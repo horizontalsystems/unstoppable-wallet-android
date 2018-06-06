@@ -2,6 +2,7 @@ package org.grouvi.wallet.modules.generateMnemonic
 
 import com.nhaarman.mockito_kotlin.whenever
 import org.bitcoinj.wallet.DeterministicSeed
+import org.grouvi.wallet.modules.confirmMnemonic.ConfirmMnemonicModule
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
@@ -12,11 +13,13 @@ class GenerateMnemonicModuleInteractorTest {
     private var interactor = GenerateMnemonicModuleInteractor()
     private var seedGenerator = mock(GenerateMnemonicModule.ISeedGenerator::class.java)
     private var delegate = mock(GenerateMnemonicModule.IInteractorDelegate::class.java)
+    private var walletDataProvider = mock(ConfirmMnemonicModule.IWalletDataProvider::class.java)
 
     @Before
     fun before() {
         interactor.seedGenerator = seedGenerator
         interactor.delegate = delegate
+        interactor.walletDataProvider = walletDataProvider
     }
 
 
@@ -31,6 +34,7 @@ class GenerateMnemonicModuleInteractorTest {
         interactor.generateMnemonic()
 
         verify(delegate).didGenerateMnemonic(words)
+        verify(walletDataProvider).mnemonicWords = words
     }
 
 

@@ -2,12 +2,14 @@ package org.grouvi.wallet.modules.generateMnemonic
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import org.grouvi.wallet.SingleLiveEvent
 
 class GenerateMnemonicViewModel : ViewModel(), GenerateMnemonicModule.IView, GenerateMnemonicModule.IRouter {
 
     override lateinit var presenter: GenerateMnemonicModule.IPresenter
 
     val mnemonicWords = MutableLiveData<List<String>>()
+    val openMnemonicWordsConfirmationLiveEvent = SingleLiveEvent<Void>()
 
     fun init() {
         GenerateMnemonicModule.initModule(this, this)
@@ -20,6 +22,6 @@ class GenerateMnemonicViewModel : ViewModel(), GenerateMnemonicModule.IView, Gen
     }
 
     override fun openMnemonicWordsConfirmation() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        openMnemonicWordsConfirmationLiveEvent.call()
     }
 }

@@ -2,6 +2,8 @@ package org.grouvi.wallet.modules.generateMnemonic
 
 import org.bitcoinj.core.Utils
 import org.bitcoinj.wallet.DeterministicSeed
+import org.grouvi.wallet.modules.confirmMnemonic.ConfirmMnemonicModule
+import org.grouvi.wallet.modules.confirmMnemonic.WalletDataProvider
 import java.security.SecureRandom
 
 object GenerateMnemonicModule {
@@ -28,6 +30,7 @@ object GenerateMnemonicModule {
     interface IInteractor {
         var seedGenerator: ISeedGenerator
         var delegate: IInteractorDelegate
+        var walletDataProvider: ConfirmMnemonicModule.IWalletDataProvider
 
         fun generateMnemonic()
     }
@@ -55,6 +58,7 @@ object GenerateMnemonicModule {
 
         interactor.delegate = presenter
         interactor.seedGenerator = SeedGenerator()
+        interactor.walletDataProvider = WalletDataProvider()
     }
 
 }
@@ -85,10 +89,14 @@ class GenerateMnemonicModulePresenter : GenerateMnemonicModule.IPresenter, Gener
 class GenerateMnemonicModuleInteractor : GenerateMnemonicModule.IInteractor {
     override lateinit var seedGenerator: GenerateMnemonicModule.ISeedGenerator
     override lateinit var delegate: GenerateMnemonicModule.IInteractorDelegate
+    override lateinit var walletDataProvider: ConfirmMnemonicModule.IWalletDataProvider
 
     override fun generateMnemonic() {
         val seed = seedGenerator.generateSeed("")
-        seed.mnemonicCode?.let { delegate.didGenerateMnemonic(it) }
+        seed.mnemonicCode?.let {
+            delegate.didGenerateMnemonic(it)
+            walletDataProvider.mnemonicWords = it
+        }
     }
 }
 

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Wallet</string>
+    <string name="error">error</string>
 </resources>

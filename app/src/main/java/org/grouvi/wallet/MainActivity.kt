@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.widget.Button
+import kotlinx.android.synthetic.main.activity_main.*
 import org.bitcoinj.core.Utils
 import org.bitcoinj.crypto.ChildNumber
 import org.bitcoinj.crypto.DeterministicKey
@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        findViewById<Button>(R.id.button_create_wallet).setOnClickListener {
+        button_create_wallet.setOnClickListener {
             val intent = Intent(this, GenerateMnemonicActivity::class.java)
             startActivity(intent)
         }
