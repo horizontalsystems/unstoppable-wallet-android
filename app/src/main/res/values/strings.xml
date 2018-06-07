@@ -15,7 +15,6 @@
     <string name="button_submit">Submit</string>
     <string name="welcome_title">Welcome
         \nto Crypton</string>
-    <string name="welcome_description">
-        The best of the best crypto wallet ever
-    </string>
+    <string name="welcome_description">The best of the best crypto wallet ever</string>
+    <string name="write_down_on_paper">Write down on paper and keep safe</string>
 </resources>
