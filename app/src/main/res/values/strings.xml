@@ -1,4 +1,16 @@
 <resources>
     <string name="app_name">Wallet</string>
     <string name="error">error</string>
+    <string name="restore_wallet">Restore</string>
+    <string name="create_wallet">Create Wallet</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="backup_words_title">Backup</string>
+    <string name="backup_words_description">
+        Your paper key is the only way to restore your Crypton if you lost, stolen, broken, or upgraded.
+        \n\nWe will show you a list of words to write down on a piece of paper and keep safe.
+    </string>
+    <string name="button_backup">Backup</string>
+    <string name="button_back">Back</string>
+    <string name="button_next">Next</string>
+    <string name="button_submit">Submit</string>
 </resources>

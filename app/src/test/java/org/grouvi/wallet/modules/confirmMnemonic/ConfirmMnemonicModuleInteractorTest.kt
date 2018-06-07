@@ -4,6 +4,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
 import com.nhaarman.mockito_kotlin.whenever
+import org.grouvi.wallet.lib.WalletDataManager
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
@@ -13,7 +14,7 @@ class ConfirmMnemonicModuleInteractorTest {
 
     private val interactor = ConfirmMnemonicModuleInteractor()
     private val delegate = mock(ConfirmMnemonicModule.IInteractorDelegate::class.java)
-    private val walletDataProvider = mock(ConfirmMnemonicModule.IWalletDataProvider::class.java)
+    private val walletDataProvider = mock(WalletDataManager::class.java)
     private val random = mock(Random::class.java)
 
     @Before

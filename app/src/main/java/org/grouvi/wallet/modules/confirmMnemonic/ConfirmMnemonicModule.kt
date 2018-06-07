@@ -2,8 +2,7 @@ package org.grouvi.wallet.modules.confirmMnemonic
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
-import org.grouvi.wallet.core.App
+import org.grouvi.wallet.lib.WalletDataManager
 import java.util.*
 
 object ConfirmMnemonicModule {
@@ -26,7 +25,7 @@ object ConfirmMnemonicModule {
 
     interface IInteractor {
         var delegate: IInteractorDelegate
-        var walletDataProvider: IWalletDataProvider
+        var walletDataProvider: WalletDataManager
         var random: Random
 
         fun retrieveConfirmationWord()
@@ -39,9 +38,6 @@ object ConfirmMnemonicModule {
         fun didConfirmationFailure()
     }
 
-    interface IWalletDataProvider {
-        var mnemonicWords: List<String>
-    }
 
     fun start(context: Context) {
         val intent = Intent(context, ConfirmMnemonicActivity::class.java)
@@ -57,26 +53,15 @@ object ConfirmMnemonicModule {
 
         interactor.delegate = presenter
         interactor.random = Random()
-        interactor.walletDataProvider = WalletDataProvider()
+        interactor.walletDataProvider = WalletDataManager
 
         view.presenter = presenter
     }
 }
 
-class WalletDataProvider : ConfirmMnemonicModule.IWalletDataProvider {
-
-    override var mnemonicWords: List<String>
-        get() = App.preferences.getString("mnemonicWords", "").split(", ")
-        set(value) {
-            App.preferences.edit().putString("mnemonicWords", value.joinToString(", ")).apply()
-            Log.e("AAA", "Words: $value")
-        }
-
-}
-
 class ConfirmMnemonicModuleInteractor : ConfirmMnemonicModule.IInteractor {
     override lateinit var delegate: ConfirmMnemonicModule.IInteractorDelegate
-    override lateinit var walletDataProvider: ConfirmMnemonicModule.IWalletDataProvider
+    override lateinit var walletDataProvider: WalletDataManager
     override lateinit var random: Random
 
     override fun retrieveConfirmationWord() {

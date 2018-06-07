@@ -19,6 +19,9 @@
         </activity>
         <activity android:name=".modules.generateMnemonic.GenerateMnemonicActivity"/>
         <activity android:name=".modules.confirmMnemonic.ConfirmMnemonicActivity"/>
+        <activity android:name=".modules.addWallet.AddWalletActivity"/>
+        <activity android:name=".modules.backupWords.BackupWordsActivity"/>
+        <activity android:name=".modules.dashboard.DashboardActivity"/>
     </application>
 
 </manifest>
