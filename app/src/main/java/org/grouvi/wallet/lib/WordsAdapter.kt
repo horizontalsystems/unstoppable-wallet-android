@@ -1,51 +1,12 @@
-package org.grouvi.wallet.modules.generateMnemonic
+package org.grouvi.wallet.lib
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
-import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import kotlinx.android.synthetic.main.activity_generate_mnemonic.*
 import org.grouvi.wallet.R
-import org.grouvi.wallet.modules.confirmMnemonic.ConfirmMnemonicModule
-
-class GenerateMnemonicActivity : AppCompatActivity() {
-
-    private lateinit var viewModel: GenerateMnemonicViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_generate_mnemonic)
-
-        val wordsAdapter = WordsAdapter(View.OnClickListener {
-            viewModel.openMnemonicWordsConfirmation()
-        })
-        mnemonicWordsView.adapter = wordsAdapter
-        mnemonicWordsView.layoutManager = LinearLayoutManager(this)
-
-
-        viewModel = ViewModelProviders.of(this).get(GenerateMnemonicViewModel::class.java)
-        viewModel.init()
-
-        viewModel.mnemonicWords.observe(this, Observer { mnemonicWords: List<String>? ->
-            mnemonicWords?.let {
-                wordsAdapter.items = it
-                wordsAdapter.notifyDataSetChanged()
-            }
-        })
-
-        viewModel.openMnemonicWordsConfirmationLiveEvent.observe(this, Observer {
-            ConfirmMnemonicModule.start(this)
-        })
-    }
-
-}
 
 class WordsAdapter(private val buttonClickListener: View.OnClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
