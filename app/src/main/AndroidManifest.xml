@@ -18,7 +18,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".modules.addWallet.AddWalletActivity"/>
-        <activity android:name=".modules.backupWords.BackupWordsActivity"/>
+        <activity
+            android:name=".modules.backupWords.BackupWordsActivity"
+            android:windowSoftInputMode="adjustResize"
+            />
         <activity android:name=".modules.dashboard.DashboardActivity"/>
 
         <meta-data

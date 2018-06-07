@@ -11,24 +11,29 @@
         android:id="@+id/textWordNumber1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="32dp"
+        android:letterSpacing="0.01"
+        android:textColor="#ffffff"
+        android:textSize="22sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/editWord1"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="10"
+        tools:text="10."
         />
 
-    <EditText
+
+    <android.support.v7.widget.AppCompatEditText
         android:id="@+id/editWord1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/textWordNumber1"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textDescription"
         tools:text="first"
         />
 
@@ -36,12 +41,16 @@
         android:id="@+id/textWordNumber2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:letterSpacing="0.01"
+        android:textColor="#ffffff"
+        android:textSize="22sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/editWord2"
-        app:layout_constraintEnd_toEndOf="@+id/textWordNumber1"
-        tools:text="8"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="8."
         />
 
-    <EditText
+    <android.support.v7.widget.AppCompatEditText
         android:id="@+id/editWord2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -49,7 +58,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textWordNumber2"
         app:layout_constraintTop_toBottomOf="@+id/editWord1"
@@ -58,36 +67,57 @@
 
     <Button
         android:id="@+id/buttonBack"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="18dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginStart="32dp"
         android:text="@string/button_back"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/buttonSubmit"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_weight="0.34"
+        style="@style/ButtonNegative"
         />
 
     <Button
         android:id="@+id/buttonSubmit"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="18dp"
-        android:layout_marginStart="32dp"
+        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginStart="4dp"
         android:text="@string/button_submit"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/buttonBack"
+        app:layout_constraintHorizontal_weight="0.66"
         />
 
     <TextView
         android:id="@+id/textError"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="24dp"
         android:textColor="@color/colorAccent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editWord2"
         tools:text="Error"
+        />
+
+    <TextView
+        android:id="@+id/textDescription"
+        style="@style/Description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/backup_words_confirm_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         />
 
 </android.support.constraint.ConstraintLayout>

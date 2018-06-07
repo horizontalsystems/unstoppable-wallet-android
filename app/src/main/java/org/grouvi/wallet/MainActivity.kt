@@ -17,7 +17,6 @@ class MainActivity : AppCompatActivity() {
         } else {
             AddWalletModule.start(this)
         }
-        finish()
     }
 
 }
