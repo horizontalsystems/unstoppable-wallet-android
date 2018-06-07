@@ -13,4 +13,9 @@
     <string name="button_back">Back</string>
     <string name="button_next">Next</string>
     <string name="button_submit">Submit</string>
+    <string name="welcome_title">Welcome
+        \nto Crypton</string>
+    <string name="welcome_description">
+        The best of the best crypto wallet ever
+    </string>
 </resources>
