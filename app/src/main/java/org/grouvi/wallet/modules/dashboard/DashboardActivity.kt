@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_dashboard.*
-import org.grouvi.wallet.MainActivity
+import org.grouvi.wallet.LauncherActivity
 import org.grouvi.wallet.R
 import org.grouvi.wallet.lib.WalletDataManager
 
@@ -18,7 +18,7 @@ class DashboardActivity : AppCompatActivity() {
         buttonRemoveWallet.setOnClickListener {
             WalletDataManager.mnemonicWords = listOf()
 
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, LauncherActivity::class.java)
             startActivity(intent)
 
             finish()

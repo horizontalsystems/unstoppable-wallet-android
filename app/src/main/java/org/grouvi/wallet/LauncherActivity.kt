@@ -7,7 +7,7 @@ import org.grouvi.wallet.modules.addWallet.AddWalletModule
 import org.grouvi.wallet.modules.dashboard.DashboardModule
 
 
-class MainActivity : AppCompatActivity() {
+class LauncherActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
