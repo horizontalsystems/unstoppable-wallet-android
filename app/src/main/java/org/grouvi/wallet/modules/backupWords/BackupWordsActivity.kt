@@ -47,6 +47,10 @@ class BackupWordsActivity : AppCompatActivity() {
 
         })
 
+        viewModel.navigateBackLiveEvent.observe(this, Observer {
+            supportFragmentManager.popBackStack()
+        })
+
         viewModel.closeLiveEvent.observe(this, Observer {
             finish()
         })

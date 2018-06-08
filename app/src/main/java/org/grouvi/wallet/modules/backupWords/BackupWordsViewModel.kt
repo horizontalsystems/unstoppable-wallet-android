@@ -16,6 +16,7 @@ class BackupWordsViewModel : ViewModel(), BackupWordsModule.IView, BackupWordsMo
     val navigationWordsLiveEvent = SingleLiveEvent<Void>()
     val navigationConfirmLiveEvent = SingleLiveEvent<Void>()
     val closeLiveEvent = SingleLiveEvent<Void>()
+    val navigateBackLiveEvent = SingleLiveEvent<Void>()
 
     fun init() {
         BackupWordsModule.init(this, this)
@@ -35,11 +36,12 @@ class BackupWordsViewModel : ViewModel(), BackupWordsModule.IView, BackupWordsMo
     }
 
     override fun hideWords() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        navigateBackLiveEvent.call()
     }
 
     override fun hideConfirmation() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        errorLiveData.value = null
+        navigateBackLiveEvent.call()
     }
 
     override fun showConfirmationError() {

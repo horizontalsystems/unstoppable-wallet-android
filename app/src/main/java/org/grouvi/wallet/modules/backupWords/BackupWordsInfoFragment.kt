@@ -29,6 +29,10 @@ class BackupWordsInfoFragment : Fragment() {
 
             viewModel.presenter.showWordsDidTap()
         }
+
+        buttonCancel.setOnClickListener {
+            viewModel.presenter.cancelDidTap()
+        }
     }
 
 }

@@ -91,7 +91,7 @@ class BackupWordsModulePresenter : BackupWordsModule.IPresenter, BackupWordsModu
     // presenter
 
     override fun cancelDidTap() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        router.close()
     }
 
     override fun showWordsDidTap() {
@@ -99,7 +99,7 @@ class BackupWordsModulePresenter : BackupWordsModule.IPresenter, BackupWordsModu
     }
 
     override fun hideWordsDidTap() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        view.hideWords()
     }
 
     override fun showConfirmationDidTap() {
@@ -107,7 +107,7 @@ class BackupWordsModulePresenter : BackupWordsModule.IPresenter, BackupWordsModu
     }
 
     override fun hideConfirmationDidTap() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        view.hideConfirmation()
     }
 
     override fun validateDidTap(confirmationWords: HashMap<Int, String>) {
