@@ -29,6 +29,7 @@ object AddWalletModule {
 
     interface IRouter {
         fun openBackupScreen()
+        fun openRestoreWalletScreen()
     }
 
     interface IInteractorDelegate {
@@ -70,7 +71,7 @@ class AddWalletModulePresenter : AddWalletModule.IPresenter, AddWalletModule.IIn
     }
 
     override fun restoreWallet() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        router.openRestoreWalletScreen()
     }
 
     // interactor delegate

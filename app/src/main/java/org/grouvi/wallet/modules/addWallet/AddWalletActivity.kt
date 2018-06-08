@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_add_wallet.*
 import org.grouvi.wallet.R
 import org.grouvi.wallet.modules.backupWords.BackupWordsModule
+import org.grouvi.wallet.modules.restoreWallet.RestoreWalletModule
 
 class AddWalletActivity : AppCompatActivity() {
 
@@ -22,6 +23,11 @@ class AddWalletActivity : AppCompatActivity() {
 
         viewModel.openBackupScreenLiveEvent.observe(this, Observer {
             BackupWordsModule.start(this)
+            finish()
+        })
+
+        viewModel.openRestoreWalletScreenLiveEvent.observe(this, Observer {
+            RestoreWalletModule.start(this)
             finish()
         })
 

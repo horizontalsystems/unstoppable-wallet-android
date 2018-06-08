@@ -25,6 +25,13 @@ class AddWalletModulePresenterTest {
     }
 
     @Test
+    fun restoreWallet() {
+        presenter.restoreWallet()
+
+        verify(router).openRestoreWalletScreen()
+    }
+
+    @Test
     fun didCreateWallet() {
         presenter.didCreateWallet()
 

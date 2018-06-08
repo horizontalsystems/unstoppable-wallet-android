@@ -8,6 +8,7 @@ class AddWalletViewModel: ViewModel(), AddWalletModule.IView, AddWalletModule.IR
     override lateinit var presenter: AddWalletModule.IPresenter
 
     val openBackupScreenLiveEvent = SingleLiveEvent<Void>()
+    val openRestoreWalletScreenLiveEvent = SingleLiveEvent<Void>()
 
     fun init() {
         AddWalletModule.init(this, this)
@@ -18,5 +19,9 @@ class AddWalletViewModel: ViewModel(), AddWalletModule.IView, AddWalletModule.IR
     // router
     override fun openBackupScreen() {
         openBackupScreenLiveEvent.call()
+    }
+
+    override fun openRestoreWalletScreen() {
+        openRestoreWalletScreenLiveEvent.call()
     }
 }

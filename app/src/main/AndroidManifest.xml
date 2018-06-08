@@ -23,6 +23,7 @@
             android:windowSoftInputMode="adjustResize"
             />
         <activity android:name=".modules.dashboard.DashboardActivity"/>
+        <activity android:name=".modules.restoreWallet.RestoreWalletActivity"/>
 
         <meta-data
             android:name="preloaded_fonts"
