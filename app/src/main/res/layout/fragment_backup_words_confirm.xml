@@ -67,6 +67,7 @@
 
     <Button
         android:id="@+id/buttonBack"
+        style="@style/ButtonNegative"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
@@ -75,9 +76,8 @@
         android:text="@string/button_back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/buttonSubmit"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintHorizontal_weight="0.34"
-        style="@style/ButtonNegative"
+        app:layout_constraintStart_toStartOf="parent"
         />
 
     <Button
@@ -90,17 +90,17 @@
         android:text="@string/button_submit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/buttonBack"
         app:layout_constraintHorizontal_weight="0.66"
+        app:layout_constraintStart_toEndOf="@+id/buttonBack"
         />
 
     <TextView
         android:id="@+id/textError"
+        style="@style/Error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="24dp"
-        android:textColor="@color/colorAccent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editWord2"
         tools:text="Error"

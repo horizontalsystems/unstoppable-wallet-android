@@ -2,21 +2,34 @@ package org.grouvi.wallet.lib
 
 import android.util.Log
 import org.bitcoinj.core.Utils
-import org.bitcoinj.crypto.ChildNumber
-import org.bitcoinj.crypto.DeterministicKey
-import org.bitcoinj.crypto.HDKeyDerivation
+import org.bitcoinj.crypto.*
 import org.bitcoinj.wallet.DeterministicSeed
 import org.grouvi.wallet.core.App
 import org.grouvi.wallet.modules.backupWords.BackupWordsModule
+import org.grouvi.wallet.modules.restoreWallet.RestoreWalletModule
 import java.security.SecureRandom
 
-object WalletDataManager : BackupWordsModule.IWordsProvider {
+object WalletDataManager : BackupWordsModule.IWordsProvider, RestoreWalletModule.IWalletRestorer {
+
+    private val defautPassphrase = ""
 
     override var mnemonicWords: List<String>
         get() = App.preferences.getString("mnemonicWords", "").split(", ").filter { it.isNotBlank() }
         set(value) {
             App.preferences.edit().putString("mnemonicWords", value.joinToString(", ")).apply()
         }
+
+    override fun restoreWallet(words: List<String>)  {
+        try {
+            MnemonicCode.INSTANCE.check(words)
+
+            mnemonicWords = words
+            masterKey = HDKeyDerivation.createMasterPrivateKey(MnemonicCode.toSeed(words, defautPassphrase))
+
+        } catch (e: MnemonicException) {
+            throw RestoreWalletModule.InvalidWordsException()
+        }
+    }
 
     fun hasWallet(): Boolean {
         return mnemonicWords.isNotEmpty()
@@ -26,7 +39,7 @@ object WalletDataManager : BackupWordsModule.IWordsProvider {
         // todo
         Log.e("AAA", "Creating wallet...")
 
-        generateSeed("")
+        generateSeed(defautPassphrase)
         createMasterKey()
         deriveBip44RootKey()
         deriveBitcoinRootKey()

@@ -37,4 +37,8 @@
         <item name="android:textSize">17sp</item>
     </style>
 
+    <style name="Error">
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
 </resources>
