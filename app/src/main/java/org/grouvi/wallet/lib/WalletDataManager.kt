@@ -30,7 +30,7 @@ object WalletDataManager :
             App.preferences.edit().putString("mnemonicWords", value.joinToString(", ")).apply()
         }
 
-    override fun restoreWallet(words: List<String>)  {
+    override fun restoreWallet(words: List<String>) {
         try {
             MnemonicCode.INSTANCE.check(words)
 
@@ -61,21 +61,23 @@ object WalletDataManager :
         val transactions = listOf(
                 Transaction().apply {
                     inputs = listOf(
-                            TransactionInput("34gyGHhoCBbWJPsCrCwdUjRHDa7rihTUGa", 6989776510)
-                    )
-                    outputs = listOf(
-                            TransactionOutput("3GsfBQ6Df4tofeqvsGid4GAyUjn82tRE77", 6989776501),
-                            TransactionOutput("3K8jbcHrLAkQ1t2zfsbgBM48w37AL22JRC", 9)
-                    )
-                },
-                Transaction().apply {
-                    inputs = listOf(
                             TransactionInput("3GsfBQ6Df4tofeqvsGid4GAyUjn82tRE77", 6989776501)
                     )
                     outputs = listOf(
                             TransactionOutput("1HN8SMYNXu4dLQxijYNP8gb5NfUMaCRecD", 980000000),
                             TransactionOutput("38PUuTYFoJMmkz7sfidHbKCp5Rxz2rbTZG", 6009660301)
                     )
+                    timestamp = 1528896350000L
+                },
+                Transaction().apply {
+                    inputs = listOf(
+                            TransactionInput("34gyGHhoCBbWJPsCrCwdUjRHDa7rihTUGa", 6989776510)
+                    )
+                    outputs = listOf(
+                            TransactionOutput("3GsfBQ6Df4tofeqvsGid4GAyUjn82tRE77", 6989776501),
+                            TransactionOutput("3K8jbcHrLAkQ1t2zfsbgBM48w37AL22JRC", 9)
+                    )
+                    timestamp = 1528796350000L
                 }
         )
         return Flowable.just(transactions)

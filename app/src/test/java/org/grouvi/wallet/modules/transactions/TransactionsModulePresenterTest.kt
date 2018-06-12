@@ -30,6 +30,6 @@ class TransactionsModulePresenterTest {
 
         presenter.didTransactionItemsRetrieve(items)
 
-        verify(view).showItems(items)
+        verify(view).showTransactionItems(items)
     }
 }

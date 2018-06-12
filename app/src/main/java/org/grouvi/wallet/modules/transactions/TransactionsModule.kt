@@ -11,7 +11,7 @@ import kotlin.math.absoluteValue
 object TransactionsModule {
 
     interface IView {
-        fun showItems(items: List<TransactionViewItem>)
+        fun showTransactionItems(items: List<TransactionViewItem>)
 
         var presenter: IPresenter
     }
@@ -83,7 +83,7 @@ class TransactionsModulePresenter : TransactionsModule.IPresenter, TransactionsM
     }
 
     override fun didTransactionItemsRetrieve(items: List<TransactionViewItem>) {
-        view.showItems(items)
+        view.showTransactionItems(items)
     }
 }
 
