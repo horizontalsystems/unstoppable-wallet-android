@@ -20,4 +20,6 @@
     <string name="backup_words_confirm_description">Enter the following words from your paper key</string>
     <string name="enter_paper_keys_title">Enter Paper Keys</string>
     <string name="action_done">Done</string>
+    <string name="button_receive">Receive</string>
+    <string name="button_pay">Pay</string>
 </resources>

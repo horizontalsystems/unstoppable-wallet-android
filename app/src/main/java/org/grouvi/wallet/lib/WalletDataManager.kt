@@ -1,15 +1,18 @@
 package org.grouvi.wallet.lib
 
 import android.util.Log
+import io.reactivex.Flowable
 import org.bitcoinj.core.Utils
 import org.bitcoinj.crypto.*
 import org.bitcoinj.wallet.DeterministicSeed
 import org.grouvi.wallet.core.App
+import org.grouvi.wallet.entities.Coin
 import org.grouvi.wallet.modules.backupWords.BackupWordsModule
 import org.grouvi.wallet.modules.restoreWallet.RestoreWalletModule
+import org.grouvi.wallet.modules.wallet.WalletModule
 import java.security.SecureRandom
 
-object WalletDataManager : BackupWordsModule.IWordsProvider, RestoreWalletModule.IWalletRestorer {
+object WalletDataManager : BackupWordsModule.IWordsProvider, RestoreWalletModule.IWalletRestorer, WalletModule.ICoinsDataProvider {
 
     private val defautPassphrase = ""
 
@@ -29,6 +32,14 @@ object WalletDataManager : BackupWordsModule.IWordsProvider, RestoreWalletModule
         } catch (e: MnemonicException) {
             throw RestoreWalletModule.InvalidWordsException()
         }
+    }
+
+    override fun getCoins(): Flowable<List<Coin>> {
+        return Flowable.just(listOf(
+                Coin("Bitcoin", "BTC", 1.0, 7000.0, 7000.0),
+                Coin("Bitcoin Cash", "BCH", 1.0, 1000.0, 1000.0),
+                Coin("Ethereum", "ETH", 2.0, 600.0, 1200.0)
+        ))
     }
 
     fun hasWallet(): Boolean {

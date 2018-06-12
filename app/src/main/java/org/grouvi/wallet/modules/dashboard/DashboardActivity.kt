@@ -17,8 +17,12 @@ class DashboardActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_dashboard)
+
+        setSupportActionBar(toolbar)
+
+        // todo move title to fragments
+        supportActionBar?.title = "Balance"
 
         bottomNavigation.setOnNavigationItemSelectedListener {
             val fragmentTag = when (it.itemId) {
@@ -36,9 +40,10 @@ class DashboardActivity : AppCompatActivity() {
                 }
             }
 
+            val fragment = getFragmentByTag(fragmentTag)
             supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.fl_main, getFragmentByTag(fragmentTag), fragmentTag.name)
+                    .replace(R.id.fl_main, fragment, fragmentTag.name)
                     .commit()
 
             true
