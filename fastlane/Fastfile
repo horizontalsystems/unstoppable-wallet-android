@@ -1,0 +1,64 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+  before_all do
+    reset_git_repo(force: true, skip_clean: true)
+  end
+
+  desc "Runs all the tests"
+  lane :test do
+    gradle(task: "test")
+  end
+
+
+  desc "Submit a new Beta Build to Crashlytics Beta"
+  lane :beta do |options|
+
+  app_name = options[:app_name]
+  commit = last_git_commit
+  build_number = options[:build_number]
+
+   puts "⚪ Dev #{build_number} Started,\nApp: #{app_name}\nAuthor: #{commit[:author]} \nChanges: #{commit[:message]}"
+
+   report_to_grouvi("⚪ Dev #{build_number} Started,\nApp: #{app_name}\nAuthor: #{commit[:author]} \nChanges: #{commit[:message]}")
+   #   gradle(task: "clean")
+   #   gradle(task: "assembleDebug")
+
+      # upload_to_crashlytics(groups: 'grouvi-1')
+      # report_to_grouvi("🔵 Dev #{ENV['BUILD_NUMBER']}\nApp: #{app_name}\nSuccess")
+
+
+    # sh "your_script.sh"
+    # You can also use other beta testing services here
+  end
+
+  desc "Deploy a new version to the Google Play"
+  lane :deploy do
+    gradle(task: "clean assembleRelease")
+    upload_to_play_store
+  end
+
+
+  def report_to_grouvi(note)
+      note = note.gsub('"', '\\"').gsub("'", "").gsub("\n", '\\n')
+
+      json = "{\"platform\": \"android\", \"note\": \"#{note}\"}"
+      sh("curl -H 'Content-Type: application/json' -X POST -d '#{json}' https://app.grouvi.org/dev/build_report")
+    end
+
+end
