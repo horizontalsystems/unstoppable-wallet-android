@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.fragment_settings.*
 import org.grouvi.wallet.LauncherActivity
 import org.grouvi.wallet.R
 import org.grouvi.wallet.lib.WalletDataManager
+import org.grouvi.wallet.modules.backupWords.BackupWordsModule
 
 class SettingsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -26,6 +27,10 @@ class SettingsFragment : Fragment() {
             startActivity(intent)
 
             activity?.finish()
+        }
+
+        buttonBackup.setOnClickListener {
+            context?.let { BackupWordsModule.start(it) }
         }
     }
 }
