@@ -1,13 +1,13 @@
-package org.grouvi.wallet.core
+package bitcoin.wallet.core
 
+import bitcoin.wallet.blockchain.info.BlockchainInfoClient
+import bitcoin.wallet.entities.Transaction
+import bitcoin.wallet.entities.TransactionInput
+import bitcoin.wallet.entities.TransactionOutput
+import bitcoin.wallet.entities.UnspentOutput
+import bitcoin.wallet.lib.WalletDataManager
 import com.google.gson.JsonParser
 import io.reactivex.Flowable
-import org.grouvi.wallet.blockchain.info.BlockchainInfoClient
-import org.grouvi.wallet.entities.Transaction
-import org.grouvi.wallet.entities.TransactionInput
-import org.grouvi.wallet.entities.TransactionOutput
-import org.grouvi.wallet.entities.UnspentOutput
-import org.grouvi.wallet.lib.WalletDataManager
 
 object NetworkManager {
     fun getTransactions(): Flowable<List<Transaction>> {

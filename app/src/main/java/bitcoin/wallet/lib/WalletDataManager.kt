@@ -1,5 +1,15 @@
 package bitcoin.wallet.lib
 
+import bitcoin.wallet.core.App
+import bitcoin.wallet.core.NetworkManager
+import bitcoin.wallet.entities.Coin
+import bitcoin.wallet.entities.Transaction
+import bitcoin.wallet.log
+import bitcoin.wallet.modules.backupWords.BackupWordsModule
+import bitcoin.wallet.modules.restoreWallet.RestoreWalletModule
+import bitcoin.wallet.modules.transactions.IAddressesProvider
+import bitcoin.wallet.modules.transactions.ITransactionsDataProvider
+import bitcoin.wallet.modules.wallet.WalletModule
 import io.reactivex.Flowable
 import org.bitcoinj.core.Utils
 import org.bitcoinj.crypto.ChildNumber
@@ -9,26 +19,6 @@ import org.bitcoinj.crypto.MnemonicException
 import org.bitcoinj.params.MainNetParams
 import org.bitcoinj.params.TestNet3Params
 import org.bitcoinj.wallet.DeterministicSeed
-import bitcoin.wallet.core.App
-import bitcoin.wallet.entities.Coin
-import bitcoin.wallet.entities.Transaction
-import bitcoin.wallet.entities.TransactionInput
-import bitcoin.wallet.entities.TransactionOutput
-import bitcoin.wallet.modules.backupWords.BackupWordsModule
-import bitcoin.wallet.modules.restoreWallet.RestoreWalletModule
-import bitcoin.wallet.modules.transactions.IAddressesProvider
-import bitcoin.wallet.modules.transactions.ITransactionsDataProvider
-import bitcoin.wallet.modules.wallet.WalletModule
-import org.grouvi.wallet.core.App
-import org.grouvi.wallet.core.NetworkManager
-import org.grouvi.wallet.entities.Coin
-import org.grouvi.wallet.entities.Transaction
-import org.grouvi.wallet.log
-import org.grouvi.wallet.modules.backupWords.BackupWordsModule
-import org.grouvi.wallet.modules.restoreWallet.RestoreWalletModule
-import org.grouvi.wallet.modules.transactions.IAddressesProvider
-import org.grouvi.wallet.modules.transactions.ITransactionsDataProvider
-import org.grouvi.wallet.modules.wallet.WalletModule
 import java.security.SecureRandom
 
 object WalletDataManager :

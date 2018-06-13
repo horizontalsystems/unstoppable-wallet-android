@@ -4,8 +4,8 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import org.grouvi.wallet.modules.dashboard.DashboardModule
 import bitcoin.wallet.R
+import bitcoin.wallet.modules.dashboard.DashboardModule
 
 class BackupWordsActivity : AppCompatActivity() {
 

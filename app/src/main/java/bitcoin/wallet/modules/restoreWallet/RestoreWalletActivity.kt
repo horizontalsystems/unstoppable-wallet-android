@@ -12,11 +12,8 @@ import android.view.View
 import bitcoin.wallet.R
 import bitcoin.wallet.lib.EditTextViewHolder
 import bitcoin.wallet.lib.WordsInputAdapter
+import bitcoin.wallet.modules.dashboard.DashboardModule
 import kotlinx.android.synthetic.main.activity_restore_wallet.*
-import org.grouvi.wallet.R
-import org.grouvi.wallet.lib.EditTextViewHolder
-import org.grouvi.wallet.lib.WordsInputAdapter
-import org.grouvi.wallet.modules.dashboard.DashboardModule
 
 class RestoreWalletActivity : AppCompatActivity() {
 

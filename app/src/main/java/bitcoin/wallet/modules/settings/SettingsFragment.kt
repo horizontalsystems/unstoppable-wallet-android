@@ -9,11 +9,8 @@ import android.view.ViewGroup
 import bitcoin.wallet.LauncherActivity
 import bitcoin.wallet.R
 import bitcoin.wallet.lib.WalletDataManager
+import bitcoin.wallet.modules.backupWords.BackupWordsModule
 import kotlinx.android.synthetic.main.fragment_settings.*
-import org.grouvi.wallet.LauncherActivity
-import org.grouvi.wallet.R
-import org.grouvi.wallet.lib.WalletDataManager
-import org.grouvi.wallet.modules.backupWords.BackupWordsModule
 
 class SettingsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

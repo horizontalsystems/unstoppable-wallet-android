@@ -6,7 +6,6 @@ import bitcoin.wallet.lib.WalletDataManager
 import bitcoin.wallet.modules.addWallet.AddWalletModule
 import bitcoin.wallet.modules.dashboard.DashboardModule
 
-
 class LauncherActivity : AppCompatActivity() {
 
     override fun onResume() {
