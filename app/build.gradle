@@ -34,11 +34,11 @@ task test1 << {
 }
 
 task test2 << {
-    println " !!!!!!!!!! ${project.ext["build_number"]}"
+    println " !!!!!!!!!! ${build_number}"
 }
 
 task test3 << {
-    println " !!!!!!!!!! ${project.ext["build_counter"]}"
+    println " !!!!!!!!!! ${build_counter}"
 }
 
 task test4 << {
