@@ -1,15 +1,19 @@
 package org.grouvi.wallet.lib
 
-import android.util.Log
 import io.reactivex.Flowable
 import org.bitcoinj.core.Utils
-import org.bitcoinj.crypto.*
+import org.bitcoinj.crypto.ChildNumber
+import org.bitcoinj.crypto.HDKeyDerivation
+import org.bitcoinj.crypto.MnemonicCode
+import org.bitcoinj.crypto.MnemonicException
+import org.bitcoinj.params.MainNetParams
+import org.bitcoinj.params.TestNet3Params
 import org.bitcoinj.wallet.DeterministicSeed
 import org.grouvi.wallet.core.App
+import org.grouvi.wallet.core.NetworkManager
 import org.grouvi.wallet.entities.Coin
 import org.grouvi.wallet.entities.Transaction
-import org.grouvi.wallet.entities.TransactionInput
-import org.grouvi.wallet.entities.TransactionOutput
+import org.grouvi.wallet.log
 import org.grouvi.wallet.modules.backupWords.BackupWordsModule
 import org.grouvi.wallet.modules.restoreWallet.RestoreWalletModule
 import org.grouvi.wallet.modules.transactions.IAddressesProvider
@@ -35,7 +39,6 @@ object WalletDataManager :
             MnemonicCode.INSTANCE.check(words)
 
             mnemonicWords = words
-            masterKey = HDKeyDerivation.createMasterPrivateKey(MnemonicCode.toSeed(words, defautPassphrase))
 
         } catch (e: MnemonicException) {
             throw RestoreWalletModule.InvalidWordsException()
@@ -43,44 +46,60 @@ object WalletDataManager :
     }
 
     override fun getCoins(): Flowable<List<Coin>> {
-        // todo replace stub
-        return Flowable.just(listOf(
-                Coin("Bitcoin", "BTC", 1.0, 7000.0, 7000.0),
-                Coin("Bitcoin Cash", "BCH", 1.0, 1000.0, 1000.0),
-                Coin("Ethereum", "ETH", 2.0, 600.0, 1200.0)
-        ))
+
+        return NetworkManager.getUnspentOutputs()
+                .map {
+
+                    val bitcoinAmount = it.map { it.value }.sum() / 100000000.0
+                    val bitcoinExchangeRate = 7000.0
+
+                    listOf(
+                            Coin("Bitcoin", "BTC", bitcoinAmount, bitcoinAmount * bitcoinExchangeRate, bitcoinExchangeRate),
+                            Coin("Bitcoin Cash", "BCH", 1.0, 1000.0, 1000.0),
+                            Coin("Ethereum", "ETH", 2.0, 600.0, 1200.0)
+                    )
+                }
+
     }
 
     override fun getAddresses(): List<String> {
-        // todo replace stub
-        return listOf("3GsfBQ6Df4tofeqvsGid4GAyUjn82tRE77", "38PUuTYFoJMmkz7sfidHbKCp5Rxz2rbTZG")
+
+        val masterKey = HDKeyDerivation.createMasterPrivateKey(MnemonicCode.toSeed(mnemonicWords, defautPassphrase))
+        val bip44RootKey = HDKeyDerivation.deriveChildKey(masterKey, ChildNumber(44, true))
+        val bitcoinRootKey = HDKeyDerivation.deriveChildKey(bip44RootKey, ChildNumber(if (App.testMode) 1 else 0, true))
+
+        val bitcoinAccountKey = HDKeyDerivation.deriveChildKey(bitcoinRootKey, ChildNumber.ZERO_HARDENED)
+
+        val external = HDKeyDerivation.deriveChildKey(bitcoinAccountKey, ChildNumber.ZERO)
+        val change = HDKeyDerivation.deriveChildKey(bitcoinAccountKey, ChildNumber.ONE)
+
+        val networkParameters = when (App.testMode) {
+            true -> TestNet3Params()
+            else -> MainNetParams()
+        }
+
+        val addresses = mutableListOf<String>()
+        for (i in 0..1) {
+            val externalKeyI = HDKeyDerivation.deriveChildKey(external, i)
+
+            externalKeyI.pathAsString.log("External Key Path")
+
+            val addressExternal = externalKeyI.toAddress(networkParameters).toString()
+
+            val changeKeyI = HDKeyDerivation.deriveChildKey(change, i)
+
+            changeKeyI.pathAsString.log("Change Key Path")
+
+            val addressChange = changeKeyI.toAddress(networkParameters).toString()
+            addresses.add(addressExternal)
+            addresses.add(addressChange)
+        }
+
+        return addresses
     }
 
     override fun getTransactions(): Flowable<List<Transaction>> {
-        // todo replace stub
-        val transactions = listOf(
-                Transaction().apply {
-                    inputs = listOf(
-                            TransactionInput("3GsfBQ6Df4tofeqvsGid4GAyUjn82tRE77", 6989776501)
-                    )
-                    outputs = listOf(
-                            TransactionOutput("1HN8SMYNXu4dLQxijYNP8gb5NfUMaCRecD", 980000000),
-                            TransactionOutput("38PUuTYFoJMmkz7sfidHbKCp5Rxz2rbTZG", 6009660301)
-                    )
-                    timestamp = 1528896350000L
-                },
-                Transaction().apply {
-                    inputs = listOf(
-                            TransactionInput("34gyGHhoCBbWJPsCrCwdUjRHDa7rihTUGa", 6989776510)
-                    )
-                    outputs = listOf(
-                            TransactionOutput("3GsfBQ6Df4tofeqvsGid4GAyUjn82tRE77", 6989776501),
-                            TransactionOutput("3K8jbcHrLAkQ1t2zfsbgBM48w37AL22JRC", 9)
-                    )
-                    timestamp = 1528796350000L
-                }
-        )
-        return Flowable.just(transactions)
+        return NetworkManager.getTransactions()
     }
 
     fun hasWallet(): Boolean {
@@ -88,41 +107,9 @@ object WalletDataManager :
     }
 
     fun createWallet() {
-        // todo
-        Log.e("AAA", "Creating wallet...")
-
-        generateSeed(defautPassphrase)
-        createMasterKey()
-        deriveBip44RootKey()
-        deriveBitcoinRootKey()
-
-    }
-
-    ////////////
-
-    private var seed: DeterministicSeed? = null
-    private var masterKey: DeterministicKey? = null
-    private var bip44RootKey: DeterministicKey? = null
-    private var bitcoinRootKey: DeterministicKey? = null
-
-    fun generateSeed(passphrase: String) {
-        seed = DeterministicSeed(SecureRandom(), DeterministicSeed.DEFAULT_SEED_ENTROPY_BITS, passphrase, Utils.currentTimeSeconds())
-
-        seed?.mnemonicCode?.let {
+        DeterministicSeed(SecureRandom(), DeterministicSeed.DEFAULT_SEED_ENTROPY_BITS, defautPassphrase, Utils.currentTimeSeconds()).mnemonicCode?.let {
             mnemonicWords = it
         }
-    }
-
-    fun createMasterKey() {
-        masterKey = HDKeyDerivation.createMasterPrivateKey(seed?.seedBytes)
-    }
-
-    fun deriveBip44RootKey() {
-        bip44RootKey = HDKeyDerivation.deriveChildKey(masterKey, ChildNumber(44, true))
-    }
-
-    fun deriveBitcoinRootKey() {
-        bitcoinRootKey = HDKeyDerivation.deriveChildKey(bip44RootKey, ChildNumber(0, true))
     }
 
 }

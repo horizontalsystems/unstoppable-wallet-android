@@ -17,6 +17,8 @@ class LauncherActivity : AppCompatActivity() {
         } else {
             AddWalletModule.start(this)
         }
+
+        finish()
     }
 
 }
@@ -24,5 +26,5 @@ class LauncherActivity : AppCompatActivity() {
 fun Any?.log(label: String = "") {
 
     Log.e("AAA", "$label: $this")
-    Log.e("BBB", "$label: $this")
+
 }

@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.activity_restore_wallet.*
 import org.grouvi.wallet.R
 import org.grouvi.wallet.lib.EditTextViewHolder
 import org.grouvi.wallet.lib.WordsInputAdapter
+import org.grouvi.wallet.modules.dashboard.DashboardModule
 
 class RestoreWalletActivity : AppCompatActivity() {
 
@@ -42,7 +43,7 @@ class RestoreWalletActivity : AppCompatActivity() {
         })
 
         viewModel.navigateToMainScreenLiveEvent.observe(this, Observer {
-            finish()
+            DashboardModule.start(this)
         })
 
         recyclerInputs.adapter = WordsInputAdapter(object : EditTextViewHolder.WordsChangedListener {

@@ -8,6 +8,8 @@ class App : Application() {
 
     companion object {
         lateinit var preferences: SharedPreferences
+
+        val testMode = true
     }
 
     override fun onCreate() {

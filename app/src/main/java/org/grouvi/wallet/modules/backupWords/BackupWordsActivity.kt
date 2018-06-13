@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import org.grouvi.wallet.R
+import org.grouvi.wallet.modules.dashboard.DashboardModule
 
 class BackupWordsActivity : AppCompatActivity() {
 
@@ -16,7 +17,7 @@ class BackupWordsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_backup_words)
 
         viewModel = ViewModelProviders.of(this).get(BackupWordsViewModel::class.java)
-        viewModel.init()
+        viewModel.init(BackupWordsModule.DismissMode.valueOf(intent.getStringExtra("DismissMode")))
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -49,6 +50,10 @@ class BackupWordsActivity : AppCompatActivity() {
 
         viewModel.navigateBackLiveEvent.observe(this, Observer {
             supportFragmentManager.popBackStack()
+        })
+
+        viewModel.navigateToMainLiveEvent.observe(this, Observer {
+            DashboardModule.start(this)
         })
 
         viewModel.closeLiveEvent.observe(this, Observer {

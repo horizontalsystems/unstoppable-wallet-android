@@ -17,10 +17,15 @@ class BackupWordsViewModel : ViewModel(), BackupWordsModule.IView, BackupWordsMo
     val navigationConfirmLiveEvent = SingleLiveEvent<Void>()
     val closeLiveEvent = SingleLiveEvent<Void>()
     val navigateBackLiveEvent = SingleLiveEvent<Void>()
+    val navigateToMainLiveEvent = SingleLiveEvent<Void>()
 
-    fun init() {
+    var dismissMode = BackupWordsModule.DismissMode.TO_MAIN
+
+    fun init(dismissMode: BackupWordsModule.DismissMode) {
         BackupWordsModule.init(this, this)
         Log.e("AAA", "Yahoo, $presenter")
+
+        this.dismissMode = dismissMode
     }
 
     // view
@@ -51,6 +56,10 @@ class BackupWordsViewModel : ViewModel(), BackupWordsModule.IView, BackupWordsMo
     // router
 
     override fun close() {
-        closeLiveEvent.call()
+        when (dismissMode) {
+            BackupWordsModule.DismissMode.TO_MAIN -> navigateToMainLiveEvent.call()
+            BackupWordsModule.DismissMode.DISMISS_SELF -> closeLiveEvent.call()
+        }
+
     }
 }

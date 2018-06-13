@@ -57,13 +57,15 @@ object BackupWordsModule {
         var mnemonicWords: List<String>
     }
 
-    interface CreateWalletRandomIndexesProvider {
-        fun getRandomIndexes(count: Int) : List<Int>
+    // helpers
+
+    enum class DismissMode {
+        TO_MAIN, DISMISS_SELF
     }
 
-
-    fun start(context: Context) {
+    fun start(context: Context, dismissMode: DismissMode) {
         val intent = Intent(context, BackupWordsActivity::class.java)
+        intent.putExtra("DismissMode", dismissMode.name)
         context.startActivity(intent)
     }
 

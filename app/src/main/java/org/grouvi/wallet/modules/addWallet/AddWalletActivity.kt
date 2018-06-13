@@ -22,13 +22,12 @@ class AddWalletActivity : AppCompatActivity() {
         viewModel.init()
 
         viewModel.openBackupScreenLiveEvent.observe(this, Observer {
-            BackupWordsModule.start(this)
+            BackupWordsModule.start(this, BackupWordsModule.DismissMode.TO_MAIN)
             finish()
         })
 
         viewModel.openRestoreWalletScreenLiveEvent.observe(this, Observer {
             RestoreWalletModule.start(this)
-            finish()
         })
 
         buttonCreate.setOnClickListener {

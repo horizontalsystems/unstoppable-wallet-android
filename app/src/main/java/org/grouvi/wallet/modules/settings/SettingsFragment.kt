@@ -30,7 +30,7 @@ class SettingsFragment : Fragment() {
         }
 
         buttonBackup.setOnClickListener {
-            context?.let { BackupWordsModule.start(it) }
+            context?.let { BackupWordsModule.start(it, BackupWordsModule.DismissMode.DISMISS_SELF) }
         }
     }
 }
