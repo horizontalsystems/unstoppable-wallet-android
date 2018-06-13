@@ -17,6 +17,14 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'io.fabric'
 
+def computeVersionCode() {
+    ext.buildNumber = System.getenv("BUILD_NUMBER") ?: 0
+    return "$buildNumber".toInteger()
+}
+
+Properties buildProperties = new Properties()
+buildProperties.load(new BufferedReader(new InputStreamReader(new FileInputStream("app/confs/wallet.properties"), "UTF8")))
+
 androidExtensions {
     experimental = true
 }
@@ -24,10 +32,10 @@ androidExtensions {
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "bitcoin.wallet"
+        applicationId buildProperties.get("application_id")
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 1
+        versionCode computeVersionCode()
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
