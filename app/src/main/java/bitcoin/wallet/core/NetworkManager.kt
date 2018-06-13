@@ -45,6 +45,7 @@ object NetworkManager {
                         UnspentOutput(it.asJsonObject["value"].asLong)
                     }
                 }
+                .onErrorResumeNext(Flowable.just(listOf()))
 
     }
 }
