@@ -16,7 +16,7 @@ platform :android do
     gradle(task: "clean")
     gradle(task: "assembleDebug")
 
-    upload_to_hockey(notes: "Author: #{commit[:author]} \nChanges: #{commit[:message]}")
+    upload_to_hockey(notes: "Author: #{commit[:author]}, changes: #{commit[:message]}")
 
     report_to_grouvi("🔵 Dev #{build_number}\nApp: #{app_name}\nSuccess")
   end
