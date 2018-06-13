@@ -24,9 +24,10 @@ androidExtensions {
     experimental = true
 }
 
-version = 3
-if (project.ext.has('build.vcs.number')) {
-    version = "${project.ext['build.vcs.number']}".toInteger()
+
+def computeVersionCode() {
+    ext.buildCounter = System.getProperty("buildCounter", "2")
+    return "$buildCounter".toInteger()
 }
 
 task test1 << {
@@ -43,7 +44,7 @@ task test3 << {
 }
 
 task test4 << {
-    println " !!!!!!!!!! version = ${version}"
+    println " !!!!!!!!!! version = ${computeVersionCode()}"
 }
 
 android {
@@ -52,7 +53,7 @@ android {
         applicationId buildProperties.get("application_id")
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode version
+        versionCode computeVersionCode()
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
