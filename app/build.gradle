@@ -25,7 +25,7 @@ androidExtensions {
 }
 
 version = 1
-if (project.ext.hasProperty("build.number")) {
+if (project.ext.properties.containsKey("build.number")) {
     version = project.ext["build.number"]
 }
 
