@@ -38,7 +38,7 @@ task test2 << {
 }
 
 task test3 << {
-    println " !!!!!!!!!! ${project.ext["build.counter"]}"
+    println " !!!!!!!!!! ${project.ext["build_counter"]}"
 }
 
 task test4 << {
