@@ -21,7 +21,7 @@ platform :android do
   desc "testing 3"
   lane :test_three do |options|
      puts "testing 3 ++++++++"
-     gradle(task: "test3")
+     gradle(task: "test3", properties: {"buildCounter" => options[:build_counter]})
   end
 
   desc "testing 4"

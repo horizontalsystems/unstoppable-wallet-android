@@ -38,11 +38,12 @@ task test2 << {
 }
 
 task test3 << {
+    version = buildCounter
     println " !!!!!!!!!! ${buildCounter}"
 }
 
 task test4 << {
-    println " !!!!!!!!!! ${project.ext["teamcity.build.id"]}"
+    println " !!!!!!!!!! version = ${version}"
 }
 
 android {
