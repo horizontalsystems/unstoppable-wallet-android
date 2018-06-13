@@ -26,8 +26,8 @@ androidExtensions {
 
 
 def computeVersionCode() {
-    ext.buildCounter = System.getProperty("buildCounter", "2")
-    return "$buildCounter".toInteger()
+    ext.buildNumber = System.getenv("BUILD_NUMBER") ?: 3
+    return "$buildNumber".toInteger()
 }
 
 task test1 << {
