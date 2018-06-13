@@ -1,18 +1,3 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
-
 default_platform(:android)
 
 platform :android do
@@ -20,12 +5,7 @@ platform :android do
     reset_git_repo(force: true, skip_clean: true)
   end
 
-  desc "Runs all the tests"
-  lane :test do
-    gradle(task: "test")
-  end
-
-  desc "Submit a new Dev Build to Crashlytics Beta"
+  desc "Submit a new Dev Build"
   lane :dev_build do |options|
     app_name = options[:app_name]
     commit = last_git_commit
@@ -36,15 +16,9 @@ platform :android do
     gradle(task: "clean")
     gradle(task: "assembleDebug")
 
-    upload_to_crashlytics(groups: 'grouvi-1', notes: commit[:message])
+    upload_to_hockey(notes: commit[:message])
 
     report_to_grouvi("🔵 Dev #{build_number}\nApp: #{app_name}\nSuccess")
-  end
-
-  desc "Deploy a new version to the Google Play"
-  lane :deploy do
-    gradle(task: "clean assembleRelease")
-    upload_to_play_store
   end
 
   def report_to_grouvi(note)
@@ -52,19 +26,17 @@ platform :android do
 
       json = "{\"platform\": \"android\", \"note\": \"#{note}\"}"
       sh("curl -H 'Content-Type: application/json' -X POST -d '#{json}' https://app.grouvi.org/dev/build_report")
-    end
+  end
 
-  private_lane :upload_to_crashlytics do |options|
-    crashlytics(
-        api_token: '5ba2b59a53cac6368417c172d001b67f7acc4532',
-        build_secret: '86029e4ef30bf10a8422f53ac7bed3c20bf02c0f6e439cbca0ad710246f74c41',
-        notes:  options[:notes],
-        groups: options[:groups]
-    )
+  private_lane :upload_to_hockey do |options|
+      hockey(
+        api_token: "61f67135578645d3a9a762baa0a75a13",
+        notes: options[:notes],
+      )
   end
 
   error do |lane, exception, options|
       report_to_grouvi("🔴 #{lane} #{options[:build_number]} Failed:\n#{exception.message}")
-   end
+  end
 
 end

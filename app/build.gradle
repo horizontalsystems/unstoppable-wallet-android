@@ -17,11 +17,6 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'io.fabric'
 
-def computeVersionCode() {
-    ext.buildNumber = System.getenv("BUILD_NUMBER") ?: 0
-    return "$buildNumber".toInteger()
-}
-
 Properties buildProperties = new Properties()
 buildProperties.load(new BufferedReader(new InputStreamReader(new FileInputStream("app/confs/wallet.properties"), "UTF8")))
 
@@ -35,7 +30,7 @@ android {
         applicationId buildProperties.get("application_id")
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode computeVersionCode()
+        versionCode System.getProperty("build.number")
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
