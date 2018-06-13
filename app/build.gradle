@@ -29,6 +29,18 @@ if (project.ext.has('build.vcs.number')) {
     version = "${project.ext['build.vcs.number']}".toInteger()
 }
 
+task test1 << {
+    println " !!!!!!!!!! ${project.ext['build.vcs.number']}"
+}
+
+task test2 << {
+    println " !!!!!!!!!! ${project.ext['build.vcs.number.1']}"
+}
+
+task test3 << {
+    println " !!!!!!!!!! ${project.ext['build.counter']}"
+}
+
 android {
     compileSdkVersion 27
     defaultConfig {
