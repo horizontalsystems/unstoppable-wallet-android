@@ -24,9 +24,9 @@ androidExtensions {
     experimental = true
 }
 
-version = 1
-if (project.ext.properties.containsKey("build.number")) {
-    version = project.ext["build.number"]
+version = 3
+if (project.ext.has('build.vcs.number')) {
+    version = "${project.ext['build.vcs.number']}".toInteger()
 }
 
 android {
