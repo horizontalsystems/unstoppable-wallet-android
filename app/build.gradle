@@ -30,15 +30,19 @@ if (project.ext.has('build.vcs.number')) {
 }
 
 task test1 << {
-    println " !!!!!!!!!! ${project.ext['build.vcs.number']}"
+    println " !!!!!!!!!! ${project.ext["build.vcs.number"]}"
 }
 
 task test2 << {
-    println " !!!!!!!!!! ${project.ext['build.vcs.number.1']}"
+    println " !!!!!!!!!! ${project.ext["build.vcs.number.1"]}"
 }
 
 task test3 << {
-    println " !!!!!!!!!! ${project.ext['build.counter']}"
+    println " !!!!!!!!!! ${project.ext["build.counter"]}"
+}
+
+task test4 << {
+    println " !!!!!!!!!! ${project.ext["teamcity.build.id"]}"
 }
 
 android {

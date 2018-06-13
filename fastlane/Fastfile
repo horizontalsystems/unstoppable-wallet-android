@@ -24,6 +24,12 @@ platform :android do
      gradle(task: "test3")
   end
 
+  desc "testing 4"
+  lane :test_three do |options|
+     puts "testing 4 ++++++++"
+     gradle(task: "test4")
+  end
+
   desc "Submit a new Dev Build"
   lane :dev_build do |options|
     app_name = options[:app_name]
