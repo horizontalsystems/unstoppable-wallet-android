@@ -24,13 +24,18 @@ androidExtensions {
     experimental = true
 }
 
+version = 1
+if (project.hasProperty("teamcity")) {
+    version = teamcity["build.counter"]
+}
+
 android {
     compileSdkVersion 27
     defaultConfig {
         applicationId buildProperties.get("application_id")
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode System.getProperty("build.number")
+        versionCode version
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
