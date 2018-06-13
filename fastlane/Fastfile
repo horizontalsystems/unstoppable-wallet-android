@@ -25,7 +25,7 @@ platform :android do
   end
 
   desc "testing 4"
-  lane :test_three do |options|
+  lane :test_four do |options|
      puts "testing 4 ++++++++"
      gradle(task: "test4")
   end
