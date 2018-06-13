@@ -24,7 +24,7 @@ androidExtensions {
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "org.grouvi.wallet"
+        applicationId "bitcoin.wallet"
         minSdkVersion 21
         targetSdkVersion 27
         versionCode 1
