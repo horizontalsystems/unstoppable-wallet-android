@@ -25,8 +25,8 @@ androidExtensions {
 }
 
 version = 1
-if (project.hasProperty("teamcity")) {
-    version = teamcity["build.counter"]
+if (project.ext.hasProperty("build.number")) {
+    version = project.ext["build.number"]
 }
 
 android {
