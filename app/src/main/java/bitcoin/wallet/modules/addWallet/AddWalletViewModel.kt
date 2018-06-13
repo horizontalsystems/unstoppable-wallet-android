@@ -1,0 +1,27 @@
+package bitcoin.wallet.modules.addWallet
+
+import android.arch.lifecycle.ViewModel
+import bitcoin.wallet.SingleLiveEvent
+
+class AddWalletViewModel: ViewModel(), AddWalletModule.IView, AddWalletModule.IRouter {
+
+    override lateinit var presenter: AddWalletModule.IPresenter
+
+    val openBackupScreenLiveEvent = SingleLiveEvent<Void>()
+    val openRestoreWalletScreenLiveEvent = SingleLiveEvent<Void>()
+
+    fun init() {
+        AddWalletModule.init(this, this)
+
+        presenter.start()
+    }
+
+    // router
+    override fun openBackupScreen() {
+        openBackupScreenLiveEvent.call()
+    }
+
+    override fun openRestoreWalletScreen() {
+        openRestoreWalletScreenLiveEvent.call()
+    }
+}

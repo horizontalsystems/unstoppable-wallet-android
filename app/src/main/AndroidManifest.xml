@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="org.grouvi.wallet"
+<manifest package="bitcoin.wallet"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -31,6 +31,9 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts"/>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="5ba2b59a53cac6368417c172d001b67f7acc4532"/>
     </application>
 
 </manifest>

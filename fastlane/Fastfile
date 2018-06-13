@@ -1,0 +1,42 @@
+default_platform(:android)
+
+platform :android do
+  before_all do
+    reset_git_repo(force: true, skip_clean: true)
+  end
+
+  desc "Submit a new Dev Build"
+  lane :dev_build do |options|
+    app_name = options[:app_name]
+    commit = last_git_commit
+    build_number = options[:build_number]
+
+    report_to_grouvi("⚪ Dev #{build_number} Started,\nApp: #{app_name}\nAuthor: #{commit[:author]} \nChanges: #{commit[:message]}")
+
+    gradle(task: "clean")
+    gradle(task: "assembleDebug")
+
+    upload_to_hockey(notes: commit[:message])
+
+    report_to_grouvi("🔵 Dev #{build_number}\nApp: #{app_name}\nSuccess")
+  end
+
+  def report_to_grouvi(note)
+      note = note.gsub('"', '\\"').gsub("'", "").gsub("\n", '\\n')
+
+      json = "{\"platform\": \"android\", \"note\": \"#{note}\"}"
+      sh("curl -H 'Content-Type: application/json' -X POST -d '#{json}' https://app.grouvi.org/dev/build_report")
+  end
+
+  private_lane :upload_to_hockey do |options|
+      hockey(
+        api_token: "61f67135578645d3a9a762baa0a75a13",
+        notes: options[:notes],
+      )
+  end
+
+  error do |lane, exception, options|
+      report_to_grouvi("🔴 #{lane} #{options[:build_number]} Failed:\n#{exception.message}")
+  end
+
+end
