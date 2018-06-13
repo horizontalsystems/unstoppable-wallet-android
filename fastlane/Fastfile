@@ -25,26 +25,20 @@ platform :android do
     gradle(task: "test")
   end
 
+  desc "Submit a new Dev Build to Crashlytics Beta"
+  lane :dev_build do |options|
+    app_name = options[:app_name]
+    commit = last_git_commit
+    build_number = options[:build_number]
 
-  desc "Submit a new Beta Build to Crashlytics Beta"
-  lane :beta do |options|
+    report_to_grouvi("⚪ Dev #{build_number} Started,\nApp: #{app_name}\nAuthor: #{commit[:author]} \nChanges: #{commit[:message]}")
 
-  app_name = options[:app_name]
-  commit = last_git_commit
-  build_number = options[:build_number]
+    gradle(task: "clean")
+    gradle(task: "assembleDebug")
 
-   puts "⚪ Dev #{build_number} Started,\nApp: #{app_name}\nAuthor: #{commit[:author]} \nChanges: #{commit[:message]}"
+    upload_to_crashlytics(groups: 'grouvi-1', notes: commit[:message])
 
-   report_to_grouvi("⚪ Dev #{build_number} Started,\nApp: #{app_name}\nAuthor: #{commit[:author]} \nChanges: #{commit[:message]}")
-   #   gradle(task: "clean")
-   #   gradle(task: "assembleDebug")
-
-      # upload_to_crashlytics(groups: 'grouvi-1')
-      # report_to_grouvi("🔵 Dev #{ENV['BUILD_NUMBER']}\nApp: #{app_name}\nSuccess")
-
-
-    # sh "your_script.sh"
-    # You can also use other beta testing services here
+    report_to_grouvi("🔵 Dev #{build_number}\nApp: #{app_name}\nSuccess")
   end
 
   desc "Deploy a new version to the Google Play"
@@ -53,12 +47,24 @@ platform :android do
     upload_to_play_store
   end
 
-
   def report_to_grouvi(note)
       note = note.gsub('"', '\\"').gsub("'", "").gsub("\n", '\\n')
 
       json = "{\"platform\": \"android\", \"note\": \"#{note}\"}"
       sh("curl -H 'Content-Type: application/json' -X POST -d '#{json}' https://app.grouvi.org/dev/build_report")
     end
+
+  private_lane :upload_to_crashlytics do |options|
+    crashlytics(
+        api_token: '5ba2b59a53cac6368417c172d001b67f7acc4532',
+        build_secret: '86029e4ef30bf10a8422f53ac7bed3c20bf02c0f6e439cbca0ad710246f74c41',
+        notes:  options[:notes],
+        groups: options[:groups]
+    )
+  end
+
+  error do |lane, exception, options|
+      report_to_grouvi("🔴 #{lane} #{options[:build_number]} Failed:\n#{exception.message}")
+   end
 
 end
