@@ -24,27 +24,9 @@ androidExtensions {
     experimental = true
 }
 
-
 def computeVersionCode() {
-    ext.buildNumber = System.getenv("BUILD_NUMBER") ?: 3
+    ext.buildNumber = System.getenv("BUILD_NUMBER") ?: 0
     return "$buildNumber".toInteger()
-}
-
-task test1 << {
-    println " !!!!!!!!!! ${project.ext["build.vcs.number"]}"
-}
-
-task test2 << {
-    println " !!!!!!!!!! ${buildNumber}"
-}
-
-task test3 << {
-    version = buildCounter
-    println " !!!!!!!!!! ${buildCounter}"
-}
-
-task test4 << {
-    println " !!!!!!!!!! version = ${computeVersionCode()}"
 }
 
 android {

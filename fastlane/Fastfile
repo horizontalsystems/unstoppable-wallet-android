@@ -2,32 +2,7 @@ default_platform(:android)
 
 platform :android do
   before_all do
-    # reset_git_repo(force: true, skip_clean: true)
-  end
-
-  desc "testing 1"
-  lane :test_one do |options|
-    puts "testing 1 ++++++++"
-    gradle(task: "test1")
-
-  end
-
-  desc "testing 2"
-  lane :test_two do |options|
-      puts "testing 2 ++++++++"
-      gradle(task: "test2")
-  end
-
-  desc "testing 3"
-  lane :test_three do |options|
-     puts "testing 3 ++++++++"
-     gradle(task: "test3", properties: {"buildCounter" => options[:build_counter]})
-  end
-
-  desc "testing 4"
-  lane :test_four do |options|
-     puts "testing 4 ++++++++"
-     gradle(task: "test4")
+    reset_git_repo(force: true, skip_clean: true)
   end
 
   desc "Submit a new Dev Build"
@@ -36,14 +11,14 @@ platform :android do
     commit = last_git_commit
     build_number = options[:build_number]
 
-    # report_to_grouvi("⚪ Dev #{build_number} Started,\nApp: #{app_name}\nAuthor: #{commit[:author]} \nChanges: #{commit[:message]}")
+    report_to_grouvi("⚪ Dev #{build_number} Started,\nApp: #{app_name}\nAuthor: #{commit[:author]} \nChanges: #{commit[:message]}")
 
-    # gradle(task: "clean")
-    # gradle(task: "assembleDebug")
+    gradle(task: "clean")
+    gradle(task: "assembleDebug")
 
-    # upload_to_hockey(notes: commit[:message])
+    upload_to_hockey(notes: commit[:message])
 
-    # report_to_grouvi("🔵 Dev #{build_number}\nApp: #{app_name}\nSuccess")
+    report_to_grouvi("🔵 Dev #{build_number}\nApp: #{app_name}\nSuccess")
   end
 
   def report_to_grouvi(note)
@@ -61,7 +36,7 @@ platform :android do
   end
 
   error do |lane, exception, options|
-      # report_to_grouvi("🔴 #{lane} #{options[:build_number]} Failed:\n#{exception.message}")
+      report_to_grouvi("🔴 #{lane} #{options[:build_number]} Failed:\n#{exception.message}")
   end
 
 end
