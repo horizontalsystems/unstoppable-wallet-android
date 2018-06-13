@@ -34,11 +34,11 @@ task test1 << {
 }
 
 task test2 << {
-    println " !!!!!!!!!! ${build_number}"
+    println " !!!!!!!!!! ${buildNumber}"
 }
 
 task test3 << {
-    println " !!!!!!!!!! ${build_counter}"
+    println " !!!!!!!!!! ${buildCounter}"
 }
 
 task test4 << {
