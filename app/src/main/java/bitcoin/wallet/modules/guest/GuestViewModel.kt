@@ -1,17 +1,17 @@
-package bitcoin.wallet.modules.addWallet
+package bitcoin.wallet.modules.guest
 
 import android.arch.lifecycle.ViewModel
 import bitcoin.wallet.SingleLiveEvent
 
-class AddWalletViewModel: ViewModel(), AddWalletModule.IView, AddWalletModule.IRouter {
+class GuestViewModel: ViewModel(), GuestModule.IView, GuestModule.IRouter {
 
-    override lateinit var presenter: AddWalletModule.IPresenter
+    override lateinit var presenter: GuestModule.IPresenter
 
     val openBackupScreenLiveEvent = SingleLiveEvent<Void>()
     val openRestoreWalletScreenLiveEvent = SingleLiveEvent<Void>()
 
     fun init() {
-        AddWalletModule.init(this, this)
+        GuestModule.init(this, this)
 
         presenter.start()
     }

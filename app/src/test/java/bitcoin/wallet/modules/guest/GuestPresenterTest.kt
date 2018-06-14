@@ -1,15 +1,15 @@
-package bitcoin.wallet.modules.addWallet
+package bitcoin.wallet.modules.guest
 
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
 
-class AddWalletModulePresenterTest {
+class GuestPresenterTest {
 
-    private val presenter = AddWalletModulePresenter()
-    private val interactor = mock(AddWalletModule.IInteractor::class.java)
-    private val router = mock(AddWalletModule.IRouter::class.java)
+    private val presenter = GuestPresenter()
+    private val interactor = mock(GuestModule.IInteractor::class.java)
+    private val router = mock(GuestModule.IRouter::class.java)
 
     @Before
     fun before() {

@@ -20,7 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".modules.addWallet.AddWalletActivity"/>
+        <activity android:name=".modules.guest.GuestActivity"/>
         <activity
             android:name=".modules.backupWords.BackupWordsActivity"
             android:windowSoftInputMode="adjustResize"

@@ -1,4 +1,4 @@
-package bitcoin.wallet.modules.addWallet
+package bitcoin.wallet.modules.guest
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -9,16 +9,16 @@ import bitcoin.wallet.modules.backupWords.BackupWordsModule
 import bitcoin.wallet.modules.restoreWallet.RestoreWalletModule
 import kotlinx.android.synthetic.main.activity_add_wallet.*
 
-class AddWalletActivity : AppCompatActivity() {
+class GuestActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: AddWalletViewModel
+    private lateinit var viewModel: GuestViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_add_wallet)
 
-        viewModel = ViewModelProviders.of(this).get(AddWalletViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(GuestViewModel::class.java)
         viewModel.init()
 
         viewModel.openBackupScreenLiveEvent.observe(this, Observer {

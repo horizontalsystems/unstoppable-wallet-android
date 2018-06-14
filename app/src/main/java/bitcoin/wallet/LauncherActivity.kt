@@ -3,8 +3,8 @@ package bitcoin.wallet
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import bitcoin.wallet.lib.WalletDataManager
-import bitcoin.wallet.modules.addWallet.AddWalletModule
 import bitcoin.wallet.modules.dashboard.DashboardModule
+import bitcoin.wallet.modules.guest.GuestModule
 
 class LauncherActivity : AppCompatActivity() {
 
@@ -14,7 +14,7 @@ class LauncherActivity : AppCompatActivity() {
         if (WalletDataManager.hasWallet()) {
             DashboardModule.start(this)
         } else {
-            AddWalletModule.start(this)
+            GuestModule.start(this)
         }
 
         finish()
