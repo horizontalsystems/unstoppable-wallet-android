@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import bitcoin.wallet.R
-import bitcoin.wallet.modules.dashboard.DashboardModule
+import bitcoin.wallet.modules.main.MainModule
 
 class BackupActivity : AppCompatActivity() {
 
@@ -53,7 +53,7 @@ class BackupActivity : AppCompatActivity() {
         })
 
         viewModel.navigateToMainLiveEvent.observe(this, Observer {
-            DashboardModule.start(this)
+            MainModule.start(this)
         })
 
         viewModel.closeLiveEvent.observe(this, Observer {

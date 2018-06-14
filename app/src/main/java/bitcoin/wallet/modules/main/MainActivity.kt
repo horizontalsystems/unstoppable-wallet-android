@@ -1,4 +1,4 @@
-package bitcoin.wallet.modules.dashboard
+package bitcoin.wallet.modules.main
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -9,7 +9,7 @@ import bitcoin.wallet.modules.transactions.TransactionsFragment
 import bitcoin.wallet.modules.wallet.WalletFragment
 import kotlinx.android.synthetic.main.activity_dashboard.*
 
-class DashboardActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
 
     enum class FragmentTag {
         WALLET, TRANSACTIONS, SETTINGS

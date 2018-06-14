@@ -12,7 +12,7 @@ import android.view.View
 import bitcoin.wallet.R
 import bitcoin.wallet.lib.EditTextViewHolder
 import bitcoin.wallet.lib.WordsInputAdapter
-import bitcoin.wallet.modules.dashboard.DashboardModule
+import bitcoin.wallet.modules.main.MainModule
 import kotlinx.android.synthetic.main.activity_restore_wallet.*
 
 class RestoreWalletActivity : AppCompatActivity() {
@@ -43,7 +43,7 @@ class RestoreWalletActivity : AppCompatActivity() {
         })
 
         viewModel.navigateToMainScreenLiveEvent.observe(this, Observer {
-            DashboardModule.start(this)
+            MainModule.start(this)
         })
 
         recyclerInputs.adapter = WordsInputAdapter(object : EditTextViewHolder.WordsChangedListener {

@@ -25,7 +25,7 @@
             android:name=".modules.backup.BackupActivity"
             android:windowSoftInputMode="adjustResize"
             />
-        <activity android:name=".modules.dashboard.DashboardActivity"/>
+        <activity android:name=".modules.main.MainActivity"/>
         <activity android:name=".modules.restore.RestoreWalletActivity"/>
 
         <meta-data
