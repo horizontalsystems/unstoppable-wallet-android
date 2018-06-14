@@ -1,8 +1,6 @@
 package bitcoin.wallet.modules.guest
 
-class GuestPresenter : GuestModule.IViewDelegate, GuestModule.IInteractorDelegate {
-    lateinit var interactor: GuestModule.IInteractor
-    lateinit var router: GuestModule.IRouter
+class GuestPresenter(private val interactor: GuestModule.IInteractor, private val router: GuestModule.IRouter) : GuestModule.IViewDelegate, GuestModule.IInteractorDelegate {
 
     override fun createWalletDidClick() {
         interactor.createWallet()

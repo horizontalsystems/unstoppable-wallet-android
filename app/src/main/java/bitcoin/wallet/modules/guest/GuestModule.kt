@@ -31,14 +31,10 @@ object GuestModule {
 
     fun init(view: GuestViewModel, router: IRouter) {
         val interactor = GuestInteractor(Factory.mnemonicManager, Factory.preferencesManager)
-        val presenter = GuestPresenter()
+        val presenter = GuestPresenter(interactor, router)
 
         view.delegate = presenter
-
         interactor.delegate = presenter
-
-        presenter.interactor = interactor
-        presenter.router = router
     }
 
 }

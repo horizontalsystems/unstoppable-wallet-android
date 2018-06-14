@@ -1,4 +1,4 @@
-package bitcoin.wallet.modules.restoreWallet
+package bitcoin.wallet.modules.restore
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_restore_wallet.*
 
 class RestoreWalletActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: RestoreWalletViewModel
+    private lateinit var viewModel: RestoreViewModel
 
     private val words = MutableList(12, {""})
 
@@ -30,7 +30,7 @@ class RestoreWalletActivity : AppCompatActivity() {
         supportActionBar?.title = getString(R.string.enter_paper_keys_title)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        viewModel = ViewModelProviders.of(this).get(RestoreWalletViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(RestoreViewModel::class.java)
         viewModel.init()
 
         viewModel.errorLiveData.observe(this, Observer { errorId ->
@@ -68,7 +68,7 @@ class RestoreWalletActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_done -> {
             Log.e("AAA", "Words: ${words.joinToString()}")
-            viewModel.presenter.onRestoreButtonClick(words)
+            viewModel.delegate.restoreDidClick(words)
             true
         }
         else -> {

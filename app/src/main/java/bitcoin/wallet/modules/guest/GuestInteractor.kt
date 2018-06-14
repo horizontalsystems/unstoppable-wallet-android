@@ -5,11 +5,11 @@ import bitcoin.wallet.core.IMnemonic
 
 class GuestInteractor(private val mnemonic: IMnemonic, private val localStorage: ILocalStorage) : GuestModule.IInteractor {
 
-    lateinit var delegate: GuestModule.IInteractorDelegate
+    var delegate: GuestModule.IInteractorDelegate? = null
 
     override fun createWallet() {
         localStorage.saveWords(mnemonic.generateWords())
-        delegate.didCreateWallet()
+        delegate?.didCreateWallet()
     }
 
 }

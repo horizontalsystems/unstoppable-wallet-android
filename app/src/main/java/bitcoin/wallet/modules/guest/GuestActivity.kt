@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import bitcoin.wallet.R
 import bitcoin.wallet.modules.backupWords.BackupWordsModule
-import bitcoin.wallet.modules.restoreWallet.RestoreWalletModule
+import bitcoin.wallet.modules.restore.RestoreModule
 import kotlinx.android.synthetic.main.activity_add_wallet.*
 
 class GuestActivity : AppCompatActivity() {
@@ -27,7 +27,7 @@ class GuestActivity : AppCompatActivity() {
         })
 
         viewModel.openRestoreWalletScreenLiveEvent.observe(this, Observer {
-            RestoreWalletModule.start(this)
+            RestoreModule.start(this)
         })
 
         buttonCreate.setOnClickListener {

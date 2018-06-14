@@ -6,4 +6,5 @@ interface ILocalStorage {
 
 interface IMnemonic {
     fun generateWords(): List<String>
+    fun validateWords(words: List<String>): Boolean
 }

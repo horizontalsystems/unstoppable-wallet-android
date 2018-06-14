@@ -6,7 +6,6 @@ import bitcoin.wallet.entities.Coin
 import bitcoin.wallet.entities.Transaction
 import bitcoin.wallet.log
 import bitcoin.wallet.modules.backupWords.BackupWordsModule
-import bitcoin.wallet.modules.restoreWallet.RestoreWalletModule
 import bitcoin.wallet.modules.transactions.IAddressesProvider
 import bitcoin.wallet.modules.transactions.ITransactionsDataProvider
 import bitcoin.wallet.modules.wallet.WalletModule
@@ -15,7 +14,6 @@ import org.bitcoinj.core.Utils
 import org.bitcoinj.crypto.ChildNumber
 import org.bitcoinj.crypto.HDKeyDerivation
 import org.bitcoinj.crypto.MnemonicCode
-import org.bitcoinj.crypto.MnemonicException
 import org.bitcoinj.params.MainNetParams
 import org.bitcoinj.params.TestNet3Params
 import org.bitcoinj.wallet.DeterministicSeed
@@ -23,7 +21,6 @@ import java.security.SecureRandom
 
 object WalletDataManager :
         BackupWordsModule.IWordsProvider,
-        RestoreWalletModule.IWalletRestorer,
         WalletModule.ICoinsDataProvider, IAddressesProvider, ITransactionsDataProvider {
 
     private val defautPassphrase = ""
@@ -34,16 +31,6 @@ object WalletDataManager :
             App.preferences.edit().putString("mnemonicWords", value.joinToString(", ")).apply()
         }
 
-    override fun restoreWallet(words: List<String>) {
-        try {
-            MnemonicCode.INSTANCE.check(words)
-
-            mnemonicWords = words
-
-        } catch (e: MnemonicException) {
-            throw RestoreWalletModule.InvalidWordsException()
-        }
-    }
 
     override fun getCoins(): Flowable<List<Coin>> {
 
