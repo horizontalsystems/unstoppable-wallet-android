@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/action_wallet"
           android:title="Wallet"
-          android:icon="@android:drawable/ic_menu_directions" />
+          android:icon="@drawable/wallet"/>
     <item android:id="@+id/action_transactions"
           android:title="Transactions"
-          android:icon="@android:drawable/ic_menu_directions" />
+          android:icon="@drawable/transactions" />
     <item android:id="@+id/action_settings"
           android:title="Settings"
-          android:icon="@android:drawable/ic_menu_directions" />
+          android:icon="@drawable/settings" />
 </menu>
