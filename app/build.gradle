@@ -47,7 +47,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation 'org.bitcoinj:bitcoinj-core:0.14.7'
+    api('org.bitcoinj:bitcoinj-core:0.14.7') {
+        exclude module: 'scrypt'
+    }
     // ViewModel and LiveData
     implementation "android.arch.lifecycle:extensions:$lifecycle_version"
     // alternatively - just ViewModel
