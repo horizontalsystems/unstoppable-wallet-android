@@ -1,25 +1,20 @@
 package bitcoin.wallet.modules.guest
 
-class GuestPresenter : GuestModule.IPresenter, GuestModule.IInteractorDelegate {
-    override lateinit var view: GuestModule.IView
-    override lateinit var interactor: GuestModule.IInteractor
-    override lateinit var router: GuestModule.IRouter
+class GuestPresenter : GuestModule.IViewDelegate, GuestModule.IInteractorDelegate {
+    lateinit var interactor: GuestModule.IInteractor
+    lateinit var router: GuestModule.IRouter
 
-    override fun start() {
-        // todo: do nothing?
-    }
-
-    override fun createWallet() {
+    override fun createWalletDidClick() {
         interactor.createWallet()
     }
 
-    override fun restoreWallet() {
-        router.openRestoreWalletScreen()
+    override fun restoreWalletDidClick() {
+        router.navigateToRestore()
     }
 
     // interactor delegate
 
     override fun didCreateWallet() {
-        router.openBackupScreen()
+        router.navigateToBackupRoutingToMain()
     }
 }

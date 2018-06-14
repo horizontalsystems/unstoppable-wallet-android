@@ -19,23 +19,23 @@ class GuestPresenterTest {
 
     @Test
     fun createWallet() {
-        presenter.createWallet()
+        presenter.createWalletDidClick()
 
         verify(interactor).createWallet()
     }
 
     @Test
     fun restoreWallet() {
-        presenter.restoreWallet()
+        presenter.restoreWalletDidClick()
 
-        verify(router).openRestoreWalletScreen()
+        verify(router).navigateToRestore()
     }
 
     @Test
     fun didCreateWallet() {
         presenter.didCreateWallet()
 
-        verify(router).openBackupScreen()
+        verify(router).navigateToBackupRoutingToMain()
     }
 
 }

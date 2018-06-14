@@ -1,15 +1,14 @@
 package bitcoin.wallet.modules.guest
 
-import bitcoin.wallet.lib.WalletDataManager
+import bitcoin.wallet.core.ILocalStorage
+import bitcoin.wallet.core.IMnemonic
 
-class GuestInteractor: GuestModule.IInteractor {
+class GuestInteractor(private val mnemonic: IMnemonic, private val localStorage: ILocalStorage) : GuestModule.IInteractor {
 
-    override lateinit var delegate: GuestModule.IInteractorDelegate
-    override lateinit var walletDataProvider: WalletDataManager
+    lateinit var delegate: GuestModule.IInteractorDelegate
 
     override fun createWallet() {
-        WalletDataManager.createWallet()
-
+        localStorage.saveWords(mnemonic.generateWords())
         delegate.didCreateWallet()
     }
 

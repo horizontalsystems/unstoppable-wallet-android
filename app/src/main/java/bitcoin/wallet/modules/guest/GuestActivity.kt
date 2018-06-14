@@ -31,11 +31,11 @@ class GuestActivity : AppCompatActivity() {
         })
 
         buttonCreate.setOnClickListener {
-            viewModel.presenter.createWallet()
+            viewModel.delegate.createWalletDidClick()
         }
 
         buttonRestore.setOnClickListener {
-            viewModel.presenter.restoreWallet()
+            viewModel.delegate.restoreWalletDidClick()
         }
     }
 }
