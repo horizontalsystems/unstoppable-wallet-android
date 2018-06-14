@@ -5,7 +5,8 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import bitcoin.wallet.R
-import bitcoin.wallet.modules.backupWords.BackupWordsModule
+import bitcoin.wallet.modules.backup.BackupModule
+import bitcoin.wallet.modules.backup.BackupPresenter
 import bitcoin.wallet.modules.restore.RestoreModule
 import kotlinx.android.synthetic.main.activity_add_wallet.*
 
@@ -22,7 +23,7 @@ class GuestActivity : AppCompatActivity() {
         viewModel.init()
 
         viewModel.openBackupScreenLiveEvent.observe(this, Observer {
-            BackupWordsModule.start(this, BackupWordsModule.DismissMode.TO_MAIN)
+            BackupModule.start(this, BackupPresenter.DismissMode.TO_MAIN)
             finish()
         })
 

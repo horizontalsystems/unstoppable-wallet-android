@@ -1,13 +1,12 @@
-package bitcoin.wallet.modules.backupWords
+package bitcoin.wallet.modules.backup
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.util.Log
 import bitcoin.wallet.R
 import bitcoin.wallet.SingleLiveEvent
 
-class BackupWordsViewModel : ViewModel(), BackupWordsModule.IView, BackupWordsModule.IRouter {
-    override lateinit var presenter: BackupWordsModule.IPresenter
+class BackupViewModel : ViewModel(), BackupModule.IView, BackupModule.IRouter {
+    lateinit var delegate: BackupModule.IViewDelegate
 
     val errorLiveData = MutableLiveData<Int>()
     val wordsLiveData = MutableLiveData<List<String>>()
@@ -19,13 +18,8 @@ class BackupWordsViewModel : ViewModel(), BackupWordsModule.IView, BackupWordsMo
     val navigateBackLiveEvent = SingleLiveEvent<Void>()
     val navigateToMainLiveEvent = SingleLiveEvent<Void>()
 
-    var dismissMode = BackupWordsModule.DismissMode.TO_MAIN
-
-    fun init(dismissMode: BackupWordsModule.DismissMode) {
-        BackupWordsModule.init(this, this)
-        Log.e("AAA", "Yahoo, $presenter")
-
-        this.dismissMode = dismissMode
+    fun init(dismissMode: BackupPresenter.DismissMode) {
+        BackupModule.init(this, this, dismissMode)
     }
 
     // view
@@ -56,10 +50,10 @@ class BackupWordsViewModel : ViewModel(), BackupWordsModule.IView, BackupWordsMo
     // router
 
     override fun close() {
-        when (dismissMode) {
-            BackupWordsModule.DismissMode.TO_MAIN -> navigateToMainLiveEvent.call()
-            BackupWordsModule.DismissMode.DISMISS_SELF -> closeLiveEvent.call()
-        }
+        closeLiveEvent.call()
+    }
 
+    override fun navigateToMain() {
+        navigateToMainLiveEvent.call()
     }
 }

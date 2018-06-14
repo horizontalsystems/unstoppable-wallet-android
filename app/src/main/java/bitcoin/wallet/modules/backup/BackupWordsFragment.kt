@@ -1,4 +1,4 @@
-package bitcoin.wallet.modules.backupWords
+package bitcoin.wallet.modules.backup
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -12,9 +12,9 @@ import bitcoin.wallet.R
 import bitcoin.wallet.lib.WordsAdapter
 import kotlinx.android.synthetic.main.fragment_backup_words_show_words.*
 
-class BackupWordsShowWordsFragment : Fragment() {
+class BackupWordsFragment : Fragment() {
 
-    private lateinit var viewModel: BackupWordsViewModel
+    private lateinit var viewModel: BackupViewModel
     private val wordsAdapter = WordsAdapter()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -25,7 +25,7 @@ class BackupWordsShowWordsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         activity?.let {
-            viewModel = ViewModelProviders.of(it).get(BackupWordsViewModel::class.java)
+            viewModel = ViewModelProviders.of(it).get(BackupViewModel::class.java)
         }
 
         recyclerWords.adapter = wordsAdapter
@@ -39,11 +39,11 @@ class BackupWordsShowWordsFragment : Fragment() {
         })
 
         buttonBack.setOnClickListener {
-            viewModel.presenter.hideWordsDidTap()
+            viewModel.delegate.hideWordsDidClick()
         }
 
         buttonNext.setOnClickListener {
-            viewModel.presenter.showConfirmationDidTap()
+            viewModel.delegate.showConfirmationDidClick()
         }
 
     }

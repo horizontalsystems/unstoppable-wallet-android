@@ -1,4 +1,4 @@
-package bitcoin.wallet.modules.backupWords
+package bitcoin.wallet.modules.backup
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -10,8 +10,8 @@ import android.view.ViewGroup
 import bitcoin.wallet.R
 import kotlinx.android.synthetic.main.fragment_backup_words_confirm.*
 
-class BackupWordsConfirmFragment : Fragment() {
-    private lateinit var viewModel: BackupWordsViewModel
+class BackupConfirmFragment : Fragment() {
+    private lateinit var viewModel: BackupViewModel
 
     private var wordIndex1 = -1
     private var wordIndex2 = -1
@@ -24,13 +24,13 @@ class BackupWordsConfirmFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         activity?.let {
-            viewModel = ViewModelProviders.of(it).get(BackupWordsViewModel::class.java)
+            viewModel = ViewModelProviders.of(it).get(BackupViewModel::class.java)
         }
 
         viewModel.wordIndexesToConfirmLiveData.observe(this, Observer {
             it?.let {
-                textWordNumber1.text = "${it[0] + 1}."
-                textWordNumber2.text = "${it[1] + 1}."
+                textWordNumber1.text = "${it[0]}."
+                textWordNumber2.text = "${it[1]}."
 
                 wordIndex1 = it[0]
                 wordIndex2 = it[1]
@@ -47,17 +47,16 @@ class BackupWordsConfirmFragment : Fragment() {
         })
 
         buttonBack.setOnClickListener {
-            viewModel.presenter.hideConfirmationDidTap()
+            viewModel.delegate.hideConfirmationDidClick()
         }
 
         buttonSubmit.setOnClickListener {
-            viewModel.presenter.validateDidTap(
+            viewModel.delegate.validateDidClick(
                     hashMapOf(wordIndex1 to editWord1.text.toString(),
                             wordIndex2 to editWord2.text.toString())
             )
         }
 
     }
-
 
 }
