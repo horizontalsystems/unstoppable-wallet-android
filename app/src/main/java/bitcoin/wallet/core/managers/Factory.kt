@@ -18,4 +18,12 @@ object Factory {
         RandomProvider()
     }
 
+    val unspentOutputProvider by lazy {
+        UnspentOutputProvider()
+    }
+
+    val exchangeRateProvider by lazy {
+        ExchangeRateProvider()
+    }
+
 }

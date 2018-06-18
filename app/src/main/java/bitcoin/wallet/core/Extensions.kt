@@ -26,3 +26,14 @@ fun <T> io.reactivex.Flowable<T>.subscribeAsync(disposables: CompositeDisposable
     disposables.add(disposable)
     return disposable
 }
+
+fun <T> io.reactivex.subjects.PublishSubject<T>.subscribeAsync(disposables: CompositeDisposable, onNext: ((T) -> Unit)): Disposable {
+    val disposable = this
+            .subscribeOn(io.reactivex.schedulers.Schedulers.io())
+            .unsubscribeOn(io.reactivex.schedulers.Schedulers.io())
+            .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
+            .subscribe(onNext)
+
+    disposables.add(disposable)
+    return disposable
+}

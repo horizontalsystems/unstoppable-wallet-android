@@ -11,7 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import bitcoin.wallet.R
-import bitcoin.wallet.entities.Coin
+import bitcoin.wallet.entities.CurrencyValue
+import bitcoin.wallet.entities.WalletBalanceViewItem
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import kotlinx.android.synthetic.main.view_holder_coin.*
@@ -22,7 +23,7 @@ class WalletFragment : Fragment() {
     private val coinsAdapter = CoinsAdapter()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_wallet, container, false);
+        return inflater.inflate(R.layout.fragment_wallet, container, false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +32,7 @@ class WalletFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(WalletViewModel::class.java)
         viewModel.init()
 
-        viewModel.coinItemsLiveData.observe(this, Observer { coins ->
+        viewModel.walletBalancesLiveData.observe(this, Observer { coins ->
             coins?.let {
                 coinsAdapter.items = it
                 coinsAdapter.notifyDataSetChanged()
@@ -62,8 +63,8 @@ class CoinsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     }
 
-    var items = listOf<Coin>()
-    var total = 0.0
+    var items = listOf<WalletBalanceViewItem>()
+    var total: CurrencyValue? = null
 
     override fun getItemCount() = items.size + 1
 
@@ -87,8 +88,8 @@ class CoinsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 }
 
 class ViewHolderTotalBalance(private val textView: TextView) : RecyclerView.ViewHolder(textView) {
-    fun bind(total: Double) {
-        textView.text = total.toString()
+    fun bind(total: CurrencyValue?) {
+        textView.text = total?.value.toString()
     }
 }
 
@@ -104,11 +105,11 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
         }
     }
 
-    fun bind(coin: Coin) {
-        textName.text = coin.currencyName
-        textRate.text = coin.exchangeRate.toString()
-        textAmountFiat.text = coin.amountFiat.toString()
-        textAmount.text = "${coin.amount} ${coin.currencyCode}"
+    fun bind(walletBalanceViewItem: WalletBalanceViewItem) {
+        textName.text = walletBalanceViewItem.coinValue.coin.name
+        textRate.text = walletBalanceViewItem.exchangeValue.value.toString()
+        textAmountFiat.text = walletBalanceViewItem.currencyValue.value.toString()
+        textAmount.text = "${walletBalanceViewItem.coinValue.value} ${walletBalanceViewItem.coinValue.coin.code}"
     }
 
     private fun toggleButtons() {

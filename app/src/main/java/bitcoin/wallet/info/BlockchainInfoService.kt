@@ -1,6 +1,7 @@
 package bitcoin.wallet.blockchain.info
 
 import bitcoin.wallet.core.App
+import bitcoin.wallet.entities.UnspentOutput
 import io.reactivex.Flowable
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
@@ -40,8 +41,12 @@ object BlockchainInfoClient {
         fun multiaddr(@Query("active") addresses: String): Flowable<ResponseBody>
 
         @GET("unspent")
-        fun unspent(@Query("active") addresses: String): Flowable<ResponseBody>
+        fun unspent(@Query("active") addresses: String): Flowable<BlockchaininfoUnspents>
     }
 
 }
 
+
+class BlockchaininfoUnspents {
+    val unspentOutputs : List<UnspentOutput> = listOf()
+}

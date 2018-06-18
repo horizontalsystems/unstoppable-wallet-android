@@ -2,12 +2,9 @@ package bitcoin.wallet.lib
 
 import bitcoin.wallet.core.App
 import bitcoin.wallet.core.NetworkManager
-import bitcoin.wallet.entities.Coin
 import bitcoin.wallet.entities.Transaction
-import bitcoin.wallet.log
 import bitcoin.wallet.modules.transactions.IAddressesProvider
 import bitcoin.wallet.modules.transactions.ITransactionsDataProvider
-import bitcoin.wallet.modules.wallet.WalletModule
 import io.reactivex.Flowable
 import org.bitcoinj.core.Utils
 import org.bitcoinj.crypto.ChildNumber
@@ -18,8 +15,7 @@ import org.bitcoinj.params.TestNet3Params
 import org.bitcoinj.wallet.DeterministicSeed
 import java.security.SecureRandom
 
-object WalletDataManager :
-        WalletModule.ICoinsDataProvider, IAddressesProvider, ITransactionsDataProvider {
+object WalletDataManager : IAddressesProvider, ITransactionsDataProvider {
 
     private val defautPassphrase = ""
 
@@ -28,24 +24,6 @@ object WalletDataManager :
         set(value) {
             App.preferences.edit().putString("mnemonicWords", value.joinToString(", ")).apply()
         }
-
-
-    override fun getCoins(): Flowable<List<Coin>> {
-
-        return NetworkManager.getUnspentOutputs()
-                .map {
-
-                    val bitcoinAmount = it.map { it.value }.sum() / 100000000.0
-                    val bitcoinExchangeRate = 7000.0
-
-                    listOf(
-                            Coin("Bitcoin", "BTC", bitcoinAmount, bitcoinAmount * bitcoinExchangeRate, bitcoinExchangeRate),
-                            Coin("Bitcoin Cash", "BCH", 1.0, 1000.0, 1000.0),
-                            Coin("Ethereum", "ETH", 2.0, 600.0, 1200.0)
-                    )
-                }
-
-    }
 
     override fun getAddresses(): List<String> {
 
@@ -64,16 +42,12 @@ object WalletDataManager :
         }
 
         val addresses = mutableListOf<String>()
-        for (i in 0..1) {
+        for (i in 0..20) {
             val externalKeyI = HDKeyDerivation.deriveChildKey(external, i)
-
-            externalKeyI.pathAsString.log("External Key Path")
 
             val addressExternal = externalKeyI.toAddress(networkParameters).toString()
 
             val changeKeyI = HDKeyDerivation.deriveChildKey(change, i)
-
-            changeKeyI.pathAsString.log("Change Key Path")
 
             val addressChange = changeKeyI.toAddress(networkParameters).toString()
             addresses.add(addressExternal)

@@ -41,11 +41,8 @@ object NetworkManager {
     fun getUnspentOutputs(): Flowable<List<UnspentOutput>> {
         return BlockchainInfoClient.service.unspent(WalletDataManager.getAddresses().joinToString("|"))
                 .map {
-                    JsonParser().parse(it.string()).asJsonObject["unspent_outputs"].asJsonArray.map {
-                        UnspentOutput(it.asJsonObject["value"].asLong)
-                    }
+                    it.unspentOutputs
                 }
-                .onErrorResumeNext(Flowable.just(listOf()))
 
     }
 }
