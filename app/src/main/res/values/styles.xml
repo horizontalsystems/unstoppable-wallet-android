@@ -7,11 +7,12 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="buttonStyle">@style/Button</item>
+        <item name="android:colorBackground">@color/appBackground</item>
 
     </style>
 
     <style name="Button" parent="Base.Widget.AppCompat.Button">
-        <item name="android:background">#f7b731</item>
+        <item name="android:background">@color/orange</item>
         <item name="android:textColor">#000000</item>
         <item name="android:height">50dp</item>
         <item name="android:textSize">17sp</item>
@@ -25,7 +26,7 @@
 
     <style name="Title">
         <item name="android:fontFamily">@font/noto_sans_bold</item>
-        <item name="android:textColor">#f7b731</item>
+        <item name="android:textColor">@color/orange</item>
         <item name="android:textSize">50sp</item>
     </style>
 

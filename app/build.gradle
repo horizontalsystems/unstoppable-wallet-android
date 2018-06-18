@@ -104,4 +104,6 @@ dependencies {
     // Test helpers
     testImplementation "android.arch.persistence.room:testing:$room_version"
 
+    api 'com.aurelhubert:ahbottomnavigation:2.2.0'
+
 }

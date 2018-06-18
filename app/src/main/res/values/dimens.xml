@@ -1,0 +1,10 @@
+<resources>
+    <!-- Bottom Navigation Bar -->
+    <dimen name="bottom_navigation_height">48dp</dimen>
+    <dimen name="bottom_navigation_small_margin_bottom">12dp</dimen>
+    <dimen name="bottom_navigation_small_margin_top">12dp</dimen>
+    <dimen name="bottom_navigation_small_selected_width_difference">0dp</dimen>
+    <dimen name="bottom_navigation_small_inactive_max_width">96dp</dimen>
+    <dimen name="bottom_navigation_small_inactive_min_width">64dp</dimen>
+</resources>
+
