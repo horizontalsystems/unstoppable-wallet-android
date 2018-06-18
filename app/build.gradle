@@ -85,4 +85,6 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
     implementation 'com.google.code.gson:gson:2.8.5'
 
+    api 'com.aurelhubert:ahbottomnavigation:2.2.0'
+
 }
