@@ -6,12 +6,14 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import bitcoin.wallet.R
+import bitcoin.wallet.viewHelpers.DateHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
 import kotlinx.android.synthetic.main.view_holder_transaction.*
@@ -86,6 +88,10 @@ class ViewHolderTransaction(override val containerView: View) : RecyclerView.Vie
 
     fun bind(transaction: TransactionViewItem) {
         val sign = if (transaction.type == TransactionViewItem.Type.IN) "+" else "-"
-        textSummarize.text = "${sign} ${transaction.amount}, ${transaction.date}"
+        val amountTextColor = if (transaction.type == TransactionViewItem.Type.IN) R.color.green else R.color.grey
+        txAmount.setTextColor(ContextCompat.getColor(itemView.context, amountTextColor))
+        txAmount.text = "$sign ${transaction.amount} ${transaction.currency}"
+        txStatus.text = transaction.status
+        txDate.text = DateHelper.getRelativeDateString(itemView.context, transaction.date)
     }
 }
