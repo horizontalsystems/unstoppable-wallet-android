@@ -2,24 +2,74 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="72dp"
+    android:background="?android:selectableItemBackground"
+    android:clickable="true"
     >
 
 
     <TextView
-        android:id="@+id/textSummarize"
-        android:layout_width="0dp"
+        android:id="@+id/txDate"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="12dp"
+        android:textColor="#ffffff"
+        android:textSize="14sp"
+        android:fontFamily="@font/noto_sans"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        tools:text="3 June 2018"
+        />
+
+    <TextView
+        android:id="@+id/txStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:textColor="#8a8a8f"
+        android:textSize="14sp"
+        android:fontFamily="@font/noto_sans"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txDate"
+        tools:text="success"
+        />
+
+    <TextView
+        android:id="@+id/txAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="18dp"
+        android:layout_marginTop="25dp"
+        android:textColor="#1ebf6b"
+        android:textSize="14sp"
+        android:fontFamily="@font/noto_sans_bold"
+        app:layout_constraintEnd_toStartOf="@+id/txInfoIcon"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="+ 0,006482 BTC"
+        />
+
+    <ImageView
+        android:id="@+id/txInfoIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="18dp"
+        android:layout_marginTop="24dp"
+        android:cropToPadding="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/outline_info_24px"
+        />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="#808a8a8f"
         />
 
 </android.support.constraint.ConstraintLayout>

@@ -1,10 +1,10 @@
 package bitcoin.wallet.modules.transactions
 
-import io.reactivex.Flowable
-import io.reactivex.disposables.CompositeDisposable
 import bitcoin.wallet.core.subscribeAsync
 import bitcoin.wallet.entities.Transaction
 import bitcoin.wallet.lib.WalletDataManager
+import io.reactivex.Flowable
+import io.reactivex.disposables.CompositeDisposable
 import java.util.*
 import kotlin.math.absoluteValue
 
@@ -65,6 +65,9 @@ interface IAddressesProvider {
 }
 
 class TransactionViewItem(var type: Type, var amount: Double, var date: Date) {
+
+    var status: String = "success" // todo to-be-implemented
+    var currency: String = "BTC" // todo to-be-implemented
 
     enum class Type {
         IN, OUT

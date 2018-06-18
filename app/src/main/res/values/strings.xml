@@ -22,4 +22,10 @@
     <string name="action_done">Done</string>
     <string name="button_receive">Receive</string>
     <string name="button_pay">Pay</string>
+    <string name="timestamp_just_now">just now</string>
+    <string name="timestamp_min_ago">%dm. ago</string>
+    <string name="timestamp_hours_ago">%dh. ago</string>
+    <string name="timestamp_today">Тoday</string>
+    <string name="timestamp_yesterday">Yesterday</string>
+
 </resources>
