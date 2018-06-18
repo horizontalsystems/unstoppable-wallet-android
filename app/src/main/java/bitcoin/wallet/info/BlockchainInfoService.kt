@@ -2,6 +2,7 @@ package bitcoin.wallet.blockchain.info
 
 import bitcoin.wallet.core.App
 import bitcoin.wallet.entities.UnspentOutput
+import com.google.gson.annotations.SerializedName
 import io.reactivex.Flowable
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
@@ -48,5 +49,6 @@ object BlockchainInfoClient {
 
 
 class BlockchaininfoUnspents {
-    val unspentOutputs : List<UnspentOutput> = listOf()
+    @SerializedName("unspent_outputs")
+    var unspentOutputs : List<UnspentOutput> = listOf()
 }
