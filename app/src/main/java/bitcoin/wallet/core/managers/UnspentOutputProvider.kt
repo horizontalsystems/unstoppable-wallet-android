@@ -9,6 +9,8 @@ class UnspentOutputProvider : IUnspentOutputProvider {
 
     override val unspentOutputs: List<UnspentOutput>
         get() {
+//            return App.db.unspentOutputDao().all
+
             return listOf(
                     UnspentOutput(32500000, 0, 0, "", ""),
                     UnspentOutput(16250000, 0, 0, "", "")
