@@ -10,4 +10,12 @@ object Factory {
         PreferencesManager()
     }
 
+    val walletDataProvider by lazy {
+        StubWalletDataProvider()
+    }
+
+    val randomProvider by lazy {
+        RandomProvider()
+    }
+
 }

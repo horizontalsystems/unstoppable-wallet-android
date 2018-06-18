@@ -5,7 +5,6 @@ import bitcoin.wallet.core.NetworkManager
 import bitcoin.wallet.entities.Coin
 import bitcoin.wallet.entities.Transaction
 import bitcoin.wallet.log
-import bitcoin.wallet.modules.backupWords.BackupWordsModule
 import bitcoin.wallet.modules.transactions.IAddressesProvider
 import bitcoin.wallet.modules.transactions.ITransactionsDataProvider
 import bitcoin.wallet.modules.wallet.WalletModule
@@ -20,12 +19,11 @@ import org.bitcoinj.wallet.DeterministicSeed
 import java.security.SecureRandom
 
 object WalletDataManager :
-        BackupWordsModule.IWordsProvider,
         WalletModule.ICoinsDataProvider, IAddressesProvider, ITransactionsDataProvider {
 
     private val defautPassphrase = ""
 
-    override var mnemonicWords: List<String>
+    var mnemonicWords: List<String>
         get() = App.preferences.getString("mnemonicWords", "").split(", ").filter { it.isNotBlank() }
         set(value) {
             App.preferences.edit().putString("mnemonicWords", value.joinToString(", ")).apply()

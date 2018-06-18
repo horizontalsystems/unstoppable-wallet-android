@@ -9,7 +9,8 @@ import android.view.ViewGroup
 import bitcoin.wallet.LauncherActivity
 import bitcoin.wallet.R
 import bitcoin.wallet.lib.WalletDataManager
-import bitcoin.wallet.modules.backupWords.BackupWordsModule
+import bitcoin.wallet.modules.backup.BackupModule
+import bitcoin.wallet.modules.backup.BackupPresenter
 import kotlinx.android.synthetic.main.fragment_settings.*
 
 class SettingsFragment : Fragment() {
@@ -30,7 +31,7 @@ class SettingsFragment : Fragment() {
         }
 
         buttonBackup.setOnClickListener {
-            context?.let { BackupWordsModule.start(it, BackupWordsModule.DismissMode.DISMISS_SELF) }
+            context?.let { BackupModule.start(it, BackupPresenter.DismissMode.DISMISS_SELF) }
         }
     }
 }
