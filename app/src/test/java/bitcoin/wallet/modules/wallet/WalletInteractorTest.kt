@@ -1,7 +1,6 @@
 package bitcoin.wallet.modules.wallet
 
-import bitcoin.wallet.core.IExchangeRateProvider
-import bitcoin.wallet.core.IUnspentOutputProvider
+import bitcoin.wallet.core.IDatabaseManager
 import bitcoin.wallet.entities.*
 import bitcoin.wallet.modules.RxBaseTest
 import com.nhaarman.mockito_kotlin.whenever
@@ -14,26 +13,18 @@ import org.mockito.Mockito.verify
 class WalletInteractorTest {
 
     private val delegate = mock(WalletModule.IInteractorDelegate::class.java)
-    private val unspentOutputProvider = mock(IUnspentOutputProvider::class.java)
-    private val exchangeRateProvider = mock(IExchangeRateProvider::class.java)
+    private val databaseManager = mock(IDatabaseManager::class.java)
 
     private lateinit var interactor: WalletInteractor
 
-    private lateinit var unspentOutputSubject: PublishSubject<List<UnspentOutput>>
+    private val unspentOutputSubject = PublishSubject.create<List<UnspentOutput>>()
+    private val exchangeRateSubject = PublishSubject.create<HashMap<String, Double>>()
 
-    private lateinit var exchangeRateSubject: PublishSubject<HashMap<Coin, Double>>
-
-    private var exchangeRate = 10_000.0
+    private val exchangeRates = hashMapOf(Bitcoin().code to 10_000.0)
 
     @Before
     fun before() {
         RxBaseTest.setup()
-
-        unspentOutputSubject = PublishSubject.create<List<UnspentOutput>>()
-        exchangeRateSubject = PublishSubject.create<HashMap<Coin, Double>>()
-
-        whenever(unspentOutputProvider.subject).thenReturn(unspentOutputSubject)
-        whenever(exchangeRateProvider.subject).thenReturn(exchangeRateSubject)
 
         val unspentOutput1 = mock(UnspentOutput::class.java)
         val unspentOutput2 = mock(UnspentOutput::class.java)
@@ -41,10 +32,10 @@ class WalletInteractorTest {
         whenever(unspentOutput1.value).thenReturn((0.5 * 100000000).toLong())
         whenever(unspentOutput2.value).thenReturn((0.3 * 100000000).toLong())
 
-        whenever(exchangeRateProvider.getExchangeRateForCoin(Bitcoin())).thenReturn(exchangeRate)
-        whenever(unspentOutputProvider.unspentOutputs).thenReturn(listOf(unspentOutput1, unspentOutput2))
+        whenever(databaseManager.getExchangeRates()).thenReturn(exchangeRates)
+        whenever(databaseManager.getUnspentOutputs()).thenReturn(listOf(unspentOutput1, unspentOutput2))
 
-        interactor = WalletInteractor(unspentOutputProvider, exchangeRateProvider)
+        interactor = WalletInteractor(databaseManager, unspentOutputSubject, exchangeRateSubject)
         interactor.delegate = delegate
 
     }
@@ -52,7 +43,7 @@ class WalletInteractorTest {
     @Test
     fun fetchWalletBalances() {
         val expectedWalletBalances = listOf(
-                WalletBalanceItem(CoinValue(Bitcoin(), 0.8), exchangeRate, DollarCurrency())
+                WalletBalanceItem(CoinValue(Bitcoin(), 0.8), 10_000.0, DollarCurrency())
         )
 
         interactor.notifyWalletBalances()
@@ -72,7 +63,7 @@ class WalletInteractorTest {
         val updatedUnspentOutputs = listOf(unspentOutput1, unspentOutput2)
 
         val walletBalances = listOf(
-                WalletBalanceItem(CoinValue(Bitcoin(), 3.0), exchangeRate, DollarCurrency())
+                WalletBalanceItem(CoinValue(Bitcoin(), 3.0), 10_000.0, DollarCurrency())
         )
 
         unspentOutputSubject.onNext(updatedUnspentOutputs)
@@ -89,7 +80,7 @@ class WalletInteractorTest {
                 WalletBalanceItem(CoinValue(Bitcoin(), 0.8), exchangeRate, DollarCurrency())
         )
 
-        exchangeRateSubject.onNext(hashMapOf(Bitcoin() to exchangeRate))
+        exchangeRateSubject.onNext(hashMapOf(Bitcoin().code to exchangeRate))
 
         verify(delegate).didFetchWalletBalances(walletBalances)
     }

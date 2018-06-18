@@ -2,6 +2,7 @@ package bitcoin.wallet.lib
 
 import bitcoin.wallet.core.App
 import bitcoin.wallet.core.NetworkManager
+import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.entities.Transaction
 import bitcoin.wallet.modules.transactions.IAddressesProvider
 import bitcoin.wallet.modules.transactions.ITransactionsDataProvider
@@ -58,7 +59,7 @@ object WalletDataManager : IAddressesProvider, ITransactionsDataProvider {
     }
 
     override fun getTransactions(): Flowable<List<Transaction>> {
-        return NetworkManager.getTransactions()
+        return Factory.networkManager.getTransactions()
     }
 
     fun hasWallet(): Boolean {

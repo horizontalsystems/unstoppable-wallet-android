@@ -9,7 +9,7 @@ import bitcoin.wallet.lib.WalletDataManager
 import com.google.gson.JsonParser
 import io.reactivex.Flowable
 
-object NetworkManager {
+class NetworkManager : INetworkManager {
     fun getTransactions(): Flowable<List<Transaction>> {
         return BlockchainInfoClient.service.multiaddr(WalletDataManager.getAddresses().joinToString("|"))
                 .map {
@@ -38,11 +38,16 @@ object NetworkManager {
 
     }
 
-    fun getUnspentOutputs(): Flowable<List<UnspentOutput>> {
+    override fun getUnspentOutputs(): Flowable<List<UnspentOutput>> {
         return BlockchainInfoClient.service.unspent(WalletDataManager.getAddresses().joinToString("|"))
                 .map {
                     it.unspentOutputs
                 }
 
     }
+
+    override fun getExchangeRates(): Flowable<HashMap<String, Double>> {
+        return Flowable.just(hashMapOf("BTC" to 7200.0))
+    }
+
 }

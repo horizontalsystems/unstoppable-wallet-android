@@ -28,7 +28,7 @@ object WalletModule {
 
     fun init(view: WalletViewModel, router: IRouter) {
 
-        val interactor = WalletInteractor(Factory.unspentOutputProvider, Factory.exchangeRateProvider)
+        val interactor = WalletInteractor(Factory.databaseManager, Factory.unspentOutputUpdateSubject, Factory.exchangeRateUpdateSubject)
         val presenter = WalletPresenter(interactor, router)
 
         presenter.view = view
@@ -37,4 +37,3 @@ object WalletModule {
     }
 
 }
-

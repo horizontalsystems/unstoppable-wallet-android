@@ -1,8 +1,7 @@
 package bitcoin.wallet.core
 
-import bitcoin.wallet.entities.Coin
 import bitcoin.wallet.entities.UnspentOutput
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.Flowable
 
 interface ILocalStorage {
     val savedWords : List<String>?
@@ -22,16 +21,19 @@ interface IRandomProvider {
     fun getRandomIndexes(count: Int) : List<Int>
 }
 
-interface IUnspentOutputProvider {
-    val unspentOutputs : List<UnspentOutput>
-    val subject: PublishSubject<List<UnspentOutput>>
+interface IDatabaseManager {
+    fun getUnspentOutputs() : List<UnspentOutput>
+    fun insertUnspentOutputs(values: List<UnspentOutput>)
+    fun truncateUnspentOutputs()
+
+    fun getExchangeRates() : HashMap<String, Double>
+    fun insertExchangeRates(values: HashMap<String, Double>)
+    fun truncateExchangeRates()
 }
 
-interface IExchangeRateProvider {
-    val subject: PublishSubject<HashMap<Coin, Double>>
-
-    fun getExchangeRateForCoin(bitcoin: Coin): Double
-
+interface INetworkManager {
+    fun getUnspentOutputs(): Flowable<List<UnspentOutput>>
+    fun getExchangeRates(): Flowable<HashMap<String, Double>>
 }
 
 data class WalletData(val words: List<String>)
