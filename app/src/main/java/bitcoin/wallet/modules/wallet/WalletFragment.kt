@@ -3,7 +3,6 @@ package bitcoin.wallet.modules.wallet
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -13,11 +12,15 @@ import android.widget.TextView
 import bitcoin.wallet.R
 import bitcoin.wallet.entities.CurrencyValue
 import bitcoin.wallet.entities.WalletBalanceViewItem
+import bitcoin.wallet.modules.main.MainTabFragment
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import kotlinx.android.synthetic.main.view_holder_coin.*
 
-class WalletFragment : Fragment() {
+class WalletFragment : MainTabFragment() {
+
+    override val toolbarTitle: String?
+        get() = context?.getString(R.string.tab_title_wallet)
 
     private lateinit var viewModel: WalletViewModel
     private val coinsAdapter = CoinsAdapter()

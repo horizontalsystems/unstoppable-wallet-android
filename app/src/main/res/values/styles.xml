@@ -41,4 +41,10 @@
         <item name="android:textColor">@color/colorAccent</item>
     </style>
 
+    <style name="TabTitle">
+        <item name="android:fontFamily">@font/noto_sans_bold</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">34sp</item>
+    </style>
+
 </resources>
