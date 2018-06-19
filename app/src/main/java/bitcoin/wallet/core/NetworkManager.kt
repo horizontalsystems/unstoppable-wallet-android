@@ -1,10 +1,7 @@
 package bitcoin.wallet.core
 
 import bitcoin.wallet.blockchain.info.BlockchainInfoClient
-import bitcoin.wallet.entities.Transaction
-import bitcoin.wallet.entities.TransactionInput
-import bitcoin.wallet.entities.TransactionOutput
-import bitcoin.wallet.entities.UnspentOutput
+import bitcoin.wallet.entities.*
 import bitcoin.wallet.lib.WalletDataManager
 import com.google.gson.JsonParser
 import io.reactivex.Flowable
@@ -46,8 +43,8 @@ class NetworkManager : INetworkManager {
 
     }
 
-    override fun getExchangeRates(): Flowable<HashMap<String, Double>> {
-        return Flowable.just(hashMapOf("BTC" to 7200.0))
+    override fun getExchangeRates(): Flowable<List<ExchangeRate>> {
+        return Flowable.just(listOf(ExchangeRate("BTC", 7200.0)))
     }
 
 }

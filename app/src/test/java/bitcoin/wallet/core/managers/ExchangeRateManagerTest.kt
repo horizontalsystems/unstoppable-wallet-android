@@ -2,6 +2,7 @@ package bitcoin.wallet.core.managers
 
 import bitcoin.wallet.core.IDatabaseManager
 import bitcoin.wallet.core.INetworkManager
+import bitcoin.wallet.entities.ExchangeRate
 import bitcoin.wallet.modules.RxBaseTest
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
@@ -16,11 +17,11 @@ class ExchangeRateManagerTest {
 
     private val databaseManager = Mockito.mock(IDatabaseManager::class.java)
     private val networkManager = Mockito.mock(INetworkManager::class.java)
-    private val updateSubject = mock<PublishSubject<HashMap<String, Double>>>()
+    private val updateSubject = mock<PublishSubject<List<ExchangeRate>>>()
 
     private val exchangeRateManager = ExchangeRateManager(databaseManager, networkManager, updateSubject)
 
-    private val exchangeRates = hashMapOf("BTC" to 10.0, "ETH" to 20.0)
+    private val exchangeRates = listOf(ExchangeRate("BTC",10.0), ExchangeRate("ETH", 20.0))
 
     @Before
     fun before() {

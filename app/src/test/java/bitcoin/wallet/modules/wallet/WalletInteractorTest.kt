@@ -18,9 +18,9 @@ class WalletInteractorTest {
     private lateinit var interactor: WalletInteractor
 
     private val unspentOutputSubject = PublishSubject.create<List<UnspentOutput>>()
-    private val exchangeRateSubject = PublishSubject.create<HashMap<String, Double>>()
+    private val exchangeRateSubject = PublishSubject.create<List<ExchangeRate>>()
 
-    private val exchangeRates = hashMapOf(Bitcoin().code to 10_000.0)
+    private val exchangeRates = listOf(ExchangeRate("BTC", 10_000.0))
 
     @Before
     fun before() {
@@ -80,7 +80,7 @@ class WalletInteractorTest {
                 WalletBalanceItem(CoinValue(Bitcoin(), 0.8), exchangeRate, DollarCurrency())
         )
 
-        exchangeRateSubject.onNext(hashMapOf(Bitcoin().code to exchangeRate))
+        exchangeRateSubject.onNext(listOf(ExchangeRate(Bitcoin().code, exchangeRate)))
 
         verify(delegate).didFetchWalletBalances(walletBalances)
     }

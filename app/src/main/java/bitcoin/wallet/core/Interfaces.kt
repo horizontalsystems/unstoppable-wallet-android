@@ -1,5 +1,6 @@
 package bitcoin.wallet.core
 
+import bitcoin.wallet.entities.ExchangeRate
 import bitcoin.wallet.entities.UnspentOutput
 import io.reactivex.Flowable
 
@@ -26,14 +27,14 @@ interface IDatabaseManager {
     fun insertUnspentOutputs(values: List<UnspentOutput>)
     fun truncateUnspentOutputs()
 
-    fun getExchangeRates() : HashMap<String, Double>
-    fun insertExchangeRates(values: HashMap<String, Double>)
+    fun getExchangeRates() : List<ExchangeRate>
+    fun insertExchangeRates(values: List<ExchangeRate>)
     fun truncateExchangeRates()
 }
 
 interface INetworkManager {
     fun getUnspentOutputs(): Flowable<List<UnspentOutput>>
-    fun getExchangeRates(): Flowable<HashMap<String, Double>>
+    fun getExchangeRates(): Flowable<List<ExchangeRate>>
 }
 
 data class WalletData(val words: List<String>)

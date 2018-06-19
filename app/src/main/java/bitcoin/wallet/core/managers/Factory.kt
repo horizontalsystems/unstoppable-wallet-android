@@ -1,13 +1,14 @@
 package bitcoin.wallet.core.managers
 
 import bitcoin.wallet.core.NetworkManager
+import bitcoin.wallet.entities.ExchangeRate
 import bitcoin.wallet.entities.UnspentOutput
 import io.reactivex.subjects.PublishSubject
 
 object Factory {
 
     val unspentOutputUpdateSubject = PublishSubject.create<List<UnspentOutput>>()
-    val exchangeRateUpdateSubject = PublishSubject.create<HashMap<String, Double>>()
+    val exchangeRateUpdateSubject = PublishSubject.create<List<ExchangeRate>>()
 
     val mnemonicManager by lazy {
         MnemonicManager()

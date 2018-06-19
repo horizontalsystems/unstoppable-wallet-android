@@ -6,7 +6,7 @@ import bitcoin.wallet.entities.*
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
-class WalletInteractor(databaseManager: IDatabaseManager, unspentOutputUpdateSubject: PublishSubject<List<UnspentOutput>>, exchangeRateUpdateSubject: PublishSubject<HashMap<String, Double>>) : WalletModule.IInteractor {
+class WalletInteractor(databaseManager: IDatabaseManager, unspentOutputUpdateSubject: PublishSubject<List<UnspentOutput>>, exchangeRateUpdateSubject: PublishSubject<List<ExchangeRate>>) : WalletModule.IInteractor {
 
     var delegate: WalletModule.IInteractorDelegate? = null
     private var exchangeRates = databaseManager.getExchangeRates()
@@ -34,8 +34,8 @@ class WalletInteractor(databaseManager: IDatabaseManager, unspentOutputUpdateSub
 
         val bitcoin = Bitcoin()
 
-        exchangeRates[Bitcoin().code]?.let {
-            val walletBalanceItem = WalletBalanceItem(CoinValue(bitcoin, totalValue), it, DollarCurrency())
+        exchangeRates.firstOrNull { it.code == bitcoin.code }?.let {
+            val walletBalanceItem = WalletBalanceItem(CoinValue(bitcoin, totalValue), it.value, DollarCurrency())
             delegate?.didFetchWalletBalances(listOf(walletBalanceItem))
         }
     }
