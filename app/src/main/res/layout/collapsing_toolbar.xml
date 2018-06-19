@@ -20,7 +20,8 @@
         app:expandedTitleMarginBottom="16dp"
         app:expandedTitleMarginStart="16dp"
         app:expandedTitleTextAppearance="@style/TabTitle"
-        app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+        app:collapsedTitleTextAppearance="@style/TabTitleCollapsed"
+        app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"

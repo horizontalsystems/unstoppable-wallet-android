@@ -4,10 +4,11 @@
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/black</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="buttonStyle">@style/Button</item>
         <item name="android:colorBackground">@color/appBackground</item>
+        <item name="android:navigationBarColor">@color/black</item>
 
     </style>
 
@@ -45,6 +46,12 @@
         <item name="android:fontFamily">@font/noto_sans_bold</item>
         <item name="android:textColor">#ffffff</item>
         <item name="android:textSize">34sp</item>
+    </style>
+
+    <style name="TabTitleCollapsed">
+        <item name="android:fontFamily">@font/noto_sans_bold</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
 </resources>
