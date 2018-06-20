@@ -8,7 +8,7 @@
     android:layout_marginBottom="8dp"
     android:layout_marginEnd="16dp"
     android:layout_marginStart="16dp"
-    android:background="#808a8a8f"
+    android:background="@drawable/coin_holder_background"
     >
 
     <TextView
@@ -70,6 +70,7 @@
 
     <Button
         android:id="@+id/buttonReceive"
+        style="@style/ButtonGreen"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -85,6 +86,7 @@
 
     <Button
         android:id="@+id/buttonPay"
+        style="@style/ButtonYellow"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"

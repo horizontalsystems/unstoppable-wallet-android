@@ -92,7 +92,7 @@ class CoinsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 class ViewHolderTotalBalance(private val textView: TextView) : RecyclerView.ViewHolder(textView) {
     fun bind(total: CurrencyValue?) {
-        textView.text = total?.value.toString()
+        textView.text = total?.let { String.format("%.2f%s", total.value, total.currency.symbol) } ?: ""
     }
 }
 
@@ -110,8 +110,8 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
 
     fun bind(walletBalanceViewItem: WalletBalanceViewItem) {
         textName.text = walletBalanceViewItem.coinValue.coin.name
-        textRate.text = walletBalanceViewItem.exchangeValue.value.toString()
-        textAmountFiat.text = walletBalanceViewItem.currencyValue.value.toString()
+        textRate.text = String.format("%.2f%s", walletBalanceViewItem.exchangeValue.value, walletBalanceViewItem.exchangeValue.currency.symbol)
+        textAmountFiat.text = String.format("%.2f%s", walletBalanceViewItem.currencyValue.value, walletBalanceViewItem.currencyValue.currency.symbol)
         textAmount.text = "${walletBalanceViewItem.coinValue.value} ${walletBalanceViewItem.coinValue.coin.code}"
     }
 
