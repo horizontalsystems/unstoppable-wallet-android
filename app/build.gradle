@@ -105,5 +105,6 @@ dependencies {
     testImplementation "android.arch.persistence.room:testing:$room_version"
 
     api 'com.aurelhubert:ahbottomnavigation:2.2.0'
+    api "org.jetbrains.anko:anko-commons:0.10.5"
 
 }

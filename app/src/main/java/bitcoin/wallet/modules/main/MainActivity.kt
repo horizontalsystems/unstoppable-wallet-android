@@ -2,6 +2,7 @@ package bitcoin.wallet.modules.main
 
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import bitcoin.wallet.R
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
@@ -15,6 +16,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
+
+        setSupportActionBar(toolbar)
 
         adapter = MainTabsAdapter(supportFragmentManager)
 
@@ -37,6 +40,21 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+
+        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) {
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                if (positionOffset == 0f) {
+                    adapter.currentItem = bottomNavigation.currentItem
+                }
+            }
+
+            override fun onPageSelected(position: Int) {
+                bottomNavigation.currentItem = position
+            }
+        })
     }
 
 }

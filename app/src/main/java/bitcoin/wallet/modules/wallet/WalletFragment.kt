@@ -12,15 +12,15 @@ import android.widget.TextView
 import bitcoin.wallet.R
 import bitcoin.wallet.entities.CurrencyValue
 import bitcoin.wallet.entities.WalletBalanceViewItem
-import bitcoin.wallet.modules.main.MainTabFragment
+import bitcoin.wallet.modules.main.BaseTabFragment
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import kotlinx.android.synthetic.main.view_holder_coin.*
 
-class WalletFragment : MainTabFragment() {
+class WalletFragment : BaseTabFragment() {
 
-    override val toolbarTitle: String?
-        get() = context?.getString(R.string.tab_title_wallet)
+    override val title: Int
+        get() = R.string.tab_title_wallet
 
     private lateinit var viewModel: WalletViewModel
     private val coinsAdapter = CoinsAdapter()

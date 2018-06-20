@@ -10,13 +10,13 @@ import bitcoin.wallet.R
 import bitcoin.wallet.lib.WalletDataManager
 import bitcoin.wallet.modules.backup.BackupModule
 import bitcoin.wallet.modules.backup.BackupPresenter
-import bitcoin.wallet.modules.main.MainTabFragment
+import bitcoin.wallet.modules.main.BaseTabFragment
 import kotlinx.android.synthetic.main.fragment_settings.*
 
-class SettingsFragment : MainTabFragment() {
+class SettingsFragment : BaseTabFragment() {
 
-    override val toolbarTitle: String?
-        get() = context?.getString(R.string.tab_title_settings)
+    override val title: Int
+        get() = R.string.tab_title_settings
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_settings, container, false);
