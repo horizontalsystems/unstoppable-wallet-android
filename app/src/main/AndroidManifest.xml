@@ -23,13 +23,14 @@
         <activity android:name=".modules.guest.GuestActivity"/>
         <activity
             android:name=".modules.backup.BackupActivity"
-            android:windowSoftInputMode="adjustResize"
-            />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".modules.main.MainActivity"
             android:screenOrientation="portrait"/>
-
-        <activity android:name=".modules.restore.RestoreWalletActivity"/>
+        <activity
+            android:name=".modules.restore.RestoreWalletActivity"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="preloaded_fonts"

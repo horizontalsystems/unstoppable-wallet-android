@@ -3,23 +3,25 @@ package bitcoin.wallet.modules.restore
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import bitcoin.wallet.R
 import bitcoin.wallet.lib.EditTextViewHolder
+import bitcoin.wallet.lib.ErrorDialog
 import bitcoin.wallet.lib.WordsInputAdapter
 import bitcoin.wallet.modules.main.MainModule
+import bitcoin.wallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.activity_restore_wallet.*
 
 class RestoreWalletActivity : AppCompatActivity() {
 
     private lateinit var viewModel: RestoreViewModel
 
-    private val words = MutableList(12, {""})
+    private val words = MutableList(12, { "" })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,11 +36,8 @@ class RestoreWalletActivity : AppCompatActivity() {
         viewModel.init()
 
         viewModel.errorLiveData.observe(this, Observer { errorId ->
-            if (errorId == null) {
-                textError.visibility = View.GONE
-            } else {
-                textError.visibility = View.VISIBLE
-                textError.text = getString(errorId)
+            errorId?.let {
+                ErrorDialog(this, errorId).show()
             }
         })
 
@@ -60,9 +59,10 @@ class RestoreWalletActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.restore_wallet, menu)
-        return true
+        menuInflater.inflate(R.menu.menu_restore_wallet, menu)
+        LayoutHelper.tintMenuIcons(menu, ContextCompat.getColor(this, R.color.yellow))
+
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {

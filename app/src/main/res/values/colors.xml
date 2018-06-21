@@ -2,7 +2,6 @@
 <resources>
     <color name="colorPrimary">#282b35</color>
     <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">#FF4081</color>
     <color name="appBackground">#282b35</color>
     <color name="green">#1ebf6b</color>
     <color name="green_pressed">#1ba65E</color>
@@ -12,5 +11,7 @@
     <color name="yellow">#f7b731</color>
     <color name="yellow_pressed">#e09d0b</color>
     <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
+    <color name="red_error">#deff3434</color>
 
 </resources>

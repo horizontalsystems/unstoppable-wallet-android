@@ -5,7 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/black</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/yellow</item>
         <item name="buttonStyle">@style/Button</item>
         <item name="android:colorBackground">@color/appBackground</item>
         <item name="android:navigationBarColor">@color/black</item>
@@ -48,13 +48,22 @@
     </style>
 
     <style name="Error">
-        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textColor">@color/red_error</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
     <style name="TabTitle">
         <item name="android:fontFamily">@font/noto_sans_bold</item>
         <item name="android:textColor">#ffffff</item>
         <item name="android:textSize">34sp</item>
+    </style>
+
+    <style name="TabTitleSmall" parent="TabTitle">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="ToolbarStyle">
+        <item name="colorControlNormal">@color/yellow</item>
     </style>
 
 </resources>
