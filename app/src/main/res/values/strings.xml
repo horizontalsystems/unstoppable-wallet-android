@@ -27,7 +27,7 @@
     <string name="timestamp_hours_ago">%dh. ago</string>
     <string name="timestamp_today">Тoday</string>
     <string name="timestamp_yesterday">Yesterday</string>
-    <string name="tab_title_wallet">Wallet</string>
+    <string name="tab_title_wallet">Balance</string>
     <string name="tab_title_transactions">Transactions</string>
     <string name="tab_title_settings">Settings</string>
 

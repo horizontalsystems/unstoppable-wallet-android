@@ -12,16 +12,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import bitcoin.wallet.R
-import bitcoin.wallet.modules.main.MainTabFragment
+import bitcoin.wallet.modules.main.BaseTabFragment
 import bitcoin.wallet.viewHelpers.DateHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
 import kotlinx.android.synthetic.main.view_holder_transaction.*
 
-class TransactionsFragment : MainTabFragment() {
+class TransactionsFragment : BaseTabFragment() {
 
-    override val toolbarTitle: String?
-        get() = context?.getString(R.string.tab_title_transactions)
+    override val title: Int
+        get() = R.string.tab_title_transactions
 
     private lateinit var viewModel: TransactionsViewModel
     private val transactionsAdapter = TransactionsAdapter()

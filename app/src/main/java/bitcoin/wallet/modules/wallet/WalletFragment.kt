@@ -12,15 +12,15 @@ import android.widget.TextView
 import bitcoin.wallet.R
 import bitcoin.wallet.entities.CurrencyValue
 import bitcoin.wallet.entities.WalletBalanceViewItem
-import bitcoin.wallet.modules.main.MainTabFragment
+import bitcoin.wallet.modules.main.BaseTabFragment
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import kotlinx.android.synthetic.main.view_holder_coin.*
 
-class WalletFragment : MainTabFragment() {
+class WalletFragment : BaseTabFragment() {
 
-    override val toolbarTitle: String?
-        get() = context?.getString(R.string.tab_title_wallet)
+    override val title: Int
+        get() = R.string.tab_title_wallet
 
     private lateinit var viewModel: WalletViewModel
     private val coinsAdapter = CoinsAdapter()
@@ -92,7 +92,7 @@ class CoinsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 class ViewHolderTotalBalance(private val textView: TextView) : RecyclerView.ViewHolder(textView) {
     fun bind(total: CurrencyValue?) {
-        textView.text = total?.value.toString()
+        textView.text = total?.let { String.format("%.2f%s", total.value, total.currency.symbol) } ?: ""
     }
 }
 
@@ -110,8 +110,8 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
 
     fun bind(walletBalanceViewItem: WalletBalanceViewItem) {
         textName.text = walletBalanceViewItem.coinValue.coin.name
-        textRate.text = walletBalanceViewItem.exchangeValue.value.toString()
-        textAmountFiat.text = walletBalanceViewItem.currencyValue.value.toString()
+        textRate.text = String.format("%.2f%s", walletBalanceViewItem.exchangeValue.value, walletBalanceViewItem.exchangeValue.currency.symbol)
+        textAmountFiat.text = String.format("%.2f%s", walletBalanceViewItem.currencyValue.value, walletBalanceViewItem.currencyValue.currency.symbol)
         textAmount.text = "${walletBalanceViewItem.coinValue.value} ${walletBalanceViewItem.coinValue.coin.code}"
     }
 

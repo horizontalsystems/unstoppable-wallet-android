@@ -8,8 +8,20 @@ import android.view.ViewGroup
 import bitcoin.wallet.modules.settings.SettingsFragment
 import bitcoin.wallet.modules.transactions.TransactionsFragment
 import bitcoin.wallet.modules.wallet.WalletFragment
+import org.jetbrains.anko.collections.forEach
 
 class MainTabsAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
+
+    var currentItem = 0
+        set(value) {
+            field = value
+
+            registeredFragments.forEach { i, tabFragment ->
+                if (tabFragment is BaseTabFragment) {
+                    tabFragment.active = i == value
+                }
+            }
+        }
 
     private val registeredFragments = SparseArray<Fragment>()
 

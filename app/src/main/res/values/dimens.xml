@@ -7,6 +7,6 @@
     <dimen name="bottom_navigation_small_inactive_max_width">96dp</dimen>
     <dimen name="bottom_navigation_small_inactive_min_width">64dp</dimen>
 
-    <dimen name="collapsing_toolbar_height">99dp</dimen>
+    <dimen name="app_bar_layout_toolbar_height">100dp</dimen>
 </resources>
 
