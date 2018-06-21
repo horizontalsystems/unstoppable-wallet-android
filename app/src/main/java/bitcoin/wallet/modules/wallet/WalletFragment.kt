@@ -13,6 +13,7 @@ import bitcoin.wallet.R
 import bitcoin.wallet.entities.CurrencyValue
 import bitcoin.wallet.entities.WalletBalanceViewItem
 import bitcoin.wallet.modules.main.BaseTabFragment
+import bitcoin.wallet.viewHelpers.NumberFormatHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import kotlinx.android.synthetic.main.view_holder_coin.*
@@ -92,7 +93,8 @@ class CoinsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 class ViewHolderTotalBalance(private val textView: TextView) : RecyclerView.ViewHolder(textView) {
     fun bind(total: CurrencyValue?) {
-        textView.text = total?.let { String.format("%.2f%s", total.value, total.currency.symbol) } ?: ""
+        val numberFormat = NumberFormatHelper.fiatAmountFormat
+        textView.text = total?.let { "${total.currency.symbol}${numberFormat.format(total.value)}" } ?: ""
     }
 }
 
@@ -109,9 +111,10 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
     }
 
     fun bind(walletBalanceViewItem: WalletBalanceViewItem) {
+        val numberFormat = NumberFormatHelper.fiatAmountFormat
         textName.text = walletBalanceViewItem.coinValue.coin.name
-        textRate.text = String.format("%.2f%s", walletBalanceViewItem.exchangeValue.value, walletBalanceViewItem.exchangeValue.currency.symbol)
-        textAmountFiat.text = String.format("%.2f%s", walletBalanceViewItem.currencyValue.value, walletBalanceViewItem.currencyValue.currency.symbol)
+        textRate.text = "${walletBalanceViewItem.exchangeValue.currency.symbol}${numberFormat.format(walletBalanceViewItem.exchangeValue.value)}"
+        textAmountFiat.text = "${walletBalanceViewItem.currencyValue.currency.symbol}${numberFormat.format(walletBalanceViewItem.currencyValue.value)}"
         textAmount.text = "${walletBalanceViewItem.coinValue.value} ${walletBalanceViewItem.coinValue.coin.code}"
     }
 

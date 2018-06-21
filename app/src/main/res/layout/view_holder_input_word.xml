@@ -4,6 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:inputType="text"
-    android:hint="1"
+    android:fontFamily="@font/noto_sans"
     android:layout_marginBottom="8dp"
-    />
+    android:imeOptions="actionNext"/>
