@@ -11,11 +11,11 @@ class WalletInteractor(private val databaseManager: IDatabaseManager) : WalletMo
     var delegate: WalletModule.IInteractorDelegate? = null
 
     private var exchangeRates = mutableMapOf<String, Double>()
-    private var totalValues = mutableMapOf<String, Long>()
+    private var totalValues = mutableMapOf<String, Double>()
 
     override fun notifyWalletBalances() {
         databaseManager.getUnspentOutputs().subscribe {
-            totalValues[Bitcoin().code] = it.array.map { it.value }.sum()
+            totalValues[Bitcoin().code] = it.array.map { it.value }.sum() / 100000000.0
 
             refresh()
         }
@@ -30,7 +30,7 @@ class WalletInteractor(private val databaseManager: IDatabaseManager) : WalletMo
     private fun refresh() {
         val walletBalances = exchangeRates.mapNotNull {
             totalValues[it.key]?.let { totalValue ->
-                WalletBalanceItem(CoinValue(Bitcoin(), totalValue / 100000000.0), it.value, DollarCurrency())
+                WalletBalanceItem(CoinValue(Bitcoin(), totalValue), it.value, DollarCurrency())
             }
         }
 
