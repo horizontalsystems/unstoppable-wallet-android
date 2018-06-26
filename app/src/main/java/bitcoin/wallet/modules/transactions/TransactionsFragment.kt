@@ -1,8 +1,6 @@
 package bitcoin.wallet.modules.transactions
 
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -38,7 +36,7 @@ class TransactionsFragment : BaseTabFragment() {
 
         viewModel.transactionItems.observe(this, Observer { transactionItems ->
             transactionItems?.let {
-                transactionsAdapter.items = it + it //todo for test purpose, remove + it afterwards
+                transactionsAdapter.items = it
                 transactionsAdapter.notifyDataSetChanged()
             }
         })
@@ -53,26 +51,9 @@ class TransactionsFragment : BaseTabFragment() {
     }
 }
 
-class TransactionsViewModel : ViewModel(), TransactionsModule.IView, TransactionsModule.IRouter {
-
-    override lateinit var presenter: TransactionsModule.IPresenter
-
-    val transactionItems = MutableLiveData<List<TransactionViewItem>>()
-
-    fun init() {
-        TransactionsModule.initModule(this, this)
-        presenter.start()
-    }
-
-    override fun showTransactionItems(items: List<TransactionViewItem>) {
-        transactionItems.value = items
-    }
-}
-
-
 class TransactionsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var items = listOf<TransactionViewItem>()
+    var items = listOf<TransactionRecordViewItem>()
 
     override fun getItemCount() = items.size
 
@@ -89,12 +70,12 @@ class TransactionsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 class ViewHolderTransaction(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(transaction: TransactionViewItem) {
-        val sign = if (transaction.type == TransactionViewItem.Type.IN) "+" else "-"
-        val amountTextColor = if (transaction.type == TransactionViewItem.Type.IN) R.color.green else R.color.grey
+    fun bind(transactionRecord: TransactionRecordViewItem) {
+        val sign = if (transactionRecord.incoming) "+" else "-"
+        val amountTextColor = if (transactionRecord.incoming) R.color.green else R.color.grey
         txAmount.setTextColor(ContextCompat.getColor(itemView.context, amountTextColor))
-        txAmount.text = "$sign ${transaction.amount} ${transaction.currency}"
-        txStatus.text = transaction.status
-        txDate.text = DateHelper.getRelativeDateString(itemView.context, transaction.date)
+        txAmount.text = "$sign ${transactionRecord.amount.value} ${transactionRecord.amount.coin.code}"
+        txStatus.text = transactionRecord.status?.name
+        txDate.text = DateHelper.getRelativeDateString(itemView.context, transactionRecord.date)
     }
 }

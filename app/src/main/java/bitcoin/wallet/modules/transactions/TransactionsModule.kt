@@ -1,124 +1,40 @@
 package bitcoin.wallet.modules.transactions
 
-import bitcoin.wallet.core.subscribeAsync
-import bitcoin.wallet.entities.Transaction
-import bitcoin.wallet.lib.WalletDataManager
-import io.reactivex.Flowable
-import io.reactivex.disposables.CompositeDisposable
-import java.util.*
-import kotlin.math.absoluteValue
+import bitcoin.wallet.core.managers.DatabaseManager
 
 object TransactionsModule {
 
     interface IView {
-        fun showTransactionItems(items: List<TransactionViewItem>)
-
-        var presenter: IPresenter
+        fun showTransactionItems(items: List<TransactionRecordViewItem>)
     }
 
-    interface IPresenter {
-        var view: IView
-        var interactor: IInteractor
-        var router: IRouter
-
-        fun start()
+    interface IViewDelegate {
+        fun viewDidLoad()
     }
 
     interface IInteractor {
-        var delegate: IInteractorDelegate
-        var transactionsDataProvider: ITransactionsDataProvider
-        var addressesProvider: IAddressesProvider
+        fun retrieveTransactionRecords()
+    }
 
-        fun retrieveTransactionItems()
+    interface IInteractorDelegate {
+        fun didRetrieveTransactionRecords(items: List<TransactionRecordViewItem>)
     }
 
     interface IRouter
 
-    interface IInteractorDelegate {
-        fun didTransactionItemsRetrieve(items: List<TransactionViewItem>)
-    }
+    private var databaseManager: DatabaseManager? = null
 
-    fun initModule(view: IView, router: IRouter) {
-        val presenter = TransactionsModulePresenter()
-        val interactor = TransactionsModuleInteractor()
+    fun initModule(view: TransactionsViewModel, router: IRouter) {
+        val databaseManager = DatabaseManager()
 
-        view.presenter = presenter
+        val interactor = TransactionsInteractor(databaseManager)
+        val presenter = TransactionsPresenter(interactor, router)
 
-        presenter.interactor = interactor
         presenter.view = view
-        presenter.router = router
-
         interactor.delegate = presenter
-        interactor.transactionsDataProvider = WalletDataManager
-        interactor.addressesProvider = WalletDataManager
-    }
+        view.delegate = presenter
 
-
-}
-
-interface ITransactionsDataProvider {
-    fun getTransactions(): Flowable<List<Transaction>>
-}
-
-interface IAddressesProvider {
-    fun getAddresses(): List<String>
-}
-
-class TransactionViewItem(var type: Type, var amount: Double, var date: Date) {
-
-    var status: String = "success" // todo to-be-implemented
-    var currency: String = "BTC" // todo to-be-implemented
-
-    enum class Type {
-        IN, OUT
-    }
-
-}
-
-class TransactionsModulePresenter : TransactionsModule.IPresenter, TransactionsModule.IInteractorDelegate {
-
-    override lateinit var view: TransactionsModule.IView
-    override lateinit var interactor: TransactionsModule.IInteractor
-    override lateinit var router: TransactionsModule.IRouter
-
-    override fun start() {
-        interactor.retrieveTransactionItems()
-    }
-
-    override fun didTransactionItemsRetrieve(items: List<TransactionViewItem>) {
-        view.showTransactionItems(items)
-    }
-}
-
-class TransactionsModuleInteractor : TransactionsModule.IInteractor {
-
-    override lateinit var delegate: TransactionsModule.IInteractorDelegate
-    override lateinit var transactionsDataProvider: ITransactionsDataProvider
-    override lateinit var addressesProvider: IAddressesProvider
-
-    override fun retrieveTransactionItems() {
-
-        transactionsDataProvider.getTransactions().subscribeAsync(CompositeDisposable(), onNext = { transactions ->
-            delegate.didTransactionItemsRetrieve(transactions.map { convertTransactionToViewItem(it) })
-        })
-
-    }
-
-    private fun convertTransactionToViewItem(transaction: Transaction): TransactionViewItem {
-        val addresses = addressesProvider.getAddresses()
-
-        val myInputsSum = transaction.inputs.filter { addresses.contains(it.address) }.map { it.value }.sum()
-        val myOutputsSum = transaction.outputs.filter { addresses.contains(it.address) }.map { it.value }.sum()
-
-        val diff = myOutputsSum - myInputsSum
-
-        val transactionType = if (diff > 0) TransactionViewItem.Type.IN else TransactionViewItem.Type.OUT
-
-        return TransactionViewItem(
-                transactionType,
-                diff.absoluteValue.div(100000000.0),
-                Date(transaction.timestamp)
-        )
+        this.databaseManager = databaseManager
     }
 
 }

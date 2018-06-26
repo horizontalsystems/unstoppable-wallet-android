@@ -1,12 +1,6 @@
 package bitcoin.wallet.lib
 
 import bitcoin.wallet.core.App
-import bitcoin.wallet.core.NetworkManager
-import bitcoin.wallet.core.managers.Factory
-import bitcoin.wallet.entities.Transaction
-import bitcoin.wallet.modules.transactions.IAddressesProvider
-import bitcoin.wallet.modules.transactions.ITransactionsDataProvider
-import io.reactivex.Flowable
 import org.bitcoinj.core.Utils
 import org.bitcoinj.crypto.ChildNumber
 import org.bitcoinj.crypto.HDKeyDerivation
@@ -16,7 +10,7 @@ import org.bitcoinj.params.TestNet3Params
 import org.bitcoinj.wallet.DeterministicSeed
 import java.security.SecureRandom
 
-object WalletDataManager : IAddressesProvider, ITransactionsDataProvider {
+object WalletDataManager {
 
     private val defautPassphrase = ""
 
@@ -26,7 +20,7 @@ object WalletDataManager : IAddressesProvider, ITransactionsDataProvider {
             App.preferences.edit().putString("mnemonicWords", value.joinToString(", ")).apply()
         }
 
-    override fun getAddresses(): List<String> {
+    fun getAddresses(): List<String> {
 
         val masterKey = HDKeyDerivation.createMasterPrivateKey(MnemonicCode.toSeed(mnemonicWords, defautPassphrase))
         val bip44RootKey = HDKeyDerivation.deriveChildKey(masterKey, ChildNumber(44, true))
@@ -56,10 +50,6 @@ object WalletDataManager : IAddressesProvider, ITransactionsDataProvider {
         }
 
         return addresses
-    }
-
-    override fun getTransactions(): Flowable<List<Transaction>> {
-        return Factory.networkManager.getTransactions()
     }
 
     fun hasWallet(): Boolean {

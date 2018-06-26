@@ -29,17 +29,16 @@ object WalletModule {
     private var databaseManager: DatabaseManager? = null
 
     fun init(view: WalletViewModel, router: IRouter) {
-        DatabaseManager().let {
-            databaseManager = it
+        val databaseManager = DatabaseManager()
 
-            val interactor = WalletInteractor(it)
-            val presenter = WalletPresenter(interactor, router)
+        val interactor = WalletInteractor(databaseManager)
+        val presenter = WalletPresenter(interactor, router)
 
-            presenter.view = view
-            interactor.delegate = presenter
-            view.delegate = presenter
+        presenter.view = view
+        interactor.delegate = presenter
+        view.delegate = presenter
 
-        }
+        this.databaseManager = databaseManager
     }
 
     fun destroy() {

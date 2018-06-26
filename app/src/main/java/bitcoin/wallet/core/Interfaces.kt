@@ -1,6 +1,7 @@
 package bitcoin.wallet.core
 
 import bitcoin.wallet.entities.ExchangeRate
+import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.entities.UnspentOutput
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -27,6 +28,7 @@ interface IRandomProvider {
 interface IDatabaseManager {
     fun getUnspentOutputs(): Observable<DatabaseChangeset<UnspentOutput>>
     fun getExchangeRates(): Observable<DatabaseChangeset<ExchangeRate>>
+    fun getTransactionRecords(): Observable<DatabaseChangeset<TransactionRecord>>
 }
 
 interface INetworkManager {
@@ -36,14 +38,11 @@ interface INetworkManager {
 
 data class WalletData(val words: List<String>)
 
-class DatabaseChangeset<T>(val array: List<T>, val deleted: List<Int> = listOf(), val inserted: List<Int> = listOf(), val updated: List<Int> = listOf()) {
+data class DatabaseChangeset<T>(val array: List<T>, val changeset: CollectionChangeset? = null)
 
-    constructor(array: List<T>, changeset: OrderedCollectionChangeSet?) :
-            this(
-                    array,
-                    changeset?.deletions?.toList() ?: listOf(),
-                    changeset?.insertions?.toList() ?: listOf(),
-                    changeset?.changes?.toList() ?: listOf()
-            )
+data class CollectionChangeset(val deleted: List<Int> = listOf(), val inserted: List<Int> = listOf(), val updated: List<Int> = listOf()) {
+
+    constructor(changeset: OrderedCollectionChangeSet) :
+            this(changeset.deletions.toList(), changeset.insertions.toList(), changeset.changes.toList())
 
 }
