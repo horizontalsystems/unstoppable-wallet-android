@@ -3,7 +3,7 @@ package bitcoin.wallet.modules.guest
 import android.arch.lifecycle.ViewModel
 import bitcoin.wallet.SingleLiveEvent
 
-class GuestViewModel: ViewModel(), GuestModule.IRouter {
+class GuestViewModel: ViewModel(), GuestModule.IView, GuestModule.IRouter {
 
     lateinit var delegate: GuestModule.IViewDelegate
 
@@ -21,5 +21,9 @@ class GuestViewModel: ViewModel(), GuestModule.IRouter {
 
     override fun navigateToRestore() {
         openRestoreWalletScreenLiveEvent.call()
+    }
+
+    override fun showError() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

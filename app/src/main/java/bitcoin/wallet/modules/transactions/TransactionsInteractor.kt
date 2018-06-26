@@ -1,7 +1,7 @@
 package bitcoin.wallet.modules.transactions
 
 import bitcoin.wallet.core.IDatabaseManager
-import bitcoin.wallet.entities.Bitcoin
+import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.entities.CoinValue
 import java.util.*
 

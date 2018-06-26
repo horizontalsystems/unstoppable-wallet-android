@@ -6,6 +6,10 @@ import bitcoin.wallet.core.managers.Factory
 
 object GuestModule {
 
+    interface IView {
+        fun showError()
+    }
+
     interface IViewDelegate {
         fun createWalletDidClick()
         fun restoreWalletDidClick()
@@ -17,6 +21,7 @@ object GuestModule {
 
     interface IInteractorDelegate {
         fun didCreateWallet()
+        fun didFailToCreateWallet()
     }
 
     interface IRouter {
@@ -30,7 +35,7 @@ object GuestModule {
     }
 
     fun init(view: GuestViewModel, router: IRouter) {
-        val interactor = GuestInteractor(Factory.mnemonicManager, Factory.preferencesManager)
+        val interactor = GuestInteractor(Factory.mnemonicManager, Factory.loginManager)
         val presenter = GuestPresenter(interactor, router)
 
         view.delegate = presenter

@@ -1,21 +1,29 @@
 package bitcoin.wallet.modules.wallet
 
 import bitcoin.wallet.core.IDatabaseManager
-import bitcoin.wallet.entities.Bitcoin
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.DollarCurrency
 import bitcoin.wallet.entities.WalletBalanceItem
+import bitcoin.wallet.entities.coins.Coin
+import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
+import bitcoin.wallet.entities.coins.bitcoinCash.BitcoinCash
 
 class WalletInteractor(private val databaseManager: IDatabaseManager) : WalletModule.IInteractor {
 
     var delegate: WalletModule.IInteractorDelegate? = null
 
     private var exchangeRates = mutableMapOf<String, Double>()
-    private var totalValues = mutableMapOf<String, Double>()
+    private var totalValues = mutableMapOf<Coin, Double>()
 
     override fun notifyWalletBalances() {
-        databaseManager.getUnspentOutputs().subscribe {
-            totalValues[Bitcoin().code] = it.array.map { it.value }.sum() / 100000000.0
+        databaseManager.getBitcoinUnspentOutputs().subscribe {
+            totalValues[Bitcoin()] = it.array.map { it.value }.sum() / 100000000.0
+
+            refresh()
+        }
+
+        databaseManager.getBitcoinCashUnspentOutputs().subscribe {
+            totalValues[BitcoinCash()] = it.array.map { it.value }.sum() / 100000000.0
 
             refresh()
         }
@@ -28,9 +36,11 @@ class WalletInteractor(private val databaseManager: IDatabaseManager) : WalletMo
     }
 
     private fun refresh() {
-        val walletBalances = exchangeRates.mapNotNull {
-            totalValues[it.key]?.let { totalValue ->
-                WalletBalanceItem(CoinValue(Bitcoin(), totalValue), it.value, DollarCurrency())
+        val walletBalances = mutableListOf<WalletBalanceItem>()
+
+        totalValues.forEach { coin, total ->
+            exchangeRates[coin.code]?.let { rate ->
+                walletBalances.add(WalletBalanceItem(CoinValue(coin, total), rate, DollarCurrency()))
             }
         }
 

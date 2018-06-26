@@ -2,7 +2,7 @@ package bitcoin.wallet.modules.transactions
 
 import bitcoin.wallet.core.DatabaseChangeset
 import bitcoin.wallet.core.IDatabaseManager
-import bitcoin.wallet.entities.Bitcoin
+import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.modules.RxBaseTest

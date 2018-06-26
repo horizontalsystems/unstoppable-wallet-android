@@ -1,15 +1,22 @@
 package bitcoin.wallet.modules.guest
 
-import bitcoin.wallet.core.ILocalStorage
 import bitcoin.wallet.core.IMnemonic
+import bitcoin.wallet.core.managers.LoginManager
+import bitcoin.wallet.core.subscribeAsync
+import io.reactivex.disposables.CompositeDisposable
 
-class GuestInteractor(private val mnemonic: IMnemonic, private val localStorage: ILocalStorage) : GuestModule.IInteractor {
+class GuestInteractor(private val mnemonic: IMnemonic, private val loginManager: LoginManager) : GuestModule.IInteractor {
 
     var delegate: GuestModule.IInteractorDelegate? = null
 
     override fun createWallet() {
-        localStorage.saveWords(mnemonic.generateWords())
-        delegate?.didCreateWallet()
+        loginManager.login(mnemonic.generateWords()).subscribeAsync(CompositeDisposable(),
+                onComplete = {
+                    delegate?.didCreateWallet()
+                },
+                onError = {
+                    delegate?.didFailToCreateWallet()
+                })
     }
 
 }

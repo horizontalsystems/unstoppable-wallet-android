@@ -37,3 +37,15 @@ fun <T> io.reactivex.subjects.PublishSubject<T>.subscribeAsync(disposables: Comp
     disposables.add(disposable)
     return disposable
 }
+
+fun io.reactivex.Completable.subscribeAsync(disposables: CompositeDisposable, onComplete: (() -> Unit), onError: ((Throwable) -> Unit)): Disposable {
+    val disposable = this
+            .subscribeOn(io.reactivex.schedulers.Schedulers.io())
+            .unsubscribeOn(io.reactivex.schedulers.Schedulers.io())
+            .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
+            .subscribe(onComplete, onError)
+
+    disposables.add(disposable)
+    return disposable
+}
+

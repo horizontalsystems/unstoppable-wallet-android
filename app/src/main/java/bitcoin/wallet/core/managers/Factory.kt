@@ -24,5 +24,9 @@ object Factory {
         NetworkManager()
     }
 
+    val loginManager by lazy {
+        LoginManager(networkManager)
+    }
+
 }
 

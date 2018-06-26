@@ -2,7 +2,13 @@ package bitcoin.wallet.modules.wallet
 
 import bitcoin.wallet.core.DatabaseChangeset
 import bitcoin.wallet.core.IDatabaseManager
-import bitcoin.wallet.entities.*
+import bitcoin.wallet.entities.CoinValue
+import bitcoin.wallet.entities.DollarCurrency
+import bitcoin.wallet.entities.ExchangeRate
+import bitcoin.wallet.entities.WalletBalanceItem
+import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
+import bitcoin.wallet.entities.coins.bitcoin.BitcoinUnspentOutput
+import bitcoin.wallet.entities.coins.bitcoinCash.BitcoinCashUnspentOutput
 import bitcoin.wallet.modules.RxBaseTest
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.never
@@ -25,11 +31,20 @@ class WalletInteractorTest {
             }
     ))
 
-    private var unspentOutputs = DatabaseChangeset(listOf(
-            UnspentOutput().apply {
+    private var bitcoinUnspentOutputs = DatabaseChangeset(listOf(
+            BitcoinUnspentOutput().apply {
                 value = 50_000_000
             },
-            UnspentOutput().apply {
+            BitcoinUnspentOutput().apply {
+                value = 30_000_000
+            }
+    ))
+
+    private var bitcoinCashUnspentOutputs = DatabaseChangeset(listOf(
+            BitcoinCashUnspentOutput().apply {
+                value = 50_000_000
+            },
+            BitcoinCashUnspentOutput().apply {
                 value = 30_000_000
             }
     ))
@@ -47,7 +62,8 @@ class WalletInteractorTest {
     @Test
     fun fetchWalletBalances() {
         whenever(databaseManager.getExchangeRates()).thenReturn(Observable.just(exchangeRates))
-        whenever(databaseManager.getUnspentOutputs()).thenReturn(Observable.just(unspentOutputs))
+        whenever(databaseManager.getBitcoinUnspentOutputs()).thenReturn(Observable.just(bitcoinUnspentOutputs))
+        whenever(databaseManager.getBitcoinCashUnspentOutputs()).thenReturn(Observable.just(bitcoinCashUnspentOutputs))
 
         val expectedWalletBalances = listOf(
                 WalletBalanceItem(CoinValue(Bitcoin(), 0.8), 10_000.0, DollarCurrency())
@@ -61,7 +77,8 @@ class WalletInteractorTest {
     @Test
     fun fetchWalletBalances_emptyRates() {
         whenever(databaseManager.getExchangeRates()).thenReturn(Observable.just(DatabaseChangeset(listOf())))
-        whenever(databaseManager.getUnspentOutputs()).thenReturn(Observable.just(unspentOutputs))
+        whenever(databaseManager.getBitcoinUnspentOutputs()).thenReturn(Observable.just(bitcoinUnspentOutputs))
+        whenever(databaseManager.getBitcoinCashUnspentOutputs()).thenReturn(Observable.just(bitcoinCashUnspentOutputs))
 
         interactor.notifyWalletBalances()
 

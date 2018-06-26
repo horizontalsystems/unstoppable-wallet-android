@@ -6,7 +6,8 @@ import bitcoin.wallet.core.IDatabaseManager
 import bitcoin.wallet.core.RealmFactory
 import bitcoin.wallet.entities.ExchangeRate
 import bitcoin.wallet.entities.TransactionRecord
-import bitcoin.wallet.entities.UnspentOutput
+import bitcoin.wallet.entities.coins.bitcoin.BitcoinUnspentOutput
+import bitcoin.wallet.entities.coins.bitcoinCash.BitcoinCashUnspentOutput
 import io.reactivex.Observable
 import io.realm.Sort
 
@@ -14,8 +15,15 @@ class DatabaseManager : IDatabaseManager {
 
     private val realm = RealmFactory.createWalletRealm()
 
-    override fun getUnspentOutputs(): Observable<DatabaseChangeset<UnspentOutput>> =
-            realm.where(UnspentOutput::class.java).findAll()
+    override fun getBitcoinUnspentOutputs(): Observable<DatabaseChangeset<BitcoinUnspentOutput>> =
+            realm.where(BitcoinUnspentOutput::class.java).findAll()
+                    .asChangesetObservable()
+                    .map {
+                        DatabaseChangeset(it.collection, it.changeset?.let { CollectionChangeset(it) })
+                    }
+
+    override fun getBitcoinCashUnspentOutputs(): Observable<DatabaseChangeset<BitcoinCashUnspentOutput>> =
+            realm.where(BitcoinCashUnspentOutput::class.java).findAll()
                     .asChangesetObservable()
                     .map {
                         DatabaseChangeset(it.collection, it.changeset?.let { CollectionChangeset(it) })

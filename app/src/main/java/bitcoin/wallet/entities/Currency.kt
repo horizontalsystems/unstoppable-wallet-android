@@ -1,5 +1,7 @@
 package bitcoin.wallet.entities
 
+import bitcoin.wallet.entities.coins.Coin
+
 abstract class Currency {
     abstract val code: String
     abstract val symbol: String
@@ -27,36 +29,6 @@ class DollarCurrency : Currency() {
 }
 
 data class CurrencyValue(val currency: Currency, val value: Double)
-
-abstract class Coin {
-    abstract val name: String
-    abstract val code: String
-
-    override fun equals(other: Any?): Boolean {
-        if (other is Coin) {
-            return name == other.name && code == other.code
-        }
-
-        return super.equals(other)
-    }
-
-    override fun hashCode(): Int {
-        var result = name.hashCode()
-        result = 31 * result + code.hashCode()
-        return result
-    }
-
-}
-
-class Bitcoin : Coin() {
-    override val name: String = "Bitcoin"
-    override val code: String = "BTC"
-}
-
-class BitcoinCash : Coin() {
-    override val name: String = "Bitcoin Cash"
-    override val code: String = "BCH"
-}
 
 class Ethereum : Coin() {
     override val name: String = "Ethereum"

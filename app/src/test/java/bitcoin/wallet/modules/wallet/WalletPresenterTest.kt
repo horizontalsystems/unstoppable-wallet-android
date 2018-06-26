@@ -1,6 +1,7 @@
 package bitcoin.wallet.modules.wallet
 
 import bitcoin.wallet.entities.*
+import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock

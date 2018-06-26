@@ -2,8 +2,8 @@ package bitcoin.wallet.core
 
 import bitcoin.wallet.entities.ExchangeRate
 import bitcoin.wallet.entities.TransactionRecord
-import bitcoin.wallet.entities.UnspentOutput
-import io.reactivex.Flowable
+import bitcoin.wallet.entities.coins.bitcoin.BitcoinUnspentOutput
+import bitcoin.wallet.entities.coins.bitcoinCash.BitcoinCashUnspentOutput
 import io.reactivex.Observable
 import io.realm.OrderedCollectionChangeSet
 
@@ -26,14 +26,14 @@ interface IRandomProvider {
 }
 
 interface IDatabaseManager {
-    fun getUnspentOutputs(): Observable<DatabaseChangeset<UnspentOutput>>
+    fun getBitcoinUnspentOutputs(): Observable<DatabaseChangeset<BitcoinUnspentOutput>>
+    fun getBitcoinCashUnspentOutputs(): Observable<DatabaseChangeset<BitcoinCashUnspentOutput>>
     fun getExchangeRates(): Observable<DatabaseChangeset<ExchangeRate>>
     fun getTransactionRecords(): Observable<DatabaseChangeset<TransactionRecord>>
 }
 
 interface INetworkManager {
-    fun getUnspentOutputs(): Flowable<List<UnspentOutput>>
-    fun getExchangeRates(): Flowable<List<ExchangeRate>>
+//    fun getJwtToken(pubKey: String)
 }
 
 data class WalletData(val words: List<String>)

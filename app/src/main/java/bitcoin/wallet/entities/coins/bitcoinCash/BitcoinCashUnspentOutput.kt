@@ -1,9 +1,9 @@
-package bitcoin.wallet.entities
+package bitcoin.wallet.entities.coins.bitcoinCash
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
-open class UnspentOutput : RealmObject() {
+open class BitcoinCashUnspentOutput : RealmObject() {
 
     @PrimaryKey
     var transactionHash: String = ""
