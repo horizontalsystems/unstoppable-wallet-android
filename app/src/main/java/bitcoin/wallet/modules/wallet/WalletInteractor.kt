@@ -1,42 +1,41 @@
 package bitcoin.wallet.modules.wallet
 
 import bitcoin.wallet.core.IDatabaseManager
-import bitcoin.wallet.core.subscribeAsync
-import bitcoin.wallet.entities.*
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.subjects.PublishSubject
+import bitcoin.wallet.entities.Bitcoin
+import bitcoin.wallet.entities.CoinValue
+import bitcoin.wallet.entities.DollarCurrency
+import bitcoin.wallet.entities.WalletBalanceItem
 
-class WalletInteractor(databaseManager: IDatabaseManager, unspentOutputUpdateSubject: PublishSubject<List<UnspentOutput>>, exchangeRateUpdateSubject: PublishSubject<List<ExchangeRate>>) : WalletModule.IInteractor {
+class WalletInteractor(private val databaseManager: IDatabaseManager) : WalletModule.IInteractor {
 
     var delegate: WalletModule.IInteractorDelegate? = null
-    private var exchangeRates = databaseManager.getExchangeRates()
-    private var unspentOutputs = databaseManager.getUnspentOutputs()
 
-    init {
-        unspentOutputUpdateSubject.subscribeAsync(CompositeDisposable(), {
-            unspentOutputs = it
-            notifyWalletBalances()
-        })
-
-        exchangeRateUpdateSubject.subscribeAsync(CompositeDisposable(), {
-            exchangeRates = it
-            notifyWalletBalances()
-        })
-    }
-
+    private var exchangeRates = mutableMapOf<String, Double>()
+    private var totalValues = mutableMapOf<String, Long>()
 
     override fun notifyWalletBalances() {
-        var totalValue = 0.0
+        databaseManager.getUnspentOutputs().subscribe {
+            totalValues[Bitcoin().code] = it.array.map { it.value }.sum()
 
-        unspentOutputs.forEach {
-            totalValue += it.value / 100000000.0
+            refresh()
         }
 
-        val bitcoin = Bitcoin()
+        databaseManager.getExchangeRates().subscribe {
+            exchangeRates = it.array.associateBy({ it.code }, { it.value }).toMutableMap()
 
-        exchangeRates.firstOrNull { it.code == bitcoin.code }?.let {
-            val walletBalanceItem = WalletBalanceItem(CoinValue(bitcoin, totalValue), it.value, DollarCurrency())
-            delegate?.didFetchWalletBalances(listOf(walletBalanceItem))
+            refresh()
+        }
+    }
+
+    private fun refresh() {
+        val walletBalances = exchangeRates.mapNotNull {
+            totalValues[it.key]?.let { totalValue ->
+                WalletBalanceItem(CoinValue(Bitcoin(), totalValue / 100000000.0), it.value, DollarCurrency())
+            }
+        }
+
+        if (walletBalances.isNotEmpty()) {
+            delegate?.didFetchWalletBalances(walletBalances)
         }
     }
 

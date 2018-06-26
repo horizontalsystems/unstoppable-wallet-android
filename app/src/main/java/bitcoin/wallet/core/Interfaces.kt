@@ -3,9 +3,11 @@ package bitcoin.wallet.core
 import bitcoin.wallet.entities.ExchangeRate
 import bitcoin.wallet.entities.UnspentOutput
 import io.reactivex.Flowable
+import io.reactivex.Observable
+import io.realm.OrderedCollectionChangeSet
 
 interface ILocalStorage {
-    val savedWords : List<String>?
+    val savedWords: List<String>?
     fun saveWords(words: List<String>)
 }
 
@@ -19,17 +21,12 @@ interface IWalletDataProvider {
 }
 
 interface IRandomProvider {
-    fun getRandomIndexes(count: Int) : List<Int>
+    fun getRandomIndexes(count: Int): List<Int>
 }
 
 interface IDatabaseManager {
-    fun getUnspentOutputs() : List<UnspentOutput>
-    fun insertUnspentOutputs(values: List<UnspentOutput>)
-    fun truncateUnspentOutputs()
-
-    fun getExchangeRates() : List<ExchangeRate>
-    fun insertExchangeRates(values: List<ExchangeRate>)
-    fun truncateExchangeRates()
+    fun getUnspentOutputs(): Observable<DatabaseChangeset<UnspentOutput>>
+    fun getExchangeRates(): Observable<DatabaseChangeset<ExchangeRate>>
 }
 
 interface INetworkManager {
@@ -38,3 +35,15 @@ interface INetworkManager {
 }
 
 data class WalletData(val words: List<String>)
+
+class DatabaseChangeset<T>(val array: List<T>, val deleted: List<Int> = listOf(), val inserted: List<Int> = listOf(), val updated: List<Int> = listOf()) {
+
+    constructor(array: List<T>, changeset: OrderedCollectionChangeSet?) :
+            this(
+                    array,
+                    changeset?.deletions?.toList() ?: listOf(),
+                    changeset?.insertions?.toList() ?: listOf(),
+                    changeset?.changes?.toList() ?: listOf()
+            )
+
+}

@@ -1,36 +1,19 @@
 package bitcoin.wallet.entities
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.Query
-import com.google.gson.annotations.SerializedName
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 
-@Entity(primaryKeys = ["transactionHash", "index"], tableName = "unspent_output")
-class UnspentOutput(
-        val value: Long,
+open class UnspentOutput : RealmObject() {
 
-        @SerializedName("tx_output_n")
-        val index: Int,
+    @PrimaryKey
+    var transactionHash: String = ""
 
-        val confirmations: Long,
+    var value: Long = 0
 
-        @SerializedName("tx_hash")
-        val transactionHash: String,
+    var index: Long = 0
 
-        val script: String
-)
+    var confirmations: Long = 0
 
-@Dao
-interface UnspentOutputDao {
-
-    @get:Query("SELECT * FROM unspent_output")
-    val all: List<UnspentOutput>
-
-    @Insert
-    fun insertAll(vararg unspentOutputs: UnspentOutput)
-
-    @Query("DELETE FROM unspent_output")
-    fun truncate()
+    var script: String = ""
 
 }

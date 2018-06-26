@@ -1,14 +1,8 @@
 package bitcoin.wallet.core.managers
 
 import bitcoin.wallet.core.NetworkManager
-import bitcoin.wallet.entities.ExchangeRate
-import bitcoin.wallet.entities.UnspentOutput
-import io.reactivex.subjects.PublishSubject
 
 object Factory {
-
-    val unspentOutputUpdateSubject = PublishSubject.create<List<UnspentOutput>>()
-    val exchangeRateUpdateSubject = PublishSubject.create<List<ExchangeRate>>()
 
     val mnemonicManager by lazy {
         MnemonicManager()
@@ -24,18 +18,6 @@ object Factory {
 
     val randomProvider by lazy {
         RandomProvider()
-    }
-
-    val unspentOutputManager by lazy {
-        UnspentOutputManager(databaseManager, networkManager, unspentOutputUpdateSubject)
-    }
-
-    val exchangeRateManager by lazy {
-        ExchangeRateManager(databaseManager, networkManager, exchangeRateUpdateSubject)
-    }
-
-    val databaseManager by lazy {
-        DatabaseManager()
     }
 
     val networkManager by lazy {

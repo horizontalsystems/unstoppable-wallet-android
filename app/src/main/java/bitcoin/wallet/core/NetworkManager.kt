@@ -8,6 +8,10 @@ import io.reactivex.Flowable
 
 class NetworkManager : INetworkManager {
     fun getTransactions(): Flowable<List<Transaction>> {
+
+//        val pkey = "tpubDDf1ySGMy5TDPQjy5KScHgvu1mWCCWvf28ydrNDWmsNkzjb5UCmjHEvW7NqFi7cvUnY4FdAbD2H5wCjZRKBMt5VkDanPCX2W8fL17srC5xN"
+//        return GrouviApi.service.transactions(pkey)
+
         return BlockchainInfoClient.service.multiaddr(WalletDataManager.getAddresses().joinToString("|"))
                 .map {
                     JsonParser().parse(it.string()).asJsonObject["txs"].asJsonArray.map {
@@ -44,7 +48,11 @@ class NetworkManager : INetworkManager {
     }
 
     override fun getExchangeRates(): Flowable<List<ExchangeRate>> {
-        return Flowable.just(listOf(ExchangeRate("BTC", 7200.0)))
+        val exchangeRate = ExchangeRate().apply {
+            code = "BTC"
+            value = 7200.0
+        }
+        return Flowable.just(listOf(exchangeRate))
     }
 
 }

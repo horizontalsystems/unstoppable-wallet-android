@@ -1,25 +1,13 @@
 package bitcoin.wallet.entities
 
-import android.arch.persistence.room.*
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 
-@Entity(tableName = "exchange_rate")
-class ExchangeRate(
-        @PrimaryKey
-        val code: String,
+open class ExchangeRate : RealmObject() {
 
-        val value: Double
-)
+    @PrimaryKey
+    var code: String = ""
 
-@Dao
-interface ExchangeRateDao {
-
-    @get:Query("SELECT * FROM exchange_rate")
-    val all: List<ExchangeRate>
-
-    @Insert
-    fun insertAll(vararg exchangeRates: ExchangeRate)
-
-    @Query("DELETE FROM exchange_rate")
-    fun truncate()
+    var value: Double = 0.0
 
 }

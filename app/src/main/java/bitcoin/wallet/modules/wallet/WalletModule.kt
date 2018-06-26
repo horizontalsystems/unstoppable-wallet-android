@@ -1,6 +1,6 @@
 package bitcoin.wallet.modules.wallet
 
-import bitcoin.wallet.core.managers.Factory
+import bitcoin.wallet.core.managers.DatabaseManager
 import bitcoin.wallet.entities.CurrencyValue
 import bitcoin.wallet.entities.WalletBalanceItem
 import bitcoin.wallet.entities.WalletBalanceViewItem
@@ -26,14 +26,24 @@ object WalletModule {
 
     interface IRouter
 
+    private var databaseManager: DatabaseManager? = null
+
     fun init(view: WalletViewModel, router: IRouter) {
+        DatabaseManager().let {
+            databaseManager = it
 
-        val interactor = WalletInteractor(Factory.databaseManager, Factory.unspentOutputUpdateSubject, Factory.exchangeRateUpdateSubject)
-        val presenter = WalletPresenter(interactor, router)
+            val interactor = WalletInteractor(it)
+            val presenter = WalletPresenter(interactor, router)
 
-        presenter.view = view
-        interactor.delegate = presenter
-        view.delegate = presenter
+            presenter.view = view
+            interactor.delegate = presenter
+            view.delegate = presenter
+
+        }
+    }
+
+    fun destroy() {
+        databaseManager?.close()
     }
 
 }
