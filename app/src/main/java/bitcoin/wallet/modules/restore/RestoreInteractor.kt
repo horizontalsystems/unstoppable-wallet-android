@@ -1,19 +1,34 @@
 package bitcoin.wallet.modules.restore
 
-import bitcoin.wallet.core.ILocalStorage
 import bitcoin.wallet.core.IMnemonic
+import bitcoin.wallet.core.managers.LoginManager
+import bitcoin.wallet.core.subscribeAsync
+import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 
-class RestoreInteractor(private val mnemonic: IMnemonic, private val localStorage: ILocalStorage) : RestoreModule.IInteractor {
+class RestoreInteractor(private val mnemonic: IMnemonic, private val loginManager: LoginManager) : RestoreModule.IInteractor {
 
     var delegate: RestoreModule.IInteractorDelegate? = null
 
     override fun restore(words: List<String>) {
-        if (mnemonic.validateWords(words)) {
-            localStorage.saveWords(words)
-            delegate?.didRestore()
+        val validationObservable = if (mnemonic.validateWords(words)) {
+            Observable.just(words)
         } else {
-            delegate?.didFailToRestore()
+            Observable.error(Exception())
         }
+
+        validationObservable
+                .flatMapCompletable {
+                    loginManager.login(it)
+                }
+                .subscribeAsync(CompositeDisposable(),
+                        onComplete = {
+                            delegate?.didRestore()
+                        },
+                        onError = {
+                            delegate?.didFailToRestore()
+                        })
+
     }
 
 }

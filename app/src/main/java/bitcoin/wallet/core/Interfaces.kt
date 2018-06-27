@@ -33,7 +33,7 @@ interface IDatabaseManager {
 }
 
 interface INetworkManager {
-//    fun getJwtToken(pubKey: String)
+    fun getJwtToken(identity: String, pubKeys: Map<Int, String>): Observable<String>
 }
 
 data class WalletData(val words: List<String>)

@@ -1,28 +1,26 @@
 package bitcoin.wallet.core.managers
 
+import bitcoin.wallet.WalletManager
+import bitcoin.wallet.core.ILocalStorage
 import bitcoin.wallet.core.INetworkManager
+import bitcoin.wallet.core.RealmManager
 import io.reactivex.Completable
-import io.realm.ObjectServerError
-import io.realm.SyncCredentials
-import io.realm.SyncUser
+import io.reactivex.Observable
 
-class LoginManager(private val networkManager: INetworkManager) {
+class LoginManager(private val networkManager: INetworkManager, private val walletManager: WalletManager, private val realmManager: RealmManager, private val localStorage: ILocalStorage) {
 
-    fun login(words: List<String>): Completable = Completable.create { emitter ->
-
-        val credentials = SyncCredentials.usernamePassword("bakyt", "123")
-
-        val authURL = "https://grouvi-wallet.us1a.cloud.realm.io"
-
-        SyncUser.logInAsync(credentials, authURL, object : SyncUser.Callback<SyncUser> {
-            override fun onSuccess(user: SyncUser) {
-                emitter.onComplete()
+    fun login(words: List<String>): Completable = Observable.just(words)
+            .map {
+                walletManager.createWallet(it)
             }
-
-            override fun onError(error: ObjectServerError) {
-                emitter.onError(error)
+            .flatMap { wallet ->
+                networkManager.getJwtToken(wallet.getIdentity(), wallet.getPubKeys())
             }
-        })
-    }
+            .flatMapCompletable { jwtToken ->
+                realmManager.login(jwtToken)
+            }
+            .doOnComplete {
+                localStorage.saveWords(words)
+            }
 
 }

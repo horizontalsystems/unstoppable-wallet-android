@@ -1,6 +1,8 @@
 package bitcoin.wallet.core.managers
 
+import bitcoin.wallet.WalletManager
 import bitcoin.wallet.core.NetworkManager
+import bitcoin.wallet.core.RealmManager
 
 object Factory {
 
@@ -24,8 +26,16 @@ object Factory {
         NetworkManager()
     }
 
+    val walletManager by lazy {
+        WalletManager()
+    }
+
+    val realmManager by lazy {
+        RealmManager()
+    }
+
     val loginManager by lazy {
-        LoginManager(networkManager)
+        LoginManager(networkManager, walletManager, realmManager, preferencesManager)
     }
 
 }

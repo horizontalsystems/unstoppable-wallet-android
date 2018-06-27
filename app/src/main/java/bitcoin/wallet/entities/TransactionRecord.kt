@@ -18,6 +18,8 @@ open class TransactionRecord : RealmObject() {
     @PrimaryKey
     var hash = ""
 
+    var coinCode = ""
+
     var from = ""
     var to = ""
 

@@ -3,7 +3,6 @@ package bitcoin.wallet.core.managers
 import bitcoin.wallet.core.CollectionChangeset
 import bitcoin.wallet.core.DatabaseChangeset
 import bitcoin.wallet.core.IDatabaseManager
-import bitcoin.wallet.core.RealmFactory
 import bitcoin.wallet.entities.ExchangeRate
 import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.entities.coins.bitcoin.BitcoinUnspentOutput
@@ -13,24 +12,24 @@ import io.realm.Sort
 
 class DatabaseManager : IDatabaseManager {
 
-    private val realm = RealmFactory.createWalletRealm()
+    private val realm = Factory.realmManager.createWalletRealm()
 
     override fun getBitcoinUnspentOutputs(): Observable<DatabaseChangeset<BitcoinUnspentOutput>> =
-            realm.where(BitcoinUnspentOutput::class.java).findAll()
+            realm.where(BitcoinUnspentOutput::class.java).findAllAsync()
                     .asChangesetObservable()
                     .map {
                         DatabaseChangeset(it.collection, it.changeset?.let { CollectionChangeset(it) })
                     }
 
     override fun getBitcoinCashUnspentOutputs(): Observable<DatabaseChangeset<BitcoinCashUnspentOutput>> =
-            realm.where(BitcoinCashUnspentOutput::class.java).findAll()
+            realm.where(BitcoinCashUnspentOutput::class.java).findAllAsync()
                     .asChangesetObservable()
                     .map {
                         DatabaseChangeset(it.collection, it.changeset?.let { CollectionChangeset(it) })
                     }
 
     override fun getExchangeRates(): Observable<DatabaseChangeset<ExchangeRate>> =
-            realm.where(ExchangeRate::class.java).findAll()
+            realm.where(ExchangeRate::class.java).findAllAsync()
                     .asChangesetObservable()
                     .map {
                         DatabaseChangeset(it.collection, it.changeset?.let { CollectionChangeset(it) })
@@ -39,7 +38,7 @@ class DatabaseManager : IDatabaseManager {
     override fun getTransactionRecords(): Observable<DatabaseChangeset<TransactionRecord>> =
             realm.where(TransactionRecord::class.java)
                     .sort("blockHeight", Sort.DESCENDING)
-                    .findAll()
+                    .findAllAsync()
                     .asChangesetObservable()
                     .map {
                         DatabaseChangeset(it.collection, it.changeset?.let { CollectionChangeset(it) })
