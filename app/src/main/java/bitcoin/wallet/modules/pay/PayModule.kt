@@ -1,7 +1,7 @@
 package bitcoin.wallet.modules.pay
 
 import android.support.v4.app.FragmentActivity
-import bitcoin.wallet.entities.Coin
+import bitcoin.wallet.entities.coins.Coin
 
 object PayModule {
 

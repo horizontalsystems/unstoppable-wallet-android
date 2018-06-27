@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import bitcoin.wallet.R
-import bitcoin.wallet.entities.Coin
+import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.entities.CurrencyValue
 import bitcoin.wallet.entities.WalletBalanceViewItem
 import bitcoin.wallet.modules.main.BaseTabFragment

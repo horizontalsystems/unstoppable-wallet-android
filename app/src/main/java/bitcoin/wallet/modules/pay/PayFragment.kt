@@ -15,7 +15,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.EditText
 import bitcoin.wallet.R
-import bitcoin.wallet.entities.Coin
+import bitcoin.wallet.entities.coins.Coin
 import com.google.zxing.integration.android.IntentIntegrator
 
 class PayFragment : DialogFragment() {
