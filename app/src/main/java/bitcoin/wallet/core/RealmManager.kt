@@ -23,8 +23,8 @@ class RealmManager {
         val authURL = "https://grouvi-wallet.us1a.cloud.realm.io"
 
         try {
-            SyncUser.all().forEach { _, user ->
-                user.logOut()
+            SyncUser.all().forEach { userEntry ->
+                userEntry.value.logOut()
             }
             SyncUser.logIn(credentials, authURL)
             emitter.onComplete()

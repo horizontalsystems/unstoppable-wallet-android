@@ -38,7 +38,10 @@ class WalletInteractor(private val databaseManager: IDatabaseManager) : WalletMo
     private fun refresh() {
         val walletBalances = mutableListOf<WalletBalanceItem>()
 
-        totalValues.forEach { coin, total ->
+        totalValues.forEach { totalValueEntry ->
+            val coin = totalValueEntry.key
+            val total = totalValueEntry.value
+
             exchangeRates[coin.code]?.let { rate ->
                 walletBalances.add(WalletBalanceItem(CoinValue(coin, total), rate, DollarCurrency()))
             }
