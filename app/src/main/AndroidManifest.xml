@@ -32,6 +32,9 @@
             android:name=".modules.restore.RestoreWalletActivity"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".modules.pay.PortraitCaptureActivity"
+            android:screenOrientation="portrait"/>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts"/>
