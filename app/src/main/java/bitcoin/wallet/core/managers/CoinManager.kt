@@ -6,10 +6,9 @@ import bitcoin.wallet.entities.coins.bitcoinCash.BitcoinCash
 
 class CoinManager {
 
-    fun getCoinByCode(code: String) : Coin? = when (code) {
-        "BTC" -> Bitcoin()
-        "BCH" -> BitcoinCash()
-        else -> null
-    }
+    private val supportedCoins = listOf(Bitcoin(), BitcoinCash())
+
+    fun getCoinByCode(code: String): Coin? =
+            supportedCoins.firstOrNull { it.code == code }
 
 }
