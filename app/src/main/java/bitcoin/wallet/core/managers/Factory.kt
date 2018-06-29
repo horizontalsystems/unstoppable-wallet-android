@@ -38,5 +38,13 @@ object Factory {
         LoginManager(networkManager, walletManager, realmManager, preferencesManager)
     }
 
+    val databaseManager by lazy {
+        DatabaseManager()
+    }
+
+    val coinManager by lazy {
+        CoinManager()
+    }
+
 }
 

@@ -2,9 +2,11 @@ package bitcoin.wallet.modules.transactions
 
 import bitcoin.wallet.core.DatabaseChangeset
 import bitcoin.wallet.core.IDatabaseManager
-import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
+import bitcoin.wallet.core.managers.CoinManager
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.TransactionRecord
+import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
+import bitcoin.wallet.entities.coins.bitcoinCash.BitcoinCash
 import bitcoin.wallet.modules.RxBaseTest
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Observable
@@ -18,8 +20,9 @@ class TransactionsInteractorTest {
 
     private val delegate = mock(TransactionsModule.IInteractorDelegate::class.java)
     private val databaseManager = mock(IDatabaseManager::class.java)
+    private val coinManager = mock(CoinManager::class.java)
 
-    private val interactor = TransactionsInteractor(databaseManager)
+    private val interactor = TransactionsInteractor(databaseManager, coinManager)
 
     @Before
     fun before() {
@@ -51,9 +54,11 @@ class TransactionsInteractorTest {
     @Test
     fun retrieveTransactionItems_transactionOutConvert() {
         val now = Date()
+        val bitcoin = Bitcoin()
+        val bitcoinCash = BitcoinCash()
 
-        val transactionRecord = TransactionRecord().apply {
-            hash = "hash"
+        val transactionRecordBTC = TransactionRecord().apply {
+            transactionHash = "transactionHash"
             amount = 100000000
             fee = 1000000
             incoming = true
@@ -61,25 +66,53 @@ class TransactionsInteractorTest {
             from = "from-address"
             to = "to-address"
             blockHeight = 123
+            coinCode = "BTC"
         }
 
+        val transactionRecordBCH = TransactionRecord().apply {
+            transactionHash = "transactionHash"
+            amount = 100000000
+            fee = 1000000
+            incoming = true
+            timestamp = now.time
+            from = "from-address"
+            to = "to-address"
+            blockHeight = 123
+            coinCode = "BCH"
+        }
 
-        whenever(databaseManager.getTransactionRecords()).thenReturn(Observable.just(DatabaseChangeset(listOf(transactionRecord))))
+        val expectedItems = listOf(
+                TransactionRecordViewItem(
+                        "transactionHash",
+                        CoinValue(bitcoin, 1.0),
+                        CoinValue(bitcoin, 0.01),
+                        "from-address",
+                        "to-address",
+                        true,
+                        123,
+                        now,
+                        null,
+                        null
+                ),
+                TransactionRecordViewItem(
+                        "transactionHash",
+                        CoinValue(bitcoinCash, 1.0),
+                        CoinValue(bitcoinCash, 0.01),
+                        "from-address",
+                        "to-address",
+                        true,
+                        123,
+                        now,
+                        null,
+                        null
+                )
+        )
+
+        whenever(coinManager.getCoinByCode("BTC")).thenReturn(bitcoin)
+        whenever(coinManager.getCoinByCode("BCH")).thenReturn(bitcoinCash)
+        whenever(databaseManager.getTransactionRecords()).thenReturn(Observable.just(DatabaseChangeset(listOf(transactionRecordBTC, transactionRecordBCH))))
 
         interactor.retrieveTransactionRecords()
-
-        val expectedItems = listOf(TransactionRecordViewItem(
-                "hash",
-                CoinValue(Bitcoin(), 1.0),
-                CoinValue(Bitcoin(), 0.01),
-                "from-address",
-                "to-address",
-                true,
-                123,
-                now,
-                null,
-                null
-        ))
 
         verify(delegate).didRetrieveTransactionRecords(expectedItems)
     }

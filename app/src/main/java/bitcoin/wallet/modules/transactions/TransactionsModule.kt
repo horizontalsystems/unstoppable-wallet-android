@@ -1,6 +1,7 @@
 package bitcoin.wallet.modules.transactions
 
 import bitcoin.wallet.core.managers.DatabaseManager
+import bitcoin.wallet.core.managers.Factory
 
 object TransactionsModule {
 
@@ -25,9 +26,9 @@ object TransactionsModule {
     private var databaseManager: DatabaseManager? = null
 
     fun initModule(view: TransactionsViewModel, router: IRouter) {
-        val databaseManager = DatabaseManager()
+        val databaseManager = Factory.databaseManager
 
-        val interactor = TransactionsInteractor(databaseManager)
+        val interactor = TransactionsInteractor(databaseManager, Factory.coinManager)
         val presenter = TransactionsPresenter(interactor, router)
 
         presenter.view = view

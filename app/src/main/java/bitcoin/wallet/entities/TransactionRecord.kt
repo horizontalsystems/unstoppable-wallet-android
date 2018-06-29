@@ -16,7 +16,7 @@ class TransactionOutput(var address: String = "", var value: Long = 0)
 open class TransactionRecord : RealmObject() {
 
     @PrimaryKey
-    var hash = ""
+    var transactionHash = ""
 
     var coinCode = ""
 

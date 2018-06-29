@@ -9,7 +9,7 @@ import io.realm.SyncUser
 class RealmManager {
 
     fun createWalletRealm(): Realm {
-        val realmURL = "realms://grouvi-wallet.us1a.cloud.realm.io/default"
+        val realmURL = "realms://grouvi-wallet.us1a.cloud.realm.io/~/wallet"
 
         val config = SyncUser.current()
                 .createConfiguration(realmURL)
