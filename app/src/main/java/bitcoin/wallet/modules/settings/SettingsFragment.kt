@@ -7,10 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import bitcoin.wallet.LauncherActivity
 import bitcoin.wallet.R
-import bitcoin.wallet.lib.WalletDataManager
+import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.modules.backup.BackupModule
 import bitcoin.wallet.modules.backup.BackupPresenter
 import bitcoin.wallet.modules.main.BaseTabFragment
+import io.realm.SyncUser
 import kotlinx.android.synthetic.main.fragment_settings.*
 
 class SettingsFragment : BaseTabFragment() {
@@ -26,7 +27,11 @@ class SettingsFragment : BaseTabFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         buttonRemoveWallet.setOnClickListener {
-            WalletDataManager.mnemonicWords = listOf()
+
+            Factory.preferencesManager.saveWords(listOf())
+            SyncUser.all().forEach { t, user ->
+                user.logOut()
+            }
 
             val intent = Intent(context, LauncherActivity::class.java)
             startActivity(intent)
