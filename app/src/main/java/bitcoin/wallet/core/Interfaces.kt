@@ -1,5 +1,6 @@
 package bitcoin.wallet.core
 
+import bitcoin.wallet.entities.BlockchainInfo
 import bitcoin.wallet.entities.ExchangeRate
 import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.entities.coins.bitcoin.BitcoinUnspentOutput
@@ -30,6 +31,7 @@ interface IDatabaseManager {
     fun getBitcoinCashUnspentOutputs(): Observable<DatabaseChangeset<BitcoinCashUnspentOutput>>
     fun getExchangeRates(): Observable<DatabaseChangeset<ExchangeRate>>
     fun getTransactionRecords(): Observable<DatabaseChangeset<TransactionRecord>>
+    fun getBlockchainInfos(): Observable<DatabaseChangeset<BlockchainInfo>>
 }
 
 interface INetworkManager {

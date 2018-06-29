@@ -3,6 +3,7 @@ package bitcoin.wallet.core.managers
 import bitcoin.wallet.core.CollectionChangeset
 import bitcoin.wallet.core.DatabaseChangeset
 import bitcoin.wallet.core.IDatabaseManager
+import bitcoin.wallet.entities.BlockchainInfo
 import bitcoin.wallet.entities.ExchangeRate
 import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.entities.coins.bitcoin.BitcoinUnspentOutput
@@ -38,6 +39,14 @@ class DatabaseManager : IDatabaseManager {
     override fun getTransactionRecords(): Observable<DatabaseChangeset<TransactionRecord>> =
             realm.where(TransactionRecord::class.java)
                     .sort("blockHeight", Sort.DESCENDING)
+                    .findAllAsync()
+                    .asChangesetObservable()
+                    .map {
+                        DatabaseChangeset(it.collection, it.changeset?.let { CollectionChangeset(it) })
+                    }
+
+    override fun getBlockchainInfos(): Observable<DatabaseChangeset<BlockchainInfo>> =
+            realm.where(BlockchainInfo::class.java)
                     .findAllAsync()
                     .asChangesetObservable()
                     .map {

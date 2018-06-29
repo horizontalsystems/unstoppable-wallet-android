@@ -3,6 +3,7 @@ package bitcoin.wallet.modules.transactions
 import bitcoin.wallet.core.DatabaseChangeset
 import bitcoin.wallet.core.IDatabaseManager
 import bitcoin.wallet.core.managers.CoinManager
+import bitcoin.wallet.entities.BlockchainInfo
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
@@ -56,6 +57,15 @@ class TransactionsInteractorTest {
         val now = Date()
         val bitcoin = Bitcoin()
         val bitcoinCash = BitcoinCash()
+        val blockchainInfos = listOf(
+                BlockchainInfo().apply {
+                    coinCode = "BTC"
+                    latestBlockHeight = 130
+                },
+                BlockchainInfo().apply {
+                    coinCode = "BCH"
+                    latestBlockHeight = 140
+                })
 
         val transactionRecordBTC = TransactionRecord().apply {
             transactionHash = "transactionHash"
@@ -65,7 +75,7 @@ class TransactionsInteractorTest {
             timestamp = now.time
             from = "from-address"
             to = "to-address"
-            blockHeight = 123
+            blockHeight = 0
             coinCode = "BTC"
         }
 
@@ -77,7 +87,7 @@ class TransactionsInteractorTest {
             timestamp = now.time
             from = "from-address"
             to = "to-address"
-            blockHeight = 123
+            blockHeight = 113
             coinCode = "BCH"
         }
 
@@ -89,10 +99,10 @@ class TransactionsInteractorTest {
                         "from-address",
                         "to-address",
                         true,
-                        123,
+                        0,
                         now,
-                        null,
-                        null
+                        TransactionRecordViewItem.Status.PENDING,
+                        0
                 ),
                 TransactionRecordViewItem(
                         "transactionHash",
@@ -101,16 +111,17 @@ class TransactionsInteractorTest {
                         "from-address",
                         "to-address",
                         true,
-                        123,
+                        113,
                         now,
-                        null,
-                        null
+                        TransactionRecordViewItem.Status.SUCCESS,
+                        28
                 )
         )
 
         whenever(coinManager.getCoinByCode("BTC")).thenReturn(bitcoin)
         whenever(coinManager.getCoinByCode("BCH")).thenReturn(bitcoinCash)
         whenever(databaseManager.getTransactionRecords()).thenReturn(Observable.just(DatabaseChangeset(listOf(transactionRecordBTC, transactionRecordBCH))))
+        whenever(databaseManager.getBlockchainInfos()).thenReturn(Observable.just(DatabaseChangeset(blockchainInfos)))
 
         interactor.retrieveTransactionRecords()
 
