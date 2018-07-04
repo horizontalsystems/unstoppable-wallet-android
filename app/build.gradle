@@ -28,7 +28,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId buildProperties.get("application_id")
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 27
         versionCode computeVersionCode()
         versionName "1.0"

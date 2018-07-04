@@ -8,6 +8,7 @@ object RestoreModule {
 
     interface IView {
         fun showInvalidWordsError()
+        fun authenticateToRestoreWallet()
     }
 
     interface IViewDelegate {
@@ -21,7 +22,7 @@ object RestoreModule {
 
     interface IInteractorDelegate {
         fun didRestore()
-        fun didFailToRestore()
+        fun didFailToRestore(error: Throwable)
     }
 
     interface IRouter {

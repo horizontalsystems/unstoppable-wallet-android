@@ -8,6 +8,7 @@ object GuestModule {
 
     interface IView {
         fun showError()
+        fun authenticateToCreateWallet()
     }
 
     interface IViewDelegate {
@@ -21,7 +22,7 @@ object GuestModule {
 
     interface IInteractorDelegate {
         fun didCreateWallet()
-        fun didFailToCreateWallet()
+        fun didFailToCreateWallet(error: Throwable)
     }
 
     interface IRouter {
@@ -39,6 +40,7 @@ object GuestModule {
         val presenter = GuestPresenter(interactor, router)
 
         view.delegate = presenter
+        presenter.view = view
         interactor.delegate = presenter
     }
 

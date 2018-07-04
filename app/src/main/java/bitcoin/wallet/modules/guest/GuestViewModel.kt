@@ -9,6 +9,7 @@ class GuestViewModel: ViewModel(), GuestModule.IView, GuestModule.IRouter {
 
     val openBackupScreenLiveEvent = SingleLiveEvent<Void>()
     val openRestoreWalletScreenLiveEvent = SingleLiveEvent<Void>()
+    val authenticateToCreateWallet = SingleLiveEvent<Void>()
 
     fun init() {
         GuestModule.init(this, this)
@@ -26,4 +27,9 @@ class GuestViewModel: ViewModel(), GuestModule.IView, GuestModule.IRouter {
     override fun showError() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+
+    override fun authenticateToCreateWallet() {
+        authenticateToCreateWallet.call()
+    }
+
 }

@@ -1,7 +1,12 @@
 package bitcoin.wallet.modules.backup
 
+import android.app.Activity
+import android.app.KeyguardManager
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.security.keystore.UserNotAuthenticatedException
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -24,12 +29,34 @@ class BackupInfoFragment : Fragment() {
         }
 
         buttonBackup.setOnClickListener {
-            viewModel.delegate.showWordsDidClick()
+            try {
+                viewModel.delegate.showWordsDidClick()
+            } catch (exception: Exception) {
+                if (exception is UserNotAuthenticatedException) {
+                    val mKeyguardManager = context?.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+                    val intent: Intent? = mKeyguardManager.createConfirmDeviceCredentialIntent("Authorization required", "")
+                    startActivityForResult(intent, AUTHENTICATE_TO_BACKUP_WORDS)
+                }
+            }
         }
 
         buttonCancel.setOnClickListener {
             viewModel.delegate.cancelDidClick()
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == AUTHENTICATE_TO_BACKUP_WORDS) {
+                viewModel.delegate.showWordsDidClick()
+            }
+        }
+    }
+
+    companion object {
+        const val AUTHENTICATE_TO_BACKUP_WORDS = 1
     }
 
 }

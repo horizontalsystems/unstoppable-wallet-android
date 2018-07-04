@@ -1,7 +1,11 @@
 package bitcoin.wallet.modules.guest
 
+import android.app.Activity
+import android.app.KeyguardManager
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import bitcoin.wallet.R
@@ -31,6 +35,12 @@ class GuestActivity : AppCompatActivity() {
             RestoreModule.start(this)
         })
 
+        viewModel.authenticateToCreateWallet.observe(this, Observer {
+            val mKeyguardManager = this.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+            val intent: Intent? = mKeyguardManager.createConfirmDeviceCredentialIntent("Authorization required", "")
+            startActivityForResult(intent, AUTHENTICATE_TO_CREATE_WALLET)
+        })
+
         buttonCreate.setOnClickListener {
             viewModel.delegate.createWalletDidClick()
         }
@@ -38,5 +48,20 @@ class GuestActivity : AppCompatActivity() {
         buttonRestore.setOnClickListener {
             viewModel.delegate.restoreWalletDidClick()
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK) {
+
+            if (requestCode == AUTHENTICATE_TO_CREATE_WALLET) {
+                viewModel.delegate.createWalletDidClick()
+            }
+        }
+    }
+
+    companion object {
+        const val AUTHENTICATE_TO_CREATE_WALLET = 1
     }
 }

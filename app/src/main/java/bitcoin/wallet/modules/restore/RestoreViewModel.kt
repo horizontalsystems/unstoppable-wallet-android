@@ -11,6 +11,7 @@ class RestoreViewModel : ViewModel(), RestoreModule.IView, RestoreModule.IRouter
 
     val errorLiveData = MutableLiveData<Int>()
     val navigateToMainScreenLiveEvent = SingleLiveEvent<Void>()
+    val authenticateToRestoreWallet = SingleLiveEvent<Void>()
 
     fun init() {
         RestoreModule.initModule(this, this)
@@ -26,6 +27,10 @@ class RestoreViewModel : ViewModel(), RestoreModule.IView, RestoreModule.IRouter
 
     override fun close() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun authenticateToRestoreWallet() {
+        authenticateToRestoreWallet.call()
     }
 
 }

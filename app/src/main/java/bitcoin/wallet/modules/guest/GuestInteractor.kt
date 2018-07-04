@@ -15,7 +15,7 @@ class GuestInteractor(private val mnemonic: IMnemonic, private val loginManager:
                     delegate?.didCreateWallet()
                 },
                 onError = {
-                    delegate?.didFailToCreateWallet()
+                    delegate?.didFailToCreateWallet(it)
                 })
     }
 

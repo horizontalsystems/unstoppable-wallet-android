@@ -41,7 +41,7 @@ class GuestPresenterTest {
 
     @Test
     fun didFailToCreateWallet() {
-        presenter.didFailToCreateWallet()
+        presenter.didFailToCreateWallet(Exception())
 
         verify(view).showError()
     }

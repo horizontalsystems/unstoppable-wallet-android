@@ -55,13 +55,14 @@ class GuestInteractorTest {
     @Test
     fun createWallet_error() {
         val words = listOf("1", "2", "etc")
+        val exception = Exception()
 
         whenever(mnemonic.generateWords()).thenReturn(words)
-        whenever(loginManager.login(words)).thenReturn(Completable.error(Exception()))
+        whenever(loginManager.login(words)).thenReturn(Completable.error(exception))
 
         interactor.createWallet()
 
-        verify(delegate).didFailToCreateWallet()
+        verify(delegate).didFailToCreateWallet(exception)
         verifyNoMoreInteractions(delegate)
     }
 }

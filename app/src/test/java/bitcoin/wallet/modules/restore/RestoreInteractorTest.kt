@@ -3,6 +3,7 @@ package bitcoin.wallet.modules.restore
 import bitcoin.wallet.core.IMnemonic
 import bitcoin.wallet.core.managers.LoginManager
 import bitcoin.wallet.modules.RxBaseTest
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
 import com.nhaarman.mockito_kotlin.whenever
@@ -56,7 +57,7 @@ class RestoreInteractorTest {
 
         interactor.restore(words)
 
-        verify(delegate).didFailToRestore()
+        verify(delegate).didFailToRestore(any())
         verifyNoMoreInteractions(delegate)
     }
 
@@ -70,7 +71,7 @@ class RestoreInteractorTest {
 
         interactor.restore(words)
 
-        verify(delegate).didFailToRestore()
+        verify(delegate).didFailToRestore(exception)
         verifyNoMoreInteractions(delegate)
     }
 }

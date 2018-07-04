@@ -38,6 +38,11 @@ interface INetworkManager {
     fun getJwtToken(identity: String, pubKeys: Map<Int, String>): Observable<String>
 }
 
+interface IEncryptionManager {
+    fun encrypt(data: String): String
+    fun decrypt(data: String): String
+}
+
 data class WalletData(val words: List<String>)
 
 data class DatabaseChangeset<T>(val array: List<T>, val changeset: CollectionChangeset? = null)

@@ -26,7 +26,7 @@ class RestoreInteractor(private val mnemonic: IMnemonic, private val loginManage
                             delegate?.didRestore()
                         },
                         onError = {
-                            delegate?.didFailToRestore()
+                            delegate?.didFailToRestore(it)
                         })
 
     }

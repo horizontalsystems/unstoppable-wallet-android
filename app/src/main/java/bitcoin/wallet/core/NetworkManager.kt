@@ -1,6 +1,5 @@
 package bitcoin.wallet.core
 
-import bitcoin.wallet.log
 import io.reactivex.Observable
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -25,7 +24,7 @@ object BackendApi {
 
     var service: IGrouviService
 
-    private const val apiURL = "http://192.168.4.11:3000/api/BTC/testnet/"
+    private const val apiURL = "http://192.168.4.15:3000/api/BTC/testnet/"
 
     init {
         val logging = HttpLoggingInterceptor()
