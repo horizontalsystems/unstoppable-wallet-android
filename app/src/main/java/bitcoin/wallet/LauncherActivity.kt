@@ -1,14 +1,13 @@
 package bitcoin.wallet
 
 import android.app.Activity
-import android.app.KeyguardManager
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.security.keystore.UserNotAuthenticatedException
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import bitcoin.wallet.core.managers.Factory
+import bitcoin.wallet.core.security.EncryptionManager
 import bitcoin.wallet.modules.guest.GuestModule
 import bitcoin.wallet.modules.main.MainModule
 import io.realm.SyncUser
@@ -21,9 +20,7 @@ class LauncherActivity : AppCompatActivity() {
         try {
             redirectToCorrectPage()
         } catch (exception: UserNotAuthenticatedException) {
-            val mKeyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
-            val intent: Intent? = mKeyguardManager.createConfirmDeviceCredentialIntent("Authorization required", "")
-            startActivityForResult(intent, AUTHENTICATE_TO_REDIRECT)
+            EncryptionManager.showAuthenticationScreen(this, AUTHENTICATE_TO_REDIRECT)
         }
     }
 

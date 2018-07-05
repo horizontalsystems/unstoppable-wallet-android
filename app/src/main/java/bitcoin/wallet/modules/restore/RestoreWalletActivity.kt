@@ -1,10 +1,8 @@
 package bitcoin.wallet.modules.restore
 
 import android.app.Activity
-import android.app.KeyguardManager
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -14,6 +12,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import bitcoin.wallet.R
+import bitcoin.wallet.core.security.EncryptionManager
 import bitcoin.wallet.lib.EditTextViewHolder
 import bitcoin.wallet.lib.ErrorDialog
 import bitcoin.wallet.lib.WordsInputAdapter
@@ -50,9 +49,7 @@ class RestoreWalletActivity : AppCompatActivity() {
         })
 
         viewModel.authenticateToRestoreWallet.observe(this, Observer {
-            val mKeyguardManager = this.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
-            val intent: Intent? = mKeyguardManager.createConfirmDeviceCredentialIntent("Authorization required", "")
-            startActivityForResult(intent, AUTHENTICATE_TO_RESTORE_WALLET)
+            EncryptionManager.showAuthenticationScreen(this@RestoreWalletActivity, AUTHENTICATE_TO_RESTORE_WALLET)
         })
 
         recyclerInputs.adapter = WordsInputAdapter(object : EditTextViewHolder.WordsChangedListener {
