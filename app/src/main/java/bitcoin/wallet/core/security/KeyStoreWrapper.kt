@@ -43,4 +43,5 @@ class KeyStoreWrapper {
 
     fun getAndroidKeyStoreSymmetricKey(alias: String): SecretKey? = keyStore.getKey(alias, null) as? SecretKey
 
+    fun removeAndroidKeyStoreKey(alias: String) = keyStore.deleteEntry(alias)
 }

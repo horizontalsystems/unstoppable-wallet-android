@@ -11,6 +11,7 @@ import io.realm.OrderedCollectionChangeSet
 interface ILocalStorage {
     val savedWords: List<String>?
     fun saveWords(words: List<String>)
+    fun clearAll()
 }
 
 interface IMnemonic {

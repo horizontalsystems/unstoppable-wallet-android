@@ -24,7 +24,7 @@ object BackendApi {
 
     var service: IGrouviService
 
-    private const val apiURL = "http://192.168.4.15:3000/api/BTC/testnet/"
+    private const val apiURL = "http://bitnode-db.grouvi.org:3000/api/BTC/testnet/"
 
     init {
         val logging = HttpLoggingInterceptor()

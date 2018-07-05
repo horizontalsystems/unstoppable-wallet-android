@@ -5,6 +5,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
+import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.UserNotAuthenticatedException
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -58,7 +59,9 @@ class BackupConfirmFragment : Fragment() {
             try {
                 validateWords()
             } catch (exception: UserNotAuthenticatedException) {
-                EncryptionManager.showAuthenticationScreen(activity as Activity, AUTHENTICATE_TO_VALIDATE_WORDS)
+                EncryptionManager.showAuthenticationScreen(this, AUTHENTICATE_TO_VALIDATE_WORDS)
+            }  catch (exception: KeyPermanentlyInvalidatedException) {
+                activity?.let { EncryptionManager.showKeysInvalidatedAlert(it) }
             }
         }
     }

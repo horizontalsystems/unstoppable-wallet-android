@@ -3,6 +3,7 @@ package bitcoin.wallet
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.UserNotAuthenticatedException
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -21,6 +22,8 @@ class LauncherActivity : AppCompatActivity() {
             redirectToCorrectPage()
         } catch (exception: UserNotAuthenticatedException) {
             EncryptionManager.showAuthenticationScreen(this, AUTHENTICATE_TO_REDIRECT)
+        } catch (exception: KeyPermanentlyInvalidatedException) {
+            EncryptionManager.showKeysInvalidatedAlert(this)
         }
     }
 

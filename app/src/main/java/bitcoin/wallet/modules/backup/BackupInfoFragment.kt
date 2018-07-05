@@ -4,6 +4,7 @@ import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
+import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.UserNotAuthenticatedException
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -30,10 +31,10 @@ class BackupInfoFragment : Fragment() {
         buttonBackup.setOnClickListener {
             try {
                 viewModel.delegate.showWordsDidClick()
-            } catch (exception: Exception) {
-                if (exception is UserNotAuthenticatedException) {
-                    EncryptionManager.showAuthenticationScreen(activity as Activity, AUTHENTICATE_TO_BACKUP_WORDS)
-                }
+            } catch (exception: UserNotAuthenticatedException) {
+                EncryptionManager.showAuthenticationScreen(this, AUTHENTICATE_TO_BACKUP_WORDS)
+            } catch (exception: KeyPermanentlyInvalidatedException) {
+                activity?.let { EncryptionManager.showKeysInvalidatedAlert(it) }
             }
         }
 

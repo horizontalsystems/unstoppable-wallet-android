@@ -30,5 +30,6 @@
     <string name="tab_title_wallet">Balance</string>
     <string name="tab_title_transactions">Transactions</string>
     <string name="tab_title_settings">Settings</string>
+    <string name="alert_ok">OK</string>
 
 </resources>

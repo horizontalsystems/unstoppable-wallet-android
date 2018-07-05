@@ -21,4 +21,7 @@ class PreferencesManager(private val encryptionManager: IEncryptionManager) : IL
         App.preferences.edit().putString("mnemonicWords", encryptionManager.encrypt(words.joinToString(" "))).apply()
     }
 
+    override fun clearAll() {
+        App.preferences.edit().clear().apply()
+    }
 }
