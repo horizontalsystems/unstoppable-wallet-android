@@ -303,6 +303,7 @@
 
             <Button
                 android:id="@+id/btnPay"
+                style="@style/ButtonYellow"
                 android:layout_width="0dp"
                 android:layout_height="49dp"
                 android:layout_marginEnd="16dp"
