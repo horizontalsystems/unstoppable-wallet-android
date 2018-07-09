@@ -7,7 +7,8 @@
     <color name="green_pressed">#1ba65E</color>
     <color name="grey">#8a8a8f</color>
     <color name="steel_grey">#c7c7c7</color>
-    <color name="light_grey">#808a8a8f</color>
+    <color name="grey_50">#808a8a8f</color>
+    <color name="grey_light">#e0e0e0</color>
     <color name="yellow">#f7b731</color>
     <color name="yellow_pressed">#e09d0b</color>
     <color name="black">#000000</color>

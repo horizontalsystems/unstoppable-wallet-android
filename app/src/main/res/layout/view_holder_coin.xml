@@ -70,7 +70,7 @@
 
     <Button
         android:id="@+id/buttonReceive"
-        style="@style/ButtonGreen"
+        style="@style/ButtonGreen_12"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
