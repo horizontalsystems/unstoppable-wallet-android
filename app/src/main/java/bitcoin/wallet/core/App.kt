@@ -3,6 +3,8 @@ package bitcoin.wallet.core
 import android.app.Application
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import bitcoin.wallet.bitcoin.BitcoinBlockchainService
+import bitcoin.wallet.blockchain.BlockchainStorage
 import io.realm.Realm
 
 class App : Application() {
@@ -18,7 +20,13 @@ class App : Application() {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
         Realm.init(this)
-//        RealmLog.setLevel(LogLevel.ALL)
+
+        startBlockchainService()
+    }
+
+    private fun startBlockchainService() {
+        // todo: implement Blockchain as service
+        BitcoinBlockchainService.start(BlockchainStorage, externalCacheDir)
     }
 
 }

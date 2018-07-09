@@ -1,6 +1,7 @@
 package bitcoin.wallet.modules.wallet
 
 import bitcoin.wallet.core.managers.DatabaseManager
+import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.entities.CurrencyValue
 import bitcoin.wallet.entities.WalletBalanceItem
 import bitcoin.wallet.entities.WalletBalanceViewItem
@@ -29,7 +30,7 @@ object WalletModule {
     private var databaseManager: DatabaseManager? = null
 
     fun init(view: WalletViewModel, router: IRouter) {
-        val databaseManager = DatabaseManager()
+        val databaseManager = Factory.databaseManager
 
         val interactor = WalletInteractor(databaseManager)
         val presenter = WalletPresenter(interactor, router)

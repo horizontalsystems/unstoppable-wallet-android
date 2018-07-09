@@ -7,9 +7,9 @@ import bitcoin.wallet.core.RealmManager
 import io.reactivex.Completable
 import io.reactivex.Observable
 
-class LoginManager(private val networkManager: INetworkManager, private val walletManager: WalletManager, private val realmManager: RealmManager, private val localStorage: ILocalStorage) {
+open class LoginManager(private val networkManager: INetworkManager, protected val walletManager: WalletManager, protected val realmManager: RealmManager, protected val localStorage: ILocalStorage) {
 
-    fun login(words: List<String>): Completable = Observable.just(words)
+    open fun login(words: List<String>): Completable = Observable.just(words)
             .map {
                 walletManager.createWallet(it)
             }
@@ -18,6 +18,18 @@ class LoginManager(private val networkManager: INetworkManager, private val wall
             }
             .flatMapCompletable { jwtToken ->
                 realmManager.login(jwtToken)
+            }
+            .doOnComplete {
+                localStorage.saveWords(words)
+            }
+
+}
+
+class LoginManagerLocal(networkManager: INetworkManager, walletManager: WalletManager, realmManager: RealmManager, localStorage: ILocalStorage) : LoginManager(networkManager, walletManager, realmManager, localStorage) {
+
+    override fun login(words: List<String>): Completable = Observable.just(words)
+            .flatMapCompletable {
+                Completable.complete()
             }
             .doOnComplete {
                 localStorage.saveWords(words)

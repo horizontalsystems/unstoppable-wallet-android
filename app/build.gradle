@@ -115,4 +115,6 @@ dependencies {
 
     api 'com.journeyapps:zxing-android-embedded:3.6.0'
 
+    implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.20'
+
 }

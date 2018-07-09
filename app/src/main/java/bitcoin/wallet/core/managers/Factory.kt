@@ -36,12 +36,12 @@ object Factory {
     }
 
     val loginManager by lazy {
-        LoginManager(networkManager, walletManager, realmManager, preferencesManager)
+        LoginManagerLocal(networkManager, walletManager, realmManager, preferencesManager)
+//        LoginManager(networkManager, walletManager, realmManager, preferencesManager)
     }
 
-    val databaseManager by lazy {
-        DatabaseManager()
-    }
+    val databaseManager
+        get() = DatabaseManager()
 
     val coinManager by lazy {
         CoinManager()

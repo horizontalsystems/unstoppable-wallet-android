@@ -33,6 +33,8 @@ interface IDatabaseManager {
     fun getExchangeRates(): Observable<DatabaseChangeset<ExchangeRate>>
     fun getTransactionRecords(): Observable<DatabaseChangeset<TransactionRecord>>
     fun getBlockchainInfos(): Observable<DatabaseChangeset<BlockchainInfo>>
+    fun insertOrUpdateTransaction(transactionRecord: TransactionRecord)
+    fun updateBlockchainInfo(blockchainInfo: BlockchainInfo)
 }
 
 interface INetworkManager {

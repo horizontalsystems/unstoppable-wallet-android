@@ -18,6 +18,10 @@ class RealmManager {
         return Realm.getInstance(config)
     }
 
+    fun createWalletRealmLocal(): Realm {
+        return Realm.getDefaultInstance()
+    }
+
     fun login(jwtToken: String): Completable = Completable.create { emitter ->
         val credentials = SyncCredentials.jwt(jwtToken)
         val authURL = "https://grouvi-wallet.us1a.cloud.realm.io"

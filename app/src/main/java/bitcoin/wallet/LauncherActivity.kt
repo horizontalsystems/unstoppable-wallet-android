@@ -11,7 +11,6 @@ import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.core.security.EncryptionManager
 import bitcoin.wallet.modules.guest.GuestModule
 import bitcoin.wallet.modules.main.MainModule
-import io.realm.SyncUser
 
 class LauncherActivity : AppCompatActivity() {
 
@@ -28,7 +27,7 @@ class LauncherActivity : AppCompatActivity() {
     }
 
     private fun redirectToCorrectPage() {
-        if (Factory.preferencesManager.savedWords != null && SyncUser.current() != null) {
+        if (Factory.preferencesManager.savedWords != null) {
             MainModule.start(this)
         } else {
             GuestModule.start(this)

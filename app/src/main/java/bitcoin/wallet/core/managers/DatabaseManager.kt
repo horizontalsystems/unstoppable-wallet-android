@@ -13,7 +13,7 @@ import io.realm.Sort
 
 class DatabaseManager : IDatabaseManager {
 
-    private val realm = Factory.realmManager.createWalletRealm()
+    private val realm = Factory.realmManager.createWalletRealmLocal()
 
     override fun getBitcoinUnspentOutputs(): Observable<DatabaseChangeset<BitcoinUnspentOutput>> =
             realm.where(BitcoinUnspentOutput::class.java).findAllAsync()
@@ -52,6 +52,18 @@ class DatabaseManager : IDatabaseManager {
                     .map {
                         DatabaseChangeset(it.collection, it.changeset?.let { CollectionChangeset(it) })
                     }
+
+    override fun insertOrUpdateTransaction(transactionRecord: TransactionRecord) {
+        realm.executeTransactionAsync {
+            it.insertOrUpdate(transactionRecord)
+        }
+    }
+
+    override fun updateBlockchainInfo(blockchainInfo: BlockchainInfo) {
+        realm.executeTransactionAsync {
+            it.insertOrUpdate(blockchainInfo)
+        }
+    }
 
     fun close() {
         realm.close()
