@@ -2,16 +2,13 @@ package bitcoin.wallet.modules.settings
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import bitcoin.wallet.LauncherActivity
+import android.widget.CompoundButton
 import bitcoin.wallet.R
-import bitcoin.wallet.core.managers.Factory
-import bitcoin.wallet.modules.backup.BackupModule
-import bitcoin.wallet.modules.backup.BackupPresenter
 import bitcoin.wallet.modules.main.BaseTabFragment
-import io.realm.SyncUser
 import kotlinx.android.synthetic.main.fragment_settings.*
 
 class SettingsFragment : BaseTabFragment() {
@@ -26,21 +23,64 @@ class SettingsFragment : BaseTabFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        buttonRemoveWallet.setOnClickListener {
+        resources.getDrawable(R.drawable.info, null).let { securityBadge ->
+            securityBadge.setTint(resources.getColor(R.color.red_warning, null))
+            securityCenter.badge = securityBadge
+        }
 
-            Factory.preferencesManager.saveWords(listOf())
-            SyncUser.all().forEach { t, user ->
-                user.logOut()
+        securityCenter.setOnClickListener {
+            startActivity(Intent(context, SecuritySettingsActivity::class.java))
+        }
+
+
+        baseCurrency.apply {
+            setOnClickListener {
+                Log.e("AAA", "base currency clicked!")
+            }
+            selectedValue = "USD"
+        }
+
+        importWallet.setOnClickListener {
+            Log.e("AAA", "import wallet clicked!")
+        }
+
+        language.apply {
+            setOnClickListener {
+                Log.e("AAA", "language clicked!")
+            }
+            selectedValue = "English"
+        }
+
+        darkMode.apply {
+            switchOnCheckedChangeListener = null
+            switchIsChecked = true
+            setOnClickListener {
+                switchToggle()
             }
 
-            val intent = Intent(context, LauncherActivity::class.java)
-            startActivity(intent)
-
-            activity?.finish()
+            switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
+                Log.e("AAA", "darkMode $isChecked")
+            }
         }
 
-        buttonBackup.setOnClickListener {
-            context?.let { BackupModule.start(it, BackupPresenter.DismissMode.DISMISS_SELF) }
+        pushNotifications.apply {
+            switchOnCheckedChangeListener = null
+            switchIsChecked = true
+            setOnClickListener {
+                switchToggle()
+            }
+            switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
+                Log.e("AAA", "pushNotifications $isChecked")
+            }
         }
+
+        appVersion.apply {
+            selectedValue = "1.01"
+            setOnClickListener {
+                Log.e("AAA", "app version clicked!")
+            }
+        }
+
     }
+
 }
