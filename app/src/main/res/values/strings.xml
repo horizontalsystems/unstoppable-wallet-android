@@ -9,6 +9,14 @@
         Your paper key is the only way to restore your Crypton if you lost, stolen, broken, or upgraded.
         \n\nWe will show you a list of words to write down on a piece of paper and keep safe.
     </string>
+    <string name="backup_words_confirm_alert_wallet_held_on_device">I understand that my <b>wallet and tokens are held securely on this device only and not any servers</b></string>
+    <string name="backup_words_confirm_alert_wallet_restore_with_words">I understand that if this app is moved to another device or is deleted, my wallet can be only recovered with the backup phrase that I have written down and saved in a secure place</string>
+    <string name="backup_words_confirm_alert_wallet_device_lock_warning">Changing the phone\'s unlock PIN in your Android OS settings would reset the wallet. You will need your backup phrase to restore your wallet after that</string>
+    <string name="backup_alert_confirm_button">Confirm</string>
+
+    <string name="backup_words_confirm_description">Enter the following words from your paper key</string>
+    <string name="backup_words_error_enter_words">Please, enter words from your paper key.</string>
+    <string name="backup_words_error_no_match">Entered words do not match. Please, make sure you write down your words exactly as they appear in the previous step and in correct order.</string>
     <string name="button_backup">Backup</string>
     <string name="button_back">Back</string>
     <string name="button_next">Next</string>
@@ -17,7 +25,6 @@
         \nto Crypton</string>
     <string name="welcome_description">The best of the best crypto wallet ever</string>
     <string name="write_down_on_paper">Write down on paper and keep safe</string>
-    <string name="backup_words_confirm_description">Enter the following words from your paper key</string>
     <string name="enter_paper_keys_title">Enter Paper Keys</string>
     <string name="action_done">Done</string>
     <string name="button_receive">Receive</string>
