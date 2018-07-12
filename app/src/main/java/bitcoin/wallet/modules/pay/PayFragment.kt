@@ -68,6 +68,10 @@ class PayFragment : DialogFragment() {
             startScanner()
         }
 
+        rootView.findViewById<TextView>(R.id.txtTitle)?.let { txtTitle ->
+            txtTitle.text = getString(R.string.send_title, coin.code)
+        }
+
         addressTxt = rootView.findViewById(R.id.txtAddress)
         addressLayout = rootView.findViewById<View>(R.id.addressLayout)
         addressTxt.setOnFocusChangeListener { _, hasFocus ->

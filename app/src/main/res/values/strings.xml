@@ -27,8 +27,8 @@
     <string name="write_down_on_paper">Write down on paper and keep safe</string>
     <string name="enter_paper_keys_title">Enter Paper Keys</string>
     <string name="action_done">Done</string>
-    <string name="button_receive">Receive</string>
-    <string name="button_pay">Pay</string>
+    <string name="button_receive">Deposit</string>
+    <string name="button_pay">Send</string>
     <string name="timestamp_just_now">just now</string>
     <string name="timestamp_min_ago">%dm. ago</string>
     <string name="timestamp_hours_ago">%dh. ago</string>
@@ -39,5 +39,6 @@
     <string name="tab_title_settings">Settings</string>
     <string name="alert_ok">OK</string>
     <string name="scan_qr_code">Scan QR Code</string>
+    <string name="send_title">Send %s</string>
 
 </resources>

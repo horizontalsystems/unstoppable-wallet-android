@@ -29,9 +29,9 @@
         android:id="@+id/textAmountFiat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="12dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/noto_sans"
         android:textColor="@color/yellow_crypto"
         android:textSize="14sp"
@@ -47,12 +47,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="12dp"
         android:fontFamily="@font/noto_sans_bold"
         android:textColor="@color/white"
         android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textAmountFiat"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textAmountFiat"
         tools:text="0.000078 BTC"
         />
 
@@ -74,7 +74,7 @@
 
     <Button
         android:id="@+id/buttonPay"
-        style="@style/ButtonYellow"
+        style="@style/ButtonYellowOnDark"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"

@@ -39,6 +39,11 @@
         <item name="android:background">@drawable/button_yellow_background_12</item>
     </style>
 
+    <style name="ButtonYellowOnDark" parent="Button">
+        <item name="android:textColor">@color/button_yellow_on_dark_text_color_selector</item>
+        <item name="android:background">@drawable/button_yellow_on_dark_background_12</item>
+    </style>
+
     <style name="ButtonNegative" parent="Button">
         <item name="android:background">@drawable/button_grey_background_12</item>
         <item name="android:textColor">@color/white</item>
