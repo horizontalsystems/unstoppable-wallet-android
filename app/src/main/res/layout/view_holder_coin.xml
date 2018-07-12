@@ -33,7 +33,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/noto_sans"
-        android:textColor="@color/yellow_crypto"
+        android:textColor="@color/yellow_text_on_dark_color_selector"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/buttonReceive"
         app:layout_constraintStart_toStartOf="parent"
