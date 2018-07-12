@@ -2,15 +2,14 @@ package bitcoin.wallet.modules.pay
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.app.AlertDialog
 import android.app.Dialog
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentActivity
-import android.support.v7.app.AlertDialog
+import android.text.TextUtils
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -63,7 +62,6 @@ class PayFragment : DialogFragment() {
         mDialog = builder?.create()
         mDialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
         mDialog?.window?.setGravity(Gravity.BOTTOM)
-        mDialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         val btnScan = rootView.findViewById<View>(R.id.btnScan)
         btnScan.setOnClickListener {
@@ -131,7 +129,7 @@ class PayFragment : DialogFragment() {
 
     private fun startScanner() {
         val intentIntegrator = IntentIntegrator.forSupportFragment(this)
-        intentIntegrator.captureActivity = PortraitCaptureActivity::class.java
+        intentIntegrator.captureActivity = QRScannerActivity::class.java
         intentIntegrator.setOrientationLocked(true)
         intentIntegrator.setPrompt("")
         intentIntegrator.setBeepEnabled(false)
@@ -142,7 +140,7 @@ class PayFragment : DialogFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
         val scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent)
-        if (scanResult != null) {
+        if (scanResult != null && !TextUtils.isEmpty(scanResult.contents)) {
             // handle scan result
             addressTxt.setText(scanResult.contents)
         }
@@ -152,9 +150,7 @@ class PayFragment : DialogFragment() {
         fun show(activity: FragmentActivity, coin: Coin) {
             val fragment = PayFragment()
             fragment.coin = coin
-            val ft = activity.supportFragmentManager.beginTransaction()
-            ft.add(fragment, "pay_fragment")
-            ft.commitAllowingStateLoss()
+            fragment.show(activity.supportFragmentManager, "pay_fragment")
         }
     }
 

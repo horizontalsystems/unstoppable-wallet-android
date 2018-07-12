@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         adapter = MainTabsAdapter(supportFragmentManager)
 
         viewPager.adapter = adapter
+        viewPager.offscreenPageLimit = 2
         viewPager.setPagingEnabled(true)
 
         bottomNavigation.defaultBackgroundColor = ContextCompat.getColor(this, R.color.appBackground)

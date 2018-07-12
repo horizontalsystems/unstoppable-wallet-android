@@ -29,12 +29,11 @@
         android:layout_height="24dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:clickable="true"
-        android:elevation="1dp"
+        android:foreground="?android:attr/selectableItemBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/qr_code"
+        android:src="@drawable/qr_code"
+        android:elevation="1dp"
         />
 
 
@@ -81,7 +80,7 @@
                     android:hint="Address"
                     android:includeFontPadding="false"
                     android:inputType="text"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/btnPaste"
                     app:layout_constraintStart_toStartOf="parent"
@@ -234,7 +233,7 @@
                         android:includeFontPadding="false"
                         android:inputType="text"
                         android:padding="12dp"
-                        android:textSize="20sp"
+                        android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
