@@ -130,10 +130,9 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
 
     fun bind(walletBalanceViewItem: WalletBalanceViewItem, onPayClick: (() -> (Unit))? = null, onReceiveClick: (() -> (Unit))? = null, onHolderCLicked: (() -> (Unit))? = null, expand: Boolean = false) {
         val numberFormat = NumberFormatHelper.fiatAmountFormat
-        textName.text = walletBalanceViewItem.coinValue.coin.name
-        textRate.text = "${walletBalanceViewItem.exchangeValue.currency.symbol}${numberFormat.format(walletBalanceViewItem.exchangeValue.value)}"
+        textName.text = "${walletBalanceViewItem.coinValue.coin.name} (${walletBalanceViewItem.coinValue.coin.code})"
         textAmountFiat.text = "${walletBalanceViewItem.currencyValue.currency.symbol}${numberFormat.format(walletBalanceViewItem.currencyValue.value)}"
-        textAmount.text = "${walletBalanceViewItem.coinValue.value} ${walletBalanceViewItem.coinValue.coin.code}"
+        textAmount.text = "${walletBalanceViewItem.coinValue.value}"
 
         buttonPay.setOnClickListener {
             onPayClick?.invoke()
