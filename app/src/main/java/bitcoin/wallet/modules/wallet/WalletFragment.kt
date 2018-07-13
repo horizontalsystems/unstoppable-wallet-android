@@ -14,6 +14,7 @@ import bitcoin.wallet.entities.*
 import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.modules.main.BaseTabFragment
 import bitcoin.wallet.modules.pay.PayModule
+import bitcoin.wallet.modules.receive.ReceiveModule
 import bitcoin.wallet.viewHelpers.NumberFormatHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_wallet.*
@@ -71,6 +72,9 @@ class WalletFragment : BaseTabFragment(), CoinsAdapter.Listener {
     }
 
     override fun onReceiveClicked(coin: Coin) {
+        activity?.let {
+            ReceiveModule.start(it, coin, "1AYHMDV1XR8HWaReC3Rr4Qv79vJiSR8RCU")
+        }
     }
 }
 

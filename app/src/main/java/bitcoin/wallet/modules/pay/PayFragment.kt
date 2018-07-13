@@ -69,7 +69,7 @@ class PayFragment : DialogFragment() {
         }
 
         rootView.findViewById<TextView>(R.id.txtTitle)?.let { txtTitle ->
-            txtTitle.text = getString(R.string.send_title, coin.code)
+            txtTitle.text = getString(R.string.send_bottom_sheet_title, coin.code)
         }
 
         addressTxt = rootView.findViewById(R.id.txtAddress)
