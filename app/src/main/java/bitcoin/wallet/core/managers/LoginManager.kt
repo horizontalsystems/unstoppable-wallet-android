@@ -1,6 +1,7 @@
 package bitcoin.wallet.core.managers
 
 import bitcoin.wallet.WalletManager
+import bitcoin.wallet.bitcoin.BitcoinBlockchainService
 import bitcoin.wallet.core.ILocalStorage
 import bitcoin.wallet.core.INetworkManager
 import bitcoin.wallet.core.RealmManager
@@ -29,6 +30,8 @@ class LoginManagerLocal(networkManager: INetworkManager, walletManager: WalletMa
 
     override fun login(words: List<String>): Completable = Observable.just(words)
             .flatMapCompletable {
+                BitcoinBlockchainService.initNewWallet()
+
                 Completable.complete()
             }
             .doOnComplete {

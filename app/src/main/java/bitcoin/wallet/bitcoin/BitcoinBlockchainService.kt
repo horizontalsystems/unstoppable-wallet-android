@@ -1,109 +1,202 @@
 package bitcoin.wallet.bitcoin
 
+import android.content.res.AssetManager
 import bitcoin.wallet.blockchain.BlockchainStorage
+import bitcoin.wallet.core.managers.Factory
+import bitcoin.wallet.entities.Balance
 import bitcoin.wallet.entities.BlockchainInfo
 import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.log
-import com.google.common.collect.ImmutableList
-import org.bitcoinj.core.BlockChain
-import org.bitcoinj.core.PeerGroup
-import org.bitcoinj.core.Transaction
-import org.bitcoinj.crypto.ChildNumber
+import io.reactivex.subjects.PublishSubject
+import org.bitcoinj.core.*
 import org.bitcoinj.net.discovery.DnsDiscovery
+import org.bitcoinj.params.MainNetParams
 import org.bitcoinj.params.TestNet3Params
 import org.bitcoinj.store.SPVBlockStore
 import org.bitcoinj.utils.BriefLogFormatter
-import org.bitcoinj.wallet.DeterministicKeyChain
-import org.bitcoinj.wallet.DeterministicSeed
-import org.bitcoinj.wallet.KeyChainGroup
+import org.bitcoinj.wallet.UnreadableWalletException
 import org.bitcoinj.wallet.Wallet
 import java.io.File
+import java.io.InputStream
+import java.util.concurrent.TimeUnit
 
 
 object BitcoinBlockchainService {
 
-    fun start(storage: BlockchainStorage, chainFileDir: File) {
+    var seedCode: String = ""
+    var checkpoints: InputStream? = null
 
+    lateinit var filesDir: File
+    lateinit var storage: BlockchainStorage
+    private lateinit var params: NetworkParameters
+
+    private var updateBlockchainHeightSubject = PublishSubject.create<Long>()
+    private var transactionsUpdatedSubject = PublishSubject.create<Map<String, Transaction>>()
+
+    private var latestBlockHeight = 0
+        set(value) {
+            if (value > field) {
+                field = value
+                updateBlockchainHeightSubject.onNext(value.toLong())
+            }
+        }
+
+    private var txs = mutableMapOf<String, Transaction>()
+    private lateinit var wallet: Wallet
+
+    fun init(filesDir: File, assetManager: AssetManager, storage: BlockchainStorage, testMode: Boolean) {
         BriefLogFormatter.initVerbose()
 
-        val params = TestNet3Params()
+        this.filesDir = filesDir
+        this.storage = storage
 
-        val seedCode = "used ugly meat glad balance divorce inner artwork hire invest already piano"
-        val creationTime = 1525845045L
-        val seed = DeterministicSeed(seedCode, null, "", creationTime)
-
-        val keyChain = Bip44TestNetDeterministicKeyChain(seed)
-        val keyChainGroup = KeyChainGroup(params)
-        keyChainGroup.addAndActivateHDChain(keyChain)
-
-        val wallet = Wallet(params, keyChainGroup)
-        val chainFile = File(chainFileDir, "${params.paymentProtocolId}.spvchain")
-        val spvBlockStore = SPVBlockStore(params, chainFile)
-        val spvBlockChain = BlockChain(params, wallet, spvBlockStore)
-
-        wallet.addChangeEventListener {
-            it.balance.log("Balance: ")
+        params = if (testMode) {
+            TestNet3Params.get()
+        } else {
+            MainNetParams.get()
 
         }
 
+        checkpoints = assetManager.open("${params.id}.checkpoints.txt")
+
+        updateBlockchainHeightSubject.sample(30, TimeUnit.SECONDS).subscribe {
+            val blockchainInfo = BlockchainInfo().apply {
+                coinCode = "BTC"
+                latestBlockHeight = it
+            }
+
+            storage.updateBlockchainInfo(blockchainInfo)
+        }
+
+        transactionsUpdatedSubject.sample(30, TimeUnit.SECONDS).subscribe { txs ->
+
+            val transactionRecords = mutableListOf<TransactionRecord>()
+            txs.forEach {
+                val t = it.value
+                val transactionRecord = TransactionRecord().apply {
+                    transactionHash = t.hashAsString
+                    coinCode = "BTC"
+                    amount = t.getValue(wallet).value
+                    incoming = amount > 0
+                    timestamp = t.updateTime.time
+
+                    blockHeight = try {
+                        t.confidence.appearedAtChainHeight.toLong()
+                    } catch (e: IllegalStateException) {
+                        0
+                    }
+                }
+
+                transactionRecords.add(transactionRecord)
+
+            }
+
+            "Updating transactions ${transactionRecords.joinToString { it.transactionHash }}".log()
+
+            storage.insertOrUpdateTransactions(transactionRecords)
+
+            this.txs.clear()
+
+            "Cleared transactions, tx count: ${txs.count()}".log()
+        }
+
+    }
+
+    fun initNewWallet() {
+        updateBalance(0)
+        updateLatestBlockHeight(0)
+    }
+
+
+    fun start() {
+        seedCode = Factory.preferencesManager.savedWords?.joinToString(" ") ?: throw Exception("No saved words")
+
+        val chainFile = File(filesDir, "${params.paymentProtocolId}.spvchain")
+        val spvBlockStore = SPVBlockStore(params, chainFile)
+
+        wallet = getWallet()
+
+        if (wallet.lastBlockSeenHeight <= 0) {
+            if (checkpoints == null) {
+                checkpoints = CheckpointManager.openStream(params)
+            }
+
+            CheckpointManager.checkpoint(params, checkpoints, spvBlockStore, wallet.earliestKeyCreationTime)
+            wallet.notifyNewBestBlock(spvBlockStore.chainHead)
+        }
+
+        val spvBlockChain = BlockChain(params, wallet, spvBlockStore)
+
+        wallet.addCoinsReceivedEventListener { _, tx, prevBalance, newBalance ->
+            updateBalance(newBalance.value)
+        }
+        wallet.addCoinsSentEventListener { _, tx, prevBalance, newBalance ->
+            updateBalance(newBalance.value)
+        }
         wallet.addTransactionConfidenceEventListener { wallet, tx ->
-            insertOrUpdateTransaction(storage, tx, wallet)
+            updateTransaction(tx)
         }
 
         val peerGroup = PeerGroup(params, spvBlockChain)
+
         peerGroup.addWallet(wallet)
         peerGroup.addPeerDiscovery(DnsDiscovery(params))
-        peerGroup.addBlocksDownloadedEventListener { peer, block, filteredBlock, blocksLeft ->
-            "Downloaded block: ${block.hashAsString}, Blocks left: $blocksLeft".log()
-        }
+        peerGroup.fastCatchupTimeSecs = wallet.earliestKeyCreationTime
 
+        peerGroup.addConnectedEventListener { peer, peerCount ->
+            updateLatestBlockHeight(peerGroup.mostCommonChainHeight)
+        }
         peerGroup.addOnTransactionBroadcastListener { peer, t ->
-            insertOrUpdateTransaction(storage, t, wallet)
+            updateTransaction(t)
+        }
+        spvBlockChain.addNewBestBlockListener {
+            updateLatestBlockHeight(it.height)
         }
 
-        spvBlockChain.addNewBestBlockListener {
-            val blockchainInfo = BlockchainInfo().apply {
-                coinCode = "BTC"
-                latestBlockHeight = it.height.toLong()
-            }
-
-            "New best block height: ${it.height}".log()
-
-//            storage.updateBlockchainInfo(blockchainInfo)
+        peerGroup.addBlocksDownloadedEventListener { peer, block, filteredBlock, blocksLeft ->
+            "Downloaded block: ${block.time}, ${block.hashAsString}, Blocks left: $blocksLeft".log()
         }
 
         peerGroup.startAsync()
     }
 
-    private fun insertOrUpdateTransaction(storage: BlockchainStorage, t: Transaction, wallet: Wallet) {
-        val transactionRecord = TransactionRecord().apply {
-            transactionHash = t.hashAsString
-            coinCode = "BTC"
-            amount = t.getValue(wallet).value
-            incoming = true
-            timestamp = t.updateTime.time
+    private fun getWallet(): Wallet {
+        val walletFilename = "${params.paymentProtocolId}-${Integer.toHexString(seedCode.hashCode())}.dat"
+        val walletFile = File(filesDir, walletFilename)
 
-            try {
-                blockHeight = t.confidence.appearedAtChainHeight.toLong()
-            } catch (e: IllegalStateException) {
-                blockHeight = 0
-            }
+        var wallet: Wallet
+        try {
+            "Read wallet from file: ${walletFile.absolutePath}".log()
+            wallet = WalletBip44.loadFromFile(walletFile, params)
+        } catch (e: UnreadableWalletException) {
+            "Could not read wallet from file: \"${e.message}\". New wallet will be created".log()
+            wallet = WalletBip44.newFromSeedCode(params, seedCode)
+            wallet.saveToFile(walletFile)
         }
 
-        storage.insertOrUpdateTransaction(transactionRecord)
+        wallet.autosaveToFile(walletFile, 0, TimeUnit.SECONDS, null)
+
+        return wallet
     }
 
-}
+    private fun updateLatestBlockHeight(v: Int) {
+        latestBlockHeight = v
+    }
 
-class Bip44TestNetDeterministicKeyChain(seed: DeterministicSeed) : DeterministicKeyChain(seed) {
+    private fun updateBalance(v: Long) {
+        storage.updateBalance(Balance().apply {
+            code = "BTC"
+            value = v
+        })
+    }
 
-    override fun getAccountPath(): ImmutableList<ChildNumber> =
-            ImmutableList.of(ChildNumber(44, true), ChildNumber(1, true), ChildNumber.ZERO_HARDENED)
+    private fun updateTransaction(t: Transaction) {
+        txs[t.hashAsString] = t
 
-}
+        txs.size.log("Transactions count: ")
 
-class Bip44DeterministicKeyChain(seed: DeterministicSeed) : DeterministicKeyChain(seed) {
+        transactionsUpdatedSubject.onNext(txs)
 
-    override fun getAccountPath(): ImmutableList<ChildNumber> = BIP44_ACCOUNT_ZERO_PATH
+    }
 
 }

@@ -1,10 +1,7 @@
 package bitcoin.wallet.core
 
 import io.reactivex.Completable
-import io.realm.ObjectServerError
-import io.realm.Realm
-import io.realm.SyncCredentials
-import io.realm.SyncUser
+import io.realm.*
 
 class RealmManager {
 
@@ -19,7 +16,10 @@ class RealmManager {
     }
 
     fun createWalletRealmLocal(): Realm {
-        return Realm.getDefaultInstance()
+        val config = RealmConfiguration.Builder()
+                .build()
+
+        return Realm.getInstance(config)
     }
 
     fun login(jwtToken: String): Completable = Completable.create { emitter ->

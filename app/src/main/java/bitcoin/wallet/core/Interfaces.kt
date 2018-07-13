@@ -1,5 +1,6 @@
 package bitcoin.wallet.core
 
+import bitcoin.wallet.entities.Balance
 import bitcoin.wallet.entities.BlockchainInfo
 import bitcoin.wallet.entities.ExchangeRate
 import bitcoin.wallet.entities.TransactionRecord
@@ -33,8 +34,11 @@ interface IDatabaseManager {
     fun getExchangeRates(): Observable<DatabaseChangeset<ExchangeRate>>
     fun getTransactionRecords(): Observable<DatabaseChangeset<TransactionRecord>>
     fun getBlockchainInfos(): Observable<DatabaseChangeset<BlockchainInfo>>
-    fun insertOrUpdateTransaction(transactionRecord: TransactionRecord)
+    fun getBalances(): Observable<DatabaseChangeset<Balance>>
+    fun insertOrUpdateTransactions(transactionRecords: List<TransactionRecord>)
     fun updateBlockchainInfo(blockchainInfo: BlockchainInfo)
+    fun updateExchangeRate(exchangeRate: ExchangeRate)
+    fun updateBalance(balance: Balance)
 }
 
 interface INetworkManager {

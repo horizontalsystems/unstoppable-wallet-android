@@ -3,6 +3,7 @@ package bitcoin.wallet.core.managers
 import bitcoin.wallet.core.CollectionChangeset
 import bitcoin.wallet.core.DatabaseChangeset
 import bitcoin.wallet.core.IDatabaseManager
+import bitcoin.wallet.entities.Balance
 import bitcoin.wallet.entities.BlockchainInfo
 import bitcoin.wallet.entities.ExchangeRate
 import bitcoin.wallet.entities.TransactionRecord
@@ -45,6 +46,14 @@ class DatabaseManager : IDatabaseManager {
                         DatabaseChangeset(it.collection, it.changeset?.let { CollectionChangeset(it) })
                     }
 
+    override fun getBalances(): Observable<DatabaseChangeset<Balance>> =
+            realm.where(Balance::class.java)
+                    .findAllAsync()
+                    .asChangesetObservable()
+                    .map {
+                        DatabaseChangeset(it.collection, it.changeset?.let { CollectionChangeset(it) })
+                    }
+
     override fun getBlockchainInfos(): Observable<DatabaseChangeset<BlockchainInfo>> =
             realm.where(BlockchainInfo::class.java)
                     .findAllAsync()
@@ -53,15 +62,27 @@ class DatabaseManager : IDatabaseManager {
                         DatabaseChangeset(it.collection, it.changeset?.let { CollectionChangeset(it) })
                     }
 
-    override fun insertOrUpdateTransaction(transactionRecord: TransactionRecord) {
+    override fun insertOrUpdateTransactions(transactionRecords: List<TransactionRecord>) {
         realm.executeTransactionAsync {
-            it.insertOrUpdate(transactionRecord)
+            it.insertOrUpdate(transactionRecords)
         }
     }
 
     override fun updateBlockchainInfo(blockchainInfo: BlockchainInfo) {
         realm.executeTransactionAsync {
             it.insertOrUpdate(blockchainInfo)
+        }
+    }
+
+    override fun updateBalance(balance: Balance) {
+        realm.executeTransactionAsync {
+            it.insertOrUpdate(balance)
+        }
+    }
+
+    override fun updateExchangeRate(exchangeRate: ExchangeRate) {
+        realm.executeTransactionAsync {
+            it.insertOrUpdate(exchangeRate)
         }
     }
 

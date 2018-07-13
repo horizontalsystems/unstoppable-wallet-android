@@ -26,7 +26,9 @@ class App : Application() {
 
     private fun startBlockchainService() {
         // todo: implement Blockchain as service
-        BitcoinBlockchainService.start(BlockchainStorage, externalCacheDir)
+        BitcoinBlockchainService.init(externalCacheDir, resources.assets, BlockchainStorage, testMode)
+
+        ExchangeRateService.start(BlockchainStorage)
     }
 
 }

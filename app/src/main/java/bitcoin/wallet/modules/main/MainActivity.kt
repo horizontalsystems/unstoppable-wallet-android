@@ -5,6 +5,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import bitcoin.wallet.R
+import bitcoin.wallet.bitcoin.BitcoinBlockchainService
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import kotlinx.android.synthetic.main.activity_dashboard.*
@@ -57,6 +58,8 @@ class MainActivity : AppCompatActivity() {
                 bottomNavigation.currentItem = position
             }
         })
+
+        BitcoinBlockchainService.start()
     }
 
 }
