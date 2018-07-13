@@ -10,11 +10,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import bitcoin.wallet.R
+import bitcoin.wallet.entities.*
 import bitcoin.wallet.entities.coins.Coin
-import bitcoin.wallet.entities.CurrencyValue
-import bitcoin.wallet.entities.WalletBalanceViewItem
 import bitcoin.wallet.modules.main.BaseTabFragment
 import bitcoin.wallet.modules.pay.PayModule
+import bitcoin.wallet.modules.receive.ReceiveModule
 import bitcoin.wallet.viewHelpers.NumberFormatHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_wallet.*
@@ -40,7 +40,12 @@ class WalletFragment : BaseTabFragment(), CoinsAdapter.Listener {
 
         viewModel.walletBalancesLiveData.observe(this, Observer { coins ->
             coins?.let {
-                coinsAdapter.items = it
+
+                //todo begin - for testing purposes, remove after testing
+                val tmpItems = it.toMutableList()
+                tmpItems.add(WalletBalanceViewItem(CoinValue(Ethereum(), 0.0), CurrencyValue(DollarCurrency(), 750.0), CurrencyValue(DollarCurrency(), 0.0)))
+                //todo end
+                coinsAdapter.items = tmpItems//it //todo replace tmpItems with it
                 coinsAdapter.notifyDataSetChanged()
             }
         })
@@ -67,6 +72,9 @@ class WalletFragment : BaseTabFragment(), CoinsAdapter.Listener {
     }
 
     override fun onReceiveClicked(coin: Coin) {
+        activity?.let {
+            ReceiveModule.start(it, coin, "1AYHMDV1XR8HWaReC3Rr4Qv79vJiSR8RCU")
+        }
     }
 }
 
@@ -85,6 +93,7 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
 
     var items = listOf<WalletBalanceViewItem>()
     var total: CurrencyValue? = null
+    private var expandedViewPosition = -1
 
     override fun getItemCount() = items.size + 1
 
@@ -100,7 +109,18 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is ViewHolderCoin -> holder.bind(items[position - 1], { listener.onPayClicked(items[position - 1].coinValue.coin) }, { listener.onReceiveClicked(items[position - 1].coinValue.coin) })
+            is ViewHolderCoin -> holder.bind(items[position - 1],
+                    onPayClick = { listener.onPayClicked(items[position - 1].coinValue.coin) },
+                    onReceiveClick = { listener.onReceiveClicked(items[position - 1].coinValue.coin) },
+                    onHolderCLicked = {
+                        val oldExpandedViewPosition = expandedViewPosition
+                        expandedViewPosition = if (expandedViewPosition == position) -1 else position
+                        if (oldExpandedViewPosition != -1) {
+                            notifyItemChanged(oldExpandedViewPosition)
+                        }
+                        notifyItemChanged(expandedViewPosition)
+                    },
+                    expand = expandedViewPosition == position)
             is ViewHolderTotalBalance -> holder.bind(total)
         }
     }
@@ -116,22 +136,16 @@ class ViewHolderTotalBalance(private val textView: TextView) : RecyclerView.View
 
 class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    private var buttonsVisible = false
-
-    init {
-        toggleButtons()
-
-        containerView.setOnClickListener {
-            toggleButtons()
-        }
-    }
-
-    fun bind(walletBalanceViewItem: WalletBalanceViewItem, onPayClick: (() -> (Unit))? = null, onReceiveClick: (() -> (Unit))? = null) {
+    fun bind(walletBalanceViewItem: WalletBalanceViewItem, onPayClick: (() -> (Unit))? = null, onReceiveClick: (() -> (Unit))? = null, onHolderCLicked: (() -> (Unit))? = null, expand: Boolean = false) {
         val numberFormat = NumberFormatHelper.fiatAmountFormat
-        textName.text = walletBalanceViewItem.coinValue.coin.name
-        textRate.text = "${walletBalanceViewItem.exchangeValue.currency.symbol}${numberFormat.format(walletBalanceViewItem.exchangeValue.value)}"
+        textName.text = "${walletBalanceViewItem.coinValue.coin.name} (${walletBalanceViewItem.coinValue.coin.code})"
         textAmountFiat.text = "${walletBalanceViewItem.currencyValue.currency.symbol}${numberFormat.format(walletBalanceViewItem.currencyValue.value)}"
-        textAmount.text = "${walletBalanceViewItem.coinValue.value} ${walletBalanceViewItem.coinValue.coin.code}"
+        textAmount.text = "${walletBalanceViewItem.coinValue.value}"
+
+        val zeroBalance = walletBalanceViewItem.coinValue.value <= 0.0
+        textAmount.visibility = if (zeroBalance) View.GONE else View.VISIBLE
+        buttonPay.isEnabled = !zeroBalance
+        textAmountFiat.isEnabled = !zeroBalance
 
         buttonPay.setOnClickListener {
             onPayClick?.invoke()
@@ -140,13 +154,13 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
         buttonReceive.setOnClickListener {
             onReceiveClick?.invoke()
         }
-    }
 
-    private fun toggleButtons() {
-        buttonReceive.visibility = if (buttonsVisible) View.VISIBLE else View.GONE
-        buttonPay.visibility = if (buttonsVisible) View.VISIBLE else View.GONE
+        containerView.setOnClickListener {
+            onHolderCLicked?.invoke()
+        }
 
-        buttonsVisible = !buttonsVisible
+        buttonReceive.visibility = if (expand) View.VISIBLE else View.GONE
+        buttonPay.visibility = if (expand) View.VISIBLE else View.GONE
     }
 
 }

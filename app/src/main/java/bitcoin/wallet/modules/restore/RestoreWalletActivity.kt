@@ -67,7 +67,7 @@ class RestoreWalletActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_restore_wallet, menu)
-        LayoutHelper.tintMenuIcons(menu, ContextCompat.getColor(this, R.color.yellow))
+        LayoutHelper.tintMenuIcons(menu, ContextCompat.getColor(this, R.color.yellow_crypto))
 
         return super.onCreateOptionsMenu(menu)
     }

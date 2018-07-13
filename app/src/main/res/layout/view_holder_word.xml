@@ -8,6 +8,6 @@
     android:fontFamily="@font/noto_sans_bold"
     android:letterSpacing="0.01"
     android:textColor="#ffffff"
-    android:textSize="22sp"
+    android:textSize="20sp"
     tools:text="1. Super"
     />

@@ -22,10 +22,11 @@ class MainActivity : AppCompatActivity() {
         adapter = MainTabsAdapter(supportFragmentManager)
 
         viewPager.adapter = adapter
+        viewPager.offscreenPageLimit = 2
         viewPager.setPagingEnabled(true)
 
         bottomNavigation.defaultBackgroundColor = ContextCompat.getColor(this, R.color.appBackground)
-        bottomNavigation.accentColor = ContextCompat.getColor(this, R.color.yellow)
+        bottomNavigation.accentColor = ContextCompat.getColor(this, R.color.yellow_crypto)
         bottomNavigation.inactiveColor = ContextCompat.getColor(this, R.color.grey)
 
         bottomNavigation.addItem(AHBottomNavigationItem(R.string.tab_title_wallet, R.drawable.wallet, 0))

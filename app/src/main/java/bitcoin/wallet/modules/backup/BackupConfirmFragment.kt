@@ -13,9 +13,10 @@ import android.view.View
 import android.view.ViewGroup
 import bitcoin.wallet.R
 import bitcoin.wallet.core.security.EncryptionManager
+import bitcoin.wallet.lib.ErrorDialog
 import kotlinx.android.synthetic.main.fragment_backup_words_confirm.*
 
-class BackupConfirmFragment : Fragment() {
+class BackupConfirmFragment : Fragment(), BackupConfirmAlert.Listener {
     private lateinit var viewModel: BackupViewModel
 
     private var wordIndex1 = -1
@@ -43,12 +44,7 @@ class BackupConfirmFragment : Fragment() {
         })
 
         viewModel.errorLiveData.observe(this, Observer {
-            if (it != null) {
-                textError.text = getString(it)
-                textError.visibility = View.VISIBLE
-            } else {
-                textError.visibility = View.GONE
-            }
+            showError(it)
         })
 
         buttonBack.setOnClickListener {
@@ -56,13 +52,29 @@ class BackupConfirmFragment : Fragment() {
         }
 
         buttonSubmit.setOnClickListener {
-            try {
-                validateWords()
-            } catch (exception: UserNotAuthenticatedException) {
-                EncryptionManager.showAuthenticationScreen(this, AUTHENTICATE_TO_VALIDATE_WORDS)
-            }  catch (exception: KeyPermanentlyInvalidatedException) {
-                activity?.let { EncryptionManager.showKeysInvalidatedAlert(it) }
+            if (editWord1.text.isEmpty() || editWord2.text.isEmpty()) {
+                showError(R.string.backup_words_error_enter_words)
+            } else {
+                activity?.let { BackupConfirmAlert.show(it, this) }
             }
+        }
+    }
+
+    private fun showError(errorMsgId: Int?) {
+        context?.let { context ->
+            errorMsgId?.let {
+                ErrorDialog(context, errorMsgId).show()
+            }
+        }
+    }
+
+    override fun backupConfirmationSuccess() {
+        try {
+            validateWords()
+        } catch (exception: UserNotAuthenticatedException) {
+            EncryptionManager.showAuthenticationScreen(this, AUTHENTICATE_TO_VALIDATE_WORDS)
+        } catch (exception: KeyPermanentlyInvalidatedException) {
+            activity?.let { EncryptionManager.showKeysInvalidatedAlert(it) }
         }
     }
 

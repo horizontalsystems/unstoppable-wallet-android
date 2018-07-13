@@ -18,7 +18,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:fontFamily="@font/noto_sans_bold"
-        android:textColor="#deffffff"
+        android:textColor="@color/white"
         android:textSize="17sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -29,30 +29,16 @@
         android:id="@+id/textAmountFiat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="12dp"
-        android:fontFamily="@font/noto_sans_bold"
-        android:textColor="#f7b731"
-        android:textSize="17sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="$52.50"
-        />
-
-    <TextView
-        android:id="@+id/textRate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="12dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/noto_sans"
-        android:textColor="#deffffff"
+        android:textColor="@color/yellow_text_on_dark_color_selector"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/buttonReceive"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textName"
-        tools:text="$7520.20"
+        tools:text="$52.50"
         />
 
 
@@ -61,16 +47,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/noto_sans"
+        android:fontFamily="@font/noto_sans_bold"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textAmountFiat"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textAmountFiat"
+        app:layout_constraintTop_toTopOf="@+id/textAmountFiat"
         tools:text="0.000078 BTC"
         />
 
     <Button
         android:id="@+id/buttonReceive"
-        style="@style/ButtonGreen"
+        style="@style/ButtonGreen_12"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -81,12 +69,12 @@
         app:layout_constraintEnd_toStartOf="@+id/buttonPay"
         app:layout_constraintHorizontal_weight="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textRate"
+        app:layout_constraintTop_toBottomOf="@+id/textAmountFiat"
         />
 
     <Button
         android:id="@+id/buttonPay"
-        style="@style/ButtonYellow"
+        style="@style/ButtonYellowOnDark"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"

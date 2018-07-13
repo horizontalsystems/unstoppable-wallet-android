@@ -23,7 +23,11 @@ class EditTextViewHolder(private val editText: EditText, listener: WordsChangedL
         })
     }
 
+    private val testPaperKey = listOf("used", "ugly", "meat", "glad", "balance", "divorce", "inner", "artwork", "hire", "invest", "already", "piano")
+
     fun bind(position: Int) {
+        editText.setText(testPaperKey[position])
+
         editText.hint = "${position + 1}"
     }
 
