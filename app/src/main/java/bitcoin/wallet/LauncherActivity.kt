@@ -27,7 +27,10 @@ class LauncherActivity : AppCompatActivity() {
     }
 
     private fun redirectToCorrectPage() {
-        if (Factory.preferencesManager.savedWords != null) {
+        if (!EncryptionManager.isDeviceLockEnabled(this)) {
+            EncryptionManager.showNoDeviceLockWarning(this)
+            return
+        } else if (Factory.preferencesManager.savedWords != null) {
             MainModule.start(this)
         } else {
             GuestModule.start(this)
