@@ -44,6 +44,7 @@ object BitcoinBlockchainService {
 
     private var txs = mutableMapOf<String, Transaction>()
     private lateinit var wallet: Wallet
+    private lateinit var spvBlockStore: SPVBlockStore
 
     fun init(filesDir: File, assetManager: AssetManager, storage: BlockchainStorage, testMode: Boolean) {
         BriefLogFormatter.initVerbose()
@@ -59,6 +60,9 @@ object BitcoinBlockchainService {
         }
 
         checkpoints = assetManager.open("${params.id}.checkpoints.txt")
+
+        val chainFile = File(BitcoinBlockchainService.filesDir, "${params.paymentProtocolId}.spvchain")
+        spvBlockStore = SPVBlockStore(params, chainFile)
 
         updateBlockchainHeightSubject.sample(30, TimeUnit.SECONDS).subscribe {
             val blockchainInfo = BlockchainInfo().apply {
@@ -100,7 +104,6 @@ object BitcoinBlockchainService {
 
             "Cleared transactions, tx count: ${txs.count()}".log()
         }
-
     }
 
     fun initNewWallet() {
@@ -108,12 +111,8 @@ object BitcoinBlockchainService {
         updateLatestBlockHeight(0)
     }
 
-
     fun start() {
         seedCode = Factory.preferencesManager.savedWords?.joinToString(" ") ?: throw Exception("No saved words")
-
-        val chainFile = File(filesDir, "${params.paymentProtocolId}.spvchain")
-        val spvBlockStore = SPVBlockStore(params, chainFile)
 
         wallet = getWallet()
 
