@@ -2,6 +2,8 @@ package bitcoin.wallet.bitcoin
 
 import android.content.res.AssetManager
 import bitcoin.wallet.blockchain.BlockchainStorage
+import bitcoin.wallet.blockchain.InvalidAddress
+import bitcoin.wallet.blockchain.NotEnoughFundsException
 import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.entities.Balance
 import bitcoin.wallet.entities.BlockchainInfo
@@ -45,6 +47,7 @@ object BitcoinBlockchainService {
     private var txs = mutableMapOf<String, Transaction>()
     private lateinit var wallet: Wallet
     private lateinit var spvBlockStore: SPVBlockStore
+    private lateinit var peerGroup: PeerGroup
 
     fun init(filesDir: File, assetManager: AssetManager, storage: BlockchainStorage, testMode: Boolean) {
         BriefLogFormatter.initVerbose()
@@ -61,7 +64,7 @@ object BitcoinBlockchainService {
 
         checkpoints = assetManager.open("${params.id}.checkpoints.txt")
 
-        val chainFile = File(BitcoinBlockchainService.filesDir, "${params.paymentProtocolId}.spvchain")
+        val chainFile = File(filesDir, "${params.paymentProtocolId}.spvchain")
         spvBlockStore = SPVBlockStore(params, chainFile)
 
         updateBlockchainHeightSubject.sample(30, TimeUnit.SECONDS).subscribe {
@@ -142,7 +145,7 @@ object BitcoinBlockchainService {
             updateTransaction(tx)
         }
 
-        val peerGroup = PeerGroup(params, spvBlockChain)
+        peerGroup = PeerGroup(params, spvBlockChain)
 
         peerGroup.addWallet(wallet)
         peerGroup.addPeerDiscovery(DnsDiscovery(params))
@@ -163,6 +166,18 @@ object BitcoinBlockchainService {
         }
 
         peerGroup.startAsync()
+    }
+
+    fun sendCoins(address: String, value: Long) = try {
+        val targetAddress = Address.fromBase58(params, address)
+        val result = wallet.sendCoins(peerGroup, targetAddress, Coin.valueOf(value))
+        val transaction = result.broadcastComplete.get()
+
+        transaction.log("Send Coins Transaction")
+    } catch (e: InsufficientMoneyException) {
+        throw NotEnoughFundsException(e)
+    } catch (e: AddressFormatException) {
+        throw InvalidAddress(e)
     }
 
     private fun getWallet(): Wallet {

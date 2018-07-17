@@ -3,7 +3,7 @@ package bitcoin.wallet.core
 import android.app.Application
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import bitcoin.wallet.bitcoin.BitcoinBlockchainService
+import bitcoin.wallet.blockchain.BlockchainManager
 import bitcoin.wallet.blockchain.BlockchainStorage
 import bitcoin.wallet.core.managers.BackgroundManager
 import io.realm.Realm
@@ -31,7 +31,7 @@ class App : Application() {
 
     private fun startBlockchainService() {
         // todo: implement Blockchain as service
-        BitcoinBlockchainService.init(filesDir, resources.assets, BlockchainStorage, testMode)
+        BlockchainManager.init(filesDir, resources.assets, BlockchainStorage, testMode)
 
         ExchangeRateService.start(BlockchainStorage)
     }
