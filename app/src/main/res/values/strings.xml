@@ -59,4 +59,10 @@
 
     <string name="alert_no_device_lock_title">WARNING</string>
     <string name="alert_no_device_lock_description">A device lock is needed to safeguard your wallet. Go to “Settings” > “Security” > “Screen Lock” and enable to continue </string>
+
+
+    <string name="unlock_page_deposit_button">Deposit</string>
+    <string name="unlock_page_enter_your_pin">Type your pin to unlock</string>
+
+
 </resources>

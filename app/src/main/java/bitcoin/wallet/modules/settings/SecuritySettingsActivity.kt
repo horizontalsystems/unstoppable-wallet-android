@@ -7,9 +7,11 @@ import android.util.Log
 import android.view.MenuItem
 import bitcoin.wallet.LauncherActivity
 import bitcoin.wallet.R
+import bitcoin.wallet.core.App
 import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.modules.backup.BackupModule
 import bitcoin.wallet.modules.backup.BackupPresenter
+import bitcoin.wallet.modules.main.UnlockActivity
 import io.realm.SyncUser
 import kotlinx.android.synthetic.main.activity_settings_security.*
 
@@ -52,6 +54,17 @@ class SecuritySettingsActivity : AppCompatActivity() {
             finish()
         }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (App.promptPin) {
+            startActivity(Intent(this, UnlockActivity::class.java))
+            return
+        }
+
+        App.promptPin = false
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -1,11 +1,14 @@
 package bitcoin.wallet.modules.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import bitcoin.wallet.R
 import bitcoin.wallet.bitcoin.BitcoinBlockchainService
+import bitcoin.wallet.core.App
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import kotlinx.android.synthetic.main.activity_dashboard.*
@@ -60,6 +63,17 @@ class MainActivity : AppCompatActivity() {
         })
 
         BitcoinBlockchainService.start()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (App.promptPin) {
+            startActivity(Intent(this, UnlockActivity::class.java))
+            return
+        }
+
+        App.promptPin = false
     }
 
 }

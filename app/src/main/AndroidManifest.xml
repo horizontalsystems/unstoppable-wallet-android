@@ -40,6 +40,9 @@
             android:name=".modules.settings.SecuritySettingsActivity"
             android:screenOrientation="portrait"/>
 
+        <activity
+            android:name=".modules.main.UnlockActivity"/>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts"/>
