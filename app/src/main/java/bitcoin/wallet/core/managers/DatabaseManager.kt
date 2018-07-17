@@ -3,10 +3,7 @@ package bitcoin.wallet.core.managers
 import bitcoin.wallet.core.CollectionChangeset
 import bitcoin.wallet.core.DatabaseChangeset
 import bitcoin.wallet.core.IDatabaseManager
-import bitcoin.wallet.entities.Balance
-import bitcoin.wallet.entities.BlockchainInfo
-import bitcoin.wallet.entities.ExchangeRate
-import bitcoin.wallet.entities.TransactionRecord
+import bitcoin.wallet.entities.*
 import bitcoin.wallet.entities.coins.bitcoin.BitcoinUnspentOutput
 import bitcoin.wallet.entities.coins.bitcoinCash.BitcoinCashUnspentOutput
 import io.reactivex.Observable
@@ -77,6 +74,12 @@ class DatabaseManager : IDatabaseManager {
     override fun updateBalance(balance: Balance) {
         realm.executeTransactionAsync {
             it.insertOrUpdate(balance)
+        }
+    }
+
+    override fun updateReceiveAddress(address: ReceiveAddress) {
+        realm.executeTransactionAsync {
+            it.insertOrUpdate(address)
         }
     }
 

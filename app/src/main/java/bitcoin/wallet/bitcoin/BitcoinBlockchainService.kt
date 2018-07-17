@@ -5,6 +5,7 @@ import bitcoin.wallet.blockchain.BlockchainStorage
 import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.entities.Balance
 import bitcoin.wallet.entities.BlockchainInfo
+import bitcoin.wallet.entities.ReceiveAddress
 import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.log
 import io.reactivex.subjects.PublishSubject
@@ -116,6 +117,8 @@ object BitcoinBlockchainService {
 
         wallet = getWallet()
 
+        updateReceiveAddress(wallet.currentReceiveAddress().toBase58())
+
         if (wallet.lastBlockSeenHeight <= 0) {
             if (checkpoints == null) {
                 checkpoints = CheckpointManager.openStream(params)
@@ -128,6 +131,9 @@ object BitcoinBlockchainService {
         val spvBlockChain = BlockChain(params, wallet, spvBlockStore)
 
         wallet.addCoinsReceivedEventListener { _, tx, prevBalance, newBalance ->
+
+            updateReceiveAddress(wallet.currentReceiveAddress().toBase58())
+
             updateBalance(newBalance.value)
         }
         wallet.addCoinsSentEventListener { _, tx, prevBalance, newBalance ->
@@ -187,6 +193,15 @@ object BitcoinBlockchainService {
         storage.updateBalance(Balance().apply {
             code = "BTC"
             value = v
+        })
+    }
+
+    private fun updateReceiveAddress(address: String) {
+        address.log("Updating receive address: ")
+
+        storage.updateReceiveAddress(ReceiveAddress().apply {
+            code = "BTC"
+            this.address = address
         })
     }
 
