@@ -2,12 +2,12 @@ package bitcoin.wallet.bitcoin
 
 import android.content.res.AssetManager
 import bitcoin.wallet.blockchain.BlockchainStorage
+import bitcoin.wallet.blockchain.IBlockchainService
 import bitcoin.wallet.blockchain.InvalidAddress
 import bitcoin.wallet.blockchain.NotEnoughFundsException
 import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.entities.Balance
 import bitcoin.wallet.entities.BlockchainInfo
-import bitcoin.wallet.entities.ReceiveAddress
 import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.log
 import io.reactivex.subjects.PublishSubject
@@ -24,7 +24,7 @@ import java.io.InputStream
 import java.util.concurrent.TimeUnit
 
 
-object BitcoinBlockchainService {
+object BitcoinBlockchainService : IBlockchainService {
 
     var seedCode: String = ""
     var checkpoints: InputStream? = null
@@ -119,8 +119,6 @@ object BitcoinBlockchainService {
 
         wallet = getWallet()
 
-        updateReceiveAddress(wallet.currentReceiveAddress().toBase58())
-
         if (wallet.lastBlockSeenHeight <= 0) {
             if (checkpoints == null) {
                 checkpoints = CheckpointManager.openStream(params)
@@ -133,9 +131,6 @@ object BitcoinBlockchainService {
         val spvBlockChain = BlockChain(params, wallet, spvBlockStore)
 
         wallet.addCoinsReceivedEventListener { _, tx, prevBalance, newBalance ->
-
-            updateReceiveAddress(wallet.currentReceiveAddress().toBase58())
-
             updateBalance(newBalance.value)
         }
         wallet.addCoinsSentEventListener { _, tx, prevBalance, newBalance ->
@@ -168,7 +163,9 @@ object BitcoinBlockchainService {
         peerGroup.startAsync()
     }
 
-    fun sendCoins(address: String, value: Long) = try {
+    override fun getReceiveAddress(): String = wallet.currentReceiveAddress().toBase58()
+
+    override fun sendCoins(address: String, value: Long) = try {
         val targetAddress = Address.fromBase58(params, address)
         val result = wallet.sendCoins(peerGroup, targetAddress, Coin.valueOf(value))
         val transaction = result.broadcastComplete.get()
@@ -207,15 +204,6 @@ object BitcoinBlockchainService {
         storage.updateBalance(Balance().apply {
             code = "BTC"
             value = v
-        })
-    }
-
-    private fun updateReceiveAddress(address: String) {
-        address.log("Updating receive address: ")
-
-        storage.updateReceiveAddress(ReceiveAddress().apply {
-            code = "BTC"
-            this.address = address
         })
     }
 

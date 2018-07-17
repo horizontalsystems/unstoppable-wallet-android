@@ -1,7 +1,10 @@
 package bitcoin.wallet.blockchain
 
 import bitcoin.wallet.core.managers.Factory
-import bitcoin.wallet.entities.*
+import bitcoin.wallet.entities.Balance
+import bitcoin.wallet.entities.BlockchainInfo
+import bitcoin.wallet.entities.ExchangeRate
+import bitcoin.wallet.entities.TransactionRecord
 
 object BlockchainStorage {
 
@@ -20,12 +23,6 @@ object BlockchainStorage {
     fun updateBalance(balance: Balance) {
         val databaseManager = Factory.databaseManager
         databaseManager.updateBalance(balance)
-        databaseManager.close()
-    }
-
-    fun updateReceiveAddress(address: ReceiveAddress) {
-        val databaseManager = Factory.databaseManager
-        databaseManager.updateReceiveAddress(address)
         databaseManager.close()
     }
 

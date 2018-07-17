@@ -1,6 +1,9 @@
 package bitcoin.wallet.core
 
-import bitcoin.wallet.entities.*
+import bitcoin.wallet.entities.Balance
+import bitcoin.wallet.entities.BlockchainInfo
+import bitcoin.wallet.entities.ExchangeRate
+import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.entities.coins.bitcoin.BitcoinUnspentOutput
 import bitcoin.wallet.entities.coins.bitcoinCash.BitcoinCashUnspentOutput
 import io.reactivex.Observable
@@ -36,7 +39,6 @@ interface IDatabaseManager {
     fun updateBlockchainInfo(blockchainInfo: BlockchainInfo)
     fun updateExchangeRate(exchangeRate: ExchangeRate)
     fun updateBalance(balance: Balance)
-    fun updateReceiveAddress(address: ReceiveAddress)
 }
 
 interface INetworkManager {
