@@ -73,7 +73,7 @@ class WalletFragment : BaseTabFragment(), CoinsAdapter.Listener {
 
     override fun onReceiveClicked(coin: Coin) {
         activity?.let {
-            ReceiveModule.start(it, coin, "1AYHMDV1XR8HWaReC3Rr4Qv79vJiSR8RCU")
+            ReceiveModule.start(it, coin.code)
         }
     }
 }

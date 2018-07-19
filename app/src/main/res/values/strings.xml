@@ -64,5 +64,6 @@
     <string name="unlock_page_deposit_button">Deposit</string>
     <string name="unlock_page_enter_your_pin">Type your pin to unlock</string>
 
+    <string name="error_unsupported_blockchain">Unsupported currency</string>
 
 </resources>

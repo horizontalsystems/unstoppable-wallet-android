@@ -30,6 +30,7 @@ object BlockchainManager {
     private fun getServiceByCoinCode(coinCode: String) =
             blockchainServices[coinCode] ?: throw UnsupportedBlockchain(coinCode)
 
+    @Throws(Exception::class)
     fun getReceiveAddress(coinCode: String): String {
         return getServiceByCoinCode(coinCode).getReceiveAddress()
     }

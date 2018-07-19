@@ -50,6 +50,10 @@ interface IEncryptionManager {
     fun decrypt(data: String): String
 }
 
+interface IClipboardManager {
+    fun copyText(text: String)
+}
+
 data class WalletData(val words: List<String>)
 
 data class DatabaseChangeset<T>(val array: List<T>, val changeset: CollectionChangeset? = null)

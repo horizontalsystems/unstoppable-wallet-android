@@ -16,6 +16,9 @@ class App : Application() {
         val testMode = true
 
         var promptPin = true
+
+        lateinit var instance: App
+            private set
     }
 
     override fun onCreate() {
@@ -27,6 +30,8 @@ class App : Application() {
         BackgroundManager.init(this)
 
         startBlockchainService()
+
+        instance = this
     }
 
     private fun startBlockchainService() {
