@@ -10,8 +10,10 @@ import bitcoin.wallet.entities.Balance
 import bitcoin.wallet.entities.BlockchainInfo
 import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.log
+import com.google.common.util.concurrent.MoreExecutors
 import io.reactivex.subjects.PublishSubject
 import org.bitcoinj.core.*
+import org.bitcoinj.core.listeners.DownloadProgressTracker
 import org.bitcoinj.net.discovery.DnsDiscovery
 import org.bitcoinj.params.MainNetParams
 import org.bitcoinj.params.TestNet3Params
@@ -160,7 +162,9 @@ object BitcoinBlockchainService : IBlockchainService {
             "Downloaded block: ${block.time}, ${block.hashAsString}, Blocks left: $blocksLeft".log()
         }
 
-        peerGroup.startAsync()
+        peerGroup.startAsync().addListener(Runnable {
+            peerGroup.startBlockChainDownload(DownloadProgressTracker())
+        }, MoreExecutors.directExecutor())
     }
 
     override fun getReceiveAddress(): String = wallet.currentReceiveAddress().toBase58()
