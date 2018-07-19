@@ -6,6 +6,7 @@ import android.preference.PreferenceManager
 import bitcoin.wallet.blockchain.BlockchainManager
 import bitcoin.wallet.blockchain.BlockchainStorage
 import bitcoin.wallet.core.managers.BackgroundManager
+import bitcoin.wallet.core.managers.Factory
 import io.realm.Realm
 
 class App : Application() {
@@ -38,6 +39,7 @@ class App : Application() {
         // todo: implement Blockchain as service
         BlockchainManager.init(filesDir, resources.assets, BlockchainStorage, testMode)
 
+        ExchangeRateService.networkManager = Factory.networkManager
         ExchangeRateService.start(BlockchainStorage)
     }
 

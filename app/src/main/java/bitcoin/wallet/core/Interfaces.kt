@@ -43,6 +43,7 @@ interface IDatabaseManager {
 
 interface INetworkManager {
     fun getJwtToken(identity: String, pubKeys: Map<Int, String>): Observable<String>
+    fun getExchangeRates(): Observable<Map<String, Double>>
 }
 
 interface IEncryptionManager {
