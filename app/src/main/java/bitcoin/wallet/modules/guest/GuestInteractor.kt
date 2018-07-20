@@ -1,22 +1,20 @@
 package bitcoin.wallet.modules.guest
 
+import android.security.keystore.UserNotAuthenticatedException
+import bitcoin.wallet.blockchain.BlockchainManager
 import bitcoin.wallet.core.IMnemonic
-import bitcoin.wallet.core.managers.LoginManager
-import bitcoin.wallet.core.subscribeAsync
-import io.reactivex.disposables.CompositeDisposable
 
-class GuestInteractor(private val mnemonic: IMnemonic, private val loginManager: LoginManager) : GuestModule.IInteractor {
+class GuestInteractor(private val mnemonic: IMnemonic, private val blockchainManager: BlockchainManager) : GuestModule.IInteractor {
 
     var delegate: GuestModule.IInteractorDelegate? = null
 
     override fun createWallet() {
-        loginManager.login(mnemonic.generateWords()).subscribeAsync(CompositeDisposable(),
-                onComplete = {
-                    delegate?.didCreateWallet()
-                },
-                onError = {
-                    delegate?.didFailToCreateWallet(it)
-                })
+        try {
+            blockchainManager.initNewWallet(mnemonic.generateWords())
+            delegate?.didCreateWallet()
+        } catch (e: UserNotAuthenticatedException) {
+            delegate?.didFailToCreateWallet(e)
+        }
     }
 
 }
