@@ -13,7 +13,7 @@ import bitcoin.wallet.R
 import bitcoin.wallet.entities.*
 import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.modules.main.BaseTabFragment
-import bitcoin.wallet.modules.pay.PayModule
+import bitcoin.wallet.modules.send.SendModule
 import bitcoin.wallet.modules.receive.ReceiveModule
 import bitcoin.wallet.viewHelpers.NumberFormatHelper
 import kotlinx.android.extensions.LayoutContainer
@@ -67,7 +67,7 @@ class WalletFragment : BaseTabFragment(), CoinsAdapter.Listener {
 
     override fun onPayClicked(coin: Coin) {
         activity?.let {
-            PayModule.start(it, coin)
+            SendModule.start(it, coin)
         }
     }
 

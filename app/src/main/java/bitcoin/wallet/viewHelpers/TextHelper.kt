@@ -19,6 +19,19 @@ object TextHelper : IClipboardManager {
         copyTextToClipboard(App.instance, text)
     }
 
+    override fun getCopiedText(): String {
+        val clipboard = App.instance.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
+
+        return clipboard?.primaryClip?.itemCount?.let { count ->
+            if (count > 0) {
+                clipboard.primaryClip?.getItemAt(0)?.text?.toString()
+            } else {
+                null
+            }
+        } ?: ""
+
+    }
+
     private fun copyTextToClipboard(context: Context, text: String) {
         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
         val clip = ClipData.newPlainText("text", text)

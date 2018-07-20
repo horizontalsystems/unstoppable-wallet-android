@@ -298,13 +298,13 @@
                 android:layout_marginTop="30dp"
                 android:text="@string/button_cancel"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/btnPay"
+                app:layout_constraintEnd_toStartOf="@+id/btnSend"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/moreLayout"
                 />
 
             <Button
-                android:id="@+id/btnPay"
+                android:id="@+id/btnSend"
                 style="@style/ButtonYellow"
                 android:layout_width="0dp"
                 android:layout_height="49dp"

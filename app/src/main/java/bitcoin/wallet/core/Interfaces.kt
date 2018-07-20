@@ -53,6 +53,7 @@ interface IEncryptionManager {
 
 interface IClipboardManager {
     fun copyText(text: String)
+    fun getCopiedText(): String
 }
 
 data class WalletData(val words: List<String>)

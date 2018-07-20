@@ -1,4 +1,4 @@
-package bitcoin.wallet.modules.pay
+package bitcoin.wallet.modules.send
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
