@@ -1,10 +1,14 @@
 package bitcoin.wallet.blockchain
 
 import android.content.res.AssetManager
+import android.security.keystore.UserNotAuthenticatedException
 import bitcoin.wallet.bitcoin.BitcoinBlockchainService
+import bitcoin.wallet.core.ILocalStorage
 import java.io.File
 
 object BlockchainManager {
+
+    lateinit var localStorage: ILocalStorage
 
     private val blockchainServices = mapOf<String, IBlockchainService>(
             "BTC" to BitcoinBlockchainService
@@ -18,7 +22,9 @@ object BlockchainManager {
         BitcoinBlockchainService.start()
     }
 
-    fun initNewWallet() {
+    @Throws(UserNotAuthenticatedException::class)
+    fun initNewWallet(words: List<String>) {
+        localStorage.saveWords(words)
         BitcoinBlockchainService.initNewWallet()
     }
 

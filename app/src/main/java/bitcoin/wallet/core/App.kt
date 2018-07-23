@@ -37,6 +37,7 @@ class App : Application() {
 
     private fun startBlockchainService() {
         // todo: implement Blockchain as service
+        BlockchainManager.localStorage = Factory.preferencesManager
         BlockchainManager.init(filesDir, resources.assets, BlockchainStorage, testMode)
 
         ExchangeRateService.networkManager = Factory.networkManager

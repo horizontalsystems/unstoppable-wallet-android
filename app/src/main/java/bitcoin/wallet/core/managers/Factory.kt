@@ -35,11 +35,6 @@ object Factory {
         RealmManager()
     }
 
-    val loginManager by lazy {
-        LoginManagerLocal(networkManager, walletManager, realmManager, preferencesManager)
-//        LoginManager(networkManager, walletManager, realmManager, preferencesManager)
-    }
-
     val databaseManager
         get() = DatabaseManager()
 
