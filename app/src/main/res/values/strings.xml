@@ -46,6 +46,9 @@
     <string name="send_bottom_sheet_hint_payment_reference">Payment Reference</string>
     <string name="send_bottom_sheet_paste">Paste</string>
     <string name="send_bottom_sheet_more">More</string>
+    <string name="send_bottom_sheet_error_invalid_address">Address entered seems invalid. Please check and try again!</string>
+    <string name="send_bottom_sheet_error_insufficient_balance">Your balance is insufficient. Please try to send smaller amount!</string>
+    <string name="send_bottom_sheet_success">Successfully sent!</string>
 
     <string name="receive_bottom_sheet_title">Deposit %s</string>
     <string name="receive_bottom_sheet_copy">Copy</string>

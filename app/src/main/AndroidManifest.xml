@@ -33,7 +33,7 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".modules.pay.QRScannerActivity"
+            android:name=".modules.send.QRScannerActivity"
             android:screenOrientation="portrait"/>
 
         <activity

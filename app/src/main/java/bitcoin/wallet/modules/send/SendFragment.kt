@@ -1,28 +1,29 @@
-package bitcoin.wallet.modules.pay
+package bitcoin.wallet.modules.send
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.app.AlertDialog
 import android.app.Dialog
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentActivity
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ScrollView
-import android.widget.TextView
+import android.widget.*
 import bitcoin.wallet.R
 import bitcoin.wallet.entities.coins.Coin
+import bitcoin.wallet.lib.ErrorDialog
 import com.google.zxing.integration.android.IntentIntegrator
 
-class PayFragment : DialogFragment() {
+class SendFragment : DialogFragment() {
 
     private var mDialog: Dialog? = null
 
@@ -30,7 +31,10 @@ class PayFragment : DialogFragment() {
     private lateinit var addressLayout: View
 
     private lateinit var amountTxt: EditText
+    private lateinit var hintTxt: TextView
     private lateinit var amountLayout: View
+
+    private lateinit var btnCurrency: Button
 
     private lateinit var paymentRefTxt: EditText
     private lateinit var moreTxt: TextView
@@ -41,15 +45,15 @@ class PayFragment : DialogFragment() {
 
     private lateinit var btnCancel: Button
 
-    private lateinit var viewModel: PayViewModel
+    private lateinit var viewModel: SendViewModel
 
     private lateinit var coin: Coin
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this).get(PayViewModel::class.java)
-        viewModel.init()
+        viewModel = ViewModelProviders.of(this).get(SendViewModel::class.java)
+        viewModel.init(coin.code)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -63,9 +67,8 @@ class PayFragment : DialogFragment() {
         mDialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
         mDialog?.window?.setGravity(Gravity.BOTTOM)
 
-        val btnScan = rootView.findViewById<View>(R.id.btnScan)
-        btnScan.setOnClickListener {
-            startScanner()
+        rootView.findViewById<View>(R.id.btnScan)?.setOnClickListener {
+            viewModel.delegate.onScanClick()
         }
 
         rootView.findViewById<TextView>(R.id.txtTitle)?.let { txtTitle ->
@@ -81,6 +84,7 @@ class PayFragment : DialogFragment() {
                 addressLayout.background = resources.getDrawable(R.drawable.border_grey, null)
         }
 
+        hintTxt = rootView.findViewById(R.id.txtAmountEquivalent)
         amountTxt = rootView.findViewById(R.id.txtAmount)
         amountLayout = rootView.findViewById<View>(R.id.amountLayout)
         amountTxt.setOnFocusChangeListener { _, hasFocus ->
@@ -88,6 +92,31 @@ class PayFragment : DialogFragment() {
                 amountLayout.background = resources.getDrawable(R.drawable.border_yellow, null)
             else
                 amountLayout.background = resources.getDrawable(R.drawable.border_grey, null)
+        }
+
+        val textChangeListener = object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                viewModel.delegate.onAmountEntered(s?.toString())
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        }
+
+        amountTxt.addTextChangedListener(textChangeListener)
+
+        rootView.findViewById<Button>(R.id.btnCurrency)?.apply {
+            btnCurrency = this
+            setOnClickListener {
+                amountTxt.removeTextChangedListener(textChangeListener)
+                viewModel.delegate.onCurrencyButtonClick()
+                amountTxt.addTextChangedListener(textChangeListener)
+            }
+        }
+
+        rootView.findViewById<Button>(R.id.btnPaste)?.setOnClickListener {
+            viewModel.delegate.onPasteClick()
         }
 
         paymentRefTxt = rootView.findViewById(R.id.txtPaymentRef)
@@ -117,19 +146,67 @@ class PayFragment : DialogFragment() {
                     .setListener(object : AnimatorListenerAdapter() {
                         override fun onAnimationEnd(animation: Animator?) {
                             super.onAnimationEnd(animation)
-                            scrollView.post({
+                            scrollView.post {
                                 scrollView.fullScroll(View.FOCUS_DOWN)
                                 paymentRefTxt.requestFocus()
-                            })
+                            }
                         }
                     })
         }
 
         btnCancel = rootView.findViewById(R.id.btnCancel)
-        btnCancel.setOnClickListener { dismiss() }
+        btnCancel.setOnClickListener { viewModel.delegate.onCancelClick() }
+
+        rootView.findViewById<Button>(R.id.btnSend)?.setOnClickListener {
+            viewModel.delegate.onSendClick(addressTxt.text.toString())
+        }
+
+        viewModel.startScanLiveEvent.observe(this, Observer {
+            startScanner()
+        })
+
+        viewModel.addressLiveData.observe(this, Observer { address ->
+            address?.let {
+                addressTxt.setText(it)
+            }
+        })
+
+        viewModel.primaryAmountLiveData.observe(this, Observer { primaryAmount ->
+            amountTxt.setText(primaryAmount)
+        })
+
+        viewModel.primaryCurrencyLiveData.observe(this, Observer { primaryCurrency ->
+            primaryCurrency?.let {
+                btnCurrency.text = primaryCurrency
+            }
+        })
+
+        viewModel.secondaryAmountHintLiveData.observe(this, Observer { hint ->
+            hint?.let {
+                hintTxt.text = hint
+            }
+        })
+
+        viewModel.closeViewLiveEvent.observe(this, Observer {
+            dismiss()
+        })
+
+        viewModel.showErrorLiveData.observe(this, Observer { error ->
+            error?.apply {
+                activity?.let { context ->
+                    ErrorDialog(context, error).show()
+                }
+            }
+        })
+
+        viewModel.showSuccessLiveEvent.observe(this, Observer {
+            dismiss()
+            Toast.makeText(context, R.string.send_bottom_sheet_success, Toast.LENGTH_LONG).show()
+        })
 
         return mDialog as Dialog
     }
+
 
     private fun startScanner() {
         val intentIntegrator = IntentIntegrator.forSupportFragment(this)
@@ -152,7 +229,7 @@ class PayFragment : DialogFragment() {
 
     companion object {
         fun show(activity: FragmentActivity, coin: Coin) {
-            val fragment = PayFragment()
+            val fragment = SendFragment()
             fragment.coin = coin
             fragment.show(activity.supportFragmentManager, "pay_fragment")
         }
