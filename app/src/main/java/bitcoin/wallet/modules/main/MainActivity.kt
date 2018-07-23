@@ -2,12 +2,16 @@ package bitcoin.wallet.modules.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.security.keystore.KeyPermanentlyInvalidatedException
+import android.security.keystore.UserNotAuthenticatedException
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
+import bitcoin.wallet.LauncherActivity
 import bitcoin.wallet.R
 import bitcoin.wallet.blockchain.BlockchainManager
 import bitcoin.wallet.core.App
+import bitcoin.wallet.core.security.EncryptionManager
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import kotlinx.android.synthetic.main.activity_dashboard.*
@@ -61,7 +65,13 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        BlockchainManager.startServices()
+        try {
+            BlockchainManager.startServices()
+        } catch (exception: UserNotAuthenticatedException) {
+            EncryptionManager.showAuthenticationScreen(this, LauncherActivity.AUTHENTICATE_TO_REDIRECT)
+        } catch (exception: KeyPermanentlyInvalidatedException) {
+            EncryptionManager.showKeysInvalidatedAlert(this)
+        }
     }
 
     override fun onResume() {
