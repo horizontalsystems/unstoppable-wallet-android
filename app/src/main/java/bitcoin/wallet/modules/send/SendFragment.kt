@@ -94,21 +94,24 @@ class SendFragment : DialogFragment() {
                 amountLayout.background = resources.getDrawable(R.drawable.border_grey, null)
         }
 
-        amountTxt.addTextChangedListener(object : TextWatcher {
+        val textChangeListener = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                val enteredDouble = s?.toString()?.toDoubleOrNull()
-                viewModel.delegate.onAmountEntered(enteredDouble ?: 0.0)
+                viewModel.delegate.onAmountEntered(s?.toString())
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        })
+        }
+
+        amountTxt.addTextChangedListener(textChangeListener)
 
         rootView.findViewById<Button>(R.id.btnCurrency)?.apply {
             btnCurrency = this
             setOnClickListener {
+                amountTxt.removeTextChangedListener(textChangeListener)
                 viewModel.delegate.onCurrencyButtonClick()
+                amountTxt.addTextChangedListener(textChangeListener)
             }
         }
 
@@ -143,10 +146,10 @@ class SendFragment : DialogFragment() {
                     .setListener(object : AnimatorListenerAdapter() {
                         override fun onAnimationEnd(animation: Animator?) {
                             super.onAnimationEnd(animation)
-                            scrollView.post({
+                            scrollView.post {
                                 scrollView.fullScroll(View.FOCUS_DOWN)
                                 paymentRefTxt.requestFocus()
-                            })
+                            }
                         }
                     })
         }
@@ -169,9 +172,7 @@ class SendFragment : DialogFragment() {
         })
 
         viewModel.primaryAmountLiveData.observe(this, Observer { primaryAmount ->
-            primaryAmount?.let {
-                amountTxt.setText(it.toString())
-            }
+            amountTxt.setText(primaryAmount)
         })
 
         viewModel.primaryCurrencyLiveData.observe(this, Observer { primaryCurrency ->

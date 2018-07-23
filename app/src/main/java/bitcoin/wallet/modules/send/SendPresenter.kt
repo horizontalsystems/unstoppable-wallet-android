@@ -4,6 +4,9 @@ import bitcoin.wallet.R
 import bitcoin.wallet.blockchain.InvalidAddress
 import bitcoin.wallet.blockchain.NotEnoughFundsException
 import bitcoin.wallet.blockchain.UnsupportedBlockchain
+import bitcoin.wallet.viewHelpers.NumberFormatHelper
+import java.text.NumberFormat
+import java.text.ParseException
 
 class SendPresenter(private val interactor: SendModule.IInteractor, private val router: SendModule.IRouter, private val coinCode: String) : SendModule.IViewDelegate, SendModule.IInteractorDelegate {
 
@@ -16,7 +19,7 @@ class SendPresenter(private val interactor: SendModule.IInteractor, private val 
 
     private var exchangeRate = 0.0
 
-    private var showCryptoAmountFirst = false
+    private var isEnteringInCrypto = false
 
     private lateinit var baseCurrencyCode: String
 
@@ -38,19 +41,25 @@ class SendPresenter(private val interactor: SendModule.IInteractor, private val 
     }
 
     override fun onCurrencyButtonClick() {
-        showCryptoAmountFirst = !showCryptoAmountFirst
+        isEnteringInCrypto = !isEnteringInCrypto
 
         updateAmounts()
     }
 
     override fun didFetchExchangeRate(exchangeRate: Double) {
         this.exchangeRate = exchangeRate
-        recalculateSecondaryAmountHint()
+        refreshAmountHint()
     }
 
-    override fun onAmountEntered(amount: Double?) {
-        enteredAmount = amount ?: 0.0
-        recalculateSecondaryAmountHint()
+    override fun onAmountEntered(amount: String?) {
+        val numberFormat = NumberFormat.getInstance()
+        val number = try {
+            numberFormat.parse(amount)
+        } catch (ex: ParseException) {
+            null
+        }
+        enteredAmount = number?.toDouble() ?: 0.0
+        refreshAmountHint()
     }
 
     override fun onCancelClick() {
@@ -77,12 +86,12 @@ class SendPresenter(private val interactor: SendModule.IInteractor, private val 
     }
 
     private fun updateAmounts() {
-        updatePrimaryAmount()
-        updateSecondaryAmountHint()
+        updateAmountView()
+        updateAmountHintView()
     }
 
-    private fun recalculateSecondaryAmountHint() {
-        if (showCryptoAmountFirst) {
+    private fun refreshAmountHint() {
+        if (isEnteringInCrypto) {
             cryptoAmount = enteredAmount
             fiatAmount = enteredAmount * exchangeRate
         } else {
@@ -90,23 +99,28 @@ class SendPresenter(private val interactor: SendModule.IInteractor, private val 
             cryptoAmount = enteredAmount / exchangeRate
         }
 
-        updateSecondaryAmountHint()
+        updateAmountHintView()
     }
 
-    private fun updatePrimaryAmount() {
-        if (showCryptoAmountFirst) {
-            view?.setPrimaryCurrency(coinCode)
-            view?.setPrimaryAmount(cryptoAmount)
-        } else {
-            view?.setPrimaryCurrency(baseCurrencyCode)
-            view?.setPrimaryAmount(fiatAmount)
-        }
+    private fun updateAmountView() {
+        val amount = (if (isEnteringInCrypto) cryptoAmount else fiatAmount) ?: 0.0
+        val amountStr = if (isEnteringInCrypto) formatCryptoAmount(amount) else formatFiatAmount(amount)
+        val currency = if (isEnteringInCrypto) coinCode else baseCurrencyCode
+
+        view?.setCurrency(currency)
+        view?.setAmount(if (amount ?: 0.0 > 0.0) amountStr else null)
     }
 
-    private fun updateSecondaryAmountHint() {
-        val amount = (if (showCryptoAmountFirst) fiatAmount else cryptoAmount) ?: 0.0
-        val currency = if (showCryptoAmountFirst) baseCurrencyCode else coinCode
-        view?.setSecondaryAmountHint("$amount $currency")
+    private fun updateAmountHintView() {
+        val amount = (if (isEnteringInCrypto) fiatAmount else cryptoAmount) ?: 0.0
+        val amountStr = if (isEnteringInCrypto) formatFiatAmount(amount) else formatCryptoAmount(amount)
+        val currency = if (isEnteringInCrypto) baseCurrencyCode else coinCode
+
+        view?.setAmountHint("$amountStr $currency")
     }
+
+    private fun formatCryptoAmount(amount: Double) = NumberFormatHelper.cryptoAmountFormat.format(amount)
+
+    private fun formatFiatAmount(amount: Double) = NumberFormatHelper.fiatAmountFormat.format(amount)
 
 }

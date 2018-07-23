@@ -10,9 +10,9 @@ object SendModule {
 
     interface IView {
         fun setAddress(address: String)
-        fun setPrimaryCurrency(code: String)
-        fun setPrimaryAmount(amount: Double?)
-        fun setSecondaryAmountHint(hint: String)
+        fun setCurrency(code: String)
+        fun setAmount(amount: String?)
+        fun setAmountHint(hint: String)
         fun closeView()
         fun showError(error: Int)
         fun showSuccess()
@@ -23,7 +23,7 @@ object SendModule {
         fun onPasteClick()
         fun onCurrencyButtonClick()
         fun onViewDidLoad()
-        fun onAmountEntered(amount: Double?)
+        fun onAmountEntered(amount: String?)
         fun onCancelClick()
         fun onSendClick(address: String)
     }
