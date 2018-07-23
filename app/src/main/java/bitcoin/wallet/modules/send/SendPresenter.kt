@@ -108,7 +108,7 @@ class SendPresenter(private val interactor: SendModule.IInteractor, private val 
         val currency = if (isEnteringInCrypto) coinCode else baseCurrencyCode
 
         view?.setCurrency(currency)
-        view?.setAmount(if (amount ?: 0.0 > 0.0) amountStr else null)
+        view?.setAmount(if (amount > 0.0) amountStr else null)
     }
 
     private fun updateAmountHintView() {
