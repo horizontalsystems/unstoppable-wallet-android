@@ -73,10 +73,10 @@ class ViewHolderTransaction(override val containerView: View) : RecyclerView.Vie
 
     fun bind(transactionRecord: TransactionRecordViewItem) {
         val sign = if (transactionRecord.incoming) "+" else "-"
-        val amountTextColor = if (transactionRecord.incoming) R.color.green_crypto else R.color.grey
+        val amountTextColor = if (transactionRecord.incoming) R.color.green_crypto else R.color.yellow_crypto
         txAmount.setTextColor(ContextCompat.getColor(itemView.context, amountTextColor))
         txAmount.text = "$sign ${NumberFormatHelper.cryptoAmountFormat.format(Math.abs(transactionRecord.amount.value))} ${transactionRecord.amount.coin.code}"
-        txStatus.text = transactionRecord.status?.name
         txDate.text = DateHelper.getRelativeDateString(itemView.context, transactionRecord.date)
+        txValueInFiat.text = "\$400 when " + (if (transactionRecord.incoming) "received" else "sent")
     }
 }
