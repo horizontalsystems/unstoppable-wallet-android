@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import bitcoin.wallet.R
 import bitcoin.wallet.modules.main.BaseTabFragment
 import bitcoin.wallet.viewHelpers.DateHelper
+import bitcoin.wallet.viewHelpers.NumberFormatHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
 import kotlinx.android.synthetic.main.view_holder_transaction.*
@@ -74,7 +75,7 @@ class ViewHolderTransaction(override val containerView: View) : RecyclerView.Vie
         val sign = if (transactionRecord.incoming) "+" else "-"
         val amountTextColor = if (transactionRecord.incoming) R.color.green_crypto else R.color.grey
         txAmount.setTextColor(ContextCompat.getColor(itemView.context, amountTextColor))
-        txAmount.text = "$sign ${transactionRecord.amount.value} ${transactionRecord.amount.coin.code}"
+        txAmount.text = "$sign ${NumberFormatHelper.cryptoAmountFormat.format(Math.abs(transactionRecord.amount.value))} ${transactionRecord.amount.coin.code}"
         txStatus.text = transactionRecord.status?.name
         txDate.text = DateHelper.getRelativeDateString(itemView.context, transactionRecord.date)
     }
