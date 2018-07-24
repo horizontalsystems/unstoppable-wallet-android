@@ -2,9 +2,9 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/bottom_sheet_background"
     >
 
@@ -18,11 +18,11 @@
         android:layout_marginTop="16dp"
         android:fontFamily="@font/noto_sans_bold"
         android:textColor="@color/grey"
-        tools:text="Send BTC"
         android:textSize="17sp"
-        app:layout_constraintEnd_toStartOf="@+id/btnScan"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        tools:text="Send BTC"
         />
 
     <ImageView
@@ -31,16 +31,16 @@
         android:layout_height="24dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
+        android:elevation="1dp"
         android:foreground="?android:attr/selectableItemBackground"
+        android:src="@drawable/qr_code"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/qr_code"
-        android:elevation="1dp"
         />
 
 
     <ScrollView android:id="@+id/scrollView"
-        xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -225,6 +225,7 @@
                     android:layout_height="match_parent"
                     android:visibility="gone"
                     >
+
                     <EditText
                         android:id="@+id/txtPaymentRef"
                         style="@style/BottomDialogText"

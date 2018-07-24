@@ -41,7 +41,8 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".modules.main.UnlockActivity"/>
+            android:name=".modules.main.UnlockActivity"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="preloaded_fonts"

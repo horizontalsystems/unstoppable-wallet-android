@@ -27,7 +27,7 @@
     <string name="write_down_on_paper">Write down on paper and keep safe</string>
     <string name="enter_paper_keys_title">Enter Paper Keys</string>
     <string name="action_done">Done</string>
-    <string name="button_receive">Deposit</string>
+    <string name="button_receive">Receive</string>
     <string name="button_pay">Send</string>
     <string name="timestamp_just_now">just now</string>
     <string name="timestamp_min_ago">%dm. ago</string>
@@ -50,10 +50,10 @@
     <string name="send_bottom_sheet_error_insufficient_balance">Your balance is insufficient. Please try to send smaller amount!</string>
     <string name="send_bottom_sheet_success">Successfully sent!</string>
 
-    <string name="receive_bottom_sheet_title">Deposit %s</string>
+    <string name="receive_bottom_sheet_title">Receive %s</string>
     <string name="receive_bottom_sheet_copy">Copy</string>
     <string name="receive_bottom_sheet_copied">Copied</string>
-    <string name="receive_bottom_sheet_receive">Deposit</string>
+    <string name="receive_bottom_sheet_receive">Receive</string>
     <string name="receive_bottom_sheet_share">Share</string>
     <string name="receive_bottom_sheet_share_to">Share to</string>
 
@@ -64,7 +64,7 @@
     <string name="alert_no_device_lock_description">A device lock is needed to safeguard your wallet. Go to “Settings” > “Security” > “Screen Lock” and enable to continue </string>
 
 
-    <string name="unlock_page_deposit_button">Deposit</string>
+    <string name="unlock_page_receive_button">Receive</string>
     <string name="unlock_page_enter_your_pin">Type your pin to unlock</string>
 
     <string name="error_unsupported_blockchain">Unsupported currency</string>
