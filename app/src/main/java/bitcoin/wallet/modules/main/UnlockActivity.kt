@@ -127,27 +127,30 @@ class NumPadItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private var txtNumber: TextView = itemView.findViewById(R.id.txtNumPadNumber)
     private var txtLetters: TextView = itemView.findViewById(R.id.txtNumPadText)
+    private var imgBackSpace: ImageView = itemView.findViewById(R.id.imgBackSpace)
 
 
     fun bind(item: NumPadItem, onClick: () -> (Unit)) {
 
         itemView.setOnClickListener { onClick.invoke() }
 
+        txtNumber.visibility = View.GONE
+        txtLetters.visibility = View.GONE
+        imgBackSpace.visibility = View.GONE
+        itemView.background = null
+
         when (item.type) {
             NumPadItemType.DELETE -> {
-                txtNumber.visibility = View.GONE
-                txtLetters.visibility = View.VISIBLE
-                txtLetters.text = item.letters
+                imgBackSpace.visibility = View.VISIBLE
             }
             NumPadItemType.NUMBER -> {
                 txtNumber.visibility = View.VISIBLE
-                txtLetters.visibility = View.VISIBLE
+                txtLetters.visibility = if (item.number == 0) View.GONE else View.VISIBLE
                 txtNumber.text = item.number.toString()
                 txtLetters.text = item.letters
+                itemView.setBackgroundResource(R.drawable.numpad_button_background)
             }
             NumPadItemType.NONE -> {
-                txtNumber.visibility = View.GONE
-                txtLetters.visibility = View.GONE
             }
         }
     }
