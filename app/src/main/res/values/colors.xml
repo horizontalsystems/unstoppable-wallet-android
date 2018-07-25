@@ -17,5 +17,6 @@
     <color name="red_error">#deff3434</color>
     <color name="red_warning">#ff5e3a</color>
     <color name="color_settings_title">#f9f9f9</color>
+    <color name="ripple_white">#b2ffffff</color>
 
 </resources>
