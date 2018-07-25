@@ -12,6 +12,7 @@
     android:fontFamily="@font/noto_sans_bold"
     android:background="@drawable/stateful_tag_bg"
     android:textSize="12sp"
+    android:textColor="@color/stateful_tag_filter_text_color"
     android:textAllCaps="true"
     tools:text="Bitcoin"
     android:clickable="true"

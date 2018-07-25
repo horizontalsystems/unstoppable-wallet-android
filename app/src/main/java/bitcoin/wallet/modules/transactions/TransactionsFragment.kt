@@ -2,7 +2,6 @@ package bitcoin.wallet.modules.transactions
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
@@ -105,7 +104,6 @@ class ViewHolderFilter(override val containerView: View) : RecyclerView.ViewHold
 
     fun bind(filterName: String, active: Boolean) {
         filter_text.text = filterName
-        filter_text.setTextColor(if (active) Color.argb(255, 40, 43, 53) else Color.argb(255, 255, 173, 0))
         filter_text.isActivated = active
     }
 }
