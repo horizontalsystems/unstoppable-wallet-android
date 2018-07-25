@@ -59,7 +59,7 @@ class TransactionsInteractor(private val databaseManager: IDatabaseManager, priv
                 }
 
         val coinAmount = Math.abs(transactionRecord.amount / 100000000.0)
-        val valueInBaseCurrency =  exchangeRate?.let { NumberFormatHelper.fiatAmountFormat.format(it.times(coinAmount)) } ?: run { ""}
+        val valueInBaseCurrency =  exchangeRate?.let { NumberFormatHelper.fiatAmountFormat.format(it.times(coinAmount)) } ?: ""
 
         return TransactionRecordViewItem(
                 transactionRecord.transactionHash,
