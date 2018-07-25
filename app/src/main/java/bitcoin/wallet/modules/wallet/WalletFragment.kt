@@ -8,22 +8,17 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import bitcoin.wallet.R
 import bitcoin.wallet.entities.*
 import bitcoin.wallet.entities.coins.Coin
-import bitcoin.wallet.modules.main.BaseTabFragment
-import bitcoin.wallet.modules.send.SendModule
 import bitcoin.wallet.modules.receive.ReceiveModule
+import bitcoin.wallet.modules.send.SendModule
 import bitcoin.wallet.viewHelpers.NumberFormatHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import kotlinx.android.synthetic.main.view_holder_coin.*
 
-class WalletFragment : BaseTabFragment(), CoinsAdapter.Listener {
-
-    override val title: Int
-        get() = R.string.tab_title_wallet
+class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener {
 
     private lateinit var viewModel: WalletViewModel
     private val coinsAdapter = CoinsAdapter(this)
@@ -51,16 +46,15 @@ class WalletFragment : BaseTabFragment(), CoinsAdapter.Listener {
         })
 
         viewModel.totalBalanceLiveData.observe(this, Observer { total ->
-            total?.let {
-                coinsAdapter.total = it
-                coinsAdapter.notifyDataSetChanged()
-            }
+            val numberFormat = NumberFormatHelper.fiatAmountFormat
+            ballanceText.text = total?.let { "${total.currency.symbol}${numberFormat.format(total.value)}" } ?: ""
         })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        toolbar.setTitle(R.string.tab_title_wallet)
         recyclerCoins.adapter = coinsAdapter
         recyclerCoins.layoutManager = LinearLayoutManager(context)
     }
@@ -85,33 +79,19 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
         fun onReceiveClicked(coin: Coin)
     }
 
-    companion object {
-        const val viewTypeTotal = 1
-        const val viewTypeCoin = 2
-
-    }
-
     var items = listOf<WalletBalanceViewItem>()
-    var total: CurrencyValue? = null
     private var expandedViewPosition = -1
 
-    override fun getItemCount() = items.size + 1
+    override fun getItemCount() = items.size
 
-    override fun getItemViewType(position: Int) = when (position) {
-        0 -> viewTypeTotal
-        else -> viewTypeCoin
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
-        viewTypeCoin -> ViewHolderCoin(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_coin, parent, false))
-        else -> ViewHolderTotalBalance(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_total, parent, false) as TextView)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+            ViewHolderCoin(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_coin, parent, false))
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is ViewHolderCoin -> holder.bind(items[position - 1],
-                    onPayClick = { listener.onPayClicked(items[position - 1].coinValue.coin) },
-                    onReceiveClick = { listener.onReceiveClicked(items[position - 1].coinValue.coin) },
+            is ViewHolderCoin -> holder.bind(items[position],
+                    onPayClick = { listener.onPayClicked(items[position].coinValue.coin) },
+                    onReceiveClick = { listener.onReceiveClicked(items[position].coinValue.coin) },
                     onHolderCLicked = {
                         val oldExpandedViewPosition = expandedViewPosition
                         expandedViewPosition = if (expandedViewPosition == position) -1 else position
@@ -121,17 +101,9 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
                         notifyItemChanged(expandedViewPosition)
                     },
                     expand = expandedViewPosition == position)
-            is ViewHolderTotalBalance -> holder.bind(total)
         }
     }
 
-}
-
-class ViewHolderTotalBalance(private val textView: TextView) : RecyclerView.ViewHolder(textView) {
-    fun bind(total: CurrencyValue?) {
-        val numberFormat = NumberFormatHelper.fiatAmountFormat
-        textView.text = total?.let { "${total.currency.symbol}${numberFormat.format(total.value)}" } ?: ""
-    }
 }
 
 class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {

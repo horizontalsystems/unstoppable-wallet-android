@@ -1,5 +1,6 @@
 package bitcoin.wallet.modules.settings
 
+import android.app.Fragment
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -8,13 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
 import bitcoin.wallet.R
-import bitcoin.wallet.modules.main.BaseTabFragment
 import kotlinx.android.synthetic.main.fragment_settings.*
 
-class SettingsFragment : BaseTabFragment() {
 
-    override val title: Int
-        get() = R.string.tab_title_settings
+class SettingsFragment : android.support.v4.app.Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_settings, container, false);
@@ -22,6 +20,8 @@ class SettingsFragment : BaseTabFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        toolbar.setTitle(R.string.tab_title_settings)
 
         resources.getDrawable(R.drawable.info, null).let { securityBadge ->
             securityBadge.setTint(resources.getColor(R.color.red_warning, null))

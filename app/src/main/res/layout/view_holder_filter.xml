@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<TextView
+    android:id="@+id/filter_text"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    android:fontFamily="@font/noto_sans_bold"
+    android:background="@drawable/stateful_tag_bg"
+    android:textSize="12sp"
+    android:textColor="@color/stateful_tag_filter_text_color"
+    android:textAllCaps="true"
+    tools:text="Bitcoin"
+    android:clickable="true"
+    />

@@ -24,8 +24,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 
-        setSupportActionBar(toolbar)
-
         adapter = MainTabsAdapter(supportFragmentManager)
 
         viewPager.adapter = adapter
