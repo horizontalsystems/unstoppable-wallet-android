@@ -13,7 +13,8 @@ data class TransactionRecordViewItem(
         val blockHeight: Long,
         val date: Date,
         val status: Status?,
-        val confirmations: Long?
+        val confirmations: Long?,
+        val valueInBaseCurrency: String?
 ) {
 
     enum class Status {

@@ -77,6 +77,6 @@ class ViewHolderTransaction(override val containerView: View) : RecyclerView.Vie
         txAmount.setTextColor(ContextCompat.getColor(itemView.context, amountTextColor))
         txAmount.text = "$sign ${NumberFormatHelper.cryptoAmountFormat.format(Math.abs(transactionRecord.amount.value))} ${transactionRecord.amount.coin.code}"
         txDate.text = DateHelper.getRelativeDateString(itemView.context, transactionRecord.date)
-        txValueInFiat.text = "\$400 when " + (if (transactionRecord.incoming) "received" else "sent")
+        txValueInFiat.text = "\$${transactionRecord.valueInBaseCurrency} when " + (if (transactionRecord.incoming) "received" else "sent")
     }
 }

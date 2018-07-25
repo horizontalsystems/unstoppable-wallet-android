@@ -7,6 +7,7 @@ import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem.Status.PENDING
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem.Status.SUCCESS
+import bitcoin.wallet.viewHelpers.NumberFormatHelper
 import java.util.*
 import kotlin.math.max
 
@@ -34,14 +35,15 @@ class TransactionsInteractor(private val databaseManager: IDatabaseManager, priv
     }
 
     private fun refresh(changeset: CollectionChangeset? = null) {
-
-        delegate?.didRetrieveTransactionRecords(transactionRecords.mapNotNull { transactionRecord ->
-            convert(transactionRecord)
-        })
-
+        databaseManager.getExchangeRates().subscribe {
+            delegate?.didRetrieveTransactionRecords(transactionRecords.mapNotNull { transactionRecord ->
+                val exchangeRate = it.array.find { it.code == transactionRecord.coinCode }?.value
+                convert(transactionRecord, exchangeRate)
+            })
+        }
     }
 
-    private fun convert(transactionRecord: TransactionRecord): TransactionRecordViewItem? {
+    private fun convert(transactionRecord: TransactionRecord, exchangeRate: Double?): TransactionRecordViewItem? {
         val coin = coinManager.getCoinByCode(transactionRecord.coinCode)
         val latestBlockHeight = latestBlockHeights[transactionRecord.coinCode]
 
@@ -56,9 +58,13 @@ class TransactionsInteractor(private val databaseManager: IDatabaseManager, priv
                     max(0, latestBlockHeight - transactionRecord.blockHeight + 1)
                 }
 
+        val coinAmount = Math.abs(transactionRecord.amount / 100000000.0)
+        val valueInBaseCurrency =  exchangeRate?.let { NumberFormatHelper.fiatAmountFormat.format(it.times(coinAmount)) } ?: run { ""}
+
         return TransactionRecordViewItem(
                 transactionRecord.transactionHash,
                 CoinValue(coin, transactionRecord.amount / 100000000.0),
+
                 CoinValue(coin, transactionRecord.fee / 100000000.0),
                 transactionRecord.from,
                 transactionRecord.to,
@@ -66,8 +72,8 @@ class TransactionsInteractor(private val databaseManager: IDatabaseManager, priv
                 transactionRecord.blockHeight,
                 Date(transactionRecord.timestamp),
                 if (confirmations > 0) SUCCESS else PENDING,
-                confirmations
-
+                confirmations,
+                valueInBaseCurrency
         )
 
     }
