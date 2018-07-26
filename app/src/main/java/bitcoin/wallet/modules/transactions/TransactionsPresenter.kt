@@ -12,4 +12,7 @@ class TransactionsPresenter(private val interactor: TransactionsModule.IInteract
         view?.showTransactionItems(items)
     }
 
+    override fun onTransactionItemClick(coinCode: String, txHash: String) {
+        router.showTransactionInfo(coinCode, txHash)
+    }
 }

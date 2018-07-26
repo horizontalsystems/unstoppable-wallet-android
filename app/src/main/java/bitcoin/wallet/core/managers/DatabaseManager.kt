@@ -86,6 +86,15 @@ class DatabaseManager : IDatabaseManager {
         }
     }
 
+    override fun getTransactionRecord(coinCode: String, txHash: String): Observable<TransactionRecord> =
+            realm.where(TransactionRecord::class.java)
+                    .and().equalTo("coinCode", coinCode).and().equalTo("transactionHash", txHash)
+                    .findAllAsync()
+                    .asChangesetObservable()
+                    .map {
+                        it.collection.first()
+                    }
+
     fun close() {
         realm.close()
     }

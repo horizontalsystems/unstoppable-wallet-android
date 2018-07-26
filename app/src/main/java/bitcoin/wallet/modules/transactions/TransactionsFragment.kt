@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import bitcoin.wallet.R
+import bitcoin.wallet.modules.transactionInfo.TransactionInfoModule
 import bitcoin.wallet.viewHelpers.DateHelper
 import bitcoin.wallet.viewHelpers.NumberFormatHelper
 import kotlinx.android.extensions.LayoutContainer
@@ -17,10 +18,10 @@ import kotlinx.android.synthetic.main.fragment_transactions.*
 import kotlinx.android.synthetic.main.view_holder_filter.*
 import kotlinx.android.synthetic.main.view_holder_transaction.*
 
-class TransactionsFragment : android.support.v4.app.Fragment() {
+class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdapter.Listener {
 
     private lateinit var viewModel: TransactionsViewModel
-    private val transactionsAdapter = TransactionsAdapter()
+    private val transactionsAdapter = TransactionsAdapter(this)
     private val filterAdapter = FilterAdapter()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -40,6 +41,13 @@ class TransactionsFragment : android.support.v4.app.Fragment() {
             }
         })
 
+        viewModel.showTransactionInfoLifeEvent.observe(this, Observer { pair ->
+            pair?.apply {
+                val (coinCode, txHash) = this
+                activity?.let { TransactionInfoModule.start(it, coinCode, txHash) }
+            }
+        })
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,9 +60,17 @@ class TransactionsFragment : android.support.v4.app.Fragment() {
         recyclerTags.adapter = filterAdapter
         recyclerTags.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
     }
+
+    override fun onItemClick(item: TransactionRecordViewItem) {
+        viewModel.delegate.onTransactionItemClick(item.amount.coin.code, item.hash)
+    }
 }
 
-class TransactionsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class TransactionsAdapter(private var listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    interface Listener {
+        fun onItemClick(item: TransactionRecordViewItem)
+    }
 
     var items = listOf<TransactionRecordViewItem>()
 
@@ -65,7 +81,7 @@ class TransactionsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is ViewHolderTransaction -> holder.bind(items[position])
+            is ViewHolderTransaction -> holder.bind(items[position]) { listener.onItemClick(items[position]) }
         }
     }
 
@@ -73,13 +89,16 @@ class TransactionsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 class ViewHolderTransaction(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(transactionRecord: TransactionRecordViewItem) {
+    fun bind(transactionRecord: TransactionRecordViewItem, onClick: () -> (Unit)) {
+
+        containerView.setOnClickListener { onClick.invoke() }
+
         val sign = if (transactionRecord.incoming) "+" else "-"
         val amountTextColor = if (transactionRecord.incoming) R.color.green_crypto else R.color.yellow_crypto
         txAmount.setTextColor(ContextCompat.getColor(itemView.context, amountTextColor))
         txAmount.text = "$sign ${NumberFormatHelper.cryptoAmountFormat.format(Math.abs(transactionRecord.amount.value))} ${transactionRecord.amount.coin.code}"
         txDate.text = DateHelper.getRelativeDateString(itemView.context, transactionRecord.date)
-        txValueInFiat.text = "\$${transactionRecord.valueInBaseCurrency} when " + (if (transactionRecord.incoming) "received" else "sent")
+        txValueInFiat.text = "\$${NumberFormatHelper.fiatAmountFormat.format(transactionRecord.valueInBaseCurrency)} when " + (if (transactionRecord.incoming) "received" else "sent")
     }
 }
 

@@ -39,6 +39,7 @@ interface IDatabaseManager {
     fun updateBlockchainInfo(blockchainInfo: BlockchainInfo)
     fun updateExchangeRate(exchangeRate: ExchangeRate)
     fun updateBalance(balance: Balance)
+    fun getTransactionRecord(coinCode: String, txHash: String): Observable<TransactionRecord>
 }
 
 interface INetworkManager {
