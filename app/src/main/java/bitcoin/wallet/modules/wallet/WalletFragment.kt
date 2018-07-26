@@ -13,6 +13,7 @@ import bitcoin.wallet.entities.*
 import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.modules.receive.ReceiveModule
 import bitcoin.wallet.modules.send.SendModule
+import bitcoin.wallet.viewHelpers.AnimationHelper
 import bitcoin.wallet.viewHelpers.NumberFormatHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_wallet.*
@@ -93,12 +94,8 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
                     onPayClick = { listener.onPayClicked(items[position].coinValue.coin) },
                     onReceiveClick = { listener.onReceiveClicked(items[position].coinValue.coin) },
                     onHolderCLicked = {
-                        val oldExpandedViewPosition = expandedViewPosition
                         expandedViewPosition = if (expandedViewPosition == position) -1 else position
-                        if (oldExpandedViewPosition != -1) {
-                            notifyItemChanged(oldExpandedViewPosition)
-                        }
-                        notifyItemChanged(expandedViewPosition)
+                        notifyDataSetChanged()
                     },
                     expand = expandedViewPosition == position)
         }
@@ -131,8 +128,12 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
             onHolderCLicked?.invoke()
         }
 
-        buttonReceive.visibility = if (expand) View.VISIBLE else View.GONE
-        buttonPay.visibility = if (expand) View.VISIBLE else View.GONE
+        if (expand) {
+            AnimationHelper.expand(buttonsWrapper)
+        } else {
+            AnimationHelper.collapse(buttonsWrapper)
+        }
+
     }
 
 }
