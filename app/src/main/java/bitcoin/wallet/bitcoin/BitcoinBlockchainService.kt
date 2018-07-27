@@ -31,8 +31,8 @@ object BitcoinBlockchainService : IBlockchainService {
     var seedCode: String = ""
     var checkpoints: InputStream? = null
 
-    lateinit var filesDir: File
-    lateinit var storage: BlockchainStorage
+    private lateinit var filesDir: File
+    private lateinit var storage: BlockchainStorage
     private lateinit var params: NetworkParameters
 
     private var updateBlockchainHeightSubject = PublishSubject.create<Long>()
@@ -61,7 +61,6 @@ object BitcoinBlockchainService : IBlockchainService {
             TestNet3Params.get()
         } else {
             MainNetParams.get()
-
         }
 
         checkpoints = assetManager.open("${params.id}.checkpoints.txt")
@@ -78,36 +77,8 @@ object BitcoinBlockchainService : IBlockchainService {
             storage.updateBlockchainInfo(blockchainInfo)
         }
 
-        transactionsUpdatedSubject.sample(30, TimeUnit.SECONDS).subscribe { txs ->
-
-            val transactionRecords = mutableListOf<TransactionRecord>()
-            txs.forEach {
-                val t = it.value
-                val transactionRecord = TransactionRecord().apply {
-                    transactionHash = t.hashAsString
-                    coinCode = "BTC"
-                    amount = t.getValue(wallet).value
-                    incoming = amount > 0
-                    timestamp = t.updateTime.time
-
-                    blockHeight = try {
-                        t.confidence.appearedAtChainHeight.toLong()
-                    } catch (e: IllegalStateException) {
-                        0
-                    }
-                }
-
-                transactionRecords.add(transactionRecord)
-
-            }
-
-            "Updating transactions ${transactionRecords.joinToString { it.transactionHash }}".log()
-
-            storage.insertOrUpdateTransactions(transactionRecords)
-
-            this.txs.clear()
-
-            "Cleared transactions, tx count: ${txs.count()}".log()
+        transactionsUpdatedSubject.sample(30, TimeUnit.SECONDS).subscribe {
+            dequeueTransactionUpdate()
         }
     }
 
@@ -132,30 +103,32 @@ object BitcoinBlockchainService : IBlockchainService {
 
         val spvBlockChain = BlockChain(params, wallet, spvBlockStore)
 
+        spvBlockChain.addNewBestBlockListener {
+            updateLatestBlockHeight(it.height)
+        }
+
         wallet.addCoinsReceivedEventListener { _, tx, prevBalance, newBalance ->
             updateBalance(newBalance.value)
         }
+
         wallet.addCoinsSentEventListener { _, tx, prevBalance, newBalance ->
             updateBalance(newBalance.value)
         }
+
         wallet.addTransactionConfidenceEventListener { wallet, tx ->
-            updateTransaction(tx)
+            enqueueTransactionUpdate(tx)
         }
 
         peerGroup = PeerGroup(params, spvBlockChain)
-
         peerGroup.addWallet(wallet)
         peerGroup.addPeerDiscovery(DnsDiscovery(params))
         peerGroup.fastCatchupTimeSecs = wallet.earliestKeyCreationTime
-
         peerGroup.addConnectedEventListener { peer, peerCount ->
             updateLatestBlockHeight(peerGroup.mostCommonChainHeight)
         }
-        peerGroup.addOnTransactionBroadcastListener { peer, t ->
-            updateTransaction(t)
-        }
-        spvBlockChain.addNewBestBlockListener {
-            updateLatestBlockHeight(it.height)
+
+        peerGroup.addOnTransactionBroadcastListener { _, tx ->
+            storage.insertOrUpdateTransactions(listOf(newTransactionRecord(tx)))
         }
 
         peerGroup.addBlocksDownloadedEventListener { peer, block, filteredBlock, blocksLeft ->
@@ -211,13 +184,40 @@ object BitcoinBlockchainService : IBlockchainService {
         })
     }
 
-    private fun updateTransaction(t: Transaction) {
-        txs[t.hashAsString] = t
-
+    private fun enqueueTransactionUpdate(tx: Transaction) {
+        txs[tx.hashAsString] = tx
         txs.size.log("Transactions count: ")
 
         transactionsUpdatedSubject.onNext(txs)
-
     }
 
+    private fun dequeueTransactionUpdate() {
+        val transactionRecords = mutableListOf<TransactionRecord>()
+        txs.forEach {
+            val tx = it.value
+
+            // collect items for bulk write/update
+            transactionRecords.add(newTransactionRecord(tx))
+
+            // remove item from queue
+            txs.remove(tx.hashAsString)
+        }
+
+        storage.insertOrUpdateTransactions(transactionRecords)
+    }
+
+    private fun newTransactionRecord(tx: Transaction): TransactionRecord {
+        return TransactionRecord().apply {
+            transactionHash = tx.hashAsString
+            coinCode = "BTC"
+            amount = tx.getValue(wallet).value
+            incoming = amount > 0
+            timestamp = tx.updateTime.time
+            blockHeight = try {
+                tx.confidence.appearedAtChainHeight.toLong()
+            } catch (e: IllegalStateException) {
+                0
+            }
+        }
+    }
 }
