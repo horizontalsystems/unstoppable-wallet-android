@@ -36,7 +36,7 @@ object BitcoinBlockchainService : IBlockchainService {
     private lateinit var params: NetworkParameters
 
     private var updateBlockchainHeightSubject = PublishSubject.create<Long>()
-    private var transactionsUpdatedSubject = PublishSubject.create<Map<String, Transaction>>()
+    private var updateTransactionsSubject = PublishSubject.create<Map<String, Transaction>>()
 
     private var latestBlockHeight = 0
         set(value) {
@@ -51,12 +51,11 @@ object BitcoinBlockchainService : IBlockchainService {
     private lateinit var spvBlockStore: SPVBlockStore
     private lateinit var peerGroup: PeerGroup
 
-    fun init(filesDir: File, assetManager: AssetManager, storage: BlockchainStorage, testMode: Boolean) {
+    fun init(dir: File, assetManager: AssetManager, store: BlockchainStorage, testMode: Boolean) {
         BriefLogFormatter.initVerbose()
 
-        this.filesDir = filesDir
-        this.storage = storage
-
+        filesDir = dir
+        storage = store
         params = if (testMode) {
             TestNet3Params.get()
         } else {
@@ -65,21 +64,10 @@ object BitcoinBlockchainService : IBlockchainService {
 
         checkpoints = assetManager.open("${params.id}.checkpoints.txt")
 
-        val chainFile = File(filesDir, "${params.paymentProtocolId}.spvchain")
+        val chainFile = File(dir, "${params.paymentProtocolId}.spvchain")
         spvBlockStore = SPVBlockStore(params, chainFile)
 
-        updateBlockchainHeightSubject.sample(30, TimeUnit.SECONDS).subscribe {
-            val blockchainInfo = BlockchainInfo().apply {
-                coinCode = "BTC"
-                latestBlockHeight = it
-            }
-
-            storage.updateBlockchainInfo(blockchainInfo)
-        }
-
-        transactionsUpdatedSubject.sample(30, TimeUnit.SECONDS).subscribe {
-            dequeueTransactionUpdate()
-        }
+        observeSubjects()
     }
 
     fun initNewWallet() {
@@ -90,23 +78,52 @@ object BitcoinBlockchainService : IBlockchainService {
     fun start() {
         seedCode = Factory.preferencesManager.savedWords?.joinToString(" ") ?: throw Exception("No saved words")
 
-        wallet = getWallet()
+        startWallet()
+        startPeerGroup()
+    }
 
-        if (wallet.lastBlockSeenHeight <= 0) {
-            if (checkpoints == null) {
-                checkpoints = CheckpointManager.openStream(params)
-            }
+    override fun getReceiveAddress(): String = wallet.currentReceiveAddress().toBase58()
 
-            CheckpointManager.checkpoint(params, checkpoints, spvBlockStore, wallet.earliestKeyCreationTime)
-            wallet.notifyNewBestBlock(spvBlockStore.chainHead)
+    override fun sendCoins(address: String, value: Long) = try {
+        val targetAddress = Address.fromBase58(params, address)
+        val result = wallet.sendCoins(peerGroup, targetAddress, Coin.valueOf(value))
+        val transaction = result.broadcastComplete.get()
+
+        transaction.log("Send Coins Transaction")
+    } catch (e: InsufficientMoneyException) {
+        throw NotEnoughFundsException(e)
+    } catch (e: AddressFormatException) {
+        throw InvalidAddress(e)
+    }
+
+    private fun observeSubjects() {
+        updateTransactionsSubject.sample(30, TimeUnit.SECONDS).subscribe {
+            dequeueTransactionUpdate()
         }
 
-        val spvBlockChain = BlockChain(params, wallet, spvBlockStore)
+        updateBlockchainHeightSubject.sample(30, TimeUnit.SECONDS).subscribe {
+            storage.updateBlockchainInfo(
+                    BlockchainInfo().apply {
+                        coinCode = "BTC"
+                        latestBlockHeight = it
+                    })
+        }
+    }
 
-        spvBlockChain.addNewBestBlockListener {
-            updateLatestBlockHeight(it.height)
+    private fun startWallet() {
+        val walletFilename = "${params.paymentProtocolId}-${Integer.toHexString(seedCode.hashCode())}.dat"
+        val walletFile = File(filesDir, walletFilename)
+
+        try {
+            "Read wallet from file: ${walletFile.absolutePath}".log()
+            wallet = WalletBip44.loadFromFile(walletFile, params)
+        } catch (e: UnreadableWalletException) {
+            "Could not read wallet from file: \"${e.message}\". New wallet will be created".log()
+            wallet = WalletBip44.newFromSeedCode(params, seedCode)
+            wallet.saveToFile(walletFile)
         }
 
+        wallet.autosaveToFile(walletFile, 0, TimeUnit.SECONDS, null)
         wallet.addCoinsReceivedEventListener { _, tx, prevBalance, newBalance ->
             updateBalance(newBalance.value)
         }
@@ -117,6 +134,23 @@ object BitcoinBlockchainService : IBlockchainService {
 
         wallet.addTransactionConfidenceEventListener { wallet, tx ->
             enqueueTransactionUpdate(tx)
+        }
+
+        if (wallet.lastBlockSeenHeight <= 0) {
+            if (checkpoints == null) {
+                checkpoints = CheckpointManager.openStream(params)
+            }
+
+            CheckpointManager.checkpoint(params, checkpoints, spvBlockStore, wallet.earliestKeyCreationTime)
+            wallet.notifyNewBestBlock(spvBlockStore.chainHead)
+        }
+    }
+
+    private fun startPeerGroup() {
+        val spvBlockChain = BlockChain(params, wallet, spvBlockStore)
+
+        spvBlockChain.addNewBestBlockListener {
+            updateLatestBlockHeight(it.height)
         }
 
         peerGroup = PeerGroup(params, spvBlockChain)
@@ -140,47 +174,14 @@ object BitcoinBlockchainService : IBlockchainService {
         }, MoreExecutors.directExecutor())
     }
 
-    override fun getReceiveAddress(): String = wallet.currentReceiveAddress().toBase58()
-
-    override fun sendCoins(address: String, value: Long) = try {
-        val targetAddress = Address.fromBase58(params, address)
-        val result = wallet.sendCoins(peerGroup, targetAddress, Coin.valueOf(value))
-        val transaction = result.broadcastComplete.get()
-
-        transaction.log("Send Coins Transaction")
-    } catch (e: InsufficientMoneyException) {
-        throw NotEnoughFundsException(e)
-    } catch (e: AddressFormatException) {
-        throw InvalidAddress(e)
+    private fun updateLatestBlockHeight(height: Int) {
+        latestBlockHeight = height
     }
 
-    private fun getWallet(): Wallet {
-        val walletFilename = "${params.paymentProtocolId}-${Integer.toHexString(seedCode.hashCode())}.dat"
-        val walletFile = File(filesDir, walletFilename)
-
-        var wallet: Wallet
-        try {
-            "Read wallet from file: ${walletFile.absolutePath}".log()
-            wallet = WalletBip44.loadFromFile(walletFile, params)
-        } catch (e: UnreadableWalletException) {
-            "Could not read wallet from file: \"${e.message}\". New wallet will be created".log()
-            wallet = WalletBip44.newFromSeedCode(params, seedCode)
-            wallet.saveToFile(walletFile)
-        }
-
-        wallet.autosaveToFile(walletFile, 0, TimeUnit.SECONDS, null)
-
-        return wallet
-    }
-
-    private fun updateLatestBlockHeight(v: Int) {
-        latestBlockHeight = v
-    }
-
-    private fun updateBalance(v: Long) {
+    private fun updateBalance(balance: Long) {
         storage.updateBalance(Balance().apply {
             code = "BTC"
-            value = v
+            value = balance
         })
     }
 
@@ -188,7 +189,7 @@ object BitcoinBlockchainService : IBlockchainService {
         txs[tx.hashAsString] = tx
         txs.size.log("Transactions count: ")
 
-        transactionsUpdatedSubject.onNext(txs)
+        updateTransactionsSubject.onNext(txs)
     }
 
     private fun dequeueTransactionUpdate() {
