@@ -2,13 +2,14 @@ package bitcoin.wallet.modules.transactions
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import bitcoin.wallet.SingleLiveEvent
 
 class TransactionsViewModel : ViewModel(), TransactionsModule.IView, TransactionsModule.IRouter {
 
     lateinit var delegate: TransactionsModule.IViewDelegate
 
     val transactionItems = MutableLiveData<List<TransactionRecordViewItem>>()
-    val showTransactionInfoLifeEvent = MutableLiveData<Pair<String, String>>()
+    val showTransactionInfoLiveEvent = SingleLiveEvent<Pair<String, String>>()
 
     fun init() {
         TransactionsModule.initModule(this, this)
@@ -20,6 +21,6 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
     }
 
     override fun showTransactionInfo(coinCode: String, txHash: String) {
-        showTransactionInfoLifeEvent.value = Pair(coinCode, txHash)
+        showTransactionInfoLiveEvent.value = Pair(coinCode, txHash)
     }
 }

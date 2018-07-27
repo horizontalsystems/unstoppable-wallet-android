@@ -22,11 +22,15 @@
             app:titleTextAppearance="@style/TabTitle"
             />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/grey_20"/>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerTags"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingRight="8dp"
             />
 
     </android.support.design.widget.AppBarLayout>
@@ -35,6 +39,7 @@
         android:id="@+id/recyclerTransactions"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="?TransactionsBackgroundColor"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         />
 </android.support.design.widget.CoordinatorLayout>

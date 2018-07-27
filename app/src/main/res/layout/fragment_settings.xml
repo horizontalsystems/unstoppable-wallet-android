@@ -27,11 +27,14 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="?SettingBackgroundColor"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         >
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?SettingBackgroundColor"
             >
 
             <bitcoin.wallet.modules.settings.SettingsItemView
@@ -71,7 +74,6 @@
                 android:id="@+id/divider_1"
                 android:layout_width="match_parent"
                 android:layout_height="16dp"
-                android:background="#1e000000"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/importWallet"
@@ -104,7 +106,6 @@
                 android:id="@+id/divider_2"
                 android:layout_width="match_parent"
                 android:layout_height="16dp"
-                android:background="#1e000000"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/darkMode"
