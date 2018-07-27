@@ -3,6 +3,7 @@ package bitcoin.wallet.core.managers
 import bitcoin.wallet.WalletManager
 import bitcoin.wallet.core.NetworkManager
 import bitcoin.wallet.core.RealmManager
+import bitcoin.wallet.core.TransactionConverter
 import bitcoin.wallet.core.security.EncryptionManager
 
 object Factory {
@@ -44,6 +45,10 @@ object Factory {
 
     val encryptionManager by lazy {
         EncryptionManager()
+    }
+
+    val transactionConverter by lazy {
+        TransactionConverter()
     }
 
 }

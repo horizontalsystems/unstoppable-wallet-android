@@ -8,6 +8,8 @@ import java.util.*
 
 object DateHelper {
 
+    fun getFullDateWithTime(date: Date): String = formatDate(date, "MMMM d, yyyy, hh:mm")
+
     fun getRelativeDateString(context: Context, date: Date): String {
         val secondsAgo = getSecondsAgo(date).toInt()
         val hoursAgo = secondsAgo / (60 * 60)

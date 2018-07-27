@@ -14,7 +14,8 @@ data class TransactionRecordViewItem(
         val date: Date,
         val status: Status?,
         val confirmations: Long?,
-        val valueInBaseCurrency: String?
+        val valueInBaseCurrency: Double,
+        val exchangeRate: Double? = null
 ) {
 
     enum class Status {

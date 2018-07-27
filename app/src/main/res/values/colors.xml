@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- base colors -->
     <color name="colorPrimary">#282b35</color>
     <color name="colorPrimaryDark">#000000</color>
-    <color name="appBackground">#282b35</color>
+    <color name="dark">#282b35</color>
     <color name="green_pressed">#1ba65E</color>
     <color name="green_crypto">#1ebf6b</color>
     <color name="grey">#8a8a8f</color>
@@ -16,7 +17,11 @@
     <color name="white">#ffffff</color>
     <color name="red_error">#deff3434</color>
     <color name="red_warning">#ff5e3a</color>
-    <color name="color_settings_title">#f9f9f9</color>
+    <color name="bars_color">#f9f9f9</color>
+    <!-- eof base colors -->
+
+    <color name="appBackground">@color/dark</color>
+    <color name="color_settings_title">@color/bars_color</color>
     <color name="ripple_white">#b2ffffff</color>
 
 </resources>

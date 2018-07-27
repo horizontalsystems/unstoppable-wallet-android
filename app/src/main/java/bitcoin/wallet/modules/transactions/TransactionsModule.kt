@@ -11,6 +11,7 @@ object TransactionsModule {
 
     interface IViewDelegate {
         fun viewDidLoad()
+        fun onTransactionItemClick(coinCode: String, txHash: String)
     }
 
     interface IInteractor {
@@ -21,7 +22,9 @@ object TransactionsModule {
         fun didRetrieveTransactionRecords(items: List<TransactionRecordViewItem>)
     }
 
-    interface IRouter
+    interface IRouter {
+        fun showTransactionInfo(coinCode: String, txHash: String)
+    }
 
     private var databaseManager: DatabaseManager? = null
 

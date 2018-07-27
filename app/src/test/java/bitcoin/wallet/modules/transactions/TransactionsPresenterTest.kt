@@ -33,4 +33,14 @@ class TransactionsPresenterTest {
 
         verify(view).showTransactionItems(items)
     }
+
+    @Test
+    fun onTransactionItemClick() {
+        val coinCode = "BTC"
+        val txHash = "tx_hash"
+
+        presenter.onTransactionItemClick(coinCode, txHash)
+
+        verify(router).showTransactionInfo(coinCode, txHash)
+    }
 }

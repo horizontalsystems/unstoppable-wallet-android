@@ -5,6 +5,7 @@ import bitcoin.wallet.core.IDatabaseManager
 import bitcoin.wallet.core.managers.CoinManager
 import bitcoin.wallet.entities.BlockchainInfo
 import bitcoin.wallet.entities.CoinValue
+import bitcoin.wallet.entities.ExchangeRate
 import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.entities.coins.bitcoinCash.BitcoinCash
@@ -35,6 +36,7 @@ class TransactionsInteractorTest {
     @Test
     fun retrieveTransactionRecords() {
         whenever(databaseManager.getTransactionRecords()).thenReturn(Observable.empty())
+        whenever(databaseManager.getBlockchainInfos()).thenReturn(Observable.empty())
 
         interactor.retrieveTransactionRecords()
 
@@ -46,6 +48,8 @@ class TransactionsInteractorTest {
         val transactionRecords = listOf<TransactionRecord>()
 
         whenever(databaseManager.getTransactionRecords()).thenReturn(Observable.just(DatabaseChangeset(transactionRecords)))
+        whenever(databaseManager.getBlockchainInfos()).thenReturn(Observable.empty())
+        whenever(databaseManager.getExchangeRates()).thenReturn(Observable.just(DatabaseChangeset(arrayListOf())))
 
         interactor.retrieveTransactionRecords()
 
@@ -66,6 +70,9 @@ class TransactionsInteractorTest {
                     coinCode = "BCH"
                     latestBlockHeight = 140
                 })
+
+        val btcTxAmount = 1.0
+        val bchTxAmount = 1.0
 
         val transactionRecordBTC = TransactionRecord().apply {
             transactionHash = "transactionHash"
@@ -91,10 +98,23 @@ class TransactionsInteractorTest {
             coinCode = "BCH"
         }
 
+
+        val btcExchangeRate = ExchangeRate().apply {
+            code = "BTC"
+            value = 7349.4
+        }
+
+        val bchExchangeRate = ExchangeRate().apply {
+            code = "BCH"
+            value = 843.2
+        }
+
+        val exchangeRates = listOf(btcExchangeRate, bchExchangeRate)
+
         val expectedItems = listOf(
                 TransactionRecordViewItem(
                         "transactionHash",
-                        CoinValue(bitcoin, 1.0),
+                        CoinValue(bitcoin, btcTxAmount),
                         CoinValue(bitcoin, 0.01),
                         "from-address",
                         "to-address",
@@ -102,11 +122,12 @@ class TransactionsInteractorTest {
                         0,
                         now,
                         TransactionRecordViewItem.Status.PENDING,
-                        0
+                        0,
+                        btcTxAmount / 100_000_000.0 * btcExchangeRate.value
                 ),
                 TransactionRecordViewItem(
                         "transactionHash",
-                        CoinValue(bitcoinCash, 1.0),
+                        CoinValue(bitcoinCash, bchTxAmount),
                         CoinValue(bitcoinCash, 0.01),
                         "from-address",
                         "to-address",
@@ -114,7 +135,8 @@ class TransactionsInteractorTest {
                         113,
                         now,
                         TransactionRecordViewItem.Status.SUCCESS,
-                        28
+                        28,
+                        bchTxAmount / 100_000_000.0 * bchExchangeRate.value
                 )
         )
 
@@ -122,6 +144,8 @@ class TransactionsInteractorTest {
         whenever(coinManager.getCoinByCode("BCH")).thenReturn(bitcoinCash)
         whenever(databaseManager.getTransactionRecords()).thenReturn(Observable.just(DatabaseChangeset(listOf(transactionRecordBTC, transactionRecordBCH))))
         whenever(databaseManager.getBlockchainInfos()).thenReturn(Observable.just(DatabaseChangeset(blockchainInfos)))
+
+        whenever(databaseManager.getExchangeRates()).thenReturn(Observable.just(DatabaseChangeset(exchangeRates)))
 
         interactor.retrieveTransactionRecords()
 

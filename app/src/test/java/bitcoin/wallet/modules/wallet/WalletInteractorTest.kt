@@ -2,10 +2,7 @@ package bitcoin.wallet.modules.wallet
 
 import bitcoin.wallet.core.DatabaseChangeset
 import bitcoin.wallet.core.IDatabaseManager
-import bitcoin.wallet.entities.CoinValue
-import bitcoin.wallet.entities.DollarCurrency
-import bitcoin.wallet.entities.ExchangeRate
-import bitcoin.wallet.entities.WalletBalanceItem
+import bitcoin.wallet.entities.*
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.entities.coins.bitcoin.BitcoinUnspentOutput
 import bitcoin.wallet.entities.coins.bitcoinCash.BitcoinCashUnspentOutput
@@ -64,6 +61,10 @@ class WalletInteractorTest {
         whenever(databaseManager.getExchangeRates()).thenReturn(Observable.just(exchangeRates))
         whenever(databaseManager.getBitcoinUnspentOutputs()).thenReturn(Observable.just(bitcoinUnspentOutputs))
         whenever(databaseManager.getBitcoinCashUnspentOutputs()).thenReturn(Observable.just(bitcoinCashUnspentOutputs))
+        whenever(databaseManager.getBalances()).thenReturn(Observable.just(DatabaseChangeset(listOf(Balance().apply {
+            code = "BTC"
+            value = 80_000_000
+        }))))
 
         val expectedWalletBalances = listOf(
                 WalletBalanceItem(CoinValue(Bitcoin(), 0.8), 10_000.0, DollarCurrency())
@@ -79,6 +80,7 @@ class WalletInteractorTest {
         whenever(databaseManager.getExchangeRates()).thenReturn(Observable.just(DatabaseChangeset(listOf())))
         whenever(databaseManager.getBitcoinUnspentOutputs()).thenReturn(Observable.just(bitcoinUnspentOutputs))
         whenever(databaseManager.getBitcoinCashUnspentOutputs()).thenReturn(Observable.just(bitcoinCashUnspentOutputs))
+        whenever(databaseManager.getBalances()).thenReturn(Observable.just(DatabaseChangeset(listOf())))
 
         interactor.notifyWalletBalances()
 
