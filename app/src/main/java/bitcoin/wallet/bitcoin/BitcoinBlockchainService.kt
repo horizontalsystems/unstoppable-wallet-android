@@ -23,6 +23,7 @@ import org.bitcoinj.wallet.UnreadableWalletException
 import org.bitcoinj.wallet.Wallet
 import java.io.File
 import java.io.InputStream
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
 
 
@@ -46,7 +47,7 @@ object BitcoinBlockchainService : IBlockchainService {
             }
         }
 
-    private var txs = mutableMapOf<String, Transaction>()
+    private var txs = ConcurrentHashMap<String, Transaction>()
     private lateinit var wallet: Wallet
     private lateinit var spvBlockStore: SPVBlockStore
     private lateinit var peerGroup: PeerGroup
@@ -186,25 +187,29 @@ object BitcoinBlockchainService : IBlockchainService {
     }
 
     private fun enqueueTransactionUpdate(tx: Transaction) {
-        txs[tx.hashAsString] = tx
-        txs.size.log("Transactions count: ")
+        synchronized(txs) {
+            txs[tx.hashAsString] = tx
+            txs.size.log("Transactions count: ")
 
-        updateTransactionsSubject.onNext(txs)
+            updateTransactionsSubject.onNext(txs)
+        }
     }
 
     private fun dequeueTransactionUpdate() {
-        val transactionRecords = mutableListOf<TransactionRecord>()
-        txs.forEach {
-            val tx = it.value
+        synchronized(txs) {
+            val transactionRecords = mutableListOf<TransactionRecord>()
+            txs.forEach {
+                val tx = it.value
 
-            // collect items for bulk write/update
-            transactionRecords.add(newTransactionRecord(tx))
+                // collect items for bulk write/update
+                transactionRecords.add(newTransactionRecord(tx))
 
-            // remove item from queue
-            txs.remove(tx.hashAsString)
+                // remove item from queue
+                txs.remove(tx.hashAsString)
+            }
+
+            storage.insertOrUpdateTransactions(transactionRecords)
         }
-
-        storage.insertOrUpdateTransactions(transactionRecords)
     }
 
     private fun newTransactionRecord(tx: Transaction): TransactionRecord {
