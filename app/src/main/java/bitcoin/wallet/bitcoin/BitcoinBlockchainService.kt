@@ -5,7 +5,6 @@ import bitcoin.wallet.blockchain.BlockchainStorage
 import bitcoin.wallet.blockchain.IBlockchainService
 import bitcoin.wallet.blockchain.InvalidAddress
 import bitcoin.wallet.blockchain.NotEnoughFundsException
-import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.entities.Balance
 import bitcoin.wallet.entities.BlockchainInfo
 import bitcoin.wallet.entities.TransactionRecord
@@ -29,7 +28,6 @@ import java.util.concurrent.TimeUnit
 
 object BitcoinBlockchainService : IBlockchainService {
 
-    var seedCode: String = ""
     var checkpoints: InputStream? = null
 
     private lateinit var filesDir: File
@@ -76,10 +74,8 @@ object BitcoinBlockchainService : IBlockchainService {
         updateLatestBlockHeight(0)
     }
 
-    fun start() {
-        seedCode = Factory.preferencesManager.savedWords?.joinToString(" ") ?: throw Exception("No saved words")
-
-        startWallet()
+    fun start(words: List<String>) {
+        startWallet(words)
         startPeerGroup()
     }
 
@@ -111,7 +107,8 @@ object BitcoinBlockchainService : IBlockchainService {
         }
     }
 
-    private fun startWallet() {
+    private fun startWallet(words: List<String>) {
+        val seedCode = words.joinToString(" ")
         val walletFilename = "${params.paymentProtocolId}-${Integer.toHexString(seedCode.hashCode())}.dat"
         val walletFile = File(filesDir, walletFilename)
 
