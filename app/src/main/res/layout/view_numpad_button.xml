@@ -9,7 +9,6 @@
     android:layout_margin="5dp"
     >
 
-
     <TextView
         android:id="@+id/txtNumPadNumber"
         android:layout_width="wrap_content"
@@ -17,7 +16,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:fontFamily="@font/noto_sans_bold"
-        android:textColor="@color/white"
+        android:textColor="?NumpadNumberColor"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,7 +33,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:fontFamily="@font/noto_sans"
-        android:textColor="@color/steel_grey"
+        android:textColor="?NumpadLettersColor"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +47,7 @@
         android:id="@+id/imgBackSpace"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/round_backspace_24px"
+        android:src="?NumpadDeleteButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

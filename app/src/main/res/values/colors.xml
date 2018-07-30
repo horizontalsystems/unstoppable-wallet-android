@@ -14,6 +14,7 @@
     <color name="yellow_pressed">#e09d0b</color>
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
+    <color name="white_50">#80ffffff</color>
     <color name="red_error">#deff3434</color>
     <color name="red_warning">#ff5e3a</color>
     <color name="bars_color">#f9f9f9</color>
