@@ -95,17 +95,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setStatusBarIconColor(darkMode: Boolean) {
-        var flags = window.decorView.systemUiVisibility // get current flag
-        if (darkMode) {
-            //clear Light Status Bar
-            flags = flags xor View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR // use XOR here for remove LIGHT_STATUS_BAR from flags
-            window.decorView.systemUiVisibility = flags
+        var flags = window.decorView.systemUiVisibility
+        flags = if (darkMode) {
+            flags xor View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR // remove flag
         } else {
-            //set Light Status Bar
-            flags = flags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-            window.decorView.systemUiVisibility = flags
+            flags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         }
-        window.statusBarColor = LayoutHelper.getAttrColor(R.attr.StatusBarColor, theme)
+        window.decorView.systemUiVisibility = flags
     }
 
 }

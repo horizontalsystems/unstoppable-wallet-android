@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- App themable color names -->
     <attr name="NumpadNumberColor" format="reference|color" />
@@ -54,7 +54,7 @@
     <style name="LightModeAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/bars_color</item>
-        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorPrimaryDark">@color/bars_color</item>
         <item name="colorAccent">@color/yellow_crypto</item>
         <item name="buttonStyle">@style/Button</item>
         <item name="android:colorBackground">@color/white</item>
