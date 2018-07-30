@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:selectableItemBackground"
+    android:background="@drawable/clickable_setting_item_bg"
     >
 
     <ImageView
@@ -32,7 +32,7 @@
         android:layout_marginTop="8dp"
         android:fontFamily="@font/noto_sans"
         android:text="App Version"
-        android:textColor="@color/color_settings_title"
+        android:textColor="?TitleColor"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/setting_icon"
@@ -52,6 +52,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:saveEnabled="false"
         />
 
     <TextView

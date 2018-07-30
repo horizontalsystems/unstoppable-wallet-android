@@ -9,7 +9,7 @@
     android:layout_marginTop="8dp"
     android:paddingBottom="8dp"
     android:paddingTop="12dp"
-    android:background="@drawable/coin_holder_background"
+    android:background="@drawable/clickable_coin_holder_background"
     android:orientation="vertical"
     >
 
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:fontFamily="@font/noto_sans_bold"
-        android:textColor="@color/white"
+        android:textColor="?BallanceCoinNameColor"
         android:textSize="17sp"
         tools:text="Bitcoin"
         />
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/noto_sans_bold"
-            android:textColor="@color/white"
+            android:textColor="?BallanceCoinAmountColor"
             android:textSize="17sp"
             tools:text="0.000078 BTC"
             />

@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import bitcoin.wallet.R
 import bitcoin.wallet.core.App
+import bitcoin.wallet.core.managers.Factory
 import kotlinx.android.synthetic.main.activity_unlock.*
 
 class UnlockActivity : AppCompatActivity(), NumPadItemsAdapter.Listener {
@@ -24,6 +25,7 @@ class UnlockActivity : AppCompatActivity(), NumPadItemsAdapter.Listener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(if (Factory.preferencesManager.isDarkModeEnabled) R.style.DarkModeAppTheme else R.style.LightModeAppTheme)
 
         setContentView(R.layout.activity_unlock)
 

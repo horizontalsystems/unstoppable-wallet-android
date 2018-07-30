@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- base colors -->
-    <color name="colorPrimary">#282b35</color>
-    <color name="colorPrimaryDark">#000000</color>
     <color name="dark">#282b35</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="lightBackground">#efeff4</color>
     <color name="green_pressed">#1ba65E</color>
     <color name="green_crypto">#1ebf6b</color>
     <color name="grey">#8a8a8f</color>
@@ -15,13 +14,19 @@
     <color name="yellow_pressed">#e09d0b</color>
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
+    <color name="white_50">#80ffffff</color>
     <color name="red_error">#deff3434</color>
     <color name="red_warning">#ff5e3a</color>
     <color name="bars_color">#f9f9f9</color>
     <!-- eof base colors -->
 
+    <color name="navigation_bar">?attr/BottomNavigationBackgroundColor</color>
+
     <color name="appBackground">@color/dark</color>
-    <color name="color_settings_title">@color/bars_color</color>
     <color name="ripple_white">#b2ffffff</color>
+    <color name="ripple_black">#1f000000</color>
+    <color name="status_bar_light_color">#4c000000</color>
+
+    <color name="transparent">#00000000</color>
 
 </resources>

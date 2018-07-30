@@ -1,17 +1,86 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- App themable color names -->
+    <attr name="NumpadNumberColor" format="reference|color" />
+    <attr name="NumpadLettersColor" format="reference|color" />
+    <attr name="BallanceCoinNameColor" format="reference|color" />
+    <attr name="BallanceCoinAmountColor" format="reference|color" />
+    <attr name="TitleColor" format="reference|color" />
+    <attr name="SettingBackgroundColor" format="reference|color" />
+    <attr name="WalletBackgroundColor" format="reference|color" />
+    <attr name="TransactionsBackgroundColor" format="reference|color" />
+    <attr name="TransactionItemBackgroundColor" format="reference|color" />
+    <attr name="SettingItemBackgroundColor" format="reference|color" />
+    <attr name="CoinItemBackgroundColor" format="reference|color" />
+    <attr name="FilterButtonBackgroundColor" format="reference|color" />
+    <attr name="BottomNavigationBackgroundColor" format="reference|color" />
+    <attr name="StatusBarColor" format="reference|color" />
+    <attr name="RippleColor" format="reference|color" />
+    <attr name="NumpadDeleteButton" format="reference" />
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="DarkModeAppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/dark</item>
         <item name="colorPrimaryDark">@color/black</item>
         <item name="colorAccent">@color/yellow_crypto</item>
         <item name="buttonStyle">@style/Button</item>
         <item name="android:colorBackground">@color/appBackground</item>
         <item name="android:navigationBarColor">@color/black</item>
+        <item name="android:statusBarColor">@color/dark</item>
+        <item name="android:windowLightStatusBar">false</item>
+\
+        <item name="colorControlNormal">@color/grey</item>
+        <item name="colorControlActivated">@color/yellow_crypto</item>
+
+        <item name="NumpadNumberColor">@color/white</item>
+        <item name="NumpadLettersColor">@color/white_50</item>
+        <item name="BallanceCoinNameColor">@color/white</item>
+        <item name="BallanceCoinAmountColor">@color/white</item>
+        <item name="TitleColor">@color/white</item>
+        <item name="SettingBackgroundColor">@color/dark</item>
+        <item name="WalletBackgroundColor">@color/dark</item>
+        <item name="TransactionsBackgroundColor">@color/dark</item>
+        <item name="TransactionItemBackgroundColor">@color/dark</item>
+        <item name="CoinItemBackgroundColor">@color/grey_20</item>
+        <item name="FilterButtonBackgroundColor">@color/appBackground</item>
+        <item name="SettingItemBackgroundColor">@color/grey_20</item>
+        <item name="BottomNavigationBackgroundColor">@color/dark</item>
+        <item name="StatusBarColor">@color/dark</item>
+        <item name="RippleColor">@color/ripple_white</item>
+        <item name="NumpadDeleteButton">@drawable/round_backspace_24px</item>
+    </style>
+
+    <style name="LightModeAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/bars_color</item>
+        <item name="colorPrimaryDark">@color/bars_color</item>
+        <item name="colorAccent">@color/yellow_crypto</item>
+        <item name="buttonStyle">@style/Button</item>
+        <item name="android:colorBackground">@color/white</item>
+        <item name="android:navigationBarColor">@color/black</item>
+        <item name="android:statusBarColor">@color/bars_color</item>
+        <item name="android:windowLightStatusBar">true</item>
 
         <item name="colorControlNormal">@color/grey</item>
         <item name="colorControlActivated">@color/yellow_crypto</item>
+
+        <item name="NumpadNumberColor">@color/dark</item>
+        <item name="NumpadLettersColor">@color/dark</item>
+        <item name="BallanceCoinNameColor">@color/dark</item>
+        <item name="BallanceCoinAmountColor">@color/dark</item>
+        <item name="TitleColor">@color/dark</item>
+        <item name="SettingBackgroundColor">@color/lightBackground</item>
+        <item name="WalletBackgroundColor">@color/lightBackground</item>
+        <item name="TransactionsBackgroundColor">@color/lightBackground</item>
+        <item name="TransactionItemBackgroundColor">@color/white</item>
+        <item name="CoinItemBackgroundColor">@color/white</item>
+        <item name="FilterButtonBackgroundColor">@color/white</item>
+        <item name="SettingItemBackgroundColor">@color/white</item>
+        <item name="BottomNavigationBackgroundColor">@color/bars_color</item>
+        <item name="StatusBarColor">@color/bars_color</item>
+        <item name="RippleColor">@color/ripple_black</item>
+        <item name="NumpadDeleteButton">@drawable/round_backspace_dark_24px</item>
     </style>
 
     <style name="Button" parent="Widget.AppCompat.Button.Borderless">
@@ -69,7 +138,7 @@
 
     <style name="TabTitle">
         <item name="android:fontFamily">@font/noto_sans_bold</item>
-        <item name="android:textColor">#ffffff</item>
+        <item name="android:textColor">?TitleColor</item>
         <item name="android:textSize">34sp</item>
     </style>
 

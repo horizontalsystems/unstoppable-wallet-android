@@ -7,14 +7,18 @@ import android.security.keystore.UserNotAuthenticatedException
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import bitcoin.wallet.LauncherActivity
 import bitcoin.wallet.R
 import bitcoin.wallet.blockchain.BlockchainManager
 import bitcoin.wallet.core.App
+import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.core.security.EncryptionManager
+import bitcoin.wallet.viewHelpers.LayoutHelper
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import kotlinx.android.synthetic.main.activity_dashboard.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,6 +26,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val darkMode = Factory.preferencesManager.isDarkModeEnabled
+        setTheme(if (darkMode) R.style.DarkModeAppTheme else R.style.LightModeAppTheme)
+        if (savedInstanceState != null) {
+            setStatusBarIconColor(darkMode)
+        }
+
         setContentView(R.layout.activity_dashboard)
 
         adapter = MainTabsAdapter(supportFragmentManager)
@@ -30,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         viewPager.offscreenPageLimit = 2
         viewPager.setPagingEnabled(true)
 
-        bottomNavigation.defaultBackgroundColor = ContextCompat.getColor(this, R.color.appBackground)
+        bottomNavigation.defaultBackgroundColor = LayoutHelper.getAttrColor(R.attr.BottomNavigationBackgroundColor, theme)
         bottomNavigation.accentColor = ContextCompat.getColor(this, R.color.yellow_crypto)
         bottomNavigation.inactiveColor = ContextCompat.getColor(this, R.color.grey)
 
@@ -81,6 +92,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         App.promptPin = false
+    }
+
+    private fun setStatusBarIconColor(darkMode: Boolean) {
+        var flags = window.decorView.systemUiVisibility
+        flags = if (darkMode) {
+            flags xor View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR // remove flag
+        } else {
+            flags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
+        window.decorView.systemUiVisibility = flags
     }
 
 }

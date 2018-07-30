@@ -1,6 +1,5 @@
 package bitcoin.wallet.modules.settings
 
-import android.app.Fragment
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
 import bitcoin.wallet.R
+import bitcoin.wallet.core.managers.Factory
 import kotlinx.android.synthetic.main.fragment_settings.*
 
 
@@ -52,19 +52,18 @@ class SettingsFragment : android.support.v4.app.Fragment() {
         }
 
         darkMode.apply {
-            switchOnCheckedChangeListener = null
-            switchIsChecked = true
+            switchIsChecked = Factory.preferencesManager.isDarkModeEnabled
             setOnClickListener {
                 switchToggle()
             }
 
             switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                Log.e("AAA", "darkMode $isChecked")
+                Factory.preferencesManager.isDarkModeEnabled = isChecked
+                activity?.recreate()
             }
         }
 
         pushNotifications.apply {
-            switchOnCheckedChangeListener = null
             switchIsChecked = true
             setOnClickListener {
                 switchToggle()

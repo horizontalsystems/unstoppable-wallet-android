@@ -41,7 +41,7 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
             }
         })
 
-        viewModel.showTransactionInfoLifeEvent.observe(this, Observer { pair ->
+        viewModel.showTransactionInfoLiveEvent.observe(this, Observer { pair ->
             pair?.apply {
                 val (coinCode, txHash) = this
                 activity?.let { TransactionInfoModule.start(it, coinCode, txHash) }

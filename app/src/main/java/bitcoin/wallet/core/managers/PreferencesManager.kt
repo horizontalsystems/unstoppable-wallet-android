@@ -24,4 +24,11 @@ class PreferencesManager(private val encryptionManager: IEncryptionManager) : IL
     override fun clearAll() {
         App.preferences.edit().clear().apply()
     }
+
+    private val DARK_MODE_ENABLED = "dark_mode_enabled"
+
+    var isDarkModeEnabled: Boolean
+        get() = App.preferences.getBoolean(DARK_MODE_ENABLED, true)
+        set(value) = App.preferences.edit().putBoolean(DARK_MODE_ENABLED, value).apply()
+
 }
