@@ -35,6 +35,18 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <TextView
+        android:id="@+id/emptyListText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/tx_info_empty_list"
+        android:layout_marginTop="48dp"
+        android:layout_marginBottom="48dp"
+        android:textAlignment="center"
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerTransactions"
         android:layout_width="match_parent"

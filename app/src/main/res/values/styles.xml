@@ -75,7 +75,7 @@
         <item name="TransactionsBackgroundColor">@color/lightBackground</item>
         <item name="TransactionItemBackgroundColor">@color/white</item>
         <item name="CoinItemBackgroundColor">@color/white</item>
-        <item name="FilterButtonBackgroundColor">@color/white</item>
+        <item name="FilterButtonBackgroundColor">@color/bars_color</item>
         <item name="SettingItemBackgroundColor">@color/white</item>
         <item name="BottomNavigationBackgroundColor">@color/bars_color</item>
         <item name="StatusBarColor">@color/bars_color</item>

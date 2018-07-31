@@ -83,4 +83,6 @@
     <string name="tx_info_bottom_sheet_more">More</string>
     <string name="tx_info_bottom_sheet_less">Less</string>
 
+    <string name="tx_info_empty_list">You don\’t have any pending or past transaction yet</string>
+
 </resources>
