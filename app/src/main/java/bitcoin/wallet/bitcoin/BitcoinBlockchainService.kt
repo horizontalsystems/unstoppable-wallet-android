@@ -37,6 +37,7 @@ object BitcoinBlockchainService : IBlockchainService {
     private var updateBlockchainHeightSubject = PublishSubject.create<Long>()
     private var updateTransactionsSubject = PublishSubject.create<Map<String, Transaction>>()
 
+    // Sets block-height to subject only if it greater than previous one
     private var latestBlockHeight = 0
         set(value) {
             if (value > field) {
@@ -71,7 +72,7 @@ object BitcoinBlockchainService : IBlockchainService {
 
     fun initNewWallet() {
         updateBalance(0)
-        updateLatestBlockHeight(0)
+        updateBlockHeight(0)
     }
 
     fun start(words: List<String>) {
@@ -99,11 +100,7 @@ object BitcoinBlockchainService : IBlockchainService {
         }
 
         updateBlockchainHeightSubject.sample(30, TimeUnit.SECONDS).subscribe {
-            storage.updateBlockchainInfo(
-                    BlockchainInfo().apply {
-                        coinCode = "BTC"
-                        latestBlockHeight = it
-                    })
+            updateBlockHeight(it)
         }
     }
 
@@ -148,7 +145,7 @@ object BitcoinBlockchainService : IBlockchainService {
         val spvBlockChain = BlockChain(params, wallet, spvBlockStore)
 
         spvBlockChain.addNewBestBlockListener {
-            updateLatestBlockHeight(it.height)
+            latestBlockHeight = it.height
         }
 
         peerGroup = PeerGroup(params, spvBlockChain)
@@ -156,7 +153,7 @@ object BitcoinBlockchainService : IBlockchainService {
         peerGroup.addPeerDiscovery(DnsDiscovery(params))
         peerGroup.fastCatchupTimeSecs = wallet.earliestKeyCreationTime
         peerGroup.addConnectedEventListener { peer, peerCount ->
-            updateLatestBlockHeight(peerGroup.mostCommonChainHeight)
+            latestBlockHeight = peerGroup.mostCommonChainHeight
         }
 
         peerGroup.addOnTransactionBroadcastListener { _, tx ->
@@ -172,15 +169,19 @@ object BitcoinBlockchainService : IBlockchainService {
         }, MoreExecutors.directExecutor())
     }
 
-    private fun updateLatestBlockHeight(height: Int) {
-        latestBlockHeight = height
-    }
-
     private fun updateBalance(balance: Long) {
         storage.updateBalance(Balance().apply {
             code = "BTC"
             value = balance
         })
+    }
+
+    private fun updateBlockHeight(height: Long) {
+        storage.updateBlockchainInfo(
+                BlockchainInfo().apply {
+                    coinCode = "BTC"
+                    latestBlockHeight = height
+                })
     }
 
     private fun enqueueTransactionUpdate(tx: Transaction) {
