@@ -20,6 +20,7 @@ import org.bitcoinj.utils.BriefLogFormatter
 import org.bitcoinj.wallet.UnreadableWalletException
 import org.bitcoinj.wallet.Wallet
 import java.io.File
+import java.io.IOException
 import java.io.InputStream
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
@@ -27,7 +28,7 @@ import java.util.concurrent.TimeUnit
 
 object BitcoinBlockchainService : IBlockchainService {
 
-    var checkpoints: InputStream? = null
+    lateinit var checkpoints: InputStream
 
     private lateinit var filesDir: File
     private lateinit var storage: BlockchainStorage
@@ -63,10 +64,13 @@ object BitcoinBlockchainService : IBlockchainService {
             MainNetParams.get()
         }
 
-        checkpoints = assetManager.open("${params.id}.checkpoints.txt")
+        try {
+            checkpoints = assetManager.open("${params.id}.checkpoints.txt")
+        } catch (e: IOException) {
+            checkpoints = CheckpointManager.openStream(params)
+        }
 
-        val chainFile = File(dir, "${params.paymentProtocolId}.spvchain")
-        spvBlockStore = SPVBlockStore(params, chainFile)
+        spvBlockStore = SPVBlockStore(params, File(dir, "${params.paymentProtocolId}.spvchain"))
 
         observeSubjects()
     }
@@ -133,10 +137,6 @@ object BitcoinBlockchainService : IBlockchainService {
         }
 
         if (wallet.lastBlockSeenHeight <= 0) {
-            if (checkpoints == null) {
-                checkpoints = CheckpointManager.openStream(params)
-            }
-
             CheckpointManager.checkpoint(params, checkpoints, spvBlockStore, wallet.earliestKeyCreationTime)
             wallet.notifyNewBestBlock(spvBlockStore.chainHead)
         }
