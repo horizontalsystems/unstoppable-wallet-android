@@ -74,6 +74,34 @@ class DatabaseManager : IDatabaseManager {
         }
     }
 
+    override fun updateBlockchainHeight(coinCode: String, height: Long) {
+        var blockchainInfo = realm.where(BlockchainInfo::class.java).equalTo("coinCode", coinCode).findFirst()
+
+        if (blockchainInfo == null) {
+            blockchainInfo = BlockchainInfo().apply { this.coinCode = coinCode }
+        }
+
+        realm.executeTransaction {
+            blockchainInfo.latestBlockHeight = height
+            it.insertOrUpdate(blockchainInfo)
+
+        }
+    }
+
+    override fun updateBlockchainSyncing(coinCode: String, syncing: Boolean) {
+        var blockchainInfo = realm.where(BlockchainInfo::class.java).equalTo("coinCode", coinCode).findFirst()
+
+        if (blockchainInfo == null) {
+            blockchainInfo = BlockchainInfo().apply { this.coinCode = coinCode }
+        }
+
+        realm.executeTransaction {
+            blockchainInfo.syncing = syncing
+            it.insertOrUpdate(blockchainInfo)
+
+        }
+    }
+
     override fun updateBalance(balance: Balance) {
         realm.executeTransactionAsync {
             it.insertOrUpdate(balance)

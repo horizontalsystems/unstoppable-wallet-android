@@ -30,13 +30,13 @@ class WalletPresenterTest {
     @Test
     fun didFetchWalletBalances() {
         val walletBalances: List<WalletBalanceItem> = listOf(
-                WalletBalanceItem(CoinValue(Bitcoin(), 0.5), 5000.0, DollarCurrency()),
-                WalletBalanceItem(CoinValue(Ethereum(), 1.0), 1000.0, DollarCurrency())
+                WalletBalanceItem(CoinValue(Bitcoin(), 0.5), 5000.0, DollarCurrency(), true),
+                WalletBalanceItem(CoinValue(Ethereum(), 1.0), 1000.0, DollarCurrency(), false)
         )
 
         val expectedViewItems = listOf(
-                WalletBalanceViewItem(CoinValue(Bitcoin(), 0.5), CurrencyValue(DollarCurrency(), 5000.0), CurrencyValue(DollarCurrency(), 2500.0)),
-                WalletBalanceViewItem(CoinValue(Ethereum(), 1.0), CurrencyValue(DollarCurrency(), 1000.0), CurrencyValue(DollarCurrency(), 1000.0))
+                WalletBalanceViewItem(CoinValue(Bitcoin(), 0.5), CurrencyValue(DollarCurrency(), 5000.0), CurrencyValue(DollarCurrency(), 2500.0), true),
+                WalletBalanceViewItem(CoinValue(Ethereum(), 1.0), CurrencyValue(DollarCurrency(), 1000.0), CurrencyValue(DollarCurrency(), 1000.0), false)
         )
 
         val expectedTotalBalance = CurrencyValue(DollarCurrency(), 3500.0)

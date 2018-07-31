@@ -6,7 +6,6 @@ import bitcoin.wallet.blockchain.IBlockchainService
 import bitcoin.wallet.blockchain.InvalidAddress
 import bitcoin.wallet.blockchain.NotEnoughFundsException
 import bitcoin.wallet.entities.Balance
-import bitcoin.wallet.entities.BlockchainInfo
 import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.log
 import com.google.common.util.concurrent.MoreExecutors
@@ -36,6 +35,8 @@ object BitcoinBlockchainService : IBlockchainService {
 
     private var updateBlockchainHeightSubject = PublishSubject.create<Long>()
     private var updateTransactionsSubject = PublishSubject.create<Map<String, Transaction>>()
+
+    private const val BTC = "BTC"
 
     // Sets block-height to subject only if it greater than previous one
     private var latestBlockHeight = 0
@@ -165,23 +166,29 @@ object BitcoinBlockchainService : IBlockchainService {
         }
 
         peerGroup.startAsync().addListener(Runnable {
-            peerGroup.startBlockChainDownload(DownloadProgressTracker())
+            peerGroup.startBlockChainDownload(object : DownloadProgressTracker() {
+                override fun startDownload(blocks: Int) {
+                    super.startDownload(blocks)
+                    storage.updateBlockchainSyncing(BTC, true)
+                }
+
+                override fun doneDownload() {
+                    super.doneDownload()
+                    storage.updateBlockchainSyncing(BTC, false)
+                }
+            })
         }, MoreExecutors.directExecutor())
     }
 
     private fun updateBalance(balance: Long) {
         storage.updateBalance(Balance().apply {
-            code = "BTC"
+            code = BTC
             value = balance
         })
     }
 
     private fun updateBlockHeight(height: Long) {
-        storage.updateBlockchainInfo(
-                BlockchainInfo().apply {
-                    coinCode = "BTC"
-                    latestBlockHeight = height
-                })
+        storage.updateBlockchainHeight(BTC, height)
     }
 
     private fun enqueueTransactionUpdate(tx: Transaction) {
@@ -213,7 +220,7 @@ object BitcoinBlockchainService : IBlockchainService {
     private fun newTransactionRecord(tx: Transaction): TransactionRecord {
         return TransactionRecord().apply {
             transactionHash = tx.hashAsString
-            coinCode = "BTC"
+            coinCode = BTC
             amount = tx.getValue(wallet).value
             incoming = amount > 0
             timestamp = tx.updateTime.time

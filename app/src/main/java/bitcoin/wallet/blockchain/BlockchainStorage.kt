@@ -2,7 +2,6 @@ package bitcoin.wallet.blockchain
 
 import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.entities.Balance
-import bitcoin.wallet.entities.BlockchainInfo
 import bitcoin.wallet.entities.ExchangeRate
 import bitcoin.wallet.entities.TransactionRecord
 
@@ -14,9 +13,15 @@ object BlockchainStorage {
         databaseManager.close()
     }
 
-    fun updateBlockchainInfo(blockchainInfo: BlockchainInfo) {
+    fun updateBlockchainHeight(coinCode: String, height: Long) {
         val databaseManager = Factory.databaseManager
-        databaseManager.updateBlockchainInfo(blockchainInfo)
+        databaseManager.updateBlockchainHeight(coinCode, height)
+        databaseManager.close()
+    }
+
+    fun updateBlockchainSyncing(coinCode: String, syncing: Boolean) {
+        val databaseManager = Factory.databaseManager
+        databaseManager.updateBlockchainSyncing(coinCode, syncing)
         databaseManager.close()
     }
 
