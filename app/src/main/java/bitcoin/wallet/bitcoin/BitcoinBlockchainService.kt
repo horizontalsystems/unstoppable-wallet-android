@@ -5,7 +5,6 @@ import bitcoin.wallet.blockchain.BlockchainStorage
 import bitcoin.wallet.blockchain.IBlockchainService
 import bitcoin.wallet.blockchain.InvalidAddress
 import bitcoin.wallet.blockchain.NotEnoughFundsException
-import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.entities.Balance
 import bitcoin.wallet.entities.BlockchainInfo
 import bitcoin.wallet.entities.TransactionRecord
@@ -29,7 +28,6 @@ import java.util.concurrent.TimeUnit
 
 object BitcoinBlockchainService : IBlockchainService {
 
-    var seedCode: String = ""
     var checkpoints: InputStream? = null
 
     private lateinit var filesDir: File
@@ -39,6 +37,7 @@ object BitcoinBlockchainService : IBlockchainService {
     private var updateBlockchainHeightSubject = PublishSubject.create<Long>()
     private var updateTransactionsSubject = PublishSubject.create<Map<String, Transaction>>()
 
+    // Sets block-height to subject only if it greater than previous one
     private var latestBlockHeight = 0
         set(value) {
             if (value > field) {
@@ -73,13 +72,11 @@ object BitcoinBlockchainService : IBlockchainService {
 
     fun initNewWallet() {
         updateBalance(0)
-        updateLatestBlockHeight(0)
+        updateBlockHeight(0)
     }
 
-    fun start() {
-        seedCode = Factory.preferencesManager.savedWords?.joinToString(" ") ?: throw Exception("No saved words")
-
-        startWallet()
+    fun start(words: List<String>) {
+        startWallet(words)
         startPeerGroup()
     }
 
@@ -103,15 +100,12 @@ object BitcoinBlockchainService : IBlockchainService {
         }
 
         updateBlockchainHeightSubject.sample(30, TimeUnit.SECONDS).subscribe {
-            storage.updateBlockchainInfo(
-                    BlockchainInfo().apply {
-                        coinCode = "BTC"
-                        latestBlockHeight = it
-                    })
+            updateBlockHeight(it)
         }
     }
 
-    private fun startWallet() {
+    private fun startWallet(words: List<String>) {
+        val seedCode = words.joinToString(" ")
         val walletFilename = "${params.paymentProtocolId}-${Integer.toHexString(seedCode.hashCode())}.dat"
         val walletFile = File(filesDir, walletFilename)
 
@@ -151,7 +145,7 @@ object BitcoinBlockchainService : IBlockchainService {
         val spvBlockChain = BlockChain(params, wallet, spvBlockStore)
 
         spvBlockChain.addNewBestBlockListener {
-            updateLatestBlockHeight(it.height)
+            latestBlockHeight = it.height
         }
 
         peerGroup = PeerGroup(params, spvBlockChain)
@@ -159,7 +153,7 @@ object BitcoinBlockchainService : IBlockchainService {
         peerGroup.addPeerDiscovery(DnsDiscovery(params))
         peerGroup.fastCatchupTimeSecs = wallet.earliestKeyCreationTime
         peerGroup.addConnectedEventListener { peer, peerCount ->
-            updateLatestBlockHeight(peerGroup.mostCommonChainHeight)
+            latestBlockHeight = peerGroup.mostCommonChainHeight
         }
 
         peerGroup.addOnTransactionBroadcastListener { _, tx ->
@@ -175,15 +169,19 @@ object BitcoinBlockchainService : IBlockchainService {
         }, MoreExecutors.directExecutor())
     }
 
-    private fun updateLatestBlockHeight(height: Int) {
-        latestBlockHeight = height
-    }
-
     private fun updateBalance(balance: Long) {
         storage.updateBalance(Balance().apply {
             code = "BTC"
             value = balance
         })
+    }
+
+    private fun updateBlockHeight(height: Long) {
+        storage.updateBlockchainInfo(
+                BlockchainInfo().apply {
+                    coinCode = "BTC"
+                    latestBlockHeight = height
+                })
     }
 
     private fun enqueueTransactionUpdate(tx: Transaction) {

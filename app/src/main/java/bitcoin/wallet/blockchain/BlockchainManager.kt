@@ -19,7 +19,9 @@ object BlockchainManager {
     }
 
     fun startServices() {
-        BitcoinBlockchainService.start()
+        localStorage.savedWords?.let {
+            BitcoinBlockchainService.start(it)
+        }
     }
 
     @Throws(UserNotAuthenticatedException::class)
