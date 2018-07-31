@@ -17,7 +17,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/noto_sans_bold"
-        android:textColor="@color/grey"
+        android:textColor="@color/dark"
         android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,20 +54,13 @@
         tools:text="1AYHMDV1XR8HWaReC3Rr4Qv79vJiSR8RCU"
         />
 
-    <TextView
+    <Button
         android:id="@+id/txtCopy"
-        android:layout_width="match_parent"
+        style="@style/ButtonGrey_4"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="50dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="12dp"
-        android:clickable="true"
-        android:fontFamily="@font/noto_sans_bold"
-        android:letterSpacing="0"
+        android:layout_marginTop="8dp"
         android:text="@string/receive_bottom_sheet_copy"
-        android:textColor="@color/clickable_green"
-        android:textSize="17sp"
-        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtAddress"
