@@ -12,10 +12,14 @@ object AnimationHelper {
         val targetHeight = v.measuredHeight
 
         v.visibility = View.VISIBLE
+        v.alpha = 0.3f
         val a = object : Animation() {
             override fun applyTransformation(interpolatedTime: Float, t: Transformation) {
                 v.layoutParams.height = if (interpolatedTime == 1f) targetHeight else (targetHeight * interpolatedTime).toInt()
                 v.requestLayout()
+                if (interpolatedTime > 0.3f) {
+                    v.alpha = interpolatedTime
+                }
             }
 
             override fun willChangeBounds(): Boolean {
@@ -38,6 +42,9 @@ object AnimationHelper {
                 } else {
                     v.layoutParams.height = initialHeight - (initialHeight * interpolatedTime).toInt()
                     v.requestLayout()
+                    if (interpolatedTime > 0.3f) {
+                        v.alpha = (1 - interpolatedTime)*2
+                    }
                 }
             }
 
