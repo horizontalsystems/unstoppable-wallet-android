@@ -21,27 +21,15 @@ object BitcoinBlockchainService : IBlockchainService {
     private lateinit var storage: BlockchainStorage
     private lateinit var bitcoinJWrapper: BitcoinJWrapper
 
-    private var updateBlockchainHeightSubject = PublishSubject.create<Long>()
     private var updateTransactionsSubject = PublishSubject.create<Map<String, Transaction>>()
 
     private const val BTC = "BTC"
-
-    // Sets block-height to subject only if it greater than previous one
-    private var latestBlockHeight = 0
-        set(value) {
-            if (value > field) {
-                field = value
-                updateBlockchainHeightSubject.onNext(value.toLong())
-            }
-        }
 
     private var txs = ConcurrentHashMap<String, Transaction>()
 
     fun init(bitcoinJWrapper: BitcoinJWrapper, storage: BlockchainStorage) {
         this.storage = storage
         this.bitcoinJWrapper = bitcoinJWrapper
-
-        observeSubjects()
     }
 
     fun initNewWallet() {
@@ -50,13 +38,17 @@ object BitcoinBlockchainService : IBlockchainService {
     }
 
     fun start(words: List<String>) {
+        updateTransactionsSubject.sample(2, TimeUnit.SECONDS).subscribe {
+            dequeueTransactionUpdate()
+        }
+
         bitcoinJWrapper.prepareEnvForWallet(words, object : BitcoinChangeListener {
             override fun onBalanceChange(value: Long) {
                 updateBalance(value)
             }
 
             override fun onNewTransaction(tx: Transaction) {
-                storage.insertOrUpdateTransactions(listOf(newTransactionRecord(tx)))
+                enqueueTransactionUpdate(tx)
             }
 
             override fun onTransactionConfidenceChange(tx: Transaction) {
@@ -64,7 +56,7 @@ object BitcoinBlockchainService : IBlockchainService {
             }
 
             override fun onBestChainHeightChange(value: Int) {
-                latestBlockHeight = value
+                updateBlockHeight(value.toLong())
             }
         })
 
@@ -89,16 +81,6 @@ object BitcoinBlockchainService : IBlockchainService {
         throw NotEnoughFundsException(e)
     } catch (e: AddressFormatException) {
         throw InvalidAddress(e)
-    }
-
-    private fun observeSubjects() {
-        updateTransactionsSubject.sample(30, TimeUnit.SECONDS).subscribe {
-            dequeueTransactionUpdate()
-        }
-
-        updateBlockchainHeightSubject.sample(30, TimeUnit.SECONDS).subscribe {
-            updateBlockHeight(it)
-        }
     }
 
     private fun updateBalance(balance: Long) {
