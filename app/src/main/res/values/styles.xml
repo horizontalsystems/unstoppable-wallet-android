@@ -11,9 +11,7 @@
     <attr name="TransactionsBackgroundColor" format="reference|color" />
     <attr name="TransactionItemBackgroundColor" format="reference|color" />
     <attr name="SettingItemBackgroundColor" format="reference|color" />
-    <attr name="SettingItemBackgroundColorPressed" format="reference|color" />
     <attr name="CoinItemBackgroundColor" format="reference|color" />
-    <attr name="CoinItemBackgroundColorPressed" format="reference|color" />
     <attr name="FilterButtonBackgroundColor" format="reference|color" />
     <attr name="BottomNavigationBackgroundColor" format="reference|color" />
     <attr name="StatusBarColor" format="reference|color" />
@@ -46,11 +44,9 @@
         <item name="WalletBackgroundColor">@color/dark</item>
         <item name="TransactionsBackgroundColor">@color/dark</item>
         <item name="TransactionItemBackgroundColor">@color/transaction_item_background_dark</item>
-        <item name="CoinItemBackgroundColor">@color/grey_20</item>
-        <item name="CoinItemBackgroundColorPressed">@color/grey_40</item>
+        <item name="CoinItemBackgroundColor">@color/coin_item_background_dark</item>
         <item name="FilterButtonBackgroundColor">@color/appBackground</item>
-        <item name="SettingItemBackgroundColor">@color/grey_20</item>
-        <item name="SettingItemBackgroundColorPressed">@color/grey_40</item>
+        <item name="SettingItemBackgroundColor">@color/setting_item_background_dark</item>
         <item name="BottomNavigationBackgroundColor">@color/dark</item>
         <item name="StatusBarColor">@color/dark</item>
         <item name="RippleColor">@color/ripple_white</item>
@@ -82,11 +78,9 @@
         <item name="WalletBackgroundColor">@color/lightBackground</item>
         <item name="TransactionsBackgroundColor">@color/lightBackground</item>
         <item name="TransactionItemBackgroundColor">@color/transaction_item_background_light</item>
-        <item name="CoinItemBackgroundColor">@color/white</item>
+        <item name="CoinItemBackgroundColor">@color/coin_item_background_light</item>
         <item name="FilterButtonBackgroundColor">@color/bars_color</item>
-        <item name="CoinItemBackgroundColorPressed">@color/bars_color</item>
-        <item name="SettingItemBackgroundColor">@color/white</item>
-        <item name="SettingItemBackgroundColorPressed">@color/bars_color</item>
+        <item name="SettingItemBackgroundColor">@color/setting_item_background_light</item>
         <item name="BottomNavigationBackgroundColor">@color/bars_color</item>
         <item name="StatusBarColor">@color/bars_color</item>
         <item name="RippleColor">@color/ripple_black</item>
