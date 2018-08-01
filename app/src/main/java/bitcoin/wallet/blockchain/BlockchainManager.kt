@@ -3,6 +3,7 @@ package bitcoin.wallet.blockchain
 import android.content.res.AssetManager
 import android.security.keystore.UserNotAuthenticatedException
 import bitcoin.wallet.bitcoin.BitcoinBlockchainService
+import bitcoin.wallet.bitcoin.BitcoinJWrapper
 import bitcoin.wallet.core.ILocalStorage
 import java.io.File
 
@@ -15,7 +16,7 @@ object BlockchainManager {
     )
 
     fun init(filesDir: File, assetManager: AssetManager, storage: BlockchainStorage, testMode: Boolean) {
-        BitcoinBlockchainService.init(filesDir, assetManager, storage, testMode)
+        BitcoinBlockchainService.init(BitcoinJWrapper(filesDir, assetManager, testMode), storage)
     }
 
     fun startServices() {

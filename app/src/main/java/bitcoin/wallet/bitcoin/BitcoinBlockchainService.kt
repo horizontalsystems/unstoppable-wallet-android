@@ -1,43 +1,28 @@
 package bitcoin.wallet.bitcoin
 
-import android.content.res.AssetManager
 import bitcoin.wallet.blockchain.BlockchainStorage
 import bitcoin.wallet.blockchain.IBlockchainService
 import bitcoin.wallet.blockchain.InvalidAddress
 import bitcoin.wallet.blockchain.NotEnoughFundsException
 import bitcoin.wallet.entities.Balance
+import bitcoin.wallet.entities.BlockchainInfo
 import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.log
-import com.google.common.util.concurrent.MoreExecutors
 import io.reactivex.subjects.PublishSubject
-import org.bitcoinj.core.*
-import org.bitcoinj.core.listeners.DownloadProgressTracker
-import org.bitcoinj.net.discovery.DnsDiscovery
-import org.bitcoinj.params.MainNetParams
-import org.bitcoinj.params.TestNet3Params
-import org.bitcoinj.store.SPVBlockStore
-import org.bitcoinj.utils.BriefLogFormatter
-import org.bitcoinj.wallet.UnreadableWalletException
-import org.bitcoinj.wallet.Wallet
-import java.io.File
-import java.io.IOException
-import java.io.InputStream
+import org.bitcoinj.core.AddressFormatException
+import org.bitcoinj.core.InsufficientMoneyException
+import org.bitcoinj.core.Transaction
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
 
 
 object BitcoinBlockchainService : IBlockchainService {
 
-    lateinit var checkpoints: InputStream
-
-    private lateinit var filesDir: File
     private lateinit var storage: BlockchainStorage
-    private lateinit var params: NetworkParameters
+    private lateinit var bitcoinJWrapper: BitcoinJWrapper
 
     private var updateBlockchainHeightSubject = PublishSubject.create<Long>()
     private var updateTransactionsSubject = PublishSubject.create<Map<String, Transaction>>()
-
-    private const val BTC = "BTC"
 
     // Sets block-height to subject only if it greater than previous one
     private var latestBlockHeight = 0
@@ -49,28 +34,10 @@ object BitcoinBlockchainService : IBlockchainService {
         }
 
     private var txs = ConcurrentHashMap<String, Transaction>()
-    private lateinit var wallet: Wallet
-    private lateinit var spvBlockStore: SPVBlockStore
-    private lateinit var peerGroup: PeerGroup
 
-    fun init(dir: File, assetManager: AssetManager, store: BlockchainStorage, testMode: Boolean) {
-        BriefLogFormatter.initVerbose()
-
-        filesDir = dir
-        storage = store
-        params = if (testMode) {
-            TestNet3Params.get()
-        } else {
-            MainNetParams.get()
-        }
-
-        try {
-            checkpoints = assetManager.open("${params.id}.checkpoints.txt")
-        } catch (e: IOException) {
-            checkpoints = CheckpointManager.openStream(params)
-        }
-
-        spvBlockStore = SPVBlockStore(params, File(dir, "${params.paymentProtocolId}.spvchain"))
+    fun init(bitcoinJWrapper: BitcoinJWrapper, storage: BlockchainStorage) {
+        this.storage = storage
+        this.bitcoinJWrapper = bitcoinJWrapper
 
         observeSubjects()
     }
@@ -81,18 +48,43 @@ object BitcoinBlockchainService : IBlockchainService {
     }
 
     fun start(words: List<String>) {
-        startWallet(words)
-        startPeerGroup()
+        bitcoinJWrapper.prepareEnvForWallet(words)
+
+        bitcoinJWrapper.wallet.addChangeEventListener {
+            "wallet.addChangeEventListener".log()
+        }
+
+        bitcoinJWrapper.wallet.addCoinsReceivedEventListener { _, tx, prevBalance, newBalance ->
+            updateBalance(newBalance.value)
+        }
+        bitcoinJWrapper.wallet.addCoinsSentEventListener { _, tx, prevBalance, newBalance ->
+            updateBalance(newBalance.value)
+        }
+        bitcoinJWrapper.wallet.addTransactionConfidenceEventListener { wallet, tx ->
+            enqueueTransactionUpdate(tx)
+        }
+
+        bitcoinJWrapper.spvBlockChain.addNewBestBlockListener {
+            latestBlockHeight = it.height
+        }
+
+        bitcoinJWrapper.peerGroup.addConnectedEventListener { peer, peerCount ->
+            latestBlockHeight = bitcoinJWrapper.peerGroup.mostCommonChainHeight
+        }
+        bitcoinJWrapper.peerGroup.addOnTransactionBroadcastListener { _, tx ->
+            storage.insertOrUpdateTransactions(listOf(newTransactionRecord(tx)))
+        }
+        bitcoinJWrapper.peerGroup.addBlocksDownloadedEventListener { peer, block, filteredBlock, blocksLeft ->
+            "Downloaded block: ${block.time}, ${block.hashAsString}, Blocks left: $blocksLeft".log()
+        }
+
+        bitcoinJWrapper.startAsync()
     }
 
-    override fun getReceiveAddress(): String = wallet.currentReceiveAddress().toBase58()
+    override fun getReceiveAddress(): String = bitcoinJWrapper.getReceiveAddress()
 
     override fun sendCoins(address: String, value: Long) = try {
-        val targetAddress = Address.fromBase58(params, address)
-        val result = wallet.sendCoins(peerGroup, targetAddress, Coin.valueOf(value))
-        val transaction = result.broadcastComplete.get()
-
-        transaction.log("Send Coins Transaction")
+        bitcoinJWrapper.sendCoins(address, value)
     } catch (e: InsufficientMoneyException) {
         throw NotEnoughFundsException(e)
     } catch (e: AddressFormatException) {
@@ -109,86 +101,19 @@ object BitcoinBlockchainService : IBlockchainService {
         }
     }
 
-    private fun startWallet(words: List<String>) {
-        val seedCode = words.joinToString(" ")
-        val walletFilename = "${params.paymentProtocolId}-${Integer.toHexString(seedCode.hashCode())}.dat"
-        val walletFile = File(filesDir, walletFilename)
-
-        try {
-            "Read wallet from file: ${walletFile.absolutePath}".log()
-            wallet = WalletBip44.loadFromFile(walletFile, params)
-        } catch (e: UnreadableWalletException) {
-            "Could not read wallet from file: \"${e.message}\". New wallet will be created".log()
-            wallet = WalletBip44.newFromSeedCode(params, seedCode)
-            wallet.saveToFile(walletFile)
-        }
-
-        wallet.autosaveToFile(walletFile, 0, TimeUnit.SECONDS, null)
-        wallet.addCoinsReceivedEventListener { _, tx, prevBalance, newBalance ->
-            updateBalance(newBalance.value)
-        }
-
-        wallet.addCoinsSentEventListener { _, tx, prevBalance, newBalance ->
-            updateBalance(newBalance.value)
-        }
-
-        wallet.addTransactionConfidenceEventListener { wallet, tx ->
-            enqueueTransactionUpdate(tx)
-        }
-
-        if (wallet.lastBlockSeenHeight <= 0) {
-            CheckpointManager.checkpoint(params, checkpoints, spvBlockStore, wallet.earliestKeyCreationTime)
-            wallet.notifyNewBestBlock(spvBlockStore.chainHead)
-        }
-    }
-
-    private fun startPeerGroup() {
-        val spvBlockChain = BlockChain(params, wallet, spvBlockStore)
-
-        spvBlockChain.addNewBestBlockListener {
-            latestBlockHeight = it.height
-        }
-
-        peerGroup = PeerGroup(params, spvBlockChain)
-        peerGroup.addWallet(wallet)
-        peerGroup.addPeerDiscovery(DnsDiscovery(params))
-        peerGroup.fastCatchupTimeSecs = wallet.earliestKeyCreationTime
-        peerGroup.addConnectedEventListener { peer, peerCount ->
-            latestBlockHeight = peerGroup.mostCommonChainHeight
-        }
-
-        peerGroup.addOnTransactionBroadcastListener { _, tx ->
-            storage.insertOrUpdateTransactions(listOf(newTransactionRecord(tx)))
-        }
-
-        peerGroup.addBlocksDownloadedEventListener { peer, block, filteredBlock, blocksLeft ->
-            "Downloaded block: ${block.time}, ${block.hashAsString}, Blocks left: $blocksLeft".log()
-        }
-
-        peerGroup.startAsync().addListener(Runnable {
-            peerGroup.startBlockChainDownload(object : DownloadProgressTracker() {
-                override fun startDownload(blocks: Int) {
-                    super.startDownload(blocks)
-                    storage.updateBlockchainSyncing(BTC, true)
-                }
-
-                override fun doneDownload() {
-                    super.doneDownload()
-                    storage.updateBlockchainSyncing(BTC, false)
-                }
-            })
-        }, MoreExecutors.directExecutor())
-    }
-
     private fun updateBalance(balance: Long) {
         storage.updateBalance(Balance().apply {
-            code = BTC
+            code = "BTC"
             value = balance
         })
     }
 
     private fun updateBlockHeight(height: Long) {
-        storage.updateBlockchainHeight(BTC, height)
+        storage.updateBlockchainInfo(
+                BlockchainInfo().apply {
+                    coinCode = "BTC"
+                    latestBlockHeight = height
+                })
     }
 
     private fun enqueueTransactionUpdate(tx: Transaction) {
@@ -220,8 +145,8 @@ object BitcoinBlockchainService : IBlockchainService {
     private fun newTransactionRecord(tx: Transaction): TransactionRecord {
         return TransactionRecord().apply {
             transactionHash = tx.hashAsString
-            coinCode = BTC
-            amount = tx.getValue(wallet).value
+            coinCode = "BTC"
+            amount = tx.getValue(bitcoinJWrapper.wallet).value
             incoming = amount > 0
             timestamp = tx.updateTime.time
             blockHeight = try {
