@@ -25,10 +25,10 @@ class PreferencesManager(private val encryptionManager: IEncryptionManager) : IL
         App.preferences.edit().clear().apply()
     }
 
-    private val DARK_MODE_ENABLED = "dark_mode_enabled"
+    private val LIGHT_MODE_ENABLED = "light_mode_enabled"
 
-    var isDarkModeEnabled: Boolean
-        get() = App.preferences.getBoolean(DARK_MODE_ENABLED, true)
-        set(value) = App.preferences.edit().putBoolean(DARK_MODE_ENABLED, value).apply()
+    var isLightModeEnabled: Boolean
+        get() = App.preferences.getBoolean(LIGHT_MODE_ENABLED, false)
+        set(value) = App.preferences.edit().putBoolean(LIGHT_MODE_ENABLED, value).apply()
 
 }

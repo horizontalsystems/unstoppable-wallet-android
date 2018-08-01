@@ -51,14 +51,14 @@ class SettingsFragment : android.support.v4.app.Fragment() {
             selectedValue = "English"
         }
 
-        darkMode.apply {
-            switchIsChecked = Factory.preferencesManager.isDarkModeEnabled
+        lightMode.apply {
+            switchIsChecked = Factory.preferencesManager.isLightModeEnabled
             setOnClickListener {
                 switchToggle()
             }
 
             switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                Factory.preferencesManager.isDarkModeEnabled = isChecked
+                Factory.preferencesManager.isLightModeEnabled = isChecked
                 activity?.recreate()
             }
         }

@@ -27,10 +27,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val darkMode = Factory.preferencesManager.isDarkModeEnabled
-        setTheme(if (darkMode) R.style.DarkModeAppTheme else R.style.LightModeAppTheme)
+        val lightMode = Factory.preferencesManager.isLightModeEnabled
+        setTheme(if (lightMode) R.style.LightModeAppTheme else R.style.DarkModeAppTheme)
         if (savedInstanceState != null) {
-            setStatusBarIconColor(darkMode)
+            setStatusBarIconColor(lightMode)
         }
 
         setContentView(R.layout.activity_dashboard)
@@ -94,12 +94,12 @@ class MainActivity : AppCompatActivity() {
         App.promptPin = false
     }
 
-    private fun setStatusBarIconColor(darkMode: Boolean) {
+    private fun setStatusBarIconColor(lightMode: Boolean) {
         var flags = window.decorView.systemUiVisibility
-        flags = if (darkMode) {
-            flags xor View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR // remove flag
-        } else {
+        flags = if (lightMode) {
             flags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        } else {
+            flags xor View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR // remove flag
         }
         window.decorView.systemUiVisibility = flags
     }
