@@ -1,12 +1,12 @@
 package bitcoin.wallet.bitcoin
 
-import org.bitcoinj.core.Transaction
+import bitcoin.wallet.entities.TransactionRecord
 
 interface BitcoinChangeListener {
 
     fun onBalanceChange(value: Long)
-    fun onNewTransaction(tx: Transaction)
-    fun onTransactionConfidenceChange(tx: Transaction)
+    fun onNewTransaction(tx: TransactionRecord)
+    fun onTransactionConfidenceChange(tx: TransactionRecord)
     fun onBestChainHeightChange(value: Int)
 
 }

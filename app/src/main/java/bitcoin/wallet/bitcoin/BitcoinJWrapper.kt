@@ -1,6 +1,9 @@
 package bitcoin.wallet.bitcoin
 
 import android.content.res.AssetManager
+import bitcoin.wallet.blockchain.InvalidAddress
+import bitcoin.wallet.blockchain.NotEnoughFundsException
+import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.log
 import com.google.common.util.concurrent.MoreExecutors
 import org.bitcoinj.core.*
@@ -22,7 +25,7 @@ class BitcoinJWrapper(private val filesDir: File, assetManager: AssetManager, te
     private val params: NetworkParameters
     private val checkpoints: InputStream
 
-    lateinit var wallet: Wallet
+    private lateinit var wallet: Wallet
     private lateinit var spvBlockChain: BlockChain
     private lateinit var peerGroup: PeerGroup
 
@@ -92,9 +95,9 @@ class BitcoinJWrapper(private val filesDir: File, assetManager: AssetManager, te
                     }
 
                     if (prevConfidenceType == null) {
-                        listener.onNewTransaction(txNewState)
+                        listener.onNewTransaction(newTransactionRecord(txNewState))
                     } else {
-                        listener.onTransactionConfidenceChange(txNewState)
+                        listener.onTransactionConfidenceChange(newTransactionRecord(txNewState))
                     }
 
                     transactionConfidenceTypes[txNewState.hashAsString] = newConfidenceType
@@ -123,14 +126,33 @@ class BitcoinJWrapper(private val filesDir: File, assetManager: AssetManager, te
         }, MoreExecutors.directExecutor())
     }
 
-    fun sendCoins(address: String, value: Long) {
+    fun sendCoins(address: String, value: Long) = try {
         val targetAddress = Address.fromBase58(params, address)
         val result = wallet.sendCoins(peerGroup, targetAddress, Coin.valueOf(value))
         val transaction = result.broadcastComplete.get()
 
         transaction.log("Send Coins Transaction")
+    } catch (e: InsufficientMoneyException) {
+        throw NotEnoughFundsException(e)
+    } catch (e: AddressFormatException) {
+        throw InvalidAddress(e)
     }
 
     fun getReceiveAddress(): String = wallet.currentReceiveAddress().toBase58()
+
+    private fun newTransactionRecord(tx: Transaction): TransactionRecord {
+        return TransactionRecord().apply {
+            transactionHash = tx.hashAsString
+            coinCode = "BTC"
+            amount = tx.getValue(wallet).value
+            incoming = amount > 0
+            timestamp = tx.updateTime.time
+            blockHeight = try {
+                tx.confidence.appearedAtChainHeight.toLong()
+            } catch (e: IllegalStateException) {
+                0
+            }
+        }
+    }
 
 }

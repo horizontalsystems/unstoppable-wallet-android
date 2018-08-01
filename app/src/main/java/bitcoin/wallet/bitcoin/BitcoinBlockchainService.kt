@@ -2,30 +2,24 @@ package bitcoin.wallet.bitcoin
 
 import bitcoin.wallet.blockchain.BlockchainStorage
 import bitcoin.wallet.blockchain.IBlockchainService
-import bitcoin.wallet.blockchain.InvalidAddress
-import bitcoin.wallet.blockchain.NotEnoughFundsException
 import bitcoin.wallet.entities.Balance
 import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.log
 import io.reactivex.subjects.PublishSubject
-import org.bitcoinj.core.AddressFormatException
-import org.bitcoinj.core.InsufficientMoneyException
-import org.bitcoinj.core.Transaction
 import org.bitcoinj.core.listeners.DownloadProgressTracker
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
-
 
 object BitcoinBlockchainService : IBlockchainService {
 
     private lateinit var storage: BlockchainStorage
     private lateinit var bitcoinJWrapper: BitcoinJWrapper
 
-    private var updateTransactionsSubject = PublishSubject.create<Map<String, Transaction>>()
+    private var updateTransactionsSubject = PublishSubject.create<Map<String, TransactionRecord>>()
 
     private const val BTC = "BTC"
 
-    private var txs = ConcurrentHashMap<String, Transaction>()
+    private var txs = ConcurrentHashMap<String, TransactionRecord>()
 
     fun init(bitcoinJWrapper: BitcoinJWrapper, storage: BlockchainStorage) {
         this.storage = storage
@@ -47,11 +41,11 @@ object BitcoinBlockchainService : IBlockchainService {
                 updateBalance(value)
             }
 
-            override fun onNewTransaction(tx: Transaction) {
+            override fun onNewTransaction(tx: TransactionRecord) {
                 enqueueTransactionUpdate(tx)
             }
 
-            override fun onTransactionConfidenceChange(tx: Transaction) {
+            override fun onTransactionConfidenceChange(tx: TransactionRecord) {
                 enqueueTransactionUpdate(tx)
             }
 
@@ -75,13 +69,7 @@ object BitcoinBlockchainService : IBlockchainService {
 
     override fun getReceiveAddress(): String = bitcoinJWrapper.getReceiveAddress()
 
-    override fun sendCoins(address: String, value: Long) = try {
-        bitcoinJWrapper.sendCoins(address, value)
-    } catch (e: InsufficientMoneyException) {
-        throw NotEnoughFundsException(e)
-    } catch (e: AddressFormatException) {
-        throw InvalidAddress(e)
-    }
+    override fun sendCoins(address: String, value: Long) = bitcoinJWrapper.sendCoins(address, value)
 
     private fun updateBalance(balance: Long) {
         storage.updateBalance(Balance().apply {
@@ -94,9 +82,9 @@ object BitcoinBlockchainService : IBlockchainService {
         storage.updateBlockchainHeight(BTC, height)
     }
 
-    private fun enqueueTransactionUpdate(tx: Transaction) {
+    private fun enqueueTransactionUpdate(tx: TransactionRecord) {
         synchronized(txs) {
-            txs[tx.hashAsString] = tx
+            txs[tx.transactionHash] = tx
             txs.size.log("Transactions count: ")
 
             updateTransactionsSubject.onNext(txs)
@@ -110,28 +98,14 @@ object BitcoinBlockchainService : IBlockchainService {
                 val tx = it.value
 
                 // collect items for bulk write/update
-                transactionRecords.add(newTransactionRecord(tx))
+                transactionRecords.add(tx)
 
                 // remove item from queue
-                txs.remove(tx.hashAsString)
+                txs.remove(tx.transactionHash)
             }
 
             storage.insertOrUpdateTransactions(transactionRecords)
         }
     }
 
-    private fun newTransactionRecord(tx: Transaction): TransactionRecord {
-        return TransactionRecord().apply {
-            transactionHash = tx.hashAsString
-            coinCode = BTC
-            amount = tx.getValue(bitcoinJWrapper.wallet).value
-            incoming = amount > 0
-            timestamp = tx.updateTime.time
-            blockHeight = try {
-                tx.confidence.appearedAtChainHeight.toLong()
-            } catch (e: IllegalStateException) {
-                0
-            }
-        }
-    }
 }
