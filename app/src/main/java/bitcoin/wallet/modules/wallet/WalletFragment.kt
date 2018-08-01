@@ -39,7 +39,7 @@ class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener 
 
                 //todo begin - for testing purposes, remove after testing
                 val tmpItems = it.toMutableList()
-                tmpItems.add(WalletBalanceViewItem(CoinValue(Ethereum(), 0.0), CurrencyValue(DollarCurrency(), 750.0), CurrencyValue(DollarCurrency(), 0.0)))
+                tmpItems.add(WalletBalanceViewItem(CoinValue(Ethereum(), 0.0), CurrencyValue(DollarCurrency(), 750.0), CurrencyValue(DollarCurrency(), 0.0), false))
                 //todo end
                 coinsAdapter.items = tmpItems//it //todo replace tmpItems with it
                 coinsAdapter.notifyDataSetChanged()
@@ -115,6 +115,7 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
         textAmount.visibility = if (zeroBalance) View.GONE else View.VISIBLE
         buttonPay.isEnabled = !zeroBalance
         textAmountFiat.isEnabled = !zeroBalance
+        syncProgress.visibility = if (walletBalanceViewItem.syncing) View.VISIBLE else View.GONE
 
         buttonPay.setOnClickListener {
             onPayClick?.invoke()

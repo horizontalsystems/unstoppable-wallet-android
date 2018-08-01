@@ -8,6 +8,7 @@ import bitcoin.wallet.entities.coins.bitcoin.BitcoinUnspentOutput
 import bitcoin.wallet.entities.coins.bitcoinCash.BitcoinCashUnspentOutput
 import bitcoin.wallet.modules.RxBaseTest
 import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.atMost
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Observable
@@ -28,23 +29,21 @@ class WalletInteractorTest {
             }
     ))
 
-    private var bitcoinUnspentOutputs = DatabaseChangeset(listOf(
-            BitcoinUnspentOutput().apply {
-                value = 50_000_000
-            },
-            BitcoinUnspentOutput().apply {
-                value = 30_000_000
-            }
-    ))
+    private val blockchainInfosSyncing = listOf(
+            BlockchainInfo().apply {
+                coinCode = "BTC"
+                latestBlockHeight = 130
+                syncing = true
 
-    private var bitcoinCashUnspentOutputs = DatabaseChangeset(listOf(
-            BitcoinCashUnspentOutput().apply {
-                value = 50_000_000
-            },
-            BitcoinCashUnspentOutput().apply {
-                value = 30_000_000
-            }
-    ))
+            })
+
+    private val blockchainInfosNotSyncing = listOf(
+            BlockchainInfo().apply {
+                coinCode = "BTC"
+                latestBlockHeight = 135
+                syncing = false
+
+            })
 
     private lateinit var interactor: WalletInteractor
 
@@ -59,29 +58,45 @@ class WalletInteractorTest {
     @Test
     fun fetchWalletBalances() {
         whenever(databaseManager.getExchangeRates()).thenReturn(Observable.just(exchangeRates))
-        whenever(databaseManager.getBitcoinUnspentOutputs()).thenReturn(Observable.just(bitcoinUnspentOutputs))
-        whenever(databaseManager.getBitcoinCashUnspentOutputs()).thenReturn(Observable.just(bitcoinCashUnspentOutputs))
+        whenever(databaseManager.getBalances()).thenReturn(Observable.just(DatabaseChangeset(listOf(Balance().apply {
+            code = "BTC"
+            value = 80_000_000
+        }))))
+        whenever(databaseManager.getBlockchainInfos()).thenReturn(Observable.just(DatabaseChangeset(blockchainInfosNotSyncing)))
+
+        val expectedWalletBalances = listOf(
+                WalletBalanceItem(CoinValue(Bitcoin(), 0.8), 10_000.0, DollarCurrency(), false)
+        )
+
+        interactor.notifyWalletBalances()
+
+        verify(delegate, atMost(2)).didFetchWalletBalances(expectedWalletBalances)
+    }
+
+    @Test
+    fun fetchWalletBalancesWhileSyncing() {
+        whenever(databaseManager.getExchangeRates()).thenReturn(Observable.just(exchangeRates))
         whenever(databaseManager.getBalances()).thenReturn(Observable.just(DatabaseChangeset(listOf(Balance().apply {
             code = "BTC"
             value = 80_000_000
         }))))
 
+        whenever(databaseManager.getBlockchainInfos()).thenReturn(Observable.just(DatabaseChangeset(blockchainInfosSyncing)))
+
         val expectedWalletBalances = listOf(
-                WalletBalanceItem(CoinValue(Bitcoin(), 0.8), 10_000.0, DollarCurrency())
+                WalletBalanceItem(CoinValue(Bitcoin(), 0.8), 10_000.0, DollarCurrency(), true)
         )
 
         interactor.notifyWalletBalances()
 
-        verify(delegate).didFetchWalletBalances(expectedWalletBalances)
+        verify(delegate, atMost(1)).didFetchWalletBalances(expectedWalletBalances)
     }
 
     @Test
     fun fetchWalletBalances_emptyRates() {
         whenever(databaseManager.getExchangeRates()).thenReturn(Observable.just(DatabaseChangeset(listOf())))
-        whenever(databaseManager.getBitcoinUnspentOutputs()).thenReturn(Observable.just(bitcoinUnspentOutputs))
-        whenever(databaseManager.getBitcoinCashUnspentOutputs()).thenReturn(Observable.just(bitcoinCashUnspentOutputs))
         whenever(databaseManager.getBalances()).thenReturn(Observable.just(DatabaseChangeset(listOf())))
-
+        whenever(databaseManager.getBlockchainInfos()).thenReturn(Observable.just(DatabaseChangeset(listOf())))
         interactor.notifyWalletBalances()
 
         verify(delegate, never()).didFetchWalletBalances(any())

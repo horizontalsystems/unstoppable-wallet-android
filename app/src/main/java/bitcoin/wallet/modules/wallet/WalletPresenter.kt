@@ -32,7 +32,8 @@ class WalletPresenter(private var interactor: WalletModule.IInteractor, private 
         return WalletBalanceViewItem(
                 walletBalance.coinValue,
                 CurrencyValue(walletBalance.currency, walletBalance.exchangeRate),
-                CurrencyValue(walletBalance.currency, walletBalance.coinValue.value * walletBalance.exchangeRate)
+                CurrencyValue(walletBalance.currency, walletBalance.coinValue.value * walletBalance.exchangeRate),
+                walletBalance.syncing
         )
     }
 

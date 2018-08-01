@@ -54,15 +54,16 @@ data class CoinValue(val coin: Coin, val value: Double) {
 
 }
 
-data class WalletBalanceItem(val coinValue: CoinValue, val exchangeRate: Double, val currency: Currency)
+data class WalletBalanceItem(val coinValue: CoinValue, val exchangeRate: Double, val currency: Currency, val syncing: Boolean)
 
-data class WalletBalanceViewItem(val coinValue: CoinValue, val exchangeValue: CurrencyValue, val currencyValue: CurrencyValue) {
+data class WalletBalanceViewItem(val coinValue: CoinValue, val exchangeValue: CurrencyValue, val currencyValue: CurrencyValue, val syncing: Boolean) {
 
     override fun equals(other: Any?): Boolean {
         if (other is WalletBalanceViewItem) {
             return coinValue == other.coinValue &&
                     exchangeValue == other.exchangeValue &&
-                    currencyValue == other.currencyValue
+                    currencyValue == other.currencyValue &&
+                    syncing == other.syncing
         }
 
         return super.equals(other)
@@ -72,6 +73,7 @@ data class WalletBalanceViewItem(val coinValue: CoinValue, val exchangeValue: Cu
         var result = coinValue.hashCode()
         result = 31 * result + exchangeValue.hashCode()
         result = 31 * result + currencyValue.hashCode()
+        result = 31 * result + syncing.hashCode()
         return result
     }
 

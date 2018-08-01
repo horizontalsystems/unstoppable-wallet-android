@@ -10,4 +10,6 @@ open class BlockchainInfo : RealmObject() {
 
     var latestBlockHeight = 0L
 
+    var syncing = false
+
 }

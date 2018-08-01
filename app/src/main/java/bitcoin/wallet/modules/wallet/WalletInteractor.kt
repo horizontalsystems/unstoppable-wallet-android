@@ -15,6 +15,8 @@ class WalletInteractor(private val databaseManager: IDatabaseManager) : WalletMo
     private var exchangeRates = mutableMapOf<String, Double>()
     private var balances = mutableMapOf<String, Long>()
 
+    private var blockchaingSyncing = mapOf<String, Boolean>()
+
     override fun notifyWalletBalances() {
         databaseManager.getBalances().subscribe {
             balances = it.array.associateBy({ it.code }, { it.value }).toMutableMap()
@@ -27,6 +29,12 @@ class WalletInteractor(private val databaseManager: IDatabaseManager) : WalletMo
 
             refresh()
         }
+
+        databaseManager.getBlockchainInfos().subscribe {
+            blockchaingSyncing = it.array.map { it.coinCode to it.syncing }.toMap()
+
+            refresh()
+        }
     }
 
     private fun refresh() {
@@ -36,7 +44,7 @@ class WalletInteractor(private val databaseManager: IDatabaseManager) : WalletMo
             val code = it.key
             val total = it.value
 
-            val coin = when(code) {
+            val coin = when (code) {
                 "BTC" -> Bitcoin()
                 "BCH" -> BitcoinCash()
                 "ETH" -> Ethereum()
@@ -45,7 +53,10 @@ class WalletInteractor(private val databaseManager: IDatabaseManager) : WalletMo
 
             if (coin != null) {
                 exchangeRates[code]?.let { rate ->
-                    walletBalances.add(WalletBalanceItem(CoinValue(coin, total / 100000000.0), rate, DollarCurrency()))
+                    walletBalances.add(WalletBalanceItem(CoinValue(coin, total / 100000000.0),
+                            rate,
+                            DollarCurrency(),
+                            blockchaingSyncing[code] ?: false))
                 }
             }
         }
