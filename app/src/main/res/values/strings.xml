@@ -83,4 +83,8 @@
     <string name="tx_info_bottom_sheet_more">More</string>
     <string name="tx_info_bottom_sheet_less">Less</string>
 
+    <!--Settings-->
+    <string name="decentralized_app_by">A decentralized app By</string>
+    <string name="company_link">horizontalsystems.io</string>
+
 </resources>
