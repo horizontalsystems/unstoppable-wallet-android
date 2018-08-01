@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ripple xmlns:android="http://schemas.android.com/apk/res/android"
-        android:color="?RippleColor"
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+       android:shape="rectangle"
     >
-    <item>
-        <shape android:shape="rectangle">
-            <solid android:color="?SettingItemBackgroundColor"/>
-        </shape>
-    </item>
-</ripple>
+    <solid android:color="?SettingItemBackgroundColor"/>
+</shape>

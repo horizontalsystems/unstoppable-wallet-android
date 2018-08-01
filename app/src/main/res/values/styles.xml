@@ -43,10 +43,10 @@
         <item name="SettingBackgroundColor">@color/dark</item>
         <item name="WalletBackgroundColor">@color/dark</item>
         <item name="TransactionsBackgroundColor">@color/dark</item>
-        <item name="TransactionItemBackgroundColor">@color/dark</item>
-        <item name="CoinItemBackgroundColor">@color/grey_20</item>
+        <item name="TransactionItemBackgroundColor">@color/transaction_item_background_dark</item>
+        <item name="CoinItemBackgroundColor">@color/coin_item_background_dark</item>
         <item name="FilterButtonBackgroundColor">@color/appBackground</item>
-        <item name="SettingItemBackgroundColor">@color/grey_20</item>
+        <item name="SettingItemBackgroundColor">@color/setting_item_background_dark</item>
         <item name="BottomNavigationBackgroundColor">@color/dark</item>
         <item name="StatusBarColor">@color/dark</item>
         <item name="RippleColor">@color/ripple_white</item>
@@ -77,10 +77,10 @@
         <item name="SettingBackgroundColor">@color/lightBackground</item>
         <item name="WalletBackgroundColor">@color/lightBackground</item>
         <item name="TransactionsBackgroundColor">@color/lightBackground</item>
-        <item name="TransactionItemBackgroundColor">@color/white</item>
-        <item name="CoinItemBackgroundColor">@color/white</item>
+        <item name="TransactionItemBackgroundColor">@color/transaction_item_background_light</item>
+        <item name="CoinItemBackgroundColor">@color/coin_item_background_light</item>
         <item name="FilterButtonBackgroundColor">@color/bars_color</item>
-        <item name="SettingItemBackgroundColor">@color/white</item>
+        <item name="SettingItemBackgroundColor">@color/setting_item_background_light</item>
         <item name="BottomNavigationBackgroundColor">@color/bars_color</item>
         <item name="StatusBarColor">@color/bars_color</item>
         <item name="RippleColor">@color/ripple_black</item>
