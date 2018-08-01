@@ -50,40 +50,23 @@ object BitcoinBlockchainService : IBlockchainService {
     }
 
     fun start(words: List<String>) {
-        bitcoinJWrapper.prepareEnvForWallet(words)
-
-        bitcoinJWrapper.wallet.addChangeEventListener {
-            "wallet.addChangeEventListener".log()
-
-            it.getTransactions(true).forEach {
-                it.confidence.confidenceType.log("tx confidenceType")
+        bitcoinJWrapper.prepareEnvForWallet(words, object : BitcoinChangeListener {
+            override fun onBalanceChange(value: Long) {
+                updateBalance(value)
             }
 
-        }
+            override fun onNewTransaction(tx: Transaction) {
+                storage.insertOrUpdateTransactions(listOf(newTransactionRecord(tx)))
+            }
 
-        bitcoinJWrapper.wallet.addCoinsReceivedEventListener { _, tx, prevBalance, newBalance ->
-            updateBalance(newBalance.value)
-        }
-        bitcoinJWrapper.wallet.addCoinsSentEventListener { _, tx, prevBalance, newBalance ->
-            updateBalance(newBalance.value)
-        }
-        bitcoinJWrapper.wallet.addTransactionConfidenceEventListener { wallet, tx ->
-            enqueueTransactionUpdate(tx)
-        }
+            override fun onTransactionConfidenceChange(tx: Transaction) {
+                enqueueTransactionUpdate(tx)
+            }
 
-        bitcoinJWrapper.spvBlockChain.addNewBestBlockListener {
-            latestBlockHeight = it.height
-        }
-
-        bitcoinJWrapper.peerGroup.addConnectedEventListener { peer, peerCount ->
-            latestBlockHeight = bitcoinJWrapper.peerGroup.mostCommonChainHeight
-        }
-        bitcoinJWrapper.peerGroup.addOnTransactionBroadcastListener { _, tx ->
-            storage.insertOrUpdateTransactions(listOf(newTransactionRecord(tx)))
-        }
-        bitcoinJWrapper.peerGroup.addBlocksDownloadedEventListener { peer, block, filteredBlock, blocksLeft ->
-            "Downloaded block: ${block.time}, ${block.hashAsString}, Blocks left: $blocksLeft".log()
-        }
+            override fun onBestChainHeightChange(value: Int) {
+                latestBlockHeight = value
+            }
+        })
 
         bitcoinJWrapper.startAsync(object : DownloadProgressTracker() {
             override fun startDownload(blocks: Int) {

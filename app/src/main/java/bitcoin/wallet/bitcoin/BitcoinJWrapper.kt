@@ -23,8 +23,8 @@ class BitcoinJWrapper(private val filesDir: File, assetManager: AssetManager, te
     private val checkpoints: InputStream
 
     lateinit var wallet: Wallet
-    lateinit var spvBlockChain: BlockChain
-    lateinit var peerGroup: PeerGroup
+    private lateinit var spvBlockChain: BlockChain
+    private lateinit var peerGroup: PeerGroup
 
     init {
         BriefLogFormatter.initVerbose()
@@ -42,7 +42,7 @@ class BitcoinJWrapper(private val filesDir: File, assetManager: AssetManager, te
         }
     }
 
-    fun prepareEnvForWallet(words: List<String>) {
+    fun prepareEnvForWallet(words: List<String>, listener: BitcoinChangeListener) {
         val seedCode = words.joinToString(" ")
         val walletFilename = "${params.paymentProtocolId}-${Integer.toHexString(seedCode.hashCode())}.dat"
         val walletFile = File(filesDir, walletFilename)
@@ -71,6 +71,50 @@ class BitcoinJWrapper(private val filesDir: File, assetManager: AssetManager, te
             peerGroup.fastCatchupTimeSecs = wallet.earliestKeyCreationTime
         }
 
+        peerGroup.addBlocksDownloadedEventListener { peer, block, filteredBlock, blocksLeft ->
+            "Downloaded block: ${block.time}, ${block.hashAsString}, Blocks left: $blocksLeft".log()
+        }
+
+        val transactionConfidenceTypes = wallet.getTransactions(true).map { it.hashAsString to it.confidence.confidenceType }.toMap().toMutableMap()
+        var balance = wallet.balance
+        var latestBlockHeight = spvBlockChain.bestChainHeight
+
+        wallet.addChangeEventListener { changedWallet ->
+            changedWallet.getTransactions(true).forEach { txNewState ->
+
+                val prevConfidenceType = transactionConfidenceTypes[txNewState.hashAsString]
+                val newConfidenceType = txNewState.confidence.confidenceType
+
+                if (prevConfidenceType != newConfidenceType) {
+                    if (balance != changedWallet.balance) {
+                        listener.onBalanceChange(changedWallet.balance.value)
+                        balance = changedWallet.balance
+                    }
+
+                    if (prevConfidenceType == null) {
+                        listener.onNewTransaction(txNewState)
+                    } else {
+                        listener.onTransactionConfidenceChange(txNewState)
+                    }
+
+                    transactionConfidenceTypes[txNewState.hashAsString] = newConfidenceType
+                }
+            }
+        }
+
+        spvBlockChain.addNewBestBlockListener {
+            if (it.height > latestBlockHeight) {
+                latestBlockHeight = it.height
+                listener.onBestChainHeightChange(latestBlockHeight)
+            }
+        }
+
+        peerGroup.addConnectedEventListener { peer, peerCount ->
+            if (peerGroup.mostCommonChainHeight > latestBlockHeight) {
+                latestBlockHeight = peerGroup.mostCommonChainHeight
+                listener.onBestChainHeightChange(latestBlockHeight)
+            }
+        }
     }
 
     fun startAsync(tracker: DownloadProgressTracker) {
@@ -88,6 +132,5 @@ class BitcoinJWrapper(private val filesDir: File, assetManager: AssetManager, te
     }
 
     fun getReceiveAddress(): String = wallet.currentReceiveAddress().toBase58()
-
 
 }
