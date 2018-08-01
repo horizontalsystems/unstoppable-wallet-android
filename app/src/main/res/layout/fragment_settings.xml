@@ -11,6 +11,7 @@
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:elevation="0dp"
         >
 
         <android.support.v7.widget.Toolbar
@@ -144,4 +145,7 @@
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v4.widget.NestedScrollView>
+    <View
+        style="@style/Widget.Shadow.AppBar"
+        app:layout_anchor="@id/app_bar_layout"/>
 </android.support.design.widget.CoordinatorLayout>
