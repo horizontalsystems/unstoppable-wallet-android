@@ -17,7 +17,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/noto_sans_bold"
-        android:textColor="@color/grey"
+        android:textColor="@color/dark"
         android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -91,7 +91,7 @@
 
                 <Button
                     android:id="@+id/btnPaste"
-                    style="@style/ButtonGreen_4"
+                    style="@style/ButtonGrey_4"
                     android:layout_width="0dp"
                     android:layout_height="36dp"
                     android:layout_marginBottom="6dp"
@@ -100,7 +100,6 @@
                     android:maxWidth="200dp"
                     android:minWidth="71dp"
                     android:text="@string/send_bottom_sheet_paste"
-                    android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="@+id/txtAddress"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/txtAddress"
@@ -140,7 +139,7 @@
 
                 <Button
                     android:id="@+id/btnCurrency"
-                    style="@style/ButtonGreen_4"
+                    style="@style/ButtonGrey_4"
                     android:layout_width="0dp"
                     android:layout_height="36dp"
                     android:layout_marginBottom="6dp"
@@ -152,7 +151,6 @@
                     android:paddingEnd="0dp"
                     android:paddingStart="12dp"
                     android:text="USD"
-                    android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="@+id/txtAmount"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/txtAmount"

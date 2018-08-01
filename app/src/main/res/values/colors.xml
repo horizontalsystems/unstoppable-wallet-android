@@ -18,6 +18,7 @@
     <color name="red_error">#deff3434</color>
     <color name="red_warning">#ff5e3a</color>
     <color name="bars_color">#f9f9f9</color>
+    <color name="bars_color_80">#ccf9f9f9</color>
     <!-- eof base colors -->
 
     <color name="navigation_bar">?attr/BottomNavigationBackgroundColor</color>
