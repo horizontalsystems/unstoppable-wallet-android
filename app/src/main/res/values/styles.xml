@@ -10,7 +10,6 @@
     <attr name="WalletBackgroundColor" format="reference|color" />
     <attr name="TransactionsBackgroundColor" format="reference|color" />
     <attr name="TransactionItemBackgroundColor" format="reference|color" />
-    <attr name="TransactionItemBackgroundColorPressed" format="reference|color" />
     <attr name="SettingItemBackgroundColor" format="reference|color" />
     <attr name="SettingItemBackgroundColorPressed" format="reference|color" />
     <attr name="CoinItemBackgroundColor" format="reference|color" />
@@ -46,8 +45,7 @@
         <item name="SettingBackgroundColor">@color/dark</item>
         <item name="WalletBackgroundColor">@color/dark</item>
         <item name="TransactionsBackgroundColor">@color/dark</item>
-        <item name="TransactionItemBackgroundColor">@color/dark</item>
-        <item name="TransactionItemBackgroundColorPressed">@color/grey_20</item>
+        <item name="TransactionItemBackgroundColor">@color/transaction_item_background_dark</item>
         <item name="CoinItemBackgroundColor">@color/grey_20</item>
         <item name="CoinItemBackgroundColorPressed">@color/grey_40</item>
         <item name="FilterButtonBackgroundColor">@color/appBackground</item>
@@ -83,8 +81,7 @@
         <item name="SettingBackgroundColor">@color/lightBackground</item>
         <item name="WalletBackgroundColor">@color/lightBackground</item>
         <item name="TransactionsBackgroundColor">@color/lightBackground</item>
-        <item name="TransactionItemBackgroundColor">@color/white</item>
-        <item name="TransactionItemBackgroundColorPressed">@color/bars_color</item>
+        <item name="TransactionItemBackgroundColor">@color/transaction_item_background_light</item>
         <item name="CoinItemBackgroundColor">@color/white</item>
         <item name="FilterButtonBackgroundColor">@color/bars_color</item>
         <item name="CoinItemBackgroundColorPressed">@color/bars_color</item>
