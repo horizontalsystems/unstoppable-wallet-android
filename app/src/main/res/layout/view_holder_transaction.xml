@@ -9,16 +9,29 @@
     android:clickable="true"
     >
 
+    <ImageView
+        android:id="@+id/imgAvatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/avatar_placeholder"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
     <TextView
         android:id="@+id/txAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
+        android:fontFamily="@font/noto_sans_bold"
         android:textColor="@color/green_crypto"
         android:textSize="14sp"
-        android:fontFamily="@font/noto_sans_bold"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imgAvatar"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="+ 0,006482 BTC"
         />
@@ -27,12 +40,12 @@
         android:id="@+id/txValueInFiat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
+        android:layout_marginStart="12dp"
         android:textColor="@color/grey"
         android:textSize="14sp"
         android:fontFamily="@font/noto_sans"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imgAvatar"
         app:layout_constraintTop_toBottomOf="@+id/txAmount"
         tools:text="$400 when received"
         />
