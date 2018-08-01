@@ -101,14 +101,14 @@
                 />
 
             <bitcoin.wallet.modules.settings.SettingsItemView
-                android:id="@+id/darkMode"
+                android:id="@+id/lightMode"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/language"
-                app:setting_icon="@drawable/dark_mode"
-                app:setting_title="Dark Mode"
+                app:setting_icon="@drawable/light_mode"
+                app:setting_title="Light Mode"
                 />
 
             <View
@@ -117,7 +117,7 @@
                 android:layout_height="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/darkMode"
+                app:layout_constraintTop_toBottomOf="@+id/lightMode"
                 />
 
             <bitcoin.wallet.modules.settings.SettingsItemView

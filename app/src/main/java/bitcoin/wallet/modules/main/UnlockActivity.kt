@@ -25,7 +25,7 @@ class UnlockActivity : AppCompatActivity(), NumPadItemsAdapter.Listener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(if (Factory.preferencesManager.isDarkModeEnabled) R.style.DarkModeAppTheme else R.style.LightModeAppTheme)
+        setTheme(if (Factory.preferencesManager.isLightModeEnabled) R.style.LightModeAppTheme else R.style.DarkModeAppTheme)
 
         setContentView(R.layout.activity_unlock)
 
