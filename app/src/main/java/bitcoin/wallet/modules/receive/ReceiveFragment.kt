@@ -76,7 +76,7 @@ class ReceiveFragment : DialogFragment() {
 
         viewModel.showCopiedLiveEvent.observe(this, Observer {
             rootView.findViewById<TextView>(R.id.txtCopy)?.let {
-                HudHelper.showCopySuccess()
+                HudHelper.showCopySuccess(activity)
             }
         })
 

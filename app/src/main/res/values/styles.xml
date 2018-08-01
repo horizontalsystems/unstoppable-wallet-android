@@ -91,7 +91,6 @@
 
     <style name="Button" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:textColor">@color/black</item>
-        <item name="android:height">50dp</item>
         <item name="android:textSize">17sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:textAllCaps">false</item>
@@ -101,7 +100,10 @@
 
     <style name="ButtonGrey_4" parent="Button">
         <item name="android:background">@drawable/button_grey_background_4</item>
-        <item name="android:height">36dp</item>
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingBottom">7dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
         <item name="android:textColor">@color/dark</item>
     </style>
 
