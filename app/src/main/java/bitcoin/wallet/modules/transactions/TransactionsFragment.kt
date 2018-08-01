@@ -38,6 +38,9 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
             transactionItems?.let {
                 transactionsAdapter.items = it
                 transactionsAdapter.notifyDataSetChanged()
+
+                recyclerTransactions.visibility = if (it.isEmpty()) View.GONE else View.VISIBLE
+                emptyListText.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
             }
         })
 
