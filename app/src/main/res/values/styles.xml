@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <!-- App themable color names -->
     <attr name="NumpadNumberColor" format="reference|color" />
@@ -17,6 +17,8 @@
     <attr name="StatusBarColor" format="reference|color" />
     <attr name="RippleColor" format="reference|color" />
     <attr name="NumpadDeleteButton" format="reference" />
+    <attr name="AppBarBackground" format="reference" />
+    <attr name="BottomNavBackground" format="reference" />
 
     <!-- Base application theme. -->
     <style name="DarkModeAppTheme" parent="Theme.AppCompat.NoActionBar">
@@ -49,6 +51,8 @@
         <item name="StatusBarColor">@color/dark</item>
         <item name="RippleColor">@color/ripple_white</item>
         <item name="NumpadDeleteButton">@drawable/round_backspace_24px</item>
+        <item name="AppBarBackground">@drawable/shadow_top_navigation</item>
+        <item name="BottomNavBackground">@drawable/shadow_bottom_navigation</item>
     </style>
 
     <style name="LightModeAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -75,12 +79,14 @@
         <item name="TransactionsBackgroundColor">@color/lightBackground</item>
         <item name="TransactionItemBackgroundColor">@color/white</item>
         <item name="CoinItemBackgroundColor">@color/white</item>
-        <item name="FilterButtonBackgroundColor">@color/white</item>
+        <item name="FilterButtonBackgroundColor">@color/bars_color</item>
         <item name="SettingItemBackgroundColor">@color/white</item>
         <item name="BottomNavigationBackgroundColor">@color/bars_color</item>
         <item name="StatusBarColor">@color/bars_color</item>
         <item name="RippleColor">@color/ripple_black</item>
         <item name="NumpadDeleteButton">@drawable/round_backspace_dark_24px</item>
+        <item name="AppBarBackground">@drawable/shadow_top_navigation_light</item>
+        <item name="BottomNavBackground">@drawable/shadow_bottom_navigation_light</item>
     </style>
 
     <style name="Button" parent="Widget.AppCompat.Button.Borderless">
@@ -91,6 +97,12 @@
         <item name="android:textAllCaps">false</item>
         <item name="android:fontFamily">@font/noto_sans_bold</item>
         <item name="android:background">@drawable/button_yellow_background_12</item>
+    </style>
+
+    <style name="ButtonGrey_4" parent="Button">
+        <item name="android:background">@drawable/button_grey_background_4</item>
+        <item name="android:height">36dp</item>
+        <item name="android:textColor">@color/dark</item>
     </style>
 
     <style name="ButtonGreen_12" parent="Button">
@@ -199,6 +211,14 @@
         <item name="android:textSize">17sp</item>
         <item name="android:fontFamily">@font/noto_sans</item>
         <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Widget.Shadow.AppBar" parent="">
+        <item name="android:background">?AppBarBackground</item>
+        <item name="android:layout_height">4dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="layout_anchorGravity">bottom</item>
+        <item name="android:layout_gravity">bottom</item>
     </style>
 
 </resources>

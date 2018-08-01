@@ -28,7 +28,7 @@
         android:id="@+id/bottom_navigation_bar_shadow"
         android:layout_width="0dp"
         android:layout_height="4dp"
-        android:background="@drawable/shadow_bottom_navigation"
+        android:background="?BottomNavBackground"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

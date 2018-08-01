@@ -84,5 +84,6 @@
     <string name="tx_info_bottom_sheet_less">Less</string>
 
     <string name="blockchain_syncing">Syncing</string>
+    <string name="tx_info_empty_list">You don\’t have any pending or past transaction yet</string>
 
 </resources>
