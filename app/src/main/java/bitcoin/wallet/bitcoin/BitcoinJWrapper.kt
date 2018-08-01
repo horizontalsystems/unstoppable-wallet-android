@@ -73,9 +73,9 @@ class BitcoinJWrapper(private val filesDir: File, assetManager: AssetManager, te
 
     }
 
-    fun startAsync() {
+    fun startAsync(tracker: DownloadProgressTracker) {
         peerGroup.startAsync().addListener(Runnable {
-            peerGroup.startBlockChainDownload(DownloadProgressTracker())
+            peerGroup.startBlockChainDownload(tracker)
         }, MoreExecutors.directExecutor())
     }
 

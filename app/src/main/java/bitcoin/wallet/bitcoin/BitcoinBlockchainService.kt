@@ -5,13 +5,13 @@ import bitcoin.wallet.blockchain.IBlockchainService
 import bitcoin.wallet.blockchain.InvalidAddress
 import bitcoin.wallet.blockchain.NotEnoughFundsException
 import bitcoin.wallet.entities.Balance
-import bitcoin.wallet.entities.BlockchainInfo
 import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.log
 import io.reactivex.subjects.PublishSubject
 import org.bitcoinj.core.AddressFormatException
 import org.bitcoinj.core.InsufficientMoneyException
 import org.bitcoinj.core.Transaction
+import org.bitcoinj.core.listeners.DownloadProgressTracker
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
 
@@ -23,6 +23,8 @@ object BitcoinBlockchainService : IBlockchainService {
 
     private var updateBlockchainHeightSubject = PublishSubject.create<Long>()
     private var updateTransactionsSubject = PublishSubject.create<Map<String, Transaction>>()
+
+    private const val BTC = "BTC"
 
     // Sets block-height to subject only if it greater than previous one
     private var latestBlockHeight = 0
@@ -52,6 +54,11 @@ object BitcoinBlockchainService : IBlockchainService {
 
         bitcoinJWrapper.wallet.addChangeEventListener {
             "wallet.addChangeEventListener".log()
+
+            it.getTransactions(true).forEach {
+                it.confidence.confidenceType.log("tx confidenceType")
+            }
+
         }
 
         bitcoinJWrapper.wallet.addCoinsReceivedEventListener { _, tx, prevBalance, newBalance ->
@@ -78,7 +85,17 @@ object BitcoinBlockchainService : IBlockchainService {
             "Downloaded block: ${block.time}, ${block.hashAsString}, Blocks left: $blocksLeft".log()
         }
 
-        bitcoinJWrapper.startAsync()
+        bitcoinJWrapper.startAsync(object : DownloadProgressTracker() {
+            override fun startDownload(blocks: Int) {
+                super.startDownload(blocks)
+                storage.updateBlockchainSyncing(BTC, true)
+            }
+
+            override fun doneDownload() {
+                super.doneDownload()
+                storage.updateBlockchainSyncing(BTC, false)
+            }
+        })
     }
 
     override fun getReceiveAddress(): String = bitcoinJWrapper.getReceiveAddress()
@@ -103,17 +120,13 @@ object BitcoinBlockchainService : IBlockchainService {
 
     private fun updateBalance(balance: Long) {
         storage.updateBalance(Balance().apply {
-            code = "BTC"
+            code = BTC
             value = balance
         })
     }
 
     private fun updateBlockHeight(height: Long) {
-        storage.updateBlockchainInfo(
-                BlockchainInfo().apply {
-                    coinCode = "BTC"
-                    latestBlockHeight = height
-                })
+        storage.updateBlockchainHeight(BTC, height)
     }
 
     private fun enqueueTransactionUpdate(tx: Transaction) {
@@ -145,7 +158,7 @@ object BitcoinBlockchainService : IBlockchainService {
     private fun newTransactionRecord(tx: Transaction): TransactionRecord {
         return TransactionRecord().apply {
             transactionHash = tx.hashAsString
-            coinCode = "BTC"
+            coinCode = BTC
             amount = tx.getValue(bitcoinJWrapper.wallet).value
             incoming = amount > 0
             timestamp = tx.updateTime.time
