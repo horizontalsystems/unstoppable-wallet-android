@@ -99,6 +99,12 @@
         <item name="android:background">@drawable/button_yellow_background_12</item>
     </style>
 
+    <style name="ButtonGrey_4" parent="Button">
+        <item name="android:background">@drawable/button_grey_background_4</item>
+        <item name="android:height">36dp</item>
+        <item name="android:textColor">@color/dark</item>
+    </style>
+
     <style name="ButtonGreen_12" parent="Button">
         <item name="android:background">@drawable/button_green_background_12</item>
     </style>
