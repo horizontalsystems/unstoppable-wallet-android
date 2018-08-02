@@ -10,8 +10,8 @@
     android:background="@drawable/clickable_coin_holder_background"
     android:orientation="vertical"
     android:paddingBottom="8dp"
-    android:paddingEnd="12dp"
-    android:paddingStart="0dp"
+    android:paddingEnd="10dp"
+    android:paddingStart="10dp"
     android:paddingTop="12dp"
     >
 
@@ -19,13 +19,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp"
         >
 
         <TextView
             android:id="@+id/textName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_weight="1"
             android:fontFamily="@font/noto_sans_bold"
             android:textColor="?BallanceCoinNameColor"
@@ -52,6 +53,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         android:layout_marginTop="16dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp"
         android:orientation="horizontal"
         >
 
@@ -59,14 +62,12 @@
             android:id="@+id/textAmountFiat"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_weight="1"
             android:fontFamily="@font/noto_sans"
             android:textColor="@color/yellow_text_on_dark_color_selector"
             android:textSize="14sp"
             tools:text="$52.50"
             />
-
 
         <TextView
             android:id="@+id/textAmount"
@@ -84,6 +85,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:visibility="gone"
         >
 
         <Button
@@ -92,7 +94,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
-            android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:text="@string/button_receive"
             />
@@ -102,7 +103,6 @@
             style="@style/ButtonYellowOnDark"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="4dp"
             android:layout_weight="1"
             android:text="@string/button_pay"

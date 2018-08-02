@@ -44,6 +44,7 @@
         android:layout_marginTop="48dp"
         android:layout_marginBottom="48dp"
         android:textAlignment="center"
+        android:textColor="@color/grey"
         android:visibility="gone"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         />

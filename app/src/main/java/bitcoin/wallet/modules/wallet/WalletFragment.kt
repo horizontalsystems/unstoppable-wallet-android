@@ -129,9 +129,9 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
             onHolderCLicked?.invoke()
         }
 
-        if (expand) {
+        if (expand && buttonsWrapper.visibility == View.GONE) {
             AnimationHelper.expand(buttonsWrapper)
-        } else {
+        } else if(!expand && buttonsWrapper.visibility == View.VISIBLE) {
             AnimationHelper.collapse(buttonsWrapper)
         }
 
