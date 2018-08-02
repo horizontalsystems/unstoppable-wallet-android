@@ -127,7 +127,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider_2"
-                app:setting_icon="@drawable/alert"
+                app:setting_icon="@drawable/ic_alert_bell"
                 app:setting_title="Push Notifications"
                 />
 

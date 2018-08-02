@@ -5,7 +5,6 @@ import android.content.res.Resources
 import android.graphics.PorterDuff
 import android.util.TypedValue
 import android.view.Menu
-import bitcoin.wallet.R
 
 object LayoutHelper {
 
@@ -24,12 +23,12 @@ object LayoutHelper {
         if (dp == 0f) 0 else Math.ceil((density * dp).toDouble()).toInt()
     } ?: dp.toInt()
 
-    fun getAttrColor(attr: Int, theme: Resources.Theme) : Int {
+    fun getAttr(attr: Int, theme: Resources.Theme) : Int? {
         val typedValue = TypedValue()
         return if (theme.resolveAttribute(attr, typedValue, true))
             typedValue.data
         else
-            R.color.transparent
+            null
     }
 
 }

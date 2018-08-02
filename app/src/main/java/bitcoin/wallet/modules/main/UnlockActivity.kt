@@ -13,6 +13,7 @@ import android.widget.TextView
 import bitcoin.wallet.R
 import bitcoin.wallet.core.App
 import bitcoin.wallet.core.managers.Factory
+import bitcoin.wallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_unlock.*
 
 class UnlockActivity : AppCompatActivity(), NumPadItemsAdapter.Listener {
@@ -63,6 +64,7 @@ class UnlockActivity : AppCompatActivity(), NumPadItemsAdapter.Listener {
                     if (enteredPin.toString() == "1234") {
                         unlockPage()
                     } else if (enteredPin.length == 4) {
+                        HudHelper.showErrorMessage(R.string.hud_text_invalid_pin_error, this)
                         Handler().postDelayed({
                             enteredPin.setLength(0)
                             updatePinCircles()

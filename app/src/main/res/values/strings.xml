@@ -91,4 +91,12 @@
 
     <string name="tx_info_empty_list">You don\’t have any pending or past transaction yet</string>
 
+    <!--Hud texts-->
+    <string name="hud_text_unlock">Unlock</string>
+    <string name="hud_text_success">Success</string>
+    <string name="hud_text_error">Error</string>
+    <string name="hud_text_no_internet">No Internet</string>
+    <string name="hud_text_copied">Copied</string>
+    <string name="hud_text_invalid_pin_error">Invalid PIN. \nPlease try again.</string>
+
 </resources>

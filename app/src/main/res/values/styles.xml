@@ -19,6 +19,9 @@
     <attr name="NumpadDeleteButton" format="reference" />
     <attr name="AppBarBackground" format="reference" />
     <attr name="BottomNavBackground" format="reference" />
+    <attr name="HudIconTint" format="reference|color" />
+    <attr name="HudBackground" format="reference|color" />
+    <attr name="HudTextColor" format="reference|color" />
 
     <!-- Base application theme. -->
     <style name="DarkModeAppTheme" parent="Theme.AppCompat.NoActionBar">
@@ -53,6 +56,9 @@
         <item name="NumpadDeleteButton">@drawable/round_backspace_24px</item>
         <item name="AppBarBackground">@drawable/shadow_top_navigation</item>
         <item name="BottomNavBackground">@drawable/shadow_bottom_navigation</item>
+        <item name="HudIconTint">@color/steel_grey</item>
+        <item name="HudBackground">@color/black_85</item>
+        <item name="HudTextColor">@color/white</item>
     </style>
 
     <style name="LightModeAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -87,11 +93,13 @@
         <item name="NumpadDeleteButton">@drawable/round_backspace_dark_24px</item>
         <item name="AppBarBackground">@drawable/shadow_top_navigation_light</item>
         <item name="BottomNavBackground">@drawable/shadow_bottom_navigation_light</item>
+        <item name="HudIconTint">@color/dark</item>
+        <item name="HudBackground">@color/bars_color_95</item>
+        <item name="HudTextColor">@color/dark</item>
     </style>
 
     <style name="Button" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:textColor">@color/black</item>
-        <item name="android:height">50dp</item>
         <item name="android:textSize">17sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:textAllCaps">false</item>
@@ -101,7 +109,10 @@
 
     <style name="ButtonGrey_4" parent="Button">
         <item name="android:background">@drawable/button_grey_background_4</item>
-        <item name="android:height">36dp</item>
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingBottom">7dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
         <item name="android:textColor">@color/dark</item>
     </style>
 
