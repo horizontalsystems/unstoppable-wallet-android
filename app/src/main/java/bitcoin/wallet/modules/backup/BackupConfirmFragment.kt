@@ -13,7 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import bitcoin.wallet.R
 import bitcoin.wallet.core.security.EncryptionManager
-import bitcoin.wallet.lib.ErrorDialog
+import bitcoin.wallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_backup_words_confirm.*
 
 class BackupConfirmFragment : Fragment(), BackupConfirmAlert.Listener {
@@ -61,11 +61,7 @@ class BackupConfirmFragment : Fragment(), BackupConfirmAlert.Listener {
     }
 
     private fun showError(errorMsgId: Int?) {
-        context?.let { context ->
-            errorMsgId?.let {
-                ErrorDialog(context, errorMsgId).show()
-            }
-        }
+        errorMsgId?.let { HudHelper.showErrorMessage(it, activity) }
     }
 
     override fun backupConfirmationSuccess() {

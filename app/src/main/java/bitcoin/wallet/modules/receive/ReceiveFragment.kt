@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentActivity
@@ -16,7 +15,6 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import bitcoin.wallet.R
-import bitcoin.wallet.lib.ErrorDialog
 import bitcoin.wallet.viewHelpers.HudHelper
 import bitcoin.wallet.viewHelpers.TextHelper
 
@@ -33,11 +31,6 @@ class ReceiveFragment : DialogFragment() {
 
         viewModel = ViewModelProviders.of(this).get(ReceiveViewModel::class.java)
         viewModel.init(coinCode)
-    }
-
-    override fun onDismiss(dialog: DialogInterface?) {
-        HudHelper.cancelToast()
-        super.onDismiss(dialog)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -66,12 +59,10 @@ class ReceiveFragment : DialogFragment() {
         })
 
         viewModel.showErrorLiveData.observe(this, Observer { error ->
-            error?.apply {
-                activity?.let { context ->
-                    dismiss()
-                    ErrorDialog(context, error).show()
-                }
+            error?.let {
+                HudHelper.showErrorMessage(it, activity)
             }
+            dismiss()
         })
 
         viewModel.showCopiedLiveEvent.observe(this, Observer {
