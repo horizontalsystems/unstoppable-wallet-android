@@ -41,7 +41,9 @@ class MainActivity : AppCompatActivity() {
         viewPager.offscreenPageLimit = 2
         viewPager.setPagingEnabled(true)
 
-        bottomNavigation.defaultBackgroundColor = LayoutHelper.getAttrColor(R.attr.BottomNavigationBackgroundColor, theme)
+        LayoutHelper.getAttr(R.attr.BottomNavigationBackgroundColor, theme)?.let {
+            bottomNavigation.defaultBackgroundColor = it
+        }
         bottomNavigation.accentColor = ContextCompat.getColor(this, R.color.yellow_crypto)
         bottomNavigation.inactiveColor = ContextCompat.getColor(this, R.color.grey)
 

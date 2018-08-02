@@ -20,6 +20,7 @@
     <color name="red_warning">#ff5e3a</color>
     <color name="bars_color">#f9f9f9</color>
     <color name="bars_color_95">#f2f9f9f9</color>
+    <color name="black_85">#d9000000</color>
     <!-- eof base colors -->
 
     <color name="navigation_bar">?attr/BottomNavigationBackgroundColor</color>

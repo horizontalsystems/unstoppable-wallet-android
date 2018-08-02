@@ -19,6 +19,9 @@
     <attr name="NumpadDeleteButton" format="reference" />
     <attr name="AppBarBackground" format="reference" />
     <attr name="BottomNavBackground" format="reference" />
+    <attr name="HudIconTint" format="reference|color" />
+    <attr name="HudBackground" format="reference|color" />
+    <attr name="HudTextColor" format="reference|color" />
 
     <!-- Base application theme. -->
     <style name="DarkModeAppTheme" parent="Theme.AppCompat.NoActionBar">
@@ -53,6 +56,9 @@
         <item name="NumpadDeleteButton">@drawable/round_backspace_24px</item>
         <item name="AppBarBackground">@drawable/shadow_top_navigation</item>
         <item name="BottomNavBackground">@drawable/shadow_bottom_navigation</item>
+        <item name="HudIconTint">@color/steel_grey</item>
+        <item name="HudBackground">@color/black_85</item>
+        <item name="HudTextColor">@color/white</item>
     </style>
 
     <style name="LightModeAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -87,6 +93,9 @@
         <item name="NumpadDeleteButton">@drawable/round_backspace_dark_24px</item>
         <item name="AppBarBackground">@drawable/shadow_top_navigation_light</item>
         <item name="BottomNavBackground">@drawable/shadow_bottom_navigation_light</item>
+        <item name="HudIconTint">@color/dark</item>
+        <item name="HudBackground">@color/bars_color_95</item>
+        <item name="HudTextColor">@color/dark</item>
     </style>
 
     <style name="Button" parent="Widget.AppCompat.Button.Borderless">
