@@ -46,7 +46,7 @@ object SendModule {
     }
 
     fun init(view: SendViewModel, router: IRouter, coinCode: String) {
-        val interactor = SendInteractor(Factory.databaseManager, BlockchainManager, TextHelper, coinCode)
+        val interactor = SendInteractor(Factory.databaseManager, Factory.blockchainManager, TextHelper, coinCode)
         val presenter = SendPresenter(interactor, router, coinCode)
 
         view.delegate = presenter

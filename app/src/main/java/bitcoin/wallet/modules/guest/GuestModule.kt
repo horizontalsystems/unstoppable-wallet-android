@@ -37,7 +37,7 @@ object GuestModule {
     }
 
     fun init(view: GuestViewModel, router: IRouter) {
-        val interactor = GuestInteractor(Factory.mnemonicManager, BlockchainManager)
+        val interactor = GuestInteractor(Factory.mnemonicManager, Factory.blockchainManager)
         val presenter = GuestPresenter(interactor, router)
 
         view.delegate = presenter

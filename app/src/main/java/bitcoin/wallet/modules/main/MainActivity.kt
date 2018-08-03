@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import bitcoin.wallet.LauncherActivity
 import bitcoin.wallet.R
-import bitcoin.wallet.blockchain.BlockchainManager
 import bitcoin.wallet.core.App
 import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.core.security.EncryptionManager
@@ -77,7 +76,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         try {
-            BlockchainManager.startServices()
+            Factory.blockchainManager.startServices()
         } catch (exception: UserNotAuthenticatedException) {
             EncryptionManager.showAuthenticationScreen(this, LauncherActivity.AUTHENTICATE_TO_REDIRECT)
         } catch (exception: KeyPermanentlyInvalidatedException) {

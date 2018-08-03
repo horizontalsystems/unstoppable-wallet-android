@@ -9,34 +9,27 @@ import io.reactivex.subjects.PublishSubject
 import org.bitcoinj.core.listeners.DownloadProgressTracker
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-object BitcoinBlockchainService : IBlockchainService {
-
-    private lateinit var storage: BlockchainStorage
-    private lateinit var bitcoinJWrapper: BitcoinJWrapper
+class BitcoinBlockchainService @Inject constructor(private val storage: BlockchainStorage, private val bitcoinJWrapper: BitcoinJWrapper) : IBlockchainService {
 
     private var updateTransactionsSubject = PublishSubject.create<Map<String, TransactionRecord>>()
 
-    private const val BTC = "BTC"
+    private val BTC = "BTC"
 
     private var txs = ConcurrentHashMap<String, TransactionRecord>()
 
-    fun init(bitcoinJWrapper: BitcoinJWrapper, storage: BlockchainStorage) {
-        this.storage = storage
-        this.bitcoinJWrapper = bitcoinJWrapper
-    }
-
-    fun initNewWallet() {
+    override fun initNewWallet() {
         updateBalance(0)
         updateBlockHeight(0)
     }
 
-    fun start(words: List<String>) {
+    override fun start(paperKeys: List<String>) {
         updateTransactionsSubject.sample(2, TimeUnit.SECONDS).subscribe {
             dequeueTransactionUpdate()
         }
 
-        bitcoinJWrapper.prepareEnvForWallet(words, object : BitcoinChangeListener {
+        bitcoinJWrapper.prepareEnvForWallet(paperKeys, object : BitcoinChangeListener {
             override fun onBalanceChange(value: Long) {
                 updateBalance(value)
             }

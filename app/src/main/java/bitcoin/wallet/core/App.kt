@@ -3,15 +3,21 @@ package bitcoin.wallet.core
 import android.app.Application
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import bitcoin.wallet.blockchain.BlockchainManager
-import bitcoin.wallet.blockchain.BlockchainStorage
 import bitcoin.wallet.core.managers.BackgroundManager
-import bitcoin.wallet.core.managers.Factory
+import bitcoin.wallet.injections.component.AppComponent
+import bitcoin.wallet.injections.component.DaggerAppComponent
+import bitcoin.wallet.injections.module.AppModule
 import io.realm.Realm
+import javax.inject.Inject
 
 class App : Application() {
 
+    @Inject
+    lateinit var exchangeRateService: ExchangeRateService
+
     companion object {
+
+        lateinit var appComponent: AppComponent
         lateinit var preferences: SharedPreferences
 
         val testMode = true
@@ -25,23 +31,26 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
         Realm.init(this)
+
+        appComponent = DaggerAppComponent
+                .builder()
+                .appModule(AppModule(this))
+                .build()
+
+        appComponent.inject(this)
+
 
         BackgroundManager.init(this)
 
         startBlockchainService()
 
         instance = this
+        preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
     }
 
     private fun startBlockchainService() {
-        // todo: implement Blockchain as service
-        BlockchainManager.localStorage = Factory.preferencesManager
-        BlockchainManager.init(filesDir, resources.assets, BlockchainStorage, testMode)
-
-        ExchangeRateService.networkManager = Factory.networkManager
-        ExchangeRateService.start(BlockchainStorage)
+        exchangeRateService.start()
     }
 
 }
