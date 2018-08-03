@@ -14,9 +14,9 @@ import android.view.MenuItem
 import bitcoin.wallet.R
 import bitcoin.wallet.core.security.EncryptionManager
 import bitcoin.wallet.lib.EditTextViewHolder
-import bitcoin.wallet.lib.ErrorDialog
 import bitcoin.wallet.lib.WordsInputAdapter
 import bitcoin.wallet.modules.main.MainModule
+import bitcoin.wallet.viewHelpers.HudHelper
 import bitcoin.wallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.activity_restore_wallet.*
 
@@ -40,7 +40,7 @@ class RestoreWalletActivity : AppCompatActivity() {
 
         viewModel.errorLiveData.observe(this, Observer { errorId ->
             errorId?.let {
-                ErrorDialog(this, errorId).show()
+                HudHelper.showErrorMessage(it, this@RestoreWalletActivity)
             }
         })
 

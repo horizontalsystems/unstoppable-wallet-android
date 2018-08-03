@@ -20,7 +20,7 @@ import android.view.WindowManager
 import android.widget.*
 import bitcoin.wallet.R
 import bitcoin.wallet.entities.coins.Coin
-import bitcoin.wallet.lib.ErrorDialog
+import bitcoin.wallet.viewHelpers.HudHelper
 import com.google.zxing.integration.android.IntentIntegrator
 
 class SendFragment : DialogFragment() {
@@ -192,11 +192,7 @@ class SendFragment : DialogFragment() {
         })
 
         viewModel.showErrorLiveData.observe(this, Observer { error ->
-            error?.apply {
-                activity?.let { context ->
-                    ErrorDialog(context, error).show()
-                }
-            }
+            error?.let { HudHelper.showErrorMessage(it, activity) }
         })
 
         viewModel.showSuccessLiveEvent.observe(this, Observer {

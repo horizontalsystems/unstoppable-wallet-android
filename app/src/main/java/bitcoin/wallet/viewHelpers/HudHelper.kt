@@ -51,7 +51,7 @@ object HudHelper {
 
         toast = Toast(App.instance)
         toast?.view = view
-        toast?.setGravity(Gravity.TOP, 0, 50)
+        toast?.setGravity(Gravity.CENTER, 0, -200)
         toast?.duration = Toast.LENGTH_SHORT
         toast?.show()
     }

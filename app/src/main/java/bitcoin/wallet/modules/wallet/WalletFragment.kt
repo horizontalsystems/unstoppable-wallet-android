@@ -93,7 +93,7 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
             is ViewHolderCoin -> holder.bind(items[position],
                     onPayClick = { listener.onPayClicked(items[position].coinValue.coin) },
                     onReceiveClick = { listener.onReceiveClicked(items[position].coinValue.coin) },
-                    onHolderCLicked = {
+                    onHolderClicked = {
                         expandedViewPosition = if (expandedViewPosition == position) -1 else position
                         notifyDataSetChanged()
                     },
@@ -105,7 +105,7 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
 
 class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(walletBalanceViewItem: WalletBalanceViewItem, onPayClick: (() -> (Unit))? = null, onReceiveClick: (() -> (Unit))? = null, onHolderCLicked: (() -> (Unit))? = null, expand: Boolean = false) {
+    fun bind(walletBalanceViewItem: WalletBalanceViewItem, onPayClick: (() -> (Unit))? = null, onReceiveClick: (() -> (Unit))? = null, onHolderClicked: (() -> (Unit))? = null, expand: Boolean = false) {
         val numberFormat = NumberFormatHelper.fiatAmountFormat
         textName.text = "${walletBalanceViewItem.coinValue.coin.name} (${walletBalanceViewItem.coinValue.coin.code})"
         textAmountFiat.text = "${walletBalanceViewItem.currencyValue.currency.symbol}${numberFormat.format(walletBalanceViewItem.currencyValue.value)}"
@@ -126,7 +126,7 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
         }
 
         containerView.setOnClickListener {
-            onHolderCLicked?.invoke()
+            onHolderClicked?.invoke()
         }
 
         if (expand && buttonsWrapper.visibility == View.GONE) {
