@@ -5,18 +5,18 @@ import bitcoin.wallet.entities.ExchangeRate
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-object ExchangeRateService {
-    lateinit var networkManager: INetworkManager
+class ExchangeRateService @Inject constructor(private val networkManager: INetworkManager, private val storage: BlockchainStorage) {
 
-    fun start(storage: BlockchainStorage) {
+    fun start() {
         Observable.interval(0, 10, TimeUnit.MINUTES, Schedulers.io())
                 .subscribe {
-                    refreshRates(storage)
+                    refreshRates()
                 }
     }
 
-    fun refreshRates(storage: BlockchainStorage) {
+    fun refreshRates() {
         networkManager.getExchangeRates()
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())

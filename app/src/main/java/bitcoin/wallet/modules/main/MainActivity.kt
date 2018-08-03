@@ -14,18 +14,31 @@ import bitcoin.wallet.blockchain.BlockchainManager
 import bitcoin.wallet.core.App
 import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.core.security.EncryptionManager
+import bitcoin.wallet.injections.component.DaggerMainActivityComponent
+import bitcoin.wallet.injections.module.AppModule
+import bitcoin.wallet.injections.module.MainActivityModule
 import bitcoin.wallet.viewHelpers.LayoutHelper
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import kotlinx.android.synthetic.main.activity_dashboard.*
-
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var blockchainManager: BlockchainManager
 
     private lateinit var adapter: MainTabsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        DaggerMainActivityComponent
+                .builder()
+                .appModule(AppModule(App.instance))
+                .mainActivityModule(MainActivityModule(this))
+                .build()
+                .inject(this)
 
         val lightMode = Factory.preferencesManager.isLightModeEnabled
         setTheme(if (lightMode) R.style.LightModeAppTheme else R.style.DarkModeAppTheme)
@@ -77,7 +90,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         try {
-            BlockchainManager.startServices()
+            blockchainManager.startServices()
         } catch (exception: UserNotAuthenticatedException) {
             EncryptionManager.showAuthenticationScreen(this, LauncherActivity.AUTHENTICATE_TO_REDIRECT)
         } catch (exception: KeyPermanentlyInvalidatedException) {

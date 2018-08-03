@@ -42,6 +42,7 @@ interface IDatabaseManager {
     fun getTransactionRecord(coinCode: String, txHash: String): Observable<TransactionRecord>
     fun updateBlockchainHeight(coinCode: String, height: Long)
     fun updateBlockchainSyncing(coinCode: String, syncing: Boolean)
+    fun close()
 }
 
 interface INetworkManager {

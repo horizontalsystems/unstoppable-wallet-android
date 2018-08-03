@@ -1,34 +1,25 @@
 package bitcoin.wallet.blockchain
 
-import android.content.res.AssetManager
 import android.security.keystore.UserNotAuthenticatedException
-import bitcoin.wallet.bitcoin.BitcoinBlockchainService
-import bitcoin.wallet.bitcoin.BitcoinJWrapper
 import bitcoin.wallet.core.ILocalStorage
-import java.io.File
+import javax.inject.Inject
 
-object BlockchainManager {
-
-    lateinit var localStorage: ILocalStorage
+class BlockchainManager @Inject constructor(private val bitcoinBlockchainService: IBlockchainService, private val localStorage: ILocalStorage) {
 
     private val blockchainServices = mapOf<String, IBlockchainService>(
-            "BTC" to BitcoinBlockchainService
+            "BTC" to bitcoinBlockchainService
     )
-
-    fun init(filesDir: File, assetManager: AssetManager, storage: BlockchainStorage, testMode: Boolean) {
-        BitcoinBlockchainService.init(BitcoinJWrapper(filesDir, assetManager, testMode), storage)
-    }
 
     fun startServices() {
         localStorage.savedWords?.let {
-            BitcoinBlockchainService.start(it)
+            bitcoinBlockchainService.start(it)
         }
     }
 
     @Throws(UserNotAuthenticatedException::class)
     fun initNewWallet(words: List<String>) {
         localStorage.saveWords(words)
-        BitcoinBlockchainService.initNewWallet()
+        bitcoinBlockchainService.initNewWallet()
     }
 
     @Throws(NotEnoughFundsException::class, InvalidAddress::class)
@@ -51,6 +42,10 @@ interface IBlockchainService {
     fun sendCoins(address: String, value: Long)
 
     fun getReceiveAddress(): String
+
+    fun start(paperKeys: List<String>)
+
+    fun initNewWallet()
 
 }
 

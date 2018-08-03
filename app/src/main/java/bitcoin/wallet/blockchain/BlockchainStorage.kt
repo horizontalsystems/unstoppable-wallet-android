@@ -1,11 +1,13 @@
 package bitcoin.wallet.blockchain
 
+import bitcoin.wallet.core.IDatabaseManager
 import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.entities.Balance
 import bitcoin.wallet.entities.ExchangeRate
 import bitcoin.wallet.entities.TransactionRecord
+import javax.inject.Inject
 
-object BlockchainStorage {
+class BlockchainStorage @Inject constructor(val realm: IDatabaseManager) {
 
     fun insertOrUpdateTransactions(transactionRecords: List<TransactionRecord>) {
         val databaseManager = Factory.databaseManager

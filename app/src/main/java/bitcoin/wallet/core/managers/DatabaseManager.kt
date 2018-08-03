@@ -3,6 +3,7 @@ package bitcoin.wallet.core.managers
 import bitcoin.wallet.core.CollectionChangeset
 import bitcoin.wallet.core.DatabaseChangeset
 import bitcoin.wallet.core.IDatabaseManager
+import bitcoin.wallet.core.RealmManager
 import bitcoin.wallet.entities.Balance
 import bitcoin.wallet.entities.BlockchainInfo
 import bitcoin.wallet.entities.ExchangeRate
@@ -11,10 +12,11 @@ import bitcoin.wallet.entities.coins.bitcoin.BitcoinUnspentOutput
 import bitcoin.wallet.entities.coins.bitcoinCash.BitcoinCashUnspentOutput
 import io.reactivex.Observable
 import io.realm.Sort
+import javax.inject.Inject
 
-class DatabaseManager : IDatabaseManager {
+class DatabaseManager @Inject constructor(realmManager: RealmManager) : IDatabaseManager {
 
-    private val realm = Factory.realmManager.createWalletRealmLocal()
+    private val realm = RealmManager().createWalletRealmLocal()
 
     override fun getBitcoinUnspentOutputs(): Observable<DatabaseChangeset<BitcoinUnspentOutput>> =
             realm.where(BitcoinUnspentOutput::class.java).findAllAsync()
@@ -123,7 +125,7 @@ class DatabaseManager : IDatabaseManager {
                         it.collection.first()
                     }
 
-    fun close() {
+    override fun close() {
         realm.close()
     }
 
