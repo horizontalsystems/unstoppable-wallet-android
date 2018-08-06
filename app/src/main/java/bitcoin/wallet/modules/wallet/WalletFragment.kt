@@ -71,6 +71,10 @@ class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener 
             ReceiveModule.start(it, coin.code)
         }
     }
+
+    override fun performOnItemClick(position: Int) {
+        recyclerCoins.findViewHolderForAdapterPosition(position).itemView.performClick()
+    }
 }
 
 class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -78,6 +82,7 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
     interface Listener {
         fun onPayClicked(coin: Coin)
         fun onReceiveClicked(coin: Coin)
+        fun performOnItemClick(position: Int)
     }
 
     var items = listOf<WalletBalanceViewItem>()
@@ -94,10 +99,22 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
                     onPayClick = { listener.onPayClicked(items[position].coinValue.coin) },
                     onReceiveClick = { listener.onReceiveClicked(items[position].coinValue.coin) },
                     onHolderClicked = {
-                        expandedViewPosition = if (expandedViewPosition == position) -1 else position
-                        notifyDataSetChanged()
-                    },
-                    expand = expandedViewPosition == position)
+                        updateExpandedItem(position, it)
+                    })
+        }
+    }
+
+    private fun updateExpandedItem(position: Int, expanded: Boolean) {
+        val oldExpandPos = expandedViewPosition
+
+        expandedViewPosition = when {
+            expanded -> position
+            else -> if (expandedViewPosition == position) -1 else expandedViewPosition
+        }
+
+        //trigger only for collapsing other item
+        if (expanded && oldExpandPos > -1 && oldExpandPos != position) {
+            listener.performOnItemClick(oldExpandPos)
         }
     }
 
@@ -105,7 +122,7 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
 
 class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(walletBalanceViewItem: WalletBalanceViewItem, onPayClick: (() -> (Unit))? = null, onReceiveClick: (() -> (Unit))? = null, onHolderClicked: (() -> (Unit))? = null, expand: Boolean = false) {
+    fun bind(walletBalanceViewItem: WalletBalanceViewItem, onPayClick: (() -> (Unit))? = null, onReceiveClick: (() -> (Unit))? = null, onHolderClicked: ((Boolean) -> Unit)? = null) {
         val numberFormat = NumberFormatHelper.fiatAmountFormat
         textName.text = "${walletBalanceViewItem.coinValue.coin.name} (${walletBalanceViewItem.coinValue.coin.code})"
         textAmountFiat.text = "${walletBalanceViewItem.currencyValue.currency.symbol}${numberFormat.format(walletBalanceViewItem.currencyValue.value)}"
@@ -125,16 +142,18 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
             onReceiveClick?.invoke()
         }
 
+        var expand = false
         containerView.setOnClickListener {
-            onHolderClicked?.invoke()
-        }
+            expand = !expand
+            viewHolderRoot.isSelected = expand
 
-        if (expand && buttonsWrapper.visibility == View.GONE) {
-            AnimationHelper.expand(buttonsWrapper)
-        } else if(!expand && buttonsWrapper.visibility == View.VISIBLE) {
-            AnimationHelper.collapse(buttonsWrapper)
+            if (expand) {
+                AnimationHelper.expand(buttonsWrapper)
+            } else {
+                AnimationHelper.collapse(buttonsWrapper)
+            }
+            onHolderClicked?.invoke(expand)
         }
-
     }
 
 }
