@@ -72,7 +72,7 @@ class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener 
         }
     }
 
-    override fun performOnItemClick(position: Int) {
+    override fun onItemClick(position: Int) {
         recyclerCoins.findViewHolderForAdapterPosition(position).itemView.performClick()
     }
 }
@@ -82,7 +82,7 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
     interface Listener {
         fun onPayClicked(coin: Coin)
         fun onReceiveClicked(coin: Coin)
-        fun performOnItemClick(position: Int)
+        fun onItemClick(position: Int)
     }
 
     var items = listOf<WalletBalanceViewItem>()
@@ -114,7 +114,7 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
 
         //trigger only for collapsing other item
         if (expanded && oldExpandPos > -1 && oldExpandPos != position) {
-            listener.performOnItemClick(oldExpandPos)
+            listener.onItemClick(oldExpandPos)
         }
     }
 
