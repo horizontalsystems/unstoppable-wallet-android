@@ -100,7 +100,8 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
                     onReceiveClick = { listener.onReceiveClicked(items[position].coinValue.coin) },
                     onHolderClicked = {
                         updateExpandedItem(position, it)
-                    })
+                    },
+                    expanded = expandedViewPosition == position)
         }
     }
 
@@ -122,7 +123,7 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
 
 class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(walletBalanceViewItem: WalletBalanceViewItem, onPayClick: (() -> (Unit))? = null, onReceiveClick: (() -> (Unit))? = null, onHolderClicked: ((Boolean) -> Unit)? = null) {
+    fun bind(walletBalanceViewItem: WalletBalanceViewItem, onPayClick: (() -> (Unit))? = null, onReceiveClick: (() -> (Unit))? = null, onHolderClicked: ((Boolean) -> Unit)? = null, expanded: Boolean) {
         val numberFormat = NumberFormatHelper.fiatAmountFormat
         textName.text = "${walletBalanceViewItem.coinValue.coin.name} (${walletBalanceViewItem.coinValue.coin.code})"
         textAmountFiat.text = "${walletBalanceViewItem.currencyValue.currency.symbol}${numberFormat.format(walletBalanceViewItem.currencyValue.value)}"
@@ -142,17 +143,16 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
             onReceiveClick?.invoke()
         }
 
-        var expand = false
+        var isExpanded = expanded
         containerView.setOnClickListener {
-            expand = !expand
-            viewHolderRoot.isSelected = expand
-
-            if (expand) {
+            isExpanded = !isExpanded
+            viewHolderRoot.isSelected = isExpanded
+            if (isExpanded) {
                 AnimationHelper.expand(buttonsWrapper)
             } else {
                 AnimationHelper.collapse(buttonsWrapper)
             }
-            onHolderClicked?.invoke(expand)
+            onHolderClicked?.invoke(isExpanded)
         }
     }
 
