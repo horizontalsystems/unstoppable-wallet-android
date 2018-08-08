@@ -27,12 +27,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
         android:fontFamily="@font/noto_sans_bold"
         android:textColor="@color/green_crypto"
         android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/txValueInFiat"
         app:layout_constraintStart_toEndOf="@+id/imgAvatar"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
         tools:text="+ 0,006482 BTC"
         />
 
@@ -40,14 +41,15 @@
         android:id="@+id/txValueInFiat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         android:layout_marginStart="12dp"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/noto_sans"
         android:textColor="@color/grey"
         android:textSize="14sp"
-        android:fontFamily="@font/noto_sans"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imgAvatar"
         app:layout_constraintTop_toBottomOf="@+id/txAmount"
-        tools:text="$400 when received"
+        tools:text="$400"
         />
 
     <TextView
@@ -55,21 +57,30 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="12dp"
+        android:fontFamily="@font/noto_sans"
         android:textColor="@color/grey"
         android:textSize="14sp"
-        android:fontFamily="@font/noto_sans"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@id/txAmount"
         tools:text="3 June 2018"
+        />
+
+    <ImageView
+        android:id="@+id/statusIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:src="@drawable/pending"
+        app:layout_constraintRight_toRightOf="@id/txDate"
+        app:layout_constraintTop_toTopOf="@+id/txValueInFiat"
         />
 
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:background="#338a8a8f"
+        app:layout_constraintBottom_toBottomOf="parent"
         />
 
 </android.support.constraint.ConstraintLayout>

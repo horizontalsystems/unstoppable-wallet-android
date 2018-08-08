@@ -2,6 +2,7 @@ package bitcoin.wallet.modules.transactions
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
@@ -10,8 +11,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import bitcoin.wallet.R
+import bitcoin.wallet.core.App
 import bitcoin.wallet.modules.transactionInfo.TransactionInfoModule
 import bitcoin.wallet.viewHelpers.DateHelper
+import bitcoin.wallet.viewHelpers.LayoutHelper
 import bitcoin.wallet.viewHelpers.NumberFormatHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
@@ -101,13 +104,21 @@ class ViewHolderTransaction(override val containerView: View) : RecyclerView.Vie
         txAmount.setTextColor(ContextCompat.getColor(itemView.context, amountTextColor))
         txAmount.text = "$sign ${NumberFormatHelper.cryptoAmountFormat.format(Math.abs(transactionRecord.amount.value))} ${transactionRecord.amount.coin.code}"
         txDate.text = DateHelper.getRelativeDateString(itemView.context, transactionRecord.date)
-        txValueInFiat.text = "\$${NumberFormatHelper.fiatAmountFormat.format(transactionRecord.valueInBaseCurrency)} when " + (if (transactionRecord.incoming) "received" else "sent")
+        txValueInFiat.text = "\$${NumberFormatHelper.fiatAmountFormat.format(transactionRecord.valueInBaseCurrency)}"
+        statusIcon.setImageDrawable(getStatusIcon(transactionRecord.status))
+    }
+
+    private fun getStatusIcon(status: TransactionRecordViewItem.Status?): Drawable? {
+        return if (status == TransactionRecordViewItem.Status.SUCCESS)
+            LayoutHelper.getTintedDrawable(R.drawable.checkmark, R.color.green_crypto, App.instance)
+        else
+            LayoutHelper.d(R.drawable.pending, App.instance)
     }
 }
 
 class FilterAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var filters = listOf("All", "Bitcon", "Bitcon Cash", "Ethereum", "Litecoin")
+    var filters = listOf("All", "Bitcoin", "Bitcon Cash", "Ethereum", "Litecoin")
 
     override fun getItemCount() = filters.size
 
