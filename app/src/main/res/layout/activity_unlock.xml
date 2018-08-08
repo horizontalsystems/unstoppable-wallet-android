@@ -2,103 +2,112 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:layout_editor_absoluteY="25dp"
     >
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnDeposit"
+        app:layout_constraintVertical_bias="0.5"
+        >
+
+        <TextView
+            android:id="@+id/txtPromptPin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/noto_sans"
+            android:text="@string/unlock_page_enter_your_pin"
+            android:textSize="17sp"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/pinLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            app:layout_constraintTop_toBottomOf="@id/txtPromptPin"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            >
+
+            <ImageView
+                android:id="@+id/imgPinMaskOne"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/pin_circle_empty"
+                />
+
+            <ImageView
+                android:id="@+id/imgPinMaskTwo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                app:layout_constraintBottom_toBottomOf="@+id/imgPinMaskOne"
+                app:layout_constraintStart_toEndOf="@+id/imgPinMaskOne"
+                app:layout_constraintTop_toTopOf="@+id/imgPinMaskOne"
+                app:srcCompat="@drawable/pin_circle_empty"
+                />
+
+            <ImageView
+                android:id="@+id/imgPinMaskThree"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                app:layout_constraintBottom_toBottomOf="@+id/imgPinMaskTwo"
+                app:layout_constraintStart_toEndOf="@+id/imgPinMaskTwo"
+                app:layout_constraintTop_toTopOf="@+id/imgPinMaskTwo"
+                app:srcCompat="@drawable/pin_circle_empty"
+                />
+
+            <ImageView
+                android:id="@+id/imgPinMaskFour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                app:layout_constraintBottom_toBottomOf="@+id/imgPinMaskThree"
+                app:layout_constraintStart_toEndOf="@+id/imgPinMaskThree"
+                app:layout_constraintTop_toTopOf="@+id/imgPinMaskThree"
+                app:srcCompat="@drawable/pin_circle_empty"
+                />
+
+        </android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
 
     <Button
         android:id="@+id/btnDeposit"
         style="@style/ButtonGreen_12"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
         android:layout_marginEnd="32dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
         android:text="@string/unlock_page_receive_button"
+        app:layout_constraintBottom_toTopOf="@+id/numPadItems"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         />
-
-    <TextView
-        android:id="@+id/txtPromptPin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="72dp"
-        android:fontFamily="@font/noto_sans"
-        android:text="@string/unlock_page_enter_your_pin"
-        android:textSize="17sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnDeposit"
-        />
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/pinLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtPromptPin"
-        >
-
-        <ImageView
-            android:id="@+id/imgPinMaskOne"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/pin_circle_empty"
-            />
-
-        <ImageView
-            android:id="@+id/imgPinMaskTwo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            app:layout_constraintBottom_toBottomOf="@+id/imgPinMaskOne"
-            app:layout_constraintStart_toEndOf="@+id/imgPinMaskOne"
-            app:layout_constraintTop_toTopOf="@+id/imgPinMaskOne"
-            app:srcCompat="@drawable/pin_circle_empty"
-            />
-
-        <ImageView
-            android:id="@+id/imgPinMaskThree"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            app:layout_constraintBottom_toBottomOf="@+id/imgPinMaskTwo"
-            app:layout_constraintStart_toEndOf="@+id/imgPinMaskTwo"
-            app:layout_constraintTop_toTopOf="@+id/imgPinMaskTwo"
-            app:srcCompat="@drawable/pin_circle_empty"
-            />
-
-        <ImageView
-            android:id="@+id/imgPinMaskFour"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            app:layout_constraintBottom_toBottomOf="@+id/imgPinMaskThree"
-            app:layout_constraintStart_toEndOf="@+id/imgPinMaskThree"
-            app:layout_constraintTop_toTopOf="@+id/imgPinMaskThree"
-            app:srcCompat="@drawable/pin_circle_empty"
-            />
-
-    </android.support.constraint.ConstraintLayout>
-
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/numPadItems"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="93dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pinLayout"
         />
-
 
 </android.support.constraint.ConstraintLayout>
