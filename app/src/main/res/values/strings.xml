@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Wallet</string>
+    <string name="app_name">Bank</string>
     <string name="error">error</string>
     <string name="restore_wallet">Restore</string>
     <string name="create_wallet">Create Wallet</string>
