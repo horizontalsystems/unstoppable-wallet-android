@@ -1,0 +1,93 @@
+package bitcoin.wallet.kit.network
+
+import bitcoin.walllet.kit.network.MessageListener
+import bitcoin.walllet.kit.network.MessageSender
+import bitcoin.walllet.kit.network.PeerListener
+import bitcoin.walllet.kit.network.message.Message
+import org.slf4j.LoggerFactory
+import java.util.concurrent.ConcurrentHashMap
+
+class PeerGroup(private val messageListener: MessageListener, private val peerSize: Int = 3) : Thread(), PeerListener {
+
+    private val log = LoggerFactory.getLogger(PeerGroup::class.java)
+    private val peerManager = PeerManager()
+    private val connectionMap = ConcurrentHashMap<String, PeerConnection>()
+
+    @Volatile
+    private var running = false
+
+    override fun run() {
+        running = true
+        // loop:
+        while (running) {
+            if (connectionMap.size < peerSize) {
+                log.info("Try open new peer connection...")
+                val ip = peerManager.getPeer()
+                if (ip != null) {
+                    log.info("Try open new peer connection to $ip...")
+                    val conn = PeerConnection(ip, this)
+                    connectionMap[ip] = conn
+                    conn.start()
+                } else {
+                    log.info("No peers found yet.")
+                }
+            }
+
+            try {
+                Thread.sleep(5000L)
+            } catch (e: InterruptedException) {
+                break
+            }
+        }
+
+        log.info("Closing all peer connections...")
+        for (conn in connectionMap.values) {
+            conn.close()
+        }
+    }
+
+    fun close() {
+        running = false
+        interrupt()
+        try {
+            join(5000)
+        } catch (e: InterruptedException) {
+        }
+    }
+
+    /**
+     * Send message to all connected peers.
+     *
+     * @param message
+     * Bitcoin message object.
+     * @return Number of peers sent.
+     */
+    fun sendMessage(message: Message): Int {
+        var n = 0
+        for (sender in connectionMap.values) {
+            sender.sendMessage(message)
+            n++
+        }
+
+        return n
+    }
+
+    override fun onMessage(sender: MessageSender, message: Message) {
+        messageListener.onMessage(sender, message)
+    }
+
+    override fun connected(ip: String) {
+        log.info("Peer $ip connected.")
+    }
+
+    override fun disconnected(ip: String, e: Exception?) {
+        if (e == null) {
+            log.info("Peer $ip disconnected.")
+        } else {
+            log.warn("Peer $ip disconnected with error.", e)
+        }
+
+        connectionMap.remove(ip)
+        peerManager.releasePeer(ip, if (e == null) 3 else -1)
+    }
+}

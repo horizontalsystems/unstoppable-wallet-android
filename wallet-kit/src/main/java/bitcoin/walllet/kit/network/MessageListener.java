@@ -1,9 +1,10 @@
-package bitcoin.walllet.kit.network;
+package bitcoin.wallet.kit.network
 
-import bitcoin.walllet.kit.network.message.Message;
+import bitcoin.wallet.kit.network.MessageSender
+import bitcoin.walllet.kit.network.message.Message
 
-public interface MessageListener {
+interface MessageListener {
 
-    void onMessage(MessageSender sender, Message message);
+    fun onMessage(sender: MessageSender, message: Message)
 
 }
