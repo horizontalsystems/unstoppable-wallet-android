@@ -118,7 +118,7 @@ class ViewHolderTransaction(override val containerView: View) : RecyclerView.Vie
 
 class FilterAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var filters = listOf("All", "Bitcoin", "Bitcon Cash", "Ethereum", "Litecoin")
+    var filters = listOf("All", "Bitcoin", "Bitcoin Cash", "Ethereum", "Litecoin")
 
     override fun getItemCount() = filters.size
 
