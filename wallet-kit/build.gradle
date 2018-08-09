@@ -5,6 +5,12 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
+    // For cryptocurrency
+    implementation 'org.bouncycastle:bcprov-jdk16:1.45'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.6'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.6'
+    implementation 'com.madgag.spongycastle:core:1.58.0.0'
+
     // Simple Logging Facade for Java
     implementation 'org.slf4j:slf4j-api:1.7.25'
     implementation 'org.slf4j:slf4j-log4j12:1.7.25'
