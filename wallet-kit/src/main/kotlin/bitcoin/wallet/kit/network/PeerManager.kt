@@ -38,7 +38,7 @@ class PeerManager(private val cached: File? = null) {
      * @return Ip or null if no peer available.
      */
     @Synchronized
-    fun getPeer(): String? {
+    fun getPeerIp(): String? {
         log.info("Try get an unused peer from " + peers.size + " peers...")
         peers.sortWith(Comparator { p1, p2 ->
             if (p1.score > p2.score) -1 else 1

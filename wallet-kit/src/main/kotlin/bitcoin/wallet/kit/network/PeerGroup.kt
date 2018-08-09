@@ -7,10 +7,9 @@ import bitcoin.walllet.kit.network.message.Message
 import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentHashMap
 
-class PeerGroup(private val messageListener: MessageListener, private val peerSize: Int = 3) : Thread(), PeerListener {
+class PeerGroup(private val messageListener: MessageListener, private val peerManager: PeerManager, private val peerSize: Int = 3) : Thread(), PeerListener {
 
     private val log = LoggerFactory.getLogger(PeerGroup::class.java)
-    private val peerManager = PeerManager()
     private val connectionMap = ConcurrentHashMap<String, PeerConnection>()
 
     @Volatile
@@ -21,16 +20,7 @@ class PeerGroup(private val messageListener: MessageListener, private val peerSi
         // loop:
         while (running) {
             if (connectionMap.size < peerSize) {
-                log.info("Try open new peer connection...")
-                val ip = peerManager.getPeer()
-                if (ip != null) {
-                    log.info("Try open new peer connection to $ip...")
-                    val conn = PeerConnection(ip, this)
-                    connectionMap[ip] = conn
-                    conn.start()
-                } else {
-                    log.info("No peers found yet.")
-                }
+                startConnection()
             }
 
             try {
@@ -43,6 +33,19 @@ class PeerGroup(private val messageListener: MessageListener, private val peerSi
         log.info("Closing all peer connections...")
         for (conn in connectionMap.values) {
             conn.close()
+        }
+    }
+
+    private fun startConnection() {
+        log.info("Try open new peer connection...")
+        val ip = peerManager.getPeerIp()
+        if (ip != null) {
+            log.info("Try open new peer connection to $ip...")
+            val conn = PeerConnection(ip, this)
+            connectionMap[ip] = conn
+            conn.start()
+        } else {
+            log.info("No peers found yet.")
         }
     }
 
@@ -84,7 +87,7 @@ class PeerGroup(private val messageListener: MessageListener, private val peerSi
         if (e == null) {
             log.info("Peer $ip disconnected.")
         } else {
-            log.warn("Peer $ip disconnected with error.", e)
+            log.warn("Peer $ip disconnected with error.", e.message)
         }
 
         connectionMap.remove(ip)
