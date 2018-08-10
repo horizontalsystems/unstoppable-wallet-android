@@ -86,11 +86,12 @@ class PeerGroup(private val messageListener: MessageListener, private val peerMa
     override fun disconnected(ip: String, e: Exception?) {
         if (e == null) {
             log.info("Peer $ip disconnected.")
+            peerManager.markSuccess(ip)
         } else {
             log.warn("Peer $ip disconnected with error.", e.message)
+            peerManager.markFailed(ip)
         }
 
         connectionMap.remove(ip)
-        peerManager.releasePeer(ip, if (e == null) 3 else -1)
     }
 }

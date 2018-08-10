@@ -60,35 +60,26 @@ class PeerManager(private val cached: File? = null) {
     }
 
     @Synchronized
-    fun peerCount(): Int {
-        return peers.size
+    fun markFailed(peerIp: String) {
+        peers.firstOrNull { it.ip == peerIp }?.let { peer ->
+            peers.remove(peer)
+            storePeers()
+        }
     }
 
-    /**
-     * Release a peer.
-     *
-     * @param ip
-     * The ip address.
-     * @param score
-     * The score of peer.
-     */
     @Synchronized
-    fun releasePeer(ip: String, score: Int) {
-        var target: Peer? = null
-        for (p in peers) {
-            if (p.ip == ip) {
-                target = p
-                break
-            }
+    fun markSuccess(peerIp: String) {
+        peers.firstOrNull { it.ip == peerIp }?.let { peer ->
+            peer.using = false
+            peer.score += 3
+
+            storePeers()
         }
-        if (target != null) {
-            target.using = false
-            target.score += score
-            if (target.score < 0) {
-                peers.remove(target)
-            }
-        }
-        storePeers()
+    }
+
+    @Synchronized
+    fun peerCount(): Int {
+        return peers.size
     }
 
     @Synchronized
@@ -98,7 +89,7 @@ class PeerManager(private val cached: File? = null) {
     }
 
     @Synchronized
-    fun addPeers(ps: Array<Peer>) {
+    private fun addPeers(ps: Array<Peer>) {
         log.info("Add discovered " + ps.size + " peers...")
         for (p in ps) {
             if (!peers.contains(p)) {
