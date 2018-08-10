@@ -4,6 +4,23 @@ apply plugin: 'kotlin'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    // For cryptocurrency
+    implementation 'org.bouncycastle:bcprov-jdk16:1.45'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.6'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.6'
+    implementation 'com.madgag.spongycastle:core:1.58.0.0'
+
+    // Simple Logging Facade for Java
+    implementation 'org.slf4j:slf4j-api:1.7.25'
+    implementation 'org.slf4j:slf4j-log4j12:1.7.25'
+
+    // Test helpers
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:2.21.0'
+    testImplementation 'com.nhaarman:mockito-kotlin-kt1.1:1.6.0'
+    testImplementation 'org.powermock:powermock-api-mockito2:2.0.0-beta.5'
+    testImplementation 'org.powermock:powermock-module-junit4:2.0.0-beta.5'
 }
 
 sourceCompatibility = "1.8"
