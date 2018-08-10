@@ -1,17 +1,17 @@
-package bitcoin.wallet.kit.network
+package bitcoin.walllet.kit.network;
 
-import bitcoin.walllet.kit.network.message.Message
+import bitcoin.walllet.kit.network.message.Message;
 
-interface MessageSender {
+public interface MessageSender {
 
-    fun sendMessage(message: Message)
+    void sendMessage(Message message);
 
     /**
      * Set timeout must be called periodically to keep connection alive.
      *
      * @param timeoutInMillis
      */
-    fun setTimeout(timeoutInMillis: Long)
+    void setTimeout(long timeoutInMillis);
 
-    fun close()
+    void close();
 }

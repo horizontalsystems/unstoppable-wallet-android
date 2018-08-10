@@ -1,12 +1,12 @@
-package bitcoin.wallet.kit.network
+package bitcoin.walllet.kit.network;
 
-import bitcoin.walllet.kit.network.message.Message
+import bitcoin.walllet.kit.network.message.Message;
 
-interface PeerListener {
+public interface PeerListener {
 
-    fun onMessage(sender: MessageSender, message: Message)
+    void onMessage(MessageSender sender, Message message);
 
-    fun connected(ip: String)
+    void connected(String ip);
 
-    fun disconnected(ip: String, e: Exception)
+    void disconnected(String ip, Exception e);
 }
