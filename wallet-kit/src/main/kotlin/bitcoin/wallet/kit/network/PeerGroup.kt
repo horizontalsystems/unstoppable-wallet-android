@@ -1,13 +1,13 @@
 package bitcoin.wallet.kit.network
 
-import bitcoin.walllet.kit.network.MessageListener
 import bitcoin.walllet.kit.network.MessageSender
+import bitcoin.walllet.kit.network.PeerGroupListener
 import bitcoin.walllet.kit.network.PeerListener
 import bitcoin.walllet.kit.network.message.Message
 import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentHashMap
 
-class PeerGroup(private val messageListener: MessageListener, private val peerManager: PeerManager, private val peerSize: Int = 3) : Thread(), PeerListener {
+class PeerGroup(private val peerGroupListener: PeerGroupListener, private val peerManager: PeerManager, private val peerSize: Int = 3) : Thread(), PeerListener {
 
     private val log = LoggerFactory.getLogger(PeerGroup::class.java)
     private val connectionMap = ConcurrentHashMap<String, PeerConnection>()
@@ -76,7 +76,7 @@ class PeerGroup(private val messageListener: MessageListener, private val peerMa
     }
 
     override fun onMessage(sender: MessageSender, message: Message) {
-        messageListener.onMessage(sender, message)
+        peerGroupListener.onMessage(sender, message)
     }
 
     override fun connected(ip: String) {
