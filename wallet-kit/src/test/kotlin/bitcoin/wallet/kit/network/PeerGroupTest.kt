@@ -61,13 +61,14 @@ class PeerGroupTest {
     fun disconnected() { // removes peer from connection list
         peerGroup.disconnected(peerIp, null)
 
-        verify(peerManager).releasePeer(peerIp, 3)
+        verify(peerManager).markSuccess(peerIp)
     }
 
     @Test
     fun disconnected_withError() { // removes peer from connection list
         peerGroup.disconnected(peerIp, SocketTimeoutException("Some Error"))
 
-        verify(peerManager).releasePeer(peerIp, -1)
+        verify(peerManager).markFailed(peerIp)
     }
+
 }
