@@ -1,17 +1,25 @@
 package bitcoin.wallet.kit.hdwallet;
 
-import bitcoin.wallet.kit.hdwallet.utils.EntropyGenerator
-import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito
+import org.junit.runner.RunWith
+import org.powermock.api.mockito.PowerMockito
+import org.powermock.api.mockito.PowerMockito.doAnswer
+import org.powermock.api.mockito.PowerMockito.mock
+import org.powermock.core.classloader.annotations.PowerMockIgnore
+import org.powermock.core.classloader.annotations.PrepareForTest
+import org.powermock.modules.junit4.PowerMockRunner
+import java.security.SecureRandom
+
+@RunWith(PowerMockRunner::class)
+@PrepareForTest(SecureRandom::class, Mnemonic::class)
+@PowerMockIgnore("javax.crypto.*")
 
 class MnemonicTest {
 
-    private val entropyGenerator = Mockito.mock(EntropyGenerator::class.java)
-    private val mnemonic = Mnemonic(entropyGenerator)
+    private val mnemonic = Mnemonic()
 
     @Before
     fun setup() {
@@ -61,7 +69,7 @@ class MnemonicTest {
 
         val mnemonicKeys = listOf("jealous", "digital", "west", "actor", "thunder", "matter", "marble", "marine", "olympic", "range", "dust", "banner")
 
-        val seed: ByteArray = mnemonic.toSeed(mnemonicKeys)
+        val seed = mnemonic.toSeed(mnemonicKeys)
 
         val expectedSeed = hexStringToByteArray("6908630f564bd3ca9efb521e72da86727fc78285b15decedb44f40b02474502ed6844958b29465246a618b1b56b4bdffacd1de8b324159e0f7f594c611b0519d")
 
@@ -87,9 +95,20 @@ class MnemonicTest {
     @Test
     fun generate() {
 
-        val entropy: ByteArray = hexStringToByteArray("7787bfe5815e1912a1ec409a56391109")
+        val entropy = hexStringToByteArray("7787bfe5815e1912a1ec409a56391109")
+        val seed = ByteArray(128 / 8)
+        val random = mock(SecureRandom::class.java)
 
-        whenever(entropyGenerator.getEntropy(any())).thenReturn(entropy)
+        PowerMockito.whenNew(SecureRandom::class.java)
+                .withNoArguments()
+                .thenReturn(random)
+
+        doAnswer {
+            val arg1: ByteArray = it.arguments[0] as ByteArray
+            for (i in 0 until entropy.size) {
+                arg1[i] = entropy[i]
+            }
+        }.whenever(random).nextBytes(seed)
 
         val mnemonicKeys = mnemonic.generate().toTypedArray()
 

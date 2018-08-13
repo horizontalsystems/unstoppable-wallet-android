@@ -1,14 +1,14 @@
 package bitcoin.wallet.kit.hdwallet
 
 import WordList
-import bitcoin.wallet.kit.hdwallet.utils.EntropyGenerator
-import bitcoin.wallet.kit.hdwallet.utils.Hasher
 import bitcoin.wallet.kit.hdwallet.utils.PBKDF2SHA512
-import javax.inject.Inject
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
+import java.security.SecureRandom
 import kotlin.experimental.and
 
 
-class Mnemonic @Inject constructor(private val entropyGenerator: EntropyGenerator) {
+class Mnemonic {
 
     private val PBKDF2_ROUNDS = 2048
 
@@ -24,8 +24,10 @@ class Mnemonic @Inject constructor(private val entropyGenerator: EntropyGenerato
      * Generate mnemonic keys
      */
     fun generate(strength: Strength = Strength.Default): List<String> {
-        val entropy = entropyGenerator.getEntropy(strength.value)
-        return toMnemonic(entropy)
+        val seed = ByteArray(strength.value / 8)
+        val random = SecureRandom()
+        random.nextBytes(seed)
+        return toMnemonic(seed)
     }
 
     /**
@@ -38,8 +40,8 @@ class Mnemonic @Inject constructor(private val entropyGenerator: EntropyGenerato
         // We take initial entropy of ENT bits and compute its
         // checksum by taking first ENT / 32 bits of its SHA256 hash.
 
-        val hash = Hasher.hash(entropy, 0, entropy.size)
-        val hashBits = bytesToBits(hash)
+        val hashed = hash(entropy, 0, entropy.size)
+        val hashBits = bytesToBits(hashed)
 
         val entropyBits = bytesToBits(entropy)
         val checksumLengthBits = entropyBits.size / 32
@@ -120,6 +122,21 @@ class Mnemonic @Inject constructor(private val entropyGenerator: EntropyGenerato
                 bits[i * 8 + j] = tmp2 != 0.toByte()
             }
         return bits
+    }
+
+    private fun hash(input: ByteArray, offset: Int, length: Int): ByteArray {
+        val digest = newDigest()
+        digest.update(input, offset, length)
+        return digest.digest()
+    }
+
+    private fun newDigest(): MessageDigest {
+        try {
+            return MessageDigest.getInstance("SHA-256")
+        } catch (e: NoSuchAlgorithmException) {
+            throw RuntimeException(e)  // Can't happen.
+        }
+
     }
 
     open class MnemonicException(message: String) : Exception(message)
