@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 
+import bitcoin.walllet.kit.common.constant.BitcoinConstants;
 import bitcoin.walllet.kit.common.io.BitcoinInput;
 import bitcoin.walllet.kit.common.io.BitcoinOutput;
 import bitcoin.walllet.kit.common.util.HashUtils;
@@ -32,6 +33,14 @@ public class GetHeadersMessage extends Message {
             }
             this.hashStop = input.readBytes(32);
         }
+    }
+
+    public GetHeadersMessage() {
+        super("getheaders");
+        version = BitcoinConstants.PROTOCOL_VERSION;
+        hashStop = BitcoinConstants.ZERO_HASH_BYTES;
+        hashes = new byte[1][];
+        hashes[0] = BitcoinConstants.GENESIS_HASH_BYTES;
     }
 
     @Override

@@ -80,7 +80,10 @@ class PeerGroup(private val peerGroupListener: PeerGroupListener, private val pe
     }
 
     override fun connected(ip: String) {
-        log.info("Peer $ip connected.")
+        if (connectionMap.size == peerSize) {
+            log.info("Peer group ready; Last peer $ip")
+            peerGroupListener.onReady(connectionMap[ip])
+        }
     }
 
     override fun disconnected(ip: String, e: Exception?) {
