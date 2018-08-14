@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import bitcoin.wallet.kit.message.HeadersMessage;
 import bitcoin.walllet.kit.common.BitcoinException;
 import bitcoin.walllet.kit.common.constant.BitcoinConstants;
 import bitcoin.walllet.kit.common.io.BitcoinInput;
@@ -99,6 +100,7 @@ public abstract class Message {
             map.put("pong", PongMessage.class);
             map.put("verack", VerAckMessage.class);
             map.put("version", VersionMessage.class);
+            map.put("headers", HeadersMessage.class);
             return map;
         }
 

@@ -4,8 +4,7 @@ import bitcoin.walllet.kit.common.constant.BitcoinConstants
 import bitcoin.walllet.kit.common.io.BitcoinInput
 import bitcoin.walllet.kit.network.MessageSender
 import bitcoin.walllet.kit.network.PeerListener
-import bitcoin.walllet.kit.network.message.Message
-import bitcoin.walllet.kit.network.message.VersionMessage
+import bitcoin.walllet.kit.network.message.*
 import org.slf4j.LoggerFactory
 import java.io.IOException
 import java.net.ConnectException
@@ -45,7 +44,7 @@ class PeerConnection(private val host: String, private val listener: PeerListene
             val input = sock.getInputStream()
             val output = sock.getOutputStream()
 
-            listener.connected(host)
+            log.info("Socket $host connected.")
             setTimeout(60000)
 
             // add version message to send automatically:
@@ -67,10 +66,17 @@ class PeerConnection(private val host: String, private val listener: PeerListene
 
                 // try receive message:
                 if (isRunning && input.available() > 0) {
-                    val input1 = BitcoinInput(input)
-                    val parsedMsg = Message.Builder.parseMessage<Message>(input1)
+                    val inputStream = BitcoinInput(input)
+                    val parsedMsg = Message.Builder.parseMessage<Message>(inputStream)
+
                     log.info("<= $parsedMsg")
-                    listener.onMessage(this, parsedMsg)
+
+                    when (parsedMsg) {
+                        is PingMessage -> sendMessage(PongMessage(parsedMsg.nonce))
+                        is VersionMessage -> sendMessage(VerAckMessage())
+                        is VerAckMessage -> listener.connected(host)
+                        else -> listener.onMessage(this, parsedMsg)
+                    }
                 }
             }
 

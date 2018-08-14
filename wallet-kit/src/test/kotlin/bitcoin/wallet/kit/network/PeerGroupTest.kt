@@ -1,7 +1,7 @@
 package bitcoin.wallet.kit.network
 
-import bitcoin.walllet.kit.network.MessageListener
 import bitcoin.walllet.kit.network.MessageSender
+import bitcoin.walllet.kit.network.PeerGroupListener
 import bitcoin.walllet.kit.network.message.Message
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
@@ -16,19 +16,20 @@ import java.net.SocketTimeoutException
 
 @RunWith(PowerMockRunner::class)
 @PrepareForTest(PeerGroup::class)
+
 class PeerGroupTest {
     private lateinit var peerGroup: PeerGroup
     private lateinit var peerConnection: PeerConnection
     private lateinit var peerManager: PeerManager
-    private lateinit var messageListener: MessageListener
+    private lateinit var peerGroupListener: PeerGroupListener
     private val peerIp = "8.8.8.8"
 
     @Before
     fun setup() {
-        messageListener = mock(MessageListener::class.java)
+        peerGroupListener = mock(PeerGroupListener::class.java)
         peerManager = mock(PeerManager::class.java)
         peerConnection = mock(PeerConnection::class.java)
-        peerGroup = PeerGroup(messageListener, peerManager, 1)
+        peerGroup = PeerGroup(peerGroupListener, peerManager, 1)
     }
 
     @Test
@@ -54,7 +55,7 @@ class PeerGroupTest {
         val message = mock(Message::class.java)
         peerGroup.onMessage(sender, message)
 
-        verify(messageListener).onMessage(sender, message)
+        verify(peerGroupListener).onMessage(sender, message)
     }
 
     @Test
