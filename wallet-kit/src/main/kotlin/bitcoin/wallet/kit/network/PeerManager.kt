@@ -3,25 +3,42 @@ package bitcoin.wallet.kit.network
 import bitcoin.walllet.kit.common.util.JsonUtils
 import org.slf4j.LoggerFactory
 import java.io.*
-import java.util.*
 
 class PeerManager(private val cached: File? = null) {
 
+    // A PeerAddress holds an IP address representing the network location of
+    // a peer in the Peer-to-Peer network.
+    class PeerAddress(var ip: String, var score: Int = 0) {
+
+        @Volatile
+        var using: Boolean = false
+
+        override fun equals(other: Any?): Boolean {
+            if (other is PeerAddress) {
+                return ip == other.ip
+            }
+
+            return false
+        }
+
+        override fun hashCode() = ip.hashCode()
+    }
+
     private val log = LoggerFactory.getLogger(PeerManager::class.java)
-    private val peers: MutableList<Peer> = ArrayList()
+    private val peerAddresses: MutableList<PeerAddress> = ArrayList()
 
     init {
-        // add cached peers:
+        // add cached peer addresses:
         addPeers(loadPeers())
 
-        if (peers.size < 5) {
+        if (peerAddresses.size < 5) {
             // lookup from DNS:
             val thread = object : Thread() {
                 override fun run() {
                     try {
                         addPeers(PeerDiscover.lookup())
                     } catch (e: Exception) {
-                        log.warn("Could not discover peers.", e)
+                        log.warn("Could not discover peerAddresses.", e)
                     }
 
                 }
@@ -39,12 +56,12 @@ class PeerManager(private val cached: File? = null) {
      */
     @Synchronized
     fun getPeerIp(): String? {
-        log.info("Try get an unused peer from " + peers.size + " peers...")
-        peers.sortWith(Comparator { p1, p2 ->
+        log.info("Try get an unused peer from " + peerAddresses.size + " peerAddresses...")
+        peerAddresses.sortWith(Comparator { p1, p2 ->
             if (p1.score > p2.score) -1 else 1
         })
 
-        for (p in peers) {
+        for (p in peerAddresses) {
             if (!p.using) {
                 p.using = true
 
@@ -61,15 +78,15 @@ class PeerManager(private val cached: File? = null) {
 
     @Synchronized
     fun markFailed(peerIp: String) {
-        peers.firstOrNull { it.ip == peerIp }?.let { peer ->
-            peers.remove(peer)
+        peerAddresses.firstOrNull { it.ip == peerIp }?.let { peer ->
+            peerAddresses.remove(peer)
             storePeers()
         }
     }
 
     @Synchronized
     fun markSuccess(peerIp: String) {
-        peers.firstOrNull { it.ip == peerIp }?.let { peer ->
+        peerAddresses.firstOrNull { it.ip == peerIp }?.let { peer ->
             peer.using = false
             peer.score += 3
 
@@ -79,24 +96,24 @@ class PeerManager(private val cached: File? = null) {
 
     @Synchronized
     fun peerCount(): Int {
-        return peers.size
+        return peerAddresses.size
     }
 
     @Synchronized
     fun addPeers(ips: Array<String>) {
-        addPeers(ips.map { Peer(it) }.toTypedArray())
+        addPeers(ips.map { PeerAddress(it) }.toTypedArray())
         storePeers()
     }
 
     @Synchronized
-    private fun addPeers(ps: Array<Peer>) {
-        log.info("Add discovered " + ps.size + " peers...")
+    private fun addPeers(ps: Array<PeerAddress>) {
+        log.info("Add discovered " + ps.size + " peerAddresses...")
         for (p in ps) {
-            if (!peers.contains(p)) {
-                peers.add(p)
+            if (!peerAddresses.contains(p)) {
+                peerAddresses.add(p)
             }
         }
-        log.info("Total peers: " + peers.size)
+        log.info("Total peerAddresses: " + peerAddresses.size)
         storePeers()
     }
 
@@ -105,15 +122,15 @@ class PeerManager(private val cached: File? = null) {
         storePeers()
     }
 
-    private fun loadPeers(): Array<Peer> {
+    private fun loadPeers(): Array<PeerAddress> {
         if (cached != null) {
             try {
                 val inputStream = FileInputStream(cached)
                 BufferedInputStream(inputStream).use { input ->
-                    return JsonUtils.fromJson(Array<Peer>::class.java, input)
+                    return JsonUtils.fromJson(Array<PeerAddress>::class.java, input)
                 }
             } catch (e: Exception) {
-                log.warn("Load cached peers from cached file failed: " + cached.absolutePath)
+                log.warn("Load cached peerAddresses from cached file failed: " + cached.absolutePath)
             }
 
         }
@@ -126,11 +143,11 @@ class PeerManager(private val cached: File? = null) {
             try {
                 val streamWriter = OutputStreamWriter(FileOutputStream(cached), "UTF-8")
                 BufferedWriter(streamWriter).use { writer ->
-                    val peerArray = peers.toTypedArray()
+                    val peerArray = peerAddresses.toTypedArray()
                     writer.write(JsonUtils.toJson(peerArray))
                 }
             } catch (e: Exception) {
-                log.warn("Write peers to cached file failed: " + cached.absolutePath, e)
+                log.warn("Write peerAddresses to cached file failed: " + cached.absolutePath, e)
             }
 
         }
