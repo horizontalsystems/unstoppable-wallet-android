@@ -15,9 +15,9 @@ import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.TimeUnit
 
-class PeerConnection(private val host: String, private val listener: PeerListener) : Thread(), MessageSender {
+class Peer(private val host: String, private val listener: PeerListener) : Thread(), MessageSender {
 
-    private val log = LoggerFactory.getLogger(PeerConnection::class.java)
+    private val log = LoggerFactory.getLogger(Peer::class.java)
     private val sendingQueue: BlockingQueue<Message> = ArrayBlockingQueue(100)
     private val sock = Socket()
 

@@ -19,7 +19,7 @@ import java.net.SocketTimeoutException
 
 class PeerGroupTest {
     private lateinit var peerGroup: PeerGroup
-    private lateinit var peerConnection: PeerConnection
+    private lateinit var peerConnection: Peer
     private lateinit var peerManager: PeerManager
     private lateinit var peerGroupListener: PeerGroupListener
     private val peerIp = "8.8.8.8"
@@ -28,14 +28,14 @@ class PeerGroupTest {
     fun setup() {
         peerGroupListener = mock(PeerGroupListener::class.java)
         peerManager = mock(PeerManager::class.java)
-        peerConnection = mock(PeerConnection::class.java)
+        peerConnection = mock(Peer::class.java)
         peerGroup = PeerGroup(peerGroupListener, peerManager, 1)
     }
 
     @Test
     fun run() { // creates peer connection with given IP address
         whenever(peerManager.getPeerIp()).thenReturn(peerIp)
-        whenNew(PeerConnection::class.java)
+        whenNew(Peer::class.java)
                 .withArguments(peerIp, peerGroup)
                 .thenReturn(peerConnection)
 
