@@ -1,7 +1,6 @@
 package bitcoin.wallet.kit.hdwallet
 
 import bitcoin.walllet.kit.common.hdwallet.HDKey
-import javax.xml.bind.DatatypeConverter
 
 class HDWallet(private var seed: ByteArray) {
 
@@ -32,33 +31,20 @@ class HDWallet(private var seed: ByteArray) {
     private var account: Int = 0
 
 
-    fun receiveAddress(index: Int): Address {
-        return Address(index = index, external = true, key = privateKey(index = index, chain = 0))
+    fun receiveAddress(index: Int): PublicKey {
+        return PublicKey(index = index, external = true, key = privateKey(index = index, chain = 0))
     }
 
-    fun changeAddress(index: Int): Address {
-        return Address(index = index, external = false, key = privateKey(index = index, chain = 1))
+    fun changeAddress(index: Int): PublicKey {
+        return PublicKey(index = index, external = false, key = privateKey(index = index, chain = 1))
     }
 
-    fun privateKey(index: Int, chain: Int): HDKey {
+    private fun privateKey(index: Int, chain: Int): HDKey {
         return privateKey(path = "m/$purpose'/$coinType'/$account'/$chain/$index")
     }
 
-    fun privateKey(path: String): HDKey {
-        val privateKey = hdKeychain.getKeyByPath(path)
-        return privateKey
-    }
-
-    fun test(count: Int): MutableList<Address> {
-        val receiveKeys = mutableListOf<Address>()
-
-        for (i in 0..(count - 1)) {
-            val address = receiveAddress(i)
-//            val wifKeyPair = ECDSAKeyPair.of(key.privKey)
-//            print("\nkey $i " + key.toAddress().toString() + " privWifKey: " + wifKeyPair.toCompressedWIF() + " pub: " +  DatatypeConverter.printHexBinary(key.pubKey))
-            print("\naddress $i " + address.base58 + " publicKey: " + DatatypeConverter.printHexBinary(address.publicKey))
-        }
-        return receiveKeys
+    private fun privateKey(path: String): HDKey {
+        return hdKeychain.getKeyByPath(path)
     }
 
 }

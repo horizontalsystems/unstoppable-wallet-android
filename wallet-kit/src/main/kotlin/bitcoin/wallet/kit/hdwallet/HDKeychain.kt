@@ -26,17 +26,17 @@ class HDKeychain(seed: ByteArray) {
     /// "m / 0 / 1" (contains spaces)
     /// "m/b/c" (alphabetical characters instead of numerical indexes)
     /// "m/1.2^3" (contains illegal characters)
-    fun getKeyByPath(derivePath: String): HDKey {
+    fun getKeyByPath(path: String): HDKey {
         var key = privateKey
 
-        var path = derivePath
-        if (path == "m" || path == "/" || path == "") {
+        var derivePath = path
+        if (derivePath == "m" || derivePath == "/" || derivePath == "") {
             return key
         }
-        if (path.contains("m/")) {
-            path = path.drop(2)
+        if (derivePath.contains("m/")) {
+            derivePath = derivePath.drop(2)
         }
-        for (chunk in path.split("/")) {
+        for (chunk in derivePath.split("/")) {
             var hardened = false
             var indexText: String = chunk
             if (chunk.contains("'")) {
@@ -47,7 +47,6 @@ class HDKeychain(seed: ByteArray) {
             key = HDKeyDerivation.deriveChildKey(key, index, hardened)
         }
 
-//        print("\nkey.serializePrivKeyToString: " + key.serializePrivKeyToString())
         return key
     }
 
