@@ -6,6 +6,6 @@ public interface PeerGroupListener {
 
     void onMessage(MessageSender sender, Message message);
 
-    void onReady(MessageSender sender);
+    void onReady();
 
 }

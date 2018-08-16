@@ -2,7 +2,6 @@ package bitcoin.wallet.kit.network
 
 import bitcoin.walllet.kit.network.MessageSender
 import bitcoin.walllet.kit.network.message.GetHeadersMessage
-import com.nhaarman.mockito_kotlin.verify
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -33,9 +32,9 @@ class PeerGroupHandlerTest {
                 .withNoArguments()
                 .thenReturn(getHeaderMessage)
 
-        peerGroupHandler.onReady(messageSender)
+        peerGroupHandler.onReady()
 
-        verify(messageSender).sendMessage(getHeaderMessage)
+        // pass control too syncer
     }
 
 }

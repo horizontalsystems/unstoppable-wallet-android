@@ -10,7 +10,8 @@ import java.util.concurrent.ConcurrentHashMap
 class PeerGroup(private val peerGroupListener: PeerGroupListener, private val peerManager: PeerManager, private val peerSize: Int = 3) : Thread(), PeerListener {
 
     private val log = LoggerFactory.getLogger(PeerGroup::class.java)
-    private val connectionMap = ConcurrentHashMap<String, PeerConnection>()
+    private val peerMap = ConcurrentHashMap<String, Peer>()
+    private var syncPeer: Peer? = null
 
     @Volatile
     private var running = false
@@ -19,7 +20,7 @@ class PeerGroup(private val peerGroupListener: PeerGroupListener, private val pe
         running = true
         // loop:
         while (running) {
-            if (connectionMap.size < peerSize) {
+            if (peerMap.size < peerSize) {
                 startConnection()
             }
 
@@ -31,7 +32,7 @@ class PeerGroup(private val peerGroupListener: PeerGroupListener, private val pe
         }
 
         log.info("Closing all peer connections...")
-        for (conn in connectionMap.values) {
+        for (conn in peerMap.values) {
             conn.close()
         }
     }
@@ -41,9 +42,9 @@ class PeerGroup(private val peerGroupListener: PeerGroupListener, private val pe
         val ip = peerManager.getPeerIp()
         if (ip != null) {
             log.info("Try open new peer connection to $ip...")
-            val conn = PeerConnection(ip, this)
-            connectionMap[ip] = conn
-            conn.start()
+            val peer = Peer(ip, this)
+            peerMap[ip] = peer
+            peer.start()
         } else {
             log.info("No peers found yet.")
         }
@@ -67,7 +68,7 @@ class PeerGroup(private val peerGroupListener: PeerGroupListener, private val pe
      */
     fun sendMessage(message: Message): Int {
         var n = 0
-        for (sender in connectionMap.values) {
+        for (sender in peerMap.values) {
             sender.sendMessage(message)
             n++
         }
@@ -79,22 +80,29 @@ class PeerGroup(private val peerGroupListener: PeerGroupListener, private val pe
         peerGroupListener.onMessage(sender, message)
     }
 
-    override fun connected(ip: String) {
-        if (connectionMap.size == peerSize) {
-            log.info("Peer group ready; Last peer $ip")
-            peerGroupListener.onReady(connectionMap[ip])
+    override fun connected(peer: Peer) {
+        if (syncPeer == null) {
+            syncPeer = peer
+
+            log.info("Sync Peer ready")
+            peerGroupListener.onReady()
         }
     }
 
-    override fun disconnected(ip: String, e: Exception?) {
+    override fun disconnected(peer: Peer, e: Exception?) {
         if (e == null) {
-            log.info("Peer $ip disconnected.")
-            peerManager.markSuccess(ip)
+            log.info("PeerAddress $peer.host disconnected.")
+            peerManager.markSuccess(peer.host)
         } else {
-            log.warn("Peer $ip disconnected with error.", e.message)
-            peerManager.markFailed(ip)
+            log.warn("PeerAddress $peer.host disconnected with error.", e.message)
+            peerManager.markFailed(peer.host)
         }
 
-        connectionMap.remove(ip)
+        // it restores syncPeer on next connection
+        if (syncPeer == peer) {
+            syncPeer = null
+        }
+
+        peerMap.remove(peer.host)
     }
 }

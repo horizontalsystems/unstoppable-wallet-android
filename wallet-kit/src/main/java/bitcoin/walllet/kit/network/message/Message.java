@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import bitcoin.wallet.kit.message.HeadersMessage;
+import bitcoin.wallet.kit.message.MerkleBlockMessage;
 import bitcoin.walllet.kit.common.BitcoinException;
 import bitcoin.walllet.kit.common.constant.BitcoinConstants;
 import bitcoin.walllet.kit.common.io.BitcoinInput;
@@ -101,6 +102,7 @@ public abstract class Message {
             map.put("verack", VerAckMessage.class);
             map.put("version", VersionMessage.class);
             map.put("headers", HeadersMessage.class);
+            map.put("merkleblock", MerkleBlockMessage.class);
             return map;
         }
 
