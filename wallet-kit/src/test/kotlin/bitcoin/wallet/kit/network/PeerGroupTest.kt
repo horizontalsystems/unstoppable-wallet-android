@@ -49,6 +49,15 @@ class PeerGroupTest {
     }
 
     @Test
+    fun requestHeaders() {
+        val hashes = arrayOf<ByteArray>()
+        peerGroup.connected(peer)
+        peerGroup.requestHeaders(hashes)
+
+        verify(peer).requestHeaders(hashes)
+    }
+
+    @Test
     fun connected_onReady() {
         peerGroup.connected(peer)
         verify(peerGroupListener).onReady()
