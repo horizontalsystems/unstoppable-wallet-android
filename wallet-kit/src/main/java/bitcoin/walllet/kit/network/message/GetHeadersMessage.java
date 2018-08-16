@@ -35,12 +35,11 @@ public class GetHeadersMessage extends Message {
         }
     }
 
-    public GetHeadersMessage() {
+    public GetHeadersMessage(byte[][] blockHashes) {
         super("getheaders");
+        hashes = blockHashes;
         version = BitcoinConstants.PROTOCOL_VERSION;
         hashStop = BitcoinConstants.ZERO_HASH_BYTES;
-        hashes = new byte[1][];
-        hashes[0] = BitcoinConstants.GENESIS_HASH_BYTES;
     }
 
     @Override

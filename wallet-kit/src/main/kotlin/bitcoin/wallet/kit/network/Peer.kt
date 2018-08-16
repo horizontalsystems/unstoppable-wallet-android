@@ -1,5 +1,7 @@
 package bitcoin.wallet.kit.network
 
+import bitcoin.wallet.kit.message.HeadersMessage
+import bitcoin.wallet.kit.message.MerkleBlockMessage
 import bitcoin.walllet.kit.common.constant.BitcoinConstants
 import bitcoin.walllet.kit.common.io.BitcoinInput
 import bitcoin.walllet.kit.network.MessageSender
@@ -71,12 +73,7 @@ class Peer(val host: String, private val listener: PeerListener) : Thread(), Mes
 
                     log.info("<= $parsedMsg")
 
-                    when (parsedMsg) {
-                        is PingMessage -> sendMessage(PongMessage(parsedMsg.nonce))
-                        is VersionMessage -> sendMessage(VerAckMessage())
-                        is VerAckMessage -> listener.connected(this)
-                        else -> listener.onMessage(this, parsedMsg)
-                    }
+                    onMessage(parsedMsg)
                 }
             }
 
@@ -101,6 +98,20 @@ class Peer(val host: String, private val listener: PeerListener) : Thread(), Mes
         }
     }
 
+    fun onMessage(message: Message) {
+        when (message) {
+            is PingMessage -> sendMessage(PongMessage(message.nonce))
+            is VersionMessage -> sendMessage(VerAckMessage())
+            is VerAckMessage -> listener.connected(this)
+            is HeadersMessage -> {
+            }
+            is MerkleBlockMessage -> {
+            }
+            is InvMessage -> {
+            }
+        }
+    }
+
     override fun close() {
         isRunning = false
         try {
@@ -116,5 +127,9 @@ class Peer(val host: String, private val listener: PeerListener) : Thread(), Mes
 
     override fun setTimeout(timeoutInMillis: Long) {
         timeout = System.currentTimeMillis() + timeoutInMillis
+    }
+
+    fun requestHeaders(headerHashes: Array<ByteArray>) {
+        sendMessage(GetHeadersMessage(headerHashes))
     }
 }

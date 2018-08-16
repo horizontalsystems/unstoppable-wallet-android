@@ -1,13 +1,12 @@
 package bitcoin.wallet.kit.network
 
-import bitcoin.walllet.kit.network.MessageSender
 import bitcoin.walllet.kit.network.PeerGroupListener
 import bitcoin.walllet.kit.network.PeerListener
-import bitcoin.walllet.kit.network.message.Message
+import bitcoin.walllet.kit.struct.Transaction
 import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentHashMap
 
-class PeerGroup(private val peerGroupListener: PeerGroupListener, private val peerManager: PeerManager, private val peerSize: Int = 3) : Thread(), PeerListener {
+class PeerGroup(private val peerGroupListener: PeerGroupListener, private val peerManager: PeerManager, private val peerSize: Int = 3) : Thread(), PeerListener, PeerInteraction {
 
     private val log = LoggerFactory.getLogger(PeerGroup::class.java)
     private val peerMap = ConcurrentHashMap<String, Peer>()
@@ -59,25 +58,14 @@ class PeerGroup(private val peerGroupListener: PeerGroupListener, private val pe
         }
     }
 
-    /**
-     * Send message to all connected peers.
-     *
-     * @param message
-     * Bitcoin message object.
-     * @return Number of peers sent.
-     */
-    fun sendMessage(message: Message): Int {
-        var n = 0
-        for (sender in peerMap.values) {
-            sender.sendMessage(message)
-            n++
-        }
-
-        return n
+    override fun requestHeaders(headerHashes: Array<ByteArray>, switchPeer: Boolean) {
+        syncPeer?.requestHeaders(headerHashes)
     }
 
-    override fun onMessage(sender: MessageSender, message: Message) {
-        peerGroupListener.onMessage(sender, message)
+    override fun requestBlocks(headerHashes: Array<ByteArray>) {
+    }
+
+    override fun relay(transaction: Transaction) {
     }
 
     override fun connected(peer: Peer) {
