@@ -1,4 +1,4 @@
-package bitcoin.walllet.kit.common;
+package bitcoin.walllet.kit.common.exceptions;
 
 /**
  * Base exception for bitcoin app.
@@ -21,4 +21,6 @@ public class BitcoinException extends RuntimeException {
     public BitcoinException(String message, Throwable cause) {
         super(message, cause);
     }
+
 }
+

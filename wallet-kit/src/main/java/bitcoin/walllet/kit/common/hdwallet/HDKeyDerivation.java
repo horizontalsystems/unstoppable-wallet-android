@@ -21,6 +21,8 @@ import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
+import bitcoin.walllet.kit.common.exceptions.HDDerivationException;
+
 /**
  * Hierarchical Deterministic key derivation (BIP 32)
  */

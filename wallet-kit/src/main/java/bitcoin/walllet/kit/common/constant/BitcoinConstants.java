@@ -37,6 +37,51 @@ public final class BitcoinConstants {
     public static final byte NETWORK_ID = 0x00;
     public static final byte[] NETWORK_ID_ARRAY = {NETWORK_ID};
 
+    /** Production network public key hash address version */
+    public static final int ADDRESS_VERSION_PRODNET = 0;
+
+    /** Test network public key hash address version */
+    public static final int ADDRESS_VERSION_TESTNET = 111;
+
+    /** Public key hash address version */
+    public static int ADDRESS_VERSION = ADDRESS_VERSION_PRODNET;
+
+    /** Production network script hash address version */
+    public static final int SCRIPT_ADDRESS_VERSION_PRODNET = 5;
+
+    /** Test network script hash address version */
+    public static final int SCRIPT_ADDRESS_VERSION_TESTNET = 196;
+
+    /** Script hash address version */
+    public static int SCRIPT_ADDRESS_VERSION = SCRIPT_ADDRESS_VERSION_PRODNET;
+
+    /** Production network dumped private key version */
+    public static final int DUMPED_PRIVATE_KEY_VERSION_PRODNET = 128;
+
+    /** Test network dumped private key version */
+    public static final int DUMPED_PRIVATE_KEY_VERSION_TESTNET = 239;
+
+    /** Dumped private key version */
+    public static int DUMPED_PRIVATE_KEY_VERSION = DUMPED_PRIVATE_KEY_VERSION_PRODNET;
+
+    /** Production network HD private key prefix */
+    public static final int HD_PRIVATE_KEY_PREFIX_PRODNET = 0x0488ADE4;
+
+    /** Production network HD public key prefix */
+    public static final int HD_PUBLIC_KEY_PREFIX_PRODNET = 0x0488B21E;
+
+    /** Test network HD private key prefix */
+    public static final int HD_PRIVATE_KEY_PREFIX_TESTNET = 0x04358394;
+
+    /** Test network HD public key prefix */
+    public static final int HD_PUBLIC_KEY_PREFIX_TESTNET = 0x043587CF;
+
+    /** HD private key prefix */
+    public static int HD_PRIVATE_KEY_PREFIX = HD_PRIVATE_KEY_PREFIX_PRODNET;
+
+    /** HD public key prefix */
+    public static int HD_PUBLIC_KEY_PREFIX = HD_PUBLIC_KEY_PREFIX_PRODNET;
+
     /**
      * Public key prefix: 0x04.
      */

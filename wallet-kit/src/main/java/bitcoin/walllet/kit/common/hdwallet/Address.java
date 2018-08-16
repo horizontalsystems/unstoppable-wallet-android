@@ -17,6 +17,10 @@ package bitcoin.walllet.kit.common.hdwallet;
 
 import java.util.Arrays;
 
+import bitcoin.walllet.kit.common.constant.BitcoinConstants;
+import bitcoin.walllet.kit.common.exceptions.AddressFormatException;
+import bitcoin.walllet.kit.common.util.Base58Utils;
+
 /**
  * An address is a 20-byte Hash160 of a public key or script.  The displayable form
  * is Base-58 encoded with a 1-byte version and a 4-byte checksum.
@@ -91,7 +95,7 @@ public class Address {
      * Creates a new Address using a Base-58 encoded address
      *
      * @param       address                 Encoded address
-     * @throws      AddressFormatException  Address string is not a valid address
+     * @throws AddressFormatException  Address string is not a valid address
      */
     public Address(String address) throws AddressFormatException {
         this(address, "");
@@ -112,11 +116,11 @@ public class Address {
         //
         // Decode the address
         //
-        byte[] decoded = Base58.decodeChecked(address);
+        byte[] decoded = Base58Utils.decodeChecked(address);
         int version = (int)decoded[0]&0xff;
-        if (version == NetParams.ADDRESS_VERSION) {
+        if (version == BitcoinConstants.ADDRESS_VERSION) {
             type = AddressType.P2PKH;
-        } else if (version == NetParams.SCRIPT_ADDRESS_VERSION) {
+        } else if (version == BitcoinConstants.SCRIPT_ADDRESS_VERSION) {
             type = AddressType.P2SH;
         } else {
             throw new AddressFormatException(String.format("Address version %d is not correct", version));
@@ -178,14 +182,14 @@ public class Address {
     public String toString() {
         byte[] addressBytes = new byte[1+hash.length+4];
         if (type == AddressType.P2PKH) {
-            addressBytes[0] = (byte)NetParams.ADDRESS_VERSION;
+            addressBytes[0] = (byte)BitcoinConstants.ADDRESS_VERSION;
         } else {
-            addressBytes[0] = (byte)NetParams.SCRIPT_ADDRESS_VERSION;
+            addressBytes[0] = (byte)BitcoinConstants.SCRIPT_ADDRESS_VERSION;
         }
         System.arraycopy(hash, 0, addressBytes, 1, hash.length);
         byte[] digest = Utils.doubleDigest(addressBytes, 0, hash.length+1);
         System.arraycopy(digest, 0, addressBytes, hash.length+1, 4);
-        return Base58.encode(addressBytes);
+        return Base58Utils.encode(addressBytes);
     }
 
     /**
