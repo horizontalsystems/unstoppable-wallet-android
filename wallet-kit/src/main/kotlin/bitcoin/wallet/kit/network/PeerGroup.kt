@@ -11,6 +11,7 @@ class PeerGroup(private val peerGroupListener: PeerGroupListener, private val pe
 
     private val log = LoggerFactory.getLogger(PeerGroup::class.java)
     private val peerMap = ConcurrentHashMap<String, Peer>()
+    private var syncPeer: Peer? = null
 
     @Volatile
     private var running = false
@@ -79,22 +80,29 @@ class PeerGroup(private val peerGroupListener: PeerGroupListener, private val pe
         peerGroupListener.onMessage(sender, message)
     }
 
-    override fun connected(ip: String) {
-        if (peerMap.size == peerSize) {
-            log.info("Peer group ready; Last peer $ip")
-            peerGroupListener.onReady(peerMap[ip])
+    override fun connected(peer: Peer) {
+        if (syncPeer == null) {
+            syncPeer = peer
+
+            log.info("Sync Peer ready")
+            peerGroupListener.onReady()
         }
     }
 
-    override fun disconnected(ip: String, e: Exception?) {
+    override fun disconnected(peer: Peer, e: Exception?) {
         if (e == null) {
-            log.info("Peer $ip disconnected.")
-            peerManager.markSuccess(ip)
+            log.info("PeerAddress $peer.host disconnected.")
+            peerManager.markSuccess(peer.host)
         } else {
-            log.warn("Peer $ip disconnected with error.", e.message)
-            peerManager.markFailed(ip)
+            log.warn("PeerAddress $peer.host disconnected with error.", e.message)
+            peerManager.markFailed(peer.host)
         }
 
-        peerMap.remove(ip)
+        // it restores syncPeer on next connection
+        if (syncPeer == peer) {
+            syncPeer = null
+        }
+
+        peerMap.remove(peer.host)
     }
 }
