@@ -74,7 +74,7 @@ class Peer(val host: String, private val listener: PeerListener) : Thread(), Mes
                     when (parsedMsg) {
                         is PingMessage -> sendMessage(PongMessage(parsedMsg.nonce))
                         is VersionMessage -> sendMessage(VerAckMessage())
-                        is VerAckMessage -> listener.connected(host)
+                        is VerAckMessage -> listener.connected(this)
                         else -> listener.onMessage(this, parsedMsg)
                     }
                 }
