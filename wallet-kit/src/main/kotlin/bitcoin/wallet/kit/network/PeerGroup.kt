@@ -59,23 +59,6 @@ class PeerGroup(private val peerGroupListener: PeerGroupListener, private val pe
         }
     }
 
-    /**
-     * Send message to all connected peers.
-     *
-     * @param message
-     * Bitcoin message object.
-     * @return Number of peers sent.
-     */
-    fun sendMessage(message: Message): Int {
-        var n = 0
-        for (sender in peerMap.values) {
-            sender.sendMessage(message)
-            n++
-        }
-
-        return n
-    }
-
     override fun onMessage(sender: MessageSender, message: Message) {
         peerGroupListener.onMessage(sender, message)
     }
