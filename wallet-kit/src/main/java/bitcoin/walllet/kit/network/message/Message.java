@@ -12,7 +12,7 @@ import java.util.Map;
 
 import bitcoin.wallet.kit.message.HeadersMessage;
 import bitcoin.wallet.kit.message.MerkleBlockMessage;
-import bitcoin.walllet.kit.common.BitcoinException;
+import bitcoin.walllet.kit.common.exceptions.BitcoinException;
 import bitcoin.walllet.kit.common.constant.BitcoinConstants;
 import bitcoin.walllet.kit.common.io.BitcoinInput;
 import bitcoin.walllet.kit.common.io.BitcoinOutput;

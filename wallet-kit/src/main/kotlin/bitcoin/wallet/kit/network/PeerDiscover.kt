@@ -1,6 +1,6 @@
 package bitcoin.wallet.kit.network
 
-import bitcoin.walllet.kit.common.BitcoinException
+import bitcoin.walllet.kit.common.exceptions.BitcoinException
 import org.slf4j.LoggerFactory
 import java.net.InetAddress
 import java.net.UnknownHostException
