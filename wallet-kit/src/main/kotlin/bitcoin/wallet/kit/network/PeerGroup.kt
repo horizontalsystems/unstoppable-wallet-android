@@ -6,12 +6,17 @@ import bitcoin.walllet.kit.network.PeerListener
 import bitcoin.walllet.kit.struct.Transaction
 import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentLinkedQueue
 
 class PeerGroup(private val peerGroupListener: PeerGroupListener, private val peerManager: PeerManager, private val peerSize: Int = 3) : Thread(), PeerListener, PeerInteraction {
 
     private val log = LoggerFactory.getLogger(PeerGroup::class.java)
     private val peerMap = ConcurrentHashMap<String, Peer>()
     private var syncPeer: Peer? = null
+    private val fetchingBlocksQueue = ConcurrentLinkedQueue<ByteArray>()
+
+    @Volatile
+    private var fetchingBlocks = false
 
     @Volatile
     private var running = false
@@ -25,7 +30,7 @@ class PeerGroup(private val peerGroupListener: PeerGroupListener, private val pe
             }
 
             try {
-                Thread.sleep(5000L)
+                Thread.sleep(2000L)
             } catch (e: InterruptedException) {
                 break
             }
@@ -59,12 +64,43 @@ class PeerGroup(private val peerGroupListener: PeerGroupListener, private val pe
         }
     }
 
+    private fun getFreePeer(): Peer? {
+        return peerMap.values.firstOrNull { it.isFree }
+    }
+
+    private fun fetchBlocks() {
+        if (fetchingBlocks) return
+
+        // only on worker should distribution tasks
+        fetchingBlocks = true
+
+        // loop:
+        while (fetchingBlocksQueue.isNotEmpty()) {
+            val peer = getFreePeer()
+            print(peer)
+            if (peer == null) {
+                Thread.sleep(1000)
+            } else {
+                val hashes = mutableListOf<ByteArray>()
+                for (i in 1..10) {
+                    val hash = fetchingBlocksQueue.poll() ?: break
+                    hashes.add(hash)
+                }
+
+                peer.requestBlocks(hashes.toTypedArray())
+            }
+        }
+
+        fetchingBlocks = false
+    }
+
     override fun requestHeaders(headerHashes: Array<ByteArray>, switchPeer: Boolean) {
         syncPeer?.requestHeaders(headerHashes)
     }
 
     override fun requestMerkleBlocks(headerHashes: Array<ByteArray>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        fetchingBlocksQueue.addAll(headerHashes)
+        fetchBlocks()
     }
 
     override fun relay(transaction: Transaction) {
