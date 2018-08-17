@@ -12,6 +12,7 @@ import java.util.Map;
 
 import bitcoin.wallet.kit.message.HeadersMessage;
 import bitcoin.wallet.kit.message.MerkleBlockMessage;
+import bitcoin.wallet.kit.message.TransactionMessage;
 import bitcoin.walllet.kit.common.exceptions.BitcoinException;
 import bitcoin.walllet.kit.common.constant.BitcoinConstants;
 import bitcoin.walllet.kit.common.io.BitcoinInput;
@@ -103,6 +104,7 @@ public abstract class Message {
             map.put("version", VersionMessage.class);
             map.put("headers", HeadersMessage.class);
             map.put("merkleblock", MerkleBlockMessage.class);
+            map.put("tx", TransactionMessage.class);
             return map;
         }
 
