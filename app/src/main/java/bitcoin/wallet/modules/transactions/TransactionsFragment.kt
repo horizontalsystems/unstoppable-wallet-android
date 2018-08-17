@@ -16,11 +16,11 @@ import bitcoin.wallet.modules.transactionInfo.TransactionInfoModule
 import bitcoin.wallet.viewHelpers.DateHelper
 import bitcoin.wallet.viewHelpers.LayoutHelper
 import bitcoin.wallet.viewHelpers.NumberFormatHelper
+import bitcoin.wallet.viewHelpers.TextHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
 import kotlinx.android.synthetic.main.view_holder_filter.*
 import kotlinx.android.synthetic.main.view_holder_transaction.*
-import java.util.*
 
 class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdapter.Listener {
 
@@ -105,13 +105,9 @@ class ViewHolderTransaction(override val containerView: View) : RecyclerView.Vie
         txAmount.setTextColor(ContextCompat.getColor(itemView.context, amountTextColor))
         txAmount.text = "$sign ${NumberFormatHelper.cryptoAmountFormat.format(Math.abs(transactionRecord.amount.value))} ${transactionRecord.amount.coin.code}"
         txDate.text = DateHelper.getRelativeDateString(itemView.context, transactionRecord.date)
-        val addressExcerpt = getRandomText().take(6) + "\u2026"//todo replace after from starts to show address (transactionRecord.from)
+        val addressExcerpt = TextHelper.randomHashGenerator().take(6) + "\u2026"//todo replace after from starts to show address (transactionRecord.from)
         txValueInFiat.text = "\$${NumberFormatHelper.fiatAmountFormat.format(transactionRecord.valueInBaseCurrency)}" + " from " + addressExcerpt
         statusIcon.setImageDrawable(getStatusIcon(transactionRecord.status))
-    }
-
-    fun getRandomText(): String {
-        return UUID.randomUUID().toString()
     }
 
     private fun getStatusIcon(status: TransactionRecordViewItem.Status?): Drawable? {

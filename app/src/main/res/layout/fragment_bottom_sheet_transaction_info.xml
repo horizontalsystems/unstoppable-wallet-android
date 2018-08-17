@@ -4,196 +4,143 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/bottom_sheet_background"
     android:backgroundTint="@color/bars_color"
     >
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/header"
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/coinImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:tint="@color/grey"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/txtTitle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:fontFamily="@font/noto_sans_bold"
+        android:textColor="@color/dark"
+        android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        >
+        tools:text="Received BTC"
+        />
 
-        <TextView
-            android:id="@+id/txtTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/noto_sans_bold"
-            android:textColor="@color/dark"
-            android:textSize="17sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Received"
-            />
+    <ImageView
+        android:id="@+id/detailsBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/details_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
-        <TextView
-            android:id="@+id/txtAmount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/noto_sans_bold"
-            android:textColor="@color/green_crypto"
-            android:textSize="17sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtTitle"
-            tools:text="0,0006482"
-            />
+    <TextView
+        android:id="@+id/txtAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@color/white"
+        android:fontFamily="@font/noto_sans_bold"
+        android:paddingTop="8dp"
+        android:textAlignment="center"
+        android:textColor="@color/green_crypto"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtTitle"
+        tools:text="+ 0,0006482"
+        />
 
-        <TextView
-            android:id="@+id/txtValueOnTxDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/noto_sans"
-            android:textColor="@color/grey"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtAmount"
-            tools:text="$3.50 (when receive)"
+    <TextView
+        android:id="@+id/txDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:fontFamily="@font/noto_sans"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        android:textAlignment="center"
+        android:textColor="@color/grey"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtAmount"
+        tools:text="August 3, 2018, 4:41 PM"
+        />
 
-            />
-    </android.support.constraint.ConstraintLayout>
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/itemsLayout"
+    <bitcoin.wallet.modules.transactionInfo.TransactionInfoItemView
+        android:id="@+id/itemStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header"
-        >
+        app:layout_constraintTop_toBottomOf="@+id/txDate"
+        app:title="@string/tx_info_bottom_sheet_status"
+        app:value="Received"
+        />
 
-        <bitcoin.wallet.modules.transactionInfo.TransactionInfoItemView
-            android:id="@+id/itemStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:title=""
-            app:value=""
-            />
-
-        <bitcoin.wallet.modules.transactionInfo.TransactionInfoItemView
-            android:id="@+id/itemFrom"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/itemStatus"
-            app:title="@string/tx_info_bottom_sheet_from"
-            app:value=""
-            />
-
-        <bitcoin.wallet.modules.transactionInfo.TransactionInfoItemView
-            android:id="@+id/itemReference"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/itemFrom"
-            app:title="@string/tx_info_bottom_sheet_reference"
-            app:value=""
-            />
-
-        <bitcoin.wallet.modules.transactionInfo.TransactionInfoItemView
-            android:id="@+id/itemFee"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/itemReference"
-            app:title="@string/tx_info_bottom_sheet_fee"
-            app:value=""
-            />
-
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/moreItemsLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/itemFee"
-            >
-
-            <bitcoin.wallet.modules.transactionInfo.TransactionInfoItemView
-                android:id="@+id/itemExchangeRate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:title="@string/tx_info_bottom_sheet_exchange_rate"
-                app:value=""
-                />
-
-            <bitcoin.wallet.modules.transactionInfo.TransactionInfoItemView
-                android:id="@+id/itemConfirmedBlock"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/itemExchangeRate"
-                app:title="@string/tx_info_bottom_sheet_confirmed_in_block"
-                app:value="3432"
-                />
-
-            <bitcoin.wallet.modules.transactionInfo.TransactionInfoItemView
-                android:id="@+id/itemTransactionId"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/itemConfirmedBlock"
-                app:title="@string/tx_info_bottom_sheet_transaction_id"
-                app:value=""
-                />
-        </android.support.constraint.ConstraintLayout>
-
-    </android.support.constraint.ConstraintLayout>
-
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/lessMoreLayout"
+    <bitcoin.wallet.modules.transactionInfo.TransactionInfoItemView
+        android:id="@+id/itemTransactionId"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="?android:selectableItemBackground"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemStatus"
+        app:title="@string/tx_info_bottom_sheet_transaction_id"
+        app:value=""
+        />
+
+    <bitcoin.wallet.modules.transactionInfo.TransactionInfoItemView
+        android:id="@+id/valueWhenReceived"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemTransactionId"
+        app:title="@string/tx_info_bottom_sheet_value_when_received"
+        app:value=""
+        />
+
+    <bitcoin.wallet.modules.transactionInfo.TransactionInfoItemView
+        android:id="@+id/itemFrom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/valueWhenReceived"
+        app:title="@string/tx_info_bottom_sheet_from"
+        app:value=""
+        />
+
+    <TextView
+        android:id="@+id/txtClose"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/noto_sans_bold"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp"
+        android:text="@string/tx_info_bottom_sheet_close"
+        android:textAlignment="center"
+        android:textColor="@color/green_crypto"
+        android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemsLayout"
-        >
-
-        <TextView
-            android:id="@+id/txtExpand"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/noto_sans_bold"
-            android:text="@string/tx_info_bottom_sheet_more"
-            android:textColor="@color/green_crypto"
-            android:textSize="17sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
-    </android.support.constraint.ConstraintLayout>
-
+        app:layout_constraintTop_toBottomOf="@+id/itemFrom"
+        />
 
 </android.support.constraint.ConstraintLayout>

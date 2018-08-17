@@ -218,8 +218,8 @@
     </style>
 
     <style name="TransactionInfoFieldValue">
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">@font/noto_sans</item>
         <item name="android:includeFontPadding">false</item>
     </style>
