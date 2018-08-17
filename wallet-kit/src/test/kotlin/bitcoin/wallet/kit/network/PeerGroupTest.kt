@@ -79,7 +79,7 @@ class PeerGroupTest {
         whenever(peer2.host).thenReturn(peerIp2)
 
         peerGroup.connected(peer2)
-        peerGroup.disconnected(peer2, null)
+        peerGroup.disconnected(peer2, null, arrayOf())
         peerGroup.connected(peer)
 
         verify(peerGroupListener, times(2)).onReady()
@@ -87,14 +87,14 @@ class PeerGroupTest {
 
     @Test
     fun disconnected() { // removes peer from connection list
-        peerGroup.disconnected(peer, null)
+        peerGroup.disconnected(peer, null, arrayOf())
 
         verify(peerManager).markSuccess(peerIp)
     }
 
     @Test
     fun disconnected_withError() { // removes peer from connection list
-        peerGroup.disconnected(peer, SocketTimeoutException("Some Error"))
+        peerGroup.disconnected(peer, SocketTimeoutException("Some Error"), arrayOf())
 
         verify(peerManager).markFailed(peerIp)
     }

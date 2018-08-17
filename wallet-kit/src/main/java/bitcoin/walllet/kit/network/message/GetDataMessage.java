@@ -17,7 +17,7 @@ public class GetDataMessage extends Message {
 
     InvVect[] inventory; // byte[36]
 
-    public GetDataMessage(int type, byte[]... hashes) {
+    public GetDataMessage(int type, byte[][] hashes) {
         super("getdata");
         this.inventory = new InvVect[hashes.length];
         for (int i = 0; i < this.inventory.length; i++) {

@@ -1,5 +1,6 @@
 package bitcoin.wallet.kit.network
 
+import bitcoin.wallet.kit.blocks.MerkleBlock
 import bitcoin.walllet.kit.network.PeerGroupListener
 import bitcoin.walllet.kit.network.PeerListener
 import bitcoin.walllet.kit.struct.Transaction
@@ -62,7 +63,8 @@ class PeerGroup(private val peerGroupListener: PeerGroupListener, private val pe
         syncPeer?.requestHeaders(headerHashes)
     }
 
-    override fun requestBlocks(headerHashes: Array<ByteArray>) {
+    override fun requestMerkleBlocks(headerHashes: Array<ByteArray>) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun relay(transaction: Transaction) {
@@ -77,7 +79,7 @@ class PeerGroup(private val peerGroupListener: PeerGroupListener, private val pe
         }
     }
 
-    override fun disconnected(peer: Peer, e: Exception?) {
+    override fun disconnected(peer: Peer, e: Exception?, incompleteMerkleBlocks: Array<ByteArray>) {
         if (e == null) {
             log.info("PeerAddress $peer.host disconnected.")
             peerManager.markSuccess(peer.host)
@@ -93,4 +95,9 @@ class PeerGroup(private val peerGroupListener: PeerGroupListener, private val pe
 
         peerMap.remove(peer.host)
     }
+
+    override fun onReceiveMerkleBlock(merkleBlock: MerkleBlock?) {
+        peerGroupListener.onReceiveMerkleBlock(merkleBlock)
+    }
+
 }
