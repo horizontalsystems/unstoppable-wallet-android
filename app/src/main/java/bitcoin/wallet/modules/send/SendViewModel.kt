@@ -8,11 +8,9 @@ class SendViewModel : ViewModel(), SendModule.IView, SendModule.IRouter {
 
     lateinit var delegate: SendModule.IViewDelegate
     val addressLiveData = MutableLiveData<String>()
-    val primaryCurrencyLiveData = MutableLiveData<String>()
     val primaryAmountLiveData = MutableLiveData<String>()
     val secondaryAmountHintLiveData = MutableLiveData<String>()
     val startScanLiveEvent = SingleLiveEvent<Unit>()
-    val closeViewLiveEvent = SingleLiveEvent<Unit>()
     val showSuccessLiveEvent = SingleLiveEvent<Unit>()
     val showErrorLiveData = MutableLiveData<Int>()
 
@@ -25,20 +23,12 @@ class SendViewModel : ViewModel(), SendModule.IView, SendModule.IRouter {
        addressLiveData.value = address
     }
 
-    override fun setCurrency(code: String) {
-        primaryCurrencyLiveData.value = code
-    }
-
     override fun setAmount(amount: String?) {
         primaryAmountLiveData.value = amount
     }
 
     override fun setAmountHint(hint: String) {
         secondaryAmountHintLiveData.value = hint
-    }
-
-    override fun closeView() {
-        closeViewLiveEvent.call()
     }
 
     override fun showError(error: Int) {

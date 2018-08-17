@@ -68,7 +68,7 @@ class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener 
 
     override fun onReceiveClicked(coin: Coin) {
         activity?.let {
-            ReceiveModule.start(it, coin.code)
+            ReceiveModule.start(it, coin)
         }
     }
 

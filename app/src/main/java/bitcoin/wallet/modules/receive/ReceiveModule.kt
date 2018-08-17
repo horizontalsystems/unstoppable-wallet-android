@@ -2,6 +2,7 @@ package bitcoin.wallet.modules.receive
 
 import android.support.v4.app.FragmentActivity
 import bitcoin.wallet.core.managers.Factory
+import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.viewHelpers.TextHelper
 
 object ReceiveModule {
@@ -10,13 +11,11 @@ object ReceiveModule {
         fun showAddress(coinAddress: String)
         fun showError(error: Int)
         fun showCopied()
-        fun closeView()
     }
 
     interface IViewDelegate {
         fun viewDidLoad()
         fun onCopyClick()
-        fun onCancelClick()
         fun onShareClick()
     }
 
@@ -44,8 +43,8 @@ object ReceiveModule {
         interactor.delegate = presenter
     }
 
-    fun start(activity: FragmentActivity, coinCode: String) {
-        ReceiveFragment.show(activity, coinCode)
+    fun start(activity: FragmentActivity, coin: Coin) {
+        ReceiveFragment.show(activity, coin)
     }
 
 }

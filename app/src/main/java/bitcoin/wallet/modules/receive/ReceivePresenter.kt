@@ -34,10 +34,6 @@ class ReceivePresenter(private val interactor: ReceiveModule.IInteractor, privat
         view?.showCopied()
     }
 
-    override fun onCancelClick() {
-        view?.closeView()
-    }
-
     override fun onShareClick() {
         coinAddress?.let { router.openShareView(it) }
     }

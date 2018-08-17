@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentActivity
@@ -16,9 +15,9 @@ import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import bitcoin.wallet.R
-import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem
 import bitcoin.wallet.viewHelpers.DateHelper
+import bitcoin.wallet.viewHelpers.LayoutHelper
 import bitcoin.wallet.viewHelpers.NumberFormatHelper
 import bitcoin.wallet.viewHelpers.TextHelper
 
@@ -57,7 +56,10 @@ class TransactionInfoFragment : DialogFragment() {
                 val titleText = getString(if (txRecord.incoming) R.string.tx_info_bottom_sheet_title_received else R.string.tx_info_bottom_sheet_title_sent)
 
                 rootView.findViewById<TextView>(R.id.txtTitle)?.text = titleText  + " " + txRecord.amount.coin.code
-                rootView.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(getCoinDrawable(txRecord.amount.coin))
+                context?.let {
+                    val coinDrawable = ContextCompat.getDrawable(it, LayoutHelper.getCoinDrawable(txRecord.amount.coin.code))
+                    rootView.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
+                }
 
                 rootView.findViewById<TextView>(R.id.txtAmount)?.apply {
                     val sign = if (txRecord.incoming) "+" else "-"
@@ -109,21 +111,6 @@ class TransactionInfoFragment : DialogFragment() {
         })
 
         return mDialog as Dialog
-    }
-
-    private fun getCoinDrawable(coin: Coin): Drawable? {
-        val coinResource = when(coin.code) {
-            "BCH" -> R.drawable.coin_bitcoin_cash
-            "LTC" -> R.drawable.coin_litecoin
-            "DASH" -> R.drawable.coin_dash
-            "EOS" -> R.drawable.coin_eos
-            "XMR" -> R.drawable.coin_monero
-            "XRP" -> R.drawable.coin_ripple
-            "ZEC" -> R.drawable.coin_zcash
-            "ETH" -> R.drawable.coin_ether
-            else -> R.drawable.coin_bitcoin
-        }
-        return context?.let { ContextCompat.getDrawable(it, coinResource) }
     }
 
     companion object {
