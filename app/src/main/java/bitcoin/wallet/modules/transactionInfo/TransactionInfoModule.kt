@@ -7,13 +7,14 @@ import bitcoin.wallet.modules.transactions.TransactionRecordViewItem
 object TransactionInfoModule {
     interface IView {
         fun showTransactionItem(transactionRecordViewItem: TransactionRecordViewItem)
-        fun expand()
-        fun lessen()
+        fun showDetails()
+        fun close()
     }
 
     interface IViewDelegate {
         fun viewDidLoad()
-        fun onLessMoreClick()
+        fun onDetailsClick()
+        fun onCloseClick()
     }
 
     interface IInteractor {

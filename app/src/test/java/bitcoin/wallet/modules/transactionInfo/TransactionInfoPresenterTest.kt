@@ -1,7 +1,6 @@
 package bitcoin.wallet.modules.transactionInfo
 
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem
-import com.nhaarman.mockito_kotlin.reset
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Before
 import org.junit.Test
@@ -35,24 +34,6 @@ class TransactionInfoPresenterTest {
         presenter.didGetTransactionInfo(transactionRecordViewItem)
 
         view.showTransactionItem(transactionRecordViewItem)
-    }
-
-    @Test
-    fun onMoreLessClick_expand() {
-
-        presenter.onLessMoreClick()
-
-        verify(view).expand()
-    }
-
-    @Test
-    fun onMoreLessClick_lessen() {
-
-        presenter.onLessMoreClick()
-        reset(view)
-        presenter.onLessMoreClick()
-
-        verify(view).lessen()
     }
 
 }

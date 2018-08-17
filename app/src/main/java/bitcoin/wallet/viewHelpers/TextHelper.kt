@@ -12,6 +12,8 @@ import com.google.zxing.EncodeHintType
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
+import java.util.*
+
 
 object TextHelper : IClipboardManager {
 
@@ -58,6 +60,21 @@ object TextHelper : IClipboardManager {
             e.printStackTrace()
             null
         }
+    }
+
+    //todo remove it when Address From and To in TransactionRecord will start to work
+    fun randomHashGenerator(): String {
+        val length = 30
+        val ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+        val random = Random()
+        val builder = StringBuilder(length)
+        builder.append("1")
+
+        for (i in 1 until length) {
+            builder.append(ALPHABET[random.nextInt(ALPHABET.length)])
+        }
+
+        return builder.toString()
     }
 
 }

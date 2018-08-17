@@ -10,7 +10,8 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.IView, Trans
     lateinit var delegate: TransactionInfoModule.IViewDelegate
 
     val transactionLiveData = MutableLiveData<TransactionRecordViewItem>()
-    val expandLiveEvent = SingleLiveEvent<Boolean>()
+    val showDetailsLiveEvent = SingleLiveEvent<Unit>()
+    val closeLiveEvent = SingleLiveEvent<Unit>()
 
     fun init(coinCode: String, txHash: String) {
         TransactionInfoModule.init(this, this, coinCode, txHash)
@@ -21,12 +22,11 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.IView, Trans
         transactionLiveData.value = transactionRecordViewItem
     }
 
-    override fun expand() {
-        expandLiveEvent.value = true
+    override fun showDetails() {
+        showDetailsLiveEvent.call()
     }
 
-    override fun lessen() {
-        expandLiveEvent.value = false
+    override fun close() {
+        closeLiveEvent.call()
     }
-
 }
