@@ -25,7 +25,7 @@ class PeerConnection(val host: String, private val listener: Listener): Thread()
 
     private val log = LoggerFactory.getLogger(Peer::class.java)
     private val sendingQueue: BlockingQueue<Message> = ArrayBlockingQueue(100)
-    private val sock = Socket()
+    private val socket = Socket()
 
     @Volatile
     private var isRunning = false
@@ -44,17 +44,17 @@ class PeerConnection(val host: String, private val listener: Listener): Thread()
         isRunning = true
         // connect:
         try {
-            sock.connect(InetSocketAddress(host, BitcoinConstants.PORT), 10000)
-            sock.soTimeout = 10000
+            socket.connect(InetSocketAddress(host, BitcoinConstants.PORT), 10000)
+            socket.soTimeout = 10000
 
-            val input = sock.getInputStream()
-            val output = sock.getOutputStream()
+            val input = socket.getInputStream()
+            val output = socket.getOutputStream()
 
             log.info("Socket $host connected.")
             setTimeout(60000)
 
             // add version message to send automatically:
-            sendMessage(VersionMessage(0, sock.inetAddress))
+            sendMessage(VersionMessage(0, socket.inetAddress))
             // loop:
             while (isRunning) {
                 if (isTimeout) {
