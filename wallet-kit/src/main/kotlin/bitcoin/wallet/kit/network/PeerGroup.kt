@@ -74,6 +74,9 @@ class PeerGroup(private val peerGroupListener: PeerGroupListener, private val pe
         if (syncPeer == null) {
             syncPeer = peer
 
+            // sync peer will always busy for headers tasks
+            peer.isFree = false
+
             log.info("Sync Peer ready")
             peerGroupListener.onReady()
         }
