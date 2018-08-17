@@ -2,13 +2,21 @@ package bitcoin.wallet.kit.blocks
 
 import bitcoin.walllet.kit.common.io.BitcoinInput
 import bitcoin.walllet.kit.common.io.BitcoinOutput
+import bitcoin.walllet.kit.common.util.HashUtils
 import bitcoin.walllet.kit.struct.Header
+import bitcoin.walllet.kit.struct.Transaction
 
 class MerkleBlock(input: BitcoinInput) {
 
     var header: Header = Header(input)
     var hashes: Array<ByteArray> = arrayOf()
     var flags: ByteArray = byteArrayOf()
+
+    var associatedTransactionHashes: Array<ByteArray> = arrayOf()
+    val associatedTransactions: MutableList<Transaction> = mutableListOf()
+    val blockHash: ByteArray by lazy {
+        HashUtils.doubleSha256(header.toByteArray())
+    }
 
     private var txnCount: Int = 0
     private var hashCount: Long = 0L
@@ -38,4 +46,9 @@ class MerkleBlock(input: BitcoinInput) {
 
         return output.toByteArray()
     }
+
+    fun addTransaction(transaction: Transaction) {
+        associatedTransactions.add(transaction)
+    }
+
 }

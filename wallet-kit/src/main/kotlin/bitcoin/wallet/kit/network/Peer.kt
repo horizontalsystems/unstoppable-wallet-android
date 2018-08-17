@@ -1,135 +1,82 @@
 package bitcoin.wallet.kit.network
 
-import bitcoin.wallet.kit.message.HeadersMessage
+import bitcoin.wallet.kit.blocks.MerkleBlock
 import bitcoin.wallet.kit.message.MerkleBlockMessage
-import bitcoin.walllet.kit.common.constant.BitcoinConstants
-import bitcoin.walllet.kit.common.io.BitcoinInput
-import bitcoin.walllet.kit.network.MessageSender
+import bitcoin.wallet.kit.message.TransactionMessage
 import bitcoin.walllet.kit.network.PeerListener
 import bitcoin.walllet.kit.network.message.*
-import org.slf4j.LoggerFactory
-import java.io.IOException
-import java.net.ConnectException
-import java.net.InetSocketAddress
-import java.net.Socket
-import java.net.SocketTimeoutException
-import java.util.concurrent.ArrayBlockingQueue
-import java.util.concurrent.BlockingQueue
-import java.util.concurrent.TimeUnit
+import bitcoin.walllet.kit.struct.InvVect
+import bitcoin.walllet.kit.struct.Transaction
+import java.lang.Exception
 
-class Peer(val host: String, private val listener: PeerListener) : Thread(), MessageSender {
+class Peer(val host: String, private val listener: PeerListener) : PeerInteraction, PeerConnection.Listener {
 
-    private val log = LoggerFactory.getLogger(Peer::class.java)
-    private val sendingQueue: BlockingQueue<Message> = ArrayBlockingQueue(100)
-    private val sock = Socket()
+    var isFree = true
 
-    @Volatile
-    private var isRunning = false
+    private val peerConnection = PeerConnection(host, this)
+    private var requestedMerkleBlocks: MutableMap<ByteArray, MerkleBlock?> = mutableMapOf()
 
-    @Volatile
-    private var timeout: Long = 0
-    private val isTimeout: Boolean
-        get() = System.currentTimeMillis() > this.timeout
-
-    // initialize:
-    init {
-        isDaemon = true
+    fun start() {
+        peerConnection.start()
     }
 
-    override fun run() {
-        isRunning = true
-        // connect:
-        try {
-            sock.connect(InetSocketAddress(host, BitcoinConstants.PORT), 10000)
-            sock.soTimeout = 10000
-
-            val input = sock.getInputStream()
-            val output = sock.getOutputStream()
-
-            log.info("Socket $host connected.")
-            setTimeout(60000)
-
-            // add version message to send automatically:
-            sendMessage(VersionMessage(0, sock.inetAddress))
-            // loop:
-            while (isRunning) {
-                if (isTimeout) {
-                    log.info("Timeout!")
-                    break
-                }
-
-                // try get message to send:
-                val msg = sendingQueue.poll(1, TimeUnit.SECONDS)
-                if (isRunning && msg != null) {
-                    // send message:
-                    log.info("=> " + msg.toString())
-                    output.write(msg.toByteArray())
-                }
-
-                // try receive message:
-                if (isRunning && input.available() > 0) {
-                    val inputStream = BitcoinInput(input)
-                    val parsedMsg = Message.Builder.parseMessage<Message>(inputStream)
-
-                    log.info("<= $parsedMsg")
-
-                    onMessage(parsedMsg)
-                }
-            }
-
-            listener.disconnected(this, null)
-        } catch (e: SocketTimeoutException) {
-            log.warn("Connect timeout exception: " + e.message, e)
-            listener.disconnected(this, e)
-        } catch (e: ConnectException) {
-            log.warn("Connect exception: " + e.message, e)
-            listener.disconnected(this, e)
-        } catch (e: IOException) {
-            log.warn("IOException: " + e.message, e)
-            listener.disconnected(this, e)
-        } catch (e: InterruptedException) {
-            log.warn("Peer connection thread interrupted.")
-            listener.disconnected(this, null)
-        } catch (e: Exception) {
-            log.warn("Peer connection exception.", e)
-            listener.disconnected(this, null)
-        } finally {
-            isRunning = false
-        }
+    fun close() {
+        peerConnection.close()
     }
 
-    fun onMessage(message: Message) {
+    override fun requestHeaders(headerHashes: Array<ByteArray>, switchPeer: Boolean) {
+        peerConnection.sendMessage(GetHeadersMessage(headerHashes))
+    }
+
+
+    override fun requestMerkleBlocks(headerHashes: Array<ByteArray>) {
+        requestedMerkleBlocks.plusAssign(headerHashes.map { it to null }.toMap())
+
+        peerConnection.sendMessage(GetDataMessage(InvVect.MSG_FILTERED_BLOCK, headerHashes))
+        isFree = false
+    }
+
+    override fun relay(transaction: Transaction) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onMessage(message: Message) {
         when (message) {
-            is PingMessage -> sendMessage(PongMessage(message.nonce))
-            is VersionMessage -> sendMessage(VerAckMessage())
+            is PingMessage -> peerConnection.sendMessage(PongMessage(message.nonce))
+            is VersionMessage -> peerConnection.sendMessage(VerAckMessage())
             is VerAckMessage -> listener.connected(this)
-            is HeadersMessage -> {
-            }
             is MerkleBlockMessage -> {
+                val merkleBlock = message.merkleBlock
+                requestedMerkleBlocks[merkleBlock.blockHash] = merkleBlock
+
+                if (merkleBlock.associatedTransactionHashes.isEmpty()) {
+                    merkleBlockCompleted(merkleBlock)
+                }
             }
-            is InvMessage -> {
+            is TransactionMessage -> {
+                val transaction = message.transaction
+
+                val merkleBlock = requestedMerkleBlocks.values.filterNotNull().firstOrNull { it.associatedTransactionHashes.contains(transaction.txHash) }
+                if (merkleBlock != null) {
+                    merkleBlock.addTransaction(transaction)
+                    if (merkleBlock.associatedTransactionHashes.size == merkleBlock.associatedTransactions.size) {
+                        merkleBlockCompleted(merkleBlock)
+                    }
+                }
             }
         }
     }
 
-    override fun close() {
-        isRunning = false
-        try {
-            join(1000)
-        } catch (e: InterruptedException) {
-            log.error(e.message)
+    private fun merkleBlockCompleted(merkleBlock: MerkleBlock) {
+        listener.onReceiveMerkleBlock(merkleBlock)
+        requestedMerkleBlocks.minusAssign(merkleBlock.blockHash)
+        if (requestedMerkleBlocks.isEmpty()) {
+            isFree = true
         }
     }
 
-    override fun sendMessage(message: Message) {
-        sendingQueue.add(message)
+    override fun disconnected(e: Exception?) {
+        listener.disconnected(this, e, requestedMerkleBlocks.keys.toTypedArray())
     }
 
-    override fun setTimeout(timeoutInMillis: Long) {
-        timeout = System.currentTimeMillis() + timeoutInMillis
-    }
-
-    fun requestHeaders(headerHashes: Array<ByteArray>) {
-        sendMessage(GetHeadersMessage(headerHashes))
-    }
 }
