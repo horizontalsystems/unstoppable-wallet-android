@@ -35,6 +35,51 @@ class Ethereum : Coin() {
     override val code: String = "ETH"
 }
 
+class Cardano : Coin() {
+    override val name: String = "Cardano"
+    override val code: String = "ETH"
+}
+
+class Dash : Coin() {
+    override val name: String = "Dash"
+    override val code: String = "DASH"
+}
+
+class Litecoin : Coin() {
+    override val name: String = "Litecoin"
+    override val code: String = "LTC"
+}
+
+class Monero : Coin() {
+    override val name: String = "Monero"
+    override val code: String = "XMR"
+}
+
+class Xrp : Coin() {
+    override val name: String = "Xrp"
+    override val code: String = "XRP"
+}
+
+class Zcash : Coin() {
+    override val name: String = "Zcash"
+    override val code: String = "ZEC"
+}
+
+class EOS : Coin() {
+    override val name: String = "EOS"
+    override val code: String = "EOS"
+}
+
+class Tether : Coin() {
+    override val name: String = "Tether"
+    override val code: String = "USDT"
+}
+
+class Stellar : Coin() {
+    override val name: String = "Stellar"
+    override val code: String = "XLM"
+}
+
 data class CoinValue(val coin: Coin, val value: Double) {
 
     override fun equals(other: Any?): Boolean {
