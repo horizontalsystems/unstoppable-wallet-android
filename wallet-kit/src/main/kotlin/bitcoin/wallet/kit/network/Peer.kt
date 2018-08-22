@@ -84,7 +84,4 @@ class Peer(val host: String, private val listener: Listener) : PeerInteraction, 
         listener.disconnected(this, e, requestedMerkleBlocks.keys.toTypedArray())
     }
 
-    fun requestBlocks(headerHashes: Array<ByteArray>) {
-
-    }
 }
