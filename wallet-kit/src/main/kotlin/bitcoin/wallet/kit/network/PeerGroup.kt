@@ -77,7 +77,6 @@ class PeerGroup(private val peerGroupListener: PeerGroupListener, private val pe
         // loop:
         while (fetchingBlocksQueue.isNotEmpty()) {
             val peer = getFreePeer()
-            print(peer)
             if (peer == null) {
                 Thread.sleep(1000)
             } else {
