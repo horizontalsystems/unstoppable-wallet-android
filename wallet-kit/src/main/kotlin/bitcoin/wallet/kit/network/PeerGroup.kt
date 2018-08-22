@@ -95,7 +95,7 @@ class PeerGroup(private val peerGroupListener: Listener, private val peerManager
                     hashes.add(hash)
                 }
 
-                peer.requestBlocks(hashes.toTypedArray())
+                peer.requestMerkleBlocks(hashes.toTypedArray())
             }
         }
 

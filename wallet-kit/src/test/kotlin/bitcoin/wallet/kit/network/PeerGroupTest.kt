@@ -74,7 +74,7 @@ class PeerGroupTest {
         )
 
         peerGroup.requestMerkleBlocks(hashes)
-        verify(peer).requestBlocks(hashes)
+        verify(peer).requestMerkleBlocks(hashes)
     }
 
     @Test
@@ -104,8 +104,8 @@ class PeerGroupTest {
 
         peerGroup.requestMerkleBlocks(hashes)
 
-        verify(peer).requestBlocks(hashes.copyOfRange(0, 10))
-        verify(peer2).requestBlocks(hashes.copyOfRange(10, 12))
+        verify(peer).requestMerkleBlocks(hashes.copyOfRange(0, 10))
+        verify(peer2).requestMerkleBlocks(hashes.copyOfRange(10, 12))
     }
 
     @Test
@@ -163,6 +163,6 @@ class PeerGroupTest {
         )
 
         peerGroup.disconnected(peer, null, hashes)
-        verify(peer).requestBlocks(hashes)
+        verify(peer).requestMerkleBlocks(hashes)
     }
 }
