@@ -33,6 +33,7 @@ class SendFragment : DialogFragment() {
     private lateinit var addressLayout: View
 
     private lateinit var amountTxt: EditText
+    private lateinit var sendButton: Button
     private lateinit var hintTxt: TextView
     private lateinit var amountLayout: View
 
@@ -97,9 +98,22 @@ class SendFragment : DialogFragment() {
                 amountLayout.background = resources.getDrawable(R.drawable.border_grey, null)
         }
 
+        val addressTextChangeListener = object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                updateSendBtnState()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        }
+
+        addressTxt.addTextChangedListener(addressTextChangeListener)
+
         val textChangeListener = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 viewModel.delegate.onAmountEntered(s?.toString())
+                updateSendBtnState()
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -122,7 +136,9 @@ class SendFragment : DialogFragment() {
         }
 
         scrollView = rootView.findViewById(R.id.scrollView)
+        sendButton = rootView.findViewById(R.id.btnSend)
 
+        sendButton.isEnabled = false
 
         moreTxt = rootView.findViewById(R.id.txtMore)
         moreOptionsLayout = rootView.findViewById(R.id.moreOptionsLayout)
@@ -148,7 +164,7 @@ class SendFragment : DialogFragment() {
                     })
         }
 
-        rootView.findViewById<Button>(R.id.btnSend)?.setOnClickListener {
+        sendButton?.setOnClickListener {
             viewModel.delegate.onSendClick(addressTxt.text.toString())
         }
 
@@ -182,6 +198,10 @@ class SendFragment : DialogFragment() {
         })
 
         return mDialog as Dialog
+    }
+
+    private fun updateSendBtnState() {
+        sendButton.isEnabled = addressTxt.text.toString().isNotEmpty() && amountTxt.text.toString().isNotEmpty()
     }
 
 
