@@ -3,7 +3,6 @@ package bitcoin.wallet.kit.network
 import bitcoin.wallet.kit.blocks.MerkleBlock
 import bitcoin.wallet.kit.message.MerkleBlockMessage
 import bitcoin.wallet.kit.message.TransactionMessage
-import bitcoin.walllet.kit.network.PeerListener
 import bitcoin.walllet.kit.network.message.GetDataMessage
 import bitcoin.walllet.kit.struct.InvVect
 import bitcoin.walllet.kit.struct.Transaction
@@ -25,12 +24,12 @@ import javax.xml.bind.DatatypeConverter
 class PeerTest {
 
     private lateinit var peer: Peer
-    private lateinit var listener: PeerListener
+    private lateinit var listener: Peer.Listener
     private lateinit var peerConnection: PeerConnection
 
     @Before
     fun setup() {
-        listener = mock(PeerListener::class.java)
+        listener = mock(Peer.Listener::class.java)
         peerConnection = mock(PeerConnection::class.java)
 
         PowerMockito

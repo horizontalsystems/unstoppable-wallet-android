@@ -1,17 +1,31 @@
 package bitcoin.wallet.kit.network
 
 import bitcoin.wallet.kit.blocks.MerkleBlock
-import bitcoin.walllet.kit.network.PeerGroupListener
-import bitcoin.walllet.kit.network.PeerListener
+import bitcoin.walllet.kit.struct.Header
+import bitcoin.walllet.kit.struct.InvVect
 import bitcoin.walllet.kit.struct.Transaction
 import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentLinkedQueue
 
-class PeerGroup(private val peerGroupListener: PeerGroupListener, private val peerManager: PeerManager, private val peerSize: Int = 3) : Thread(), PeerListener, PeerInteraction {
+class PeerGroup(private val peerGroupListener: Listener, private val peerManager: PeerManager, private val peerSize: Int = 3) : Thread(), Peer.Listener, PeerInteraction {
+
+    interface Listener {
+        fun onReady()
+        fun onReceiveHeaders(headers: Array<Header>)
+        fun onReceiveMerkleBlock(merkleBlock: MerkleBlock)
+        fun onReceiveTransaction(transaction: Transaction)
+        fun shouldRequest(invVect: InvVect): Boolean?
+        fun getTransaction(hash: String): Transaction
+    }
 
     private val log = LoggerFactory.getLogger(PeerGroup::class.java)
     private val peerMap = ConcurrentHashMap<String, Peer>()
     private var syncPeer: Peer? = null
+    private val fetchingBlocksQueue = ConcurrentLinkedQueue<ByteArray>()
+
+    @Volatile
+    private var fetchingBlocks = false
 
     @Volatile
     private var running = false
@@ -25,7 +39,7 @@ class PeerGroup(private val peerGroupListener: PeerGroupListener, private val pe
             }
 
             try {
-                Thread.sleep(5000L)
+                Thread.sleep(2000L)
             } catch (e: InterruptedException) {
                 break
             }
@@ -59,12 +73,42 @@ class PeerGroup(private val peerGroupListener: PeerGroupListener, private val pe
         }
     }
 
+    private fun getFreePeer(): Peer? {
+        return peerMap.values.firstOrNull { it.isFree }
+    }
+
+    private fun fetchBlocks() {
+        if (fetchingBlocks) return
+
+        // only on worker should distribution tasks
+        fetchingBlocks = true
+
+        // loop:
+        while (fetchingBlocksQueue.isNotEmpty()) {
+            val peer = getFreePeer()
+            if (peer == null) {
+                Thread.sleep(1000)
+            } else {
+                val hashes = mutableListOf<ByteArray>()
+                for (i in 1..10) {
+                    val hash = fetchingBlocksQueue.poll() ?: break
+                    hashes.add(hash)
+                }
+
+                peer.requestMerkleBlocks(hashes.toTypedArray())
+            }
+        }
+
+        fetchingBlocks = false
+    }
+
     override fun requestHeaders(headerHashes: Array<ByteArray>, switchPeer: Boolean) {
         syncPeer?.requestHeaders(headerHashes)
     }
 
     override fun requestMerkleBlocks(headerHashes: Array<ByteArray>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        fetchingBlocksQueue.addAll(headerHashes)
+        fetchBlocks()
     }
 
     override fun relay(transaction: Transaction) {
@@ -73,6 +117,9 @@ class PeerGroup(private val peerGroupListener: PeerGroupListener, private val pe
     override fun connected(peer: Peer) {
         if (syncPeer == null) {
             syncPeer = peer
+
+            // sync peer will always busy for headers tasks
+            peer.isFree = false
 
             log.info("Sync Peer ready")
             peerGroupListener.onReady()
@@ -93,10 +140,14 @@ class PeerGroup(private val peerGroupListener: PeerGroupListener, private val pe
             syncPeer = null
         }
 
+        if (incompleteMerkleBlocks.isNotEmpty()) {
+            requestMerkleBlocks(incompleteMerkleBlocks)
+        }
+
         peerMap.remove(peer.host)
     }
 
-    override fun onReceiveMerkleBlock(merkleBlock: MerkleBlock?) {
+    override fun onReceiveMerkleBlock(merkleBlock: MerkleBlock) {
         peerGroupListener.onReceiveMerkleBlock(merkleBlock)
     }
 
