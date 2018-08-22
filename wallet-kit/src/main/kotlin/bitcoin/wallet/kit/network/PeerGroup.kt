@@ -132,6 +132,10 @@ class PeerGroup(private val peerGroupListener: PeerGroupListener, private val pe
             syncPeer = null
         }
 
+        if (incompleteMerkleBlocks.isNotEmpty()) {
+            requestMerkleBlocks(incompleteMerkleBlocks)
+        }
+
         peerMap.remove(peer.host)
     }
 

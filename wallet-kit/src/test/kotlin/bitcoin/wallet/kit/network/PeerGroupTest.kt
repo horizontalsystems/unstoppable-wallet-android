@@ -150,4 +150,20 @@ class PeerGroupTest {
 
         verify(peerManager).markFailed(peerIp)
     }
+
+    @Test
+    fun disconnected_withIncompleteMerkleBlocks() {
+
+        peerGroup.start()
+        peerGroup.connected(peer)
+        whenever(peer.isFree).thenReturn(true)
+
+        val hashes = arrayOf(
+                byteArrayOf(1),
+                byteArrayOf(2)
+        )
+
+        peerGroup.disconnected(peer, null, hashes)
+        verify(peer).requestBlocks(hashes)
+    }
 }
