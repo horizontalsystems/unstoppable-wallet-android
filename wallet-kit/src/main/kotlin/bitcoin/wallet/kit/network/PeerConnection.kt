@@ -2,7 +2,6 @@ package bitcoin.wallet.kit.network
 
 import bitcoin.walllet.kit.common.constant.BitcoinConstants
 import bitcoin.walllet.kit.common.io.BitcoinInput
-import bitcoin.walllet.kit.network.MessageSender
 import bitcoin.walllet.kit.network.message.Message
 import bitcoin.walllet.kit.network.message.VersionMessage
 import org.slf4j.LoggerFactory
@@ -16,7 +15,7 @@ import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.TimeUnit
 
-class PeerConnection(val host: String, private val listener: Listener): Thread(), MessageSender {
+class PeerConnection(val host: String, private val listener: Listener) : Thread() {
 
     interface Listener {
         fun onMessage(message: Message)
@@ -100,7 +99,7 @@ class PeerConnection(val host: String, private val listener: Listener): Thread()
         }
     }
 
-    override fun close() {
+    fun close() {
         isRunning = false
         try {
             join(1000)
@@ -109,11 +108,11 @@ class PeerConnection(val host: String, private val listener: Listener): Thread()
         }
     }
 
-    override fun sendMessage(message: Message) {
+    fun sendMessage(message: Message) {
         sendingQueue.add(message)
     }
 
-    override fun setTimeout(timeoutInMillis: Long) {
+    fun setTimeout(timeoutInMillis: Long) {
         timeout = System.currentTimeMillis() + timeoutInMillis
     }
 

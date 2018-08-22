@@ -3,13 +3,18 @@ package bitcoin.wallet.kit.network
 import bitcoin.wallet.kit.blocks.MerkleBlock
 import bitcoin.wallet.kit.message.MerkleBlockMessage
 import bitcoin.wallet.kit.message.TransactionMessage
-import bitcoin.walllet.kit.network.PeerListener
 import bitcoin.walllet.kit.network.message.*
 import bitcoin.walllet.kit.struct.InvVect
 import bitcoin.walllet.kit.struct.Transaction
 import java.lang.Exception
 
-class Peer(val host: String, private val listener: PeerListener) : PeerInteraction, PeerConnection.Listener {
+class Peer(val host: String, private val listener: Listener) : PeerInteraction, PeerConnection.Listener {
+
+    interface Listener {
+        fun connected(peer: Peer)
+        fun disconnected(peer: Peer, e: Exception?, incompleteMerkleBlocks: Array<ByteArray>)
+        fun onReceiveMerkleBlock(merkleBlock: MerkleBlock)
+    }
 
     var isFree = true
 

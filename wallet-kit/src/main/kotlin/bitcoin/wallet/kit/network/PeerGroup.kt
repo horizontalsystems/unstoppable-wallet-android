@@ -1,14 +1,23 @@
 package bitcoin.wallet.kit.network
 
 import bitcoin.wallet.kit.blocks.MerkleBlock
-import bitcoin.walllet.kit.network.PeerGroupListener
-import bitcoin.walllet.kit.network.PeerListener
+import bitcoin.walllet.kit.struct.Header
+import bitcoin.walllet.kit.struct.InvVect
 import bitcoin.walllet.kit.struct.Transaction
 import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedQueue
 
-class PeerGroup(private val peerGroupListener: PeerGroupListener, private val peerManager: PeerManager, private val peerSize: Int = 3) : Thread(), PeerListener, PeerInteraction {
+class PeerGroup(private val peerGroupListener: Listener, private val peerManager: PeerManager, private val peerSize: Int = 3) : Thread(), Peer.Listener, PeerInteraction {
+
+    interface Listener {
+        fun onReady()
+        fun onReceiveHeaders(headers: Array<Header>)
+        fun onReceiveMerkleBlock(merkleBlock: MerkleBlock)
+        fun onReceiveTransaction(transaction: Transaction)
+        fun shouldRequest(invVect: InvVect): Boolean?
+        fun getTransaction(hash: String): Transaction
+    }
 
     private val log = LoggerFactory.getLogger(PeerGroup::class.java)
     private val peerMap = ConcurrentHashMap<String, Peer>()
@@ -138,7 +147,7 @@ class PeerGroup(private val peerGroupListener: PeerGroupListener, private val pe
         peerMap.remove(peer.host)
     }
 
-    override fun onReceiveMerkleBlock(merkleBlock: MerkleBlock?) {
+    override fun onReceiveMerkleBlock(merkleBlock: MerkleBlock) {
         peerGroupListener.onReceiveMerkleBlock(merkleBlock)
     }
 

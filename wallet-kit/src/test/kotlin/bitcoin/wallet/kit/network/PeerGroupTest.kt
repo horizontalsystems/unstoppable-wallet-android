@@ -1,6 +1,5 @@
 package bitcoin.wallet.kit.network
 
-import bitcoin.walllet.kit.network.PeerGroupListener
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Test
@@ -19,13 +18,13 @@ class PeerGroupTest {
     private lateinit var peer: Peer
     private lateinit var peer2: Peer
     private lateinit var peerManager: PeerManager
-    private lateinit var peerGroupListener: PeerGroupListener
+    private lateinit var peerGroupListener: PeerGroup.Listener
     private val peerIp = "8.8.8.8"
     private val peerIp2 = "5.5.5.5"
 
     @Before
     fun setup() {
-        peerGroupListener = mock(PeerGroupListener::class.java)
+        peerGroupListener = mock(PeerGroup.Listener::class.java)
         peerManager = mock(PeerManager::class.java)
         peerGroup = PeerGroup(peerGroupListener, peerManager, 2)
         peer = mock(Peer::class.java)
