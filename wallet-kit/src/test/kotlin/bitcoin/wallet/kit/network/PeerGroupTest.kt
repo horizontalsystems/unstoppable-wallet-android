@@ -1,5 +1,6 @@
 package bitcoin.wallet.kit.network
 
+import bitcoin.wallet.kit.crypto.BloomFilter
 import bitcoin.walllet.kit.struct.Transaction
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
@@ -112,7 +113,7 @@ class PeerGroupTest {
     @Test
     fun connected_onReady() {
         peerGroup.connected(peer)
-        verify(peerGroupListener).onReady()
+        verify(peerGroupListener).onReady(peerGroup)
     }
 
     @Test
@@ -122,7 +123,7 @@ class PeerGroupTest {
 
         peerGroup.connected(peer)
         peerGroup.connected(peer2)
-        verify(peerGroupListener).onReady()
+        verify(peerGroupListener).onReady(peerGroup)
     }
 
     @Test
@@ -134,7 +135,7 @@ class PeerGroupTest {
         peerGroup.disconnected(peer2, null, arrayOf())
         peerGroup.connected(peer)
 
-        verify(peerGroupListener, times(2)).onReady()
+        verify(peerGroupListener, times(2)).onReady(peerGroup)
     }
 
     @Test
@@ -165,6 +166,18 @@ class PeerGroupTest {
 
         peerGroup.disconnected(peer, null, hashes)
         verify(peer).requestMerkleBlocks(hashes)
+    }
+
+    @Test
+    fun sendFilterLoadMessage() {
+        val filter = BloomFilter(0)
+        peerGroup.setBloomFilter(filter)
+        peerGroup.start()
+
+        Thread.sleep(10L)
+        peerGroup.connected(peer)
+
+        verify(peer).setBloomFilter(filter)
     }
 
     @Test

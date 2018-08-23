@@ -1,6 +1,7 @@
 package bitcoin.wallet.kit.network
 
 import bitcoin.wallet.kit.blocks.MerkleBlock
+import bitcoin.wallet.kit.crypto.BloomFilter
 import bitcoin.walllet.kit.struct.Header
 import bitcoin.walllet.kit.struct.InvVect
 import bitcoin.walllet.kit.struct.Transaction
@@ -11,7 +12,7 @@ import java.util.concurrent.ConcurrentLinkedQueue
 class PeerGroup(private val peerGroupListener: Listener, private val peerManager: PeerManager, private val peerSize: Int = 3) : Thread(), Peer.Listener, PeerInteraction {
 
     interface Listener {
-        fun onReady()
+        fun onReady(peerGroup: PeerGroup)
         fun onReceiveHeaders(headers: Array<Header>)
         fun onReceiveMerkleBlock(merkleBlock: MerkleBlock)
         fun onReceiveTransaction(transaction: Transaction)
@@ -23,6 +24,7 @@ class PeerGroup(private val peerGroupListener: Listener, private val peerManager
     private val peerMap = ConcurrentHashMap<String, Peer>()
     private var syncPeer: Peer? = null
     private val fetchingBlocksQueue = ConcurrentLinkedQueue<ByteArray>()
+    private var bloomFilter: BloomFilter? = null
 
     @Volatile
     private var fetchingBlocks = false
@@ -73,6 +75,10 @@ class PeerGroup(private val peerGroupListener: Listener, private val peerManager
         }
     }
 
+    fun setBloomFilter(filter: BloomFilter) {
+        bloomFilter = filter
+    }
+
     private fun getFreePeer(): Peer? {
         return peerMap.values.firstOrNull { it.isFree }
     }
@@ -118,6 +124,10 @@ class PeerGroup(private val peerGroupListener: Listener, private val peerManager
     }
 
     override fun connected(peer: Peer) {
+        bloomFilter?.let {
+            peer.setBloomFilter(it)
+        }
+
         if (syncPeer == null) {
             syncPeer = peer
 
@@ -125,7 +135,7 @@ class PeerGroup(private val peerGroupListener: Listener, private val peerManager
             peer.isFree = false
 
             log.info("Sync Peer ready")
-            peerGroupListener.onReady()
+            peerGroupListener.onReady(this)
         }
     }
 
