@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentLinkedQueue
 class PeerGroup(private val peerGroupListener: Listener, private val peerManager: PeerManager, private val peerSize: Int = 3) : Thread(), Peer.Listener, PeerInteraction {
 
     interface Listener {
-        fun onReady()
+        fun onReady(peerGroup: PeerGroup)
         fun onReceiveHeaders(headers: Array<Header>)
         fun onReceiveMerkleBlock(merkleBlock: MerkleBlock)
         fun onReceiveTransaction(transaction: Transaction)
@@ -122,7 +122,7 @@ class PeerGroup(private val peerGroupListener: Listener, private val peerManager
             peer.isFree = false
 
             log.info("Sync Peer ready")
-            peerGroupListener.onReady()
+            peerGroupListener.onReady(this)
         }
     }
 

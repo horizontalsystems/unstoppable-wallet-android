@@ -111,7 +111,7 @@ class PeerGroupTest {
     @Test
     fun connected_onReady() {
         peerGroup.connected(peer)
-        verify(peerGroupListener).onReady()
+        verify(peerGroupListener).onReady(peerGroup)
     }
 
     @Test
@@ -121,7 +121,7 @@ class PeerGroupTest {
 
         peerGroup.connected(peer)
         peerGroup.connected(peer2)
-        verify(peerGroupListener).onReady()
+        verify(peerGroupListener).onReady(peerGroup)
     }
 
     @Test
@@ -133,7 +133,7 @@ class PeerGroupTest {
         peerGroup.disconnected(peer2, null, arrayOf())
         peerGroup.connected(peer)
 
-        verify(peerGroupListener, times(2)).onReady()
+        verify(peerGroupListener, times(2)).onReady(peerGroup)
     }
 
     @Test
