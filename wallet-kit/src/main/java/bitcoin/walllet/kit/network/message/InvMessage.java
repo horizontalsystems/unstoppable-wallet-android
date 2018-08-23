@@ -29,6 +29,14 @@ public class InvMessage extends Message {
         }
     }
 
+    public InvMessage(Integer type, byte[] hash) {
+        super("inv");
+        InvVect inv = new InvVect();
+        inv.type = type;
+        inv.hash = hash;
+        inventory = new InvVect[]{inv};
+    }
+
     public byte[][] getBlockHashes() {
         return Arrays.stream(this.inventory).filter((iv) -> {
             return iv.type == InvVect.MSG_BLOCK;

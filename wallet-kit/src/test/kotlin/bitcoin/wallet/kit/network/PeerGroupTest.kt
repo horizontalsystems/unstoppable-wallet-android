@@ -1,6 +1,7 @@
 package bitcoin.wallet.kit.network
 
 import bitcoin.wallet.kit.crypto.BloomFilter
+import bitcoin.walllet.kit.struct.Transaction
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Test
@@ -178,4 +179,18 @@ class PeerGroupTest {
 
         verify(peer).setBloomFilter(filter)
     }
+
+    @Test
+    fun relay() {
+        peerGroup.start()
+
+        Thread.sleep(2500L)
+
+        val transaction = mock(Transaction::class.java)
+
+        peerGroup.relay(transaction)
+        verify(peer).relay(transaction)
+        verify(peer2).relay(transaction)
+    }
+
 }
