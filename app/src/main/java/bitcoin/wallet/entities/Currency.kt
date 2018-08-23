@@ -37,7 +37,7 @@ class Ethereum : Coin() {
 
 class Cardano : Coin() {
     override val name: String = "Cardano"
-    override val code: String = "ETH"
+    override val code: String = "ADA"
 }
 
 class Dash : Coin() {
