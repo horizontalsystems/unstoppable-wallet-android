@@ -15,7 +15,12 @@ import bitcoin.walllet.kit.struct.InvVect;
  */
 public class GetDataMessage extends Message {
 
-    InvVect[] inventory; // byte[36]
+    public InvVect[] inventory; // byte[36]
+
+    public GetDataMessage(InvVect[] inventory) {
+        super("getdata");
+        this.inventory = inventory;
+    }
 
     public GetDataMessage(int type, byte[][] hashes) {
         super("getdata");

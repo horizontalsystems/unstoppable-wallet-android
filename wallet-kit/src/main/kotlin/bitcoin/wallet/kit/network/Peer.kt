@@ -14,6 +14,7 @@ class Peer(val host: String, private val listener: Listener) : PeerInteraction, 
         fun connected(peer: Peer)
         fun disconnected(peer: Peer, e: Exception?, incompleteMerkleBlocks: Array<ByteArray>)
         fun onReceiveMerkleBlock(merkleBlock: MerkleBlock)
+        fun shouldRequest(invVect: InvVect): Boolean
     }
 
     var isFree = true
@@ -68,6 +69,23 @@ class Peer(val host: String, private val listener: Listener) : PeerInteraction, 
                         merkleBlockCompleted(merkleBlock)
                     }
                 }
+            }
+            is InvMessage -> {
+                val inventoryToRequest = message.inventory
+                        .filter { listener.shouldRequest(it) }
+                        .map {
+                            if (it.type == InvVect.MSG_BLOCK) {
+                                InvVect().apply {
+                                    type = InvVect.MSG_FILTERED_BLOCK
+                                    hash = it.hash
+                                }
+                            } else {
+                                it
+                            }
+                        }
+                        .toTypedArray()
+
+                peerConnection.sendMessage(GetDataMessage(inventoryToRequest))
             }
         }
     }

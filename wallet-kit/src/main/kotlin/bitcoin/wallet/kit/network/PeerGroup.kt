@@ -15,7 +15,7 @@ class PeerGroup(private val peerGroupListener: Listener, private val peerManager
         fun onReceiveHeaders(headers: Array<Header>)
         fun onReceiveMerkleBlock(merkleBlock: MerkleBlock)
         fun onReceiveTransaction(transaction: Transaction)
-        fun shouldRequest(invVect: InvVect): Boolean?
+        fun shouldRequest(invVect: InvVect): Boolean
         fun getTransaction(hash: String): Transaction
     }
 
@@ -149,6 +149,10 @@ class PeerGroup(private val peerGroupListener: Listener, private val peerManager
 
     override fun onReceiveMerkleBlock(merkleBlock: MerkleBlock) {
         peerGroupListener.onReceiveMerkleBlock(merkleBlock)
+    }
+
+    override fun shouldRequest(invVect: InvVect): Boolean {
+        return peerGroupListener.shouldRequest(invVect)
     }
 
 }

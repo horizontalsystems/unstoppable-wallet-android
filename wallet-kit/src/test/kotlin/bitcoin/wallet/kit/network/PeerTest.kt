@@ -4,8 +4,10 @@ import bitcoin.wallet.kit.blocks.MerkleBlock
 import bitcoin.wallet.kit.message.MerkleBlockMessage
 import bitcoin.wallet.kit.message.TransactionMessage
 import bitcoin.walllet.kit.network.message.GetDataMessage
+import bitcoin.walllet.kit.network.message.InvMessage
 import bitcoin.walllet.kit.struct.InvVect
 import bitcoin.walllet.kit.struct.Transaction
+import com.nhaarman.mockito_kotlin.argumentCaptor
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Assert
@@ -190,6 +192,53 @@ class PeerTest {
 
         // then
         Assert.assertTrue(peer.isFree)
+    }
+
+    @Test
+    fun onMessage_inv_requestOnlyRequired() {
+        val invVect1 = mock(InvVect::class.java)
+        val invVect2 = mock(InvVect::class.java)
+
+        val invMessage = InvMessage().apply {
+            inventory = arrayOf(invVect1, invVect2)
+        }
+
+        whenever(listener.shouldRequest(invVect1)).thenReturn(true)
+        whenever(listener.shouldRequest(invVect2)).thenReturn(false)
+
+        peer.onMessage(invMessage)
+
+        argumentCaptor<GetDataMessage>().apply {
+            verify(peerConnection).sendMessage(capture())
+
+            Assert.assertEquals(arrayOf(invVect1), firstValue.inventory)
+        }
+    }
+
+    @Test
+    fun onMessage_inv_newBlock() {
+        val blockHash = DatatypeConverter.parseHexBinary("0000000000000005ed683decf91ff610c7710d03bb3f618d121d47cbcb1bc1e1")
+        val invVectBlock = InvVect().apply {
+            type = InvVect.MSG_BLOCK
+            hash = blockHash
+        }
+
+        val invMessage = InvMessage().apply {
+            inventory = arrayOf(invVectBlock)
+        }
+
+        whenever(listener.shouldRequest(invVectBlock)).thenReturn(true)
+
+        peer.onMessage(invMessage)
+
+        argumentCaptor<GetDataMessage>().apply {
+            verify(peerConnection).sendMessage(capture())
+
+            val invVect = firstValue.inventory.first()
+
+            Assert.assertEquals(InvVect.MSG_FILTERED_BLOCK, invVect.type)
+            Assert.assertEquals(blockHash, invVect.hash)
+        }
     }
 
 }
