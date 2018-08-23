@@ -1,6 +1,7 @@
 package bitcoin.wallet.kit.crypto
 
 import bitcoin.walllet.kit.common.hdwallet.Utils
+import bitcoin.walllet.kit.common.io.BitcoinOutput
 import bitcoin.walllet.kit.common.util.MurmurHash3
 import java.lang.Double.valueOf
 
@@ -68,8 +69,22 @@ class BloomFilter(elements: Int) {
         }
     }
 
+    /**
+     * Serialize the filter
+     */
+    fun toByteArray(): ByteArray {
+        val output = BitcoinOutput()
+        output.writeVarInt(filter.size.toLong())
+        output.write(filter)
+        output.writeInt(nHashFuncs)
+        output.writeUnsignedInt(nTweak)
+        output.writeByte(nFlags)
+
+        return output.toByteArray()
+    }
+
     override fun toString(): String {
-        return "Bloom Filter of size " + filter.size + " with " + nHashFuncs + " hash functions and flags " + nFlags + "."
+        return "Bloom Filter of size " + filter.size + " with " + nHashFuncs + " hash functions."
     }
 
     companion object {

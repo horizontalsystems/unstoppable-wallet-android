@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import bitcoin.wallet.kit.message.FilterLoadMessage;
 import bitcoin.wallet.kit.message.HeadersMessage;
 import bitcoin.wallet.kit.message.MerkleBlockMessage;
 import bitcoin.wallet.kit.message.TransactionMessage;
@@ -105,6 +106,7 @@ public abstract class Message {
             map.put("headers", HeadersMessage.class);
             map.put("merkleblock", MerkleBlockMessage.class);
             map.put("tx", TransactionMessage.class);
+            map.put("filterload", FilterLoadMessage.class);
             return map;
         }
 
