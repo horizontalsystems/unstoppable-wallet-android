@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import bitcoin.wallet.R
 import bitcoin.wallet.core.App
+import bitcoin.wallet.core.setOnSingleClickListener
 import bitcoin.wallet.modules.transactionInfo.TransactionInfoModule
 import bitcoin.wallet.viewHelpers.DateHelper
 import bitcoin.wallet.viewHelpers.LayoutHelper
@@ -98,7 +99,7 @@ class ViewHolderTransaction(override val containerView: View) : RecyclerView.Vie
 
     fun bind(transactionRecord: TransactionRecordViewItem, onClick: () -> (Unit)) {
 
-        containerView.setOnClickListener { onClick.invoke() }
+        containerView.setOnSingleClickListener{ onClick.invoke() }
 
         val sign = if (transactionRecord.incoming) "+" else "-"
         val amountTextColor = if (transactionRecord.incoming) R.color.green_crypto else R.color.yellow_crypto
