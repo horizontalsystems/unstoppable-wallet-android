@@ -195,6 +195,18 @@ class PeerTest {
     }
 
     @Test
+    fun onMessage_transaction() {
+        val transaction = mock(Transaction::class.java)
+        val transactionMessage = mock(TransactionMessage::class.java)
+
+        whenever(transactionMessage.transaction).thenReturn(transaction)
+
+        peer.onMessage(transactionMessage)
+
+        verify(listener).onReceiveTransaction(transaction)
+    }
+
+    @Test
     fun onMessage_inv_requestOnlyRequired() {
         val invVect1 = mock(InvVect::class.java)
         val invVect2 = mock(InvVect::class.java)

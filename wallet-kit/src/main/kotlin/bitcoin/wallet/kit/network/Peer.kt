@@ -14,6 +14,7 @@ class Peer(val host: String, private val listener: Listener) : PeerInteraction, 
         fun connected(peer: Peer)
         fun disconnected(peer: Peer, e: Exception?, incompleteMerkleBlocks: Array<ByteArray>)
         fun onReceiveMerkleBlock(merkleBlock: MerkleBlock)
+        fun onReceiveTransaction(transaction: Transaction)
         fun shouldRequest(invVect: InvVect): Boolean
     }
 
@@ -68,6 +69,8 @@ class Peer(val host: String, private val listener: Listener) : PeerInteraction, 
                     if (merkleBlock.associatedTransactionHashes.size == merkleBlock.associatedTransactions.size) {
                         merkleBlockCompleted(merkleBlock)
                     }
+                } else {
+                    listener.onReceiveTransaction(transaction)
                 }
             }
             is InvMessage -> {
