@@ -7,7 +7,6 @@ import java.util.Arrays;
 import bitcoin.walllet.kit.common.io.BitcoinInput;
 import bitcoin.walllet.kit.common.io.BitcoinOutput;
 import bitcoin.walllet.kit.common.util.HashUtils;
-import bitcoin.walllet.kit.struct.Inv;
 import bitcoin.walllet.kit.struct.InvVect;
 
 public class InvMessage extends Message {
