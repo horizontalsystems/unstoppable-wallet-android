@@ -4,7 +4,6 @@ import bitcoin.wallet.R
 import bitcoin.wallet.blockchain.InvalidAddress
 import bitcoin.wallet.blockchain.NotEnoughFundsException
 import bitcoin.wallet.viewHelpers.NumberFormatHelper
-import com.nhaarman.mockito_kotlin.atLeastOnce
 import com.nhaarman.mockito_kotlin.reset
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
@@ -37,9 +36,8 @@ class SendPresenterTest {
         presenter.onViewDidLoad()
 
         verify(interactor).getBaseCurrency()
-        verify(view).setCurrency(baseCurrency)
         verify(view).setAmount(null)
-        verify(view).setAmountHint("${cryptoAmountFormat.format(0)} $coinCode")
+        verify(view).setAmountHint("${cryptoAmountFormat.format(0)} $baseCurrency")
     }
 
     @Test
@@ -77,9 +75,9 @@ class SendPresenterTest {
     @Test
     fun onFiatAmountEntered() {
         val exchangeRate = 7000.0
-        val amountEntered = "3500.0"
+        val amountEntered = "0.5"
 
-        val secondaryAmountHint = "${cryptoAmountFormat.format(0.5)} BTC"
+        val secondaryAmountHint = "${cryptoAmountFormat.format(3500.0)} USD"
 
         presenter.onViewDidLoad()
         presenter.didFetchExchangeRate(exchangeRate)
@@ -99,72 +97,16 @@ class SendPresenterTest {
 
         presenter.onViewDidLoad()
         presenter.didFetchExchangeRate(exchangeRate)
-        presenter.onCurrencyButtonClick()
         reset(view)
         presenter.onAmountEntered(amountEntered)
 
         verify(view).setAmountHint(secondaryAmountHint)
     }
 
-
-    @Test
-    fun onCurrencyButtonClick_initial() {
-
-        val exchangeRate = 7000.0
-        val fiatAmount = fiatAmountFormat.format(3500.0)
-        val cryptoAmount = cryptoAmountFormat.format(0.50)
-
-        val cryptoCurrency = "BTC"
-        val fiatCurrency = "USD"
-
-        presenter.onViewDidLoad()
-        presenter.didFetchExchangeRate(exchangeRate)
-        presenter.onAmountEntered(fiatAmount)
-        reset(view)
-
-        presenter.onCurrencyButtonClick()
-
-        verify(view).setCurrency(cryptoCurrency)
-        verify(view).setAmount(cryptoAmount)
-        verify(view, atLeastOnce()).setAmountHint("$fiatAmount $fiatCurrency")
-    }
-
-    @Test
-    fun onCurrencyButtonClick_afterSwap() {
-
-        val exchangeRate = 7000.0
-        val fiatAmount = fiatAmountFormat.format(3500.0)
-        val cryptoAmount = cryptoAmountFormat.format(0.5)
-
-        val cryptoCurrency = "BTC"
-        val fiatCurrency = "USD"
-
-        presenter.onViewDidLoad()
-        presenter.didFetchExchangeRate(exchangeRate)
-        presenter.onAmountEntered(fiatAmount)
-
-        presenter.onCurrencyButtonClick()
-        reset(view)
-        presenter.onCurrencyButtonClick()
-
-        verify(view).setCurrency(fiatCurrency)
-        verify(view).setAmount(fiatAmount)
-        verify(view).setAmountHint("$cryptoAmount $cryptoCurrency")
-    }
-
-    @Test
-    fun onCancelClick() {
-
-        presenter.onCancelClick()
-
-        verify(view).closeView()
-    }
-
     @Test
     fun onSendClick() {
 
         val exchangeRate = 7000.0
-        val fiatAmount = "3500.0"
         val cryptoAmount = 0.5
 
         val cryptoCurrencyCode = "BTC"
@@ -172,7 +114,7 @@ class SendPresenterTest {
 
         presenter.onViewDidLoad()
         presenter.didFetchExchangeRate(exchangeRate)
-        presenter.onAmountEntered(fiatAmount)
+        presenter.onAmountEntered(cryptoAmount.toString())
 
         presenter.onSendClick(address)
 

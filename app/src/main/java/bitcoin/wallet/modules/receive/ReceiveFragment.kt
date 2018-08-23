@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentActivity
+import android.support.v4.content.ContextCompat
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +16,9 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import bitcoin.wallet.R
+import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.viewHelpers.HudHelper
+import bitcoin.wallet.viewHelpers.LayoutHelper
 import bitcoin.wallet.viewHelpers.TextHelper
 
 class ReceiveFragment : DialogFragment() {
@@ -24,13 +27,13 @@ class ReceiveFragment : DialogFragment() {
 
     private lateinit var viewModel: ReceiveViewModel
 
-    private lateinit var coinCode: String
+    private lateinit var coin: Coin
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProviders.of(this).get(ReceiveViewModel::class.java)
-        viewModel.init(coinCode)
+        viewModel.init(coin.code)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -43,9 +46,13 @@ class ReceiveFragment : DialogFragment() {
         mDialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
         mDialog?.window?.setGravity(Gravity.BOTTOM)
 
-        rootView.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.receive_bottom_sheet_title, coinCode)
+        context?.let {
+            val coinDrawable = ContextCompat.getDrawable(it, LayoutHelper.getCoinDrawable(coin.code))
+            rootView.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
+        }
 
-        rootView.findViewById<Button>(R.id.btnCancel)?.setOnClickListener { viewModel.delegate.onCancelClick() }
+        val coinText = "${coin.name} (${coin.code})"
+        rootView.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.receive_bottom_sheet_title, coinText)
 
         rootView.findViewById<Button>(R.id.btnShare)?.setOnClickListener { viewModel.delegate.onShareClick() }
 
@@ -59,20 +66,21 @@ class ReceiveFragment : DialogFragment() {
         })
 
         viewModel.showErrorLiveData.observe(this, Observer { error ->
-            error?.let {
-                HudHelper.showErrorMessage(it, activity)
-            }
-            dismiss()
+            //todo remove after Wallet starts to work
+            val someAddress = TextHelper.randomHashGenerator()
+            rootView.findViewById<TextView>(R.id.txtAddress)?.let { it.text = someAddress }
+            rootView.findViewById<ImageView>(R.id.imgQrCode)?.setImageBitmap(TextHelper.getQrCodeBitmapFromAddress(someAddress))
+            //uncomment me
+//            error?.let {
+//                HudHelper.showErrorMessage(it, activity)
+//            }
+//            dismiss()
         })
 
         viewModel.showCopiedLiveEvent.observe(this, Observer {
             rootView.findViewById<TextView>(R.id.txtCopy)?.let {
                 HudHelper.showSuccessMessage(R.string.hud_text_copied, activity)
             }
-        })
-
-        viewModel.closeViewLiveEvent.observe(this, Observer {
-            dismiss()
         })
 
         viewModel.openShareViewLiveEvent.observe(this, Observer { address ->
@@ -85,9 +93,9 @@ class ReceiveFragment : DialogFragment() {
     }
 
     companion object {
-        fun show(activity: FragmentActivity, coinCode: String) {
+        fun show(activity: FragmentActivity, coin: Coin) {
             val fragment = ReceiveFragment()
-            fragment.coinCode = coinCode
+            fragment.coin = coin
             fragment.show(activity.supportFragmentManager, "receive_fragment")
         }
     }

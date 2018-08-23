@@ -10,6 +10,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentActivity
+import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -21,6 +22,7 @@ import android.widget.*
 import bitcoin.wallet.R
 import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.viewHelpers.HudHelper
+import bitcoin.wallet.viewHelpers.LayoutHelper
 import com.google.zxing.integration.android.IntentIntegrator
 
 class SendFragment : DialogFragment() {
@@ -31,10 +33,9 @@ class SendFragment : DialogFragment() {
     private lateinit var addressLayout: View
 
     private lateinit var amountTxt: EditText
+    private lateinit var sendButton: Button
     private lateinit var hintTxt: TextView
     private lateinit var amountLayout: View
-
-    private lateinit var btnCurrency: Button
 
     private lateinit var paymentRefTxt: EditText
     private lateinit var moreTxt: TextView
@@ -42,8 +43,6 @@ class SendFragment : DialogFragment() {
     private lateinit var moreOptionsLayout: View
 
     private lateinit var scrollView: ScrollView
-
-    private lateinit var btnCancel: Button
 
     private lateinit var viewModel: SendViewModel
 
@@ -71,6 +70,11 @@ class SendFragment : DialogFragment() {
             viewModel.delegate.onScanClick()
         }
 
+        context?.let {
+            val coinDrawable = ContextCompat.getDrawable(it, LayoutHelper.getCoinDrawable(coin.code))
+            rootView.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
+        }
+
         rootView.findViewById<TextView>(R.id.txtTitle)?.let { txtTitle ->
             txtTitle.text = getString(R.string.send_bottom_sheet_title, coin.code)
         }
@@ -94,9 +98,22 @@ class SendFragment : DialogFragment() {
                 amountLayout.background = resources.getDrawable(R.drawable.border_grey, null)
         }
 
+        val addressTextChangeListener = object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                updateSendBtnState()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        }
+
+        addressTxt.addTextChangedListener(addressTextChangeListener)
+
         val textChangeListener = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 viewModel.delegate.onAmountEntered(s?.toString())
+                updateSendBtnState()
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -105,15 +122,6 @@ class SendFragment : DialogFragment() {
         }
 
         amountTxt.addTextChangedListener(textChangeListener)
-
-        rootView.findViewById<Button>(R.id.btnCurrency)?.apply {
-            btnCurrency = this
-            setOnClickListener {
-                amountTxt.removeTextChangedListener(textChangeListener)
-                viewModel.delegate.onCurrencyButtonClick()
-                amountTxt.addTextChangedListener(textChangeListener)
-            }
-        }
 
         rootView.findViewById<Button>(R.id.btnPaste)?.setOnClickListener {
             viewModel.delegate.onPasteClick()
@@ -128,7 +136,9 @@ class SendFragment : DialogFragment() {
         }
 
         scrollView = rootView.findViewById(R.id.scrollView)
+        sendButton = rootView.findViewById(R.id.btnSend)
 
+        sendButton.isEnabled = false
 
         moreTxt = rootView.findViewById(R.id.txtMore)
         moreOptionsLayout = rootView.findViewById(R.id.moreOptionsLayout)
@@ -154,10 +164,7 @@ class SendFragment : DialogFragment() {
                     })
         }
 
-        btnCancel = rootView.findViewById(R.id.btnCancel)
-        btnCancel.setOnClickListener { viewModel.delegate.onCancelClick() }
-
-        rootView.findViewById<Button>(R.id.btnSend)?.setOnClickListener {
+        sendButton?.setOnClickListener {
             viewModel.delegate.onSendClick(addressTxt.text.toString())
         }
 
@@ -175,20 +182,10 @@ class SendFragment : DialogFragment() {
             amountTxt.setText(primaryAmount)
         })
 
-        viewModel.primaryCurrencyLiveData.observe(this, Observer { primaryCurrency ->
-            primaryCurrency?.let {
-                btnCurrency.text = primaryCurrency
-            }
-        })
-
         viewModel.secondaryAmountHintLiveData.observe(this, Observer { hint ->
             hint?.let {
                 hintTxt.text = hint
             }
-        })
-
-        viewModel.closeViewLiveEvent.observe(this, Observer {
-            dismiss()
         })
 
         viewModel.showErrorLiveData.observe(this, Observer { error ->
@@ -201,6 +198,10 @@ class SendFragment : DialogFragment() {
         })
 
         return mDialog as Dialog
+    }
+
+    private fun updateSendBtnState() {
+        sendButton.isEnabled = addressTxt.text.toString().isNotEmpty() && amountTxt.text.toString().isNotEmpty()
     }
 
 

@@ -19,8 +19,6 @@ class SendPresenter(private val interactor: SendModule.IInteractor, private val 
 
     private var exchangeRate = 0.0
 
-    private var isEnteringInCrypto = false
-
     private lateinit var baseCurrencyCode: String
 
     override fun onViewDidLoad() {
@@ -40,12 +38,6 @@ class SendPresenter(private val interactor: SendModule.IInteractor, private val 
         view?.setAddress(copiedText)
     }
 
-    override fun onCurrencyButtonClick() {
-        isEnteringInCrypto = !isEnteringInCrypto
-
-        updateAmounts()
-    }
-
     override fun didFetchExchangeRate(exchangeRate: Double) {
         this.exchangeRate = exchangeRate
         refreshAmountHint()
@@ -60,10 +52,6 @@ class SendPresenter(private val interactor: SendModule.IInteractor, private val 
         }
         enteredAmount = number?.toDouble() ?: 0.0
         refreshAmountHint()
-    }
-
-    override fun onCancelClick() {
-        view?.closeView()
     }
 
     override fun onSendClick(address: String) {
@@ -91,30 +79,22 @@ class SendPresenter(private val interactor: SendModule.IInteractor, private val 
     }
 
     private fun refreshAmountHint() {
-        if (isEnteringInCrypto) {
-            cryptoAmount = enteredAmount
-            fiatAmount = enteredAmount * exchangeRate
-        } else {
-            fiatAmount = enteredAmount
-            cryptoAmount = enteredAmount / exchangeRate
-        }
-
+        cryptoAmount = enteredAmount
+        fiatAmount = enteredAmount * exchangeRate
         updateAmountHintView()
     }
 
     private fun updateAmountView() {
-        val amount = (if (isEnteringInCrypto) cryptoAmount else fiatAmount) ?: 0.0
-        val amountStr = if (isEnteringInCrypto) formatCryptoAmount(amount) else formatFiatAmount(amount)
-        val currency = if (isEnteringInCrypto) coinCode else baseCurrencyCode
+        val amount = cryptoAmount ?: 0.0
+        val amountStr = formatCryptoAmount(amount)
 
-        view?.setCurrency(currency)
         view?.setAmount(if (amount > 0.0) amountStr else null)
     }
 
     private fun updateAmountHintView() {
-        val amount = (if (isEnteringInCrypto) fiatAmount else cryptoAmount) ?: 0.0
-        val amountStr = if (isEnteringInCrypto) formatFiatAmount(amount) else formatCryptoAmount(amount)
-        val currency = if (isEnteringInCrypto) baseCurrencyCode else coinCode
+        val amount = fiatAmount ?: 0.0
+        val amountStr = formatFiatAmount(amount)
+        val currency = baseCurrencyCode
 
         view?.setAmountHint("$amountStr $currency")
     }

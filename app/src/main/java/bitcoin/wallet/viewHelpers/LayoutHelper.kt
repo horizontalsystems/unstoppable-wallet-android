@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.util.TypedValue
 import android.view.Menu
+import bitcoin.wallet.R
 
 object LayoutHelper {
 
@@ -45,6 +46,23 @@ object LayoutHelper {
         drawable?.let { DrawableCompat.setTint(it, color) }
         drawable?.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
         return drawable
+    }
+
+    fun getCoinDrawable(coinCode: String): Int {
+        return when(coinCode) {
+            "BCH" -> R.drawable.coin_bitcoin_cash
+            "LTC" -> R.drawable.coin_litecoin
+            "DASH" -> R.drawable.coin_dash
+            "EOS" -> R.drawable.coin_eos
+            "XMR" -> R.drawable.coin_monero
+            "XRP" -> R.drawable.coin_xrp
+            "ZEC" -> R.drawable.coin_zcash
+            "ETH" -> R.drawable.coin_ether
+            "ADA" -> R.drawable.coin_cardano
+            "XLM" -> R.drawable.coin_stellar
+            "USDT" -> R.drawable.coin_tether
+            else -> R.drawable.coin_bitcoin
+        }
     }
 
 }

@@ -19,10 +19,11 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import kotlinx.android.synthetic.main.view_holder_coin.*
 
+
 class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener {
 
     private lateinit var viewModel: WalletViewModel
-    private val coinsAdapter = CoinsAdapter(this)
+    private var coinsAdapter = CoinsAdapter(this)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_wallet, container, false)
@@ -39,7 +40,17 @@ class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener 
 
                 //todo begin - for testing purposes, remove after testing
                 val tmpItems = it.toMutableList()
-                tmpItems.add(WalletBalanceViewItem(CoinValue(Ethereum(), 0.0), CurrencyValue(DollarCurrency(), 750.0), CurrencyValue(DollarCurrency(), 0.0), false))
+                tmpItems.add(WalletBalanceViewItem(CoinValue(Ethereum(), 0.0), CurrencyValue(DollarCurrency(), 750.0), CurrencyValue(DollarCurrency(), 750.0), false))
+                tmpItems.add(WalletBalanceViewItem(CoinValue(EOS(), 0.0), CurrencyValue(DollarCurrency(), 7050.0), CurrencyValue(DollarCurrency(), 7050.0), false))
+                tmpItems.add(WalletBalanceViewItem(CoinValue(Zcash(), 0.0), CurrencyValue(DollarCurrency(), 750.0), CurrencyValue(DollarCurrency(), 750.0), false))
+                tmpItems.add(WalletBalanceViewItem(CoinValue(Xrp(), 0.0), CurrencyValue(DollarCurrency(), 750.0), CurrencyValue(DollarCurrency(), 750.0), false))
+                tmpItems.add(WalletBalanceViewItem(CoinValue(Cardano(), 0.0), CurrencyValue(DollarCurrency(), 50.0), CurrencyValue(DollarCurrency(), 50.0), false))
+                tmpItems.add(WalletBalanceViewItem(CoinValue(Dash(), 0.0), CurrencyValue(DollarCurrency(), 230.0), CurrencyValue(DollarCurrency(), 230.0), false))
+                tmpItems.add(WalletBalanceViewItem(CoinValue(Monero(), 0.0), CurrencyValue(DollarCurrency(), 71.0), CurrencyValue(DollarCurrency(), 71.0), false))
+                tmpItems.add(WalletBalanceViewItem(CoinValue(Litecoin(), 0.0), CurrencyValue(DollarCurrency(), 1200.0), CurrencyValue(DollarCurrency(), 1200.0), false))
+                tmpItems.add(WalletBalanceViewItem(CoinValue(Stellar(), 0.0), CurrencyValue(DollarCurrency(), 324.0), CurrencyValue(DollarCurrency(), 324.0), false))
+                tmpItems.add(WalletBalanceViewItem(CoinValue(Tether(), 0.0), CurrencyValue(DollarCurrency(), 33.0), CurrencyValue(DollarCurrency(), 33.0), false))
+
                 //todo end
                 coinsAdapter.items = tmpItems//it //todo replace tmpItems with it
                 coinsAdapter.notifyDataSetChanged()
@@ -68,12 +79,12 @@ class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener 
 
     override fun onReceiveClicked(coin: Coin) {
         activity?.let {
-            ReceiveModule.start(it, coin.code)
+            ReceiveModule.start(it, coin)
         }
     }
 
     override fun onItemClick(position: Int) {
-        recyclerCoins.findViewHolderForAdapterPosition(position).itemView.performClick()
+        recyclerCoins.findViewHolderForAdapterPosition(position)?.itemView?.performClick()
     }
 }
 
@@ -93,37 +104,39 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
             ViewHolderCoin(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_coin, parent, false))
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) { }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: MutableList<Any>) {
         when (holder) {
-            is ViewHolderCoin -> holder.bind(items[position],
-                    onPayClick = { listener.onPayClicked(items[position].coinValue.coin) },
-                    onReceiveClick = { listener.onReceiveClicked(items[position].coinValue.coin) },
-                    onHolderClicked = {
-                        updateExpandedItem(position, it)
-                    },
-                    expanded = expandedViewPosition == position)
+            is ViewHolderCoin ->
+                if (payloads.isEmpty()) {
+                    holder.bind(items[position],
+                            onPayClick = { listener.onPayClicked(items[position].coinValue.coin) },
+                            onReceiveClick = { listener.onReceiveClicked(items[position].coinValue.coin) },
+                            onHolderClicked = {
+                                val oldExpandedViewPosition = expandedViewPosition
+                                expandedViewPosition = if (expandedViewPosition == position) -1 else position
+                                notifyItemChanged(expandedViewPosition, true)
+                                if (oldExpandedViewPosition != -1) {
+                                    notifyItemChanged(oldExpandedViewPosition, false)
+                                }
+
+                            },
+                            expanded = expandedViewPosition == position)
+                } else {
+                    for (payload in payloads) {
+                        if (payload is Boolean) {
+                            holder.bindPartial(expanded = expandedViewPosition == position)
+                        }
+                    }
+                }
         }
     }
-
-    private fun updateExpandedItem(position: Int, expanded: Boolean) {
-        val oldExpandPos = expandedViewPosition
-
-        expandedViewPosition = when {
-            expanded -> position
-            else -> if (expandedViewPosition == position) -1 else expandedViewPosition
-        }
-
-        //trigger only for collapsing other item
-        if (expanded && oldExpandPos > -1 && oldExpandPos != position) {
-            listener.onItemClick(oldExpandPos)
-        }
-    }
-
 }
 
 class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(walletBalanceViewItem: WalletBalanceViewItem, onPayClick: (() -> (Unit))? = null, onReceiveClick: (() -> (Unit))? = null, onHolderClicked: ((Boolean) -> Unit)? = null, expanded: Boolean) {
+    fun bind(walletBalanceViewItem: WalletBalanceViewItem, onPayClick: (() -> (Unit))? = null, onReceiveClick: (() -> (Unit))? = null, onHolderClicked: (() -> Unit)? = null, expanded: Boolean) {
         val numberFormat = NumberFormatHelper.fiatAmountFormat
         textName.text = "${walletBalanceViewItem.coinValue.coin.name} (${walletBalanceViewItem.coinValue.coin.code})"
         textAmountFiat.text = "${walletBalanceViewItem.currencyValue.currency.symbol}${numberFormat.format(walletBalanceViewItem.currencyValue.value)}"
@@ -143,17 +156,21 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
             onReceiveClick?.invoke()
         }
 
-        var isExpanded = expanded
+        viewHolderRoot.isSelected = expanded
+        buttonsWrapper.visibility = if (expanded) View.VISIBLE else View.GONE
         containerView.setOnClickListener {
-            isExpanded = !isExpanded
-            viewHolderRoot.isSelected = isExpanded
-            if (isExpanded) {
-                AnimationHelper.expand(buttonsWrapper)
-            } else {
-                AnimationHelper.collapse(buttonsWrapper)
-            }
-            onHolderClicked?.invoke(isExpanded)
+            onHolderClicked?.invoke()
         }
+    }
+
+    fun bindPartial(expanded: Boolean) {
+        viewHolderRoot.isSelected = expanded
+        if (expanded) {
+            AnimationHelper.expand(buttonsWrapper)
+        } else {
+            AnimationHelper.collapse(buttonsWrapper)
+        }
+
     }
 
 }

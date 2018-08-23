@@ -75,14 +75,6 @@ class ReceivePresenterTest {
     }
 
     @Test
-    fun onCancelClick() {
-
-        presenter.onCancelClick()
-
-        verify(view).closeView()
-    }
-
-    @Test
     fun onShareClick() {
         val address = "[coin_address]"
 

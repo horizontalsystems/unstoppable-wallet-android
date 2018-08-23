@@ -11,7 +11,6 @@ class ReceiveViewModel : ViewModel(), ReceiveModule.IView, ReceiveModule.IRouter
     val showAddressLiveData = MutableLiveData<String>()
     val showErrorLiveData = MutableLiveData<Int>()
     val showCopiedLiveEvent = SingleLiveEvent<Unit>()
-    val closeViewLiveEvent = SingleLiveEvent<Unit>()
     val openShareViewLiveEvent = SingleLiveEvent<String>()
 
     fun init(coinCode: String) {
@@ -29,10 +28,6 @@ class ReceiveViewModel : ViewModel(), ReceiveModule.IView, ReceiveModule.IRouter
 
     override fun showCopied() {
         showCopiedLiveEvent.call()
-    }
-
-    override fun closeView() {
-        closeViewLiveEvent.call()
     }
 
     override fun openShareView(coinAddress: String) {
