@@ -1,6 +1,7 @@
 package bitcoin.wallet.kit.network
 
 import bitcoin.wallet.kit.blocks.MerkleBlock
+import bitcoin.wallet.kit.crypto.BloomFilter
 import bitcoin.walllet.kit.struct.Header
 import bitcoin.walllet.kit.struct.InvVect
 import bitcoin.walllet.kit.struct.Transaction
@@ -23,6 +24,7 @@ class PeerGroup(private val peerGroupListener: Listener, private val peerManager
     private val peerMap = ConcurrentHashMap<String, Peer>()
     private var syncPeer: Peer? = null
     private val fetchingBlocksQueue = ConcurrentLinkedQueue<ByteArray>()
+    private var bloomFilter: BloomFilter? = null
 
     @Volatile
     private var fetchingBlocks = false
@@ -73,6 +75,10 @@ class PeerGroup(private val peerGroupListener: Listener, private val peerManager
         }
     }
 
+    fun setBloomFilter(filter: BloomFilter) {
+        bloomFilter = filter
+    }
+
     private fun getFreePeer(): Peer? {
         return peerMap.values.firstOrNull { it.isFree }
     }
@@ -115,6 +121,10 @@ class PeerGroup(private val peerGroupListener: Listener, private val peerManager
     }
 
     override fun connected(peer: Peer) {
+        bloomFilter?.let {
+            peer.setBloomFilter(it)
+        }
+
         if (syncPeer == null) {
             syncPeer = peer
 

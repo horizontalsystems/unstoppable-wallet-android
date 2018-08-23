@@ -1,6 +1,8 @@
 package bitcoin.wallet.kit.network
 
 import bitcoin.wallet.kit.blocks.MerkleBlock
+import bitcoin.wallet.kit.crypto.BloomFilter
+import bitcoin.wallet.kit.message.FilterLoadMessage
 import bitcoin.wallet.kit.message.MerkleBlockMessage
 import bitcoin.wallet.kit.message.TransactionMessage
 import bitcoin.walllet.kit.network.message.*
@@ -31,10 +33,14 @@ class Peer(val host: String, private val listener: Listener) : PeerInteraction, 
         peerConnection.close()
     }
 
+    // Sets a Bloom filter on this connection
+    fun setBloomFilter(filter: BloomFilter) {
+        peerConnection.sendMessage(FilterLoadMessage(filter))
+    }
+
     override fun requestHeaders(headerHashes: Array<ByteArray>, switchPeer: Boolean) {
         peerConnection.sendMessage(GetHeadersMessage(headerHashes))
     }
-
 
     override fun requestMerkleBlocks(headerHashes: Array<ByteArray>) {
         requestedMerkleBlocks.plusAssign(headerHashes.map { it to null }.toMap())

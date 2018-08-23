@@ -6,11 +6,12 @@ class PublicKey() {
 
     var index = 0
     var external = true
-    var publicKey: ByteArray? = null
-    var publicKeyHash: ByteArray? = null
     var address = ""
 
-    constructor(index: Int, external: Boolean, key: HDKey): this() {
+    lateinit var publicKey: ByteArray
+    lateinit var publicKeyHash: ByteArray
+
+    constructor(index: Int, external: Boolean, key: HDKey) : this() {
         this.index = index
         this.external = external
         this.publicKey = key.pubKey
