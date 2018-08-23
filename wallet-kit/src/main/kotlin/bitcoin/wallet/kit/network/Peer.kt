@@ -22,6 +22,7 @@ class Peer(val host: String, private val listener: Listener) : PeerInteraction, 
 
     private val peerConnection = PeerConnection(host, this)
     private var requestedMerkleBlocks: MutableMap<ByteArray, MerkleBlock?> = mutableMapOf()
+    private var relayedTransactions: MutableMap<ByteArray, Transaction> = mutableMapOf()
 
     fun start() {
         peerConnection.start()
@@ -44,7 +45,9 @@ class Peer(val host: String, private val listener: Listener) : PeerInteraction, 
     }
 
     override fun relay(transaction: Transaction) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        relayedTransactions[transaction.txHash] = transaction
+
+        peerConnection.sendMessage(InvMessage(InvVect.MSG_TX, transaction.txHash))
     }
 
     override fun onMessage(message: Message) {
@@ -89,6 +92,17 @@ class Peer(val host: String, private val listener: Listener) : PeerInteraction, 
                         .toTypedArray()
 
                 peerConnection.sendMessage(GetDataMessage(inventoryToRequest))
+            }
+
+            is GetDataMessage -> {
+
+                //handle relayed transactions
+                message.inventory.filter { it.type == InvVect.MSG_TX }.forEach {
+                    relayedTransactions[it.hash]?.let { tx ->
+                        peerConnection.sendMessage(TransactionMessage(tx))
+                        relayedTransactions.remove(tx.txHash)
+                    }
+                }
             }
         }
     }

@@ -112,6 +112,9 @@ class PeerGroup(private val peerGroupListener: Listener, private val peerManager
     }
 
     override fun relay(transaction: Transaction) {
+        peerMap.forEach {
+            it.value.relay(transaction)
+        }
     }
 
     override fun connected(peer: Peer) {

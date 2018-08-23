@@ -9,6 +9,10 @@ class TransactionMessage() : Message("tx") {
 
     lateinit var transaction: Transaction
 
+    constructor(transaction: Transaction) : this() {
+        this.transaction = transaction
+    }
+
     constructor(payload: ByteArray) : this() {
         BitcoinInput(ByteArrayInputStream(payload)).use { input ->
 

@@ -8,6 +8,7 @@ import bitcoin.walllet.kit.network.message.InvMessage
 import bitcoin.walllet.kit.struct.InvVect
 import bitcoin.walllet.kit.struct.Transaction
 import com.nhaarman.mockito_kotlin.argumentCaptor
+import com.nhaarman.mockito_kotlin.reset
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Assert
@@ -250,6 +251,53 @@ class PeerTest {
 
             Assert.assertEquals(InvVect.MSG_FILTERED_BLOCK, invVect.type)
             Assert.assertEquals(blockHash, invVect.hash)
+        }
+    }
+
+    @Test
+    fun relayTransaction() {
+        val transaction = mock(Transaction::class.java)
+        val txHash = DatatypeConverter.parseHexBinary("0000000000000005ed683decf91ff610c7710d03bb3f618d121d47cbcb1bc1e1")
+
+        whenever(transaction.txHash).thenReturn(txHash)
+
+        peer.relay(transaction)
+
+        argumentCaptor<InvMessage>().apply {
+
+            verify(peerConnection).sendMessage(capture())
+
+            val invVect = firstValue.inventory.first()
+
+            Assert.assertEquals(InvVect.MSG_TX, invVect.type)
+            Assert.assertEquals(txHash, invVect.hash)
+        }
+    }
+
+    @Test
+    fun onMessage_getData_tx() {
+
+        val transaction = mock(Transaction::class.java)
+        val txHash = DatatypeConverter.parseHexBinary("0000000000000005ed683decf91ff610c7710d03bb3f618d121d47cbcb1bc1e1")
+
+        whenever(transaction.txHash).thenReturn(txHash)
+
+        peer.relay(transaction)
+
+        reset(peerConnection)
+
+        val invVectTx = InvVect().apply {
+            type = InvVect.MSG_TX
+            hash = txHash
+        }
+        val getDataMessage = GetDataMessage(arrayOf(invVectTx))
+
+        peer.onMessage(getDataMessage)
+
+        argumentCaptor<TransactionMessage>().apply {
+            verify(peerConnection).sendMessage(capture())
+
+            Assert.assertEquals(firstValue.transaction, transaction)
         }
     }
 
