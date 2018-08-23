@@ -11,7 +11,7 @@ import bitcoin.walllet.kit.struct.InvVect;
 
 public class InvMessage extends Message {
 
-    InvVect[] inventory;
+    public InvVect[] inventory;
 
     public InvMessage() {
         super("inv");
