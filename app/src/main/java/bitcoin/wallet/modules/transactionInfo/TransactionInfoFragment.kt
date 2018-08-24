@@ -57,7 +57,7 @@ class TransactionInfoFragment : DialogFragment() {
 
                 rootView.findViewById<TextView>(R.id.txtTitle)?.text = titleText  + " " + txRecord.amount.coin.code
                 context?.let {
-                    val coinDrawable = ContextCompat.getDrawable(it, LayoutHelper.getCoinDrawable(txRecord.amount.coin.code))
+                    val coinDrawable = ContextCompat.getDrawable(it, LayoutHelper.getCoinDrawableResource(txRecord.amount.coin.code))
                     rootView.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
                 }
 

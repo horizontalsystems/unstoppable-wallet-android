@@ -47,7 +47,7 @@ class ReceiveFragment : DialogFragment() {
         mDialog?.window?.setGravity(Gravity.BOTTOM)
 
         context?.let {
-            val coinDrawable = ContextCompat.getDrawable(it, LayoutHelper.getCoinDrawable(coin.code))
+            val coinDrawable = ContextCompat.getDrawable(it, LayoutHelper.getCoinDrawableResource(coin.code))
             rootView.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
         }
 
