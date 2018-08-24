@@ -88,7 +88,7 @@
     <string name="blockchain_syncing">Syncing</string>
 
     <!--Settings-->
-    <string name="decentralized_app_by">A decentralized app By</string>
+    <string name="decentralized_app">decentralized app</string>
     <string name="company_link">http://horizontalsystems.io</string>
 
     <string name="tx_info_empty_list">You don\’t have any pending or past transaction yet</string>
