@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Bank</string>
+    <string name="app_name_with_version">Bank Wallet %s</string>
     <string name="error">error</string>
     <string name="restore_wallet">Restore</string>
     <string name="create_wallet">Create Wallet</string>
@@ -88,7 +89,7 @@
 
     <!--Settings-->
     <string name="decentralized_app_by">A decentralized app By</string>
-    <string name="company_link">horizontalsystems.io</string>
+    <string name="company_link">http://horizontalsystems.io</string>
 
     <string name="tx_info_empty_list">You don\’t have any pending or past transaction yet</string>
 

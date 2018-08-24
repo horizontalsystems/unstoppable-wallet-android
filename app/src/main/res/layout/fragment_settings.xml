@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     >
 
     <android.support.design.widget.AppBarLayout
@@ -111,77 +112,59 @@
                 app:setting_title="Light Mode"
                 />
 
-            <View
-                android:id="@+id/divider_2"
-                android:layout_width="match_parent"
-                android:layout_height="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lightMode"
-                />
-
             <bitcoin.wallet.modules.settings.SettingsItemView
                 android:id="@+id/pushNotifications"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider_2"
+                app:layout_constraintTop_toBottomOf="@+id/lightMode"
                 app:setting_icon="@drawable/ic_alert_bell"
                 app:setting_title="Push Notifications"
                 />
 
-            <bitcoin.wallet.modules.settings.SettingsItemView
-                android:id="@+id/appVersion"
+            <TextView
+                android:id="@+id/appName"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="37dp"
+                tools:text="Bank 1.01"
+                android:textAlignment="center"
+                android:textColor="@color/grey"
+                android:textAllCaps="true"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/pushNotifications"
-                app:setting_icon="@drawable/info"
-                app:setting_title="App Version"
                 />
 
             <TextView
                 android:id="@+id/decentralizedAppBy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="48dp"
+                android:layout_marginTop="24dp"
                 android:text="@string/decentralized_app_by"
                 android:textAlignment="center"
                 android:textColor="@color/grey"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/appVersion"
+                app:layout_constraintTop_toBottomOf="@+id/appName"
                 />
 
             <ImageView
-                android:id="@+id/company_logo"
+                android:id="@+id/companyLogo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="42dp"
+                android:padding="6dp"
                 android:src="@drawable/hs_center"
+                android:background="?android:selectableItemBackground"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/decentralizedAppBy"
-                />
-
-            <TextView
-                android:id="@+id/company_link"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
-                android:layout_marginTop="16dp"
-                android:autoLink="web"
-                android:text="@string/company_link"
-                android:textAlignment="center"
-                android:textColorLink="@color/grey"
-                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/company_logo"
+                app:layout_constraintTop_toBottomOf="@+id/decentralizedAppBy"
                 />
 
         </android.support.constraint.ConstraintLayout>

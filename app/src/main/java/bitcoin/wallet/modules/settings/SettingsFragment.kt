@@ -1,6 +1,7 @@
 package bitcoin.wallet.modules.settings
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -73,12 +74,14 @@ class SettingsFragment : android.support.v4.app.Fragment() {
             }
         }
 
-        appVersion.apply {
-            selectedValue = "1.01"
-            setOnClickListener {
-                Log.e("AAA", "app version clicked!")
-            }
+        companyLogo.setOnClickListener {
+            val uri = Uri.parse(getString(R.string.company_link))
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            activity?.startActivity(intent)
         }
+
+        val appVersion = "1.01"
+        appName.text = getString(R.string.app_name_with_version, appVersion)
 
     }
 
