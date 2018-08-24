@@ -3,18 +3,21 @@ package bitcoin.wallet.kit.message
 import bitcoin.walllet.kit.common.io.BitcoinInput
 import bitcoin.walllet.kit.common.util.HashUtils
 import bitcoin.walllet.kit.network.message.Message
-import bitcoin.walllet.kit.struct.Block
+import bitcoin.walllet.kit.struct.Header
 import java.io.ByteArrayInputStream
 
 class HeadersMessage() : Message("headers") {
 
-    val blocks = mutableListOf<Block>()
+    var headers = arrayOf<Header>()
 
     constructor(payload: ByteArray) : this() {
         BitcoinInput(ByteArrayInputStream(payload)).use { input ->
-            val count = input.readVarInt()
-            for (i in 0 until count) {
-                blocks.add(Block(input))
+            val count = input.readVarInt().toInt()
+
+            headers = Array(count) {
+                val header = Header(input)
+                input.readVarInt() // tx count always zero
+                header
             }
         }
     }
@@ -24,6 +27,6 @@ class HeadersMessage() : Message("headers") {
     }
 
     override fun toString(): String {
-        return "HeadersMessage(${blocks.size}:[${blocks.joinToString { HashUtils.toHexStringAsLittleEndian(it.blockHash) }}])"
+        return "HeadersMessage(${headers.size}:[${headers.joinToString { HashUtils.toHexStringAsLittleEndian(it.hash) }}])"
     }
 }

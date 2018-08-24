@@ -8,6 +8,7 @@ import bitcoin.walllet.kit.common.io.BitcoinInput;
 import bitcoin.walllet.kit.common.io.BitcoinOutput;
 import bitcoin.walllet.kit.common.serializer.HashSerializer;
 import bitcoin.walllet.kit.common.serializer.TimestampSerializer;
+import bitcoin.walllet.kit.common.util.HashUtils;
 
 /**
  * Block header.
@@ -53,6 +54,8 @@ public class Header {
      */
     public long nonce;
 
+    private byte[] hash = null;
+
     public Header(BitcoinInput input) throws IOException {
         this.version = input.readInt();
         this.prevHash = input.readBytes(32);
@@ -60,6 +63,14 @@ public class Header {
         this.timestamp = input.readUnsignedInt();
         this.bits = input.readUnsignedInt();
         this.nonce = input.readUnsignedInt();
+    }
+
+    public byte[] getHash() {
+        if (this.hash == null) {
+            byte[] data = toByteArray();
+            this.hash = HashUtils.doubleSha256(data);
+        }
+        return this.hash;
     }
 
     public byte[] toByteArray() {
