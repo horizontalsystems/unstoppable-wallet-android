@@ -1,4 +1,4 @@
-package bitcoin.wallet.kit.message
+package bitcoin.wallet.kit.messages
 
 import bitcoin.walllet.kit.common.io.BitcoinInput
 import bitcoin.walllet.kit.common.util.HashUtils

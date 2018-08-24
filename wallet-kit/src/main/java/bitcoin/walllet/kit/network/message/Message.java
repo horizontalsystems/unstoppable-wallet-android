@@ -10,10 +10,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import bitcoin.wallet.kit.message.FilterLoadMessage;
-import bitcoin.wallet.kit.message.HeadersMessage;
-import bitcoin.wallet.kit.message.MerkleBlockMessage;
-import bitcoin.wallet.kit.message.TransactionMessage;
+import bitcoin.wallet.kit.messages.FilterLoadMessage;
+import bitcoin.wallet.kit.messages.HeadersMessage;
+import bitcoin.wallet.kit.messages.MerkleBlockMessage;
+import bitcoin.wallet.kit.messages.TransactionMessage;
 import bitcoin.walllet.kit.common.exceptions.BitcoinException;
 import bitcoin.walllet.kit.common.constant.BitcoinConstants;
 import bitcoin.walllet.kit.common.io.BitcoinInput;

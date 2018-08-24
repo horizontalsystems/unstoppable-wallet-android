@@ -1,4 +1,4 @@
-package bitcoin.wallet.kit.message
+package bitcoin.wallet.kit.messages
 
 import bitcoin.wallet.kit.crypto.BloomFilter
 import bitcoin.walllet.kit.network.message.Message

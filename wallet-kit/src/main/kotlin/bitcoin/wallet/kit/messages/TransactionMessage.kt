@@ -1,25 +1,26 @@
-package bitcoin.wallet.kit.message
+package bitcoin.wallet.kit.messages
 
-import bitcoin.wallet.kit.blocks.MerkleBlock
 import bitcoin.walllet.kit.common.io.BitcoinInput
 import bitcoin.walllet.kit.network.message.Message
+import bitcoin.walllet.kit.struct.Transaction
 import java.io.ByteArrayInputStream
 
-class MerkleBlockMessage() : Message("merkleblock") {
+class TransactionMessage() : Message("tx") {
 
-    lateinit var merkleBlock: MerkleBlock
+    lateinit var transaction: Transaction
+
+    constructor(transaction: Transaction) : this() {
+        this.transaction = transaction
+    }
 
     constructor(payload: ByteArray) : this() {
         BitcoinInput(ByteArrayInputStream(payload)).use { input ->
-            merkleBlock = MerkleBlock(input)
+
         }
     }
 
     override fun getPayload(): ByteArray {
-        return merkleBlock.toByteArray()
-    }
-
-    override fun toString(): String {
         TODO("not implemented")
     }
+
 }
