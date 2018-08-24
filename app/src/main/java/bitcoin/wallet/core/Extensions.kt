@@ -1,5 +1,7 @@
 package bitcoin.wallet.core
 
+import android.view.View
+import im.grouvi.app.ui.view.SingleClickListener
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
@@ -49,3 +51,13 @@ fun io.reactivex.Completable.subscribeAsync(disposables: CompositeDisposable, on
     return disposable
 }
 
+//View
+
+fun View.setOnSingleClickListener(l: ((v: View) -> Unit)) {
+    this.setOnClickListener(
+            object : SingleClickListener() {
+                override fun onSingleClick(v: View) {
+                    l.invoke(v)
+                }
+            })
+}
