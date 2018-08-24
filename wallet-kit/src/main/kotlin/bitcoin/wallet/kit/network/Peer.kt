@@ -3,9 +3,11 @@ package bitcoin.wallet.kit.network
 import bitcoin.wallet.kit.blocks.MerkleBlock
 import bitcoin.wallet.kit.crypto.BloomFilter
 import bitcoin.wallet.kit.message.FilterLoadMessage
+import bitcoin.wallet.kit.message.HeadersMessage
 import bitcoin.wallet.kit.message.MerkleBlockMessage
 import bitcoin.wallet.kit.message.TransactionMessage
 import bitcoin.walllet.kit.network.message.*
+import bitcoin.walllet.kit.struct.Header
 import bitcoin.walllet.kit.struct.InvVect
 import bitcoin.walllet.kit.struct.Transaction
 import java.lang.Exception
@@ -15,6 +17,7 @@ class Peer(val host: String, private val listener: Listener) : PeerInteraction, 
     interface Listener {
         fun connected(peer: Peer)
         fun disconnected(peer: Peer, e: Exception?, incompleteMerkleBlocks: Array<ByteArray>)
+        fun onReceiveHeaders(headers: Array<Header>)
         fun onReceiveMerkleBlock(merkleBlock: MerkleBlock)
         fun onReceiveTransaction(transaction: Transaction)
         fun shouldRequest(invVect: InvVect): Boolean
@@ -61,6 +64,7 @@ class Peer(val host: String, private val listener: Listener) : PeerInteraction, 
             is PingMessage -> peerConnection.sendMessage(PongMessage(message.nonce))
             is VersionMessage -> peerConnection.sendMessage(VerAckMessage())
             is VerAckMessage -> listener.connected(this)
+            is HeadersMessage -> listener.onReceiveHeaders(message.headers)
             is MerkleBlockMessage -> {
                 val merkleBlock = message.merkleBlock
                 requestedMerkleBlocks[merkleBlock.blockHash] = merkleBlock

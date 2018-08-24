@@ -18,8 +18,6 @@ public class Block {
     public Header header;
     public Transaction[] txns;
 
-    private byte[] blockHash = null;
-
     public Block(BitcoinInput input) throws IOException {
         this.header = new Header(input);
         long txnCount = input.readVarInt(); // do not store txn_count
@@ -30,11 +28,7 @@ public class Block {
     }
 
     public byte[] getBlockHash() {
-        if (this.blockHash == null) {
-            byte[] data = this.header.toByteArray();
-            this.blockHash = HashUtils.doubleSha256(data);
-        }
-        return this.blockHash;
+        return this.header.getHash();
     }
 
     public byte[] calculateMerkleHash() {

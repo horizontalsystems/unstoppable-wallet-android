@@ -160,6 +160,10 @@ class PeerGroup(private val peerGroupListener: Listener, private val peerManager
         peerMap.remove(peer.host)
     }
 
+    override fun onReceiveHeaders(headers: Array<Header>) {
+        peerGroupListener.onReceiveHeaders(headers)
+    }
+
     override fun onReceiveMerkleBlock(merkleBlock: MerkleBlock) {
         peerGroupListener.onReceiveMerkleBlock(merkleBlock)
     }

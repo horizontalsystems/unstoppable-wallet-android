@@ -1,10 +1,12 @@
 package bitcoin.wallet.kit.network
 
 import bitcoin.wallet.kit.blocks.MerkleBlock
+import bitcoin.wallet.kit.message.HeadersMessage
 import bitcoin.wallet.kit.message.MerkleBlockMessage
 import bitcoin.wallet.kit.message.TransactionMessage
 import bitcoin.walllet.kit.network.message.GetDataMessage
 import bitcoin.walllet.kit.network.message.InvMessage
+import bitcoin.walllet.kit.struct.Header
 import bitcoin.walllet.kit.struct.InvVect
 import bitcoin.walllet.kit.struct.Transaction
 import com.nhaarman.mockito_kotlin.argumentCaptor
@@ -299,6 +301,18 @@ class PeerTest {
 
             Assert.assertEquals(firstValue.transaction, transaction)
         }
+    }
+
+    @Test
+    fun onMessage_headers() {
+        val headers = arrayOf(mock(Header::class.java))
+        val headersMessage = HeadersMessage().apply {
+            this.headers = headers
+        }
+
+        peer.onMessage(headersMessage)
+
+        verify(listener).onReceiveHeaders(headers)
     }
 
 }
