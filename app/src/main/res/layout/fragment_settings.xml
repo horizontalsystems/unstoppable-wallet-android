@@ -3,9 +3,9 @@
     android:id="@+id/coordinator"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     >
 
     <android.support.design.widget.AppBarLayout
@@ -38,6 +38,7 @@
             android:layout_height="wrap_content"
             android:background="?SettingBackgroundColor"
             >
+
             <View
                 android:id="@+id/divider_0"
                 android:layout_width="match_parent"
@@ -125,51 +126,62 @@
 
             <TextView
                 android:id="@+id/appName"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="37dp"
-                tools:text="Bank 1.01"
-                android:textAlignment="center"
-                android:textColor="@color/grey"
                 android:textAllCaps="true"
+                android:textColor="@color/grey"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/pushNotifications"
+                tools:text="Bank 1.01"
+                />
+
+            <View
+                android:id="@+id/lineView"
+                android:layout_width="0dp"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="2dp"
+                android:background="@color/grey"
+                app:layout_constraintEnd_toEndOf="@+id/appName"
+                app:layout_constraintStart_toStartOf="@+id/appName"
+                app:layout_constraintTop_toBottomOf="@+id/appName"
                 />
 
             <TextView
                 android:id="@+id/decentralizedAppBy"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="@string/decentralized_app_by"
-                android:textAlignment="center"
+                android:layout_marginTop="1.5dp"
+                android:text="@string/decentralized_app"
                 android:textColor="@color/grey"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/appName"
+                app:layout_constraintTop_toBottomOf="@+id/lineView"
                 />
 
             <ImageView
                 android:id="@+id/companyLogo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginBottom="42dp"
+                android:layout_marginTop="10dp"
+                android:background="?android:selectableItemBackground"
                 android:padding="6dp"
                 android:src="@drawable/hs_center"
-                android:background="?android:selectableItemBackground"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/decentralizedAppBy"
                 />
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v4.widget.NestedScrollView>
+
     <View
         style="@style/Widget.Shadow.AppBar"
-        app:layout_anchor="@id/app_bar_layout"/>
+        app:layout_anchor="@id/app_bar_layout"
+        />
 </android.support.design.widget.CoordinatorLayout>

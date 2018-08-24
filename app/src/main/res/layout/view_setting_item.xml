@@ -64,7 +64,7 @@
         android:layout_marginTop="8dp"
         android:fontFamily="@font/noto_sans"
         android:text="USD"
-        android:textColor="@color/steel_grey"
+        android:textColor="@color/grey"
         android:textSize="16sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
