@@ -48,7 +48,7 @@ object LayoutHelper {
         return drawable
     }
 
-    fun getCoinDrawable(coinCode: String): Int {
+    fun getCoinDrawableResource(coinCode: String): Int {
         return when(coinCode) {
             "BCH" -> R.drawable.coin_bitcoin_cash
             "LTC" -> R.drawable.coin_litecoin

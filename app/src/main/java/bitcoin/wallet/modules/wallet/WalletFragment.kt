@@ -3,17 +3,20 @@ package bitcoin.wallet.modules.wallet
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import bitcoin.wallet.R
+import bitcoin.wallet.core.setOnSingleClickListener
 import bitcoin.wallet.entities.*
 import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.modules.receive.ReceiveModule
 import bitcoin.wallet.modules.send.SendModule
 import bitcoin.wallet.viewHelpers.AnimationHelper
+import bitcoin.wallet.viewHelpers.LayoutHelper
 import bitcoin.wallet.viewHelpers.NumberFormatHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_wallet.*
@@ -137,6 +140,8 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
 class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     fun bind(walletBalanceViewItem: WalletBalanceViewItem, onPayClick: (() -> (Unit))? = null, onReceiveClick: (() -> (Unit))? = null, onHolderClicked: (() -> Unit)? = null, expanded: Boolean) {
+        val iconDrawable = ContextCompat.getDrawable(containerView.context, LayoutHelper.getCoinDrawableResource(walletBalanceViewItem.coinValue.coin.code))
+        coinIcon.setImageDrawable(iconDrawable)
         val numberFormat = NumberFormatHelper.fiatAmountFormat
         textName.text = "${walletBalanceViewItem.coinValue.coin.name} (${walletBalanceViewItem.coinValue.coin.code})"
         textAmountFiat.text = "${walletBalanceViewItem.currencyValue.currency.symbol}${numberFormat.format(walletBalanceViewItem.currencyValue.value)}"
@@ -158,7 +163,7 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
 
         viewHolderRoot.isSelected = expanded
         buttonsWrapper.visibility = if (expanded) View.VISIBLE else View.GONE
-        containerView.setOnClickListener {
+        containerView.setOnSingleClickListener {
             onHolderClicked?.invoke()
         }
     }
