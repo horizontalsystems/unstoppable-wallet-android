@@ -1,10 +1,20 @@
 package bitcoin.wallet.kit.messages
 
-import bitcoin.wallet.kit.blocks.MerkleBlock
+import bitcoin.wallet.kit.models.MerkleBlock
 import bitcoin.walllet.kit.common.io.BitcoinInput
-import bitcoin.walllet.kit.network.message.Message
 import java.io.ByteArrayInputStream
 
+/**
+ * MerkleBlock Message
+ *
+ *  Size        Field           Description
+ *  ====        =====           ===========
+ *  80 bytes    Header          Consists of 6 fields that are hashed to calculate the block hash
+ *  VarInt      hashCount       Number of hashes
+ *  Variable    hashes          Hashes in depth-first order
+ *  VarInt      flagsCount      Number of bytes of flag bits
+ *  Variable    flagsBits       Flag bits packed 8 per byte, least significant bit first
+ */
 class MerkleBlockMessage() : Message("merkleblock") {
 
     lateinit var merkleBlock: MerkleBlock

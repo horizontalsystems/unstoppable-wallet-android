@@ -1,14 +1,23 @@
-package bitcoin.wallet.kit.blocks
+package bitcoin.wallet.kit.models
 
 import bitcoin.walllet.kit.common.io.BitcoinInput
 import bitcoin.walllet.kit.common.io.BitcoinOutput
 import bitcoin.walllet.kit.common.util.HashUtils
-import bitcoin.walllet.kit.struct.Header
-import bitcoin.walllet.kit.struct.Transaction
 
+/**
+ * MerkleBlock
+ *
+ *  Size        Field           Description
+ *  ====        =====           ===========
+ *  80 bytes    Header          Consists of 6 fields that are hashed to calculate the block hash
+ *  VarInt      HashCount       Number of hashes
+ *  Variable    Hashes          Hashes in depth-first order
+ *  VarInt      FlagsCount      Number of bytes of flag bits
+ *  Variable    Flags           Flag bits packed 8 per byte, least significant bit first
+ */
 class MerkleBlock(input: BitcoinInput) {
 
-    var header: Header = Header(input)
+    var header = Header(input)
     var hashes: Array<ByteArray> = arrayOf()
     var flags: ByteArray = byteArrayOf()
 

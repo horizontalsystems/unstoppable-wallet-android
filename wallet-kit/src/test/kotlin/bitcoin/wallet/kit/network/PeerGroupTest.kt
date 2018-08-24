@@ -1,7 +1,7 @@
 package bitcoin.wallet.kit.network
 
 import bitcoin.wallet.kit.crypto.BloomFilter
-import bitcoin.walllet.kit.struct.Transaction
+import bitcoin.wallet.kit.models.Transaction
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Test

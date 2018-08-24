@@ -1,10 +1,14 @@
 package bitcoin.wallet.kit.messages
 
+import bitcoin.wallet.kit.models.Transaction
 import bitcoin.walllet.kit.common.io.BitcoinInput
-import bitcoin.walllet.kit.network.message.Message
-import bitcoin.walllet.kit.struct.Transaction
 import java.io.ByteArrayInputStream
 
+/**
+ * The 'tx' message contains a transaction which is not yet in a block. The transaction
+ * will be held in the memory pool for a period of time to allow other peers to request
+ * the transaction
+ */
 class TransactionMessage() : Message("tx") {
 
     lateinit var transaction: Transaction

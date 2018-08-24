@@ -6,26 +6,15 @@ import bitcoin.walllet.kit.common.util.MurmurHash3
 import java.lang.Double.valueOf
 
 /**
- * <p>A Bloom filter is a probabilistic data structure which can be sent to another client
- * so that it can avoid sending us transactions that aren't relevant to our set of keys.
- * This allows for significantly more efficient use of available network bandwidth and CPU time.</p>
+ * BloomFilter
  *
- * <p>Because a Bloom filter is probabilistic, it has a configurable false positive rate.
- * So the filter will sometimes match transactions that weren't inserted into it, but it will
- * never fail to match transactions that were. This is a useful privacy feature - if you have
- * spare bandwidth the false positive rate can be increased so the remote peer gets a noisy
- * picture of what transactions are relevant to your wallet.</p>
- *
- * <p>Bloom Filter</p>
- * <pre>
- *   Size       Field               Description
- *   ====       =====               ===========
- *   VarInt     Count               Number of bytes in the filter
- *   Variable   Filter              Filter data
- *   4 bytes    nHashFuncs          Number of hash functions
- *   4 bytes    nTweak              Random value to add to the hash seed
- *   1 byte     nFlags              Filter update flags
- * </pre>
+ *   Size       Field           Description
+ *   ====       =====           ===========
+ *   VarInt     Count           Number of bytes in the filter
+ *   Variable   Filter          Filter data
+ *   4 bytes    nHashFuncs      Number of hash functions
+ *   4 bytes    nTweak          Random value to add to the hash seed
+ *   1 byte     nFlags          Filter update flags
  */
 class BloomFilter(elements: Int) {
 
@@ -61,7 +50,7 @@ class BloomFilter(elements: Int) {
     /**
      * Inserts an bytes into the filter
      *
-     * @param       bytes          Object to insert
+     * @param   bytes    Object to insert
      */
     fun insert(bytes: ByteArray) {
         for (i in 0 until nHashFuncs) {
@@ -84,7 +73,7 @@ class BloomFilter(elements: Int) {
     }
 
     override fun toString(): String {
-        return "Bloom Filter of size " + filter.size + " with " + nHashFuncs + " hash functions."
+        return "Bloom Filter of size ${filter.size} with $nHashFuncs hash functions."
     }
 
     companion object {

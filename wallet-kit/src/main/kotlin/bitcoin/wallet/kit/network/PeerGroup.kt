@@ -1,10 +1,10 @@
 package bitcoin.wallet.kit.network
 
-import bitcoin.wallet.kit.blocks.MerkleBlock
+import bitcoin.wallet.kit.models.MerkleBlock
 import bitcoin.wallet.kit.crypto.BloomFilter
-import bitcoin.walllet.kit.struct.Header
-import bitcoin.walllet.kit.struct.InvVect
-import bitcoin.walllet.kit.struct.Transaction
+import bitcoin.wallet.kit.models.Header
+import bitcoin.wallet.kit.models.InvVect
+import bitcoin.wallet.kit.models.Transaction
 import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedQueue

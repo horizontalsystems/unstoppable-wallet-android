@@ -1,14 +1,10 @@
 package bitcoin.wallet.kit.network
 
-import bitcoin.wallet.kit.blocks.MerkleBlock
-import bitcoin.wallet.kit.messages.HeadersMessage
-import bitcoin.wallet.kit.messages.MerkleBlockMessage
-import bitcoin.wallet.kit.messages.TransactionMessage
-import bitcoin.walllet.kit.network.message.GetDataMessage
-import bitcoin.walllet.kit.network.message.InvMessage
-import bitcoin.walllet.kit.struct.Header
-import bitcoin.walllet.kit.struct.InvVect
-import bitcoin.walllet.kit.struct.Transaction
+import bitcoin.wallet.kit.models.MerkleBlock
+import bitcoin.wallet.kit.messages.*
+import bitcoin.wallet.kit.models.Header
+import bitcoin.wallet.kit.models.InvVect
+import bitcoin.wallet.kit.models.Transaction
 import com.nhaarman.mockito_kotlin.argumentCaptor
 import com.nhaarman.mockito_kotlin.reset
 import com.nhaarman.mockito_kotlin.verify

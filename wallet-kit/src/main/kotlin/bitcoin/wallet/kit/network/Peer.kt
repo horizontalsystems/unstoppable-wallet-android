@@ -1,15 +1,11 @@
 package bitcoin.wallet.kit.network
 
-import bitcoin.wallet.kit.blocks.MerkleBlock
+import bitcoin.wallet.kit.models.MerkleBlock
 import bitcoin.wallet.kit.crypto.BloomFilter
-import bitcoin.wallet.kit.messages.FilterLoadMessage
-import bitcoin.wallet.kit.messages.HeadersMessage
-import bitcoin.wallet.kit.messages.MerkleBlockMessage
-import bitcoin.wallet.kit.messages.TransactionMessage
-import bitcoin.walllet.kit.network.message.*
-import bitcoin.walllet.kit.struct.Header
-import bitcoin.walllet.kit.struct.InvVect
-import bitcoin.walllet.kit.struct.Transaction
+import bitcoin.wallet.kit.messages.*
+import bitcoin.wallet.kit.models.Header
+import bitcoin.wallet.kit.models.InvVect
+import bitcoin.wallet.kit.models.Transaction
 import java.lang.Exception
 
 class Peer(val host: String, private val listener: Listener) : PeerInteraction, PeerConnection.Listener {

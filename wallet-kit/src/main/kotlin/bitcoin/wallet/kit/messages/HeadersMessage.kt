@@ -1,11 +1,18 @@
 package bitcoin.wallet.kit.messages
 
+import bitcoin.wallet.kit.models.Header
 import bitcoin.walllet.kit.common.io.BitcoinInput
 import bitcoin.walllet.kit.common.util.HashUtils
-import bitcoin.walllet.kit.network.message.Message
-import bitcoin.walllet.kit.struct.Header
 import java.io.ByteArrayInputStream
 
+/**
+ * Headers Message
+ *
+ *  Size        Field       Description
+ *  ====        =====       ===========
+ *  VarInt      Count       Number of headers
+ *  Variable    Entries     Header entries
+ */
 class HeadersMessage() : Message("headers") {
 
     var headers = arrayOf<Header>()

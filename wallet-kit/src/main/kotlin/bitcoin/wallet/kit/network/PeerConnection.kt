@@ -1,9 +1,9 @@
 package bitcoin.wallet.kit.network
 
+import bitcoin.wallet.kit.messages.Message
+import bitcoin.wallet.kit.messages.VersionMessage
 import bitcoin.walllet.kit.common.constant.BitcoinConstants
 import bitcoin.walllet.kit.common.io.BitcoinInput
-import bitcoin.walllet.kit.network.message.Message
-import bitcoin.walllet.kit.network.message.VersionMessage
 import org.slf4j.LoggerFactory
 import java.io.IOException
 import java.lang.Exception
