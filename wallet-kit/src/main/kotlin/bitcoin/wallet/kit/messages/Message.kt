@@ -1,10 +1,10 @@
 package bitcoin.wallet.kit.messages
 
-import bitcoin.walllet.kit.common.constant.BitcoinConstants
-import bitcoin.walllet.kit.common.exceptions.BitcoinException
-import bitcoin.walllet.kit.common.io.BitcoinInput
-import bitcoin.walllet.kit.common.io.BitcoinOutput
-import bitcoin.walllet.kit.common.util.HashUtils
+import bitcoin.walllet.kit.constant.BitcoinConstants
+import bitcoin.walllet.kit.exceptions.BitcoinException
+import bitcoin.walllet.kit.io.BitcoinInput
+import bitcoin.walllet.kit.io.BitcoinOutput
+import bitcoin.walllet.kit.utils.HashUtils
 import org.slf4j.LoggerFactory
 import java.io.IOException
 import java.nio.charset.StandardCharsets

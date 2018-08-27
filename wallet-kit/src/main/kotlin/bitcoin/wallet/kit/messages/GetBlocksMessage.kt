@@ -1,9 +1,9 @@
 package bitcoin.wallet.kit.messages
 
-import bitcoin.walllet.kit.common.constant.BitcoinConstants
-import bitcoin.walllet.kit.common.io.BitcoinInput
-import bitcoin.walllet.kit.common.io.BitcoinOutput
-import bitcoin.walllet.kit.common.util.HashUtils
+import bitcoin.walllet.kit.constant.BitcoinConstants
+import bitcoin.walllet.kit.io.BitcoinInput
+import bitcoin.walllet.kit.io.BitcoinOutput
+import bitcoin.walllet.kit.utils.HashUtils
 import java.io.ByteArrayInputStream
 import java.io.IOException
 

@@ -1,9 +1,9 @@
 package bitcoin.wallet.kit.models
 
-import bitcoin.walllet.kit.common.io.BitcoinInput
-import bitcoin.walllet.kit.common.io.BitcoinOutput
-import bitcoin.walllet.kit.common.serializer.HexSerializer
-import bitcoin.walllet.kit.common.util.BytesUtils
+import bitcoin.walllet.kit.io.BitcoinInput
+import bitcoin.walllet.kit.io.BitcoinOutput
+import bitcoin.walllet.kit.serializer.HexSerializer
+import bitcoin.walllet.kit.utils.BytesUtils
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import java.io.IOException
 

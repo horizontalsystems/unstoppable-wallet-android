@@ -1,7 +1,7 @@
 package bitcoin.wallet.kit.models
 
-import bitcoin.walllet.kit.common.io.BitcoinInput
-import bitcoin.walllet.kit.common.serializer.TimestampSerializer
+import bitcoin.walllet.kit.io.BitcoinInput
+import bitcoin.walllet.kit.serializer.TimestampSerializer
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import java.io.IOException
 

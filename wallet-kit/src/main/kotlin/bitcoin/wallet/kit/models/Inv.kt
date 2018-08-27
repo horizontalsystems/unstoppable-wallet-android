@@ -1,6 +1,6 @@
 package bitcoin.wallet.kit.models
 
-import bitcoin.walllet.kit.common.io.BitcoinInput
+import bitcoin.walllet.kit.io.BitcoinInput
 import java.io.IOException
 
 class Inv {

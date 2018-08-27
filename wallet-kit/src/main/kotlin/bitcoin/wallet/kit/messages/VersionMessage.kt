@@ -1,10 +1,10 @@
 package bitcoin.wallet.kit.messages
 
 import bitcoin.wallet.kit.models.NetworkAddress
-import bitcoin.walllet.kit.common.constant.BitcoinConstants
-import bitcoin.walllet.kit.common.io.BitcoinInput
-import bitcoin.walllet.kit.common.io.BitcoinOutput
-import bitcoin.walllet.kit.common.util.NetworkUtils
+import bitcoin.walllet.kit.constant.BitcoinConstants
+import bitcoin.walllet.kit.io.BitcoinInput
+import bitcoin.walllet.kit.io.BitcoinOutput
+import bitcoin.walllet.kit.utils.NetworkUtils
 import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.net.InetAddress

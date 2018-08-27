@@ -1,8 +1,8 @@
 package bitcoin.wallet.kit.messages
 
 import bitcoin.wallet.kit.models.Header
-import bitcoin.walllet.kit.common.io.BitcoinInput
-import bitcoin.walllet.kit.common.util.HashUtils
+import bitcoin.walllet.kit.io.BitcoinInput
+import bitcoin.walllet.kit.utils.HashUtils
 import java.io.ByteArrayInputStream
 
 /**

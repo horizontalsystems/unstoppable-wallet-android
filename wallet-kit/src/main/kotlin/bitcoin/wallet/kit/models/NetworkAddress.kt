@@ -1,11 +1,11 @@
 package bitcoin.wallet.kit.models
 
-import bitcoin.walllet.kit.common.constant.BitcoinConstants
-import bitcoin.walllet.kit.common.io.BitcoinInput
-import bitcoin.walllet.kit.common.io.BitcoinOutput
-import bitcoin.walllet.kit.common.serializer.IPv6Serializer
-import bitcoin.walllet.kit.common.serializer.TimestampSerializer
-import bitcoin.walllet.kit.common.util.NetworkUtils
+import bitcoin.walllet.kit.constant.BitcoinConstants
+import bitcoin.walllet.kit.io.BitcoinInput
+import bitcoin.walllet.kit.io.BitcoinOutput
+import bitcoin.walllet.kit.serializer.IPv6Serializer
+import bitcoin.walllet.kit.serializer.TimestampSerializer
+import bitcoin.walllet.kit.utils.NetworkUtils
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import java.io.IOException
 import java.net.InetAddress

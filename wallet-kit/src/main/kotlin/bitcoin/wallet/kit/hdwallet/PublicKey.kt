@@ -1,6 +1,6 @@
 package bitcoin.wallet.kit.hdwallet
 
-import bitcoin.walllet.kit.common.hdwallet.HDKey
+import bitcoin.walllet.kit.hdwallet.HDKey
 
 class PublicKey() {
 

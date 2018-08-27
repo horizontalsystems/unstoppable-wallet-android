@@ -1,7 +1,7 @@
 package bitcoin.wallet.kit.messages
 
 import bitcoin.wallet.kit.models.MerkleBlock
-import bitcoin.walllet.kit.common.io.BitcoinInput
+import bitcoin.walllet.kit.io.BitcoinInput
 import java.io.ByteArrayInputStream
 
 /**
