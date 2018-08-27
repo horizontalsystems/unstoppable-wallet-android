@@ -112,15 +112,24 @@
                 app:setting_title="Light Mode"
                 />
 
+            <View
+                android:id="@+id/divider_2"
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lightMode"
+                />
+
             <bitcoin.wallet.modules.settings.SettingsItemView
-                android:id="@+id/pushNotifications"
+                android:id="@+id/about"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lightMode"
-                app:setting_icon="@drawable/ic_alert_bell"
-                app:setting_title="Push Notifications"
+                app:layout_constraintTop_toBottomOf="@+id/divider_2"
+                app:setting_icon="@drawable/info"
+                app:setting_title="About"
                 />
 
             <TextView
@@ -133,7 +142,7 @@
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/pushNotifications"
+                app:layout_constraintTop_toBottomOf="@+id/about"
                 tools:text="Bank 1.01"
                 />
 
