@@ -1,14 +1,19 @@
 package bitcoin.wallet.kit.network
 
 import bitcoin.wallet.kit.crypto.BloomFilter
+import bitcoin.wallet.kit.messages.VersionMessage
 import bitcoin.wallet.kit.messages.*
 import bitcoin.wallet.kit.models.Header
 import bitcoin.wallet.kit.models.InventoryItem
 import bitcoin.wallet.kit.models.MerkleBlock
 import bitcoin.wallet.kit.models.Transaction
+import bitcoin.walllet.kit.constant.BitcoinConstants
+import org.slf4j.LoggerFactory
 import java.lang.Exception
 
 class Peer(val host: String, private val listener: Listener) : PeerInteraction, PeerConnection.Listener {
+
+    private val log = LoggerFactory.getLogger(Peer::class.java)
 
     interface Listener {
         fun connected(peer: Peer)
@@ -58,7 +63,17 @@ class Peer(val host: String, private val listener: Listener) : PeerInteraction, 
     override fun onMessage(message: Message) {
         when (message) {
             is PingMessage -> peerConnection.sendMessage(PongMessage(message.nonce))
-            is VersionMessage -> peerConnection.sendMessage(VerAckMessage())
+            is VersionMessage -> {
+                val reason = reasonToClosePeer(message)
+                if (reason.isEmpty()) {
+                    log.info("SENDING VerAckMessage")
+                    peerConnection.sendMessage(VerAckMessage())
+                } else {
+                    //close with reason
+                    log.info("Closing Peer with reason: $reason")
+                    close()
+                }
+            }
             is VerAckMessage -> listener.connected(this)
             is HeadersMessage -> listener.onReceiveHeaders(message.headers)
             is MerkleBlockMessage -> {
@@ -111,6 +126,27 @@ class Peer(val host: String, private val listener: Listener) : PeerInteraction, 
                 }
             }
         }
+    }
+
+    private fun reasonToClosePeer(message: VersionMessage): String {
+        var reason = ""
+        if (message.lastBlock <= 0) {
+            reason = "Peer last block is not greater than 0."
+        } else if (!hasBlockChain(message.services)) {
+            log.info("SENDING VerAckMessage: " + message.services)
+            reason = "Peer does not have a copy of the block chain."
+        } else if (!hasBloomFilter(message.protocolVersion)) {
+            reason = "Peer does not support Bloom Filter."
+        }
+        return reason
+    }
+
+    private fun hasBloomFilter(protocolVersion: Int): Boolean {
+        return protocolVersion >= BitcoinConstants.BLOOM_FILTER
+    }
+
+    private fun hasBlockChain(services: Long): Boolean {
+        return (services and BitcoinConstants.SERVICE_FULL_NODE) == BitcoinConstants.SERVICE_FULL_NODE
     }
 
     private fun merkleBlockCompleted(merkleBlock: MerkleBlock) {

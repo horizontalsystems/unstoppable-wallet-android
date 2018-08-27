@@ -22,9 +22,19 @@ public final class BitcoinConstants {
     public static final int PROTOCOL_VERSION = 70014;
 
     /**
+     * Bitcoin protocol version since which Bloom filtering is available
+     */
+    public static final int BLOOM_FILTER = 70000;
+
+    /**
      * Network services.
      */
     public static final long NETWORK_SERVICES = 1L;
+
+    /**
+     * A service bit that denotes whether the peer has a copy of the block chain or not.
+     */
+    public static final long SERVICE_FULL_NODE = 1L;
 
     /**
      * Legal base58 characters.

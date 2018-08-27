@@ -1,7 +1,7 @@
 package bitcoin.wallet.kit.network
 
-import bitcoin.wallet.kit.messages.Message
 import bitcoin.wallet.kit.messages.VersionMessage
+import bitcoin.wallet.kit.messages.Message
 import bitcoin.walllet.kit.constant.BitcoinConstants
 import bitcoin.walllet.kit.io.BitcoinInput
 import org.slf4j.LoggerFactory
