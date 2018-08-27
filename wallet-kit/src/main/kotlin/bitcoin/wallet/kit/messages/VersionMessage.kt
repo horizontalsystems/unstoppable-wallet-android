@@ -9,6 +9,7 @@ import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.net.InetAddress
 
+
 /**
  * <p>Version Message</p>
  * <pre>
@@ -25,40 +26,37 @@ import java.net.InetAddress
  *   1 byte     TxRelay             TRUE if remote peer should relay transactions
  * </pre>
  */
+
+
 class VersionMessage : Message {
 
-    // How many blocks are in the chain, according to the other side.
-    private var lastBlock: Int = 0
-
     // The version number of the protocol spoken
-    private var protocolVersion = BitcoinConstants.PROTOCOL_VERSION
+    var protocolVersion: Int = 0
 
     // Flags defining what optional services are supported.
-    private var services = BitcoinConstants.NETWORK_SERVICES
+    var services: Long = 0
 
     // What the other side believes the current time to be, in seconds.
-    private var timestamp = System.currentTimeMillis() / 1000
+    var timestamp: Long = 0
 
     // The network address of the node receiving this message.
-    private lateinit var recipientAddress: NetworkAddress
+    lateinit var recipientAddress: NetworkAddress
 
     // The network address of the node emitting this message.
-    private lateinit var senderAddress: NetworkAddress
+    lateinit var senderAddress: NetworkAddress
 
     // Random value to identify sending node
-    private var nonce = BitcoinConstants.NODE_ID
+    var nonce: Long = 0
 
     // User-Agent as defined in <a href="https://github.com/bitcoin/bips/blob/master/bip-0014.mediawiki">BIP 14</a>.
-    private var subVersion = BitcoinConstants.SUB_VERSION
+    lateinit var subVersion: String
 
-    // Whether or not to relay tx invs before a filter is received. See <a href="https://github.com/bitcoin/bips/blob/master/bip-0037.mediawiki#extensions-to-existing-messages">BIP 37</a>.
-    private var relay = true
+    // How many blocks are in the chain, according to the other side.
+    var lastBlock: Int = 0
 
-    constructor(bestBlock: Int, recipientAddr: InetAddress) : super("version") {
-        lastBlock = bestBlock
-        recipientAddress = NetworkAddress(recipientAddr)
-        senderAddress = NetworkAddress(NetworkUtils.getLocalInetAddress())
-    }
+    // Whether or not to relay tx invs before a filter is received.
+    // See <a href="https://github.com/bitcoin/bips/blob/master/bip-0037.mediawiki#extensions-to-existing-messages">BIP 37</a>.
+    var relay: Boolean = false
 
     @Throws(IOException::class)
     constructor(payload: ByteArray) : super("version") {
@@ -79,22 +77,35 @@ class VersionMessage : Message {
         }
     }
 
+    constructor() : super("version") {}
+
+    constructor(lastBlock: Int, recipientAddr: InetAddress) : super("version") {
+        protocolVersion = BitcoinConstants.PROTOCOL_VERSION
+        services = BitcoinConstants.NETWORK_SERVICES
+        timestamp = System.currentTimeMillis() / 1000
+        recipientAddress = NetworkAddress(recipientAddr)
+        senderAddress = NetworkAddress(NetworkUtils.getLocalInetAddress())
+        nonce = BitcoinConstants.NODE_ID
+        subVersion = BitcoinConstants.SUB_VERSION
+        this.lastBlock = lastBlock
+        relay = true
+    }
+
     override fun getPayload(): ByteArray {
         val output = BitcoinOutput()
-        output.writeInt(protocolVersion)                               // protocol
-                .writeLong(services)                                   // services
-                .writeLong(timestamp)                                       // timestamp
-                .write(recipientAddress.toByteArray(true))  // recipient-address
+        output.writeInt(protocolVersion) // protocol
+                .writeLong(services) // services
+                .writeLong(timestamp) // timestamp
+                .write(recipientAddress.toByteArray(true)) // recipient-address
         if (protocolVersion >= 106) {
-            output.write(senderAddress.toByteArray(true))   // sender-address
-                    .writeLong(nonce)                                  // nodeId
-                    .writeString(subVersion)                           // sub-version-string
-                    .writeInt(lastBlock)                               // hash of last block
+            output.write(senderAddress.toByteArray(true)) // sender-address
+                    .writeLong(nonce) // nodeId
+                    .writeString(subVersion) // sub-version-string
+                    .writeInt(lastBlock) // # of last block
             if (protocolVersion >= 70001) {
                 output.writeByte(1)
             }
         }
-
         return output.toByteArray()
     }
 

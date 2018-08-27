@@ -1,10 +1,11 @@
 package bitcoin.wallet.kit.network
 
-import bitcoin.wallet.kit.models.MerkleBlock
 import bitcoin.wallet.kit.messages.*
 import bitcoin.wallet.kit.models.Header
 import bitcoin.wallet.kit.models.InventoryItem
+import bitcoin.wallet.kit.models.MerkleBlock
 import bitcoin.wallet.kit.models.Transaction
+import bitcoin.walllet.kit.constant.BitcoinConstants
 import com.nhaarman.mockito_kotlin.argumentCaptor
 import com.nhaarman.mockito_kotlin.reset
 import com.nhaarman.mockito_kotlin.verify
@@ -309,6 +310,74 @@ class PeerTest {
         peer.onMessage(headersMessage)
 
         verify(listener).onReceiveHeaders(headers)
+    }
+
+    @Test
+    fun onMessage_versionMessage_success() {
+        val versionMessage = mock(VersionMessage::class.java)
+        val lastBlock = 538674
+        val services: Long = BitcoinConstants.SERVICE_FULL_NODE
+        val protocol = 70015
+
+        whenever(versionMessage.lastBlock).thenReturn(lastBlock)
+        whenever(versionMessage.services).thenReturn(services)
+        whenever(versionMessage.protocolVersion).thenReturn(protocol)
+
+        peer.onMessage(versionMessage)
+
+        argumentCaptor<Message>().apply {
+            verify(peerConnection).sendMessage(capture())
+
+            Assert.assertTrue(firstValue is VerAckMessage)
+        }
+    }
+
+    @Test
+    fun onMessage_versionMessage_error_lastBlockIs0() {
+        val versionMessage = mock(VersionMessage::class.java)
+        val lastBlock = 0
+        val services: Long = BitcoinConstants.SERVICE_FULL_NODE
+        val protocol = 70015
+
+        whenever(versionMessage.lastBlock).thenReturn(lastBlock)
+        whenever(versionMessage.services).thenReturn(services)
+        whenever(versionMessage.protocolVersion).thenReturn(protocol)
+
+        peer.onMessage(versionMessage)
+
+        verify(peerConnection).close()
+    }
+
+    @Test
+    fun onMessage_versionMessage_error_notFullNode() {
+        val versionMessage = mock(VersionMessage::class.java)
+        val services = 0L
+        val lastBlock = 538674
+        val protocol = 70015
+
+        whenever(versionMessage.lastBlock).thenReturn(lastBlock)
+        whenever(versionMessage.services).thenReturn(services)
+        whenever(versionMessage.protocolVersion).thenReturn(protocol)
+
+        peer.onMessage(versionMessage)
+
+        verify(peerConnection).close()
+    }
+
+    @Test
+    fun onMessage_versionMessage_error_notSupportingBloomFilter() {
+        val versionMessage = mock(VersionMessage::class.java)
+        val protocol = 69000
+        val lastBlock = 538674
+        val services: Long = BitcoinConstants.SERVICE_FULL_NODE
+
+        whenever(versionMessage.lastBlock).thenReturn(lastBlock)
+        whenever(versionMessage.services).thenReturn(services)
+        whenever(versionMessage.protocolVersion).thenReturn(protocol)
+
+        peer.onMessage(versionMessage)
+
+        verify(peerConnection).close()
     }
 
 }
