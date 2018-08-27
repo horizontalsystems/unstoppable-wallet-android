@@ -30,17 +30,32 @@ import java.net.InetAddress
 
 class VersionMessage : Message {
 
+    // The version number of the protocol spoken
     var protocolVersion: Int = 0
+
+    // Flags defining what optional services are supported.
     var services: Long = 0
+
+    // What the other side believes the current time to be, in seconds.
     var timestamp: Long = 0
 
+    // The network address of the node receiving this message.
     lateinit var recipientAddress: NetworkAddress
+
+    // The network address of the node emitting this message.
     lateinit var senderAddress: NetworkAddress
 
+    // Random value to identify sending node
     var nonce: Long = 0
+
+    // User-Agent as defined in <a href="https://github.com/bitcoin/bips/blob/master/bip-0014.mediawiki">BIP 14</a>.
     lateinit var subVersion: String
 
+    // How many blocks are in the chain, according to the other side.
     var lastBlock: Int = 0
+
+    // Whether or not to relay tx invs before a filter is received.
+    // See <a href="https://github.com/bitcoin/bips/blob/master/bip-0037.mediawiki#extensions-to-existing-messages">BIP 37</a>.
     var relay: Boolean = false
 
     @Throws(IOException::class)
