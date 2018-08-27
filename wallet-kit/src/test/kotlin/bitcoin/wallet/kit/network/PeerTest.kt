@@ -3,7 +3,7 @@ package bitcoin.wallet.kit.network
 import bitcoin.wallet.kit.models.MerkleBlock
 import bitcoin.wallet.kit.messages.*
 import bitcoin.wallet.kit.models.Header
-import bitcoin.wallet.kit.models.InvVect
+import bitcoin.wallet.kit.models.InventoryItem
 import bitcoin.wallet.kit.models.Transaction
 import com.nhaarman.mockito_kotlin.argumentCaptor
 import com.nhaarman.mockito_kotlin.reset
@@ -56,7 +56,7 @@ class PeerTest {
 
         PowerMockito
                 .whenNew(GetDataMessage::class.java)
-                .withArguments(InvVect.MSG_FILTERED_BLOCK, headerHashes)
+                .withArguments(InventoryItem.MSG_FILTERED_BLOCK, headerHashes)
                 .thenReturn(getDataMessage)
 
         peer.requestMerkleBlocks(headerHashes)
@@ -207,8 +207,8 @@ class PeerTest {
 
     @Test
     fun onMessage_inv_requestOnlyRequired() {
-        val invVect1 = mock(InvVect::class.java)
-        val invVect2 = mock(InvVect::class.java)
+        val invVect1 = mock(InventoryItem::class.java)
+        val invVect2 = mock(InventoryItem::class.java)
 
         val invMessage = InvMessage().apply {
             inventory = arrayOf(invVect1, invVect2)
@@ -229,8 +229,8 @@ class PeerTest {
     @Test
     fun onMessage_inv_newBlock() {
         val blockHash = DatatypeConverter.parseHexBinary("0000000000000005ed683decf91ff610c7710d03bb3f618d121d47cbcb1bc1e1")
-        val invVectBlock = InvVect().apply {
-            type = InvVect.MSG_BLOCK
+        val invVectBlock = InventoryItem().apply {
+            type = InventoryItem.MSG_BLOCK
             hash = blockHash
         }
 
@@ -247,7 +247,7 @@ class PeerTest {
 
             val invVect = firstValue.inventory.first()
 
-            Assert.assertEquals(InvVect.MSG_FILTERED_BLOCK, invVect.type)
+            Assert.assertEquals(InventoryItem.MSG_FILTERED_BLOCK, invVect.type)
             Assert.assertEquals(blockHash, invVect.hash)
         }
     }
@@ -267,7 +267,7 @@ class PeerTest {
 
             val invVect = firstValue.inventory.first()
 
-            Assert.assertEquals(InvVect.MSG_TX, invVect.type)
+            Assert.assertEquals(InventoryItem.MSG_TX, invVect.type)
             Assert.assertEquals(txHash, invVect.hash)
         }
     }
@@ -284,8 +284,8 @@ class PeerTest {
 
         reset(peerConnection)
 
-        val invVectTx = InvVect().apply {
-            type = InvVect.MSG_TX
+        val invVectTx = InventoryItem().apply {
+            type = InventoryItem.MSG_TX
             hash = txHash
         }
         val getDataMessage = GetDataMessage(arrayOf(invVectTx))

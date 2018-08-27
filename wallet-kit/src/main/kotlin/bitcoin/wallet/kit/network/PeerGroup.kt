@@ -1,9 +1,9 @@
 package bitcoin.wallet.kit.network
 
-import bitcoin.wallet.kit.models.MerkleBlock
 import bitcoin.wallet.kit.crypto.BloomFilter
 import bitcoin.wallet.kit.models.Header
-import bitcoin.wallet.kit.models.InvVect
+import bitcoin.wallet.kit.models.InventoryItem
+import bitcoin.wallet.kit.models.MerkleBlock
 import bitcoin.wallet.kit.models.Transaction
 import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentHashMap
@@ -16,7 +16,7 @@ class PeerGroup(private val peerGroupListener: Listener, private val peerManager
         fun onReceiveHeaders(headers: Array<Header>)
         fun onReceiveMerkleBlock(merkleBlock: MerkleBlock)
         fun onReceiveTransaction(transaction: Transaction)
-        fun shouldRequest(invVect: InvVect): Boolean
+        fun shouldRequest(inventory: InventoryItem): Boolean
         fun getTransaction(hash: String): Transaction
     }
 
@@ -172,8 +172,7 @@ class PeerGroup(private val peerGroupListener: Listener, private val peerManager
         peerGroupListener.onReceiveTransaction(transaction)
     }
 
-    override fun shouldRequest(invVect: InvVect): Boolean {
-        return peerGroupListener.shouldRequest(invVect)
+    override fun shouldRequest(inventory: InventoryItem): Boolean {
+        return peerGroupListener.shouldRequest(inventory)
     }
-
 }

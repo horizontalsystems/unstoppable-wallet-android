@@ -1,6 +1,6 @@
 package bitcoin.wallet.kit.messages
 
-import bitcoin.wallet.kit.models.InvVect
+import bitcoin.wallet.kit.models.InventoryItem
 import bitcoin.walllet.kit.io.BitcoinInput
 import bitcoin.walllet.kit.io.BitcoinOutput
 import java.io.ByteArrayInputStream
@@ -9,22 +9,22 @@ import java.io.IOException
 /**
  * GetData Message
  *
- *  Size        Field       Definition
- *  ====        =====       ==========
- *  VarInt      Count       Number of inventory items
- *  Variable    InvVect     One or more inventory items
+ *  Size        Field           Definition
+ *  ====        =====           ==========
+ *  VarInt      Count           Number of inventory items
+ *  Variable    InventoryItem   One or more inventory items
  */
 class GetDataMessage : Message {
 
-    lateinit var inventory: Array<InvVect> // byte[36]
+    lateinit var inventory: Array<InventoryItem> // byte[36]
 
-    constructor(inventory: Array<InvVect>) : super("getdata") {
+    constructor(inventory: Array<InventoryItem>) : super("getdata") {
         this.inventory = inventory
     }
 
     constructor(type: Int, hashes: Array<ByteArray>) : super("getdata") {
         inventory = Array(hashes.size) { i ->
-            val iv = InvVect()
+            val iv = InventoryItem()
             iv.type = type
             iv.hash = hashes[i]
             iv
@@ -36,7 +36,7 @@ class GetDataMessage : Message {
         BitcoinInput(ByteArrayInputStream(payload)).use { input ->
             val count = input.readVarInt() // do not store count
             inventory = Array(count.toInt()) {
-                InvVect(input)
+                InventoryItem(input)
             }
         }
     }

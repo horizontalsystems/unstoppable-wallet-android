@@ -1,10 +1,10 @@
 package bitcoin.wallet.kit.network
 
-import bitcoin.wallet.kit.models.MerkleBlock
 import bitcoin.wallet.kit.crypto.BloomFilter
 import bitcoin.wallet.kit.messages.*
 import bitcoin.wallet.kit.models.Header
-import bitcoin.wallet.kit.models.InvVect
+import bitcoin.wallet.kit.models.InventoryItem
+import bitcoin.wallet.kit.models.MerkleBlock
 import bitcoin.wallet.kit.models.Transaction
 import java.lang.Exception
 
@@ -16,7 +16,7 @@ class Peer(val host: String, private val listener: Listener) : PeerInteraction, 
         fun onReceiveHeaders(headers: Array<Header>)
         fun onReceiveMerkleBlock(merkleBlock: MerkleBlock)
         fun onReceiveTransaction(transaction: Transaction)
-        fun shouldRequest(invVect: InvVect): Boolean
+        fun shouldRequest(inventory: InventoryItem): Boolean
     }
 
     var isFree = true
@@ -45,14 +45,14 @@ class Peer(val host: String, private val listener: Listener) : PeerInteraction, 
     override fun requestMerkleBlocks(headerHashes: Array<ByteArray>) {
         requestedMerkleBlocks.plusAssign(headerHashes.map { it to null }.toMap())
 
-        peerConnection.sendMessage(GetDataMessage(InvVect.MSG_FILTERED_BLOCK, headerHashes))
+        peerConnection.sendMessage(GetDataMessage(InventoryItem.MSG_FILTERED_BLOCK, headerHashes))
         isFree = false
     }
 
     override fun relay(transaction: Transaction) {
         relayedTransactions[transaction.txHash] = transaction
 
-        peerConnection.sendMessage(InvMessage(InvVect.MSG_TX, transaction.txHash))
+        peerConnection.sendMessage(InvMessage(InventoryItem.MSG_TX, transaction.txHash))
     }
 
     override fun onMessage(message: Message) {
@@ -86,9 +86,9 @@ class Peer(val host: String, private val listener: Listener) : PeerInteraction, 
                 val inventoryToRequest = message.inventory
                         .filter { listener.shouldRequest(it) }
                         .map {
-                            if (it.type == InvVect.MSG_BLOCK) {
-                                InvVect().apply {
-                                    type = InvVect.MSG_FILTERED_BLOCK
+                            if (it.type == InventoryItem.MSG_BLOCK) {
+                                InventoryItem().apply {
+                                    type = InventoryItem.MSG_FILTERED_BLOCK
                                     hash = it.hash
                                 }
                             } else {
@@ -103,7 +103,7 @@ class Peer(val host: String, private val listener: Listener) : PeerInteraction, 
             is GetDataMessage -> {
 
                 //handle relayed transactions
-                message.inventory.filter { it.type == InvVect.MSG_TX }.forEach {
+                message.inventory.filter { it.type == InventoryItem.MSG_TX }.forEach {
                     relayedTransactions[it.hash]?.let { tx ->
                         peerConnection.sendMessage(TransactionMessage(tx))
                         relayedTransactions.remove(tx.txHash)

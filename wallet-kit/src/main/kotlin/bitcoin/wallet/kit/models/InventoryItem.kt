@@ -7,14 +7,14 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import java.io.IOException
 
 /**
- * InvVect
+ * InventoryItem
  *
  *   Size       Field   Description
  *   ====       =====   ===========
  *   4 bytes    Type    0=Error, 1=Transaction, 2=Block, 3=Filtered Block
  *  32 bytes    Hash    Object hash
  */
-class InvVect {
+class InventoryItem {
 
     // Uint32
     var type: Int = 0
