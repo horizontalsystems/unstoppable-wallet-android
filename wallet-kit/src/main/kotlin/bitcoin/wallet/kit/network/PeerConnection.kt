@@ -22,7 +22,7 @@ class PeerConnection(val host: String, private val listener: Listener) : Thread(
         fun disconnected(e: Exception? = null)
     }
 
-    private val log = LoggerFactory.getLogger(Peer::class.java)
+    private val log = LoggerFactory.getLogger(PeerConnection::class.java)
     private val sendingQueue: BlockingQueue<Message> = ArrayBlockingQueue(100)
     private val socket = Socket()
 
