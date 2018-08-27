@@ -9,14 +9,12 @@ import java.util.*
 /**
  * The 'block' message consists of a single serialized block.
  */
-class BlockMessage : Message {
+class BlockMessage() : Message("block") {
 
     lateinit var block: Block
 
-    constructor() : super("block")
-
     @Throws(IOException::class)
-    constructor(payload: ByteArray) : super("block") {
+    constructor(payload: ByteArray) : this() {
         BitcoinInput(ByteArrayInputStream(payload)).use { input ->
             block = Block(input)
         }

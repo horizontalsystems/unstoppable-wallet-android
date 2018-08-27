@@ -4,11 +4,9 @@ package bitcoin.wallet.kit.messages
  * The 'verack' message is sent in response to the 'version' message.
  * It consists of just the message header.
  */
-class VerAckMessage : Message {
+class VerAckMessage() : Message("verack") {
 
-    constructor() : super("verack")
-
-    constructor(payload: ByteArray) : super("verack")
+    constructor(payload: ByteArray) : this()
 
     override fun getPayload(): ByteArray {
         return ByteArray(0)
