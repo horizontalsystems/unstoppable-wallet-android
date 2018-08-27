@@ -1,6 +1,6 @@
 package bitcoin.wallet.kit.network
 
-import bitcoin.walllet.kit.common.util.JsonUtils
+import bitcoin.walllet.kit.utils.JsonUtils
 import org.slf4j.LoggerFactory
 import java.io.*
 

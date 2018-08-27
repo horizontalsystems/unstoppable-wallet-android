@@ -1,6 +1,6 @@
 package bitcoin.wallet.kit.network
 
-import bitcoin.walllet.kit.struct.Transaction
+import bitcoin.wallet.kit.models.Transaction
 
 interface PeerInteraction {
 

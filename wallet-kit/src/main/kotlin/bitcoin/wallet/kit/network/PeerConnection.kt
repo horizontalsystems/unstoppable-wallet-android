@@ -1,9 +1,9 @@
 package bitcoin.wallet.kit.network
 
-import bitcoin.walllet.kit.common.constant.BitcoinConstants
-import bitcoin.walllet.kit.common.io.BitcoinInput
-import bitcoin.walllet.kit.network.message.Message
-import bitcoin.walllet.kit.network.message.VersionMessage
+import bitcoin.wallet.kit.messages.Message
+import bitcoin.wallet.kit.messages.VersionMessage
+import bitcoin.walllet.kit.constant.BitcoinConstants
+import bitcoin.walllet.kit.io.BitcoinInput
 import org.slf4j.LoggerFactory
 import java.io.IOException
 import java.lang.Exception
@@ -22,7 +22,7 @@ class PeerConnection(val host: String, private val listener: Listener) : Thread(
         fun disconnected(e: Exception? = null)
     }
 
-    private val log = LoggerFactory.getLogger(Peer::class.java)
+    private val log = LoggerFactory.getLogger(PeerConnection::class.java)
     private val sendingQueue: BlockingQueue<Message> = ArrayBlockingQueue(100)
     private val socket = Socket()
 
