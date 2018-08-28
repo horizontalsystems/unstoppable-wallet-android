@@ -1,11 +1,12 @@
 package bitcoin.wallet.kit.network
 
+import bitcoin.wallet.kit.TestHelper
 import bitcoin.wallet.kit.messages.*
 import bitcoin.wallet.kit.models.Header
 import bitcoin.wallet.kit.models.InventoryItem
 import bitcoin.wallet.kit.models.MerkleBlock
 import bitcoin.wallet.kit.models.Transaction
-import bitcoin.walllet.kit.constant.BitcoinConstants
+import bitcoin.walllet.kit.io.BitcoinInput
 import com.nhaarman.mockito_kotlin.argumentCaptor
 import com.nhaarman.mockito_kotlin.reset
 import com.nhaarman.mockito_kotlin.verify
@@ -27,6 +28,17 @@ class PeerTest {
     private lateinit var peer: Peer
     private lateinit var listener: Peer.Listener
     private lateinit var peerConnection: PeerConnection
+    private val versionMessage_protocol_69000 = "F9BEB4D976657273696F6E0000000000660000008C490408880D01000D0400000000000061E5845B00000000000000000000000000000000000000000000FFFFD4707C06B26B0D04000000000000000000000000000000000000000000000000D8E6F92E8EC8F039112F5361746F7368693A302E31362E39392FE9380800"
+    private val versionMessage_lastBlock_0 =    "F9BEB4D976657273696F6E000000000066000000BE39611E7F1101000D04000000000000D7E5845B00000000000000000000000000000000000000000000FFFFD4707C069DBE0D04000000000000000000000000000000000000000000000000E6030F56C7080373102F5361746F7368693A302E31362E322F0000000001"
+    private val versionMessage_services_0 =     "F9BEB4D976657273696F6E00000000006600000041E561B07F110100000000000000000092E4845B00000000000000000000000000000000000000000000FFFFD4707C06B4670D04000000000000000000000000000000000000000000000000E343866042AF517C102F5361746F7368693A302E31362E322FE838080001"
+    private val versionMessage_successful =     "F9BEB4D976657273696F6E000000000066000000600C82817F1101000D04000000000000D1DC845B00000000000000000000000000000000000000000000FFFFD4707C069ACD0D040000000000000000000000000000000000000000000000002A13586EB0756F44102F5361746F7368693A302E31362E322FE838080001"
+
+    fun getMessageFromHex(hex: String): Message {
+        val versionMessageRaw = TestHelper.hexToByteArray(hex)
+        val bitcoinInput = BitcoinInput(versionMessageRaw)
+        val parsedMsg = Message.Builder.parseMessage<Message>(bitcoinInput)
+        return parsedMsg
+    }
 
     @Before
     fun setup() {
@@ -313,14 +325,7 @@ class PeerTest {
 
     @Test
     fun onMessage_versionMessage_success() {
-        val versionMessage = mock(VersionMessage::class.java)
-        val lastBlock = 538674
-        val services: Long = BitcoinConstants.SERVICE_FULL_NODE
-        val protocol = 70015
-
-        whenever(versionMessage.lastBlock).thenReturn(lastBlock)
-        whenever(versionMessage.services).thenReturn(services)
-        whenever(versionMessage.protocolVersion).thenReturn(protocol)
+        val versionMessage = getMessageFromHex(versionMessage_successful)
 
         peer.onMessage(versionMessage)
 
@@ -333,14 +338,7 @@ class PeerTest {
 
     @Test
     fun onMessage_versionMessage_error_lastBlockIs0() {
-        val versionMessage = mock(VersionMessage::class.java)
-        val lastBlock = 0
-        val services: Long = BitcoinConstants.SERVICE_FULL_NODE
-        val protocol = 70015
-
-        whenever(versionMessage.lastBlock).thenReturn(lastBlock)
-        whenever(versionMessage.services).thenReturn(services)
-        whenever(versionMessage.protocolVersion).thenReturn(protocol)
+        val versionMessage = getMessageFromHex(versionMessage_lastBlock_0)
 
         peer.onMessage(versionMessage)
 
@@ -349,14 +347,7 @@ class PeerTest {
 
     @Test
     fun onMessage_versionMessage_error_notFullNode() {
-        val versionMessage = mock(VersionMessage::class.java)
-        val services = 0L
-        val lastBlock = 538674
-        val protocol = 70015
-
-        whenever(versionMessage.lastBlock).thenReturn(lastBlock)
-        whenever(versionMessage.services).thenReturn(services)
-        whenever(versionMessage.protocolVersion).thenReturn(protocol)
+        val versionMessage = getMessageFromHex(versionMessage_services_0)
 
         peer.onMessage(versionMessage)
 
@@ -365,14 +356,7 @@ class PeerTest {
 
     @Test
     fun onMessage_versionMessage_error_notSupportingBloomFilter() {
-        val versionMessage = mock(VersionMessage::class.java)
-        val protocol = 69000
-        val lastBlock = 538674
-        val services: Long = BitcoinConstants.SERVICE_FULL_NODE
-
-        whenever(versionMessage.lastBlock).thenReturn(lastBlock)
-        whenever(versionMessage.services).thenReturn(services)
-        whenever(versionMessage.protocolVersion).thenReturn(protocol)
+        val versionMessage = getMessageFromHex(versionMessage_protocol_69000)
 
         peer.onMessage(versionMessage)
 

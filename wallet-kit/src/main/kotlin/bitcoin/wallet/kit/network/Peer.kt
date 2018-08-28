@@ -1,13 +1,11 @@
 package bitcoin.wallet.kit.network
 
 import bitcoin.wallet.kit.crypto.BloomFilter
-import bitcoin.wallet.kit.messages.VersionMessage
 import bitcoin.wallet.kit.messages.*
 import bitcoin.wallet.kit.models.Header
 import bitcoin.wallet.kit.models.InventoryItem
 import bitcoin.wallet.kit.models.MerkleBlock
 import bitcoin.wallet.kit.models.Transaction
-import bitcoin.walllet.kit.constant.BitcoinConstants
 import org.slf4j.LoggerFactory
 import java.lang.Exception
 
@@ -132,21 +130,12 @@ class Peer(val host: String, private val listener: Listener) : PeerInteraction, 
         var reason = ""
         if (message.lastBlock <= 0) {
             reason = "Peer last block is not greater than 0."
-        } else if (!hasBlockChain(message.services)) {
-            log.info("SENDING VerAckMessage: " + message.services)
+        } else if (!message.hasBlockChain()) {
             reason = "Peer does not have a copy of the block chain."
-        } else if (!hasBloomFilter(message.protocolVersion)) {
+        } else if (!message.supportsBloomFilter()) {
             reason = "Peer does not support Bloom Filter."
         }
         return reason
-    }
-
-    private fun hasBloomFilter(protocolVersion: Int): Boolean {
-        return protocolVersion >= BitcoinConstants.BLOOM_FILTER
-    }
-
-    private fun hasBlockChain(services: Long): Boolean {
-        return (services and BitcoinConstants.SERVICE_FULL_NODE) == BitcoinConstants.SERVICE_FULL_NODE
     }
 
     private fun merkleBlockCompleted(merkleBlock: MerkleBlock) {
