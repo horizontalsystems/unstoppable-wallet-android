@@ -116,8 +116,7 @@ class PeerGroup(private val peerGroupListener: Listener, private val peerManager
     }
 
     private fun switchSyncPeer() {
-        val newPeer = getFreePeer()
-        newPeer?.let {
+        getFreePeer()?.let {
             syncPeer?.isFree = true
             setSyncPeer(it)
         }
