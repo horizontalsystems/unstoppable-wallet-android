@@ -9,10 +9,10 @@ import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedQueue
 
-class PeerGroup(private val peerGroupListener: Listener, private val peerManager: PeerManager, private val peerSize: Int = 3) : Thread(), Peer.Listener, PeerInteraction {
+class PeerGroup(private val peerManager: PeerManager, private val peerSize: Int = 3) : Thread(), Peer.Listener, PeerInteraction {
 
     interface Listener {
-        fun onReady(peerGroup: PeerGroup)
+        fun onReady()
         fun onReceiveHeaders(headers: Array<Header>)
         fun onReceiveMerkleBlock(merkleBlock: MerkleBlock)
         fun onReceiveTransaction(transaction: Transaction)
@@ -25,6 +25,8 @@ class PeerGroup(private val peerGroupListener: Listener, private val peerManager
     private var syncPeer: Peer? = null
     private val fetchingBlocksQueue = ConcurrentLinkedQueue<ByteArray>()
     private var bloomFilter: BloomFilter? = null
+
+    lateinit var listener: Listener
 
     @Volatile
     private var fetchingBlocks = false
@@ -135,7 +137,7 @@ class PeerGroup(private val peerGroupListener: Listener, private val peerManager
             peer.isFree = false
 
             log.info("Sync Peer ready")
-            peerGroupListener.onReady(this)
+            listener.onReady()
         }
     }
 
@@ -161,18 +163,18 @@ class PeerGroup(private val peerGroupListener: Listener, private val peerManager
     }
 
     override fun onReceiveHeaders(headers: Array<Header>) {
-        peerGroupListener.onReceiveHeaders(headers)
+        listener.onReceiveHeaders(headers)
     }
 
     override fun onReceiveMerkleBlock(merkleBlock: MerkleBlock) {
-        peerGroupListener.onReceiveMerkleBlock(merkleBlock)
+        listener.onReceiveMerkleBlock(merkleBlock)
     }
 
     override fun onReceiveTransaction(transaction: Transaction) {
-        peerGroupListener.onReceiveTransaction(transaction)
+        listener.onReceiveTransaction(transaction)
     }
 
     override fun shouldRequest(inventory: InventoryItem): Boolean {
-        return peerGroupListener.shouldRequest(inventory)
+        return listener.shouldRequest(inventory)
     }
 }

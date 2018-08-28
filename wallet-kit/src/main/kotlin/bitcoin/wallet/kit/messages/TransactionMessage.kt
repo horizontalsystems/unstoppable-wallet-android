@@ -19,7 +19,7 @@ class TransactionMessage() : Message("tx") {
 
     constructor(payload: ByteArray) : this() {
         BitcoinInput(ByteArrayInputStream(payload)).use { input ->
-
+            transaction = Transaction(input)
         }
     }
 
