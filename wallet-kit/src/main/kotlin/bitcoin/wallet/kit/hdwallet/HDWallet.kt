@@ -1,10 +1,11 @@
 package bitcoin.wallet.kit.hdwallet
 
+import bitcoin.wallet.kit.network.NetworkParameters
 import bitcoin.walllet.kit.hdwallet.HDKey
 
-class HDWallet(private var seed: ByteArray) {
+class HDWallet(private val seed: ByteArray, private val networkParams: NetworkParameters) {
 
-    private var hdKeychain: HDKeychain = HDKeychain(this.seed)
+    private var hdKeychain: HDKeychain = HDKeychain(seed, networkParams)
 
 
     // m / purpose' / coin_type' / account' / change / address_index
@@ -19,8 +20,8 @@ class HDWallet(private var seed: ByteArray) {
     // Coin type is a constant, set for each cryptocoin. Cryptocoin developers may ask for registering unused number for their project.
     // The list of already allocated coin types is in the chapter "Registered coin types" below.
     // Hardened derivation is used at this level.
-    //network.name == MainNet().name ? 0 : 1
-    private var coinType: Int = 0
+    // network.name == MainNet().name ? 0 : 1
+    // private var coinType: Int = 0
 
     // This level splits the key space into independent user identities, so the wallet never mixes the coins across different accounts.
     // Users can use these accounts to organize the funds in the same fashion as bank accounts; for donation purposes (where all addresses are considered public), for saving purposes, for common expenses etc.
@@ -32,15 +33,15 @@ class HDWallet(private var seed: ByteArray) {
 
 
     fun receiveAddress(index: Int): PublicKey {
-        return PublicKey(index = index, external = true, key = privateKey(index = index, chain = 0))
+        return PublicKey(index = index, external = true, key = privateKey(index = index, chain = 0), network = networkParams)
     }
 
     fun changeAddress(index: Int): PublicKey {
-        return PublicKey(index = index, external = false, key = privateKey(index = index, chain = 1))
+        return PublicKey(index = index, external = false, key = privateKey(index = index, chain = 1), network = networkParams)
     }
 
     private fun privateKey(index: Int, chain: Int): HDKey {
-        return privateKey(path = "m/$purpose'/$coinType'/$account'/$chain/$index")
+        return privateKey(path = "m/$purpose'/${networkParams.coinType}'/$account'/$chain/$index")
     }
 
     private fun privateKey(path: String): HDKey {

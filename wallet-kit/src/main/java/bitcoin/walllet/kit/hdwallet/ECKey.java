@@ -32,6 +32,8 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Arrays;
 
+import bitcoin.wallet.kit.network.NetworkParameters;
+
 /**
  * ECKey supports elliptic curve cryptographic operations using a public/private
  * key pair.  A private key is required to create a signature and a public key is
@@ -303,8 +305,8 @@ public class ECKey {
      *
      * @return                          Address
      */
-    public Address toAddress() {
-        return new Address(getPubKeyHash(), label);
+    public Address toAddress(NetworkParameters networkParameters) {
+        return new Address(getPubKeyHash(), label, networkParameters);
     }
 
     /**

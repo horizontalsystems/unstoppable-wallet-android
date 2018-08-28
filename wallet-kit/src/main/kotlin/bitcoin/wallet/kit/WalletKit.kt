@@ -7,6 +7,7 @@ import bitcoin.wallet.kit.hdwallet.Mnemonic
 import bitcoin.wallet.kit.hdwallet.PublicKey
 import bitcoin.wallet.kit.headers.HeaderSyncer
 import bitcoin.wallet.kit.managers.Syncer
+import bitcoin.wallet.kit.network.MainNet
 import bitcoin.wallet.kit.network.PeerGroup
 import bitcoin.wallet.kit.network.PeerManager
 
@@ -14,7 +15,7 @@ class Wallet {
     private val mnemonic = Mnemonic()
     private var keys = listOf("used", "ugly", "meat", "glad", "balance", "divorce", "inner", "artwork", "hire", "invest", "already", "piano")
     private var seed = mnemonic.toSeed(keys)
-    private var wall = HDWallet(seed)
+    private var wall = HDWallet(seed, MainNet())
     private val pubKeys: MutableList<PublicKey> = mutableListOf()
 
     init {

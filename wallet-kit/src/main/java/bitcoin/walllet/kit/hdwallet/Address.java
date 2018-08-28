@@ -17,7 +17,8 @@ package bitcoin.walllet.kit.hdwallet;
 
 import java.util.Arrays;
 
-import bitcoin.walllet.kit.constant.BitcoinConstants;
+import bitcoin.wallet.kit.network.NetworkParameters;
+import bitcoin.wallet.kit.network.MainNet;
 import bitcoin.walllet.kit.exceptions.AddressFormatException;
 import bitcoin.walllet.kit.utils.Base58Utils;
 
@@ -42,11 +43,13 @@ public class Address {
     /** Address type */
     private AddressType type;
 
+    private NetworkParameters networkParameters = new MainNet();
+
     /**
      * Creates a new Address with a zero hash
      */
     public Address() {
-        this (AddressType.P2PKH, new byte[20], "");
+        this (AddressType.P2PKH, new byte[20], "", new MainNet());
     }
 
     /**
@@ -55,7 +58,7 @@ public class Address {
      * @param       hash                    Hash
      */
     public Address(byte[] hash) {
-        this(AddressType.P2PKH, hash, "");
+        this(AddressType.P2PKH, hash, "", new MainNet());
     }
 
     /**
@@ -64,8 +67,8 @@ public class Address {
      * @param       hash                    Hash
      * @param       label                   Address label
      */
-    public Address(byte[] hash, String label) {
-        this(AddressType.P2PKH, hash, label);
+    public Address(byte[] hash, String label, NetworkParameters networkParameters) {
+        this(AddressType.P2PKH, hash, label, networkParameters);
     }
 
     /**
@@ -74,8 +77,8 @@ public class Address {
      * @param       type                    Address type
      * @param       hash                    Hash
      */
-    public Address(AddressType type, byte[] hash) {
-        this(type, hash, "");
+    public Address(AddressType type, byte[] hash, NetworkParameters networkParameters) {
+        this(type, hash, "", networkParameters);
     }
 
     /**
@@ -85,10 +88,11 @@ public class Address {
      * @param       hash                    Hash
      * @param       label                   Address label
      */
-    public Address(AddressType type, byte[] hash, String label) {
+    public Address(AddressType type, byte[] hash, String label, NetworkParameters networkParameters) {
         this.hash = hash;
         this.label = label;
         this.type = type;
+        this.networkParameters = networkParameters;
     }
 
     /**
@@ -97,9 +101,9 @@ public class Address {
      * @param       address                 Encoded address
      * @throws AddressFormatException  Address string is not a valid address
      */
-    public Address(String address) throws AddressFormatException {
-        this(address, "");
-    }
+//    public Address(String address) throws AddressFormatException {
+//        this(address, "");
+//    }
 
     /**
      * Creates a new Address using a Base-58 encoded address and a label
@@ -108,33 +112,33 @@ public class Address {
      * @param       label                   Address label
      * @throws      AddressFormatException  Address string is not valid
      */
-    public Address(String address, String label) throws AddressFormatException {
-        //
-        // Set the label
-        //
-        this.label = label;
-        //
-        // Decode the address
-        //
-        byte[] decoded = Base58Utils.decodeChecked(address);
-        int version = (int)decoded[0]&0xff;
-        if (version == BitcoinConstants.ADDRESS_VERSION) {
-            type = AddressType.P2PKH;
-        } else if (version == BitcoinConstants.SCRIPT_ADDRESS_VERSION) {
-            type = AddressType.P2SH;
-        } else {
-            throw new AddressFormatException(String.format("Address version %d is not correct", version));
-        }
-        //
-        // The address must be 20 bytes
-        //
-        if (decoded.length != 20+1)
-            throw new AddressFormatException("Address length is not 20 bytes");
-        //
-        // Get the address hash
-        //
-        hash = Arrays.copyOfRange(decoded, 1, decoded.length);
-    }
+//    public Address(String address, String label) throws AddressFormatException {
+//        //
+//        // Set the label
+//        //
+//        this.label = label;
+//        //
+//        // Decode the address
+//        //
+//        byte[] decoded = Base58Utils.decodeChecked(address);
+//        int version = (int)decoded[0]&0xff;
+//        if (version == BitcoinConstants.ADDRESS_VERSION) {
+//            type = AddressType.P2PKH;
+//        } else if (version == BitcoinConstants.SCRIPT_ADDRESS_VERSION) {
+//            type = AddressType.P2SH;
+//        } else {
+//            throw new AddressFormatException(String.format("Address version %d is not correct", version));
+//        }
+//        //
+//        // The address must be 20 bytes
+//        //
+//        if (decoded.length != 20+1)
+//            throw new AddressFormatException("Address length is not 20 bytes");
+//        //
+//        // Get the address hash
+//        //
+//        hash = Arrays.copyOfRange(decoded, 1, decoded.length);
+//    }
 
     /**
      * Returns the address label
@@ -182,9 +186,9 @@ public class Address {
     public String toString() {
         byte[] addressBytes = new byte[1+hash.length+4];
         if (type == AddressType.P2PKH) {
-            addressBytes[0] = (byte)BitcoinConstants.ADDRESS_VERSION;
+            addressBytes[0] = (byte) networkParameters.getAddressHeader();
         } else {
-            addressBytes[0] = (byte)BitcoinConstants.SCRIPT_ADDRESS_VERSION;
+            addressBytes[0] = (byte) networkParameters.getScriptAddressHeader();
         }
         System.arraycopy(hash, 0, addressBytes, 1, hash.length);
         byte[] digest = Utils.doubleDigest(addressBytes, 0, hash.length+1);
