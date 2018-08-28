@@ -31,13 +31,13 @@ import java.net.InetAddress
 class VersionMessage : Message {
 
     // The version number of the protocol spoken
-    var protocolVersion: Int = 0
+    private var protocolVersion: Int = 0
 
     // Flags defining what optional services are supported.
-    var services: Long = 0
+    private var services: Long = 0
 
     // What the other side believes the current time to be, in seconds.
-    var timestamp: Long = 0
+    private var timestamp: Long = 0
 
     // The network address of the node receiving this message.
     lateinit var recipientAddress: NetworkAddress
@@ -109,7 +109,15 @@ class VersionMessage : Message {
         return output.toByteArray()
     }
 
+    fun hasBlockChain(): Boolean {
+        return (services and BitcoinConstants.SERVICE_FULL_NODE) == BitcoinConstants.SERVICE_FULL_NODE
+    }
+
+    fun supportsBloomFilter(): Boolean {
+        return protocolVersion >= BitcoinConstants.BLOOM_FILTER
+    }
+
     override fun toString(): String {
-        return ("VersionMessage(lastBlock=$lastBlock, protocol=$protocolVersion, timestamp=$timestamp)")
+        return ("VersionMessage(lastBlock=$lastBlock, protocol=$protocolVersion, services=$services, timestamp=$timestamp)")
     }
 }
