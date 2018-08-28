@@ -18,7 +18,6 @@ import org.mockito.Mockito.mock
 import org.powermock.api.mockito.PowerMockito
 import org.powermock.core.classloader.annotations.PrepareForTest
 import org.powermock.modules.junit4.PowerMockRunner
-import javax.xml.bind.DatatypeConverter
 
 @RunWith(PowerMockRunner::class)
 @PrepareForTest(Peer::class)
@@ -51,8 +50,8 @@ class PeerTest {
     fun requestMerkleBlocks() {
         val getDataMessage = mock(GetDataMessage::class.java)
         val headerHashes = arrayOf(
-                DatatypeConverter.parseHexBinary("0000000000000005ed683decf91ff610c7710d03bb3f618d121d47cbcb1bc1e1"),
-                DatatypeConverter.parseHexBinary("0000000000000027d222eb8a315aae9e437f907edd85ce9ec6ef4a3de3ee2d2f")
+                "0000000000000005ed683decf91ff610c7710d03bb3f618d121d47cbcb1bc1e1".toByteArray(),
+                "0000000000000027d222eb8a315aae9e437f907edd85ce9ec6ef4a3de3ee2d2f".toByteArray()
         )
 
         PowerMockito
@@ -76,8 +75,8 @@ class PeerTest {
         val anyException = Exception()
 
         val headerHashes = arrayOf(
-                DatatypeConverter.parseHexBinary("0000000000000005ed683decf91ff610c7710d03bb3f618d121d47cbcb1bc1e1"),
-                DatatypeConverter.parseHexBinary("0000000000000027d222eb8a315aae9e437f907edd85ce9ec6ef4a3de3ee2d2f")
+                "0000000000000005ed683decf91ff610c7710d03bb3f618d121d47cbcb1bc1e1".toByteArray(),
+                "0000000000000027d222eb8a315aae9e437f907edd85ce9ec6ef4a3de3ee2d2f".toByteArray()
         )
 
         peer.requestMerkleBlocks(headerHashes)
@@ -94,8 +93,8 @@ class PeerTest {
     // it notifies us about error with list of not processed block hashes
     @Test
     fun requestMerkleBlocks_onFailedOne() {
-        val successMerkleBlockHash = DatatypeConverter.parseHexBinary("0000000000000005ed683decf91ff610c7710d03bb3f618d121d47cbcb1bc1e1")
-        val failureMerkleBlockHash = DatatypeConverter.parseHexBinary("0000000000000027d222eb8a315aae9e437f907edd85ce9ec6ef4a3de3ee2d2f")
+        val successMerkleBlockHash = "0000000000000005ed683decf91ff610c7710d03bb3f618d121d47cbcb1bc1e1".toByteArray()
+        val failureMerkleBlockHash = "0000000000000027d222eb8a315aae9e437f907edd85ce9ec6ef4a3de3ee2d2f".toByteArray()
 
         val headerHashes = arrayOf(successMerkleBlockHash, failureMerkleBlockHash)
 
@@ -143,7 +142,7 @@ class PeerTest {
     @Test
     fun onMessage_MerkleBlockMessage_withOneTransaction() {
         // given
-        val txHash = DatatypeConverter.parseHexBinary("d4a3974699818360b76bc62f4ec61d4a8ccb9abe161a24572644007bd85f2aaa")
+        val txHash = "d4a3974699818360b76bc62f4ec61d4a8ccb9abe161a24572644007bd85f2aaa".toByteArray()
 
         val merkleBlock = mock(MerkleBlock::class.java)
         val merkleBlockMessage = mock(MerkleBlockMessage::class.java)
@@ -177,7 +176,7 @@ class PeerTest {
     @Test
     fun requestMerkleBlocks_allCompleted() {
         // given
-        val merkleBlockHash = DatatypeConverter.parseHexBinary("0000000000000005ed683decf91ff610c7710d03bb3f618d121d47cbcb1bc1e1")
+        val merkleBlockHash = "0000000000000005ed683decf91ff610c7710d03bb3f618d121d47cbcb1bc1e1".toByteArray()
         peer.requestMerkleBlocks(arrayOf(merkleBlockHash))
 
         // when
@@ -229,7 +228,7 @@ class PeerTest {
 
     @Test
     fun onMessage_inv_newBlock() {
-        val blockHash = DatatypeConverter.parseHexBinary("0000000000000005ed683decf91ff610c7710d03bb3f618d121d47cbcb1bc1e1")
+        val blockHash = "0000000000000005ed683decf91ff610c7710d03bb3f618d121d47cbcb1bc1e1".toByteArray()
         val invVectBlock = InventoryItem().apply {
             type = InventoryItem.MSG_BLOCK
             hash = blockHash
@@ -256,7 +255,7 @@ class PeerTest {
     @Test
     fun relayTransaction() {
         val transaction = mock(Transaction::class.java)
-        val txHash = DatatypeConverter.parseHexBinary("0000000000000005ed683decf91ff610c7710d03bb3f618d121d47cbcb1bc1e1")
+        val txHash = "0000000000000005ed683decf91ff610c7710d03bb3f618d121d47cbcb1bc1e1".toByteArray()
 
         whenever(transaction.txHash).thenReturn(txHash)
 
@@ -277,7 +276,7 @@ class PeerTest {
     fun onMessage_getData_tx() {
 
         val transaction = mock(Transaction::class.java)
-        val txHash = DatatypeConverter.parseHexBinary("0000000000000005ed683decf91ff610c7710d03bb3f618d121d47cbcb1bc1e1")
+        val txHash = "0000000000000005ed683decf91ff610c7710d03bb3f618d121d47cbcb1bc1e1".toByteArray()
 
         whenever(transaction.txHash).thenReturn(txHash)
 
