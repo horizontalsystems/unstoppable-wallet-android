@@ -3,7 +3,6 @@ package bitcoin.wallet.kit.network
 import bitcoin.wallet.kit.crypto.BloomFilter
 import bitcoin.wallet.kit.models.Transaction
 import com.nhaarman.mockito_kotlin.whenever
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -208,7 +207,7 @@ class PeerGroupTest {
 
         peerGroup.requestHeaders(hashes, true)
 
-        Assert.assertNotEquals(peer.host, peerGroup.getSyncPeer()?.host)
+        verify(peer2).requestHeaders(hashes)
     }
 
 }
