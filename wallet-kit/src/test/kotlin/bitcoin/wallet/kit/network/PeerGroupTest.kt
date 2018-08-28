@@ -28,7 +28,8 @@ class PeerGroupTest {
     fun setup() {
         peerGroupListener = mock(PeerGroup.Listener::class.java)
         peerManager = mock(PeerManager::class.java)
-        peerGroup = PeerGroup(peerGroupListener, peerManager, 2)
+        peerGroup = PeerGroup(peerManager, 2)
+        peerGroup.listener = peerGroupListener
         peer = mock(Peer::class.java)
         peer2 = mock(Peer::class.java)
         whenever(peer.host).thenReturn(peerIp)
@@ -113,7 +114,7 @@ class PeerGroupTest {
     @Test
     fun connected_onReady() {
         peerGroup.connected(peer)
-        verify(peerGroupListener).onReady(peerGroup)
+        verify(peerGroupListener).onReady()
     }
 
     @Test
@@ -123,7 +124,7 @@ class PeerGroupTest {
 
         peerGroup.connected(peer)
         peerGroup.connected(peer2)
-        verify(peerGroupListener).onReady(peerGroup)
+        verify(peerGroupListener).onReady()
     }
 
     @Test
@@ -135,7 +136,7 @@ class PeerGroupTest {
         peerGroup.disconnected(peer2, null, arrayOf())
         peerGroup.connected(peer)
 
-        verify(peerGroupListener, times(2)).onReady(peerGroup)
+        verify(peerGroupListener, times(2)).onReady()
     }
 
     @Test
