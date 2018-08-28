@@ -9,54 +9,55 @@ import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.net.InetAddress
 
-
 /**
- * <p>Version Message</p>
- * <pre>
- *   Size       Field               Description
- *   ====       =====               ===========
- *   4 bytes    Version             Protocol version
- *   8 bytes    Services            Supported services (bit field)
- *   8 bytes    Timestamp           Time in seconds since the epoch
- *  26 bytes    RemoteAddress       Remote node address
- *  26 bytes    LocalAddress        Local node address
- *   8 bytes    Nonce               Random value to identify sending node
- *  VarString   UserAgent           Identification string
- *   4 bytes    BlockHeight         Last block received by sending node
- *   1 byte     TxRelay             TRUE if remote peer should relay transactions
- * </pre>
+ * Version Message
+ *
+ *   Size       Field           Description
+ *   ====       =====           ===========
+ *   4 bytes    Version         Protocol version
+ *   8 bytes    Services        Supported services (bit field)
+ *   8 bytes    Timestamp       Time in seconds since the epoch
+ *  26 bytes    RemoteAddress   Remote node address
+ *  26 bytes    LocalAddress    Local node address
+ *   8 bytes    Nonce           Random value to identify sending node
+ * VarString    UserAgent       Identification string
+ *   4 bytes    BlockHeight     Last block received by sending node
+ *   1 byte     TxRelay         TRUE if remote peer should relay transactions
  */
-
-
 class VersionMessage : Message {
 
     // The version number of the protocol spoken
-    private var protocolVersion: Int = 0
+    private var protocolVersion = BitcoinConstants.PROTOCOL_VERSION
 
     // Flags defining what optional services are supported.
-    private var services: Long = 0
+    private var services = BitcoinConstants.NETWORK_SERVICES
 
     // What the other side believes the current time to be, in seconds.
-    private var timestamp: Long = 0
+    private var timestamp = System.currentTimeMillis() / 1000
 
     // The network address of the node receiving this message.
-    lateinit var recipientAddress: NetworkAddress
+    private lateinit var recipientAddress: NetworkAddress
 
     // The network address of the node emitting this message.
-    lateinit var senderAddress: NetworkAddress
+    private var senderAddress = NetworkAddress(NetworkUtils.getLocalInetAddress())
 
     // Random value to identify sending node
-    var nonce: Long = 0
+    private var nonce = BitcoinConstants.NODE_ID
 
     // User-Agent as defined in <a href="https://github.com/bitcoin/bips/blob/master/bip-0014.mediawiki">BIP 14</a>.
-    lateinit var subVersion: String
+    private var subVersion = BitcoinConstants.SUB_VERSION
 
     // How many blocks are in the chain, according to the other side.
     var lastBlock: Int = 0
 
     // Whether or not to relay tx invs before a filter is received.
     // See <a href="https://github.com/bitcoin/bips/blob/master/bip-0037.mediawiki#extensions-to-existing-messages">BIP 37</a>.
-    var relay: Boolean = false
+    private var relay = false
+
+    constructor(bestBlock: Int, recipientAddr: InetAddress) : super("version") {
+        lastBlock = bestBlock
+        recipientAddress = NetworkAddress(recipientAddr)
+    }
 
     @Throws(IOException::class)
     constructor(payload: ByteArray) : super("version") {
@@ -75,20 +76,6 @@ class VersionMessage : Message {
                 }
             }
         }
-    }
-
-    constructor() : super("version") {}
-
-    constructor(lastBlock: Int, recipientAddr: InetAddress) : super("version") {
-        protocolVersion = BitcoinConstants.PROTOCOL_VERSION
-        services = BitcoinConstants.NETWORK_SERVICES
-        timestamp = System.currentTimeMillis() / 1000
-        recipientAddress = NetworkAddress(recipientAddr)
-        senderAddress = NetworkAddress(NetworkUtils.getLocalInetAddress())
-        nonce = BitcoinConstants.NODE_ID
-        subVersion = BitcoinConstants.SUB_VERSION
-        this.lastBlock = lastBlock
-        relay = true
     }
 
     override fun getPayload(): ByteArray {
