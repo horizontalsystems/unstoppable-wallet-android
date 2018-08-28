@@ -60,16 +60,13 @@ class Transaction @Throws(IOException::class) constructor(input: BitcoinInput) {
     init {
         version = input.readInt()
         val txInCount = input.readVarInt() // do not store count
-
-        txIns = arrayOf()
-        for (i in 0 until txInCount.toInt()) {
-            txIns[i] = TxIn(input)
+        txIns = Array(txInCount.toInt()) {
+            TxIn(input)
         }
 
         val txOutCount = input.readVarInt() // do not store count
-        txOuts = arrayOf()
-        for (i in 0 until txOutCount.toInt()) {
-            txOuts[i] = TxOut(input)
+        txOuts = Array(txOutCount.toInt()) {
+            TxOut(input)
         }
 
         lockTime = input.readUnsignedInt()
