@@ -64,14 +64,8 @@ class SettingsFragment : android.support.v4.app.Fragment() {
             }
         }
 
-        pushNotifications.apply {
-            switchIsChecked = true
-            setOnClickListener {
-                switchToggle()
-            }
-            switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                Log.e("AAA", "pushNotifications $isChecked")
-            }
+        about.setOnClickListener {
+            Log.e("AAA", "About clicked!")
         }
 
         companyLogo.setOnClickListener {
