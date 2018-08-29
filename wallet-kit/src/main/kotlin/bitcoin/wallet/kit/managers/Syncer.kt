@@ -8,21 +8,22 @@ import bitcoin.wallet.kit.models.MerkleBlock
 import bitcoin.wallet.kit.models.Transaction
 import bitcoin.wallet.kit.network.PeerGroup
 import bitcoin.walllet.kit.io.BitcoinInput
-import org.slf4j.LoggerFactory
+import java.util.logging.Level
+import java.util.logging.Logger
 
 class Syncer(private val peerGroup: PeerGroup, private val headerSyncer: HeaderSyncer, private val blockSyncer: BlockSyncer) : PeerGroup.Listener {
+    private val logger = Logger.getLogger("Syncer")
 
     enum class SyncStatus {
         Syncing, Synced, Error
     }
 
-    private val log = LoggerFactory.getLogger(Syncer::class.java)
 
     override fun onReady() {
         try {
             headerSyncer.sync()
         } catch (e: Exception) {
-            log.error("Header Syncer Error", e)
+            logger.log(Level.SEVERE, "Header Syncer Error", e)
         }
 
         blockSyncer.run()

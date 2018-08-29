@@ -5,9 +5,9 @@ import bitcoin.wallet.kit.models.Header
 import bitcoin.wallet.kit.models.InventoryItem
 import bitcoin.wallet.kit.models.MerkleBlock
 import bitcoin.wallet.kit.models.Transaction
-import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedQueue
+import java.util.logging.Logger
 
 class PeerGroup(private val peerManager: PeerManager, val network: NetworkParameters, private val peerSize: Int = 3) : Thread(), Peer.Listener, PeerInteraction {
 
@@ -20,7 +20,7 @@ class PeerGroup(private val peerManager: PeerManager, val network: NetworkParame
         fun getTransaction(hash: String): Transaction
     }
 
-    private val log = LoggerFactory.getLogger(PeerGroup::class.java)
+    private val logger = Logger.getLogger("PeerGroup")
     private val peerMap = ConcurrentHashMap<String, Peer>()
     private var syncPeer: Peer? = null
     private val fetchingBlocksQueue = ConcurrentLinkedQueue<ByteArray>()
@@ -49,22 +49,22 @@ class PeerGroup(private val peerManager: PeerManager, val network: NetworkParame
             }
         }
 
-        log.info("Closing all peer connections...")
+        logger.info("Closing all peer connections...")
         for (conn in peerMap.values) {
             conn.close()
         }
     }
 
     private fun startConnection() {
-        log.info("Try open new peer connection...")
+        logger.info("Try open new peer connection...")
         val ip = peerManager.getPeerIp()
         if (ip != null) {
-            log.info("Try open new peer connection to $ip...")
+            logger.info("Try open new peer connection to $ip...")
             val peer = Peer(ip, network, this)
             peerMap[ip] = peer
             peer.start()
         } else {
-            log.info("No peers found yet.")
+            logger.info("No peers found yet.")
         }
     }
 
@@ -149,17 +149,17 @@ class PeerGroup(private val peerManager: PeerManager, val network: NetworkParame
         if (syncPeer == null) {
             setSyncPeer(peer)
 
-            log.info("Sync Peer ready")
+            logger.info("Sync Peer ready")
             listener.onReady()
         }
     }
 
     override fun disconnected(peer: Peer, e: Exception?, incompleteMerkleBlocks: Array<ByteArray>) {
         if (e == null) {
-            log.info("PeerAddress $peer.host disconnected.")
+            logger.info("PeerAddress $peer.host disconnected.")
             peerManager.markSuccess(peer.host)
         } else {
-            log.warn("PeerAddress $peer.host disconnected with error.", e.message)
+            logger.warning("PeerAddress $peer.host disconnected with error.")
             peerManager.markFailed(peer.host)
         }
 

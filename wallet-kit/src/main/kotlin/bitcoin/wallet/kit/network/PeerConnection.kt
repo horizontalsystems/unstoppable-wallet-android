@@ -3,7 +3,6 @@ package bitcoin.wallet.kit.network
 import bitcoin.wallet.kit.messages.Message
 import bitcoin.wallet.kit.messages.VersionMessage
 import bitcoin.walllet.kit.io.BitcoinInput
-import org.slf4j.LoggerFactory
 import java.io.IOException
 import java.lang.Exception
 import java.net.ConnectException
@@ -13,6 +12,8 @@ import java.net.SocketTimeoutException
 import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.TimeUnit
+import java.util.logging.Level
+import java.util.logging.Logger
 
 class PeerConnection(val host: String, private val network: NetworkParameters, private val listener: Listener) : Thread() {
 
@@ -21,7 +22,7 @@ class PeerConnection(val host: String, private val network: NetworkParameters, p
         fun disconnected(e: Exception? = null)
     }
 
-    private val log = LoggerFactory.getLogger(PeerConnection::class.java)
+    private val logger = Logger.getLogger("PeerConnection")
     private val sendingQueue: BlockingQueue<Message> = ArrayBlockingQueue(100)
     private val socket = Socket()
 
@@ -48,7 +49,7 @@ class PeerConnection(val host: String, private val network: NetworkParameters, p
             val input = socket.getInputStream()
             val output = socket.getOutputStream()
 
-            log.info("Socket $host connected.")
+            logger.info("Socket $host connected.")
             setTimeout(60000)
 
             // add version message to send automatically:
@@ -56,7 +57,7 @@ class PeerConnection(val host: String, private val network: NetworkParameters, p
             // loop:
             while (isRunning) {
                 if (isTimeout) {
-                    log.info("Timeout!")
+                    logger.info("Timeout!")
                     break
                 }
 
@@ -64,7 +65,7 @@ class PeerConnection(val host: String, private val network: NetworkParameters, p
                 val msg = sendingQueue.poll(1, TimeUnit.SECONDS)
                 if (isRunning && msg != null) {
                     // send message:
-                    log.info("=> " + msg.toString())
+                    logger.info("=> " + msg.toString())
                     output.write(msg.toByteArray(network))
                 }
 
@@ -72,26 +73,26 @@ class PeerConnection(val host: String, private val network: NetworkParameters, p
                 if (isRunning && input.available() > 0) {
                     val inputStream = BitcoinInput(input)
                     val parsedMsg = Message.Builder.parseMessage<Message>(inputStream, network)
-                    log.info("<= $parsedMsg")
+                    logger.info("<= $parsedMsg")
                     listener.onMessage(parsedMsg)
                 }
             }
 
             listener.disconnected()
         } catch (e: SocketTimeoutException) {
-            log.warn("Connect timeout exception: " + e.message, e)
+            logger.log(Level.SEVERE, "Connect timeout exception: ${e.message}", e)
             listener.disconnected(e)
         } catch (e: ConnectException) {
-            log.warn("Connect exception: " + e.message, e)
+            logger.log(Level.SEVERE, "Connect exception: ${e.message}", e)
             listener.disconnected(e)
         } catch (e: IOException) {
-            log.warn("IOException: " + e.message, e)
+            logger.log(Level.SEVERE, "IOException: ${e.message}", e)
             listener.disconnected(e)
         } catch (e: InterruptedException) {
-            log.warn("Peer connection thread interrupted.")
+            logger.log(Level.SEVERE, "Peer connection thread interrupted.")
             listener.disconnected()
         } catch (e: Exception) {
-            log.warn("Peer connection exception.", e)
+            logger.log(Level.SEVERE, "Peer connection exception.", e)
             listener.disconnected()
         } finally {
             isRunning = false
@@ -102,8 +103,8 @@ class PeerConnection(val host: String, private val network: NetworkParameters, p
         isRunning = false
         try {
             join(1000)
-        } catch (e: InterruptedException) {
-            log.error(e.message)
+        } catch (e: Exception) {
+            logger.log(Level.SEVERE, e.message)
         }
     }
 

@@ -1,14 +1,14 @@
 package bitcoin.wallet.kit.network
 
 import bitcoin.walllet.kit.exceptions.BitcoinException
-import org.slf4j.LoggerFactory
 import java.net.InetAddress
 import java.net.UnknownHostException
 import java.util.*
+import java.util.logging.Logger
 
 object PeerDiscover {
 
-    private val log = LoggerFactory.getLogger(PeerDiscover::class.java)
+    private val log = Logger.getLogger("PeerDiscover")
 
     /**
      * Lookup bitcoin peers by DNS seed.
@@ -30,7 +30,7 @@ object PeerDiscover {
                     }
                 }
             } catch (e: UnknownHostException) {
-                log.warn("Cannot look up host: $host")
+                log.warning("Cannot look up host: $host")
             }
         }
 
