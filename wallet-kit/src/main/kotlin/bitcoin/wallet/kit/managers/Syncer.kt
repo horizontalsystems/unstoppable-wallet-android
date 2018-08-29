@@ -11,13 +11,14 @@ import bitcoin.walllet.kit.io.BitcoinInput
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class Syncer(private val peerGroup: PeerGroup, private val headerSyncer: HeaderSyncer, private val blockSyncer: BlockSyncer) : PeerGroup.Listener {
+class Syncer(peerGroup: PeerGroup) : PeerGroup.Listener {
     private val logger = Logger.getLogger("Syncer")
+    private val headerSyncer = HeaderSyncer(peerGroup)
+    private val blockSyncer = BlockSyncer(peerGroup)
 
     enum class SyncStatus {
         Syncing, Synced, Error
     }
-
 
     override fun onReady() {
         try {

@@ -1,11 +1,9 @@
 package bitcoin.wallet.kit
 
-import bitcoin.wallet.kit.blocks.BlockSyncer
 import bitcoin.wallet.kit.crypto.BloomFilter
 import bitcoin.wallet.kit.hdwallet.HDWallet
 import bitcoin.wallet.kit.hdwallet.Mnemonic
 import bitcoin.wallet.kit.hdwallet.PublicKey
-import bitcoin.wallet.kit.headers.HeaderSyncer
 import bitcoin.wallet.kit.managers.Syncer
 import bitcoin.wallet.kit.network.MainNet
 import bitcoin.wallet.kit.network.NetworkParameters
@@ -49,11 +47,7 @@ class WalletKit {
 
         peerGroup = PeerGroup(peerManager, network, 1)
         peerGroup.setBloomFilter(filters)
-        peerGroup.listener = Syncer(
-                peerGroup,
-                HeaderSyncer(peerGroup),
-                BlockSyncer(peerGroup)
-        )
+        peerGroup.listener = Syncer(peerGroup)
         peerGroup.start()
 
     }
