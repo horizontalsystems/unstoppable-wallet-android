@@ -11,9 +11,9 @@ androidExtensions {
     experimental = true
 }
 
-realm {
-    syncEnabled = true
-}
+//realm {
+//    syncEnabled = true
+//}
 
 def computeVersionCode() {
     ext.buildNumber = System.getenv("BUILD_NUMBER") ?: 0
