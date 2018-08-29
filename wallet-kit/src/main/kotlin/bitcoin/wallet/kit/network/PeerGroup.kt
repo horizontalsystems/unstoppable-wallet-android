@@ -111,7 +111,23 @@ class PeerGroup(private val peerManager: PeerManager, private val peerSize: Int 
     }
 
     override fun requestHeaders(headerHashes: Array<ByteArray>, switchPeer: Boolean) {
+        if (switchPeer) {
+            switchSyncPeer()
+        }
         syncPeer?.requestHeaders(headerHashes)
+    }
+
+    private fun switchSyncPeer() {
+        getFreePeer()?.let {
+            syncPeer?.isFree = true
+            setSyncPeer(it)
+        }
+    }
+
+    private fun setSyncPeer(newPeer: Peer) {
+        // sync peer will always busy for headers tasks
+        newPeer.isFree = false
+        syncPeer = newPeer
     }
 
     override fun requestMerkleBlocks(headerHashes: Array<ByteArray>) {
@@ -131,10 +147,7 @@ class PeerGroup(private val peerManager: PeerManager, private val peerSize: Int 
         }
 
         if (syncPeer == null) {
-            syncPeer = peer
-
-            // sync peer will always busy for headers tasks
-            peer.isFree = false
+            setSyncPeer(peer)
 
             log.info("Sync Peer ready")
             listener.onReady()

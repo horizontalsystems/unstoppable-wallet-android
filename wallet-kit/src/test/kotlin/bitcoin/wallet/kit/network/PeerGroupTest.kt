@@ -33,6 +33,7 @@ class PeerGroupTest {
         peer = mock(Peer::class.java)
         peer2 = mock(Peer::class.java)
         whenever(peer.host).thenReturn(peerIp)
+        whenever(peer2.host).thenReturn(peerIp2)
 
         whenever(peerManager.getPeerIp())
                 .thenReturn(peerIp, peerIp2)
@@ -192,6 +193,22 @@ class PeerGroupTest {
         peerGroup.relay(transaction)
         verify(peer).relay(transaction)
         verify(peer2).relay(transaction)
+    }
+
+    @Test
+    fun requestHeaders_switchPeer() {
+        val hashes = arrayOf<ByteArray>()
+
+        peerGroup.start()
+        Thread.sleep(2010L)
+        peerGroup.connected(peer)
+
+        whenever(peer.isFree).thenReturn(false)
+        whenever(peer2.isFree).thenReturn(true)
+
+        peerGroup.requestHeaders(hashes, true)
+
+        verify(peer2).requestHeaders(hashes)
     }
 
 }
