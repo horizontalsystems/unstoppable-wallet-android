@@ -12,7 +12,6 @@ import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.modules.backup.BackupModule
 import bitcoin.wallet.modules.backup.BackupPresenter
 import bitcoin.wallet.modules.main.UnlockActivity
-import io.realm.SyncUser
 import kotlinx.android.synthetic.main.activity_settings_security.*
 
 class SecuritySettingsActivity : AppCompatActivity() {
@@ -45,8 +44,6 @@ class SecuritySettingsActivity : AppCompatActivity() {
         removeWallet.titleTextColor = R.color.red_warning
         removeWallet.setOnClickListener {
             Factory.preferencesManager.saveWords(listOf())
-
-            SyncUser.all().forEach { t, user -> user.logOut() }
 
             val intent = Intent(this, LauncherActivity::class.java)
             startActivity(intent)
