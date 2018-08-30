@@ -1,7 +1,7 @@
 package bitcoin.wallet.kit.messages
 
 import bitcoin.wallet.kit.models.NetworkAddress
-import bitcoin.walllet.kit.constant.BitcoinConstants
+import bitcoin.wallet.kit.network.NetworkParameters
 import bitcoin.walllet.kit.io.BitcoinInput
 import bitcoin.walllet.kit.io.BitcoinOutput
 import bitcoin.walllet.kit.utils.NetworkUtils
@@ -27,10 +27,10 @@ import java.net.InetAddress
 class VersionMessage : Message {
 
     // The version number of the protocol spoken
-    private var protocolVersion = BitcoinConstants.PROTOCOL_VERSION
+    private var protocolVersion: Int = 0
 
     // Flags defining what optional services are supported.
-    private var services = BitcoinConstants.NETWORK_SERVICES
+    private var services: Long = 0L
 
     // What the other side believes the current time to be, in seconds.
     private var timestamp = System.currentTimeMillis() / 1000
@@ -39,13 +39,13 @@ class VersionMessage : Message {
     private lateinit var recipientAddress: NetworkAddress
 
     // The network address of the node emitting this message.
-    private var senderAddress = NetworkAddress(NetworkUtils.getLocalInetAddress())
+    private lateinit var senderAddress: NetworkAddress
 
     // Random value to identify sending node
-    private var nonce = BitcoinConstants.NODE_ID
+    private var nonce = 0L
 
     // User-Agent as defined in <a href="https://github.com/bitcoin/bips/blob/master/bip-0014.mediawiki">BIP 14</a>.
-    private var subVersion = BitcoinConstants.SUB_VERSION
+    private var subVersion = "/Satoshi:0.7.2/"
 
     // How many blocks are in the chain, according to the other side.
     var lastBlock: Int = 0
@@ -54,9 +54,13 @@ class VersionMessage : Message {
     // See <a href="https://github.com/bitcoin/bips/blob/master/bip-0037.mediawiki#extensions-to-existing-messages">BIP 37</a>.
     private var relay = false
 
-    constructor(bestBlock: Int, recipientAddr: InetAddress) : super("version") {
+    constructor(bestBlock: Int, recipientAddr: InetAddress, network: NetworkParameters) : super("version") {
+        protocolVersion = network.protocolVersion
+        services = network.networkServices
         lastBlock = bestBlock
-        recipientAddress = NetworkAddress(recipientAddr)
+        recipientAddress = NetworkAddress(recipientAddr, network)
+        senderAddress = NetworkAddress(NetworkUtils.getLocalInetAddress(), network)
+        nonce = (Math.random() * java.lang.Long.MAX_VALUE).toLong() //Random node id generated at startup.
     }
 
     @Throws(IOException::class)
@@ -96,12 +100,12 @@ class VersionMessage : Message {
         return output.toByteArray()
     }
 
-    fun hasBlockChain(): Boolean {
-        return (services and BitcoinConstants.SERVICE_FULL_NODE) == BitcoinConstants.SERVICE_FULL_NODE
+    fun hasBlockChain(network: NetworkParameters): Boolean {
+        return (services and network.serviceFullNode) == network.serviceFullNode
     }
 
-    fun supportsBloomFilter(): Boolean {
-        return protocolVersion >= BitcoinConstants.BLOOM_FILTER
+    fun supportsBloomFilter(network: NetworkParameters): Boolean {
+        return protocolVersion >= network.bloomFilter
     }
 
     override fun toString(): String {

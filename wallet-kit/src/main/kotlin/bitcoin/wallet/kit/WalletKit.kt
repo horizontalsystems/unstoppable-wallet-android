@@ -8,14 +8,15 @@ import bitcoin.wallet.kit.hdwallet.PublicKey
 import bitcoin.wallet.kit.headers.HeaderSyncer
 import bitcoin.wallet.kit.managers.Syncer
 import bitcoin.wallet.kit.network.MainNet
+import bitcoin.wallet.kit.network.NetworkParameters
 import bitcoin.wallet.kit.network.PeerGroup
 import bitcoin.wallet.kit.network.PeerManager
 
-class Wallet {
+class Wallet(network: NetworkParameters) {
     private val mnemonic = Mnemonic()
     private var keys = listOf("used", "ugly", "meat", "glad", "balance", "divorce", "inner", "artwork", "hire", "invest", "already", "piano")
     private var seed = mnemonic.toSeed(keys)
-    private var wall = HDWallet(seed, MainNet())
+    private var wall = HDWallet(seed, network)
     private val pubKeys: MutableList<PublicKey> = mutableListOf()
 
     init {
@@ -34,7 +35,9 @@ class WalletKit {
     private var peerGroup: PeerGroup
 
     init {
-        val wallet = Wallet()
+        //todo make network switch to select networkParameters
+        val network = MainNet()
+        val wallet = Wallet(network)
         val pubKeys = wallet.pubKeys()
         val filters = BloomFilter(pubKeys.size)
 
@@ -42,9 +45,9 @@ class WalletKit {
             filters.insert(it.publicKey)
         }
 
-        val peerManager = PeerManager()
+        val peerManager = PeerManager(network)
 
-        peerGroup = PeerGroup(peerManager, 1)
+        peerGroup = PeerGroup(peerManager, network, 1)
         peerGroup.setBloomFilter(filters)
         peerGroup.listener = Syncer(
                 peerGroup,
@@ -52,6 +55,7 @@ class WalletKit {
                 BlockSyncer(peerGroup)
         )
         peerGroup.start()
+
     }
 }
 

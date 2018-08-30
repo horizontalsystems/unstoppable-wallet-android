@@ -1,6 +1,6 @@
 package bitcoin.wallet.kit.messages
 
-import bitcoin.walllet.kit.constant.BitcoinConstants
+import bitcoin.wallet.kit.network.NetworkParameters
 import bitcoin.walllet.kit.exceptions.BitcoinException
 import bitcoin.walllet.kit.io.BitcoinInput
 import bitcoin.walllet.kit.io.BitcoinOutput
@@ -18,11 +18,11 @@ abstract class Message(cmd: String) {
         command = getCommandBytes(cmd)
     }
 
-    fun toByteArray(): ByteArray {
+    fun toByteArray(network: NetworkParameters): ByteArray {
         val payload = getPayload()
         return BitcoinOutput()
-                .writeInt(BitcoinConstants.MAGIC)   // magic
-                .write(command)                // command: char[12]
+                .write(network.magicAsUInt32ByteArray())   // magic
+                .write(command)                     // command: char[12]
                 .writeInt(payload.size)             // length: uint32_t
                 .write(getCheckSum(payload))        // checksum: uint32_t
                 .write(payload)                     // payload:
@@ -65,8 +65,9 @@ abstract class Message(cmd: String) {
          * Parse stream as message.
          */
         @Throws(IOException::class)
-        fun <T : Message> parseMessage(input: BitcoinInput): T {
-            if (input.readInt() != BitcoinConstants.MAGIC) {
+        fun <T : Message> parseMessage(input: BitcoinInput, networkParameters: NetworkParameters): T {
+            val magicAsBytesArray = input.readBytes(4)
+            if (!Arrays.equals(magicAsBytesArray, networkParameters.magicAsUInt32ByteArray())) {
                 throw BitcoinException("Bad magic.")
             }
 

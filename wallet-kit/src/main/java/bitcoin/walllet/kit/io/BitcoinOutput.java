@@ -45,6 +45,14 @@ public final class BitcoinOutput {
         return this;
     }
 
+    public BitcoinOutput writeInt32(long v) {
+        out.write((int)(0xff & v));
+        out.write((int)(0xff & (v >> 8)));
+        out.write((int)(0xff & (v >> 16)));
+        out.write((int)(0xff & (v >> 24)));
+        return this;
+    }
+
     public BitcoinOutput writeLong(long v) {
         out.write((int) (0xff & v));
         out.write((int) (0xff & (v >> 8)));

@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedQueue
 
-class PeerGroup(private val peerManager: PeerManager, private val peerSize: Int = 3) : Thread(), Peer.Listener, PeerInteraction {
+class PeerGroup(private val peerManager: PeerManager, val network: NetworkParameters, private val peerSize: Int = 3) : Thread(), Peer.Listener, PeerInteraction {
 
     interface Listener {
         fun onReady()
@@ -60,7 +60,7 @@ class PeerGroup(private val peerManager: PeerManager, private val peerSize: Int 
         val ip = peerManager.getPeerIp()
         if (ip != null) {
             log.info("Try open new peer connection to $ip...")
-            val peer = Peer(ip, this)
+            val peer = Peer(ip, network, this)
             peerMap[ip] = peer
             peer.start()
         } else {

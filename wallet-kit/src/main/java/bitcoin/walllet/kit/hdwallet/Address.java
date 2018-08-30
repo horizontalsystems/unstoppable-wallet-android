@@ -18,7 +18,6 @@ package bitcoin.walllet.kit.hdwallet;
 import java.util.Arrays;
 
 import bitcoin.wallet.kit.network.NetworkParameters;
-import bitcoin.wallet.kit.network.MainNet;
 import bitcoin.walllet.kit.exceptions.AddressFormatException;
 import bitcoin.walllet.kit.utils.Base58Utils;
 
@@ -43,13 +42,13 @@ public class Address {
     /** Address type */
     private AddressType type;
 
-    private NetworkParameters networkParameters = new MainNet();
+    private NetworkParameters networkParameters;
 
     /**
      * Creates a new Address with a zero hash
      */
-    public Address() {
-        this (AddressType.P2PKH, new byte[20], "", new MainNet());
+    public Address(NetworkParameters networkParameters) {
+        this (AddressType.P2PKH, new byte[20], "", networkParameters);
     }
 
     /**
@@ -57,8 +56,8 @@ public class Address {
      *
      * @param       hash                    Hash
      */
-    public Address(byte[] hash) {
-        this(AddressType.P2PKH, hash, "", new MainNet());
+    public Address(byte[] hash, NetworkParameters networkParameters) {
+        this(AddressType.P2PKH, hash, "", networkParameters);
     }
 
     /**

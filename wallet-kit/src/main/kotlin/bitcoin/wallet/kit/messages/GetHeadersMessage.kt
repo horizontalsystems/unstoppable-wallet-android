@@ -1,6 +1,6 @@
 package bitcoin.wallet.kit.messages
 
-import bitcoin.walllet.kit.constant.BitcoinConstants
+import bitcoin.wallet.kit.network.NetworkParameters
 import bitcoin.walllet.kit.io.BitcoinInput
 import bitcoin.walllet.kit.io.BitcoinOutput
 import bitcoin.walllet.kit.utils.HashUtils
@@ -23,10 +23,10 @@ class GetHeadersMessage : Message {
     lateinit var hashes: Array<ByteArray>   // byte[32]
     lateinit var hashStop: ByteArray        // hash of the last desired block header; set to zero to get as many blocks as possible (2000)
 
-    constructor(blockHashes: Array<ByteArray>) : super("getheaders") {
+    constructor(blockHashes: Array<ByteArray>, networkParameters: NetworkParameters) : super("getheaders") {
         hashes = blockHashes
-        version = BitcoinConstants.PROTOCOL_VERSION
-        hashStop = BitcoinConstants.ZERO_HASH_BYTES
+        version = networkParameters.protocolVersion
+        hashStop = networkParameters.zeroHashBytes
     }
 
     @Throws(IOException::class)

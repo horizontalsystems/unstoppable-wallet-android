@@ -4,7 +4,7 @@ import bitcoin.walllet.kit.utils.JsonUtils
 import org.slf4j.LoggerFactory
 import java.io.*
 
-class PeerManager(private val cached: File? = null) {
+class PeerManager(val network: NetworkParameters, private val cached: File? = null) {
 
     // A PeerAddress holds an IP address representing the network location of
     // a peer in the Peer-to-Peer network.
@@ -36,7 +36,7 @@ class PeerManager(private val cached: File? = null) {
             val thread = object : Thread() {
                 override fun run() {
                     try {
-                        addPeers(PeerDiscover.lookup())
+                        addPeers(PeerDiscover.lookup(network.dnsSeeds))
                     } catch (e: Exception) {
                         log.warn("Could not discover peerAddresses.", e)
                     }

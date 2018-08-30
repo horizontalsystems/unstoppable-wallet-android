@@ -1,8 +1,7 @@
 package bitcoin.wallet.kit.network
 
-import bitcoin.wallet.kit.messages.VersionMessage
 import bitcoin.wallet.kit.messages.Message
-import bitcoin.walllet.kit.constant.BitcoinConstants
+import bitcoin.wallet.kit.messages.VersionMessage
 import bitcoin.walllet.kit.io.BitcoinInput
 import org.slf4j.LoggerFactory
 import java.io.IOException
@@ -15,7 +14,7 @@ import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.TimeUnit
 
-class PeerConnection(val host: String, private val listener: Listener) : Thread() {
+class PeerConnection(val host: String, private val network: NetworkParameters, private val listener: Listener) : Thread() {
 
     interface Listener {
         fun onMessage(message: Message)
@@ -43,7 +42,7 @@ class PeerConnection(val host: String, private val listener: Listener) : Thread(
         isRunning = true
         // connect:
         try {
-            socket.connect(InetSocketAddress(host, BitcoinConstants.PORT), 10000)
+            socket.connect(InetSocketAddress(host, network.port), 10000)
             socket.soTimeout = 10000
 
             val input = socket.getInputStream()
@@ -53,7 +52,7 @@ class PeerConnection(val host: String, private val listener: Listener) : Thread(
             setTimeout(60000)
 
             // add version message to send automatically:
-            sendMessage(VersionMessage(0, socket.inetAddress))
+            sendMessage(VersionMessage(0, socket.inetAddress, network))
             // loop:
             while (isRunning) {
                 if (isTimeout) {
@@ -66,13 +65,13 @@ class PeerConnection(val host: String, private val listener: Listener) : Thread(
                 if (isRunning && msg != null) {
                     // send message:
                     log.info("=> " + msg.toString())
-                    output.write(msg.toByteArray())
+                    output.write(msg.toByteArray(network))
                 }
 
                 // try receive message:
                 if (isRunning && input.available() > 0) {
                     val inputStream = BitcoinInput(input)
-                    val parsedMsg = Message.Builder.parseMessage<Message>(inputStream)
+                    val parsedMsg = Message.Builder.parseMessage<Message>(inputStream, network)
                     log.info("<= $parsedMsg")
                     listener.onMessage(parsedMsg)
                 }

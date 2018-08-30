@@ -28,6 +28,7 @@ class PeerTest {
     private lateinit var peer: Peer
     private lateinit var listener: Peer.Listener
     private lateinit var peerConnection: PeerConnection
+    private val network = MainNet()
     private val versionMessage_protocol_69000 = "F9BEB4D976657273696F6E0000000000660000008C490408880D01000D0400000000000061E5845B00000000000000000000000000000000000000000000FFFFD4707C06B26B0D04000000000000000000000000000000000000000000000000D8E6F92E8EC8F039112F5361746F7368693A302E31362E39392FE9380800"
     private val versionMessage_lastBlock_0 =    "F9BEB4D976657273696F6E000000000066000000BE39611E7F1101000D04000000000000D7E5845B00000000000000000000000000000000000000000000FFFFD4707C069DBE0D04000000000000000000000000000000000000000000000000E6030F56C7080373102F5361746F7368693A302E31362E322F0000000001"
     private val versionMessage_services_0 =     "F9BEB4D976657273696F6E00000000006600000041E561B07F110100000000000000000092E4845B00000000000000000000000000000000000000000000FFFFD4707C06B4670D04000000000000000000000000000000000000000000000000E343866042AF517C102F5361746F7368693A302E31362E322FE838080001"
@@ -36,7 +37,7 @@ class PeerTest {
     fun getMessageFromHex(hex: String): Message {
         val versionMessageRaw = TestHelper.hexToByteArray(hex)
         val bitcoinInput = BitcoinInput(versionMessageRaw)
-        val parsedMsg = Message.Builder.parseMessage<Message>(bitcoinInput)
+        val parsedMsg = Message.Builder.parseMessage<Message>(bitcoinInput, network)
         return parsedMsg
     }
 
@@ -50,7 +51,7 @@ class PeerTest {
                 .withAnyArguments()
                 .thenReturn(peerConnection)
 
-        peer = Peer("host", listener)
+        peer = Peer("host", network, listener)
     }
 
     // when
