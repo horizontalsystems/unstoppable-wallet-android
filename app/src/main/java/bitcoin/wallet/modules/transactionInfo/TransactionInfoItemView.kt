@@ -6,6 +6,7 @@ import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import bitcoin.wallet.R
 import bitcoin.wallet.core.App
@@ -20,6 +21,7 @@ class TransactionInfoItemView : ConstraintLayout {
     private lateinit var titleTextView: TextView
     private lateinit var valueTextView: TextView
     private lateinit var iconImageView: ImageView
+    private lateinit var valueLinearLayout: LinearLayout
 
     var title: String? = null
         set(value) {
@@ -35,7 +37,7 @@ class TransactionInfoItemView : ConstraintLayout {
 
     var showValueBackground: Boolean = false
         set(value) {
-            valueTextView.background = if (value) ContextCompat.getDrawable(App.instance, R.drawable.text_grey_background) else null
+            valueLinearLayout.background = if (value) ContextCompat.getDrawable(App.instance, R.drawable.text_grey_background) else null
             valueTextView.setTextColor(ContextCompat.getColor(App.instance, if (value) R.color.dark else R.color.grey))
             invalidate()
         }
@@ -88,6 +90,7 @@ class TransactionInfoItemView : ConstraintLayout {
         titleTextView = findViewById(R.id.txtTitle)
         valueTextView = findViewById(R.id.txtValue)
         iconImageView = findViewById(R.id.valueLeftIcon)
+        valueLinearLayout = findViewById(R.id.valueWrapper)
 
         titleTextView.text = attrTitle
         valueTextView.text = attrValue

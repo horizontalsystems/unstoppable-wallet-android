@@ -69,8 +69,7 @@
     <string name="unlock_page_enter_your_pin">Type your pin to unlock</string>
 
     <string name="error_unsupported_blockchain">Unsupported currency</string>
-    <string name="tx_info_bottom_sheet_title_received">Received</string>
-    <string name="tx_info_bottom_sheet_title_sent">Sent</string>
+    <string name="tx_info_bottom_sheet_title_completed">Completed</string>
     <string name="tx_info_bottom_sheet_value_when_received">Value when received:</string>
     <string name="tx_info_bottom_sheet_value_when_sent">%s (when sent)</string>
     <string name="tx_info_bottom_sheet_status">Status:</string>
@@ -78,6 +77,7 @@
     <string name="tx_info_bottom_sheet_status_processing">Processing\u2026</string>
     <string name="tx_info_bottom_sheet_status_pending">Pending</string>
     <string name="tx_info_bottom_sheet_from">From:</string>
+    <string name="tx_info_bottom_sheet_to">To:</string>
     <string name="tx_info_bottom_sheet_reference">Reference:</string>
     <string name="tx_info_bottom_sheet_fee">Fee:</string>
     <string name="tx_info_bottom_sheet_exchange_rate">Exchange Rate:</string>
