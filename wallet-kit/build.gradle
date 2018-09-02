@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 27
@@ -30,6 +31,8 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.0'
 
     // For cryptocurrency
     implementation 'org.bouncycastle:bcprov-jdk16:1.45'

@@ -2,9 +2,8 @@ package bitcoin.wallet.kit.models
 
 import bitcoin.walllet.kit.io.BitcoinInput
 import bitcoin.walllet.kit.io.BitcoinOutput
-import bitcoin.walllet.kit.serializer.HexSerializer
 import bitcoin.walllet.kit.utils.BytesUtils
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import io.realm.RealmObject
 import java.io.IOException
 
 /**
@@ -18,12 +17,12 @@ import java.io.IOException
  *  Variable    TxInScript          Script
  *  4 bytes     TxInSeqNumber       Input sequence number (irrelevant unless transaction LockTime is non-zero)
  */
-class TxIn @Throws(IOException::class) constructor(input: BitcoinInput) {
+open class TxIn : RealmObject {
 
-    var previousOutput = OutPoint(input)
+    var previousOutput: OutPoint? = null
 
-    @JsonSerialize(using = HexSerializer::class)
-    var sigScript: ByteArray
+    // @JsonSerialize(using = HexSerializer::class)
+    var sigScript: ByteArray = byteArrayOf()
 
     /**
      * uint32, Transaction version as defined by the sender. Intended for
@@ -33,9 +32,13 @@ class TxIn @Throws(IOException::class) constructor(input: BitcoinInput) {
     var sequence: Long = 0
 
     val isCoinbase: Boolean
-        get() = (previousOutput.hash != null && BytesUtils.isZeros(previousOutput.hash))
+        get() = (previousOutput?.hash != null && BytesUtils.isZeros(previousOutput?.hash))
 
-    init {
+    constructor()
+
+    @Throws(IOException::class)
+    constructor(input: BitcoinInput) {
+        this.previousOutput = OutPoint(input)
         val sigScriptLength = input.readVarInt()
         sigScript = input.readBytes(sigScriptLength.toInt())
         sequence = input.readUnsignedInt()
@@ -43,7 +46,7 @@ class TxIn @Throws(IOException::class) constructor(input: BitcoinInput) {
 
     fun toByteArray(): ByteArray {
         return BitcoinOutput()
-                .write(previousOutput.toByteArray())
+                .write(previousOutput?.toByteArray())
                 .writeVarInt(sigScript.size.toLong())
                 .write(sigScript)
                 .writeUnsignedInt(sequence)

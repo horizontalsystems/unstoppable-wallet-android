@@ -2,8 +2,7 @@ package bitcoin.wallet.kit.models
 
 import bitcoin.walllet.kit.io.BitcoinInput
 import bitcoin.walllet.kit.io.BitcoinOutput
-import bitcoin.walllet.kit.serializer.HashSerializer
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import io.realm.RealmObject
 import java.io.IOException
 
 /**
@@ -11,14 +10,21 @@ import java.io.IOException
  * It consists of the hash for the transaction containing the output
  * and the index of the output within the transaction.
  */
-class OutPoint @Throws(IOException::class) constructor(input: BitcoinInput) {
+open class OutPoint : RealmObject {
 
     // 32-bytes, the hash of the referenced transaction.
-    @JsonSerialize(using = HashSerializer::class)
-    var hash: ByteArray = input.readBytes(32)
+    // @JsonSerialize(using = HashSerializer::class)
+    var hash: ByteArray = byteArrayOf()
 
     // Uint32, the index of the specific output in the transaction. The first output is 0, etc.
-    var index: Long = input.readUnsignedInt()
+    var index: Long = 0
+
+    constructor()
+
+    @Throws(IOException::class) constructor(input: BitcoinInput) {
+        this.hash = input.readBytes(32)
+        this.index = input.readUnsignedInt()
+    }
 
     fun toByteArray(): ByteArray {
         return BitcoinOutput()
