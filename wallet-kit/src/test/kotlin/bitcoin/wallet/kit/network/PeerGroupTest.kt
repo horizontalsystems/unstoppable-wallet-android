@@ -23,12 +23,13 @@ class PeerGroupTest {
     private lateinit var peerGroupListener: PeerGroup.Listener
     private val peerIp = "8.8.8.8"
     private val peerIp2 = "5.5.5.5"
+    private val network = MainNet()
 
     @Before
     fun setup() {
         peerGroupListener = mock(PeerGroup.Listener::class.java)
         peerManager = mock(PeerManager::class.java)
-        peerGroup = PeerGroup(peerManager, 2)
+        peerGroup = PeerGroup(peerManager, network, 2)
         peerGroup.listener = peerGroupListener
         peer = mock(Peer::class.java)
         peer2 = mock(Peer::class.java)

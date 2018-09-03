@@ -20,8 +20,6 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.Provider;
 
-import bitcoin.walllet.kit.constant.BitcoinConstants;
-
 public class Secp256k1Utils {
 
     public static final Provider BC = new BouncyCastleProvider();
@@ -75,11 +73,17 @@ public class Secp256k1Utils {
         return ECPARAMS.getG().multiply(privateKey).getEncoded();
     }
 
-    public static byte[] toPublicKey(BigInteger[] pubKeys) {
-        byte[] xs = bigIntegerToBytes(pubKeys[0], 32);
-        byte[] ys = bigIntegerToBytes(pubKeys[1], 32);
-        return BytesUtils.concat(BitcoinConstants.PUBLIC_KEY_PREFIX_ARRAY, xs, ys);
-    }
+    /**
+     * Public key prefix: 0x04.
+     */
+//    private static final byte PUBLIC_KEY_PREFIX = 0x04;
+//    private static final byte[] PUBLIC_KEY_PREFIX_ARRAY = {PUBLIC_KEY_PREFIX};
+//
+//    public static byte[] toPublicKey(BigInteger[] pubKeys) {
+//        byte[] xs = bigIntegerToBytes(pubKeys[0], 32);
+//        byte[] ys = bigIntegerToBytes(pubKeys[1], 32);
+//        return BytesUtils.concat(PUBLIC_KEY_PREFIX_ARRAY, xs, ys);
+//    }
 
     static byte[] bigIntegerToBytes(BigInteger bi, int length) {
         byte[] data = bi.toByteArray();
@@ -122,47 +126,53 @@ public class Secp256k1Utils {
         return curve;
     }
 
-    public static String uncompressedPublicKeyToAddress(byte[] uncompressed) {
-        if (uncompressed.length != 65) {
-            throw new IllegalArgumentException(
-                    "bad length of uncompressed bytes: expect 65 but actual " + uncompressed.length);
-        }
-        byte[] hash160 = HashUtils.ripeMd160(HashUtils.sha256(uncompressed));
-        return _hash160PublicKeyToAddress(hash160);
-    }
+//    public static String uncompressedPublicKeyToAddress(byte[] uncompressed) {
+//        if (uncompressed.length != 65) {
+//            throw new IllegalArgumentException(
+//                    "bad length of uncompressed bytes: expect 65 but actual " + uncompressed.length);
+//        }
+//        byte[] hash160 = HashUtils.ripeMd160(HashUtils.sha256(uncompressed));
+//        return _hash160PublicKeyToAddress(hash160);
+//    }
+//
+//    public static String compressedPublicKeyToAddress(byte[] compressed) {
+//        if (compressed.length != 33) {
+//            throw new IllegalArgumentException(
+//                    "bad length of compressed bytes: expect 33 but actual " + compressed.length);
+//        }
+//        byte[] hash160 = HashUtils.ripeMd160(HashUtils.sha256(compressed));
+//        return _hash160PublicKeyToAddress(hash160);
+//    }
+//
+//    public static String hash160PublicKeyToAddress(byte[] hash160) {
+//        if (hash160.length != 20) {
+//            throw new IllegalArgumentException("bad length of hash160 bytes: expect 20 but actual " + hash160.length);
+//        }
+//        return _hash160PublicKeyToAddress(hash160);
+//    }
 
-    public static String compressedPublicKeyToAddress(byte[] compressed) {
-        if (compressed.length != 33) {
-            throw new IllegalArgumentException(
-                    "bad length of compressed bytes: expect 33 but actual " + compressed.length);
-        }
-        byte[] hash160 = HashUtils.ripeMd160(HashUtils.sha256(compressed));
-        return _hash160PublicKeyToAddress(hash160);
-    }
-
-    public static String hash160PublicKeyToAddress(byte[] hash160) {
-        if (hash160.length != 20) {
-            throw new IllegalArgumentException("bad length of hash160 bytes: expect 20 but actual " + hash160.length);
-        }
-        return _hash160PublicKeyToAddress(hash160);
-    }
-
-    private static String _hash160PublicKeyToAddress(byte[] hash160) {
-        byte[] hashWithNetworkId = BytesUtils.concat(BitcoinConstants.NETWORK_ID_ARRAY, hash160);
-        byte[] checksum = HashUtils.doubleSha256(hashWithNetworkId);
-        byte[] address = BytesUtils.concat(hashWithNetworkId, Arrays.copyOfRange(checksum, 0, 4));
-        return Base58Utils.encode(address);
-    }
-
-    public static byte[] publicKeyAddressToBytes(String address) {
-        byte[] data = Base58Utils.decodeChecked(address);
-        if (data.length != 21) {
-            throw new IllegalArgumentException("bad length of decoded bytes: expect 21 but actual " + data.length);
-        }
-        if (data[0] != BitcoinConstants.NETWORK_ID) {
-            throw new IllegalArgumentException("Leading byte is not 0x00.");
-        }
-        return Arrays.copyOfRange(data, 1, data.length);
-    }
+    /**
+     * Network ID: 0x00 = main network.
+     */
+//    private static final byte NETWORK_ID = 0x00;
+//    private static final byte[] NETWORK_ID_ARRAY = {NETWORK_ID};
+//
+//    private static String _hash160PublicKeyToAddress(byte[] hash160) {
+//        byte[] hashWithNetworkId = BytesUtils.concat(NETWORK_ID_ARRAY, hash160);
+//        byte[] checksum = HashUtils.doubleSha256(hashWithNetworkId);
+//        byte[] address = BytesUtils.concat(hashWithNetworkId, Arrays.copyOfRange(checksum, 0, 4));
+//        return Base58Utils.encode(address);
+//    }
+//
+//    public static byte[] publicKeyAddressToBytes(String address) {
+//        byte[] data = Base58Utils.decodeChecked(address);
+//        if (data.length != 21) {
+//            throw new IllegalArgumentException("bad length of decoded bytes: expect 21 but actual " + data.length);
+//        }
+//        if (data[0] != NETWORK_ID) {
+//            throw new IllegalArgumentException("Leading byte is not 0x00.");
+//        }
+//        return Arrays.copyOfRange(data, 1, data.length);
+//    }
 
 }

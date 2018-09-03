@@ -9,7 +9,7 @@ import bitcoin.wallet.kit.models.Transaction
 import org.slf4j.LoggerFactory
 import java.lang.Exception
 
-class Peer(val host: String, private val listener: Listener) : PeerInteraction, PeerConnection.Listener {
+class Peer(val host: String, private val network: NetworkParameters, private val listener: Listener) : PeerInteraction, PeerConnection.Listener {
 
     private val log = LoggerFactory.getLogger(Peer::class.java)
 
@@ -24,7 +24,7 @@ class Peer(val host: String, private val listener: Listener) : PeerInteraction, 
 
     var isFree = true
 
-    private val peerConnection = PeerConnection(host, this)
+    private val peerConnection = PeerConnection(host, network, this)
     private var requestedMerkleBlocks: MutableMap<ByteArray, MerkleBlock?> = mutableMapOf()
     private var relayedTransactions: MutableMap<ByteArray, Transaction> = mutableMapOf()
 
@@ -42,7 +42,7 @@ class Peer(val host: String, private val listener: Listener) : PeerInteraction, 
     }
 
     override fun requestHeaders(headerHashes: Array<ByteArray>, switchPeer: Boolean) {
-        peerConnection.sendMessage(GetHeadersMessage(headerHashes))
+        peerConnection.sendMessage(GetHeadersMessage(headerHashes, network))
     }
 
     override fun requestMerkleBlocks(headerHashes: Array<ByteArray>) {
@@ -130,9 +130,9 @@ class Peer(val host: String, private val listener: Listener) : PeerInteraction, 
         var reason = ""
         if (message.lastBlock <= 0) {
             reason = "Peer last block is not greater than 0."
-        } else if (!message.hasBlockChain()) {
+        } else if (!message.hasBlockChain(network)) {
             reason = "Peer does not have a copy of the block chain."
-        } else if (!message.supportsBloomFilter()) {
+        } else if (!message.supportsBloomFilter(network)) {
             reason = "Peer does not support Bloom Filter."
         }
         return reason

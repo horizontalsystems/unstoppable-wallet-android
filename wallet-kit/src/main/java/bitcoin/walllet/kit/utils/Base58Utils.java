@@ -3,11 +3,14 @@ package bitcoin.walllet.kit.utils;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-import bitcoin.walllet.kit.constant.BitcoinConstants;
-
 public class Base58Utils {
 
-    static final char[] ALPHABET = BitcoinConstants.BASE58_CHARS.toCharArray();
+    /**
+     * Legal base58 characters.
+     */
+    private static final String BASE58_CHARS = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+
+    static final char[] ALPHABET = BASE58_CHARS.toCharArray();
     static final char ENCODED_ZERO = ALPHABET[0];
     static final int[] INDEXES = new int[128];
 

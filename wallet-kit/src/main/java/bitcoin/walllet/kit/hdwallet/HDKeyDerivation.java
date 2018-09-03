@@ -21,6 +21,7 @@ import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
+import bitcoin.wallet.kit.network.NetworkParameters;
 import bitcoin.walllet.kit.exceptions.HDDerivationException;
 
 /**
@@ -32,10 +33,11 @@ public class HDKeyDerivation {
      * Generate a root key from the given seed.  The seed must be at least 128 bits.
      *
      * @param   seed                    HD seed
+     * @param   networkParams           Network parameters
      * @return                          Root key
      * @throws  HDDerivationException   Generated master key is invalid
      */
-    public static HDKey createRootKey(byte[] seed) throws HDDerivationException {
+    public static HDKey createRootKey(byte[] seed, NetworkParameters networkParams) {
         if (seed.length < 16)
             throw new IllegalArgumentException("Seed must be at least 128 bits");
         //
@@ -54,7 +56,7 @@ public class HDKeyDerivation {
             throw new HDDerivationException("Generated master private key is zero");
         if (privKey.compareTo(ECKey.ecParams.getN()) >= 0)
             throw new HDDerivationException("Generated master private key is not less than N");
-        return new HDKey(privKey, ir, null, 0, false);
+        return new HDKey(privKey, ir, null, 0, false, networkParams);
     }
 
     /**
@@ -134,7 +136,7 @@ public class HDKeyDerivation {
         BigInteger ki = parent.getPrivKey().add(ilInt).mod(ECKey.ecParams.getN());
         if (ki.signum() == 0)
             throw new HDDerivationException("Derived private key is zero");
-        return new HDKey(ki, ir, parent, childNumber, hardened);
+        return new HDKey(ki, ir, parent, childNumber, hardened, parent.networkParameters);
     }
 
     /**
@@ -168,7 +170,7 @@ public class HDKeyDerivation {
         ECPoint Ki = ECKey.pubKeyPointFromPrivKey(ilInt).add(pubKeyPoint);
         if (Ki.equals(ECKey.ecParams.getCurve().getInfinity()))
             throw new HDDerivationException("Derived public key equals infinity");
-        return new HDKey(Ki.getEncoded(true), ir, parent, childNumber, false);
+        return new HDKey(Ki.getEncoded(true), ir, parent, childNumber, false, parent.networkParameters);
     }
 
 }

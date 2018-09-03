@@ -10,27 +10,18 @@ object PeerDiscover {
 
     private val log = LoggerFactory.getLogger(PeerDiscover::class.java)
 
-    // https://en.bitcoin.it/wiki/Satoshi_Client_Node_Discovery#DNS_Addresses
-    private val DNS_SEEDS = arrayOf(
-            "bitseed.xf2.org",
-            "dnsseed.bluematt.me",
-            "seed.bitcoin.sipa.be",
-            "dnsseed.bitcoin.dashjr.org",
-            "seed.bitcoinstats.com"
-    )
-
     /**
      * Lookup bitcoin peers by DNS seed.
      *
      * @return InetAddress[] contains 1~N peers.
      * @throws BitcoinException If lookup failed.
      */
-    fun lookup(): Array<String> {
+    fun lookup(dnsList: Array<String>): Array<String> {
         log.info("Lookup peers from DNS seed...")
 
         val ips: MutableList<String> = ArrayList()
 
-        DNS_SEEDS.forEach { host ->
+        dnsList.forEach { host ->
             try {
                 val addresses = InetAddress.getAllByName(host)
                 for (address in addresses) {

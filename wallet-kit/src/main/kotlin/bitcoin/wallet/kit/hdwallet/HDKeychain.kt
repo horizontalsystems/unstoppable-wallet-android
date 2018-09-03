@@ -1,11 +1,12 @@
 package bitcoin.wallet.kit.hdwallet
 
+import bitcoin.wallet.kit.network.NetworkParameters
 import bitcoin.walllet.kit.hdwallet.HDKey
 import bitcoin.walllet.kit.hdwallet.HDKeyDerivation
 
-class HDKeychain(seed: ByteArray) {
+class HDKeychain(seed: ByteArray, networkParams: NetworkParameters) {
 
-    private var privateKey: HDKey = HDKeyDerivation.createRootKey(seed)
+    private var privateKey: HDKey = HDKeyDerivation.createRootKey(seed, networkParams)
 
     /// Parses the BIP32 path and derives the chain of keychains accordingly.
     /// Path syntax: (m?/)?([0-9]+'?(/[0-9]+'?)*)?

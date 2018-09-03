@@ -1,6 +1,6 @@
 package bitcoin.wallet.kit.models
 
-import bitcoin.walllet.kit.constant.BitcoinConstants
+import bitcoin.wallet.kit.network.NetworkParameters
 import bitcoin.walllet.kit.io.BitcoinInput
 import bitcoin.walllet.kit.io.BitcoinOutput
 import bitcoin.walllet.kit.serializer.IPv6Serializer
@@ -49,11 +49,11 @@ class NetworkAddress {
         port = input.readUnsignedShort()
     }
 
-    constructor(addr: InetAddress) {
+    constructor(addr: InetAddress, networkParameters: NetworkParameters) {
         time = System.currentTimeMillis() / 1000
         services = 1
         address = NetworkUtils.getIPv6(addr)
-        port = BitcoinConstants.PORT
+        port = networkParameters.port
     }
 
     fun toByteArray(excludeTime: Boolean): ByteArray {

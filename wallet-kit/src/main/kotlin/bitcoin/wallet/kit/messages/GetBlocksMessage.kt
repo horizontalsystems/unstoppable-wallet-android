@@ -1,6 +1,5 @@
 package bitcoin.wallet.kit.messages
 
-import bitcoin.walllet.kit.constant.BitcoinConstants
 import bitcoin.walllet.kit.io.BitcoinInput
 import bitcoin.walllet.kit.io.BitcoinOutput
 import bitcoin.walllet.kit.utils.HashUtils
@@ -23,9 +22,9 @@ class GetBlocksMessage : Message {
     private lateinit var hashes: Array<ByteArray>   // byte[32]
     private lateinit var hashStop: ByteArray        // hash of the last desired block header; set to zero to get as many blocks as possible (2000)
 
-    constructor(firstHash: ByteArray, hashStop: ByteArray) : super("getblocks") {
-        version = BitcoinConstants.PROTOCOL_VERSION
+    constructor(firstHash: ByteArray, hashStop: ByteArray, version: Int) : super("getblocks") {
         hashes = arrayOf(firstHash)
+        this.version = version
         this.hashStop = hashStop
     }
 

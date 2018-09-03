@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import bitcoin.walllet.kit.constant.BitcoinConstants;
+import bitcoin.wallet.kit.network.NetworkParameters;
 import bitcoin.walllet.kit.utils.Base58Utils;
 
 /**
@@ -64,6 +64,8 @@ public class HDKey extends ECKey {
      */
     private final int parentFingerprint;
 
+    final NetworkParameters networkParameters;
+
     /**
      * Create a new HD key from a private key
      *
@@ -73,7 +75,7 @@ public class HDKey extends ECKey {
      * @param childNumber Child number (first child is 0)
      * @param isHardened  TRUE if the child is hardened
      */
-    public HDKey(BigInteger privKey, byte[] chainCode, HDKey parent, int childNumber, boolean isHardened) {
+    public HDKey(BigInteger privKey, byte[] chainCode, HDKey parent, int childNumber, boolean isHardened, NetworkParameters networkParameters) {
         super(privKey, true);
         if (getPrivKeyBytes().length > 33)
             throw new IllegalArgumentException("Private key is longer than 33 bytes");
@@ -87,6 +89,7 @@ public class HDKey extends ECKey {
         this.childNumber = childNumber;
         this.depth = (parent != null ? parent.getDepth() + 1 : 0);
         this.parentFingerprint = (parent != null ? parent.getFingerprint() : 0);
+        this.networkParameters = networkParameters;
     }
 
     /**
@@ -99,7 +102,7 @@ public class HDKey extends ECKey {
      * @param childNumber Child number (first child is 0)
      * @param isHardened  TRUE if the child is hardened
      */
-    public HDKey(byte[] pubKey, byte[] chainCode, HDKey parent, int childNumber, boolean isHardened) {
+    public HDKey(byte[] pubKey, byte[] chainCode, HDKey parent, int childNumber, boolean isHardened, NetworkParameters networkParameters) {
         super(pubKey);
         if (pubKey.length != 33)
             throw new IllegalArgumentException("Public key is not compressed");
@@ -111,6 +114,7 @@ public class HDKey extends ECKey {
         this.childNumber = childNumber;
         this.depth = (parent != null ? parent.getDepth() + 1 : 0);
         this.parentFingerprint = (parent != null ? parent.getFingerprint() : 0);
+        this.networkParameters = networkParameters;
     }
 
     /**
@@ -202,7 +206,7 @@ public class HDKey extends ECKey {
         if (depth > 255)
             throw new IllegalStateException("Key depth greater than 255");
         ByteBuffer serBuffer = ByteBuffer.allocate(78);
-        serBuffer.putInt(pubKey ? BitcoinConstants.HD_PUBLIC_KEY_PREFIX : BitcoinConstants.HD_PRIVATE_KEY_PREFIX);
+        serBuffer.putInt(pubKey ? networkParameters.getBip32HeaderPub() : networkParameters.getBip32HeaderPriv());
         serBuffer.put((byte) getDepth());
         serBuffer.putInt(getParentFingerprint());
         serBuffer.putInt(isHardened() ? (getChildNumber() | HARDENED_FLAG) : getChildNumber());
