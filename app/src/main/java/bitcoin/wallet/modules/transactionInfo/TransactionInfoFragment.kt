@@ -7,17 +7,14 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentActivity
-import android.support.v4.content.ContextCompat
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.ImageView
 import android.widget.TextView
 import bitcoin.wallet.R
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem
 import bitcoin.wallet.viewHelpers.DateHelper
-import bitcoin.wallet.viewHelpers.LayoutHelper
 import bitcoin.wallet.viewHelpers.NumberFormatHelper
 import bitcoin.wallet.viewHelpers.TextHelper
 
@@ -47,55 +44,47 @@ class TransactionInfoFragment : DialogFragment() {
         mDialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
         mDialog?.window?.setGravity(Gravity.BOTTOM)
 
-        rootView.findViewById<View>(R.id.detailsBtn)?.setOnClickListener { viewModel.delegate.onDetailsClick() }
         rootView.findViewById<View>(R.id.txtClose)?.setOnClickListener { viewModel.delegate.onCloseClick() }
 
         viewModel.transactionLiveData.observe(this, Observer { txRecord ->
             if (txRecord != null) {
 
-                val titleText = getString(if (txRecord.incoming) R.string.tx_info_bottom_sheet_title_received else R.string.tx_info_bottom_sheet_title_sent)
-
-                rootView.findViewById<TextView>(R.id.txtTitle)?.text = titleText  + " " + txRecord.amount.coin.code
-                context?.let {
-                    val coinDrawable = ContextCompat.getDrawable(it, LayoutHelper.getCoinDrawableResource(txRecord.amount.coin.code))
-                    rootView.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
-                }
-
                 rootView.findViewById<TextView>(R.id.txtAmount)?.apply {
                     val sign = if (txRecord.incoming) "+" else "-"
-                    text = "$sign ${NumberFormatHelper.cryptoAmountFormat.format(Math.abs(txRecord.amount.value))}"
+                    text = "$sign ${NumberFormatHelper.cryptoAmountFormat.format(Math.abs(txRecord.amount.value))} ${txRecord.amount.coin.code}"
                     setTextColor(resources.getColor(if (txRecord.incoming) R.color.green_crypto else R.color.yellow_crypto, null))
                 }
 
                 rootView.findViewById<TextView>(R.id.txDate)?.text = if (txRecord.status == TransactionRecordViewItem.Status.SUCCESS) {
-                    DateHelper.getFullDateWithTime(txRecord.date)
+                    DateHelper.getFullDateWithShortMonth(txRecord.date)
                 } else {
                     getString(R.string.tx_info_bottom_sheet_status_processing)
                 }
 
                 val getStatusText = when {
                     txRecord.status == TransactionRecordViewItem.Status.PENDING -> R.string.tx_info_bottom_sheet_status_processing
-                    txRecord.incoming -> R.string.tx_info_bottom_sheet_title_received
-                    else -> R.string.tx_info_bottom_sheet_title_sent
+                    else -> R.string.tx_info_bottom_sheet_title_completed
                 }
 
                 rootView.findViewById<TransactionInfoItemView>(R.id.itemStatus)?.apply {
                     value = getString(getStatusText)
-                    valueIcon = if (txRecord.status == TransactionRecordViewItem.Status.SUCCESS) R.drawable.checkmark else R.drawable.pending
-                }
-
-                rootView.findViewById<TransactionInfoItemView>(R.id.itemTransactionId)?.apply{
-                    value = TextHelper.randomHashGenerator()//todo txRecord.hash
                     showValueBackground = true
+                    valueIcon = if (txRecord.status == TransactionRecordViewItem.Status.SUCCESS) R.drawable.checkmark_green else R.drawable.pending
                 }
 
-                rootView.findViewById<TransactionInfoItemView>(R.id.valueWhenReceived)?.apply{
-                    value = "\$${NumberFormatHelper.fiatAmountFormat.format(txRecord.valueInBaseCurrency)}"
+                rootView.findViewById<TextView>(R.id.transactionId)?.apply{
+                    text = TextHelper.randomHashGenerator()//todo txRecord.hash
                 }
 
-                rootView.findViewById<TransactionInfoItemView>(R.id.itemFrom)?.apply{
+                rootView.findViewById<TextView>(R.id.fiatValue)?.apply{
+                    text = "~\$${NumberFormatHelper.fiatAmountFormat.format(txRecord.valueInBaseCurrency)}"
+                }
+
+                rootView.findViewById<TransactionInfoItemView>(R.id.itemFromTo)?.apply{
+                    title = getString(if (txRecord.incoming) R.string.tx_info_bottom_sheet_from else R.string.tx_info_bottom_sheet_to)
                     value = TextHelper.randomHashGenerator()//todo txRecord.from
                     showValueBackground = true
+                    valueIcon = R.drawable.round_person_18px
                 }
 
             }
