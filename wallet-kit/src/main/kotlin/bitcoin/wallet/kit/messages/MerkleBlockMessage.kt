@@ -2,6 +2,7 @@ package bitcoin.wallet.kit.messages
 
 import bitcoin.wallet.kit.models.MerkleBlock
 import bitcoin.walllet.kit.io.BitcoinInput
+import bitcoin.walllet.kit.utils.HashUtils
 import java.io.ByteArrayInputStream
 
 /**
@@ -26,10 +27,10 @@ class MerkleBlockMessage() : Message("merkleblock") {
     }
 
     override fun getPayload(): ByteArray {
-        return merkleBlock.toByteArray()
+        return byteArrayOf()
     }
 
     override fun toString(): String {
-        TODO("not implemented")
+        return "MerkleBlockMessage(blockHash=${HashUtils.toHexStringAsLittleEndian(merkleBlock.blockHash)}, hashesSize=${merkleBlock.hashes.size})"
     }
 }

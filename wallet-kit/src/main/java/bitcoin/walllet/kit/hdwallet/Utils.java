@@ -105,6 +105,17 @@ public class Utils {
     }
 
     /**
+     * Checks if the specified bit is set
+     *
+     * @param       data            Byte array to check
+     * @param       index           Bit position
+     * @return      TRUE if the bit is set
+     */
+    public static boolean checkBitLE(byte[] data, int index) {
+        return (data[index>>>3] & bitMask[7&index]) != 0;
+    }
+
+    /**
      * Sets the specified bit
      * @param       data            Byte array
      * @param       index           Bit position
@@ -112,4 +123,29 @@ public class Utils {
     public static void setBitLE(byte[] data, int index) {
         data[index >>> 3] |= bitMask[7 & index];
     }
+
+    /**
+     * Calculate SHA256(SHA256(byte range 1 + byte range 2)).
+     *
+     * @param       input1          First input byte array
+     * @param       offset1         Starting position in the first array
+     * @param       length1         Number of bytes to process in the first array
+     * @param       input2          Second input byte array
+     * @param       offset2         Starting position in the second array
+     * @param       length2         Number of bytes to process in the second array
+     * @return                      The SHA-256 digest
+     */
+    public static byte[] doubleDigestTwoBuffers(byte[]input1, int offset1, int length1,
+                                                byte[]input2, int offset2, int length2) {
+        byte[] bytes;
+        synchronized (digest) {
+            digest.reset();
+            digest.update(input1, offset1, length1);
+            digest.update(input2, offset2, length2);
+            byte[]first = digest.digest();
+            bytes = digest.digest(first);
+        }
+        return bytes;
+    }
+
 }
