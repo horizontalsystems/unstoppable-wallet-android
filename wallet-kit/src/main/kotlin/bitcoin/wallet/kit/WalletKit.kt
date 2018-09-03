@@ -1,16 +1,21 @@
 package bitcoin.wallet.kit
 
-import bitcoin.wallet.kit.blocks.BlockSyncer
+import android.content.Context
 import bitcoin.wallet.kit.crypto.BloomFilter
 import bitcoin.wallet.kit.hdwallet.HDWallet
 import bitcoin.wallet.kit.hdwallet.Mnemonic
 import bitcoin.wallet.kit.hdwallet.PublicKey
-import bitcoin.wallet.kit.headers.HeaderSyncer
 import bitcoin.wallet.kit.managers.Syncer
 import bitcoin.wallet.kit.network.MainNet
 import bitcoin.wallet.kit.network.NetworkParameters
 import bitcoin.wallet.kit.network.PeerGroup
 import bitcoin.wallet.kit.network.PeerManager
+import io.realm.Realm
+import io.realm.RealmConfiguration
+import io.realm.annotations.RealmModule
+
+@RealmModule(library = true, allClasses = true)
+class WalletKitModule
 
 class Wallet(network: NetworkParameters) {
     private val mnemonic = Mnemonic()
@@ -49,16 +54,24 @@ class WalletKit {
 
         peerGroup = PeerGroup(peerManager, network, 1)
         peerGroup.setBloomFilter(filters)
-        peerGroup.listener = Syncer(
-                peerGroup,
-                HeaderSyncer(peerGroup),
-                BlockSyncer(peerGroup)
-        )
+        peerGroup.listener = Syncer(peerGroup)
         peerGroup.start()
 
     }
-}
 
-fun main(args: Array<String>) {
-    WalletKit()
+    companion object {
+        fun init(context: Context) {
+            Realm.init(context)
+
+            val config = RealmConfiguration.Builder()
+                    .name("kit")
+                    .deleteRealmIfMigrationNeeded()
+                    .modules(WalletKitModule())
+                    .build()
+
+            Realm.setDefaultConfiguration(config)
+
+            WalletKit()
+        }
+    }
 }

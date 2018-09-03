@@ -5,10 +5,10 @@ import bitcoin.walllet.kit.exceptions.BitcoinException
 import bitcoin.walllet.kit.io.BitcoinInput
 import bitcoin.walllet.kit.io.BitcoinOutput
 import bitcoin.walllet.kit.utils.HashUtils
-import org.slf4j.LoggerFactory
 import java.io.IOException
 import java.nio.charset.StandardCharsets
 import java.util.*
+import java.util.logging.Logger
 
 abstract class Message(cmd: String) {
 
@@ -37,7 +37,7 @@ abstract class Message(cmd: String) {
 
     object Builder {
 
-        private val log = LoggerFactory.getLogger(Builder::class.java)
+        private val logger = Logger.getLogger("Builder")
         private val msgMap = initMessages()
 
         private fun initMessages(): Map<String, Class<*>> {
@@ -84,7 +84,7 @@ abstract class Message(cmd: String) {
                 throw BitcoinException("Checksum failed.")
             }
 
-            log.info("MSG: $command payload ($payloadLength)")
+            logger.info("MSG: $command payload ($payloadLength)")
             // build msg:
             val msgClass = msgMap[command] ?: return UnknownMessage(command, payload) as T
             try {

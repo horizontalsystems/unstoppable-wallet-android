@@ -1,8 +1,9 @@
 package bitcoin.wallet.kit.network
 
 import bitcoin.walllet.kit.utils.JsonUtils
-import org.slf4j.LoggerFactory
 import java.io.*
+import java.util.logging.Level
+import java.util.logging.Logger
 
 class PeerManager(val network: NetworkParameters, private val cached: File? = null) {
 
@@ -24,7 +25,7 @@ class PeerManager(val network: NetworkParameters, private val cached: File? = nu
         override fun hashCode() = ip.hashCode()
     }
 
-    private val log = LoggerFactory.getLogger(PeerManager::class.java)
+    private val logger = Logger.getLogger("PeerManager")
     private val peerAddresses: MutableList<PeerAddress> = ArrayList()
 
     init {
@@ -38,7 +39,7 @@ class PeerManager(val network: NetworkParameters, private val cached: File? = nu
                     try {
                         addPeers(PeerDiscover.lookup(network.dnsSeeds))
                     } catch (e: Exception) {
-                        log.warn("Could not discover peerAddresses.", e)
+                        logger.log(Level.WARNING, "Could not discover peerAddresses.", e)
                     }
 
                 }
@@ -56,7 +57,7 @@ class PeerManager(val network: NetworkParameters, private val cached: File? = nu
      */
     @Synchronized
     fun getPeerIp(): String? {
-        log.info("Try get an unused peer from " + peerAddresses.size + " peerAddresses...")
+        logger.info("Try get an unused peer from " + peerAddresses.size + " peerAddresses...")
         peerAddresses.sortWith(Comparator { p1, p2 ->
             if (p1.score > p2.score) -1 else 1
         })
@@ -107,13 +108,13 @@ class PeerManager(val network: NetworkParameters, private val cached: File? = nu
 
     @Synchronized
     private fun addPeers(ps: Array<PeerAddress>) {
-        log.info("Add discovered " + ps.size + " peerAddresses...")
+        logger.info("Add discovered " + ps.size + " peerAddresses...")
         for (p in ps) {
             if (!peerAddresses.contains(p)) {
                 peerAddresses.add(p)
             }
         }
-        log.info("Total peerAddresses: " + peerAddresses.size)
+        logger.info("Total peerAddresses: " + peerAddresses.size)
         storePeers()
     }
 
@@ -130,7 +131,7 @@ class PeerManager(val network: NetworkParameters, private val cached: File? = nu
                     return JsonUtils.fromJson(Array<PeerAddress>::class.java, input)
                 }
             } catch (e: Exception) {
-                log.warn("Load cached peerAddresses from cached file failed: " + cached.absolutePath)
+                logger.warning("Load cached peerAddresses from cached file failed: " + cached.absolutePath)
             }
 
         }
@@ -147,7 +148,7 @@ class PeerManager(val network: NetworkParameters, private val cached: File? = nu
                     writer.write(JsonUtils.toJson(peerArray))
                 }
             } catch (e: Exception) {
-                log.warn("Write peerAddresses to cached file failed: " + cached.absolutePath, e)
+                logger.log(Level.WARNING, "Write peerAddresses to cached file failed: " + cached.absolutePath, e)
             }
 
         }

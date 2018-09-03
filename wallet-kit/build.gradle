@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 27
@@ -24,6 +25,7 @@ android {
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
     }
 }
 
@@ -31,15 +33,13 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.0'
+
     // For cryptocurrency
     implementation 'org.bouncycastle:bcprov-jdk16:1.45'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.9.6'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.6'
     implementation 'com.madgag.spongycastle:core:1.58.0.0'
-
-    // Simple Logging Facade for Java
-    implementation 'org.slf4j:slf4j-api:1.7.25'
-    implementation 'org.slf4j:slf4j-log4j12:1.7.25'
 
     // Test helpers
     testImplementation 'junit:junit:4.12'

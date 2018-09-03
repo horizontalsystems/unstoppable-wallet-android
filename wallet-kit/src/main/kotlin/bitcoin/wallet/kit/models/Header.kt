@@ -2,10 +2,9 @@ package bitcoin.wallet.kit.models
 
 import bitcoin.walllet.kit.io.BitcoinInput
 import bitcoin.walllet.kit.io.BitcoinOutput
-import bitcoin.walllet.kit.serializer.HashSerializer
-import bitcoin.walllet.kit.serializer.TimestampSerializer
 import bitcoin.walllet.kit.utils.HashUtils
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import io.realm.RealmObject
+import io.realm.annotations.Ignore
 import java.io.IOException
 
 /**
@@ -20,21 +19,21 @@ import java.io.IOException
  *   4 bytes    Bits            The target difficulty
  *   4 bytes    Nonce           The nonce used to generate the required hash
  */
-class Header @Throws(IOException::class) constructor(input: BitcoinInput) {
+open class Header : RealmObject {
 
     // Int32, block version information (note, this is signed)
     var version: Int = 0
 
     // The hash value of the previous block this particular block references
-    @JsonSerialize(using = HashSerializer::class)
-    var prevHash: ByteArray
+    // @JsonSerialize(using = HashSerializer::class)
+    var prevHash: ByteArray = byteArrayOf()
 
     // The reference to a Merkle tree collection which is a hash of all transactions related to this block
-    @JsonSerialize(using = HashSerializer::class)
-    var merkleHash: ByteArray
+    // @JsonSerialize(using = HashSerializer::class)
+    var merkleHash: ByteArray = byteArrayOf()
 
     // Uint32, A timestamp recording when this block was created (Will overflow in 2106)
-    @JsonSerialize(using = TimestampSerializer::class)
+    // @JsonSerialize(using = TimestampSerializer::class)
     var timestamp: Long = 0
 
     // Uint32, The calculated difficulty target being used for this block
@@ -43,17 +42,21 @@ class Header @Throws(IOException::class) constructor(input: BitcoinInput) {
     // Uint32, The nonce used to generate this block to allow variations of the header and compute different hashes
     var nonce: Long = 0
 
-    init {
+    @delegate:Ignore
+    val hash: ByteArray by lazy {
+        HashUtils.doubleSha256(toByteArray())
+    }
+
+    constructor()
+
+    @Throws(IOException::class)
+    constructor(input: BitcoinInput) {
         version = input.readInt()
         prevHash = input.readBytes(32)
         merkleHash = input.readBytes(32)
         timestamp = input.readUnsignedInt()
         bits = input.readUnsignedInt()
         nonce = input.readUnsignedInt()
-    }
-
-    val hash: ByteArray by lazy {
-        HashUtils.doubleSha256(toByteArray())
     }
 
     fun toByteArray(): ByteArray {

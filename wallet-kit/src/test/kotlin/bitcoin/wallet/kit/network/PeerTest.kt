@@ -1,5 +1,6 @@
 package bitcoin.wallet.kit.network
 
+import android.content.Context
 import bitcoin.wallet.kit.TestHelper
 import bitcoin.wallet.kit.messages.*
 import bitcoin.wallet.kit.models.Header
@@ -11,17 +12,21 @@ import com.nhaarman.mockito_kotlin.argumentCaptor
 import com.nhaarman.mockito_kotlin.reset
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
+import io.realm.Realm
+import io.realm.RealmConfiguration
+import io.realm.internal.RealmCore
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import org.powermock.api.mockito.PowerMockito
 import org.powermock.core.classloader.annotations.PrepareForTest
 import org.powermock.modules.junit4.PowerMockRunner
 
 @RunWith(PowerMockRunner::class)
-@PrepareForTest(Peer::class)
+@PrepareForTest(Peer::class, Realm::class, RealmConfiguration::class, RealmCore::class)
 
 class PeerTest {
 
@@ -52,6 +57,13 @@ class PeerTest {
                 .thenReturn(peerConnection)
 
         peer = Peer("host", network, listener)
+
+        // Realm initialize
+        PowerMockito.mockStatic(Realm::class.java)
+        PowerMockito.mockStatic(RealmConfiguration::class.java)
+        PowerMockito.mockStatic(RealmCore::class.java)
+
+        RealmCore.loadLibrary(Mockito.any(Context::class.java))
     }
 
     // when

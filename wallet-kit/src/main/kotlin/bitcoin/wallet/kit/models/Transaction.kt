@@ -3,6 +3,9 @@ package bitcoin.wallet.kit.models
 import bitcoin.walllet.kit.io.BitcoinInput
 import bitcoin.walllet.kit.io.BitcoinOutput
 import bitcoin.walllet.kit.utils.HashUtils
+import io.realm.RealmList
+import io.realm.RealmObject
+import io.realm.annotations.Ignore
 import java.io.IOException
 
 /**
@@ -17,7 +20,7 @@ import java.io.IOException
  *  Variable    TxOuts          Outputs
  *  4 bytes     LockTime        Transaction lock time
  */
-class Transaction @Throws(IOException::class) constructor(input: BitcoinInput) {
+open class Transaction() : RealmObject() {
 
     /**
      * int32_t, transaction data format version (signed)
@@ -27,12 +30,12 @@ class Transaction @Throws(IOException::class) constructor(input: BitcoinInput) {
     /**
      * a list of 1 or more transaction inputs or sources for coins
      */
-    var txIns: Array<TxIn>
+    var txIns = RealmList<TxIn>()
 
     /**
      * a list of 1 or more transaction outputs or destinations for coins
      */
-    var txOuts: Array<TxOut>
+    var txOuts = RealmList<TxOut>()
 
     /**
      * uint32_t, the block number or timestamp at which this transaction is
@@ -53,20 +56,25 @@ class Transaction @Throws(IOException::class) constructor(input: BitcoinInput) {
     /**
      * Get transaction hash (actually calculate the hash of transaction data).
      */
+    @delegate:Ignore
     val txHash: ByteArray by lazy {
         HashUtils.doubleSha256(toByteArray())
     }
 
-    init {
+    var block: Block? = null
+
+    @Throws(IOException::class)
+    constructor(input: BitcoinInput) : this() {
         version = input.readInt()
+
         val txInCount = input.readVarInt() // do not store count
-        txIns = Array(txInCount.toInt()) {
-            TxIn(input)
+        for (i in 0..txInCount.toInt()) {
+            txIns.add(TxIn(input))
         }
 
         val txOutCount = input.readVarInt() // do not store count
-        txOuts = Array(txOutCount.toInt()) {
-            TxOut(input)
+        for (i in 0..txOutCount.toInt()) {
+            txOuts.add(TxOut(input))
         }
 
         lockTime = input.readUnsignedInt()
@@ -76,11 +84,11 @@ class Transaction @Throws(IOException::class) constructor(input: BitcoinInput) {
         val buffer = BitcoinOutput()
         buffer.writeInt(version).writeVarInt(txIns.size.toLong())
         for (i in txIns.indices) {
-            buffer.write(txIns[i].toByteArray())
+            buffer.write(txIns[i]?.toByteArray())
         }
         buffer.writeVarInt(txOuts.size.toLong())
         for (i in txOuts.indices) {
-            buffer.write(txOuts[i].toByteArray())
+            buffer.write(txOuts[i]?.toByteArray())
         }
         buffer.writeUnsignedInt(lockTime)
         return buffer.toByteArray()

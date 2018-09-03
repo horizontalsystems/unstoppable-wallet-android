@@ -6,12 +6,12 @@ import bitcoin.wallet.kit.models.Header
 import bitcoin.wallet.kit.models.InventoryItem
 import bitcoin.wallet.kit.models.MerkleBlock
 import bitcoin.wallet.kit.models.Transaction
-import org.slf4j.LoggerFactory
 import java.lang.Exception
+import java.util.logging.Logger
 
 class Peer(val host: String, private val network: NetworkParameters, private val listener: Listener) : PeerInteraction, PeerConnection.Listener {
 
-    private val log = LoggerFactory.getLogger(Peer::class.java)
+    private val logger = Logger.getLogger("Peer")
 
     interface Listener {
         fun connected(peer: Peer)
@@ -64,11 +64,11 @@ class Peer(val host: String, private val network: NetworkParameters, private val
             is VersionMessage -> {
                 val reason = reasonToClosePeer(message)
                 if (reason.isEmpty()) {
-                    log.info("SENDING VerAckMessage")
+                    logger.info("SENDING VerAckMessage")
                     peerConnection.sendMessage(VerAckMessage())
                 } else {
                     //close with reason
-                    log.info("Closing Peer with reason: $reason")
+                    logger.info("Closing Peer with reason: $reason")
                     close()
                 }
             }
