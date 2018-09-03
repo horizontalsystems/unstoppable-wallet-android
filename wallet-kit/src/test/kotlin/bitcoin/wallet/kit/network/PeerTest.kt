@@ -116,7 +116,7 @@ class PeerTest {
 
         whenever(successMerkleBlockMessage.merkleBlock).thenReturn(successMerkleBlock)
         whenever(successMerkleBlock.blockHash).thenReturn(successMerkleBlockHash)
-        whenever(successMerkleBlock.associatedTransactionHashes).thenReturn(arrayOf())
+        whenever(successMerkleBlock.associatedTransactionHashes).thenReturn(mutableListOf())
 
         peer.requestMerkleBlocks(headerHashes)
         peer.onMessage(successMerkleBlockMessage)
@@ -137,7 +137,7 @@ class PeerTest {
 
         whenever(merkleBlockMessage.merkleBlock).thenReturn(merkleBlock)
         whenever(merkleBlock.blockHash).thenReturn(byteArrayOf(1, 2))
-        whenever(merkleBlock.associatedTransactionHashes).thenReturn(arrayOf())
+        whenever(merkleBlock.associatedTransactionHashes).thenReturn(mutableListOf())
 
         peer.onMessage(merkleBlockMessage)
 
@@ -161,7 +161,7 @@ class PeerTest {
         val merkleBlockMessage = mock(MerkleBlockMessage::class.java)
 
         whenever(merkleBlockMessage.merkleBlock).thenReturn(merkleBlock)
-        whenever(merkleBlock.associatedTransactionHashes).thenReturn(arrayOf(txHash))
+        whenever(merkleBlock.associatedTransactionHashes).thenReturn(mutableListOf(txHash))
 
         peer.onMessage(merkleBlockMessage)
 
@@ -198,7 +198,7 @@ class PeerTest {
 
         whenever(merkleBlockMessage.merkleBlock).thenReturn(merkleBlock)
         whenever(merkleBlock.blockHash).thenReturn(merkleBlockHash)
-        whenever(merkleBlock.associatedTransactionHashes).thenReturn(arrayOf())
+        whenever(merkleBlock.associatedTransactionHashes).thenReturn(mutableListOf())
 
         peer.onMessage(merkleBlockMessage)
 
