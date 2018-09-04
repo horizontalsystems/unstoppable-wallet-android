@@ -1,5 +1,6 @@
 package bitcoin.wallet.modules.wallet
 
+import bitcoin.wallet.core.AdapterManager
 import bitcoin.wallet.core.IDatabaseManager
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.DollarCurrency
@@ -8,7 +9,7 @@ import bitcoin.wallet.entities.WalletBalanceItem
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.entities.coins.bitcoinCash.BitcoinCash
 
-class WalletInteractor(private val databaseManager: IDatabaseManager) : WalletModule.IInteractor {
+class WalletInteractor(private val adapterManager: AdapterManager, private val databaseManager: IDatabaseManager) : WalletModule.IInteractor {
 
     var delegate: WalletModule.IInteractorDelegate? = null
 
@@ -18,23 +19,28 @@ class WalletInteractor(private val databaseManager: IDatabaseManager) : WalletMo
     private var blockchaingSyncing = mapOf<String, Boolean>()
 
     override fun notifyWalletBalances() {
-        databaseManager.getBalances().subscribe {
-            balances = it.array.associateBy({ it.code }, { it.value }).toMutableMap()
-
+        for (adapter in adapterManager.adapters) {
+            balances[adapter.coin.code] = adapter.balance
             refresh()
         }
+
+//        databaseManager.getBalances().subscribe {
+//            balances = it.array.associateBy({ it.code }, { it.value }).toMutableMap()
+//
+//            refresh()
+//        }
 
         databaseManager.getExchangeRates().subscribe {
             exchangeRates = it.array.associateBy({ it.code }, { it.value }).toMutableMap()
 
             refresh()
         }
-
-        databaseManager.getBlockchainInfos().subscribe {
-            blockchaingSyncing = it.array.map { it.coinCode to it.syncing }.toMap()
-
-            refresh()
-        }
+//
+//        databaseManager.getBlockchainInfos().subscribe {
+//            blockchaingSyncing = it.array.map { it.coinCode to it.syncing }.toMap()
+//
+//            refresh()
+//        }
     }
 
     private fun refresh() {
@@ -43,6 +49,8 @@ class WalletInteractor(private val databaseManager: IDatabaseManager) : WalletMo
         balances.forEach {
             val code = it.key
             val total = it.value
+
+            println("total: $total")
 
             val coin = when (code) {
                 "BTC" -> Bitcoin()

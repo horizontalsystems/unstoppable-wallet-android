@@ -11,7 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import bitcoin.wallet.R
 import bitcoin.wallet.core.setOnSingleClickListener
-import bitcoin.wallet.entities.*
+import bitcoin.wallet.entities.WalletBalanceViewItem
 import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.modules.receive.ReceiveModule
 import bitcoin.wallet.modules.send.SendModule
@@ -43,16 +43,16 @@ class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener 
 
                 //todo begin - for testing purposes, remove after testing
                 val tmpItems = it.toMutableList()
-                tmpItems.add(WalletBalanceViewItem(CoinValue(Ethereum(), 0.0), CurrencyValue(DollarCurrency(), 750.0), CurrencyValue(DollarCurrency(), 750.0), false))
-                tmpItems.add(WalletBalanceViewItem(CoinValue(EOS(), 0.0), CurrencyValue(DollarCurrency(), 7050.0), CurrencyValue(DollarCurrency(), 7050.0), false))
-                tmpItems.add(WalletBalanceViewItem(CoinValue(Zcash(), 0.0), CurrencyValue(DollarCurrency(), 750.0), CurrencyValue(DollarCurrency(), 750.0), false))
-                tmpItems.add(WalletBalanceViewItem(CoinValue(Xrp(), 0.0), CurrencyValue(DollarCurrency(), 750.0), CurrencyValue(DollarCurrency(), 750.0), false))
-                tmpItems.add(WalletBalanceViewItem(CoinValue(Cardano(), 0.0), CurrencyValue(DollarCurrency(), 50.0), CurrencyValue(DollarCurrency(), 50.0), false))
-                tmpItems.add(WalletBalanceViewItem(CoinValue(Dash(), 0.0), CurrencyValue(DollarCurrency(), 230.0), CurrencyValue(DollarCurrency(), 230.0), false))
-                tmpItems.add(WalletBalanceViewItem(CoinValue(Monero(), 0.0), CurrencyValue(DollarCurrency(), 71.0), CurrencyValue(DollarCurrency(), 71.0), false))
-                tmpItems.add(WalletBalanceViewItem(CoinValue(Litecoin(), 0.0), CurrencyValue(DollarCurrency(), 1200.0), CurrencyValue(DollarCurrency(), 1200.0), false))
-                tmpItems.add(WalletBalanceViewItem(CoinValue(Stellar(), 0.0), CurrencyValue(DollarCurrency(), 324.0), CurrencyValue(DollarCurrency(), 324.0), false))
-                tmpItems.add(WalletBalanceViewItem(CoinValue(Tether(), 0.0), CurrencyValue(DollarCurrency(), 33.0), CurrencyValue(DollarCurrency(), 33.0), false))
+//                tmpItems.add(WalletBalanceViewItem(CoinValue(Ethereum(), 0.0), CurrencyValue(DollarCurrency(), 750.0), CurrencyValue(DollarCurrency(), 750.0), false))
+//                tmpItems.add(WalletBalanceViewItem(CoinValue(EOS(), 0.0), CurrencyValue(DollarCurrency(), 7050.0), CurrencyValue(DollarCurrency(), 7050.0), false))
+//                tmpItems.add(WalletBalanceViewItem(CoinValue(Zcash(), 0.0), CurrencyValue(DollarCurrency(), 750.0), CurrencyValue(DollarCurrency(), 750.0), false))
+//                tmpItems.add(WalletBalanceViewItem(CoinValue(Xrp(), 0.0), CurrencyValue(DollarCurrency(), 750.0), CurrencyValue(DollarCurrency(), 750.0), false))
+//                tmpItems.add(WalletBalanceViewItem(CoinValue(Cardano(), 0.0), CurrencyValue(DollarCurrency(), 50.0), CurrencyValue(DollarCurrency(), 50.0), false))
+//                tmpItems.add(WalletBalanceViewItem(CoinValue(Dash(), 0.0), CurrencyValue(DollarCurrency(), 230.0), CurrencyValue(DollarCurrency(), 230.0), false))
+//                tmpItems.add(WalletBalanceViewItem(CoinValue(Monero(), 0.0), CurrencyValue(DollarCurrency(), 71.0), CurrencyValue(DollarCurrency(), 71.0), false))
+//                tmpItems.add(WalletBalanceViewItem(CoinValue(Litecoin(), 0.0), CurrencyValue(DollarCurrency(), 1200.0), CurrencyValue(DollarCurrency(), 1200.0), false))
+//                tmpItems.add(WalletBalanceViewItem(CoinValue(Stellar(), 0.0), CurrencyValue(DollarCurrency(), 324.0), CurrencyValue(DollarCurrency(), 324.0), false))
+//                tmpItems.add(WalletBalanceViewItem(CoinValue(Tether(), 0.0), CurrencyValue(DollarCurrency(), 33.0), CurrencyValue(DollarCurrency(), 33.0), false))
 
                 //todo end
                 coinsAdapter.items = tmpItems//it //todo replace tmpItems with it

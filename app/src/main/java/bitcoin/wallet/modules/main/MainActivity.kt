@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import bitcoin.wallet.R
 import bitcoin.wallet.blockchain.BlockchainManager
+import bitcoin.wallet.core.AdapterManager
 import bitcoin.wallet.core.App
 import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.injections.component.DaggerMainActivityComponent
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Factory.preferencesManager.savedWords?.let { AdapterManager.initAdapters(it) }
 
         DaggerMainActivityComponent
                 .builder()
