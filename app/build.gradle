@@ -103,5 +103,6 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
 
-    implementation project(':wallet-kit')
+    // WalletKit
+    implementation 'com.github.horizontalsystems:WalletKit-Android:dev-SNAPSHOT'
 }
