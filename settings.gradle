@@ -1,1 +1,1 @@
-include ':app', ':wallet-kit'
+include ':app'
