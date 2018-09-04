@@ -7,6 +7,7 @@ import bitcoin.wallet.core.managers.BackgroundManager
 import bitcoin.wallet.injections.component.AppComponent
 import bitcoin.wallet.injections.component.DaggerAppComponent
 import bitcoin.wallet.injections.module.AppModule
+import bitcoin.wallet.kit.WalletKit
 import io.realm.Realm
 import javax.inject.Inject
 
@@ -32,6 +33,9 @@ class App : Application() {
         super.onCreate()
 
         Realm.init(this)
+
+        // Start WalletKit
+        WalletKit.init(this)
 
         appComponent = DaggerAppComponent
                 .builder()
