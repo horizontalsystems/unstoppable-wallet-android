@@ -1,5 +1,6 @@
 package bitcoin.wallet.modules.wallet
 
+import bitcoin.wallet.core.AdapterManager
 import bitcoin.wallet.core.managers.DatabaseManager
 import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.entities.CurrencyValue
@@ -31,8 +32,9 @@ object WalletModule {
 
     fun init(view: WalletViewModel, router: IRouter) {
         val databaseManager = Factory.databaseManager
+        val adapterManager = AdapterManager
 
-        val interactor = WalletInteractor(databaseManager)
+        val interactor = WalletInteractor(adapterManager, databaseManager)
         val presenter = WalletPresenter(interactor, router)
 
         presenter.view = view
