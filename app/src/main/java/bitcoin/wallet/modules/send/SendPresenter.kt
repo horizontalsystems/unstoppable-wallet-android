@@ -8,25 +8,37 @@ import bitcoin.wallet.viewHelpers.NumberFormatHelper
 import java.text.NumberFormat
 import java.text.ParseException
 
-class SendPresenter(private val interactor: SendModule.IInteractor, private val router: SendModule.IRouter, private val coinCode: String) : SendModule.IViewDelegate, SendModule.IInteractorDelegate {
+class SendPresenter(private val interactor: SendModule.IInteractor, private val router: SendModule.IRouter) : SendModule.IViewDelegate, SendModule.IInteractorDelegate {
 
     var view: SendModule.IView? = null
 
     private var enteredAmount: Double = 0.0
-
     private var fiatAmount: Double? = null
     private var cryptoAmount: Double? = null
-
     private var exchangeRate = 0.0
 
     private lateinit var baseCurrencyCode: String
+    lateinit var coinCode: String
 
     override fun onViewDidLoad() {
         baseCurrencyCode = interactor.getBaseCurrency()
-
+        coinCode = interactor.getCoinCode()
         updateAmounts()
 
         interactor.fetchExchangeRate()
+    }
+
+    override fun didFetchExchangeRate(exchangeRate: Double) {
+        this.exchangeRate = exchangeRate
+        refreshAmountHint()
+    }
+
+    override fun didFailToSend(exception: Exception) {
+        view?.showError(getError(exception))
+    }
+
+    override fun didSend() {
+        view?.showSuccess()
     }
 
     override fun onScanClick() {
@@ -36,11 +48,6 @@ class SendPresenter(private val interactor: SendModule.IInteractor, private val 
     override fun onPasteClick() {
         val copiedText = interactor.getCopiedText()
         view?.setAddress(copiedText)
-    }
-
-    override fun didFetchExchangeRate(exchangeRate: Double) {
-        this.exchangeRate = exchangeRate
-        refreshAmountHint()
     }
 
     override fun onAmountEntered(amount: String?) {
@@ -54,23 +61,12 @@ class SendPresenter(private val interactor: SendModule.IInteractor, private val 
         refreshAmountHint()
     }
 
+    override fun onAddressEntered(address: String?) {
+        view?.showAddressWarning(address?.let { !interactor.isValid(it) } ?: false)
+    }
+
     override fun onSendClick(address: String) {
         cryptoAmount?.let { interactor.send(coinCode, address, it) }
-    }
-
-    override fun didFailToSend(exception: Exception) {
-        view?.showError(getError(exception))
-    }
-
-    override fun didSend() {
-        view?.showSuccess()
-    }
-
-    private fun getError(exception: Exception) = when (exception) {
-        is UnsupportedBlockchain -> R.string.error_unsupported_blockchain
-        is InvalidAddress -> R.string.send_bottom_sheet_error_invalid_address
-        is NotEnoughFundsException -> R.string.send_bottom_sheet_error_insufficient_balance
-        else -> R.string.error
     }
 
     private fun updateAmounts() {
@@ -92,11 +88,16 @@ class SendPresenter(private val interactor: SendModule.IInteractor, private val 
     }
 
     private fun updateAmountHintView() {
-        val amount = fiatAmount ?: 0.0
-        val amountStr = formatFiatAmount(amount)
-        val currency = baseCurrencyCode
+        val amountStr = formatFiatAmount(fiatAmount ?: 0.0)
 
-        view?.setAmountHint("$amountStr $currency")
+        view?.setAmountHint("$amountStr $baseCurrencyCode")
+    }
+
+    private fun getError(exception: Exception) = when (exception) {
+        is UnsupportedBlockchain -> R.string.error_unsupported_blockchain
+        is InvalidAddress -> R.string.send_bottom_sheet_error_invalid_address
+        is NotEnoughFundsException -> R.string.send_bottom_sheet_error_insufficient_balance
+        else -> R.string.error
     }
 
     private fun formatCryptoAmount(amount: Double) = NumberFormatHelper.cryptoAmountFormat.format(amount)

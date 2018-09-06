@@ -92,7 +92,7 @@
             >
 
             <android.support.constraint.ConstraintLayout
-                android:id="@+id/addressLayout"
+                android:id="@+id/amountLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -100,56 +100,6 @@
                 android:background="@drawable/border_grey"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                >
-
-                <EditText
-                    android:id="@+id/txtAddress"
-                    style="@style/BottomDialogText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="12dp"
-                    android:background="@android:color/transparent"
-                    android:fontFamily="@font/noto_sans"
-                    android:hint="@string/send_bottom_sheet_hint_address"
-                    android:includeFontPadding="false"
-                    android:inputType="text"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/btnPaste"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
-
-                <Button
-                    android:id="@+id/btnPaste"
-                    style="@style/ButtonSmallGrey_4"
-                    android:layout_width="0dp"
-                    android:layout_height="36dp"
-                    android:layout_marginBottom="6dp"
-                    android:layout_marginEnd="6dp"
-                    android:layout_marginTop="6dp"
-                    android:maxWidth="200dp"
-                    android:minWidth="71dp"
-                    android:text="@string/send_bottom_sheet_paste"
-                    app:layout_constraintBottom_toBottomOf="@+id/txtAddress"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/txtAddress"
-                    />
-            </android.support.constraint.ConstraintLayout>
-
-            <android.support.constraint.ConstraintLayout
-                android:id="@+id/amountLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
-                android:background="@drawable/border_grey"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/addressLayout"
                 >
 
                 <EditText
@@ -199,6 +149,56 @@
                     app:layout_constraintTop_toBottomOf="@+id/separator_line"
                     />
             </android.support.constraint.ConstraintLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/addressLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/border_grey"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/amountLayout"
+                >
+
+                <EditText
+                    android:id="@+id/txtAddress"
+                    style="@style/BottomDialogText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="@font/noto_sans"
+                    android:hint="@string/send_bottom_sheet_hint_address"
+                    android:includeFontPadding="false"
+                    android:inputType="text"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/btnPaste"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    />
+
+                <Button
+                    android:id="@+id/btnPaste"
+                    style="@style/ButtonSmallGrey_4"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginTop="6dp"
+                    android:maxWidth="200dp"
+                    android:minWidth="71dp"
+                    android:text="@string/send_bottom_sheet_paste"
+                    app:layout_constraintBottom_toBottomOf="@+id/txtAddress"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/txtAddress"
+                    />
+            </android.support.constraint.ConstraintLayout>
             
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/moreLayout"
@@ -210,7 +210,7 @@
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/amountLayout"
+                app:layout_constraintTop_toBottomOf="@+id/addressLayout"
                 >
 
                 <TextView

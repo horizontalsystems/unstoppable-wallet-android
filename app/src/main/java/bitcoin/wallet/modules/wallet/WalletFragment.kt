@@ -57,10 +57,10 @@ class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener 
             }
         })
 
-        viewModel.openSendDialog.observe(this, Observer { sendCoin ->
-            sendCoin?.let{ coin ->
+        viewModel.openSendDialog.observe(this, Observer { iAdapter ->
+            iAdapter?.let{ adapter ->
                 activity?.let {
-                    SendModule.start(it, coin)
+                    SendModule.start(it, adapter)
                 }
             }
         })
@@ -74,8 +74,8 @@ class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener 
         recyclerCoins.layoutManager = LinearLayoutManager(context)
     }
 
-    override fun onPayClicked(coin: Coin) {
-        viewModel.onSendClicked(coin)
+    override fun onSendClicked(adapterId: String) {
+        viewModel.onSendClicked(adapterId)
     }
 
     override fun onReceiveClicked(adapterId: String) {
@@ -90,7 +90,7 @@ class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener 
 class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface Listener {
-        fun onPayClicked(coin: Coin)
+        fun onSendClicked(adapterId: String)
         fun onReceiveClicked(adapterId: String)
         fun onItemClick(position: Int)
     }
@@ -110,7 +110,7 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
             is ViewHolderCoin ->
                 if (payloads.isEmpty()) {
                     holder.bind(items[position],
-                            onPayClick = { listener.onPayClicked(items[position].coinValue.coin) },
+                            onSendClick = { listener.onSendClicked(items[position].adapterId) },
                             onReceiveClick = { listener.onReceiveClicked(items[position].adapterId) },
                             onHolderClicked = {
                                 val oldExpandedViewPosition = expandedViewPosition
@@ -135,7 +135,7 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
 
 class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(walletBalanceViewItem: WalletBalanceViewItem, onPayClick: (() -> (Unit))? = null, onReceiveClick: (() -> (Unit))? = null, onHolderClicked: (() -> Unit)? = null, expanded: Boolean) {
+    fun bind(walletBalanceViewItem: WalletBalanceViewItem, onSendClick: (() -> (Unit))? = null, onReceiveClick: (() -> (Unit))? = null, onHolderClicked: (() -> Unit)? = null, expanded: Boolean) {
         val iconDrawable = ContextCompat.getDrawable(containerView.context, LayoutHelper.getCoinDrawableResource(walletBalanceViewItem.coinValue.coin.code))
         coinIcon.setImageDrawable(iconDrawable)
         val numberFormat = NumberFormatHelper.fiatAmountFormat
@@ -153,7 +153,7 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
         }
 
         buttonPay.setOnClickListener {
-            onPayClick?.invoke()
+            onSendClick?.invoke()
         }
 
         buttonReceive.setOnClickListener {

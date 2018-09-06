@@ -20,7 +20,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.*
 import bitcoin.wallet.R
-import bitcoin.wallet.entities.coins.Coin
+import bitcoin.wallet.core.IAdapter
 import bitcoin.wallet.viewHelpers.HudHelper
 import bitcoin.wallet.viewHelpers.LayoutHelper
 import com.google.zxing.integration.android.IntentIntegrator
@@ -46,13 +46,13 @@ class SendFragment : DialogFragment() {
 
     private lateinit var viewModel: SendViewModel
 
-    private lateinit var coin: Coin
+    private lateinit var coinAdapter: IAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProviders.of(this).get(SendViewModel::class.java)
-        viewModel.init(coin.code)
+        viewModel.init(coinAdapter)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -71,12 +71,12 @@ class SendFragment : DialogFragment() {
         }
 
         context?.let {
-            val coinDrawable = ContextCompat.getDrawable(it, LayoutHelper.getCoinDrawableResource(coin.code))
+            val coinDrawable = ContextCompat.getDrawable(it, LayoutHelper.getCoinDrawableResource(coinAdapter.coin.code))
             rootView.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
         }
 
         rootView.findViewById<TextView>(R.id.txtTitle)?.let { txtTitle ->
-            txtTitle.text = getString(R.string.send_bottom_sheet_title, coin.code)
+            txtTitle.text = getString(R.string.send_bottom_sheet_title, coinAdapter.coin.code)
         }
 
         addressTxt = rootView.findViewById(R.id.txtAddress)
@@ -197,6 +197,12 @@ class SendFragment : DialogFragment() {
             Toast.makeText(context, R.string.send_bottom_sheet_success, Toast.LENGTH_LONG).show()
         })
 
+        viewModel.showAddressWarningLiveEvent.observe(this, Observer { showWarning ->
+            showWarning?.let {
+                addressLayout.setBackgroundResource(if (it) R.drawable.border_red else R.drawable.border_grey)
+            }
+        })
+
         return mDialog as Dialog
     }
 
@@ -225,9 +231,9 @@ class SendFragment : DialogFragment() {
     }
 
     companion object {
-        fun show(activity: FragmentActivity, coin: Coin) {
+        fun show(activity: FragmentActivity, adapter: IAdapter) {
             val fragment = SendFragment()
-            fragment.coin = coin
+            fragment.coinAdapter = adapter
             fragment.show(activity.supportFragmentManager, "pay_fragment")
         }
     }

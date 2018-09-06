@@ -1,10 +1,10 @@
 package bitcoin.wallet.modules.wallet
 
+import bitcoin.wallet.core.AdapterManager
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
 import bitcoin.wallet.entities.DollarCurrency
-import bitcoin.wallet.entities.coins.Coin
 import io.reactivex.subjects.BehaviorSubject
 
 class WalletPresenter(private var interactor: WalletModule.IInteractor, private val router: WalletModule.IRouter) : WalletModule.IViewDelegate, WalletModule.IInteractorDelegate {
@@ -20,8 +20,9 @@ class WalletPresenter(private var interactor: WalletModule.IInteractor, private 
         router.openReceiveDialog(adapterId)
     }
 
-    override fun onSendClicked(coin: Coin) {
-        router.openSendDialog(coin)
+    override fun onSendClicked(adapterId: String) {
+        val adapter = AdapterManager.adapters.firstOrNull { it.id == adapterId }
+        adapter?.let { router.openSendDialog(it) }
     }
 
     override fun viewDidLoad() {
