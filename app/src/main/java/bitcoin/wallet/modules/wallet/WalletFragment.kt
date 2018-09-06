@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import bitcoin.wallet.R
 import bitcoin.wallet.core.setOnSingleClickListener
-import bitcoin.wallet.entities.WalletBalanceViewItem
 import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.modules.receive.ReceiveModule
 import bitcoin.wallet.modules.send.SendModule
@@ -40,22 +39,7 @@ class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener 
 
         viewModel.walletBalancesLiveData.observe(this, Observer { coins ->
             coins?.let {
-
-                //todo begin - for testing purposes, remove after testing
-                val tmpItems = it.toMutableList()
-//                tmpItems.add(WalletBalanceViewItem(CoinValue(Ethereum(), 0.0), CurrencyValue(DollarCurrency(), 750.0), CurrencyValue(DollarCurrency(), 750.0), false))
-//                tmpItems.add(WalletBalanceViewItem(CoinValue(EOS(), 0.0), CurrencyValue(DollarCurrency(), 7050.0), CurrencyValue(DollarCurrency(), 7050.0), false))
-//                tmpItems.add(WalletBalanceViewItem(CoinValue(Zcash(), 0.0), CurrencyValue(DollarCurrency(), 750.0), CurrencyValue(DollarCurrency(), 750.0), false))
-//                tmpItems.add(WalletBalanceViewItem(CoinValue(Xrp(), 0.0), CurrencyValue(DollarCurrency(), 750.0), CurrencyValue(DollarCurrency(), 750.0), false))
-//                tmpItems.add(WalletBalanceViewItem(CoinValue(Cardano(), 0.0), CurrencyValue(DollarCurrency(), 50.0), CurrencyValue(DollarCurrency(), 50.0), false))
-//                tmpItems.add(WalletBalanceViewItem(CoinValue(Dash(), 0.0), CurrencyValue(DollarCurrency(), 230.0), CurrencyValue(DollarCurrency(), 230.0), false))
-//                tmpItems.add(WalletBalanceViewItem(CoinValue(Monero(), 0.0), CurrencyValue(DollarCurrency(), 71.0), CurrencyValue(DollarCurrency(), 71.0), false))
-//                tmpItems.add(WalletBalanceViewItem(CoinValue(Litecoin(), 0.0), CurrencyValue(DollarCurrency(), 1200.0), CurrencyValue(DollarCurrency(), 1200.0), false))
-//                tmpItems.add(WalletBalanceViewItem(CoinValue(Stellar(), 0.0), CurrencyValue(DollarCurrency(), 324.0), CurrencyValue(DollarCurrency(), 324.0), false))
-//                tmpItems.add(WalletBalanceViewItem(CoinValue(Tether(), 0.0), CurrencyValue(DollarCurrency(), 33.0), CurrencyValue(DollarCurrency(), 33.0), false))
-
-                //todo end
-                coinsAdapter.items = tmpItems//it //todo replace tmpItems with it
+                coinsAdapter.items = it
                 coinsAdapter.notifyDataSetChanged()
             }
         })
@@ -63,6 +47,22 @@ class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener 
         viewModel.totalBalanceLiveData.observe(this, Observer { total ->
             val numberFormat = NumberFormatHelper.fiatAmountFormat
             ballanceText.text = total?.let { "${total.currency.symbol}${numberFormat.format(total.value)}" } ?: ""
+        })
+
+        viewModel.openReceiveDialog.observe(this, Observer { adapterId ->
+            adapterId?.let{ id ->
+                activity?.let {
+                    ReceiveModule.start(it, id)
+                }
+            }
+        })
+
+        viewModel.openSendDialog.observe(this, Observer { sendCoin ->
+            sendCoin?.let{ coin ->
+                activity?.let {
+                    SendModule.start(it, coin)
+                }
+            }
         })
     }
 
@@ -75,15 +75,11 @@ class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener 
     }
 
     override fun onPayClicked(coin: Coin) {
-        activity?.let {
-            SendModule.start(it, coin)
-        }
+        viewModel.onSendClicked(coin)
     }
 
-    override fun onReceiveClicked(coin: Coin) {
-        activity?.let {
-            ReceiveModule.start(it, coin)
-        }
+    override fun onReceiveClicked(adapterId: String) {
+        viewModel.onReceiveClicked(adapterId)
     }
 
     override fun onItemClick(position: Int) {
@@ -95,7 +91,7 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
 
     interface Listener {
         fun onPayClicked(coin: Coin)
-        fun onReceiveClicked(coin: Coin)
+        fun onReceiveClicked(adapterId: String)
         fun onItemClick(position: Int)
     }
 
@@ -115,7 +111,7 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
                 if (payloads.isEmpty()) {
                     holder.bind(items[position],
                             onPayClick = { listener.onPayClicked(items[position].coinValue.coin) },
-                            onReceiveClick = { listener.onReceiveClicked(items[position].coinValue.coin) },
+                            onReceiveClick = { listener.onReceiveClicked(items[position].adapterId) },
                             onHolderClicked = {
                                 val oldExpandedViewPosition = expandedViewPosition
                                 expandedViewPosition = if (expandedViewPosition == position) -1 else position
@@ -151,7 +147,10 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
         textAmount.visibility = if (zeroBalance) View.GONE else View.VISIBLE
         buttonPay.isEnabled = !zeroBalance
         textAmountFiat.isEnabled = !zeroBalance
-        syncProgress.visibility = if (walletBalanceViewItem.syncing) View.VISIBLE else View.GONE
+        //todo convert indeterminate spinner to determinant one
+        walletBalanceViewItem.progress?.subscribe{
+            syncProgress.visibility = if (it == 1.0) View.GONE else View.VISIBLE
+        }
 
         buttonPay.setOnClickListener {
             onPayClick?.invoke()

@@ -1,18 +1,22 @@
 package bitcoin.wallet.modules.receive
 
-import bitcoin.wallet.blockchain.BlockchainManager
+import bitcoin.wallet.core.AdapterManager
 import bitcoin.wallet.core.IClipboardManager
+import bitcoin.wallet.modules.receive.viewitems.AddressItem
 
-class ReceiveInteractor(private var blockchainManager: BlockchainManager, private var clipboardManager: IClipboardManager) : ReceiveModule.IInteractor {
+class ReceiveInteractor(private var adapterManager: AdapterManager, private var adapterId: String?, private var clipboardManager: IClipboardManager) : ReceiveModule.IInteractor {
 
     var delegate: ReceiveModule.IInteractorDelegate? = null
 
-    override fun getReceiveAddress(coinCode: String) {
-        try {
-            val address = blockchainManager.getReceiveAddress(coinCode)
-            delegate?.didReceiveAddress(address)
-        } catch (e: Exception) {
-            delegate?.didFailToReceiveAddress(e)
+    override fun getReceiveAddress() {
+        val adapters = adapterManager.adapters.filter { adapterId == null || it.id == adapterId }
+
+        val addresses = mutableListOf<AddressItem>()
+        adapters.forEach { adapter ->
+            addresses.add(AddressItem(adapterId = adapter.id, address = adapter.receiveAddress, coin = adapter.coin))
+        }
+        if (addresses.isNotEmpty()) {
+            delegate?.didReceiveAddresses(addresses)
         }
     }
 

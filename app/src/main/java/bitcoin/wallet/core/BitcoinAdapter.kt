@@ -1,14 +1,13 @@
 package bitcoin.wallet.core
 
-import android.util.Log
 import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.kit.network.NetworkParameters
 import bitcoin.wallet.kit.network.RegTest
 import bitcoin.wallet.kit.network.TestNet
-import io.realm.Realm
-import io.realm.RealmConfiguration
+import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
 
 class BitcoinAdapter(words: List<String>, network: NetworkParameters) : IAdapter {
 
@@ -16,13 +15,20 @@ class BitcoinAdapter(words: List<String>, network: NetworkParameters) : IAdapter
     var wordsHash: String = words.joinToString(" ")
 
     init {
-        //code related to Realm
-        val realmFileName = "${network.paymentProtocolId}-${Integer.toHexString(wordsHash.hashCode())}.dat"
-//        val walletFile = File(filesDir, realmFileName)
-        val configuration = Realm.getDefaultConfiguration()//RealmConfiguration()
-        walletKit = WalletKit(words, configuration!!, network)
+        walletKit = WalletKit(words, network)
         println("BitcoinAdapter started with words $words")
-        Log.e("BitcoinAdapter", "BitcoinAdapter started with words $words")
+
+        //for test purpose
+//        Handler().postDelayed({
+//            progressSubject.onNext(0.0)
+//
+//        }, (1 * 1000).toLong())
+//
+//        Handler().postDelayed({
+//            updateBalance(2091183337)
+//            progressSubject.onNext(1.0)
+//
+//        }, (10 * 1000).toLong())
     }
 
     override var coin: Coin = when (network) {
@@ -32,11 +38,15 @@ class BitcoinAdapter(words: List<String>, network: NetworkParameters) : IAdapter
     }
 
     override var id: String = "${wordsHash.hashCode()}-${coin.code}"
-    override var balance: Long = 2091183337
+    override var balanceSubject: PublishSubject<Double> = PublishSubject.create()
+    override var balance: Double = 24.0//0.0
+        set(value) {
+            field = value
+            balanceSubject.onNext(field)
+        }
 
-//    private var transactionsNotificationToken: NotificationToken?
+    //    private var transactionsNotificationToken: NotificationToken?
 //    private var unspentOutputsNotificationToken: NotificationToken?
-//    override var balanceSubject: PublishSubject<Double> = PublishSubject.create()
 //    override var latestBlockHeightSubject: PublishSubject<Void> = PublishSubject.create()
 //    override var transactionRecordsSubject: PublishSubject<Void> = PublishSubject.create()
 
@@ -68,15 +78,27 @@ class BitcoinAdapter(words: List<String>, network: NetworkParameters) : IAdapter
         return true
     }
 
+    override var progressSubject: BehaviorSubject<Double> = walletKit.progressSubject
+
     override var receiveAddress: String = walletKit.receiveAddress
 
+    private fun updateBalance() {
+        var satoshiBalance = 0
+
+//        for output in walletKit.unspentOutputsRealmResults {
+//            satoshiBalance += output.value
+//        }
+
+        balance = satoshiBalance / 100000000.0
+    }
 }
 
 //Stub class from WalletKit
-class WalletKit(words: List<String>, realmConfiguration: RealmConfiguration, network: NetworkParameters) {
+class WalletKit(words: List<String>, network: NetworkParameters) {
     val latestBlockHeight = 0
     val transactionRecords: List<TransactionRecord> = listOf() //todo get transactions from database
-    val receiveAddress = ""
+    val receiveAddress = "addressSomeTesting32String"
+    val progressSubject: BehaviorSubject<Double> = BehaviorSubject.create()
 
     fun showRealmInfo() {
 

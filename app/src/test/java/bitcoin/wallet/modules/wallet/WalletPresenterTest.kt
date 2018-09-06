@@ -2,6 +2,7 @@ package bitcoin.wallet.modules.wallet
 
 import bitcoin.wallet.entities.*
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
+import io.reactivex.subjects.BehaviorSubject
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
@@ -28,20 +29,33 @@ class WalletPresenterTest {
     }
 
     @Test
-    fun didFetchWalletBalances() {
-        val walletBalances: List<WalletBalanceItem> = listOf(
-                WalletBalanceItem(CoinValue(Bitcoin(), 0.5), 5000.0, DollarCurrency(), true),
-                WalletBalanceItem(CoinValue(Ethereum(), 1.0), 1000.0, DollarCurrency(), false)
-        )
+    fun updateView() {
 
-        val expectedViewItems = listOf(
-                WalletBalanceViewItem(CoinValue(Bitcoin(), 0.5), CurrencyValue(DollarCurrency(), 5000.0), CurrencyValue(DollarCurrency(), 2500.0), true),
-                WalletBalanceViewItem(CoinValue(Ethereum(), 1.0), CurrencyValue(DollarCurrency(), 1000.0), CurrencyValue(DollarCurrency(), 1000.0), false)
-        )
+        val coinValues = mutableMapOf<String, CoinValue>()
+        val rates = mutableMapOf<String, Double>()
+        val progresses = mutableMapOf<String, BehaviorSubject<Double>>()
+        val currency: Currency = DollarCurrency()
+        val coin1 = Bitcoin()
+        val coin2 = Ethereum()
+        val bhvSubject: BehaviorSubject<Double> = BehaviorSubject.create()
 
         val expectedTotalBalance = CurrencyValue(DollarCurrency(), 3500.0)
 
-        presenter.didFetchWalletBalances(walletBalances)
+        val adapterId1 = "id1"
+        val adapterId2 = "id2"
+        coinValues[adapterId1] = CoinValue(coin1, 0.5)
+        coinValues[adapterId2] = CoinValue(coin2, 1.0)
+        progresses[adapterId1] = bhvSubject
+        progresses[adapterId2] = bhvSubject
+        rates["BTC"] = 5000.0
+        rates["ETH"] = 1000.0
+
+        presenter.didInitialFetch(coinValues, rates, progresses, currency)
+
+        val expectedViewItems = listOf(
+                WalletBalanceViewItem(adapterId1, CoinValue(coin1, 0.5), CurrencyValue(DollarCurrency(), 5000.0), CurrencyValue(DollarCurrency(), 2500.0), bhvSubject),
+                WalletBalanceViewItem(adapterId2, CoinValue(coin2, 1.0), CurrencyValue(DollarCurrency(), 1000.0), CurrencyValue(DollarCurrency(), 1000.0), bhvSubject)
+        )
 
         verify(view).showWalletBalances(expectedViewItems)
         verify(view).showTotalBalance(expectedTotalBalance)

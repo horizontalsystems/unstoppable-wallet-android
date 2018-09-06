@@ -1,9 +1,11 @@
 package bitcoin.wallet.core
 
 import bitcoin.wallet.kit.network.MainNet
+import io.reactivex.subjects.PublishSubject
 
 object AdapterManager {
     var adapters: MutableList<IAdapter> = mutableListOf()
+    var subject: PublishSubject<Any> = PublishSubject.create<Any>()
 
     fun initAdapters(words: List<String>) {
         adapters.add(BitcoinAdapter(words, network = MainNet()))

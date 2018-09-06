@@ -1,31 +1,31 @@
 package bitcoin.wallet.modules.receive
 
 import android.support.v4.app.FragmentActivity
-import bitcoin.wallet.core.managers.Factory
-import bitcoin.wallet.entities.coins.Coin
+import bitcoin.wallet.core.AdapterManager
+import bitcoin.wallet.modules.receive.viewitems.AddressItem
 import bitcoin.wallet.viewHelpers.TextHelper
 
 object ReceiveModule {
 
     interface IView {
-        fun showAddress(coinAddress: String)
+        fun showAddresses(addresses: List<AddressItem>)
         fun showError(error: Int)
         fun showCopied()
     }
 
     interface IViewDelegate {
         fun viewDidLoad()
-        fun onCopyClick()
-        fun onShareClick()
+        fun onCopyClick(index: Int)
+        fun onShareClick(index: Int)
     }
 
     interface IInteractor {
-        fun getReceiveAddress(coinCode: String)
+        fun getReceiveAddress()
         fun copyToClipboard(coinAddress: String)
     }
 
     interface IInteractorDelegate {
-        fun didReceiveAddress(coinAddress: String)
+        fun didReceiveAddresses(addresses: List<AddressItem>)
         fun didFailToReceiveAddress(exception: Exception)
         fun didCopyToClipboard()
     }
@@ -34,17 +34,18 @@ object ReceiveModule {
         fun openShareView(coinAddress: String)
     }
 
-    fun init(view: ReceiveViewModel, router: IRouter, coinCode: String) {
-        val interactor = ReceiveInteractor(Factory.blockchainManager, TextHelper)
-        val presenter = ReceivePresenter(interactor, router, coinCode)
+    fun init(view: ReceiveViewModel, router: IRouter, adapterId: String?) {
+        val adapterManager = AdapterManager
+        val interactor = ReceiveInteractor(adapterManager, adapterId, TextHelper)
+        val presenter = ReceivePresenter(interactor, router)
 
         view.delegate = presenter
         presenter.view = view
         interactor.delegate = presenter
     }
 
-    fun start(activity: FragmentActivity, coin: Coin) {
-        ReceiveFragment.show(activity, coin)
+    fun start(activity: FragmentActivity, adapterId: String) {
+        ReceiveFragment.show(activity, adapterId)
     }
 
 }

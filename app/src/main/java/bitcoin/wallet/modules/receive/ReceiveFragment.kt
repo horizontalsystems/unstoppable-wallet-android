@@ -16,7 +16,6 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import bitcoin.wallet.R
-import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.viewHelpers.HudHelper
 import bitcoin.wallet.viewHelpers.LayoutHelper
 import bitcoin.wallet.viewHelpers.TextHelper
@@ -27,13 +26,15 @@ class ReceiveFragment : DialogFragment() {
 
     private lateinit var viewModel: ReceiveViewModel
 
-    private lateinit var coin: Coin
+    private lateinit var adapterId: String
+
+    private var itemIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProviders.of(this).get(ReceiveViewModel::class.java)
-        viewModel.init(coin.code)
+        viewModel.init(adapterId)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -46,22 +47,24 @@ class ReceiveFragment : DialogFragment() {
         mDialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
         mDialog?.window?.setGravity(Gravity.BOTTOM)
 
-        context?.let {
-            val coinDrawable = ContextCompat.getDrawable(it, LayoutHelper.getCoinDrawableResource(coin.code))
-            rootView.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
-        }
+        rootView.findViewById<Button>(R.id.btnShare)?.setOnClickListener { viewModel.delegate.onShareClick(itemIndex) }
 
-        val coinText = "${coin.name} (${coin.code})"
-        rootView.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.receive_bottom_sheet_title, coinText)
+        rootView.findViewById<TextView>(R.id.txtCopy)?.setOnClickListener { viewModel.delegate.onCopyClick(itemIndex) }
 
-        rootView.findViewById<Button>(R.id.btnShare)?.setOnClickListener { viewModel.delegate.onShareClick() }
+        viewModel.showAddressesLiveData.observe(this, Observer { addresses ->
+            addresses?.apply {
+                if (addresses.isNotEmpty()) {
+                    val address = addresses[itemIndex]
+                    context?.let {ctx ->
+                        val coinDrawable = ContextCompat.getDrawable(ctx, LayoutHelper.getCoinDrawableResource(address.coin.code))
+                        rootView.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
+                    }
+                    val coinText = "${address.coin.name} (${address.coin.code})"
+                    rootView.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.receive_bottom_sheet_title, coinText)
 
-        rootView.findViewById<TextView>(R.id.txtCopy)?.setOnClickListener { viewModel.delegate.onCopyClick() }
-
-        viewModel.showAddressLiveData.observe(this, Observer { address ->
-            address?.apply {
-                rootView.findViewById<TextView>(R.id.txtAddress)?.let { it.text = address }
-                rootView.findViewById<ImageView>(R.id.imgQrCode)?.setImageBitmap(TextHelper.getQrCodeBitmapFromAddress(address))
+                    rootView.findViewById<TextView>(R.id.txtAddress)?.let { it.text = address.address }
+                    rootView.findViewById<ImageView>(R.id.imgQrCode)?.setImageBitmap(TextHelper.getQrCodeBitmapFromAddress(address.address))
+                }
             }
         })
 
@@ -93,9 +96,9 @@ class ReceiveFragment : DialogFragment() {
     }
 
     companion object {
-        fun show(activity: FragmentActivity, coin: Coin) {
+        fun show(activity: FragmentActivity, adapterId: String) {
             val fragment = ReceiveFragment()
-            fragment.coin = coin
+            fragment.adapterId = adapterId
             fragment.show(activity.supportFragmentManager, "receive_fragment")
         }
     }

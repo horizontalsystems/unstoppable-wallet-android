@@ -4,74 +4,46 @@ import bitcoin.wallet.core.AdapterManager
 import bitcoin.wallet.core.IDatabaseManager
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.DollarCurrency
-import bitcoin.wallet.entities.Ethereum
-import bitcoin.wallet.entities.WalletBalanceItem
-import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
-import bitcoin.wallet.entities.coins.bitcoinCash.BitcoinCash
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.subjects.BehaviorSubject
 
 class WalletInteractor(private val adapterManager: AdapterManager, private val databaseManager: IDatabaseManager) : WalletModule.IInteractor {
 
     var delegate: WalletModule.IInteractorDelegate? = null
-
+    private var disposables: CompositeDisposable = CompositeDisposable()
     private var exchangeRates = mutableMapOf<String, Double>()
-    private var balances = mutableMapOf<String, Long>()
-
-    private var blockchaingSyncing = mapOf<String, Boolean>()
 
     override fun notifyWalletBalances() {
-        for (adapter in adapterManager.adapters) {
-            balances[adapter.coin.code] = adapter.balance
-            refresh()
+        adapterManager.subject.subscribe {
+            disposables.clear()
+            initialFetchAndSubscribe()
         }
 
-//        databaseManager.getBalances().subscribe {
-//            balances = it.array.associateBy({ it.code }, { it.value }).toMutableMap()
-//
-//            refresh()
-//        }
-
-        databaseManager.getExchangeRates().subscribe {
-            exchangeRates = it.array.associateBy({ it.code }, { it.value }).toMutableMap()
-
-            refresh()
-        }
-//
-//        databaseManager.getBlockchainInfos().subscribe {
-//            blockchaingSyncing = it.array.map { it.coinCode to it.syncing }.toMap()
-//
-//            refresh()
-//        }
+        initialFetchAndSubscribe()
     }
 
-    private fun refresh() {
-        val walletBalances = mutableListOf<WalletBalanceItem>()
+    private fun initialFetchAndSubscribe() {
+        val coinValues = mutableMapOf<String, CoinValue>()
+        val progresses = mutableMapOf<String, BehaviorSubject<Double>>()
+        val currency = DollarCurrency()
 
-        balances.forEach {
-            val code = it.key
-            val total = it.value
-
-            println("total: $total")
-
-            val coin = when (code) {
-                "BTC" -> Bitcoin()
-                "BCH" -> BitcoinCash()
-                "ETH" -> Ethereum()
-                else -> null
-            }
-
-            if (coin != null) {
-                exchangeRates[code]?.let { rate ->
-                    walletBalances.add(WalletBalanceItem(CoinValue(coin, total / 100000000.0),
-                            rate,
-                            DollarCurrency(),
-                            blockchaingSyncing[code] ?: false))
-                }
-            }
+        adapterManager.adapters.forEach { adapter ->
+            coinValues[adapter.id] = CoinValue(adapter.coin, adapter.balance)
+            progresses[adapter.id] = adapter.progressSubject
         }
 
-        if (walletBalances.isNotEmpty()) {
-            delegate?.didFetchWalletBalances(walletBalances)
+        delegate?.didInitialFetch(coinValues, exchangeRates, progresses, currency)
+
+        adapterManager.adapters.forEach { adapter ->
+            disposables.add(adapter.balanceSubject.subscribe {
+                delegate?.didUpdate(CoinValue(adapter.coin, it), adapterId = adapter.id)
+            })
         }
+
+        disposables.add(databaseManager.getExchangeRates().subscribe {
+            exchangeRates = it.array.associateBy({ it.code }, { it.value }).toMutableMap()
+            delegate?.didUpdate(exchangeRates)
+        })
     }
 
 }
