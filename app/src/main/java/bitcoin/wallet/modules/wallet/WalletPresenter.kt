@@ -1,40 +1,79 @@
 package bitcoin.wallet.modules.wallet
 
+import bitcoin.wallet.entities.CoinValue
+import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
-import bitcoin.wallet.entities.WalletBalanceItem
-import bitcoin.wallet.entities.WalletBalanceViewItem
+import bitcoin.wallet.entities.DollarCurrency
+import bitcoin.wallet.entities.coins.Coin
+import io.reactivex.subjects.BehaviorSubject
 
 class WalletPresenter(private var interactor: WalletModule.IInteractor, private val router: WalletModule.IRouter) : WalletModule.IViewDelegate, WalletModule.IInteractorDelegate {
 
     var view: WalletModule.IView? = null
 
+    private var coinValues = mutableMapOf<String, CoinValue>()
+    private var rates = mutableMapOf<String, Double>()
+    private var progresses = mutableMapOf<String, BehaviorSubject<Double>>()
+    var currency: Currency = DollarCurrency()
+
+    override fun onReceiveClicked(adapterId: String) {
+        router.openReceiveDialog(adapterId)
+    }
+
+    override fun onSendClicked(coin: Coin) {
+        router.openSendDialog(coin)
+    }
+
     override fun viewDidLoad() {
         interactor.notifyWalletBalances()
     }
 
-    override fun didFetchWalletBalances(walletBalances: List<WalletBalanceItem>) {
-        var totalBalance = 0.0
-        val walletBalanceViewItems = mutableListOf<WalletBalanceViewItem>()
+    override fun didInitialFetch(coinValues: MutableMap<String, CoinValue>, rates: MutableMap<String, Double>, progresses: MutableMap<String, BehaviorSubject<Double>>, currency: Currency) {
+        this.coinValues = coinValues
+        this.rates = rates
+        this.progresses = progresses
+        this.currency = currency
 
-        walletBalances.forEach { balance ->
-            totalBalance += balance.coinValue.value * balance.exchangeRate
-            walletBalanceViewItems.add(viewItemForBalance(balance))
-        }
-
-        walletBalances.firstOrNull()?.currency?.let {
-            view?.showTotalBalance(CurrencyValue(it, totalBalance))
-        }
-
-        view?.showWalletBalances(walletBalanceViewItems)
+        updateView()
     }
 
-    private fun viewItemForBalance(walletBalance: WalletBalanceItem): WalletBalanceViewItem {
-        return WalletBalanceViewItem(
-                walletBalance.coinValue,
-                CurrencyValue(walletBalance.currency, walletBalance.exchangeRate),
-                CurrencyValue(walletBalance.currency, walletBalance.coinValue.value * walletBalance.exchangeRate),
-                walletBalance.syncing
-        )
+    override fun didUpdate(coinValue: CoinValue, adapterId: String) {
+        coinValues[adapterId] = coinValue
+
+        updateView()
+    }
+
+    override fun didUpdate(rates: MutableMap<String, Double>) {
+        this.rates = rates
+
+        updateView()
+    }
+
+    private fun updateView() {
+        var totalBalance = 0.0
+        val viewItems = mutableListOf<WalletBalanceViewItem>()
+
+        for (item in coinValues) {
+
+            val adapterId = item.key
+            val coinValue = item.value
+            val rate = rates[coinValue.coin.code] ?: 0.0
+
+            viewItems.add(
+                    WalletBalanceViewItem(
+                            adapterId = adapterId,
+                            coinValue = coinValue,
+                            exchangeValue = CurrencyValue(currency, rate),
+                            currencyValue = CurrencyValue(currency, coinValue.value * rate),
+                            progress = progresses[adapterId]
+                    )
+            )
+
+            totalBalance += coinValue.value * rate
+        }
+
+        view?.showTotalBalance(CurrencyValue(currency, totalBalance))
+        view?.showWalletBalances(viewItems)
     }
 
 }

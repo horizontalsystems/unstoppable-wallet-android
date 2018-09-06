@@ -1,17 +1,18 @@
 package bitcoin.wallet.modules.wallet
 
+import bitcoin.wallet.core.AdapterManager
+import bitcoin.wallet.core.BitcoinAdapter
 import bitcoin.wallet.core.DatabaseChangeset
 import bitcoin.wallet.core.IDatabaseManager
-import bitcoin.wallet.entities.*
+import bitcoin.wallet.entities.CoinValue
+import bitcoin.wallet.entities.ExchangeRate
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
-import bitcoin.wallet.entities.coins.bitcoin.BitcoinUnspentOutput
-import bitcoin.wallet.entities.coins.bitcoinCash.BitcoinCashUnspentOutput
 import bitcoin.wallet.modules.RxBaseTest
 import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.atMost
-import com.nhaarman.mockito_kotlin.never
+import com.nhaarman.mockito_kotlin.atLeast
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
@@ -21,6 +22,13 @@ class WalletInteractorTest {
 
     private val delegate = mock(WalletModule.IInteractorDelegate::class.java)
     private val databaseManager = mock(IDatabaseManager::class.java)
+    private val adapterManager = mock(AdapterManager::class.java)
+    private val bitcoinAdapter = mock(BitcoinAdapter::class.java)
+    private lateinit var interactor: WalletInteractor
+    private var coin = Bitcoin()
+    private var words = listOf("used", "ugly", "meat", "glad", "balance", "divorce", "inner", "artwork", "hire", "invest", "already", "piano")
+    private var wordsHash = words.joinToString(" ")
+    private var adapterId: String = "${wordsHash.hashCode()}-${coin.code}"
 
     private var exchangeRates = DatabaseChangeset(listOf(
             ExchangeRate().apply {
@@ -29,77 +37,62 @@ class WalletInteractorTest {
             }
     ))
 
-    private val blockchainInfosSyncing = listOf(
-            BlockchainInfo().apply {
-                coinCode = "BTC"
-                latestBlockHeight = 130
-                syncing = true
-
-            })
-
-    private val blockchainInfosNotSyncing = listOf(
-            BlockchainInfo().apply {
-                coinCode = "BTC"
-                latestBlockHeight = 135
-                syncing = false
-
-            })
-
-    private lateinit var interactor: WalletInteractor
-
     @Before
     fun before() {
         RxBaseTest.setup()
 
-        interactor = WalletInteractor(databaseManager)
+        interactor = WalletInteractor(adapterManager, databaseManager)
         interactor.delegate = delegate
+
+        adapterManager.adapters = mutableListOf(bitcoinAdapter)
     }
 
     @Test
     fun fetchWalletBalances() {
         whenever(databaseManager.getExchangeRates()).thenReturn(Observable.just(exchangeRates))
-        whenever(databaseManager.getBalances()).thenReturn(Observable.just(DatabaseChangeset(listOf(Balance().apply {
-            code = "BTC"
-            value = 80_000_000
-        }))))
-        whenever(databaseManager.getBlockchainInfos()).thenReturn(Observable.just(DatabaseChangeset(blockchainInfosNotSyncing)))
-
-        val expectedWalletBalances = listOf(
-                WalletBalanceItem(CoinValue(Bitcoin(), 0.8), 10_000.0, DollarCurrency(), false)
-        )
+        whenever(adapterManager.subject).thenReturn(PublishSubject.create<Any>())
 
         interactor.notifyWalletBalances()
 
-        verify(delegate, atMost(2)).didFetchWalletBalances(expectedWalletBalances)
+        verify(delegate).didInitialFetch(any(), any(), any(), any())
     }
 
     @Test
-    fun fetchWalletBalancesWhileSyncing() {
-        whenever(databaseManager.getExchangeRates()).thenReturn(Observable.just(exchangeRates))
-        whenever(databaseManager.getBalances()).thenReturn(Observable.just(DatabaseChangeset(listOf(Balance().apply {
-            code = "BTC"
-            value = 80_000_000
-        }))))
+    fun fetchWalletBalances_balanceUpdated() {
+        val coin = Bitcoin()
+        val newBalanceValue = 3.4
+        val balanceSub: PublishSubject<Double> = PublishSubject.create()
+        val managerSub: PublishSubject<Any> = PublishSubject.create()
 
-        whenever(databaseManager.getBlockchainInfos()).thenReturn(Observable.just(DatabaseChangeset(blockchainInfosSyncing)))
-
-        val expectedWalletBalances = listOf(
-                WalletBalanceItem(CoinValue(Bitcoin(), 0.8), 10_000.0, DollarCurrency(), true)
-        )
-
-        interactor.notifyWalletBalances()
-
-        verify(delegate, atMost(1)).didFetchWalletBalances(expectedWalletBalances)
-    }
-
-    @Test
-    fun fetchWalletBalances_emptyRates() {
         whenever(databaseManager.getExchangeRates()).thenReturn(Observable.just(DatabaseChangeset(listOf())))
-        whenever(databaseManager.getBalances()).thenReturn(Observable.just(DatabaseChangeset(listOf())))
-        whenever(databaseManager.getBlockchainInfos()).thenReturn(Observable.just(DatabaseChangeset(listOf())))
+
+        whenever(adapterManager.subject).thenReturn(managerSub)
+        whenever(adapterManager.adapters).thenReturn(mutableListOf(bitcoinAdapter))
+
+        whenever(bitcoinAdapter.id).thenReturn(adapterId)
+        whenever(bitcoinAdapter.coin).thenReturn(coin)
+        whenever(bitcoinAdapter.balanceSubject).thenReturn(balanceSub)
+        whenever(bitcoinAdapter.balance).thenReturn(0.0)
+
+        interactor.notifyWalletBalances()
+        balanceSub.onNext(newBalanceValue)
+        val expectedCoinValue = CoinValue(Bitcoin(), newBalanceValue)
+
+        verify(delegate).didUpdate(expectedCoinValue, adapterId)
+    }
+
+    @Test
+    fun notifyWalletBalances_adapterManagerSubjectUpdate() {
+        val managerSub: PublishSubject<Any> = PublishSubject.create()
+
+        whenever(adapterManager.subject).thenReturn(managerSub)
+        whenever(databaseManager.getExchangeRates()).thenReturn(Observable.just(exchangeRates))
+
         interactor.notifyWalletBalances()
 
-        verify(delegate, never()).didFetchWalletBalances(any())
+        managerSub.onNext(Any())
+
+        verify(delegate, atLeast(2)).didInitialFetch(any(), any(), any(), any())
     }
 
 }

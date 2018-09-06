@@ -3,9 +3,11 @@ package bitcoin.wallet.modules.wallet
 import bitcoin.wallet.core.AdapterManager
 import bitcoin.wallet.core.managers.DatabaseManager
 import bitcoin.wallet.core.managers.Factory
+import bitcoin.wallet.entities.CoinValue
+import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
-import bitcoin.wallet.entities.WalletBalanceItem
-import bitcoin.wallet.entities.WalletBalanceViewItem
+import bitcoin.wallet.entities.coins.Coin
+import io.reactivex.subjects.BehaviorSubject
 
 object WalletModule {
 
@@ -16,6 +18,8 @@ object WalletModule {
 
     interface IViewDelegate {
         fun viewDidLoad()
+        fun onReceiveClicked(adapterId: String)
+        fun onSendClicked(coin: Coin)
     }
 
     interface IInteractor {
@@ -23,10 +27,15 @@ object WalletModule {
     }
 
     interface IInteractorDelegate {
-        fun didFetchWalletBalances(walletBalances: List<WalletBalanceItem>)
+        fun didInitialFetch(coinValues: MutableMap<String, CoinValue>, rates: MutableMap<String, Double>, progresses: MutableMap<String, BehaviorSubject<Double>>, currency: Currency)
+        fun didUpdate(coinValue: CoinValue, adapterId: String)
+        fun didUpdate(rates: MutableMap<String, Double>)
     }
 
-    interface IRouter
+    interface IRouter {
+        fun openReceiveDialog(adapterId: String)
+        fun openSendDialog(coin: Coin)
+    }
 
     private var databaseManager: DatabaseManager? = null
 

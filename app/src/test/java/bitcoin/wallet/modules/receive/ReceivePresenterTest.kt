@@ -2,6 +2,9 @@ package bitcoin.wallet.modules.receive
 
 import bitcoin.wallet.R
 import bitcoin.wallet.blockchain.UnsupportedBlockchain
+import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
+import bitcoin.wallet.modules.receive.viewitems.AddressItem
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Before
 import org.junit.Test
@@ -13,9 +16,15 @@ class ReceivePresenterTest {
     private val router = Mockito.mock(ReceiveModule.IRouter::class.java)
     private val view = Mockito.mock(ReceiveModule.IView::class.java)
 
-    private val coinCode = "BTC"
+    private var coin = Bitcoin()
+    private var words = listOf("used", "ugly", "meat", "glad", "balance", "divorce", "inner", "artwork", "hire", "invest", "already", "piano")
+    private var wordsHash = words.joinToString(" ")
+    private var adapterId: String = "${wordsHash.hashCode()}-${coin.code}"
+    private val coinAddress = "[coin_address]"
+    private val addressItem = AddressItem(adapterId = adapterId, address = coinAddress, coin = coin)
+    private val addresses = listOf(addressItem)
 
-    private val presenter = ReceivePresenter(interactor, router, coinCode)
+    private val presenter = ReceivePresenter(interactor, router)
 
     @Before
     fun setUp() {
@@ -27,16 +36,14 @@ class ReceivePresenterTest {
 
         presenter.viewDidLoad()
 
-        verify(interactor).getReceiveAddress(coinCode)
+        verify(interactor).getReceiveAddress()
     }
 
     @Test
     fun didReceiveAddress() {
-        val address = "[coin_address]"
+        presenter.didReceiveAddresses(addresses)
 
-        presenter.didReceiveAddress(address)
-
-        verify(view).showAddress(address)
+        verify(view).showAddresses(addresses)
     }
 
     @Test
@@ -59,12 +66,10 @@ class ReceivePresenterTest {
 
     @Test
     fun onCopyClick() {
-        val address = "[coin_address]"
+        presenter.didReceiveAddresses(addresses)
+        presenter.onCopyClick(any())
 
-        presenter.didReceiveAddress(address)
-        presenter.onCopyClick()
-
-        verify(interactor).copyToClipboard(address)
+        verify(interactor).copyToClipboard(addressItem.address)
     }
 
     @Test
@@ -76,12 +81,11 @@ class ReceivePresenterTest {
 
     @Test
     fun onShareClick() {
-        val address = "[coin_address]"
+        presenter.didReceiveAddresses(addresses)
+        val index = 0
+        presenter.onShareClick(index)
 
-        presenter.didReceiveAddress(address)
-        presenter.onShareClick()
-
-        verify(router).openShareView(address)
+        verify(router).openShareView(addresses[index].address)
     }
 
 }

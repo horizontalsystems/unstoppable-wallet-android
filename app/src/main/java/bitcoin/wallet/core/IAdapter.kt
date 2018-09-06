@@ -2,18 +2,20 @@ package bitcoin.wallet.core
 
 import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.entities.coins.Coin
+import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
 
 
 interface IAdapter {
     var id: String
     var coin: Coin
-    var balance: Long
+    var balance: Double
 
-//    var balanceSubject: PublishSubject<Double>
+    var balanceSubject: PublishSubject<Double>
+    var progressSubject: BehaviorSubject<Double>
 //    var latestBlockHeightSubject: PublishSubject<Void>
 //    var transactionRecordsSubject: PublishSubject<Void>
 
-    //    var progressSubject: BehaviorSubject<Double> { get }
 
     var latestBlockHeight: Int
 

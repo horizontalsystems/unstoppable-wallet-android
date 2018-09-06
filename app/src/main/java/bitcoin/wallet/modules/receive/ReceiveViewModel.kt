@@ -3,23 +3,24 @@ package bitcoin.wallet.modules.receive
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import bitcoin.wallet.SingleLiveEvent
+import bitcoin.wallet.modules.receive.viewitems.AddressItem
 
 class ReceiveViewModel : ViewModel(), ReceiveModule.IView, ReceiveModule.IRouter {
 
     lateinit var delegate: ReceiveModule.IViewDelegate
 
-    val showAddressLiveData = MutableLiveData<String>()
+    val showAddressesLiveData = MutableLiveData<List<AddressItem>>()
     val showErrorLiveData = MutableLiveData<Int>()
     val showCopiedLiveEvent = SingleLiveEvent<Unit>()
     val openShareViewLiveEvent = SingleLiveEvent<String>()
 
-    fun init(coinCode: String) {
-        ReceiveModule.init(this, this, coinCode)
+    fun init(adapterId: String) {
+        ReceiveModule.init(this, this, adapterId)
         delegate.viewDidLoad()
     }
 
-    override fun showAddress(coinAddress: String) {
-        showAddressLiveData.value = coinAddress
+    override fun showAddresses(addresses: List<AddressItem>) {
+        showAddressesLiveData.value = addresses
     }
 
     override fun showError(error: Int) {
@@ -30,8 +31,8 @@ class ReceiveViewModel : ViewModel(), ReceiveModule.IView, ReceiveModule.IRouter
         showCopiedLiveEvent.call()
     }
 
-    override fun openShareView(coinAddress: String) {
-        openShareViewLiveEvent.value = coinAddress
+    override fun openShareView(receiveAddress: String) {
+        openShareViewLiveEvent.value = receiveAddress
     }
 
 }

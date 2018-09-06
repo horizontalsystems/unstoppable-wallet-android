@@ -2,19 +2,20 @@ package bitcoin.wallet.modules.receive
 
 import bitcoin.wallet.R
 import bitcoin.wallet.blockchain.UnsupportedBlockchain
+import bitcoin.wallet.modules.receive.viewitems.AddressItem
 
-class ReceivePresenter(private val interactor: ReceiveModule.IInteractor, private val router: ReceiveModule.IRouter, private val coinCode: String) : ReceiveModule.IViewDelegate, ReceiveModule.IInteractorDelegate {
+class ReceivePresenter(private val interactor: ReceiveModule.IInteractor, private val router: ReceiveModule.IRouter) : ReceiveModule.IViewDelegate, ReceiveModule.IInteractorDelegate {
 
     var view: ReceiveModule.IView? = null
-    private var coinAddress: String? = null
+    private var receiveAddresses: List<AddressItem> = mutableListOf()
 
     override fun viewDidLoad() {
-        interactor.getReceiveAddress(coinCode)
+        interactor.getReceiveAddress()
     }
 
-    override fun didReceiveAddress(coinAddress: String) {
-        this.coinAddress = coinAddress
-        view?.showAddress(coinAddress)
+    override fun didReceiveAddresses(addresses: List<AddressItem>) {
+        this.receiveAddresses = addresses
+        view?.showAddresses(receiveAddresses)
     }
 
     override fun didFailToReceiveAddress(exception: Exception) {
@@ -26,16 +27,16 @@ class ReceivePresenter(private val interactor: ReceiveModule.IInteractor, privat
         else -> R.string.error
     }
 
-    override fun onCopyClick() {
-        coinAddress?.let { interactor.copyToClipboard(it) }
+    override fun onCopyClick(index: Int) {
+        interactor.copyToClipboard(receiveAddresses[index].address)
     }
 
     override fun didCopyToClipboard() {
         view?.showCopied()
     }
 
-    override fun onShareClick() {
-        coinAddress?.let { router.openShareView(it) }
+    override fun onShareClick(index: Int) {
+        router.openShareView(receiveAddresses[index].address)
     }
 
 }
