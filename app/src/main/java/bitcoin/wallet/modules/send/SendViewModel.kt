@@ -3,6 +3,7 @@ package bitcoin.wallet.modules.send
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import bitcoin.wallet.SingleLiveEvent
+import bitcoin.wallet.core.IAdapter
 
 class SendViewModel : ViewModel(), SendModule.IView, SendModule.IRouter {
 
@@ -12,10 +13,11 @@ class SendViewModel : ViewModel(), SendModule.IView, SendModule.IRouter {
     val secondaryAmountHintLiveData = MutableLiveData<String>()
     val startScanLiveEvent = SingleLiveEvent<Unit>()
     val showSuccessLiveEvent = SingleLiveEvent<Unit>()
+    val showAddressWarningLiveEvent = MutableLiveData<Boolean>()
     val showErrorLiveData = MutableLiveData<Int>()
 
-    fun init(coinCode: String) {
-        SendModule.init(this, this, coinCode)
+    fun init(adapter: IAdapter) {
+        SendModule.init(this, this, adapter)
         delegate.onViewDidLoad()
     }
 
@@ -37,6 +39,10 @@ class SendViewModel : ViewModel(), SendModule.IView, SendModule.IRouter {
 
     override fun showSuccess() {
         showSuccessLiveEvent.call()
+    }
+
+    override fun showAddressWarning(show: Boolean) {
+        showAddressWarningLiveEvent.value = show
     }
 
     // --- IRouter methods ---

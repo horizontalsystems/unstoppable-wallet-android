@@ -3,8 +3,8 @@ package bitcoin.wallet.modules.wallet
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import bitcoin.wallet.SingleLiveEvent
+import bitcoin.wallet.core.IAdapter
 import bitcoin.wallet.entities.CurrencyValue
-import bitcoin.wallet.entities.coins.Coin
 
 class WalletViewModel : ViewModel(), WalletModule.IView, WalletModule.IRouter {
 
@@ -12,7 +12,7 @@ class WalletViewModel : ViewModel(), WalletModule.IView, WalletModule.IRouter {
 
     val walletBalancesLiveData = MutableLiveData<List<WalletBalanceViewItem>>()
     val totalBalanceLiveData = MutableLiveData<CurrencyValue>()
-    val openSendDialog = SingleLiveEvent<Coin>()
+    val openSendDialog = SingleLiveEvent<IAdapter>()
     val openReceiveDialog = SingleLiveEvent<String>()
 
     fun init() {
@@ -31,8 +31,8 @@ class WalletViewModel : ViewModel(), WalletModule.IView, WalletModule.IRouter {
         openReceiveDialog.value = adapterId
     }
 
-    override fun openSendDialog(coin: Coin) {
-        openSendDialog.value = coin
+    override fun openSendDialog(adapter: IAdapter) {
+        openSendDialog.value = adapter
     }
 
     override fun showTotalBalance(totalBalance: CurrencyValue) {
@@ -47,8 +47,8 @@ class WalletViewModel : ViewModel(), WalletModule.IView, WalletModule.IRouter {
         delegate.onReceiveClicked(adapterId)
     }
 
-    fun onSendClicked(coin: Coin) {
-        delegate.onSendClicked(coin)
+    fun onSendClicked(adapterId: String) {
+        delegate.onSendClicked(adapterId)
     }
 
 }

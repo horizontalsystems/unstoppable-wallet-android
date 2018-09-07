@@ -17,9 +17,8 @@ class SendPresenterTest {
     private val router = Mockito.mock(SendModule.IRouter::class.java)
     private val view = Mockito.mock(SendModule.IView::class.java)
 
-    private val coinCode = "BTC"
     private val baseCurrency = "USD"
-    private val presenter = SendPresenter(interactor, router, coinCode)
+    private val presenter = SendPresenter(interactor, router)
     private val cryptoAmountFormat = NumberFormatHelper.cryptoAmountFormat
     private val fiatAmountFormat = NumberFormatHelper.fiatAmountFormat
 
@@ -32,7 +31,6 @@ class SendPresenterTest {
 
     @Test
     fun onViewDidLoad() {
-
         presenter.onViewDidLoad()
 
         verify(interactor).getBaseCurrency()
@@ -105,12 +103,13 @@ class SendPresenterTest {
 
     @Test
     fun onSendClick() {
-
         val exchangeRate = 7000.0
         val cryptoAmount = 0.5
 
         val cryptoCurrencyCode = "BTC"
         val address = "mxNEBQf2xQeLknPZW65rMbKxEban6udxFc"
+
+        whenever(interactor.getCoinCode()).thenReturn(cryptoCurrencyCode)
 
         presenter.onViewDidLoad()
         presenter.didFetchExchangeRate(exchangeRate)
@@ -141,10 +140,23 @@ class SendPresenterTest {
 
     @Test
     fun didSend() {
-
         presenter.didSend()
 
         verify(view).showSuccess()
+    }
+
+    @Test
+    fun onAddressEntered() {
+        val address = "[address]"
+        whenever(interactor.isValid(address)).thenReturn(true)
+        presenter.onAddressEntered(address)
+        verify(view).showAddressWarning(false)
+    }
+
+    @Test
+    fun onAddressEntered_emptyAddress() {
+        presenter.onAddressEntered(null)
+        verify(view).showAddressWarning(false)
     }
 
 }

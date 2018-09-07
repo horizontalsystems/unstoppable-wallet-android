@@ -1,8 +1,8 @@
 package bitcoin.wallet.modules.send
 
 import android.support.v4.app.FragmentActivity
+import bitcoin.wallet.core.IAdapter
 import bitcoin.wallet.core.managers.Factory
-import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.viewHelpers.TextHelper
 
 object SendModule {
@@ -13,6 +13,7 @@ object SendModule {
         fun setAmountHint(hint: String)
         fun showError(error: Int)
         fun showSuccess()
+        fun showAddressWarning(show: Boolean)
     }
 
     interface IViewDelegate {
@@ -21,13 +22,16 @@ object SendModule {
         fun onViewDidLoad()
         fun onAmountEntered(amount: String?)
         fun onSendClick(address: String)
+        fun onAddressEntered(address: String?)
     }
 
     interface IInteractor {
+        fun getCoinCode(): String
         fun getBaseCurrency(): String
         fun getCopiedText(): String
         fun fetchExchangeRate()
         fun send(coinCode: String, address: String, amount: Double)
+        fun isValid(address: String): Boolean
     }
 
     interface IInteractorDelegate {
@@ -40,17 +44,17 @@ object SendModule {
         fun startScan()
     }
 
-    fun init(view: SendViewModel, router: IRouter, coinCode: String) {
-        val interactor = SendInteractor(Factory.databaseManager, Factory.blockchainManager, TextHelper, coinCode)
-        val presenter = SendPresenter(interactor, router, coinCode)
+    fun init(view: SendViewModel, router: IRouter, adapter: IAdapter) {
+        val interactor = SendInteractor(Factory.databaseManager, TextHelper, adapter)
+        val presenter = SendPresenter(interactor, router)
 
         view.delegate = presenter
         presenter.view = view
         interactor.delegate = presenter
     }
 
-    fun start(activity: FragmentActivity, coin: Coin) {
-        SendFragment.show(activity, coin)
+    fun start(activity: FragmentActivity, adapter: IAdapter) {
+        SendFragment.show(activity, adapter)
     }
 
 }

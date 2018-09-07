@@ -1,12 +1,12 @@
 package bitcoin.wallet.modules.wallet
 
 import bitcoin.wallet.core.AdapterManager
+import bitcoin.wallet.core.IAdapter
 import bitcoin.wallet.core.managers.DatabaseManager
 import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
-import bitcoin.wallet.entities.coins.Coin
 import io.reactivex.subjects.BehaviorSubject
 
 object WalletModule {
@@ -19,7 +19,7 @@ object WalletModule {
     interface IViewDelegate {
         fun viewDidLoad()
         fun onReceiveClicked(adapterId: String)
-        fun onSendClicked(coin: Coin)
+        fun onSendClicked(adapterId: String)
     }
 
     interface IInteractor {
@@ -34,7 +34,7 @@ object WalletModule {
 
     interface IRouter {
         fun openReceiveDialog(adapterId: String)
-        fun openSendDialog(coin: Coin)
+        fun openSendDialog(adapter: IAdapter)
     }
 
     private var databaseManager: DatabaseManager? = null
