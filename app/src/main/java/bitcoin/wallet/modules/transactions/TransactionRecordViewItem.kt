@@ -1,20 +1,21 @@
 package bitcoin.wallet.modules.transactions
 
 import bitcoin.wallet.entities.CoinValue
+import bitcoin.wallet.entities.CurrencyValue
 import java.util.*
 
 data class TransactionRecordViewItem(
         val hash: String,
         val amount: CoinValue,
         val fee: CoinValue,
-        val from: String,
-        val to: String,
+        val from: String?,
+        val to: String?,
         val incoming: Boolean,
-        val blockHeight: Long,
-        val date: Date,
-        val status: Status?,
+        val blockHeight: Long?,
+        val date: Date?,
+        val status: Status,
         val confirmations: Long?,
-        val valueInBaseCurrency: Double,
+        val currencyAmount: CurrencyValue?,
         val exchangeRate: Double? = null
 ) {
 
@@ -43,13 +44,15 @@ data class TransactionRecordViewItem(
         var result = hash.hashCode()
         result = 31 * result + amount.hashCode()
         result = 31 * result + fee.hashCode()
-        result = 31 * result + from.hashCode()
-        result = 31 * result + to.hashCode()
+        result = 31 * result + (from?.hashCode() ?: 0)
+        result = 31 * result + (to?.hashCode() ?: 0)
         result = 31 * result + incoming.hashCode()
-        result = 31 * result + blockHeight.hashCode()
-        result = 31 * result + date.hashCode()
-        result = 31 * result + (status?.hashCode() ?: 0)
+        result = 31 * result + (blockHeight?.hashCode() ?: 0)
+        result = 31 * result + (date?.hashCode() ?: 0)
+        result = 31 * result + status.hashCode()
         result = 31 * result + (confirmations?.hashCode() ?: 0)
+        result = 31 * result + (currencyAmount?.hashCode() ?: 0)
+        result = 31 * result + (exchangeRate?.hashCode() ?: 0)
         return result
     }
 

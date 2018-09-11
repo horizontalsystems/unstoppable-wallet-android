@@ -28,7 +28,7 @@ object TransactionInfoModule {
     interface IRouter {}
 
     fun init(view: TransactionInfoViewModel, router: IRouter, coinCode: String, txHash: String) {
-        val interactor = TransactionInfoInteractor(Factory.databaseManager, Factory.coinManager, Factory.transactionConverter)
+        val interactor = TransactionInfoInteractor(Factory.databaseManager, Factory.coinManager)
         val presenter = TransactionInfoPresenter(interactor, router, coinCode, txHash)
 
         view.delegate = presenter

@@ -1,18 +1,42 @@
 package bitcoin.wallet.modules.transactions
 
+import android.os.Handler
+
 class TransactionsPresenter(private val interactor: TransactionsModule.IInteractor, private val router: TransactionsModule.IRouter) : TransactionsModule.IViewDelegate, TransactionsModule.IInteractorDelegate {
+
+    override fun viewDidLoad() {
+        interactor.retrieveFilters()
+    }
+
+    override fun onTransactionItemClick(transaction: TransactionRecordViewItem, coinCode: String, txHash: String) {
+        router.showTransactionInfo(transaction, coinCode, txHash)
+    }
+
+    override fun refresh() {
+        println("on refresh")
+        Handler().postDelayed({
+            view?.didRefresh()
+        }, 3 * 1000)
+    }
+
+    override fun onFilterSelect(adapterId: String?) {
+        println("onFilterSelect $adapterId")
+        interactor.retrieveTransactionItems(adapterId = adapterId)
+    }
+
+    override fun didRetrieveFilters(filters: List<TransactionFilterItem>) {
+        val filterItems: List<TransactionFilterItem> = filters.map { TransactionFilterItem(it.adapterId, it.name) }
+
+        //todo get "All" from Strings
+        val items = filterItems.toMutableList()
+        items.add(0, TransactionFilterItem(null, "All"))
+        view?.showFilters(filters = items)
+        interactor.retrieveTransactionItems(null)
+    }
 
     var view: TransactionsModule.IView? = null
 
-    override fun viewDidLoad() {
-        interactor.retrieveTransactionRecords()
-    }
-
-    override fun didRetrieveTransactionRecords(items: List<TransactionRecordViewItem>) {
+    override fun didRetrieveItems(items: List<TransactionRecordViewItem>) {
         view?.showTransactionItems(items)
-    }
-
-    override fun onTransactionItemClick(coinCode: String, txHash: String) {
-        router.showTransactionInfo(coinCode, txHash)
     }
 }

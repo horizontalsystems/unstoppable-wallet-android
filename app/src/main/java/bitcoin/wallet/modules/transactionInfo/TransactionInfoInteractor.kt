@@ -1,11 +1,10 @@
 package bitcoin.wallet.modules.transactionInfo
 
 import bitcoin.wallet.core.IDatabaseManager
-import bitcoin.wallet.core.TransactionConverter
 import bitcoin.wallet.core.managers.CoinManager
 import bitcoin.wallet.entities.TransactionRecord
 
-class TransactionInfoInteractor(private val databaseManager: IDatabaseManager, private val coinManager: CoinManager, private val transactionConverter: TransactionConverter) : TransactionInfoModule.IInteractor {
+class TransactionInfoInteractor(private val databaseManager: IDatabaseManager, private val coinManager: CoinManager) : TransactionInfoModule.IInteractor {
 
     var delegate: TransactionInfoModule.IInteractorDelegate? = null
 
@@ -36,10 +35,10 @@ class TransactionInfoInteractor(private val databaseManager: IDatabaseManager, p
                     databaseManager.getExchangeRates().subscribe {
 
                         val exchangeRate = it.array.find { it.code == transactionRecord.coinCode }?.value
-                        transactionConverter.convertToTransactionRecordViewItem(coin, transactionRecord, latestBlockHeight, exchangeRate).let { transactionRecordViewItem ->
-
-                            delegate?.didGetTransactionInfo(transactionRecordViewItem)
-                        }
+//                        transactionConverter.convertToTransactionRecordViewItem(coin, transactionRecord, latestBlockHeight, exchangeRate).let { transactionRecordViewItem ->
+//
+//                            delegate?.didGetTransactionInfo(transactionRecordViewItem)
+//                        }
                     }
 
                 }

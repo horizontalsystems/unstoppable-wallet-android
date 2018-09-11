@@ -1,80 +1,72 @@
 package bitcoin.wallet.modules.transactions
 
-import bitcoin.wallet.core.CollectionChangeset
-import bitcoin.wallet.core.IDatabaseManager
-import bitcoin.wallet.core.managers.CoinManager
+import bitcoin.wallet.core.AdapterManager
+import bitcoin.wallet.core.ExchangeRateManager
 import bitcoin.wallet.entities.CoinValue
-import bitcoin.wallet.entities.TransactionRecord
+import bitcoin.wallet.entities.CurrencyValue
+import bitcoin.wallet.entities.DollarCurrency
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem.Status.PENDING
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem.Status.SUCCESS
+import io.reactivex.disposables.CompositeDisposable
 import java.util.*
-import kotlin.math.max
 
-class TransactionsInteractor(private val databaseManager: IDatabaseManager, private val coinManager: CoinManager) : TransactionsModule.IInteractor {
+class TransactionsInteractor(private val adapterManager: AdapterManager, private val exchangeRateManager: ExchangeRateManager) : TransactionsModule.IInteractor {
 
     var delegate: TransactionsModule.IInteractorDelegate? = null
+    private var disposables: CompositeDisposable = CompositeDisposable()
 
-    private var latestBlockHeights = mapOf<String, Long>()
-    private var transactionRecords = listOf<TransactionRecord>()
-
-    override fun retrieveTransactionRecords() {
-
-        databaseManager.getBlockchainInfos().subscribe {
-            latestBlockHeights = it.array.map { it.coinCode to it.latestBlockHeight }.toMap()
-
-            refresh()
+    override fun retrieveFilters() {
+        adapterManager.subject.subscribe {
+            disposables.clear()
+            initialFetchAndSubscribe()
         }
 
-        databaseManager.getTransactionRecords().subscribe { transactions ->
-            transactionRecords = transactions.array
-
-            refresh(transactions.changeset)
-        }
-
+        initialFetchAndSubscribe()
     }
 
-    private fun refresh(changeset: CollectionChangeset? = null) {
-        databaseManager.getExchangeRates().subscribe {
-            delegate?.didRetrieveTransactionRecords(transactionRecords.mapNotNull { transactionRecord ->
-                val exchangeRate = it.array.find { it.code == transactionRecord.coinCode }?.value
-                convert(transactionRecord, exchangeRate)
+    private fun initialFetchAndSubscribe() {
+        val filters = adapterManager.adapters.map {
+            TransactionFilterItem(it.id, it.coin.name)
+        }
+        delegate?.didRetrieveFilters(filters)
+
+        adapterManager.adapters.forEach { adapter ->
+            disposables.add(adapter.transactionRecordsSubject.subscribe {
+                retrieveTransactionItems()
             })
         }
     }
 
-    private fun convert(transactionRecord: TransactionRecord, exchangeRate: Double?): TransactionRecordViewItem? {
-        val coin = coinManager.getCoinByCode(transactionRecord.coinCode)
-        val latestBlockHeight = latestBlockHeights[transactionRecord.coinCode]
+    override fun retrieveTransactionItems(adapterId: String?) {
+        val rates = exchangeRateManager.exchangeRates
+        val items = mutableListOf<TransactionRecordViewItem>()
 
-        if (coin == null || latestBlockHeight == null) {
-            return null
+        val filteredAdapters = adapterManager.adapters.filter { adapterId == null || it.id == adapterId }
+
+        filteredAdapters.forEach { adapter ->
+            val latestBlockHeight = adapter.latestBlockHeight
+            adapter.transactionRecords.forEach { record ->
+                val confirmations = record.blockHeight?.let { latestBlockHeight - it + 1 } ?: 0
+                val convertedValue = rates[adapter.coin.code]?.let { it * record.amount }
+
+                val item = TransactionRecordViewItem(
+                        hash = record.transactionHash,
+                        amount = CoinValue(adapter.coin, record.amount.toDouble()),
+                        currencyAmount = convertedValue?.let { CurrencyValue(currency = DollarCurrency(), value = it) },
+                        fee = CoinValue(coin = adapter.coin, value = record.fee.toDouble()),
+                        from = record.from.first(),
+                        to = record.to.first(),
+                        incoming = record.amount > 0,
+                        blockHeight = record.blockHeight,
+                        date = record.timestamp?.let { Date(it) },
+                        status = if (confirmations > 0) SUCCESS else PENDING,
+                        confirmations = confirmations
+                )
+                items.add(item)
+            }
         }
 
-        val confirmations =
-                if (transactionRecord.blockHeight == 0L) {
-                    0
-                } else {
-                    max(0, latestBlockHeight - transactionRecord.blockHeight + 1)
-                }
-
-        val coinAmount = Math.abs(transactionRecord.amount / 100000000.0)
-        val valueInBaseCurrency = exchangeRate?.times(coinAmount) ?: 0.0
-
-        return TransactionRecordViewItem(
-                transactionRecord.transactionHash,
-                CoinValue(coin, transactionRecord.amount / 100000000.0),
-
-                CoinValue(coin, transactionRecord.fee / 100000000.0),
-                transactionRecord.from,
-                transactionRecord.to,
-                transactionRecord.incoming,
-                transactionRecord.blockHeight,
-                Date(transactionRecord.timestamp),
-                if (confirmations > 0) SUCCESS else PENDING,
-                confirmations,
-                valueInBaseCurrency
-        )
-
+        delegate?.didRetrieveItems(items)
     }
 
 }

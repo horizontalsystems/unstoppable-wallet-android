@@ -56,7 +56,7 @@ class TransactionInfoFragment : DialogFragment() {
                 }
 
                 rootView.findViewById<TextView>(R.id.txDate)?.text = if (txRecord.status == TransactionRecordViewItem.Status.SUCCESS) {
-                    DateHelper.getFullDateWithShortMonth(txRecord.date)
+                    txRecord.date?.let { DateHelper.getFullDateWithShortMonth(it) }
                 } else {
                     getString(R.string.tx_info_bottom_sheet_status_processing)
                 }
@@ -77,7 +77,7 @@ class TransactionInfoFragment : DialogFragment() {
                 }
 
                 rootView.findViewById<TextView>(R.id.fiatValue)?.apply{
-                    text = "~\$${NumberFormatHelper.fiatAmountFormat.format(txRecord.valueInBaseCurrency)}"
+                    text = "~\$${NumberFormatHelper.fiatAmountFormat.format(txRecord.currencyAmount)}"
                 }
 
                 rootView.findViewById<TransactionInfoItemView>(R.id.itemFromTo)?.apply{

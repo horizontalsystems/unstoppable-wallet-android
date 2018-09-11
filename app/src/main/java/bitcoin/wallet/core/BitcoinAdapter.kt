@@ -1,6 +1,6 @@
 package bitcoin.wallet.core
 
-import bitcoin.wallet.entities.TransactionRecord
+import bitcoin.wallet.entities.TransactionRecordNew
 import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.kit.network.NetworkParameters
@@ -48,11 +48,11 @@ class BitcoinAdapter(words: List<String>, network: NetworkParameters) : IAdapter
     //    private var transactionsNotificationToken: NotificationToken?
 //    private var unspentOutputsNotificationToken: NotificationToken?
 //    override var latestBlockHeightSubject: PublishSubject<Void> = PublishSubject.create()
-//    override var transactionRecordsSubject: PublishSubject<Void> = PublishSubject.create()
+    override var transactionRecordsSubject: PublishSubject<Void> = PublishSubject.create()
 
 
     override var latestBlockHeight: Int = walletKit.latestBlockHeight
-    override var transactionRecords: List<TransactionRecord> = walletKit.transactionRecords
+    override var transactionRecords: List<TransactionRecordNew> = walletKit.transactionRecords
 
     override fun showInfo() {
         walletKit.showRealmInfo()
@@ -96,7 +96,7 @@ class BitcoinAdapter(words: List<String>, network: NetworkParameters) : IAdapter
 //Stub class from WalletKit
 class WalletKit(words: List<String>, network: NetworkParameters) {
     val latestBlockHeight = 0
-    val transactionRecords: List<TransactionRecord> = listOf() //todo get transactions from database
+    val transactionRecords: List<TransactionRecordNew> = listOf()
     val receiveAddress = "addressSomeTesting32String"
     val progressSubject: BehaviorSubject<Double> = BehaviorSubject.create()
 
