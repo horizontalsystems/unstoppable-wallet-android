@@ -6,10 +6,10 @@ object ExchangeRateManager {
 
     var subject: PublishSubject<MutableMap<String, Double>> = PublishSubject.create()
 
-    var exchangeRates: Map<String, Double> = hashMapOf("BTC" to 1000.0)
+    var exchangeRates: Map<String, Double> = hashMapOf("BTC" to 6300.0)
 
     fun updateRates() {
         //for testing purpose
-        subject.onNext(hashMapOf("BTC" to 3000.0))
+        subject.onNext(hashMapOf("BTC" to 7000.0))
     }
 }

@@ -9,8 +9,8 @@ open class TransactionRecordNew {
     var from: List<String> = listOf()
     var to: List<String> = listOf()
 
-    var amount = 0L
-    var fee = 0L
+    var amount: Double = 0.0
+    var fee: Double = 0.0
 
     var incoming = true
 

@@ -27,7 +27,6 @@ class TransactionsPresenter(private val interactor: TransactionsModule.IInteract
     override fun didRetrieveFilters(filters: List<TransactionFilterItem>) {
         val filterItems: List<TransactionFilterItem> = filters.map { TransactionFilterItem(it.adapterId, it.name) }
 
-        //todo get "All" from Strings
         val items = filterItems.toMutableList()
         items.add(0, TransactionFilterItem(null, "All"))
         view?.showFilters(filters = items)

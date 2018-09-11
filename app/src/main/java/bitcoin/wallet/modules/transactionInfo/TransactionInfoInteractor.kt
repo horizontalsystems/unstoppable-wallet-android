@@ -18,11 +18,11 @@ class TransactionInfoInteractor(private val databaseManager: IDatabaseManager, p
             refresh()
         }
 
-        databaseManager.getTransactionRecord(coinCode, txHash).subscribe {
-            transactionRecord = it
-
-            refresh()
-        }
+//        databaseManager.getTransactionRecord(coinCode, txHash).subscribe {
+//            transactionRecord = it
+//
+//            refresh()
+//        }
     }
 
     private fun refresh() {

@@ -95,8 +95,8 @@ class BitcoinAdapter(words: List<String>, network: NetworkParameters) : IAdapter
 
 //Stub class from WalletKit
 class WalletKit(words: List<String>, network: NetworkParameters) {
-    val latestBlockHeight = 0
-    val transactionRecords: List<TransactionRecordNew> = listOf()
+    val latestBlockHeight = 129
+    val transactionRecords: List<TransactionRecordNew> = demoTransactions()//listOf()
     val receiveAddress = "addressSomeTesting32String"
     val progressSubject: BehaviorSubject<Double> = BehaviorSubject.create()
 
@@ -118,5 +118,48 @@ class WalletKit(words: List<String>, network: NetworkParameters) {
 
     fun fee(value: Int, senderPay: Boolean): Int {
         return 0
+    }
+
+
+    //demo transactions
+    fun demoTransactions(): List<TransactionRecordNew> {
+        val transactions: MutableList<TransactionRecordNew> = mutableListOf()
+        val tr1 = TransactionRecordNew().apply {
+            transactionHash = "f34ff4gffr"
+            coinCode = "BTC"
+            from = listOf("1A7o3DtwdLQWy9dMq5oV9CHW1PC8jrfFPi")
+            to = listOf("13UwE8nL9PBezSrMK5LtncsTR6Er7DhBdy")
+            amount = 0.03
+            fee = 0.0093
+            blockHeight = 123
+            timestamp = 1536652171123
+        }
+        transactions.add(tr1)
+
+        val tr2 = TransactionRecordNew().apply {
+            transactionHash = "efw43f3fwer"
+            coinCode = "BTC"
+            from = listOf("mxNEBQf2xQeLknPZW65rMbKxEban6udxFc")
+            to = listOf("13UwE8nL9PBezSrMK5LtncsTR6Er7DhBdy")
+            amount = -0.23
+            fee = 0.00012
+            blockHeight = 125
+            timestamp = 1536152151123
+        }
+        transactions.add(tr2)
+
+        val tr3 = TransactionRecordNew().apply {
+            transactionHash = "eewffw43f3fwer"
+            coinCode = "BTC"
+            from = listOf("wef23mxNEBQf2xQeLknPZW65rMbKxEban6udxFc")
+            to = listOf("ew13UwE8nL9PBezSrMK5LtncsTR6Er7DhBdy")
+            amount = 0.183
+            fee = 0.00092
+            blockHeight = 123
+            timestamp = 1536052151123
+        }
+        transactions.add(tr3)
+
+        return transactions
     }
 }

@@ -1,137 +1,167 @@
 package bitcoin.wallet.modules.transactions
 
+import bitcoin.wallet.core.AdapterManager
+import bitcoin.wallet.core.BitcoinAdapter
+import bitcoin.wallet.core.ExchangeRateManager
+import bitcoin.wallet.entities.CoinValue
+import bitcoin.wallet.entities.CurrencyValue
+import bitcoin.wallet.entities.DollarCurrency
+import bitcoin.wallet.entities.TransactionRecordNew
+import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
+import bitcoin.wallet.modules.RxBaseTest
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.whenever
+import io.reactivex.subjects.PublishSubject
+import org.junit.Before
+import org.junit.Test
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
+import java.util.*
+
 class TransactionsInteractorTest {
 
-//    private val delegate = mock(TransactionsModule.IInteractorDelegate::class.java)
-//    private val databaseManager = mock(IDatabaseManager::class.java)
-//    private val coinManager = mock(CoinManager::class.java)
-//
-//    private val interactor = TransactionsInteractor(databaseManager, coinManager)
-//
-//    @Before
-//    fun before() {
-//        RxBaseTest.setup()
-//
-//        interactor.delegate = delegate
-//    }
-//
-//    @Test
-//    fun retrieveTransactionRecords() {
-//        whenever(databaseManager.getTransactionRecords()).thenReturn(Observable.empty())
-//        whenever(databaseManager.getBlockchainInfos()).thenReturn(Observable.empty())
-//
-//        interactor.retrieveTransactionRecords()
-//
-//        verify(databaseManager).getTransactionRecords()
-//    }
-//
-//    @Test
-//    fun retrieveTransactionItems_success() {
-//        val transactionRecords = listOf<TransactionRecord>()
-//
-//        whenever(databaseManager.getTransactionRecords()).thenReturn(Observable.just(DatabaseChangeset(transactionRecords)))
-//        whenever(databaseManager.getBlockchainInfos()).thenReturn(Observable.empty())
-//        whenever(databaseManager.getExchangeRates()).thenReturn(Observable.just(DatabaseChangeset(arrayListOf())))
-//
-//        interactor.retrieveTransactionRecords()
-//
-//        verify(delegate).didRetrieveTransactionRecords(listOf())
-//    }
-//
-//    @Test
-//    fun retrieveTransactionItems_transactionOutConvert() {
-//        val now = Date()
-//        val bitcoin = Bitcoin()
-//        val bitcoinCash = BitcoinCash()
-//        val blockchainInfos = listOf(
-//                BlockchainInfo().apply {
-//                    coinCode = "BTC"
-//                    latestBlockHeight = 130
-//                },
-//                BlockchainInfo().apply {
-//                    coinCode = "BCH"
-//                    latestBlockHeight = 140
-//                })
-//
-//        val btcTxAmount = 1.0
-//        val bchTxAmount = 1.0
-//
-//        val transactionRecordBTC = TransactionRecord().apply {
-//            transactionHash = "transactionHash"
-//            amount = 100000000
-//            fee = 1000000
-//            incoming = true
-//            timestamp = now.time
-//            from = RealmList("from-address")
-//            to = RealmList("to-address")
-//            blockHeight = 0
-//            coinCode = "BTC"
-//        }
-//
-//        val transactionRecordBCH = TransactionRecord().apply {
-//            transactionHash = "transactionHash"
-//            amount = 100000000
-//            fee = 1000000
-//            incoming = true
-//            timestamp = now.time
-//            from = RealmList("from-address")
-//            to = RealmList("to-address")
-//            blockHeight = 113
-//            coinCode = "BCH"
-//        }
-//
-//
-//        val btcExchangeRate = ExchangeRate().apply {
-//            code = "BTC"
-//            value = 7349.4
-//        }
-//
-//        val bchExchangeRate = ExchangeRate().apply {
-//            code = "BCH"
-//            value = 843.2
-//        }
-//
-//        val exchangeRates = listOf(btcExchangeRate, bchExchangeRate)
-//
-//        val expectedItems = listOf(
-//                TransactionRecordViewItem(
-//                        "transactionHash",
-//                        CoinValue(bitcoin, btcTxAmount),
-//                        CoinValue(bitcoin, 0.01),
-//                        "from-address",
-//                        "to-address",
-//                        true,
-//                        0,
-//                        now,
-//                        TransactionRecordViewItem.Status.PENDING,
-//                        0,
-//                        btcTxAmount / 100_000_000.0 * btcExchangeRate.value
-//                ),
-//                TransactionRecordViewItem(
-//                        "transactionHash",
-//                        CoinValue(bitcoinCash, bchTxAmount),
-//                        CoinValue(bitcoinCash, 0.01),
-//                        "from-address",
-//                        "to-address",
-//                        true,
-//                        113,
-//                        now,
-//                        TransactionRecordViewItem.Status.SUCCESS,
-//                        28,
-//                        bchTxAmount / 100_000_000.0 * bchExchangeRate.value
-//                )
-//        )
-//
-//        whenever(coinManager.getCoinByCode("BTC")).thenReturn(bitcoin)
-//        whenever(coinManager.getCoinByCode("BCH")).thenReturn(bitcoinCash)
-//        whenever(databaseManager.getTransactionRecords()).thenReturn(Observable.just(DatabaseChangeset(listOf(transactionRecordBTC, transactionRecordBCH))))
-//        whenever(databaseManager.getBlockchainInfos()).thenReturn(Observable.just(DatabaseChangeset(blockchainInfos)))
-//
-//        whenever(databaseManager.getExchangeRates()).thenReturn(Observable.just(DatabaseChangeset(exchangeRates)))
-//
-//        interactor.retrieveTransactionRecords()
-//
-//        verify(delegate).didRetrieveTransactionRecords(expectedItems)
-//    }
+    private val delegate = mock(TransactionsModule.IInteractorDelegate::class.java)
+    private val exchangeRateManager = mock(ExchangeRateManager::class.java)
+    private val adapterManager = mock(AdapterManager::class.java)
+    private val bitcoinAdapter = mock(BitcoinAdapter::class.java)
+
+    private var coin = Bitcoin()
+    private var words = listOf("used", "ugly", "meat", "glad", "balance", "divorce", "inner", "artwork", "hire", "invest", "already", "piano")
+    private var wordsHash = words.joinToString(" ")
+    private var adapterId: String = "${wordsHash.hashCode()}-${coin.code}"
+
+    private val interactor = TransactionsInteractor(adapterManager, exchangeRateManager)
+
+    private var exchangeRates = mapOf("BTC" to 10_000.0)
+
+    @Before
+    fun before() {
+        RxBaseTest.setup()
+
+        interactor.delegate = delegate
+
+        whenever(exchangeRateManager.exchangeRates).thenReturn(exchangeRates)
+    }
+
+    @Test
+    fun retrieveFilters() {
+        val subject: PublishSubject<Void> = PublishSubject.create()
+        whenever(adapterManager.adapters).thenReturn(mutableListOf(bitcoinAdapter))
+        whenever(adapterManager.subject).thenReturn(PublishSubject.create<Any>())
+
+        whenever(bitcoinAdapter.id).thenReturn(adapterId)
+        whenever(bitcoinAdapter.coin).thenReturn(coin)
+        whenever(bitcoinAdapter.balance).thenReturn(0.0)
+        whenever(bitcoinAdapter.transactionRecordsSubject).thenReturn(subject)
+
+        interactor.retrieveFilters()
+
+        verify(delegate).didRetrieveFilters(any())
+    }
+
+    @Test
+    fun retrieveTransactionItems() {
+        val subject: PublishSubject<Void> = PublishSubject.create()
+
+        val transaction = TransactionRecordNew()
+        transaction.transactionHash = "efw43f3fwer"
+        transaction.coinCode = "BTC"
+        transaction.from = listOf("mxNEBQf2xQeLknPZW65rMbKxEban6udxFc")
+        transaction.to = listOf("13UwE8nL9PBezSrMK5LtncsTR6Er7DhBdy")
+        transaction.amount = -0.23
+        transaction.fee = 0.00012
+        transaction.blockHeight = 125
+        transaction.timestamp = 1536152151123
+
+        whenever(adapterManager.adapters).thenReturn(mutableListOf(bitcoinAdapter))
+        whenever(adapterManager.subject).thenReturn(PublishSubject.create<Any>())
+
+        whenever(bitcoinAdapter.id).thenReturn(adapterId)
+        whenever(bitcoinAdapter.coin).thenReturn(coin)
+        whenever(bitcoinAdapter.balance).thenReturn(0.0)
+        whenever(bitcoinAdapter.transactionRecords).thenReturn(listOf(transaction))
+        whenever(bitcoinAdapter.transactionRecordsSubject).thenReturn(subject)
+
+        interactor.retrieveTransactionItems()
+
+        verify(delegate).didRetrieveItems(any())
+    }
+
+
+    @Test
+    fun retrieveTransactionItems_transactionOutConvert() {
+        val now = Date()
+        val bitcoin = Bitcoin()
+        val subject: PublishSubject<Void> = PublishSubject.create()
+
+        val btcTxAmount = 10.0
+
+        val transactionRecordBTCsuccess = TransactionRecordNew().apply {
+            transactionHash = "transactionHash"
+            amount = btcTxAmount
+            fee = 1.0
+            incoming = true
+            timestamp = now.time
+            from = listOf("from-address")
+            to = listOf("to-address")
+            blockHeight = 98
+            coinCode = "BTC"
+        }
+
+        val transactionRecordBTCpending = TransactionRecordNew().apply {
+            transactionHash = "transactionHash"
+            amount = btcTxAmount
+            fee = 1.0
+            incoming = true
+            timestamp = now.time
+            from = listOf("from-address")
+            to = listOf("to-address")
+            blockHeight = 101
+            coinCode = "BTC"
+        }
+
+        val expectedItems = listOf(
+                TransactionRecordViewItem(
+                        "transactionHash",
+                        CoinValue(bitcoin, btcTxAmount),
+                        CoinValue(bitcoin, 1.0),
+                        "from-address",
+                        "to-address",
+                        true,
+                        98,
+                        now,
+                        TransactionRecordViewItem.Status.SUCCESS,
+                        3,
+                        CurrencyValue(currency = DollarCurrency(), value = btcTxAmount * (exchangeRates["BTC"] ?: 0.0))
+                ),
+                TransactionRecordViewItem(
+                        "transactionHash",
+                        CoinValue(bitcoin, btcTxAmount),
+                        CoinValue(bitcoin, 1.0),
+                        "from-address",
+                        "to-address",
+                        true,
+                        101,
+                        now,
+                        TransactionRecordViewItem.Status.PENDING,
+                        0,
+                        CurrencyValue(currency = DollarCurrency(), value = btcTxAmount * (exchangeRates["BTC"] ?: 0.0))
+                )
+        )
+
+        whenever(adapterManager.adapters).thenReturn(mutableListOf(bitcoinAdapter))
+        whenever(adapterManager.subject).thenReturn(PublishSubject.create<Any>())
+
+        whenever(bitcoinAdapter.id).thenReturn(adapterId)
+        whenever(bitcoinAdapter.coin).thenReturn(coin)
+        whenever(bitcoinAdapter.balance).thenReturn(0.0)
+        whenever(bitcoinAdapter.latestBlockHeight).thenReturn(100)
+        whenever(bitcoinAdapter.transactionRecords).thenReturn(listOf(transactionRecordBTCsuccess, transactionRecordBTCpending))
+        whenever(bitcoinAdapter.transactionRecordsSubject).thenReturn(subject)
+
+        interactor.retrieveTransactionItems()
+
+        verify(delegate).didRetrieveItems(expectedItems)
+    }
 
 }

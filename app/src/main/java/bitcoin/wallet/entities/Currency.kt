@@ -28,8 +28,6 @@ class DollarCurrency : Currency() {
 
 }
 
-data class CurrencyValue(val currency: Currency, val value: Double)
-
 class Ethereum : Coin() {
     override val name: String = "Ethereum"
     override val code: String = "ETH"
@@ -78,23 +76,4 @@ class Tether : Coin() {
 class Stellar : Coin() {
     override val name: String = "Stellar"
     override val code: String = "XLM"
-}
-
-data class CoinValue(val coin: Coin, val value: Double) {
-
-    override fun equals(other: Any?): Boolean {
-        if (other is CoinValue) {
-            return coin == other.coin && value == other.value
-
-        }
-
-        return super.equals(other)
-    }
-
-    override fun hashCode(): Int {
-        var result = coin.hashCode()
-        result = 31 * result + value.hashCode()
-        return result
-    }
-
 }

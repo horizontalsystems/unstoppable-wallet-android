@@ -25,7 +25,8 @@ class TransactionsInteractor(private val adapterManager: AdapterManager, private
     }
 
     private fun initialFetchAndSubscribe() {
-        val filters = adapterManager.adapters.map {
+        val adapters = adapterManager.adapters
+        val filters: List<TransactionFilterItem> = adapters.map {
             TransactionFilterItem(it.id, it.coin.name)
         }
         delegate?.didRetrieveFilters(filters)
@@ -51,9 +52,9 @@ class TransactionsInteractor(private val adapterManager: AdapterManager, private
 
                 val item = TransactionRecordViewItem(
                         hash = record.transactionHash,
-                        amount = CoinValue(adapter.coin, record.amount.toDouble()),
+                        amount = CoinValue(adapter.coin, record.amount),
                         currencyAmount = convertedValue?.let { CurrencyValue(currency = DollarCurrency(), value = it) },
-                        fee = CoinValue(coin = adapter.coin, value = record.fee.toDouble()),
+                        fee = CoinValue(coin = adapter.coin, value = record.fee),
                         from = record.from.first(),
                         to = record.to.first(),
                         incoming = record.amount > 0,

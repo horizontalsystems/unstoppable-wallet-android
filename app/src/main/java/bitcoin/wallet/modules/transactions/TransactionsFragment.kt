@@ -126,7 +126,7 @@ class ViewHolderTransaction(override val containerView: View) : RecyclerView.Vie
         txAmount.text = "$sign ${NumberFormatHelper.cryptoAmountFormat.format(Math.abs(transactionRecord.amount.value))} ${transactionRecord.amount.coin.code}"
         txDate.text = transactionRecord.date?.let { DateHelper.getRelativeDateString(itemView.context, it) }
         val addressExcerpt = TextHelper.randomHashGenerator().take(6) + "\u2026"//todo replace after from starts to show address (transactionRecord.from)
-        txValueInFiat.text = "\$${NumberFormatHelper.fiatAmountFormat.format(transactionRecord.currencyAmount)}" + " from " + addressExcerpt
+        txValueInFiat.text = "\$${NumberFormatHelper.fiatAmountFormat.format(transactionRecord.currencyAmount?.value)}" + " from " + addressExcerpt
         statusIcon.setImageDrawable(getStatusIcon(transactionRecord.status))
     }
 
