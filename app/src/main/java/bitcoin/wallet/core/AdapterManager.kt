@@ -8,6 +8,7 @@ object AdapterManager {
     var subject: PublishSubject<Any> = PublishSubject.create<Any>()
 
     fun initAdapters(words: List<String>) {
+        adapters.clear()
         adapters.add(BitcoinAdapter(words, network = MainNet()))
 //        adapters.add(BitcoinAdapter(words, network = TestNet()))
 

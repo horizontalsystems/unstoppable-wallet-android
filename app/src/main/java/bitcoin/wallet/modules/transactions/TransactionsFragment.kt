@@ -23,11 +23,11 @@ import kotlinx.android.synthetic.main.fragment_transactions.*
 import kotlinx.android.synthetic.main.view_holder_filter.*
 import kotlinx.android.synthetic.main.view_holder_transaction.*
 
-class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdapter.Listener {
+class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdapter.Listener, FilterAdapter.Listener {
 
     private lateinit var viewModel: TransactionsViewModel
     private val transactionsAdapter = TransactionsAdapter(this)
-    private val filterAdapter = FilterAdapter()
+    private val filterAdapter = FilterAdapter(this)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_transactions, container, false)
@@ -49,11 +49,22 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
             }
         })
 
+        viewModel.filterItems.observe(this, Observer { filters ->
+            filters?.let {
+                filterAdapter.filters = it
+                filterAdapter.notifyDataSetChanged()
+            }
+        })
+
         viewModel.showTransactionInfoLiveEvent.observe(this, Observer { pair ->
             pair?.apply {
                 val (coinCode, txHash) = this
                 activity?.let { TransactionInfoModule.start(it, coinCode, txHash) }
             }
+        })
+
+        viewModel.didRefreshLiveEvent.observe(this, Observer {
+            pullToRefresh.isRefreshing = false
         })
 
     }
@@ -67,10 +78,18 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
 
         recyclerTags.adapter = filterAdapter
         recyclerTags.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
+        pullToRefresh.setOnRefreshListener {
+            viewModel.delegate.refresh()
+        }
     }
 
     override fun onItemClick(item: TransactionRecordViewItem) {
-        viewModel.delegate.onTransactionItemClick(item.amount.coin.code, item.hash)
+        viewModel.delegate.onTransactionItemClick(item, item.amount.coin.code, item.hash)
+    }
+
+    override fun onFilterItemClick(item: TransactionFilterItem) {
+        viewModel.delegate.onFilterSelect(item.adapterId)
     }
 }
 
@@ -99,15 +118,15 @@ class ViewHolderTransaction(override val containerView: View) : RecyclerView.Vie
 
     fun bind(transactionRecord: TransactionRecordViewItem, onClick: () -> (Unit)) {
 
-        containerView.setOnSingleClickListener{ onClick.invoke() }
+        containerView.setOnSingleClickListener { onClick.invoke() }
 
         val sign = if (transactionRecord.incoming) "+" else "-"
         val amountTextColor = if (transactionRecord.incoming) R.color.green_crypto else R.color.yellow_crypto
         txAmount.setTextColor(ContextCompat.getColor(itemView.context, amountTextColor))
         txAmount.text = "$sign ${NumberFormatHelper.cryptoAmountFormat.format(Math.abs(transactionRecord.amount.value))} ${transactionRecord.amount.coin.code}"
-        txDate.text = DateHelper.getRelativeDateString(itemView.context, transactionRecord.date)
+        txDate.text = transactionRecord.date?.let { DateHelper.getRelativeDateString(itemView.context, it) }
         val addressExcerpt = TextHelper.randomHashGenerator().take(6) + "\u2026"//todo replace after from starts to show address (transactionRecord.from)
-        txValueInFiat.text = "\$${NumberFormatHelper.fiatAmountFormat.format(transactionRecord.valueInBaseCurrency)}" + " from " + addressExcerpt
+        txValueInFiat.text = "\$${NumberFormatHelper.fiatAmountFormat.format(transactionRecord.currencyAmount?.value)}" + " from " + addressExcerpt
         statusIcon.setImageDrawable(getStatusIcon(transactionRecord.status))
     }
 
@@ -119,9 +138,14 @@ class ViewHolderTransaction(override val containerView: View) : RecyclerView.Vie
     }
 }
 
-class FilterAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class FilterAdapter(private var listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var filters = listOf("All", "Bitcoin", "Bitcoin Cash", "Ethereum", "Litecoin")
+    interface Listener {
+        fun onFilterItemClick(item: TransactionFilterItem)
+    }
+
+    var selectedFilterId: String? = null
+    var filters: List<TransactionFilterItem> = listOf()
 
     override fun getItemCount() = filters.size
 
@@ -130,7 +154,11 @@ class FilterAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is ViewHolderFilter -> holder.bind(filters[position], active = position == 0)
+            is ViewHolderFilter -> holder.bind(filters[position].name, active = selectedFilterId == filters[position].adapterId) {
+                listener.onFilterItemClick(filters[position])
+                selectedFilterId = filters[position].adapterId
+                notifyDataSetChanged()
+            }
         }
     }
 
@@ -138,7 +166,9 @@ class FilterAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 class ViewHolderFilter(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(filterName: String, active: Boolean) {
+    fun bind(filterName: String, active: Boolean, onClick: () -> (Unit)) {
+        filter_text.setOnClickListener { onClick.invoke() }
+
         filter_text.text = filterName
         filter_text.isActivated = active
     }

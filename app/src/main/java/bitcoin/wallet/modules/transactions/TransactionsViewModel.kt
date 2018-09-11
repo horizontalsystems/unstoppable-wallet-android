@@ -9,7 +9,9 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
     lateinit var delegate: TransactionsModule.IViewDelegate
 
     val transactionItems = MutableLiveData<List<TransactionRecordViewItem>>()
+    val filterItems = MutableLiveData<List<TransactionFilterItem>>()
     val showTransactionInfoLiveEvent = SingleLiveEvent<Pair<String, String>>()
+    val didRefreshLiveEvent = SingleLiveEvent<Void>()
 
     fun init() {
         TransactionsModule.initModule(this, this)
@@ -20,7 +22,15 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
         transactionItems.value = items
     }
 
-    override fun showTransactionInfo(coinCode: String, txHash: String) {
+    override fun showFilters(filters: List<TransactionFilterItem>) {
+        filterItems.value = filters
+    }
+
+    override fun didRefresh() {
+        didRefreshLiveEvent.call()
+    }
+
+    override fun showTransactionInfo(transaction: TransactionRecordViewItem, coinCode: String, txHash: String) {
         showTransactionInfoLiveEvent.value = Pair(coinCode, txHash)
     }
 }

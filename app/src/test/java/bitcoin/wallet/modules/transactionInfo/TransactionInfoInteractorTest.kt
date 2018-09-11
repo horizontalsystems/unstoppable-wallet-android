@@ -2,7 +2,6 @@ package bitcoin.wallet.modules.transactionInfo
 
 import bitcoin.wallet.core.DatabaseChangeset
 import bitcoin.wallet.core.IDatabaseManager
-import bitcoin.wallet.core.TransactionConverter
 import bitcoin.wallet.core.managers.CoinManager
 import bitcoin.wallet.entities.BlockchainInfo
 import bitcoin.wallet.entities.ExchangeRate
@@ -23,9 +22,8 @@ class TransactionInfoInteractorTest {
     private val delegate = Mockito.mock(TransactionInfoModule.IInteractorDelegate::class.java)
     private val databaseManager = Mockito.mock(IDatabaseManager::class.java)
     private val coinManager = Mockito.mock(CoinManager::class.java)
-    private val transactionConverter = Mockito.mock(TransactionConverter::class.java)
 
-    private val interactor = TransactionInfoInteractor(databaseManager, coinManager, transactionConverter)
+    private val interactor = TransactionInfoInteractor(databaseManager, coinManager)
 
     @Before
     fun setUp() {
@@ -60,7 +58,7 @@ class TransactionInfoInteractorTest {
         whenever(coinManager.getCoinByCode(coinCode)).thenReturn(bitcoin)
         whenever(databaseManager.getExchangeRates()).thenReturn(Observable.just(DatabaseChangeset(arrayListOf(exchangeRate))))
 
-        whenever(transactionConverter.convertToTransactionRecordViewItem(bitcoin, txRecord, btcLatestBlockHeight, exchangeRate.value)).thenReturn(txRecordViewItem)
+//        whenever(transactionConverter.convertToTransactionRecordViewItem(bitcoin, txRecord, btcLatestBlockHeight, exchangeRate.value)).thenReturn(txRecordViewItem)
 
         interactor.getTransactionInfo(coinCode, txHash)
 
