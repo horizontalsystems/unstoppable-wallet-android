@@ -13,7 +13,7 @@ object TransactionsModule {
 
     interface IViewDelegate {
         fun viewDidLoad()
-        fun onTransactionItemClick(transaction: TransactionRecordViewItem, coinCode: String, txHash: String)
+        fun onTransactionItemClick(transaction: TransactionRecordViewItem)
         fun refresh()
         fun onFilterSelect(adapterId: String?)
     }
@@ -29,7 +29,7 @@ object TransactionsModule {
     }
 
     interface IRouter {
-        fun showTransactionInfo(transaction: TransactionRecordViewItem, coinCode: String, txHash: String)
+        fun showTransactionInfo(transaction: TransactionRecordViewItem)
     }
 
     fun initModule(view: TransactionsViewModel, router: IRouter) {

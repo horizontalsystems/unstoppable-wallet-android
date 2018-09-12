@@ -1,29 +1,40 @@
 package bitcoin.wallet.modules.transactionInfo
 
-import bitcoin.wallet.core.DatabaseChangeset
-import bitcoin.wallet.core.IDatabaseManager
-import bitcoin.wallet.core.managers.CoinManager
-import bitcoin.wallet.entities.BlockchainInfo
-import bitcoin.wallet.entities.ExchangeRate
-import bitcoin.wallet.entities.TransactionRecord
+import bitcoin.wallet.core.IClipboardManager
+import bitcoin.wallet.entities.CoinValue
+import bitcoin.wallet.entities.CurrencyValue
+import bitcoin.wallet.entities.DollarCurrency
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.modules.RxBaseTest
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
-import io.reactivex.Observable
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
+import java.util.*
 
 class TransactionInfoInteractorTest {
 
     private val delegate = Mockito.mock(TransactionInfoModule.IInteractorDelegate::class.java)
-    private val databaseManager = Mockito.mock(IDatabaseManager::class.java)
-    private val coinManager = Mockito.mock(CoinManager::class.java)
+    private val clipboardManager = Mockito.mock(IClipboardManager::class.java)
 
-    private val interactor = TransactionInfoInteractor(databaseManager, coinManager)
+    val transaction = TransactionRecordViewItem(
+            "",
+            CoinValue(Bitcoin(), 0.0),
+            CoinValue(Bitcoin(), 0.0),
+            "",
+            "",
+            true,
+            0,
+            Date(),
+            TransactionRecordViewItem.Status.SUCCESS,
+            0,
+            CurrencyValue(DollarCurrency(), 0.0),
+            0.0
+    )
+
+    private val interactor = TransactionInfoInteractor(transaction, clipboardManager)
 
     @Before
     fun setUp() {
@@ -34,35 +45,26 @@ class TransactionInfoInteractorTest {
 
     @Test
     fun getTransactionInfo() {
-        val coinCode = "BTC"
-        val bitcoin = Bitcoin()
+        interactor.getTransactionInfo()
+        verify(delegate).didGetTransactionInfo(any())
+    }
 
-        val txHash = "tx_hash"
-        val txRecord = TransactionRecord().apply { this.coinCode = coinCode }
-        val txRecordViewItem = Mockito.mock(TransactionRecordViewItem::class.java)
+    @Test
+    fun onCopyFromAddress() {
+        interactor.onCopyFromAddress()
+        verify(delegate).didCopyToClipboard()
+    }
 
-        val btcLatestBlockHeight = 105L
-        val exchangeRate = ExchangeRate().apply {
-            code = coinCode
-            value = 7349.4
-        }
+    @Test
+    fun onCopyId() {
+        interactor.onCopyId()
+        verify(delegate).didCopyToClipboard()
+    }
 
-        val blockchainInfos = listOf(
-                BlockchainInfo().apply {
-                    this.coinCode = "BTC"
-                    this.latestBlockHeight = btcLatestBlockHeight
-                })
-
-        whenever(databaseManager.getBlockchainInfos()).thenReturn(Observable.just(DatabaseChangeset(blockchainInfos)))
-        whenever(databaseManager.getTransactionRecord(any(), any())).thenReturn(Observable.just(txRecord))
-        whenever(coinManager.getCoinByCode(coinCode)).thenReturn(bitcoin)
-        whenever(databaseManager.getExchangeRates()).thenReturn(Observable.just(DatabaseChangeset(arrayListOf(exchangeRate))))
-
-//        whenever(transactionConverter.convertToTransactionRecordViewItem(bitcoin, txRecord, btcLatestBlockHeight, exchangeRate.value)).thenReturn(txRecordViewItem)
-
-        interactor.getTransactionInfo(coinCode, txHash)
-
-        verify(delegate).didGetTransactionInfo(txRecordViewItem)
+    @Test
+    fun showFullInfo() {
+        interactor.showFullInfo()
+        verify(delegate).showFullInfo(any())
     }
 
 }

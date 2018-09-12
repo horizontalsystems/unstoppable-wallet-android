@@ -74,8 +74,8 @@ class TransactionsPresenterTest {
                 0.0
                 )
 
-        presenter.onTransactionItemClick(transactionRecord, coinCode, txHash)
+        presenter.onTransactionItemClick(transactionRecord)
 
-        verify(router).showTransactionInfo(transactionRecord, coinCode, txHash)
+        verify(router).showTransactionInfo(transactionRecord)
     }
 }

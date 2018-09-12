@@ -1,43 +1,52 @@
 package bitcoin.wallet.modules.transactionInfo
 
 import android.support.v4.app.FragmentActivity
-import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem
+import bitcoin.wallet.viewHelpers.TextHelper
 
 object TransactionInfoModule {
     interface IView {
         fun showTransactionItem(transactionRecordViewItem: TransactionRecordViewItem)
-        fun showDetails()
         fun close()
+        fun showCopied()
     }
 
     interface IViewDelegate {
         fun viewDidLoad()
-        fun onDetailsClick()
+        fun onStatusClick()
+        fun onCopyFromAddress()
+        fun onCopyId()
         fun onCloseClick()
     }
 
     interface IInteractor {
-        fun getTransactionInfo(coinCode: String, txHash: String)
+        fun getTransactionInfo()
+        fun onCopyFromAddress()
+        fun onCopyId()
+        fun showFullInfo()
     }
 
     interface IInteractorDelegate {
         fun didGetTransactionInfo(txRecordViewItem: TransactionRecordViewItem)
+        fun didCopyToClipboard()
+        fun showFullInfo(transactionRecordViewItem: TransactionRecordViewItem)
     }
 
-    interface IRouter {}
+    interface IRouter {
+        fun showFullInfo(transaction: TransactionRecordViewItem)
+    }
 
-    fun init(view: TransactionInfoViewModel, router: IRouter, coinCode: String, txHash: String) {
-        val interactor = TransactionInfoInteractor(Factory.databaseManager, Factory.coinManager)
-        val presenter = TransactionInfoPresenter(interactor, router, coinCode, txHash)
+    fun init(view: TransactionInfoViewModel, router: IRouter, transaction: TransactionRecordViewItem) {
+        val interactor = TransactionInfoInteractor(transaction, TextHelper)
+        val presenter = TransactionInfoPresenter(interactor, router)
 
         view.delegate = presenter
         presenter.view = view
         interactor.delegate = presenter
     }
 
-    fun start(activity: FragmentActivity, coinCode: String, txHash: String) {
-        TransactionInfoFragment.show(activity, coinCode, txHash)
+    fun start(activity: FragmentActivity, transactionRecordViewItem: TransactionRecordViewItem) {
+        TransactionInfoFragment.show(activity, transactionRecordViewItem)
     }
 
 }

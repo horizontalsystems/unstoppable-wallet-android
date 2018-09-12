@@ -56,10 +56,9 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
             }
         })
 
-        viewModel.showTransactionInfoLiveEvent.observe(this, Observer { pair ->
-            pair?.apply {
-                val (coinCode, txHash) = this
-                activity?.let { TransactionInfoModule.start(it, coinCode, txHash) }
+        viewModel.showTransactionInfoLiveEvent.observe(this, Observer { transactionRecordViewItem ->
+            transactionRecordViewItem?.let { transaction ->
+                activity?.let { TransactionInfoModule.start(it, transaction) }
             }
         })
 
@@ -85,7 +84,7 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
     }
 
     override fun onItemClick(item: TransactionRecordViewItem) {
-        viewModel.delegate.onTransactionItemClick(item, item.amount.coin.code, item.hash)
+        viewModel.delegate.onTransactionItemClick(item)
     }
 
     override fun onFilterItemClick(item: TransactionFilterItem) {

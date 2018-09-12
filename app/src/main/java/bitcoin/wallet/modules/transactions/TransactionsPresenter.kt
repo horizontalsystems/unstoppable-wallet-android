@@ -8,8 +8,8 @@ class TransactionsPresenter(private val interactor: TransactionsModule.IInteract
         interactor.retrieveFilters()
     }
 
-    override fun onTransactionItemClick(transaction: TransactionRecordViewItem, coinCode: String, txHash: String) {
-        router.showTransactionInfo(transaction, coinCode, txHash)
+    override fun onTransactionItemClick(transaction: TransactionRecordViewItem) {
+        router.showTransactionInfo(transaction)
     }
 
     override fun refresh() {

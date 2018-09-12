@@ -1,6 +1,5 @@
 package bitcoin.wallet.modules.transactionInfo
 
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import bitcoin.wallet.SingleLiveEvent
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem
@@ -9,12 +8,13 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.IView, Trans
 
     lateinit var delegate: TransactionInfoModule.IViewDelegate
 
-    val transactionLiveData = MutableLiveData<TransactionRecordViewItem>()
-    val showDetailsLiveEvent = SingleLiveEvent<Unit>()
+    val transactionLiveData = SingleLiveEvent<TransactionRecordViewItem>()
+    val showDetailsLiveEvent = SingleLiveEvent<TransactionRecordViewItem>()
     val closeLiveEvent = SingleLiveEvent<Unit>()
+    val showCopiedLiveEvent = SingleLiveEvent<Unit>()
 
-    fun init(coinCode: String, txHash: String) {
-        TransactionInfoModule.init(this, this, coinCode, txHash)
+    fun init(transactionRecordViewItem: TransactionRecordViewItem) {
+        TransactionInfoModule.init(this, this, transactionRecordViewItem)
         delegate.viewDidLoad()
     }
 
@@ -22,11 +22,15 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.IView, Trans
         transactionLiveData.value = transactionRecordViewItem
     }
 
-    override fun showDetails() {
-        showDetailsLiveEvent.call()
-    }
-
     override fun close() {
         closeLiveEvent.call()
+    }
+
+    override fun showCopied() {
+        showCopiedLiveEvent.call()
+    }
+
+    override fun showFullInfo(transaction: TransactionRecordViewItem) {
+        showDetailsLiveEvent.value = transaction
     }
 }

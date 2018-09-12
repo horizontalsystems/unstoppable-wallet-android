@@ -36,6 +36,7 @@
         />
 
     <LinearLayout
+        android:id="@+id/transactionIdLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -51,6 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="24dp"
             android:layout_marginStart="7dp"
+            android:layout_marginEnd="7dp"
             android:layout_marginTop="3dp"
             android:text="ID:"
             android:textColor="@color/grey"
@@ -60,8 +62,9 @@
         <TextView
             android:id="@+id/transactionId"
             style="@style/TransactionInfoFieldValue"
-            android:layout_width="125dp"
+            android:layout_width="wrap_content"
             android:layout_height="24dp"
+            android:maxWidth="125dp"
             android:layout_marginEnd="7dp"
             android:layout_marginTop="3dp"
             android:textAlignment="textEnd"
@@ -153,7 +156,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/border3"
         app:title="@string/tx_info_bottom_sheet_status"
-        app:value="Received"
+        app:value="COMPLETED"
         />
 
     <View

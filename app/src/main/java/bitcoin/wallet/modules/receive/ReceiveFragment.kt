@@ -81,9 +81,7 @@ class ReceiveFragment : DialogFragment() {
         })
 
         viewModel.showCopiedLiveEvent.observe(this, Observer {
-            rootView.findViewById<TextView>(R.id.txtCopy)?.let {
-                HudHelper.showSuccessMessage(R.string.hud_text_copied, activity)
-            }
+            HudHelper.showSuccessMessage(R.string.hud_text_copied, activity)
         })
 
         viewModel.openShareViewLiveEvent.observe(this, Observer { address ->

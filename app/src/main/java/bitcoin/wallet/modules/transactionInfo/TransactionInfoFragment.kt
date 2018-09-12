@@ -15,8 +15,8 @@ import android.widget.TextView
 import bitcoin.wallet.R
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem
 import bitcoin.wallet.viewHelpers.DateHelper
+import bitcoin.wallet.viewHelpers.HudHelper
 import bitcoin.wallet.viewHelpers.NumberFormatHelper
-import bitcoin.wallet.viewHelpers.TextHelper
 
 class TransactionInfoFragment : DialogFragment() {
 
@@ -24,14 +24,13 @@ class TransactionInfoFragment : DialogFragment() {
 
     private lateinit var viewModel: TransactionInfoViewModel
 
-    private lateinit var coinCode: String
-    private lateinit var txHash: String
+    private lateinit var transactionRecordViewItem: TransactionRecordViewItem
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProviders.of(this).get(TransactionInfoViewModel::class.java)
-        viewModel.init(coinCode, txHash)
+        viewModel.init(transactionRecordViewItem)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -45,6 +44,9 @@ class TransactionInfoFragment : DialogFragment() {
         mDialog?.window?.setGravity(Gravity.BOTTOM)
 
         rootView.findViewById<View>(R.id.txtClose)?.setOnClickListener { viewModel.delegate.onCloseClick() }
+        rootView.findViewById<View>(R.id.transactionIdLayout)?.setOnClickListener { viewModel.delegate.onCopyId() }
+        rootView.findViewById<View>(R.id.itemFromTo)?.setOnClickListener { viewModel.delegate.onCopyFromAddress() }
+        rootView.findViewById<View>(R.id.itemStatus)?.setOnClickListener { viewModel.delegate.onStatusClick() }
 
         viewModel.transactionLiveData.observe(this, Observer { txRecord ->
             if (txRecord != null) {
@@ -55,34 +57,35 @@ class TransactionInfoFragment : DialogFragment() {
                     setTextColor(resources.getColor(if (txRecord.incoming) R.color.green_crypto else R.color.yellow_crypto, null))
                 }
 
-                rootView.findViewById<TextView>(R.id.txDate)?.text = if (txRecord.status == TransactionRecordViewItem.Status.SUCCESS) {
-                    txRecord.date?.let { DateHelper.getFullDateWithShortMonth(it) }
-                } else {
+                rootView.findViewById<TextView>(R.id.txDate)?.text = if (txRecord.status == TransactionRecordViewItem.Status.PENDING) {
                     getString(R.string.tx_info_bottom_sheet_status_processing)
+                } else {
+                    txRecord.date?.let { DateHelper.getFullDateWithShortMonth(it) }
                 }
 
-                val getStatusText = when {
-                    txRecord.status == TransactionRecordViewItem.Status.PENDING -> R.string.tx_info_bottom_sheet_status_processing
+                val statusText = when {
+                    txRecord.status == TransactionRecordViewItem.Status.PROCESSING -> R.string.tx_info_bottom_sheet_status_processing
+                    txRecord.status == TransactionRecordViewItem.Status.PENDING -> R.string.tx_info_bottom_sheet_status_pending
                     else -> R.string.tx_info_bottom_sheet_title_completed
                 }
 
                 rootView.findViewById<TransactionInfoItemView>(R.id.itemStatus)?.apply {
-                    value = getString(getStatusText)
+                    value = getString(statusText).toUpperCase()
                     showValueBackground = true
                     valueIcon = if (txRecord.status == TransactionRecordViewItem.Status.SUCCESS) R.drawable.checkmark_green else R.drawable.pending
                 }
 
-                rootView.findViewById<TextView>(R.id.transactionId)?.apply{
-                    text = TextHelper.randomHashGenerator()//todo txRecord.hash
+                rootView.findViewById<TextView>(R.id.transactionId)?.apply {
+                    text = txRecord.hash
                 }
 
-                rootView.findViewById<TextView>(R.id.fiatValue)?.apply{
-                    text = "~\$${NumberFormatHelper.fiatAmountFormat.format(txRecord.currencyAmount)}"
+                rootView.findViewById<TextView>(R.id.fiatValue)?.apply {
+                    text = "~\$${NumberFormatHelper.fiatAmountFormat.format(txRecord.currencyAmount?.value)}"
                 }
 
-                rootView.findViewById<TransactionInfoItemView>(R.id.itemFromTo)?.apply{
+                rootView.findViewById<TransactionInfoItemView>(R.id.itemFromTo)?.apply {
                     title = getString(if (txRecord.incoming) R.string.tx_info_bottom_sheet_from else R.string.tx_info_bottom_sheet_to)
-                    value = TextHelper.randomHashGenerator()//todo txRecord.from
+                    value = txRecord.from
                     showValueBackground = true
                     valueIcon = R.drawable.round_person_18px
                 }
@@ -99,14 +102,17 @@ class TransactionInfoFragment : DialogFragment() {
             dismiss()
         })
 
+        viewModel.showCopiedLiveEvent.observe(this, Observer {
+            HudHelper.showSuccessMessage(R.string.hud_text_copied, activity)
+        })
+
         return mDialog as Dialog
     }
 
     companion object {
-        fun show(activity: FragmentActivity, coinCode: String, txHash: String) {
+        fun show(activity: FragmentActivity, transactionRecordViewItem: TransactionRecordViewItem) {
             val fragment = TransactionInfoFragment()
-            fragment.coinCode = coinCode
-            fragment.txHash = txHash
+            fragment.transactionRecordViewItem = transactionRecordViewItem
             fragment.show(activity.supportFragmentManager, "receive_fragment")
         }
     }
