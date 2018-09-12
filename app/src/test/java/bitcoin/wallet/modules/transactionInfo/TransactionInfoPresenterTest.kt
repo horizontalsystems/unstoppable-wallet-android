@@ -1,10 +1,10 @@
 package bitcoin.wallet.modules.transactionInfo
 
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem
-import com.nhaarman.mockito_kotlin.verify
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
+import org.mockito.Mockito.verify
 
 class TransactionInfoPresenterTest {
 
@@ -12,9 +12,7 @@ class TransactionInfoPresenterTest {
     private val router = Mockito.mock(TransactionInfoModule.IRouter::class.java)
     private val view = Mockito.mock(TransactionInfoModule.IView::class.java)
 
-    private val coinCode = "BTC"
-    private val txHash = "tx_hash"
-    private val presenter = TransactionInfoPresenter(interactor, router, coinCode, txHash)
+    private val presenter = TransactionInfoPresenter(interactor, router)
 
     @Before
     fun setUp() {
@@ -25,7 +23,7 @@ class TransactionInfoPresenterTest {
     fun viewDidLoad() {
         presenter.viewDidLoad()
 
-        verify(interactor).getTransactionInfo(coinCode, txHash)
+        verify(interactor).getTransactionInfo()
     }
 
     @Test

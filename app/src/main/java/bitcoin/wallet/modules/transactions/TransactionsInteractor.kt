@@ -5,8 +5,7 @@ import bitcoin.wallet.core.ExchangeRateManager
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.CurrencyValue
 import bitcoin.wallet.entities.DollarCurrency
-import bitcoin.wallet.modules.transactions.TransactionRecordViewItem.Status.PENDING
-import bitcoin.wallet.modules.transactions.TransactionRecordViewItem.Status.SUCCESS
+import bitcoin.wallet.modules.transactions.TransactionRecordViewItem.Status.*
 import io.reactivex.disposables.CompositeDisposable
 import java.util.*
 
@@ -44,6 +43,7 @@ class TransactionsInteractor(private val adapterManager: AdapterManager, private
 
         val filteredAdapters = adapterManager.adapters.filter { adapterId == null || it.id == adapterId }
 
+
         filteredAdapters.forEach { adapter ->
             val latestBlockHeight = adapter.latestBlockHeight
             adapter.transactionRecords.forEach { record ->
@@ -60,7 +60,7 @@ class TransactionsInteractor(private val adapterManager: AdapterManager, private
                         incoming = record.amount > 0,
                         blockHeight = record.blockHeight,
                         date = record.timestamp?.let { Date(it) },
-                        status = if (confirmations > 0) SUCCESS else PENDING,
+                        status = getStatus(confirmations),
                         confirmations = confirmations
                 )
                 items.add(item)
@@ -68,6 +68,12 @@ class TransactionsInteractor(private val adapterManager: AdapterManager, private
         }
 
         delegate?.didRetrieveItems(items)
+    }
+
+    private fun getStatus(confirmations: Long? = 0) : TransactionRecordViewItem.Status = when (confirmations) {
+        0L -> PENDING
+        in 1L..6L -> PROCESSING
+        else -> SUCCESS
     }
 
 }

@@ -20,7 +20,7 @@ data class TransactionRecordViewItem(
 ) {
 
     enum class Status {
-        SUCCESS, PENDING
+        SUCCESS, PENDING, PROCESSING
     }
 
     override fun equals(other: Any?): Boolean {

@@ -2,21 +2,37 @@ package bitcoin.wallet.modules.transactionInfo
 
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem
 
-class TransactionInfoPresenter(private val interactor: TransactionInfoModule.IInteractor, private val router: TransactionInfoModule.IRouter, private val coinCode: String, private val txHash: String) : TransactionInfoModule.IViewDelegate, TransactionInfoModule.IInteractorDelegate {
+class TransactionInfoPresenter(private val interactor: TransactionInfoModule.IInteractor, private val router: TransactionInfoModule.IRouter) : TransactionInfoModule.IViewDelegate, TransactionInfoModule.IInteractorDelegate {
     var view: TransactionInfoModule.IView? = null
 
     // IViewDelegate methods
 
     override fun viewDidLoad() {
-        interactor.getTransactionInfo(coinCode, txHash)
+        interactor.getTransactionInfo()
     }
 
-    override fun onDetailsClick() {
-        view?.showDetails()
+    override fun onCopyFromAddress() {
+        interactor.onCopyFromAddress()
+    }
+
+    override fun onCopyId() {
+        interactor.onCopyId()
+    }
+
+    override fun onStatusClick() {
+        interactor.showFullInfo()
     }
 
     override fun onCloseClick() {
         view?.close()
+    }
+
+    override fun didCopyToClipboard() {
+        view?.showCopied()
+    }
+
+    override fun showFullInfo(transactionRecordViewItem: TransactionRecordViewItem) {
+        router.showFullInfo(transactionRecordViewItem)
     }
 
     // IInteractorDelegate methods
