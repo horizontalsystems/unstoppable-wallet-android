@@ -1,4 +1,4 @@
-![Header](/Images/top-logo.jpg)
+![Header](/images/top-logo.jpg)
 
 # Bank Wallet (Android)
 
