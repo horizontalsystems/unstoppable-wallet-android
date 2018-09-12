@@ -10,9 +10,9 @@ This wallet provides a seamless and secure way to get started with Bitcoin and o
 
 This wallet is an independent crypto bank. 
 
-![Header](/Images/BankWalletAllTabs-X-Mockup.jpg)
+![Header](/images/BankWalletAllTabs-android-Mockup.jpg)
 
-The BANK wallet has been designed for everyone. You don't need to understand the inner workings of cryptocurrencies to be able to use it on daily basis and participate in this economy. Check out all BANK wallet screens [here](https://scene.zeplin.io/project/5b167c731d079e4122e946b7).
+The BANK wallet has been designed for everyone. You don't need to understand the inner workings of cryptocurrencies to be able to use it on daily basis and participate in this economy. Check out all BANK wallet screens [here](https://scene.zeplin.io/project/5b18ecff68e34a92986b0224).
 
 ## Independent & Decentralized
 
