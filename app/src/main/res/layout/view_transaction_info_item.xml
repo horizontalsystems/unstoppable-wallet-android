@@ -23,10 +23,23 @@
         tools:text="From"
         />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="28dp"
+        android:progressDrawable="@drawable/transaction_progress"
+        android:max="100"
+        app:layout_constraintBottom_toBottomOf="@+id/valueWrapper"
+        app:layout_constraintEnd_toEndOf="@+id/valueWrapper"
+        app:layout_constraintStart_toStartOf="@+id/valueWrapper"
+        app:layout_constraintTop_toTopOf="@+id/valueWrapper"
+        />
+
     <LinearLayout
         android:id="@+id/valueWrapper"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="27dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="4dp"
         android:orientation="horizontal"
@@ -42,21 +55,21 @@
             android:layout_gravity="center"
             android:layout_marginStart="8dp"
             android:src="@drawable/pending"
-            android:visibility="visible"
+            android:visibility="gone"
             />
 
         <TextView
             android:id="@+id/txtValue"
             style="@style/TransactionInfoFieldValue"
             android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="3dp"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="3dp"
+            android:maxWidth="150dp"
+            android:textAllCaps="true"
             android:ellipsize="middle"
-            android:maxWidth="135dp"
             android:singleLine="true"
-            android:textAlignment="textEnd"
             tools:text="1AYHMDV1XR8DHDNKBKJBDEEF8DFA8KMNBBYDF9PQ"
             />
     </LinearLayout>

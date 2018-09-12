@@ -125,7 +125,7 @@ class WalletKit(words: List<String>, network: NetworkParameters) {
     fun demoTransactions(): List<TransactionRecordNew> {
         val transactions: MutableList<TransactionRecordNew> = mutableListOf()
         val tr = TransactionRecordNew().apply {
-            transactionHash = "f34ff4gffr"
+            transactionHash = "1AYHMDV1XR8DHDNKBKJBDEEF8DFA8KMNBBYDF9PQ"
             coinCode = "BTC"
             from = listOf("1A7o3DtwdLQWy9dMq5oV9CHW1PC8jrfFPi")
             to = listOf("13UwE8nL9PBezSrMK5LtncsTR6Er7DhBdy")
@@ -137,19 +137,31 @@ class WalletKit(words: List<String>, network: NetworkParameters) {
         transactions.add(tr)
 
         val tr1 = TransactionRecordNew().apply {
-            transactionHash = "f34ff4gffr"
+            transactionHash = "1ANKNJ1XR8DHDNKBKJBDEEF8DFA8KMNBBYDF9PQ"
             coinCode = "BTC"
             from = listOf("1A7o3DtwdLQWy9dMq5oV9CHW1PC8jrfFPi")
             to = listOf("13UwE8nL9PBezSrMK5LtncsTR6Er7DhBdy")
             amount = 0.03
             fee = 0.0093
-            blockHeight = 127
+            blockHeight = 128
             timestamp = 1533152151123
         }
         transactions.add(tr1)
 
         val tr2 = TransactionRecordNew().apply {
-            transactionHash = "efw43f3fwer"
+            transactionHash = "1AYHMDV1XR8DHDNKBKJBDEEF8DFA8KMNBBYDF9PQ"
+            coinCode = "BTC"
+            from = listOf("1A7o3DtwdLQWy9dMq5oV9CHW1PC8jrfFPi")
+            to = listOf("13UwE8nL9PBezSrMK5LtncsTR6Er7DhBdy")
+            amount = 0.032
+            fee = 0.0093
+            blockHeight = 125
+            timestamp = 1533052151123
+        }
+        transactions.add(tr2)
+
+        val tr3 = TransactionRecordNew().apply {
+            transactionHash = "1AYHMDV1XR8DHDNKBKJBDEEF8DFA8KMNBBYDF9PQ"
             coinCode = "BTC"
             from = listOf("mxNEBQf2xQeLknPZW65rMbKxEban6udxFc")
             to = listOf("13UwE8nL9PBezSrMK5LtncsTR6Er7DhBdy")
@@ -158,10 +170,10 @@ class WalletKit(words: List<String>, network: NetworkParameters) {
             blockHeight = 122
             timestamp = 1536152151123
         }
-        transactions.add(tr2)
+        transactions.add(tr3)
 
-        val tr3 = TransactionRecordNew().apply {
-            transactionHash = "eewffw43f3fwer"
+        val tr4 = TransactionRecordNew().apply {
+            transactionHash = "1AYHMDV1XR8DHDNKBKJBDEEF8DFA8KMNBBYDF9PQ"
             coinCode = "BTC"
             from = listOf("wef23mxNEBQf2xQeLknPZW65rMbKxEban6udxFc")
             to = listOf("ew13UwE8nL9PBezSrMK5LtncsTR6Er7DhBdy")
@@ -170,7 +182,7 @@ class WalletKit(words: List<String>, network: NetworkParameters) {
             blockHeight = 103
             timestamp = 1536052151123
         }
-        transactions.add(tr3)
+        transactions.add(tr4)
 
         return transactions
     }

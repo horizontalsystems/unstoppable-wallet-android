@@ -70,7 +70,8 @@
             android:textAlignment="textEnd"
             android:ellipsize="middle"
             android:singleLine="true"
-            tools:text="1AYHMDV1XR8DHDNKBKJBDEEF8DFA8KMNBBYDF9PQ"
+            android:textAllCaps="true"
+            tools:text="1111111111111111111111"
             />
     </LinearLayout>
 
@@ -135,7 +136,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/border2"
         app:title="@string/tx_info_bottom_sheet_from"
-        app:value=""
+        app:value="1111111"
         />
 
     <View
@@ -178,8 +179,9 @@
         android:paddingTop="16dp"
         android:text="@string/tx_info_bottom_sheet_close"
         android:textAlignment="center"
-        android:textColor="@color/green_crypto"
+        android:textColor="@color/grey"
         android:textSize="17sp"
+        tools:text="Close"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import bitcoin.wallet.R
 import bitcoin.wallet.core.App
@@ -22,37 +23,8 @@ class TransactionInfoItemView : ConstraintLayout {
     private lateinit var valueTextView: TextView
     private lateinit var iconImageView: ImageView
     private lateinit var valueLinearLayout: LinearLayout
+    private lateinit var progressBarView: ProgressBar
 
-    var title: String? = null
-        set(value) {
-            titleTextView.text = value
-            invalidate()
-        }
-
-    var value: String? = null
-        set(value) {
-            valueTextView.text = value
-            invalidate()
-        }
-
-    var showValueBackground: Boolean = false
-        set(value) {
-            valueLinearLayout.background = if (value) ContextCompat.getDrawable(App.instance, R.drawable.text_grey_background) else null
-            valueTextView.setTextColor(ContextCompat.getColor(App.instance, if (value) R.color.dark else R.color.grey))
-            invalidate()
-        }
-
-    var valueIcon: Int? = null
-        set(value) {
-            value?.let {
-                iconImageView.setImageDrawable(ContextCompat.getDrawable(App.instance, it))
-                iconImageView.visibility = View.VISIBLE
-            } ?: run {
-                iconImageView.visibility = View.GONE
-            }
-
-            invalidate()
-        }
 
     constructor(context: Context) : super(context) {
         initializeViews()
@@ -66,6 +38,38 @@ class TransactionInfoItemView : ConstraintLayout {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         initializeViews()
         loadAttributes(attrs)
+    }
+
+    override fun onFinishInflate() {
+        super.onFinishInflate()
+
+        titleTextView = findViewById(R.id.txtTitle)
+        valueTextView = findViewById(R.id.txtValue)
+        iconImageView = findViewById(R.id.valueLeftIcon)
+        valueLinearLayout = findViewById(R.id.valueWrapper)
+        progressBarView = findViewById(R.id.progressBar)
+
+        titleTextView.text = attrTitle
+        valueTextView.text = attrValue
+    }
+
+    fun bind(title: String? = null, value: String? = null, valueIcon: Int? = null, progressValue: Int? = null) {
+        titleTextView.text = title
+        valueTextView.text = value
+        valueIcon?.let {
+            iconImageView.setImageDrawable(ContextCompat.getDrawable(App.instance, it))
+            iconImageView.visibility = View.VISIBLE
+        } ?: run {
+            iconImageView.visibility = View.GONE
+        }
+
+        progressBarView.progress = progressValue ?: 0
+        progressBarView.visibility = if (progressValue == null) View.GONE else View.VISIBLE
+
+        valueLinearLayout.background = if (valueIcon != null && progressValue == null) ContextCompat.getDrawable(App.instance, R.drawable.text_grey_background) else null
+        valueTextView.setTextColor(ContextCompat.getColor(App.instance, if (valueIcon != null || progressValue != null) R.color.dark else R.color.grey))
+
+        invalidate()
     }
 
     private fun initializeViews() {
@@ -82,18 +86,6 @@ class TransactionInfoItemView : ConstraintLayout {
         } finally {
             ta.recycle()
         }
-    }
-
-    override fun onFinishInflate() {
-        super.onFinishInflate()
-
-        titleTextView = findViewById(R.id.txtTitle)
-        valueTextView = findViewById(R.id.txtValue)
-        iconImageView = findViewById(R.id.valueLeftIcon)
-        valueLinearLayout = findViewById(R.id.valueWrapper)
-
-        titleTextView.text = attrTitle
-        valueTextView.text = attrValue
     }
 
 }

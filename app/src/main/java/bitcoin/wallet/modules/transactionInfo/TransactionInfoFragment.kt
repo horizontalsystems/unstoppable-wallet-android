@@ -49,60 +49,67 @@ class TransactionInfoFragment : DialogFragment() {
         rootView.findViewById<View>(R.id.itemStatus)?.setOnClickListener { viewModel.delegate.onStatusClick() }
 
         viewModel.transactionLiveData.observe(this, Observer { txRecord ->
-            if (txRecord != null) {
+            txRecord?.let { txRec ->
 
                 rootView.findViewById<TextView>(R.id.txtAmount)?.apply {
-                    val sign = if (txRecord.incoming) "+" else "-"
-                    text = "$sign ${NumberFormatHelper.cryptoAmountFormat.format(Math.abs(txRecord.amount.value))} ${txRecord.amount.coin.code}"
-                    setTextColor(resources.getColor(if (txRecord.incoming) R.color.green_crypto else R.color.yellow_crypto, null))
+                    val sign = if (txRec.incoming) "+" else "-"
+                    text = "$sign ${NumberFormatHelper.cryptoAmountFormat.format(Math.abs(txRec.amount.value))} ${txRec.amount.coin.code}"
+                    setTextColor(resources.getColor(if (txRec.incoming) R.color.green_crypto else R.color.yellow_crypto, null))
                 }
 
-                rootView.findViewById<TextView>(R.id.txDate)?.text = if (txRecord.status == TransactionRecordViewItem.Status.PENDING) {
+                rootView.findViewById<TextView>(R.id.txDate)?.text = if (txRec.status == TransactionRecordViewItem.Status.PENDING) {
                     getString(R.string.tx_info_bottom_sheet_status_processing)
                 } else {
-                    txRecord.date?.let { DateHelper.getFullDateWithShortMonth(it) }
-                }
-
-                val statusText = when {
-                    txRecord.status == TransactionRecordViewItem.Status.PROCESSING -> R.string.tx_info_bottom_sheet_status_processing
-                    txRecord.status == TransactionRecordViewItem.Status.PENDING -> R.string.tx_info_bottom_sheet_status_pending
-                    else -> R.string.tx_info_bottom_sheet_title_completed
+                    txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) }
                 }
 
                 rootView.findViewById<TransactionInfoItemView>(R.id.itemStatus)?.apply {
-                    value = getString(statusText).toUpperCase()
-                    showValueBackground = true
-                    valueIcon = if (txRecord.status == TransactionRecordViewItem.Status.SUCCESS) R.drawable.checkmark_green else R.drawable.pending
+                    val progressNumber = txRec.confirmations?.let { 100 / 6 * it.toInt() } ?: 0 //6 confirmations is accepted as 100% for transaction success
+                    val valueIcon = when {
+                        txRec.status == TransactionRecordViewItem.Status.PENDING -> R.drawable.pending
+                        txRec.status == TransactionRecordViewItem.Status.PROCESSING -> null
+                        else -> R.drawable.checkmark_green
+                    }
+                    val progress = when {
+                        txRec.status == TransactionRecordViewItem.Status.PROCESSING -> progressNumber
+                        else -> null
+                    }
+                    val statusText = when {
+                        txRec.status == TransactionRecordViewItem.Status.PROCESSING -> getString(R.string.tx_info_bottom_sheet_status_processing, progressNumber)
+                        txRec.status == TransactionRecordViewItem.Status.PENDING -> getString(R.string.tx_info_bottom_sheet_status_pending)
+                        else -> getString(R.string.tx_info_bottom_sheet_title_completed)
+                    }
+                    bind(title = getString(R.string.tx_info_bottom_sheet_status), value = statusText, valueIcon = valueIcon, progressValue = progress)
                 }
 
                 rootView.findViewById<TextView>(R.id.transactionId)?.apply {
-                    text = txRecord.hash
+                    text = txRec.hash
                 }
 
                 rootView.findViewById<TextView>(R.id.fiatValue)?.apply {
-                    text = "~\$${NumberFormatHelper.fiatAmountFormat.format(txRecord.currencyAmount?.value)}"
+                    text = "~\$${NumberFormatHelper.fiatAmountFormat.format(txRec.currencyAmount?.value)}"
                 }
 
                 rootView.findViewById<TransactionInfoItemView>(R.id.itemFromTo)?.apply {
-                    title = getString(if (txRecord.incoming) R.string.tx_info_bottom_sheet_from else R.string.tx_info_bottom_sheet_to)
-                    value = txRecord.from
-                    showValueBackground = true
-                    valueIcon = R.drawable.round_person_18px
+                    val title = getString(if (txRec.incoming) R.string.tx_info_bottom_sheet_from else R.string.tx_info_bottom_sheet_to)
+                    bind(title = title, value = txRec.from, valueIcon = R.drawable.round_person_18px)
                 }
-
             }
 
         })
 
-        viewModel.showDetailsLiveEvent.observe(this, Observer {
+        viewModel.showDetailsLiveEvent.observe(this, Observer
+        {
             //todo open Details activity
         })
 
-        viewModel.closeLiveEvent.observe(this, Observer {
+        viewModel.closeLiveEvent.observe(this, Observer
+        {
             dismiss()
         })
 
-        viewModel.showCopiedLiveEvent.observe(this, Observer {
+        viewModel.showCopiedLiveEvent.observe(this, Observer
+        {
             HudHelper.showSuccessMessage(R.string.hud_text_copied, activity)
         })
 
