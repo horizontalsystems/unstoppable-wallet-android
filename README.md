@@ -12,7 +12,7 @@ This wallet is an independent crypto bank.
 
 ![Header](/Images/BankWalletAllTabs-X-Mockup.jpg)
 
-The BANK wallet has been designed for everyone. You don't need to understand the inner workings of crypto currencies to be able to use it on daily basis and participate in this economy. Check out all BANK wallet screens [here](https://scene.zeplin.io/project/5b167c731d079e4122e946b7).
+The BANK wallet has been designed for everyone. You don't need to understand the inner workings of cryptocurrencies to be able to use it on daily basis and participate in this economy. Check out all BANK wallet screens [here](https://scene.zeplin.io/project/5b167c731d079e4122e946b7).
 
 ## Independent & Decentralized
 
@@ -47,7 +47,7 @@ Upcoming features:
 * multi-lingual design and user interface.
 * import multiple wallets into the app.
 * support for multiple wallets each having its own balance and list of currencies.
-* privately swap/exchange one crypto currency to another.
+* privately swap/exchange one cryptocurrency to another.
 * ability to label transactions and addresses.
 * integrated block explorer to get status on transactions, blocks and payment addresses.
 * option to put a portion of your funds into a secure stand-alone paper wallet.
