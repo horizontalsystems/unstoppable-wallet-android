@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import bitcoin.wallet.core.managers.BackgroundManager
+import bitcoin.wallet.kit.WalletKit
 
 class App : Application() {
 
