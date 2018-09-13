@@ -2,16 +2,13 @@ package bitcoin.wallet.modules.wallet
 
 import bitcoin.wallet.core.AdapterManager
 import bitcoin.wallet.core.BitcoinAdapter
-import bitcoin.wallet.core.DatabaseChangeset
-import bitcoin.wallet.core.IDatabaseManager
+import bitcoin.wallet.core.ExchangeRateManager
 import bitcoin.wallet.entities.CoinValue
-import bitcoin.wallet.entities.ExchangeRate
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.modules.RxBaseTest
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.atLeast
 import com.nhaarman.mockito_kotlin.whenever
-import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import org.junit.Before
 import org.junit.Test
@@ -21,8 +18,8 @@ import org.mockito.Mockito.verify
 class WalletInteractorTest {
 
     private val delegate = mock(WalletModule.IInteractorDelegate::class.java)
-    private val databaseManager = mock(IDatabaseManager::class.java)
     private val adapterManager = mock(AdapterManager::class.java)
+    private val exchangeRateManager = mock(ExchangeRateManager::class.java)
     private val bitcoinAdapter = mock(BitcoinAdapter::class.java)
     private lateinit var interactor: WalletInteractor
     private var coin = Bitcoin()
@@ -30,26 +27,23 @@ class WalletInteractorTest {
     private var wordsHash = words.joinToString(" ")
     private var adapterId: String = "${wordsHash.hashCode()}-${coin.code}"
 
-    private var exchangeRates = DatabaseChangeset(listOf(
-            ExchangeRate().apply {
-                code = "BTC"
-                value = 10_000.0
-            }
-    ))
+    private var exchangeRates = mapOf("BTC" to 10_000.0)
 
     @Before
     fun before() {
         RxBaseTest.setup()
 
-        interactor = WalletInteractor(adapterManager, databaseManager)
+        interactor = WalletInteractor(adapterManager, exchangeRateManager)
         interactor.delegate = delegate
 
         adapterManager.adapters = mutableListOf(bitcoinAdapter)
+
+        whenever(exchangeRateManager.subject).thenReturn(PublishSubject.create())
     }
 
     @Test
     fun fetchWalletBalances() {
-        whenever(databaseManager.getExchangeRates()).thenReturn(Observable.just(exchangeRates))
+        whenever(exchangeRateManager.exchangeRates).thenReturn(exchangeRates)
         whenever(adapterManager.subject).thenReturn(PublishSubject.create<Any>())
 
         interactor.notifyWalletBalances()
@@ -64,7 +58,7 @@ class WalletInteractorTest {
         val balanceSub: PublishSubject<Double> = PublishSubject.create()
         val managerSub: PublishSubject<Any> = PublishSubject.create()
 
-        whenever(databaseManager.getExchangeRates()).thenReturn(Observable.just(DatabaseChangeset(listOf())))
+        whenever(exchangeRateManager.exchangeRates).thenReturn(exchangeRates)
 
         whenever(adapterManager.subject).thenReturn(managerSub)
         whenever(adapterManager.adapters).thenReturn(mutableListOf(bitcoinAdapter))
@@ -86,7 +80,7 @@ class WalletInteractorTest {
         val managerSub: PublishSubject<Any> = PublishSubject.create()
 
         whenever(adapterManager.subject).thenReturn(managerSub)
-        whenever(databaseManager.getExchangeRates()).thenReturn(Observable.just(exchangeRates))
+        whenever(exchangeRateManager.exchangeRates).thenReturn(exchangeRates)
 
         interactor.notifyWalletBalances()
 

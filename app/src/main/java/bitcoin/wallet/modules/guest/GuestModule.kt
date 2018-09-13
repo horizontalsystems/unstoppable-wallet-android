@@ -2,7 +2,6 @@ package bitcoin.wallet.modules.guest
 
 import android.content.Context
 import android.content.Intent
-import bitcoin.wallet.blockchain.BlockchainManager
 import bitcoin.wallet.core.managers.Factory
 
 object GuestModule {
@@ -37,7 +36,7 @@ object GuestModule {
     }
 
     fun init(view: GuestViewModel, router: IRouter) {
-        val interactor = GuestInteractor(Factory.mnemonicManager, Factory.blockchainManager)
+        val interactor = GuestInteractor()
         val presenter = GuestPresenter(interactor, router)
 
         view.delegate = presenter

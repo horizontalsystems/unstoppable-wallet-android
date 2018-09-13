@@ -36,7 +36,7 @@ object RestoreModule {
     }
 
     fun initModule(view: RestoreViewModel, router: IRouter) {
-        val interactor = RestoreInteractor(Factory.mnemonicManager, Factory.blockchainManager)
+        val interactor = RestoreInteractor()
         val presenter = RestorePresenter(interactor, router)
 
         view.delegate = presenter

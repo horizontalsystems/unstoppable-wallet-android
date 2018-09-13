@@ -130,7 +130,7 @@ class TransactionsInteractorTest {
                         true,
                         98,
                         now,
-                        TransactionRecordViewItem.Status.SUCCESS,
+                        TransactionRecordViewItem.Status.PROCESSING,
                         3,
                         CurrencyValue(currency = DollarCurrency(), value = btcTxAmount * (exchangeRates["BTC"] ?: 0.0))
                 ),

@@ -1,17 +1,16 @@
 package bitcoin.wallet.modules.wallet
 
 import bitcoin.wallet.core.AdapterManager
-import bitcoin.wallet.core.IDatabaseManager
+import bitcoin.wallet.core.ExchangeRateManager
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.DollarCurrency
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 
-class WalletInteractor(private val adapterManager: AdapterManager, private val databaseManager: IDatabaseManager) : WalletModule.IInteractor {
+class WalletInteractor(private val adapterManager: AdapterManager, private val exchangeRateManager: ExchangeRateManager) : WalletModule.IInteractor {
 
     var delegate: WalletModule.IInteractorDelegate? = null
     private var disposables: CompositeDisposable = CompositeDisposable()
-    private var exchangeRates = mutableMapOf<String, Double>()
 
     override fun notifyWalletBalances() {
         adapterManager.subject.subscribe {
@@ -32,6 +31,7 @@ class WalletInteractor(private val adapterManager: AdapterManager, private val d
             progresses[adapter.id] = adapter.progressSubject
         }
 
+        val exchangeRates = ExchangeRateManager.exchangeRates
         delegate?.didInitialFetch(coinValues, exchangeRates, progresses, currency)
 
         adapterManager.adapters.forEach { adapter ->
@@ -40,10 +40,10 @@ class WalletInteractor(private val adapterManager: AdapterManager, private val d
             })
         }
 
-        disposables.add(databaseManager.getExchangeRates().subscribe {
-            exchangeRates = it.array.associateBy({ it.code }, { it.value }).toMutableMap()
-            delegate?.didUpdate(exchangeRates)
-        })
+        exchangeRateManager.subject.subscribe {
+            delegate?.didUpdate(it)
+        }
+
     }
 
 }

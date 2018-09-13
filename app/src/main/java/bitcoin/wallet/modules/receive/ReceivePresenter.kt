@@ -1,7 +1,6 @@
 package bitcoin.wallet.modules.receive
 
 import bitcoin.wallet.R
-import bitcoin.wallet.blockchain.UnsupportedBlockchain
 import bitcoin.wallet.modules.receive.viewitems.AddressItem
 
 class ReceivePresenter(private val interactor: ReceiveModule.IInteractor, private val router: ReceiveModule.IRouter) : ReceiveModule.IViewDelegate, ReceiveModule.IInteractorDelegate {
@@ -23,7 +22,7 @@ class ReceivePresenter(private val interactor: ReceiveModule.IInteractor, privat
     }
 
     private fun getError(exception: Exception) = when (exception) {
-        is UnsupportedBlockchain -> R.string.error_unsupported_blockchain
+//        is UnsupportedBlockchain -> R.string.error_unsupported_blockchain
         else -> R.string.error
     }
 

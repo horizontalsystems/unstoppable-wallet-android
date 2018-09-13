@@ -21,12 +21,6 @@ class WalletViewModel : ViewModel(), WalletModule.IView, WalletModule.IRouter {
         delegate.viewDidLoad()
     }
 
-    override fun onCleared() {
-        super.onCleared()
-
-        WalletModule.destroy()
-    }
-
     override fun openReceiveDialog(adapterId: String) {
         openReceiveDialog.value = adapterId
     }

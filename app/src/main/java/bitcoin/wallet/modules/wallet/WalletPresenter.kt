@@ -12,7 +12,7 @@ class WalletPresenter(private var interactor: WalletModule.IInteractor, private 
     var view: WalletModule.IView? = null
 
     private var coinValues = mutableMapOf<String, CoinValue>()
-    private var rates = mutableMapOf<String, Double>()
+    private var rates = mapOf<String, Double>()
     private var progresses = mutableMapOf<String, BehaviorSubject<Double>>()
     var currency: Currency = DollarCurrency()
 
@@ -29,7 +29,7 @@ class WalletPresenter(private var interactor: WalletModule.IInteractor, private 
         interactor.notifyWalletBalances()
     }
 
-    override fun didInitialFetch(coinValues: MutableMap<String, CoinValue>, rates: MutableMap<String, Double>, progresses: MutableMap<String, BehaviorSubject<Double>>, currency: Currency) {
+    override fun didInitialFetch(coinValues: MutableMap<String, CoinValue>, rates: Map<String, Double>, progresses: MutableMap<String, BehaviorSubject<Double>>, currency: Currency) {
         this.coinValues = coinValues
         this.rates = rates
         this.progresses = progresses
@@ -44,7 +44,7 @@ class WalletPresenter(private var interactor: WalletModule.IInteractor, private 
         updateView()
     }
 
-    override fun didUpdate(rates: MutableMap<String, Double>) {
+    override fun didUpdate(rates: Map<String, Double>) {
         this.rates = rates
 
         updateView()

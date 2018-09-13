@@ -4,7 +4,7 @@ import io.reactivex.subjects.PublishSubject
 
 object ExchangeRateManager {
 
-    var subject: PublishSubject<MutableMap<String, Double>> = PublishSubject.create()
+    var subject: PublishSubject<Map<String, Double>> = PublishSubject.create()
 
     var exchangeRates: Map<String, Double> = hashMapOf("BTC" to 6300.0)
 

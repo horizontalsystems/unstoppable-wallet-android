@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'realm-android'
 
 Properties buildProperties = new Properties()
 buildProperties.load(new BufferedReader(new InputStreamReader(new FileInputStream("app/confs/wallet.properties"), "UTF8")))
@@ -10,10 +9,6 @@ buildProperties.load(new BufferedReader(new InputStreamReader(new FileInputStrea
 androidExtensions {
     experimental = true
 }
-
-//realm {
-//    syncEnabled = true
-//}
 
 def computeVersionCode() {
     ext.buildNumber = System.getenv("BUILD_NUMBER") ?: 0
@@ -51,9 +46,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    api('org.bitcoinj:bitcoinj-core:0.14.7') {
-        exclude module: 'scrypt'
-    }
+
     // ViewModel and LiveData
     implementation "android.arch.lifecycle:extensions:$lifecycle_version"
     // alternatively - just ViewModel
@@ -95,13 +88,6 @@ dependencies {
     api 'com.journeyapps:zxing-android-embedded:3.6.0'
 
     implementation 'org.slf4j:slf4j-simple:1.7.20'
-
-    def daggerVersion = "2.16"
-
-    implementation "com.google.dagger:dagger-android:$daggerVersion"
-    implementation "com.google.dagger:dagger-android-support:$daggerVersion"
-    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
-    kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
 
     // WalletKit
     implementation 'com.github.horizontalsystems:wallet-kit-android:dev-SNAPSHOT'
