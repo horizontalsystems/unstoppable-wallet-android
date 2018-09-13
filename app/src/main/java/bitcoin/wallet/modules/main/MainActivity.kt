@@ -7,36 +7,21 @@ import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import bitcoin.wallet.R
-import bitcoin.wallet.blockchain.BlockchainManager
 import bitcoin.wallet.core.AdapterManager
 import bitcoin.wallet.core.App
 import bitcoin.wallet.core.managers.Factory
-import bitcoin.wallet.injections.component.DaggerMainActivityComponent
-import bitcoin.wallet.injections.module.AppModule
-import bitcoin.wallet.injections.module.MainActivityModule
 import bitcoin.wallet.viewHelpers.LayoutHelper
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import kotlinx.android.synthetic.main.activity_dashboard.*
-import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
-
-    @Inject
-    lateinit var blockchainManager: BlockchainManager
 
     private lateinit var adapter: MainTabsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Factory.preferencesManager.savedWords?.let { AdapterManager.initAdapters(it) }
-
-        DaggerMainActivityComponent
-                .builder()
-                .appModule(AppModule(App.instance))
-                .mainActivityModule(MainActivityModule(this))
-                .build()
-                .inject(this)
 
         val lightMode = Factory.preferencesManager.isLightModeEnabled
         setTheme(if (lightMode) R.style.LightModeAppTheme else R.style.DarkModeAppTheme)

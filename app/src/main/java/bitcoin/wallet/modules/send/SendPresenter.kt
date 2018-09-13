@@ -1,9 +1,6 @@
 package bitcoin.wallet.modules.send
 
 import bitcoin.wallet.R
-import bitcoin.wallet.blockchain.InvalidAddress
-import bitcoin.wallet.blockchain.NotEnoughFundsException
-import bitcoin.wallet.blockchain.UnsupportedBlockchain
 import bitcoin.wallet.viewHelpers.NumberFormatHelper
 import java.text.NumberFormat
 import java.text.ParseException
@@ -94,9 +91,9 @@ class SendPresenter(private val interactor: SendModule.IInteractor, private val 
     }
 
     private fun getError(exception: Exception) = when (exception) {
-        is UnsupportedBlockchain -> R.string.error_unsupported_blockchain
-        is InvalidAddress -> R.string.send_bottom_sheet_error_invalid_address
-        is NotEnoughFundsException -> R.string.send_bottom_sheet_error_insufficient_balance
+//        is UnsupportedBlockchain -> R.string.error_unsupported_blockchain
+//        is InvalidAddress -> R.string.send_bottom_sheet_error_invalid_address
+//        is NotEnoughFundsException -> R.string.send_bottom_sheet_error_insufficient_balance
         else -> R.string.error
     }
 

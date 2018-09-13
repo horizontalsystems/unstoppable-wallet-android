@@ -1,12 +1,10 @@
 package bitcoin.wallet.modules.send
 
+import bitcoin.wallet.core.ExchangeRateManager
 import bitcoin.wallet.core.IAdapter
 import bitcoin.wallet.core.IClipboardManager
-import bitcoin.wallet.core.IDatabaseManager
 
-class SendInteractor(private val databaseManager: IDatabaseManager,
-                     private var clipboardManager: IClipboardManager,
-                     private val adapter: IAdapter) : SendModule.IInteractor {
+class SendInteractor(private var clipboardManager: IClipboardManager, private val adapter: IAdapter, private val exchangeRateManager: ExchangeRateManager) : SendModule.IInteractor {
 
     var delegate: SendModule.IInteractorDelegate? = null
 
@@ -23,9 +21,11 @@ class SendInteractor(private val databaseManager: IDatabaseManager,
     }
 
     override fun fetchExchangeRate() {
-        databaseManager.getExchangeRates().subscribe { rates ->
-            val exchangeRate = rates.array.find { it.code == adapter.coin.code }?.value
-            exchangeRate?.let { delegate?.didFetchExchangeRate(it) }
+        val exchangeRates = exchangeRateManager.exchangeRates
+        exchangeRates.forEach {
+            if (it.key == adapter.coin.code) {
+                delegate?.didFetchExchangeRate(it.value)
+            }
         }
     }
 

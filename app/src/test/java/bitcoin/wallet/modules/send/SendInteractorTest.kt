@@ -1,15 +1,12 @@
 package bitcoin.wallet.modules.send
 
 import bitcoin.wallet.core.BitcoinAdapter
-import bitcoin.wallet.core.DatabaseChangeset
+import bitcoin.wallet.core.ExchangeRateManager
 import bitcoin.wallet.core.IClipboardManager
-import bitcoin.wallet.core.IDatabaseManager
-import bitcoin.wallet.entities.ExchangeRate
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.modules.RxBaseTest
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
-import io.reactivex.Observable
 import junit.framework.Assert
 import org.junit.Before
 import org.junit.Test
@@ -18,11 +15,13 @@ import org.mockito.Mockito
 class SendInteractorTest {
 
     private val delegate = Mockito.mock(SendModule.IInteractorDelegate::class.java)
-    private val databaseManager = Mockito.mock(IDatabaseManager::class.java)
     private val clipboardManager = Mockito.mock(IClipboardManager::class.java)
     private val bitcoinAdapter = Mockito.mock(BitcoinAdapter::class.java)
+    private val exchangeRateManager = Mockito.mock(ExchangeRateManager::class.java)
 
-    private val interactor = SendInteractor(databaseManager, clipboardManager, bitcoinAdapter)
+    private val interactor = SendInteractor(clipboardManager, bitcoinAdapter, exchangeRateManager)
+
+    private var exchangeRates = mapOf("BTC" to 10_000.0)
 
     @Before
     fun setUp() {
@@ -50,16 +49,12 @@ class SendInteractorTest {
     fun fetchExchangeRate() {
         val coin = Bitcoin()
 
-        val exchangeRate = ExchangeRate().apply {
-            code = "BTC"
-            value = 7349.4
-        }
-        whenever(databaseManager.getExchangeRates()).thenReturn(Observable.just(DatabaseChangeset(arrayListOf(exchangeRate))))
+        whenever(exchangeRateManager.exchangeRates).thenReturn(exchangeRates)
         whenever(bitcoinAdapter.coin).thenReturn(coin)
 
         interactor.fetchExchangeRate()
 
-        verify(delegate).didFetchExchangeRate(exchangeRate.value)
+        verify(delegate).didFetchExchangeRate(10_000.0)
     }
 
     @Test

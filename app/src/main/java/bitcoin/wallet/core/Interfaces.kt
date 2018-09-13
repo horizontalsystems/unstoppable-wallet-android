@@ -1,11 +1,5 @@
 package bitcoin.wallet.core
 
-import bitcoin.wallet.entities.Balance
-import bitcoin.wallet.entities.BlockchainInfo
-import bitcoin.wallet.entities.ExchangeRate
-import bitcoin.wallet.entities.TransactionRecord
-import bitcoin.wallet.entities.coins.bitcoin.BitcoinUnspentOutput
-import bitcoin.wallet.entities.coins.bitcoinCash.BitcoinCashUnspentOutput
 import io.reactivex.Observable
 import io.realm.OrderedCollectionChangeSet
 
@@ -26,23 +20,6 @@ interface IWalletDataProvider {
 
 interface IRandomProvider {
     fun getRandomIndexes(count: Int): List<Int>
-}
-
-interface IDatabaseManager {
-    fun getBitcoinUnspentOutputs(): Observable<DatabaseChangeset<BitcoinUnspentOutput>>
-    fun getBitcoinCashUnspentOutputs(): Observable<DatabaseChangeset<BitcoinCashUnspentOutput>>
-    fun getExchangeRates(): Observable<DatabaseChangeset<ExchangeRate>>
-    fun getTransactionRecords(): Observable<DatabaseChangeset<TransactionRecord>>
-    fun getBlockchainInfos(): Observable<DatabaseChangeset<BlockchainInfo>>
-    fun getBalances(): Observable<DatabaseChangeset<Balance>>
-    fun insertOrUpdateTransactions(transactionRecords: List<TransactionRecord>)
-    fun updateBlockchainInfo(blockchainInfo: BlockchainInfo)
-    fun updateExchangeRate(exchangeRate: ExchangeRate)
-    fun updateBalance(balance: Balance)
-    fun getTransactionRecord(coinCode: String, txHash: String): Observable<TransactionRecord>
-    fun updateBlockchainHeight(coinCode: String, height: Long)
-    fun updateBlockchainSyncing(coinCode: String, syncing: Boolean)
-    fun close()
 }
 
 interface INetworkManager {
