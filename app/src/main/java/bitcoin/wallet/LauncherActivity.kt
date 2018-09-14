@@ -17,6 +17,9 @@ class LauncherActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //todo remove after testing
+        Factory.preferencesManager.saveWords(listOf("used", "ugly", "meat", "glad", "balance", "divorce", "inner", "artwork", "hire", "invest", "already", "piano"))
+
         try {
             redirectToCorrectPage()
         } catch (exception: UserNotAuthenticatedException) {

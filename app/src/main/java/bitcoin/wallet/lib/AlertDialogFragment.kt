@@ -35,7 +35,10 @@ class AlertDialogFragment : DialogFragment() {
 
         rootView.findViewById<TextView>(R.id.txtButton)?.let { txtButton ->
             buttonText?.let { txtButton.setText(it) }
-            txtButton.setOnClickListener { listener?.onButtonClick() }
+            txtButton.setOnClickListener {
+                listener?.onButtonClick()
+                dismiss()
+            }
         }
 
         val mDialog = builder?.create()
@@ -51,7 +54,7 @@ class AlertDialogFragment : DialogFragment() {
     }
 
     companion object {
-        fun newInstance(title: Int, description: Int, buttonText: Int, listener: Listener): AlertDialogFragment {
+        fun newInstance(title: Int, description: Int, buttonText: Int, listener: Listener? = null): AlertDialogFragment {
             val dialog = AlertDialogFragment()
             dialog.title = title
             dialog.description = description

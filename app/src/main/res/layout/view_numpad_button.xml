@@ -55,4 +55,16 @@
         android:visibility="gone"
         />
 
+    <ImageView
+        android:id="@+id/imgFingerprint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="?NumpadFingerprintButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
+        />
+
 </android.support.constraint.ConstraintLayout>

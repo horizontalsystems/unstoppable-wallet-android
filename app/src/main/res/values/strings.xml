@@ -90,6 +90,8 @@
     <!--Settings-->
     <string name="decentralized_app">decentralized app</string>
     <string name="company_link">http://horizontalsystems.io</string>
+    <string name="settings_error_fingerprint_not_enabled">Fingerprint Not Enabled</string>
+    <string name="settings_error_no_fingerprint_added_yet">You have not enabled fingerprint on this device. Go to Settings > Security to set up fingerprint</string>
 
     <string name="tx_info_empty_list">You don\’t have any pending or past transaction yet</string>
 
@@ -100,5 +102,13 @@
     <string name="hud_text_no_internet">No Internet</string>
     <string name="hud_text_copied">Copied</string>
     <string name="hud_text_invalid_pin_error">Invalid PIN. \nPlease try again.</string>
+
+
+    <!--Fingerprint texts-->
+    <string name="fingerprint_dialog_title">Fingerprint login</string>
+    <string name="fingerprint_hint">Touch sensor</string>
+    <string name="enter_pin">Enter pin</string>
+    <string name="fingerprint_not_recognized">Fingerprint not recognized. Try again</string>
+    <string name="fingerprint_success">Fingerprint recognized</string>
 
 </resources>
