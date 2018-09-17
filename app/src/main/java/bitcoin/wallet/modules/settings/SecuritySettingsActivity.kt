@@ -50,7 +50,7 @@ class SecuritySettingsActivity : AppCompatActivity() {
             fingerprint.apply {
                 switchIsChecked = Factory.preferencesManager.isFingerprintEnabled
                 setOnClickListener {
-                    if (switchIsChecked || fingerprintCanBeEnabled()) {
+                    if (Factory.preferencesManager.isFingerprintEnabled || fingerprintCanBeEnabled()) {
                         switchToggle()
                     }
                 }

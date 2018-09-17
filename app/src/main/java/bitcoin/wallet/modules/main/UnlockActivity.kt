@@ -15,6 +15,7 @@ import bitcoin.wallet.R
 import bitcoin.wallet.core.App
 import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.core.security.FingerprintAuthenticationDialogFragment
+import bitcoin.wallet.core.security.KeyStoreWrapper
 import bitcoin.wallet.core.security.SecurityUtils
 import bitcoin.wallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_unlock.*
@@ -29,6 +30,8 @@ class UnlockActivity : AppCompatActivity(), NumPadItemsAdapter.Listener, Fingerp
     private lateinit var imgPinMask4: ImageView
     private lateinit var imgPinMask5: ImageView
     private lateinit var imgPinMask6: ImageView
+
+    private val keyStoreWrapper = KeyStoreWrapper()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,13 +68,20 @@ class UnlockActivity : AppCompatActivity(), NumPadItemsAdapter.Listener, Fingerp
 
     private fun showFingerprintUnlock() {
         if (Factory.preferencesManager.isFingerprintEnabled && SecurityUtils.touchSensorCanBeUsed(this)) {
-            val cryptoObject = SecurityUtils.getCryptoObject()
-            cryptoObject?.let { cryptoObj ->
-                val fragment = FingerprintAuthenticationDialogFragment()
-                fragment.setCryptoObject(cryptoObj)
-                fragment.setCallback(this@UnlockActivity)
-                fragment.show(fragmentManager, "fingerprint_dialog")
+            if (keyStoreWrapper.initCipher()) {
+                val cryptoObject = keyStoreWrapper.getCryptoObject()
+                cryptoObject?.let { cryptoObj ->
+                    val fragment = FingerprintAuthenticationDialogFragment()
+                    fragment.setCryptoObject(cryptoObj)
+                    fragment.setCallback(this@UnlockActivity)
+                    fragment.show(fragmentManager, "fingerprint_dialog")
+                }
+            } else {
+                // This happens if the lock screen has been disabled or a fingerprint was
+                // enrolled. Thus, show the dialog to authenticate with their password first and ask
+                // the user if they want to authenticate with a fingerprint in the future.
             }
+
         }
     }
 
@@ -177,7 +187,7 @@ class NumPadItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 imgBackSpace.visibility = View.VISIBLE
             }
             NumPadItemType.FINGER -> {
-                imgFingerprint.visibility = if (Factory.preferencesManager.isFingerprintEnabled) View.VISIBLE else View.GONE
+                imgFingerprint.visibility = if (Factory.preferencesManager.isFingerprintEnabled && SecurityUtils.touchSensorCanBeUsed(itemView.context)) View.VISIBLE else View.GONE
             }
             NumPadItemType.NUMBER -> {
                 txtNumber.visibility = View.VISIBLE

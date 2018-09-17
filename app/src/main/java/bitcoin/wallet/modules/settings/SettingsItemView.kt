@@ -104,6 +104,7 @@ class SettingsItemView : ConstraintLayout {
         titleTextView = findViewById(R.id.setting_title)
         selectedValueTextView = findViewById(R.id.setting_value)
         switch = findViewById(R.id.setting_switch)
+        switch.isClickable = false
         checkMarkImageView = findViewById(R.id.setting_check_mark)
         badgeImageView = findViewById(R.id.setting_badge)
 

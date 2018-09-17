@@ -9,16 +9,12 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.core.security.EncryptionManager
-import bitcoin.wallet.modules.guest.GuestModule
 import bitcoin.wallet.modules.main.MainModule
 
 class LauncherActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        //todo remove after testing
-        Factory.preferencesManager.saveWords(listOf("used", "ugly", "meat", "glad", "balance", "divorce", "inner", "artwork", "hire", "invest", "already", "piano"))
 
         try {
             redirectToCorrectPage()
@@ -33,11 +29,14 @@ class LauncherActivity : AppCompatActivity() {
         if (!EncryptionManager.isDeviceLockEnabled(this)) {
             EncryptionManager.showNoDeviceLockWarning(this)
             return
-        } else if (Factory.preferencesManager.savedWords != null) {
-            MainModule.start(this)
-        } else {
-            GuestModule.start(this)
-        }
+        }//todo remove after testing
+        Factory.preferencesManager.saveWords(listOf("used", "ugly", "meat", "glad", "balance", "divorce", "inner", "artwork", "hire", "invest", "already", "piano"))
+        MainModule.start(this)
+//        else if (Factory.preferencesManager.savedWords != null) {
+//            MainModule.start(this)
+//        } else {
+//            GuestModule.start(this)
+//        }
         finish()
     }
 
