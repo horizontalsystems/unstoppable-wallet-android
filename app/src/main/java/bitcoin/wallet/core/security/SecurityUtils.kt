@@ -20,8 +20,8 @@ import javax.crypto.spec.PSource
 
 object SecurityUtils {
 
-    private val KEY_ALIAS = "FINGERPRINT_KEY_PAIR_ALIAS"
-    private val KEY_STORE = "AndroidKeyStore"
+    private const val KEY_ALIAS = "FINGERPRINT_KEY_PAIR_ALIAS"
+    private const val KEY_STORE = "AndroidKeyStore"
 
     private var sKeyStore: KeyStore? = null
     private var sKeyPairGenerator: KeyPairGenerator? = null
@@ -29,11 +29,13 @@ object SecurityUtils {
 
     fun touchSensorCanBeUsed(context: Context): Boolean {
         val fingerprintManager = context.getSystemService(FINGERPRINT_SERVICE) as? FingerprintManager
-        if (fingerprintManager?.isHardwareDetected == true) {
-            val keyguardManager = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
-            return keyguardManager.isKeyguardSecure && fingerprintManager.hasEnrolledFingerprints()
-        } else
-            return false
+        return when {
+            fingerprintManager?.isHardwareDetected == true -> {
+                val keyguardManager = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+                keyguardManager.isKeyguardSecure && fingerprintManager.hasEnrolledFingerprints()
+            }
+            else -> false
+        }
     }
 
     fun phoneHasFingerprintSensor(context: Context): Boolean {

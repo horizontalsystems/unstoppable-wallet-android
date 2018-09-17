@@ -107,8 +107,6 @@ class UnlockActivity : AppCompatActivity(), NumPadItemsAdapter.Listener, Fingerp
             NumPadItemType.FINGER -> {
                 showFingerprintUnlock()
             }
-            else -> {
-            }
         }
     }
 
@@ -151,7 +149,7 @@ class NumPadItemsAdapter(private val numPadItems: List<NumPadItem>, private val 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is NumPadItemViewHolder) {
-            holder.bind(numPadItems[position], { listener.onItemClick(numPadItems[position]) })
+            holder.bind(numPadItems[position]) { listener.onItemClick(numPadItems[position]) }
         }
     }
 }
@@ -179,7 +177,7 @@ class NumPadItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 imgBackSpace.visibility = View.VISIBLE
             }
             NumPadItemType.FINGER -> {
-                imgFingerprint.visibility = View.VISIBLE
+                imgFingerprint.visibility = if (Factory.preferencesManager.isFingerprintEnabled) View.VISIBLE else View.GONE
             }
             NumPadItemType.NUMBER -> {
                 txtNumber.visibility = View.VISIBLE

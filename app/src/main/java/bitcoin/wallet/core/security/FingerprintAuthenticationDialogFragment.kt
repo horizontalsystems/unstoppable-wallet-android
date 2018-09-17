@@ -62,6 +62,7 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(), FingerprintUiH
             it.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             it.requestFeature(Window.FEATURE_NO_TITLE)
         }
+        isCancelable = false
         return inflater.inflate(R.layout.fingerprint_dialog_container, container, false)
     }
 
