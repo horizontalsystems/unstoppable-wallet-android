@@ -3,7 +3,7 @@ package bitcoin.wallet.modules.receive
 import bitcoin.wallet.R
 import bitcoin.wallet.modules.receive.viewitems.AddressItem
 
-class ReceivePresenter(private val interactor: ReceiveModule.IInteractor, private val router: ReceiveModule.IRouter) : ReceiveModule.IViewDelegate, ReceiveModule.IInteractorDelegate {
+class ReceivePresenter(private val interactor: ReceiveModule.IInteractor) : ReceiveModule.IViewDelegate, ReceiveModule.IInteractorDelegate {
 
     var view: ReceiveModule.IView? = null
     private var receiveAddresses: List<AddressItem> = mutableListOf()
@@ -32,10 +32,6 @@ class ReceivePresenter(private val interactor: ReceiveModule.IInteractor, privat
 
     override fun didCopyToClipboard() {
         view?.showCopied()
-    }
-
-    override fun onShareClick(index: Int) {
-        router.openShareView(receiveAddresses[index].address)
     }
 
 }

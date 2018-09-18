@@ -16,7 +16,6 @@ object ReceiveModule {
     interface IViewDelegate {
         fun viewDidLoad()
         fun onCopyClick(index: Int)
-        fun onShareClick(index: Int)
     }
 
     interface IInteractor {
@@ -30,14 +29,10 @@ object ReceiveModule {
         fun didCopyToClipboard()
     }
 
-    interface IRouter {
-        fun openShareView(coinAddress: String)
-    }
-
-    fun init(view: ReceiveViewModel, router: IRouter, adapterId: String?) {
+    fun init(view: ReceiveViewModel, adapterId: String?) {
         val adapterManager = AdapterManager
         val interactor = ReceiveInteractor(adapterManager, adapterId, TextHelper)
-        val presenter = ReceivePresenter(interactor, router)
+        val presenter = ReceivePresenter(interactor)
 
         view.delegate = presenter
         presenter.view = view

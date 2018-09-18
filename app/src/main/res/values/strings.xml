@@ -54,7 +54,6 @@
 
     <string name="receive_title">Receive %s</string>
     <string name="receive_copy">Copy</string>
-    <string name="receive_share_to">Share to</string>
 
     <string name="timestamp_just_now">just now</string>
     <string name="timestamp_min_ago">%dm. ago</string>
