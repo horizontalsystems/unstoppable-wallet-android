@@ -3,22 +3,27 @@ package bitcoin.wallet.modules.main
 import android.hardware.fingerprint.FingerprintManager
 import android.os.Bundle
 import android.os.Handler
+import android.security.keystore.KeyPermanentlyInvalidatedException
+import android.security.keystore.UserNotAuthenticatedException
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import bitcoin.wallet.LauncherActivity
 import bitcoin.wallet.R
 import bitcoin.wallet.core.App
 import bitcoin.wallet.core.managers.Factory
+import bitcoin.wallet.core.security.EncryptionManager
 import bitcoin.wallet.core.security.FingerprintAuthenticationDialogFragment
-import bitcoin.wallet.core.security.KeyStoreWrapper
 import bitcoin.wallet.core.security.SecurityUtils
 import bitcoin.wallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_unlock.*
+import java.security.UnrecoverableKeyException
 
 
 class UnlockActivity : AppCompatActivity(), NumPadItemsAdapter.Listener, FingerprintAuthenticationDialogFragment.Callback {
@@ -30,8 +35,6 @@ class UnlockActivity : AppCompatActivity(), NumPadItemsAdapter.Listener, Fingerp
     private lateinit var imgPinMask4: ImageView
     private lateinit var imgPinMask5: ImageView
     private lateinit var imgPinMask6: ImageView
-
-    private val keyStoreWrapper = KeyStoreWrapper()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,18 +71,22 @@ class UnlockActivity : AppCompatActivity(), NumPadItemsAdapter.Listener, Fingerp
 
     private fun showFingerprintUnlock() {
         if (Factory.preferencesManager.isFingerprintEnabled && SecurityUtils.touchSensorCanBeUsed(this)) {
-            if (keyStoreWrapper.initCipher()) {
-                val cryptoObject = keyStoreWrapper.getCryptoObject()
+            try {
+                val cryptoObject = Factory.encryptionManager.getCryptoObject()
+
                 cryptoObject?.let { cryptoObj ->
                     val fragment = FingerprintAuthenticationDialogFragment()
                     fragment.setCryptoObject(cryptoObj)
                     fragment.setCallback(this@UnlockActivity)
                     fragment.show(fragmentManager, "fingerprint_dialog")
                 }
-            } else {
-                // This happens if the lock screen has been disabled or a fingerprint was
-                // enrolled. Thus, show the dialog to authenticate with their password first and ask
-                // the user if they want to authenticate with a fingerprint in the future.
+            } catch (e: Exception) {
+                Log.e("UnlockActivity", "Failed to getCryptoObject", e)
+                when (e) {
+                    is UserNotAuthenticatedException -> EncryptionManager.showAuthenticationScreen(this, LauncherActivity.AUTHENTICATE_TO_REDIRECT)
+                    is KeyPermanentlyInvalidatedException,
+                    is UnrecoverableKeyException -> EncryptionManager.showKeysInvalidatedAlert(this)
+                }
             }
 
         }

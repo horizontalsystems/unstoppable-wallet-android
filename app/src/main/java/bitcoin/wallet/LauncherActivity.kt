@@ -10,6 +10,7 @@ import android.util.Log
 import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.core.security.EncryptionManager
 import bitcoin.wallet.modules.main.MainModule
+import java.security.UnrecoverableKeyException
 
 class LauncherActivity : AppCompatActivity() {
 
@@ -18,10 +19,13 @@ class LauncherActivity : AppCompatActivity() {
 
         try {
             redirectToCorrectPage()
-        } catch (exception: UserNotAuthenticatedException) {
-            EncryptionManager.showAuthenticationScreen(this, AUTHENTICATE_TO_REDIRECT)
-        } catch (exception: KeyPermanentlyInvalidatedException) {
-            EncryptionManager.showKeysInvalidatedAlert(this)
+        } catch (e: Exception) {
+            Log.e("LauncherActivity", "Failed to redirectToCorrectPage", e)
+            when (e) {
+                is UserNotAuthenticatedException -> EncryptionManager.showAuthenticationScreen(this, AUTHENTICATE_TO_REDIRECT)
+                is KeyPermanentlyInvalidatedException,
+                is UnrecoverableKeyException -> EncryptionManager.showKeysInvalidatedAlert(this)
+            }
         }
     }
 
