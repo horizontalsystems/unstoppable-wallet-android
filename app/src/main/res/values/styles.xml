@@ -158,7 +158,7 @@
     <style name="Description">
         <item name="android:fontFamily">@font/noto_sans</item>
         <item name="android:letterSpacing">-0.02</item>
-        <item name="android:textColor">#c8c7cc</item>
+        <item name="android:textColor">@color/grey</item>
         <item name="android:textSize">17sp</item>
     </style>
 
