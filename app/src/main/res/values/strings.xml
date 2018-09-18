@@ -9,10 +9,10 @@
     <string name="alert_success">Success</string>
     <string name="alert_copied">Copied</string>
 
-    <string name="welcome_title">Welcome\nto Crypton</string>
-    <string name="welcome_description">The best of the best crypto wallet ever</string>
+    <string name="welcome_title">Bank Wallet</string>
+    <string name="welcome_description">Decentralized App</string>
     <string name="welcome_btn_create_wallet">Create Wallet</string>
-    <string name="welcome_btn_restore">Restore</string>
+    <string name="welcome_btn_import_wallet">Import Wallet</string>
 
     <string name="restore_title">Enter Paper Keys</string>
     <string name="restore_validation_failed">The words you entered are invalid</string>
