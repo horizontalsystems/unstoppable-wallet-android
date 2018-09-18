@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import bitcoin.wallet.R
 import bitcoin.wallet.core.setOnSingleClickListener
-import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.modules.receive.ReceiveModule
 import bitcoin.wallet.modules.send.SendModule
 import bitcoin.wallet.viewHelpers.AnimationHelper
@@ -69,7 +68,7 @@ class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setTitle(R.string.tab_title_wallet)
+        toolbar.setTitle(R.string.wallet_title)
         recyclerCoins.adapter = coinsAdapter
         recyclerCoins.layoutManager = LinearLayoutManager(context)
     }

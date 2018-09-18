@@ -112,7 +112,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="4dp"
             android:layout_weight="1"
-            android:text="@string/button_receive"
+            android:text="@string/wallet_button_receive"
             />
 
         <Button
@@ -123,7 +123,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginStart="4dp"
             android:layout_weight="1"
-            android:text="@string/button_pay"
+            android:text="@string/wallet_button_pay"
             />
 
     </LinearLayout>

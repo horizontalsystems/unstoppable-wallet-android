@@ -74,7 +74,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="45dp"
         android:enabled="false"
-        android:text="@string/backup_alert_confirm_button"
+        android:text="@string/backup_button_confirm"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

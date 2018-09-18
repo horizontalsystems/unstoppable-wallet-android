@@ -93,7 +93,7 @@ class SendPresenter(private val interactor: SendModule.IInteractor, private val 
     private fun getError(exception: Exception) = when (exception) {
 //        is UnsupportedBlockchain -> R.string.error_unsupported_blockchain
 //        is InvalidAddress -> R.string.send_bottom_sheet_error_invalid_address
-//        is NotEnoughFundsException -> R.string.send_bottom_sheet_error_insufficient_balance
+//        is NotEnoughFundsException -> R.string.send_insufficient_funds
         else -> R.string.error
     }
 

@@ -32,7 +32,7 @@ class RestoreWalletActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
 
-        supportActionBar?.title = getString(R.string.enter_paper_keys_title)
+        supportActionBar?.title = getString(R.string.restore_title)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         viewModel = ViewModelProviders.of(this).get(RestoreViewModel::class.java)

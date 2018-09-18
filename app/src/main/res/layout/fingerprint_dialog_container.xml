@@ -52,7 +52,6 @@
             />
     </FrameLayout>
 
-
     <TextView
         android:id="@+id/fingerprint_status"
         style="@android:style/TextAppearance.Material.Body1"

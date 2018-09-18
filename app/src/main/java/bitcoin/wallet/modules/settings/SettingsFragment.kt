@@ -22,7 +22,7 @@ class SettingsFragment : android.support.v4.app.Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setTitle(R.string.tab_title_settings)
+        toolbar.setTitle(R.string.settings_title)
 
         resources.getDrawable(R.drawable.info, null).let { securityBadge ->
             securityBadge.setTint(resources.getColor(R.color.red_warning, null))
@@ -69,13 +69,13 @@ class SettingsFragment : android.support.v4.app.Fragment() {
         }
 
         companyLogo.setOnClickListener {
-            val uri = Uri.parse(getString(R.string.company_link))
+            val uri = Uri.parse(getString(R.string.settings_info_link))
             val intent = Intent(Intent.ACTION_VIEW, uri)
             activity?.startActivity(intent)
         }
 
         val appVersion = "1.01"
-        appName.text = getString(R.string.app_name_with_version, appVersion)
+        appName.text = getString(R.string.settings_info_app_name_with_version, appVersion)
 
     }
 

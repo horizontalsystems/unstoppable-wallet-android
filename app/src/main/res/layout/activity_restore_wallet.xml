@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -9,18 +8,19 @@
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="bottom">
+        android:gravity="bottom"
+        >
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="?android:attr/actionBarSize"
             android:theme="@style/ToolbarStyle"
             app:titleMarginStart="16dp"
-            app:titleTextAppearance="@style/TabTitleSmall"/>
+            app:titleTextAppearance="@style/TabTitleSmall"
+            />
     </android.support.design.widget.AppBarLayout>
 
     <android.support.constraint.ConstraintLayout
@@ -34,12 +34,11 @@
             android:id="@+id/recyclerInputs"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="16dp"
+            android:clipToPadding="false"
             android:paddingEnd="32dp"
             android:paddingStart="32dp"
-            android:clipToPadding="false"
+            android:paddingTop="16dp"
             />
 
     </android.support.constraint.ConstraintLayout>
-
 </android.support.constraint.ConstraintLayout>
