@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import bitcoin.wallet.LauncherActivity
@@ -39,6 +40,8 @@ class UnlockActivity : AppCompatActivity(), NumPadItemsAdapter.Listener, Fingerp
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(if (Factory.preferencesManager.isLightModeEnabled) R.style.LightModeAppTheme else R.style.DarkModeAppTheme)
+
+        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
 
         setContentView(R.layout.activity_unlock)
 

@@ -1,23 +1,20 @@
 package bitcoin.wallet.modules.settings
 
-import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.CompoundButton
+import bitcoin.wallet.BaseActivity
 import bitcoin.wallet.R
-import bitcoin.wallet.core.App
 import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.core.security.SecurityUtils
 import bitcoin.wallet.lib.AlertDialogFragment
 import bitcoin.wallet.modules.backup.BackupModule
 import bitcoin.wallet.modules.backup.BackupPresenter
-import bitcoin.wallet.modules.main.UnlockActivity
 import kotlinx.android.synthetic.main.activity_settings_security.*
 
-class SecuritySettingsActivity : AppCompatActivity() {
+class SecuritySettingsActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,17 +68,6 @@ class SecuritySettingsActivity : AppCompatActivity() {
             return false
         }
         return true
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        if (App.promptPin) {
-            startActivity(Intent(this, UnlockActivity::class.java))
-            return
-        }
-
-        App.promptPin = false
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

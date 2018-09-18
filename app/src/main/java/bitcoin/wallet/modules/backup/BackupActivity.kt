@@ -3,11 +3,11 @@ package bitcoin.wallet.modules.backup
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import bitcoin.wallet.BaseActivity
 import bitcoin.wallet.R
 import bitcoin.wallet.modules.main.MainModule
 
-class BackupActivity : AppCompatActivity() {
+class BackupActivity : BaseActivity() {
 
     private lateinit var viewModel: BackupViewModel
 

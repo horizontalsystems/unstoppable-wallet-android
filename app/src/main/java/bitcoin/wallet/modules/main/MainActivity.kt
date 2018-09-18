@@ -1,21 +1,19 @@
 package bitcoin.wallet.modules.main
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
-import android.support.v7.app.AppCompatActivity
 import android.view.View
+import bitcoin.wallet.BaseActivity
 import bitcoin.wallet.R
 import bitcoin.wallet.core.AdapterManager
-import bitcoin.wallet.core.App
 import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.viewHelpers.LayoutHelper
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import kotlinx.android.synthetic.main.activity_dashboard.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private lateinit var adapter: MainTabsAdapter
 
@@ -79,17 +77,6 @@ class MainActivity : AppCompatActivity() {
          // } catch (exception: KeyPermanentlyInvalidatedException) {
          //     EncryptionManager.showKeysInvalidatedAlert(this)
          // }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        if (App.promptPin) {
-            startActivity(Intent(this, UnlockActivity::class.java))
-            return
-        }
-
-        App.promptPin = false
     }
 
     private fun setStatusBarIconColor(lightMode: Boolean) {
