@@ -71,7 +71,7 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setTitle(R.string.tab_title_transactions)
+        toolbar.setTitle(R.string.transactions_title)
         recyclerTransactions.adapter = transactionsAdapter
         recyclerTransactions.layoutManager = LinearLayoutManager(context)
 

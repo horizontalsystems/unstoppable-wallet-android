@@ -16,7 +16,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/noto_sans_bold"
-        android:text="Transaction"
+        android:text="@string/transaction_info_title"
         android:textColor="@color/dark"
         android:textSize="17sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -135,7 +135,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/border2"
-        app:title="@string/tx_info_bottom_sheet_from"
+        app:title="@string/transaction_info_from"
         app:value="1111111"
         />
 
@@ -156,7 +156,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/border3"
-        app:title="@string/tx_info_bottom_sheet_status"
+        app:title="@string/transaction_info_status"
         app:value="COMPLETED"
         />
 
@@ -177,11 +177,10 @@
         android:fontFamily="@font/noto_sans_bold"
         android:paddingBottom="16dp"
         android:paddingTop="16dp"
-        android:text="@string/tx_info_bottom_sheet_close"
+        android:text="@string/transaction_info_close"
         android:textAlignment="center"
         android:textColor="@color/grey"
         android:textSize="17sp"
-        tools:text="Close"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

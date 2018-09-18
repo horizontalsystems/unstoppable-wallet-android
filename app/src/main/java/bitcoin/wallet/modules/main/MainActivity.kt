@@ -43,9 +43,9 @@ class MainActivity : AppCompatActivity() {
         bottomNavigation.accentColor = ContextCompat.getColor(this, R.color.yellow_crypto)
         bottomNavigation.inactiveColor = ContextCompat.getColor(this, R.color.grey)
 
-        bottomNavigation.addItem(AHBottomNavigationItem(R.string.tab_title_wallet, R.drawable.bank_icon, 0))
-        bottomNavigation.addItem(AHBottomNavigationItem(R.string.tab_title_transactions, R.drawable.transactions, 0))
-        bottomNavigation.addItem(AHBottomNavigationItem(R.string.tab_title_settings, R.drawable.settings, 0))
+        bottomNavigation.addItem(AHBottomNavigationItem(R.string.wallet_title, R.drawable.bank_icon, 0))
+        bottomNavigation.addItem(AHBottomNavigationItem(R.string.transactions_title, R.drawable.transactions, 0))
+        bottomNavigation.addItem(AHBottomNavigationItem(R.string.settings_title, R.drawable.settings, 0))
 
         bottomNavigation.titleState = AHBottomNavigation.TitleState.ALWAYS_HIDE
         bottomNavigation.setUseElevation(false)

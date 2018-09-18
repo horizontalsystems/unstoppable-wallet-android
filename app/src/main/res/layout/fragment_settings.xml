@@ -55,7 +55,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider_0"
                 app:setting_icon="@drawable/security"
-                app:setting_title="Security Center"
+                app:setting_title="@string/settings_security_center"
                 />
 
             <bitcoin.wallet.modules.settings.SettingsItemView
@@ -66,7 +66,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/securityCenter"
                 app:setting_icon="@drawable/add_wallet"
-                app:setting_title="Import Wallet"
+                app:setting_title="@string/settings_import_wallet"
                 />
 
             <View
@@ -86,7 +86,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider_1"
                 app:setting_icon="@drawable/currency"
-                app:setting_title="Base Currency"
+                app:setting_title="@string/settings_base_currency"
                 />
 
             <bitcoin.wallet.modules.settings.SettingsItemView
@@ -97,7 +97,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/baseCurrency"
                 app:setting_icon="@drawable/language"
-                app:setting_title="Language"
+                app:setting_title="@string/settings_language"
                 />
 
             <bitcoin.wallet.modules.settings.SettingsItemView
@@ -108,7 +108,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/language"
                 app:setting_icon="@drawable/light_mode"
-                app:setting_title="Light Mode"
+                app:setting_title="@string/settings_light_mode"
                 />
 
             <View
@@ -128,7 +128,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider_2"
                 app:setting_icon="@drawable/info"
-                app:setting_title="About"
+                app:setting_title="@string/settings_about"
                 />
 
             <TextView
@@ -142,7 +142,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/about"
-                tools:text="Bank 1.01"
+                tools:text="Wallet Bank 1.01"
                 />
 
             <View
@@ -161,7 +161,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1.5dp"
-                android:text="@string/decentralized_app"
+                android:text="@string/settings_info_subtitle"
                 android:textColor="@color/grey"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"

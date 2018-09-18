@@ -10,8 +10,6 @@
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="bottom"
@@ -26,7 +24,6 @@
             app:titleTextAppearance="@style/TabTitleSmall"
             />
     </android.support.design.widget.AppBarLayout>
-
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -43,6 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             >
+
             <View
                 android:id="@+id/divider_0"
                 android:layout_width="match_parent"
@@ -59,7 +57,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider_0"
-                app:setting_title="Fingerprint"
+                app:setting_title="@string/settings_security_fingerprint"
                 />
 
             <bitcoin.wallet.modules.settings.SettingsItemView
@@ -69,7 +67,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fingerprint"
-                app:setting_title="Change pin"
+                app:setting_title="@string/settings_security_change_pin"
                 />
 
             <View
@@ -88,7 +86,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider_1"
-                app:setting_title="Backup wallet"
+                app:setting_title="@string/settings_security_backup_wallet"
                 />
         </android.support.constraint.ConstraintLayout>
     </ScrollView>

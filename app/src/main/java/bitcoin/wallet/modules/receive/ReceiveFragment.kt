@@ -60,7 +60,7 @@ class ReceiveFragment : DialogFragment() {
                         rootView.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
                     }
                     val coinText = "${address.coin.name} (${address.coin.code})"
-                    rootView.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.receive_bottom_sheet_title, coinText)
+                    rootView.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.receive_title, coinText)
 
                     rootView.findViewById<TextView>(R.id.txtAddress)?.let { it.text = address.address }
                     rootView.findViewById<ImageView>(R.id.imgQrCode)?.setImageBitmap(TextHelper.getQrCodeBitmapFromAddress(address.address))
@@ -86,7 +86,7 @@ class ReceiveFragment : DialogFragment() {
 
         viewModel.openShareViewLiveEvent.observe(this, Observer { address ->
             address?.let {
-                context?.let { context -> TextHelper.shareExternalText(context, address, getString(R.string.receive_bottom_sheet_share_to)) }
+                context?.let { context -> TextHelper.shareExternalText(context, address, getString(R.string.receive_share_to)) }
             }
         })
 

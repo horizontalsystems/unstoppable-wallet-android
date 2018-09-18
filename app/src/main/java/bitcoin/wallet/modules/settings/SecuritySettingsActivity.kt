@@ -29,7 +29,7 @@ class SecuritySettingsActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "Security Center"
+        supportActionBar?.title = getString(R.string.settings_security_center)
 
         changePin.setOnClickListener {
             Log.e("SecuritySettingsAct", "change pin clicked")

@@ -58,7 +58,7 @@ class TransactionInfoFragment : DialogFragment() {
                 }
 
                 rootView.findViewById<TextView>(R.id.txDate)?.text = if (txRec.status == TransactionRecordViewItem.Status.PENDING) {
-                    getString(R.string.tx_info_bottom_sheet_status_processing)
+                    getString(R.string.transaction_info_processing)
                 } else {
                     txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) }
                 }
@@ -75,11 +75,11 @@ class TransactionInfoFragment : DialogFragment() {
                         else -> null
                     }
                     val statusText = when {
-                        txRec.status == TransactionRecordViewItem.Status.PROCESSING -> getString(R.string.tx_info_bottom_sheet_status_processing, progressNumber)
-                        txRec.status == TransactionRecordViewItem.Status.PENDING -> getString(R.string.tx_info_bottom_sheet_status_pending)
-                        else -> getString(R.string.tx_info_bottom_sheet_title_completed)
+                        txRec.status == TransactionRecordViewItem.Status.PROCESSING -> getString(R.string.transaction_info_processing, progressNumber)
+                        txRec.status == TransactionRecordViewItem.Status.PENDING -> getString(R.string.transaction_info_status_pending)
+                        else -> getString(R.string.transaction_info_status_completed)
                     }
-                    bind(title = getString(R.string.tx_info_bottom_sheet_status), value = statusText, valueIcon = valueIcon, progressValue = progress)
+                    bind(title = getString(R.string.transaction_info_status), value = statusText, valueIcon = valueIcon, progressValue = progress)
                 }
 
                 rootView.findViewById<TextView>(R.id.transactionId)?.apply {
@@ -91,7 +91,7 @@ class TransactionInfoFragment : DialogFragment() {
                 }
 
                 rootView.findViewById<TransactionInfoItemView>(R.id.itemFromTo)?.apply {
-                    val title = getString(if (txRec.incoming) R.string.tx_info_bottom_sheet_from else R.string.tx_info_bottom_sheet_to)
+                    val title = getString(if (txRec.incoming) R.string.transaction_info_from else R.string.transaction_info_to)
                     bind(title = title, value = txRec.from, valueIcon = R.drawable.round_person_18px)
                 }
             }
