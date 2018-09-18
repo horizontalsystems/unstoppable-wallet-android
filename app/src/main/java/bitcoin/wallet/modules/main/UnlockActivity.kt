@@ -73,13 +73,10 @@ class UnlockActivity : AppCompatActivity(), NumPadItemsAdapter.Listener, Fingerp
         if (Factory.preferencesManager.isFingerprintEnabled && SecurityUtils.touchSensorCanBeUsed(this)) {
             try {
                 val cryptoObject = Factory.encryptionManager.getCryptoObject()
-
-                cryptoObject?.let { cryptoObj ->
-                    val fragment = FingerprintAuthenticationDialogFragment()
-                    fragment.setCryptoObject(cryptoObj)
-                    fragment.setCallback(this@UnlockActivity)
-                    fragment.show(fragmentManager, "fingerprint_dialog")
-                }
+                val fragment = FingerprintAuthenticationDialogFragment()
+                fragment.setCryptoObject(cryptoObject)
+                fragment.setCallback(this@UnlockActivity)
+                fragment.show(fragmentManager, "fingerprint_dialog")
             } catch (e: Exception) {
                 Log.e("UnlockActivity", "Failed to getCryptoObject", e)
                 when (e) {
@@ -88,7 +85,6 @@ class UnlockActivity : AppCompatActivity(), NumPadItemsAdapter.Listener, Fingerp
                     is UnrecoverableKeyException -> EncryptionManager.showKeysInvalidatedAlert(this)
                 }
             }
-
         }
     }
 

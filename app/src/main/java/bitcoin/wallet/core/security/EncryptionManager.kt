@@ -38,7 +38,7 @@ class EncryptionManager : IEncryptionManager {
     }
 
 
-    override fun getCryptoObject(): FingerprintManager.CryptoObject? {
+    override fun getCryptoObject(): FingerprintManager.CryptoObject {
         var masterKey = keyStoreWrapper.getAndroidKeyStoreSymmetricKey(MASTER_KEY)
 
         if (masterKey == null) {
