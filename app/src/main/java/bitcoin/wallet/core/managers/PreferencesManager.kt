@@ -26,9 +26,14 @@ class PreferencesManager(private val encryptionManager: IEncryptionManager) : IL
     }
 
     private val LIGHT_MODE_ENABLED = "light_mode_enabled"
+    private val FINGERPRINT_ENABLED = "fingerprint_enabled"
 
     var isLightModeEnabled: Boolean
         get() = App.preferences.getBoolean(LIGHT_MODE_ENABLED, false)
         set(value) = App.preferences.edit().putBoolean(LIGHT_MODE_ENABLED, value).apply()
+
+    var isFingerprintEnabled: Boolean
+        get() = App.preferences.getBoolean(FINGERPRINT_ENABLED, false)
+        set(value) = App.preferences.edit().putBoolean(FINGERPRINT_ENABLED, value).apply()
 
 }

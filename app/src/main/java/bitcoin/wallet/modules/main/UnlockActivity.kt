@@ -1,28 +1,40 @@
 package bitcoin.wallet.modules.main
 
+import android.hardware.fingerprint.FingerprintManager
 import android.os.Bundle
 import android.os.Handler
+import android.security.keystore.KeyPermanentlyInvalidatedException
+import android.security.keystore.UserNotAuthenticatedException
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import bitcoin.wallet.LauncherActivity
 import bitcoin.wallet.R
 import bitcoin.wallet.core.App
 import bitcoin.wallet.core.managers.Factory
+import bitcoin.wallet.core.security.EncryptionManager
+import bitcoin.wallet.core.security.FingerprintAuthenticationDialogFragment
+import bitcoin.wallet.core.security.SecurityUtils
 import bitcoin.wallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_unlock.*
+import java.security.UnrecoverableKeyException
 
-class UnlockActivity : AppCompatActivity(), NumPadItemsAdapter.Listener {
+
+class UnlockActivity : AppCompatActivity(), NumPadItemsAdapter.Listener, FingerprintAuthenticationDialogFragment.Callback {
 
     private var enteredPin: StringBuilder = StringBuilder("")
     private lateinit var imgPinMask1: ImageView
     private lateinit var imgPinMask2: ImageView
     private lateinit var imgPinMask3: ImageView
     private lateinit var imgPinMask4: ImageView
+    private lateinit var imgPinMask5: ImageView
+    private lateinit var imgPinMask6: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +46,8 @@ class UnlockActivity : AppCompatActivity(), NumPadItemsAdapter.Listener {
         imgPinMask2 = findViewById(R.id.imgPinMaskTwo)
         imgPinMask3 = findViewById(R.id.imgPinMaskThree)
         imgPinMask4 = findViewById(R.id.imgPinMaskFour)
+        imgPinMask5 = findViewById(R.id.imgPinMaskFive)
+        imgPinMask6 = findViewById(R.id.imgPinMaskSix)
 
         numPadItems.adapter = NumPadItemsAdapter(listOf(
                 NumPadItem(NumPadItemType.NUMBER, 1, ""),
@@ -45,25 +59,50 @@ class UnlockActivity : AppCompatActivity(), NumPadItemsAdapter.Listener {
                 NumPadItem(NumPadItemType.NUMBER, 7, "pqrs"),
                 NumPadItem(NumPadItemType.NUMBER, 8, "tuv"),
                 NumPadItem(NumPadItemType.NUMBER, 9, "wxyz"),
-                NumPadItem(NumPadItemType.NONE, 0, ""),
+                NumPadItem(NumPadItemType.FINGER, 0, "FINGER"),
                 NumPadItem(NumPadItemType.NUMBER, 0, ""),
                 NumPadItem(NumPadItemType.DELETE, 0, "DEL")
         ), this)
 
         numPadItems.layoutManager = GridLayoutManager(this, 3)
+
+        showFingerprintUnlock()
+    }
+
+    private fun showFingerprintUnlock() {
+        if (Factory.preferencesManager.isFingerprintEnabled && SecurityUtils.touchSensorCanBeUsed(this)) {
+            try {
+                val cryptoObject = Factory.encryptionManager.getCryptoObject()
+                val fragment = FingerprintAuthenticationDialogFragment()
+                fragment.setCryptoObject(cryptoObject)
+                fragment.setCallback(this@UnlockActivity)
+                fragment.show(fragmentManager, "fingerprint_dialog")
+            } catch (e: Exception) {
+                Log.e("UnlockActivity", "Failed to getCryptoObject", e)
+                when (e) {
+                    is UserNotAuthenticatedException -> EncryptionManager.showAuthenticationScreen(this, LauncherActivity.AUTHENTICATE_TO_REDIRECT)
+                    is KeyPermanentlyInvalidatedException,
+                    is UnrecoverableKeyException -> EncryptionManager.showKeysInvalidatedAlert(this)
+                }
+            }
+        }
+    }
+
+    override fun onFingerprintAuthSucceed(withFingerprint: Boolean, crypto: FingerprintManager.CryptoObject?) {
+        unlockPage()
     }
 
     override fun onItemClick(item: NumPadItem) {
 
         when (item.type) {
             NumPadItemType.NUMBER -> {
-                if (enteredPin.length < 4) {
+                if (enteredPin.length < 6) {
                     enteredPin.append(item.number)
                     updatePinCircles()
 
-                    if (enteredPin.toString() == "1234") {
+                    if (enteredPin.toString() == "123456") {
                         unlockPage()
-                    } else if (enteredPin.length == 4) {
+                    } else if (enteredPin.length == 6) {
                         HudHelper.showErrorMessage(R.string.hud_text_invalid_pin_error, this)
                         Handler().postDelayed({
                             enteredPin.setLength(0)
@@ -78,16 +117,15 @@ class UnlockActivity : AppCompatActivity(), NumPadItemsAdapter.Listener {
                     updatePinCircles()
                 }
             }
-            else -> {
+            NumPadItemType.FINGER -> {
+                showFingerprintUnlock()
             }
         }
     }
 
     private fun unlockPage() {
-        if (enteredPin.toString() == "1234") {
-            App.promptPin = false
-            finish()
-        }
+        App.promptPin = false
+        finish()
     }
 
     private fun updatePinCircles() {
@@ -99,11 +137,13 @@ class UnlockActivity : AppCompatActivity(), NumPadItemsAdapter.Listener {
         imgPinMask2.setImageResource(if (length > 1) filledCircle else emptyCircle)
         imgPinMask3.setImageResource(if (length > 2) filledCircle else emptyCircle)
         imgPinMask4.setImageResource(if (length > 3) filledCircle else emptyCircle)
+        imgPinMask5.setImageResource(if (length > 4) filledCircle else emptyCircle)
+        imgPinMask6.setImageResource(if (length > 5) filledCircle else emptyCircle)
     }
 }
 
 enum class NumPadItemType {
-    NUMBER, DELETE, NONE
+    NUMBER, DELETE, FINGER
 }
 
 data class NumPadItem(val type: NumPadItemType, val number: Int, val letters: String)
@@ -122,7 +162,7 @@ class NumPadItemsAdapter(private val numPadItems: List<NumPadItem>, private val 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is NumPadItemViewHolder) {
-            holder.bind(numPadItems[position], { listener.onItemClick(numPadItems[position]) })
+            holder.bind(numPadItems[position]) { listener.onItemClick(numPadItems[position]) }
         }
     }
 }
@@ -132,6 +172,7 @@ class NumPadItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private var txtNumber: TextView = itemView.findViewById(R.id.txtNumPadNumber)
     private var txtLetters: TextView = itemView.findViewById(R.id.txtNumPadText)
     private var imgBackSpace: ImageView = itemView.findViewById(R.id.imgBackSpace)
+    private var imgFingerprint: ImageView = itemView.findViewById(R.id.imgFingerprint)
 
 
     fun bind(item: NumPadItem, onClick: () -> (Unit)) {
@@ -141,11 +182,15 @@ class NumPadItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         txtNumber.visibility = View.GONE
         txtLetters.visibility = View.GONE
         imgBackSpace.visibility = View.GONE
+        imgFingerprint.visibility = View.GONE
         itemView.background = null
 
         when (item.type) {
             NumPadItemType.DELETE -> {
                 imgBackSpace.visibility = View.VISIBLE
+            }
+            NumPadItemType.FINGER -> {
+                imgFingerprint.visibility = if (Factory.preferencesManager.isFingerprintEnabled && SecurityUtils.touchSensorCanBeUsed(itemView.context)) View.VISIBLE else View.GONE
             }
             NumPadItemType.NUMBER -> {
                 txtNumber.visibility = View.VISIBLE
@@ -153,8 +198,6 @@ class NumPadItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 txtNumber.text = item.number.toString()
                 txtLetters.text = item.letters
                 itemView.setBackgroundResource(R.drawable.numpad_button_background)
-            }
-            NumPadItemType.NONE -> {
             }
         }
     }

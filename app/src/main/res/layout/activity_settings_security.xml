@@ -20,7 +20,7 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="?android:attr/actionBarSize"
             android:theme="@style/ToolbarStyle"
             app:titleMarginStart="16dp"
             app:titleTextAppearance="@style/TabTitleSmall"
@@ -32,6 +32,7 @@
         android:id="@+id/scrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="?SettingBackgroundColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,55 +43,52 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             >
-
-            <bitcoin.wallet.modules.settings.SettingsItemView
-                android:id="@+id/pinTouchId"
+            <View
+                android:id="@+id/divider_0"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_height="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:setting_title="Pin / Touch ID"
                 />
 
             <bitcoin.wallet.modules.settings.SettingsItemView
-                android:id="@+id/backup"
+                android:id="@+id/fingerprint"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/pinTouchId"
-                app:setting_title="Backup / Restore as File"
+                app:layout_constraintTop_toBottomOf="@+id/divider_0"
+                app:setting_title="Fingerprint"
                 />
 
             <bitcoin.wallet.modules.settings.SettingsItemView
-                android:id="@+id/paperKey"
+                android:id="@+id/changePin"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/backup"
-                app:setting_title="Paper Key"
+                app:layout_constraintTop_toBottomOf="@+id/fingerprint"
+                app:setting_title="Change pin"
                 />
 
             <View
                 android:id="@+id/divider_1"
                 android:layout_width="match_parent"
                 android:layout_height="16dp"
-                android:background="#1e000000"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/paperKey"
+                app:layout_constraintTop_toBottomOf="@+id/changePin"
                 />
 
             <bitcoin.wallet.modules.settings.SettingsItemView
-                android:id="@+id/removeWallet"
+                android:id="@+id/backupWallet"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider_1"
-                app:setting_title="Remove Wallet"
+                app:setting_title="Backup wallet"
                 />
         </android.support.constraint.ConstraintLayout>
     </ScrollView>

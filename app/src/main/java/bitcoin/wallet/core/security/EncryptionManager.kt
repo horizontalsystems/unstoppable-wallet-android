@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
+import android.hardware.fingerprint.FingerprintManager
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
@@ -12,6 +13,7 @@ import bitcoin.wallet.R
 import bitcoin.wallet.core.IEncryptionManager
 import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.lib.AlertDialogFragment
+import javax.crypto.Cipher
 
 class EncryptionManager : IEncryptionManager {
 
@@ -33,6 +35,20 @@ class EncryptionManager : IEncryptionManager {
         val masterKey = keyStoreWrapper.getAndroidKeyStoreSymmetricKey(MASTER_KEY)
                 ?: throw KeyPermanentlyInvalidatedException()
         return CipherWrapper().decrypt(data, masterKey)
+    }
+
+
+    override fun getCryptoObject(): FingerprintManager.CryptoObject {
+        var masterKey = keyStoreWrapper.getAndroidKeyStoreSymmetricKey(MASTER_KEY)
+
+        if (masterKey == null) {
+            masterKey = keyStoreWrapper.createAndroidKeyStoreSymmetricKey(MASTER_KEY)
+        }
+
+        val cipher = CipherWrapper().cipher
+        cipher.init(Cipher.ENCRYPT_MODE, masterKey)
+
+        return FingerprintManager.CryptoObject(cipher)
     }
 
     companion object {
@@ -79,7 +95,6 @@ class EncryptionManager : IEncryptionManager {
             val keyguardManager = ctx.getSystemService(Activity.KEYGUARD_SERVICE) as KeyguardManager
             return keyguardManager.isKeyguardSecure
         }
-
 
 
     }

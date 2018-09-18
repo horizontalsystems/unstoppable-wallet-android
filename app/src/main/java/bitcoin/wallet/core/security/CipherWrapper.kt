@@ -12,7 +12,7 @@ class CipherWrapper {
         const val IV_SEPARATOR = "]"
     }
 
-    private val cipher: Cipher = Cipher.getInstance(TRANSFORMATION_SYMMETRIC)
+    val cipher: Cipher = Cipher.getInstance(TRANSFORMATION_SYMMETRIC)
 
     fun encrypt(data: String, key: Key?): String {
         cipher.init(Cipher.ENCRYPT_MODE, key)

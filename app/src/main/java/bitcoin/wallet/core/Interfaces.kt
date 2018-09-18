@@ -1,5 +1,6 @@
 package bitcoin.wallet.core
 
+import android.hardware.fingerprint.FingerprintManager
 import io.reactivex.Observable
 import io.realm.OrderedCollectionChangeSet
 
@@ -30,6 +31,7 @@ interface INetworkManager {
 interface IEncryptionManager {
     fun encrypt(data: String): String
     fun decrypt(data: String): String
+    fun getCryptoObject(): FingerprintManager.CryptoObject?
 }
 
 interface IClipboardManager {
