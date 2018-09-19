@@ -3,14 +3,14 @@
 <resources>
   <string name="app_name">Bank</string>
   <string name="alert_ok">OK</string>
-  <string name="alert_cancel">Cancel</string>
-  <string name="alert_copy">Copy</string>
-  <string name="alert_share">Share</string>
-  <string name="alert_close">Close</string>
-  <string name="alert_success">Success</string>
-  <string name="alert_copied">Copied</string>
+  <string name="alert_cancel">Abbrechen</string>
+  <string name="alert_copy">Kopieren</string>
+  <string name="alert_share">Teilen</string>
+  <string name="alert_close">Schließen</string>
+  <string name="alert_success">Erfolgreich</string>
+  <string name="alert_copied">Kopiert</string>
   <string name="welcome_title">Bank Wallet</string>
-  <string name="welcome_description">Decentralized App</string>
+  <string name="welcome_description">Dezentralisierte App</string>
   <string name="welcome_btn_create_wallet">Create Wallet</string>
   <string name="welcome_btn_import_wallet">Import Wallet</string>
   <string name="restore_title">Enter Paper Keys</string>
