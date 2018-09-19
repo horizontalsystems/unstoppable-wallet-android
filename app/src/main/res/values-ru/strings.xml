@@ -16,12 +16,13 @@
   <string name="restore_title">Введите ключи</string>
   <string name="restore_validation_failed">Введенные слова неверны</string>
   <string name="backup_words_title">Записать ключ</string>
-  <string name="backup_words_description">Ваш ключ является единственным способом для восстановления вашего кошелька.
-
-Мы покажем вам список слов, чтобы вы записали их на бумаге и хранили в безопасном месте    </string>
-  <string name="backup_words_confirm_alert_wallet_held_on_device">Я понимаю, что мой <b>кошелек и токены хранятся только на этом устройстве</b></string>
-  <string name="backup_words_confirm_alert_wallet_restore_with_words">Я понимаю, что если это приложение удаляется или устанавливается на другое устройство, мой кошелек можно восстановить только ключом, который я храню в безопасном месте</string>
-  <string name="backup_words_confirm_alert_wallet_device_lock_warning">Changing the phone\'s unlock PIN in your Android OS settings would reset the wallet. You will need your backup phrase to restore your wallet after that</string>
+  <string name="backup_words_description">
+        Your paper key is the only way to restore your wallet if your device is lost, stolen, broken or upgraded.
+        \n\nYou will see a list of words on the next screen. Write them down on a piece of paper and do not show it to anyone.
+    </string>
+  <string name="backup_words_confirm_alert_wallet_held_on_device">I understand that my <b>wallet and tokens are stored on this device only and not any servers.</b></string>
+  <string name="backup_words_confirm_alert_wallet_restore_with_words">I understand that if this app is moved to another device or is deleted, my wallet can be only recovered with the Paper Key that I have written down and saved in a secure place.</string>
+  <string name="backup_words_confirm_alert_wallet_device_lock_warning">Changing the phone\'s unlock PIN in your Android OS settings would reset the wallet. You will need your backup phrase to restore your wallet after that.</string>
   <string name="backup_words_confirm_description">Введите следующие слова из вашего ключа</string>
   <string name="backup_words_error_enter_words">Пожалуйста, введите слова из вашего ключа.</string>
   <string name="backup_words_error_no_match">Введенные слова не совпадают. Пожалуйста убедитесь, что вы записали ваши слова, точно так, как они появляются на предыдущем шаге и в правильном порядке.</string>
