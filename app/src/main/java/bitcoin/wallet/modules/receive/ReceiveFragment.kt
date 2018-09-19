@@ -47,9 +47,7 @@ class ReceiveFragment : DialogFragment() {
         mDialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
         mDialog?.window?.setGravity(Gravity.BOTTOM)
 
-        rootView.findViewById<Button>(R.id.btnShare)?.setOnClickListener { viewModel.delegate.onShareClick(itemIndex) }
-
-        rootView.findViewById<TextView>(R.id.txtCopy)?.setOnClickListener { viewModel.delegate.onCopyClick(itemIndex) }
+        rootView.findViewById<Button>(R.id.btnCopy)?.setOnClickListener { viewModel.delegate.onCopyClick(itemIndex) }
 
         viewModel.showAddressesLiveData.observe(this, Observer { addresses ->
             addresses?.apply {
@@ -59,9 +57,7 @@ class ReceiveFragment : DialogFragment() {
                         val coinDrawable = ContextCompat.getDrawable(ctx, LayoutHelper.getCoinDrawableResource(address.coin.code))
                         rootView.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
                     }
-                    val coinText = "${address.coin.name} (${address.coin.code})"
-                    rootView.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.receive_title, coinText)
-
+                    rootView.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.receive_title, address.coin.code)
                     rootView.findViewById<TextView>(R.id.txtAddress)?.let { it.text = address.address }
                     rootView.findViewById<ImageView>(R.id.imgQrCode)?.setImageBitmap(TextHelper.getQrCodeBitmapFromAddress(address.address))
                 }
@@ -82,12 +78,6 @@ class ReceiveFragment : DialogFragment() {
 
         viewModel.showCopiedLiveEvent.observe(this, Observer {
             HudHelper.showSuccessMessage(R.string.hud_text_copied, activity)
-        })
-
-        viewModel.openShareViewLiveEvent.observe(this, Observer { address ->
-            address?.let {
-                context?.let { context -> TextHelper.shareExternalText(context, address, getString(R.string.receive_share_to)) }
-            }
         })
 
         return mDialog as Dialog

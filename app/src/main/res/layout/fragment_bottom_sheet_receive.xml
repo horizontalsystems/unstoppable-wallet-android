@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/bottom_sheet_background"
     >
 
@@ -14,7 +14,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:tint="@color/grey"
+        android:tint="@color/dark"
+        android:src="@drawable/coin_bitcoin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />
@@ -24,17 +25,16 @@
         style="@style/BottomDialogText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingEnd="50dp"
-        android:paddingStart="50dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:fontFamily="@font/noto_sans_bold"
         android:textColor="@color/dark"
         android:ellipsize="end"
         android:singleLine="true"
         android:textSize="17sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/coinImg"
+        app:layout_constraintTop_toTopOf="@+id/coinImg"
+        app:layout_constraintBottom_toBottomOf="@+id/coinImg"
         tools:text="Receive Bitcoin (BTC)"
         />
 
@@ -75,13 +75,13 @@
 
     <TextView
         android:id="@+id/txtAddress"
-        android:layout_width="wrap_content"
+        android:layout_width="184dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="18dp"
         android:fontFamily="@font/noto_sans"
-        android:textColor="@color/grey"
+        android:textColor="@color/black"
         android:textSize="14sp"
         android:singleLine="true"
         android:ellipsize="middle"
@@ -91,20 +91,8 @@
         tools:text="1AYHMDV1XR8HWaReC3Rr4Qv79vJiSR8RCU"
         />
 
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/txtCopy"
-        style="@style/ButtonSmallGrey_4"
-        android:layout_width="wrap_content"
-        android:layout_height="36dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/receive_copy"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtAddress"
-        />
-
     <Button
-        android:id="@+id/btnShare"
+        android:id="@+id/btnCopy"
         style="@style/ButtonGreen_12"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -112,11 +100,11 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="24dp"
-        android:text="@string/share"
+        android:text="@string/receive_copy"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtCopy"
+        app:layout_constraintTop_toBottomOf="@+id/txtAddress"
         />
 
 </android.support.constraint.ConstraintLayout>

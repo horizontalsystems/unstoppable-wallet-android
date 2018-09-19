@@ -97,7 +97,7 @@ class BitcoinAdapter(words: List<String>, network: NetworkParameters) : IAdapter
 class WalletKit(words: List<String>, network: NetworkParameters) {
     val latestBlockHeight = 129
     val transactionRecords: List<TransactionRecordNew> = demoTransactions()//listOf()
-    val receiveAddress = "addressSomeTesting32String"
+    val receiveAddress = "1AYHMDV1XR8HWaReC3Rr4Qv79vJiSR8RCU"
     val progressSubject: BehaviorSubject<Double> = BehaviorSubject.create()
 
     fun showRealmInfo() {
