@@ -12,6 +12,7 @@ import bitcoin.wallet.core.security.SecurityUtils
 import bitcoin.wallet.lib.AlertDialogFragment
 import bitcoin.wallet.modules.backup.BackupModule
 import bitcoin.wallet.modules.backup.BackupPresenter
+import bitcoin.wallet.modules.pin.PinModule
 import kotlinx.android.synthetic.main.activity_settings_security.*
 
 class SecuritySettingsActivity : BaseActivity() {
@@ -30,6 +31,7 @@ class SecuritySettingsActivity : BaseActivity() {
 
         changePin.setOnClickListener {
             Log.e("SecuritySettingsAct", "change pin clicked")
+            PinModule.startForSetPin(this)
         }
 
         backupWallet.apply {

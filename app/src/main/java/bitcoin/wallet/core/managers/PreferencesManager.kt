@@ -9,7 +9,7 @@ class PreferencesManager(private val encryptionManager: IEncryptionManager) : IL
 
     override val savedWords: List<String>?
         get() {
-            val string = App.preferences.getString("mnemonicWords", null)
+            val string = App.preferences.getString(MNEMONIC_WORDS, null)
             return if (TextUtils.isEmpty(string)) {
                 null
             } else {
@@ -18,13 +18,15 @@ class PreferencesManager(private val encryptionManager: IEncryptionManager) : IL
         }
 
     override fun saveWords(words: List<String>) {
-        App.preferences.edit().putString("mnemonicWords", encryptionManager.encrypt(words.joinToString(" "))).apply()
+        App.preferences.edit().putString(MNEMONIC_WORDS, encryptionManager.encrypt(words.joinToString(" "))).apply()
     }
 
     override fun clearAll() {
         App.preferences.edit().clear().apply()
     }
 
+    private val MNEMONIC_WORDS = "mnemonicWords"
+    private val LOCK_PIN = "lockPin"
     private val LIGHT_MODE_ENABLED = "light_mode_enabled"
     private val FINGERPRINT_ENABLED = "fingerprint_enabled"
 
@@ -36,4 +38,17 @@ class PreferencesManager(private val encryptionManager: IEncryptionManager) : IL
         get() = App.preferences.getBoolean(FINGERPRINT_ENABLED, false)
         set(value) = App.preferences.edit().putBoolean(FINGERPRINT_ENABLED, value).apply()
 
+
+    override fun savePin(pin: String) {
+        App.preferences.edit().putString(LOCK_PIN, encryptionManager.encrypt(pin)).apply()
+    }
+
+    override fun getPin(): String? {
+        val string = App.preferences.getString(LOCK_PIN, null)
+        return if (TextUtils.isEmpty(string)) {
+            null
+        } else {
+            encryptionManager.decrypt(string)
+        }
+    }
 }

@@ -137,4 +137,15 @@
     <string name="fingerprint_not_recognized">Fingerprint not recognized. Try again</string>
     <string name="fingerprint_success">Fingerprint recognized</string>
 
+
+    <!--Set Pin-->
+    <string name="set_pin_title">Enter pin</string>
+    <string name="set_pin_description">Your pin will be used to unlock your wallet and send money</string>
+    <string name="set_pin_error_short_pin">Please enter all digits.</string>
+    <string name="set_pin_confirm_title">Enter again</string>
+    <string name="set_pin_confirm_description">Your pin will be used to unlock your wallet and send money</string>
+    <string name="set_pin_success">Lock pin was set successfully!</string>
+    <string name="set_pin_error_pins_dont_match">Entered pins do not match.</string>
+    <string name="set_pin_error_failed_to_save_pin">Error occurred while saving your pin. Please, try again.</string>
+
 </resources>
