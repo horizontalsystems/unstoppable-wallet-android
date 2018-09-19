@@ -32,7 +32,7 @@
   <string name="backup_button_submit">Submit</string>
   <string name="backup_write_down_on_paper">Write down on paper and keep safe</string>
   <string name="wallet_title">Balance</string>
-  <string name="wallet_button_receive">Receive</string>
+  <string name="wallet_button_receive">Empfangen</string>
   <string name="wallet_button_pay">Bezahlen</string>
   <string name="send_title">Senden</string>
   <string name="send_error_insufficient_funds">Nicht verfügbare Betrag</string>
@@ -59,8 +59,8 @@
   <string name="transactions_empty_list">You don\’t have any pending or past transaction yet</string>
   <string name="transaction_info_title">Transaktion</string>
   <string name="transaction_info_status">Status:</string>
-  <string name="transaction_info_status_completed">Completed</string>
-  <string name="transaction_info_status_pending">Pending</string>
+  <string name="transaction_info_status_completed">Abgeschlossen</string>
+  <string name="transaction_info_status_pending">Anstehend</string>
   <string name="transaction_info_processing">Processing %d%%</string>
   <string name="transaction_info_close">Schließen</string>
   <string name="transaction_info_id">ID:</string>
@@ -71,7 +71,7 @@
   <string name="full_transaction_info_fee_rate">Gebührenrate</string>
   <string name="full_transaction_info_received_time">Received Time</string>
   <string name="full_transaction_info_mined_time">Verminte Zeit</string>
-  <string name="full_transaction_info_included_in_block">Included in Block</string>
+  <string name="full_transaction_info_included_in_block">Im Block Enthalten</string>
   <string name="full_transaction_info_confirmations">Bestätigungen</string>
   <string name="full_transaction_info_lock_time">Sperrzeit</string>
   <string name="full_transaction_info_from">Von</string>
