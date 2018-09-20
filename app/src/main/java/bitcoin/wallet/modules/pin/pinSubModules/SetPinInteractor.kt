@@ -13,4 +13,8 @@ class SetPinInteractor : PinInteractor() {
             delegate?.goToPinConfirmation(pin)
     }
 
+    override fun onBackPressed() {
+        delegate?.onMinimizeApp()
+    }
+
 }

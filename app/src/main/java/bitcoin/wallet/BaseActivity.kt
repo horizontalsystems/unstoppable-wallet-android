@@ -25,7 +25,7 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        if (App.promptPin) {
+        if (App.promptPin && Factory.preferencesManager.getPin() != null) {
             PinModule.startForUnlock(this)
             return
         }

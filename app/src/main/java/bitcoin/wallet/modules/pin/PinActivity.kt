@@ -23,6 +23,7 @@ import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.core.security.EncryptionManager
 import bitcoin.wallet.core.security.FingerprintAuthenticationDialogFragment
 import bitcoin.wallet.core.security.SecurityUtils
+import bitcoin.wallet.modules.main.MainModule
 import bitcoin.wallet.viewHelpers.HudHelper
 import bitcoin.wallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.activity_pin.*
@@ -79,13 +80,13 @@ class PinActivity : AppCompatActivity(), NumPadItemsAdapter.Listener, Fingerprin
         viewModel.goToPinConfirmationLiveEvent.observe(this, Observer { pin ->
             pin?.let {
                 PinModule.startForSetPinConfirm(this, pin)
-                finish()
             }
         })
 
         viewModel.showSuccessLiveData.observe(this, Observer { success ->
             success?.let {
                 HudHelper.showSuccessMessage(it, this)
+                MainModule.start(this)
                 finish()
             }
         })
@@ -205,7 +206,7 @@ class PinActivity : AppCompatActivity(), NumPadItemsAdapter.Listener, Fingerprin
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        super.onBackPressed()
+        viewModel.delegate.onBackPressed()
         return true
     }
 

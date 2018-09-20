@@ -63,15 +63,18 @@ class MainActivity : BaseActivity() {
             }
         })
 
-         // try {
-         //     blockchainManager.startServices()
-         // } catch (exception: UserNotAuthenticatedException) {
-         //     EncryptionManager.showAuthenticationScreen(this, LauncherActivity.AUTHENTICATE_TO_REDIRECT)
-         // } catch (exception: KeyPermanentlyInvalidatedException) {
-         //     EncryptionManager.showKeysInvalidatedAlert(this)
-         // }
-    }
+//        if (Factory.preferencesManager.getPin() == null) {
+//            PinModule.startForSetPin(this)
+//        }
 
+        // try {
+        //     blockchainManager.startServices()
+        // } catch (exception: UserNotAuthenticatedException) {
+        //     EncryptionManager.showAuthenticationScreen(this, LauncherActivity.AUTHENTICATE_TO_REDIRECT)
+        // } catch (exception: KeyPermanentlyInvalidatedException) {
+        //     EncryptionManager.showKeysInvalidatedAlert(this)
+        // }
+    }
 
 
 }

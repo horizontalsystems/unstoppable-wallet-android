@@ -28,6 +28,7 @@
             android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".modules.main.MainActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".modules.restore.RestoreWalletActivity"
