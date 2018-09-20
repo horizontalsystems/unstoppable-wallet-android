@@ -4,8 +4,9 @@ import android.text.TextUtils
 import bitcoin.wallet.core.App
 import bitcoin.wallet.core.IEncryptionManager
 import bitcoin.wallet.core.ILocalStorage
+import bitcoin.wallet.core.ISettingsManager
 
-class PreferencesManager(private val encryptionManager: IEncryptionManager) : ILocalStorage {
+class PreferencesManager(private val encryptionManager: IEncryptionManager) : ILocalStorage, ISettingsManager {
 
     override val savedWords: List<String>?
         get() {
@@ -30,14 +31,17 @@ class PreferencesManager(private val encryptionManager: IEncryptionManager) : IL
     private val LIGHT_MODE_ENABLED = "light_mode_enabled"
     private val FINGERPRINT_ENABLED = "fingerprint_enabled"
 
-    var isLightModeEnabled: Boolean
-        get() = App.preferences.getBoolean(LIGHT_MODE_ENABLED, false)
-        set(value) = App.preferences.edit().putBoolean(LIGHT_MODE_ENABLED, value).apply()
+    override fun isLightModeEnabled() = App.preferences.getBoolean(LIGHT_MODE_ENABLED, false)
 
-    var isFingerprintEnabled: Boolean
-        get() = App.preferences.getBoolean(FINGERPRINT_ENABLED, false)
-        set(value) = App.preferences.edit().putBoolean(FINGERPRINT_ENABLED, value).apply()
+    override fun setLightModeEnabled(enabled: Boolean) {
+        App.preferences.edit().putBoolean(LIGHT_MODE_ENABLED, enabled).apply()
+    }
 
+    override fun isFingerprintEnabled() = App.preferences.getBoolean(FINGERPRINT_ENABLED, false)
+
+    override fun setFingerprintEnabled(enabled: Boolean) {
+        App.preferences.edit().putBoolean(FINGERPRINT_ENABLED, enabled).apply()
+    }
 
     override fun savePin(pin: String) {
         App.preferences.edit().putString(LOCK_PIN, encryptionManager.encrypt(pin)).apply()

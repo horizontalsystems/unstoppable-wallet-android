@@ -20,9 +20,6 @@ class SecuritySettingsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val lightMode = Factory.preferencesManager.isLightModeEnabled
-        setTheme(if (lightMode) R.style.LightModeAppTheme else R.style.DarkModeAppTheme)
-
         setContentView(R.layout.activity_settings_security)
 
         setSupportActionBar(toolbar)
@@ -47,15 +44,15 @@ class SecuritySettingsActivity : BaseActivity() {
 
         if (phoneHasFingerprintSensor) {
             fingerprint.apply {
-                switchIsChecked = Factory.preferencesManager.isFingerprintEnabled
+                switchIsChecked = Factory.preferencesManager.isFingerprintEnabled()
                 setOnClickListener {
-                    if (Factory.preferencesManager.isFingerprintEnabled || fingerprintCanBeEnabled()) {
+                    if (Factory.preferencesManager.isFingerprintEnabled() || fingerprintCanBeEnabled()) {
                         switchToggle()
                     }
                 }
 
                 switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                    Factory.preferencesManager.isFingerprintEnabled = isChecked
+                    Factory.preferencesManager.setFingerprintEnabled(isChecked)
                 }
             }
         }

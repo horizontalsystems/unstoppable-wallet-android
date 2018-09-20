@@ -1,6 +1,6 @@
-package bitcoin.wallet.modules.pin.pinSubModules
+package bitcoin.wallet.modules.pin
 
-import bitcoin.wallet.modules.pin.PinModule
+import bitcoin.wallet.modules.pin.pinSubModules.SetPinConfirmationPresenter
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
 import org.junit.After
@@ -33,8 +33,8 @@ class SetPinConfirmationPresenterTest {
 
         presenter.viewDidLoad()
 
-        verify(view).setTitleEnterAgain()
-        verify(view).setDescriptionEnterAgain()
+        verify(view).setTitleForEnterAgain()
+        verify(view).setDescriptionForEnterAgain()
     }
 
     @Test

@@ -3,7 +3,6 @@ package bitcoin.wallet.modules.main
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
-import android.view.View
 import bitcoin.wallet.BaseActivity
 import bitcoin.wallet.R
 import bitcoin.wallet.core.AdapterManager
@@ -20,12 +19,6 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Factory.preferencesManager.savedWords?.let { AdapterManager.initAdapters(it) }
-
-        val lightMode = Factory.preferencesManager.isLightModeEnabled
-        setTheme(if (lightMode) R.style.LightModeAppTheme else R.style.DarkModeAppTheme)
-        if (savedInstanceState != null) {
-            setStatusBarIconColor(lightMode)
-        }
 
         setContentView(R.layout.activity_dashboard)
 
@@ -79,14 +72,6 @@ class MainActivity : BaseActivity() {
          // }
     }
 
-    private fun setStatusBarIconColor(lightMode: Boolean) {
-        var flags = window.decorView.systemUiVisibility
-        flags = if (lightMode) {
-            flags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        } else {
-            flags xor View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR // remove flag
-        }
-        window.decorView.systemUiVisibility = flags
-    }
+
 
 }

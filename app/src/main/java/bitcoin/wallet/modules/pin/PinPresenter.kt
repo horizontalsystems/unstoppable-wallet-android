@@ -4,7 +4,7 @@ package bitcoin.wallet.modules.pin
 abstract class PinPresenter(protected val interactor: PinModule.IInteractor, protected val router: PinModule.IRouter) : PinModule.IViewDelegate, PinModule.IInteractorDelegate {
     var view: PinModule.IView? = null
 
-    private var enteredPin: StringBuilder = StringBuilder()
+    protected var enteredPin: StringBuilder = StringBuilder()
 
     override fun viewDidLoad() {
         updateViewTitleAndDescription()
@@ -32,6 +32,10 @@ abstract class PinPresenter(protected val interactor: PinModule.IInteractor, pro
         interactor.submit(enteredPin.toString())
     }
 
+    override fun onBackPressed() {
+        interactor.onBackPressed()
+    }
+
     //InteractorDelegate
 
     override fun onErrorShortPinLength() {
@@ -52,5 +56,27 @@ abstract class PinPresenter(protected val interactor: PinModule.IInteractor, pro
 
     override fun onErrorFailedToSavePin() {
         view?.showErrorFailedToSavePin()
+    }
+
+    override fun onCorrectPinSubmitted() {
+        router.unlockWallet()
+    }
+
+    override fun onWrongPinSubmitted() {
+        enteredPin.setLength(0)
+        view?.showErrorWrongPin()
+        view?.clearPinMaskWithDelay()
+    }
+
+    override fun onFingerprintEnabled() {
+        view?.showFingerprintDialog()
+    }
+
+    override fun onMinimizeApp() {
+        view?.minimizeApp()
+    }
+
+    override fun onNavigateToPrevPage() {
+        view?.navigateToPrevPage()
     }
 }

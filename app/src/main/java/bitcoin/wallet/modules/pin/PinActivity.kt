@@ -1,10 +1,15 @@
 package bitcoin.wallet.modules.pin
 
+import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
+import android.hardware.fingerprint.FingerprintManager
 import android.os.Bundle
+import android.os.Handler
+import android.security.keystore.KeyPermanentlyInvalidatedException
+import android.security.keystore.UserNotAuthenticatedException
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
@@ -13,13 +18,18 @@ import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import bitcoin.wallet.R
+import bitcoin.wallet.core.App
 import bitcoin.wallet.core.managers.Factory
+import bitcoin.wallet.core.security.EncryptionManager
+import bitcoin.wallet.core.security.FingerprintAuthenticationDialogFragment
+import bitcoin.wallet.core.security.SecurityUtils
 import bitcoin.wallet.viewHelpers.HudHelper
 import bitcoin.wallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.activity_pin.*
+import java.security.UnrecoverableKeyException
 
 
-class PinActivity : AppCompatActivity(), NumPadItemsAdapter.Listener {
+class PinActivity : AppCompatActivity(), NumPadItemsAdapter.Listener, FingerprintAuthenticationDialogFragment.Callback {
 
     private lateinit var viewModel: PinViewModel
 
@@ -30,9 +40,10 @@ class PinActivity : AppCompatActivity(), NumPadItemsAdapter.Listener {
     private lateinit var imgPinMask5: ImageView
     private lateinit var imgPinMask6: ImageView
 
+    private var isFingerprintEnabled = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(if (Factory.preferencesManager.isLightModeEnabled) R.style.LightModeAppTheme else R.style.DarkModeAppTheme)
 
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
 
@@ -79,6 +90,32 @@ class PinActivity : AppCompatActivity(), NumPadItemsAdapter.Listener {
             }
         })
 
+        viewModel.hideToolbarLiveEvent.observe(this, Observer {
+            supportActionBar?.hide()
+        })
+
+        viewModel.unlockWalletLiveEvent.observe(this, Observer {
+            unlockWallet()
+        })
+
+        viewModel.clearPinMaskWithDelayLiveEvent.observe(this, Observer {
+            Handler().postDelayed({
+                updatePinCircles(0)
+            }, 200)
+        })
+
+        viewModel.showFingerprintDialogLiveEvent.observe(this, Observer {
+            showFingerprintDialog()
+        })
+
+        viewModel.minimizeAppLiveEvent.observe(this, Observer {
+            moveTaskToBack(true)
+        })
+
+        viewModel.goBackLiveEvent.observe(this, Observer {
+            super.onBackPressed()
+        })
+
         imgPinMask1 = findViewById(R.id.imgPinMaskOne)
         imgPinMask2 = findViewById(R.id.imgPinMaskTwo)
         imgPinMask3 = findViewById(R.id.imgPinMaskThree)
@@ -104,6 +141,47 @@ class PinActivity : AppCompatActivity(), NumPadItemsAdapter.Listener {
         numPadItems.layoutManager = GridLayoutManager(this, 3)
     }
 
+    private fun showFingerprintDialog() {
+        if (SecurityUtils.touchSensorCanBeUsed(this)) {
+            try {
+                val cryptoObject = Factory.encryptionManager.getCryptoObject()
+                val fragment = FingerprintAuthenticationDialogFragment()
+                fragment.setCryptoObject(cryptoObject)
+                fragment.setCallback(this@PinActivity)
+                fragment.isCancelable = true
+                fragment.show(fragmentManager, "fingerprint_dialog")
+
+                isFingerprintEnabled = true
+                numPadItems.adapter.notifyDataSetChanged()
+
+            } catch (e: Exception) {
+                when (e) {
+                    is UserNotAuthenticatedException -> EncryptionManager.showAuthenticationScreen(this, AUTHENTICATE_TO_FINGERPRINT)
+                    is KeyPermanentlyInvalidatedException,
+                    is UnrecoverableKeyException -> EncryptionManager.showKeysInvalidatedAlert(this)
+                }
+            }
+        }
+    }
+
+    override fun onFingerprintAuthSucceed(withFingerprint: Boolean, crypto: FingerprintManager.CryptoObject?) {
+        unlockWallet()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == AUTHENTICATE_TO_FINGERPRINT) {
+                showFingerprintDialog()
+            }
+        }
+    }
+
+    private fun unlockWallet() {
+        App.promptPin = false
+        finish()
+    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_set_pin, menu)
@@ -122,8 +200,12 @@ class PinActivity : AppCompatActivity(), NumPadItemsAdapter.Listener {
         }
     }
 
+    override fun onBackPressed() {
+        viewModel.delegate.onBackPressed()
+    }
+
     override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
+        super.onBackPressed()
         return true
     }
 
@@ -135,8 +217,15 @@ class PinActivity : AppCompatActivity(), NumPadItemsAdapter.Listener {
             NumPadItemType.DELETE -> {
                 viewModel.delegate.onClickDelete()
             }
+            NumPadItemType.FINGER -> {
+                if (isFingerprintEnabled) {
+                    showFingerprintDialog()
+                }
+            }
         }
     }
+
+    override fun isFingerPrintEnabled() = isFingerprintEnabled
 
     private fun updatePinCircles(length: Int) {
         val filledCircle = R.drawable.pin_circle_filled
@@ -151,6 +240,8 @@ class PinActivity : AppCompatActivity(), NumPadItemsAdapter.Listener {
     }
 
     companion object {
+
+        const val AUTHENTICATE_TO_FINGERPRINT = 1
 
         private const val keyInteractionType = "interaction_type"
         private const val keyEnteredPin = "entered_pin"
@@ -175,6 +266,7 @@ class NumPadItemsAdapter(private val numPadItems: List<NumPadItem>, private val 
 
     interface Listener {
         fun onItemClick(item: NumPadItem)
+        fun isFingerPrintEnabled(): Boolean
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -185,7 +277,7 @@ class NumPadItemsAdapter(private val numPadItems: List<NumPadItem>, private val 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is NumPadItemViewHolder) {
-            holder.bind(numPadItems[position]) { listener.onItemClick(numPadItems[position]) }
+            holder.bind(numPadItems[position], { listener.onItemClick(numPadItems[position]) }, listener.isFingerPrintEnabled())
         }
     }
 }
@@ -198,7 +290,7 @@ class NumPadItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private var imgFingerprint: ImageView = itemView.findViewById(R.id.imgFingerprint)
 
 
-    fun bind(item: NumPadItem, onClick: () -> (Unit)) {
+    fun bind(item: NumPadItem, onClick: () -> (Unit), isFingerprintEnabled: Boolean) {
 
         itemView.setOnClickListener { onClick.invoke() }
 
@@ -219,6 +311,10 @@ class NumPadItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 txtNumber.text = item.number.toString()
                 txtLetters.text = item.letters
                 itemView.setBackgroundResource(R.drawable.numpad_button_background)
+            }
+
+            NumPadItemType.FINGER -> {
+                imgFingerprint.visibility = if (isFingerprintEnabled) View.VISIBLE else View.GONE
             }
         }
     }

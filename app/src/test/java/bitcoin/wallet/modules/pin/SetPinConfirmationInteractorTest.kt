@@ -1,7 +1,7 @@
-package bitcoin.wallet.modules.pin.pinSubModules
+package bitcoin.wallet.modules.pin
 
 import bitcoin.wallet.core.ILocalStorage
-import bitcoin.wallet.modules.pin.PinModule
+import bitcoin.wallet.modules.pin.pinSubModules.SetPinConfirmationInteractor
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
 import com.nhaarman.mockito_kotlin.whenever

@@ -6,8 +6,8 @@ import bitcoin.wallet.modules.pin.PinPresenter
 class SetPinConfirmationPresenter(interactor: PinModule.IInteractor, router: PinModule.IRouter) : PinPresenter(interactor, router) {
 
     override fun updateViewTitleAndDescription() {
-        view?.setTitleEnterAgain()
-        view?.setDescriptionEnterAgain()
+        view?.setTitleForEnterAgain()
+        view?.setDescriptionForEnterAgain()
     }
 
 }

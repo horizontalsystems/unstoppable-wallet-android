@@ -43,4 +43,11 @@ class SetPinInteractorTest {
         verify(delegate).onErrorShortPinLength()
     }
 
+    @Test
+    fun onBackPressed() {
+        interactor.onBackPressed()
+
+        verify(delegate).onNavigateToPrevPage()
+    }
+
 }

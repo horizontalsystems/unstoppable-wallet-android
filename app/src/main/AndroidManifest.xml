@@ -42,10 +42,6 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".modules.main.UnlockActivity"
-            android:screenOrientation="portrait"/>
-
-        <activity
             android:name=".modules.pin.PinActivity"
             android:screenOrientation="portrait"/>
 

@@ -34,8 +34,8 @@ class SetPinPresenterTest {
 
         presenter.viewDidLoad()
 
-        verify(view).setTitleEnterPin()
-        verify(view).setDescriptionEnterPin()
+        verify(view).setTitleForEnterPin()
+        verify(view).setDescriptionForEnterPin()
     }
 
     @Test
@@ -97,4 +97,17 @@ class SetPinPresenterTest {
         verify(router).goToPinConfirmation(pin)
     }
 
+    @Test
+    fun onBackPressed() {
+        presenter.onBackPressed()
+
+        verify(interactor).onBackPressed()
+    }
+
+    @Test
+    fun onNavigateToPrevPage() {
+        presenter.onNavigateToPrevPage()
+
+        verify(view).navigateToPrevPage()
+    }
 }

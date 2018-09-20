@@ -41,6 +41,14 @@ interface IClipboardManager {
     fun getCopiedText(): String
 }
 
+interface ISettingsManager {
+    fun isFingerprintEnabled(): Boolean
+    fun setFingerprintEnabled(enabled: Boolean)
+
+    fun isLightModeEnabled(): Boolean
+    fun setLightModeEnabled(enabled: Boolean)
+}
+
 data class WalletData(val words: List<String>)
 
 data class DatabaseChangeset<T>(val array: List<T>, val changeset: CollectionChangeset? = null)

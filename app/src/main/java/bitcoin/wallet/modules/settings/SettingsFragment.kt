@@ -53,13 +53,13 @@ class SettingsFragment : android.support.v4.app.Fragment() {
         }
 
         lightMode.apply {
-            switchIsChecked = Factory.preferencesManager.isLightModeEnabled
+            switchIsChecked = Factory.preferencesManager.isLightModeEnabled()
             setOnClickListener {
                 switchToggle()
             }
 
             switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                Factory.preferencesManager.isLightModeEnabled = isChecked
+                Factory.preferencesManager.setLightModeEnabled(isChecked)
                 activity?.recreate()
             }
         }
