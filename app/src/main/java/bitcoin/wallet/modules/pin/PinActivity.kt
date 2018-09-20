@@ -59,31 +59,31 @@ class PinActivity : AppCompatActivity(), NumPadItemsAdapter.Listener, Fingerprin
         viewModel = ViewModelProviders.of(this).get(PinViewModel::class.java)
         viewModel.init(interactionType, enteredPin)
 
-        viewModel.setTitleLiveData.observe(this, Observer { title ->
+        viewModel.title.observe(this, Observer { title ->
             title?.let { supportActionBar?.title = getString(it) }
         })
 
-        viewModel.setDescriptionLiveData.observe(this, Observer { description ->
+        viewModel.description.observe(this, Observer { description ->
             description?.let { txtPromptPin.setText(it) }
         })
 
-        viewModel.highlightPinMaskLiveData.observe(this, Observer { length ->
+        viewModel.highlightPinMask.observe(this, Observer { length ->
             length?.let { updatePinCircles(it) }
         })
 
-        viewModel.showErrorLiveData.observe(this, Observer { error ->
+        viewModel.showError.observe(this, Observer { error ->
             error?.let {
                 HudHelper.showErrorMessage(error, this)
             }
         })
 
-        viewModel.goToPinConfirmationLiveEvent.observe(this, Observer { pin ->
+        viewModel.goToPinConfirmation.observe(this, Observer { pin ->
             pin?.let {
                 PinModule.startForSetPinConfirm(this, pin)
             }
         })
 
-        viewModel.showSuccessLiveData.observe(this, Observer { success ->
+        viewModel.showSuccess.observe(this, Observer { success ->
             success?.let {
                 HudHelper.showSuccessMessage(it, this)
                 MainModule.start(this)
@@ -91,29 +91,29 @@ class PinActivity : AppCompatActivity(), NumPadItemsAdapter.Listener, Fingerprin
             }
         })
 
-        viewModel.hideToolbarLiveEvent.observe(this, Observer {
+        viewModel.hideToolbar.observe(this, Observer {
             supportActionBar?.hide()
         })
 
-        viewModel.unlockWalletLiveEvent.observe(this, Observer {
+        viewModel.unlockWallet.observe(this, Observer {
             unlockWallet()
         })
 
-        viewModel.clearPinMaskWithDelayLiveEvent.observe(this, Observer {
+        viewModel.clearPinMaskWithDelay.observe(this, Observer {
             Handler().postDelayed({
                 updatePinCircles(0)
             }, 200)
         })
 
-        viewModel.showFingerprintDialogLiveEvent.observe(this, Observer {
+        viewModel.showFingerprintDialog.observe(this, Observer {
             showFingerprintDialog()
         })
 
-        viewModel.minimizeAppLiveEvent.observe(this, Observer {
+        viewModel.minimizeApp.observe(this, Observer {
             moveTaskToBack(true)
         })
 
-        viewModel.goBackLiveEvent.observe(this, Observer {
+        viewModel.goBack.observe(this, Observer {
             super.onBackPressed()
         })
 

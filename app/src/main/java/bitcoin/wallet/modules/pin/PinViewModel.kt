@@ -9,19 +9,19 @@ class PinViewModel : ViewModel(), PinModule.IView, PinModule.IRouter {
 
     lateinit var delegate: PinModule.IViewDelegate
 
-    val setTitleLiveData = MutableLiveData<Int>()
-    val setDescriptionLiveData = MutableLiveData<Int>()
-    val highlightPinMaskLiveData = MutableLiveData<Int>()
-    val showErrorLiveData = MutableLiveData<Int>()
-    val showSuccessLiveData = MutableLiveData<Int>()
+    val title = MutableLiveData<Int>()
+    val description = MutableLiveData<Int>()
+    val highlightPinMask = MutableLiveData<Int>()
+    val showError = MutableLiveData<Int>()
+    val showSuccess = MutableLiveData<Int>()
 
-    val goToPinConfirmationLiveEvent = SingleLiveEvent<String>()
-    val hideToolbarLiveEvent = SingleLiveEvent<Unit>()
-    val unlockWalletLiveEvent = SingleLiveEvent<Unit>()
-    val clearPinMaskWithDelayLiveEvent = SingleLiveEvent<Unit>()
-    val showFingerprintDialogLiveEvent = SingleLiveEvent<Unit>()
-    val minimizeAppLiveEvent = SingleLiveEvent<Unit>()
-    val goBackLiveEvent = SingleLiveEvent<Unit>()
+    val goToPinConfirmation = SingleLiveEvent<String>()
+    val hideToolbar = SingleLiveEvent<Unit>()
+    val unlockWallet = SingleLiveEvent<Unit>()
+    val clearPinMaskWithDelay = SingleLiveEvent<Unit>()
+    val showFingerprintDialog = SingleLiveEvent<Unit>()
+    val minimizeApp = SingleLiveEvent<Unit>()
+    val goBack = SingleLiveEvent<Unit>()
     val goToPinEdit = SingleLiveEvent<Unit>()
 
     fun init(interactionType: PinInteractionType, enteredPin: String) {
@@ -30,95 +30,96 @@ class PinViewModel : ViewModel(), PinModule.IView, PinModule.IRouter {
     }
 
     override fun setTitleForEnterPin() {
-        setTitleLiveData.value = R.string.set_pin_title
+        title.value = R.string.set_pin_title
     }
 
     override fun setDescriptionForEnterPin() {
-        setDescriptionLiveData.value = R.string.set_pin_description
+        description.value = R.string.set_pin_description
     }
 
     override fun highlightPinMask(length: Int) {
-        highlightPinMaskLiveData.value = length
+        highlightPinMask.value = length
     }
 
     override fun showErrorShortPinLength() {
-        showErrorLiveData.value = R.string.set_pin_error_short_pin
+        showError.value = R.string.set_pin_error_short_pin
     }
 
     override fun setTitleForEnterAgain() {
-        setTitleLiveData.value = R.string.set_pin_confirm_title
+        title.value = R.string.set_pin_confirm_title
     }
 
     override fun setDescriptionForEnterAgain() {
-        setDescriptionLiveData.value = R.string.set_pin_confirm_description
+        description.value = R.string.set_pin_confirm_description
     }
 
     override fun showSuccessPinSet() {
-        showSuccessLiveData.value = R.string.set_pin_success
+        showSuccess.value = R.string.set_pin_success
     }
 
     override fun showErrorPinsDontMatch() {
-        showErrorLiveData.value = R.string.set_pin_error_pins_dont_match
+        showError.value = R.string.set_pin_error_pins_dont_match
     }
 
     override fun showErrorFailedToSavePin() {
-        showErrorLiveData.value = R.string.set_pin_error_failed_to_save_pin
+        showError.value = R.string.set_pin_error_failed_to_save_pin
     }
 
     override fun setDescriptionForUnlock() {
-        setDescriptionLiveData.value = R.string.unlock_page_enter_your_pin
+        description.value = R.string.unlock_page_enter_your_pin
     }
 
     override fun setTitleForEditPinAuth() {
-        setTitleLiveData.value = R.string.edit_pin_auth_title
+        title.value = R.string.edit_pin_auth_title
     }
 
     override fun setDescriptionForEditPinAuth() {
-        setDescriptionLiveData.value = R.string.edit_pin_auth_description
+        description.value = R.string.edit_pin_auth_description
     }
 
     override fun setTitleForEditPin() {
-        setTitleLiveData.value = R.string.edit_pin_title
+        title.value = R.string.edit_pin_title
     }
 
     override fun setDescriptionForEditPin() {
-        setDescriptionLiveData.value = R.string.edit_pin_description
+        description.value = R.string.edit_pin_description
     }
 
     override fun hideToolbar() {
-        hideToolbarLiveEvent.call()
+        hideToolbar.call()
     }
 
     override fun showErrorWrongPin() {
-        showErrorLiveData.value = R.string.hud_text_invalid_pin_error
+        showError.value = R.string.hud_text_invalid_pin_error
     }
 
     override fun clearPinMaskWithDelay() {
-        clearPinMaskWithDelayLiveEvent.call()
+        clearPinMaskWithDelay.call()
     }
 
     override fun showFingerprintDialog() {
-        showFingerprintDialogLiveEvent.call()
+        showFingerprintDialog.call()
     }
 
     override fun minimizeApp() {
-        minimizeAppLiveEvent.call()
+        minimizeApp.call()
     }
 
     override fun navigateToPrevPage() {
-        goBackLiveEvent.call()
+        goBack.call()
     }
 
     //IRouter
     override fun goToPinConfirmation(pin: String) {
-        goToPinConfirmationLiveEvent.value = pin
+        goToPinConfirmation.value = pin
     }
 
     override fun unlockWallet() {
-        unlockWalletLiveEvent.call()
+        unlockWallet.call()
     }
 
     override fun goToPinEdit() {
         goToPinEdit.call()
     }
+
 }
