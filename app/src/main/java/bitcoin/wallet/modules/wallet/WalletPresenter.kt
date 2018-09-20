@@ -26,6 +26,7 @@ class WalletPresenter(private var interactor: WalletModule.IInteractor, private 
     }
 
     override fun viewDidLoad() {
+        interactor.checkIfPinSet()
         interactor.notifyWalletBalances()
     }
 
@@ -77,4 +78,7 @@ class WalletPresenter(private var interactor: WalletModule.IInteractor, private 
         view?.showWalletBalances(viewItems)
     }
 
+    override fun onPinNotSet() {
+        router.navigateToSetPin()
+    }
 }

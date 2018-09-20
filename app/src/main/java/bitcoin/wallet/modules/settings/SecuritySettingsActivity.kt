@@ -1,29 +1,24 @@
 package bitcoin.wallet.modules.settings
 
-import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.CompoundButton
+import bitcoin.wallet.BaseActivity
 import bitcoin.wallet.R
-import bitcoin.wallet.core.App
 import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.core.security.SecurityUtils
 import bitcoin.wallet.lib.AlertDialogFragment
 import bitcoin.wallet.modules.backup.BackupModule
 import bitcoin.wallet.modules.backup.BackupPresenter
-import bitcoin.wallet.modules.main.UnlockActivity
+import bitcoin.wallet.modules.pin.PinModule
 import kotlinx.android.synthetic.main.activity_settings_security.*
 
-class SecuritySettingsActivity : AppCompatActivity() {
+class SecuritySettingsActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val lightMode = Factory.preferencesManager.isLightModeEnabled
-        setTheme(if (lightMode) R.style.LightModeAppTheme else R.style.DarkModeAppTheme)
 
         setContentView(R.layout.activity_settings_security)
 
@@ -32,7 +27,7 @@ class SecuritySettingsActivity : AppCompatActivity() {
         supportActionBar?.title = getString(R.string.settings_security_center)
 
         changePin.setOnClickListener {
-            Log.e("SecuritySettingsAct", "change pin clicked")
+            PinModule.startForEditPinAuth(this)
         }
 
         backupWallet.apply {
@@ -48,15 +43,15 @@ class SecuritySettingsActivity : AppCompatActivity() {
 
         if (phoneHasFingerprintSensor) {
             fingerprint.apply {
-                switchIsChecked = Factory.preferencesManager.isFingerprintEnabled
+                switchIsChecked = Factory.preferencesManager.isFingerprintEnabled()
                 setOnClickListener {
-                    if (Factory.preferencesManager.isFingerprintEnabled || fingerprintCanBeEnabled()) {
+                    if (Factory.preferencesManager.isFingerprintEnabled() || fingerprintCanBeEnabled()) {
                         switchToggle()
                     }
                 }
 
                 switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                    Factory.preferencesManager.isFingerprintEnabled = isChecked
+                    Factory.preferencesManager.setFingerprintEnabled(isChecked)
                 }
             }
         }
@@ -71,17 +66,6 @@ class SecuritySettingsActivity : AppCompatActivity() {
             return false
         }
         return true
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        if (App.promptPin) {
-            startActivity(Intent(this, UnlockActivity::class.java))
-            return
-        }
-
-        App.promptPin = false
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

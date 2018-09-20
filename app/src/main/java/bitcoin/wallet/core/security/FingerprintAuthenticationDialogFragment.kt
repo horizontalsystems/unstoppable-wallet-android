@@ -26,10 +26,7 @@ import android.graphics.drawable.ColorDrawable
 import android.hardware.fingerprint.FingerprintManager
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.Window
+import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import bitcoin.wallet.R
@@ -67,6 +64,7 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(), FingerprintUiH
         return inflater.inflate(R.layout.fingerprint_dialog_container, container, false)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -88,6 +86,19 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(), FingerprintUiH
     override fun onResume() {
         super.onResume()
         fingerprintUiHelper.startListening(cryptoObject)
+
+        dialog.setOnKeyListener { _, keyCode, _ ->
+
+            if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+                // To dismiss the fragment when the back-button is pressed.
+                dismiss()
+                true
+            }
+            // Otherwise, do nothing else
+            else false
+
+
+        }
     }
 
     override fun onPause() {

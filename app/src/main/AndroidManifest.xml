@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
 
     <application
         android:name=".core.App"
@@ -28,6 +28,7 @@
             android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".modules.main.MainActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".modules.restore.RestoreWalletActivity"
@@ -42,7 +43,7 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".modules.main.UnlockActivity"
+            android:name=".modules.pin.PinActivity"
             android:screenOrientation="portrait"/>
 
         <meta-data

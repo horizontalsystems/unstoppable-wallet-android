@@ -3,11 +3,13 @@ package bitcoin.wallet.modules.wallet
 import bitcoin.wallet.core.AdapterManager
 import bitcoin.wallet.core.BitcoinAdapter
 import bitcoin.wallet.core.ExchangeRateManager
+import bitcoin.wallet.core.ILocalStorage
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.modules.RxBaseTest
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.atLeast
+import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.subjects.PublishSubject
 import org.junit.Before
@@ -21,6 +23,7 @@ class WalletInteractorTest {
     private val adapterManager = mock(AdapterManager::class.java)
     private val exchangeRateManager = mock(ExchangeRateManager::class.java)
     private val bitcoinAdapter = mock(BitcoinAdapter::class.java)
+    private val storage = mock(ILocalStorage::class.java)
     private lateinit var interactor: WalletInteractor
     private var coin = Bitcoin()
     private var words = listOf("used", "ugly", "meat", "glad", "balance", "divorce", "inner", "artwork", "hire", "invest", "already", "piano")
@@ -33,7 +36,7 @@ class WalletInteractorTest {
     fun before() {
         RxBaseTest.setup()
 
-        interactor = WalletInteractor(adapterManager, exchangeRateManager)
+        interactor = WalletInteractor(adapterManager, exchangeRateManager, storage)
         interactor.delegate = delegate
 
         adapterManager.adapters = mutableListOf(bitcoinAdapter)
@@ -87,6 +90,26 @@ class WalletInteractorTest {
         managerSub.onNext(Any())
 
         verify(delegate, atLeast(2)).didInitialFetch(any(), any(), any(), any())
+    }
+
+    @Test
+    fun checkIfPinSet_set() {
+
+        whenever(storage.getPin()).thenReturn("123456")
+
+        interactor.checkIfPinSet()
+
+        verifyNoMoreInteractions(delegate)
+    }
+
+    @Test
+    fun checkIfPinSet_notSet() {
+
+        whenever(storage.getPin()).thenReturn(null)
+
+        interactor.checkIfPinSet()
+
+        verify(delegate).onPinNotSet()
     }
 
 }

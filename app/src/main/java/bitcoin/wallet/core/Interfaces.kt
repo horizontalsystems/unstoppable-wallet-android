@@ -8,6 +8,8 @@ interface ILocalStorage {
     val savedWords: List<String>?
     fun saveWords(words: List<String>)
     fun clearAll()
+    fun savePin(pin: String)
+    fun getPin(): String?
 }
 
 interface IMnemonic {
@@ -37,6 +39,14 @@ interface IEncryptionManager {
 interface IClipboardManager {
     fun copyText(text: String)
     fun getCopiedText(): String
+}
+
+interface ISettingsManager {
+    fun isFingerprintEnabled(): Boolean
+    fun setFingerprintEnabled(enabled: Boolean)
+
+    fun isLightModeEnabled(): Boolean
+    fun setLightModeEnabled(enabled: Boolean)
 }
 
 data class WalletData(val words: List<String>)

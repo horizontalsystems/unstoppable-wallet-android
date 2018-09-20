@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import bitcoin.wallet.R
 import bitcoin.wallet.core.setOnSingleClickListener
+import bitcoin.wallet.modules.pin.PinModule
 import bitcoin.wallet.modules.receive.ReceiveModule
 import bitcoin.wallet.modules.send.SendModule
 import bitcoin.wallet.viewHelpers.AnimationHelper
@@ -49,7 +50,7 @@ class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener 
         })
 
         viewModel.openReceiveDialog.observe(this, Observer { adapterId ->
-            adapterId?.let{ id ->
+            adapterId?.let { id ->
                 activity?.let {
                     ReceiveModule.start(it, id)
                 }
@@ -57,11 +58,15 @@ class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener 
         })
 
         viewModel.openSendDialog.observe(this, Observer { iAdapter ->
-            iAdapter?.let{ adapter ->
+            iAdapter?.let { adapter ->
                 activity?.let {
                     SendModule.start(it, adapter)
                 }
             }
+        })
+
+        viewModel.navigateToSetPin.observe(this, Observer {
+            context?.let { context -> PinModule.startForSetPin(context) }
         })
     }
 
@@ -102,7 +107,7 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
             ViewHolderCoin(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_coin, parent, false))
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) { }
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {}
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: MutableList<Any>) {
         when (holder) {
@@ -147,7 +152,7 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
         buttonPay.isEnabled = !zeroBalance
         textAmountFiat.isEnabled = !zeroBalance
         //todo convert indeterminate spinner to determinant one
-        walletBalanceViewItem.progress?.subscribe{
+        walletBalanceViewItem.progress?.subscribe {
             syncProgress.visibility = if (it == 1.0) View.GONE else View.VISIBLE
         }
 
