@@ -16,6 +16,8 @@ object PinModule {
         fun setTitleForEnterAgain()
         fun setDescriptionForEnterAgain()
         fun setDescriptionForUnlock()
+        fun setTitleForEditPinAuth()
+        fun setDescriptionForEditPinAuth()
 
         fun highlightPinMask(length: Int)
 
@@ -29,6 +31,8 @@ object PinModule {
         fun showFingerprintDialog()
         fun minimizeApp()
         fun navigateToPrevPage()
+        fun setTitleForEditPin()
+        fun setDescriptionForEditPin()
     }
 
     interface IViewDelegate {
@@ -56,11 +60,13 @@ object PinModule {
         fun onFingerprintEnabled()
         fun onMinimizeApp()
         fun onNavigateToPrevPage()
+        fun goToPinEdit()
     }
 
     interface IRouter {
         fun goToPinConfirmation(pin: String)
         fun unlockWallet()
+        fun goToPinEdit()
     }
 
     fun init(view: PinViewModel, router: IRouter, interactionType: PinInteractionType, enteredPin: String) {
@@ -72,11 +78,15 @@ object PinModule {
             PinInteractionType.SET_PIN -> SetPinInteractor()
             PinInteractionType.SET_PIN_CONFIRM -> SetPinConfirmationInteractor(enteredPin, storage)
             PinInteractionType.UNLOCK -> UnlockInteractor(storage, settings)
+            PinInteractionType.EDIT_PIN_AUTH -> EditPinAuthInteractor(storage)
+            PinInteractionType.EDIT_PIN -> EditPinInteractor(storage)
         }
         val presenter = when (interactionType) {
             PinInteractionType.SET_PIN -> SetPinPresenter(interactor, router)
             PinInteractionType.SET_PIN_CONFIRM -> SetPinConfirmationPresenter(interactor, router)
             PinInteractionType.UNLOCK -> UnlockPresenter(interactor, router)
+            PinInteractionType.EDIT_PIN_AUTH -> EditPinAuthPresenter(interactor, router)
+            PinInteractionType.EDIT_PIN -> EditPinPresenter(interactor, router)
         }
 
         view.delegate = presenter
@@ -97,10 +107,20 @@ object PinModule {
         PinActivity.start(context, PinInteractionType.UNLOCK)
     }
 
+    fun startForEditPinAuth(context: Context) {
+        PinActivity.start(context, PinInteractionType.EDIT_PIN_AUTH)
+    }
+
+    fun startForEditPin(context: Context) {
+        PinActivity.start(context, PinInteractionType.EDIT_PIN)
+    }
+
 }
 
 enum class PinInteractionType {
     SET_PIN,
     SET_PIN_CONFIRM,
-    UNLOCK
+    UNLOCK,
+    EDIT_PIN_AUTH,
+    EDIT_PIN
 }

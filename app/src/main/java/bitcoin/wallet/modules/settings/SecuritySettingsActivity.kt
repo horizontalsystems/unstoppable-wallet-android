@@ -27,8 +27,7 @@ class SecuritySettingsActivity : BaseActivity() {
         supportActionBar?.title = getString(R.string.settings_security_center)
 
         changePin.setOnClickListener {
-            Log.e("SecuritySettingsAct", "change pin clicked")
-            PinModule.startForSetPin(this)
+            PinModule.startForEditPinAuth(this)
         }
 
         backupWallet.apply {

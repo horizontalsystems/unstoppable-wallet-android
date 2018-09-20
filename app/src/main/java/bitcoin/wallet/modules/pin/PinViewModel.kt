@@ -22,6 +22,7 @@ class PinViewModel : ViewModel(), PinModule.IView, PinModule.IRouter {
     val showFingerprintDialogLiveEvent = SingleLiveEvent<Unit>()
     val minimizeAppLiveEvent = SingleLiveEvent<Unit>()
     val goBackLiveEvent = SingleLiveEvent<Unit>()
+    val goToPinEdit = SingleLiveEvent<Unit>()
 
     fun init(interactionType: PinInteractionType, enteredPin: String) {
         PinModule.init(this, this, interactionType, enteredPin)
@@ -68,6 +69,22 @@ class PinViewModel : ViewModel(), PinModule.IView, PinModule.IRouter {
         setDescriptionLiveData.value = R.string.unlock_page_enter_your_pin
     }
 
+    override fun setTitleForEditPinAuth() {
+        setTitleLiveData.value = R.string.edit_pin_auth_title
+    }
+
+    override fun setDescriptionForEditPinAuth() {
+        setDescriptionLiveData.value = R.string.edit_pin_auth_description
+    }
+
+    override fun setTitleForEditPin() {
+        setTitleLiveData.value = R.string.edit_pin_title
+    }
+
+    override fun setDescriptionForEditPin() {
+        setDescriptionLiveData.value = R.string.edit_pin_description
+    }
+
     override fun hideToolbar() {
         hideToolbarLiveEvent.call()
     }
@@ -89,7 +106,7 @@ class PinViewModel : ViewModel(), PinModule.IView, PinModule.IRouter {
     }
 
     override fun navigateToPrevPage() {
-       goBackLiveEvent.call()
+        goBackLiveEvent.call()
     }
 
     //IRouter
@@ -101,4 +118,7 @@ class PinViewModel : ViewModel(), PinModule.IView, PinModule.IRouter {
         unlockWalletLiveEvent.call()
     }
 
+    override fun goToPinEdit() {
+        goToPinEdit.call()
+    }
 }

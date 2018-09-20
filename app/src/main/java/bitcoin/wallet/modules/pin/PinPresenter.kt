@@ -46,6 +46,10 @@ abstract class PinPresenter(protected val interactor: PinModule.IInteractor, pro
         router.goToPinConfirmation(pin)
     }
 
+    override fun goToPinEdit() {
+        router.goToPinEdit()
+    }
+
     override fun onDidPinSet() {
         view?.showSuccessPinSet()
     }

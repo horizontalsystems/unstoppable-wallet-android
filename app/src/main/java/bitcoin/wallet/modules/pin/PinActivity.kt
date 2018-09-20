@@ -117,6 +117,11 @@ class PinActivity : AppCompatActivity(), NumPadItemsAdapter.Listener, Fingerprin
             super.onBackPressed()
         })
 
+        viewModel.goToPinEdit.observe(this, Observer {
+            PinModule.startForEditPin(this)
+            finish()
+        })
+
         imgPinMask1 = findViewById(R.id.imgPinMaskOne)
         imgPinMask2 = findViewById(R.id.imgPinMaskTwo)
         imgPinMask3 = findViewById(R.id.imgPinMaskThree)
