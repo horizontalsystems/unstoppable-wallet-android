@@ -51,4 +51,15 @@ class EditPinInteractorTest {
         verifyNoMoreInteractions(delegate)
     }
 
+    @Test
+    fun submit_shortPinError() {
+
+        val pin = "1234"
+
+        interactor.submit(pin)
+
+        verify(delegate).onErrorShortPinLength()
+        verifyNoMoreInteractions(delegate)
+    }
+
 }
