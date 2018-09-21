@@ -47,6 +47,9 @@
         android:id="@+id/recyclerCoins"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:clipToPadding="false"
         android:background="?WalletBackgroundColor"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         />
