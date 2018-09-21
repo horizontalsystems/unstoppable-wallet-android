@@ -5,16 +5,15 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
+import bitcoin.wallet.BaseActivity
 import bitcoin.wallet.R
-import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem
 import bitcoin.wallet.viewHelpers.DateHelper
 import bitcoin.wallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_full_transaction_info.*
 
-class FullTransactionInfoActivity : AppCompatActivity() {
+class FullTransactionInfoActivity : BaseActivity() {
 
     private lateinit var viewModel: FullTransactionInfoViewModel
 
@@ -26,9 +25,6 @@ class FullTransactionInfoActivity : AppCompatActivity() {
 
         viewModel = ViewModelProviders.of(this).get(FullTransactionInfoViewModel::class.java)
         viewModel.init(adapterId, transactionId)
-
-        val lightMode = Factory.preferencesManager.isLightModeEnabled()
-        setTheme(if (lightMode) R.style.LightModeAppTheme else R.style.DarkModeAppTheme)
 
         setContentView(R.layout.activity_full_transaction_info)
 

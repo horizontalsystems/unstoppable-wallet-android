@@ -77,6 +77,7 @@ class FullTransactionInfoInteractorTest {
         interactor.retrieveTransaction()
 
         interactor.onCopyFromAddress()
+        verify(clipboardManager).copyText(any())
         verify(delegate).didCopyToClipboard()
     }
 
@@ -85,6 +86,16 @@ class FullTransactionInfoInteractorTest {
         interactor.retrieveTransaction()
 
         interactor.onCopyToAddress()
+        verify(clipboardManager).copyText(any())
+        verify(delegate).didCopyToClipboard()
+    }
+
+    @Test
+    fun onCopyTransactionId() {
+        interactor.retrieveTransaction()
+
+        interactor.onCopyTransactionId()
+        verify(clipboardManager).copyText(any())
         verify(delegate).didCopyToClipboard()
     }
 
