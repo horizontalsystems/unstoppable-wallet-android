@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bottom_sheet_background"
-    android:backgroundTint="@color/bars_color"
+    android:backgroundTint="?BottomTransactionInfoBackground"
     >
 
     <TextView
@@ -17,8 +17,8 @@
         android:layout_marginTop="8dp"
         android:fontFamily="@font/noto_sans_bold"
         android:text="@string/transaction_info_title"
-        android:textColor="@color/dark"
-        android:textSize="17sp"
+        android:textColor="?TransactionDetailValueTextColor"
+        android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />
@@ -32,7 +32,7 @@
         android:letterSpacing="-0.02"
         app:layout_constraintStart_toStartOf="@+id/txtTitle"
         app:layout_constraintTop_toBottomOf="@+id/txtTitle"
-        tools:text="Aug 3, 2018, 4:41 PM"
+        tools:text="Aug 3, 2018, 4:41"
         />
 
     <LinearLayout
@@ -54,7 +54,7 @@
             android:layout_marginStart="7dp"
             android:layout_marginEnd="7dp"
             android:layout_marginTop="3dp"
-            android:text="ID:"
+            android:text="@string/transaction_info_id"
             android:textColor="@color/grey"
             android:textSize="14sp"
             />
@@ -70,21 +70,9 @@
             android:textAlignment="textEnd"
             android:ellipsize="middle"
             android:singleLine="true"
-            android:textAllCaps="true"
             tools:text="1111111111111111111111"
             />
     </LinearLayout>
-
-    <View
-        android:id="@+id/border1"
-        android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:layout_marginTop="8dp"
-        android:background="@color/grey_20"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txDate"
-        />
 
     <TextView
         android:id="@+id/txtAmount"
@@ -95,10 +83,22 @@
         android:textAlignment="center"
         android:textColor="@color/green_crypto"
         android:textSize="22sp"
+        android:layout_marginTop="8dp"
+        android:background="?TransactionDetailBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/border1"
+        app:layout_constraintTop_toBottomOf="@+id/txDate"
         tools:text="+ 0,0006482"
+        />
+
+    <View
+        android:id="@+id/border1"
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:background="@color/grey_20"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txtAmount"
         />
 
     <TextView
@@ -111,6 +111,7 @@
         android:textAlignment="center"
         android:textColor="@color/grey"
         android:textSize="14sp"
+        android:background="?TransactionDetailBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtAmount"
@@ -124,14 +125,13 @@
         android:background="@color/grey_20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fiatValue"
+        app:layout_constraintBottom_toBottomOf="@+id/fiatValue"
         />
 
     <bitcoin.wallet.modules.transactionInfo.TransactionInfoItemView
         android:id="@+id/itemFromTo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/border2"
@@ -146,7 +146,7 @@
         android:background="@color/grey_20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemFromTo"
+        app:layout_constraintBottom_toBottomOf="@+id/itemFromTo"
         />
 
     <bitcoin.wallet.modules.transactionInfo.TransactionInfoItemView
@@ -167,7 +167,7 @@
         android:background="@color/grey_20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemStatus"
+        app:layout_constraintBottom_toBottomOf="@+id/itemStatus"
         />
 
     <TextView

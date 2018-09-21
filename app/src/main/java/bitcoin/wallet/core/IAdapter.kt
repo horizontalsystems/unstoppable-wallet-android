@@ -14,7 +14,7 @@ interface IAdapter {
     var balanceSubject: PublishSubject<Double>
     var progressSubject: BehaviorSubject<Double>
 //    var latestBlockHeightSubject: PublishSubject<Void>
-    var transactionRecordsSubject: PublishSubject<Void>
+    var transactionRecordsSubject: PublishSubject<Any>
 
 
     var latestBlockHeight: Int

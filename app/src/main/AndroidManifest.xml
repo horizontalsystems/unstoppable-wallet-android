@@ -45,6 +45,9 @@
         <activity
             android:name=".modules.pin.PinActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".modules.fulltransactioninfo.FullTransactionInfoActivity"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="preloaded_fonts"

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bars_color"
+    android:background="?TransactionDetailBackground"
     >
 
     <TextView
@@ -28,8 +28,9 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="0dp"
         android:layout_height="28dp"
-        android:progressDrawable="@drawable/transaction_progress"
         android:max="100"
+        android:progressDrawable="@drawable/transaction_progress"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/valueWrapper"
         app:layout_constraintEnd_toEndOf="@+id/valueWrapper"
         app:layout_constraintStart_toStartOf="@+id/valueWrapper"
@@ -39,9 +40,11 @@
     <LinearLayout
         android:id="@+id/valueWrapper"
         android:layout_width="wrap_content"
-        android:layout_height="27dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="4dp"
+        android:background="@drawable/text_grey_background"
+        android:minHeight="27dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -58,20 +61,38 @@
             android:visibility="gone"
             />
 
-        <TextView
-            android:id="@+id/txtValue"
-            style="@style/TransactionInfoFieldValue"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="3dp"
-            android:maxWidth="150dp"
-            android:textAllCaps="true"
-            android:ellipsize="middle"
-            android:singleLine="true"
-            tools:text="1AYHMDV1XR8DHDNKBKJBDEEF8DFA8KMNBBYDF9PQ"
-            />
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/txtValueTitle"
+                style="@style/TransactionInfoFieldValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="middle"
+                android:maxWidth="150dp"
+                android:singleLine="true"
+                android:textAlignment="textEnd"
+                tools:text="1AYHMDV1XR8DHDNKBKJBDEEF8DFA8KMNBBYDF9PQ"
+                />
+
+            <TextView
+                android:id="@+id/txtValueSubtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="textEnd"
+                android:textColor="@color/grey"
+                android:textSize="14sp"
+                android:visibility="gone"
+                tools:text="Subtitle"
+                />
+        </LinearLayout>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

@@ -9,7 +9,7 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.IView, Trans
     lateinit var delegate: TransactionInfoModule.IViewDelegate
 
     val transactionLiveData = SingleLiveEvent<TransactionRecordViewItem>()
-    val showDetailsLiveEvent = SingleLiveEvent<TransactionRecordViewItem>()
+    val showDetailsLiveEvent = SingleLiveEvent<Pair<String, String>>()
     val closeLiveEvent = SingleLiveEvent<Unit>()
     val showCopiedLiveEvent = SingleLiveEvent<Unit>()
 
@@ -31,6 +31,6 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.IView, Trans
     }
 
     override fun showFullInfo(transaction: TransactionRecordViewItem) {
-        showDetailsLiveEvent.value = transaction
+        showDetailsLiveEvent.value = Pair(transaction.adapterId, transaction.hash)
     }
 }

@@ -45,7 +45,7 @@ class TransactionsInteractorTest {
 
     @Test
     fun retrieveFilters() {
-        val subject: PublishSubject<Void> = PublishSubject.create()
+        val subject: PublishSubject<Any> = PublishSubject.create()
         whenever(adapterManager.adapters).thenReturn(mutableListOf(bitcoinAdapter))
         whenever(adapterManager.subject).thenReturn(PublishSubject.create<Any>())
 
@@ -61,7 +61,7 @@ class TransactionsInteractorTest {
 
     @Test
     fun retrieveTransactionItems() {
-        val subject: PublishSubject<Void> = PublishSubject.create()
+        val subject: PublishSubject<Any> = PublishSubject.create()
 
         val transaction = TransactionRecordNew()
         transaction.transactionHash = "efw43f3fwer"
@@ -92,7 +92,7 @@ class TransactionsInteractorTest {
     fun retrieveTransactionItems_transactionOutConvert() {
         val now = Date()
         val bitcoin = Bitcoin()
-        val subject: PublishSubject<Void> = PublishSubject.create()
+        val subject: PublishSubject<Any> = PublishSubject.create()
 
         val btcTxAmount = 10.0
 
@@ -123,6 +123,7 @@ class TransactionsInteractorTest {
         val expectedItems = listOf(
                 TransactionRecordViewItem(
                         "transactionHash",
+                        adapterId,
                         CoinValue(bitcoin, btcTxAmount),
                         CoinValue(bitcoin, 1.0),
                         "from-address",
@@ -130,12 +131,12 @@ class TransactionsInteractorTest {
                         true,
                         98,
                         now,
-                        TransactionRecordViewItem.Status.PROCESSING,
                         3,
                         CurrencyValue(currency = DollarCurrency(), value = btcTxAmount * (exchangeRates["BTC"] ?: 0.0))
                 ),
                 TransactionRecordViewItem(
                         "transactionHash",
+                        adapterId,
                         CoinValue(bitcoin, btcTxAmount),
                         CoinValue(bitcoin, 1.0),
                         "from-address",
@@ -143,7 +144,6 @@ class TransactionsInteractorTest {
                         true,
                         101,
                         now,
-                        TransactionRecordViewItem.Status.PENDING,
                         0,
                         CurrencyValue(currency = DollarCurrency(), value = btcTxAmount * (exchangeRates["BTC"] ?: 0.0))
                 )

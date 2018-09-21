@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.TextView
 import bitcoin.wallet.R
+import bitcoin.wallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem
 import bitcoin.wallet.viewHelpers.DateHelper
 import bitcoin.wallet.viewHelpers.HudHelper
@@ -58,28 +59,27 @@ class TransactionInfoFragment : DialogFragment() {
                 }
 
                 rootView.findViewById<TextView>(R.id.txDate)?.text = if (txRec.status == TransactionRecordViewItem.Status.PENDING) {
-                    getString(R.string.transaction_info_processing)
+                    getString(R.string.transaction_info_status_pending)
                 } else {
                     txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) }
                 }
 
                 rootView.findViewById<TransactionInfoItemView>(R.id.itemStatus)?.apply {
-                    val progressNumber = txRec.confirmations?.let { 100 / 6 * it.toInt() } ?: 0 //6 confirmations is accepted as 100% for transaction success
                     val valueIcon = when {
                         txRec.status == TransactionRecordViewItem.Status.PENDING -> R.drawable.pending
                         txRec.status == TransactionRecordViewItem.Status.PROCESSING -> null
                         else -> R.drawable.checkmark_green
                     }
                     val progress = when {
-                        txRec.status == TransactionRecordViewItem.Status.PROCESSING -> progressNumber
+                        txRec.status == TransactionRecordViewItem.Status.PROCESSING -> txRec.confirmationProgress()
                         else -> null
                     }
                     val statusText = when {
-                        txRec.status == TransactionRecordViewItem.Status.PROCESSING -> getString(R.string.transaction_info_processing, progressNumber)
+                        txRec.status == TransactionRecordViewItem.Status.PROCESSING -> getString(R.string.transaction_info_processing, txRec.confirmationProgress())
                         txRec.status == TransactionRecordViewItem.Status.PENDING -> getString(R.string.transaction_info_status_pending)
                         else -> getString(R.string.transaction_info_status_completed)
                     }
-                    bind(title = getString(R.string.transaction_info_status), value = statusText, valueIcon = valueIcon, progressValue = progress)
+                    bind(title = getString(R.string.transaction_info_status), valueTitle = statusText.toUpperCase(), valueIcon = valueIcon, progressValue = progress)
                 }
 
                 rootView.findViewById<TextView>(R.id.transactionId)?.apply {
@@ -92,24 +92,26 @@ class TransactionInfoFragment : DialogFragment() {
 
                 rootView.findViewById<TransactionInfoItemView>(R.id.itemFromTo)?.apply {
                     val title = getString(if (txRec.incoming) R.string.transaction_info_from else R.string.transaction_info_to)
-                    bind(title = title, value = txRec.from, valueIcon = R.drawable.round_person_18px)
+                    bind(title = title, valueTitle = txRec.from, valueIcon = R.drawable.round_person_18px)
                 }
             }
 
         })
 
-        viewModel.showDetailsLiveEvent.observe(this, Observer
-        {
-            //todo open Details activity
+        viewModel.showDetailsLiveEvent.observe(this, Observer { pair ->
+            pair?.let {
+                val (adapterId, transactionId) = it
+                activity?.let { activity ->
+                    FullTransactionInfoModule.start(activity, adapterId, transactionId)
+                }
+            }
         })
 
-        viewModel.closeLiveEvent.observe(this, Observer
-        {
+        viewModel.closeLiveEvent.observe(this, Observer {
             dismiss()
         })
 
-        viewModel.showCopiedLiveEvent.observe(this, Observer
-        {
+        viewModel.showCopiedLiveEvent.observe(this, Observer {
             HudHelper.showSuccessMessage(R.string.hud_text_copied, activity)
         })
 

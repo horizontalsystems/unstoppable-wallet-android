@@ -75,7 +75,7 @@
     <string name="transaction_info_to">To:</string>
     <string name="transaction_info_from">From:</string>
 
-    <string name="full_transaction_info_title">Details</string>
+    <string name="full_transaction_info_title">Transaction</string>
     <string name="full_transaction_info_size">Size</string>
     <string name="full_transaction_info_fee_rate">Fee rate</string>
     <string name="full_transaction_info_received_time">Received Time</string>
@@ -83,10 +83,14 @@
     <string name="full_transaction_info_included_in_block">Included in Block</string>
     <string name="full_transaction_info_confirmations">Confirmations</string>
     <string name="full_transaction_info_lock_time">Lock Time</string>
+    <string name="full_transaction_info_time">Time</string>
     <string name="full_transaction_info_from">From</string>
     <string name="full_transaction_info_to">To</string>
     <string name="full_transaction_info_received">Received</string>
     <string name="full_transaction_info_sent">Sent</string>
+    <string name="full_transaction_info_amount">Amount</string>
+    <string name="full_transaction_info_fee">Fee</string>
+    <string name="full_transaction_info_block">Block</string>
 
     <string name="settings_title">Settings</string>
     <string name="settings_security_center">Security Center</string>

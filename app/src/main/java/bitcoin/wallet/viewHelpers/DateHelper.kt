@@ -9,7 +9,7 @@ import java.util.*
 object DateHelper {
 
     fun getFullDateWithTime(date: Date): String = formatDate(date, "MMMM d, yyyy, hh:mm")
-    fun getFullDateWithShortMonth(date: Date): String = formatDate(date, "MMM d, yyyy, hh:mm")
+    fun getFullDateWithShortMonth(date: Date): String = formatDate(date, "MMM d, yyyy, HH:mm")
 
     fun getRelativeDateString(context: Context, date: Date): String {
         val secondsAgo = getSecondsAgo(date).toInt()

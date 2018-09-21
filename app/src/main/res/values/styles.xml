@@ -23,6 +23,11 @@
     <attr name="HudIconTint" format="reference|color" />
     <attr name="HudBackground" format="reference|color" />
     <attr name="HudTextColor" format="reference|color" />
+    <attr name="TransactionDetailBackground" format="reference|color" />
+    <attr name="TransactionTextBoxBackground" format="reference|color" />
+    <attr name="TransactionDetailValueTextColor" format="reference|color" />
+    <attr name="TransactionDetailBottomBarBackground" format="reference|color" />
+    <attr name="BottomTransactionInfoBackground" format="reference|color" />
 
     <!-- Base application theme. -->
     <style name="DarkModeAppTheme" parent="Theme.AppCompat.NoActionBar">
@@ -61,6 +66,11 @@
         <item name="HudIconTint">@color/steel_grey</item>
         <item name="HudBackground">@color/black_85</item>
         <item name="HudTextColor">@color/white</item>
+        <item name="TransactionDetailBackground">@color/grey_20</item>
+        <item name="TransactionTextBoxBackground">@color/text_box_background_dark</item>
+        <item name="TransactionDetailValueTextColor">@color/bars_color</item>
+        <item name="TransactionDetailBottomBarBackground">@color/dark</item>
+        <item name="BottomTransactionInfoBackground">@color/dark</item>
     </style>
 
     <style name="LightModeAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -99,6 +109,11 @@
         <item name="HudIconTint">@color/dark</item>
         <item name="HudBackground">@color/bars_color_95</item>
         <item name="HudTextColor">@color/dark</item>
+        <item name="TransactionDetailBackground">@color/white</item>
+        <item name="TransactionTextBoxBackground">@color/text_box_background_light</item>
+        <item name="TransactionDetailValueTextColor">@color/dark</item>
+        <item name="TransactionDetailBottomBarBackground">#f5fafafa</item>
+        <item name="BottomTransactionInfoBackground">@color/bars_color</item>
     </style>
 
     <style name="Button" parent="Widget.AppCompat.Button.Borderless">
@@ -226,7 +241,7 @@
     </style>
 
     <style name="TransactionInfoFieldValue">
-        <item name="android:textColor">@color/dark</item>
+        <item name="android:textColor">?TransactionDetailValueTextColor</item>
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">@font/noto_sans</item>
         <item name="android:includeFontPadding">false</item>

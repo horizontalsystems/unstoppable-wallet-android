@@ -57,10 +57,10 @@ class TransactionsPresenterTest {
 
     @Test
     fun onTransactionItemClick() {
-        val coinCode = "BTC"
-        val txHash = "tx_hash"
+        val adapterId = "[adapterId]"
         val transactionRecord = TransactionRecordViewItem(
                 "",
+                adapterId,
                 CoinValue(Bitcoin(), 0.0),
                 CoinValue(Bitcoin(), 0.0),
                 "",
@@ -68,7 +68,6 @@ class TransactionsPresenterTest {
                 true,
                 0,
                 Date(),
-                TransactionRecordViewItem.Status.SUCCESS,
                 0,
                 CurrencyValue(DollarCurrency(), 0.0),
                 0.0
