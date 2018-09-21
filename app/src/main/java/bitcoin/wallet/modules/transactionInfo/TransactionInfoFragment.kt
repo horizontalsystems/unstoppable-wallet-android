@@ -25,13 +25,14 @@ class TransactionInfoFragment : DialogFragment() {
 
     private lateinit var viewModel: TransactionInfoViewModel
 
-    private lateinit var transactionRecordViewItem: TransactionRecordViewItem
+    private var transactionRecordViewItem: TransactionRecordViewItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        viewModel = ViewModelProviders.of(this).get(TransactionInfoViewModel::class.java)
-        viewModel.init(transactionRecordViewItem)
+        transactionRecordViewItem?.let {
+            viewModel = ViewModelProviders.of(this).get(TransactionInfoViewModel::class.java)
+            viewModel.init(it)
+        } ?: kotlin.run { dismiss() }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

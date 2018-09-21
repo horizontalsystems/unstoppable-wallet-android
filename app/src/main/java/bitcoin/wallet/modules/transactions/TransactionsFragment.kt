@@ -17,7 +17,6 @@ import bitcoin.wallet.modules.transactionInfo.TransactionInfoModule
 import bitcoin.wallet.viewHelpers.DateHelper
 import bitcoin.wallet.viewHelpers.LayoutHelper
 import bitcoin.wallet.viewHelpers.NumberFormatHelper
-import bitcoin.wallet.viewHelpers.TextHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
 import kotlinx.android.synthetic.main.view_holder_filter.*
@@ -123,15 +122,16 @@ class ViewHolderTransaction(override val containerView: View) : RecyclerView.Vie
         val amountTextColor = if (transactionRecord.incoming) R.color.green_crypto else R.color.yellow_crypto
         txAmount.setTextColor(ContextCompat.getColor(itemView.context, amountTextColor))
         txAmount.text = "$sign ${NumberFormatHelper.cryptoAmountFormat.format(Math.abs(transactionRecord.amount.value))} ${transactionRecord.amount.coin.code}"
-        txDate.text = transactionRecord.date?.let { DateHelper.getRelativeDateString(itemView.context, it) }
-        val addressExcerpt = TextHelper.randomHashGenerator().take(6) + "\u2026"//todo replace after from starts to show address (transactionRecord.from)
-        txValueInFiat.text = "\$${NumberFormatHelper.fiatAmountFormat.format(transactionRecord.currencyAmount?.value)}" + " from " + addressExcerpt
+        txDate.text = transactionRecord.date?.let { DateHelper.getShortDateForTransaction(it) }
+        txTime.text = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }
+        val absFiatValue = transactionRecord.currencyAmount?.value?.let { Math.abs(it) }
+        txValueInFiat.text = "~ \$ ${NumberFormatHelper.fiatAmountFormat.format(absFiatValue ?: 0)}"
         statusIcon.setImageDrawable(getStatusIcon(transactionRecord.status))
     }
 
     private fun getStatusIcon(status: TransactionRecordViewItem.Status?): Drawable? {
         return if (status == TransactionRecordViewItem.Status.SUCCESS)
-            LayoutHelper.getTintedDrawable(R.drawable.checkmark, R.color.grey, App.instance)
+            null
         else
             LayoutHelper.d(R.drawable.pending, App.instance)
     }

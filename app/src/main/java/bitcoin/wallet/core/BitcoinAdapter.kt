@@ -180,7 +180,7 @@ class WalletKit(words: List<String>, network: NetworkParameters) {
             amount = 0.183
             fee = 0.00092
             blockHeight = 103
-            timestamp = 1536052151123
+            timestamp = 1490090153000
         }
         transactions.add(tr4)
 
