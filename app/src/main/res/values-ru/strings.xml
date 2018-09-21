@@ -66,7 +66,7 @@
   <string name="transaction_info_id">ID:</string>
   <string name="transaction_info_to">Кому:</string>
   <string name="transaction_info_from">От:</string>
-  <string name="full_transaction_info_title">Подробности</string>
+  <string name="full_transaction_info_title">Transaction</string>
   <string name="full_transaction_info_size">Размер</string>
   <string name="full_transaction_info_fee_rate">Комиссия</string>
   <string name="full_transaction_info_received_time">Время Получения</string>
@@ -74,10 +74,14 @@
   <string name="full_transaction_info_included_in_block">Записан в Блок</string>
   <string name="full_transaction_info_confirmations">Подтверждения</string>
   <string name="full_transaction_info_lock_time">Время Блокировки</string>
+  <string name="full_transaction_info_time">Time</string>
   <string name="full_transaction_info_from">От</string>
   <string name="full_transaction_info_to">Кому</string>
   <string name="full_transaction_info_received">Получено</string>
   <string name="full_transaction_info_sent">Отправлено</string>
+  <string name="full_transaction_info_amount">Amount</string>
+  <string name="full_transaction_info_fee">Fee</string>
+  <string name="full_transaction_info_block">Block</string>
   <string name="settings_title">Настройки</string>
   <string name="settings_security_center">Центр Безопасности</string>
   <string name="settings_base_currency">Базовая Валюта</string>
