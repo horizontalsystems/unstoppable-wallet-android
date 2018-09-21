@@ -20,7 +20,8 @@ class TransactionInfoItemView : ConstraintLayout {
     private var attrValueIcon: String? = null
 
     private lateinit var titleTextView: TextView
-    private lateinit var valueTextView: TextView
+    private lateinit var valueTitleTextView: TextView
+    private lateinit var valueSubtitleTextView: TextView
     private lateinit var iconImageView: ImageView
     private lateinit var valueLinearLayout: LinearLayout
     private lateinit var progressBarView: ProgressBar
@@ -44,18 +45,24 @@ class TransactionInfoItemView : ConstraintLayout {
         super.onFinishInflate()
 
         titleTextView = findViewById(R.id.txtTitle)
-        valueTextView = findViewById(R.id.txtValue)
+        valueTitleTextView = findViewById(R.id.txtValueTitle)
+        valueSubtitleTextView = findViewById(R.id.txtValueSubtitle)
         iconImageView = findViewById(R.id.valueLeftIcon)
         valueLinearLayout = findViewById(R.id.valueWrapper)
         progressBarView = findViewById(R.id.progressBar)
 
         titleTextView.text = attrTitle
-        valueTextView.text = attrValue
+        valueTitleTextView.text = attrValue
     }
 
-    fun bind(title: String? = null, value: String? = null, valueIcon: Int? = null, progressValue: Int? = null) {
+    private fun initializeViews() {
+        ConstraintLayout.inflate(context, R.layout.view_transaction_info_item, this)
+    }
+
+    fun bind(title: String? = null, valueTitle: String? = null, valueSubtitle: String? = null, valueIcon: Int? = null, progressValue: Int? = null) {
         titleTextView.text = title
-        valueTextView.text = value
+        valueTitleTextView.text = valueTitle
+        valueSubtitleTextView.text = valueSubtitle
         valueIcon?.let {
             iconImageView.setImageDrawable(ContextCompat.getDrawable(App.instance, it))
             iconImageView.visibility = View.VISIBLE
@@ -65,15 +72,13 @@ class TransactionInfoItemView : ConstraintLayout {
 
         progressBarView.progress = progressValue ?: 0
         progressBarView.visibility = if (progressValue == null) View.GONE else View.VISIBLE
+        valueSubtitleTextView.visibility = if (valueSubtitle == null) View.GONE else View.VISIBLE
 
-        valueLinearLayout.background = if (valueIcon != null && progressValue == null) ContextCompat.getDrawable(App.instance, R.drawable.text_grey_background) else null
-        valueTextView.setTextColor(ContextCompat.getColor(App.instance, if (valueIcon != null || progressValue != null) R.color.dark else R.color.grey))
+        if (valueIcon == null || progressValue != null) {
+            valueLinearLayout.background = null
+        }
 
         invalidate()
-    }
-
-    private fun initializeViews() {
-        ConstraintLayout.inflate(context, R.layout.view_transaction_info_item, this)
     }
 
     private fun loadAttributes(attrs: AttributeSet) {

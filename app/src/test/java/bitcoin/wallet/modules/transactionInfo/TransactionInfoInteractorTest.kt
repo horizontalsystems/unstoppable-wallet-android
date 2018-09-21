@@ -19,7 +19,8 @@ class TransactionInfoInteractorTest {
     private val delegate = Mockito.mock(TransactionInfoModule.IInteractorDelegate::class.java)
     private val clipboardManager = Mockito.mock(IClipboardManager::class.java)
 
-    val transaction = TransactionRecordViewItem(
+    private val transaction = TransactionRecordViewItem(
+            "",
             "",
             CoinValue(Bitcoin(), 0.0),
             CoinValue(Bitcoin(), 0.0),
@@ -28,7 +29,6 @@ class TransactionInfoInteractorTest {
             true,
             0,
             Date(),
-            TransactionRecordViewItem.Status.SUCCESS,
             0,
             CurrencyValue(DollarCurrency(), 0.0),
             0.0

@@ -5,7 +5,6 @@ import bitcoin.wallet.core.ExchangeRateManager
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.CurrencyValue
 import bitcoin.wallet.entities.DollarCurrency
-import bitcoin.wallet.modules.transactions.TransactionRecordViewItem.Status.*
 import io.reactivex.disposables.CompositeDisposable
 import java.util.*
 
@@ -43,15 +42,13 @@ class TransactionsInteractor(private val adapterManager: AdapterManager, private
 
         val filteredAdapters = adapterManager.adapters.filter { adapterId == null || it.id == adapterId }
 
-
         filteredAdapters.forEach { adapter ->
-            val latestBlockHeight = adapter.latestBlockHeight
             adapter.transactionRecords.forEach { record ->
-                val confirmations = record.blockHeight?.let { latestBlockHeight - it + 1 } ?: 0
                 val convertedValue = rates[adapter.coin.code]?.let { it * record.amount }
 
                 val item = TransactionRecordViewItem(
                         hash = record.transactionHash,
+                        adapterId = adapter.id,
                         amount = CoinValue(adapter.coin, record.amount),
                         currencyAmount = convertedValue?.let { CurrencyValue(currency = DollarCurrency(), value = it) },
                         fee = CoinValue(coin = adapter.coin, value = record.fee),
@@ -60,20 +57,13 @@ class TransactionsInteractor(private val adapterManager: AdapterManager, private
                         incoming = record.amount > 0,
                         blockHeight = record.blockHeight,
                         date = record.timestamp?.let { Date(it) },
-                        status = getStatus(confirmations),
-                        confirmations = confirmations
+                        confirmations = TransactionRecordViewItem.getConfirmationsCount(record.blockHeight, adapter.latestBlockHeight)
                 )
                 items.add(item)
             }
         }
 
         delegate?.didRetrieveItems(items)
-    }
-
-    private fun getStatus(confirmations: Long? = 0) : TransactionRecordViewItem.Status = when (confirmations) {
-        0L -> PENDING
-        in 1L..6L -> PROCESSING
-        else -> SUCCESS
     }
 
 }

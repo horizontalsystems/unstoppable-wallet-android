@@ -2,7 +2,7 @@
 
     <item android:id="@android:id/background">
         <shape>
-            <solid android:color="@color/lightBackground"/>
+            <solid android:color="?TransactionTextBoxBackground"/>
             <corners android:radius="2dp"/>
             <stroke
                 android:width="0.5dp"
