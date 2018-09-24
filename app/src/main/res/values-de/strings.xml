@@ -42,14 +42,14 @@
   <string name="send_button_paste">Einsetzen</string>
   <string name="send_button_more">Mehr</string>
   <string name="send_button_send">Senden</string>
-  <string name="scan_qr_code">Scan QR Code</string>
+  <string name="scan_qr_code">QR-Code Scannen</string>
   <string name="send_bottom_sheet_title">Send %s</string>
   <string name="send_bottom_sheet_error_invalid_address">Address entered seems invalid. Please check and try again!</string>
   <string name="send_bottom_sheet_error_insufficient_balance">Your balance is insufficient. Please try to send smaller amount!</string>
   <string name="send_bottom_sheet_success">Successfully sent!</string>
   <string name="receive_title">Receive %s</string>
   <string name="receive_copy">Kopieren</string>
-  <string name="timestamp_just_now">just now</string>
+  <string name="timestamp_just_now">gerade eben</string>
   <string name="timestamp_min_ago">%dm. ago</string>
   <string name="timestamp_hours_ago">%dh. ago</string>
   <string name="timestamp_today">Heute</string>
@@ -66,7 +66,7 @@
   <string name="transaction_info_id">ID:</string>
   <string name="transaction_info_to">An:</string>
   <string name="transaction_info_from">Von:</string>
-  <string name="full_transaction_info_title">Transaction</string>
+  <string name="full_transaction_info_title">Transaktion</string>
   <string name="full_transaction_info_size">Größe</string>
   <string name="full_transaction_info_fee_rate">Gebührenrate</string>
   <string name="full_transaction_info_received_time">Received Time</string>
@@ -80,7 +80,7 @@
   <string name="full_transaction_info_received">Received</string>
   <string name="full_transaction_info_sent">Sent</string>
   <string name="full_transaction_info_amount">Amount</string>
-  <string name="full_transaction_info_fee">Fee</string>
+  <string name="full_transaction_info_fee">Gebühr</string>
   <string name="full_transaction_info_block">Block</string>
   <string name="settings_title">Einstellungen</string>
   <string name="settings_security_center">Sicherheits-Center</string>
@@ -96,12 +96,12 @@
   <string name="settings_info_subtitle">dezentralisierte app</string>
   <string name="settings_info_link">http://horizontalsystems.io</string>
   <string name="settings_security_fingerprint">Fingerprint</string>
-  <string name="settings_security_change_pin">Change Pin</string>
+  <string name="settings_security_change_pin">PIN ändern</string>
   <string name="settings_security_backup_wallet">Backup wallet</string>
   <string name="unlock_page_enter_your_pin">Type your pin to unlock</string>
   <string name="alert_keys_invalidated_title">Android Keystore Error</string>
   <string name="alert_keys_invalidated_description">Your encrypted data was recently invalidated because your Android lock screen was changed</string>
-  <string name="alert_no_device_lock_title">WARNING</string>
+  <string name="alert_no_device_lock_title">WARNUNG</string>
   <string name="alert_no_device_lock_description">A device lock is needed to safeguard your wallet. Go to “Settings” &gt; “Security” &gt; “Screen Lock” and enable to continue </string>
   <string name="button_cancel">Abbrechen</string>
   <string name="button_back">Zurück</string>
@@ -114,7 +114,7 @@
   <string name="hud_text_unlock">Unlock</string>
   <string name="hud_text_success">Erfolgreich</string>
   <string name="hud_text_error">Fehler</string>
-  <string name="hud_text_no_internet">No Internet</string>
+  <string name="hud_text_no_internet">Kein Internet</string>
   <string name="hud_text_copied">Kopiert</string>
   <string name="hud_text_invalid_pin_error">Invalid PIN. \nPlease try again.</string>
   <!--Fingerprint texts-->
