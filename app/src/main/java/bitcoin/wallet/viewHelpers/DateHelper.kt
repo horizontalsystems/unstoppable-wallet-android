@@ -8,7 +8,7 @@ import java.util.*
 
 object DateHelper {
 
-    fun getFullDateWithTime(date: Date): String = formatDate(date, "MMMM d, yyyy, hh:mm")
+    fun getOnlyTime(date: Date): String = formatDate(date, "HH:mm")
     fun getFullDateWithShortMonth(date: Date): String = formatDate(date, "MMM d, yyyy, HH:mm")
 
     fun getRelativeDateString(context: Context, date: Date): String {
@@ -25,6 +25,12 @@ object DateHelper {
             isThisYear(date) -> getFormattedDateWithoutYear(date)
             else -> getFormattedDateWithYear(date)
         }
+    }
+
+    fun getShortDateForTransaction(date: Date): String = if (isThisYear(date)) {
+        formatDate(date, "MMM d")
+    } else {
+        formatDate(date, "MM/dd/yyyy")
     }
 
     private fun formatDate(date: Date, outputFormat: String) =

@@ -31,6 +31,9 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerTags"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:clipToPadding="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
