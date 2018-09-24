@@ -130,8 +130,8 @@
   <string name="set_pin_confirm_title">Введите еще раз</string>
   <string name="set_pin_confirm_description">Your pin will be used to unlock your wallet and send money</string>
   <string name="set_pin_success">Lock pin was set successfully!</string>
-  <string name="set_pin_error_pins_dont_match">Entered pins do not match.</string>
-  <string name="set_pin_error_failed_to_save_pin">Error occurred while saving your pin. Please, try again.</string>
+  <string name="set_pin_error_pins_dont_match">Введенный ПИН не совпадают.</string>
+  <string name="set_pin_error_failed_to_save_pin">При сохранении вашего ПИН произошла ошибка. Повторите попытку.</string>
   <string name="edit_pin_auth_title">Изменить ПИН</string>
   <string name="edit_pin_auth_description">Введите текущий ПИН
 </string>
