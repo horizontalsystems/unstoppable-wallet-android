@@ -18,7 +18,7 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Factory.preferencesManager.savedWords?.let { AdapterManager.initAdapters(it) }
+        Factory.wordsManager.savedWords()?.let { AdapterManager.initAdapters(it) }
 
         setContentView(R.layout.activity_dashboard)
 

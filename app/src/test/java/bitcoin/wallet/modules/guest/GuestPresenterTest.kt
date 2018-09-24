@@ -39,11 +39,4 @@ class GuestPresenterTest {
         verify(router).navigateToBackupRoutingToMain()
     }
 
-    @Test
-    fun didFailToCreateWallet() {
-        presenter.didFailToCreateWallet(Exception())
-
-        verify(view).showError()
-    }
-
 }

@@ -6,6 +6,6 @@ import bitcoin.wallet.core.WalletData
 class StubWalletDataProvider : IWalletDataProvider {
 
     override val walletData: WalletData
-        get() = WalletData(Factory.preferencesManager.savedWords ?: listOf())
+        get() = WalletData(Factory.wordsManager.savedWords() ?: listOf())
 
 }

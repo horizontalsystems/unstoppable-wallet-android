@@ -2,12 +2,12 @@ package bitcoin.wallet.modules.guest
 
 import android.content.Context
 import android.content.Intent
+import bitcoin.wallet.core.AdapterManager
 import bitcoin.wallet.core.managers.Factory
 
 object GuestModule {
 
     interface IView {
-        fun showError()
         fun authenticateToCreateWallet()
     }
 
@@ -22,7 +22,6 @@ object GuestModule {
 
     interface IInteractorDelegate {
         fun didCreateWallet()
-        fun didFailToCreateWallet(error: Throwable)
     }
 
     interface IRouter {
@@ -36,7 +35,9 @@ object GuestModule {
     }
 
     fun init(view: GuestViewModel, router: IRouter) {
-        val interactor = GuestInteractor()
+        val wordsManager = Factory.wordsManager
+        val adapterManager = AdapterManager
+        val interactor = GuestInteractor(wordsManager, adapterManager)
         val presenter = GuestPresenter(interactor, router)
 
         view.delegate = presenter

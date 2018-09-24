@@ -29,5 +29,9 @@ object Factory {
         EncryptionManager()
     }
 
+    val wordsManager: WordsManager by lazy {
+        WordsManager(preferencesManager)
+    }
+
 }
 
