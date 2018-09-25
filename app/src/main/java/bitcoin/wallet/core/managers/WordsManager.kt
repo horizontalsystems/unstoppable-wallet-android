@@ -27,6 +27,7 @@ class WordsManager(private val storage: ILocalStorage) {
         return generatedWords
     }
 
+    @Throws(Mnemonic.MnemonicException::class, UserNotAuthenticatedException::class)
     fun restore(words: List<String>) {
         Mnemonic().validate(words)
         storage.saveWords(words)

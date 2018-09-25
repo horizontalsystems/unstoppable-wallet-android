@@ -10,10 +10,6 @@ class RestorePresenter(private val interactor: RestoreModule.IInteractor, privat
         interactor.restore(words)
     }
 
-    override fun cancelDidClick() {
-        router.close()
-    }
-
     override fun didRestore() {
         router.navigateToMain()
     }

@@ -37,9 +37,7 @@ object GuestModule {
     }
 
     fun init(view: GuestViewModel, router: IRouter) {
-        val wordsManager = Factory.wordsManager
-        val adapterManager = AdapterManager
-        val interactor = GuestInteractor(wordsManager, adapterManager)
+        val interactor = GuestInteractor(Factory.wordsManager, AdapterManager)
         val presenter = GuestPresenter(interactor, router)
 
         view.delegate = presenter

@@ -28,13 +28,6 @@ class RestoreWalletModulePresenterTest {
     }
 
     @Test
-    fun cancelDidClick() {
-        presenter.cancelDidClick()
-
-        verify(router).close()
-    }
-
-    @Test
     fun didRestoreWallet() {
         presenter.didRestore()
 

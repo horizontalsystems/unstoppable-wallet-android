@@ -1,19 +1,22 @@
 package bitcoin.wallet.modules.restore
 
-class RestoreInteractor() : RestoreModule.IInteractor {
+import bitcoin.wallet.core.AdapterManager
+import bitcoin.wallet.core.managers.WordsManager
+
+class RestoreInteractor(private val wordsManager: WordsManager, private val adapterManager: AdapterManager) : RestoreModule.IInteractor {
 
     var delegate: RestoreModule.IInteractorDelegate? = null
 
     override fun restore(words: List<String>) {
-//        if (mnemonic.validateWords(words)) {
-//            try {
-////                blockchainManager.initNewWallet(words)
-//                delegate?.didRestore()
-//            } catch (e: UserNotAuthenticatedException) {
-//                delegate?.didFailToRestore(e)
-//            }
-//        } else {
-//            delegate?.didFailToRestore(Exception())
-//        }
+        try {
+            wordsManager.restore(words)
+        } catch (e: Exception) {
+            delegate?.didFailToRestore(e)
+            return
+        }
+
+        adapterManager.initAdapters(words)
+        wordsManager.wordListBackedUp = true
+        delegate?.didRestore()
     }
 }
