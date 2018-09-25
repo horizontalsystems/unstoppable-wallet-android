@@ -1,15 +1,17 @@
 package bitcoin.wallet.modules.backup
 
 import bitcoin.wallet.core.IRandomProvider
-import bitcoin.wallet.core.IWalletDataProvider
+import bitcoin.wallet.core.managers.WordsManager
 import java.util.*
 
-class BackupInteractor(private val walletDataProvider: IWalletDataProvider, private val indexesProvider: IRandomProvider) : BackupModule.IInteractor {
+class BackupInteractor(private val wordsManager: WordsManager, private val indexesProvider: IRandomProvider) : BackupModule.IInteractor {
 
     var delegate: BackupModule.IInteractorDelegate? = null
 
     override fun fetchWords() {
-        delegate?.didFetchWords(walletDataProvider.walletData.words)
+        wordsManager.savedWords?.let {
+            delegate?.didFetchWords(it)
+        }
     }
 
     override fun fetchConfirmationIndexes() {
@@ -17,16 +19,16 @@ class BackupInteractor(private val walletDataProvider: IWalletDataProvider, priv
     }
 
     override fun validate(confirmationWords: HashMap<Int, String>) {
-        val words = walletDataProvider.walletData.words
-
-        for ((index, word) in confirmationWords) {
-            if (words[index - 1] != word.trim()) {
-                delegate?.didValidateFailure()
-                return
+        wordsManager.savedWords?.let { wordList ->
+            for ((index, word) in confirmationWords) {
+                if (wordList[index - 1] != word.trim()) {
+                    delegate?.didValidateFailure()
+                    return
+                }
             }
-        }
-
-        delegate?.didValidateSuccess()
+            wordsManager.wordListBackedUp = true
+            delegate?.didValidateSuccess()
+        } ?: run { delegate?.didValidateFailure() }
     }
 
 }

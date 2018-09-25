@@ -25,10 +25,6 @@ class RestoreViewModel : ViewModel(), RestoreModule.IView, RestoreModule.IRouter
         navigateToMainScreenLiveEvent.call()
     }
 
-    override fun close() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
     override fun authenticateToRestoreWallet() {
         authenticateToRestoreWallet.call()
     }

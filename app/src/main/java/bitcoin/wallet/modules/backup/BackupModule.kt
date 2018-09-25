@@ -1,7 +1,6 @@
 package bitcoin.wallet.modules.backup
 
 import android.content.Context
-import android.content.Intent
 import bitcoin.wallet.core.managers.Factory
 import java.util.*
 
@@ -16,7 +15,7 @@ object BackupModule {
     }
 
     interface IViewDelegate {
-        fun cancelDidClick()
+        fun laterDidClick()
         fun showWordsDidClick()
         fun hideWordsDidClick()
         fun showConfirmationDidClick()
@@ -45,15 +44,12 @@ object BackupModule {
 
     // helpers
 
-
     fun start(context: Context, dismissMode: BackupPresenter.DismissMode) {
-        val intent = Intent(context, BackupActivity::class.java)
-        intent.putExtra("DismissMode", dismissMode.name)
-        context.startActivity(intent)
+        BackupActivity.start(context, dismissMode)
     }
 
     fun init(view: BackupViewModel, router: IRouter, dismissMode: BackupPresenter.DismissMode) {
-        val interactor = BackupInteractor(Factory.walletDataProvider, Factory.randomProvider)
+        val interactor = BackupInteractor(Factory.wordsManager, Factory.randomProvider)
         val presenter = BackupPresenter(interactor, router, dismissMode)
 
         presenter.view = view

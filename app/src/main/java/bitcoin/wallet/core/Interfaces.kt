@@ -2,7 +2,6 @@ package bitcoin.wallet.core
 
 import android.hardware.fingerprint.FingerprintManager
 import io.reactivex.Observable
-import io.realm.OrderedCollectionChangeSet
 
 interface ILocalStorage {
     val savedWords: List<String>?
@@ -10,15 +9,8 @@ interface ILocalStorage {
     fun clearAll()
     fun savePin(pin: String)
     fun getPin(): String?
-}
-
-interface IMnemonic {
-    fun generateWords(): List<String>
-    fun validateWords(words: List<String>): Boolean
-}
-
-interface IWalletDataProvider {
-    val walletData: WalletData
+    fun wordlistBackedUp(backedUp: Boolean)
+    fun isWordListBackedUp(): Boolean
 }
 
 interface IRandomProvider {
@@ -47,15 +39,4 @@ interface ISettingsManager {
 
     fun isLightModeEnabled(): Boolean
     fun setLightModeEnabled(enabled: Boolean)
-}
-
-data class WalletData(val words: List<String>)
-
-data class DatabaseChangeset<T>(val array: List<T>, val changeset: CollectionChangeset? = null)
-
-data class CollectionChangeset(val deleted: List<Int> = listOf(), val inserted: List<Int> = listOf(), val updated: List<Int> = listOf()) {
-
-    constructor(changeset: OrderedCollectionChangeSet) :
-            this(changeset.deletions.toList(), changeset.insertions.toList(), changeset.changes.toList())
-
 }

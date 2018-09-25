@@ -109,7 +109,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
             app:layout_constraintBottom_toBottomOf="@+id/imgPinMaskFour"
-            app:layout_constraintEnd_toEndOf="@+id/imgPinMaskSix"
+            app:layout_constraintEnd_toStartOf="@+id/imgPinMaskSix"
             app:layout_constraintStart_toEndOf="@+id/imgPinMaskFour"
             app:layout_constraintTop_toTopOf="@+id/imgPinMaskFour"
             app:srcCompat="@drawable/pin_circle_empty"

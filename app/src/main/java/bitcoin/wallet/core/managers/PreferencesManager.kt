@@ -30,6 +30,7 @@ class PreferencesManager(private val encryptionManager: IEncryptionManager) : IL
     private val LOCK_PIN = "lockPin"
     private val LIGHT_MODE_ENABLED = "light_mode_enabled"
     private val FINGERPRINT_ENABLED = "fingerprint_enabled"
+    private val WORDLIST_BACKUP = "wordlist_backup"
 
     override fun isLightModeEnabled() = App.preferences.getBoolean(LIGHT_MODE_ENABLED, false)
 
@@ -54,5 +55,13 @@ class PreferencesManager(private val encryptionManager: IEncryptionManager) : IL
         } else {
             encryptionManager.decrypt(string)
         }
+    }
+
+    override fun wordlistBackedUp(backedUp: Boolean) {
+        App.preferences.edit().putBoolean(WORDLIST_BACKUP, backedUp).apply()
+    }
+
+    override fun isWordListBackedUp(): Boolean {
+        return App.preferences.getBoolean(WORDLIST_BACKUP, false)
     }
 }

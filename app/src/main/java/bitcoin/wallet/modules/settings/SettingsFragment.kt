@@ -1,6 +1,7 @@
 package bitcoin.wallet.modules.settings
 
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -24,10 +25,7 @@ class SettingsFragment : android.support.v4.app.Fragment() {
 
         toolbar.setTitle(R.string.settings_title)
 
-        resources.getDrawable(R.drawable.info, null).let { securityBadge ->
-            securityBadge.setTint(resources.getColor(R.color.red_warning, null))
-            securityCenter.badge = securityBadge
-        }
+        setSecurityBadgeAndSubscribe()
 
         securityCenter.setOnClickListener {
             startActivity(Intent(context, SecuritySettingsActivity::class.java))
@@ -77,6 +75,23 @@ class SettingsFragment : android.support.v4.app.Fragment() {
         val appVersion = "1.01"
         appName.text = getString(R.string.settings_info_app_name_with_version, appVersion)
 
+    }
+
+    private fun setSecurityBadgeAndSubscribe() {
+        securityCenter.badge = getInfoBadge(Factory.wordsManager.wordListBackedUp)
+
+        Factory.wordsManager.wordListBackedUpSubject.subscribe {
+            securityCenter.badge = getInfoBadge(it)
+        }
+    }
+
+    private fun getInfoBadge(wordListBackedUp: Boolean): Drawable? {
+        var infoBadge: Drawable? = null
+        if (!wordListBackedUp) {
+            infoBadge = resources.getDrawable(R.drawable.info, null)
+            infoBadge?.setTint(resources.getColor(R.color.red_warning, null))
+        }
+        return infoBadge
     }
 
 }

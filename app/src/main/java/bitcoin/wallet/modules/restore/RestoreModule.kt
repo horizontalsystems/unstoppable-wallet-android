@@ -2,6 +2,7 @@ package bitcoin.wallet.modules.restore
 
 import android.content.Context
 import android.content.Intent
+import bitcoin.wallet.core.AdapterManager
 import bitcoin.wallet.core.managers.Factory
 
 object RestoreModule {
@@ -13,7 +14,6 @@ object RestoreModule {
 
     interface IViewDelegate {
         fun restoreDidClick(words: List<String>)
-        fun cancelDidClick()
     }
 
     interface IInteractor {
@@ -27,7 +27,6 @@ object RestoreModule {
 
     interface IRouter {
         fun navigateToMain()
-        fun close()
     }
 
     fun start(context: Context) {
@@ -36,7 +35,7 @@ object RestoreModule {
     }
 
     fun initModule(view: RestoreViewModel, router: IRouter) {
-        val interactor = RestoreInteractor()
+        val interactor = RestoreInteractor(Factory.wordsManager, AdapterManager)
         val presenter = RestorePresenter(interactor, router)
 
         view.delegate = presenter

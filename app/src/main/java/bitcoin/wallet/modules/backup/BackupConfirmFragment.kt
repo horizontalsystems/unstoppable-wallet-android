@@ -33,8 +33,8 @@ class BackupConfirmFragment : Fragment(), BackupConfirmAlert.Listener {
             viewModel = ViewModelProviders.of(it).get(BackupViewModel::class.java)
         }
 
-        viewModel.wordIndexesToConfirmLiveData.observe(this, Observer {
-            it?.let {
+        viewModel.wordIndexesToConfirmLiveData.observe(this, Observer { list ->
+            list?.let {
                 textWordNumber1.text = "${it[0]}."
                 textWordNumber2.text = "${it[1]}."
 
@@ -52,7 +52,7 @@ class BackupConfirmFragment : Fragment(), BackupConfirmAlert.Listener {
         }
 
         buttonSubmit.setOnClickListener {
-            if (editWord1.text.isEmpty() || editWord2.text.isEmpty()) {
+            if (editWord1.text?.isEmpty() == true || editWord2.text?.isEmpty() == true) {
                 showError(R.string.backup_words_error_enter_words)
             } else {
                 activity?.let { BackupConfirmAlert.show(it, this) }

@@ -2,7 +2,7 @@ package bitcoin.wallet.modules.backup
 
 import java.util.*
 
-class BackupPresenter(private val interactor: BackupModule.IInteractor, private val router: BackupModule.IRouter, private val dismissMode: DismissMode) : BackupModule.IViewDelegate, BackupModule.IInteractorDelegate {
+    class BackupPresenter(private val interactor: BackupModule.IInteractor, private val router: BackupModule.IRouter, private val dismissMode: DismissMode) : BackupModule.IViewDelegate, BackupModule.IInteractorDelegate {
 
     enum class DismissMode {
         TO_MAIN, DISMISS_SELF
@@ -12,7 +12,7 @@ class BackupPresenter(private val interactor: BackupModule.IInteractor, private 
 
     // view delegate
 
-    override fun cancelDidClick() {
+    override fun laterDidClick() {
         dismiss()
     }
 
