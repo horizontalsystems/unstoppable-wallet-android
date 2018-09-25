@@ -19,15 +19,24 @@
         app:layout_constraintTop_toTopOf="parent"
         />
 
+    <ImageView
+        android:id="@+id/backupImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/backup_image"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@id/textTitle"
+        />
+
     <TextView
         android:id="@+id/textDescription"
         style="@style/Description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:text="@string/backup_words_description"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textTitle"
+        app:layout_constraintTop_toBottomOf="@+id/backupImage"
         />
 
     <Button
