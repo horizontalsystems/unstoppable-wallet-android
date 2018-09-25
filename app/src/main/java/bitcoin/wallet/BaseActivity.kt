@@ -6,6 +6,7 @@ import android.view.View
 import android.view.WindowManager
 import bitcoin.wallet.core.App
 import bitcoin.wallet.core.managers.Factory
+import bitcoin.wallet.modules.pin.PinActivity
 import bitcoin.wallet.modules.pin.PinModule
 
 abstract class BaseActivity : AppCompatActivity() {
@@ -24,13 +25,14 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        if (this !is PinActivity) {
+            if (App.promptPin && Factory.preferencesManager.getPin() != null) {
+                PinModule.startForUnlock(this)
+                return
+            }
 
-        if (App.promptPin && Factory.preferencesManager.getPin() != null) {
-            PinModule.startForUnlock(this)
-            return
+            App.promptPin = false
         }
-
-        App.promptPin = false
     }
 
     private fun setStatusBarIconColor(lightMode: Boolean) {
