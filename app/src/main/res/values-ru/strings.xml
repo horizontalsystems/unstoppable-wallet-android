@@ -30,6 +30,7 @@
   <string name="backup_button_backup">Записать ключ</string>
   <string name="backup_button_next">Далее</string>
   <string name="backup_button_submit">Отправить</string>
+  <string name="backup_button_later">Later</string>
   <string name="backup_write_down_on_paper">Запишите на бумаге и храните в безопасности</string>
   <string name="wallet_title">Баланс</string>
   <string name="wallet_button_receive">Получить</string>
