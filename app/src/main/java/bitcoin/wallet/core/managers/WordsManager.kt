@@ -1,5 +1,6 @@
 package bitcoin.wallet.core.managers
 
+import android.security.keystore.UserNotAuthenticatedException
 import bitcoin.wallet.core.ILocalStorage
 import bitcoin.wallet.kit.hdwallet.Mnemonic
 import io.reactivex.subjects.PublishSubject
@@ -19,6 +20,7 @@ class WordsManager(private val storage: ILocalStorage) {
 
     var savedWords: List<String>? = storage.savedWords
 
+    @Throws(UserNotAuthenticatedException::class)
     fun createWords(): List<String> {
         val generatedWords = Mnemonic().generate()
         storage.saveWords(generatedWords)

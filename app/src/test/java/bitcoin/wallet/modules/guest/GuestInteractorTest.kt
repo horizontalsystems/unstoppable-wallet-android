@@ -1,5 +1,6 @@
 package bitcoin.wallet.modules.guest
 
+import android.security.keystore.UserNotAuthenticatedException
 import bitcoin.wallet.core.AdapterManager
 import bitcoin.wallet.core.managers.WordsManager
 import bitcoin.wallet.modules.RxBaseTest
@@ -34,5 +35,18 @@ class GuestInteractorTest {
         verify(delegate).didCreateWallet()
         verifyNoMoreInteractions(delegate)
     }
+
+    @Test
+    fun createWallet_error() {
+        val exception = UserNotAuthenticatedException()
+
+        whenever(wordsManager.createWords()).thenThrow(exception)
+
+        interactor.createWallet()
+
+        verify(delegate).didFailToCreateWallet(exception)
+        verifyNoMoreInteractions(delegate)
+    }
+
 
 }

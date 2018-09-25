@@ -1,5 +1,7 @@
 package bitcoin.wallet.modules.guest
 
+import android.security.keystore.UserNotAuthenticatedException
+
 class GuestPresenter(private val interactor: GuestModule.IInteractor, private val router: GuestModule.IRouter) : GuestModule.IViewDelegate, GuestModule.IInteractorDelegate {
 
     var view: GuestModule.IView? = null
@@ -16,6 +18,14 @@ class GuestPresenter(private val interactor: GuestModule.IInteractor, private va
 
     override fun didCreateWallet() {
         router.navigateToBackupRoutingToMain()
+    }
+
+    override fun didFailToCreateWallet(error: Throwable) {
+        if (error is UserNotAuthenticatedException) {
+            view?.authenticateToCreateWallet()
+        } else {
+            view?.showError()
+        }
     }
 
 }

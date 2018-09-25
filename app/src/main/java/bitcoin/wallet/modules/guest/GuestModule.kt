@@ -9,6 +9,7 @@ object GuestModule {
 
     interface IView {
         fun authenticateToCreateWallet()
+        fun showError()
     }
 
     interface IViewDelegate {
@@ -22,6 +23,7 @@ object GuestModule {
 
     interface IInteractorDelegate {
         fun didCreateWallet()
+        fun didFailToCreateWallet(error: Throwable)
     }
 
     interface IRouter {

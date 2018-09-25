@@ -11,6 +11,7 @@ import bitcoin.wallet.core.security.EncryptionManager
 import bitcoin.wallet.modules.backup.BackupModule
 import bitcoin.wallet.modules.backup.BackupPresenter
 import bitcoin.wallet.modules.restore.RestoreModule
+import bitcoin.wallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_add_wallet.*
 
 class GuestActivity : AppCompatActivity() {
@@ -36,6 +37,10 @@ class GuestActivity : AppCompatActivity() {
 
         viewModel.authenticateToCreateWallet.observe(this, Observer {
             EncryptionManager.showAuthenticationScreen(this, AUTHENTICATE_TO_CREATE_WALLET)
+        })
+
+        viewModel.showErrorDialog.observe(this, Observer {
+            HudHelper.showErrorMessage(R.string.error, this)
         })
 
         buttonCreate.setOnClickListener {

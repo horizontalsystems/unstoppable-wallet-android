@@ -10,6 +10,7 @@ class GuestViewModel: ViewModel(), GuestModule.IView, GuestModule.IRouter {
     val openBackupScreenLiveEvent = SingleLiveEvent<Void>()
     val openRestoreWalletScreenLiveEvent = SingleLiveEvent<Void>()
     val authenticateToCreateWallet = SingleLiveEvent<Void>()
+    val showErrorDialog = SingleLiveEvent<Void>()
 
     fun init() {
         GuestModule.init(this, this)
@@ -26,6 +27,10 @@ class GuestViewModel: ViewModel(), GuestModule.IView, GuestModule.IRouter {
 
     override fun authenticateToCreateWallet() {
         authenticateToCreateWallet.call()
+    }
+
+    override fun showError() {
+        showErrorDialog.call()
     }
 
 }
