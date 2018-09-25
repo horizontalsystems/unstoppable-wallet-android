@@ -2,12 +2,22 @@ package bitcoin.wallet.core.managers
 
 import bitcoin.wallet.core.ILocalStorage
 import bitcoin.wallet.kit.hdwallet.Mnemonic
+import io.reactivex.subjects.PublishSubject
 
 class WordsManager(private val storage: ILocalStorage) {
 
-    fun savedWords(): List<String>? {
-        return storage.savedWords
-    }
+    var wordListBackedUpSubject: PublishSubject<Boolean> = PublishSubject.create()
+
+    var wordListBackedUp: Boolean
+        get() {
+            return storage.isWordListBackedUp()
+        }
+        set(value) {
+            storage.wordlistBackedUp(value)
+            wordListBackedUpSubject.onNext(value)
+        }
+
+    var savedWords: List<String>? = storage.savedWords
 
     fun createWords(): List<String> {
         val generatedWords = Mnemonic().generate()

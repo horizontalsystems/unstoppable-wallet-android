@@ -38,8 +38,8 @@ class BackupInfoFragment : Fragment() {
             }
         }
 
-        buttonCancel.setOnClickListener {
-            viewModel.delegate.cancelDidClick()
+        buttonLater.setOnClickListener {
+            viewModel.delegate.laterDidClick()
         }
     }
 

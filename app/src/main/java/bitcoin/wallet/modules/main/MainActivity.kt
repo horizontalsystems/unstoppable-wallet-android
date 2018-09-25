@@ -18,7 +18,7 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Factory.wordsManager.savedWords()?.let { AdapterManager.initAdapters(it) }
+        Factory.wordsManager.savedWords?.let { AdapterManager.initAdapters(it) }
 
         setContentView(R.layout.activity_dashboard)
 
@@ -48,6 +48,8 @@ class MainActivity : BaseActivity() {
             true
         }
 
+        setBottomNavigationBadgesAndSubscribe()
+
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
             }
@@ -76,5 +78,17 @@ class MainActivity : BaseActivity() {
         // }
     }
 
+    private fun setBottomNavigationBadgesAndSubscribe() {
+        updateSettingsBadge(Factory.wordsManager.wordListBackedUp)
+        Factory.wordsManager.wordListBackedUpSubject.subscribe {
+            updateSettingsBadge(it)
+        }
+    }
+
+    private fun updateSettingsBadge(backedUp: Boolean) {
+        val settingsTabPosition = 2
+        val notification = if (backedUp) "" else "1"
+        bottomNavigation.setNotification(notification, settingsTabPosition)
+    }
 
 }

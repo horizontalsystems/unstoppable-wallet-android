@@ -1,7 +1,7 @@
 package bitcoin.wallet.modules.settings
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.CompoundButton
@@ -36,6 +36,8 @@ class SecuritySettingsActivity : BaseActivity() {
             }
         }
 
+        setBackupWalletBadgeAndSubscribe()
+
         //fingerprint
         val phoneHasFingerprintSensor = SecurityUtils.phoneHasFingerprintSensor(this)
 
@@ -56,6 +58,23 @@ class SecuritySettingsActivity : BaseActivity() {
             }
         }
 
+    }
+
+    private fun setBackupWalletBadgeAndSubscribe() {
+        backupWallet.badge = getInfoBadge(Factory.wordsManager.wordListBackedUp)
+
+        Factory.wordsManager.wordListBackedUpSubject.subscribe {
+            backupWallet.badge = getInfoBadge(it)
+        }
+    }
+
+    private fun getInfoBadge(wordListBackedUp: Boolean): Drawable? {
+        var infoBadge: Drawable? = null
+        if (!wordListBackedUp) {
+            infoBadge = resources.getDrawable(R.drawable.info, null)
+            infoBadge?.setTint(resources.getColor(R.color.red_warning, null))
+        }
+        return infoBadge
     }
 
     private fun fingerprintCanBeEnabled(): Boolean {

@@ -5,16 +5,8 @@ import bitcoin.wallet.core.security.EncryptionManager
 
 object Factory {
 
-//    val mnemonicManager by lazy {
-//        MnemonicManager()
-//    }
-
     val preferencesManager by lazy {
         PreferencesManager(encryptionManager)
-    }
-
-    val walletDataProvider by lazy {
-        StubWalletDataProvider()
     }
 
     val randomProvider by lazy {
@@ -34,4 +26,3 @@ object Factory {
     }
 
 }
-

@@ -2,6 +2,8 @@ package bitcoin.wallet.modules.backup
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import bitcoin.wallet.BaseActivity
 import bitcoin.wallet.R
@@ -17,14 +19,13 @@ class BackupActivity : BaseActivity() {
         setContentView(R.layout.activity_backup_words)
 
         viewModel = ViewModelProviders.of(this).get(BackupViewModel::class.java)
-        viewModel.init(BackupPresenter.DismissMode.valueOf(intent.getStringExtra("DismissMode")))
+        viewModel.init(BackupPresenter.DismissMode.valueOf(intent.getStringExtra(dismissModeKey)))
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                     .add(R.id.fragmentContainer, BackupInfoFragment()).commit()
 
         }
-
 
         viewModel.navigationWordsLiveEvent.observe(this, Observer {
 
@@ -54,6 +55,7 @@ class BackupActivity : BaseActivity() {
 
         viewModel.navigateToMainLiveEvent.observe(this, Observer {
             MainModule.start(this)
+            finish()
         })
 
         viewModel.closeLiveEvent.observe(this, Observer {
@@ -61,5 +63,15 @@ class BackupActivity : BaseActivity() {
         })
 
 
+    }
+
+    companion object {
+        private const val dismissModeKey = "DismissMode"
+
+        fun start(context: Context, dismissMode: BackupPresenter.DismissMode) {
+            val intent = Intent(context, BackupActivity::class.java)
+            intent.putExtra(dismissModeKey, dismissMode.name)
+            context.startActivity(intent)
+        }
     }
 }

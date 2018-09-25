@@ -33,8 +33,8 @@ class BackupConfirmFragment : Fragment(), BackupConfirmAlert.Listener {
             viewModel = ViewModelProviders.of(it).get(BackupViewModel::class.java)
         }
 
-        viewModel.wordIndexesToConfirmLiveData.observe(this, Observer {
-            it?.let {
+        viewModel.wordIndexesToConfirmLiveData.observe(this, Observer { list ->
+            list?.let {
                 textWordNumber1.text = "${it[0]}."
                 textWordNumber2.text = "${it[1]}."
 
