@@ -158,7 +158,7 @@ class PinActivity : AppCompatActivity(), NumPadItemsAdapter.Listener, Fingerprin
                 fragment.show(fragmentManager, "fingerprint_dialog")
 
                 isFingerprintEnabled = true
-                numPadItems.adapter.notifyDataSetChanged()
+                numPadItems.adapter?.notifyDataSetChanged()
 
             } catch (e: Exception) {
                 when (e) {

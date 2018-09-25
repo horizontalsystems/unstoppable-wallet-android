@@ -52,7 +52,7 @@ class BackupConfirmFragment : Fragment(), BackupConfirmAlert.Listener {
         }
 
         buttonSubmit.setOnClickListener {
-            if (editWord1.text.isEmpty() || editWord2.text.isEmpty()) {
+            if (editWord1.text?.isEmpty() == true || editWord2.text?.isEmpty() == true) {
                 showError(R.string.backup_words_error_enter_words)
             } else {
                 activity?.let { BackupConfirmAlert.show(it, this) }
