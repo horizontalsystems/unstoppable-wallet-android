@@ -30,6 +30,7 @@
   <string name="backup_button_backup">Sicherung</string>
   <string name="backup_button_next">Weiter</string>
   <string name="backup_button_submit">Absenden</string>
+  <string name="backup_button_later">Later</string>
   <string name="backup_write_down_on_paper">Write down on paper and keep safe</string>
   <string name="wallet_title">Balance</string>
   <string name="wallet_button_receive">Empfangen</string>
