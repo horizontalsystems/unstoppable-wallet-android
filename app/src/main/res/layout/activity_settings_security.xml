@@ -88,6 +88,26 @@
                 app:layout_constraintTop_toBottomOf="@+id/divider_1"
                 app:setting_title="@string/settings_security_backup_wallet"
                 />
+
+            <bitcoin.wallet.modules.settings.SettingsItemView
+                android:id="@+id/importWallet"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/backupWallet"
+                app:setting_title="@string/settings_import_wallet"
+                />
+
+            <bitcoin.wallet.modules.settings.SettingsItemView
+                android:id="@+id/unlink"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/importWallet"
+                app:setting_title="@string/settings_unlink_from_this_device"
+                />
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
 

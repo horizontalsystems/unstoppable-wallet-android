@@ -59,14 +59,14 @@
                 />
 
             <bitcoin.wallet.modules.settings.SettingsItemView
-                android:id="@+id/importWallet"
+                android:id="@+id/baseCurrency"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/securityCenter"
-                app:setting_icon="@drawable/add_wallet"
-                app:setting_title="@string/settings_import_wallet"
+                app:setting_icon="@drawable/currency"
+                app:setting_title="@string/settings_base_currency"
                 />
 
             <View
@@ -75,18 +75,7 @@
                 android:layout_height="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/importWallet"
-                />
-
-            <bitcoin.wallet.modules.settings.SettingsItemView
-                android:id="@+id/baseCurrency"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider_1"
-                app:setting_icon="@drawable/currency"
-                app:setting_title="@string/settings_base_currency"
+                app:layout_constraintTop_toBottomOf="@+id/baseCurrency"
                 />
 
             <bitcoin.wallet.modules.settings.SettingsItemView
@@ -95,7 +84,7 @@
                 android:layout_height="56dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/baseCurrency"
+                app:layout_constraintTop_toBottomOf="@+id/divider_1"
                 app:setting_icon="@drawable/language"
                 app:setting_title="@string/settings_language"
                 />

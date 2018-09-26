@@ -44,10 +44,6 @@ class SettingsFragment : android.support.v4.app.Fragment() {
             selectedValue = "USD"
         }
 
-        importWallet.setOnClickListener {
-            Log.e("AAA", "import wallet clicked!")
-        }
-
         language.apply {
             setOnClickListener {
                 Log.e("AAA", "language clicked!")
