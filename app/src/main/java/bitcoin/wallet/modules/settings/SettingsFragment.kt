@@ -1,5 +1,7 @@
 package bitcoin.wallet.modules.settings
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -16,6 +18,8 @@ import kotlinx.android.synthetic.main.fragment_settings.*
 
 class SettingsFragment : android.support.v4.app.Fragment() {
 
+    private lateinit var viewModel: SettingsViewModel
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_settings, container, false);
     }
@@ -23,9 +27,10 @@ class SettingsFragment : android.support.v4.app.Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setTitle(R.string.settings_title)
+        viewModel = ViewModelProviders.of(this).get(SettingsViewModel::class.java)
+        viewModel.init()
 
-        setSecurityBadgeAndSubscribe()
+        toolbar.setTitle(R.string.settings_title)
 
         securityCenter.setOnClickListener {
             startActivity(Intent(context, SecuritySettingsActivity::class.java))
@@ -75,14 +80,11 @@ class SettingsFragment : android.support.v4.app.Fragment() {
         val appVersion = "1.01"
         appName.text = getString(R.string.settings_info_app_name_with_version, appVersion)
 
-    }
-
-    private fun setSecurityBadgeAndSubscribe() {
-        securityCenter.badge = getInfoBadge(Factory.wordsManager.wordListBackedUp)
-
-        Factory.wordsManager.wordListBackedUpSubject.subscribe {
-            securityCenter.badge = getInfoBadge(it)
-        }
+        viewModel.wordListBackedUp.observe(this, Observer { wordListBackedUp ->
+            wordListBackedUp?.let {
+                securityCenter.badge = getInfoBadge(it)
+            }
+        })
     }
 
     private fun getInfoBadge(wordListBackedUp: Boolean): Drawable? {

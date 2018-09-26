@@ -1,5 +1,6 @@
 package bitcoin.wallet.modules.main
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
@@ -15,10 +16,14 @@ import kotlinx.android.synthetic.main.activity_dashboard.*
 class MainActivity : BaseActivity() {
 
     private lateinit var adapter: MainTabsAdapter
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Factory.wordsManager.savedWords?.let { AdapterManager.initAdapters(it) }
+        Factory.wordsManager.savedWords()?.let { AdapterManager.initAdapters(it) }
+
+        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        viewModel.init()
 
         setContentView(R.layout.activity_dashboard)
 
@@ -37,7 +42,6 @@ class MainActivity : BaseActivity() {
         bottomNavigation.addItem(AHBottomNavigationItem(R.string.wallet_title, R.drawable.bank_icon, 0))
         bottomNavigation.addItem(AHBottomNavigationItem(R.string.transactions_title, R.drawable.transactions, 0))
         bottomNavigation.addItem(AHBottomNavigationItem(R.string.settings_title, R.drawable.settings, 0))
-
         bottomNavigation.titleState = AHBottomNavigation.TitleState.ALWAYS_HIDE
         bottomNavigation.setUseElevation(false)
 
@@ -47,8 +51,6 @@ class MainActivity : BaseActivity() {
             }
             true
         }
-
-        setBottomNavigationBadgesAndSubscribe()
 
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
@@ -78,9 +80,9 @@ class MainActivity : BaseActivity() {
         // }
     }
 
-    private fun setBottomNavigationBadgesAndSubscribe() {
-        updateSettingsBadge(Factory.wordsManager.wordListBackedUp)
-        Factory.wordsManager.wordListBackedUpSubject.subscribe {
+    override fun onResume() {
+        super.onResume()
+        viewModel.wordListBackedUp.value?.let {
             updateSettingsBadge(it)
         }
     }

@@ -9,7 +9,7 @@ class BackupInteractor(private val wordsManager: WordsManager, private val index
     var delegate: BackupModule.IInteractorDelegate? = null
 
     override fun fetchWords() {
-        wordsManager.savedWords?.let {
+        wordsManager.savedWords()?.let {
             delegate?.didFetchWords(it)
         }
     }
@@ -19,7 +19,7 @@ class BackupInteractor(private val wordsManager: WordsManager, private val index
     }
 
     override fun validate(confirmationWords: HashMap<Int, String>) {
-        wordsManager.savedWords?.let { wordList ->
+        wordsManager.savedWords()?.let { wordList ->
             for ((index, word) in confirmationWords) {
                 if (wordList[index - 1] != word.trim()) {
                     delegate?.didValidateFailure()

@@ -1,5 +1,7 @@
 package bitcoin.wallet.modules.settings
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.MenuItem
@@ -17,8 +19,13 @@ import kotlinx.android.synthetic.main.activity_settings_security.*
 
 class SecuritySettingsActivity : BaseActivity() {
 
+    private lateinit var viewModel: SecuritySettingsViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        viewModel = ViewModelProviders.of(this).get(SecuritySettingsViewModel::class.java)
+        viewModel.init()
 
         setContentView(R.layout.activity_settings_security)
 
@@ -35,8 +42,6 @@ class SecuritySettingsActivity : BaseActivity() {
                 BackupModule.start(this@SecuritySettingsActivity, BackupPresenter.DismissMode.DISMISS_SELF)
             }
         }
-
-        setBackupWalletBadgeAndSubscribe()
 
         //fingerprint
         val phoneHasFingerprintSensor = SecurityUtils.phoneHasFingerprintSensor(this)
@@ -58,14 +63,12 @@ class SecuritySettingsActivity : BaseActivity() {
             }
         }
 
-    }
+        viewModel.wordListBackedUp.observe(this, Observer { wordListBackedUp ->
+            wordListBackedUp?.let {
+                backupWallet.badge = getInfoBadge(it)
+            }
+        })
 
-    private fun setBackupWalletBadgeAndSubscribe() {
-        backupWallet.badge = getInfoBadge(Factory.wordsManager.wordListBackedUp)
-
-        Factory.wordsManager.wordListBackedUpSubject.subscribe {
-            backupWallet.badge = getInfoBadge(it)
-        }
     }
 
     private fun getInfoBadge(wordListBackedUp: Boolean): Drawable? {
