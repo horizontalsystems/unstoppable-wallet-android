@@ -18,7 +18,7 @@ class WordsManager(private val storage: ILocalStorage) {
             wordListBackedUpSubject.onNext(value)
         }
 
-    var savedWords: List<String>? = storage.savedWords
+    fun savedWords(): List<String>? = storage.savedWords
 
     @Throws(UserNotAuthenticatedException::class)
     fun createWords(): List<String> {
