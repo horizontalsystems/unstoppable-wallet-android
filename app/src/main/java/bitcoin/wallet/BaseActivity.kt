@@ -10,6 +10,8 @@ import bitcoin.wallet.modules.pin.PinModule
 
 abstract class BaseActivity : AppCompatActivity() {
 
+    protected open var requiresPinUnlock = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -24,13 +26,14 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        if (requiresPinUnlock) {
+            if (App.promptPin && Factory.preferencesManager.getPin() != null) {
+                PinModule.startForUnlock(this)
+                return
+            }
 
-        if (App.promptPin && Factory.preferencesManager.getPin() != null) {
-            PinModule.startForUnlock(this)
-            return
+            App.promptPin = false
         }
-
-        App.promptPin = false
     }
 
     private fun setStatusBarIconColor(lightMode: Boolean) {

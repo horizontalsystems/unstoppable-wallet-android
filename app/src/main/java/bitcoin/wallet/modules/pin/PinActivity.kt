@@ -11,12 +11,12 @@ import android.os.Handler
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.UserNotAuthenticatedException
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
+import bitcoin.wallet.BaseActivity
 import bitcoin.wallet.R
 import bitcoin.wallet.core.App
 import bitcoin.wallet.core.managers.Factory
@@ -30,7 +30,7 @@ import kotlinx.android.synthetic.main.activity_pin.*
 import java.security.UnrecoverableKeyException
 
 
-class PinActivity : AppCompatActivity(), NumPadItemsAdapter.Listener, FingerprintAuthenticationDialogFragment.Callback {
+class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuthenticationDialogFragment.Callback {
 
     private lateinit var viewModel: PinViewModel
 
@@ -42,6 +42,8 @@ class PinActivity : AppCompatActivity(), NumPadItemsAdapter.Listener, Fingerprin
     private lateinit var imgPinMask6: ImageView
 
     private var isFingerprintEnabled = false
+
+    override var requiresPinUnlock = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
