@@ -22,7 +22,7 @@
     </string>
   <string name="backup_words_confirm_alert_wallet_held_on_device">Ich verstehe, dass mein Wallet <b>und Token auf dieses Gerät nur und keine Server gespeichert sind.</b></string>
   <string name="backup_words_confirm_alert_wallet_restore_with_words">Ich verstehe, dass wenn diese app auf ein anderes Gerät verschoben wird oder gelöscht, mein Wallet nur mit dem Papier-Schlüssel wiederhergestellt werden können, die ich aufgeschrieben und an einem sicheren Ort gespeichert.</string>
-  <string name="backup_words_confirm_alert_wallet_device_lock_warning">Changing the phone\'s unlock PIN in your Android OS settings would reset the wallet. You will need your backup phrase to restore your wallet after that.</string>
+  <string name="backup_words_confirm_alert_wallet_device_lock_warning">Wenn Sie die Entsperrungs-PIN des Telefons in den Einstellungen Ihres Android-Betriebssystems ändern, wird die Wallet zurückgesetzt. Sie benötigen Ihre Backup-Phrase, um danach Ihre Wallet wiederherzustellen.</string>
   <string name="backup_words_confirm_description">Geben Sie die folgenden Wörter aus Ihrem Papier-Schlüssel</string>
   <string name="backup_words_error_enter_words">Geben Sie Wörter aus Ihrem Papier-Schlüssel.</string>
   <string name="backup_words_error_no_match">Eingegebenen Worte stimmen nicht überein. Stellen Sie sicher, dass Sie Ihre Worte aufschreiben, genau so, wie sie im vorherigen Schritt und in der richtigen Reihenfolge angezeigt werden.</string>
@@ -46,7 +46,7 @@
   <string name="scan_qr_code">QR-Code Scannen</string>
   <string name="send_bottom_sheet_title">Sende %s</string>
   <string name="send_bottom_sheet_error_invalid_address">Eingegebene Adresse scheint ungültig zu sein. Bitte überprüfen Sie und versuchen es erneut!</string>
-  <string name="send_bottom_sheet_error_insufficient_balance">Your balance is insufficient. Please try to send smaller amount!</string>
+  <string name="send_bottom_sheet_error_insufficient_balance">Ihr Balance reicht nicht aus. Bitte versuchen Sie, kleinere Menge zu senden!</string>
   <string name="send_bottom_sheet_success">Erfolgreich gesendet!</string>
   <string name="receive_title">Empfangen: %s</string>
   <string name="receive_copy">Kopieren</string>
@@ -57,7 +57,7 @@
   <string name="timestamp_yesterday">Gestern</string>
   <string name="transactions_title">Transaktionen</string>
   <string name="transactions_filter_all">Alle</string>
-  <string name="transactions_empty_list">You don\’t have any pending or past transaction yet</string>
+  <string name="transactions_empty_list">Sie haben nicht die anstehenden oder vergangenen Transaktionen noch.</string>
   <string name="transaction_info_title">Transaktion</string>
   <string name="transaction_info_status">Status:</string>
   <string name="transaction_info_status_completed">Abgeschlossen</string>
@@ -92,7 +92,7 @@
   <string name="settings_light_mode">Licht Modus</string>
   <string name="settings_push_notifications">Benachrichtigungen</string>
   <string name="settings_error_fingerprint_not_enabled">Fingerabdruck nicht aktivieren</string>
-  <string name="settings_error_no_fingerprint_added_yet">You have not enabled fingerprint on this device. Go to Settings &gt; Security to set up fingerprint</string>
+  <string name="settings_error_no_fingerprint_added_yet">Fingerabdruck auf diesem Gerät aktiviert nicht. Gehen Sie zu Einstellungen &gt; Sicherheit Fingerabdruck einrichten</string>
   <string name="settings_info_app_name_with_version">Bank Wallet %s</string>
   <string name="settings_info_subtitle">dezentralisierte app</string>
   <string name="settings_info_link">https://horizontalsystems.io</string>
@@ -132,7 +132,7 @@
   <string name="set_pin_confirm_description">Ihre Pin wird verwendet werden, um Ihren Wallet zu entsperren und Geld schicken</string>
   <string name="set_pin_success">Lock PIN wurde erfolgreich gesetzt!</string>
   <string name="set_pin_error_pins_dont_match">Die eingegebenen PINs stimmen nicht überein.</string>
-  <string name="set_pin_error_failed_to_save_pin">Error occurred while saving your pin. Please, try again.</string>
+  <string name="set_pin_error_failed_to_save_pin">Beim Speichern Ihres PIN ist leider ein Fehler aufgetreten. Bitte versuchen es erneut.</string>
   <string name="edit_pin_auth_title">PIN bearbeiten</string>
   <string name="edit_pin_auth_description">Aktuelle PIN eingeben</string>
   <string name="edit_pin_title">Neue PIN eingeben</string>
