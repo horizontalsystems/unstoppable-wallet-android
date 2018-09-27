@@ -100,7 +100,7 @@
   <string name="settings_security_backup_wallet">Записать кошелёк</string>
   <string name="unlock_page_enter_your_pin">Введите ваш ПИН-код для разблокировки</string>
   <string name="alert_keys_invalidated_title">Ошибка Android Keystore</string>
-  <string name="alert_keys_invalidated_description">Your encrypted data was recently invalidated because your Android lock screen was changed</string>
+  <string name="alert_keys_invalidated_description">Ваши зашифрованные данные были недавно аннулированы, поскольку экран блокировки Android был изменен</string>
   <string name="alert_no_device_lock_title">ВНИМАНИЕ</string>
   <string name="alert_no_device_lock_description">Блокировка устройства необходима для защиты вашего кошелька. Перейдите в «Настройки» &gt; «Безопасность» &gt; «Блокировка экрана» и продолжите </string>
   <string name="button_cancel">Отменить</string>
