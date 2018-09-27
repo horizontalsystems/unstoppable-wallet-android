@@ -13,10 +13,11 @@ import android.view.View
 import android.view.ViewGroup
 import bitcoin.wallet.R
 import bitcoin.wallet.core.security.EncryptionManager
+import bitcoin.wallet.ui.dialogs.BottomConfirmAlert
 import bitcoin.wallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_backup_words_confirm.*
 
-class BackupConfirmFragment : Fragment(), BackupConfirmAlert.Listener {
+class BackupConfirmFragment : Fragment(), BottomConfirmAlert.Listener {
     private lateinit var viewModel: BackupViewModel
 
     private var wordIndex1 = -1
@@ -55,7 +56,14 @@ class BackupConfirmFragment : Fragment(), BackupConfirmAlert.Listener {
             if (editWord1.text?.isEmpty() == true || editWord2.text?.isEmpty() == true) {
                 showError(R.string.backup_words_error_enter_words)
             } else {
-                activity?.let { BackupConfirmAlert.show(it, this) }
+                activity?.let {
+                    val confirmationList = mutableListOf(
+                            R.string.backup_words_confirm_alert_wallet_held_on_device,
+                            R.string.backup_words_confirm_alert_wallet_restore_with_words,
+                            R.string.backup_words_confirm_alert_wallet_device_lock_warning
+                    )
+                    BottomConfirmAlert.show(it, confirmationList, this)
+                }
             }
         }
     }
@@ -64,7 +72,7 @@ class BackupConfirmFragment : Fragment(), BackupConfirmAlert.Listener {
         errorMsgId?.let { HudHelper.showErrorMessage(it, activity) }
     }
 
-    override fun backupConfirmationSuccess() {
+    override fun confirmationSuccess() {
         try {
             validateWords()
         } catch (exception: UserNotAuthenticatedException) {

@@ -4,6 +4,7 @@ import android.security.keystore.UserNotAuthenticatedException
 import bitcoin.wallet.core.AdapterManager
 import bitcoin.wallet.core.managers.WordsManager
 import bitcoin.wallet.kit.hdwallet.Mnemonic
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Test
@@ -41,6 +42,7 @@ class RestoreInteractorTest {
 
         verify(delegate).didRestore()
         verify(wordsManager).wordListBackedUp = true
+        verify(adapterManager).initAdapters(any())
         verifyNoMoreInteractions(delegate)
     }
 

@@ -33,4 +33,8 @@ class WordsManager(private val storage: ILocalStorage) {
         storage.saveWords(words)
     }
 
+    fun clear() {
+        storage.saveWords(listOf())
+    }
+
 }

@@ -8,6 +8,7 @@ object AdapterManager {
     var subject: PublishSubject<Any> = PublishSubject.create<Any>()
 
     fun initAdapters(words: List<String>) {
+        clear()
         adapters.clear()
         adapters.add(BitcoinAdapter(words, network = MainNet()))
 //        adapters.add(BitcoinAdapter(words, network = TestNet()))
@@ -33,5 +34,6 @@ object AdapterManager {
                 print("Could not clear ${adapter.coin.name}: $error")
             }
         }
+        adapters.clear()
     }
 }
