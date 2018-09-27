@@ -16,6 +16,7 @@ class TransactionInfoItemView : ConstraintLayout {
 
     private var attrTitle: String? = null
     private var attrValue: String? = null
+    private var attrValueSubtitle: String? = null
     private var attrShowValueBackground: String? = null
     private var attrValueIcon: String? = null
 
@@ -53,6 +54,7 @@ class TransactionInfoItemView : ConstraintLayout {
 
         titleTextView.text = attrTitle
         valueTitleTextView.text = attrValue
+        valueSubtitleTextView.text = attrValueSubtitle
     }
 
     private fun initializeViews() {
@@ -86,6 +88,7 @@ class TransactionInfoItemView : ConstraintLayout {
         try {
             attrTitle = ta.getString(R.styleable.TransactionInfoItemView_title)
             attrValue = ta.getString(R.styleable.TransactionInfoItemView_value)
+            attrValueSubtitle = ta.getString(R.styleable.TransactionInfoItemView_valueSubtitle)
             attrShowValueBackground = ta.getString(R.styleable.TransactionInfoItemView_showValueBackground)
             attrValueIcon = ta.getString(R.styleable.TransactionInfoItemView_valueIcon)
         } finally {
