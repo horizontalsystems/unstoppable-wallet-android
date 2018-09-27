@@ -106,15 +106,14 @@
     <string name="settings_error_no_fingerprint_added_yet">You have not enabled fingerprint on this device. Go to Settings > Security to set up fingerprint</string>
     <string name="settings_info_app_name_with_version">Bank Wallet %s</string>
     <string name="settings_info_subtitle">decentralized app</string>
-    <string name="settings_info_link">http://horizontalsystems.io</string>
+    <string name="settings_info_link">https://horizontalsystems.io</string>
     <string name="settings_security_fingerprint">Fingerprint</string>
-    <string name="settings_security_change_pin">Change Pin</string>
+    <string name="settings_security_change_pin">Change PIN</string>
     <string name="settings_security_backup_wallet">Backup wallet</string>
 
+    <string name="unlock_page_enter_your_pin">Type your PIN to unlock</string>
     <string name="settings_security_import_wallet_confirmation_1">This action will remove the currently installed wallet</string>
     <string name="settings_security_import_wallet_confirmation_2">Backup its secret keys if you want too be able to access that wallet in the future.</string>
-
-    <string name="unlock_page_enter_your_pin">Type your pin to unlock</string>
 
     <string name="alert_keys_invalidated_title">Android Keystore Error</string>
     <string name="alert_keys_invalidated_description">Your encrypted data was recently invalidated because your Android lock screen was changed</string>
@@ -142,23 +141,23 @@
     <!--Fingerprint texts-->
     <string name="fingerprint_dialog_title">Fingerprint login</string>
     <string name="fingerprint_hint">Touch sensor</string>
-    <string name="enter_pin">Enter pin</string>
+    <string name="enter_pin">Enter PIN</string>
     <string name="fingerprint_not_recognized">Fingerprint not recognized. Try again</string>
     <string name="fingerprint_success">Fingerprint recognized</string>
 
 
     <!--Set Pin-->
-    <string name="set_pin_title">Enter pin</string>
-    <string name="set_pin_description">Your pin will be used to unlock your wallet and send money</string>
+    <string name="set_pin_title">Enter PIN</string>
+    <string name="set_pin_description">Your PIN will be used to unlock your wallet and send money</string>
     <string name="set_pin_error_short_pin">Please enter all digits.</string>
     <string name="set_pin_confirm_title">Enter again</string>
-    <string name="set_pin_confirm_description">Your pin will be used to unlock your wallet and send money</string>
-    <string name="set_pin_success">Lock pin was set successfully!</string>
-    <string name="set_pin_error_pins_dont_match">Entered pins do not match.</string>
-    <string name="set_pin_error_failed_to_save_pin">Error occurred while saving your pin. Please, try again.</string>
-    <string name="edit_pin_auth_title">Edit Pin</string>
-    <string name="edit_pin_auth_description">Enter current Pin</string>
-    <string name="edit_pin_title">Enter New Pin</string>
-    <string name="edit_pin_description">Your pin will be used to unlock your wallet and send money</string>
+    <string name="set_pin_confirm_description">Your PIN will be used to unlock your wallet and send money</string>
+    <string name="set_pin_success">Lock PIN was set successfully!</string>
+    <string name="set_pin_error_pins_dont_match">Entered PINs do not match.</string>
+    <string name="set_pin_error_failed_to_save_pin">Error occurred while saving your PIN. Please, try again.</string>
+    <string name="edit_pin_auth_title">Edit PIN</string>
+    <string name="edit_pin_auth_description">Enter current PIN</string>
+    <string name="edit_pin_title">Enter New PIN</string>
+    <string name="edit_pin_description">Your PIN will be used to unlock your wallet and send money</string>
 
 </resources>
