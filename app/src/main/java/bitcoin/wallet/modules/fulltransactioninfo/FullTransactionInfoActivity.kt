@@ -11,6 +11,7 @@ import bitcoin.wallet.R
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem
 import bitcoin.wallet.viewHelpers.DateHelper
 import bitcoin.wallet.viewHelpers.HudHelper
+import bitcoin.wallet.viewHelpers.NumberFormatHelper
 import kotlinx.android.synthetic.main.activity_full_transaction_info.*
 
 class FullTransactionInfoActivity : BaseActivity() {
@@ -76,7 +77,7 @@ class FullTransactionInfoActivity : BaseActivity() {
         itemAmount.bind(
                 title = getString(R.string.full_transaction_info_amount),
                 valueTitle = "${trx.amount.value} ${trx.amount.coin.code}",
-                valueSubtitle = trx.currencyAmount?.value?.let { "$$it" }
+                valueSubtitle = "~ \$${NumberFormatHelper.fiatAmountFormat.format(Math.abs(trx.currencyAmount?.value ?: 0.0))}"
         )
         itemFee.bind(title = getString(R.string.full_transaction_info_fee), valueTitle = "${trx.fee.value} ${trx.fee.coin.code}")
         itemBlock.bind(title = getString(R.string.full_transaction_info_block), valueTitle = trx.blockHeight.toString())
