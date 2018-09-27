@@ -97,9 +97,9 @@
   <string name="settings_info_subtitle">dezentralisierte app</string>
   <string name="settings_info_link">https://horizontalsystems.io</string>
   <string name="settings_security_fingerprint">Fingerabdruck</string>
-  <string name="settings_security_change_pin">PIN ändern</string>
+  <string name="settings_security_change_pin">Change PIN</string>
   <string name="settings_security_backup_wallet">Sicherungs Wallet</string>
-  <string name="unlock_page_enter_your_pin">PIN zum Entsperren eingeben</string>
+  <string name="unlock_page_enter_your_pin">Type your PIN to unlock</string>
   <string name="alert_keys_invalidated_title">Android Keystore Fehler</string>
   <string name="alert_keys_invalidated_description">Ihre verschlüsselten Daten wurden kürzlich ungültig gemacht, weil Ihr Android-Sperrbildschirm geändert wurde</string>
   <string name="alert_no_device_lock_title">WARNUNG</string>
@@ -121,20 +121,20 @@
   <!--Fingerprint texts-->
   <string name="fingerprint_dialog_title">Anmeldung per Fingerabdruck</string>
   <string name="fingerprint_hint">Touchsensor</string>
-  <string name="enter_pin">PIN eingeben</string>
+  <string name="enter_pin">Enter PIN</string>
   <string name="fingerprint_not_recognized">Fingerabdruck nicht erkannt. Bitte wiederholen.</string>
   <string name="fingerprint_success">Fingerabdruck erkannt</string>
   <!--Set Pin-->
-  <string name="set_pin_title">PIN eingeben</string>
-  <string name="set_pin_description">Ihr PIN wird verwendet, um Ihre Wallet  zu entsperren und Geld zu senden</string>
+  <string name="set_pin_title">Enter PIN</string>
+  <string name="set_pin_description">Your PIN will be used to unlock your wallet and send money</string>
   <string name="set_pin_error_short_pin">Bitte geben Sie nur Zahlen ein.</string>
   <string name="set_pin_confirm_title">Erneut Eingeben</string>
-  <string name="set_pin_confirm_description">Ihre Pin wird verwendet werden, um Ihren Wallet zu entsperren und Geld schicken</string>
-  <string name="set_pin_success">Lock PIN wurde erfolgreich gesetzt!</string>
-  <string name="set_pin_error_pins_dont_match">Die eingegebenen PINs stimmen nicht überein.</string>
-  <string name="set_pin_error_failed_to_save_pin">Beim Speichern Ihres PIN ist leider ein Fehler aufgetreten. Bitte versuchen es erneut.</string>
-  <string name="edit_pin_auth_title">PIN bearbeiten</string>
-  <string name="edit_pin_auth_description">Aktuelle PIN eingeben</string>
-  <string name="edit_pin_title">Neue PIN eingeben</string>
-  <string name="edit_pin_description">Ihre Pin wird verwendet werden, um Ihren Wallet zu entsperren und Geld schicken</string>
+  <string name="set_pin_confirm_description">Your PIN will be used to unlock your wallet and send money</string>
+  <string name="set_pin_success">Lock PIN was set successfully!</string>
+  <string name="set_pin_error_pins_dont_match">Entered PINs do not match.</string>
+  <string name="set_pin_error_failed_to_save_pin">Error occurred while saving your PIN. Please, try again.</string>
+  <string name="edit_pin_auth_title">Edit PIN</string>
+  <string name="edit_pin_auth_description">Enter current PIN</string>
+  <string name="edit_pin_title">Enter New PIN</string>
+  <string name="edit_pin_description">Your PIN will be used to unlock your wallet and send money</string>
 </resources>
