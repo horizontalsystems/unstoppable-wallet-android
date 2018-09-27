@@ -25,7 +25,7 @@
   <string name="backup_words_confirm_alert_wallet_device_lock_warning">Changing the phone\'s unlock PIN in your Android OS settings would reset the wallet. You will need your backup phrase to restore your wallet after that.</string>
   <string name="backup_words_confirm_description">Введите следующие слова из вашего ключа</string>
   <string name="backup_words_error_enter_words">Пожалуйста, введите слова из вашего ключа.</string>
-  <string name="backup_words_error_no_match">Введенные слова не совпадают. Пожалуйста убедитесь, что вы записали ваши слова, точно так, как они появляются на предыдущем шаге и в правильном порядке.</string>
+  <string name="backup_words_error_no_match">Введенные слова не совпадают. Пожалуйста убедитесь, что вы записали ваши слова, точно так, как они появляются в предыдущем шаге и в правильном порядке.</string>
   <string name="backup_button_confirm">Подтвердить</string>
   <string name="backup_button_backup">Записать ключ</string>
   <string name="backup_button_next">Далее</string>
@@ -45,7 +45,7 @@
   <string name="send_button_send">Отправить</string>
   <string name="scan_qr_code">Сканировать QR-код</string>
   <string name="send_bottom_sheet_title">Отправить %s</string>
-  <string name="send_bottom_sheet_error_invalid_address">Введенный адрес кажется недействительными. Пожалуйста проверьте и попробуйте еще раз!</string>
+  <string name="send_bottom_sheet_error_invalid_address">Введенный адрес недействительный. Пожалуйста проверьте и попробуйте еще раз!</string>
   <string name="send_bottom_sheet_error_insufficient_balance">Ваш баланс является недостаточным. Пожалуйста, попробуйте отправить меньше!</string>
   <string name="send_bottom_sheet_success">Успешно отправлено!</string>
   <string name="receive_title">Получено %s</string>
@@ -81,7 +81,7 @@
   <string name="full_transaction_info_received">Получено</string>
   <string name="full_transaction_info_sent">Отправлено</string>
   <string name="full_transaction_info_amount">Сумма</string>
-  <string name="full_transaction_info_fee">Коммисия</string>
+  <string name="full_transaction_info_fee">Комиссия</string>
   <string name="full_transaction_info_block">Заблокировать</string>
   <string name="settings_title">Настройки</string>
   <string name="settings_security_center">Центр Безопасности</string>
@@ -92,11 +92,11 @@
   <string name="settings_light_mode">Светлый Режим</string>
   <string name="settings_push_notifications">Уведомления</string>
   <string name="settings_error_fingerprint_not_enabled">Отпечаток пальца не включен</string>
-  <string name="settings_error_no_fingerprint_added_yet">У вас недоступен отпечаток пальцев на этом устройстве. Перейдите в настройки &gt; Безопасности выберите отпечатки пальцев</string>
+  <string name="settings_error_no_fingerprint_added_yet">У вас недоступен отпечаток пальцев на этом устройстве. Перейдите в настройки &gt; Безопасности и выберите отпечатки пальцев</string>
   <string name="settings_info_app_name_with_version">Bank Wallet %s</string>
   <string name="settings_info_subtitle">децентрализованное приложение</string>
-  <string name="settings_info_link">http://horizontalsystems.io</string>
-  <string name="settings_security_fingerprint">Отпечаток</string>
+  <string name="settings_info_link">https://horizontalsystems.io</string>
+  <string name="settings_security_fingerprint">Отпечаток пальцев</string>
   <string name="settings_security_change_pin">Изменить ПИН-код</string>
   <string name="settings_security_backup_wallet">Записать кошелёк</string>
   <string name="unlock_page_enter_your_pin">Введите ваш ПИН-код для разблокировки</string>
@@ -131,7 +131,7 @@
   <string name="set_pin_confirm_title">Введите еще раз</string>
   <string name="set_pin_confirm_description">Your pin will be used to unlock your wallet and send money</string>
   <string name="set_pin_success">Lock pin was set successfully!</string>
-  <string name="set_pin_error_pins_dont_match">Введенный ПИН не совпадают.</string>
+  <string name="set_pin_error_pins_dont_match">Введенные ПИН не совпадают.</string>
   <string name="set_pin_error_failed_to_save_pin">При сохранении вашего ПИН произошла ошибка. Повторите попытку.</string>
   <string name="edit_pin_auth_title">Изменить ПИН</string>
   <string name="edit_pin_auth_description">Введите текущий ПИН
