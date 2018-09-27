@@ -21,7 +21,7 @@
 \n\nМы покажем вам список слов, чтобы вы записали их на бумаге и хранили в безопасном месте.</string>
   <string name="backup_words_confirm_alert_wallet_held_on_device">Я понимаю, что мой <b>кошелек и токены хранятся только на этом устройстве</b></string>
   <string name="backup_words_confirm_alert_wallet_restore_with_words">Я понимаю, что если это приложение удаляется или устанавливается на другое устройство, мой кошелек можно восстановить только ключом, который я храню в безопасном месте.</string>
-  <string name="backup_words_confirm_alert_wallet_device_lock_warning">Changing the phone\'s unlock PIN in your Android OS settings would reset the wallet. You will need your backup phrase to restore your wallet after that.</string>
+  <string name="backup_words_confirm_alert_wallet_device_lock_warning">Изменение ПИН-кода для разблокировки телефона в настройках ОС Android приведет к сбросу кошелька. После этого вам понадобится резервная фраза для восстановления вашего кошелька.</string>
   <string name="backup_words_confirm_description">Введите следующие слова из вашего ключа</string>
   <string name="backup_words_error_enter_words">Пожалуйста, введите слова из вашего ключа.</string>
   <string name="backup_words_error_no_match">Введенные слова не совпадают. Пожалуйста убедитесь, что вы записали ваши слова, точно так, как они появляются в предыдущем шаге и в правильном порядке.</string>
