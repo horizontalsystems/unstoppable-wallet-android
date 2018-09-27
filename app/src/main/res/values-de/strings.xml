@@ -20,18 +20,18 @@
         Ihr Papier-Schlüssel ist die einzige Möglichkeit, Ihren Geldbeutel zu wiederherzustellen, wenn Ihr Gerät verloren, gestohlen, kaputt oder ein Upgrade ist.
         \n\nYou wird eine Liste von Wörtern auf dem nächsten Bildschirm sehen. Auf einem Blatt Papier schreiben Sie auf und zeigen Sie es nicht für jeden.
     </string>
-  <string name="backup_words_confirm_alert_wallet_held_on_device">I understand that my <b>wallet and tokens are stored on this device only and not any servers.</b></string>
-  <string name="backup_words_confirm_alert_wallet_restore_with_words">I understand that if this app is moved to another device or is deleted, my wallet can be only recovered with the Paper Key that I have written down and saved in a secure place.</string>
+  <string name="backup_words_confirm_alert_wallet_held_on_device">Ich verstehe, dass mein Wallet <b>und Token auf dieses Gerät nur und keine Server gespeichert sind.</b></string>
+  <string name="backup_words_confirm_alert_wallet_restore_with_words">Ich verstehe, dass wenn diese app auf ein anderes Gerät verschoben wird oder gelöscht, mein Wallet nur mit dem Papier-Schlüssel wiederhergestellt werden können, die ich aufgeschrieben und an einem sicheren Ort gespeichert.</string>
   <string name="backup_words_confirm_alert_wallet_device_lock_warning">Changing the phone\'s unlock PIN in your Android OS settings would reset the wallet. You will need your backup phrase to restore your wallet after that.</string>
-  <string name="backup_words_confirm_description">Enter the following words from your paper key</string>
+  <string name="backup_words_confirm_description">Geben Sie die folgenden Wörter aus Ihrem Papier-Schlüssel</string>
   <string name="backup_words_error_enter_words">Geben Sie Wörter aus Ihrem Papier-Schlüssel.</string>
-  <string name="backup_words_error_no_match">Entered words do not match. Please, make sure you write down your words exactly as they appear in the previous step and in correct order.</string>
+  <string name="backup_words_error_no_match">Eingegebenen Worte stimmen nicht überein. Stellen Sie sicher, dass Sie Ihre Worte aufschreiben, genau so, wie sie im vorherigen Schritt und in der richtigen Reihenfolge angezeigt werden.</string>
   <string name="backup_button_confirm">Bestätigen</string>
   <string name="backup_button_backup">Sicherung</string>
   <string name="backup_button_next">Weiter</string>
   <string name="backup_button_submit">Absenden</string>
   <string name="backup_button_later">Später</string>
-  <string name="backup_write_down_on_paper">Write down on paper and keep safe</string>
+  <string name="backup_write_down_on_paper">Schreiben Sie auf Papier und halten Sie sicher</string>
   <string name="wallet_title">Balance</string>
   <string name="wallet_button_receive">Empfangen</string>
   <string name="wallet_button_pay">Bezahlen</string>
@@ -98,12 +98,12 @@
   <string name="settings_info_link">https://horizontalsystems.io</string>
   <string name="settings_security_fingerprint">Fingerabdruck</string>
   <string name="settings_security_change_pin">PIN ändern</string>
-  <string name="settings_security_backup_wallet">Backup wallet</string>
+  <string name="settings_security_backup_wallet">Sicherungs Wallet</string>
   <string name="unlock_page_enter_your_pin">Type your pin to unlock</string>
   <string name="alert_keys_invalidated_title">Android Keystore Error</string>
   <string name="alert_keys_invalidated_description">Your encrypted data was recently invalidated because your Android lock screen was changed</string>
   <string name="alert_no_device_lock_title">WARNUNG</string>
-  <string name="alert_no_device_lock_description">A device lock is needed to safeguard your wallet. Go to “Settings” &gt; “Security” &gt; “Screen Lock” and enable to continue </string>
+  <string name="alert_no_device_lock_description">Ein Sperrbildschirm ist benötigt um Ihr Wallet zu sichern. Gehen Sie zu \"Einstellungen\" &gt; \"Sicherheit\" &gt; \"Sperrbildschirm\" und aktivieren Sie diesen.</string>
   <string name="button_cancel">Abbrechen</string>
   <string name="button_back">Zurück</string>
   <string name="button_ok">OK</string>
@@ -126,15 +126,15 @@
   <string name="fingerprint_success">Fingerabdruck erkannt</string>
   <!--Set Pin-->
   <string name="set_pin_title">PIN eingeben</string>
-  <string name="set_pin_description">Your pin will be used to unlock your wallet and send money</string>
+  <string name="set_pin_description">Ihr PIN wird verwendet, um Ihre Wallet  zu entsperren und Geld zu senden</string>
   <string name="set_pin_error_short_pin">Please enter all digits.</string>
   <string name="set_pin_confirm_title">Erneut Eingeben</string>
-  <string name="set_pin_confirm_description">Your pin will be used to unlock your wallet and send money</string>
+  <string name="set_pin_confirm_description">Ihre Pin wird verwendet werden, um Ihren Wallet zu entsperren und Geld schicken</string>
   <string name="set_pin_success">Lock pin was set successfully!</string>
   <string name="set_pin_error_pins_dont_match">Entered pins do not match.</string>
   <string name="set_pin_error_failed_to_save_pin">Error occurred while saving your pin. Please, try again.</string>
   <string name="edit_pin_auth_title">PIN bearbeiten</string>
   <string name="edit_pin_auth_description">Aktuelle PIN eingeben</string>
   <string name="edit_pin_title">Neue PIN eingeben</string>
-  <string name="edit_pin_description">Your pin will be used to unlock your wallet and send money</string>
+  <string name="edit_pin_description">Ihre Pin wird verwendet werden, um Ihren Wallet zu entsperren und Geld schicken</string>
 </resources>
