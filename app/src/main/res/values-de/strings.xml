@@ -20,7 +20,7 @@
         Ihr Papier-Schlüssel ist die einzige Möglichkeit, Ihren Geldbeutel zu wiederherzustellen, wenn Ihr Gerät verloren, gestohlen, kaputt oder ein Upgrade ist.
         \n\nYou wird eine Liste von Wörtern auf dem nächsten Bildschirm sehen. Auf einem Blatt Papier schreiben Sie auf und zeigen Sie es nicht für jeden.
     </string>
-  <string name="backup_words_confirm_alert_wallet_held_on_device">Ich verstehe, dass mein Wallet <b>und Token auf dieses Gerät nur und keine Server gespeichert sind.</b></string>
+  <string name="backup_words_confirm_alert_wallet_held_on_device">Ich verstehe, dass mein <b>Wallet und Token auf dieses Gerät nur und keine Server gespeichert sind.</b></string>
   <string name="backup_words_confirm_alert_wallet_restore_with_words">Ich verstehe, dass wenn diese app auf ein anderes Gerät verschoben wird oder gelöscht, mein Wallet nur mit dem Papier-Schlüssel wiederhergestellt werden können, die ich aufgeschrieben und an einem sicheren Ort gespeichert.</string>
   <string name="backup_words_confirm_alert_wallet_device_lock_warning">Wenn Sie die Entsperrungs-PIN des Telefons in den Einstellungen Ihres Android-Betriebssystems ändern, wird die Wallet zurückgesetzt. Sie benötigen Ihre Backup-Phrase, um danach Ihre Wallet wiederherzustellen.</string>
   <string name="backup_words_confirm_description">Geben Sie die folgenden Wörter aus Ihrem Papier-Schlüssel</string>
@@ -48,7 +48,7 @@
   <string name="send_bottom_sheet_error_invalid_address">Eingegebene Adresse scheint ungültig zu sein. Bitte überprüfen Sie und versuchen es erneut!</string>
   <string name="send_bottom_sheet_error_insufficient_balance">Ihr Balance reicht nicht aus. Bitte versuchen Sie, kleinere Menge zu senden!</string>
   <string name="send_bottom_sheet_success">Erfolgreich gesendet!</string>
-  <string name="receive_title">Empfangen: %s</string>
+  <string name="receive_title">Empfangen %s</string>
   <string name="receive_copy">Kopieren</string>
   <string name="timestamp_just_now">gerade eben</string>
   <string name="timestamp_min_ago">Vor %dm. Min.</string>
@@ -91,7 +91,7 @@
   <string name="settings_about">Über</string>
   <string name="settings_light_mode">Licht Modus</string>
   <string name="settings_push_notifications">Benachrichtigungen</string>
-  <string name="settings_error_fingerprint_not_enabled">Fingerabdruck nicht aktivieren</string>
+  <string name="settings_error_fingerprint_not_enabled">Fingerabdruck Nicht Aktivieren</string>
   <string name="settings_error_no_fingerprint_added_yet">Fingerabdruck auf diesem Gerät aktiviert nicht. Gehen Sie zu Einstellungen &gt; Sicherheit Fingerabdruck einrichten</string>
   <string name="settings_info_app_name_with_version">Bank Wallet %s</string>
   <string name="settings_info_subtitle">dezentralisierte app</string>
@@ -126,15 +126,15 @@
   <string name="fingerprint_success">Fingerabdruck erkannt</string>
   <!--Set Pin-->
   <string name="set_pin_title">PIN eingeben</string>
-  <string name="set_pin_description">Ihr PIN wird verwendet, um Ihre Wallet  zu entsperren und Geld zu senden</string>
+  <string name="set_pin_description">Ihre PIN wird verwendet werden, um Ihren Wallet zu entsperren und Geld schicken</string>
   <string name="set_pin_error_short_pin">Bitte geben Sie nur Zahlen ein.</string>
   <string name="set_pin_confirm_title">Erneut Eingeben</string>
-  <string name="set_pin_confirm_description">Ihre Pin wird verwendet werden, um Ihren Wallet zu entsperren und Geld schicken</string>
+  <string name="set_pin_confirm_description">Ihre PIN wird verwendet werden, um Ihren Wallet zu entsperren und Geld schicken</string>
   <string name="set_pin_success">Lock PIN wurde erfolgreich gesetzt!</string>
   <string name="set_pin_error_pins_dont_match">Die eingegebenen PINs stimmen nicht überein.</string>
   <string name="set_pin_error_failed_to_save_pin">Beim Speichern Ihres PIN ist leider ein Fehler aufgetreten. Bitte versuchen es erneut.</string>
   <string name="edit_pin_auth_title">PIN bearbeiten</string>
   <string name="edit_pin_auth_description">Aktuelle PIN eingeben</string>
-  <string name="edit_pin_title">Neue PIN eingeben</string>
-  <string name="edit_pin_description">Ihre Pin wird verwendet werden, um Ihren Wallet zu entsperren und Geld schicken</string>
+  <string name="edit_pin_title">Neuen PIN eingeben</string>
+  <string name="edit_pin_description">Ihre PIN wird verwendet werden, um Ihren Wallet zu entsperren und Geld schicken</string>
 </resources>
