@@ -101,7 +101,7 @@
   <string name="settings_security_backup_wallet">Sicherungs Wallet</string>
   <string name="unlock_page_enter_your_pin">PIN zum Entsperren eingeben</string>
   <string name="alert_keys_invalidated_title">Android Keystore Fehler</string>
-  <string name="alert_keys_invalidated_description">Your encrypted data was recently invalidated because your Android lock screen was changed</string>
+  <string name="alert_keys_invalidated_description">Ihre verschlüsselten Daten wurden kürzlich ungültig gemacht, weil Ihr Android-Sperrbildschirm geändert wurde</string>
   <string name="alert_no_device_lock_title">WARNUNG</string>
   <string name="alert_no_device_lock_description">Ein Sperrbildschirm ist benötigt um Ihr Wallet zu sichern. Gehen Sie zu \"Einstellungen\" &gt; \"Sicherheit\" &gt; \"Sperrbildschirm\" und aktivieren Sie diesen.</string>
   <string name="button_cancel">Abbrechen</string>
