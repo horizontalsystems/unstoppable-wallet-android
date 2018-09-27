@@ -3,7 +3,7 @@ package bitcoin.wallet.modules.fulltransactioninfo
 import bitcoin.wallet.core.BitcoinAdapter
 import bitcoin.wallet.core.ExchangeRateManager
 import bitcoin.wallet.core.IClipboardManager
-import bitcoin.wallet.entities.TransactionRecordNew
+import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.modules.RxBaseTest
 import com.nhaarman.mockito_kotlin.*
@@ -25,7 +25,7 @@ class FullTransactionInfoInteractorTest {
     private val btcTxAmount = 10.0
     private val now = Date()
 
-    private val transaction = TransactionRecordNew().apply {
+    private val transaction = TransactionRecord().apply {
         transactionHash = transactionId
         amount = btcTxAmount
         fee = 1.0

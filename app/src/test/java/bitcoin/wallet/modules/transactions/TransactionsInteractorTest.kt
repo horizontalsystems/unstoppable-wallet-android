@@ -6,7 +6,7 @@ import bitcoin.wallet.core.ExchangeRateManager
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.CurrencyValue
 import bitcoin.wallet.entities.DollarCurrency
-import bitcoin.wallet.entities.TransactionRecordNew
+import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.modules.RxBaseTest
 import com.nhaarman.mockito_kotlin.any
@@ -63,7 +63,7 @@ class TransactionsInteractorTest {
     fun retrieveTransactionItems() {
         val subject: PublishSubject<Any> = PublishSubject.create()
 
-        val transaction = TransactionRecordNew()
+        val transaction = TransactionRecord()
         transaction.transactionHash = "efw43f3fwer"
         transaction.coinCode = "BTC"
         transaction.from = listOf("mxNEBQf2xQeLknPZW65rMbKxEban6udxFc")
@@ -96,7 +96,7 @@ class TransactionsInteractorTest {
 
         val btcTxAmount = 10.0
 
-        val transactionRecordBTCsuccess = TransactionRecordNew().apply {
+        val transactionRecordBTCsuccess = TransactionRecord().apply {
             transactionHash = "transactionHash"
             amount = btcTxAmount
             fee = 1.0
@@ -108,7 +108,7 @@ class TransactionsInteractorTest {
             coinCode = "BTC"
         }
 
-        val transactionRecordBTCpending = TransactionRecordNew().apply {
+        val transactionRecordBTCpending = TransactionRecord().apply {
             transactionHash = "transactionHash"
             amount = btcTxAmount
             fee = 1.0

@@ -6,7 +6,7 @@ import bitcoin.wallet.core.IClipboardManager
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.CurrencyValue
 import bitcoin.wallet.entities.DollarCurrency
-import bitcoin.wallet.entities.TransactionRecordNew
+import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem
 import java.util.*
 
@@ -33,7 +33,7 @@ class FullTransactionInfoInteractor(private val adapter: IAdapter?, private val 
         }
     }
 
-    private fun getTransactionRecordViewItem(record: TransactionRecordNew, adapter: IAdapter): TransactionRecordViewItem {
+    private fun getTransactionRecordViewItem(record: TransactionRecord, adapter: IAdapter): TransactionRecordViewItem {
         val rates = exchangeRateManager.exchangeRates
         val convertedValue = rates[adapter.coin.code]?.let { it * record.amount }
 

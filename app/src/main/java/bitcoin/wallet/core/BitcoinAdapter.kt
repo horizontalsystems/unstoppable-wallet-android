@@ -1,6 +1,6 @@
 package bitcoin.wallet.core
 
-import bitcoin.wallet.entities.TransactionRecordNew
+import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.kit.network.NetworkParameters
@@ -52,7 +52,7 @@ class BitcoinAdapter(words: List<String>, network: NetworkParameters) : IAdapter
 
 
     override var latestBlockHeight: Int = walletKit.latestBlockHeight
-    override var transactionRecords: List<TransactionRecordNew> = walletKit.transactionRecords
+    override var transactionRecords: List<TransactionRecord> = walletKit.transactionRecords
 
     override fun showInfo() {
         walletKit.showRealmInfo()
@@ -96,7 +96,7 @@ class BitcoinAdapter(words: List<String>, network: NetworkParameters) : IAdapter
 //Stub class from WalletKit
 class WalletKit(words: List<String>, network: NetworkParameters) {
     val latestBlockHeight = 129
-    val transactionRecords: List<TransactionRecordNew> = demoTransactions()//listOf()
+    val transactionRecords: List<TransactionRecord> = demoTransactions()//listOf()
     val receiveAddress = "1AYHMDV1XR8HWaReC3Rr4Qv79vJiSR8RCU"
     val progressSubject: BehaviorSubject<Double> = BehaviorSubject.create()
 
@@ -122,9 +122,9 @@ class WalletKit(words: List<String>, network: NetworkParameters) {
 
 
     //demo transactions
-    fun demoTransactions(): List<TransactionRecordNew> {
-        val transactions: MutableList<TransactionRecordNew> = mutableListOf()
-        val tr = TransactionRecordNew().apply {
+    fun demoTransactions(): List<TransactionRecord> {
+        val transactions: MutableList<TransactionRecord> = mutableListOf()
+        val tr = TransactionRecord().apply {
             transactionHash = "1ayhmdv1xr8dhdnkbkjbdeef8dfa8kmnbbydf9pq"
             coinCode = "BTC"
             from = listOf("1A7o3DtwdLQWy9dMq5oV9CHW1PC8jrfFPi")
@@ -136,7 +136,7 @@ class WalletKit(words: List<String>, network: NetworkParameters) {
         }
         transactions.add(tr)
 
-        val tr1 = TransactionRecordNew().apply {
+        val tr1 = TransactionRecord().apply {
             transactionHash = "1byhmdv1xr8dhdnkbkjbdeef8dfa8kmnbbydf9pq"
             coinCode = "BTC"
             from = listOf("1A7o3DtwdLQWy9dMq5oV9CHW1PC8jrfFPi")
@@ -148,7 +148,7 @@ class WalletKit(words: List<String>, network: NetworkParameters) {
         }
         transactions.add(tr1)
 
-        val tr2 = TransactionRecordNew().apply {
+        val tr2 = TransactionRecord().apply {
             transactionHash = "1cyhmdv1xr8dhdnkbkjbdeef8dfa8kmnbbydf9pq"
             coinCode = "BTC"
             from = listOf("1A7o3DtwdLQWy9dMq5oV9CHW1PC8jrfFPi")
@@ -160,7 +160,7 @@ class WalletKit(words: List<String>, network: NetworkParameters) {
         }
         transactions.add(tr2)
 
-        val tr3 = TransactionRecordNew().apply {
+        val tr3 = TransactionRecord().apply {
             transactionHash = "1dyhmdv1xr8dhdnkbkjbdeef8dfa8kmnbbydf9pq"
             coinCode = "BTC"
             from = listOf("mxNEBQf2xQeLknPZW65rMbKxEban6udxFc")
@@ -172,7 +172,7 @@ class WalletKit(words: List<String>, network: NetworkParameters) {
         }
         transactions.add(tr3)
 
-        val tr4 = TransactionRecordNew().apply {
+        val tr4 = TransactionRecord().apply {
             transactionHash = "1eyhmdv1xr8dhdnkbkjbdeef8dfa8kmnbbydf9pq"
             coinCode = "BTC"
             from = listOf("wef23mxNEBQf2xQeLknPZW65rMbKxEban6udxFc")
