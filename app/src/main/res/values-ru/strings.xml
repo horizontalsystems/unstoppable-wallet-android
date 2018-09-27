@@ -30,7 +30,7 @@
   <string name="backup_button_next">Далее</string>
   <string name="backup_button_submit">Отправить</string>
   <string name="backup_button_later">Позже</string>
-  <string name="backup_write_down_on_paper">Запишите на бумаге и храните в безопасности</string>
+  <string name="backup_write_down_on_paper">Запишите и храните в безопасности</string>
   <string name="wallet_title">Баланс</string>
   <string name="wallet_button_receive">Получить</string>
   <string name="wallet_button_pay">Оплатить</string>
@@ -59,9 +59,9 @@
   <string name="transactions_empty_list">У Вас ещё нет ожидаемых или прошлых транзакций </string>
   <string name="transaction_info_title">Транзакция</string>
   <string name="transaction_info_status">Статус:</string>
-  <string name="transaction_info_status_completed">Завершенные</string>
-  <string name="transaction_info_status_pending">В ожидание</string>
-  <string name="transaction_info_processing">Обрабатывается %d%%</string>
+  <string name="transaction_info_status_completed">Завершено</string>
+  <string name="transaction_info_status_pending">Ожидание</string>
+  <string name="transaction_info_processing">Обработка %d%%</string>
   <string name="transaction_info_close">Закрыть</string>
   <string name="transaction_info_id">ID:</string>
   <string name="transaction_info_to">Кому:</string>
@@ -134,6 +134,6 @@
   <string name="set_pin_error_failed_to_save_pin">При сохранении вашего ПИН произошла ошибка. Повторите попытку.</string>
   <string name="edit_pin_auth_title">Изменить ПИН-код</string>
   <string name="edit_pin_auth_description">Введите текущий ПИН-код</string>
-  <string name="edit_pin_title">Введите новый ПИН-код</string>
+  <string name="edit_pin_title">Введите новый ПИН</string>
   <string name="edit_pin_description">Ваш ПИН-код будет использоваться для разблокировки вашего кошелька и отправки денег</string>
 </resources>
