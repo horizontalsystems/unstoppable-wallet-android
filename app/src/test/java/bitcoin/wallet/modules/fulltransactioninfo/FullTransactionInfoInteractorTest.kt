@@ -37,7 +37,7 @@ class FullTransactionInfoInteractorTest {
         coinCode = "BTC"
     }
 
-    private val interactor = FullTransactionInfoInteractor(bitcoinAdapter, exchangeRateManager, transactionId, clipboardManager)
+    private val interactor = FullTransactionInfoInteractor(bitcoinAdapter, transactionId, clipboardManager)
 
 
     @Before
@@ -46,7 +46,7 @@ class FullTransactionInfoInteractorTest {
 
         interactor.delegate = delegate
 
-        whenever(exchangeRateManager.exchangeRates).thenReturn(exchangeRates)
+//        whenever(exchangeRateManager.exchangeRates).thenReturn(exchangeRates)
         whenever(bitcoinAdapter.transactionRecords).thenReturn(listOf(transaction))
         whenever(bitcoinAdapter.transactionRecordsSubject).thenReturn(PublishSubject.create())
         whenever(bitcoinAdapter.coin).thenReturn(coin)

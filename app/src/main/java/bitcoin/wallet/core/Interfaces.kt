@@ -1,7 +1,7 @@
 package bitcoin.wallet.core
 
 import android.hardware.fingerprint.FingerprintManager
-import io.reactivex.Observable
+import io.reactivex.Flowable
 
 interface ILocalStorage {
     val savedWords: List<String>?
@@ -18,8 +18,9 @@ interface IRandomProvider {
 }
 
 interface INetworkManager {
-    fun getJwtToken(identity: String, pubKeys: Map<Int, String>): Observable<String>
-    fun getExchangeRates(): Observable<Map<String, Double>>
+    fun getLatestRate(coinCode:String, currency: String): Flowable<Double>
+    fun getRate(coinCode:String, currency: String, year: Int, month: String, day: String, hour: String, minute: String): Flowable<Double>
+    fun getRateByDay(coinCode:String, currency: String, year: Int, month: String, day: String): Flowable<Double>
 }
 
 interface IEncryptionManager {

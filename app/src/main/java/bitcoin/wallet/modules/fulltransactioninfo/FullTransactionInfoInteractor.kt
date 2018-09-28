@@ -8,9 +8,10 @@ import bitcoin.wallet.entities.CurrencyValue
 import bitcoin.wallet.entities.DollarCurrency
 import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem
+import io.reactivex.schedulers.Schedulers
 import java.util.*
 
-class FullTransactionInfoInteractor(private val adapter: IAdapter?, private val exchangeRateManager: ExchangeRateManager, private val transactionId: String, private var clipboardManager: IClipboardManager) : FullTransactionInfoModule.IInteractor {
+class FullTransactionInfoInteractor(private val adapter: IAdapter?, private val transactionId: String, private var clipboardManager: IClipboardManager) : FullTransactionInfoModule.IInteractor {
 
     private var transactionRecordViewItem: TransactionRecordViewItem? = null
     var delegate: FullTransactionInfoModule.IInteractorDelegate? = null
@@ -29,19 +30,31 @@ class FullTransactionInfoInteractor(private val adapter: IAdapter?, private val 
         transaction?.let {
             val viewItem = getTransactionRecordViewItem(it, adapter)
             transactionRecordViewItem = viewItem
+            fetchExchangeRate(transaction)
             delegate?.didGetTransactionInfo(viewItem)
         }
     }
 
-    private fun getTransactionRecordViewItem(record: TransactionRecord, adapter: IAdapter): TransactionRecordViewItem {
-        val rates = exchangeRateManager.exchangeRates
-        val convertedValue = rates[adapter.coin.code]?.let { it * record.amount }
+    private fun fetchExchangeRate(transaction: TransactionRecord) {
+        transaction.timestamp?.let { timestamp ->
+            ExchangeRateManager.getRate(coinCode = transaction.coinCode, currency = DollarCurrency().code, timestamp = timestamp)
+                    .subscribeOn(Schedulers.io())
+                    .unsubscribeOn(Schedulers.io())
+                    .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
+                    .subscribe { rate ->
+                        val value = (transactionRecordViewItem?.amount?.value ?: 0.0) * rate
+                        transactionRecordViewItem?.currencyAmount = CurrencyValue(currency = DollarCurrency(), value = value)
+                        transactionRecordViewItem?.exchangeRate = rate
+                        transactionRecordViewItem?.let { delegate?.didGetTransactionInfo(it) }
+                    }
+        }
+    }
 
+    private fun getTransactionRecordViewItem(record: TransactionRecord, adapter: IAdapter): TransactionRecordViewItem {
         return TransactionRecordViewItem(
                 hash = record.transactionHash,
                 adapterId = adapter.id,
                 amount = CoinValue(adapter.coin, record.amount),
-                currencyAmount = convertedValue?.let { CurrencyValue(currency = DollarCurrency(), value = it) },
                 fee = CoinValue(coin = adapter.coin, value = record.fee),
                 from = record.from.first(),
                 to = record.to.first(),

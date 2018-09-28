@@ -41,7 +41,7 @@ class WalletInteractorTest {
 
         adapterManager.adapters = mutableListOf(bitcoinAdapter)
 
-        whenever(exchangeRateManager.subject).thenReturn(PublishSubject.create())
+        whenever(exchangeRateManager.latestExchangeRateSubject).thenReturn(PublishSubject.create())
     }
 
     @Test

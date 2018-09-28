@@ -33,6 +33,12 @@ object DateHelper {
         formatDate(date, "MM/dd/yyyy")
     }
 
+    fun getCalendarFromTimestamp(timestamp: Long) : Calendar {
+        val cal = Calendar.getInstance()
+        cal.timeInMillis = timestamp
+        return cal
+    }
+
     private fun formatDate(date: Date, outputFormat: String) =
             SimpleDateFormat(DateFormat.getBestDateTimePattern(Locale.getDefault(), outputFormat)).format(date)
 

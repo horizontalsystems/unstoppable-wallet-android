@@ -14,7 +14,7 @@ class WalletInteractor(private val adapterManager: AdapterManager, private val e
     private var disposables: CompositeDisposable = CompositeDisposable()
 
     override fun notifyWalletBalances() {
-        adapterManager.subject.subscribe {
+        val disposable = adapterManager.subject.subscribe {
             disposables.clear()
             initialFetchAndSubscribe()
         }
@@ -32,7 +32,7 @@ class WalletInteractor(private val adapterManager: AdapterManager, private val e
             progresses[adapter.id] = adapter.progressSubject
         }
 
-        val exchangeRates = ExchangeRateManager.exchangeRates
+        val exchangeRates = exchangeRateManager.exchangeRates
         delegate?.didInitialFetch(coinValues, exchangeRates, progresses, currency)
 
         adapterManager.adapters.forEach { adapter ->
@@ -41,9 +41,9 @@ class WalletInteractor(private val adapterManager: AdapterManager, private val e
             })
         }
 
-        exchangeRateManager.subject.subscribe {
+        disposables.add(exchangeRateManager.latestExchangeRateSubject.subscribe {
             delegate?.didUpdate(it)
-        }
+        })
 
     }
 

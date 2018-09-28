@@ -15,8 +15,8 @@ data class TransactionRecordViewItem(
         val blockHeight: Long?,
         val date: Date?,
         val confirmations: Long? = 0,
-        val currencyAmount: CurrencyValue?,
-        val exchangeRate: Double? = null
+        var currencyAmount: CurrencyValue? = null,
+        var exchangeRate: Double? = null
 ) {
 
 

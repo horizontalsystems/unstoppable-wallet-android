@@ -1,11 +1,14 @@
 package bitcoin.wallet.modules.transactions
 
+import android.util.Log
 import bitcoin.wallet.core.AdapterManager
 import bitcoin.wallet.core.ExchangeRateManager
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.CurrencyValue
 import bitcoin.wallet.entities.DollarCurrency
+import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import java.util.*
 
 class TransactionsInteractor(private val adapterManager: AdapterManager, private val exchangeRateManager: ExchangeRateManager) : TransactionsModule.IInteractor {
@@ -14,7 +17,7 @@ class TransactionsInteractor(private val adapterManager: AdapterManager, private
     private var disposables: CompositeDisposable = CompositeDisposable()
 
     override fun retrieveFilters() {
-        adapterManager.subject.subscribe {
+        val disposable = adapterManager.subject.subscribe {
             disposables.clear()
             initialFetchAndSubscribe()
         }
@@ -37,20 +40,18 @@ class TransactionsInteractor(private val adapterManager: AdapterManager, private
     }
 
     override fun retrieveTransactionItems(adapterId: String?) {
-        val rates = exchangeRateManager.exchangeRates
         val items = mutableListOf<TransactionRecordViewItem>()
 
         val filteredAdapters = adapterManager.adapters.filter { adapterId == null || it.id == adapterId }
+        val flowableList = mutableListOf<Flowable<Pair<String, Double>>>()
 
         filteredAdapters.forEach { adapter ->
             adapter.transactionRecords.forEach { record ->
-                val convertedValue = rates[adapter.coin.code]?.let { it * record.amount }
 
                 val item = TransactionRecordViewItem(
                         hash = record.transactionHash,
                         adapterId = adapter.id,
                         amount = CoinValue(adapter.coin, record.amount),
-                        currencyAmount = convertedValue?.let { CurrencyValue(currency = DollarCurrency(), value = it) },
                         fee = CoinValue(coin = adapter.coin, value = record.fee),
                         from = record.from.first(),
                         to = record.to.first(),
@@ -60,10 +61,39 @@ class TransactionsInteractor(private val adapterManager: AdapterManager, private
                         confirmations = TransactionRecordViewItem.getConfirmationsCount(record.blockHeight, adapter.latestBlockHeight)
                 )
                 items.add(item)
+                record.timestamp?.let { timestamp ->
+                    flowableList.add(
+                            ExchangeRateManager.getRate(coinCode = record.coinCode, currency = DollarCurrency().code, timestamp = timestamp)
+                                    .map { Pair(record.transactionHash, it) }
+                    )
+                }
             }
         }
 
-        delegate?.didRetrieveItems(items)
+        items.sortByDescending { it.date }
+
+        disposables.add(Flowable.zip(flowableList, Arrays::asList)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
+                .subscribe { resultRates ->
+                    val ratesMap = mutableMapOf<String, Double>()
+                    resultRates.forEach { any ->
+                        if (any is Pair<*, *>) {
+                            ratesMap[any.first as String] = any.second as Double
+                        }
+                    }
+                    Log.e("TransInt", "zip result.size: $resultRates")
+
+                    items.forEach { item ->
+                        val rate = ratesMap[item.hash] ?: 0.0
+                        val value = item.amount.value * rate
+                        item.currencyAmount = CurrencyValue(currency = DollarCurrency(), value = value)
+                        item.exchangeRate = rate
+                    }
+
+                    delegate?.didRetrieveItems(items)
+                })
     }
 
 }
