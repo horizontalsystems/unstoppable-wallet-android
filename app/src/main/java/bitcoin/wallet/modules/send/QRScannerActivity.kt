@@ -22,6 +22,7 @@ class QRScannerActivity : AppCompatActivity() {
 
         supportActionBar?.title = getString(R.string.scan_qr_code)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.back)
 
         barcodeScannerView = findViewById(R.id.zxing_barcode_scanner)
 

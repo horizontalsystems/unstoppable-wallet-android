@@ -54,6 +54,7 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.back)
 
         val interactionType = intent.getSerializableExtra(keyInteractionType) as PinInteractionType
         val enteredPin = intent.getStringExtra(keyEnteredPin)
