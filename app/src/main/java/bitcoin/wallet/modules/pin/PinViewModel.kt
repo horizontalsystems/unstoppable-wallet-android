@@ -13,7 +13,7 @@ class PinViewModel : ViewModel(), PinModule.IView, PinModule.IRouter {
     val description = MutableLiveData<Int>()
     val highlightPinMask = MutableLiveData<Int>()
     val showError = MutableLiveData<Int>()
-    val showSuccess = MutableLiveData<Int>()
+    val showSuccess = SingleLiveEvent<Unit>()
 
     val goToPinConfirmation = SingleLiveEvent<String>()
     val hideToolbar = SingleLiveEvent<Unit>()
@@ -54,7 +54,7 @@ class PinViewModel : ViewModel(), PinModule.IView, PinModule.IRouter {
     }
 
     override fun showSuccessPinSet() {
-        showSuccess.value = R.string.set_pin_success
+        showSuccess.call()
     }
 
     override fun showErrorPinsDontMatch() {

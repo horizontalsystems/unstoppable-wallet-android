@@ -15,7 +15,7 @@ object HudHelper {
 
     private var toast: Toast? = null
 
-    fun showSuccessMessage(text: Int, activity: Activity?) {
+    fun showSuccessMessage(text: Int? = null, activity: Activity?) {
         showHudNotification(text, R.drawable.ic_done_checkmark_green, activity)
     }
 
@@ -35,11 +35,12 @@ object HudHelper {
         toast?.cancel()
     }
 
-    private fun showHudNotification(text: Int, icon: Int, activity: Activity?, useIconTint: Boolean = false) {
+    private fun showHudNotification(text: Int?, icon: Int, activity: Activity?, useIconTint: Boolean = false) {
         cancelToast()
 
         val inflater = activity?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val view = inflater.inflate(R.layout.custom_toast_view, null)
+        val layoutResource = if (text == null) R.layout.custom_toast_view_no_text else R.layout.custom_toast_view
+        val view = inflater.inflate(layoutResource, null)
         view.findViewById<ImageView>(R.id.toastIcon).setImageResource(icon)
         if (useIconTint) {
             LayoutHelper.getAttr(R.attr.HudIconTint, activity.theme)?.let {
@@ -47,7 +48,9 @@ object HudHelper {
             }
         }
 
-        view.findViewById<TextView>(R.id.infoText).setText(text)
+        text?.let {
+            view.findViewById<TextView>(R.id.infoText)?.setText(it)
+        }
 
         toast = Toast(App.instance)
         toast?.view = view
