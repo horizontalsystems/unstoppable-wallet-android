@@ -1,12 +1,13 @@
 package bitcoin.wallet.modules.fulltransactioninfo
 
 import bitcoin.wallet.core.BitcoinAdapter
-import bitcoin.wallet.core.ExchangeRateManager
 import bitcoin.wallet.core.IClipboardManager
+import bitcoin.wallet.core.IExchangeRateManager
 import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.modules.RxBaseTest
 import com.nhaarman.mockito_kotlin.*
+import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
 import org.junit.Before
 import org.junit.Test
@@ -17,11 +18,10 @@ class FullTransactionInfoInteractorTest {
 
     private val delegate = Mockito.mock(FullTransactionInfoModule.IInteractorDelegate::class.java)
     private val clipboardManager = Mockito.mock(IClipboardManager::class.java)
-    private val exchangeRateManager = Mockito.mock(ExchangeRateManager::class.java)
+    private val exchangeRateManager = mock<IExchangeRateManager>()
     private val bitcoinAdapter = Mockito.mock(BitcoinAdapter::class.java)
     private var coin = Bitcoin()
     private val transactionId = "[transaction_id]"
-    private var exchangeRates = mutableMapOf("BTC" to 6_000.0)
     private val btcTxAmount = 10.0
     private val now = Date()
 
@@ -37,7 +37,7 @@ class FullTransactionInfoInteractorTest {
         coinCode = "BTC"
     }
 
-    private val interactor = FullTransactionInfoInteractor(bitcoinAdapter, transactionId, clipboardManager)
+    private val interactor = FullTransactionInfoInteractor(bitcoinAdapter, exchangeRateManager, transactionId, clipboardManager)
 
 
     @Before
@@ -46,7 +46,9 @@ class FullTransactionInfoInteractorTest {
 
         interactor.delegate = delegate
 
-        whenever(exchangeRateManager.exchangeRates).thenReturn(exchangeRates)
+        val rateResponse = Flowable.just(6000.0)
+        whenever(exchangeRateManager.getRate(any(), any(), any())).thenReturn(rateResponse)
+
         whenever(bitcoinAdapter.transactionRecords).thenReturn(listOf(transaction))
         whenever(bitcoinAdapter.transactionRecordsSubject).thenReturn(PublishSubject.create())
         whenever(bitcoinAdapter.coin).thenReturn(coin)

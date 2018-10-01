@@ -43,9 +43,9 @@ class TransactionsInteractorTest {
 
         interactor.delegate = delegate
 
-        val rateResonse = Flowable.just(6300.0)
-        whenever(networkManager.getLatestRate(any(), any())).thenReturn(rateResonse)
-        whenever(exchangeRateManager.getRate(any(), any(), any())).thenReturn(rateResonse)
+        val rateResponse = Flowable.just(6300.0)
+        whenever(networkManager.getLatestRate(any(), any())).thenReturn(rateResponse)
+        whenever(exchangeRateManager.getRate(any(), any(), any())).thenReturn(rateResponse)
     }
 
     @Test

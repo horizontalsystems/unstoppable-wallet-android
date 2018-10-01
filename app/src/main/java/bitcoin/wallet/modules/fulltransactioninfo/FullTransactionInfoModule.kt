@@ -2,6 +2,7 @@ package bitcoin.wallet.modules.fulltransactioninfo
 
 import android.support.v4.app.FragmentActivity
 import bitcoin.wallet.core.AdapterManager
+import bitcoin.wallet.core.ExchangeRateManager
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem
 import bitcoin.wallet.viewHelpers.TextHelper
 
@@ -43,7 +44,7 @@ object FullTransactionInfoModule {
 
     fun init(view: FullTransactionInfoViewModel, router: IRouter, adapterId: String, transactionId: String) {
         val adapter = AdapterManager.adapters.firstOrNull { it.id == adapterId }
-        val interactor = FullTransactionInfoInteractor(adapter, transactionId, TextHelper)
+        val interactor = FullTransactionInfoInteractor(adapter, ExchangeRateManager, transactionId, TextHelper)
         val presenter = FullTransactionInfoPresenter(interactor, router)
 
         view.delegate = presenter
