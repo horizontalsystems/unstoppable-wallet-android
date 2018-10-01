@@ -2,7 +2,7 @@
 <resources>
     <color name="dark">#282b35</color>
     <color name="colorPrimaryDark">#000000</color>
-    <color name="lightBackground">#efeff4</color>
+    <color name="lightBackground">#ebebf0</color>
     <color name="green_pressed">#1ba65E</color>
     <color name="green_crypto">#1ebf6b</color>
     <color name="green_crypto_20">#331ebf6b</color>
