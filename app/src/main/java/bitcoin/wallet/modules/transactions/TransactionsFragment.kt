@@ -43,6 +43,7 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
                 transactionsAdapter.items = it
                 transactionsAdapter.notifyDataSetChanged()
 
+                recyclerTags.visibility = if (it.isEmpty()) View.GONE else View.VISIBLE
                 recyclerTransactions.visibility = if (it.isEmpty()) View.GONE else View.VISIBLE
                 emptyListText.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
             }
@@ -131,7 +132,7 @@ class ViewHolderTransaction(override val containerView: View) : RecyclerView.Vie
 
     private fun getStatusIcon(status: TransactionRecordViewItem.Status?): Drawable? {
         return if (status == TransactionRecordViewItem.Status.SUCCESS)
-            null
+            LayoutHelper.d(R.drawable.checkmark_small_grey, App.instance)
         else
             LayoutHelper.d(R.drawable.pending, App.instance)
     }
