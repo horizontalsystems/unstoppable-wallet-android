@@ -42,8 +42,9 @@ class SecuritySettingsActivity : BaseActivity(), BottomConfirmAlert.Listener {
         setContentView(R.layout.activity_settings_security)
 
         setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = getString(R.string.settings_security_center)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.back)
 
         changePin.setOnClickListener {
             PinModule.startForEditPinAuth(this)
