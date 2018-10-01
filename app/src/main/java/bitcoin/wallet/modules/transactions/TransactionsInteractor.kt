@@ -1,8 +1,7 @@
 package bitcoin.wallet.modules.transactions
 
-import android.util.Log
 import bitcoin.wallet.core.AdapterManager
-import bitcoin.wallet.core.ExchangeRateManager
+import bitcoin.wallet.core.IExchangeRateManager
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.CurrencyValue
 import bitcoin.wallet.entities.DollarCurrency
@@ -11,7 +10,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 
-class TransactionsInteractor(private val adapterManager: AdapterManager, private val exchangeRateManager: ExchangeRateManager) : TransactionsModule.IInteractor {
+class TransactionsInteractor(private val adapterManager: AdapterManager, private val exchangeRateManager: IExchangeRateManager) : TransactionsModule.IInteractor {
 
     var delegate: TransactionsModule.IInteractorDelegate? = null
     private var disposables: CompositeDisposable = CompositeDisposable()
@@ -63,7 +62,7 @@ class TransactionsInteractor(private val adapterManager: AdapterManager, private
                 items.add(item)
                 record.timestamp?.let { timestamp ->
                     flowableList.add(
-                            ExchangeRateManager.getRate(coinCode = record.coinCode, currency = DollarCurrency().code, timestamp = timestamp)
+                            exchangeRateManager.getRate(coinCode = record.coinCode, currency = DollarCurrency().code, timestamp = timestamp)
                                     .map { Pair(record.transactionHash, it) }
                     )
                 }
@@ -83,13 +82,14 @@ class TransactionsInteractor(private val adapterManager: AdapterManager, private
                             ratesMap[any.first as String] = any.second as Double
                         }
                     }
-                    Log.e("TransInt", "zip result.size: $resultRates")
 
                     items.forEach { item ->
                         val rate = ratesMap[item.hash] ?: 0.0
-                        val value = item.amount.value * rate
-                        item.currencyAmount = CurrencyValue(currency = DollarCurrency(), value = value)
-                        item.exchangeRate = rate
+                        if (rate > 0) {
+                            val value = item.amount.value * rate
+                            item.currencyAmount = CurrencyValue(currency = DollarCurrency(), value = value)
+                            item.exchangeRate = rate
+                        }
                     }
 
                     delegate?.didRetrieveItems(items)

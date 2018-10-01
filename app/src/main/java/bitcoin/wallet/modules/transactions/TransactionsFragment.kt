@@ -124,8 +124,7 @@ class ViewHolderTransaction(override val containerView: View) : RecyclerView.Vie
         txAmount.text = "$sign ${NumberFormatHelper.cryptoAmountFormat.format(Math.abs(transactionRecord.amount.value))} ${transactionRecord.amount.coin.code}"
         txDate.text = transactionRecord.date?.let { DateHelper.getShortDateForTransaction(it) }
         txTime.text = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }
-        val absFiatValue = transactionRecord.currencyAmount?.value?.let { Math.abs(it) }
-        txValueInFiat.text = "~ \$ ${NumberFormatHelper.fiatAmountFormat.format(absFiatValue ?: 0)}"
+        txValueInFiat.text = "~ \$ ${transactionRecord.getFiatValue()}"
         statusIcon.setImageDrawable(getStatusIcon(transactionRecord.status))
     }
 

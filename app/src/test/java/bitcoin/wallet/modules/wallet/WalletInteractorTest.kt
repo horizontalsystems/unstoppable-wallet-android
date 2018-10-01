@@ -30,7 +30,7 @@ class WalletInteractorTest {
     private var wordsHash = words.joinToString(" ")
     private var adapterId: String = "${wordsHash.hashCode()}-${coin.code}"
 
-    private var exchangeRates = mapOf("BTC" to 10_000.0)
+    private var exchangeRates = mutableMapOf("BTC" to 10_000.0)
 
     @Before
     fun before() {

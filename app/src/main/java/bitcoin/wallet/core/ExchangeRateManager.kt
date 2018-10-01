@@ -1,6 +1,5 @@
 package bitcoin.wallet.core
 
-import android.util.Log
 import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.viewHelpers.DateHelper
 import io.reactivex.Flowable
@@ -11,7 +10,7 @@ import java.text.DecimalFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-object ExchangeRateManager {
+object ExchangeRateManager: IExchangeRateManager {
 
     init {
         start()
@@ -28,7 +27,7 @@ object ExchangeRateManager {
                 }
     }
 
-    private fun refreshRates() {
+    override fun refreshRates() {
         val coinCode = "btc"
         val currency = "usd"
         val disposable = Factory.networkManager.getLatestRate(coinCode.toLowerCase(), currency.toLowerCase())
@@ -39,12 +38,12 @@ object ExchangeRateManager {
                         val rateAsDouble = rate.toDouble()
                         exchangeRates[coinCode.toUpperCase()] = rateAsDouble
                         latestExchangeRateSubject.onNext(hashMapOf(coinCode.toUpperCase() to rateAsDouble))
-                        Log.e("ExchangeRateMan", "new exchange rate: $rate")
                 }
     }
 
-    fun getRate(coinCode: String, currency: String, timestamp: Long) : Flowable<Double> {
+    override fun getRate(coinCode: String, currency: String, timestamp: Long) : Flowable<Double> {
         val calendar = DateHelper.getCalendarFromTimestamp(timestamp)
+
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH) + 1
         val day = calendar.get(Calendar.DAY_OF_MONTH)

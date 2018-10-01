@@ -42,10 +42,12 @@ class FullTransactionInfoInteractor(private val adapter: IAdapter?, private val 
                     .unsubscribeOn(Schedulers.io())
                     .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
                     .subscribe { rate ->
-                        val value = (transactionRecordViewItem?.amount?.value ?: 0.0) * rate
-                        transactionRecordViewItem?.currencyAmount = CurrencyValue(currency = DollarCurrency(), value = value)
-                        transactionRecordViewItem?.exchangeRate = rate
-                        transactionRecordViewItem?.let { delegate?.didGetTransactionInfo(it) }
+                        if (rate > 0) {
+                            val value = (transactionRecordViewItem?.amount?.value ?: 0.0) * rate
+                            transactionRecordViewItem?.currencyAmount = CurrencyValue(currency = DollarCurrency(), value = value)
+                            transactionRecordViewItem?.exchangeRate = rate
+                            transactionRecordViewItem?.let { delegate?.didGetTransactionInfo(it) }
+                        }
                     }
         }
     }

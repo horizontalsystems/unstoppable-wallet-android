@@ -21,7 +21,7 @@ class FullTransactionInfoInteractorTest {
     private val bitcoinAdapter = Mockito.mock(BitcoinAdapter::class.java)
     private var coin = Bitcoin()
     private val transactionId = "[transaction_id]"
-    private var exchangeRates = mapOf("BTC" to 10_000.0)
+    private var exchangeRates = mutableMapOf("BTC" to 6_000.0)
     private val btcTxAmount = 10.0
     private val now = Date()
 
@@ -46,7 +46,7 @@ class FullTransactionInfoInteractorTest {
 
         interactor.delegate = delegate
 
-//        whenever(exchangeRateManager.exchangeRates).thenReturn(exchangeRates)
+        whenever(exchangeRateManager.exchangeRates).thenReturn(exchangeRates)
         whenever(bitcoinAdapter.transactionRecords).thenReturn(listOf(transaction))
         whenever(bitcoinAdapter.transactionRecordsSubject).thenReturn(PublishSubject.create())
         whenever(bitcoinAdapter.coin).thenReturn(coin)

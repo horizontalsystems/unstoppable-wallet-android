@@ -2,6 +2,7 @@ package bitcoin.wallet.modules.transactions
 
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.CurrencyValue
+import bitcoin.wallet.viewHelpers.NumberFormatHelper
 import java.util.*
 
 data class TransactionRecordViewItem(
@@ -42,6 +43,8 @@ data class TransactionRecordViewItem(
                     && blockHeight == other.blockHeight
                     && date == other.date
                     && confirmations == other.confirmations
+                    && currencyAmount == other.currencyAmount
+                    && exchangeRate == other.exchangeRate
         }
 
         return super.equals(other)
@@ -61,6 +64,14 @@ data class TransactionRecordViewItem(
         result = 31 * result + (currencyAmount?.hashCode() ?: 0)
         result = 31 * result + (exchangeRate?.hashCode() ?: 0)
         return result
+    }
+
+    fun getFiatValue(): String {
+        var fiatValue = "..."
+        currencyAmount?.value?.let {
+            fiatValue = NumberFormatHelper.fiatAmountFormat.format(Math.abs(it))
+        }
+        return fiatValue
     }
 
     //6 confirmations is accepted as 100% for transaction success
