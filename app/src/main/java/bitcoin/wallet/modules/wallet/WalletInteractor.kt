@@ -6,15 +6,17 @@ import bitcoin.wallet.core.ILocalStorage
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.DollarCurrency
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
 class WalletInteractor(private val adapterManager: AdapterManager, private val exchangeRateManager: ExchangeRateManager, private val storage: ILocalStorage) : WalletModule.IInteractor {
 
     var delegate: WalletModule.IInteractorDelegate? = null
     private var disposables: CompositeDisposable = CompositeDisposable()
+    var disposable: Disposable? = null
 
     override fun notifyWalletBalances() {
-        val disposable = adapterManager.subject.subscribe {
+        disposable = adapterManager.subject.subscribe {
             disposables.clear()
             initialFetchAndSubscribe()
         }
@@ -32,8 +34,7 @@ class WalletInteractor(private val adapterManager: AdapterManager, private val e
             progresses[adapter.id] = adapter.progressSubject
         }
 
-        val exchangeRates = exchangeRateManager.exchangeRates
-        delegate?.didInitialFetch(coinValues, exchangeRates, progresses, currency)
+        delegate?.didInitialFetch(coinValues, exchangeRateManager.exchangeRates, progresses, currency)
 
         adapterManager.adapters.forEach { adapter ->
             disposables.add(adapter.balanceSubject.subscribe {

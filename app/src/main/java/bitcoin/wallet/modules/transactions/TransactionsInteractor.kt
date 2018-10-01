@@ -7,6 +7,7 @@ import bitcoin.wallet.entities.CurrencyValue
 import bitcoin.wallet.entities.DollarCurrency
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 
@@ -14,9 +15,10 @@ class TransactionsInteractor(private val adapterManager: AdapterManager, private
 
     var delegate: TransactionsModule.IInteractorDelegate? = null
     private var disposables: CompositeDisposable = CompositeDisposable()
+    var disposable: Disposable? = null
 
     override fun retrieveFilters() {
-        val disposable = adapterManager.subject.subscribe {
+        disposable = adapterManager.subject.subscribe {
             disposables.clear()
             initialFetchAndSubscribe()
         }

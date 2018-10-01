@@ -4,6 +4,7 @@ import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.viewHelpers.DateHelper
 import io.reactivex.Flowable
 import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import java.text.DecimalFormat
@@ -12,11 +13,13 @@ import java.util.concurrent.TimeUnit
 
 object ExchangeRateManager: IExchangeRateManager {
 
+    private var disposables: CompositeDisposable = CompositeDisposable()
+
     init {
-        val disposable = Observable.interval(0, 5, TimeUnit.MINUTES, Schedulers.io())
+        disposables.add(Observable.interval(0, 5, TimeUnit.MINUTES, Schedulers.io())
                 .subscribe {
                     refreshRates()
-                }
+                })
     }
 
     var latestExchangeRateSubject: PublishSubject<Map<String, Double>> = PublishSubject.create()
@@ -24,9 +27,9 @@ object ExchangeRateManager: IExchangeRateManager {
     var exchangeRates: MutableMap<String, Double> = hashMapOf("BTC" to 0.0)
 
     override fun refreshRates() {
-        val coinCode = "btc"
-        val currency = "usd"
-        val disposable = Factory.networkManager.getLatestRate(coinCode.toLowerCase(), currency.toLowerCase())
+        val coinCode = "BTC"
+        val currency = "USD"
+        disposables.add(Factory.networkManager.getLatestRate(coinCode.toLowerCase(), currency.toLowerCase())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
@@ -34,7 +37,7 @@ object ExchangeRateManager: IExchangeRateManager {
                         val rateAsDouble = rate.toDouble()
                         exchangeRates[coinCode.toUpperCase()] = rateAsDouble
                         latestExchangeRateSubject.onNext(hashMapOf(coinCode.toUpperCase() to rateAsDouble))
-                }
+                })
     }
 
     override fun getRate(coinCode: String, currency: String, timestamp: Long) : Flowable<Double> {
