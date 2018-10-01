@@ -38,7 +38,6 @@ import bitcoin.wallet.R
 class FingerprintAuthenticationDialogFragment : DialogFragment(), FingerprintUiHelper.Callback {
 
     private lateinit var cancelButton: Button
-    private lateinit var enterPinButton: Button
 
     private lateinit var callback: Callback
     private lateinit var cryptoObject: FingerprintManager.CryptoObject
@@ -69,10 +68,8 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(), FingerprintUiH
         super.onViewCreated(view, savedInstanceState)
 
         cancelButton = view.findViewById(R.id.cancel_button)
-        enterPinButton = view.findViewById(R.id.pin_button)
 
         cancelButton.setOnClickListener { dismiss() }
-        enterPinButton.setOnClickListener { dismiss() }
 
         fingerprintUiHelper = FingerprintUiHelper(
                 activity.getSystemService(FingerprintManager::class.java),

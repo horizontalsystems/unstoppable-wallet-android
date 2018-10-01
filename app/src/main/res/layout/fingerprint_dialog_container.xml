@@ -75,18 +75,6 @@
         android:layout_height="wrap_content"
         android:text="@string/button_cancel"
         android:textColor="@color/green_crypto"
-        app:layout_constraintEnd_toStartOf="@+id/pin_button"
-        app:layout_constraintTop_toTopOf="@+id/pin_button"
-        />
-
-    <Button
-        android:id="@+id/pin_button"
-        style="?android:attr/buttonBarPositiveButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/enter_pin"
-        android:textColor="@color/green_crypto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fingerprint_wrapper"
         />
