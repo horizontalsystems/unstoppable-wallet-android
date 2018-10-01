@@ -13,19 +13,15 @@ import java.util.concurrent.TimeUnit
 object ExchangeRateManager: IExchangeRateManager {
 
     init {
-        start()
-    }
-
-    var latestExchangeRateSubject: PublishSubject<Map<String, Double>> = PublishSubject.create()
-
-    var exchangeRates: MutableMap<String, Double> = hashMapOf("BTC" to 0.0)
-
-    fun start() {
         val disposable = Observable.interval(0, 5, TimeUnit.MINUTES, Schedulers.io())
                 .subscribe {
                     refreshRates()
                 }
     }
+
+    var latestExchangeRateSubject: PublishSubject<Map<String, Double>> = PublishSubject.create()
+
+    var exchangeRates: MutableMap<String, Double> = hashMapOf("BTC" to 0.0)
 
     override fun refreshRates() {
         val coinCode = "btc"
