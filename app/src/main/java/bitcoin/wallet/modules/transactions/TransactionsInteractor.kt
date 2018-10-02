@@ -1,7 +1,7 @@
 package bitcoin.wallet.modules.transactions
 
 import bitcoin.wallet.core.AdapterManager
-import bitcoin.wallet.core.IExchangeRateManager
+import bitcoin.wallet.core.ExchangeRateManager
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.CurrencyValue
 import bitcoin.wallet.entities.DollarCurrency
@@ -11,7 +11,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 
-class TransactionsInteractor(private val adapterManager: AdapterManager, private val exchangeRateManager: IExchangeRateManager) : TransactionsModule.IInteractor {
+class TransactionsInteractor(private val adapterManager: AdapterManager, private val exchangeRateManager: ExchangeRateManager) : TransactionsModule.IInteractor {
 
     var delegate: TransactionsModule.IInteractorDelegate? = null
     private var disposables: CompositeDisposable = CompositeDisposable()
@@ -77,14 +77,10 @@ class TransactionsInteractor(private val adapterManager: AdapterManager, private
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
-                .subscribe { resultRates ->
-                    val ratesMap = mutableMapOf<String, Double>()
-                    resultRates.forEach { any ->
-                        if (any is Pair<*, *>) {
-                            ratesMap[any.first as String] = any.second as Double
-                        }
-                    }
-
+                .map {resultRates ->
+                    (resultRates as List<Pair<String, Double>>).toMap()
+                }
+                .subscribe { ratesMap ->
                     items.forEach { item ->
                         val rate = ratesMap[item.hash] ?: 0.0
                         if (rate > 0) {

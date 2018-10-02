@@ -2,8 +2,7 @@ package bitcoin.wallet.modules.transactions
 
 import bitcoin.wallet.core.AdapterManager
 import bitcoin.wallet.core.BitcoinAdapter
-import bitcoin.wallet.core.IExchangeRateManager
-import bitcoin.wallet.core.INetworkManager
+import bitcoin.wallet.core.ExchangeRateManager
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.CurrencyValue
 import bitcoin.wallet.entities.DollarCurrency
@@ -11,7 +10,6 @@ import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.modules.RxBaseTest
 import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
@@ -24,8 +22,7 @@ import java.util.*
 class TransactionsInteractorTest {
 
     private val delegate = mock(TransactionsModule.IInteractorDelegate::class.java)
-    private val exchangeRateManager = mock<IExchangeRateManager>()
-    private val networkManager = mock<INetworkManager>()
+    private val exchangeRateManager = mock(ExchangeRateManager::class.java)
     private val adapterManager = mock(AdapterManager::class.java)
     private val bitcoinAdapter = mock(BitcoinAdapter::class.java)
 
@@ -44,7 +41,6 @@ class TransactionsInteractorTest {
         interactor.delegate = delegate
 
         val rateResponse = Flowable.just(6300.0)
-        whenever(networkManager.getLatestRate(any(), any())).thenReturn(rateResponse)
         whenever(exchangeRateManager.getRate(any(), any(), any())).thenReturn(rateResponse)
     }
 
@@ -168,9 +164,6 @@ class TransactionsInteractorTest {
         whenever(bitcoinAdapter.latestBlockHeight).thenReturn(100)
         whenever(bitcoinAdapter.transactionRecords).thenReturn(listOf(transactionRecordBTCsuccess, transactionRecordBTCpending))
         whenever(bitcoinAdapter.transactionRecordsSubject).thenReturn(subject)
-
-        val rateResonse = Flowable.just(rate)
-        whenever(networkManager.getRate(any(), any(), any(), any(), any(), any(), any())).thenReturn(rateResonse)
 
         interactor.retrieveTransactionItems()
 

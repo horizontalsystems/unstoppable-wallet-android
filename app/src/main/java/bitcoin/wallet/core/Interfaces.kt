@@ -23,11 +23,6 @@ interface INetworkManager {
     fun getRateByDay(coinCode:String, currency: String, year: Int, month: String, day: String): Flowable<Double>
 }
 
-interface IExchangeRateManager {
-    fun refreshRates()
-    fun getRate(coinCode:String, currency: String, timestamp: Long): Flowable<Double>
-}
-
 interface IEncryptionManager {
     fun encrypt(data: String): String
     fun decrypt(data: String): String

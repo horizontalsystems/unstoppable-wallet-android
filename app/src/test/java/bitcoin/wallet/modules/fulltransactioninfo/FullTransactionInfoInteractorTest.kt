@@ -1,8 +1,8 @@
 package bitcoin.wallet.modules.fulltransactioninfo
 
 import bitcoin.wallet.core.BitcoinAdapter
+import bitcoin.wallet.core.ExchangeRateManager
 import bitcoin.wallet.core.IClipboardManager
-import bitcoin.wallet.core.IExchangeRateManager
 import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.modules.RxBaseTest
@@ -11,15 +11,15 @@ import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito
+import org.mockito.Mockito.mock
 import java.util.*
 
 class FullTransactionInfoInteractorTest {
 
-    private val delegate = Mockito.mock(FullTransactionInfoModule.IInteractorDelegate::class.java)
-    private val clipboardManager = Mockito.mock(IClipboardManager::class.java)
-    private val exchangeRateManager = mock<IExchangeRateManager>()
-    private val bitcoinAdapter = Mockito.mock(BitcoinAdapter::class.java)
+    private val delegate = mock(FullTransactionInfoModule.IInteractorDelegate::class.java)
+    private val clipboardManager = mock(IClipboardManager::class.java)
+    private val exchangeRateManager = mock(ExchangeRateManager::class.java)
+    private val bitcoinAdapter = mock(BitcoinAdapter::class.java)
     private var coin = Bitcoin()
     private val transactionId = "[transaction_id]"
     private val btcTxAmount = 10.0

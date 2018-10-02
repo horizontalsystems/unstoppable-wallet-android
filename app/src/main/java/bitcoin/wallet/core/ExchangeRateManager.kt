@@ -11,7 +11,7 @@ import java.text.DecimalFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-object ExchangeRateManager: IExchangeRateManager {
+object ExchangeRateManager {
 
     private var disposables: CompositeDisposable = CompositeDisposable()
 
@@ -26,7 +26,7 @@ object ExchangeRateManager: IExchangeRateManager {
 
     var exchangeRates: MutableMap<String, Double> = hashMapOf("BTC" to 0.0)
 
-    override fun refreshRates() {
+    private fun refreshRates() {
         val coinCode = "BTC"
         val currency = "USD"
         disposables.add(Factory.networkManager.getLatestRate(coinCode.toLowerCase(), currency.toLowerCase())
@@ -40,7 +40,7 @@ object ExchangeRateManager: IExchangeRateManager {
                 })
     }
 
-    override fun getRate(coinCode: String, currency: String, timestamp: Long) : Flowable<Double> {
+    fun getRate(coinCode: String, currency: String, timestamp: Long) : Flowable<Double> {
         val calendar = DateHelper.getCalendarFromTimestamp(timestamp)
 
         val year = calendar.get(Calendar.YEAR)
