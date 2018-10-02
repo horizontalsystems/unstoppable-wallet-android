@@ -10,7 +10,7 @@
     <string name="alert_copied">Copied</string>
 
     <string name="welcome_title">Bank Wallet</string>
-    <string name="welcome_description">Decentralized App</string>
+    <string name="welcome_description" translatable="false">Decentralized App</string>
     <string name="welcome_btn_create_wallet">Create Wallet</string>
     <string name="welcome_btn_import_wallet">Import Wallet</string>
 
@@ -105,7 +105,7 @@
     <string name="settings_error_fingerprint_not_enabled">Fingerprint Not Enabled</string>
     <string name="settings_error_no_fingerprint_added_yet">You have not enabled fingerprint on this device. Go to Settings > Security to set up fingerprint</string>
     <string name="settings_info_app_name_with_version">Bank Wallet %s</string>
-    <string name="settings_info_subtitle">decentralized app</string>
+    <string name="settings_info_subtitle" translatable="false">decentralized app</string>
     <string name="settings_info_link">https://horizontalsystems.io</string>
     <string name="settings_security_fingerprint">Fingerprint</string>
     <string name="settings_security_change_pin">Change PIN</string>

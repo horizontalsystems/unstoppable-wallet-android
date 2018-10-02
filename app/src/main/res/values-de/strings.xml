@@ -10,7 +10,6 @@
   <string name="alert_success">Erfolgreich</string>
   <string name="alert_copied">Kopiert</string>
   <string name="welcome_title">Bank Wallet</string>
-  <string name="welcome_description">Dezentralisierte App</string>
   <string name="welcome_btn_create_wallet">Wallet Erstellen</string>
   <string name="welcome_btn_import_wallet">Wallet Importieren</string>
   <string name="restore_title">Papier-Schlüssel eingeben</string>
@@ -94,7 +93,6 @@
   <string name="settings_error_fingerprint_not_enabled">Fingerabdruck Nicht Aktivieren</string>
   <string name="settings_error_no_fingerprint_added_yet">Fingerabdruck auf diesem Gerät aktiviert nicht. Gehen Sie zu Einstellungen &gt; Sicherheit Fingerabdruck einrichten</string>
   <string name="settings_info_app_name_with_version">Bank Wallet %s</string>
-  <string name="settings_info_subtitle">dezentralisierte app</string>
   <string name="settings_info_link">https://horizontalsystems.io</string>
   <string name="settings_security_fingerprint">Fingerabdruck</string>
   <string name="settings_security_change_pin">PIN ändern</string>
