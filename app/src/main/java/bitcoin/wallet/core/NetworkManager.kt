@@ -1,71 +1,43 @@
 package bitcoin.wallet.core
 
-import io.reactivex.Observable
+import io.reactivex.Flowable
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
 import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.Path
 
 class NetworkManager : INetworkManager {
-    override fun getJwtToken(identity: String, pubKeys: Map<Int, String>): Observable<String> {
-        return BackendApi.service
-                .getJwtToken(mapOf("identity" to identity))
-                .map {
-                    it["token"]
-                }
-    }
 
-    override fun getExchangeRates(): Observable<Map<String, Double>> {
+    override fun getRate(coinCode: String, currency: String, year: Int, month: String, day: String, hour: String, minute: String): Flowable<Double> {
         return ServiceExchangeApi.service
-                .getRates("USD", "BTC,BCH,ETH")
+                .getRate(coinCode, currency, year, month, day, hour, minute)
+                .onErrorResumeNext(getRateByDay(coinCode, currency, year, month, day))
+    }
+
+    override fun getRateByDay(coinCode: String, currency: String, year: Int, month: String, day: String): Flowable<Double> {
+        return ServiceExchangeApi.service
+                .getRateByDay(coinCode, currency, year, month, day)
                 .onErrorReturn {
-                    mapOf()
+                    0.0
                 }
     }
-}
 
-
-object BackendApi {
-
-    var service: IGrouviService
-
-    private const val apiURL = "http://bitnode-db.grouvi.org:3000/api/BTC/testnet/"
-
-    init {
-        val logging = HttpLoggingInterceptor()
-        logging.level = HttpLoggingInterceptor.Level.BASIC
-
-        val httpClient = OkHttpClient.Builder()
-        httpClient.addInterceptor(logging)  // <-- this is the important line!
-
-        val retrofit = Retrofit.Builder()
-                .baseUrl(apiURL)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(httpClient.build())
-                .build()
-
-        service = retrofit.create(IGrouviService::class.java)
-    }
-
-    interface IGrouviService {
-
-        @POST("wallet")
-        fun getJwtToken(
-                @Body params: Map<String, @JvmSuppressWildcards Any>
-        ): Observable<HashMap<String, String>>
-
+    override fun getLatestRate(coinCode: String, currency: String): Flowable<Double> {
+        return ServiceExchangeApi.service
+                .getLatestRate(coinCode, currency)
+                .onErrorReturn {
+                    0.0
+                }
     }
 }
 
 object ServiceExchangeApi {
 
     val service: IExchangeRate
+    private const val apiURL = "http://ipfs.grouvi.org/ipns/QmVefrf2xrWzGzPpERF6fRHeUTh9uVSyfHHh4cWgUBnXpq/io-hs/data/xrates/"
 
     init {
         val logger = HttpLoggingInterceptor()
@@ -75,7 +47,7 @@ object ServiceExchangeApi {
         httpClient.addInterceptor(logger)
 
         val retrofit = Retrofit.Builder()
-                .baseUrl("https://min-api.cryptocompare.com")
+                .baseUrl(apiURL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient.build())
@@ -86,11 +58,31 @@ object ServiceExchangeApi {
 
     interface IExchangeRate {
 
-        @GET("data/price")
-        fun getRates(
-                @Query("fsym") baseCurrency: String,
-                @Query("tsyms") coinTypes: String
-        ): Observable<Map<String, Double>>
+        @GET("{coin}/{fiat}/{year}/{month}/{day}/{hour}/{minute}/index.json")
+        fun getRate(
+                @Path("coin") coinCode: String,
+                @Path("fiat") currency: String,
+                @Path("year") year: Int,
+                @Path("month") month: String,
+                @Path("day") day: String,
+                @Path("hour") hour: String,
+                @Path("minute") minute: String
+        ): Flowable<Double>
+
+        @GET("{coin}/{fiat}/{year}/{month}/{day}/index.json")
+        fun getRateByDay(
+                @Path("coin") coinCode: String,
+                @Path("fiat") currency: String,
+                @Path("year") year: Int,
+                @Path("month") month: String,
+                @Path("day") day: String
+        ): Flowable<Double>
+
+        @GET("{coin}/{fiat}/index.json")
+        fun getLatestRate(
+                @Path("coin") coinCode: String,
+                @Path("fiat") currency: String
+        ): Flowable<Double>
 
     }
 }

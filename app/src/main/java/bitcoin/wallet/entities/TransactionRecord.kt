@@ -1,6 +1,6 @@
 package bitcoin.wallet.entities
 
-open class TransactionRecordNew {
+open class TransactionRecord {
 
     var transactionHash = ""
 

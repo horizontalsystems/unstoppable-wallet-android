@@ -6,11 +6,12 @@ import bitcoin.wallet.core.ExchangeRateManager
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.CurrencyValue
 import bitcoin.wallet.entities.DollarCurrency
-import bitcoin.wallet.entities.TransactionRecordNew
+import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.modules.RxBaseTest
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.whenever
+import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
 import org.junit.Before
 import org.junit.Test
@@ -32,7 +33,6 @@ class TransactionsInteractorTest {
 
     private val interactor = TransactionsInteractor(adapterManager, exchangeRateManager)
 
-    private var exchangeRates = mapOf("BTC" to 10_000.0)
 
     @Before
     fun before() {
@@ -40,7 +40,8 @@ class TransactionsInteractorTest {
 
         interactor.delegate = delegate
 
-        whenever(exchangeRateManager.exchangeRates).thenReturn(exchangeRates)
+        val rateResponse = Flowable.just(6300.0)
+        whenever(exchangeRateManager.getRate(any(), any(), any())).thenReturn(rateResponse)
     }
 
     @Test
@@ -63,7 +64,7 @@ class TransactionsInteractorTest {
     fun retrieveTransactionItems() {
         val subject: PublishSubject<Any> = PublishSubject.create()
 
-        val transaction = TransactionRecordNew()
+        val transaction = TransactionRecord()
         transaction.transactionHash = "efw43f3fwer"
         transaction.coinCode = "BTC"
         transaction.from = listOf("mxNEBQf2xQeLknPZW65rMbKxEban6udxFc")
@@ -93,22 +94,25 @@ class TransactionsInteractorTest {
         val now = Date()
         val bitcoin = Bitcoin()
         val subject: PublishSubject<Any> = PublishSubject.create()
+        val currency = DollarCurrency()
+        val timestampNow = now.time
+        val rate = 6300.0
 
         val btcTxAmount = 10.0
 
-        val transactionRecordBTCsuccess = TransactionRecordNew().apply {
+        val transactionRecordBTCsuccess = TransactionRecord().apply {
             transactionHash = "transactionHash"
             amount = btcTxAmount
             fee = 1.0
             incoming = true
-            timestamp = now.time
+            timestamp = timestampNow
             from = listOf("from-address")
             to = listOf("to-address")
             blockHeight = 98
             coinCode = "BTC"
         }
 
-        val transactionRecordBTCpending = TransactionRecordNew().apply {
+        val transactionRecordBTCpending = TransactionRecord().apply {
             transactionHash = "transactionHash"
             amount = btcTxAmount
             fee = 1.0
@@ -122,30 +126,32 @@ class TransactionsInteractorTest {
 
         val expectedItems = listOf(
                 TransactionRecordViewItem(
-                        "transactionHash",
-                        adapterId,
-                        CoinValue(bitcoin, btcTxAmount),
-                        CoinValue(bitcoin, 1.0),
-                        "from-address",
-                        "to-address",
-                        true,
-                        98,
-                        now,
-                        3,
-                        CurrencyValue(currency = DollarCurrency(), value = btcTxAmount * (exchangeRates["BTC"] ?: 0.0))
+                        hash = "transactionHash",
+                        adapterId = adapterId,
+                        amount = CoinValue(bitcoin, btcTxAmount),
+                        fee = CoinValue(bitcoin, 1.0),
+                        from ="from-address",
+                        to = "to-address",
+                        incoming = true,
+                        blockHeight = 98,
+                        date = now,
+                        confirmations = 3,
+                        currencyAmount = CurrencyValue(currency = currency, value = btcTxAmount * rate),
+                        exchangeRate = rate
                 ),
                 TransactionRecordViewItem(
-                        "transactionHash",
-                        adapterId,
-                        CoinValue(bitcoin, btcTxAmount),
-                        CoinValue(bitcoin, 1.0),
-                        "from-address",
-                        "to-address",
-                        true,
-                        101,
-                        now,
-                        0,
-                        CurrencyValue(currency = DollarCurrency(), value = btcTxAmount * (exchangeRates["BTC"] ?: 0.0))
+                        hash = "transactionHash",
+                        adapterId = adapterId,
+                        amount = CoinValue(bitcoin, btcTxAmount),
+                        fee = CoinValue(bitcoin, 1.0),
+                        from = "from-address",
+                        to = "to-address",
+                        incoming = true,
+                        blockHeight = 101,
+                        date = now,
+                        confirmations = 0,
+                        currencyAmount = CurrencyValue(currency = currency, value = btcTxAmount * rate),
+                        exchangeRate = rate
                 )
         )
 

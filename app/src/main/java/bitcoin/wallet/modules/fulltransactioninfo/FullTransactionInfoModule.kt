@@ -43,9 +43,8 @@ object FullTransactionInfoModule {
     }
 
     fun init(view: FullTransactionInfoViewModel, router: IRouter, adapterId: String, transactionId: String) {
-        val exchangeRateManager = ExchangeRateManager
         val adapter = AdapterManager.adapters.firstOrNull { it.id == adapterId }
-        val interactor = FullTransactionInfoInteractor(adapter, exchangeRateManager, transactionId, TextHelper)
+        val interactor = FullTransactionInfoInteractor(adapter, ExchangeRateManager, transactionId, TextHelper)
         val presenter = FullTransactionInfoPresenter(interactor, router)
 
         view.delegate = presenter

@@ -1,6 +1,6 @@
 package bitcoin.wallet.core
 
-import bitcoin.wallet.entities.TransactionRecordNew
+import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.entities.coins.Coin
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
@@ -19,7 +19,7 @@ interface IAdapter {
 
     var latestBlockHeight: Int
 
-    var transactionRecords: List<TransactionRecordNew>
+    var transactionRecords: List<TransactionRecord>
 
     fun showInfo()
 

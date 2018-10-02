@@ -21,7 +21,7 @@ class SendInteractorTest {
 
     private val interactor = SendInteractor(clipboardManager, bitcoinAdapter, exchangeRateManager)
 
-    private var exchangeRates = mapOf("BTC" to 10_000.0)
+    private var exchangeRates = mutableMapOf("BTC" to 10_000.0)
 
     @Before
     fun setUp() {
