@@ -170,7 +170,7 @@
     <style name="Title">
         <item name="android:fontFamily">@font/noto_sans_bold</item>
         <item name="android:textColor">?TitleColor</item>
-        <item name="android:textSize">50sp</item>
+        <item name="android:textSize">42sp</item>
     </style>
 
     <style name="Description">

@@ -86,12 +86,10 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
             }
         })
 
-        viewModel.showSuccess.observe(this, Observer { success ->
-            success?.let {
-                HudHelper.showSuccessMessage(it, this)
-                MainModule.start(this)
-                finish()
-            }
+        viewModel.showSuccess.observe(this, Observer {
+            HudHelper.showSuccessMessage(activity = this)
+            MainModule.start(this)
+            finish()
         })
 
         viewModel.hideToolbar.observe(this, Observer {

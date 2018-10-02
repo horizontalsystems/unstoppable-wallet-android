@@ -10,7 +10,6 @@
   <string name="alert_success">Успешно</string>
   <string name="alert_copied">Скопировано</string>
   <string name="welcome_title">Bank Wallet</string>
-  <string name="welcome_description">Децентрализованное Приложение</string>
   <string name="welcome_btn_create_wallet">Создать Кошелек</string>
   <string name="welcome_btn_import_wallet">Импортировать Кошелёк</string>
   <string name="restore_title">Введите ключи</string>
@@ -93,7 +92,6 @@
   <string name="settings_error_fingerprint_not_enabled">Отпечаток пальца не включен</string>
   <string name="settings_error_no_fingerprint_added_yet">У вас недоступен отпечаток пальцев на этом устройстве. Перейдите в настройки &gt; Безопасности и выберите отпечатки пальцев</string>
   <string name="settings_info_app_name_with_version">Bank Wallet %s</string>
-  <string name="settings_info_subtitle">децентрализованное приложение</string>
   <string name="settings_info_link">https://horizontalsystems.io</string>
   <string name="settings_security_fingerprint">Отпечаток пальцев</string>
   <string name="settings_security_change_pin">Изменить ПИН-код</string>
