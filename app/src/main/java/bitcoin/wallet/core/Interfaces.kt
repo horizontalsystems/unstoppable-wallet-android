@@ -1,6 +1,7 @@
 package bitcoin.wallet.core
 
 import android.hardware.fingerprint.FingerprintManager
+import bitcoin.wallet.entities.Currency
 import io.reactivex.Flowable
 
 interface ILocalStorage {
@@ -21,6 +22,7 @@ interface INetworkManager {
     fun getLatestRate(coinCode:String, currency: String): Flowable<Double>
     fun getRate(coinCode:String, currency: String, year: Int, month: String, day: String, hour: String, minute: String): Flowable<Double>
     fun getRateByDay(coinCode:String, currency: String, year: Int, month: String, day: String): Flowable<Double>
+    fun getCurrencyCodes(): Flowable<List<Currency>>
 }
 
 interface IEncryptionManager {

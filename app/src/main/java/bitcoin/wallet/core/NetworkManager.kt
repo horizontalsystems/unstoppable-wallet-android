@@ -1,5 +1,9 @@
 package bitcoin.wallet.core
 
+import android.util.Log
+import bitcoin.wallet.entities.Currency
+import bitcoin.wallet.entities.DollarCurrency
+import bitcoin.wallet.entities.EuroCurrency
 import io.reactivex.Flowable
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -31,6 +35,29 @@ class NetworkManager : INetworkManager {
                 .onErrorReturn {
                     0.0
                 }
+    }
+
+    override fun getCurrencyCodes(): Flowable<List<Currency>> {
+        return ServiceExchangeApi.service .getCurrencies()
+                .map { t: String ->  getCurrenciesFromCodes(t) }
+                .onErrorReturn {
+                    Log.e("NetwMan", "exception: ", it)
+                    listOf(DollarCurrency(), EuroCurrency())
+                }
+    }
+
+    private fun getCurrenciesFromCodes(currencyCodes: String): List<Currency> {
+        val codeList = currencyCodes.split(",").map { it.trim() }
+        val currencyList = mutableListOf<Currency>()
+        codeList.forEach { code ->
+            val currency: Currency? = when(code) {
+                "USD" -> DollarCurrency()
+                "EUR" -> EuroCurrency()
+                else -> null
+            }
+            currency?.let { currencyList.add(it) }
+        }
+        return currencyList
     }
 }
 
@@ -83,6 +110,9 @@ object ServiceExchangeApi {
                 @Path("coin") coinCode: String,
                 @Path("fiat") currency: String
         ): Flowable<Double>
+
+        @GET("btc/index.json")
+        fun getCurrencies(): Flowable<String>
 
     }
 }

@@ -25,7 +25,11 @@ abstract class Currency {
 class DollarCurrency : Currency() {
     override val code: String = "USD"
     override val symbol: String = "$"
+}
 
+class EuroCurrency : Currency() {
+    override val code: String = "EUR"
+    override val symbol: String = "€"
 }
 
 class Ethereum : Coin() {

@@ -31,6 +31,7 @@ class PreferencesManager(private val encryptionManager: IEncryptionManager) : IL
     private val LIGHT_MODE_ENABLED = "light_mode_enabled"
     private val FINGERPRINT_ENABLED = "fingerprint_enabled"
     private val WORDLIST_BACKUP = "wordlist_backup"
+    private val BASE_CURRENCY = "base_currency"
 
     override fun isLightModeEnabled() = App.preferences.getBoolean(LIGHT_MODE_ENABLED, false)
 
@@ -63,5 +64,13 @@ class PreferencesManager(private val encryptionManager: IEncryptionManager) : IL
 
     override fun isWordListBackedUp(): Boolean {
         return App.preferences.getBoolean(WORDLIST_BACKUP, false)
+    }
+
+    fun setBaseCurrencyCode(code: String) {
+        App.preferences.edit().putString(BASE_CURRENCY, code).apply()
+    }
+
+    fun getBaseCurrencyCode(): String {
+        return App.preferences.getString(BASE_CURRENCY, "USD")
     }
 }

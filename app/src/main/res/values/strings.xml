@@ -115,6 +115,8 @@
     <string name="settings_security_import_wallet_confirmation_1">This action will remove the currently installed wallet</string>
     <string name="settings_security_import_wallet_confirmation_2">Backup its secret keys if you want too be able to access that wallet in the future.</string>
 
+    <string name="settings_currency_switcher_title">Base Currency</string>
+
     <string name="alert_keys_invalidated_title">Android Keystore Error</string>
     <string name="alert_keys_invalidated_description">Your encrypted data was recently invalidated because your Android lock screen was changed</string>
     <string name="alert_no_device_lock_title">WARNING</string>
