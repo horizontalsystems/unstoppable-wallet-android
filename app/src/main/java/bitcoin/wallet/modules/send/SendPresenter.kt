@@ -1,11 +1,15 @@
 package bitcoin.wallet.modules.send
 
 import bitcoin.wallet.R
+import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.viewHelpers.NumberFormatHelper
 import java.text.NumberFormat
 import java.text.ParseException
 
-class SendPresenter(private val interactor: SendModule.IInteractor, private val router: SendModule.IRouter) : SendModule.IViewDelegate, SendModule.IInteractorDelegate {
+class SendPresenter(
+        private val interactor: SendModule.IInteractor,
+        private val router: SendModule.IRouter,
+        private val baseCurrency: Currency) : SendModule.IViewDelegate, SendModule.IInteractorDelegate {
 
     var view: SendModule.IView? = null
 
@@ -14,11 +18,9 @@ class SendPresenter(private val interactor: SendModule.IInteractor, private val 
     private var cryptoAmount: Double? = null
     private var exchangeRate = 0.0
 
-    private lateinit var baseCurrencyCode: String
     lateinit var coinCode: String
 
     override fun onViewDidLoad() {
-        baseCurrencyCode = interactor.getBaseCurrency()
         coinCode = interactor.getCoinCode()
         updateAmounts()
 
@@ -87,7 +89,7 @@ class SendPresenter(private val interactor: SendModule.IInteractor, private val 
     private fun updateAmountHintView() {
         val amountStr = formatFiatAmount(fiatAmount ?: 0.0)
 
-        view?.setAmountHint("$amountStr $baseCurrencyCode")
+        view?.setAmountHint("$amountStr ${baseCurrency.code}")
     }
 
     private fun getError(exception: Exception) = when (exception) {

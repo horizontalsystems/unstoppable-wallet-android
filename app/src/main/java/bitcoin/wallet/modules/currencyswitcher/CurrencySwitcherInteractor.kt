@@ -14,14 +14,14 @@ class CurrencySwitcherInteractor(private val networkManager: NetworkManager, pri
     var delegate: CurrencySwitcherModule.IInteractorDelegate? = null
 
     override fun getAvailableCurrencies() {
-        disposable = networkManager.getCurrencyCodes()
+        disposable = networkManager.getCurrencies()
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
                 .subscribe {
-                    val baseCurrencyCode = preferencesManager.getBaseCurrencyCode()
+                    val baseCurrency = preferencesManager.getBaseCurrency()
                     it.forEach { item ->
-                        currencyList.add(CurrencyViewItem(item, baseCurrencyCode == item.code))
+                        currencyList.add(CurrencyViewItem(item, baseCurrency == item))
                     }
                     delegate?.currencyListUpdated(currencyList)
                 }
@@ -31,7 +31,7 @@ class CurrencySwitcherInteractor(private val networkManager: NetworkManager, pri
         currencyList.forEach {item ->
             item.selected = item.currency.code == currency.code
         }
-        preferencesManager.setBaseCurrencyCode(currency.code)
+        preferencesManager.setBaseCurrency(currency)
         delegate?.currencyListUpdated(currencyList)
     }
 }

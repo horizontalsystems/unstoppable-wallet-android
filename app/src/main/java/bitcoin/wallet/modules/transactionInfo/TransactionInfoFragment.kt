@@ -88,7 +88,7 @@ class TransactionInfoFragment : DialogFragment() {
                 }
 
                 rootView.findViewById<TextView>(R.id.fiatValue)?.apply {
-                    text = "~ \$${txRec.getFiatValue()}"
+                    text = txRec.getFiatValue()
                 }
 
                 rootView.findViewById<TransactionInfoItemView>(R.id.itemFromTo)?.apply {

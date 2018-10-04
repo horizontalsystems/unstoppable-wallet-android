@@ -4,8 +4,8 @@ import bitcoin.wallet.core.AdapterManager
 import bitcoin.wallet.core.BitcoinAdapter
 import bitcoin.wallet.core.ExchangeRateManager
 import bitcoin.wallet.entities.CoinValue
+import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
-import bitcoin.wallet.entities.DollarCurrency
 import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.modules.RxBaseTest
@@ -15,10 +15,15 @@ import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
+import org.powermock.core.classloader.annotations.SuppressStaticInitializationFor
+import org.powermock.modules.junit4.PowerMockRunner
 import java.util.*
 
+@RunWith(PowerMockRunner::class)
+@SuppressStaticInitializationFor("bitcoin.wallet.core.ExchangeRateManager")
 class TransactionsInteractorTest {
 
     private val delegate = mock(TransactionsModule.IInteractorDelegate::class.java)
@@ -31,7 +36,14 @@ class TransactionsInteractorTest {
     private var wordsHash = words.joinToString(" ")
     private var adapterId: String = "${wordsHash.hashCode()}-${coin.code}"
 
-    private val interactor = TransactionsInteractor(adapterManager, exchangeRateManager)
+    private val baseCurrency = Currency().apply {
+        code = "USD"
+        symbol = "$"
+        description = "United States Dollar"
+    }
+    private val baseCurrencyFlowable = Flowable.just(baseCurrency)
+
+    private val interactor = TransactionsInteractor(adapterManager, exchangeRateManager, baseCurrencyFlowable)
 
 
     @Before
@@ -83,18 +95,16 @@ class TransactionsInteractorTest {
         whenever(bitcoinAdapter.transactionRecords).thenReturn(listOf(transaction))
         whenever(bitcoinAdapter.transactionRecordsSubject).thenReturn(subject)
 
-        interactor.retrieveTransactionItems()
+        interactor.retrieveTransactions(null)
 
         verify(delegate).didRetrieveItems(any())
     }
-
 
     @Test
     fun retrieveTransactionItems_transactionOutConvert() {
         val now = Date()
         val bitcoin = Bitcoin()
         val subject: PublishSubject<Any> = PublishSubject.create()
-        val currency = DollarCurrency()
         val timestampNow = now.time
         val rate = 6300.0
 
@@ -136,7 +146,7 @@ class TransactionsInteractorTest {
                         blockHeight = 98,
                         date = now,
                         confirmations = 3,
-                        currencyAmount = CurrencyValue(currency = currency, value = btcTxAmount * rate),
+                        currencyAmount = CurrencyValue(currency = baseCurrency, value = btcTxAmount * rate),
                         exchangeRate = rate
                 ),
                 TransactionRecordViewItem(
@@ -150,7 +160,7 @@ class TransactionsInteractorTest {
                         blockHeight = 101,
                         date = now,
                         confirmations = 0,
-                        currencyAmount = CurrencyValue(currency = currency, value = btcTxAmount * rate),
+                        currencyAmount = CurrencyValue(currency = baseCurrency, value = btcTxAmount * rate),
                         exchangeRate = rate
                 )
         )
@@ -165,7 +175,7 @@ class TransactionsInteractorTest {
         whenever(bitcoinAdapter.transactionRecords).thenReturn(listOf(transactionRecordBTCsuccess, transactionRecordBTCpending))
         whenever(bitcoinAdapter.transactionRecordsSubject).thenReturn(subject)
 
-        interactor.retrieveTransactionItems()
+        interactor.retrieveTransactions(null)
 
         verify(delegate).didRetrieveItems(expectedItems)
     }

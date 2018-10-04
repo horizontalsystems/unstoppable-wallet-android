@@ -42,7 +42,6 @@ class SettingsFragment : android.support.v4.app.Fragment() {
             setOnClickListener {
                 CurrencySwitcherModule.start(context)
             }
-            selectedValue = Factory.preferencesManager.getBaseCurrencyCode()
         }
 
         language.apply {
@@ -80,6 +79,12 @@ class SettingsFragment : android.support.v4.app.Fragment() {
         viewModel.wordListBackedUp.observe(this, Observer { wordListBackedUp ->
             wordListBackedUp?.let {
                 securityCenter.badge = getInfoBadge(it)
+            }
+        })
+
+        viewModel.baseCurrencyCode.observe(this, Observer { code ->
+            code?.let {
+                baseCurrency.selectedValue = it
             }
         })
     }

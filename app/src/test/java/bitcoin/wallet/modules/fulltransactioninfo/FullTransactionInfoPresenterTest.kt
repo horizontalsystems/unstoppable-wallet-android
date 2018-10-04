@@ -1,8 +1,8 @@
 package bitcoin.wallet.modules.fulltransactioninfo
 
 import bitcoin.wallet.entities.CoinValue
+import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
-import bitcoin.wallet.entities.DollarCurrency
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem
 import com.nhaarman.mockito_kotlin.any
@@ -38,7 +38,7 @@ class FullTransactionInfoPresenterTest {
             98,
             now,
             3,
-            CurrencyValue(currency = DollarCurrency(), value = btcTxAmount * (exchangeRates["BTC"] ?: 0.0))
+            CurrencyValue(currency = Currency(), value = btcTxAmount * (exchangeRates["BTC"] ?: 0.0))
     )
 
     @Before

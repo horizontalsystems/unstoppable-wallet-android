@@ -1,9 +1,6 @@
 package bitcoin.wallet.core
 
-import android.util.Log
 import bitcoin.wallet.entities.Currency
-import bitcoin.wallet.entities.DollarCurrency
-import bitcoin.wallet.entities.EuroCurrency
 import io.reactivex.Flowable
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -37,28 +34,28 @@ class NetworkManager : INetworkManager {
                 }
     }
 
-    override fun getCurrencyCodes(): Flowable<List<Currency>> {
-        return ServiceExchangeApi.service .getCurrencies()
-                .map { t: String ->  getCurrenciesFromCodes(t) }
-                .onErrorReturn {
-                    Log.e("NetwMan", "exception: ", it)
-                    listOf(DollarCurrency(), EuroCurrency())
-                }
+    override fun getCurrencies(): Flowable<List<Currency>> {
+        val currency1 = Currency().apply {
+            code = "USD"
+            symbol = "$"
+            description = "United States Dollar"
+        }
+
+        val currency2 = Currency().apply {
+            code = "EUR"
+            symbol = "€"
+            description = "Euro"
+        }
+        return Flowable.just(listOf(currency1, currency2))
+        //todo After backend ready parse currency list from API response
+//        return ServiceExchangeApi.service .getCurrencies()
+//                .map { t: String ->  getCurrenciesFromCodes(t) }
+//                .onErrorReturn {
+//                    Log.e("NetwMan", "exception: ", it)
+//                    listOf(DollarCurrency(), EuroCurrency())
+//                }
     }
 
-    private fun getCurrenciesFromCodes(currencyCodes: String): List<Currency> {
-        val codeList = currencyCodes.split(",").map { it.trim() }
-        val currencyList = mutableListOf<Currency>()
-        codeList.forEach { code ->
-            val currency: Currency? = when(code) {
-                "USD" -> DollarCurrency()
-                "EUR" -> EuroCurrency()
-                else -> null
-            }
-            currency?.let { currencyList.add(it) }
-        }
-        return currencyList
-    }
 }
 
 object ServiceExchangeApi {

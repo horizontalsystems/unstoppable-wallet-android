@@ -1,5 +1,6 @@
 package bitcoin.wallet.modules.send
 
+import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.viewHelpers.NumberFormatHelper
 import com.nhaarman.mockito_kotlin.reset
 import com.nhaarman.mockito_kotlin.verify
@@ -14,25 +15,28 @@ class SendPresenterTest {
     private val router = Mockito.mock(SendModule.IRouter::class.java)
     private val view = Mockito.mock(SendModule.IView::class.java)
 
-    private val baseCurrency = "USD"
-    private val presenter = SendPresenter(interactor, router)
     private val cryptoAmountFormat = NumberFormatHelper.cryptoAmountFormat
     private val fiatAmountFormat = NumberFormatHelper.fiatAmountFormat
+
+    private val baseCurrency = Currency().apply {
+        code = "USD"
+        symbol = "$"
+        description = "United States Dollar"
+    }
+
+    private val presenter = SendPresenter(interactor, router, baseCurrency)
 
     @Before
     fun setUp() {
         presenter.view = view
-
-        whenever(interactor.getBaseCurrency()).thenReturn(baseCurrency)
     }
 
     @Test
     fun onViewDidLoad() {
         presenter.onViewDidLoad()
 
-        verify(interactor).getBaseCurrency()
         verify(view).setAmount(null)
-        verify(view).setAmountHint("${cryptoAmountFormat.format(0)} $baseCurrency")
+        verify(view).setAmountHint("${cryptoAmountFormat.format(0)} ${baseCurrency.code}")
     }
 
     @Test

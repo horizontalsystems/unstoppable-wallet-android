@@ -76,7 +76,7 @@ class FullTransactionInfoActivity : BaseActivity() {
         itemAmount.bind(
                 title = getString(R.string.full_transaction_info_amount),
                 valueTitle = "${trx.amount.value} ${trx.amount.coin.code}",
-                valueSubtitle = "~ \$${trx.getFiatValue()}"
+                valueSubtitle = trx.getFiatValue()
         )
         itemFee.bind(title = getString(R.string.full_transaction_info_fee), valueTitle = "${trx.fee.value} ${trx.fee.coin.code}")
         itemBlock.bind(title = getString(R.string.full_transaction_info_block), valueTitle = trx.blockHeight.toString())

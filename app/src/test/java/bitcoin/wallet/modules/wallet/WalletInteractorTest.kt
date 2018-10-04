@@ -5,6 +5,9 @@ import bitcoin.wallet.core.BitcoinAdapter
 import bitcoin.wallet.core.ExchangeRateManager
 import bitcoin.wallet.core.ILocalStorage
 import bitcoin.wallet.entities.CoinValue
+import bitcoin.wallet.entities.Currency
+import bitcoin.wallet.entities.CurrencyValue
+import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.modules.RxBaseTest
 import com.nhaarman.mockito_kotlin.any
@@ -14,9 +17,14 @@ import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.subjects.PublishSubject
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
+import org.powermock.core.classloader.annotations.SuppressStaticInitializationFor
+import org.powermock.modules.junit4.PowerMockRunner
 
+@RunWith(PowerMockRunner::class)
+@SuppressStaticInitializationFor("bitcoin.wallet.core.ExchangeRateManager")
 class WalletInteractorTest {
 
     private val delegate = mock(WalletModule.IInteractorDelegate::class.java)
@@ -30,7 +38,12 @@ class WalletInteractorTest {
     private var wordsHash = words.joinToString(" ")
     private var adapterId: String = "${wordsHash.hashCode()}-${coin.code}"
 
-    private var exchangeRates = mutableMapOf("BTC" to 10_000.0)
+    private val currency1 = Currency().apply {
+        code = "USD"
+        symbol = "$"
+        description = "United States Dollar"
+    }
+    private var exchangeRates = mutableMapOf(Bitcoin() as Coin to CurrencyValue(currency1, 10_000.0))
 
     @Before
     fun before() {
@@ -51,7 +64,7 @@ class WalletInteractorTest {
 
         interactor.notifyWalletBalances()
 
-        verify(delegate).didInitialFetch(any(), any(), any(), any())
+        verify(delegate).didInitialFetch(any(), any(), any())
     }
 
     @Test
@@ -89,7 +102,7 @@ class WalletInteractorTest {
 
         managerSub.onNext(Any())
 
-        verify(delegate, atLeast(2)).didInitialFetch(any(), any(), any(), any())
+        verify(delegate, atLeast(2)).didInitialFetch(any(), any(), any())
     }
 
     @Test

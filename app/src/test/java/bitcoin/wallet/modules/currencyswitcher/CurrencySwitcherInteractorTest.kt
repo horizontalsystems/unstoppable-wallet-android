@@ -2,8 +2,7 @@ package bitcoin.wallet.modules.currencyswitcher
 
 import bitcoin.wallet.core.NetworkManager
 import bitcoin.wallet.core.managers.PreferencesManager
-import bitcoin.wallet.entities.DollarCurrency
-import bitcoin.wallet.entities.EuroCurrency
+import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.modules.RxBaseTest
 import com.nhaarman.mockito_kotlin.atLeast
 import com.nhaarman.mockito_kotlin.whenever
@@ -19,8 +18,20 @@ class CurrencySwitcherInteractorTest {
     private val preferencesManager = mock(PreferencesManager::class.java)
 
     private val interactor = CurrencySwitcherInteractor(networkManager, preferencesManager)
-    private val currencyList = listOf(DollarCurrency(), EuroCurrency())
-    private val currencyViewItemList = listOf(CurrencyViewItem(DollarCurrency(), true), CurrencyViewItem(EuroCurrency(), false))
+
+    private val currency1 = Currency().apply {
+        code = "USD"
+        symbol = "$"
+        description = "United States Dollar"
+    }
+
+    private val currency2 = Currency().apply {
+        code = "EUR"
+        symbol = "€"
+        description = "Euro"
+    }
+    private val currencyList = listOf(currency1, currency2)
+    private val currencyViewItemList = listOf(CurrencyViewItem(currency1, true), CurrencyViewItem(currency2, false))
 
 
     @Before
@@ -29,10 +40,8 @@ class CurrencySwitcherInteractorTest {
 
         interactor.delegate = delegate
 
-        whenever(networkManager.getCurrencyCodes()).thenReturn(Flowable.just(currencyList))
-
-        val currentBaseCurrencyCode = "USD"
-        whenever(preferencesManager.getBaseCurrencyCode()).thenReturn(currentBaseCurrencyCode)
+        whenever(networkManager.getCurrencies()).thenReturn(Flowable.just(currencyList))
+        whenever(preferencesManager.getBaseCurrency()).thenReturn(currency1)
     }
 
     @Test
@@ -43,13 +52,12 @@ class CurrencySwitcherInteractorTest {
 
     @Test
     fun setBaseCurrency() {
-        val newBaseCurrency = EuroCurrency()
 
-        val expectedCurrencyList= listOf(CurrencyViewItem(DollarCurrency(), false), CurrencyViewItem(EuroCurrency(), true))
+        val expectedCurrencyList= listOf(CurrencyViewItem(currency1, false), CurrencyViewItem(currency2, true))
 
         interactor.getAvailableCurrencies()
 
-        interactor.setBaseCurrency(newBaseCurrency)
+        interactor.setBaseCurrency(currency2)
         verify(delegate, atLeast(2)).currencyListUpdated(expectedCurrencyList)
     }
 

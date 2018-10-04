@@ -33,4 +33,9 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
     override fun showTransactionInfo(transaction: TransactionRecordViewItem) {
         showTransactionInfoLiveEvent.value = transaction
     }
+
+    override fun onCleared() {
+        delegate.onCleared()
+        super.onCleared()
+    }
 }

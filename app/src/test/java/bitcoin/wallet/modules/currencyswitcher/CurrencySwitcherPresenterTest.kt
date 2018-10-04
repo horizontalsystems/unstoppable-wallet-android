@@ -1,7 +1,6 @@
 package bitcoin.wallet.modules.currencyswitcher
 
-import bitcoin.wallet.entities.DollarCurrency
-import bitcoin.wallet.entities.EuroCurrency
+import bitcoin.wallet.entities.Currency
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Before
 import org.junit.Test
@@ -12,7 +11,17 @@ class CurrencySwitcherPresenterTest {
     private val interactor = mock(CurrencySwitcherModule.IInteractor::class.java)
     private val view = mock(CurrencySwitcherModule.IView::class.java)
     private val presenter = CurrencySwitcherPresenter(interactor)
+    private val currency1 = Currency().apply {
+        code = "USD"
+        symbol = "$"
+        description = "United States Dollar"
+    }
 
+    private val currency2 = Currency().apply {
+        code = "EUR"
+        symbol = "€"
+        description = "Euro"
+    }
 
     @Before
     fun setUp() {
@@ -28,7 +37,7 @@ class CurrencySwitcherPresenterTest {
 
     @Test
     fun currencyListUpdated() {
-        val currencyViewItemList = listOf(CurrencyViewItem(DollarCurrency(), true), CurrencyViewItem(EuroCurrency(), false))
+        val currencyViewItemList = listOf(CurrencyViewItem(currency1, true), CurrencyViewItem(currency2, false))
 
         presenter.currencyListUpdated(currencyViewItemList)
         verify(view).updateCurrencyList(currencyViewItemList)
@@ -36,9 +45,7 @@ class CurrencySwitcherPresenterTest {
 
     @Test
     fun onItemClick() {
-        val currency = DollarCurrency()
-
-        presenter.onItemClick(currency)
-        verify(interactor).setBaseCurrency(currency)
+        presenter.onItemClick(currency1)
+        verify(interactor).setBaseCurrency(currency1)
     }
 }

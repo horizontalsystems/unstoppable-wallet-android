@@ -2,8 +2,8 @@ package bitcoin.wallet.modules.transactionInfo
 
 import bitcoin.wallet.core.IClipboardManager
 import bitcoin.wallet.entities.CoinValue
+import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
-import bitcoin.wallet.entities.DollarCurrency
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.modules.RxBaseTest
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem
@@ -30,7 +30,7 @@ class TransactionInfoInteractorTest {
             0,
             Date(),
             0,
-            CurrencyValue(DollarCurrency(), 0.0),
+            CurrencyValue(Currency(), 0.0),
             0.0
     )
 

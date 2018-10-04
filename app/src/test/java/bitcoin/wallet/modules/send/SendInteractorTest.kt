@@ -3,6 +3,9 @@ package bitcoin.wallet.modules.send
 import bitcoin.wallet.core.BitcoinAdapter
 import bitcoin.wallet.core.ExchangeRateManager
 import bitcoin.wallet.core.IClipboardManager
+import bitcoin.wallet.entities.Currency
+import bitcoin.wallet.entities.CurrencyValue
+import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.modules.RxBaseTest
 import com.nhaarman.mockito_kotlin.verify
@@ -10,8 +13,13 @@ import com.nhaarman.mockito_kotlin.whenever
 import junit.framework.Assert
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.Mockito
+import org.powermock.core.classloader.annotations.SuppressStaticInitializationFor
+import org.powermock.modules.junit4.PowerMockRunner
 
+@RunWith(PowerMockRunner::class)
+@SuppressStaticInitializationFor("bitcoin.wallet.core.ExchangeRateManager")
 class SendInteractorTest {
 
     private val delegate = Mockito.mock(SendModule.IInteractorDelegate::class.java)
@@ -20,8 +28,12 @@ class SendInteractorTest {
     private val exchangeRateManager = Mockito.mock(ExchangeRateManager::class.java)
 
     private val interactor = SendInteractor(clipboardManager, bitcoinAdapter, exchangeRateManager)
-
-    private var exchangeRates = mutableMapOf("BTC" to 10_000.0)
+    private val currency1 = Currency().apply {
+        code = "USD"
+        symbol = "$"
+        description = "United States Dollar"
+    }
+    private var exchangeRates = mutableMapOf(Bitcoin() as Coin to CurrencyValue(currency1, 10_000.0))
 
     @Before
     fun setUp() {

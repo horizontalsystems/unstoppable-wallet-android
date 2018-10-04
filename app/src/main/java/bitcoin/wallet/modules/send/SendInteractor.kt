@@ -12,10 +12,6 @@ class SendInteractor(private var clipboardManager: IClipboardManager, private va
         return adapter.coin.code
     }
 
-    override fun getBaseCurrency(): String {
-        return "USD"
-    }
-
     override fun getCopiedText(): String {
         return clipboardManager.getCopiedText()
     }
@@ -23,8 +19,9 @@ class SendInteractor(private var clipboardManager: IClipboardManager, private va
     override fun fetchExchangeRate() {
         val exchangeRates = exchangeRateManager.exchangeRates
         exchangeRates.forEach {
-            if (it.key == adapter.coin.code) {
-                delegate?.didFetchExchangeRate(it.value)
+            val (coin, currencyValue) = it
+            if (coin.code == adapter.coin.code) {
+                delegate?.didFetchExchangeRate(currencyValue.value)
             }
         }
     }

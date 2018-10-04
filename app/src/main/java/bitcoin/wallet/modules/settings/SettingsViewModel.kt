@@ -8,6 +8,7 @@ import io.reactivex.disposables.CompositeDisposable
 class SettingsViewModel : ViewModel(){
 
     val wordListBackedUp = MutableLiveData<Boolean>()
+    val baseCurrencyCode = MutableLiveData<String>()
     private val disposables = CompositeDisposable()
 
     fun init() {
@@ -16,6 +17,11 @@ class SettingsViewModel : ViewModel(){
         disposables.add(Factory.wordsManager.wordListBackedUpSubject.subscribe {
             wordListBackedUp.value = it
         })
+
+        disposables.add(Factory.preferencesManager.getBaseCurrencyFlowable()
+                .subscribe {
+                    baseCurrencyCode.value = it.code
+                })
     }
 
     override fun onCleared() {

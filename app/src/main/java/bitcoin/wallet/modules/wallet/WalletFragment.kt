@@ -144,7 +144,7 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
         coinIcon.setImageDrawable(iconDrawable)
         val numberFormat = NumberFormatHelper.fiatAmountFormat
         textName.text = "${walletBalanceViewItem.coinValue.coin.name} (${walletBalanceViewItem.coinValue.coin.code})"
-        textAmountFiat.text = "${walletBalanceViewItem.currencyValue.currency.symbol}${numberFormat.format(walletBalanceViewItem.currencyValue.value)}"
+        textAmountFiat.text = "${walletBalanceViewItem.currencyValue?.currency?.symbol ?: ""}${numberFormat.format(walletBalanceViewItem.currencyValue?.value ?: 0.0)}"
         textAmount.text = "${walletBalanceViewItem.coinValue.value}"
 
         val zeroBalance = walletBalanceViewItem.coinValue.value <= 0.0
