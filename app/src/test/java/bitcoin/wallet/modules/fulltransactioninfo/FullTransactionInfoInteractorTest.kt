@@ -1,8 +1,9 @@
 package bitcoin.wallet.modules.fulltransactioninfo
 
 import bitcoin.wallet.core.BitcoinAdapter
-import bitcoin.wallet.core.ExchangeRateManager
 import bitcoin.wallet.core.IClipboardManager
+import bitcoin.wallet.core.IExchangeRateManager
+import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.modules.RxBaseTest
@@ -18,7 +19,7 @@ class FullTransactionInfoInteractorTest {
 
     private val delegate = mock(FullTransactionInfoModule.IInteractorDelegate::class.java)
     private val clipboardManager = mock(IClipboardManager::class.java)
-    private val exchangeRateManager = mock(ExchangeRateManager::class.java)
+    private val exchangeRateManager = mock(IExchangeRateManager::class.java)
     private val bitcoinAdapter = mock(BitcoinAdapter::class.java)
     private var coin = Bitcoin()
     private val transactionId = "[transaction_id]"
@@ -37,7 +38,7 @@ class FullTransactionInfoInteractorTest {
         coinCode = "BTC"
     }
 
-    private val interactor = FullTransactionInfoInteractor(bitcoinAdapter, exchangeRateManager, transactionId, clipboardManager)
+    private val interactor = FullTransactionInfoInteractor(bitcoinAdapter, exchangeRateManager, transactionId, clipboardManager, Currency())
 
 
     @Before

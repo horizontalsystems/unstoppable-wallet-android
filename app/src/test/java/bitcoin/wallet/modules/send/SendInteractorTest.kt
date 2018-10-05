@@ -1,8 +1,11 @@
 package bitcoin.wallet.modules.send
 
 import bitcoin.wallet.core.BitcoinAdapter
-import bitcoin.wallet.core.ExchangeRateManager
 import bitcoin.wallet.core.IClipboardManager
+import bitcoin.wallet.core.IExchangeRateManager
+import bitcoin.wallet.entities.Currency
+import bitcoin.wallet.entities.CurrencyValue
+import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.modules.RxBaseTest
 import com.nhaarman.mockito_kotlin.verify
@@ -17,11 +20,15 @@ class SendInteractorTest {
     private val delegate = Mockito.mock(SendModule.IInteractorDelegate::class.java)
     private val clipboardManager = Mockito.mock(IClipboardManager::class.java)
     private val bitcoinAdapter = Mockito.mock(BitcoinAdapter::class.java)
-    private val exchangeRateManager = Mockito.mock(ExchangeRateManager::class.java)
+    private val exchangeRateManager = Mockito.mock(IExchangeRateManager::class.java)
 
     private val interactor = SendInteractor(clipboardManager, bitcoinAdapter, exchangeRateManager)
-
-    private var exchangeRates = mutableMapOf("BTC" to 10_000.0)
+    private val currency1 = Currency().apply {
+        code = "USD"
+        symbol = "$"
+        description = "United States Dollar"
+    }
+    private var exchangeRates = mutableMapOf(Bitcoin() as Coin to CurrencyValue(currency1, 10_000.0))
 
     @Before
     fun setUp() {
@@ -49,7 +56,7 @@ class SendInteractorTest {
     fun fetchExchangeRate() {
         val coin = Bitcoin()
 
-        whenever(exchangeRateManager.exchangeRates).thenReturn(exchangeRates)
+        whenever(exchangeRateManager.getExchangeRates()).thenReturn(exchangeRates)
         whenever(bitcoinAdapter.coin).thenReturn(coin)
 
         interactor.fetchExchangeRate()

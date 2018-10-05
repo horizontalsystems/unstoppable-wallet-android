@@ -5,6 +5,9 @@ import bitcoin.wallet.core.App
 import bitcoin.wallet.core.IEncryptionManager
 import bitcoin.wallet.core.ILocalStorage
 import bitcoin.wallet.core.ISettingsManager
+import bitcoin.wallet.entities.Currency
+import com.google.gson.Gson
+
 
 class PreferencesManager(private val encryptionManager: IEncryptionManager) : ILocalStorage, ISettingsManager {
 
@@ -31,6 +34,7 @@ class PreferencesManager(private val encryptionManager: IEncryptionManager) : IL
     private val LIGHT_MODE_ENABLED = "light_mode_enabled"
     private val FINGERPRINT_ENABLED = "fingerprint_enabled"
     private val WORDLIST_BACKUP = "wordlist_backup"
+    val BASE_CURRENCY = "base_currency"
 
     override fun isLightModeEnabled() = App.preferences.getBoolean(LIGHT_MODE_ENABLED, false)
 
@@ -57,11 +61,30 @@ class PreferencesManager(private val encryptionManager: IEncryptionManager) : IL
         }
     }
 
-    override fun wordlistBackedUp(backedUp: Boolean) {
+    override fun wordListBackedUp(backedUp: Boolean) {
         App.preferences.edit().putBoolean(WORDLIST_BACKUP, backedUp).apply()
     }
 
     override fun isWordListBackedUp(): Boolean {
         return App.preferences.getBoolean(WORDLIST_BACKUP, false)
     }
+
+    override fun setBaseCurrency(currency: Currency) {
+        val gson = Gson()
+        val json = gson.toJson(currency)
+        App.preferences.edit().putString(BASE_CURRENCY, json).apply()
+    }
+
+    override fun getBaseCurrency(): Currency {
+        val gson = Gson()
+        val json = App.preferences.getString(BASE_CURRENCY, "")
+        return if (json?.isBlank() == true) defaultCurrency else gson.fromJson<Currency>(json, Currency::class.java)
+    }
+
+    private val defaultCurrency: Currency = Currency().apply {
+        code = "USD"
+        symbol = "$"
+        description = "United States Dollar"
+    }
+
 }

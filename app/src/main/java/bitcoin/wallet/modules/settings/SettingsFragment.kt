@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.CompoundButton
 import bitcoin.wallet.R
 import bitcoin.wallet.core.managers.Factory
+import bitcoin.wallet.modules.currencyswitcher.CurrencySwitcherModule
 import kotlinx.android.synthetic.main.fragment_settings.*
 
 
@@ -39,9 +40,8 @@ class SettingsFragment : android.support.v4.app.Fragment() {
 
         baseCurrency.apply {
             setOnClickListener {
-                Log.e("AAA", "base currency clicked!")
+                CurrencySwitcherModule.start(context)
             }
-            selectedValue = "USD"
         }
 
         language.apply {
@@ -79,6 +79,12 @@ class SettingsFragment : android.support.v4.app.Fragment() {
         viewModel.wordListBackedUp.observe(this, Observer { wordListBackedUp ->
             wordListBackedUp?.let {
                 securityCenter.badge = getInfoBadge(it)
+            }
+        })
+
+        viewModel.baseCurrencyCode.observe(this, Observer { code ->
+            code?.let {
+                baseCurrency.selectedValue = it
             }
         })
     }

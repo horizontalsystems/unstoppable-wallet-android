@@ -1,7 +1,11 @@
 package bitcoin.wallet.modules.wallet
 
-import bitcoin.wallet.entities.*
+import bitcoin.wallet.entities.CoinValue
+import bitcoin.wallet.entities.Currency
+import bitcoin.wallet.entities.CurrencyValue
+import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
+import bitcoin.wallet.entities.coins.bitcoinCash.BitcoinCash
 import io.reactivex.subjects.BehaviorSubject
 import org.junit.Before
 import org.junit.Test
@@ -15,6 +19,12 @@ class WalletPresenterTest {
     private val router = mock(WalletModule.IRouter::class.java)
 
     private val presenter = WalletPresenter(interactor, router)
+
+    private val dollarCurrency = Currency().apply {
+        code = "USD"
+        symbol = "$"
+        description = "United States Dollar"
+    }
 
     @Before
     fun before() {
@@ -33,14 +43,13 @@ class WalletPresenterTest {
     fun updateView() {
 
         val coinValues = mutableMapOf<String, CoinValue>()
-        val rates = mutableMapOf<String, Double>()
+        val rates = mutableMapOf<Coin, CurrencyValue>()
         val progresses = mutableMapOf<String, BehaviorSubject<Double>>()
-        val currency: Currency = DollarCurrency()
         val coin1 = Bitcoin()
-        val coin2 = Ethereum()
+        val coin2 = BitcoinCash()
         val bhvSubject: BehaviorSubject<Double> = BehaviorSubject.create()
 
-        val expectedTotalBalance = CurrencyValue(DollarCurrency(), 3500.0)
+        val expectedTotalBalance = CurrencyValue(dollarCurrency, 3500.0)
 
         val adapterId1 = "id1"
         val adapterId2 = "id2"
@@ -48,14 +57,14 @@ class WalletPresenterTest {
         coinValues[adapterId2] = CoinValue(coin2, 1.0)
         progresses[adapterId1] = bhvSubject
         progresses[adapterId2] = bhvSubject
-        rates["BTC"] = 5000.0
-        rates["ETH"] = 1000.0
+        rates[coin1] = CurrencyValue(dollarCurrency, 5000.0)
+        rates[coin2] = CurrencyValue(dollarCurrency, 1000.0)
 
-        presenter.didInitialFetch(coinValues, rates, progresses, currency)
+        presenter.didInitialFetch(coinValues, rates, progresses)
 
         val expectedViewItems = listOf(
-                WalletBalanceViewItem(adapterId1, CoinValue(coin1, 0.5), CurrencyValue(DollarCurrency(), 5000.0), CurrencyValue(DollarCurrency(), 2500.0), bhvSubject),
-                WalletBalanceViewItem(adapterId2, CoinValue(coin2, 1.0), CurrencyValue(DollarCurrency(), 1000.0), CurrencyValue(DollarCurrency(), 1000.0), bhvSubject)
+                WalletBalanceViewItem(adapterId1, CoinValue(coin1, 0.5), CurrencyValue(dollarCurrency, 5000.0), CurrencyValue(dollarCurrency, 2500.0), bhvSubject),
+                WalletBalanceViewItem(adapterId2, CoinValue(coin2, 1.0), CurrencyValue(dollarCurrency, 1000.0), CurrencyValue(dollarCurrency, 1000.0), bhvSubject)
         )
 
         verify(view).showWalletBalances(expectedViewItems)

@@ -4,17 +4,18 @@ import bitcoin.wallet.core.AdapterManager
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
-import bitcoin.wallet.entities.DollarCurrency
+import bitcoin.wallet.entities.coins.Coin
 import io.reactivex.subjects.BehaviorSubject
 
-class WalletPresenter(private var interactor: WalletModule.IInteractor, private val router: WalletModule.IRouter) : WalletModule.IViewDelegate, WalletModule.IInteractorDelegate {
+class WalletPresenter(
+        private var interactor: WalletModule.IInteractor,
+        private val router: WalletModule.IRouter) : WalletModule.IViewDelegate, WalletModule.IInteractorDelegate {
 
     var view: WalletModule.IView? = null
 
     private var coinValues = mutableMapOf<String, CoinValue>()
-    private var rates = mapOf<String, Double>()
+    private var rates = mutableMapOf<Coin, CurrencyValue>()
     private var progresses = mutableMapOf<String, BehaviorSubject<Double>>()
-    var currency: Currency = DollarCurrency()
 
     override fun onReceiveClicked(adapterId: String) {
         router.openReceiveDialog(adapterId)
@@ -30,11 +31,10 @@ class WalletPresenter(private var interactor: WalletModule.IInteractor, private 
         interactor.notifyWalletBalances()
     }
 
-    override fun didInitialFetch(coinValues: MutableMap<String, CoinValue>, rates: Map<String, Double>, progresses: MutableMap<String, BehaviorSubject<Double>>, currency: Currency) {
+    override fun didInitialFetch(coinValues: MutableMap<String, CoinValue>, rates: MutableMap<Coin, CurrencyValue>, progresses: MutableMap<String, BehaviorSubject<Double>>) {
         this.coinValues = coinValues
         this.rates = rates
         this.progresses = progresses
-        this.currency = currency
 
         updateView()
     }
@@ -45,7 +45,7 @@ class WalletPresenter(private var interactor: WalletModule.IInteractor, private 
         updateView()
     }
 
-    override fun didUpdate(rates: Map<String, Double>) {
+    override fun didExchangeRateUpdate(rates: MutableMap<Coin, CurrencyValue>) {
         this.rates = rates
 
         updateView()
@@ -54,27 +54,36 @@ class WalletPresenter(private var interactor: WalletModule.IInteractor, private 
     private fun updateView() {
         var totalBalance = 0.0
         val viewItems = mutableListOf<WalletBalanceViewItem>()
+        var baseCurrency: Currency? = null
 
         for (item in coinValues) {
 
             val adapterId = item.key
             val coinValue = item.value
-            val rate = rates[coinValue.coin.code] ?: 0.0
+            val exchangeRateValue = rates[coinValue.coin]
+            var currencyValue: CurrencyValue? = null
+
+            exchangeRateValue?.let {
+                val valueInFiat = it.value * coinValue.value
+                currencyValue = CurrencyValue(it.currency, valueInFiat)
+                totalBalance += valueInFiat
+                baseCurrency = it.currency
+            }
 
             viewItems.add(
                     WalletBalanceViewItem(
                             adapterId = adapterId,
                             coinValue = coinValue,
-                            exchangeValue = CurrencyValue(currency, rate),
-                            currencyValue = CurrencyValue(currency, coinValue.value * rate),
+                            exchangeRateValue = exchangeRateValue,
+                            currencyValue = currencyValue,
                             progress = progresses[adapterId]
                     )
             )
-
-            totalBalance += coinValue.value * rate
         }
 
-        view?.showTotalBalance(CurrencyValue(currency, totalBalance))
+        baseCurrency?.let {
+            view?.showTotalBalance(CurrencyValue(it, totalBalance))
+        }
         view?.showWalletBalances(viewItems)
     }
 

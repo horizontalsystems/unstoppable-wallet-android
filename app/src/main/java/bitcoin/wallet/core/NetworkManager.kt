@@ -1,5 +1,6 @@
 package bitcoin.wallet.core
 
+import bitcoin.wallet.entities.Currency
 import io.reactivex.Flowable
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -32,6 +33,29 @@ class NetworkManager : INetworkManager {
                     0.0
                 }
     }
+
+    override fun getCurrencies(): Flowable<List<Currency>> {
+        val currency1 = Currency().apply {
+            code = "USD"
+            symbol = "$"
+            description = "United States Dollar"
+        }
+
+        val currency2 = Currency().apply {
+            code = "EUR"
+            symbol = "€"
+            description = "Euro"
+        }
+        return Flowable.just(listOf(currency1, currency2))
+        //todo After backend ready parse currency list from API response
+//        return ServiceExchangeApi.service .getCurrencies()
+//                .map { t: String ->  getCurrenciesFromCodes(t) }
+//                .onErrorReturn {
+//                    Log.e("NetwMan", "exception: ", it)
+//                    listOf(DollarCurrency(), EuroCurrency())
+//                }
+    }
+
 }
 
 object ServiceExchangeApi {
@@ -83,6 +107,9 @@ object ServiceExchangeApi {
                 @Path("coin") coinCode: String,
                 @Path("fiat") currency: String
         ): Flowable<Double>
+
+        @GET("btc/index.json")
+        fun getCurrencies(): Flowable<String>
 
     }
 }

@@ -1,22 +1,24 @@
 package bitcoin.wallet.modules.wallet
 
 import bitcoin.wallet.core.AdapterManager
-import bitcoin.wallet.core.ExchangeRateManager
+import bitcoin.wallet.core.IExchangeRateManager
 import bitcoin.wallet.core.ILocalStorage
 import bitcoin.wallet.entities.CoinValue
-import bitcoin.wallet.entities.DollarCurrency
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
-class WalletInteractor(private val adapterManager: AdapterManager, private val exchangeRateManager: ExchangeRateManager, private val storage: ILocalStorage) : WalletModule.IInteractor {
+class WalletInteractor(
+        private val adapterManager: AdapterManager,
+        private val exchangeRateManager: IExchangeRateManager,
+        private val storage: ILocalStorage) : WalletModule.IInteractor {
 
     var delegate: WalletModule.IInteractorDelegate? = null
     private var disposables: CompositeDisposable = CompositeDisposable()
-    var disposable: Disposable? = null
+    private var adapterManagerDisposable: Disposable? = null
 
     override fun notifyWalletBalances() {
-        disposable = adapterManager.subject.subscribe {
+        adapterManagerDisposable = adapterManager.subject.subscribe {
             disposables.clear()
             initialFetchAndSubscribe()
         }
@@ -27,14 +29,13 @@ class WalletInteractor(private val adapterManager: AdapterManager, private val e
     private fun initialFetchAndSubscribe() {
         val coinValues = mutableMapOf<String, CoinValue>()
         val progresses = mutableMapOf<String, BehaviorSubject<Double>>()
-        val currency = DollarCurrency()
 
         adapterManager.adapters.forEach { adapter ->
             coinValues[adapter.id] = CoinValue(adapter.coin, adapter.balance)
             progresses[adapter.id] = adapter.progressSubject
         }
 
-        delegate?.didInitialFetch(coinValues, exchangeRateManager.exchangeRates, progresses, currency)
+        delegate?.didInitialFetch(coinValues, exchangeRateManager.getExchangeRates(), progresses)
 
         adapterManager.adapters.forEach { adapter ->
             disposables.add(adapter.balanceSubject.subscribe {
@@ -42,8 +43,8 @@ class WalletInteractor(private val adapterManager: AdapterManager, private val e
             })
         }
 
-        disposables.add(exchangeRateManager.latestExchangeRateSubject.subscribe {
-            delegate?.didUpdate(it)
+        disposables.add(exchangeRateManager.getLatestExchangeRateSubject().subscribe {
+            delegate?.didExchangeRateUpdate(it)
         })
 
     }

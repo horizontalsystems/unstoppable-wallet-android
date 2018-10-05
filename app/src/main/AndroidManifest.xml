@@ -21,8 +21,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".modules.guest.GuestActivity"
-                  android:screenOrientation="portrait"/>
+        <activity
+            android:name=".modules.guest.GuestActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".modules.backup.BackupActivity"
             android:screenOrientation="portrait"
@@ -48,6 +49,9 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".modules.fulltransactioninfo.FullTransactionInfoActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".modules.currencyswitcher.CurrencySwitcherActivity"
             android:screenOrientation="portrait"/>
 
         <meta-data

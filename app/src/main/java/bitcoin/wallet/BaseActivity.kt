@@ -27,6 +27,7 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         if (requiresPinUnlock) {
+            //todo handle exception(UserNotAuthenticatedException) while calling Factory.preferencesManager.getPin()
             if (App.promptPin && Factory.preferencesManager.getPin() != null) {
                 PinModule.startForUnlock(this)
                 return

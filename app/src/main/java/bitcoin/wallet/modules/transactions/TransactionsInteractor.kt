@@ -1,24 +1,28 @@
 package bitcoin.wallet.modules.transactions
 
 import bitcoin.wallet.core.AdapterManager
-import bitcoin.wallet.core.ExchangeRateManager
+import bitcoin.wallet.core.IExchangeRateManager
 import bitcoin.wallet.entities.CoinValue
+import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
-import bitcoin.wallet.entities.DollarCurrency
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 
-class TransactionsInteractor(private val adapterManager: AdapterManager, private val exchangeRateManager: ExchangeRateManager) : TransactionsModule.IInteractor {
+class TransactionsInteractor(
+        private val adapterManager: AdapterManager,
+        private val exchangeRateManager: IExchangeRateManager,
+        private val baseCurrencyFlowable: Flowable<Currency>) : TransactionsModule.IInteractor {
 
     var delegate: TransactionsModule.IInteractorDelegate? = null
     private var disposables: CompositeDisposable = CompositeDisposable()
-    var disposable: Disposable? = null
+    private var adapterManagerDisposable: Disposable? = null
+    private var clickedAdapterId: String? = null
 
     override fun retrieveFilters() {
-        disposable = adapterManager.subject.subscribe {
+        adapterManagerDisposable = adapterManager.subject.subscribe {
             disposables.clear()
             initialFetchAndSubscribe()
         }
@@ -35,12 +39,26 @@ class TransactionsInteractor(private val adapterManager: AdapterManager, private
 
         adapterManager.adapters.forEach { adapter ->
             disposables.add(adapter.transactionRecordsSubject.subscribe {
-                retrieveTransactionItems()
+                retrieveTransactions(clickedAdapterId)
             })
         }
+
+        retrieveTransactions(clickedAdapterId)
     }
 
-    override fun retrieveTransactionItems(adapterId: String?) {
+    override fun retrieveTransactions(adapterId: String?) {
+        clickedAdapterId = adapterId
+        disposables.add(baseCurrencyFlowable.subscribe { baseCurrency ->
+            retrieveTransactionItemsWithBaseCurrency(baseCurrency, clickedAdapterId)
+        })
+    }
+
+    override fun onCleared() {
+        disposables.clear()
+        adapterManagerDisposable?.dispose()
+    }
+
+    private fun retrieveTransactionItemsWithBaseCurrency(baseCurrency: Currency, adapterId: String?) {
         val items = mutableListOf<TransactionRecordViewItem>()
 
         val filteredAdapters = adapterManager.adapters.filter { adapterId == null || it.id == adapterId }
@@ -64,7 +82,7 @@ class TransactionsInteractor(private val adapterManager: AdapterManager, private
                 items.add(item)
                 record.timestamp?.let { timestamp ->
                     flowableList.add(
-                            exchangeRateManager.getRate(coinCode = record.coinCode, currency = DollarCurrency().code, timestamp = timestamp)
+                            exchangeRateManager.getRate(coinCode = record.coinCode, currency = baseCurrency.code, timestamp = timestamp)
                                     .map { Pair(record.transactionHash, it) }
                     )
                 }
@@ -85,7 +103,7 @@ class TransactionsInteractor(private val adapterManager: AdapterManager, private
                         val rate = ratesMap[item.hash] ?: 0.0
                         if (rate > 0) {
                             val value = item.amount.value * rate
-                            item.currencyAmount = CurrencyValue(currency = DollarCurrency(), value = value)
+                            item.currencyAmount = CurrencyValue(currency = baseCurrency, value = value)
                             item.exchangeRate = rate
                         }
                     }

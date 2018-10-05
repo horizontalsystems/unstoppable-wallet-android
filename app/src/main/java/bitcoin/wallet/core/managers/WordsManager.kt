@@ -14,7 +14,7 @@ class WordsManager(private val storage: ILocalStorage) {
             return storage.isWordListBackedUp()
         }
         set(value) {
-            storage.wordlistBackedUp(value)
+            storage.wordListBackedUp(value)
             wordListBackedUpSubject.onNext(value)
         }
 

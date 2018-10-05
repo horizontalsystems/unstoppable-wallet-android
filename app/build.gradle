@@ -43,9 +43,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     // ViewModel and LiveData
     implementation "android.arch.lifecycle:extensions:$lifecycle_version"
@@ -62,10 +59,7 @@ dependencies {
     implementation "android.arch.lifecycle:common-java8:$lifecycle_version"
     // optional - ReactiveStreams support for LiveData
     implementation "android.arch.lifecycle:reactivestreams:$lifecycle_version"
-    // optional - Test helpers for LiveData
-    testImplementation "android.arch.core:core-testing:$lifecycle_version"
-    testImplementation 'org.mockito:mockito-core'
-    testImplementation 'com.nhaarman:mockito-kotlin-kt1.1:1.6.0'
+
     implementation 'com.android.support:recyclerview-v7:28.0.0'
 
     implementation 'com.aurelhubert:ahbottomnavigation:2.2.0'
@@ -91,4 +85,15 @@ dependencies {
 
     // WalletKit
     implementation 'com.github.horizontalsystems:wallet-kit-android:dev-SNAPSHOT'
+
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    
+    // optional - Test helpers for LiveData
+    testImplementation 'junit:junit:4.12'
+    testImplementation "android.arch.core:core-testing:$lifecycle_version"
+    testImplementation 'org.mockito:mockito-core'
+    testImplementation 'com.nhaarman:mockito-kotlin-kt1.1:1.6.0'
+    testImplementation 'org.powermock:powermock-api-mockito2:2.0.0-beta.5'
+    testImplementation 'org.powermock:powermock-module-junit4:2.0.0-beta.5'
 }

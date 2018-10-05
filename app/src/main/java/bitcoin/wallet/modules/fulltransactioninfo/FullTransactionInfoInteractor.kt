@@ -1,17 +1,22 @@
 package bitcoin.wallet.modules.fulltransactioninfo
 
-import bitcoin.wallet.core.ExchangeRateManager
 import bitcoin.wallet.core.IAdapter
 import bitcoin.wallet.core.IClipboardManager
+import bitcoin.wallet.core.IExchangeRateManager
 import bitcoin.wallet.entities.CoinValue
+import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
-import bitcoin.wallet.entities.DollarCurrency
 import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 
-class FullTransactionInfoInteractor(private val adapter: IAdapter?, private val exchangeRateManager: ExchangeRateManager, private val transactionId: String, private var clipboardManager: IClipboardManager) : FullTransactionInfoModule.IInteractor {
+class FullTransactionInfoInteractor(
+        private val adapter: IAdapter?,
+        private val exchangeRateManager: IExchangeRateManager,
+        private val transactionId: String,
+        private var clipboardManager: IClipboardManager,
+        private val baseCurrency: Currency) : FullTransactionInfoModule.IInteractor {
 
     private var transactionRecordViewItem: TransactionRecordViewItem? = null
     var delegate: FullTransactionInfoModule.IInteractorDelegate? = null
@@ -37,14 +42,14 @@ class FullTransactionInfoInteractor(private val adapter: IAdapter?, private val 
 
     private fun fetchExchangeRate(transaction: TransactionRecord) {
         transaction.timestamp?.let { timestamp ->
-            exchangeRateManager.getRate(coinCode = transaction.coinCode, currency = DollarCurrency().code, timestamp = timestamp)
+            exchangeRateManager.getRate(coinCode = transaction.coinCode, currency = baseCurrency.code, timestamp = timestamp)
                     .subscribeOn(Schedulers.io())
                     .unsubscribeOn(Schedulers.io())
                     .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
                     .subscribe { rate ->
                         if (rate > 0) {
                             val value = (transactionRecordViewItem?.amount?.value ?: 0.0) * rate
-                            transactionRecordViewItem?.currencyAmount = CurrencyValue(currency = DollarCurrency(), value = value)
+                            transactionRecordViewItem?.currencyAmount = CurrencyValue(currency = baseCurrency, value = value)
                             transactionRecordViewItem?.exchangeRate = rate
                             transactionRecordViewItem?.let { delegate?.didGetTransactionInfo(it) }
                         }

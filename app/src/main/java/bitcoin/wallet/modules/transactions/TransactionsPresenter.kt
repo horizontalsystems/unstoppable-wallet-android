@@ -21,7 +21,7 @@ class TransactionsPresenter(private val interactor: TransactionsModule.IInteract
 
     override fun onFilterSelect(adapterId: String?) {
         println("onFilterSelect $adapterId")
-        interactor.retrieveTransactionItems(adapterId = adapterId)
+        interactor.retrieveTransactions(adapterId = adapterId)
     }
 
     override fun didRetrieveFilters(filters: List<TransactionFilterItem>) {
@@ -30,12 +30,15 @@ class TransactionsPresenter(private val interactor: TransactionsModule.IInteract
         val items = filterItems.toMutableList()
         items.add(0, TransactionFilterItem(null, "All"))
         view?.showFilters(filters = items)
-        interactor.retrieveTransactionItems(null)
     }
 
     var view: TransactionsModule.IView? = null
 
     override fun didRetrieveItems(items: List<TransactionRecordViewItem>) {
         view?.showTransactionItems(items)
+    }
+
+    override fun onCleared() {
+        interactor.onCleared()
     }
 }

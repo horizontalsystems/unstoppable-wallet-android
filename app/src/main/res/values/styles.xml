@@ -29,6 +29,7 @@
     <attr name="TransactionDetailValueTextColor" format="reference|color" />
     <attr name="TransactionDetailBottomBarBackground" format="reference|color" />
     <attr name="BottomTransactionInfoBackground" format="reference|color" />
+    <attr name="CurrencySwitcherTitleColor" format="reference|color" />
 
     <!-- Base application theme. -->
     <style name="DarkModeAppTheme" parent="Theme.AppCompat.NoActionBar">
@@ -73,6 +74,7 @@
         <item name="TransactionDetailValueTextColor">@color/bars_color</item>
         <item name="TransactionDetailBottomBarBackground">@color/dark</item>
         <item name="BottomTransactionInfoBackground">@color/dark</item>
+        <item name="CurrencySwitcherTitleColor">@color/bars_color</item>
     </style>
 
     <style name="LightModeAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -117,6 +119,7 @@
         <item name="TransactionDetailValueTextColor">@color/dark</item>
         <item name="TransactionDetailBottomBarBackground">#f5fafafa</item>
         <item name="BottomTransactionInfoBackground">@color/bars_color</item>
+        <item name="CurrencySwitcherTitleColor">@color/dark</item>
     </style>
 
     <style name="Button" parent="Widget.AppCompat.Button.Borderless">
