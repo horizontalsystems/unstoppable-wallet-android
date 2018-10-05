@@ -1,7 +1,6 @@
 package bitcoin.wallet.modules.transactions
 
 import bitcoin.wallet.core.AdapterManager
-import bitcoin.wallet.core.ExchangeRateManager
 import bitcoin.wallet.core.managers.Factory
 
 object TransactionsModule {
@@ -37,8 +36,8 @@ object TransactionsModule {
 
     fun initModule(view: TransactionsViewModel, router: IRouter) {
         val adapter = AdapterManager
-        val exchangeRateManager = ExchangeRateManager
-        val baseCurrencyFlowable = Factory.preferencesManager.getBaseCurrencyFlowable()
+        val exchangeRateManager = Factory.exchangeRateManager
+        val baseCurrencyFlowable = Factory.currencyManager.getBaseCurrencyFlowable()
         val interactor = TransactionsInteractor(adapter, exchangeRateManager, baseCurrencyFlowable)
         val presenter = TransactionsPresenter(interactor, router)
 

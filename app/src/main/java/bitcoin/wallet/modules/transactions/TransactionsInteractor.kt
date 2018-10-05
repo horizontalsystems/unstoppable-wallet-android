@@ -1,7 +1,7 @@
 package bitcoin.wallet.modules.transactions
 
 import bitcoin.wallet.core.AdapterManager
-import bitcoin.wallet.core.ExchangeRateManager
+import bitcoin.wallet.core.IExchangeRateManager
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
@@ -13,7 +13,7 @@ import java.util.*
 
 class TransactionsInteractor(
         private val adapterManager: AdapterManager,
-        private val exchangeRateManager: ExchangeRateManager,
+        private val exchangeRateManager: IExchangeRateManager,
         private val baseCurrencyFlowable: Flowable<Currency>) : TransactionsModule.IInteractor {
 
     var delegate: TransactionsModule.IInteractorDelegate? = null

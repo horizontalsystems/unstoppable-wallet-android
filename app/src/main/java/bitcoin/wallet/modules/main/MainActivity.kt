@@ -21,6 +21,7 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Factory.wordsManager.savedWords()?.let { AdapterManager.initAdapters(it) }
+        Factory.exchangeRateManager
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         viewModel.init()

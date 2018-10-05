@@ -1,7 +1,7 @@
 package bitcoin.wallet.modules.currencyswitcher
 
+import bitcoin.wallet.core.ISettingsManager
 import bitcoin.wallet.core.NetworkManager
-import bitcoin.wallet.core.managers.PreferencesManager
 import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.modules.RxBaseTest
 import com.nhaarman.mockito_kotlin.atLeast
@@ -15,9 +15,9 @@ import org.mockito.Mockito.verify
 class CurrencySwitcherInteractorTest {
     private val delegate = mock(CurrencySwitcherModule.IInteractorDelegate::class.java)
     private val networkManager = mock(NetworkManager::class.java)
-    private val preferencesManager = mock(PreferencesManager::class.java)
+    private val settingsManager = mock(ISettingsManager::class.java)
 
-    private val interactor = CurrencySwitcherInteractor(networkManager, preferencesManager)
+    private val interactor = CurrencySwitcherInteractor(networkManager, settingsManager)
 
     private val currency1 = Currency().apply {
         code = "USD"
@@ -41,7 +41,7 @@ class CurrencySwitcherInteractorTest {
         interactor.delegate = delegate
 
         whenever(networkManager.getCurrencies()).thenReturn(Flowable.just(currencyList))
-        whenever(preferencesManager.getBaseCurrency()).thenReturn(currency1)
+        whenever(settingsManager.getBaseCurrency()).thenReturn(currency1)
     }
 
     @Test

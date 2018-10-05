@@ -2,7 +2,10 @@ package bitcoin.wallet.core
 
 import android.hardware.fingerprint.FingerprintManager
 import bitcoin.wallet.entities.Currency
+import bitcoin.wallet.entities.CurrencyValue
+import bitcoin.wallet.entities.coins.Coin
 import io.reactivex.Flowable
+import io.reactivex.subjects.PublishSubject
 
 interface ILocalStorage {
     val savedWords: List<String>?
@@ -10,7 +13,7 @@ interface ILocalStorage {
     fun clearAll()
     fun savePin(pin: String)
     fun getPin(): String?
-    fun wordlistBackedUp(backedUp: Boolean)
+    fun wordListBackedUp(backedUp: Boolean)
     fun isWordListBackedUp(): Boolean
 }
 
@@ -42,4 +45,17 @@ interface ISettingsManager {
 
     fun isLightModeEnabled(): Boolean
     fun setLightModeEnabled(enabled: Boolean)
+
+    fun setBaseCurrency(currency: Currency)
+    fun getBaseCurrency(): Currency
+}
+
+interface ICurrencyManager {
+    fun getBaseCurrencyFlowable(): Flowable<Currency>
+}
+
+interface IExchangeRateManager {
+    fun getRate(coinCode: String, currency: String, timestamp: Long): Flowable<Double>
+    fun getExchangeRates(): MutableMap<Coin, CurrencyValue>
+    fun getLatestExchangeRateSubject(): PublishSubject<MutableMap<Coin, CurrencyValue>>
 }

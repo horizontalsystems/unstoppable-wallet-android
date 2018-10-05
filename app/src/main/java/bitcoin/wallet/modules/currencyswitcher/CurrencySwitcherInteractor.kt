@@ -1,12 +1,12 @@
 package bitcoin.wallet.modules.currencyswitcher
 
+import bitcoin.wallet.core.ISettingsManager
 import bitcoin.wallet.core.NetworkManager
-import bitcoin.wallet.core.managers.PreferencesManager
 import bitcoin.wallet.entities.Currency
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class CurrencySwitcherInteractor(private val networkManager: NetworkManager, private val preferencesManager: PreferencesManager) : CurrencySwitcherModule.IInteractor{
+class CurrencySwitcherInteractor(private val networkManager: NetworkManager, private val preferencesManager: ISettingsManager) : CurrencySwitcherModule.IInteractor{
 
     private var disposable: Disposable? = null
     private var currencyList: MutableList<CurrencyViewItem> = mutableListOf()

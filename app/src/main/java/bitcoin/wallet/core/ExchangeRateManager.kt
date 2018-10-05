@@ -15,13 +15,13 @@ import java.text.DecimalFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-object ExchangeRateManager {
+class ExchangeRateManager: IExchangeRateManager {
 
     private var disposables: CompositeDisposable = CompositeDisposable()
     private var baseCurrencyDisposable: Disposable? = null
 
     init {
-        baseCurrencyDisposable = Factory.preferencesManager.getBaseCurrencyFlowable().subscribe { baseCurrency ->
+        baseCurrencyDisposable = Factory.currencyManager.getBaseCurrencyFlowable().subscribe { baseCurrency ->
             disposables.clear()
             disposables.add(Observable.interval(0, 5, TimeUnit.MINUTES, Schedulers.io())
                     .subscribe {
@@ -30,9 +30,13 @@ object ExchangeRateManager {
         }
     }
 
-    var latestExchangeRateSubject: PublishSubject<MutableMap<Coin, CurrencyValue>> = PublishSubject.create()
+    private var latestExchangeRateSubject: PublishSubject<MutableMap<Coin, CurrencyValue>> = PublishSubject.create()
 
-    var exchangeRates: MutableMap<Coin, CurrencyValue> = hashMapOf()
+    override fun getLatestExchangeRateSubject() = latestExchangeRateSubject
+
+    private var exchangeRates: MutableMap<Coin, CurrencyValue> = hashMapOf()
+
+    override fun getExchangeRates() = exchangeRates
 
     private fun refreshRates(baseCurrency: Currency) {
         val flowableList = mutableListOf<Flowable<Pair<String, Double>>>()
@@ -57,7 +61,7 @@ object ExchangeRateManager {
                 })
     }
 
-    fun getRate(coinCode: String, currency: String, timestamp: Long): Flowable<Double> {
+    override fun getRate(coinCode: String, currency: String, timestamp: Long): Flowable<Double> {
         val calendar = DateHelper.getCalendarFromTimestamp(timestamp)
 
         val year = calendar.get(Calendar.YEAR)

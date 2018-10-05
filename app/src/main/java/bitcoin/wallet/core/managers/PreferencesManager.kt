@@ -1,6 +1,5 @@
 package bitcoin.wallet.core.managers
 
-import android.content.SharedPreferences
 import android.text.TextUtils
 import bitcoin.wallet.core.App
 import bitcoin.wallet.core.IEncryptionManager
@@ -8,8 +7,6 @@ import bitcoin.wallet.core.ILocalStorage
 import bitcoin.wallet.core.ISettingsManager
 import bitcoin.wallet.entities.Currency
 import com.google.gson.Gson
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
 
 
 class PreferencesManager(private val encryptionManager: IEncryptionManager) : ILocalStorage, ISettingsManager {
@@ -37,7 +34,7 @@ class PreferencesManager(private val encryptionManager: IEncryptionManager) : IL
     private val LIGHT_MODE_ENABLED = "light_mode_enabled"
     private val FINGERPRINT_ENABLED = "fingerprint_enabled"
     private val WORDLIST_BACKUP = "wordlist_backup"
-    private val BASE_CURRENCY = "base_currency"
+    val BASE_CURRENCY = "base_currency"
 
     override fun isLightModeEnabled() = App.preferences.getBoolean(LIGHT_MODE_ENABLED, false)
 
@@ -64,7 +61,7 @@ class PreferencesManager(private val encryptionManager: IEncryptionManager) : IL
         }
     }
 
-    override fun wordlistBackedUp(backedUp: Boolean) {
+    override fun wordListBackedUp(backedUp: Boolean) {
         App.preferences.edit().putBoolean(WORDLIST_BACKUP, backedUp).apply()
     }
 
@@ -72,35 +69,17 @@ class PreferencesManager(private val encryptionManager: IEncryptionManager) : IL
         return App.preferences.getBoolean(WORDLIST_BACKUP, false)
     }
 
-    fun setBaseCurrency(currency: Currency) {
+    override fun setBaseCurrency(currency: Currency) {
         val gson = Gson()
         val json = gson.toJson(currency)
         App.preferences.edit().putString(BASE_CURRENCY, json).apply()
     }
 
-    fun getBaseCurrency(): Currency {
+    override fun getBaseCurrency(): Currency {
         val gson = Gson()
         val json = App.preferences.getString(BASE_CURRENCY, "")
         return if (json?.isBlank() == true) defaultCurrency else gson.fromJson<Currency>(json, Currency::class.java)
     }
-
-    fun getBaseCurrencyFlowable(): Flowable<Currency> =
-            Flowable.create({ emitter ->
-                val emitSavedBaseCurrency = {
-                    val currency = getBaseCurrency()
-                    emitter.onNext(currency)
-                }
-
-                val preferencesListener = SharedPreferences.OnSharedPreferenceChangeListener { _, updatedKey ->
-                    if (TextUtils.equals(BASE_CURRENCY, updatedKey)) {
-                        emitSavedBaseCurrency()
-                    }
-                }
-
-                App.preferences.registerOnSharedPreferenceChangeListener(preferencesListener)
-                emitSavedBaseCurrency()
-                emitter.setCancellable { App.preferences.unregisterOnSharedPreferenceChangeListener(preferencesListener) }
-            }, BackpressureStrategy.LATEST)
 
     private val defaultCurrency: Currency = Currency().apply {
         code = "USD"

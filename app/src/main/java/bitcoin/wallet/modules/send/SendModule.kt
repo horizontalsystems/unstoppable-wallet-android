@@ -1,7 +1,6 @@
 package bitcoin.wallet.modules.send
 
 import android.support.v4.app.FragmentActivity
-import bitcoin.wallet.core.ExchangeRateManager
 import bitcoin.wallet.core.IAdapter
 import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.viewHelpers.TextHelper
@@ -45,7 +44,7 @@ object SendModule {
     }
 
     fun init(view: SendViewModel, router: IRouter, adapter: IAdapter) {
-        val exchangeRateManager = ExchangeRateManager
+        val exchangeRateManager = Factory.exchangeRateManager
         val baseCurrency = Factory.preferencesManager.getBaseCurrency()
         val interactor = SendInteractor(TextHelper, adapter, exchangeRateManager)
         val presenter = SendPresenter(interactor, router, baseCurrency)

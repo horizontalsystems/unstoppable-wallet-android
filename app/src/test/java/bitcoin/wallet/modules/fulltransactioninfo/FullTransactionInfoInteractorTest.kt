@@ -1,9 +1,8 @@
 package bitcoin.wallet.modules.fulltransactioninfo
 
 import bitcoin.wallet.core.BitcoinAdapter
-import bitcoin.wallet.core.ExchangeRateManager
 import bitcoin.wallet.core.IClipboardManager
-import bitcoin.wallet.core.managers.Factory
+import bitcoin.wallet.core.IExchangeRateManager
 import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
@@ -13,20 +12,14 @@ import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
-import org.powermock.core.classloader.annotations.SuppressStaticInitializationFor
-import org.powermock.modules.junit4.PowerMockRunner
 import java.util.*
 
-@RunWith(PowerMockRunner::class)
-@SuppressStaticInitializationFor("bitcoin.wallet.core.ExchangeRateManager")
 class FullTransactionInfoInteractorTest {
 
     private val delegate = mock(FullTransactionInfoModule.IInteractorDelegate::class.java)
     private val clipboardManager = mock(IClipboardManager::class.java)
-    private val factory = mock(Factory::class.java)
-    private val exchangeRateManager = mock(ExchangeRateManager::class.java)
+    private val exchangeRateManager = mock(IExchangeRateManager::class.java)
     private val bitcoinAdapter = mock(BitcoinAdapter::class.java)
     private var coin = Bitcoin()
     private val transactionId = "[transaction_id]"

@@ -2,7 +2,7 @@ package bitcoin.wallet.modules.transactions
 
 import bitcoin.wallet.core.AdapterManager
 import bitcoin.wallet.core.BitcoinAdapter
-import bitcoin.wallet.core.ExchangeRateManager
+import bitcoin.wallet.core.IExchangeRateManager
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
@@ -15,19 +15,14 @@ import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
-import org.powermock.core.classloader.annotations.SuppressStaticInitializationFor
-import org.powermock.modules.junit4.PowerMockRunner
 import java.util.*
 
-@RunWith(PowerMockRunner::class)
-@SuppressStaticInitializationFor("bitcoin.wallet.core.ExchangeRateManager")
 class TransactionsInteractorTest {
 
     private val delegate = mock(TransactionsModule.IInteractorDelegate::class.java)
-    private val exchangeRateManager = mock(ExchangeRateManager::class.java)
+    private val exchangeRateManager = mock(IExchangeRateManager::class.java)
     private val adapterManager = mock(AdapterManager::class.java)
     private val bitcoinAdapter = mock(BitcoinAdapter::class.java)
 

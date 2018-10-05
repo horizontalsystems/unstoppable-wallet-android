@@ -2,7 +2,7 @@ package bitcoin.wallet.modules.wallet
 
 import bitcoin.wallet.core.AdapterManager
 import bitcoin.wallet.core.BitcoinAdapter
-import bitcoin.wallet.core.ExchangeRateManager
+import bitcoin.wallet.core.IExchangeRateManager
 import bitcoin.wallet.core.ILocalStorage
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.Currency
@@ -29,7 +29,7 @@ class WalletInteractorTest {
 
     private val delegate = mock(WalletModule.IInteractorDelegate::class.java)
     private val adapterManager = mock(AdapterManager::class.java)
-    private val exchangeRateManager = mock(ExchangeRateManager::class.java)
+    private val exchangeRateManager = mock(IExchangeRateManager::class.java)
     private val bitcoinAdapter = mock(BitcoinAdapter::class.java)
     private val storage = mock(ILocalStorage::class.java)
     private lateinit var interactor: WalletInteractor
@@ -54,12 +54,12 @@ class WalletInteractorTest {
 
         adapterManager.adapters = mutableListOf(bitcoinAdapter)
 
-        whenever(exchangeRateManager.latestExchangeRateSubject).thenReturn(PublishSubject.create())
+        whenever(exchangeRateManager.getLatestExchangeRateSubject()).thenReturn(PublishSubject.create())
     }
 
     @Test
     fun fetchWalletBalances() {
-        whenever(exchangeRateManager.exchangeRates).thenReturn(exchangeRates)
+        whenever(exchangeRateManager.getExchangeRates()).thenReturn(exchangeRates)
         whenever(adapterManager.subject).thenReturn(PublishSubject.create<Any>())
 
         interactor.notifyWalletBalances()
@@ -74,7 +74,7 @@ class WalletInteractorTest {
         val balanceSub: PublishSubject<Double> = PublishSubject.create()
         val managerSub: PublishSubject<Any> = PublishSubject.create()
 
-        whenever(exchangeRateManager.exchangeRates).thenReturn(exchangeRates)
+        whenever(exchangeRateManager.getExchangeRates()).thenReturn(exchangeRates)
 
         whenever(adapterManager.subject).thenReturn(managerSub)
         whenever(adapterManager.adapters).thenReturn(mutableListOf(bitcoinAdapter))
@@ -96,7 +96,7 @@ class WalletInteractorTest {
         val managerSub: PublishSubject<Any> = PublishSubject.create()
 
         whenever(adapterManager.subject).thenReturn(managerSub)
-        whenever(exchangeRateManager.exchangeRates).thenReturn(exchangeRates)
+        whenever(exchangeRateManager.getExchangeRates()).thenReturn(exchangeRates)
 
         interactor.notifyWalletBalances()
 

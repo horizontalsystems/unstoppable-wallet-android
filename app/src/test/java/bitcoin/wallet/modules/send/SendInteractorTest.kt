@@ -1,8 +1,8 @@
 package bitcoin.wallet.modules.send
 
 import bitcoin.wallet.core.BitcoinAdapter
-import bitcoin.wallet.core.ExchangeRateManager
 import bitcoin.wallet.core.IClipboardManager
+import bitcoin.wallet.core.IExchangeRateManager
 import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
 import bitcoin.wallet.entities.coins.Coin
@@ -13,19 +13,14 @@ import com.nhaarman.mockito_kotlin.whenever
 import junit.framework.Assert
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mockito
-import org.powermock.core.classloader.annotations.SuppressStaticInitializationFor
-import org.powermock.modules.junit4.PowerMockRunner
 
-@RunWith(PowerMockRunner::class)
-@SuppressStaticInitializationFor("bitcoin.wallet.core.ExchangeRateManager")
 class SendInteractorTest {
 
     private val delegate = Mockito.mock(SendModule.IInteractorDelegate::class.java)
     private val clipboardManager = Mockito.mock(IClipboardManager::class.java)
     private val bitcoinAdapter = Mockito.mock(BitcoinAdapter::class.java)
-    private val exchangeRateManager = Mockito.mock(ExchangeRateManager::class.java)
+    private val exchangeRateManager = Mockito.mock(IExchangeRateManager::class.java)
 
     private val interactor = SendInteractor(clipboardManager, bitcoinAdapter, exchangeRateManager)
     private val currency1 = Currency().apply {
@@ -61,7 +56,7 @@ class SendInteractorTest {
     fun fetchExchangeRate() {
         val coin = Bitcoin()
 
-        whenever(exchangeRateManager.exchangeRates).thenReturn(exchangeRates)
+        whenever(exchangeRateManager.getExchangeRates()).thenReturn(exchangeRates)
         whenever(bitcoinAdapter.coin).thenReturn(coin)
 
         interactor.fetchExchangeRate()

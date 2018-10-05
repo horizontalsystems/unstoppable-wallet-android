@@ -18,7 +18,7 @@ class SettingsViewModel : ViewModel(){
             wordListBackedUp.value = it
         })
 
-        disposables.add(Factory.preferencesManager.getBaseCurrencyFlowable()
+        disposables.add(Factory.currencyManager.getBaseCurrencyFlowable()
                 .subscribe {
                     baseCurrencyCode.value = it.code
                 })

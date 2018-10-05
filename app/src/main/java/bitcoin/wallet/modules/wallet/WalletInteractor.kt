@@ -1,7 +1,7 @@
 package bitcoin.wallet.modules.wallet
 
 import bitcoin.wallet.core.AdapterManager
-import bitcoin.wallet.core.ExchangeRateManager
+import bitcoin.wallet.core.IExchangeRateManager
 import bitcoin.wallet.core.ILocalStorage
 import bitcoin.wallet.entities.CoinValue
 import io.reactivex.disposables.CompositeDisposable
@@ -10,7 +10,7 @@ import io.reactivex.subjects.BehaviorSubject
 
 class WalletInteractor(
         private val adapterManager: AdapterManager,
-        private val exchangeRateManager: ExchangeRateManager,
+        private val exchangeRateManager: IExchangeRateManager,
         private val storage: ILocalStorage) : WalletModule.IInteractor {
 
     var delegate: WalletModule.IInteractorDelegate? = null
@@ -35,7 +35,7 @@ class WalletInteractor(
             progresses[adapter.id] = adapter.progressSubject
         }
 
-        delegate?.didInitialFetch(coinValues, exchangeRateManager.exchangeRates, progresses)
+        delegate?.didInitialFetch(coinValues, exchangeRateManager.getExchangeRates(), progresses)
 
         adapterManager.adapters.forEach { adapter ->
             disposables.add(adapter.balanceSubject.subscribe {
@@ -43,7 +43,7 @@ class WalletInteractor(
             })
         }
 
-        disposables.add(exchangeRateManager.latestExchangeRateSubject.subscribe {
+        disposables.add(exchangeRateManager.getLatestExchangeRateSubject().subscribe {
             delegate?.didExchangeRateUpdate(it)
         })
 

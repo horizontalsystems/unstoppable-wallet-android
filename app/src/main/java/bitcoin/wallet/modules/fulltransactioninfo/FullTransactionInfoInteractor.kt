@@ -1,8 +1,8 @@
 package bitcoin.wallet.modules.fulltransactioninfo
 
-import bitcoin.wallet.core.ExchangeRateManager
 import bitcoin.wallet.core.IAdapter
 import bitcoin.wallet.core.IClipboardManager
+import bitcoin.wallet.core.IExchangeRateManager
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
@@ -13,7 +13,7 @@ import java.util.*
 
 class FullTransactionInfoInteractor(
         private val adapter: IAdapter?,
-        private val exchangeRateManager: ExchangeRateManager,
+        private val exchangeRateManager: IExchangeRateManager,
         private val transactionId: String,
         private var clipboardManager: IClipboardManager,
         private val baseCurrency: Currency) : FullTransactionInfoModule.IInteractor {
