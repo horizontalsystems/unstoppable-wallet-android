@@ -203,6 +203,8 @@ class SendFragment : DialogFragment() {
             }
         })
 
+        mDialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+
         return mDialog as Dialog
     }
 
