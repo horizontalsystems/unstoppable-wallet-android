@@ -22,13 +22,13 @@ class CurrencySwitcherInteractorTest {
     private val currency1 = Currency().apply {
         code = "USD"
         symbol = "$"
-        description = "United States Dollar"
+        name = "United States Dollar"
     }
 
     private val currency2 = Currency().apply {
         code = "EUR"
         symbol = "€"
-        description = "Euro"
+        name = "Euro"
     }
     private val currencyList = listOf(currency1, currency2)
     private val currencyViewItemList = listOf(CurrencyViewItem(currency1, true), CurrencyViewItem(currency2, false))

@@ -21,7 +21,7 @@ class SendPresenterTest {
     private val baseCurrency = Currency().apply {
         code = "USD"
         symbol = "$"
-        description = "United States Dollar"
+        name = "United States Dollar"
     }
 
     private val presenter = SendPresenter(interactor, router, baseCurrency)

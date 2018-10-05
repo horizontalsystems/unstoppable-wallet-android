@@ -31,6 +31,8 @@ class CurrencySwitcherActivity: BaseActivity(), CurrencySwitcherAdapter.Listener
 
         setSupportActionBar(toolbar)
         supportActionBar?.title = getString(R.string.settings_currency_switcher_title)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.back)
 
         adapter = CurrencySwitcherAdapter(this)
         recyclerView.adapter = adapter
@@ -90,7 +92,7 @@ class ViewHolderCurrency(override val containerView: View) : RecyclerView.ViewHo
 
         containerView.setOnSingleClickListener { onClick.invoke() }
         title.text = item.currency.code
-        subtitle.text = item.currency.code
+        subtitle.text = item.currency.name
         checkmarkIcon.visibility = if (item.selected) View.VISIBLE else View.GONE
     }
 

@@ -14,13 +14,13 @@ class CurrencySwitcherPresenterTest {
     private val currency1 = Currency().apply {
         code = "USD"
         symbol = "$"
-        description = "United States Dollar"
+        name = "United States Dollar"
     }
 
     private val currency2 = Currency().apply {
         code = "EUR"
         symbol = "€"
-        description = "Euro"
+        name = "Euro"
     }
 
     @Before

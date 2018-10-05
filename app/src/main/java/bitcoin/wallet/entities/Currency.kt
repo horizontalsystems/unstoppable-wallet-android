@@ -3,7 +3,8 @@ package bitcoin.wallet.entities
 class Currency {
     var code: String = ""
     var symbol: String = ""
-    var description: String = ""
+    var name: String = ""
+    var type: Int = 0
 
     override fun equals(other: Any?): Boolean {
         if (other is Currency) {

@@ -84,7 +84,7 @@ class PreferencesManager(private val encryptionManager: IEncryptionManager) : IL
     private val defaultCurrency: Currency = Currency().apply {
         code = "USD"
         symbol = "$"
-        description = "United States Dollar"
+        name = "United States Dollar"
     }
 
 }

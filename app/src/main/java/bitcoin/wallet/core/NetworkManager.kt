@@ -1,6 +1,7 @@
 package bitcoin.wallet.core
 
 import bitcoin.wallet.entities.Currency
+import com.google.gson.GsonBuilder
 import io.reactivex.Flowable
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -35,25 +36,11 @@ class NetworkManager : INetworkManager {
     }
 
     override fun getCurrencies(): Flowable<List<Currency>> {
-        val currency1 = Currency().apply {
-            code = "USD"
-            symbol = "$"
-            description = "United States Dollar"
-        }
-
-        val currency2 = Currency().apply {
-            code = "EUR"
-            symbol = "€"
-            description = "Euro"
-        }
-        return Flowable.just(listOf(currency1, currency2))
-        //todo After backend ready parse currency list from API response
-//        return ServiceExchangeApi.service .getCurrencies()
-//                .map { t: String ->  getCurrenciesFromCodes(t) }
-//                .onErrorReturn {
-//                    Log.e("NetwMan", "exception: ", it)
-//                    listOf(DollarCurrency(), EuroCurrency())
-//                }
+        return ServiceExchangeApi.service.getCurrencies()
+                .map { response -> response.currencies }
+                .onErrorReturn {
+                    listOf()
+                }
     }
 
 }
@@ -70,10 +57,14 @@ object ServiceExchangeApi {
         val httpClient = OkHttpClient.Builder()
         httpClient.addInterceptor(logger)
 
+        val gsonBuilder = GsonBuilder()
+        gsonBuilder.setLenient()
+        val gson = gsonBuilder.create()
+
         val retrofit = Retrofit.Builder()
                 .baseUrl(apiURL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(httpClient.build())
                 .build()
 
@@ -108,8 +99,12 @@ object ServiceExchangeApi {
                 @Path("fiat") currency: String
         ): Flowable<Double>
 
-        @GET("btc/index.json")
-        fun getCurrencies(): Flowable<String>
+        @GET("index.json")
+        fun getCurrencies(): Flowable<CurrenciesJsonResponse>
 
     }
+}
+
+class CurrenciesJsonResponse {
+    var currencies: List<Currency> = listOf()
 }
