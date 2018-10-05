@@ -98,7 +98,7 @@
         <item name="TitleColor">@color/dark</item>
         <item name="SettingBackgroundColor">@color/lightBackground</item>
         <item name="WalletBackgroundColor">@color/lightBackground</item>
-        <item name="TransactionsBackgroundColor">@color/lightBackground</item>
+        <item name="TransactionsBackgroundColor">@color/white</item>
         <item name="TransactionItemBackgroundColor">@color/transaction_item_background_light</item>
         <item name="CoinItemBackgroundColor">@color/coin_item_background_light</item>
         <item name="FilterButtonBackgroundColor">@color/bars_color</item>
