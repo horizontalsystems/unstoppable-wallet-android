@@ -20,4 +20,10 @@ class Currency {
         return result
     }
 
+    fun getSymbolChar(): Char {
+        val hex = symbol.replace("U+", "")
+        val charInt = Integer.parseInt(hex, 16)
+        return charInt.toChar()
+    }
+
 }
