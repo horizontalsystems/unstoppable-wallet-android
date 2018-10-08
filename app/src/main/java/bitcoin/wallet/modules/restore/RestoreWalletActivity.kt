@@ -6,11 +6,11 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import bitcoin.wallet.BaseActivity
 import bitcoin.wallet.R
 import bitcoin.wallet.core.security.EncryptionManager
 import bitcoin.wallet.lib.EditTextViewHolder
@@ -20,7 +20,7 @@ import bitcoin.wallet.viewHelpers.HudHelper
 import bitcoin.wallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.activity_restore_wallet.*
 
-class RestoreWalletActivity : AppCompatActivity() {
+class RestoreWalletActivity : BaseActivity() {
 
     private lateinit var viewModel: RestoreViewModel
 
