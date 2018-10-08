@@ -14,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="bottom"
+        app:elevation="0dp"
         >
 
         <android.support.v7.widget.Toolbar
@@ -196,6 +197,13 @@
         app:layout_constraintBottom_toTopOf="@+id/bottomBar"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        />
+
+    <View
+        style="@style/Widget.Shadow.AppBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout"
         />
 
 </android.support.constraint.ConstraintLayout>
