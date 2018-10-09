@@ -6,6 +6,7 @@ import bitcoin.wallet.core.IEncryptionManager
 import bitcoin.wallet.core.ILocalStorage
 import bitcoin.wallet.core.ISettingsManager
 import bitcoin.wallet.entities.Currency
+import bitcoin.wallet.entities.CurrencyType
 import com.google.gson.Gson
 
 
@@ -83,8 +84,10 @@ class PreferencesManager(private val encryptionManager: IEncryptionManager) : IL
 
     private val defaultCurrency: Currency = Currency().apply {
         code = "USD"
-        symbol = "$"
-        name = "United States Dollar"
+        symbol = "U+0024"
+        name = "US Dollar"
+        type = CurrencyType.FIAT
+        codeNumeric = 840
     }
 
 }

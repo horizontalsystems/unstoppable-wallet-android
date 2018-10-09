@@ -10,7 +10,6 @@ class CurrencySwitcherInteractor(private val networkManager: NetworkManager, pri
 
     private var disposable: Disposable? = null
     private var currencyList: MutableList<CurrencyViewItem> = mutableListOf()
-    private val typeFiat = 2
 
     var delegate: CurrencySwitcherModule.IInteractorDelegate? = null
 
@@ -20,7 +19,7 @@ class CurrencySwitcherInteractor(private val networkManager: NetworkManager, pri
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
                 .subscribe { allCurrencies ->
-                    val fiatCurrencies = allCurrencies.filter { it.type == typeFiat }
+                    val fiatCurrencies = allCurrencies.filter { it.type.isFiat }
                     val baseCurrency = preferencesManager.getBaseCurrency()
                     fiatCurrencies.forEach { item ->
                         currencyList.add(CurrencyViewItem(item, baseCurrency == item))

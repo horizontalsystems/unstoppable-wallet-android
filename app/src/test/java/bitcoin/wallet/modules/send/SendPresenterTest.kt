@@ -1,6 +1,7 @@
 package bitcoin.wallet.modules.send
 
 import bitcoin.wallet.entities.Currency
+import bitcoin.wallet.entities.CurrencyType
 import bitcoin.wallet.viewHelpers.NumberFormatHelper
 import com.nhaarman.mockito_kotlin.reset
 import com.nhaarman.mockito_kotlin.verify
@@ -20,8 +21,10 @@ class SendPresenterTest {
 
     private val baseCurrency = Currency().apply {
         code = "USD"
-        symbol = "$"
-        name = "United States Dollar"
+        symbol = "U+0024"
+        name = "US Dollar"
+        type = CurrencyType.FIAT
+        codeNumeric = 840
     }
 
     private val presenter = SendPresenter(interactor, router, baseCurrency)

@@ -3,6 +3,7 @@ package bitcoin.wallet.modules.currencyswitcher
 import bitcoin.wallet.core.ISettingsManager
 import bitcoin.wallet.core.NetworkManager
 import bitcoin.wallet.entities.Currency
+import bitcoin.wallet.entities.CurrencyType
 import bitcoin.wallet.modules.RxBaseTest
 import com.nhaarman.mockito_kotlin.atLeast
 import com.nhaarman.mockito_kotlin.whenever
@@ -21,14 +22,18 @@ class CurrencySwitcherInteractorTest {
 
     private val currency1 = Currency().apply {
         code = "USD"
-        symbol = "$"
-        name = "United States Dollar"
+        symbol = "U+0024"
+        name = "US Dollar"
+        type = CurrencyType.FIAT
+        codeNumeric = 840
     }
 
     private val currency2 = Currency().apply {
         code = "EUR"
-        symbol = "€"
+        symbol = "U+20AC"
         name = "Euro"
+        type = CurrencyType.FIAT
+        codeNumeric = 978
     }
     private val currencyList = listOf(currency1, currency2)
     private val currencyViewItemList = listOf(CurrencyViewItem(currency1, true), CurrencyViewItem(currency2, false))
