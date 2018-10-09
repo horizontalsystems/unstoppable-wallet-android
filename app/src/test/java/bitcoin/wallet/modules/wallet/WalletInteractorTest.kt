@@ -41,7 +41,7 @@ class WalletInteractorTest {
     private val currency1 = Currency().apply {
         code = "USD"
         symbol = "$"
-        description = "United States Dollar"
+        name = "United States Dollar"
     }
     private var exchangeRates = mutableMapOf(Bitcoin() as Coin to CurrencyValue(currency1, 10_000.0))
 

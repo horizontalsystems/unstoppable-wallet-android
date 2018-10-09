@@ -34,7 +34,7 @@ class TransactionsInteractorTest {
     private val baseCurrency = Currency().apply {
         code = "USD"
         symbol = "$"
-        description = "United States Dollar"
+        name = "United States Dollar"
     }
     private val baseCurrencyFlowable = Flowable.just(baseCurrency)
 

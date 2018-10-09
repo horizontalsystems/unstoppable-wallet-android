@@ -46,7 +46,7 @@ class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener 
 
         viewModel.totalBalanceLiveData.observe(this, Observer { total ->
             val numberFormat = NumberFormatHelper.fiatAmountFormat
-            ballanceText.text = total?.let { "${total.currency.symbol}${numberFormat.format(total.value)}" } ?: ""
+            ballanceText.text = total?.let { "${total.currency.getSymbolChar()}${numberFormat.format(total.value)}" } ?: ""
         })
 
         viewModel.openReceiveDialog.observe(this, Observer { adapterId ->
@@ -144,7 +144,7 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
         coinIcon.setImageDrawable(iconDrawable)
         val numberFormat = NumberFormatHelper.fiatAmountFormat
         textName.text = "${walletBalanceViewItem.coinValue.coin.name} (${walletBalanceViewItem.coinValue.coin.code})"
-        textAmountFiat.text = "${walletBalanceViewItem.currencyValue?.currency?.symbol ?: ""}${numberFormat.format(walletBalanceViewItem.currencyValue?.value ?: 0.0)}"
+        textAmountFiat.text = "${walletBalanceViewItem.currencyValue?.currency?.getSymbolChar() ?: ""}${numberFormat.format(walletBalanceViewItem.currencyValue?.value ?: 0.0)}"
         textAmount.text = "${walletBalanceViewItem.coinValue.value}"
 
         val zeroBalance = walletBalanceViewItem.coinValue.value <= 0.0

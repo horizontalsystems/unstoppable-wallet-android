@@ -23,7 +23,7 @@ class WalletPresenterTest {
     private val dollarCurrency = Currency().apply {
         code = "USD"
         symbol = "$"
-        description = "United States Dollar"
+        name = "United States Dollar"
     }
 
     @Before
