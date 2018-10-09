@@ -37,7 +37,6 @@ class NetworkManager : INetworkManager {
 
     override fun getCurrencies(): Flowable<List<Currency>> {
         return ServiceExchangeApi.service.getCurrencies()
-                .map { response -> response.currencies }
                 .onErrorReturn {
                     listOf()
                 }
@@ -100,11 +99,7 @@ object ServiceExchangeApi {
         ): Flowable<Double>
 
         @GET("index.json")
-        fun getCurrencies(): Flowable<CurrenciesJsonResponse>
+        fun getCurrencies(): Flowable<List<Currency>>
 
     }
-}
-
-class CurrenciesJsonResponse {
-    var currencies: List<Currency> = listOf()
 }

@@ -1,6 +1,7 @@
 package bitcoin.wallet.modules.currencyswitcher
 
 import bitcoin.wallet.entities.Currency
+import bitcoin.wallet.entities.CurrencyType
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Before
 import org.junit.Test
@@ -13,14 +14,18 @@ class CurrencySwitcherPresenterTest {
     private val presenter = CurrencySwitcherPresenter(interactor)
     private val currency1 = Currency().apply {
         code = "USD"
-        symbol = "$"
-        name = "United States Dollar"
+        symbol = "U+0024"
+        name = "US Dollar"
+        type = CurrencyType.FIAT
+        codeNumeric = 840
     }
 
     private val currency2 = Currency().apply {
         code = "EUR"
-        symbol = "€"
+        symbol = "U+20AC"
         name = "Euro"
+        type = CurrencyType.FIAT
+        codeNumeric = 978
     }
 
     @Before

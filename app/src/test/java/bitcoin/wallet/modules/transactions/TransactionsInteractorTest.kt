@@ -3,10 +3,8 @@ package bitcoin.wallet.modules.transactions
 import bitcoin.wallet.core.AdapterManager
 import bitcoin.wallet.core.BitcoinAdapter
 import bitcoin.wallet.core.IExchangeRateManager
-import bitcoin.wallet.entities.CoinValue
+import bitcoin.wallet.entities.*
 import bitcoin.wallet.entities.Currency
-import bitcoin.wallet.entities.CurrencyValue
-import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.modules.RxBaseTest
 import com.nhaarman.mockito_kotlin.any
@@ -33,8 +31,10 @@ class TransactionsInteractorTest {
 
     private val baseCurrency = Currency().apply {
         code = "USD"
-        symbol = "$"
-        name = "United States Dollar"
+        symbol = "U+0024"
+        name = "US Dollar"
+        type = CurrencyType.FIAT
+        codeNumeric = 840
     }
     private val baseCurrencyFlowable = Flowable.just(baseCurrency)
 

@@ -2,6 +2,7 @@ package bitcoin.wallet.modules.wallet
 
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.Currency
+import bitcoin.wallet.entities.CurrencyType
 import bitcoin.wallet.entities.CurrencyValue
 import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
@@ -22,8 +23,10 @@ class WalletPresenterTest {
 
     private val dollarCurrency = Currency().apply {
         code = "USD"
-        symbol = "$"
-        name = "United States Dollar"
+        symbol = "U+0024"
+        name = "US Dollar"
+        type = CurrencyType.FIAT
+        codeNumeric = 840
     }
 
     @Before

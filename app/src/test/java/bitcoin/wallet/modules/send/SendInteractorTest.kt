@@ -4,6 +4,7 @@ import bitcoin.wallet.core.BitcoinAdapter
 import bitcoin.wallet.core.IClipboardManager
 import bitcoin.wallet.core.IExchangeRateManager
 import bitcoin.wallet.entities.Currency
+import bitcoin.wallet.entities.CurrencyType
 import bitcoin.wallet.entities.CurrencyValue
 import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
@@ -25,8 +26,10 @@ class SendInteractorTest {
     private val interactor = SendInteractor(clipboardManager, bitcoinAdapter, exchangeRateManager)
     private val currency1 = Currency().apply {
         code = "USD"
-        symbol = "$"
-        name = "United States Dollar"
+        symbol = "U+0024"
+        name = "US Dollar"
+        type = CurrencyType.FIAT
+        codeNumeric = 840
     }
     private var exchangeRates = mutableMapOf(Bitcoin() as Coin to CurrencyValue(currency1, 10_000.0))
 

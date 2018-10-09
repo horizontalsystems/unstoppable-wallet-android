@@ -1,10 +1,20 @@
 package bitcoin.wallet.entities
 
+import com.google.gson.annotations.SerializedName
+
 class Currency {
     var code: String = ""
-    var symbol: String = ""
+
+    @SerializedName("symbol_ucode")
+    var symbol: String? = null
+
+    @SerializedName("display_name")
     var name: String = ""
-    var type: Int = 0
+
+    var type: CurrencyType = CurrencyType.FIAT
+
+    @SerializedName("code_numeric")
+    var codeNumeric: Int = 0
 
     override fun equals(other: Any?): Boolean {
         if (other is Currency) {
@@ -16,14 +26,20 @@ class Currency {
 
     override fun hashCode(): Int {
         var result = code.hashCode()
-        result = 31 * result + symbol.hashCode()
+        result = 31 * result + (symbol?.hashCode() ?: 0)
+        result = 31 * result + name.hashCode()
+        result = 31 * result + type.hashCode()
+        result = 31 * result + codeNumeric
         return result
     }
 
-    fun getSymbolChar(): Char {
-        val hex = symbol.replace("U+", "")
-        val charInt = Integer.parseInt(hex, 16)
-        return charInt.toChar()
+    fun getSymbolChar(): Char? {
+        val hex = symbol?.replace("U+", "")
+        var symbolChar: Char? = null
+        hex?.let {
+            symbolChar = Integer.parseInt(it, 16).toChar()
+        }
+        return symbolChar
     }
 
 }
