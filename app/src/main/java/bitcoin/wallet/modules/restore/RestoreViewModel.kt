@@ -4,8 +4,9 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import bitcoin.wallet.R
 import bitcoin.wallet.SingleLiveEvent
+import bitcoin.wallet.core.IKeyStoreSafeExecute
 
-class RestoreViewModel : ViewModel(), RestoreModule.IView, RestoreModule.IRouter, RestoreModule.IKeyStoreSafeExecute {
+class RestoreViewModel : ViewModel(), RestoreModule.IView, RestoreModule.IRouter, IKeyStoreSafeExecute {
 
     lateinit var delegate: RestoreModule.IViewDelegate
 

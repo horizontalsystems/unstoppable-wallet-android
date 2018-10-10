@@ -1,6 +1,7 @@
 package bitcoin.wallet.modules.backup
 
 import android.content.Context
+import bitcoin.wallet.core.IKeyStoreSafeExecute
 import bitcoin.wallet.core.managers.Factory
 import java.util.*
 
@@ -21,10 +22,6 @@ object BackupModule {
         fun showConfirmationDidClick()
         fun hideConfirmationDidClick()
         fun validateDidClick(confirmationWords: HashMap<Int, String>)
-    }
-
-    interface IKeyStoreSafeExecute {
-        fun safeExecute(action: Runnable, onSuccess: Runnable? = null, onFailure: Runnable? = null)
     }
 
     interface IInteractor {

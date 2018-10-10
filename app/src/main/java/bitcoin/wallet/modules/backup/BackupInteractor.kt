@@ -1,10 +1,11 @@
 package bitcoin.wallet.modules.backup
 
+import bitcoin.wallet.core.IKeyStoreSafeExecute
 import bitcoin.wallet.core.IRandomProvider
 import bitcoin.wallet.core.managers.WordsManager
 import java.util.*
 
-class BackupInteractor(private val wordsManager: WordsManager, private val indexesProvider: IRandomProvider, private val keystoreSafeExecute: BackupModule.IKeyStoreSafeExecute) : BackupModule.IInteractor {
+class BackupInteractor(private val wordsManager: WordsManager, private val indexesProvider: IRandomProvider, private val keystoreSafeExecute: IKeyStoreSafeExecute) : BackupModule.IInteractor {
 
     var delegate: BackupModule.IInteractorDelegate? = null
 

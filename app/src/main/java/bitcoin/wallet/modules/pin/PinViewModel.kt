@@ -4,8 +4,9 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import bitcoin.wallet.R
 import bitcoin.wallet.SingleLiveEvent
+import bitcoin.wallet.core.IKeyStoreSafeExecute
 
-class PinViewModel : ViewModel(), PinModule.IView, PinModule.IRouter, PinModule.IKeyStoreSafeExecute {
+class PinViewModel : ViewModel(), PinModule.IView, PinModule.IRouter, IKeyStoreSafeExecute {
 
     lateinit var delegate: PinModule.IViewDelegate
 

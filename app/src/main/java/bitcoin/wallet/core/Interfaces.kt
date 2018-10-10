@@ -60,3 +60,7 @@ interface IExchangeRateManager {
     fun getExchangeRates(): MutableMap<Coin, CurrencyValue>
     fun getLatestExchangeRateSubject(): PublishSubject<MutableMap<Coin, CurrencyValue>>
 }
+
+interface IKeyStoreSafeExecute {
+    fun safeExecute(action: Runnable, onSuccess: Runnable? = null, onFailure: Runnable? = null)
+}

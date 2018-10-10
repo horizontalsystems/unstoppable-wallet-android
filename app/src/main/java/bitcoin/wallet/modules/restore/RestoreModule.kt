@@ -3,6 +3,7 @@ package bitcoin.wallet.modules.restore
 import android.content.Context
 import android.content.Intent
 import bitcoin.wallet.core.AdapterManager
+import bitcoin.wallet.core.IKeyStoreSafeExecute
 import bitcoin.wallet.core.managers.Factory
 
 object RestoreModule {
@@ -14,10 +15,6 @@ object RestoreModule {
 
     interface IViewDelegate {
         fun restoreDidClick(words: List<String>)
-    }
-
-    interface IKeyStoreSafeExecute {
-        fun safeExecute(action: Runnable, onSuccess: Runnable? = null, onFailure: Runnable? = null)
     }
 
     interface IInteractor {

@@ -3,6 +3,7 @@ package bitcoin.wallet.modules.guest
 import android.content.Context
 import android.content.Intent
 import bitcoin.wallet.core.AdapterManager
+import bitcoin.wallet.core.IKeyStoreSafeExecute
 import bitcoin.wallet.core.managers.Factory
 
 object GuestModule {
@@ -15,10 +16,6 @@ object GuestModule {
     interface IViewDelegate {
         fun createWalletDidClick()
         fun restoreWalletDidClick()
-    }
-
-    interface IKeyStoreSafeExecute {
-        fun safeExecute(action: Runnable, onSuccess: Runnable? = null, onFailure: Runnable? = null)
     }
 
     interface IInteractor {

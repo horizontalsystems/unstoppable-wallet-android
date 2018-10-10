@@ -4,8 +4,9 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import bitcoin.wallet.R
 import bitcoin.wallet.SingleLiveEvent
+import bitcoin.wallet.core.IKeyStoreSafeExecute
 
-class BackupViewModel : ViewModel(), BackupModule.IView, BackupModule.IRouter, BackupModule.IKeyStoreSafeExecute {
+class BackupViewModel : ViewModel(), BackupModule.IView, BackupModule.IRouter, IKeyStoreSafeExecute {
     lateinit var delegate: BackupModule.IViewDelegate
 
     val errorLiveData = MutableLiveData<Int>()

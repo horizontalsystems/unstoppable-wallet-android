@@ -2,8 +2,9 @@ package bitcoin.wallet.modules.guest
 
 import android.arch.lifecycle.ViewModel
 import bitcoin.wallet.SingleLiveEvent
+import bitcoin.wallet.core.IKeyStoreSafeExecute
 
-class GuestViewModel: ViewModel(), GuestModule.IView, GuestModule.IRouter, GuestModule.IKeyStoreSafeExecute {
+class GuestViewModel: ViewModel(), GuestModule.IView, GuestModule.IRouter, IKeyStoreSafeExecute {
 
     lateinit var delegate: GuestModule.IViewDelegate
 
