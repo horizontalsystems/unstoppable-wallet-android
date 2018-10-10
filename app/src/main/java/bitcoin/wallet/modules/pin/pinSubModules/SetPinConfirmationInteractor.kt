@@ -13,13 +13,6 @@ class SetPinConfirmationInteractor(private val enteredPin: String, private val s
                     onSuccess = Runnable {  delegate?.onDidPinSet() },
                     onFailure = Runnable { delegate?.onErrorFailedToSavePin() }
             )
-//            try {
-//                storage.savePin(pin)
-//            } catch (e: Exception) {
-//                delegate?.onErrorFailedToSavePin()
-//                return
-//            }
-//            delegate?.onDidPinSet()
         } else {
             delegate?.onErrorPinsDontMatch()
         }

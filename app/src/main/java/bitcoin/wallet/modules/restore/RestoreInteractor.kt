@@ -19,16 +19,5 @@ class RestoreInteractor(private val wordsManager: WordsManager, private val adap
                 },
                 onFailure = Runnable { delegate?.didFailToRestore() }
         )
-
-//        try {
-//            wordsManager.restore(words)
-//        } catch (e: Exception) {
-//            delegate?.didFailToRestore(e)
-//            return
-//        }
-//
-//        adapterManager.initAdapters(words)
-//        wordsManager.wordListBackedUp = true
-//        delegate?.didRestore()
     }
 }
