@@ -53,6 +53,13 @@ class RestoreWalletActivity : BaseActivity() {
             EncryptionManager.showAuthenticationScreen(this@RestoreWalletActivity, AUTHENTICATE_TO_RESTORE_WALLET)
         })
 
+        viewModel.keyStoreSafeExecute.observe(this, Observer { triple ->
+            triple?.let {
+                val (action, onSuccess, onFailure) = it
+                safeExecuteWithKeystore(action, onSuccess, onFailure)
+            }
+        })
+
         recyclerInputs.adapter = WordsInputAdapter(object : EditTextViewHolder.WordsChangedListener {
             override fun set(position: Int, value: String) {
                 words[position] = value

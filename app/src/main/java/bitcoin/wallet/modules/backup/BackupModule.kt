@@ -21,7 +21,10 @@ object BackupModule {
         fun showConfirmationDidClick()
         fun hideConfirmationDidClick()
         fun validateDidClick(confirmationWords: HashMap<Int, String>)
+    }
 
+    interface IKeyStoreSafeExecute {
+        fun safeExecute(action: Runnable, onSuccess: Runnable? = null, onFailure: Runnable? = null)
     }
 
     interface IInteractor {
@@ -48,8 +51,8 @@ object BackupModule {
         BackupActivity.start(context, dismissMode)
     }
 
-    fun init(view: BackupViewModel, router: IRouter, dismissMode: BackupPresenter.DismissMode) {
-        val interactor = BackupInteractor(Factory.wordsManager, Factory.randomProvider)
+    fun init(view: BackupViewModel, router: IRouter, keystoreSafeExecute: IKeyStoreSafeExecute, dismissMode: BackupPresenter.DismissMode) {
+        val interactor = BackupInteractor(Factory.wordsManager, Factory.randomProvider, keystoreSafeExecute)
         val presenter = BackupPresenter(interactor, router, dismissMode)
 
         presenter.view = view

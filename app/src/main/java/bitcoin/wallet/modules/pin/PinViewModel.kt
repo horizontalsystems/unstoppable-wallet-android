@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModel
 import bitcoin.wallet.R
 import bitcoin.wallet.SingleLiveEvent
 
-class PinViewModel : ViewModel(), PinModule.IView, PinModule.IRouter {
+class PinViewModel : ViewModel(), PinModule.IView, PinModule.IRouter, PinModule.IKeyStoreSafeExecute {
 
     lateinit var delegate: PinModule.IViewDelegate
 
@@ -26,9 +26,10 @@ class PinViewModel : ViewModel(), PinModule.IView, PinModule.IRouter {
     val minimizeApp = SingleLiveEvent<Unit>()
     val goBack = SingleLiveEvent<Unit>()
     val goToPinEdit = SingleLiveEvent<Unit>()
+    val keyStoreSafeExecute = SingleLiveEvent<Triple<Runnable, Runnable?, Runnable?>>()
 
     fun init(interactionType: PinInteractionType, enteredPin: String) {
-        PinModule.init(this, this, interactionType, enteredPin)
+        PinModule.init(this, this, this, interactionType, enteredPin)
         delegate.viewDidLoad()
     }
 
@@ -114,6 +115,10 @@ class PinViewModel : ViewModel(), PinModule.IView, PinModule.IRouter {
 
     override fun navigateToPrevPage() {
         goBack.call()
+    }
+
+    override fun safeExecute(action: Runnable, onSuccess: Runnable?, onFailure: Runnable?) {
+        keyStoreSafeExecute.value = Triple(action, onSuccess, onFailure)
     }
 
     //IRouter

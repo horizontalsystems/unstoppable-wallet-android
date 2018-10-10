@@ -16,13 +16,17 @@ object RestoreModule {
         fun restoreDidClick(words: List<String>)
     }
 
+    interface IKeyStoreSafeExecute {
+        fun safeExecute(action: Runnable, onSuccess: Runnable? = null, onFailure: Runnable? = null)
+    }
+
     interface IInteractor {
         fun restore(words: List<String>)
     }
 
     interface IInteractorDelegate {
         fun didRestore()
-        fun didFailToRestore(error: Throwable)
+        fun didFailToRestore()
     }
 
     interface IRouter {
@@ -34,8 +38,8 @@ object RestoreModule {
         context.startActivity(intent)
     }
 
-    fun initModule(view: RestoreViewModel, router: IRouter) {
-        val interactor = RestoreInteractor(Factory.wordsManager, AdapterManager)
+    fun init(view: RestoreViewModel, router: IRouter, keystoreSafeExecute: IKeyStoreSafeExecute) {
+        val interactor = RestoreInteractor(Factory.wordsManager, AdapterManager, keystoreSafeExecute)
         val presenter = RestorePresenter(interactor, router)
 
         view.delegate = presenter

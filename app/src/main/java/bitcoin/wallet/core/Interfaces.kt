@@ -15,6 +15,7 @@ interface ILocalStorage {
     fun getPin(): String?
     fun wordListBackedUp(backedUp: Boolean)
     fun isWordListBackedUp(): Boolean
+    fun pinIsEmpty(): Boolean
 }
 
 interface IRandomProvider {

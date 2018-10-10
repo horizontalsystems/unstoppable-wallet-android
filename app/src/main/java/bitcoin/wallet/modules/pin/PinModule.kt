@@ -36,6 +36,10 @@ object PinModule {
         fun hideBackButton()
     }
 
+    interface IKeyStoreSafeExecute {
+        fun safeExecute(action: Runnable, onSuccess: Runnable? = null, onFailure: Runnable? = null)
+    }
+
     interface IViewDelegate {
         fun viewDidLoad()
         fun onEnterDigit(digit: Int)
@@ -70,17 +74,17 @@ object PinModule {
         fun goToPinEdit()
     }
 
-    fun init(view: PinViewModel, router: IRouter, interactionType: PinInteractionType, enteredPin: String) {
+    fun init(view: PinViewModel, router: IRouter, keystoreSafeExecute: IKeyStoreSafeExecute, interactionType: PinInteractionType, enteredPin: String) {
 
         val storage: ILocalStorage = Factory.preferencesManager
         val settings: ISettingsManager = Factory.preferencesManager
 
         val interactor = when (interactionType) {
             PinInteractionType.SET_PIN -> SetPinInteractor()
-            PinInteractionType.SET_PIN_CONFIRM -> SetPinConfirmationInteractor(enteredPin, storage)
-            PinInteractionType.UNLOCK -> UnlockInteractor(storage, settings)
-            PinInteractionType.EDIT_PIN_AUTH -> EditPinAuthInteractor(storage)
-            PinInteractionType.EDIT_PIN -> EditPinInteractor(storage)
+            PinInteractionType.SET_PIN_CONFIRM -> SetPinConfirmationInteractor(enteredPin, storage, keystoreSafeExecute)
+            PinInteractionType.UNLOCK -> UnlockInteractor(storage, settings, keystoreSafeExecute)
+            PinInteractionType.EDIT_PIN_AUTH -> EditPinAuthInteractor(storage, keystoreSafeExecute)
+            PinInteractionType.EDIT_PIN -> EditPinInteractor(storage, keystoreSafeExecute)
         }
         val presenter = when (interactionType) {
             PinInteractionType.SET_PIN -> SetPinPresenter(interactor, router)

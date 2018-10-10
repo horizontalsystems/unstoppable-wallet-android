@@ -142,6 +142,14 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
             backButton.visibility = View.GONE
         })
 
+        viewModel.keyStoreSafeExecute.observe(this, Observer { triple ->
+            triple?.let {
+                val (action, onSuccess, onFailure) = it
+                safeExecuteWithKeystore(action, onSuccess, onFailure)
+            }
+        })
+
+
         imgPinMask1 = findViewById(R.id.imgPinMaskOne)
         imgPinMask2 = findViewById(R.id.imgPinMaskTwo)
         imgPinMask3 = findViewById(R.id.imgPinMaskThree)
@@ -195,13 +203,13 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == AUTHENTICATE_TO_FINGERPRINT) {
                 showFingerprintDialog()
+                return
             }
         }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun unlockWallet() {

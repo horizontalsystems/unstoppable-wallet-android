@@ -1,7 +1,5 @@
 package bitcoin.wallet.modules.restore
 
-import android.security.keystore.UserNotAuthenticatedException
-
 class RestorePresenter(private val interactor: RestoreModule.IInteractor, private val router: RestoreModule.IRouter) : RestoreModule.IViewDelegate, RestoreModule.IInteractorDelegate {
 
     var view: RestoreModule.IView? = null
@@ -14,13 +12,8 @@ class RestorePresenter(private val interactor: RestoreModule.IInteractor, privat
         router.navigateToMain()
     }
 
-    override fun didFailToRestore(error: Throwable) {
-
-        if (error is UserNotAuthenticatedException) {
-            view?.authenticateToRestoreWallet()
-        } else {
-            view?.showInvalidWordsError()
-        }
+    override fun didFailToRestore() {
+        view?.showInvalidWordsError()
     }
 
 }

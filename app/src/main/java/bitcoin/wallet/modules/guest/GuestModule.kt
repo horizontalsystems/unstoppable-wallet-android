@@ -17,13 +17,17 @@ object GuestModule {
         fun restoreWalletDidClick()
     }
 
+    interface IKeyStoreSafeExecute {
+        fun safeExecute(action: Runnable, onSuccess: Runnable? = null, onFailure: Runnable? = null)
+    }
+
     interface IInteractor {
         fun createWallet()
     }
 
     interface IInteractorDelegate {
         fun didCreateWallet()
-        fun didFailToCreateWallet(error: Throwable)
+        fun didFailToCreateWallet()
     }
 
     interface IRouter {
@@ -36,8 +40,8 @@ object GuestModule {
         context.startActivity(intent)
     }
 
-    fun init(view: GuestViewModel, router: IRouter) {
-        val interactor = GuestInteractor(Factory.wordsManager, AdapterManager)
+    fun init(view: GuestViewModel, router: IRouter, keystoreSafeExecute: IKeyStoreSafeExecute) {
+        val interactor = GuestInteractor(Factory.wordsManager, AdapterManager, keystoreSafeExecute)
         val presenter = GuestPresenter(interactor, router)
 
         view.delegate = presenter

@@ -5,7 +5,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import bitcoin.wallet.BaseActivity
 import bitcoin.wallet.R
 import bitcoin.wallet.core.security.EncryptionManager
 import bitcoin.wallet.modules.backup.BackupModule
@@ -14,7 +14,7 @@ import bitcoin.wallet.modules.restore.RestoreModule
 import bitcoin.wallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_add_wallet.*
 
-class GuestActivity : AppCompatActivity() {
+class GuestActivity : BaseActivity() {
 
     private lateinit var viewModel: GuestViewModel
 
@@ -50,6 +50,13 @@ class GuestActivity : AppCompatActivity() {
         buttonRestore.setOnClickListener {
             viewModel.delegate.restoreWalletDidClick()
         }
+
+        viewModel.keyStoreSafeExecute.observe(this, Observer { triple ->
+            triple?.let {
+                val (action, onSuccess, onFailure) = it
+                safeExecuteWithKeystore(action, onSuccess, onFailure)
+            }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -4,14 +4,18 @@ import bitcoin.wallet.core.IRandomProvider
 import bitcoin.wallet.core.managers.WordsManager
 import java.util.*
 
-class BackupInteractor(private val wordsManager: WordsManager, private val indexesProvider: IRandomProvider) : BackupModule.IInteractor {
+class BackupInteractor(private val wordsManager: WordsManager, private val indexesProvider: IRandomProvider, private val keystoreSafeExecute: BackupModule.IKeyStoreSafeExecute) : BackupModule.IInteractor {
 
     var delegate: BackupModule.IInteractorDelegate? = null
 
     override fun fetchWords() {
-        wordsManager.savedWords()?.let {
-            delegate?.didFetchWords(it)
-        }
+        keystoreSafeExecute.safeExecute(
+                action = Runnable {
+                    wordsManager.savedWords()?.let {
+                        delegate?.didFetchWords(it)
+                    }
+                }
+        )
     }
 
     override fun fetchConfirmationIndexes() {
@@ -19,16 +23,20 @@ class BackupInteractor(private val wordsManager: WordsManager, private val index
     }
 
     override fun validate(confirmationWords: HashMap<Int, String>) {
-        wordsManager.savedWords()?.let { wordList ->
-            for ((index, word) in confirmationWords) {
-                if (wordList[index - 1] != word.trim()) {
-                    delegate?.didValidateFailure()
-                    return
-                }
-            }
-            wordsManager.wordListBackedUp = true
-            delegate?.didValidateSuccess()
-        } ?: run { delegate?.didValidateFailure() }
+        keystoreSafeExecute.safeExecute(
+                action = Runnable {
+                    wordsManager.savedWords()?.let { wordList ->
+                        for ((index, word) in confirmationWords) {
+                            if (wordList[index - 1] != word.trim()) {
+                                throw Exception()
+                            }
+                        }
+                        wordsManager.wordListBackedUp = true
+                    } ?: run { throw Exception() }
+                },
+                onSuccess = Runnable { delegate?.didValidateSuccess() },
+                onFailure = Runnable { delegate?.didValidateFailure() }
+        )
     }
 
 }

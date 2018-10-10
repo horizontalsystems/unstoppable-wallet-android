@@ -3,7 +3,7 @@ package bitcoin.wallet.modules.guest
 import android.arch.lifecycle.ViewModel
 import bitcoin.wallet.SingleLiveEvent
 
-class GuestViewModel: ViewModel(), GuestModule.IView, GuestModule.IRouter {
+class GuestViewModel: ViewModel(), GuestModule.IView, GuestModule.IRouter, GuestModule.IKeyStoreSafeExecute {
 
     lateinit var delegate: GuestModule.IViewDelegate
 
@@ -11,9 +11,10 @@ class GuestViewModel: ViewModel(), GuestModule.IView, GuestModule.IRouter {
     val openRestoreWalletScreenLiveEvent = SingleLiveEvent<Void>()
     val authenticateToCreateWallet = SingleLiveEvent<Void>()
     val showErrorDialog = SingleLiveEvent<Void>()
+    val keyStoreSafeExecute = SingleLiveEvent<Triple<Runnable, Runnable?, Runnable?>>()
 
     fun init() {
-        GuestModule.init(this, this)
+        GuestModule.init(this, this, this)
     }
 
     // router
@@ -33,4 +34,7 @@ class GuestViewModel: ViewModel(), GuestModule.IView, GuestModule.IRouter {
         showErrorDialog.call()
     }
 
+    override fun safeExecute(action: Runnable, onSuccess: Runnable?, onFailure: Runnable?) {
+        keyStoreSafeExecute.value = Triple(action, onSuccess, onFailure)
+    }
 }

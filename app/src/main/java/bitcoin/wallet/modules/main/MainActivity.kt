@@ -6,7 +6,6 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import bitcoin.wallet.BaseActivity
 import bitcoin.wallet.R
-import bitcoin.wallet.core.AdapterManager
 import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.viewHelpers.LayoutHelper
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
@@ -20,7 +19,6 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Factory.wordsManager.savedWords()?.let { AdapterManager.initAdapters(it) }
         Factory.exchangeRateManager
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
@@ -68,17 +66,6 @@ class MainActivity : BaseActivity() {
             }
         })
 
-//        if (Factory.preferencesManager.getPin() == null) {
-//            PinModule.startForSetPin(this)
-//        }
-
-        // try {
-        //     blockchainManager.startServices()
-        // } catch (exception: UserNotAuthenticatedException) {
-        //     EncryptionManager.showAuthenticationScreen(this, LauncherActivity.AUTHENTICATE_TO_REDIRECT)
-        // } catch (exception: KeyPermanentlyInvalidatedException) {
-        //     EncryptionManager.showKeysInvalidatedAlert(this)
-        // }
     }
 
     override fun onResume() {

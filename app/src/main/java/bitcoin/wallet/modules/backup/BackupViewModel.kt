@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModel
 import bitcoin.wallet.R
 import bitcoin.wallet.SingleLiveEvent
 
-class BackupViewModel : ViewModel(), BackupModule.IView, BackupModule.IRouter {
+class BackupViewModel : ViewModel(), BackupModule.IView, BackupModule.IRouter, BackupModule.IKeyStoreSafeExecute {
     lateinit var delegate: BackupModule.IViewDelegate
 
     val errorLiveData = MutableLiveData<Int>()
@@ -17,9 +17,10 @@ class BackupViewModel : ViewModel(), BackupModule.IView, BackupModule.IRouter {
     val closeLiveEvent = SingleLiveEvent<Void>()
     val navigateBackLiveEvent = SingleLiveEvent<Void>()
     val navigateToMainLiveEvent = SingleLiveEvent<Void>()
+    val keyStoreSafeExecute = SingleLiveEvent<Triple<Runnable, Runnable?, Runnable?>>()
 
     fun init(dismissMode: BackupPresenter.DismissMode) {
-        BackupModule.init(this, this, dismissMode)
+        BackupModule.init(this, this, this, dismissMode)
     }
 
     // view
@@ -45,6 +46,10 @@ class BackupViewModel : ViewModel(), BackupModule.IView, BackupModule.IRouter {
 
     override fun showConfirmationError() {
         errorLiveData.value = R.string.backup_words_error_no_match
+    }
+
+    override fun safeExecute(action: Runnable, onSuccess: Runnable?, onFailure: Runnable?) {
+        keyStoreSafeExecute.value = Triple(action, onSuccess, onFailure)
     }
 
     // router
