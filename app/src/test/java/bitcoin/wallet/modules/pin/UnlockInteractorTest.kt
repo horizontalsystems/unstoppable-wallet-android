@@ -1,15 +1,14 @@
 package bitcoin.wallet.modules.pin
 
+import bitcoin.wallet.core.IKeyStoreSafeExecute
 import bitcoin.wallet.core.ILocalStorage
 import bitcoin.wallet.core.ISettingsManager
 import bitcoin.wallet.modules.pin.pinSubModules.UnlockInteractor
-import com.nhaarman.mockito_kotlin.atMost
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.mockito.Captor
 import org.mockito.Mockito
 
 class UnlockInteractorTest {
@@ -17,8 +16,17 @@ class UnlockInteractorTest {
     private val delegate = Mockito.mock(PinModule.IInteractorDelegate::class.java)
     private val storage = Mockito.mock(ILocalStorage::class.java)
     private val settings = Mockito.mock(ISettingsManager::class.java)
+    private val keystoreSafeExecute = Mockito.mock(IKeyStoreSafeExecute::class.java)
+    private var interactor = UnlockInteractor(storage, settings, keystoreSafeExecute)
 
-    private var interactor = UnlockInteractor(storage, settings)
+    @Captor
+    private val actionRunnableCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
+
+    @Captor
+    private val successRunnableCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
+
+    @Captor
+    private val failureRunnableCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
 
     @Before
     fun setUp() {
@@ -57,6 +65,12 @@ class UnlockInteractorTest {
 
         interactor.submit(pin)
 
+        verify(keystoreSafeExecute).safeExecute(actionRunnableCaptor.capture(), successRunnableCaptor.capture(), failureRunnableCaptor.capture())
+
+        val actionRunnable = actionRunnableCaptor.firstValue
+
+        actionRunnable.run()
+
         verify(delegate).onCorrectPinSubmitted()
     }
 
@@ -69,6 +83,12 @@ class UnlockInteractorTest {
         whenever(storage.getPin()).thenReturn(pin)
 
         interactor.submit(pin2)
+
+        verify(keystoreSafeExecute).safeExecute(actionRunnableCaptor.capture(), successRunnableCaptor.capture(), failureRunnableCaptor.capture())
+
+        val actionRunnable = actionRunnableCaptor.firstValue
+
+        actionRunnable.run()
 
         verify(delegate).onWrongPinSubmitted()
     }

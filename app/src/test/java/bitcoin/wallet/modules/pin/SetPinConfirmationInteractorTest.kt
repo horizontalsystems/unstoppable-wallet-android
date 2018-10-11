@@ -1,13 +1,17 @@
 package bitcoin.wallet.modules.pin
 
+import bitcoin.wallet.core.IKeyStoreSafeExecute
 import bitcoin.wallet.core.ILocalStorage
 import bitcoin.wallet.modules.pin.pinSubModules.SetPinConfirmationInteractor
+import com.nhaarman.mockito_kotlin.KArgumentCaptor
+import com.nhaarman.mockito_kotlin.argumentCaptor
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
-import com.nhaarman.mockito_kotlin.whenever
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.mockito.Captor
+import org.mockito.Mockito
 import org.mockito.Mockito.mock
 
 class SetPinConfirmationInteractorTest {
@@ -15,7 +19,17 @@ class SetPinConfirmationInteractorTest {
     private val enteredPin = "123456"
     private val delegate = mock(PinModule.IInteractorDelegate::class.java)
     private val storage = mock(ILocalStorage::class.java)
-    private var interactor = SetPinConfirmationInteractor(enteredPin, storage)
+    private val keystoreSafeExecute = Mockito.mock(IKeyStoreSafeExecute::class.java)
+    private var interactor = SetPinConfirmationInteractor(enteredPin, storage, keystoreSafeExecute)
+
+    @Captor
+    private val actionRunnableCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
+
+    @Captor
+    private val successRunnableCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
+
+    @Captor
+    private val failureRunnableCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
 
     @Before
     fun setUp() {
@@ -33,6 +47,14 @@ class SetPinConfirmationInteractorTest {
         val pin = "123456"
 
         interactor.submit(pin)
+
+        verify(keystoreSafeExecute).safeExecute(actionRunnableCaptor.capture(), successRunnableCaptor.capture(), failureRunnableCaptor.capture())
+
+        val actionRunnable = actionRunnableCaptor.firstValue
+        val successRunnable = successRunnableCaptor.firstValue
+
+        actionRunnable.run()
+        successRunnable.run()
 
         verify(storage).savePin(pin)
         verify(delegate).onDidPinSet()
@@ -55,9 +77,15 @@ class SetPinConfirmationInteractorTest {
 
         val pin = "123456"
 
-        whenever(storage.savePin(pin)).thenThrow(Exception::class.java)
-
         interactor.submit(pin)
+
+        verify(keystoreSafeExecute).safeExecute(actionRunnableCaptor.capture(), successRunnableCaptor.capture(), failureRunnableCaptor.capture())
+
+        val actionRunnable = actionRunnableCaptor.firstValue
+        val failureRunnable = failureRunnableCaptor.firstValue
+
+        actionRunnable.run()
+        failureRunnable.run()
 
         verify(delegate).onErrorFailedToSavePin()
         verifyNoMoreInteractions(delegate)

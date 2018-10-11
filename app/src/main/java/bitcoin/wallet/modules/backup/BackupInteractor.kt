@@ -27,15 +27,21 @@ class BackupInteractor(private val wordsManager: WordsManager, private val index
         keystoreSafeExecute.safeExecute(
                 action = Runnable {
                     wordsManager.savedWords()?.let { wordList ->
+                        var valid = true
                         for ((index, word) in confirmationWords) {
                             if (wordList[index - 1] != word.trim()) {
-                                throw Exception()
+                                valid = false
                             }
                         }
-                        wordsManager.wordListBackedUp = true
-                    } ?: run { throw Exception() }
+
+                        if (valid) {
+                            wordsManager.wordListBackedUp = true
+                            delegate?.didValidateSuccess()
+                        } else {
+                            delegate?.didValidateFailure()
+                        }
+                    } ?: run { delegate?.didValidateFailure() }
                 },
-                onSuccess = Runnable { delegate?.didValidateSuccess() },
                 onFailure = Runnable { delegate?.didValidateFailure() }
         )
     }

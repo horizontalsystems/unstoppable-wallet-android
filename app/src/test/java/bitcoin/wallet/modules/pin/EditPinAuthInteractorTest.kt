@@ -1,20 +1,31 @@
 package bitcoin.wallet.modules.pin
 
+import bitcoin.wallet.core.IKeyStoreSafeExecute
 import bitcoin.wallet.core.ILocalStorage
 import bitcoin.wallet.modules.pin.pinSubModules.EditPinAuthInteractor
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.mockito.Captor
+import org.mockito.Mockito
 import org.mockito.Mockito.mock
 
 class EditPinAuthInteractorTest {
 
     private val delegate = mock(PinModule.IInteractorDelegate::class.java)
     private val storage = mock(ILocalStorage::class.java)
-    private var interactor = EditPinAuthInteractor(storage)
+    private val keystoreSafeExecute = Mockito.mock(IKeyStoreSafeExecute::class.java)
+    private var interactor = EditPinAuthInteractor(storage, keystoreSafeExecute)
+
+    @Captor
+    private val actionRunnableCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
+
+    @Captor
+    private val successRunnableCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
+
+    @Captor
+    private val failureRunnableCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
 
     @Before
     fun setUp() {
@@ -34,6 +45,12 @@ class EditPinAuthInteractorTest {
 
         interactor.submit(pin)
 
+        verify(keystoreSafeExecute).safeExecute(actionRunnableCaptor.capture(), successRunnableCaptor.capture(), failureRunnableCaptor.capture())
+
+        val actionRunnable = actionRunnableCaptor.firstValue
+
+        actionRunnable.run()
+
         verify(delegate).goToPinEdit()
     }
 
@@ -45,6 +62,12 @@ class EditPinAuthInteractorTest {
         whenever(storage.getPin()).thenReturn(pin)
 
         interactor.submit(pin2)
+
+        verify(keystoreSafeExecute).safeExecute(actionRunnableCaptor.capture(), successRunnableCaptor.capture(), failureRunnableCaptor.capture())
+
+        val actionRunnable = actionRunnableCaptor.firstValue
+
+        actionRunnable.run()
 
         verify(delegate).onWrongPinSubmitted()
     }
