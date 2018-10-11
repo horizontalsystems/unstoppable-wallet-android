@@ -10,10 +10,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.UserNotAuthenticatedException
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import bitcoin.wallet.BaseActivity
@@ -25,8 +27,8 @@ import bitcoin.wallet.core.security.FingerprintAuthenticationDialogFragment
 import bitcoin.wallet.core.security.SecurityUtils
 import bitcoin.wallet.modules.main.MainModule
 import bitcoin.wallet.viewHelpers.HudHelper
-import bitcoin.wallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.activity_pin.*
+import kotlinx.android.synthetic.main.custom_tall_toolbar.*
 import java.security.UnrecoverableKeyException
 
 
@@ -53,17 +55,20 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
         setContentView(R.layout.activity_pin)
 
         setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.back)
+        supportActionBar?.title = ""
 
         val interactionType = intent.getSerializableExtra(keyInteractionType) as PinInteractionType
         val enteredPin = intent.getStringExtra(keyEnteredPin)
+
+        backButton.setOnClickListener { viewModel.delegate.onBackPressed() }
 
         viewModel = ViewModelProviders.of(this).get(PinViewModel::class.java)
         viewModel.init(interactionType, enteredPin)
 
         viewModel.title.observe(this, Observer { title ->
-            title?.let { supportActionBar?.title = getString(it) }
+            title?.let {
+                toolbarTitle.text = getString(it)
+            }
         })
 
         viewModel.description.observe(this, Observer { description ->
@@ -74,9 +79,15 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
             length?.let { updatePinCircles(it) }
         })
 
-        viewModel.showError.observe(this, Observer { error ->
+        viewModel.showErrorInDialog.observe(this, Observer { error ->
             error?.let {
                 HudHelper.showErrorMessage(error, this)
+            }
+        })
+
+        viewModel.showErrorMessage.observe(this, Observer { error ->
+            error?.let {
+                errorMessage.setText(error)
             }
         })
 
@@ -84,6 +95,10 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
             pin?.let {
                 PinModule.startForSetPinConfirm(this, pin)
             }
+        })
+
+        viewModel.goToSetPin.observe(this, Observer {
+            PinModule.startForSetPin(this)
         })
 
         viewModel.showSuccess.observe(this, Observer {
@@ -103,7 +118,7 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
         viewModel.clearPinMaskWithDelay.observe(this, Observer {
             Handler().postDelayed({
                 updatePinCircles(0)
-            }, 200)
+            }, 300)
         })
 
         viewModel.showFingerprintDialog.observe(this, Observer {
@@ -121,6 +136,10 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
         viewModel.goToPinEdit.observe(this, Observer {
             PinModule.startForEditPin(this)
             finish()
+        })
+
+        viewModel.hideBackButton.observe(this, Observer {
+            backButton.visibility = View.GONE
         })
 
         imgPinMask1 = findViewById(R.id.imgPinMaskOne)
@@ -190,27 +209,6 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
         finish()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_set_pin, menu)
-        LayoutHelper.tintMenuIcons(menu, ContextCompat.getColor(this, R.color.yellow_crypto))
-
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.action_done -> {
-            viewModel.delegate.onClickDone()
-            true
-        }
-        else -> {
-            super.onOptionsItemSelected(item)
-        }
-    }
-
-    override fun onBackPressed() {
-        viewModel.delegate.onBackPressed()
-    }
-
     override fun onSupportNavigateUp(): Boolean {
         viewModel.delegate.onBackPressed()
         return true
@@ -219,6 +217,7 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
     override fun onItemClick(item: NumPadItem) {
         when (item.type) {
             NumPadItemType.NUMBER -> {
+                errorMessage.text = ""
                 viewModel.delegate.onEnterDigit(item.number)
             }
             NumPadItemType.DELETE -> {
@@ -326,4 +325,3 @@ class NumPadItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
     }
 }
-

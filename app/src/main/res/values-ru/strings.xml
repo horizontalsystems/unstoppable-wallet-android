@@ -114,7 +114,7 @@
   <string name="hud_text_error">Ошибка</string>
   <string name="hud_text_no_internet">Нет интернета</string>
   <string name="hud_text_copied">Скопировано</string>
-  <string name="hud_text_invalid_pin_error">Неверный ПИН-код. \nПожалуйста попробуйте еще раз.</string>
+  <string name="hud_text_invalid_pin_error">Неверный ПИН-код. Пожалуйста попробуйте еще раз.</string>
   <!--Fingerprint texts-->
   <string name="fingerprint_dialog_title">Отпечаток пальца для входа</string>
   <string name="fingerprint_hint">Коснитесь датчика</string>

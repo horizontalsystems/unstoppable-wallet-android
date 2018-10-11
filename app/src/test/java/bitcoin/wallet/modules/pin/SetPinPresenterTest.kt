@@ -69,18 +69,6 @@ class SetPinPresenterTest {
 
 
     @Test
-    fun onClickDone() {
-
-        presenter.onEnterDigit(3)
-        presenter.onEnterDigit(4)
-
-        presenter.onClickDone()
-
-        verify(interactor).submit("34")
-    }
-
-
-    @Test
     fun onErrorShortPinLength() {
 
         presenter.onErrorShortPinLength()

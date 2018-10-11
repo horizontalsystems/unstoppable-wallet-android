@@ -6,6 +6,7 @@ import bitcoin.wallet.modules.pin.PinPresenter
 class SetPinPresenter(interactor: PinModule.IInteractor, router: PinModule.IRouter) : PinPresenter(interactor, router) {
 
     override fun updateViewTitleAndDescription() {
+        view?.hideBackButton()
         view?.setTitleForEnterPin()
         view?.setDescriptionForEnterPin()
     }

@@ -12,13 +12,16 @@ class PinViewModel : ViewModel(), PinModule.IView, PinModule.IRouter {
     val title = MutableLiveData<Int>()
     val description = MutableLiveData<Int>()
     val highlightPinMask = MutableLiveData<Int>()
-    val showError = MutableLiveData<Int>()
+    val showErrorInDialog = MutableLiveData<Int>()
+    val showErrorMessage = MutableLiveData<Int>()
     val showSuccess = SingleLiveEvent<Unit>()
 
+    val goToSetPin = SingleLiveEvent<Unit>()
     val goToPinConfirmation = SingleLiveEvent<String>()
     val hideToolbar = SingleLiveEvent<Unit>()
     val unlockWallet = SingleLiveEvent<Unit>()
     val clearPinMaskWithDelay = SingleLiveEvent<Unit>()
+    val hideBackButton = SingleLiveEvent<Unit>()
     val showFingerprintDialog = SingleLiveEvent<Unit>()
     val minimizeApp = SingleLiveEvent<Unit>()
     val goBack = SingleLiveEvent<Unit>()
@@ -42,7 +45,7 @@ class PinViewModel : ViewModel(), PinModule.IView, PinModule.IRouter {
     }
 
     override fun showErrorShortPinLength() {
-        showError.value = R.string.set_pin_error_short_pin
+        showErrorInDialog.value = R.string.set_pin_error_short_pin
     }
 
     override fun setTitleForEnterAgain() {
@@ -58,11 +61,11 @@ class PinViewModel : ViewModel(), PinModule.IView, PinModule.IRouter {
     }
 
     override fun showErrorPinsDontMatch() {
-        showError.value = R.string.set_pin_error_pins_dont_match
+        showErrorMessage.value = R.string.set_pin_error_pins_dont_match
     }
 
     override fun showErrorFailedToSavePin() {
-        showError.value = R.string.set_pin_error_failed_to_save_pin
+        showErrorInDialog.value = R.string.set_pin_error_failed_to_save_pin
     }
 
     override fun setDescriptionForUnlock() {
@@ -85,12 +88,16 @@ class PinViewModel : ViewModel(), PinModule.IView, PinModule.IRouter {
         description.value = R.string.edit_pin_description
     }
 
+    override fun hideBackButton() {
+        hideBackButton.call()
+    }
+
     override fun hideToolbar() {
         hideToolbar.call()
     }
 
     override fun showErrorWrongPin() {
-        showError.value = R.string.hud_text_invalid_pin_error
+        showErrorMessage.value = R.string.hud_text_invalid_pin_error
     }
 
     override fun clearPinMaskWithDelay() {
@@ -110,6 +117,10 @@ class PinViewModel : ViewModel(), PinModule.IView, PinModule.IRouter {
     }
 
     //IRouter
+    override fun goToSetPin() {
+        goToSetPin.call()
+    }
+
     override fun goToPinConfirmation(pin: String) {
         goToPinConfirmation.value = pin
     }

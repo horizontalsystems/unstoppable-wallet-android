@@ -115,7 +115,7 @@
   <string name="hud_text_error">Fehler</string>
   <string name="hud_text_no_internet">Kein Internet</string>
   <string name="hud_text_copied">Kopiert</string>
-  <string name="hud_text_invalid_pin_error">Ungültiger PIN. \nBitte versuche es erneut.</string>
+  <string name="hud_text_invalid_pin_error">Ungültiger PIN. Bitte versuche es erneut.</string>
   <!--Fingerprint texts-->
   <string name="fingerprint_dialog_title">Anmeldung per Fingerabdruck</string>
   <string name="fingerprint_hint">Touchsensor</string>

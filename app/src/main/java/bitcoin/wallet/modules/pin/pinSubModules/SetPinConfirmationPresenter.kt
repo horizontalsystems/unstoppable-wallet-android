@@ -10,4 +10,7 @@ class SetPinConfirmationPresenter(interactor: PinModule.IInteractor, router: Pin
         view?.setDescriptionForEnterAgain()
     }
 
+    override fun onBackPressed() {
+        router.goToSetPin()
+    }
 }
