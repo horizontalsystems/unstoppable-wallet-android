@@ -10,6 +10,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
+import java.util.concurrent.TimeUnit
 
 class NetworkManager : INetworkManager {
 
@@ -55,6 +56,8 @@ object ServiceExchangeApi {
 
         val httpClient = OkHttpClient.Builder()
         httpClient.addInterceptor(logger)
+        httpClient.connectTimeout(60, TimeUnit.SECONDS)
+        httpClient.readTimeout(60, TimeUnit.SECONDS)
 
         val gsonBuilder = GsonBuilder()
         gsonBuilder.setLenient()
