@@ -11,18 +11,15 @@
 
     <string name="welcome_title">Bank Wallet</string>
     <string name="welcome_description" translatable="false">Decentralized App</string>
-    <string name="welcome_btn_create_wallet">Create Wallet</string>
+    <string name="welcome_btn_create_wallet">New Wallet</string>
     <string name="welcome_btn_import_wallet">Import Wallet</string>
 
     <string name="restore_title">Enter Paper Keys</string>
-    <string name="restore_validation_failed">The words you entered are invalid</string>
+    <string name="restore_validation_failed">Words do not match</string>
 
-    <string name="backup_words_title">Backup</string>
-    <string name="backup_words_description">
-        Your paper key is the only way to restore your wallet if your device is lost, stolen, broken or upgraded.
-        \n\nYou will see a list of words on the next screen. Write them down on a piece of paper and do not show it to anyone.
-    </string>
-    <string name="backup_words_confirm_alert_wallet_held_on_device">I understand that my <b>wallet and tokens are stored on this device only and not any servers.</b></string>
+    <string name="backup_words_title">Secret Key</string>
+    <string name="backup_words_description">Your secret key is the only way to restore your wallet and funds if your phone is ever lost, stolen, broken, or upgraded.\n\n It consists of 12 words. Write them on a piece of paper and do not ever show it to anyone.</string>
+    <string name="backup_words_confirm_alert_wallet_held_on_device">I understand that my wallet and tokens are held securely on this device only and not any servers.</string>
     <string name="backup_words_confirm_alert_wallet_restore_with_words">I understand that if this app is moved to another device or is deleted, my wallet can be only recovered with the Paper Key that I have written down and saved in a secure place.</string>
     <string name="backup_words_confirm_alert_wallet_device_lock_warning">Changing the phone\'s unlock PIN in your Android OS settings would reset the wallet. You will need your backup phrase to restore your wallet after that.</string>
     <string name="backup_words_confirm_description">Enter the following words from your paper key</string>
