@@ -16,12 +16,4 @@ class UnlockPresenter(interactor: PinModule.IInteractor, router: PinModule.IRout
         view?.setDescriptionForUnlock()
     }
 
-    override fun onEnterDigit(digit: Int) {
-        super.onEnterDigit(digit)
-
-        if (enteredPin.length == PinModule.pinLength) {
-            interactor.submit(enteredPin.toString())
-        }
-    }
-
 }

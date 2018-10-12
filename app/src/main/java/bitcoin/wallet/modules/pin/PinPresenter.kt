@@ -18,6 +18,10 @@ abstract class PinPresenter(protected val interactor: PinModule.IInteractor, pro
         }
 
         view?.highlightPinMask(enteredPin.length)
+
+        if (enteredPin.length == PinModule.pinLength) {
+            interactor.submit(enteredPin.toString())
+        }
     }
 
     override fun onClickDelete() {
@@ -26,10 +30,6 @@ abstract class PinPresenter(protected val interactor: PinModule.IInteractor, pro
         }
 
         view?.highlightPinMask(enteredPin.length)
-    }
-
-    override fun onClickDone() {
-        interactor.submit(enteredPin.toString())
     }
 
     override fun onBackPressed() {
@@ -56,6 +56,8 @@ abstract class PinPresenter(protected val interactor: PinModule.IInteractor, pro
 
     override fun onErrorPinsDontMatch() {
         view?.showErrorPinsDontMatch()
+        enteredPin.setLength(0)
+        view?.clearPinMaskWithDelay()
     }
 
     override fun onErrorFailedToSavePin() {

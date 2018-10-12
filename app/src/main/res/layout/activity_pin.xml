@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:layout_editor_absoluteY="25dp"
     >
 
     <android.support.design.widget.AppBarLayout
@@ -18,14 +17,7 @@
         app:elevation="0dp"
         >
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:theme="@style/ToolbarStyle"
-            app:titleMarginStart="16dp"
-            app:titleTextAppearance="@style/TabTitleSmall"
-            />
+        <include layout="@layout/custom_tall_toolbar"/>
     </android.support.design.widget.AppBarLayout>
 
 
@@ -59,8 +51,8 @@
             android:id="@+id/imgPinMaskOne"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            app:layout_constraintBottom_toTopOf="@+id/imgPinMaskTwo"
+            android:layout_marginBottom="40dp"
+            app:layout_constraintBottom_toTopOf="@+id/numPadItems"
             app:layout_constraintEnd_toStartOf="@+id/imgPinMaskTwo"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
@@ -126,6 +118,20 @@
             app:layout_constraintStart_toEndOf="@+id/imgPinMaskFive"
             app:layout_constraintTop_toTopOf="@+id/imgPinMaskFive"
             app:srcCompat="@drawable/pin_circle_empty"
+            />
+
+        <TextView
+            android:id="@+id/errorMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:textAlignment="center"
+            android:textColor="@color/red_warning"
+            android:textSize="17sp"
+            app:layout_constraintBottom_toTopOf="@+id/numPadItems"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Error message"
             />
 
         <android.support.v7.widget.RecyclerView

@@ -33,13 +33,13 @@ object PinModule {
         fun navigateToPrevPage()
         fun setTitleForEditPin()
         fun setDescriptionForEditPin()
+        fun hideBackButton()
     }
 
     interface IViewDelegate {
         fun viewDidLoad()
         fun onEnterDigit(digit: Int)
         fun onClickDelete()
-        fun onClickDone()
         fun onBackPressed()
     }
 
@@ -64,6 +64,7 @@ object PinModule {
     }
 
     interface IRouter {
+        fun goToSetPin()
         fun goToPinConfirmation(pin: String)
         fun unlockWallet()
         fun goToPinEdit()
