@@ -66,7 +66,7 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-    fun safeExecuteWithKeystore(action: Runnable, onSuccess: Runnable?, onFailure: Runnable?) {
+    fun safeExecuteWithKeystore(action: Runnable, onSuccess: Runnable? = null, onFailure: Runnable? = null) {
         try {
             action.run()
             onSuccess?.run()
