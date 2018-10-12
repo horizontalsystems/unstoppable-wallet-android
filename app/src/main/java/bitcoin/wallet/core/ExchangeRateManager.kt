@@ -41,7 +41,7 @@ class ExchangeRateManager: IExchangeRateManager {
     private fun refreshRates(baseCurrency: Currency) {
         val flowableList = mutableListOf<Flowable<Pair<String, Double>>>()
         AdapterManager.adapters.forEach {adapter ->
-            flowableList.add(Factory.networkManager.getLatestRate(adapter.coin.code.toLowerCase(), baseCurrency.code.toLowerCase())
+            flowableList.add(Factory.networkManager.getLatestRate(adapter.coin.code, baseCurrency.code)
                     .map { Pair(adapter.coin.code, it) })
         }
 
@@ -76,7 +76,7 @@ class ExchangeRateManager: IExchangeRateManager {
         val formattedHour = f.format(hour).toString()
         val formattedMinute = f.format(minute).toString()
 
-        return Factory.networkManager.getRate(coinCode.toLowerCase(), currency.toLowerCase(), year, formattedMonth, formattedDay, formattedHour, formattedMinute)
+        return Factory.networkManager.getRate(coinCode, currency, year, formattedMonth, formattedDay, formattedHour, formattedMinute)
     }
 
 }

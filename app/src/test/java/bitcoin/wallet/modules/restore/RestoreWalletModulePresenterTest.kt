@@ -36,7 +36,7 @@ class RestoreWalletModulePresenterTest {
 
     @Test
     fun didFailToRestore() {
-        presenter.didFailToRestore(Exception())
+        presenter.didFailToRestore()
 
         verify(view).showInvalidWordsError()
     }

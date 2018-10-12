@@ -12,6 +12,14 @@ import com.google.gson.Gson
 
 class PreferencesManager(private val encryptionManager: IEncryptionManager) : ILocalStorage, ISettingsManager {
 
+    private val MNEMONIC_WORDS = "mnemonicWords"
+    private val LOCK_PIN = "lockPin"
+    private val LIGHT_MODE_ENABLED = "light_mode_enabled"
+    private val FINGERPRINT_ENABLED = "fingerprint_enabled"
+    private val WORDLIST_BACKUP = "wordlist_backup"
+    val BASE_CURRENCY = "base_currency"
+
+
     override val savedWords: List<String>?
         get() {
             val string = App.preferences.getString(MNEMONIC_WORDS, null)
@@ -29,13 +37,6 @@ class PreferencesManager(private val encryptionManager: IEncryptionManager) : IL
     override fun clearAll() {
         App.preferences.edit().clear().apply()
     }
-
-    private val MNEMONIC_WORDS = "mnemonicWords"
-    private val LOCK_PIN = "lockPin"
-    private val LIGHT_MODE_ENABLED = "light_mode_enabled"
-    private val FINGERPRINT_ENABLED = "fingerprint_enabled"
-    private val WORDLIST_BACKUP = "wordlist_backup"
-    val BASE_CURRENCY = "base_currency"
 
     override fun isLightModeEnabled() = App.preferences.getBoolean(LIGHT_MODE_ENABLED, false)
 
@@ -60,6 +61,11 @@ class PreferencesManager(private val encryptionManager: IEncryptionManager) : IL
         } else {
             encryptionManager.decrypt(string)
         }
+    }
+
+    override fun pinIsEmpty(): Boolean {
+        val string = App.preferences.getString(LOCK_PIN, null)
+        return string.isNullOrEmpty()
     }
 
     override fun wordListBackedUp(backedUp: Boolean) {

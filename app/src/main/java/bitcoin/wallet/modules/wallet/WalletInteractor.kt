@@ -50,7 +50,7 @@ class WalletInteractor(
     }
 
     override fun checkIfPinSet() {
-        if (storage.getPin() == null) {
+        if (storage.pinIsEmpty()) {
             delegate?.onPinNotSet()
         }
     }

@@ -3,6 +3,7 @@ package bitcoin.wallet.modules.restore
 import android.content.Context
 import android.content.Intent
 import bitcoin.wallet.core.AdapterManager
+import bitcoin.wallet.core.IKeyStoreSafeExecute
 import bitcoin.wallet.core.managers.Factory
 
 object RestoreModule {
@@ -22,7 +23,7 @@ object RestoreModule {
 
     interface IInteractorDelegate {
         fun didRestore()
-        fun didFailToRestore(error: Throwable)
+        fun didFailToRestore()
     }
 
     interface IRouter {
@@ -34,8 +35,8 @@ object RestoreModule {
         context.startActivity(intent)
     }
 
-    fun initModule(view: RestoreViewModel, router: IRouter) {
-        val interactor = RestoreInteractor(Factory.wordsManager, AdapterManager)
+    fun init(view: RestoreViewModel, router: IRouter, keystoreSafeExecute: IKeyStoreSafeExecute) {
+        val interactor = RestoreInteractor(Factory.wordsManager, AdapterManager, keystoreSafeExecute)
         val presenter = RestorePresenter(interactor, router)
 
         view.delegate = presenter

@@ -15,6 +15,7 @@ interface ILocalStorage {
     fun getPin(): String?
     fun wordListBackedUp(backedUp: Boolean)
     fun isWordListBackedUp(): Boolean
+    fun pinIsEmpty(): Boolean
 }
 
 interface IRandomProvider {
@@ -58,4 +59,8 @@ interface IExchangeRateManager {
     fun getRate(coinCode: String, currency: String, timestamp: Long): Flowable<Double>
     fun getExchangeRates(): MutableMap<Coin, CurrencyValue>
     fun getLatestExchangeRateSubject(): PublishSubject<MutableMap<Coin, CurrencyValue>>
+}
+
+interface IKeyStoreSafeExecute {
+    fun safeExecute(action: Runnable, onSuccess: Runnable? = null, onFailure: Runnable? = null)
 }
