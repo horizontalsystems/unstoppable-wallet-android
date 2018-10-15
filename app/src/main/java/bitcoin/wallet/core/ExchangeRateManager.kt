@@ -23,7 +23,7 @@ class ExchangeRateManager: IExchangeRateManager {
     init {
         baseCurrencyDisposable = Factory.currencyManager.getBaseCurrencyFlowable().subscribe { baseCurrency ->
             disposables.clear()
-            disposables.add(Observable.interval(0, 5, TimeUnit.MINUTES, Schedulers.io())
+            disposables.add(Observable.interval(5, 180, TimeUnit.SECONDS, Schedulers.io())
                     .subscribe {
                         refreshRates(baseCurrency)
                     })

@@ -132,7 +132,7 @@ class WalletKit(words: List<String>, network: NetworkParameters) {
             amount = 0.025
             fee = 0.0093
             blockHeight = 130
-            timestamp = 1538131030582
+            timestamp = 1539206581000
         }
         transactions.add(tr)
 
@@ -144,7 +144,7 @@ class WalletKit(words: List<String>, network: NetworkParameters) {
             amount = 0.03
             fee = 0.0093
             blockHeight = 122
-            timestamp = 1533152151123
+            timestamp = 1538893392000
         }
         transactions.add(tr1)
 
@@ -156,7 +156,7 @@ class WalletKit(words: List<String>, network: NetworkParameters) {
             amount = 0.032
             fee = 0.0093
             blockHeight = 105
-            timestamp = 1533052151123
+            timestamp = 1538461392000
         }
         transactions.add(tr2)
 
@@ -168,7 +168,7 @@ class WalletKit(words: List<String>, network: NetworkParameters) {
             amount = -0.23
             fee = 0.00012
             blockHeight = 128
-            timestamp = 1536152151123
+            timestamp = 1538288592000
         }
         transactions.add(tr3)
 
@@ -180,7 +180,7 @@ class WalletKit(words: List<String>, network: NetworkParameters) {
             amount = 0.183
             fee = 0.00092
             blockHeight = 103
-            timestamp = 1490090153000
+            timestamp = 1538131030582
         }
         transactions.add(tr4)
 

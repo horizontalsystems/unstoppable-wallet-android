@@ -6,6 +6,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import bitcoin.wallet.BaseActivity
 import bitcoin.wallet.R
+import bitcoin.wallet.core.AdapterManager
 import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.viewHelpers.LayoutHelper
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
@@ -20,6 +21,16 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Factory.exchangeRateManager
+
+        if(AdapterManager.adapters.isEmpty()) {
+            safeExecuteWithKeystore(
+                    action = Runnable {
+                        Factory.wordsManager.savedWords()?.let {
+                            AdapterManager.initAdapters(it)
+                        }
+                    }
+            )
+        }
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         viewModel.init()

@@ -175,6 +175,10 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
         numPadItems.layoutManager = GridLayoutManager(this, 3)
     }
 
+    override fun onBackPressed() {
+        viewModel.delegate.onBackPressed()
+    }
+
     private fun showFingerprintDialog() {
         if (SecurityUtils.touchSensorCanBeUsed(this)) {
             try {
