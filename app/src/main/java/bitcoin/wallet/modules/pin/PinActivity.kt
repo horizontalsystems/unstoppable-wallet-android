@@ -143,10 +143,25 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
         })
 
         viewModel.keyStoreSafeExecute.observe(this, Observer { triple ->
-            triple?.let {
-                val (action, onSuccess, onFailure) = it
+            triple?.let { (action, onSuccess, onFailure) ->
                 safeExecuteWithKeystore(action, onSuccess, onFailure)
             }
+        })
+
+        viewModel.showAttemptsLeftWarning.observe(this, Observer { pair ->
+            pair?.let { (stringRes, attemptsCount) ->
+                errorMessage.text = getString(stringRes, attemptsCount)
+            }
+        })
+
+        viewModel.blockScreen.observe(this, Observer {
+            pinUnlock.visibility = View.GONE
+            pinUnlockBlocked.visibility = View.VISIBLE
+        })
+
+        viewModel.unblockScreen.observe(this, Observer {
+            pinUnlock.visibility = View.VISIBLE
+            pinUnlockBlocked.visibility = View.GONE
         })
 
 

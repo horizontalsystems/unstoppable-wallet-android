@@ -78,6 +78,21 @@ abstract class PinPresenter(protected val interactor: PinModule.IInteractor, pro
         view?.showFingerprintDialog()
     }
 
+    override fun blockScreen() {
+        view?.clearPinMaskWithDelay()
+        view?.blockScreen()
+    }
+
+    override fun unblockScreen() {
+        view?.unblockScreen()
+    }
+
+    override fun showAttemptsLeftWarning(attemptsLeft: Int) {
+        enteredPin.setLength(0)
+        view?.clearPinMaskWithDelay()
+        view?.showAttemptsLeftWarning(attemptsLeft)
+    }
+
     override fun onMinimizeApp() {
         view?.minimizeApp()
     }

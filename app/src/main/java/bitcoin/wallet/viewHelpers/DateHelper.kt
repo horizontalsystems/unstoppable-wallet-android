@@ -6,6 +6,8 @@ import bitcoin.wallet.R
 import java.text.SimpleDateFormat
 import java.util.*
 
+
+
 object DateHelper {
 
     fun getOnlyTime(date: Date): String = formatDate(date, "HH:mm")
@@ -39,6 +41,15 @@ object DateHelper {
         return cal
     }
 
+    fun minutesAfterNow(minutes: Int): Long {
+        var now = Date()
+        val cal = Calendar.getInstance()
+        cal.time = now
+        cal.add(Calendar.MINUTE, minutes)
+        now = cal.time
+        return now.time
+    }
+
     private fun formatDate(date: Date, outputFormat: String) =
             SimpleDateFormat(DateFormat.getBestDateTimePattern(Locale.getDefault(), outputFormat)).format(date)
 
@@ -48,6 +59,11 @@ object DateHelper {
 
     private fun getSecondsAgo(date: Date): Long {
         val differenceInMillis = Date().time - date.time
+        return differenceInMillis / 1000
+    }
+
+    fun getSecondsAgo(dateInMillis: Long): Long {
+        val differenceInMillis = Date().time - dateInMillis
         return differenceInMillis / 1000
     }
 
