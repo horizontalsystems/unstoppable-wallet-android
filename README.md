@@ -8,7 +8,7 @@ BANK Wallet is a secure and a fully decentralized crypto wallet app that support
 
 This wallet provides a seamless and secure way to get started with Bitcoin and other crypto currencies for masses. It has been built using best practices on all fronts ranging from the design of the interface to the implementation of blockchain protocols.
 
-This wallet is an independent crypto bank. 
+This wallet is a trully independent crypto bank. 
 
 ![Header](/images/BankWalletAllTabs-android-Mockup.jpg)
 
