@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import bitcoin.wallet.core.App
+import java.util.*
 
 object BackgroundManager : Application.ActivityLifecycleCallbacks {
 
@@ -28,7 +29,7 @@ object BackgroundManager : Application.ActivityLifecycleCallbacks {
 
         if (refs == 0) {
             //App is in background
-
+            App.appBackgroundedTime = Date().time
             App.promptPin = true
         }
     }

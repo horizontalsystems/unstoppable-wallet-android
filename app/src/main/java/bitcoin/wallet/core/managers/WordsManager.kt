@@ -19,6 +19,7 @@ class WordsManager(private val storage: ILocalStorage) {
         }
 
     fun savedWords(): List<String>? = storage.savedWords
+    fun wordsAreEmpty(): Boolean = storage.wordsAreEmpty()
 
     @Throws(UserNotAuthenticatedException::class)
     fun createWords(): List<String> {

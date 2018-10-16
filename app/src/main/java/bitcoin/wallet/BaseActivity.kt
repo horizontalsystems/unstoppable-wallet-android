@@ -11,6 +11,7 @@ import bitcoin.wallet.core.App
 import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.core.security.EncryptionManager
 import bitcoin.wallet.modules.pin.PinModule
+import bitcoin.wallet.viewHelpers.DateHelper
 
 abstract class BaseActivity : AppCompatActivity() {
 
@@ -18,6 +19,8 @@ abstract class BaseActivity : AppCompatActivity() {
     private var pendingRunnable: Runnable? = null
     private var successRunnable: Runnable? = null
     private var failureRunnable: Runnable? = null
+
+    private val allowableTimeInBackground: Long = 30
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,16 +36,24 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (requiresPinUnlock) {
-            safeExecuteWithKeystore(
-                    action = Runnable {
-                        if (App.promptPin && Factory.preferencesManager.getPin() != null) {
-                            PinModule.startForUnlock(this)
-                        }
-                    },
-                    onSuccess = Runnable { App.promptPin = false },
-                    onFailure = null
-            )
+        if (App.promptPin) {
+            var promptPinByTimeout = true
+            App.appBackgroundedTime?.let {
+                val secondsAgo = DateHelper.getSecondsAgo(it)
+                promptPinByTimeout = secondsAgo > allowableTimeInBackground
+            }
+
+            if (promptPinByTimeout) {
+                safeExecuteWithKeystore(
+                        action = Runnable {
+                            if (Factory.preferencesManager.getPin() != null) {
+                                PinModule.startForUnlock(this)
+                            }
+                        },
+                        onSuccess = Runnable { App.promptPin = false },
+                        onFailure = null
+                )
+            }
         }
     }
 

@@ -10,6 +10,7 @@ import io.reactivex.subjects.PublishSubject
 interface ILocalStorage {
     val savedWords: List<String>?
     fun saveWords(words: List<String>)
+    fun wordsAreEmpty(): Boolean
     fun clearAll()
     fun savePin(pin: String)
     fun getPin(): String?
