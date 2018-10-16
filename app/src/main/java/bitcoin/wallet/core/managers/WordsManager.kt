@@ -2,7 +2,7 @@ package bitcoin.wallet.core.managers
 
 import android.security.keystore.UserNotAuthenticatedException
 import bitcoin.wallet.core.ILocalStorage
-import bitcoin.wallet.kit.hdwallet.Mnemonic
+import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.reactivex.subjects.PublishSubject
 
 class WordsManager(private val storage: ILocalStorage) {
