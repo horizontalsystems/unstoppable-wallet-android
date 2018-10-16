@@ -49,6 +49,8 @@
     <string name="send_bottom_sheet_error_invalid_address">Address seems invalid. Please check and try again!</string>
     <string name="send_bottom_sheet_error_insufficient_balance">Not enough funds.</string>
     <string name="send_bottom_sheet_success">Sent!</string>
+    <string name="send_bottom_confirm_dialog_title">Confirm Transaction</string>
+    <string name="send_bottom_confirm_dialog_fee">Fee</string>
 
     <string name="receive_title">Receive %s</string>
     <string name="receive_copy">Copy</string>
