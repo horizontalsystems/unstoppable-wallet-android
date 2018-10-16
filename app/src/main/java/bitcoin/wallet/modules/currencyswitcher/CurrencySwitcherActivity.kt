@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import bitcoin.wallet.BaseActivity
@@ -44,6 +45,16 @@ class CurrencySwitcherActivity: BaseActivity(), CurrencySwitcherAdapter.Listener
                 adapter?.notifyDataSetChanged()
             }
         })
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onItemClick(item: Currency) {
