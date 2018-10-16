@@ -19,7 +19,7 @@ class UnlockInteractor(private val storage: ILocalStorage, private val settings:
                 action = Runnable {
                     if (storage.getPin() == pin) {
                         delegate?.onCorrectPinSubmitted()
-                        settings.setUnlockAttemptsNumber(defaultAttemptsNumber)
+                        settings.setUnlockAttemptsLeft(defaultAttemptsNumber)
                     } else {
                         onWrongPinSubmit()
                     }
@@ -28,14 +28,14 @@ class UnlockInteractor(private val storage: ILocalStorage, private val settings:
     }
 
     private fun onWrongPinSubmit() {
-        val attemptsLeft = settings.getUnlockAttemptsNumber()
+        val attemptsLeft = settings.getUnlockAttemptsLeft()
         if (attemptsLeft > 0) {
-            settings.setUnlockAttemptsNumber(attemptsLeft - 1)
+            settings.setUnlockAttemptsLeft(attemptsLeft - 1)
             delegate?.showAttemptsLeftWarning(attemptsLeft)
         } else {
             val blockTillDate = DateHelper.minutesAfterNow(blockingTimeInMinutes.toInt())
             settings.setBlockTillDate(blockTillDate)
-            settings.setUnlockAttemptsNumber(5)
+            settings.setUnlockAttemptsLeft(1)
             delegate?.blockScreen()
             unblockScreenAfter(blockingTimeInMinutes * 60)
         }

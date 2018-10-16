@@ -106,7 +106,7 @@ class UnlockInteractorTest {
         actionRunnable.run()
 
         verify(delegate).onCorrectPinSubmitted()
-        verify(settings).setUnlockAttemptsNumber(defaultAttemptsLeft)
+        verify(settings).setUnlockAttemptsLeft(defaultAttemptsLeft)
     }
 
     @Test
@@ -123,7 +123,7 @@ class UnlockInteractorTest {
         val attemptsLeft = 5
 
         whenever(storage.getPin()).thenReturn(pin)
-        whenever(settings.getUnlockAttemptsNumber()).thenReturn(attemptsLeft)
+        whenever(settings.getUnlockAttemptsLeft()).thenReturn(attemptsLeft)
 
         interactor.submit(pin2)
 
@@ -134,7 +134,7 @@ class UnlockInteractorTest {
         actionRunnable.run()
 
         verify(delegate).showAttemptsLeftWarning(attemptsLeft)
-        verify(settings).setUnlockAttemptsNumber(attemptsLeft-1)
+        verify(settings).setUnlockAttemptsLeft(attemptsLeft-1)
     }
 
     @Test
@@ -145,7 +145,7 @@ class UnlockInteractorTest {
         val defaultAttemptsLeft = 5
 
         whenever(storage.getPin()).thenReturn(pin)
-        whenever(settings.getUnlockAttemptsNumber()).thenReturn(attemptsLeft)
+        whenever(settings.getUnlockAttemptsLeft()).thenReturn(attemptsLeft)
 
         interactor.submit(pin2)
 
@@ -156,7 +156,7 @@ class UnlockInteractorTest {
         actionRunnable.run()
 
         verify(delegate).blockScreen()
-        verify(settings).setUnlockAttemptsNumber(defaultAttemptsLeft)
+        verify(settings).setUnlockAttemptsLeft(defaultAttemptsLeft)
     }
 
 }

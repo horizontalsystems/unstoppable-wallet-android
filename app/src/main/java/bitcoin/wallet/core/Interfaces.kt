@@ -50,8 +50,8 @@ interface ISettingsManager {
     fun setBaseCurrency(currency: Currency)
     fun getBaseCurrency(): Currency
 
-    fun setUnlockAttemptsNumber(attemptsNumber: Int)
-    fun getUnlockAttemptsNumber(): Int
+    fun setUnlockAttemptsLeft(attemptsNumber: Int)
+    fun getUnlockAttemptsLeft(): Int
 
     fun setBlockTillDate(date: Long?)
     fun getBlockTillDate(): Long?

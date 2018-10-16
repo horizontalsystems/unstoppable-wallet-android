@@ -90,11 +90,11 @@ class PreferencesManager(private val encryptionManager: IEncryptionManager) : IL
         return if (json?.isBlank() == true) defaultCurrency else gson.fromJson<Currency>(json, Currency::class.java)
     }
 
-    override fun setUnlockAttemptsNumber(attemptsNumber: Int) {
+    override fun setUnlockAttemptsLeft(attemptsNumber: Int) {
         App.preferences.edit().putInt(UNLOCK_PIN_ATTEMPTS_LEFT, attemptsNumber).apply()
     }
 
-    override fun getUnlockAttemptsNumber(): Int {
+    override fun getUnlockAttemptsLeft(): Int {
         return App.preferences.getInt(UNLOCK_PIN_ATTEMPTS_LEFT, 5)
     }
 
