@@ -35,6 +35,9 @@ object PinModule {
         fun setTitleForEditPin()
         fun setDescriptionForEditPin()
         fun hideBackButton()
+        fun showAttemptsLeftWarning(attempts: Int)
+        fun blockScreen()
+        fun unblockScreen()
     }
 
     interface IViewDelegate {
@@ -62,6 +65,9 @@ object PinModule {
         fun onMinimizeApp()
         fun onNavigateToPrevPage()
         fun goToPinEdit()
+        fun blockScreen()
+        fun unblockScreen()
+        fun showAttemptsLeftWarning(attemptsLeft: Int)
     }
 
     interface IRouter {

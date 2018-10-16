@@ -3,13 +3,16 @@ package bitcoin.wallet.modules.pin
 import bitcoin.wallet.core.IKeyStoreSafeExecute
 import bitcoin.wallet.core.ILocalStorage
 import bitcoin.wallet.core.ISettingsManager
+import bitcoin.wallet.modules.RxBaseTest
 import bitcoin.wallet.modules.pin.pinSubModules.UnlockInteractor
+import bitcoin.wallet.viewHelpers.DateHelper
 import com.nhaarman.mockito_kotlin.*
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Captor
 import org.mockito.Mockito
+import java.util.*
 
 class UnlockInteractorTest {
 
@@ -30,6 +33,7 @@ class UnlockInteractorTest {
 
     @Before
     fun setUp() {
+        RxBaseTest.setup()
         interactor.delegate = delegate
     }
 
@@ -57,8 +61,38 @@ class UnlockInteractorTest {
     }
 
     @Test
-    fun submit_success() {
+    fun viewDidLoad_showBlockedScreen() {
+        val fiveMinutesLater = DateHelper.minutesAfterNow(1)
 
+        whenever(settings.getBlockTillDate()).thenReturn(fiveMinutesLater)
+        interactor.viewDidLoad()
+
+        verify(delegate).blockScreen()
+
+        verify(delegate).unblockScreen()
+    }
+
+    @Test
+    fun viewDidLoad_showBlockedScreen_timeout() {
+        val now = Date().time
+
+        whenever(settings.getBlockTillDate()).thenReturn(now)
+        interactor.viewDidLoad()
+
+        verify(delegate, atMost(0)).blockScreen()
+    }
+
+    @Test
+    fun viewDidLoad_notBlocked() {
+        whenever(settings.getBlockTillDate()).thenReturn(null)
+        interactor.viewDidLoad()
+
+        verify(delegate, atMost(0)).blockScreen()
+    }
+
+    @Test
+    fun submit_success() {
+        val defaultAttemptsLeft = 5
         val pin = "123456"
 
         whenever(storage.getPin()).thenReturn(pin)
@@ -72,15 +106,24 @@ class UnlockInteractorTest {
         actionRunnable.run()
 
         verify(delegate).onCorrectPinSubmitted()
+        verify(settings).setUnlockAttemptsLeft(defaultAttemptsLeft)
     }
 
     @Test
-    fun submit_fail() {
+    fun onBackPressed() {
+        interactor.onBackPressed()
 
+        verify(delegate).onMinimizeApp()
+    }
+
+    @Test
+    fun onWrongPinSubmit_showFiveAttemptsLeft() {
         val pin = "111111"
         val pin2 = "123456"
+        val attemptsLeft = 5
 
         whenever(storage.getPin()).thenReturn(pin)
+        whenever(settings.getUnlockAttemptsLeft()).thenReturn(attemptsLeft)
 
         interactor.submit(pin2)
 
@@ -90,14 +133,30 @@ class UnlockInteractorTest {
 
         actionRunnable.run()
 
-        verify(delegate).onWrongPinSubmitted()
+        verify(delegate).showAttemptsLeftWarning(attemptsLeft)
+        verify(settings).setUnlockAttemptsLeft(attemptsLeft-1)
     }
 
     @Test
-    fun onBackPressed() {
-        interactor.onBackPressed()
+    fun onWrongPinSubmit_blockScreen() {
+        val pin = "111111"
+        val pin2 = "123456"
+        val attemptsLeft = 0
+        val defaultAttemptsLeft = 5
 
-        verify(delegate).onMinimizeApp()
+        whenever(storage.getPin()).thenReturn(pin)
+        whenever(settings.getUnlockAttemptsLeft()).thenReturn(attemptsLeft)
+
+        interactor.submit(pin2)
+
+        verify(keystoreSafeExecute).safeExecute(actionRunnableCaptor.capture(), successRunnableCaptor.capture(), failureRunnableCaptor.capture())
+
+        val actionRunnable = actionRunnableCaptor.firstValue
+
+        actionRunnable.run()
+
+        verify(delegate).blockScreen()
+        verify(settings).setUnlockAttemptsLeft(defaultAttemptsLeft)
     }
 
 }

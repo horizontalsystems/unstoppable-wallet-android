@@ -23,9 +23,9 @@ interface IRandomProvider {
 }
 
 interface INetworkManager {
-    fun getLatestRate(coinCode:String, currency: String): Flowable<Double>
-    fun getRate(coinCode:String, currency: String, year: Int, month: String, day: String, hour: String, minute: String): Flowable<Double>
-    fun getRateByDay(coinCode:String, currency: String, year: Int, month: String, day: String): Flowable<Double>
+    fun getLatestRate(coinCode: String, currency: String): Flowable<Double>
+    fun getRate(coinCode: String, currency: String, year: Int, month: String, day: String, hour: String, minute: String): Flowable<Double>
+    fun getRateByDay(coinCode: String, currency: String, year: Int, month: String, day: String): Flowable<Double>
     fun getCurrencies(): Flowable<List<Currency>>
 }
 
@@ -49,6 +49,12 @@ interface ISettingsManager {
 
     fun setBaseCurrency(currency: Currency)
     fun getBaseCurrency(): Currency
+
+    fun setUnlockAttemptsLeft(attemptsNumber: Int)
+    fun getUnlockAttemptsLeft(): Int
+
+    fun setBlockTillDate(date: Long?)
+    fun getBlockTillDate(): Long?
 }
 
 interface ICurrencyManager {

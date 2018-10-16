@@ -18,6 +18,8 @@ class PreferencesManager(private val encryptionManager: IEncryptionManager) : IL
     private val FINGERPRINT_ENABLED = "fingerprint_enabled"
     private val WORDLIST_BACKUP = "wordlist_backup"
     val BASE_CURRENCY = "base_currency"
+    val UNLOCK_PIN_ATTEMPTS_LEFT = "unlock_pin_attempts_left"
+    val BLOCK_TILL_DATE = "unblock_date"
 
 
     override val savedWords: List<String>?
@@ -86,6 +88,25 @@ class PreferencesManager(private val encryptionManager: IEncryptionManager) : IL
         val gson = Gson()
         val json = App.preferences.getString(BASE_CURRENCY, "")
         return if (json?.isBlank() == true) defaultCurrency else gson.fromJson<Currency>(json, Currency::class.java)
+    }
+
+    override fun setUnlockAttemptsLeft(attemptsNumber: Int) {
+        App.preferences.edit().putInt(UNLOCK_PIN_ATTEMPTS_LEFT, attemptsNumber).apply()
+    }
+
+    override fun getUnlockAttemptsLeft(): Int {
+        return App.preferences.getInt(UNLOCK_PIN_ATTEMPTS_LEFT, 5)
+    }
+
+    override fun setBlockTillDate(date: Long?) {
+        date?.let {
+            App.preferences.edit().putLong(BLOCK_TILL_DATE, date).apply()
+        } ?: run { App.preferences.edit().remove(BLOCK_TILL_DATE).apply() }
+    }
+
+    override fun getBlockTillDate(): Long? {
+        val date = App.preferences.getLong(BLOCK_TILL_DATE, 0)
+        return if (date > 0) date else null
     }
 
     private val defaultCurrency: Currency = Currency().apply {

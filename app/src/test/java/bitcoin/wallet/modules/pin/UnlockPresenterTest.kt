@@ -81,4 +81,28 @@ class UnlockPresenterTest {
         verify(view).minimizeApp()
     }
 
+    @Test
+    fun showAttemptsLeftWarning() {
+        val attempts = 5
+        presenter.showAttemptsLeftWarning(attempts)
+
+        verify(view).clearPinMaskWithDelay()
+        verify(view).showAttemptsLeftWarning(attempts)
+    }
+
+    @Test
+    fun blockScreen() {
+        presenter.blockScreen()
+
+        verify(view).clearPinMaskWithDelay()
+        verify(view).blockScreen()
+    }
+
+    @Test
+    fun unblockScreen() {
+        presenter.unblockScreen()
+
+        verify(view).unblockScreen()
+    }
+
 }
