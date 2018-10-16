@@ -16,6 +16,8 @@ class App : Application() {
 
         var promptPin = true
 
+        var appBackgroundedTime: Long? = null
+
         lateinit var instance: App
             private set
     }

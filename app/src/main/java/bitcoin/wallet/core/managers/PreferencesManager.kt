@@ -36,6 +36,11 @@ class PreferencesManager(private val encryptionManager: IEncryptionManager) : IL
         App.preferences.edit().putString(MNEMONIC_WORDS, encryptionManager.encrypt(words.joinToString(" "))).apply()
     }
 
+    override fun wordsAreEmpty(): Boolean {
+        val words = App.preferences.getString(MNEMONIC_WORDS, null)
+        return words.isNullOrEmpty()
+    }
+
     override fun clearAll() {
         App.preferences.edit().clear().apply()
     }
