@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="25dp"
+    android:layout_marginRight="25dp"
+    android:background="@drawable/alert_white_background"
+    >
+
+    <TextView
+        android:id="@+id/txtTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/noto_sans_bold"
+        android:textColor="@color/dark"
+        android:textSize="17sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/send_bottom_confirm_dialog_title"
+        />
+
+    <View
+        android:id="@+id/border1"
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/grey_20"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtTitle"
+        />
+
+    <TextView
+        android:id="@+id/txtAmountInCrypto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/noto_sans_bold"
+        android:maxLines="10"
+        android:textColor="@color/yellow_crypto"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/border1"
+        tools:text="0,0006482 BTC"
+        />
+
+    <TextView
+        android:id="@+id/txtAmountInFiat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/grey"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtAmountInCrypto"
+        tools:text="~$105"
+        />
+
+    <View
+        android:id="@+id/border2"
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/grey_20"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtAmountInFiat"
+        />
+
+    <TextView
+        android:id="@+id/txtFeeTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11.5dp"
+        android:layout_marginStart="16dp"
+        android:textColor="@color/grey"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/border2"
+        android:text="@string/send_bottom_confirm_dialog_fee"
+        />
+
+    <TextView
+        android:id="@+id/txtFeeAmountInCrypto"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/dark"
+        android:textAlignment="textEnd"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/txtFeeTitle"
+        app:layout_constraintTop_toTopOf="@+id/txtFeeTitle"
+        android:text="0,0000006482 BTC"
+        />
+
+    <TextView
+        android:id="@+id/txtFeeAmountInFiat"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/grey"
+        android:textAlignment="textEnd"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/txtFeeTitle"
+        app:layout_constraintTop_toBottomOf="@+id/txtFeeTitle"
+        android:text="$ 1.5"
+        />
+
+    <View
+        android:id="@+id/border3"
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="18dp"
+        android:background="@color/grey_20"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtFeeAmountInFiat"
+        />
+
+    <TextView
+        android:id="@+id/txtButtonCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="34dp"
+        android:fontFamily="@font/noto_sans_bold"
+        android:text="@string/button_cancel"
+        android:textColor="@color/clickable_green"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/txtButtonConfirm"
+        app:layout_constraintTop_toTopOf="@+id/txtButtonConfirm"
+        />
+
+    <TextView
+        android:id="@+id/txtButtonConfirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/noto_sans_bold"
+        android:text="@string/backup_button_confirm"
+        android:textColor="@color/clickable_green"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/border3"
+        />
+
+</android.support.constraint.ConstraintLayout>
