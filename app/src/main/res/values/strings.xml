@@ -14,7 +14,7 @@
     <string name="welcome_btn_create_wallet">New Wallet</string>
     <string name="welcome_btn_import_wallet">Import Wallet</string>
 
-    <string name="restore_title">Enter Paper Keys</string>
+    <string name="restore_title">Enter Secret Keys</string>
     <string name="restore_validation_failed">Words do not match</string>
 
     <string name="backup_words_title">Secret Key</string>
@@ -23,7 +23,7 @@
     <string name="backup_words_confirm_alert_wallet_restore_with_words">I understand that if this app is moved to another device or is deleted, my wallet can be only recovered with the Secret Key that I have just written down and saved in a secure place.</string>
     <string name="backup_words_confirm_alert_wallet_device_lock_warning">Changing the phone\'s unlock PIN in your Android OS settings would reset the wallet. You will need your backup phrase to restore your wallet after that.</string>
     <string name="backup_words_confirm_description">Enter following words from your Secret Key</string>
-    <string name="backup_words_error_enter_words">Enter words from your paper key.</string>
+    <string name="backup_words_error_enter_words">Enter words from your secret key.</string>
     <string name="backup_words_error_no_match">Entered words do not match. Please, make sure you write down your words exactly as they appear in the previous step and in correct order.</string>
     <string name="backup_button_confirm">Confirm</string>
     <string name="backup_button_backup">Backup</string>
