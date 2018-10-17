@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import bitcoin.wallet.core.managers.BackgroundManager
 import bitcoin.wallet.kit.WalletKit
+import com.squareup.leakcanary.LeakCanary
 
 class App : Application() {
 
@@ -24,6 +25,13 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return
+        }
+        LeakCanary.install(this)
 
         // Start WalletKit
         WalletKit.init(this)

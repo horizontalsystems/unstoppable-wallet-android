@@ -15,7 +15,6 @@ import bitcoin.wallet.viewHelpers.DateHelper
 
 abstract class BaseActivity : AppCompatActivity() {
 
-    protected open var requiresPinUnlock = true
     private var pendingRunnable: Runnable? = null
     private var successRunnable: Runnable? = null
     private var failureRunnable: Runnable? = null

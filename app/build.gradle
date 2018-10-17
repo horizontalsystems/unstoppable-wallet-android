@@ -83,6 +83,9 @@ dependencies {
 
     implementation 'org.slf4j:slf4j-simple:1.7.20'
 
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.2'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
+
     // WalletKit
     implementation 'com.github.horizontalsystems:wallet-kit-android:dev-SNAPSHOT'
 
