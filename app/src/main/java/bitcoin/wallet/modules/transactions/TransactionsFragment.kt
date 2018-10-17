@@ -32,8 +32,8 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
         return inflater.inflate(R.layout.fragment_transactions, container, false)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
         viewModel = ViewModelProviders.of(this).get(TransactionsViewModel::class.java)
         viewModel.init()
@@ -66,11 +66,6 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
             pullToRefresh.isRefreshing = false
         })
 
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         toolbar.setTitle(R.string.transactions_title)
         recyclerTransactions.adapter = transactionsAdapter
         recyclerTransactions.layoutManager = LinearLayoutManager(context)
@@ -81,6 +76,7 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
         pullToRefresh.setOnRefreshListener {
             viewModel.delegate.refresh()
         }
+
     }
 
     override fun onItemClick(item: TransactionRecordViewItem) {
