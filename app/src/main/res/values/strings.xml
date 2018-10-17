@@ -111,8 +111,8 @@
     <string name="settings_security_backup_wallet">Backup Wallet</string>
 
     <string name="unlock_page_enter_your_pin">Enter PIN</string>
-    <string name="settings_security_import_wallet_confirmation_1">This action will remove the your wallet from this device.</string>
-    <string name="settings_security_import_wallet_confirmation_2">Make sure you Backup its Secret Key. You will not be able to access that wallet in the future without Secret Key.</string>
+    <string name="settings_security_import_wallet_confirmation_1">This action will remove the currently installed wallet from this device.</string>
+    <string name="settings_security_import_wallet_confirmation_2">Make sure you have its Secret Key or you will not be able to access the funds on it in the future.</string>
 
     <string name="settings_currency_switcher_title">Base Currency</string>
 
