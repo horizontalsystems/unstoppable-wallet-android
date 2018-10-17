@@ -31,8 +31,8 @@ class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener 
         return inflater.inflate(R.layout.fragment_wallet, container, false)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
         viewModel = ViewModelProviders.of(this).get(WalletViewModel::class.java)
         viewModel.init()
@@ -68,10 +68,6 @@ class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener 
         viewModel.navigateToSetPin.observe(this, Observer {
             context?.let { context -> PinModule.startForSetPin(context) }
         })
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         toolbar.setTitle(R.string.wallet_title)
         recyclerCoins.adapter = coinsAdapter
