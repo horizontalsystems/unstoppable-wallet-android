@@ -3,7 +3,7 @@ package bitcoin.wallet.modules.currencyswitcher
 import android.content.Context
 import android.content.Intent
 import bitcoin.wallet.core.App
-import bitcoin.wallet.core.NetworkManager
+import bitcoin.wallet.core.managers.NetworkManager
 import bitcoin.wallet.entities.Currency
 
 object CurrencySwitcherModule {

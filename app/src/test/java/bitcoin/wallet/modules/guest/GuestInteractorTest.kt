@@ -1,6 +1,6 @@
 package bitcoin.wallet.modules.guest
 
-import bitcoin.wallet.core.AdapterManager
+import bitcoin.wallet.core.managers.AdapterManager
 import bitcoin.wallet.core.IKeyStoreSafeExecute
 import bitcoin.wallet.core.managers.WordsManager
 import bitcoin.wallet.modules.RxBaseTest

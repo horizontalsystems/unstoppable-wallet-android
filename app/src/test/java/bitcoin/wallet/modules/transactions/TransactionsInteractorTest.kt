@@ -1,6 +1,6 @@
 package bitcoin.wallet.modules.transactions
 
-import bitcoin.wallet.core.AdapterManager
+import bitcoin.wallet.core.managers.AdapterManager
 import bitcoin.wallet.core.BitcoinAdapter
 import bitcoin.wallet.core.IExchangeRateManager
 import bitcoin.wallet.entities.*

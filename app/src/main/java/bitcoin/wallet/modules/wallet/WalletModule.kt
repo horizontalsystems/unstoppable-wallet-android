@@ -1,6 +1,5 @@
 package bitcoin.wallet.modules.wallet
 
-import bitcoin.wallet.core.AdapterManager
 import bitcoin.wallet.core.App
 import bitcoin.wallet.core.IAdapter
 import bitcoin.wallet.core.ISecuredStorage

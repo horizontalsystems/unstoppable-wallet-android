@@ -1,7 +1,7 @@
 package bitcoin.wallet.modules.currencyswitcher
 
 import bitcoin.wallet.core.ISettingsManager
-import bitcoin.wallet.core.NetworkManager
+import bitcoin.wallet.core.managers.NetworkManager
 import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyType
 import bitcoin.wallet.modules.RxBaseTest

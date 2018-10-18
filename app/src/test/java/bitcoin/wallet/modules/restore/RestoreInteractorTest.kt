@@ -1,6 +1,6 @@
 package bitcoin.wallet.modules.restore
 
-import bitcoin.wallet.core.AdapterManager
+import bitcoin.wallet.core.managers.AdapterManager
 import bitcoin.wallet.core.IKeyStoreSafeExecute
 import bitcoin.wallet.core.managers.WordsManager
 import com.nhaarman.mockito_kotlin.KArgumentCaptor

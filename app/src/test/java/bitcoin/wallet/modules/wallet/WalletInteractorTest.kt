@@ -1,6 +1,6 @@
 package bitcoin.wallet.modules.wallet
 
-import bitcoin.wallet.core.AdapterManager
+import bitcoin.wallet.core.managers.AdapterManager
 import bitcoin.wallet.core.BitcoinAdapter
 import bitcoin.wallet.core.IExchangeRateManager
 import bitcoin.wallet.core.ILocalStorage
@@ -25,7 +25,7 @@ import org.powermock.core.classloader.annotations.SuppressStaticInitializationFo
 import org.powermock.modules.junit4.PowerMockRunner
 
 @RunWith(PowerMockRunner::class)
-@SuppressStaticInitializationFor("bitcoin.wallet.core.ExchangeRateManager")
+@SuppressStaticInitializationFor("bitcoin.wallet.core.managers.ExchangeRateManager")
 class WalletInteractorTest {
 
     private val delegate = mock(WalletModule.IInteractorDelegate::class.java)

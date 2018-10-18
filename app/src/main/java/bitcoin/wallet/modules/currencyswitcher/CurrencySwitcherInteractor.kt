@@ -1,7 +1,7 @@
 package bitcoin.wallet.modules.currencyswitcher
 
 import bitcoin.wallet.core.ILocalStorage
-import bitcoin.wallet.core.NetworkManager
+import bitcoin.wallet.core.managers.NetworkManager
 import bitcoin.wallet.entities.Currency
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers

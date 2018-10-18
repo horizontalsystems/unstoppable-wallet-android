@@ -1,6 +1,5 @@
 package bitcoin.wallet.modules.transactions
 
-import bitcoin.wallet.core.AdapterManager
 import bitcoin.wallet.core.App
 
 object TransactionsModule {

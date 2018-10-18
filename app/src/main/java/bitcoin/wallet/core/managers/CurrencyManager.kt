@@ -1,8 +1,9 @@
-package bitcoin.wallet.core
+package bitcoin.wallet.core.managers
 
 import android.content.SharedPreferences
 import android.text.TextUtils
-import bitcoin.wallet.core.managers.LocalStorageManager
+import bitcoin.wallet.core.App
+import bitcoin.wallet.core.ICurrencyManager
 import bitcoin.wallet.entities.Currency
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable

@@ -1,5 +1,7 @@
-package bitcoin.wallet.core
+package bitcoin.wallet.core.managers
 
+import bitcoin.wallet.core.App
+import bitcoin.wallet.core.IExchangeRateManager
 import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
 import bitcoin.wallet.entities.coins.Coin
@@ -39,7 +41,7 @@ class ExchangeRateManager: IExchangeRateManager {
 
     private fun refreshRates(baseCurrency: Currency) {
         val flowableList = mutableListOf<Flowable<Pair<String, Double>>>()
-        App.adapterManager.adapters.forEach {adapter ->
+        App.adapterManager.adapters.forEach { adapter ->
             flowableList.add(App.networkManager.getLatestRate(adapter.coin.code, baseCurrency.code)
                     .map { Pair(adapter.coin.code, it) })
         }
@@ -52,7 +54,7 @@ class ExchangeRateManager: IExchangeRateManager {
                     (resultRates as List<Pair<String, Double>>).toMap()
                 }
                 .subscribe { ratesMap ->
-                    App.adapterManager.adapters.forEach {adapter ->
+                    App.adapterManager.adapters.forEach { adapter ->
                         val rate = ratesMap[adapter.coin.code] ?: 0.0
                         exchangeRates[adapter.coin] = CurrencyValue(baseCurrency, rate)
                     }
