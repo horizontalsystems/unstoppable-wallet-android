@@ -2,8 +2,8 @@ package bitcoin.wallet.modules.currencyswitcher
 
 import android.content.Context
 import android.content.Intent
+import bitcoin.wallet.core.App
 import bitcoin.wallet.core.NetworkManager
-import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.entities.Currency
 
 object CurrencySwitcherModule {
@@ -32,7 +32,7 @@ object CurrencySwitcherModule {
     }
 
     fun init(view: CurrencySwitcherViewModel) {
-        val interactor = CurrencySwitcherInteractor(NetworkManager(), Factory.preferencesManager)
+        val interactor = CurrencySwitcherInteractor(NetworkManager(), App.localStorage)
         val presenter = CurrencySwitcherPresenter(interactor)
 
         view.delegate = presenter

@@ -168,7 +168,7 @@ class TransactionsInteractorTest {
         whenever(bitcoinAdapter.id).thenReturn(adapterId)
         whenever(bitcoinAdapter.coin).thenReturn(coin)
         whenever(bitcoinAdapter.balance).thenReturn(0.0)
-        whenever(bitcoinAdapter.latestBlockHeight).thenReturn(100)
+        whenever(bitcoinAdapter.lastBlockHeight).thenReturn(100)
         whenever(bitcoinAdapter.transactionRecords).thenReturn(listOf(transactionRecordBTCsuccess, transactionRecordBTCpending))
         whenever(bitcoinAdapter.transactionRecordsSubject).thenReturn(subject)
 

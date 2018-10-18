@@ -3,7 +3,8 @@ package bitcoin.wallet.core
 import android.app.Application
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import bitcoin.wallet.core.managers.BackgroundManager
+import bitcoin.wallet.core.managers.*
+import bitcoin.wallet.core.security.EncryptionManager
 import com.squareup.leakcanary.LeakCanary
 import io.horizontalsystems.bitcoinkit.WalletKit
 import io.horizontalsystems.ethereumkit.EthereumKit
@@ -13,6 +14,18 @@ class App : Application() {
     companion object {
 
         lateinit var preferences: SharedPreferences
+
+        lateinit var secureStorage: ISecuredStorage
+        lateinit var localStorage: ILocalStorage
+        lateinit var encryptionManager: EncryptionManager
+        lateinit var wordsManager: WordsManager
+        lateinit var randomManager: IRandomProvider
+        lateinit var networkManager: INetworkManager
+        lateinit var currencyManager: ICurrencyManager
+        lateinit var exchangeRateManager: IExchangeRateManager
+        lateinit var adapterManager: IAdapterManager
+        lateinit var backgroundManager: BackgroundManager
+
 
         val testMode = true
 
@@ -40,10 +53,19 @@ class App : Application() {
         // Initialize EthereumKit
         EthereumKit.init(this)
 
-        BackgroundManager.init(this)
-
         instance = this
         preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+
+        backgroundManager = BackgroundManager(this)
+        encryptionManager = EncryptionManager()
+        secureStorage = SecuredStorageManager(encryptionManager)
+        localStorage = LocalStorageManager()
+        wordsManager = WordsManager(localStorage, secureStorage)
+        randomManager = RandomProvider()
+        networkManager = NetworkManager()
+        currencyManager = CurrencyManager()
+        exchangeRateManager = ExchangeRateManager()
+        adapterManager = AdapterManager(wordsManager)
     }
 
 }

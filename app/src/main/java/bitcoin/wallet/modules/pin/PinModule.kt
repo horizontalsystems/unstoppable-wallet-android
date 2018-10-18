@@ -1,10 +1,10 @@
 package bitcoin.wallet.modules.pin
 
 import android.content.Context
+import bitcoin.wallet.core.App
 import bitcoin.wallet.core.IKeyStoreSafeExecute
 import bitcoin.wallet.core.ILocalStorage
-import bitcoin.wallet.core.ISettingsManager
-import bitcoin.wallet.core.managers.Factory
+import bitcoin.wallet.core.ISecuredStorage
 import bitcoin.wallet.modules.pin.pinSubModules.*
 
 object PinModule {
@@ -79,15 +79,15 @@ object PinModule {
 
     fun init(view: PinViewModel, router: IRouter, keystoreSafeExecute: IKeyStoreSafeExecute, interactionType: PinInteractionType, enteredPin: String) {
 
-        val storage: ILocalStorage = Factory.preferencesManager
-        val settings: ISettingsManager = Factory.preferencesManager
+        val storage: ILocalStorage = App.localStorage
+        val secureStorage: ISecuredStorage = App.secureStorage
 
         val interactor = when (interactionType) {
             PinInteractionType.SET_PIN -> SetPinInteractor()
-            PinInteractionType.SET_PIN_CONFIRM -> SetPinConfirmationInteractor(enteredPin, storage, keystoreSafeExecute)
-            PinInteractionType.UNLOCK -> UnlockInteractor(storage, settings, keystoreSafeExecute)
-            PinInteractionType.EDIT_PIN_AUTH -> EditPinAuthInteractor(storage, keystoreSafeExecute)
-            PinInteractionType.EDIT_PIN -> EditPinInteractor(storage, keystoreSafeExecute)
+            PinInteractionType.SET_PIN_CONFIRM -> SetPinConfirmationInteractor(enteredPin, secureStorage, keystoreSafeExecute)
+            PinInteractionType.UNLOCK -> UnlockInteractor(storage, secureStorage, keystoreSafeExecute)
+            PinInteractionType.EDIT_PIN_AUTH -> EditPinAuthInteractor(secureStorage, keystoreSafeExecute)
+            PinInteractionType.EDIT_PIN -> EditPinInteractor(secureStorage, keystoreSafeExecute)
         }
         val presenter = when (interactionType) {
             PinInteractionType.SET_PIN -> SetPinPresenter(interactor, router)

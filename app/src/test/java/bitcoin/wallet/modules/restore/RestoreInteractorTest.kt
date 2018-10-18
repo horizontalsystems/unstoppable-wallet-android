@@ -67,7 +67,7 @@ class RestoreInteractorTest {
         successRunnable.run()
 
         verify(delegate).didRestore()
-        verify(wordsManager).wordListBackedUp = true
+        verify(wordsManager).isBackedUp = true
         verify(adapterManager).initAdapters(any())
         verifyNoMoreInteractions(delegate)
     }

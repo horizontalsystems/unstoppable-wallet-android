@@ -21,7 +21,6 @@ import android.widget.TextView
 import bitcoin.wallet.BaseActivity
 import bitcoin.wallet.R
 import bitcoin.wallet.core.App
-import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.core.security.EncryptionManager
 import bitcoin.wallet.core.security.FingerprintAuthenticationDialogFragment
 import bitcoin.wallet.core.security.SecurityUtils
@@ -195,7 +194,7 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
     private fun showFingerprintDialog() {
         if (SecurityUtils.touchSensorCanBeUsed(this)) {
             try {
-                val cryptoObject = Factory.encryptionManager.getCryptoObject()
+                val cryptoObject = App.encryptionManager.getCryptoObject()
                 val fragment = FingerprintAuthenticationDialogFragment()
                 fragment.setCryptoObject(cryptoObject)
                 fragment.setCallback(this@PinActivity)

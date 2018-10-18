@@ -11,8 +11,7 @@ import android.widget.CompoundButton
 import bitcoin.wallet.BaseActivity
 import bitcoin.wallet.LauncherActivity
 import bitcoin.wallet.R
-import bitcoin.wallet.core.AdapterManager
-import bitcoin.wallet.core.managers.Factory
+import bitcoin.wallet.core.App
 import bitcoin.wallet.core.security.SecurityUtils
 import bitcoin.wallet.lib.AlertDialogFragment
 import bitcoin.wallet.modules.backup.BackupModule
@@ -63,15 +62,15 @@ class SecuritySettingsActivity : BaseActivity(), BottomConfirmAlert.Listener {
 
         if (phoneHasFingerprintSensor) {
             fingerprint.apply {
-                switchIsChecked = Factory.preferencesManager.isFingerprintEnabled()
+                switchIsChecked = App.localStorage.isBiometricOn
                 setOnClickListener {
-                    if (Factory.preferencesManager.isFingerprintEnabled() || fingerprintCanBeEnabled()) {
+                    if (App.localStorage.isBiometricOn || fingerprintCanBeEnabled()) {
                         switchToggle()
                     }
                 }
 
                 switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                    Factory.preferencesManager.setFingerprintEnabled(isChecked)
+                    App.localStorage.isBiometricOn = isChecked
                 }
             }
         }
@@ -106,8 +105,8 @@ class SecuritySettingsActivity : BaseActivity(), BottomConfirmAlert.Listener {
         when(selectedAction) {
             Action.OPEN_RESTORE -> RestoreModule.start(this)
             Action.CLEAR_WALLETS -> {
-                AdapterManager.clear()
-                Factory.preferencesManager.clearAll()
+                App.adapterManager.clear()
+                App.localStorage.clearAll()
 
                 val intent = Intent(this, LauncherActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

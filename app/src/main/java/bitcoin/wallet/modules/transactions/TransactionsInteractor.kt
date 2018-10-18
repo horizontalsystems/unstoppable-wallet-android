@@ -1,6 +1,6 @@
 package bitcoin.wallet.modules.transactions
 
-import bitcoin.wallet.core.AdapterManager
+import bitcoin.wallet.core.IAdapterManager
 import bitcoin.wallet.core.IExchangeRateManager
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.Currency
@@ -12,7 +12,7 @@ import io.reactivex.schedulers.Schedulers
 import java.util.*
 
 class TransactionsInteractor(
-        private val adapterManager: AdapterManager,
+        private val adapterManager: IAdapterManager,
         private val exchangeRateManager: IExchangeRateManager,
         private val baseCurrencyFlowable: Flowable<Currency>) : TransactionsModule.IInteractor {
 

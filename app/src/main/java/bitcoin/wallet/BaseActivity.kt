@@ -8,10 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.WindowManager
 import bitcoin.wallet.core.App
-import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.core.security.EncryptionManager
-import bitcoin.wallet.modules.pin.PinModule
-import bitcoin.wallet.viewHelpers.DateHelper
 
 abstract class BaseActivity : AppCompatActivity() {
 
@@ -24,7 +21,7 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val lightMode = Factory.preferencesManager.isLightModeEnabled()
+        val lightMode = App.localStorage.isLightModeOn
         setTheme(if (lightMode) R.style.LightModeAppTheme else R.style.DarkModeAppTheme)
         if (savedInstanceState != null) {
             setStatusBarIconColor(lightMode)
@@ -35,25 +32,25 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (App.promptPin) {
-            var promptPinByTimeout = true
-            App.appBackgroundedTime?.let {
-                val secondsAgo = DateHelper.getSecondsAgo(it)
-                promptPinByTimeout = secondsAgo > allowableTimeInBackground
-            }
-
-            if (promptPinByTimeout) {
-                safeExecuteWithKeystore(
-                        action = Runnable {
-                            if (Factory.preferencesManager.getPin() != null) {
-                                PinModule.startForUnlock(this)
-                            }
-                        },
-                        onSuccess = Runnable { App.promptPin = false },
-                        onFailure = null
-                )
-            }
-        }
+//        if (App.promptPin) {
+//            var promptPinByTimeout = true
+//            App.appBackgroundedTime?.let {
+//                val secondsAgo = DateHelper.getSecondsAgo(it)
+//                promptPinByTimeout = secondsAgo > allowableTimeInBackground
+//            }
+//
+//            if (promptPinByTimeout) {
+//                safeExecuteWithKeystore(
+//                        action = Runnable {
+//                            if (App.secureStorage.savedPin != null) {
+//                                PinModule.startForUnlock(this)
+//                            }
+//                        },
+//                        onSuccess = Runnable { App.promptPin = false },
+//                        onFailure = null
+//                )
+//            }
+//        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

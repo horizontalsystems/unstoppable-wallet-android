@@ -3,19 +3,32 @@ package bitcoin.wallet.core
 import android.hardware.fingerprint.FingerprintManager
 import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
+import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.entities.coins.Coin
 import io.reactivex.Flowable
+import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 
 interface ILocalStorage {
+    var currentLanguage: String?
+    var isBackedUp: Boolean
+    var isBiometricOn: Boolean
+    var isLightModeOn: Boolean
+    var iUnderstand: Boolean
+    var lastExitDate: Long
+    var unlockAttemptsLeft: Int
+    var baseCurrency: Currency
+    var blockTillDate: Long?
+    fun clearAll()
+}
+
+interface ISecuredStorage {
     val savedWords: List<String>?
     fun saveWords(words: List<String>)
     fun wordsAreEmpty(): Boolean
-    fun clearAll()
+    val savedPin: String?
     fun savePin(pin: String)
     fun getPin(): String?
-    fun wordListBackedUp(backedUp: Boolean)
-    fun isWordListBackedUp(): Boolean
     fun pinIsEmpty(): Boolean
 }
 
@@ -41,23 +54,6 @@ interface IClipboardManager {
     fun getCopiedText(): String
 }
 
-interface ISettingsManager {
-    fun isFingerprintEnabled(): Boolean
-    fun setFingerprintEnabled(enabled: Boolean)
-
-    fun isLightModeEnabled(): Boolean
-    fun setLightModeEnabled(enabled: Boolean)
-
-    fun setBaseCurrency(currency: Currency)
-    fun getBaseCurrency(): Currency
-
-    fun setUnlockAttemptsLeft(attemptsNumber: Int)
-    fun getUnlockAttemptsLeft(): Int
-
-    fun setBlockTillDate(date: Long?)
-    fun getBlockTillDate(): Long?
-}
-
 interface ICurrencyManager {
     fun getBaseCurrencyFlowable(): Flowable<Currency>
 }
@@ -70,4 +66,51 @@ interface IExchangeRateManager {
 
 interface IKeyStoreSafeExecute {
     fun safeExecute(action: Runnable, onSuccess: Runnable? = null, onFailure: Runnable? = null)
+}
+
+interface IAdapterManager {
+    var adapters: MutableList<IAdapter>
+    var subject: PublishSubject<Any>
+    fun start()
+    fun refresh()
+    fun clear()
+}
+
+interface IWordsManager {
+    fun safeLoad()
+    var words: List<String>?
+    var isBackedUp: Boolean
+    var isLoggedIn: Boolean
+    var backedUpSubject: PublishSubject<Boolean>
+    fun createWords()
+    fun validate(words: List<String>)
+    fun restore(words: List<String>)
+    fun removeWords()
+}
+
+interface IAdapter {
+    var id: String
+    var coin: Coin
+    var balance: Double
+
+    var balanceSubject: PublishSubject<Double>
+    var progressSubject: BehaviorSubject<Double>
+
+    var lastBlockHeight: Int
+    var lastBlockHeightSubject: PublishSubject<Int>
+
+    var transactionRecords: List<TransactionRecord>
+    var transactionRecordsSubject: PublishSubject<Any>
+
+    fun showInfo()
+
+    fun start()
+    fun refresh()
+    fun clear()
+
+    fun send(address: String, value: Int, completion:((Exception?) -> Unit))
+    fun fee(value: Int, senderPay: Boolean): Long
+    fun validate(address: String): Boolean
+
+    var receiveAddress: String
 }

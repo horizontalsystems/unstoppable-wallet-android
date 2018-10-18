@@ -1,12 +1,12 @@
 package bitcoin.wallet.modules.currencyswitcher
 
-import bitcoin.wallet.core.ISettingsManager
+import bitcoin.wallet.core.ILocalStorage
 import bitcoin.wallet.core.NetworkManager
 import bitcoin.wallet.entities.Currency
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class CurrencySwitcherInteractor(private val networkManager: NetworkManager, private val preferencesManager: ISettingsManager) : CurrencySwitcherModule.IInteractor{
+class CurrencySwitcherInteractor(private val networkManager: NetworkManager, private val localStorage: ILocalStorage) : CurrencySwitcherModule.IInteractor{
 
     private var disposable: Disposable? = null
     private var currencyList: MutableList<CurrencyViewItem> = mutableListOf()
@@ -20,7 +20,7 @@ class CurrencySwitcherInteractor(private val networkManager: NetworkManager, pri
                 .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
                 .subscribe { allCurrencies ->
                     val fiatCurrencies = allCurrencies.filter { it.type.isFiat }
-                    val baseCurrency = preferencesManager.getBaseCurrency()
+                    val baseCurrency = localStorage.baseCurrency
                     fiatCurrencies.forEach { item ->
                         currencyList.add(CurrencyViewItem(item, baseCurrency == item))
                     }
@@ -32,7 +32,7 @@ class CurrencySwitcherInteractor(private val networkManager: NetworkManager, pri
         currencyList.forEach {item ->
             item.selected = item.currency.code == currency.code
         }
-        preferencesManager.setBaseCurrency(currency)
+        localStorage.baseCurrency = currency
         delegate?.currencyListUpdated(currencyList)
     }
 }

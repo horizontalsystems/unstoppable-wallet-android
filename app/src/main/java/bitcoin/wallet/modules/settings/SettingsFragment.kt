@@ -12,7 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
 import bitcoin.wallet.R
-import bitcoin.wallet.core.managers.Factory
+import bitcoin.wallet.core.App
 import bitcoin.wallet.modules.currencyswitcher.CurrencySwitcherModule
 import kotlinx.android.synthetic.main.fragment_settings.*
 
@@ -52,13 +52,13 @@ class SettingsFragment : android.support.v4.app.Fragment() {
         }
 
         lightMode.apply {
-            switchIsChecked = Factory.preferencesManager.isLightModeEnabled()
+            switchIsChecked = App.localStorage.isLightModeOn
             setOnClickListener {
                 switchToggle()
             }
 
             switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                Factory.preferencesManager.setLightModeEnabled(isChecked)
+                App.localStorage.isLightModeOn = isChecked
                 activity?.recreate()
             }
         }

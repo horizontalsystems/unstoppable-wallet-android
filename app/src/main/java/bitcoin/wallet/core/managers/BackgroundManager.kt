@@ -6,7 +6,11 @@ import android.os.Bundle
 import bitcoin.wallet.core.App
 import java.util.*
 
-object BackgroundManager : Application.ActivityLifecycleCallbacks {
+class BackgroundManager(application: Application) : Application.ActivityLifecycleCallbacks {
+
+    init {
+        application.registerActivityLifecycleCallbacks(this)
+    }
 
     private var refs: Int = 0
 
@@ -15,10 +19,6 @@ object BackgroundManager : Application.ActivityLifecycleCallbacks {
 
     val inBackground: Boolean
         get() = refs == 0
-
-    fun init(application: Application) {
-        application.registerActivityLifecycleCallbacks(this)
-    }
 
     override fun onActivityStarted(activity: Activity?) {
         refs++

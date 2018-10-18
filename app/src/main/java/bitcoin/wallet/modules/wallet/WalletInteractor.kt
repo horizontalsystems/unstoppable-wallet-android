@@ -1,17 +1,17 @@
 package bitcoin.wallet.modules.wallet
 
-import bitcoin.wallet.core.AdapterManager
+import bitcoin.wallet.core.IAdapterManager
 import bitcoin.wallet.core.IExchangeRateManager
-import bitcoin.wallet.core.ILocalStorage
+import bitcoin.wallet.core.ISecuredStorage
 import bitcoin.wallet.entities.CoinValue
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
 class WalletInteractor(
-        private val adapterManager: AdapterManager,
+        private val adapterManager: IAdapterManager,
         private val exchangeRateManager: IExchangeRateManager,
-        private val storage: ILocalStorage) : WalletModule.IInteractor {
+        private val securedStorage: ISecuredStorage) : WalletModule.IInteractor {
 
     var delegate: WalletModule.IInteractorDelegate? = null
     private var disposables: CompositeDisposable = CompositeDisposable()
@@ -50,7 +50,7 @@ class WalletInteractor(
     }
 
     override fun checkIfPinSet() {
-        if (storage.pinIsEmpty()) {
+        if (securedStorage.pinIsEmpty()) {
             delegate?.onPinNotSet()
         }
     }
