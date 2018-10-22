@@ -1,7 +1,7 @@
 package bitcoin.wallet.modules.pin
 
 import bitcoin.wallet.core.IKeyStoreSafeExecute
-import bitcoin.wallet.core.ILocalStorage
+import bitcoin.wallet.core.ISecuredStorage
 import bitcoin.wallet.modules.pin.pinSubModules.SetPinConfirmationInteractor
 import com.nhaarman.mockito_kotlin.KArgumentCaptor
 import com.nhaarman.mockito_kotlin.argumentCaptor
@@ -18,9 +18,9 @@ class SetPinConfirmationInteractorTest {
 
     private val enteredPin = "123456"
     private val delegate = mock(PinModule.IInteractorDelegate::class.java)
-    private val storage = mock(ILocalStorage::class.java)
+    private val iSecuredStorage = mock(ISecuredStorage::class.java)
     private val keystoreSafeExecute = Mockito.mock(IKeyStoreSafeExecute::class.java)
-    private var interactor = SetPinConfirmationInteractor(enteredPin, storage, keystoreSafeExecute)
+    private var interactor = SetPinConfirmationInteractor(enteredPin, iSecuredStorage, keystoreSafeExecute)
 
     @Captor
     private val actionRunnableCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
@@ -56,7 +56,7 @@ class SetPinConfirmationInteractorTest {
         actionRunnable.run()
         successRunnable.run()
 
-        verify(storage).savePin(pin)
+        verify(iSecuredStorage).savePin(pin)
         verify(delegate).onDidPinSet()
         verifyNoMoreInteractions(delegate)
     }

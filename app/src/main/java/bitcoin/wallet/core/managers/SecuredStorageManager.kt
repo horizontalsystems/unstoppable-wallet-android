@@ -45,15 +45,6 @@ class SecuredStorageManager(private val encryptionManager: IEncryptionManager) :
         App.preferences.edit().putString(LOCK_PIN, encryptionManager.encrypt(pin)).apply()
     }
 
-    override fun getPin(): String? {
-        val string = App.preferences.getString(LOCK_PIN, null)
-        return if (TextUtils.isEmpty(string)) {
-            null
-        } else {
-            encryptionManager.decrypt(string)
-        }
-    }
-
     override fun pinIsEmpty(): Boolean {
         val string = App.preferences.getString(LOCK_PIN, null)
         return string.isNullOrEmpty()

@@ -52,6 +52,7 @@ class SetPinConfirmationPresenterTest {
         presenter.onErrorPinsDontMatch()
 
         verify(view).showErrorPinsDontMatch()
+        verify(view).clearPinMaskWithDelay()
     }
 
     @Test

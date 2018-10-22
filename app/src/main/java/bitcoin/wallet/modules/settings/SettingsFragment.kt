@@ -14,6 +14,9 @@ import android.widget.CompoundButton
 import bitcoin.wallet.R
 import bitcoin.wallet.core.App
 import bitcoin.wallet.modules.currencyswitcher.CurrencySwitcherModule
+import bitcoin.wallet.modules.main.MainActivity
+import bitcoin.wallet.modules.main.MainModule
+import bitcoin.wallet.modules.settings.language.LanguageSettingsModule
 import kotlinx.android.synthetic.main.fragment_settings.*
 
 
@@ -46,9 +49,9 @@ class SettingsFragment : android.support.v4.app.Fragment() {
 
         language.apply {
             setOnClickListener {
-                Log.e("AAA", "language clicked!")
+                LanguageSettingsModule.start(context)
             }
-            selectedValue = "English"
+            selectedValue = App.languageManager.currentLanguage.displayName.capitalize()
         }
 
         lightMode.apply {
@@ -59,7 +62,7 @@ class SettingsFragment : android.support.v4.app.Fragment() {
 
             switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
                 App.localStorage.isLightModeOn = isChecked
-                activity?.recreate()
+                MainModule.startAsNewTask(context, MainActivity.SETTINGS_TAB_POSITION)
             }
         }
 

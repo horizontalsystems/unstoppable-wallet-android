@@ -8,6 +8,7 @@ import bitcoin.wallet.core.security.EncryptionManager
 import com.squareup.leakcanary.LeakCanary
 import io.horizontalsystems.bitcoinkit.WalletKit
 import io.horizontalsystems.ethereumkit.EthereumKit
+import java.util.*
 
 class App : Application() {
 
@@ -25,6 +26,7 @@ class App : Application() {
         lateinit var exchangeRateManager: IExchangeRateManager
         lateinit var adapterManager: IAdapterManager
         lateinit var backgroundManager: BackgroundManager
+        lateinit var languageManager: ILanguageManager
 
 
         val testMode = true
@@ -56,6 +58,8 @@ class App : Application() {
         instance = this
         preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
+        val fallbackLanguage = Locale("en")
+
         backgroundManager = BackgroundManager(this)
         encryptionManager = EncryptionManager()
         secureStorage = SecuredStorageManager(encryptionManager)
@@ -66,6 +70,7 @@ class App : Application() {
         currencyManager = CurrencyManager()
         exchangeRateManager = ExchangeRateManager()
         adapterManager = AdapterManager(wordsManager)
+        languageManager = LanguageManager(localStorage, fallbackLanguage)
     }
 
 }

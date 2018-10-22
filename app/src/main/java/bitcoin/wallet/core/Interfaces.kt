@@ -8,6 +8,7 @@ import bitcoin.wallet.entities.coins.Coin
 import io.reactivex.Flowable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
+import java.util.*
 
 interface ILocalStorage {
     var currentLanguage: String?
@@ -28,7 +29,6 @@ interface ISecuredStorage {
     fun wordsAreEmpty(): Boolean
     val savedPin: String?
     fun savePin(pin: String)
-    fun getPin(): String?
     fun pinIsEmpty(): Boolean
 }
 
@@ -86,6 +86,12 @@ interface IWordsManager {
     fun validate(words: List<String>)
     fun restore(words: List<String>)
     fun removeWords()
+}
+
+interface ILanguageManager {
+    var currentLanguage: Locale
+    var preferredLanguage: Locale?
+    var availableLanguages: List<Locale>
 }
 
 interface IAdapter {

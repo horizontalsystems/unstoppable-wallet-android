@@ -1,10 +1,9 @@
 package bitcoin.wallet.modules.restore
 
-import bitcoin.wallet.core.managers.AdapterManager
 import bitcoin.wallet.core.IKeyStoreSafeExecute
+import bitcoin.wallet.core.managers.AdapterManager
 import bitcoin.wallet.core.managers.WordsManager
 import com.nhaarman.mockito_kotlin.KArgumentCaptor
-import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.argumentCaptor
 import org.junit.Before
 import org.junit.Test
@@ -68,7 +67,7 @@ class RestoreInteractorTest {
 
         verify(delegate).didRestore()
         verify(wordsManager).isBackedUp = true
-        verify(adapterManager).initAdapters(any())
+        verify(adapterManager).start()
         verifyNoMoreInteractions(delegate)
     }
 

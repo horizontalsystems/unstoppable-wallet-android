@@ -29,7 +29,7 @@ object SendModule {
         fun getCoinCode(): String
         fun getCopiedText(): String
         fun fetchExchangeRate()
-        fun send(coinCode: String, address: String, amount: Double)
+        fun send(address: String, amount: Double)
         fun isValid(address: String): Boolean
     }
 

@@ -74,6 +74,10 @@ class MainActivity : BaseActivity() {
             }
         })
 
+        val activeTab = intent?.extras?.getInt(ACTIVE_TAB_KEY)
+        activeTab?.let {
+            bottomNavigation.currentItem = it
+        }
     }
 
     override fun onResume() {
@@ -87,6 +91,11 @@ class MainActivity : BaseActivity() {
         val settingsTabPosition = 2
         val notification = if (backedUp) "" else "1"
         bottomNavigation.setNotification(notification, settingsTabPosition)
+    }
+
+    companion object {
+        const val ACTIVE_TAB_KEY = "active_tab"
+        const val SETTINGS_TAB_POSITION = 2
     }
 
 }

@@ -1,12 +1,11 @@
 package bitcoin.wallet.modules.guest
 
-import bitcoin.wallet.core.managers.AdapterManager
 import bitcoin.wallet.core.IKeyStoreSafeExecute
+import bitcoin.wallet.core.managers.AdapterManager
 import bitcoin.wallet.core.managers.WordsManager
 import bitcoin.wallet.modules.RxBaseTest
 import com.nhaarman.mockito_kotlin.KArgumentCaptor
 import com.nhaarman.mockito_kotlin.argumentCaptor
-import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Captor
@@ -39,9 +38,6 @@ class GuestInteractorTest {
 
     @Test
     fun createWallet_success() {
-        val words = listOf("1", "2", "etc")
-
-        whenever(wordsManager.createWords()).thenReturn(words)
 
         interactor.createWallet()
 
@@ -53,7 +49,7 @@ class GuestInteractorTest {
         actionRunnable.run()
         successRunnable.run()
 
-        verify(adapterManager).initAdapters(words)
+        verify(adapterManager).start()
         verify(delegate).didCreateWallet()
         verifyNoMoreInteractions(delegate)
     }
