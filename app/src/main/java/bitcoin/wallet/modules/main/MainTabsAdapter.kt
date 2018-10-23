@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.util.SparseArray
 import android.view.ViewGroup
-import bitcoin.wallet.modules.settings.SettingsFragment
+import bitcoin.wallet.modules.settings.main.MainSettingsFragment
 import bitcoin.wallet.modules.transactions.TransactionsFragment
 import bitcoin.wallet.modules.wallet.WalletFragment
 
@@ -20,7 +20,7 @@ class MainTabsAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(f
     override fun getItem(position: Int): Fragment = when (position) {
         0 -> WalletFragment()
         1 -> TransactionsFragment()
-        else -> SettingsFragment()
+        else -> MainSettingsFragment()
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {

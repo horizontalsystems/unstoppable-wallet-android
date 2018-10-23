@@ -27,6 +27,7 @@ class App : Application() {
         lateinit var adapterManager: IAdapterManager
         lateinit var backgroundManager: BackgroundManager
         lateinit var languageManager: ILanguageManager
+        lateinit var systemInfoManager: ISystemInfoManager
 
 
         val testMode = true
@@ -71,6 +72,7 @@ class App : Application() {
         exchangeRateManager = ExchangeRateManager()
         adapterManager = AdapterManager(wordsManager)
         languageManager = LanguageManager(localStorage, fallbackLanguage)
+        systemInfoManager = SystemInfoManager()
     }
 
 }

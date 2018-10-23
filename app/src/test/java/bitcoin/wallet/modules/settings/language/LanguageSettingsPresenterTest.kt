@@ -41,7 +41,7 @@ class LanguageSettingsPresenterTest {
     @Test
     fun viewDidLoad() {
         presenter.viewDidLoad()
-        verify(view).set(any())
+        verify(view).setTitle(any())
         verify(view).show(items)
     }
 

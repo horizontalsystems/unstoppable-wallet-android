@@ -120,3 +120,7 @@ interface IAdapter {
 
     var receiveAddress: String
 }
+
+interface ISystemInfoManager {
+    var appVersion: String
+}

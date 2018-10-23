@@ -25,7 +25,6 @@ class CurrencyManager : ICurrencyManager {
                 }
 
                 App.preferences.registerOnSharedPreferenceChangeListener(preferencesListener)
-                emitSavedBaseCurrency()
                 emitter.setCancellable { App.preferences.unregisterOnSharedPreferenceChangeListener(preferencesListener) }
             }, BackpressureStrategy.LATEST)
 }

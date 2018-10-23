@@ -1,6 +1,5 @@
 package bitcoin.wallet.modules.main
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
@@ -15,7 +14,6 @@ import kotlinx.android.synthetic.main.activity_dashboard.*
 class MainActivity : BaseActivity() {
 
     private lateinit var adapter: MainTabsAdapter
-    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,9 +26,6 @@ class MainActivity : BaseActivity() {
                     App.adapterManager.start()
                 }
         )
-
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        viewModel.init()
 
         setContentView(R.layout.activity_dashboard)
 
@@ -80,17 +75,10 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.wordListBackedUp.value?.let {
-            updateSettingsBadge(it)
-        }
-    }
-
-    private fun updateSettingsBadge(backedUp: Boolean) {
+    fun updateSettingsTabCounter(count: Int) {
+        val countText = if (count < 1) "" else count.toString()
         val settingsTabPosition = 2
-        val notification = if (backedUp) "" else "1"
-        bottomNavigation.setNotification(notification, settingsTabPosition)
+        bottomNavigation.setNotification(countText, settingsTabPosition)
     }
 
     companion object {
