@@ -1,6 +1,6 @@
 package bitcoin.wallet.core
 
-import bitcoin.wallet.kit.network.MainNet
+import io.horizontalsystems.bitcoinkit.network.MainNet
 import io.reactivex.subjects.PublishSubject
 
 object AdapterManager {

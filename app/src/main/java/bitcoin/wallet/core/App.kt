@@ -4,8 +4,8 @@ import android.app.Application
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import bitcoin.wallet.core.managers.BackgroundManager
-import bitcoin.wallet.kit.WalletKit
 import com.squareup.leakcanary.LeakCanary
+import io.horizontalsystems.bitcoinkit.WalletKit
 
 class App : Application() {
 

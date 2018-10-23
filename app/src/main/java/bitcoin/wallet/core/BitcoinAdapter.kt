@@ -3,9 +3,9 @@ package bitcoin.wallet.core
 import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
-import bitcoin.wallet.kit.network.NetworkParameters
-import bitcoin.wallet.kit.network.RegTest
-import bitcoin.wallet.kit.network.TestNet
+import io.horizontalsystems.bitcoinkit.network.NetworkParameters
+import io.horizontalsystems.bitcoinkit.network.RegTest
+import io.horizontalsystems.bitcoinkit.network.TestNet
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 
