@@ -3,6 +3,7 @@ package bitcoin.wallet.modules.transactions
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
+import bitcoin.wallet.entities.TransactionStatus
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import com.nhaarman.mockito_kotlin.any
 import org.junit.Before
@@ -68,10 +69,10 @@ class TransactionsPresenterTest {
                 true,
                 0,
                 Date(),
-                0,
+                TransactionStatus.Completed,
                 CurrencyValue(Currency(), 0.0),
                 0.0
-                )
+        )
 
         presenter.onTransactionItemClick(transactionRecord)
 

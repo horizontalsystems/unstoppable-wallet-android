@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.widget.Toast
 import bitcoin.wallet.BaseActivity
 import bitcoin.wallet.R
+import bitcoin.wallet.entities.TransactionStatus
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem
 import bitcoin.wallet.viewHelpers.DateHelper
 import bitcoin.wallet.viewHelpers.HudHelper
@@ -54,15 +55,15 @@ class FullTransactionInfoActivity : BaseActivity() {
     }
 
     private fun setTransaction(trx: TransactionRecordViewItem) {
-        val statusTxt = when {
-            trx.status == TransactionRecordViewItem.Status.PROCESSING -> getString(R.string.transaction_info_processing, trx.confirmationProgress())
-            trx.status == TransactionRecordViewItem.Status.PENDING -> getString(R.string.transaction_info_status_pending)
+        val txStatus = trx.status
+        val statusTxt = when (txStatus) {
+            is TransactionStatus.Processing -> getString(R.string.transaction_info_processing, txStatus.progress)
+            is TransactionStatus.Pending -> getString(R.string.transaction_info_status_pending)
             else -> getString(R.string.transaction_info_status_completed)
         }
-
-        val statusImg = when {
-            trx.status == TransactionRecordViewItem.Status.PROCESSING -> R.drawable.processing_image
-            trx.status == TransactionRecordViewItem.Status.PENDING -> R.drawable.pending_image
+        val statusImg = when (txStatus) {
+            is TransactionStatus.Processing -> R.drawable.processing_image
+            is TransactionStatus.Pending -> R.drawable.pending_image
             else -> R.drawable.comleted_image
         }
 

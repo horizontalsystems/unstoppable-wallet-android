@@ -1,6 +1,7 @@
 package bitcoin.wallet.core
 
 import bitcoin.wallet.entities.TransactionRecord
+import bitcoin.wallet.entities.TransactionStatus
 import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import io.horizontalsystems.bitcoinkit.network.NetworkParameters
@@ -132,6 +133,7 @@ class WalletKit(words: List<String>, network: NetworkParameters) {
             amount = 0.025
             fee = 0.0093
             blockHeight = 130
+            status = TransactionStatus.Processing(33)
             timestamp = 1539206581000
         }
         transactions.add(tr)
@@ -144,6 +146,7 @@ class WalletKit(words: List<String>, network: NetworkParameters) {
             amount = 0.03
             fee = 0.0093
             blockHeight = 122
+            status = TransactionStatus.Completed
             timestamp = 1538893392000
         }
         transactions.add(tr1)
@@ -156,6 +159,7 @@ class WalletKit(words: List<String>, network: NetworkParameters) {
             amount = 0.032
             fee = 0.0093
             blockHeight = 105
+            status = TransactionStatus.Completed
             timestamp = 1538461392000
         }
         transactions.add(tr2)
@@ -168,6 +172,7 @@ class WalletKit(words: List<String>, network: NetworkParameters) {
             amount = -0.23
             fee = 0.00012
             blockHeight = 128
+            status = TransactionStatus.Pending
             timestamp = 1538288592000
         }
         transactions.add(tr3)
@@ -180,6 +185,7 @@ class WalletKit(words: List<String>, network: NetworkParameters) {
             amount = 0.183
             fee = 0.00092
             blockHeight = 103
+            status = TransactionStatus.Completed
             timestamp = 1538131030582
         }
         transactions.add(tr4)

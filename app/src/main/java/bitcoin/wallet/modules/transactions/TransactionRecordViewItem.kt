@@ -2,6 +2,7 @@ package bitcoin.wallet.modules.transactions
 
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.CurrencyValue
+import bitcoin.wallet.entities.TransactionStatus
 import bitcoin.wallet.viewHelpers.NumberFormatHelper
 import java.util.*
 
@@ -15,21 +16,10 @@ data class TransactionRecordViewItem(
         val incoming: Boolean,
         val blockHeight: Long?,
         val date: Date?,
-        val confirmations: Long? = 0,
+        val status: TransactionStatus,
         var currencyAmount: CurrencyValue? = null,
         var exchangeRate: Double? = null
 ) {
-
-
-    enum class Status {
-        SUCCESS, PENDING, PROCESSING
-    }
-
-    val status: Status = when (confirmations) {
-        0L -> TransactionRecordViewItem.Status.PENDING
-        in 1L..6L -> TransactionRecordViewItem.Status.PROCESSING
-        else -> TransactionRecordViewItem.Status.SUCCESS
-    }
 
     override fun equals(other: Any?): Boolean {
         if (other is TransactionRecordViewItem) {
@@ -40,9 +30,7 @@ data class TransactionRecordViewItem(
                     && from == other.from
                     && to == other.to
                     && incoming == other.incoming
-                    && blockHeight == other.blockHeight
                     && date == other.date
-                    && confirmations == other.confirmations
                     && currencyAmount == other.currencyAmount
                     && exchangeRate == other.exchangeRate
         }
@@ -58,9 +46,7 @@ data class TransactionRecordViewItem(
         result = 31 * result + (from?.hashCode() ?: 0)
         result = 31 * result + (to?.hashCode() ?: 0)
         result = 31 * result + incoming.hashCode()
-        result = 31 * result + (blockHeight?.hashCode() ?: 0)
         result = 31 * result + (date?.hashCode() ?: 0)
-        result = 31 * result + (confirmations?.hashCode() ?: 0)
         result = 31 * result + (currencyAmount?.hashCode() ?: 0)
         result = 31 * result + (exchangeRate?.hashCode() ?: 0)
         return result
@@ -80,15 +66,6 @@ data class TransactionRecordViewItem(
         }
 
         return fiatValue
-    }
-
-    //6 confirmations is accepted as 100% for transaction success
-    fun confirmationProgress() = confirmations?.let { 100 / 6 * it.toInt() } ?: 0
-
-    companion object {
-        fun getConfirmationsCount(transactionBlockHeight: Long?, latestBlockHeight: Int): Long{
-            return transactionBlockHeight?.let { latestBlockHeight - it + 1 } ?: 0
-        }
     }
 
 }

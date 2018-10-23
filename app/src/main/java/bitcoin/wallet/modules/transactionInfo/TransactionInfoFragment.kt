@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.TextView
 import bitcoin.wallet.R
+import bitcoin.wallet.entities.TransactionStatus
 import bitcoin.wallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem
 import bitcoin.wallet.viewHelpers.DateHelper
@@ -52,6 +53,7 @@ class TransactionInfoFragment : DialogFragment() {
 
         viewModel.transactionLiveData.observe(this, Observer { txRecord ->
             txRecord?.let { txRec ->
+                val txStatus = txRec.status
 
                 rootView.findViewById<TextView>(R.id.txtAmount)?.apply {
                     val sign = if (txRec.incoming) "+" else "-"
@@ -59,25 +61,25 @@ class TransactionInfoFragment : DialogFragment() {
                     setTextColor(resources.getColor(if (txRec.incoming) R.color.green_crypto else R.color.yellow_crypto, null))
                 }
 
-                rootView.findViewById<TextView>(R.id.txDate)?.text = if (txRec.status == TransactionRecordViewItem.Status.PENDING) {
+                rootView.findViewById<TextView>(R.id.txDate)?.text = if (txStatus is TransactionStatus.Pending) {
                     getString(R.string.transaction_info_status_pending)
                 } else {
                     txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) }
                 }
 
                 rootView.findViewById<TransactionInfoItemView>(R.id.itemStatus)?.apply {
-                    val valueIcon = when {
-                        txRec.status == TransactionRecordViewItem.Status.PENDING -> R.drawable.pending
-                        txRec.status == TransactionRecordViewItem.Status.PROCESSING -> null
+                    val valueIcon = when (txStatus) {
+                        is TransactionStatus.Pending -> R.drawable.pending
+                        is TransactionStatus.Processing -> null
                         else -> R.drawable.checkmark_green
                     }
-                    val progress = when {
-                        txRec.status == TransactionRecordViewItem.Status.PROCESSING -> txRec.confirmationProgress()
+                    val progress = when (txStatus) {
+                        is TransactionStatus.Processing -> txStatus.progress
                         else -> null
                     }
-                    val statusText = when {
-                        txRec.status == TransactionRecordViewItem.Status.PROCESSING -> getString(R.string.transaction_info_processing, txRec.confirmationProgress())
-                        txRec.status == TransactionRecordViewItem.Status.PENDING -> getString(R.string.transaction_info_status_pending)
+                    val statusText = when (txStatus) {
+                        is TransactionStatus.Processing -> getString(R.string.transaction_info_processing, progress)
+                        is TransactionStatus.Pending -> getString(R.string.transaction_info_status_pending)
                         else -> getString(R.string.transaction_info_status_completed)
                     }
                     bind(title = getString(R.string.transaction_info_status), valueTitle = statusText.toUpperCase(), valueIcon = valueIcon, progressValue = progress)
