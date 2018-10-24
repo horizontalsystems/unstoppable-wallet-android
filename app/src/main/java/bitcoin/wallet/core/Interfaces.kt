@@ -1,6 +1,7 @@
 package bitcoin.wallet.core
 
 import android.hardware.fingerprint.FingerprintManager
+import bitcoin.wallet.entities.BiometryType
 import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
 import bitcoin.wallet.entities.TransactionRecord
@@ -123,4 +124,7 @@ interface IAdapter {
 
 interface ISystemInfoManager {
     var appVersion: String
+    var biometryType: BiometryType
+    fun phoneHasFingerprintSensor(): Boolean
+    fun touchSensorCanBeUsed(): Boolean
 }

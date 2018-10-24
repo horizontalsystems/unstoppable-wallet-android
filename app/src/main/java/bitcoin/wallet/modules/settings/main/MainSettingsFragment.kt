@@ -3,7 +3,6 @@ package bitcoin.wallet.modules.settings.main
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,8 +13,9 @@ import bitcoin.wallet.R
 import bitcoin.wallet.modules.currencyswitcher.CurrencySwitcherModule
 import bitcoin.wallet.modules.main.MainActivity
 import bitcoin.wallet.modules.main.MainModule
-import bitcoin.wallet.modules.settings.SecuritySettingsActivity
 import bitcoin.wallet.modules.settings.language.LanguageSettingsModule
+import bitcoin.wallet.modules.settings.security.SecuritySettingsModule
+import bitcoin.wallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.fragment_settings.*
 
 class MainSettingsFragment : android.support.v4.app.Fragment() {
@@ -32,7 +32,7 @@ class MainSettingsFragment : android.support.v4.app.Fragment() {
         viewModel.init()
 
         securityCenter.setOnClickListener {
-            startActivity(Intent(context, SecuritySettingsActivity::class.java))
+            viewModel.delegate.didTapSecurity()
         }
 
         baseCurrency.apply {
@@ -75,7 +75,7 @@ class MainSettingsFragment : android.support.v4.app.Fragment() {
 
         viewModel.backedUpLiveDate.observe(this, Observer { backedUp ->
             backedUp?.let {
-                securityCenter.badge = getInfoBadge(it)
+                securityCenter.badge = LayoutHelper.getInfoBadge(it, resources)
             }
         })
 
@@ -113,7 +113,7 @@ class MainSettingsFragment : android.support.v4.app.Fragment() {
 
         viewModel.showSecuritySettingsLiveEvent.observe(this, Observer {
             context?.let {
-                startActivity(Intent(context, SecuritySettingsActivity::class.java))
+                SecuritySettingsModule.start(it)
             }
         })
 
@@ -139,15 +139,6 @@ class MainSettingsFragment : android.support.v4.app.Fragment() {
             context?.let { context -> MainModule.startAsNewTask(context, MainActivity.SETTINGS_TAB_POSITION) }
         })
 
-    }
-
-    private fun getInfoBadge(wordListBackedUp: Boolean): Drawable? {
-        var infoBadge: Drawable? = null
-        if (!wordListBackedUp) {
-            infoBadge = resources.getDrawable(R.drawable.info, null)
-            infoBadge?.setTint(resources.getColor(R.color.red_warning, null))
-        }
-        return infoBadge
     }
 
 }

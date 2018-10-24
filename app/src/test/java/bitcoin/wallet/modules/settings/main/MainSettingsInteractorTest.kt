@@ -11,12 +11,11 @@ import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito.mock
 import java.util.*
 
 class MainSettingsInteractorTest {
 
-    private val delegate = mock(MainSettingsModule.IMainSettingsInteractorDelegate::class.java)
+    private val delegate = mock<MainSettingsModule.IMainSettingsInteractorDelegate>()
 
     private lateinit var localStorage: ILocalStorage
     private lateinit var wordsManager: IWordsManager
