@@ -95,7 +95,7 @@ class TransactionInfoFragment : DialogFragment() {
 
                 rootView.findViewById<TransactionInfoItemView>(R.id.itemFromTo)?.apply {
                     val title = getString(if (txRec.incoming) R.string.transaction_info_from else R.string.transaction_info_to)
-                    bind(title = title, valueTitle = txRec.from, valueIcon = R.drawable.round_person_18px)
+                    bind(title = title, valueTitle = if (txRec.incoming) txRec.from else txRec.to, valueIcon = R.drawable.round_person_18px)
                 }
             }
 
