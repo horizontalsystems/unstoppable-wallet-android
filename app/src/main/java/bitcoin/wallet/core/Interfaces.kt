@@ -96,30 +96,30 @@ interface ILanguageManager {
 }
 
 interface IAdapter {
-    var id: String
-    var coin: Coin
-    var balance: Double
+    val id: String
+    val coin: Coin
+    val balance: Double
 
-    var balanceSubject: PublishSubject<Double>
-    var progressSubject: BehaviorSubject<Double>
+    val balanceSubject: PublishSubject<Double>
+    val progressSubject: BehaviorSubject<Double>
 
-    var lastBlockHeight: Int
-    var lastBlockHeightSubject: PublishSubject<Int>
+    val latestBlockHeight: Int
+    val latestBlockHeightSubject: PublishSubject<Any>
 
-    var transactionRecords: List<TransactionRecord>
-    var transactionRecordsSubject: PublishSubject<Any>
+    val transactionRecords: List<TransactionRecord>
+    val transactionRecordsSubject: PublishSubject<Any>
 
-    fun showInfo()
+    val receiveAddress: String
+
+    fun debugInfo()
 
     fun start()
     fun refresh()
     fun clear()
 
-    fun send(address: String, value: Int, completion:((Exception?) -> Unit))
-    fun fee(value: Int, senderPay: Boolean): Long
+    fun send(address: String, value: Double, completion: ((Throwable?) -> (Unit))? = null)
+    fun fee(value: Int, senderPay: Boolean): Double
     fun validate(address: String): Boolean
-
-    var receiveAddress: String
 }
 
 interface ISystemInfoManager {

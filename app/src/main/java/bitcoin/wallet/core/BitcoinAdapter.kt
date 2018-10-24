@@ -10,7 +10,7 @@ import io.horizontalsystems.bitcoinkit.network.TestNet
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 
-class BitcoinAdapter(words: List<String>, network: NetworkParameters) : IAdapter {
+class BitcoinAdapter(val words: List<String>, network: NetworkParameters) : IAdapter {
 
     private var walletKit = WalletKit(words, network)
 
@@ -21,20 +21,24 @@ class BitcoinAdapter(words: List<String>, network: NetworkParameters) : IAdapter
         is TestNet -> Bitcoin("T")
         else -> Bitcoin()
     }
-    override val id: String = "${words.joinToString(" ").hashCode()}-${coin.code}"
+    override val id: String
+        get() = "${words.joinToString(" ").hashCode()}-${coin.code}"
 
     override val balance: Double
         get() = walletKit.balance / satoshisInBitcoin
+
     override val balanceSubject: PublishSubject<Double> = PublishSubject.create()
 
     override val progressSubject: BehaviorSubject<Double> = walletKit.progressSubject
 
     override val latestBlockHeight: Int
         get() = walletKit.latestBlockHeight
+
     override val latestBlockHeightSubject: PublishSubject<Any> = PublishSubject.create()
 
     override val transactionRecords: List<TransactionRecord>
         get() = walletKit.transactionRecords
+
     override val transactionRecordsSubject: PublishSubject<Any> = PublishSubject.create()
 
     override val receiveAddress: String
