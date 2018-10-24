@@ -76,7 +76,7 @@
   <string name="full_transaction_info_time">Heure</string>
   <string name="full_transaction_info_from">De</string>
   <string name="full_transaction_info_to">À</string>
-  <string name="full_transaction_info_received">Reçue</string>
+  <string name="full_transaction_info_received">Reçu</string>
   <string name="full_transaction_info_sent">Envoyée</string>
   <string name="full_transaction_info_amount">Montant</string>
   <string name="full_transaction_info_fee">Frais</string>
