@@ -12,7 +12,7 @@
   <string name="welcome_title">Bank Wallet</string>
   <string name="welcome_btn_create_wallet">Yeni Cüzdan</string>
   <string name="welcome_btn_import_wallet">Cüzdanı içe aktar</string>
-  <string name="restore_title">Gizli Anahtarı Girin</string>
+  <string name="restore_title">Enter Secret Keys</string>
   <string name="restore_validation_failed">Kelimeler eşleşmiyor</string>
   <string name="backup_words_title">Gizli Anahtar</string>
   <string name="backup_words_description">Gizli Anahtar, telefonunuzun kaybolması, çalınması, bozulması veya programın tekrar kurulması durumunda hesaba erişebilmenin tek yoludur.\n\n 12 kelimeden oluşur. Not alıp güvenli bir yerde tutun ve kimseye göstermeyin.</string>
@@ -20,7 +20,7 @@
   <string name="backup_words_confirm_alert_wallet_restore_with_words">Bu programın kaldırılmase veya başka bir cihaza taşınması durumunda cüzdanıma erişmek için tek seçeneğimin yenice kağıda yazıp güvenli bir yerde sakladığım Gizli Anahtar olduğunu biliyorum.</string>
   <string name="backup_words_confirm_alert_wallet_device_lock_warning">Android sisteminde, cihazın kilit kodunu değiştirmek Banka programını da sıfırlayacak. Cüzdana ulaşmak için Gizli Anahtarınızı tekrar girmeniz gerekecek.</string>
   <string name="backup_words_confirm_description">Gizli Anahtarınızda ki istenen kelimeleri giriniz</string>
-  <string name="backup_words_error_enter_words">Gizli Anahtarı girin.</string>
+  <string name="backup_words_error_enter_words">Enter words from your secret key.</string>
   <string name="backup_words_error_no_match">Kelimeler eşleşmiyor. Lütfen kağıda yazdığınız kelimelerin aynısını girin. Kelimelerin sırasına dikkat edin.</string>
   <string name="backup_button_confirm">Onayla</string>
   <string name="backup_button_backup">Yedekle</string>
@@ -98,8 +98,8 @@
   <string name="settings_security_change_pin">PİN\'i değiştir</string>
   <string name="settings_security_backup_wallet">Cüzdanı yedekle</string>
   <string name="unlock_page_enter_your_pin">PİN girin</string>
-  <string name="settings_security_import_wallet_confirmation_1">Bu işlem hesabı bu cihazdan kaldıracak.</string>
-  <string name="settings_security_import_wallet_confirmation_2">Cüzdanınızın Gizli Anahtarını yedeklediğinizden emin olun. Gizli Anahtar olmadan bu cüzdana gelecekte ulaşılamayacak.</string>
+  <string name="settings_security_import_wallet_confirmation_1">This action will remove the currently installed wallet from this device.</string>
+  <string name="settings_security_import_wallet_confirmation_2">Make sure you have its Secret Key or you will not be able to access the funds on it in the future.</string>
   <string name="settings_currency_switcher_title">Para birimi</string>
   <string name="alert_keys_invalidated_title">Android anahtar deposu hatası</string>
   <string name="alert_keys_invalidated_description">Android cihazınızın kilidi değiştirildiğinden cüzdan bilginizi tutan şifreli dosya artık geçersiz</string>
@@ -135,7 +135,8 @@
   <string name="set_pin_error_pins_dont_match">PİN uyuşmuyor. Tekrar deneyin.</string>
   <string name="set_pin_error_pins_dont_match_you_have_attempts_left">Wrong PIN. You have %s attempts left.</string>
   <string name="set_pin_error_failed_to_save_pin">PİN kaydedilirken hata oldu. Lütfen tekrar deneyin.</string>
-  <string name="edit_pin_auth_title">Edit PIN</string>
+  <string name="edit_pin_auth_title">PIN oluştur
+</string>
   <string name="edit_pin_auth_description">Şu an kullandığınız PİN\'i girin</string>
   <string name="edit_pin_title">Yeni PİN gerin</string>
   <string name="edit_pin_description">PİN, uygulama kilidini açmak ve para göndermek için kullanılacak</string>
