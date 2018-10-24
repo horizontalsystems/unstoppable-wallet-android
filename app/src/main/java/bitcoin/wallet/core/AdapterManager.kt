@@ -1,6 +1,7 @@
 package bitcoin.wallet.core
 
 import io.horizontalsystems.bitcoinkit.network.MainNet
+import io.horizontalsystems.ethereumkit.network.NetworkType
 import io.reactivex.subjects.PublishSubject
 
 object AdapterManager {
@@ -11,7 +12,7 @@ object AdapterManager {
         clear()
         adapters.clear()
         adapters.add(BitcoinAdapter(words, network = MainNet()))
-//        adapters.add(BitcoinAdapter(words, network = TestNet()))
+        adapters.add(EthereumAdapter(listOf("subway", "plate", "brick", "pattern", "inform", "used", "oblige", "identify", "cherry", "drop", "flush", "balance"), network = NetworkType.Kovan))
 
         start()
     }
