@@ -24,6 +24,7 @@ object TransactionsModule {
         fun retrieveFilters()
         fun retrieveTransactions(adapterId: String?)
         fun onCleared()
+        fun refresh()
     }
 
     interface IInteractorDelegate {

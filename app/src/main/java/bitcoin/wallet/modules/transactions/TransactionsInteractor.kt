@@ -66,6 +66,10 @@ class TransactionsInteractor(
         adapterManagerDisposable?.dispose()
     }
 
+    override fun refresh() {
+        adapterManager.refresh()
+    }
+
     private fun retrieveTransactionItemsWithBaseCurrency(baseCurrency: Currency, adapterId: String?) {
         val items = mutableListOf<TransactionRecordViewItem>()
 
