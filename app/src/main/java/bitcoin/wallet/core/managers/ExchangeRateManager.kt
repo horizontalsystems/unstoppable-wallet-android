@@ -9,7 +9,6 @@ import bitcoin.wallet.viewHelpers.DateHelper
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import java.text.DecimalFormat
@@ -19,16 +18,20 @@ import java.util.concurrent.TimeUnit
 class ExchangeRateManager: IExchangeRateManager {
 
     private var disposables: CompositeDisposable = CompositeDisposable()
-    private var baseCurrencyDisposable: Disposable? = null
 
     init {
-        baseCurrencyDisposable = App.currencyManager.getBaseCurrencyFlowable().subscribe { baseCurrency ->
-            disposables.clear()
-            disposables.add(Observable.interval(5, 180, TimeUnit.SECONDS, Schedulers.io())
-                    .subscribe {
-                        refreshRates(baseCurrency)
-                    })
+        fetchRatesWithInterval(App.localStorage.baseCurrency)
+        val baseCurrencyDisposable = App.currencyManager.getBaseCurrencyFlowable().subscribe { baseCurrency ->
+            fetchRatesWithInterval(baseCurrency)
         }
+    }
+
+    private fun fetchRatesWithInterval(baseCurrency: Currency) {
+        disposables.clear()
+        disposables.add(Observable.interval(5, 180, TimeUnit.SECONDS, Schedulers.io())
+                .subscribe {
+                    refreshRates(baseCurrency)
+                })
     }
 
     private var latestExchangeRateSubject: PublishSubject<MutableMap<Coin, CurrencyValue>> = PublishSubject.create()
