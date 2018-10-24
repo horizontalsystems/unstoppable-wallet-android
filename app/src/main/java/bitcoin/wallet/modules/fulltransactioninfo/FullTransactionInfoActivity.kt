@@ -8,9 +8,11 @@ import android.os.Bundle
 import android.widget.Toast
 import bitcoin.wallet.BaseActivity
 import bitcoin.wallet.R
+import bitcoin.wallet.entities.TransactionStatus
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem
 import bitcoin.wallet.viewHelpers.DateHelper
 import bitcoin.wallet.viewHelpers.HudHelper
+import bitcoin.wallet.viewHelpers.NumberFormatHelper
 import kotlinx.android.synthetic.main.activity_full_transaction_info.*
 
 class FullTransactionInfoActivity : BaseActivity() {
@@ -54,15 +56,15 @@ class FullTransactionInfoActivity : BaseActivity() {
     }
 
     private fun setTransaction(trx: TransactionRecordViewItem) {
-        val statusTxt = when {
-            trx.status == TransactionRecordViewItem.Status.PROCESSING -> getString(R.string.transaction_info_processing, trx.confirmationProgress())
-            trx.status == TransactionRecordViewItem.Status.PENDING -> getString(R.string.transaction_info_status_pending)
+        val txStatus = trx.status
+        val statusTxt = when (txStatus) {
+            is TransactionStatus.Processing -> getString(R.string.transaction_info_processing, txStatus.progress)
+            is TransactionStatus.Pending -> getString(R.string.transaction_info_status_pending)
             else -> getString(R.string.transaction_info_status_completed)
         }
-
-        val statusImg = when {
-            trx.status == TransactionRecordViewItem.Status.PROCESSING -> R.drawable.processing_image
-            trx.status == TransactionRecordViewItem.Status.PENDING -> R.drawable.pending_image
+        val statusImg = when (txStatus) {
+            is TransactionStatus.Processing -> R.drawable.processing_image
+            is TransactionStatus.Pending -> R.drawable.pending_image
             else -> R.drawable.comleted_image
         }
 
@@ -73,12 +75,13 @@ class FullTransactionInfoActivity : BaseActivity() {
         itemTime.bind(title = getString(R.string.full_transaction_info_time), valueTitle = trx.date?.let { DateHelper.getFullDateWithShortMonth(it) })
         itemFrom.bind(title = getString(R.string.full_transaction_info_from), valueTitle = trx.from, valueIcon = R.drawable.round_person_18px)
         itemTo.bind(title = getString(R.string.full_transaction_info_to), valueTitle = trx.to, valueIcon = R.drawable.round_person_18px)
+        val cryptoAmountFormat = NumberFormatHelper.cryptoAmountFormat
         itemAmount.bind(
                 title = getString(R.string.full_transaction_info_amount),
-                valueTitle = "${trx.amount.value} ${trx.amount.coin.code}",
+                valueTitle = "${cryptoAmountFormat.format(trx.amount.value)} ${trx.amount.coin.code}",
                 valueSubtitle = trx.getFiatValue()
         )
-        itemFee.bind(title = getString(R.string.full_transaction_info_fee), valueTitle = "${trx.fee.value} ${trx.fee.coin.code}")
+        itemFee.bind(title = getString(R.string.full_transaction_info_fee), valueTitle = "${cryptoAmountFormat.format(trx.fee.value)} ${trx.fee.coin.code}")
         itemBlock.bind(title = getString(R.string.full_transaction_info_block), valueTitle = trx.blockHeight.toString())
 
         transactionId.setOnClickListener { viewModel.delegate.onTransactionIdClick() }

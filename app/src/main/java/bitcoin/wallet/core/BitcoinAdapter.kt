@@ -1,6 +1,7 @@
 package bitcoin.wallet.core
 
 import bitcoin.wallet.entities.TransactionRecord
+import bitcoin.wallet.entities.TransactionStatus
 import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import io.horizontalsystems.bitcoinkit.network.NetworkParameters
@@ -11,50 +12,35 @@ import io.reactivex.subjects.PublishSubject
 
 class BitcoinAdapter(words: List<String>, network: NetworkParameters) : IAdapter {
 
-    private var walletKit: WalletKit
-    var wordsHash: String = words.joinToString(" ")
+    private var walletKit = WalletKit(words, network)
 
-    init {
-        walletKit = WalletKit(words, network)
-        println("BitcoinAdapter started with words $words")
+    private val satoshisInBitcoin = Math.pow(10.0, 8.0)
 
-        //for test purpose
-//        Handler().postDelayed({
-//            progressSubject.onNext(0.0)
-//
-//        }, (1 * 1000).toLong())
-//
-//        Handler().postDelayed({
-//            updateBalance(2091183337)
-//            progressSubject.onNext(1.0)
-//
-//        }, (10 * 1000).toLong())
-    }
-
-    override var coin: Coin = when (network) {
+    override val coin: Coin = when (network) {
         is RegTest -> Bitcoin("R")
         is TestNet -> Bitcoin("T")
         else -> Bitcoin()
     }
+    override val id: String = "${words.joinToString(" ").hashCode()}-${coin.code}"
 
-    override var id: String = "${wordsHash.hashCode()}-${coin.code}"
-    override var balanceSubject: PublishSubject<Double> = PublishSubject.create()
-    override var balance: Double = 24.0//0.0
-        set(value) {
-            field = value
-            balanceSubject.onNext(field)
-        }
+    override val balance: Double
+        get() = walletKit.balance / satoshisInBitcoin
+    override val balanceSubject: PublishSubject<Double> = PublishSubject.create()
 
-    //    private var transactionsNotificationToken: NotificationToken?
-//    private var unspentOutputsNotificationToken: NotificationToken?
-//    override var latestBlockHeightSubject: PublishSubject<Void> = PublishSubject.create()
-    override var transactionRecordsSubject: PublishSubject<Any> = PublishSubject.create()
+    override val progressSubject: BehaviorSubject<Double> = walletKit.progressSubject
 
+    override val latestBlockHeight: Int
+        get() = walletKit.latestBlockHeight
+    override val latestBlockHeightSubject: PublishSubject<Any> = PublishSubject.create()
 
-    override var latestBlockHeight: Int = walletKit.latestBlockHeight
-    override var transactionRecords: List<TransactionRecord> = walletKit.transactionRecords
+    override val transactionRecords: List<TransactionRecord>
+        get() = walletKit.transactionRecords
+    override val transactionRecordsSubject: PublishSubject<Any> = PublishSubject.create()
 
-    override fun showInfo() {
+    override val receiveAddress: String
+        get() = walletKit.receiveAddress
+
+    override fun debugInfo() {
         walletKit.showRealmInfo()
     }
 
@@ -62,43 +48,41 @@ class BitcoinAdapter(words: List<String>, network: NetworkParameters) : IAdapter
         walletKit.start()
     }
 
+    override fun refresh() {
+
+    }
+
     override fun clear() {
         walletKit.clear()
     }
 
-    override fun send(address: String, value: Int) {
-        walletKit.send(address, value)
+    override fun send(address: String, value: Double, completion: ((Throwable?) -> (Unit))?) {
+        try {
+            walletKit.send(address, (value * satoshisInBitcoin).toInt())
+            completion?.invoke(null)
+        } catch (ex: Exception) {
+            completion?.invoke(ex)
+        }
     }
 
-    override fun fee(value: Int, senderPay: Boolean): Int {
-        return walletKit.fee(value, senderPay)
+    override fun fee(value: Int, senderPay: Boolean): Double {
+        return walletKit.fee(value, senderPay).div(satoshisInBitcoin)
     }
 
     override fun validate(address: String): Boolean {
         return true
     }
 
-    override var progressSubject: BehaviorSubject<Double> = walletKit.progressSubject
-
-    override var receiveAddress: String = walletKit.receiveAddress
-
-    private fun updateBalance() {
-        var satoshiBalance = 0
-
-//        for output in walletKit.unspentOutputsRealmResults {
-//            satoshiBalance += output.value
-//        }
-
-        balance = satoshiBalance / 100000000.0
-    }
 }
 
 //Stub class from WalletKit
 class WalletKit(words: List<String>, network: NetworkParameters) {
     val latestBlockHeight = 129
-    val transactionRecords: List<TransactionRecord> = demoTransactions()//listOf()
+    val transactionRecords: List<TransactionRecord> = demoTransactions()
     val receiveAddress = "1AYHMDV1XR8HWaReC3Rr4Qv79vJiSR8RCU"
     val progressSubject: BehaviorSubject<Double> = BehaviorSubject.create()
+    val balance: Long
+        get() = 24 * Math.pow(10.0, 8.0).toLong()
 
     fun showRealmInfo() {
 
@@ -132,6 +116,7 @@ class WalletKit(words: List<String>, network: NetworkParameters) {
             amount = 0.025
             fee = 0.0093
             blockHeight = 130
+            status = TransactionStatus.Processing(33)
             timestamp = 1539206581000
         }
         transactions.add(tr)
@@ -144,6 +129,7 @@ class WalletKit(words: List<String>, network: NetworkParameters) {
             amount = 0.03
             fee = 0.0093
             blockHeight = 122
+            status = TransactionStatus.Completed
             timestamp = 1538893392000
         }
         transactions.add(tr1)
@@ -156,6 +142,7 @@ class WalletKit(words: List<String>, network: NetworkParameters) {
             amount = 0.032
             fee = 0.0093
             blockHeight = 105
+            status = TransactionStatus.Completed
             timestamp = 1538461392000
         }
         transactions.add(tr2)
@@ -168,6 +155,7 @@ class WalletKit(words: List<String>, network: NetworkParameters) {
             amount = -0.23
             fee = 0.00012
             blockHeight = 128
+            status = TransactionStatus.Pending
             timestamp = 1538288592000
         }
         transactions.add(tr3)
@@ -180,6 +168,7 @@ class WalletKit(words: List<String>, network: NetworkParameters) {
             amount = 0.183
             fee = 0.00092
             blockHeight = 103
+            status = TransactionStatus.Completed
             timestamp = 1538131030582
         }
         transactions.add(tr4)

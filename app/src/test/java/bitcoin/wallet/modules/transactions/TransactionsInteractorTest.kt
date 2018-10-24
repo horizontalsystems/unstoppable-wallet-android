@@ -114,6 +114,7 @@ class TransactionsInteractorTest {
             from = listOf("from-address")
             to = listOf("to-address")
             blockHeight = 98
+            status = TransactionStatus.Processing(33)
             coinCode = "BTC"
         }
 
@@ -127,6 +128,7 @@ class TransactionsInteractorTest {
             to = listOf("to-address")
             blockHeight = 101
             coinCode = "BTC"
+            status = TransactionStatus.Pending
         }
 
         val expectedItems = listOf(
@@ -135,12 +137,12 @@ class TransactionsInteractorTest {
                         adapterId = adapterId,
                         amount = CoinValue(bitcoin, btcTxAmount),
                         fee = CoinValue(bitcoin, 1.0),
-                        from ="from-address",
+                        from = "from-address",
                         to = "to-address",
                         incoming = true,
                         blockHeight = 98,
                         date = now,
-                        confirmations = 3,
+                        status = TransactionStatus.Processing(33),
                         currencyAmount = CurrencyValue(currency = baseCurrency, value = btcTxAmount * rate),
                         exchangeRate = rate
                 ),
@@ -154,7 +156,7 @@ class TransactionsInteractorTest {
                         incoming = true,
                         blockHeight = 101,
                         date = now,
-                        confirmations = 0,
+                        status = TransactionStatus.Pending,
                         currencyAmount = CurrencyValue(currency = baseCurrency, value = btcTxAmount * rate),
                         exchangeRate = rate
                 )

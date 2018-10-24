@@ -68,7 +68,7 @@ class FullTransactionInfoInteractor(
                 incoming = record.amount > 0,
                 blockHeight = record.blockHeight,
                 date = record.timestamp?.let { Date(it) },
-                confirmations = TransactionRecordViewItem.getConfirmationsCount(record.blockHeight, adapter.latestBlockHeight)
+                status = record.status
         )
     }
 

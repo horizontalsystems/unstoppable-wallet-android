@@ -7,28 +7,30 @@ import io.reactivex.subjects.PublishSubject
 
 
 interface IAdapter {
-    var id: String
-    var coin: Coin
-    var balance: Double
+    val id: String
+    val coin: Coin
 
-    var balanceSubject: PublishSubject<Double>
-    var progressSubject: BehaviorSubject<Double>
-//    var latestBlockHeightSubject: PublishSubject<Void>
-    var transactionRecordsSubject: PublishSubject<Any>
+    val balance: Double
+    val balanceSubject: PublishSubject<Double>
 
+    val progressSubject: BehaviorSubject<Double>
 
-    var latestBlockHeight: Int
+    val latestBlockHeight: Int
+    val latestBlockHeightSubject: PublishSubject<Any>
 
-    var transactionRecords: List<TransactionRecord>
+    val transactionRecords: List<TransactionRecord>
+    val transactionRecordsSubject: PublishSubject<Any>
 
-    fun showInfo()
+    val receiveAddress: String
+
+    fun debugInfo()
 
     fun start()
+    fun refresh()
     fun clear()
 
-    fun send(address: String, value: Int)
-    fun fee(value: Int, senderPay: Boolean): Int
+    fun send(address: String, value: Double, completion: ((Throwable?) -> (Unit))? = null)
+    fun fee(value: Int, senderPay: Boolean): Double
     fun validate(address: String): Boolean
 
-    var receiveAddress: String
 }

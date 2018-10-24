@@ -61,7 +61,7 @@ class TransactionInfoItemView : ConstraintLayout {
         ConstraintLayout.inflate(context, R.layout.view_transaction_info_item, this)
     }
 
-    fun bind(title: String? = null, valueTitle: String? = null, valueSubtitle: String? = null, valueIcon: Int? = null, progressValue: Int? = null) {
+    fun bind(title: String? = null, valueTitle: String? = null, valueSubtitle: String? = null, valueIcon: Int? = null, progressValue: Byte? = null) {
         titleTextView.text = title
         valueTitleTextView.text = valueTitle
         valueSubtitleTextView.text = valueSubtitle
@@ -72,7 +72,7 @@ class TransactionInfoItemView : ConstraintLayout {
             iconImageView.visibility = View.GONE
         }
 
-        progressBarView.progress = progressValue ?: 0
+        progressBarView.progress = progressValue?.toInt() ?: 0
         progressBarView.visibility = if (progressValue == null) View.GONE else View.VISIBLE
         valueSubtitleTextView.visibility = if (valueSubtitle == null) View.GONE else View.VISIBLE
 

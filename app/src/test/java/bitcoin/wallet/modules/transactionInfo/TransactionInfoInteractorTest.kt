@@ -4,6 +4,7 @@ import bitcoin.wallet.core.IClipboardManager
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
+import bitcoin.wallet.entities.TransactionStatus
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.modules.RxBaseTest
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem
@@ -29,7 +30,7 @@ class TransactionInfoInteractorTest {
             true,
             0,
             Date(),
-            0,
+            TransactionStatus.Completed,
             CurrencyValue(Currency(), 0.0),
             0.0
     )

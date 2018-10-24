@@ -77,7 +77,7 @@ class TransactionsInteractor(
                         incoming = record.amount > 0,
                         blockHeight = record.blockHeight,
                         date = record.timestamp?.let { Date(it) },
-                        confirmations = TransactionRecordViewItem.getConfirmationsCount(record.blockHeight, adapter.latestBlockHeight)
+                        status = record.status
                 )
                 items.add(item)
                 record.timestamp?.let { timestamp ->
@@ -95,7 +95,7 @@ class TransactionsInteractor(
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
-                .map {resultRates ->
+                .map { resultRates ->
                     (resultRates as List<Pair<String, Double>>).toMap()
                 }
                 .subscribe { ratesMap ->

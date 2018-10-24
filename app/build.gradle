@@ -89,6 +89,9 @@ dependencies {
     // BitcoinKit
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:master-SNAPSHOT'
 
+    // EthereumKit
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:master-SNAPSHOT'
+
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     
@@ -100,3 +103,8 @@ dependencies {
     testImplementation 'org.powermock:powermock-api-mockito2:2.0.0-beta.5'
     testImplementation 'org.powermock:powermock-module-junit4:2.0.0-beta.5'
 }
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+

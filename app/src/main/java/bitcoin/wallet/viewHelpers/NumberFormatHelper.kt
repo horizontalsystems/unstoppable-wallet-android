@@ -15,7 +15,7 @@ object NumberFormatHelper {
     val cryptoAmountFormat: NumberFormat
         get() {
             val numberFormat = NumberFormat.getInstance()
-            numberFormat.maximumFractionDigits = 8
+            numberFormat.maximumFractionDigits = 12
             numberFormat.minimumFractionDigits = 2
             return numberFormat
         }

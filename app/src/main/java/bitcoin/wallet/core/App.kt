@@ -6,6 +6,7 @@ import android.preference.PreferenceManager
 import bitcoin.wallet.core.managers.BackgroundManager
 import com.squareup.leakcanary.LeakCanary
 import io.horizontalsystems.bitcoinkit.WalletKit
+import io.horizontalsystems.ethereumkit.EthereumKit
 
 class App : Application() {
 
@@ -35,6 +36,9 @@ class App : Application() {
 
         // Start WalletKit
         WalletKit.init(this)
+
+        // Initialize EthereumKit
+        EthereumKit.init(this)
 
         BackgroundManager.init(this)
 

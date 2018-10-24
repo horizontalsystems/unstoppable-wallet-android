@@ -72,11 +72,10 @@ class SendInteractorTest {
         val coinCode = "BTC"
         val address = "address"
         val amountBTC = 1.0
-        val amountSatoshi = 100_000_000
 
         interactor.send(coinCode, address, amountBTC)
 
-        verify(bitcoinAdapter).send(address, amountSatoshi)
+        verify(bitcoinAdapter).send(address, amountBTC)
     }
 
 //    @Test
