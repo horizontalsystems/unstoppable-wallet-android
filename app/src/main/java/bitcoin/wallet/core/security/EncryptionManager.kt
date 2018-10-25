@@ -10,8 +10,8 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import bitcoin.wallet.LauncherActivity
 import bitcoin.wallet.R
+import bitcoin.wallet.core.App
 import bitcoin.wallet.core.IEncryptionManager
-import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.lib.AlertDialogFragment
 import javax.crypto.Cipher
 
@@ -71,7 +71,7 @@ class EncryptionManager : IEncryptionManager {
                     object : AlertDialogFragment.Listener {
                         override fun onButtonClick() {
                             KeyStoreWrapper().removeAndroidKeyStoreKey(MASTER_KEY)
-                            Factory.preferencesManager.clearAll()
+                            App.localStorage.clearAll()
 
                             val intent = Intent(activity, LauncherActivity::class.java)
                             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -95,7 +95,6 @@ class EncryptionManager : IEncryptionManager {
             val keyguardManager = ctx.getSystemService(Activity.KEYGUARD_SERVICE) as KeyguardManager
             return keyguardManager.isKeyguardSecure
         }
-
 
     }
 

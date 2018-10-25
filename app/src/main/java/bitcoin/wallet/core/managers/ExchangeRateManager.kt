@@ -1,6 +1,7 @@
-package bitcoin.wallet.core
+package bitcoin.wallet.core.managers
 
-import bitcoin.wallet.core.managers.Factory
+import bitcoin.wallet.core.App
+import bitcoin.wallet.core.IExchangeRateManager
 import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
 import bitcoin.wallet.entities.coins.Coin
@@ -8,7 +9,6 @@ import bitcoin.wallet.viewHelpers.DateHelper
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import java.text.DecimalFormat
@@ -18,16 +18,20 @@ import java.util.concurrent.TimeUnit
 class ExchangeRateManager: IExchangeRateManager {
 
     private var disposables: CompositeDisposable = CompositeDisposable()
-    private var baseCurrencyDisposable: Disposable? = null
 
     init {
-        baseCurrencyDisposable = Factory.currencyManager.getBaseCurrencyFlowable().subscribe { baseCurrency ->
-            disposables.clear()
-            disposables.add(Observable.interval(5, 180, TimeUnit.SECONDS, Schedulers.io())
-                    .subscribe {
-                        refreshRates(baseCurrency)
-                    })
+        fetchRatesWithInterval(App.localStorage.baseCurrency)
+        val baseCurrencyDisposable = App.currencyManager.getBaseCurrencyFlowable().subscribe { baseCurrency ->
+            fetchRatesWithInterval(baseCurrency)
         }
+    }
+
+    private fun fetchRatesWithInterval(baseCurrency: Currency) {
+        disposables.clear()
+        disposables.add(Observable.interval(5, 180, TimeUnit.SECONDS, Schedulers.io())
+                .subscribe {
+                    refreshRates(baseCurrency)
+                })
     }
 
     private var latestExchangeRateSubject: PublishSubject<MutableMap<Coin, CurrencyValue>> = PublishSubject.create()
@@ -40,8 +44,8 @@ class ExchangeRateManager: IExchangeRateManager {
 
     private fun refreshRates(baseCurrency: Currency) {
         val flowableList = mutableListOf<Flowable<Pair<String, Double>>>()
-        AdapterManager.adapters.forEach {adapter ->
-            flowableList.add(Factory.networkManager.getLatestRate(adapter.coin.code, baseCurrency.code)
+        App.adapterManager.adapters.forEach { adapter ->
+            flowableList.add(App.networkManager.getLatestRate(adapter.coin.code, baseCurrency.code)
                     .map { Pair(adapter.coin.code, it) })
         }
 
@@ -53,7 +57,7 @@ class ExchangeRateManager: IExchangeRateManager {
                     (resultRates as List<Pair<String, Double>>).toMap()
                 }
                 .subscribe { ratesMap ->
-                    AdapterManager.adapters.forEach {adapter ->
+                    App.adapterManager.adapters.forEach { adapter ->
                         val rate = ratesMap[adapter.coin.code] ?: 0.0
                         exchangeRates[adapter.coin] = CurrencyValue(baseCurrency, rate)
                     }
@@ -76,7 +80,7 @@ class ExchangeRateManager: IExchangeRateManager {
         val formattedHour = f.format(hour).toString()
         val formattedMinute = f.format(minute).toString()
 
-        return Factory.networkManager.getRate(coinCode, currency, year, formattedMonth, formattedDay, formattedHour, formattedMinute)
+        return App.networkManager.getRate(coinCode, currency, year, formattedMonth, formattedDay, formattedHour, formattedMinute)
     }
 
 }

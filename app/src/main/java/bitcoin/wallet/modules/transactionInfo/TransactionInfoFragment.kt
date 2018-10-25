@@ -48,7 +48,7 @@ class TransactionInfoFragment : DialogFragment() {
 
         rootView.findViewById<View>(R.id.txtClose)?.setOnClickListener { viewModel.delegate.onCloseClick() }
         rootView.findViewById<View>(R.id.transactionIdLayout)?.setOnClickListener { viewModel.delegate.onCopyId() }
-        rootView.findViewById<View>(R.id.itemFromTo)?.setOnClickListener { viewModel.delegate.onCopyFromAddress() }
+        rootView.findViewById<View>(R.id.itemFromTo)?.setOnClickListener { viewModel.delegate.onCopyAddress() }
         rootView.findViewById<View>(R.id.itemStatus)?.setOnClickListener { viewModel.delegate.onStatusClick() }
 
         viewModel.transactionLiveData.observe(this, Observer { txRecord ->

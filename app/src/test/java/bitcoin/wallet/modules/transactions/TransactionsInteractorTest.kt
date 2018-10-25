@@ -1,8 +1,9 @@
 package bitcoin.wallet.modules.transactions
 
-import bitcoin.wallet.core.AdapterManager
 import bitcoin.wallet.core.BitcoinAdapter
+import bitcoin.wallet.core.IAdapterManager
 import bitcoin.wallet.core.IExchangeRateManager
+import bitcoin.wallet.core.ILocalStorage
 import bitcoin.wallet.entities.*
 import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
@@ -21,7 +22,8 @@ class TransactionsInteractorTest {
 
     private val delegate = mock(TransactionsModule.IInteractorDelegate::class.java)
     private val exchangeRateManager = mock(IExchangeRateManager::class.java)
-    private val adapterManager = mock(AdapterManager::class.java)
+    private val adapterManager = mock(IAdapterManager::class.java)
+    private val localStorage = mock(ILocalStorage::class.java)
     private val bitcoinAdapter = mock(BitcoinAdapter::class.java)
 
     private var coin = Bitcoin()
@@ -36,19 +38,23 @@ class TransactionsInteractorTest {
         type = CurrencyType.FIAT
         codeNumeric = 840
     }
+
     private val baseCurrencyFlowable = Flowable.just(baseCurrency)
 
-    private val interactor = TransactionsInteractor(adapterManager, exchangeRateManager, baseCurrencyFlowable)
+    private lateinit var interactor: TransactionsInteractor
 
 
     @Before
     fun before() {
         RxBaseTest.setup()
 
-        interactor.delegate = delegate
-
         val rateResponse = Flowable.just(6300.0)
         whenever(exchangeRateManager.getRate(any(), any(), any())).thenReturn(rateResponse)
+        whenever(localStorage.baseCurrency).thenReturn(baseCurrency)
+
+        interactor = TransactionsInteractor(localStorage, adapterManager, exchangeRateManager, baseCurrencyFlowable)
+
+        interactor.delegate = delegate
     }
 
     @Test
@@ -168,7 +174,7 @@ class TransactionsInteractorTest {
         whenever(bitcoinAdapter.id).thenReturn(adapterId)
         whenever(bitcoinAdapter.coin).thenReturn(coin)
         whenever(bitcoinAdapter.balance).thenReturn(0.0)
-        whenever(bitcoinAdapter.latestBlockHeight).thenReturn(100)
+        whenever(bitcoinAdapter.lastBlockHeight).thenReturn(100)
         whenever(bitcoinAdapter.transactionRecords).thenReturn(listOf(transactionRecordBTCsuccess, transactionRecordBTCpending))
         whenever(bitcoinAdapter.transactionRecordsSubject).thenReturn(subject)
 

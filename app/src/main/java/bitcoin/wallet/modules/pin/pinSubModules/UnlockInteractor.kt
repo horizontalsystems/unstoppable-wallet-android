@@ -2,14 +2,14 @@ package bitcoin.wallet.modules.pin.pinSubModules
 
 import bitcoin.wallet.core.IKeyStoreSafeExecute
 import bitcoin.wallet.core.ILocalStorage
-import bitcoin.wallet.core.ISettingsManager
+import bitcoin.wallet.core.ISecuredStorage
 import bitcoin.wallet.modules.pin.PinInteractor
 import bitcoin.wallet.viewHelpers.DateHelper
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import java.util.concurrent.TimeUnit
 
-class UnlockInteractor(private val storage: ILocalStorage, private val settings: ISettingsManager, private val keystoreSafeExecute: IKeyStoreSafeExecute) : PinInteractor() {
+class UnlockInteractor(private val storage: ILocalStorage, private val secureStorage: ISecuredStorage, private val keystoreSafeExecute: IKeyStoreSafeExecute) : PinInteractor() {
 
     private val defaultAttemptsNumber = 5
     private val blockingTimeInMinutes = 5L
@@ -17,9 +17,9 @@ class UnlockInteractor(private val storage: ILocalStorage, private val settings:
     override fun submit(pin: String) {
         keystoreSafeExecute.safeExecute(
                 action = Runnable {
-                    if (storage.getPin() == pin) {
+                    if (secureStorage.savedPin == pin) {
                         delegate?.onCorrectPinSubmitted()
-                        settings.setUnlockAttemptsLeft(defaultAttemptsNumber)
+                        storage.unlockAttemptsLeft = defaultAttemptsNumber
                     } else {
                         onWrongPinSubmit()
                     }
@@ -28,14 +28,14 @@ class UnlockInteractor(private val storage: ILocalStorage, private val settings:
     }
 
     private fun onWrongPinSubmit() {
-        val attemptsLeft = settings.getUnlockAttemptsLeft()
+        val attemptsLeft = storage.unlockAttemptsLeft
         if (attemptsLeft > 0) {
-            settings.setUnlockAttemptsLeft(attemptsLeft - 1)
+            storage.unlockAttemptsLeft = attemptsLeft - 1
             delegate?.showAttemptsLeftWarning(attemptsLeft)
         } else {
             val blockTillDate = DateHelper.minutesAfterNow(blockingTimeInMinutes.toInt())
-            settings.setBlockTillDate(blockTillDate)
-            settings.setUnlockAttemptsLeft(1)
+            storage.blockTillDate = blockTillDate
+            storage.unlockAttemptsLeft = 1
             delegate?.blockScreen()
             unblockScreenAfter(blockingTimeInMinutes * 60)
         }
@@ -44,11 +44,11 @@ class UnlockInteractor(private val storage: ILocalStorage, private val settings:
     override fun viewDidLoad() {
         super.viewDidLoad()
 
-        if (settings.isFingerprintEnabled()) {
+        if (storage.isBiometricOn) {
             delegate?.onFingerprintEnabled()
         }
 
-        settings.getBlockTillDate()?.let { dateInMillis ->
+        storage.blockTillDate?.let { dateInMillis ->
             val secondsAgo = DateHelper.getSecondsAgo(dateInMillis)
             if (secondsAgo < 0) {
                 delegate?.blockScreen()

@@ -1,17 +1,22 @@
 package bitcoin.wallet
 
+import android.annotation.TargetApi
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
+import android.content.res.Resources
+import android.os.Build
 import android.os.Bundle
 import android.security.keystore.UserNotAuthenticatedException
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.WindowManager
 import bitcoin.wallet.core.App
-import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.core.security.EncryptionManager
 import bitcoin.wallet.modules.pin.PinModule
 import bitcoin.wallet.viewHelpers.DateHelper
+import java.util.*
 
 abstract class BaseActivity : AppCompatActivity() {
 
@@ -24,7 +29,7 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val lightMode = Factory.preferencesManager.isLightModeEnabled()
+        val lightMode = App.localStorage.isLightModeOn
         setTheme(if (lightMode) R.style.LightModeAppTheme else R.style.DarkModeAppTheme)
         if (savedInstanceState != null) {
             setStatusBarIconColor(lightMode)
@@ -45,7 +50,7 @@ abstract class BaseActivity : AppCompatActivity() {
             if (promptPinByTimeout) {
                 safeExecuteWithKeystore(
                         action = Runnable {
-                            if (Factory.preferencesManager.getPin() != null) {
+                            if (App.secureStorage.savedPin != null) {
                                 PinModule.startForUnlock(this)
                             }
                         },
@@ -76,6 +81,12 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
+    override fun attachBaseContext(newBase: Context?) {
+        newBase?.let {
+            super.attachBaseContext(updateBaseContextLocale(it))
+        } ?: super.attachBaseContext(newBase)
+    }
+
     fun safeExecuteWithKeystore(action: Runnable, onSuccess: Runnable? = null, onFailure: Runnable? = null) {
         try {
             action.run()
@@ -98,6 +109,32 @@ abstract class BaseActivity : AppCompatActivity() {
             flags xor View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR // remove flag
         }
         window.decorView.systemUiVisibility = flags
+    }
+
+    private fun updateBaseContextLocale(context: Context): Context {
+        val language = App.languageManager.currentLanguage
+        val locale = language
+        Locale.setDefault(locale)
+
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            updateResourcesLocale(context, locale)
+        } else updateResourcesLocaleLegacy(context, locale)
+    }
+
+    @TargetApi(Build.VERSION_CODES.N)
+    private fun updateResourcesLocale(context: Context , locale: Locale): Context {
+        val configuration: Configuration = context.resources.configuration
+        configuration.setLocale(locale)
+        return context.createConfigurationContext(configuration)
+    }
+
+    @SuppressWarnings("deprecation")
+    private fun updateResourcesLocaleLegacy(context: Context , locale: Locale): Context {
+        val resources: Resources = context.resources
+        val configuration: Configuration = resources.configuration
+        configuration.locale = locale
+        resources.updateConfiguration(configuration, resources.displayMetrics)
+        return context
     }
 
     companion object {

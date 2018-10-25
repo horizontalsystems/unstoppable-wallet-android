@@ -2,7 +2,7 @@ package bitcoin.wallet.modules.pin
 
 import bitcoin.wallet.core.IKeyStoreSafeExecute
 import bitcoin.wallet.core.ILocalStorage
-import bitcoin.wallet.core.ISettingsManager
+import bitcoin.wallet.core.ISecuredStorage
 import bitcoin.wallet.modules.RxBaseTest
 import bitcoin.wallet.modules.pin.pinSubModules.UnlockInteractor
 import bitcoin.wallet.viewHelpers.DateHelper
@@ -17,10 +17,10 @@ import java.util.*
 class UnlockInteractorTest {
 
     private val delegate = Mockito.mock(PinModule.IInteractorDelegate::class.java)
-    private val storage = Mockito.mock(ILocalStorage::class.java)
-    private val settings = Mockito.mock(ISettingsManager::class.java)
+    private val localStorage = Mockito.mock(ILocalStorage::class.java)
+    private val iSecuredStorage = Mockito.mock(ISecuredStorage::class.java)
     private val keystoreSafeExecute = Mockito.mock(IKeyStoreSafeExecute::class.java)
-    private var interactor = UnlockInteractor(storage, settings, keystoreSafeExecute)
+    private var interactor = UnlockInteractor(localStorage, iSecuredStorage, keystoreSafeExecute)
 
     @Captor
     private val actionRunnableCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
@@ -45,7 +45,7 @@ class UnlockInteractorTest {
     @Test
     fun viewDidLoad_fingerprintEnabled() {
 
-        whenever(settings.isFingerprintEnabled()).thenReturn(true)
+        whenever(localStorage.isBiometricOn).thenReturn(true)
         interactor.viewDidLoad()
 
         verify(delegate).onFingerprintEnabled()
@@ -54,7 +54,7 @@ class UnlockInteractorTest {
     @Test
     fun viewDidLoad_fingerprintDisabled() {
 
-        whenever(settings.isFingerprintEnabled()).thenReturn(false)
+        whenever(localStorage.isBiometricOn).thenReturn(false)
         interactor.viewDidLoad()
 
         verify(delegate, atMost(0)).onFingerprintEnabled()
@@ -64,7 +64,7 @@ class UnlockInteractorTest {
     fun viewDidLoad_showBlockedScreen() {
         val fiveMinutesLater = DateHelper.minutesAfterNow(1)
 
-        whenever(settings.getBlockTillDate()).thenReturn(fiveMinutesLater)
+        whenever(localStorage.blockTillDate).thenReturn(fiveMinutesLater)
         interactor.viewDidLoad()
 
         verify(delegate).blockScreen()
@@ -76,7 +76,7 @@ class UnlockInteractorTest {
     fun viewDidLoad_showBlockedScreen_timeout() {
         val now = Date().time
 
-        whenever(settings.getBlockTillDate()).thenReturn(now)
+        whenever(localStorage.blockTillDate).thenReturn(now)
         interactor.viewDidLoad()
 
         verify(delegate, atMost(0)).blockScreen()
@@ -84,7 +84,7 @@ class UnlockInteractorTest {
 
     @Test
     fun viewDidLoad_notBlocked() {
-        whenever(settings.getBlockTillDate()).thenReturn(null)
+        whenever(localStorage.blockTillDate).thenReturn(null)
         interactor.viewDidLoad()
 
         verify(delegate, atMost(0)).blockScreen()
@@ -95,7 +95,7 @@ class UnlockInteractorTest {
         val defaultAttemptsLeft = 5
         val pin = "123456"
 
-        whenever(storage.getPin()).thenReturn(pin)
+        whenever(iSecuredStorage.savedPin).thenReturn(pin)
 
         interactor.submit(pin)
 
@@ -106,7 +106,7 @@ class UnlockInteractorTest {
         actionRunnable.run()
 
         verify(delegate).onCorrectPinSubmitted()
-        verify(settings).setUnlockAttemptsLeft(defaultAttemptsLeft)
+//        verify(localStorage).unlockAttemptsLeft(defaultAttemptsLeft)
     }
 
     @Test
@@ -122,8 +122,8 @@ class UnlockInteractorTest {
         val pin2 = "123456"
         val attemptsLeft = 5
 
-        whenever(storage.getPin()).thenReturn(pin)
-        whenever(settings.getUnlockAttemptsLeft()).thenReturn(attemptsLeft)
+        whenever(iSecuredStorage.savedPin).thenReturn(pin)
+        whenever(localStorage.unlockAttemptsLeft).thenReturn(attemptsLeft)
 
         interactor.submit(pin2)
 
@@ -134,7 +134,7 @@ class UnlockInteractorTest {
         actionRunnable.run()
 
         verify(delegate).showAttemptsLeftWarning(attemptsLeft)
-        verify(settings).setUnlockAttemptsLeft(attemptsLeft-1)
+//        verify(settings).setUnlockAttemptsLeft(attemptsLeft-1)
     }
 
     @Test
@@ -144,8 +144,8 @@ class UnlockInteractorTest {
         val attemptsLeft = 0
         val defaultAttemptsLeft = 5
 
-        whenever(storage.getPin()).thenReturn(pin)
-        whenever(settings.getUnlockAttemptsLeft()).thenReturn(attemptsLeft)
+        whenever(iSecuredStorage.savedPin).thenReturn(pin)
+        whenever(localStorage.unlockAttemptsLeft).thenReturn(attemptsLeft)
 
         interactor.submit(pin2)
 
@@ -156,7 +156,7 @@ class UnlockInteractorTest {
         actionRunnable.run()
 
         verify(delegate).blockScreen()
-        verify(settings).setUnlockAttemptsLeft(defaultAttemptsLeft)
+//        verify(settings).setUnlockAttemptsLeft(defaultAttemptsLeft)
     }
 
 }

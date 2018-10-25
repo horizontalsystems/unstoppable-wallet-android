@@ -26,7 +26,7 @@ class SendInteractor(private var clipboardManager: IClipboardManager, private va
         }
     }
 
-    override fun send(coinCode: String, address: String, amount: Double) {
+    override fun send(address: String, amount: Double) {
         try {
             adapter.send(address, amount)
             delegate?.didSend()

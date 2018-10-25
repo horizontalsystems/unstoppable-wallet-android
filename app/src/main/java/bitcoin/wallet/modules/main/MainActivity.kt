@@ -1,13 +1,11 @@
 package bitcoin.wallet.modules.main
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import bitcoin.wallet.BaseActivity
 import bitcoin.wallet.R
-import bitcoin.wallet.core.AdapterManager
-import bitcoin.wallet.core.managers.Factory
+import bitcoin.wallet.core.App
 import bitcoin.wallet.viewHelpers.LayoutHelper
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
@@ -16,24 +14,20 @@ import kotlinx.android.synthetic.main.activity_dashboard.*
 class MainActivity : BaseActivity() {
 
     private lateinit var adapter: MainTabsAdapter
-    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Factory.exchangeRateManager
 
-        if(AdapterManager.adapters.isEmpty()) {
+        if (App.adapterManager.adapters.isEmpty()) {
             safeExecuteWithKeystore(
                     action = Runnable {
-                        Factory.wordsManager.savedWords()?.let {
-                            AdapterManager.initAdapters(it)
-                        }
+                        App.wordsManager.safeLoad()
+                    },
+                    onSuccess = Runnable {
+                        App.adapterManager.start()
                     }
             )
         }
-
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        viewModel.init()
 
         setContentView(R.layout.activity_dashboard)
 
@@ -77,19 +71,21 @@ class MainActivity : BaseActivity() {
             }
         })
 
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.wordListBackedUp.value?.let {
-            updateSettingsBadge(it)
+        val activeTab = intent?.extras?.getInt(ACTIVE_TAB_KEY)
+        activeTab?.let {
+            bottomNavigation.currentItem = it
         }
     }
 
-    private fun updateSettingsBadge(backedUp: Boolean) {
+    fun updateSettingsTabCounter(count: Int) {
+        val countText = if (count < 1) "" else count.toString()
         val settingsTabPosition = 2
-        val notification = if (backedUp) "" else "1"
-        bottomNavigation.setNotification(notification, settingsTabPosition)
+        bottomNavigation.setNotification(countText, settingsTabPosition)
+    }
+
+    companion object {
+        const val ACTIVE_TAB_KEY = "active_tab"
+        const val SETTINGS_TAB_POSITION = 2
     }
 
 }

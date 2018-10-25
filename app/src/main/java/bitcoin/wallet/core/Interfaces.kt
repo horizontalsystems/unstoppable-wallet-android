@@ -1,21 +1,35 @@
 package bitcoin.wallet.core
 
 import android.hardware.fingerprint.FingerprintManager
+import bitcoin.wallet.entities.BiometryType
 import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
+import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.entities.coins.Coin
 import io.reactivex.Flowable
+import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
+import java.util.*
 
 interface ILocalStorage {
+    var currentLanguage: String?
+    var isBackedUp: Boolean
+    var isBiometricOn: Boolean
+    var isLightModeOn: Boolean
+    var iUnderstand: Boolean
+    var lastExitDate: Long
+    var unlockAttemptsLeft: Int
+    var baseCurrency: Currency
+    var blockTillDate: Long?
+    fun clearAll()
+}
+
+interface ISecuredStorage {
     val savedWords: List<String>?
     fun saveWords(words: List<String>)
     fun wordsAreEmpty(): Boolean
-    fun clearAll()
+    val savedPin: String?
     fun savePin(pin: String)
-    fun getPin(): String?
-    fun wordListBackedUp(backedUp: Boolean)
-    fun isWordListBackedUp(): Boolean
     fun pinIsEmpty(): Boolean
 }
 
@@ -41,23 +55,6 @@ interface IClipboardManager {
     fun getCopiedText(): String
 }
 
-interface ISettingsManager {
-    fun isFingerprintEnabled(): Boolean
-    fun setFingerprintEnabled(enabled: Boolean)
-
-    fun isLightModeEnabled(): Boolean
-    fun setLightModeEnabled(enabled: Boolean)
-
-    fun setBaseCurrency(currency: Currency)
-    fun getBaseCurrency(): Currency
-
-    fun setUnlockAttemptsLeft(attemptsNumber: Int)
-    fun getUnlockAttemptsLeft(): Int
-
-    fun setBlockTillDate(date: Long?)
-    fun getBlockTillDate(): Long?
-}
-
 interface ICurrencyManager {
     fun getBaseCurrencyFlowable(): Flowable<Currency>
 }
@@ -70,4 +67,64 @@ interface IExchangeRateManager {
 
 interface IKeyStoreSafeExecute {
     fun safeExecute(action: Runnable, onSuccess: Runnable? = null, onFailure: Runnable? = null)
+}
+
+interface IAdapterManager {
+    var adapters: MutableList<IAdapter>
+    var subject: PublishSubject<Any>
+    fun start()
+    fun refresh()
+    fun clear()
+}
+
+interface IWordsManager {
+    fun safeLoad()
+    var words: List<String>?
+    var isBackedUp: Boolean
+    var isLoggedIn: Boolean
+    var backedUpSubject: PublishSubject<Boolean>
+    fun createWords()
+    fun validate(words: List<String>)
+    fun restore(words: List<String>)
+    fun removeWords()
+}
+
+interface ILanguageManager {
+    var currentLanguage: Locale
+    var preferredLanguage: Locale?
+    var availableLanguages: List<Locale>
+}
+
+interface IAdapter {
+    val id: String
+    val coin: Coin
+    val balance: Double
+
+    val balanceSubject: PublishSubject<Double>
+    val progressSubject: BehaviorSubject<Double>
+
+    val latestBlockHeight: Int
+    val latestBlockHeightSubject: PublishSubject<Any>
+
+    val transactionRecords: List<TransactionRecord>
+    val transactionRecordsSubject: PublishSubject<Any>
+
+    val receiveAddress: String
+
+    fun debugInfo()
+
+    fun start()
+    fun refresh()
+    fun clear()
+
+    fun send(address: String, value: Double, completion: ((Throwable?) -> (Unit))? = null)
+    fun fee(value: Int, senderPay: Boolean): Double
+    fun validate(address: String): Boolean
+}
+
+interface ISystemInfoManager {
+    var appVersion: String
+    var biometryType: BiometryType
+    fun phoneHasFingerprintSensor(): Boolean
+    fun touchSensorCanBeUsed(): Boolean
 }

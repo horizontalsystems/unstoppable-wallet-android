@@ -1,10 +1,10 @@
 package bitcoin.wallet.modules.receive
 
-import bitcoin.wallet.core.AdapterManager
+import bitcoin.wallet.core.IAdapterManager
 import bitcoin.wallet.core.IClipboardManager
 import bitcoin.wallet.modules.receive.viewitems.AddressItem
 
-class ReceiveInteractor(private var adapterManager: AdapterManager, private var adapterId: String?, private var clipboardManager: IClipboardManager) : ReceiveModule.IInteractor {
+class ReceiveInteractor(private var adapterManager: IAdapterManager, private var adapterId: String?, private var clipboardManager: IClipboardManager) : ReceiveModule.IInteractor {
 
     var delegate: ReceiveModule.IInteractorDelegate? = null
 

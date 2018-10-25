@@ -11,8 +11,9 @@ class TransactionInfoInteractor(private val transactionRecordViewItem: Transacti
         delegate?.didGetTransactionInfo(transactionRecordViewItem)
     }
 
-    override fun onCopyFromAddress() {
-        transactionRecordViewItem.from?.let {
+    override fun onCopyAddress() {
+        val address = if (transactionRecordViewItem.incoming) transactionRecordViewItem.from else transactionRecordViewItem.to
+        address?.let {
             clipboardManager.copyText(it)
             delegate?.didCopyToClipboard()
         }

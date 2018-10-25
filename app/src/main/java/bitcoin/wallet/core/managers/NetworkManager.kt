@@ -1,5 +1,6 @@
-package bitcoin.wallet.core
+package bitcoin.wallet.core.managers
 
+import bitcoin.wallet.core.INetworkManager
 import bitcoin.wallet.entities.Currency
 import com.google.gson.GsonBuilder
 import io.reactivex.Flowable

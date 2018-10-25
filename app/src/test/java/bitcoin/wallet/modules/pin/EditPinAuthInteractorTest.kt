@@ -1,7 +1,7 @@
 package bitcoin.wallet.modules.pin
 
 import bitcoin.wallet.core.IKeyStoreSafeExecute
-import bitcoin.wallet.core.ILocalStorage
+import bitcoin.wallet.core.ISecuredStorage
 import bitcoin.wallet.modules.pin.pinSubModules.EditPinAuthInteractor
 import com.nhaarman.mockito_kotlin.*
 import org.junit.After
@@ -14,9 +14,9 @@ import org.mockito.Mockito.mock
 class EditPinAuthInteractorTest {
 
     private val delegate = mock(PinModule.IInteractorDelegate::class.java)
-    private val storage = mock(ILocalStorage::class.java)
+    private val secureStorage = mock(ISecuredStorage::class.java)
     private val keystoreSafeExecute = Mockito.mock(IKeyStoreSafeExecute::class.java)
-    private var interactor = EditPinAuthInteractor(storage, keystoreSafeExecute)
+    private var interactor = EditPinAuthInteractor(secureStorage, keystoreSafeExecute)
 
     @Captor
     private val actionRunnableCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
@@ -41,7 +41,7 @@ class EditPinAuthInteractorTest {
     fun submit_success() {
         val pin = "123456"
 
-        whenever(storage.getPin()).thenReturn(pin)
+        whenever(secureStorage.savedPin).thenReturn(pin)
 
         interactor.submit(pin)
 
@@ -59,7 +59,7 @@ class EditPinAuthInteractorTest {
         val pin = "111111"
         val pin2 = "123456"
 
-        whenever(storage.getPin()).thenReturn(pin)
+        whenever(secureStorage.savedPin).thenReturn(pin)
 
         interactor.submit(pin2)
 

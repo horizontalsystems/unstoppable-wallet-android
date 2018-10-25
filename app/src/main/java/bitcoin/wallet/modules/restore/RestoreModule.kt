@@ -2,9 +2,8 @@ package bitcoin.wallet.modules.restore
 
 import android.content.Context
 import android.content.Intent
-import bitcoin.wallet.core.AdapterManager
+import bitcoin.wallet.core.App
 import bitcoin.wallet.core.IKeyStoreSafeExecute
-import bitcoin.wallet.core.managers.Factory
 
 object RestoreModule {
 
@@ -36,7 +35,7 @@ object RestoreModule {
     }
 
     fun init(view: RestoreViewModel, router: IRouter, keystoreSafeExecute: IKeyStoreSafeExecute) {
-        val interactor = RestoreInteractor(Factory.wordsManager, AdapterManager, keystoreSafeExecute)
+        val interactor = RestoreInteractor(App.wordsManager, App.adapterManager, keystoreSafeExecute)
         val presenter = RestorePresenter(interactor, router)
 
         view.delegate = presenter

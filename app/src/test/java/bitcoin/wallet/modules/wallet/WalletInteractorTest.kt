@@ -1,9 +1,9 @@
 package bitcoin.wallet.modules.wallet
 
-import bitcoin.wallet.core.AdapterManager
 import bitcoin.wallet.core.BitcoinAdapter
 import bitcoin.wallet.core.IExchangeRateManager
-import bitcoin.wallet.core.ILocalStorage
+import bitcoin.wallet.core.ISecuredStorage
+import bitcoin.wallet.core.managers.AdapterManager
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyType
@@ -25,14 +25,14 @@ import org.powermock.core.classloader.annotations.SuppressStaticInitializationFo
 import org.powermock.modules.junit4.PowerMockRunner
 
 @RunWith(PowerMockRunner::class)
-@SuppressStaticInitializationFor("bitcoin.wallet.core.ExchangeRateManager")
+@SuppressStaticInitializationFor("bitcoin.wallet.core.managers.ExchangeRateManager")
 class WalletInteractorTest {
 
     private val delegate = mock(WalletModule.IInteractorDelegate::class.java)
     private val adapterManager = mock(AdapterManager::class.java)
     private val exchangeRateManager = mock(IExchangeRateManager::class.java)
     private val bitcoinAdapter = mock(BitcoinAdapter::class.java)
-    private val storage = mock(ILocalStorage::class.java)
+    private val secureStorage = mock(ISecuredStorage::class.java)
     private lateinit var interactor: WalletInteractor
     private var coin = Bitcoin()
     private var words = listOf("used", "ugly", "meat", "glad", "balance", "divorce", "inner", "artwork", "hire", "invest", "already", "piano")
@@ -52,7 +52,7 @@ class WalletInteractorTest {
     fun before() {
         RxBaseTest.setup()
 
-        interactor = WalletInteractor(adapterManager, exchangeRateManager, storage)
+        interactor = WalletInteractor(adapterManager, exchangeRateManager, secureStorage)
         interactor.delegate = delegate
 
         adapterManager.adapters = mutableListOf(bitcoinAdapter)
@@ -111,7 +111,7 @@ class WalletInteractorTest {
     @Test
     fun checkIfPinSet_set() {
 
-        whenever(storage.getPin()).thenReturn("123456")
+        whenever(secureStorage.savedPin).thenReturn("123456")
 
         interactor.checkIfPinSet()
 
@@ -121,7 +121,7 @@ class WalletInteractorTest {
     @Test
     fun checkIfPinSet_notSet() {
 
-        whenever(storage.getPin()).thenReturn(null)
+        whenever(secureStorage.pinIsEmpty()).thenReturn(true)
 
         interactor.checkIfPinSet()
 

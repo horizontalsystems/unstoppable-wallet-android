@@ -51,8 +51,8 @@ class TransactionInfoInteractorTest {
     }
 
     @Test
-    fun onCopyFromAddress() {
-        interactor.onCopyFromAddress()
+    fun onCopyAddress() {
+        interactor.onCopyAddress()
         verify(delegate).didCopyToClipboard()
     }
 

@@ -39,7 +39,7 @@ class SendPresenterTest {
         presenter.onViewDidLoad()
 
         verify(view).setAmount(null)
-        verify(view).setAmountHint("${cryptoAmountFormat.format(0)} ${baseCurrency.code}")
+        verify(view).setAmountHint("${baseCurrency.getSymbolChar()} ${cryptoAmountFormat.format(0)}")
     }
 
     @Test
@@ -79,7 +79,7 @@ class SendPresenterTest {
         val exchangeRate = 7000.0
         val amountEntered = "0.5"
 
-        val secondaryAmountHint = "${cryptoAmountFormat.format(3500.0)} USD"
+        val secondaryAmountHint = "$ ${cryptoAmountFormat.format(3500.0)}"
 
         presenter.onViewDidLoad()
         presenter.didFetchExchangeRate(exchangeRate)
@@ -95,7 +95,7 @@ class SendPresenterTest {
         val exchangeRate = 7000.0
         val amountEntered = "1.0"
 
-        val secondaryAmountHint = "${fiatAmountFormat.format(7000.0)} USD"
+        val secondaryAmountHint = "$ ${fiatAmountFormat.format(7000.0)}"
 
         presenter.onViewDidLoad()
         presenter.didFetchExchangeRate(exchangeRate)
@@ -121,7 +121,7 @@ class SendPresenterTest {
 
         presenter.onSendClick(address)
 
-        verify(interactor).send(cryptoCurrencyCode, address, cryptoAmount)
+        verify(interactor).send(address, cryptoAmount)
     }
 
 //    @Test

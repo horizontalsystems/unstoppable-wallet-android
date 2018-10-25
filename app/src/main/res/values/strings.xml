@@ -116,6 +116,8 @@
 
     <string name="settings_currency_switcher_title">Base Currency</string>
 
+    <string name="settings_language_title">Language</string>
+
     <string name="alert_keys_invalidated_title">Android Keystore Error</string>
     <string name="alert_keys_invalidated_description">The encrypted data holding your wallet was recently invalidated because your Android lock screen was changed</string>
     <string name="alert_no_device_lock_title">Warning</string>

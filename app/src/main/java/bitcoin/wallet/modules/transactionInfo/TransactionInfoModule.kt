@@ -14,14 +14,14 @@ object TransactionInfoModule {
     interface IViewDelegate {
         fun viewDidLoad()
         fun onStatusClick()
-        fun onCopyFromAddress()
+        fun onCopyAddress()
         fun onCopyId()
         fun onCloseClick()
     }
 
     interface IInteractor {
         fun getTransactionInfo()
-        fun onCopyFromAddress()
+        fun onCopyAddress()
         fun onCopyId()
         fun showFullInfo()
     }
