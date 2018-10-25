@@ -101,6 +101,7 @@
   <string name="settings_security_import_wallet_confirmation_1">Cette action supprimera le porte-monnaie actuellement installé sur cet appareil.</string>
   <string name="settings_security_import_wallet_confirmation_2">Assurez-vous de disposer de la clé secrète, sinon vous ne pourrez plus accéder aux fonds.</string>
   <string name="settings_currency_switcher_title">Devise de Base</string>
+  <string name="settings_language_title">Language</string>
   <string name="alert_keys_invalidated_title">Erreur de Keystore Android</string>
   <string name="alert_keys_invalidated_description">The encrypted data holding your wallet was recently invalidated because your Android lock screen was changed</string>
   <string name="alert_no_device_lock_title">Attention</string>
