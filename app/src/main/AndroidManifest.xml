@@ -56,8 +56,13 @@
             android:name=".modules.settings.language.LanguageSettingsActivity"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".modules.settings.security.SecuritySettingsActivity"
-                  android:screenOrientation="portrait"/>
+        <activity
+            android:name=".modules.settings.security.SecuritySettingsActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".modules.settings.AboutSettingsActivity"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="preloaded_fonts"

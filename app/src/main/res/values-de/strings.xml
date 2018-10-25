@@ -9,7 +9,6 @@
   <string name="alert_close">Schließen</string>
   <string name="alert_success">Erfolgreich</string>
   <string name="alert_copied">Kopiert</string>
-  <string name="welcome_title">Bank Wallet</string>
   <string name="welcome_btn_create_wallet">Geldbörse erstellen</string>
   <string name="welcome_btn_import_wallet">Geldbörse Importieren</string>
   <string name="restore_title">Offlineschlüssel eingeben</string>
