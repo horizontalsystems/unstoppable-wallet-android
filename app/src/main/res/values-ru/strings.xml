@@ -101,6 +101,7 @@
   <string name="settings_security_import_wallet_confirmation_1">Это действие удалит ваш кошелёк с этого устройства.</string>
   <string name="settings_security_import_wallet_confirmation_2">Убедитесь, что у вас есть свой секретный ключ, иначе вы сможете получить доступ к денежным средствам.</string>
   <string name="settings_currency_switcher_title">Базовая Валюта</string>
+  <string name="settings_language_title">Language</string>
   <string name="alert_keys_invalidated_title">Ошибка Android Keystore</string>
   <string name="alert_keys_invalidated_description">Ваши зашифрованные данные были недавно аннулированы, потому что  Android lock screen был изменен</string>
   <string name="alert_no_device_lock_title">Внимание</string>
