@@ -43,6 +43,8 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
 
     private var isFingerprintEnabled = false
 
+    override var requiresPinUnlock: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
