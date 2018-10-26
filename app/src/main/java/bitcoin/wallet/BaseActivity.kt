@@ -10,7 +10,6 @@ import android.os.Build
 import android.os.Bundle
 import android.security.keystore.UserNotAuthenticatedException
 import android.support.v7.app.AppCompatActivity
-import android.view.View
 import android.view.WindowManager
 import bitcoin.wallet.core.App
 import bitcoin.wallet.core.security.EncryptionManager
@@ -31,9 +30,6 @@ abstract class BaseActivity : AppCompatActivity() {
 
         val lightMode = App.localStorage.isLightModeOn
         setTheme(if (lightMode) R.style.LightModeAppTheme else R.style.DarkModeAppTheme)
-        if (savedInstanceState != null) {
-            setStatusBarIconColor(lightMode)
-        }
 
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
     }
@@ -101,24 +97,13 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-    private fun setStatusBarIconColor(lightMode: Boolean) {
-        var flags = window.decorView.systemUiVisibility
-        flags = if (lightMode) {
-            flags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        } else {
-            flags xor View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR // remove flag
-        }
-        window.decorView.systemUiVisibility = flags
-    }
-
     private fun updateBaseContextLocale(context: Context): Context {
         val language = App.languageManager.currentLanguage
-        val locale = language
-        Locale.setDefault(locale)
+        Locale.setDefault(language)
 
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            updateResourcesLocale(context, locale)
-        } else updateResourcesLocaleLegacy(context, locale)
+            updateResourcesLocale(context, language)
+        } else updateResourcesLocaleLegacy(context, language)
     }
 
     @TargetApi(Build.VERSION_CODES.N)
