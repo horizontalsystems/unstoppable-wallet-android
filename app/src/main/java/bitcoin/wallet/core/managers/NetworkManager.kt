@@ -49,7 +49,7 @@ class NetworkManager : INetworkManager {
 object ServiceExchangeApi {
 
     val service: IExchangeRate
-    private const val apiURL = "http://ipfs.grouvi.org/ipns/QmVefrf2xrWzGzPpERF6fRHeUTh9uVSyfHHh4cWgUBnXpq/io-hs/data/xrates/"
+    private const val apiURL = "https://ipfs.grouvi.im/ipns/QmSxpioQuDSjTH6XiT5q35V7xpJqxmDheEcTRRWyMkMim7/io-hs/data/xrates/"
 
     init {
         val logger = HttpLoggingInterceptor()
