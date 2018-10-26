@@ -8,7 +8,6 @@ import bitcoin.wallet.core.IKeyStoreSafeExecute
 object GuestModule {
 
     interface IView {
-        fun authenticateToCreateWallet()
         fun showError()
     }
 
@@ -46,4 +45,3 @@ object GuestModule {
     }
 
 }
-

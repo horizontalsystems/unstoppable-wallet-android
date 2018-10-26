@@ -1,13 +1,10 @@
 package bitcoin.wallet.modules.guest
 
-import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Intent
 import android.os.Bundle
 import bitcoin.wallet.BaseActivity
 import bitcoin.wallet.R
-import bitcoin.wallet.core.security.EncryptionManager
 import bitcoin.wallet.modules.backup.BackupModule
 import bitcoin.wallet.modules.backup.BackupPresenter
 import bitcoin.wallet.modules.restore.RestoreModule
@@ -35,10 +32,6 @@ class GuestActivity : BaseActivity() {
             RestoreModule.start(this)
         })
 
-        viewModel.authenticateToCreateWallet.observe(this, Observer {
-            EncryptionManager.showAuthenticationScreen(this, AUTHENTICATE_TO_CREATE_WALLET)
-        })
-
         viewModel.showErrorDialog.observe(this, Observer {
             HudHelper.showErrorMessage(R.string.error, this)
         })
@@ -59,18 +52,4 @@ class GuestActivity : BaseActivity() {
         })
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode == Activity.RESULT_OK) {
-
-            if (requestCode == AUTHENTICATE_TO_CREATE_WALLET) {
-                viewModel.delegate.createWalletDidClick()
-            }
-        }
-    }
-
-    companion object {
-        const val AUTHENTICATE_TO_CREATE_WALLET = 1
-    }
 }

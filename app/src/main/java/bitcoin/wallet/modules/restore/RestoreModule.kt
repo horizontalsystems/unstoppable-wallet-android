@@ -9,7 +9,6 @@ object RestoreModule {
 
     interface IView {
         fun showInvalidWordsError()
-        fun authenticateToRestoreWallet()
     }
 
     interface IViewDelegate {

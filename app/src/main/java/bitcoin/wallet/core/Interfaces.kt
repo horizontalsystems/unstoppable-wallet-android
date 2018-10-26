@@ -71,7 +71,7 @@ interface IKeyStoreSafeExecute {
 
 interface IAdapterManager {
     var adapters: MutableList<IAdapter>
-    var subject: PublishSubject<Any>
+    var subject: PublishSubject<Boolean>
     fun start()
     fun refresh()
     fun clear()

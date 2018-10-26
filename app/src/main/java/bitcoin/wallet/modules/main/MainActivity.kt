@@ -18,17 +18,6 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (App.adapterManager.adapters.isEmpty()) {
-            safeExecuteWithKeystore(
-                    action = Runnable {
-                        App.wordsManager.safeLoad()
-                    },
-                    onSuccess = Runnable {
-                        App.adapterManager.start()
-                    }
-            )
-        }
-
         setContentView(R.layout.activity_dashboard)
 
         adapter = MainTabsAdapter(supportFragmentManager)
@@ -74,6 +63,20 @@ class MainActivity : BaseActivity() {
         val activeTab = intent?.extras?.getInt(ACTIVE_TAB_KEY)
         activeTab?.let {
             bottomNavigation.currentItem = it
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (App.adapterManager.adapters.isEmpty()) {
+            safeExecuteWithKeystore(
+                    action = Runnable {
+                        App.wordsManager.safeLoad()
+                    },
+                    onSuccess = Runnable {
+                        App.adapterManager.start()
+                    }
+            )
         }
     }
 

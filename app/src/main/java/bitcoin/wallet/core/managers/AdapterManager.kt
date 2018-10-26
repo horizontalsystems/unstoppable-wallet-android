@@ -7,7 +7,7 @@ import io.reactivex.subjects.PublishSubject
 class AdapterManager(private val wordsManager: IWordsManager): IAdapterManager {
 
     override var adapters: MutableList<IAdapter> = mutableListOf()
-    override var subject: PublishSubject<Any> = PublishSubject.create<Any>()
+    override var subject: PublishSubject<Boolean> = PublishSubject.create<Boolean>()
 
 
     override fun start() {
@@ -22,6 +22,7 @@ class AdapterManager(private val wordsManager: IWordsManager): IAdapterManager {
                     print("Could not start ${adapter.coin.name}: $error")
                 }
             }
+            subject.onNext(true)
         }
     }
 

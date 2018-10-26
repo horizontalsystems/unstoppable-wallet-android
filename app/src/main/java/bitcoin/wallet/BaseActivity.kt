@@ -8,6 +8,7 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
+import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.UserNotAuthenticatedException
 import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
@@ -19,11 +20,12 @@ import java.util.*
 
 abstract class BaseActivity : AppCompatActivity() {
 
-    private var pendingRunnable: Runnable? = null
-    private var successRunnable: Runnable? = null
     private var failureRunnable: Runnable? = null
 
+    private val queuedRunnables: MutableList<Runnable?> = mutableListOf()
+
     private val allowableTimeInBackground: Long = 30
+    protected open var requiresPinUnlock = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +38,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (App.promptPin) {
+        if (requiresPinUnlock && App.promptPin) {
             var promptPinByTimeout = true
             App.appBackgroundedTime?.let {
                 val secondsAgo = DateHelper.getSecondsAgo(it)
@@ -61,17 +63,15 @@ abstract class BaseActivity : AppCompatActivity() {
         if (requestCode == AUTHENTICATE_FOR_ENCRYPTION) {
             if (resultCode == Activity.RESULT_OK) {
                 try {
-                    pendingRunnable?.run()
-                    successRunnable?.run()
+                    queuedRunnables.forEach { it?.run() }
                 } catch (e: Exception){
                     failureRunnable?.run()
                 }
             } else {
                 failureRunnable?.run()
             }
-            pendingRunnable = null
             failureRunnable = null
-            successRunnable = null
+            queuedRunnables.clear()
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
@@ -84,16 +84,23 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     fun safeExecuteWithKeystore(action: Runnable, onSuccess: Runnable? = null, onFailure: Runnable? = null) {
-        try {
-            action.run()
-            onSuccess?.run()
-        } catch (e: UserNotAuthenticatedException) {
-            pendingRunnable = action
-            successRunnable = onSuccess
-            failureRunnable = onFailure
-            EncryptionManager.showAuthenticationScreen(this, AUTHENTICATE_FOR_ENCRYPTION)
-        } catch (e: Exception) {
-            onFailure?.run()
+        if (queuedRunnables.isNotEmpty()) {
+            queuedRunnables.add(action)
+            queuedRunnables.add(onSuccess)
+        } else {
+            try {
+                action.run()
+                onSuccess?.run()
+            } catch (e: UserNotAuthenticatedException) {
+                queuedRunnables.add(action)
+                queuedRunnables.add(onSuccess)
+                failureRunnable = onFailure
+                EncryptionManager.showAuthenticationScreen(this, AUTHENTICATE_FOR_ENCRYPTION)
+            } catch (e: KeyPermanentlyInvalidatedException) {
+                EncryptionManager.showKeysInvalidatedAlert(this)
+            } catch (e: Exception) {
+                onFailure?.run()
+            }
         }
     }
 

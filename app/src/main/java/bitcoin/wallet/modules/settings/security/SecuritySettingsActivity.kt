@@ -119,7 +119,7 @@ class SecuritySettingsActivity : BaseActivity(), BottomConfirmAlert.Listener {
 
     }
 
-    override fun confirmationSuccess() {
+    override fun onConfirmationSuccess() {
         when (selectedAction) {
             Action.OPEN_RESTORE -> viewModel.delegate.didTapRestoreWallet()
             Action.CLEAR_WALLETS -> viewModel.delegate.confirmedUnlinkWallet()
