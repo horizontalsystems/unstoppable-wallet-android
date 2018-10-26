@@ -147,6 +147,7 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
         textAmount.visibility = if (zeroBalance) View.GONE else View.VISIBLE
         buttonPay.isEnabled = !zeroBalance
         textAmountFiat.isEnabled = !zeroBalance
+        textExchangeRate.text = "1 ${walletBalanceViewItem.coinValue.coin.code} - ${walletBalanceViewItem.currencyValue?.currency?.getSymbolChar() ?: ""}${numberFormat.format(walletBalanceViewItem.exchangeRateValue?.value ?: 0.0)}"
         //todo convert indeterminate spinner to determinant one
         walletBalanceViewItem.progress?.subscribe {
             syncProgress.visibility = if (it == 1.0) View.GONE else View.VISIBLE

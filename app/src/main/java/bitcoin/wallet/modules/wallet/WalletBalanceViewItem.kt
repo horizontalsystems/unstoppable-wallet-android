@@ -4,7 +4,12 @@ import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.CurrencyValue
 import io.reactivex.subjects.BehaviorSubject
 
-data class WalletBalanceViewItem(val adapterId: String, val coinValue: CoinValue, val exchangeRateValue: CurrencyValue?, val currencyValue: CurrencyValue?, val progress: BehaviorSubject<Double>?) {
+data class WalletBalanceViewItem(
+        val adapterId: String,
+        val coinValue: CoinValue,
+        val exchangeRateValue: CurrencyValue?,
+        val currencyValue: CurrencyValue?,
+        val progress: BehaviorSubject<Double>?) {
 
     override fun equals(other: Any?): Boolean {
         if (other is WalletBalanceViewItem) {
