@@ -69,10 +69,10 @@
   <string name="full_transaction_info_size">Boyut</string>
   <string name="full_transaction_info_fee_rate">Ücret oranı</string>
   <string name="full_transaction_info_received_time">İşlem vakti</string>
-  <string name="full_transaction_info_mined_time">Mined Time</string>
-  <string name="full_transaction_info_included_in_block">Included in Block</string>
-  <string name="full_transaction_info_confirmations">Confirmations</string>
-  <string name="full_transaction_info_lock_time">Lock Time</string>
+  <string name="full_transaction_info_mined_time">Madenleme Süresi</string>
+  <string name="full_transaction_info_included_in_block">Blok Numarası</string>
+  <string name="full_transaction_info_confirmations">Onaylama</string>
+  <string name="full_transaction_info_lock_time">Kilit Süresi</string>
   <string name="full_transaction_info_time">Tarih</string>
   <string name="full_transaction_info_from">Gönderen</string>
   <string name="full_transaction_info_to">Alan</string>
@@ -98,7 +98,7 @@
   <string name="settings_security_change_pin">PİN\'i değiştir</string>
   <string name="settings_security_backup_wallet">Cüzdanı yedekle</string>
   <string name="unlock_page_enter_your_pin">PİN girin</string>
-  <string name="settings_security_import_wallet_confirmation_1">This action will remove the currently installed wallet from this device.</string>
+  <string name="settings_security_import_wallet_confirmation_1">Bu işlemle, cüzdan cihazdan kaldırılacak.</string>
   <string name="settings_security_import_wallet_confirmation_2">Make sure you have its Secret Key or you will not be able to access the funds on it in the future.</string>
   <string name="settings_currency_switcher_title">Para birimi</string>
   <string name="settings_language_title">Language</string>
