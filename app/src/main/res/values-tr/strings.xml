@@ -15,7 +15,7 @@
   <string name="restore_title">Gizli Anahtarı girin</string>
   <string name="restore_validation_failed">Kelimeler eşleşmiyor</string>
   <string name="backup_words_title">Gizli Anahtar</string>
-  <string name="backup_words_description">Gizli Anahtar, telefonunuzun kaybolması, çalınması, bozulması veya programın tekrar kurulması durumunda hesaba erişebilmenin tek yoludur.\n\n 12 kelimeden oluşur. Not alıp güvenli bir yerde tutun ve kimseye göstermeyin.</string>
+  <string name="backup_words_description">Gizli Anahtar, telefonunuzun kaybolması, çalınması, bozulması veya programın tekrar kurulması durumunda cüzdana erişebilmenin tek yoludur.\n\n 12 kelimeden oluşur. Gizli Anahtarı not alıp güvenli bir yerde tutun ve kimseye göstermeyin.</string>
   <string name="backup_words_confirm_alert_wallet_held_on_device">Cüzdanımın güvenle, sadece bu cihazda bulunduğunu ve herhangi bir sunucuda olmadığını biliyorum.</string>
   <string name="backup_words_confirm_alert_wallet_restore_with_words">Bu programın kaldırılmase veya başka bir cihaza taşınması durumunda cüzdanıma erişmek için tek seçeneğimin yenice kağıda yazıp güvenli bir yerde sakladığım Gizli Anahtar olduğunu biliyorum.</string>
   <string name="backup_words_confirm_alert_wallet_device_lock_warning">Android sisteminde, cihazın kilit kodunu değiştirmek Banka programını da sıfırlayacak. Cüzdana ulaşmak için Gizli Anahtarınızı tekrar girmeniz gerekecek.</string>
@@ -104,13 +104,13 @@
   <string name="settings_language_title">Dil</string>
   <string name="settings_about_title">Hakkında</string>
   <string name="settings_about_terms_privacy_subtitle">Şartlar &amp; Gizlilik Politikası:</string>
-  <string name="settings_about_terms_privacy_text">Your funds are stored in the BANK wallet app. Not on any external servers.
-\n\nBANK Wallet doesn\'t store or collect any private info.
-\n\nBANK Wallet doesn\'t depend on any server or person to function.
-\n\nBANK Wallet works everywhere as long as there is an internet.
-\n\nIt is impossible for a third party to block the wallet from working or to block the user.
-\n\nThe entire code powering the BANK Wallet is free and open to public.
-\n\nThere may be bugs in the code. Make sure you always backup a Secret Key for your wallet!</string>
+  <string name="settings_about_terms_privacy_text">Hesap bilgisi sadece BANKA Cüzdanı uygulamasında tutulur. Sunucuda değil.
+\n\nBANKA Cüzdanı, hiçbir şekilde kişisel bilgi toplamaz.
+\n\nBANKA Cüzdanı, herhangi bir sunucuya veya kuruma ihtiyaç duymaz.
+\n\nİnternet bağlantısı bulunduğu sürece her yerde çalışabilir.
+\n\n3. şahsın herhangi bir kullanıcıyı engellemesi veya sistemden atması imkansızdır.
+\n\nBANKA Cüzdanı açık kaynaklıdır, kodu herkese açıktır.
+\n\nProgramda gözden kaçmış hatalar olabilir. Lütfen cüzdanınızı Gizli Anahtar ile yedekleyip Gizli Anahtarı güvenli bir yerde tutun!</string>
   <string name="settings_about_dependencies_subtitle">Gereksinimler:</string>
   <string name="settings_about_dependencies_text">There are some third-party services used by the BANK Wallet for non-critical data for the wallet.
 \n\n1. IPFS Decentralized Storage
