@@ -155,10 +155,10 @@
   <string name="set_pin_confirm_description">PİN, program\'ı açmak ve para göndermek için kullanılacak</string>
   <string name="set_pin_success">Kilit PİN\'i başarıyla oluşturuldu!</string>
   <string name="set_pin_error_pins_dont_match">PİN uyuşmuyor. Tekrar deneyin.</string>
-  <string name="set_pin_error_pins_dont_match_you_have_attempts_left">Yanlış PİN. %s deneme hakkınız kaldı.</string>
+  <string name="set_pin_error_pins_dont_match_you_have_attempts_left">Wrong PIN</string>
   <string name="set_pin_error_failed_to_save_pin">PİN kaydedilirken hata oldu. Lütfen tekrar deneyin.</string>
   <string name="edit_pin_auth_title">PİN\'i değiştir</string>
   <string name="edit_pin_auth_description">Şu an kullandığınız PİN\'i girin</string>
   <string name="edit_pin_title">Yeni PİN gerin</string>
-  <string name="edit_pin_description">PİN, uygulama kilidini açmak ve para göndermek için kullanılacak</string>
+  <string name="edit_pin_description">Your PIN will be used to unlock your wallet</string>
 </resources>
