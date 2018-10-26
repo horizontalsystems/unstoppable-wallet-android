@@ -18,8 +18,6 @@ open class TransactionRecord {
     var amount: Double = 0.0
     var fee: Double = 0.0
 
-    var incoming = true
-
     var blockHeight: Long? = null
 
     var timestamp: Long? = null

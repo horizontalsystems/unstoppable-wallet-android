@@ -1,10 +1,11 @@
-package bitcoin.wallet.core
+package bitcoin.wallet.core.managers
 
-import io.horizontalsystems.bitcoinkit.network.MainNet
-import io.horizontalsystems.ethereumkit.network.NetworkType
+import bitcoin.wallet.core.*
+import io.horizontalsystems.bitcoinkit.BitcoinKit
+import io.horizontalsystems.ethereumkit.EthereumKit
 import io.reactivex.subjects.PublishSubject
 
-class AdapterManager(private val wordsManager: IWordsManager): IAdapterManager {
+class AdapterManager(private val wordsManager: IWordsManager) : IAdapterManager {
 
     override var adapters: MutableList<IAdapter> = mutableListOf()
     override var subject: PublishSubject<Boolean> = PublishSubject.create<Boolean>()
@@ -12,8 +13,8 @@ class AdapterManager(private val wordsManager: IWordsManager): IAdapterManager {
 
     override fun start() {
         wordsManager.words?.let { words ->
-            adapters.add(BitcoinAdapter(words, network = MainNet()))
-            adapters.add(EthereumAdapter(listOf("subway", "plate", "brick", "pattern", "inform", "used", "oblige", "identify", "cherry", "drop", "flush", "balance"), network = NetworkType.Kovan))
+            adapters.add(BitcoinAdapter(listOf("used", "ugly", "meat", "ugly", "balance", "divorce", "inner", "artwork", "hire", "invest", "already", "piano"), BitcoinKit.NetworkType.TestNet))
+            adapters.add(EthereumAdapter(listOf("subway", "plate", "brick", "pattern", "inform", "used", "oblige", "identify", "cherry", "drop", "flush", "balance"), EthereumKit.NetworkType.Kovan))
 
             for (adapter in adapters) {
                 try {

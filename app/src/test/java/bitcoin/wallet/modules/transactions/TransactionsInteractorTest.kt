@@ -61,7 +61,7 @@ class TransactionsInteractorTest {
     fun retrieveFilters() {
         val subject: PublishSubject<Any> = PublishSubject.create()
         whenever(adapterManager.adapters).thenReturn(mutableListOf(bitcoinAdapter))
-        whenever(adapterManager.subject).thenReturn(PublishSubject.create<Any>())
+        whenever(adapterManager.subject).thenReturn(PublishSubject.create<Boolean>())
 
         whenever(bitcoinAdapter.id).thenReturn(adapterId)
         whenever(bitcoinAdapter.coin).thenReturn(coin)
@@ -88,7 +88,7 @@ class TransactionsInteractorTest {
         transaction.timestamp = 1536152151123
 
         whenever(adapterManager.adapters).thenReturn(mutableListOf(bitcoinAdapter))
-        whenever(adapterManager.subject).thenReturn(PublishSubject.create<Any>())
+        whenever(adapterManager.subject).thenReturn(PublishSubject.create<Boolean>())
 
         whenever(bitcoinAdapter.id).thenReturn(adapterId)
         whenever(bitcoinAdapter.coin).thenReturn(coin)
@@ -115,7 +115,6 @@ class TransactionsInteractorTest {
             transactionHash = "transactionHash"
             amount = btcTxAmount
             fee = 1.0
-            incoming = true
             timestamp = timestampNow
             from = listOf("from-address")
             to = listOf("to-address")
@@ -128,7 +127,6 @@ class TransactionsInteractorTest {
             transactionHash = "transactionHash"
             amount = btcTxAmount
             fee = 1.0
-            incoming = true
             timestamp = now.time
             from = listOf("from-address")
             to = listOf("to-address")
@@ -169,12 +167,11 @@ class TransactionsInteractorTest {
         )
 
         whenever(adapterManager.adapters).thenReturn(mutableListOf(bitcoinAdapter))
-        whenever(adapterManager.subject).thenReturn(PublishSubject.create<Any>())
+        whenever(adapterManager.subject).thenReturn(PublishSubject.create<Boolean>())
 
         whenever(bitcoinAdapter.id).thenReturn(adapterId)
         whenever(bitcoinAdapter.coin).thenReturn(coin)
         whenever(bitcoinAdapter.balance).thenReturn(0.0)
-        whenever(bitcoinAdapter.lastBlockHeight).thenReturn(100)
         whenever(bitcoinAdapter.transactionRecords).thenReturn(listOf(transactionRecordBTCsuccess, transactionRecordBTCpending))
         whenever(bitcoinAdapter.transactionRecordsSubject).thenReturn(subject)
 

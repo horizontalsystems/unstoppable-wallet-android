@@ -30,7 +30,6 @@ class FullTransactionInfoInteractorTest {
         transactionHash = transactionId
         amount = btcTxAmount
         fee = 1.0
-        incoming = true
         timestamp = now.time
         from = listOf("from-address")
         to = listOf("to-address")

@@ -5,8 +5,8 @@ import bitcoin.wallet.entities.TransactionStatus
 import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.entities.coins.ethereum.Ethereum
 import io.horizontalsystems.ethereumkit.EthereumKit
+import io.horizontalsystems.ethereumkit.EthereumKit.NetworkType
 import io.horizontalsystems.ethereumkit.models.Transaction
-import io.horizontalsystems.ethereumkit.network.NetworkType
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
