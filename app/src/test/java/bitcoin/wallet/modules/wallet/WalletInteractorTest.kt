@@ -63,7 +63,7 @@ class WalletInteractorTest {
     @Test
     fun fetchWalletBalances() {
         whenever(exchangeRateManager.getExchangeRates()).thenReturn(exchangeRates)
-        whenever(adapterManager.subject).thenReturn(PublishSubject.create<Any>())
+        whenever(adapterManager.subject).thenReturn(PublishSubject.create<Boolean>())
 
         interactor.notifyWalletBalances()
 
@@ -75,7 +75,7 @@ class WalletInteractorTest {
         val coin = Bitcoin()
         val newBalanceValue = 3.4
         val balanceSub: PublishSubject<Double> = PublishSubject.create()
-        val managerSub: PublishSubject<Any> = PublishSubject.create()
+        val managerSub: PublishSubject<Boolean> = PublishSubject.create()
 
         whenever(exchangeRateManager.getExchangeRates()).thenReturn(exchangeRates)
 
@@ -96,14 +96,14 @@ class WalletInteractorTest {
 
     @Test
     fun notifyWalletBalances_adapterManagerSubjectUpdate() {
-        val managerSub: PublishSubject<Any> = PublishSubject.create()
+        val managerSub: PublishSubject<Boolean> = PublishSubject.create()
 
         whenever(adapterManager.subject).thenReturn(managerSub)
         whenever(exchangeRateManager.getExchangeRates()).thenReturn(exchangeRates)
 
         interactor.notifyWalletBalances()
 
-        managerSub.onNext(Any())
+        managerSub.onNext(true)
 
         verify(delegate, atLeast(2)).didInitialFetch(any(), any(), any())
     }
