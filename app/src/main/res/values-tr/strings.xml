@@ -99,9 +99,9 @@
   <string name="settings_security_backup_wallet">Cüzdanı yedekle</string>
   <string name="unlock_page_enter_your_pin">PİN girin</string>
   <string name="settings_security_import_wallet_confirmation_1">Bu işlemle, cüzdan cihazdan kaldırılacak.</string>
-  <string name="settings_security_import_wallet_confirmation_2">Make sure you have its Secret Key or you will not be able to access the funds on it in the future.</string>
+  <string name="settings_security_import_wallet_confirmation_2">Gizli Anahtarı yedeklediğinizden emin olun. Onsuz, cüzdana gelecekte ulaşamayacaksınız.</string>
   <string name="settings_currency_switcher_title">Para birimi</string>
-  <string name="settings_language_title">Language</string>
+  <string name="settings_language_title">Dil</string>
   <string name="alert_keys_invalidated_title">Android anahtar deposu hatası</string>
   <string name="alert_keys_invalidated_description">Android cihazınızın kilidi değiştirildiğinden cüzdan bilginizi tutan şifreli dosya artık geçersiz</string>
   <string name="alert_no_device_lock_title">Uyarı</string>
@@ -122,7 +122,7 @@
   <string name="hud_text_invalid_pin_error">Yanlış PİN</string>
   <!--Fingerprint texts-->
   <string name="fingerprint_dialog_title">Parmak iziyle giriş</string>
-  <string name="fingerprint_hint">Touch sensor</string>
+  <string name="fingerprint_hint">Dokunmatik sensör</string>
   <string name="enter_pin">PIN\'i girin</string>
   <string name="fingerprint_not_recognized">Parmak izi tanınmadı. Tekrar deneyin</string>
   <string name="fingerprint_success">Başarılı!</string>
@@ -134,9 +134,9 @@
   <string name="set_pin_confirm_description">PİN, program\'ı açmak ve para göndermek için kullanılacak</string>
   <string name="set_pin_success">Kilit PİN\'i başarıyla oluşturuldu!</string>
   <string name="set_pin_error_pins_dont_match">PİN uyuşmuyor. Tekrar deneyin.</string>
-  <string name="set_pin_error_pins_dont_match_you_have_attempts_left">Wrong PIN. You have %s attempts left.</string>
+  <string name="set_pin_error_pins_dont_match_you_have_attempts_left">Yanlış PİN. %s deneme hakkınız kaldı.</string>
   <string name="set_pin_error_failed_to_save_pin">PİN kaydedilirken hata oldu. Lütfen tekrar deneyin.</string>
-  <string name="edit_pin_auth_title">Change PIN</string>
+  <string name="edit_pin_auth_title">PİN\'i değiştir</string>
   <string name="edit_pin_auth_description">Şu an kullandığınız PİN\'i girin</string>
   <string name="edit_pin_title">Yeni PİN gerin</string>
   <string name="edit_pin_description">PİN, uygulama kilidini açmak ve para göndermek için kullanılacak</string>
