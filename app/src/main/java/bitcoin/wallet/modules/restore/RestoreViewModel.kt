@@ -12,7 +12,6 @@ class RestoreViewModel : ViewModel(), RestoreModule.IView, RestoreModule.IRouter
 
     val errorLiveData = MutableLiveData<Int>()
     val navigateToMainScreenLiveEvent = SingleLiveEvent<Void>()
-    val authenticateToRestoreWallet = SingleLiveEvent<Void>()
     val keyStoreSafeExecute = SingleLiveEvent<Triple<Runnable, Runnable?, Runnable?>>()
 
     fun init() {
@@ -25,10 +24,6 @@ class RestoreViewModel : ViewModel(), RestoreModule.IView, RestoreModule.IRouter
 
     override fun navigateToMain() {
         navigateToMainScreenLiveEvent.call()
-    }
-
-    override fun authenticateToRestoreWallet() {
-        authenticateToRestoreWallet.call()
     }
 
     override fun safeExecute(action: Runnable, onSuccess: Runnable?, onFailure: Runnable?) {

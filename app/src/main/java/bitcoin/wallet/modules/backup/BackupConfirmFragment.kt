@@ -1,18 +1,13 @@
 package bitcoin.wallet.modules.backup
 
-import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Intent
 import android.os.Bundle
-import android.security.keystore.KeyPermanentlyInvalidatedException
-import android.security.keystore.UserNotAuthenticatedException
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import bitcoin.wallet.R
-import bitcoin.wallet.core.security.EncryptionManager
 import bitcoin.wallet.ui.dialogs.BottomConfirmAlert
 import bitcoin.wallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_backup_words_confirm.*
@@ -72,35 +67,11 @@ class BackupConfirmFragment : Fragment(), BottomConfirmAlert.Listener {
         errorMsgId?.let { HudHelper.showErrorMessage(it, activity) }
     }
 
-    override fun confirmationSuccess() {
-        try {
-            validateWords()
-        } catch (exception: UserNotAuthenticatedException) {
-            EncryptionManager.showAuthenticationScreen(this, AUTHENTICATE_TO_VALIDATE_WORDS)
-        } catch (exception: KeyPermanentlyInvalidatedException) {
-            activity?.let { EncryptionManager.showKeysInvalidatedAlert(it) }
-        }
-    }
-
-    private fun validateWords() {
+    override fun onConfirmationSuccess() {
         viewModel.delegate.validateDidClick(
                 hashMapOf(wordIndex1 to editWord1.text.toString(),
                         wordIndex2 to editWord2.text.toString())
         )
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == AUTHENTICATE_TO_VALIDATE_WORDS) {
-                validateWords()
-            }
-        }
-    }
-
-    companion object {
-        const val AUTHENTICATE_TO_VALIDATE_WORDS = 1
     }
 
 }

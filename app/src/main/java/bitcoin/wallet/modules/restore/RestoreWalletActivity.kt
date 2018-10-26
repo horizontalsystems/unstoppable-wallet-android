@@ -1,18 +1,14 @@
 package bitcoin.wallet.modules.restore
 
-import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import bitcoin.wallet.BaseActivity
 import bitcoin.wallet.R
-import bitcoin.wallet.core.security.EncryptionManager
 import bitcoin.wallet.lib.EditTextViewHolder
 import bitcoin.wallet.lib.WordsInputAdapter
 import bitcoin.wallet.modules.main.MainModule
@@ -49,10 +45,6 @@ class RestoreWalletActivity : BaseActivity() {
             MainModule.start(this)
         })
 
-        viewModel.authenticateToRestoreWallet.observe(this, Observer {
-            EncryptionManager.showAuthenticationScreen(this@RestoreWalletActivity, AUTHENTICATE_TO_RESTORE_WALLET)
-        })
-
         viewModel.keyStoreSafeExecute.observe(this, Observer { triple ->
             triple?.let {
                 val (action, onSuccess, onFailure) = it
@@ -82,7 +74,6 @@ class RestoreWalletActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_done -> {
-            Log.e("AAA", "Words: ${words.joinToString()}")
             viewModel.delegate.restoreDidClick(words)
             true
         }
@@ -91,18 +82,5 @@ class RestoreWalletActivity : BaseActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == AUTHENTICATE_TO_RESTORE_WALLET) {
-                viewModel.delegate.restoreDidClick(words)
-            }
-        }
-    }
-
-    companion object {
-        const val AUTHENTICATE_TO_RESTORE_WALLET = 1
-    }
-
 }
+

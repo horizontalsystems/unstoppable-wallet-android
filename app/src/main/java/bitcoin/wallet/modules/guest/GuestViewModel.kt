@@ -10,7 +10,6 @@ class GuestViewModel: ViewModel(), GuestModule.IView, GuestModule.IRouter, IKeyS
 
     val openBackupScreenLiveEvent = SingleLiveEvent<Void>()
     val openRestoreWalletScreenLiveEvent = SingleLiveEvent<Void>()
-    val authenticateToCreateWallet = SingleLiveEvent<Void>()
     val showErrorDialog = SingleLiveEvent<Void>()
     val keyStoreSafeExecute = SingleLiveEvent<Triple<Runnable, Runnable?, Runnable?>>()
 
@@ -25,10 +24,6 @@ class GuestViewModel: ViewModel(), GuestModule.IView, GuestModule.IRouter, IKeyS
 
     override fun navigateToRestore() {
         openRestoreWalletScreenLiveEvent.call()
-    }
-
-    override fun authenticateToCreateWallet() {
-        authenticateToCreateWallet.call()
     }
 
     override fun showError() {

@@ -8,6 +8,7 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
+import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.UserNotAuthenticatedException
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -99,6 +100,8 @@ abstract class BaseActivity : AppCompatActivity() {
                 queuedRunnables.add(onSuccess)
                 failureRunnable = onFailure
                 EncryptionManager.showAuthenticationScreen(this, AUTHENTICATE_FOR_ENCRYPTION)
+            } catch (e: KeyPermanentlyInvalidatedException) {
+                EncryptionManager.showKeysInvalidatedAlert(this)
             } catch (e: Exception) {
                 onFailure?.run()
             }

@@ -4,7 +4,10 @@ import bitcoin.wallet.core.IAdapterManager
 import bitcoin.wallet.core.IKeyStoreSafeExecute
 import bitcoin.wallet.core.managers.WordsManager
 
-class GuestInteractor(private val wordsManager: WordsManager, private val adapterManager: IAdapterManager, private val keystoreSafeExecute: IKeyStoreSafeExecute) : GuestModule.IInteractor {
+class GuestInteractor(
+        private val wordsManager: WordsManager,
+        private val adapterManager: IAdapterManager,
+        private val keystoreSafeExecute: IKeyStoreSafeExecute) : GuestModule.IInteractor {
 
     var delegate: GuestModule.IInteractorDelegate? = null
 
