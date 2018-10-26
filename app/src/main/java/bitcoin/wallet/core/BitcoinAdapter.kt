@@ -4,179 +4,115 @@ import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.entities.TransactionStatus
 import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
-import io.horizontalsystems.bitcoinkit.network.NetworkParameters
-import io.horizontalsystems.bitcoinkit.network.RegTest
-import io.horizontalsystems.bitcoinkit.network.TestNet
+import io.horizontalsystems.bitcoinkit.BitcoinKit
+import io.horizontalsystems.bitcoinkit.BitcoinKit.NetworkType
+import io.horizontalsystems.bitcoinkit.models.BlockInfo
+import io.horizontalsystems.bitcoinkit.models.TransactionInfo
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 
-class BitcoinAdapter(val words: List<String>, network: NetworkParameters) : IAdapter {
+class BitcoinAdapter(val words: List<String>, network: NetworkType) : IAdapter, BitcoinKit.Listener {
 
-    private var walletKit = WalletKit(words, network)
-
+    private var bitcoinKit = BitcoinKit(words, network)
+    private val transactionCompletionThreshold = 6
     private val satoshisInBitcoin = Math.pow(10.0, 8.0)
 
     override val coin: Coin = when (network) {
-        is RegTest -> Bitcoin("R")
-        is TestNet -> Bitcoin("T")
+        NetworkType.RegTest -> Bitcoin("R")
+        NetworkType.TestNet -> Bitcoin("T")
         else -> Bitcoin()
     }
-    override val id: String
-        get() = "${words.joinToString(" ").hashCode()}-${coin.code}"
+    override val id: String = "${words.joinToString(" ").hashCode()}-${coin.code}"
 
     override val balance: Double
-        get() = walletKit.balance / satoshisInBitcoin
-
+        get() = bitcoinKit.balance / satoshisInBitcoin
     override val balanceSubject: PublishSubject<Double> = PublishSubject.create()
 
-    override val progressSubject: BehaviorSubject<Double> = walletKit.progressSubject
+    override val progressSubject: BehaviorSubject<Double> = BehaviorSubject.createDefault(0.0)
 
     override val latestBlockHeight: Int
-        get() = walletKit.latestBlockHeight
-
+        get() = bitcoinKit.lastBlockHeight
     override val latestBlockHeightSubject: PublishSubject<Any> = PublishSubject.create()
 
     override val transactionRecords: List<TransactionRecord>
-        get() = walletKit.transactionRecords
-
+        get() = bitcoinKit.transactions.map { transactionRecord(it) }
     override val transactionRecordsSubject: PublishSubject<Any> = PublishSubject.create()
 
     override val receiveAddress: String
-        get() = walletKit.receiveAddress
+        get() = bitcoinKit.receiveAddress()
 
     override fun debugInfo() {
-        walletKit.showRealmInfo()
     }
 
     override fun start() {
-        walletKit.start()
+        bitcoinKit.listener = this
+        bitcoinKit.start()
     }
 
     override fun refresh() {
-
     }
 
     override fun clear() {
-        walletKit.clear()
+        bitcoinKit.clear()
     }
 
     override fun send(address: String, value: Double, completion: ((Throwable?) -> (Unit))?) {
         try {
-            walletKit.send(address, (value * satoshisInBitcoin).toInt())
+            bitcoinKit.send(address, (value * satoshisInBitcoin).toInt())
             completion?.invoke(null)
         } catch (ex: Exception) {
             completion?.invoke(ex)
         }
     }
 
-    override fun fee(value: Int, senderPay: Boolean): Double {
-        return walletKit.fee(value, senderPay).div(satoshisInBitcoin)
+    override fun fee(value: Int, senderPay: Boolean): Double =
+            bitcoinKit.fee(value = value, senderPay = senderPay) / satoshisInBitcoin
+
+    override fun validate(address: String) = try {
+        bitcoinKit.validateAddress(address)
+        true
+    } catch (ex: Exception) {
+        false
     }
 
-    override fun validate(address: String): Boolean {
-        return true
-    }
-
-}
-
-//Stub class from WalletKit
-class WalletKit(words: List<String>, network: NetworkParameters) {
-    val latestBlockHeight = 129
-    val transactionRecords: List<TransactionRecord> = demoTransactions()
-    val receiveAddress = "1AYHMDV1XR8HWaReC3Rr4Qv79vJiSR8RCU"
-    val progressSubject: BehaviorSubject<Double> = BehaviorSubject.create()
-    val balance: Long
-        get() = 24 * Math.pow(10.0, 8.0).toLong()
-
-    fun showRealmInfo() {
-
-    }
-
-    fun start() {
-
-    }
-
-    fun clear() {
-
-    }
-
-    fun send(address: String, value: Int) {
-
-    }
-
-    fun fee(value: Int, senderPay: Boolean): Int {
-        return 0
-    }
-
-
-    //demo transactions
-    fun demoTransactions(): List<TransactionRecord> {
-        val transactions: MutableList<TransactionRecord> = mutableListOf()
-        val tr = TransactionRecord().apply {
-            transactionHash = "1ayhmdv1xr8dhdnkbkjbdeef8dfa8kmnbbydf9pq"
-            coinCode = "BTC"
-            from = listOf("1A7o3DtwdLQWy9dMq5oV9CHW1PC8jrfFPi")
-            to = listOf("13UwE8nL9PBezSrMK5LtncsTR6Er7DhBdy")
-            amount = 0.025
-            fee = 0.0093
-            blockHeight = 130
-            status = TransactionStatus.Processing(33)
-            timestamp = 1539206581000
+    private fun transactionRecord(transactionInfo: TransactionInfo): TransactionRecord {
+        val confirmations = transactionInfo.blockHeight?.let {
+            bitcoinKit.lastBlockHeight - it
+        } ?: 0
+        val txStatus = when {
+            confirmations <= 0 -> TransactionStatus.Pending
+            confirmations in 1 until transactionCompletionThreshold ->
+                TransactionStatus.Processing(progress = (confirmations * 100 / transactionCompletionThreshold).toByte())
+            else -> TransactionStatus.Completed
         }
-        transactions.add(tr)
-
-        val tr1 = TransactionRecord().apply {
-            transactionHash = "1byhmdv1xr8dhdnkbkjbdeef8dfa8kmnbbydf9pq"
-            coinCode = "BTC"
-            from = listOf("1A7o3DtwdLQWy9dMq5oV9CHW1PC8jrfFPi")
-            to = listOf("13UwE8nL9PBezSrMK5LtncsTR6Er7DhBdy")
-            amount = 0.03
-            fee = 0.0093
-            blockHeight = 122
-            status = TransactionStatus.Completed
-            timestamp = 1538893392000
+        return TransactionRecord().apply {
+            transactionHash = transactionInfo.transactionHash
+            coinCode = coin.code
+            from = transactionInfo.from.map { it.address }
+            to = transactionInfo.to.map { it.address }
+            amount = transactionInfo.amount / satoshisInBitcoin
+            blockHeight = transactionInfo.blockHeight?.toLong()
+            status = txStatus
+            timestamp = transactionInfo.timestamp
         }
-        transactions.add(tr1)
-
-        val tr2 = TransactionRecord().apply {
-            transactionHash = "1cyhmdv1xr8dhdnkbkjbdeef8dfa8kmnbbydf9pq"
-            coinCode = "BTC"
-            from = listOf("1A7o3DtwdLQWy9dMq5oV9CHW1PC8jrfFPi")
-            to = listOf("13UwE8nL9PBezSrMK5LtncsTR6Er7DhBdy")
-            amount = 0.032
-            fee = 0.0093
-            blockHeight = 105
-            status = TransactionStatus.Completed
-            timestamp = 1538461392000
-        }
-        transactions.add(tr2)
-
-        val tr3 = TransactionRecord().apply {
-            transactionHash = "1dyhmdv1xr8dhdnkbkjbdeef8dfa8kmnbbydf9pq"
-            coinCode = "BTC"
-            from = listOf("mxNEBQf2xQeLknPZW65rMbKxEban6udxFc")
-            to = listOf("13UwE8nL9PBezSrMK5LtncsTR6Er7DhBdy")
-            amount = -0.23
-            fee = 0.00012
-            blockHeight = 128
-            status = TransactionStatus.Pending
-            timestamp = 1538288592000
-        }
-        transactions.add(tr3)
-
-        val tr4 = TransactionRecord().apply {
-            transactionHash = "1eyhmdv1xr8dhdnkbkjbdeef8dfa8kmnbbydf9pq"
-            coinCode = "BTC"
-            from = listOf("wef23mxNEBQf2xQeLknPZW65rMbKxEban6udxFc")
-            to = listOf("ew13UwE8nL9PBezSrMK5LtncsTR6Er7DhBdy")
-            amount = 0.183
-            fee = 0.00092
-            blockHeight = 103
-            status = TransactionStatus.Completed
-            timestamp = 1538131030582
-        }
-        transactions.add(tr4)
-
-        return transactions
     }
+
+    //Bitcoin Kit listener methods
+
+    override fun balanceUpdated(bitcoinKit: BitcoinKit, balance: Long) {
+        balanceSubject.onNext(balance / satoshisInBitcoin)
+    }
+
+    override fun lastBlockInfoUpdated(bitcoinKit: BitcoinKit, lastBlockInfo: BlockInfo) {
+        latestBlockHeightSubject.onNext(Any())
+    }
+
+    override fun progressUpdated(bitcoinKit: BitcoinKit, progress: Double) {
+        progressSubject.onNext(progress)
+    }
+
+    override fun transactionsUpdated(bitcoinKit: BitcoinKit, inserted: List<TransactionInfo>, updated: List<TransactionInfo>, deleted: List<Int>) {
+        transactionRecordsSubject.onNext(Any())
+    }
+
 }

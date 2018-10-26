@@ -6,7 +6,7 @@ import android.preference.PreferenceManager
 import bitcoin.wallet.core.managers.*
 import bitcoin.wallet.core.security.EncryptionManager
 import com.squareup.leakcanary.LeakCanary
-import io.horizontalsystems.bitcoinkit.WalletKit
+import io.horizontalsystems.bitcoinkit.BitcoinKit
 import io.horizontalsystems.ethereumkit.EthereumKit
 import java.util.*
 
@@ -50,8 +50,8 @@ class App : Application() {
         }
         LeakCanary.install(this)
 
-        // Start WalletKit
-        WalletKit.init(this)
+        // Initialize BitcoinKit
+        BitcoinKit.init(this)
 
         // Initialize EthereumKit
         EthereumKit.init(this)
