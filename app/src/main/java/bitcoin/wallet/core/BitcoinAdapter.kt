@@ -93,7 +93,7 @@ class BitcoinAdapter(val words: List<String>, network: NetworkType) : IAdapter, 
             amount = transactionInfo.amount / satoshisInBitcoin
             blockHeight = transactionInfo.blockHeight?.toLong()
             status = txStatus
-            timestamp = transactionInfo.timestamp
+            timestamp = transactionInfo.timestamp?.times(1000)
         }
     }
 
