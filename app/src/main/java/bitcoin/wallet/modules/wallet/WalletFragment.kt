@@ -17,6 +17,7 @@ import bitcoin.wallet.modules.send.SendModule
 import bitcoin.wallet.viewHelpers.AnimationHelper
 import bitcoin.wallet.viewHelpers.LayoutHelper
 import bitcoin.wallet.viewHelpers.NumberFormatHelper
+import io.reactivex.disposables.Disposable
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import kotlinx.android.synthetic.main.view_holder_coin.*
@@ -74,6 +75,11 @@ class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener 
         recyclerCoins.layoutManager = LinearLayoutManager(context)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        recyclerCoins.adapter = null
+    }
+
     override fun onSendClicked(adapterId: String) {
         viewModel.onSendClicked(adapterId)
     }
@@ -105,6 +111,13 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {}
 
+    override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
+        super.onViewDetachedFromWindow(holder)
+        when (holder) {
+            is ViewHolderCoin -> holder.unbind()
+        }
+    }
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: MutableList<Any>) {
         when (holder) {
             is ViewHolderCoin ->
@@ -135,6 +148,8 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
 
 class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
+    private var disposable: Disposable? = null
+
     fun bind(walletBalanceViewItem: WalletBalanceViewItem, onSendClick: (() -> (Unit))? = null, onReceiveClick: (() -> (Unit))? = null, onHolderClicked: (() -> Unit)? = null, expanded: Boolean) {
         val iconDrawable = ContextCompat.getDrawable(containerView.context, LayoutHelper.getCoinDrawableResource(walletBalanceViewItem.coinValue.coin.code))
         coinIcon.setImageDrawable(iconDrawable)
@@ -149,7 +164,7 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
         textAmountFiat.isEnabled = !zeroBalance
         textExchangeRate.text = "1 ${walletBalanceViewItem.coinValue.coin.code} - ${walletBalanceViewItem.currencyValue?.currency?.getSymbolChar() ?: ""}${numberFormat.format(walletBalanceViewItem.exchangeRateValue?.value ?: 0.0)}"
         //todo convert indeterminate spinner to determinant one
-        walletBalanceViewItem.progress?.subscribe {
+        disposable = walletBalanceViewItem.progress?.subscribe {
             syncProgress.visibility = if (it == 1.0) View.GONE else View.VISIBLE
         }
 
@@ -176,6 +191,10 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
             AnimationHelper.collapse(buttonsWrapper)
         }
 
+    }
+
+    fun unbind() {
+        disposable?.dispose()
     }
 
 }
