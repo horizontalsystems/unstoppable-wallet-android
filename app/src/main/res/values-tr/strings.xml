@@ -133,7 +133,6 @@
   <string name="set_pin_confirm_description">PİN, program\'ı açmak ve para göndermek için kullanılacak</string>
   <string name="set_pin_success">Kilit PİN\'i başarıyla oluşturuldu!</string>
   <string name="set_pin_error_pins_dont_match">PİN uyuşmuyor. Tekrar deneyin.</string>
-  <string name="set_pin_error_pins_dont_match_you_have_attempts_left">Wrong PIN. You have %s attempts left.</string>
   <string name="set_pin_error_failed_to_save_pin">PİN kaydedilirken hata oldu. Lütfen tekrar deneyin.</string>
   <string name="edit_pin_auth_title">PIN oluştur
 </string>

@@ -6,8 +6,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.hardware.fingerprint.FingerprintManager
-import android.os.Bundle
-import android.os.Handler
+import android.os.*
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.UserNotAuthenticatedException
 import android.support.v7.widget.GridLayoutManager
@@ -16,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import bitcoin.wallet.BaseActivity
@@ -28,6 +28,8 @@ import bitcoin.wallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_pin.*
 import kotlinx.android.synthetic.main.custom_tall_toolbar.*
 import java.security.UnrecoverableKeyException
+
+
 
 
 class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuthenticationDialogFragment.Callback {
@@ -146,10 +148,9 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
             }
         })
 
-        viewModel.showAttemptsLeftWarning.observe(this, Observer { pair ->
-            pair?.let { (stringRes, attemptsCount) ->
-                errorMessage.text = getString(stringRes, attemptsCount)
-            }
+        viewModel.onWrongPin.observe(this, Observer {
+            vibrate()
+            shakePinCircles()
         })
 
         viewModel.blockScreen.observe(this, Observer {
@@ -192,6 +193,39 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
         viewModel.delegate.onBackPressed()
     }
 
+    override fun onFingerprintAuthSucceed(withFingerprint: Boolean, crypto: FingerprintManager.CryptoObject?) {
+        unlockWallet()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == AUTHENTICATE_TO_FINGERPRINT) {
+                showFingerprintDialog()
+                return
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun onItemClick(item: NumPadItem) {
+        when (item.type) {
+            NumPadItemType.NUMBER -> {
+                errorMessage.text = ""
+                viewModel.delegate.onEnterDigit(item.number)
+            }
+            NumPadItemType.DELETE -> {
+                viewModel.delegate.onClickDelete()
+            }
+            NumPadItemType.FINGER -> {
+                if (isFingerprintEnabled) {
+                    showFingerprintDialog()
+                }
+            }
+        }
+    }
+
+    override fun isFingerPrintEnabled() = isFingerprintEnabled
+
     private fun showFingerprintDialog() {
         if (App.systemInfoManager.touchSensorCanBeUsed()) {
             try {
@@ -215,18 +249,19 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
         }
     }
 
-    override fun onFingerprintAuthSucceed(withFingerprint: Boolean, crypto: FingerprintManager.CryptoObject?) {
-        unlockWallet()
+    private fun shakePinCircles() {
+        val shake = AnimationUtils.loadAnimation(this, R.anim.shake_pin_circles)
+        pinCirclesWrapper.startAnimation(shake)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == AUTHENTICATE_TO_FINGERPRINT) {
-                showFingerprintDialog()
-                return
-            }
+    private fun vibrate() {
+        val v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        val vibrateTime = 300L
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            v.vibrate(VibrationEffect.createOneShot(vibrateTime, VibrationEffect.DEFAULT_AMPLITUDE))
+        } else {//deprecated in API 26
+            v.vibrate(vibrateTime)
         }
-        super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun unlockWallet() {
@@ -238,25 +273,6 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
         viewModel.delegate.onBackPressed()
         return true
     }
-
-    override fun onItemClick(item: NumPadItem) {
-        when (item.type) {
-            NumPadItemType.NUMBER -> {
-                errorMessage.text = ""
-                viewModel.delegate.onEnterDigit(item.number)
-            }
-            NumPadItemType.DELETE -> {
-                viewModel.delegate.onClickDelete()
-            }
-            NumPadItemType.FINGER -> {
-                if (isFingerprintEnabled) {
-                    showFingerprintDialog()
-                }
-            }
-        }
-    }
-
-    override fun isFingerPrintEnabled() = isFingerprintEnabled
 
     private fun updatePinCircles(length: Int) {
         val filledCircle = R.drawable.pin_circle_filled

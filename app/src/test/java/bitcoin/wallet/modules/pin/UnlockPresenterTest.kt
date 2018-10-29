@@ -83,11 +83,10 @@ class UnlockPresenterTest {
 
     @Test
     fun showAttemptsLeftWarning() {
-        val attempts = 5
-        presenter.showAttemptsLeftWarning(attempts)
+        presenter.onWrongPin()
 
         verify(view).clearPinMaskWithDelay()
-        verify(view).showAttemptsLeftWarning(attempts)
+        verify(view).onWrongPin()
     }
 
     @Test

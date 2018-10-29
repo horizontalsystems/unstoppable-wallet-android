@@ -15,7 +15,7 @@ class PinViewModel : ViewModel(), PinModule.IView, PinModule.IRouter, IKeyStoreS
     val highlightPinMask = MutableLiveData<Int>()
     val showErrorInDialog = MutableLiveData<Int>()
     val showErrorMessage = MutableLiveData<Int>()
-    val showAttemptsLeftWarning = MutableLiveData<Pair<Int,Int>>()
+    val onWrongPin = SingleLiveEvent<Unit>()
     val blockScreen = SingleLiveEvent<Unit>()
     val unblockScreen = SingleLiveEvent<Unit>()
     val showSuccess = SingleLiveEvent<Unit>()
@@ -93,8 +93,8 @@ class PinViewModel : ViewModel(), PinModule.IView, PinModule.IRouter, IKeyStoreS
         description.value = R.string.edit_pin_description
     }
 
-    override fun showAttemptsLeftWarning(attempts: Int) {
-        showAttemptsLeftWarning.value = Pair(R.string.set_pin_error_pins_dont_match_you_have_attempts_left, attempts)
+    override fun onWrongPin() {
+        onWrongPin.call()
     }
 
     override fun blockScreen() {
