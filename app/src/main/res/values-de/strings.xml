@@ -160,5 +160,5 @@
   <string name="edit_pin_auth_title">PIN aktualisieren</string>
   <string name="edit_pin_auth_description">Gib deine derzeitige PIN ein</string>
   <string name="edit_pin_title">Gib neue PIN ein</string>
-  <string name="edit_pin_description">Your PIN will be used to unlock your wallet</string>
+  <string name="edit_pin_description">Deine PIN wird verwendet, um dein Geldbörse zu entsperren</string>
 </resources>
