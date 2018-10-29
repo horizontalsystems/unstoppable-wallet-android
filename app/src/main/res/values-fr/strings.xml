@@ -103,7 +103,7 @@
   <string name="settings_currency_switcher_title">Devise de Base</string>
   <string name="settings_language_title">Langue</string>
   <string name="settings_about_title">Sur</string>
-  <string name="settings_about_terms_privacy_subtitle">Terms &amp; Privacy:</string>
+  <string name="settings_about_terms_privacy_subtitle">Terms &amp; Confidentialité:</string>
   <string name="settings_about_terms_privacy_text">Your funds are stored in the BANK wallet app. Not on any external servers.
 \n\nBANK Wallet doesn\'t store or collect any private info.
 \n\nBANK Wallet doesn\'t depend on any server or person to function.
