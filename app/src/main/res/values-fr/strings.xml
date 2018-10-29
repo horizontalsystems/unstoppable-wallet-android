@@ -104,14 +104,14 @@
   <string name="settings_language_title">Langue</string>
   <string name="settings_about_title">Sur</string>
   <string name="settings_about_terms_privacy_subtitle">Terms &amp; Confidentialité:</string>
-  <string name="settings_about_terms_privacy_text">Your funds are stored in the BANK wallet app. Not on any external servers.
-\n\nBANK Wallet doesn\'t store or collect any private info.
-\n\nBANK Wallet doesn\'t depend on any server or person to function.
-\n\nBANK Wallet works everywhere as long as there is an internet.
-\n\nIt is impossible for a third party to block the wallet from working or to block the user.
-\n\nThe entire code powering the BANK Wallet is free and open to public.
-\n\nThere may be bugs in the code. Make sure you always backup a Secret Key for your wallet!</string>
-  <string name="settings_about_dependencies_subtitle">Dependencies:</string>
+  <string name="settings_about_terms_privacy_text">Vos fonds sont stockées dans l’application Bank Wallet. Pas sur des serveurs externes.
+\n\nBANK Wallet ne stocke pas et collecte pas des informations privées.
+\n\nBANK Wallet ne dépend d\'aucun serveur ni d\'aucune personne pour fonctionner.
+\n\nBANK Wallet fonctionne partout tant qu’il y a un internet.
+\n\nIl est impossible pour un tiers de bloquer le porte-monnaie de fonctionner ou de bloque l\'utilisateur.
+\n\nL\'ensemble du code alimentant le BANK Wallet est gratuit et ouvert au public.
+\n\nIl est possible d\'avoir des bugs dans le code. Assurez-vous de toujours sauvegarder une clé secrète pour votre porte-monnaie!</string>
+  <string name="settings_about_dependencies_subtitle">Dépendances:</string>
   <string name="settings_about_dependencies_text">There are some third-party services used by the BANK Wallet for non-critical data for the wallet.
 \n\n1. IPFS Decentralized Storage
         \n
