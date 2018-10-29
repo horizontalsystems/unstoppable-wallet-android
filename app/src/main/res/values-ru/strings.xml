@@ -103,7 +103,7 @@
   <string name="settings_currency_switcher_title">Базовая Валюта</string>
   <string name="settings_language_title">Язык</string>
   <string name="settings_about_title">Около</string>
-  <string name="settings_about_terms_privacy_subtitle">Terms &amp; Privacy:</string>
+  <string name="settings_about_terms_privacy_subtitle">Условия &amp; Политика конфиденциальности:</string>
   <string name="settings_about_terms_privacy_text">Your funds are stored in the BANK wallet app. Not on any external servers.
 \n\nBANK Wallet doesn\'t store or collect any private info.
 \n\nBANK Wallet doesn\'t depend on any server or person to function.
@@ -111,7 +111,7 @@
 \n\nIt is impossible for a third party to block the wallet from working or to block the user.
 \n\nThe entire code powering the BANK Wallet is free and open to public.
 \n\nThere may be bugs in the code. Make sure you always backup a Secret Key for your wallet!</string>
-  <string name="settings_about_dependencies_subtitle">Dependencies:</string>
+  <string name="settings_about_dependencies_subtitle">Зависимости: </string>
   <string name="settings_about_dependencies_text">There are some third-party services used by the BANK Wallet for non-critical data for the wallet.
 \n\n1. IPFS Decentralized Storage
         \n
@@ -160,5 +160,5 @@
   <string name="edit_pin_auth_title">Изменить PIN-код</string>
   <string name="edit_pin_auth_description">Введите текущий PIN-код</string>
   <string name="edit_pin_title">Введите новый PIN-код</string>
-  <string name="edit_pin_description">Your PIN will be used to unlock your wallet</string>
+  <string name="edit_pin_description">Ваш PIN-код будет использоваться для разблокировки кошелька</string>
 </resources>
