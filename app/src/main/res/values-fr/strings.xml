@@ -157,7 +157,7 @@
   <string name="set_pin_error_pins_dont_match">Le PIN ne correspond pas. Réessayez.</string>
   <string name="set_pin_error_pins_dont_match_you_have_attempts_left">Wrong PIN</string>
   <string name="set_pin_error_failed_to_save_pin">Une erreur est apparue lors de l\'enregistrement de votre code PIN. Veuillez réessayer.</string>
-  <string name="edit_pin_auth_title">Change PIN</string>
+  <string name="edit_pin_auth_title">Changez votre PIN</string>
   <string name="edit_pin_auth_description">Entrez le PIN actuel</string>
   <string name="edit_pin_title">Entrez le nouveau PIN</string>
   <string name="edit_pin_description">Your PIN will be used to unlock your wallet</string>
