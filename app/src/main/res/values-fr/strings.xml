@@ -112,17 +112,17 @@
 \n\nL\'ensemble du code alimentant le BANK Wallet est gratuit et ouvert au public.
 \n\nIl est possible d\'avoir des bugs dans le code. Assurez-vous de toujours sauvegarder une clé secrète pour votre porte-monnaie!</string>
   <string name="settings_about_dependencies_subtitle">Dépendances:</string>
-  <string name="settings_about_dependencies_text">There are some third-party services used by the BANK Wallet for non-critical data for the wallet.
-\n\n1. IPFS Decentralized Storage
+  <string name="settings_about_dependencies_text">Il y a certains services tiers utilisés par le Bank Wallet pour données non critiques pour le porte-monnaie.
+\n\n1. Stockage décentralisé de CIP
         \n
-\n  &#8226; stores current exchange rates,
-\n  &#8226; stores coin information,
-\n  &#8226; stores \"recommended\" transaction fees
-\n  &#8226; stores a list of supported base currencies
-\n  &#8226; stores public blockchain dada
-        \n\n2. CryptoCompare.com - used to obtain current market exchange rates.
-\n\n3. Etherscan.io - used to retrieve a list of past transactions for a given Ethereum address.
-\n\n4. Infura.io - a public gateway to Ethereum Blockchain.</string>
+\ n  &#8226; stocke les taux de change actuels,
+\ n &#8226; stocke les informations sur les coins,
+\ n &#8226; enregistre les frais de transaction \"recommandés\"
+\ n &#8226; stocke une liste des devises de base prises en charge
+\ n &#8226; stocke la blockchain publique dada
+        \n\n2. CryptoCompare.com - permet d’obtenir des taux de change du marché.
+\n\n3. Etherscan.IO - utilisé pour récupérer une liste d’opérations passées pour une adresse donnée de l’Ethereum.
+\n\n4. Infura.IO - une passerelle publique à Ethereum Blockchain.</string>
   <string name="alert_keys_invalidated_title">Erreur de Keystore Android</string>
   <string name="alert_keys_invalidated_description">The encrypted data holding your wallet was recently invalidated because your Android lock screen was changed</string>
   <string name="alert_no_device_lock_title">Attention</string>
@@ -155,10 +155,10 @@
   <string name="set_pin_confirm_description">Votre PIN sera utilisé pour déverrouiller votre porte-monnaie et envoyer de l’argent</string>
   <string name="set_pin_success">Le code PIN de verrouillage a été configuré!</string>
   <string name="set_pin_error_pins_dont_match">Le PIN ne correspond pas. Réessayez.</string>
-  <string name="set_pin_error_pins_dont_match_you_have_attempts_left">Wrong PIN</string>
+  <string name="set_pin_error_pins_dont_match_you_have_attempts_left">PIN incorrect</string>
   <string name="set_pin_error_failed_to_save_pin">Une erreur est apparue lors de l\'enregistrement de votre code PIN. Veuillez réessayer.</string>
   <string name="edit_pin_auth_title">Changez votre PIN</string>
   <string name="edit_pin_auth_description">Entrez le PIN actuel</string>
   <string name="edit_pin_title">Entrez le nouveau PIN</string>
-  <string name="edit_pin_description">Your PIN will be used to unlock your wallet</string>
+  <string name="edit_pin_description">Votre PIN sera utilisé pour déverrouiller l\'appli de porte-monnaie</string>
 </resources>
