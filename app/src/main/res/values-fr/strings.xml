@@ -124,9 +124,9 @@
 \n\n3. Etherscan.IO - utilisé pour récupérer une liste d’opérations passées pour une adresse donnée de l’Ethereum.
 \n\n4. Infura.IO - une passerelle publique à Ethereum Blockchain.</string>
   <string name="alert_keys_invalidated_title">Erreur de Keystore Android</string>
-  <string name="alert_keys_invalidated_description">The encrypted data holding your wallet was recently invalidated because your Android lock screen was changed</string>
+  <string name="alert_keys_invalidated_description">Les données cryptées contenant votre porte-monnaie ont récemment été invalidées car votre écran de verrouillage Android a été modifié</string>
   <string name="alert_no_device_lock_title">Attention</string>
-  <string name="alert_no_device_lock_description">Set up a lock screen on this device to continue. Go to “Settings” &gt; “Security” &gt; “Screen Lock” and enable the lock screen setting.</string>
+  <string name="alert_no_device_lock_description">Installez un écran de verrouillage sur cet appareil pour continuer. Allez dans « Paramètres » &gt; « Sécurité » &gt; « Screen Lock » et activez le paramètre d’écran de verrouillage.</string>
   <string name="button_cancel">Annuler</string>
   <string name="button_back">Retour</string>
   <string name="button_ok">OK</string>
