@@ -35,7 +35,7 @@ object PinModule {
         fun setTitleForEditPin()
         fun setDescriptionForEditPin()
         fun hideBackButton()
-        fun showAttemptsLeftWarning(attempts: Int)
+        fun onWrongPin()
         fun blockScreen()
         fun unblockScreen()
     }
@@ -67,7 +67,7 @@ object PinModule {
         fun goToPinEdit()
         fun blockScreen()
         fun unblockScreen()
-        fun showAttemptsLeftWarning(attemptsLeft: Int)
+        fun onWrongPin()
     }
 
     interface IRouter {

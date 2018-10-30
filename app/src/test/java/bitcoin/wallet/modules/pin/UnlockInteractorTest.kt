@@ -117,7 +117,7 @@ class UnlockInteractorTest {
     }
 
     @Test
-    fun onWrongPinSubmit_showFiveAttemptsLeft() {
+    fun onWrongPinSubmit() {
         val pin = "111111"
         val pin2 = "123456"
         val attemptsLeft = 5
@@ -133,7 +133,7 @@ class UnlockInteractorTest {
 
         actionRunnable.run()
 
-        verify(delegate).showAttemptsLeftWarning(attemptsLeft)
+        verify(delegate).onWrongPin()
 //        verify(settings).setUnlockAttemptsLeft(attemptsLeft-1)
     }
 
@@ -142,7 +142,6 @@ class UnlockInteractorTest {
         val pin = "111111"
         val pin2 = "123456"
         val attemptsLeft = 0
-        val defaultAttemptsLeft = 5
 
         whenever(iSecuredStorage.savedPin).thenReturn(pin)
         whenever(localStorage.unlockAttemptsLeft).thenReturn(attemptsLeft)

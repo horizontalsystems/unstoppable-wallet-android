@@ -31,7 +31,7 @@ class UnlockInteractor(private val storage: ILocalStorage, private val secureSto
         val attemptsLeft = storage.unlockAttemptsLeft
         if (attemptsLeft > 0) {
             storage.unlockAttemptsLeft = attemptsLeft - 1
-            delegate?.showAttemptsLeftWarning(attemptsLeft)
+            delegate?.onWrongPin()
         } else {
             val blockTillDate = DateHelper.minutesAfterNow(blockingTimeInMinutes.toInt())
             storage.blockTillDate = blockTillDate

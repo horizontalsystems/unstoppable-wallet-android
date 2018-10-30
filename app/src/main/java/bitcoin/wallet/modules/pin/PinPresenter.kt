@@ -87,10 +87,10 @@ abstract class PinPresenter(protected val interactor: PinModule.IInteractor, pro
         view?.unblockScreen()
     }
 
-    override fun showAttemptsLeftWarning(attemptsLeft: Int) {
+    override fun onWrongPin() {
         enteredPin.setLength(0)
         view?.clearPinMaskWithDelay()
-        view?.showAttemptsLeftWarning(attemptsLeft)
+        view?.onWrongPin()
     }
 
     override fun onMinimizeApp() {
