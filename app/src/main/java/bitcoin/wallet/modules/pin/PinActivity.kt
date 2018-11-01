@@ -45,8 +45,6 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
 
     private var isFingerprintEnabled = false
 
-    override var requiresPinUnlock: Boolean = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -265,7 +263,6 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
     }
 
     private fun unlockWallet() {
-        App.promptPin = false
         finish()
     }
 
@@ -294,10 +291,10 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
         private const val keyEnteredPin = "entered_pin"
 
         fun start(context: Context, interactionType: PinInteractionType, enteredPin: String = "") {
-            val intent = Intent(context, PinActivity::class.java)
-            intent.putExtra(keyInteractionType, interactionType)
-            intent.putExtra(keyEnteredPin, enteredPin)
-            context.startActivity(intent)
+//            val intent = Intent(context, PinActivity::class.java)
+//            intent.putExtra(keyInteractionType, interactionType)
+//            intent.putExtra(keyEnteredPin, enteredPin)
+//            context.startActivity(intent)
         }
     }
 

@@ -172,7 +172,7 @@
 
 
     <!--Set Pin-->
-    <string name="set_pin_title">Enter PIN</string>
+    <string name="set_pin_title">Set PIN</string>
     <string name="set_pin_description">Your PIN will be used to unlock wallet app</string>
     <string name="set_pin_error_short_pin">Please enter all digits.</string>
     <string name="set_pin_confirm_title">Enter again</string>

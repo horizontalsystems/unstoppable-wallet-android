@@ -11,7 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import bitcoin.wallet.R
 import bitcoin.wallet.core.setOnSingleClickListener
-import bitcoin.wallet.modules.pin.PinModule
+import bitcoin.wallet.modules.newpin.PinModule
 import bitcoin.wallet.modules.receive.ReceiveModule
 import bitcoin.wallet.modules.send.SendModule
 import bitcoin.wallet.viewHelpers.AnimationHelper

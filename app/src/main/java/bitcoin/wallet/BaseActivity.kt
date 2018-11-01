@@ -14,8 +14,6 @@ import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
 import bitcoin.wallet.core.App
 import bitcoin.wallet.core.security.EncryptionManager
-import bitcoin.wallet.modules.pin.PinModule
-import bitcoin.wallet.viewHelpers.DateHelper
 import java.util.*
 
 abstract class BaseActivity : AppCompatActivity() {
@@ -24,9 +22,6 @@ abstract class BaseActivity : AppCompatActivity() {
 
     private val queuedRunnables: MutableList<Runnable?> = mutableListOf()
 
-    private val allowableTimeInBackground: Long = 30
-    protected open var requiresPinUnlock = true
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -34,29 +29,6 @@ abstract class BaseActivity : AppCompatActivity() {
         setTheme(if (lightMode) R.style.LightModeAppTheme else R.style.DarkModeAppTheme)
 
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (requiresPinUnlock && App.promptPin) {
-            var promptPinByTimeout = true
-            App.appBackgroundedTime?.let {
-                val secondsAgo = DateHelper.getSecondsAgo(it)
-                promptPinByTimeout = secondsAgo > allowableTimeInBackground
-            }
-
-            if (promptPinByTimeout) {
-                safeExecuteWithKeystore(
-                        action = Runnable {
-                            if (App.secureStorage.savedPin != null) {
-                                PinModule.startForUnlock(this)
-                            }
-                        },
-                        onSuccess = Runnable { App.promptPin = false },
-                        onFailure = null
-                )
-            }
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -75,12 +47,6 @@ abstract class BaseActivity : AppCompatActivity() {
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
-    }
-
-    override fun attachBaseContext(newBase: Context?) {
-        newBase?.let {
-            super.attachBaseContext(updateBaseContextLocale(it))
-        } ?: super.attachBaseContext(newBase)
     }
 
     fun safeExecuteWithKeystore(action: Runnable, onSuccess: Runnable? = null, onFailure: Runnable? = null) {
@@ -102,6 +68,12 @@ abstract class BaseActivity : AppCompatActivity() {
                 onFailure?.run()
             }
         }
+    }
+
+    override fun attachBaseContext(newBase: Context?) {
+        newBase?.let {
+            super.attachBaseContext(updateBaseContextLocale(it))
+        } ?: super.attachBaseContext(newBase)
     }
 
     private fun updateBaseContextLocale(context: Context): Context {

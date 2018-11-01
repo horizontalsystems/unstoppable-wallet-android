@@ -128,3 +128,17 @@ interface ISystemInfoManager {
     fun phoneHasFingerprintSensor(): Boolean
     fun touchSensorCanBeUsed(): Boolean
 }
+
+interface IPinManager {
+    val isPinSet: Boolean
+    fun store(pin: String)
+    fun validate(pin: String): Boolean
+}
+
+interface ILockManager {
+    var isLocked: Boolean
+    fun lock()
+    fun onUnlock()
+    fun didEnterBackground()
+    fun willEnterForeground()
+}
