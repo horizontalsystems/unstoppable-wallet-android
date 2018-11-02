@@ -29,6 +29,7 @@ import bitcoin.wallet.core.security.EncryptionManager
 import bitcoin.wallet.core.security.FingerprintAuthenticationDialogFragment
 import bitcoin.wallet.modules.main.MainModule
 import bitcoin.wallet.modules.pin.NumPadItemType
+import bitcoin.wallet.ui.extensions.SmoothLinearLayoutManager
 import bitcoin.wallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_new_pin.*
 import kotlinx.android.synthetic.main.custom_tall_toolbar.*
@@ -54,7 +55,7 @@ class NewPinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintA
         val interactionType = intent.getSerializableExtra(keyInteractionType) as NewPinInteractionType
 
         pinPagesAdapter = PinPagesAdapter()
-        layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        layoutManager = SmoothLinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         pinPagesRecyclerView.layoutManager = layoutManager
         val snapHelper = PagerSnapHelper()
         snapHelper.attachToRecyclerView(pinPagesRecyclerView)
