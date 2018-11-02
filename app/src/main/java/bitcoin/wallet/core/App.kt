@@ -36,6 +36,8 @@ class App : Application() {
 
         lateinit var instance: App
             private set
+
+        var lastExitDate: Long = 0
     }
 
     override fun onCreate() {
@@ -72,7 +74,7 @@ class App : Application() {
         languageManager = LanguageManager(localStorage, fallbackLanguage)
         systemInfoManager = SystemInfoManager()
         pinManager = PinManager(secureStorage)
-        lockManager = LockManager(localStorage, secureStorage, wordsManager)
+        lockManager = LockManager(secureStorage, wordsManager)
     }
 
 }

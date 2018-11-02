@@ -10,7 +10,8 @@ object UnlockPinModule {
     }
 
     interface IUnlockPinInteractor {
-        fun unlock(pin: String)
+        fun cacheSecuredData()
+        fun unlock(pin: String): Boolean
         fun biometricUnlock()
         fun onUnlock()
     }
@@ -24,7 +25,7 @@ object UnlockPinModule {
 
     fun init(view: PinViewModel, router: IUnlockPinRouter, keystoreSafeExecute: IKeyStoreSafeExecute) {
 
-        val interactor = UnlockPinInteractor(keystoreSafeExecute, App.localStorage, App.pinManager, App.lockManager)
+        val interactor = UnlockPinInteractor(keystoreSafeExecute, App.localStorage, App.wordsManager, App.adapterManager, App.pinManager, App.lockManager)
         val presenter = UnlockPinPresenter(interactor, router)
 
         view.delegate = presenter

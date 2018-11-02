@@ -39,7 +39,6 @@ class NewPinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintA
     private lateinit var viewModel: PinViewModel
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var pinPagesAdapter: PinPagesAdapter
-    private var enteredPin = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -113,9 +112,10 @@ class NewPinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintA
 
         viewModel.showPageAtIndex.observe(this, Observer { index ->
             index?.let {
-                enteredPin = ""
-                pinPagesAdapter.setEnteredPinLength(layoutManager.findFirstVisibleItemPosition(), enteredPin.length)
-                pinPagesRecyclerView.smoothScrollToPosition(it)
+                Handler().postDelayed({
+                    pinPagesAdapter.setEnteredPinLength(layoutManager.findFirstVisibleItemPosition(), 0)
+                    pinPagesRecyclerView.smoothScrollToPosition(it)
+                }, 300)
             }
         })
 
@@ -131,19 +131,12 @@ class NewPinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintA
             }
         })
 
-        viewModel.shakeAndClearLiveEvent.observe(this, Observer {pageIndex ->
-            pageIndex?.let {
-                pinPagesAdapter.shakePageIndex = it
-                Handler().postDelayed({
-                    pinPagesAdapter.shakePageIndex = null
-                }, 500)
-            }
-        })
-
         viewModel.navigateToMainLiveEvent.observe(this, Observer {
-            HudHelper.showSuccessMessage(activity = this)
-            MainModule.start(this)
-            finish()
+            Handler().postDelayed({
+                HudHelper.showSuccessMessage(activity = this)
+                MainModule.start(this)
+                finish()
+            }, 300)
         })
 
         viewModel.keyStoreSafeExecute.observe(this, Observer { triple ->
@@ -170,6 +163,18 @@ class NewPinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintA
         viewModel.showFingerprintInputLiveEvent.observe(this, Observer {
             showFingerprintDialog()
             numpadAdapter.showFingerPrintButton = true
+        })
+
+        viewModel.resetCirclesWithShakeAndDelayForPage.observe(this, Observer { pageIndex ->
+            pageIndex?.let {
+                pinPagesAdapter.shakePageIndex = it
+                pinPagesAdapter.notifyDataSetChanged()
+                Handler().postDelayed({
+                    pinPagesAdapter.shakePageIndex = null
+                    pinPagesAdapter.setEnteredPinLength(pageIndex, 0)
+                    viewModel.delegate.resetPin()
+                }, 300)
+            }
         })
 
     }
@@ -240,7 +245,7 @@ class NewPinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintA
         fun startForUnlock() {
             val intent = Intent(App.instance, NewPinActivity::class.java)
             intent.putExtra(keyInteractionType, NewPinInteractionType.UNLOCK)
-            intent.flags = Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS and Intent.FLAG_ACTIVITY_NEW_TASK
+            intent.flags = Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS and Intent.FLAG_ACTIVITY_NEW_TASK and Intent.FLAG_ACTIVITY_CLEAR_TOP
             App.instance.startActivity(intent)
         }
     }
@@ -253,10 +258,6 @@ class PinPagesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var pinPages = mutableListOf<PinPage>()
     var shakePageIndex: Int? = null
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
 
     fun setErrorForPage(pageIndex: Int, error: Int?) {
         pinPages[pageIndex].error = error
@@ -334,7 +335,7 @@ class NumPadItemsAdapter(private val numPadItems: List<NumPadItem>, private val 
     override fun getItemCount() = numPadItems.count()
 
     var showFingerPrintButton = false
-        set(value){
+        set(value) {
             field = value
             notifyDataSetChanged()
         }

@@ -19,8 +19,8 @@ import java.util.*
 abstract class BaseActivity : AppCompatActivity() {
 
     private var failureRunnable: Runnable? = null
-
-    private val queuedRunnables: MutableList<Runnable?> = mutableListOf()
+    private var actionRunnable: Runnable? = null
+    private var successRunnable: Runnable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,39 +35,37 @@ abstract class BaseActivity : AppCompatActivity() {
         if (requestCode == AUTHENTICATE_FOR_ENCRYPTION) {
             if (resultCode == Activity.RESULT_OK) {
                 try {
-                    queuedRunnables.forEach { it?.run() }
-                } catch (e: Exception){
+                    actionRunnable?.run()
+                    successRunnable?.run()
+                } catch (e: Exception) {
                     failureRunnable?.run()
                 }
             } else {
                 failureRunnable?.run()
             }
             failureRunnable = null
-            queuedRunnables.clear()
+            actionRunnable = null
+            successRunnable = null
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
     }
 
     fun safeExecuteWithKeystore(action: Runnable, onSuccess: Runnable? = null, onFailure: Runnable? = null) {
-        if (queuedRunnables.isNotEmpty()) {
-            queuedRunnables.add(action)
-            queuedRunnables.add(onSuccess)
-        } else {
-            try {
-                action.run()
-                onSuccess?.run()
-            } catch (e: UserNotAuthenticatedException) {
-                queuedRunnables.add(action)
-                queuedRunnables.add(onSuccess)
-                failureRunnable = onFailure
-                EncryptionManager.showAuthenticationScreen(this, AUTHENTICATE_FOR_ENCRYPTION)
-            } catch (e: KeyPermanentlyInvalidatedException) {
-                EncryptionManager.showKeysInvalidatedAlert(this)
-            } catch (e: Exception) {
-                onFailure?.run()
-            }
+        try {
+            action.run()
+            onSuccess?.run()
+        } catch (e: UserNotAuthenticatedException) {
+            actionRunnable = action
+            successRunnable = onSuccess
+            failureRunnable = onFailure
+            EncryptionManager.showAuthenticationScreen(this, AUTHENTICATE_FOR_ENCRYPTION)
+        } catch (e: KeyPermanentlyInvalidatedException) {
+            EncryptionManager.showKeysInvalidatedAlert(this)
+        } catch (e: Exception) {
+            onFailure?.run()
         }
+
     }
 
     override fun attachBaseContext(newBase: Context?) {
@@ -86,14 +84,14 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     @TargetApi(Build.VERSION_CODES.N)
-    private fun updateResourcesLocale(context: Context , locale: Locale): Context {
+    private fun updateResourcesLocale(context: Context, locale: Locale): Context {
         val configuration: Configuration = context.resources.configuration
         configuration.setLocale(locale)
         return context.createConfigurationContext(configuration)
     }
 
     @SuppressWarnings("deprecation")
-    private fun updateResourcesLocaleLegacy(context: Context , locale: Locale): Context {
+    private fun updateResourcesLocaleLegacy(context: Context, locale: Locale): Context {
         val resources: Resources = context.resources
         val configuration: Configuration = resources.configuration
         configuration.locale = locale

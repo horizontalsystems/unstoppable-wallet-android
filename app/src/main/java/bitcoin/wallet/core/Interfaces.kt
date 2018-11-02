@@ -17,7 +17,6 @@ interface ILocalStorage {
     var isBiometricOn: Boolean
     var isLightModeOn: Boolean
     var iUnderstand: Boolean
-    var lastExitDate: Long
     var unlockAttemptsLeft: Int
     var baseCurrency: Currency
     var blockTillDate: Long?
@@ -130,6 +129,8 @@ interface ISystemInfoManager {
 }
 
 interface IPinManager {
+    fun safeLoad()
+    var pin: String?
     val isPinSet: Boolean
     fun store(pin: String)
     fun validate(pin: String): Boolean

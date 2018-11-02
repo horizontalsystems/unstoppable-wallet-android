@@ -10,7 +10,6 @@ import com.google.gson.Gson
 class LocalStorageManager : ILocalStorage {
 
     private val CURRENT_LANGUAGE = "current_language"
-    private val LAST_EXIT_DATE = "last_exit_date"
     private val LIGHT_MODE_ENABLED = "light_mode_enabled"
     private val FINGERPRINT_ENABLED = "fingerprint_enabled"
     private val WORDLIST_BACKUP = "wordlist_backup"
@@ -47,12 +46,6 @@ class LocalStorageManager : ILocalStorage {
         get() = App.preferences.getBoolean(I_UNDERSTAND, false)
         set(value) {
             App.preferences.edit().putBoolean(LIGHT_MODE_ENABLED, value).apply()
-        }
-
-    override var lastExitDate: Long
-        get() = App.preferences.getLong(LAST_EXIT_DATE, 0)
-        set(timestamp) {
-            App.preferences.edit().putLong(LAST_EXIT_DATE, timestamp).apply()
         }
 
     override var unlockAttemptsLeft: Int

@@ -62,6 +62,7 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".modules.newpin.NewPinActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
 
         <meta-data

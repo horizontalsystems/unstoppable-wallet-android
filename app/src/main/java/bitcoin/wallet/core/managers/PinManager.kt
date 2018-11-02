@@ -6,6 +6,12 @@ import bitcoin.wallet.core.ISecuredStorage
 
 class PinManager(private val securedStorage: ISecuredStorage): IPinManager {
 
+    override var pin: String? = null
+
+    override fun safeLoad() {
+        pin = securedStorage.savedPin
+    }
+
     override val isPinSet: Boolean
         get() = !securedStorage.pinIsEmpty()
 
@@ -14,8 +20,7 @@ class PinManager(private val securedStorage: ISecuredStorage): IPinManager {
         securedStorage.savePin(pin)
     }
 
-    @Throws(UserNotAuthenticatedException::class)
     override fun validate(pin: String): Boolean {
-        return securedStorage.savedPin == pin
+        return this.pin == pin
     }
 }

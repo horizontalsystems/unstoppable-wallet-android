@@ -17,13 +17,13 @@ class PinViewModel: ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter,
     val showError = MutableLiveData<Int>()
     val showErrorForPage = MutableLiveData<Pair<Int, Int>>()
     val fillPinCircles = MutableLiveData<Pair<Int, Int>>()
-    val shakeAndClearLiveEvent = MutableLiveData<Int>()
     val navigateToMainLiveEvent = SingleLiveEvent<Unit>()
     val hideToolbar = SingleLiveEvent<Unit>()
     val dismissLiveEvent = SingleLiveEvent<Unit>()
     val showBackButton = SingleLiveEvent<Unit>()
     val showSuccess = SingleLiveEvent<Unit>()
     val showFingerprintInputLiveEvent = SingleLiveEvent<Unit>()
+    val resetCirclesWithShakeAndDelayForPage = SingleLiveEvent<Int>()
     val keyStoreSafeExecute = SingleLiveEvent<Triple<Runnable, Runnable?, Runnable?>>()
 
     fun init(interactionType: NewPinInteractionType) {
@@ -60,7 +60,7 @@ class PinViewModel: ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter,
     }
 
     override fun showPinWrong(pageIndex: Int) {
-        shakeAndClearLiveEvent.value = pageIndex
+        resetCirclesWithShakeAndDelayForPage.value = pageIndex
     }
 
     override fun showFingerprintDialog() {

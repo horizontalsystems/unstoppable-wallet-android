@@ -1,6 +1,6 @@
 package bitcoin.wallet.core.managers
 
-import bitcoin.wallet.core.ILocalStorage
+import bitcoin.wallet.core.App
 import bitcoin.wallet.core.ILockManager
 import bitcoin.wallet.core.ISecuredStorage
 import bitcoin.wallet.core.IWordsManager
@@ -11,7 +11,6 @@ import java.util.*
 
 
 class LockManager(
-        private val localStorage: ILocalStorage,
         private val securedStorage: ISecuredStorage,
         private val wordsManager: IWordsManager): ILockManager {
 
@@ -24,7 +23,7 @@ class LockManager(
             return
         }
 
-        localStorage.lastExitDate = Date().time
+        App.lastExitDate = Date().time
     }
 
     override fun willEnterForeground() {
@@ -32,7 +31,7 @@ class LockManager(
             return
         }
 
-        val secondsAgo = DateHelper.getSecondsAgo(localStorage.lastExitDate)
+        val secondsAgo = DateHelper.getSecondsAgo(App.lastExitDate)
         if (secondsAgo < lockTimeout) {
             return
         }

@@ -28,13 +28,13 @@ object PinModule {
         fun onBackPressed() {}
         fun onBiometricUnlock() {}
         fun showBiometricUnlock() {}
+        fun resetPin()
     }
 
     interface IPinInteractor {
         fun set(pin: String?)
         fun validate(pin: String): Boolean
         fun save(pin: String)
-
         fun unlock(pin: String): Boolean
     }
 

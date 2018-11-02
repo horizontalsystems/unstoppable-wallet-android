@@ -1,6 +1,5 @@
 package bitcoin.wallet.modules.newpin
 
-import android.os.Handler
 import bitcoin.wallet.R
 
 open class ManagePinPresenter(
@@ -22,20 +21,22 @@ open class ManagePinPresenter(
             view?.fillCircles(enteredPin.length, pageIndex)
 
             if (enteredPin.length == PinModule.PIN_COUNT) {
-                Handler().postDelayed({
-                    navigateToPage(pageIndex, enteredPin)
-                    enteredPin = ""
-                }, 300)
+                navigateToPage(pageIndex, enteredPin)
+                enteredPin = ""
             }
         }
     }
 
     private fun navigateToPage(pageIndex: Int, pin: String) {
         when (pages[pageIndex]) {
-            Page.UNLOCK -> onEnterFromUnlockPage(pin)
+            Page.UNLOCK -> onEnterFromUnlock(pin)
             Page.ENTER -> onEnterFromEnterPage(pin)
             Page.CONFIRM -> onEnterFromConfirmPage(pin)
         }
+    }
+
+    override fun resetPin() {
+        enteredPin = ""
     }
 
     override fun onDelete(pageIndex: Int) {
@@ -75,17 +76,14 @@ open class ManagePinPresenter(
         show(Page.ENTER)
     }
 
-    private fun onEnterFromUnlockPage(pin: String) {
+    private fun onEnterFromUnlock(pin: String) {
         if (interactor.unlock(pin)) {
             show(Page.ENTER)
         } else {
             val pageUnlockIndex = pages.indexOfFirst { it == Page.UNLOCK }
             if (pageUnlockIndex >= 0) {
+                enteredPin = ""
                 view?.showPinWrong(pageUnlockIndex)
-                Handler().postDelayed({
-                    enteredPin = ""
-                    view?.fillCircles(enteredPin.length, 0)
-                }, 500)
             }
         }
     }
