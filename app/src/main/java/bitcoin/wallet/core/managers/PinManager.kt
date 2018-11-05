@@ -18,6 +18,7 @@ class PinManager(private val securedStorage: ISecuredStorage): IPinManager {
     @Throws(UserNotAuthenticatedException::class)
     override fun store(pin: String) {
         securedStorage.savePin(pin)
+        this.pin = pin
     }
 
     override fun validate(pin: String): Boolean {
