@@ -1,8 +1,8 @@
-package bitcoin.wallet.modules.newpin.unlock
+package bitcoin.wallet.modules.pin.unlock
 
 import bitcoin.wallet.core.App
 import bitcoin.wallet.core.IKeyStoreSafeExecute
-import bitcoin.wallet.modules.newpin.PinViewModel
+import bitcoin.wallet.modules.pin.PinViewModel
 
 object UnlockPinModule {
     interface IUnlockPinRouter {

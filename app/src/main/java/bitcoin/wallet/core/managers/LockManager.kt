@@ -4,7 +4,7 @@ import bitcoin.wallet.core.App
 import bitcoin.wallet.core.ILockManager
 import bitcoin.wallet.core.ISecuredStorage
 import bitcoin.wallet.core.IWordsManager
-import bitcoin.wallet.modules.newpin.PinModule
+import bitcoin.wallet.modules.pin.PinModule
 import bitcoin.wallet.viewHelpers.DateHelper
 import java.util.*
 

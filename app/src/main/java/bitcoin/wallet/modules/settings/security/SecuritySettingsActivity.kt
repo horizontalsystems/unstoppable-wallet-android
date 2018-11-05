@@ -15,7 +15,7 @@ import bitcoin.wallet.entities.BiometryType
 import bitcoin.wallet.lib.AlertDialogFragment
 import bitcoin.wallet.modules.backup.BackupModule
 import bitcoin.wallet.modules.backup.BackupPresenter
-import bitcoin.wallet.modules.newpin.PinModule
+import bitcoin.wallet.modules.pin.PinModule
 import bitcoin.wallet.modules.restore.RestoreModule
 import bitcoin.wallet.ui.dialogs.BottomConfirmAlert
 import bitcoin.wallet.viewHelpers.LayoutHelper

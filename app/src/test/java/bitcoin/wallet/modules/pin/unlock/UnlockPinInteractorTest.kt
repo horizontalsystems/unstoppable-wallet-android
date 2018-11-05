@@ -1,4 +1,4 @@
-package bitcoin.wallet.modules.newpin.unlock
+package bitcoin.wallet.modules.pin.unlock
 
 import bitcoin.wallet.core.*
 import com.nhaarman.mockito_kotlin.*

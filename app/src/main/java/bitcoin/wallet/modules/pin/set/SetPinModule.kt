@@ -1,9 +1,9 @@
-package bitcoin.wallet.modules.newpin.set
+package bitcoin.wallet.modules.pin.set
 
 import bitcoin.wallet.core.App
 import bitcoin.wallet.core.IKeyStoreSafeExecute
-import bitcoin.wallet.modules.newpin.PinInteractor
-import bitcoin.wallet.modules.newpin.PinViewModel
+import bitcoin.wallet.modules.pin.PinInteractor
+import bitcoin.wallet.modules.pin.PinViewModel
 
 object SetPinModule {
 

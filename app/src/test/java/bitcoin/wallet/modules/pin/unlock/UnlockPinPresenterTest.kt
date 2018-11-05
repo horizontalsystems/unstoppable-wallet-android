@@ -1,7 +1,7 @@
-package bitcoin.wallet.modules.newpin.unlock
+package bitcoin.wallet.modules.pin.unlock
 
 import bitcoin.wallet.modules.RxBaseTest
-import bitcoin.wallet.modules.newpin.PinModule
+import bitcoin.wallet.modules.pin.PinModule
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify

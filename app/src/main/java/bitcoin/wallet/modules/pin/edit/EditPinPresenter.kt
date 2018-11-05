@@ -1,9 +1,9 @@
-package bitcoin.wallet.modules.newpin.edit
+package bitcoin.wallet.modules.pin.edit
 
 import bitcoin.wallet.R
-import bitcoin.wallet.modules.newpin.ManagePinPresenter
-import bitcoin.wallet.modules.newpin.PinModule
-import bitcoin.wallet.modules.newpin.PinPage
+import bitcoin.wallet.modules.pin.ManagePinPresenter
+import bitcoin.wallet.modules.pin.PinModule
+import bitcoin.wallet.modules.pin.PinPage
 
 class EditPinPresenter(
         interactor: PinModule.IPinInteractor,

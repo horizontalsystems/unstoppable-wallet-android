@@ -2,156 +2,99 @@ package bitcoin.wallet.modules.pin
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import bitcoin.wallet.R
 import bitcoin.wallet.SingleLiveEvent
 import bitcoin.wallet.core.IKeyStoreSafeExecute
+import bitcoin.wallet.modules.pin.edit.EditPinModule
+import bitcoin.wallet.modules.pin.set.SetPinModule
+import bitcoin.wallet.modules.pin.unlock.UnlockPinModule
 
-class PinViewModel : ViewModel(), PinModule.IView, PinModule.IRouter, IKeyStoreSafeExecute {
+class PinViewModel: ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter, EditPinModule.IEditPinRouter, IKeyStoreSafeExecute, UnlockPinModule.IUnlockPinRouter {
 
-    lateinit var delegate: PinModule.IViewDelegate
-
-    val title = MutableLiveData<Int>()
-    val description = MutableLiveData<Int>()
-    val highlightPinMask = MutableLiveData<Int>()
-    val showErrorInDialog = MutableLiveData<Int>()
-    val showErrorMessage = MutableLiveData<Int>()
-    val onWrongPin = SingleLiveEvent<Unit>()
-    val blockScreen = SingleLiveEvent<Unit>()
-    val unblockScreen = SingleLiveEvent<Unit>()
-    val showSuccess = SingleLiveEvent<Unit>()
-
-    val goToSetPin = SingleLiveEvent<Unit>()
-    val goToPinConfirmation = SingleLiveEvent<String>()
+    lateinit var delegate: PinModule.IPinViewDelegate
+    val titleLiveDate = MutableLiveData<Int>()
+    val addPagesEvent = MutableLiveData<List<PinPage>>()
+    val showPageAtIndex = MutableLiveData<Int>()
+    val showError = MutableLiveData<Int>()
+    val showErrorForPage = MutableLiveData<Pair<Int, Int>>()
+    val fillPinCircles = MutableLiveData<Pair<Int, Int>>()
+    val navigateToMainLiveEvent = SingleLiveEvent<Unit>()
     val hideToolbar = SingleLiveEvent<Unit>()
-    val unlockWallet = SingleLiveEvent<Unit>()
-    val clearPinMaskWithDelay = SingleLiveEvent<Unit>()
-    val hideBackButton = SingleLiveEvent<Unit>()
-    val showFingerprintDialog = SingleLiveEvent<Unit>()
-    val minimizeApp = SingleLiveEvent<Unit>()
-    val goBack = SingleLiveEvent<Unit>()
-    val goToPinEdit = SingleLiveEvent<Unit>()
+    val dismissLiveEvent = SingleLiveEvent<Unit>()
+    val showBackButton = SingleLiveEvent<Unit>()
+    val showSuccess = SingleLiveEvent<Unit>()
+    val showFingerprintInputLiveEvent = SingleLiveEvent<Unit>()
+    val resetCirclesWithShakeAndDelayForPage = SingleLiveEvent<Int>()
     val keyStoreSafeExecute = SingleLiveEvent<Triple<Runnable, Runnable?, Runnable?>>()
 
-    fun init(interactionType: PinInteractionType, enteredPin: String) {
-        PinModule.init(this, this, this, interactionType, enteredPin)
+    fun init(interactionType: PinInteractionType) {
+        when(interactionType) {
+            PinInteractionType.SET_PIN -> SetPinModule.init(this, this, this)
+            PinInteractionType.UNLOCK -> UnlockPinModule.init(this, this, this)
+            PinInteractionType.EDIT_PIN -> EditPinModule.init(this, this, this)
+        }
         delegate.viewDidLoad()
     }
 
-    override fun setTitleForEnterPin() {
-        title.value = R.string.set_pin_title
-    }
-
-    override fun setDescriptionForEnterPin() {
-        description.value = R.string.set_pin_description
-    }
-
-    override fun highlightPinMask(length: Int) {
-        highlightPinMask.value = length
-    }
-
-    override fun showErrorShortPinLength() {
-        showErrorInDialog.value = R.string.set_pin_error_short_pin
-    }
-
-    override fun setTitleForEnterAgain() {
-        title.value = R.string.set_pin_confirm_title
-    }
-
-    override fun setDescriptionForEnterAgain() {
-        description.value = R.string.set_pin_confirm_description
-    }
-
-    override fun showSuccessPinSet() {
-        showSuccess.call()
-    }
-
-    override fun showErrorPinsDontMatch() {
-        showErrorMessage.value = R.string.set_pin_error_pins_dont_match
-    }
-
-    override fun showErrorFailedToSavePin() {
-        showErrorInDialog.value = R.string.set_pin_error_failed_to_save_pin
-    }
-
-    override fun setDescriptionForUnlock() {
-        description.value = R.string.unlock_page_enter_your_pin
-    }
-
-    override fun setTitleForEditPinAuth() {
-        title.value = R.string.edit_pin_auth_title
-    }
-
-    override fun setDescriptionForEditPinAuth() {
-        description.value = R.string.edit_pin_auth_description
-    }
-
-    override fun setTitleForEditPin() {
-        title.value = R.string.edit_pin_title
-    }
-
-    override fun setDescriptionForEditPin() {
-        description.value = R.string.edit_pin_description
-    }
-
-    override fun onWrongPin() {
-        onWrongPin.call()
-    }
-
-    override fun blockScreen() {
-        blockScreen.call()
-    }
-
-    override fun unblockScreen() {
-        unblockScreen.call()
-    }
-
-    override fun hideBackButton() {
-        hideBackButton.call()
+    override fun setTitle(title: Int) {
+        titleLiveDate.value = title
     }
 
     override fun hideToolbar() {
         hideToolbar.call()
     }
 
-    override fun showErrorWrongPin() {
-        showErrorMessage.value = R.string.hud_text_invalid_pin_error
+    override fun addPages(pages: List<PinPage>) {
+        addPagesEvent.value = pages
     }
 
-    override fun clearPinMaskWithDelay() {
-        clearPinMaskWithDelay.call()
+    override fun showPage(index: Int) {
+        showPageAtIndex.value = index
+    }
+
+    override fun showErrorForPage(error: Int, pageIndex: Int) {
+        showErrorForPage.value = Pair(error, pageIndex)
+    }
+
+    override fun showError(error: Int) {
+        showError.value = error
+    }
+
+    override fun showPinWrong(pageIndex: Int) {
+        resetCirclesWithShakeAndDelayForPage.value = pageIndex
     }
 
     override fun showFingerprintDialog() {
-        showFingerprintDialog.call()
+        showFingerprintInputLiveEvent.call()
     }
 
-    override fun minimizeApp() {
-        minimizeApp.call()
+    override fun showCancel() {
+        showBackButton.call()
     }
 
-    override fun navigateToPrevPage() {
-        goBack.call()
+    override fun showSuccess() {
+        showSuccess.call()
+    }
+
+    override fun fillCircles(length: Int, pageIndex: Int) {
+        fillPinCircles.value = Pair(length, pageIndex)
+    }
+
+    override fun navigateToMain() {
+        navigateToMainLiveEvent.call()
     }
 
     override fun safeExecute(action: Runnable, onSuccess: Runnable?, onFailure: Runnable?) {
         keyStoreSafeExecute.value = Triple(action, onSuccess, onFailure)
     }
 
-    //IRouter
-    override fun goToSetPin() {
-        goToSetPin.call()
+    override fun dismiss(didUnlock: Boolean) {
+        if (didUnlock) {
+            dismissLiveEvent.call()
+        }
     }
 
-    override fun goToPinConfirmation(pin: String) {
-        goToPinConfirmation.value = pin
-    }
-
-    override fun unlockWallet() {
-        unlockWallet.call()
-    }
-
-    override fun goToPinEdit() {
-        goToPinEdit.call()
+    override fun dismiss() {
+        dismissLiveEvent.call()
     }
 
 }

@@ -1,8 +1,8 @@
-package bitcoin.wallet.modules.newpin.unlock
+package bitcoin.wallet.modules.pin.unlock
 
 import bitcoin.wallet.R
-import bitcoin.wallet.modules.newpin.PinModule
-import bitcoin.wallet.modules.newpin.PinPage
+import bitcoin.wallet.modules.pin.PinModule
+import bitcoin.wallet.modules.pin.PinPage
 
 class UnlockPinPresenter(
         private val interactor: UnlockPinModule.IUnlockPinInteractor,

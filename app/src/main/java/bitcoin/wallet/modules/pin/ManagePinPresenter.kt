@@ -1,4 +1,4 @@
-package bitcoin.wallet.modules.newpin
+package bitcoin.wallet.modules.pin
 
 import bitcoin.wallet.R
 
