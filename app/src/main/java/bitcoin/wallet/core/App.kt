@@ -28,16 +28,16 @@ class App : Application() {
         lateinit var backgroundManager: BackgroundManager
         lateinit var languageManager: ILanguageManager
         lateinit var systemInfoManager: ISystemInfoManager
+        lateinit var pinManager: IPinManager
+        lateinit var lockManager: ILockManager
 
 
         val testMode = true
 
-        var promptPin = true
-
-        var appBackgroundedTime: Long? = null
-
         lateinit var instance: App
             private set
+
+        var lastExitDate: Long = 0
     }
 
     override fun onCreate() {
@@ -73,6 +73,8 @@ class App : Application() {
         adapterManager = AdapterManager(wordsManager)
         languageManager = LanguageManager(localStorage, fallbackLanguage)
         systemInfoManager = SystemInfoManager()
+        pinManager = PinManager(secureStorage)
+        lockManager = LockManager(secureStorage, wordsManager)
     }
 
 }

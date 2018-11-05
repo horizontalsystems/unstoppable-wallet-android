@@ -17,7 +17,6 @@ interface ILocalStorage {
     var isBiometricOn: Boolean
     var isLightModeOn: Boolean
     var iUnderstand: Boolean
-    var lastExitDate: Long
     var unlockAttemptsLeft: Int
     var baseCurrency: Currency
     var blockTillDate: Long?
@@ -127,4 +126,20 @@ interface ISystemInfoManager {
     var biometryType: BiometryType
     fun phoneHasFingerprintSensor(): Boolean
     fun touchSensorCanBeUsed(): Boolean
+}
+
+interface IPinManager {
+    fun safeLoad()
+    var pin: String?
+    val isPinSet: Boolean
+    fun store(pin: String)
+    fun validate(pin: String): Boolean
+}
+
+interface ILockManager {
+    var isLocked: Boolean
+    fun lock()
+    fun onUnlock()
+    fun didEnterBackground()
+    fun willEnterForeground()
 }

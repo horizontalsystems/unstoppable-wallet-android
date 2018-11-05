@@ -5,7 +5,6 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import bitcoin.wallet.BaseActivity
 import bitcoin.wallet.R
-import bitcoin.wallet.core.App
 import bitcoin.wallet.viewHelpers.LayoutHelper
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
@@ -63,20 +62,6 @@ class MainActivity : BaseActivity() {
         val activeTab = intent?.extras?.getInt(ACTIVE_TAB_KEY)
         activeTab?.let {
             bottomNavigation.currentItem = it
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (App.adapterManager.adapters.isEmpty()) {
-            safeExecuteWithKeystore(
-                    action = Runnable {
-                        App.wordsManager.safeLoad()
-                    },
-                    onSuccess = Runnable {
-                        App.adapterManager.start()
-                    }
-            )
         }
     }
 

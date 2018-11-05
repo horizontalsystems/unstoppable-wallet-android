@@ -75,7 +75,8 @@ class SecuritySettingsActivity : BaseActivity(), BottomConfirmAlert.Listener {
         })
 
         viewModel.openEditPinLiveEvent.observe(this, Observer {
-            PinModule.startForEditPinAuth(this)
+//            PinModule.startForEditPinAuth(this)
+            PinModule.startForEditPin(this)
         })
 
         viewModel.openRestoreWalletLiveEvent.observe(this, Observer {

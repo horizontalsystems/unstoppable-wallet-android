@@ -42,10 +42,6 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".modules.pin.PinActivity"
-            android:screenOrientation="portrait"/>
-
-        <activity
             android:name=".modules.fulltransactioninfo.FullTransactionInfoActivity"
             android:screenOrientation="portrait"/>
 
@@ -63,6 +59,10 @@
 
         <activity
             android:name=".modules.settings.AboutSettingsActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".modules.pin.PinActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
 
         <meta-data

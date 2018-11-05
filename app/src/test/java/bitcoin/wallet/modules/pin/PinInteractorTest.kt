@@ -1,25 +1,21 @@
 package bitcoin.wallet.modules.pin
 
 import bitcoin.wallet.core.IKeyStoreSafeExecute
-import bitcoin.wallet.core.ISecuredStorage
-import bitcoin.wallet.modules.pin.pinSubModules.EditPinInteractor
-import com.nhaarman.mockito_kotlin.KArgumentCaptor
-import com.nhaarman.mockito_kotlin.argumentCaptor
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
+import bitcoin.wallet.core.IPinManager
+import com.nhaarman.mockito_kotlin.*
 import org.junit.After
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Captor
 import org.mockito.Mockito
-import org.mockito.Mockito.mock
 
-class EditPinInteractorTest {
+class PinInteractorTest {
 
-    private val delegate = mock(PinModule.IInteractorDelegate::class.java)
-    private val iSecuredStorage = mock(ISecuredStorage::class.java)
+    private val delegate = Mockito.mock(PinModule.IPinInteractorDelegate::class.java)
+    private val pinManager = Mockito.mock(IPinManager::class.java)
     private val keystoreSafeExecute = Mockito.mock(IKeyStoreSafeExecute::class.java)
-    private var interactor = EditPinInteractor(iSecuredStorage, keystoreSafeExecute)
+    private var interactor = PinInteractor(pinManager, keystoreSafeExecute)
 
     @Captor
     private val actionRunnableCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
@@ -41,11 +37,24 @@ class EditPinInteractorTest {
     }
 
     @Test
-    fun submit_success() {
+    fun validate_success() {
+        val pin = "0000"
+        interactor.set(pin)
+        Assert.assertTrue(interactor.validate(pin))
+    }
 
-        val pin = "123456"
+    @Test
+    fun validate_failure() {
+        val pin = "0000"
+        val pin2 = "1111"
+        interactor.set(pin)
+        Assert.assertFalse(interactor.validate(pin2))
+    }
 
-        interactor.submit(pin)
+    @Test
+    fun save_successSave() {
+        val pin = "0000"
+        interactor.save(pin)
 
         verify(keystoreSafeExecute).safeExecute(actionRunnableCaptor.capture(), successRunnableCaptor.capture(), failureRunnableCaptor.capture())
 
@@ -55,17 +64,14 @@ class EditPinInteractorTest {
         actionRunnable.run()
         successRunnable.run()
 
-        verify(iSecuredStorage).savePin(pin)
-        verify(delegate).onDidPinSet()
-        verifyNoMoreInteractions(delegate)
+        verify(pinManager).store(pin)
+        verify(delegate).didSavePin()
     }
 
     @Test
-    fun submit_storageError() {
-
-        val pin = "123456"
-
-        interactor.submit(pin)
+    fun save_failToSave() {
+        val pin = "0000"
+        interactor.save(pin)
 
         verify(keystoreSafeExecute).safeExecute(actionRunnableCaptor.capture(), successRunnableCaptor.capture(), failureRunnableCaptor.capture())
 
@@ -75,19 +81,27 @@ class EditPinInteractorTest {
         actionRunnable.run()
         failureRunnable.run()
 
-        verify(delegate).onErrorFailedToSavePin()
-        verifyNoMoreInteractions(delegate)
+        verify(pinManager).store(pin)
+        verify(delegate).didFailToSavePin()
     }
 
     @Test
-    fun submit_shortPinError() {
-
-        val pin = "1234"
-
-        interactor.submit(pin)
-
-        verify(delegate).onErrorShortPinLength()
-        verifyNoMoreInteractions(delegate)
+    fun unlock_success() {
+        val pin = "0000"
+        whenever(pinManager.validate(pin)).thenReturn(true)
+        val isValid = interactor.unlock(pin)
+        Assert.assertTrue(isValid)
     }
 
+    @Test
+    fun unlock_failure() {
+        val pin = "0000"
+
+        whenever(pinManager.validate(pin)).thenReturn(false)
+
+        interactor.unlock(pin)
+
+        val isValid = interactor.unlock(pin)
+        Assert.assertFalse(isValid)
+    }
 }
