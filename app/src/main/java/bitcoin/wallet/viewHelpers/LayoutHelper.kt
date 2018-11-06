@@ -65,4 +65,13 @@ object LayoutHelper {
         }
     }
 
+    fun getInfoBadge(wordListBackedUp: Boolean, resources: Resources): Drawable? {
+        var infoBadge: Drawable? = null
+        if (!wordListBackedUp) {
+            infoBadge = resources.getDrawable(R.drawable.info, null)
+            infoBadge?.setTint(resources.getColor(R.color.red_warning, null))
+        }
+        return infoBadge
+    }
+
 }

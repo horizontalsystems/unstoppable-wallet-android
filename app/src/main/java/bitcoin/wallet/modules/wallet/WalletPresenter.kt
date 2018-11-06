@@ -1,6 +1,6 @@
 package bitcoin.wallet.modules.wallet
 
-import bitcoin.wallet.core.AdapterManager
+import bitcoin.wallet.core.App
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
@@ -22,7 +22,7 @@ class WalletPresenter(
     }
 
     override fun onSendClicked(adapterId: String) {
-        val adapter = AdapterManager.adapters.firstOrNull { it.id == adapterId }
+        val adapter = App.adapterManager.adapters.firstOrNull { it.id == adapterId }
         adapter?.let { router.openSendDialog(it) }
     }
 

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Bank</string>
+    <string name="app_name_long">Bank Wallet</string>
 
     <string name="alert_ok">OK</string>
     <string name="alert_cancel">Cancel</string>
@@ -9,7 +10,6 @@
     <string name="alert_success">Success</string>
     <string name="alert_copied">Copied</string>
 
-    <string name="welcome_title">Bank Wallet</string>
     <string name="welcome_description" translatable="false">Decentralized App</string>
     <string name="welcome_btn_create_wallet">New Wallet</string>
     <string name="welcome_btn_import_wallet">Import Wallet</string>
@@ -116,6 +116,30 @@
 
     <string name="settings_currency_switcher_title">Base Currency</string>
 
+    <string name="settings_language_title">Language</string>
+
+    <string name="settings_about_title">About</string>
+    <string name="settings_about_terms_privacy_subtitle">Terms &amp; Privacy:</string>
+    <string name="settings_about_terms_privacy_text">Your funds are stored in the BANK wallet app. Not on any external servers.
+\n\nBANK Wallet doesn\'t store or collect any private info.
+\n\nBANK Wallet doesn\'t depend on any server or person to function.
+\n\nBANK Wallet works everywhere as long as there is an internet.
+\n\nIt is impossible for a third party to block the wallet from working or to block the user.
+\n\nThe entire code powering the BANK Wallet is free and open to public.
+\n\nThere may be bugs in the code. Make sure you always backup a Secret Key for your wallet!</string>
+    <string name="settings_about_dependencies_subtitle">Dependencies:</string>
+    <string name="settings_about_dependencies_text">There are some third-party services used by the BANK Wallet for non-critical data for the wallet.
+\n\n1. IPFS Decentralized Storage
+        \n
+\n  &#8226; stores current exchange rates,
+\n  &#8226; stores coin information,
+\n  &#8226; stores "recommended" transaction fees
+\n  &#8226; stores a list of supported base currencies
+\n  &#8226; stores public blockchain dada
+        \n\n2. CryptoCompare.com - used to obtain current market exchange rates.
+\n\n3. Etherscan.io - used to retrieve a list of past transactions for a given Ethereum address.
+\n\n4. Infura.io - a public gateway to Ethereum Blockchain.</string>
+
     <string name="alert_keys_invalidated_title">Android Keystore Error</string>
     <string name="alert_keys_invalidated_description">The encrypted data holding your wallet was recently invalidated because your Android lock screen was changed</string>
     <string name="alert_no_device_lock_title">Warning</string>
@@ -148,18 +172,17 @@
 
 
     <!--Set Pin-->
-    <string name="set_pin_title">Enter PIN</string>
+    <string name="set_pin_title">Set PIN</string>
     <string name="set_pin_description">Your PIN will be used to unlock wallet app</string>
     <string name="set_pin_error_short_pin">Please enter all digits.</string>
     <string name="set_pin_confirm_title">Enter again</string>
     <string name="set_pin_confirm_description">Your PIN will be used to unlock your wallet and send money</string>
     <string name="set_pin_success">Lock PIN was set successfully!</string>
     <string name="set_pin_error_pins_dont_match">PIN did not match. Try again.</string>
-    <string name="set_pin_error_pins_dont_match_you_have_attempts_left">Wrong PIN. You have %s attempts left.</string>
     <string name="set_pin_error_failed_to_save_pin">Error occurred while saving your PIN. Please, try again.</string>
     <string name="edit_pin_auth_title">Change PIN</string>
     <string name="edit_pin_auth_description">Enter current PIN</string>
     <string name="edit_pin_title">Enter New PIN</string>
-    <string name="edit_pin_description">Your PIN will be used to unlock your wallet and send money</string>
+    <string name="edit_pin_description">Your PIN will be used to unlock your wallet</string>
 
 </resources>

@@ -15,7 +15,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="32dp"
         android:maxLines="1"
-        android:text="@string/welcome_title"
+        android:text="@string/app_name_long"
         android:textAlignment="center"
         app:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"

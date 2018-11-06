@@ -1,5 +1,11 @@
 package bitcoin.wallet.entities
 
+sealed class TransactionStatus {
+    object Completed : TransactionStatus()
+    class Processing(val progress: Byte) : TransactionStatus() //progress in 0..100%
+    object Pending : TransactionStatus()
+}
+
 open class TransactionRecord {
 
     var transactionHash = ""
@@ -12,10 +18,10 @@ open class TransactionRecord {
     var amount: Double = 0.0
     var fee: Double = 0.0
 
-    var incoming = true
-
     var blockHeight: Long? = null
 
     var timestamp: Long? = null
+
+    var status: TransactionStatus = TransactionStatus.Pending
 
 }

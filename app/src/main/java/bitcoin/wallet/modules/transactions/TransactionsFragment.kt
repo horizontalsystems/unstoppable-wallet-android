@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import bitcoin.wallet.R
 import bitcoin.wallet.core.App
 import bitcoin.wallet.core.setOnSingleClickListener
+import bitcoin.wallet.entities.TransactionStatus
 import bitcoin.wallet.modules.transactionInfo.TransactionInfoModule
 import bitcoin.wallet.viewHelpers.DateHelper
 import bitcoin.wallet.viewHelpers.LayoutHelper
@@ -125,8 +126,8 @@ class ViewHolderTransaction(override val containerView: View) : RecyclerView.Vie
         statusIcon.setImageDrawable(getStatusIcon(transactionRecord.status))
     }
 
-    private fun getStatusIcon(status: TransactionRecordViewItem.Status?): Drawable? {
-        return if (status == TransactionRecordViewItem.Status.SUCCESS)
+    private fun getStatusIcon(status: TransactionStatus?): Drawable? {
+        return if (status is TransactionStatus.Completed)
             LayoutHelper.d(R.drawable.checkmark_small_grey, App.instance)
         else
             LayoutHelper.d(R.drawable.pending, App.instance)

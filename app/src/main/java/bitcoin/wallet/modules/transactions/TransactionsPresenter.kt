@@ -13,7 +13,7 @@ class TransactionsPresenter(private val interactor: TransactionsModule.IInteract
     }
 
     override fun refresh() {
-        println("on refresh")
+        interactor.refresh()
         Handler().postDelayed({
             view?.didRefresh()
         }, 3 * 1000)

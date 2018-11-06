@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
 
     <application
@@ -41,17 +42,27 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".modules.settings.SecuritySettingsActivity"
+            android:name=".modules.fulltransactioninfo.FullTransactionInfoActivity"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".modules.pin.PinActivity"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".modules.fulltransactioninfo.FullTransactionInfoActivity"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".modules.currencyswitcher.CurrencySwitcherActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".modules.settings.language.LanguageSettingsActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".modules.settings.security.SecuritySettingsActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".modules.settings.AboutSettingsActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".modules.pin.PinActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
 
         <meta-data

@@ -69,14 +69,12 @@ class SendInteractorTest {
 
     @Test
     fun send() {
-        val coinCode = "BTC"
         val address = "address"
         val amountBTC = 1.0
-        val amountSatoshi = 100_000_000
 
-        interactor.send(coinCode, address, amountBTC)
+        interactor.send(address, amountBTC)
 
-        verify(bitcoinAdapter).send(address, amountSatoshi)
+        verify(bitcoinAdapter).send(address, amountBTC)
     }
 
 //    @Test
@@ -113,11 +111,10 @@ class SendInteractorTest {
     @Test
     fun send_success() {
 
-        val coinCode = "BTC"
         val address = "address"
         val amountBTC = 1.0
 
-        interactor.send(coinCode, address, amountBTC)
+        interactor.send(address, amountBTC)
 
         verify(delegate).didSend()
     }

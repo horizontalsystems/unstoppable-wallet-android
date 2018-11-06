@@ -1,7 +1,8 @@
 package bitcoin.wallet.modules.transactions
 
-import bitcoin.wallet.core.AdapterManager
+import bitcoin.wallet.core.IAdapterManager
 import bitcoin.wallet.core.IExchangeRateManager
+import bitcoin.wallet.core.ILocalStorage
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
@@ -12,14 +13,23 @@ import io.reactivex.schedulers.Schedulers
 import java.util.*
 
 class TransactionsInteractor(
-        private val adapterManager: AdapterManager,
+        localStorage: ILocalStorage,
+        private val adapterManager: IAdapterManager,
         private val exchangeRateManager: IExchangeRateManager,
-        private val baseCurrencyFlowable: Flowable<Currency>) : TransactionsModule.IInteractor {
+        baseCurrencyFlowable: Flowable<Currency>) : TransactionsModule.IInteractor {
 
     var delegate: TransactionsModule.IInteractorDelegate? = null
     private var disposables: CompositeDisposable = CompositeDisposable()
     private var adapterManagerDisposable: Disposable? = null
     private var clickedAdapterId: String? = null
+
+    init {
+        disposables.add(baseCurrencyFlowable.subscribe { baseCurrency ->
+            retrieveTransactionItemsWithBaseCurrency(baseCurrency, clickedAdapterId)
+        })
+    }
+
+    override var baseCurrency: Currency = localStorage.baseCurrency
 
     override fun retrieveFilters() {
         adapterManagerDisposable = adapterManager.subject.subscribe {
@@ -48,14 +58,16 @@ class TransactionsInteractor(
 
     override fun retrieveTransactions(adapterId: String?) {
         clickedAdapterId = adapterId
-        disposables.add(baseCurrencyFlowable.subscribe { baseCurrency ->
-            retrieveTransactionItemsWithBaseCurrency(baseCurrency, clickedAdapterId)
-        })
+        retrieveTransactionItemsWithBaseCurrency(baseCurrency, clickedAdapterId)
     }
 
     override fun onCleared() {
         disposables.clear()
         adapterManagerDisposable?.dispose()
+    }
+
+    override fun refresh() {
+        adapterManager.refresh()
     }
 
     private fun retrieveTransactionItemsWithBaseCurrency(baseCurrency: Currency, adapterId: String?) {
@@ -77,7 +89,7 @@ class TransactionsInteractor(
                         incoming = record.amount > 0,
                         blockHeight = record.blockHeight,
                         date = record.timestamp?.let { Date(it) },
-                        confirmations = TransactionRecordViewItem.getConfirmationsCount(record.blockHeight, adapter.latestBlockHeight)
+                        status = record.status
                 )
                 items.add(item)
                 record.timestamp?.let { timestamp ->
@@ -95,7 +107,7 @@ class TransactionsInteractor(
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
-                .map {resultRates ->
+                .map { resultRates ->
                     (resultRates as List<Pair<String, Double>>).toMap()
                 }
                 .subscribe { ratesMap ->

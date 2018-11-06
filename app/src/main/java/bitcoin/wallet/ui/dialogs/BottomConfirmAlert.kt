@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.view_holder_confirmation.*
 class BottomConfirmAlert : DialogFragment(), ConfirmationsAdapter.Listener {
 
     interface Listener {
-        fun confirmationSuccess()
+        fun onConfirmationSuccess()
     }
 
     private var mDialog: Dialog? = null
@@ -44,7 +44,7 @@ class BottomConfirmAlert : DialogFragment(), ConfirmationsAdapter.Listener {
         mDialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         btnConfirm.setOnClickListener {
-            listener.confirmationSuccess()
+            listener.onConfirmationSuccess()
             dismiss()
         }
 

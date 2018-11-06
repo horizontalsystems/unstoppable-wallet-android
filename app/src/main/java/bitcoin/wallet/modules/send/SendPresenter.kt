@@ -65,7 +65,7 @@ class SendPresenter(
     }
 
     override fun onSendClick(address: String) {
-        cryptoAmount?.let { interactor.send(coinCode, address, it) }
+        cryptoAmount?.let { interactor.send(address, it) }
     }
 
     private fun updateAmounts() {

@@ -1,7 +1,7 @@
 package bitcoin.wallet.modules.receive
 
 import android.support.v4.app.FragmentActivity
-import bitcoin.wallet.core.AdapterManager
+import bitcoin.wallet.core.App
 import bitcoin.wallet.modules.receive.viewitems.AddressItem
 import bitcoin.wallet.viewHelpers.TextHelper
 
@@ -30,7 +30,7 @@ object ReceiveModule {
     }
 
     fun init(view: ReceiveViewModel, adapterId: String?) {
-        val adapterManager = AdapterManager
+        val adapterManager = App.adapterManager
         val interactor = ReceiveInteractor(adapterManager, adapterId, TextHelper)
         val presenter = ReceivePresenter(interactor)
 

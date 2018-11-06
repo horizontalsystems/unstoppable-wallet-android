@@ -3,7 +3,7 @@ package bitcoin.wallet
 import android.os.Bundle
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.support.v7.app.AppCompatActivity
-import bitcoin.wallet.core.managers.Factory
+import bitcoin.wallet.core.App
 import bitcoin.wallet.core.security.EncryptionManager
 import bitcoin.wallet.modules.guest.GuestModule
 import bitcoin.wallet.modules.main.MainModule
@@ -28,10 +28,10 @@ class LauncherActivity : AppCompatActivity() {
         if (!EncryptionManager.isDeviceLockEnabled(this)) {
             EncryptionManager.showNoDeviceLockWarning(this)
             return
-        } else if (Factory.wordsManager.wordsAreEmpty()) {
-            GuestModule.start(this)
-        } else {
+        } else if (App.wordsManager.isLoggedIn) {
             MainModule.start(this)
+        } else {
+            GuestModule.start(this)
         }
         finish()
     }

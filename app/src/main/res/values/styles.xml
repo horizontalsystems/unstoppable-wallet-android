@@ -9,6 +9,8 @@
     <attr name="SettingBackgroundColor" format="reference|color" />
     <attr name="WalletBackgroundColor" format="reference|color" />
     <attr name="TransactionsBackgroundColor" format="reference|color" />
+    <attr name="AboutBackgroundColor" format="reference|color" />
+    <attr name="AboutLongTextColor" format="reference|color" />
     <attr name="TransactionItemBackgroundColor" format="reference|color" />
     <attr name="SettingItemBackgroundColor" format="reference|color" />
     <attr name="CoinItemBackgroundColor" format="reference|color" />
@@ -54,6 +56,8 @@
         <item name="SettingBackgroundColor">@color/dark</item>
         <item name="WalletBackgroundColor">@color/dark</item>
         <item name="TransactionsBackgroundColor">@color/dark</item>
+        <item name="AboutBackgroundColor">@color/dark</item>
+        <item name="AboutLongTextColor">@color/steel_grey</item>
         <item name="TransactionItemBackgroundColor">@color/transaction_item_background_dark</item>
         <item name="CoinItemBackgroundColor">@color/coin_item_background_dark</item>
         <item name="FilterButtonBackgroundColor">@color/appBackground</item>
@@ -99,6 +103,8 @@
         <item name="SettingBackgroundColor">@color/lightBackground</item>
         <item name="WalletBackgroundColor">@color/lightBackground</item>
         <item name="TransactionsBackgroundColor">@color/white</item>
+        <item name="AboutBackgroundColor">@color/white</item>
+        <item name="AboutLongTextColor">@color/dark</item>
         <item name="TransactionItemBackgroundColor">@color/transaction_item_background_light</item>
         <item name="CoinItemBackgroundColor">@color/coin_item_background_light</item>
         <item name="FilterButtonBackgroundColor">@color/bars_color</item>
@@ -192,6 +198,12 @@
         <item name="android:fontFamily">@font/noto_sans_bold</item>
         <item name="android:textColor">?TitleColor</item>
         <item name="android:textSize">34sp</item>
+    </style>
+
+    <style name="AboutSubTitle">
+        <item name="android:fontFamily">@font/noto_sans_bold</item>
+        <item name="android:textColor">@color/yellow_crypto</item>
+        <item name="android:textSize">17sp</item>
     </style>
 
     <style name="TabTitleSmall" parent="TabTitle">

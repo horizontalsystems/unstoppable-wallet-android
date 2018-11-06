@@ -36,7 +36,8 @@ object DateHelper {
     }
 
     fun getCalendarFromTimestamp(timestamp: Long) : Calendar {
-        val cal = Calendar.getInstance()
+        val timeZone = TimeZone.getTimeZone("UTC")
+        val cal = Calendar.getInstance(timeZone)
         cal.timeInMillis = timestamp
         return cal
     }

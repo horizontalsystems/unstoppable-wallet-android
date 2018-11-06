@@ -11,8 +11,8 @@ class TransactionInfoPresenter(private val interactor: TransactionInfoModule.IIn
         interactor.getTransactionInfo()
     }
 
-    override fun onCopyFromAddress() {
-        interactor.onCopyFromAddress()
+    override fun onCopyAddress() {
+        interactor.onCopyAddress()
     }
 
     override fun onCopyId() {

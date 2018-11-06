@@ -1,6 +1,6 @@
 package bitcoin.wallet.modules.receive
 
-import bitcoin.wallet.core.AdapterManager
+import bitcoin.wallet.core.managers.AdapterManager
 import bitcoin.wallet.core.BitcoinAdapter
 import bitcoin.wallet.core.IClipboardManager
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin

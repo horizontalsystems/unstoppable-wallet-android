@@ -1,8 +1,9 @@
 package bitcoin.wallet.modules.transactions
 
-import bitcoin.wallet.core.AdapterManager
 import bitcoin.wallet.core.BitcoinAdapter
+import bitcoin.wallet.core.IAdapterManager
 import bitcoin.wallet.core.IExchangeRateManager
+import bitcoin.wallet.core.ILocalStorage
 import bitcoin.wallet.entities.*
 import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
@@ -21,7 +22,8 @@ class TransactionsInteractorTest {
 
     private val delegate = mock(TransactionsModule.IInteractorDelegate::class.java)
     private val exchangeRateManager = mock(IExchangeRateManager::class.java)
-    private val adapterManager = mock(AdapterManager::class.java)
+    private val adapterManager = mock(IAdapterManager::class.java)
+    private val localStorage = mock(ILocalStorage::class.java)
     private val bitcoinAdapter = mock(BitcoinAdapter::class.java)
 
     private var coin = Bitcoin()
@@ -36,26 +38,30 @@ class TransactionsInteractorTest {
         type = CurrencyType.FIAT
         codeNumeric = 840
     }
+
     private val baseCurrencyFlowable = Flowable.just(baseCurrency)
 
-    private val interactor = TransactionsInteractor(adapterManager, exchangeRateManager, baseCurrencyFlowable)
+    private lateinit var interactor: TransactionsInteractor
 
 
     @Before
     fun before() {
         RxBaseTest.setup()
 
-        interactor.delegate = delegate
-
         val rateResponse = Flowable.just(6300.0)
         whenever(exchangeRateManager.getRate(any(), any(), any())).thenReturn(rateResponse)
+        whenever(localStorage.baseCurrency).thenReturn(baseCurrency)
+
+        interactor = TransactionsInteractor(localStorage, adapterManager, exchangeRateManager, baseCurrencyFlowable)
+
+        interactor.delegate = delegate
     }
 
     @Test
     fun retrieveFilters() {
         val subject: PublishSubject<Any> = PublishSubject.create()
         whenever(adapterManager.adapters).thenReturn(mutableListOf(bitcoinAdapter))
-        whenever(adapterManager.subject).thenReturn(PublishSubject.create<Any>())
+        whenever(adapterManager.subject).thenReturn(PublishSubject.create<Boolean>())
 
         whenever(bitcoinAdapter.id).thenReturn(adapterId)
         whenever(bitcoinAdapter.coin).thenReturn(coin)
@@ -82,7 +88,7 @@ class TransactionsInteractorTest {
         transaction.timestamp = 1536152151123
 
         whenever(adapterManager.adapters).thenReturn(mutableListOf(bitcoinAdapter))
-        whenever(adapterManager.subject).thenReturn(PublishSubject.create<Any>())
+        whenever(adapterManager.subject).thenReturn(PublishSubject.create<Boolean>())
 
         whenever(bitcoinAdapter.id).thenReturn(adapterId)
         whenever(bitcoinAdapter.coin).thenReturn(coin)
@@ -109,11 +115,11 @@ class TransactionsInteractorTest {
             transactionHash = "transactionHash"
             amount = btcTxAmount
             fee = 1.0
-            incoming = true
             timestamp = timestampNow
             from = listOf("from-address")
             to = listOf("to-address")
             blockHeight = 98
+            status = TransactionStatus.Processing(33)
             coinCode = "BTC"
         }
 
@@ -121,12 +127,12 @@ class TransactionsInteractorTest {
             transactionHash = "transactionHash"
             amount = btcTxAmount
             fee = 1.0
-            incoming = true
             timestamp = now.time
             from = listOf("from-address")
             to = listOf("to-address")
             blockHeight = 101
             coinCode = "BTC"
+            status = TransactionStatus.Pending
         }
 
         val expectedItems = listOf(
@@ -135,12 +141,12 @@ class TransactionsInteractorTest {
                         adapterId = adapterId,
                         amount = CoinValue(bitcoin, btcTxAmount),
                         fee = CoinValue(bitcoin, 1.0),
-                        from ="from-address",
+                        from = "from-address",
                         to = "to-address",
                         incoming = true,
                         blockHeight = 98,
                         date = now,
-                        confirmations = 3,
+                        status = TransactionStatus.Processing(33),
                         currencyAmount = CurrencyValue(currency = baseCurrency, value = btcTxAmount * rate),
                         exchangeRate = rate
                 ),
@@ -154,19 +160,18 @@ class TransactionsInteractorTest {
                         incoming = true,
                         blockHeight = 101,
                         date = now,
-                        confirmations = 0,
+                        status = TransactionStatus.Pending,
                         currencyAmount = CurrencyValue(currency = baseCurrency, value = btcTxAmount * rate),
                         exchangeRate = rate
                 )
         )
 
         whenever(adapterManager.adapters).thenReturn(mutableListOf(bitcoinAdapter))
-        whenever(adapterManager.subject).thenReturn(PublishSubject.create<Any>())
+        whenever(adapterManager.subject).thenReturn(PublishSubject.create<Boolean>())
 
         whenever(bitcoinAdapter.id).thenReturn(adapterId)
         whenever(bitcoinAdapter.coin).thenReturn(coin)
         whenever(bitcoinAdapter.balance).thenReturn(0.0)
-        whenever(bitcoinAdapter.latestBlockHeight).thenReturn(100)
         whenever(bitcoinAdapter.transactionRecords).thenReturn(listOf(transactionRecordBTCsuccess, transactionRecordBTCpending))
         whenever(bitcoinAdapter.transactionRecordsSubject).thenReturn(subject)
 

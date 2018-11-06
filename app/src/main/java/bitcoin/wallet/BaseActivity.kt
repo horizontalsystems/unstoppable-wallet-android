@@ -1,75 +1,50 @@
 package bitcoin.wallet
 
+import android.annotation.TargetApi
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
+import android.content.res.Resources
+import android.os.Build
 import android.os.Bundle
+import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.UserNotAuthenticatedException
 import android.support.v7.app.AppCompatActivity
-import android.view.View
 import android.view.WindowManager
 import bitcoin.wallet.core.App
-import bitcoin.wallet.core.managers.Factory
 import bitcoin.wallet.core.security.EncryptionManager
-import bitcoin.wallet.modules.pin.PinModule
-import bitcoin.wallet.viewHelpers.DateHelper
+import java.util.*
 
 abstract class BaseActivity : AppCompatActivity() {
 
-    private var pendingRunnable: Runnable? = null
-    private var successRunnable: Runnable? = null
     private var failureRunnable: Runnable? = null
-
-    private val allowableTimeInBackground: Long = 30
+    private var actionRunnable: Runnable? = null
+    private var successRunnable: Runnable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val lightMode = Factory.preferencesManager.isLightModeEnabled()
+        val lightMode = App.localStorage.isLightModeOn
         setTheme(if (lightMode) R.style.LightModeAppTheme else R.style.DarkModeAppTheme)
-        if (savedInstanceState != null) {
-            setStatusBarIconColor(lightMode)
-        }
 
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (App.promptPin) {
-            var promptPinByTimeout = true
-            App.appBackgroundedTime?.let {
-                val secondsAgo = DateHelper.getSecondsAgo(it)
-                promptPinByTimeout = secondsAgo > allowableTimeInBackground
-            }
-
-            if (promptPinByTimeout) {
-                safeExecuteWithKeystore(
-                        action = Runnable {
-                            if (Factory.preferencesManager.getPin() != null) {
-                                PinModule.startForUnlock(this)
-                            }
-                        },
-                        onSuccess = Runnable { App.promptPin = false },
-                        onFailure = null
-                )
-            }
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == AUTHENTICATE_FOR_ENCRYPTION) {
             if (resultCode == Activity.RESULT_OK) {
                 try {
-                    pendingRunnable?.run()
+                    actionRunnable?.run()
                     successRunnable?.run()
-                } catch (e: Exception){
+                } catch (e: Exception) {
                     failureRunnable?.run()
                 }
             } else {
                 failureRunnable?.run()
             }
-            pendingRunnable = null
             failureRunnable = null
+            actionRunnable = null
             successRunnable = null
         } else {
             super.onActivityResult(requestCode, resultCode, data)
@@ -81,23 +56,47 @@ abstract class BaseActivity : AppCompatActivity() {
             action.run()
             onSuccess?.run()
         } catch (e: UserNotAuthenticatedException) {
-            pendingRunnable = action
+            actionRunnable = action
             successRunnable = onSuccess
             failureRunnable = onFailure
             EncryptionManager.showAuthenticationScreen(this, AUTHENTICATE_FOR_ENCRYPTION)
+        } catch (e: KeyPermanentlyInvalidatedException) {
+            EncryptionManager.showKeysInvalidatedAlert(this)
         } catch (e: Exception) {
             onFailure?.run()
         }
+
     }
 
-    private fun setStatusBarIconColor(lightMode: Boolean) {
-        var flags = window.decorView.systemUiVisibility
-        flags = if (lightMode) {
-            flags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        } else {
-            flags xor View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR // remove flag
-        }
-        window.decorView.systemUiVisibility = flags
+    override fun attachBaseContext(newBase: Context?) {
+        newBase?.let {
+            super.attachBaseContext(updateBaseContextLocale(it))
+        } ?: super.attachBaseContext(newBase)
+    }
+
+    private fun updateBaseContextLocale(context: Context): Context {
+        val language = App.languageManager.currentLanguage
+        Locale.setDefault(language)
+
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            updateResourcesLocale(context, language)
+        } else updateResourcesLocaleLegacy(context, language)
+    }
+
+    @TargetApi(Build.VERSION_CODES.N)
+    private fun updateResourcesLocale(context: Context, locale: Locale): Context {
+        val configuration: Configuration = context.resources.configuration
+        configuration.setLocale(locale)
+        return context.createConfigurationContext(configuration)
+    }
+
+    @SuppressWarnings("deprecation")
+    private fun updateResourcesLocaleLegacy(context: Context, locale: Locale): Context {
+        val resources: Resources = context.resources
+        val configuration: Configuration = resources.configuration
+        configuration.locale = locale
+        resources.updateConfiguration(configuration, resources.displayMetrics)
+        return context
     }
 
     companion object {

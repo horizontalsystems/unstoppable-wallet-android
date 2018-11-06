@@ -3,6 +3,7 @@ package bitcoin.wallet.modules.fulltransactioninfo
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
+import bitcoin.wallet.entities.TransactionStatus
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem
 import com.nhaarman.mockito_kotlin.any
@@ -37,7 +38,7 @@ class FullTransactionInfoPresenterTest {
             true,
             98,
             now,
-            3,
+            TransactionStatus.Completed,
             CurrencyValue(currency = Currency(), value = btcTxAmount * (exchangeRates["BTC"] ?: 0.0))
     )
 

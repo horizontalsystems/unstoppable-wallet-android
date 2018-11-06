@@ -2,7 +2,7 @@ package bitcoin.wallet.modules.settings
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import bitcoin.wallet.core.managers.Factory
+import bitcoin.wallet.core.App
 import io.reactivex.disposables.CompositeDisposable
 
 class SecuritySettingsViewModel : ViewModel(){
@@ -11,9 +11,9 @@ class SecuritySettingsViewModel : ViewModel(){
     private val disposables = CompositeDisposable()
 
     fun init() {
-        wordListBackedUp.value = Factory.wordsManager.wordListBackedUp
+        wordListBackedUp.value = App.wordsManager.isBackedUp
 
-        disposables.add(Factory.wordsManager.wordListBackedUpSubject.subscribe {
+        disposables.add(App.wordsManager.backedUpSubject.subscribe {
             wordListBackedUp.value = it
         })
     }
