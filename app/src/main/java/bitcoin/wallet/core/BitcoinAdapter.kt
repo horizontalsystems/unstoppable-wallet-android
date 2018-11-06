@@ -4,6 +4,7 @@ import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.entities.TransactionStatus
 import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
+import bitcoin.wallet.entities.coins.bitcoinCash.BitcoinCash
 import io.horizontalsystems.bitcoinkit.BitcoinKit
 import io.horizontalsystems.bitcoinkit.BitcoinKit.NetworkType
 import io.horizontalsystems.bitcoinkit.models.BlockInfo
@@ -20,7 +21,9 @@ class BitcoinAdapter(val words: List<String>, network: NetworkType) : IAdapter, 
     override val coin: Coin = when (network) {
         NetworkType.RegTest -> Bitcoin("R")
         NetworkType.TestNet -> Bitcoin("T")
-        else -> Bitcoin()
+        NetworkType.MainNet -> Bitcoin()
+        NetworkType.TestNetBitCash -> BitcoinCash("T")
+        NetworkType.MainNetBitCash -> BitcoinCash()
     }
     override val id: String = "${words.joinToString(" ").hashCode()}-${coin.code}"
 
