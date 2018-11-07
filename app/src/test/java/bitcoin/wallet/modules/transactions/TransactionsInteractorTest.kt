@@ -2,8 +2,8 @@ package bitcoin.wallet.modules.transactions
 
 import bitcoin.wallet.core.BitcoinAdapter
 import bitcoin.wallet.core.IAdapterManager
+import bitcoin.wallet.core.ICurrencyManager
 import bitcoin.wallet.core.IExchangeRateManager
-import bitcoin.wallet.core.ILocalStorage
 import bitcoin.wallet.entities.*
 import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
@@ -23,21 +23,15 @@ class TransactionsInteractorTest {
     private val delegate = mock(TransactionsModule.IInteractorDelegate::class.java)
     private val exchangeRateManager = mock(IExchangeRateManager::class.java)
     private val adapterManager = mock(IAdapterManager::class.java)
-    private val localStorage = mock(ILocalStorage::class.java)
+    private val currencyManager = mock(ICurrencyManager::class.java)
     private val bitcoinAdapter = mock(BitcoinAdapter::class.java)
 
     private var coin = Bitcoin()
     private var words = listOf("used", "ugly", "meat", "glad", "balance", "divorce", "inner", "artwork", "hire", "invest", "already", "piano")
     private var wordsHash = words.joinToString(" ")
     private var adapterId: String = "${wordsHash.hashCode()}-${coin.code}"
+    private val baseCurrency = Currency(code = "USD", symbol = "\u0024")
 
-    private val baseCurrency = Currency().apply {
-        code = "USD"
-        symbol = "U+0024"
-        name = "US Dollar"
-        type = CurrencyType.FIAT
-        codeNumeric = 840
-    }
 
     private val baseCurrencyFlowable = Flowable.just(baseCurrency)
 
@@ -50,9 +44,9 @@ class TransactionsInteractorTest {
 
         val rateResponse = Flowable.just(6300.0)
         whenever(exchangeRateManager.getRate(any(), any(), any())).thenReturn(rateResponse)
-        whenever(localStorage.baseCurrency).thenReturn(baseCurrency)
+        whenever(currencyManager.baseCurrency).thenReturn(baseCurrency)
 
-        interactor = TransactionsInteractor(localStorage, adapterManager, exchangeRateManager, baseCurrencyFlowable)
+        interactor = TransactionsInteractor(adapterManager, exchangeRateManager, currencyManager)
 
         interactor.delegate = delegate
     }

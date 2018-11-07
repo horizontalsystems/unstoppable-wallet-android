@@ -1,30 +1,34 @@
 package bitcoin.wallet.core.managers
 
-import android.content.SharedPreferences
-import android.text.TextUtils
-import bitcoin.wallet.core.App
+import bitcoin.wallet.core.IAppConfigProvider
 import bitcoin.wallet.core.ICurrencyManager
+import bitcoin.wallet.core.ILocalStorage
 import bitcoin.wallet.entities.Currency
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
+import io.reactivex.subjects.PublishSubject
 
 
-class CurrencyManager : ICurrencyManager {
+class CurrencyManager(
+        private val localStorageManager: ILocalStorage,
+        private val appConfigProvider: IAppConfigProvider) : ICurrencyManager {
 
-    override fun getBaseCurrencyFlowable(): Flowable<Currency> =
-            Flowable.create({ emitter ->
-                val emitSavedBaseCurrency = {
-                    val currency = App.localStorage.baseCurrency
-                    emitter.onNext(currency)
-                }
+    override val baseCurrency: Currency
+        get() {
+            val currencies = appConfigProvider.currencies
+            val storedCode = localStorageManager.baseCurrencyCode
+            storedCode?.let { code ->
+                return currencies.first { it.code == code }
+            }
+            return currencies[0]
+        }
 
-                val preferencesListener = SharedPreferences.OnSharedPreferenceChangeListener { _, updatedKey ->
-                    if (TextUtils.equals(LocalStorageManager.BASE_CURRENCY, updatedKey)) {
-                        emitSavedBaseCurrency()
-                    }
-                }
+    override val currencies: List<Currency>
+        get() = appConfigProvider.currencies
 
-                App.preferences.registerOnSharedPreferenceChangeListener(preferencesListener)
-                emitter.setCancellable { App.preferences.unregisterOnSharedPreferenceChangeListener(preferencesListener) }
-            }, BackpressureStrategy.LATEST)
+    override var subject: PublishSubject<Currency> = PublishSubject.create()
+
+    override fun setBaseCurrency(code: String) {
+        localStorageManager.baseCurrencyCode = code
+        subject.onNext(baseCurrency)
+    }
+
 }

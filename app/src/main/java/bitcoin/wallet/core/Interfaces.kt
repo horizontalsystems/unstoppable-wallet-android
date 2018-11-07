@@ -18,7 +18,7 @@ interface ILocalStorage {
     var isLightModeOn: Boolean
     var iUnderstand: Boolean
     var unlockAttemptsLeft: Int
-    var baseCurrency: Currency
+    var baseCurrencyCode: String?
     var blockTillDate: Long?
     fun clearAll()
 }
@@ -40,7 +40,6 @@ interface INetworkManager {
     fun getLatestRate(coinCode: String, currency: String): Flowable<Double>
     fun getRate(coinCode: String, currency: String, year: Int, month: String, day: String, hour: String, minute: String): Flowable<Double>
     fun getRateByDay(coinCode: String, currency: String, year: Int, month: String, day: String): Flowable<Double>
-    fun getCurrencies(): Flowable<List<Currency>>
 }
 
 interface IEncryptionManager {
@@ -55,7 +54,10 @@ interface IClipboardManager {
 }
 
 interface ICurrencyManager {
-    fun getBaseCurrencyFlowable(): Flowable<Currency>
+    val baseCurrency: Currency
+    val currencies: List<Currency>
+    var subject: PublishSubject<Currency>
+    fun setBaseCurrency(code: String)
 }
 
 interface IExchangeRateManager {
@@ -142,4 +144,9 @@ interface ILockManager {
     fun onUnlock()
     fun didEnterBackground()
     fun willEnterForeground()
+}
+
+interface IAppConfigProvider {
+    val enabledCoins: List<String>
+    val currencies: List<Currency>
 }

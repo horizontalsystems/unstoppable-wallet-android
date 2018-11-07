@@ -3,9 +3,8 @@ package bitcoin.wallet.modules.send
 import bitcoin.wallet.core.BitcoinAdapter
 import bitcoin.wallet.core.IClipboardManager
 import bitcoin.wallet.core.IExchangeRateManager
-import bitcoin.wallet.entities.Currency
-import bitcoin.wallet.entities.CurrencyType
 import bitcoin.wallet.entities.CurrencyValue
+import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.modules.RxBaseTest
@@ -24,14 +23,8 @@ class SendInteractorTest {
     private val exchangeRateManager = Mockito.mock(IExchangeRateManager::class.java)
 
     private val interactor = SendInteractor(clipboardManager, bitcoinAdapter, exchangeRateManager)
-    private val currency1 = Currency().apply {
-        code = "USD"
-        symbol = "U+0024"
-        name = "US Dollar"
-        type = CurrencyType.FIAT
-        codeNumeric = 840
-    }
-    private var exchangeRates = mutableMapOf(Bitcoin() as Coin to CurrencyValue(currency1, 10_000.0))
+    private val currencyUsd = Currency(code = "USD", symbol = "\u0024")
+    private var exchangeRates = mutableMapOf(Bitcoin() as Coin to CurrencyValue(currencyUsd, 10_000.0))
 
     @Before
     fun setUp() {

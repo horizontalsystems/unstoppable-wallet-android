@@ -5,9 +5,8 @@ import bitcoin.wallet.core.IExchangeRateManager
 import bitcoin.wallet.core.ISecuredStorage
 import bitcoin.wallet.core.managers.AdapterManager
 import bitcoin.wallet.entities.CoinValue
-import bitcoin.wallet.entities.Currency
-import bitcoin.wallet.entities.CurrencyType
 import bitcoin.wallet.entities.CurrencyValue
+import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.modules.RxBaseTest
@@ -38,15 +37,10 @@ class WalletInteractorTest {
     private var words = listOf("used", "ugly", "meat", "glad", "balance", "divorce", "inner", "artwork", "hire", "invest", "already", "piano")
     private var wordsHash = words.joinToString(" ")
     private var adapterId: String = "${wordsHash.hashCode()}-${coin.code}"
+    private val currencyUsd = Currency(code = "USD", symbol = "\u0024")
 
-    private val currency1 = Currency().apply {
-        code = "USD"
-        symbol = "U+0024"
-        name = "US Dollar"
-        type = CurrencyType.FIAT
-        codeNumeric = 840
-    }
-    private var exchangeRates = mutableMapOf(Bitcoin() as Coin to CurrencyValue(currency1, 10_000.0))
+
+    private var exchangeRates = mutableMapOf(Bitcoin() as Coin to CurrencyValue(currencyUsd, 10_000.0))
 
     @Before
     fun before() {

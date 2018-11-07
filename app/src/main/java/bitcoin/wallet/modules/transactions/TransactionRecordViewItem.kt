@@ -55,9 +55,7 @@ data class TransactionRecordViewItem(
     fun getFiatValue(): String {
         var fiatValue = ""
 
-        currencyAmount?.currency?.getSymbolChar()?.let {
-            fiatValue += "~ $it"
-        }
+        fiatValue += "~ ${currencyAmount?.currency?.symbol}"
 
         currencyAmount?.value?.let {
             fiatValue += NumberFormatHelper.fiatAmountFormat.format(Math.abs(it))

@@ -2,9 +2,6 @@ package bitcoin.wallet.core.managers
 
 import bitcoin.wallet.core.App
 import bitcoin.wallet.core.ILocalStorage
-import bitcoin.wallet.entities.Currency
-import bitcoin.wallet.entities.CurrencyType
-import com.google.gson.Gson
 
 
 class LocalStorageManager : ILocalStorage {
@@ -16,6 +13,7 @@ class LocalStorageManager : ILocalStorage {
     private val I_UNDERSTAND = "i_understand"
     private val UNLOCK_PIN_ATTEMPTS_LEFT = "unlock_pin_attempts_left"
     private val BLOCK_TILL_DATE = "unblock_date"
+    private val BASE_CURRENCY_CODE = "base_currency_code"
 
 
     override var currentLanguage: String?
@@ -54,16 +52,10 @@ class LocalStorageManager : ILocalStorage {
             App.preferences.edit().putInt(UNLOCK_PIN_ATTEMPTS_LEFT, value).apply()
         }
 
-    override var baseCurrency: Currency
-        get() {
-            val gson = Gson()
-            val json = App.preferences.getString(BASE_CURRENCY, "")
-            return if (json?.isBlank() == true) defaultCurrency else gson.fromJson<Currency>(json, Currency::class.java)
-        }
-        set(currency) {
-            val gson = Gson()
-            val json = gson.toJson(currency)
-            App.preferences.edit().putString(BASE_CURRENCY, json).apply()
+    override var baseCurrencyCode: String?
+        get() = App.preferences.getString(BASE_CURRENCY_CODE, null)
+        set(value) {
+            App.preferences.edit().putString(BASE_CURRENCY_CODE, value).apply()
         }
 
     override var blockTillDate: Long?
@@ -81,18 +73,6 @@ class LocalStorageManager : ILocalStorage {
 
     override fun clearAll() {
         App.preferences.edit().clear().apply()
-    }
-
-    private val defaultCurrency: Currency = Currency().apply {
-        code = "USD"
-        symbol = "U+0024"
-        name = "US Dollar"
-        type = CurrencyType.FIAT
-        codeNumeric = 840
-    }
-
-    companion object {
-        val BASE_CURRENCY = "base_currency"
     }
 
 }

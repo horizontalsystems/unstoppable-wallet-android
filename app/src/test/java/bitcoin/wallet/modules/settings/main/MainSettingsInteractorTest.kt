@@ -2,10 +2,8 @@ package bitcoin.wallet.modules.settings.main
 
 import bitcoin.wallet.core.*
 import bitcoin.wallet.entities.Currency
-import bitcoin.wallet.entities.CurrencyType
 import bitcoin.wallet.modules.RxBaseTest
 import com.nhaarman.mockito_kotlin.*
-import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
 import org.junit.After
 import org.junit.Assert
@@ -29,13 +27,8 @@ class MainSettingsInteractorTest {
 
     val currentLanguage : Locale = Locale("en")
 
-    private val currency = Currency().apply {
-        code = "USD"
-        symbol = "U+0024"
-        name = "US Dollar"
-        type = CurrencyType.FIAT
-        codeNumeric = 840
-    }
+    private val currency = Currency(code = "USD", symbol = "\u0024")
+
 
     private val appVersion = "1,01"
 
@@ -50,7 +43,7 @@ class MainSettingsInteractorTest {
 
         localStorage = mock {
             on { isLightModeOn } doReturn true
-            on { baseCurrency } doReturn currency
+            on { baseCurrencyCode } doReturn currency.code
         }
 
         languageManager = mock{
@@ -62,7 +55,8 @@ class MainSettingsInteractorTest {
         }
 
         currencyManager = mock{
-            on { getBaseCurrencyFlowable() } doReturn Flowable.just(currency)
+            on { subject } doReturn PublishSubject.create<Currency>()
+            on { baseCurrency } doReturn currency
         }
 
 
@@ -117,7 +111,7 @@ class MainSettingsInteractorTest {
     fun getLightModeOff() {
         localStorage = mock {
             on { isLightModeOn } doReturn false
-            on { baseCurrency } doReturn currency
+            on { baseCurrencyCode } doReturn currency.code
         }
         interactor = MainSettingsInteractor(localStorage, wordsManager, languageManager, sysInfoManager, currencyManager)
         interactor.delegate = delegate

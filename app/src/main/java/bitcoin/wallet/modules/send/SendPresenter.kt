@@ -89,7 +89,7 @@ class SendPresenter(
     private fun updateAmountHintView() {
         val amountStr = formatFiatAmount(fiatAmount ?: 0.0)
 
-        view?.setAmountHint("${baseCurrency.getSymbolChar()} $amountStr")
+        view?.setAmountHint("${baseCurrency.symbol} $amountStr")
     }
 
     private fun getError(exception: Exception) = when (exception) {

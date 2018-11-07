@@ -26,8 +26,13 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
-        release {
+        debug{
             minifyEnabled false
+            resValue "string", "enabled_coins", buildProperties.get("enabled_coins")
+        }
+
+        release.initWith(buildTypes.debug)
+        release {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

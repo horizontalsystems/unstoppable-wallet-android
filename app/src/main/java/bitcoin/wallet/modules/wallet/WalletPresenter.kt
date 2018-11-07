@@ -2,8 +2,8 @@ package bitcoin.wallet.modules.wallet
 
 import bitcoin.wallet.core.App
 import bitcoin.wallet.entities.CoinValue
-import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
+import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.coins.Coin
 import io.reactivex.subjects.BehaviorSubject
 

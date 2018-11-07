@@ -1,4 +1,4 @@
-package bitcoin.wallet.modules.currencyswitcher
+package bitcoin.wallet.modules.settings.basecurrency
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -12,20 +12,19 @@ import android.view.ViewGroup
 import bitcoin.wallet.BaseActivity
 import bitcoin.wallet.R
 import bitcoin.wallet.core.setOnSingleClickListener
-import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.ui.view.ViewHolderProgressbar
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_currency_switcher.*
 import kotlinx.android.synthetic.main.view_holder_currency_item.*
 
-class CurrencySwitcherActivity: BaseActivity(), CurrencySwitcherAdapter.Listener {
+class BaseCurrencySettingsActivity: BaseActivity(), CurrencySwitcherAdapter.Listener {
 
-    private lateinit var viewModel: CurrencySwitcherViewModel
+    private lateinit var viewModel: BaseCurrencySettingsViewModel
     private var adapter: CurrencySwitcherAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(CurrencySwitcherViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(BaseCurrencySettingsViewModel::class.java)
         viewModel.init()
 
         setContentView(R.layout.activity_currency_switcher)
@@ -57,8 +56,8 @@ class CurrencySwitcherActivity: BaseActivity(), CurrencySwitcherAdapter.Listener
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onItemClick(item: Currency) {
-        viewModel.delegate.onItemClick(item)
+    override fun onItemClick(item: CurrencyItem) {
+        viewModel.delegate.didSelect(item)
     }
 }
 
@@ -67,10 +66,10 @@ class CurrencySwitcherAdapter(private var listener: Listener) : RecyclerView.Ada
     private val VIEW_TYPE_LOADING = 2
 
     interface Listener {
-        fun onItemClick(item: Currency)
+        fun onItemClick(item: CurrencyItem)
     }
 
-    var items = listOf<CurrencyViewItem>()
+    var items = listOf<CurrencyItem>()
 
     override fun getItemCount() = if (items.isEmpty()) 1 else items.size
 
@@ -91,7 +90,7 @@ class CurrencySwitcherAdapter(private var listener: Listener) : RecyclerView.Ada
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is ViewHolderCurrency -> holder.bind(items[position]) { listener.onItemClick(items[position].currency) }
+            is ViewHolderCurrency -> holder.bind(items[position]) { listener.onItemClick(items[position]) }
         }
     }
 
@@ -99,11 +98,11 @@ class CurrencySwitcherAdapter(private var listener: Listener) : RecyclerView.Ada
 
 class ViewHolderCurrency(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(item: CurrencyViewItem, onClick: () -> (Unit)) {
+    fun bind(item: CurrencyItem, onClick: () -> (Unit)) {
 
         containerView.setOnSingleClickListener { onClick.invoke() }
-        title.text = item.currency.code
-        subtitle.text = item.currency.name
+        title.text = item.code
+        subtitle.text = item.symbol
         checkmarkIcon.visibility = if (item.selected) View.VISIBLE else View.GONE
     }
 

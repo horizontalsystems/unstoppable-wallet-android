@@ -1,7 +1,6 @@
 package bitcoin.wallet.core.managers
 
 import bitcoin.wallet.core.INetworkManager
-import bitcoin.wallet.entities.Currency
 import com.google.gson.GsonBuilder
 import io.reactivex.Flowable
 import okhttp3.OkHttpClient
@@ -34,13 +33,6 @@ class NetworkManager : INetworkManager {
                 .getLatestRate(coinCode, currency)
                 .onErrorReturn {
                     0.0
-                }
-    }
-
-    override fun getCurrencies(): Flowable<List<Currency>> {
-        return ServiceExchangeApi.service.getCurrencies()
-                .onErrorReturn {
-                    listOf()
                 }
     }
 
@@ -101,9 +93,6 @@ object ServiceExchangeApi {
                 @Path("coin") coinCode: String,
                 @Path("fiat") currency: String
         ): Flowable<Double>
-
-        @GET("index.json")
-        fun getCurrencies(): Flowable<List<Currency>>
 
     }
 }

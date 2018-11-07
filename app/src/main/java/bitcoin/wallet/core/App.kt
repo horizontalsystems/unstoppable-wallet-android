@@ -30,6 +30,7 @@ class App : Application() {
         lateinit var systemInfoManager: ISystemInfoManager
         lateinit var pinManager: IPinManager
         lateinit var lockManager: ILockManager
+        lateinit var appConfigProvider: IAppConfigProvider
 
 
         val testMode = true
@@ -68,13 +69,14 @@ class App : Application() {
         wordsManager = WordsManager(localStorage, secureStorage)
         randomManager = RandomProvider()
         networkManager = NetworkManager()
-        currencyManager = CurrencyManager()
-        exchangeRateManager = ExchangeRateManager()
         adapterManager = AdapterManager(wordsManager)
         languageManager = LanguageManager(localStorage, fallbackLanguage)
         systemInfoManager = SystemInfoManager()
         pinManager = PinManager(secureStorage)
         lockManager = LockManager(secureStorage, wordsManager)
+        appConfigProvider = AppConfigProvider()
+        currencyManager = CurrencyManager(localStorage, appConfigProvider)
+        exchangeRateManager = ExchangeRateManager(currencyManager)
     }
 
 }
