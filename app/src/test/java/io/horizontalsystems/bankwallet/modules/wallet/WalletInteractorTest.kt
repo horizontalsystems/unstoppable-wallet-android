@@ -24,7 +24,7 @@ import org.powermock.core.classloader.annotations.SuppressStaticInitializationFo
 import org.powermock.modules.junit4.PowerMockRunner
 
 @RunWith(PowerMockRunner::class)
-@SuppressStaticInitializationFor("bitcoin.horizontalsystems.wallet.core.managers.ExchangeRateManager")
+@SuppressStaticInitializationFor("io.horizontalsystems.wallet.core.managers.ExchangeRateManager")
 class WalletInteractorTest {
 
     private val delegate = mock(WalletModule.IInteractorDelegate::class.java)
