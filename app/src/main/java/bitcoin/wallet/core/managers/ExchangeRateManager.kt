@@ -3,8 +3,8 @@ package bitcoin.wallet.core.managers
 import bitcoin.wallet.core.App
 import bitcoin.wallet.core.ICurrencyManager
 import bitcoin.wallet.core.IExchangeRateManager
-import bitcoin.wallet.entities.CurrencyValue
 import bitcoin.wallet.entities.Currency
+import bitcoin.wallet.entities.CurrencyValue
 import bitcoin.wallet.entities.coins.Coin
 import bitcoin.wallet.viewHelpers.DateHelper
 import io.reactivex.Flowable
@@ -21,7 +21,7 @@ class ExchangeRateManager(currencyManager: ICurrencyManager): IExchangeRateManag
     private var disposables: CompositeDisposable = CompositeDisposable()
 
     init {
-        fetchRatesWithInterval(App.currencyManager.baseCurrency)
+        fetchRatesWithInterval(currencyManager.baseCurrency)
         val baseCurrencyDisposable = currencyManager.subject.subscribe { baseCurrency ->
             fetchRatesWithInterval(baseCurrency)
         }
