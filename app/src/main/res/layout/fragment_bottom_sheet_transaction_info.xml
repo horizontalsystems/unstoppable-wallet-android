@@ -128,7 +128,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/fiatValue"
         />
 
-    <bitcoin.wallet.modules.transactionInfo.TransactionInfoItemView
+    <io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemView
         android:id="@+id/itemFromTo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -149,7 +149,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/itemFromTo"
         />
 
-    <bitcoin.wallet.modules.transactionInfo.TransactionInfoItemView
+    <io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemView
         android:id="@+id/itemStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

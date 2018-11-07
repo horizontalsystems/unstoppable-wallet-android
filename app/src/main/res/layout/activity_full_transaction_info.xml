@@ -87,7 +87,7 @@
                 tools:text="@string/transaction_info_status_pending"
                 />
 
-            <bitcoin.wallet.modules.transactionInfo.TransactionInfoItemView
+            <io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemView
                 android:id="@+id/itemTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -99,7 +99,7 @@
                 app:value="Aug 7, 2018, 2:12"
                 />
 
-            <bitcoin.wallet.modules.transactionInfo.TransactionInfoItemView
+            <io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemView
                 android:id="@+id/itemFrom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -110,7 +110,7 @@
                 app:value="BU878BUYB96NKB8987687BHJ78"
                 />
 
-            <bitcoin.wallet.modules.transactionInfo.TransactionInfoItemView
+            <io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemView
                 android:id="@+id/itemTo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -121,7 +121,7 @@
                 app:value="BU878BUYB96NKB8987687BHJ78"
                 />
 
-            <bitcoin.wallet.modules.transactionInfo.TransactionInfoItemView
+            <io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemView
                 android:id="@+id/itemAmount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -132,7 +132,7 @@
                 app:value="0.0062 BTC"
                 />
 
-            <bitcoin.wallet.modules.transactionInfo.TransactionInfoItemView
+            <io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemView
                 android:id="@+id/itemFee"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -143,7 +143,7 @@
                 app:value="0.006 BTC"
                 />
 
-            <bitcoin.wallet.modules.transactionInfo.TransactionInfoItemView
+            <io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemView
                 android:id="@+id/itemBlock"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
