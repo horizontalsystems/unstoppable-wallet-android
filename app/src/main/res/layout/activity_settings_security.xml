@@ -51,7 +51,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 />
 
-            <bitcoin.wallet.modules.settings.SettingsItemView
+            <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
                 android:id="@+id/fingerprint"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
@@ -61,7 +61,7 @@
                 app:setting_title="@string/settings_security_fingerprint"
                 />
 
-            <bitcoin.wallet.modules.settings.SettingsItemView
+            <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
                 android:id="@+id/changePin"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
@@ -80,7 +80,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/changePin"
                 />
 
-            <bitcoin.wallet.modules.settings.SettingsItemView
+            <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
                 android:id="@+id/backupWallet"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
@@ -90,7 +90,7 @@
                 app:setting_title="@string/settings_security_backup_wallet"
                 />
 
-            <bitcoin.wallet.modules.settings.SettingsItemView
+            <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
                 android:id="@+id/importWallet"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
@@ -100,7 +100,7 @@
                 app:setting_title="@string/settings_import_wallet"
                 />
 
-            <bitcoin.wallet.modules.settings.SettingsItemView
+            <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
                 android:id="@+id/unlink"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"

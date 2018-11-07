@@ -47,7 +47,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 />
 
-            <bitcoin.wallet.modules.settings.SettingsItemView
+            <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
                 android:id="@+id/securityCenter"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
@@ -58,7 +58,7 @@
                 app:setting_title="@string/settings_security_center"
                 />
 
-            <bitcoin.wallet.modules.settings.SettingsItemView
+            <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
                 android:id="@+id/baseCurrency"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
@@ -78,7 +78,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/baseCurrency"
                 />
 
-            <bitcoin.wallet.modules.settings.SettingsItemView
+            <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
                 android:id="@+id/language"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
@@ -89,7 +89,7 @@
                 app:setting_title="@string/settings_language"
                 />
 
-            <bitcoin.wallet.modules.settings.SettingsItemView
+            <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
                 android:id="@+id/lightMode"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
@@ -109,7 +109,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/lightMode"
                 />
 
-            <bitcoin.wallet.modules.settings.SettingsItemView
+            <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
                 android:id="@+id/about"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
