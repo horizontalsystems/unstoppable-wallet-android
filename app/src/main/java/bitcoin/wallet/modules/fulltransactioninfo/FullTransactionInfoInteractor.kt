@@ -4,8 +4,8 @@ import bitcoin.wallet.core.IAdapter
 import bitcoin.wallet.core.IClipboardManager
 import bitcoin.wallet.core.IExchangeRateManager
 import bitcoin.wallet.entities.CoinValue
-import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
+import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.TransactionRecord
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem
 import io.reactivex.schedulers.Schedulers

@@ -1,6 +1,7 @@
 package bitcoin.wallet.core.managers
 
 import bitcoin.wallet.core.App
+import bitcoin.wallet.core.ICurrencyManager
 import bitcoin.wallet.core.IExchangeRateManager
 import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
@@ -15,13 +16,13 @@ import java.text.DecimalFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class ExchangeRateManager: IExchangeRateManager {
+class ExchangeRateManager(currencyManager: ICurrencyManager): IExchangeRateManager {
 
     private var disposables: CompositeDisposable = CompositeDisposable()
 
     init {
-        fetchRatesWithInterval(App.localStorage.baseCurrency)
-        val baseCurrencyDisposable = App.currencyManager.getBaseCurrencyFlowable().subscribe { baseCurrency ->
+        fetchRatesWithInterval(currencyManager.baseCurrency)
+        val baseCurrencyDisposable = currencyManager.subject.subscribe { baseCurrency ->
             fetchRatesWithInterval(baseCurrency)
         }
     }

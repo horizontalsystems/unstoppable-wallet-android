@@ -1,8 +1,8 @@
 package bitcoin.wallet.modules.transactions
 
 import bitcoin.wallet.core.IAdapterManager
+import bitcoin.wallet.core.ICurrencyManager
 import bitcoin.wallet.core.IExchangeRateManager
-import bitcoin.wallet.core.ILocalStorage
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
@@ -13,27 +13,28 @@ import io.reactivex.schedulers.Schedulers
 import java.util.*
 
 class TransactionsInteractor(
-        localStorage: ILocalStorage,
         private val adapterManager: IAdapterManager,
         private val exchangeRateManager: IExchangeRateManager,
-        baseCurrencyFlowable: Flowable<Currency>) : TransactionsModule.IInteractor {
+        private val currencyManager: ICurrencyManager) : TransactionsModule.IInteractor {
 
     var delegate: TransactionsModule.IInteractorDelegate? = null
-    private var disposables: CompositeDisposable = CompositeDisposable()
+    private var transactionsDisposables: CompositeDisposable = CompositeDisposable()
     private var adapterManagerDisposable: Disposable? = null
     private var clickedAdapterId: String? = null
 
     init {
-        disposables.add(baseCurrencyFlowable.subscribe { baseCurrency ->
+        val disposable = currencyManager.subject.subscribe { baseCurrency ->
+            transactionsDisposables.clear()
             retrieveTransactionItemsWithBaseCurrency(baseCurrency, clickedAdapterId)
-        })
+        }
     }
 
-    override var baseCurrency: Currency = localStorage.baseCurrency
+    override val baseCurrency: Currency
+        get() = currencyManager.baseCurrency
 
     override fun retrieveFilters() {
         adapterManagerDisposable = adapterManager.subject.subscribe {
-            disposables.clear()
+            transactionsDisposables.clear()
             initialFetchAndSubscribe()
         }
 
@@ -48,7 +49,7 @@ class TransactionsInteractor(
         delegate?.didRetrieveFilters(filters)
 
         adapterManager.adapters.forEach { adapter ->
-            disposables.add(adapter.transactionRecordsSubject.subscribe {
+            transactionsDisposables.add(adapter.transactionRecordsSubject.subscribe {
                 retrieveTransactions(clickedAdapterId)
             })
         }
@@ -62,7 +63,7 @@ class TransactionsInteractor(
     }
 
     override fun onCleared() {
-        disposables.clear()
+        transactionsDisposables.clear()
         adapterManagerDisposable?.dispose()
     }
 
@@ -103,7 +104,7 @@ class TransactionsInteractor(
 
         items.sortByDescending { it.date }
 
-        disposables.add(Flowable.zip(flowableList, Arrays::asList)
+        transactionsDisposables.add(Flowable.zip(flowableList, Arrays::asList)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())

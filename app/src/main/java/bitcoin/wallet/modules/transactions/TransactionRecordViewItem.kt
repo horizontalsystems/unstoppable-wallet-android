@@ -3,7 +3,6 @@ package bitcoin.wallet.modules.transactions
 import bitcoin.wallet.entities.CoinValue
 import bitcoin.wallet.entities.CurrencyValue
 import bitcoin.wallet.entities.TransactionStatus
-import bitcoin.wallet.viewHelpers.NumberFormatHelper
 import java.util.*
 
 data class TransactionRecordViewItem(
@@ -50,22 +49,6 @@ data class TransactionRecordViewItem(
         result = 31 * result + (currencyAmount?.hashCode() ?: 0)
         result = 31 * result + (exchangeRate?.hashCode() ?: 0)
         return result
-    }
-
-    fun getFiatValue(): String {
-        var fiatValue = ""
-
-        currencyAmount?.currency?.getSymbolChar()?.let {
-            fiatValue += "~ $it"
-        }
-
-        currencyAmount?.value?.let {
-            fiatValue += NumberFormatHelper.fiatAmountFormat.format(Math.abs(it))
-        } ?: run {
-            fiatValue += "..."
-        }
-
-        return fiatValue
     }
 
 }

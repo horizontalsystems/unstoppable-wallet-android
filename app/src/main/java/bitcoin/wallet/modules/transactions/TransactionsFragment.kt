@@ -17,7 +17,7 @@ import bitcoin.wallet.entities.TransactionStatus
 import bitcoin.wallet.modules.transactionInfo.TransactionInfoModule
 import bitcoin.wallet.viewHelpers.DateHelper
 import bitcoin.wallet.viewHelpers.LayoutHelper
-import bitcoin.wallet.viewHelpers.NumberFormatHelper
+import bitcoin.wallet.viewHelpers.ValueFormatter
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
 import kotlinx.android.synthetic.main.view_holder_filter.*
@@ -116,13 +116,12 @@ class ViewHolderTransaction(override val containerView: View) : RecyclerView.Vie
 
         containerView.setOnSingleClickListener { onClick.invoke() }
 
-        val sign = if (transactionRecord.incoming) "+" else "-"
         val amountTextColor = if (transactionRecord.incoming) R.color.green_crypto else R.color.yellow_crypto
         txAmount.setTextColor(ContextCompat.getColor(itemView.context, amountTextColor))
-        txAmount.text = "$sign ${NumberFormatHelper.cryptoAmountFormat.format(Math.abs(transactionRecord.amount.value))} ${transactionRecord.amount.coin.code}"
+        txAmount.text = ValueFormatter.format(transactionRecord.amount, true)
         txDate.text = transactionRecord.date?.let { DateHelper.getShortDateForTransaction(it) }
         txTime.text = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }
-        txValueInFiat.text = transactionRecord.getFiatValue()
+        txValueInFiat.text = transactionRecord.currencyAmount?.let { ValueFormatter.format(it, true) }
         statusIcon.setImageDrawable(getStatusIcon(transactionRecord.status))
     }
 

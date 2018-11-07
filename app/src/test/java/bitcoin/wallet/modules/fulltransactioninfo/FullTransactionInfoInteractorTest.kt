@@ -37,7 +37,9 @@ class FullTransactionInfoInteractorTest {
         coinCode = "BTC"
     }
 
-    private val interactor = FullTransactionInfoInteractor(bitcoinAdapter, exchangeRateManager, transactionId, clipboardManager, Currency())
+    private val currencyUsd = Currency(code = "USD", symbol = "\u0024")
+
+    private val interactor = FullTransactionInfoInteractor(bitcoinAdapter, exchangeRateManager, transactionId, clipboardManager, currencyUsd)
 
 
     @Before

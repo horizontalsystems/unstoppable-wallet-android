@@ -1,8 +1,8 @@
 package bitcoin.wallet.modules.transactions
 
 import bitcoin.wallet.entities.CoinValue
-import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
+import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.TransactionStatus
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import com.nhaarman.mockito_kotlin.any
@@ -59,6 +59,7 @@ class TransactionsPresenterTest {
     @Test
     fun onTransactionItemClick() {
         val adapterId = "[adapterId]"
+        val currencyUsd = Currency(code = "USD", symbol = "\u0024")
         val transactionRecord = TransactionRecordViewItem(
                 "",
                 adapterId,
@@ -70,7 +71,7 @@ class TransactionsPresenterTest {
                 0,
                 Date(),
                 TransactionStatus.Completed,
-                CurrencyValue(Currency(), 0.0),
+                CurrencyValue(currencyUsd, 0.0),
                 0.0
         )
 

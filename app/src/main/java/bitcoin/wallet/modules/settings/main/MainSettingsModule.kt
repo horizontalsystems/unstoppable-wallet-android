@@ -27,7 +27,7 @@ object MainSettingsModule {
     interface IMainSettingsInteractor {
         var isBackedUp: Boolean
         var currentLanguage: String
-        var baseCurrency: String
+        val baseCurrency: String
         var appVersion: String
         fun getLightMode(): Boolean
         fun setLightMode(lightMode: Boolean)

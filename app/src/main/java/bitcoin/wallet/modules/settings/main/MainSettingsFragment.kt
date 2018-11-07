@@ -10,10 +10,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
 import bitcoin.wallet.R
-import bitcoin.wallet.modules.currencyswitcher.CurrencySwitcherModule
 import bitcoin.wallet.modules.main.MainActivity
 import bitcoin.wallet.modules.main.MainModule
 import bitcoin.wallet.modules.settings.AboutSettingsActivity
+import bitcoin.wallet.modules.settings.basecurrency.BaseCurrencySettingsModule
 import bitcoin.wallet.modules.settings.language.LanguageSettingsModule
 import bitcoin.wallet.modules.settings.security.SecuritySettingsModule
 import bitcoin.wallet.viewHelpers.LayoutHelper
@@ -81,7 +81,7 @@ class MainSettingsFragment : android.support.v4.app.Fragment() {
         })
 
         viewModel.showBaseCurrencySettingsLiveEvent.observe(this, Observer {
-            context?.let { context -> CurrencySwitcherModule.start(context) }
+            context?.let { context -> BaseCurrencySettingsModule.start(context) }
         })
 
         viewModel.languageLiveDate.observe(this, Observer { languageCode ->

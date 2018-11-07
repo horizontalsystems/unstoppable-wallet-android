@@ -1,8 +1,8 @@
 package bitcoin.wallet.modules.fulltransactioninfo
 
 import bitcoin.wallet.entities.CoinValue
-import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
+import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.TransactionStatus
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem
@@ -27,6 +27,7 @@ class FullTransactionInfoPresenterTest {
     private var exchangeRates = mapOf("BTC" to 10_000.0)
     private val btcTxAmount = 10.0
     private val now = Date()
+    private val currencyUsd = Currency(code = "USD", symbol = "\u0024")
 
     private val transactionRecordViewItem = TransactionRecordViewItem(
             transactionId,
@@ -39,7 +40,7 @@ class FullTransactionInfoPresenterTest {
             98,
             now,
             TransactionStatus.Completed,
-            CurrencyValue(currency = Currency(), value = btcTxAmount * (exchangeRates["BTC"] ?: 0.0))
+            CurrencyValue(currency = currencyUsd, value = btcTxAmount * (exchangeRates["BTC"] ?: 0.0))
     )
 
     @Before

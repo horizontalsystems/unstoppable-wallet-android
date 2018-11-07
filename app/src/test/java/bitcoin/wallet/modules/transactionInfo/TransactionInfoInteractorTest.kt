@@ -2,8 +2,8 @@ package bitcoin.wallet.modules.transactionInfo
 
 import bitcoin.wallet.core.IClipboardManager
 import bitcoin.wallet.entities.CoinValue
-import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.CurrencyValue
+import bitcoin.wallet.entities.Currency
 import bitcoin.wallet.entities.TransactionStatus
 import bitcoin.wallet.entities.coins.bitcoin.Bitcoin
 import bitcoin.wallet.modules.RxBaseTest
@@ -19,6 +19,7 @@ class TransactionInfoInteractorTest {
 
     private val delegate = Mockito.mock(TransactionInfoModule.IInteractorDelegate::class.java)
     private val clipboardManager = Mockito.mock(IClipboardManager::class.java)
+    private val currencyUsd = Currency(code = "USD", symbol = "\u0024")
 
     private val transaction = TransactionRecordViewItem(
             "",
@@ -31,7 +32,7 @@ class TransactionInfoInteractorTest {
             0,
             Date(),
             TransactionStatus.Completed,
-            CurrencyValue(Currency(), 0.0),
+            CurrencyValue(currencyUsd, 0.0),
             0.0
     )
 

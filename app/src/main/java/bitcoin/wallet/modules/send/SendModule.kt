@@ -45,7 +45,7 @@ object SendModule {
 
     fun init(view: SendViewModel, router: IRouter, adapter: IAdapter) {
         val exchangeRateManager = App.exchangeRateManager
-        val baseCurrency = App.localStorage.baseCurrency
+        val baseCurrency = App.currencyManager.baseCurrency
         val interactor = SendInteractor(TextHelper, adapter, exchangeRateManager)
         val presenter = SendPresenter(interactor, router, baseCurrency)
 

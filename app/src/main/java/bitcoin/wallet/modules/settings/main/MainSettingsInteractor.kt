@@ -19,7 +19,7 @@ class MainSettingsInteractor(
             onUpdateBackedUp(it)
         })
 
-        disposables.add(currencyManager.getBaseCurrencyFlowable().subscribe {
+        disposables.add(currencyManager.subject.subscribe {
             delegate?.didUpdateBaseCurrency(it.code)
         })
     }
@@ -35,7 +35,8 @@ class MainSettingsInteractor(
 
     override var currentLanguage: String = languageManager.currentLanguage.displayLanguage
 
-    override var baseCurrency: String = localStorage.baseCurrency.code
+    override val baseCurrency: String
+        get() = currencyManager.baseCurrency.code
 
     override var appVersion: String = systemInfoManager.appVersion
 

@@ -18,7 +18,7 @@ import bitcoin.wallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem
 import bitcoin.wallet.viewHelpers.DateHelper
 import bitcoin.wallet.viewHelpers.HudHelper
-import bitcoin.wallet.viewHelpers.NumberFormatHelper
+import bitcoin.wallet.viewHelpers.ValueFormatter
 
 class TransactionInfoFragment : DialogFragment() {
 
@@ -56,8 +56,7 @@ class TransactionInfoFragment : DialogFragment() {
                 val txStatus = txRec.status
 
                 rootView.findViewById<TextView>(R.id.txtAmount)?.apply {
-                    val sign = if (txRec.incoming) "+" else "-"
-                    text = "$sign ${NumberFormatHelper.cryptoAmountFormat.format(Math.abs(txRec.amount.value))} ${txRec.amount.coin.code}"
+                    text = ValueFormatter.format(txRec.amount, true)
                     setTextColor(resources.getColor(if (txRec.incoming) R.color.green_crypto else R.color.yellow_crypto, null))
                 }
 
@@ -90,7 +89,7 @@ class TransactionInfoFragment : DialogFragment() {
                 }
 
                 rootView.findViewById<TextView>(R.id.fiatValue)?.apply {
-                    text = txRec.getFiatValue()
+                    text = txRec.currencyAmount?.let { ValueFormatter.format(it, true) }
                 }
 
                 rootView.findViewById<TransactionInfoItemView>(R.id.itemFromTo)?.apply {

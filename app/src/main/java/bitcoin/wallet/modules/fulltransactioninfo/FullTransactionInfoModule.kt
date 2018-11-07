@@ -43,7 +43,7 @@ object FullTransactionInfoModule {
 
     fun init(view: FullTransactionInfoViewModel, router: IRouter, adapterId: String, transactionId: String) {
         val adapter = App.adapterManager.adapters.firstOrNull { it.id == adapterId }
-        val baseCurrency = App.localStorage.baseCurrency
+        val baseCurrency = App.currencyManager.baseCurrency
         val interactor = FullTransactionInfoInteractor(adapter, App.exchangeRateManager, transactionId, TextHelper, baseCurrency)
         val presenter = FullTransactionInfoPresenter(interactor, router)
 

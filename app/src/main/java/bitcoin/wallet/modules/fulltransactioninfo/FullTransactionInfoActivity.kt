@@ -12,7 +12,7 @@ import bitcoin.wallet.entities.TransactionStatus
 import bitcoin.wallet.modules.transactions.TransactionRecordViewItem
 import bitcoin.wallet.viewHelpers.DateHelper
 import bitcoin.wallet.viewHelpers.HudHelper
-import bitcoin.wallet.viewHelpers.NumberFormatHelper
+import bitcoin.wallet.viewHelpers.ValueFormatter
 import kotlinx.android.synthetic.main.activity_full_transaction_info.*
 
 class FullTransactionInfoActivity : BaseActivity() {
@@ -75,13 +75,12 @@ class FullTransactionInfoActivity : BaseActivity() {
         itemTime.bind(title = getString(R.string.full_transaction_info_time), valueTitle = trx.date?.let { DateHelper.getFullDateWithShortMonth(it) })
         itemFrom.bind(title = getString(R.string.full_transaction_info_from), valueTitle = trx.from, valueIcon = R.drawable.round_person_18px)
         itemTo.bind(title = getString(R.string.full_transaction_info_to), valueTitle = trx.to, valueIcon = R.drawable.round_person_18px)
-        val cryptoAmountFormat = NumberFormatHelper.cryptoAmountFormat
         itemAmount.bind(
                 title = getString(R.string.full_transaction_info_amount),
-                valueTitle = "${cryptoAmountFormat.format(trx.amount.value)} ${trx.amount.coin.code}",
-                valueSubtitle = trx.getFiatValue()
+                valueTitle = ValueFormatter.format(trx.amount, true),
+                valueSubtitle = trx.currencyAmount?.let { ValueFormatter.format(it, true) }
         )
-        itemFee.bind(title = getString(R.string.full_transaction_info_fee), valueTitle = "${cryptoAmountFormat.format(trx.fee.value)} ${trx.fee.coin.code}")
+        itemFee.bind(title = getString(R.string.full_transaction_info_fee), valueTitle = ValueFormatter.format(trx.fee))
         itemBlock.bind(title = getString(R.string.full_transaction_info_block), valueTitle = trx.blockHeight.toString())
 
         transactionId.setOnClickListener { viewModel.delegate.onTransactionIdClick() }

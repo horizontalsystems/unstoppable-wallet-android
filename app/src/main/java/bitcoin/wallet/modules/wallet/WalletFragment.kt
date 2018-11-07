@@ -16,7 +16,7 @@ import bitcoin.wallet.modules.receive.ReceiveModule
 import bitcoin.wallet.modules.send.SendModule
 import bitcoin.wallet.viewHelpers.AnimationHelper
 import bitcoin.wallet.viewHelpers.LayoutHelper
-import bitcoin.wallet.viewHelpers.NumberFormatHelper
+import bitcoin.wallet.viewHelpers.ValueFormatter
 import io.reactivex.disposables.Disposable
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_wallet.*
@@ -46,8 +46,7 @@ class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener 
         })
 
         viewModel.totalBalanceLiveData.observe(this, Observer { total ->
-            val numberFormat = NumberFormatHelper.fiatAmountFormat
-            ballanceText.text = total?.let { "${total.currency.getSymbolChar()}${numberFormat.format(total.value)}" } ?: ""
+            ballanceText.text = total?.let { ValueFormatter.format(it) } ?: ""
         })
 
         viewModel.openReceiveDialog.observe(this, Observer { adapterId ->
@@ -153,16 +152,18 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
     fun bind(walletBalanceViewItem: WalletBalanceViewItem, onSendClick: (() -> (Unit))? = null, onReceiveClick: (() -> (Unit))? = null, onHolderClicked: (() -> Unit)? = null, expanded: Boolean) {
         val iconDrawable = ContextCompat.getDrawable(containerView.context, LayoutHelper.getCoinDrawableResource(walletBalanceViewItem.coinValue.coin.code))
         coinIcon.setImageDrawable(iconDrawable)
-        val numberFormat = NumberFormatHelper.fiatAmountFormat
-        textName.text = "${walletBalanceViewItem.coinValue.coin.name} (${walletBalanceViewItem.coinValue.coin.code})"
-        textAmountFiat.text = "${walletBalanceViewItem.currencyValue?.currency?.getSymbolChar() ?: ""}${numberFormat.format(walletBalanceViewItem.currencyValue?.value ?: 0.0)}"
-        textAmount.text = "${walletBalanceViewItem.coinValue.value}"
+        textName.text = "${walletBalanceViewItem.coinValue.coin.name}"
+        textAmountFiat.text = walletBalanceViewItem.currencyValue?.let { ValueFormatter.format(it) }
+        coinAmount.text = "${ValueFormatter.format(walletBalanceViewItem.coinValue)}"
 
         val zeroBalance = walletBalanceViewItem.coinValue.value <= 0.0
-        textAmount.visibility = if (zeroBalance) View.GONE else View.VISIBLE
+        coinAmount.visibility = if (zeroBalance) View.GONE else View.VISIBLE
         buttonPay.isEnabled = !zeroBalance
         textAmountFiat.isEnabled = !zeroBalance
-        textExchangeRate.text = "1 ${walletBalanceViewItem.coinValue.coin.code} - ${walletBalanceViewItem.currencyValue?.currency?.getSymbolChar() ?: ""}${numberFormat.format(walletBalanceViewItem.exchangeRateValue?.value ?: 0.0)}"
+        textExchangeRate.text = walletBalanceViewItem.exchangeRateValue?.let {
+            containerView.context.getString(R.string.wallet_exchange_rate, ValueFormatter.format(it), walletBalanceViewItem.coinValue.coin.code)
+        } ?: kotlin.run { "..." }
+
         //todo convert indeterminate spinner to determinant one
         disposable = walletBalanceViewItem.progress?.subscribe {
             syncProgress.visibility = if (it == 1.0) View.GONE else View.VISIBLE
