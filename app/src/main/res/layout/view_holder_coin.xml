@@ -96,11 +96,11 @@
             android:fontFamily="@font/noto_sans"
             android:textColor="@color/grey"
             android:textSize="14sp"
-            tools:text="1 BTC - $6500"
+            tools:text="$6500 per BTC"
             />
 
         <TextView
-            android:id="@+id/textAmount"
+            android:id="@+id/coinAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/noto_sans_bold"

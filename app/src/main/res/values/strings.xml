@@ -35,6 +35,7 @@
     <string name="wallet_title">Balance</string>
     <string name="wallet_button_receive">Receive</string>
     <string name="wallet_button_pay">Send</string>
+    <string name="wallet_exchange_rate">%s per %s</string>
 
     <string name="send_title">Send</string>
     <string name="send_error_insufficient_funds">Not enough funds</string>
