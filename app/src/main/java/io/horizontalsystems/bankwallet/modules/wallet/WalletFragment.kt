@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.viewHelpers.AnimationHelper
@@ -63,10 +62,6 @@ class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener 
                     SendModule.start(it, adapter)
                 }
             }
-        })
-
-        viewModel.navigateToSetPin.observe(this, Observer {
-            context?.let { context -> PinModule.startForSetPin(context) }
         })
 
         toolbar.setTitle(R.string.wallet_title)

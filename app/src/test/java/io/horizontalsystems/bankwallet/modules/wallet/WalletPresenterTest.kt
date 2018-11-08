@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.wallet
 
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.coins.Coin
 import io.horizontalsystems.bankwallet.entities.coins.bitcoin.Bitcoin
 import io.horizontalsystems.bankwallet.entities.coins.bitcoinCash.BitcoinCash
@@ -31,7 +31,6 @@ class WalletPresenterTest {
     fun start() {
         presenter.viewDidLoad()
 
-        verify(interactor).checkIfPinSet()
         verify(interactor).notifyWalletBalances()
     }
 
@@ -65,13 +64,6 @@ class WalletPresenterTest {
 
         verify(view).showWalletBalances(expectedViewItems)
         verify(view).showTotalBalance(expectedTotalBalance)
-    }
-
-    @Test
-    fun onPinNotSet() {
-        presenter.onPinNotSet()
-
-        verify(router).navigateToSetPin()
     }
 
 }

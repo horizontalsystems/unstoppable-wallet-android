@@ -14,7 +14,6 @@ class WalletViewModel : ViewModel(), WalletModule.IView, WalletModule.IRouter {
     val totalBalanceLiveData = MutableLiveData<CurrencyValue>()
     val openSendDialog = SingleLiveEvent<IAdapter>()
     val openReceiveDialog = SingleLiveEvent<String>()
-    val navigateToSetPin = SingleLiveEvent<Unit>()
 
     fun init() {
         WalletModule.init(this, this)
@@ -44,10 +43,6 @@ class WalletViewModel : ViewModel(), WalletModule.IView, WalletModule.IRouter {
 
     fun onSendClicked(adapterId: String) {
         delegate.onSendClicked(adapterId)
-    }
-
-    override fun navigateToSetPin() {
-        navigateToSetPin.call()
     }
 
 }

@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.modules.wallet
 
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.coins.Coin
 import io.reactivex.subjects.BehaviorSubject
 
@@ -27,7 +27,6 @@ class WalletPresenter(
     }
 
     override fun viewDidLoad() {
-        interactor.checkIfPinSet()
         interactor.notifyWalletBalances()
     }
 
@@ -87,7 +86,4 @@ class WalletPresenter(
         view?.showWalletBalances(viewItems)
     }
 
-    override fun onPinNotSet() {
-        router.navigateToSetPin()
-    }
 }
