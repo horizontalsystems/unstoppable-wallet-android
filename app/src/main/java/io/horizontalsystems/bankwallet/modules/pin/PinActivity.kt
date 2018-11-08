@@ -134,7 +134,7 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
         viewModel.navigateToMainLiveEvent.observe(this, Observer {
             Handler().postDelayed({
                 HudHelper.showSuccessMessage(activity = this)
-                MainModule.start(this)
+                MainModule.startAsNewTask(this)
                 finish()
             }, 300)
         })
