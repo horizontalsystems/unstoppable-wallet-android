@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.lib.EditTextViewHolder
 import io.horizontalsystems.bankwallet.lib.WordsInputAdapter
-import io.horizontalsystems.bankwallet.modules.main.MainModule
+import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.activity_restore_wallet.*
@@ -41,8 +41,8 @@ class RestoreWalletActivity : BaseActivity() {
             }
         })
 
-        viewModel.navigateToMainScreenLiveEvent.observe(this, Observer {
-            MainModule.start(this)
+        viewModel.navigateToSetPinLiveEvent.observe(this, Observer {
+            PinModule.startForSetPin(this)
         })
 
         viewModel.keyStoreSafeExecute.observe(this, Observer { triple ->

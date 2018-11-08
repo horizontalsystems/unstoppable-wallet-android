@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.wallet
 
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IExchangeRateManager
-import io.horizontalsystems.bankwallet.core.ISecuredStorage
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -10,8 +9,7 @@ import io.reactivex.subjects.BehaviorSubject
 
 class WalletInteractor(
         private val adapterManager: IAdapterManager,
-        private val exchangeRateManager: IExchangeRateManager,
-        private val securedStorage: ISecuredStorage) : WalletModule.IInteractor {
+        private val exchangeRateManager: IExchangeRateManager) : WalletModule.IInteractor {
 
     var delegate: WalletModule.IInteractorDelegate? = null
     private var disposables: CompositeDisposable = CompositeDisposable()
@@ -49,9 +47,4 @@ class WalletInteractor(
 
     }
 
-    override fun checkIfPinSet() {
-        if (securedStorage.pinIsEmpty()) {
-            delegate?.onPinNotSet()
-        }
-    }
 }

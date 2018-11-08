@@ -11,7 +11,7 @@ class RestoreViewModel : ViewModel(), RestoreModule.IView, RestoreModule.IRouter
     lateinit var delegate: RestoreModule.IViewDelegate
 
     val errorLiveData = MutableLiveData<Int>()
-    val navigateToMainScreenLiveEvent = SingleLiveEvent<Void>()
+    val navigateToSetPinLiveEvent = SingleLiveEvent<Void>()
     val keyStoreSafeExecute = SingleLiveEvent<Triple<Runnable, Runnable?, Runnable?>>()
 
     fun init() {
@@ -22,8 +22,8 @@ class RestoreViewModel : ViewModel(), RestoreModule.IView, RestoreModule.IRouter
         errorLiveData.value = R.string.error
     }
 
-    override fun navigateToMain() {
-        navigateToMainScreenLiveEvent.call()
+    override fun navigateToSetPin() {
+        navigateToSetPinLiveEvent.call()
     }
 
     override fun safeExecute(action: Runnable, onSuccess: Runnable?, onFailure: Runnable?) {

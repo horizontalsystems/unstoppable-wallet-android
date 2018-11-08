@@ -9,7 +9,7 @@ class RestorePresenter(private val interactor: RestoreModule.IInteractor, privat
     }
 
     override fun didRestore() {
-        router.navigateToMain()
+        router.navigateToSetPin()
     }
 
     override fun didFailToRestore() {

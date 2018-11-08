@@ -1,19 +1,17 @@
 package io.horizontalsystems.bankwallet.modules.wallet
 
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.atLeast
+import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.core.BitcoinAdapter
 import io.horizontalsystems.bankwallet.core.IExchangeRateManager
-import io.horizontalsystems.bankwallet.core.ISecuredStorage
 import io.horizontalsystems.bankwallet.core.managers.AdapterManager
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.coins.Coin
 import io.horizontalsystems.bankwallet.entities.coins.bitcoin.Bitcoin
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.atLeast
-import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
-import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.subjects.PublishSubject
 import org.junit.Before
 import org.junit.Test
@@ -31,7 +29,6 @@ class WalletInteractorTest {
     private val adapterManager = mock(AdapterManager::class.java)
     private val exchangeRateManager = mock(IExchangeRateManager::class.java)
     private val bitcoinAdapter = mock(BitcoinAdapter::class.java)
-    private val secureStorage = mock(ISecuredStorage::class.java)
     private lateinit var interactor: WalletInteractor
     private var coin = Bitcoin()
     private var words = listOf("used", "ugly", "meat", "glad", "balance", "divorce", "inner", "artwork", "hire", "invest", "already", "piano")
@@ -46,7 +43,7 @@ class WalletInteractorTest {
     fun before() {
         RxBaseTest.setup()
 
-        interactor = WalletInteractor(adapterManager, exchangeRateManager, secureStorage)
+        interactor = WalletInteractor(adapterManager, exchangeRateManager)
         interactor.delegate = delegate
 
         adapterManager.adapters = mutableListOf(bitcoinAdapter)
@@ -100,26 +97,6 @@ class WalletInteractorTest {
         managerSub.onNext(true)
 
         verify(delegate, atLeast(2)).didInitialFetch(any(), any(), any())
-    }
-
-    @Test
-    fun checkIfPinSet_set() {
-
-        whenever(secureStorage.savedPin).thenReturn("123456")
-
-        interactor.checkIfPinSet()
-
-        verifyNoMoreInteractions(delegate)
-    }
-
-    @Test
-    fun checkIfPinSet_notSet() {
-
-        whenever(secureStorage.pinIsEmpty()).thenReturn(true)
-
-        interactor.checkIfPinSet()
-
-        verify(delegate).onPinNotSet()
     }
 
 }

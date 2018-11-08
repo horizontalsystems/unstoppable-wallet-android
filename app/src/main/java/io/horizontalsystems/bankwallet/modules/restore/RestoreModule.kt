@@ -25,7 +25,7 @@ object RestoreModule {
     }
 
     interface IRouter {
-        fun navigateToMain()
+        fun navigateToSetPin()
     }
 
     fun start(context: Context) {

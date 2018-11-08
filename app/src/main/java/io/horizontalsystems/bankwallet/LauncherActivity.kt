@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.modules.guest.GuestModule
 import io.horizontalsystems.bankwallet.modules.main.MainModule
+import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import java.security.UnrecoverableKeyException
 
 class LauncherActivity : AppCompatActivity() {
@@ -28,10 +29,12 @@ class LauncherActivity : AppCompatActivity() {
         if (!EncryptionManager.isDeviceLockEnabled(this)) {
             EncryptionManager.showNoDeviceLockWarning(this)
             return
-        } else if (App.wordsManager.isLoggedIn) {
-            MainModule.start(this)
-        } else {
+        } else if (!App.wordsManager.isLoggedIn) {
             GuestModule.start(this)
+        } else if(App.secureStorage.pinIsEmpty()) {
+            PinModule.startForSetPin(this)
+        } else {
+            MainModule.start(this)
         }
         finish()
     }

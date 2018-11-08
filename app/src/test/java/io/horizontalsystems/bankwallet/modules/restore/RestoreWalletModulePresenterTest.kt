@@ -31,7 +31,7 @@ class RestoreWalletModulePresenterTest {
     fun didRestoreWallet() {
         presenter.didRestore()
 
-        verify(router).navigateToMain()
+        verify(router).navigateToSetPin()
     }
 
     @Test
