@@ -5,7 +5,7 @@ import java.util.*
     class BackupPresenter(private val interactor: BackupModule.IInteractor, private val router: BackupModule.IRouter, private val dismissMode: DismissMode) : BackupModule.IViewDelegate, BackupModule.IInteractorDelegate {
 
     enum class DismissMode {
-        TO_MAIN, DISMISS_SELF
+        SET_PIN, DISMISS_SELF
     }
 
     var view: BackupModule.IView? = null
@@ -55,7 +55,7 @@ import java.util.*
     }
 
     private fun dismiss() = when (dismissMode) {
-        DismissMode.TO_MAIN -> router.navigateToMain()
+        DismissMode.SET_PIN -> router.navigateToSetPin()
         DismissMode.DISMISS_SELF -> router.close()
     }
 

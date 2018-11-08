@@ -7,7 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.main.MainModule
+import io.horizontalsystems.bankwallet.modules.pin.PinModule
 
 class BackupActivity : BaseActivity() {
 
@@ -53,9 +53,8 @@ class BackupActivity : BaseActivity() {
             supportFragmentManager.popBackStack()
         })
 
-        viewModel.navigateToMainLiveEvent.observe(this, Observer {
-            MainModule.start(this)
-            finish()
+        viewModel.navigateToSetPinLiveEvent.observe(this, Observer {
+            PinModule.startForSetPin(this)
         })
 
         viewModel.closeLiveEvent.observe(this, Observer {

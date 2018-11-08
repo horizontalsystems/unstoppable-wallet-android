@@ -16,7 +16,7 @@ class BackupViewModel : ViewModel(), BackupModule.IView, BackupModule.IRouter {
     val navigationConfirmLiveEvent = SingleLiveEvent<Void>()
     val closeLiveEvent = SingleLiveEvent<Void>()
     val navigateBackLiveEvent = SingleLiveEvent<Void>()
-    val navigateToMainLiveEvent = SingleLiveEvent<Void>()
+    val navigateToSetPinLiveEvent = SingleLiveEvent<Void>()
 
     fun init(dismissMode: BackupPresenter.DismissMode) {
         BackupModule.init(this, this, dismissMode)
@@ -53,7 +53,7 @@ class BackupViewModel : ViewModel(), BackupModule.IView, BackupModule.IRouter {
         closeLiveEvent.call()
     }
 
-    override fun navigateToMain() {
-        navigateToMainLiveEvent.call()
+    override fun navigateToSetPin() {
+        navigateToSetPinLiveEvent.call()
     }
 }
