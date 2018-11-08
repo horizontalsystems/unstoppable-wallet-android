@@ -24,4 +24,9 @@ class AppConfigProvider : IAppConfigProvider {
             Currency(code = "JPY", symbol = "\u00A5")
     )
 
+    override val localizations: List<String>
+        get() {
+            val coinsString = App.instance.getString(R.string.localizations)
+            return coinsString.split(",")
+        }
 }

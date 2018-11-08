@@ -2,12 +2,16 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import android.os.Build
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.ILanguageManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import java.util.*
 
 
-class LanguageManager(private val localStorage: ILocalStorage, fallbackLanguage: Locale) : ILanguageManager {
+class LanguageManager(
+        private val localStorage: ILocalStorage,
+        private val appConfigProvider: IAppConfigProvider,
+        fallbackLanguage: Locale) : ILanguageManager {
 
     override var preferredLanguage: Locale? = null
         get() {
@@ -17,7 +21,8 @@ class LanguageManager(private val localStorage: ILocalStorage, fallbackLanguage:
             }
         }
 
-    override var availableLanguages = arrayOf("de", "en", "ky", "ru").map { Locale(it) }
+    override val availableLanguages: List<Locale>
+        get() = appConfigProvider.localizations.map { Locale(it) }
 
     private var language: Locale = localStorage.currentLanguage?.let { Locale(localStorage.currentLanguage) }
             ?: preferredLanguage ?: fallbackLanguage
