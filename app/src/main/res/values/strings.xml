@@ -10,7 +10,7 @@
     <string name="alert_success">Success</string>
     <string name="alert_copied">Copied</string>
 
-    <string name="welcome_description" translatable="false">Decentralized App</string>
+    <string name="decentralized_app" translatable="false">Decentralized App</string>
     <string name="welcome_btn_create_wallet">New Wallet</string>
     <string name="welcome_btn_import_wallet">Import Wallet</string>
 
