@@ -93,7 +93,7 @@ interface IWordsManager {
 interface ILanguageManager {
     var currentLanguage: Locale
     var preferredLanguage: Locale?
-    var availableLanguages: List<Locale>
+    val availableLanguages: List<Locale>
 }
 
 interface IAdapter {
@@ -148,5 +148,6 @@ interface ILockManager {
 
 interface IAppConfigProvider {
     val enabledCoins: List<String>
+    val localizations: List<String>
     val currencies: List<Currency>
 }

@@ -3,9 +3,9 @@ package io.horizontalsystems.bankwallet.core
 import android.app.Application
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import com.squareup.leakcanary.LeakCanary
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
-import com.squareup.leakcanary.LeakCanary
 import io.horizontalsystems.bitcoinkit.BitcoinKit
 import io.horizontalsystems.ethereumkit.EthereumKit
 import java.util.*
@@ -70,11 +70,11 @@ class App : Application() {
         randomManager = RandomProvider()
         networkManager = NetworkManager()
         adapterManager = AdapterManager(wordsManager)
-        languageManager = LanguageManager(localStorage, fallbackLanguage)
         systemInfoManager = SystemInfoManager()
         pinManager = PinManager(secureStorage)
         lockManager = LockManager(secureStorage, wordsManager)
         appConfigProvider = AppConfigProvider()
+        languageManager = LanguageManager(localStorage, appConfigProvider, fallbackLanguage)
         currencyManager = CurrencyManager(localStorage, appConfigProvider)
         exchangeRateManager = ExchangeRateManager(currencyManager)
     }
