@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.INetworkManager
 import com.google.gson.GsonBuilder
+import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.reactivex.Flowable
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -41,7 +41,7 @@ class NetworkManager : INetworkManager {
 object ServiceExchangeApi {
 
     val service: IExchangeRate
-    private const val apiURL = "https://ipfs.grouvi.im/ipns/QmSxpioQuDSjTH6XiT5q35V7xpJqxmDheEcTRRWyMkMim7/io-hs/data/xrates/"
+    private const val apiURL = "https://ipfs.horizontalsystems.xyz/ipns/QmSxpioQuDSjTH6XiT5q35V7xpJqxmDheEcTRRWyMkMim7/io-hs/data/xrates/"
 
     init {
         val logger = HttpLoggingInterceptor()
