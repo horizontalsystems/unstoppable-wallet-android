@@ -13,9 +13,9 @@ class AdapterManager(private val wordsManager: IWordsManager) : IAdapterManager 
 
     override fun start() {
         wordsManager.words?.let { words ->
-            adapters.add(BitcoinAdapter(listOf("used", "ugly", "meat", "glad", "balance", "divorce", "inner", "artwork", "hire", "invest", "already", "piano"), BitcoinKit.NetworkType.TestNet))
-            adapters.add(BitcoinAdapter(listOf("used", "ugly", "meat", "glad", "balance", "divorce", "inner", "artwork", "hire", "invest", "already", "piano"), BitcoinKit.NetworkType.TestNetBitCash))
-            adapters.add(EthereumAdapter(listOf("subway", "plate", "brick", "pattern", "inform", "used", "oblige", "identify", "cherry", "drop", "flush", "balance"), EthereumKit.NetworkType.Kovan))
+            adapters.add(BitcoinAdapter(words, BitcoinKit.NetworkType.MainNet))
+            adapters.add(BitcoinAdapter(words, BitcoinKit.NetworkType.MainNetBitCash))
+//            adapters.add(EthereumAdapter(words, EthereumKit.NetworkType.MainNet))
 
             for (adapter in adapters) {
                 try {
