@@ -24,7 +24,7 @@ class GuestActivity : BaseActivity() {
         viewModel.init()
 
         viewModel.openBackupScreenLiveEvent.observe(this, Observer {
-            BackupModule.start(this, BackupPresenter.DismissMode.TO_MAIN)
+            BackupModule.start(this, BackupPresenter.DismissMode.SET_PIN)
             finish()
         })
 

@@ -10,7 +10,7 @@ class BackupPresenterTest {
     private val interactor = Mockito.mock(BackupModule.IInteractor::class.java)
     private val router = Mockito.mock(BackupModule.IRouter::class.java)
     private val view = Mockito.mock(BackupModule.IView::class.java)
-    private val toMain = BackupPresenter.DismissMode.TO_MAIN
+    private val toMain = BackupPresenter.DismissMode.SET_PIN
     private val selfDismiss = BackupPresenter.DismissMode.DISMISS_SELF
     private val presenter = BackupPresenter(interactor, router, toMain)
 
@@ -18,7 +18,7 @@ class BackupPresenterTest {
     @Test
     fun laterDidClick() {
         presenter.laterDidClick()
-        verify(router).navigateToMain()
+        verify(router).navigateToSetPin()
     }
 
     @Test
@@ -74,7 +74,7 @@ class BackupPresenterTest {
     @Test
     fun didValidateSuccess() {
         presenter.didValidateSuccess()
-        verify(router).navigateToMain()
+        verify(router).navigateToSetPin()
     }
 
     @Test

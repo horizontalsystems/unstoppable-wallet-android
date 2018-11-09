@@ -36,11 +36,13 @@ object PinModule {
         fun validate(pin: String): Boolean
         fun save(pin: String)
         fun unlock(pin: String): Boolean
+        fun startAdapters()
     }
 
     interface IPinInteractorDelegate {
         fun didSavePin()
         fun didFailToSavePin()
+        fun didStartedAdapters()
     }
 
     fun startForSetPin(context: Context) {

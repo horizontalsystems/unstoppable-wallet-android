@@ -13,7 +13,7 @@ object SetPinModule {
 
     fun init(view: PinViewModel, router: ISetPinRouter, keystoreSafeExecute: IKeyStoreSafeExecute) {
 
-        val interactor = PinInteractor(App.pinManager, keystoreSafeExecute)
+        val interactor = PinInteractor(App.pinManager, App.wordsManager, App.adapterManager, keystoreSafeExecute)
         val presenter = SetPinPresenter(interactor, router)
 
         view.delegate = presenter

@@ -1,10 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.restore
 
-import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
-import io.horizontalsystems.bankwallet.core.managers.AdapterManager
-import io.horizontalsystems.bankwallet.core.managers.WordsManager
 import com.nhaarman.mockito_kotlin.KArgumentCaptor
 import com.nhaarman.mockito_kotlin.argumentCaptor
+import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
+import io.horizontalsystems.bankwallet.core.managers.WordsManager
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Captor
@@ -16,9 +15,8 @@ class RestoreInteractorTest {
 
     private val wordsManager = Mockito.mock(WordsManager::class.java)
     private val delegate = Mockito.mock(RestoreModule.IInteractorDelegate::class.java)
-    private val adapterManager = Mockito.mock(AdapterManager::class.java)
     private val keystoreSafeExecute = Mockito.mock(IKeyStoreSafeExecute::class.java)
-    private val interactor = RestoreInteractor(wordsManager, adapterManager, keystoreSafeExecute)
+    private val interactor = RestoreInteractor(wordsManager, keystoreSafeExecute)
 
     @Captor
     private val actionRunnableCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
@@ -67,7 +65,6 @@ class RestoreInteractorTest {
 
         verify(delegate).didRestore()
         verify(wordsManager).isBackedUp = true
-        verify(adapterManager).start()
         verifyNoMoreInteractions(delegate)
     }
 

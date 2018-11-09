@@ -37,7 +37,7 @@ object BackupModule {
     }
 
     interface IRouter {
-        fun navigateToMain()
+        fun navigateToSetPin()
         fun close()
     }
 

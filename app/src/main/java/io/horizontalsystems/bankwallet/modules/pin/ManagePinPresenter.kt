@@ -52,6 +52,9 @@ open class ManagePinPresenter(
     override fun didSavePin() {
     }
 
+    override fun didStartedAdapters() {
+    }
+
     override fun didFailToSavePin() {
         showEnterPage()
         view?.showError(R.string.set_pin_error_failed_to_save_pin)
