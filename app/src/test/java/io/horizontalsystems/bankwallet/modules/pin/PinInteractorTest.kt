@@ -1,8 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.pin
 
+import com.nhaarman.mockito_kotlin.*
+import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
 import io.horizontalsystems.bankwallet.core.IPinManager
-import com.nhaarman.mockito_kotlin.*
+import io.horizontalsystems.bankwallet.core.IWordsManager
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -14,8 +16,10 @@ class PinInteractorTest {
 
     private val delegate = Mockito.mock(PinModule.IPinInteractorDelegate::class.java)
     private val pinManager = Mockito.mock(IPinManager::class.java)
+    private val wordsManager = Mockito.mock(IWordsManager::class.java)
+    private val adapterManager = Mockito.mock(IAdapterManager::class.java)
     private val keystoreSafeExecute = Mockito.mock(IKeyStoreSafeExecute::class.java)
-    private var interactor = PinInteractor(pinManager, keystoreSafeExecute)
+    private var interactor = PinInteractor(pinManager, wordsManager, adapterManager, keystoreSafeExecute)
 
     @Captor
     private val actionRunnableCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
@@ -103,5 +107,22 @@ class PinInteractorTest {
 
         val isValid = interactor.unlock(pin)
         Assert.assertFalse(isValid)
+    }
+
+    @Test
+    fun startAdapters() {
+        interactor.startAdapters()
+
+        verify(keystoreSafeExecute).safeExecute(actionRunnableCaptor.capture(), successRunnableCaptor.capture(), failureRunnableCaptor.capture())
+
+        val actionRunnable = actionRunnableCaptor.firstValue
+        val successRunnable = successRunnableCaptor.firstValue
+
+        actionRunnable.run()
+        successRunnable.run()
+
+        verify(wordsManager).safeLoad()
+        verify(adapterManager).start()
+        verify(delegate).didStartedAdapters()
     }
 }

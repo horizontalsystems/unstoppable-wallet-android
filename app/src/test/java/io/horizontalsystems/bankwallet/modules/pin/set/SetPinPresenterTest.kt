@@ -1,10 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.pin.set
 
-import io.horizontalsystems.bankwallet.modules.RxBaseTest
-import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
+import io.horizontalsystems.bankwallet.modules.RxBaseTest
+import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
@@ -47,6 +47,12 @@ class SetPinPresenterTest {
     @Test
     fun didSavePin() {
         presenter.didSavePin()
+        verify(interactor).startAdapters()
+    }
+
+    @Test
+    fun didStartedAdapters() {
+        presenter.didStartedAdapters()
         verify(router).navigateToMain()
     }
 }
