@@ -14,7 +14,6 @@ object PinModule {
         fun showError(error: Int)
         fun showPinWrong(pageIndex: Int)
         fun showCancel()
-        fun showSuccess()
         fun fillCircles(length: Int, pageIndex: Int)
         fun hideToolbar()
         fun showFingerprintDialog()

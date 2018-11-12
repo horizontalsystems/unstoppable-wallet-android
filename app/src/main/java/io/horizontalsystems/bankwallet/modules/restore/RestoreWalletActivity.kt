@@ -37,7 +37,7 @@ class RestoreWalletActivity : BaseActivity() {
 
         viewModel.errorLiveData.observe(this, Observer { errorId ->
             errorId?.let {
-                HudHelper.showErrorMessage(it, this@RestoreWalletActivity)
+                HudHelper.showErrorMessage(it)
             }
         })
 

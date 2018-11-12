@@ -71,10 +71,6 @@ class PinViewModel: ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter,
         showBackButton.call()
     }
 
-    override fun showSuccess() {
-        showSuccess.call()
-    }
-
     override fun fillCircles(length: Int, pageIndex: Int) {
         fillPinCircles.value = Pair(length, pageIndex)
     }

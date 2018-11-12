@@ -127,13 +127,12 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
 
         viewModel.showError.observe(this, Observer { error ->
             error?.let {
-                HudHelper.showErrorMessage(it, this)
+                HudHelper.showErrorMessage(it)
             }
         })
 
         viewModel.navigateToMainLiveEvent.observe(this, Observer {
             Handler().postDelayed({
-                HudHelper.showSuccessMessage(activity = this)
                 MainModule.startAsNewTask(this)
                 finish()
             }, 300)
@@ -154,10 +153,6 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
 
         viewModel.dismissLiveEvent.observe(this, Observer {
             finish()
-        })
-
-        viewModel.showSuccess.observe(this, Observer {
-            HudHelper.showSuccessMessage(activity = this)
         })
 
         viewModel.showFingerprintInputLiveEvent.observe(this, Observer {
