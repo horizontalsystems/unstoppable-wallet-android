@@ -100,21 +100,22 @@ class BitcoinAdapter(val words: List<String>, network: NetworkType) : IAdapter, 
         }
     }
 
-    //Bitcoin Kit listener methods
-
-    override fun balanceUpdated(bitcoinKit: BitcoinKit, balance: Long) {
+    //
+    // BitcoinKit Listener implementations
+    //
+    override fun onBalanceUpdate(bitcoinKit: BitcoinKit, balance: Long) {
         balanceSubject.onNext(balance / satoshisInBitcoin)
     }
 
-    override fun lastBlockInfoUpdated(bitcoinKit: BitcoinKit, lastBlockInfo: BlockInfo) {
+    override fun onLastBlockInfoUpdate(bitcoinKit: BitcoinKit, blockInfo: BlockInfo) {
         latestBlockHeightSubject.onNext(Any())
     }
 
-    override fun progressUpdated(bitcoinKit: BitcoinKit, progress: Double) {
+    override fun onProgressUpdate(bitcoinKit: BitcoinKit, progress: Double) {
         progressSubject.onNext(progress)
     }
 
-    override fun transactionsUpdated(bitcoinKit: BitcoinKit, inserted: List<TransactionInfo>, updated: List<TransactionInfo>, deleted: List<Int>) {
+    override fun onTransactionsUpdate(bitcoinKit: BitcoinKit, inserted: List<TransactionInfo>, updated: List<TransactionInfo>, deleted: List<Int>) {
         transactionRecordsSubject.onNext(Any())
     }
 
