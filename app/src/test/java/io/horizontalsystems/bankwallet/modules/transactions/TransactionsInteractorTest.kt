@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.core.BitcoinAdapter
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
@@ -8,8 +10,6 @@ import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.coins.bitcoin.Bitcoin
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
 import org.junit.Before
@@ -17,6 +17,7 @@ import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 import java.util.*
+
 
 class TransactionsInteractorTest {
 
@@ -33,7 +34,7 @@ class TransactionsInteractorTest {
     private val baseCurrency = Currency(code = "USD", symbol = "\u0024")
 
 
-    private val baseCurrencyFlowable = Flowable.just(baseCurrency)
+    private val subject: PublishSubject<Currency> = PublishSubject.create()
 
     private lateinit var interactor: TransactionsInteractor
 
@@ -45,6 +46,7 @@ class TransactionsInteractorTest {
         val rateResponse = Flowable.just(6300.0)
         whenever(exchangeRateManager.getRate(any(), any(), any())).thenReturn(rateResponse)
         whenever(currencyManager.baseCurrency).thenReturn(baseCurrency)
+        whenever(currencyManager.subject).thenReturn(subject)
 
         interactor = TransactionsInteractor(adapterManager, exchangeRateManager, currencyManager)
 
