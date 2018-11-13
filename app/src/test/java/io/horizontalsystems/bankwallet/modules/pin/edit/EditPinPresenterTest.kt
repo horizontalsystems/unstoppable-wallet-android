@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.pin.edit
 
-import io.horizontalsystems.bankwallet.modules.RxBaseTest
-import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.verify
+import io.horizontalsystems.bankwallet.modules.RxBaseTest
+import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
@@ -44,7 +44,6 @@ class EditPinPresenterTest {
     @Test
     fun didSavePin() {
         presenter.didSavePin()
-        verify(view).showSuccess()
         verify(router).dismiss()
     }
 

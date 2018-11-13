@@ -20,11 +20,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.*
+import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
-import com.google.zxing.integration.android.IntentIntegrator
 
 class SendFragment : DialogFragment() {
 
@@ -190,7 +190,7 @@ class SendFragment : DialogFragment() {
         })
 
         viewModel.showErrorLiveData.observe(this, Observer { error ->
-            error?.let { HudHelper.showErrorMessage(it, activity) }
+            error?.let { HudHelper.showErrorMessage(it) }
         })
 
         viewModel.showSuccessLiveEvent.observe(this, Observer {

@@ -114,7 +114,7 @@ class TransactionInfoFragment : DialogFragment() {
         })
 
         viewModel.showCopiedLiveEvent.observe(this, Observer {
-            HudHelper.showSuccessMessage(R.string.hud_text_copied, activity)
+            HudHelper.showSuccessMessage(R.string.hud_text_copied)
         })
 
         return mDialog as Dialog

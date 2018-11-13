@@ -64,7 +64,7 @@ class BackupConfirmFragment : Fragment(), BottomConfirmAlert.Listener {
     }
 
     private fun showError(errorMsgId: Int?) {
-        errorMsgId?.let { HudHelper.showErrorMessage(it, activity) }
+        errorMsgId?.let { HudHelper.showErrorMessage(it) }
     }
 
     override fun onConfirmationSuccess() {

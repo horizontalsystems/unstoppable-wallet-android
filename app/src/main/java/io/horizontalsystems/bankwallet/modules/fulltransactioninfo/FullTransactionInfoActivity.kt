@@ -37,7 +37,7 @@ class FullTransactionInfoActivity : BaseActivity() {
         closeBtn.setOnClickListener { onBackPressed() }
 
         viewModel.showCopiedLiveEvent.observe(this, Observer {
-            HudHelper.showSuccessMessage(R.string.hud_text_copied, this)
+            HudHelper.showSuccessMessage(R.string.hud_text_copied)
         })
 
         viewModel.showTransactionRecordViewLiveData.observe(this, Observer { transaction ->

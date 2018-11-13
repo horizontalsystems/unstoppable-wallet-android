@@ -5,12 +5,12 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
-import android.hardware.fingerprint.FingerprintManager
 import android.os.Bundle
 import android.os.Handler
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.UserNotAuthenticatedException
 import android.support.constraint.ConstraintLayout
+import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.PagerSnapHelper
@@ -127,13 +127,12 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
 
         viewModel.showError.observe(this, Observer { error ->
             error?.let {
-                HudHelper.showErrorMessage(it, this)
+                HudHelper.showErrorMessage(it)
             }
         })
 
         viewModel.navigateToMainLiveEvent.observe(this, Observer {
             Handler().postDelayed({
-                HudHelper.showSuccessMessage(activity = this)
                 MainModule.startAsNewTask(this)
                 finish()
             }, 300)
@@ -154,10 +153,6 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
 
         viewModel.dismissLiveEvent.observe(this, Observer {
             finish()
-        })
-
-        viewModel.showSuccess.observe(this, Observer {
-            HudHelper.showSuccessMessage(activity = this)
         })
 
         viewModel.showFingerprintInputLiveEvent.observe(this, Observer {
@@ -197,7 +192,7 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
         }
     }
 
-    override fun onFingerprintAuthSucceed(withFingerprint: Boolean, crypto: FingerprintManager.CryptoObject?) {
+    override fun onFingerprintAuthSucceed(withFingerprint: Boolean, crypto: FingerprintManagerCompat.CryptoObject?) {
         viewModel.delegate.onBiometricUnlock()
     }
 

@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.core
 
-import android.hardware.fingerprint.FingerprintManager
+import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import io.horizontalsystems.bankwallet.entities.BiometryType
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -45,7 +45,7 @@ interface INetworkManager {
 interface IEncryptionManager {
     fun encrypt(data: String): String
     fun decrypt(data: String): String
-    fun getCryptoObject(): FingerprintManager.CryptoObject?
+    fun getCryptoObject(): FingerprintManagerCompat.CryptoObject?
 }
 
 interface IClipboardManager {

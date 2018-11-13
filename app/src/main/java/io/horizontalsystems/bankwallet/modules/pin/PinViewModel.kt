@@ -21,7 +21,6 @@ class PinViewModel: ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter,
     val hideToolbar = SingleLiveEvent<Unit>()
     val dismissLiveEvent = SingleLiveEvent<Unit>()
     val showBackButton = SingleLiveEvent<Unit>()
-    val showSuccess = SingleLiveEvent<Unit>()
     val showFingerprintInputLiveEvent = SingleLiveEvent<Unit>()
     val resetCirclesWithShakeAndDelayForPage = SingleLiveEvent<Int>()
     val keyStoreSafeExecute = SingleLiveEvent<Triple<Runnable, Runnable?, Runnable?>>()
@@ -69,10 +68,6 @@ class PinViewModel: ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter,
 
     override fun showCancel() {
         showBackButton.call()
-    }
-
-    override fun showSuccess() {
-        showSuccess.call()
     }
 
     override fun fillCircles(length: Int, pageIndex: Int) {
