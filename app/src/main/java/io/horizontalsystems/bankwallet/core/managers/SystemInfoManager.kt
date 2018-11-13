@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import android.app.KeyguardManager
 import android.content.Context
-import android.hardware.fingerprint.FingerprintManager
 import android.support.v4.BuildConfig
+import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISystemInfoManager
 import io.horizontalsystems.bankwallet.entities.BiometryType
@@ -20,14 +20,14 @@ class SystemInfoManager: ISystemInfoManager {
         }
 
     override fun phoneHasFingerprintSensor(): Boolean {
-        val fingerprintManager = App.instance.getSystemService(Context.FINGERPRINT_SERVICE) as? FingerprintManager
-        return fingerprintManager?.isHardwareDetected ?: false
+        val fingerprintManager = FingerprintManagerCompat.from(App.instance)
+        return fingerprintManager.isHardwareDetected
     }
 
     override fun touchSensorCanBeUsed(): Boolean {
-        val fingerprintManager = App.instance.getSystemService(Context.FINGERPRINT_SERVICE) as? FingerprintManager
+        val fingerprintManager = FingerprintManagerCompat.from(App.instance)
         return when {
-            fingerprintManager?.isHardwareDetected == true -> {
+            fingerprintManager.isHardwareDetected -> {
                 val keyguardManager = App.instance.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
                 keyguardManager.isKeyguardSecure && fingerprintManager.hasEnrolledFingerprints()
             }

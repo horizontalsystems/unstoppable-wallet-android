@@ -4,10 +4,10 @@ import android.app.Activity
 import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
-import android.hardware.fingerprint.FingerprintManager
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
+import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import io.horizontalsystems.bankwallet.LauncherActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -38,7 +38,7 @@ class EncryptionManager : IEncryptionManager {
     }
 
 
-    override fun getCryptoObject(): FingerprintManager.CryptoObject {
+    override fun getCryptoObject(): FingerprintManagerCompat.CryptoObject {
         var masterKey = keyStoreWrapper.getAndroidKeyStoreSymmetricKey(MASTER_KEY)
 
         if (masterKey == null) {
@@ -48,7 +48,7 @@ class EncryptionManager : IEncryptionManager {
         val cipher = CipherWrapper().cipher
         cipher.init(Cipher.ENCRYPT_MODE, masterKey)
 
-        return FingerprintManager.CryptoObject(cipher)
+        return FingerprintManagerCompat.CryptoObject(cipher)
     }
 
     companion object {

@@ -23,9 +23,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.hardware.fingerprint.FingerprintManager
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -40,7 +40,7 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(), FingerprintUiH
     private lateinit var cancelButton: Button
 
     private lateinit var callback: Callback
-    private lateinit var cryptoObject: FingerprintManager.CryptoObject
+    private lateinit var cryptoObject: FingerprintManagerCompat.CryptoObject
     private lateinit var fingerprintUiHelper: FingerprintUiHelper
     private lateinit var inputMethodManager: InputMethodManager
     private lateinit var sharedPreferences: SharedPreferences
@@ -72,7 +72,6 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(), FingerprintUiH
         cancelButton.setOnClickListener { dismiss() }
 
         fingerprintUiHelper = FingerprintUiHelper(
-                activity.getSystemService(FingerprintManager::class.java),
                 view.findViewById(R.id.fingerprint_background),
                 view.findViewById(R.id.fingerprint_status),
                 view.findViewById(R.id.fingerprint_wrapper),
@@ -113,7 +112,7 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(), FingerprintUiH
         this.callback = callback
     }
 
-    fun setCryptoObject(cryptoObject: FingerprintManager.CryptoObject) {
+    fun setCryptoObject(cryptoObject: FingerprintManagerCompat.CryptoObject) {
         this.cryptoObject = cryptoObject
     }
 
@@ -124,6 +123,6 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(), FingerprintUiH
     }
 
     interface Callback {
-        fun onFingerprintAuthSucceed(withFingerprint: Boolean, crypto: FingerprintManager.CryptoObject? = null)
+        fun onFingerprintAuthSucceed(withFingerprint: Boolean, crypto: FingerprintManagerCompat.CryptoObject? = null)
     }
 }

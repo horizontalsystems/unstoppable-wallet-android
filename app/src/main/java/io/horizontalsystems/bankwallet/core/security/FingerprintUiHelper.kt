@@ -19,15 +19,16 @@ package io.horizontalsystems.bankwallet.core.security
 
 
 import android.content.res.ColorStateList
-import android.hardware.fingerprint.FingerprintManager
-import android.os.CancellationSignal
 import android.support.v4.content.ContextCompat
+import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
+import android.support.v4.os.CancellationSignal
 import android.support.v4.widget.ImageViewCompat
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 
 /**
  * Small helper class to manage text/icon around fingerprint authentication UI.
@@ -37,18 +38,14 @@ class FingerprintUiHelper
 /**
  * Constructor for [FingerprintUiHelper].
  */
-internal constructor(private val fingerprintMgr: FingerprintManager,
-                     private val iconBackgroundImg: ImageView,
+internal constructor(private val iconBackgroundImg: ImageView,
                      private val errorTextView: TextView,
                      private val fingerprintWrapper: FrameLayout,
                      private val callback: Callback
-) : FingerprintManager.AuthenticationCallback() {
+) : FingerprintManagerCompat.AuthenticationCallback() {
 
     private var cancellationSignal: CancellationSignal? = null
     private var selfCancelled = false
-
-    private val isFingerprintAuthAvailable: Boolean
-        get() = fingerprintMgr.isHardwareDetected && fingerprintMgr.hasEnrolledFingerprints()
 
     private val resetErrorTextRunnable = Runnable {
         setImageTintColor(iconBackgroundImg, R.color.dark)
@@ -63,11 +60,12 @@ internal constructor(private val fingerprintMgr: FingerprintManager,
         ImageViewCompat.setImageTintList(image, ColorStateList.valueOf(color))
     }
 
-    fun startListening(cryptoObject: FingerprintManager.CryptoObject) {
-        if (!isFingerprintAuthAvailable) return
-        cancellationSignal = CancellationSignal()
-        selfCancelled = false
-        fingerprintMgr.authenticate(cryptoObject, cancellationSignal, 0, this, null)
+    fun startListening(cryptoObject: FingerprintManagerCompat.CryptoObject) {
+        if (App.systemInfoManager.touchSensorCanBeUsed()) {
+            cancellationSignal = CancellationSignal()
+            selfCancelled = false
+            FingerprintManagerCompat.from(App.instance).authenticate(cryptoObject, 0, cancellationSignal, this, null)
+        }
     }
 
     fun stopListening() {
@@ -90,7 +88,7 @@ internal constructor(private val fingerprintMgr: FingerprintManager,
     override fun onAuthenticationFailed() =
             showError(iconBackgroundImg.resources.getString(R.string.fingerprint_not_recognized))
 
-    override fun onAuthenticationSucceeded(result: FingerprintManager.AuthenticationResult) {
+    override fun onAuthenticationSucceeded(result: FingerprintManagerCompat.AuthenticationResult) {
         errorTextView.run {
             removeCallbacks(resetErrorTextRunnable)
             setTextColor(errorTextView.resources.getColor(R.color.green_crypto, null))
@@ -120,6 +118,6 @@ internal constructor(private val fingerprintMgr: FingerprintManager,
 
     companion object {
         const val ERROR_TIMEOUT_MILLIS: Long = 1900
-        const val SUCCESS_DELAY_MILLIS: Long = 1300
+        const val SUCCESS_DELAY_MILLIS: Long = 1000
     }
 }
