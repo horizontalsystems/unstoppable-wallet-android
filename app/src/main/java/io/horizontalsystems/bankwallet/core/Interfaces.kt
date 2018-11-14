@@ -97,13 +97,13 @@ interface IWordsManager {
     var words: List<String>?
     var isBackedUp: Boolean
     var isLoggedIn: Boolean
+    var loggedInSubject: PublishSubject<Boolean>
     var backedUpSubject: PublishSubject<Boolean>
     fun createWords()
     fun validate(words: List<String>)
     fun restore(words: List<String>)
-    fun removeWords()
+    fun logout()
 }
-
 interface ILanguageManager {
     var currentLanguage: Locale
     var preferredLanguage: Locale?
