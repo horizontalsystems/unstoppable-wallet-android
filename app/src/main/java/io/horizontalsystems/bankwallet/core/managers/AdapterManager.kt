@@ -15,7 +15,7 @@ class AdapterManager(private val wordsManager: IWordsManager) : IAdapterManager 
         wordsManager.words?.let { words ->
             adapters.add(BitcoinAdapter(words, BitcoinKit.NetworkType.MainNet))
             adapters.add(BitcoinAdapter(words, BitcoinKit.NetworkType.MainNetBitCash))
-//            adapters.add(EthereumAdapter(words, EthereumKit.NetworkType.MainNet))
+            adapters.add(EthereumAdapter(words, EthereumKit.NetworkType.MainNet))
 
             for (adapter in adapters) {
                 try {
