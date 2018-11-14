@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.core
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.entities.coins.CoinOld
 import io.horizontalsystems.bankwallet.modules.transactions.Coin
 import io.reactivex.Flowable
 import io.reactivex.subjects.BehaviorSubject
@@ -45,9 +44,9 @@ interface IRandomProvider {
 }
 
 interface INetworkManager {
-    fun getLatestRate(coinCode: String, currency: String): Flowable<Double>
-    fun getRate(coinCode: String, currency: String, timestamp: Long): Flowable<Double>
-    fun getRateByDay(coinCode: String, currency: String, datePath: String): Flowable<Double>
+    fun getLatestRate(coin: String, currency: String): Flowable<Double>
+    fun getRate(coin: String, currency: String, timestamp: Long): Flowable<Double>
+    fun getRateByDay(coin: String, currency: String, datePath: String): Flowable<Double>
 }
 
 interface IEncryptionManager {
@@ -66,12 +65,6 @@ interface ICurrencyManager {
     val currencies: List<Currency>
     var subject: PublishSubject<Currency>
     fun setBaseCurrency(code: String)
-}
-
-interface IExchangeRateManager {
-    fun getRate(coinCode: String, currency: String, timestamp: Long): Flowable<Double>
-    fun getExchangeRates(): MutableMap<CoinOld, CurrencyValue>
-    fun getLatestExchangeRateSubject(): PublishSubject<MutableMap<CoinOld, CurrencyValue>>
 }
 
 interface IKeyStoreSafeExecute {
@@ -174,4 +167,10 @@ interface IPeriodicTimerDelegate {
 
 interface IRateSyncerDelegate {
     fun didSync(coin: String, currencyCode: String, value: Double)
+}
+
+interface IRateStorage {
+    fun rate(coin: Coin, currencyCode: String): Rate?
+    fun save(value: Double, coin: Coin, currencyCode: String)
+    fun clear()
 }

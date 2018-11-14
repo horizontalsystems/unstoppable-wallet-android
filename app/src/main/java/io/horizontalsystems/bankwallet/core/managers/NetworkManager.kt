@@ -15,26 +15,35 @@ import java.util.concurrent.TimeUnit
 
 class NetworkManager : INetworkManager {
 
-    override fun getRate(coinCode: String, currency: String, timestamp: Long): Flowable<Double> {
+    override fun getRate(coin: String, currency: String, timestamp: Long): Flowable<Double> {
+        val cleanedCoin = getCleanCoinCode(coin)
+
         return ServiceExchangeApi.service
-                .getRate(coinCode, currency, DateHelper.formatDateByUsLocale(timestamp, "yyyy/MM/dd/HH/mm"))
-                .onErrorResumeNext(getRateByDay(coinCode, currency, DateHelper.formatDateByUsLocale(timestamp, "yyyy/MM/dd")))
+                .getRate(cleanedCoin, currency, DateHelper.formatDateByUsLocale(timestamp, "yyyy/MM/dd/HH/mm"))
+                .onErrorResumeNext(getRateByDay(cleanedCoin, currency, DateHelper.formatDateByUsLocale(timestamp, "yyyy/MM/dd")))
     }
 
-    override fun getRateByDay(coinCode: String, currency: String, datePath: String): Flowable<Double> {
+    override fun getRateByDay(coin: String, currency: String, datePath: String): Flowable<Double> {
         return ServiceExchangeApi.service
-                .getRateByDay(coinCode, currency, datePath)
+                .getRateByDay(coin, currency, datePath)
                 .onErrorReturn {
                     0.0
                 }
     }
 
-    override fun getLatestRate(coinCode: String, currency: String): Flowable<Double> {
+    override fun getLatestRate(coin: String, currency: String): Flowable<Double> {
+        val cleanedCoin = getCleanCoinCode(coin)
         return ServiceExchangeApi.service
-                .getLatestRate(coinCode, currency)
+                .getLatestRate(cleanedCoin, currency)
                 .onErrorReturn {
                     0.0
                 }
+    }
+
+    private fun getCleanCoinCode(coin: String): String {
+        var cleanedCoin = coin.removeSuffix("t")
+        cleanedCoin = cleanedCoin.removeSuffix("r")
+        return cleanedCoin
     }
 
 }

@@ -39,7 +39,7 @@ class FullTransactionInfoInteractor(
     }
 
     private fun fetchExchangeRate(transaction: TransactionRecord) {
-        val disposable = networkManager.getRate(coinCode = transaction.coinCode, currency = baseCurrency.code, timestamp = transaction.timestamp)
+        val disposable = networkManager.getRate(coin = transaction.coinCode, currency = baseCurrency.code, timestamp = transaction.timestamp)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())

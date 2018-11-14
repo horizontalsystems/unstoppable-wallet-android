@@ -14,7 +14,7 @@ class RateSyncer(private val networkManager: INetworkManager, private val timer:
     fun sync(coins: List<String>, currencyCode: String) {
         disposables.clear()
         coins.forEach { coin ->
-            disposables.add(networkManager.getLatestRate(coinCode = coin, currency = currencyCode)
+            disposables.add(networkManager.getLatestRate(coin = coin, currency = currencyCode)
                     .subscribeOn(Schedulers.io())
                     .unsubscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
