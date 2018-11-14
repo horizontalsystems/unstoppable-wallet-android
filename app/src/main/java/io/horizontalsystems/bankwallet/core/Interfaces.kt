@@ -1,15 +1,29 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
-import io.horizontalsystems.bankwallet.entities.BiometryType
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.TransactionRecord
-import io.horizontalsystems.bankwallet.entities.coins.Coin
+import io.horizontalsystems.bankwallet.entities.coins.CoinOld
+import io.horizontalsystems.bankwallet.modules.transactions.Coin
 import io.reactivex.Flowable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import java.util.*
+
+interface IWalletManager {
+    val wallets: List<Wallet>
+    val walletsSubject: PublishSubject<List<Wallet>>
+
+    fun initWallets(words: List<String>, coins: List<Coin>)
+    fun refreshWallets()
+    fun clearWallets()
+}
+
+interface IRateManager {
+    val subject: PublishSubject<Void>
+    fun rateForCoin(coin: Coin, currencyCode: String): Rate?
+}
+
 
 interface ILocalStorage {
     var currentLanguage: String?
@@ -62,8 +76,8 @@ interface ICurrencyManager {
 
 interface IExchangeRateManager {
     fun getRate(coinCode: String, currency: String, timestamp: Long): Flowable<Double>
-    fun getExchangeRates(): MutableMap<Coin, CurrencyValue>
-    fun getLatestExchangeRateSubject(): PublishSubject<MutableMap<Coin, CurrencyValue>>
+    fun getExchangeRates(): MutableMap<CoinOld, CurrencyValue>
+    fun getLatestExchangeRateSubject(): PublishSubject<MutableMap<CoinOld, CurrencyValue>>
 }
 
 interface IKeyStoreSafeExecute {
@@ -96,31 +110,39 @@ interface ILanguageManager {
     val availableLanguages: List<Locale>
 }
 
+open class AdapterState {
+    class Synced : AdapterState()
+    class Syncing(progressSubject: BehaviorSubject<Double>) : AdapterState()
+}
+
 interface IAdapter {
-    val id: String
-    val coin: Coin
     val balance: Double
-
     val balanceSubject: PublishSubject<Double>
-    val progressSubject: BehaviorSubject<Double>
 
-    val latestBlockHeight: Int
-    val latestBlockHeightSubject: PublishSubject<Any>
+    val state: AdapterState
+    val stateSubject: PublishSubject<AdapterState>
 
-    val transactionRecords: List<TransactionRecord>
-    val transactionRecordsSubject: PublishSubject<Any>
+    val confirmationsThreshold: Int
+    val lastBlockHeight: Int?
+    val lastBlockHeightSubject: PublishSubject<Int>
 
-    val receiveAddress: String
+    val transactionRecordsSubject: PublishSubject<List<TransactionRecord>>
 
-    fun debugInfo()
+    val debugInfo: String
 
     fun start()
     fun refresh()
     fun clear()
 
     fun send(address: String, value: Double, completion: ((Throwable?) -> (Unit))? = null)
-    fun fee(value: Int, senderPay: Boolean): Double
-    fun validate(address: String): Boolean
+
+    @Throws
+    fun fee(value: Double, senderPay: Boolean): Double
+
+    @Throws
+    fun validate(address: String)
+
+    val receiveAddress: String
 }
 
 interface ISystemInfoManager {

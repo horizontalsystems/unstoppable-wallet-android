@@ -8,10 +8,8 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentActivity
-import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -19,12 +17,14 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ScrollView
+import android.widget.TextView
 import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 
 class SendFragment : DialogFragment() {
 
@@ -72,12 +72,12 @@ class SendFragment : DialogFragment() {
         }
 
         context?.let {
-            val coinDrawable = ContextCompat.getDrawable(it, LayoutHelper.getCoinDrawableResource(coinAdapter.coin.code))
-            rootView.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
+//            val coinDrawable = ContextCompat.getDrawable(it, LayoutHelper.getCoinDrawableResource(coinAdapter.coin.code))
+//            rootView.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
         }
 
         rootView.findViewById<TextView>(R.id.txtTitle)?.let { txtTitle ->
-            txtTitle.text = getString(R.string.send_bottom_sheet_title, coinAdapter.coin.code)
+//            txtTitle.text = getString(R.string.send_bottom_sheet_title, coinAdapter.coin.code)
         }
 
         addressTxt = rootView.findViewById(R.id.txtAddress)
@@ -194,14 +194,14 @@ class SendFragment : DialogFragment() {
         })
 
         viewModel.showSuccessLiveEvent.observe(this, Observer {
-            val cryptoAmount = "${amountTxt.text} ${coinAdapter.coin.code}"
-            ConfirmationFragment.newInstance(amountInCrypto = cryptoAmount, amountInFiat = hintTxt.text.toString(),
-                    listener = object : ConfirmationFragment.Listener {
-                        override fun onButtonClick() {
-                            Toast.makeText(activity, R.string.send_bottom_sheet_success, Toast.LENGTH_LONG).show()
-                            Handler().postDelayed({ dismiss() }, 500)
-                        }
-                    }).show(activity?.supportFragmentManager, "confirmation_dialog")
+//            val cryptoAmount = "${amountTxt.text} ${coinAdapter.coin.code}"
+//            ConfirmationFragment.newInstance(amountInCrypto = cryptoAmount, amountInFiat = hintTxt.text.toString(),
+//                    listener = object : ConfirmationFragment.Listener {
+//                        override fun onButtonClick() {
+//                            Toast.makeText(activity, R.string.send_bottom_sheet_success, Toast.LENGTH_LONG).show()
+//                            Handler().postDelayed({ dismiss() }, 500)
+//                        }
+//                    }).show(activity?.supportFragmentManager, "confirmation_dialog")
         })
 
         viewModel.showAddressWarningLiveEvent.observe(this, Observer { showWarning ->

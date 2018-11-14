@@ -13,9 +13,9 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.TextView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.TransactionStatus
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionRecordViewItem
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import io.horizontalsystems.bankwallet.viewHelpers.ValueFormatter
@@ -81,7 +81,7 @@ class TransactionInfoFragment : DialogFragment() {
                         is TransactionStatus.Pending -> getString(R.string.transaction_info_status_pending)
                         else -> getString(R.string.transaction_info_status_completed)
                     }
-                    bind(title = getString(R.string.transaction_info_status), valueTitle = statusText.toUpperCase(), valueIcon = valueIcon, progressValue = progress)
+//                    bind(title = getString(R.string.transaction_info_status), valueTitle = statusText.toUpperCase(), valueIcon = valueIcon, progressValue = progress)
                 }
 
                 rootView.findViewById<TextView>(R.id.transactionId)?.apply {

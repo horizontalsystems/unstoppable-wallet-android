@@ -9,7 +9,8 @@ class SendInteractor(private var clipboardManager: IClipboardManager, private va
     var delegate: SendModule.IInteractorDelegate? = null
 
     override fun getCoinCode(): String {
-        return adapter.coin.code
+        TODO()
+//        return adapter.coin.code
     }
 
     override fun getCopiedText(): String {
@@ -20,9 +21,9 @@ class SendInteractor(private var clipboardManager: IClipboardManager, private va
         val exchangeRates = exchangeRateManager.getExchangeRates()
         exchangeRates.forEach {
             val (coin, currencyValue) = it
-            if (coin.code == adapter.coin.code) {
-                delegate?.didFetchExchangeRate(currencyValue.value)
-            }
+//            if (coin.code == adapter.coin.code) {
+//                delegate?.didFetchExchangeRate(currencyValue.value)
+//            }
         }
     }
 

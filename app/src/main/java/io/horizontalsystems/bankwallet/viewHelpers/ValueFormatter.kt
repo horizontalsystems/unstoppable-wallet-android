@@ -32,7 +32,7 @@ object ValueFormatter {
             return null
         }
 
-        var result = "$formattedValue ${coinValue.coin.code}"
+        var result = "$formattedValue ${coinValue.coin}"
 
         if (explicitSign) {
             val sign = if (coinValue.value < 0) "-" else "+"

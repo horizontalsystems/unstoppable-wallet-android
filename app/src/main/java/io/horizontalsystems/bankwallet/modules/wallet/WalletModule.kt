@@ -4,7 +4,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.coins.Coin
+import io.horizontalsystems.bankwallet.entities.coins.CoinOld
 import io.reactivex.subjects.BehaviorSubject
 
 object WalletModule {
@@ -25,9 +25,9 @@ object WalletModule {
     }
 
     interface IInteractorDelegate {
-        fun didInitialFetch(coinValues: MutableMap<String, CoinValue>, rates: MutableMap<Coin, CurrencyValue>, progresses: MutableMap<String, BehaviorSubject<Double>>)
+        fun didInitialFetch(coinValues: MutableMap<String, CoinValue>, rates: MutableMap<CoinOld, CurrencyValue>, progresses: MutableMap<String, BehaviorSubject<Double>>)
         fun didUpdate(coinValue: CoinValue, adapterId: String)
-        fun didExchangeRateUpdate(rates: MutableMap<Coin, CurrencyValue>)
+        fun didExchangeRateUpdate(rates: MutableMap<CoinOld, CurrencyValue>)
     }
 
     interface IRouter {

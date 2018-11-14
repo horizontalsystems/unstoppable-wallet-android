@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.core.ICurrencyManager
 import io.horizontalsystems.bankwallet.core.IExchangeRateManager
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.coins.Coin
+import io.horizontalsystems.bankwallet.entities.coins.CoinOld
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -35,35 +35,35 @@ class ExchangeRateManager(currencyManager: ICurrencyManager): IExchangeRateManag
                 })
     }
 
-    private var latestExchangeRateSubject: PublishSubject<MutableMap<Coin, CurrencyValue>> = PublishSubject.create()
+    private var latestExchangeRateSubject: PublishSubject<MutableMap<CoinOld, CurrencyValue>> = PublishSubject.create()
 
     override fun getLatestExchangeRateSubject() = latestExchangeRateSubject
 
-    private var exchangeRates: MutableMap<Coin, CurrencyValue> = hashMapOf()
+    private var exchangeRates: MutableMap<CoinOld, CurrencyValue> = hashMapOf()
 
     override fun getExchangeRates() = exchangeRates
 
     private fun refreshRates(baseCurrency: Currency) {
         val flowableList = mutableListOf<Flowable<Pair<String, Double>>>()
-        App.adapterManager.adapters.forEach { adapter ->
-            flowableList.add(App.networkManager.getLatestRate(adapter.coin.code, baseCurrency.code)
-                    .map { Pair(adapter.coin.code, it) })
-        }
+//        App.adapterManager.adapters.forEach { adapter ->
+//            flowableList.add(App.networkManager.getLatestRate(adapter.coin.code, baseCurrency.code)
+//                    .map { Pair(adapter.coin.code, it) })
+//        }
 
-        disposables.add(Flowable.zip(flowableList, Arrays::asList)
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
-                .map {resultRates ->
-                    (resultRates as List<Pair<String, Double>>).toMap()
-                }
-                .subscribe { ratesMap ->
-                    App.adapterManager.adapters.forEach { adapter ->
-                        val rate = ratesMap[adapter.coin.code] ?: 0.0
-                        exchangeRates[adapter.coin] = CurrencyValue(baseCurrency, rate)
-                    }
-                    latestExchangeRateSubject.onNext(exchangeRates)
-                })
+//        disposables.add(Flowable.zip(flowableList, Arrays::asList)
+//                .subscribeOn(Schedulers.io())
+//                .unsubscribeOn(Schedulers.io())
+//                .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
+//                .map {resultRates ->
+//                    (resultRates as List<Pair<String, Double>>).toMap()
+//                }
+//                .subscribe { ratesMap ->
+//                    App.adapterManager.adapters.forEach { adapter ->
+//                        val rate = ratesMap[adapter.coin.code] ?: 0.0
+//                        exchangeRates[adapter.coin] = CurrencyValue(baseCurrency, rate)
+//                    }
+//                    latestExchangeRateSubject.onNext(exchangeRates)
+//                })
     }
 
     override fun getRate(coinCode: String, currency: String, timestamp: Long): Flowable<Double> {

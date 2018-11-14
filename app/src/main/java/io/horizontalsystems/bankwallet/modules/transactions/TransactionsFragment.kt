@@ -13,7 +13,6 @@ import android.view.ViewGroup
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.entities.TransactionStatus
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoModule
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
@@ -39,16 +38,7 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
         viewModel = ViewModelProviders.of(this).get(TransactionsViewModel::class.java)
         viewModel.init()
 
-        viewModel.transactionItems.observe(this, Observer { transactionItems ->
-            transactionItems?.let {
-                transactionsAdapter.items = it
-                transactionsAdapter.notifyDataSetChanged()
-
-                recyclerTags.visibility = if (it.isEmpty()) View.GONE else View.VISIBLE
-                recyclerTransactions.visibility = if (it.isEmpty()) View.GONE else View.VISIBLE
-                emptyListText.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
-            }
-        })
+        transactionsAdapter.viewModel = viewModel
 
         viewModel.filterItems.observe(this, Observer { filters ->
             filters?.let {
@@ -67,6 +57,13 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
             pullToRefresh.isRefreshing = false
         })
 
+        viewModel.reloadLiveEvent.observe(this, Observer {
+            transactionsAdapter.notifyDataSetChanged()
+
+            recyclerTransactions.visibility = if (viewModel.delegate.itemsCount == 0) View.GONE else View.VISIBLE
+            emptyListText.visibility = if (viewModel.delegate.itemsCount == 0) View.VISIBLE else View.GONE
+        })
+
         toolbar.setTitle(R.string.transactions_title)
         recyclerTransactions.adapter = transactionsAdapter
         recyclerTransactions.layoutManager = LinearLayoutManager(context)
@@ -80,7 +77,7 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
 
     }
 
-    override fun onItemClick(item: TransactionRecordViewItem) {
+    override fun onItemClick(item: TransactionViewItem) {
         viewModel.delegate.onTransactionItemClick(item)
     }
 
@@ -92,19 +89,22 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
 class TransactionsAdapter(private var listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface Listener {
-        fun onItemClick(item: TransactionRecordViewItem)
+        fun onItemClick(item: TransactionViewItem)
     }
 
-    var items = listOf<TransactionRecordViewItem>()
+    lateinit var viewModel: TransactionsViewModel
 
-    override fun getItemCount() = items.size
+    override fun getItemCount() = viewModel.delegate.itemsCount
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
             ViewHolderTransaction(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_transaction, parent, false))
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is ViewHolderTransaction -> holder.bind(items[position]) { listener.onItemClick(items[position]) }
+            is ViewHolderTransaction -> {
+                val transactionRecord = viewModel.delegate.itemForIndex(position)
+                holder.bind(transactionRecord) { listener.onItemClick(transactionRecord) }
+            }
         }
     }
 
@@ -112,16 +112,16 @@ class TransactionsAdapter(private var listener: Listener) : RecyclerView.Adapter
 
 class ViewHolderTransaction(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(transactionRecord: TransactionRecordViewItem, onClick: () -> (Unit)) {
+    fun bind(transactionRecord: TransactionViewItem, onClick: () -> (Unit)) {
 
         containerView.setOnSingleClickListener { onClick.invoke() }
 
         val amountTextColor = if (transactionRecord.incoming) R.color.green_crypto else R.color.yellow_crypto
         txAmount.setTextColor(ContextCompat.getColor(itemView.context, amountTextColor))
-        txAmount.text = ValueFormatter.format(transactionRecord.amount, true)
+        txAmount.text = ValueFormatter.format(transactionRecord.coinValue, true)
         txDate.text = transactionRecord.date?.let { DateHelper.getShortDateForTransaction(it) }
         txTime.text = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }
-        txValueInFiat.text = transactionRecord.currencyAmount?.let { ValueFormatter.format(it, true) }
+        txValueInFiat.text = transactionRecord.currencyValue?.let { ValueFormatter.format(it, true) }
         statusIcon.setImageDrawable(getStatusIcon(transactionRecord.status))
     }
 
@@ -149,13 +149,25 @@ class FilterAdapter(private var listener: Listener) : RecyclerView.Adapter<Recyc
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is ViewHolderFilter -> holder.bind(filters[position].name, active = selectedFilterId == filters[position].adapterId) {
+            is ViewHolderFilter -> holder.bind(xxx(filters[position].name), active = selectedFilterId == filters[position].adapterId) {
                 listener.onFilterItemClick(filters[position])
                 selectedFilterId = filters[position].adapterId
                 notifyDataSetChanged()
             }
         }
     }
+
+    fun xxx(coin: Coin) = when (coin) {
+        "BTC" -> "Bitcoin"
+        "BTCt" -> "Bitcoin-T"
+        "BTCr" -> "Bitcoin-R"
+        "BCH" -> "Bitcoin Cash"
+        "BCHt" -> "Bitcoin Cash-T"
+        "ETH" -> "Ethereum"
+        "ETHt" -> "Ethereum-T"
+        else -> coin
+    }
+
 
 }
 

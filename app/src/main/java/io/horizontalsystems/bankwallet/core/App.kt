@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import com.squareup.leakcanary.LeakCanary
+import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bitcoinkit.BitcoinKit
@@ -31,7 +32,7 @@ class App : Application() {
         lateinit var pinManager: IPinManager
         lateinit var lockManager: ILockManager
         lateinit var appConfigProvider: IAppConfigProvider
-
+        lateinit var walletManager : IWalletManager
 
         val testMode = true
 
@@ -77,6 +78,7 @@ class App : Application() {
         languageManager = LanguageManager(localStorage, appConfigProvider, fallbackLanguage)
         currencyManager = CurrencyManager(localStorage, appConfigProvider)
         exchangeRateManager = ExchangeRateManager(currencyManager)
+        walletManager = WalletManager(AdapterFactory())
     }
 
 }

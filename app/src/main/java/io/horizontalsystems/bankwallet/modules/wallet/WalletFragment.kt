@@ -145,9 +145,9 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
     private var disposable: Disposable? = null
 
     fun bind(walletBalanceViewItem: WalletBalanceViewItem, onSendClick: (() -> (Unit))? = null, onReceiveClick: (() -> (Unit))? = null, onHolderClicked: (() -> Unit)? = null, expanded: Boolean) {
-        val iconDrawable = ContextCompat.getDrawable(containerView.context, LayoutHelper.getCoinDrawableResource(walletBalanceViewItem.coinValue.coin.code))
+        val iconDrawable = ContextCompat.getDrawable(containerView.context, LayoutHelper.getCoinDrawableResource(walletBalanceViewItem.coinValue.coin))
         coinIcon.setImageDrawable(iconDrawable)
-        textName.text = "${walletBalanceViewItem.coinValue.coin.name}"
+        textName.text = "${walletBalanceViewItem.coinValue.coin}"
         textAmountFiat.text = walletBalanceViewItem.currencyValue?.let { ValueFormatter.format(it) }
         coinAmount.text = "${ValueFormatter.format(walletBalanceViewItem.coinValue)}"
 
@@ -156,7 +156,7 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
         buttonPay.isEnabled = !zeroBalance
         textAmountFiat.isEnabled = !zeroBalance
         textExchangeRate.text = walletBalanceViewItem.exchangeRateValue?.let {
-            containerView.context.getString(R.string.wallet_exchange_rate, ValueFormatter.format(it), walletBalanceViewItem.coinValue.coin.code)
+            containerView.context.getString(R.string.wallet_exchange_rate, ValueFormatter.format(it), walletBalanceViewItem.coinValue.coin)
         } ?: kotlin.run { "..." }
 
         //todo convert indeterminate spinner to determinant one

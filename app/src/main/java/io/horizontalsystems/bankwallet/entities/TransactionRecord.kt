@@ -1,27 +1,30 @@
 package io.horizontalsystems.bankwallet.entities
 
-sealed class TransactionStatus {
-    object Completed : TransactionStatus()
-    class Processing(val progress: Byte) : TransactionStatus() //progress in 0..100%
-    object Pending : TransactionStatus()
-}
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 
 open class TransactionRecord {
 
     var transactionHash = ""
+    var blockHeight: Long = 0
+    var coin = ""
+    var amount: Double = 0.0
+    var timestamp: Long = 0
+    var rate: Double = 0.0
 
+    var from: List<TransactionAddress> = listOf()
+    var to: List<TransactionAddress> = listOf()
+
+    @Deprecated("use coin instead")
     var coinCode = ""
 
-    var from: List<String> = listOf()
-    var to: List<String> = listOf()
-
-    var amount: Double = 0.0
+    @Deprecated("remove???")
     var fee: Double = 0.0
 
-    var blockHeight: Long? = null
-
-    var timestamp: Long? = null
-
+    @Deprecated("remove")
     var status: TransactionStatus = TransactionStatus.Pending
+}
 
+class TransactionAddress {
+    var address = ""
+    var mine = false
 }

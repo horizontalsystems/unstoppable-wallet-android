@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.receive.viewitems
 
-import io.horizontalsystems.bankwallet.entities.coins.Coin
+import io.horizontalsystems.bankwallet.entities.coins.CoinOld
 
-class AddressItem(var adapterId: String = "", var address: String = "", var coin: Coin) {
+class AddressItem(var adapterId: String = "", var address: String = "", var coin: CoinOld) {
     override fun equals(other: Any?): Boolean {
         if (other is AddressItem) {
             return adapterId == other.adapterId

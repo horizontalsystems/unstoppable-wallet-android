@@ -1,11 +1,11 @@
 package io.horizontalsystems.bankwallet.entities.coins
 
-abstract class Coin {
+abstract class CoinOld {
     abstract val name: String
     abstract val code: String
 
     override fun equals(other: Any?): Boolean {
-        if (other is Coin) {
+        if (other is CoinOld) {
             return name == other.name && code == other.code
         }
 
