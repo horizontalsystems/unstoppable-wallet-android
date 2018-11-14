@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
-import io.horizontalsystems.bankwallet.core.managers.RateManager
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
@@ -95,14 +94,13 @@ object TransactionsModule {
     }
 
     fun initModule(view: TransactionsViewModel, router: IRouter) {
-        App.walletManager.initWallets(
-                listOf("subway", "plate", "brick", "pattern", "inform", "used", "oblige", "identify", "cherry", "drop", "flush", "balance"),
-                listOf("BTCt", "ETHt")
-        )
+//        App.walletManager.initWallets(
+//                listOf("subway", "plate", "brick", "pattern", "inform", "used", "oblige", "identify", "cherry", "drop", "flush", "balance"),
+//                listOf("BTCt", "ETHt")
+//        )
 
         val dataSource = TransactionRecordDataSource()
-
-        val interactor = TransactionsInteractor(App.walletManager, RateManager(), dataSource)
+        val interactor = TransactionsInteractor(App.walletManager, dataSource)
         val presenter = TransactionsPresenter(interactor, router, TransactionViewItemFactory(App.walletManager, App.currencyManager))
 
         dataSource.delegate = interactor

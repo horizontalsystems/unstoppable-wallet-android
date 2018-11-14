@@ -35,11 +35,8 @@ object DateHelper {
         formatDate(date, "MM/dd/yyyy")
     }
 
-    fun getCalendarFromTimestamp(timestamp: Long) : Calendar {
-        val timeZone = TimeZone.getTimeZone("UTC")
-        val cal = Calendar.getInstance(timeZone)
-        cal.timeInMillis = timestamp
-        return cal
+    fun formatDateByUsLocale(timestamp: Long, dateFormat: String) : String {
+        return SimpleDateFormat(dateFormat, Locale("US")).format(Date(timestamp))
     }
 
     fun minutesAfterNow(minutes: Int): Long {

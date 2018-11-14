@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
 import android.os.Handler
-import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.reactivex.Observable
@@ -9,7 +8,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import java.util.concurrent.TimeUnit
 
-class TransactionsInteractor(private val walletManager: IWalletManager, private val exchangeRateManager: IRateManager, private val dataSource: TransactionsModule.ITransactionRecordDataSource, private val refreshTimeout: Double = 2.0) : TransactionsModule.IInteractor, TransactionsModule.ITransactionRecordDataSourceDelegate {
+class TransactionsInteractor(
+        private val walletManager: IWalletManager,
+        private val dataSource: TransactionsModule.ITransactionRecordDataSource,
+        private val refreshTimeout: Double = 2.0
+) : TransactionsModule.IInteractor, TransactionsModule.ITransactionRecordDataSourceDelegate {
 
     private val disposables = CompositeDisposable()
 

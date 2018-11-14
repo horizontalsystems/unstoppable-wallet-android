@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import com.google.gson.GsonBuilder
 import io.horizontalsystems.bankwallet.core.INetworkManager
+import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.reactivex.Flowable
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -14,15 +15,15 @@ import java.util.concurrent.TimeUnit
 
 class NetworkManager : INetworkManager {
 
-    override fun getRate(coinCode: String, currency: String, year: Int, month: String, day: String, hour: String, minute: String): Flowable<Double> {
+    override fun getRate(coinCode: String, currency: String, timestamp: Long): Flowable<Double> {
         return ServiceExchangeApi.service
-                .getRate(coinCode, currency, year, month, day, hour, minute)
-                .onErrorResumeNext(getRateByDay(coinCode, currency, year, month, day))
+                .getRate(coinCode, currency, DateHelper.formatDateByUsLocale(timestamp, "yyyy/MM/dd/HH/mm"))
+                .onErrorResumeNext(getRateByDay(coinCode, currency, DateHelper.formatDateByUsLocale(timestamp, "yyyy/MM/dd")))
     }
 
-    override fun getRateByDay(coinCode: String, currency: String, year: Int, month: String, day: String): Flowable<Double> {
+    override fun getRateByDay(coinCode: String, currency: String, datePath: String): Flowable<Double> {
         return ServiceExchangeApi.service
-                .getRateByDay(coinCode, currency, year, month, day)
+                .getRateByDay(coinCode, currency, datePath)
                 .onErrorReturn {
                     0.0
                 }
@@ -68,24 +69,18 @@ object ServiceExchangeApi {
 
     interface IExchangeRate {
 
-        @GET("{coin}/{fiat}/{year}/{month}/{day}/{hour}/{minute}/index.json")
+        @GET("{coin}/{fiat}/{datePath}/index.json")
         fun getRate(
                 @Path("coin") coinCode: String,
                 @Path("fiat") currency: String,
-                @Path("year") year: Int,
-                @Path("month") month: String,
-                @Path("day") day: String,
-                @Path("hour") hour: String,
-                @Path("minute") minute: String
+                @Path("datePath") datePath: String
         ): Flowable<Double>
 
-        @GET("{coin}/{fiat}/{year}/{month}/{day}/index.json")
+        @GET("{coin}/{fiat}/{year}/{month}/{datePath}/index.json")
         fun getRateByDay(
                 @Path("coin") coinCode: String,
                 @Path("fiat") currency: String,
-                @Path("year") year: Int,
-                @Path("month") month: String,
-                @Path("day") day: String
+                @Path("datePath") datePath: String
         ): Flowable<Double>
 
         @GET("{coin}/{fiat}/index.json")

@@ -24,7 +24,6 @@ class App : Application() {
         lateinit var randomManager: IRandomProvider
         lateinit var networkManager: INetworkManager
         lateinit var currencyManager: ICurrencyManager
-        lateinit var exchangeRateManager: IExchangeRateManager
         lateinit var adapterManager: IAdapterManager
         lateinit var backgroundManager: BackgroundManager
         lateinit var languageManager: ILanguageManager
@@ -34,6 +33,12 @@ class App : Application() {
         lateinit var appConfigProvider: IAppConfigProvider
         lateinit var walletManager: IWalletManager
         lateinit var coinManager: CoinManager
+
+        lateinit var rateSyncer: RateSyncer
+        lateinit var rateManager: RateManager
+        lateinit var periodicTimer: PeriodicTimer
+        lateinit var networkAvailabilityManager: NetworkAvailabilityManager
+
 
         val testMode = true
 
@@ -78,9 +83,14 @@ class App : Application() {
         appConfigProvider = AppConfigProvider()
         languageManager = LanguageManager(localStorage, appConfigProvider, fallbackLanguage)
         currencyManager = CurrencyManager(localStorage, appConfigProvider)
-        exchangeRateManager = ExchangeRateManager(currencyManager)
         walletManager = WalletManager(AdapterFactory())
         coinManager = CoinManager(wordsManager, walletManager, appConfigProvider)
+
+        networkAvailabilityManager = NetworkAvailabilityManager()
+        periodicTimer = PeriodicTimer(delay = 3 * 60 * 1000)
+        rateSyncer = RateSyncer(networkManager, periodicTimer)
+        rateManager = RateManager(rateSyncer, walletManager, currencyManager, networkAvailabilityManager, periodicTimer)
+
     }
 
 }

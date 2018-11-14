@@ -1,45 +1,47 @@
 package io.horizontalsystems.bankwallet.modules.wallet
 
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.IAdapter
-import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.coins.CoinOld
-import io.reactivex.subjects.BehaviorSubject
+import io.horizontalsystems.bankwallet.entities.Rate
+import io.horizontalsystems.bankwallet.entities.Wallet
 
 object WalletModule {
 
     interface IView {
-        fun showTotalBalance(totalBalance: CurrencyValue)
-        fun showWalletBalances(walletBalances: List<WalletBalanceViewItem>)
+        fun setTitle(title: Int)
+        fun didRefresh()
+        fun show(totalBalance: CurrencyValue?)
+        fun show(wallets: List<WalletViewItem>)
+        fun show(syncStatus: String)
     }
 
     interface IViewDelegate {
         fun viewDidLoad()
-        fun onReceiveClicked(adapterId: String)
-        fun onSendClicked(adapterId: String)
+        fun refresh()
+        fun onReceive(coin: String)
+        fun onPay(coin: String)
     }
 
     interface IInteractor {
-        fun notifyWalletBalances()
+        fun refresh()
+        fun rate(coin: String): Rate?
+        val baseCurrency: Currency
+        val wallets: List<Wallet>
     }
 
     interface IInteractorDelegate {
-        fun didInitialFetch(coinValues: MutableMap<String, CoinValue>, rates: MutableMap<CoinOld, CurrencyValue>, progresses: MutableMap<String, BehaviorSubject<Double>>)
-        fun didUpdate(coinValue: CoinValue, adapterId: String)
-        fun didExchangeRateUpdate(rates: MutableMap<CoinOld, CurrencyValue>)
+        fun didUpdate()
+        fun didRefresh()
     }
 
     interface IRouter {
-        fun openReceiveDialog(adapterId: String)
-        fun openSendDialog(adapter: IAdapter)
+        fun openReceiveDialog(coin: String)
+        fun openSendDialog(coin: String)
     }
 
     fun init(view: WalletViewModel, router: IRouter) {
-        val adapterManager = App.adapterManager
-        val exchangeRateManager = App.exchangeRateManager
-
-        val interactor = WalletInteractor(adapterManager, exchangeRateManager)
+        val interactor = WalletInteractor(App.walletManager, App.rateManager, App.currencyManager)
         val presenter = WalletPresenter(interactor, router)
 
         presenter.view = view

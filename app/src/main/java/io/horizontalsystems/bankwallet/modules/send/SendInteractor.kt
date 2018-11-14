@@ -2,9 +2,9 @@ package io.horizontalsystems.bankwallet.modules.send
 
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IClipboardManager
-import io.horizontalsystems.bankwallet.core.IExchangeRateManager
+import io.horizontalsystems.bankwallet.entities.Rate
 
-class SendInteractor(private var clipboardManager: IClipboardManager, private val adapter: IAdapter, private val exchangeRateManager: IExchangeRateManager) : SendModule.IInteractor {
+class SendInteractor(private var clipboardManager: IClipboardManager, private val adapter: IAdapter) : SendModule.IInteractor {
 
     var delegate: SendModule.IInteractorDelegate? = null
 
@@ -18,13 +18,15 @@ class SendInteractor(private var clipboardManager: IClipboardManager, private va
     }
 
     override fun fetchExchangeRate() {
-        val exchangeRates = exchangeRateManager.getExchangeRates()
-        exchangeRates.forEach {
-            val (coin, currencyValue) = it
+        val exchangeRate = Rate("BTS", "USD", 5000.0)
+        delegate?.didFetchExchangeRate(exchangeRate.value)
+//        val exchangeRates = exchangeRateManager.getExchangeRates()
+//        exchangeRates.forEach {
+//            val (coin, currencyValue) = it
 //            if (coin.code == adapter.coin.code) {
 //                delegate?.didFetchExchangeRate(currencyValue.value)
 //            }
-        }
+//        }
     }
 
     override fun send(address: String, amount: Double) {

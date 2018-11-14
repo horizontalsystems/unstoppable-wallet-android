@@ -5,7 +5,7 @@ import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.core.BitcoinAdapter
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
-import io.horizontalsystems.bankwallet.core.IExchangeRateManager
+import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.coins.bitcoin.Bitcoin
@@ -22,7 +22,7 @@ import java.util.*
 class TransactionsInteractorTest {
 
     private val delegate = mock(TransactionsModule.IInteractorDelegate::class.java)
-    private val exchangeRateManager = mock(IExchangeRateManager::class.java)
+    private val networkManager = mock(INetworkManager::class.java)
     private val adapterManager = mock(IAdapterManager::class.java)
     private val currencyManager = mock(ICurrencyManager::class.java)
     private val bitcoinAdapter = mock(BitcoinAdapter::class.java)
@@ -44,11 +44,11 @@ class TransactionsInteractorTest {
         RxBaseTest.setup()
 
         val rateResponse = Flowable.just(6300.0)
-        whenever(exchangeRateManager.getRate(any(), any(), any())).thenReturn(rateResponse)
+        whenever(networkManager.getRate(any(), any(), any())).thenReturn(rateResponse)
         whenever(currencyManager.baseCurrency).thenReturn(baseCurrency)
         whenever(currencyManager.subject).thenReturn(subject)
 
-        interactor = TransactionsInteractor(adapterManager, exchangeRateManager, currencyManager)
+        interactor = TransactionsInteractor(adapterManager, networkManager, currencyManager)
 
         interactor.delegate = delegate
     }

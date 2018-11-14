@@ -1,10 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.wallet
 
+import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.coins.CoinOld
-import io.reactivex.subjects.BehaviorSubject
+import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 
 class WalletPresenter(
         private var interactor: WalletModule.IInteractor,
@@ -12,77 +12,69 @@ class WalletPresenter(
 
     var view: WalletModule.IView? = null
 
-    private var coinValues = mutableMapOf<String, CoinValue>()
-    private var rates = mutableMapOf<CoinOld, CurrencyValue>()
-    private var progresses = mutableMapOf<String, BehaviorSubject<Double>>()
-
-    override fun onReceiveClicked(adapterId: String) {
-        router.openReceiveDialog(adapterId)
+    override fun onReceive(coin: String) {
+        router.openReceiveDialog(coin)
     }
 
-    override fun onSendClicked(adapterId: String) {
-//        val adapter = App.adapterManager.adapters.firstOrNull { it.id == adapterId }
-//        adapter?.let { router.openSendDialog(it) }
+    override fun onPay(coin: String) {
+        router.openSendDialog(coin)
     }
 
     override fun viewDidLoad() {
-        interactor.notifyWalletBalances()
-    }
-
-    override fun didInitialFetch(coinValues: MutableMap<String, CoinValue>, rates: MutableMap<CoinOld, CurrencyValue>, progresses: MutableMap<String, BehaviorSubject<Double>>) {
-        this.coinValues = coinValues
-        this.rates = rates
-        this.progresses = progresses
-
+        view?.setTitle(R.string.wallet_title)
         updateView()
     }
 
-    override fun didUpdate(coinValue: CoinValue, adapterId: String) {
-        coinValues[adapterId] = coinValue
+    override fun refresh() {
+        interactor.refresh()
+    }
 
+    override fun didUpdate() {
         updateView()
     }
 
-    override fun didExchangeRateUpdate(rates: MutableMap<CoinOld, CurrencyValue>) {
-        this.rates = rates
-
-        updateView()
+    override fun didRefresh() {
+        view?.didRefresh()
     }
 
     private fun updateView() {
         var totalBalance = 0.0
-        val viewItems = mutableListOf<WalletBalanceViewItem>()
-        var baseCurrency: Currency? = null
 
-//        for (item in coinValues) {
-//
-//            val adapterId = item.key
-//            val coinValue = item.value
-//            val exchangeRateValue = rates[coinValue.coin]
-//            var currencyValue: CurrencyValue? = null
-//
-//            exchangeRateValue?.let {
-//                val valueInFiat = it.value * coinValue.value
-//                currencyValue = CurrencyValue(it.currency, valueInFiat)
-//                totalBalance += valueInFiat
-//                baseCurrency = it.currency
-//            }
-//
-//            viewItems.add(
-//                    WalletBalanceViewItem(
-//                            adapterId = adapterId,
-//                            coinValue = coinValue,
-//                            exchangeRateValue = exchangeRateValue,
-//                            currencyValue = currencyValue,
-//                            progress = progresses[adapterId]
-//                    )
-//            )
-//        }
+        val viewItems = mutableListOf<WalletViewItem>()
+        val currency = interactor.baseCurrency
 
-        baseCurrency?.let {
-            view?.showTotalBalance(CurrencyValue(it, totalBalance))
+        var allSynced = true
+
+        interactor.wallets.forEach { wallet ->
+            val balance = wallet.adapter.balance
+            val rate = interactor.rate(wallet.coin)
+
+            var rateExpired = false
+
+            rate?.let { mRate ->
+                val diff = DateHelper.getSecondsAgo(mRate.timestamp)
+                rateExpired = diff > 60 * 10
+
+                totalBalance += balance * mRate.value
+            }
+
+            viewItems.add(WalletViewItem(
+                    coinValue = CoinValue(coin = wallet.coin, value = balance),
+                    exchangeValue = rate?.let { CurrencyValue(currency = currency, value = it.value) },
+                    currencyValue = rate?.let { CurrencyValue(currency = currency, value = balance * it.value) },
+                    state = wallet.adapter.state,
+                    rateExpired = rateExpired
+            ))
+
+            if (AdapterState.Syncing() == wallet.adapter.state) {
+                allSynced = false
+            }
+
+            allSynced = allSynced && rate != null
         }
-        view?.showWalletBalances(viewItems)
+
+        view?.show(totalBalance = if (allSynced) CurrencyValue(currency = currency, value = totalBalance) else null)
+        view?.show(wallets = viewItems)
     }
 
 }

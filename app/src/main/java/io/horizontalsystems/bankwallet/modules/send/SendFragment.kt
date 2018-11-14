@@ -23,7 +23,6 @@ import android.widget.ScrollView
 import android.widget.TextView
 import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 
 class SendFragment : DialogFragment() {
@@ -47,13 +46,13 @@ class SendFragment : DialogFragment() {
 
     private lateinit var viewModel: SendViewModel
 
-    private lateinit var coinAdapter: IAdapter
+    private lateinit var coin: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProviders.of(this).get(SendViewModel::class.java)
-        viewModel.init(coinAdapter)
+//        viewModel.init(coin)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -240,9 +239,9 @@ class SendFragment : DialogFragment() {
     }
 
     companion object {
-        fun show(activity: FragmentActivity, adapter: IAdapter) {
+        fun show(activity: FragmentActivity, coin: String) {
             val fragment = SendFragment()
-            fragment.coinAdapter = adapter
+            fragment.coin = coin
             fragment.show(activity.supportFragmentManager, "pay_fragment")
         }
     }

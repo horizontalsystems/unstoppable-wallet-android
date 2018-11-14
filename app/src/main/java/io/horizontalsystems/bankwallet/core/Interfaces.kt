@@ -19,12 +19,6 @@ interface IWalletManager {
     fun clearWallets()
 }
 
-interface IRateManager {
-    val subject: PublishSubject<Void>
-    fun rateForCoin(coin: Coin, currencyCode: String): Rate?
-}
-
-
 interface ILocalStorage {
     var currentLanguage: String?
     var isBackedUp: Boolean
@@ -52,8 +46,8 @@ interface IRandomProvider {
 
 interface INetworkManager {
     fun getLatestRate(coinCode: String, currency: String): Flowable<Double>
-    fun getRate(coinCode: String, currency: String, year: Int, month: String, day: String, hour: String, minute: String): Flowable<Double>
-    fun getRateByDay(coinCode: String, currency: String, year: Int, month: String, day: String): Flowable<Double>
+    fun getRate(coinCode: String, currency: String, timestamp: Long): Flowable<Double>
+    fun getRateByDay(coinCode: String, currency: String, datePath: String): Flowable<Double>
 }
 
 interface IEncryptionManager {
@@ -112,7 +106,7 @@ interface ILanguageManager {
 
 open class AdapterState {
     class Synced : AdapterState()
-    class Syncing(progressSubject: BehaviorSubject<Double>) : AdapterState()
+    class Syncing(progressSubject: BehaviorSubject<Double>? = null) : AdapterState()
 }
 
 interface IAdapter {
@@ -172,4 +166,12 @@ interface IAppConfigProvider {
     val enabledCoins: List<String>
     val localizations: List<String>
     val currencies: List<Currency>
+}
+
+interface IPeriodicTimerDelegate {
+    fun onFire()
+}
+
+interface IRateSyncerDelegate {
+    fun didSync(coin: String, currencyCode: String, value: Double)
 }
