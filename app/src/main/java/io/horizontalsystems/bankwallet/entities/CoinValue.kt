@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.entities
 
-import io.horizontalsystems.bankwallet.entities.coins.Coin
+import io.horizontalsystems.bankwallet.modules.transactions.Coin
 
 data class CoinValue(val coin: Coin, val value: Double) {
 

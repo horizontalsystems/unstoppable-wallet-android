@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bitcoinkit.BitcoinKit
-import io.horizontalsystems.ethereumkit.EthereumKit
+import io.horizontalsystems.bankwallet.core.IAdapter
+import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.IWordsManager
 import io.reactivex.subjects.PublishSubject
 
 class AdapterManager(private val wordsManager: IWordsManager) : IAdapterManager {
@@ -13,15 +13,15 @@ class AdapterManager(private val wordsManager: IWordsManager) : IAdapterManager 
 
     override fun start() {
         wordsManager.words?.let { words ->
-            adapters.add(BitcoinAdapter(words, BitcoinKit.NetworkType.MainNet))
-            adapters.add(BitcoinAdapter(words, BitcoinKit.NetworkType.MainNetBitCash))
-            adapters.add(EthereumAdapter(words, EthereumKit.NetworkType.MainNet))
+//            adapters.add(BitcoinAdapter(words, BitcoinKit.NetworkType.MainNet))
+//            adapters.add(BitcoinAdapter(words, BitcoinKit.NetworkType.MainNetBitCash))
+//            adapters.add(EthereumAdapter(words, EthereumKit.NetworkType.MainNet))
 
             for (adapter in adapters) {
                 try {
                     adapter.start()
                 } catch (error: Exception) {
-                    print("Could not start ${adapter.coin.name}: $error")
+//                    print("Could not start ${adapter.coin.name}: $error")
                 }
             }
             subject.onNext(true)
@@ -40,7 +40,7 @@ class AdapterManager(private val wordsManager: IWordsManager) : IAdapterManager 
             try {
                 adapter.clear()
             } catch (error: Exception) {
-                print("Could not clear ${adapter.coin.name}: $error")
+//                print("Could not clear ${adapter.coin.name}: $error")
             }
         }
         adapters.clear()

@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.core.IClipboardManager
 import io.horizontalsystems.bankwallet.core.IExchangeRateManager
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.entities.coins.Coin
+import io.horizontalsystems.bankwallet.entities.coins.CoinOld
 import io.horizontalsystems.bankwallet.entities.coins.bitcoin.Bitcoin
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
 import com.nhaarman.mockito_kotlin.verify
@@ -24,7 +24,7 @@ class SendInteractorTest {
 
     private val interactor = SendInteractor(clipboardManager, bitcoinAdapter, exchangeRateManager)
     private val currencyUsd = Currency(code = "USD", symbol = "\u0024")
-    private var exchangeRates = mutableMapOf(Bitcoin() as Coin to CurrencyValue(currencyUsd, 10_000.0))
+    private var exchangeRates = mutableMapOf(Bitcoin() as CoinOld to CurrencyValue(currencyUsd, 10_000.0))
 
     @Before
     fun setUp() {

@@ -3,13 +3,11 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IClipboardManager
 import io.horizontalsystems.bankwallet.core.IExchangeRateManager
-import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionRecordViewItem
 import io.reactivex.schedulers.Schedulers
-import java.util.*
 
 class FullTransactionInfoInteractor(
         private val adapter: IAdapter?,
@@ -31,13 +29,13 @@ class FullTransactionInfoInteractor(
     }
 
     private fun updateTransaction(adapter: IAdapter, transactionId: String) {
-        val transaction = adapter.transactionRecords.firstOrNull { it.transactionHash == transactionId }
-        transaction?.let {
-            val viewItem = getTransactionRecordViewItem(it, adapter)
-            transactionRecordViewItem = viewItem
-            fetchExchangeRate(transaction)
-            delegate?.didGetTransactionInfo(viewItem)
-        }
+//        val transaction = adapter.transactionRecords.firstOrNull { it.transactionHash == transactionId }
+//        transaction?.let {
+//            val viewItem = getTransactionRecordViewItem(it, adapter)
+//            transactionRecordViewItem = viewItem
+//            fetchExchangeRate(transaction)
+//            delegate?.didGetTransactionInfo(viewItem)
+//        }
     }
 
     private fun fetchExchangeRate(transaction: TransactionRecord) {
@@ -58,18 +56,19 @@ class FullTransactionInfoInteractor(
     }
 
     private fun getTransactionRecordViewItem(record: TransactionRecord, adapter: IAdapter): TransactionRecordViewItem {
-        return TransactionRecordViewItem(
-                hash = record.transactionHash,
-                adapterId = adapter.id,
-                amount = CoinValue(adapter.coin, record.amount),
-                fee = CoinValue(coin = adapter.coin, value = record.fee),
-                from = record.from.first(),
-                to = record.to.first(),
-                incoming = record.amount > 0,
-                blockHeight = record.blockHeight,
-                date = record.timestamp?.let { Date(it) },
-                status = record.status
-        )
+        TODO()
+//        return TransactionRecordViewItem(
+//                hash = record.transactionHash,
+//                adapterId = adapter.id,
+//                amount = CoinValue(adapter.coin, record.amount),
+//                fee = CoinValue(coin = adapter.coin, value = record.fee),
+//                from = record.from.first(),
+//                to = record.to.first(),
+//                incoming = record.amount > 0,
+//                blockHeight = record.blockHeight,
+//                date = record.timestamp?.let { Date(it) },
+//                status = record.status
+//        )
     }
 
     override fun getTransactionInfo() {

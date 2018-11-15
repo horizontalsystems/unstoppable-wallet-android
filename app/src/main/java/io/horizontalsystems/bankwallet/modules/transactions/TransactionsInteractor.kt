@@ -1,128 +1,56 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import io.horizontalsystems.bankwallet.core.IAdapterManager
-import io.horizontalsystems.bankwallet.core.ICurrencyManager
-import io.horizontalsystems.bankwallet.core.IExchangeRateManager
-import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.reactivex.Flowable
+import android.os.Handler
+import io.horizontalsystems.bankwallet.core.IRateManager
+import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import java.util.*
+import java.util.concurrent.TimeUnit
 
-class TransactionsInteractor(
-        private val adapterManager: IAdapterManager,
-        private val exchangeRateManager: IExchangeRateManager,
-        private val currencyManager: ICurrencyManager) : TransactionsModule.IInteractor {
+class TransactionsInteractor(private val walletManager: IWalletManager, private val exchangeRateManager: IRateManager, private val dataSource: TransactionsModule.ITransactionRecordDataSource, private val refreshTimeout: Double = 2.0) : TransactionsModule.IInteractor, TransactionsModule.ITransactionRecordDataSourceDelegate {
+
+    private val disposables = CompositeDisposable()
 
     var delegate: TransactionsModule.IInteractorDelegate? = null
-    private var transactionsDisposables: CompositeDisposable = CompositeDisposable()
-    private var adapterManagerDisposable: Disposable? = null
-    private var clickedAdapterId: String? = null
 
     init {
-        val disposable = currencyManager.subject.subscribe { baseCurrency ->
-            transactionsDisposables.clear()
-            retrieveTransactionItemsWithBaseCurrency(baseCurrency, clickedAdapterId)
-        }
-    }
-
-    override val baseCurrency: Currency
-        get() = currencyManager.baseCurrency
-
-    override fun retrieveFilters() {
-        adapterManagerDisposable = adapterManager.subject.subscribe {
-            transactionsDisposables.clear()
-            initialFetchAndSubscribe()
-        }
-
-        initialFetchAndSubscribe()
-    }
-
-    private fun initialFetchAndSubscribe() {
-        val adapters = adapterManager.adapters
-        val filters: List<TransactionFilterItem> = adapters.map {
-            TransactionFilterItem(it.id, it.coin.name)
-        }
-        delegate?.didRetrieveFilters(filters)
-
-        adapterManager.adapters.forEach { adapter ->
-            transactionsDisposables.add(adapter.transactionRecordsSubject.subscribe {
-                retrieveTransactions(clickedAdapterId)
-            })
-        }
-
-        retrieveTransactions(clickedAdapterId)
-    }
-
-    override fun retrieveTransactions(adapterId: String?) {
-        clickedAdapterId = adapterId
-        retrieveTransactionItemsWithBaseCurrency(baseCurrency, clickedAdapterId)
-    }
-
-    override fun onCleared() {
-        transactionsDisposables.clear()
-        adapterManagerDisposable?.dispose()
-    }
-
-    override fun refresh() {
-        adapterManager.refresh()
-    }
-
-    private fun retrieveTransactionItemsWithBaseCurrency(baseCurrency: Currency, adapterId: String?) {
-        val items = mutableListOf<TransactionRecordViewItem>()
-
-        val filteredAdapters = adapterManager.adapters.filter { adapterId == null || it.id == adapterId }
-        val flowableList = mutableListOf<Flowable<Pair<String, Double>>>()
-
-        filteredAdapters.forEach { adapter ->
-            adapter.transactionRecords.forEach { record ->
-
-                val item = TransactionRecordViewItem(
-                        hash = record.transactionHash,
-                        adapterId = adapter.id,
-                        amount = CoinValue(adapter.coin, record.amount),
-                        fee = CoinValue(coin = adapter.coin, value = record.fee),
-                        from = record.from.first(),
-                        to = record.to.first(),
-                        incoming = record.amount > 0,
-                        blockHeight = record.blockHeight,
-                        date = record.timestamp?.let { Date(it) },
-                        status = record.status
-                )
-                items.add(item)
-                record.timestamp?.let { timestamp ->
-                    flowableList.add(
-                            exchangeRateManager.getRate(coinCode = record.coinCode, currency = baseCurrency.code, timestamp = timestamp)
-                                    .map { Pair(record.transactionHash, it) }
-                    )
-                }
-            }
-        }
-
-        items.sortByDescending { it.date }
-
-        transactionsDisposables.add(Flowable.zip(flowableList, Arrays::asList)
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
-                .map { resultRates ->
-                    (resultRates as List<Pair<String, Double>>).toMap()
-                }
-                .subscribe { ratesMap ->
-                    items.forEach { item ->
-                        val rate = ratesMap[item.hash] ?: 0.0
-                        if (rate > 0) {
-                            val value = item.amount.value * rate
-                            item.currencyAmount = CurrencyValue(currency = baseCurrency, value = value)
-                            item.exchangeRate = rate
-                        }
-                    }
-
-                    delegate?.didRetrieveItems(items)
+        disposables.add(Observable.merge(walletManager.wallets.map { it.adapter.lastBlockHeightSubject })
+                .throttleLast(3, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    delegate?.didUpdateDataSource()
                 })
     }
 
+    override fun retrieveFilters() {
+        val coins = walletManager.wallets.map { it.coin }
+        delegate?.didRetrieveFilters(coins)
+    }
+
+    override fun refresh() {
+        Handler().postDelayed({
+            delegate?.didRefresh()
+        }, (refreshTimeout * 1000).toLong())
+    }
+
+    override fun setCoin(coin: Coin?) {
+        dataSource.setCoin(coin)
+    }
+
+    override val recordsCount: Int
+        get() = dataSource.count
+
+    override fun recordForIndex(index: Int): TransactionRecord {
+        return dataSource.recordForIndex(index)
+    }
+
+    override fun clear() {
+        disposables.clear()
+    }
+
+    override fun onUpdateResults() {
+        delegate?.didUpdateDataSource()
+    }
 }

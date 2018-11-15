@@ -29,15 +29,15 @@ class WalletInteractor(
         val progresses = mutableMapOf<String, BehaviorSubject<Double>>()
 
         adapterManager.adapters.forEach { adapter ->
-            coinValues[adapter.id] = CoinValue(adapter.coin, adapter.balance)
-            progresses[adapter.id] = adapter.progressSubject
+//            coinValues[adapter.id] = CoinValue(adapter.coin, adapter.balance)
+//            progresses[adapter.id] = adapter.progressSubject
         }
 
         delegate?.didInitialFetch(coinValues, exchangeRateManager.getExchangeRates(), progresses)
 
         adapterManager.adapters.forEach { adapter ->
             disposables.add(adapter.balanceSubject.subscribe {
-                delegate?.didUpdate(CoinValue(adapter.coin, it), adapterId = adapter.id)
+//                delegate?.didUpdate(CoinValue(adapter.coin, it), adapterId = adapter.id)
             })
         }
 

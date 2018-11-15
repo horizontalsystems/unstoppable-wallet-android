@@ -1,9 +1,7 @@
 package io.horizontalsystems.bankwallet.core
 
+import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
-import io.horizontalsystems.bankwallet.entities.TransactionStatus
-import io.horizontalsystems.bankwallet.entities.coins.Coin
-import io.horizontalsystems.bankwallet.entities.coins.ethereum.Ethereum
 import io.horizontalsystems.ethereumkit.EthereumKit
 import io.horizontalsystems.ethereumkit.EthereumKit.NetworkType
 import io.horizontalsystems.ethereumkit.models.Transaction
@@ -14,30 +12,26 @@ import java.math.BigDecimal
 class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, EthereumKit.Listener {
 
     private var ethereumKit = EthereumKit(words, network)
-    private val transactionCompletionThreshold = 12
     private val weisInEther = Math.pow(10.0, 18.0)
 
-    override val coin: Coin = Ethereum()
-    override val id: String = "${words.joinToString(" ").hashCode()}-${coin.code}"
-
-    override val balance: Double
-        get() = ethereumKit.balance
+    override val balance: Double get() = ethereumKit.balance
     override val balanceSubject: PublishSubject<Double> = PublishSubject.create()
 
-    override val progressSubject: BehaviorSubject<Double> = BehaviorSubject.createDefault(1.0)
+    val progressSubject: BehaviorSubject<Double> = BehaviorSubject.createDefault(1.0)
 
-    override var latestBlockHeight: Int = 0 //not used
-    override val latestBlockHeightSubject: PublishSubject<Any> = PublishSubject.create()
+    override val state: AdapterState = AdapterState.Synced()
+    override val stateSubject: PublishSubject<AdapterState> = PublishSubject.create()
 
-    override val transactionRecords: List<TransactionRecord>
-        get() = ethereumKit.transactions.map { transactionRecord(it) }
-    override val transactionRecordsSubject: PublishSubject<Any> = PublishSubject.create()
+    override val confirmationsThreshold: Int = 12
+    // todo replace with real ethereumKit.lastBlockHeight
+    override val lastBlockHeight: Int? get() = 0
+    override val lastBlockHeightSubject: PublishSubject<Int> = PublishSubject.create()
 
-    override val receiveAddress: String
-        get() = ethereumKit.receiveAddress()
+    override val transactionRecordsSubject: PublishSubject<List<TransactionRecord>> = PublishSubject.create()
 
-    override fun debugInfo() {
-    }
+    override val debugInfo: String = ""
+
+    override val receiveAddress: String get() = ethereumKit.receiveAddress()
 
     override fun start() {
         ethereumKit.listener = this
@@ -56,52 +50,67 @@ class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, Eth
         ethereumKit.send(address, value, completion)
     }
 
-    override fun fee(value: Int, senderPay: Boolean): Double = ethereumKit.fee()
+    override fun fee(value: Double, senderPay: Boolean): Double = ethereumKit.fee() / weisInEther
 
-    override fun validate(address: String) = try {
+    override fun validate(address: String) {
         ethereumKit.validateAddress(address)
-        true
-    } catch (ex: Exception) {
-        false
     }
-
-    private fun transactionRecord(ethereumTx: Transaction): TransactionRecord {
-        val txStatus = when (ethereumTx.confirmations) {
-            0 -> TransactionStatus.Pending
-            in 1 until transactionCompletionThreshold ->
-                TransactionStatus.Processing(progress = (ethereumTx.confirmations * 100 / transactionCompletionThreshold).toByte())
-            else -> TransactionStatus.Completed
-        }
-        val incoming = ethereumKit.receiveAddress().toLowerCase() == ethereumTx.to.toLowerCase()
-
-        return TransactionRecord().apply {
-            transactionHash = ethereumTx.hash
-            coinCode = coin.code
-            from = listOf(ethereumTx.from)
-            to = listOf(ethereumTx.to)
-            amount = fromWeiToETH(ethereumTx.value) * (if (incoming) 1 else -1)
-            fee = calculateFee(ethereumTx.gasUsed, ethereumTx.gasPrice)
-            blockHeight = ethereumTx.blockNumber
-            status = txStatus
-            timestamp = ethereumTx.timeStamp * 1000 //convert to milliseconds
-        }
-    }
-
-    private fun calculateFee(gasUsed: String, gasPrice: String): Double {
-        val feeInWeis = BigDecimal(gasUsed).multiply(BigDecimal(gasPrice))
-        return feeInWeis.divide(weisInEther.toBigDecimal()).toDouble()
-    }
-
-    private fun fromWeiToETH(weiAmount: String): Double =
-            BigDecimal(weiAmount).divide(weisInEther.toBigDecimal()).toDouble()
-
-    //Ethereum Kit listener methods
 
     override fun balanceUpdated(ethereumKit: EthereumKit, balance: Double) {
-        balanceSubject.onNext(balance)
+        balanceSubject.onNext(balance / weisInEther)
     }
 
     override fun transactionsUpdated(ethereumKit: EthereumKit, inserted: List<Transaction>, updated: List<Transaction>, deleted: List<Int>) {
-        transactionRecordsSubject.onNext(Any())
+        val records = mutableListOf<TransactionRecord>()
+
+        for (info in inserted) {
+            records.add(transactionRecord(info))
+        }
+
+        for (info in updated) {
+            records.add(transactionRecord(info))
+        }
+
+        transactionRecordsSubject.onNext(records)
     }
+
+    private fun transactionRecord(transaction: Transaction): TransactionRecord {
+        val amountEther: Double = convertToValue(transaction.value) ?: 0.0
+
+        val mineAddress = ethereumKit.receiveAddress().toLowerCase()
+
+        val from = TransactionAddress()
+        from.address = transaction.from
+        from.mine = transaction.from.toLowerCase() == mineAddress
+
+        val to = TransactionAddress()
+        to.address = transaction.to
+        to.mine = transaction.to.toLowerCase() == mineAddress
+
+        val record = TransactionRecord()
+
+        record.transactionHash = transaction.hash
+        record.blockHeight = transaction.blockNumber
+        record.amount = amountEther * if (from.mine) -1 else 1
+        record.timestamp = transaction.timeStamp
+
+        record.from = listOf(from)
+        record.to = listOf(to)
+
+        return record
+    }
+
+    private fun convertToValue(amount: String): Double? {
+        val result = BigDecimal(amount)
+        if (result != null) {
+            return result.toDouble() / weisInEther
+        }
+        return null
+    }
+
+//    private fun calculateFee(gasUsed: String, gasPrice: String): Double {
+//        val feeInWeis = BigDecimal(gasUsed).multiply(BigDecimal(gasPrice))
+//        return feeInWeis.divide(weisInEther.toBigDecimal()).toDouble()
+//    }
+//
 }

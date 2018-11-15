@@ -1,9 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
 
 import android.support.v4.app.FragmentActivity
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionRecordViewItem
-import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 
 object FullTransactionInfoModule {
     interface IView {
@@ -42,14 +40,14 @@ object FullTransactionInfoModule {
     }
 
     fun init(view: FullTransactionInfoViewModel, router: IRouter, adapterId: String, transactionId: String) {
-        val adapter = App.adapterManager.adapters.firstOrNull { it.id == adapterId }
-        val baseCurrency = App.currencyManager.baseCurrency
-        val interactor = FullTransactionInfoInteractor(adapter, App.exchangeRateManager, transactionId, TextHelper, baseCurrency)
-        val presenter = FullTransactionInfoPresenter(interactor, router)
-
-        view.delegate = presenter
-        presenter.view = view
-        interactor.delegate = presenter
+//        val adapter = App.adapterManager.adapters.firstOrNull { it.id == adapterId }
+//        val baseCurrency = App.currencyManager.baseCurrency
+//        val interactor = FullTransactionInfoInteractor(adapter, App.exchangeRateManager, transactionId, TextHelper, baseCurrency)
+//        val presenter = FullTransactionInfoPresenter(interactor, router)
+//
+//        view.delegate = presenter
+//        presenter.view = view
+//        interactor.delegate = presenter
     }
 
     fun start(activity: FragmentActivity, adapterId: String, transactionId: String) {
