@@ -1,60 +1,127 @@
 package io.horizontalsystems.bankwallet.modules.send
 
 import android.support.v4.app.FragmentActivity
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAdapter
-import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
+import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.transactions.Coin
 
 object SendModule {
 
     interface IView {
-        fun setAddress(address: String)
-        fun setAmount(amount: String?)
-        fun setAmountHint(hint: String)
-        fun showError(error: Int)
-        fun showSuccess()
-        fun showAddressWarning(show: Boolean)
+        fun setCoin(coin: Coin)
+
+        fun setAmountInfo(amountInfo: AmountInfo?)
+        fun setSwitchButtonEnabled(enabled: Boolean)
+        fun setHintInfo(amountInfo: HintInfo?)
+
+        fun setAddressInfo(addressInfo: AddressInfo?)
+
+        fun setPrimaryFeeInfo(primaryFeeInfo: AmountInfo?)
+        fun setSecondaryFeeInfo(secondaryFeeInfo: AmountInfo?)
+
+        fun setSendButtonEnabled(sendButtonEnabled: Boolean)
+
+        fun showError(error: Throwable)
+        fun dismissWithSuccess()
+
     }
 
     interface IViewDelegate {
-        fun onScanClick()
-        fun onPasteClick()
         fun onViewDidLoad()
-        fun onAmountEntered(amount: String?)
-        fun onSendClick(address: String)
-        fun onAddressEntered(address: String?)
+        fun onAmountChanged(amount: Double)
+        fun onSwitchClicked()
+        fun onPasteClicked()
+        fun onScanAddress(address: String)
+        fun onDeleteClicked()
+        fun onSendClicked()
     }
 
     interface IInteractor {
-        fun getCoinCode(): String
-        fun getCopiedText(): String
-        fun fetchExchangeRate()
-        fun send(address: String, amount: Double)
-        fun isValid(address: String): Boolean
+        val coin: Coin
+        val addressFromClipboard: String?
+
+        fun convertedAmountForInputType(inputType: InputType, amount: Double): Double?
+        fun stateForUserInput(input: UserInput): State
+
+        fun send(userInput: UserInput)
     }
 
     interface IInteractorDelegate {
-        fun didFetchExchangeRate(exchangeRate: Double)
-        fun didFailToSend(exception: Exception)
         fun didSend()
+        fun didFailToSend(error: Throwable)
     }
 
     interface IRouter {
-        fun startScan()
     }
 
     fun init(view: SendViewModel, router: IRouter, adapter: IAdapter) {
-        val baseCurrency = App.currencyManager.baseCurrency
-        val interactor = SendInteractor(TextHelper, adapter)
-        val presenter = SendPresenter(interactor, router, baseCurrency)
-
-        view.delegate = presenter
-        presenter.view = view
-        interactor.delegate = presenter
+//        val exchangeRateManager = App.exchangeRateManager
+//        val baseCurrency = App.currencyManager.baseCurrency
+//        val interactor = SendInteractor(TextHelper, adapter, exchangeRateManager)
+//        val presenter = SendPresenter(interactor, router, baseCurrency)
+//
+//        view.delegate = presenter
+//        presenter.view = view
+//        interactor.delegate = presenter
     }
 
     fun start(activity: FragmentActivity, coin: String) {
         SendFragment.show(activity, coin)
+    }
+
+    enum class InputType {
+        COIN, CURRENCY
+    }
+
+    open class AmountError : Exception() {
+        data class InsufficientBalance(val amountInfo: AmountInfo) : AmountError()
+    }
+
+    open class AddressError : Exception() {
+        class InvalidAddress : AddressError()
+    }
+
+    sealed class HintInfo {
+        data class Amount(val amountInfo: AmountInfo) : HintInfo()
+        data class ErrorInfo(val error: AmountError) : HintInfo()
+    }
+
+    sealed class AddressInfo {
+        class ValidAddressInfo(val address: String) : AddressInfo()
+        class InvalidAddressInfo(val address: String, val error: Exception) : AddressInfo()
+    }
+
+    sealed class AmountInfo {
+        data class CoinValueInfo(val coinValue: CoinValue) : AmountInfo()
+        data class CurrencyValueInfo(val currencyValue: CurrencyValue) : AmountInfo()
+    }
+
+    class UserInput {
+        var inputType: InputType = InputType.COIN
+        var amount: Double = 0.0
+        var address: String? = null
+
+    }
+
+    class State(var inputType: InputType) {
+        var coinValue: CoinValue? = null
+        var currencyValue: CurrencyValue? = null
+        var amountError: AmountError? = null
+        var address: String? = null
+        var addressError: AddressError? = null
+        var feeCoinValue: CoinValue? = null
+        var feeCurrencyValue: CurrencyValue? = null
+    }
+
+    class StateViewItem {
+        var amountInfo: AmountInfo? = null
+        var switchButtonEnabled: Boolean = false
+        var hintInfo: HintInfo? = null
+        var addressInfo: AddressInfo? = null
+        var primaryFeeInfo: AmountInfo? = null
+        var secondaryFeeInfo: AmountInfo? = null
+        var sendButtonEnabled: Boolean = false
     }
 
 }

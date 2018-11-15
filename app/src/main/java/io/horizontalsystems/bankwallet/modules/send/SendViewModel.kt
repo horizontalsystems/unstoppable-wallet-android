@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.core.IAdapter
 
-class SendViewModel : ViewModel(), SendModule.IView, SendModule.IRouter {
+class SendViewModel : ViewModel(), SendModule.IRouter {
 
     lateinit var delegate: SendModule.IViewDelegate
     val addressLiveData = MutableLiveData<String>()
@@ -21,34 +21,34 @@ class SendViewModel : ViewModel(), SendModule.IView, SendModule.IRouter {
         delegate.onViewDidLoad()
     }
 
-    override fun setAddress(address: String) {
-       addressLiveData.value = address
-    }
-
-    override fun setAmount(amount: String?) {
-        primaryAmountLiveData.value = amount
-    }
-
-    override fun setAmountHint(hint: String) {
-        secondaryAmountHintLiveData.value = hint
-    }
-
-    override fun showError(error: Int) {
-        showErrorLiveData.value = error
-    }
-
-    override fun showSuccess() {
-        showSuccessLiveEvent.call()
-    }
-
-    override fun showAddressWarning(show: Boolean) {
-        showAddressWarningLiveEvent.value = show
-    }
-
-    // --- IRouter methods ---
-
-    override fun startScan() {
-        startScanLiveEvent.call()
-    }
+//    override fun setAddress(address: String) {
+//       addressLiveData.value = address
+//    }
+//
+//    override fun setAmount(amount: String?) {
+//        primaryAmountLiveData.value = amount
+//    }
+//
+//    override fun setAmountHint(hint: String) {
+//        secondaryAmountHintLiveData.value = hint
+//    }
+//
+//    override fun showError(error: Int) {
+//        showErrorLiveData.value = error
+//    }
+//
+//    override fun showSuccess() {
+//        showSuccessLiveEvent.call()
+//    }
+//
+//    override fun showAddressWarning(show: Boolean) {
+//        showAddressWarningLiveEvent.value = show
+//    }
+//
+//    // --- IRouter methods ---
+//
+//    override fun startScan() {
+//        startScanLiveEvent.call()
+//    }
 
 }

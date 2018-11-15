@@ -1,106 +1,95 @@
 package io.horizontalsystems.bankwallet.modules.send
 
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.viewHelpers.NumberFormatHelper
-import java.text.NumberFormat
-import java.text.ParseException
-
 class SendPresenter(
         private val interactor: SendModule.IInteractor,
         private val router: SendModule.IRouter,
-        private val baseCurrency: Currency) : SendModule.IViewDelegate, SendModule.IInteractorDelegate {
+        private val factory: StateViewItemFactory,
+        private val userInput: SendModule.UserInput
+) : SendModule.IViewDelegate, SendModule.IInteractorDelegate {
 
     var view: SendModule.IView? = null
 
-    private var enteredAmount: Double = 0.0
-    private var fiatAmount: Double? = null
-    private var cryptoAmount: Double? = null
-    private var exchangeRate = 0.0
-
-    lateinit var coinCode: String
-
     override fun onViewDidLoad() {
-        coinCode = interactor.getCoinCode()
-        updateAmounts()
+        val state = interactor.stateForUserInput(userInput)
+        val viewItem = factory.viewItemForState(state)
 
-        interactor.fetchExchangeRate()
+        view?.setCoin(interactor.coin)
+        view?.setAmountInfo(viewItem.amountInfo)
+        view?.setSwitchButtonEnabled(viewItem.switchButtonEnabled)
+        view?.setHintInfo(viewItem.hintInfo)
+        view?.setAddressInfo(viewItem.addressInfo)
+        view?.setPrimaryFeeInfo(viewItem.primaryFeeInfo)
+        view?.setSecondaryFeeInfo(viewItem.secondaryFeeInfo)
+        view?.setSendButtonEnabled(viewItem.sendButtonEnabled)
     }
 
-    override fun didFetchExchangeRate(exchangeRate: Double) {
-        this.exchangeRate = exchangeRate
-        refreshAmountHint()
+    override fun onAmountChanged(amount: Double) {
+        userInput.amount = amount
+
+        val state = interactor.stateForUserInput(userInput)
+        val viewItem = factory.viewItemForState(state)
+
+        view?.setHintInfo(viewItem.hintInfo)
+        view?.setPrimaryFeeInfo(viewItem.primaryFeeInfo)
+        view?.setSecondaryFeeInfo(viewItem.secondaryFeeInfo)
+        view?.setSendButtonEnabled(viewItem.sendButtonEnabled)
     }
 
-    override fun didFailToSend(exception: Exception) {
-        view?.showError(getError(exception))
+    override fun onSwitchClicked() {
+        val convertedAmount = interactor.convertedAmountForInputType(userInput.inputType, userInput.amount)
+                ?: return
+
+        userInput.amount = convertedAmount
+        userInput.inputType = when (userInput.inputType) {
+            SendModule.InputType.CURRENCY -> SendModule.InputType.COIN
+            else -> SendModule.InputType.CURRENCY
+        }
+
+        val state = interactor.stateForUserInput(userInput)
+        val viewItem = factory.viewItemForState(state)
+
+        view?.setAmountInfo(viewItem.amountInfo)
+        view?.setHintInfo(viewItem.hintInfo)
+        view?.setPrimaryFeeInfo(viewItem.primaryFeeInfo)
+        view?.setSecondaryFeeInfo(viewItem.secondaryFeeInfo)
+    }
+
+    override fun onPasteClicked() {
+        interactor.addressFromClipboard?.let {
+            onAddressChange(it)
+        }
+    }
+
+    override fun onScanAddress(address: String) {
+        onAddressChange(address)
+    }
+
+    override fun onDeleteClicked() {
+        onAddressChange(null)
+    }
+
+    override fun onSendClicked() {
+        interactor.send(userInput)
     }
 
     override fun didSend() {
-        view?.showSuccess()
+        view?.dismissWithSuccess()
     }
 
-    override fun onScanClick() {
-        router.startScan()
+    override fun didFailToSend(error: Throwable) {
+        view?.showError(error)
     }
 
-    override fun onPasteClick() {
-        val copiedText = interactor.getCopiedText()
-        view?.setAddress(copiedText)
+    private fun onAddressChange(address: String?) {
+        userInput.address = address
+
+        val state = interactor.stateForUserInput(userInput)
+        val viewItem = factory.viewItemForState(state)
+
+        view?.setAddressInfo(viewItem.addressInfo)
+        view?.setPrimaryFeeInfo(viewItem.primaryFeeInfo)
+        view?.setSecondaryFeeInfo(viewItem.secondaryFeeInfo)
+        view?.setSendButtonEnabled(viewItem.sendButtonEnabled)
     }
-
-    override fun onAmountEntered(amount: String?) {
-        val numberFormat = NumberFormat.getInstance()
-        val number = try {
-            numberFormat.parse(amount)
-        } catch (ex: ParseException) {
-            null
-        }
-        enteredAmount = number?.toDouble() ?: 0.0
-        refreshAmountHint()
-    }
-
-    override fun onAddressEntered(address: String?) {
-        view?.showAddressWarning(address?.let { !interactor.isValid(it) } ?: false)
-    }
-
-    override fun onSendClick(address: String) {
-        cryptoAmount?.let { interactor.send(address, it) }
-    }
-
-    private fun updateAmounts() {
-        updateAmountView()
-        updateAmountHintView()
-    }
-
-    private fun refreshAmountHint() {
-        cryptoAmount = enteredAmount
-        fiatAmount = enteredAmount * exchangeRate
-        updateAmountHintView()
-    }
-
-    private fun updateAmountView() {
-        val amount = cryptoAmount ?: 0.0
-        val amountStr = formatCryptoAmount(amount)
-
-        view?.setAmount(if (amount > 0.0) amountStr else null)
-    }
-
-    private fun updateAmountHintView() {
-        val amountStr = formatFiatAmount(fiatAmount ?: 0.0)
-
-        view?.setAmountHint("${baseCurrency.symbol} $amountStr")
-    }
-
-    private fun getError(exception: Exception) = when (exception) {
-//        is UnsupportedBlockchain -> R.string.error_unsupported_blockchain
-//        is InvalidAddress -> R.string.send_bottom_sheet_error_invalid_address
-//        is NotEnoughFundsException -> R.string.send_insufficient_funds
-        else -> R.string.error
-    }
-
-    private fun formatCryptoAmount(amount: Double) = NumberFormatHelper.cryptoAmountFormat.format(amount)
-
-    private fun formatFiatAmount(amount: Double) = NumberFormatHelper.fiatAmountFormat.format(amount)
 
 }

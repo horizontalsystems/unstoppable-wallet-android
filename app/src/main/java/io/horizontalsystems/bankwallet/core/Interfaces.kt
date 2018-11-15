@@ -117,7 +117,7 @@ interface IAdapter {
     fun send(address: String, value: Double, completion: ((Throwable?) -> (Unit))? = null)
 
     @Throws
-    fun fee(value: Double, senderPay: Boolean): Double
+    fun fee(value: Double, address: String?, senderPay: Boolean): Double
 
     @Throws
     fun validate(address: String)
