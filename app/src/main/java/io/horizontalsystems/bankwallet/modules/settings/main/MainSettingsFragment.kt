@@ -86,7 +86,7 @@ class MainSettingsFragment : android.support.v4.app.Fragment() {
 
         viewModel.languageLiveDate.observe(this, Observer { languageCode ->
             languageCode?.let {
-                language.selectedValue = it
+                language.selectedValue = it.capitalize()
             }
         })
 
