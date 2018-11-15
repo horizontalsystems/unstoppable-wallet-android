@@ -37,7 +37,11 @@ class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener 
         viewModel = ViewModelProviders.of(this).get(WalletViewModel::class.java)
         viewModel.init()
 
-        viewModel.walletBalancesLiveData.observe(this, Observer { coins ->
+        viewModel.titleLiveDate.observe(this, Observer {title ->
+            title?.let { toolbar.setTitle(it) }
+        })
+
+        viewModel.walletsLiveData.observe(this, Observer { coins ->
             coins?.let {
                 coinsAdapter.items = it
                 coinsAdapter.notifyDataSetChanged()
@@ -57,14 +61,13 @@ class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener 
         })
 
         viewModel.openSendDialog.observe(this, Observer { iAdapter ->
-            iAdapter?.let { adapter ->
+            iAdapter?.let { coin ->
                 activity?.let {
-                    SendModule.start(it, adapter)
+                    SendModule.start(it, coin)
                 }
             }
         })
 
-        toolbar.setTitle(R.string.wallet_title)
         recyclerCoins.adapter = coinsAdapter
         recyclerCoins.layoutManager = LinearLayoutManager(context)
     }
@@ -95,7 +98,7 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
         fun onItemClick(position: Int)
     }
 
-    var items = listOf<WalletBalanceViewItem>()
+    var items = listOf<WalletViewItem>()
     private var expandedViewPosition = -1
 
     override fun getItemCount() = items.size
@@ -117,8 +120,8 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
             is ViewHolderCoin ->
                 if (payloads.isEmpty()) {
                     holder.bind(items[position],
-                            onSendClick = { listener.onSendClicked(items[position].adapterId) },
-                            onReceiveClick = { listener.onReceiveClicked(items[position].adapterId) },
+                            onSendClick = { listener.onSendClicked(items[position].coinValue.coin) },
+                            onReceiveClick = { listener.onReceiveClicked(items[position].coinValue.coin) },
                             onHolderClicked = {
                                 val oldExpandedViewPosition = expandedViewPosition
                                 expandedViewPosition = if (expandedViewPosition == position) -1 else position
@@ -144,25 +147,25 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
 
     private var disposable: Disposable? = null
 
-    fun bind(walletBalanceViewItem: WalletBalanceViewItem, onSendClick: (() -> (Unit))? = null, onReceiveClick: (() -> (Unit))? = null, onHolderClicked: (() -> Unit)? = null, expanded: Boolean) {
-        val iconDrawable = ContextCompat.getDrawable(containerView.context, LayoutHelper.getCoinDrawableResource(walletBalanceViewItem.coinValue.coin))
+    fun bind(walletViewItem: WalletViewItem, onSendClick: (() -> (Unit))? = null, onReceiveClick: (() -> (Unit))? = null, onHolderClicked: (() -> Unit)? = null, expanded: Boolean) {
+        val iconDrawable = ContextCompat.getDrawable(containerView.context, LayoutHelper.getCoinDrawableResource(walletViewItem.coinValue.coin))
         coinIcon.setImageDrawable(iconDrawable)
-        textName.text = "${walletBalanceViewItem.coinValue.coin}"
-        textAmountFiat.text = walletBalanceViewItem.currencyValue?.let { ValueFormatter.format(it) }
-        coinAmount.text = "${ValueFormatter.format(walletBalanceViewItem.coinValue)}"
+        textName.text = "${walletViewItem.coinValue.coin}"
+        textAmountFiat.text = walletViewItem.currencyValue?.let { ValueFormatter.format(it) }
+        coinAmount.text = "${ValueFormatter.format(walletViewItem.coinValue)}"
 
-        val zeroBalance = walletBalanceViewItem.coinValue.value <= 0.0
+        val zeroBalance = walletViewItem.coinValue.value <= 0.0
         coinAmount.visibility = if (zeroBalance) View.GONE else View.VISIBLE
         buttonPay.isEnabled = !zeroBalance
         textAmountFiat.isEnabled = !zeroBalance
-        textExchangeRate.text = walletBalanceViewItem.exchangeRateValue?.let {
-            containerView.context.getString(R.string.wallet_exchange_rate, ValueFormatter.format(it), walletBalanceViewItem.coinValue.coin)
+        textExchangeRate.text = walletViewItem.exchangeValue?.let {
+            containerView.context.getString(R.string.wallet_exchange_rate, ValueFormatter.format(it), walletViewItem.coinValue.coin)
         } ?: kotlin.run { "..." }
 
         //todo convert indeterminate spinner to determinant one
-        disposable = walletBalanceViewItem.progress?.subscribe {
-            syncProgress.visibility = if (it == 1.0) View.GONE else View.VISIBLE
-        }
+//        disposable = walletViewItem.progress?.subscribe {
+//            syncProgress.visibility = if (it == 1.0) View.GONE else View.VISIBLE
+//        }
 
         buttonPay.setOnClickListener {
             onSendClick?.invoke()

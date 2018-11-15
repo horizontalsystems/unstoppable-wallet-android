@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
 
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IClipboardManager
-import io.horizontalsystems.bankwallet.core.IExchangeRateManager
+import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
@@ -11,7 +11,7 @@ import io.reactivex.schedulers.Schedulers
 
 class FullTransactionInfoInteractor(
         private val adapter: IAdapter?,
-        private val exchangeRateManager: IExchangeRateManager,
+        private val networkManager: INetworkManager,
         private val transactionId: String,
         private var clipboardManager: IClipboardManager,
         private val baseCurrency: Currency) : FullTransactionInfoModule.IInteractor {
@@ -39,20 +39,18 @@ class FullTransactionInfoInteractor(
     }
 
     private fun fetchExchangeRate(transaction: TransactionRecord) {
-        transaction.timestamp?.let { timestamp ->
-            exchangeRateManager.getRate(coinCode = transaction.coinCode, currency = baseCurrency.code, timestamp = timestamp)
-                    .subscribeOn(Schedulers.io())
-                    .unsubscribeOn(Schedulers.io())
-                    .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
-                    .subscribe { rate ->
-                        if (rate > 0) {
-                            val value = (transactionRecordViewItem?.amount?.value ?: 0.0) * rate
-                            transactionRecordViewItem?.currencyAmount = CurrencyValue(currency = baseCurrency, value = value)
-                            transactionRecordViewItem?.exchangeRate = rate
-                            transactionRecordViewItem?.let { delegate?.didGetTransactionInfo(it) }
-                        }
+        val disposable = networkManager.getRate(coin = transaction.coinCode, currency = baseCurrency.code, timestamp = transaction.timestamp)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
+                .subscribe { rate ->
+                    if (rate > 0) {
+                        val value = (transactionRecordViewItem?.amount?.value ?: 0.0) * rate
+                        transactionRecordViewItem?.currencyAmount = CurrencyValue(currency = baseCurrency, value = value)
+                        transactionRecordViewItem?.exchangeRate = rate
+                        transactionRecordViewItem?.let { delegate?.didGetTransactionInfo(it) }
                     }
-        }
+                }
     }
 
     private fun getTransactionRecordViewItem(record: TransactionRecord, adapter: IAdapter): TransactionRecordViewItem {

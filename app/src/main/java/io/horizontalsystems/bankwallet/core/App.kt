@@ -24,8 +24,6 @@ class App : Application() {
         lateinit var randomManager: IRandomProvider
         lateinit var networkManager: INetworkManager
         lateinit var currencyManager: ICurrencyManager
-        lateinit var exchangeRateManager: IExchangeRateManager
-        lateinit var adapterManager: IAdapterManager
         lateinit var backgroundManager: BackgroundManager
         lateinit var languageManager: ILanguageManager
         lateinit var systemInfoManager: ISystemInfoManager
@@ -34,6 +32,14 @@ class App : Application() {
         lateinit var appConfigProvider: IAppConfigProvider
         lateinit var walletManager: IWalletManager
         lateinit var coinManager: CoinManager
+
+        lateinit var rateSyncer: RateSyncer
+        lateinit var rateManager: RateManager
+        lateinit var periodicTimer: PeriodicTimer
+        lateinit var networkAvailabilityManager: NetworkAvailabilityManager
+        lateinit var stubStorage: StubStorage
+        lateinit var transactionRateSyncer: ITransactionRateSyncer
+        lateinit var transactionManager: TransactionManager
 
         val testMode = true
 
@@ -71,16 +77,24 @@ class App : Application() {
         wordsManager = WordsManager(localStorage, secureStorage)
         randomManager = RandomProvider()
         networkManager = NetworkManager()
-        adapterManager = AdapterManager(wordsManager)
         systemInfoManager = SystemInfoManager()
         pinManager = PinManager(secureStorage)
         lockManager = LockManager(secureStorage, wordsManager)
         appConfigProvider = AppConfigProvider()
         languageManager = LanguageManager(localStorage, appConfigProvider, fallbackLanguage)
         currencyManager = CurrencyManager(localStorage, appConfigProvider)
-        exchangeRateManager = ExchangeRateManager(currencyManager)
         walletManager = WalletManager(AdapterFactory())
         coinManager = CoinManager(wordsManager, walletManager, appConfigProvider)
+
+        networkAvailabilityManager = NetworkAvailabilityManager()
+        periodicTimer = PeriodicTimer(delay = 3 * 60 * 1000)
+        rateSyncer = RateSyncer(networkManager, periodicTimer)
+        stubStorage = StubStorage()
+        rateManager = RateManager(stubStorage, rateSyncer, walletManager, currencyManager, networkAvailabilityManager, periodicTimer)
+
+        transactionRateSyncer = TransactionRateSyncer(stubStorage, networkManager)
+        transactionManager = TransactionManager(stubStorage, transactionRateSyncer, walletManager, currencyManager, wordsManager)
+
     }
 
 }

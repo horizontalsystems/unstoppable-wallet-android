@@ -1,13 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
 
+import com.nhaarman.mockito_kotlin.*
 import io.horizontalsystems.bankwallet.core.BitcoinAdapter
 import io.horizontalsystems.bankwallet.core.IClipboardManager
-import io.horizontalsystems.bankwallet.core.IExchangeRateManager
+import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.coins.bitcoin.Bitcoin
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
-import com.nhaarman.mockito_kotlin.*
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
 import org.junit.Before
@@ -19,7 +19,7 @@ class FullTransactionInfoInteractorTest {
 
     private val delegate = mock(FullTransactionInfoModule.IInteractorDelegate::class.java)
     private val clipboardManager = mock(IClipboardManager::class.java)
-    private val exchangeRateManager = mock(IExchangeRateManager::class.java)
+    private val networkManager = mock(INetworkManager::class.java)
     private val bitcoinAdapter = mock(BitcoinAdapter::class.java)
     private var coin = Bitcoin()
     private val transactionId = "[transaction_id]"
@@ -39,7 +39,7 @@ class FullTransactionInfoInteractorTest {
 
     private val currencyUsd = Currency(code = "USD", symbol = "\u0024")
 
-    private val interactor = FullTransactionInfoInteractor(bitcoinAdapter, exchangeRateManager, transactionId, clipboardManager, currencyUsd)
+    private val interactor = FullTransactionInfoInteractor(bitcoinAdapter, networkManager, transactionId, clipboardManager, currencyUsd)
 
 
     @Before
@@ -49,7 +49,7 @@ class FullTransactionInfoInteractorTest {
         interactor.delegate = delegate
 
         val rateResponse = Flowable.just(6000.0)
-        whenever(exchangeRateManager.getRate(any(), any(), any())).thenReturn(rateResponse)
+        whenever(networkManager.getRate(any(), any(), any())).thenReturn(rateResponse)
 
         whenever(bitcoinAdapter.transactionRecords).thenReturn(listOf(transaction))
         whenever(bitcoinAdapter.transactionRecordsSubject).thenReturn(PublishSubject.create())

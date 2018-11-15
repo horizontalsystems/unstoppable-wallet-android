@@ -44,9 +44,8 @@ object SendModule {
     }
 
     fun init(view: SendViewModel, router: IRouter, adapter: IAdapter) {
-        val exchangeRateManager = App.exchangeRateManager
         val baseCurrency = App.currencyManager.baseCurrency
-        val interactor = SendInteractor(TextHelper, adapter, exchangeRateManager)
+        val interactor = SendInteractor(TextHelper, adapter)
         val presenter = SendPresenter(interactor, router, baseCurrency)
 
         view.delegate = presenter
@@ -54,8 +53,8 @@ object SendModule {
         interactor.delegate = presenter
     }
 
-    fun start(activity: FragmentActivity, adapter: IAdapter) {
-        SendFragment.show(activity, adapter)
+    fun start(activity: FragmentActivity, coin: String) {
+        SendFragment.show(activity, coin)
     }
 
 }

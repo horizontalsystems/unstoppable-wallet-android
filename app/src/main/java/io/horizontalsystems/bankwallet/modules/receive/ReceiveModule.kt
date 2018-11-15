@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.receive
 
 import android.support.v4.app.FragmentActivity
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.receive.viewitems.AddressItem
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 
@@ -30,8 +29,7 @@ object ReceiveModule {
     }
 
     fun init(view: ReceiveViewModel, adapterId: String?) {
-        val adapterManager = App.adapterManager
-        val interactor = ReceiveInteractor(adapterManager, adapterId, TextHelper)
+        val interactor = ReceiveInteractor(adapterId, TextHelper)
         val presenter = ReceivePresenter(interactor)
 
         view.delegate = presenter

@@ -14,6 +14,7 @@ class WordsManager(private val localStorage: ILocalStorage, private val secureSt
     @Throws(UserNotAuthenticatedException::class)
     override fun safeLoad() {
         words = secureStorage.savedWords
+        loggedInSubject.onNext(true)
     }
 
     @Throws(UserNotAuthenticatedException::class)
@@ -47,9 +48,9 @@ class WordsManager(private val localStorage: ILocalStorage, private val secureSt
     override var isLoggedIn: Boolean = false
         get() = !secureStorage.wordsAreEmpty()
 
-    override var backedUpSubject: PublishSubject<Boolean> = PublishSubject.create()
-
     override var loggedInSubject: PublishSubject<Boolean> = PublishSubject.create()
+
+    override var backedUpSubject: PublishSubject<Boolean> = PublishSubject.create()
 
     override fun validate(words: List<String>) {
         Mnemonic().validate(words)
