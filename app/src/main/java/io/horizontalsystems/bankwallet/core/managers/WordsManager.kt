@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.core.IWordsManager
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.reactivex.subjects.PublishSubject
 
-class WordsManager(private val localStorage: ILocalStorage, private val secureStorage: ISecuredStorage): IWordsManager {
+class WordsManager(private val localStorage: ILocalStorage, private val secureStorage: ISecuredStorage) : IWordsManager {
 
     override var words: List<String>? = null
 
@@ -22,6 +22,8 @@ class WordsManager(private val localStorage: ILocalStorage, private val secureSt
         words?.let {
             secureStorage.saveWords(it)
         }
+
+        loggedInSubject.onNext(true)
     }
 
     @Throws(Mnemonic.MnemonicException::class, UserNotAuthenticatedException::class)
@@ -29,6 +31,8 @@ class WordsManager(private val localStorage: ILocalStorage, private val secureSt
         Mnemonic().validate(words)
         secureStorage.saveWords(words)
         this.words = words
+
+        loggedInSubject.onNext(true)
     }
 
     override var isBackedUp: Boolean
@@ -45,13 +49,17 @@ class WordsManager(private val localStorage: ILocalStorage, private val secureSt
 
     override var backedUpSubject: PublishSubject<Boolean> = PublishSubject.create()
 
+    override var loggedInSubject: PublishSubject<Boolean> = PublishSubject.create()
+
     override fun validate(words: List<String>) {
         Mnemonic().validate(words)
     }
 
-    override fun removeWords() {
+    override fun logout() {
         words = null
         secureStorage.saveWords(listOf())
+
+        loggedInSubject.onNext(false)
     }
 
 }

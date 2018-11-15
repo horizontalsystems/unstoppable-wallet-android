@@ -32,7 +32,8 @@ class App : Application() {
         lateinit var pinManager: IPinManager
         lateinit var lockManager: ILockManager
         lateinit var appConfigProvider: IAppConfigProvider
-        lateinit var walletManager : IWalletManager
+        lateinit var walletManager: IWalletManager
+        lateinit var coinManager: CoinManager
 
         val testMode = true
 
@@ -79,6 +80,7 @@ class App : Application() {
         currencyManager = CurrencyManager(localStorage, appConfigProvider)
         exchangeRateManager = ExchangeRateManager(currencyManager)
         walletManager = WalletManager(AdapterFactory())
+        coinManager = CoinManager(wordsManager, walletManager, appConfigProvider)
     }
 
 }
