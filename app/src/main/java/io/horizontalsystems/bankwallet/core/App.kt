@@ -38,8 +38,9 @@ class App : Application() {
         lateinit var rateManager: RateManager
         lateinit var periodicTimer: PeriodicTimer
         lateinit var networkAvailabilityManager: NetworkAvailabilityManager
-        lateinit var rateStorage: IRateStorage
-
+        lateinit var stubStorage: StubStorage
+        lateinit var transactionRateSyncer: ITransactionRateSyncer
+        lateinit var transactionManager: TransactionManager
 
         val testMode = true
 
@@ -90,8 +91,11 @@ class App : Application() {
         networkAvailabilityManager = NetworkAvailabilityManager()
         periodicTimer = PeriodicTimer(delay = 3 * 60 * 1000)
         rateSyncer = RateSyncer(networkManager, periodicTimer)
-        rateStorage = RateDataSource()
-        rateManager = RateManager(rateStorage, rateSyncer, walletManager, currencyManager, networkAvailabilityManager, periodicTimer)
+        stubStorage = StubStorage()
+        rateManager = RateManager(stubStorage, rateSyncer, walletManager, currencyManager, networkAvailabilityManager, periodicTimer)
+
+        transactionRateSyncer = TransactionRateSyncer(stubStorage, networkManager)
+        transactionManager = TransactionManager(stubStorage, transactionRateSyncer, walletManager, currencyManager, wordsManager)
 
     }
 

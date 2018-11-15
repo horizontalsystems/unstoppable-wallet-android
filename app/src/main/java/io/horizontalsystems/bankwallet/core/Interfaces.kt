@@ -174,3 +174,18 @@ interface IRateStorage {
     fun save(value: Double, coin: Coin, currencyCode: String)
     fun clear()
 }
+
+interface ITransactionRateSyncer {
+    fun sync(currencyCode: String)
+    fun cancelCurrentSync()
+}
+
+interface ITransactionRecordStorage {
+    fun record(hash: String): TransactionRecord?
+    val nonFilledRecords: List<TransactionRecord>
+    fun set(rate: Double, transactionHash: String)
+    fun clearRates()
+
+    fun update(records: List<TransactionRecord>)
+    fun clearRecords()
+}
