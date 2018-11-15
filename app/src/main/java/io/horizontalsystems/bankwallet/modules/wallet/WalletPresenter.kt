@@ -22,6 +22,7 @@ class WalletPresenter(
 
     override fun viewDidLoad() {
         view?.setTitle(R.string.wallet_title)
+        interactor.loadWallets()
         updateView()
     }
 

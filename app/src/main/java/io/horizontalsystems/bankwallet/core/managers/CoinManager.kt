@@ -12,8 +12,6 @@ class CoinManager(private val wordsManager: IWordsManager,
     private var disposables: CompositeDisposable = CompositeDisposable()
 
     init {
-        syncWallets()
-
         wordsManager.loggedInSubject.subscribe {
             syncWallets()
         }.let {

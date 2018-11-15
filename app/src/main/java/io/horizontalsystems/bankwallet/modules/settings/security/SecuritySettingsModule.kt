@@ -49,7 +49,7 @@ object SecuritySettingsModule {
     }
 
     fun init(view: SecuritySettingsViewModel, router: ISecuritySettingsRouter) {
-        val interactor = SecuritySettingsInteractor(App.adapterManager, App.wordsManager, App.localStorage, App.systemInfoManager)
+        val interactor = SecuritySettingsInteractor(App.walletManager, App.wordsManager, App.localStorage, App.systemInfoManager)
         val presenter = SecuritySettingsPresenter(router, interactor)
 
         view.delegate = presenter

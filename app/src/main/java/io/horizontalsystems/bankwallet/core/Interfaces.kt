@@ -71,14 +71,6 @@ interface IKeyStoreSafeExecute {
     fun safeExecute(action: Runnable, onSuccess: Runnable? = null, onFailure: Runnable? = null)
 }
 
-interface IAdapterManager {
-    var adapters: MutableList<IAdapter>
-    var subject: PublishSubject<Boolean>
-    fun start()
-    fun refresh()
-    fun clear()
-}
-
 interface IWordsManager {
     fun safeLoad()
     var words: List<String>?

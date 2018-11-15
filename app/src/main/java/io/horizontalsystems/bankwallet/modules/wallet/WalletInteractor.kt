@@ -16,7 +16,15 @@ class WalletInteractor(
     var delegate: WalletModule.IInteractorDelegate? = null
     private var disposables: CompositeDisposable = CompositeDisposable()
 
-    init {
+    override fun loadWallets() {
+        val walletManagerDisposable = walletManager.walletsSubject.subscribe {
+            disposables.clear()
+            initialFetchAndSubscribe()
+        }
+        initialFetchAndSubscribe()
+    }
+
+    private fun initialFetchAndSubscribe() {
         walletManager.wallets.forEach { wallet ->
             disposables.add(wallet.adapter.balanceSubject.subscribe {
                 delegate?.didUpdate()

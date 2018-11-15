@@ -1,9 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.receive
 
-import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IClipboardManager
 
-class ReceiveInteractor(private var adapterManager: IAdapterManager, private var adapterId: String?, private var clipboardManager: IClipboardManager) : ReceiveModule.IInteractor {
+class ReceiveInteractor(private var adapterId: String?, private var clipboardManager: IClipboardManager) : ReceiveModule.IInteractor {
 
     var delegate: ReceiveModule.IInteractorDelegate? = null
 

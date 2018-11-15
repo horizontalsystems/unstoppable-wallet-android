@@ -24,6 +24,7 @@ object WalletModule {
     }
 
     interface IInteractor {
+        fun loadWallets()
         fun refresh()
         fun rate(coin: String): Rate?
         val baseCurrency: Currency

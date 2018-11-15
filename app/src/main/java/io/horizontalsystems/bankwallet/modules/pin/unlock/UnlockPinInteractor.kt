@@ -6,7 +6,6 @@ class UnlockPinInteractor(
         private val keystoreSafeExecute: IKeyStoreSafeExecute,
         private val localStorage: ILocalStorage,
         private val wordsManager: IWordsManager,
-        private val adapterManager: IAdapterManager,
         private val pinManager: IPinManager,
         private val lockManager: ILockManager) : UnlockPinModule.IUnlockPinInteractor {
 
@@ -19,9 +18,8 @@ class UnlockPinInteractor(
                         if (pinManager.pin.isNullOrEmpty() && pinManager.isPinSet) {
                             pinManager.safeLoad()
                         }
-                        if (adapterManager.adapters.isEmpty()) {
+                        if (wordsManager.words == null || wordsManager.words?.isEmpty() == true) {
                             wordsManager.safeLoad()
-                            adapterManager.start()
                         }
                     }
             )

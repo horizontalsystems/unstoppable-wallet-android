@@ -24,7 +24,6 @@ class App : Application() {
         lateinit var randomManager: IRandomProvider
         lateinit var networkManager: INetworkManager
         lateinit var currencyManager: ICurrencyManager
-        lateinit var adapterManager: IAdapterManager
         lateinit var backgroundManager: BackgroundManager
         lateinit var languageManager: ILanguageManager
         lateinit var systemInfoManager: ISystemInfoManager
@@ -78,7 +77,6 @@ class App : Application() {
         wordsManager = WordsManager(localStorage, secureStorage)
         randomManager = RandomProvider()
         networkManager = NetworkManager()
-        adapterManager = AdapterManager(wordsManager)
         systemInfoManager = SystemInfoManager()
         pinManager = PinManager(secureStorage)
         lockManager = LockManager(secureStorage, wordsManager)

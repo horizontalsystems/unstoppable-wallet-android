@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.pin
 
-import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
 import io.horizontalsystems.bankwallet.core.IPinManager
 import io.horizontalsystems.bankwallet.core.IWordsManager
@@ -8,7 +7,6 @@ import io.horizontalsystems.bankwallet.core.IWordsManager
 class PinInteractor(
         private val pinManager: IPinManager,
         private val wordsManager: IWordsManager,
-        private val adapterManager: IAdapterManager,
         private val keystoreSafeExecute: IKeyStoreSafeExecute) : PinModule.IPinInteractor {
 
     var delegate: PinModule.IPinInteractorDelegate? = null
@@ -40,7 +38,6 @@ class PinInteractor(
         keystoreSafeExecute.safeExecute(
                 action = Runnable {
                     wordsManager.safeLoad()
-                    adapterManager.start()
                 },
                 onSuccess = Runnable { delegate?.didStartedAdapters() }
         )
