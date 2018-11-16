@@ -67,14 +67,17 @@ class WalletPresenter(
                     rateExpired = rateExpired
             ))
 
-            if (AdapterState.Syncing() == wallet.adapter.state) {
+            if (wallet.adapter.state is AdapterState.Syncing) {
                 allSynced = false
             }
 
-            allSynced = allSynced && rate != null
+            if (balance > 0) {
+                allSynced = allSynced && rate != null && !rateExpired
+            }
         }
 
-        view?.show(totalBalance = if (allSynced) CurrencyValue(currency = currency, value = totalBalance) else null)
+        view?.updateBalanceColor(if (allSynced) R.color.yellow_crypto else R.color.yellow_crypto_40)
+        view?.show(totalBalance = CurrencyValue(currency = currency, value = totalBalance))
         view?.show(wallets = viewItems)
     }
 

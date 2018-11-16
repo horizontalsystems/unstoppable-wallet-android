@@ -10,11 +10,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.viewHelpers.AnimationHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
+import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import io.horizontalsystems.bankwallet.viewHelpers.ValueFormatter
 import io.reactivex.disposables.Disposable
 import kotlinx.android.extensions.LayoutContainer
@@ -37,7 +39,7 @@ class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener 
         viewModel = ViewModelProviders.of(this).get(WalletViewModel::class.java)
         viewModel.init()
 
-        viewModel.titleLiveDate.observe(this, Observer {title ->
+        viewModel.titleLiveDate.observe(this, Observer { title ->
             title?.let { toolbar.setTitle(it) }
         })
 
@@ -64,6 +66,14 @@ class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener 
             iAdapter?.let { coin ->
                 activity?.let {
                     SendModule.start(it, coin)
+                }
+            }
+        })
+
+        viewModel.balanceColorLiveDate.observe(this, Observer { color ->
+            color?.let { colorRes ->
+                context?.let { it ->
+                    ballanceText.setTextColor(ContextCompat.getColor(it, colorRes))
                 }
             }
         })
@@ -129,7 +139,6 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
                                 if (oldExpandedViewPosition != -1) {
                                     notifyItemChanged(oldExpandedViewPosition, false)
                                 }
-
                             },
                             expanded = expandedViewPosition == position)
                 } else {
@@ -148,24 +157,34 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
     private var disposable: Disposable? = null
 
     fun bind(walletViewItem: WalletViewItem, onSendClick: (() -> (Unit))? = null, onReceiveClick: (() -> (Unit))? = null, onHolderClicked: (() -> Unit)? = null, expanded: Boolean) {
-        val iconDrawable = ContextCompat.getDrawable(containerView.context, LayoutHelper.getCoinDrawableResource(walletViewItem.coinValue.coin))
+        val iconDrawable = ContextCompat.getDrawable(containerView.context, LayoutHelper.getCoinDrawableResource(TextHelper.getCleanCoinCode(walletViewItem.coinValue.coin)))
         coinIcon.setImageDrawable(iconDrawable)
         textName.text = "${walletViewItem.coinValue.coin}"
         textAmountFiat.text = walletViewItem.currencyValue?.let { ValueFormatter.format(it) }
         coinAmount.text = "${ValueFormatter.format(walletViewItem.coinValue)}"
 
-        val zeroBalance = walletViewItem.coinValue.value <= 0.0
-        coinAmount.visibility = if (zeroBalance) View.GONE else View.VISIBLE
-        buttonPay.isEnabled = !zeroBalance
-        textAmountFiat.isEnabled = !zeroBalance
-        textExchangeRate.text = walletViewItem.exchangeValue?.let {
-            containerView.context.getString(R.string.wallet_exchange_rate, ValueFormatter.format(it), walletViewItem.coinValue.coin)
-        } ?: kotlin.run { "..." }
+        buttonPay.isEnabled = (walletViewItem.state is AdapterState.Synced)
+        textExchangeRate.text = walletViewItem.exchangeValue?.let { exchangeValue ->
+            containerView.context.getString(R.string.wallet_exchange_rate, ValueFormatter.format(exchangeValue), walletViewItem.coinValue.coin)
+        } ?: kotlin.run { "" }
 
-        //todo convert indeterminate spinner to determinant one
-//        disposable = walletViewItem.progress?.subscribe {
-//            syncProgress.visibility = if (it == 1.0) View.GONE else View.VISIBLE
-//        }
+        textExchangeRate.setTextColor(ContextCompat.getColor(containerView.context, if (walletViewItem.rateExpired) R.color.grey_40 else R.color.grey))
+        textAmountFiat.setTextColor(ContextCompat.getColor(containerView.context, if (walletViewItem.rateExpired) R.color.yellow_crypto_40 else R.color.yellow_crypto))
+
+        val isSyncing = walletViewItem.state is AdapterState.Syncing
+        val zeroBalance = walletViewItem.coinValue.value <= 0.0
+
+        syncProgress.visibility = if(isSyncing) View.VISIBLE else View.GONE
+        coinSyncProgress.visibility = if(isSyncing) View.VISIBLE else View.GONE
+        textAmountFiat.visibility = if(isSyncing || zeroBalance) View.GONE else View.VISIBLE
+        coinAmount.visibility = if (isSyncing || zeroBalance) View.GONE else View.VISIBLE
+
+        if (isSyncing) {
+            disposable = walletViewItem.state.progressSubject?.subscribe {
+                val progress = (it * 100).toInt()
+                coinSyncProgress.text = "$progress%"
+            }
+        }
 
         buttonPay.setOnClickListener {
             onSendClick?.invoke()

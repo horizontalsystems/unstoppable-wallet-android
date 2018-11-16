@@ -14,6 +14,7 @@ object WalletModule {
         fun show(totalBalance: CurrencyValue?)
         fun show(wallets: List<WalletViewItem>)
         fun show(syncStatus: String)
+        fun updateBalanceColor(i: Int)
     }
 
     interface IViewDelegate {

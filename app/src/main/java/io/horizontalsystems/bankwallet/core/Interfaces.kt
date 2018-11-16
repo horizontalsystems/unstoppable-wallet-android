@@ -89,9 +89,10 @@ interface ILanguageManager {
     val availableLanguages: List<Locale>
 }
 
-open class AdapterState {
-    class Synced : AdapterState()
-    class Syncing(progressSubject: BehaviorSubject<Double>? = null) : AdapterState()
+sealed class AdapterState {
+    abstract var progressSubject: BehaviorSubject<Double>?
+    class Synced(override var progressSubject: BehaviorSubject<Double>? = null) : AdapterState()
+    class Syncing(override var progressSubject: BehaviorSubject<Double>? = null) : AdapterState()
 }
 
 interface IAdapter {
