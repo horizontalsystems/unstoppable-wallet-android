@@ -35,8 +35,9 @@ class StubStorage: ITransactionRecordStorage, IRateStorage {
 
     override fun rate(coin: String, currencyCode: String): Rate? {
         return when(coin) {
-            "ETHt" -> Rate("ETHt", "USD", 200.0, 1542347346000)
-            "BTCt" -> Rate("BTCt", "USD", 10_000.0, 1542080725000)
+            "ETH" -> Rate("ETH", "USD", 28.87, 1542347346000)
+//            "ETHt" -> Rate("ETHt", "USD", 200.0, 1542347346000)
+            "BTCt" -> Rate("BTCt", "USD", 5_500.85, 1542080725000)
             "BTC" -> Rate("BTC", "USD", 6300.0, 1542359212000)
             else -> null
         }
