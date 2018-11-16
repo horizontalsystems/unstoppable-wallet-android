@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.entities
 
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
-
 open class TransactionRecord {
 
     var transactionHash = ""
@@ -14,14 +12,6 @@ open class TransactionRecord {
     var from: List<TransactionAddress> = listOf()
     var to: List<TransactionAddress> = listOf()
 
-    @Deprecated("use coin instead")
-    var coinCode = ""
-
-    @Deprecated("remove???")
-    var fee: Double = 0.0
-
-    @Deprecated("remove")
-    var status: TransactionStatus = TransactionStatus.Pending
 }
 
 class TransactionAddress {
