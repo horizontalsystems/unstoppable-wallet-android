@@ -3,9 +3,11 @@ package io.horizontalsystems.bankwallet.modules.transactions
 import android.os.Handler
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import java.util.concurrent.TimeUnit
 
 class TransactionsInteractor(
@@ -15,21 +17,24 @@ class TransactionsInteractor(
 ) : TransactionsModule.IInteractor, TransactionsModule.ITransactionRecordDataSourceDelegate {
 
     private val disposables = CompositeDisposable()
+    private var lastBlockHeightDisposable: Disposable? = null
 
     var delegate: TransactionsModule.IInteractorDelegate? = null
 
     init {
-        disposables.add(Observable.merge(walletManager.wallets.map { it.adapter.lastBlockHeightSubject })
-                .throttleLast(3, TimeUnit.SECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    delegate?.didUpdateDataSource()
-                })
+        resubscribeToLastBlockHeightSubjects(walletManager.wallets)
+
+        disposables.add(walletManager.walletsSubject.subscribe {
+            resubscribeToLastBlockHeightSubjects(it)
+        })
     }
 
     override fun retrieveFilters() {
-        val coins = walletManager.wallets.map { it.coin }
-        delegate?.didRetrieveFilters(coins)
+        delegate?.didRetrieveFilters(walletManager.wallets.map { it.coin })
+
+        disposables.add(walletManager.walletsSubject.subscribe {
+            delegate?.didRetrieveFilters(it.map { it.coin })
+        })
     }
 
     override fun refresh() {
@@ -55,5 +60,19 @@ class TransactionsInteractor(
 
     override fun onUpdateResults() {
         delegate?.didUpdateDataSource()
+    }
+
+    private fun resubscribeToLastBlockHeightSubjects(wallets: List<Wallet>) {
+        lastBlockHeightDisposable?.dispose()
+        lastBlockHeightDisposable = Observable.merge(wallets.map { it.adapter.lastBlockHeightSubject })
+                .throttleLast(3, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    delegate?.didUpdateDataSource()
+                }
+
+        lastBlockHeightDisposable?.let {
+            disposables.add(it)
+        }
     }
 }
