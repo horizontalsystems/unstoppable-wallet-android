@@ -90,9 +90,8 @@ interface ILanguageManager {
 }
 
 sealed class AdapterState {
-    abstract var progressSubject: BehaviorSubject<Double>?
-    class Synced(override var progressSubject: BehaviorSubject<Double>? = null) : AdapterState()
-    class Syncing(override var progressSubject: BehaviorSubject<Double>? = null) : AdapterState()
+    object Synced : AdapterState()
+    class Syncing(val progressSubject: BehaviorSubject<Double>) : AdapterState()
 }
 
 interface IAdapter {

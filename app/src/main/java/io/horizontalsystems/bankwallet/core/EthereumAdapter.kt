@@ -19,7 +19,7 @@ class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, Eth
 
     val progressSubject: BehaviorSubject<Double> = BehaviorSubject.createDefault(1.0)
 
-    override val state: AdapterState = AdapterState.Synced()
+    override val state: AdapterState = AdapterState.Synced
     override val stateSubject: PublishSubject<AdapterState> = PublishSubject.create()
 
     override val confirmationsThreshold: Int = 12
