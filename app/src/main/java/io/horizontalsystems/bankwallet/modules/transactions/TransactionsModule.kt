@@ -99,7 +99,7 @@ object TransactionsModule {
 //                listOf("BTCt", "ETHt")
 //        )
 
-        val dataSource = TransactionRecordDataSource()
+        val dataSource = TransactionRecordDataSource(App.appDatabase)
         val interactor = TransactionsInteractor(App.walletManager, dataSource)
         val presenter = TransactionsPresenter(interactor, router, TransactionViewItemFactory(App.walletManager, App.currencyManager))
 

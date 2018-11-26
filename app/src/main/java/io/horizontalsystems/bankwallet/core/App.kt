@@ -1,12 +1,14 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.app.Application
+import android.arch.persistence.room.Room
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import com.squareup.leakcanary.LeakCanary
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
+import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bitcoinkit.BitcoinKit
 import io.horizontalsystems.ethereumkit.EthereumKit
 import java.util.*
@@ -40,6 +42,7 @@ class App : Application() {
         lateinit var stubStorage: StubStorage
         lateinit var transactionRateSyncer: ITransactionRateSyncer
         lateinit var transactionManager: TransactionManager
+        lateinit var appDatabase: AppDatabase
 
         val testMode = true
 
@@ -94,6 +97,8 @@ class App : Application() {
 
         transactionRateSyncer = TransactionRateSyncer(stubStorage, networkManager)
         transactionManager = TransactionManager(stubStorage, transactionRateSyncer, walletManager, currencyManager, wordsManager)
+
+        appDatabase = Room.databaseBuilder(this, AppDatabase::class.java, "dbBankWallet").build()
 
     }
 
