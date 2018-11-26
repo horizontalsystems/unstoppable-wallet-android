@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
+import io.horizontalsystems.bankwallet.core.storage.TransactionRepository
 import io.horizontalsystems.bitcoinkit.BitcoinKit
 import io.horizontalsystems.ethereumkit.EthereumKit
 import java.util.*
@@ -43,6 +44,7 @@ class App : Application() {
         lateinit var transactionRateSyncer: ITransactionRateSyncer
         lateinit var transactionManager: TransactionManager
         lateinit var appDatabase: AppDatabase
+        lateinit var transactionStorage: ITransactionRecordStorage
 
         val testMode = true
 
@@ -92,13 +94,15 @@ class App : Application() {
         networkAvailabilityManager = NetworkAvailabilityManager()
         periodicTimer = PeriodicTimer(delay = 3 * 60 * 1000)
         rateSyncer = RateSyncer(networkManager, periodicTimer)
+
+        appDatabase = Room.databaseBuilder(this, AppDatabase::class.java, "dbBankWallet").build()
+        transactionStorage = TransactionRepository(appDatabase)
+
         stubStorage = StubStorage()
         rateManager = RateManager(stubStorage, rateSyncer, walletManager, currencyManager, networkAvailabilityManager, periodicTimer)
 
-        transactionRateSyncer = TransactionRateSyncer(stubStorage, networkManager)
-        transactionManager = TransactionManager(stubStorage, transactionRateSyncer, walletManager, currencyManager, wordsManager)
-
-        appDatabase = Room.databaseBuilder(this, AppDatabase::class.java, "dbBankWallet").build()
+        transactionRateSyncer = TransactionRateSyncer(transactionStorage, networkManager)
+        transactionManager = TransactionManager(transactionStorage, transactionRateSyncer, walletManager, currencyManager, wordsManager)
 
     }
 
