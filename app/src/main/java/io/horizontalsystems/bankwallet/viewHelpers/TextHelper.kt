@@ -5,13 +5,13 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.IClipboardManager
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IClipboardManager
 import java.util.*
 
 
@@ -60,6 +60,12 @@ object TextHelper : IClipboardManager {
             e.printStackTrace()
             null
         }
+    }
+
+    fun getCleanCoinCode(coin: String): String {
+        var cleanedCoin = coin.removeSuffix("t")
+        cleanedCoin = cleanedCoin.removeSuffix("r")
+        return cleanedCoin
     }
 
     //todo remove it when Address From and To in TransactionRecord will start to work

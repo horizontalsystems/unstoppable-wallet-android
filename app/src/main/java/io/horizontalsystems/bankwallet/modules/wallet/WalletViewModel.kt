@@ -14,6 +14,7 @@ class WalletViewModel : ViewModel(), WalletModule.IView, WalletModule.IRouter {
     val totalBalanceLiveData = MutableLiveData<CurrencyValue>()
     val openSendDialog = SingleLiveEvent<String>()
     val openReceiveDialog = SingleLiveEvent<String>()
+    val balanceColorLiveDate = MutableLiveData<Int>()
 
     fun init() {
         WalletModule.init(this, this)
@@ -55,5 +56,9 @@ class WalletViewModel : ViewModel(), WalletModule.IView, WalletModule.IRouter {
 
     override fun show(syncStatus: String) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun updateBalanceColor(color: Int) {
+        balanceColorLiveDate.value = color
     }
 }

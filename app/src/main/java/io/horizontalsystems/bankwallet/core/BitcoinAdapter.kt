@@ -86,7 +86,7 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType) :
             }
             is AdapterState.Syncing -> {
                 if (progress == 1.0) {
-                    state = AdapterState.Synced()
+                    state = AdapterState.Synced
                 }
             }
         }

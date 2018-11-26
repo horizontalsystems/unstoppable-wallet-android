@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.managers
 import com.google.gson.GsonBuilder
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
+import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import io.reactivex.Flowable
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -16,7 +17,7 @@ import java.util.concurrent.TimeUnit
 class NetworkManager : INetworkManager {
 
     override fun getRate(coin: String, currency: String, timestamp: Long): Flowable<Double> {
-        val cleanedCoin = getCleanCoinCode(coin)
+        val cleanedCoin = TextHelper.getCleanCoinCode(coin)
 
         return ServiceExchangeApi.service
                 .getRate(cleanedCoin, currency, DateHelper.formatDateByUsLocale(timestamp, "yyyy/MM/dd/HH/mm"))
@@ -32,18 +33,12 @@ class NetworkManager : INetworkManager {
     }
 
     override fun getLatestRate(coin: String, currency: String): Flowable<Double> {
-        val cleanedCoin = getCleanCoinCode(coin)
+        val cleanedCoin = TextHelper.getCleanCoinCode(coin)
         return ServiceExchangeApi.service
                 .getLatestRate(cleanedCoin, currency)
                 .onErrorReturn {
                     0.0
                 }
-    }
-
-    private fun getCleanCoinCode(coin: String): String {
-        var cleanedCoin = coin.removeSuffix("t")
-        cleanedCoin = cleanedCoin.removeSuffix("r")
-        return cleanedCoin
     }
 
 }

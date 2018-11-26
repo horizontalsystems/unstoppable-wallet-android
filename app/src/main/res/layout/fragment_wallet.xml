@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     >
 
     <android.support.design.widget.AppBarLayout
@@ -37,8 +38,9 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:textColor="@color/yellow_crypto"
+            android:textColor="@color/yellow_crypto_40"
             android:textSize="22sp"
+            tools:text="$ 200,234.90"
             />
 
     </android.support.design.widget.AppBarLayout>

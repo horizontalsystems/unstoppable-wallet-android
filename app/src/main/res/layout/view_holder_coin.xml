@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/noto_sans"
-            android:textColor="@color/yellow_text_on_dark_color_selector"
+            android:textColor="@color/yellow_crypto"
             android:textSize="14sp"
             android:layout_marginEnd="4dp"
             app:layout_constraintEnd_toStartOf="@+id/syncProgress"
@@ -80,7 +80,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="23dp"
         android:layout_marginBottom="12dp"
         android:layout_marginEnd="4dp"
         android:layout_marginStart="4dp"
@@ -107,6 +107,16 @@
             android:textColor="?BallanceCoinAmountColor"
             android:textSize="17sp"
             tools:text="0.000078 BTC"
+            />
+        <TextView
+            android:id="@+id/coinSyncProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/noto_sans"
+            android:textColor="@color/grey"
+            android:textSize="14sp"
+            android:visibility="gone"
+            tools:text="45%"
             />
     </LinearLayout>
 

@@ -43,14 +43,16 @@ object ValueFormatter {
     }
 
     fun format(currencyValue: CurrencyValue, approximate: Boolean = false): String? {
-        val formatter = currencyFormatter
-        formatter.maximumFractionDigits = if (approximate) 0 else 2
-
         var value = currencyValue.value
 
         if (approximate) {
             value = Math.abs(value)
         }
+
+        val bigNumber = value >= 100.0
+
+        val formatter = currencyFormatter
+        formatter.maximumFractionDigits = if (bigNumber || approximate) 0 else 2
 
         var result: String = formatter.format(value) ?: kotlin.run {
             return null
