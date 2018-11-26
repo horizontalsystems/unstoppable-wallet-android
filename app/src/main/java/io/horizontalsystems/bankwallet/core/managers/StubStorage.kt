@@ -6,16 +6,17 @@ import io.horizontalsystems.bankwallet.core.ITransactionRecordStorage
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.reactivex.Single
 import java.util.*
 
-class StubStorage: ITransactionRecordStorage, IRateStorage {
+class StubStorage : ITransactionRecordStorage, IRateStorage {
 
-    override fun record(hash: String): TransactionRecord? {
+    override fun record(hash: String): Single<TransactionRecord> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override val nonFilledRecords: List<TransactionRecord>
-        get() = transactionRecords
+    override val nonFilledRecords: Single<List<TransactionRecord>>
+        get() = Single.just(transactionRecords)
 
     override fun set(rate: Double, transactionHash: String) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
