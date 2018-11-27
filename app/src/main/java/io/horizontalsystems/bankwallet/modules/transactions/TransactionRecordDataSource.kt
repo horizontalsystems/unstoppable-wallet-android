@@ -31,7 +31,7 @@ class TransactionRecordDataSource(private val appDatabase: AppDatabase) : Transa
     private fun subscribe(coin: Coin? = null) {
         disposable?.dispose()
 
-        disposable = results(coin)
+        disposable = getTransactionRecords(coin)
                 .subscribeOn(io.reactivex.schedulers.Schedulers.io())
                 .unsubscribeOn(io.reactivex.schedulers.Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -41,7 +41,7 @@ class TransactionRecordDataSource(private val appDatabase: AppDatabase) : Transa
                 }
     }
 
-    private fun results(coin: Coin? = null): Flowable<List<TransactionRecord>> =
+    private fun getTransactionRecords(coin: Coin? = null): Flowable<List<TransactionRecord>> =
             if (coin == null)
                 appDatabase.transactionDao().getAll()
             else
