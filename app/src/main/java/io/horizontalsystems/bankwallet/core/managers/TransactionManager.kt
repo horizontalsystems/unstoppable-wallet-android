@@ -36,7 +36,7 @@ class TransactionManager(
     }
 
     private fun resubscribeToAdapters() {
-        adapterDisposables.dispose()
+        adapterDisposables.clear()
 
         walletManager.wallets.forEach { wallet ->
             adapterDisposables.add(wallet.adapter.transactionRecordsSubject

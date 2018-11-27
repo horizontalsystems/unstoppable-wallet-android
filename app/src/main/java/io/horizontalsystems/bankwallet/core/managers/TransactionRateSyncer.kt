@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.ITransactionRateSyncer
 import io.horizontalsystems.bankwallet.core.ITransactionRecordStorage
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
@@ -14,21 +13,20 @@ class TransactionRateSyncer(
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     override fun sync(currencyCode: String) {
-        storage.nonFilledRecords.subscribe { records ->
-            records.forEach { record ->
-                if (record.timestamp > 0L) {
-                    disposables.add(networkManager.getRate(coin = record.coin, currency = currencyCode, timestamp = record.timestamp)
-                            .subscribeOn(Schedulers.io())
-                            .unsubscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe {
-                                storage.set(rate = it, transactionHash = record.transactionHash)
-                            })
+        storage.nonFilledRecords
+                .subscribeOn(Schedulers.io())
+                .subscribe { records ->
+                    records.forEach { record ->
+                        if (record.timestamp > 0L) {
+                            disposables.add(networkManager.getRate(coin = record.coin, currency = currencyCode, timestamp = record.timestamp)
+                                    .subscribe {
+                                        storage.set(rate = it, transactionHash = record.transactionHash)
+                                    })
+                        }
+                    }
+                }.let {
+                    disposables.add(it)
                 }
-            }
-        }.let {
-            disposables.add(it)
-        }
     }
 
     override fun cancelCurrentSync() {
