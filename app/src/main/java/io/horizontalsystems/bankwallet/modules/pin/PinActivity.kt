@@ -10,7 +10,6 @@ import android.os.Handler
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.UserNotAuthenticatedException
 import android.support.constraint.ConstraintLayout
-import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.PagerSnapHelper
@@ -192,7 +191,7 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
         }
     }
 
-    override fun onFingerprintAuthSucceed(withFingerprint: Boolean, crypto: FingerprintManagerCompat.CryptoObject?) {
+    override fun onFingerprintAuthSucceed() {
         viewModel.delegate.onBiometricUnlock()
     }
 

@@ -19,31 +19,42 @@ package io.horizontalsystems.bankwallet.core.security
 
 
 import android.app.DialogFragment
-import android.content.Context
-import android.content.SharedPreferences
+import android.content.DialogInterface
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.hardware.fingerprint.FingerprintManager
 import android.os.Bundle
-import android.preference.PreferenceManager
+import android.support.v4.content.ContextCompat
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
+import android.support.v4.widget.ImageViewCompat
 import android.view.*
-import android.view.inputmethod.InputMethodManager
+import android.view.animation.AnimationUtils
 import android.widget.Button
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.TextView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
+
 
 /**
  * A dialog which uses fingerprint APIs to authenticate the user, and falls back to password
  * authentication if fingerprint is not available.
  */
-class FingerprintAuthenticationDialogFragment : DialogFragment(), FingerprintUiHelper.Callback {
+class FingerprintAuthenticationDialogFragment : DialogFragment(), FingerprintCallback {
 
     private lateinit var cancelButton: Button
+    private lateinit var fingerprintWrapper: FrameLayout
+    private lateinit var iconBackgroundImg: ImageView
+    private lateinit var errorTextView: TextView
 
     private lateinit var callback: Callback
     private lateinit var cryptoObject: FingerprintManagerCompat.CryptoObject
-    private lateinit var fingerprintUiHelper: FingerprintUiHelper
-    private lateinit var inputMethodManager: InputMethodManager
-    private lateinit var sharedPreferences: SharedPreferences
+    private var authCallbackHandler: FingerprintAuthenticationHandler? = null
+
+     private val ERROR_TIMEOUT_MILLIS: Long = 1900
+     private val SUCCESS_DELAY_MILLIS: Long = 100
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,20 +79,23 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(), FingerprintUiH
         super.onViewCreated(view, savedInstanceState)
 
         cancelButton = view.findViewById(R.id.cancel_button)
+        fingerprintWrapper = view.findViewById(R.id.fingerprint_wrapper)
+        iconBackgroundImg = view.findViewById(R.id.fingerprint_background)
+        errorTextView = view.findViewById(R.id.fingerprint_status)
 
         cancelButton.setOnClickListener { dismiss() }
 
-        fingerprintUiHelper = FingerprintUiHelper(
-                view.findViewById(R.id.fingerprint_background),
-                view.findViewById(R.id.fingerprint_status),
-                view.findViewById(R.id.fingerprint_wrapper),
-                this
-        )
+        authCallbackHandler = FingerprintAuthenticationHandler(this, cryptoObject)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        authCallbackHandler?.stopListening()
     }
 
     override fun onResume() {
         super.onResume()
-        fingerprintUiHelper.startListening(cryptoObject)
+        authCallbackHandler?.startListening()
 
         dialog.setOnKeyListener { _, keyCode, _ ->
 
@@ -92,20 +106,37 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(), FingerprintUiH
             }
             // Otherwise, do nothing else
             else false
-
-
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        fingerprintUiHelper.stopListening()
+    override fun onDismiss(dialog: DialogInterface?) {
+        super.onDismiss(dialog)
+        authCallbackHandler?.releaseFingerprintCallback()
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        inputMethodManager = context.getSystemService(InputMethodManager::class.java)
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    override fun onAuthenticated() {
+        errorTextView.run {
+            removeCallbacks(resetErrorTextRunnable)
+            setTextColor(errorTextView.resources.getColor(R.color.green_crypto, null))
+            text = errorTextView.resources.getString(R.string.fingerprint_success)
+        }
+        iconBackgroundImg.run {
+            setImageTintColor(iconBackgroundImg, R.color.green_crypto)
+            postDelayed({ callback.onFingerprintAuthSucceed() }, SUCCESS_DELAY_MILLIS)
+        }
+    }
+
+    override fun onAuthenticationHelp(helpString: CharSequence?) { }
+
+    override fun onAuthenticationFailed() {
+        showError(getString(R.string.fingerprint_not_recognized))
+    }
+
+    override fun onAuthenticationError(errMsgId: Int, errString: CharSequence?) {
+        if (errMsgId == FingerprintManager.FINGERPRINT_ERROR_LOCKOUT) {
+            HudHelper.showErrorMessage(R.string.unlock_page_enter_your_pin)
+            dismiss()
+        }
     }
 
     fun setCallback(callback: Callback) {
@@ -116,13 +147,35 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(), FingerprintUiH
         this.cryptoObject = cryptoObject
     }
 
-    override fun onAuthenticated() {
-        // Callback from FingerprintUiHelper. Let the activity know that authentication succeeded.
-        callback.onFingerprintAuthSucceed(withFingerprint = true, crypto = cryptoObject)
-        dismiss()
+    private val resetErrorTextRunnable = Runnable {
+        setImageTintColor(iconBackgroundImg, R.color.dark)
+        errorTextView.run {
+            setTextColor(errorTextView.resources.getColor(R.color.dark, null))
+            text = errorTextView.resources.getString(R.string.fingerprint_hint)
+        }
+    }
+
+    private fun showError(error: CharSequence) {
+        dialog?.let {
+            errorTextView.run {
+                text = error
+                setTextColor(errorTextView.resources.getColor(R.color.red_warning, null))
+                removeCallbacks(resetErrorTextRunnable)
+                postDelayed(resetErrorTextRunnable, ERROR_TIMEOUT_MILLIS)
+            }
+
+            setImageTintColor(iconBackgroundImg, R.color.red_warning)
+            val shake = AnimationUtils.loadAnimation(it.context, R.anim.shake)
+            fingerprintWrapper.startAnimation(shake)
+        }
+    }
+
+    private fun setImageTintColor(image: ImageView, colorResource: Int) {
+        val color = ContextCompat.getColor(image.context, colorResource)
+        ImageViewCompat.setImageTintList(image, ColorStateList.valueOf(color))
     }
 
     interface Callback {
-        fun onFingerprintAuthSucceed(withFingerprint: Boolean, crypto: FingerprintManagerCompat.CryptoObject? = null)
+        fun onFingerprintAuthSucceed()
     }
 }
