@@ -14,16 +14,20 @@ class TransactionRateSyncer(
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     override fun sync(currencyCode: String) {
-        storage.nonFilledRecords.forEach { record ->
-            if (record.timestamp > 0L) {
-                disposables.add(networkManager.getRate(coin = record.coin, currency = currencyCode, timestamp = record.timestamp)
-                                .subscribeOn(Schedulers.io())
-                                .unsubscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe {
-                                    storage.set(rate = it, transactionHash = record.transactionHash)
-                                })
+        storage.nonFilledRecords.subscribe { records ->
+            records.forEach { record ->
+                if (record.timestamp > 0L) {
+                    disposables.add(networkManager.getRate(coin = record.coin, currency = currencyCode, timestamp = record.timestamp)
+                            .subscribeOn(Schedulers.io())
+                            .unsubscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe {
+                                storage.set(rate = it, transactionHash = record.transactionHash)
+                            })
+                }
             }
+        }.let {
+            disposables.add(it)
         }
     }
 

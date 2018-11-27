@@ -1,12 +1,15 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.app.Application
+import android.arch.persistence.room.Room
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import com.squareup.leakcanary.LeakCanary
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
+import io.horizontalsystems.bankwallet.core.storage.AppDatabase
+import io.horizontalsystems.bankwallet.core.storage.TransactionRepository
 import io.horizontalsystems.bitcoinkit.BitcoinKit
 import io.horizontalsystems.ethereumkit.EthereumKit
 import java.util.*
@@ -40,6 +43,8 @@ class App : Application() {
         lateinit var stubStorage: StubStorage
         lateinit var transactionRateSyncer: ITransactionRateSyncer
         lateinit var transactionManager: TransactionManager
+        lateinit var appDatabase: AppDatabase
+        lateinit var transactionStorage: ITransactionRecordStorage
 
         val testMode = true
 
@@ -89,11 +94,15 @@ class App : Application() {
         networkAvailabilityManager = NetworkAvailabilityManager()
         periodicTimer = PeriodicTimer(delay = 3 * 60 * 1000)
         rateSyncer = RateSyncer(networkManager, periodicTimer)
+
+        appDatabase = Room.databaseBuilder(this, AppDatabase::class.java, "dbBankWallet").build()
+        transactionStorage = TransactionRepository(appDatabase)
+
         stubStorage = StubStorage()
         rateManager = RateManager(stubStorage, rateSyncer, walletManager, currencyManager, networkAvailabilityManager, periodicTimer)
 
-        transactionRateSyncer = TransactionRateSyncer(stubStorage, networkManager)
-        transactionManager = TransactionManager(stubStorage, transactionRateSyncer, walletManager, currencyManager, wordsManager)
+        transactionRateSyncer = TransactionRateSyncer(transactionStorage, networkManager)
+        transactionManager = TransactionManager(transactionStorage, transactionRateSyncer, walletManager, currencyManager, wordsManager)
 
     }
 

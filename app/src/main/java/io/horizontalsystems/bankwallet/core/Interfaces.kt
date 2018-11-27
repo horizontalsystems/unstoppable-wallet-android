@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.transactions.Coin
 import io.reactivex.Flowable
+import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import java.util.*
@@ -83,6 +84,7 @@ interface IWordsManager {
     fun restore(words: List<String>)
     fun logout()
 }
+
 interface ILanguageManager {
     var currentLanguage: Locale
     var preferredLanguage: Locale?
@@ -173,8 +175,8 @@ interface ITransactionRateSyncer {
 }
 
 interface ITransactionRecordStorage {
-    fun record(hash: String): TransactionRecord?
-    val nonFilledRecords: List<TransactionRecord>
+    fun record(hash: String): Single<TransactionRecord>
+    val nonFilledRecords: Single<List<TransactionRecord>>
     fun set(rate: Double, transactionHash: String)
     fun clearRates()
 
