@@ -57,8 +57,10 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType) :
         }
     }
 
-    override fun fee(value: Double, senderPay: Boolean): Double {
-        return bitcoinKit.fee(value = (value * satoshisInBitcoin).toInt(), senderPay = senderPay) / satoshisInBitcoin
+    override fun fee(value: Double, address: String?, senderPay: Boolean): Double {
+        val amount = (value * satoshisInBitcoin).toInt()
+        val fee = bitcoinKit.fee(amount, address, senderPay)
+        return fee / satoshisInBitcoin
     }
 
     override fun validate(address: String) {

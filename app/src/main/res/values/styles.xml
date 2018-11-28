@@ -151,6 +151,13 @@
         <item name="android:textColor">@color/dark</item>
     </style>
 
+    <style name="ImageButtonSmallGrey_4" parent="ButtonSmallGrey_4">
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:paddingStart">8dp</item>
+    </style>
+
     <style name="ButtonGreen_12" parent="Button">
         <item name="android:background">@drawable/button_green_background_12</item>
     </style>

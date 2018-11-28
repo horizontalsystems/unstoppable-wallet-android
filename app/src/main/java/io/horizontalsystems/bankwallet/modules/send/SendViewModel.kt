@@ -3,52 +3,66 @@ package io.horizontalsystems.bankwallet.modules.send
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
-import io.horizontalsystems.bankwallet.core.IAdapter
+import io.horizontalsystems.bankwallet.modules.transactions.Coin
 
-class SendViewModel : ViewModel(), SendModule.IView, SendModule.IRouter {
+class SendViewModel : ViewModel(), SendModule.IRouter, SendModule.IView {
 
     lateinit var delegate: SendModule.IViewDelegate
-    val addressLiveData = MutableLiveData<String>()
-    val primaryAmountLiveData = MutableLiveData<String>()
-    val secondaryAmountHintLiveData = MutableLiveData<String>()
-    val startScanLiveEvent = SingleLiveEvent<Unit>()
-    val showSuccessLiveEvent = SingleLiveEvent<Unit>()
-    val showAddressWarningLiveEvent = MutableLiveData<Boolean>()
-    val showErrorLiveData = MutableLiveData<Int>()
 
-    fun init(adapter: IAdapter) {
-        SendModule.init(this, this, adapter)
+    val hintInfoLiveData = MutableLiveData<SendModule.HintInfo>()
+    val sendButtonEnabledLiveData = MutableLiveData<Boolean>()
+    val coinLiveData = MutableLiveData<Coin>()
+    val amountInfoLiveData = MutableLiveData<SendModule.AmountInfo>()
+    val switchButtonEnabledLiveData = MutableLiveData<Boolean>()
+    val addressInfoLiveData = MutableLiveData<SendModule.AddressInfo>()
+    val dismissWithSuccessLiveEvent = SingleLiveEvent<Unit>()
+    val primaryFeeAmountInfoLiveData = MutableLiveData<SendModule.AmountInfo>()
+    val secondaryFeeAmountInfoLiveData = MutableLiveData<SendModule.AmountInfo>()
+    val errorLiveData = MutableLiveData<Throwable>()
+
+    fun init(coin: String) {
+        SendModule.init(this, this, coin)
         delegate.onViewDidLoad()
     }
 
-    override fun setAddress(address: String) {
-       addressLiveData.value = address
+    override fun setCoin(coin: Coin) {
+        coinLiveData.value = coin
     }
 
-    override fun setAmount(amount: String?) {
-        primaryAmountLiveData.value = amount
+    override fun setAmountInfo(amountInfo: SendModule.AmountInfo?) {
+        amountInfoLiveData.value = amountInfo
     }
 
-    override fun setAmountHint(hint: String) {
-        secondaryAmountHintLiveData.value = hint
+    override fun setSwitchButtonEnabled(enabled: Boolean) {
+        switchButtonEnabledLiveData.value = enabled
     }
 
-    override fun showError(error: Int) {
-        showErrorLiveData.value = error
+    override fun setHintInfo(amountInfo: SendModule.HintInfo?) {
+        hintInfoLiveData.value = amountInfo
     }
 
-    override fun showSuccess() {
-        showSuccessLiveEvent.call()
+    override fun setAddressInfo(addressInfo: SendModule.AddressInfo?) {
+        addressInfoLiveData.value = addressInfo
     }
 
-    override fun showAddressWarning(show: Boolean) {
-        showAddressWarningLiveEvent.value = show
+    override fun setPrimaryFeeInfo(primaryFeeInfo: SendModule.AmountInfo?) {
+        primaryFeeAmountInfoLiveData.value = primaryFeeInfo
     }
 
-    // --- IRouter methods ---
+    override fun setSecondaryFeeInfo(secondaryFeeInfo: SendModule.AmountInfo?) {
+        secondaryFeeAmountInfoLiveData.value = secondaryFeeInfo
+    }
 
-    override fun startScan() {
-        startScanLiveEvent.call()
+    override fun setSendButtonEnabled(sendButtonEnabled: Boolean) {
+        sendButtonEnabledLiveData.value = sendButtonEnabled
+    }
+
+    override fun showError(error: Throwable) {
+        errorLiveData.value = error
+    }
+
+    override fun dismissWithSuccess() {
+        dismissWithSuccessLiveEvent.call()
     }
 
 }

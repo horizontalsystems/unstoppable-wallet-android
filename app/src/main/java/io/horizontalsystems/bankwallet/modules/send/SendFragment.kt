@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.send
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.app.AlertDialog
 import android.app.Dialog
 import android.arch.lifecycle.Observer
@@ -10,39 +8,38 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentActivity
+import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ScrollView
-import android.widget.TextView
+import android.widget.*
 import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
+import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
+import io.horizontalsystems.bankwallet.viewHelpers.ValueFormatter
 
 class SendFragment : DialogFragment() {
 
     private var mDialog: Dialog? = null
 
-    private lateinit var addressTxt: EditText
-    private lateinit var addressLayout: View
-
-    private lateinit var amountTxt: EditText
+    private lateinit var addressTxt: TextView
+    private lateinit var addressErrorTxt: TextView
+    private lateinit var hintInfoTxt: TextView
+    private lateinit var amountEditTxt: EditText
     private lateinit var sendButton: Button
-    private lateinit var hintTxt: TextView
-    private lateinit var amountLayout: View
-
-    private lateinit var paymentRefTxt: EditText
-    private lateinit var moreTxt: TextView
-
-    private lateinit var moreOptionsLayout: View
-
-    private lateinit var scrollView: ScrollView
+    private lateinit var switchButton: ImageButton
+    private lateinit var pasteButton: Button
+    private lateinit var scanBarcodeButton: ImageButton
+    private lateinit var deleteAddressButton: ImageButton
+    private lateinit var amountPrefixTxt: TextView
+    private lateinit var feePrimaryTxt: TextView
+    private lateinit var feeSecondaryTxt: TextView
 
     private lateinit var viewModel: SendViewModel
 
@@ -52,7 +49,7 @@ class SendFragment : DialogFragment() {
         super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProviders.of(this).get(SendViewModel::class.java)
-//        viewModel.init(coin)
+        viewModel.init(coin)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -66,158 +63,160 @@ class SendFragment : DialogFragment() {
         mDialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
         mDialog?.window?.setGravity(Gravity.BOTTOM)
 
-        rootView.findViewById<View>(R.id.btnScan)?.setOnClickListener {
-            viewModel.delegate.onScanClick()
-        }
-
-        context?.let {
-//            val coinDrawable = ContextCompat.getDrawable(it, LayoutHelper.getCoinDrawableResource(coinAdapter.coin.code))
-//            rootView.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
-        }
-
-        rootView.findViewById<TextView>(R.id.txtTitle)?.let { txtTitle ->
-//            txtTitle.text = getString(R.string.send_bottom_sheet_title, coinAdapter.coin.code)
-        }
-
+        hintInfoTxt = rootView.findViewById(R.id.txtHintInfo)
         addressTxt = rootView.findViewById(R.id.txtAddress)
-        addressLayout = rootView.findViewById<View>(R.id.addressLayout)
-        addressTxt.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus)
-                addressLayout.background = resources.getDrawable(R.drawable.border_yellow, null)
-            else
-                addressLayout.background = resources.getDrawable(R.drawable.border_grey, null)
-        }
-
-        hintTxt = rootView.findViewById(R.id.txtAmountEquivalent)
-        amountTxt = rootView.findViewById(R.id.txtAmount)
-        amountLayout = rootView.findViewById<View>(R.id.amountLayout)
-        amountTxt.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus)
-                amountLayout.background = resources.getDrawable(R.drawable.border_yellow, null)
-            else
-                amountLayout.background = resources.getDrawable(R.drawable.border_grey, null)
-        }
-
-        val addressTextChangeListener = object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                updateSendBtnState()
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        }
-
-        addressTxt.addTextChangedListener(addressTextChangeListener)
-
-        val textChangeListener = object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                viewModel.delegate.onAmountEntered(s?.toString())
-                updateSendBtnState()
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        }
-
-        amountTxt.addTextChangedListener(textChangeListener)
-
-        rootView.findViewById<Button>(R.id.btnPaste)?.setOnClickListener {
-            viewModel.delegate.onPasteClick()
-        }
-
-        paymentRefTxt = rootView.findViewById(R.id.txtPaymentRef)
-        paymentRefTxt.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus)
-                paymentRefTxt.background = resources.getDrawable(R.drawable.border_yellow, null)
-            else
-                paymentRefTxt.background = resources.getDrawable(R.drawable.border_grey, null)
-        }
-
-        scrollView = rootView.findViewById(R.id.scrollView)
+        addressErrorTxt = rootView.findViewById(R.id.txtAddressError)
+        amountPrefixTxt = rootView.findViewById(R.id.topAmountPrefix)
+        switchButton = rootView.findViewById(R.id.btnSwitch)
+        pasteButton = rootView.findViewById(R.id.btnPaste)
+        scanBarcodeButton = rootView.findViewById(R.id.btnBarcodeScan)
+        deleteAddressButton = rootView.findViewById(R.id.btnDeleteAddress)
+        feePrimaryTxt = rootView.findViewById(R.id.txtFeePrimary)
+        feeSecondaryTxt = rootView.findViewById(R.id.txtFeeSecondary)
+        amountEditTxt = rootView.findViewById(R.id.editTxtAmount)
         sendButton = rootView.findViewById(R.id.btnSend)
 
         sendButton.isEnabled = false
 
-        moreTxt = rootView.findViewById(R.id.txtMore)
-        moreOptionsLayout = rootView.findViewById(R.id.moreOptionsLayout)
-        moreTxt.setOnClickListener {
-            moreTxt.visibility = View.GONE
+        switchButton.setOnClickListener { viewModel.delegate.onSwitchClicked() }
+        scanBarcodeButton.setOnClickListener { startScanner() }
+        pasteButton.setOnClickListener { viewModel.delegate.onPasteClicked() }
+        deleteAddressButton.setOnClickListener { viewModel.delegate.onDeleteClicked() }
+        sendButton.setOnClickListener { viewModel.delegate.onSendClicked() }
 
-            // Prepare the View for the animation
-            moreOptionsLayout.visibility = View.VISIBLE
-            moreOptionsLayout.alpha = 0.0f
+        amountEditTxt.addTextChangedListener(textChangeListener)
 
-            // Start the animation
-            moreOptionsLayout.animate()
-                    .translationY(moreOptionsLayout.height * 1F)
-                    .alpha(1.0f)
-                    .setListener(object : AnimatorListenerAdapter() {
-                        override fun onAnimationEnd(animation: Animator?) {
-                            super.onAnimationEnd(animation)
-                            scrollView.post {
-                                scrollView.fullScroll(View.FOCUS_DOWN)
-                                paymentRefTxt.requestFocus()
+        viewModel.switchButtonEnabledLiveData.observe(this, Observer { enabled ->
+            enabled?.let { switchButton.isEnabled = it }
+        })
+
+        viewModel.coinLiveData.observe(this, Observer { coin ->
+            coin?.let { coinCode ->
+                context?.let {
+                    val coinDrawable = ContextCompat.getDrawable(it, LayoutHelper.getCoinDrawableResource(coinCode))
+                    rootView.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
+                }
+                rootView.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.send_bottom_sheet_title, coinCode)
+            }
+        })
+
+        viewModel.hintInfoLiveData.observe(this, Observer { hintInfo ->
+
+            hintInfo?.let { hint ->
+                hintInfoTxt.setTextColor(addressTxt.resources.getColor(if (hint is SendModule.HintInfo.ErrorInfo) R.color.red_warning else R.color.dark, null))
+
+                when (hint) {
+                    is SendModule.HintInfo.Amount -> {
+                        hintInfoTxt.text = when (hint.amountInfo) {
+                            is SendModule.AmountInfo.CoinValueInfo -> ValueFormatter.format(hint.amountInfo.coinValue)
+                            is SendModule.AmountInfo.CurrencyValueInfo -> ValueFormatter.format(hint.amountInfo.currencyValue)
+                        }
+                    }
+                    is SendModule.HintInfo.ErrorInfo -> {
+                        when (hint.error) {
+                            is SendModule.AmountError.InsufficientBalance -> {
+                                val balanceAmount = when (hint.error.amountInfo) {
+                                    is SendModule.AmountInfo.CoinValueInfo -> ValueFormatter.format(hint.error.amountInfo.coinValue)
+                                    is SendModule.AmountInfo.CurrencyValueInfo -> ValueFormatter.format(hint.error.amountInfo.currencyValue)
+                                }
+                                hintInfoTxt.text = hintInfoTxt.context.getString(R.string.send_error_balance_amount, balanceAmount)
                             }
                         }
-                    })
-        }
-
-        sendButton?.setOnClickListener {
-            viewModel.delegate.onSendClick(addressTxt.text.toString())
-        }
-
-        viewModel.startScanLiveEvent.observe(this, Observer {
-            startScanner()
-        })
-
-        viewModel.addressLiveData.observe(this, Observer { address ->
-            address?.let {
-                addressTxt.setText(it)
+                    }
+                }
             }
         })
 
-        viewModel.primaryAmountLiveData.observe(this, Observer { primaryAmount ->
-            amountTxt.setText(primaryAmount)
+        viewModel.sendButtonEnabledLiveData.observe(this, Observer { enabled ->
+            enabled?.let { sendButton.isEnabled = it }
         })
 
-        viewModel.secondaryAmountHintLiveData.observe(this, Observer { hint ->
-            hint?.let {
-                hintTxt.text = hint
+        viewModel.amountInfoLiveData.observe(this, Observer { amountInfo ->
+            amountInfo?.let {
+                amountPrefixTxt.text = when (it) {
+                    is SendModule.AmountInfo.CoinValueInfo -> it.coinValue.coin
+                    is SendModule.AmountInfo.CurrencyValueInfo -> it.currencyValue.currency.symbol
+                }
+
+                val amountNumber = when (it) {
+                    is SendModule.AmountInfo.CoinValueInfo -> it.coinValue.value
+                    is SendModule.AmountInfo.CurrencyValueInfo -> it.currencyValue.value
+                }
+
+                if (amountNumber > 0) {
+                    amountEditTxt.setText(amountNumber.toString())
+                }
             }
         })
 
-        viewModel.showErrorLiveData.observe(this, Observer { error ->
-            error?.let { HudHelper.showErrorMessage(it) }
-        })
+        viewModel.addressInfoLiveData.observe(this, Observer { addressInfo ->
+            deleteAddressButton.visibility = if (addressInfo == null) View.GONE else View.VISIBLE
+            pasteButton.visibility = if (addressInfo == null) View.VISIBLE else View.GONE
+            scanBarcodeButton.visibility = if (addressInfo == null) View.VISIBLE else View.GONE
+            addressTxt.setTextColor(addressTxt.resources.getColor(if (addressInfo == null) R.color.steel_grey else R.color.dark, null))
 
-        viewModel.showSuccessLiveEvent.observe(this, Observer {
-//            val cryptoAmount = "${amountTxt.text} ${coinAdapter.coin.code}"
-//            ConfirmationFragment.newInstance(amountInCrypto = cryptoAmount, amountInFiat = hintTxt.text.toString(),
-//                    listener = object : ConfirmationFragment.Listener {
-//                        override fun onButtonClick() {
-//                            Toast.makeText(activity, R.string.send_bottom_sheet_success, Toast.LENGTH_LONG).show()
-//                            Handler().postDelayed({ dismiss() }, 500)
-//                        }
-//                    }).show(activity?.supportFragmentManager, "confirmation_dialog")
-        })
+            if (addressInfo == null) {
+                addressErrorTxt.visibility = View.GONE
+                addressTxt.text = ""
+                addressTxt.text = addressTxt.context.getString(R.string.send_hint_address)
+            }
 
-        viewModel.showAddressWarningLiveEvent.observe(this, Observer { showWarning ->
-            showWarning?.let {
-                addressLayout.setBackgroundResource(if (it) R.drawable.border_red else R.drawable.border_grey)
+            addressInfo?.let {
+                when (it) {
+                    is SendModule.AddressInfo.ValidAddressInfo -> {
+                        addressTxt.text = it.address
+                        addressErrorTxt.visibility = View.GONE
+                    }
+                    is SendModule.AddressInfo.InvalidAddressInfo -> {
+                        addressTxt.text = it.address
+                        addressErrorTxt.setText(R.string.send_error_incorrect_address)
+                        addressErrorTxt.visibility = View.VISIBLE
+                    }
+                }
             }
         })
+
+        viewModel.primaryFeeAmountInfoLiveData.observe(this, Observer { amountInfo ->
+            amountInfo?.let {
+                feePrimaryTxt.text = when (it) {
+                    is SendModule.AmountInfo.CurrencyValueInfo -> ValueFormatter.format(it.currencyValue)
+                    is SendModule.AmountInfo.CoinValueInfo -> ValueFormatter.format(it.coinValue)
+                }
+            }
+        })
+
+        viewModel.secondaryFeeAmountInfoLiveData.observe(this, Observer { amountInfo ->
+            amountInfo?.let {
+                feeSecondaryTxt.text = when (it) {
+                    is SendModule.AmountInfo.CurrencyValueInfo -> ValueFormatter.format(it.currencyValue)
+                    is SendModule.AmountInfo.CoinValueInfo -> ValueFormatter.format(it.coinValue)
+                }
+            }
+        })
+
+        viewModel.dismissWithSuccessLiveEvent.observe(this, Observer {
+            dismiss()
+        })
+
+        viewModel.errorLiveData.observe(this, Observer { error ->
+            error?.let {
+                HudHelper.showErrorMessage(R.string.error)
+            }
+        })
+
 
         mDialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
 
         return mDialog as Dialog
     }
 
-    private fun updateSendBtnState() {
-        sendButton.isEnabled = addressTxt.text.toString().isNotEmpty() && amountTxt.text.toString().isNotEmpty()
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+        val scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent)
+        if (scanResult != null && !TextUtils.isEmpty(scanResult.contents)) {
+            viewModel.delegate.onScanAddress(scanResult.contents)
+        }
     }
-
 
     private fun startScanner() {
         val intentIntegrator = IntentIntegrator.forSupportFragment(this)
@@ -229,13 +228,22 @@ class SendFragment : DialogFragment() {
         intentIntegrator.initiateScan()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
-        val scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent)
-        if (scanResult != null && !TextUtils.isEmpty(scanResult.contents)) {
-            // handle scan result
-            addressTxt.setText(scanResult.contents)
+    private val textChangeListener = object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {
+            val amountText = s?.toString() ?: ""
+            var amountNumber = 0.0
+            try {
+                amountNumber = amountText.toDouble()
+            } catch (e: NumberFormatException) {
+                Log.e("SendFragment", "Exception", e)
+            }
+
+            viewModel.delegate.onAmountChanged(amountNumber)
         }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
     }
 
     companion object {

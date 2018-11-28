@@ -50,7 +50,7 @@ class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, Eth
         ethereumKit.send(address, value, completion)
     }
 
-    override fun fee(value: Double, senderPay: Boolean): Double = ethereumKit.fee() / weisInEther
+    override fun fee(value: Double, address: String?, senderPay: Boolean): Double = ethereumKit.fee() / weisInEther
 
     override fun validate(address: String) {
         ethereumKit.validateAddress(address)
