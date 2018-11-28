@@ -16,6 +16,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.transactions.Coin
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
@@ -26,7 +27,7 @@ class ReceiveFragment : DialogFragment() {
 
     private lateinit var viewModel: ReceiveViewModel
 
-    private lateinit var adapterId: String
+    private lateinit var coin: Coin
 
     private var itemIndex = 0
 
@@ -34,7 +35,7 @@ class ReceiveFragment : DialogFragment() {
         super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProviders.of(this).get(ReceiveViewModel::class.java)
-        viewModel.init(adapterId)
+        viewModel.init(coin)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -53,11 +54,11 @@ class ReceiveFragment : DialogFragment() {
             addresses?.apply {
                 if (addresses.isNotEmpty()) {
                     val address = addresses[itemIndex]
-                    context?.let {ctx ->
-                        val coinDrawable = ContextCompat.getDrawable(ctx, LayoutHelper.getCoinDrawableResource(address.coin.code))
+                    context?.let { ctx ->
+                        val coinDrawable = ContextCompat.getDrawable(ctx, LayoutHelper.getCoinDrawableResource(address.coin))
                         rootView.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
                     }
-                    rootView.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.receive_title, address.coin.code)
+                    rootView.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.receive_title, address.coin)
                     rootView.findViewById<TextView>(R.id.txtAddress)?.let { it.text = address.address }
                     rootView.findViewById<ImageView>(R.id.imgQrCode)?.setImageBitmap(TextHelper.getQrCodeBitmapFromAddress(address.address))
                 }
@@ -84,9 +85,9 @@ class ReceiveFragment : DialogFragment() {
     }
 
     companion object {
-        fun show(activity: FragmentActivity, adapterId: String) {
+        fun show(activity: FragmentActivity, coin: Coin) {
             val fragment = ReceiveFragment()
-            fragment.adapterId = adapterId
+            fragment.coin = coin
             fragment.show(activity.supportFragmentManager, "receive_fragment")
         }
     }

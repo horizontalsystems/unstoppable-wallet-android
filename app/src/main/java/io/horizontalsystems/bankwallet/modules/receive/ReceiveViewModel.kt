@@ -4,6 +4,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.modules.receive.viewitems.AddressItem
+import io.horizontalsystems.bankwallet.modules.transactions.Coin
 
 class ReceiveViewModel : ViewModel(), ReceiveModule.IView {
 
@@ -13,8 +14,8 @@ class ReceiveViewModel : ViewModel(), ReceiveModule.IView {
     val showErrorLiveData = MutableLiveData<Int>()
     val showCopiedLiveEvent = SingleLiveEvent<Unit>()
 
-    fun init(adapterId: String) {
-        ReceiveModule.init(this, adapterId)
+    fun init(coin: Coin) {
+        ReceiveModule.init(this, coin)
         delegate.viewDidLoad()
     }
 
