@@ -1,7 +1,9 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.entities.LatestRate
 import io.horizontalsystems.bankwallet.entities.Rate
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
@@ -34,7 +36,7 @@ class RateManager(
         })
     }
 
-    fun rate(coin: String, currencyCode: String): Rate? {
+    fun rate(coin: String, currencyCode: String): Single<Rate> {
         return storage.rate(coin, currencyCode)
     }
 
@@ -45,8 +47,8 @@ class RateManager(
         syncer.sync(coins = coins, currencyCode = currencyCode)
     }
 
-    override fun didSync(coin: String, currencyCode: String, value: Double) {
-        storage.save(value = value, coin = coin, currencyCode = currencyCode)
+    override fun didSync(coin: String, currencyCode: String, latestRate: LatestRate) {
+        storage.save(latestRate = latestRate, coin = coin, currencyCode = currencyCode)
         subject.onNext(true)
     }
 

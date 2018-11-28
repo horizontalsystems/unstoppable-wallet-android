@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.managers.RateManager
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 
 class WalletInteractor(
@@ -43,7 +44,7 @@ class WalletInteractor(
         })
     }
 
-    override fun rate(coin: String): Rate? {
+    override fun rate(coin: String): Single<Rate> {
         return rateManager.rate(coin, currencyManager.baseCurrency.code)
     }
 

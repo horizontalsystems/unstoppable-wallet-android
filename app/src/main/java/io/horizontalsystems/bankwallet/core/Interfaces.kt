@@ -45,9 +45,8 @@ interface IRandomProvider {
 }
 
 interface INetworkManager {
-    fun getLatestRate(coin: String, currency: String): Flowable<Double>
+    fun getLatestRate(coin: String, currency: String): Flowable<LatestRate>
     fun getRate(coin: String, currency: String, timestamp: Long): Flowable<Double>
-    fun getRateByDay(coin: String, currency: String, datePath: String): Flowable<Double>
 }
 
 interface IEncryptionManager {
@@ -160,12 +159,12 @@ interface IPeriodicTimerDelegate {
 }
 
 interface IRateSyncerDelegate {
-    fun didSync(coin: String, currencyCode: String, value: Double)
+    fun didSync(coin: String, currencyCode: String, latestRate: LatestRate)
 }
 
 interface IRateStorage {
-    fun rate(coin: Coin, currencyCode: String): Rate?
-    fun save(value: Double, coin: Coin, currencyCode: String)
+    fun rate(coin: Coin, currencyCode: String): Single<Rate>
+    fun save(latestRate: LatestRate, coin: Coin, currencyCode: String)
     fun clear()
 }
 

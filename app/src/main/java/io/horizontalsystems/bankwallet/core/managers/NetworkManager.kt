@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import com.google.gson.GsonBuilder
 import io.horizontalsystems.bankwallet.core.INetworkManager
+import io.horizontalsystems.bankwallet.entities.LatestRate
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import io.reactivex.Flowable
@@ -20,25 +21,23 @@ class NetworkManager : INetworkManager {
         val cleanedCoin = TextHelper.getCleanCoinCode(coin)
 
         return ServiceExchangeApi.service
-                .getRate(cleanedCoin, currency, DateHelper.formatDateByUsLocale(timestamp, "yyyy/MM/dd/HH/mm"))
-                .onErrorResumeNext(getRateByDay(cleanedCoin, currency, DateHelper.formatDateByUsLocale(timestamp, "yyyy/MM/dd")))
-    }
-
-    override fun getRateByDay(coin: String, currency: String, datePath: String): Flowable<Double> {
-        return ServiceExchangeApi.service
-                .getRateByDay(coin, currency, datePath)
-                .onErrorReturn {
-                    0.0
+                .getRatesByHour(cleanedCoin, currency, DateHelper.formatDateInUTC(timestamp, "yyyy/MM/dd/HH"))
+                .flatMap { minuteRates ->
+                    val minute = DateHelper.formatDateInUTC(timestamp, "mm")
+                    Flowable.just(minuteRates[minute]!!)
                 }
+                .onErrorResumeNext(
+                        ServiceExchangeApi.service
+                                .getRate(cleanedCoin, currency, DateHelper.formatDateInUTC(timestamp, "yyyy/MM/dd"))
+                                .onErrorResumeNext(Flowable.empty())
+                )
     }
 
-    override fun getLatestRate(coin: String, currency: String): Flowable<Double> {
+    override fun getLatestRate(coin: String, currency: String): Flowable<LatestRate> {
         val cleanedCoin = TextHelper.getCleanCoinCode(coin)
         return ServiceExchangeApi.service
                 .getLatestRate(cleanedCoin, currency)
-                .onErrorReturn {
-                    0.0
-                }
+                .onErrorResumeNext(Flowable.empty())
     }
 
 }
@@ -46,7 +45,7 @@ class NetworkManager : INetworkManager {
 object ServiceExchangeApi {
 
     val service: IExchangeRate
-    private const val apiURL = "https://ipfs.horizontalsystems.xyz/ipns/QmSxpioQuDSjTH6XiT5q35V7xpJqxmDheEcTRRWyMkMim7/io-hs/data/xrates/"
+    private const val apiURL = "https://ipfs.horizontalsystems.xyz/ipns/Qmd4Gv2YVPqs6dmSy1XEq7pQRSgLihqYKL2JjK7DMUFPVz/io-hs/data/xrates/"
 
     init {
         val logger = HttpLoggingInterceptor()
@@ -80,18 +79,18 @@ object ServiceExchangeApi {
                 @Path("datePath") datePath: String
         ): Flowable<Double>
 
-        @GET("{coin}/{fiat}/{year}/{month}/{datePath}/index.json")
-        fun getRateByDay(
+        @GET("{coin}/{fiat}/{datePath}/index.json")
+        fun getRatesByHour(
                 @Path("coin") coinCode: String,
                 @Path("fiat") currency: String,
                 @Path("datePath") datePath: String
-        ): Flowable<Double>
+        ): Flowable<Map<String, Double>>
 
         @GET("{coin}/{fiat}/index.json")
         fun getLatestRate(
                 @Path("coin") coinCode: String,
                 @Path("fiat") currency: String
-        ): Flowable<Double>
+        ): Flowable<LatestRate>
 
     }
 }
