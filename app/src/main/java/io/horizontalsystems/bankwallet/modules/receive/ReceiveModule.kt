@@ -1,7 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.receive
 
 import android.support.v4.app.FragmentActivity
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.receive.viewitems.AddressItem
+import io.horizontalsystems.bankwallet.modules.transactions.Coin
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 
 object ReceiveModule {
@@ -28,8 +30,8 @@ object ReceiveModule {
         fun didCopyToClipboard()
     }
 
-    fun init(view: ReceiveViewModel, adapterId: String?) {
-        val interactor = ReceiveInteractor(adapterId, TextHelper)
+    fun init(view: ReceiveViewModel, coin: Coin?) {
+        val interactor = ReceiveInteractor(coin, App.walletManager, TextHelper)
         val presenter = ReceivePresenter(interactor)
 
         view.delegate = presenter
@@ -37,8 +39,8 @@ object ReceiveModule {
         interactor.delegate = presenter
     }
 
-    fun start(activity: FragmentActivity, adapterId: String) {
-        ReceiveFragment.show(activity, adapterId)
+    fun start(activity: FragmentActivity, coin: Coin) {
+        ReceiveFragment.show(activity, coin)
     }
 
 }
