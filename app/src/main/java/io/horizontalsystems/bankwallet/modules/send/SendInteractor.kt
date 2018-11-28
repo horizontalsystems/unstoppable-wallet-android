@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.ICurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.RateManager
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.Coin
 
@@ -21,8 +22,11 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
     override val addressFromClipboard: String?
         get() = clipboardManager.getCopiedText()
 
+    //todo replace stubbed data with real data
+    val stubbedRate = Rate("BTC", "USD", 4000.0)
+
     override fun convertedAmountForInputType(inputType: SendModule.InputType, amount: Double): Double? {
-        val rate = rateManager.rate(wallet.coin, currencyManager.baseCurrency.code) ?: return null
+        val rate = stubbedRate //rateManager.rate(wallet.coin, currencyManager.baseCurrency.code) ?: return null
 
         return when (inputType) {
             SendModule.InputType.COIN -> amount * rate.value
@@ -35,7 +39,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
         val coin = wallet.coin
         val adapter = wallet.adapter
         val baseCurrency = currencyManager.baseCurrency
-        val rateValue = rateManager.rate(coin, baseCurrency.code)?.value
+        val rateValue =stubbedRate.value// rateManager.rate(coin, baseCurrency.code)?.value
 
         val state = SendModule.State(input.inputType)
 
@@ -97,7 +101,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
 
     override fun send(userInput: SendModule.UserInput) {
 
-        val rateValue = rateManager.rate(wallet.coin, currencyManager.baseCurrency.code)?.value
+        val rateValue = stubbedRate.value// rateManager.rate(wallet.coin, currencyManager.baseCurrency.code)?.value
                 ?: return
 
         val address = userInput.address ?: return

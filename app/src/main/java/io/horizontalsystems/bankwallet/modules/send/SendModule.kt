@@ -1,10 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.send
 
 import android.support.v4.app.FragmentActivity
-import io.horizontalsystems.bankwallet.core.IAdapter
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.transactions.Coin
+import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 
 object SendModule {
 
@@ -55,15 +56,14 @@ object SendModule {
     interface IRouter {
     }
 
-    fun init(view: SendViewModel, router: IRouter, adapter: IAdapter) {
-//        val exchangeRateManager = App.exchangeRateManager
-//        val baseCurrency = App.currencyManager.baseCurrency
-//        val interactor = SendInteractor(TextHelper, adapter, exchangeRateManager)
-//        val presenter = SendPresenter(interactor, router, baseCurrency)
+    fun init(view: SendViewModel, router: IRouter, coin: String) {
+        val wallet = App.walletManager.wallets.first { it.coin == coin }
+        val interactor = SendInteractor(App.currencyManager, App.rateManager, TextHelper, wallet)
+        val presenter = SendPresenter(interactor, router, StateViewItemFactory(), UserInput())
 //
-//        view.delegate = presenter
-//        presenter.view = view
-//        interactor.delegate = presenter
+        view.delegate = presenter
+        presenter.view = view
+        interactor.delegate = presenter
     }
 
     fun start(activity: FragmentActivity, coin: String) {
