@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.reactivex.Single
 
 object WalletModule {
 
@@ -27,7 +28,7 @@ object WalletModule {
     interface IInteractor {
         fun loadWallets()
         fun refresh()
-        fun rate(coin: String): Rate?
+        fun rate(coin: String): Single<Rate>
         val baseCurrency: Currency
         val wallets: List<Wallet>
     }

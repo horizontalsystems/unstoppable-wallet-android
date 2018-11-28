@@ -5,10 +5,16 @@ import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
 class WalletPresenter(
         private var interactor: WalletModule.IInteractor,
         private val router: WalletModule.IRouter) : WalletModule.IViewDelegate, WalletModule.IInteractorDelegate {
+
+    private var disposables: CompositeDisposable = CompositeDisposable()
 
     var view: WalletModule.IView? = null
 
@@ -39,46 +45,57 @@ class WalletPresenter(
     }
 
     private fun updateView() {
-        var totalBalance = 0.0
+        val wallets = interactor.wallets
+        val rateObservables = wallets.map { interactor.rate(it.coin) }
 
-        val viewItems = mutableListOf<WalletViewItem>()
-        val currency = interactor.baseCurrency
+        Single.merge(rateObservables)
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { rates ->
 
-        var allSynced = true
+                    var totalBalance = 0.0
+                    val viewItems = mutableListOf<WalletViewItem>()
+                    val currency = interactor.baseCurrency
+                    var allSynced = true
 
-        interactor.wallets.forEach { wallet ->
-            val balance = wallet.adapter.balance
-            val rate = interactor.rate(wallet.coin)
+                    rates.forEach { rate ->
+                        val wallet = wallets.first { it.coin == rate.coin }
+                        val balance = wallet.adapter.balance
 
-            var rateExpired = false
+                        var rateExpired = false
 
-            rate?.let { mRate ->
-                val diff = DateHelper.getSecondsAgo(mRate.timestamp)
-                rateExpired = diff > 60 * 10
+                        rate?.let { mRate ->
+                            val diff = DateHelper.getSecondsAgo(mRate.timestamp)
+                            rateExpired = diff > 60 * 10
 
-                totalBalance += balance * mRate.value
-            }
+                            totalBalance += balance * mRate.value
+                        }
 
-            viewItems.add(WalletViewItem(
-                    coinValue = CoinValue(coin = wallet.coin, value = balance),
-                    exchangeValue = rate?.let { CurrencyValue(currency = currency, value = it.value) },
-                    currencyValue = rate?.let { CurrencyValue(currency = currency, value = balance * it.value) },
-                    state = wallet.adapter.state,
-                    rateExpired = rateExpired
-            ))
+                        viewItems.add(WalletViewItem(
+                                coinValue = CoinValue(coin = wallet.coin, value = balance),
+                                exchangeValue = rate?.let { CurrencyValue(currency = currency, value = it.value) },
+                                currencyValue = rate?.let { CurrencyValue(currency = currency, value = balance * it.value) },
+                                state = wallet.adapter.state,
+                                rateExpired = rateExpired
+                        ))
 
-            if (wallet.adapter.state is AdapterState.Syncing) {
-                allSynced = false
-            }
+                        if (wallet.adapter.state is AdapterState.Syncing) {
+                            allSynced = false
+                        }
 
-            if (balance > 0) {
-                allSynced = allSynced && rate != null && !rateExpired
-            }
-        }
+                        if (balance > 0) {
+                            allSynced = allSynced && rate != null && !rateExpired
+                        }
+                    }
 
-        view?.updateBalanceColor(if (allSynced) R.color.yellow_crypto else R.color.yellow_crypto_40)
-        view?.show(totalBalance = CurrencyValue(currency = currency, value = totalBalance))
-        view?.show(wallets = viewItems)
+                    view?.updateBalanceColor(if (allSynced) R.color.yellow_crypto else R.color.yellow_crypto_40)
+                    view?.show(totalBalance = CurrencyValue(currency = currency, value = totalBalance))
+                    view?.show(wallets = viewItems)
+
+                }.let {
+                    disposables.add(it)
+                }
     }
 
 }

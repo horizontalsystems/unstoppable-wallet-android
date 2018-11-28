@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-
 object DateHelper {
 
     fun getOnlyTime(date: Date): String = formatDate(date, "HH:mm")
@@ -35,8 +34,10 @@ object DateHelper {
         formatDate(date, "MM/dd/yyyy")
     }
 
-    fun formatDateByUsLocale(timestamp: Long, dateFormat: String) : String {
-        return SimpleDateFormat(dateFormat, Locale("US")).format(Date(timestamp))
+    fun formatDateInUTC(timestamp: Long, dateFormat: String): String {
+        val dateFormatter = SimpleDateFormat(dateFormat, Locale("US"))
+        dateFormatter.timeZone = TimeZone.getTimeZone("UTC")
+        return dateFormatter.format(Date(timestamp * 1000)) //timestamp in seconds
     }
 
     fun minutesAfterNow(minutes: Int): Long {
