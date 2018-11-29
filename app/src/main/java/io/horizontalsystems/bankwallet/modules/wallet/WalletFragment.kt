@@ -177,7 +177,7 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
         syncProgress.visibility = if (isSyncing) View.VISIBLE else View.GONE
         coinSyncProgress.visibility = if (isSyncing) View.VISIBLE else View.GONE
         textAmountFiat.visibility = if (isSyncing || zeroBalance) View.GONE else View.VISIBLE
-        coinAmount.visibility = if (isSyncing || zeroBalance) View.GONE else View.VISIBLE
+        coinAmount.visibility = if (isSyncing) View.GONE else View.VISIBLE
 
         disposable = (walletViewItem.state as? AdapterState.Syncing)?.progressSubject?.subscribe {
             val progress = (it * 100).toInt()
