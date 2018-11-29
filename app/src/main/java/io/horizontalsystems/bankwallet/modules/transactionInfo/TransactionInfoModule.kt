@@ -1,12 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.transactionInfo
 
 import android.support.v4.app.FragmentActivity
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
+import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionRecordViewItem
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 
 object TransactionInfoModule {
     interface IView {
-        fun showTransactionItem(transactionRecordViewItem: TransactionRecordViewItem)
+        fun showTransactionItem(transactionViewItem: TransactionViewItem)
         fun close()
         fun showCopied()
     }
@@ -20,15 +24,13 @@ object TransactionInfoModule {
     }
 
     interface IInteractor {
-        fun getTransactionInfo()
-        fun onCopyAddress()
-        fun onCopyId()
+        fun getTransaction(transactionHash: String)
+        fun onCopy(value: String)
         fun showFullInfo()
     }
 
     interface IInteractorDelegate {
-        fun didGetTransactionInfo(txRecordViewItem: TransactionRecordViewItem)
-        fun didCopyToClipboard()
+        fun didGetTransaction(txRecord: TransactionRecord)
         fun showFullInfo(transactionRecordViewItem: TransactionRecordViewItem)
     }
 
@@ -36,17 +38,17 @@ object TransactionInfoModule {
         fun showFullInfo(transaction: TransactionRecordViewItem)
     }
 
-    fun init(view: TransactionInfoViewModel, router: IRouter, transaction: TransactionRecordViewItem) {
-        val interactor = TransactionInfoInteractor(transaction, TextHelper)
-        val presenter = TransactionInfoPresenter(interactor, router)
+    fun init(view: TransactionInfoViewModel, router: IRouter, transactionHash: String) {
+        val interactor = TransactionInfoInteractor(App.transactionStorage, TextHelper)
+        val presenter = TransactionInfoPresenter(transactionHash, interactor, router, TransactionViewItemFactory(App.walletManager, App.currencyManager))
 
         view.delegate = presenter
         presenter.view = view
         interactor.delegate = presenter
     }
 
-    fun start(activity: FragmentActivity, transactionRecordViewItem: TransactionRecordViewItem) {
-        TransactionInfoFragment.show(activity, transactionRecordViewItem)
+    fun start(activity: FragmentActivity, transactionHash: String) {
+        TransactionInfoFragment.show(activity, transactionHash)
     }
 
 }

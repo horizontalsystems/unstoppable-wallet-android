@@ -9,7 +9,7 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
     lateinit var delegate: TransactionsModule.IViewDelegate
 
     val filterItems = MutableLiveData<List<TransactionFilterItem>>()
-    val showTransactionInfoLiveEvent = SingleLiveEvent<TransactionRecordViewItem>()
+    val showTransactionInfoLiveEvent = SingleLiveEvent<String>()
     val didRefreshLiveEvent = SingleLiveEvent<Void>()
     val reloadLiveEvent = SingleLiveEvent<Void>()
 
@@ -31,7 +31,7 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
     }
 
     override fun openTransactionInfo(transactionHash: String) {
-        showTransactionInfoLiveEvent.call()
+        showTransactionInfoLiveEvent.value = transactionHash
     }
 
     override fun onCleared() {

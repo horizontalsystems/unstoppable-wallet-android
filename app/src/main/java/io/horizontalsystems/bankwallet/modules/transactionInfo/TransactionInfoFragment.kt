@@ -14,7 +14,6 @@ import android.view.WindowManager
 import android.widget.TextView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionRecordViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
@@ -26,11 +25,11 @@ class TransactionInfoFragment : DialogFragment() {
 
     private lateinit var viewModel: TransactionInfoViewModel
 
-    private var transactionRecordViewItem: TransactionRecordViewItem? = null
+    private var transactionHash: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        transactionRecordViewItem?.let {
+        transactionHash?.let {
             viewModel = ViewModelProviders.of(this).get(TransactionInfoViewModel::class.java)
             viewModel.init(it)
         } ?: kotlin.run { dismiss() }
@@ -56,7 +55,7 @@ class TransactionInfoFragment : DialogFragment() {
                 val txStatus = txRec.status
 
                 rootView.findViewById<TextView>(R.id.txtAmount)?.apply {
-                    text = ValueFormatter.format(txRec.amount, true)
+                    text = ValueFormatter.format(txRec.coinValue, true)
                     setTextColor(resources.getColor(if (txRec.incoming) R.color.green_crypto else R.color.yellow_crypto, null))
                 }
 
@@ -81,15 +80,15 @@ class TransactionInfoFragment : DialogFragment() {
                         is TransactionStatus.Pending -> getString(R.string.transaction_info_status_pending)
                         else -> getString(R.string.transaction_info_status_completed)
                     }
-//                    bind(title = getString(R.string.transaction_info_status), valueTitle = statusText.toUpperCase(), valueIcon = valueIcon, progressValue = progress)
+                    bind(title = getString(R.string.transaction_info_status), valueTitle = statusText.toUpperCase(), valueIcon = valueIcon, progressValue = progress)
                 }
 
                 rootView.findViewById<TextView>(R.id.transactionId)?.apply {
-                    text = txRec.hash
+                    text = txRec.transactionHash
                 }
 
                 rootView.findViewById<TextView>(R.id.fiatValue)?.apply {
-                    text = txRec.currencyAmount?.let { ValueFormatter.format(it, true) }
+                    text = txRec.currencyValue?.let { ValueFormatter.format(it, true) }
                 }
 
                 rootView.findViewById<TransactionInfoItemView>(R.id.itemFromTo)?.apply {
@@ -121,9 +120,9 @@ class TransactionInfoFragment : DialogFragment() {
     }
 
     companion object {
-        fun show(activity: FragmentActivity, transactionRecordViewItem: TransactionRecordViewItem) {
+        fun show(activity: FragmentActivity, transactionHash: String) {
             val fragment = TransactionInfoFragment()
-            fragment.transactionRecordViewItem = transactionRecordViewItem
+            fragment.transactionHash = transactionHash
             fragment.show(activity.supportFragmentManager, "receive_fragment")
         }
     }

@@ -61,7 +61,7 @@ class TransactionInfoItemView : ConstraintLayout {
         ConstraintLayout.inflate(context, R.layout.view_transaction_info_item, this)
     }
 
-    fun bind(title: String? = null, valueTitle: String? = null, valueSubtitle: String? = null, valueIcon: Int? = null, progressValue: Byte? = null) {
+    fun bind(title: String? = null, valueTitle: String? = null, valueSubtitle: String? = null, valueIcon: Int? = null, progressValue: Double? = null) {
         titleTextView.text = title
         valueTitleTextView.text = valueTitle
         valueSubtitleTextView.text = valueSubtitle
