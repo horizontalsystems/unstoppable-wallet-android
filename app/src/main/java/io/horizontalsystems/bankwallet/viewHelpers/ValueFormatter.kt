@@ -27,11 +27,14 @@ object ValueFormatter {
         }
 
     fun format(coinValue: CoinValue, explicitSign: Boolean = false): String? {
-        val value = if (explicitSign)  Math.abs (coinValue.value) else coinValue.value
+        val value = if (explicitSign) Math.abs(coinValue.value) else coinValue.value
 
-        val formattedValue = coinFormatter.format(value) ?:kotlin.run{
-            return null
+        val customFormatter = coinFormatter
+        if (value == 0.0) {
+            customFormatter.maximumFractionDigits = 0
         }
+
+        val formattedValue = customFormatter.format(value) ?: run { return null }
 
         var result = "$formattedValue ${coinValue.coin}"
 
@@ -53,7 +56,7 @@ object ValueFormatter {
         val bigNumber = value >= 100.0
 
         val formatter = currencyFormatter
-        formatter.maximumFractionDigits = if (bigNumber || approximate) 0 else 2
+        formatter.maximumFractionDigits = if (bigNumber || approximate || value == 0.0) 0 else 2
 
         var result: String = formatter.format(value) ?: kotlin.run {
             return null
