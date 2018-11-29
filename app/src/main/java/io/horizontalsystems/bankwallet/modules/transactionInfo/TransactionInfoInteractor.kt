@@ -1,31 +1,32 @@
 package io.horizontalsystems.bankwallet.modules.transactionInfo
 
 import io.horizontalsystems.bankwallet.core.IClipboardManager
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionRecordViewItem
+import io.horizontalsystems.bankwallet.core.storage.AppDatabase
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
-class TransactionInfoInteractor(private val transactionRecordViewItem: TransactionRecordViewItem, private var clipboardManager: IClipboardManager) : TransactionInfoModule.IInteractor {
+class TransactionInfoInteractor(
+        private val database: AppDatabase,
+        private var clipboardManager: IClipboardManager) : TransactionInfoModule.IInteractor {
 
     var delegate: TransactionInfoModule.IInteractorDelegate? = null
 
-    override fun getTransactionInfo() {
-        delegate?.didGetTransactionInfo(transactionRecordViewItem)
+    override fun getTransaction(transactionHash: String) {
+        val disposable = database.transactionDao().getByHash(transactionHash)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(io.reactivex.schedulers.Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { record ->
+                    delegate?.didGetTransaction(record)
+                }
     }
 
-    override fun onCopyAddress() {
-        val address = if (transactionRecordViewItem.incoming) transactionRecordViewItem.from else transactionRecordViewItem.to
-        address?.let {
-            clipboardManager.copyText(it)
-            delegate?.didCopyToClipboard()
-        }
-    }
-
-    override fun onCopyId() {
-        clipboardManager.copyText(transactionRecordViewItem.hash)
-        delegate?.didCopyToClipboard()
+    override fun onCopy(value: String) {
+        clipboardManager.copyText(value)
     }
 
     override fun showFullInfo() {
-        delegate?.showFullInfo(transactionRecordViewItem)
+//        delegate?.showFullInfo(transactionRecordViewItem)
     }
 
 }

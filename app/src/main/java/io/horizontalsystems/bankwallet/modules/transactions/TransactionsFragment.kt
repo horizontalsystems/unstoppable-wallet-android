@@ -47,9 +47,9 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
             }
         })
 
-        viewModel.showTransactionInfoLiveEvent.observe(this, Observer { transactionRecordViewItem ->
-            transactionRecordViewItem?.let { transaction ->
-                activity?.let { TransactionInfoModule.start(it, transaction) }
+        viewModel.showTransactionInfoLiveEvent.observe(this, Observer { transactionHash ->
+            transactionHash?.let { transactionHash ->
+                activity?.let { TransactionInfoModule.start(it, transactionHash) }
             }
         })
 
