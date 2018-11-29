@@ -4,14 +4,14 @@ import io.horizontalsystems.bankwallet.core.IRateStorage
 import io.horizontalsystems.bankwallet.entities.LatestRate
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.modules.transactions.Coin
-import io.reactivex.Single
+import io.reactivex.Maybe
 import java.util.concurrent.Executors
 
 class RatesRepository(private val appDatabase: AppDatabase) : IRateStorage {
 
     private val executor = Executors.newSingleThreadExecutor()
 
-    override fun rate(coin: Coin, currencyCode: String): Single<Rate> {
+    override fun rate(coin: Coin, currencyCode: String): Maybe<Rate> {
         return appDatabase.ratesDao().getRate(coin, currencyCode)
     }
 
