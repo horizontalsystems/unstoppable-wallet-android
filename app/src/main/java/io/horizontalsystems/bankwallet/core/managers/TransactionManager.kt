@@ -61,7 +61,7 @@ class TransactionManager(
     }
 
     private fun clear() {
-        storage.clearRecords()
+        storage.deleteAll()
     }
 
 }
