@@ -65,7 +65,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
                 if (rateValue != null) {
                     val currencyBalance = adapter.balance * rateValue
                     if (currencyBalance < input.amount) {
-                        SendModule.AmountError.InsufficientBalance(SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(baseCurrency, currencyBalance)))
+                        state.amountError = SendModule.AmountError.InsufficientBalance(SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(baseCurrency, currencyBalance)))
                     }
                 }
 
