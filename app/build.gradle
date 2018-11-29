@@ -24,17 +24,28 @@ android {
         versionCode computeVersionCode()
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        resValue "string", "localizations", buildProperties.get("localizations")
     }
     buildTypes {
-        debug{
+        debug {
             minifyEnabled false
-            resValue "string", "enabled_coins", buildProperties.get("enabled_coins")
-            resValue "string", "localizations", buildProperties.get("localizations")
         }
-
-        release.initWith(buildTypes.debug)
         release {
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    flavorDimensions "network"
+    productFlavors {
+        devTestnet {
+            resValue "string", "enabled_coins", buildProperties.get("enabled_coins_testnet")
+            applicationIdSuffix ".dev.testnet"
+        }
+        devMainnet {
+            resValue "string", "enabled_coins", buildProperties.get("enabled_coins_mainnet")
+            applicationIdSuffix ".dev"
         }
     }
     compileOptions {
@@ -105,7 +116,7 @@ dependencies {
 
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    
+
     // optional - Test helpers for LiveData
     testImplementation 'junit:junit:4.12'
     testImplementation "android.arch.core:core-testing:$lifecycle_version"

@@ -7,12 +7,22 @@ platform :android do
 
   desc "Submit a new Dev Build"
   lane :dev_build do |options|
-    app_name = options[:app_name]
     commit = last_git_commit
     build_number = options[:build_number]
 
     gradle(task: "clean")
-    gradle(task: "assembleDebug")
+    gradle(task: "assembleDevMainnetDebug")
+
+    upload_to_hockey(notes: "Author: #{commit[:author]}, changes: #{commit[:message]}")
+  end
+
+  desc "Submit a new Dev Testnet Build"
+  lane :dev_testnet_build do |options|
+    commit = last_git_commit
+    build_number = options[:build_number]
+
+    gradle(task: "clean")
+    gradle(task: "assembleDevTestnetDebug")
 
     upload_to_hockey(notes: "Author: #{commit[:author]}, changes: #{commit[:message]}")
   end
