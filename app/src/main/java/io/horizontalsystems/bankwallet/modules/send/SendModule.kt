@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.transactions.Coin
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
+import io.horizontalsystems.bankwallet.viewHelpers.ValueFormatter
 
 object SendModule {
 
@@ -23,6 +24,7 @@ object SendModule {
 
         fun setSendButtonEnabled(sendButtonEnabled: Boolean)
 
+        fun showConfirmation(viewItem: SendConfirmationViewItem)
         fun showError(error: Throwable)
         fun dismissWithSuccess()
 
@@ -36,6 +38,7 @@ object SendModule {
         fun onScanAddress(address: String)
         fun onDeleteClicked()
         fun onSendClicked()
+        fun onConfirmClicked()
     }
 
     interface IInteractor {
@@ -95,6 +98,15 @@ object SendModule {
     sealed class AmountInfo {
         data class CoinValueInfo(val coinValue: CoinValue) : AmountInfo()
         data class CurrencyValueInfo(val currencyValue: CurrencyValue) : AmountInfo()
+
+        fun getFormatted(): String? = when (this) {
+            is SendModule.AmountInfo.CoinValueInfo -> {
+                ValueFormatter.format(this.coinValue)
+            }
+            is SendModule.AmountInfo.CurrencyValueInfo -> {
+                ValueFormatter.formatSimple(this.currencyValue)
+            }
+        }
     }
 
     class UserInput {
@@ -124,4 +136,7 @@ object SendModule {
         var sendButtonEnabled: Boolean = false
     }
 
+    class SendConfirmationViewItem(val coinValue: CoinValue, val address: String, val feeInfo: AmountInfo, val totalInfo: AmountInfo) {
+        var currencyValue: CurrencyValue? = null
+    }
 }

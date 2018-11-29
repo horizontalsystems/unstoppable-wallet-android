@@ -48,8 +48,10 @@ class SendFragment : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this).get(SendViewModel::class.java)
-        viewModel.init(coin)
+        activity?.let {
+            viewModel = ViewModelProviders.of(it).get(SendViewModel::class.java)
+            viewModel.init(coin)
+        }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -204,6 +206,9 @@ class SendFragment : DialogFragment() {
             }
         })
 
+        viewModel.showConfirmationLiveEvent.observe(this, Observer {
+            activity?.let { ConfirmationFragment.show(it) }
+        })
 
         mDialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
 

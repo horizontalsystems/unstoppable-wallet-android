@@ -69,7 +69,15 @@ class SendPresenter(
     }
 
     override fun onSendClicked() {
+        val state = interactor.stateForUserInput(userInput)
+        val viewItem = factory.confirmationViewItemForState(state) ?: return
+
+        view?.showConfirmation(viewItem)
+    }
+
+    override fun onConfirmClicked() {
         interactor.send(userInput)
+        view?.dismissWithSuccess()
     }
 
     override fun didSend() {

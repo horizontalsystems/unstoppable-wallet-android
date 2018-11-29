@@ -1,69 +1,80 @@
 package io.horizontalsystems.bankwallet.modules.send
 
 import android.app.Dialog
-import android.content.DialogInterface
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import android.support.v4.app.FragmentActivity
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
+import io.horizontalsystems.bankwallet.viewHelpers.ValueFormatter
 
 class ConfirmationFragment : DialogFragment() {
 
-    interface Listener {
-        fun onButtonClick()
+    private lateinit var viewModel: SendViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        activity?.let {
+            viewModel = ViewModelProviders.of(it).get(SendViewModel::class.java)
+        }
     }
 
-    private var amountInCrypto: String = ""
-    private var amountInFiat: String = ""
-
-    private var listener: Listener? = null
-
     override fun onCreateDialog(bundle: Bundle?): Dialog {
-
         val builder = activity?.let { AlertDialog.Builder(it, R.style.AlertDialog) }
 
         val rootView = View.inflate(context, R.layout.fragment_confirmation, null) as ViewGroup
         builder?.setView(rootView)
 
-        rootView.findViewById<TextView>(R.id.txtAmountInCrypto)?.text = amountInCrypto
-        rootView.findViewById<TextView>(R.id.txtAmountInFiat)?.text = amountInFiat
-
-        rootView.findViewById<TextView>(R.id.txtButtonConfirm)?.let { txtButton ->
-            txtButton.setOnClickListener {
-                listener?.onButtonClick()
-                dismiss()
+        viewModel.sendConfirmationViewItemLiveData.observe(this, Observer {
+            it?.let { sendConfirmationViewItem ->
+                rootView.findViewById<TextView>(R.id.txtAmountInCrypto)?.text = "${sendConfirmationViewItem.coinValue.value} ${sendConfirmationViewItem.coinValue.coin}"
+                sendConfirmationViewItem.currencyValue?.let { currencyValue ->
+                    rootView.findViewById<TextView>(R.id.txtAmountInFiat)?.let {
+                        it.visibility = View.VISIBLE
+                        it.text = ValueFormatter.formatSimple(currencyValue)
+                    }
+                }
+                rootView.findViewById<TextView>(R.id.txtAddressTo)?.text = sendConfirmationViewItem.address
+                rootView.findViewById<TextView>(R.id.txtFeeValue)?.text = sendConfirmationViewItem.feeInfo.getFormatted()
+                rootView.findViewById<TextView>(R.id.txtTotalValue)?.text = sendConfirmationViewItem.totalInfo.getFormatted()
             }
-        }
+        })
 
-        rootView.findViewById<TextView>(R.id.txtButtonCancel)?.let { txtButton ->
-            txtButton.setOnClickListener {
+        viewModel.coinLiveData.observe(this, Observer { coin ->
+            coin?.let { coinCode ->
+                context?.let {
+                    val coinDrawable = ContextCompat.getDrawable(it, LayoutHelper.getCoinDrawableResource(coinCode))
+                    rootView.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
+                }
+                rootView.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.send_bottom_sheet_title, coinCode)
+            }
+        })
+
+
+        rootView.findViewById<TextView>(R.id.buttonConfirm)?.let { buttonConfirm ->
+            buttonConfirm.setOnClickListener {
+                viewModel.delegate.onConfirmClicked()
                 dismiss()
             }
         }
 
         val mDialog = builder?.create()
-        mDialog?.setCanceledOnTouchOutside(false)
-
         return mDialog as Dialog
     }
 
-    override fun onDismiss(dialog: DialogInterface?) {
-        super.onDismiss(dialog)
-
-        listener?.onButtonClick()
-    }
-
-
     companion object {
-        fun newInstance(amountInCrypto: String, amountInFiat: String, listener: Listener? = null): ConfirmationFragment {
-            val dialog = ConfirmationFragment()
-            dialog.amountInCrypto = amountInCrypto
-            dialog.amountInFiat = amountInFiat
-            dialog.listener = listener
-            return dialog
+        fun show(activity: FragmentActivity) {
+            val fragment = ConfirmationFragment()
+            fragment.show(activity.supportFragmentManager, "confirm_send_fragment")
         }
     }
 
