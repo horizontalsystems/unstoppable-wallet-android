@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
-import io.reactivex.Single
+import io.reactivex.Maybe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -48,7 +48,7 @@ class WalletPresenter(
         val wallets = interactor.wallets
         val rateObservables = wallets.map { interactor.rate(it.coin) }
 
-        Single.merge(rateObservables)
+        Maybe.merge(rateObservables)
                 .toList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

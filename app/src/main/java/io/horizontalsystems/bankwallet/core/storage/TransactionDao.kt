@@ -7,16 +7,16 @@ import android.arch.persistence.room.Query
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.Coin
 import io.reactivex.Flowable
-import io.reactivex.Single
+import io.reactivex.Maybe
 
 @Dao
 interface TransactionDao {
 
     @Query("SELECT * FROM TransactionRecord WHERE transactionHash = :txHash")
-    fun getByHash(txHash: String): Single<TransactionRecord>
+    fun getByHash(txHash: String): Maybe<TransactionRecord>
 
     @Query("SELECT * FROM TransactionRecord WHERE rate = 0")
-    fun getNonFilledRecord(): Single<List<TransactionRecord>>
+    fun getNonFilledRecord(): Maybe<List<TransactionRecord>>
 
     @Query("UPDATE TransactionRecord SET rate = :rate WHERE transactionHash = :txHash")
     fun updateRate(rate: Double, txHash: String)

@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.transactions.Coin
 import io.reactivex.Flowable
-import io.reactivex.Single
+import io.reactivex.Maybe
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import java.util.*
@@ -163,7 +163,7 @@ interface IRateSyncerDelegate {
 }
 
 interface IRateStorage {
-    fun rate(coin: Coin, currencyCode: String): Single<Rate>
+    fun rate(coin: Coin, currencyCode: String): Maybe<Rate>
     fun save(latestRate: LatestRate, coin: Coin, currencyCode: String)
     fun clear()
 }
@@ -174,8 +174,8 @@ interface ITransactionRateSyncer {
 }
 
 interface ITransactionRecordStorage {
-    fun record(hash: String): Single<TransactionRecord>
-    val nonFilledRecords: Single<List<TransactionRecord>>
+    fun record(hash: String): Maybe<TransactionRecord>
+    val nonFilledRecords: Maybe<List<TransactionRecord>>
     fun set(rate: Double, transactionHash: String)
     fun clearRates()
 

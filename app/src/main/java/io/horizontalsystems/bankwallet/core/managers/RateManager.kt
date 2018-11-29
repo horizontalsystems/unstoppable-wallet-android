@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.LatestRate
 import io.horizontalsystems.bankwallet.entities.Rate
-import io.reactivex.Single
+import io.reactivex.Maybe
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
@@ -36,7 +36,7 @@ class RateManager(
         })
     }
 
-    fun rate(coin: String, currencyCode: String): Single<Rate> {
+    fun rate(coin: String, currencyCode: String): Maybe<Rate> {
         return storage.rate(coin, currencyCode)
     }
 
