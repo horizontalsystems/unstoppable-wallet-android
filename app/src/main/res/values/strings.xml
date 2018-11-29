@@ -52,6 +52,7 @@
     <string name="send_bottom_sheet_success">Sent!</string>
     <string name="send_bottom_confirm_dialog_title">Confirm Transaction</string>
     <string name="send_bottom_confirm_dialog_fee">Fee:</string>
+    <string name="send_bottom_confirm_dialog_total">Total:</string>
     <string name="send_error_incorrect_address">Incorrect Address</string>
     <string name="send_error_balance_amount">Balance %s</string>
 

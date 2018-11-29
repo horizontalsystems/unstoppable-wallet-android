@@ -21,6 +21,7 @@ object ValueFormatter {
         get() {
             val format: NumberFormat = NumberFormat.getInstance()
             format.minimumFractionDigits = 2
+            format.maximumFractionDigits = 2
             format.roundingMode = RoundingMode.CEILING
             return format
         }
@@ -65,5 +66,10 @@ object ValueFormatter {
         }
 
         return result
+    }
+
+    fun formatSimple(currencyValue: CurrencyValue): String? {
+        val result = currencyFormatter.format(currencyValue.value) ?: return null
+        return "${currencyValue.currency.symbol}$result"
     }
 }

@@ -19,6 +19,8 @@ class SendViewModel : ViewModel(), SendModule.IRouter, SendModule.IView {
     val primaryFeeAmountInfoLiveData = MutableLiveData<SendModule.AmountInfo>()
     val secondaryFeeAmountInfoLiveData = MutableLiveData<SendModule.AmountInfo>()
     val errorLiveData = MutableLiveData<Throwable>()
+    val sendConfirmationViewItemLiveData = MutableLiveData<SendModule.SendConfirmationViewItem>()
+    val showConfirmationLiveEvent = SingleLiveEvent<Unit>()
 
     fun init(coin: String) {
         SendModule.init(this, this, coin)
@@ -55,6 +57,11 @@ class SendViewModel : ViewModel(), SendModule.IRouter, SendModule.IView {
 
     override fun setSendButtonEnabled(sendButtonEnabled: Boolean) {
         sendButtonEnabledLiveData.value = sendButtonEnabled
+    }
+
+    override fun showConfirmation(viewItem: SendModule.SendConfirmationViewItem) {
+        sendConfirmationViewItemLiveData.value = viewItem
+        showConfirmationLiveEvent.call()
     }
 
     override fun showError(error: Throwable) {
