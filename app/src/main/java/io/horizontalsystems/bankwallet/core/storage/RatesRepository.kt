@@ -21,7 +21,7 @@ class RatesRepository(private val appDatabase: AppDatabase) : IRateStorage {
         }
     }
 
-    override fun clear() {
+    override fun deleteAll() {
         executor.execute {
             appDatabase.ratesDao().deleteAll()
         }

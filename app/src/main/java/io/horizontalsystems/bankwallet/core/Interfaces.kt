@@ -165,7 +165,7 @@ interface IRateSyncerDelegate {
 interface IRateStorage {
     fun rate(coin: Coin, currencyCode: String): Maybe<Rate>
     fun save(latestRate: LatestRate, coin: Coin, currencyCode: String)
-    fun clear()
+    fun deleteAll()
 }
 
 interface ITransactionRateSyncer {
@@ -180,5 +180,5 @@ interface ITransactionRecordStorage {
     fun clearRates()
 
     fun update(records: List<TransactionRecord>)
-    fun clearRecords()
+    fun deleteAll()
 }

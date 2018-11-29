@@ -1,15 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.settings.security
 
-import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.core.ISystemInfoManager
-import io.horizontalsystems.bankwallet.core.IWalletManager
-import io.horizontalsystems.bankwallet.core.IWordsManager
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.BiometryType
 
 class SecuritySettingsInteractor(
         private val walletManager: IWalletManager,
         wordsManager: IWordsManager,
         private val localStorage: ILocalStorage,
+        private val transactionRepository: ITransactionRecordStorage,
+        private val exchangeRateRepository: IRateStorage,
         private val systemInfoManager: ISystemInfoManager): SecuritySettingsModule.ISecuritySettingsInteractor {
 
     var delegate: SecuritySettingsModule.ISecuritySettingsInteractorDelegate? = null
@@ -42,6 +41,8 @@ class SecuritySettingsInteractor(
     override fun unlinkWallet() {
         walletManager.clearWallets()
         localStorage.clearAll()
+        transactionRepository.deleteAll()
+        exchangeRateRepository.deleteAll()
         delegate?.didUnlinkWallet()
     }
 }

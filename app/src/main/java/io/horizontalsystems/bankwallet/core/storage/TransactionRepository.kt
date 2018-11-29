@@ -31,7 +31,7 @@ class TransactionRepository(private val appDatabase: AppDatabase) : ITransaction
         }
     }
 
-    override fun clearRecords() {
+    override fun deleteAll() {
         executor.execute {
             appDatabase.transactionDao().deleteAll()
         }
