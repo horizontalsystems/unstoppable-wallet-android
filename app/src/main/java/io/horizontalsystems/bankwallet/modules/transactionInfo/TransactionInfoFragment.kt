@@ -72,7 +72,7 @@ class TransactionInfoFragment : DialogFragment() {
                         else -> R.drawable.checkmark_green
                     }
                     val progress = when (txStatus) {
-                        is TransactionStatus.Processing -> txStatus.progress
+                        is TransactionStatus.Processing -> txStatus.progress.times(100).toInt()
                         else -> null
                     }
                     val statusText = when (txStatus) {
