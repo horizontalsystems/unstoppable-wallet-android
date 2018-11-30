@@ -22,7 +22,7 @@ data class TransactionViewItem(
 
 sealed class TransactionStatus {
     object Pending : TransactionStatus()
-    class Processing(val progress: Double) : TransactionStatus() //progress in 0..100%
+    class Processing(val progress: Int) : TransactionStatus() //progress in 0..100%
     object Completed : TransactionStatus()
 }
 
