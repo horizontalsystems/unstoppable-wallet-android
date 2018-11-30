@@ -123,6 +123,7 @@ class ViewHolderTransaction(override val containerView: View) : RecyclerView.Vie
         txTime.text = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }
         txValueInFiat.text = transactionRecord.currencyValue?.let { ValueFormatter.format(it, true) }
         statusIcon.setImageDrawable(getStatusIcon(transactionRecord.status))
+        pendingShade.visibility = if (transactionRecord.status == TransactionStatus.Pending) View.VISIBLE else View.GONE
     }
 
     private fun getStatusIcon(status: TransactionStatus?): Drawable? {
