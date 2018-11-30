@@ -26,10 +26,9 @@ class TransactionViewItemFactory(private val walletManager: IWalletManager, priv
 
             val threshold = adapter.confirmationsThreshold
 
-            if (confirmations >= threshold) {
-                status = TransactionStatus.Completed
-            } else {
-                status = TransactionStatus.Processing(confirmations / threshold.toDouble())
+            status = when {
+                confirmations >= threshold -> TransactionStatus.Completed
+                else -> TransactionStatus.Processing((confirmations / threshold.toDouble()).times(100).toInt())
             }
         }
 
