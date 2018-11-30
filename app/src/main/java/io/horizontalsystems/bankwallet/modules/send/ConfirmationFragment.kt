@@ -34,9 +34,9 @@ class ConfirmationFragment : DialogFragment() {
         val rootView = View.inflate(context, R.layout.fragment_confirmation, null) as ViewGroup
         builder?.setView(rootView)
 
-        viewModel.sendConfirmationViewItemLiveData.observe(this, Observer {
-            it?.let { sendConfirmationViewItem ->
-                rootView.findViewById<TextView>(R.id.txtAmountInCrypto)?.text = "${sendConfirmationViewItem.coinValue.value} ${sendConfirmationViewItem.coinValue.coin}"
+        viewModel.sendConfirmationViewItemLiveData.observe(this, Observer { viewItem ->
+            viewItem?.let { sendConfirmationViewItem ->
+                rootView.findViewById<TextView>(R.id.txtAmountInCrypto)?.text = ValueFormatter.format(sendConfirmationViewItem.coinValue)
                 sendConfirmationViewItem.currencyValue?.let { currencyValue ->
                     rootView.findViewById<TextView>(R.id.txtAmountInFiat)?.let {
                         it.visibility = View.VISIBLE
