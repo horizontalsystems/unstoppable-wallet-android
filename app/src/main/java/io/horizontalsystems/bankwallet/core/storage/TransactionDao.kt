@@ -24,10 +24,10 @@ interface TransactionDao {
     @Query("UPDATE TransactionRecord SET rate = 0")
     fun clearRates()
 
-    @Query("SELECT * FROM TransactionRecord")
+    @Query("SELECT * FROM TransactionRecord ORDER BY timestamp DESC")
     fun getAll(): Flowable<List<TransactionRecord>>
 
-    @Query("SELECT * FROM TransactionRecord where coin = :coin")
+    @Query("SELECT * FROM TransactionRecord where coin = :coin ORDER BY timestamp DESC")
     fun getAll(coin: Coin): Flowable<List<TransactionRecord>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
