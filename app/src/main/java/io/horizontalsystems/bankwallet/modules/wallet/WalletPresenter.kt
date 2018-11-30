@@ -58,11 +58,11 @@ class WalletPresenter(
                     val currency = interactor.baseCurrency
                     var allSynced = true
 
-                    rates.forEach { rate ->
-                        val wallet = wallets.first { it.coin == rate.coin }
+                    wallets.forEach { wallet ->
+                        val rate = rates.firstOrNull { it.coin == wallet.coin }
                         val balance = wallet.adapter.balance
 
-                        val rateExpired = rate.expired
+                        val rateExpired = rate?.expired ?: true
 
                         rate?.let { mRate ->
                             totalBalance += balance * mRate.value
