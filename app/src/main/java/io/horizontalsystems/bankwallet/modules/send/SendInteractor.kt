@@ -8,11 +8,19 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.Coin
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
 class SendInteractor(private val currencyManager: ICurrencyManager,
                      private val rateManager: RateManager,
                      private val clipboardManager: IClipboardManager,
                      private val wallet: Wallet) : SendModule.IInteractor {
+
+    sealed class SendError : Exception() {
+        class NoAddress : SendError()
+        class NoAmount : SendError()
+    }
 
     var delegate: SendModule.IInteractorDelegate? = null
 
@@ -22,11 +30,25 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
     override val addressFromClipboard: String?
         get() = clipboardManager.getCopiedText()
 
-    //todo replace stubbed data with real data
-    val stubbedRate = Rate("BTC", "USD", 4000.0)
+    private var rate: Rate? = null
+    private val disposables = CompositeDisposable()
+
+    override fun retrieveRate() {
+        disposables.add(
+                rateManager.rate(wallet.coin, currencyManager.baseCurrency.code)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doFinally {
+                            delegate?.didRateRetrieve()
+                        }
+                        .subscribe {
+                            rate = if (it.expired) null else it
+                        }
+        )
+    }
 
     override fun convertedAmountForInputType(inputType: SendModule.InputType, amount: Double): Double? {
-        val rate = stubbedRate //rateManager.rate(wallet.coin, currencyManager.baseCurrency.code) ?: return null
+        val rate = this.rate ?: return null
 
         return when (inputType) {
             SendModule.InputType.COIN -> amount * rate.value
@@ -39,7 +61,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
         val coin = wallet.coin
         val adapter = wallet.adapter
         val baseCurrency = currencyManager.baseCurrency
-        val rateValue =stubbedRate.value// rateManager.rate(coin, baseCurrency.code)?.value
+        val rateValue = rate?.value
 
         val state = SendModule.State(input.inputType)
 
@@ -100,13 +122,29 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
     }
 
     override fun send(userInput: SendModule.UserInput) {
+        val address = userInput.address
+        if (address == null) {
+            delegate?.didFailToSend(SendError.NoAddress())
+            return
+        }
 
-        val rateValue = stubbedRate.value// rateManager.rate(wallet.coin, currencyManager.baseCurrency.code)?.value
-                ?: return
+        var computedAmount: Double? = null
 
-        val address = userInput.address ?: return
+        if (userInput.inputType == SendModule.InputType.COIN) {
+            computedAmount = userInput.amount
+        } else {
+            val rateValue = rate?.value
+            if (rateValue != null) {
+                computedAmount = userInput.amount / rateValue
+            }
+        }
 
-        val amount = if (userInput.inputType == SendModule.InputType.COIN) userInput.amount else userInput.amount / rateValue
+        val amount = computedAmount
+
+        if (amount == null) {
+            delegate?.didFailToSend(SendError.NoAmount())
+            return
+        }
 
         wallet.adapter.send(address, amount) { error ->
             when (error) {
