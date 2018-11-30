@@ -45,6 +45,7 @@ object SendModule {
         val coin: Coin
         val addressFromClipboard: String?
 
+        fun retrieveRate()
         fun convertedAmountForInputType(inputType: InputType, amount: Double): Double?
         fun stateForUserInput(input: UserInput): State
 
@@ -52,6 +53,7 @@ object SendModule {
     }
 
     interface IInteractorDelegate {
+        fun didRateRetrieve()
         fun didSend()
         fun didFailToSend(error: Throwable)
     }

@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.reactivex.Maybe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -63,12 +62,9 @@ class WalletPresenter(
                         val wallet = wallets.first { it.coin == rate.coin }
                         val balance = wallet.adapter.balance
 
-                        var rateExpired = false
+                        val rateExpired = rate.expired
 
                         rate?.let { mRate ->
-                            val diff = DateHelper.getSecondsAgo(mRate.timestamp)
-                            rateExpired = diff > 60 * 10
-
                             totalBalance += balance * mRate.value
                         }
 

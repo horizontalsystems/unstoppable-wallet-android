@@ -10,17 +10,7 @@ class SendPresenter(
     var view: SendModule.IView? = null
 
     override fun onViewDidLoad() {
-        val state = interactor.stateForUserInput(userInput)
-        val viewItem = factory.viewItemForState(state)
-
-        view?.setCoin(interactor.coin)
-        view?.setAmountInfo(viewItem.amountInfo)
-        view?.setSwitchButtonEnabled(viewItem.switchButtonEnabled)
-        view?.setHintInfo(viewItem.hintInfo)
-        view?.setAddressInfo(viewItem.addressInfo)
-        view?.setPrimaryFeeInfo(viewItem.primaryFeeInfo)
-        view?.setSecondaryFeeInfo(viewItem.secondaryFeeInfo)
-        view?.setSendButtonEnabled(viewItem.sendButtonEnabled)
+        interactor.retrieveRate()
     }
 
     override fun onAmountChanged(amount: Double) {
@@ -77,7 +67,20 @@ class SendPresenter(
 
     override fun onConfirmClicked() {
         interactor.send(userInput)
-        view?.dismissWithSuccess()
+    }
+
+    override fun didRateRetrieve() {
+        val state = interactor.stateForUserInput(userInput)
+        val viewItem = factory.viewItemForState(state)
+
+        view?.setCoin(interactor.coin)
+        view?.setAmountInfo(viewItem.amountInfo)
+        view?.setSwitchButtonEnabled(viewItem.switchButtonEnabled)
+        view?.setHintInfo(viewItem.hintInfo)
+        view?.setAddressInfo(viewItem.addressInfo)
+        view?.setPrimaryFeeInfo(viewItem.primaryFeeInfo)
+        view?.setSecondaryFeeInfo(viewItem.secondaryFeeInfo)
+        view?.setSendButtonEnabled(viewItem.sendButtonEnabled)
     }
 
     override fun didSend() {
