@@ -23,8 +23,7 @@ class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, Eth
     override val stateSubject: PublishSubject<AdapterState> = PublishSubject.create()
 
     override val confirmationsThreshold: Int = 12
-    // todo replace with real ethereumKit.lastBlockHeight
-    override val lastBlockHeight: Int? get() = 0
+    override val lastBlockHeight: Int? get() = ethereumKit.lastBlockHeight
     override val lastBlockHeightSubject: PublishSubject<Int> = PublishSubject.create()
 
     override val transactionRecordsSubject: PublishSubject<List<TransactionRecord>> = PublishSubject.create()
@@ -58,6 +57,10 @@ class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, Eth
 
     override fun balanceUpdated(ethereumKit: EthereumKit, balance: Double) {
         balanceSubject.onNext(balance / weisInEther)
+    }
+
+    override fun lastBlockHeightUpdated(height: Int) {
+        lastBlockHeightSubject.onNext(height)
     }
 
     override fun transactionsUpdated(ethereumKit: EthereumKit, inserted: List<Transaction>, updated: List<Transaction>, deleted: List<Int>) {
