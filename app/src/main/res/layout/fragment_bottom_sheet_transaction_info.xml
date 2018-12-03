@@ -129,7 +129,7 @@
         />
 
     <io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemView
-        android:id="@+id/itemFromTo"
+        android:id="@+id/itemFrom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -139,14 +139,16 @@
         app:value="1111111"
         />
 
-    <View
-        android:id="@+id/border3"
-        android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:background="@color/grey_20"
+    <io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemView
+        android:id="@+id/itemTo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/itemFromTo"
+        app:layout_constraintTop_toBottomOf="@+id/itemFrom"
+        app:title="@string/transaction_info_to"
+        app:value="222222"
         />
 
     <io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemView
@@ -155,19 +157,9 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/border3"
+        app:layout_constraintTop_toBottomOf="@+id/itemTo"
         app:title="@string/transaction_info_status"
         app:value="COMPLETED"
-        />
-
-    <View
-        android:id="@+id/border4"
-        android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:background="@color/grey_20"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/itemStatus"
         />
 
     <TextView
@@ -184,7 +176,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/border4"
+        app:layout_constraintTop_toBottomOf="@+id/itemStatus"
         />
 
 </android.support.constraint.ConstraintLayout>

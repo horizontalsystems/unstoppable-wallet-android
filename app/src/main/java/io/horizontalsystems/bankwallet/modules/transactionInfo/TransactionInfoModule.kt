@@ -18,7 +18,8 @@ object TransactionInfoModule {
     interface IViewDelegate {
         fun viewDidLoad()
         fun onStatusClick()
-        fun onCopyAddress()
+        fun onCopyFromAddress()
+        fun onCopyToAddress()
         fun onCopyId()
         fun onCloseClick()
     }
