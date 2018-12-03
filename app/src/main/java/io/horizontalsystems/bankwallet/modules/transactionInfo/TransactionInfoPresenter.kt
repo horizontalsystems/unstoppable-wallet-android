@@ -21,9 +21,15 @@ class TransactionInfoPresenter(
         interactor.getTransaction(transactionHash)
     }
 
-    override fun onCopyAddress() {
-        val address = transactionViewItem?.let { if (it.incoming) it.from else it.to }
-        address?.let {
+    override fun onCopyFromAddress() {
+        transactionViewItem?.from?.let {
+            interactor.onCopy(it)
+            view?.showCopied()
+        }
+    }
+
+    override fun onCopyToAddress() {
+        transactionViewItem?.to?.let {
             interactor.onCopy(it)
             view?.showCopied()
         }

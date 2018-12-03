@@ -26,6 +26,7 @@ class TransactionInfoItemView : ConstraintLayout {
     private lateinit var iconImageView: ImageView
     private lateinit var valueLinearLayout: LinearLayout
     private lateinit var progressBarView: ProgressBar
+    private lateinit var bottomBorder: View
 
 
     constructor(context: Context) : super(context) {
@@ -51,6 +52,7 @@ class TransactionInfoItemView : ConstraintLayout {
         iconImageView = findViewById(R.id.valueLeftIcon)
         valueLinearLayout = findViewById(R.id.valueWrapper)
         progressBarView = findViewById(R.id.progressBar)
+        bottomBorder = findViewById(R.id.border)
 
         titleTextView.text = attrTitle
         valueTitleTextView.text = attrValue
@@ -61,7 +63,7 @@ class TransactionInfoItemView : ConstraintLayout {
         ConstraintLayout.inflate(context, R.layout.view_transaction_info_item, this)
     }
 
-    fun bind(title: String? = null, valueTitle: String? = null, valueSubtitle: String? = null, valueIcon: Int? = null, progressValue: Int? = null) {
+    fun bind(title: String? = null, valueTitle: String? = null, valueSubtitle: String? = null, valueIcon: Int? = null, progressValue: Int? = null, showBottomBorder: Boolean = false) {
         titleTextView.text = title
         valueTitleTextView.text = valueTitle
         valueSubtitleTextView.text = valueSubtitle
@@ -75,6 +77,7 @@ class TransactionInfoItemView : ConstraintLayout {
         progressBarView.progress = progressValue ?: 0
         progressBarView.visibility = if (progressValue == null) View.GONE else View.VISIBLE
         valueSubtitleTextView.visibility = if (valueSubtitle == null) View.GONE else View.VISIBLE
+        bottomBorder.visibility = if (showBottomBorder) View.VISIBLE else View.GONE
 
         if (valueIcon == null || progressValue != null) {
             valueLinearLayout.background = null

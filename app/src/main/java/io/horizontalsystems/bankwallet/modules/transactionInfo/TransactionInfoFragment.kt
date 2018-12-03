@@ -47,7 +47,6 @@ class TransactionInfoFragment : DialogFragment() {
 
         rootView.findViewById<View>(R.id.txtClose)?.setOnClickListener { viewModel.delegate.onCloseClick() }
         rootView.findViewById<View>(R.id.transactionIdLayout)?.setOnClickListener { viewModel.delegate.onCopyId() }
-        rootView.findViewById<View>(R.id.itemFromTo)?.setOnClickListener { viewModel.delegate.onCopyAddress() }
 //        rootView.findViewById<View>(R.id.itemStatus)?.setOnClickListener { viewModel.delegate.onStatusClick() }
 
         viewModel.transactionLiveData.observe(this, Observer { txRecord ->
@@ -80,7 +79,7 @@ class TransactionInfoFragment : DialogFragment() {
                         is TransactionStatus.Pending -> getString(R.string.transaction_info_status_pending)
                         else -> getString(R.string.transaction_info_status_completed)
                     }
-                    bind(title = getString(R.string.transaction_info_status), valueTitle = statusText.toUpperCase(), valueIcon = valueIcon, progressValue = progress)
+                    bind(title = getString(R.string.transaction_info_status), valueTitle = statusText.toUpperCase(), valueIcon = valueIcon, progressValue = progress, showBottomBorder = true)
                 }
 
                 rootView.findViewById<TextView>(R.id.transactionId)?.apply {
@@ -91,9 +90,16 @@ class TransactionInfoFragment : DialogFragment() {
                     text = txRec.currencyValue?.let { ValueFormatter.format(it, true) }
                 }
 
-                rootView.findViewById<TransactionInfoItemView>(R.id.itemFromTo)?.apply {
-                    val title = getString(if (txRec.incoming) R.string.transaction_info_from else R.string.transaction_info_to)
-                    bind(title = title, valueTitle = if (txRec.incoming) txRec.from else txRec.to, valueIcon = R.drawable.round_person_18px)
+                rootView.findViewById<TransactionInfoItemView>(R.id.itemFrom)?.apply {
+                    setOnClickListener { viewModel.delegate.onCopyFromAddress() }
+                    visibility = if (txRec.from == null) View.GONE else View.VISIBLE
+                    bind(title = getString(R.string.transaction_info_from), valueTitle = txRec.from, valueIcon = R.drawable.round_person_18px, showBottomBorder = true)
+                }
+
+                rootView.findViewById<TransactionInfoItemView>(R.id.itemTo)?.apply {
+                    setOnClickListener { viewModel.delegate.onCopyToAddress() }
+                    visibility = if (txRec.to == null) View.GONE else View.VISIBLE
+                    bind(title = getString(R.string.transaction_info_to), valueTitle = txRec.to, valueIcon = R.drawable.round_person_18px, showBottomBorder = true)
                 }
             }
 
