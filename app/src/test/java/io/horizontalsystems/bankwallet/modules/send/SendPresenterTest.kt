@@ -123,7 +123,7 @@
 ////
 ////        presenter.didFailToSend(exception)
 ////
-////        verify(view).showError(R.string.send_bottom_sheet_error_invalid_address)
+////        verify(view).showError(R.string.Send_Error_InvalidAddress)
 ////    }
 //
 ////    @Test
@@ -132,7 +132,7 @@
 ////
 ////        presenter.didFailToSend(exception)
 ////
-////        verify(view).showError(R.string.send_bottom_sheet_error_insufficient_balance)
+////        verify(view).showError(R.string.Send__Error_Insufficient_Balance)
 ////    }
 //
 //    @Test

@@ -14,7 +14,7 @@ class LanguageSettingsPresenter(
     }
 
     override fun viewDidLoad() {
-        view?.setTitle(R.string.settings_language_title)
+        view?.setTitle(R.string.SettingsLanguage_Title)
         view?.show(items = interactor.items)
     }
 

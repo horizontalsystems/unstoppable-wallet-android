@@ -55,7 +55,7 @@ class ConfirmationFragment : DialogFragment() {
                     val coinDrawable = ContextCompat.getDrawable(it, LayoutHelper.getCoinDrawableResource(coinCode))
                     rootView.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
                 }
-                rootView.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.send_bottom_sheet_title, coinCode)
+                rootView.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.Send_Title, coinCode)
             }
         })
 

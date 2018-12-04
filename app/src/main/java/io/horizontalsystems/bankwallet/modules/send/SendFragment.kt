@@ -98,7 +98,7 @@ class SendFragment : DialogFragment() {
                     val coinDrawable = ContextCompat.getDrawable(it, LayoutHelper.getCoinDrawableResource(coinCode))
                     rootView.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
                 }
-                rootView.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.send_bottom_sheet_title, coinCode)
+                rootView.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.Send_Title, coinCode)
             }
         })
 
@@ -121,7 +121,7 @@ class SendFragment : DialogFragment() {
                                     is SendModule.AmountInfo.CoinValueInfo -> ValueFormatter.format(hint.error.amountInfo.coinValue)
                                     is SendModule.AmountInfo.CurrencyValueInfo -> ValueFormatter.format(hint.error.amountInfo.currencyValue)
                                 }
-                                hintInfoTxt.text = hintInfoTxt.context.getString(R.string.send_error_balance_amount, balanceAmount)
+                                hintInfoTxt.text = hintInfoTxt.context.getString(R.string.Send_Error_BalanceAmount, balanceAmount)
                             }
                         }
                     }
@@ -171,7 +171,7 @@ class SendFragment : DialogFragment() {
                     }
                     is SendModule.AddressInfo.InvalidAddressInfo -> {
                         addressTxt.text = it.address
-                        addressErrorTxt.setText(R.string.send_error_incorrect_address)
+                        addressErrorTxt.setText(R.string.Send_Error_IncorrectAddress)
                         addressErrorTxt.visibility = View.VISIBLE
                     }
                 }
@@ -202,7 +202,7 @@ class SendFragment : DialogFragment() {
 
         viewModel.errorLiveData.observe(this, Observer { error ->
             error?.let {
-                HudHelper.showErrorMessage(R.string.error)
+                HudHelper.showErrorMessage(R.string.Error)
             }
         })
 

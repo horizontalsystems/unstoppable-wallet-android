@@ -30,7 +30,7 @@ class BaseCurrencySettingsActivity: BaseActivity(), CurrencySwitcherAdapter.List
         setContentView(R.layout.activity_currency_switcher)
 
         setSupportActionBar(toolbar)
-        supportActionBar?.title = getString(R.string.settings_currency_switcher_title)
+        supportActionBar?.title = getString(R.string.SettingsCurrency_Title)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.back)
 

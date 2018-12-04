@@ -33,7 +33,7 @@ class GuestActivity : BaseActivity() {
         })
 
         viewModel.showErrorDialog.observe(this, Observer {
-            HudHelper.showErrorMessage(R.string.error)
+            HudHelper.showErrorMessage(R.string.Error)
         })
 
         buttonCreate.setOnClickListener {

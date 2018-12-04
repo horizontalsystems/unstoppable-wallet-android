@@ -52,8 +52,8 @@ class SecuritySettingsActivity : BaseActivity(), BottomConfirmAlert.Listener {
         importWallet.setOnClickListener {
             selectedAction = Action.OPEN_RESTORE
             val confirmationList = mutableListOf(
-                    R.string.settings_security_import_wallet_confirmation_1,
-                    R.string.settings_security_import_wallet_confirmation_2
+                    R.string.SettingsSecurity_ImportWalletConfirmation_1,
+                    R.string.SettingsSecurity_ImportWalletConfirmation_2
             )
             BottomConfirmAlert.show(this, confirmationList, this)
         }
@@ -61,8 +61,8 @@ class SecuritySettingsActivity : BaseActivity(), BottomConfirmAlert.Listener {
         unlink.setOnClickListener {
             selectedAction = Action.CLEAR_WALLETS
             val confirmationList = mutableListOf(
-                    R.string.settings_security_import_wallet_confirmation_1,
-                    R.string.settings_security_import_wallet_confirmation_2
+                    R.string.SettingsSecurity_ImportWalletConfirmation_1,
+                    R.string.SettingsSecurity_ImportWalletConfirmation_2
             )
             BottomConfirmAlert.show(this, confirmationList, this)
         }
@@ -140,7 +140,7 @@ class SecuritySettingsActivity : BaseActivity(), BottomConfirmAlert.Listener {
     private fun fingerprintCanBeEnabled(): Boolean {
         val touchSensorCanBeUsed = App.systemInfoManager.touchSensorCanBeUsed()
         if (!touchSensorCanBeUsed) {
-            AlertDialogFragment.newInstance(R.string.settings_error_fingerprint_not_enabled, R.string.settings_error_no_fingerprint_added_yet, R.string.Alert_Ok)
+            AlertDialogFragment.newInstance(R.string.Settings_Error_FingerprintNotEnabled, R.string.Settings_Error_NoFingerprintAddedYet, R.string.Alert_Ok)
                     .show(this.supportFragmentManager, "fingerprint_not_enabled_alert")
             return false
         }

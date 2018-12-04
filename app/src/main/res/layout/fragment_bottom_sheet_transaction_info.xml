@@ -16,7 +16,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/noto_sans_bold"
-        android:text="@string/Tx_Info_Title"
+        android:text="@string/TransactionInfo_Title"
         android:textColor="?TransactionDetailValueTextColor"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,7 +54,7 @@
             android:layout_marginStart="7dp"
             android:layout_marginEnd="7dp"
             android:layout_marginTop="3dp"
-            android:text="@string/transaction_info_id"
+            android:text="@string/TransactionInfo_Id"
             android:textColor="@color/grey"
             android:textSize="14sp"
             />
@@ -135,7 +135,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/border2"
-        app:title="@string/transaction_info_from"
+        app:title="@string/TransactionInfo_From"
         app:value="1111111"
         />
 
@@ -147,7 +147,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/itemFrom"
-        app:title="@string/transaction_info_to"
+        app:title="@string/TransactionInfo_To"
         app:value="222222"
         />
 
@@ -158,7 +158,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/itemTo"
-        app:title="@string/Tx_Info_Status"
+        app:title="@string/TransactionInfo_Status"
         app:value="COMPLETED"
         />
 
@@ -169,7 +169,7 @@
         android:fontFamily="@font/noto_sans_bold"
         android:paddingBottom="16dp"
         android:paddingTop="16dp"
-        android:text="@string/transaction_info_close"
+        android:text="@string/TransactionInfo_Close"
         android:textAlignment="center"
         android:textColor="@color/grey"
         android:textSize="17sp"

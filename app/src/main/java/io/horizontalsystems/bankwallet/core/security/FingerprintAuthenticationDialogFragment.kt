@@ -118,7 +118,7 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(), FingerprintCal
         errorTextView.run {
             removeCallbacks(resetErrorTextRunnable)
             setTextColor(errorTextView.resources.getColor(R.color.green_crypto, null))
-            text = errorTextView.resources.getString(R.string.fingerprint_success)
+            text = errorTextView.resources.getString(R.string.Fingerprint_Success)
         }
         iconBackgroundImg.run {
             setImageTintColor(iconBackgroundImg, R.color.green_crypto)
@@ -129,12 +129,12 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(), FingerprintCal
     override fun onAuthenticationHelp(helpString: CharSequence?) { }
 
     override fun onAuthenticationFailed() {
-        showError(getString(R.string.fingerprint_not_recognized))
+        showError(getString(R.string.Fingerprint_NotRecognized))
     }
 
     override fun onAuthenticationError(errMsgId: Int, errString: CharSequence?) {
         if (errMsgId == FingerprintManager.FINGERPRINT_ERROR_LOCKOUT) {
-            HudHelper.showErrorMessage(R.string.unlock_page_enter_your_pin)
+            HudHelper.showErrorMessage(R.string.Unlock_Page_EnterYourPin)
             dismiss()
         }
     }
@@ -151,7 +151,7 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(), FingerprintCal
         setImageTintColor(iconBackgroundImg, R.color.dark)
         errorTextView.run {
             setTextColor(errorTextView.resources.getColor(R.color.dark, null))
-            text = errorTextView.resources.getString(R.string.fingerprint_hint)
+            text = errorTextView.resources.getString(R.string.Fingerprint_Hint)
         }
     }
 

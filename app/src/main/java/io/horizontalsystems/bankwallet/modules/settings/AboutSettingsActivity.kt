@@ -17,7 +17,7 @@ class AboutSettingsActivity: BaseActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.back)
-        supportActionBar?.title = getString(R.string.settings_about_title)
+        supportActionBar?.title = getString(R.string.SettingsAbout_Title)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

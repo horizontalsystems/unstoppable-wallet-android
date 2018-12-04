@@ -10,14 +10,14 @@ class EditPinPresenter(
         private val router: EditPinModule.IEditPinRouter): ManagePinPresenter(interactor, pages = listOf(Page.UNLOCK, Page.ENTER, Page.CONFIRM)) {
 
     override fun viewDidLoad() {
-        view?.setTitle(R.string.edit_pin_auth_title)
+        view?.setTitle(R.string.EditPin_Title)
         val pinPages = mutableListOf<PinPage>()
 
         pages.forEach { page ->
             when(page) {
-                Page.UNLOCK -> pinPages.add(PinPage(R.string.edit_pin_auth_description))
-                Page.ENTER -> pinPages.add(PinPage(R.string.edit_pin_title))
-                Page.CONFIRM -> pinPages.add(PinPage(R.string.set_pin_confirm_title))
+                Page.UNLOCK -> pinPages.add(PinPage(R.string.EditPin_UnlockInfo))
+                Page.ENTER -> pinPages.add(PinPage(R.string.EditPin_NewPinInfo))
+                Page.CONFIRM -> pinPages.add(PinPage(R.string.SetPin_ConfirmInfo))
             }
         }
         view?.addPages(pinPages)

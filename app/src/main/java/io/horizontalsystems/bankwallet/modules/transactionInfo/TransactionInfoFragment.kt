@@ -59,7 +59,7 @@ class TransactionInfoFragment : DialogFragment() {
                 }
 
                 rootView.findViewById<TextView>(R.id.txDate)?.text = if (txStatus is TransactionStatus.Pending) {
-                    getString(R.string.Tx_Info_Pending)
+                    getString(R.string.TransactionInfo_Pending)
                 } else {
                     txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) }
                 }
@@ -75,11 +75,11 @@ class TransactionInfoFragment : DialogFragment() {
                         else -> null
                     }
                     val statusText = when (txStatus) {
-                        is TransactionStatus.Processing -> getString(R.string.Tx_Info_Processing, progress)
-                        is TransactionStatus.Pending -> getString(R.string.Tx_Info_Pending)
-                        else -> getString(R.string.Tx_Info_Completed)
+                        is TransactionStatus.Processing -> getString(R.string.TransactionInfo_Processing, progress)
+                        is TransactionStatus.Pending -> getString(R.string.TransactionInfo_Pending)
+                        else -> getString(R.string.TransactionInfo_Completed)
                     }
-                    bind(title = getString(R.string.Tx_Info_Status), valueTitle = statusText.toUpperCase(), valueIcon = valueIcon, progressValue = progress, showBottomBorder = true)
+                    bind(title = getString(R.string.TransactionInfo_Status), valueTitle = statusText.toUpperCase(), valueIcon = valueIcon, progressValue = progress, showBottomBorder = true)
                 }
 
                 rootView.findViewById<TextView>(R.id.transactionId)?.apply {
@@ -93,13 +93,13 @@ class TransactionInfoFragment : DialogFragment() {
                 rootView.findViewById<TransactionInfoItemView>(R.id.itemFrom)?.apply {
                     setOnClickListener { viewModel.delegate.onCopyFromAddress() }
                     visibility = if (txRec.from == null) View.GONE else View.VISIBLE
-                    bind(title = getString(R.string.transaction_info_from), valueTitle = txRec.from, valueIcon = R.drawable.round_person_18px, showBottomBorder = true)
+                    bind(title = getString(R.string.TransactionInfo_From), valueTitle = txRec.from, valueIcon = R.drawable.round_person_18px, showBottomBorder = true)
                 }
 
                 rootView.findViewById<TransactionInfoItemView>(R.id.itemTo)?.apply {
                     setOnClickListener { viewModel.delegate.onCopyToAddress() }
                     visibility = if (txRec.to == null) View.GONE else View.VISIBLE
-                    bind(title = getString(R.string.transaction_info_to), valueTitle = txRec.to, valueIcon = R.drawable.round_person_18px, showBottomBorder = true)
+                    bind(title = getString(R.string.TransactionInfo_To), valueTitle = txRec.to, valueIcon = R.drawable.round_person_18px, showBottomBorder = true)
                 }
             }
 
@@ -119,7 +119,7 @@ class TransactionInfoFragment : DialogFragment() {
         })
 
         viewModel.showCopiedLiveEvent.observe(this, Observer {
-            HudHelper.showSuccessMessage(R.string.hud_text_copied)
+            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied)
         })
 
         return mDialog as Dialog

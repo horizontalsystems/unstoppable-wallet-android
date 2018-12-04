@@ -22,8 +22,8 @@ class ReceivePresenter(private val interactor: ReceiveModule.IInteractor) : Rece
     }
 
     private fun getError(exception: Exception) = when (exception) {
-//        is UnsupportedBlockchain -> R.string.error_unsupported_blockchain
-        else -> R.string.error
+//        is UnsupportedBlockchain -> R.string.Error_UnsupportedBlockchain
+        else -> R.string.Error
     }
 
     override fun onCopyClick(index: Int) {

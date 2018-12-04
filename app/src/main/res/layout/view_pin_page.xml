@@ -17,7 +17,7 @@
         android:layout_marginRight="32dp"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/noto_sans"
-        android:text="@string/set_pin_description"
+        android:text="@string/SetPin_Info"
         android:textAlignment="center"
         android:textColor="@color/grey"
         android:textSize="17sp"

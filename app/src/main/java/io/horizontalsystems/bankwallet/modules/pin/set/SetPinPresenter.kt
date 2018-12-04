@@ -10,13 +10,13 @@ class SetPinPresenter(
         private val router: SetPinModule.ISetPinRouter): ManagePinPresenter(interactor, pages = listOf(Page.ENTER, Page.CONFIRM)) {
 
     override fun viewDidLoad() {
-        view?.setTitle(R.string.set_pin_title)
+        view?.setTitle(R.string.SetPin_Title)
 
         val pinPages = mutableListOf<PinPage>()
         pages.forEach { page ->
             when(page) {
-                Page.ENTER -> pinPages.add(PinPage(R.string.set_pin_description))
-                Page.CONFIRM -> pinPages.add(PinPage(R.string.set_pin_confirm_title))
+                Page.ENTER -> pinPages.add(PinPage(R.string.SetPin_Info))
+                Page.CONFIRM -> pinPages.add(PinPage(R.string.SetPin_ConfirmInfo))
             }
         }
         view?.addPages(pinPages)

@@ -19,7 +19,7 @@ class RestoreViewModel : ViewModel(), RestoreModule.IView, RestoreModule.IRouter
     }
 
     override fun showInvalidWordsError() {
-        errorLiveData.value = R.string.error
+        errorLiveData.value = R.string.Error
     }
 
     override fun navigateToSetPin() {

@@ -14,7 +14,7 @@ class UnlockPinPresenter(
     override fun viewDidLoad() {
         interactor.cacheSecuredData()
         view?.hideToolbar()
-        view?.addPages(listOf(PinPage(R.string.unlock_page_enter_your_pin)))
+        view?.addPages(listOf(PinPage(R.string.Unlock_Page_EnterYourPin)))
         interactor.biometricUnlock()
     }
 
