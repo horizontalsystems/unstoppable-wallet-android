@@ -28,7 +28,7 @@ class RestoreWalletActivity : BaseActivity() {
 
         setSupportActionBar(toolbar)
 
-        supportActionBar?.title = getString(R.string.restore_title)
+        supportActionBar?.title = getString(R.string.Restore_Title)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.back)
 

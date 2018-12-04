@@ -18,11 +18,11 @@ object DateHelper {
         val minutesAgo = secondsAgo / 60
 
         return when {
-            secondsAgo < 60 -> context.getString(R.string.timestamp_just_now)
-            secondsAgo < 60 * 60 -> context.getString(R.string.timestamp_min_ago, minutesAgo)
-            hoursAgo < 12 -> context.getString(R.string.timestamp_hours_ago, hoursAgo)
-            isToday(date) -> context.getString(R.string.timestamp_today)
-            isYesterday(date) -> context.getString(R.string.timestamp_yesterday)
+            secondsAgo < 60 -> context.getString(R.string.Timestamp_JustNow)
+            secondsAgo < 60 * 60 -> context.getString(R.string.Timestamp_MinAgo, minutesAgo)
+            hoursAgo < 12 -> context.getString(R.string.Timestamp_HoursAgo, hoursAgo)
+            isToday(date) -> context.getString(R.string.Timestamp_Today)
+            isYesterday(date) -> context.getString(R.string.Timestamp_Yesterday)
             isThisYear(date) -> getFormattedDateWithoutYear(date)
             else -> getFormattedDateWithYear(date)
         }

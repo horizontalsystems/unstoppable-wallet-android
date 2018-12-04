@@ -64,7 +64,7 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
             emptyListText.visibility = if (viewModel.delegate.itemsCount == 0) View.VISIBLE else View.GONE
         })
 
-        toolbar.setTitle(R.string.transactions_title)
+        toolbar.setTitle(R.string.Transactions_Title)
         recyclerTransactions.adapter = transactionsAdapter
         recyclerTransactions.layoutManager = LinearLayoutManager(context)
 

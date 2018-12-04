@@ -84,7 +84,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/statusImage"
-                tools:text="@string/transaction_info_status_pending"
+                tools:text="@string/Tx_Info_Pending"
                 />
 
             <io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemView

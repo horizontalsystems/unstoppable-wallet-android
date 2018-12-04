@@ -6,7 +6,7 @@
     <item
         android:id="@+id/action_done"
         android:icon="@drawable/ic_done_black_24dp"
-        android:title="@string/button_ok"
+        android:title="@string/Button_Ok"
         app:showAsAction="always"
         />
 

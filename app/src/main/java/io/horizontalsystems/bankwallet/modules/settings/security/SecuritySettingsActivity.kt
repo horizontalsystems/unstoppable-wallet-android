@@ -140,7 +140,7 @@ class SecuritySettingsActivity : BaseActivity(), BottomConfirmAlert.Listener {
     private fun fingerprintCanBeEnabled(): Boolean {
         val touchSensorCanBeUsed = App.systemInfoManager.touchSensorCanBeUsed()
         if (!touchSensorCanBeUsed) {
-            AlertDialogFragment.newInstance(R.string.settings_error_fingerprint_not_enabled, R.string.settings_error_no_fingerprint_added_yet, R.string.alert_ok)
+            AlertDialogFragment.newInstance(R.string.settings_error_fingerprint_not_enabled, R.string.settings_error_no_fingerprint_added_yet, R.string.Alert_Ok)
                     .show(this.supportFragmentManager, "fingerprint_not_enabled_alert")
             return false
         }

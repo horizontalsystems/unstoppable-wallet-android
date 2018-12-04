@@ -46,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="48dp"
         android:layout_marginTop="48dp"
-        android:text="@string/transactions_empty_list"
+        android:text="@string/Transactions_EmptyList"
         android:textAlignment="center"
         android:textColor="@color/grey"
         android:visibility="gone"

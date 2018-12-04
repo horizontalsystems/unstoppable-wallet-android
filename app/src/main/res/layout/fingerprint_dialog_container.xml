@@ -73,7 +73,7 @@
         style="?android:attr/buttonBarNegativeButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button_cancel"
+        android:text="@string/Button_Cancel"
         android:textColor="@color/green_crypto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fingerprint_wrapper"

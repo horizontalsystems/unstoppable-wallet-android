@@ -99,7 +99,7 @@
                 android:layout_marginStart="12dp"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/noto_sans"
-                android:hint="@string/send_hint_amount"
+                android:hint="@string/Send_HintAmount"
                 android:inputType="numberDecimal"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="@+id/topAmountPrefix"
@@ -219,7 +219,7 @@
                     android:layout_height="36dp"
                     android:maxWidth="200dp"
                     android:minWidth="71dp"
-                    android:text="@string/send_button_paste"
+                    android:text="@string/Send_Button_Paste"
                     />
 
                 <ImageButton
@@ -290,7 +290,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="@string/wallet_button_pay"
+                android:text="@string/Balance_Send"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
