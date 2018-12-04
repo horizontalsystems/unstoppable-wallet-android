@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core
 
+import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bitcoinkit.BitcoinKit
@@ -46,6 +47,11 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType) :
 
     override fun clear() {
         bitcoinKit.clear()
+    }
+
+    override fun parsePaymentAddress(address: String): PaymentRequestAddress {
+        val paymentData = bitcoinKit.parsePaymentAddress(address)
+        return PaymentRequestAddress(paymentData.address, paymentData.amount)
     }
 
     override fun send(address: String, value: Double, completion: ((Throwable?) -> (Unit))?) {

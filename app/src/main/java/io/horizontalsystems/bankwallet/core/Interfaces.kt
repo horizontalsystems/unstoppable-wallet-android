@@ -114,6 +114,8 @@ interface IAdapter {
     fun refresh()
     fun clear()
 
+    fun parsePaymentAddress(address: String): PaymentRequestAddress
+
     fun send(address: String, value: Double, completion: ((Throwable?) -> (Unit))? = null)
 
     @Throws
