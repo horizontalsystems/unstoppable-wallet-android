@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?AboutBackgroundColor"
@@ -106,39 +107,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="17dp"
+                android:paddingBottom="24dp"
                 android:text="@string/settings_about_terms_privacy_text"
                 android:textColor="?AboutLongTextColor"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/termsSubTitle"
-                />
-
-            <TextView
-                android:id="@+id/dependenciesSubTitle"
-                style="@style/AboutSubTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="17dp"
-                android:text="@string/settings_about_dependencies_subtitle"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/termsText"
-                />
-
-            <TextView
-                android:id="@+id/dependenciesText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:layout_marginTop="17dp"
-                android:text="@string/settings_about_dependencies_text"
-                android:textColor="?AboutLongTextColor"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/dependenciesSubTitle"
                 />
 
         </android.support.constraint.ConstraintLayout>

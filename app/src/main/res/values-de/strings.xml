@@ -32,7 +32,6 @@
     <string name="wallet_button_receive">Erhalten</string>
     <string name="wallet_button_pay">Senden</string>
     <string name="wallet_exchange_rate">%s pro %s</string>
-    <string name="send_title">Senden</string>
     <string name="send_error_insufficient_funds">Nicht genug Geldmittel</string>
     <string name="send_hint_payment_reference">Zahlungsreferenz</string>
     <string name="send_hint_address">Adresse</string>
@@ -88,12 +87,10 @@
     <string name="settings_title">Einstellungen</string>
     <string name="settings_security_center">Sicherheits-Center</string>
     <string name="settings_base_currency">Basiswährung</string>
-    <string name="settings_import_wallet">Geldbörse Importieren</string>
     <string name="settings_unlink_from_this_device">Verknüpfung mit diesem Gerät aufheben</string>
     <string name="settings_language">Sprache</string>
     <string name="settings_about">Info</string>
     <string name="settings_light_mode">Licht Modus</string>
-    <string name="settings_push_notifications">Benachrichtigungen</string>
     <string name="settings_error_fingerprint_not_enabled">Fingerabdruck Nicht Aktivieren</string>
     <string name="settings_error_no_fingerprint_added_yet">Fingerabdruck auf diesem Gerät aktiviert nicht. Gehen Sie zu Einstellungen &gt; Sicherheit Fingerabdruck einrichten.</string>
     <string name="settings_info_app_name_with_version">Bank Wallet %s</string>
@@ -115,18 +112,6 @@
 \n\nIt ist unmöglich, dass ein Dritter die Geldbörse von der Arbeit zu blockieren oder der Benutzer sperren.
 \n\nThe gesamten Code Einschalten der BANK Wallet ist kostenlos und offen für die Öffentlichkeit.
 \n\nThere möglicherweise Fehler im Code. Stellen Sie sicher Sie sichern Sie immer einen geheimen Schlüssel für Ihren Geldbeutel!</string>
-    <string name="settings_about_dependencies_subtitle">Abhängigkeiten:</string>
-    <string name="settings_about_dependencies_text">Es gibt einige Drittanbieter-Dienste von der BANK Wallet für unwichtige Daten für die Brieftasche verwendet.
-\n\n1. IPFS dezentrale Lagerung
-        \n
-\n  &#8226; speichert aktuelle Wechselkurse,
-\n  &#8226; Shops Münze Informationen,
-\n  &#8226; Filialen \"Empfohlene\" Transaktionsgebühren, die
-\n  &#8226; eine Liste der speichert unterstützten Basiswährungen
-\n  &#8226; speichert öffentlichen Blockchain Dada
-        \n\n2. CryptoCompare.com - verwendet, um aktuelle Markt-Wechselkurs zu erhalten.
-\n\n3. Etherscan.io - verwendet, um eine Liste der letzten Transaktionen für eine gegebene Adresse des Astraleums abzurufen.
-\n\n4. Infura.io - ein öffentliches Tor zur Ethereum Blockchain.</string>
     <string name="alert_keys_invalidated_title">Android Keystore Fehler</string>
     <string name="alert_keys_invalidated_description">Deine verschlüsselten Daten wurden kürzlich ungültig gemacht, weil dein Android-Sperrbildschirm geändert wurde</string>
     <string name="alert_no_device_lock_title">Warnung</string>
@@ -156,12 +141,10 @@
     <string name="set_pin_description">Deine PIN wird verwendet, um deine Geldbörse zu entsperren</string>
     <string name="set_pin_error_short_pin">Bitte geben Sie nur Zahlen ein.</string>
     <string name="set_pin_confirm_title">PIN bestätigen</string>
-    <string name="set_pin_confirm_description">Deine PIN wird verwendet, um deine Geldbörse zu entsperren und Geld zu versenden</string>
     <string name="set_pin_success">Lock PIN wurde erfolgreich gesetzt!</string>
     <string name="set_pin_error_pins_dont_match">PIN stimmt nicht überein.</string>
     <string name="set_pin_error_failed_to_save_pin">Beim Speichern Ihres PIN ist leider ein Fehler aufgetreten. Bitte versuchen es erneut.</string>
     <string name="edit_pin_auth_title">PIN aktualisieren</string>
     <string name="edit_pin_auth_description">Gib deine derzeitige PIN ein</string>
     <string name="edit_pin_title">Gib neue PIN ein</string>
-    <string name="edit_pin_description">Deine PIN wird verwendet, um deine Geldbörse zu entsperren und Geld zu versenden</string>
 </resources>
