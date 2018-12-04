@@ -46,12 +46,12 @@ class SendPresenter(
 
     override fun onPasteClicked() {
         interactor.addressFromClipboard?.let {
-            onAddressChange(it)
+            onAddressEnter(it)
         }
     }
 
     override fun onScanAddress(address: String) {
-        onAddressChange(address)
+        onAddressEnter(address)
     }
 
     override fun onDeleteClicked() {
@@ -91,6 +91,15 @@ class SendPresenter(
         view?.showError(error)
     }
 
+    private fun onAddressEnter(address: String) {
+        val paymentAddress = interactor.parsePaymentAddress(address)
+        paymentAddress.amount?.let{
+            userInput.amount = it
+        }
+
+        onAddressChange(paymentAddress.address)
+    }
+
     private fun onAddressChange(address: String?) {
         userInput.address = address
 
@@ -98,6 +107,7 @@ class SendPresenter(
         val viewItem = factory.viewItemForState(state)
 
         view?.setAddressInfo(viewItem.addressInfo)
+        view?.setAmountInfo(viewItem.amountInfo)
         view?.setPrimaryFeeInfo(viewItem.primaryFeeInfo)
         view?.setSecondaryFeeInfo(viewItem.secondaryFeeInfo)
         view?.setSendButtonEnabled(viewItem.sendButtonEnabled)

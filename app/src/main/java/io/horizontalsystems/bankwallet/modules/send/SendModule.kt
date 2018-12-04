@@ -4,6 +4,7 @@ import android.support.v4.app.FragmentActivity
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
 import io.horizontalsystems.bankwallet.modules.transactions.Coin
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import io.horizontalsystems.bankwallet.viewHelpers.ValueFormatter
@@ -46,6 +47,7 @@ object SendModule {
         val addressFromClipboard: String?
 
         fun retrieveRate()
+        fun parsePaymentAddress(address: String): PaymentRequestAddress
         fun convertedAmountForInputType(inputType: InputType, amount: Double): Double?
         fun stateForUserInput(input: UserInput): State
 

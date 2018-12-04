@@ -3,10 +3,7 @@ package io.horizontalsystems.bankwallet.modules.send
 import io.horizontalsystems.bankwallet.core.IClipboardManager
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.RateManager
-import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.Rate
-import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.transactions.Coin
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -45,6 +42,10 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
                             rate = if (it.expired) null else it
                         }
         )
+    }
+
+    override fun parsePaymentAddress(address: String): PaymentRequestAddress {
+        return wallet.adapter.parsePaymentAddress(address)
     }
 
     override fun convertedAmountForInputType(inputType: SendModule.InputType, amount: Double): Double? {

@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core
 
+import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.ethereumkit.EthereumKit
@@ -43,6 +44,10 @@ class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, Eth
 
     override fun clear() {
         ethereumKit.clear()
+    }
+
+    override fun parsePaymentAddress(address: String): PaymentRequestAddress {
+        return PaymentRequestAddress(address)
     }
 
     override fun send(address: String, value: Double, completion: ((Throwable?) -> (Unit))?) {
