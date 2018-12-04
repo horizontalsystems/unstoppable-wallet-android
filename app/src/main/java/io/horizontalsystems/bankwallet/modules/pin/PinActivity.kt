@@ -239,7 +239,7 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
         fun startForUnlock() {
             val intent = Intent(App.instance, PinActivity::class.java)
             intent.putExtra(keyInteractionType, PinInteractionType.UNLOCK)
-            intent.flags = Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS and Intent.FLAG_ACTIVITY_NEW_TASK and Intent.FLAG_ACTIVITY_CLEAR_TOP
+            intent.flags = Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             App.instance.startActivity(intent)
         }
     }
