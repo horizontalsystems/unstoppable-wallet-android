@@ -28,13 +28,13 @@ class FullTransactionInfoActivity : BaseActivity() {
         setContentView(R.layout.activity_full_transaction_info)
 
         setSupportActionBar(toolbar)
-        supportActionBar?.title = getString(R.string.full_transaction_info_title)
+        supportActionBar?.title = getString(R.string.FullTransactionInfo_Title)
 
         shareBtn.setOnClickListener { viewModel.delegate.onShareClick() }
         closeBtn.setOnClickListener { onBackPressed() }
 
         viewModel.showCopiedLiveEvent.observe(this, Observer {
-            HudHelper.showSuccessMessage(R.string.hud_text_copied)
+            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied)
         })
 
         viewModel.showTransactionRecordViewLiveData.observe(this, Observer { transaction ->
@@ -56,8 +56,8 @@ class FullTransactionInfoActivity : BaseActivity() {
 //        val txStatus = trx.status
 //        val statusTxt = when (txStatus) {
 //            is TransactionStatus.Processing -> getString(R.string.Transaction_Info_Processing, txStatus.progress)
-//            is TransactionStatus.Pending -> getString(R.string.Tx_Info_Pending)
-//            else -> getString(R.string.Tx_Info_Completed)
+//            is TransactionStatus.Pending -> getString(R.string.TransactionInfo_Pending)
+//            else -> getString(R.string.TransactionInfo_Completed)
 //        }
 //        val statusImg = when (txStatus) {
 //            is TransactionStatus.Processing -> R.drawable.processing_image
@@ -69,16 +69,16 @@ class FullTransactionInfoActivity : BaseActivity() {
 //        statusImage.setImageResource(statusImg)
 //        statusText.text = statusTxt
 //
-//        itemTime.bind(title = getString(R.string.full_transaction_info_time), valueTitle = trx.date?.let { DateHelper.getFullDateWithShortMonth(it) })
-//        itemFrom.bind(title = getString(R.string.full_transaction_info_from), valueTitle = trx.from, valueIcon = R.drawable.round_person_18px)
-//        itemTo.bind(title = getString(R.string.full_transaction_info_to), valueTitle = trx.to, valueIcon = R.drawable.round_person_18px)
+//        itemTime.bind(title = getString(R.string.FullTransactionInfo_Time), valueTitle = trx.date?.let { DateHelper.getFullDateWithShortMonth(it) })
+//        itemFrom.bind(title = getString(R.string.FullTransactionInfo_From), valueTitle = trx.from, valueIcon = R.drawable.round_person_18px)
+//        itemTo.bind(title = getString(R.string.FullTransactionInfo_To), valueTitle = trx.to, valueIcon = R.drawable.round_person_18px)
 //        itemAmount.bind(
-//                title = getString(R.string.full_transaction_info_amount),
+//                title = getString(R.string.FullTransactionInfo_Amount),
 //                valueTitle = ValueFormatter.format(trx.amount, true),
 //                valueSubtitle = trx.currencyAmount?.let { ValueFormatter.format(it, true) }
 //        )
-//        itemFee.bind(title = getString(R.string.full_transaction_info_fee), valueTitle = ValueFormatter.format(trx.fee))
-//        itemBlock.bind(title = getString(R.string.full_transaction_info_block), valueTitle = trx.blockHeight.toString())
+//        itemFee.bind(title = getString(R.string.FullTransactionInfo_Fee), valueTitle = ValueFormatter.format(trx.fee))
+//        itemBlock.bind(title = getString(R.string.FullTransactionInfo_Block), valueTitle = trx.blockHeight.toString())
 //
 //        transactionId.setOnClickListener { viewModel.delegate.onTransactionIdClick() }
 //        itemFrom.setOnClickListener { viewModel.delegate.onFromFieldClick() }

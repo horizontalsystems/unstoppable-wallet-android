@@ -10,7 +10,7 @@ class SecuritySettingsPresenter(
     var view: SecuritySettingsModule.ISecuritySettingsView? = null
 
     override fun viewDidLoad() {
-        view?.setTitle(R.string.settings_security_center)
+        view?.setTitle(R.string.Settings_SecurityCenter)
         view?.setBiometricUnlockOn(interactor.getBiometricUnlockOn())
         view?.setBiometryType(interactor.biometryType)
         view?.setBackedUp(interactor.isBackedUp)

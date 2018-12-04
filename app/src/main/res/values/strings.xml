@@ -14,7 +14,7 @@
     <string name="Button_Back">Back</string>
     <string name="Button_Ok">OK</string>
     <string name="Button_Share">Share</string>
-    <string name="Error">error</string>
+    <string name="Error">Error</string>
 
 
     <!--Guest-->
@@ -38,7 +38,7 @@
     <string name="Backup_Intro_Later">Later</string>
     <string name="Backup_Intro_BackupNow">Backup</string>
 
-    <string name="Backup_Words_Title">Write down on paper and keep safe</string>
+    <string name="Backup_Words_Title">Secret Key</string>
 
     <string name="Backup_Confirmation_Understand">I understand that my wallet and tokens are held securely on this device only and not any servers.</string>
     <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device or is deleted, my wallet can be only recovered with the Secret Key that I have just written down and saved in a secure place.</string>
@@ -62,8 +62,8 @@
 
     <!--Send-->
 
-    <string name="Send_Title">Send</string>
-    <string name="send_error_insufficient_funds">Not enough funds</string>
+    <string name="Send_Title1">Send</string>
+    <string name="Send_Title">Send %s</string>
 
     <string name="Send_Hint_PaymentReference">Payment Reference</string>
     <string name="Send_Hint_Address">Address</string>
@@ -74,15 +74,17 @@
     <string name="Send_Button_Send">Send</string>
 
     <string name="Send_ScanQrCode">Scan QR Code</string>
-    <string name="send_bottom_sheet_title">Send %s</string>
-    <string name="send_bottom_sheet_error_invalid_address">Address seems invalid. Please check and try again!</string>
-    <string name="send_bottom_sheet_error_insufficient_balance">Not enough funds.</string>
-    <string name="send_bottom_sheet_success">Sent!</string>
-    <string name="send_bottom_confirm_dialog_title">Confirm Transaction</string>
-    <string name="send_bottom_confirm_dialog_fee">Fee:</string>
-    <string name="send_bottom_confirm_dialog_total">Total:</string>
-    <string name="send_error_incorrect_address">Incorrect Address</string>
-    <string name="send_error_balance_amount">Balance %s</string>
+    <string name="Send_Success">Sent!</string>
+
+    <string name="Send_Error_InvalidAddress">Address seems invalid. Please check and try again!</string>
+    <string name="Send_Error_InsufficientBalance">Not enough funds.</string>
+    <string name="Send_Error_IncorrectAddress">Incorrect Address</string>
+    <string name="Send_Error_BalanceAmount">Balance %s</string>
+
+
+    <string name="Send_DialogTitle">Confirm Transaction</string>
+    <string name="Send_DialogFee">Fee:</string>
+    <string name="Send_DialogTotal">Total:</string>
 
 
     <!--Deposit-->
@@ -108,123 +110,143 @@
 
     <!--Transaction Info-->
 
-    <string name="Tx_Info_Title">Transaction</string>
-    <string name="Tx_info_Status">Status:</string>
-    <string name="Tx_Info_Completed">Completed</string>
-    <string name="Tx_Info_Pending">Pending</string>
-    <string name="Tx_Info_Processing">Processing %d%%</string>
-    <string name="transaction_info_close">Close</string>
-    <string name="transaction_info_id">ID:</string>
-    <string name="transaction_info_to">To:</string>
-    <string name="transaction_info_from">From:</string>
+    <string name="TransactionInfo_Title">Transaction</string>
+    <string name="TransactionInfo_Status">Status:</string>
+    <string name="TransactionInfo_Completed">Completed</string>
+    <string name="TransactionInfo_Pending">Pending</string>
+    <string name="TransactionInfo_Processing">Processing %d%%</string>
+    <string name="TransactionInfo_Close">Close</string>
+    <string name="TransactionInfo_Id">ID:</string>
+    <string name="TransactionInfo_To">To:</string>
+    <string name="TransactionInfo_From">From:</string>
+
 
     <!--Full Transaction-->
 
-    <string name="full_transaction_info_title">Transaction</string>
-    <string name="full_transaction_info_size">Size</string>
-    <string name="full_transaction_info_fee_rate">Fee rate</string>
-    <string name="full_transaction_info_received_time">Received Time</string>
-    <string name="full_transaction_info_mined_time">Mined Time</string>
-    <string name="full_transaction_info_included_in_block">Included in Block</string>
-    <string name="full_transaction_info_confirmations">Confirmations</string>
-    <string name="full_transaction_info_lock_time">Lock Time</string>
-    <string name="full_transaction_info_time">Time</string>
-    <string name="full_transaction_info_from">From</string>
-    <string name="full_transaction_info_to">To</string>
-    <string name="full_transaction_info_received">Received</string>
-    <string name="full_transaction_info_sent">Sent</string>
-    <string name="full_transaction_info_amount">Amount</string>
-    <string name="full_transaction_info_fee">Fee</string>
-    <string name="full_transaction_info_block">Block</string>
+    <string name="FullTransactionInfo_Title">Transaction</string>
+    <string name="FullTransactionInfo_Size">Size</string>
+    <string name="FullTransactionInfo_FeeRate">Fee rate</string>
+    <string name="FullransactionInfo_ReceivedTime">Received Time</string>
+    <string name="FullTransactionInfo_MinedTime">Mined Time</string>
+    <string name="FullTransactionInfo_IncludedInBblock">Included in Block</string>
+    <string name="FullTransactionInfo_Confirmations">Confirmations</string>
+    <string name="FullTransactionInfo_LockTime">Lock Time</string>
+    <string name="FullTransactionInfo_Time">Time</string>
+    <string name="FullTransactionInfo_From">From</string>
+    <string name="FullTransactionInfo_To">To</string>
+    <string name="FullTransactionInfo_Received">Received</string>
+    <string name="FullTransactionInfo_Sent">Sent</string>
+    <string name="FullTransactionInfo_Amount">Amount</string>
+    <string name="FullTransactionInfo_Fee">Fee</string>
+    <string name="FullTransactionInfo_Block">Block</string>
 
     <!--Settings-->
 
-    <string name="settings_title">Settings</string>
-    <string name="settings_security_center">Security Center</string>
-    <string name="settings_base_currency">Base Currency</string>
-    <string name="settings_unlink_from_this_device">Unlink from this device</string>
-    <string name="settings_language">Language</string>
-    <string name="settings_about">About</string>
-    <string name="settings_light_mode">Light Mode</string>
-    <string name="settings_error_fingerprint_not_enabled">Fingerprint Not Enabled</string>
-    <string name="settings_error_no_fingerprint_added_yet">You have not enabled fingerprint on this device. Go to Settings > Security to set up fingerprint access.</string>
+    <string name="Settings_Title">Settings</string>
+    <string name="Settings_SecurityCenter">Security Center</string>
+    <string name="Settings_BaseCurrency">Base Currency</string>
+    <string name="Settings_Language">Language</string>
+    <string name="Settings_LightMode">Light Mode</string>
+    <string name="Settings_About">About</string>
+    <string name="Settings_InfoTitleWithVersion">Bank Wallet %s</string>
+    <string name="Settings_InfoSubtitle" translatable="false">decentralized app</string>
+    <string name="Settings_InfoLink">https://horizontalsystems.io</string>
 
-    <!--Setting_Info-->
+    <!--Settings-->
 
-    <string name="settings_info_app_name_with_version">Bank Wallet %s</string>
-    <string name="settings_info_subtitle" translatable="false">decentralized app</string>
-    <string name="settings_info_link">https://horizontalsystems.io</string>
+    <string name="Settings_Error_FingerprintNotEnabled">Fingerprint Not Enabled</string>
+    <string name="Settings_Error_NoFingerprintAddedYet">You have not enabled fingerprint on this device. Go to Settings > Security to set up fingerprint access.</string>
+
 
     <!--Setting_Security-->
 
-    <string name="settings_security_fingerprint">Fingerprint</string>
-    <string name="settings_security_change_pin">Edit PIN</string>
-    <string name="settings_security_backup_wallet">Backup Wallet</string>
+    <string name="SettingsSecurity_Fingerprint">Fingerprint</string>
+    <string name="SettingsSecurity_EditPin">Edit PIN</string>
+    <string name="SettingsSecurity_BackupWallet">Backup Wallet</string>
+    <string name="SettingsSecurity_UnlinkFromThisDevice">Unlink from this device</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_1">This action will remove the currently installed wallet from this device.</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_2">Make sure you have its Secret Key or you will not be able to access the funds on it in the future.</string>
 
-    <string name="unlock_page_enter_your_pin">Enter PIN</string>
-    <string name="settings_security_import_wallet_confirmation_1">This action will remove the currently installed wallet from this device.</string>
-    <string name="settings_security_import_wallet_confirmation_2">Make sure you have its Secret Key or you will not be able to access the funds on it in the future.</string>
 
     <!--Setting_Currency-->
 
-    <string name="settings_currency_switcher_title">Base Currency</string>
+    <string name="SettingsCurrency_Title">Base Currency</string>
+
 
     <!--Setting_Language-->
 
-    <string name="settings_language_title">Language</string>
+    <string name="SettingsLanguage_Title">Language</string>
+
 
     <!--Setting_About-->
 
-    <string name="settings_about_title">About</string>
-    <string name="settings_about_terms_privacy_subtitle">Terms &amp; Privacy:</string>
-    <string name="settings_about_terms_privacy_text">Your funds are stored in the BANK wallet app. Not on any external servers.
-\n\nBANK Wallet doesn\'t store or collect any private info.
-\n\nBANK Wallet doesn\'t depend on any server or person to function.
-\n\nBANK Wallet works everywhere as long as there is an internet.
+    <string name="SettingsAbout_Title">About</string>
+    <string name="SettingsAbout_TermsPrivacySubtitle">Terms &amp; Privacy:</string>
+    <string name="SettingsAbout_TermsPrivacyText">Your funds are securely stored on your device. Not on any external servers.
+\n\nThe app does not depend on any server or person to function.
+\n\nSome generic app data like exchange rates are stored on decentralized storage (IPFS).
+\n\nThe app works everywhere as long as there is an internet connection.
 \n\nIt is impossible for a third party to block the wallet from working or to block the user.
-\n\nThe entire code powering the BANK Wallet is free and open to public.
-\n\nThere may be bugs in the code. Make sure you always backup a Secret Key for your wallet!</string>
+\n\nThe entire code powering this app is free and open to the public.
+\n\nThere may be bugs in the code. And while we tried to provide the most secure wallet we still can not guarantee the security of your funds. No one can.
+\n\nMake sure you backup a Secret Key for your wallet! Never show your secret key to anyone.
+\n\nDo not jailbreak your phone or install apps from unknown (untrusted) sources.
+\n\nDo not give your device to untrusted parties.
+\n\nYou are solely responsible for keeping your Secret Key and your device secure.</string>
 
     <!--Alert-->
 
-    <string name="alert_keys_invalidated_title">Android Keystore Error</string>
-    <string name="alert_keys_invalidated_description">The encrypted data holding your wallet was recently invalidated because your Android lock screen was changed</string>
-    <string name="alert_no_device_lock_title">Warning</string>
-    <string name="alert_no_device_lock_description">Set up a lock screen on this device to continue. Go to “Settings” > “Security” > “Screen Lock” and enable the lock screen setting.</string>
+
+    <string name="Alert_KeysInvalidatedTitle">Android Keystore Error</string>
+    <string name="Alert_KeysInvalidatedDescription">The encrypted data holding your wallet was recently invalidated because your Android lock screen was changed</string>
+    <string name="Alert_NoDeviceLockTitle">Warning</string>
+    <string name="Alert_NoDeviceLockDescription">Set up a lock screen on this device to continue. Go to “Settings” > “Security” > “Screen Lock” and enable the lock screen setting.</string>
+
+
+    <!--Unlock-->
+
+    <string name="Unlock_Page_EnterYourPin">Enter PIN</string>
 
 
     <!--Errors-->
 
-    <string name="error_unsupported_blockchain">Unsupported currency</string>
+    <string name="Error_UnsupportedBlockchain">Unsupported currency</string>
 
 
     <!--Hud texts-->
 
-    <string name="hud_text_unlock">Unlock</string>
-    <string name="hud_text_success">Success</string>
-    <string name="hud_text_error">Error</string>
-    <string name="hud_text_no_internet">No Internet</string>
-    <string name="hud_text_copied">Copied</string>
-    <string name="hud_text_invalid_pin_error">Incorrect PIN</string>
-    
+    <string name="Hud_Text_Unlock">Unlock</string>
+    <string name="Hud_Text_Success">Success</string>
+    <string name="Hud_Text_Error">Error</string>
+    <string name="Hud_Text_NoInternet">No Internet</string>
+    <string name="Hud_Text_Copied">Copied</string>
+    <string name="Hud_Text_InvalidPinError">Incorrect PIN</string>
+
+
     <!--Fingerprint texts-->
-    <string name="fingerprint_dialog_title">Fingerprint login</string>
-    <string name="fingerprint_hint">Touch sensor</string>
-    <string name="enter_pin">Enter PIN</string>
-    <string name="fingerprint_not_recognized">Fingerprint not recognized. Try again</string>
-    <string name="fingerprint_success">Success!</string>
+
+    <string name="Fingerprint_DialogTitle">Fingerprint login</string>
+    <string name="Fingerprint_Hint">Touch sensor</string>
+    <string name="Fingerprint_EnterPin">Enter PIN</string>
+    <string name="Fingerprint_NotRecognized">Fingerprint not recognized. Try again</string>
+    <string name="Fingerprint_Success">Success!</string>
 
 
     <!--Set Pin-->
-    <string name="set_pin_title">Set PIN</string>
-    <string name="set_pin_description">Your PIN will be used to unlock wallet app</string>
-    <string name="set_pin_error_short_pin">Please enter all digits.</string>
-    <string name="set_pin_confirm_title">Confirm PIN</string>
-    <string name="set_pin_success">Lock PIN was set successfully!</string>
-    <string name="set_pin_error_pins_dont_match">PIN did not match. Try again.</string>
-    <string name="set_pin_error_failed_to_save_pin">Error occurred while saving your PIN. Please, try again.</string>
-    <string name="edit_pin_auth_title">Edit PIN</string>
-    <string name="edit_pin_auth_description">Enter current PIN</string>
-    <string name="edit_pin_title">Enter New PIN</string>
+
+    <string name="SetPin_Title">Set PIN</string>
+    <string name="SetPin_Info">Your PIN will be used to unlock wallet app</string>
+    <string name="SetPin_ErrorShortPin">Please enter all digits.</string>
+    <string name="SetPin_ConfirmInfo">Confirm PIN</string>
+    <string name="SetPin_Success">Lock PIN was set successfully!</string>
+    <string name="SetPin_ErrorPinsDontMatch">PIN did not match. Try again.</string>
+    <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your PIN. Please, try again.</string>
+
+
+    <!--Edit Pin-->
+
+    <string name="EditPin_Title">Edit PIN</string>
+    <string name="EditPin_UnlockInfo">Enter current PIN</string>
+    <string name="EditPin_NewPinInfo">Enter New PIN</string>
 
 </resources>

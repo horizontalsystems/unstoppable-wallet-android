@@ -15,7 +15,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:fontFamily="@font/noto_sans"
-        android:text="@string/unlock_page_enter_your_pin"
+        android:text="@string/Unlock_Page_EnterYourPin"
         android:textColor="@color/grey"
         android:textSize="17sp"
         app:layout_constraintBottom_toTopOf="@+id/numPadItems"

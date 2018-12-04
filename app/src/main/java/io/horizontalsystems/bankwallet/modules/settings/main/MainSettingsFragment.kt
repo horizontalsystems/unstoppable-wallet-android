@@ -127,11 +127,11 @@ class MainSettingsFragment : android.support.v4.app.Fragment() {
         })
 
         viewModel.appVersionLiveDate.observe(this, Observer { version ->
-            version?.let { appName.text = getString(R.string.settings_info_app_name_with_version, it) }
+            version?.let { appName.text = getString(R.string.Settings_InfoTitleWithVersion, it) }
         })
 
         viewModel.showAppLinkLiveEvent.observe(this, Observer {
-            val uri = Uri.parse(getString(R.string.settings_info_link))
+            val uri = Uri.parse(getString(R.string.Settings_InfoLink))
             val intent = Intent(Intent.ACTION_VIEW, uri)
             activity?.startActivity(intent)
         })

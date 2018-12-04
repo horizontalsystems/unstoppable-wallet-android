@@ -55,7 +55,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider_0"
                 app:setting_icon="@drawable/security"
-                app:setting_title="@string/settings_security_center"
+                app:setting_title="@string/Settings_SecurityCenter"
                 />
 
             <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
@@ -66,7 +66,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/securityCenter"
                 app:setting_icon="@drawable/currency"
-                app:setting_title="@string/settings_base_currency"
+                app:setting_title="@string/Settings_BaseCurrency"
                 />
 
             <View
@@ -86,7 +86,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider_1"
                 app:setting_icon="@drawable/language"
-                app:setting_title="@string/settings_language"
+                app:setting_title="@string/Settings_Language"
                 />
 
             <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
@@ -97,7 +97,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/language"
                 app:setting_icon="@drawable/light_mode"
-                app:setting_title="@string/settings_light_mode"
+                app:setting_title="@string/Settings_LightMode"
                 />
 
             <View
@@ -117,7 +117,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider_2"
                 app:setting_icon="@drawable/info"
-                app:setting_title="@string/settings_about"
+                app:setting_title="@string/Settings_About"
                 />
 
             <TextView
@@ -150,7 +150,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1.5dp"
-                android:text="@string/settings_info_subtitle"
+                android:text="@string/Settings_InfoSubtitle"
                 android:textColor="@color/grey"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"

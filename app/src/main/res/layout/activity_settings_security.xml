@@ -58,7 +58,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider_0"
-                app:setting_title="@string/settings_security_fingerprint"
+                app:setting_title="@string/SettingsSecurity_Fingerprint"
                 />
 
             <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
@@ -68,7 +68,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fingerprint"
-                app:setting_title="@string/settings_security_change_pin"
+                app:setting_title="@string/SettingsSecurity_EditPin"
                 />
 
             <View
@@ -87,7 +87,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider_1"
-                app:setting_title="@string/settings_security_backup_wallet"
+                app:setting_title="@string/SettingsSecurity_BackupWallet"
                 />
 
             <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
@@ -108,7 +108,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/importWallet"
-                app:setting_title="@string/settings_unlink_from_this_device"
+                app:setting_title="@string/SettingsSecurity_UnlinkFromThisDevice"
                 />
         </android.support.constraint.ConstraintLayout>
     </ScrollView>

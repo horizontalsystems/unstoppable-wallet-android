@@ -78,7 +78,7 @@ class ReceiveFragment : DialogFragment() {
         })
 
         viewModel.showCopiedLiveEvent.observe(this, Observer {
-            HudHelper.showSuccessMessage(R.string.hud_text_copied)
+            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied)
         })
 
         return mDialog as Dialog

@@ -84,7 +84,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/statusImage"
-                tools:text="@string/Tx_Info_Pending"
+                tools:text="@string/TransactionInfo_Pending"
                 />
 
             <io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemView
@@ -95,7 +95,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/statusText"
-                app:title="@string/full_transaction_info_time"
+                app:title="@string/FullTransactionInfo_Time"
                 app:value="Aug 7, 2018, 2:12"
                 />
 
@@ -106,7 +106,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/itemTime"
-                app:title="@string/full_transaction_info_from"
+                app:title="@string/FullTransactionInfo_From"
                 app:value="BU878BUYB96NKB8987687BHJ78"
                 />
 
@@ -117,7 +117,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/itemFrom"
-                app:title="@string/full_transaction_info_to"
+                app:title="@string/FullTransactionInfo_To"
                 app:value="BU878BUYB96NKB8987687BHJ78"
                 />
 
@@ -128,7 +128,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/itemTo"
-                app:title="@string/full_transaction_info_amount"
+                app:title="@string/FullTransactionInfo_Amount"
                 app:value="0.0062 BTC"
                 />
 
@@ -139,7 +139,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/itemAmount"
-                app:title="@string/full_transaction_info_fee"
+                app:title="@string/FullTransactionInfo_Fee"
                 app:value="0.006 BTC"
                 />
 
@@ -151,7 +151,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/itemFee"
-                app:title="@string/full_transaction_info_block"
+                app:title="@string/FullTransactionInfo_Block"
                 app:value="67,457"
                 />
 

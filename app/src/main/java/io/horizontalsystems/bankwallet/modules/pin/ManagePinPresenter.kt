@@ -57,7 +57,7 @@ open class ManagePinPresenter(
 
     override fun didFailToSavePin() {
         showEnterPage()
-        view?.showError(R.string.set_pin_error_failed_to_save_pin)
+        view?.showError(R.string.SetPin_ErrorFailedToSavePin)
     }
 
     private fun show(page: Page) {
@@ -101,7 +101,7 @@ open class ManagePinPresenter(
             interactor.save(pin)
         } else {
             showEnterPage()
-            show(R.string.set_pin_error_pins_dont_match, page = Page.ENTER)
+            show(R.string.SetPin_ErrorPinsDontMatch, page = Page.ENTER)
         }
     }
 }

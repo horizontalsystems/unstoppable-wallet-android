@@ -99,7 +99,7 @@
                 android:layout_marginStart="12dp"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/noto_sans"
-                android:hint="@string/Send_HintAmount"
+                android:hint="@string/Send_Hint_Amount"
                 android:inputType="numberDecimal"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="@+id/topAmountPrefix"
@@ -198,7 +198,7 @@
                         android:textColor="@color/red_error"
                         android:textSize="12sp"
                         android:visibility="gone"
-                        tools:text="@string/send_error_incorrect_address"
+                        tools:text="@string/Send_Error_IncorrectAddress"
                         />
                 </LinearLayout>
 
@@ -249,7 +249,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15.5dp"
-                android:text="@string/send_bottom_confirm_dialog_fee"
+                android:text="@string/Send_DialogFee"
                 android:textColor="@color/dark"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="@+id/topAmountPrefix"

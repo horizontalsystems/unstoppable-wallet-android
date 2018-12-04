@@ -59,7 +59,7 @@ class ReceivePresenterTest {
 //
 //        presenter.didFailToReceiveAddress(exception)
 //
-//        verify(view).showError(R.string.error_unsupported_blockchain)
+//        verify(view).showError(R.string.Error_UnsupportedBlockchain)
 //    }
 
     @Test

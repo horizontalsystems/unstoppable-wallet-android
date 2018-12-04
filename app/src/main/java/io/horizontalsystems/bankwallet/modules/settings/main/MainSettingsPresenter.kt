@@ -10,7 +10,7 @@ class MainSettingsPresenter(
     var view: MainSettingsModule.IMainSettingsView? = null
 
     override fun viewDidLoad() {
-        view?.setTitle(R.string.settings_title)
+        view?.setTitle(R.string.Settings_Title)
         view?.setBackedUp(interactor.isBackedUp)
         view?.setBaseCurrency(interactor.baseCurrency)
         view?.setLanguage(interactor.currentLanguage)
