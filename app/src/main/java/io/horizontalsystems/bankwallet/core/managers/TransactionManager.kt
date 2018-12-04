@@ -9,7 +9,8 @@ class TransactionManager(
         private val rateSyncer: ITransactionRateSyncer,
         private val walletManager: IWalletManager,
         private val currencyManager: ICurrencyManager,
-        wordsManager: IWordsManager) {
+        wordsManager: IWordsManager,
+        networkAvailabilityManager: NetworkAvailabilityManager) {
 
     private val disposables: CompositeDisposable = CompositeDisposable()
     private var adapterDisposables: CompositeDisposable = CompositeDisposable()
@@ -33,6 +34,13 @@ class TransactionManager(
                         clear()
                     }
                 })
+
+        disposables.add(networkAvailabilityManager.stateSubject
+                .subscribe { connected ->
+                    if (connected) {
+                        syncRates()
+                    }
+                })
     }
 
     private fun resubscribeToAdapters() {
@@ -52,11 +60,15 @@ class TransactionManager(
         }
 
         storage.update(records)
-        rateSyncer.sync(currencyManager.baseCurrency.code)
+        syncRates()
     }
 
     private fun handleCurrencyChange() {
         storage.clearRates()
+        syncRates()
+    }
+
+    private fun syncRates() {
         rateSyncer.sync(currencyManager.baseCurrency.code)
     }
 
