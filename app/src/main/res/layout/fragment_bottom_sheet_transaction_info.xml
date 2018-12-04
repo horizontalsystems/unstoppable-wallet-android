@@ -16,7 +16,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/noto_sans_bold"
-        android:text="@string/transaction_info_title"
+        android:text="@string/Tx_Info_Title"
         android:textColor="?TransactionDetailValueTextColor"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -158,7 +158,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/itemTo"
-        app:title="@string/transaction_info_status"
+        app:title="@string/Tx_Info_Status"
         app:value="COMPLETED"
         />
 

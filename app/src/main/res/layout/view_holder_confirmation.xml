@@ -15,5 +15,5 @@
     android:paddingStart="15dp"
     android:paddingTop="4dp"
     android:textColor="@color/black"
-    tools:text="@string/backup_words_confirm_alert_wallet_held_on_device"
+    tools:text="@string/backup_Confirmation_Understand"
     />

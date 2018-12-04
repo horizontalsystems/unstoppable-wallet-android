@@ -160,7 +160,7 @@ class SendFragment : DialogFragment() {
             if (addressInfo == null) {
                 addressErrorTxt.visibility = View.GONE
                 addressTxt.text = ""
-                addressTxt.text = addressTxt.context.getString(R.string.send_hint_address)
+                addressTxt.text = addressTxt.context.getString(R.string.Send_Hint_Address)
             }
 
             addressInfo?.let {

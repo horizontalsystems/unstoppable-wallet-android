@@ -67,7 +67,7 @@ class EncryptionManager : IEncryptionManager {
         }
 
         fun showKeysInvalidatedAlert(activity: FragmentActivity) {
-            AlertDialogFragment.newInstance(R.string.alert_keys_invalidated_title, R.string.alert_keys_invalidated_description, R.string.alert_ok,
+            AlertDialogFragment.newInstance(R.string.alert_keys_invalidated_title, R.string.alert_keys_invalidated_description, R.string.Alert_Ok,
                     object : AlertDialogFragment.Listener {
                         override fun onButtonClick() {
                             KeyStoreWrapper().removeAndroidKeyStoreKey(MASTER_KEY)
@@ -83,7 +83,7 @@ class EncryptionManager : IEncryptionManager {
         }
 
         fun showNoDeviceLockWarning(activity: FragmentActivity) {
-            AlertDialogFragment.newInstance(R.string.alert_no_device_lock_title, R.string.alert_no_device_lock_description, R.string.alert_close,
+            AlertDialogFragment.newInstance(R.string.alert_no_device_lock_title, R.string.alert_no_device_lock_description, R.string.Alert_Close,
                     object : AlertDialogFragment.Listener {
                         override fun onButtonClick() {
                             activity.finish()

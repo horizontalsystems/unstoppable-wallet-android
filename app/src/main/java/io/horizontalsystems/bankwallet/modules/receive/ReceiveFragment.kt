@@ -58,7 +58,7 @@ class ReceiveFragment : DialogFragment() {
                         val coinDrawable = ContextCompat.getDrawable(ctx, LayoutHelper.getCoinDrawableResource(address.coin))
                         rootView.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
                     }
-                    rootView.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.receive_title, address.coin)
+                    rootView.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.Deposit_Title, address.coin)
                     rootView.findViewById<TextView>(R.id.txtAddress)?.let { it.text = address.address }
                     rootView.findViewById<ImageView>(R.id.imgQrCode)?.setImageBitmap(TextHelper.getQrCodeBitmapFromAddress(address.address))
                 }

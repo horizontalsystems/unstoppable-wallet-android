@@ -55,9 +55,9 @@ class FullTransactionInfoActivity : BaseActivity() {
     private fun setTransaction(trx: TransactionRecordViewItem) {
 //        val txStatus = trx.status
 //        val statusTxt = when (txStatus) {
-//            is TransactionStatus.Processing -> getString(R.string.transaction_info_processing, txStatus.progress)
-//            is TransactionStatus.Pending -> getString(R.string.transaction_info_status_pending)
-//            else -> getString(R.string.transaction_info_status_completed)
+//            is TransactionStatus.Processing -> getString(R.string.Transaction_Info_Processing, txStatus.progress)
+//            is TransactionStatus.Pending -> getString(R.string.Tx_Info_Pending)
+//            else -> getString(R.string.Tx_Info_Completed)
 //        }
 //        val statusImg = when (txStatus) {
 //            is TransactionStatus.Processing -> R.drawable.processing_image

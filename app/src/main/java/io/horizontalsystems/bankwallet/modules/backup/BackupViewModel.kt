@@ -44,7 +44,7 @@ class BackupViewModel : ViewModel(), BackupModule.IView, BackupModule.IRouter {
     }
 
     override fun showConfirmationError() {
-        errorLiveData.value = R.string.backup_words_error_no_match
+        errorLiveData.value = R.string.Backup_Confirmation_FailureAlertText
     }
 
     // router

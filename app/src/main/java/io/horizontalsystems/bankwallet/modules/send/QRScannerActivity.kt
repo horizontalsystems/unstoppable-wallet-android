@@ -20,7 +20,7 @@ class QRScannerActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
 
-        supportActionBar?.title = getString(R.string.scan_qr_code)
+        supportActionBar?.title = getString(R.string.Send_ScanQrCode)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.back)
 

@@ -53,7 +53,7 @@
         android:layout_marginEnd="24dp"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/noto_sans_bold"
-        android:text="@string/alert_ok"
+        android:text="@string/Alert_Ok"
         android:textColor="@color/clickable_green"
         android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="parent"

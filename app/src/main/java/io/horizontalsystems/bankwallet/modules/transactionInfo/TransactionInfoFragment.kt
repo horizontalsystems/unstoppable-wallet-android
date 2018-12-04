@@ -59,7 +59,7 @@ class TransactionInfoFragment : DialogFragment() {
                 }
 
                 rootView.findViewById<TextView>(R.id.txDate)?.text = if (txStatus is TransactionStatus.Pending) {
-                    getString(R.string.transaction_info_status_pending)
+                    getString(R.string.Tx_Info_Pending)
                 } else {
                     txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) }
                 }
@@ -75,11 +75,11 @@ class TransactionInfoFragment : DialogFragment() {
                         else -> null
                     }
                     val statusText = when (txStatus) {
-                        is TransactionStatus.Processing -> getString(R.string.transaction_info_processing, progress)
-                        is TransactionStatus.Pending -> getString(R.string.transaction_info_status_pending)
-                        else -> getString(R.string.transaction_info_status_completed)
+                        is TransactionStatus.Processing -> getString(R.string.Tx_Info_Processing, progress)
+                        is TransactionStatus.Pending -> getString(R.string.Tx_Info_Pending)
+                        else -> getString(R.string.Tx_Info_Completed)
                     }
-                    bind(title = getString(R.string.transaction_info_status), valueTitle = statusText.toUpperCase(), valueIcon = valueIcon, progressValue = progress, showBottomBorder = true)
+                    bind(title = getString(R.string.Tx_Info_Status), valueTitle = statusText.toUpperCase(), valueIcon = valueIcon, progressValue = progress, showBottomBorder = true)
                 }
 
                 rootView.findViewById<TextView>(R.id.transactionId)?.apply {

@@ -49,13 +49,13 @@ class BackupConfirmFragment : Fragment(), BottomConfirmAlert.Listener {
 
         buttonSubmit.setOnClickListener {
             if (editWord1.text?.isEmpty() == true || editWord2.text?.isEmpty() == true) {
-                showError(R.string.backup_words_error_enter_words)
+                showError(R.string.Backup_Confirmation_Description)
             } else {
                 activity?.let {
                     val confirmationList = mutableListOf(
-                            R.string.backup_words_confirm_alert_wallet_held_on_device,
-                            R.string.backup_words_confirm_alert_wallet_restore_with_words,
-                            R.string.backup_words_confirm_alert_wallet_device_lock_warning
+                            R.string.Backup_Confirmation_Understand,
+                            R.string.Backup_Confirmation_DeleteAppWarn,
+                            R.string.Backup_Confirmation_LockAppWarn
                     )
                     BottomConfirmAlert.show(it, confirmationList, this)
                 }

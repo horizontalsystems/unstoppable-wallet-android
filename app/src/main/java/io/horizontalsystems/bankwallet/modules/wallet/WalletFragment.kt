@@ -165,7 +165,7 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
 
         buttonPay.isEnabled = (walletViewItem.state is AdapterState.Synced)
         textExchangeRate.text = walletViewItem.exchangeValue?.let { exchangeValue ->
-            containerView.context.getString(R.string.wallet_exchange_rate, ValueFormatter.format(exchangeValue), walletViewItem.coinValue.coin)
+            containerView.context.getString(R.string.Balance_RatePerCoin, ValueFormatter.format(exchangeValue), walletViewItem.coinValue.coin)
         } ?: kotlin.run { "" }
 
         textExchangeRate.setTextColor(ContextCompat.getColor(containerView.context, if (walletViewItem.rateExpired) R.color.grey_40 else R.color.grey))
