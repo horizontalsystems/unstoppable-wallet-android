@@ -50,6 +50,7 @@ class BackupActivity : BaseActivity() {
         })
 
         viewModel.navigateBackLiveEvent.observe(this, Observer {
+            hideSoftKeyboard()
             supportFragmentManager.popBackStack()
         })
 
