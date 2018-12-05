@@ -5,6 +5,8 @@ import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.support.v7.app.AppCompatActivity
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
+import io.horizontalsystems.bankwallet.modules.backup.BackupModule
+import io.horizontalsystems.bankwallet.modules.backup.BackupPresenter
 import io.horizontalsystems.bankwallet.modules.guest.GuestModule
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
@@ -31,6 +33,8 @@ class LauncherActivity : AppCompatActivity() {
             return
         } else if (!App.wordsManager.isLoggedIn) {
             GuestModule.start(this)
+        } else if (!App.localStorage.iUnderstand) {
+            BackupModule.start(this, BackupPresenter.DismissMode.SET_PIN)
         } else if(App.secureStorage.pinIsEmpty()) {
             PinModule.startForSetPin(this)
         } else {

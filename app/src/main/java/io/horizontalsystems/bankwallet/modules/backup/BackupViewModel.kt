@@ -4,8 +4,9 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
 
-class BackupViewModel : ViewModel(), BackupModule.IView, BackupModule.IRouter {
+class BackupViewModel : ViewModel(), BackupModule.IView, BackupModule.IRouter, IKeyStoreSafeExecute {
     lateinit var delegate: BackupModule.IViewDelegate
 
     val errorLiveData = MutableLiveData<Int>()
@@ -17,9 +18,11 @@ class BackupViewModel : ViewModel(), BackupModule.IView, BackupModule.IRouter {
     val closeLiveEvent = SingleLiveEvent<Void>()
     val navigateBackLiveEvent = SingleLiveEvent<Void>()
     val navigateToSetPinLiveEvent = SingleLiveEvent<Void>()
+    val showConfirmationCheckDialogLiveEvent = SingleLiveEvent<Void>()
+    val keyStoreSafeExecute = SingleLiveEvent<Triple<Runnable, Runnable?, Runnable?>>()
 
     fun init(dismissMode: BackupPresenter.DismissMode) {
-        BackupModule.init(this, this, dismissMode)
+        BackupModule.init(this, this, this, dismissMode)
     }
 
     // view
@@ -47,6 +50,10 @@ class BackupViewModel : ViewModel(), BackupModule.IView, BackupModule.IRouter {
         errorLiveData.value = R.string.Backup_Confirmation_FailureAlertText
     }
 
+    override fun showTermsConfirmDialog() {
+        showConfirmationCheckDialogLiveEvent.call()
+    }
+
     // router
 
     override fun close() {
@@ -55,5 +62,9 @@ class BackupViewModel : ViewModel(), BackupModule.IView, BackupModule.IRouter {
 
     override fun navigateToSetPin() {
         navigateToSetPinLiveEvent.call()
+    }
+
+    override fun safeExecute(action: Runnable, onSuccess: Runnable?, onFailure: Runnable?) {
+        keyStoreSafeExecute.value = Triple(action, onSuccess, onFailure)
     }
 }

@@ -39,7 +39,7 @@ class BackupInfoFragment : Fragment(), BottomConfirmAlert.Listener {
     }
 
     override fun onConfirmationSuccess() {
-        viewModel.delegate.laterDidClick()
+        viewModel.delegate.onTermsConfirm()
     }
 }
 

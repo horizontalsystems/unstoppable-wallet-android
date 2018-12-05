@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.backup
 
 import java.util.*
 
-    class BackupPresenter(private val interactor: BackupModule.IInteractor, private val router: BackupModule.IRouter, private val dismissMode: DismissMode) : BackupModule.IViewDelegate, BackupModule.IInteractorDelegate {
+class BackupPresenter(private val interactor: BackupModule.IInteractor, private val router: BackupModule.IRouter, private val dismissMode: DismissMode) : BackupModule.IViewDelegate, BackupModule.IInteractorDelegate {
 
     enum class DismissMode {
         SET_PIN, DISMISS_SELF
@@ -11,10 +11,6 @@ import java.util.*
     var view: BackupModule.IView? = null
 
     // view delegate
-
-    override fun laterDidClick() {
-        dismiss()
-    }
 
     override fun showWordsDidClick() {
         interactor.fetchWords()
@@ -36,6 +32,11 @@ import java.util.*
         interactor.validate(confirmationWords)
     }
 
+    override fun onTermsConfirm() {
+        interactor.onTermsConfirm()
+        dismiss()
+    }
+
     // interactor delegate
 
     override fun didFetchWords(words: List<String>) {
@@ -47,7 +48,7 @@ import java.util.*
     }
 
     override fun didValidateSuccess() {
-        dismiss()
+        view?.showTermsConfirmDialog()
     }
 
     override fun didValidateFailure() {

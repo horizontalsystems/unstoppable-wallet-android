@@ -43,7 +43,7 @@ class LocalStorageManager : ILocalStorage {
     override var iUnderstand: Boolean
         get() = App.preferences.getBoolean(I_UNDERSTAND, false)
         set(value) {
-            App.preferences.edit().putBoolean(LIGHT_MODE_ENABLED, value).apply()
+            App.preferences.edit().putBoolean(I_UNDERSTAND, value).apply()
         }
 
     override var unlockAttemptsLeft: Int
