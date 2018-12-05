@@ -43,6 +43,17 @@ class BackupConfirmFragment : Fragment(), BottomConfirmAlert.Listener {
             showError(it)
         })
 
+        viewModel.showConfirmationCheckDialogLiveEvent.observe(this, Observer {
+            activity?.let {
+                val confirmationList = mutableListOf(
+                        R.string.Backup_Confirmation_Understand,
+                        R.string.Backup_Confirmation_DeleteAppWarn,
+                        R.string.Backup_Confirmation_LockAppWarn
+                )
+                BottomConfirmAlert.show(it, confirmationList, this)
+            }
+        })
+
         buttonBack.setOnClickListener {
             viewModel.delegate.hideConfirmationDidClick()
         }
@@ -51,14 +62,10 @@ class BackupConfirmFragment : Fragment(), BottomConfirmAlert.Listener {
             if (editWord1.text?.isEmpty() == true || editWord2.text?.isEmpty() == true) {
                 showError(R.string.Backup_Confirmation_Description)
             } else {
-                activity?.let {
-                    val confirmationList = mutableListOf(
-                            R.string.Backup_Confirmation_Understand,
-                            R.string.Backup_Confirmation_DeleteAppWarn,
-                            R.string.Backup_Confirmation_LockAppWarn
-                    )
-                    BottomConfirmAlert.show(it, confirmationList, this)
-                }
+                viewModel.delegate.validateDidClick(
+                        hashMapOf(wordIndex1 to editWord1.text.toString(),
+                                wordIndex2 to editWord2.text.toString())
+                )
             }
         }
     }
@@ -68,10 +75,7 @@ class BackupConfirmFragment : Fragment(), BottomConfirmAlert.Listener {
     }
 
     override fun onConfirmationSuccess() {
-        viewModel.delegate.validateDidClick(
-                hashMapOf(wordIndex1 to editWord1.text.toString(),
-                        wordIndex2 to editWord2.text.toString())
-        )
+        viewModel.delegate.onTermsConfirm()
     }
 
 }

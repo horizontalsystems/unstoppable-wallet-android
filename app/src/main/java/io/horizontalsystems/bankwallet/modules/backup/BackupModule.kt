@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.backup
 
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
 import java.util.*
 
 object BackupModule {
@@ -12,21 +13,23 @@ object BackupModule {
         fun hideWords()
         fun hideConfirmation()
         fun showConfirmationError()
+        fun showTermsConfirmDialog()
     }
 
     interface IViewDelegate {
-        fun laterDidClick()
         fun showWordsDidClick()
         fun hideWordsDidClick()
         fun showConfirmationDidClick()
         fun hideConfirmationDidClick()
         fun validateDidClick(confirmationWords: HashMap<Int, String>)
+        fun onTermsConfirm()
     }
 
     interface IInteractor {
         fun fetchWords()
         fun fetchConfirmationIndexes()
         fun validate(confirmationWords: HashMap<Int, String>)
+        fun onTermsConfirm()
     }
 
     interface IInteractorDelegate {
@@ -47,8 +50,8 @@ object BackupModule {
         BackupActivity.start(context, dismissMode)
     }
 
-    fun init(view: BackupViewModel, router: IRouter, dismissMode: BackupPresenter.DismissMode) {
-        val interactor = BackupInteractor(App.wordsManager, App.randomManager)
+    fun init(view: BackupViewModel, router: IRouter, keystoreSafeExecute: IKeyStoreSafeExecute, dismissMode: BackupPresenter.DismissMode) {
+        val interactor = BackupInteractor(App.wordsManager, App.randomManager, App.localStorage, keystoreSafeExecute)
         val presenter = BackupPresenter(interactor, router, dismissMode)
 
         presenter.view = view

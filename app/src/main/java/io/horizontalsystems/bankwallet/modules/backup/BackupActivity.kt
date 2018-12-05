@@ -61,6 +61,13 @@ class BackupActivity : BaseActivity() {
             finish()
         })
 
+        viewModel.keyStoreSafeExecute.observe(this, Observer { triple ->
+            triple?.let {
+                val (action, onSuccess, onFailure) = it
+                safeExecuteWithKeystore(action, onSuccess, onFailure)
+            }
+        })
+
     }
 
     companion object {
