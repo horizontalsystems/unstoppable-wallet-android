@@ -103,13 +103,11 @@ dependencies {
 
     api 'com.journeyapps:zxing-android-embedded:3.6.0'
 
-    implementation 'org.slf4j:slf4j-simple:1.7.20'
-
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.2'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
 
     // BitcoinKit
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:0f08e54'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:f726c2a'
 
     // EthereumKit
     implementation 'com.github.horizontalsystems:ethereum-kit-android:master-SNAPSHOT'
