@@ -21,21 +21,13 @@ class TransactionViewItemFactory(
     fun item(record: TransactionRecord): TransactionViewItem {
         val adapter = walletManager.wallets.firstOrNull { it.coin == record.coin }?.adapter
 
-        var rateValue: Double? = null
-
-        if (record.rate == 0.0) {
-            val secondsAgo = DateHelper.getSecondsAgo(record.timestamp * 1000)
-            if (secondsAgo < latestRateFallbackThreshold * 60) {
-                val rate = rateManager.latestRates[record.coin]?.get(currencyManager.baseCurrency.code)
-                rate?.let {
-                    rateValue = it.value
-                }
-            }
-        } else {
-            rateValue = record.rate
+        val rateValue = when {
+            record.rate != 0.0 -> record.rate
+            DateHelper.getSecondsAgo(record.timestamp * 1000) < latestRateFallbackThreshold * 60 -> rateManager.latestRates[record.coin]?.get(currencyManager.baseCurrency.code)?.value
+            else -> null
         }
 
-        val convertedValue = rateValue?.let { it * record.amount } ?: run { null }
+        val convertedValue = rateValue?.let { it * record.amount }
 
         var status: TransactionStatus = TransactionStatus.Pending
 
