@@ -16,6 +16,8 @@ class RateManager(
         timer: PeriodicTimer) : IPeriodicTimerDelegate, IRateSyncerDelegate {
 
     val subject: PublishSubject<Boolean> = PublishSubject.create()
+    val latestRates = mutableMapOf<String, MutableMap<String, LatestRate>>()
+
     private var disposables: CompositeDisposable = CompositeDisposable()
 
     init {
@@ -48,6 +50,11 @@ class RateManager(
     }
 
     override fun didSync(coin: String, currencyCode: String, latestRate: LatestRate) {
+        if (latestRates[coin] == null) {
+            latestRates[coin] = mutableMapOf()
+        }
+        latestRates[coin]?.set(currencyCode, latestRate)
+
         storage.save(latestRate = latestRate, coin = coin, currencyCode = currencyCode)
         subject.onNext(true)
     }

@@ -2,19 +2,32 @@ package io.horizontalsystems.bankwallet.core.factories
 
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.managers.RateManager
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
+import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import java.util.*
 
-class TransactionViewItemFactory(private val walletManager: IWalletManager, private val currencyManager: ICurrencyManager) {
+class TransactionViewItemFactory(
+        private val walletManager: IWalletManager,
+        private val currencyManager: ICurrencyManager,
+        private val rateManager: RateManager) {
+
+    private val latestRateFallbackThreshold: Long = 60 // minutes
 
     fun item(record: TransactionRecord): TransactionViewItem {
         val adapter = walletManager.wallets.firstOrNull { it.coin == record.coin }?.adapter
 
-        val convertedValue = if (record.rate == 0.0) null else record.rate * record.amount
+        val rateValue = when {
+            record.rate != 0.0 -> record.rate
+            DateHelper.getSecondsAgo(record.timestamp * 1000) < latestRateFallbackThreshold * 60 -> rateManager.latestRates[record.coin]?.get(currencyManager.baseCurrency.code)?.value
+            else -> null
+        }
+
+        val convertedValue = rateValue?.let { it * record.amount }
 
         var status: TransactionStatus = TransactionStatus.Pending
 

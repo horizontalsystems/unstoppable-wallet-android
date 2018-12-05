@@ -101,7 +101,7 @@ object TransactionsModule {
 
         val dataSource = TransactionRecordDataSource(App.appDatabase)
         val interactor = TransactionsInteractor(App.walletManager, dataSource)
-        val presenter = TransactionsPresenter(interactor, router, TransactionViewItemFactory(App.walletManager, App.currencyManager))
+        val presenter = TransactionsPresenter(interactor, router, TransactionViewItemFactory(App.walletManager, App.currencyManager, App.rateManager))
 
         dataSource.delegate = interactor
         presenter.view = view

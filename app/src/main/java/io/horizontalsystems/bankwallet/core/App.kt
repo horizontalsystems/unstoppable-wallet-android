@@ -105,7 +105,7 @@ class App : Application() {
         rateSyncer.delegate = rateManager
 
         transactionRateSyncer = TransactionRateSyncer(transactionStorage, networkManager)
-        transactionManager = TransactionManager(transactionStorage, transactionRateSyncer, walletManager, currencyManager, wordsManager)
+        transactionManager = TransactionManager(transactionStorage, transactionRateSyncer, walletManager, currencyManager, wordsManager, networkAvailabilityManager)
 
     }
 
