@@ -12,8 +12,11 @@ class RestorePresenter(private val interactor: RestoreModule.IInteractor, privat
         router.navigateToSetPin()
     }
 
-    override fun didFailToRestore() {
-        view?.showInvalidWordsError()
+    override fun didFailToRestore(error: Int) {
+        view?.showError(error)
     }
 
+    override fun didFailToValidate(error: Int) {
+        view?.showError(error)
+    }
 }
