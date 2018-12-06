@@ -37,6 +37,10 @@ class BackupPresenter(private val interactor: BackupModule.IInteractor, private 
         dismiss()
     }
 
+    override fun onLaterClick() {
+        dismissOrShowConfirmationDialog()
+    }
+
     // interactor delegate
 
     override fun didFetchWords(words: List<String>) {
@@ -48,7 +52,15 @@ class BackupPresenter(private val interactor: BackupModule.IInteractor, private 
     }
 
     override fun didValidateSuccess() {
-        view?.showTermsConfirmDialog()
+        dismissOrShowConfirmationDialog()
+    }
+
+    private fun dismissOrShowConfirmationDialog() {
+        if (interactor.shouldShowTermsConfirmation()) {
+            view?.showTermsConfirmDialog()
+        } else {
+            dismiss()
+        }
     }
 
     override fun didValidateFailure() {

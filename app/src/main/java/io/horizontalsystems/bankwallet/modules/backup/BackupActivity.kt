@@ -8,8 +8,9 @@ import android.os.Bundle
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
+import io.horizontalsystems.bankwallet.ui.dialogs.BottomConfirmAlert
 
-class BackupActivity : BaseActivity() {
+class BackupActivity : BaseActivity(), BottomConfirmAlert.Listener {
 
     private lateinit var viewModel: BackupViewModel
 
@@ -69,6 +70,19 @@ class BackupActivity : BaseActivity() {
             }
         })
 
+        viewModel.showConfirmationCheckDialogLiveEvent.observe(this, Observer {
+            val confirmationList = mutableListOf(
+                    R.string.Backup_Confirmation_Understand,
+                    R.string.Backup_Confirmation_DeleteAppWarn,
+                    R.string.Backup_Confirmation_LockAppWarn
+            )
+            BottomConfirmAlert.show(this, confirmationList, this)
+        })
+
+    }
+
+    override fun onConfirmationSuccess() {
+        viewModel.delegate.onTermsConfirm()
     }
 
     companion object {

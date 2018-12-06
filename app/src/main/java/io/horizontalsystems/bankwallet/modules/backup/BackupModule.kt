@@ -23,6 +23,7 @@ object BackupModule {
         fun hideConfirmationDidClick()
         fun validateDidClick(confirmationWords: HashMap<Int, String>)
         fun onTermsConfirm()
+        fun onLaterClick()
     }
 
     interface IInteractor {
@@ -30,6 +31,7 @@ object BackupModule {
         fun fetchConfirmationIndexes()
         fun validate(confirmationWords: HashMap<Int, String>)
         fun onTermsConfirm()
+        fun shouldShowTermsConfirmation(): Boolean
     }
 
     interface IInteractorDelegate {
