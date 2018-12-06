@@ -8,20 +8,20 @@ BANK Wallet is a secure and a fully decentralized crypto wallet app that support
 
 This wallet provides a seamless and secure way to get started with Bitcoin and other crypto currencies for masses. The BANK wallet has been designed for everyone. You don't need to understand the inner workings of cryptocurrencies to be able to use it on daily basis and participate in this economy. 
 
-It has been built using best practices on all fronts ranging from the design of the interface to the implementation of blockchain protocols.
+It has been built using best practices from the design of the interface to the implementation of blockchain protocols.
 
 ![Header](/images/BankWalletAllTabs-android-Mockup.jpg)
 
 
 ## Independent & Decentralized
 
-The BANK wallet is fully peer-to-peer and works without any centrally managed servers. As a result it can't be stopped, blocked or taken down. The wallet connects directly to the currency networks i.e. Bitcoin using an SPV protocol. Such technical approach enables the BANK wallet to operate anywhere and remain censoship-resitant as long as there is an internet connection. 
+The BANK wallet is fully peer-to-peer and works without any centrally managed servers. As a result it can't be stopped, blocked or taken down. The wallet connects directly to the currency networks i.e. Bitcoin using an SPV protocol. Such approach enables the BANK wallet to operate anywhere and remain censoship-resitant as long as there is an internet connection. 
 
-Because the wallet doesn't rely on any central servers it will continue working and allow users to access and spend funds at any time. You and only you are in full control of the money on your balance. 
+Because the wallet doesn't rely on any central servers it will continue working and allow users to access and spend funds at any time. Only the user is in control of the money. 
 
 Moreover, other app functionality follows same approach as well. There are no centrally managed servers that can fail and as a result stop app from functioning. The BANK wallet is truly decentralized and independent!
 
-It should be noted that a large majority of the crypto wallet apps out there don't really give users full control of their funds. Usually the funds are stored on a remote server operated and controlled by the wallet provider. This essentially means that a person have to REALLY trust a third party with the funds because users have limited control over the funds. Due to the unregulated nature of the cryptocurrencies there are no mechanisms in place to guarantee that a wallet provider doesn't cheat.
+It should be noted that most crypto wallet apps out there don't really give users full control of their funds. Usually the funds are stored on a remote server operated and controlled by the wallet provider. This essentially means that a person have to REALLY trust a third party with the funds because users have limited control over the funds. Due to the unregulated nature of the cryptocurrencies there are no mechanisms in place to guarantee that a wallet provider doesn't cheat.
 
 
 ## Secure & Open Source
