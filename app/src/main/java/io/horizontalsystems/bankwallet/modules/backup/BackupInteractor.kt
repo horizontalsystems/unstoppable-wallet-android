@@ -31,6 +31,10 @@ class BackupInteractor(
         delegate?.didFetchConfirmationIndexes(indexesProvider.getRandomIndexes(2))
     }
 
+    override fun shouldShowTermsConfirmation(): Boolean {
+        return !localStorage.iUnderstand
+    }
+
     override fun validate(confirmationWords: HashMap<Int, String>) {
         wordsManager.words?.let { wordList ->
             var valid = true

@@ -34,7 +34,7 @@ object RestoreModule {
     }
 
     fun init(view: RestoreViewModel, router: IRouter, keystoreSafeExecute: IKeyStoreSafeExecute) {
-        val interactor = RestoreInteractor(App.wordsManager, keystoreSafeExecute)
+        val interactor = RestoreInteractor(App.wordsManager, App.localStorage, keystoreSafeExecute)
         val presenter = RestorePresenter(interactor, router)
 
         view.delegate = presenter

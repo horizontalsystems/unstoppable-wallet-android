@@ -8,11 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.ui.dialogs.BottomConfirmAlert
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_backup_words_confirm.*
 
-class BackupConfirmFragment : Fragment(), BottomConfirmAlert.Listener {
+class BackupConfirmFragment : Fragment() {
     private lateinit var viewModel: BackupViewModel
 
     private var wordIndex1 = -1
@@ -43,17 +42,6 @@ class BackupConfirmFragment : Fragment(), BottomConfirmAlert.Listener {
             showError(it)
         })
 
-        viewModel.showConfirmationCheckDialogLiveEvent.observe(this, Observer {
-            activity?.let {
-                val confirmationList = mutableListOf(
-                        R.string.Backup_Confirmation_Understand,
-                        R.string.Backup_Confirmation_DeleteAppWarn,
-                        R.string.Backup_Confirmation_LockAppWarn
-                )
-                BottomConfirmAlert.show(it, confirmationList, this)
-            }
-        })
-
         buttonBack.setOnClickListener {
             viewModel.delegate.hideConfirmationDidClick()
         }
@@ -72,10 +60,6 @@ class BackupConfirmFragment : Fragment(), BottomConfirmAlert.Listener {
 
     private fun showError(errorMsgId: Int?) {
         errorMsgId?.let { HudHelper.showErrorMessage(it) }
-    }
-
-    override fun onConfirmationSuccess() {
-        viewModel.delegate.onTermsConfirm()
     }
 
 }
