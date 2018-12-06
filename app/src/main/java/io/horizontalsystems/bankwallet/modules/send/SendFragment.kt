@@ -149,6 +149,7 @@ class SendFragment : DialogFragment() {
 
             if (amountNumber > 0) {
                 amountEditTxt.setText(BigDecimal.valueOf(amountNumber).toPlainString())
+                amountEditTxt.setSelection(amountEditTxt.text.length)
             }
         })
 
