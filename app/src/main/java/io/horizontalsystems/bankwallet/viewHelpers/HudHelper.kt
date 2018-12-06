@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.viewHelpers
 
 import android.graphics.PorterDuff
 import android.support.v4.content.ContextCompat
+import android.view.Gravity
 import android.widget.TextView
 import android.widget.Toast
 import io.horizontalsystems.bankwallet.R
@@ -28,6 +29,7 @@ object HudHelper {
         val toastText = toast.view.findViewById(android.R.id.message) as TextView
         toastText.setTextColor(ContextCompat.getColor(toast.view.context, R.color.white))
         toast.view.background.setColorFilter(ContextCompat.getColor(toast.view.context, backgroundColor), PorterDuff.Mode.SRC_IN)
+        toast.setGravity(Gravity.CENTER, 0, 0)
         toast.show()
     }
 }
