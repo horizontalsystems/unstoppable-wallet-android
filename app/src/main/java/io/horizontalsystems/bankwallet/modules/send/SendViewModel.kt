@@ -23,6 +23,17 @@ class SendViewModel : ViewModel(), SendModule.IRouter, SendModule.IView {
     val showConfirmationLiveEvent = SingleLiveEvent<Unit>()
 
     fun init(coin: String) {
+        hintInfoLiveData.value = null
+        sendButtonEnabledLiveData.value = null
+        coinLiveData.value = null
+        amountInfoLiveData.value = null
+        switchButtonEnabledLiveData.value = null
+        addressInfoLiveData.value = null
+        primaryFeeAmountInfoLiveData.value = null
+        secondaryFeeAmountInfoLiveData.value = null
+        errorLiveData.value = null
+        sendConfirmationViewItemLiveData.value = null
+
         SendModule.init(this, this, coin)
         delegate.onViewDidLoad()
     }
