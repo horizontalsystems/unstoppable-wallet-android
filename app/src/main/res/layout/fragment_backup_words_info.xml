@@ -13,19 +13,11 @@
         style="@style/Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:text="@string/Backup_Intro_Title"
+        android:textSize="34sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        />
-
-    <ImageView
-        android:id="@+id/backupImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/backup_image"
-        android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@id/textTitle"
         />
 
     <TextView
@@ -33,10 +25,10 @@
         style="@style/Description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="32dp"
         android:text="@string/Backup_Intro_Subtitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/backupImage"
+        app:layout_constraintTop_toBottomOf="@+id/textTitle"
         />
 
     <Button
