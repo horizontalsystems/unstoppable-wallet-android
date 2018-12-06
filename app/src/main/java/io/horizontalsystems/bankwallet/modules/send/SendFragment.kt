@@ -23,6 +23,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import io.horizontalsystems.bankwallet.viewHelpers.ValueFormatter
+import java.math.BigDecimal
 
 class SendFragment : DialogFragment() {
 
@@ -134,20 +135,20 @@ class SendFragment : DialogFragment() {
         })
 
         viewModel.amountInfoLiveData.observe(this, Observer { amountInfo ->
-            amountInfo?.let {
-                amountPrefixTxt.text = when (it) {
-                    is SendModule.AmountInfo.CoinValueInfo -> it.coinValue.coin
-                    is SendModule.AmountInfo.CurrencyValueInfo -> it.currencyValue.currency.symbol
+            var amountNumber = 0.0
+            when (amountInfo) {
+                is SendModule.AmountInfo.CoinValueInfo -> {
+                    amountPrefixTxt.text = amountInfo.coinValue.coin
+                    amountNumber = Math.round(amountInfo.coinValue.value * 100_000_000.0) / 100_000_000.0
                 }
+                is SendModule.AmountInfo.CurrencyValueInfo -> {
+                    amountPrefixTxt.text = amountInfo.currencyValue.currency.symbol
+                    amountNumber = Math.round(amountInfo.currencyValue.value * 100.0) / 100.0
+                }
+            }
 
-                val amountNumber = when (it) {
-                    is SendModule.AmountInfo.CoinValueInfo -> it.coinValue.value
-                    is SendModule.AmountInfo.CurrencyValueInfo -> it.currencyValue.value
-                }
-
-                if (amountNumber > 0) {
-                    amountEditTxt.setText(amountNumber.toString())
-                }
+            if (amountNumber > 0) {
+                amountEditTxt.setText(BigDecimal.valueOf(amountNumber).toPlainString())
             }
         })
 
