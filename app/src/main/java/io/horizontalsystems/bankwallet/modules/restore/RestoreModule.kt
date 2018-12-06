@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
 object RestoreModule {
 
     interface IView {
-        fun showInvalidWordsError()
+        fun showError(error: Int)
     }
 
     interface IViewDelegate {
@@ -21,7 +21,7 @@ object RestoreModule {
 
     interface IInteractorDelegate {
         fun didRestore()
-        fun didFailToRestore()
+        fun didFailToRestore(exception: Exception)
     }
 
     interface IRouter {
@@ -41,5 +41,7 @@ object RestoreModule {
         presenter.view = view
         interactor.delegate = presenter
     }
+
+    class RestoreFailedException : Exception()
 
 }

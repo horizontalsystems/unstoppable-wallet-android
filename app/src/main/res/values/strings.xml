@@ -28,8 +28,8 @@
     <!--Restore-->
 
     <string name="Restore_Title">Enter Secret Keys</string>
-    <string name="Restore_ValidationFailed">Words do not match</string>
-
+    <string name="Restore_ValidationFailed">Incorrect Secret Key</string>
+    <string name="Restore_RestoreFailed">Failed to restore wallet</string>
 
     <!--Backup-->
 

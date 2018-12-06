@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.restore
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
 
@@ -18,8 +17,8 @@ class RestoreViewModel : ViewModel(), RestoreModule.IView, RestoreModule.IRouter
         RestoreModule.init(this, this, this)
     }
 
-    override fun showInvalidWordsError() {
-        errorLiveData.value = R.string.Error
+    override fun showError(error: Int) {
+        errorLiveData.value = error
     }
 
     override fun navigateToSetPin() {
