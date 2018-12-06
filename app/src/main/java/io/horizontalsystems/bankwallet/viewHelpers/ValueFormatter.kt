@@ -13,7 +13,6 @@ object ValueFormatter {
             val format: NumberFormat = NumberFormat.getInstance()
             format.minimumFractionDigits = 2
             format.maximumFractionDigits = 8
-            format.roundingMode = RoundingMode.CEILING
             return format
         }
 
