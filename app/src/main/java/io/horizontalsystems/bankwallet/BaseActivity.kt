@@ -12,6 +12,7 @@ import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.UserNotAuthenticatedException
 import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import java.util.*
@@ -72,6 +73,10 @@ abstract class BaseActivity : AppCompatActivity() {
         newBase?.let {
             super.attachBaseContext(updateBaseContextLocale(it))
         } ?: super.attachBaseContext(newBase)
+    }
+
+    protected fun hideSoftKeyboard() {
+        getSystemService(InputMethodManager::class.java)?.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
     }
 
     private fun updateBaseContextLocale(context: Context): Context {
