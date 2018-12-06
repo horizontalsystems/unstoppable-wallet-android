@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.restore
 
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.managers.WordsManager
@@ -25,11 +24,11 @@ class RestoreInteractor(
                         delegate?.didRestore()
                     },
                     onFailure = Runnable {
-                        delegate?.didFailToRestore(R.string.Restore_RestoreFailed)
+                        delegate?.didFailToRestore(RestoreModule.RestoreFailedException())
                     }
             )
         } catch (e: Mnemonic.MnemonicException) {
-            delegate?.didFailToValidate(R.string.Restore_ValidationFailed)
+            delegate?.didFailToRestore(e)
         }
     }
 

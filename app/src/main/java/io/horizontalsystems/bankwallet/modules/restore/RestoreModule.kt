@@ -21,8 +21,7 @@ object RestoreModule {
 
     interface IInteractorDelegate {
         fun didRestore()
-        fun didFailToRestore(error: Int)
-        fun didFailToValidate(error: Int)
+        fun didFailToRestore(exception: Exception)
     }
 
     interface IRouter {
@@ -42,5 +41,7 @@ object RestoreModule {
         presenter.view = view
         interactor.delegate = presenter
     }
+
+    class RestoreFailedException : Exception()
 
 }
