@@ -23,11 +23,15 @@ class UnlockPinInteractor(
                         wordsManager.safeLoad()
                         wordsManager.loggedInSubject.onNext(LogInState.RESUME)
                     }
-                    if (localStorage.isBiometricOn) {
-                        encryptionManager.getCryptoObject()?.let { delegate?.showFingerprintInput(it) }
+                    if (isBiometricOn()) {
+                        encryptionManager.getCryptoObject()?.let { delegate?.setCryptoObject(it) }
                     }
                 }
         )
+    }
+
+    override fun isBiometricOn(): Boolean {
+        return localStorage.isBiometricOn
     }
 
     override fun unlock(pin: String): Boolean {
