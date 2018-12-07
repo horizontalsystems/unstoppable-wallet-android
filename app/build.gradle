@@ -107,7 +107,7 @@ dependencies {
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
 
     // BitcoinKit
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:f726c2a'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:86e12ad'
 
     // EthereumKit
     implementation 'com.github.horizontalsystems:ethereum-kit-android:master-SNAPSHOT'

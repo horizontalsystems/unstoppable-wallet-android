@@ -157,32 +157,51 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
     private var disposable: Disposable? = null
 
     fun bind(walletViewItem: WalletViewItem, onSendClick: (() -> (Unit))? = null, onReceiveClick: (() -> (Unit))? = null, onHolderClicked: (() -> Unit)? = null, expanded: Boolean) {
-        val iconDrawable = ContextCompat.getDrawable(containerView.context, LayoutHelper.getCoinDrawableResource(TextHelper.getCleanCoinCode(walletViewItem.coinValue.coin)))
-        coinIcon.setImageDrawable(iconDrawable)
-        textName.text = "${walletViewItem.coinValue.coin}"
-        textAmountFiat.text = walletViewItem.currencyValue?.let { ValueFormatter.format(it) }
-        coinAmount.text = "${ValueFormatter.format(walletViewItem.coinValue)}"
+        buttonPay.isEnabled = false
+        imgSyncFailed.visibility = View.GONE
+        textCurrencyAmount.visibility = View.GONE
+        textCoinAmount.visibility = View.GONE
+        progressSync.visibility = View.GONE
+        textSyncProgress.visibility = View.GONE
 
-        buttonPay.isEnabled = (walletViewItem.state is AdapterState.Synced)
+        walletViewItem.state.let { adapterState ->
+            when (adapterState) {
+                is AdapterState.Syncing -> {
+                    progressSync.visibility = View.VISIBLE
+                    textSyncProgress.visibility = View.VISIBLE
+
+                    disposable = adapterState.progressSubject.subscribe {
+                        val progress = (it * 100).toInt()
+                        textSyncProgress.text = "$progress%"
+                    }
+                }
+                is AdapterState.Synced -> {
+                    if (walletViewItem.coinValue.value > 0) {
+                        textCurrencyAmount.visibility = View.VISIBLE
+                        textCurrencyAmount.text = walletViewItem.currencyValue?.let { ValueFormatter.format(it) }
+                        textCurrencyAmount.setTextColor(ContextCompat.getColor(containerView.context, if (walletViewItem.rateExpired) R.color.yellow_crypto_40 else R.color.yellow_crypto))
+                    }
+
+                    textCoinAmount.visibility = View.VISIBLE
+                    textCoinAmount.text = ValueFormatter.format(walletViewItem.coinValue)
+
+                    buttonPay.isEnabled = true
+                }
+                is AdapterState.NotSynced -> {
+                    imgSyncFailed.visibility = View.VISIBLE
+                }
+            }
+        }
+
+        val iconDrawable = ContextCompat.getDrawable(containerView.context, LayoutHelper.getCoinDrawableResource(TextHelper.getCleanCoinCode(walletViewItem.coinValue.coin)))
+        imgCoin.setImageDrawable(iconDrawable)
+
+        textCoinName.text = walletViewItem.coinValue.coin
+
         textExchangeRate.text = walletViewItem.exchangeValue?.let { exchangeValue ->
             containerView.context.getString(R.string.Balance_RatePerCoin, ValueFormatter.format(exchangeValue), walletViewItem.coinValue.coin)
-        } ?: kotlin.run { "" }
-
+        } ?: ""
         textExchangeRate.setTextColor(ContextCompat.getColor(containerView.context, if (walletViewItem.rateExpired) R.color.grey_40 else R.color.grey))
-        textAmountFiat.setTextColor(ContextCompat.getColor(containerView.context, if (walletViewItem.rateExpired) R.color.yellow_crypto_40 else R.color.yellow_crypto))
-
-        val isSyncing = walletViewItem.state is AdapterState.Syncing
-        val zeroBalance = walletViewItem.coinValue.value <= 0.0
-
-        syncProgress.visibility = if (isSyncing) View.VISIBLE else View.GONE
-        coinSyncProgress.visibility = if (isSyncing) View.VISIBLE else View.GONE
-        textAmountFiat.visibility = if (isSyncing || zeroBalance) View.GONE else View.VISIBLE
-        coinAmount.visibility = if (isSyncing) View.GONE else View.VISIBLE
-
-        disposable = (walletViewItem.state as? AdapterState.Syncing)?.progressSubject?.subscribe {
-            val progress = (it * 100).toInt()
-            coinSyncProgress.text = "$progress%"
-        }
 
         buttonPay.setOnSingleClickListener {
             onSendClick?.invoke()
