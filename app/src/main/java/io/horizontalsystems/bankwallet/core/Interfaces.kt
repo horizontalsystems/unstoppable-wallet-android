@@ -14,7 +14,7 @@ interface IWalletManager {
     val wallets: List<Wallet>
     val walletsSubject: PublishSubject<List<Wallet>>
 
-    fun initWallets(words: List<String>, coins: List<Coin>)
+    fun initWallets(words: List<String>, coins: List<Coin>, newWallet: Boolean)
     fun refreshWallets()
     fun clearWallets()
 }
@@ -29,6 +29,7 @@ interface ILocalStorage {
     var baseCurrencyCode: String?
     var blockTillDate: Long?
     fun clearAll()
+    var isNewWallet: Boolean
 }
 
 interface ISecuredStorage {
@@ -76,12 +77,16 @@ interface IWordsManager {
     var words: List<String>?
     var isBackedUp: Boolean
     var isLoggedIn: Boolean
-    var loggedInSubject: PublishSubject<Boolean>
+    var loggedInSubject: PublishSubject<LogInState>
     var backedUpSubject: PublishSubject<Boolean>
     fun createWords()
     fun validate(words: List<String>)
     fun restore(words: List<String>)
     fun logout()
+}
+
+enum class LogInState {
+    CREATE, RESTORE, RESUME, LOGOUT
 }
 
 interface ILanguageManager {

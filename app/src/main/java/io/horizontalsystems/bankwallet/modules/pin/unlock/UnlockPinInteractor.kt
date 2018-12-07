@@ -13,16 +13,17 @@ class UnlockPinInteractor(
 
     //we cache secured data here, since its main Entry point for logged in user
     override fun cacheSecuredData() {
-            keystoreSafeExecute.safeExecute(
-                    action = Runnable {
-                        if (pinManager.pin.isNullOrEmpty() && pinManager.isPinSet) {
-                            pinManager.safeLoad()
-                        }
-                        if (wordsManager.words == null || wordsManager.words?.isEmpty() == true) {
-                            wordsManager.safeLoad()
-                        }
+        keystoreSafeExecute.safeExecute(
+                action = Runnable {
+                    if (pinManager.pin.isNullOrEmpty() && pinManager.isPinSet) {
+                        pinManager.safeLoad()
                     }
-            )
+                    if (wordsManager.words == null || wordsManager.words?.isEmpty() == true) {
+                        wordsManager.safeLoad()
+                        wordsManager.loggedInSubject.onNext(LogInState.RESUME)
+                    }
+                }
+        )
     }
 
     override fun biometricUnlock() {

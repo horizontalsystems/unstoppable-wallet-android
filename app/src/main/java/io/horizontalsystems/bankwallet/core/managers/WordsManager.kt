@@ -4,6 +4,7 @@ import android.security.keystore.UserNotAuthenticatedException
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ISecuredStorage
 import io.horizontalsystems.bankwallet.core.IWordsManager
+import io.horizontalsystems.bankwallet.core.LogInState
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.reactivex.subjects.PublishSubject
 
@@ -14,7 +15,6 @@ class WordsManager(private val localStorage: ILocalStorage, private val secureSt
     @Throws(UserNotAuthenticatedException::class)
     override fun safeLoad() {
         words = secureStorage.savedWords
-        loggedInSubject.onNext(true)
     }
 
     @Throws(UserNotAuthenticatedException::class)
@@ -23,16 +23,13 @@ class WordsManager(private val localStorage: ILocalStorage, private val secureSt
         words?.let {
             secureStorage.saveWords(it)
         }
-
-        loggedInSubject.onNext(true)
+        localStorage.isNewWallet = true
     }
 
     @Throws(UserNotAuthenticatedException::class)
     override fun restore(words: List<String>) {
         secureStorage.saveWords(words)
         this.words = words
-
-        loggedInSubject.onNext(true)
     }
 
     override var isBackedUp: Boolean
@@ -47,7 +44,7 @@ class WordsManager(private val localStorage: ILocalStorage, private val secureSt
     override var isLoggedIn: Boolean = false
         get() = !secureStorage.wordsAreEmpty()
 
-    override var loggedInSubject: PublishSubject<Boolean> = PublishSubject.create()
+    override var loggedInSubject: PublishSubject<LogInState> = PublishSubject.create()
 
     override var backedUpSubject: PublishSubject<Boolean> = PublishSubject.create()
 
@@ -60,7 +57,7 @@ class WordsManager(private val localStorage: ILocalStorage, private val secureSt
         words = null
         secureStorage.saveWords(listOf())
 
-        loggedInSubject.onNext(false)
+        loggedInSubject.onNext(LogInState.LOGOUT)
     }
 
 }

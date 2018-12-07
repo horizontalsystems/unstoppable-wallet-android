@@ -8,12 +8,12 @@ import io.horizontalsystems.ethereumkit.EthereumKit
 
 class AdapterFactory {
 
-    fun adapterForCoin(coin: Coin, words: List<String>) = when (coin) {
-        "BTC" -> BitcoinAdapter(words, BitcoinKit.NetworkType.MainNet)
-        "BTCt" -> BitcoinAdapter(words, BitcoinKit.NetworkType.TestNet)
-        "BTCr" -> BitcoinAdapter(words, BitcoinKit.NetworkType.RegTest)
-        "BCH" -> BitcoinAdapter(words, BitcoinKit.NetworkType.MainNetBitCash)
-        "BCHt" -> BitcoinAdapter(words, BitcoinKit.NetworkType.TestNetBitCash)
+    fun adapterForCoin(coin: Coin, words: List<String>, newWallet: Boolean) = when (coin) {
+        "BTC" -> BitcoinAdapter(words, BitcoinKit.NetworkType.MainNet, newWallet)
+        "BTCt" -> BitcoinAdapter(words, BitcoinKit.NetworkType.TestNet, newWallet)
+        "BTCr" -> BitcoinAdapter(words, BitcoinKit.NetworkType.RegTest, newWallet)
+        "BCH" -> BitcoinAdapter(words, BitcoinKit.NetworkType.MainNetBitCash, newWallet)
+        "BCHt" -> BitcoinAdapter(words, BitcoinKit.NetworkType.TestNetBitCash, newWallet)
         "ETH" -> EthereumAdapter(words, EthereumKit.NetworkType.MainNet)
         "ETHt" -> EthereumAdapter(words, EthereumKit.NetworkType.Kovan)
         else -> null

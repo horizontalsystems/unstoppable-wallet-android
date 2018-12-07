@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.IWordsManager
+import io.horizontalsystems.bankwallet.core.LogInState
 import io.reactivex.disposables.CompositeDisposable
 
 class CoinManager(private val wordsManager: IWordsManager,
@@ -12,16 +13,16 @@ class CoinManager(private val wordsManager: IWordsManager,
     private var disposables: CompositeDisposable = CompositeDisposable()
 
     init {
-        wordsManager.loggedInSubject.subscribe {
-            syncWallets()
+        wordsManager.loggedInSubject.subscribe { logInState ->
+            syncWallets(logInState == LogInState.CREATE)
         }.let {
             disposables.add(it)
         }
     }
 
-    private fun syncWallets() {
+    private fun syncWallets(newWallet: Boolean) {
         wordsManager.words?.let {
-            walletManager.initWallets(it, appConfigProvider.enabledCoins)
+            walletManager.initWallets(it, appConfigProvider.enabledCoins, newWallet)
         } ?: walletManager.clearWallets()
     }
 

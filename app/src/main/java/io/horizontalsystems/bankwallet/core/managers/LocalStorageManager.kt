@@ -14,6 +14,7 @@ class LocalStorageManager : ILocalStorage {
     private val UNLOCK_PIN_ATTEMPTS_LEFT = "unlock_pin_attempts_left"
     private val BLOCK_TILL_DATE = "unblock_date"
     private val BASE_CURRENCY_CODE = "base_currency_code"
+    private val NEW_WALLET = "new_wallet"
 
 
     override var currentLanguage: String?
@@ -75,4 +76,9 @@ class LocalStorageManager : ILocalStorage {
         App.preferences.edit().clear().apply()
     }
 
+    override var isNewWallet: Boolean
+        get() = App.preferences.getBoolean(NEW_WALLET, false)
+        set(value) {
+            App.preferences.edit().putBoolean(NEW_WALLET, value).apply()
+        }
 }
