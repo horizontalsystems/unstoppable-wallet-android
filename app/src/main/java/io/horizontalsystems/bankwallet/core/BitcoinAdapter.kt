@@ -10,9 +10,9 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import java.util.*
 
-class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType) : IAdapter, BitcoinKit.Listener {
+class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, newWallet: Boolean) : IAdapter, BitcoinKit.Listener {
 
-    private var bitcoinKit = BitcoinKit(words, network)
+    private var bitcoinKit = BitcoinKit(words, network, newWallet = newWallet)
     private val satoshisInBitcoin = Math.pow(10.0, 8.0)
 
     override val balance: Double get() = bitcoinKit.balance / satoshisInBitcoin

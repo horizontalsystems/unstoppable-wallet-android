@@ -29,8 +29,8 @@ class TransactionManager(
                 })
 
         disposables.add(wordsManager.loggedInSubject
-                .subscribe{ loggedIn ->
-                    if (!loggedIn) {
+                .subscribe{ logInState ->
+                    if (logInState == LogInState.LOGOUT ) {
                         clear()
                     }
                 })
