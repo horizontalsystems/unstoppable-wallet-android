@@ -10,6 +10,7 @@ class UnlockPinPresenter(
         private val router: UnlockPinModule.IUnlockPinRouter): PinModule.IPinViewDelegate, UnlockPinModule.IUnlockPinInteractorDelegate {
 
     private var enteredPin = ""
+    private var cryptoObject: FingerprintManagerCompat.CryptoObject? = null
     var view: PinModule.IPinView? = null
 
     override fun viewDidLoad() {
@@ -57,12 +58,19 @@ class UnlockPinPresenter(
         router.dismiss(true)
     }
 
-    override fun showFingerprintInput(cryptoObject: FingerprintManagerCompat.CryptoObject) {
-        view?.showFingerprintDialog(cryptoObject)
+    override fun setCryptoObject(cryptoObject: FingerprintManagerCompat.CryptoObject) {
+        this.cryptoObject = cryptoObject
+        showBiometricUnlock()
     }
 
     override fun wrongPinSubmitted() {
         view?.showPinWrong(0)
+    }
+
+    override fun showBiometricUnlock() {
+        if (interactor.isBiometricOn()) {
+            cryptoObject?.let { view?.showFingerprintDialog(it) }
+        }
     }
 
     override fun onBiometricUnlock() {

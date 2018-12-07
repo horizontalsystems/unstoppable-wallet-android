@@ -13,6 +13,7 @@ object UnlockPinModule {
     interface IUnlockPinInteractor {
         fun cacheSecuredData()
         fun unlock(pin: String): Boolean
+        fun isBiometricOn(): Boolean
         fun onUnlock()
     }
 
@@ -20,7 +21,7 @@ object UnlockPinModule {
         fun didBiometricUnlock()
         fun unlock()
         fun wrongPinSubmitted()
-        fun showFingerprintInput(cryptoObject: FingerprintManagerCompat.CryptoObject)
+        fun setCryptoObject(cryptoObject: FingerprintManagerCompat.CryptoObject)
     }
 
     fun init(view: PinViewModel, router: IUnlockPinRouter, keystoreSafeExecute: IKeyStoreSafeExecute) {
