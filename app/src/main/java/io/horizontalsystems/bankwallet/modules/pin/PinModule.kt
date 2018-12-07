@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.pin
 
 import android.content.Context
+import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 
 object PinModule {
 
@@ -16,7 +17,7 @@ object PinModule {
         fun showCancel()
         fun fillCircles(length: Int, pageIndex: Int)
         fun hideToolbar()
-        fun showFingerprintDialog()
+        fun showFingerprintDialog(cryptoObject: FingerprintManagerCompat.CryptoObject)
     }
 
     interface IPinViewDelegate {

@@ -1,15 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.pin
 
-import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.security.keystore.KeyPermanentlyInvalidatedException
-import android.security.keystore.UserNotAuthenticatedException
 import android.support.constraint.ConstraintLayout
+import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.PagerSnapHelper
@@ -24,14 +22,12 @@ import android.widget.TextView
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.core.security.FingerprintAuthenticationDialogFragment
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.ui.extensions.SmoothLinearLayoutManager
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_new_pin.*
 import kotlinx.android.synthetic.main.custom_tall_toolbar.*
-import java.security.UnrecoverableKeyException
 
 class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuthenticationDialogFragment.Callback {
 
@@ -154,9 +150,11 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
             finish()
         })
 
-        viewModel.showFingerprintInputLiveEvent.observe(this, Observer {
-            showFingerprintDialog()
-            numpadAdapter.showFingerPrintButton = true
+        viewModel.showFingerprintInputLiveEvent.observe(this, Observer { cryptoObject ->
+            cryptoObject?.let {
+                showFingerprintDialog(it)
+                numpadAdapter.showFingerPrintButton = true
+            }
         })
 
         viewModel.resetCirclesWithShakeAndDelayForPage.observe(this, Observer { pageIndex ->
@@ -195,38 +193,17 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
         viewModel.delegate.onBiometricUnlock()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == AUTHENTICATE_TO_FINGERPRINT) {
-                showFingerprintDialog()
-                return
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data)
-    }
-
-    private fun showFingerprintDialog() {
+    private fun showFingerprintDialog(cryptoObject: FingerprintManagerCompat.CryptoObject) {
         if (App.systemInfoManager.touchSensorCanBeUsed()) {
-            try {
-                val cryptoObject = App.encryptionManager.getCryptoObject()
-                val fragment = FingerprintAuthenticationDialogFragment()
-                fragment.setCryptoObject(cryptoObject)
-                fragment.setCallback(this@PinActivity)
-                fragment.isCancelable = true
-                fragment.show(fragmentManager, "fingerprint_dialog")
-
-            } catch (e: Throwable) {
-                when (e) {
-                    is UserNotAuthenticatedException -> EncryptionManager.showAuthenticationScreen(this, AUTHENTICATE_TO_FINGERPRINT)
-                    is KeyPermanentlyInvalidatedException,
-                    is UnrecoverableKeyException -> EncryptionManager.showKeysInvalidatedAlert(this)
-                }
-            }
+            val fragment = FingerprintAuthenticationDialogFragment()
+            fragment.setCryptoObject(cryptoObject)
+            fragment.setCallback(this@PinActivity)
+            fragment.isCancelable = true
+            fragment.show(fragmentManager, "fingerprint_dialog")
         }
     }
 
     companion object {
-        const val AUTHENTICATE_TO_FINGERPRINT = 1
 
         private const val keyInteractionType = "interaction_type"
 
