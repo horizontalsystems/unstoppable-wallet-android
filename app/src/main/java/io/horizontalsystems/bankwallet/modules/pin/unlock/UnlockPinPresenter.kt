@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.pin.unlock
 
+import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.pin.PinPage
@@ -15,7 +16,6 @@ class UnlockPinPresenter(
         interactor.cacheSecuredData()
         view?.hideToolbar()
         view?.addPages(listOf(PinPage(R.string.Unlock_Page_EnterYourPin)))
-        interactor.biometricUnlock()
     }
 
     override fun onEnter(pin: String, pageIndex: Int) {
@@ -57,8 +57,8 @@ class UnlockPinPresenter(
         router.dismiss(true)
     }
 
-    override fun showFingerprintInput() {
-        view?.showFingerprintDialog()
+    override fun showFingerprintInput(cryptoObject: FingerprintManagerCompat.CryptoObject) {
+        view?.showFingerprintDialog(cryptoObject)
     }
 
     override fun wrongPinSubmitted() {
@@ -69,7 +69,4 @@ class UnlockPinPresenter(
         interactor.onUnlock()
     }
 
-    override fun showBiometricUnlock() {
-        interactor.biometricUnlock()
-    }
 }

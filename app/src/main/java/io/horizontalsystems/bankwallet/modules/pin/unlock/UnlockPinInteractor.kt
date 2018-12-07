@@ -7,7 +7,8 @@ class UnlockPinInteractor(
         private val localStorage: ILocalStorage,
         private val wordsManager: IWordsManager,
         private val pinManager: IPinManager,
-        private val lockManager: ILockManager) : UnlockPinModule.IUnlockPinInteractor {
+        private val lockManager: ILockManager,
+        private val encryptionManager: IEncryptionManager) : UnlockPinModule.IUnlockPinInteractor {
 
     var delegate: UnlockPinModule.IUnlockPinInteractorDelegate? = null
 
@@ -22,14 +23,11 @@ class UnlockPinInteractor(
                         wordsManager.safeLoad()
                         wordsManager.loggedInSubject.onNext(LogInState.RESUME)
                     }
+                    if (localStorage.isBiometricOn) {
+                        encryptionManager.getCryptoObject()?.let { delegate?.showFingerprintInput(it) }
+                    }
                 }
         )
-    }
-
-    override fun biometricUnlock() {
-        if (localStorage.isBiometricOn) {
-            delegate?.showFingerprintInput()
-        }
     }
 
     override fun unlock(pin: String): Boolean {

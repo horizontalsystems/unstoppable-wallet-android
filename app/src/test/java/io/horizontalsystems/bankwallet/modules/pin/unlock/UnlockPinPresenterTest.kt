@@ -76,8 +76,8 @@ class UnlockPinPresenterTest {
 
     @Test
     fun showFingerprintInput() {
-        presenter.showFingerprintInput()
-        verify(view).showFingerprintDialog()
+        presenter.showFingerprintInput(cryptoObject)
+        verify(view).showFingerprintDialog(cryptoObject)
     }
 
     @Test
@@ -96,9 +96,4 @@ class UnlockPinPresenterTest {
         verify(interactor).onUnlock()
     }
 
-    @Test
-    fun showBiometricUnlock() {
-        presenter.showBiometricUnlock()
-        verify(interactor).biometricUnlock()
-    }
 }

@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.pin.unlock
 
+import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
 import io.horizontalsystems.bankwallet.modules.pin.PinViewModel
@@ -12,7 +13,6 @@ object UnlockPinModule {
     interface IUnlockPinInteractor {
         fun cacheSecuredData()
         fun unlock(pin: String): Boolean
-        fun biometricUnlock()
         fun onUnlock()
     }
 
@@ -20,12 +20,12 @@ object UnlockPinModule {
         fun didBiometricUnlock()
         fun unlock()
         fun wrongPinSubmitted()
-        fun showFingerprintInput()
+        fun showFingerprintInput(cryptoObject: FingerprintManagerCompat.CryptoObject)
     }
 
     fun init(view: PinViewModel, router: IUnlockPinRouter, keystoreSafeExecute: IKeyStoreSafeExecute) {
 
-        val interactor = UnlockPinInteractor(keystoreSafeExecute, App.localStorage, App.wordsManager, App.pinManager, App.lockManager)
+        val interactor = UnlockPinInteractor(keystoreSafeExecute, App.localStorage, App.wordsManager, App.pinManager, App.lockManager, App.encryptionManager)
         val presenter = UnlockPinPresenter(interactor, router)
 
         view.delegate = presenter

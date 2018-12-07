@@ -107,16 +107,16 @@ class UnlockPinInteractorTest {
     fun biometricUnlock() {
         whenever(localStorage.isBiometricOn).thenReturn(true)
 
-        interactor.biometricUnlock()
-        verify(delegate).showFingerprintInput()
+        interactor.showBiometricUnlock()
+        verify(delegate).showFingerprintInput(cryptoObject)
     }
 
     @Test
     fun biometricUnlock_disabled() {
         whenever(localStorage.isBiometricOn).thenReturn(false)
 
-        interactor.biometricUnlock()
-        verify(delegate, never()).showFingerprintInput()
+        interactor.showBiometricUnlock()
+        verify(delegate, never()).showFingerprintInput(cryptoObject)
     }
 
     @Test

@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.pin
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
 import io.horizontalsystems.bankwallet.modules.pin.edit.EditPinModule
@@ -21,7 +22,7 @@ class PinViewModel: ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter,
     val hideToolbar = SingleLiveEvent<Unit>()
     val dismissLiveEvent = SingleLiveEvent<Unit>()
     val showBackButton = SingleLiveEvent<Unit>()
-    val showFingerprintInputLiveEvent = SingleLiveEvent<Unit>()
+    val showFingerprintInputLiveEvent = SingleLiveEvent<FingerprintManagerCompat.CryptoObject>()
     val resetCirclesWithShakeAndDelayForPage = SingleLiveEvent<Int>()
     val keyStoreSafeExecute = SingleLiveEvent<Triple<Runnable, Runnable?, Runnable?>>()
 
@@ -62,8 +63,8 @@ class PinViewModel: ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter,
         resetCirclesWithShakeAndDelayForPage.value = pageIndex
     }
 
-    override fun showFingerprintDialog() {
-        showFingerprintInputLiveEvent.call()
+    override fun showFingerprintDialog(cryptoObject: FingerprintManagerCompat.CryptoObject) {
+        showFingerprintInputLiveEvent.value = cryptoObject
     }
 
     override fun showCancel() {
