@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.backup.BackupModule
 import io.horizontalsystems.bankwallet.modules.backup.BackupPresenter
 import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
@@ -36,11 +37,11 @@ class GuestActivity : BaseActivity() {
             HudHelper.showErrorMessage(R.string.Error)
         })
 
-        buttonCreate.setOnClickListener {
+        buttonCreate.setOnSingleClickListener {
             viewModel.delegate.createWalletDidClick()
         }
 
-        buttonRestore.setOnClickListener {
+        buttonRestore.setOnSingleClickListener {
             viewModel.delegate.restoreWalletDidClick()
         }
 
