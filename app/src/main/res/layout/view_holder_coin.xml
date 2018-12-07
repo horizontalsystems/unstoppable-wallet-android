@@ -6,10 +6,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="4dp"
     android:layout_marginEnd="16dp"
     android:layout_marginStart="16dp"
     android:layout_marginTop="4dp"
-    android:layout_marginBottom="4dp"
     android:background="@drawable/clickable_coin_holder_background"
     android:elevation="1dp"
     android:orientation="vertical"
@@ -26,7 +26,7 @@
         >
 
         <ImageView
-            android:id="@+id/coinIcon"
+            android:id="@+id/imgCoin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/coin_bitcoin"
@@ -36,44 +36,56 @@
             />
 
         <TextView
-            android:id="@+id/textName"
+            android:id="@+id/textCoinName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:fontFamily="@font/noto_sans_bold"
             android:textColor="?BallanceCoinNameColor"
             android:textSize="17sp"
-            app:layout_constraintBottom_toBottomOf="@+id/coinIcon"
-            app:layout_constraintStart_toEndOf="@+id/coinIcon"
+            app:layout_constraintBottom_toBottomOf="@+id/imgCoin"
+            app:layout_constraintStart_toEndOf="@+id/imgCoin"
             tools:text="Bitcoin"
             />
 
         <TextView
-            android:id="@+id/textAmountFiat"
+            android:id="@+id/textCurrencyAmount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
             android:layout_weight="1"
             android:fontFamily="@font/noto_sans"
             android:textColor="@color/yellow_crypto"
             android:textSize="14sp"
-            android:layout_marginEnd="4dp"
-            app:layout_constraintEnd_toStartOf="@+id/syncProgress"
+            app:layout_constraintEnd_toStartOf="@+id/progressSync"
             tools:text="$52.50"
             />
 
         <ProgressBar
-            android:id="@+id/syncProgress"
+            android:id="@+id/progressSync"
             style="?android:attr/progressBarStyle"
             android:layout_width="16dp"
             android:layout_height="16dp"
+            android:layout_marginTop="2dp"
             android:backgroundTint="@color/grey"
             android:indeterminate="true"
+            android:indeterminateTint="@color/grey"
+            android:indeterminateTintMode="src_atop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imgCoin"
+            />
+
+        <ImageView
+            android:id="@+id/imgSyncFailed"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
             android:layout_marginTop="2dp"
             android:indeterminateTint="@color/grey"
             android:indeterminateTintMode="src_atop"
-            android:visibility="visible"
-            app:layout_constraintTop_toTopOf="@+id/coinIcon"
+            android:src="@drawable/attention"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imgCoin"
             />
 
     </android.support.constraint.ConstraintLayout>
@@ -100,7 +112,7 @@
             />
 
         <TextView
-            android:id="@+id/coinAmount"
+            android:id="@+id/textCoinAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/noto_sans_bold"
@@ -108,8 +120,9 @@
             android:textSize="17sp"
             tools:text="0.000078 BTC"
             />
+
         <TextView
-            android:id="@+id/coinSyncProgress"
+            android:id="@+id/textSyncProgress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/noto_sans"

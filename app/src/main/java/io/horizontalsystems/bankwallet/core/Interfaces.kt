@@ -98,6 +98,7 @@ interface ILanguageManager {
 sealed class AdapterState {
     object Synced : AdapterState()
     class Syncing(val progressSubject: BehaviorSubject<Double>) : AdapterState()
+    object NotSynced : AdapterState()
 }
 
 interface IAdapter {

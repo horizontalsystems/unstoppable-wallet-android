@@ -76,7 +76,7 @@ class WalletPresenter(
                                 rateExpired = rateExpired
                         ))
 
-                        if (wallet.adapter.state is AdapterState.Syncing) {
+                        if (wallet.adapter.state !is AdapterState.Synced) {
                             allSynced = false
                         }
 

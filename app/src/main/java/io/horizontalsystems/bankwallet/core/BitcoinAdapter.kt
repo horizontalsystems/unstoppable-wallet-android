@@ -84,22 +84,22 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
         lastBlockHeightSubject.onNext(lastBlockInfo.height)
     }
 
-    override fun onProgressUpdate(bitcoinKit: BitcoinKit, progress: Double) {
+    override fun onKitStateUpdate(bitcoinKit: BitcoinKit, state: BitcoinKit.KitState) {
         when (state) {
-            is AdapterState.Synced -> {
-                if (progress < 1) {
-                    state = AdapterState.Syncing(progressSubject)
-                }
-
+            is BitcoinKit.KitState.Synced -> {
+                this.state = AdapterState.Synced
             }
-            is AdapterState.Syncing -> {
-                if (progress == 1.0) {
-                    state = AdapterState.Synced
+            is BitcoinKit.KitState.NotSynced -> {
+                this.state = AdapterState.NotSynced
+            }
+            is BitcoinKit.KitState.Syncing -> {
+                progressSubject.onNext(state.progress)
+
+                if (this.state !is AdapterState.Syncing) {
+                    this.state = AdapterState.Syncing(progressSubject)
                 }
             }
         }
-
-        progressSubject.onNext(progress)
     }
 
     override fun onTransactionsUpdate(bitcoinKit: BitcoinKit, inserted: List<TransactionInfo>, updated: List<TransactionInfo>, deleted: List<Int>) {
