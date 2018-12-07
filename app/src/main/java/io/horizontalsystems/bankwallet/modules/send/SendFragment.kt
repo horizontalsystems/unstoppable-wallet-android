@@ -23,7 +23,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import io.horizontalsystems.bankwallet.viewHelpers.ValueFormatter
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
+import java.util.concurrent.TimeUnit
 
 class SendFragment : DialogFragment() {
 
@@ -44,6 +47,8 @@ class SendFragment : DialogFragment() {
 
     private lateinit var viewModel: SendViewModel
 
+    private val amountChangeSubject: PublishSubject<Double> = PublishSubject.create()
+
     private lateinit var coin: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +58,12 @@ class SendFragment : DialogFragment() {
             viewModel = ViewModelProviders.of(it).get(SendViewModel::class.java)
             viewModel.init(coin)
         }
+
+        amountChangeSubject.debounce(300, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    viewModel.delegate.onAmountChanged(it)
+                }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -245,7 +256,7 @@ class SendFragment : DialogFragment() {
                 Log.e("SendFragment", "Exception", e)
             }
 
-            viewModel.delegate.onAmountChanged(amountNumber)
+            amountChangeSubject.onNext(amountNumber)
         }
 
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
