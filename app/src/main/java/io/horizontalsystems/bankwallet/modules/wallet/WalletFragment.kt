@@ -184,11 +184,11 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
             coinSyncProgress.text = "$progress%"
         }
 
-        buttonPay.setOnClickListener {
+        buttonPay.setOnSingleClickListener {
             onSendClick?.invoke()
         }
 
-        buttonReceive.setOnClickListener {
+        buttonReceive.setOnSingleClickListener {
             onReceiveClick?.invoke()
         }
 
