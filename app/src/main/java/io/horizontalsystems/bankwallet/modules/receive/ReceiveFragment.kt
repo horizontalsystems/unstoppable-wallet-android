@@ -27,7 +27,7 @@ class ReceiveFragment : DialogFragment() {
 
     private lateinit var viewModel: ReceiveViewModel
 
-    private lateinit var coin: Coin
+    private var coin: Coin? = null
 
     private var itemIndex = 0
 
@@ -35,7 +35,7 @@ class ReceiveFragment : DialogFragment() {
         super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProviders.of(this).get(ReceiveViewModel::class.java)
-        viewModel.init(coin)
+        coin?.let { viewModel.init(it) } ?:  dismiss()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
