@@ -15,6 +15,7 @@ class WalletViewModel : ViewModel(), WalletModule.IView, WalletModule.IRouter {
     val openSendDialog = SingleLiveEvent<String>()
     val openReceiveDialog = SingleLiveEvent<String>()
     val balanceColorLiveDate = MutableLiveData<Int>()
+    val didRefreshLiveEvent = SingleLiveEvent<Void>()
 
     fun init() {
         WalletModule.init(this, this)
@@ -43,7 +44,7 @@ class WalletViewModel : ViewModel(), WalletModule.IView, WalletModule.IRouter {
     }
 
     override fun didRefresh() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        didRefreshLiveEvent.call()
     }
 
     override fun show(totalBalance: CurrencyValue?) {
