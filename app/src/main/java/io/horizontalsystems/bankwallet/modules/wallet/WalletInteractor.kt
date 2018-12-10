@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.wallet
 
+import android.os.Handler
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.managers.RateManager
@@ -12,7 +13,9 @@ import io.reactivex.disposables.CompositeDisposable
 class WalletInteractor(
         private val walletManager: IWalletManager,
         private val rateManager: RateManager,
-        private val currencyManager: ICurrencyManager) : WalletModule.IInteractor {
+        private val currencyManager: ICurrencyManager,
+        private val refreshTimeout: Double = 2.0
+) : WalletModule.IInteractor {
 
     var delegate: WalletModule.IInteractorDelegate? = null
     private var disposables: CompositeDisposable = CompositeDisposable()
@@ -51,7 +54,9 @@ class WalletInteractor(
     override fun refresh() {
         walletManager.refreshWallets()
 
-        delegate?.didRefresh()
+        Handler().postDelayed({
+            delegate?.didRefresh()
+        }, (refreshTimeout * 1000).toLong())
     }
 
     override val baseCurrency: Currency

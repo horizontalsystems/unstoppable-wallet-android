@@ -78,8 +78,16 @@ class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener 
             }
         })
 
+        viewModel.didRefreshLiveEvent.observe(this, Observer {
+            pullToRefresh.isRefreshing = false
+        })
+
         recyclerCoins.adapter = coinsAdapter
         recyclerCoins.layoutManager = LinearLayoutManager(context)
+
+        pullToRefresh.setOnRefreshListener {
+            viewModel.delegate.refresh()
+        }
     }
 
     override fun onDestroyView() {
