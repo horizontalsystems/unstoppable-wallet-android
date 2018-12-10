@@ -29,6 +29,7 @@ class BottomConfirmAlert : DialogFragment(), ConfirmationsAdapter.Listener {
     private lateinit var recyclerView: RecyclerView
 
     private lateinit var listener: Listener
+    private lateinit var color: BottomButtonColor
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = activity?.let { AlertDialog.Builder(it, R.style.BottomDialog) }
@@ -48,6 +49,8 @@ class BottomConfirmAlert : DialogFragment(), ConfirmationsAdapter.Listener {
             dismiss()
         }
 
+        btnConfirm.setBackgroundResource(getBackgroundResId(color))
+
         return mDialog as Dialog
     }
 
@@ -65,15 +68,21 @@ class BottomConfirmAlert : DialogFragment(), ConfirmationsAdapter.Listener {
         checkConfirmations()
     }
 
+    private fun getBackgroundResId(color: BottomButtonColor): Int = when (color) {
+        BottomButtonColor.RED -> R.drawable.button_red_background_12
+        BottomButtonColor.YELLOW -> R.drawable.button_yellow_background_12
+    }
+
     private fun checkConfirmations() {
         val uncheckedCount = checkboxItemList.asSequence().filter { !it.checked }.count()
         btnConfirm.isEnabled = uncheckedCount == 0
     }
 
     companion object {
-        fun show(activity: FragmentActivity, textResourcesList: MutableList<Int>, listener: Listener) {
+        fun show(activity: FragmentActivity, textResourcesList: MutableList<Int>, listener: Listener, color: BottomButtonColor = BottomButtonColor.YELLOW) {
             val fragment = BottomConfirmAlert()
             fragment.listener = listener
+            fragment.color = color
             textResourcesList.forEach {
                 fragment.checkboxItemList.add(CheckBoxItem(it))
             }
@@ -82,6 +91,10 @@ class BottomConfirmAlert : DialogFragment(), ConfirmationsAdapter.Listener {
             ft.commitAllowingStateLoss()
         }
     }
+}
+
+enum class BottomButtonColor {
+    YELLOW, RED
 }
 
 class ConfirmationsAdapter(private var listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {

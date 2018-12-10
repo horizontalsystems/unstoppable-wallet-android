@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.modules.backup.BackupModule
 import io.horizontalsystems.bankwallet.modules.backup.BackupPresenter
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
+import io.horizontalsystems.bankwallet.ui.dialogs.BottomButtonColor
 import io.horizontalsystems.bankwallet.ui.dialogs.BottomConfirmAlert
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.activity_settings_security.*
@@ -64,8 +65,10 @@ class SecuritySettingsActivity : BaseActivity(), BottomConfirmAlert.Listener {
                     R.string.SettingsSecurity_ImportWalletConfirmation_1,
                     R.string.SettingsSecurity_ImportWalletConfirmation_2
             )
-            BottomConfirmAlert.show(this, confirmationList, this)
+            BottomConfirmAlert.show(this, confirmationList, this, BottomButtonColor.RED)
         }
+
+        unlink.titleTextColor = R.color.red_warning
 
 
         viewModel.backedUpLiveData.observe(this, Observer { wordListBackedUp ->
