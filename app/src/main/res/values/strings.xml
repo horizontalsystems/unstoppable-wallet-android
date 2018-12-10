@@ -182,20 +182,16 @@
 
     <string name="SettingsAbout_Title">About</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Terms &amp; Privacy:</string>
-    <string name="SettingsAbout_TermsPrivacyText">Your funds are securely stored on your device. Not on any external servers.
-\n\nThe app does not depend on any server or person to function.
-\n\nSome generic app data like exchange rates are stored on decentralized storage (IPFS).
-\n\nThe app works everywhere as long as there is an internet connection.
-\n\nIt is impossible for a third party to block the wallet from working or to block the user.
-\n\nThe entire code powering this app is free and open to the public.
-\n\nThere may be bugs in the code. And while we tried to provide the most secure wallet we still can not guarantee the security of your funds. No one can.
-\n\nMake sure you backup a Secret Key for your wallet! Never show your secret key to anyone.
-\n\nDo not jailbreak your phone or install apps from unknown (untrusted) sources.
-\n\nDo not give your device to untrusted parties.
-\n\nYou are solely responsible for keeping your Secret Key and your device secure.</string>
+    <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
+\n\nIt works everywhere as long as there is internet. No entity can block this app from working or to block someone from using it.
+\n\nYour funds are securely stored on the phone itself, not anywhere else.
+\n\nIt’s your responsibility to backup your Secret Key and keep it private. Never show it to anyone. If it’s lost, forgotten or stollen your funds can be used by the person who has your Secret key.
+\n\nDo not jailbreak your phone, do not install apps from unknown (untrusted) sources, do not give your device to untrusted people, and keep the Operating System on your phone up to date. The security of your wallet depends on this.
+\n\nThe entire code powering this app been open to the public scrutiny since the beginning. We tried to build the most secure and decentralized wallet we could, however there are no guarantees that there are no unintended software issues. That said, this wallet is likely to be significantly more secure than any smartphone wallet app out there.
+\n\nSome generic non-private app data like currency exchange rates are stored on decentralized storage (IPFS).</string>
+
 
     <!--Alert-->
-
 
     <string name="Alert_KeysInvalidatedTitle">Android Keystore Error</string>
     <string name="Alert_KeysInvalidatedDescription">The encrypted data holding your wallet was recently invalidated because your Android lock screen was changed</string>
