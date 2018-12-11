@@ -17,7 +17,7 @@ class BaseCurrencySettingsPresenter(private val interactor: BaseCurrencySettings
     }
 
     override fun didSetBaseCurrency() {
-        showItems()
+        view?.close()
     }
 
     private fun showItems() {
