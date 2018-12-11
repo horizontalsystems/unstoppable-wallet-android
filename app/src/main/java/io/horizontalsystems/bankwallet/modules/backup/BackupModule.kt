@@ -44,6 +44,7 @@ object BackupModule {
 
     interface IRouter {
         fun navigateToSetPin()
+        fun openWordsListScreen()
         fun close()
     }
 

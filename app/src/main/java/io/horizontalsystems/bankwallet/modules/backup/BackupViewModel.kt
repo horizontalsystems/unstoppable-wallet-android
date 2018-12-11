@@ -27,7 +27,7 @@ class BackupViewModel : ViewModel(), BackupModule.IView, BackupModule.IRouter, I
 
     // view
 
-    fun showWordsView() {
+    override fun openWordsListScreen() {
         navigationWordsLiveEvent.call()
     }
 
