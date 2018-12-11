@@ -36,6 +36,11 @@ class RateManager(
                 updateRates()
             }
         })
+
+        disposables.add(storage.getAll().subscribe {
+            subject.onNext(true)
+        })
+
     }
 
     fun rate(coin: String, currencyCode: String): Maybe<Rate> {
@@ -56,7 +61,6 @@ class RateManager(
         latestRates[coin]?.set(currencyCode, latestRate)
 
         storage.save(latestRate = latestRate, coin = coin, currencyCode = currencyCode)
-        subject.onNext(true)
     }
 
     override fun onFire() {

@@ -173,6 +173,7 @@ interface IRateSyncerDelegate {
 interface IRateStorage {
     fun rate(coin: Coin, currencyCode: String): Maybe<Rate>
     fun save(latestRate: LatestRate, coin: Coin, currencyCode: String)
+    fun getAll(): Flowable<List<Rate>>
     fun deleteAll()
 }
 
