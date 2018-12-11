@@ -31,6 +31,8 @@ class BackupWordsFragment : Fragment() {
         recyclerWords.adapter = wordsAdapter
         recyclerWords.layoutManager = LinearLayoutManager(context)
 
+        viewModel.delegate.wordsListViewLoaded()
+
         viewModel.wordsLiveData.observe(this, Observer {
             it?.let {
                 wordsAdapter.items = it

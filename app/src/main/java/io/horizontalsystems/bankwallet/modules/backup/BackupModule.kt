@@ -24,6 +24,7 @@ object BackupModule {
         fun validateDidClick(confirmationWords: HashMap<Int, String>)
         fun onTermsConfirm()
         fun onLaterClick()
+        fun wordsListViewLoaded()
     }
 
     interface IInteractor {

@@ -27,9 +27,12 @@ class BackupViewModel : ViewModel(), BackupModule.IView, BackupModule.IRouter, I
 
     // view
 
+    fun showWordsView() {
+        navigationWordsLiveEvent.call()
+    }
+
     override fun showWords(words: List<String>) {
         wordsLiveData.value = words
-        navigationWordsLiveEvent.call()
     }
 
     override fun showConfirmationWithIndexes(indexes: List<Int>) {

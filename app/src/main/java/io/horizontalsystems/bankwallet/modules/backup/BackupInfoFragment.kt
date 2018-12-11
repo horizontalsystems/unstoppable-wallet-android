@@ -23,7 +23,7 @@ class BackupInfoFragment : Fragment() {
             viewModel = ViewModelProviders.of(it).get(BackupViewModel::class.java)
         }
 
-        buttonBackup.setOnClickListener { viewModel.delegate.showWordsDidClick() }
+        buttonBackup.setOnClickListener { viewModel.showWordsView() }
 
         buttonLater.setOnClickListener {
             viewModel.delegate.onLaterClick()
@@ -32,4 +32,3 @@ class BackupInfoFragment : Fragment() {
     }
 
 }
-

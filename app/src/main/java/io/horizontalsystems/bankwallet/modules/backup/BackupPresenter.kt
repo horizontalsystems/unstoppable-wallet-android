@@ -41,6 +41,10 @@ class BackupPresenter(private val interactor: BackupModule.IInteractor, private 
         dismissOrShowConfirmationDialog()
     }
 
+    override fun wordsListViewLoaded() {
+        interactor.fetchWords()
+    }
+
     // interactor delegate
 
     override fun didFetchWords(words: List<String>) {
