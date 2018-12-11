@@ -9,6 +9,7 @@ object BaseCurrencySettingsModule {
 
     interface IBaseCurrencySettingsView{
         fun show(items: List<CurrencyItem>)
+        fun close()
     }
 
     interface IBaseCurrencySettingsViewDelegate {

@@ -2,11 +2,13 @@ package io.horizontalsystems.bankwallet.modules.settings.basecurrency
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.SingleLiveEvent
 
 class BaseCurrencySettingsViewModel: ViewModel(), BaseCurrencySettingsModule.IBaseCurrencySettingsView {
 
     lateinit var delegate: BaseCurrencySettingsModule.IBaseCurrencySettingsViewDelegate
     val currencyItems = MutableLiveData<List<CurrencyItem>>()
+    val closeLiveEvent = SingleLiveEvent<Unit>()
 
 
     fun init() {
@@ -18,4 +20,7 @@ class BaseCurrencySettingsViewModel: ViewModel(), BaseCurrencySettingsModule.IBa
         currencyItems.value = items
     }
 
+    override fun close() {
+        closeLiveEvent.call()
+    }
 }

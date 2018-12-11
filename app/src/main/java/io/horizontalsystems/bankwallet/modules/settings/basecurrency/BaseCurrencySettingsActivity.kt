@@ -17,7 +17,7 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_currency_switcher.*
 import kotlinx.android.synthetic.main.view_holder_currency_item.*
 
-class BaseCurrencySettingsActivity: BaseActivity(), CurrencySwitcherAdapter.Listener {
+class BaseCurrencySettingsActivity : BaseActivity(), CurrencySwitcherAdapter.Listener {
 
     private lateinit var viewModel: BaseCurrencySettingsViewModel
     private var adapter: CurrencySwitcherAdapter? = null
@@ -43,6 +43,10 @@ class BaseCurrencySettingsActivity: BaseActivity(), CurrencySwitcherAdapter.List
                 adapter?.items = it
                 adapter?.notifyDataSetChanged()
             }
+        })
+
+        viewModel.closeLiveEvent.observe(this, Observer {
+            finish()
         })
     }
 
@@ -73,7 +77,7 @@ class CurrencySwitcherAdapter(private var listener: Listener) : RecyclerView.Ada
 
     override fun getItemCount() = if (items.isEmpty()) 1 else items.size
 
-    override fun getItemViewType(position: Int): Int = if(items.isEmpty()) {
+    override fun getItemViewType(position: Int): Int = if (items.isEmpty()) {
         VIEW_TYPE_LOADING
     } else {
         VIEW_TYPE_ITEM
