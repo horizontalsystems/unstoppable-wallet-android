@@ -17,7 +17,7 @@ class BackupPresenterTest {
 
     @Test
     fun laterDidClick() {
-        presenter.laterDidClick()
+//        presenter.laterDidClick()
         verify(router).navigateToSetPin()
     }
 
