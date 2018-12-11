@@ -13,7 +13,7 @@ class BackupPresenter(private val interactor: BackupModule.IInteractor, private 
     // view delegate
 
     override fun showWordsDidClick() {
-        interactor.fetchWords()
+        router.openWordsListScreen()
     }
 
     override fun hideWordsDidClick() {
@@ -39,6 +39,10 @@ class BackupPresenter(private val interactor: BackupModule.IInteractor, private 
 
     override fun onLaterClick() {
         dismissOrShowConfirmationDialog()
+    }
+
+    override fun wordsListViewLoaded() {
+        interactor.fetchWords()
     }
 
     // interactor delegate

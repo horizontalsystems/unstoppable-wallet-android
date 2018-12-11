@@ -24,6 +24,7 @@ object BackupModule {
         fun validateDidClick(confirmationWords: HashMap<Int, String>)
         fun onTermsConfirm()
         fun onLaterClick()
+        fun wordsListViewLoaded()
     }
 
     interface IInteractor {
@@ -43,6 +44,7 @@ object BackupModule {
 
     interface IRouter {
         fun navigateToSetPin()
+        fun openWordsListScreen()
         fun close()
     }
 

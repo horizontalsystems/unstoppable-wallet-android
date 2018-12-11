@@ -32,4 +32,3 @@ class BackupInfoFragment : Fragment() {
     }
 
 }
-
