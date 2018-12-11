@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import android.app.KeyguardManager
 import android.content.Context
-import android.support.v4.BuildConfig
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
+import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISystemInfoManager
 import io.horizontalsystems.bankwallet.entities.BiometryType
