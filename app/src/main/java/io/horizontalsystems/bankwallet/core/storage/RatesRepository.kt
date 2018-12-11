@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.IRateStorage
 import io.horizontalsystems.bankwallet.entities.LatestRate
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.modules.transactions.Coin
+import io.reactivex.Flowable
 import io.reactivex.Maybe
 import java.util.concurrent.Executors
 
@@ -19,6 +20,10 @@ class RatesRepository(private val appDatabase: AppDatabase) : IRateStorage {
         executor.execute {
             appDatabase.ratesDao().insert(Rate(coin, currencyCode, latestRate.value, latestRate.timestamp))
         }
+    }
+
+    override fun getAll(): Flowable<List<Rate>> {
+        return appDatabase.ratesDao().getAll()
     }
 
     override fun deleteAll() {

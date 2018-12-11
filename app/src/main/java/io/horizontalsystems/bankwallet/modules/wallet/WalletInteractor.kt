@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.reactivex.Maybe
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 
 class WalletInteractor(
@@ -30,9 +31,11 @@ class WalletInteractor(
 
     private fun initialFetchAndSubscribe() {
         walletManager.wallets.forEach { wallet ->
-            disposables.add(wallet.adapter.balanceSubject.subscribe {
-                delegate?.didUpdate()
-            })
+            disposables.add(wallet.adapter.balanceSubject
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe {
+                        delegate?.didUpdate()
+                    })
             disposables.add(wallet.adapter.stateSubject.subscribe {
                 delegate?.didUpdate()
             })

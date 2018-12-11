@@ -32,9 +32,11 @@ class TransactionsInteractor(
     override fun retrieveFilters() {
         delegate?.didRetrieveFilters(walletManager.wallets.map { it.coin })
 
-        disposables.add(walletManager.walletsSubject.subscribe {
-            delegate?.didRetrieveFilters(it.map { it.coin })
-        })
+        disposables.add(walletManager.walletsSubject
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    delegate?.didRetrieveFilters(it.map { it.coin })
+                })
     }
 
     override fun refresh() {

@@ -6,6 +6,7 @@ import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.modules.transactions.Coin
+import io.reactivex.Flowable
 import io.reactivex.Maybe
 
 @Dao
@@ -16,6 +17,9 @@ interface RatesDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(rate: Rate)
+
+    @Query("SELECT * FROM Rate")
+    fun getAll(): Flowable<List<Rate>>
 
     @Query("DELETE FROM Rate")
     fun deleteAll()
