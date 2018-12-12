@@ -83,7 +83,7 @@ class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, Eth
     }
 
     private fun transactionRecord(transaction: Transaction): TransactionRecord {
-        val amountEther: Double = convertToValue(transaction.value) ?: 0.0
+        val amountEther: Double = weisToEther(transaction.value) ?: 0.0
 
         val mineAddress = ethereumKit.receiveAddress().toLowerCase()
 
@@ -108,12 +108,10 @@ class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, Eth
         return record
     }
 
-    private fun convertToValue(amount: String): Double? {
-        val result = BigDecimal(amount)
-        if (result != null) {
-            return result.toDouble() / weisInEther
-        }
-        return null
+    private fun weisToEther(amount: String): Double? = try {
+        BigDecimal(amount).toDouble() / weisInEther
+    } catch (ex: Exception) {
+        null
     }
 
 //    private fun calculateFee(gasUsed: String, gasPrice: String): Double {
