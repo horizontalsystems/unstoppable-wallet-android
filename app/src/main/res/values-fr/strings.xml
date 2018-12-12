@@ -20,7 +20,7 @@
     <string name="Guest_RestoreWallet">Restaurer le porte-monnaie</string>
     <!--Restore-->
     <string name="Restore_Title">Entrez la clé secrete</string>
-    <string name="Restore_ValidationFailed">Incorrect Secret Key</string>
+    <string name="Restore_ValidationFailed">Clé secrète incorrecte</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Le mot secret</string>
@@ -126,17 +126,13 @@
     <!--Setting_About-->
     <string name="SettingsAbout_Title">À propos de</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Terms &amp; Confidentialité:</string>
-    <string name="SettingsAbout_TermsPrivacyText">Your funds are securely stored on your device. Not on any external servers.
-\n\nThe app does not depend on any server or person to function.
-\n\nSome generic app data like exchange rates are stored on decentralized storage (IPFS).
-\n\nThe app works everywhere as long as there is an internet connection.
-\n\nIt is impossible for a third party to block the wallet from working or to block the user.
-\n\nThe entire code powering this app is free and open to the public.
-\n\nThere may be bugs in the code. And while we tried to provide the most secure wallet we still can not guarantee the security of your funds. No one can.
-\n\nMake sure you backup a Secret Key for your wallet! Never show your secret key to anyone.
-\n\nDo not jailbreak your phone or install apps from unknown (untrusted) sources.
-\n\nDo not give your device to untrusted parties.
-\n\nYou are solely responsible for keeping your Secret Key and your device secure.</string>
+    <string name="SettingsAbout_TermsPrivacyText">\n\nCette application est décentralisé. Cela ne dépend pas du personnel du service d\'assistance Web.
+\n\nCela fonctionne partout tant qu\'il y a internet. Aucune entité ne peut empêcher cette application de fonctionner ou d\'empêcher quelqu\'un de l\'utiliser.
+\n\nVos fonds stockés en sécurité sur votre portable, pas sur autres.
+\n\nIl est de votre responsabilité de sauvegarder votre clé secrète et de la garder privée. Ne le montre jamais à personne. En cas de perte, d’oubli ou de vol, vos fonds peuvent être utilisés par la personne qui détient votre clé secrète.
+\n\nNe piratez pas votre portable, n\'installez pas d\'applications de sources inconnues (non fiables), ne confiez pas votre appareil à des personnes non fiables et maintenez le système d\'exploitation à jour. La sécurité de votre portefeuille dépend de tout cela.
+\n\nLe code alimentant cette application a été ouvert au public depuis le début. Nous avons essayé de créer le porte-monnaie le plus sécurisé et le plus décentralisé possible, mais rien ne garantit qu’il n’y ait pas de problèmes logiciels inattendus. Cela dit, ce porte-monnaie sera probablement beaucoup plus sécurisé que n\'importe quelle application de porte-monnaie pour portable.
+\n\nCertaines données d\'applications génériques non privées, telles que les taux de change, sont stockées dans un stockage décentralisé (IPFS). </string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Erreur de Keystore Android</string>
     <string name="Alert_KeysInvalidatedDescription">Les données cryptées contenant votre porte-monnaie ont récemment été invalidées car votre écran de verrouillage Android a été modifié</string>
