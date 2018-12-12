@@ -107,10 +107,10 @@ dependencies {
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
 
     // BitcoinKit
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:cf2b23b'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:c24e85c'
 
     // EthereumKit
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:master-SNAPSHOT'
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:1f83058'
 
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
