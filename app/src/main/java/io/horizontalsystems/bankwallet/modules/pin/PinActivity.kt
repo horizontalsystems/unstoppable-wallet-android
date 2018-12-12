@@ -116,7 +116,7 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
 
         viewModel.showErrorForPage.observe(this, Observer { errorForPage ->
             errorForPage?.let { (error, pageIndex) ->
-                pinPagesAdapter.setErrorForPage(pageIndex, error)
+                pinPagesAdapter.setErrorForPage(pageIndex, error?.let { getString(error) } ?: null )
             }
         })
 
@@ -166,6 +166,13 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
                     pinPagesAdapter.setEnteredPinLength(pageIndex, 0)
                     viewModel.delegate.resetPin()
                 }, 300)
+            }
+        })
+
+        viewModel.showAttemptsLeftError.observe(this, Observer { pair ->
+            pair?.let { (attempts, pageIndex) ->
+                val error = getString(R.string.UnlockPin_ErrorAttemptsLeft, attempts.toString())
+                pinPagesAdapter.setErrorForPage(pageIndex, error)
             }
         })
 
@@ -227,14 +234,14 @@ enum class NumPadItemType {
 }
 
 //PinPage part
-class PinPage(val description: Int, var enteredDidgitsLength: Int = 0, var error: Int? = null)
+class PinPage(val description: Int, var enteredDidgitsLength: Int = 0, var error: String? = null)
 
 class PinPagesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var pinPages = mutableListOf<PinPage>()
     var shakePageIndex: Int? = null
 
-    fun setErrorForPage(pageIndex: Int, error: Int?) {
+    fun setErrorForPage(pageIndex: Int, error: String?) {
         pinPages[pageIndex].error = error
         notifyDataSetChanged()
     }
@@ -273,7 +280,7 @@ class PinPageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(pinPage: PinPage, shake: Boolean) {
         txtDesc.text = itemView.resources.getString(pinPage.description)
         updatePinCircles(pinPage.enteredDidgitsLength)
-        txtError.text = pinPage.error?.let { itemView.resources.getString(it) } ?: ""
+        txtError.text = pinPage.error ?: ""
         if (shake) {
             val shakeAnim = AnimationUtils.loadAnimation(itemView.context, R.anim.shake_pin_circles)
             pinCirclesWrapper.startAnimation(shakeAnim)

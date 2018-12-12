@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.pin.unlock
 
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.managers.OneTimeTimer
+import io.horizontalsystems.bankwallet.entities.LockoutState
 
 class UnlockPinInteractor(
         private val keystoreSafeExecute: IKeyStoreSafeExecute,
@@ -8,9 +10,15 @@ class UnlockPinInteractor(
         private val wordsManager: IWordsManager,
         private val pinManager: IPinManager,
         private val lockManager: ILockManager,
-        private val encryptionManager: IEncryptionManager) : UnlockPinModule.IUnlockPinInteractor {
+        private val encryptionManager: IEncryptionManager,
+        private val lockoutManager: ILockoutManager,
+        private val timer: OneTimeTimer) : UnlockPinModule.IUnlockPinInteractor, IPeriodicTimerDelegate {
 
     var delegate: UnlockPinModule.IUnlockPinInteractorDelegate? = null
+
+    init {
+        timer.delegate = this
+    }
 
     //we cache secured data here, since its main Entry point for logged in user
     override fun cacheSecuredData() {
@@ -38,7 +46,11 @@ class UnlockPinInteractor(
         val valid = pinManager.validate(pin)
         if (valid) {
             lockManager.onUnlock()
+        } else {
+            lockoutManager.didFailUnlock()
+            updateLockoutState()
         }
+
         return valid
     }
 
@@ -47,4 +59,16 @@ class UnlockPinInteractor(
         lockManager.onUnlock()
     }
 
+    override fun onFire() {
+        updateLockoutState()
+    }
+
+    override fun updateLockoutState() {
+        val state = lockoutManager.currentState
+        when(state) {
+            is LockoutState.Locked -> timer.schedule(state.until)
+        }
+
+        delegate?.updateLockoutState(lockoutManager.currentState)
+    }
 }

@@ -191,3 +191,10 @@ interface ITransactionRecordStorage {
     fun update(records: List<TransactionRecord>)
     fun deleteAll()
 }
+
+interface ILockoutManager{
+    fun didFailUnlock()
+
+    var currentState: LockoutState
+
+}

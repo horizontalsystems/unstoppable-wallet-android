@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
 import io.horizontalsystems.bankwallet.modules.pin.edit.EditPinModule
 import io.horizontalsystems.bankwallet.modules.pin.set.SetPinModule
 import io.horizontalsystems.bankwallet.modules.pin.unlock.UnlockPinModule
+import java.util.*
 
 class PinViewModel: ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter, EditPinModule.IEditPinRouter, IKeyStoreSafeExecute, UnlockPinModule.IUnlockPinRouter {
 
@@ -25,6 +26,9 @@ class PinViewModel: ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter,
     val showFingerprintInputLiveEvent = SingleLiveEvent<FingerprintManagerCompat.CryptoObject>()
     val resetCirclesWithShakeAndDelayForPage = SingleLiveEvent<Int>()
     val keyStoreSafeExecute = SingleLiveEvent<Triple<Runnable, Runnable?, Runnable?>>()
+    val showAttemptsLeftError = MutableLiveData<Pair<Int, Int>>()
+    val showLockedView = SingleLiveEvent<Unit>()
+
 
     fun init(interactionType: PinInteractionType) {
         when(interactionType) {
@@ -93,4 +97,13 @@ class PinViewModel: ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter,
         dismissLiveEvent.call()
     }
 
+    override fun showLockView(until: Date) {
+        showLockedView.call()
+    }
+
+    override fun showAttemptsLeft(attempts: Int?, pageIndex: Int) {
+        attempts?.let {
+            showAttemptsLeftError.value = Pair(pageIndex, pageIndex)
+        }
+    }
 }
