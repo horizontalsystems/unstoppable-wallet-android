@@ -233,4 +233,14 @@ class UnlockPinInteractorTest {
         verify(delegate).updateLockoutState(state)
     }
 
+    @Test
+    fun dropFailedAttempts() {
+        val pin = "0000"
+        whenever(pinManager.validate(pin)).thenReturn(true)
+
+        interactor.unlock(pin)
+
+        verify(lockoutManager).dropFailedAttempts()
+    }
+
 }

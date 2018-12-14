@@ -25,11 +25,12 @@ interface ILocalStorage {
     var isBiometricOn: Boolean
     var isLightModeOn: Boolean
     var iUnderstand: Boolean
-    var unlockAttemptsLeft: Int
     var baseCurrencyCode: String?
     var blockTillDate: Long?
     fun clearAll()
     var isNewWallet: Boolean
+    var failedAttempts: Int?
+    var lockoutTimestamp: Long?
 }
 
 interface ISecuredStorage {
@@ -194,7 +195,19 @@ interface ITransactionRecordStorage {
 
 interface ILockoutManager{
     fun didFailUnlock()
+    fun dropFailedAttempts()
 
-    var currentState: LockoutState
+    val currentState: LockoutState
+}
 
+interface IUptimeProvider {
+    val uptime: Long
+}
+
+interface ILockoutUntilDateFactory {
+    fun lockoutUntilDate(failedAttempts: Int, lockoutTimestamp: Long, uptime: Long): Date
+}
+
+interface ICurrentDateProvider {
+    val currentDate: Date
 }

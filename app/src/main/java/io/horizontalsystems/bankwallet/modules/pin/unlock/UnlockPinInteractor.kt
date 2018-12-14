@@ -46,6 +46,7 @@ class UnlockPinInteractor(
         val valid = pinManager.validate(pin)
         if (valid) {
             lockManager.onUnlock()
+            lockoutManager.dropFailedAttempts()
         } else {
             lockoutManager.didFailUnlock()
             updateLockoutState()

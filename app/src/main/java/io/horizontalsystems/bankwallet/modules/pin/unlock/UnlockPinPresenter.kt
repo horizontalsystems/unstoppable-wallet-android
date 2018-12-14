@@ -80,7 +80,7 @@ class UnlockPinPresenter(
     override fun onBiometricUnlock() {
         interactor.onUnlock()
     }
-    
+
     override fun updateLockoutState(state: LockoutState) {
         when (state) {
             is LockoutState.Unlocked -> view?.showAttemptsLeft(state.attemptsLeft, unlockPageIndex)
