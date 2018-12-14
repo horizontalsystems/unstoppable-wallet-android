@@ -47,12 +47,17 @@ class TransactionViewItemFactory(
 
         val incoming = record.amount > 0
 
+        val toAddress = when(incoming) {
+            true -> record.to.find { it.mine }?.address
+            false -> record.to.find { !it.mine }?.address ?: record.to.find { it.mine }?.address
+        }
+
         return TransactionViewItem(
                 record.transactionHash,
                 CoinValue(record.coin, record.amount),
                 convertedValue?.let { CurrencyValue(currencyManager.baseCurrency, it) },
                 record.from.firstOrNull { it.mine != incoming }?.address,
-                record.to.firstOrNull { it.mine == incoming }?.address,
+                toAddress,
                 incoming,
                 if (record.timestamp == 0L) null else Date(record.timestamp * 1000),
                 status
