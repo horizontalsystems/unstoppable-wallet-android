@@ -2,13 +2,15 @@ package io.horizontalsystems.bankwallet.modules.pin.unlock
 
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.entities.LockoutState
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.pin.PinPage
 
 class UnlockPinPresenter(
         private val interactor: UnlockPinModule.IUnlockPinInteractor,
-        private val router: UnlockPinModule.IUnlockPinRouter): PinModule.IPinViewDelegate, UnlockPinModule.IUnlockPinInteractorDelegate {
+        private val router: UnlockPinModule.IUnlockPinRouter) : PinModule.IPinViewDelegate, UnlockPinModule.IUnlockPinInteractorDelegate {
 
+    private val unlockPageIndex = 0
     private var enteredPin = ""
     private var cryptoObject: FingerprintManagerCompat.CryptoObject? = null
     var view: PinModule.IPinView? = null
@@ -17,6 +19,8 @@ class UnlockPinPresenter(
         interactor.cacheSecuredData()
         view?.hideToolbar()
         view?.addPages(listOf(PinPage(R.string.Unlock_Page_EnterYourPin)))
+
+        interactor.updateLockoutState()
     }
 
     override fun onEnter(pin: String, pageIndex: Int) {
@@ -64,7 +68,7 @@ class UnlockPinPresenter(
     }
 
     override fun wrongPinSubmitted() {
-        view?.showPinWrong(0)
+        view?.showPinWrong(unlockPageIndex)
     }
 
     override fun showBiometricUnlock() {
@@ -77,4 +81,10 @@ class UnlockPinPresenter(
         interactor.onUnlock()
     }
 
+    override fun updateLockoutState(state: LockoutState) {
+        when (state) {
+            is LockoutState.Unlocked -> view?.showAttemptsLeft(state.attemptsLeft, unlockPageIndex)
+            is LockoutState.Locked -> view?.showLockView(state.until)
+        }
+    }
 }

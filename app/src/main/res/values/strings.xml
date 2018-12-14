@@ -228,6 +228,11 @@
     <string name="Fingerprint_Success">Success!</string>
 
 
+    <!--Unlock Pin-->
+
+    <string name="UnlockPin_WalletDisabledUntil">Disabled until: %s</string>
+
+
     <!--Set Pin-->
 
     <string name="SetPin_Title">Set PIN</string>

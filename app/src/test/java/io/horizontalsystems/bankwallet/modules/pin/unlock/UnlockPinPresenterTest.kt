@@ -1,14 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.pin.unlock
 
-import io.horizontalsystems.bankwallet.modules.RxBaseTest
-import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify
+import io.horizontalsystems.bankwallet.entities.LockoutState
+import io.horizontalsystems.bankwallet.modules.RxBaseTest
+import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.reset
+import java.util.*
 
 class UnlockPinPresenterTest {
 
@@ -76,8 +78,8 @@ class UnlockPinPresenterTest {
 
     @Test
     fun showFingerprintInput() {
-        presenter.showFingerprintInput(cryptoObject)
-        verify(view).showFingerprintDialog(cryptoObject)
+//        presenter.showFingerprintInput(cryptoObject)
+//        verify(view).showFingerprintDialog(cryptoObject)
     }
 
     @Test
@@ -95,5 +97,48 @@ class UnlockPinPresenterTest {
         presenter.onBiometricUnlock()
         verify(interactor).onUnlock()
     }
+
+
+
+
+    @Test
+    fun onViewDidLoad_UpdateLockoutState() {
+        presenter.viewDidLoad()
+
+        verify(interactor).updateLockoutState()
+    }
+
+    @Test
+    fun updateLockoutState_Unlocked() {
+        val attempts = null
+        val pageIndex = 0
+        val state = LockoutState.Unlocked(null)
+        presenter.updateLockoutState(state)
+
+        verify(view).showAttemptsLeft(attempts, pageIndex)
+        verify(view, never()).showLockView(any())
+    }
+
+    @Test
+    fun updateLockoutState_UnlockedWithFewAttempts() {
+        val attempts = 3
+        val pageIndex = 0
+        val state = LockoutState.Unlocked(3)
+        presenter.updateLockoutState(state)
+
+        verify(view).showAttemptsLeft(attempts, pageIndex)
+        verify(view, never()).showLockView(any())
+    }
+
+    @Test
+    fun updateLockoutState_Locked() {
+        val date = Date()
+        val state = LockoutState.Locked(date)
+        presenter.updateLockoutState(state)
+
+        verify(view).showLockView(any())
+        verify(view, never()).showAttemptsLeft(any(), any())
+    }
+
 
 }

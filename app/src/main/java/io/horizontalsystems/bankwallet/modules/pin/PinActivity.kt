@@ -25,8 +25,9 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.security.FingerprintAuthenticationDialogFragment
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.ui.extensions.SmoothLinearLayoutManager
+import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
-import kotlinx.android.synthetic.main.activity_new_pin.*
+import kotlinx.android.synthetic.main.activity_pin.*
 import kotlinx.android.synthetic.main.custom_tall_toolbar.*
 
 class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuthenticationDialogFragment.Callback {
@@ -40,7 +41,7 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
 
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
 
-        setContentView(R.layout.activity_new_pin)
+        setContentView(R.layout.activity_pin)
 
         setSupportActionBar(toolbar)
         backButton.visibility = View.GONE
@@ -116,7 +117,7 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
 
         viewModel.showErrorForPage.observe(this, Observer { errorForPage ->
             errorForPage?.let { (error, pageIndex) ->
-                pinPagesAdapter.setErrorForPage(pageIndex, error)
+                pinPagesAdapter.setErrorForPage(pageIndex, error?.let { getString(error) } ?: null )
             }
         })
 
@@ -166,6 +167,22 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
                     pinPagesAdapter.setEnteredPinLength(pageIndex, 0)
                     viewModel.delegate.resetPin()
                 }, 300)
+            }
+        })
+
+        viewModel.showAttemptsLeftError.observe(this, Observer { pair ->
+            pair?.let { (attempts, pageIndex) ->
+                pinUnlock.visibility = View.VISIBLE
+                pinUnlockBlocked.visibility = View.GONE
+            }
+        })
+
+        viewModel.showLockedView.observe(this, Observer { untilDate ->
+            untilDate?.let {
+                pinUnlock.visibility = View.GONE
+                pinUnlockBlocked.visibility = View.VISIBLE
+                val time = DateHelper.formatDate(it, "HH:mm:ss")
+                blockedScreenMessage.text = getString(R.string.UnlockPin_WalletDisabledUntil, time)
             }
         })
 
@@ -227,14 +244,14 @@ enum class NumPadItemType {
 }
 
 //PinPage part
-class PinPage(val description: Int, var enteredDidgitsLength: Int = 0, var error: Int? = null)
+class PinPage(val description: Int, var enteredDidgitsLength: Int = 0, var error: String? = null)
 
 class PinPagesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var pinPages = mutableListOf<PinPage>()
     var shakePageIndex: Int? = null
 
-    fun setErrorForPage(pageIndex: Int, error: Int?) {
+    fun setErrorForPage(pageIndex: Int, error: String?) {
         pinPages[pageIndex].error = error
         notifyDataSetChanged()
     }
@@ -273,7 +290,7 @@ class PinPageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(pinPage: PinPage, shake: Boolean) {
         txtDesc.text = itemView.resources.getString(pinPage.description)
         updatePinCircles(pinPage.enteredDidgitsLength)
-        txtError.text = pinPage.error?.let { itemView.resources.getString(it) } ?: ""
+        txtError.text = pinPage.error ?: ""
         if (shake) {
             val shakeAnim = AnimationUtils.loadAnimation(itemView.context, R.anim.shake_pin_circles)
             pinCirclesWrapper.startAnimation(shakeAnim)
