@@ -15,4 +15,3 @@ data class Rate(var coin: String,
             return diff > 60 * 10
         }
 }
-

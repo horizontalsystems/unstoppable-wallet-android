@@ -14,7 +14,7 @@ class LockManager(
         private val securedStorage: ISecuredStorage,
         private val wordsManager: IWordsManager): ILockManager {
 
-    private val lockTimeout: Double = 10.0
+    private val lockTimeout: Double = 60.0
 
     override var isLocked: Boolean = false
 
