@@ -29,10 +29,12 @@ android {
     }
     buildTypes {
         debug {
+            debuggable true
             minifyEnabled false
         }
         release {
-            minifyEnabled true
+            debuggable false
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -46,6 +48,9 @@ android {
         devMainnet {
             resValue "string", "enabled_coins", buildProperties.get("enabled_coins_mainnet")
             applicationIdSuffix ".dev"
+        }
+        productionMainnet {
+            resValue "string", "enabled_coins", buildProperties.get("enabled_coins_mainnet")
         }
     }
     compileOptions {
