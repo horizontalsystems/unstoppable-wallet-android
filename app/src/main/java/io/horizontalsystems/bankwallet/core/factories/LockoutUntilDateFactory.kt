@@ -6,7 +6,7 @@ import java.util.*
 
 class LockoutUntilDateFactory(private val currentDateProvider: ICurrentDateProvider) : ILockoutUntilDateFactory {
 
-    override fun lockoutUntilDate(failedAttempts: Int, lockoutTimestamp: Long, uptime: Long): Date {
+    override fun lockoutUntilDate(failedAttempts: Int, lockoutTimestamp: Long, uptime: Long): Date? {
 
         var timeFrame: Long = 0
 
@@ -17,12 +17,15 @@ class LockoutUntilDateFactory(private val currentDateProvider: ICurrentDateProvi
             failedAttempts >= 8 -> timeFrame = 30 * 60 * 1000 - (uptime - lockoutTimestamp)
         }
 
-        val timestamp = (if (timeFrame < 0) 0 else timeFrame) + currentDateProvider.currentDate.time
-
-        val date = currentDateProvider.currentDate
-        date.time = timestamp
-
-        return date
+        return when {
+            timeFrame > 0 -> {
+                val timestamp = timeFrame + currentDateProvider.currentDate.time
+                val date = currentDateProvider.currentDate
+                date.time = timestamp
+                date
+            }
+            else -> null
+        }
     }
 
 }

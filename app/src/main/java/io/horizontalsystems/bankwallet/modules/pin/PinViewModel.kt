@@ -27,7 +27,7 @@ class PinViewModel: ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter,
     val resetCirclesWithShakeAndDelayForPage = SingleLiveEvent<Int>()
     val keyStoreSafeExecute = SingleLiveEvent<Triple<Runnable, Runnable?, Runnable?>>()
     val showAttemptsLeftError = MutableLiveData<Pair<Int, Int>>()
-    val showLockedView = SingleLiveEvent<Unit>()
+    val showLockedView = SingleLiveEvent<Date>()
 
 
     fun init(interactionType: PinInteractionType) {
@@ -98,12 +98,12 @@ class PinViewModel: ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter,
     }
 
     override fun showLockView(until: Date) {
-        showLockedView.call()
+        showLockedView.postValue(until)
     }
 
     override fun showAttemptsLeft(attempts: Int?, pageIndex: Int) {
         attempts?.let {
-            showAttemptsLeftError.value = Pair(pageIndex, pageIndex)
+            showAttemptsLeftError.postValue(Pair(attempts, pageIndex))
         }
     }
 }

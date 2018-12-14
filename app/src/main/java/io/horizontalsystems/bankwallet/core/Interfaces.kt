@@ -30,7 +30,7 @@ interface ILocalStorage {
     fun clearAll()
     var isNewWallet: Boolean
     var failedAttempts: Int?
-    var lockoutTimestamp: Long?
+    var lockoutUptime: Long?
 }
 
 interface ISecuredStorage {
@@ -167,6 +167,10 @@ interface IPeriodicTimerDelegate {
     fun onFire()
 }
 
+interface IOneTimerDelegate {
+    fun onFire()
+}
+
 interface IRateSyncerDelegate {
     fun didSync(coin: String, currencyCode: String, latestRate: LatestRate)
 }
@@ -205,7 +209,7 @@ interface IUptimeProvider {
 }
 
 interface ILockoutUntilDateFactory {
-    fun lockoutUntilDate(failedAttempts: Int, lockoutTimestamp: Long, uptime: Long): Date
+    fun lockoutUntilDate(failedAttempts: Int, lockoutTimestamp: Long, uptime: Long): Date?
 }
 
 interface ICurrentDateProvider {

@@ -12,7 +12,7 @@ class UnlockPinInteractor(
         private val lockManager: ILockManager,
         private val encryptionManager: IEncryptionManager,
         private val lockoutManager: ILockoutManager,
-        private val timer: OneTimeTimer) : UnlockPinModule.IUnlockPinInteractor, IPeriodicTimerDelegate {
+        private val timer: OneTimeTimer) : UnlockPinModule.IUnlockPinInteractor, IOneTimerDelegate {
 
     var delegate: UnlockPinModule.IUnlockPinInteractorDelegate? = null
 
@@ -70,6 +70,6 @@ class UnlockPinInteractor(
             is LockoutState.Locked -> timer.schedule(state.until)
         }
 
-        delegate?.updateLockoutState(lockoutManager.currentState)
+        delegate?.updateLockoutState(state)
     }
 }

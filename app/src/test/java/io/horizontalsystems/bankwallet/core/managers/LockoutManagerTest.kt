@@ -69,7 +69,7 @@ class LockoutManagerTest {
         val failedAttempts = 7
 
         whenever(localStorage.failedAttempts).thenReturn(failedAttempts)
-        whenever(localStorage.lockoutTimestamp).thenReturn(timestamp)
+        whenever(localStorage.lockoutUptime).thenReturn(timestamp)
         whenever(uptimeProvider.uptime).thenReturn(timestamp)
         whenever(lockoutUntilDateFactory.lockoutUntilDate(failedAttempts, timestamp, timestamp)).thenReturn(unlockDate)
 
@@ -89,7 +89,7 @@ class LockoutManagerTest {
 
         lockoutManager.didFailUnlock()
 
-        verify(localStorage).lockoutTimestamp = timestamp
+        verify(localStorage).lockoutUptime = timestamp
     }
 
     @Test
@@ -104,7 +104,7 @@ class LockoutManagerTest {
 
         val failedAttempts = 5
         whenever(localStorage.failedAttempts).thenReturn(failedAttempts)
-        whenever(localStorage.lockoutTimestamp).thenReturn(timestamp)
+        whenever(localStorage.lockoutUptime).thenReturn(timestamp)
         whenever(uptimeProvider.uptime).thenReturn(timestamp)
         whenever(lockoutUntilDateFactory.lockoutUntilDate(failedAttempts, timestamp, timestamp)).thenReturn(unlockDate)
 

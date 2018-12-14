@@ -49,7 +49,7 @@ object DateHelper {
         return now.time
     }
 
-    private fun formatDate(date: Date, outputFormat: String) =
+    fun formatDate(date: Date, outputFormat: String) =
             SimpleDateFormat(DateFormat.getBestDateTimePattern(Locale.getDefault(), outputFormat)).format(date)
 
     private fun getFormattedDateWithYear(date: Date) = formatDate(date, "MMMM d, yyyy")

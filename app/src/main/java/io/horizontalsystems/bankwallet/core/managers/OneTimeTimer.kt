@@ -1,22 +1,18 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import android.util.Log
-import io.horizontalsystems.bankwallet.core.IPeriodicTimerDelegate
+import io.horizontalsystems.bankwallet.core.IOneTimerDelegate
 import java.util.*
 
 class OneTimeTimer {
 
-    var delegate: IPeriodicTimerDelegate? = null
+    var delegate: IOneTimerDelegate? = null
     private var timer: Timer? = null
 
     fun schedule(time: Date) {
-        try {
-            timer?.cancel()
-        } catch (e: Exception) {
-            Log.e("OneTimeTimer", "exception", e)
-        }
 
-        timer = Timer()
+        if(timer == null) {
+            timer = Timer()
+        }
 
         timer?.schedule(object : TimerTask() {
             override fun run() {

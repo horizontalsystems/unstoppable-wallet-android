@@ -91,7 +91,7 @@ class LocalStorageManager : ILocalStorage {
             } ?: App.preferences.edit().remove(FAILED_ATTEMPTS).apply()
         }
 
-    override var lockoutTimestamp: Long?
+    override var lockoutUptime: Long?
         get() {
             val timestamp = App.preferences.getLong(LOCKOUT_TIMESTAMP, 0L)
             return when (timestamp) {

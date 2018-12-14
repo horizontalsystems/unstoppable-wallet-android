@@ -25,8 +25,9 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.security.FingerprintAuthenticationDialogFragment
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.ui.extensions.SmoothLinearLayoutManager
+import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
-import kotlinx.android.synthetic.main.activity_new_pin.*
+import kotlinx.android.synthetic.main.activity_pin.*
 import kotlinx.android.synthetic.main.custom_tall_toolbar.*
 
 class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuthenticationDialogFragment.Callback {
@@ -40,7 +41,7 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
 
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
 
-        setContentView(R.layout.activity_new_pin)
+        setContentView(R.layout.activity_pin)
 
         setSupportActionBar(toolbar)
         backButton.visibility = View.GONE
@@ -171,8 +172,19 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
 
         viewModel.showAttemptsLeftError.observe(this, Observer { pair ->
             pair?.let { (attempts, pageIndex) ->
+                pinUnlock.visibility = View.VISIBLE
+                pinUnlockBlocked.visibility = View.GONE
                 val error = getString(R.string.UnlockPin_ErrorAttemptsLeft, attempts.toString())
                 pinPagesAdapter.setErrorForPage(pageIndex, error)
+            }
+        })
+
+        viewModel.showLockedView.observe(this, Observer { untilDate ->
+            untilDate?.let {
+                pinUnlock.visibility = View.GONE
+                pinUnlockBlocked.visibility = View.VISIBLE
+                val time = DateHelper.formatDate(it, "HH:mm:ss")
+                blockedScreenMessage.text = getString(R.string.UnlockPin_WalletDisabledUntil, time)
             }
         })
 
