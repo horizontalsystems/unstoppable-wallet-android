@@ -1,4 +1,4 @@
-package im.grouvi.app.ui.view
+package io.horizontalsystems.bankwallet.ui.view
 
 import android.os.SystemClock
 
