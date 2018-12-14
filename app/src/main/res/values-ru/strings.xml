@@ -21,7 +21,7 @@
     <!--Restore-->
     <string name="Restore_Title">Cекретный Ключ</string>
     <string name="Restore_ValidationFailed">Неверный Секретный Ключ</string>
-    <string name="Restore_RestoreFailed">Не удалось создать кошелек</string>
+    <string name="Restore_RestoreFailed">Не удалось восстановить кошелек</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Секретный Ключ</string>
     <string name="Backup_Intro_Subtitle">Ваш секретный ключ является единственным способом для восстановления вашего кошелька.\n\nМы покажем вам список слов, чтобы вы записали их на бумаге и хранили в безопасном месте.</string>
@@ -155,6 +155,8 @@
     <string name="Fingerprint_EnterPin">Введите PIN</string>
     <string name="Fingerprint_NotRecognized">Отпечаток не распознан. Повторите ещё раз</string>
     <string name="Fingerprint_Success">Успешно!</string>
+    <!--Unlock Pin-->
+    <string name="UnlockPin_WalletDisabledUntil">Отключено до: %s</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Установить PIN-код</string>
     <string name="SetPin_Info">Ваш PIN-код будет использоваться для разблокировки кошелька</string>

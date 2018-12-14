@@ -159,6 +159,8 @@
     <string name="Fingerprint_EnterPin">Enter PIN</string>
     <string name="Fingerprint_NotRecognized">Fingerprint not recognized. Try again</string>
     <string name="Fingerprint_Success">Success!</string>
+    <!--Unlock Pin-->
+    <string name="UnlockPin_WalletDisabledUntil">Disabled until: %s</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Set PIN</string>
     <string name="SetPin_Info">Your PIN will be used to unlock wallet app</string>

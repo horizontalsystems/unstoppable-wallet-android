@@ -155,6 +155,8 @@
     <string name="Fingerprint_EnterPin">Entrez PIN</string>
     <string name="Fingerprint_NotRecognized">Empreinte digitale non reconnue. Réessayez</string>
     <string name="Fingerprint_Success">Effectué!</string>
+    <!--Unlock Pin-->
+    <string name="UnlockPin_WalletDisabledUntil">Désactivé jusqu\'à: %s</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Définir le PIN</string>
     <string name="SetPin_Info">Votre code PIN sera utilisé pour déverrouiller l\'appli de porte-monnaie</string>
