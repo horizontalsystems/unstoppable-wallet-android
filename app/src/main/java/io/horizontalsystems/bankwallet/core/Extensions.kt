@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.view.View
-import im.grouvi.app.ui.view.SingleClickListener
+import io.horizontalsystems.bankwallet.ui.view.SingleClickListener
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 

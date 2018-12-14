@@ -224,7 +224,7 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
 
         viewHolderRoot.isSelected = expanded
         buttonsWrapper.visibility = if (expanded) View.VISIBLE else View.GONE
-        containerView.setOnSingleClickListener {
+        containerView.setOnClickListener {
             onHolderClicked?.invoke()
         }
     }
