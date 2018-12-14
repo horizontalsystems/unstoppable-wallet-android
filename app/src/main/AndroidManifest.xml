@@ -9,7 +9,7 @@
 
     <application
         android:name="io.horizontalsystems.bankwallet.core.App"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/bitcoin_launcher"
         android:label="@string/App_Name"
         android:roundIcon="@mipmap/bitcoin_launcher_round"
