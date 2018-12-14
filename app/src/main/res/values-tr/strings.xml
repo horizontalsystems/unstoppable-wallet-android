@@ -20,7 +20,7 @@
     <string name="Guest_RestoreWallet">Cüzdanı Geri Yükle</string>
     <!--Restore-->
     <string name="Restore_Title">Gizli Anahtarı girin</string>
-    <string name="Restore_ValidationFailed">Incorrect Secret Key</string>
+    <string name="Restore_ValidationFailed">Hatalı Gizli anahtar</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Gizli Anahtar</string>
