@@ -20,7 +20,11 @@ class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, Eth
 
     val progressSubject: BehaviorSubject<Double> = BehaviorSubject.createDefault(1.0)
 
-    override val state: AdapterState = AdapterState.Synced
+    override var state: AdapterState = AdapterState.Syncing(progressSubject)
+        set(value) {
+            field = value
+            stateSubject.onNext(value)
+        }
     override val stateSubject: PublishSubject<AdapterState> = PublishSubject.create()
 
     override val confirmationsThreshold: Int = 12
@@ -60,7 +64,7 @@ class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, Eth
         ethereumKit.validateAddress(address)
     }
 
-    override fun balanceUpdated(ethereumKit: EthereumKit, balance: Double) {
+    override fun balanceUpdated(balance: Double) {
         balanceSubject.onNext(balance / weisInEther)
     }
 
@@ -68,7 +72,25 @@ class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, Eth
         lastBlockHeightSubject.onNext(height)
     }
 
-    override fun transactionsUpdated(ethereumKit: EthereumKit, inserted: List<Transaction>, updated: List<Transaction>, deleted: List<Int>) {
+    override fun onKitStateUpdate(state: EthereumKit.KitState) {
+        when (state) {
+            is EthereumKit.KitState.Synced -> {
+                this.state = AdapterState.Synced
+            }
+            is EthereumKit.KitState.NotSynced -> {
+                this.state = AdapterState.NotSynced
+            }
+            is EthereumKit.KitState.Syncing -> {
+                progressSubject.onNext(state.progress)
+
+                if (this.state !is AdapterState.Syncing) {
+                    this.state = AdapterState.Syncing(progressSubject)
+                }
+            }
+        }
+    }
+
+    override fun transactionsUpdated(inserted: List<Transaction>, updated: List<Transaction>, deleted: List<Int>) {
         val records = mutableListOf<TransactionRecord>()
 
         for (info in inserted) {
