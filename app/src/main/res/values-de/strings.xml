@@ -21,7 +21,7 @@
     <!--Restore-->
     <string name="Restore_Title">Offlineschlüssel eingeben</string>
     <string name="Restore_ValidationFailed">Falscher Offlineschlüssel</string>
-    <string name="Restore_RestoreFailed">Fehler beim Erstellen des Geldbörse</string>
+    <string name="Restore_RestoreFailed">Fehler beim Wiederherstellen des Geldbörse</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Sicherung</string>
     <string name="Backup_Intro_Subtitle">Dein Offlineschlüssel ist die einzige Möglichkeit, deine Geldbörse wiederherzustellen, falls du dein Smartphone verlierst, austauscht, es gestohlen wird oder kaputtgeht. \n\n Hierfür zeigen wir die eine Liste von Wörtern an, damit du sie dir auf ein Stück Papier notieren kannst, das es sicher aufzubewahren  gilt.</string>
@@ -156,6 +156,8 @@ Hack dein Telefon nicht, installier keine Anwendungen von inoffiziellen Quellen 
     <string name="Fingerprint_EnterPin">Gib deine Pin ein</string>
     <string name="Fingerprint_NotRecognized">Fingerabdruck nicht erkannt. Bitte wiederholen.</string>
     <string name="Fingerprint_Success">Erfolgreich!</string>
+    <!--Unlock Pin-->
+    <string name="UnlockPin_WalletDisabledUntil">Deaktiviert bis: %s </string>
     <!--Set Pin-->
     <string name="SetPin_Title">PIN festlegen</string>
     <string name="SetPin_Info">Deine PIN wird verwendet, um deine Geldbörse zu entsperren</string>

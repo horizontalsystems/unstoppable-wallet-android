@@ -159,6 +159,8 @@
     <string name="Fingerprint_EnterPin">PIN\'i girin</string>
     <string name="Fingerprint_NotRecognized">Parmak izi tanınmadı. Tekrar deneyin</string>
     <string name="Fingerprint_Success">Başarılı!</string>
+    <!--Unlock Pin-->
+    <string name="UnlockPin_WalletDisabledUntil">Disabled until: %s</string>
     <!--Set Pin-->
     <string name="SetPin_Title">PIN oluştur</string>
     <string name="SetPin_Info">PİN, uygulama kilidini açmak için kullanılacak</string>
