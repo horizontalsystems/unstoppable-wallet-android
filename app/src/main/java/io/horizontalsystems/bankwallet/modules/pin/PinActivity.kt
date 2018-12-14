@@ -174,8 +174,6 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
             pair?.let { (attempts, pageIndex) ->
                 pinUnlock.visibility = View.VISIBLE
                 pinUnlockBlocked.visibility = View.GONE
-                val error = getString(R.string.UnlockPin_ErrorAttemptsLeft, attempts.toString())
-                pinPagesAdapter.setErrorForPage(pageIndex, error)
             }
         })
 
