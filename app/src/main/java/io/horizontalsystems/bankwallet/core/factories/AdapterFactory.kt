@@ -2,21 +2,47 @@ package io.horizontalsystems.bankwallet.core.factories
 
 import io.horizontalsystems.bankwallet.core.BitcoinAdapter
 import io.horizontalsystems.bankwallet.core.EthereumAdapter
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import io.horizontalsystems.bankwallet.core.IAdapter
+import io.horizontalsystems.bankwallet.core.IAppConfigProvider
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bitcoinkit.BitcoinKit
 import io.horizontalsystems.ethereumkit.EthereumKit
 
-class AdapterFactory {
+class AdapterFactory(private val appConfigProvider: IAppConfigProvider) {
 
-    fun adapterForCoin(coinCode: CoinCode, words: List<String>, newWallet: Boolean) = when (coinCode) {
-        "BTC" -> BitcoinAdapter(words, BitcoinKit.NetworkType.MainNet, newWallet)
-        "BTCt" -> BitcoinAdapter(words, BitcoinKit.NetworkType.TestNet, newWallet)
-        "BTCr" -> BitcoinAdapter(words, BitcoinKit.NetworkType.RegTest, newWallet)
-        "BCH" -> BitcoinAdapter(words, BitcoinKit.NetworkType.MainNetBitCash, newWallet)
-        "BCHt" -> BitcoinAdapter(words, BitcoinKit.NetworkType.TestNetBitCash, newWallet)
-        "ETH" -> EthereumAdapter(words, EthereumKit.NetworkType.MainNet)
-        "ETHt" -> EthereumAdapter(words, EthereumKit.NetworkType.Kovan)
-        else -> null
+    fun adapterForCoin(coin: Coin, words: List<String>, newWallet: Boolean): IAdapter? {
+        return when (coin.blockChain) {
+            is BlockChain.Bitcoin ->
+                when (coin.blockChain.type) {
+                    is BitcoinType.Bitcoin -> {
+                        val network = when (appConfigProvider.network) {
+                            Network.MAIN -> BitcoinKit.NetworkType.MainNet
+                            Network.TEST -> BitcoinKit.NetworkType.TestNet
+                        }
+                        BitcoinAdapter(words, network, newWallet)
+                    }
+                    is BitcoinType.BitcoinCash -> {
+                        val network = when (appConfigProvider.network) {
+                            Network.MAIN -> BitcoinKit.NetworkType.MainNetBitCash
+                            Network.TEST -> BitcoinKit.NetworkType.TestNetBitCash
+                        }
+                        BitcoinAdapter(words, network, newWallet)
+                    }
+                }
+            is BlockChain.Ethereum ->
+                when (coin.blockChain.type) {
+                    is EthereumType.Ethereum -> {
+                        val network = when (appConfigProvider.network) {
+                            Network.MAIN -> EthereumKit.NetworkType.MainNet
+                            Network.TEST -> EthereumKit.NetworkType.Kovan
+                        }
+                        EthereumAdapter(words, network)
+                    }
+                    is EthereumType.Erc20 -> {
+                        null
+                    }
+                }
+        }
     }
 
 }

@@ -88,7 +88,7 @@ class App : Application() {
         appConfigProvider = AppConfigProvider()
         languageManager = LanguageManager(localStorage, appConfigProvider, fallbackLanguage)
         currencyManager = CurrencyManager(localStorage, appConfigProvider)
-        walletManager = WalletManager(AdapterFactory())
+        walletManager = WalletManager(AdapterFactory(appConfigProvider))
         coinManager = CoinManager(wordsManager, walletManager, appConfigProvider)
 
         networkAvailabilityManager = NetworkAvailabilityManager()

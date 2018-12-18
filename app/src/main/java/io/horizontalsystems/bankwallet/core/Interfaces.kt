@@ -14,7 +14,7 @@ interface IWalletManager {
     val wallets: List<Wallet>
     val walletsSubject: PublishSubject<List<Wallet>>
 
-    fun initWallets(words: List<String>, coins: List<CoinCode>, newWallet: Boolean)
+    fun initWallets(words: List<String>, coins: List<Coin>, newWallet: Boolean)
     fun refreshWallets()
     fun clearWallets()
 }
@@ -158,7 +158,7 @@ interface ILockManager {
 }
 
 interface IAppConfigProvider {
-    val enabledCoins: List<String>
+    val network: Network
     val localizations: List<String>
     val currencies: List<Currency>
 }

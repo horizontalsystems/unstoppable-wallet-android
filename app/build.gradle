@@ -48,15 +48,15 @@ android {
     flavorDimensions "network"
     productFlavors {
         devTestnet {
-            resValue "string", "enabled_coins", buildProperties.get("enabled_coins_testnet")
+            resValue "string", "network_type", "Test"
             applicationIdSuffix ".dev.testnet"
         }
         devMainnet {
-            resValue "string", "enabled_coins", buildProperties.get("enabled_coins_mainnet")
+            resValue "string", "network_type", "Main"
             applicationIdSuffix ".dev"
         }
         productionMainnet {
-            resValue "string", "enabled_coins", buildProperties.get("enabled_coins_mainnet")
+            resValue "string", "network_type", "Main"
         }
     }
     compileOptions {

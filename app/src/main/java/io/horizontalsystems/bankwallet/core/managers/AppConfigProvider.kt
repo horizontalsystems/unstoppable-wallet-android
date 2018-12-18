@@ -4,12 +4,14 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.entities.Network
 
 class AppConfigProvider : IAppConfigProvider {
-    override val enabledCoins: List<String>
+
+    override val network: Network
         get() {
-            val coinsString = App.instance.getString(R.string.enabled_coins)
-            return coinsString.split(",")
+            val networkRaw = App.instance.getString(R.string.network_type)
+            return Network.fromRawValue(networkRaw)
         }
 
     override val currencies: List<Currency> = listOf(
