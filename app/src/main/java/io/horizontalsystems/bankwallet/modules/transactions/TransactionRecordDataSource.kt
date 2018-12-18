@@ -20,18 +20,18 @@ class TransactionRecordDataSource(private val appDatabase: AppDatabase) : Transa
         return results[index]
     }
 
-    override fun setCoin(coin: Coin?) {
-        subscribe(coin)
+    override fun setCoin(coinCode: CoinCode?) {
+        subscribe(coinCode)
     }
 
     init {
         subscribe()
     }
 
-    private fun subscribe(coin: Coin? = null) {
+    private fun subscribe(coinCode: CoinCode? = null) {
         disposable?.dispose()
 
-        disposable = getTransactionRecords(coin)
+        disposable = getTransactionRecords(coinCode)
                 .subscribeOn(io.reactivex.schedulers.Schedulers.io())
                 .unsubscribeOn(io.reactivex.schedulers.Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -41,10 +41,10 @@ class TransactionRecordDataSource(private val appDatabase: AppDatabase) : Transa
                 }
     }
 
-    private fun getTransactionRecords(coin: Coin? = null): Flowable<List<TransactionRecord>> =
-            if (coin == null)
+    private fun getTransactionRecords(coinCode: CoinCode? = null): Flowable<List<TransactionRecord>> =
+            if (coinCode == null)
                 appDatabase.transactionDao().getAll()
             else
-                appDatabase.transactionDao().getAll(coin)
+                appDatabase.transactionDao().getAll(coinCode)
 
 }

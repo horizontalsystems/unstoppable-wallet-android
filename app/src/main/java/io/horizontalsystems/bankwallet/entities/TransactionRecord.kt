@@ -11,7 +11,7 @@ open class TransactionRecord {
     @PrimaryKey
     var transactionHash = ""
     var blockHeight: Long = 0
-    var coin = ""
+    var coinCode = ""
     var amount: Double = 0.0
     var timestamp: Long = 0
     var rate: Double = 0.0

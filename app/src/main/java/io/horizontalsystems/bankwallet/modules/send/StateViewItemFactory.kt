@@ -77,7 +77,7 @@ class StateViewItemFactory {
             val feeCoinValue = state.feeCoinValue
             if (feeCoinValue != null) {
                 stateFeeInfo = SendModule.AmountInfo.CoinValueInfo(feeCoinValue)
-                stateTotalInfo = SendModule.AmountInfo.CoinValueInfo(CoinValue(coinValue. coin, coinValue.value + feeCoinValue.value))
+                stateTotalInfo = SendModule.AmountInfo.CoinValueInfo(CoinValue(coinValue. coinCode, coinValue.value + feeCoinValue.value))
             }
         }
 

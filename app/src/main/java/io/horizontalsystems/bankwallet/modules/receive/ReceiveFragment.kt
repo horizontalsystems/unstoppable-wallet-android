@@ -16,7 +16,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.transactions.Coin
+import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
@@ -27,7 +27,7 @@ class ReceiveFragment : DialogFragment() {
 
     private lateinit var viewModel: ReceiveViewModel
 
-    private var coin: Coin? = null
+    private var coinCode: CoinCode? = null
 
     private var itemIndex = 0
 
@@ -35,7 +35,7 @@ class ReceiveFragment : DialogFragment() {
         super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProviders.of(this).get(ReceiveViewModel::class.java)
-        coin?.let { viewModel.init(it) } ?:  dismiss()
+        coinCode?.let { viewModel.init(it) } ?:  dismiss()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -55,10 +55,10 @@ class ReceiveFragment : DialogFragment() {
                 if (addresses.isNotEmpty()) {
                     val address = addresses[itemIndex]
                     context?.let { ctx ->
-                        val coinDrawable = ContextCompat.getDrawable(ctx, LayoutHelper.getCoinDrawableResource(address.coin))
+                        val coinDrawable = ContextCompat.getDrawable(ctx, LayoutHelper.getCoinDrawableResource(address.coinCode))
                         rootView.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
                     }
-                    rootView.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.Deposit_Title, address.coin)
+                    rootView.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.Deposit_Title, address.coinCode)
                     rootView.findViewById<TextView>(R.id.txtAddress)?.let { it.text = address.address }
                     rootView.findViewById<ImageView>(R.id.imgQrCode)?.setImageBitmap(TextHelper.getQrCodeBitmapFromAddress(address.address))
                 }
@@ -85,9 +85,9 @@ class ReceiveFragment : DialogFragment() {
     }
 
     companion object {
-        fun show(activity: FragmentActivity, coin: Coin) {
+        fun show(activity: FragmentActivity, coinCode: CoinCode) {
             val fragment = ReceiveFragment()
-            fragment.coin = coin
+            fragment.coinCode = coinCode
             fragment.show(activity.supportFragmentManager, "receive_fragment")
         }
     }

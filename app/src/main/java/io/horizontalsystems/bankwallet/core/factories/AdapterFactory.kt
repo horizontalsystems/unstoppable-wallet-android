@@ -2,13 +2,13 @@ package io.horizontalsystems.bankwallet.core.factories
 
 import io.horizontalsystems.bankwallet.core.BitcoinAdapter
 import io.horizontalsystems.bankwallet.core.EthereumAdapter
-import io.horizontalsystems.bankwallet.modules.transactions.Coin
+import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.bitcoinkit.BitcoinKit
 import io.horizontalsystems.ethereumkit.EthereumKit
 
 class AdapterFactory {
 
-    fun adapterForCoin(coin: Coin, words: List<String>, newWallet: Boolean) = when (coin) {
+    fun adapterForCoin(coinCode: CoinCode, words: List<String>, newWallet: Boolean) = when (coinCode) {
         "BTC" -> BitcoinAdapter(words, BitcoinKit.NetworkType.MainNet, newWallet)
         "BTCt" -> BitcoinAdapter(words, BitcoinKit.NetworkType.TestNet, newWallet)
         "BTCr" -> BitcoinAdapter(words, BitcoinKit.NetworkType.RegTest, newWallet)

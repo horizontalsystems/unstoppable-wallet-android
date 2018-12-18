@@ -49,14 +49,14 @@ class TransactionManager(
         walletManager.wallets.forEach { wallet ->
             adapterDisposables.add(wallet.adapter.transactionRecordsSubject
                     .subscribe { records ->
-                        handle(records, wallet.coin)
+                        handle(records, wallet.coinCode)
                     })
         }
     }
 
-    private fun handle(records: List<TransactionRecord>, coin: String) {
+    private fun handle(records: List<TransactionRecord>, coinCode: String) {
         records.forEach { record ->
-            record.coin = coin
+            record.coinCode = coinCode
         }
 
         storage.update(records)

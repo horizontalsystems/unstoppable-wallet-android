@@ -149,7 +149,7 @@ class SendFragment : DialogFragment() {
             var amountNumber = 0.0
             when (amountInfo) {
                 is SendModule.AmountInfo.CoinValueInfo -> {
-                    amountPrefixTxt.text = amountInfo.coinValue.coin
+                    amountPrefixTxt.text = amountInfo.coinValue.coinCode
                     amountNumber = Math.round(amountInfo.coinValue.value * 100_000_000.0) / 100_000_000.0
                 }
                 is SendModule.AmountInfo.CurrencyValueInfo -> {

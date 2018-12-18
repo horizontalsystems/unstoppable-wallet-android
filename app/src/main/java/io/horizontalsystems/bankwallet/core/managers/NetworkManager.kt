@@ -17,8 +17,8 @@ import java.util.concurrent.TimeUnit
 
 class NetworkManager : INetworkManager {
 
-    override fun getRate(coin: String, currency: String, timestamp: Long): Flowable<Double> {
-        val cleanedCoin = TextHelper.getCleanCoinCode(coin)
+    override fun getRate(coinCode: String, currency: String, timestamp: Long): Flowable<Double> {
+        val cleanedCoin = TextHelper.getCleanCoinCode(coinCode)
 
         return ServiceExchangeApi.service
                 .getRatesByHour(cleanedCoin, currency, DateHelper.formatDateInUTC(timestamp, "yyyy/MM/dd/HH"))

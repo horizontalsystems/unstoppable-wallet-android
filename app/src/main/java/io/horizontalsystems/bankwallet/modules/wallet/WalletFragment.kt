@@ -139,8 +139,8 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
             is ViewHolderCoin ->
                 if (payloads.isEmpty()) {
                     holder.bind(items[position],
-                            onSendClick = { listener.onSendClicked(items[position].coinValue.coin) },
-                            onReceiveClick = { listener.onReceiveClicked(items[position].coinValue.coin) },
+                            onSendClick = { listener.onSendClicked(items[position].coinValue.coinCode) },
+                            onReceiveClick = { listener.onReceiveClicked(items[position].coinValue.coinCode) },
                             onHolderClicked = {
                                 val oldExpandedViewPosition = expandedViewPosition
                                 expandedViewPosition = if (expandedViewPosition == position) -1 else position
@@ -204,13 +204,13 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
             }
         }
 
-        val iconDrawable = ContextCompat.getDrawable(containerView.context, LayoutHelper.getCoinDrawableResource(TextHelper.getCleanCoinCode(walletViewItem.coinValue.coin)))
+        val iconDrawable = ContextCompat.getDrawable(containerView.context, LayoutHelper.getCoinDrawableResource(TextHelper.getCleanCoinCode(walletViewItem.coinValue.coinCode)))
         imgCoin.setImageDrawable(iconDrawable)
 
-        textCoinName.text = walletViewItem.coinValue.coin
+        textCoinName.text = walletViewItem.coinValue.coinCode
 
         textExchangeRate.text = walletViewItem.exchangeValue?.let { exchangeValue ->
-            containerView.context.getString(R.string.Balance_RatePerCoin, ValueFormatter.format(exchangeValue), walletViewItem.coinValue.coin)
+            containerView.context.getString(R.string.Balance_RatePerCoin, ValueFormatter.format(exchangeValue), walletViewItem.coinValue.coinCode)
         } ?: ""
         textExchangeRate.setTextColor(ContextCompat.getColor(containerView.context, if (walletViewItem.rateExpired) R.color.grey_40 else R.color.grey))
 

@@ -158,7 +158,7 @@ class FilterAdapter(private var listener: Listener) : RecyclerView.Adapter<Recyc
         }
     }
 
-    fun xxx(coin: Coin) = when (coin) {
+    fun xxx(coinCode: CoinCode) = when (coinCode) {
         "BTC" -> "Bitcoin"
         "BTCt" -> "Bitcoin-T"
         "BTCr" -> "Bitcoin-R"
@@ -166,7 +166,7 @@ class FilterAdapter(private var listener: Listener) : RecyclerView.Adapter<Recyc
         "BCHt" -> "Bitcoin Cash-T"
         "ETH" -> "Ethereum"
         "ETHt" -> "Ethereum-T"
-        else -> coin
+        else -> coinCode
     }
 
 

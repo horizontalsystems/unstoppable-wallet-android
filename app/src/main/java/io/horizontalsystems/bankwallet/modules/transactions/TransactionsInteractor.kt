@@ -30,12 +30,12 @@ class TransactionsInteractor(
     }
 
     override fun retrieveFilters() {
-        delegate?.didRetrieveFilters(walletManager.wallets.map { it.coin })
+        delegate?.didRetrieveFilters(walletManager.wallets.map { it.coinCode })
 
         disposables.add(walletManager.walletsSubject
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    delegate?.didRetrieveFilters(it.map { it.coin })
+                    delegate?.didRetrieveFilters(it.map { it.coinCode })
                 })
     }
 
@@ -45,8 +45,8 @@ class TransactionsInteractor(
         }, (refreshTimeout * 1000).toLong())
     }
 
-    override fun setCoin(coin: Coin?) {
-        dataSource.setCoin(coin)
+    override fun setCoin(coinCode: CoinCode?) {
+        dataSource.setCoin(coinCode)
     }
 
     override val recordsCount: Int
