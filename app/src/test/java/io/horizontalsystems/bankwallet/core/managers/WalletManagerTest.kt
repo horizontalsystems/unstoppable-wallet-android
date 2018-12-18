@@ -5,10 +5,8 @@ import android.os.HandlerThread
 import android.os.Looper
 import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
-import io.horizontalsystems.bankwallet.entities.BitcoinType
-import io.horizontalsystems.bankwallet.entities.BlockChain
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.EthereumType
+import io.horizontalsystems.bankwallet.entities.CoinType
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -27,8 +25,8 @@ class WalletManagerTest {
     private val handlerThread = mock(HandlerThread::class.java)
     private val words = listOf("one", "two", "three")
     private val enabledCoins = listOf(
-            Coin("Bitcoin", "BTC", blockChain = BlockChain.Bitcoin(BitcoinType.Bitcoin)),
-            Coin("Ethereum", "ETH", blockChain = BlockChain.Ethereum(EthereumType.Ethereum)))
+            Coin("Bitcoin", "BTC", CoinType.Bitcoin),
+            Coin("Ethereum", "ETH", CoinType.Ethereum))
 
     private lateinit var manager: WalletManager
 

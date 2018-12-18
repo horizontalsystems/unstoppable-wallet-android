@@ -141,4 +141,13 @@ class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, Eth
 //        return feeInWeis.divide(weisInEther.toBigDecimal()).toDouble()
 //    }
 //
+
+    companion object {
+
+        fun createEthereum(words: List<String>, testMode: Boolean): EthereumAdapter {
+            val network = if (testMode) EthereumKit.NetworkType.Kovan else EthereumKit.NetworkType.MainNet
+            return EthereumAdapter(words, network)
+        }
+    }
+
 }

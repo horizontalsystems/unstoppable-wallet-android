@@ -4,7 +4,8 @@ import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.IWordsManager
 import io.horizontalsystems.bankwallet.core.LogInState
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinType
 import io.reactivex.disposables.CompositeDisposable
 
 class CoinManager(private val wordsManager: IWordsManager,
@@ -29,14 +30,11 @@ class CoinManager(private val wordsManager: IWordsManager,
 
     private val defaultCoins: List<Coin>
         get() {
-            var suffix = ""
-            if (appConfigProvider.network == Network.TEST) {
-                suffix = "t"
-            }
+            val suffix = if (appConfigProvider.testMode) "t" else ""
             val coins = mutableListOf<Coin>()
-            coins.add(Coin("Bitcoin", "BTC$suffix", blockChain = BlockChain.Bitcoin(BitcoinType.Bitcoin)))
-            coins.add(Coin("Bitcoin Cash", "BCH$suffix", blockChain = BlockChain.Bitcoin(BitcoinType.BitcoinCash)))
-            coins.add(Coin("Ethereum", "ETH$suffix", blockChain = BlockChain.Ethereum(EthereumType.Ethereum)))
+            coins.add(Coin("Bitcoin", "BTC$suffix", CoinType.Bitcoin))
+            coins.add(Coin("Bitcoin Cash", "BCH$suffix", CoinType.BitcoinCash))
+            coins.add(Coin("Ethereum", "ETH$suffix", CoinType.Ethereum))
             return coins
         }
 

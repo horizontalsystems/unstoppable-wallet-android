@@ -1,18 +1,14 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.entities.Network
 
 class AppConfigProvider : IAppConfigProvider {
 
-    override val network: Network
-        get() {
-            val networkRaw = App.instance.getString(R.string.network_type)
-            return Network.fromRawValue(networkRaw)
-        }
+    override val testMode: Boolean = BuildConfig.testMode
 
     override val currencies: List<Currency> = listOf(
             Currency(code = "USD", symbol = "\u0024"),

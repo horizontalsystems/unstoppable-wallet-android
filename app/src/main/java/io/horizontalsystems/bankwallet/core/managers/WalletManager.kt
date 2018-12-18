@@ -25,17 +25,17 @@ class WalletManager(private val adapterFactory: AdapterFactory) : IWalletManager
             val newWallets = mutableListOf<Wallet>()
 
             wallets = coins.mapNotNull { coin ->
-                var wallet = wallets.firstOrNull { it.coinCode == coin.coinCode }
+                var wallet = wallets.firstOrNull { it.coinCode == coin.code }
 
                 if (wallet != null) {
                     wallet
                 } else {
-                    val adapter = adapterFactory.adapterForCoin(coin, words, newWallet)
+                    val adapter = adapterFactory.adapterForCoin(coin.type, words, newWallet)
 
                     if (adapter == null) {
                         null
                     } else {
-                        wallet = Wallet(coin.coinCode, coin.title, adapter)
+                        wallet = Wallet(coin.title, coin.code, adapter)
 
                         newWallets.add(wallet)
                         wallet

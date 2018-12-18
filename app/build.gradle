@@ -48,15 +48,15 @@ android {
     flavorDimensions "network"
     productFlavors {
         devTestnet {
-            resValue "string", "network_type", "Test"
+            buildConfigField "boolean", "testMode", "true"
             applicationIdSuffix ".dev.testnet"
         }
         devMainnet {
-            resValue "string", "network_type", "Main"
+            buildConfigField "boolean", "testMode", "false"
             applicationIdSuffix ".dev"
         }
         productionMainnet {
-            resValue "string", "network_type", "Main"
+            buildConfigField "boolean", "testMode", "false"
         }
     }
     compileOptions {

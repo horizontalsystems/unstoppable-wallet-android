@@ -2,19 +2,11 @@ package io.horizontalsystems.bankwallet.entities
 
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 
-sealed class BitcoinType {
-    object Bitcoin : BitcoinType()
-    object BitcoinCash : BitcoinType()
+sealed class CoinType {
+    object BitcoinCash : CoinType()
+    object Bitcoin : CoinType()
+    object Ethereum : CoinType()
+    class Erc20(address: String, decimal: Int) : CoinType()
 }
 
-    sealed class EthereumType {
-    object Ethereum : EthereumType()
-    class Erc20(address: String, decimal: Int) : EthereumType()
-}
-
-sealed class BlockChain {
-    class Bitcoin(val type: BitcoinType) : BlockChain()
-    class Ethereum(val type: EthereumType) : BlockChain()
-}
-
-data class Coin(val title: String, val coinCode: CoinCode, val blockChain: BlockChain)
+data class Coin(val title: String, val code: CoinCode, val type: CoinType)
