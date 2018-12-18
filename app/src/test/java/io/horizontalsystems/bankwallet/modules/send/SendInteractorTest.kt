@@ -1,115 +1,116 @@
-//package io.horizontalsystems.bankwallet.modules.send
-//
-//import io.horizontalsystems.bankwallet.core.BitcoinAdapter
-//import io.horizontalsystems.bankwallet.core.IClipboardManager
-//import io.horizontalsystems.bankwallet.core.IExchangeRateManager
-//import io.horizontalsystems.bankwallet.entities.CurrencyValue
-//import io.horizontalsystems.bankwallet.entities.Currency
-//import io.horizontalsystems.bankwallet.entities.coins.CoinOld
-//import io.horizontalsystems.bankwallet.entities.coins.bitcoin.Bitcoin
-//import io.horizontalsystems.bankwallet.modules.RxBaseTest
-//import com.nhaarman.mockito_kotlin.verify
-//import com.nhaarman.mockito_kotlin.whenever
-//import junit.framework.Assert
-//import org.junit.Before
-//import org.junit.Test
-//import org.mockito.Mockito
-//
-//class SendInteractorTest {
-//
-//    private val delegate = Mockito.mock(SendModule.IInteractorDelegate::class.java)
-//    private val clipboardManager = Mockito.mock(IClipboardManager::class.java)
-//    private val bitcoinAdapter = Mockito.mock(BitcoinAdapter::class.java)
-//    private val exchangeRateManager = Mockito.mock(IExchangeRateManager::class.java)
-//
-//    private val interactor = SendInteractor(clipboardManager, bitcoinAdapter, exchangeRateManager)
-//    private val currencyUsd = Currency(code = "USD", symbol = "\u0024")
-//    private var exchangeRates = mutableMapOf(Bitcoin() as CoinOld to CurrencyValue(currencyUsd, 10_000.0))
-//
-//    @Before
-//    fun setUp() {
-//        RxBaseTest.setup()
-//        interactor.delegate = delegate
-//    }
-//
-//    @Test
-//    fun getCopiedText() {
-//        interactor.getCopiedText()
-//
-//        verify(clipboardManager).getCopiedText()
-//    }
-//
-//    @Test
-//    fun returnCopiedText() {
-//        val copiedText = "copied_address"
-//
-//        whenever(clipboardManager.getCopiedText()).thenReturn(copiedText)
-//
-//        Assert.assertEquals(copiedText, interactor.getCopiedText())
-//    }
-//
-//    @Test
-//    fun fetchExchangeRate() {
-//        val coin = Bitcoin()
-//
-//        whenever(exchangeRateManager.getExchangeRates()).thenReturn(exchangeRates)
-//        whenever(bitcoinAdapter.coin).thenReturn(coin)
-//
-//        interactor.fetchExchangeRate()
-//
-//        verify(delegate).didFetchExchangeRate(10_000.0)
-//    }
-//
-//    @Test
-//    fun send() {
-//        val address = "address"
-//        val amountBTC = 1.0
-//
-//        interactor.send(address, amountBTC)
-//
-//        verify(bitcoinAdapter).send(address, amountBTC)
-//    }
-//
-////    @Test
-////    fun send_invalidAddress() {
-////
-////        val coinCode = "BTC"
-////        val address = "address"
-////        val amountBTC = 1.0
-////        val amountSatoshi = 100_000_000L
-////
-////        val exception = InvalidAddress(Throwable())
-////
-////        interactor.send(coinCode, address, amountBTC)
-////
-////        verify(delegate).didFailToSend(exception)
-////    }
-//
-////    @Test
-////    fun send_insufficientAmount() {
-////
-////        val coinCode = "BTC"
-////        val address = "address"
-////        val amountBTC = 1.0
-////        val amountSatoshi = 100_000_000L
-////
-////        val exception = NotEnoughFundsException(Throwable())
-////
-////        interactor.send(coinCode, address, amountBTC)
-////
-////        verify(delegate).didFailToSend(exception)
-////    }
-//
-//
-//    @Test
-//    fun send_success() {
-//
-//        val address = "address"
-//        val amountBTC = 1.0
-//
-//        interactor.send(address, amountBTC)
-//
-//        verify(delegate).didSend()
-//    }
-//
-//}
+package io.horizontalsystems.bankwallet.modules.send
+
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.argThat
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
+import io.horizontalsystems.bankwallet.core.IAdapter
+import io.horizontalsystems.bankwallet.core.IClipboardManager
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.RateManager
+import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.entities.Rate
+import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.RxBaseTest
+import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import io.reactivex.Maybe
+import org.junit.Before
+import org.junit.Test
+import org.mockito.Mockito.mock
+
+class SendInteractorTest {
+
+    private val delegate = mock(SendModule.IInteractorDelegate::class.java)
+    private val clipboardManager = mock(IClipboardManager::class.java)
+
+    private val currencyManager = mock(CurrencyManager::class.java)
+    private val rateManager = mock(RateManager::class.java)
+    private val wallet = mock(Wallet::class.java)
+    private val adapter = mock(IAdapter::class.java)
+
+    private val currency = Currency("USD", symbol = "\u0024")
+    private val coin = CoinCode()
+    private val rate = Rate(coin, currency.code, 0.1, timestamp = System.currentTimeMillis())
+    private val userInput = mock(SendModule.UserInput::class.java)
+
+    private lateinit var interactor: SendInteractor
+
+    @Before
+    fun setup() {
+        RxBaseTest.setup()
+
+        whenever(wallet.coinCode).thenReturn(coin)
+        whenever(wallet.adapter).thenReturn(adapter)
+        whenever(currencyManager.baseCurrency).thenReturn(currency)
+        whenever(rateManager.rate(coin, currency.code)).thenReturn(Maybe.just(rate))
+
+        interactor = SendInteractor(currencyManager, rateManager, clipboardManager, wallet)
+        interactor.delegate = delegate
+    }
+
+    @Test
+    fun retrieveRate() {
+        interactor.retrieveRate()
+
+        verify(rateManager).rate(coin, currency.code)
+    }
+
+    @Test
+    fun send() {
+        interactor.retrieveRate() // set rate
+
+        whenever(userInput.address).thenReturn("abc")
+        whenever(userInput.amount).thenReturn(1.0)
+
+        whenever(adapter.send(any(), any(), any())).then {
+            val completion = it.arguments[2] as (Throwable?) -> (Unit)
+            completion.invoke(null)
+        }
+
+        interactor.send(userInput)
+
+        verify(delegate).didSend()
+    }
+
+    @Test
+    fun send_emptyAddress() {
+        whenever(userInput.address).thenReturn(null)
+
+        interactor.send(userInput)
+
+        verify(delegate).didFailToSend(argThat {
+            this is SendInteractor.SendError.NoAddress
+        })
+    }
+
+    @Test
+    fun send_emptyAmount() {
+        whenever(userInput.address).thenReturn("abc")
+        whenever(userInput.amount).thenReturn(0.0)
+
+        interactor.send(userInput)
+
+        verify(delegate).didFailToSend(argThat {
+            this is SendInteractor.SendError.NoAmount
+        })
+    }
+
+    @Test
+    fun send_error() {
+        interactor.retrieveRate() // set rate
+
+        val exception = Exception("InsufficientAmount")
+
+        whenever(userInput.address).thenReturn("abc")
+        whenever(userInput.amount).thenReturn(1.0)
+        whenever(adapter.send(any(), any(), any())).then {
+            val completion = it.arguments[2] as (Throwable?) -> Unit
+            completion.invoke(exception)
+        }
+
+        interactor.send(userInput)
+
+        verify(delegate).didFailToSend(exception)
+    }
+
+}

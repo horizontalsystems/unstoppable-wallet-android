@@ -21,9 +21,7 @@ class PinInteractor(
 
     override fun save(pin: String) {
         keystoreSafeExecute.safeExecute(
-                action = Runnable {
-                    pinManager.store(pin)
-                },
+                action = Runnable { pinManager.store(pin) },
                 onSuccess = Runnable { delegate?.didSavePin() },
                 onFailure = Runnable { delegate?.didFailToSavePin() }
         )
@@ -37,7 +35,10 @@ class PinInteractor(
         keystoreSafeExecute.safeExecute(
                 action = Runnable {
                     wordsManager.safeLoad()
-                    wordsManager.loggedInSubject.onNext(if (localStorage.isNewWallet) LogInState.CREATE else LogInState.RESTORE)
+                    wordsManager.loggedInSubject.onNext(if (localStorage.isNewWallet)
+                        LogInState.CREATE
+                    else
+                        LogInState.RESTORE)
                 },
                 onSuccess = Runnable { delegate?.didStartedAdapters() }
         )

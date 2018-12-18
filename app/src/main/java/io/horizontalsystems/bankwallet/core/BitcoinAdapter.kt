@@ -14,17 +14,17 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
 
     private var bitcoinKit = BitcoinKit(words, network, newWallet = newWallet)
     private val satoshisInBitcoin = Math.pow(10.0, 8.0)
+    private val progressSubject: BehaviorSubject<Double> = BehaviorSubject.createDefault(0.0)
 
     override val balance: Double get() = bitcoinKit.balance / satoshisInBitcoin
     override val balanceSubject: PublishSubject<Double> = PublishSubject.create()
 
-    val progressSubject: BehaviorSubject<Double> = BehaviorSubject.createDefault(0.0)
-
     override var state: AdapterState = AdapterState.Syncing(progressSubject)
-        set(value) {
+        set (value) {
             field = value
             stateSubject.onNext(value)
         }
+
     override val stateSubject: PublishSubject<AdapterState> = PublishSubject.create()
 
     override val confirmationsThreshold: Int = 6

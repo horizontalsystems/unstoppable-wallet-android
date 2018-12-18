@@ -17,14 +17,9 @@ class WalletPresenter(
 
     var view: WalletModule.IView? = null
 
-    override fun onReceive(coin: String) {
-        router.openReceiveDialog(coin)
-    }
-
-    override fun onPay(coin: String) {
-        router.openSendDialog(coin)
-    }
-
+    //
+    // WalletModule.IViewDelegate
+    //
     override fun viewDidLoad() {
         view?.setTitle(R.string.Balance_Title)
         interactor.loadWallets()
@@ -35,6 +30,17 @@ class WalletPresenter(
         interactor.refresh()
     }
 
+    override fun onReceive(coin: String) {
+        router.openReceiveDialog(coin)
+    }
+
+    override fun onPay(coin: String) {
+        router.openSendDialog(coin)
+    }
+
+    //
+    // WalletModule.IInteractorDelegate
+    //
     override fun didUpdate() {
         updateView()
     }

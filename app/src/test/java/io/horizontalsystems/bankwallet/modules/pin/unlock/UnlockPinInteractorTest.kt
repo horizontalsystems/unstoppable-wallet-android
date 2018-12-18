@@ -157,8 +157,6 @@ class UnlockPinInteractorTest {
     }
 
 
-
-
     @Test
     fun updateFailedAttempt() {
         val pin = "0000"

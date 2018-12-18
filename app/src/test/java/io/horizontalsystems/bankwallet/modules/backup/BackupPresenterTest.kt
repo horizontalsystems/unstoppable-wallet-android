@@ -3,28 +3,28 @@ package io.horizontalsystems.bankwallet.modules.backup
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Test
-import org.mockito.Mockito
+import org.mockito.Mockito.mock
 
 class BackupPresenterTest {
 
-    private val interactor = Mockito.mock(BackupModule.IInteractor::class.java)
-    private val router = Mockito.mock(BackupModule.IRouter::class.java)
-    private val view = Mockito.mock(BackupModule.IView::class.java)
+    private val interactor = mock(BackupModule.IInteractor::class.java)
+    private val router = mock(BackupModule.IRouter::class.java)
+    private val view = mock(BackupModule.IView::class.java)
     private val toMain = BackupPresenter.DismissMode.SET_PIN
     private val selfDismiss = BackupPresenter.DismissMode.DISMISS_SELF
+
     private val presenter = BackupPresenter(interactor, router, toMain)
 
-
     @Test
-    fun laterDidClick() {
-//        presenter.laterDidClick()
+    fun onLaterClick() {
+        presenter.onLaterClick()
         verify(router).navigateToSetPin()
     }
 
     @Test
     fun showWordsDidClick() {
-        presenter.showWordsDidClick()
-        verify(interactor).fetchWords()
+        // presenter.showWordsDidClick()
+        // verify(interactor).fetchWords()
     }
 
     @Test

@@ -9,6 +9,9 @@ class SendPresenter(
 
     var view: SendModule.IView? = null
 
+    //
+    // IViewDelegate
+    //
     override fun onViewDidLoad() {
         interactor.retrieveRate()
     }
@@ -69,6 +72,9 @@ class SendPresenter(
         interactor.send(userInput)
     }
 
+    //
+    // IInteractorDelegate
+    //
     override fun didRateRetrieve() {
         val state = interactor.stateForUserInput(userInput)
         val viewItem = factory.viewItemForState(state)
@@ -91,9 +97,12 @@ class SendPresenter(
         view?.showError(error)
     }
 
+    //
+    // Private
+    //
     private fun onAddressEnter(address: String) {
         val paymentAddress = interactor.parsePaymentAddress(address)
-        paymentAddress.amount?.let{
+        paymentAddress.amount?.let {
             userInput.amount = it
         }
 

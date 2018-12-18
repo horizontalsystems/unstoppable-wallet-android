@@ -1,63 +1,83 @@
-//package io.horizontalsystems.bankwallet.modules.wallet
-//
-//import io.horizontalsystems.bankwallet.entities.Currency
-//import org.junit.Before
-//import org.junit.Test
-//import org.mockito.Mockito.mock
-//import org.mockito.Mockito.verify
-//
-//class WalletPresenterTest {
-//
-//    private val interactor = mock(WalletModule.IInteractor::class.java)
-//    private val view = mock(WalletModule.IView::class.java)
-//    private val router = mock(WalletModule.IRouter::class.java)
-//
-//    private val presenter = WalletPresenter(interactor, router)
-//    private val dollarCurrency = Currency(code = "USD", symbol = "\u0024")
-//
-//
-//    @Before
-//    fun before() {
-//        presenter.view = view
-//    }
-//
-//    @Test
-//    fun start() {
-//        presenter.viewDidLoad()
-//
-//        verify(interactor).notifyWalletBalances()
-//    }
-//
-////    @Test
-////    fun updateView() {
-////
-////        val coinValues = mutableMapOf<String, CoinValue>()
-////        val rates = mutableMapOf<CoinOld, CurrencyValue>()
-////        val progresses = mutableMapOf<String, BehaviorSubject<Double>>()
-////        val coin1 = Bitcoin()
-////        val coin2 = BitcoinCash()
-////        val bhvSubject: BehaviorSubject<Double> = BehaviorSubject.create()
-////
-////        val expectedTotalBalance = CurrencyValue(dollarCurrency, 3500.0)
-////
-////        val adapterId1 = "id1"
-////        val adapterId2 = "id2"
-////        coinValues[adapterId1] = CoinValue(coin1, 0.5)
-////        coinValues[adapterId2] = CoinValue(coin2, 1.0)
-////        progresses[adapterId1] = bhvSubject
-////        progresses[adapterId2] = bhvSubject
-////        rates[coin1] = CurrencyValue(dollarCurrency, 5000.0)
-////        rates[coin2] = CurrencyValue(dollarCurrency, 1000.0)
-////
-////        presenter.didInitialFetch(coinValues, rates, progresses)
-////
-////        val expectedViewItems = listOf(
-////                WalletBalanceViewItem(adapterId1, CoinValue(coin1, 0.5), CurrencyValue(dollarCurrency, 5000.0), CurrencyValue(dollarCurrency, 2500.0), bhvSubject),
-////                WalletBalanceViewItem(adapterId2, CoinValue(coin2, 1.0), CurrencyValue(dollarCurrency, 1000.0), CurrencyValue(dollarCurrency, 1000.0), bhvSubject)
-////        )
-////
-////        verify(view).showWalletBalances(expectedViewItems)
-////        verify(view).showTotalBalance(expectedTotalBalance)
-////    }
-//
-//}
+package io.horizontalsystems.bankwallet.modules.wallet
+
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.whenever
+import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.AdapterState
+import io.horizontalsystems.bankwallet.core.IAdapter
+import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.entities.Rate
+import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.RxBaseTest
+import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import io.reactivex.Maybe
+import org.junit.Before
+import org.junit.Test
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
+
+class WalletPresenterTest {
+
+    private val interactor = mock(WalletModule.IInteractor::class.java)
+    private val view = mock(WalletModule.IView::class.java)
+    private val router = mock(WalletModule.IRouter::class.java)
+
+    private val wallet = mock(Wallet::class.java)
+    private val adapter = mock(IAdapter::class.java)
+    private val coin: CoinCode = "BTC"
+
+    private lateinit var presenter: WalletPresenter
+
+    @Before
+    fun setup() {
+        RxBaseTest.setup()
+
+        val currency = Currency("USD", "\u0024")
+        val rate = Rate(coin, "USD", 0.1, System.currentTimeMillis())
+        val wallets = listOf(wallet)
+        val state = AdapterState.Synced
+
+        whenever(wallet.coinCode).thenReturn(coin)
+        whenever(wallet.adapter).thenReturn(adapter)
+        whenever(wallet.adapter.state).thenReturn(state)
+        whenever(interactor.baseCurrency).thenReturn(currency)
+        whenever(interactor.wallets).thenReturn(wallets)
+        whenever(interactor.rate(any())).thenReturn(Maybe.just(rate))
+
+        presenter = WalletPresenter(interactor, router)
+        presenter.view = view
+    }
+
+    @Test
+    fun viewDidLoad() {
+        presenter.viewDidLoad()
+
+        verify(interactor).loadWallets()
+
+        verify(view).setTitle(R.string.Balance_Title)
+        verify(view).updateBalanceColor(any())
+        verify(view).show(totalBalance = any())
+        verify(view).show(wallets = any())
+    }
+
+    @Test
+    fun refresh() {
+        presenter.refresh()
+
+        verify(interactor).refresh()
+    }
+
+    @Test
+    fun onReceive() {
+        presenter.onReceive(coin)
+
+        verify(router).openReceiveDialog(coin)
+    }
+
+    @Test
+    fun onPay() {
+        presenter.onPay(coin)
+
+        verify(router).openSendDialog(coin)
+    }
+}
