@@ -2,68 +2,48 @@
 //
 //import com.nhaarman.mockito_kotlin.any
 //import com.nhaarman.mockito_kotlin.whenever
-//import io.horizontalsystems.bankwallet.core.BitcoinAdapter
-//import io.horizontalsystems.bankwallet.core.IAdapterManager
-//import io.horizontalsystems.bankwallet.core.ICurrencyManager
-//import io.horizontalsystems.bankwallet.core.INetworkManager
-//import io.horizontalsystems.bankwallet.entities.*
-//import io.horizontalsystems.bankwallet.entities.Currency
-//import io.horizontalsystems.bankwallet.entities.coins.bitcoin.Bitcoin
+//import io.horizontalsystems.bankwallet.core.IAdapter
+//import io.horizontalsystems.bankwallet.core.IWalletManager
+//import io.horizontalsystems.bankwallet.entities.Wallet
 //import io.horizontalsystems.bankwallet.modules.RxBaseTest
-//import io.reactivex.Flowable
 //import io.reactivex.subjects.PublishSubject
 //import org.junit.Before
 //import org.junit.Test
 //import org.mockito.Mockito.mock
 //import org.mockito.Mockito.verify
-//import java.util.*
 //
 //
 //class TransactionsInteractorTest {
 //
+//    private val walletManager = mock(IWalletManager::class.java)
+//    private val dataSource = mock(TransactionsModule.ITransactionRecordDataSource::class.java)
 //    private val delegate = mock(TransactionsModule.IInteractorDelegate::class.java)
-//    private val networkManager = mock(INetworkManager::class.java)
-//    private val adapterManager = mock(IAdapterManager::class.java)
-//    private val currencyManager = mock(ICurrencyManager::class.java)
-//    private val bitcoinAdapter = mock(BitcoinAdapter::class.java)
 //
-//    private var coin = Bitcoin()
-//    private var words = listOf("used", "ugly", "meat", "glad", "balance", "divorce", "inner", "artwork", "hire", "invest", "already", "piano")
-//    private var wordsHash = words.joinToString(" ")
-//    private var adapterId: String = "${wordsHash.hashCode()}-${coin.code}"
-//    private val baseCurrency = Currency(code = "USD", symbol = "\u0024")
-//
-//
-//    private val subject: PublishSubject<Currency> = PublishSubject.create()
+//    private val wallet = mock(Wallet::class.java)
+//    private val adapter = mock(IAdapter::class.java)
+//    private val blockHeightSubject = PublishSubject.create<Int>()
 //
 //    private lateinit var interactor: TransactionsInteractor
-//
 //
 //    @Before
 //    fun before() {
 //        RxBaseTest.setup()
 //
-//        val rateResponse = Flowable.just(6300.0)
-//        whenever(networkManager.getRate(any(), any(), any())).thenReturn(rateResponse)
-//        whenever(currencyManager.baseCurrency).thenReturn(baseCurrency)
-//        whenever(currencyManager.subject).thenReturn(subject)
+//        val wallets = listOf(wallet)
+//        val walletsSubject = PublishSubject.create<List<Wallet>>()
 //
-//        interactor = TransactionsInteractor(adapterManager, networkManager, currencyManager)
+//        whenever(adapter.lastBlockHeightSubject).thenReturn(blockHeightSubject)
 //
+//        whenever(wallet.adapter).thenReturn(adapter)
+//        whenever(walletManager.wallets).thenReturn(wallets)
+//        whenever(walletManager.walletsSubject).thenReturn(walletsSubject)
+//
+//        interactor = TransactionsInteractor(walletManager, dataSource)
 //        interactor.delegate = delegate
 //    }
 //
 //    @Test
 //    fun retrieveFilters() {
-//        val subject: PublishSubject<Any> = PublishSubject.create()
-//        whenever(adapterManager.adapters).thenReturn(mutableListOf(bitcoinAdapter))
-//        whenever(adapterManager.subject).thenReturn(PublishSubject.create<Boolean>())
-//
-//        whenever(bitcoinAdapter.id).thenReturn(adapterId)
-//        whenever(bitcoinAdapter.coin).thenReturn(coin)
-//        whenever(bitcoinAdapter.balance).thenReturn(0.0)
-//        whenever(bitcoinAdapter.transactionRecordsSubject).thenReturn(subject)
-//
 //        interactor.retrieveFilters()
 //
 //        verify(delegate).didRetrieveFilters(any())

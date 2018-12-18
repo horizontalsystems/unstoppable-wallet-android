@@ -19,6 +19,7 @@ class WalletInteractor(
 ) : WalletModule.IInteractor {
 
     var delegate: WalletModule.IInteractorDelegate? = null
+
     private var disposables: CompositeDisposable = CompositeDisposable()
 
     override fun loadWallets() {

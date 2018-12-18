@@ -18,12 +18,7 @@ class ReceivePresenter(private val interactor: ReceiveModule.IInteractor) : Rece
     }
 
     override fun didFailToReceiveAddress(exception: Exception) {
-        view?.showError(getError(exception))
-    }
-
-    private fun getError(exception: Exception) = when (exception) {
-//        is UnsupportedBlockchain -> R.string.Error_UnsupportedBlockchain
-        else -> R.string.Error
+        view?.showError(R.string.Error)
     }
 
     override fun onCopyClick(index: Int) {
