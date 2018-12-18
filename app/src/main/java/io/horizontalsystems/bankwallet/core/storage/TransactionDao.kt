@@ -5,7 +5,7 @@ import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
-import io.horizontalsystems.bankwallet.modules.transactions.Coin
+import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.Flowable
 import io.reactivex.Maybe
 
@@ -27,8 +27,8 @@ interface TransactionDao {
     @Query("SELECT * FROM TransactionRecord ORDER BY timestamp DESC")
     fun getAll(): Flowable<List<TransactionRecord>>
 
-    @Query("SELECT * FROM TransactionRecord where coin = :coin ORDER BY timestamp DESC")
-    fun getAll(coin: Coin): Flowable<List<TransactionRecord>>
+    @Query("SELECT * FROM TransactionRecord where coinCode = :coinCode ORDER BY timestamp DESC")
+    fun getAll(coinCode: CoinCode): Flowable<List<TransactionRecord>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(transactionRecords: List<TransactionRecord>)

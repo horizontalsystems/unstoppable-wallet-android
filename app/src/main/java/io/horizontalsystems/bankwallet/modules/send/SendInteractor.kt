@@ -4,7 +4,7 @@ import io.horizontalsystems.bankwallet.core.IClipboardManager
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.RateManager
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.modules.transactions.Coin
+import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -21,8 +21,8 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
 
     var delegate: SendModule.IInteractorDelegate? = null
 
-    override val coin: Coin
-        get() = wallet.coin
+    override val coinCode: CoinCode
+        get() = wallet.coinCode
 
     override val addressFromClipboard: String?
         get() = clipboardManager.getCopiedText()
@@ -32,7 +32,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
 
     override fun retrieveRate() {
         disposables.add(
-                rateManager.rate(wallet.coin, currencyManager.baseCurrency.code)
+                rateManager.rate(wallet.coinCode, currencyManager.baseCurrency.code)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doFinally {
@@ -59,7 +59,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
 
     override fun stateForUserInput(input: SendModule.UserInput): SendModule.State {
 
-        val coin = wallet.coin
+        val coin = wallet.coinCode
         val adapter = wallet.adapter
         val baseCurrency = currencyManager.baseCurrency
         val rateValue = rate?.value

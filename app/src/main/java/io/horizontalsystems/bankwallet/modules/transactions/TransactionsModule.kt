@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import java.util.*
 
-typealias Coin = String
+typealias CoinCode = String
 
 data class TransactionViewItem(
         val transactionHash: String,
@@ -53,7 +53,7 @@ object TransactionsModule {
         fun viewDidLoad()
         fun onTransactionItemClick(transaction: TransactionViewItem)
         fun refresh()
-        fun onFilterSelect(coin: Coin?)
+        fun onFilterSelect(coinCode: CoinCode?)
         fun onClear()
 
         val itemsCount: Int
@@ -63,7 +63,7 @@ object TransactionsModule {
     interface IInteractor {
         fun retrieveFilters()
         fun refresh()
-        fun setCoin(coin: Coin?)
+        fun setCoin(coinCode: CoinCode?)
 
         val recordsCount: Int
         fun recordForIndex(index: Int): TransactionRecord
@@ -71,7 +71,7 @@ object TransactionsModule {
     }
 
     interface IInteractorDelegate {
-        fun didRetrieveFilters(filters: List<Coin>)
+        fun didRetrieveFilters(filters: List<CoinCode>)
         fun didUpdateDataSource()
         fun didRefresh()
     }
@@ -86,7 +86,7 @@ object TransactionsModule {
 
         val count: Int
         fun recordForIndex(index: Int): TransactionRecord
-        fun setCoin(coin: Coin?)
+        fun setCoin(coinCode: CoinCode?)
     }
 
     interface ITransactionRecordDataSourceDelegate {

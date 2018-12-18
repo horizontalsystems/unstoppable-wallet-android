@@ -18,7 +18,7 @@ class TransactionRateSyncer(
                 .subscribe { records ->
                     records.forEach { record ->
                         if (record.timestamp > 0L) {
-                            disposables.add(networkManager.getRate(coin = record.coin, currency = currencyCode, timestamp = record.timestamp)
+                            disposables.add(networkManager.getRate(coinCode = record.coinCode, currency = currencyCode, timestamp = record.timestamp)
                                     .subscribe {
                                         storage.set(rate = it, transactionHash = record.transactionHash)
                                     })

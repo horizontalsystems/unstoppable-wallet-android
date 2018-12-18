@@ -18,8 +18,8 @@ class TransactionsPresenter(private val interactor: TransactionsModule.IInteract
         interactor.refresh()
     }
 
-    override fun onFilterSelect(coin: Coin?) {
-        interactor.setCoin(coin)
+    override fun onFilterSelect(coinCode: CoinCode?) {
+        interactor.setCoin(coinCode)
     }
 
     override fun onClear() {
@@ -34,7 +34,7 @@ class TransactionsPresenter(private val interactor: TransactionsModule.IInteract
         return factory.item(record)
     }
 
-    override fun didRetrieveFilters(filters: List<Coin>) {
+    override fun didRetrieveFilters(filters: List<CoinCode>) {
         val filterItems = filters.map {
             TransactionFilterItem(it, it)
         }.toMutableList()

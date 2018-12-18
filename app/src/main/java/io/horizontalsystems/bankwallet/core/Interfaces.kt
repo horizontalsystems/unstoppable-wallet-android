@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.core
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.modules.transactions.Coin
+import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.Flowable
 import io.reactivex.Maybe
 import io.reactivex.subjects.BehaviorSubject
@@ -14,7 +14,7 @@ interface IWalletManager {
     val wallets: List<Wallet>
     val walletsSubject: PublishSubject<List<Wallet>>
 
-    fun initWallets(words: List<String>, coins: List<Coin>, newWallet: Boolean)
+    fun initWallets(words: List<String>, coins: List<CoinCode>, newWallet: Boolean)
     fun refreshWallets()
     fun clearWallets()
 }
@@ -48,7 +48,7 @@ interface IRandomProvider {
 
 interface INetworkManager {
     fun getLatestRate(coin: String, currency: String): Flowable<LatestRate>
-    fun getRate(coin: String, currency: String, timestamp: Long): Flowable<Double>
+    fun getRate(coinCode: String, currency: String, timestamp: Long): Flowable<Double>
 }
 
 interface IEncryptionManager {
@@ -176,8 +176,8 @@ interface IRateSyncerDelegate {
 }
 
 interface IRateStorage {
-    fun rate(coin: Coin, currencyCode: String): Maybe<Rate>
-    fun save(latestRate: LatestRate, coin: Coin, currencyCode: String)
+    fun rate(coinCode: CoinCode, currencyCode: String): Maybe<Rate>
+    fun save(latestRate: LatestRate, coinCode: CoinCode, currencyCode: String)
     fun getAll(): Flowable<List<Rate>>
     fun deleteAll()
 }

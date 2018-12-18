@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.send
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
-import io.horizontalsystems.bankwallet.modules.transactions.Coin
+import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 
 class SendViewModel : ViewModel(), SendModule.IRouter, SendModule.IView {
 
@@ -11,7 +11,7 @@ class SendViewModel : ViewModel(), SendModule.IRouter, SendModule.IView {
 
     val hintInfoLiveData = MutableLiveData<SendModule.HintInfo>()
     val sendButtonEnabledLiveData = MutableLiveData<Boolean>()
-    val coinLiveData = MutableLiveData<Coin>()
+    val coinLiveData = MutableLiveData<CoinCode>()
     val amountInfoLiveData = MutableLiveData<SendModule.AmountInfo>()
     val switchButtonEnabledLiveData = MutableLiveData<Boolean>()
     val addressInfoLiveData = MutableLiveData<SendModule.AddressInfo>()
@@ -38,8 +38,8 @@ class SendViewModel : ViewModel(), SendModule.IRouter, SendModule.IView {
         delegate.onViewDidLoad()
     }
 
-    override fun setCoin(coin: Coin) {
-        coinLiveData.value = coin
+    override fun setCoin(coinCode: CoinCode) {
+        coinLiveData.value = coinCode
     }
 
     override fun setAmountInfo(amountInfo: SendModule.AmountInfo?) {

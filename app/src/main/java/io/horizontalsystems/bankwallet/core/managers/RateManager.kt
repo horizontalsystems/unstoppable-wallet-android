@@ -48,7 +48,7 @@ class RateManager(
     }
 
     private fun updateRates() {
-        val coins = walletManager.wallets.map { it.coin }
+        val coins = walletManager.wallets.map { it.coinCode }
         val currencyCode = currencyManager.baseCurrency.code
 
         syncer.sync(coins = coins, currencyCode = currencyCode)
@@ -60,7 +60,7 @@ class RateManager(
         }
         latestRates[coin]?.set(currencyCode, latestRate)
 
-        storage.save(latestRate = latestRate, coin = coin, currencyCode = currencyCode)
+        storage.save(latestRate = latestRate, coinCode = coin, currencyCode = currencyCode)
     }
 
     override fun onFire() {

@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.app.Application
-import android.arch.persistence.room.Room
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import com.squareup.leakcanary.LeakCanary
@@ -96,7 +95,7 @@ class App : Application() {
         periodicTimer = PeriodicTimer(delay = 3 * 60 * 1000)
         rateSyncer = RateSyncer(networkManager, periodicTimer)
 
-        appDatabase = Room.databaseBuilder(this, AppDatabase::class.java, "dbBankWallet").build()
+        appDatabase = AppDatabase.getInstance(this)
         transactionStorage = TransactionRepository(appDatabase)
 
         rateStorage = RatesRepository(appDatabase)

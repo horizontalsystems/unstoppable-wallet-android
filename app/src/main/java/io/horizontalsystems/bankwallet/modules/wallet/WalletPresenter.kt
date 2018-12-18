@@ -45,7 +45,7 @@ class WalletPresenter(
 
     private fun updateView() {
         val wallets = interactor.wallets
-        val rateObservables = wallets.map { interactor.rate(it.coin) }
+        val rateObservables = wallets.map { interactor.rate(it.coinCode) }
 
         Maybe.merge(rateObservables)
                 .toList()
@@ -59,7 +59,7 @@ class WalletPresenter(
                     var allSynced = true
 
                     wallets.forEach { wallet ->
-                        val rate = rates.firstOrNull { it.coin == wallet.coin }
+                        val rate = rates.firstOrNull { it.coinCode == wallet.coinCode }
                         val balance = wallet.adapter.balance
 
                         val rateExpired = rate?.expired ?: true
@@ -69,7 +69,7 @@ class WalletPresenter(
                         }
 
                         viewItems.add(WalletViewItem(
-                                coinValue = CoinValue(coin = wallet.coin, value = balance),
+                                coinValue = CoinValue(coinCode = wallet.coinCode, value = balance),
                                 exchangeValue = rate?.let { CurrencyValue(currency = currency, value = it.value) },
                                 currencyValue = rate?.let { CurrencyValue(currency = currency, value = balance * it.value) },
                                 state = wallet.adapter.state,

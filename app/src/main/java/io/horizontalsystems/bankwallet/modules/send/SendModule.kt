@@ -5,14 +5,14 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
-import io.horizontalsystems.bankwallet.modules.transactions.Coin
+import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import io.horizontalsystems.bankwallet.viewHelpers.ValueFormatter
 
 object SendModule {
 
     interface IView {
-        fun setCoin(coin: Coin)
+        fun setCoin(coinCode: CoinCode)
 
         fun setAmountInfo(amountInfo: AmountInfo?)
         fun setSwitchButtonEnabled(enabled: Boolean)
@@ -43,7 +43,7 @@ object SendModule {
     }
 
     interface IInteractor {
-        val coin: Coin
+        val coinCode: CoinCode
         val addressFromClipboard: String?
 
         fun retrieveRate()
@@ -63,8 +63,8 @@ object SendModule {
     interface IRouter {
     }
 
-    fun init(view: SendViewModel, router: IRouter, coin: String) {
-        val wallet = App.walletManager.wallets.first { it.coin == coin }
+    fun init(view: SendViewModel, router: IRouter, coinCode: String) {
+        val wallet = App.walletManager.wallets.first { it.coinCode == coinCode }
         val interactor = SendInteractor(App.currencyManager, App.rateManager, TextHelper, wallet)
         val presenter = SendPresenter(interactor, router, StateViewItemFactory(), UserInput())
 //

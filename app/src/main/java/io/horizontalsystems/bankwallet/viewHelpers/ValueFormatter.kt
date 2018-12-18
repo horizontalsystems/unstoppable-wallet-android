@@ -35,7 +35,7 @@ object ValueFormatter {
 
         val formattedValue = customFormatter.format(value) ?: run { return null }
 
-        var result = "$formattedValue ${coinValue.coin}"
+        var result = "$formattedValue ${coinValue.coinCode}"
 
         if (explicitSign) {
             val sign = if (coinValue.value < 0) "-" else "+"

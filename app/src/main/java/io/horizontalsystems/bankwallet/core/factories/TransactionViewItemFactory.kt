@@ -19,11 +19,11 @@ class TransactionViewItemFactory(
     private val latestRateFallbackThreshold: Long = 60 // minutes
 
     fun item(record: TransactionRecord): TransactionViewItem {
-        val adapter = walletManager.wallets.firstOrNull { it.coin == record.coin }?.adapter
+        val adapter = walletManager.wallets.firstOrNull { it.coinCode == record.coinCode }?.adapter
 
         val rateValue = when {
             record.rate != 0.0 -> record.rate
-            DateHelper.getSecondsAgo(record.timestamp * 1000) < latestRateFallbackThreshold * 60 -> rateManager.latestRates[record.coin]?.get(currencyManager.baseCurrency.code)?.value
+            DateHelper.getSecondsAgo(record.timestamp * 1000) < latestRateFallbackThreshold * 60 -> rateManager.latestRates[record.coinCode]?.get(currencyManager.baseCurrency.code)?.value
             else -> null
         }
 
@@ -54,7 +54,7 @@ class TransactionViewItemFactory(
 
         return TransactionViewItem(
                 record.transactionHash,
-                CoinValue(record.coin, record.amount),
+                CoinValue(record.coinCode, record.amount),
                 convertedValue?.let { CurrencyValue(currencyManager.baseCurrency, it) },
                 record.from.firstOrNull { it.mine != incoming }?.address,
                 toAddress,
