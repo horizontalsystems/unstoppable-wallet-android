@@ -2,21 +2,16 @@ package io.horizontalsystems.bankwallet.core.factories
 
 import io.horizontalsystems.bankwallet.core.BitcoinAdapter
 import io.horizontalsystems.bankwallet.core.EthereumAdapter
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
-import io.horizontalsystems.bitcoinkit.BitcoinKit
-import io.horizontalsystems.ethereumkit.EthereumKit
+import io.horizontalsystems.bankwallet.core.IAppConfigProvider
+import io.horizontalsystems.bankwallet.entities.CoinType
 
-class AdapterFactory {
+class AdapterFactory(private val appConfigProvider: IAppConfigProvider) {
 
-    fun adapterForCoin(coinCode: CoinCode, words: List<String>, newWallet: Boolean) = when (coinCode) {
-        "BTC" -> BitcoinAdapter(words, BitcoinKit.NetworkType.MainNet, newWallet)
-        "BTCt" -> BitcoinAdapter(words, BitcoinKit.NetworkType.TestNet, newWallet)
-        "BTCr" -> BitcoinAdapter(words, BitcoinKit.NetworkType.RegTest, newWallet)
-        "BCH" -> BitcoinAdapter(words, BitcoinKit.NetworkType.MainNetBitCash, newWallet)
-        "BCHt" -> BitcoinAdapter(words, BitcoinKit.NetworkType.TestNetBitCash, newWallet)
-        "ETH" -> EthereumAdapter(words, EthereumKit.NetworkType.MainNet)
-        "ETHt" -> EthereumAdapter(words, EthereumKit.NetworkType.Kovan)
-        else -> null
+    fun adapterForCoin(coinType: CoinType, words: List<String>, newWallet: Boolean) = when (coinType) {
+            is CoinType.Bitcoin -> BitcoinAdapter.createBitcoin(words, appConfigProvider.testMode, newWallet)
+            is CoinType.BitcoinCash -> BitcoinAdapter.createBitcoinCash(words, appConfigProvider.testMode, newWallet)
+            is CoinType.Ethereum -> EthereumAdapter.createEthereum(words, appConfigProvider.testMode)
+            is CoinType.Erc20 -> null
     }
 
 }

@@ -36,7 +36,6 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
     override val debugInfo: String = ""
 
     override val receiveAddress: String get() = bitcoinKit.receiveAddress()
-
     override fun start() {
         bitcoinKit.listener = this
         bitcoinKit.start()
@@ -141,4 +140,18 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
 
         return record
     }
+
+    companion object {
+
+        fun createBitcoin(words: List<String>, testMode: Boolean, newWallet: Boolean): BitcoinAdapter{
+            val network = if (testMode) BitcoinKit.NetworkType.TestNet else BitcoinKit.NetworkType.MainNet
+            return BitcoinAdapter(words, network, newWallet)
+        }
+
+        fun createBitcoinCash(words: List<String>, testMode: Boolean, newWallet: Boolean): BitcoinAdapter{
+            val network = if (testMode) BitcoinKit.NetworkType.TestNetBitCash else BitcoinKit.NetworkType.MainNetBitCash
+            return BitcoinAdapter(words, network, newWallet)
+        }
+    }
+
 }
