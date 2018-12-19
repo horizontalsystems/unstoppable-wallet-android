@@ -36,6 +36,11 @@ In case of a device loss or replacement the user may easily restore the wallet u
 
 Source code: https://github.com/horizontalsystems/bank-wallet-android-app
 
+## Install
+
+- Play Market Version: https://play.google.com/store/apps/details?id=io.horizontalsystems.bankwallet
+- Version 1.0: https://github.com/horizontalsystems/bank-wallet-android/releases/download/1.0.0/bank-wallet.apk
+
 ## License
 
 The BANK wallet is open source and available under the terms of the MIT Lincense.
