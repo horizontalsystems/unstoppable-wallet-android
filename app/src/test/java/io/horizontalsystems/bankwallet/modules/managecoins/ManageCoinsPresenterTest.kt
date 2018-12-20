@@ -48,14 +48,14 @@ class ManageCoinsPresenterTest {
     @Test
     fun enableCoin() {
         presenter.enableCoin(bitCashCoin)
-        verify(state).add(bitCashCoin)
+        verify(state).enable(bitCashCoin)
         verify(view).showCoins(enabledCoins, disabledCoins)
     }
 
     @Test
     fun disableCoin() {
         presenter.disableCoin(bitCoin)
-        verify(state).remove(bitCoin)
+        verify(state).disable(bitCoin)
         verify(view).showCoins(enabledCoins, disabledCoins)
     }
 
@@ -70,7 +70,18 @@ class ManageCoinsPresenterTest {
     fun saveChanges() {
         presenter.saveChanges()
         verify(interactor).saveEnabledCoins(enabledCoins)
+    }
+
+    @Test
+    fun didSave() {
+        presenter.didSaveChanges()
         verify(router).close()
+    }
+
+    @Test
+    fun didFailedToSaveEnabledCoins() {
+        presenter.didFailedToSave()
+        verify(view).showFailedToSaveError()
     }
 
 }

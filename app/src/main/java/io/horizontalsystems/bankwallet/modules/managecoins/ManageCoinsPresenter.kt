@@ -26,12 +26,12 @@ class ManageCoinsPresenter(
     }
 
     override fun enableCoin(coin: Coin) {
-        state.add(coin)
+        state.enable(coin)
         updateCoins()
     }
 
     override fun disableCoin(coin: Coin) {
-        state.remove(coin)
+        state.disable(coin)
         updateCoins()
     }
 
@@ -42,6 +42,13 @@ class ManageCoinsPresenter(
 
     override fun saveChanges() {
         interactor.saveEnabledCoins(state.enabledCoins)
+    }
+
+    override fun didSaveChanges() {
         router.close()
+    }
+
+    override fun didFailedToSave() {
+        view?.showFailedToSaveError()
     }
 }

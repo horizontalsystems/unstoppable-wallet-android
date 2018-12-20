@@ -19,4 +19,8 @@ class ManageCoinsViewModel: ViewModel(), ManageCoinsModule.IView, ManageCoinsMod
     override fun close() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+
+    override fun showFailedToSaveError() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 }

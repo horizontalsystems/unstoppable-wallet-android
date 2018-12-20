@@ -5,31 +5,30 @@ import io.horizontalsystems.bankwallet.entities.Coin
 object ManageCoinsModule {
 
     class ManageCoinsPresenterState {
-        var allCoins = mutableListOf<Coin>()
+        var allCoins = listOf<Coin>()
         var enabledCoins = mutableListOf<Coin>()
-        val disabledCoins: MutableList<Coin>
+        val disabledCoins: List<Coin>
             get() {
-                val disabledCoins = allCoins.toMutableList()
-                disabledCoins.removeAll(enabledCoins)
-                return disabledCoins
+                return allCoins.minus(enabledCoins)
             }
 
-        fun add(coin: Coin) {
+        fun enable(coin: Coin) {
             enabledCoins.add(coin)
         }
 
-        fun remove(coin: Coin) {
+        fun disable(coin: Coin) {
             enabledCoins.remove(coin)
         }
 
         fun move(coin: Coin, index: Int) {
-            remove(coin)
+            enabledCoins.remove(coin)
             enabledCoins.add(index, coin)
         }
     }
 
     interface IView {
         fun showCoins(enabledCoins: List<Coin>, disabledCoins: List<Coin>)
+        fun showFailedToSaveError()
     }
 
     interface IViewDelegate {
@@ -47,6 +46,8 @@ object ManageCoinsModule {
 
     interface IInteractorDelegate {
         fun didLoadCoins(allCoins: List<Coin>, enabledCoins: List<Coin>)
+        fun didSaveChanges()
+        fun didFailedToSave()
     }
 
     interface IRouter {

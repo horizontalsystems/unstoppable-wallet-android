@@ -22,20 +22,20 @@ class ManageCoinsPresenterStateTest {
     }
 
     @Test
-    fun add() {
+    fun enable() {
         state.allCoins = allCoins
         state.enabledCoins = enabledCoins
-        state.add(bitCashCoin)
+        state.enable(bitCashCoin)
 
         val expectedEnabledCoins = mutableListOf(bitCoin, ethereumCoin, bitCashCoin)
         Assert.assertEquals(state.enabledCoins, expectedEnabledCoins)
     }
 
     @Test
-    fun remove() {
+    fun disable() {
         state.allCoins = allCoins
         state.enabledCoins = enabledCoins
-        state.remove(bitCoin)
+        state.disable(bitCoin)
 
         val expectedEnabledCoins = mutableListOf(ethereumCoin)
         Assert.assertEquals(state.enabledCoins, expectedEnabledCoins)
