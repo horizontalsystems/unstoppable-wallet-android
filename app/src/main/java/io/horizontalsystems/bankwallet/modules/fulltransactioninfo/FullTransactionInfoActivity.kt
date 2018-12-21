@@ -28,7 +28,7 @@ class FullTransactionInfoActivity : BaseActivity() {
         setContentView(R.layout.activity_full_transaction_info)
 
         setSupportActionBar(toolbar)
-        supportActionBar?.title = getString(R.string.FullTransactionInfo_Title)
+        supportActionBar?.title = getString(R.string.FullInfo_Title)
 
         shareBtn.setOnClickListener { viewModel.delegate.onShareClick() }
         closeBtn.setOnClickListener { onBackPressed() }
@@ -69,7 +69,7 @@ class FullTransactionInfoActivity : BaseActivity() {
 //        statusImage.setImageResource(statusImg)
 //        statusText.text = statusTxt
 //
-//        itemTime.bind(title = getString(R.string.FullTransactionInfo_Time), valueTitle = trx.date?.let { DateHelper.getFullDateWithShortMonth(it) })
+//        itemTime.bind(title = getString(R.string.FullInfo_Time), valueTitle = trx.date?.let { DateHelper.getFullDateWithShortMonth(it) })
 //        itemFrom.bind(title = getString(R.string.FullTransactionInfo_From), valueTitle = trx.from, valueIcon = R.drawable.round_person_18px)
 //        itemTo.bind(title = getString(R.string.FullTransactionInfo_To), valueTitle = trx.to, valueIcon = R.drawable.round_person_18px)
 //        itemAmount.bind(
