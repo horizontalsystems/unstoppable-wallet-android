@@ -100,7 +100,7 @@ class App : Application() {
         transactionStorage = TransactionRepository(appDatabase)
 
         rateStorage = RatesRepository(appDatabase)
-        rateManager = RateManager(rateStorage, rateSyncer, walletManager, currencyManager, networkAvailabilityManager, periodicTimer)
+        rateManager = RateManager(rateStorage, rateSyncer, walletManager, currencyManager, wordsManager, networkAvailabilityManager, periodicTimer)
 
         rateSyncer.delegate = rateManager
 
