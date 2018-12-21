@@ -56,6 +56,7 @@ class WordsManager(private val localStorage: ILocalStorage, private val secureSt
     override fun logout() {
         words = null
         secureStorage.saveWords(listOf())
+        localStorage.clearAll()
 
         loggedInSubject.onNext(LogInState.LOGOUT)
     }
