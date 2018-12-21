@@ -80,4 +80,11 @@ class WalletPresenterTest {
 
         verify(router).openSendDialog(coin)
     }
+
+    @Test
+    fun openManageCoins() {
+        presenter.openManageCoins()
+
+        verify(router).openManageCoins()
+    }
 }

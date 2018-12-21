@@ -49,6 +49,10 @@ class WalletPresenter(
         view?.didRefresh()
     }
 
+    override fun openManageCoins() {
+        router.openManageCoins()
+    }
+
     private fun updateView() {
         val wallets = interactor.wallets
         val rateObservables = wallets.map { interactor.rate(it.coinCode) }

@@ -250,4 +250,10 @@
     <string name="EditPin_UnlockInfo">Enter current PIN</string>
     <string name="EditPin_NewPinInfo">Enter New PIN</string>
 
+
+    <!--Manage Coins-->
+
+    <string name="ManageCoins_title">Manage Coins</string>
+    <string name="ManageCoins_save">Save</string>
+
 </resources>

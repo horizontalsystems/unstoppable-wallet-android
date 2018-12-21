@@ -1,9 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.managecoins
 
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
@@ -36,6 +38,7 @@ class ManageCoinsPresenterTest {
     @Test
     fun viewDidLoad() {
         presenter.viewDidLoad()
+        verify(view).setTitle(any())
         verify(interactor).loadCoins()
     }
 
@@ -82,6 +85,26 @@ class ManageCoinsPresenterTest {
     fun didFailedToSaveEnabledCoins() {
         presenter.didFailedToSave()
         verify(view).showFailedToSaveError()
+    }
+
+    @Test
+    fun enabledItemForIndex(){
+        Assert.assertEquals(bitCoin, presenter.enabledItemForIndex(0))
+    }
+
+    @Test
+    fun disabledItemForIndex(){
+        Assert.assertEquals(bitCashCoin, presenter.disabledItemForIndex(0))
+    }
+
+    @Test
+    fun enabledCoinsCount() {
+        Assert.assertEquals(enabledCoins.size, presenter.enabledCoinsCount)
+    }
+
+    @Test
+    fun disabledCoinsCount() {
+        Assert.assertEquals(disabledCoins.size, presenter.disabledCoinsCount)
     }
 
 }

@@ -3,17 +3,17 @@
     android:id="@+id/coordinator"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     >
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_behavior="io.horizontalsystems.bankwallet.ui.extensions.FixAppBarLayoutBehavior"
         app:elevation="0dp"
+        app:layout_behavior="io.horizontalsystems.bankwallet.ui.extensions.FixAppBarLayoutBehavior"
         >
 
         <android.support.v7.widget.Toolbar
@@ -28,16 +28,17 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="@color/grey_20"/>
+            android:background="@color/grey_20"
+            />
 
         <TextView
             android:id="@+id/ballanceText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/noto_sans_bold"
+            android:layout_marginBottom="8dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/noto_sans_bold"
             android:textColor="@color/yellow_crypto_40"
             android:textSize="22sp"
             tools:text="$ 200,234.90"
@@ -51,20 +52,39 @@
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         >
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerCoins"
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:clipToPadding="false"
+            android:orientation="vertical"
             android:background="?WalletBackgroundColor"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            />
+            >
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerCoins"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                />
+
+            <ImageView
+                android:id="@+id/manageCoins"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="32dp"
+                android:src="@drawable/add_2"
+                android:background="@drawable/rounded_ripple"
+                />
+        </LinearLayout>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <View
         style="@style/Widget.Shadow.AppBar"
-        app:layout_anchor="@id/app_bar_layout"/>
+        app:layout_anchor="@id/app_bar_layout"
+        />
 </android.support.design.widget.CoordinatorLayout>

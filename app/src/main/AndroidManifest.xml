@@ -63,6 +63,9 @@
         <activity
             android:name="io.horizontalsystems.bankwallet.modules.settings.basecurrency.BaseCurrencySettingsActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".modules.managecoins.ManageCoinsActivity"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="preloaded_fonts"

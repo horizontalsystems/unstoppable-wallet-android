@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.managecoins
 
+import android.content.Context
+import android.content.Intent
 import io.horizontalsystems.bankwallet.entities.Coin
 
 object ManageCoinsModule {
@@ -27,6 +29,7 @@ object ManageCoinsModule {
     }
 
     interface IView {
+        fun setTitle(title: Int)
         fun showCoins(enabledCoins: List<Coin>, disabledCoins: List<Coin>)
         fun showFailedToSaveError()
     }
@@ -37,6 +40,11 @@ object ManageCoinsModule {
         fun disableCoin(coin: Coin)
         fun saveChanges()
         fun moveCoin(coin: Coin, index: Int)
+
+        fun enabledItemForIndex(position: Int): Coin
+        fun disabledItemForIndex(position: Int): Coin
+        val enabledCoinsCount: Int
+        val disabledCoinsCount: Int
     }
 
     interface IInteractor {
@@ -62,6 +70,11 @@ object ManageCoinsModule {
         view.delegate = presenter
         presenter.view = view
         interactor.delegate = presenter
+    }
+
+    fun start(context: Context) {
+        val intent = Intent(context, ManageCoinsActivity::class.java)
+        context.startActivity(intent)
     }
 
 }

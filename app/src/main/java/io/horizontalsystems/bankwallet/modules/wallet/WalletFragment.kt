@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.modules.managecoins.ManageCoinsModule
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.viewHelpers.AnimationHelper
@@ -83,8 +84,14 @@ class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener 
             pullToRefresh.isRefreshing = false
         })
 
+        viewModel.openManageCoinsLiveEvent.observe(this, Observer {
+            context?.let { context -> ManageCoinsModule.start(context) }
+        })
+
         recyclerCoins.adapter = coinsAdapter
         recyclerCoins.layoutManager = LinearLayoutManager(context)
+
+        manageCoins.setOnSingleClickListener { viewModel.delegate.openManageCoins() }
 
         pullToRefresh.setOnRefreshListener {
             viewModel.delegate.refresh()
