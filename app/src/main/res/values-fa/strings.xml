@@ -83,22 +83,24 @@
     <string name="TransactionInfo_Id">شناس نامه:</string>
     <string name="TransactionInfo_To">به:</string>
     <string name="TransactionInfo_From">از:</string>
-    <!--Full Transaction-->
-    <string name="FullTransactionInfo_Title">معاملات</string>
-    <string name="FullTransactionInfo_Size">اندازه</string>
-    <string name="FullTransactionInfo_FeeRate">نرخ هزينه</string>
-    <string name="FullransactionInfo_ReceivedTime">زمان دريافت</string>
-    <string name="FullTransactionInfo_MinedTime">زمان استخراج</string>
-    <string name="FullTransactionInfo_IncludedInBblock">در بلاك شامل</string>
-    <string name="FullTransactionInfo_Confirmations">تاييدات</string>
-    <string name="FullTransactionInfo_LockTime">زمان قفل شده</string>
-    <string name="FullTransactionInfo_Time">زمان</string>
+    <string name="TransactionInfo_ButtonMore">From:</string>
+    <!--Full Info-->
+    <string name="FullInfo_Title">Transaction</string>
+    <string name="FullInfo_Id">ID</string>
+    <string name="FullInfo_Status">Status</string>
+    <string name="FullInfo_Time">Time</string>
+    <string name="FullInfo_Block">Block</string>
+    <string name="FullInfo_Confirmations">Confirmations</string>
+    <string name="FullInfo_TotalInput">Total Input</string>
+    <string name="FullInfo_TotalOutput">Total Output</string>
+    <string name="FullInfo_Fee">Fee</string>
+    <string name="FullInfo_SubtitleFrom">From</string>
+    <string name="FullInfo_SubtitleInputs">Inputs</string>
+    <string name="FullInfo_SubtitleOutputs">Outputs</string>
+    <string name="FullInfo_SubtitleProvider">Data Provider</string>
     <string name="FullTransactionInfo_From">از</string>
     <string name="FullTransactionInfo_To">به</string>
-    <string name="FullTransactionInfo_Received">دريافت شد</string>
-    <string name="FullTransactionInfo_Sent">ارسال شد</string>
     <string name="FullTransactionInfo_Amount">مقدار</string>
-    <string name="FullTransactionInfo_Fee">هزینه</string>
     <string name="FullTransactionInfo_Block">مسدود</string>
     <!--Settings-->
     <string name="Settings_Title">تنظيمات</string>
@@ -173,4 +175,7 @@
     <string name="EditPin_Title">ويرايش پين</string>
     <string name="EditPin_UnlockInfo">پين حال را وارد كنيد</string>
     <string name="EditPin_NewPinInfo">پين قبلي را وارد كنيد</string>
+    <!--Manage Coins-->
+    <string name="ManageCoins_title">Manage Coins</string>
+    <string name="ManageCoins_save">Save</string>
 </resources>
