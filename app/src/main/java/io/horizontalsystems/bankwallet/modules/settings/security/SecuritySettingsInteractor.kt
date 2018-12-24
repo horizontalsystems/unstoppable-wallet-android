@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.entities.BiometryType
 
 class SecuritySettingsInteractor(
         private val walletManager: IWalletManager,
-        wordsManager: IWordsManager,
+        private val wordsManager: IWordsManager,
         private val localStorage: ILocalStorage,
         private val transactionRepository: ITransactionRecordStorage,
         private val exchangeRateRepository: IRateStorage,
@@ -39,10 +39,7 @@ class SecuritySettingsInteractor(
     }
 
     override fun unlinkWallet() {
-        walletManager.clearWallets()
-        localStorage.clearAll()
-        transactionRepository.deleteAll()
-        exchangeRateRepository.deleteAll()
+        wordsManager.logout()
         delegate?.didUnlinkWallet()
     }
 }
