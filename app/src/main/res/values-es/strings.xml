@@ -83,22 +83,24 @@
     <string name="TransactionInfo_Id">Identificación:</string>
     <string name="TransactionInfo_To">Para:</string>
     <string name="TransactionInfo_From">From:</string>
-    <!--Full Transaction-->
-    <string name="FullTransactionInfo_Title">Transacción</string>
-    <string name="FullTransactionInfo_Size">Size</string>
-    <string name="FullTransactionInfo_FeeRate">Fee rate</string>
-    <string name="FullransactionInfo_ReceivedTime">Received Time</string>
-    <string name="FullTransactionInfo_MinedTime">Mined Time</string>
-    <string name="FullTransactionInfo_IncludedInBblock">Incluídas en el Bloque</string>
-    <string name="FullTransactionInfo_Confirmations">Confirmaciones</string>
-    <string name="FullTransactionInfo_LockTime">Lock Time</string>
-    <string name="FullTransactionInfo_Time">Hora</string>
+    <string name="TransactionInfo_ButtonMore">From:</string>
+    <!--Full Info-->
+    <string name="FullInfo_Title">Transaction</string>
+    <string name="FullInfo_Id">ID</string>
+    <string name="FullInfo_Status">Status</string>
+    <string name="FullInfo_Time">Time</string>
+    <string name="FullInfo_Block">Block</string>
+    <string name="FullInfo_Confirmations">Confirmations</string>
+    <string name="FullInfo_TotalInput">Total Input</string>
+    <string name="FullInfo_TotalOutput">Total Output</string>
+    <string name="FullInfo_Fee">Fee</string>
+    <string name="FullInfo_SubtitleFrom">From</string>
+    <string name="FullInfo_SubtitleInputs">Inputs</string>
+    <string name="FullInfo_SubtitleOutputs">Outputs</string>
+    <string name="FullInfo_SubtitleProvider">Data Provider</string>
     <string name="FullTransactionInfo_From">From</string>
     <string name="FullTransactionInfo_To">Para</string>
-    <string name="FullTransactionInfo_Received">Received</string>
-    <string name="FullTransactionInfo_Sent">Sent</string>
     <string name="FullTransactionInfo_Amount">Importe</string>
-    <string name="FullTransactionInfo_Fee">Comisión</string>
     <string name="FullTransactionInfo_Block">Bloque</string>
     <!--Settings-->
     <string name="Settings_Title">Configuraciones</string>
@@ -175,4 +177,7 @@ Algunos datos genéricos de carácter público de esta app se guardan en centros
     <string name="EditPin_Title">Editar el PIN</string>
     <string name="EditPin_UnlockInfo">Introduzca el PIN actual</string>
     <string name="EditPin_NewPinInfo">Enter New PIN</string>
+    <!--Manage Coins-->
+    <string name="ManageCoins_title">Manage Coins</string>
+    <string name="ManageCoins_save">Save</string>
 </resources>
