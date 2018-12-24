@@ -8,13 +8,13 @@ import io.horizontalsystems.bankwallet.core.ISecuredStorage
 
 class SecuredStorageManager(private val encryptionManager: IEncryptionManager) : ISecuredStorage {
 
-    private val MNEMONIC_WORDS = "mnemonic_words"
+    private val AUTH_DATA = "auth_data"
     private val LOCK_PIN = "lock_pin"
 
 
-    override val savedWords: List<String>?
+    override val authData: List<String>?
         get() {
-            val string = App.preferences.getString(MNEMONIC_WORDS, null)
+            val string = App.preferences.getString(AUTH_DATA, null)
             return if (TextUtils.isEmpty(string)) {
                 null
             } else {
@@ -22,12 +22,12 @@ class SecuredStorageManager(private val encryptionManager: IEncryptionManager) :
             }
         }
 
-    override fun saveWords(words: List<String>) {
-        App.preferences.edit().putString(MNEMONIC_WORDS, encryptionManager.encrypt(words.joinToString(" "))).apply()
+    override fun saveAuthData(words: List<String>) {
+        App.preferences.edit().putString(AUTH_DATA, encryptionManager.encrypt(words.joinToString(" "))).apply()
     }
 
-    override fun wordsAreEmpty(): Boolean {
-        val words = App.preferences.getString(MNEMONIC_WORDS, null)
+    override fun noAuthData(): Boolean {
+        val words = App.preferences.getString(AUTH_DATA, null)
         return words.isNullOrEmpty()
     }
 

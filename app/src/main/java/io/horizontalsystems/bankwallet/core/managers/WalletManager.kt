@@ -20,7 +20,7 @@ class WalletManager(private val adapterFactory: AdapterFactory) : IWalletManager
     override var wallets: List<Wallet> = listOf()
     override val walletsSubject = PublishSubject.create<List<Wallet>>()
 
-    override fun initWallets(words: List<String>, coins: List<Coin>, newWallet: Boolean) {
+    override fun initWallets(words: List<String>, coins: List<Coin>, newWallet: Boolean, walletId: String?) {
         handler.post {
             val newWallets = mutableListOf<Wallet>()
 
@@ -30,7 +30,7 @@ class WalletManager(private val adapterFactory: AdapterFactory) : IWalletManager
                 if (wallet != null) {
                     wallet
                 } else {
-                    val adapter = adapterFactory.adapterForCoin(coin, words, newWallet)
+                    val adapter = adapterFactory.adapterForCoin(coin, words, newWallet, walletId)
 
                     if (adapter == null) {
                         null
