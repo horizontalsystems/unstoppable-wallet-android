@@ -92,13 +92,13 @@ class TransactionInfoFragment : DialogFragment() {
 
                 rootView.findViewById<TransactionInfoItemView>(R.id.itemFrom)?.apply {
                     setOnClickListener { viewModel.delegate.onCopyFromAddress() }
-                    visibility = if (txRec.from == null) View.GONE else View.VISIBLE
+                    visibility = if (txRec.from.isNullOrEmpty()) View.GONE else View.VISIBLE
                     bind(title = getString(R.string.TransactionInfo_From), valueTitle = txRec.from, valueIcon = R.drawable.round_person_18px, showBottomBorder = true)
                 }
 
                 rootView.findViewById<TransactionInfoItemView>(R.id.itemTo)?.apply {
                     setOnClickListener { viewModel.delegate.onCopyToAddress() }
-                    visibility = if (txRec.to == null) View.GONE else View.VISIBLE
+                    visibility = if (txRec.to.isNullOrEmpty()) View.GONE else View.VISIBLE
                     bind(title = getString(R.string.TransactionInfo_To), valueTitle = txRec.to, valueIcon = R.drawable.round_person_18px, showBottomBorder = true)
                 }
             }
