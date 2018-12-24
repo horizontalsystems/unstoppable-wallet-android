@@ -8,33 +8,33 @@
     <string name="Alert_Share">Compartir</string>
     <string name="Alert_Close">Cerrar</string>
     <string name="Alert_Success">Success</string>
-    <string name="Alert_Copied">Copied</string>
+    <string name="Alert_Copied">Copiado</string>
     <string name="Button_Cancel">Cancelar</string>
     <string name="Button_Back">Atrás</string>
     <string name="Button_Ok">OK</string>
-    <string name="Button_Share">Share</string>
+    <string name="Button_Share">Compartir</string>
     <string name="Error">Error</string>
     <!--Guest-->
     <string name="Guest_Title">Bank Wallet</string>
-    <string name="Guest_CreateWallet">New Wallet</string>
-    <string name="Guest_RestoreWallet">Restore Wallet</string>
+    <string name="Guest_CreateWallet">Nueva cartera</string>
+    <string name="Guest_RestoreWallet">Restaurar cartera</string>
     <!--Restore-->
-    <string name="Restore_Title">Enter Secret Keys</string>
-    <string name="Restore_ValidationFailed">Incorrect Secret Key</string>
+    <string name="Restore_Title">Ingresar clave secreta</string>
+    <string name="Restore_ValidationFailed">Clave secreta incorrecta</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>
     <!--Backup-->
-    <string name="Backup_Intro_Title">Secret Key</string>
-    <string name="Backup_Intro_Subtitle">Your secret key is the only way to restore your wallet and funds if your phone is ever lost, stolen, broken, or upgraded.\n\n It consists of 12 words. Write them on a piece of paper and do not ever show it to anyone.</string>
+    <string name="Backup_Intro_Title">Clave secreta</string>
+    <string name="Backup_Intro_Subtitle">Su clave secreta es la única manera de recuperar su cartera y otros fondos si su teléfono alguna vez se pierde, se rompe, es sustraído o se actualiza a otra versión.</string>
     <string name="Backup_Intro_Later">Posterior</string>
     <string name="Backup_Intro_BackupNow">Copia de seguridad</string>
     <string name="Backup_Words_Title">Clave secreta</string>
-    <string name="Backup_Confirmation_Understand">I understand that my wallet and tokens are held securely on this device only and not any servers.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device or is deleted, my wallet can be only recovered with the Secret Key that I have just written down and saved in a secure place.</string>
+    <string name="Backup_Confirmation_Understand">Entiendo que mis datos y mi monedero se guardan de manera segura en este dispositivo y no en ningún otro servidor</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">Entiendo que si esta aplicación se elimina o deja de funcionar por alguna razón, mi monedero sólo puede ser recuperado utilizando mi clave secreta, que he anotado y guardado en un lugar seguro.</string>
     <string name="Backup_Confirmation_LockAppWarn">Changing the phone\'s unlock PIN in your Android OS settings would reset the wallet. You will need your backup phrase to restore your wallet after that.</string>
-    <string name="Backup_Confirmation_Title">Enter following words from your Secret Key</string>
-    <string name="Backup_Confirmation_Description">Enter words from your secret key.</string>
-    <string name="Backup_Confirmation_FailureAlertText"> Words do not match</string>
-    <string name="Backup_Button_Confirm">Confirm</string>
+    <string name="Backup_Confirmation_Title">Insertar palabras de su clave secreta</string>
+    <string name="Backup_Confirmation_Description">Insertar palabras de su clave secreta.</string>
+    <string name="Backup_Confirmation_FailureAlertText"> Las contraseñas no coinciden</string>
+    <string name="Backup_Button_Confirm">Confirmar</string>
     <string name="Backup_Button_Next">Siguiente</string>
     <string name="Backup_Button_Submit">Submit</string>
     <!--Balance-->
@@ -44,14 +44,14 @@
     <string name="Balance_RatePerCoin">%s per %s</string>
     <!--Send-->
     <string name="Send_Title1">Enviar</string>
-    <string name="Send_Title">Send %s</string>
+    <string name="Send_Title">Enviar %s</string>
     <string name="Send_Hint_PaymentReference">Payment Reference</string>
-    <string name="Send_Hint_Address">Address</string>
-    <string name="Send_Hint_Amount">Amount</string>
+    <string name="Send_Hint_Address">Dirección</string>
+    <string name="Send_Hint_Amount">Importe</string>
     <string name="Send_Button_Paste">Pegar</string>
     <string name="Send_Button_More">More</string>
     <string name="Send_Button_Send">Enviar</string>
-    <string name="Send_ScanQrCode">Scan QR Code</string>
+    <string name="Send_ScanQrCode">Escanee el código QR</string>
     <string name="Send_Success">Sent!</string>
     <string name="Send_Error_InvalidAddress">Address seems invalid. Please check and try again!</string>
     <string name="Send_Error_InsufficientBalance">Not enough funds.</string>
@@ -62,7 +62,7 @@
     <string name="Send_DialogTotal">Total:</string>
     <!--Deposit-->
     <string name="Deposit_Title">Recibir %s</string>
-    <string name="Deposit_Copy">Copy</string>
+    <string name="Deposit_Copy">Copiar</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">just now</string>
     <string name="Timestamp_MinAgo">%dm. ago</string>
@@ -70,18 +70,18 @@
     <string name="Timestamp_Today">Тoday</string>
     <string name="Timestamp_Yesterday">Yesterday</string>
     <!--Transactions-->
-    <string name="Transactions_Title">Transactions</string>
-    <string name="Transactions_FilterAll">All</string>
+    <string name="Transactions_Title">Transacciones</string>
+    <string name="Transactions_FilterAll">Todo</string>
     <string name="Transactions_EmptyList">You don\’t have any transactions yet</string>
     <!--Transaction Info-->
-    <string name="TransactionInfo_Title">Transaction</string>
-    <string name="TransactionInfo_Status">Status:</string>
+    <string name="TransactionInfo_Title">Transacción</string>
+    <string name="TransactionInfo_Status">Estado:</string>
     <string name="TransactionInfo_Completed">Completed</string>
     <string name="TransactionInfo_Pending">Pending</string>
     <string name="TransactionInfo_Processing">Processing %d%%</string>
-    <string name="TransactionInfo_Close">Close</string>
-    <string name="TransactionInfo_Id">ID:</string>
-    <string name="TransactionInfo_To">To:</string>
+    <string name="TransactionInfo_Close">Cerrar</string>
+    <string name="TransactionInfo_Id">Identificación:</string>
+    <string name="TransactionInfo_To">Para:</string>
     <string name="TransactionInfo_From">From:</string>
     <!--Full Transaction-->
     <string name="FullTransactionInfo_Title">Transacción</string>
@@ -152,21 +152,21 @@
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">Fingerprint login</string>
     <string name="Fingerprint_Hint">Touch sensor</string>
-    <string name="Fingerprint_EnterPin">Enter PIN</string>
+    <string name="Fingerprint_EnterPin">Introduzca PIN</string>
     <string name="Fingerprint_NotRecognized">Fingerprint not recognized. Try again</string>
     <string name="Fingerprint_Success">Success!</string>
     <!--Unlock Pin-->
-    <string name="UnlockPin_WalletDisabledUntil">Disabled until: %s</string>
+    <string name="UnlockPin_WalletDisabledUntil">Inhabilitado hasta: %s</string>
     <!--Set Pin-->
-    <string name="SetPin_Title">Set PIN</string>
+    <string name="SetPin_Title">Establecer PIN</string>
     <string name="SetPin_Info">Your PIN will be used to unlock wallet app</string>
     <string name="SetPin_ErrorShortPin">Please enter all digits.</string>
-    <string name="SetPin_ConfirmInfo">Confirm PIN</string>
+    <string name="SetPin_ConfirmInfo">Confirmar PIN</string>
     <string name="SetPin_Success">Lock PIN was set successfully!</string>
     <string name="SetPin_ErrorPinsDontMatch">PIN did not match. Try again.</string>
     <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your PIN. Please, try again.</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">Edit PIN</string>
-    <string name="EditPin_UnlockInfo">Enter current PIN</string>
+    <string name="EditPin_Title">Editar el PIN</string>
+    <string name="EditPin_UnlockInfo">Introduzca el PIN actual</string>
     <string name="EditPin_NewPinInfo">Enter New PIN</string>
 </resources>
