@@ -95,7 +95,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/statusText"
-                app:title="@string/FullTransactionInfo_Time"
+                app:title="@string/FullInfo_Time"
                 app:value="Aug 7, 2018, 2:12"
                 />
 
@@ -139,7 +139,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/itemAmount"
-                app:title="@string/FullTransactionInfo_Fee"
+                app:title="@string/FullInfo_Fee"
                 app:value="0.006 BTC"
                 />
 

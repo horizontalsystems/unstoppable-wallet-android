@@ -119,26 +119,31 @@
     <string name="TransactionInfo_Id">ID:</string>
     <string name="TransactionInfo_To">To:</string>
     <string name="TransactionInfo_From">From:</string>
+    <string name="TransactionInfo_ButtonMore">From:</string>
 
 
-    <!--Full Transaction-->
+    <!--Full Info-->
 
-    <string name="FullTransactionInfo_Title">Transaction</string>
-    <string name="FullTransactionInfo_Size">Size</string>
-    <string name="FullTransactionInfo_FeeRate">Fee rate</string>
-    <string name="FullransactionInfo_ReceivedTime">Received Time</string>
-    <string name="FullTransactionInfo_MinedTime">Mined Time</string>
-    <string name="FullTransactionInfo_IncludedInBblock">Included in Block</string>
-    <string name="FullTransactionInfo_Confirmations">Confirmations</string>
-    <string name="FullTransactionInfo_LockTime">Lock Time</string>
-    <string name="FullTransactionInfo_Time">Time</string>
+    <string name="FullInfo_Title">Transaction</string>
+    <string name="FullInfo_Id">ID</string>
+    <string name="FullInfo_Status">Status</string>
+    <string name="FullInfo_Time">Time</string>
+    <string name="FullInfo_Block">Block</string>
+    <string name="FullInfo_Confirmations">Confirmations</string>
+    <string name="FullInfo_TotalInput">Total Input</string>
+    <string name="FullInfo_TotalOutput">Total Output</string>
+    <string name="FullInfo_Fee">Fee</string>
+    <string name="FullInfo_SubtitleFrom">From</string>
+    <string name="FullInfo_SubtitleInputs">Inputs</string>
+    <string name="FullInfo_SubtitleOutputs">Outputs</string>
+    <string name="FullInfo_SubtitleProvider">Data Provider</string>
+
+
     <string name="FullTransactionInfo_From">From</string>
     <string name="FullTransactionInfo_To">To</string>
-    <string name="FullTransactionInfo_Received">Received</string>
-    <string name="FullTransactionInfo_Sent">Sent</string>
     <string name="FullTransactionInfo_Amount">Amount</string>
-    <string name="FullTransactionInfo_Fee">Fee</string>
     <string name="FullTransactionInfo_Block">Block</string>
+
 
     <!--Settings-->
 
