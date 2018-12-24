@@ -13,6 +13,7 @@
     <attr name="AboutLongTextColor" format="reference|color" />
     <attr name="TransactionItemBackgroundColor" format="reference|color" />
     <attr name="SettingItemBackgroundColor" format="reference|color" />
+    <attr name="DraggableCoinBackgroundColor" format="reference|color" />
     <attr name="CoinItemBackgroundColor" format="reference|color" />
     <attr name="FilterButtonBackgroundColor" format="reference|color" />
     <attr name="BottomNavigationBackgroundColor" format="reference|color" />
@@ -63,6 +64,7 @@
         <item name="CoinItemBackgroundColor">@color/coin_item_background_dark</item>
         <item name="FilterButtonBackgroundColor">@color/appBackground</item>
         <item name="SettingItemBackgroundColor">@color/setting_item_background_dark</item>
+        <item name="DraggableCoinBackgroundColor">@color/manage_coin_background_dark</item>
         <item name="BottomNavigationBackgroundColor">@color/dark</item>
         <item name="StatusBarColor">@color/dark</item>
         <item name="RippleColor">@color/ripple_white</item>
@@ -111,6 +113,7 @@
         <item name="CoinItemBackgroundColor">@color/coin_item_background_light</item>
         <item name="FilterButtonBackgroundColor">@color/bars_color</item>
         <item name="SettingItemBackgroundColor">@color/setting_item_background_light</item>
+        <item name="DraggableCoinBackgroundColor">@color/setting_item_background_light</item>
         <item name="BottomNavigationBackgroundColor">@color/bars_color</item>
         <item name="StatusBarColor">@color/bars_color</item>
         <item name="RippleColor">@color/ripple_black</item>
