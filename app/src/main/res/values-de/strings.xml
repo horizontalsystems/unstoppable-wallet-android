@@ -83,22 +83,24 @@
     <string name="TransactionInfo_Id">ID:</string>
     <string name="TransactionInfo_To">An:</string>
     <string name="TransactionInfo_From">Von:</string>
-    <!--Full Transaction-->
-    <string name="FullTransactionInfo_Title">Transaktion</string>
-    <string name="FullTransactionInfo_Size">Größe</string>
-    <string name="FullTransactionInfo_FeeRate">Gebührenrate</string>
-    <string name="FullransactionInfo_ReceivedTime">Empfangene Uhrzeit</string>
-    <string name="FullTransactionInfo_MinedTime">Verminte Zeit</string>
-    <string name="FullTransactionInfo_IncludedInBblock">Im Block Enthalten</string>
-    <string name="FullTransactionInfo_Confirmations">Bestätigungen</string>
-    <string name="FullTransactionInfo_LockTime">Sperrzeit</string>
-    <string name="FullTransactionInfo_Time">Zeit</string>
+    <string name="TransactionInfo_ButtonMore">From:</string>
+    <!--Full Info-->
+    <string name="FullInfo_Title">Transaction</string>
+    <string name="FullInfo_Id">ID</string>
+    <string name="FullInfo_Status">Status</string>
+    <string name="FullInfo_Time">Time</string>
+    <string name="FullInfo_Block">Block</string>
+    <string name="FullInfo_Confirmations">Confirmations</string>
+    <string name="FullInfo_TotalInput">Total Input</string>
+    <string name="FullInfo_TotalOutput">Total Output</string>
+    <string name="FullInfo_Fee">Fee</string>
+    <string name="FullInfo_SubtitleFrom">From</string>
+    <string name="FullInfo_SubtitleInputs">Inputs</string>
+    <string name="FullInfo_SubtitleOutputs">Outputs</string>
+    <string name="FullInfo_SubtitleProvider">Data Provider</string>
     <string name="FullTransactionInfo_From">Von</string>
     <string name="FullTransactionInfo_To">An</string>
-    <string name="FullTransactionInfo_Received">Erhalten</string>
-    <string name="FullTransactionInfo_Sent">Gesendet</string>
     <string name="FullTransactionInfo_Amount">Betrag</string>
-    <string name="FullTransactionInfo_Fee">Gebühr</string>
     <string name="FullTransactionInfo_Block">Block</string>
     <!--Settings-->
     <string name="Settings_Title">Einstellungen</string>
@@ -170,4 +172,7 @@ Hack dein Telefon nicht, installier keine Anwendungen von inoffiziellen Quellen 
     <string name="EditPin_Title">PIN bearbeiten</string>
     <string name="EditPin_UnlockInfo">Gib deine derzeitige PIN ein</string>
     <string name="EditPin_NewPinInfo">Gib neuen PIN ein</string>
+    <!--Manage Coins-->
+    <string name="ManageCoins_title">Manage Coins</string>
+    <string name="ManageCoins_save">Save</string>
 </resources>
