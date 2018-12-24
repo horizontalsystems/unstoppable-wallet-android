@@ -60,6 +60,7 @@ interface IEncryptionManager {
 interface IClipboardManager {
     fun copyText(text: String)
     fun getCopiedText(): String
+    val hasPrimaryClip: Boolean
 }
 
 interface ICurrencyManager {

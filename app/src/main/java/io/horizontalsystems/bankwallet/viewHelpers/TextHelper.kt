@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.viewHelpers
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
@@ -16,35 +15,21 @@ import io.horizontalsystems.bankwallet.core.IClipboardManager
 
 object TextHelper : IClipboardManager {
 
+    override val hasPrimaryClip: Boolean
+        get() = clipboard?.hasPrimaryClip() ?: false
+
     override fun copyText(text: String) {
         copyTextToClipboard(App.instance, text)
     }
 
     override fun getCopiedText(): String {
-        val clipboard = App.instance.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
-
         return clipboard?.primaryClip?.itemCount?.let { count ->
             if (count > 0) {
-                clipboard.primaryClip?.getItemAt(0)?.text?.toString()
+                clipboard?.primaryClip?.getItemAt(0)?.text?.toString()
             } else {
                 null
             }
         } ?: ""
-
-    }
-
-    private fun copyTextToClipboard(context: Context, text: String) {
-        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
-        val clip = ClipData.newPlainText("text", text)
-        clipboard?.primaryClip = clip
-    }
-
-    fun shareExternalText(context: Context, text: String, title: String) {
-        val intent = Intent(Intent.ACTION_SEND)
-        intent.type = "text/plain"
-        intent.putExtra(Intent.EXTRA_TEXT, text)
-
-        context.startActivity(Intent.createChooser(intent, title))
     }
 
     fun getQrCodeBitmapFromAddress(address: String): Bitmap? {
@@ -65,6 +50,15 @@ object TextHelper : IClipboardManager {
         var cleanedCoin = coin.removeSuffix("t")
         cleanedCoin = cleanedCoin.removeSuffix("r")
         return cleanedCoin
+    }
+
+    private val clipboard: ClipboardManager?
+        get() = App.instance.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
+
+    private fun copyTextToClipboard(context: Context, text: String) {
+        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
+        val clip = ClipData.newPlainText("text", text)
+        clipboard?.primaryClip = clip
     }
 
 }

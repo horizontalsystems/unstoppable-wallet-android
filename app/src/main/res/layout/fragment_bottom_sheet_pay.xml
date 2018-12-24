@@ -219,6 +219,7 @@
                     android:layout_height="36dp"
                     android:maxWidth="200dp"
                     android:minWidth="71dp"
+                    android:textColor="@color/stateful_button_grey_text_color"
                     android:text="@string/Send_Button_Paste"
                     />
 

@@ -28,6 +28,7 @@ object SendModule {
         fun showConfirmation(viewItem: SendConfirmationViewItem)
         fun showError(error: Throwable)
         fun dismissWithSuccess()
+        fun setPasteButtonState(enabled: Boolean)
 
     }
 
@@ -43,6 +44,7 @@ object SendModule {
     }
 
     interface IInteractor {
+        val clipboardHasPrimaryClip: Boolean
         val coinCode: CoinCode
         val addressFromClipboard: String?
 

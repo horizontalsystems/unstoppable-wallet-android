@@ -223,6 +223,10 @@ class SendFragment : DialogFragment() {
             activity?.let { ConfirmationFragment.show(it) }
         })
 
+        viewModel.pasteButtonEnabledLiveData.observe(this, Observer { enabled ->
+            enabled?.let { pasteButton.isEnabled = it }
+        })
+
         mDialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
 
         return mDialog as Dialog

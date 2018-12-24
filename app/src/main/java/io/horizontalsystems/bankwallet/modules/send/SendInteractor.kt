@@ -19,6 +19,9 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
         class NoAmount : SendError()
     }
 
+    override val clipboardHasPrimaryClip: Boolean
+        get() = clipboardManager.hasPrimaryClip
+
     var delegate: SendModule.IInteractorDelegate? = null
 
     override val coinCode: CoinCode
