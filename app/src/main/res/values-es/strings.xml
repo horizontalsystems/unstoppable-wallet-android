@@ -89,7 +89,7 @@
     <string name="FullTransactionInfo_FeeRate">Fee rate</string>
     <string name="FullransactionInfo_ReceivedTime">Received Time</string>
     <string name="FullTransactionInfo_MinedTime">Mined Time</string>
-    <string name="FullTransactionInfo_IncludedInBblock">Included in Block</string>
+    <string name="FullTransactionInfo_IncludedInBblock">Incluídas en el Bloque</string>
     <string name="FullTransactionInfo_Confirmations">Confirmaciones</string>
     <string name="FullTransactionInfo_LockTime">Lock Time</string>
     <string name="FullTransactionInfo_Time">Hora</string>
@@ -99,7 +99,7 @@
     <string name="FullTransactionInfo_Sent">Sent</string>
     <string name="FullTransactionInfo_Amount">Importe</string>
     <string name="FullTransactionInfo_Fee">Comisión</string>
-    <string name="FullTransactionInfo_Block">Block</string>
+    <string name="FullTransactionInfo_Block">Bloque</string>
     <!--Settings-->
     <string name="Settings_Title">Configuraciones</string>
     <string name="Settings_SecurityCenter">Centro de Seguridad</string>
@@ -115,31 +115,37 @@
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Fingerprint</string>
     <string name="SettingsSecurity_EditPin">Editar el PIN</string>
-    <string name="SettingsSecurity_BackupWallet">Backup Wallet</string>
-    <string name="SettingsSecurity_UnlinkFromThisDevice">Unlink from this device</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_1">This action will remove the currently installed wallet from this device.</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_2">Make sure you have its Secret Key or you will not be able to access the funds on it in the future.</string>
+    <string name="SettingsSecurity_BackupWallet">Copia de Seguridad de Cartera</string>
+    <string name="SettingsSecurity_UnlinkFromThisDevice">Desconectarse desde este dispositivo</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_1">Esta acción eliminará de este dispositivo la carpeta instalada actualmente </string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_2">Asegúrese de que usted tiene su clave secreta o no podrá acceder a los fondos en el futuro</string>
     <!--Setting_Currency-->
-    <string name="SettingsCurrency_Title">Base Currency</string>
+    <string name="SettingsCurrency_Title">Divisa principal</string>
     <!--Setting_Language-->
     <string name="SettingsLanguage_Title">Idioma</string>
     <!--Setting_About-->
-    <string name="SettingsAbout_Title">About</string>
-    <string name="SettingsAbout_TermsPrivacySubtitle">Terms &amp; Privacy:</string>
-    <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
-\n\nIt works everywhere as long as there is internet. No entity can block this app from working or to block someone from using it.
-\n\nYour funds are securely stored on the phone itself, not anywhere else.
-\n\nIt’s your responsibility to backup your Secret Key and keep it private. Never show it to anyone. If it’s lost, forgotten or stollen your funds can be used by the person who has your Secret key.
-\n\nDo not jailbreak your phone, do not install apps from unknown (untrusted) sources, do not give your device to untrusted people, and keep the Operating System on your phone up to date. The security of your wallet depends on this.
-\n\nThe entire code powering this app been open to the public scrutiny since the beginning. We tried to build the most secure and decentralized wallet we could, however there are no guarantees that there are no unintended software issues. That said, this wallet is likely to be significantly more secure than any smartphone wallet app out there.
-\n\nSome generic non-private app data like currency exchange rates are stored on decentralized storage (IPFS).</string>
+    <string name="SettingsAbout_Title">Acerca de</string>
+    <string name="SettingsAbout_TermsPrivacySubtitle">Términos y privacidad:</string>
+    <string name="SettingsAbout_TermsPrivacyText">Esta aplicación es de servidor a servidor. No depende de ninguna web o tecnología personal de apoyo a la función.
+
+Funciona en cualquier lugar siempre que haya conexión a internet. Ninguna entidad puede bloquear el funcionamiento de esta aplicación o impedir el acceso de un usuario.
+
+Sus fondos son almacenados de forma segura únicamente en el teléfono, en ningún otro lugar.
+
+Es su responsabilidad recordar su clave secreta y mantenerla en privado. Nunca la muestre a nadie. Si la pierde, la olvida o es sustraída, sus fondos pueden ser utilizados por la persona que tiene su clave secreta.
+
+No modifique la seguridad del software de su teléfono, no instale aplicaciones de orígenes desconocidos , no entregue su dispositivo a desconocidos y mantenga actualizado el sistema operativo de tu teléfono. La seguridad de su cartera depende de ello.
+
+La totalidad del código que soporta esta aplicación está abierta al escrutinio público desde el inicio de la aplicación. Hemos intentado construir la cartera más segura y descentralizada posible; sin embargo, hay ninguna garantía de que no se produzca algún problema de software no deseado. Dicho esto, esta carpeta es probable que sea significativamente más segura que cualquier aplicación de gestión de cartera de smartphone del mercado
+
+Algunos datos genéricos de carácter público de esta app se guardan en centros de almacenamiento descentralizado (IPFS).</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android Keystore Error</string>
     <string name="Alert_KeysInvalidatedDescription">The encrypted data holding your wallet was recently invalidated because your Android lock screen was changed</string>
     <string name="Alert_NoDeviceLockTitle">Warning</string>
     <string name="Alert_NoDeviceLockDescription">Set up a lock screen on this device to continue. Go to “Settings” &gt; “Security” &gt; “Screen Lock” and enable the lock screen setting.</string>
     <!--Unlock-->
-    <string name="Unlock_Page_EnterYourPin">Enter PIN</string>
+    <string name="Unlock_Page_EnterYourPin">Introduzca PIN</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Unsupported currency</string>
     <!--Hud texts-->
