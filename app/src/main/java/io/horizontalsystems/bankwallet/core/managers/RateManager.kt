@@ -12,6 +12,7 @@ class RateManager(
         private val syncer: RateSyncer,
         private val walletManager: IWalletManager,
         private val currencyManager: ICurrencyManager,
+        private val wordsManager: IWordsManager,
         networkAvailabilityManager: NetworkAvailabilityManager,
         timer: PeriodicTimer) : IPeriodicTimerDelegate, IRateSyncerDelegate {
 
@@ -41,6 +42,12 @@ class RateManager(
             subject.onNext(true)
         })
 
+        disposables.add(wordsManager.loggedInSubject
+                .subscribe { logInState ->
+                    if (logInState == LogInState.LOGOUT) {
+                        storage.deleteAll()
+                    }
+                })
     }
 
     fun rate(coin: String, currencyCode: String): Maybe<Rate> {
