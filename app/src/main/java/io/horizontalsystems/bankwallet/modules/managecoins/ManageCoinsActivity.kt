@@ -12,7 +12,6 @@ import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import kotlinx.android.extensions.LayoutContainer
@@ -53,6 +52,10 @@ class ManageCoinsActivity : BaseActivity(), ManageCoinsAdapter.Listener, StartDr
                 supportActionBar?.title = getString(it)
             }
         })
+
+        viewModel.closeLiveDate.observe(this, Observer {
+            finish()
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -73,8 +76,12 @@ class ManageCoinsActivity : BaseActivity(), ManageCoinsAdapter.Listener, StartDr
         else -> super.onOptionsItemSelected(item)
     }
 
-    override fun onItemClick(coin: Coin) {
-        HudHelper.showSuccessMessage(R.string.Hud_Text_Success)
+    override fun onEnabledItemClick(coin: Coin) {
+        viewModel.delegate.disableCoin(coin)
+    }
+
+    override fun onDisabledItemClick(coin: Coin) {
+        viewModel.delegate.enableCoin(coin)
     }
 
     override fun requestDrag(viewHolder: RecyclerView.ViewHolder) {
@@ -82,10 +89,14 @@ class ManageCoinsActivity : BaseActivity(), ManageCoinsAdapter.Listener, StartDr
     }
 }
 
-class ManageCoinsAdapter(private var listener: Listener, private var startDragListener: StartDragListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), MyDragHelperCallback.Listener {
+class ManageCoinsAdapter(
+        private var listener: Listener,
+        private var startDragListener: StartDragListener)
+    : RecyclerView.Adapter<RecyclerView.ViewHolder>(), MyDragHelperCallback.Listener {
 
     interface Listener {
-        fun onItemClick(coin: Coin)
+        fun onEnabledItemClick(coin: Coin)
+        fun onDisabledItemClick(coin: Coin)
     }
 
     lateinit var viewModel: ManageCoinsViewModel
@@ -94,11 +105,11 @@ class ManageCoinsAdapter(private var listener: Listener, private var startDragLi
     private val typeDisabled = 1
     private val typeDivider = 2
 
-    override fun getItemCount() = viewModel.delegate.enabledCoinsCount + viewModel.delegate.disabledCoinsCount + 1
+    override fun getItemCount() = viewModel.delegate.enabledCoinsCount + viewModel.delegate.disabledCoinsCount + (if (showDivider) 1 else 0)
 
     override fun getItemViewType(position: Int): Int = when {
         position < viewModel.delegate.enabledCoinsCount -> typeEnabled
-        position == viewModel.delegate.enabledCoinsCount -> typeDivider
+        showDivider && position == viewModel.delegate.enabledCoinsCount -> typeDivider
         else -> typeDisabled
     }
 
@@ -114,7 +125,7 @@ class ManageCoinsAdapter(private var listener: Listener, private var startDragLi
         when (holder) {
             is ViewHolderEnabledCoin -> {
                 val transactionRecord = viewModel.delegate.enabledItemForIndex(position)
-                holder.bind(transactionRecord) { listener.onItemClick(transactionRecord) }
+                holder.bind(transactionRecord) { listener.onEnabledItemClick(transactionRecord) }
 
                 holder.dragIcon.setOnTouchListener { _, event ->
                     if (event.action == MotionEvent.ACTION_DOWN) {
@@ -124,8 +135,8 @@ class ManageCoinsAdapter(private var listener: Listener, private var startDragLi
                 }
             }
             is ViewHolderDisabledCoin -> {
-                val transactionRecord = viewModel.delegate.disabledItemForIndex(position - viewModel.delegate.enabledCoinsCount - 1)
-                holder.bind(transactionRecord) { listener.onItemClick(transactionRecord) }
+                val transactionRecord = viewModel.delegate.disabledItemForIndex(disabledIndex(position))
+                holder.bind(transactionRecord) { listener.onDisabledItemClick(transactionRecord) }
             }
         }
 
@@ -133,6 +144,14 @@ class ManageCoinsAdapter(private var listener: Listener, private var startDragLi
 
     override fun onItemMoved(from: Int, to: Int) {
         notifyItemMoved(from, to)
+    }
+
+    private val showDivider
+        get() = viewModel.delegate.enabledCoinsCount > 0
+
+    private fun disabledIndex(position: Int): Int = when {
+        showDivider -> position - viewModel.delegate.enabledCoinsCount - 1
+        else -> position
     }
 }
 

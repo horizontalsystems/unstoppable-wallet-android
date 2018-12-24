@@ -20,26 +20,22 @@ class ManageCoinsPresenter(
     override fun didLoadCoins(allCoins: List<Coin>, enabledCoins: List<Coin>) {
         state.allCoins = allCoins.toMutableList()
         state.enabledCoins = enabledCoins.toMutableList()
-        updateCoins()
-    }
-
-    private fun updateCoins() {
-        view?.showCoins(state.enabledCoins, state.disabledCoins)
+        view?.updateCoins()
     }
 
     override fun enableCoin(coin: Coin) {
         state.enable(coin)
-        updateCoins()
+        view?.updateCoins()
     }
 
     override fun disableCoin(coin: Coin) {
         state.disable(coin)
-        updateCoins()
+        view?.updateCoins()
     }
 
     override fun moveCoin(coin: Coin, index: Int) {
         state.move(coin, index)
-        updateCoins()
+        view?.updateCoins()
     }
 
     override fun saveChanges() {

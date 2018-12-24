@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.managecoins
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
-import io.horizontalsystems.bankwallet.entities.Coin
 
 class ManageCoinsViewModel: ViewModel(), ManageCoinsModule.IView, ManageCoinsModule.IRouter {
 
@@ -23,7 +22,7 @@ class ManageCoinsViewModel: ViewModel(), ManageCoinsModule.IView, ManageCoinsMod
         titleLiveDate.value = title
     }
 
-    override fun showCoins(enabledCoins: List<Coin>, disabledCoins: List<Coin>) {
+    override fun updateCoins() {
         coinsLoadedLiveEvent.call()
     }
 

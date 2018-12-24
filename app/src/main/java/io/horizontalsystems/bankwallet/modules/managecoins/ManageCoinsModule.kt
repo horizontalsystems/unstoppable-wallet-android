@@ -30,7 +30,7 @@ object ManageCoinsModule {
 
     interface IView {
         fun setTitle(title: Int)
-        fun showCoins(enabledCoins: List<Coin>, disabledCoins: List<Coin>)
+        fun updateCoins()
         fun showFailedToSaveError()
     }
 

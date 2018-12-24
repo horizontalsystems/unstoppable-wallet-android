@@ -14,6 +14,7 @@ class ManageCoinsInteractor : ManageCoinsModule.IInteractor {
                 Coin("Ethereum", "ETH", CoinType.Ethereum),
                 Coin("DASH Coin", "DASH", CoinType.Ethereum),
                 Coin("Litecoin", "LTC", CoinType.BitcoinCash),
+                Coin("XRP", "XRP", CoinType.Ethereum),
                 Coin("Bitcoin Cash", "BCH", CoinType.BitcoinCash)
         )
         val enabledCoins = mutableListOf(
@@ -25,6 +26,7 @@ class ManageCoinsInteractor : ManageCoinsModule.IInteractor {
 
     override fun saveEnabledCoins(enabledCoins: List<Coin>) {
         Log.e("ManageCoinsInter","Enabled Coins save")
+        delegate?.didSaveChanges()
     }
 
 }
