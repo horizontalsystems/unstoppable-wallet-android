@@ -66,15 +66,10 @@ class ReceiveFragment : DialogFragment() {
         })
 
         viewModel.showErrorLiveData.observe(this, Observer { error ->
-            //todo remove after Wallet starts to work
-            val someAddress = TextHelper.randomHashGenerator()
-            rootView.findViewById<TextView>(R.id.txtAddress)?.let { it.text = someAddress }
-            rootView.findViewById<ImageView>(R.id.imgQrCode)?.setImageBitmap(TextHelper.getQrCodeBitmapFromAddress(someAddress))
-            //uncomment me
-//            error?.let {
-//                HudHelper.showErrorMessage(it, activity)
-//            }
-//            dismiss()
+            error?.let {
+                HudHelper.showErrorMessage(it)
+            }
+            dismiss()
         })
 
         viewModel.showCopiedLiveEvent.observe(this, Observer {

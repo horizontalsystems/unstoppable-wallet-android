@@ -12,7 +12,6 @@ import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IClipboardManager
-import java.util.*
 
 
 object TextHelper : IClipboardManager {
@@ -66,21 +65,6 @@ object TextHelper : IClipboardManager {
         var cleanedCoin = coin.removeSuffix("t")
         cleanedCoin = cleanedCoin.removeSuffix("r")
         return cleanedCoin
-    }
-
-    //todo remove it when Address From and To in TransactionRecord will start to work
-    fun randomHashGenerator(): String {
-        val length = 30
-        val ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-        val random = Random()
-        val builder = StringBuilder(length)
-        builder.append("1")
-
-        for (i in 1 until length) {
-            builder.append(ALPHABET[random.nextInt(ALPHABET.length)])
-        }
-
-        return builder.toString()
     }
 
 }
