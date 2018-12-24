@@ -4,6 +4,7 @@ import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
@@ -42,28 +43,28 @@ class ManageCoinsPresenterTest {
     @Test
     fun didLoadCoins() {
         presenter.didLoadCoins(allCoins, enabledCoins)
-        verify(view).showCoins(enabledCoins, disabledCoins)
+        verify(view).updateCoins()
     }
 
     @Test
     fun enableCoin() {
         presenter.enableCoin(bitCashCoin)
         verify(state).enable(bitCashCoin)
-        verify(view).showCoins(enabledCoins, disabledCoins)
+        verify(view).updateCoins()
     }
 
     @Test
     fun disableCoin() {
         presenter.disableCoin(bitCoin)
         verify(state).disable(bitCoin)
-        verify(view).showCoins(enabledCoins, disabledCoins)
+        verify(view).updateCoins()
     }
 
     @Test
     fun moveCoin() {
         presenter.moveCoin(ethereumCoin, 0)
         verify(state).move(ethereumCoin, 0)
-        verify(view).showCoins(enabledCoins, disabledCoins)
+        verify(view).updateCoins()
     }
 
     @Test
@@ -82,6 +83,26 @@ class ManageCoinsPresenterTest {
     fun didFailedToSaveEnabledCoins() {
         presenter.didFailedToSave()
         verify(view).showFailedToSaveError()
+    }
+
+    @Test
+    fun enabledItemForIndex(){
+        Assert.assertEquals(bitCoin, presenter.enabledItemForIndex(0))
+    }
+
+    @Test
+    fun disabledItemForIndex(){
+        Assert.assertEquals(bitCashCoin, presenter.disabledItemForIndex(0))
+    }
+
+    @Test
+    fun enabledCoinsCount() {
+        Assert.assertEquals(enabledCoins.size, presenter.enabledCoinsCount)
+    }
+
+    @Test
+    fun disabledCoinsCount() {
+        Assert.assertEquals(disabledCoins.size, presenter.disabledCoinsCount)
     }
 
 }

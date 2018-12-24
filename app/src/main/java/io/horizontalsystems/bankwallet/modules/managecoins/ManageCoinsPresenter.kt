@@ -18,26 +18,22 @@ class ManageCoinsPresenter(
     override fun didLoadCoins(allCoins: List<Coin>, enabledCoins: List<Coin>) {
         state.allCoins = allCoins.toMutableList()
         state.enabledCoins = enabledCoins.toMutableList()
-        updateCoins()
-    }
-
-    private fun updateCoins() {
-        view?.showCoins(state.enabledCoins, state.disabledCoins)
+        view?.updateCoins()
     }
 
     override fun enableCoin(coin: Coin) {
         state.enable(coin)
-        updateCoins()
+        view?.updateCoins()
     }
 
     override fun disableCoin(coin: Coin) {
         state.disable(coin)
-        updateCoins()
+        view?.updateCoins()
     }
 
     override fun moveCoin(coin: Coin, index: Int) {
         state.move(coin, index)
-        updateCoins()
+        view?.updateCoins()
     }
 
     override fun saveChanges() {
@@ -51,4 +47,18 @@ class ManageCoinsPresenter(
     override fun didFailedToSave() {
         view?.showFailedToSaveError()
     }
+
+    override fun enabledItemForIndex(position: Int): Coin {
+        return state.enabledCoins[position]
+    }
+
+    override fun disabledItemForIndex(position: Int): Coin {
+        return state.disabledCoins[position]
+    }
+
+    override val enabledCoinsCount: Int
+        get() = state.enabledCoins.size
+
+    override val disabledCoinsCount: Int
+        get() = state.disabledCoins.size
 }

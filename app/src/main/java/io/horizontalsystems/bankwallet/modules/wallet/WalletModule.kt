@@ -23,6 +23,7 @@ object WalletModule {
         fun refresh()
         fun onReceive(coin: String)
         fun onPay(coin: String)
+        fun openManageCoins()
     }
 
     interface IInteractor {
@@ -41,6 +42,7 @@ object WalletModule {
     interface IRouter {
         fun openReceiveDialog(coin: String)
         fun openSendDialog(coin: String)
+        fun openManageCoins()
     }
 
     fun init(view: WalletViewModel, router: IRouter) {

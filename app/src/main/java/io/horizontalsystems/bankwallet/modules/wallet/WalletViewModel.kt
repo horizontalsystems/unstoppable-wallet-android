@@ -16,6 +16,7 @@ class WalletViewModel : ViewModel(), WalletModule.IView, WalletModule.IRouter {
     val openReceiveDialog = SingleLiveEvent<String>()
     val balanceColorLiveDate = MutableLiveData<Int>()
     val didRefreshLiveEvent = SingleLiveEvent<Void>()
+    val openManageCoinsLiveEvent = SingleLiveEvent<Void>()
 
     fun init() {
         WalletModule.init(this, this)
@@ -61,5 +62,9 @@ class WalletViewModel : ViewModel(), WalletModule.IView, WalletModule.IRouter {
 
     override fun updateBalanceColor(color: Int) {
         balanceColorLiveDate.value = color
+    }
+
+    override fun openManageCoins() {
+        openManageCoinsLiveEvent.call()
     }
 }
