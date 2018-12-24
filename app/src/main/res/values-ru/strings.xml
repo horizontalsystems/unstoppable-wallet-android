@@ -106,7 +106,7 @@
     <string name="Settings_BaseCurrency">Базовая Валюта</string>
     <string name="Settings_Language">Язык</string>
     <string name="Settings_LightMode">Светлый Режим</string>
-    <string name="Settings_About">О программе</string>
+    <string name="Settings_About">О приложении</string>
     <string name="Settings_InfoTitleWithVersion">Bank Wallet %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <!--Settings-->
@@ -124,7 +124,7 @@
     <!--Setting_Language-->
     <string name="SettingsLanguage_Title">Язык</string>
     <!--Setting_About-->
-    <string name="SettingsAbout_Title">О программе</string>
+    <string name="SettingsAbout_Title">О приложении</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Условия &amp; Политика конфиденциальности:</string>
     <string name="SettingsAbout_TermsPrivacyText">\n\nЭто приложение полностью децентрализованно. Работоспособность этого приложения не зависит от сторонних серверов или какой-либо команды тех поддержки.
 \n\nПриложение работает везде, пока есть интернет. Этот кошелек или его пользователи не могут быть заблокированы кем-либо.
