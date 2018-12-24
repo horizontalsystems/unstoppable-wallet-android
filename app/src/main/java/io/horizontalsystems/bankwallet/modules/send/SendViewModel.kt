@@ -21,6 +21,7 @@ class SendViewModel : ViewModel(), SendModule.IRouter, SendModule.IView {
     val errorLiveData = MutableLiveData<Throwable>()
     val sendConfirmationViewItemLiveData = MutableLiveData<SendModule.SendConfirmationViewItem>()
     val showConfirmationLiveEvent = SingleLiveEvent<Unit>()
+    val pasteButtonEnabledLiveData = MutableLiveData<Boolean>()
 
     fun init(coin: String) {
         hintInfoLiveData.value = null
@@ -36,6 +37,10 @@ class SendViewModel : ViewModel(), SendModule.IRouter, SendModule.IView {
 
         SendModule.init(this, this, coin)
         delegate.onViewDidLoad()
+    }
+
+    override fun setPasteButtonState(enabled: Boolean) {
+        pasteButtonEnabledLiveData.value = enabled
     }
 
     override fun setCoin(coinCode: CoinCode) {

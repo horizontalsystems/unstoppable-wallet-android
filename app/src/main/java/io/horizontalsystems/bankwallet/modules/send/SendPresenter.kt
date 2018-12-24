@@ -14,6 +14,7 @@ class SendPresenter(
     //
     override fun onViewDidLoad() {
         interactor.retrieveRate()
+        updatePastButtonState()
     }
 
     override fun onAmountChanged(amount: Double) {
@@ -59,6 +60,7 @@ class SendPresenter(
 
     override fun onDeleteClicked() {
         onAddressChange(null)
+        updatePastButtonState()
     }
 
     override fun onSendClicked() {
@@ -100,6 +102,10 @@ class SendPresenter(
     //
     // Private
     //
+    private fun updatePastButtonState() {
+        view?.setPasteButtonState(interactor.clipboardHasPrimaryClip)
+    }
+
     private fun onAddressEnter(address: String) {
         val paymentAddress = interactor.parsePaymentAddress(address)
         paymentAddress.amount?.let {

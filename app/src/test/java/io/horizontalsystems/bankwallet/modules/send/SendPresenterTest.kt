@@ -39,9 +39,11 @@ class SendPresenterTest {
 
     @Test
     fun onViewDidLoad() {
+        whenever(interactor.clipboardHasPrimaryClip).thenReturn(true)
         presenter.onViewDidLoad()
 
         verify(interactor).retrieveRate()
+        verify(view).setPasteButtonState(true)
     }
 
     @Test
@@ -88,6 +90,14 @@ class SendPresenterTest {
         presenter.onSendClicked()
 
         verify(view).showConfirmation(viewItemConfirm)
+    }
+
+    @Test
+    fun onDeleteClicked() {
+        whenever(interactor.clipboardHasPrimaryClip).thenReturn(true)
+        presenter.onDeleteClicked()
+
+        verify(view).setPasteButtonState(true)
     }
 
     // InteractorDelegate
