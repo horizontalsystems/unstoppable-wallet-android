@@ -29,7 +29,6 @@ object ManageCoinsModule {
     }
 
     interface IView {
-        fun setTitle(title: Int)
         fun updateCoins()
         fun showFailedToSaveError()
     }

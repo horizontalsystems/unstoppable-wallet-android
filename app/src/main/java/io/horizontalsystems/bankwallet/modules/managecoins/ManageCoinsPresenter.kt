@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.managecoins
 
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
 
 class ManageCoinsPresenter(
@@ -13,7 +12,6 @@ class ManageCoinsPresenter(
     var view: ManageCoinsModule.IView? = null
 
     override fun viewDidLoad() {
-        view?.setTitle(R.string.ManageCoins_title)
         interactor.loadCoins()
     }
 

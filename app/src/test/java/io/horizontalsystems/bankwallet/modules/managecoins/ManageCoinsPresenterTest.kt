@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.managecoins
 
-import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.entities.Coin
@@ -38,7 +37,6 @@ class ManageCoinsPresenterTest {
     @Test
     fun viewDidLoad() {
         presenter.viewDidLoad()
-        verify(view).setTitle(any())
         verify(interactor).loadCoins()
     }
 

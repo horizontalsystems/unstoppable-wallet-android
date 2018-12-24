@@ -42,15 +42,10 @@ class ManageCoinsActivity : BaseActivity(), ManageCoinsAdapter.Listener, StartDr
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.close)
+        supportActionBar?.title = getString(R.string.ManageCoins_title)
 
         viewModel.coinsLoadedLiveEvent.observe(this, Observer {
             adapter.notifyDataSetChanged()
-        })
-
-        viewModel.titleLiveDate.observe(this, Observer { title ->
-            title?.let {
-                supportActionBar?.title = getString(it)
-            }
         })
 
         viewModel.closeLiveDate.observe(this, Observer {

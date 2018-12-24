@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.SingleLiveEvent
 class ManageCoinsViewModel: ViewModel(), ManageCoinsModule.IView, ManageCoinsModule.IRouter {
 
     val coinsLoadedLiveEvent = SingleLiveEvent<Void>()
-    val titleLiveDate = MutableLiveData<Int>()
     val closeLiveDate = SingleLiveEvent<Void>()
 
     lateinit var delegate: ManageCoinsModule.IViewDelegate
@@ -16,10 +15,6 @@ class ManageCoinsViewModel: ViewModel(), ManageCoinsModule.IView, ManageCoinsMod
     fun init() {
         ManageCoinsModule.init(this, this)
         delegate.viewDidLoad()
-    }
-
-    override fun setTitle(title: Int) {
-        titleLiveDate.value = title
     }
 
     override fun updateCoins() {
