@@ -83,22 +83,24 @@
     <string name="TransactionInfo_Id">ID:</string>
     <string name="TransactionInfo_To">À:</string>
     <string name="TransactionInfo_From">De:</string>
-    <!--Full Transaction-->
-    <string name="FullTransactionInfo_Title">Transaction</string>
-    <string name="FullTransactionInfo_Size">Taille</string>
-    <string name="FullTransactionInfo_FeeRate">Taux de frais</string>
-    <string name="FullransactionInfo_ReceivedTime">Heure de Réception</string>
-    <string name="FullTransactionInfo_MinedTime">Heure miné</string>
-    <string name="FullTransactionInfo_IncludedInBblock">Inclus dans le Block</string>
-    <string name="FullTransactionInfo_Confirmations">Confirmation</string>
-    <string name="FullTransactionInfo_LockTime">Heure de verrouillage</string>
-    <string name="FullTransactionInfo_Time">Heure</string>
+    <string name="TransactionInfo_ButtonMore">From:</string>
+    <!--Full Info-->
+    <string name="FullInfo_Title">Transaction</string>
+    <string name="FullInfo_Id">ID</string>
+    <string name="FullInfo_Status">Status</string>
+    <string name="FullInfo_Time">Time</string>
+    <string name="FullInfo_Block">Block</string>
+    <string name="FullInfo_Confirmations">Confirmations</string>
+    <string name="FullInfo_TotalInput">Total Input</string>
+    <string name="FullInfo_TotalOutput">Total Output</string>
+    <string name="FullInfo_Fee">Fee</string>
+    <string name="FullInfo_SubtitleFrom">From</string>
+    <string name="FullInfo_SubtitleInputs">Inputs</string>
+    <string name="FullInfo_SubtitleOutputs">Outputs</string>
+    <string name="FullInfo_SubtitleProvider">Data Provider</string>
     <string name="FullTransactionInfo_From">De</string>
     <string name="FullTransactionInfo_To">À</string>
-    <string name="FullTransactionInfo_Received">Reçue</string>
-    <string name="FullTransactionInfo_Sent">Envoyée</string>
     <string name="FullTransactionInfo_Amount">Montant</string>
-    <string name="FullTransactionInfo_Fee">Frais</string>
     <string name="FullTransactionInfo_Block">Bloc</string>
     <!--Settings-->
     <string name="Settings_Title">Paramètres</string>
@@ -169,4 +171,7 @@
     <string name="EditPin_Title">Modifier le PIN</string>
     <string name="EditPin_UnlockInfo">Entrez le PIN actuel</string>
     <string name="EditPin_NewPinInfo">Entrez le nouveau PIN</string>
+    <!--Manage Coins-->
+    <string name="ManageCoins_title">Manage Coins</string>
+    <string name="ManageCoins_save">Save</string>
 </resources>

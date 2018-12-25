@@ -83,22 +83,24 @@
     <string name="TransactionInfo_Id">Kimlik:</string>
     <string name="TransactionInfo_To">Alan:</string>
     <string name="TransactionInfo_From">Gönderen:</string>
-    <!--Full Transaction-->
-    <string name="FullTransactionInfo_Title">Hesap işlemi</string>
-    <string name="FullTransactionInfo_Size">Boyut</string>
-    <string name="FullTransactionInfo_FeeRate">Ücret oranı</string>
-    <string name="FullransactionInfo_ReceivedTime">İşlem vakti</string>
-    <string name="FullTransactionInfo_MinedTime">Madenleme Süresi</string>
-    <string name="FullTransactionInfo_IncludedInBblock">Blok Numarası</string>
-    <string name="FullTransactionInfo_Confirmations">Onaylama</string>
-    <string name="FullTransactionInfo_LockTime">Kilit Süresi</string>
-    <string name="FullTransactionInfo_Time">Tarih</string>
+    <string name="TransactionInfo_ButtonMore">Gönderen:</string>
+    <!--Full Info-->
+    <string name="FullInfo_Title">Hesap işlemi</string>
+    <string name="FullInfo_Id">Kimlik</string>
+    <string name="FullInfo_Status">Durum</string>
+    <string name="FullInfo_Time">Tarih</string>
+    <string name="FullInfo_Block">Block</string>
+    <string name="FullInfo_Confirmations">Onaylama</string>
+    <string name="FullInfo_TotalInput">Total Input</string>
+    <string name="FullInfo_TotalOutput">Total Output</string>
+    <string name="FullInfo_Fee">Masraf</string>
+    <string name="FullInfo_SubtitleFrom">Gönderen</string>
+    <string name="FullInfo_SubtitleInputs">Inputs</string>
+    <string name="FullInfo_SubtitleOutputs">Outputs</string>
+    <string name="FullInfo_SubtitleProvider">Data Provider</string>
     <string name="FullTransactionInfo_From">Gönderen</string>
     <string name="FullTransactionInfo_To">Alan</string>
-    <string name="FullTransactionInfo_Received">Alındı</string>
-    <string name="FullTransactionInfo_Sent">Gönderildi</string>
     <string name="FullTransactionInfo_Amount">Tutar</string>
-    <string name="FullTransactionInfo_Fee">Ücret</string>
     <string name="FullTransactionInfo_Block">Blok numarası</string>
     <!--Settings-->
     <string name="Settings_Title">Ayarlar</string>
@@ -126,13 +128,17 @@
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Hakkında</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Şartlar &amp; Gizlilik Politikası:</string>
-    <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
-\n\nIt works everywhere as long as there is internet. No entity can block this app from working or to block someone from using it.
-\n\nYour funds are securely stored on the phone itself, not anywhere else.
-\n\nIt’s your responsibility to backup your Secret Key and keep it private. Never show it to anyone. If it’s lost, forgotten or stollen your funds can be used by the person who has your Secret key.
-\n\nDo not jailbreak your phone, do not install apps from unknown (untrusted) sources, do not give your device to untrusted people, and keep the Operating System on your phone up to date. The security of your wallet depends on this.
-\n\nThe entire code powering this app been open to the public scrutiny since the beginning. We tried to build the most secure and decentralized wallet we could, however there are no guarantees that there are no unintended software issues. That said, this wallet is likely to be significantly more secure than any smartphone wallet app out there.
-\n\nSome generic non-private app data like currency exchange rates are stored on decentralized storage (IPFS).</string>
+    <string name="SettingsAbout_TermsPrivacyText">Hesabınız güvenli bir şekilde cihazınızda tutlur. Herhangi bir harici sunucu da değil.
+\n\nUygulama, çalışmak için herhangi bir sunucuya veya şahsa bağımlı değildir.
+\n\nBazı genel bilgiler (kur oranı vb.) merkezsiz bilgi deposunda tutulur. (IPFS)
+\n\nUygulama internet olan heryerde çalışır.
+\n\n3. şahsın uygulamayı engellemesi imkansızdır.
+\n\nBu uygulamanın kaynak kodu açıktır.
+\n\nKodda bazı hatalar olabilir. Biz en güvenli cüzdanı oluşturmaya çalışsakta mülkünüzün tam güvenliğini garanti edemeyiz. Kimse tam garanti veremez.
+\n\nGizli Anahtarınızı yedekleyin ve kimseye göstermeyin!
+\n\nCihazınıza güvenilmeyen ve bilmediğiniz yerlerden uygulama yüklemeyin. Sistemin yönetici (root) hesabını etkinleştirmeyin.
+\n\nCihazınızı tanımadığınız ve güvenmediğiniz kimselere vermeyin.
+\n\nGizli Anahtarınızın ve cihazınızın güvenliğinden sadece SİZ sorumlusunuz.</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android anahtar deposu hatası</string>
     <string name="Alert_KeysInvalidatedDescription">Android cihazınızın kilidi değiştirildiğinden cüzdan bilginizi tutan şifreli dosya artık geçersiz</string>
@@ -169,4 +175,7 @@
     <string name="EditPin_Title">PIN\'i değiştir</string>
     <string name="EditPin_UnlockInfo">Şu an kullandığınız PİN\'i girin</string>
     <string name="EditPin_NewPinInfo">Yeni PİN gerin</string>
+    <!--Manage Coins-->
+    <string name="ManageCoins_title">Manage Coins</string>
+    <string name="ManageCoins_save">Save</string>
 </resources>

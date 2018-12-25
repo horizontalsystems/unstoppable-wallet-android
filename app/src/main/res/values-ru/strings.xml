@@ -83,22 +83,24 @@
     <string name="TransactionInfo_Id">ID:</string>
     <string name="TransactionInfo_To">Кому:</string>
     <string name="TransactionInfo_From">От:</string>
-    <!--Full Transaction-->
-    <string name="FullTransactionInfo_Title">Транзакция</string>
-    <string name="FullTransactionInfo_Size">Размер</string>
-    <string name="FullTransactionInfo_FeeRate">Комиссия</string>
-    <string name="FullransactionInfo_ReceivedTime">Время Получения</string>
-    <string name="FullTransactionInfo_MinedTime">Время Записи</string>
-    <string name="FullTransactionInfo_IncludedInBblock">Записан в Блок</string>
-    <string name="FullTransactionInfo_Confirmations">Подтверждения</string>
-    <string name="FullTransactionInfo_LockTime">Время Блокировки</string>
-    <string name="FullTransactionInfo_Time">Время</string>
+    <string name="TransactionInfo_ButtonMore">From:</string>
+    <!--Full Info-->
+    <string name="FullInfo_Title">Transaction</string>
+    <string name="FullInfo_Id">ID</string>
+    <string name="FullInfo_Status">Status</string>
+    <string name="FullInfo_Time">Time</string>
+    <string name="FullInfo_Block">Block</string>
+    <string name="FullInfo_Confirmations">Confirmations</string>
+    <string name="FullInfo_TotalInput">Total Input</string>
+    <string name="FullInfo_TotalOutput">Total Output</string>
+    <string name="FullInfo_Fee">Fee</string>
+    <string name="FullInfo_SubtitleFrom">From</string>
+    <string name="FullInfo_SubtitleInputs">Inputs</string>
+    <string name="FullInfo_SubtitleOutputs">Outputs</string>
+    <string name="FullInfo_SubtitleProvider">Data Provider</string>
     <string name="FullTransactionInfo_From">От</string>
     <string name="FullTransactionInfo_To">Кому</string>
-    <string name="FullTransactionInfo_Received">Получено</string>
-    <string name="FullTransactionInfo_Sent">Отправлено</string>
     <string name="FullTransactionInfo_Amount">Сумма</string>
-    <string name="FullTransactionInfo_Fee">Комиссия</string>
     <string name="FullTransactionInfo_Block">Заблокировать</string>
     <!--Settings-->
     <string name="Settings_Title">Настройки</string>
@@ -106,7 +108,7 @@
     <string name="Settings_BaseCurrency">Базовая Валюта</string>
     <string name="Settings_Language">Язык</string>
     <string name="Settings_LightMode">Светлый Режим</string>
-    <string name="Settings_About">О программе</string>
+    <string name="Settings_About">О приложении</string>
     <string name="Settings_InfoTitleWithVersion">Bank Wallet %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <!--Settings-->
@@ -124,7 +126,7 @@
     <!--Setting_Language-->
     <string name="SettingsLanguage_Title">Язык</string>
     <!--Setting_About-->
-    <string name="SettingsAbout_Title">О программе</string>
+    <string name="SettingsAbout_Title">О приложении</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Условия &amp; Политика конфиденциальности:</string>
     <string name="SettingsAbout_TermsPrivacyText">\n\nЭто приложение полностью децентрализованно. Работоспособность этого приложения не зависит от сторонних серверов или какой-либо команды тех поддержки.
 \n\nПриложение работает везде, пока есть интернет. Этот кошелек или его пользователи не могут быть заблокированы кем-либо.
@@ -169,4 +171,7 @@
     <string name="EditPin_Title">Обновить PIN-код</string>
     <string name="EditPin_UnlockInfo">Введите текущий PIN-код</string>
     <string name="EditPin_NewPinInfo">Введите новый PIN-код</string>
+    <!--Manage Coins-->
+    <string name="ManageCoins_title">Manage Coins</string>
+    <string name="ManageCoins_save">Save</string>
 </resources>
