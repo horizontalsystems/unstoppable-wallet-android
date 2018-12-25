@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.wallet
+package io.horizontalsystems.bankwallet.modules.balance
 
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.whenever
@@ -16,17 +16,17 @@ import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 
-class WalletPresenterTest {
+class BalancePresenterTest {
 
-    private val interactor = mock(WalletModule.IInteractor::class.java)
-    private val view = mock(WalletModule.IView::class.java)
-    private val router = mock(WalletModule.IRouter::class.java)
+    private val interactor = mock(BalanceModule.IInteractor::class.java)
+    private val view = mock(BalanceModule.IView::class.java)
+    private val router = mock(BalanceModule.IRouter::class.java)
 
     private val wallet = mock(Wallet::class.java)
     private val adapter = mock(IAdapter::class.java)
     private val coin: CoinCode = "BTC"
 
-    private lateinit var presenter: WalletPresenter
+    private lateinit var presenter: BalancePresenter
 
     @Before
     fun setup() {
@@ -44,7 +44,7 @@ class WalletPresenterTest {
         whenever(interactor.wallets).thenReturn(wallets)
         whenever(interactor.rate(any())).thenReturn(Maybe.just(rate))
 
-        presenter = WalletPresenter(interactor, router)
+        presenter = BalancePresenter(interactor, router)
         presenter.view = view
     }
 

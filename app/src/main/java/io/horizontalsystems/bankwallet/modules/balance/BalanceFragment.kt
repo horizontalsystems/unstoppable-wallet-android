@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.wallet
+package io.horizontalsystems.bankwallet.modules.balance
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -26,9 +26,9 @@ import kotlinx.android.synthetic.main.fragment_wallet.*
 import kotlinx.android.synthetic.main.view_holder_coin.*
 
 
-class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener {
+class BalanceFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener {
 
-    private lateinit var viewModel: WalletViewModel
+    private lateinit var viewModel: BalanceViewModel
     private var coinsAdapter = CoinsAdapter(this)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -38,7 +38,7 @@ class WalletFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this).get(WalletViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(BalanceViewModel::class.java)
         viewModel.init()
 
         viewModel.titleLiveDate.observe(this, Observer { title ->
@@ -124,7 +124,7 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
         fun onItemClick(position: Int)
     }
 
-    var items = listOf<WalletViewItem>()
+    var items = listOf<BalanceViewItem>()
     private var expandedViewPosition = -1
 
     override fun getItemCount() = items.size
@@ -172,7 +172,7 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
 
     private var disposable: Disposable? = null
 
-    fun bind(walletViewItem: WalletViewItem, onSendClick: (() -> (Unit))? = null, onReceiveClick: (() -> (Unit))? = null, onHolderClicked: (() -> Unit)? = null, expanded: Boolean) {
+    fun bind(balanceViewItem: BalanceViewItem, onSendClick: (() -> (Unit))? = null, onReceiveClick: (() -> (Unit))? = null, onHolderClicked: (() -> Unit)? = null, expanded: Boolean) {
         buttonPay.isEnabled = false
         imgSyncFailed.visibility = View.GONE
         textCurrencyAmount.visibility = View.GONE
@@ -180,7 +180,7 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
         progressSync.visibility = View.GONE
         textSyncProgress.visibility = View.GONE
 
-        walletViewItem.state.let { adapterState ->
+        balanceViewItem.state.let { adapterState ->
             when (adapterState) {
                 is AdapterState.Syncing -> {
                     progressSync.visibility = View.VISIBLE
@@ -194,14 +194,14 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
                             }
                 }
                 is AdapterState.Synced -> {
-                    if (walletViewItem.coinValue.value > 0) {
+                    if (balanceViewItem.coinValue.value > 0) {
                         textCurrencyAmount.visibility = View.VISIBLE
-                        textCurrencyAmount.text = walletViewItem.currencyValue?.let { ValueFormatter.format(it) }
-                        textCurrencyAmount.setTextColor(ContextCompat.getColor(containerView.context, if (walletViewItem.rateExpired) R.color.yellow_crypto_40 else R.color.yellow_crypto))
+                        textCurrencyAmount.text = balanceViewItem.currencyValue?.let { ValueFormatter.format(it) }
+                        textCurrencyAmount.setTextColor(ContextCompat.getColor(containerView.context, if (balanceViewItem.rateExpired) R.color.yellow_crypto_40 else R.color.yellow_crypto))
                     }
 
                     textCoinAmount.visibility = View.VISIBLE
-                    textCoinAmount.text = ValueFormatter.format(walletViewItem.coinValue)
+                    textCoinAmount.text = ValueFormatter.format(balanceViewItem.coinValue)
 
                     buttonPay.isEnabled = true
                 }
@@ -211,15 +211,15 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
             }
         }
 
-        val iconDrawable = ContextCompat.getDrawable(containerView.context, LayoutHelper.getCoinDrawableResource(TextHelper.getCleanCoinCode(walletViewItem.coinValue.coinCode)))
+        val iconDrawable = ContextCompat.getDrawable(containerView.context, LayoutHelper.getCoinDrawableResource(TextHelper.getCleanCoinCode(balanceViewItem.coinValue.coinCode)))
         imgCoin.setImageDrawable(iconDrawable)
 
-        textCoinName.text = walletViewItem.coinValue.coinCode
+        textCoinName.text = balanceViewItem.coinValue.coinCode
 
-        textExchangeRate.text = walletViewItem.exchangeValue?.let { exchangeValue ->
-            containerView.context.getString(R.string.Balance_RatePerCoin, ValueFormatter.format(exchangeValue), walletViewItem.coinValue.coinCode)
+        textExchangeRate.text = balanceViewItem.exchangeValue?.let { exchangeValue ->
+            containerView.context.getString(R.string.Balance_RatePerCoin, ValueFormatter.format(exchangeValue), balanceViewItem.coinValue.coinCode)
         } ?: ""
-        textExchangeRate.setTextColor(ContextCompat.getColor(containerView.context, if (walletViewItem.rateExpired) R.color.grey_40 else R.color.grey))
+        textExchangeRate.setTextColor(ContextCompat.getColor(containerView.context, if (balanceViewItem.rateExpired) R.color.grey_40 else R.color.grey))
 
         buttonPay.setOnSingleClickListener {
             onSendClick?.invoke()

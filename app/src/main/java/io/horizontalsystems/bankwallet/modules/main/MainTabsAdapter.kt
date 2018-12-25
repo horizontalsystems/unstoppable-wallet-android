@@ -7,7 +7,7 @@ import android.util.SparseArray
 import android.view.ViewGroup
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsFragment
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsFragment
-import io.horizontalsystems.bankwallet.modules.wallet.WalletFragment
+import io.horizontalsystems.bankwallet.modules.balance.BalanceFragment
 
 class MainTabsAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
 
@@ -18,7 +18,7 @@ class MainTabsAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(f
     override fun getCount(): Int = 3
 
     override fun getItem(position: Int): Fragment = when (position) {
-        0 -> WalletFragment()
+        0 -> BalanceFragment()
         1 -> TransactionsFragment()
         else -> MainSettingsFragment()
     }

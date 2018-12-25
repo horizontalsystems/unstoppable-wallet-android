@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.wallet
+package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Currency
@@ -7,13 +7,13 @@ import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.reactivex.Maybe
 
-object WalletModule {
+object BalanceModule {
 
     interface IView {
         fun setTitle(title: Int)
         fun didRefresh()
         fun show(totalBalance: CurrencyValue?)
-        fun show(wallets: List<WalletViewItem>)
+        fun show(wallets: List<BalanceViewItem>)
         fun show(syncStatus: String)
         fun updateBalanceColor(i: Int)
     }
@@ -45,9 +45,9 @@ object WalletModule {
         fun openManageCoins()
     }
 
-    fun init(view: WalletViewModel, router: IRouter) {
-        val interactor = WalletInteractor(App.walletManager, App.rateManager, App.currencyManager)
-        val presenter = WalletPresenter(interactor, router)
+    fun init(view: BalanceViewModel, router: IRouter) {
+        val interactor = BalanceInteractor(App.walletManager, App.rateManager, App.currencyManager)
+        val presenter = BalancePresenter(interactor, router)
 
         presenter.view = view
         interactor.delegate = presenter

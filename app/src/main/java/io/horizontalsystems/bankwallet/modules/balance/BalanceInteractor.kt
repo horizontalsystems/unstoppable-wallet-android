@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.wallet
+package io.horizontalsystems.bankwallet.modules.balance
 
 import android.os.Handler
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
@@ -11,14 +11,14 @@ import io.reactivex.Maybe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 
-class WalletInteractor(
+class BalanceInteractor(
         private val walletManager: IWalletManager,
         private val rateManager: RateManager,
         private val currencyManager: ICurrencyManager,
         private val refreshTimeout: Double = 2.0
-) : WalletModule.IInteractor {
+) : BalanceModule.IInteractor {
 
-    var delegate: WalletModule.IInteractorDelegate? = null
+    var delegate: BalanceModule.IInteractorDelegate? = null
 
     private var disposables: CompositeDisposable = CompositeDisposable()
 

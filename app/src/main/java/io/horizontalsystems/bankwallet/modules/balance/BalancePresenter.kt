@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.wallet
+package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
@@ -9,16 +9,16 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class WalletPresenter(
-        private var interactor: WalletModule.IInteractor,
-        private val router: WalletModule.IRouter) : WalletModule.IViewDelegate, WalletModule.IInteractorDelegate {
+class BalancePresenter(
+        private var interactor: BalanceModule.IInteractor,
+        private val router: BalanceModule.IRouter) : BalanceModule.IViewDelegate, BalanceModule.IInteractorDelegate {
 
     private var disposables: CompositeDisposable = CompositeDisposable()
 
-    var view: WalletModule.IView? = null
+    var view: BalanceModule.IView? = null
 
     //
-    // WalletModule.IViewDelegate
+    // BalanceModule.IViewDelegate
     //
     override fun viewDidLoad() {
         view?.setTitle(R.string.Balance_Title)
@@ -39,7 +39,7 @@ class WalletPresenter(
     }
 
     //
-    // WalletModule.IInteractorDelegate
+    // BalanceModule.IInteractorDelegate
     //
     override fun didUpdate() {
         updateView()
@@ -64,7 +64,7 @@ class WalletPresenter(
                 .subscribe { rates ->
 
                     var totalBalance = 0.0
-                    val viewItems = mutableListOf<WalletViewItem>()
+                    val viewItems = mutableListOf<BalanceViewItem>()
                     val currency = interactor.baseCurrency
                     var allSynced = true
 
@@ -78,7 +78,7 @@ class WalletPresenter(
                             totalBalance += balance * mRate.value
                         }
 
-                        viewItems.add(WalletViewItem(
+                        viewItems.add(BalanceViewItem(
                                 coinValue = CoinValue(coinCode = wallet.coinCode, value = balance),
                                 exchangeValue = rate?.let { CurrencyValue(currency = currency, value = it.value) },
                                 currencyValue = rate?.let { CurrencyValue(currency = currency, value = balance * it.value) },

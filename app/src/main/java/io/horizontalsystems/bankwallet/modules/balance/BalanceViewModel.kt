@@ -1,16 +1,16 @@
-package io.horizontalsystems.bankwallet.modules.wallet
+package io.horizontalsystems.bankwallet.modules.balance
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 
-class WalletViewModel : ViewModel(), WalletModule.IView, WalletModule.IRouter {
+class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter {
 
-    lateinit var delegate: WalletModule.IViewDelegate
+    lateinit var delegate: BalanceModule.IViewDelegate
 
     val titleLiveDate = MutableLiveData<Int>()
-    val walletsLiveData = MutableLiveData<List<WalletViewItem>>()
+    val walletsLiveData = MutableLiveData<List<BalanceViewItem>>()
     val totalBalanceLiveData = MutableLiveData<CurrencyValue>()
     val openSendDialog = SingleLiveEvent<String>()
     val openReceiveDialog = SingleLiveEvent<String>()
@@ -19,7 +19,7 @@ class WalletViewModel : ViewModel(), WalletModule.IView, WalletModule.IRouter {
     val openManageCoinsLiveEvent = SingleLiveEvent<Void>()
 
     fun init() {
-        WalletModule.init(this, this)
+        BalanceModule.init(this, this)
 
         delegate.viewDidLoad()
     }
@@ -52,7 +52,7 @@ class WalletViewModel : ViewModel(), WalletModule.IView, WalletModule.IRouter {
         totalBalanceLiveData.value = totalBalance
     }
 
-    override fun show(wallets: List<WalletViewItem>) {
+    override fun show(wallets: List<BalanceViewItem>) {
         walletsLiveData.value = wallets
     }
 

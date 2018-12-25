@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.wallet
+package io.horizontalsystems.bankwallet.modules.balance
 
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
@@ -15,9 +15,9 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
 
-class WalletInteractorTest {
+class BalanceInteractorTest {
 
-    private val delegate = mock(WalletModule.IInteractorDelegate::class.java)
+    private val delegate = mock(BalanceModule.IInteractorDelegate::class.java)
 
     private val walletManager = mock(IWalletManager::class.java)
     private val rateManager = mock(RateManager::class.java)
@@ -34,7 +34,7 @@ class WalletInteractorTest {
     private val rateSubject = PublishSubject.create<Boolean>()
     private val currencySubject = PublishSubject.create<Currency>()
 
-    private lateinit var interactor: WalletInteractor
+    private lateinit var interactor: BalanceInteractor
 
     @Before
     fun setup() {
@@ -51,7 +51,7 @@ class WalletInteractorTest {
         whenever(wallet.adapter).thenReturn(adapter)
         whenever(walletManager.wallets).thenReturn(wallets)
 
-        interactor = WalletInteractor(walletManager, rateManager, currencyManager)
+        interactor = BalanceInteractor(walletManager, rateManager, currencyManager)
         interactor.delegate = delegate
     }
 
