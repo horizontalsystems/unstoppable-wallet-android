@@ -83,9 +83,9 @@
     <string name="TransactionInfo_Id">ID:</string>
     <string name="TransactionInfo_To">À:</string>
     <string name="TransactionInfo_From">De:</string>
-    <string name="TransactionInfo_ButtonMore">From:</string>
+    <string name="TransactionInfo_ButtonMore">Full Info:</string>
     <!--Full Info-->
-    <string name="FullInfo_Title">Transaction</string>
+    <string name="FullInfo_Title">Full Info</string>
     <string name="FullInfo_Id">ID</string>
     <string name="FullInfo_Status">Status</string>
     <string name="FullInfo_Time">Time</string>
@@ -141,7 +141,7 @@
     <string name="Alert_NoDeviceLockTitle">Attention</string>
     <string name="Alert_NoDeviceLockDescription">Installez un écran de verrouillage sur cet appareil pour continuer. Allez dans « Paramètres » &gt; « Sécurité » &gt; « Screen Lock » et activez le paramètre d’écran de verrouillage.</string>
     <!--Unlock-->
-    <string name="Unlock_Page_EnterYourPin">Entrez PIN</string>
+    <string name="Unlock_Page_EnterYourPin">PIN</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Devise non supportée</string>
     <!--Hud texts-->
@@ -160,7 +160,7 @@
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Désactivé jusqu\'à: %s</string>
     <!--Set Pin-->
-    <string name="SetPin_Title">Définir le PIN</string>
+    <string name="SetPin_Title">PIN</string>
     <string name="SetPin_Info">Votre code PIN sera utilisé pour déverrouiller l\'appli de porte-monnaie</string>
     <string name="SetPin_ErrorShortPin">S\'il vous plaît entrez tous les chiffres.</string>
     <string name="SetPin_ConfirmInfo">Confirmez le PIN</string>
