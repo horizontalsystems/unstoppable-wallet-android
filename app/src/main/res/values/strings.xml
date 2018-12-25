@@ -119,12 +119,12 @@
     <string name="TransactionInfo_Id">ID:</string>
     <string name="TransactionInfo_To">To:</string>
     <string name="TransactionInfo_From">From:</string>
-    <string name="TransactionInfo_ButtonMore">From:</string>
+    <string name="TransactionInfo_ButtonMore">Full Info:</string>
 
 
     <!--Full Info-->
 
-    <string name="FullInfo_Title">Transaction</string>
+    <string name="FullInfo_Title">Full Info</string>
     <string name="FullInfo_Id">ID</string>
     <string name="FullInfo_Status">Status</string>
     <string name="FullInfo_Time">Time</string>
@@ -206,7 +206,7 @@
 
     <!--Unlock-->
 
-    <string name="Unlock_Page_EnterYourPin">Enter PIN</string>
+    <string name="Unlock_Page_EnterYourPin">PIN</string>
 
 
     <!--Errors-->
@@ -240,7 +240,7 @@
 
     <!--Set Pin-->
 
-    <string name="SetPin_Title">Set PIN</string>
+    <string name="SetPin_Title">PIN</string>
     <string name="SetPin_Info">Your PIN will be used to unlock wallet app</string>
     <string name="SetPin_ErrorShortPin">Please enter all digits.</string>
     <string name="SetPin_ConfirmInfo">Confirm PIN</string>
