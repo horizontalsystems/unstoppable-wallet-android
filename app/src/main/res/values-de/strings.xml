@@ -83,9 +83,9 @@
     <string name="TransactionInfo_Id">ID:</string>
     <string name="TransactionInfo_To">An:</string>
     <string name="TransactionInfo_From">Von:</string>
-    <string name="TransactionInfo_ButtonMore">From:</string>
+    <string name="TransactionInfo_ButtonMore">Full Info:</string>
     <!--Full Info-->
-    <string name="FullInfo_Title">Transaction</string>
+    <string name="FullInfo_Title">Full Info</string>
     <string name="FullInfo_Id">ID</string>
     <string name="FullInfo_Status">Status</string>
     <string name="FullInfo_Time">Time</string>
@@ -142,7 +142,7 @@ Hack dein Telefon nicht, installier keine Anwendungen von inoffiziellen Quellen 
     <string name="Alert_NoDeviceLockTitle">Warnung</string>
     <string name="Alert_NoDeviceLockDescription">Richten Sie ein Sperrbildschirm auf diesem Gerät weiter. Gehen Sie auf \"Einstellungen\" &gt; \"Security\" &gt; \"Bildschirmsperre\" und aktivieren Sie die Sperre Bildschirmeinstellung.</string>
     <!--Unlock-->
-    <string name="Unlock_Page_EnterYourPin">Gib deine PIN ein</string>
+    <string name="Unlock_Page_EnterYourPin">PIN</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Nicht unterstützte Währung</string>
     <!--Hud texts-->
@@ -161,7 +161,7 @@ Hack dein Telefon nicht, installier keine Anwendungen von inoffiziellen Quellen 
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Deaktiviert bis: %s </string>
     <!--Set Pin-->
-    <string name="SetPin_Title">PIN festlegen</string>
+    <string name="SetPin_Title">PIN</string>
     <string name="SetPin_Info">Deine PIN wird verwendet, um deine Geldbörse zu entsperren</string>
     <string name="SetPin_ErrorShortPin">Gib bitte nur Zahlen ein.</string>
     <string name="SetPin_ConfirmInfo">PIN bestätigen</string>
