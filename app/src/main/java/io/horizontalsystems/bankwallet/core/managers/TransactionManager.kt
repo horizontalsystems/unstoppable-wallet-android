@@ -31,7 +31,7 @@ class TransactionManager(
         disposables.add(wordsManager.loggedInSubject
                 .subscribe{ logInState ->
                     if (logInState == LogInState.LOGOUT ) {
-                        clear()
+                        storage.deleteAll()
                     }
                 })
 
@@ -70,10 +70,6 @@ class TransactionManager(
 
     private fun syncRates() {
         rateSyncer.sync(currencyManager.baseCurrency.code)
-    }
-
-    private fun clear() {
-        storage.deleteAll()
     }
 
 }

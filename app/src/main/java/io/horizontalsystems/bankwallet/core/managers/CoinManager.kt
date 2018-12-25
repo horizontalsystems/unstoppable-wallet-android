@@ -24,7 +24,7 @@ class CoinManager(private val wordsManager: IWordsManager,
 
     private fun syncWallets(newWallet: Boolean) {
         wordsManager.words?.let {
-            walletManager.initWallets(it, defaultCoins, newWallet)
+            walletManager.initWallets(it, defaultCoins, newWallet, wordsManager.walletId)
         } ?: walletManager.clearWallets()
     }
 

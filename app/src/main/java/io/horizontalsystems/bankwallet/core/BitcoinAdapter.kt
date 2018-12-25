@@ -10,9 +10,9 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import java.util.*
 
-class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, newWallet: Boolean) : IAdapter, BitcoinKit.Listener {
+class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, newWallet: Boolean, walletId: String?) : IAdapter, BitcoinKit.Listener {
 
-    private var bitcoinKit = BitcoinKit(words, network, newWallet = newWallet)
+    private var bitcoinKit = BitcoinKit(words, network, newWallet = newWallet, walletId = walletId)
     private val satoshisInBitcoin = Math.pow(10.0, 8.0)
     private val progressSubject: BehaviorSubject<Double> = BehaviorSubject.createDefault(0.0)
 
@@ -143,14 +143,14 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
 
     companion object {
 
-        fun createBitcoin(words: List<String>, testMode: Boolean, newWallet: Boolean): BitcoinAdapter{
+        fun createBitcoin(words: List<String>, testMode: Boolean, newWallet: Boolean, walletId: String?): BitcoinAdapter {
             val network = if (testMode) BitcoinKit.NetworkType.TestNet else BitcoinKit.NetworkType.MainNet
-            return BitcoinAdapter(words, network, newWallet)
+            return BitcoinAdapter(words, network, newWallet, walletId)
         }
 
-        fun createBitcoinCash(words: List<String>, testMode: Boolean, newWallet: Boolean): BitcoinAdapter{
+        fun createBitcoinCash(words: List<String>, testMode: Boolean, newWallet: Boolean, walletId: String?): BitcoinAdapter {
             val network = if (testMode) BitcoinKit.NetworkType.TestNetBitCash else BitcoinKit.NetworkType.MainNetBitCash
-            return BitcoinAdapter(words, network, newWallet)
+            return BitcoinAdapter(words, network, newWallet, walletId)
         }
     }
 

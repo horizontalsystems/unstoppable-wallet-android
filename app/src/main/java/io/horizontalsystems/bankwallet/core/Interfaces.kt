@@ -14,7 +14,7 @@ interface IWalletManager {
     val wallets: List<Wallet>
     val walletsSubject: PublishSubject<List<Wallet>>
 
-    fun initWallets(words: List<String>, coins: List<Coin>, newWallet: Boolean)
+    fun initWallets(words: List<String>, coins: List<Coin>, newWallet: Boolean, walletId: String?)
     fun refreshWallets()
     fun clearWallets()
 }
@@ -34,9 +34,9 @@ interface ILocalStorage {
 }
 
 interface ISecuredStorage {
-    val savedWords: List<String>?
-    fun saveWords(words: List<String>)
-    fun wordsAreEmpty(): Boolean
+    val authData: List<String>?
+    fun saveAuthData(words: List<String>)
+    fun noAuthData(): Boolean
     val savedPin: String?
     fun savePin(pin: String)
     fun pinIsEmpty(): Boolean
@@ -77,6 +77,7 @@ interface IKeyStoreSafeExecute {
 interface IWordsManager {
     fun safeLoad()
     var words: List<String>?
+    var walletId: String?
     var isBackedUp: Boolean
     var isLoggedIn: Boolean
     var loggedInSubject: PublishSubject<LogInState>
@@ -198,7 +199,7 @@ interface ITransactionRecordStorage {
     fun deleteAll()
 }
 
-interface ILockoutManager{
+interface ILockoutManager {
     fun didFailUnlock()
     fun dropFailedAttempts()
 
