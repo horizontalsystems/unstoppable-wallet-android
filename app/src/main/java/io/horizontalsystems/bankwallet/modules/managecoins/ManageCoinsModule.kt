@@ -35,10 +35,10 @@ object ManageCoinsModule {
 
     interface IViewDelegate {
         fun viewDidLoad()
-        fun enableCoin(coin: Coin)
-        fun disableCoin(coin: Coin)
+        fun enableCoin(position: Int)
+        fun disableCoin(position: Int)
         fun saveChanges()
-        fun moveCoin(coin: Coin, index: Int)
+        fun moveCoin(fromIndex: Int, toIndex: Int)
 
         fun enabledItemForIndex(position: Int): Coin
         fun disabledItemForIndex(position: Int): Coin

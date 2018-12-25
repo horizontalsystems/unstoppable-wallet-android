@@ -48,21 +48,21 @@ class ManageCoinsPresenterTest {
 
     @Test
     fun enableCoin() {
-        presenter.enableCoin(bitCashCoin)
+        presenter.enableCoin(0)
         verify(state).enable(bitCashCoin)
         verify(view).updateCoins()
     }
 
     @Test
     fun disableCoin() {
-        presenter.disableCoin(bitCoin)
+        presenter.disableCoin(0)
         verify(state).disable(bitCoin)
         verify(view).updateCoins()
     }
 
     @Test
     fun moveCoin() {
-        presenter.moveCoin(ethereumCoin, 0)
+        presenter.moveCoin(1, 0)
         verify(state).move(ethereumCoin, 0)
         verify(view).updateCoins()
     }

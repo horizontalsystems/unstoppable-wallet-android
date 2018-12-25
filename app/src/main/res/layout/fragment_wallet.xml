@@ -75,9 +75,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_margin="32dp"
-                android:src="@drawable/add_2"
-                android:background="@drawable/rounded_ripple"
+                android:layout_margin="24dp"
+                android:src="@drawable/stateful_wallet_add_icon"
                 />
         </LinearLayout>
 

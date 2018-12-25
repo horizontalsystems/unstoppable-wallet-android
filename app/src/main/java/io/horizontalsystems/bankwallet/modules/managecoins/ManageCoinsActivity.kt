@@ -71,12 +71,12 @@ class ManageCoinsActivity : BaseActivity(), ManageCoinsAdapter.Listener, StartDr
         else -> super.onOptionsItemSelected(item)
     }
 
-    override fun onEnabledItemClick(coin: Coin) {
-        viewModel.delegate.disableCoin(coin)
+    override fun onEnabledItemClick(position: Int) {
+        viewModel.delegate.disableCoin(position)
     }
 
-    override fun onDisabledItemClick(coin: Coin) {
-        viewModel.delegate.enableCoin(coin)
+    override fun onDisabledItemClick(position: Int) {
+        viewModel.delegate.enableCoin(position)
     }
 
     override fun requestDrag(viewHolder: RecyclerView.ViewHolder) {
@@ -90,8 +90,8 @@ class ManageCoinsAdapter(
     : RecyclerView.Adapter<RecyclerView.ViewHolder>(), MyDragHelperCallback.Listener {
 
     interface Listener {
-        fun onEnabledItemClick(coin: Coin)
-        fun onDisabledItemClick(coin: Coin)
+        fun onEnabledItemClick(position: Int)
+        fun onDisabledItemClick(position: Int)
     }
 
     lateinit var viewModel: ManageCoinsViewModel
@@ -120,7 +120,7 @@ class ManageCoinsAdapter(
         when (holder) {
             is ViewHolderEnabledCoin -> {
                 val transactionRecord = viewModel.delegate.enabledItemForIndex(position)
-                holder.bind(transactionRecord) { listener.onEnabledItemClick(transactionRecord) }
+                holder.bind(transactionRecord) { listener.onEnabledItemClick(position) }
 
                 holder.dragIcon.setOnTouchListener { _, event ->
                     if (event.action == MotionEvent.ACTION_DOWN) {
@@ -131,7 +131,7 @@ class ManageCoinsAdapter(
             }
             is ViewHolderDisabledCoin -> {
                 val transactionRecord = viewModel.delegate.disabledItemForIndex(disabledIndex(position))
-                holder.bind(transactionRecord) { listener.onDisabledItemClick(transactionRecord) }
+                holder.bind(transactionRecord) { listener.onDisabledItemClick(disabledIndex(position)) }
             }
         }
 
@@ -139,6 +139,10 @@ class ManageCoinsAdapter(
 
     override fun onItemMoved(from: Int, to: Int) {
         notifyItemMoved(from, to)
+    }
+
+    override fun onItemMoveEnded(from: Int, to: Int) {
+        viewModel.delegate.moveCoin(from, to)
     }
 
     private val showDivider
@@ -181,8 +185,12 @@ class ViewHolderDivider(override val containerView: View) : RecyclerView.ViewHol
 
 class MyDragHelperCallback(private var listener: Listener) : ItemTouchHelper.Callback() {
 
+    var dragFrom = -1
+    var dragTo = -1
+
     interface Listener {
         fun onItemMoved(from: Int, to: Int)
+        fun onItemMoveEnded(from: Int, to: Int)
     }
 
     private val drawMovementFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
@@ -191,13 +199,34 @@ class MyDragHelperCallback(private var listener: Listener) : ItemTouchHelper.Cal
         return makeMovementFlags(drawMovementFlags, 0)
     }
 
+    override fun canDropOver(recyclerView: RecyclerView, current: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+        return current.itemViewType == target.itemViewType
+    }
+
     override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+        val fromPosition = viewHolder.adapterPosition
+        val toPosition = target.adapterPosition
+        if(dragFrom == -1) {
+            dragFrom =  fromPosition
+        }
+        dragTo = toPosition
+
         listener.onItemMoved(viewHolder.adapterPosition, target.adapterPosition)
         return true
     }
 
     override fun onSwiped(recyclerView: RecyclerView.ViewHolder, position: Int) { }
 
+    override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+        super.clearView(recyclerView, viewHolder)
+
+        if(dragFrom != -1 && dragTo != -1 && dragFrom != dragTo) {
+            listener.onItemMoveEnded(dragFrom, dragTo)
+        }
+
+        dragFrom = -1
+        dragTo = -1
+    }
 }
 
 interface StartDragListener {
