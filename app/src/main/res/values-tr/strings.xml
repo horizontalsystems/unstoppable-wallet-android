@@ -83,18 +83,18 @@
     <string name="TransactionInfo_Id">Kimlik:</string>
     <string name="TransactionInfo_To">Alan:</string>
     <string name="TransactionInfo_From">Gönderen:</string>
-    <string name="TransactionInfo_ButtonMore">From:</string>
+    <string name="TransactionInfo_ButtonMore">Gönderen:</string>
     <!--Full Info-->
-    <string name="FullInfo_Title">Transaction</string>
-    <string name="FullInfo_Id">ID</string>
-    <string name="FullInfo_Status">Status</string>
-    <string name="FullInfo_Time">Time</string>
+    <string name="FullInfo_Title">Hesap işlemi</string>
+    <string name="FullInfo_Id">Kimlik</string>
+    <string name="FullInfo_Status">Durum</string>
+    <string name="FullInfo_Time">Tarih</string>
     <string name="FullInfo_Block">Block</string>
-    <string name="FullInfo_Confirmations">Confirmations</string>
+    <string name="FullInfo_Confirmations">Onaylama</string>
     <string name="FullInfo_TotalInput">Total Input</string>
     <string name="FullInfo_TotalOutput">Total Output</string>
-    <string name="FullInfo_Fee">Fee</string>
-    <string name="FullInfo_SubtitleFrom">From</string>
+    <string name="FullInfo_Fee">Masraf</string>
+    <string name="FullInfo_SubtitleFrom">Gönderen</string>
     <string name="FullInfo_SubtitleInputs">Inputs</string>
     <string name="FullInfo_SubtitleOutputs">Outputs</string>
     <string name="FullInfo_SubtitleProvider">Data Provider</string>
