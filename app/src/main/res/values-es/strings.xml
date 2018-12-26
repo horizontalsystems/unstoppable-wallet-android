@@ -91,13 +91,13 @@
     <string name="FullInfo_Time">Hora</string>
     <string name="FullInfo_Block">Bloque</string>
     <string name="FullInfo_Confirmations">Confirmaciones</string>
-    <string name="FullInfo_TotalInput">Aportación total</string>
-    <string name="FullInfo_TotalOutput">Producción total</string>
+    <string name="FullInfo_TotalInput">Inversión total</string>
+    <string name="FullInfo_TotalOutput">Rendimiento total</string>
     <string name="FullInfo_Fee">Comisión</string>
     <string name="FullInfo_SubtitleFrom">Desde </string>
-    <string name="FullInfo_SubtitleInputs">Aportaciones</string>
-    <string name="FullInfo_SubtitleOutputs">Producciones</string>
-    <string name="FullInfo_SubtitleProvider">Proveedores de datos</string>
+    <string name="FullInfo_SubtitleInputs">Inversiones</string>
+    <string name="FullInfo_SubtitleOutputs">Rendimientos</string>
+    <string name="FullInfo_SubtitleProvider">Proveedor de datos</string>
     <string name="FullTransactionInfo_From">Desde </string>
     <string name="FullTransactionInfo_To">Para</string>
     <string name="FullTransactionInfo_Amount">Importe</string>
@@ -109,13 +109,13 @@
     <string name="Settings_Language">Idioma</string>
     <string name="Settings_LightMode">Modo de brillo</string>
     <string name="Settings_About">Acerca de</string>
-    <string name="Settings_InfoTitleWithVersion">Bank Wallet %s</string>
+    <string name="Settings_InfoTitleWithVersion">Cartera bancaria %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Huella digital no habilitada</string>
-    <string name="Settings_Error_NoFingerprintAddedYet">You have not enabled fingerprint on this device. Go to Settings &gt; Security to set up fingerprint access.</string>
+    <string name="Settings_Error_NoFingerprintAddedYet">No ha activado su huella digital en este dispositivo. Vaya a Ajustes &gt; seguridad para configurar el acceso a su huella digital.</string>
     <!--Setting_Security-->
-    <string name="SettingsSecurity_Fingerprint">Fingerprint</string>
+    <string name="SettingsSecurity_Fingerprint">Huella digital</string>
     <string name="SettingsSecurity_EditPin">Editar el PIN</string>
     <string name="SettingsSecurity_BackupWallet">Copia de Seguridad de Cartera</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">Desconectarse desde este dispositivo</string>
@@ -142,42 +142,42 @@ La totalidad del código que soporta esta aplicación está abierta al escrutini
 
 Algunos datos genéricos de carácter público de esta app se guardan en centros de almacenamiento descentralizado (IPFS).</string>
     <!--Alert-->
-    <string name="Alert_KeysInvalidatedTitle">Android Keystore Error</string>
-    <string name="Alert_KeysInvalidatedDescription">The encrypted data holding your wallet was recently invalidated because your Android lock screen was changed</string>
-    <string name="Alert_NoDeviceLockTitle">Warning</string>
-    <string name="Alert_NoDeviceLockDescription">Set up a lock screen on this device to continue. Go to “Settings” &gt; “Security” &gt; “Screen Lock” and enable the lock screen setting.</string>
+    <string name="Alert_KeysInvalidatedTitle">Error de almacenamiento de claves de Android</string>
+    <string name="Alert_KeysInvalidatedDescription">Los datos encriptados de su monedero han sido recientemente  invalidados porque se cambió la pantalla de bloqueo de Android</string>
+    <string name="Alert_NoDeviceLockTitle">Aviso</string>
+    <string name="Alert_NoDeviceLockDescription">Configurar bloqueo de pantalla de este dispositivo para continuar. Ir a \"Ajustes\" &amp;gt; &amp;gt;  \"Seguridad\" \"Bloqueo de pantalla\" y establezca la configuración de la pantalla de bloqueo.</string>
     <!--Unlock-->
     <string name="Unlock_Page_EnterYourPin">PIN</string>
     <!--Errors-->
-    <string name="Error_UnsupportedBlockchain">Unsupported currency</string>
+    <string name="Error_UnsupportedBlockchain">Divisa no admitida</string>
     <!--Hud texts-->
-    <string name="Hud_Text_Unlock">Unlock</string>
-    <string name="Hud_Text_Success">Success</string>
+    <string name="Hud_Text_Unlock">Desbloquear</string>
+    <string name="Hud_Text_Success">Completado</string>
     <string name="Hud_Text_Error">Error</string>
-    <string name="Hud_Text_NoInternet">No Internet</string>
+    <string name="Hud_Text_NoInternet">Sin conexión a Internet</string>
     <string name="Hud_Text_Copied">Copiado</string>
-    <string name="Hud_Text_InvalidPinError">Incorrect PIN</string>
+    <string name="Hud_Text_InvalidPinError">PIN incorrecto</string>
     <!--Fingerprint texts-->
-    <string name="Fingerprint_DialogTitle">Fingerprint login</string>
-    <string name="Fingerprint_Hint">Touch sensor</string>
+    <string name="Fingerprint_DialogTitle">Inicio de sesión de huella digital</string>
+    <string name="Fingerprint_Hint">Sensor táctil</string>
     <string name="Fingerprint_EnterPin">Introduzca PIN</string>
-    <string name="Fingerprint_NotRecognized">Fingerprint not recognized. Try again</string>
-    <string name="Fingerprint_Success">Success!</string>
+    <string name="Fingerprint_NotRecognized">Huella digital no reconocida. Por favor inténtelo de nuevo.</string>
+    <string name="Fingerprint_Success">Operación realizada correctamente</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Inhabilitado hasta: %s</string>
     <!--Set Pin-->
     <string name="SetPin_Title">PIN</string>
-    <string name="SetPin_Info">Your PIN will be used to unlock wallet app</string>
-    <string name="SetPin_ErrorShortPin">Please enter all digits.</string>
+    <string name="SetPin_Info">Su PIN servirá para desbloquear la aplicación de su cartera</string>
+    <string name="SetPin_ErrorShortPin">Por favor, introduzca todos los dígitos.</string>
     <string name="SetPin_ConfirmInfo">Confirmar PIN</string>
-    <string name="SetPin_Success">Lock PIN was set successfully!</string>
-    <string name="SetPin_ErrorPinsDontMatch">PIN did not match. Try again.</string>
-    <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your PIN. Please, try again.</string>
+    <string name="SetPin_Success">¡Código PIN establecido con éxito!</string>
+    <string name="SetPin_ErrorPinsDontMatch">El PIN no coincide. Inténtelo de nuevo</string>
+    <string name="SetPin_ErrorFailedToSavePin">Se ha producido un error al intentar guardar su PIN. Inténtelo de nuevo.</string>
     <!--Edit Pin-->
     <string name="EditPin_Title">Editar el PIN</string>
     <string name="EditPin_UnlockInfo">Introduzca el PIN actual</string>
-    <string name="EditPin_NewPinInfo">Enter New PIN</string>
+    <string name="EditPin_NewPinInfo">Introduzca nuevo PIN</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Manage Coins</string>
-    <string name="ManageCoins_save">Save</string>
+    <string name="ManageCoins_title">Gestionar monedas</string>
+    <string name="ManageCoins_save">Guardar</string>
 </resources>
