@@ -21,18 +21,18 @@ class ManageCoinsPresenter(
         view?.updateCoins()
     }
 
-    override fun enableCoin(coin: Coin) {
-        state.enable(coin)
+    override fun enableCoin(position: Int) {
+        state.enable(state.disabledCoins[position])
         view?.updateCoins()
     }
 
-    override fun disableCoin(coin: Coin) {
-        state.disable(coin)
+    override fun disableCoin(position: Int) {
+        state.disable(state.enabledCoins[position])
         view?.updateCoins()
     }
 
-    override fun moveCoin(coin: Coin, index: Int) {
-        state.move(coin, index)
+    override fun moveCoin(fromIndex: Int, toIndex: Int) {
+        state.move(state.enabledCoins[fromIndex], toIndex)
         view?.updateCoins()
     }
 
