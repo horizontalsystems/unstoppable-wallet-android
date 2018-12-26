@@ -87,16 +87,16 @@
     <!--Full Info-->
     <string name="FullInfo_Title">Full Info</string>
     <string name="FullInfo_Id">ID</string>
-    <string name="FullInfo_Status">Status</string>
-    <string name="FullInfo_Time">Time</string>
+    <string name="FullInfo_Status">Statut</string>
+    <string name="FullInfo_Time">Heure</string>
     <string name="FullInfo_Block">Block</string>
-    <string name="FullInfo_Confirmations">Confirmations</string>
-    <string name="FullInfo_TotalInput">Total Input</string>
-    <string name="FullInfo_TotalOutput">Total Output</string>
-    <string name="FullInfo_Fee">Fee</string>
-    <string name="FullInfo_SubtitleFrom">From</string>
-    <string name="FullInfo_SubtitleInputs">Inputs</string>
-    <string name="FullInfo_SubtitleOutputs">Outputs</string>
+    <string name="FullInfo_Confirmations">Confirmation</string>
+    <string name="FullInfo_TotalInput">Total des entrées</string>
+    <string name="FullInfo_TotalOutput">Total des sorties</string>
+    <string name="FullInfo_Fee">Frais</string>
+    <string name="FullInfo_SubtitleFrom">De</string>
+    <string name="FullInfo_SubtitleInputs">Entrées</string>
+    <string name="FullInfo_SubtitleOutputs">Sorties</string>
     <string name="FullInfo_SubtitleProvider">Data Provider</string>
     <string name="FullTransactionInfo_From">De</string>
     <string name="FullTransactionInfo_To">À</string>
