@@ -87,16 +87,16 @@
     <!--Full Info-->
     <string name="FullInfo_Title">Full Info</string>
     <string name="FullInfo_Id">ID</string>
-    <string name="FullInfo_Status">Status</string>
-    <string name="FullInfo_Time">Time</string>
-    <string name="FullInfo_Block">Block</string>
-    <string name="FullInfo_Confirmations">Confirmations</string>
+    <string name="FullInfo_Status">Статус</string>
+    <string name="FullInfo_Time">Время</string>
+    <string name="FullInfo_Block">Блок</string>
+    <string name="FullInfo_Confirmations">Подтверждения</string>
     <string name="FullInfo_TotalInput">Total Input</string>
     <string name="FullInfo_TotalOutput">Total Output</string>
     <string name="FullInfo_Fee">Fee</string>
-    <string name="FullInfo_SubtitleFrom">From</string>
-    <string name="FullInfo_SubtitleInputs">Inputs</string>
-    <string name="FullInfo_SubtitleOutputs">Outputs</string>
+    <string name="FullInfo_SubtitleFrom">От</string>
+    <string name="FullInfo_SubtitleInputs">Входы</string>
+    <string name="FullInfo_SubtitleOutputs">Выходы</string>
     <string name="FullInfo_SubtitleProvider">Data Provider</string>
     <string name="FullTransactionInfo_From">От</string>
     <string name="FullTransactionInfo_To">Кому</string>
@@ -141,7 +141,7 @@
     <string name="Alert_NoDeviceLockTitle">Внимание</string>
     <string name="Alert_NoDeviceLockDescription">Установите блокировку экрана на этом устройстве. Перейдите в «Настройки» &gt; «Безопасность» &gt; «Блокировка экрана» и включите параметр экрана блокировки.</string>
     <!--Unlock-->
-    <string name="Unlock_Page_EnterYourPin">PIN</string>
+    <string name="Unlock_Page_EnterYourPin">PIN-код</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Неподдерживаемая валюта</string>
     <!--Hud texts-->
@@ -160,7 +160,7 @@
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Отключено до: %s</string>
     <!--Set Pin-->
-    <string name="SetPin_Title">PIN</string>
+    <string name="SetPin_Title">PIN-код</string>
     <string name="SetPin_Info">Ваш PIN-код будет использоваться для разблокировки кошелька</string>
     <string name="SetPin_ErrorShortPin">Пожалуйста, введите только символы цифр.</string>
     <string name="SetPin_ConfirmInfo">Подтвердить PIN-код</string>
@@ -173,5 +173,5 @@
     <string name="EditPin_NewPinInfo">Введите новый PIN-код</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Manage Coins</string>
-    <string name="ManageCoins_save">Save</string>
+    <string name="ManageCoins_save">Сохранить</string>
 </resources>
