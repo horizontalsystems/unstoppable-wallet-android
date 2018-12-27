@@ -83,7 +83,7 @@
     <string name="TransactionInfo_Id">ID:</string>
     <string name="TransactionInfo_To">Кому:</string>
     <string name="TransactionInfo_From">От:</string>
-    <string name="TransactionInfo_ButtonMore">Full Info:</string>
+    <string name="TransactionInfo_ButtonMore">Full Info</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Full Info</string>
     <string name="FullInfo_Id">ID</string>
@@ -91,9 +91,9 @@
     <string name="FullInfo_Time">Время</string>
     <string name="FullInfo_Block">Блок</string>
     <string name="FullInfo_Confirmations">Подтверждения</string>
-    <string name="FullInfo_TotalInput">Total Input</string>
-    <string name="FullInfo_TotalOutput">Total Output</string>
-    <string name="FullInfo_Fee">Fee</string>
+    <string name="FullInfo_TotalInput">Всего Входов</string>
+    <string name="FullInfo_TotalOutput">Всего Выходов</string>
+    <string name="FullInfo_Fee">Комиссия</string>
     <string name="FullInfo_SubtitleFrom">От</string>
     <string name="FullInfo_SubtitleInputs">Входы</string>
     <string name="FullInfo_SubtitleOutputs">Выходы</string>
