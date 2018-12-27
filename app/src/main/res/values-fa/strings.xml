@@ -83,7 +83,7 @@
     <string name="TransactionInfo_Id">شناس نامه:</string>
     <string name="TransactionInfo_To">به:</string>
     <string name="TransactionInfo_From">از:</string>
-    <string name="TransactionInfo_ButtonMore">Full Info:</string>
+    <string name="TransactionInfo_ButtonMore">Full Info</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Full Info</string>
     <string name="FullInfo_Id">ID</string>
