@@ -83,7 +83,7 @@
     <string name="TransactionInfo_Id">Identificación:</string>
     <string name="TransactionInfo_To">Para:</string>
     <string name="TransactionInfo_From">Desde:</string>
-    <string name="TransactionInfo_ButtonMore">Información completa:</string>
+    <string name="TransactionInfo_ButtonMore">Full Info</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Información completa</string>
     <string name="FullInfo_Id">Identificación</string>
