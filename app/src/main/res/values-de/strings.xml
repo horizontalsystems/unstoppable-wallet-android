@@ -83,7 +83,7 @@
     <string name="TransactionInfo_Id">ID:</string>
     <string name="TransactionInfo_To">An:</string>
     <string name="TransactionInfo_From">Von:</string>
-    <string name="TransactionInfo_ButtonMore">Volle Info:</string>
+    <string name="TransactionInfo_ButtonMore">Full Info</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Volle Info</string>
     <string name="FullInfo_Id">ID</string>
