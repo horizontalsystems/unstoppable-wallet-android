@@ -83,9 +83,9 @@
     <string name="TransactionInfo_Id">ID:</string>
     <string name="TransactionInfo_To">An:</string>
     <string name="TransactionInfo_From">Von:</string>
-    <string name="TransactionInfo_ButtonMore">Full Info:</string>
+    <string name="TransactionInfo_ButtonMore">Volle Info:</string>
     <!--Full Info-->
-    <string name="FullInfo_Title">Full Info</string>
+    <string name="FullInfo_Title">Volle Info</string>
     <string name="FullInfo_Id">ID</string>
     <string name="FullInfo_Status">Status</string>
     <string name="FullInfo_Time">Zeit</string>
@@ -97,7 +97,7 @@
     <string name="FullInfo_SubtitleFrom">Von</string>
     <string name="FullInfo_SubtitleInputs">Eingänge</string>
     <string name="FullInfo_SubtitleOutputs">Ausgänge</string>
-    <string name="FullInfo_SubtitleProvider">Data Provider</string>
+    <string name="FullInfo_SubtitleProvider">Datenanbieter</string>
     <string name="FullTransactionInfo_From">Von</string>
     <string name="FullTransactionInfo_To">An</string>
     <string name="FullTransactionInfo_Amount">Betrag</string>
@@ -173,6 +173,6 @@ Hack dein Telefon nicht, installier keine Anwendungen von inoffiziellen Quellen 
     <string name="EditPin_UnlockInfo">Gib deine derzeitige PIN ein</string>
     <string name="EditPin_NewPinInfo">Gib neuen PIN ein</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Manage Coins</string>
-    <string name="ManageCoins_save">Save</string>
+    <string name="ManageCoins_title">Coins Verwalten</string>
+    <string name="ManageCoins_save">Speichern</string>
 </resources>
