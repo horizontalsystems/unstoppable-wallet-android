@@ -4,7 +4,6 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.os.Handler
 import android.support.annotation.NonNull
 import android.support.design.widget.BottomSheetBehavior
 import android.support.v4.content.ContextCompat
@@ -17,6 +16,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
+import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoModule
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import io.horizontalsystems.bankwallet.viewHelpers.ValueFormatter
@@ -72,11 +72,11 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
 
         viewModel.showTransactionInfoLiveEvent.observe(this, Observer { transactionHash ->
             transactionHash?.let { transactionHash ->
-               (activity as? MainActivity)?.setBottomNavigationVisible(false)
-                Handler().postDelayed({
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED)
-                }, 50)
-//                activity?.let { TransactionInfoModule.start(it, transactionHash) }
+//               (activity as? MainActivity)?.setBottomNavigationVisible(false)
+//                Handler().postDelayed({
+//                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED)
+//                }, 50)
+                activity?.let { TransactionInfoModule.start(it, transactionHash) }
             }
         })
 

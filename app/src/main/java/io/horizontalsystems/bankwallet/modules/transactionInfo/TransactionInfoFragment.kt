@@ -65,21 +65,7 @@ class TransactionInfoFragment : DialogFragment() {
                 }
 
                 rootView.findViewById<TransactionInfoItemView>(R.id.itemStatus)?.apply {
-                    val valueIcon = when (txStatus) {
-                        is TransactionStatus.Pending -> R.drawable.pending
-                        is TransactionStatus.Processing -> null
-                        else -> R.drawable.checkmark_green
-                    }
-                    val progress = when (txStatus) {
-                        is TransactionStatus.Processing -> txStatus.progress
-                        else -> null
-                    }
-                    val statusText = when (txStatus) {
-                        is TransactionStatus.Processing -> getString(R.string.TransactionInfo_Processing, progress)
-                        is TransactionStatus.Pending -> getString(R.string.TransactionInfo_Pending)
-                        else -> getString(R.string.TransactionInfo_Completed)
-                    }
-                    bind(title = getString(R.string.TransactionInfo_Status), valueTitle = statusText.toUpperCase(), valueIcon = valueIcon, progressValue = progress, showBottomBorder = true)
+                    bindStatus(txStatus)
                 }
 
                 rootView.findViewById<TextView>(R.id.transactionId)?.apply {

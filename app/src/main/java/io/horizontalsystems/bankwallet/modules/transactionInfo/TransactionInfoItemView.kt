@@ -5,12 +5,10 @@ import android.support.constraint.ConstraintLayout
 import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.view.View
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.TextView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
+import kotlinx.android.synthetic.main.view_transaction_info_item.view.*
 
 class TransactionInfoItemView : ConstraintLayout {
 
@@ -19,14 +17,6 @@ class TransactionInfoItemView : ConstraintLayout {
     private var attrValueSubtitle: String? = null
     private var attrShowValueBackground: String? = null
     private var attrValueIcon: String? = null
-
-    private lateinit var titleTextView: TextView
-    private lateinit var valueTitleTextView: TextView
-    private lateinit var valueSubtitleTextView: TextView
-    private lateinit var iconImageView: ImageView
-    private lateinit var valueLinearLayout: LinearLayout
-    private lateinit var progressBarView: ProgressBar
-    private lateinit var bottomBorder: View
 
 
     constructor(context: Context) : super(context) {
@@ -43,47 +33,70 @@ class TransactionInfoItemView : ConstraintLayout {
         loadAttributes(attrs)
     }
 
-    override fun onFinishInflate() {
-        super.onFinishInflate()
-
-        titleTextView = findViewById(R.id.txtTitle)
-        valueTitleTextView = findViewById(R.id.txtValueTitle)
-        valueSubtitleTextView = findViewById(R.id.txtValueSubtitle)
-        iconImageView = findViewById(R.id.valueLeftIcon)
-        valueLinearLayout = findViewById(R.id.valueWrapper)
-        progressBarView = findViewById(R.id.progressBar)
-        bottomBorder = findViewById(R.id.border)
-
-        titleTextView.text = attrTitle
-        valueTitleTextView.text = attrValue
-        valueSubtitleTextView.text = attrValueSubtitle
-    }
-
     private fun initializeViews() {
         ConstraintLayout.inflate(context, R.layout.view_transaction_info_item, this)
     }
 
-    fun bind(title: String? = null, valueTitle: String? = null, valueSubtitle: String? = null, valueIcon: Int? = null, progressValue: Int? = null, showBottomBorder: Boolean = false) {
-        titleTextView.text = title
-        valueTitleTextView.text = valueTitle
-        valueSubtitleTextView.text = valueSubtitle
+    fun bind(title: String? = null, valueTitle: String? = null, valueSubtitle: String? = null, valueIcon: Int? = null, showBottomBorder: Boolean = false) {
+        valueWrapper.visibility = View.VISIBLE
+
+        txtTitle.text = title
+        txtValueTitle.text = valueTitle
+        txtValueSubtitle.text = valueSubtitle
         valueIcon?.let {
-            iconImageView.setImageDrawable(ContextCompat.getDrawable(App.instance, it))
-            iconImageView.visibility = View.VISIBLE
+            valueLeftIcon.setImageDrawable(ContextCompat.getDrawable(App.instance, it))
+            valueLeftIcon.visibility = View.VISIBLE
         } ?: run {
-            iconImageView.visibility = View.GONE
+            valueLeftIcon.visibility = View.GONE
+            valueWrapper.background = null
         }
 
-        progressBarView.progress = progressValue ?: 0
-        progressBarView.visibility = if (progressValue == null) View.GONE else View.VISIBLE
-        valueSubtitleTextView.visibility = if (valueSubtitle == null) View.GONE else View.VISIBLE
-        bottomBorder.visibility = if (showBottomBorder) View.VISIBLE else View.GONE
+        txtValueSubtitle.visibility = if (valueSubtitle == null) View.GONE else View.VISIBLE
+        border.visibility = if (showBottomBorder) View.VISIBLE else View.GONE
 
-        if (valueIcon == null || progressValue != null) {
-            valueLinearLayout.background = null
+        invalidate()
+    }
+
+    fun bindStatus(transactionStatus: TransactionStatus) {
+        valueWrapper.visibility = View.GONE
+        border.visibility = View.VISIBLE
+        txtTitle.setText(R.string.TransactionInfo_Status)
+
+        when (transactionStatus) {
+            is TransactionStatus.Pending -> {
+                pendingIcon.visibility = View.VISIBLE
+                statusProgressBar.visibility = View.GONE
+            }
+            is TransactionStatus.Processing -> {
+                pendingIcon.visibility = View.GONE
+                statusProgressBar.visibility = View.VISIBLE
+                setProgressBars(transactionStatus.progress)
+            }
+            else -> {
+                pendingIcon.visibility = View.GONE
+                statusProgressBar.visibility = View.VISIBLE
+                setProgressBars()
+            }
         }
 
         invalidate()
+    }
+
+    private fun setProgressBars(progress: Int = 6) {
+        if (progress == 0) return
+        val greenBar = R.drawable.status_progress_bar_green
+
+        progressBar1.setImageResource(greenBar)
+        if (progress == 1) return
+        progressBar2.setImageResource(greenBar)
+        if (progress == 2) return
+        progressBar3.setImageResource(greenBar)
+        if (progress == 3) return
+        progressBar4.setImageResource(greenBar)
+        if (progress == 4) return
+        progressBar5.setImageResource(greenBar)
+        if (progress == 5) return
+        progressBar6.setImageResource(greenBar)
     }
 
     private fun loadAttributes(attrs: AttributeSet) {

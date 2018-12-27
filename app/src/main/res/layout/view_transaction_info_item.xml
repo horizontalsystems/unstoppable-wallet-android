@@ -23,19 +23,64 @@
         tools:text="From"
         />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="0dp"
-        android:layout_height="28dp"
-        android:max="100"
-        android:progressDrawable="@drawable/transaction_progress"
+    <ImageView
+        android:id="@+id/pendingIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="4dp"
+        android:src="@drawable/pending"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/valueWrapper"
         app:layout_constraintEnd_toEndOf="@+id/valueWrapper"
-        app:layout_constraintStart_toStartOf="@+id/valueWrapper"
         app:layout_constraintTop_toTopOf="@+id/valueWrapper"
         />
+
+    <LinearLayout
+        android:id="@+id/statusProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="4dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/valueWrapper"
+        app:layout_constraintEnd_toEndOf="@+id/valueWrapper"
+        app:layout_constraintTop_toTopOf="@+id/valueWrapper"
+        >
+
+        <ImageView
+            android:id="@+id/progressBar1"
+            style="@style/TransactionInfoStatusProgressBar"
+            />
+
+        <ImageView
+            android:id="@+id/progressBar2"
+            style="@style/TransactionInfoStatusProgressBar"
+            />
+
+        <ImageView
+            android:id="@+id/progressBar3"
+            style="@style/TransactionInfoStatusProgressBar"
+            />
+
+        <ImageView
+            android:id="@+id/progressBar4"
+            style="@style/TransactionInfoStatusProgressBar"
+            />
+
+        <ImageView
+            android:id="@+id/progressBar5"
+            style="@style/TransactionInfoStatusProgressBar"
+            />
+
+        <ImageView
+            android:id="@+id/progressBar6"
+            style="@style/TransactionInfoStatusProgressBar"
+            />
+    </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/valueWrapper"
@@ -46,6 +91,7 @@
         android:background="@drawable/text_grey_background"
         android:minHeight="27dp"
         android:orientation="horizontal"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
