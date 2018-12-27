@@ -4,6 +4,9 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.os.Handler
+import android.support.annotation.NonNull
+import android.support.design.widget.BottomSheetBehavior
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -13,7 +16,7 @@ import android.view.ViewGroup
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoModule
+import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import io.horizontalsystems.bankwallet.viewHelpers.ValueFormatter
@@ -40,6 +43,26 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
 
         transactionsAdapter.viewModel = viewModel
 
+        val bottomSheetBehavior = BottomSheetBehavior.from(nestedScrollView)
+
+        transactionsDim.alpha = 0f
+
+        var bottomSheetSlideOffOld = 0f
+
+        bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(@NonNull bottomSheet: View, newState: Int) {}
+
+            override fun onSlide(@NonNull bottomSheet: View, slideOffset: Float) {
+                transactionsDim.alpha = slideOffset
+                if (bottomSheetSlideOffOld >= 0.7 && slideOffset < 0.7) {
+                    (activity as? MainActivity)?.setBottomNavigationVisible(true)
+                } else if (bottomSheetSlideOffOld >= 0.8 && slideOffset > 0.9) {
+                    (activity as? MainActivity)?.setBottomNavigationVisible(false)
+                }
+                bottomSheetSlideOffOld = slideOffset
+            }
+        })
+
         viewModel.filterItems.observe(this, Observer { filters ->
             filters?.let {
                 filterAdapter.filters = it
@@ -49,7 +72,11 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
 
         viewModel.showTransactionInfoLiveEvent.observe(this, Observer { transactionHash ->
             transactionHash?.let { transactionHash ->
-                activity?.let { TransactionInfoModule.start(it, transactionHash) }
+               (activity as? MainActivity)?.setBottomNavigationVisible(false)
+                Handler().postDelayed({
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED)
+                }, 50)
+//                activity?.let { TransactionInfoModule.start(it, transactionHash) }
             }
         })
 

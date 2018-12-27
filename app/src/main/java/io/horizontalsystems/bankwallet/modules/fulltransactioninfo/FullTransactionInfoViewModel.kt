@@ -15,7 +15,7 @@ class FullTransactionInfoViewModel: ViewModel(), FullTransactionInfoModule.IView
 
     fun init(adapterId: String, transactionId: String) {
         FullTransactionInfoModule.init(this, this, adapterId, transactionId)
-        delegate.viewDidLoad()
+//        delegate.viewDidLoad()
     }
 
     override fun showTransactionItem(transactionRecordViewItem: TransactionRecordViewItem) {

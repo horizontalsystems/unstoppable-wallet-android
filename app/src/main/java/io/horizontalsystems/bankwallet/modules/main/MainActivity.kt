@@ -3,11 +3,11 @@ package io.horizontalsystems.bankwallet.modules.main
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
+import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
+import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
-import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
-import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import kotlinx.android.synthetic.main.activity_dashboard.*
 
 class MainActivity : BaseActivity() {
@@ -23,7 +23,7 @@ class MainActivity : BaseActivity() {
 
         viewPager.adapter = adapter
         viewPager.offscreenPageLimit = 2
-        viewPager.setPagingEnabled(true)
+        viewPager.setPagingEnabled(false)
 
         LayoutHelper.getAttr(R.attr.BottomNavigationBackgroundColor, theme)?.let {
             bottomNavigation.defaultBackgroundColor = it
@@ -63,6 +63,11 @@ class MainActivity : BaseActivity() {
         activeTab?.let {
             bottomNavigation.currentItem = it
         }
+    }
+
+    fun setBottomNavigationVisible(visible: Boolean) {
+        bottomNavigation.animate().translationY(if (visible) 0f else (bottomNavigation.height).toFloat()).duration = 150
+        bottomNavigationBarShadow.animate().translationY(if (visible) 0f else (bottomNavigation.height).toFloat()).duration = 150
     }
 
     fun updateSettingsTabCounter(count: Int) {

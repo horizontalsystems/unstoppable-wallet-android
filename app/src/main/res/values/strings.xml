@@ -119,6 +119,7 @@
     <string name="TransactionInfo_Id">ID:</string>
     <string name="TransactionInfo_To">To:</string>
     <string name="TransactionInfo_From">From:</string>
+    <string name="TransactionInfo_Time">Time:</string>
     <string name="TransactionInfo_ButtonMore">Full Info</string>
 
 
