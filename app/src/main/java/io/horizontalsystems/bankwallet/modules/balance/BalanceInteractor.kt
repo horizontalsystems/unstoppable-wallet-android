@@ -2,18 +2,16 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import android.os.Handler
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
+import io.horizontalsystems.bankwallet.core.IRateStorage
 import io.horizontalsystems.bankwallet.core.IWalletManager
-import io.horizontalsystems.bankwallet.core.managers.RateManager
-import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.reactivex.Maybe
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
 class BalanceInteractor(
         private val walletManager: IWalletManager,
-        private val rateManager: RateManager,
+        private val rateStorage: IRateStorage,
         private val currencyManager: ICurrencyManager,
         private val refreshTimeout: Double = 2.0
 ) : BalanceModule.IInteractor {
@@ -21,39 +19,92 @@ class BalanceInteractor(
     var delegate: BalanceModule.IInteractorDelegate? = null
 
     private var disposables: CompositeDisposable = CompositeDisposable()
+    private var walletDisposables: CompositeDisposable = CompositeDisposable()
+    private var rateDisposables: CompositeDisposable = CompositeDisposable()
 
-    override fun loadWallets() {
-        val walletManagerDisposable = walletManager.walletsSubject.subscribe {
-            disposables.clear()
-            initialFetchAndSubscribe()
-        }
-        initialFetchAndSubscribe()
+    override fun initWallets() {
+        disposables.add(walletManager.walletsObservable
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe {
+                    onUpdateWallets(it)
+                })
+
+        disposables.add(currencyManager.baseCurrencyObservable
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe {
+                    delegate?.didUpdateCurrency(it)
+                })
     }
 
-    private fun initialFetchAndSubscribe() {
-        walletManager.wallets.forEach { wallet ->
-            disposables.add(wallet.adapter.balanceSubject
-                    .observeOn(AndroidSchedulers.mainThread())
+    override fun fetchRates(currencyCode: String, coinCodes: List<CoinCode>) {
+        rateDisposables.clear()
+
+        coinCodes.forEach {
+            rateDisposables.add(rateStorage.rateObservable(it, currencyCode)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
                     .subscribe {
-                        delegate?.didUpdate()
+                        delegate?.didUpdateRate(it)
                     })
-            disposables.add(wallet.adapter.stateSubject.subscribe {
-                delegate?.didUpdate()
-            })
         }
-
-        disposables.add(rateManager.subject.subscribe {
-            delegate?.didUpdate()
-        })
-
-        disposables.add(currencyManager.subject.subscribe {
-            delegate?.didUpdate()
-        })
     }
 
-    override fun rate(coin: String): Maybe<Rate> {
-        return rateManager.rate(coin, currencyManager.baseCurrency.code)
+    private fun onUpdateWallets(wallets: List<Wallet>) {
+        delegate?.didUpdateWallets(wallets)
+
+        walletDisposables.clear()
+
+        wallets.forEach { wallet ->
+            walletDisposables.add(wallet.adapter.balanceObservable
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .subscribe { balance ->
+                        delegate?.didUpdateBalance(wallet.coinCode, balance)
+                    })
+
+            walletDisposables.add(wallet.adapter.stateObservable
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .subscribe { state ->
+                        delegate?.didUpdateState(wallet.coinCode, state)
+                    })
+        }
     }
+
+    //    override fun loadWallets() {
+//        val walletManagerDisposable = walletManager.walletsSubject.subscribe {
+//            disposables.clear()
+//            initialFetchAndSubscribe()
+//        }
+//        initialFetchAndSubscribe()
+//    }
+
+//    private fun initialFetchAndSubscribe() {
+//        walletManager.wallets.forEach { wallet ->
+//            disposables.add(wallet.adapter.balanceSubject
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe {
+//                        delegate?.didUpdate()
+//                    })
+//            disposables.add(wallet.adapter.stateSubject.subscribe {
+//                delegate?.didUpdate()
+//            })
+//        }
+//
+//        disposables.add(rateManager.subject.subscribe {
+//            delegate?.didUpdate()
+//        })
+//
+//        disposables.add(currencyManager.subject.subscribe {
+//            delegate?.didUpdate()
+//        })
+//    }
+
+//    override fun rate(coin: String): Maybe<Rate> {
+//        return rateManager.rate(coin, currencyManager.baseCurrency.code)
+//    }
 
     override fun refresh() {
         walletManager.refreshWallets()
@@ -63,10 +114,10 @@ class BalanceInteractor(
         }, (refreshTimeout * 1000).toLong())
     }
 
-    override val baseCurrency: Currency
-        get() = currencyManager.baseCurrency
+//    override val baseCurrency: Currency
+//        get() = currencyManager.baseCurrency
 
-    override val wallets: List<Wallet>
-        get() = walletManager.wallets
+//    override val wallets: List<Wallet>
+//        get() = walletManager.wallets
 
 }

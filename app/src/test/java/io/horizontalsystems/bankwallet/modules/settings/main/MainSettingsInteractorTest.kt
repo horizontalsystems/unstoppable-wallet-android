@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.settings.main
 
+import com.nhaarman.mockito_kotlin.*
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
-import com.nhaarman.mockito_kotlin.*
 import io.reactivex.subjects.PublishSubject
 import org.junit.After
 import org.junit.Assert
@@ -55,7 +55,7 @@ class MainSettingsInteractorTest {
         }
 
         currencyManager = mock{
-            on { subject } doReturn PublishSubject.create<Currency>()
+//            on { subject } doReturn PublishSubject.create<Currency>()
             on { baseCurrency } doReturn currency
         }
 

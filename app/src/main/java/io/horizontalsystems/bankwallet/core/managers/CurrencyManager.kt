@@ -4,7 +4,9 @@ import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.entities.Currency
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
+import io.reactivex.subjects.BehaviorSubject
 
 
 class CurrencyManager(
@@ -21,10 +23,13 @@ class CurrencyManager(
             return currencies[0]
         }
 
+    override var subject: BehaviorSubject<Currency> = BehaviorSubject.createDefault(baseCurrency)
+
+    override val baseCurrencyObservable: Flowable<Currency> = subject.toFlowable(BackpressureStrategy.DROP)
+
     override val currencies: List<Currency>
         get() = appConfigProvider.currencies
 
-    override var subject: PublishSubject<Currency> = PublishSubject.create()
 
     override fun setBaseCurrency(code: String) {
         localStorageManager.baseCurrencyCode = code

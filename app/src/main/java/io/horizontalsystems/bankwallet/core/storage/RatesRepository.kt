@@ -12,6 +12,10 @@ class RatesRepository(private val appDatabase: AppDatabase) : IRateStorage {
 
     private val executor = Executors.newSingleThreadExecutor()
 
+    override fun rateObservable(coinCode: CoinCode, currencyCode: String): Flowable<Rate> {
+        return appDatabase.ratesDao().getRateX(coinCode, currencyCode)
+    }
+
     override fun rate(coinCode: CoinCode, currencyCode: String): Maybe<Rate> {
         return appDatabase.ratesDao().getRate(coinCode, currencyCode)
     }

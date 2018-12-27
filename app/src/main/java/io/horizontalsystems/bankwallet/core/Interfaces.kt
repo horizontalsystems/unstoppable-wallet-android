@@ -13,6 +13,7 @@ import java.util.*
 interface IWalletManager {
     val wallets: List<Wallet>
     val walletsSubject: PublishSubject<List<Wallet>>
+    val walletsObservable: Flowable<List<Wallet>>
 
     fun initWallets(words: List<String>, coins: List<Coin>, newWallet: Boolean, walletId: String?)
     fun refreshWallets()
@@ -65,8 +66,9 @@ interface IClipboardManager {
 
 interface ICurrencyManager {
     val baseCurrency: Currency
+    val baseCurrencyObservable: Flowable<Currency>
     val currencies: List<Currency>
-    var subject: PublishSubject<Currency>
+    var subject: BehaviorSubject<Currency>
     fun setBaseCurrency(code: String)
 }
 
@@ -106,10 +108,9 @@ sealed class AdapterState {
 
 interface IAdapter {
     val balance: Double
-    val balanceSubject: PublishSubject<Double>
 
-    val state: AdapterState
-    val stateSubject: PublishSubject<AdapterState>
+    val balanceObservable: Flowable<Double>
+    val stateObservable: Flowable<AdapterState>
 
     val confirmationsThreshold: Int
     val lastBlockHeight: Int?
@@ -178,6 +179,7 @@ interface IRateSyncerDelegate {
 }
 
 interface IRateStorage {
+    fun rateObservable(coinCode: CoinCode, currencyCode: String): Flowable<Rate>
     fun rate(coinCode: CoinCode, currencyCode: String): Maybe<Rate>
     fun save(latestRate: LatestRate, coinCode: CoinCode, currencyCode: String)
     fun getAll(): Flowable<List<Rate>>

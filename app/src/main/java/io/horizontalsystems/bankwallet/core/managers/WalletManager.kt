@@ -6,6 +6,8 @@ import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
 
 class WalletManager(private val adapterFactory: AdapterFactory) : IWalletManager, HandlerThread("A") {
@@ -19,6 +21,7 @@ class WalletManager(private val adapterFactory: AdapterFactory) : IWalletManager
 
     override var wallets: List<Wallet> = listOf()
     override val walletsSubject = PublishSubject.create<List<Wallet>>()
+    override val walletsObservable: Flowable<List<Wallet>> = walletsSubject.toFlowable(BackpressureStrategy.DROP)
 
     override fun initWallets(words: List<String>, coins: List<Coin>, newWallet: Boolean, walletId: String?) {
         handler.post {

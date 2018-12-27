@@ -38,19 +38,11 @@ class BalanceFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        toolbar.setTitle(R.string.Balance_Title)
+
         viewModel = ViewModelProviders.of(this).get(BalanceViewModel::class.java)
         viewModel.init()
 
-        viewModel.titleLiveDate.observe(this, Observer { title ->
-            title?.let { toolbar.setTitle(it) }
-        })
-
-        viewModel.walletsLiveData.observe(this, Observer { coins ->
-            coins?.let {
-                coinsAdapter.items = it
-                coinsAdapter.notifyDataSetChanged()
-            }
-        })
 
         viewModel.totalBalanceLiveData.observe(this, Observer { total ->
             ballanceText.text = total?.let { ValueFormatter.format(it) } ?: ""
@@ -88,6 +80,23 @@ class BalanceFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener
             context?.let { context -> ManageCoinsModule.start(context) }
         })
 
+        viewModel.reloadLiveEvent.observe(this, Observer {
+            coinsAdapter.notifyDataSetChanged()
+            reloadHeader()
+        })
+
+        viewModel.reloadHeaderLiveEvent.observe(this, Observer {
+            reloadHeader()
+        })
+
+        viewModel.reloadItemLiveEvent.observe(this, Observer { position ->
+            position?.let {
+                coinsAdapter.notifyItemChanged(it)
+            }
+        })
+
+
+        coinsAdapter.viewDelegate = viewModel.delegate
         recyclerCoins.adapter = coinsAdapter
         recyclerCoins.layoutManager = LinearLayoutManager(context)
 
@@ -98,17 +107,30 @@ class BalanceFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener
         }
     }
 
+    private fun reloadHeader() {
+        val headerViewItem = viewModel.delegate.getHeaderViewItem()
+
+        context?.let {
+            val color = if (headerViewItem.upToDate) R.color.yellow_crypto else R.color.yellow_crypto_40
+            ballanceText.setTextColor(ContextCompat.getColor(it, color))
+        }
+
+        ballanceText.text = headerViewItem.currencyValue?.let {
+            ValueFormatter.format(it)
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         recyclerCoins.adapter = null
     }
 
-    override fun onSendClicked(adapterId: String) {
-        viewModel.onSendClicked(adapterId)
+    override fun onSendClicked(position: Int) {
+        viewModel.onSendClicked(position)
     }
 
-    override fun onReceiveClicked(adapterId: String) {
-        viewModel.onReceiveClicked(adapterId)
+    override fun onReceiveClicked(position: Int) {
+        viewModel.onReceiveClicked(position)
     }
 
     override fun onItemClick(position: Int) {
@@ -119,15 +141,16 @@ class BalanceFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener
 class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface Listener {
-        fun onSendClicked(adapterId: String)
-        fun onReceiveClicked(adapterId: String)
+        fun onSendClicked(position: Int)
+        fun onReceiveClicked(position: Int)
         fun onItemClick(position: Int)
     }
 
-    var items = listOf<BalanceViewItem>()
     private var expandedViewPosition = -1
 
-    override fun getItemCount() = items.size
+    lateinit var viewDelegate: BalanceModule.IViewDelegate
+
+    override fun getItemCount() = viewDelegate.itemsCount
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
             ViewHolderCoin(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_coin, parent, false))
@@ -145,9 +168,10 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
         when (holder) {
             is ViewHolderCoin ->
                 if (payloads.isEmpty()) {
-                    holder.bind(items[position],
-                            onSendClick = { listener.onSendClicked(items[position].coinValue.coinCode) },
-                            onReceiveClick = { listener.onReceiveClicked(items[position].coinValue.coinCode) },
+                    val balanceViewItem = viewDelegate.getViewItem(position)
+                    holder.bind(balanceViewItem,
+                            onSendClick = { listener.onSendClicked(position) },
+                            onReceiveClick = { listener.onReceiveClicked(position) },
                             onHolderClicked = {
                                 val oldExpandedViewPosition = expandedViewPosition
                                 expandedViewPosition = if (expandedViewPosition == position) -1 else position

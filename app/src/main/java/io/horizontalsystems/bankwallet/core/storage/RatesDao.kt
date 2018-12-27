@@ -13,6 +13,9 @@ import io.reactivex.Maybe
 interface RatesDao {
 
     @Query("SELECT * FROM Rate WHERE coinCode = :coinCode AND currencyCode = :currencyCode")
+    fun getRateX(coinCode: CoinCode, currencyCode: String): Flowable<Rate>
+
+    @Query("SELECT * FROM Rate WHERE coinCode = :coinCode AND currencyCode = :currencyCode")
     fun getRate(coinCode: CoinCode, currencyCode: String): Maybe<Rate>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
