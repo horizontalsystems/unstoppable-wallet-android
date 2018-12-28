@@ -76,10 +76,6 @@
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Транзакция</string>
     <string name="TransactionInfo_Status">Статус:</string>
-    <string name="TransactionInfo_Completed">Завершено</string>
-    <string name="TransactionInfo_Pending">Ожидание</string>
-    <string name="TransactionInfo_Processing">Обработка %d%%</string>
-    <string name="TransactionInfo_Close">Закрыть</string>
     <string name="TransactionInfo_Id">ID:</string>
     <string name="TransactionInfo_To">Кому:</string>
     <string name="TransactionInfo_From">От:</string>

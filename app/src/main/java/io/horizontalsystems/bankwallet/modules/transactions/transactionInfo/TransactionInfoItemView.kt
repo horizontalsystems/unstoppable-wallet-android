@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.transactionInfo
+package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 
 import android.content.Context
 import android.support.constraint.ConstraintLayout

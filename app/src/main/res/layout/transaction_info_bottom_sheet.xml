@@ -113,7 +113,7 @@
         app:layout_constraintStart_toStartOf="parent"
         />
 
-    <io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemView
+    <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
         android:id="@+id/itemTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -124,7 +124,7 @@
         app:value="June 6, 2018, 15:02"
         />
 
-    <io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemView
+    <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
         android:id="@+id/itemStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -135,7 +135,7 @@
         app:value="COMPLETED"
         />
 
-    <io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemView
+    <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
         android:id="@+id/itemFrom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -146,7 +146,7 @@
         app:value="1111111"
         />
 
-    <io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemView
+    <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
         android:id="@+id/itemTo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

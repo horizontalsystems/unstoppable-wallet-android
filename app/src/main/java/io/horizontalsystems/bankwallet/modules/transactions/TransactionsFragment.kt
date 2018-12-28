@@ -15,19 +15,23 @@ import android.view.ViewGroup
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
-import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoModule
+import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoViewModel
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
+import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import io.horizontalsystems.bankwallet.viewHelpers.ValueFormatter
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
+import kotlinx.android.synthetic.main.transaction_info_bottom_sheet.*
 import kotlinx.android.synthetic.main.view_holder_filter.*
 import kotlinx.android.synthetic.main.view_holder_transaction.*
 
 class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdapter.Listener, FilterAdapter.Listener {
 
     private lateinit var viewModel: TransactionsViewModel
+    private lateinit var transInfoViewModel: TransactionInfoViewModel
     private val transactionsAdapter = TransactionsAdapter(this)
     private val filterAdapter = FilterAdapter(this)
 
@@ -42,6 +46,46 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
         viewModel.init()
 
         transactionsAdapter.viewModel = viewModel
+        toolbar.setTitle(R.string.Transactions_Title)
+
+        recyclerTransactions.adapter = transactionsAdapter
+        recyclerTransactions.layoutManager = LinearLayoutManager(context)
+        recyclerTags.adapter = filterAdapter
+        recyclerTags.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
+        pullToRefresh.setOnRefreshListener {
+            viewModel.delegate.refresh()
+        }
+
+        viewModel.filterItems.observe(this, Observer { filters ->
+            filters?.let {
+                filterAdapter.filters = it
+                filterAdapter.notifyDataSetChanged()
+            }
+        })
+
+        viewModel.showTransactionInfoLiveEvent.observe(this, Observer { transactionHash ->
+            transactionHash?.let { transactHash ->
+                transInfoViewModel.delegate.getTransaction(transactHash)
+            }
+        })
+
+        viewModel.didRefreshLiveEvent.observe(this, Observer {
+            pullToRefresh.isRefreshing = false
+        })
+
+        viewModel.reloadLiveEvent.observe(this, Observer {
+            transactionsAdapter.notifyDataSetChanged()
+
+            recyclerTransactions.visibility = if (viewModel.delegate.itemsCount == 0) View.GONE else View.VISIBLE
+            emptyListText.visibility = if (viewModel.delegate.itemsCount == 0) View.VISIBLE else View.GONE
+        })
+
+        setBottomSheet()
+    }
+
+    //Bottom sheet shows TransactionInfo
+    private fun setBottomSheet() {
 
         val bottomSheetBehavior = BottomSheetBehavior.from(nestedScrollView)
 
@@ -63,45 +107,67 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
             }
         })
 
-        viewModel.filterItems.observe(this, Observer { filters ->
-            filters?.let {
-                filterAdapter.filters = it
-                filterAdapter.notifyDataSetChanged()
+        transInfoViewModel = ViewModelProviders.of(this).get(TransactionInfoViewModel::class.java)
+        transInfoViewModel.init()
+
+        transactionId.setOnClickListener { transInfoViewModel.delegate.onCopyId() }
+        txtFullInfo.setOnClickListener { transInfoViewModel.delegate.showFullInfo() }
+
+        transInfoViewModel.showCopiedLiveEvent.observe(this, Observer {
+            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied)
+        })
+
+        transInfoViewModel.showFullInfoLiveEvent.observe(this, Observer { transactionHash ->
+            transactionHash?.let {
+                activity?.let { activity ->
+                    FullTransactionInfoModule.start(activity)
+                }
             }
         })
 
-        viewModel.showTransactionInfoLiveEvent.observe(this, Observer { transactionHash ->
-            transactionHash?.let { transactionHash ->
-//               (activity as? MainActivity)?.setBottomNavigationVisible(false)
-//                Handler().postDelayed({
-//                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED)
-//                }, 50)
-                activity?.let { TransactionInfoModule.start(it, transactionHash) }
+        transInfoViewModel.transactionLiveData.observe(this, Observer { txRecord ->
+            txRecord?.let { txRec ->
+                (activity as? MainActivity)?.setBottomNavigationVisible(false)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+
+                val txStatus = txRec.status
+
+                fiatValue.apply {
+                    text = txRec.currencyValue?.let { ValueFormatter.format(it, true) }
+                }
+
+                coinValue.apply {
+                    text = ValueFormatter.format(txRec.coinValue, true)
+                    setTextColor(resources.getColor(if (txRec.incoming) R.color.green_crypto else R.color.yellow_crypto, null))
+                }
+
+                itemTime.apply {
+                    bind(title = getString(R.string.TransactionInfo_Time),
+                            valueTitle = txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) } ?: "",
+                            showBottomBorder = true)
+                }
+
+                itemStatus.apply {
+                    bindStatus(txStatus)
+                }
+
+                transactionId.apply {
+                    text = txRec.transactionHash
+                }
+
+                itemFrom.apply {
+                    setOnClickListener { transInfoViewModel.delegate.onCopyFromAddress() }
+                    visibility = if (txRec.from.isNullOrEmpty()) View.GONE else View.VISIBLE
+                    bind(title = getString(R.string.TransactionInfo_From), valueTitle = txRec.from, valueIcon = R.drawable.round_person_18px, showBottomBorder = true)
+                }
+
+                itemTo.apply {
+                    setOnClickListener { transInfoViewModel.delegate.onCopyToAddress() }
+                    visibility = if (txRec.to.isNullOrEmpty()) View.GONE else View.VISIBLE
+                    bind(title = getString(R.string.TransactionInfo_To), valueTitle = txRec.to, valueIcon = R.drawable.round_person_18px, showBottomBorder = true)
+                }
             }
         })
-
-        viewModel.didRefreshLiveEvent.observe(this, Observer {
-            pullToRefresh.isRefreshing = false
-        })
-
-        viewModel.reloadLiveEvent.observe(this, Observer {
-            transactionsAdapter.notifyDataSetChanged()
-
-            recyclerTransactions.visibility = if (viewModel.delegate.itemsCount == 0) View.GONE else View.VISIBLE
-            emptyListText.visibility = if (viewModel.delegate.itemsCount == 0) View.VISIBLE else View.GONE
-        })
-
-        toolbar.setTitle(R.string.Transactions_Title)
-        recyclerTransactions.adapter = transactionsAdapter
-        recyclerTransactions.layoutManager = LinearLayoutManager(context)
-
-        recyclerTags.adapter = filterAdapter
-        recyclerTags.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-
-        pullToRefresh.setOnRefreshListener {
-            viewModel.delegate.refresh()
-        }
-
     }
 
     override fun onItemClick(item: TransactionViewItem) {
@@ -112,6 +178,7 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
         viewModel.delegate.onFilterSelect(item.adapterId)
     }
 }
+
 
 class TransactionsAdapter(private var listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
