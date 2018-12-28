@@ -1,23 +1,22 @@
-package io.horizontalsystems.bankwallet.modules.transactionInfo
+package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionRecordViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 
 class TransactionInfoPresenter(
-        private val transactionHash: String,
-        private val interactor: TransactionInfoModule.IInteractor,
-        private val router: TransactionInfoModule.IRouter,
+        private val interactor: TransactionInfoModule.Interactor,
+        private val router: TransactionInfoModule.Router,
         private val transactionFactory: TransactionViewItemFactory
-) : TransactionInfoModule.IViewDelegate, TransactionInfoModule.IInteractorDelegate {
+) : TransactionInfoModule.ViewDelegate, TransactionInfoModule.InteractorDelegate {
 
-    var view: TransactionInfoModule.IView? = null
-    var transactionViewItem: TransactionViewItem? = null
+    var view: TransactionInfoModule.View? = null
+    private var transactionViewItem: TransactionViewItem? = null
+    private var transactionHash = ""
 
-    // IViewDelegate methods
-
-    override fun viewDidLoad() {
+    // ViewDelegate methods
+    override fun getTransaction(transactionHash: String) {
+        this.transactionHash = transactionHash
         interactor.getTransaction(transactionHash)
     }
 
@@ -40,16 +39,8 @@ class TransactionInfoPresenter(
         view?.showCopied()
     }
 
-    override fun onStatusClick() {
-        interactor.showFullInfo()
-    }
-
-    override fun onCloseClick() {
-        view?.close()
-    }
-
-    override fun showFullInfo(transactionRecordViewItem: TransactionRecordViewItem) {
-        router.showFullInfo(transactionRecordViewItem)
+    override fun showFullInfo() {
+        router.showFullInfo(transactionHash)
     }
 
     // IInteractorDelegate methods

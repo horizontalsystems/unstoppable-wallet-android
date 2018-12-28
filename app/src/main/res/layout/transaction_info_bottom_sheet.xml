@@ -5,34 +5,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bottom_sheet_background"
-    android:backgroundTint="?BottomTransactionInfoBackground"
     >
 
     <TextView
         android:id="@+id/txtTitle"
         android:layout_width="wrap_content"
         android:layout_height="23dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_margin="16dp"
         android:fontFamily="@font/noto_sans_bold"
         android:text="@string/TransactionInfo_Title"
         android:textColor="?TransactionDetailValueTextColor"
-        android:textSize="14sp"
+        android:textSize="17sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        />
-
-    <TextView
-        android:id="@+id/txDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/grey"
-        android:textSize="14sp"
-        android:letterSpacing="-0.02"
-        app:layout_constraintStart_toStartOf="@+id/txtTitle"
-        app:layout_constraintTop_toBottomOf="@+id/txtTitle"
-        tools:text="Aug 3, 2018, 4:41"
         />
 
     <LinearLayout
@@ -51,10 +36,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="24dp"
-            android:layout_marginStart="7dp"
             android:layout_marginEnd="7dp"
+            android:layout_marginStart="7dp"
             android:layout_marginTop="3dp"
-            android:text="@string/TransactionInfo_Id"
+            android:text="#"
             android:textColor="@color/grey"
             android:textSize="14sp"
             />
@@ -64,31 +49,31 @@
             style="@style/TransactionInfoFieldValue"
             android:layout_width="wrap_content"
             android:layout_height="24dp"
-            android:maxWidth="125dp"
             android:layout_marginEnd="7dp"
             android:layout_marginTop="3dp"
-            android:textAlignment="textEnd"
             android:ellipsize="middle"
+            android:maxWidth="125dp"
             android:singleLine="true"
+            android:textAlignment="textEnd"
             tools:text="1111111111111111111111"
             />
     </LinearLayout>
 
     <TextView
-        android:id="@+id/txtAmount"
+        android:id="@+id/fiatValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="?TransactionDetailBackground"
         android:fontFamily="@font/noto_sans_bold"
-        android:paddingTop="24dp"
+        android:paddingTop="16dp"
         android:textAlignment="center"
         android:textColor="@color/green_crypto"
         android:textSize="22sp"
-        android:layout_marginTop="8dp"
-        android:background="?TransactionDetailBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txDate"
-        tools:text="+ 0,0006482"
+        app:layout_constraintTop_toBottomOf="@+id/txtTitle"
+        tools:text="$3"
         />
 
     <View
@@ -98,24 +83,24 @@
         android:background="@color/grey_20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/txtAmount"
+        app:layout_constraintTop_toTopOf="@+id/fiatValue"
         />
 
     <TextView
-        android:id="@+id/fiatValue"
+        android:id="@+id/coinValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?TransactionDetailBackground"
         android:fontFamily="@font/noto_sans"
-        android:paddingBottom="24dp"
+        android:paddingBottom="16dp"
         android:paddingTop="4dp"
         android:textAlignment="center"
         android:textColor="@color/grey"
         android:textSize="14sp"
-        android:background="?TransactionDetailBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtAmount"
-        tools:text="~$3"
+        app:layout_constraintTop_toBottomOf="@+id/fiatValue"
+        tools:text="+ 0,0006482 BTC"
         />
 
     <View
@@ -123,23 +108,45 @@
         android:layout_width="0dp"
         android:layout_height="0.5dp"
         android:background="@color/grey_20"
+        app:layout_constraintBottom_toBottomOf="@+id/coinValue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/fiatValue"
         />
 
-    <io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemView
-        android:id="@+id/itemFrom"
+    <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
+        android:id="@+id/itemTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/border2"
+        app:title="@string/TransactionInfo_Time"
+        app:value="June 6, 2018, 15:02"
+        />
+
+    <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
+        android:id="@+id/itemStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemTime"
+        app:title="@string/TransactionInfo_Status"
+        app:value="COMPLETED"
+        />
+
+    <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
+        android:id="@+id/itemFrom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemStatus"
         app:title="@string/TransactionInfo_From"
         app:value="1111111"
         />
 
-    <io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemView
+    <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
         android:id="@+id/itemTo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -151,32 +158,21 @@
         app:value="222222"
         />
 
-    <io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemView
-        android:id="@+id/itemStatus"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemTo"
-        app:title="@string/TransactionInfo_Status"
-        app:value="COMPLETED"
-        />
-
     <TextView
-        android:id="@+id/txtClose"
+        android:id="@+id/txtFullInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/noto_sans_bold"
-        android:paddingBottom="16dp"
-        android:paddingTop="16dp"
-        android:text="@string/TransactionInfo_Close"
+        android:paddingBottom="13dp"
+        android:paddingTop="12dp"
+        android:text="@string/TransactionInfo_ButtonMore"
         android:textAlignment="center"
         android:textColor="@color/grey"
         android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemStatus"
+        app:layout_constraintTop_toBottomOf="@+id/itemTo"
         />
 
 </android.support.constraint.ConstraintLayout>

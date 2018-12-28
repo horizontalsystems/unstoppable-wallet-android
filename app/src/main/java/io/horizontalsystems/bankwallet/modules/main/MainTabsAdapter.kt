@@ -34,4 +34,8 @@ class MainTabsAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(f
         super.destroyItem(container, position, `object`)
     }
 
+    fun getTransactionFragment(): TransactionsFragment {
+        return registeredFragments[1] as TransactionsFragment
+    }
+
 }

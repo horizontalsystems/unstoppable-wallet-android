@@ -112,13 +112,10 @@
 
     <string name="TransactionInfo_Title">Transaction</string>
     <string name="TransactionInfo_Status">Status:</string>
-    <string name="TransactionInfo_Completed">Completed</string>
-    <string name="TransactionInfo_Pending">Pending</string>
-    <string name="TransactionInfo_Processing">Processing %d%%</string>
-    <string name="TransactionInfo_Close">Close</string>
     <string name="TransactionInfo_Id">ID:</string>
     <string name="TransactionInfo_To">To:</string>
     <string name="TransactionInfo_From">From:</string>
+    <string name="TransactionInfo_Time">Time:</string>
     <string name="TransactionInfo_ButtonMore">Full Info</string>
 
 

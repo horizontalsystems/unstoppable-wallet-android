@@ -281,6 +281,13 @@
         <item name="android:includeFontPadding">false</item>
     </style>
 
+    <style name="TransactionInfoStatusProgressBar">
+        <item name="android:layout_width">4dp</item>
+        <item name="android:layout_height">16dp</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:src">@drawable/status_progress_bar_grey</item>
+    </style>
+
     <style name="Widget.Shadow.AppBar" parent="">
         <item name="android:background">?AppBarBackground</item>
         <item name="android:layout_height">4dp</item>
