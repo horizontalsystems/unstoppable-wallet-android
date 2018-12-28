@@ -65,6 +65,16 @@ class MainActivity : BaseActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        if (adapter.currentItem == 1 && adapter.getTransactionFragment().onBackPressed()) {
+            return
+        } else if (adapter.currentItem > 0) {
+            viewPager.currentItem = 0
+            return
+        }
+        super.onBackPressed()
+    }
+
     fun setBottomNavigationVisible(visible: Boolean) {
         bottomNavigation.animate().translationY(if (visible) 0f else (bottomNavigation.height).toFloat()).duration = 150
         bottomNavigationBarShadow.animate().translationY(if (visible) 0f else (bottomNavigation.height).toFloat()).duration = 150

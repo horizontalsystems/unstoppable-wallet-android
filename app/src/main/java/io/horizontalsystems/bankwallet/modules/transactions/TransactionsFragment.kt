@@ -34,6 +34,7 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
     private lateinit var transInfoViewModel: TransactionInfoViewModel
     private val transactionsAdapter = TransactionsAdapter(this)
     private val filterAdapter = FilterAdapter(this)
+    private var bottomSheetBehavior: BottomSheetBehavior<View>? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_transactions, container, false)
@@ -87,13 +88,14 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
     //Bottom sheet shows TransactionInfo
     private fun setBottomSheet() {
 
-        val bottomSheetBehavior = BottomSheetBehavior.from(nestedScrollView)
+        bottomSheetBehavior = BottomSheetBehavior.from(nestedScrollView)
 
+        transactionsDim.visibility = View.GONE
         transactionsDim.alpha = 0f
 
         var bottomSheetSlideOffOld = 0f
 
-        bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+        bottomSheetBehavior?.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(@NonNull bottomSheet: View, newState: Int) {}
 
             override fun onSlide(@NonNull bottomSheet: View, slideOffset: Float) {
@@ -103,6 +105,9 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
                 } else if (bottomSheetSlideOffOld >= 0.8 && slideOffset > 0.9) {
                     (activity as? MainActivity)?.setBottomNavigationVisible(false)
                 }
+
+                transactionsDim.visibility = if (slideOffset == 0f) View.GONE else View.VISIBLE
+
                 bottomSheetSlideOffOld = slideOffset
             }
         })
@@ -112,6 +117,7 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
 
         transactionId.setOnClickListener { transInfoViewModel.delegate.onCopyId() }
         txtFullInfo.setOnClickListener { transInfoViewModel.delegate.showFullInfo() }
+        transactionsDim.setOnClickListener { bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED }
 
         transInfoViewModel.showCopiedLiveEvent.observe(this, Observer {
             HudHelper.showSuccessMessage(R.string.Hud_Text_Copied)
@@ -128,7 +134,7 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
         transInfoViewModel.transactionLiveData.observe(this, Observer { txRecord ->
             txRecord?.let { txRec ->
                 (activity as? MainActivity)?.setBottomNavigationVisible(false)
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
 
                 val txStatus = txRec.status
 
@@ -177,6 +183,15 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
     override fun onFilterItemClick(item: TransactionFilterItem) {
         viewModel.delegate.onFilterSelect(item.adapterId)
     }
+
+    fun onBackPressed(): Boolean {
+        if (bottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED) {
+            bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+            return true
+        }
+        return false
+    }
+
 }
 
 
