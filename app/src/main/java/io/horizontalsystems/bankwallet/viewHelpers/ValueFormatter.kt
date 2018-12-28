@@ -21,7 +21,7 @@ object ValueFormatter {
             val format: NumberFormat = NumberFormat.getInstance()
             format.minimumFractionDigits = 2
             format.maximumFractionDigits = 2
-            format.roundingMode = RoundingMode.CEILING
+            format.roundingMode = RoundingMode.HALF_EVEN
             return format
         }
 
