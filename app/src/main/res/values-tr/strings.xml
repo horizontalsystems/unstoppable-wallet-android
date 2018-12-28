@@ -76,13 +76,10 @@
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Hesap işlemi</string>
     <string name="TransactionInfo_Status">Durum:</string>
-    <string name="TransactionInfo_Completed">Tamamlandı</string>
-    <string name="TransactionInfo_Pending">Devam ediyor</string>
-    <string name="TransactionInfo_Processing">%d%% işleniyor</string>
-    <string name="TransactionInfo_Close">Kapat</string>
     <string name="TransactionInfo_Id">Kimlik:</string>
     <string name="TransactionInfo_To">Alan:</string>
     <string name="TransactionInfo_From">Gönderen:</string>
+    <string name="TransactionInfo_Time">Time:</string>
     <string name="TransactionInfo_ButtonMore">Full Info</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Full Info</string>
