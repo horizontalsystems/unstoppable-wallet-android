@@ -45,12 +45,10 @@ object ValueFormatter {
         return result
     }
 
-    fun format(currencyValue: CurrencyValue, approximate: Boolean = false): String? {
+    fun format(currencyValue: CurrencyValue, approximate: Boolean = false, showNegativeSign: Boolean = true): String? {
         var value = currencyValue.value
 
-        if (approximate) {
-            value = Math.abs(value)
-        }
+        value = Math.abs(value)
 
         val bigNumber = value >= 100.0
 
@@ -62,6 +60,10 @@ object ValueFormatter {
         }
 
         result = "${currencyValue.currency.symbol}$result"
+
+        if (showNegativeSign && currencyValue.value < 0) {
+            result = "- $result"
+        }
 
         if (approximate) {
             result = "~ $result"

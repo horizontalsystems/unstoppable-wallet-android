@@ -54,8 +54,8 @@
             android:ellipsize="middle"
             android:maxWidth="125dp"
             android:singleLine="true"
-            android:text="1111111111111111111111"
             android:textAlignment="textEnd"
+            tools:text="1111111111111111111111"
             />
     </LinearLayout>
 
@@ -67,13 +67,13 @@
         android:background="?TransactionDetailBackground"
         android:fontFamily="@font/noto_sans_bold"
         android:paddingTop="16dp"
-        android:text="$3"
         android:textAlignment="center"
         android:textColor="@color/green_crypto"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtTitle"
+        tools:text="$3"
         />
 
     <View
@@ -94,13 +94,13 @@
         android:fontFamily="@font/noto_sans"
         android:paddingBottom="16dp"
         android:paddingTop="4dp"
-        android:text="+ 0,0006482 BTC"
         android:textAlignment="center"
         android:textColor="@color/grey"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fiatValue"
+        tools:text="+ 0,0006482 BTC"
         />
 
     <View
@@ -163,8 +163,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/noto_sans_bold"
-        android:paddingBottom="16dp"
-        android:paddingTop="16dp"
+        android:paddingBottom="13dp"
+        android:paddingTop="12dp"
         android:text="@string/TransactionInfo_ButtonMore"
         android:textAlignment="center"
         android:textColor="@color/grey"

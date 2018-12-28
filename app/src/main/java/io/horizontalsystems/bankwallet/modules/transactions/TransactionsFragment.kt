@@ -133,12 +133,12 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
                 val txStatus = txRec.status
 
                 fiatValue.apply {
-                    text = txRec.currencyValue?.let { ValueFormatter.format(it, true) }
+                    text = txRec.currencyValue?.let { ValueFormatter.format(it, showNegativeSign = true) }
+                    setTextColor(resources.getColor(if (txRec.incoming) R.color.green_crypto else R.color.yellow_crypto, null))
                 }
 
                 coinValue.apply {
                     text = ValueFormatter.format(txRec.coinValue, true)
-                    setTextColor(resources.getColor(if (txRec.incoming) R.color.green_crypto else R.color.yellow_crypto, null))
                 }
 
                 itemTime.apply {
@@ -215,7 +215,7 @@ class ViewHolderTransaction(override val containerView: View) : RecyclerView.Vie
         txAmount.text = ValueFormatter.format(transactionRecord.coinValue, true)
         txDate.text = transactionRecord.date?.let { DateHelper.getShortDateForTransaction(it) }
         txTime.text = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }
-        txValueInFiat.text = transactionRecord.currencyValue?.let { ValueFormatter.format(it, true) }
+        txValueInFiat.text = transactionRecord.currencyValue?.let { ValueFormatter.format(it, true, false) }
         statusIcon.setImageDrawable(getStatusIcon(transactionRecord.status))
         pendingShade.visibility = if (transactionRecord.status == TransactionStatus.Pending) View.VISIBLE else View.GONE
     }
