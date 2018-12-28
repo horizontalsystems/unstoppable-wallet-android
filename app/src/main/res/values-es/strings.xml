@@ -76,13 +76,10 @@
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Transacción</string>
     <string name="TransactionInfo_Status">Estado:</string>
-    <string name="TransactionInfo_Completed">Finalizado</string>
-    <string name="TransactionInfo_Pending">Pendiente</string>
-    <string name="TransactionInfo_Processing">Procesando %d%%</string>
-    <string name="TransactionInfo_Close">Cerrar</string>
     <string name="TransactionInfo_Id">Identificación:</string>
     <string name="TransactionInfo_To">Para:</string>
     <string name="TransactionInfo_From">Desde:</string>
+    <string name="TransactionInfo_Time">Time:</string>
     <string name="TransactionInfo_ButtonMore">Full Info</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Información completa</string>
