@@ -8,6 +8,7 @@ import android.view.View
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
+import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_transaction_info_item.view.*
 
 class TransactionInfoItemView : ConstraintLayout {
@@ -64,18 +65,19 @@ class TransactionInfoItemView : ConstraintLayout {
 
         when (transactionStatus) {
             is TransactionStatus.Pending -> {
-                pendingIcon.visibility = View.VISIBLE
+                statusIcon.setImageDrawable(LayoutHelper.d(R.drawable.pending, App.instance))
+                statusIcon.visibility = View.VISIBLE
                 statusProgressBar.visibility = View.GONE
             }
             is TransactionStatus.Processing -> {
-                pendingIcon.visibility = View.GONE
+                statusIcon.visibility = View.GONE
                 statusProgressBar.visibility = View.VISIBLE
                 setProgressBars(transactionStatus.progress)
             }
             else -> {
-                pendingIcon.visibility = View.GONE
-                statusProgressBar.visibility = View.VISIBLE
-                setProgressBars()
+                statusIcon.setImageDrawable(LayoutHelper.d(R.drawable.checkmark_green, App.instance))
+                statusIcon.visibility = View.VISIBLE
+                statusProgressBar.visibility = View.GONE
             }
         }
 
