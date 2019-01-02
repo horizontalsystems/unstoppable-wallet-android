@@ -79,7 +79,7 @@
     <string name="TransactionInfo_Id">Kimlik:</string>
     <string name="TransactionInfo_To">Alan:</string>
     <string name="TransactionInfo_From">Gönderen:</string>
-    <string name="TransactionInfo_Time">Time:</string>
+    <string name="TransactionInfo_Time">Tarih:</string>
     <string name="TransactionInfo_ButtonMore">Full Info</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Full Info</string>
