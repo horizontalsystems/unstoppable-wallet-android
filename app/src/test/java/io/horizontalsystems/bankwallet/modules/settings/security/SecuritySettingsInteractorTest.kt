@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.settings.security
 
 import com.nhaarman.mockito_kotlin.*
 import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.entities.BiometryType
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
 import io.reactivex.subjects.PublishSubject
@@ -15,7 +14,7 @@ import org.mockito.Mockito.mock
 class SecuritySettingsInteractorTest {
 
     private val delegate = mock(SecuritySettingsModule.ISecuritySettingsInteractorDelegate::class.java)
-    private val walletManager = mock(WalletManager::class.java)
+    private val walletManager = mock(IWalletManager::class.java)
     private val transactionRepository = mock(ITransactionRecordStorage::class.java)
     private val exchangeRateRepository = mock(IRateStorage::class.java)
 
@@ -100,10 +99,7 @@ class SecuritySettingsInteractorTest {
     fun unlinkWallet() {
         interactor.unlinkWallet()
 
-        verify(walletManager).clearWallets()
-        verify(localStorage).clearAll()
-        verify(transactionRepository).deleteAll()
-        verify(exchangeRateRepository).deleteAll()
+        verify(wordsManager).logout()
         verify(delegate).didUnlinkWallet()
     }
 

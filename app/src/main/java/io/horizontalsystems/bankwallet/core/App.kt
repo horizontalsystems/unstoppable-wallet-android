@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import com.squareup.leakcanary.LeakCanary
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
+import io.horizontalsystems.bankwallet.core.factories.WalletFactory
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
@@ -88,8 +89,8 @@ class App : Application() {
         appConfigProvider = AppConfigProvider()
         languageManager = LanguageManager(localStorage, appConfigProvider, fallbackLanguage)
         currencyManager = CurrencyManager(localStorage, appConfigProvider)
-        walletManager = WalletManager(AdapterFactory(appConfigProvider))
-        coinManager = CoinManager(wordsManager, walletManager, appConfigProvider)
+        coinManager = CoinManager(appConfigProvider)
+        walletManager = WalletManager(coinManager, wordsManager, WalletFactory(AdapterFactory(appConfigProvider)))
 
         networkAvailabilityManager = NetworkAvailabilityManager()
         periodicTimer = PeriodicTimer(delay = 3 * 60 * 1000)

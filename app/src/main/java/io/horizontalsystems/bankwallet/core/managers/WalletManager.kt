@@ -3,65 +3,72 @@ package io.horizontalsystems.bankwallet.core.managers
 import android.os.Handler
 import android.os.HandlerThread
 import io.horizontalsystems.bankwallet.core.IWalletManager
-import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
+import io.horizontalsystems.bankwallet.core.factories.WalletFactory
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.BiFunction
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 
-class WalletManager(private val adapterFactory: AdapterFactory) : IWalletManager, HandlerThread("A") {
+class WalletManager(coinManager: CoinManager, wordsManager: WordsManager, private val walletFactory: WalletFactory) : IWalletManager, HandlerThread("A") {
 
     private val handler: Handler
+    private val compositeDisposable = CompositeDisposable()
 
     init {
         start()
         handler = Handler(looper)
+
+        handler.post {
+            compositeDisposable.add(
+                    Flowable.combineLatest(
+                            coinManager.coinsObservable,
+                            wordsManager.wordsObservable,
+                            BiFunction<List<Coin>, List<String>, Pair<List<Coin>, List<String>>> { coins, words -> Pair(coins, words) })
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(Schedulers.io())
+                            .subscribe { (coins, words) ->
+                                handle(coins, words)
+                            })
+        }
     }
+
+    private val subject: BehaviorSubject<List<Wallet>> = BehaviorSubject.create()
 
     override var wallets: List<Wallet> = listOf()
     override val walletsSubject = PublishSubject.create<List<Wallet>>()
-    override val walletsObservable: Flowable<List<Wallet>> = walletsSubject.toFlowable(BackpressureStrategy.DROP)
+    override val walletsObservable: Flowable<List<Wallet>> = subject.toFlowable(BackpressureStrategy.DROP)
 
     override fun initWallets(words: List<String>, coins: List<Coin>, newWallet: Boolean, walletId: String?) {
-        handler.post {
-            val newWallets = mutableListOf<Wallet>()
-
-            wallets = coins.mapNotNull { coin ->
-                var wallet = wallets.firstOrNull { it.coinCode == coin.code }
-
-                if (wallet != null) {
-                    wallet
-                } else {
-                    val adapter = adapterFactory.adapterForCoin(coin.type, words, newWallet, walletId)
-
-                    if (adapter == null) {
-                        null
-                    } else {
-                        wallet = Wallet(coin.title, coin.code, adapter)
-
-                        newWallets.add(wallet)
-                        wallet
-                    }
-                }
-            }
-
-            walletsSubject.onNext(wallets)
-
-            newWallets.forEach { it.adapter.start() }
-        }
+        TODO("not implemented")
     }
 
     override fun refreshWallets() {
         handler.post {
-            wallets.forEach { it.adapter.refresh() }
+            subject.value?.forEach { it.adapter.refresh() }
         }
     }
 
     override fun clearWallets() {
+        TODO("not implemented")
+    }
+
+    private fun handle(coins: List<Coin>, words: List<String>) {
         handler.post {
-            wallets.forEach { it.adapter.clear() }
-            wallets = listOf()
+            val wallets = when {
+                words.isEmpty() -> listOf()
+                else -> coins.mapNotNull { coin ->
+                    subject.value?.find { it.coinCode == coin.code }
+                            ?: walletFactory.createWallet(coin, words)
+                }
+            }
+
+            subject.onNext(wallets)
         }
     }
+
 }

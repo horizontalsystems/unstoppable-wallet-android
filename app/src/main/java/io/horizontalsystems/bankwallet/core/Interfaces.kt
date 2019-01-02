@@ -84,6 +84,8 @@ interface IWordsManager {
     var isLoggedIn: Boolean
     var loggedInSubject: PublishSubject<LogInState>
     var backedUpSubject: PublishSubject<Boolean>
+    val wordsObservable: Flowable<List<String>>
+
     fun createWords()
     fun validate(words: List<String>)
     fun restore(words: List<String>)

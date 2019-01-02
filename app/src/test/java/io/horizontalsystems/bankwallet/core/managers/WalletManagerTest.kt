@@ -1,59 +1,101 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import android.os.Handler
-import android.os.HandlerThread
-import android.os.Looper
+import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
-import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
+import io.horizontalsystems.bankwallet.core.factories.WalletFactory
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CoinType
+import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.RxBaseTest
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
+import io.reactivex.subjects.BehaviorSubject
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
-import org.powermock.api.mockito.PowerMockito
-import org.powermock.core.classloader.annotations.PrepareForTest
-import org.powermock.modules.junit4.PowerMockRunner
 
-@RunWith(PowerMockRunner::class)
-@PrepareForTest(WalletManager::class, HandlerThread::class)
 class WalletManagerTest {
-
-    private val adapterFactory = mock(AdapterFactory::class.java)
-    private val handler = mock(Handler::class.java)
-    private val looper = mock(Looper::class.java)
-    private val handlerThread = mock(HandlerThread::class.java)
-    private val words = listOf("one", "two", "three")
-    private val enabledCoins = listOf(
-            Coin("Bitcoin", "BTC", CoinType.Bitcoin),
-            Coin("Ethereum", "ETH", CoinType.Ethereum))
-
     private lateinit var manager: WalletManager
+
+    private val coinManager = mock(CoinManager::class.java)
+    private val wordsManager = mock(WordsManager::class.java)
+    private val walletFactory = mock(WalletFactory::class.java)
 
     @Before
     fun setUp() {
-        PowerMockito
-                .whenNew(Handler::class.java)
-                .withAnyArguments()
-                .thenReturn(handler)
-
-        PowerMockito
-                .whenNew(HandlerThread::class.java)
-                .withAnyArguments()
-                .thenReturn(handlerThread)
-
-        whenever(handlerThread.looper).thenReturn(looper)
-
-        manager = WalletManager(adapterFactory)
+        RxBaseTest.setup()
     }
 
     @Test
-    fun initWallets() {
-//        manager.initWallets(words, enabledCoins, false)
-//        Assert.assertEquals(manager.wallets[0].coinCode, enabledCoins[0].coinCode)
-//        Assert.assertEquals(manager.wallets[0].title, enabledCoins[0].title)
-//        Assert.assertEquals(manager.wallets[1].coinCode, enabledCoins[1].coinCode)
-//        Assert.assertEquals(manager.wallets[1].title, enabledCoins[1].title)
+    fun initial() {
+        val coin = mock(Coin::class.java)
+        val coins = listOf(coin)
+        val words = listOf("ad")
+        val wallet = mock(Wallet::class.java)
+
+        whenever(coinManager.coinsObservable).thenReturn(Flowable.just(coins))
+        whenever(wordsManager.wordsObservable).thenReturn(Flowable.just(words))
+        whenever(walletFactory.createWallet(coin, words)).thenReturn(wallet)
+
+        manager = WalletManager(coinManager, wordsManager, walletFactory)
+
+        manager.walletsObservable
+                .test()
+                .assertValue(listOf(wallet))
     }
 
+    @Test
+    fun emptyWords() {
+        val coin = mock(Coin::class.java)
+        val coins = listOf(coin)
+        val words = listOf<String>()
+
+        whenever(coinManager.coinsObservable).thenReturn(Flowable.just(coins))
+        whenever(wordsManager.wordsObservable).thenReturn(Flowable.just(words))
+
+        manager = WalletManager(coinManager, wordsManager, walletFactory)
+
+        Thread.sleep(300)
+
+        manager.walletsObservable
+                .test()
+                .assertValue(listOf())
+
+
+    }
+
+    @Test
+    fun createOnlyNew() {
+        val coinCode1 = "coinCode1"
+        val coinCode2 = "coinCode2"
+        val coin1 = mock(Coin::class.java)
+        val coin2 = mock(Coin::class.java)
+        val coins = listOf(coin1)
+        val coinsUpdated = listOf(coin1, coin2)
+        val words = listOf("ad")
+        val wallet1 = mock(Wallet::class.java)
+        val wallet2 = mock(Wallet::class.java)
+
+        val coinsSubject = BehaviorSubject.createDefault(coins)
+
+        whenever(coin1.code).thenReturn(coinCode1)
+        whenever(wallet1.coinCode).thenReturn(coinCode1)
+        whenever(coin2.code).thenReturn(coinCode2)
+        whenever(wallet2.coinCode).thenReturn(coinCode2)
+
+        whenever(coinManager.coinsObservable).thenReturn(coinsSubject.toFlowable(BackpressureStrategy.DROP))
+        whenever(wordsManager.wordsObservable).thenReturn(Flowable.just(words))
+        whenever(walletFactory.createWallet(coin1, words)).thenReturn(wallet1)
+        whenever(walletFactory.createWallet(coin2, words)).thenReturn(wallet2)
+
+        manager = WalletManager(coinManager, wordsManager, walletFactory)
+
+        coinsSubject.onNext(coinsUpdated)
+
+        verify(walletFactory).createWallet(coin1, words)
+        verify(walletFactory).createWallet(coin2, words)
+
+        manager.walletsObservable
+                .test()
+                .assertValue(listOf(wallet1, wallet2))
+    }
 }

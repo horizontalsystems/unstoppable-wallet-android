@@ -1,32 +1,15 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
-import io.horizontalsystems.bankwallet.core.IWalletManager
-import io.horizontalsystems.bankwallet.core.IWordsManager
-import io.horizontalsystems.bankwallet.core.LogInState
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
-import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
+import io.reactivex.subjects.BehaviorSubject
 
-class CoinManager(private val wordsManager: IWordsManager,
-                  private val walletManager: IWalletManager,
-                  private val appConfigProvider: IAppConfigProvider) {
+class CoinManager(private val appConfigProvider: IAppConfigProvider) {
 
-    private var disposables: CompositeDisposable = CompositeDisposable()
-
-    init {
-        wordsManager.loggedInSubject.subscribe { logInState ->
-            syncWallets(logInState == LogInState.CREATE)
-        }.let {
-            disposables.add(it)
-        }
-    }
-
-    private fun syncWallets(newWallet: Boolean) {
-        wordsManager.words?.let {
-            walletManager.initWallets(it, defaultCoins, newWallet, wordsManager.walletId)
-        } ?: walletManager.clearWallets()
-    }
+    val coinsObservable: Flowable<List<Coin>> = BehaviorSubject.createDefault(defaultCoins).toFlowable(BackpressureStrategy.DROP)
 
     private val defaultCoins: List<Coin>
         get() {
