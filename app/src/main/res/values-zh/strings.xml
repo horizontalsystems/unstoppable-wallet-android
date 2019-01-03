@@ -58,7 +58,7 @@
     <string name="Send_Error_IncorrectAddress">Incorrect Address</string>
     <string name="Send_Error_BalanceAmount">余额%s</string>
     <string name="Send_DialogTitle">Confirm Transaction</string>
-    <string name="Send_DialogFee">Fee:</string>
+    <string name="Send_DialogFee">费用:</string>
     <string name="Send_DialogTotal">总额:</string>
     <!--Deposit-->
     <string name="Deposit_Title">收到%s</string>
