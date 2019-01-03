@@ -135,7 +135,7 @@ Hack dein Telefon nicht, installier keine Anwendungen von inoffiziellen Quellen 
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android Keystore Fehler</string>
     <string name="Alert_KeysInvalidatedDescription">Deine verschlüsselten Daten wurden kürzlich ungültig gemacht, weil dein Android-Sperrbildschirm geändert wurde</string>
-    <string name="Alert_NoDeviceLockTitle">Warnung</string>
+    <string name="Alert_TitleWarning">Warnung</string>
     <string name="Alert_NoDeviceLockDescription">Richten Sie ein Sperrbildschirm auf diesem Gerät weiter. Gehen Sie auf \"Einstellungen\" &gt; \"Security\" &gt; \"Bildschirmsperre\" und aktivieren Sie die Sperre Bildschirmeinstellung.</string>
     <!--Unlock-->
     <string name="Unlock_Page_EnterYourPin">Gib deine PIN ein</string>

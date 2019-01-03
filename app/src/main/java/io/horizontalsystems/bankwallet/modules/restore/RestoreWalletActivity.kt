@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.Utils
 import io.horizontalsystems.bankwallet.lib.EditTextViewHolder
 import io.horizontalsystems.bankwallet.lib.WordsInputAdapter
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
@@ -25,6 +26,10 @@ class RestoreWalletActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_restore_wallet)
+
+        if (Utils.isUsingCustomKeyboard(this) ) {
+            showCustomKeyboardAlert()
+        }
 
         setSupportActionBar(toolbar)
 
@@ -83,4 +88,3 @@ class RestoreWalletActivity : BaseActivity() {
     }
 
 }
-

@@ -140,7 +140,7 @@ Algunos datos genéricos de carácter público de esta app se guardan en centros
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android Keystore Error</string>
     <string name="Alert_KeysInvalidatedDescription">The encrypted data holding your wallet was recently invalidated because your Android lock screen was changed</string>
-    <string name="Alert_NoDeviceLockTitle">Warning</string>
+    <string name="Alert_TitleWarning">Warning</string>
     <string name="Alert_NoDeviceLockDescription">Set up a lock screen on this device to continue. Go to “Settings” &gt; “Security” &gt; “Screen Lock” and enable the lock screen setting.</string>
     <!--Unlock-->
     <string name="Unlock_Page_EnterYourPin">Introduzca PIN</string>

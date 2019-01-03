@@ -197,8 +197,9 @@
 
     <string name="Alert_KeysInvalidatedTitle">Android Keystore Error</string>
     <string name="Alert_KeysInvalidatedDescription">The encrypted data holding your wallet was recently invalidated because your Android lock screen was changed</string>
-    <string name="Alert_NoDeviceLockTitle">Warning</string>
+    <string name="Alert_TitleWarning">Warning</string>
     <string name="Alert_NoDeviceLockDescription">Set up a lock screen on this device to continue. Go to “Settings” > “Security” > “Screen Lock” and enable the lock screen setting.</string>
+    <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
 
 
     <!--Unlock-->
