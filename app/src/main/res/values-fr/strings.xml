@@ -79,14 +79,14 @@
     <string name="TransactionInfo_Id">ID:</string>
     <string name="TransactionInfo_To">À:</string>
     <string name="TransactionInfo_From">De:</string>
-    <string name="TransactionInfo_Time">Time:</string>
+    <string name="TransactionInfo_Time">Heure:</string>
     <string name="TransactionInfo_ButtonMore">Full Info</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Full Info</string>
     <string name="FullInfo_Id">ID</string>
     <string name="FullInfo_Status">Statut</string>
     <string name="FullInfo_Time">Heure</string>
-    <string name="FullInfo_Block">Block</string>
+    <string name="FullInfo_Block">Bloc</string>
     <string name="FullInfo_Confirmations">Confirmation</string>
     <string name="FullInfo_TotalInput">Total des entrées</string>
     <string name="FullInfo_TotalOutput">Total des sorties</string>
@@ -169,6 +169,6 @@
     <string name="EditPin_UnlockInfo">Entrez le PIN actuel</string>
     <string name="EditPin_NewPinInfo">Entrez le nouveau PIN</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Manage Coins</string>
+    <string name="ManageCoins_title">Gérer les coins</string>
     <string name="ManageCoins_save">Save</string>
 </resources>
