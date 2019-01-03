@@ -39,7 +39,6 @@ class App : Application() {
 
         lateinit var rateSyncer: RateSyncer
         lateinit var rateManager: RateManager
-        lateinit var periodicTimer: PeriodicTimer
         lateinit var networkAvailabilityManager: NetworkAvailabilityManager
         lateinit var transactionRateSyncer: ITransactionRateSyncer
         lateinit var transactionManager: TransactionManager
@@ -93,20 +92,16 @@ class App : Application() {
         walletManager = WalletManager(coinManager, wordsManager, WalletFactory(AdapterFactory(appConfigProvider)))
 
         networkAvailabilityManager = NetworkAvailabilityManager()
-        periodicTimer = PeriodicTimer(delay = 3 * 60 * 1000)
-        rateSyncer = RateSyncer(networkManager, periodicTimer)
 
         appDatabase = AppDatabase.getInstance(this)
         transactionStorage = TransactionRepository(appDatabase)
 
         rateStorage = RatesRepository(appDatabase)
-        rateManager = RateManager(rateStorage, rateSyncer, walletManager, currencyManager, wordsManager, networkAvailabilityManager, periodicTimer)
-
-        rateSyncer.delegate = rateManager
+        rateManager = RateManager(rateStorage, networkManager)
+        rateSyncer = RateSyncer(rateManager, walletManager, currencyManager, networkAvailabilityManager)
 
         transactionRateSyncer = TransactionRateSyncer(transactionStorage, networkManager)
         transactionManager = TransactionManager(transactionStorage, transactionRateSyncer, walletManager, currencyManager, wordsManager, networkAvailabilityManager)
-
     }
 
 }

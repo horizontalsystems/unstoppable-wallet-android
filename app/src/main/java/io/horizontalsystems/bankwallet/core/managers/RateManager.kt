@@ -1,76 +1,40 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.INetworkManager
+import io.horizontalsystems.bankwallet.core.IRateStorage
 import io.horizontalsystems.bankwallet.entities.LatestRate
 import io.horizontalsystems.bankwallet.entities.Rate
+import io.reactivex.Flowable
 import io.reactivex.Maybe
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.schedulers.Schedulers
 
-class RateManager(
-        private val storage: IRateStorage,
-        private val syncer: RateSyncer,
-        private val walletManager: IWalletManager,
-        private val currencyManager: ICurrencyManager,
-        private val wordsManager: IWordsManager,
-        networkAvailabilityManager: NetworkAvailabilityManager,
-        timer: PeriodicTimer) : IPeriodicTimerDelegate, IRateSyncerDelegate {
+class RateManager(private val storage: IRateStorage, private val networkManager: INetworkManager) {
 
-    val subject: PublishSubject<Boolean> = PublishSubject.create()
     val latestRates = mutableMapOf<String, MutableMap<String, LatestRate>>()
 
-    private var disposables: CompositeDisposable = CompositeDisposable()
-
-    init {
-        timer.delegate = this
-
-        disposables.add(walletManager.walletsSubject.subscribe {
-            updateRates()
-        })
-
-        disposables.add(currencyManager.subject.subscribe {
-            updateRates()
-        })
-
-        disposables.add(networkAvailabilityManager.stateSubject.subscribe { connected ->
-            if (connected) {
-                updateRates()
-            }
-        })
-
-        disposables.add(storage.getAll().subscribe {
-            subject.onNext(true)
-        })
-
-        disposables.add(wordsManager.loggedInSubject
-                .subscribe { logInState ->
-                    if (logInState == LogInState.LOGOUT) {
-                        storage.deleteAll()
-                    }
-                })
-    }
+    private var refreshDisposables: CompositeDisposable = CompositeDisposable()
 
     fun rate(coin: String, currencyCode: String): Maybe<Rate> {
         return storage.rate(coin, currencyCode)
     }
 
-    private fun updateRates() {
-        val coins = walletManager.wallets.map { it.coinCode }
-        val currencyCode = currencyManager.baseCurrency.code
+    fun refreshRates(coinCodes: List<String>, currencyCode: String) {
+        refreshDisposables.clear()
 
-        syncer.sync(coins = coins, currencyCode = currencyCode)
-    }
+        refreshDisposables.add(Flowable.mergeDelayError(
+                coinCodes.map { coinCode ->
+                    networkManager.getLatestRate(coinCode, currencyCode)
+                            .map {
+                                Rate(coinCode, currencyCode, it.value, it.timestamp)
+                            }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe({
+                    storage.save(it)
+                }, {
 
-    override fun didSync(coin: String, currencyCode: String, latestRate: LatestRate) {
-        if (latestRates[coin] == null) {
-            latestRates[coin] = mutableMapOf()
-        }
-        latestRates[coin]?.set(currencyCode, latestRate)
-
-        storage.save(latestRate = latestRate, coinCode = coin, currencyCode = currencyCode)
-    }
-
-    override fun onFire() {
-        updateRates()
+                }))
     }
 }

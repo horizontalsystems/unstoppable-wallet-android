@@ -168,22 +168,14 @@ interface IAppConfigProvider {
     val currencies: List<Currency>
 }
 
-interface IPeriodicTimerDelegate {
-    fun onFire()
-}
-
 interface IOneTimerDelegate {
     fun onFire()
-}
-
-interface IRateSyncerDelegate {
-    fun didSync(coin: String, currencyCode: String, latestRate: LatestRate)
 }
 
 interface IRateStorage {
     fun rateObservable(coinCode: CoinCode, currencyCode: String): Flowable<Rate>
     fun rate(coinCode: CoinCode, currencyCode: String): Maybe<Rate>
-    fun save(latestRate: LatestRate, coinCode: CoinCode, currencyCode: String)
+    fun save(rate: Rate)
     fun getAll(): Flowable<List<Rate>>
     fun deleteAll()
 }
