@@ -138,7 +138,7 @@
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">اندرايد keystore خطا</string>
     <string name="Alert_KeysInvalidatedDescription">Data شما ديگر نامتعبر است بخاطر تعغير دادن قفل صفحه</string>
-    <string name="Alert_NoDeviceLockTitle">هشدار</string>
+    <string name="Alert_TitleWarning">هشدار</string>
     <string name="Alert_NoDeviceLockDescription">پرده نمايش را بر تيليفون خود ثبت نمايد برويد به تنظيمات&amp;gt امنيت&amp;gt قفل صفحه و روشن نمايد قفل صفحه را</string>
     <!--Unlock-->
     <string name="Unlock_Page_EnterYourPin">پين را وارد كنيد</string>

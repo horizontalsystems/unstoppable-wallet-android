@@ -7,8 +7,10 @@ import android.content.Intent
 import android.os.Bundle
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.ui.dialogs.BottomConfirmAlert
+import kotlinx.android.synthetic.main.activity_backup_words.*
 
 class BackupActivity : BaseActivity(), BottomConfirmAlert.Listener {
 
@@ -23,37 +25,11 @@ class BackupActivity : BaseActivity(), BottomConfirmAlert.Listener {
         viewModel.init(BackupPresenter.DismissMode.valueOf(intent.getStringExtra(dismissModeKey)))
 
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                    .add(R.id.fragmentContainer, BackupInfoFragment()).commit()
-
+            viewModel.delegate.viewDidLoad()
         }
 
-        viewModel.navigationWordsLiveEvent.observe(this, Observer {
-
-            val transaction = supportFragmentManager.beginTransaction()
-
-            transaction.replace(R.id.fragmentContainer, BackupWordsFragment())
-            transaction.addToBackStack(null)
-
-            transaction.commit()
-
-        })
-
-        viewModel.navigationConfirmLiveEvent.observe(this, Observer {
-
-            val transaction = supportFragmentManager.beginTransaction()
-
-            transaction.replace(R.id.fragmentContainer, BackupConfirmFragment())
-            transaction.addToBackStack(null)
-
-            transaction.commit()
-
-        })
-
-        viewModel.navigateBackLiveEvent.observe(this, Observer {
-            hideSoftKeyboard()
-            supportFragmentManager.popBackStack()
-        })
+        buttonBack.setOnSingleClickListener { viewModel.delegate.onBackClick() }
+        buttonNext.setOnSingleClickListener { viewModel.delegate.onNextClick() }
 
         viewModel.navigateToSetPinLiveEvent.observe(this, Observer {
             PinModule.startForSetPin(this)
@@ -79,6 +55,43 @@ class BackupActivity : BaseActivity(), BottomConfirmAlert.Listener {
             BottomConfirmAlert.show(this, confirmationList, this)
         })
 
+        viewModel.loadPageLiveEvent.observe(this, Observer { page ->
+            page?.let {
+                val fragment = when(it) {
+                    0 -> BackupInfoFragment()
+                    1 -> BackupWordsFragment()
+                    else -> BackupConfirmFragment()
+                }
+                val transaction = supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.fragmentContainer, fragment)
+                transaction.addToBackStack(null)
+                transaction.commit()
+
+                setButtons(it)
+            }
+        })
+
+    }
+
+    private fun setButtons(page: Int) {
+        when(page) {
+            0 -> {
+                buttonBack.setText(R.string.Backup_Intro_Later)
+                buttonNext.setText(R.string.Backup_Intro_BackupNow)
+            }
+            1 -> {
+                buttonBack.setText(R.string.Button_Back)
+                buttonNext.setText(R.string.Backup_Button_Next)
+            }
+            else -> {
+                buttonBack.setText(R.string.Button_Back)
+                buttonNext.setText(R.string.Backup_Button_Submit)
+            }
+        }
+    }
+
+    override fun onBackPressed() {
+        viewModel.delegate.onBackClick()
     }
 
     override fun onConfirmationSuccess() {

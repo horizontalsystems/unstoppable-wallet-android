@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.lib
 
 import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
@@ -43,14 +42,9 @@ class AlertDialogFragment : DialogFragment() {
 
         val mDialog = builder?.create()
         mDialog?.setCanceledOnTouchOutside(false)
+        isCancelable = false
 
         return mDialog as Dialog
-    }
-
-    override fun onDismiss(dialog: DialogInterface?) {
-        super.onDismiss(dialog)
-
-        listener?.onButtonClick()
     }
 
     companion object {

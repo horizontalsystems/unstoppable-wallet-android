@@ -134,7 +134,7 @@
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Ошибка Android Keystore</string>
     <string name="Alert_KeysInvalidatedDescription">Ваши зашифрованные данные были недавно аннулированы, потому что  Android lock screen был изменен</string>
-    <string name="Alert_NoDeviceLockTitle">Внимание</string>
+    <string name="Alert_TitleWarning">Внимание</string>
     <string name="Alert_NoDeviceLockDescription">Установите блокировку экрана на этом устройстве. Перейдите в «Настройки» &gt; «Безопасность» &gt; «Блокировка экрана» и включите параметр экрана блокировки.</string>
     <!--Unlock-->
     <string name="Unlock_Page_EnterYourPin">Введите PIN-код</string>
