@@ -135,8 +135,9 @@
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android anahtar deposu hatası</string>
     <string name="Alert_KeysInvalidatedDescription">Android cihazınızın kilidi değiştirildiğinden cüzdan bilginizi tutan şifreli dosya artık geçersiz</string>
-    <string name="Alert_NoDeviceLockTitle">Uyarı</string>
+    <string name="Alert_TitleWarning">Warning</string>
     <string name="Alert_NoDeviceLockDescription">Devam edebilmek için cihaz kilidi oluşturmalısınız. Ekran kilidi oluşturmak için, Ayarlarlarda ki Güvenlik &gt; Ekran Kilidi bölümene gidin.</string>
+    <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
     <!--Unlock-->
     <string name="Unlock_Page_EnterYourPin">PİN</string>
     <!--Errors-->
