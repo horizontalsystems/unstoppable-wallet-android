@@ -139,8 +139,9 @@
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">اندرايد keystore خطا</string>
     <string name="Alert_KeysInvalidatedDescription">Data شما ديگر نامتعبر است بخاطر تعغير دادن قفل صفحه</string>
-    <string name="Alert_NoDeviceLockTitle">هشدار</string>
+    <string name="Alert_TitleWarning">Warning</string>
     <string name="Alert_NoDeviceLockDescription">پرده نمايش را بر تيليفون خود ثبت نمايد برويد به تنظيمات&amp;gt امنيت&amp;gt قفل صفحه و روشن نمايد قفل صفحه را</string>
+    <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
     <!--Unlock-->
     <string name="Unlock_Page_EnterYourPin">PIN</string>
     <!--Errors-->
