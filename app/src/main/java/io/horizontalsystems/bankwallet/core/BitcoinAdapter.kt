@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bitcoinkit.BitcoinKit
+import io.horizontalsystems.bitcoinkit.managers.UnspentOutputSelector
 import io.horizontalsystems.bitcoinkit.models.BlockInfo
 import io.horizontalsystems.bitcoinkit.models.TransactionInfo
 import io.reactivex.subjects.BehaviorSubject
@@ -64,9 +65,14 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
     }
 
     override fun fee(value: Double, address: String?, senderPay: Boolean): Double {
-        val amount = (value * satoshisInBitcoin).toInt()
-        val fee = bitcoinKit.fee(amount, address, senderPay)
-        return fee / satoshisInBitcoin
+        try {
+            val amount = (value * satoshisInBitcoin).toInt()
+            val fee = bitcoinKit.fee(amount, address, senderPay)
+            return fee / satoshisInBitcoin
+        } catch (e: UnspentOutputSelector.Error.InsufficientUnspentOutputs) {
+            val fee = e.fee / satoshisInBitcoin
+            throw Error.InsufficientAmount(fee)
+        }
     }
 
     override fun validate(address: String) {
