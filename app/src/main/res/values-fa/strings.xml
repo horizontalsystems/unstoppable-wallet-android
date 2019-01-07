@@ -143,7 +143,7 @@
     <string name="Alert_NoDeviceLockDescription">پرده نمايش را بر تيليفون خود ثبت نمايد برويد به تنظيمات&amp;gt امنيت&amp;gt قفل صفحه و روشن نمايد قفل صفحه را</string>
     <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
     <!--Unlock-->
-    <string name="Unlock_Page_EnterYourPin">PIN</string>
+    <string name="Unlock_Page_EnterYourPin">Passcode</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">پول رايج شده پيشيباني ندارد</string>
     <!--Hud texts-->
@@ -162,17 +162,17 @@
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Disabled until: %s</string>
     <!--Set Pin-->
-    <string name="SetPin_Title">PIN</string>
-    <string name="SetPin_Info">پين شما استعمال خواهد شد براي باز نمودن اپليكيشن</string>
+    <string name="SetPin_Title">Passcode</string>
+    <string name="SetPin_Info">Your passcode will be used to unlock wallet app</string>
     <string name="SetPin_ErrorShortPin">لطفلاً تمام ارقام را وارد كنيد.</string>
-    <string name="SetPin_ConfirmInfo">تأیید پین</string>
-    <string name="SetPin_Success">پين قفل نمودن با موفقيت انجام شد!</string>
-    <string name="SetPin_ErrorPinsDontMatch">پين درست نبود. دوباره كوشش كنيد.</string>
-    <string name="SetPin_ErrorFailedToSavePin">خطا رخ داده است وقتي ثبت نمودن پين. لطفاً,دوباره كوشش كنيد.</string>
+    <string name="SetPin_ConfirmInfo">Confirm</string>
+    <string name="SetPin_Success">Lock passcode was set successfully!</string>
+    <string name="SetPin_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
+    <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">ويرايش پين</string>
-    <string name="EditPin_UnlockInfo">پين حال را وارد كنيد</string>
-    <string name="EditPin_NewPinInfo">پين قبلي را وارد كنيد</string>
+    <string name="EditPin_Title">Edit Passcode</string>
+    <string name="EditPin_UnlockInfo">Current Passcode</string>
+    <string name="EditPin_NewPinInfo">New Passcode</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Manage Coins</string>
     <string name="ManageCoins_save">Save</string>
