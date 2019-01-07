@@ -4,6 +4,7 @@ import android.os.Handler
 import android.os.HandlerThread
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.factories.WalletFactory
+import io.horizontalsystems.bankwallet.entities.AuthData
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.reactivex.BackpressureStrategy
@@ -27,12 +28,12 @@ class WalletManager(coinManager: CoinManager, wordsManager: WordsManager, privat
             compositeDisposable.add(
                     Flowable.combineLatest(
                             coinManager.coinsObservable,
-                            wordsManager.wordsObservable,
-                            BiFunction<List<Coin>, List<String>, Pair<List<Coin>, List<String>>> { coins, words -> Pair(coins, words) })
+                            wordsManager.authDataObservable,
+                            BiFunction<List<Coin>, AuthData, Pair<List<Coin>, AuthData>> { coins, words -> Pair(coins, words) })
                             .subscribeOn(Schedulers.io())
                             .observeOn(Schedulers.io())
-                            .subscribe { (coins, words) ->
-                                handle(coins, words)
+                            .subscribe { (coins, authData) ->
+                                handle(coins, authData)
                             })
         }
     }
@@ -42,10 +43,6 @@ class WalletManager(coinManager: CoinManager, wordsManager: WordsManager, privat
     override var wallets: List<Wallet> = listOf()
     override val walletsSubject = PublishSubject.create<List<Wallet>>()
     override val walletsObservable: Flowable<List<Wallet>> = subject.toFlowable(BackpressureStrategy.DROP)
-
-    override fun initWallets(words: List<String>, coins: List<Coin>, newWallet: Boolean, walletId: String?) {
-        TODO("not implemented")
-    }
 
     override fun refreshWallets() {
         handler.post {
@@ -57,14 +54,10 @@ class WalletManager(coinManager: CoinManager, wordsManager: WordsManager, privat
         TODO("not implemented")
     }
 
-    private fun handle(coins: List<Coin>, words: List<String>) {
+    private fun handle(coins: List<Coin>, authData: AuthData) {
         handler.post {
-            val wallets = when {
-                words.isEmpty() -> listOf()
-                else -> coins.mapNotNull { coin ->
-                    subject.value?.find { it.coinCode == coin.code }
-                            ?: walletFactory.createWallet(coin, words)
-                }
+            val wallets = coins.mapNotNull { coin ->
+                subject.value?.find { it.coinCode == coin.code } ?: walletFactory.createWallet(coin, authData)
             }
 
             subject.onNext(wallets)

@@ -15,7 +15,6 @@ interface IWalletManager {
     val walletsSubject: PublishSubject<List<Wallet>>
     val walletsObservable: Flowable<List<Wallet>>
 
-    fun initWallets(words: List<String>, coins: List<Coin>, newWallet: Boolean, walletId: String?)
     fun refreshWallets()
     fun clearWallets()
 }
@@ -35,8 +34,8 @@ interface ILocalStorage {
 }
 
 interface ISecuredStorage {
-    val authData: List<String>?
-    fun saveAuthData(words: List<String>)
+    val authData: AuthData?
+    fun saveAuthData(authData: AuthData)
     fun noAuthData(): Boolean
     val savedPin: String?
     fun savePin(pin: String)
@@ -78,13 +77,12 @@ interface IKeyStoreSafeExecute {
 
 interface IWordsManager {
     fun safeLoad()
-    var words: List<String>?
-    var walletId: String?
+    val words: List<String>?
     var isBackedUp: Boolean
     var isLoggedIn: Boolean
     var loggedInSubject: PublishSubject<LogInState>
     var backedUpSubject: PublishSubject<Boolean>
-    val wordsObservable: Flowable<List<String>>
+    val authDataObservable: Flowable<AuthData>
 
     fun createWords()
     fun validate(words: List<String>)

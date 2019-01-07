@@ -57,8 +57,6 @@ class CurrencyManager(private val localStorage: ILocalStorage, private val appCo
     }
 
     private fun notifyUpdate(currencyCode: String?) {
-        currencies.find { it.code == currencyCode } ?: currencies.firstOrNull()
-
         val currency = currencyCode?.let { currencyCode ->
             currencies.find { it.code == currencyCode }
         } ?: currencies.firstOrNull()
