@@ -75,11 +75,11 @@
     <string name="Transactions_EmptyList">У Вас не было транзакций!</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Транзакция</string>
-    <string name="TransactionInfo_Status">Статус:</string>
-    <string name="TransactionInfo_Id">ID:</string>
-    <string name="TransactionInfo_To">Кому:</string>
-    <string name="TransactionInfo_From">От:</string>
-    <string name="TransactionInfo_Time">Time:</string>
+    <string name="TransactionInfo_Status">Status</string>
+    <string name="TransactionInfo_Id">ID</string>
+    <string name="TransactionInfo_To">To</string>
+    <string name="TransactionInfo_From">From</string>
+    <string name="TransactionInfo_Time">Time</string>
     <string name="TransactionInfo_ButtonMore">Full Info</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Full Info</string>
