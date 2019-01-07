@@ -204,7 +204,7 @@
 
     <!--Unlock-->
 
-    <string name="Unlock_Page_EnterYourPin">PIN</string>
+    <string name="Unlock_Page_EnterYourPin">Passcode</string>
 
 
     <!--Errors-->
@@ -238,20 +238,20 @@
 
     <!--Set Pin-->
 
-    <string name="SetPin_Title">PIN</string>
-    <string name="SetPin_Info">Your PIN will be used to unlock wallet app</string>
+    <string name="SetPin_Title">Passcode</string>
+    <string name="SetPin_Info">Your passcode will be used to unlock wallet app</string>
     <string name="SetPin_ErrorShortPin">Please enter all digits.</string>
-    <string name="SetPin_ConfirmInfo">Confirm PIN</string>
-    <string name="SetPin_Success">Lock PIN was set successfully!</string>
-    <string name="SetPin_ErrorPinsDontMatch">PIN did not match. Try again.</string>
-    <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your PIN. Please, try again.</string>
+    <string name="SetPin_ConfirmInfo">Confirm</string>
+    <string name="SetPin_Success">Lock passcode was set successfully!</string>
+    <string name="SetPin_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
+    <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
 
 
     <!--Edit Pin-->
 
-    <string name="EditPin_Title">Edit PIN</string>
-    <string name="EditPin_UnlockInfo">Enter current PIN</string>
-    <string name="EditPin_NewPinInfo">Enter New PIN</string>
+    <string name="EditPin_Title">Edit Passcode</string>
+    <string name="EditPin_UnlockInfo">Current Passcode</string>
+    <string name="EditPin_NewPinInfo">New Passcode</string>
 
 
     <!--Manage Coins-->
