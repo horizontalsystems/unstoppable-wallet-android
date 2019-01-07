@@ -143,7 +143,7 @@
     <string name="Alert_NoDeviceLockDescription">Set up a lock screen on this device to continue. Go to “Settings” &gt; “Security” &gt; “Screen Lock” and enable the lock screen setting.</string>
     <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
     <!--Unlock-->
-    <string name="Unlock_Page_EnterYourPin">PIN</string>
+    <string name="Unlock_Page_EnterYourPin">Passcode</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Unsupported currency</string>
     <!--Hud texts-->
@@ -162,17 +162,17 @@
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">禁用至: %s</string>
     <!--Set Pin-->
-    <string name="SetPin_Title">PIN</string>
-    <string name="SetPin_Info">Your PIN will be used to unlock wallet app</string>
+    <string name="SetPin_Title">Passcode</string>
+    <string name="SetPin_Info">Your passcode will be used to unlock wallet app</string>
     <string name="SetPin_ErrorShortPin">Please enter all digits.</string>
-    <string name="SetPin_ConfirmInfo">确认PIN码</string>
-    <string name="SetPin_Success">Lock PIN was set successfully!</string>
-    <string name="SetPin_ErrorPinsDontMatch">PIN did not match. Try again.</string>
-    <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your PIN. Please, try again.</string>
+    <string name="SetPin_ConfirmInfo">Confirm</string>
+    <string name="SetPin_Success">Lock passcode was set successfully!</string>
+    <string name="SetPin_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
+    <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">编辑 PIN码</string>
-    <string name="EditPin_UnlockInfo">输入当前的 PIN码</string>
-    <string name="EditPin_NewPinInfo">Enter New PIN</string>
+    <string name="EditPin_Title">Edit Passcode</string>
+    <string name="EditPin_UnlockInfo">Current Passcode</string>
+    <string name="EditPin_NewPinInfo">New Passcode</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">管理Coins</string>
     <string name="ManageCoins_save">Save</string>
