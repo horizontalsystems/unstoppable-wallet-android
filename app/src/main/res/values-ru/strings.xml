@@ -75,11 +75,11 @@
     <string name="Transactions_EmptyList">У Вас не было транзакций!</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Транзакция</string>
-    <string name="TransactionInfo_Status">Status</string>
+    <string name="TransactionInfo_Status">Статус</string>
     <string name="TransactionInfo_Id">ID</string>
-    <string name="TransactionInfo_To">To</string>
-    <string name="TransactionInfo_From">From</string>
-    <string name="TransactionInfo_Time">Time</string>
+    <string name="TransactionInfo_To">Кому</string>
+    <string name="TransactionInfo_From">От</string>
+    <string name="TransactionInfo_Time">Время</string>
     <string name="TransactionInfo_ButtonMore">Full Info</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Full Info</string>
@@ -94,7 +94,7 @@
     <string name="FullInfo_SubtitleFrom">От</string>
     <string name="FullInfo_SubtitleInputs">Входы</string>
     <string name="FullInfo_SubtitleOutputs">Выходы</string>
-    <string name="FullInfo_SubtitleProvider">Data Provider</string>
+    <string name="FullInfo_SubtitleProvider">Источник</string>
     <string name="FullTransactionInfo_From">От</string>
     <string name="FullTransactionInfo_To">Кому</string>
     <string name="FullTransactionInfo_Amount">Сумма</string>
@@ -135,7 +135,7 @@
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Ошибка Android Keystore</string>
     <string name="Alert_KeysInvalidatedDescription">Ваши зашифрованные данные были недавно аннулированы, потому что  Android lock screen был изменен</string>
-    <string name="Alert_TitleWarning">Warning</string>
+    <string name="Alert_TitleWarning">Внимание</string>
     <string name="Alert_NoDeviceLockDescription">Установите блокировку экрана на этом устройстве. Перейдите в «Настройки» &gt; «Безопасность» &gt; «Блокировка экрана» и включите параметр экрана блокировки.</string>
     <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
     <!--Unlock-->
