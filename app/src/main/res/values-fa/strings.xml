@@ -75,11 +75,11 @@
     <string name="Transactions_EmptyList">شما معاملات نداشته ايد تا هنوز</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">معاملات</string>
-    <string name="TransactionInfo_Status">وضيعت:</string>
-    <string name="TransactionInfo_Id">شناس نامه:</string>
-    <string name="TransactionInfo_To">به:</string>
-    <string name="TransactionInfo_From">از:</string>
-    <string name="TransactionInfo_Time">Time:</string>
+    <string name="TransactionInfo_Status">Status</string>
+    <string name="TransactionInfo_Id">ID</string>
+    <string name="TransactionInfo_To">To</string>
+    <string name="TransactionInfo_From">From</string>
+    <string name="TransactionInfo_Time">Time</string>
     <string name="TransactionInfo_ButtonMore">Full Info</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Full Info</string>
