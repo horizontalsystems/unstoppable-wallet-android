@@ -27,22 +27,22 @@
 
     <!--Restore-->
 
-    <string name="Restore_Title">Enter Secret Keys</string>
+    <string name="Restore_Title">Enter Secret Key</string>
     <string name="Restore_ValidationFailed">Incorrect Secret Key</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>
 
     <!--Backup-->
 
     <string name="Backup_Intro_Title">Secret Key</string>
-    <string name="Backup_Intro_Subtitle">Your secret key is the only way to restore your wallet and funds if your phone is ever lost, stolen, broken, or upgraded.\n\n It consists of 12 words. Write them on a piece of paper and do not ever show it to anyone.</string>
+    <string name="Backup_Intro_Subtitle">Your secret key is the only way to restore your wallet and funds if your phone is ever lost, stolen, broken, or upgraded.\n\n It consists of 12 words. Store it safely offline.</string>
     <string name="Backup_Intro_Later">Later</string>
     <string name="Backup_Intro_BackupNow">Backup</string>
 
     <string name="Backup_Words_Title">Secret Key</string>
 
     <string name="Backup_Confirmation_Understand">I understand that my wallet and tokens are held securely on this device only and not any servers.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device or is deleted, my wallet can be only recovered with the Secret Key that I have just written down and saved in a secure place.</string>
-    <string name="Backup_Confirmation_LockAppWarn">Changing the phone\'s unlock PIN in your Android OS settings would reset the wallet. You will need your backup phrase to restore your wallet after that.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I have just written down and saved in a secure place.</string>
+    <string name="Backup_Confirmation_LockAppWarn">Changing the unlock PIN or deleting app data in your Android OS settings would reset the wallet. You will need your Secret Key to restore your wallet after that.</string>
     <string name="Backup_Confirmation_Title">Enter following words from your Secret Key</string>
     <string name="Backup_Confirmation_Description">Enter words from your secret key.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Words do not match</string>
@@ -163,11 +163,11 @@
     <!--Setting_Security-->
 
     <string name="SettingsSecurity_Fingerprint">Fingerprint</string>
-    <string name="SettingsSecurity_EditPin">Edit PIN</string>
+    <string name="SettingsSecurity_EditPin">Edit Passcode</string>
     <string name="SettingsSecurity_BackupWallet">Backup Wallet</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">Unlink from this device</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">This action will remove the currently installed wallet from this device.</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_2">Make sure you have its Secret Key or you will not be able to access the funds on it in the future.</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_2">Make sure you have backed up Secret Key or you will not be able to access your funds in the future.</string>
 
 
     <!--Setting_Currency-->
