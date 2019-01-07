@@ -75,11 +75,11 @@
     <string name="Transactions_EmptyList">Noch keine Transaktionen vorhanden</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Transaktion</string>
-    <string name="TransactionInfo_Status">Status:</string>
-    <string name="TransactionInfo_Id">ID:</string>
-    <string name="TransactionInfo_To">An:</string>
-    <string name="TransactionInfo_From">Von:</string>
-    <string name="TransactionInfo_Time">Time:</string>
+    <string name="TransactionInfo_Status">Status</string>
+    <string name="TransactionInfo_Id">ID</string>
+    <string name="TransactionInfo_To">To</string>
+    <string name="TransactionInfo_From">From</string>
+    <string name="TransactionInfo_Time">Time</string>
     <string name="TransactionInfo_ButtonMore">Full Info</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Volle Info</string>
