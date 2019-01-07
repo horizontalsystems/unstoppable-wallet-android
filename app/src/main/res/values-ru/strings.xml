@@ -139,7 +139,7 @@
     <string name="Alert_NoDeviceLockDescription">Установите блокировку экрана на этом устройстве. Перейдите в «Настройки» &gt; «Безопасность» &gt; «Блокировка экрана» и включите параметр экрана блокировки.</string>
     <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
     <!--Unlock-->
-    <string name="Unlock_Page_EnterYourPin">PIN-код</string>
+    <string name="Unlock_Page_EnterYourPin">Passcode</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Неподдерживаемая валюта</string>
     <!--Hud texts-->
@@ -158,17 +158,17 @@
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Отключено до: %s</string>
     <!--Set Pin-->
-    <string name="SetPin_Title">PIN-код</string>
-    <string name="SetPin_Info">Ваш PIN-код будет использоваться для разблокировки кошелька</string>
+    <string name="SetPin_Title">Passcode</string>
+    <string name="SetPin_Info">Your passcode will be used to unlock wallet app</string>
     <string name="SetPin_ErrorShortPin">Пожалуйста, введите только символы цифр.</string>
-    <string name="SetPin_ConfirmInfo">Подтвердить PIN-код</string>
-    <string name="SetPin_Success">PIN-код блокировки успешно установлен!</string>
-    <string name="SetPin_ErrorPinsDontMatch">PIN-код не совпадает.</string>
-    <string name="SetPin_ErrorFailedToSavePin">При сохранении вашего PIN-код произошла ошибка. Повторите попытку.</string>
+    <string name="SetPin_ConfirmInfo">Confirm</string>
+    <string name="SetPin_Success">Lock passcode was set successfully!</string>
+    <string name="SetPin_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
+    <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">Обновить PIN-код</string>
-    <string name="EditPin_UnlockInfo">Введите текущий PIN-код</string>
-    <string name="EditPin_NewPinInfo">Введите новый PIN-код</string>
+    <string name="EditPin_Title">Edit Passcode</string>
+    <string name="EditPin_UnlockInfo">Current Passcode</string>
+    <string name="EditPin_NewPinInfo">New Passcode</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Manage Coins</string>
     <string name="ManageCoins_save">Сохранить</string>
