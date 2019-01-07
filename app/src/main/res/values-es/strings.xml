@@ -145,7 +145,7 @@ Algunos datos genéricos de carácter público de esta app se guardan en centros
     <string name="Alert_NoDeviceLockDescription">Configurar bloqueo de pantalla de este dispositivo para continuar. Ir a \"Ajustes\" &amp;gt; &amp;gt;  \"Seguridad\" \"Bloqueo de pantalla\" y establezca la configuración de la pantalla de bloqueo.</string>
     <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
     <!--Unlock-->
-    <string name="Unlock_Page_EnterYourPin">PIN</string>
+    <string name="Unlock_Page_EnterYourPin">Passcode</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Divisa no admitida</string>
     <!--Hud texts-->
@@ -164,17 +164,17 @@ Algunos datos genéricos de carácter público de esta app se guardan en centros
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Inhabilitado hasta: %s</string>
     <!--Set Pin-->
-    <string name="SetPin_Title">PIN</string>
-    <string name="SetPin_Info">Su PIN servirá para desbloquear la aplicación de su cartera</string>
+    <string name="SetPin_Title">Passcode</string>
+    <string name="SetPin_Info">Your passcode will be used to unlock wallet app</string>
     <string name="SetPin_ErrorShortPin">Por favor, introduzca todos los dígitos.</string>
-    <string name="SetPin_ConfirmInfo">Confirmar PIN</string>
-    <string name="SetPin_Success">¡Código PIN establecido con éxito!</string>
-    <string name="SetPin_ErrorPinsDontMatch">El PIN no coincide. Inténtelo de nuevo</string>
-    <string name="SetPin_ErrorFailedToSavePin">Se ha producido un error al intentar guardar su PIN. Inténtelo de nuevo.</string>
+    <string name="SetPin_ConfirmInfo">Confirm</string>
+    <string name="SetPin_Success">Lock passcode was set successfully!</string>
+    <string name="SetPin_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
+    <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">Editar el PIN</string>
-    <string name="EditPin_UnlockInfo">Introduzca el PIN actual</string>
-    <string name="EditPin_NewPinInfo">Introduzca nuevo PIN</string>
+    <string name="EditPin_Title">Edit Passcode</string>
+    <string name="EditPin_UnlockInfo">Current Passcode</string>
+    <string name="EditPin_NewPinInfo">New Passcode</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Gestionar monedas</string>
     <string name="ManageCoins_save">Guardar</string>
