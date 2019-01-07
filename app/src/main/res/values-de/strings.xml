@@ -140,7 +140,7 @@ Hack dein Telefon nicht, installier keine Anwendungen von inoffiziellen Quellen 
     <string name="Alert_NoDeviceLockDescription">Richten Sie ein Sperrbildschirm auf diesem Gerät weiter. Gehen Sie auf \"Einstellungen\" &gt; \"Security\" &gt; \"Bildschirmsperre\" und aktivieren Sie die Sperre Bildschirmeinstellung.</string>
     <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
     <!--Unlock-->
-    <string name="Unlock_Page_EnterYourPin">PIN</string>
+    <string name="Unlock_Page_EnterYourPin">Passcode</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Nicht unterstützte Währung</string>
     <!--Hud texts-->
@@ -159,17 +159,17 @@ Hack dein Telefon nicht, installier keine Anwendungen von inoffiziellen Quellen 
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Deaktiviert bis: %s </string>
     <!--Set Pin-->
-    <string name="SetPin_Title">PIN</string>
-    <string name="SetPin_Info">Deine PIN wird verwendet, um deine Geldbörse zu entsperren</string>
+    <string name="SetPin_Title">Passcode</string>
+    <string name="SetPin_Info">Your passcode will be used to unlock wallet app</string>
     <string name="SetPin_ErrorShortPin">Gib bitte nur Zahlen ein.</string>
-    <string name="SetPin_ConfirmInfo">PIN bestätigen</string>
-    <string name="SetPin_Success">Lock PIN wurde erfolgreich gesetzt!</string>
-    <string name="SetPin_ErrorPinsDontMatch">PIN stimmt nicht überein.</string>
-    <string name="SetPin_ErrorFailedToSavePin">Beim Speichern Ihres PIN ist leider ein Fehler aufgetreten. Bitte versuchen es erneut.</string>
+    <string name="SetPin_ConfirmInfo">Confirm</string>
+    <string name="SetPin_Success">Lock passcode was set successfully!</string>
+    <string name="SetPin_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
+    <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">PIN bearbeiten</string>
-    <string name="EditPin_UnlockInfo">Gib deine derzeitige PIN ein</string>
-    <string name="EditPin_NewPinInfo">Gib neuen PIN ein</string>
+    <string name="EditPin_Title">Edit Passcode</string>
+    <string name="EditPin_UnlockInfo">Current Passcode</string>
+    <string name="EditPin_NewPinInfo">New Passcode</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Coins Verwalten</string>
     <string name="ManageCoins_save">Speichern</string>
