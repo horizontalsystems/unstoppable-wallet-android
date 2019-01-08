@@ -19,18 +19,18 @@
     <string name="Guest_CreateWallet">Yeni Cüzdan</string>
     <string name="Guest_RestoreWallet">Cüzdanı Geri Yükle</string>
     <!--Restore-->
-    <string name="Restore_Title">Gizli Anahtarı girin</string>
+    <string name="Restore_Title">Enter Secret Key</string>
     <string name="Restore_ValidationFailed">Hatalı Gizli anahtar</string>
     <string name="Restore_RestoreFailed">Cüzdan geri yüklenemedi</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Gizli Anahtar</string>
-    <string name="Backup_Intro_Subtitle">Gizli Anahtar, telefonunuzun kaybolması, çalınması, bozulması veya programın tekrar kurulması durumunda cüzdana erişebilmenin tek yoludur.\n\n 12 kelimeden oluşur. Gizli Anahtarı not alıp güvenli bir yerde tutun ve kimseye göstermeyin.</string>
+    <string name="Backup_Intro_Subtitle">Your secret key is the only way to restore your wallet and funds if your phone is ever lost, stolen, broken, or upgraded.\n\n It consists of 12 words. Store it safely offline.</string>
     <string name="Backup_Intro_Later">Sonra</string>
     <string name="Backup_Intro_BackupNow">Yedekle</string>
     <string name="Backup_Words_Title">Gizli Anahtar</string>
     <string name="Backup_Confirmation_Understand">Cüzdanımın güvenle, sadece bu cihazda bulunduğunu ve herhangi bir sunucuda olmadığını biliyorum.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">Bu programın kaldırılmase veya başka bir cihaza taşınması durumunda cüzdanıma erişmek için tek seçeneğimin yenice kağıda yazıp güvenli bir yerde sakladığım Gizli Anahtar olduğunu biliyorum.</string>
-    <string name="Backup_Confirmation_LockAppWarn">Android sisteminde, cihazın kilit kodunu değiştirmek Banka programını da sıfırlayacak. Cüzdana ulaşmak için Gizli Anahtarınızı tekrar girmeniz gerekecek.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I have just written down and saved in a secure place.</string>
+    <string name="Backup_Confirmation_LockAppWarn">Changing the unlock PIN or deleting app data in your Android OS settings would reset the wallet. You will need your Secret Key to restore your wallet after that.</string>
     <string name="Backup_Confirmation_Title">Gizli Anahtarınızda ki istenen kelimeleri giriniz</string>
     <string name="Backup_Confirmation_Description">Gizli Anahtarınızda ki kelimeleri girin.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Kelimeler eşleşmiyor</string>
@@ -113,11 +113,11 @@
     <string name="Settings_Error_NoFingerprintAddedYet">Kayıtlı parmak izi bulunmadı. Parmak izi eklemek için, Ayarlar &gt; Güvenlik bölümüne gidin.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Parmak izi</string>
-    <string name="SettingsSecurity_EditPin">PİN\'i değiştir</string>
+    <string name="SettingsSecurity_EditPin">Edit Passcode</string>
     <string name="SettingsSecurity_BackupWallet">Cüzdanı yedekle</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">Bu cihazla bağlantıyı kes</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">Bu işlemle, cüzdan cihazdan kaldırılacak.</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_2">Gizli Anahtarı yedeklediğinizden emin olun. Onsuz, cüzdana gelecekte ulaşamayacaksınız.</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_2">Make sure you have backed up Secret Key or you will not be able to access your funds in the future.</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Para birimi</string>
     <!--Setting_Language-->
