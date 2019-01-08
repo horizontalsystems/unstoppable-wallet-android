@@ -19,18 +19,18 @@
     <string name="Guest_CreateWallet">Создать Кошелек</string>
     <string name="Guest_RestoreWallet">Восстановить Кошелек</string>
     <!--Restore-->
-    <string name="Restore_Title">Cекретный Ключ</string>
+    <string name="Restore_Title">Enter Secret Key</string>
     <string name="Restore_ValidationFailed">Неверный Секретный Ключ</string>
     <string name="Restore_RestoreFailed">Не удалось восстановить кошелек</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Секретный Ключ</string>
-    <string name="Backup_Intro_Subtitle">Ваш секретный ключ является единственным способом для восстановления вашего кошелька.\n\nМы покажем вам список слов, чтобы вы записали их на бумаге и хранили в безопасном месте.</string>
+    <string name="Backup_Intro_Subtitle">Your secret key is the only way to restore your wallet and funds if your phone is ever lost, stolen, broken, or upgraded.\n\n It consists of 12 words. Store it safely offline.</string>
     <string name="Backup_Intro_Later">Позже</string>
     <string name="Backup_Intro_BackupNow">Записать ключ</string>
     <string name="Backup_Words_Title">Секретный Ключ</string>
     <string name="Backup_Confirmation_Understand">Я понимаю, что мой кошелек и токены хранятся только на этом устройстве.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">Я понимаю, что если это приложение удаляется или устанавливается на другое устройство, мой кошелек можно восстановить только ключом, который я храню в безопасном месте.</string>
-    <string name="Backup_Confirmation_LockAppWarn">Изменение PIN-кода  блокировки телефона на вашем Android OS, сбросит кошелек . Вам необходима фраза резервного копирования для восстановления  вашего кошелька.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I have just written down and saved in a secure place.</string>
+    <string name="Backup_Confirmation_LockAppWarn">Changing the unlock PIN or deleting app data in your Android OS settings would reset the wallet. You will need your Secret Key to restore your wallet after that.</string>
     <string name="Backup_Confirmation_Title">Введите слова из вашего секретного ключа</string>
     <string name="Backup_Confirmation_Description">Введите слова из секретного ключа.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Слова не совпадают</string>
@@ -113,11 +113,11 @@
     <string name="Settings_Error_NoFingerprintAddedYet">У вас недоступен отпечаток пальцев на этом устройстве. Перейдите в настройки &gt; Безопасность и выберите отпечатки пальцев.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Отпечаток пальца</string>
-    <string name="SettingsSecurity_EditPin">Изменить PIN-код</string>
+    <string name="SettingsSecurity_EditPin">Edit Passcode</string>
     <string name="SettingsSecurity_BackupWallet">Записать Кошелёк</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">Отсоединить это устройство</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">Это действие удалит ваш кошелёк с этого устройства.</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_2">Убедитесь, что у вас есть свой секретный ключ, иначе вы не сможете получить доступ к денежным средствам.</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_2">Make sure you have backed up Secret Key or you will not be able to access your funds in the future.</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Базовая Валюта</string>
     <!--Setting_Language-->
