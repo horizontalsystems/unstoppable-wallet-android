@@ -19,18 +19,18 @@
     <string name="Guest_CreateWallet">Nouveau porte-monnaie</string>
     <string name="Guest_RestoreWallet">Restaurer le porte-monnaie</string>
     <!--Restore-->
-    <string name="Restore_Title">Entrez la clé secrete</string>
+    <string name="Restore_Title">Enter Secret Key</string>
     <string name="Restore_ValidationFailed">Clé secrète incorrecte</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Le mot secret</string>
-    <string name="Backup_Intro_Subtitle">Votre clé secrete est le seul moyen de restaurer votre porte-monnaie et vos fonds si votre téléphone est perdu, volé, cassé ou mis à jour.\n\n Elle contient 12 mots. Ecrivez-les sur un morceau de papier et ne les montrez jamais à personne.</string>
+    <string name="Backup_Intro_Subtitle">Your secret key is the only way to restore your wallet and funds if your phone is ever lost, stolen, broken, or upgraded.\n\n It consists of 12 words. Store it safely offline.</string>
     <string name="Backup_Intro_Later">Plus tard</string>
     <string name="Backup_Intro_BackupNow">Sauvegarde</string>
     <string name="Backup_Words_Title">Le mot secret</string>
     <string name="Backup_Confirmation_Understand">Je comprends que mon porte-monnaie et mes tokens sont en toute sécurité sur cet appareil uniquement et pas sur les autres appareils.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">Je comprends que si cette appli est déplacée vers un autre appareil ou supprimée, mon porte-monnaie ne peut être récupéré qu\'avec la clé secrète que je viens d\'écrire et de sauvegarder dans un endroit sécurisé.</string>
-    <string name="Backup_Confirmation_LockAppWarn">Le changement du code PIN du téléphone dans les paramètres de votre Android OS réinitialiserait le porte-monnaie. Vous aurez besoin de votre phrase de sauvegarde pour restaurer votre portporte-monnaie après.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I have just written down and saved in a secure place.</string>
+    <string name="Backup_Confirmation_LockAppWarn">Changing the unlock PIN or deleting app data in your Android OS settings would reset the wallet. You will need your Secret Key to restore your wallet after that.</string>
     <string name="Backup_Confirmation_Title">Entrez les mots de votre clé secrète</string>
     <string name="Backup_Confirmation_Description">Entrez les mots de votre clé secrète.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Les mots ne correspondent pas</string>
@@ -113,11 +113,11 @@
     <string name="Settings_Error_NoFingerprintAddedYet">Vous n’avez pas activé d’empreintes digitales sur ce appareil. Allez à paramètres &gt; sécurité à mettre en place un accès d’empreinte digitale.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Empreinte digitale</string>
-    <string name="SettingsSecurity_EditPin">Modifier le PIN</string>
+    <string name="SettingsSecurity_EditPin">Edit Passcode</string>
     <string name="SettingsSecurity_BackupWallet">Porte-monnaie de Sauvegarde</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">Supprimer le lien de cet appareil</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">Cette action supprimera le porte-monnaie actuellement installé sur cet appareil.</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_2">Assurez-vous de disposer de la clé secrète, sinon vous ne pourrez plus accéder aux fonds.</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_2">Make sure you have backed up Secret Key or you will not be able to access your funds in the future.</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Devise de Base</string>
     <!--Setting_Language-->
