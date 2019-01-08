@@ -19,18 +19,18 @@
     <string name="Guest_CreateWallet">Wallet Erstellen</string>
     <string name="Guest_RestoreWallet">Geldbörse Wiederherstellen</string>
     <!--Restore-->
-    <string name="Restore_Title">Offlineschlüssel eingeben</string>
+    <string name="Restore_Title">Enter Secret Key</string>
     <string name="Restore_ValidationFailed">Falscher Offlineschlüssel</string>
     <string name="Restore_RestoreFailed">Fehler beim Wiederherstellen des Geldbörse</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Sicherung</string>
-    <string name="Backup_Intro_Subtitle">Dein Offlineschlüssel ist die einzige Möglichkeit, deine Geldbörse wiederherzustellen, falls du dein Smartphone verlierst, austauscht, es gestohlen wird oder kaputtgeht. \n\n Hierfür zeigen wir die eine Liste von Wörtern an, damit du sie dir auf ein Stück Papier notieren kannst, das es sicher aufzubewahren  gilt.</string>
+    <string name="Backup_Intro_Subtitle">Your secret key is the only way to restore your wallet and funds if your phone is ever lost, stolen, broken, or upgraded.\n\n It consists of 12 words. Store it safely offline.</string>
     <string name="Backup_Intro_Later">Später</string>
     <string name="Backup_Intro_BackupNow">Sicherung</string>
     <string name="Backup_Words_Title">Sicherung</string>
     <string name="Backup_Confirmation_Understand">Ich verstehe, dass meine Geldbörse und Token auf diesem Gerät nur ist.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">Ich verstehe, dass wenn diese app auf ein anderes Gerät verschoben wird oder gelöscht, mein Wallet nur mit dem backup-Satz wiederhergestellt werden können, die ich aufgeschrieben und an einem sicheren Ort gespeichert.</string>
-    <string name="Backup_Confirmation_LockAppWarn">PIN zum Entsperren des Telefons ändern in Ihrem Android OS würde Einstellungen die Geldbörse. Sie benötigen Ihr backup Satz Ihrer Geldbörse danach wiederherstellen.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I have just written down and saved in a secure place.</string>
+    <string name="Backup_Confirmation_LockAppWarn">Changing the unlock PIN or deleting app data in your Android OS settings would reset the wallet. You will need your Secret Key to restore your wallet after that.</string>
     <string name="Backup_Confirmation_Title">Gib die folgenden Wörter deines Offlineschlüssels ein</string>
     <string name="Backup_Confirmation_Description">Gib die folgenden Wörter deines Offlineschlüssels ein.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Die eingegebenen Passwörter stimmen nicht überein</string>
@@ -113,11 +113,11 @@
     <string name="Settings_Error_NoFingerprintAddedYet">Fingerabdruck auf diesem Gerät aktiviert nicht. Gehen Sie zu Einstellungen &gt; Sicherheit Fingerabdruck einrichten.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Fingerabdruck</string>
-    <string name="SettingsSecurity_EditPin">PIN aktualisieren</string>
+    <string name="SettingsSecurity_EditPin">Edit Passcode</string>
     <string name="SettingsSecurity_BackupWallet">Wallet sichern</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">Verknüpfung mit diesem Gerät aufheben</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">Diese Aktion entfernt deine Geldbörse von diesem Gerät.</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_2">Stellen Sie sicher, Sie haben ihre geheimen Offlineschlüssel oder Sie werden nicht in der Lage, den Zugang zu Mitteln darauf in Zukunft.</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_2">Make sure you have backed up Secret Key or you will not be able to access your funds in the future.</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Basiswährung</string>
     <!--Setting_Language-->
