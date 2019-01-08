@@ -1,8 +1,10 @@
 <resources>
 
     <!-- App themable color names -->
+    <attr name="NumpadNumberBackground" format="reference|color" />
+    <attr name="NumpadNumberBackgroundHighlight" format="reference|color" />
     <attr name="NumpadNumberColor" format="reference|color" />
-    <attr name="NumpadLettersColor" format="reference|color" />
+    <attr name="NumpadBorderColor" format="reference|color" />
     <attr name="BallanceCoinNameColor" format="reference|color" />
     <attr name="BallanceCoinAmountColor" format="reference|color" />
     <attr name="TitleColor" format="reference|color" />
@@ -35,6 +37,7 @@
     <attr name="BottomTransactionInfoBackground" format="reference|color" />
     <attr name="CurrencySwitcherTitleColor" format="reference|color" />
     <attr name="PendingTransactionShadeColor" format="reference|color" />
+    <attr name="PinScreenBackground" format="reference|color" />
 
     <!-- Base application theme. -->
     <style name="DarkModeAppTheme" parent="Theme.AppCompat.NoActionBar">
@@ -51,8 +54,10 @@
         <item name="colorControlNormal">@color/grey</item>
         <item name="colorControlActivated">@color/yellow_crypto</item>
 
+        <item name="NumpadNumberBackground">@color/grey_20</item>
+        <item name="NumpadNumberBackgroundHighlight">@color/grey_40</item>
         <item name="NumpadNumberColor">@color/white</item>
-        <item name="NumpadLettersColor">@color/white_50</item>
+        <item name="NumpadBorderColor">@color/transparent</item>
         <item name="BallanceCoinNameColor">@color/white</item>
         <item name="BallanceCoinAmountColor">@color/white</item>
         <item name="TitleColor">@color/white</item>
@@ -85,6 +90,7 @@
         <item name="BottomTransactionInfoBackground">@color/dark</item>
         <item name="CurrencySwitcherTitleColor">@color/bars_color</item>
         <item name="PendingTransactionShadeColor">@color/dark_50</item>
+        <item name="PinScreenBackground">@color/dark</item>
     </style>
 
     <style name="LightModeAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -93,7 +99,7 @@
         <item name="colorPrimaryDark">@color/bars_color</item>
         <item name="colorAccent">@color/yellow_crypto</item>
         <item name="buttonStyle">@style/Button</item>
-        <item name="android:colorBackground">@color/white</item>
+        <item name="android:colorBackground">@color/lightBackground</item>
         <item name="android:navigationBarColor">@color/black</item>
         <item name="android:statusBarColor">@color/bars_color</item>
         <item name="android:windowLightStatusBar">true</item>
@@ -101,8 +107,10 @@
         <item name="colorControlNormal">@color/grey</item>
         <item name="colorControlActivated">@color/yellow_crypto</item>
 
+        <item name="NumpadNumberBackground">@color/white</item>
+        <item name="NumpadNumberBackgroundHighlight">@color/lightBackground</item>
         <item name="NumpadNumberColor">@color/dark</item>
-        <item name="NumpadLettersColor">@color/dark</item>
+        <item name="NumpadBorderColor">@color/grey_20</item>
         <item name="BallanceCoinNameColor">@color/dark</item>
         <item name="BallanceCoinAmountColor">@color/dark</item>
         <item name="TitleColor">@color/dark</item>
@@ -135,6 +143,7 @@
         <item name="BottomTransactionInfoBackground">@color/bars_color</item>
         <item name="CurrencySwitcherTitleColor">@color/dark</item>
         <item name="PendingTransactionShadeColor">@color/white_50</item>
+        <item name="PinScreenBackground">@color/bars_color</item>
     </style>
 
     <style name="Button" parent="Widget.AppCompat.Button.Borderless">
