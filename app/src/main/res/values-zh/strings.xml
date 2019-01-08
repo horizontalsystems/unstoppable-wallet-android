@@ -19,18 +19,18 @@
     <string name="Guest_CreateWallet">新的钱包</string>
     <string name="Guest_RestoreWallet">恢复钱包</string>
     <!--Restore-->
-    <string name="Restore_Title">输入密钥</string>
+    <string name="Restore_Title">Enter Secret Key</string>
     <string name="Restore_ValidationFailed">密钥不正确</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">密钥</string>
-    <string name="Backup_Intro_Subtitle">如果您的手机被丢失、被盗、损坏、或更新，您的密钥是恢复钱包和资金的唯一方法。\n\n密钥由12个单词组成。都必须保管好您的密钥</string>
+    <string name="Backup_Intro_Subtitle">Your secret key is the only way to restore your wallet and funds if your phone is ever lost, stolen, broken, or upgraded.\n\n It consists of 12 words. Store it safely offline.</string>
     <string name="Backup_Intro_Later">稍后</string>
     <string name="Backup_Intro_BackupNow">备份</string>
     <string name="Backup_Words_Title">密钥</string>
     <string name="Backup_Confirmation_Understand">我的钱包和代币仅在这个设备上，而不是在任何服务器上安全地保存着。这个重点我都理解。</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device or is deleted, my wallet can be only recovered with the Secret Key that I have just written down and saved in a secure place.</string>
-    <string name="Backup_Confirmation_LockAppWarn">Changing the phone\'s unlock PIN in your Android OS settings would reset the wallet. You will need your backup phrase to restore your wallet after that.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I have just written down and saved in a secure place.</string>
+    <string name="Backup_Confirmation_LockAppWarn">Changing the unlock PIN or deleting app data in your Android OS settings would reset the wallet. You will need your Secret Key to restore your wallet after that.</string>
     <string name="Backup_Confirmation_Title">Enter following words from your Secret Key</string>
     <string name="Backup_Confirmation_Description">请输入你密钥中的词.</string>
     <string name="Backup_Confirmation_FailureAlertText"> 单词不匹配</string>
@@ -113,11 +113,11 @@
     <string name="Settings_Error_NoFingerprintAddedYet">You have not enabled fingerprint on this device. Go to Settings &gt; Security to set up fingerprint access.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Fingerprint</string>
-    <string name="SettingsSecurity_EditPin">编辑 PIN码</string>
+    <string name="SettingsSecurity_EditPin">Edit Passcode</string>
     <string name="SettingsSecurity_BackupWallet">备份钱包</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">与此设备断开连接</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">此操作从此设备中将删除当前安装的钱包</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_2">确保你有钱包的密钥，否则您将无法访问资金。</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_2">Make sure you have backed up Secret Key or you will not be able to access your funds in the future.</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">基本货币</string>
     <!--Setting_Language-->
