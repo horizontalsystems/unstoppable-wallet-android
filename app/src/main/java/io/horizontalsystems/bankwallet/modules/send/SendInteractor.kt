@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send
 
+import io.horizontalsystems.bankwallet.core.Error
 import io.horizontalsystems.bankwallet.core.IClipboardManager
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.RateManager
@@ -69,35 +70,6 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
 
         val state = SendModule.State(input.inputType)
 
-        when (input.inputType) {
-            SendModule.InputType.COIN -> {
-                state.coinValue = CoinValue(coin, input.amount)
-                rateValue?.let {
-                    state.currencyValue = CurrencyValue(baseCurrency, input.amount * it)
-                }
-
-                val balance = adapter.balance
-                if (balance < input.amount) {
-                    state.amountError = SendModule.AmountError.InsufficientBalance(SendModule.AmountInfo.CoinValueInfo(CoinValue(coin, balance)))
-                }
-
-            }
-            SendModule.InputType.CURRENCY -> {
-                rateValue?.let {
-                    state.coinValue = CoinValue(coin, input.amount / it)
-                }
-                state.currencyValue = CurrencyValue(baseCurrency, input.amount)
-
-                if (rateValue != null) {
-                    val currencyBalance = adapter.balance * rateValue
-                    if (currencyBalance < input.amount) {
-                        state.amountError = SendModule.AmountError.InsufficientBalance(SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(baseCurrency, currencyBalance)))
-                    }
-                }
-
-            }
-        }
-
         state.address = input.address
         val address = input.address
 
@@ -109,11 +81,28 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
             }
         }
 
+        when (input.inputType) {
+            SendModule.InputType.COIN -> {
+                state.coinValue = CoinValue(coin, input.amount)
+                rateValue?.let {
+                    state.currencyValue = CurrencyValue(baseCurrency, input.amount * it)
+                }
+            }
+            SendModule.InputType.CURRENCY -> {
+                state.currencyValue = CurrencyValue(baseCurrency, input.amount)
+                rateValue?.let {
+                    state.coinValue = CoinValue(coin, input.amount / it)
+                }
+            }
+        }
+
         try {
             state.coinValue?.let { coinValue ->
                 state.feeCoinValue = CoinValue(coin, adapter.fee(coinValue.value, input.address, true))
             }
-        } catch (e: Exception) {
+        } catch (e: Error.InsufficientAmount) {
+            state.feeCoinValue = CoinValue(coin, e.fee)
+            state.amountError = getAmountError(input.inputType, e.fee)
         }
 
         rateValue?.let {
@@ -123,6 +112,25 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
         }
 
         return state
+    }
+
+    private fun getAmountError(inputType: SendModule.InputType, fee: Double): SendModule.AmountError? {
+        var balanceMinusFee = wallet.adapter.balance - fee
+        if (balanceMinusFee < 0) {
+            balanceMinusFee = 0.0
+        }
+
+        return when (inputType) {
+            SendModule.InputType.COIN -> {
+                SendModule.AmountError.InsufficientBalance(SendModule.AmountInfo.CoinValueInfo(CoinValue(wallet.coinCode, balanceMinusFee)))
+            }
+            SendModule.InputType.CURRENCY -> {
+                rate?.value?.let {
+                    val currencyBalanceMinusFee = balanceMinusFee * it
+                    SendModule.AmountError.InsufficientBalance(SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(currencyManager.baseCurrency, currencyBalanceMinusFee)))
+                }
+            }
+        }
     }
 
     override fun send(userInput: SendModule.UserInput) {

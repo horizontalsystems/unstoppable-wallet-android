@@ -127,7 +127,7 @@ interface IAdapter {
 
     fun send(address: String, value: Double, completion: ((Throwable?) -> (Unit))? = null)
 
-    @Throws
+    @Throws(Error.InsufficientAmount::class)
     fun fee(value: Double, address: String?, senderPay: Boolean): Double
 
     @Throws
@@ -216,4 +216,8 @@ interface ILockoutUntilDateFactory {
 
 interface ICurrentDateProvider {
     val currentDate: Date
+}
+
+sealed class Error: Exception() {
+    class InsufficientAmount(val fee: Double) : Error()
 }
