@@ -152,11 +152,11 @@
     <string name="Hud_Text_Error">خطا</string>
     <string name="Hud_Text_NoInternet">انترنت نداريد</string>
     <string name="Hud_Text_Copied">کپی انجام شد</string>
-    <string name="Hud_Text_InvalidPinError">پين غلط است</string>
+    <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">ورود با اثر انگشت</string>
     <string name="Fingerprint_Hint">حسگر لمسي</string>
-    <string name="Fingerprint_EnterPin">پين را وارد كنيد</string>
+    <string name="Fingerprint_EnterPin">Passcode</string>
     <string name="Fingerprint_NotRecognized">اثر انگشت شناخته نشد. دوباره كوشش كنيد</string>
     <string name="Fingerprint_Success">موفقيت!</string>
     <!--Unlock Pin-->
@@ -174,6 +174,6 @@
     <string name="EditPin_UnlockInfo">Current Passcode</string>
     <string name="EditPin_NewPinInfo">New Passcode</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Manage Coins</string>
+    <string name="ManageCoins_title">Wallets</string>
     <string name="ManageCoins_save">Save</string>
 </resources>
