@@ -82,39 +82,6 @@ class BalanceInteractor(
         }
     }
 
-    //    override fun loadWallets() {
-//        val walletManagerDisposable = walletManager.walletsSubject.subscribe {
-//            disposables.clear()
-//            initialFetchAndSubscribe()
-//        }
-//        initialFetchAndSubscribe()
-//    }
-
-//    private fun initialFetchAndSubscribe() {
-//        walletManager.wallets.forEach { wallet ->
-//            disposables.add(wallet.adapter.balanceSubject
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe {
-//                        delegate?.didUpdate()
-//                    })
-//            disposables.add(wallet.adapter.stateSubject.subscribe {
-//                delegate?.didUpdate()
-//            })
-//        }
-//
-//        disposables.add(rateManager.subject.subscribe {
-//            delegate?.didUpdate()
-//        })
-//
-//        disposables.add(currencyManager.subject.subscribe {
-//            delegate?.didUpdate()
-//        })
-//    }
-
-//    override fun rate(coin: String): Maybe<Rate> {
-//        return rateManager.rate(coin, currencyManager.baseCurrency.code)
-//    }
-
     override fun refresh() {
         walletManager.refreshWallets()
 
@@ -122,11 +89,5 @@ class BalanceInteractor(
             delegate?.didRefresh()
         }, (refreshTimeout * 1000).toLong())
     }
-
-//    override val baseCurrency: Currency
-//        get() = currencyManager.baseCurrency
-
-//    override val wallets: List<Wallet>
-//        get() = walletManager.wallets
 
 }
