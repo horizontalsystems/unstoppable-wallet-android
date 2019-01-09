@@ -10,13 +10,7 @@ import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 object BalanceModule {
 
     interface IView {
-//        fun setTitle(title: Int)
         fun didRefresh()
-//        fun show(totalBalance: CurrencyValue?)
-//        fun show(wallets: List<BalanceViewItem>)
-//        fun show(syncStatus: String)
-//        fun updateBalanceColor(i: Int)
-
         fun reload()
         fun updateItem(position: Int)
         fun updateHeader()
@@ -35,15 +29,9 @@ object BalanceModule {
     }
 
     interface IInteractor {
-        //        fun loadWallets()
         fun refresh()
-//        fun rate(coin: String): Maybe<Rate>
         fun initWallets()
-
         fun fetchRates(currencyCode: String, coinCodes: List<CoinCode>)
-
-//        val baseCurrency: Currency
-//        val wallets: List<Wallet>
     }
 
     interface IInteractorDelegate {

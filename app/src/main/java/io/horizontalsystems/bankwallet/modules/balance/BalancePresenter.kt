@@ -86,10 +86,6 @@ class BalancePresenter(
         view?.updateHeader()
     }
 
-    //    override fun didUpdate() {
-////        updateView()
-//    }
-
     override fun didRefresh() {
         view?.didRefresh()
     }
@@ -97,56 +93,5 @@ class BalancePresenter(
     override fun openManageCoins() {
         router.openManageCoins()
     }
-
-//    private fun updateView() {
-//        val wallets = interactor.wallets
-//        val rateObservables = wallets.map { interactor.rate(it.coinCode) }
-//
-//        Maybe.merge(rateObservables)
-//                .toList()
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe { rates ->
-//
-//                    var totalBalance = 0.0
-//                    val viewItems = mutableListOf<BalanceViewItem>()
-//                    val currency = interactor.baseCurrency
-//                    var allSynced = true
-//
-//                    wallets.forEach { wallet ->
-//                        val rate = rates.firstOrNull { it.coinCode == wallet.coinCode }
-//                        val balance = wallet.adapter.balance
-//
-//                        val rateExpired = rate?.expired ?: true
-//
-//                        rate?.let { mRate ->
-//                            totalBalance += balance * mRate.value
-//                        }
-//
-//                        viewItems.add(BalanceViewItem(
-//                                coinValue = CoinValue(coinCode = wallet.coinCode, value = balance),
-//                                exchangeValue = rate?.let { CurrencyValue(currency = currency, value = it.value) },
-//                                currencyValue = rate?.let { CurrencyValue(currency = currency, value = balance * it.value) },
-//                                state = wallet.adapter.state,
-//                                rateExpired = rateExpired
-//                        ))
-//
-//                        if (wallet.adapter.state !is AdapterState.Synced) {
-//                            allSynced = false
-//                        }
-//
-//                        if (balance > 0) {
-//                            allSynced = allSynced && rate != null && !rateExpired
-//                        }
-//                    }
-//
-//                    view?.updateBalanceColor(if (allSynced) R.color.yellow_crypto else R.color.yellow_crypto_40)
-//                    view?.show(totalBalance = CurrencyValue(currency = currency, value = totalBalance))
-//                    view?.show(wallets = viewItems)
-//
-//                }.let {
-//                    disposables.add(it)
-//                }
-//    }
 
 }
