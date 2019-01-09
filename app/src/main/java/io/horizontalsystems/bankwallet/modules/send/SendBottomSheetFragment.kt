@@ -1,22 +1,19 @@
 package io.horizontalsystems.bankwallet.modules.send
 
-import android.app.AlertDialog
 import android.app.Dialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
+import android.support.design.widget.BottomSheetDialog
+import android.support.design.widget.BottomSheetDialogFragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
-import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.*
 import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.R
@@ -28,38 +25,26 @@ import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 
-class SendFragment : DialogFragment() {
-
-    private var mDialog: Dialog? = null
-
-    private lateinit var addressTxt: TextView
-    private lateinit var addressErrorTxt: TextView
-    private lateinit var hintInfoTxt: TextView
-    private lateinit var amountEditTxt: EditText
-    private lateinit var sendButton: Button
-    private lateinit var switchButton: ImageButton
-    private lateinit var pasteButton: Button
-    private lateinit var scanBarcodeButton: ImageButton
-    private lateinit var deleteAddressButton: ImageButton
-    private lateinit var amountPrefixTxt: TextView
-    private lateinit var feePrimaryTxt: TextView
-    private lateinit var feeSecondaryTxt: TextView
+class SendBottomSheetFragment: BottomSheetDialogFragment() {
 
     private lateinit var viewModel: SendViewModel
 
     private val amountChangeSubject: PublishSubject<Double> = PublishSubject.create()
 
-    private lateinit var coin: String
+    private var coin: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        activity?.let {
-            viewModel = ViewModelProviders.of(it).get(SendViewModel::class.java)
-            viewModel.init(coin)
-        }
+        coin?.let {coin ->
+            activity?.let {
+                viewModel = ViewModelProviders.of(it).get(SendViewModel::class.java)
+                viewModel.init(coin)
+            }
+        } ?: dismiss()
 
-        amountChangeSubject.debounce(300, TimeUnit.MILLISECONDS)
+
+        val disposable = amountChangeSubject.debounce(300, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     viewModel.delegate.onAmountChanged(it)
@@ -67,61 +52,55 @@ class SendFragment : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = activity?.let { AlertDialog.Builder(it, R.style.BottomDialog) }
 
-        val rootView = View.inflate(context, R.layout.fragment_bottom_sheet_pay, null) as ViewGroup
+        val mDialog = activity?.let { BottomSheetDialog(it, R.style.BottomDialog) }
+        mDialog?.setContentView(R.layout.fragment_bottom_sheet_pay)
 
-        builder?.setView(rootView)
+        val hintInfoTxt: TextView? = mDialog?.findViewById(R.id.txtHintInfo)
+        val addressTxt: TextView? = mDialog?.findViewById(R.id.txtAddress)
+        val addressErrorTxt: TextView? = mDialog?.findViewById(R.id.txtAddressError)
+        val amountPrefixTxt: TextView? = mDialog?.findViewById(R.id.topAmountPrefix)
+        val switchButton: ImageButton? = mDialog?.findViewById(R.id.btnSwitch)
+        val pasteButton: Button? = mDialog?.findViewById(R.id.btnPaste)
+        val scanBarcodeButton: ImageButton? = mDialog?.findViewById(R.id.btnBarcodeScan)
+        val deleteAddressButton: ImageButton? = mDialog?.findViewById(R.id.btnDeleteAddress)
+        val feePrimaryTxt: TextView? = mDialog?.findViewById(R.id.txtFeePrimary)
+        val feeSecondaryTxt: TextView? = mDialog?.findViewById(R.id.txtFeeSecondary)
+        val amountEditTxt: EditText? = mDialog?.findViewById(R.id.editTxtAmount)
+        val sendButton: Button? = mDialog?.findViewById(R.id.btnSend)
 
-        mDialog = builder?.create()
-        mDialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
-        mDialog?.window?.setGravity(Gravity.BOTTOM)
+        sendButton?.isEnabled = false
 
-        hintInfoTxt = rootView.findViewById(R.id.txtHintInfo)
-        addressTxt = rootView.findViewById(R.id.txtAddress)
-        addressErrorTxt = rootView.findViewById(R.id.txtAddressError)
-        amountPrefixTxt = rootView.findViewById(R.id.topAmountPrefix)
-        switchButton = rootView.findViewById(R.id.btnSwitch)
-        pasteButton = rootView.findViewById(R.id.btnPaste)
-        scanBarcodeButton = rootView.findViewById(R.id.btnBarcodeScan)
-        deleteAddressButton = rootView.findViewById(R.id.btnDeleteAddress)
-        feePrimaryTxt = rootView.findViewById(R.id.txtFeePrimary)
-        feeSecondaryTxt = rootView.findViewById(R.id.txtFeeSecondary)
-        amountEditTxt = rootView.findViewById(R.id.editTxtAmount)
-        sendButton = rootView.findViewById(R.id.btnSend)
+        switchButton?.setOnClickListener { viewModel.delegate.onSwitchClicked() }
+        scanBarcodeButton?.setOnClickListener { startScanner() }
+        pasteButton?.setOnClickListener { viewModel.delegate.onPasteClicked() }
+        deleteAddressButton?.setOnClickListener { viewModel.delegate.onDeleteClicked() }
+        sendButton?.setOnClickListener { viewModel.delegate.onSendClicked() }
 
-        sendButton.isEnabled = false
-
-        switchButton.setOnClickListener { viewModel.delegate.onSwitchClicked() }
-        scanBarcodeButton.setOnClickListener { startScanner() }
-        pasteButton.setOnClickListener { viewModel.delegate.onPasteClicked() }
-        deleteAddressButton.setOnClickListener { viewModel.delegate.onDeleteClicked() }
-        sendButton.setOnClickListener { viewModel.delegate.onSendClicked() }
-
-        amountEditTxt.addTextChangedListener(textChangeListener)
+        amountEditTxt?.addTextChangedListener(textChangeListener)
 
         viewModel.switchButtonEnabledLiveData.observe(this, Observer { enabled ->
-            enabled?.let { switchButton.isEnabled = it }
+            enabled?.let { switchButton?.isEnabled = it }
         })
 
         viewModel.coinLiveData.observe(this, Observer { coin ->
             coin?.let { coinCode ->
                 context?.let {
                     val coinDrawable = ContextCompat.getDrawable(it, LayoutHelper.getCoinDrawableResource(coinCode))
-                    rootView.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
+                    mDialog?.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
                 }
-                rootView.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.Send_Title, coinCode)
+                mDialog?.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.Send_Title, coinCode)
             }
         })
 
         viewModel.hintInfoLiveData.observe(this, Observer { hintInfo ->
 
             hintInfo?.let { hint ->
-                hintInfoTxt.setTextColor(addressTxt.resources.getColor(if (hint is SendModule.HintInfo.ErrorInfo) R.color.red_warning else R.color.dark, null))
+                addressTxt?.resources?.getColor(if (hint is SendModule.HintInfo.ErrorInfo) R.color.red_warning else R.color.dark, null)?.let { hintInfoTxt?.setTextColor(it) }
 
                 when (hint) {
                     is SendModule.HintInfo.Amount -> {
-                        hintInfoTxt.text = when (hint.amountInfo) {
+                        hintInfoTxt?.text = when (hint.amountInfo) {
                             is SendModule.AmountInfo.CoinValueInfo -> ValueFormatter.format(hint.amountInfo.coinValue)
                             is SendModule.AmountInfo.CurrencyValueInfo -> ValueFormatter.format(hint.amountInfo.currencyValue)
                         }
@@ -133,7 +112,7 @@ class SendFragment : DialogFragment() {
                                     is SendModule.AmountInfo.CoinValueInfo -> ValueFormatter.format(hint.error.amountInfo.coinValue)
                                     is SendModule.AmountInfo.CurrencyValueInfo -> ValueFormatter.format(hint.error.amountInfo.currencyValue)
                                 }
-                                hintInfoTxt.text = hintInfoTxt.context.getString(R.string.Send_Error_BalanceAmount, balanceAmount)
+                                hintInfoTxt?.text = hintInfoTxt?.context?.getString(R.string.Send_Error_BalanceAmount, balanceAmount)
                             }
                         }
                     }
@@ -142,50 +121,50 @@ class SendFragment : DialogFragment() {
         })
 
         viewModel.sendButtonEnabledLiveData.observe(this, Observer { enabled ->
-            enabled?.let { sendButton.isEnabled = it }
+            enabled?.let { sendButton?.isEnabled = it }
         })
 
         viewModel.amountInfoLiveData.observe(this, Observer { amountInfo ->
             var amountNumber = 0.0
             when (amountInfo) {
                 is SendModule.AmountInfo.CoinValueInfo -> {
-                    amountPrefixTxt.text = amountInfo.coinValue.coinCode
+                    amountPrefixTxt?.text = amountInfo.coinValue.coinCode
                     amountNumber = Math.round(amountInfo.coinValue.value * 100_000_000.0) / 100_000_000.0
                 }
                 is SendModule.AmountInfo.CurrencyValueInfo -> {
-                    amountPrefixTxt.text = amountInfo.currencyValue.currency.symbol
+                    amountPrefixTxt?.text = amountInfo.currencyValue.currency.symbol
                     amountNumber = Math.round(amountInfo.currencyValue.value * 100.0) / 100.0
                 }
             }
 
             if (amountNumber > 0) {
-                amountEditTxt.setText(BigDecimal.valueOf(amountNumber).toPlainString())
-                amountEditTxt.setSelection(amountEditTxt.text.length)
+                amountEditTxt?.setText(BigDecimal.valueOf(amountNumber).toPlainString())
+                amountEditTxt?.setSelection(amountEditTxt.text.length)
             }
         })
 
         viewModel.addressInfoLiveData.observe(this, Observer { addressInfo ->
-            deleteAddressButton.visibility = if (addressInfo == null) View.GONE else View.VISIBLE
-            pasteButton.visibility = if (addressInfo == null) View.VISIBLE else View.GONE
-            scanBarcodeButton.visibility = if (addressInfo == null) View.VISIBLE else View.GONE
-            addressTxt.setTextColor(addressTxt.resources.getColor(if (addressInfo == null) R.color.steel_grey else R.color.dark, null))
+            deleteAddressButton?.visibility = if (addressInfo == null) View.GONE else View.VISIBLE
+            pasteButton?.visibility = if (addressInfo == null) View.VISIBLE else View.GONE
+            scanBarcodeButton?.visibility = if (addressInfo == null) View.VISIBLE else View.GONE
+            addressTxt?.setTextColor(addressTxt.resources.getColor(if (addressInfo == null) R.color.steel_grey else R.color.dark, null))
 
             if (addressInfo == null) {
-                addressErrorTxt.visibility = View.GONE
-                addressTxt.text = ""
-                addressTxt.text = addressTxt.context.getString(R.string.Send_Hint_Address)
+                addressErrorTxt?.visibility = View.GONE
+                addressTxt?.text = ""
+                addressTxt?.text = addressTxt?.context?.getString(R.string.Send_Hint_Address)
             }
 
             addressInfo?.let {
                 when (it) {
                     is SendModule.AddressInfo.ValidAddressInfo -> {
-                        addressTxt.text = it.address
-                        addressErrorTxt.visibility = View.GONE
+                        addressTxt?.text = it.address
+                        addressErrorTxt?.visibility = View.GONE
                     }
                     is SendModule.AddressInfo.InvalidAddressInfo -> {
-                        addressTxt.text = it.address
-                        addressErrorTxt.setText(R.string.Send_Error_IncorrectAddress)
-                        addressErrorTxt.visibility = View.VISIBLE
+                        addressTxt?.text = it.address
+                        addressErrorTxt?.setText(R.string.Send_Error_IncorrectAddress)
+                        addressErrorTxt?.visibility = View.VISIBLE
                     }
                 }
             }
@@ -193,7 +172,7 @@ class SendFragment : DialogFragment() {
 
         viewModel.primaryFeeAmountInfoLiveData.observe(this, Observer { amountInfo ->
             amountInfo?.let {
-                feePrimaryTxt.text = when (it) {
+                feePrimaryTxt?.text = when (it) {
                     is SendModule.AmountInfo.CurrencyValueInfo -> ValueFormatter.format(it.currencyValue)
                     is SendModule.AmountInfo.CoinValueInfo -> ValueFormatter.format(it.coinValue)
                 }
@@ -202,7 +181,7 @@ class SendFragment : DialogFragment() {
 
         viewModel.secondaryFeeAmountInfoLiveData.observe(this, Observer { amountInfo ->
             amountInfo?.let {
-                feeSecondaryTxt.text = when (it) {
+                feeSecondaryTxt?.text = when (it) {
                     is SendModule.AmountInfo.CurrencyValueInfo -> ValueFormatter.format(it.currencyValue)
                     is SendModule.AmountInfo.CoinValueInfo -> ValueFormatter.format(it.coinValue)
                 }
@@ -224,10 +203,8 @@ class SendFragment : DialogFragment() {
         })
 
         viewModel.pasteButtonEnabledLiveData.observe(this, Observer { enabled ->
-            enabled?.let { pasteButton.isEnabled = it }
+            enabled?.let { pasteButton?.isEnabled = it }
         })
-
-        mDialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
 
         return mDialog as Dialog
     }
@@ -270,10 +247,9 @@ class SendFragment : DialogFragment() {
 
     companion object {
         fun show(activity: FragmentActivity, coin: String) {
-            val fragment = SendFragment()
+            val fragment = SendBottomSheetFragment()
             fragment.coin = coin
             fragment.show(activity.supportFragmentManager, "pay_fragment")
         }
     }
-
 }

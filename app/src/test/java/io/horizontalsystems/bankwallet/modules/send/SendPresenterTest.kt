@@ -11,7 +11,6 @@ import org.mockito.Mockito.mock
 class SendPresenterTest {
 
     private val interactor = mock(SendModule.IInteractor::class.java)
-    private val router = mock(SendModule.IRouter::class.java)
     private val view = mock(SendModule.IView::class.java)
     private val factory = mock(StateViewItemFactory::class.java)
     private val userInput = mock(SendModule.UserInput::class.java)
@@ -31,7 +30,7 @@ class SendPresenterTest {
         whenever(factory.viewItemForState(any())).thenReturn(viewItem)
         whenever(factory.confirmationViewItemForState(any())).thenReturn(viewItemConfirm)
 
-        presenter = SendPresenter(interactor, router, factory, userInput)
+        presenter = SendPresenter(interactor, factory, userInput)
         presenter.view = view
     }
 

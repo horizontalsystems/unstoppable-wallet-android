@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 
-class SendViewModel : ViewModel(), SendModule.IRouter, SendModule.IView {
+class SendViewModel : ViewModel(), SendModule.IView {
 
     lateinit var delegate: SendModule.IViewDelegate
 
@@ -35,7 +35,7 @@ class SendViewModel : ViewModel(), SendModule.IRouter, SendModule.IView {
         errorLiveData.value = null
         sendConfirmationViewItemLiveData.value = null
 
-        SendModule.init(this, this, coin)
+        SendModule.init(this, coin)
         delegate.onViewDidLoad()
     }
 
