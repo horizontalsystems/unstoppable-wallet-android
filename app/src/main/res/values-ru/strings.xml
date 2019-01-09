@@ -148,11 +148,11 @@
     <string name="Hud_Text_Error">Ошибка</string>
     <string name="Hud_Text_NoInternet">Нет интернета</string>
     <string name="Hud_Text_Copied">Скопировано</string>
-    <string name="Hud_Text_InvalidPinError">Incorrect PIN</string>
+    <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">Отпечаток пальца для входа</string>
     <string name="Fingerprint_Hint">Коснитесь датчика</string>
-    <string name="Fingerprint_EnterPin">Enter PIN</string>
+    <string name="Fingerprint_EnterPin">Passcode</string>
     <string name="Fingerprint_NotRecognized">Отпечаток не распознан. Повторите ещё раз</string>
     <string name="Fingerprint_Success">Успешно!</string>
     <!--Unlock Pin-->
@@ -170,6 +170,6 @@
     <string name="EditPin_UnlockInfo">Текущий Код</string>
     <string name="EditPin_NewPinInfo">Новый Код</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Manage Coins</string>
+    <string name="ManageCoins_title">Wallets</string>
     <string name="ManageCoins_save">Сохранить</string>
 </resources>
