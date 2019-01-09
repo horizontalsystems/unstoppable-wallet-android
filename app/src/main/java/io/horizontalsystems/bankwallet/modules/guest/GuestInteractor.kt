@@ -1,10 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.guest
 
 import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
-import io.horizontalsystems.bankwallet.core.managers.WordsManager
+import io.horizontalsystems.bankwallet.core.IWordsManager
+import io.horizontalsystems.bankwallet.core.managers.AuthManager
 
 class GuestInteractor(
-        private val wordsManager: WordsManager,
+        private val authManager: AuthManager,
+        private val wordsManager: IWordsManager,
         private val keystoreSafeExecute: IKeyStoreSafeExecute) : GuestModule.IInteractor {
 
     var delegate: GuestModule.IInteractorDelegate? = null
@@ -12,7 +14,7 @@ class GuestInteractor(
     override fun createWallet() {
         keystoreSafeExecute.safeExecute(
                 action = Runnable {
-                    wordsManager.createWords()
+                    authManager.login(wordsManager.generateWords())
                 },
                 onSuccess = Runnable { delegate?.didCreateWallet() },
                 onFailure = Runnable { delegate?.didFailToCreateWallet() }

@@ -31,7 +31,7 @@ class LauncherActivity : AppCompatActivity() {
         if (!EncryptionManager.isDeviceLockEnabled(this)) {
             EncryptionManager.showNoDeviceLockWarning(this)
             return
-        } else if (!App.wordsManager.isLoggedIn) {
+        } else if (!App.authManager.isLoggedIn) {
             GuestModule.start(this)
         } else if (!App.localStorage.iUnderstand) {
             BackupModule.start(this, BackupPresenter.DismissMode.SET_PIN)

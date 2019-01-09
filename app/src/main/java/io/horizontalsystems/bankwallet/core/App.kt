@@ -25,6 +25,7 @@ class App : Application() {
         lateinit var localStorage: ILocalStorage
         lateinit var encryptionManager: EncryptionManager
         lateinit var wordsManager: WordsManager
+        lateinit var authManager: AuthManager
         lateinit var randomManager: IRandomProvider
         lateinit var networkManager: INetworkManager
         lateinit var currencyManager: ICurrencyManager
@@ -79,17 +80,18 @@ class App : Application() {
         encryptionManager = EncryptionManager()
         secureStorage = SecuredStorageManager(encryptionManager)
         localStorage = LocalStorageManager()
-        wordsManager = WordsManager(localStorage, secureStorage)
+        wordsManager = WordsManager(localStorage)
+        authManager = AuthManager(secureStorage, localStorage)
         randomManager = RandomProvider()
         networkManager = NetworkManager()
         systemInfoManager = SystemInfoManager()
         pinManager = PinManager(secureStorage)
-        lockManager = LockManager(secureStorage, wordsManager)
+        lockManager = LockManager(secureStorage, authManager)
         appConfigProvider = AppConfigProvider()
         languageManager = LanguageManager(localStorage, appConfigProvider, fallbackLanguage)
         currencyManager = CurrencyManager(localStorage, appConfigProvider)
         coinManager = CoinManager(appConfigProvider)
-        walletManager = WalletManager(coinManager, wordsManager, WalletFactory(AdapterFactory(appConfigProvider)))
+        walletManager = WalletManager(coinManager, authManager, WalletFactory(AdapterFactory(appConfigProvider)))
 
         networkAvailabilityManager = NetworkAvailabilityManager()
 
@@ -102,6 +104,10 @@ class App : Application() {
 
         transactionRateSyncer = TransactionRateSyncer(transactionStorage, networkManager)
         transactionManager = TransactionManager(transactionStorage, transactionRateSyncer, walletManager, currencyManager, wordsManager, networkAvailabilityManager)
+
+        authManager.walletManager = walletManager
+        authManager.pinManager = pinManager
+        authManager.transactionManager = transactionManager
     }
 
 }

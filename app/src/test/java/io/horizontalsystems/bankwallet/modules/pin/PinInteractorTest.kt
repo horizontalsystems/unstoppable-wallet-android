@@ -2,10 +2,8 @@ package io.horizontalsystems.bankwallet.modules.pin
 
 import com.nhaarman.mockito_kotlin.*
 import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
-import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.IPinManager
-import io.horizontalsystems.bankwallet.core.IWordsManager
-import io.reactivex.subjects.PublishSubject
+import io.horizontalsystems.bankwallet.core.managers.AuthManager
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -17,10 +15,9 @@ class PinInteractorTest {
 
     private val delegate = Mockito.mock(PinModule.IPinInteractorDelegate::class.java)
     private val pinManager = Mockito.mock(IPinManager::class.java)
-    private val wordsManager = Mockito.mock(IWordsManager::class.java)
+    private val authManager = Mockito.mock(AuthManager::class.java)
     private val keystoreSafeExecute = Mockito.mock(IKeyStoreSafeExecute::class.java)
-    private val localStorage = Mockito.mock(ILocalStorage::class.java)
-    private var interactor = PinInteractor(pinManager, wordsManager, keystoreSafeExecute, localStorage)
+    private var interactor = PinInteractor(pinManager, authManager, keystoreSafeExecute)
 
     @Captor private val actionRunnableCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
     @Captor private val successRunnableCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
@@ -29,8 +26,6 @@ class PinInteractorTest {
     @Before
     fun setup() {
         interactor.delegate = delegate
-
-        whenever(wordsManager.loggedInSubject).thenReturn(PublishSubject.create())
     }
 
     @After
@@ -126,7 +121,7 @@ class PinInteractorTest {
         actionRunnable.run()
         successRunnable.run()
 
-        verify(wordsManager).safeLoad()
+        verify(authManager).safeLoad()
         verify(delegate).didStartedAdapters()
     }
 }

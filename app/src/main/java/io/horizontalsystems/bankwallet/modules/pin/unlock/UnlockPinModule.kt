@@ -36,7 +36,7 @@ object UnlockPinModule {
 
         val lockoutManager = LockoutManager(App.localStorage, UptimeProvider(), LockoutUntilDateFactory(CurrentDateProvider()))
         val timer = OneTimeTimer()
-        val interactor = UnlockPinInteractor(keystoreSafeExecute, App.localStorage, App.wordsManager, App.pinManager, App.lockManager, App.encryptionManager, lockoutManager, timer)
+        val interactor = UnlockPinInteractor(keystoreSafeExecute, App.localStorage, App.authManager, App.pinManager, App.lockManager, App.encryptionManager, lockoutManager, timer)
         val presenter = UnlockPinPresenter(interactor, router)
 
         view.delegate = presenter

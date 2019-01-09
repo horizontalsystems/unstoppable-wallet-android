@@ -16,6 +16,7 @@ interface IWalletManager {
     val walletsUpdatedSignal: Observable<Unit>
 
     fun refreshWallets()
+    fun initWallets()
     fun clearWallets()
 }
 
@@ -75,18 +76,11 @@ interface IKeyStoreSafeExecute {
 }
 
 interface IWordsManager {
-    fun safeLoad()
-    val words: List<String>?
     var isBackedUp: Boolean
-    var isLoggedIn: Boolean
-    var loggedInSubject: PublishSubject<LogInState>
-    var backedUpSubject: PublishSubject<Boolean>
-    val authDataObservable: Flowable<AuthData>
+    var backedUpSignal: PublishSubject<Unit>
 
-    fun createWords()
     fun validate(words: List<String>)
-    fun restore(words: List<String>)
-    fun logout()
+    fun generateWords(): List<String>
 }
 
 enum class LogInState {
@@ -149,6 +143,7 @@ interface IPinManager {
     val isPinSet: Boolean
     fun store(pin: String)
     fun validate(pin: String): Boolean
+    fun clear()
 }
 
 interface ILockManager {
@@ -210,6 +205,6 @@ interface ICurrentDateProvider {
     val currentDate: Date
 }
 
-sealed class Error: Exception() {
+sealed class Error : Exception() {
     class InsufficientAmount(val fee: Double) : Error()
 }

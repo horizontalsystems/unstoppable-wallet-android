@@ -28,19 +28,16 @@ class TransactionManager(
                     handleCurrencyChange()
                 })
 
-        disposables.add(wordsManager.loggedInSubject
-                .subscribe{ logInState ->
-                    if (logInState == LogInState.LOGOUT ) {
-                        storage.deleteAll()
-                    }
-                })
-
         disposables.add(networkAvailabilityManager.networkAvailabilitySignal
                 .subscribe {
                     if (networkAvailabilityManager.isConnected) {
                         syncRates()
                     }
                 })
+    }
+
+    fun clear() {
+        storage.deleteAll()
     }
 
     private fun resubscribeToAdapters() {

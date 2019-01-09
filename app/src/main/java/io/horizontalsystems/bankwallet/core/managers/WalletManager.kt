@@ -4,36 +4,29 @@ import android.os.Handler
 import android.os.HandlerThread
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.factories.WalletFactory
-import io.horizontalsystems.bankwallet.entities.AuthData
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
-class WalletManager(coinManager: CoinManager, wordsManager: WordsManager, private val walletFactory: WalletFactory) : IWalletManager, HandlerThread("A") {
+class WalletManager(private val coinManager: CoinManager, private val authManager: AuthManager, private val walletFactory: WalletFactory) : IWalletManager, HandlerThread("A") {
 
     private val handler: Handler
-    private val compositeDisposable = CompositeDisposable()
+    private val disposables = CompositeDisposable()
 
     init {
         start()
         handler = Handler(looper)
 
-        handler.post {
-            compositeDisposable.add(
-                    Flowable.combineLatest(
-                            coinManager.coinsObservable,
-                            wordsManager.authDataObservable,
-                            BiFunction<List<Coin>, AuthData, Pair<List<Coin>, AuthData>> { coins, words -> Pair(coins, words) })
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(Schedulers.io())
-                            .subscribe { (coins, authData) ->
-                                handle(coins, authData)
-                            })
-        }
+        initWallets()
+
+        disposables.add(authManager.authDataSignal
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe {
+                    initWallets()
+                }
+        )
     }
 
     override var wallets: List<Wallet> = listOf()
@@ -45,19 +38,24 @@ class WalletManager(coinManager: CoinManager, wordsManager: WordsManager, privat
         }
     }
 
-    override fun clearWallets() {
-        TODO("not implemented")
-    }
+    override fun initWallets() {
+        authManager.authData?.let { authData ->
+            handler.post {
+                wallets = coinManager.coins.mapNotNull { coin ->
+                    wallets.find { it.coinCode == coin.code }
+                            ?: walletFactory.createWallet(coin, authData)
+                }
 
-    private fun handle(coins: List<Coin>, authData: AuthData) {
-        handler.post {
-            wallets = coins.mapNotNull { coin ->
-                wallets.find { it.coinCode == coin.code }
-                        ?: walletFactory.createWallet(coin, authData)
+                walletsUpdatedSignal.onNext(Unit)
             }
-
-            walletsUpdatedSignal.onNext(Unit)
         }
     }
 
+    override fun clearWallets() {
+        handler.post {
+            wallets.forEach { it.adapter.clear() }
+            wallets = listOf()
+            walletsUpdatedSignal.onNext(Unit)
+        }
+    }
 }

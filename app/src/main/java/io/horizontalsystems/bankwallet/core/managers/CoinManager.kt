@@ -3,13 +3,10 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
-import io.reactivex.subjects.BehaviorSubject
 
 class CoinManager(private val appConfigProvider: IAppConfigProvider) {
 
-    val coinsObservable: Flowable<List<Coin>> = BehaviorSubject.createDefault(defaultCoins).toFlowable(BackpressureStrategy.DROP)
+    val coins = defaultCoins
 
     private val defaultCoins: List<Coin>
         get() {
