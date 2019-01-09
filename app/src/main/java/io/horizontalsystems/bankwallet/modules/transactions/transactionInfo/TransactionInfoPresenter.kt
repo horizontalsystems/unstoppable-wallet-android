@@ -40,7 +40,9 @@ class TransactionInfoPresenter(
     }
 
     override fun showFullInfo() {
-        router.showFullInfo(transactionHash)
+        transactionViewItem?.let {
+            router.showFullInfo(it.transactionHash, it.coinValue.coinCode)
+        }
     }
 
     // IInteractorDelegate methods

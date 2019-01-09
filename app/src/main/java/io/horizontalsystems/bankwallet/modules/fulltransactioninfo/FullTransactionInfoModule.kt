@@ -1,57 +1,66 @@
 package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
 
 import android.support.v4.app.FragmentActivity
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionRecordViewItem
+import io.horizontalsystems.bankwallet.entities.FullTransactionRecord
+import io.horizontalsystems.bankwallet.entities.FullTransactionSection
+import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import io.reactivex.Flowable
 
 object FullTransactionInfoModule {
-    interface IView {
-        fun showTransactionItem(transactionRecordViewItem: TransactionRecordViewItem)
-        fun showCopied()
+    interface View {
+        fun show()
+        fun showLoading()
+        fun hideLoading()
+        fun reload()
     }
 
-    interface IViewDelegate {
+    interface ViewDelegate {
         fun viewDidLoad()
-        fun onShareClick()
-        fun onTransactionIdClick()
-        fun onFromFieldClick()
-        fun onToFieldClick()
+
+        val resource: String
+        val sectionCount: Int
+        fun getSection(row: Int): FullTransactionSection?
     }
 
-    interface IInteractor {
-        fun retrieveTransaction()
-        fun getTransactionInfo()
-        fun onCopyFromAddress()
-        fun onCopyToAddress()
-        fun showBlockInfo()
-        fun openShareDialog()
-        fun onCopyTransactionId()
+    interface Interactor {
+        fun retrieveTransactionInfo(transactionHash: String)
     }
 
-    interface IInteractorDelegate {
-        fun didGetTransactionInfo(txRecordViewItem: TransactionRecordViewItem)
-        fun didCopyToClipboard()
-        fun showBlockInfo(txRecordViewItem: TransactionRecordViewItem)
-        fun openShareDialog(txRecordViewItem: TransactionRecordViewItem)
+    interface InteractorDelegate {
+        fun onReceiveTransactionInfo(transactionRecord: FullTransactionRecord)
     }
 
-    interface IRouter {
-        fun showBlockInfo(transaction: TransactionRecordViewItem)
-        fun shareTransaction(transaction: TransactionRecordViewItem)
+    interface Router
+
+    interface Provider {
+        val resource: String
+        fun retrieveTransactionInfo(transactionHash: String): Flowable<FullTransactionRecord>
     }
 
-    fun init(view: FullTransactionInfoViewModel, router: IRouter, adapterId: String, transactionId: String) {
-//        val adapter = App.adapterManager.adapters.firstOrNull { it.id == adapterId }
-//        val baseCurrency = App.currencyManager.baseCurrency
-//        val interactor = FullTransactionInfoInteractor(adapter, App.networkManager, transactionId, TextHelper, baseCurrency)
-//        val presenter = FullTransactionInfoPresenter(interactor, router)
-//
-//        view.delegate = presenter
-//        presenter.view = view
-//        interactor.delegate = presenter
+    interface ProviderFactory {
+        fun providerFor(coinCode: CoinCode): Provider
     }
 
-    fun start(activity: FragmentActivity, adapterId: String = "", transactionId: String = "") {
-        FullTransactionInfoActivity.start(activity, adapterId, transactionId)
+    interface ProviderDelegate {
+        fun onReceiveTransactionInfo(transactionRecord: FullTransactionRecord)
     }
 
+    interface State {
+        val transactionHash: String
+        var transactionRecord: FullTransactionRecord?
+    }
+
+    fun init(view: FullTransactionInfoViewModel, router: Router, transactionProvider: Provider, transactionHash: String) {
+        val interactor = FullTransactionInfoInteractor(transactionProvider)
+        val dataSource = FullTransactionInfoState(transactionHash)
+        val presenter = FullTransactionInfoPresenter(interactor, router, dataSource)
+
+        view.delegate = presenter
+        presenter.view = view
+        interactor.delegate = presenter
+    }
+
+    fun start(activity: FragmentActivity, transactionHash: String, coinCode: CoinCode) {
+        FullTransactionInfoActivity.start(activity, transactionHash, coinCode)
+    }
 }

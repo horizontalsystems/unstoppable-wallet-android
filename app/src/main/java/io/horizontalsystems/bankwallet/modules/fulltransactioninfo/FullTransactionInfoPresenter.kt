@@ -1,43 +1,42 @@
 package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
 
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionRecordViewItem
+import io.horizontalsystems.bankwallet.entities.FullTransactionRecord
+import io.horizontalsystems.bankwallet.entities.FullTransactionSection
 
-class FullTransactionInfoPresenter(private val interactor: FullTransactionInfoModule.IInteractor, private val router: FullTransactionInfoModule.IRouter) : FullTransactionInfoModule.IViewDelegate, FullTransactionInfoModule.IInteractorDelegate {
-    var view: FullTransactionInfoModule.IView? = null
+class FullTransactionInfoPresenter(val interactor: FullTransactionInfoInteractor, val router: FullTransactionInfoModule.Router, private val state: FullTransactionInfoState)
+    : FullTransactionInfoModule.ViewDelegate, FullTransactionInfoModule.InteractorDelegate {
 
+    var view: FullTransactionInfoModule.View? = null
+
+    //
+    // ViewDelegate
+    //
     override fun viewDidLoad() {
-        interactor.retrieveTransaction()
+        view?.showLoading()
+
+        interactor.retrieveTransactionInfo(state.transactionHash)
     }
 
-    override fun didGetTransactionInfo(txRecordViewItem: TransactionRecordViewItem) {
-        view?.showTransactionItem(txRecordViewItem)
+    //
+    // State
+    //
+    override val resource: String
+        get() = state.transactionRecord?.resource ?: ""
+
+    override val sectionCount: Int
+        get() = state.transactionRecord?.sections?.size ?: 0
+
+    override fun getSection(row: Int): FullTransactionSection? {
+        return state.transactionRecord?.sections?.get(row)
     }
 
-    override fun didCopyToClipboard() {
-        view?.showCopied()
+    //
+    // InteractorDelegate
+    //
+    override fun onReceiveTransactionInfo(transactionRecord: FullTransactionRecord) {
+        state.transactionRecord = transactionRecord
+        view?.hideLoading()
+        view?.reload()
     }
 
-    override fun showBlockInfo(txRecordViewItem: TransactionRecordViewItem) {
-        router.showBlockInfo(txRecordViewItem)
-    }
-
-    override fun openShareDialog(txRecordViewItem: TransactionRecordViewItem) {
-        router.shareTransaction(txRecordViewItem)
-    }
-
-    override fun onShareClick() {
-        interactor.openShareDialog()
-    }
-
-    override fun onTransactionIdClick() {
-        interactor.onCopyTransactionId()
-    }
-
-    override fun onFromFieldClick() {
-        interactor.onCopyFromAddress()
-    }
-
-    override fun onToFieldClick() {
-        interactor.onCopyToAddress()
-    }
 }

@@ -3,35 +3,38 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionRecordViewItem
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 
-class FullTransactionInfoViewModel: ViewModel(), FullTransactionInfoModule.IView, FullTransactionInfoModule.IRouter  {
-    lateinit var delegate: FullTransactionInfoModule.IViewDelegate
+class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View, FullTransactionInfoModule.Router {
 
-    val showCopiedLiveEvent = SingleLiveEvent<Unit>()
-    val showTransactionRecordViewLiveData = MutableLiveData<TransactionRecordViewItem>()
-    val showBlockInfoLiveData = MutableLiveData<TransactionRecordViewItem>()
-    val shareTransactionLiveData = MutableLiveData<TransactionRecordViewItem>()
+    lateinit var delegate: FullTransactionInfoModule.ViewDelegate
 
-    fun init(adapterId: String, transactionId: String) {
-        FullTransactionInfoModule.init(this, this, adapterId, transactionId)
-//        delegate.viewDidLoad()
+    val loadingLiveData = MutableLiveData<Boolean>()
+    val reloadLiveEvent = SingleLiveEvent<Void>()
+
+    fun init(transactionHash: String, coinCode: CoinCode) {
+        val transactionProvider = App.transactionInfoFactory.providerFor(coinCode)
+
+        FullTransactionInfoModule.init(this, this, transactionProvider, transactionHash)
+        delegate.viewDidLoad()
     }
 
-    override fun showTransactionItem(transactionRecordViewItem: TransactionRecordViewItem) {
-        showTransactionRecordViewLiveData.value = transactionRecordViewItem
+    //
+    // View
+    //
+    override fun show() {
     }
 
-    override fun showCopied() {
-        showCopiedLiveEvent.call()
+    override fun showLoading() {
+        loadingLiveData.value = true
     }
 
-    //IRouter methods
-    override fun showBlockInfo(transaction: TransactionRecordViewItem) {
-        showBlockInfoLiveData.value = transaction
+    override fun hideLoading() {
+        loadingLiveData.value = false
     }
 
-    override fun shareTransaction(transaction: TransactionRecordViewItem) {
-        shareTransactionLiveData.value = transaction
+    override fun reload() {
+        reloadLiveEvent.call()
     }
 }

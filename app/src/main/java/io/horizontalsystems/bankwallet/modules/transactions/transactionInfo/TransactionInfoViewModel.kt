@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 
 import android.arch.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 
 class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, TransactionInfoModule.Router {
@@ -9,7 +10,7 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, Transa
     lateinit var delegate: TransactionInfoModule.ViewDelegate
 
     val transactionLiveData = SingleLiveEvent<TransactionViewItem>()
-    val showFullInfoLiveEvent = SingleLiveEvent<String>()
+    val showFullInfoLiveEvent = SingleLiveEvent<Pair<String, String>>()
     val showCopiedLiveEvent = SingleLiveEvent<Unit>()
 
     fun init() {
@@ -24,7 +25,7 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, Transa
         showCopiedLiveEvent.call()
     }
 
-    override fun showFullInfo(transactionHash: String) {
-        showFullInfoLiveEvent.value = transactionHash
+    override fun showFullInfo(transactionHash: String, coinCode: CoinCode) {
+        showFullInfoLiveEvent.value = Pair(transactionHash, coinCode)
     }
 }

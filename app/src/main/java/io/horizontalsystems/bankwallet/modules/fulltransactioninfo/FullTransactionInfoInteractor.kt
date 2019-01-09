@@ -1,104 +1,31 @@
 package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
 
-import io.horizontalsystems.bankwallet.core.IAdapter
-import io.horizontalsystems.bankwallet.core.IClipboardManager
-import io.horizontalsystems.bankwallet.core.INetworkManager
-import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.TransactionRecord
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionRecordViewItem
+import io.horizontalsystems.bankwallet.entities.FullTransactionRecord
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class FullTransactionInfoInteractor(
-        private val adapter: IAdapter?,
-        private val networkManager: INetworkManager,
-        private val transactionId: String,
-        private var clipboardManager: IClipboardManager,
-        private val baseCurrency: Currency) : FullTransactionInfoModule.IInteractor {
+class FullTransactionInfoInteractor(private val transactionProvider: FullTransactionInfoModule.Provider)
+    : FullTransactionInfoModule.Interactor, FullTransactionInfoModule.ProviderDelegate {
 
-    private var transactionRecordViewItem: TransactionRecordViewItem? = null
-    var delegate: FullTransactionInfoModule.IInteractorDelegate? = null
+    var delegate: FullTransactionInfoModule.InteractorDelegate? = null
 
-    override fun retrieveTransaction() {
-        adapter?.let { adapter ->
-            adapter.transactionRecordsSubject.subscribe {
-                updateTransaction(adapter, transactionId)
-            }
-            updateTransaction(adapter, transactionId)
-        }
-    }
-
-    private fun updateTransaction(adapter: IAdapter, transactionId: String) {
-//        val transaction = adapter.transactionRecords.firstOrNull { it.transactionHash == transactionId }
-//        transaction?.let {
-//            val viewItem = getTransactionRecordViewItem(it, adapter)
-//            transactionRecordViewItem = viewItem
-//            fetchExchangeRate(transaction)
-//            delegate?.didGetTransactionInfo(viewItem)
-//        }
-    }
-
-    private fun fetchExchangeRate(transaction: TransactionRecord) {
-        val disposable = networkManager.getRate(coinCode = transaction.coinCode, currency = baseCurrency.code, timestamp = transaction.timestamp)
+    //
+    // Interactor implementations
+    //
+    override fun retrieveTransactionInfo(transactionHash: String) {
+        val a = transactionProvider.retrieveTransactionInfo(transactionHash)
                 .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
-                .subscribe { rate ->
-                    if (rate > 0) {
-                        val value = (transactionRecordViewItem?.amount?.value ?: 0.0) * rate
-                        transactionRecordViewItem?.currencyAmount = CurrencyValue(currency = baseCurrency, value = value)
-                        transactionRecordViewItem?.exchangeRate = rate
-                        transactionRecordViewItem?.let { delegate?.didGetTransactionInfo(it) }
-                    }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    delegate?.onReceiveTransactionInfo(it)
                 }
+
     }
 
-    private fun getTransactionRecordViewItem(record: TransactionRecord, adapter: IAdapter): TransactionRecordViewItem {
-        TODO()
-//        return TransactionRecordViewItem(
-//                hash = record.transactionHash,
-//                adapterId = adapter.id,
-//                amount = CoinValue(adapter.coin, record.amount),
-//                fee = CoinValue(coin = adapter.coin, value = record.fee),
-//                from = record.from.first(),
-//                to = record.to.first(),
-//                incoming = record.amount > 0,
-//                blockHeight = record.blockHeight,
-//                date = record.timestamp?.let { Date(it) },
-//                status = record.status
-//        )
-    }
-
-    override fun getTransactionInfo() {
-        transactionRecordViewItem?.let { delegate?.didGetTransactionInfo(it) }
-    }
-
-    override fun onCopyFromAddress() {
-        transactionRecordViewItem?.from?.let {
-            clipboardManager.copyText(it)
-            delegate?.didCopyToClipboard()
-        }
-    }
-
-    override fun onCopyToAddress() {
-        transactionRecordViewItem?.to?.let {
-            clipboardManager.copyText(it)
-            delegate?.didCopyToClipboard()
-        }
-    }
-
-    override fun showBlockInfo() {
-        transactionRecordViewItem?.let { delegate?.showBlockInfo(it) }
-    }
-
-    override fun openShareDialog() {
-        transactionRecordViewItem?.let { delegate?.openShareDialog(it) }
-    }
-
-    override fun onCopyTransactionId() {
-        transactionRecordViewItem?.hash?.let {
-            clipboardManager.copyText(it)
-            delegate?.didCopyToClipboard()
-        }
+    //
+    // ProviderDelegate implementations
+    //
+    override fun onReceiveTransactionInfo(transactionRecord: FullTransactionRecord) {
+        delegate?.onReceiveTransactionInfo(transactionRecord)
     }
 }
