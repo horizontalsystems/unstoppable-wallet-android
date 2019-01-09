@@ -166,7 +166,7 @@
     <string name="SetPin_ErrorPinsDontMatch">Код не совпадает. Попробуйте еще раз.</string>
     <string name="SetPin_ErrorFailedToSavePin">При сохранении вашего кода произошла ошибка. Повторите попытку.</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">Изменить код</string>
+    <string name="EditPin_Title">Изменить Код</string>
     <string name="EditPin_UnlockInfo">Текущий Код</string>
     <string name="EditPin_NewPinInfo">Новый Код</string>
     <!--Manage Coins-->
