@@ -5,6 +5,7 @@ import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.argumentCaptor
 import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.managers.AuthManager
 import io.horizontalsystems.bankwallet.core.managers.WordsManager
 import org.junit.Before
 import org.junit.Test
@@ -13,6 +14,7 @@ import org.mockito.Mockito.*
 
 class RestoreInteractorTest {
 
+    private val authManager = mock(AuthManager::class.java)
     private val wordsManager = mock(WordsManager::class.java)
     private val delegate = mock(RestoreModule.IInteractorDelegate::class.java)
     private val keystoreSafeExecute = mock(IKeyStoreSafeExecute::class.java)
@@ -29,7 +31,7 @@ class RestoreInteractorTest {
 
     @Before
     fun before() {
-        interactor = RestoreInteractor(wordsManager, localStorage, keystoreSafeExecute)
+        interactor = RestoreInteractor(authManager, wordsManager, localStorage, keystoreSafeExecute)
         interactor.delegate = delegate
     }
 
@@ -47,7 +49,7 @@ class RestoreInteractorTest {
         actionRunnable.run()
         successRunnable.run()
 
-        verify(wordsManager).restore(words)
+        verify(authManager).login(words)
     }
 
     @Test

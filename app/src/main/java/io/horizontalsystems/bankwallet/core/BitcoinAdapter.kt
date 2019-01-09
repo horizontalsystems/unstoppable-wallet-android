@@ -7,6 +7,8 @@ import io.horizontalsystems.bitcoinkit.BitcoinKit
 import io.horizontalsystems.bitcoinkit.managers.UnspentOutputSelector
 import io.horizontalsystems.bitcoinkit.models.BlockInfo
 import io.horizontalsystems.bitcoinkit.models.TransactionInfo
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import java.util.*
@@ -15,18 +17,17 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
 
     private var bitcoinKit = BitcoinKit(words, network, newWallet = newWallet, walletId = walletId)
     private val satoshisInBitcoin = Math.pow(10.0, 8.0)
+
     private val progressSubject: BehaviorSubject<Double> = BehaviorSubject.createDefault(0.0)
 
-    override val balance: Double get() = bitcoinKit.balance / satoshisInBitcoin
-    override val balanceSubject: PublishSubject<Double> = PublishSubject.create()
+    private val balanceSubject: BehaviorSubject<Double> = BehaviorSubject.createDefault(balance)
+    private val stateSubject: BehaviorSubject<AdapterState> = BehaviorSubject.createDefault(AdapterState.Syncing(progressSubject))
 
-    override var state: AdapterState = AdapterState.Syncing(progressSubject)
-        set (value) {
-            field = value
-            stateSubject.onNext(value)
-        }
+    override val balance: Double
+        get() = bitcoinKit.balance / satoshisInBitcoin
 
-    override val stateSubject: PublishSubject<AdapterState> = PublishSubject.create()
+    override val balanceObservable: Flowable<Double> = balanceSubject.toFlowable(BackpressureStrategy.DROP)
+    override val stateObservable: Flowable<AdapterState> = stateSubject.toFlowable(BackpressureStrategy.DROP)
 
     override val confirmationsThreshold: Int = 6
     override val lastBlockHeight: Int get() = bitcoinKit.lastBlockHeight
@@ -37,6 +38,7 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
     override val debugInfo: String = ""
 
     override val receiveAddress: String get() = bitcoinKit.receiveAddress()
+
     override fun start() {
         bitcoinKit.listener = this
         bitcoinKit.start()
@@ -86,23 +88,25 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
         balanceSubject.onNext(balance / satoshisInBitcoin)
     }
 
-    override fun onLastBlockInfoUpdate(bitcoinKit: BitcoinKit, lastBlockInfo: BlockInfo) {
-        lastBlockHeightSubject.onNext(lastBlockInfo.height)
+    override fun onLastBlockInfoUpdate(bitcoinKit: BitcoinKit, blockInfo: BlockInfo) {
+        lastBlockHeightSubject.onNext(blockInfo.height)
     }
 
     override fun onKitStateUpdate(bitcoinKit: BitcoinKit, state: BitcoinKit.KitState) {
         when (state) {
             is BitcoinKit.KitState.Synced -> {
-                this.state = AdapterState.Synced
+                if (stateSubject.value !is AdapterState.Synced) {
+                    stateSubject.onNext(AdapterState.Synced)
+                }
             }
             is BitcoinKit.KitState.NotSynced -> {
-                this.state = AdapterState.NotSynced
+                stateSubject.onNext(AdapterState.NotSynced)
             }
             is BitcoinKit.KitState.Syncing -> {
                 progressSubject.onNext(state.progress)
 
-                if (this.state !is AdapterState.Syncing) {
-                    this.state = AdapterState.Syncing(progressSubject)
+                if (stateSubject.value !is AdapterState.Syncing) {
+                    stateSubject.onNext(AdapterState.Syncing(progressSubject))
                 }
             }
         }

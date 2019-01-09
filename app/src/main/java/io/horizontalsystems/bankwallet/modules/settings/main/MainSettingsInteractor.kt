@@ -15,17 +15,17 @@ class MainSettingsInteractor(
     var delegate: MainSettingsModule.IMainSettingsInteractorDelegate? = null
 
     init {
-        disposables.add(wordsManager.backedUpSubject.subscribe {
-            onUpdateBackedUp(it)
+        disposables.add(wordsManager.backedUpSignal.subscribe {
+            onUpdateBackedUp()
         })
 
-        disposables.add(currencyManager.subject.subscribe {
-            delegate?.didUpdateBaseCurrency(it.code)
+        disposables.add(currencyManager.baseCurrencyUpdatedSignal.subscribe {
+            delegate?.didUpdateBaseCurrency(currencyManager.baseCurrency.code)
         })
     }
 
-    private fun onUpdateBackedUp(backedUp: Boolean) {
-        if (backedUp) {
+    private fun onUpdateBackedUp() {
+        if (wordsManager.isBackedUp) {
             delegate?.didBackup()
         }
     }

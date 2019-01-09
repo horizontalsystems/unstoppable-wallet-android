@@ -52,7 +52,7 @@ object BackupModule {
     }
 
     fun init(view: BackupViewModel, router: IRouter, keystoreSafeExecute: IKeyStoreSafeExecute, dismissMode: BackupPresenter.DismissMode) {
-        val interactor = BackupInteractor(App.wordsManager, App.randomManager, App.localStorage, keystoreSafeExecute)
+        val interactor = BackupInteractor(App.authManager, App.wordsManager, App.randomManager, App.localStorage, keystoreSafeExecute)
         val presenter = BackupPresenter(interactor, router, dismissMode, BackupModuleState())
 
         presenter.view = view

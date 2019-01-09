@@ -70,7 +70,7 @@ class EncryptionManager : IEncryptionManager {
             AlertDialogFragment.newInstance(R.string.Alert_KeysInvalidatedTitle, R.string.Alert_KeysInvalidatedDescription, R.string.Alert_Ok,
                     object : AlertDialogFragment.Listener {
                         override fun onButtonClick() {
-                            App.wordsManager.logout()
+                            App.authManager.logout()
                             KeyStoreWrapper().removeAndroidKeyStoreKey(MASTER_KEY)
 
                             val intent = Intent(activity, LauncherActivity::class.java)

@@ -40,10 +40,20 @@ class SendPresenterTest {
     @Test
     fun onViewDidLoad() {
         whenever(interactor.clipboardHasPrimaryClip).thenReturn(true)
+        whenever(interactor.coinCode).thenReturn("COIN")
         presenter.onViewDidLoad()
 
-        verify(interactor).retrieveRate()
+        verify(view).setCoin("COIN")
+        verify(view).setAmountInfo(viewItem.amountInfo)
+        verify(view).setSwitchButtonEnabled(viewItem.switchButtonEnabled)
+        verify(view).setHintInfo(viewItem.hintInfo)
+        verify(view).setAddressInfo(viewItem.addressInfo)
+        verify(view).setPrimaryFeeInfo(viewItem.primaryFeeInfo)
+        verify(view).setSecondaryFeeInfo(viewItem.secondaryFeeInfo)
+        verify(view).setSendButtonEnabled(viewItem.sendButtonEnabled)
         verify(view).setPasteButtonState(true)
+
+        verify(interactor).retrieveRate()
     }
 
     @Test
@@ -106,14 +116,9 @@ class SendPresenterTest {
     fun didRateRetrieve() {
         presenter.didRateRetrieve()
 
-        verify(view).setCoin(interactor.coinCode)
-        verify(view).setAmountInfo(viewItem.amountInfo)
         verify(view).setSwitchButtonEnabled(viewItem.switchButtonEnabled)
         verify(view).setHintInfo(viewItem.hintInfo)
-        verify(view).setAddressInfo(viewItem.addressInfo)
-        verify(view).setPrimaryFeeInfo(viewItem.primaryFeeInfo)
         verify(view).setSecondaryFeeInfo(viewItem.secondaryFeeInfo)
-        verify(view).setSendButtonEnabled(viewItem.sendButtonEnabled)
     }
 
     @Test

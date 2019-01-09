@@ -4,6 +4,7 @@ import android.text.TextUtils
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IEncryptionManager
 import io.horizontalsystems.bankwallet.core.ISecuredStorage
+import io.horizontalsystems.bankwallet.entities.AuthData
 
 
 class SecuredStorageManager(private val encryptionManager: IEncryptionManager) : ISecuredStorage {
@@ -12,18 +13,21 @@ class SecuredStorageManager(private val encryptionManager: IEncryptionManager) :
     private val LOCK_PIN = "lock_pin"
 
 
-    override val authData: List<String>?
+    override val authData: AuthData?
         get() {
-            val string = App.preferences.getString(AUTH_DATA, null)
-            return if (TextUtils.isEmpty(string)) {
-                null
-            } else {
-                encryptionManager.decrypt(string).split(" ").filter { it.isNotBlank() }
+            App.preferences.getString(AUTH_DATA, null)?.let { string ->
+                val words = encryptionManager.decrypt(string).split(" ").filter { it.isNotBlank() }
+
+                words.getOrNull(12)?.let { walletId ->
+                    return AuthData(words.subList(0, 12), walletId)
+                }
             }
+
+            return null
         }
 
-    override fun saveAuthData(words: List<String>) {
-        App.preferences.edit().putString(AUTH_DATA, encryptionManager.encrypt(words.joinToString(" "))).apply()
+    override fun saveAuthData(authData: AuthData) {
+        App.preferences.edit().putString(AUTH_DATA, encryptionManager.encrypt(authData.words.plus(authData.walletId).joinToString(" "))).apply()
     }
 
     override fun noAuthData(): Boolean {

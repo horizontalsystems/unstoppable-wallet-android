@@ -18,29 +18,26 @@ class TransactionManager(
     init {
         resubscribeToAdapters()
 
-        disposables.add(walletManager.walletsSubject
+        disposables.add(walletManager.walletsUpdatedSignal
                 .subscribe {
                     resubscribeToAdapters()
                 })
 
-        disposables.add(currencyManager.subject
+        disposables.add(currencyManager.baseCurrencyUpdatedSignal
                 .subscribe{
                     handleCurrencyChange()
                 })
 
-        disposables.add(wordsManager.loggedInSubject
-                .subscribe{ logInState ->
-                    if (logInState == LogInState.LOGOUT ) {
-                        storage.deleteAll()
-                    }
-                })
-
-        disposables.add(networkAvailabilityManager.stateSubject
-                .subscribe { connected ->
-                    if (connected) {
+        disposables.add(networkAvailabilityManager.networkAvailabilitySignal
+                .subscribe {
+                    if (networkAvailabilityManager.isConnected) {
                         syncRates()
                     }
                 })
+    }
+
+    fun clear() {
+        storage.deleteAll()
     }
 
     private fun resubscribeToAdapters() {

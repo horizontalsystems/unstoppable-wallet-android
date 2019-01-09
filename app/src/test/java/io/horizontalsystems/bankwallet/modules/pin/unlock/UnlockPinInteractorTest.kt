@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.pin.unlock
 
 import com.nhaarman.mockito_kotlin.*
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.managers.AuthManager
 import io.horizontalsystems.bankwallet.core.managers.OneTimeTimer
 import io.horizontalsystems.bankwallet.entities.LockoutState
 import org.junit.After
@@ -18,12 +19,12 @@ class UnlockPinInteractorTest {
     private val pinManager = Mockito.mock(IPinManager::class.java)
     private val localStorage = Mockito.mock(ILocalStorage::class.java)
     private val lockManager = Mockito.mock(ILockManager::class.java)
-    private val wordsManager = Mockito.mock(IWordsManager::class.java)
+    private val authManager = Mockito.mock(AuthManager::class.java)
     private val encryptionManager = Mockito.mock(IEncryptionManager::class.java)
     private val keystoreSafeExecute = Mockito.mock(IKeyStoreSafeExecute::class.java)
     private val lockoutManager = Mockito.mock(ILockoutManager::class.java)
     private val timer = Mockito.mock(OneTimeTimer::class.java)
-    private var interactor = UnlockPinInteractor(keystoreSafeExecute, localStorage, wordsManager, pinManager, lockManager, encryptionManager, lockoutManager, timer)
+    private var interactor = UnlockPinInteractor(keystoreSafeExecute, localStorage, authManager, pinManager, lockManager, encryptionManager, lockoutManager, timer)
 
     @Captor
     private val actionRunnableCaptor: KArgumentCaptor<Runnable> = argumentCaptor()

@@ -36,7 +36,7 @@ object GuestModule {
     }
 
     fun init(view: GuestViewModel, router: IRouter, keystoreSafeExecute: IKeyStoreSafeExecute) {
-        val interactor = GuestInteractor(App.wordsManager, keystoreSafeExecute)
+        val interactor = GuestInteractor(App.authManager, App.wordsManager, keystoreSafeExecute)
         val presenter = GuestPresenter(interactor, router)
 
         view.delegate = presenter

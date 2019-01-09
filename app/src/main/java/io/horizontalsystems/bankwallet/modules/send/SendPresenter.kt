@@ -13,8 +13,20 @@ class SendPresenter(
     // IViewDelegate
     //
     override fun onViewDidLoad() {
+        val state = interactor.stateForUserInput(userInput)
+        val viewItem = factory.viewItemForState(state)
+
+        view?.setCoin(interactor.coinCode)
+        view?.setAmountInfo(viewItem.amountInfo)
+        view?.setSwitchButtonEnabled(viewItem.switchButtonEnabled)
+        view?.setHintInfo(viewItem.hintInfo)
+        view?.setAddressInfo(viewItem.addressInfo)
+        view?.setPrimaryFeeInfo(viewItem.primaryFeeInfo)
+        view?.setSecondaryFeeInfo(viewItem.secondaryFeeInfo)
+        view?.setSendButtonEnabled(viewItem.sendButtonEnabled)
+        updatePasteButtonState()
+
         interactor.retrieveRate()
-        updatePastButtonState()
     }
 
     override fun onAmountChanged(amount: Double) {
@@ -60,7 +72,7 @@ class SendPresenter(
 
     override fun onDeleteClicked() {
         onAddressChange(null)
-        updatePastButtonState()
+        updatePasteButtonState()
     }
 
     override fun onSendClicked() {
@@ -81,14 +93,9 @@ class SendPresenter(
         val state = interactor.stateForUserInput(userInput)
         val viewItem = factory.viewItemForState(state)
 
-        view?.setCoin(interactor.coinCode)
-        view?.setAmountInfo(viewItem.amountInfo)
         view?.setSwitchButtonEnabled(viewItem.switchButtonEnabled)
         view?.setHintInfo(viewItem.hintInfo)
-        view?.setAddressInfo(viewItem.addressInfo)
-        view?.setPrimaryFeeInfo(viewItem.primaryFeeInfo)
         view?.setSecondaryFeeInfo(viewItem.secondaryFeeInfo)
-        view?.setSendButtonEnabled(viewItem.sendButtonEnabled)
     }
 
     override fun didSend() {
@@ -102,7 +109,7 @@ class SendPresenter(
     //
     // Private
     //
-    private fun updatePastButtonState() {
+    private fun updatePasteButtonState() {
         view?.setPasteButtonState(interactor.clipboardHasPrimaryClip)
     }
 
