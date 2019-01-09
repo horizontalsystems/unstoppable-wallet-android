@@ -44,31 +44,9 @@ class NetworkManager : INetworkManager {
 
 object ServiceExchangeApi {
 
-    val service: IExchangeRate
-    private const val apiURL = "https://ipfs.horizontalsystems.xyz/ipns/Qmd4Gv2YVPqs6dmSy1XEq7pQRSgLihqYKL2JjK7DMUFPVz/io-hs/data/xrates/"
-
-    init {
-        val logger = HttpLoggingInterceptor()
-        logger.level = HttpLoggingInterceptor.Level.BASIC
-
-        val httpClient = OkHttpClient.Builder()
-        httpClient.addInterceptor(logger)
-        httpClient.connectTimeout(60, TimeUnit.SECONDS)
-        httpClient.readTimeout(60, TimeUnit.SECONDS)
-
-        val gsonBuilder = GsonBuilder()
-        gsonBuilder.setLenient()
-        val gson = gsonBuilder.create()
-
-        val retrofit = Retrofit.Builder()
-                .baseUrl(apiURL)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .client(httpClient.build())
-                .build()
-
-        service = retrofit.create(IExchangeRate::class.java)
-    }
+    val service: IExchangeRate = APIClient
+            .retrofit("https://ipfs.horizontalsystems.xyz/ipns/Qmd4Gv2YVPqs6dmSy1XEq7pQRSgLihqYKL2JjK7DMUFPVz/io-hs/data/xrates/")
+            .create(IExchangeRate::class.java)
 
     interface IExchangeRate {
 
@@ -92,5 +70,28 @@ object ServiceExchangeApi {
                 @Path("fiat") currency: String
         ): Flowable<LatestRate>
 
+    }
+}
+
+object APIClient {
+    fun retrofit(apiURL: String): Retrofit {
+
+        val logger = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BASIC
+        }
+
+        val httpClient = OkHttpClient.Builder()
+        httpClient.addInterceptor(logger)
+        httpClient.connectTimeout(60, TimeUnit.SECONDS)
+        httpClient.readTimeout(60, TimeUnit.SECONDS)
+
+        val gsonBuilder = GsonBuilder().setLenient()
+
+        return Retrofit.Builder()
+                .baseUrl(apiURL)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gsonBuilder.create()))
+                .client(httpClient.build())
+                .build()
     }
 }
