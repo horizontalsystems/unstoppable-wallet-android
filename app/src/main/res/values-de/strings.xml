@@ -149,11 +149,11 @@ Hack dein Telefon nicht, installier keine Anwendungen von inoffiziellen Quellen 
     <string name="Hud_Text_Error">Fehler</string>
     <string name="Hud_Text_NoInternet">Kein Internet</string>
     <string name="Hud_Text_Copied">Kopiert</string>
-    <string name="Hud_Text_InvalidPinError">Falsche PIN</string>
+    <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">Anmeldung per Fingerabdruck</string>
     <string name="Fingerprint_Hint">Touchsensor</string>
-    <string name="Fingerprint_EnterPin">Gib deine Pin ein</string>
+    <string name="Fingerprint_EnterPin">Passcode</string>
     <string name="Fingerprint_NotRecognized">Fingerabdruck nicht erkannt. Bitte wiederholen.</string>
     <string name="Fingerprint_Success">Erfolgreich!</string>
     <!--Unlock Pin-->
@@ -171,6 +171,6 @@ Hack dein Telefon nicht, installier keine Anwendungen von inoffiziellen Quellen 
     <string name="EditPin_UnlockInfo">Current Passcode</string>
     <string name="EditPin_NewPinInfo">New Passcode</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Coins Verwalten</string>
+    <string name="ManageCoins_title">Wallets</string>
     <string name="ManageCoins_save">Speichern</string>
 </resources>
