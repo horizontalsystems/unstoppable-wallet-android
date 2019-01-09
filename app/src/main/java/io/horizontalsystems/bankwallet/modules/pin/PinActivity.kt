@@ -12,10 +12,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.PagerSnapHelper
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
@@ -29,6 +26,9 @@ import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_pin.*
 import kotlinx.android.synthetic.main.custom_tall_toolbar.*
+import android.view.MotionEvent
+
+
 
 class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuthenticationDialogFragment.Callback {
 
@@ -349,17 +349,29 @@ class NumPadItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(item: NumPadItem, isFingerprintEnabled: Boolean, onClick: () -> (Unit)) {
 
-        itemView.setOnClickListener { onClick.invoke() }
+        itemView.setOnTouchListener { v, event ->
+            when {
+                event.action == MotionEvent.ACTION_DOWN -> {
+                    onClick.invoke()
+                    v.isPressed = true
+                    true
+                }
+                event.action == MotionEvent.ACTION_UP -> {
+                    v.isPressed = false
+                    true
+                }
+                else -> false
+            }
+        }
 
         txtNumber.visibility = View.GONE
         txtLetters.visibility = View.GONE
         imgBackSpace.visibility = View.GONE
         imgFingerprint.visibility = View.GONE
 
-        itemView.background = null
-
         when (item.type) {
             NumPadItemType.DELETE -> {
+                itemView.background = null
                 imgBackSpace.visibility = View.VISIBLE
             }
 
@@ -372,6 +384,7 @@ class NumPadItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             }
 
             NumPadItemType.FINGER -> {
+                itemView.background = null
                 imgFingerprint.visibility = if (isFingerprintEnabled) View.VISIBLE else View.GONE
             }
         }
