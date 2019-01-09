@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
+import com.nhaarman.mockito_kotlin.inOrder
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.core.*
@@ -9,6 +10,7 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import org.junit.Before
@@ -41,44 +43,46 @@ class BalanceInteractorTest {
     fun setup() {
         RxBaseTest.setup()
 
-//        val wallets = listOf(wallet)
-//
-//        whenever(adapter.stateSubject).thenReturn(stateSubject)
-//        whenever(adapter.balanceSubject).thenReturn(balanceSubject)
-//        whenever(walletManager.walletsSubject).thenReturn(walletsSubject)
-//        whenever(rateManager.subject).thenReturn(rateSubject)
-//        whenever(currencyManager.subject).thenReturn(currencySubject)
-//
-//        whenever(wallet.adapter).thenReturn(adapter)
-//        whenever(walletManager.wallets).thenReturn(wallets)
-//
         interactor = BalanceInteractor(walletManager, rateStorage, currencyManager)
         interactor.delegate = delegate
 
-        whenever(walletManager.walletsObservable).thenReturn(Flowable.empty())
-        whenever(currencyManager.baseCurrencyObservable).thenReturn(Flowable.empty())
-    }
-
-    @Test
-    fun initWallets_currencyUpdates() {
-        val currency = mock(Currency::class.java)
-
-        whenever(currencyManager.baseCurrencyObservable).thenReturn(Flowable.just(currency))
-
-        interactor.initWallets()
-
-        verify(delegate).didUpdateCurrency(currency)
+        whenever(walletManager.walletsUpdatedSignal).thenReturn(Observable.empty())
+        whenever(currencyManager.baseCurrencyUpdatedSignal).thenReturn(Observable.empty())
     }
 
     @Test
     fun initWallets() {
         val wallets = listOf<Wallet>()
+        val currency = mock(Currency::class.java)
 
-        whenever(walletManager.walletsObservable).thenReturn(Flowable.just(wallets))
+        whenever(currencyManager.baseCurrency).thenReturn(currency)
+        whenever(walletManager.wallets).thenReturn(wallets)
 
         interactor.initWallets()
 
         verify(delegate).didUpdateWallets(wallets)
+        verify(delegate).didUpdateCurrency(currency)
+    }
+
+    @Test
+    fun initWallets_currencyUpdates() {
+        val initialCurrency = mock(Currency::class.java)
+        val updatedCurrency = mock(Currency::class.java)
+
+        val currencyUpdatedSignal = PublishSubject.create<Unit>()
+
+        whenever(currencyManager.baseCurrency).thenReturn(initialCurrency, updatedCurrency)
+        whenever(currencyManager.baseCurrencyUpdatedSignal).thenReturn(currencyUpdatedSignal)
+
+        interactor.initWallets()
+
+        currencyUpdatedSignal.onNext(Unit)
+
+        inOrder(delegate).let { inOrder ->
+            inOrder.verify(delegate).didUpdateCurrency(initialCurrency)
+            inOrder.verify(delegate).didUpdateCurrency(updatedCurrency)
+            inOrder.verifyNoMoreInteractions()
+        }
     }
 
     @Test
@@ -91,7 +95,7 @@ class BalanceInteractorTest {
 
         val wallets = listOf(wallet)
 
-        whenever(walletManager.walletsObservable).thenReturn(Flowable.just(wallets))
+        whenever(walletManager.wallets).thenReturn(wallets)
         whenever(wallet.coinCode).thenReturn(coinCode)
         whenever(wallet.adapter).thenReturn(adapter)
         whenever(adapter.balanceObservable).thenReturn(Flowable.empty())
@@ -119,8 +123,10 @@ class BalanceInteractorTest {
         val wallets2 = listOf(wallet2)
 
         val state1Observable: BehaviorSubject<AdapterState> = BehaviorSubject.createDefault(state1)
+        val walletsUpdatedSignal = PublishSubject.create<Unit>()
 
-        whenever(walletManager.walletsObservable).thenReturn(Flowable.just(wallets1, wallets2))
+        whenever(walletManager.wallets).thenReturn(wallets1, wallets2)
+        whenever(walletManager.walletsUpdatedSignal).thenReturn(walletsUpdatedSignal)
         whenever(wallet1.coinCode).thenReturn(coinCode)
         whenever(wallet1.adapter).thenReturn(adapter1)
         whenever(adapter1.balanceObservable).thenReturn(Flowable.empty())
@@ -133,10 +139,14 @@ class BalanceInteractorTest {
 
         interactor.initWallets()
 
+        verify(delegate).didUpdateState(coinCode, state1)
+
+        walletsUpdatedSignal.onNext(Unit)
+
+        verify(delegate).didUpdateState(coinCode, state2)
+
         state1Observable.onNext(state1Updated)
 
-        verify(delegate).didUpdateState(coinCode, state1)
-        verify(delegate).didUpdateState(coinCode, state2)
         verify(delegate, never()).didUpdateState(coinCode, state1Updated)
     }
 
@@ -150,7 +160,7 @@ class BalanceInteractorTest {
 
         val wallets = listOf(wallet)
 
-        whenever(walletManager.walletsObservable).thenReturn(Flowable.just(wallets))
+        whenever(walletManager.wallets).thenReturn(wallets)
         whenever(wallet.coinCode).thenReturn(coinCode)
         whenever(wallet.adapter).thenReturn(adapter)
         whenever(adapter.balanceObservable).thenReturn(Flowable.just(balance))
@@ -178,8 +188,10 @@ class BalanceInteractorTest {
         val walletsUpdated = listOf(wallet2)
 
         val balanceObservable1 = BehaviorSubject.createDefault(balance)
+        val walletsUpdatedSignal = PublishSubject.create<Unit>()
 
-        whenever(walletManager.walletsObservable).thenReturn(Flowable.just(wallets, walletsUpdated))
+        whenever(walletManager.wallets).thenReturn(wallets, walletsUpdated)
+        whenever(walletManager.walletsUpdatedSignal).thenReturn(walletsUpdatedSignal)
         whenever(wallet.coinCode).thenReturn(coinCode)
         whenever(wallet.adapter).thenReturn(adapter)
         whenever(wallet2.coinCode).thenReturn(coinCode)
@@ -192,12 +204,14 @@ class BalanceInteractorTest {
         interactor.initWallets()
 
         verify(delegate).didUpdateBalance(coinCode, balance)
+
+        walletsUpdatedSignal.onNext(Unit)
+
         verify(delegate).didUpdateBalance(coinCode, balance2)
 
         balanceObservable1.onNext(balance1Updated)
 
         verify(delegate, never()).didUpdateBalance(coinCode, balance1Updated)
-
     }
 
     @Test

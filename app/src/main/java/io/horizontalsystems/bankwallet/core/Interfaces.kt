@@ -6,14 +6,14 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.Flowable
 import io.reactivex.Maybe
+import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import java.util.*
 
 interface IWalletManager {
     val wallets: List<Wallet>
-    val walletsSubject: PublishSubject<List<Wallet>>
-    val walletsObservable: Flowable<List<Wallet>>
+    val walletsUpdatedSignal: Observable<Unit>
 
     fun refreshWallets()
     fun clearWallets()
@@ -65,9 +65,8 @@ interface IClipboardManager {
 
 interface ICurrencyManager {
     val baseCurrency: Currency
-    val baseCurrencyObservable: Flowable<Currency>
+    val baseCurrencyUpdatedSignal: Observable<Unit>
     val currencies: List<Currency>
-    var subject: BehaviorSubject<Currency>
     fun setBaseCurrency(code: String)
 }
 
@@ -172,7 +171,6 @@ interface IOneTimerDelegate {
 
 interface IRateStorage {
     fun rateObservable(coinCode: CoinCode, currencyCode: String): Flowable<Rate>
-    fun rate(coinCode: CoinCode, currencyCode: String): Maybe<Rate>
     fun save(rate: Rate)
     fun getAll(): Flowable<List<Rate>>
     fun deleteAll()

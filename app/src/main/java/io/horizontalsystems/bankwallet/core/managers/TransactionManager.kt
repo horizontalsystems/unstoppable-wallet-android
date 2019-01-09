@@ -18,12 +18,12 @@ class TransactionManager(
     init {
         resubscribeToAdapters()
 
-        disposables.add(walletManager.walletsSubject
+        disposables.add(walletManager.walletsUpdatedSignal
                 .subscribe {
                     resubscribeToAdapters()
                 })
 
-        disposables.add(currencyManager.subject
+        disposables.add(currencyManager.baseCurrencyUpdatedSignal
                 .subscribe{
                     handleCurrencyChange()
                 })
@@ -35,9 +35,9 @@ class TransactionManager(
                     }
                 })
 
-        disposables.add(networkAvailabilityManager.stateSubject
-                .subscribe { connected ->
-                    if (connected) {
+        disposables.add(networkAvailabilityManager.networkAvailabilitySignal
+                .subscribe {
+                    if (networkAvailabilityManager.isConnected) {
                         syncRates()
                     }
                 })

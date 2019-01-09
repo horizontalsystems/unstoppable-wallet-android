@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.transactions
 import android.os.Handler
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
-import io.horizontalsystems.bankwallet.entities.Wallet
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -22,20 +21,20 @@ class TransactionsInteractor(
     var delegate: TransactionsModule.IInteractorDelegate? = null
 
     init {
-        resubscribeToLastBlockHeightSubjects(walletManager.wallets)
+        resubscribeToLastBlockHeightSubjects()
 
-        disposables.add(walletManager.walletsSubject.subscribe {
-            resubscribeToLastBlockHeightSubjects(it)
+        disposables.add(walletManager.walletsUpdatedSignal.subscribe {
+            resubscribeToLastBlockHeightSubjects()
         })
     }
 
     override fun retrieveFilters() {
         delegate?.didRetrieveFilters(walletManager.wallets.map { it.coinCode })
 
-        disposables.add(walletManager.walletsSubject
+        disposables.add(walletManager.walletsUpdatedSignal
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    delegate?.didRetrieveFilters(it.map { it.coinCode })
+                    delegate?.didRetrieveFilters(walletManager.wallets.map { it.coinCode })
                 })
     }
 
@@ -64,9 +63,9 @@ class TransactionsInteractor(
         delegate?.didUpdateDataSource()
     }
 
-    private fun resubscribeToLastBlockHeightSubjects(wallets: List<Wallet>) {
+    private fun resubscribeToLastBlockHeightSubjects() {
         lastBlockHeightDisposable?.dispose()
-        lastBlockHeightDisposable = Observable.merge(wallets.map { it.adapter.lastBlockHeightSubject })
+        lastBlockHeightDisposable = Observable.merge(walletManager.wallets.map { it.adapter.lastBlockHeightSubject })
                 .throttleLast(3, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {

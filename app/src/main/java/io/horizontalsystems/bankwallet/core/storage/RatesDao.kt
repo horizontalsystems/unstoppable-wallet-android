@@ -7,16 +7,12 @@ import android.arch.persistence.room.Query
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.Flowable
-import io.reactivex.Maybe
 
 @Dao
 interface RatesDao {
 
     @Query("SELECT * FROM Rate WHERE coinCode = :coinCode AND currencyCode = :currencyCode")
-    fun getRateX(coinCode: CoinCode, currencyCode: String): Flowable<Rate>
-
-    @Query("SELECT * FROM Rate WHERE coinCode = :coinCode AND currencyCode = :currencyCode")
-    fun getRate(coinCode: CoinCode, currencyCode: String): Maybe<Rate>
+    fun getRate(coinCode: CoinCode, currencyCode: String): Flowable<Rate>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(rate: Rate)

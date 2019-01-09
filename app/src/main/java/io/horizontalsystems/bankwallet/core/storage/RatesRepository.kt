@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.core.IRateStorage
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.Flowable
-import io.reactivex.Maybe
 import java.util.concurrent.Executors
 
 class RatesRepository(private val appDatabase: AppDatabase) : IRateStorage {
@@ -12,10 +11,6 @@ class RatesRepository(private val appDatabase: AppDatabase) : IRateStorage {
     private val executor = Executors.newSingleThreadExecutor()
 
     override fun rateObservable(coinCode: CoinCode, currencyCode: String): Flowable<Rate> {
-        return appDatabase.ratesDao().getRateX(coinCode, currencyCode)
-    }
-
-    override fun rate(coinCode: CoinCode, currencyCode: String): Maybe<Rate> {
         return appDatabase.ratesDao().getRate(coinCode, currencyCode)
     }
 

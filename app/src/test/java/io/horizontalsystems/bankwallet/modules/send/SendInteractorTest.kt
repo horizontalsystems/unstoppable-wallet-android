@@ -4,15 +4,11 @@ import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.argThat
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
-import io.horizontalsystems.bankwallet.core.Error
-import io.horizontalsystems.bankwallet.core.IAdapter
-import io.horizontalsystems.bankwallet.core.IClipboardManager
-import io.horizontalsystems.bankwallet.core.ICurrencyManager
-import io.horizontalsystems.bankwallet.core.managers.RateManager
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
-import io.reactivex.Maybe
+import io.reactivex.Flowable
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -24,7 +20,7 @@ class SendInteractorTest {
     private val clipboardManager = mock(IClipboardManager::class.java)
 
     private val currencyManager = mock(ICurrencyManager::class.java)
-    private val rateManager = mock(RateManager::class.java)
+    private val rateStorage = mock(IRateStorage::class.java)
     private val wallet = mock(Wallet::class.java)
     private val adapter = mock(IAdapter::class.java)
 
@@ -43,10 +39,10 @@ class SendInteractorTest {
         whenever(wallet.coinCode).thenReturn(coin)
         whenever(wallet.adapter).thenReturn(adapter)
         whenever(currencyManager.baseCurrency).thenReturn(currency)
-        whenever(rateManager.rate(coin, currency.code)).thenReturn(Maybe.just(rate))
+        whenever(rateStorage.rateObservable(coin, currency.code)).thenReturn(Flowable.just(rate))
         whenever(adapter.balance).thenReturn(balance)
 
-        interactor = SendInteractor(currencyManager, rateManager, clipboardManager, wallet)
+        interactor = SendInteractor(currencyManager, rateStorage, clipboardManager, wallet)
         interactor.delegate = delegate
     }
 
@@ -54,7 +50,7 @@ class SendInteractorTest {
     fun retrieveRate() {
         interactor.retrieveRate()
 
-        verify(rateManager).rate(coin, currency.code)
+        verify(rateStorage).rateObservable(coin, currency.code)
     }
 
     @Test

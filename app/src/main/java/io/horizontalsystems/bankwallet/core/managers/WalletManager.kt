@@ -7,12 +7,10 @@ import io.horizontalsystems.bankwallet.core.factories.WalletFactory
 import io.horizontalsystems.bankwallet.entities.AuthData
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 
 class WalletManager(coinManager: CoinManager, wordsManager: WordsManager, private val walletFactory: WalletFactory) : IWalletManager, HandlerThread("A") {
@@ -38,15 +36,12 @@ class WalletManager(coinManager: CoinManager, wordsManager: WordsManager, privat
         }
     }
 
-    private val subject: BehaviorSubject<List<Wallet>> = BehaviorSubject.create()
-
     override var wallets: List<Wallet> = listOf()
-    override val walletsSubject = PublishSubject.create<List<Wallet>>()
-    override val walletsObservable: Flowable<List<Wallet>> = subject.toFlowable(BackpressureStrategy.DROP)
+    override val walletsUpdatedSignal = PublishSubject.create<Unit>()
 
     override fun refreshWallets() {
         handler.post {
-            subject.value?.forEach { it.adapter.refresh() }
+            wallets.forEach { it.adapter.refresh() }
         }
     }
 
@@ -56,11 +51,12 @@ class WalletManager(coinManager: CoinManager, wordsManager: WordsManager, privat
 
     private fun handle(coins: List<Coin>, authData: AuthData) {
         handler.post {
-            val wallets = coins.mapNotNull { coin ->
-                subject.value?.find { it.coinCode == coin.code } ?: walletFactory.createWallet(coin, authData)
+            wallets = coins.mapNotNull { coin ->
+                wallets.find { it.coinCode == coin.code }
+                        ?: walletFactory.createWallet(coin, authData)
             }
 
-            subject.onNext(wallets)
+            walletsUpdatedSignal.onNext(Unit)
         }
     }
 

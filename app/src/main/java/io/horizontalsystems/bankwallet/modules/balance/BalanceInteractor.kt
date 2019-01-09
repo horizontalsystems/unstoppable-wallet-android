@@ -4,7 +4,6 @@ import android.os.Handler
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
 import io.horizontalsystems.bankwallet.core.IRateStorage
 import io.horizontalsystems.bankwallet.core.IWalletManager
-import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -23,18 +22,22 @@ class BalanceInteractor(
     private var rateDisposables: CompositeDisposable = CompositeDisposable()
 
     override fun initWallets() {
-        disposables.add(walletManager.walletsObservable
+        onUpdateWallets()
+
+        disposables.add(walletManager.walletsUpdatedSignal
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe {
-                    onUpdateWallets(it)
+                    onUpdateWallets()
                 })
 
-        disposables.add(currencyManager.baseCurrencyObservable
+        onUpdateCurrency()
+
+        disposables.add(currencyManager.baseCurrencyUpdatedSignal
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe {
-                    delegate?.didUpdateCurrency(it)
+                    onUpdateCurrency()
                 })
     }
 
@@ -51,7 +54,13 @@ class BalanceInteractor(
         }
     }
 
-    private fun onUpdateWallets(wallets: List<Wallet>) {
+    private fun onUpdateCurrency() {
+        delegate?.didUpdateCurrency(currencyManager.baseCurrency)
+    }
+
+    private fun onUpdateWallets() {
+        val wallets = walletManager.wallets
+
         delegate?.didUpdateWallets(wallets)
 
         walletDisposables.clear()

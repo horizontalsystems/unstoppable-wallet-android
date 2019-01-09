@@ -55,7 +55,7 @@ class MainSettingsInteractorTest {
         }
 
         currencyManager = mock{
-//            on { subject } doReturn PublishSubject.create<Currency>()
+            on { baseCurrencyUpdatedSignal } doReturn PublishSubject.create<Unit>()
             on { baseCurrency } doReturn currency
         }
 

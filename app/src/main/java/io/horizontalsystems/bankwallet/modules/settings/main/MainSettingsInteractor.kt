@@ -19,8 +19,8 @@ class MainSettingsInteractor(
             onUpdateBackedUp(it)
         })
 
-        disposables.add(currencyManager.subject.subscribe {
-            delegate?.didUpdateBaseCurrency(it.code)
+        disposables.add(currencyManager.baseCurrencyUpdatedSignal.subscribe {
+            delegate?.didUpdateBaseCurrency(currencyManager.baseCurrency.code)
         })
     }
 
