@@ -83,10 +83,6 @@ interface IWordsManager {
     fun generateWords(): List<String>
 }
 
-enum class LogInState {
-    CREATE, RESTORE, RESUME, LOGOUT
-}
-
 interface ILanguageManager {
     var currentLanguage: Locale
     var preferredLanguage: Locale?

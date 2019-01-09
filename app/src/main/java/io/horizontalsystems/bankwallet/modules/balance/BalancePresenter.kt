@@ -5,15 +5,12 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
-import io.reactivex.disposables.CompositeDisposable
 
 class BalancePresenter(
         private var interactor: BalanceModule.IInteractor,
         private val router: BalanceModule.IRouter,
         private val dataSource: BalanceModule.BalanceItemDataSource,
         private val factory: BalanceViewItemFactory) : BalanceModule.IViewDelegate, BalanceModule.IInteractorDelegate {
-
-    private var disposables: CompositeDisposable = CompositeDisposable()
 
     var view: BalanceModule.IView? = null
 
