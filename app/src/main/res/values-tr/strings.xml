@@ -148,11 +148,11 @@
     <string name="Hud_Text_Error">Hata</string>
     <string name="Hud_Text_NoInternet">Internet Bağlantısı Yok</string>
     <string name="Hud_Text_Copied">Kopyalandı</string>
-    <string name="Hud_Text_InvalidPinError">Yanlış PİN</string>
+    <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">Parmak iziyle giriş</string>
     <string name="Fingerprint_Hint">Dokunmatik sensör</string>
-    <string name="Fingerprint_EnterPin">PIN\'i girin</string>
+    <string name="Fingerprint_EnterPin">Passcode</string>
     <string name="Fingerprint_NotRecognized">Parmak izi tanınmadı. Tekrar deneyin</string>
     <string name="Fingerprint_Success">Başarılı!</string>
     <!--Unlock Pin-->
@@ -170,6 +170,6 @@
     <string name="EditPin_UnlockInfo">Current Passcode</string>
     <string name="EditPin_NewPinInfo">New Passcode</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Manage Coins</string>
+    <string name="ManageCoins_title">Wallets</string>
     <string name="ManageCoins_save">Save</string>
 </resources>
