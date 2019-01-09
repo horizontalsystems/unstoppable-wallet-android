@@ -109,7 +109,7 @@ class App : Application() {
 
         transactionRateSyncer = TransactionRateSyncer(transactionStorage, networkManager)
         transactionManager = TransactionManager(transactionStorage, transactionRateSyncer, walletManager, currencyManager, wordsManager, networkAvailabilityManager)
-        transactionInfoFactory = FullTransactionInfoFactory(networkManager, appConfigProvider, localStorage)
+        transactionInfoFactory = FullTransactionInfoFactory(networkManager, appConfigProvider)
 
         authManager.walletManager = walletManager
         authManager.pinManager = pinManager

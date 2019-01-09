@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
 
+import io.horizontalsystems.bankwallet.entities.FullTransactionItem
 import io.horizontalsystems.bankwallet.entities.FullTransactionRecord
 import io.horizontalsystems.bankwallet.entities.FullTransactionSection
 
@@ -12,16 +13,30 @@ class FullTransactionInfoPresenter(val interactor: FullTransactionInfoInteractor
     // ViewDelegate
     //
     override fun viewDidLoad() {
-        view?.showLoading()
+        retryLoadInfo()
+    }
 
-        interactor.retrieveTransactionInfo(state.transactionHash)
+    override fun onRetryLoad() {
+        interactor.retryLoadInfo()
+    }
+
+    override fun onTapItem(item: FullTransactionItem) {
+        interactor.onTapItem(item)
+    }
+
+    override fun onTapResource() {
+        view?.openUrl(state.url)
+    }
+
+    override fun onShare() {
+        view?.share(state.url)
     }
 
     //
     // State
     //
-    override val resource: String
-        get() = state.transactionRecord?.resource ?: ""
+    override val providerName: String
+        get() = state.providerName
 
     override val sectionCount: Int
         get() = state.transactionRecord?.sections?.size ?: 0
@@ -39,4 +54,32 @@ class FullTransactionInfoPresenter(val interactor: FullTransactionInfoInteractor
         view?.reload()
     }
 
+    override fun onError() {
+        view?.hideLoading()
+        view?.showError()
+    }
+
+    override fun retryLoadInfo() {
+        if (state.transactionRecord == null) {
+            tryLoadInfo()
+        }
+    }
+
+    override fun onCopied() {
+        view?.showCopied()
+    }
+
+    override fun onOpenUrl(url: String) {
+        view?.openUrl(url)
+    }
+
+    //
+    // Private
+    //
+    private fun tryLoadInfo() {
+        view?.hideError()
+        view?.showLoading()
+
+        interactor.retrieveTransactionInfo(state.transactionHash)
+    }
 }

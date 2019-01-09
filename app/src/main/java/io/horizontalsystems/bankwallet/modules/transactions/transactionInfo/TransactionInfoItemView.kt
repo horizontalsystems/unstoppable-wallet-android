@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.View
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.FullTransactionIcon
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_transaction_info_item.view.*
@@ -37,7 +38,25 @@ class TransactionInfoItemView : ConstraintLayout {
         ConstraintLayout.inflate(context, R.layout.view_transaction_info_item, this)
     }
 
-    fun bindAddress(title: String? = null, address: String? = null, showBottomBorder: Boolean = false) {
+    fun bind(title: String? = null, value: String? = null, valueIcon: FullTransactionIcon? = null, showBottomBorder: Boolean = false) {
+        txtTitle.text = title
+
+        when (valueIcon) {
+            FullTransactionIcon.PERSON -> value?.let { addressView.bind(value) }
+            FullTransactionIcon.HASH -> value?.let { addressView.bindTransactionId(value) }
+            else -> {
+                valueText.text = value
+                valueText.visibility = View.VISIBLE
+            }
+        }
+
+        addressView.visibility = if (valueIcon == null) View.GONE else View.VISIBLE
+        border.visibility = if (showBottomBorder) View.VISIBLE else View.GONE
+
+        invalidate()
+    }
+
+    fun bindAddress(title: String? = null, address: String? = null, showBottomBorder: Boolean = false, isTxId: Boolean = false) {
         txtTitle.text = title
         address?.let { addressView.bind(it) }
         addressView.visibility = if (address == null) View.GONE else View.VISIBLE
@@ -46,7 +65,7 @@ class TransactionInfoItemView : ConstraintLayout {
         invalidate()
     }
 
-    fun bindTime(title: String? = null, time: String? = null){
+    fun bindTime(title: String? = null, time: String? = null) {
         txtTitle.text = title
         valueText.text = time
         valueText.visibility = if (time == null) View.GONE else View.VISIBLE

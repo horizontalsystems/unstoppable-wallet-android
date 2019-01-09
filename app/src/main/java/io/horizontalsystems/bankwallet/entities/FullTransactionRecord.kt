@@ -1,25 +1,19 @@
 package io.horizontalsystems.bankwallet.entities
 
 data class FullTransactionItem(
-        val title: String,
-        val value: String?,
+        val translationId: Int? = null,
+        val title: String? = null,
+        val value: String? = null,
+        val valueUnit: Int? = null,
         val clickable: Boolean = false,
         val url: String? = null,
-        val icon: FullTransactionIcon = FullTransactionIcon.NONE
+        val icon: FullTransactionIcon? = null
 )
 
 data class FullTransactionSection(
-        val title: String? = null,
+        val translationId: Int? = null,
         val items: List<FullTransactionItem>
 )
 
-data class FullTransactionRecord(
-        val resource: String,
-        val sections: List<FullTransactionSection>
-)
-
-enum class FullTransactionIcon {
-    NONE,
-    HASH,
-    PERSON
-}
+data class FullTransactionRecord(val sections: List<FullTransactionSection>)
+enum class FullTransactionIcon { HASH, PERSON }

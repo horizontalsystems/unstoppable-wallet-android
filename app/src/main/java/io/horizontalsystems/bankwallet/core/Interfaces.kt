@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
+import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
@@ -50,6 +51,7 @@ interface IRandomProvider {
 interface INetworkManager {
     fun getLatestRate(coin: String, currency: String): Flowable<LatestRate>
     fun getRate(coinCode: String, currency: String, timestamp: Long): Flowable<Double>
+    fun getTransaction(host: String, path: String): Flowable<JsonObject>
 }
 
 interface IEncryptionManager {

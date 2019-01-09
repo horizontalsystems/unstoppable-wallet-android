@@ -12,12 +12,24 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
 
     val loadingLiveData = MutableLiveData<Boolean>()
     val reloadLiveEvent = SingleLiveEvent<Void>()
+    val showCopiedLiveEvent = SingleLiveEvent<Unit>()
+    val showErrorLiveEvent = SingleLiveEvent<Boolean>()
+    val showShareLiveEvent = SingleLiveEvent<String>()
+    val openLinkLiveEvent = SingleLiveEvent<String>()
 
     fun init(transactionHash: String, coinCode: CoinCode) {
         val transactionProvider = App.transactionInfoFactory.providerFor(coinCode)
 
         FullTransactionInfoModule.init(this, this, transactionProvider, transactionHash)
         delegate.viewDidLoad()
+    }
+
+    fun retry() {
+        delegate.onRetryLoad()
+    }
+
+    fun share() {
+        delegate.onShare()
     }
 
     //
@@ -34,7 +46,27 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
         loadingLiveData.value = false
     }
 
+    override fun showError() {
+        showErrorLiveEvent.value = true
+    }
+
+    override fun hideError() {
+        showErrorLiveEvent.value = false
+    }
+
     override fun reload() {
         reloadLiveEvent.call()
+    }
+
+    override fun showCopied() {
+        showCopiedLiveEvent.call()
+    }
+
+    override fun openUrl(url: String) {
+        openLinkLiveEvent.value = url
+    }
+
+    override fun share(url: String) {
+        showShareLiveEvent.value = url
     }
 }

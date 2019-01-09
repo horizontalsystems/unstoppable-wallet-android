@@ -25,6 +25,15 @@ object ValueFormatter {
             return format
         }
 
+    fun format(value: Double): String {
+        val customFormatter = coinFormatter
+        if (value == 0.0) {
+            customFormatter.maximumFractionDigits = 0
+        }
+
+        return customFormatter.format(value)
+    }
+
     fun format(coinValue: CoinValue, explicitSign: Boolean = false): String? {
         val value = if (explicitSign) Math.abs(coinValue.value) else coinValue.value
 

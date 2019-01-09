@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import com.google.gson.GsonBuilder
+import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.entities.LatestRate
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
@@ -12,7 +13,9 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.Path
+import retrofit2.http.Url
 import java.util.concurrent.TimeUnit
 
 class NetworkManager : INetworkManager {
@@ -40,6 +43,10 @@ class NetworkManager : INetworkManager {
                 .onErrorResumeNext(Flowable.empty())
     }
 
+    override fun getTransaction(host: String, path: String): Flowable<JsonObject> {
+        return ServiceFullTransaction.service(host)
+                .getFullTransaction(path)
+    }
 }
 
 object ServiceExchangeApi {
@@ -71,6 +78,20 @@ object ServiceExchangeApi {
         ): Flowable<LatestRate>
 
     }
+}
+
+object ServiceFullTransaction {
+    fun service(apiURL: String): FullTransactionAPI {
+        return APIClient.retrofit(apiURL)
+                .create(FullTransactionAPI::class.java)
+    }
+
+    interface FullTransactionAPI {
+        @GET
+        @Headers("Content-Type: application/json")
+        fun getFullTransaction(@Url path: String): Flowable<JsonObject>
+    }
+
 }
 
 object APIClient {
