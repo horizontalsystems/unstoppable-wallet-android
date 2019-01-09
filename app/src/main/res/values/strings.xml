@@ -219,14 +219,14 @@
     <string name="Hud_Text_Error">Error</string>
     <string name="Hud_Text_NoInternet">No Internet</string>
     <string name="Hud_Text_Copied">Copied</string>
-    <string name="Hud_Text_InvalidPinError">Incorrect PIN</string>
+    <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
 
 
     <!--Fingerprint texts-->
 
     <string name="Fingerprint_DialogTitle">Fingerprint login</string>
     <string name="Fingerprint_Hint">Touch sensor</string>
-    <string name="Fingerprint_EnterPin">Enter PIN</string>
+    <string name="Fingerprint_EnterPin">Passcode</string>
     <string name="Fingerprint_NotRecognized">Fingerprint not recognized. Try again</string>
     <string name="Fingerprint_Success">Success!</string>
 
@@ -256,7 +256,7 @@
 
     <!--Manage Coins-->
 
-    <string name="ManageCoins_title">Manage Coins</string>
+    <string name="ManageCoins_title">Wallets</string>
     <string name="ManageCoins_save">Save</string>
 
 </resources>
