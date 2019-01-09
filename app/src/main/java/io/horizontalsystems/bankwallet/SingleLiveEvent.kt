@@ -31,8 +31,4 @@ class SingleLiveEvent<T> : MutableLiveData<T>() {
         value = null
     }
 
-    fun callX(value: T? = null) {
-        postValue(value)
-    }
-
 }

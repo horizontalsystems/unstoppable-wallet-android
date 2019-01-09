@@ -42,6 +42,7 @@ class AuthManager(private val secureStorage: ISecuredStorage, private val localS
         transactionManager?.clear()
         localStorage.clearAll()
 
+//        todo: clear authData from secureStorage
 //        secureStorage.clearAuthData()
         authData = null
 

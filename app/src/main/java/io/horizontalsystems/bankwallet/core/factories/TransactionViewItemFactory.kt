@@ -22,7 +22,6 @@ class TransactionViewItemFactory(
 
         val rateValue = when {
             record.rate != 0.0 -> record.rate
-//            DateHelper.getSecondsAgo(record.timestamp * 1000) < latestRateFallbackThreshold * 60 -> rateManager.latestRates[record.coinCode]?.get(currencyManager.baseCurrency.code)?.value
             else -> null
         }
 

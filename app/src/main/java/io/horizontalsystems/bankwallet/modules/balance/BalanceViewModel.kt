@@ -9,7 +9,6 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
 
     lateinit var delegate: BalanceModule.IViewDelegate
 
-    val titleLiveDate = MutableLiveData<Int>()
     val totalBalanceLiveData = MutableLiveData<CurrencyValue>()
     val openSendDialog = SingleLiveEvent<String>()
     val openReceiveDialog = SingleLiveEvent<String>()
@@ -28,15 +27,15 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     }
 
     override fun reload() {
-        reloadLiveEvent.callX()
+        reloadLiveEvent.postValue(null)
     }
 
     override fun updateItem(position: Int) {
-        reloadItemLiveEvent.callX(position)
+        reloadItemLiveEvent.postValue(position)
     }
 
     override fun updateHeader() {
-        reloadHeaderLiveEvent.callX()
+        reloadHeaderLiveEvent.postValue(null)
     }
 
     override fun openReceiveDialog(coin: String) {
@@ -55,29 +54,9 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
         delegate.onPay(position)
     }
 
-//    override fun setTitle(title: Int) {
-//        titleLiveDate.value = title
-//    }
-//
     override fun didRefresh() {
         didRefreshLiveEvent.call()
     }
-//
-//    override fun show(totalBalance: CurrencyValue?) {
-//        totalBalanceLiveData.value = totalBalance
-//    }
-//
-//    override fun show(wallets: List<BalanceViewItem>) {
-//        walletsLiveData.value = wallets
-//    }
-//
-//    override fun show(syncStatus: String) {
-//        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-//    }
-//
-//    override fun updateBalanceColor(color: Int) {
-//        balanceColorLiveDate.value = color
-//    }
 
     override fun openManageCoins() {
         openManageCoinsLiveEvent.call()
