@@ -19,18 +19,18 @@
     <string name="Guest_CreateWallet">Создать Кошелек</string>
     <string name="Guest_RestoreWallet">Восстановить Кошелек</string>
     <!--Restore-->
-    <string name="Restore_Title">Cекретный Ключ</string>
+    <string name="Restore_Title">Enter Secret Key</string>
     <string name="Restore_ValidationFailed">Неверный Секретный Ключ</string>
     <string name="Restore_RestoreFailed">Не удалось восстановить кошелек</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Секретный Ключ</string>
-    <string name="Backup_Intro_Subtitle">Ваш секретный ключ является единственным способом для восстановления вашего кошелька.\n\nМы покажем вам список слов, чтобы вы записали их на бумаге и хранили в безопасном месте.</string>
+    <string name="Backup_Intro_Subtitle">Your secret key is the only way to restore your wallet and funds if your phone is ever lost, stolen, broken, or upgraded.\n\n It consists of 12 words. Store it safely offline.</string>
     <string name="Backup_Intro_Later">Позже</string>
     <string name="Backup_Intro_BackupNow">Записать ключ</string>
     <string name="Backup_Words_Title">Секретный Ключ</string>
     <string name="Backup_Confirmation_Understand">Я понимаю, что мой кошелек и токены хранятся только на этом устройстве.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">Я понимаю, что если это приложение удаляется или устанавливается на другое устройство, мой кошелек можно восстановить только ключом, который я храню в безопасном месте.</string>
-    <string name="Backup_Confirmation_LockAppWarn">Изменение PIN-кода  блокировки телефона на вашем Android OS, сбросит кошелек . Вам необходима фраза резервного копирования для восстановления  вашего кошелька.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I have just written down and saved in a secure place.</string>
+    <string name="Backup_Confirmation_LockAppWarn">Changing the unlock PIN or deleting app data in your Android OS settings would reset the wallet. You will need your Secret Key to restore your wallet after that.</string>
     <string name="Backup_Confirmation_Title">Введите слова из вашего секретного ключа</string>
     <string name="Backup_Confirmation_Description">Введите слова из секретного ключа.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Слова не совпадают</string>
@@ -75,25 +75,26 @@
     <string name="Transactions_EmptyList">У Вас не было транзакций!</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Транзакция</string>
-    <string name="TransactionInfo_Status">Статус:</string>
-    <string name="TransactionInfo_Id">ID:</string>
-    <string name="TransactionInfo_To">Кому:</string>
-    <string name="TransactionInfo_From">От:</string>
-    <string name="TransactionInfo_ButtonMore">From:</string>
+    <string name="TransactionInfo_Status">Статус</string>
+    <string name="TransactionInfo_Id">ID</string>
+    <string name="TransactionInfo_To">Кому</string>
+    <string name="TransactionInfo_From">От</string>
+    <string name="TransactionInfo_Time">Время</string>
+    <string name="TransactionInfo_ButtonMore">Full Info</string>
     <!--Full Info-->
-    <string name="FullInfo_Title">Transaction</string>
+    <string name="FullInfo_Title">Full Info</string>
     <string name="FullInfo_Id">ID</string>
-    <string name="FullInfo_Status">Status</string>
-    <string name="FullInfo_Time">Time</string>
-    <string name="FullInfo_Block">Block</string>
-    <string name="FullInfo_Confirmations">Confirmations</string>
-    <string name="FullInfo_TotalInput">Total Input</string>
-    <string name="FullInfo_TotalOutput">Total Output</string>
-    <string name="FullInfo_Fee">Fee</string>
-    <string name="FullInfo_SubtitleFrom">From</string>
-    <string name="FullInfo_SubtitleInputs">Inputs</string>
-    <string name="FullInfo_SubtitleOutputs">Outputs</string>
-    <string name="FullInfo_SubtitleProvider">Data Provider</string>
+    <string name="FullInfo_Status">Статус</string>
+    <string name="FullInfo_Time">Время</string>
+    <string name="FullInfo_Block">Блок</string>
+    <string name="FullInfo_Confirmations">Подтверждения</string>
+    <string name="FullInfo_TotalInput">Всего Входов</string>
+    <string name="FullInfo_TotalOutput">Всего Выходов</string>
+    <string name="FullInfo_Fee">Комиссия</string>
+    <string name="FullInfo_SubtitleFrom">От</string>
+    <string name="FullInfo_SubtitleInputs">Входы</string>
+    <string name="FullInfo_SubtitleOutputs">Выходы</string>
+    <string name="FullInfo_SubtitleProvider">Источник</string>
     <string name="FullTransactionInfo_From">От</string>
     <string name="FullTransactionInfo_To">Кому</string>
     <string name="FullTransactionInfo_Amount">Сумма</string>
@@ -112,11 +113,11 @@
     <string name="Settings_Error_NoFingerprintAddedYet">У вас недоступен отпечаток пальцев на этом устройстве. Перейдите в настройки &gt; Безопасность и выберите отпечатки пальцев.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Отпечаток пальца</string>
-    <string name="SettingsSecurity_EditPin">Изменить PIN-код</string>
+    <string name="SettingsSecurity_EditPin">Edit Passcode</string>
     <string name="SettingsSecurity_BackupWallet">Записать Кошелёк</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">Отсоединить это устройство</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">Это действие удалит ваш кошелёк с этого устройства.</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_2">Убедитесь, что у вас есть свой секретный ключ, иначе вы не сможете получить доступ к денежным средствам.</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_2">Make sure you have backed up Secret Key or you will not be able to access your funds in the future.</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Базовая Валюта</string>
     <!--Setting_Language-->
@@ -136,8 +137,9 @@
     <string name="Alert_KeysInvalidatedDescription">Ваши зашифрованные данные были недавно аннулированы, потому что  Android lock screen был изменен</string>
     <string name="Alert_TitleWarning">Внимание</string>
     <string name="Alert_NoDeviceLockDescription">Установите блокировку экрана на этом устройстве. Перейдите в «Настройки» &gt; «Безопасность» &gt; «Блокировка экрана» и включите параметр экрана блокировки.</string>
+    <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
     <!--Unlock-->
-    <string name="Unlock_Page_EnterYourPin">Введите PIN-код</string>
+    <string name="Unlock_Page_EnterYourPin">Код</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Неподдерживаемая валюта</string>
     <!--Hud texts-->
@@ -156,18 +158,18 @@
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Отключено до: %s</string>
     <!--Set Pin-->
-    <string name="SetPin_Title">Установить PIN-код</string>
-    <string name="SetPin_Info">Ваш PIN-код будет использоваться для разблокировки кошелька</string>
+    <string name="SetPin_Title">Код</string>
+    <string name="SetPin_Info">Your passcode will be used to unlock wallet app</string>
     <string name="SetPin_ErrorShortPin">Пожалуйста, введите только символы цифр.</string>
-    <string name="SetPin_ConfirmInfo">Подтвердить PIN-код</string>
-    <string name="SetPin_Success">PIN-код блокировки успешно установлен!</string>
-    <string name="SetPin_ErrorPinsDontMatch">PIN-код не совпадает.</string>
-    <string name="SetPin_ErrorFailedToSavePin">При сохранении вашего PIN-код произошла ошибка. Повторите попытку.</string>
+    <string name="SetPin_ConfirmInfo">Подтвердить</string>
+    <string name="SetPin_Success">Lock passcode was set successfully!</string>
+    <string name="SetPin_ErrorPinsDontMatch">Код не совпадает. Попробуйте еще раз.</string>
+    <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">Обновить PIN-код</string>
-    <string name="EditPin_UnlockInfo">Введите текущий PIN-код</string>
-    <string name="EditPin_NewPinInfo">Введите новый PIN-код</string>
+    <string name="EditPin_Title">Изменить код</string>
+    <string name="EditPin_UnlockInfo">Текущий Код</string>
+    <string name="EditPin_NewPinInfo">Новый Код</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Manage Coins</string>
-    <string name="ManageCoins_save">Save</string>
+    <string name="ManageCoins_save">Сохранить</string>
 </resources>

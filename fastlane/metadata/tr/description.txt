@@ -1,16 +1,43 @@
-  Become your own bank!
-Wallet BANK is a secure and a fully decentralized crypto wallet app that supports major cryptocurrencies, including Bitcoin, Ethereum, Bitcoin Cash and ERC 20 tokens. The number of supported currencies being gradually added with every release.
-This BANK wallet provides a seamless way to get started with Bitcoin and other crypto currencies for masses. You don't need to understand the inner workings of cryptocurrencies to be able to use it.
-It has been built using best practices from the design of the interface to the implementation of blockchain protocols.
+  Paranızı Kontrol Edin!
+BANK Cüzdanı, Bitcoin, Ethereum, Bitcoin Cash ve ERC 20 de dahil olmak üzere büyük kripto para birimlerini destekleyen Android için güvenli ve tamamen merkezi olmayan bir şifreleme cüzdanı uygulamasıdır. 
+ Desteklenen para birimlerinin sayısı her sürümde gitgide artmaktadır.
 
-  Independent & Decentralized
-The BANK wallet is fully peer-to-peer and works without any centrally managed servers. It can't be stopped, blocked or taken down. The wallet connects directly to the currency networks i.e. Bitcoin without the need for intermediary. Such approach enables the BANK wallet to operate anywhere and remain censorship-resistant. Only the user is in control of the money.
-Most crypto wallet apps out there are centralized. The funds are stored on a remote server which is operated by the wallet provider. Due to the unregulated nature of the cryptocurrencies there are no mechanisms in place to guarantee that a wallet provider doesn't cheat or that provider's servers not get hacked.
-Being a fully decentralized app the BANK wallet implements all of its functionality in a decentralized manner. Every single feature in the app is implemented in a decentralized manner substantially increasing the security and privacy aspects of the wallet.
-There are no centrally managed servers that can fail, and as a result stop app from functioning.
+Bu BANK cüzdanı, büyük halk kitlelerine Bitcoin ve diğer kripto para birimlerini kullanmaya başlamak için kusursuz bir fırsat sağlar.  Kullanabilmek için kripto para birimlerinin iç işleyişini anlamanıza gerek yok.
 
-  Secure & Open Source
-The entire code of the BANK wallet is public and open-source, giving an option for anyone to analyze all of its code. It works exactly as shown in the code. It can't cheat!
-The BANK wallet stores user's private keys and funds encrypted on a device itself using secure native storage mechanisms provided by iOS and Android operating systems. Only user can access and use his or her funds.
-In case of a device loss or replacement the user may easily restore the wallet using a secret 12-word recovery phrase. Infact, with the help of these secret phrase the user may restore the wallet and access funds on any deterministic wallet (aka HD wallet) not just the BANK wallet
-NOTE: DO NOT install the BANK wallet on a jailbroken device due to substantial security risks. A jailbroken iOS or Android operating system cannot guarantee the security of your private keys. This means that some malicious app running on jailbroken device can potentially access the private keys for your funds and steal them.
+Arayüz tasarımından blok zincir protokollerinin uygulanmasına kadar en iyi uygulanan yöntemler kullanılarak oluşturulmuştur.
+
+  BAĞIMSIZ VE MERKEZİ OLMAYAN 
+
+BANK cüzdanı tamamen uçtan uca ağdır ve merkezi olarak yönetilen sunucular olmadan çalışır.  Durdurulamaz, engellenemez veya kaldırılamaz. Cüzdan, aracıya gerek kalmadan doğrudan para ağlarına, yani Bitcoin'e bağlanır.  Bu yaklaşım, BANK cüzdanının herhangi bir yerde çalışmasını ve sansürden etkilenmemesini sağlar.
+ Paranın kontrolü sadece kullanıcının elinde olur.
+
+Çoğu kripto cüzdan uygulamaları merkezileştirildi.  Fonlar cüzdan sağlayıcı tarafından işletilen uzak bir sunucuda saklanır. Kripto para birimlerinin düzensiz doğası nedeniyle, bir cüzdan sağlayıcısının aldatmamasını veya sağlayıcı sunucularının saldırıya uğramamasını sağlayacak hiçbir mekanizma yoktur.
+
+Tamamen merkezi olmayan bir uygulama olan BANK cüzdanı tüm işlevselliğini merkezi olmayan bir şekilde uygular. Uygulamadaki her bir özellik, cüzdanın güvenlik ve gizlilik özelliklerini büyük ölçüde artıran merkezi olmayan bir şekilde uygulanır.
+
+Başarısız olabilecek merkezi olarak yönetilen ve bunun sonucu olarak uygulamayı durdurabilen sunucular yoktur.
+
+
+  GÜVENLİ VE KAYNAĞI AÇIK 
+
+BANK cüzdan kodunun tamamı herkese ve kaynağı açıktır, herkesin kodu analiz etmesi için bir seçenek sunar. Kodda gösterildiği gibi çalışır. Hile yapamaz!
+BANK cüzdanı, Android işletim sistemleri tarafından sağlanan güvenli yerel depolama mekanizmalarını kullanarak, bir kullanıcının kendisine şifrelenmiş özel anahtarlarını ve fonlarını saklar.  Sadece kullanıcı fonlarına erişebilir ve onları kullanabilir.
+
+Cihazın kaybolması veya yenisiyle değiştirilmesi durumunda, kullanıcı gizli bir 12 kelimelik kurtarma ifadesi kullanarak cüzdanı kolayca geri yükleyebilir.  
+Ayrıca, bu gizli ifade yardımı ile kullanıcı cüzdanı geri yükleyebilir ve BANK cüzdanı dışındaki herhangi bir deterministik cüzdandaki (HD cüzdan olarak da bilinen) fonlarına erişebilir.
+ 
+
+NOT: BANK cüzdanını önemli güvenlik riskleri nedeniyle yazılımı kırılmış bir cihaza yüklemeyin. Kırılmış Android işletim sistemi, özel anahtarlarınızın güvenliğini garanti edemez. Bu, yazılımı kırılmış cihazınızda çalışan bazı kötü amaçlı uygulamaların fonlarınızın özel anahtarlarına erişebileceği ve bunları çalabileceği anlamına gelir.
+
+
+RED:
+
+1. Bu Cüzdan ilk günlerinde olduğu gibi, diğer tüm yazılım ürünlerinde olduğu gibi, belirli işlemlere erişimin kaybı gibi, cüzdanın sorun yaşamalarına neden olabilecek keşfedilmemiş sorunlara da sahip olabilir. Cüzdan tamamen tekrar tekrar test edilse de, hiç kimse hatasız olduğundan emin olamaz.
+ Herhangi bir kripto para birimi uygulamasından çok daha güvenli olduğuna inanıyoruz.
+
+2. BANK cüzdanını, önemli güvenlik riskleri nedeniyle hiçbir zaman yazılımı kırılmış veya kırık bir cihaza yüklemeyin. Yazılımı kırılmış iOS özel anahtarlarınızın güvenliğini garanti edemez. Bu, yazılımı kırılmış cihazınızda çalışan bazı kötü amaçlı uygulamaların fonlarınızın özel anahtarlarına erişebileceği ve bunları çalabileceği anlamına gelir.
+
+
+3. Kaynak: https://github.com/horizontalsystems
+
+

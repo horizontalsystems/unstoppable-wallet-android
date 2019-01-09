@@ -1,16 +1,36 @@
-  Become your own bank!
-Wallet BANK is a secure and a fully decentralized crypto wallet app that supports major cryptocurrencies, including Bitcoin, Ethereum, Bitcoin Cash and ERC 20 tokens. The number of supported currencies being gradually added with every release.
-This BANK wallet provides a seamless way to get started with Bitcoin and other crypto currencies for masses. You don't need to understand the inner workings of cryptocurrencies to be able to use it.
-It has been built using best practices from the design of the interface to the implementation of blockchain protocols.
+  Control Your Money!
+Die BANK-Geldbörse ist eine sichere und vollständig dezentralisierte Kryptobörse, die die wichtigsten Kryptowährungen einhält, darunter Bitcoin, Ethereum, Bitcoin Cash und ERC 20-Token. Die Anzahl der unterstützten Währungen wird mit jedem Release nach und nach hinzugefügt.
 
-  Independent & Decentralized
-The BANK wallet is fully peer-to-peer and works without any centrally managed servers. It can't be stopped, blocked or taken down. The wallet connects directly to the currency networks i.e. Bitcoin without the need for intermediary. Such approach enables the BANK wallet to operate anywhere and remain censorship-resistant. Only the user is in control of the money.
-Most crypto wallet apps out there are centralized. The funds are stored on a remote server which is operated by the wallet provider. Due to the unregulated nature of the cryptocurrencies there are no mechanisms in place to guarantee that a wallet provider doesn't cheat or that provider's servers not get hacked.
-Being a fully decentralized app the BANK wallet implements all of its functionality in a decentralized manner. Every single feature in the app is implemented in a decentralized manner substantially increasing the security and privacy aspects of the wallet.
-There are no centrally managed servers that can fail, and as a result stop app from functioning.
+Die BANK-Geldbörse gewährt sicheres Mittel, mit Bitcoins und anderen Kryptowährungen arbeiten anzufangen. Sie müssen die inneren Abläufe der Kryptowährung nicht verstehen, um sie verwenden zu können.
+Es wurde mit Best Practices entwickelt, vom Design bis zum Blockchain-Protokoll.
 
-  Secure & Open Source
-The entire code of the BANK wallet is public and open-source, giving an option for anyone to analyze all of its code. It works exactly as shown in the code. It can't cheat!
-The BANK wallet stores user's private keys and funds encrypted on a device itself using secure native storage mechanisms provided by iOS and Android operating systems. Only user can access and use his or her funds.
-In case of a device loss or replacement the user may easily restore the wallet using a secret 12-word recovery phrase. Infact, with the help of these secret phrase the user may restore the wallet and access funds on any deterministic wallet (aka HD wallet) not just the BANK wallet
-NOTE: DO NOT install the BANK wallet on a jailbroken device due to substantial security risks. A jailbroken iOS or Android operating system cannot guarantee the security of your private keys. This means that some malicious app running on jailbroken device can potentially access the private keys for your funds and steal them.
+
+
+  UNABHÄNGIG UND DEZENTRALISIERT
+Die BANK-Geldbörse ist vollständig dezentralisiert, die Funktionsfähigkeit dieser Anwendung ist unabhängig von Servern. Es kann nicht angehalten oder blockiert werden.  Die Geldbörse stellt eine direkte Verbindung zu Krypto-Währungsnetzwerken her, beispielsweise zu einem Bitcoin-Netzwerk.  Dieser Ansatz ermöglicht es der BANK-Geldbörse, ohne Einschränkungen überall zu funktionieren. Nur der Benutzer selbst kann über Geld in der Geldbörse verfügen.
+Die meisten Kryptobörsen sind zentralisiert. Die Geldmittel werden auf einem Remote-Server gespeichert, der vom Geldbörse-Anbieter verwaltet wird. Aufgrund der nicht regulierten Umgebung von Krypto-Währungen gibt es keine Mechanismen, die garantieren, dass der  Geldbörsenanbieter nicht betrügt oder dass die Server nicht gehackt werden.
+
+Als vollständig dezentralisierte Anwendung führt die BANK-Geldbörse alle Funktionen dezentral aus, wodurch die Sicherheit und Vertraulichkeit der BANK-Geldbörse deutlich erhöht wird.  
+Es gibt keine Server mit zentraler Steuerung, die ausfallen und die Anwendung daher stoppen könnten.
+
+
+  ZUVERLÄSSIGER UND OFFENER AUSGANGSCODE 
+Der gesamte Programmcode der BANK-Geldbörse ist öffentlich verfügbar, sodass jeder seinen gesamten Code analysieren kann. Alles funktioniert genauso, wie es im Code gezeigt wird. 
+ Es ist unmöglich, zu täuschen!
+In der  BANK-Geldbörse werden private Offlineschlüssel und verschlüsselte Mittel unter Verwendung sicherer Speichermechanismen für Android-Betriebssysteme gespeichert. Nur der Benutzer hat Zugriff auf das Geld in der BANK-Geldbörse. 
+
+Bei Verlust oder Austausch des Geräts kann der Benutzer die BANK-Geldbörse mit einem geheimen Satz aus 12 Wörtern leicht wiederherstellen.  
+Mit einem geheimen Satz kann der Benutzer die Geldbörse abrufen und auf das Geld in jeder deterministischen Geldbörse (auch als HD- wallet), nicht nur in der BANK-Geldbörse zugreifen.
+ 
+
+HINWEIS. Installieren Sie die BANK-Geldbörse auf einem gehackten Gerät wegen erheblicher Sicherheitsrisiken nicht.  Das gebrochene Android-Betriebssystem kann die Sicherheit Ihrer privaten Offlineschlüssel nicht gewährleisten. Dies bedeutet, dass einige schädliche Anwendungen, die auf einem gehackten Gerät funktionieren, Zugriff auf private Offlineschlüssel erhalten und Ihr Geld stehlen können.
+
+
+DISCLAIMER:
+
+1. This Wallet is in its early days and just like any other software product it may have undiscovered issues which may potentially result in wallet having problems, like say the loss of access to specific transactions. While the wallet has been thoroughly tested over and over no one can say for sure that it's error-free. We believe it to be very secure, more than any crypto currency app out there.
+
+2. DO NOT EVER install the BANK wallet on a jailbroken or tempered device due to substantial security risks. A jailbroken Android cannot guarantee the security of your private keys. This means that some malicious app running on jailbroken device can potentially access the private keys for your funds and steal them.
+
+3. Source Code: https://github.com/horizontalsystems
+

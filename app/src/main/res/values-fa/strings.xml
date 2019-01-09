@@ -19,18 +19,18 @@
     <string name="Guest_CreateWallet">کیف پول جدید</string>
     <string name="Guest_RestoreWallet">بازگرداندن كيف پول</string>
     <!--Restore-->
-    <string name="Restore_Title">رمز را وارد کنید</string>
+    <string name="Restore_Title">Enter Secret Key</string>
     <string name="Restore_ValidationFailed">کلید مخفی نادرست</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">رقم مخفی</string>
-    <string name="Backup_Intro_Subtitle">رمز مخيفي شما ميتواند كيف پول شما را دوباره پروگرام كند اگر تيليفون شما گم شود،خراب شود يا دزدي  شود پس هميشه رمز مخفي خود را پيش خود داشته باشد و فراموش نكيد.\n رمز مخفي ١٢ رقم ميخواهد.</string>
+    <string name="Backup_Intro_Subtitle">Your secret key is the only way to restore your wallet and funds if your phone is ever lost, stolen, broken, or upgraded.\n\n It consists of 12 words. Store it safely offline.</string>
     <string name="Backup_Intro_Later">بعداً</string>
     <string name="Backup_Intro_BackupNow">پيشتيباني</string>
     <string name="Backup_Words_Title">رقم مخفی</string>
     <string name="Backup_Confirmation_Understand">من فهميدم كي پول كيف من و توكن هاي من همه شان حفظ و امانط است در اين دستگاه و نخير در ديگر سيرفير ها.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">من فهميدم كي اگر اين اپليكيشن خذف يا انتقال كند به دستگاه ديگر,تنها من با رمز مخفي كي نوشتم كي ميتوانم دوباره دسترسي پيدا كنم.</string>
-    <string name="Backup_Confirmation_LockAppWarn">تعغير دادن رمز تيليفون در تنظيمات اندرايد كيف پول شما را بازنشاني ميكند. شما عبارت پيشتباني را لازم داريد تا دوباره كيف پول خود را بازنشاني كنيد.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I have just written down and saved in a secure place.</string>
+    <string name="Backup_Confirmation_LockAppWarn">Changing the unlock PIN or deleting app data in your Android OS settings would reset the wallet. You will need your Secret Key to restore your wallet after that.</string>
     <string name="Backup_Confirmation_Title">تعقيب كنيد حرف هاي رمز مخفي خود را</string>
     <string name="Backup_Confirmation_Description">حرف هاي رمز تات را وارد كنيد.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Words do not match</string>
@@ -75,13 +75,14 @@
     <string name="Transactions_EmptyList">شما معاملات نداشته ايد تا هنوز</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">معاملات</string>
-    <string name="TransactionInfo_Status">وضيعت:</string>
-    <string name="TransactionInfo_Id">شناس نامه:</string>
-    <string name="TransactionInfo_To">به:</string>
-    <string name="TransactionInfo_From">از:</string>
-    <string name="TransactionInfo_ButtonMore">From:</string>
+    <string name="TransactionInfo_Status">Status</string>
+    <string name="TransactionInfo_Id">ID</string>
+    <string name="TransactionInfo_To">To</string>
+    <string name="TransactionInfo_From">From</string>
+    <string name="TransactionInfo_Time">Time</string>
+    <string name="TransactionInfo_ButtonMore">Full Info</string>
     <!--Full Info-->
-    <string name="FullInfo_Title">Transaction</string>
+    <string name="FullInfo_Title">Full Info</string>
     <string name="FullInfo_Id">ID</string>
     <string name="FullInfo_Status">Status</string>
     <string name="FullInfo_Time">Time</string>
@@ -112,11 +113,11 @@
     <string name="Settings_Error_NoFingerprintAddedYet">اثر انگشت در اين دستگاه فعال نشده است.بر تنظيمات برويد&gt;قفل دستگاه تا با اثر انگشت دست يابي شود.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">اثر انگشت</string>
-    <string name="SettingsSecurity_EditPin">ويرايش پين</string>
+    <string name="SettingsSecurity_EditPin">Edit Passcode</string>
     <string name="SettingsSecurity_BackupWallet">پيشتيبان گيري كيف پول</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">لغو پيوند ازين دست گاه</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">اين اكشن از اين دستگاه و پول كيف ثبت شده خاظر حذف ميشود.</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_2">مطمعاً باشيد كي رمز مخفي را با خود داريد و گرنه شما در آينده توانايي دسترسي به منابع مالي نداريد.</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_2">Make sure you have backed up Secret Key or you will not be able to access your funds in the future.</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">ارز مرجع</string>
     <!--Setting_Language-->
@@ -138,10 +139,11 @@
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">اندرايد keystore خطا</string>
     <string name="Alert_KeysInvalidatedDescription">Data شما ديگر نامتعبر است بخاطر تعغير دادن قفل صفحه</string>
-    <string name="Alert_TitleWarning">هشدار</string>
+    <string name="Alert_TitleWarning">Warning</string>
     <string name="Alert_NoDeviceLockDescription">پرده نمايش را بر تيليفون خود ثبت نمايد برويد به تنظيمات&amp;gt امنيت&amp;gt قفل صفحه و روشن نمايد قفل صفحه را</string>
+    <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
     <!--Unlock-->
-    <string name="Unlock_Page_EnterYourPin">پين را وارد كنيد</string>
+    <string name="Unlock_Page_EnterYourPin">Passcode</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">پول رايج شده پيشيباني ندارد</string>
     <!--Hud texts-->
@@ -160,17 +162,17 @@
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Disabled until: %s</string>
     <!--Set Pin-->
-    <string name="SetPin_Title">تعيين پين</string>
-    <string name="SetPin_Info">پين شما استعمال خواهد شد براي باز نمودن اپليكيشن</string>
+    <string name="SetPin_Title">Passcode</string>
+    <string name="SetPin_Info">Your passcode will be used to unlock wallet app</string>
     <string name="SetPin_ErrorShortPin">لطفلاً تمام ارقام را وارد كنيد.</string>
-    <string name="SetPin_ConfirmInfo">تأیید پین</string>
-    <string name="SetPin_Success">پين قفل نمودن با موفقيت انجام شد!</string>
-    <string name="SetPin_ErrorPinsDontMatch">پين درست نبود. دوباره كوشش كنيد.</string>
-    <string name="SetPin_ErrorFailedToSavePin">خطا رخ داده است وقتي ثبت نمودن پين. لطفاً,دوباره كوشش كنيد.</string>
+    <string name="SetPin_ConfirmInfo">Confirm</string>
+    <string name="SetPin_Success">Lock passcode was set successfully!</string>
+    <string name="SetPin_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
+    <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">ويرايش پين</string>
-    <string name="EditPin_UnlockInfo">پين حال را وارد كنيد</string>
-    <string name="EditPin_NewPinInfo">پين قبلي را وارد كنيد</string>
+    <string name="EditPin_Title">Edit Passcode</string>
+    <string name="EditPin_UnlockInfo">Current Passcode</string>
+    <string name="EditPin_NewPinInfo">New Passcode</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Manage Coins</string>
     <string name="ManageCoins_save">Save</string>

@@ -1,16 +1,27 @@
-  Become your own bank!
-Wallet BANK is a secure and a fully decentralized crypto wallet app that supports major cryptocurrencies, including Bitcoin, Ethereum, Bitcoin Cash and ERC 20 tokens. The number of supported currencies being gradually added with every release.
-This BANK wallet provides a seamless way to get started with Bitcoin and other crypto currencies for masses. You don't need to understand the inner workings of cryptocurrencies to be able to use it.
-It has been built using best practices from the design of the interface to the implementation of blockchain protocols.
+  Control Your Money!
+钱包银行是一个安全且完全分散的加密钱包应用程序，支持主要加密货币，包括比特币，比特币Cash和ERC20代币。 支持货币的数量在每一个版本都会逐渐增加
+这个银行钱包向大众提供无缝地使用比特币和其他的加密货币的方式。 使用这个软件，您不需要了解加密货币的内部运作
+它用从接口设计领域里吸收最佳的做法来构建区块链协议的一种方法。
 
-  Independent & Decentralized
-The BANK wallet is fully peer-to-peer and works without any centrally managed servers. It can't be stopped, blocked or taken down. The wallet connects directly to the currency networks i.e. Bitcoin without the need for intermediary. Such approach enables the BANK wallet to operate anywhere and remain censorship-resistant. Only the user is in control of the money.
-Most crypto wallet apps out there are centralized. The funds are stored on a remote server which is operated by the wallet provider. Due to the unregulated nature of the cryptocurrencies there are no mechanisms in place to guarantee that a wallet provider doesn't cheat or that provider's servers not get hacked.
-Being a fully decentralized app the BANK wallet implements all of its functionality in a decentralized manner. Every single feature in the app is implemented in a decentralized manner substantially increasing the security and privacy aspects of the wallet.
-There are no centrally managed servers that can fail, and as a result stop app from functioning.
+  分散独立
+这种银行钱包是完全对等及分散管理的 它不能被停止、阻塞或取下 这个钱包无须其中的机构能直接连接货币网（其中包括比特币等等） 这种方法使银行钱包可以在任何地方运行并保持抗审查 这有用户控制自己的钱
+那边的大部分加密货币的钱包都是集中进行的 资金存储在由钱包提供商操作的远程服务器上 由于加密货币的不受监管性质, 没有任何机制能保证钱包提供商不会欺骗或该提供商的服务器不会被黑客攻击。
+作为完全分散的应用程序，银行钱包以分散的方式实现其所有功能 应用程序中的每个功能都以分散的方式实现, 大大提高了钱包的安全性和隐私性。
+没有集中管理的会发生故障（发生故障会导致应用程序停止运行）的服务器, 
 
-  Secure & Open Source
-The entire code of the BANK wallet is public and open-source, giving an option for anyone to analyze all of its code. It works exactly as shown in the code. It can't cheat!
-The BANK wallet stores user's private keys and funds encrypted on a device itself using secure native storage mechanisms provided by iOS and Android operating systems. Only user can access and use his or her funds.
-In case of a device loss or replacement the user may easily restore the wallet using a secret 12-word recovery phrase. Infact, with the help of these secret phrase the user may restore the wallet and access funds on any deterministic wallet (aka HD wallet) not just the BANK wallet
-NOTE: DO NOT install the BANK wallet on a jailbroken device due to substantial security risks. A jailbroken iOS or Android operating system cannot guarantee the security of your private keys. This means that some malicious app running on jailbroken device can potentially access the private keys for your funds and steal them.
+  安全及开放源代码
+银行钱包的整个代码是公开及开源的, 任何人都可以来分析它的所有代码。 它的工作方式与代码中所示完全相同。  它不会被欺骗！
+The BANK wallet stores user's private keys and funds encrypted on a device itself using secure native storage mechanisms provided by Android operating systems. 只有用户才能查看和使用其资金。
+在设备丢失或更换的情况下, 用户可以使用12词的密钥来轻松地恢复钱包。 
+In fact, with the help of these secret phrase the user may restore the wallet and access funds on any deterministic wallet (aka HD wallet) not just the BANK wallet 
+
+注意: 由于存在严重的安全风险, 请勿将银行钱包安装在越狱的设备上。 A jailbroken Android operating system cannot guarantee the security of your private keys. 这意味着在越狱设备上运行的一些恶意应用程序可能会存取您的资金甚至窃取它们。
+
+DISCLAIMER:
+
+1. This Wallet is in its early days and just like any other software product it may have undiscovered issues which may potentially result in wallet having problems, like say the loss of access to specific transactions. While the wallet has been thoroughly tested over and over no one can say for sure that it's error-free. We believe it to be very secure, more than any crypto currency app out there.
+
+2. DO NOT EVER install the BANK wallet on a jailbroken or tempered device due to substantial security risks. A jailbroken Android cannot guarantee the security of your private keys. This means that some malicious app running on jailbroken device can potentially access the private keys for your funds and steal them.
+
+3. Source Code: https://github.com/horizontalsystems
+

@@ -19,18 +19,18 @@
     <string name="Guest_CreateWallet">Wallet Erstellen</string>
     <string name="Guest_RestoreWallet">Geldbörse Wiederherstellen</string>
     <!--Restore-->
-    <string name="Restore_Title">Offlineschlüssel eingeben</string>
+    <string name="Restore_Title">Enter Secret Key</string>
     <string name="Restore_ValidationFailed">Falscher Offlineschlüssel</string>
     <string name="Restore_RestoreFailed">Fehler beim Wiederherstellen des Geldbörse</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Sicherung</string>
-    <string name="Backup_Intro_Subtitle">Dein Offlineschlüssel ist die einzige Möglichkeit, deine Geldbörse wiederherzustellen, falls du dein Smartphone verlierst, austauscht, es gestohlen wird oder kaputtgeht. \n\n Hierfür zeigen wir die eine Liste von Wörtern an, damit du sie dir auf ein Stück Papier notieren kannst, das es sicher aufzubewahren  gilt.</string>
+    <string name="Backup_Intro_Subtitle">Your secret key is the only way to restore your wallet and funds if your phone is ever lost, stolen, broken, or upgraded.\n\n It consists of 12 words. Store it safely offline.</string>
     <string name="Backup_Intro_Later">Später</string>
     <string name="Backup_Intro_BackupNow">Sicherung</string>
     <string name="Backup_Words_Title">Sicherung</string>
     <string name="Backup_Confirmation_Understand">Ich verstehe, dass meine Geldbörse und Token auf diesem Gerät nur ist.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">Ich verstehe, dass wenn diese app auf ein anderes Gerät verschoben wird oder gelöscht, mein Wallet nur mit dem backup-Satz wiederhergestellt werden können, die ich aufgeschrieben und an einem sicheren Ort gespeichert.</string>
-    <string name="Backup_Confirmation_LockAppWarn">PIN zum Entsperren des Telefons ändern in Ihrem Android OS würde Einstellungen die Geldbörse. Sie benötigen Ihr backup Satz Ihrer Geldbörse danach wiederherstellen.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I have just written down and saved in a secure place.</string>
+    <string name="Backup_Confirmation_LockAppWarn">Changing the unlock PIN or deleting app data in your Android OS settings would reset the wallet. You will need your Secret Key to restore your wallet after that.</string>
     <string name="Backup_Confirmation_Title">Gib die folgenden Wörter deines Offlineschlüssels ein</string>
     <string name="Backup_Confirmation_Description">Gib die folgenden Wörter deines Offlineschlüssels ein.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Die eingegebenen Passwörter stimmen nicht überein</string>
@@ -75,25 +75,26 @@
     <string name="Transactions_EmptyList">Noch keine Transaktionen vorhanden</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Transaktion</string>
-    <string name="TransactionInfo_Status">Status:</string>
-    <string name="TransactionInfo_Id">ID:</string>
-    <string name="TransactionInfo_To">An:</string>
-    <string name="TransactionInfo_From">Von:</string>
-    <string name="TransactionInfo_ButtonMore">From:</string>
+    <string name="TransactionInfo_Status">Status</string>
+    <string name="TransactionInfo_Id">ID</string>
+    <string name="TransactionInfo_To">An</string>
+    <string name="TransactionInfo_From">Von</string>
+    <string name="TransactionInfo_Time">Zeit</string>
+    <string name="TransactionInfo_ButtonMore">Volle Info</string>
     <!--Full Info-->
-    <string name="FullInfo_Title">Transaction</string>
+    <string name="FullInfo_Title">Volle Info</string>
     <string name="FullInfo_Id">ID</string>
     <string name="FullInfo_Status">Status</string>
-    <string name="FullInfo_Time">Time</string>
+    <string name="FullInfo_Time">Zeit</string>
     <string name="FullInfo_Block">Block</string>
-    <string name="FullInfo_Confirmations">Confirmations</string>
-    <string name="FullInfo_TotalInput">Total Input</string>
-    <string name="FullInfo_TotalOutput">Total Output</string>
-    <string name="FullInfo_Fee">Fee</string>
-    <string name="FullInfo_SubtitleFrom">From</string>
-    <string name="FullInfo_SubtitleInputs">Inputs</string>
-    <string name="FullInfo_SubtitleOutputs">Outputs</string>
-    <string name="FullInfo_SubtitleProvider">Data Provider</string>
+    <string name="FullInfo_Confirmations">Bestätigungen</string>
+    <string name="FullInfo_TotalInput">Insgesamt Eingang</string>
+    <string name="FullInfo_TotalOutput">Insgesamte Ausgänge</string>
+    <string name="FullInfo_Fee">Gebühr</string>
+    <string name="FullInfo_SubtitleFrom">Von</string>
+    <string name="FullInfo_SubtitleInputs">Eingänge</string>
+    <string name="FullInfo_SubtitleOutputs">Ausgänge</string>
+    <string name="FullInfo_SubtitleProvider">Datenanbieter</string>
     <string name="FullTransactionInfo_From">Von</string>
     <string name="FullTransactionInfo_To">An</string>
     <string name="FullTransactionInfo_Amount">Betrag</string>
@@ -112,11 +113,11 @@
     <string name="Settings_Error_NoFingerprintAddedYet">Fingerabdruck auf diesem Gerät aktiviert nicht. Gehen Sie zu Einstellungen &gt; Sicherheit Fingerabdruck einrichten.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Fingerabdruck</string>
-    <string name="SettingsSecurity_EditPin">PIN aktualisieren</string>
+    <string name="SettingsSecurity_EditPin">Edit Passcode</string>
     <string name="SettingsSecurity_BackupWallet">Wallet sichern</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">Verknüpfung mit diesem Gerät aufheben</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">Diese Aktion entfernt deine Geldbörse von diesem Gerät.</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_2">Stellen Sie sicher, Sie haben ihre geheimen Offlineschlüssel oder Sie werden nicht in der Lage, den Zugang zu Mitteln darauf in Zukunft.</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_2">Make sure you have backed up Secret Key or you will not be able to access your funds in the future.</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Basiswährung</string>
     <!--Setting_Language-->
@@ -137,8 +138,9 @@ Hack dein Telefon nicht, installier keine Anwendungen von inoffiziellen Quellen 
     <string name="Alert_KeysInvalidatedDescription">Deine verschlüsselten Daten wurden kürzlich ungültig gemacht, weil dein Android-Sperrbildschirm geändert wurde</string>
     <string name="Alert_TitleWarning">Warnung</string>
     <string name="Alert_NoDeviceLockDescription">Richten Sie ein Sperrbildschirm auf diesem Gerät weiter. Gehen Sie auf \"Einstellungen\" &gt; \"Security\" &gt; \"Bildschirmsperre\" und aktivieren Sie die Sperre Bildschirmeinstellung.</string>
+    <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
     <!--Unlock-->
-    <string name="Unlock_Page_EnterYourPin">Gib deine PIN ein</string>
+    <string name="Unlock_Page_EnterYourPin">Passcode</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Nicht unterstützte Währung</string>
     <!--Hud texts-->
@@ -157,18 +159,18 @@ Hack dein Telefon nicht, installier keine Anwendungen von inoffiziellen Quellen 
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Deaktiviert bis: %s </string>
     <!--Set Pin-->
-    <string name="SetPin_Title">PIN festlegen</string>
-    <string name="SetPin_Info">Deine PIN wird verwendet, um deine Geldbörse zu entsperren</string>
+    <string name="SetPin_Title">Passcode</string>
+    <string name="SetPin_Info">Your passcode will be used to unlock wallet app</string>
     <string name="SetPin_ErrorShortPin">Gib bitte nur Zahlen ein.</string>
-    <string name="SetPin_ConfirmInfo">PIN bestätigen</string>
-    <string name="SetPin_Success">Lock PIN wurde erfolgreich gesetzt!</string>
-    <string name="SetPin_ErrorPinsDontMatch">PIN stimmt nicht überein.</string>
-    <string name="SetPin_ErrorFailedToSavePin">Beim Speichern Ihres PIN ist leider ein Fehler aufgetreten. Bitte versuchen es erneut.</string>
+    <string name="SetPin_ConfirmInfo">Confirm</string>
+    <string name="SetPin_Success">Lock passcode was set successfully!</string>
+    <string name="SetPin_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
+    <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">PIN bearbeiten</string>
-    <string name="EditPin_UnlockInfo">Gib deine derzeitige PIN ein</string>
-    <string name="EditPin_NewPinInfo">Gib neuen PIN ein</string>
+    <string name="EditPin_Title">Edit Passcode</string>
+    <string name="EditPin_UnlockInfo">Current Passcode</string>
+    <string name="EditPin_NewPinInfo">New Passcode</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Manage Coins</string>
-    <string name="ManageCoins_save">Save</string>
+    <string name="ManageCoins_title">Coins Verwalten</string>
+    <string name="ManageCoins_save">Speichern</string>
 </resources>
