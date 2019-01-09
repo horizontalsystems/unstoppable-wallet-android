@@ -37,11 +37,14 @@ class TransactionViewItemFactory(
 
             val confirmations = lastBlockHeight - record.blockHeight + 1
 
-            val threshold = adapter.confirmationsThreshold
+            if (confirmations >= 0) {
 
-            status = when {
-                confirmations >= threshold -> TransactionStatus.Completed
-                else -> TransactionStatus.Processing((confirmations / threshold.toDouble()).times(100).toInt())
+                val threshold = adapter.confirmationsThreshold
+
+                status = when {
+                    confirmations >= threshold -> TransactionStatus.Completed
+                    else -> TransactionStatus.Processing(confirmations.toInt())
+                }
             }
         }
 

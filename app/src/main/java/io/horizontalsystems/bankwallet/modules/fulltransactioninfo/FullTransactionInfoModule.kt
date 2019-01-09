@@ -50,7 +50,7 @@ object FullTransactionInfoModule {
 //        interactor.delegate = presenter
     }
 
-    fun start(activity: FragmentActivity, adapterId: String, transactionId: String) {
+    fun start(activity: FragmentActivity, adapterId: String = "", transactionId: String = "") {
         FullTransactionInfoActivity.start(activity, adapterId, transactionId)
     }
 

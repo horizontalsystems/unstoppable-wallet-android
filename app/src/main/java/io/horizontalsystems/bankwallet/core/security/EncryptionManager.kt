@@ -83,7 +83,7 @@ class EncryptionManager : IEncryptionManager {
         }
 
         fun showNoDeviceLockWarning(activity: FragmentActivity) {
-            AlertDialogFragment.newInstance(R.string.Alert_NoDeviceLockTitle, R.string.Alert_NoDeviceLockDescription, R.string.Alert_Close,
+            AlertDialogFragment.newInstance(R.string.Alert_TitleWarning, R.string.Alert_NoDeviceLockDescription, R.string.Alert_Close,
                     object : AlertDialogFragment.Listener {
                         override fun onButtonClick() {
                             activity.finish()

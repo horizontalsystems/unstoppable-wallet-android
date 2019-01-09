@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.transactionInfo
+package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.verify
@@ -14,7 +14,7 @@ import org.mockito.Mockito.mock
 
 class TransactionInfoInteractorTest {
 
-    private val delegate = mock(TransactionInfoModule.IInteractorDelegate::class.java)
+    private val delegate = mock(TransactionInfoModule.InteractorDelegate::class.java)
     private val clipboardManager = mock(IClipboardManager::class.java)
     private val transactionRepository = mock(ITransactionRecordStorage::class.java)
 
@@ -45,11 +45,5 @@ class TransactionInfoInteractorTest {
         interactor.onCopy(value)
         verify(clipboardManager).copyText(value)
     }
-
-//    @Test
-//    fun showFullInfo() {
-//        interactor.showFullInfo()
-//        verify(delegate).showFullInfo(any())
-//    }
 
 }
