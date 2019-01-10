@@ -20,11 +20,13 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputConnection
 import android.widget.*
 import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.pin.NumPadItemType
 import io.horizontalsystems.bankwallet.ui.extensions.NumPadItem
+import io.horizontalsystems.bankwallet.ui.extensions.NumPadItemType
 import io.horizontalsystems.bankwallet.ui.extensions.NumPadItemsAdapter
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
@@ -37,8 +39,9 @@ import java.util.concurrent.TimeUnit
 class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.Listener {
 
     private lateinit var viewModel: SendViewModel
-    private var amountEditTxt: EditText? = null
+    private var inputConnection: InputConnection? = null
 
+    private var amountEditTxt: EditText? = null
     private val amountChangeSubject: PublishSubject<Double> = PublishSubject.create()
 
     private var coin: String? = null
@@ -70,14 +73,14 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
 
         mDialog?.setOnShowListener(object : DialogInterface.OnShowListener {
             override fun onShow(dialog: DialogInterface?) {
-                val bottomSheet = mDialog.findViewById<FrameLayout>(android.support.design.R.id.design_bottom_sheet)
+                val bottomSheet = mDialog.findViewById<View>(android.support.design.R.id.design_bottom_sheet)
                 BottomSheetBehavior.from(bottomSheet).state = BottomSheetBehavior.STATE_EXPANDED
                 BottomSheetBehavior.from(bottomSheet).isFitToContents = true
             }
         })
 
 
-        val numpadAdapter = NumPadItemsAdapter(this)
+        val numpadAdapter = NumPadItemsAdapter(this, NumPadItemType.DOT)
 
         val numpadRecyclerView = mDialog?.findViewById<RecyclerView>(R.id.numPadItemsRecyclerView)
         val hintInfoTxt: TextView? = mDialog?.findViewById(R.id.txtHintInfo)
@@ -94,6 +97,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
         val sendButton: Button? = mDialog?.findViewById(R.id.btnSend)
 
         amountEditTxt?.showSoftInputOnFocus = false
+        inputConnection = amountEditTxt?.onCreateInputConnection(EditorInfo())
         sendButton?.isEnabled = false
 
         switchButton?.setOnClickListener { viewModel.delegate.onSwitchClicked() }
@@ -179,7 +183,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
 
             if (amountNumber > 0) {
                 amountEditTxt?.setText(BigDecimal.valueOf(amountNumber).toPlainString())
-//                amountEditTxt?.setSelection(amountEditTxt.text.length)
+                amountEditTxt?.setSelection(amountEditTxt?.text?.length ?: 0)
             }
         })
 
@@ -251,12 +255,12 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
 
     override fun onItemClick(item: NumPadItem) {
         when (item.type) {
-            NumPadItemType.NUMBER -> {
-//                amountEditTxt?.append(item.number.toString())
-//                viewModel.delegate.onEnter(item.number.toString())
-            }
-            NumPadItemType.DELETE -> {
-//                viewModel.delegate.onDelete()
+            NumPadItemType.NUMBER -> inputConnection?.commitText(item.number.toString(), 1)
+            NumPadItemType.DELETE -> inputConnection?.deleteSurroundingText(1, 0)
+            NumPadItemType.DOT -> {
+                if (amountEditTxt?.text?.toString()?.contains(".") != true) {
+                    inputConnection?.commitText(".", 1)
+                }
             }
         }
     }

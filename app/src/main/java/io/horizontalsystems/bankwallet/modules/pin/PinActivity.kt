@@ -25,13 +25,13 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.security.FingerprintAuthenticationDialogFragment
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.ui.extensions.NumPadItem
+import io.horizontalsystems.bankwallet.ui.extensions.NumPadItemType
 import io.horizontalsystems.bankwallet.ui.extensions.NumPadItemsAdapter
 import io.horizontalsystems.bankwallet.ui.extensions.SmoothLinearLayoutManager
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_pin.*
 import kotlinx.android.synthetic.main.custom_tall_toolbar.*
-
 
 
 class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuthenticationDialogFragment.Callback {
@@ -69,7 +69,7 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
         viewModel = ViewModelProviders.of(this).get(PinViewModel::class.java)
         viewModel.init(interactionType)
 
-        val numpadAdapter = NumPadItemsAdapter(this)
+        val numpadAdapter = NumPadItemsAdapter(this, NumPadItemType.FINGER)
 
         numPadItemsRecyclerView.adapter = numpadAdapter
         numPadItemsRecyclerView.layoutManager = GridLayoutManager(this, 3)
@@ -108,7 +108,7 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
 
         viewModel.showErrorForPage.observe(this, Observer { errorForPage ->
             errorForPage?.let { (error, pageIndex) ->
-                pinPagesAdapter.setErrorForPage(pageIndex, error?.let { getString(error) } ?: null )
+                pinPagesAdapter.setErrorForPage(pageIndex, error?.let { getString(error) } ?: null)
             }
         })
 
@@ -185,15 +185,9 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
 
     override fun onItemClick(item: NumPadItem) {
         when (item.type) {
-            NumPadItemType.NUMBER -> {
-                viewModel.delegate.onEnter(item.number.toString(), layoutManager.findFirstVisibleItemPosition())
-            }
-            NumPadItemType.DELETE -> {
-                viewModel.delegate.onDelete(layoutManager.findFirstVisibleItemPosition())
-            }
-            NumPadItemType.FINGER -> {
-                viewModel.delegate.showBiometricUnlock()
-            }
+            NumPadItemType.NUMBER -> viewModel.delegate.onEnter(item.number.toString(), layoutManager.findFirstVisibleItemPosition())
+            NumPadItemType.DELETE -> viewModel.delegate.onDelete(layoutManager.findFirstVisibleItemPosition())
+            NumPadItemType.FINGER -> viewModel.delegate.showBiometricUnlock()
         }
     }
 
@@ -228,10 +222,6 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
             App.instance.startActivity(intent)
         }
     }
-}
-
-enum class NumPadItemType {
-    NUMBER, DELETE, FINGER
 }
 
 //PinPage part

@@ -8,9 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.pin.NumPadItemType
 
-class NumPadItemsAdapter(private val listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class NumPadItemsAdapter(private val listener: Listener, bottomLeftButtonType: NumPadItemType) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface Listener {
         fun onItemClick(item: NumPadItem)
@@ -26,9 +25,9 @@ class NumPadItemsAdapter(private val listener: Listener) : RecyclerView.Adapter<
             NumPadItem(NumPadItemType.NUMBER, 7, "pqrs"),
             NumPadItem(NumPadItemType.NUMBER, 8, "tuv"),
             NumPadItem(NumPadItemType.NUMBER, 9, "wxyz"),
-            NumPadItem(NumPadItemType.FINGER, 0, "FINGER"),
+            NumPadItem(bottomLeftButtonType, 0, "Bottom Left"),
             NumPadItem(NumPadItemType.NUMBER, 0, ""),
-            NumPadItem(NumPadItemType.DELETE, 0, "DEL")
+            NumPadItem(NumPadItemType.DELETE, 0, "Bottom Right")
     )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -48,11 +47,15 @@ class NumPadItemsAdapter(private val listener: Listener) : RecyclerView.Adapter<
             holder.bind(numPadItems[position], showFingerPrintButton) { listener.onItemClick(numPadItems[position]) }
         }
     }
+
 }
 
 
 data class NumPadItem(val type: NumPadItemType, val number: Int, val letters: String)
 
+enum class NumPadItemType {
+    NUMBER, DELETE, FINGER, DOT
+}
 
 class NumPadItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -102,6 +105,13 @@ class NumPadItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 itemView.background = null
                 imgFingerprint.visibility = if (isFingerprintEnabled) View.VISIBLE else View.GONE
             }
+
+            NumPadItemType.DOT -> {
+                itemView.background = null
+                txtNumber.text = "."
+                txtNumber.visibility = View.VISIBLE
+            }
+
         }
     }
 }
