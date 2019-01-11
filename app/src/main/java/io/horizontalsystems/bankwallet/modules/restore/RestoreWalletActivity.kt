@@ -13,11 +13,12 @@ import io.horizontalsystems.bankwallet.core.Utils
 import io.horizontalsystems.bankwallet.lib.EditTextViewHolder
 import io.horizontalsystems.bankwallet.lib.WordsInputAdapter
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
+import io.horizontalsystems.bankwallet.ui.dialogs.BottomConfirmAlert
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.activity_restore_wallet.*
 
-class RestoreWalletActivity : BaseActivity() {
+class RestoreWalletActivity : BaseActivity(), BottomConfirmAlert.Listener {
 
     private lateinit var viewModel: RestoreViewModel
 
@@ -57,6 +58,15 @@ class RestoreWalletActivity : BaseActivity() {
             }
         })
 
+        viewModel.showConfirmationDialogLiveEvent.observe(this, Observer {
+            val confirmationList = mutableListOf(
+                    R.string.Backup_Confirmation_Understand,
+                    R.string.Backup_Confirmation_DeleteAppWarn,
+                    R.string.Backup_Confirmation_LockAppWarn
+            )
+            BottomConfirmAlert.show(this, confirmationList, this)
+        })
+
         recyclerInputs.adapter = WordsInputAdapter(object : EditTextViewHolder.WordsChangedListener {
             override fun set(position: Int, value: String) {
                 words[position] = value
@@ -87,4 +97,7 @@ class RestoreWalletActivity : BaseActivity() {
         }
     }
 
+    override fun onConfirmationSuccess() {
+        viewModel.delegate.didConfirm(words)
+    }
 }

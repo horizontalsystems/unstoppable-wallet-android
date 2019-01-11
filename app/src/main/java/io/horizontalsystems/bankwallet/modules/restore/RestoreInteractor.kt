@@ -14,26 +14,29 @@ class RestoreInteractor(
 
     var delegate: RestoreModule.IInteractorDelegate? = null
 
-    override fun restore(words: List<String>) {
+    override fun validate(words: List<String>) {
         try {
             wordsManager.validate(words)
-
-            keystoreSafeExecute.safeExecute(
-                    action = Runnable {
-                        authManager.login(words)
-                    },
-                    onSuccess = Runnable {
-                        wordsManager.isBackedUp = true
-                        localStorage.iUnderstand = true
-                        delegate?.didRestore()
-                    },
-                    onFailure = Runnable {
-                        delegate?.didFailToRestore(RestoreModule.RestoreFailedException())
-                    }
-            )
+            delegate?.didValidate()
         } catch (e: Mnemonic.MnemonicException) {
-            delegate?.didFailToRestore(e)
+            delegate?.didFailToValidate(e)
         }
+    }
+
+    override fun restore(words: List<String>) {
+        keystoreSafeExecute.safeExecute(
+                action = Runnable {
+                    authManager.login(words)
+                },
+                onSuccess = Runnable {
+                    wordsManager.isBackedUp = true
+                    localStorage.iUnderstand = true
+                    delegate?.didRestore()
+                },
+                onFailure = Runnable {
+                    delegate?.didFailToRestore(RestoreModule.RestoreFailedException())
+                }
+        )
     }
 
 }

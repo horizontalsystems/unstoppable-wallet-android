@@ -9,19 +9,24 @@ object RestoreModule {
 
     interface IView {
         fun showError(error: Int)
+        fun showConfirmationDialog()
     }
 
     interface IViewDelegate {
         fun restoreDidClick(words: List<String>)
+        fun didConfirm(words: List<String>)
     }
 
     interface IInteractor {
         fun restore(words: List<String>)
+        fun validate(words: List<String>)
     }
 
     interface IInteractorDelegate {
         fun didRestore()
         fun didFailToRestore(exception: Exception)
+        fun didFailToValidate(exception: Exception)
+        fun didValidate()
     }
 
     interface IRouter {

@@ -3,10 +3,12 @@ package io.horizontalsystems.bankwallet.modules.restore
 import com.nhaarman.mockito_kotlin.KArgumentCaptor
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.argumentCaptor
+import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.managers.AuthManager
 import io.horizontalsystems.bankwallet.core.managers.WordsManager
+import io.horizontalsystems.hdwalletkit.Mnemonic
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Captor
@@ -87,6 +89,22 @@ class RestoreInteractorTest {
 
         verify(delegate).didFailToRestore(any())
         verifyNoMoreInteractions(delegate)
+    }
+
+    @Test
+    fun validate() {
+        val words = listOf("yahoo", "google", "facebook")
+        interactor.validate(words)
+        verify(delegate).didValidate()
+    }
+
+    @Test
+    fun validate_failed() {
+        val words = listOf("yahoo", "google", "facebook")
+        val mnemonicException = Mnemonic.MnemonicException("error")
+        whenever(wordsManager.validate(words)).thenThrow(mnemonicException)
+        interactor.validate(words)
+        verify(delegate).didFailToValidate(mnemonicException)
     }
 
 }
