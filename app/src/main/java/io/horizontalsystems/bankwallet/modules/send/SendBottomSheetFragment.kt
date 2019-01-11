@@ -70,7 +70,6 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
         val mDialog = activity?.let { BottomSheetDialog(it, R.style.BottomDialog) }
         mDialog?.setContentView(R.layout.fragment_bottom_sheet_pay)
 
-
         mDialog?.setOnShowListener(object : DialogInterface.OnShowListener {
             override fun onShow(dialog: DialogInterface?) {
                 val bottomSheet = mDialog.findViewById<View>(android.support.design.R.id.design_bottom_sheet)
@@ -78,7 +77,6 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
                 BottomSheetBehavior.from(bottomSheet).isFitToContents = true
             }
         })
-
 
         val numpadAdapter = NumPadItemsAdapter(this, NumPadItemType.DOT)
 
@@ -140,7 +138,16 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
         viewModel.hintInfoLiveData.observe(this, Observer { hintInfo ->
 
             hintInfo?.let { hint ->
-                addressTxt?.resources?.getColor(if (hint is SendModule.HintInfo.ErrorInfo) R.color.red_warning else R.color.dark, null)?.let { hintInfoTxt?.setTextColor(it) }
+
+                if (hint is SendModule.HintInfo.ErrorInfo) {
+                    hintInfoTxt?.let { it.setTextColor(it.resources.getColor(R.color.red_warning, null)) }
+                } else {
+                    activity?.theme?.let { theme ->
+                        LayoutHelper.getAttr(R.attr.BottomDialogTextColor, theme)?.let {
+                            hintInfoTxt?.setTextColor(it)
+                        }
+                    }
+                }
 
                 when (hint) {
                     is SendModule.HintInfo.Amount -> {
@@ -191,13 +198,6 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
             deleteAddressButton?.visibility = if (addressInfo == null) View.GONE else View.VISIBLE
             pasteButton?.visibility = if (addressInfo == null) View.VISIBLE else View.GONE
             scanBarcodeButton?.visibility = if (addressInfo == null) View.VISIBLE else View.GONE
-            addressTxt?.setTextColor(addressTxt.resources.getColor(if (addressInfo == null) R.color.steel_grey else R.color.dark, null))
-
-            if (addressInfo == null) {
-                addressErrorTxt?.visibility = View.GONE
-                addressTxt?.text = ""
-                addressTxt?.text = addressTxt?.context?.getString(R.string.Send_Hint_Address)
-            }
 
             addressInfo?.let {
                 when (it) {
@@ -211,6 +211,9 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
                         addressErrorTxt?.visibility = View.VISIBLE
                     }
                 }
+            } ?: run {
+                addressErrorTxt?.visibility = View.GONE
+                addressTxt?.text = ""
             }
         })
 

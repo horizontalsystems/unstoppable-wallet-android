@@ -35,6 +35,12 @@
     <attr name="TransactionDetailValueTextColor" format="reference|color" />
     <attr name="TransactionDetailBottomBarBackground" format="reference|color" />
     <attr name="BottomTransactionInfoBackground" format="reference|color" />
+    <attr name="BottomSendBackground" format="reference|color" />
+    <attr name="BottomSendInputBackground" format="reference|color" />
+    <attr name="BottomSendButtonColor" format="reference|color" />
+    <attr name="BottomSendButtonHighlightedColor" format="reference|color" />
+    <attr name="BottomSendImageButtonTint" format="reference|color" />
+    <attr name="BottomDialogTextColor" format="reference|color" />
     <attr name="CurrencySwitcherTitleColor" format="reference|color" />
     <attr name="PendingTransactionShadeColor" format="reference|color" />
     <attr name="PinScreenBackground" format="reference|color" />
@@ -88,6 +94,12 @@
         <item name="TransactionDetailValueTextColor">@color/bars_color</item>
         <item name="TransactionDetailBottomBarBackground">@color/dark</item>
         <item name="BottomTransactionInfoBackground">@color/dark</item>
+        <item name="BottomSendBackground">@color/dark</item>
+        <item name="BottomSendInputBackground">@color/grey_20</item>
+        <item name="BottomSendButtonColor">@color/grey_20</item>
+        <item name="BottomSendButtonHighlightedColor">@color/grey_50</item>
+        <item name="BottomSendImageButtonTint">@color/white</item>
+        <item name="BottomDialogTextColor">@color/white</item>
         <item name="CurrencySwitcherTitleColor">@color/bars_color</item>
         <item name="PendingTransactionShadeColor">@color/dark_50</item>
         <item name="PinScreenBackground">@color/dark</item>
@@ -141,6 +153,12 @@
         <item name="TransactionDetailValueTextColor">@color/dark</item>
         <item name="TransactionDetailBottomBarBackground">#f5fafafa</item>
         <item name="BottomTransactionInfoBackground">@color/bars_color</item>
+        <item name="BottomSendBackground">@color/bars_color</item>
+        <item name="BottomSendInputBackground">@color/white</item>
+        <item name="BottomSendButtonColor">@color/lightBackground</item>
+        <item name="BottomSendButtonHighlightedColor">@color/steel_grey</item>
+        <item name="BottomSendImageButtonTint">@color/black</item>
+        <item name="BottomDialogTextColor">@color/black</item>
         <item name="CurrencySwitcherTitleColor">@color/dark</item>
         <item name="PendingTransactionShadeColor">@color/white_50</item>
         <item name="PinScreenBackground">@color/bars_color</item>
@@ -158,7 +176,7 @@
     </style>
 
     <style name="ButtonSmallGrey_4" parent="Button">
-        <item name="android:background">@drawable/button_grey_background_4</item>
+        <item name="android:background">@drawable/button_grey_background_4_themed</item>
         <item name="android:minHeight">0dp</item>
         <item name="android:minWidth">0dp</item>
         <item name="android:paddingTop">6dp</item>
@@ -166,7 +184,7 @@
         <item name="android:paddingEnd">16dp</item>
         <item name="android:paddingStart">16dp</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/dark</item>
+        <item name="android:textColor">@color/stateful_button_text_color</item>
     </style>
 
     <style name="ImageButtonSmallGrey_4" parent="ButtonSmallGrey_4">
@@ -174,6 +192,10 @@
         <item name="android:paddingBottom">8dp</item>
         <item name="android:paddingEnd">8dp</item>
         <item name="android:paddingStart">8dp</item>
+    </style>
+
+    <style name="ThemedImageButtonSmallGrey_4" parent="ImageButtonSmallGrey_4">
+        <item name="android:tint">@color/button_image_tint_color_selector</item>
     </style>
 
     <style name="ButtonGreen_12" parent="Button">
@@ -265,8 +287,9 @@
     </style>
 
     <style name="BottomDialogText">
-        <item name="android:textColorHint">#808a8a8f</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorHint">@color/grey_50</item>
+        <item name="android:textColor">?BottomDialogTextColor</item>
+        <item name="android:fontFamily">@font/noto_sans</item>
     </style>
 
     <style name="SwitchTheme" parent="ThemeOverlay.AppCompat.Dark">
