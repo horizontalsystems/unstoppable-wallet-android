@@ -78,7 +78,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
             }
         })
 
-        val numpadAdapter = NumPadItemsAdapter(this, NumPadItemType.DOT)
+        val numpadAdapter = NumPadItemsAdapter(this, NumPadItemType.DOT, false)
 
         val numpadRecyclerView = mDialog?.findViewById<RecyclerView>(R.id.numPadItemsRecyclerView)
         val hintInfoTxt: TextView? = mDialog?.findViewById(R.id.txtHintInfo)

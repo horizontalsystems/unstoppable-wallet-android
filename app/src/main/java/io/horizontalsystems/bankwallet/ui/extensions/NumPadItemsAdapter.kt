@@ -9,7 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import io.horizontalsystems.bankwallet.R
 
-class NumPadItemsAdapter(private val listener: Listener, bottomLeftButtonType: NumPadItemType) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class NumPadItemsAdapter(private val listener: Listener, bottomLeftButtonType: NumPadItemType, private val showLetters: Boolean = true) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface Listener {
         fun onItemClick(item: NumPadItem)
@@ -44,7 +44,7 @@ class NumPadItemsAdapter(private val listener: Listener, bottomLeftButtonType: N
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is NumPadItemViewHolder) {
-            holder.bind(numPadItems[position], showFingerPrintButton) { listener.onItemClick(numPadItems[position]) }
+            holder.bind(numPadItems[position], showFingerPrintButton, showLetters) { listener.onItemClick(numPadItems[position]) }
         }
     }
 
@@ -65,7 +65,7 @@ class NumPadItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private var imgFingerprint: ImageView = itemView.findViewById(R.id.imgFingerprint)
 
 
-    fun bind(item: NumPadItem, isFingerprintEnabled: Boolean, onClick: () -> (Unit)) {
+    fun bind(item: NumPadItem, isFingerprintEnabled: Boolean, showLetters: Boolean, onClick: () -> (Unit)) {
 
         itemView.setOnTouchListener { v, event ->
             when {
@@ -95,7 +95,7 @@ class NumPadItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
             NumPadItemType.NUMBER -> {
                 txtNumber.visibility = View.VISIBLE
-                txtLetters.visibility = if (item.number == 0) View.GONE else View.VISIBLE
+                txtLetters.visibility = if (item.number == 0 || !showLetters) View.GONE else View.VISIBLE
                 txtNumber.text = item.number.toString()
                 txtLetters.text = item.letters
                 itemView.setBackgroundResource(R.drawable.numpad_button_background)
