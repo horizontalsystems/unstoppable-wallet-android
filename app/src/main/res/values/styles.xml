@@ -41,6 +41,9 @@
     <attr name="BottomSendButtonHighlightedColor" format="reference|color" />
     <attr name="BottomSendImageButtonTint" format="reference|color" />
     <attr name="BottomDialogTextColor" format="reference|color" />
+    <attr name="ConfirmationDialogBackground" format="reference|color" />
+    <attr name="ConfirmationAddressBackground" format="reference|color" />
+    <attr name="ConfirmationMiddlePartBackground" format="reference|color" />
     <attr name="CurrencySwitcherTitleColor" format="reference|color" />
     <attr name="PendingTransactionShadeColor" format="reference|color" />
     <attr name="PinScreenBackground" format="reference|color" />
@@ -100,6 +103,9 @@
         <item name="BottomSendButtonHighlightedColor">@color/grey_50</item>
         <item name="BottomSendImageButtonTint">@color/white</item>
         <item name="BottomDialogTextColor">@color/white</item>
+        <item name="ConfirmationDialogBackground">@color/dark</item>
+        <item name="ConfirmationAddressBackground">@color/grey_20</item>
+        <item name="ConfirmationMiddlePartBackground">@color/grey_20</item>
         <item name="CurrencySwitcherTitleColor">@color/bars_color</item>
         <item name="PendingTransactionShadeColor">@color/dark_50</item>
         <item name="PinScreenBackground">@color/dark</item>
@@ -159,6 +165,9 @@
         <item name="BottomSendButtonHighlightedColor">@color/steel_grey</item>
         <item name="BottomSendImageButtonTint">@color/black</item>
         <item name="BottomDialogTextColor">@color/black</item>
+        <item name="ConfirmationDialogBackground">@color/bars_color</item>
+        <item name="ConfirmationAddressBackground">@color/lightBackground</item>
+        <item name="ConfirmationMiddlePartBackground">@color/transparent</item>
         <item name="CurrencySwitcherTitleColor">@color/dark</item>
         <item name="PendingTransactionShadeColor">@color/white_50</item>
         <item name="PinScreenBackground">@color/bars_color</item>

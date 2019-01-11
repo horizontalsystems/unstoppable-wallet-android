@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="25dp"
     android:layout_marginRight="25dp"
-    android:background="@drawable/alert_white_background"
+    android:background="@drawable/alert_background_themed"
     >
 
     <ImageView
@@ -17,18 +17,18 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:src="@drawable/coin_dash"
-        android:tint="@color/dark"
+        android:tint="@color/grey"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />
 
     <TextView
         android:id="@+id/txtTitle"
+        style="@style/BottomDialogText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:fontFamily="@font/noto_sans_bold"
-        android:textColor="@color/dark"
         android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="@+id/coinImg"
         app:layout_constraintStart_toEndOf="@+id/coinImg"
@@ -47,35 +47,45 @@
         app:layout_constraintTop_toBottomOf="@+id/txtTitle"
         />
 
+    <View
+        android:id="@+id/inputBackgroundView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?ConfirmationMiddlePartBackground"
+        app:layout_constraintBottom_toTopOf="@+id/txtFeeTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/border1"
+        />
+
     <TextView
-        android:id="@+id/txtAmountInCrypto"
+        android:id="@+id/txtFiatAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="25dp"
         android:fontFamily="@font/noto_sans_bold"
-        android:maxLines="10"
+        android:maxLines="1"
         android:textColor="@color/yellow_crypto"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/border1"
-        tools:text="0.0006482 BTC"
+        tools:text="$105"
         />
 
     <TextView
-        android:id="@+id/txtAmountInFiat"
+        android:id="@+id/txtCryptoAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:textColor="@color/grey"
         android:textSize="14sp"
-        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtAmountInCrypto"
-        tools:text="$105"
+        app:layout_constraintTop_toBottomOf="@+id/txtFiatAmount"
+        tools:text="0.0006482 BTC"
         />
 
     <LinearLayout
@@ -84,12 +94,14 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/text_grey_background_for_white_theme"
+        android:layout_marginTop="29dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/address_background_themed"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtAmountInFiat"
+        app:layout_constraintTop_toBottomOf="@+id/txtCryptoAmount"
+        app:layout_constraintBottom_toBottomOf="@+id/inputBackgroundView"
         >
 
         <ImageView
@@ -98,6 +110,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="8dp"
+            android:tint="@color/steel_grey"
             android:src="@drawable/round_person_18px"
             android:visibility="visible"
             />
@@ -114,7 +127,7 @@
             android:ellipsize="middle"
             android:singleLine="true"
             android:textAlignment="textEnd"
-            android:textColor="@color/black"
+            android:textColor="?BottomDialogTextColor"
             tools:text="bchtestqq9j3zj8kasdasdasdasdtt024fxjqk8f7xxau"
             />
 
@@ -125,7 +138,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
+        android:paddingTop="4dp"
         android:text="@string/Send_DialogFee"
         android:textColor="@color/grey"
         android:textSize="16sp"
@@ -140,6 +154,7 @@
         android:layout_marginEnd="16dp"
         android:textAlignment="textEnd"
         android:textColor="@color/grey"
+        android:paddingTop="4dp"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/txtFeeTitle"
