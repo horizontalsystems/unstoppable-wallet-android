@@ -11,8 +11,8 @@
     <string name="Alert_Copied">コピー完了</string>
     <string name="Button_Cancel">キャンセル</string>
     <string name="Button_Back">戻る</string>
-    <string name="Button_Ok">OK</string>
-    <string name="Button_Share">Share</string>
+    <string name="Button_Ok">はい</string>
+    <string name="Button_Share">共有</string>
     <string name="Error">Error</string>
     <!--Guest-->
     <string name="Guest_Title">Bank Wallet</string>
