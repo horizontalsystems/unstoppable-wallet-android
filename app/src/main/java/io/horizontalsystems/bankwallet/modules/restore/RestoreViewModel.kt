@@ -12,6 +12,7 @@ class RestoreViewModel : ViewModel(), RestoreModule.IView, RestoreModule.IRouter
     val errorLiveData = MutableLiveData<Int>()
     val navigateToSetPinLiveEvent = SingleLiveEvent<Void>()
     val keyStoreSafeExecute = SingleLiveEvent<Triple<Runnable, Runnable?, Runnable?>>()
+    val showConfirmationDialogLiveEvent = SingleLiveEvent<Void>()
 
     fun init() {
         RestoreModule.init(this, this, this)
@@ -27,5 +28,9 @@ class RestoreViewModel : ViewModel(), RestoreModule.IView, RestoreModule.IRouter
 
     override fun safeExecute(action: Runnable, onSuccess: Runnable?, onFailure: Runnable?) {
         keyStoreSafeExecute.value = Triple(action, onSuccess, onFailure)
+    }
+
+    override fun showConfirmationDialog() {
+        showConfirmationDialogLiveEvent.call()
     }
 }
