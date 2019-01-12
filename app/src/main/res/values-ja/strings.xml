@@ -13,10 +13,10 @@
     <string name="Button_Back">戻る</string>
     <string name="Button_Ok">はい</string>
     <string name="Button_Share">共有</string>
-    <string name="Error">Error</string>
+    <string name="Error">エラー</string>
     <!--Guest-->
     <string name="Guest_Title">Bank Wallet</string>
-    <string name="Guest_CreateWallet">New Wallet</string>
+    <string name="Guest_CreateWallet">新規ウォレット</string>
     <string name="Guest_RestoreWallet">Restore Wallet</string>
     <!--Restore-->
     <string name="Restore_Title">Enter Secret Key</string>
