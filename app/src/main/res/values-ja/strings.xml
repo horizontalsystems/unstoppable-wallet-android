@@ -25,8 +25,8 @@
     <!--Backup-->
     <string name="Backup_Intro_Title">Secret Key</string>
     <string name="Backup_Intro_Subtitle">Your secret key is the only way to restore your wallet and funds if your phone is ever lost, stolen, broken, or upgraded.\n\n It consists of 12 words. Store it safely offline.</string>
-    <string name="Backup_Intro_Later">Later</string>
-    <string name="Backup_Intro_BackupNow">Backup</string>
+    <string name="Backup_Intro_Later">後で</string>
+    <string name="Backup_Intro_BackupNow">バックアップ</string>
     <string name="Backup_Words_Title">Secret Key</string>
     <string name="Backup_Confirmation_Understand">I understand that my wallet and tokens are held securely on this device only and not any servers.</string>
     <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I have just written down and saved in a secure place.</string>
@@ -34,13 +34,13 @@
     <string name="Backup_Confirmation_Title">Enter following words from your Secret Key</string>
     <string name="Backup_Confirmation_Description">Enter words from your secret key.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Words do not match</string>
-    <string name="Backup_Button_Confirm">Confirm</string>
-    <string name="Backup_Button_Next">Next</string>
-    <string name="Backup_Button_Submit">Submit</string>
+    <string name="Backup_Button_Confirm">確定する</string>
+    <string name="Backup_Button_Next">次</string>
+    <string name="Backup_Button_Submit">提出</string>
     <!--Balance-->
-    <string name="Balance_Title">Balance</string>
-    <string name="Balance_Deposit">Receive</string>
-    <string name="Balance_Send">Send</string>
+    <string name="Balance_Title">残額</string>
+    <string name="Balance_Deposit">受取</string>
+    <string name="Balance_Send">送る</string>
     <string name="Balance_RatePerCoin">%s per %s</string>
     <!--Send-->
     <string name="Send_Title1">Send</string>
@@ -67,11 +67,11 @@
     <string name="Timestamp_JustNow">just now</string>
     <string name="Timestamp_MinAgo">%dm. ago</string>
     <string name="Timestamp_HoursAgo">%dh. ago</string>
-    <string name="Timestamp_Today">Тoday</string>
-    <string name="Timestamp_Yesterday">Yesterday</string>
+    <string name="Timestamp_Today">今日</string>
+    <string name="Timestamp_Yesterday">昨日</string>
     <!--Transactions-->
-    <string name="Transactions_Title">Transactions</string>
-    <string name="Transactions_FilterAll">All</string>
+    <string name="Transactions_Title">トランザクション</string>
+    <string name="Transactions_FilterAll">すべて</string>
     <string name="Transactions_EmptyList">You don\’t have any transactions yet</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Transaction</string>
@@ -88,7 +88,7 @@
     <string name="FullInfo_Time">Time</string>
     <string name="FullInfo_Block">Block</string>
     <string name="FullInfo_Confirmations">Confirmations</string>
-    <string name="FullInfo_TotalInput">Total Input</string>
+    <string name="FullInfo_TotalInput">合計入力数</string>
     <string name="FullInfo_TotalOutput">Total Output</string>
     <string name="FullInfo_Fee">Fee</string>
     <string name="FullInfo_SubtitleFrom">From</string>
@@ -161,7 +161,7 @@
     <string name="SetPin_Title">Passcode</string>
     <string name="SetPin_Info">Your passcode will be used to unlock wallet app</string>
     <string name="SetPin_ErrorShortPin">Please enter all digits.</string>
-    <string name="SetPin_ConfirmInfo">Confirm</string>
+    <string name="SetPin_ConfirmInfo">確定する</string>
     <string name="SetPin_Success">Lock passcode was set successfully!</string>
     <string name="SetPin_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
     <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
