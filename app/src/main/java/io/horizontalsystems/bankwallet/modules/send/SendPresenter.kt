@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.send
 
 class SendPresenter(
         private val interactor: SendModule.IInteractor,
-        private val router: SendModule.IRouter,
         private val factory: StateViewItemFactory,
         private val userInput: SendModule.UserInput
 ) : SendModule.IViewDelegate, SendModule.IInteractorDelegate {

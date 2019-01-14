@@ -36,13 +36,10 @@ class ConfirmationFragment : DialogFragment() {
 
         viewModel.sendConfirmationViewItemLiveData.observe(this, Observer { viewItem ->
             viewItem?.let { sendConfirmationViewItem ->
-                rootView.findViewById<TextView>(R.id.txtAmountInCrypto)?.text = ValueFormatter.format(sendConfirmationViewItem.coinValue)
-                sendConfirmationViewItem.currencyValue?.let { currencyValue ->
-                    rootView.findViewById<TextView>(R.id.txtAmountInFiat)?.let {
-                        it.visibility = View.VISIBLE
-                        it.text = ValueFormatter.formatSimple(currencyValue)
-                    }
+                rootView.findViewById<TextView>(R.id.txtFiatAmount)?.text = sendConfirmationViewItem.currencyValue?.let {
+                    ValueFormatter.format(it)
                 }
+                rootView.findViewById<TextView>(R.id.txtCryptoAmount)?.text = ValueFormatter.format(sendConfirmationViewItem.coinValue)
                 rootView.findViewById<TextView>(R.id.txtAddressTo)?.text = sendConfirmationViewItem.address
                 rootView.findViewById<TextView>(R.id.txtFeeValue)?.text = sendConfirmationViewItem.feeInfo.getFormatted()
                 rootView.findViewById<TextView>(R.id.txtTotalValue)?.text = sendConfirmationViewItem.totalInfo.getFormatted()

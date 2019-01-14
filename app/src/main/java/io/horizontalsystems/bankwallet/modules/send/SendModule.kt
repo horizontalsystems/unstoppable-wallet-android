@@ -62,21 +62,19 @@ object SendModule {
         fun didFailToSend(error: Throwable)
     }
 
-    interface IRouter {
-    }
 
-    fun init(view: SendViewModel, router: IRouter, coinCode: String) {
+    fun init(view: SendViewModel, coinCode: String) {
         val wallet = App.walletManager.wallets.first { it.coinCode == coinCode }
         val interactor = SendInteractor(App.currencyManager, App.rateStorage, TextHelper, wallet)
-        val presenter = SendPresenter(interactor, router, StateViewItemFactory(), UserInput())
-//
+        val presenter = SendPresenter(interactor, StateViewItemFactory(), UserInput())
+
         view.delegate = presenter
         presenter.view = view
         interactor.delegate = presenter
     }
 
     fun start(activity: FragmentActivity, coin: String) {
-        SendFragment.show(activity, coin)
+        SendBottomSheetFragment.show(activity, coin)
     }
 
     enum class InputType {
