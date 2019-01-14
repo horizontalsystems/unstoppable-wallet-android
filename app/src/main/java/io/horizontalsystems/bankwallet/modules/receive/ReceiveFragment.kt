@@ -1,16 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.receive
 
-import android.app.AlertDialog
 import android.app.Dialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
+import android.support.design.widget.BottomSheetDialog
+import android.support.design.widget.BottomSheetDialogFragment
 import android.support.v4.app.FragmentActivity
 import android.support.v4.content.ContextCompat
 import android.view.Gravity
-import android.view.View
-import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
@@ -21,7 +19,7 @@ import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 
-class ReceiveFragment : DialogFragment() {
+class ReceiveFragment : BottomSheetDialogFragment() {
 
     private var mDialog: Dialog? = null
 
@@ -39,16 +37,13 @@ class ReceiveFragment : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = activity?.let { AlertDialog.Builder(it, R.style.BottomDialog) }
+        mDialog = activity?.let { BottomSheetDialog(it, R.style.BottomDialog) }
+        mDialog?.setContentView(R.layout.fragment_bottom_sheet_receive)
 
-        val rootView = View.inflate(context, R.layout.fragment_bottom_sheet_receive, null) as ViewGroup
-        builder?.setView(rootView)
-
-        mDialog = builder?.create()
         mDialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
         mDialog?.window?.setGravity(Gravity.BOTTOM)
 
-        rootView.findViewById<Button>(R.id.btnCopy)?.setOnClickListener { viewModel.delegate.onCopyClick(itemIndex) }
+        mDialog?.findViewById<Button>(R.id.btnCopy)?.setOnClickListener { viewModel.delegate.onCopyClick(itemIndex) }
 
         viewModel.showAddressesLiveData.observe(this, Observer { addresses ->
             addresses?.apply {
@@ -56,11 +51,11 @@ class ReceiveFragment : DialogFragment() {
                     val address = addresses[itemIndex]
                     context?.let { ctx ->
                         val coinDrawable = ContextCompat.getDrawable(ctx, LayoutHelper.getCoinDrawableResource(address.coinCode))
-                        rootView.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
+                        mDialog?.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
                     }
-                    rootView.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.Deposit_Title, address.coinCode)
-                    rootView.findViewById<TextView>(R.id.txtAddress)?.let { it.text = address.address }
-                    rootView.findViewById<ImageView>(R.id.imgQrCode)?.setImageBitmap(TextHelper.getQrCodeBitmapFromAddress(address.address))
+                    mDialog?.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.Deposit_Title, address.coinCode)
+                    mDialog?.findViewById<TextView>(R.id.txtAddress)?.let { it.text = address.address }
+                    mDialog?.findViewById<ImageView>(R.id.imgQrCode)?.setImageBitmap(TextHelper.getQrCodeBitmapFromAddress(address.address))
                 }
             }
         })
