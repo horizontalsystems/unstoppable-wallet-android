@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.modules.pin.PinViewModel
 object UnlockPinModule {
     interface IUnlockPinRouter {
         fun dismiss(didUnlock: Boolean)
+        fun closeApplication()
     }
 
     interface IUnlockPinInteractor {

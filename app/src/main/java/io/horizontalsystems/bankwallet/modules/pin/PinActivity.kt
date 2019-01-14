@@ -177,6 +177,11 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
             }
         })
 
+        viewModel.closeApplicationLiveEvent.observe(this, Observer {
+            App.appCloseManager.appCloseSignal.onNext(Unit)
+            moveTaskToBack(false)
+        })
+
     }
 
     override fun onBackPressed() {

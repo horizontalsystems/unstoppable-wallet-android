@@ -7,12 +7,15 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_dashboard.*
 
 class MainActivity : BaseActivity() {
 
     private lateinit var adapter: MainTabsAdapter
+    private var disposable: Disposable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +66,10 @@ class MainActivity : BaseActivity() {
         activeTab?.let {
             bottomNavigation.currentItem = it
         }
+
+        disposable = App.appCloseManager.appCloseSignal.subscribe {
+            moveTaskToBack(false)
+        }
     }
 
     override fun onBackPressed() {
@@ -73,6 +80,11 @@ class MainActivity : BaseActivity() {
             return
         }
         super.onBackPressed()
+    }
+
+    override fun onDestroy() {
+        disposable?.dispose()
+        super.onDestroy()
     }
 
     fun setBottomNavigationVisible(visible: Boolean) {
