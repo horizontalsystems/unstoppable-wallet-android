@@ -129,17 +129,30 @@
     <string name="FullInfo_Confirmations">Confirmations</string>
     <string name="FullInfo_TotalInput">Total Input</string>
     <string name="FullInfo_TotalOutput">Total Output</string>
+    <string name="FullInfo_Size">Size</string>
     <string name="FullInfo_Fee">Fee</string>
-    <string name="FullInfo_SubtitleFrom">From</string>
+    <string name="FullInfo_FeePerByte">Fee per byte</string>
+    <string name="FullInfo_FeeRate">Fee Rate</string>
+    <string name="FullInfo_NoAddress">No Available</string>
+    <string name="FullInfo_SatByte">sat/B</string>
+    <string name="FullInfo_Bytes">Bytes</string>
     <string name="FullInfo_SubtitleInputs">Inputs</string>
     <string name="FullInfo_SubtitleOutputs">Outputs</string>
     <string name="FullInfo_SubtitleProvider">Data Provider</string>
 
+    <!--Full Info Ethereum-->
+    <string name="FullInfoEth_To">To</string>
+    <string name="FullInfoEth_From">From</string>
+    <string name="FullInfoEth_GasLimit">Gas Limit</string>
+    <string name="FullInfoEth_GasUsed">Gas Used</string>
+    <string name="FullInfoEth_GasPrice">Gas Price</string>
+    <string name="FullInfoEth_Nonce">Nonce</string>
+    <string name="FullInfoEth_Value">Value</string>
 
-    <string name="FullTransactionInfo_From">From</string>
-    <string name="FullTransactionInfo_To">To</string>
-    <string name="FullTransactionInfo_Amount">Amount</string>
-    <string name="FullTransactionInfo_Block">Block</string>
+    <!--Full Info Error-->
+
+    <string name="FullInfoError_SubtitleOffline">Offline</string>
+    <string name="FullInfoError_Retry">Retry</string>
 
 
     <!--Settings-->
