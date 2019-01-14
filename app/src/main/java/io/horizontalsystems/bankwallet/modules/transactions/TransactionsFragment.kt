@@ -148,9 +148,7 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
                 }
 
                 itemTime.apply {
-                    bind(title = getString(R.string.TransactionInfo_Time),
-                            valueTitle = txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) } ?: "",
-                            showBottomBorder = true)
+                    bindTime(title = getString(R.string.TransactionInfo_Time), time = txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) } ?: "")
                 }
 
                 itemStatus.apply {
@@ -164,13 +162,13 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
                 itemFrom.apply {
                     setOnClickListener { transInfoViewModel.delegate.onCopyFromAddress() }
                     visibility = if (txRec.from.isNullOrEmpty()) View.GONE else View.VISIBLE
-                    bind(title = getString(R.string.TransactionInfo_From), valueTitle = txRec.from, valueIcon = R.drawable.round_person_18px, showBottomBorder = true)
+                    bindAddress(title = getString(R.string.TransactionInfo_From), address = txRec.from, showBottomBorder = true)
                 }
 
                 itemTo.apply {
                     setOnClickListener { transInfoViewModel.delegate.onCopyToAddress() }
                     visibility = if (txRec.to.isNullOrEmpty()) View.GONE else View.VISIBLE
-                    bind(title = getString(R.string.TransactionInfo_To), valueTitle = txRec.to, valueIcon = R.drawable.round_person_18px, showBottomBorder = true)
+                    bindAddress(title = getString(R.string.TransactionInfo_To), address = txRec.to, showBottomBorder = true)
                 }
             }
         })

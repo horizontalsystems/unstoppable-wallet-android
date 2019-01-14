@@ -32,6 +32,7 @@
         android:layout_marginTop="4dp"
         android:ellipsize="middle"
         android:singleLine="true"
+        android:textAlignment="textEnd"
         android:textColor="?BottomDialogTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
