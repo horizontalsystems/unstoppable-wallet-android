@@ -129,7 +129,9 @@
     <string name="FullInfo_Confirmations">Confirmations</string>
     <string name="FullInfo_TotalInput">Total Input</string>
     <string name="FullInfo_TotalOutput">Total Output</string>
+    <string name="FullInfo_Size">Size</string>
     <string name="FullInfo_Fee">Fee</string>
+    <string name="FullInfo_FeePerByte">Fee per byte</string>
     <string name="FullInfo_SubtitleFrom">From</string>
     <string name="FullInfo_SubtitleInputs">Inputs</string>
     <string name="FullInfo_SubtitleOutputs">Outputs</string>
