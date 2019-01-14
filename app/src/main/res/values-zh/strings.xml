@@ -5,26 +5,26 @@
     <string name="Alert_Ok">确定</string>
     <string name="Alert_Cancel">取消</string>
     <string name="Alert_Copy">复制</string>
-    <string name="Alert_Share">Share</string>
+    <string name="Alert_Share">分享</string>
     <string name="Alert_Close">关闭</string>
-    <string name="Alert_Success">Success</string>
+    <string name="Alert_Success">成功</string>
     <string name="Alert_Copied">复制成功</string>
     <string name="Button_Cancel">取消</string>
     <string name="Button_Back">返回</string>
     <string name="Button_Ok">确定</string>
-    <string name="Button_Share">Share</string>
-    <string name="Error">Error</string>
+    <string name="Button_Share">分享</string>
+    <string name="Error">出错</string>
     <!--Guest-->
     <string name="Guest_Title">Bank Wallet</string>
     <string name="Guest_CreateWallet">新的钱包</string>
     <string name="Guest_RestoreWallet">恢复钱包</string>
     <!--Restore-->
-    <string name="Restore_Title">Enter Secret Key</string>
+    <string name="Restore_Title">输入密钥</string>
     <string name="Restore_ValidationFailed">密钥不正确</string>
-    <string name="Restore_RestoreFailed">Failed to restore wallet</string>
+    <string name="Restore_RestoreFailed">无法创建钱包</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">密钥</string>
-    <string name="Backup_Intro_Subtitle">Your secret key is the only way to restore your wallet and funds if your phone is ever lost, stolen, broken, or upgraded.\n\n It consists of 12 words. Store it safely offline.</string>
+    <string name="Backup_Intro_Subtitle">如果您的手机被丢失、被盗、损坏、或更新，您的密钥是恢复钱包和资金的唯一方法。\n\n密钥由12个单词组成。</string>
     <string name="Backup_Intro_Later">稍后</string>
     <string name="Backup_Intro_BackupNow">备份</string>
     <string name="Backup_Words_Title">密钥</string>
