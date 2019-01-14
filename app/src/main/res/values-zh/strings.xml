@@ -90,15 +90,27 @@
     <string name="FullInfo_Confirmations">确认框</string>
     <string name="FullInfo_TotalInput">转入总额</string>
     <string name="FullInfo_TotalOutput">转出总额</string>
+    <string name="FullInfo_Size">Size</string>
     <string name="FullInfo_Fee">费用</string>
-    <string name="FullInfo_SubtitleFrom">发件人：</string>
+    <string name="FullInfo_FeePerByte">Fee per byte</string>
+    <string name="FullInfo_FeeRate">Fee Rate</string>
+    <string name="FullInfo_NoAddress">No Available</string>
+    <string name="FullInfo_SatByte">sat/B</string>
+    <string name="FullInfo_Bytes">Bytes</string>
     <string name="FullInfo_SubtitleInputs">收入</string>
     <string name="FullInfo_SubtitleOutputs">转出</string>
     <string name="FullInfo_SubtitleProvider">数据提供者</string>
-    <string name="FullTransactionInfo_From">发件人：</string>
-    <string name="FullTransactionInfo_To">收件人：</string>
-    <string name="FullTransactionInfo_Amount">金额</string>
-    <string name="FullTransactionInfo_Block">Block</string>
+    <!--Full Info Ethereum-->
+    <string name="FullInfoEth_To">To</string>
+    <string name="FullInfoEth_From">From</string>
+    <string name="FullInfoEth_GasLimit">Gas Limit</string>
+    <string name="FullInfoEth_GasUsed">Gas Used</string>
+    <string name="FullInfoEth_GasPrice">Gas Price</string>
+    <string name="FullInfoEth_Nonce">Nonce</string>
+    <string name="FullInfoEth_Value">Value</string>
+    <!--Full Info Error-->
+    <string name="FullInfoError_SubtitleOffline">Offline</string>
+    <string name="FullInfoError_Retry">Retry</string>
     <!--Settings-->
     <string name="Settings_Title">设置</string>
     <string name="Settings_SecurityCenter">安全中心</string>
