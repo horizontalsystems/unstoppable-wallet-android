@@ -35,14 +35,17 @@ class ReceiveInteractorTest {
     @Test
     fun didReceiveAddress() {
 
+        val coinTitle = "Bitcoin"
+
         whenever(adapter.receiveAddress).thenReturn(coinAddress)
         whenever(wallet.coinCode).thenReturn(coin)
         whenever(wallet.adapter).thenReturn(adapter)
+        whenever(wallet.title).thenReturn(coinTitle)
         whenever(walletManager.wallets).thenReturn(listOf(wallet))
 
         interactor.getReceiveAddress()
 
-        verify(delegate).didReceiveAddresses(listOf(AddressItem(coinAddress, coin)))
+        verify(delegate).didReceiveAddresses(listOf(AddressItem(coinAddress, coin, coinTitle)))
     }
 
     @Test

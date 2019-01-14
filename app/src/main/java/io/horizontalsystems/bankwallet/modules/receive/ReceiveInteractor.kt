@@ -11,7 +11,7 @@ class ReceiveInteractor(private var coinCode: CoinCode?, private var walletManag
 
     override fun getReceiveAddress() {
         val addresses = walletManager.wallets.filter { coinCode == null || it.coinCode == coinCode }.map {
-            AddressItem(it.adapter.receiveAddress, it.coinCode)
+            AddressItem(it.adapter.receiveAddress, it.coinCode, it.title)
         }
 
         if (addresses.isNotEmpty()) {

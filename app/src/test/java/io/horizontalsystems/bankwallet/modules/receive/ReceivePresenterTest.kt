@@ -16,7 +16,8 @@ class ReceivePresenterTest {
 
     private var coin = CoinCode()
     private val coinAddress = "[coin_address]"
-    private val addressItem = AddressItem(address = coinAddress, coinCode = coin)
+    private val coinTitle = "[coin_address]"
+    private val addressItem = AddressItem(address = coinAddress, coinCode = coin, coinTitle = coinTitle)
     private val addresses = listOf(addressItem)
 
     private lateinit var presenter: ReceivePresenter

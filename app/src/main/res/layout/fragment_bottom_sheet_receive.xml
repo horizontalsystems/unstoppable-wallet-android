@@ -24,7 +24,7 @@
     <TextView
         android:id="@+id/txtTitle"
         style="@style/BottomDialogText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
@@ -35,7 +35,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/coinImg"
         app:layout_constraintStart_toEndOf="@+id/coinImg"
         app:layout_constraintTop_toTopOf="@+id/coinImg"
-        tools:text="Receive Bitcoin (BTC)"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="Receive Bitcoin"
         />
 
     <View
