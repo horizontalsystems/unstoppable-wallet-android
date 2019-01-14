@@ -115,7 +115,7 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
         transInfoViewModel = ViewModelProviders.of(this).get(TransactionInfoViewModel::class.java)
         transInfoViewModel.init()
 
-        transactionId.setOnClickListener { transInfoViewModel.delegate.onCopyId() }
+        transactionIdView.setOnClickListener { transInfoViewModel.delegate.onCopyId() }
         txtFullInfo.setOnClickListener { transInfoViewModel.delegate.showFullInfo() }
         transactionsDim.setOnClickListener { bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED }
 
@@ -155,9 +155,7 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
                     bindStatus(txStatus)
                 }
 
-                transactionId.apply {
-                    text = txRec.transactionHash
-                }
+                transactionIdView.bindTransactionId(txRec.transactionHash)
 
                 itemFrom.apply {
                     setOnClickListener { transInfoViewModel.delegate.onCopyFromAddress() }

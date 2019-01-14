@@ -29,4 +29,10 @@ class AddressView : ConstraintLayout {
         invalidate()
     }
 
+    fun bindTransactionId(hash: String) {
+        txtAddress.text = hash
+        iconImage.setImageResource(R.drawable.hash)
+        invalidate()
+    }
+
 }

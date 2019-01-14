@@ -9,12 +9,12 @@
     >
 
     <ImageView
-        android:id="@+id/addressIcon"
+        android:id="@+id/iconImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:src="@drawable/round_person_18px"
-        android:tint="@color/steel_grey"
+        android:tint="@color/grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/txtAddress"
@@ -36,7 +36,7 @@
         android:textColor="?BottomDialogTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/addressIcon"
+        app:layout_constraintStart_toEndOf="@+id/iconImage"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="bchtestqq9j3zj8kasdasdasdasdtt024fxjqk8f7xxau"
         />
