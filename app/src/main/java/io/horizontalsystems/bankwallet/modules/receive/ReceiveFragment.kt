@@ -15,6 +15,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import io.horizontalsystems.bankwallet.ui.extensions.AddressView
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
@@ -54,7 +55,7 @@ class ReceiveFragment : BottomSheetDialogFragment() {
                         mDialog?.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
                     }
                     mDialog?.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.Deposit_Title, address.coinCode)
-                    mDialog?.findViewById<TextView>(R.id.txtAddress)?.let { it.text = address.address }
+                    mDialog?.findViewById<AddressView>(R.id.addressView)?.let { it.bind(address.address) }
                     mDialog?.findViewById<ImageView>(R.id.imgQrCode)?.setImageBitmap(TextHelper.getQrCodeBitmapFromAddress(address.address))
                 }
             }

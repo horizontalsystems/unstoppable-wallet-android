@@ -91,6 +91,7 @@
 
     <string name="Deposit_Title">Receive %s</string>
     <string name="Deposit_Copy">Copy</string>
+    <string name="Deposit_Your_Address">Your Address</string>
 
 
     <!--Timestamp-->
