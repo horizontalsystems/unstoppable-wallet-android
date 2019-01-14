@@ -141,6 +141,11 @@
     <string name="FullTransactionInfo_Amount">Amount</string>
     <string name="FullTransactionInfo_Block">Block</string>
 
+    <!--Full Info Error-->
+
+    <string name="FullInfoError_SubtitleOffline">Offline</string>
+    <string name="FullInfoError_Retry">Retry</string>
+
 
     <!--Settings-->
 
