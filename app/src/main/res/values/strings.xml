@@ -142,7 +142,7 @@
 
     <!--Full Info Ethereum-->
     <string name="FullInfoEth_To">To</string>
-    <string name="FullInfoEth_To">From</string>
+    <string name="FullInfoEth_From">From</string>
     <string name="FullInfoEth_GasLimit">Gas Limit</string>
     <string name="FullInfoEth_GasUsed">Gas Used</string>
     <string name="FullInfoEth_GasPrice">Gas Price</string>
