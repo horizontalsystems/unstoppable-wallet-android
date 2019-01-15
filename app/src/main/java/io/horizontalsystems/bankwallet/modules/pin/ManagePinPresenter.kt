@@ -11,7 +11,6 @@ open class ManagePinPresenter(
     var view: PinModule.IPinView? = null
     private var enteredPin = ""
 
-
     override fun viewDidLoad() {
     }
 
@@ -53,6 +52,9 @@ open class ManagePinPresenter(
     }
 
     override fun didStartedAdapters() {
+    }
+
+    override fun onBackPressed() {
     }
 
     override fun didFailToSavePin() {

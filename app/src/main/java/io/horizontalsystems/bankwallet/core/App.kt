@@ -46,6 +46,7 @@ class App : Application() {
         lateinit var appDatabase: AppDatabase
         lateinit var transactionStorage: ITransactionRecordStorage
         lateinit var rateStorage: IRateStorage
+        lateinit var appCloseManager: AppCloseManager
 
         val testMode = true
 
@@ -97,6 +98,8 @@ class App : Application() {
 
         appDatabase = AppDatabase.getInstance(this)
         transactionStorage = TransactionRepository(appDatabase)
+
+        appCloseManager = AppCloseManager()
 
         rateStorage = RatesRepository(appDatabase)
         rateManager = RateManager(rateStorage, networkManager)
