@@ -62,7 +62,8 @@
     <string name="Send_DialogTotal">합계:</string>
     <!--Deposit-->
     <string name="Deposit_Title">수신%s</string>
-    <string name="Deposit_Copy">복사</string>
+    <string name="Deposit_Share">Share</string>
+    <string name="Deposit_Your_Address">Your Address</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">지금 막</string>
     <string name="Timestamp_MinAgo">%dm. ago</string>
