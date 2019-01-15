@@ -32,6 +32,7 @@ import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import io.horizontalsystems.bankwallet.viewHelpers.ValueFormatter
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
@@ -39,6 +40,7 @@ import java.util.concurrent.TimeUnit
 class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.Listener {
 
     private lateinit var viewModel: SendViewModel
+    private var disposable: Disposable? = null
     private var inputConnection: InputConnection? = null
 
     private var amountEditTxt: EditText? = null
@@ -56,8 +58,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
             }
         } ?: dismiss()
 
-
-        val disposable = amountChangeSubject.debounce(300, TimeUnit.MILLISECONDS)
+        disposable = amountChangeSubject.debounce(300, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     viewModel.delegate.onAmountChanged(it)
@@ -274,6 +275,11 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
         if (scanResult != null && !TextUtils.isEmpty(scanResult.contents)) {
             viewModel.delegate.onScanAddress(scanResult.contents)
         }
+    }
+
+    override fun onDestroy() {
+        disposable?.dispose()
+        super.onDestroy()
     }
 
     private fun startScanner() {

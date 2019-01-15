@@ -62,7 +62,7 @@
     <string name="Send_DialogTotal">Toplam:</string>
     <!--Deposit-->
     <string name="Deposit_Title">%s al</string>
-    <string name="Deposit_Copy">Kopyala</string>
+    <string name="Deposit_Share">Kopyala</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">şimdi</string>
     <string name="Timestamp_MinAgo">%dm dk önce</string>

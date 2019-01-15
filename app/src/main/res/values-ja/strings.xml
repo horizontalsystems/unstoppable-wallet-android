@@ -62,7 +62,7 @@
     <string name="Send_DialogTotal">Total:</string>
     <!--Deposit-->
     <string name="Deposit_Title">Receive %s</string>
-    <string name="Deposit_Copy">Copy</string>
+    <string name="Deposit_Share">Copy</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">just now</string>
     <string name="Timestamp_MinAgo">%dm. ago</string>

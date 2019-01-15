@@ -62,7 +62,7 @@
     <string name="Send_DialogTotal">مجموع:</string>
     <!--Deposit-->
     <string name="Deposit_Title">دریافت s%</string>
-    <string name="Deposit_Copy">رونوشت</string>
+    <string name="Deposit_Share">رونوشت</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">همين آلان</string>
     <string name="Timestamp_MinAgo">%d؜دقيقه پيش</string>

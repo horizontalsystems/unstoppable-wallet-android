@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 
 import android.content.Context
 import android.support.constraint.ConstraintLayout
-import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.view.View
 import io.horizontalsystems.bankwallet.R
@@ -38,28 +37,23 @@ class TransactionInfoItemView : ConstraintLayout {
         ConstraintLayout.inflate(context, R.layout.view_transaction_info_item, this)
     }
 
-    fun bind(title: String? = null, valueTitle: String? = null, valueSubtitle: String? = null, valueIcon: Int? = null, showBottomBorder: Boolean = false) {
-        valueWrapper.visibility = View.VISIBLE
-
+    fun bindAddress(title: String? = null, address: String? = null, showBottomBorder: Boolean = false) {
         txtTitle.text = title
-        txtValueTitle.text = valueTitle
-        txtValueSubtitle.text = valueSubtitle
-        valueIcon?.let {
-            valueLeftIcon.setImageDrawable(ContextCompat.getDrawable(App.instance, it))
-            valueLeftIcon.visibility = View.VISIBLE
-        } ?: run {
-            valueLeftIcon.visibility = View.GONE
-            valueWrapper.background = null
-        }
-
-        txtValueSubtitle.visibility = if (valueSubtitle == null) View.GONE else View.VISIBLE
+        address?.let { addressView.bind(it) }
+        addressView.visibility = if (address == null) View.GONE else View.VISIBLE
         border.visibility = if (showBottomBorder) View.VISIBLE else View.GONE
 
         invalidate()
     }
 
+    fun bindTime(title: String? = null, time: String? = null){
+        txtTitle.text = title
+        valueText.text = time
+        valueText.visibility = if (time == null) View.GONE else View.VISIBLE
+        border.visibility = View.VISIBLE
+    }
+
     fun bindStatus(transactionStatus: TransactionStatus) {
-        valueWrapper.visibility = View.GONE
         border.visibility = View.VISIBLE
         txtTitle.setText(R.string.TransactionInfo_Status)
 
