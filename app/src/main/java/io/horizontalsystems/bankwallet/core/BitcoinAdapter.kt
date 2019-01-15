@@ -74,6 +74,9 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
         } catch (e: UnspentOutputSelector.Error.InsufficientUnspentOutputs) {
             val fee = e.fee / satoshisInBitcoin
             throw Error.InsufficientAmount(fee)
+        } catch (e: UnspentOutputSelector.Error.EmptyUnspentOutputs) {
+            val fee = 0.0
+            throw Error.InsufficientAmount(fee)
         }
     }
 

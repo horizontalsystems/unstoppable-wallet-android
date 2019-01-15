@@ -222,12 +222,11 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
                         textCurrencyAmount.visibility = View.VISIBLE
                         textCurrencyAmount.text = balanceViewItem.currencyValue?.let { ValueFormatter.format(it) }
                         textCurrencyAmount.setTextColor(ContextCompat.getColor(containerView.context, if (balanceViewItem.rateExpired) R.color.yellow_crypto_40 else R.color.yellow_crypto))
+                        buttonPay.isEnabled = true
                     }
 
                     textCoinAmount.visibility = View.VISIBLE
                     textCoinAmount.text = ValueFormatter.format(balanceViewItem.coinValue)
-
-                    buttonPay.isEnabled = true
                 }
                 is AdapterState.NotSynced -> {
                     imgSyncFailed.visibility = View.VISIBLE
