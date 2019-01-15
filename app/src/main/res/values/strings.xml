@@ -72,6 +72,7 @@
     <string name="Send_Button_Paste">Paste</string>
     <string name="Send_Button_More">More</string>
     <string name="Send_Button_Send">Send</string>
+    <string name="Send_Button_Max">Max</string>
 
     <string name="Send_ScanQrCode">Scan QR Code</string>
     <string name="Send_Success">Sent!</string>

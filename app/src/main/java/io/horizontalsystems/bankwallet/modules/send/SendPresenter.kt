@@ -40,6 +40,16 @@ class SendPresenter(
         view?.setSendButtonEnabled(viewItem.sendButtonEnabled)
     }
 
+    override fun onMaxClicked() {
+        val totalBalanceMinusFee = interactor.getTotalBalanceMinusFee(userInput)
+        userInput.amount = totalBalanceMinusFee
+
+        val state = interactor.stateForUserInput(userInput)
+        val viewItem = factory.viewItemForState(state)
+
+        view?.setAmountInfo(viewItem.amountInfo)
+    }
+
     override fun onSwitchClicked() {
         val convertedAmount = interactor.convertedAmountForInputType(userInput.inputType, userInput.amount)
                 ?: return
