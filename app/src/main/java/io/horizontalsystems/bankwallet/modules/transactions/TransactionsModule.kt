@@ -51,12 +51,15 @@ object TransactionsModule {
         fun clear()
         fun fetchRecords(fetchDataList: List<FetchData>)
         fun setSelectedCoinCodes(selectedCoinCodes: List<CoinCode>)
+        fun fetchLastBlockHeights()
     }
 
     interface IInteractorDelegate {
         fun onUpdateCoinCodes(allCoinCodes: List<CoinCode>)
         fun onUpdateSelectedCoinCodes(selectedCoinCodes: List<CoinCode>)
         fun didFetchRecords(records: Map<CoinCode, List<TransactionRecord>>)
+        fun onUpdateLastBlockHeight(coinCode: CoinCode, lastBlockHeight: Int)
+        fun onUpdateConfirmationThreshold(coinCode: CoinCode, confirmationThreshold: Int)
     }
 
     interface IRouter {
@@ -67,7 +70,7 @@ object TransactionsModule {
         val dataSource = TransactionRecordDataSource()
         val interactor = TransactionsInteractor(App.walletManager)
         val transactionsLoader = TransactionsLoader(dataSource)
-        val presenter = TransactionsPresenter(interactor, router, TransactionViewItemFactory(App.walletManager, App.currencyManager, App.rateManager), transactionsLoader)
+        val presenter = TransactionsPresenter(interactor, router, TransactionViewItemFactory(App.walletManager, App.currencyManager, App.rateManager), transactionsLoader, LastBlockHeightDataSource())
 
         presenter.view = view
         interactor.delegate = presenter

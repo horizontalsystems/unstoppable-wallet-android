@@ -54,6 +54,7 @@ class TransactionsLoaderTest {
         loader.setCoinCodes(coinCodes)
 
         verify(dataSource).setCoinCodes(coinCodes)
+        verify(delegate).didChangeData()
     }
 
     @Test

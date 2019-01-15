@@ -122,7 +122,7 @@ interface IAdapter {
 
     val confirmationsThreshold: Int
     val lastBlockHeight: Int?
-    val lastBlockHeightSubject: PublishSubject<Int>
+    val lastBlockHeightUpdatedSignal: PublishSubject<Unit>
 
     val transactionRecordsSubject: PublishSubject<List<TransactionRecord>>
 

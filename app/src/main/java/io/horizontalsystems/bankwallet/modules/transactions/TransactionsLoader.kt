@@ -9,7 +9,7 @@ class TransactionsLoader(private val dataSource: TransactionRecordDataSource) {
         fun fetchRecords(fetchDataList: List<TransactionsModule.FetchData>)
     }
 
-    var delegate : Delegate? = null
+    var delegate: Delegate? = null
 
     val itemsCount: Int
         get() = dataSource.itemsCount
@@ -21,6 +21,7 @@ class TransactionsLoader(private val dataSource: TransactionRecordDataSource) {
 
     fun setCoinCodes(coinCodes: List<CoinCode>) {
         dataSource.setCoinCodes(coinCodes)
+        delegate?.didChangeData()
     }
 
     fun loadNext() {

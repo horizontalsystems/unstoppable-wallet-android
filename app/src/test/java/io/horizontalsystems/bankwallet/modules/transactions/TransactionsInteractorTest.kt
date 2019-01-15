@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.core.IAdapter
@@ -35,6 +37,56 @@ class TransactionsInteractorTest {
         interactor.delegate = delegate
 
         whenever(walletManager.walletsUpdatedSignal).thenReturn(walletsUpdatedSignal)
+    }
+
+    @Test
+    fun fetchLastBlockHeights() {
+        val lastBlockHeight = 12312
+        val confirmationThreshold = 12312
+        val adapter1 = mock(IAdapter::class.java)
+        val wallets = listOf(wallet1)
+        val coinCode1 = "BTC"
+
+        val mockSubject = mock<PublishSubject<Unit>>()
+        whenever(mockSubject.throttleLast(any(), any())).thenReturn(PublishSubject.create())
+
+        whenever(adapter1.lastBlockHeightUpdatedSignal).thenReturn(mockSubject)
+        whenever(adapter1.lastBlockHeight).thenReturn(lastBlockHeight)
+        whenever(adapter1.confirmationsThreshold).thenReturn(confirmationThreshold)
+        whenever(wallet1.adapter).thenReturn(adapter1)
+        whenever(wallet1.coinCode).thenReturn(coinCode1)
+        whenever(walletManager.wallets).thenReturn(wallets)
+
+        interactor.fetchLastBlockHeights()
+
+        verify(delegate).onUpdateLastBlockHeight(coinCode1, lastBlockHeight)
+        verify(delegate).onUpdateConfirmationThreshold(coinCode1, confirmationThreshold)
+    }
+
+    @Test
+    fun fetchLastBlockHeights_update() {
+        val lastBlockHeightUpdatedSignal1 = PublishSubject.create<Unit>()
+        val lastBlockHeight = 12312
+        val lastBlockHeightUpdated = 345345
+        val adapter1 = mock(IAdapter::class.java)
+        val wallets = listOf(wallet1)
+        val coinCode1 = "BTC"
+
+        val mockSubject = mock<PublishSubject<Unit>>()
+        whenever(mockSubject.throttleLast(any(), any())).thenReturn(lastBlockHeightUpdatedSignal1)
+
+        whenever(adapter1.lastBlockHeightUpdatedSignal).thenReturn(mockSubject)
+        whenever(adapter1.lastBlockHeight).thenReturn(lastBlockHeight, lastBlockHeightUpdated)
+        whenever(wallet1.adapter).thenReturn(adapter1)
+        whenever(wallet1.coinCode).thenReturn(coinCode1)
+        whenever(walletManager.wallets).thenReturn(wallets)
+
+        interactor.fetchLastBlockHeights()
+
+        lastBlockHeightUpdatedSignal1.onNext(Unit)
+
+        verify(delegate).onUpdateLastBlockHeight(coinCode1, lastBlockHeight)
+        verify(delegate).onUpdateLastBlockHeight(coinCode1, lastBlockHeightUpdated)
     }
 
     @Test

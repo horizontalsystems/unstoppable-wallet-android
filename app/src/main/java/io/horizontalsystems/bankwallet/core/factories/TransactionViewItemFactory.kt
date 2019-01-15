@@ -17,9 +17,8 @@ class TransactionViewItemFactory(
 
     private val latestRateFallbackThreshold: Long = 60 // minutes
 
-    fun item(transactionItem: TransactionItem): TransactionViewItem {
+    fun item(transactionItem: TransactionItem, lastBlockHeight: Int?, threshold: Int?): TransactionViewItem {
         val record = transactionItem.record
-        val adapter = walletManager.wallets.firstOrNull { it.coinCode == record.coinCode }?.adapter
 
         val rateValue = when {
             record.rate != 0.0 -> record.rate
@@ -28,20 +27,15 @@ class TransactionViewItemFactory(
 
         val convertedValue = rateValue?.let { it * record.amount }
 
-        var status: TransactionStatus = TransactionStatus.Completed
-
-        val lastBlockHeight = adapter?.lastBlockHeight
+        var status: TransactionStatus = TransactionStatus.Pending
 
         if (record.blockHeight != 0L && lastBlockHeight != null) {
 
             val confirmations = lastBlockHeight - record.blockHeight + 1
 
             if (confirmations >= 0) {
-
-                val threshold = adapter.confirmationsThreshold
-
                 status = when {
-                    confirmations >= threshold -> TransactionStatus.Completed
+                    confirmations >= threshold ?: 1 -> TransactionStatus.Completed
                     else -> TransactionStatus.Processing(confirmations.toInt())
                 }
             }

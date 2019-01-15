@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.transactions
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 
-class TransactionsPresenter(private val interactor: TransactionsModule.IInteractor, private val router: TransactionsModule.IRouter, private val factory: TransactionViewItemFactory, private val loader: TransactionsLoader) : TransactionsModule.IViewDelegate, TransactionsModule.IInteractorDelegate, TransactionsLoader.Delegate {
+class TransactionsPresenter(private val interactor: TransactionsModule.IInteractor, private val router: TransactionsModule.IRouter, private val factory: TransactionViewItemFactory, private val loader: TransactionsLoader, private val lastBlockHeightDataSource: LastBlockHeightDataSource) : TransactionsModule.IViewDelegate, TransactionsModule.IInteractorDelegate, TransactionsLoader.Delegate {
 
     var view: TransactionsModule.IView? = null
 
@@ -27,7 +27,12 @@ class TransactionsPresenter(private val interactor: TransactionsModule.IInteract
         get() = loader.itemsCount
 
     override fun itemForIndex(index: Int): TransactionViewItem {
-        return factory.item(loader.itemForIndex(index))
+        val transactionItem = loader.itemForIndex(index)
+        val coinCode = transactionItem.coinCode
+        val lastBlockHeight = lastBlockHeightDataSource.getLastBlockHeight(coinCode)
+        val threshold = lastBlockHeightDataSource.getConfirmationThreshold(coinCode)
+
+        return factory.item(transactionItem, lastBlockHeight, threshold)
     }
 
     override fun onBottomReached() {
@@ -42,6 +47,8 @@ class TransactionsPresenter(private val interactor: TransactionsModule.IInteract
         loader.loadNext()
 
         view?.showFilters(listOf(null).plus(allCoinCodes))
+
+        interactor.fetchLastBlockHeights()
     }
 
     override fun onUpdateSelectedCoinCodes(selectedCoinCodes: List<CoinCode>) {
@@ -52,6 +59,14 @@ class TransactionsPresenter(private val interactor: TransactionsModule.IInteract
 
     override fun didFetchRecords(records: Map<CoinCode, List<TransactionRecord>>) {
         loader.didFetchRecords(records)
+    }
+
+    override fun onUpdateLastBlockHeight(coinCode: CoinCode, lastBlockHeight: Int) {
+        lastBlockHeightDataSource.setLastBlockHeight(lastBlockHeight, coinCode)
+    }
+
+    override fun onUpdateConfirmationThreshold(coinCode: CoinCode, confirmationThreshold: Int) {
+        lastBlockHeightDataSource.setConfirmationThreshold(confirmationThreshold, coinCode)
     }
 
     override fun didChangeData() {

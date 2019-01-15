@@ -1,16 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import android.util.Log
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 
 class TransactionsInteractor(private val walletManager: IWalletManager) : TransactionsModule.IInteractor {
     var delegate: TransactionsModule.IInteractorDelegate? = null
 
     private val disposables = CompositeDisposable()
+    private val lastBlockHeightDisposables = CompositeDisposable()
 
     override fun fetchCoinCodes() {
         onUpdateCoinCodes()
@@ -24,8 +26,6 @@ class TransactionsInteractor(private val walletManager: IWalletManager) : Transa
     }
 
     override fun fetchRecords(fetchDataList: List<TransactionsModule.FetchData>) {
-        Log.e("AAA", "fetchRecords: ${fetchDataList}")
-//
         if (fetchDataList.isEmpty()) {
             delegate?.didFetchRecords(mapOf())
             return
@@ -69,26 +69,35 @@ class TransactionsInteractor(private val walletManager: IWalletManager) : Transa
         delegate?.onUpdateSelectedCoinCodes(if (selectedCoinCodes.isEmpty()) walletManager.wallets.map { it.coinCode } else selectedCoinCodes)
     }
 
+    override fun fetchLastBlockHeights() {
+        lastBlockHeightDisposables.clear()
+
+        walletManager.wallets.forEach { wallet ->
+            onUpdateLastBlockHeight(wallet)
+            delegate?.onUpdateConfirmationThreshold(wallet.coinCode, wallet.adapter.confirmationsThreshold)
+
+            lastBlockHeightDisposables.add(wallet.adapter.lastBlockHeightUpdatedSignal
+                    .throttleLast(3, TimeUnit.SECONDS)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .subscribe {
+                        onUpdateLastBlockHeight(wallet)
+                    })
+        }
+    }
+
     override fun clear() {
         disposables.clear()
+    }
+
+    private fun onUpdateLastBlockHeight(wallet: Wallet) {
+        wallet.adapter.lastBlockHeight?.let { lastBlockHeight ->
+            delegate?.onUpdateLastBlockHeight(wallet.coinCode, lastBlockHeight)
+        }
     }
 
     private fun onUpdateCoinCodes() {
         delegate?.onUpdateCoinCodes(walletManager.wallets.map { it.coinCode })
     }
 
-
-//    private fun resubscribeToLastBlockHeightSubjects() {
-//        lastBlockHeightDisposable?.dispose()
-//        lastBlockHeightDisposable = Observable.merge(walletManager.wallets.map { it.adapter.lastBlockHeightSubject })
-//                .throttleLast(3, TimeUnit.SECONDS)
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe {
-//                    delegate?.didUpdateDataSource()
-//                }
-//
-//        lastBlockHeightDisposable?.let {
-//            disposables.add(it)
-//        }
-//    }
 }

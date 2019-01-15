@@ -32,7 +32,7 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
 
     override val confirmationsThreshold: Int = 6
     override val lastBlockHeight: Int get() = bitcoinKit.lastBlockHeight
-    override val lastBlockHeightSubject: PublishSubject<Int> = PublishSubject.create()
+    override val lastBlockHeightUpdatedSignal: PublishSubject<Unit> = PublishSubject.create()
 
     override val transactionRecordsSubject: PublishSubject<List<TransactionRecord>> = PublishSubject.create()
 
@@ -114,7 +114,7 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
     }
 
     override fun onLastBlockInfoUpdate(bitcoinKit: BitcoinKit, blockInfo: BlockInfo) {
-        lastBlockHeightSubject.onNext(blockInfo.height)
+        lastBlockHeightUpdatedSignal.onNext(Unit)
     }
 
     override fun onKitStateUpdate(bitcoinKit: BitcoinKit, state: BitcoinKit.KitState) {

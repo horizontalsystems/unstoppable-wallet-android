@@ -18,12 +18,13 @@ class TransactionsPresenterTest {
     private val view = mock(TransactionsModule.IView::class.java)
     private val factory = mock(TransactionViewItemFactory::class.java)
     private val loader = mock(TransactionsLoader::class.java)
+    private val lastBlockHeightDataSource = mock(LastBlockHeightDataSource::class.java)
 
     private lateinit var presenter: TransactionsPresenter
 
     @Before
     fun before() {
-        presenter = TransactionsPresenter(interactor, router, factory, loader)
+        presenter = TransactionsPresenter(interactor, router, factory, loader, lastBlockHeightDataSource)
         presenter.view = view
     }
 
@@ -39,11 +40,17 @@ class TransactionsPresenterTest {
     @Test
     fun itemForIndex() {
         val index = 42
+        val lastBlockHeight = 123
+        val threshold = 6
+        val coinCode = "BTC"
         val viewItem = mock(TransactionViewItem::class.java)
         val transactionItem = mock(TransactionItem::class.java)
 
+        whenever(transactionItem.coinCode).thenReturn(coinCode)
         whenever(loader.itemForIndex(index)).thenReturn(transactionItem)
-        whenever(factory.item(transactionItem)).thenReturn(viewItem)
+        whenever(lastBlockHeightDataSource.getLastBlockHeight(coinCode)).thenReturn(lastBlockHeight)
+        whenever(lastBlockHeightDataSource.getConfirmationThreshold(coinCode)).thenReturn(threshold)
+        whenever(factory.item(transactionItem, lastBlockHeight, threshold)).thenReturn(viewItem)
 
         Assert.assertEquals(viewItem, presenter.itemForIndex(index))
     }
@@ -81,6 +88,7 @@ class TransactionsPresenterTest {
         verify(loader).loading = false
         verify(loader).loadNext()
         verify(view).showFilters(listOf(null, "BTC", "ETH"))
+        verify(interactor).fetchLastBlockHeights()
     }
 
     @Test
@@ -137,6 +145,26 @@ class TransactionsPresenterTest {
         presenter.fetchRecords(fetchDataList)
 
         verify(interactor).fetchRecords(fetchDataList)
+    }
+
+    @Test
+    fun onUpdateLastBlockHeight() {
+        val coinCode = "coinCode"
+        val lastBlockHeight = 123123
+
+        presenter.onUpdateLastBlockHeight(coinCode, lastBlockHeight)
+
+        verify(lastBlockHeightDataSource).setLastBlockHeight(lastBlockHeight, coinCode)
+    }
+
+    @Test
+    fun onUpdateConfirmationThreshold() {
+        val coinCode = "coinCode"
+        val threshold = 123123
+
+        presenter.onUpdateConfirmationThreshold(coinCode, threshold)
+
+        verify(lastBlockHeightDataSource).setConfirmationThreshold(threshold, coinCode)
     }
 
 }
