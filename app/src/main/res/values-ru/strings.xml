@@ -62,7 +62,8 @@
     <string name="Send_DialogTotal">Итого:</string>
     <!--Deposit-->
     <string name="Deposit_Title">Получено %s</string>
-    <string name="Deposit_Copy">Скопировать</string>
+    <string name="Deposit_Share">Share</string>
+    <string name="Deposit_Your_Address">Your Address</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">только что</string>
     <string name="Timestamp_MinAgo">%dm. мин назад</string>
