@@ -12,6 +12,7 @@ import org.mockito.Mockito
 class ReceivePresenterTest {
 
     private val interactor = Mockito.mock(ReceiveModule.IInteractor::class.java)
+    private val router = Mockito.mock(ReceiveModule.IRouter::class.java)
     private val view = Mockito.mock(ReceiveModule.IView::class.java)
 
     private var coin = CoinCode()
@@ -24,7 +25,7 @@ class ReceivePresenterTest {
 
     @Before
     fun setUp() {
-        presenter = ReceivePresenter(interactor)
+        presenter = ReceivePresenter(interactor, router)
         presenter.view = view
     }
 
@@ -51,18 +52,11 @@ class ReceivePresenterTest {
     }
 
     @Test
-    fun onCopyClick() {
+    fun onShareClick() {
         presenter.didReceiveAddresses(addresses)
-        presenter.onCopyClick(any())
+        presenter.onShareClick(any())
 
-        verify(interactor).copyToClipboard(addressItem.address)
-    }
-
-    @Test
-    fun didCopyToClipboard() {
-        presenter.didCopyToClipboard()
-
-        verify(view).showCopied()
+        verify(router).shareAddress(addressItem.address)
     }
 
 }

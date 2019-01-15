@@ -82,13 +82,13 @@
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/btnCopy"
-        app:layout_constraintStart_toStartOf="@+id/btnCopy"
+        app:layout_constraintEnd_toEndOf="@+id/btnShare"
+        app:layout_constraintStart_toStartOf="@+id/btnShare"
         app:layout_constraintTop_toBottomOf="@+id/txtYourAddress"
         />
 
     <Button
-        android:id="@+id/btnCopy"
+        android:id="@+id/btnShare"
         style="@style/ButtonGreen_12"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -96,7 +96,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
-        android:text="@string/Deposit_Copy"
+        android:text="@string/Deposit_Share"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

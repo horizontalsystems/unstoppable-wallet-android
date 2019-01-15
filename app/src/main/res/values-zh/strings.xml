@@ -62,7 +62,7 @@
     <string name="Send_DialogTotal">总额:</string>
     <!--Deposit-->
     <string name="Deposit_Title">收到%s</string>
-    <string name="Deposit_Copy">复制</string>
+    <string name="Deposit_Share">复制</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">just now</string>
     <string name="Timestamp_MinAgo">%dm. ago</string>

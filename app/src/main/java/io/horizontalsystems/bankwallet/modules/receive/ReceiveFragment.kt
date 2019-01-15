@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.receive
 import android.app.Dialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.BottomSheetDialogFragment
@@ -44,7 +45,7 @@ class ReceiveFragment : BottomSheetDialogFragment() {
         mDialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
         mDialog?.window?.setGravity(Gravity.BOTTOM)
 
-        mDialog?.findViewById<Button>(R.id.btnCopy)?.setOnClickListener { viewModel.delegate.onCopyClick(itemIndex) }
+        mDialog?.findViewById<Button>(R.id.btnShare)?.setOnClickListener { viewModel.delegate.onShareClick(itemIndex) }
 
         viewModel.showAddressesLiveData.observe(this, Observer { addresses ->
             addresses?.apply {
@@ -70,6 +71,17 @@ class ReceiveFragment : BottomSheetDialogFragment() {
 
         viewModel.showCopiedLiveEvent.observe(this, Observer {
             HudHelper.showSuccessMessage(R.string.Hud_Text_Copied)
+        })
+
+        viewModel.shareAddressLiveEvent.observe(this, Observer { address ->
+            address?.let {
+                val sendIntent: Intent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_TEXT, it)
+                    type = "text/plain"
+                }
+                startActivity(sendIntent)
+            }
         })
 
         return mDialog as Dialog
