@@ -28,66 +28,51 @@ sealed class TransactionStatus {
 
 object TransactionsModule {
 
+    data class FetchData(val coinCode: CoinCode, val hashFrom: String?, val limit: Int)
+
     interface IView {
-        fun showFilters(filters: List<TransactionFilterItem>)
-        fun didRefresh()
-        fun reload()
+        fun showFilters(filters: List<CoinCode?>)
+        fun reload(fromIndex: Int? = null, count: Int? = null)
     }
 
     interface IViewDelegate {
         fun viewDidLoad()
         fun onTransactionItemClick(transaction: TransactionViewItem)
-        fun refresh()
         fun onFilterSelect(coinCode: CoinCode?)
         fun onClear()
 
         val itemsCount: Int
         fun itemForIndex(index: Int): TransactionViewItem
+        fun onBottomReached()
     }
 
     interface IInteractor {
-        fun retrieveFilters()
-        fun refresh()
-        fun setCoin(coinCode: CoinCode?)
-
-        val recordsCount: Int
-        fun recordForIndex(index: Int): TransactionRecord
+        fun fetchCoinCodes()
         fun clear()
+        fun fetchRecords(fetchDataList: List<FetchData>)
+        fun setSelectedCoinCodes(selectedCoinCodes: List<CoinCode>)
     }
 
     interface IInteractorDelegate {
-        fun didRetrieveFilters(filters: List<CoinCode>)
-        fun didUpdateDataSource()
-        fun didRefresh()
+        fun onUpdateCoinCodes(allCoinCodes: List<CoinCode>)
+        fun onUpdateSelectedCoinCodes(selectedCoinCodes: List<CoinCode>)
+        fun didFetchRecords(records: Map<CoinCode, List<TransactionRecord>>)
     }
-
 
     interface IRouter {
         fun openTransactionInfo(transactionHash: String)
     }
 
-    interface ITransactionRecordDataSource {
-        var delegate: ITransactionRecordDataSourceDelegate?
-
-        val count: Int
-        fun recordForIndex(index: Int): TransactionRecord
-        fun setCoin(coinCode: CoinCode?)
-    }
-
-    interface ITransactionRecordDataSourceDelegate {
-        fun onUpdateResults()
-    }
-
     fun initModule(view: TransactionsViewModel, router: IRouter) {
+        val dataSource = TransactionRecordDataSource()
+        val interactor = TransactionsInteractor(App.walletManager)
+        val transactionsLoader = TransactionsLoader(dataSource)
+        val presenter = TransactionsPresenter(interactor, router, TransactionViewItemFactory(App.walletManager, App.currencyManager, App.rateManager), transactionsLoader)
 
-        val dataSource = TransactionRecordDataSource(App.appDatabase)
-        val interactor = TransactionsInteractor(App.walletManager, dataSource)
-        val presenter = TransactionsPresenter(interactor, router, TransactionViewItemFactory(App.walletManager, App.currencyManager, App.rateManager))
-
-        dataSource.delegate = interactor
         presenter.view = view
         interactor.delegate = presenter
         view.delegate = presenter
+        transactionsLoader.delegate = presenter
     }
 
 }

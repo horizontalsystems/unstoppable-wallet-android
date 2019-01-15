@@ -1,25 +1,22 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
+import io.horizontalsystems.bankwallet.entities.TransactionRecord
 
-class TransactionsPresenter(private val interactor: TransactionsModule.IInteractor, private val router: TransactionsModule.IRouter, private val factory: TransactionViewItemFactory) : TransactionsModule.IViewDelegate, TransactionsModule.IInteractorDelegate {
+class TransactionsPresenter(private val interactor: TransactionsModule.IInteractor, private val router: TransactionsModule.IRouter, private val factory: TransactionViewItemFactory, private val loader: TransactionsLoader) : TransactionsModule.IViewDelegate, TransactionsModule.IInteractorDelegate, TransactionsLoader.Delegate {
 
     var view: TransactionsModule.IView? = null
 
     override fun viewDidLoad() {
-        interactor.retrieveFilters()
+        interactor.fetchCoinCodes()
     }
 
     override fun onTransactionItemClick(transaction: TransactionViewItem) {
         router.openTransactionInfo(transaction.transactionHash)
     }
 
-    override fun refresh() {
-        interactor.refresh()
-    }
-
     override fun onFilterSelect(coinCode: CoinCode?) {
-        interactor.setCoin(coinCode)
+        interactor.setSelectedCoinCodes(coinCode?.let { listOf(coinCode) } ?: listOf())
     }
 
     override fun onClear() {
@@ -27,63 +24,42 @@ class TransactionsPresenter(private val interactor: TransactionsModule.IInteract
     }
 
     override val itemsCount: Int
-        get() = interactor.recordsCount
+        get() = loader.itemsCount
 
     override fun itemForIndex(index: Int): TransactionViewItem {
-        val record = interactor.recordForIndex(index)
-        return factory.item(record)
+        return factory.item(loader.itemForIndex(index))
     }
 
-    override fun didRetrieveFilters(filters: List<CoinCode>) {
-        val filterItems = filters.map {
-            TransactionFilterItem(it, it)
+    override fun onBottomReached() {
+        if (!loader.loading) {
+            loader.loadNext()
         }
-        view?.showFilters(filterItems)
     }
 
-    override fun didUpdateDataSource() {
+    override fun onUpdateCoinCodes(allCoinCodes: List<CoinCode>) {
+        loader.setCoinCodes(allCoinCodes)
+        loader.loading = false
+        loader.loadNext()
+
+        view?.showFilters(listOf(null).plus(allCoinCodes))
+    }
+
+    override fun onUpdateSelectedCoinCodes(selectedCoinCodes: List<CoinCode>) {
+        loader.setCoinCodes(selectedCoinCodes)
+        loader.loading = false
+        loader.loadNext()
+    }
+
+    override fun didFetchRecords(records: Map<CoinCode, List<TransactionRecord>>) {
+        loader.didFetchRecords(records)
+    }
+
+    override fun didChangeData() {
+        loader.loading = false
         view?.reload()
     }
 
-    override fun didRefresh() {
-        view?.didRefresh()
+    override fun fetchRecords(fetchDataList: List<TransactionsModule.FetchData>) {
+        interactor.fetchRecords(fetchDataList)
     }
-
-    //    override fun viewDidLoad() {
-//        interactor.retrieveFilters()
-//    }
-//
-//    override fun onTransactionItemClick(transaction: TransactionRecordViewItem) {
-//        router.showTransactionInfo(transaction)
-//    }
-//
-//    override fun refresh() {
-//        interactor.refresh()
-//        Handler().postDelayed({
-//            view?.didRefresh()
-//        }, 3 * 1000)
-//    }
-//
-//    override fun onFilterSelect(adapterId: String?) {
-//        println("onFilterSelect $adapterId")
-//        interactor.retrieveTransactions(adapterId = adapterId)
-//    }
-//
-//    override fun didRetrieveFilters(filters: List<TransactionFilterItem>) {
-//        val filterItems: List<TransactionFilterItem> = filters.map { TransactionFilterItem(it.adapterId, it.name) }
-//
-//        val items = filterItems.toMutableList()
-//        items.add(0, TransactionFilterItem(null, "All"))
-//        view?.showFilters(filters = items)
-//    }
-//
-//    var view: TransactionsModule.IView? = null
-//
-//    override fun didRetrieveItems(items: List<TransactionRecordViewItem>) {
-//        view?.showTransactionItems(items)
-//    }
-//
-//    override fun onClear() {
-//        interactor.onCleared()
-//    }
 }

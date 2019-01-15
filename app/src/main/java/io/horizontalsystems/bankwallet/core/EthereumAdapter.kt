@@ -111,6 +111,10 @@ class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, Eth
         transactionRecordsSubject.onNext(records)
     }
 
+    override fun getTransactionsObservable(hashFrom: String?, limit: Int): Flowable<List<TransactionRecord>> {
+        return Flowable.just(listOf())
+    }
+
     private fun transactionRecord(transaction: Transaction): TransactionRecord {
         val amountEther: Double = weisToEther(transaction.value) ?: 0.0
 

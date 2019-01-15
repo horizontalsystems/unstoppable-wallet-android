@@ -1,50 +1,119 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import io.horizontalsystems.bankwallet.core.storage.AppDatabase
+import io.horizontalsystems.bankwallet.entities.TransactionItem
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
-import io.reactivex.Flowable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule.FetchData
 
-class TransactionRecordDataSource(private val appDatabase: AppDatabase) : TransactionsModule.ITransactionRecordDataSource {
+class TransactionRecordDataSource {
 
-    private var results: List<TransactionRecord> = listOf()
-    private var disposable: Disposable? = null
+    val itemsCount
+        get() = items.size
 
-    override var delegate: TransactionsModule.ITransactionRecordDataSourceDelegate? = null
+    val allShown
+        get() = coinCodes.all { pools[it]!!.allShown }
 
-    override val count: Int
-        get() = results.count()
+    private var pools = mutableMapOf<CoinCode, Pool>()
+    private val items = mutableListOf<TransactionItem>()
+    private var coinCodes = listOf<CoinCode>()
+    private val limit = 10
 
-    override fun recordForIndex(index: Int): TransactionRecord {
-        return results[index]
+    fun getFetchDataList() = coinCodes.mapNotNull { coinCode ->
+        pools[coinCode]?.getFetchData(coinCode, limit)
     }
 
-    override fun setCoin(coinCode: CoinCode?) {
-        subscribe(coinCode)
+    fun handleNextRecords(records: Map<CoinCode, List<TransactionRecord>>) {
+        records.forEach { (coinCode, transactionRecords) ->
+            pools[coinCode]?.add(transactionRecords)
+        }
+        increasePage()
     }
 
-    init {
-        subscribe()
+    fun increasePage() {
+        val unusedItems = mutableListOf<TransactionItem>()
+
+        coinCodes.forEach { coinCode ->
+            pools[coinCode]?.unusedRecords()?.forEach {
+                unusedItems.add(TransactionItem(coinCode, it))
+            }
+        }
+
+        unusedItems.sortByDescending { it.record.timestamp }
+
+        val usedItems = unusedItems.take(limit)
+
+        items.addAll(usedItems)
+
+        usedItems.forEach {
+            pools[it.coinCode]?.increaseFirstUnusedIndex()
+        }
     }
 
-    private fun subscribe(coinCode: CoinCode? = null) {
-        disposable?.dispose()
+    fun itemForIndex(index: Int) = items[index]
 
-        disposable = getTransactionRecords(coinCode)
-                .subscribeOn(io.reactivex.schedulers.Schedulers.io())
-                .unsubscribeOn(io.reactivex.schedulers.Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    results = it
-                    delegate?.onUpdateResults()
-                }
+    fun setCoinCodes(coinCodes: List<CoinCode>) {
+        pools.values.forEach {
+            it.resetLastUnusedIndex()
+        }
+
+        coinCodes.forEach {
+            if (!pools.containsKey(it)) {
+                pools[it] = Pool()
+            }
+        }
+
+        this.coinCodes = coinCodes
+        items.clear()
+    }
+}
+
+class Pool {
+
+    private val records = mutableListOf<TransactionRecord>()
+    private var firstUnusedIndex = 0
+    var allLoaded = false
+        private set
+
+    val allShown: Boolean
+        get() = allLoaded && unusedRecords().isEmpty()
+
+    fun unusedRecords(): List<TransactionRecord> {
+        return when {
+            records.isEmpty() -> listOf()
+            else -> records.subList(firstUnusedIndex, records.size)
+        }
     }
 
-    private fun getTransactionRecords(coinCode: CoinCode? = null): Flowable<List<TransactionRecord>> =
-            if (coinCode == null)
-                appDatabase.transactionDao().getAll()
-            else
-                appDatabase.transactionDao().getAll(coinCode)
+    fun increaseFirstUnusedIndex() {
+        firstUnusedIndex++
+    }
+
+    fun resetLastUnusedIndex() {
+        firstUnusedIndex = 0
+    }
+
+    fun getFetchData(coinCode: CoinCode, limit: Int): FetchData? {
+        if (allLoaded) {
+            return null
+        }
+
+        val unusedRecordsSize = unusedRecords().size
+        if (unusedRecordsSize > limit) {
+            return null
+        }
+
+        val hashFrom = records.lastOrNull()?.transactionHash
+        val fetchLimit = limit + 1 - unusedRecordsSize
+
+        return FetchData(coinCode, hashFrom, fetchLimit)
+
+    }
+
+    fun add(transactionRecords: List<TransactionRecord>) {
+        if (transactionRecords.isEmpty()) {
+            allLoaded = true
+        } else {
+            records.addAll(transactionRecords)
+        }
+    }
 
 }

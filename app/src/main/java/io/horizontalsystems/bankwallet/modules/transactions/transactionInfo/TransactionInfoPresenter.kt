@@ -48,9 +48,9 @@ class TransactionInfoPresenter(
     // IInteractorDelegate methods
 
     override fun didGetTransaction(txRecord: TransactionRecord) {
-        val viewItem = transactionFactory.item(txRecord)
-        transactionViewItem = viewItem
-        view?.showTransactionItem(viewItem)
+//        val viewItem = transactionFactory.item(txRecord)
+//        transactionViewItem = viewItem
+//        view?.showTransactionItem(viewItem)
     }
 
 }

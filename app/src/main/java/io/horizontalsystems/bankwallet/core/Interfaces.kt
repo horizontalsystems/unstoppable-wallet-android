@@ -143,6 +143,7 @@ interface IAdapter {
     fun validate(address: String)
 
     val receiveAddress: String
+    fun getTransactionsObservable(hashFrom: String?, limit: Int): Flowable<List<TransactionRecord>>
 }
 
 interface ISystemInfoManager {

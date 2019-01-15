@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.managers.RateManager
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.TransactionItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import java.util.*
@@ -17,7 +17,8 @@ class TransactionViewItemFactory(
 
     private val latestRateFallbackThreshold: Long = 60 // minutes
 
-    fun item(record: TransactionRecord): TransactionViewItem {
+    fun item(transactionItem: TransactionItem): TransactionViewItem {
+        val record = transactionItem.record
         val adapter = walletManager.wallets.firstOrNull { it.coinCode == record.coinCode }?.adapter
 
         val rateValue = when {
@@ -27,7 +28,7 @@ class TransactionViewItemFactory(
 
         val convertedValue = rateValue?.let { it * record.amount }
 
-        var status: TransactionStatus = TransactionStatus.Pending
+        var status: TransactionStatus = TransactionStatus.Completed
 
         val lastBlockHeight = adapter?.lastBlockHeight
 
@@ -48,14 +49,14 @@ class TransactionViewItemFactory(
 
         val incoming = record.amount > 0
 
-        val toAddress = when(incoming) {
+        val toAddress = when (incoming) {
             true -> record.to.find { it.mine }?.address
             false -> record.to.find { !it.mine }?.address ?: record.to.find { it.mine }?.address
         }
 
         return TransactionViewItem(
                 record.transactionHash,
-                CoinValue(record.coinCode, record.amount),
+                CoinValue(transactionItem.coinCode, record.amount),
                 convertedValue?.let { CurrencyValue(currencyManager.baseCurrency, it) },
                 record.from.firstOrNull { it.mine != incoming }?.address,
                 toAddress,

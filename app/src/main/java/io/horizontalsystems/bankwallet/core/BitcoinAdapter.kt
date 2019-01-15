@@ -12,6 +12,7 @@ import io.reactivex.Flowable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import java.util.*
+import kotlin.math.min
 
 class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, newWallet: Boolean, walletId: String?) : IAdapter, BitcoinKit.Listener {
 
@@ -82,6 +83,27 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
 
     override fun validate(address: String) {
         bitcoinKit.validateAddress(address)
+    }
+
+    override fun getTransactionsObservable(hashFrom: String?, limit: Int): Flowable<List<TransactionRecord>> {
+        val transactions = bitcoinKit.transactions.sortedByDescending { it.timestamp }
+
+        val res = if (hashFrom == null) {
+            transactions.take(limit)
+        } else {
+            val firstIndex = transactions.indexOfFirst { it.transactionHash == hashFrom }
+
+            if (firstIndex == -1) {
+                listOf()
+            } else if (firstIndex + 1 >= transactions.size) {
+                listOf()
+            } else {
+                transactions.subList(firstIndex + 1, min(firstIndex + limit + 1, transactions.size))
+            }
+        }
+
+        return Flowable.just(res.map { transactionRecord(it) })
+
     }
 
     //
