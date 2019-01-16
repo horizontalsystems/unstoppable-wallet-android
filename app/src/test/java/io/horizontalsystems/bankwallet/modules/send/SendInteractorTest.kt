@@ -183,17 +183,34 @@ class SendInteractorTest {
     }
 
     @Test
-    fun getTotalBalanceMinusFee() {
+    fun getTotalBalanceMinusFee_coin() {
         val fee = 0.123
         val input = SendModule.UserInput()
         input.address = "address"
         input.amount = 123.0
         input.inputType = SendModule.InputType.COIN
 
-        whenever(adapter.fee(any(), any(), any())).thenReturn(fee)
+        whenever(wallet.adapter.fee(any(), any(), any())).thenReturn(fee)
 
         val expectedBalanceMinusFee = balance - fee
-        val balanceMinusFee = interactor.getTotalBalanceMinusFee(input)
+        val balanceMinusFee = interactor.getTotalBalanceMinusFee(input.inputType, input.address)
+
+        Assert.assertEquals(expectedBalanceMinusFee, balanceMinusFee, 0.001)
+    }
+
+    @Test
+    fun getTotalBalanceMinusFee_currency() {
+        val fee = 0.123
+        val input = SendModule.UserInput()
+        input.address = "address"
+        input.amount = 123.0
+        input.inputType = SendModule.InputType.CURRENCY
+
+        whenever(wallet.adapter.fee(any(), any(), any())).thenReturn(fee)
+
+        interactor.retrieveRate()
+        val expectedBalanceMinusFee = (balance - fee) * rate.value
+        val balanceMinusFee = interactor.getTotalBalanceMinusFee(input.inputType, input.address)
 
         Assert.assertEquals(expectedBalanceMinusFee, balanceMinusFee, 0.001)
     }

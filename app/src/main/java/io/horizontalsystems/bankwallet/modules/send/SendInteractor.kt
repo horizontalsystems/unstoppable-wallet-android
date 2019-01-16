@@ -60,10 +60,13 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
         }
     }
 
-    override fun getTotalBalanceMinusFee(input: SendModule.UserInput): Double {
-        input.amount = wallet.adapter.balance
-        val fee = stateForUserInput(input, false).feeCoinValue?.value ?: 0.0
-        return wallet.adapter.balance- fee
+    override fun getTotalBalanceMinusFee(inputType: SendModule.InputType, address: String?): Double {
+        val fee = wallet.adapter.fee(wallet.adapter.balance, address, false)
+        val balanceMinusFee = wallet.adapter.balance- fee
+        return when(inputType){
+            SendModule.InputType.COIN -> balanceMinusFee
+            else -> balanceMinusFee * (rate?.value ?: 0.0)
+        }
     }
 
     override fun stateForUserInput(input: SendModule.UserInput, senderPay: Boolean): SendModule.State {

@@ -138,7 +138,7 @@ class SendPresenterTest {
     @Test
     fun onMaxClicked() {
         presenter.onMaxClicked()
-        verify(interactor).getTotalBalanceMinusFee(any())
+        verify(interactor).getTotalBalanceMinusFee(userInput.inputType, userInput.address)
         verify(view).setAmountInfo(viewItem.amountInfo)
     }
 

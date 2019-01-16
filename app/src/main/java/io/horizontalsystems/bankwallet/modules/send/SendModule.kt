@@ -55,7 +55,7 @@ object SendModule {
         fun stateForUserInput(input: UserInput, senderPay: Boolean = true): State
 
         fun send(userInput: UserInput)
-        fun getTotalBalanceMinusFee(input: UserInput): Double
+        fun getTotalBalanceMinusFee(inputType: InputType, address: String?): Double
     }
 
     interface IInteractorDelegate {

@@ -41,7 +41,7 @@ class SendPresenter(
     }
 
     override fun onMaxClicked() {
-        val totalBalanceMinusFee = interactor.getTotalBalanceMinusFee(userInput)
+        val totalBalanceMinusFee = interactor.getTotalBalanceMinusFee(userInput.inputType, userInput.address)
         userInput.amount = totalBalanceMinusFee
 
         val state = interactor.stateForUserInput(userInput)
