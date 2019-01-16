@@ -8,10 +8,12 @@ import java.text.NumberFormat
 
 object ValueFormatter {
 
+    private const val COIN_BIG_NUMBER_EDGE = 0.0001
+    private const val FIAT_BIG_NUMBER_EDGE = 100.0
+
     private val coinFormatter: NumberFormat
         get() {
             val format: NumberFormat = NumberFormat.getInstance()
-            format.minimumFractionDigits = 2
             format.maximumFractionDigits = 8
             return format
         }
@@ -19,7 +21,6 @@ object ValueFormatter {
     private val currencyFormatter: NumberFormat
         get() {
             val format: NumberFormat = NumberFormat.getInstance()
-            format.minimumFractionDigits = 2
             format.maximumFractionDigits = 2
             format.roundingMode = RoundingMode.HALF_EVEN
             return format
@@ -38,8 +39,9 @@ object ValueFormatter {
         val value = if (explicitSign) Math.abs(coinValue.value) else coinValue.value
 
         val customFormatter = coinFormatter
-        if (value == 0.0) {
-            customFormatter.maximumFractionDigits = 0
+
+        if (value >= COIN_BIG_NUMBER_EDGE) {
+            customFormatter.maximumFractionDigits = 4
         }
 
         val formattedValue = customFormatter.format(value) ?: run { return null }
@@ -59,10 +61,11 @@ object ValueFormatter {
 
         value = Math.abs(value)
 
-        val bigNumber = value >= 100.0
-
         val formatter = currencyFormatter
-        formatter.maximumFractionDigits = if (bigNumber || approximate || value == 0.0) 0 else 2
+
+        if (value >= FIAT_BIG_NUMBER_EDGE || approximate) {
+            formatter.maximumFractionDigits = 0
+        }
 
         var result: String = formatter.format(value) ?: kotlin.run {
             return null
