@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    >
+    app:layout_constraintTop_toTopOf="parent">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="bottom"
-        app:elevation="0dp"
-        >
+        app:elevation="0dp">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -23,149 +20,49 @@
             android:layout_height="?android:attr/actionBarSize"
             android:theme="@style/ToolbarStyle"
             app:titleMarginStart="16dp"
-            app:titleTextAppearance="@style/TabTitleSmall"
-            />
+            app:titleTextAppearance="@style/TabTitleSmall" />
     </android.support.design.widget.AppBarLayout>
 
-    <ScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="0dp"
+    <ProgressBar
+        android:id="@+id/progressLoading"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="15dp"
+        android:backgroundTint="@color/grey"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/grey"
+        android:indeterminateTintMode="src_atop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/errorContainer"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerTransactionInfo"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="?SettingBackgroundColor"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/bottomBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout"
-        >
-
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-
-            <TextView
-                android:id="@+id/transactionId"
-                android:layout_width="130dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/text_dark_background"
-                android:ellipsize="middle"
-                android:paddingBottom="5dp"
-                android:paddingEnd="8dp"
-                android:paddingStart="8dp"
-                android:paddingTop="3dp"
-                android:singleLine="true"
-                android:textColor="?TransactionDetailValueTextColor"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="1A7o3DtwdLQWyHW1PC8jrfFPi"
-                />
-
-            <ImageView
-                android:id="@+id/statusImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:src="@drawable/processing_image"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/transactionId"
-                />
-
-            <TextView
-                android:id="@+id/statusText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:fontFamily="@font/noto_sans_bold"
-                android:textColor="?TransactionDetailValueTextColor"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/statusImage"
-                tools:text="Pending"
-                />
-
-            <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
-                android:id="@+id/itemTime"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/statusText"
-                app:title="@string/FullInfo_Time"
-                app:value="Aug 7, 2018, 2:12"
-                />
-
-            <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
-                android:id="@+id/itemFrom"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/itemTime"
-                app:title="From"
-                app:value="BU878BUYB96NKB8987687BHJ78"
-                />
-
-            <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
-                android:id="@+id/itemTo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/itemFrom"
-                app:title="@string/FullInfoEth_To"
-                app:value="BU878BUYB96NKB8987687BHJ78"
-                />
-
-            <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
-                android:id="@+id/itemAmount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/itemTo"
-                app:title="Amount"
-                app:value="0.0062 BTC"
-                />
-
-            <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
-                android:id="@+id/itemFee"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/itemAmount"
-                app:title="@string/FullInfo_Fee"
-                app:value="0.006 BTC"
-                />
-
-            <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
-                android:id="@+id/itemBlock"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/itemFee"
-                app:title="Block"
-                app:value="67,457"
-                />
-
-        </android.support.constraint.ConstraintLayout>
-    </ScrollView>
+        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout" />
 
     <!--Bottom bar-->
+
     <View
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="?TransactionDetailBottomBarBackground"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <ImageView
         android:id="@+id/shareBtn"
@@ -175,8 +72,7 @@
         android:src="@drawable/share"
         app:layout_constraintBottom_toBottomOf="@+id/bottomBar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/bottomBar"
-        />
+        app:layout_constraintTop_toTopOf="@+id/bottomBar" />
 
     <ImageView
         android:id="@+id/closeBtn"
@@ -186,8 +82,7 @@
         android:src="@drawable/close"
         app:layout_constraintBottom_toBottomOf="@+id/bottomBar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/bottomBar"
-        />
+        app:layout_constraintTop_toTopOf="@+id/bottomBar" />
 
     <View
         android:id="@+id/bottom_navigation_bar_shadow"
@@ -196,14 +91,12 @@
         android:background="?BottomNavBackground"
         app:layout_constraintBottom_toTopOf="@+id/bottomBar"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        />
+        app:layout_constraintRight_toRightOf="parent" />
 
     <View
         style="@style/Widget.Shadow.AppBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout" />
 
 </android.support.constraint.ConstraintLayout>

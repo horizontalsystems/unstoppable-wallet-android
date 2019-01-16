@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import com.google.gson.GsonBuilder
+import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.entities.LatestRate
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
@@ -12,7 +13,9 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.Path
+import retrofit2.http.Url
 import java.util.concurrent.TimeUnit
 
 class NetworkManager : INetworkManager {
@@ -40,35 +43,17 @@ class NetworkManager : INetworkManager {
                 .onErrorResumeNext(Flowable.empty())
     }
 
+    override fun getTransaction(host: String, path: String): Flowable<JsonObject> {
+        return ServiceFullTransaction.service(host)
+                .getFullTransaction(path)
+    }
 }
 
 object ServiceExchangeApi {
 
-    val service: IExchangeRate
-    private const val apiURL = "https://ipfs.horizontalsystems.xyz/ipns/Qmd4Gv2YVPqs6dmSy1XEq7pQRSgLihqYKL2JjK7DMUFPVz/io-hs/data/xrates/"
-
-    init {
-        val logger = HttpLoggingInterceptor()
-        logger.level = HttpLoggingInterceptor.Level.BASIC
-
-        val httpClient = OkHttpClient.Builder()
-        httpClient.addInterceptor(logger)
-        httpClient.connectTimeout(60, TimeUnit.SECONDS)
-        httpClient.readTimeout(60, TimeUnit.SECONDS)
-
-        val gsonBuilder = GsonBuilder()
-        gsonBuilder.setLenient()
-        val gson = gsonBuilder.create()
-
-        val retrofit = Retrofit.Builder()
-                .baseUrl(apiURL)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .client(httpClient.build())
-                .build()
-
-        service = retrofit.create(IExchangeRate::class.java)
-    }
+    val service: IExchangeRate = APIClient
+            .retrofit("https://ipfs.horizontalsystems.xyz/ipns/Qmd4Gv2YVPqs6dmSy1XEq7pQRSgLihqYKL2JjK7DMUFPVz/io-hs/data/xrates/")
+            .create(IExchangeRate::class.java)
 
     interface IExchangeRate {
 
@@ -92,5 +77,42 @@ object ServiceExchangeApi {
                 @Path("fiat") currency: String
         ): Flowable<LatestRate>
 
+    }
+}
+
+object ServiceFullTransaction {
+    fun service(apiURL: String): FullTransactionAPI {
+        return APIClient.retrofit(apiURL)
+                .create(FullTransactionAPI::class.java)
+    }
+
+    interface FullTransactionAPI {
+        @GET
+        @Headers("Content-Type: application/json")
+        fun getFullTransaction(@Url path: String): Flowable<JsonObject>
+    }
+
+}
+
+object APIClient {
+    fun retrofit(apiURL: String): Retrofit {
+
+        val logger = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BASIC
+        }
+
+        val httpClient = OkHttpClient.Builder()
+        httpClient.addInterceptor(logger)
+        httpClient.connectTimeout(60, TimeUnit.SECONDS)
+        httpClient.readTimeout(60, TimeUnit.SECONDS)
+
+        val gsonBuilder = GsonBuilder().setLenient()
+
+        return Retrofit.Builder()
+                .baseUrl(apiURL)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gsonBuilder.create()))
+                .client(httpClient.build())
+                .build()
     }
 }

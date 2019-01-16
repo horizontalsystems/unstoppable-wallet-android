@@ -1,57 +1,109 @@
 package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
 
 import android.support.v4.app.FragmentActivity
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionRecordViewItem
+import com.google.gson.JsonObject
+import io.horizontalsystems.bankwallet.entities.FullTransactionItem
+import io.horizontalsystems.bankwallet.entities.FullTransactionRecord
+import io.horizontalsystems.bankwallet.entities.FullTransactionSection
+import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
+import io.reactivex.Flowable
 
 object FullTransactionInfoModule {
-    interface IView {
-        fun showTransactionItem(transactionRecordViewItem: TransactionRecordViewItem)
+    interface View {
+        fun show()
+        fun reload()
+        fun showLoading()
+        fun hideLoading()
+        fun hideError()
+        fun showError(providerName: String)
         fun showCopied()
+        fun openUrl(url: String)
+        fun share(url: String)
     }
 
-    interface IViewDelegate {
+    interface ViewDelegate {
         fun viewDidLoad()
-        fun onShareClick()
-        fun onTransactionIdClick()
-        fun onFromFieldClick()
-        fun onToFieldClick()
+        fun onRetryLoad()
+
+        val providerName: String?
+        val sectionCount: Int
+        fun getSection(row: Int): FullTransactionSection?
+        fun onTapItem(item: FullTransactionItem)
+        fun onTapResource()
+        fun onShare()
     }
 
-    interface IInteractor {
-        fun retrieveTransaction()
-        fun getTransactionInfo()
-        fun onCopyFromAddress()
-        fun onCopyToAddress()
-        fun showBlockInfo()
-        fun openShareDialog()
-        fun onCopyTransactionId()
+    interface Interactor {
+        fun url(hash: String): String
+
+        fun retrieveTransactionInfo(transactionHash: String)
+        fun copyToClipboard(value: String)
     }
 
-    interface IInteractorDelegate {
-        fun didGetTransactionInfo(txRecordViewItem: TransactionRecordViewItem)
-        fun didCopyToClipboard()
-        fun showBlockInfo(txRecordViewItem: TransactionRecordViewItem)
-        fun openShareDialog(txRecordViewItem: TransactionRecordViewItem)
+    interface InteractorDelegate {
+        fun onReceiveTransactionInfo(transactionRecord: FullTransactionRecord)
+        fun onError(providerName: String)
+        fun retryLoadInfo()
     }
 
-    interface IRouter {
-        fun showBlockInfo(transaction: TransactionRecordViewItem)
-        fun shareTransaction(transaction: TransactionRecordViewItem)
+    interface Router
+
+    interface Provider {
+        val name: String
+
+        fun url(hash: String): String
+        fun apiUrl(hash: String): String
     }
 
-    fun init(view: FullTransactionInfoViewModel, router: IRouter, adapterId: String, transactionId: String) {
-//        val adapter = App.adapterManager.adapters.firstOrNull { it.id == adapterId }
-//        val baseCurrency = App.currencyManager.baseCurrency
-//        val interactor = FullTransactionInfoInteractor(adapter, App.networkManager, transactionId, TextHelper, baseCurrency)
-//        val presenter = FullTransactionInfoPresenter(interactor, router)
-//
-//        view.delegate = presenter
-//        presenter.view = view
-//        interactor.delegate = presenter
+    interface FullProvider {
+        val providerName: String
+        fun url(hash: String): String
+
+        fun retrieveTransactionInfo(transactionHash: String): Flowable<FullTransactionRecord>
     }
 
-    fun start(activity: FragmentActivity, adapterId: String = "", transactionId: String = "") {
-        FullTransactionInfoActivity.start(activity, adapterId, transactionId)
+    interface ProvidersMap {
+        fun bitcoin(name: String): BitcoinForksProvider
+        fun bitcoinCash(name: String): BitcoinForksProvider
+        fun ethereum(name: String): EthereumForksProvider
     }
 
+    interface BitcoinForksProvider : Provider {
+        fun convert(json: JsonObject): BitcoinResponse
+    }
+
+    interface EthereumForksProvider : Provider {
+        fun convert(json: JsonObject): EthereumResponse
+    }
+
+    interface Adapter {
+        fun convert(json: JsonObject): FullTransactionRecord
+    }
+
+    interface ProviderFactory {
+        fun providerFor(coinCode: CoinCode): FullProvider
+    }
+
+    interface ProviderDelegate {
+        fun onReceiveTransactionInfo(transactionRecord: FullTransactionRecord)
+    }
+
+    interface State {
+        val transactionHash: String
+        var transactionRecord: FullTransactionRecord?
+    }
+
+    fun init(view: FullTransactionInfoViewModel, router: Router, provider: FullProvider, transactionHash: String) {
+        val interactor = FullTransactionInfoInteractor(provider, TextHelper)
+        val presenter = FullTransactionInfoPresenter(interactor, router, FullTransactionInfoState(transactionHash))
+
+        view.delegate = presenter
+        presenter.view = view
+        interactor.delegate = presenter
+    }
+
+    fun start(activity: FragmentActivity, transactionHash: String, coinCode: CoinCode) {
+        FullTransactionInfoActivity.start(activity, transactionHash, coinCode)
+    }
 }

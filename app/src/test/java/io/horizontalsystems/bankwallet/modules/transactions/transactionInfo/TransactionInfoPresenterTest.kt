@@ -31,7 +31,7 @@ class TransactionInfoPresenterTest {
 //    @Test
 //    fun onCopyFromAddress() {
 //        presenter.onCopyFromAddress()
-//        verify(interactor).onCopy()
+//        verify(interactor).onTapItem()
 //    }
 
     @Test

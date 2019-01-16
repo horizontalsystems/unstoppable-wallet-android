@@ -123,10 +123,10 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
             HudHelper.showSuccessMessage(R.string.Hud_Text_Copied)
         })
 
-        transInfoViewModel.showFullInfoLiveEvent.observe(this, Observer { transactionHash ->
-            transactionHash?.let {
+        transInfoViewModel.showFullInfoLiveEvent.observe(this, Observer { pair ->
+            pair?.let {
                 activity?.let { activity ->
-                    FullTransactionInfoModule.start(activity)
+                    FullTransactionInfoModule.start(activity, transactionHash = it.first, coinCode = it.second)
                 }
             }
         })
@@ -201,8 +201,12 @@ class TransactionsAdapter(private var listener: Listener) : RecyclerView.Adapter
 
     override fun getItemCount() = viewModel.delegate.itemsCount
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-            ViewHolderTransaction(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_transaction, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.view_holder_transaction, parent, false)
+
+        return ViewHolderTransaction(view)
+    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {

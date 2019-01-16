@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 
@@ -30,7 +31,7 @@ object TransactionInfoModule {
     }
 
     interface Router {
-        fun showFullInfo(transactionHash: String)
+        fun showFullInfo(transactionHash: String, coinCode: CoinCode)
     }
 
     fun init(view: TransactionInfoViewModel, router: Router) {
