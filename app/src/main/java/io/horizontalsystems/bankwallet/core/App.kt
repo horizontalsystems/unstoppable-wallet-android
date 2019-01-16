@@ -12,6 +12,8 @@ import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bankwallet.core.storage.RatesRepository
 import io.horizontalsystems.bankwallet.core.storage.TransactionRepository
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers.ProvidersMap
 import io.horizontalsystems.bitcoinkit.BitcoinKit
 import io.horizontalsystems.ethereumkit.EthereumKit
 import java.util.*
@@ -48,6 +50,7 @@ class App : Application() {
         lateinit var transactionStorage: ITransactionRecordStorage
         lateinit var rateStorage: IRateStorage
         lateinit var transactionInfoFactory: FullTransactionInfoFactory
+        lateinit var transactionProviderMap: FullTransactionInfoModule.ProvidersMap
         lateinit var appCloseManager: AppCloseManager
 
         val testMode = true
@@ -109,7 +112,8 @@ class App : Application() {
 
         transactionRateSyncer = TransactionRateSyncer(transactionStorage, networkManager)
         transactionManager = TransactionManager(transactionStorage, transactionRateSyncer, walletManager, currencyManager, wordsManager, networkAvailabilityManager)
-        transactionInfoFactory = FullTransactionInfoFactory(networkManager, appConfigProvider)
+        transactionProviderMap = ProvidersMap()
+        transactionInfoFactory = FullTransactionInfoFactory(networkManager, appConfigProvider, transactionProviderMap)
 
         authManager.walletManager = walletManager
         authManager.pinManager = pinManager

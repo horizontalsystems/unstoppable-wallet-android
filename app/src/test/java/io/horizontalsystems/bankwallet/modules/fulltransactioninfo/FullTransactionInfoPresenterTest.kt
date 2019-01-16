@@ -24,7 +24,7 @@ class FullTransactionInfoPresenterTest {
     @Before
     fun setup() {
         whenever(state.transactionHash).thenReturn(transactionHash)
-        whenever(state.url).thenReturn(transactionUrl)
+        whenever(interactor.url(transactionHash)).thenReturn(transactionUrl)
 
         presenter = FullTransactionInfoPresenter(interactor, router, state)
         presenter.view = view
@@ -48,10 +48,23 @@ class FullTransactionInfoPresenterTest {
     }
 
     @Test
-    fun onTapItem() {
+    fun onTapItem_copy() {
+        whenever(transactionItem.clickable).thenReturn(true)
+        whenever(transactionItem.value).thenReturn(transactionHash)
+
         presenter.onTapItem(transactionItem)
 
-        verify(interactor).onTapItem(transactionItem)
+        verify(interactor).copyToClipboard(transactionItem.value!!)
+    }
+
+    @Test
+    fun onTapItem_openUrl() {
+        whenever(transactionItem.clickable).thenReturn(true)
+        whenever(transactionItem.url).thenReturn(transactionUrl)
+
+        presenter.onTapItem(transactionItem)
+
+        verify(view).openUrl(transactionUrl)
     }
 
     @Test
@@ -70,10 +83,10 @@ class FullTransactionInfoPresenterTest {
 
     @Test
     fun onError() {
-        presenter.onError()
+        presenter.onError("abc")
 
         verify(view).hideLoading()
-        verify(view).showError()
+        verify(view).showError("abc")
     }
 
     @Test
@@ -86,18 +99,4 @@ class FullTransactionInfoPresenterTest {
         verify(interactor).retrieveTransactionInfo(transactionHash)
     }
 
-    @Test
-    fun onCopied() {
-        presenter.onCopied()
-
-        verify(view).showCopied()
-    }
-
-    @Test
-    fun onOpenUrl() {
-        presenter.onOpenUrl(transactionUrl)
-
-        verify(view).openUrl(transactionUrl)
-    }
-    
 }

@@ -68,17 +68,19 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
             }
         })
 
-        viewModel.showErrorLiveEvent.observe(this, Observer { show ->
-            if (show == true) {
-                errorContainer.visibility = View.VISIBLE
+        viewModel.showErrorLiveEvent.observe(this, Observer { error ->
+            error?.let { (show, providerName) ->
+                if (show && providerName != null) {
+                    errorContainer.visibility = View.VISIBLE
 
-                val fragment = FullTransactionInfoErrorFragment.newInstance(viewModel.delegate.providerName)
-                val transaction = supportFragmentManager.beginTransaction()
+                    val fragment = FullTransactionInfoErrorFragment.newInstance(providerName)
+                    val transaction = supportFragmentManager.beginTransaction()
 
-                transaction.replace(R.id.errorContainer, fragment)
-                transaction.commit()
-            } else {
-                errorContainer.visibility = View.INVISIBLE
+                    transaction.replace(R.id.errorContainer, fragment)
+                    transaction.commit()
+                } else {
+                    errorContainer.visibility = View.INVISIBLE
+                }
             }
         })
 

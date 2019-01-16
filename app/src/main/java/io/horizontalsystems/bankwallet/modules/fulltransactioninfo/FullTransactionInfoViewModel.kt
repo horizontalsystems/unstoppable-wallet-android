@@ -13,7 +13,7 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
     val loadingLiveData = MutableLiveData<Boolean>()
     val reloadLiveEvent = SingleLiveEvent<Void>()
     val showCopiedLiveEvent = SingleLiveEvent<Unit>()
-    val showErrorLiveEvent = SingleLiveEvent<Boolean>()
+    val showErrorLiveEvent = SingleLiveEvent<Pair<Boolean, String?>>()
     val showShareLiveEvent = SingleLiveEvent<String>()
     val openLinkLiveEvent = SingleLiveEvent<String>()
 
@@ -46,12 +46,12 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
         loadingLiveData.value = false
     }
 
-    override fun showError() {
-        showErrorLiveEvent.value = true
+    override fun showError(providerName: String) {
+        showErrorLiveEvent.value = Pair(true, providerName)
     }
 
     override fun hideError() {
-        showErrorLiveEvent.value = false
+        showErrorLiveEvent.value = Pair(false, null)
     }
 
     override fun reload() {

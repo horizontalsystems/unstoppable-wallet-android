@@ -1,13 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
 
 import io.horizontalsystems.bankwallet.core.IClipboardManager
-import io.horizontalsystems.bankwallet.entities.FullTransactionItem
 import io.horizontalsystems.bankwallet.entities.FullTransactionRecord
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class FullTransactionInfoInteractor(private val transactionProvider: FullTransactionInfoModule.Provider, private var clipboardManager: IClipboardManager)
+class FullTransactionInfoInteractor(private val transactionProvider: FullTransactionInfoModule.FullProvider, private var clipboardManager: IClipboardManager)
     : FullTransactionInfoModule.Interactor, FullTransactionInfoModule.ProviderDelegate {
 
     val disposables = CompositeDisposable()
@@ -16,6 +15,10 @@ class FullTransactionInfoInteractor(private val transactionProvider: FullTransac
     //
     // Interactor implementations
     //
+    override fun url(hash: String): String {
+        return transactionProvider.url(hash)
+    }
+
     override fun retrieveTransactionInfo(transactionHash: String) {
         disposables.clear()
         disposables.add(transactionProvider.retrieveTransactionInfo(transactionHash)
@@ -24,24 +27,13 @@ class FullTransactionInfoInteractor(private val transactionProvider: FullTransac
                 .subscribe({
                     delegate?.onReceiveTransactionInfo(it)
                 }, {
-                    delegate?.onError()
+                    delegate?.onError(transactionProvider.providerName)
                 })
         )
     }
 
-    override fun retryLoadInfo() {
-        delegate?.retryLoadInfo()
-    }
-
-    override fun onTapItem(item: FullTransactionItem) {
-        if (item.clickable) {
-            if (item.url != null) {
-                delegate?.onOpenUrl(item.url)
-            } else if (item.value != null) {
-                clipboardManager.copyText(item.value)
-                delegate?.onCopied()
-            }
-        }
+    override fun copyToClipboard(value: String) {
+        clipboardManager.copyText(value)
     }
 
     //

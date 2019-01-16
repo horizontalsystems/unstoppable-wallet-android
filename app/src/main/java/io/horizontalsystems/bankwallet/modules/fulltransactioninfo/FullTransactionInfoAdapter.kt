@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
 
+import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.FullTransactionIcon
 import io.horizontalsystems.bankwallet.entities.FullTransactionItem
@@ -9,10 +10,11 @@ import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.ValueFormatter
 
-class FullTransactionBitcoinAdapter(val coinCode: CoinCode) : FullTransactionInfoModule.Adapter {
+class FullTransactionBitcoinAdapter(val provider: FullTransactionInfoModule.BitcoinForksProvider, val coinCode: CoinCode)
+    : FullTransactionInfoModule.Adapter {
 
-    override fun convert(response: FullTransactionResponse): FullTransactionRecord? {
-        val data = response as BitcoinResponse
+    override fun convert(json: JsonObject): FullTransactionRecord {
+        val data = provider.convert(json)
         val sections = mutableListOf<FullTransactionSection>()
 
         sections.add(FullTransactionSection(items = listOf(
@@ -37,15 +39,16 @@ class FullTransactionBitcoinAdapter(val coinCode: CoinCode) : FullTransactionInf
                 FullTransactionItem(R.string.FullInfo_TotalOutput, value = "$totalOutput $coinCode")
         )
 
-        data.feePerByte?.let { feePerByte ->
-            transactionItems.add(FullTransactionItem(R.string.FullInfo_FeePerByte, value = ValueFormatter.format(feePerByte), valueUnit = R.string.FullInfo_SatByte))
-        }
-
         data.size?.let {
             transactionItems.add(FullTransactionItem(R.string.FullInfo_Size, value = it.toString(), valueUnit = R.string.FullInfo_Bytes))
         }
 
         transactionItems.add(FullTransactionItem(R.string.FullInfo_Fee, value = "${ValueFormatter.format(data.fee)} $coinCode"))
+
+        data.feePerByte?.let { feePerByte ->
+            transactionItems.add(FullTransactionItem(R.string.FullInfo_FeeRate, value = ValueFormatter.format(feePerByte), valueUnit = R.string.FullInfo_SatByte))
+        }
+
         sections.add(FullTransactionSection(items = transactionItems))
 
         if (data.inputs.isNotEmpty()) {
@@ -62,14 +65,16 @@ class FullTransactionBitcoinAdapter(val coinCode: CoinCode) : FullTransactionInf
             }))
         }
 
-        return FullTransactionRecord(sections)
+        return FullTransactionRecord(provider.name, sections)
     }
 
 }
 
-class FullTransactionEthereumAdapter(val coinCode: CoinCode) : FullTransactionInfoModule.Adapter {
-    override fun convert(response: FullTransactionResponse): FullTransactionRecord? {
-        val data = response as EthereumResponse
+class FullTransactionEthereumAdapter(val provider: FullTransactionInfoModule.EthereumForksProvider, val coinCode: CoinCode)
+    : FullTransactionInfoModule.Adapter {
+
+    override fun convert(json: JsonObject): FullTransactionRecord {
+        val data = provider.convert(json)
         val sections = mutableListOf<FullTransactionSection>()
 
         sections.add(FullTransactionSection(items = listOf(
@@ -107,7 +112,7 @@ class FullTransactionEthereumAdapter(val coinCode: CoinCode) : FullTransactionIn
                 FullTransactionItem(R.string.FullInfoEth_To, value = data.to, clickable = true, icon = FullTransactionIcon.PERSON)
         )))
 
-        return FullTransactionRecord(sections)
+        return FullTransactionRecord(provider.name, sections)
     }
 
 }

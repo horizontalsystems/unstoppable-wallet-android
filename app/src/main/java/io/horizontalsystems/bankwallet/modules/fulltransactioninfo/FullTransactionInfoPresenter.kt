@@ -17,26 +17,35 @@ class FullTransactionInfoPresenter(val interactor: FullTransactionInfoInteractor
     }
 
     override fun onRetryLoad() {
-        interactor.retryLoadInfo()
+        if (state.transactionRecord == null) {
+            onRetryLoad()
+        }
     }
 
     override fun onTapItem(item: FullTransactionItem) {
-        interactor.onTapItem(item)
+        if (item.clickable) {
+            if (item.url != null) {
+                view?.openUrl(item.url)
+            } else if (item.value != null) {
+                interactor.copyToClipboard(item.value)
+                view?.showCopied()
+            }
+        }
     }
 
     override fun onTapResource() {
-        view?.openUrl(state.url)
+        view?.openUrl(interactor.url(state.transactionHash))
     }
 
     override fun onShare() {
-        view?.share(state.url)
+        view?.share(interactor.url(state.transactionHash))
     }
 
     //
     // State
     //
-    override val providerName: String
-        get() = state.providerName
+    override val providerName: String?
+        get() = state.transactionRecord?.providerName
 
     override val sectionCount: Int
         get() = state.transactionRecord?.sections?.size ?: 0
@@ -54,23 +63,15 @@ class FullTransactionInfoPresenter(val interactor: FullTransactionInfoInteractor
         view?.reload()
     }
 
-    override fun onError() {
+    override fun onError(providerName: String) {
         view?.hideLoading()
-        view?.showError()
+        view?.showError(providerName)
     }
 
     override fun retryLoadInfo() {
         if (state.transactionRecord == null) {
             tryLoadInfo()
         }
-    }
-
-    override fun onCopied() {
-        view?.showCopied()
-    }
-
-    override fun onOpenUrl(url: String) {
-        view?.openUrl(url)
     }
 
     //
