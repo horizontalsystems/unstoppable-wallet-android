@@ -139,12 +139,12 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
                 val txStatus = txRec.status
 
                 fiatValue.apply {
-                    text = txRec.currencyValue?.let { ValueFormatter.format(it, showNegativeSign = true) }
+                    text = txRec.currencyValue?.let { ValueFormatter.format(it, showNegativeSign = true, realNumber = true) }
                     setTextColor(resources.getColor(if (txRec.incoming) R.color.green_crypto else R.color.yellow_crypto, null))
                 }
 
                 coinValue.apply {
-                    text = ValueFormatter.format(txRec.coinValue, true)
+                    text = ValueFormatter.format(txRec.coinValue, true, true)
                 }
 
                 itemTime.apply {

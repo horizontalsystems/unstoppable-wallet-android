@@ -26,21 +26,12 @@ object ValueFormatter {
             return format
         }
 
-    fun format(value: Double): String {
-        val customFormatter = coinFormatter
-        if (value == 0.0) {
-            customFormatter.maximumFractionDigits = 0
-        }
-
-        return customFormatter.format(value)
-    }
-
-    fun format(coinValue: CoinValue, explicitSign: Boolean = false): String? {
+    fun format(coinValue: CoinValue, explicitSign: Boolean = false, realNumber: Boolean = false): String? {
         val value = if (explicitSign) Math.abs(coinValue.value) else coinValue.value
 
         val customFormatter = coinFormatter
 
-        if (value >= COIN_BIG_NUMBER_EDGE) {
+        if (!realNumber && value >= COIN_BIG_NUMBER_EDGE) {
             customFormatter.maximumFractionDigits = 4
         }
 
@@ -56,14 +47,14 @@ object ValueFormatter {
         return result
     }
 
-    fun format(currencyValue: CurrencyValue, approximate: Boolean = false, showNegativeSign: Boolean = true): String? {
+    fun format(currencyValue: CurrencyValue, approximate: Boolean = false, showNegativeSign: Boolean = true, realNumber: Boolean = false): String? {
         var value = currencyValue.value
 
         value = Math.abs(value)
 
         val formatter = currencyFormatter
 
-        if (value >= FIAT_BIG_NUMBER_EDGE || approximate) {
+        if (!realNumber && (value >= FIAT_BIG_NUMBER_EDGE || approximate)) {
             formatter.maximumFractionDigits = 0
         }
 
