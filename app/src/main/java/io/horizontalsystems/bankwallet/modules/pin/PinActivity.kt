@@ -255,7 +255,7 @@ class PinPagesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is PinPageViewHolder) {
-            holder.bind(pinPages[position], shakePageIndex == position)//, { listener.onItemClick(numPadItems[position]) }, listener.isFingerPrintEnabled())
+            holder.bind(pinPages[position], shakePageIndex == position)//, { listener.onChangeProvider(numPadItems[position]) }, listener.isFingerPrintEnabled())
         }
     }
 

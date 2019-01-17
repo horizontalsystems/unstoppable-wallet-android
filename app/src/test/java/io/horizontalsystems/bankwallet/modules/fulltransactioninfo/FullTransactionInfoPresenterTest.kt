@@ -16,14 +16,17 @@ class FullTransactionInfoPresenterTest {
     private val view = mock(FullTransactionInfoModule.View::class.java)
     private val transactionItem = mock(FullTransactionItem::class.java)
     private val transactionRecord = mock(FullTransactionRecord::class.java)
+
     private val transactionHash = "abc"
     private val transactionUrl = "http://domain.com"
+    private val coinCode = "BTC"
 
     private lateinit var presenter: FullTransactionInfoPresenter
 
     @Before
     fun setup() {
         whenever(state.transactionHash).thenReturn(transactionHash)
+        whenever(state.coinCode).thenReturn(coinCode)
         whenever(interactor.url(transactionHash)).thenReturn(transactionUrl)
 
         presenter = FullTransactionInfoPresenter(interactor, router, state)
@@ -68,6 +71,13 @@ class FullTransactionInfoPresenterTest {
     }
 
     @Test
+    fun onTapProvider() {
+        presenter.onTapProvider()
+
+        verify(view).openProviderSettings(state.coinCode)
+    }
+
+    @Test
     fun onTapResource() {
         presenter.onTapResource()
 
@@ -79,6 +89,19 @@ class FullTransactionInfoPresenterTest {
         presenter.onShare()
 
         verify(view).share(transactionUrl)
+    }
+
+    @Test
+    fun onProviderChange() {
+        presenter.onProviderChange()
+
+        verify(state).transactionRecord = null
+        verify(view).reload()
+        verify(interactor).updateProvider(coinCode)
+        verify(view).hideError()
+        verify(view).showLoading()
+
+        verify(interactor).retrieveTransactionInfo(transactionHash)
     }
 
     @Test
