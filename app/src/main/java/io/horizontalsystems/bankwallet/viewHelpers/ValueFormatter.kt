@@ -47,6 +47,15 @@ object ValueFormatter {
         return result
     }
 
+    fun format(value: Double): String {
+        val customFormatter = coinFormatter
+        if (value == 0.0) {
+            customFormatter.maximumFractionDigits = 0
+        }
+
+        return customFormatter.format(value)
+    }
+
     fun format(currencyValue: CurrencyValue, approximate: Boolean = false, showNegativeSign: Boolean = true, realNumber: Boolean = false): String? {
         var value = currencyValue.value
 
