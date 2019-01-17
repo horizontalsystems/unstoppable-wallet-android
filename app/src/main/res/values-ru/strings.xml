@@ -51,6 +51,7 @@
     <string name="Send_Button_Paste">Вставить</string>
     <string name="Send_Button_More">Ещё</string>
     <string name="Send_Button_Send">Отправить</string>
+    <string name="Send_Button_Max">Max</string>
     <string name="Send_ScanQrCode">Сканировать QR-код</string>
     <string name="Send_Success">Отправлено!</string>
     <string name="Send_Error_InvalidAddress">Адрес недействителен. Попробуйте еще раз!</string>
