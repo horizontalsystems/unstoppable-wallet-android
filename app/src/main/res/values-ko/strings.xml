@@ -51,6 +51,7 @@
     <string name="Send_Button_Paste">붙여넣기</string>
     <string name="Send_Button_More">More</string>
     <string name="Send_Button_Send">전송</string>
+    <string name="Send_Button_Max">Max</string>
     <string name="Send_ScanQrCode">Scan QR Code</string>
     <string name="Send_Success">Sent!</string>
     <string name="Send_Error_InvalidAddress">Address seems invalid. Please check and try again!</string>
