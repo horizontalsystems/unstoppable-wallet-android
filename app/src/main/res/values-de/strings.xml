@@ -51,6 +51,7 @@
     <string name="Send_Button_Paste">Einfügen</string>
     <string name="Send_Button_More">Mehr</string>
     <string name="Send_Button_Send">Senden</string>
+    <string name="Send_Button_Max">Max</string>
     <string name="Send_ScanQrCode">QR-Code Scannen</string>
     <string name="Send_Success">Gesendet!</string>
     <string name="Send_Error_InvalidAddress">Eingegebene Adresse scheint ungültig zu sein. Bitte überprüfen Sie und versuchen es erneut!</string>
