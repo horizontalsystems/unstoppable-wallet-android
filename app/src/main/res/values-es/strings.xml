@@ -51,6 +51,7 @@
     <string name="Send_Button_Paste">Pegar</string>
     <string name="Send_Button_More">Más</string>
     <string name="Send_Button_Send">Enviar</string>
+    <string name="Send_Button_Max">Max</string>
     <string name="Send_ScanQrCode">Escanee el código QR</string>
     <string name="Send_Success">Enviado!</string>
     <string name="Send_Error_InvalidAddress">La dirección parece no válida. ¡Por favor verifíquela e inténtelo de nuevo!</string>
