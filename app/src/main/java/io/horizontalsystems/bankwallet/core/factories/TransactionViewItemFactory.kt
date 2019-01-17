@@ -17,15 +17,8 @@ class TransactionViewItemFactory(
 
     private val latestRateFallbackThreshold: Long = 60 // minutes
 
-    fun item(transactionItem: TransactionItem, lastBlockHeight: Int?, threshold: Int?): TransactionViewItem {
+    fun item(transactionItem: TransactionItem, lastBlockHeight: Int?, threshold: Int?, rate: CurrencyValue?): TransactionViewItem {
         val record = transactionItem.record
-
-        val rateValue = when {
-            record.rate != 0.0 -> record.rate
-            else -> null
-        }
-
-        val convertedValue = rateValue?.let { it * record.amount }
 
         var status: TransactionStatus = TransactionStatus.Pending
 
@@ -48,10 +41,12 @@ class TransactionViewItemFactory(
             false -> record.to.find { !it.mine }?.address ?: record.to.find { it.mine }?.address
         }
 
+        val currencyValue = rate?.let { CurrencyValue(it.currency, record.amount * it.value) }
+
         return TransactionViewItem(
                 record.transactionHash,
                 CoinValue(transactionItem.coinCode, record.amount),
-                convertedValue?.let { CurrencyValue(currencyManager.baseCurrency, it) },
+                currencyValue,
                 record.from.firstOrNull { it.mine != incoming }?.address,
                 toAddress,
                 incoming,

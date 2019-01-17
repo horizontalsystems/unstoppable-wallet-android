@@ -5,7 +5,10 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.core.IAdapter
+import io.horizontalsystems.bankwallet.core.ICurrencyManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.managers.RateManager
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
@@ -18,14 +21,16 @@ import org.mockito.Mockito.mock
 class TransactionsInteractorTest {
 
     private val walletManager = mock(IWalletManager::class.java)
+    private val currencyManager = mock(ICurrencyManager::class.java)
+    private val rateManager = mock(RateManager::class.java)
     private val delegate = mock(TransactionsModule.IInteractorDelegate::class.java)
 
     private val wallet1 = mock(Wallet::class.java)
     private val wallet2 = mock(Wallet::class.java)
     private val adapter1 = mock(IAdapter::class.java)
     private val adapter2 = mock(IAdapter::class.java)
-    private val blockHeightSubject = PublishSubject.create<Int>()
     private val walletsUpdatedSignal = PublishSubject.create<Unit>()
+    private val baseCurrencyUpdatedSignal = PublishSubject.create<Unit>()
 
     private lateinit var interactor: TransactionsInteractor
 
@@ -33,10 +38,11 @@ class TransactionsInteractorTest {
     fun before() {
         RxBaseTest.setup()
 
-        interactor = TransactionsInteractor(walletManager)
+        interactor = TransactionsInteractor(walletManager, currencyManager, rateManager)
         interactor.delegate = delegate
 
         whenever(walletManager.walletsUpdatedSignal).thenReturn(walletsUpdatedSignal)
+        whenever(currencyManager.baseCurrencyUpdatedSignal).thenReturn(baseCurrencyUpdatedSignal)
     }
 
     @Test
@@ -90,20 +96,29 @@ class TransactionsInteractorTest {
     }
 
     @Test
-    fun fetchCoinCodes() {
+    fun initialFetch() {
         val wallets = listOf(wallet1)
         val allCoinCodes = listOf("BTC")
 
         whenever(wallet1.coinCode).thenReturn("BTC")
         whenever(walletManager.wallets).thenReturn(wallets)
 
-        interactor.fetchCoinCodes()
+        interactor.initialFetch()
 
         verify(delegate).onUpdateCoinCodes(allCoinCodes)
     }
 
     @Test
-    fun fetchCoinCodes_walletsUpdated() {
+    fun initialFetch_baseCurrencyUpdate() {
+        interactor.initialFetch()
+
+        baseCurrencyUpdatedSignal.onNext(Unit)
+
+        verify(delegate).onUpdateBaseCurrency()
+    }
+
+    @Test
+    fun initialFetch_walletsUpdated() {
         val wallets: List<Wallet> = listOf()
         val walletUpdated: List<Wallet> = listOf(wallet1)
         val allCoinCodes = listOf("BTC")
@@ -111,7 +126,7 @@ class TransactionsInteractorTest {
         whenever(wallet1.coinCode).thenReturn("BTC")
         whenever(walletManager.wallets).thenReturn(wallets, walletUpdated)
 
-        interactor.fetchCoinCodes()
+        interactor.initialFetch()
 
         walletsUpdatedSignal.onNext(Unit)
 
@@ -169,6 +184,33 @@ class TransactionsInteractorTest {
         val records = mapOf("BTC" to transactionRecords1, "ETH" to transactionRecords2, "BCH" to listOf())
 
         verify(delegate).didFetchRecords(records)
+    }
+
+    @Test
+    fun fetchRates() {
+        val coinCode1 = "BTC"
+        val currencyCode = "USD"
+        val timestamp1 = 123456L
+        val timestamp2 = 34556L
+        val timestamps = mapOf(coinCode1 to listOf(timestamp1, timestamp2))
+        val currency = mock(Currency::class.java)
+
+        val rate1Value = 213.123
+        val rate2Value = 234.12
+
+        whenever(currency.code).thenReturn(currencyCode)
+        whenever(currencyManager.baseCurrency).thenReturn(currency)
+
+        whenever(rateManager.rateValueObservable(coinCode1, currencyCode, timestamp1)).thenReturn(Flowable.just(rate1Value))
+        whenever(rateManager.rateValueObservable(coinCode1, currencyCode, timestamp2)).thenReturn(Flowable.just(rate2Value))
+
+        interactor.fetchRates(timestamps)
+
+        verify(rateManager).rateValueObservable(coinCode1, currencyCode, timestamp1)
+        verify(rateManager).rateValueObservable(coinCode1, currencyCode, timestamp2)
+
+        verify(delegate).didFetchRate(rate1Value, coinCode1, currency, timestamp1)
+        verify(delegate).didFetchRate(rate2Value, coinCode1, currency, timestamp2)
     }
 
 }

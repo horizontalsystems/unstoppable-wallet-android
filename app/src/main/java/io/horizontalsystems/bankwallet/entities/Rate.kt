@@ -3,11 +3,12 @@ package io.horizontalsystems.bankwallet.entities
 import android.arch.persistence.room.Entity
 import java.util.*
 
-@Entity(primaryKeys = ["coinCode", "currencyCode"])
+@Entity(primaryKeys = ["coinCode", "currencyCode", "timestamp", "isLatest"])
 data class Rate(var coinCode: String,
                 var currencyCode: String,
                 var value: Double,
-                var timestamp: Long = 0) {
+                var timestamp: Long,
+                var isLatest: Boolean) {
 
     val expired: Boolean
         get() {

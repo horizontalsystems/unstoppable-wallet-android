@@ -225,8 +225,8 @@ class BalanceInteractorTest {
         val rate1Update = mock(Rate::class.java)
         val rate2 = mock(Rate::class.java)
 
-        whenever(rateStorage.rateObservable(coinCode1, currencyCode)).thenReturn(Flowable.just(rate1, rate1Update))
-        whenever(rateStorage.rateObservable(coinCode2, currencyCode)).thenReturn(Flowable.just(rate2))
+        whenever(rateStorage.latestRateObservable(coinCode1, currencyCode)).thenReturn(Flowable.just(rate1, rate1Update))
+        whenever(rateStorage.latestRateObservable(coinCode2, currencyCode)).thenReturn(Flowable.just(rate2))
 
         interactor.fetchRates(currencyCode, coinCodes)
 

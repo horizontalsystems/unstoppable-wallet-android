@@ -15,6 +15,8 @@ class TransactionsLoader(private val dataSource: TransactionRecordDataSource) {
         get() = dataSource.itemsCount
 
     var loading: Boolean = false
+    val allRecords: Map<CoinCode, List<TransactionRecord>>
+        get() = dataSource.allRecords
 
     fun itemForIndex(index: Int) =
             dataSource.itemForIndex(index)
@@ -40,6 +42,10 @@ class TransactionsLoader(private val dataSource: TransactionRecordDataSource) {
         dataSource.handleNextRecords(records)
         dataSource.increasePage()
         delegate?.didChangeData()
+    }
+
+    fun itemIndexesForTimestamp(coinCode: CoinCode, timestamp: Long) : List<Int> {
+        return dataSource.itemIndexesForTimestamp(coinCode, timestamp)
     }
 
 }

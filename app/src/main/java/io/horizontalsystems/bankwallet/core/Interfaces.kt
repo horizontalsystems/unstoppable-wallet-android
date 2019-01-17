@@ -182,10 +182,12 @@ interface IOneTimerDelegate {
 }
 
 interface IRateStorage {
-    fun rateObservable(coinCode: CoinCode, currencyCode: String): Flowable<Rate>
+    fun latestRateObservable(coinCode: CoinCode, currencyCode: String): Flowable<Rate>
+    fun rateObservable(coinCode: CoinCode, currencyCode: String, timestamp: Long): Flowable<List<Rate>>
     fun save(rate: Rate)
     fun getAll(): Flowable<List<Rate>>
     fun deleteAll()
+    fun zeroRatesObservables(): Flowable<List<Rate>>
 }
 
 interface ICoinStorage {

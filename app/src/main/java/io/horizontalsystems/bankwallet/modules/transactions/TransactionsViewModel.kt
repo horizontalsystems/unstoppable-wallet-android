@@ -12,6 +12,7 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
     val showTransactionInfoLiveEvent = SingleLiveEvent<String>()
     val didRefreshLiveEvent = SingleLiveEvent<Void>()
     val reloadLiveEvent = SingleLiveEvent<Pair<Int?, Int?>>()
+    val reloadItemsLiveEvent = SingleLiveEvent<List<Int>>()
 
     fun init() {
         TransactionsModule.initModule(this, this)
@@ -24,6 +25,10 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
 
     override fun reload(fromIndex: Int?, count: Int?) {
         reloadLiveEvent.postValue(Pair(fromIndex, count))
+    }
+
+    override fun reloadItems(indexes: List<Int>) {
+        reloadItemsLiveEvent.postValue(indexes)
     }
 
     override fun openTransactionInfo(transactionHash: String) {

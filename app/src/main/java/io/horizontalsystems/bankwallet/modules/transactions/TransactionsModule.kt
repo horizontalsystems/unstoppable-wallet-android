@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.transactions
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
 import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import java.util.*
@@ -33,6 +34,7 @@ object TransactionsModule {
     interface IView {
         fun showFilters(filters: List<CoinCode?>)
         fun reload(fromIndex: Int? = null, count: Int? = null)
+        fun reloadItems(indexes: List<Int>)
     }
 
     interface IViewDelegate {
@@ -47,11 +49,12 @@ object TransactionsModule {
     }
 
     interface IInteractor {
-        fun fetchCoinCodes()
+        fun initialFetch()
         fun clear()
         fun fetchRecords(fetchDataList: List<FetchData>)
         fun setSelectedCoinCodes(selectedCoinCodes: List<CoinCode>)
         fun fetchLastBlockHeights()
+        fun fetchRates(timestamps: Map<CoinCode, List<Long>>)
     }
 
     interface IInteractorDelegate {
@@ -60,6 +63,8 @@ object TransactionsModule {
         fun didFetchRecords(records: Map<CoinCode, List<TransactionRecord>>)
         fun onUpdateLastBlockHeight(coinCode: CoinCode, lastBlockHeight: Int)
         fun onUpdateConfirmationThreshold(coinCode: CoinCode, confirmationThreshold: Int)
+        fun onUpdateBaseCurrency()
+        fun didFetchRate(rateValue: Double, coinCode: CoinCode, currency: Currency, timestamp: Long)
     }
 
     interface IRouter {
@@ -68,9 +73,9 @@ object TransactionsModule {
 
     fun initModule(view: TransactionsViewModel, router: IRouter) {
         val dataSource = TransactionRecordDataSource()
-        val interactor = TransactionsInteractor(App.walletManager)
+        val interactor = TransactionsInteractor(App.walletManager, App.currencyManager, App.rateManager)
         val transactionsLoader = TransactionsLoader(dataSource)
-        val presenter = TransactionsPresenter(interactor, router, TransactionViewItemFactory(App.walletManager, App.currencyManager, App.rateManager), transactionsLoader, LastBlockHeightDataSource())
+        val presenter = TransactionsPresenter(interactor, router, TransactionViewItemFactory(App.walletManager, App.currencyManager, App.rateManager), transactionsLoader, TransactionMetadataDataSource())
 
         presenter.view = view
         interactor.delegate = presenter

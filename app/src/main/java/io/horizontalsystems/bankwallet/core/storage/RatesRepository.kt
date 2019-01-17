@@ -10,12 +10,17 @@ class RatesRepository(private val appDatabase: AppDatabase) : IRateStorage {
 
     private val executor = Executors.newSingleThreadExecutor()
 
-    override fun rateObservable(coinCode: CoinCode, currencyCode: String): Flowable<Rate> {
-        return appDatabase.ratesDao().getRate(coinCode, currencyCode)
+    override fun latestRateObservable(coinCode: CoinCode, currencyCode: String): Flowable<Rate> {
+        return appDatabase.ratesDao().getLatestRate(coinCode, currencyCode)
+    }
+
+    override fun rateObservable(coinCode: CoinCode, currencyCode: String, timestamp: Long): Flowable<List<Rate>> {
+        return appDatabase.ratesDao().getRate(coinCode, currencyCode, timestamp)
     }
 
     override fun save(rate: Rate) {
         executor.execute {
+            appDatabase.ratesDao().delete(rate)
             appDatabase.ratesDao().insert(rate)
         }
     }
@@ -30,4 +35,7 @@ class RatesRepository(private val appDatabase: AppDatabase) : IRateStorage {
         }
     }
 
+    override fun zeroRatesObservables(): Flowable<List<Rate>> {
+        return appDatabase.ratesDao().getZeroRates()
+    }
 }

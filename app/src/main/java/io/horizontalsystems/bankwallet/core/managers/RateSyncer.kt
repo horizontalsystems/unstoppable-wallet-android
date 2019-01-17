@@ -30,7 +30,7 @@ class RateSyncer(private val rateManager: RateManager,
 
     private fun requestRefresh() {
         if (networkAvailabilityManager.isConnected) {
-            rateManager.refreshRates(walletManager.wallets.map { it.coinCode }, currencyManager.baseCurrency.code)
+            rateManager.refreshLatestRates(walletManager.wallets.map { it.coinCode }, currencyManager.baseCurrency.code)
         }
     }
 }

@@ -12,6 +12,11 @@ class TransactionRecordDataSource {
     val allShown
         get() = coinCodes.all { pools[it]!!.allShown }
 
+    val allRecords: Map<CoinCode, List<TransactionRecord>>
+        get() = pools.map {
+            Pair(it.key, it.value.records)
+        }.toMap()
+
     private var pools = mutableMapOf<CoinCode, Pool>()
     private val items = mutableListOf<TransactionItem>()
     private var coinCodes = listOf<CoinCode>()
@@ -64,11 +69,23 @@ class TransactionRecordDataSource {
         this.coinCodes = coinCodes
         items.clear()
     }
+
+    fun itemIndexesForTimestamp(coinCode: CoinCode, timestamp: Long): List<Int> {
+        val indexes = mutableListOf<Int>()
+
+        items.forEachIndexed { index, transactionItem ->
+            if (transactionItem.coinCode == coinCode && transactionItem.record.timestamp == timestamp) {
+                indexes.add(index)
+            }
+        }
+
+        return indexes
+    }
 }
 
 class Pool {
 
-    private val records = mutableListOf<TransactionRecord>()
+    val records = mutableListOf<TransactionRecord>()
     private var firstUnusedIndex = 0
     var allLoaded = false
         private set

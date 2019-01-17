@@ -104,6 +104,16 @@ class TransactionsLoaderTest {
         verify(dataSource).handleNextRecords(records)
         verify(dataSource).increasePage()
         verify(delegate).didChangeData()
+    }
 
+    @Test
+    fun itemIndexesForTimestamp() {
+        val coinCode = "BTC"
+        val timestamp = 123123L
+        val indexes = listOf(1231, 12323)
+
+        whenever(dataSource.itemIndexesForTimestamp(coinCode, timestamp)).thenReturn(indexes)
+
+        Assert.assertEquals(indexes, loader.itemIndexesForTimestamp(coinCode, timestamp))
     }
 }

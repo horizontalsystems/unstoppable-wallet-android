@@ -1,6 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
+import android.util.Log
+import io.horizontalsystems.bankwallet.core.ICurrencyManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.managers.RateManager
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.reactivex.Flowable
@@ -8,13 +11,14 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
-class TransactionsInteractor(private val walletManager: IWalletManager) : TransactionsModule.IInteractor {
+class TransactionsInteractor(private val walletManager: IWalletManager, private val currencyManager: ICurrencyManager, private val rateManager: RateManager) : TransactionsModule.IInteractor {
     var delegate: TransactionsModule.IInteractorDelegate? = null
 
     private val disposables = CompositeDisposable()
+    private val ratesDisposables = CompositeDisposable()
     private val lastBlockHeightDisposables = CompositeDisposable()
 
-    override fun fetchCoinCodes() {
+    override fun initialFetch() {
         onUpdateCoinCodes()
 
         disposables.add(walletManager.walletsUpdatedSignal
@@ -23,6 +27,14 @@ class TransactionsInteractor(private val walletManager: IWalletManager) : Transa
                 .subscribe {
                     onUpdateCoinCodes()
                 })
+
+        disposables.add(currencyManager.baseCurrencyUpdatedSignal
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe {
+                    ratesDisposables.clear()
+                    delegate?.onUpdateBaseCurrency()
+                })
     }
 
     override fun fetchRecords(fetchDataList: List<TransactionsModule.FetchData>) {
@@ -30,7 +42,7 @@ class TransactionsInteractor(private val walletManager: IWalletManager) : Transa
             delegate?.didFetchRecords(mapOf())
             return
         }
-//
+
         val flowables = mutableListOf<Flowable<Pair<CoinCode, List<TransactionRecord>>>>()
 
         fetchDataList.forEach { fetchData ->
@@ -86,8 +98,28 @@ class TransactionsInteractor(private val walletManager: IWalletManager) : Transa
         }
     }
 
+    override fun fetchRates(timestamps: Map<CoinCode, List<Long>>) {
+        val baseCurrency = currencyManager.baseCurrency
+        val currencyCode = baseCurrency.code
+
+        timestamps.forEach {
+            val coinCode = it.key
+            it.value.forEach { timestamp ->
+                ratesDisposables.add(rateManager.rateValueObservable(coinCode, currencyCode, timestamp)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(Schedulers.io())
+                        .subscribe {
+                            Log.e("BBB", "didFetchRate: $coinCode, ${baseCurrency.code}, $timestamp")
+                            delegate?.didFetchRate(it, coinCode, baseCurrency, timestamp)
+                        })
+            }
+        }
+    }
+
     override fun clear() {
         disposables.clear()
+        lastBlockHeightDisposables.clear()
+        ratesDisposables.clear()
     }
 
     private fun onUpdateLastBlockHeight(wallet: Wallet) {

@@ -16,7 +16,7 @@ class RateSyncerTest {
 
     private lateinit var rateSyncer: RateSyncer
 
-    private val syncer = mock(RateManager::class.java)
+    private val rateManager = mock(RateManager::class.java)
     private val walletManager = mock(IWalletManager::class.java)
     private val currencyManager = mock(ICurrencyManager::class.java)
     private val networkAvailabilityManager = mock(NetworkAvailabilityManager::class.java)
@@ -58,68 +58,68 @@ class RateSyncerTest {
 
     @Test
     fun init() {
-        rateSyncer = RateSyncer(syncer, walletManager, currencyManager, networkAvailabilityManager, timerSignal)
+        rateSyncer = RateSyncer(rateManager, walletManager, currencyManager, networkAvailabilityManager, timerSignal)
 
-        verify(syncer).refreshRates(coins1, currencyCode1)
-        verifyNoMoreInteractions(syncer)
+        verify(rateManager).refreshLatestRates(coins1, currencyCode1)
+        verifyNoMoreInteractions(rateManager)
     }
 
     @Test
     fun init_noInternetConnection() {
         whenever(networkAvailabilityManager.isConnected).thenReturn(false)
 
-        rateSyncer = RateSyncer(syncer, walletManager, currencyManager, networkAvailabilityManager, timerSignal)
+        rateSyncer = RateSyncer(rateManager, walletManager, currencyManager, networkAvailabilityManager, timerSignal)
 
-        verifyNoMoreInteractions(syncer)
+        verifyNoMoreInteractions(rateManager)
     }
 
     @Test
     fun onConnectionEstablished() {
         whenever(networkAvailabilityManager.isConnected).thenReturn(false, true)
 
-        rateSyncer = RateSyncer(syncer, walletManager, currencyManager, networkAvailabilityManager, timerSignal)
+        rateSyncer = RateSyncer(rateManager, walletManager, currencyManager, networkAvailabilityManager, timerSignal)
 
         networkAvailabilitySignal.onNext(Unit)
 
-        verify(syncer).refreshRates(coins1, currencyCode1)
+        verify(rateManager).refreshLatestRates(coins1, currencyCode1)
     }
 
     @Test
     fun onInternetDisconnected() {
         whenever(networkAvailabilityManager.isConnected).thenReturn(true, false)
 
-        rateSyncer = RateSyncer(syncer, walletManager, currencyManager, networkAvailabilityManager, timerSignal)
+        rateSyncer = RateSyncer(rateManager, walletManager, currencyManager, networkAvailabilityManager, timerSignal)
 
-        verify(syncer).refreshRates(coins1, currencyCode1)
+        verify(rateManager).refreshLatestRates(coins1, currencyCode1)
 
         networkAvailabilitySignal.onNext(Unit)
         timerSignal.onNext(Unit)
         walletsUpdatedSignal.onNext(Unit)
         baseCurrencyUpdatedSignal.onNext(Unit)
 
-        verifyNoMoreInteractions(syncer)
+        verifyNoMoreInteractions(rateManager)
     }
 
     @Test
     fun onTimePassed() {
-        rateSyncer = RateSyncer(syncer, walletManager, currencyManager, networkAvailabilityManager, timerSignal)
+        rateSyncer = RateSyncer(rateManager, walletManager, currencyManager, networkAvailabilityManager, timerSignal)
 
         timerSignal.onNext(Unit)
 
-        verify(syncer, times(2)).refreshRates(coins1, currencyCode1)
+        verify(rateManager, times(2)).refreshLatestRates(coins1, currencyCode1)
     }
 
     @Test
     fun onCoinsUpdate() {
         whenever(walletManager.wallets).thenReturn(wallets1, wallets2)
 
-        rateSyncer = RateSyncer(syncer, walletManager, currencyManager, networkAvailabilityManager, timerSignal)
+        rateSyncer = RateSyncer(rateManager, walletManager, currencyManager, networkAvailabilityManager, timerSignal)
 
         walletsUpdatedSignal.onNext(Unit)
 
-        val inOrder = inOrder(syncer)
-        inOrder.verify(syncer).refreshRates(coins1, currencyCode1)
-        inOrder.verify(syncer).refreshRates(coins2, currencyCode1)
+        val inOrder = inOrder(rateManager)
+        inOrder.verify(rateManager).refreshLatestRates(coins1, currencyCode1)
+        inOrder.verify(rateManager).refreshLatestRates(coins2, currencyCode1)
         inOrder.verifyNoMoreInteractions()
     }
 
@@ -127,13 +127,13 @@ class RateSyncerTest {
     fun onBaseCurrencyUpdate() {
         whenever(currencyManager.baseCurrency).thenReturn(baseCurrency1, baseCurrency2)
 
-        rateSyncer = RateSyncer(syncer, walletManager, currencyManager, networkAvailabilityManager, timerSignal)
+        rateSyncer = RateSyncer(rateManager, walletManager, currencyManager, networkAvailabilityManager, timerSignal)
 
         baseCurrencyUpdatedSignal.onNext(Unit)
 
-        val inOrder = inOrder(syncer)
-        inOrder.verify(syncer).refreshRates(coins1, currencyCode1)
-        inOrder.verify(syncer).refreshRates(coins1, currencyCode2)
+        val inOrder = inOrder(rateManager)
+        inOrder.verify(rateManager).refreshLatestRates(coins1, currencyCode1)
+        inOrder.verify(rateManager).refreshLatestRates(coins1, currencyCode2)
         inOrder.verifyNoMoreInteractions()
     }
 

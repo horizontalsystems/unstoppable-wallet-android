@@ -83,6 +83,14 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
             emptyListText.visibility = if (viewModel.delegate.itemsCount == 0) View.VISIBLE else View.GONE
         })
 
+        viewModel.reloadItemsLiveEvent.observe(this, Observer {
+            it?.let {
+                it.forEach { index ->
+                    transactionsAdapter.notifyItemChanged(index)
+                }
+            }
+        })
+
         setBottomSheet()
     }
 
@@ -214,12 +222,8 @@ class TransactionsAdapter(private var listener: Listener) : RecyclerView.Adapter
         return itemsCount
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.view_holder_transaction, parent, false)
-
-        return ViewHolderTransaction(view)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
+            ViewHolderTransaction(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_transaction, parent, false))
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         Log.e("BBB", "onBindViewHolder: $position")
@@ -290,7 +294,7 @@ class ViewHolderFilter(override val containerView: View) : RecyclerView.ViewHold
     fun bind(filterName: String?, active: Boolean, onClick: () -> (Unit)) {
         filter_text.setOnClickListener { onClick.invoke() }
 
-        filter_text.text = filterName ?: "All"
+        filter_text.text = filterName ?: containerView.context.getString(R.string.Transactions_FilterAll)
         filter_text.isActivated = active
     }
 }
