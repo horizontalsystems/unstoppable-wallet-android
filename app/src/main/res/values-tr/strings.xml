@@ -51,6 +51,7 @@
     <string name="Send_Button_Paste">Yapıştır</string>
     <string name="Send_Button_More">Daha fazlası</string>
     <string name="Send_Button_Send">Gönder</string>
+    <string name="Send_Button_Max">Max</string>
     <string name="Send_ScanQrCode">QR Kod Okuma</string>
     <string name="Send_Success">Gönderildi!</string>
     <string name="Send_Error_InvalidAddress">Geçersiz adres. Lütfen kontrol edip tekrar deneyin!</string>
