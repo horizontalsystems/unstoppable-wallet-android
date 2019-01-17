@@ -6,7 +6,6 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.annotation.NonNull
 import android.support.design.widget.BottomSheetBehavior
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -224,13 +223,10 @@ class ViewHolderTransaction(override val containerView: View) : RecyclerView.Vie
     fun bind(transactionRecord: TransactionViewItem, onClick: () -> (Unit)) {
 
         containerView.setOnSingleClickListener { onClick.invoke() }
-
-        val amountTextColor = if (transactionRecord.incoming) R.color.green_crypto else R.color.yellow_crypto
-        txAmount.setTextColor(ContextCompat.getColor(itemView.context, amountTextColor))
-        txAmount.text = ValueFormatter.format(transactionRecord.coinValue, true)
+        txValueInFiat.text = transactionRecord.currencyValue?.let { ValueFormatter.formatForTransactions(it, transactionRecord.incoming) }
+        txValueInCoin.text = ValueFormatter.format(transactionRecord.coinValue, true)
         txDate.text = transactionRecord.date?.let { DateHelper.getShortDateForTransaction(it) }
         txTime.text = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }
-        txValueInFiat.text = transactionRecord.currencyValue?.let { ValueFormatter.format(it, true, false) }
         statusIcon.setImageDrawable(getStatusIcon(transactionRecord.status))
         pendingShade.visibility = if (transactionRecord.status == TransactionStatus.Pending) View.VISIBLE else View.GONE
     }

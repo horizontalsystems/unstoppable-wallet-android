@@ -1,5 +1,11 @@
 package io.horizontalsystems.bankwallet.viewHelpers
 
+import android.support.v4.content.ContextCompat
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
+import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import java.math.RoundingMode
@@ -71,7 +77,7 @@ object ValueFormatter {
             return null
         }
 
-        result = "${currencyValue.currency.symbol}$result"
+        result = "${currencyValue.currency.symbol} $result"
 
         if (showNegativeSign && currencyValue.value < 0) {
             result = "- $result"
@@ -82,6 +88,21 @@ object ValueFormatter {
         }
 
         return result
+    }
+
+    fun formatForTransactions(currencyValue: CurrencyValue, isIncoming: Boolean) : SpannableString {
+        val spannable = SpannableString(format(currencyValue))
+
+        //set currency sign size
+        val endOffset = if (currencyValue.value < 0) 3 else 1
+        spannable.setSpan(RelativeSizeSpan(0.75f), 0, endOffset, 0)
+
+        //set color
+        val amountTextColor = if (isIncoming) R.color.green_crypto else R.color.yellow_crypto
+        val color = ContextCompat.getColor(App.instance, amountTextColor)
+
+        spannable.setSpan(ForegroundColorSpan(color), 0, spannable.length, 0)
+        return spannable
     }
 
     fun formatSimple(currencyValue: CurrencyValue): String? {
