@@ -87,6 +87,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
         val addressErrorTxt: TextView? = mDialog?.findViewById(R.id.txtAddressError)
         val amountPrefixTxt: TextView? = mDialog?.findViewById(R.id.topAmountPrefix)
         val switchButton: ImageButton? = mDialog?.findViewById(R.id.btnSwitch)
+        val maxButton: Button? = mDialog?.findViewById(R.id.btnMax)
         val pasteButton: Button? = mDialog?.findViewById(R.id.btnPaste)
         val scanBarcodeButton: ImageButton? = mDialog?.findViewById(R.id.btnBarcodeScan)
         val deleteAddressButton: ImageButton? = mDialog?.findViewById(R.id.btnDeleteAddress)
@@ -101,6 +102,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
 
         switchButton?.setOnClickListener { viewModel.delegate.onSwitchClicked() }
         scanBarcodeButton?.setOnClickListener { startScanner() }
+        maxButton?.setOnClickListener { viewModel.delegate.onMaxClicked() }
         pasteButton?.setOnClickListener { viewModel.delegate.onPasteClicked() }
         deleteAddressButton?.setOnClickListener { viewModel.delegate.onDeleteClicked() }
         sendButton?.setOnClickListener { viewModel.delegate.onSendClicked() }

@@ -41,6 +41,7 @@ object SendModule {
         fun onDeleteClicked()
         fun onSendClicked()
         fun onConfirmClicked()
+        fun onMaxClicked()
     }
 
     interface IInteractor {
@@ -51,9 +52,10 @@ object SendModule {
         fun retrieveRate()
         fun parsePaymentAddress(address: String): PaymentRequestAddress
         fun convertedAmountForInputType(inputType: InputType, amount: Double): Double?
-        fun stateForUserInput(input: UserInput): State
+        fun stateForUserInput(input: UserInput, senderPay: Boolean = true): State
 
         fun send(userInput: UserInput)
+        fun getTotalBalanceMinusFee(inputType: InputType, address: String?): Double
     }
 
     interface IInteractorDelegate {
@@ -117,7 +119,6 @@ object SendModule {
         var inputType: InputType = InputType.COIN
         var amount: Double = 0.0
         var address: String? = null
-
     }
 
     class State(var inputType: InputType) {

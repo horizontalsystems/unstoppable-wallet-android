@@ -26,7 +26,7 @@ class SendPresenterTest {
     fun setup() {
 
         whenever(interactor.parsePaymentAddress(any())).thenReturn(prAddress)
-        whenever(interactor.stateForUserInput(any())).thenReturn(state)
+        whenever(interactor.stateForUserInput(any(), any())).thenReturn(state)
         whenever(factory.viewItemForState(any())).thenReturn(viewItem)
         whenever(factory.confirmationViewItemForState(any())).thenReturn(viewItemConfirm)
 
@@ -134,4 +134,12 @@ class SendPresenterTest {
         presenter.didFailToSend(exception)
         verify(view).showError(exception)
     }
+
+    @Test
+    fun onMaxClicked() {
+        presenter.onMaxClicked()
+        verify(interactor).getTotalBalanceMinusFee(userInput.inputType, userInput.address)
+        verify(view).setAmountInfo(viewItem.amountInfo)
+    }
+
 }

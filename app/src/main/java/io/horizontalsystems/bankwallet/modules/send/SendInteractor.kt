@@ -60,7 +60,16 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
         }
     }
 
-    override fun stateForUserInput(input: SendModule.UserInput): SendModule.State {
+    override fun getTotalBalanceMinusFee(inputType: SendModule.InputType, address: String?): Double {
+        val fee = wallet.adapter.fee(wallet.adapter.balance, address, false)
+        val balanceMinusFee = wallet.adapter.balance- fee
+        return when(inputType){
+            SendModule.InputType.COIN -> balanceMinusFee
+            else -> balanceMinusFee * (rate?.value ?: 0.0)
+        }
+    }
+
+    override fun stateForUserInput(input: SendModule.UserInput, senderPay: Boolean): SendModule.State {
 
         val coin = wallet.coinCode
         val adapter = wallet.adapter
@@ -97,7 +106,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
 
         try {
             state.coinValue?.let { coinValue ->
-                state.feeCoinValue = CoinValue(coin, adapter.fee(coinValue.value, input.address, true))
+                state.feeCoinValue = CoinValue(coin, adapter.fee(coinValue.value, input.address, senderPay))
             }
         } catch (e: Error.InsufficientAmount) {
             state.feeCoinValue = CoinValue(coin, e.fee)
