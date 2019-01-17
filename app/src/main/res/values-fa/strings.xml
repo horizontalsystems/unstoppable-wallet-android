@@ -51,6 +51,7 @@
     <string name="Send_Button_Paste">جاگذازي</string>
     <string name="Send_Button_More">بیشتر</string>
     <string name="Send_Button_Send">ارسال</string>
+    <string name="Send_Button_Max">Max</string>
     <string name="Send_ScanQrCode">اسكن كنيد Qr را</string>
     <string name="Send_Success">ارسال شد!</string>
     <string name="Send_Error_InvalidAddress">ادرس كي وارد كرديد غلط است دوباره چك نماييد ادرس تان را!</string>
