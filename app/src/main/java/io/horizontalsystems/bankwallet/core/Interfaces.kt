@@ -186,6 +186,13 @@ interface IRateStorage {
     fun deleteAll()
 }
 
+interface ICoinStorage {
+    fun coinObservable(coinCode: CoinCode): Flowable<Coin>
+    fun save(coin: Coin)
+    fun getAll(): Flowable<List<Coin>>
+    fun deleteAll()
+}
+
 interface ITransactionRateSyncer {
     fun sync(currencyCode: String)
     fun cancelCurrentSync()

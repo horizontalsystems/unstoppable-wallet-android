@@ -6,15 +6,18 @@ import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.migration.Migration
 import android.content.Context
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 
-@Database(entities = [TransactionRecord::class, Rate::class], version = 2, exportSchema = true)
+@Database(entities = [TransactionRecord::class, Rate::class, Coin::class], version = 3, exportSchema = true)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun transactionDao(): TransactionDao
 
     abstract fun ratesDao(): RatesDao
+
+    abstract fun coinsDao(): CoinsDao
 
     companion object {
 
@@ -28,7 +31,7 @@ abstract class AppDatabase : RoomDatabase() {
         private fun buildDatabase(context: Context): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, "dbBankWallet")
                     .fallbackToDestructiveMigration()
-                    .addMigrations(MIGRATION_1_2)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                     .build()
         }
 
@@ -44,6 +47,13 @@ abstract class AppDatabase : RoomDatabase() {
                 database.execSQL("CREATE TABLE Rate (`coinCode` TEXT NOT NULL,`currencyCode` TEXT NOT NULL,`value` REAL NOT NULL,`timestamp` INTEGER NOT NULL, PRIMARY KEY(`coinCode`,`currencyCode`))")
                 database.execSQL("INSERT INTO Rate (`coinCode`,`currencyCode`,`value`,`timestamp`) SELECT `coin`,`currencyCode`,`value`,`timestamp` FROM RateTemp")
                 database.execSQL("DROP TABLE RateTemp")
+            }
+        }
+
+        private val MIGRATION_2_3: Migration = object : Migration(2, 3) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                //create new table Coin
+                database.execSQL("CREATE TABLE IF NOT EXISTS Coin (`title` TEXT NOT NULL, `code` TEXT NOT NULL, `enabled` INTEGER NOT NULL, `type` TEXT NOT NULL, `order` INTEGER, PRIMARY KEY(`code`))")
             }
         }
 

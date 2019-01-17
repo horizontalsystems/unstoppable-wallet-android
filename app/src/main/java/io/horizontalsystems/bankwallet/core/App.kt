@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.core.factories.WalletFactory
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
+import io.horizontalsystems.bankwallet.core.storage.CoinsRepository
 import io.horizontalsystems.bankwallet.core.storage.RatesRepository
 import io.horizontalsystems.bankwallet.core.storage.TransactionRepository
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
@@ -47,6 +48,7 @@ class App : Application() {
         lateinit var appDatabase: AppDatabase
         lateinit var transactionStorage: ITransactionRecordStorage
         lateinit var rateStorage: IRateStorage
+        lateinit var coinsStorage: ICoinStorage
         lateinit var transactionInfoFactory: FullTransactionInfoFactory
         lateinit var transactionDataProviderManager: TransactionDataProviderManager
         lateinit var appCloseManager: AppCloseManager
@@ -105,6 +107,7 @@ class App : Application() {
         appCloseManager = AppCloseManager()
 
         rateStorage = RatesRepository(appDatabase)
+        coinsStorage = CoinsRepository(appDatabase)
         rateManager = RateManager(rateStorage, networkManager)
         rateSyncer = RateSyncer(rateManager, walletManager, currencyManager, networkAvailabilityManager)
 
