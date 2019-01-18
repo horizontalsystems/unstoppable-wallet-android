@@ -30,6 +30,10 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
         delegate.onShare()
     }
 
+    fun changeProvider() {
+        delegate.onTapChangeProvider()
+    }
+
     //
     // View
     //

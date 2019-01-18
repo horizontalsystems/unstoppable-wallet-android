@@ -34,6 +34,7 @@ object FullTransactionInfoModule {
         fun onTapItem(item: FullTransactionItem)
         fun onTapProvider()
         fun onTapResource()
+        fun onTapChangeProvider()
         fun onShare()
     }
 

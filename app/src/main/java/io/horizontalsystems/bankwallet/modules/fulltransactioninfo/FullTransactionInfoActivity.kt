@@ -121,6 +121,10 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
         viewModel.retry()
     }
 
+    override fun onChangeProvider() {
+        viewModel.changeProvider()
+    }
+
     companion object {
         const val transactionHashKey = "transaction_hash"
         const val coinCodeKey = "coin_code"

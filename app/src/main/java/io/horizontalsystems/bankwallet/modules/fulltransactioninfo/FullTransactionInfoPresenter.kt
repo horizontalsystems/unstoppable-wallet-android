@@ -53,6 +53,11 @@ class FullTransactionInfoPresenter(val interactor: FullTransactionInfoInteractor
         view?.openProviderSettings(state.coinCode)
     }
 
+
+    override fun onTapChangeProvider() {
+        view?.openProviderSettings(state.coinCode)
+    }
+
     override fun onTapResource() {
         interactor.url(state.transactionHash)?.let {
             view?.openUrl(it)
