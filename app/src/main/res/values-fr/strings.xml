@@ -113,6 +113,7 @@
     <!--Full Info Error-->
     <string name="FullInfoError_SubtitleOffline">Offline</string>
     <string name="FullInfoError_Retry">Retry</string>
+    <string name="FullInfoError_ChangeSource">Change Source</string>
     <!--Settings-->
     <string name="Settings_Title">Paramètres</string>
     <string name="Settings_SecurityCenter">Centre de Sécurité</string>
