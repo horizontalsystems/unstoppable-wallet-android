@@ -103,8 +103,8 @@
     <string name="FullInfo_SubtitleOutputs">Выходы</string>
     <string name="FullInfo_SubtitleProvider">Источник</string>
     <!--Full Info Ethereum-->
-    <string name="FullInfoEth_To">To</string>
-    <string name="FullInfoEth_From">From</string>
+    <string name="FullInfoEth_To">Кому</string>
+    <string name="FullInfoEth_From">От</string>
     <string name="FullInfoEth_GasLimit">Gas Limit</string>
     <string name="FullInfoEth_GasUsed">Gas Used</string>
     <string name="FullInfoEth_GasPrice">Gas Price</string>
