@@ -68,10 +68,10 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
             HudHelper.showSuccessMessage(R.string.Hud_Text_Copied)
         })
 
-        viewModel.openLinkLiveEvent.observe(this, Observer { coinCode ->
-            coinCode?.let {
+        viewModel.openLinkLiveEvent.observe(this, Observer { url ->
+            url?.let {
                 val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(coinCode)
+                intent.data = Uri.parse(url)
                 startActivity(intent)
             }
         })

@@ -14,7 +14,7 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
     val showCopiedLiveEvent = SingleLiveEvent<Unit>()
     val showErrorLiveEvent = SingleLiveEvent<Pair<Boolean, String?>>()
     val showShareLiveEvent = SingleLiveEvent<String>()
-    val openLinkLiveEvent = SingleLiveEvent<CoinCode>()
+    val openLinkLiveEvent = SingleLiveEvent<String>()
     val openProviderSettingsEvent = SingleLiveEvent<CoinCode>()
 
     fun init(transactionHash: String, coinCode: CoinCode) {
