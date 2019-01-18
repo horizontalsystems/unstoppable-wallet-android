@@ -79,54 +79,54 @@
     <string name="TransactionInfo_Title">Transaction</string>
     <string name="TransactionInfo_Status">Status</string>
     <string name="TransactionInfo_Id">ID</string>
-    <string name="TransactionInfo_To">To</string>
+    <string name="TransactionInfo_To">宛先</string>
     <string name="TransactionInfo_From">From</string>
-    <string name="TransactionInfo_Time">Time</string>
+    <string name="TransactionInfo_Time">時間</string>
     <string name="TransactionInfo_ButtonMore">Full Info</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Full Info</string>
     <string name="FullInfo_Id">ID</string>
-    <string name="FullInfo_Status">Status</string>
-    <string name="FullInfo_Time">Time</string>
+    <string name="FullInfo_Status">状況</string>
+    <string name="FullInfo_Time">時間</string>
     <string name="FullInfo_Block">Block</string>
     <string name="FullInfo_Confirmations">Confirmations</string>
     <string name="FullInfo_TotalInput">合計入力数</string>
     <string name="FullInfo_TotalOutput">Total Output</string>
     <string name="FullInfo_Size">Size</string>
-    <string name="FullInfo_Fee">Fee</string>
+    <string name="FullInfo_Fee">料金</string>
     <string name="FullInfo_FeePerByte">Fee per byte</string>
-    <string name="FullInfo_FeeRate">Fee Rate</string>
-    <string name="FullInfo_NoAddress">No Available</string>
+    <string name="FullInfo_FeeRate">手数料率</string>
+    <string name="FullInfo_NoAddress">利用不可</string>
     <string name="FullInfo_SatByte">sat/B</string>
-    <string name="FullInfo_Bytes">Bytes</string>
-    <string name="FullInfo_SubtitleInputs">Inputs</string>
+    <string name="FullInfo_Bytes">バイト</string>
+    <string name="FullInfo_SubtitleInputs">入力</string>
     <string name="FullInfo_SubtitleOutputs">Outputs</string>
-    <string name="FullInfo_SubtitleProvider">Data Provider</string>
+    <string name="FullInfo_SubtitleProvider">データ提供者</string>
     <!--Full Info Ethereum-->
-    <string name="FullInfoEth_To">To</string>
+    <string name="FullInfoEth_To">宛先</string>
     <string name="FullInfoEth_From">From</string>
-    <string name="FullInfoEth_GasLimit">Gas Limit</string>
+    <string name="FullInfoEth_GasLimit">ガスリミット</string>
     <string name="FullInfoEth_GasUsed">Gas Used</string>
-    <string name="FullInfoEth_GasPrice">Gas Price</string>
+    <string name="FullInfoEth_GasPrice">ガスの価格</string>
     <string name="FullInfoEth_Nonce">Nonce</string>
     <string name="FullInfoEth_Value">Value</string>
     <!--Full Info Error-->
-    <string name="FullInfoError_SubtitleOffline">Offline</string>
-    <string name="FullInfoError_Retry">Retry</string>
+    <string name="FullInfoError_SubtitleOffline">オフライン</string>
+    <string name="FullInfoError_Retry">リトライ</string>
     <!--Settings-->
-    <string name="Settings_Title">Settings</string>
-    <string name="Settings_SecurityCenter">Security Center</string>
+    <string name="Settings_Title">設定</string>
+    <string name="Settings_SecurityCenter">セキュリティ センター</string>
     <string name="Settings_BaseCurrency">Base Currency</string>
-    <string name="Settings_Language">Language</string>
-    <string name="Settings_LightMode">Light Mode</string>
+    <string name="Settings_Language">言語</string>
+    <string name="Settings_LightMode">ライトモード</string>
     <string name="Settings_About">About</string>
     <string name="Settings_InfoTitleWithVersion">Bank Wallet %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <!--Settings-->
-    <string name="Settings_Error_FingerprintNotEnabled">Fingerprint Not Enabled</string>
+    <string name="Settings_Error_FingerprintNotEnabled">指紋認証が無効</string>
     <string name="Settings_Error_NoFingerprintAddedYet">You have not enabled fingerprint on this device. Go to Settings &gt; Security to set up fingerprint access.</string>
     <!--Setting_Security-->
-    <string name="SettingsSecurity_Fingerprint">Fingerprint</string>
+    <string name="SettingsSecurity_Fingerprint">指紋</string>
     <string name="SettingsSecurity_EditPin">Edit Passcode</string>
     <string name="SettingsSecurity_BackupWallet">Backup Wallet</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">Unlink from this device</string>
@@ -135,9 +135,9 @@
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Base Currency</string>
     <!--Setting_Language-->
-    <string name="SettingsLanguage_Title">Language</string>
+    <string name="SettingsLanguage_Title">言語</string>
     <!--Setting_About-->
-    <string name="SettingsAbout_Title">About</string>
+    <string name="SettingsAbout_Title">について</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Terms &amp; Privacy:</string>
     <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
 \n\nIt works everywhere as long as there is internet. No entity can block this app from working or to block someone from using it.
