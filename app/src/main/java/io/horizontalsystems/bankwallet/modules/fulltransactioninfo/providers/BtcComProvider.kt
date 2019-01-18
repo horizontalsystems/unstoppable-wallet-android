@@ -19,7 +19,7 @@ class BtcComBitcoinProvider : FullTransactionInfoModule.BitcoinForksProvider {
     }
 
     override fun convert(json: JsonObject): BitcoinResponse {
-        return Gson().fromJson(json, BtcComResponse::class.java)
+        return Gson().fromJson(json["data"], BtcComResponse::class.java)
     }
 }
 
@@ -35,7 +35,7 @@ class BtcComBitcoinCashProvider : FullTransactionInfoModule.BitcoinForksProvider
     }
 
     override fun convert(json: JsonObject): BitcoinResponse {
-        return Gson().fromJson(json, BtcComResponse::class.java)
+        return Gson().fromJson(json["data"], BtcComResponse::class.java)
     }
 }
 

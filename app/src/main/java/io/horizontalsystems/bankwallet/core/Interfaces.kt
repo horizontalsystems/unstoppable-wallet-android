@@ -4,6 +4,7 @@ import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.Flowable
 import io.reactivex.Maybe
@@ -29,10 +30,13 @@ interface ILocalStorage {
     var iUnderstand: Boolean
     var baseCurrencyCode: String?
     var blockTillDate: Long?
-    fun clearAll()
     var isNewWallet: Boolean
     var failedAttempts: Int?
     var lockoutUptime: Long?
+    var baseBitcoinProvider: String?
+    var baseEthereumProvider: String?
+
+    fun clearAll()
 }
 
 interface ISecuredStorage {
@@ -71,6 +75,18 @@ interface ICurrencyManager {
     val baseCurrencyUpdatedSignal: Observable<Unit>
     val currencies: List<Currency>
     fun setBaseCurrency(code: String)
+}
+
+interface ITransactionDataProviderManager {
+    val baseProviderUpdatedSignal: Observable<Unit>
+
+    fun providers(coinCode: CoinCode): List<FullTransactionInfoModule.Provider>
+    fun baseProvider(coinCode: CoinCode): FullTransactionInfoModule.Provider
+    fun setBaseProvider(name: String, coinCode: CoinCode)
+
+    fun bitcoin(name: String): FullTransactionInfoModule.BitcoinForksProvider
+    fun bitcoinCash(name: String): FullTransactionInfoModule.BitcoinForksProvider
+    fun ethereum(name: String): FullTransactionInfoModule.EthereumForksProvider
 }
 
 interface IKeyStoreSafeExecute {

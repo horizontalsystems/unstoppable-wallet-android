@@ -155,6 +155,7 @@
 
     <string name="FullInfoError_SubtitleOffline">Offline</string>
     <string name="FullInfoError_Retry">Retry</string>
+    <string name="FullInfoError_ChangeSource">Change Source</string>
 
 
     <!--Settings-->

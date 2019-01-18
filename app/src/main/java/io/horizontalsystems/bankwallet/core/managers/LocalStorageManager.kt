@@ -16,7 +16,8 @@ class LocalStorageManager : ILocalStorage {
     private val NEW_WALLET = "new_wallet"
     private val FAILED_ATTEMPTS = "failed_attempts"
     private val LOCKOUT_TIMESTAMP = "lockout_timestamp"
-
+    private val BASE_BITCOIN_PROVIDER = "base_bitcoin_provider"
+    private val BASE_ETHEREUM_PROVIDER = "base_ethereum_provider"
 
     override var currentLanguage: String?
         get() = App.preferences.getString(CURRENT_LANGUAGE, null)
@@ -67,10 +68,6 @@ class LocalStorageManager : ILocalStorage {
             }
         }
 
-    override fun clearAll() {
-        App.preferences.edit().clear().apply()
-    }
-
     override var isNewWallet: Boolean
         get() = App.preferences.getBoolean(NEW_WALLET, false)
         set(value) {
@@ -104,4 +101,21 @@ class LocalStorageManager : ILocalStorage {
                 App.preferences.edit().putLong(LOCKOUT_TIMESTAMP, it).apply()
             } ?: App.preferences.edit().remove(LOCKOUT_TIMESTAMP).apply()
         }
+
+    override var baseBitcoinProvider: String?
+        get() = App.preferences.getString(BASE_BITCOIN_PROVIDER, null)
+        set(value) {
+            App.preferences.edit().putString(BASE_BITCOIN_PROVIDER, value).apply()
+        }
+
+    override var baseEthereumProvider: String?
+        get() = App.preferences.getString(BASE_ETHEREUM_PROVIDER, null)
+        set(value) {
+            App.preferences.edit().putString(BASE_ETHEREUM_PROVIDER, value).apply()
+        }
+
+    override fun clearAll() {
+        App.preferences.edit().clear().apply()
+    }
+
 }

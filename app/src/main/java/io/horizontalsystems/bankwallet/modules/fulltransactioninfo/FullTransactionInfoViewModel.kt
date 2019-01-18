@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 
 class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View, FullTransactionInfoModule.Router {
@@ -15,12 +14,11 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
     val showCopiedLiveEvent = SingleLiveEvent<Unit>()
     val showErrorLiveEvent = SingleLiveEvent<Pair<Boolean, String?>>()
     val showShareLiveEvent = SingleLiveEvent<String>()
-    val openLinkLiveEvent = SingleLiveEvent<String>()
+    val openLinkLiveEvent = SingleLiveEvent<CoinCode>()
+    val openProviderSettingsEvent = SingleLiveEvent<CoinCode>()
 
     fun init(transactionHash: String, coinCode: CoinCode) {
-        val transactionProvider = App.transactionInfoFactory.providerFor(coinCode)
-
-        FullTransactionInfoModule.init(this, this, transactionProvider, transactionHash)
+        FullTransactionInfoModule.init(this, this, coinCode, transactionHash)
         delegate.viewDidLoad()
     }
 
@@ -30,6 +28,10 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
 
     fun share() {
         delegate.onShare()
+    }
+
+    fun changeProvider() {
+        delegate.onTapChangeProvider()
     }
 
     //
@@ -46,7 +48,7 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
         loadingLiveData.value = false
     }
 
-    override fun showError(providerName: String) {
+    override fun showError(providerName: String?) {
         showErrorLiveEvent.value = Pair(true, providerName)
     }
 
@@ -60,6 +62,10 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
 
     override fun showCopied() {
         showCopiedLiveEvent.call()
+    }
+
+    override fun openProviderSettings(coinCode: CoinCode) {
+        openProviderSettingsEvent.value = coinCode
     }
 
     override fun openUrl(url: String) {

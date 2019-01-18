@@ -14,8 +14,10 @@ import android.view.ViewGroup
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.FullTransactionItem
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider.DataProviderSettingsModule
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
+import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_full_transaction_info.*
 import kotlinx.android.synthetic.main.view_holder_full_transaction.*
@@ -31,10 +33,10 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
         super.onCreate(savedInstanceState)
 
         val transactionHash = intent.extras.getString(transactionHashKey)
-        val coinCode = intent.extras.getString(coinCodeKey)
+        val coinCodeString = intent.extras.getString(coinCodeKey)
 
         viewModel = ViewModelProviders.of(this).get(FullTransactionInfoViewModel::class.java)
-        viewModel.init(transactionHash, coinCode)
+        viewModel.init(transactionHash, coinCodeString)
 
         setContentView(R.layout.activity_full_transaction_info)
 
@@ -52,19 +54,31 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
             transactionRecordAdapter.notifyDataSetChanged()
         })
 
-        viewModel.loadingLiveData.observe(this, Observer { show ->
-            progressLoading.visibility = if (show == true) View.VISIBLE else View.INVISIBLE
+        viewModel.loadingLiveData.observe(this, Observer { coinCode ->
+            if (coinCode == true) {
+                progressLoading.visibility = View.VISIBLE
+                recyclerTransactionInfo.visibility = View.INVISIBLE
+                transactionRecordAdapter.notifyDataSetChanged()
+            } else {
+                progressLoading.visibility = View.INVISIBLE
+            }
         })
 
         viewModel.showCopiedLiveEvent.observe(this, Observer {
             HudHelper.showSuccessMessage(R.string.Hud_Text_Copied)
         })
 
-        viewModel.openLinkLiveEvent.observe(this, Observer { url ->
-            url?.let {
+        viewModel.openLinkLiveEvent.observe(this, Observer { coinCode ->
+            coinCode?.let {
                 val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(url)
+                intent.data = Uri.parse(coinCode)
                 startActivity(intent)
+            }
+        })
+
+        viewModel.openProviderSettingsEvent.observe(this, Observer { coinCode ->
+            coinCode?.let {
+                DataProviderSettingsModule.start(this, coinCode)
             }
         })
 
@@ -105,6 +119,10 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
     //
     override fun onRetry() {
         viewModel.retry()
+    }
+
+    override fun onChangeProvider() {
+        viewModel.changeProvider()
     }
 
     companion object {
@@ -153,7 +171,9 @@ class SectionViewAdapter(val context: Context) : RecyclerView.Adapter<RecyclerVi
                 viewModel.delegate.getSection(position)?.let { section ->
                     if (section.translationId == null) {
                         holder.sectionLabel.setPadding(0, 0, 0, 0)
+                        holder.sectionLabel.text = null
                     } else {
+                        holder.sectionLabel.setPadding(LayoutHelper.dp(16f, context), LayoutHelper.dp(16f, context), LayoutHelper.dp(16f, context), LayoutHelper.dp(5f, context))
                         holder.sectionLabel.text = context.getString(section.translationId)
                     }
 
@@ -168,7 +188,7 @@ class SectionViewAdapter(val context: Context) : RecyclerView.Adapter<RecyclerVi
             is SectionProviderViewHolder -> {
                 holder.sectionProvider.bind(title = viewModel.delegate.providerName)
                 holder.sectionProvider.setOnClickListener {
-                    viewModel.delegate.onTapResource()
+                    viewModel.delegate.onTapProvider()
                 }
             }
         }

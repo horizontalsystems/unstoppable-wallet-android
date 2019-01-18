@@ -10,15 +10,31 @@ class FullTransactionInfoPresenter(val interactor: FullTransactionInfoInteractor
     var view: FullTransactionInfoModule.View? = null
 
     //
+    // State
+    //
+    override val providerName: String?
+        get() = state.transactionRecord?.providerName
+
+    override val sectionCount: Int
+        get() = state.transactionRecord?.sections?.size ?: 0
+
+    override fun getSection(row: Int): FullTransactionSection? {
+        return state.transactionRecord?.sections?.get(row)
+    }
+
+    //
     // ViewDelegate
     //
     override fun viewDidLoad() {
+        interactor.didLoad()
+        interactor.updateProvider(state.coinCode)
+
         retryLoadInfo()
     }
 
     override fun onRetryLoad() {
         if (state.transactionRecord == null) {
-            onRetryLoad()
+            tryLoadInfo()
         }
     }
 
@@ -33,37 +49,46 @@ class FullTransactionInfoPresenter(val interactor: FullTransactionInfoInteractor
         }
     }
 
+    override fun onTapProvider() {
+        view?.openProviderSettings(state.coinCode)
+    }
+
+
+    override fun onTapChangeProvider() {
+        view?.openProviderSettings(state.coinCode)
+    }
+
     override fun onTapResource() {
-        view?.openUrl(interactor.url(state.transactionHash))
+        interactor.url(state.transactionHash)?.let {
+            view?.openUrl(it)
+        }
     }
 
     override fun onShare() {
-        view?.share(interactor.url(state.transactionHash))
-    }
-
-    //
-    // State
-    //
-    override val providerName: String?
-        get() = state.transactionRecord?.providerName
-
-    override val sectionCount: Int
-        get() = state.transactionRecord?.sections?.size ?: 0
-
-    override fun getSection(row: Int): FullTransactionSection? {
-        return state.transactionRecord?.sections?.get(row)
+        interactor.url(state.transactionHash)?.let {
+            view?.share(it)
+        }
     }
 
     //
     // InteractorDelegate
     //
+    override fun onProviderChange() {
+        state.transactionRecord = null
+        view?.reload()
+
+        interactor.updateProvider(state.coinCode)
+
+        retryLoadInfo()
+    }
+
     override fun onReceiveTransactionInfo(transactionRecord: FullTransactionRecord) {
         state.transactionRecord = transactionRecord
         view?.hideLoading()
         view?.reload()
     }
 
-    override fun onError(providerName: String) {
+    override fun onError(providerName: String?) {
         view?.hideLoading()
         view?.showError(providerName)
     }

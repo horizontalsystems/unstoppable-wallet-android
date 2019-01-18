@@ -13,6 +13,7 @@ class FullTransactionInfoErrorFragment : Fragment() {
 
     interface Listener {
         fun onRetry()
+        fun onChangeProvider()
     }
 
     private var provider: String? = null
@@ -31,6 +32,10 @@ class FullTransactionInfoErrorFragment : Fragment() {
 
         btnRetry.setOnClickListener {
             listener?.onRetry()
+        }
+
+        changeProvider.setOnClickListener {
+            listener?.onChangeProvider()
         }
     }
 
