@@ -105,9 +105,9 @@
     <!--Full Info Ethereum-->
     <string name="FullInfoEth_To">宛先</string>
     <string name="FullInfoEth_From">From</string>
-    <string name="FullInfoEth_GasLimit">ガスリミット</string>
+    <string name="FullInfoEth_GasLimit">Gas Limit</string>
     <string name="FullInfoEth_GasUsed">Gas Used</string>
-    <string name="FullInfoEth_GasPrice">ガスの価格</string>
+    <string name="FullInfoEth_GasPrice">Gas Price</string>
     <string name="FullInfoEth_Nonce">Nonce</string>
     <string name="FullInfoEth_Value">Value</string>
     <!--Full Info Error-->
