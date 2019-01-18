@@ -113,6 +113,7 @@
     <!--Full Info Error-->
     <string name="FullInfoError_SubtitleOffline">オフライン</string>
     <string name="FullInfoError_Retry">リトライ</string>
+    <string name="FullInfoError_ChangeSource">Change Source</string>
     <!--Settings-->
     <string name="Settings_Title">設定</string>
     <string name="Settings_SecurityCenter">セキュリティ センター</string>
