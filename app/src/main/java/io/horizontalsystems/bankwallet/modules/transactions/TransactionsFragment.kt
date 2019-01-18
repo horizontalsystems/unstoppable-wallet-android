@@ -245,44 +245,49 @@ class FilterAdapter(private var listener: Listener) : RecyclerView.Adapter<Recyc
         fun onFilterItemClick(item: TransactionFilterItem)
     }
 
-    var selectedFilterId: String? = null
+    private var selectedFilterId: String? = null
+
+    private val firstTag = TransactionFilterItem(null, "All")
     var filters: List<TransactionFilterItem> = listOf()
 
-    override fun getItemCount() = filters.size
+    private val allFilters: MutableList<TransactionFilterItem>
+        get() {
+            val items = mutableListOf(firstTag)
+            items.addAll(filters)
+            return items
+        }
+
+    override fun getItemCount() = allFilters.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
             ViewHolderFilter(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_filter, parent, false))
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is ViewHolderFilter -> holder.bind(xxx(filters[position].name), active = selectedFilterId == filters[position].adapterId) {
-                listener.onFilterItemClick(filters[position])
-                selectedFilterId = filters[position].adapterId
+            is ViewHolderFilter -> holder.bind(
+                    allFilters[position].name,
+                    active = selectedFilterId == allFilters[position].adapterId,
+                    firstButton = position == 0) {
+                listener.onFilterItemClick(allFilters[position])
+                selectedFilterId = allFilters[position].adapterId
                 notifyDataSetChanged()
             }
         }
     }
 
-    fun xxx(coinCode: CoinCode) = when (coinCode) {
-        "BTC" -> "Bitcoin"
-        "BTCt" -> "Bitcoin-T"
-        "BTCr" -> "Bitcoin-R"
-        "BCH" -> "Bitcoin Cash"
-        "BCHt" -> "Bitcoin Cash-T"
-        "ETH" -> "Ethereum"
-        "ETHt" -> "Ethereum-T"
-        else -> coinCode
-    }
-
-
 }
 
 class ViewHolderFilter(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(filterName: String, active: Boolean, onClick: () -> (Unit)) {
+    fun bind(filterName: String, active: Boolean, firstButton: Boolean, onClick: () -> (Unit)) {
         filter_text.setOnClickListener { onClick.invoke() }
 
-        filter_text.text = filterName
+        if (firstButton) {
+            val localizedFirstButtonTitle = containerView.context.getString(R.string.Transactions_FilterAll)
+            filter_text.text = localizedFirstButtonTitle
+        } else {
+            filter_text.text = filterName
+        }
         filter_text.isActivated = active
     }
 }

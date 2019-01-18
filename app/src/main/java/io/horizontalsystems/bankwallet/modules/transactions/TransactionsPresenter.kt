@@ -37,8 +37,7 @@ class TransactionsPresenter(private val interactor: TransactionsModule.IInteract
     override fun didRetrieveFilters(filters: List<CoinCode>) {
         val filterItems = filters.map {
             TransactionFilterItem(it, it)
-        }.toMutableList()
-        filterItems.add(0, TransactionFilterItem(null, "All"))
+        }
         view?.showFilters(filterItems)
     }
 
