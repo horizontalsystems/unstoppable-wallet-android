@@ -33,7 +33,7 @@ class DataProviderSettingsActivity : BaseActivity(), DataProviderSettingsAdapter
         setContentView(R.layout.activity_explorer_switcher)
 
         setSupportActionBar(toolbar)
-        supportActionBar?.title = getString(R.string.FullInfo_SubtitleProvider)
+        supportActionBar?.title = getString(R.string.FullInfo_Source)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.back)
 

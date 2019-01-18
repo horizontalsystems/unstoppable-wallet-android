@@ -93,11 +93,11 @@ class FullTransactionEthereumAdapter(val provider: FullTransactionInfoModule.Eth
             transactionItems.add(FullTransactionItem(R.string.FullInfo_Size, value = data.size.toString(), valueUnit = R.string.FullInfo_Bytes))
         }
 
-        blockItems.add(FullTransactionItem(R.string.FullInfoEth_GasLimit, value = "${data.gasLimit} GWei"))
-        blockItems.add(FullTransactionItem(R.string.FullInfoEth_GasPrice, value = "${data.gasPrice} GWei"))
+        blockItems.add(FullTransactionItem(R.string.FullInfo_GasLimit, value = "${data.gasLimit} GWei"))
+        blockItems.add(FullTransactionItem(R.string.FullInfo_GasPrice, value = "${data.gasPrice} GWei"))
 
         data.gasUsed?.let {
-            transactionItems.add(FullTransactionItem(R.string.FullInfoEth_GasUsed, value = "${data.gasUsed} GWei"))
+            transactionItems.add(FullTransactionItem(R.string.FullInfo_GasUsed, value = "${data.gasUsed} GWei"))
         }
 
         data.fee?.let {
@@ -108,8 +108,8 @@ class FullTransactionEthereumAdapter(val provider: FullTransactionInfoModule.Eth
         sections.add(FullTransactionSection(items = listOf(
                 FullTransactionItem(R.string.FullInfoEth_Nonce, value = data.nonce),
                 FullTransactionItem(R.string.FullInfoEth_Value, value = "${data.value} $coinCode"),
-                FullTransactionItem(R.string.FullInfoEth_From, value = data.from, clickable = true, icon = FullTransactionIcon.PERSON),
-                FullTransactionItem(R.string.FullInfoEth_To, value = data.to, clickable = true, icon = FullTransactionIcon.PERSON)
+                FullTransactionItem(R.string.FullInfo_From, value = data.from, clickable = true, icon = FullTransactionIcon.PERSON),
+                FullTransactionItem(R.string.FullInfo_To, value = data.to, clickable = true, icon = FullTransactionIcon.PERSON)
         )))
 
         return FullTransactionRecord(provider.name, sections)
