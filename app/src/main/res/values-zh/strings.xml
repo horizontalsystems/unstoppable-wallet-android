@@ -125,21 +125,21 @@
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">指纹识别未启用</string>
-    <string name="Settings_Error_NoFingerprintAddedYet">You have not enabled fingerprint on this device. Go to Settings &gt; Security to set up fingerprint access.</string>
+    <string name="Settings_Error_NoFingerprintAddedYet">在此设备上指纹识别尚未启用。为了设置指纹识别访问，请转到\"设置“&gt;”安全“</string>
     <!--Setting_Security-->
-    <string name="SettingsSecurity_Fingerprint">Fingerprint</string>
-    <string name="SettingsSecurity_EditPin">Edit Passcode</string>
+    <string name="SettingsSecurity_Fingerprint">指纹识别</string>
+    <string name="SettingsSecurity_EditPin">修改密码</string>
     <string name="SettingsSecurity_BackupWallet">备份钱包</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">与此设备断开连接</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">此操作从此设备中将删除当前安装的钱包</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_2">Make sure you have backed up Secret Key or you will not be able to access your funds in the future.</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_2">确保你已备份钱包的密钥，否则您将无法访问资金。</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">基本货币</string>
     <!--Setting_Language-->
     <string name="SettingsLanguage_Title">语言</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">更多</string>
-    <string name="SettingsAbout_TermsPrivacySubtitle">Terms &amp; Privacy:</string>
+    <string name="SettingsAbout_TermsPrivacySubtitle">服务条款&amp;隐私策略</string>
     <string name="SettingsAbout_TermsPrivacyText">此应用程序是对等的。它不依赖于任何 web 服务器或支持人员来运行的技术。只要有互联网, 它就可以被使用。任何实体都不能阻止此应用程序工作或阻止某人使用它。
 
 您的资金安全地存储在手机上, 而不是在其他任何地方。
@@ -152,7 +152,7 @@
 
 一些通用的非私有应用程序数据 (如货币汇率) 存储在分散存储 (ipfs) 中。 </string>
     <!--Alert-->
-    <string name="Alert_KeysInvalidatedTitle">Android Keystore Error</string>
+    <string name="Alert_KeysInvalidatedTitle">Android密钥存储错误</string>
     <string name="Alert_KeysInvalidatedDescription">The encrypted data holding your wallet was recently invalidated because your Android lock screen was changed</string>
     <string name="Alert_TitleWarning">Warning</string>
     <string name="Alert_NoDeviceLockDescription">Set up a lock screen on this device to continue. Go to “Settings” &gt; “Security” &gt; “Screen Lock” and enable the lock screen setting.</string>
