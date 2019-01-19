@@ -41,7 +41,7 @@
     <string name="Balance_Title">余额</string>
     <string name="Balance_Deposit">收到</string>
     <string name="Balance_Send">发送​​</string>
-    <string name="Balance_RatePerCoin">%s per %s</string>
+    <string name="Balance_RatePerCoin">每%s %s</string>
     <!--Send-->
     <string name="Send_Title1">发送​​</string>
     <string name="Send_Title">发送%s</string>
@@ -153,23 +153,23 @@
 一些通用的非私有应用程序数据 (如货币汇率) 存储在分散存储 (ipfs) 中。 </string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android密钥存储错误</string>
-    <string name="Alert_KeysInvalidatedDescription">The encrypted data holding your wallet was recently invalidated because your Android lock screen was changed</string>
-    <string name="Alert_TitleWarning">Warning</string>
-    <string name="Alert_NoDeviceLockDescription">Set up a lock screen on this device to continue. Go to “Settings” &gt; “Security” &gt; “Screen Lock” and enable the lock screen setting.</string>
-    <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
+    <string name="Alert_KeysInvalidatedDescription">由于您的安卓锁屏被更改，保存您钱包的加密数据已失效。</string>
+    <string name="Alert_TitleWarning">警示</string>
+    <string name="Alert_NoDeviceLockDescription">在此设备上设置锁定屏幕以继续。转到 \"设置\" &gt; \"安全\" &gt; \"屏幕锁定\" 并启用锁定屏幕设置。</string>
+    <string name="Alert_CustomKeyboardIsUsed">您使用的是第三方键盘。您必须使用默认键盘。</string>
     <!--Unlock-->
-    <string name="Unlock_Page_EnterYourPin">Passcode</string>
+    <string name="Unlock_Page_EnterYourPin">密码</string>
     <!--Errors-->
-    <string name="Error_UnsupportedBlockchain">Unsupported currency</string>
+    <string name="Error_UnsupportedBlockchain">不支持的货币</string>
     <!--Hud texts-->
-    <string name="Hud_Text_Unlock">Unlock</string>
-    <string name="Hud_Text_Success">Success</string>
-    <string name="Hud_Text_Error">Error</string>
-    <string name="Hud_Text_NoInternet">No Internet</string>
+    <string name="Hud_Text_Unlock">解锁​​​​</string>
+    <string name="Hud_Text_Success">成功</string>
+    <string name="Hud_Text_Error">出错</string>
+    <string name="Hud_Text_NoInternet">没有网络连接</string>
     <string name="Hud_Text_Copied">复制成功</string>
-    <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
+    <string name="Hud_Text_InvalidPinError">密码不正确</string>
     <!--Fingerprint texts-->
-    <string name="Fingerprint_DialogTitle">Fingerprint login</string>
+    <string name="Fingerprint_DialogTitle">使用指纹登录</string>
     <string name="Fingerprint_Hint">Touch sensor</string>
     <string name="Fingerprint_EnterPin">Passcode</string>
     <string name="Fingerprint_NotRecognized">Fingerprint not recognized. Try again</string>
