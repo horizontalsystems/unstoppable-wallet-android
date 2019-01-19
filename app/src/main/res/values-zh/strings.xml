@@ -105,15 +105,15 @@
     <!--Full Info Ethereum-->
     <string name="FullInfoEth_To">收件人：</string>
     <string name="FullInfoEth_From">发件人：</string>
-    <string name="FullInfoEth_GasLimit">Gas Limit</string>
-    <string name="FullInfoEth_GasUsed">Gas Used</string>
-    <string name="FullInfoEth_GasPrice">Gas Price</string>
-    <string name="FullInfoEth_Nonce">Nonce</string>
-    <string name="FullInfoEth_Value">Value</string>
+    <string name="FullInfoEth_GasLimit">GAS限制</string>
+    <string name="FullInfoEth_GasUsed">GAS使用</string>
+    <string name="FullInfoEth_GasPrice">GAS的价格</string>
+    <string name="FullInfoEth_Nonce">临时</string>
+    <string name="FullInfoEth_Value">价值</string>
     <!--Full Info Error-->
-    <string name="FullInfoError_SubtitleOffline">Offline</string>
-    <string name="FullInfoError_Retry">Retry</string>
-    <string name="FullInfoError_ChangeSource">Change Source</string>
+    <string name="FullInfoError_SubtitleOffline">离线</string>
+    <string name="FullInfoError_Retry">重试</string>
+    <string name="FullInfoError_ChangeSource">更改源</string>
     <!--Settings-->
     <string name="Settings_Title">设置</string>
     <string name="Settings_SecurityCenter">安全中心</string>
@@ -124,7 +124,7 @@
     <string name="Settings_InfoTitleWithVersion">Bank Wallet %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <!--Settings-->
-    <string name="Settings_Error_FingerprintNotEnabled">Fingerprint Not Enabled</string>
+    <string name="Settings_Error_FingerprintNotEnabled">指纹识别未启用</string>
     <string name="Settings_Error_NoFingerprintAddedYet">You have not enabled fingerprint on this device. Go to Settings &gt; Security to set up fingerprint access.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Fingerprint</string>
