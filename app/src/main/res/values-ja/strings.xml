@@ -64,9 +64,9 @@
     <!--Deposit-->
     <string name="Deposit_Title">Receive %s</string>
     <string name="Deposit_Share">共有</string>
-    <string name="Deposit_Your_Address">Your Address</string>
+    <string name="Deposit_Your_Address">お客様のアドレス</string>
     <!--Timestamp-->
-    <string name="Timestamp_JustNow">just now</string>
+    <string name="Timestamp_JustNow">ただ今</string>
     <string name="Timestamp_MinAgo">%dm. ago</string>
     <string name="Timestamp_HoursAgo">%dh. ago</string>
     <string name="Timestamp_Today">今日</string>
@@ -76,7 +76,7 @@
     <string name="Transactions_FilterAll">すべて</string>
     <string name="Transactions_EmptyList">You don\’t have any transactions yet</string>
     <!--Transaction Info-->
-    <string name="TransactionInfo_Title">Transaction</string>
+    <string name="TransactionInfo_Title">トランザクション</string>
     <string name="TransactionInfo_Status">Status</string>
     <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_To">宛先</string>
@@ -88,7 +88,7 @@
     <string name="FullInfo_Id">ID</string>
     <string name="FullInfo_Status">状況</string>
     <string name="FullInfo_Time">時間</string>
-    <string name="FullInfo_Block">Block</string>
+    <string name="FullInfo_Block">ブロック</string>
     <string name="FullInfo_Confirmations">Confirmations</string>
     <string name="FullInfo_TotalInput">合計入力数</string>
     <string name="FullInfo_TotalOutput">Total Output</string>
