@@ -77,7 +77,7 @@
     <string name="Transactions_EmptyList">You don\’t have any transactions yet</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">トランザクション</string>
-    <string name="TransactionInfo_Status">Status</string>
+    <string name="TransactionInfo_Status">状況</string>
     <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_To">宛先</string>
     <string name="TransactionInfo_From">From</string>
@@ -120,7 +120,7 @@
     <string name="Settings_BaseCurrency">Base Currency</string>
     <string name="Settings_Language">言語</string>
     <string name="Settings_LightMode">ライトモード</string>
-    <string name="Settings_About">About</string>
+    <string name="Settings_About">について</string>
     <string name="Settings_InfoTitleWithVersion">Bank Wallet %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <!--Settings-->
@@ -162,14 +162,14 @@
     <string name="Hud_Text_Success">Success</string>
     <string name="Hud_Text_Error">Error</string>
     <string name="Hud_Text_NoInternet">No Internet</string>
-    <string name="Hud_Text_Copied">Copied</string>
+    <string name="Hud_Text_Copied">コピー完了</string>
     <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">Fingerprint login</string>
     <string name="Fingerprint_Hint">Touch sensor</string>
     <string name="Fingerprint_EnterPin">Passcode</string>
     <string name="Fingerprint_NotRecognized">Fingerprint not recognized. Try again</string>
-    <string name="Fingerprint_Success">Success!</string>
+    <string name="Fingerprint_Success">成功!</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Disabled until: %s</string>
     <!--Set Pin-->
