@@ -31,12 +31,12 @@
     <string name="Backup_Confirmation_Understand">我的钱包和代币仅在这个设备上，而不是在任何服务器上安全地保存着。这个重点我都理解。</string>
     <string name="Backup_Confirmation_DeleteAppWarn">此应用程序因任何原因移动到其他设备被删除或出了故障，则只有使用密钥，才能恢复钱包。这个重点我都理解。</string>
     <string name="Backup_Confirmation_LockAppWarn">更改 PIN 码或删除 Android 操作系统设置中的应用数据会导致钱包重置。在这种情况下, 你需要你的密钥来恢复你的钱包。</string>
-    <string name="Backup_Confirmation_Title">Enter following words from your Secret Key</string>
+    <string name="Backup_Confirmation_Title">请输入你密钥中的词</string>
     <string name="Backup_Confirmation_Description">请输入你密钥中的词.</string>
     <string name="Backup_Confirmation_FailureAlertText"> 单词不匹配</string>
     <string name="Backup_Button_Confirm">确认</string>
     <string name="Backup_Button_Next">继续</string>
-    <string name="Backup_Button_Submit">Submit</string>
+    <string name="Backup_Button_Submit">提交</string>
     <!--Balance-->
     <string name="Balance_Title">余额</string>
     <string name="Balance_Deposit">收到</string>
@@ -45,28 +45,28 @@
     <!--Send-->
     <string name="Send_Title1">发送​​</string>
     <string name="Send_Title">发送%s</string>
-    <string name="Send_Hint_PaymentReference">Payment Reference</string>
+    <string name="Send_Hint_PaymentReference">付款参考</string>
     <string name="Send_Hint_Address">地址</string>
     <string name="Send_Hint_Amount">金额</string>
     <string name="Send_Button_Paste">粘帖</string>
-    <string name="Send_Button_More">More</string>
+    <string name="Send_Button_More">更多</string>
     <string name="Send_Button_Send">发送​​</string>
-    <string name="Send_Button_Max">Max</string>
-    <string name="Send_ScanQrCode">Scan QR Code</string>
-    <string name="Send_Success">Sent!</string>
-    <string name="Send_Error_InvalidAddress">Address seems invalid. Please check and try again!</string>
-    <string name="Send_Error_InsufficientBalance">Not enough funds.</string>
-    <string name="Send_Error_IncorrectAddress">Incorrect Address</string>
+    <string name="Send_Button_Max">最多</string>
+    <string name="Send_ScanQrCode">扫描二维码</string>
+    <string name="Send_Success">发送成功！</string>
+    <string name="Send_Error_InvalidAddress">地址无效。 请确认后再重试，谢谢</string>
+    <string name="Send_Error_InsufficientBalance">余额不足</string>
+    <string name="Send_Error_IncorrectAddress">地址不正确</string>
     <string name="Send_Error_BalanceAmount">余额%s</string>
-    <string name="Send_DialogTitle">Confirm Transaction</string>
+    <string name="Send_DialogTitle">确认交易</string>
     <string name="Send_DialogFee">费用:</string>
     <string name="Send_DialogTotal">总额:</string>
     <!--Deposit-->
     <string name="Deposit_Title">收到%s</string>
-    <string name="Deposit_Share">Share</string>
-    <string name="Deposit_Your_Address">Your Address</string>
+    <string name="Deposit_Share">分享</string>
+    <string name="Deposit_Your_Address">您的地址</string>
     <!--Timestamp-->
-    <string name="Timestamp_JustNow">just now</string>
+    <string name="Timestamp_JustNow">刚才</string>
     <string name="Timestamp_MinAgo">%dm. ago</string>
     <string name="Timestamp_HoursAgo">%dh. ago</string>
     <string name="Timestamp_Today">Тoday</string>
