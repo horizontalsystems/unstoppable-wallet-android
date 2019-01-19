@@ -43,27 +43,27 @@
     <string name="Balance_Send">送る</string>
     <string name="Balance_RatePerCoin">%s per %s</string>
     <!--Send-->
-    <string name="Send_Title1">Send</string>
+    <string name="Send_Title1">送る</string>
     <string name="Send_Title">Send %s</string>
     <string name="Send_Hint_PaymentReference">Payment Reference</string>
-    <string name="Send_Hint_Address">Address</string>
+    <string name="Send_Hint_Address">住所</string>
     <string name="Send_Hint_Amount">Amount</string>
     <string name="Send_Button_Paste">Paste</string>
-    <string name="Send_Button_More">More</string>
-    <string name="Send_Button_Send">Send</string>
-    <string name="Send_Button_Max">Max</string>
+    <string name="Send_Button_More">その他</string>
+    <string name="Send_Button_Send">送る</string>
+    <string name="Send_Button_Max">最大</string>
     <string name="Send_ScanQrCode">Scan QR Code</string>
-    <string name="Send_Success">Sent!</string>
+    <string name="Send_Success">送信完了!</string>
     <string name="Send_Error_InvalidAddress">Address seems invalid. Please check and try again!</string>
     <string name="Send_Error_InsufficientBalance">Not enough funds.</string>
     <string name="Send_Error_IncorrectAddress">Incorrect Address</string>
     <string name="Send_Error_BalanceAmount">Balance %s</string>
     <string name="Send_DialogTitle">Confirm Transaction</string>
-    <string name="Send_DialogFee">Fee:</string>
-    <string name="Send_DialogTotal">Total:</string>
+    <string name="Send_DialogFee">料金:</string>
+    <string name="Send_DialogTotal">合計:</string>
     <!--Deposit-->
     <string name="Deposit_Title">Receive %s</string>
-    <string name="Deposit_Share">Share</string>
+    <string name="Deposit_Share">共有</string>
     <string name="Deposit_Your_Address">Your Address</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">just now</string>
