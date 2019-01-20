@@ -20,14 +20,14 @@
     <string name="Guest_RestoreWallet">ウォレットを復元する</string>
     <!--Restore-->
     <string name="Restore_Title">秘密キーを入力する</string>
-    <string name="Restore_ValidationFailed">Incorrect Secret Key</string>
+    <string name="Restore_ValidationFailed">正しくない秘密鍵</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>
     <!--Backup-->
-    <string name="Backup_Intro_Title">Secret Key</string>
+    <string name="Backup_Intro_Title">秘密鍵</string>
     <string name="Backup_Intro_Subtitle">Your secret key is the only way to restore your wallet and funds if your phone is ever lost, stolen, broken, or upgraded.\n\n It consists of 12 words. Store it safely offline.</string>
     <string name="Backup_Intro_Later">後で</string>
     <string name="Backup_Intro_BackupNow">バックアップ</string>
-    <string name="Backup_Words_Title">Secret Key</string>
+    <string name="Backup_Words_Title">秘密鍵</string>
     <string name="Backup_Confirmation_Understand">I understand that my wallet and tokens are held securely on this device only and not any servers.</string>
     <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I have just written down and saved in a secure place.</string>
     <string name="Backup_Confirmation_LockAppWarn">Changing the unlock PIN or deleting app data in your Android OS settings would reset the wallet. You will need your Secret Key to restore your wallet after that.</string>
