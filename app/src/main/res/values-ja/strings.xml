@@ -154,20 +154,20 @@
     <string name="Alert_NoDeviceLockDescription">Set up a lock screen on this device to continue. Go to “Settings” &gt; “Security” &gt; “Screen Lock” and enable the lock screen setting.</string>
     <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
     <!--Unlock-->
-    <string name="Unlock_Page_EnterYourPin">Passcode</string>
+    <string name="Unlock_Page_EnterYourPin">パスコード</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Unsupported currency</string>
     <!--Hud texts-->
-    <string name="Hud_Text_Unlock">Unlock</string>
-    <string name="Hud_Text_Success">Success</string>
-    <string name="Hud_Text_Error">Error</string>
-    <string name="Hud_Text_NoInternet">No Internet</string>
+    <string name="Hud_Text_Unlock">解除する</string>
+    <string name="Hud_Text_Success">成功</string>
+    <string name="Hud_Text_Error">エラー</string>
+    <string name="Hud_Text_NoInternet">インタネットに繋がっていません。</string>
     <string name="Hud_Text_Copied">コピー完了</string>
-    <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
+    <string name="Hud_Text_InvalidPinError">正しくないパスワード</string>
     <!--Fingerprint texts-->
-    <string name="Fingerprint_DialogTitle">Fingerprint login</string>
-    <string name="Fingerprint_Hint">Touch sensor</string>
-    <string name="Fingerprint_EnterPin">Passcode</string>
+    <string name="Fingerprint_DialogTitle">指紋使用ログイン</string>
+    <string name="Fingerprint_Hint">タッチセンサー</string>
+    <string name="Fingerprint_EnterPin">パスコード</string>
     <string name="Fingerprint_NotRecognized">Fingerprint not recognized. Try again</string>
     <string name="Fingerprint_Success">成功!</string>
     <!--Unlock Pin-->
