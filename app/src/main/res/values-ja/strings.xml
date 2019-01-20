@@ -21,7 +21,7 @@
     <!--Restore-->
     <string name="Restore_Title">秘密キーを入力する</string>
     <string name="Restore_ValidationFailed">正しくない秘密鍵</string>
-    <string name="Restore_RestoreFailed">Failed to restore wallet</string>
+    <string name="Restore_RestoreFailed">ウォレットを作成できませんでした</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">秘密鍵</string>
     <string name="Backup_Intro_Subtitle">Your secret key is the only way to restore your wallet and funds if your phone is ever lost, stolen, broken, or upgraded.\n\n It consists of 12 words. Store it safely offline.</string>
@@ -33,7 +33,7 @@
     <string name="Backup_Confirmation_LockAppWarn">Changing the unlock PIN or deleting app data in your Android OS settings would reset the wallet. You will need your Secret Key to restore your wallet after that.</string>
     <string name="Backup_Confirmation_Title">Enter following words from your Secret Key</string>
     <string name="Backup_Confirmation_Description">Enter words from your secret key.</string>
-    <string name="Backup_Confirmation_FailureAlertText"> Words do not match</string>
+    <string name="Backup_Confirmation_FailureAlertText"> 言葉が一致しません</string>
     <string name="Backup_Button_Confirm">確定する</string>
     <string name="Backup_Button_Next">次</string>
     <string name="Backup_Button_Submit">提出</string>
@@ -41,10 +41,10 @@
     <string name="Balance_Title">残額</string>
     <string name="Balance_Deposit">受取</string>
     <string name="Balance_Send">送る</string>
-    <string name="Balance_RatePerCoin">%s per %s</string>
+    <string name="Balance_RatePerCoin">%s 毎 %s</string>
     <!--Send-->
     <string name="Send_Title1">送る</string>
-    <string name="Send_Title">Send %s</string>
+    <string name="Send_Title">%s を送る</string>
     <string name="Send_Hint_PaymentReference">Payment Reference</string>
     <string name="Send_Hint_Address">住所</string>
     <string name="Send_Hint_Amount">Amount</string>
