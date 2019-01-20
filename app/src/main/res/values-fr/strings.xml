@@ -178,7 +178,7 @@
     <string name="SetPin_ErrorShortPin">S\'il vous plaît entrez tous les chiffres.</string>
     <string name="SetPin_ConfirmInfo">Confirmer</string>
     <string name="SetPin_Success">Lock passcode was set successfully!</string>
-    <string name="SetPin_ErrorPinsDontMatch">Le Code ne correspond pas. Réessayez.</string>
+    <string name="SetPin_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
     <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
     <!--Edit Pin-->
     <string name="EditPin_Title">Modifier le code </string>
