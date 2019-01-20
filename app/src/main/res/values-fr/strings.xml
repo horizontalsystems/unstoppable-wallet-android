@@ -19,7 +19,7 @@
     <string name="Guest_CreateWallet">Nouveau porte-monnaie</string>
     <string name="Guest_RestoreWallet">Restaurer le porte-monnaie</string>
     <!--Restore-->
-    <string name="Restore_Title">Enter Secret Key</string>
+    <string name="Restore_Title">Entrez la clé secrete</string>
     <string name="Restore_ValidationFailed">Clé secrète incorrecte</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>
     <!--Backup-->
@@ -63,7 +63,7 @@
     <string name="Send_DialogTotal">Total:</string>
     <!--Deposit-->
     <string name="Deposit_Title">Recevoir %s</string>
-    <string name="Deposit_Share">Share</string>
+    <string name="Deposit_Share">Partager</string>
     <string name="Deposit_Your_Address">Your Address</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">à l\'instant</string>
@@ -92,7 +92,7 @@
     <string name="FullInfo_Confirmations">Confirmation</string>
     <string name="FullInfo_TotalInput">Total des entrées</string>
     <string name="FullInfo_TotalOutput">Total des sorties</string>
-    <string name="FullInfo_Size">Size</string>
+    <string name="FullInfo_Size">Taille</string>
     <string name="FullInfo_Fee">Frais</string>
     <string name="FullInfo_FeePerByte">Fee per byte</string>
     <string name="FullInfo_FeeRate">Fee Rate</string>
@@ -103,8 +103,8 @@
     <string name="FullInfo_SubtitleOutputs">Sorties</string>
     <string name="FullInfo_SubtitleProvider">Data Provider</string>
     <!--Full Info Ethereum-->
-    <string name="FullInfoEth_To">To</string>
-    <string name="FullInfoEth_From">From</string>
+    <string name="FullInfoEth_To">À</string>
+    <string name="FullInfoEth_From">De</string>
     <string name="FullInfoEth_GasLimit">Gas Limit</string>
     <string name="FullInfoEth_GasUsed">Gas Used</string>
     <string name="FullInfoEth_GasPrice">Gas Price</string>
@@ -128,11 +128,11 @@
     <string name="Settings_Error_NoFingerprintAddedYet">Vous n’avez pas activé d’empreintes digitales sur ce appareil. Allez à paramètres &gt; sécurité à mettre en place un accès d’empreinte digitale.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Empreinte digitale</string>
-    <string name="SettingsSecurity_EditPin">Edit Passcode</string>
+    <string name="SettingsSecurity_EditPin">Modifier le code </string>
     <string name="SettingsSecurity_BackupWallet">Porte-monnaie de Sauvegarde</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">Supprimer le lien de cet appareil</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">Cette action supprimera le porte-monnaie actuellement installé sur cet appareil.</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_2">Make sure you have backed up Secret Key or you will not be able to access your funds in the future.</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_2">Assurez-vous de disposer de la clé secrète, sinon vous ne pourrez plus accéder aux fonds.</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Devise de Base</string>
     <!--Setting_Language-->
@@ -154,7 +154,7 @@
     <string name="Alert_NoDeviceLockDescription">Installez un écran de verrouillage sur cet appareil pour continuer. Allez dans « Paramètres » &gt; « Sécurité » &gt; « Screen Lock » et activez le paramètre d’écran de verrouillage.</string>
     <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
     <!--Unlock-->
-    <string name="Unlock_Page_EnterYourPin">Passcode</string>
+    <string name="Unlock_Page_EnterYourPin">Code</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Devise non supportée</string>
     <!--Hud texts-->
@@ -167,24 +167,24 @@
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">Prise d\'empreintes digitales</string>
     <string name="Fingerprint_Hint">Détecteur tactile</string>
-    <string name="Fingerprint_EnterPin">Passcode</string>
+    <string name="Fingerprint_EnterPin">Code</string>
     <string name="Fingerprint_NotRecognized">Empreinte digitale non reconnue. Réessayez</string>
     <string name="Fingerprint_Success">Effectué!</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Désactivé jusqu\'à: %s</string>
     <!--Set Pin-->
-    <string name="SetPin_Title">Passcode</string>
+    <string name="SetPin_Title">Code</string>
     <string name="SetPin_Info">Your passcode will be used to unlock wallet app</string>
     <string name="SetPin_ErrorShortPin">S\'il vous plaît entrez tous les chiffres.</string>
-    <string name="SetPin_ConfirmInfo">Confirm</string>
+    <string name="SetPin_ConfirmInfo">Confirmer</string>
     <string name="SetPin_Success">Lock passcode was set successfully!</string>
-    <string name="SetPin_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
+    <string name="SetPin_ErrorPinsDontMatch">Le Code ne correspond pas. Réessayez.</string>
     <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">Edit Passcode</string>
-    <string name="EditPin_UnlockInfo">Current Passcode</string>
-    <string name="EditPin_NewPinInfo">New Passcode</string>
+    <string name="EditPin_Title">Modifier le code </string>
+    <string name="EditPin_UnlockInfo">Le code actuel</string>
+    <string name="EditPin_NewPinInfo">Le code nouveu</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Wallets</string>
+    <string name="ManageCoins_title">Portefeuilles</string>
     <string name="ManageCoins_save">Save</string>
 </resources>
