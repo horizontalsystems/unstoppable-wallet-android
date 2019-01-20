@@ -13,11 +13,11 @@ import android.view.View
 import android.view.ViewGroup
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.entities.FullTransactionIcon
 import io.horizontalsystems.bankwallet.entities.FullTransactionItem
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider.DataProviderSettingsModule
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_full_transaction_info.*
 import kotlinx.android.synthetic.main.view_holder_full_transaction.*
@@ -169,14 +169,6 @@ class SectionViewAdapter(val context: Context) : RecyclerView.Adapter<RecyclerVi
         when (holder) {
             is SectionViewHolder -> {
                 viewModel.delegate.getSection(position)?.let { section ->
-                    if (section.translationId == null) {
-                        holder.sectionLabel.setPadding(0, 0, 0, 0)
-                        holder.sectionLabel.text = null
-                    } else {
-                        holder.sectionLabel.setPadding(LayoutHelper.dp(16f, context), LayoutHelper.dp(16f, context), LayoutHelper.dp(16f, context), LayoutHelper.dp(5f, context))
-                        holder.sectionLabel.text = context.getString(section.translationId)
-                    }
-
                     holder.sectionRecyclerView.hasFixedSize()
                     holder.sectionRecyclerView.isNestedScrollingEnabled = false
 
@@ -186,7 +178,7 @@ class SectionViewAdapter(val context: Context) : RecyclerView.Adapter<RecyclerVi
 
             }
             is SectionProviderViewHolder -> {
-                holder.sectionProvider.bind(title = viewModel.delegate.providerName)
+                holder.sectionProvider.bind(title = "Source", value = viewModel.delegate.providerName, icon = null)
                 holder.sectionProvider.setOnClickListener {
                     viewModel.delegate.onTapProvider()
                 }
@@ -213,25 +205,37 @@ class SectionItemViewAdapter(val context: Context, val viewModel: FullTransactio
         when (holder) {
             is SectionItemViewHolder -> {
                 val item = items[position]
-                val last = items.size == position + 1
+                val notLast = items.size != position + 1
 
-                val title = if (item.translationId != null) context.getString(item.translationId) else item.title
-                var value = item.value
-                if (item.valueUnit != null) {
-                    value = "$value ${context.getString(item.valueUnit)}"
-                }
+                bindTransaction(item, notLast, holder.sectionItem)
+            }
+        }
+    }
 
-                holder.sectionItem.bind(
-                        title = title,
-                        value = value,
-                        valueIcon = item.icon,
-                        showBottomBorder = !last)
+    private fun bindTransaction(item: FullTransactionItem, showBorder: Boolean, viewItem: FullTransactionInfoItemView) {
+        val title = if (item.titleResId != null) context.getString(item.titleResId) else item.title
 
-                if (item.clickable) {
-                    holder.sectionItem.setOnClickListener {
-                        viewModel.delegate.onTapItem(item)
-                    }
-                }
+        viewItem.bind(title, item.value, item.icon, showBorder)
+
+//        when {
+//            item.icon == FullTransactionIcon.PERSON -> viewItem.bindAddress(title, item.value, showBorder)
+//            item.icon == FullTransactionIcon.HASH -> viewItem.bindTransactionId(address = item.value)
+//            else -> {
+//                val icon = when (item.icon) {
+//                    FullTransactionIcon.TIME -> R.drawable.pending_grey
+//                    FullTransactionIcon.BLOCK -> R.drawable.blocks
+//                    FullTransactionIcon.CHECK -> R.drawable.checkmark_grey
+//                    else -> null
+//                }
+//
+//                icon?.let { viewItem.bindTypeIcon(it) }
+//                viewItem.bind(title, item.value, showBorder)
+//            }
+//        }
+
+        if (item.clickable) {
+            viewItem.setOnClickListener {
+                viewModel.delegate.onTapItem(item)
             }
         }
     }

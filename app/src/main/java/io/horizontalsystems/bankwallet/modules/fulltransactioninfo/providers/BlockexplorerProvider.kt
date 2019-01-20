@@ -62,7 +62,7 @@ class BlockExplorerResponse(
 
     class Vout(@SerializedName("value") val amount: String, @SerializedName("scriptPubKey") val pubKey: PubKey) : Output() {
         override val value: Double get() = amount.toDouble()
-        override val address: String get() = pubKey.addresses.firstOrNull() ?: ""
+        override val address: String get() = pubKey.addresses.firstOrNull() ?: "..."
     }
 
     class PubKey(@SerializedName("addresses") val addresses: ArrayList<String>)

@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.ui.extensions
 import android.content.Context
 import android.support.constraint.ConstraintLayout
 import android.util.AttributeSet
+import android.view.View
 import io.horizontalsystems.bankwallet.R
 import kotlinx.android.synthetic.main.view_address.view.*
 
@@ -29,9 +30,13 @@ class AddressView : ConstraintLayout {
         invalidate()
     }
 
-    fun bindTransactionId(hash: String) {
+    fun bindTransactionId(hash: String, withIcon: Boolean = true) {
+        if (withIcon)
+            iconImage.setImageResource(R.drawable.hash)
+        else
+            iconImage.visibility = View.GONE
+
         txtAddress.text = hash
-        iconImage.setImageResource(R.drawable.hash)
         invalidate()
     }
 

@@ -22,47 +22,49 @@ class FullTransactionBitcoinAdapter(val provider: FullTransactionInfoModule.Bitc
         )))
 
         val blockItems = mutableListOf(
-                FullTransactionItem(R.string.FullInfo_Time, value = DateHelper.getFullDateWithShortMonth(data.date)),
-                FullTransactionItem(R.string.FullInfo_Block, value = data.height.toString())
+                FullTransactionItem(R.string.FullInfo_Time, value = DateHelper.getFullDateWithShortMonth(data.date), icon = FullTransactionIcon.TIME),
+                FullTransactionItem(R.string.FullInfo_Block, value = data.height.toString(), icon = FullTransactionIcon.BLOCK)
         )
 
         data.confirmations?.let {
-            blockItems.add(FullTransactionItem(R.string.FullInfo_Confirmations, value = data.confirmations))
+            blockItems.add(FullTransactionItem(R.string.FullInfo_Confirmations, value = data.confirmations, icon = FullTransactionIcon.CHECK))
         }
 
         sections.add(FullTransactionSection(items = blockItems))
 
-        val totalInput = ValueFormatter.format(data.inputs.sumByDouble { it.value })
-        val totalOutput = ValueFormatter.format(data.outputs.sumByDouble { it.value })
-        val transactionItems = mutableListOf(
-                FullTransactionItem(R.string.FullInfo_TotalInput, value = "$totalInput $coinCode"),
-                FullTransactionItem(R.string.FullInfo_TotalOutput, value = "$totalOutput $coinCode")
-        )
+        val transactionItems = mutableListOf(FullTransactionItem(R.string.FullInfo_Fee, value = "${ValueFormatter.format(data.fee)} $coinCode"))
 
         data.size?.let {
-            transactionItems.add(FullTransactionItem(R.string.FullInfo_Size, value = it.toString(), valueUnit = R.string.FullInfo_Bytes))
+            transactionItems.add(FullTransactionItem(R.string.FullInfo_Size, value = "$it (bytes)"))
         }
 
-        transactionItems.add(FullTransactionItem(R.string.FullInfo_Fee, value = "${ValueFormatter.format(data.fee)} $coinCode"))
-
         data.feePerByte?.let { feePerByte ->
-            transactionItems.add(FullTransactionItem(R.string.FullInfo_FeeRate, value = ValueFormatter.format(feePerByte), valueUnit = R.string.FullInfo_SatByte))
+            transactionItems.add(FullTransactionItem(R.string.FullInfo_FeeRate, value = "${ValueFormatter.format(feePerByte)} (satoshi)"))
         }
 
         sections.add(FullTransactionSection(items = transactionItems))
 
         if (data.inputs.isNotEmpty()) {
-            sections.add(FullTransactionSection(R.string.FullInfo_SubtitleInputs, data.inputs.map {
+            val totalInput = ValueFormatter.format(data.inputs.sumByDouble { it.value })
+            val inputs = mutableListOf(FullTransactionItem(R.string.FullInfo_SubtitleInputs, value = "$totalInput $coinCode"))
+            data.inputs.map {
                 val amount = ValueFormatter.format(it.value)
-                FullTransactionItem(title = "$amount $coinCode", value = it.address, clickable = true, icon = FullTransactionIcon.PERSON)
-            }))
+                inputs.add(FullTransactionItem(title = "$amount $coinCode", value = it.address, clickable = true, icon = FullTransactionIcon.PERSON))
+            }
+
+            sections.add(FullTransactionSection(inputs))
         }
 
         if (data.outputs.isNotEmpty()) {
-            sections.add(FullTransactionSection(R.string.FullInfo_SubtitleOutputs, data.outputs.map {
+            val totalOutput = ValueFormatter.format(data.outputs.sumByDouble { it.value })
+            val outputs = mutableListOf(FullTransactionItem(R.string.FullInfo_SubtitleOutputs, value = "$totalOutput $coinCode"))
+
+            data.outputs.map {
                 val amount = ValueFormatter.format(it.value)
-                FullTransactionItem(title = "$amount $coinCode", value = it.address, clickable = true, icon = FullTransactionIcon.PERSON)
-            }))
+                outputs.add(FullTransactionItem(title = "$amount $coinCode", value = it.address, clickable = true, icon = FullTransactionIcon.PERSON))
+            }
+
+            sections.add(FullTransactionSection(outputs))
         }
 
         return FullTransactionRecord(provider.name, sections)
@@ -90,7 +92,7 @@ class FullTransactionEthereumAdapter(val provider: FullTransactionInfoModule.Eth
 
         val transactionItems = mutableListOf<FullTransactionItem>()
         if (data.size != null) {
-            transactionItems.add(FullTransactionItem(R.string.FullInfo_Size, value = data.size.toString(), valueUnit = R.string.FullInfo_Bytes))
+            transactionItems.add(FullTransactionItem(R.string.FullInfo_Size, value = "${data.size} (bytes)"))
         }
 
         blockItems.add(FullTransactionItem(R.string.FullInfo_GasLimit, value = "${data.gasLimit} GWei"))
