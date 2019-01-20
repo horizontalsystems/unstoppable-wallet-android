@@ -82,9 +82,9 @@
     <string name="TransactionInfo_To">À</string>
     <string name="TransactionInfo_From">De</string>
     <string name="TransactionInfo_Time">Heure</string>
-    <string name="TransactionInfo_ButtonMore">Full Info</string>
+    <string name="TransactionInfo_ButtonMore">Info</string>
     <!--Full Info-->
-    <string name="FullInfo_Title">Full Info</string>
+    <string name="FullInfo_Title">Info</string>
     <string name="FullInfo_Id">ID</string>
     <string name="FullInfo_Status">Statut</string>
     <string name="FullInfo_Time">Heure</string>
