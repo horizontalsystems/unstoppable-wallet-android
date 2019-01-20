@@ -64,7 +64,7 @@
     <!--Deposit-->
     <string name="Deposit_Title">Recevoir %s</string>
     <string name="Deposit_Share">Partager</string>
-    <string name="Deposit_Your_Address">Your Address</string>
+    <string name="Deposit_Your_Address">Votre address</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">à l\'instant</string>
     <string name="Timestamp_MinAgo">Il y a %dm min</string>
@@ -96,12 +96,12 @@
     <string name="FullInfo_Fee">Frais</string>
     <string name="FullInfo_FeePerByte">Fee per byte</string>
     <string name="FullInfo_FeeRate">Fee Rate</string>
-    <string name="FullInfo_NoAddress">No Available</string>
+    <string name="FullInfo_NoAddress">Non disponible</string>
     <string name="FullInfo_SatByte">sat/B</string>
     <string name="FullInfo_Bytes">Bytes</string>
     <string name="FullInfo_SubtitleInputs">Entrées</string>
     <string name="FullInfo_SubtitleOutputs">Sorties</string>
-    <string name="FullInfo_SubtitleProvider">Data Provider</string>
+    <string name="FullInfo_SubtitleProvider">Fournisseurs de données</string>
     <!--Full Info Ethereum-->
     <string name="FullInfoEth_To">À</string>
     <string name="FullInfoEth_From">De</string>
@@ -111,9 +111,9 @@
     <string name="FullInfoEth_Nonce">Nonce</string>
     <string name="FullInfoEth_Value">Value</string>
     <!--Full Info Error-->
-    <string name="FullInfoError_SubtitleOffline">Offline</string>
-    <string name="FullInfoError_Retry">Retry</string>
-    <string name="FullInfoError_ChangeSource">Change Source</string>
+    <string name="FullInfoError_SubtitleOffline">Déconnecté</string>
+    <string name="FullInfoError_Retry">Réessayer</string>
+    <string name="FullInfoError_ChangeSource">Changer la Source</string>
     <!--Settings-->
     <string name="Settings_Title">Paramètres</string>
     <string name="Settings_SecurityCenter">Centre de Sécurité</string>
@@ -178,13 +178,13 @@
     <string name="SetPin_ErrorShortPin">S\'il vous plaît entrez tous les chiffres.</string>
     <string name="SetPin_ConfirmInfo">Confirmer</string>
     <string name="SetPin_Success">Lock passcode was set successfully!</string>
-    <string name="SetPin_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
-    <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
+    <string name="SetPin_ErrorPinsDontMatch">Le code ne correspond pas. Réessayez.</string>
+    <string name="SetPin_ErrorFailedToSavePin">Une erreur est apparue lors de l\'enregistrement de votre code. Veuillez réessayer.</string>
     <!--Edit Pin-->
     <string name="EditPin_Title">Modifier le code </string>
     <string name="EditPin_UnlockInfo">Le code actuel</string>
     <string name="EditPin_NewPinInfo">Le code nouveu</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Portefeuilles</string>
-    <string name="ManageCoins_save">Save</string>
+    <string name="ManageCoins_save">Sauvegarder</string>
 </resources>
