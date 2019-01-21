@@ -63,7 +63,7 @@
     <string name="Send_DialogTotal">Итого:</string>
     <!--Deposit-->
     <string name="Deposit_Title">Получено %s</string>
-    <string name="Deposit_Share">Share</string>
+    <string name="Deposit_Share">Поделиться</string>
     <string name="Deposit_Your_Address">Your Address</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">только что</string>
@@ -82,18 +82,33 @@
     <string name="TransactionInfo_To">Кому</string>
     <string name="TransactionInfo_From">От</string>
     <string name="TransactionInfo_Time">Время</string>
-    <string name="TransactionInfo_ButtonMore">Информация </string>
+    <string name="TransactionInfo_ButtonMore">More</string>
     <!--Full Info-->
-    <string name="FullInfo_Title">Информация </string>
-    <string name="FullInfo_Id">ID</string>
-    <string name="FullInfo_Status">Статус</string>
+    <string name="FullInfo_Title">Transaction</string>
     <string name="FullInfo_Time">Время</string>
     <string name="FullInfo_Block">Блок</string>
     <string name="FullInfo_Confirmations">Подтверждения</string>
+    <string name="FullInfo_Inputs">Inputs</string>
+    <string name="FullInfo_Outputs">Outputs</string>
+    <string name="FullInfo_Size">Размер</string>
+    <string name="FullInfo_Fee">Комиссия</string>
+    <string name="FullInfo_Rate">Rate</string>
+    <string name="FullInfo_Source">Source</string>
+    <string name="FullInfo_To">To</string>
+    <string name="FullInfo_From">From</string>
+    <string name="FullInfo_GasLimit">Gas Limit</string>
+    <string name="FullInfo_GasUsed">Gas Used</string>
+    <string name="FullInfo_GasPrice">Gas Price</string>
+    <string name="FullInfo_Source_Title">Source</string>
+    <string name="FullInfo_Source_Online">Online</string>
+    <string name="FullInfo_Source_Offline">Offline</string>
+    <string name="FullInfo_Error_Subtitle">Offline</string>
+    <string name="FullInfo_Error_Retry">Retry</string>
+    <string name="FullInfo_Error_ChangeSource">Change Source</string>
+    <!--no used-->
+    <string name="FullInfo_Id">ID</string>
     <string name="FullInfo_TotalInput">Всего Входов</string>
     <string name="FullInfo_TotalOutput">Всего Выходов</string>
-    <string name="FullInfo_Size">Size</string>
-    <string name="FullInfo_Fee">Комиссия</string>
     <string name="FullInfo_FeePerByte">Fee per byte</string>
     <string name="FullInfo_FeeRate">Fee Rate</string>
     <string name="FullInfo_NoAddress">No Available</string>
@@ -101,19 +116,8 @@
     <string name="FullInfo_Bytes">Bytes</string>
     <string name="FullInfo_SubtitleInputs">Входы</string>
     <string name="FullInfo_SubtitleOutputs">Выходы</string>
-    <string name="FullInfo_SubtitleProvider">Источник</string>
-    <!--Full Info Ethereum-->
-    <string name="FullInfoEth_To">Кому</string>
-    <string name="FullInfoEth_From">От</string>
-    <string name="FullInfoEth_GasLimit">Gas Limit</string>
-    <string name="FullInfoEth_GasUsed">Gas Used</string>
-    <string name="FullInfoEth_GasPrice">Gas Price</string>
     <string name="FullInfoEth_Nonce">Nonce</string>
     <string name="FullInfoEth_Value">Value</string>
-    <!--Full Info Error-->
-    <string name="FullInfoError_SubtitleOffline">Offline</string>
-    <string name="FullInfoError_Retry">Retry</string>
-    <string name="FullInfoError_ChangeSource">Change Source</string>
     <!--Settings-->
     <string name="Settings_Title">Настройки</string>
     <string name="Settings_SecurityCenter">Центр Безопасности</string>
