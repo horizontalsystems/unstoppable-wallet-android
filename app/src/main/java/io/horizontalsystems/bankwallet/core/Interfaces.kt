@@ -56,6 +56,7 @@ interface INetworkManager {
     fun getLatestRate(coin: String, currency: String): Flowable<LatestRate>
     fun getRate(coinCode: String, currency: String, timestamp: Long): Flowable<Double>
     fun getTransaction(host: String, path: String): Flowable<JsonObject>
+    fun ping(host: String, url: String): Flowable<JsonObject>
 }
 
 interface IEncryptionManager {

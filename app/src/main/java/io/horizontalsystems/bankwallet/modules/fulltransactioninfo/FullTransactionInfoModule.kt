@@ -20,7 +20,7 @@ object FullTransactionInfoModule {
         fun showError(providerName: String?)
         fun showCopied()
         fun openUrl(url: String)
-        fun openProviderSettings(coinCode: CoinCode)
+        fun openProviderSettings(coinCode: CoinCode, transactionHash: String)
         fun share(url: String)
     }
 

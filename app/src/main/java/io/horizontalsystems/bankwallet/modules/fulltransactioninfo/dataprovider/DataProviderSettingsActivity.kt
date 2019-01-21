@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -27,8 +28,9 @@ class DataProviderSettingsActivity : BaseActivity(), DataProviderSettingsAdapter
         super.onCreate(savedInstanceState)
 
         val coinCode = intent.extras.getString(DataProviderSettingsModule.COIN_CODE)
+        val txHash = intent.extras.getString(DataProviderSettingsModule.TRANSACTION_HASH)
         viewModel = ViewModelProviders.of(this).get(DataProviderSettingsViewModel::class.java)
-        viewModel.init(coinCode)
+        viewModel.init(coinCode, txHash)
 
         setContentView(R.layout.activity_explorer_switcher)
 
@@ -91,11 +93,13 @@ class DataProviderSettingsAdapter(private var listener: Listener) : RecyclerView
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            VIEW_TYPE_ITEM -> ViewHolderDataProviderSettings(inflater.inflate(ViewHolderDataProviderSettings.layoutResourceId, parent, false))
+            VIEW_TYPE_ITEM -> {
+                val containerView = inflater.inflate(ViewHolderDataProviderSettings.layoutResourceId, parent, false)
+                ViewHolderDataProviderSettings(parent.context, containerView)
+            }
             else -> ViewHolderProgressbar(inflater.inflate(ViewHolderProgressbar.layoutResourceId, parent, false))
         }
     }
-
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
@@ -105,13 +109,28 @@ class DataProviderSettingsAdapter(private var listener: Listener) : RecyclerView
 
 }
 
-class ViewHolderDataProviderSettings(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class ViewHolderDataProviderSettings(private val context: Context, override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     fun bind(item: DataProviderSettingsItem, onClick: () -> (Unit)) {
 
         containerView.setOnSingleClickListener { onClick.invoke() }
         title.text = item.name
-        subtitle.text = if (item.online) "Online" else "Offline"
+        subtitle.text = context.getString(if (item.online) R.string.FullInfo_Source_Online else R.string.FullInfo_Source_Offline)
+
+        if (item.online) {
+            subtitle.setTextColor(subtitle.resources.getColor(R.color.green_crypto))
+        } else {
+            subtitle.setTextColor(subtitle.resources.getColor(R.color.red_warning))
+        }
+
+        if (item.checking) {
+            statusChecking.visibility = View.VISIBLE
+            subtitle.visibility = View.GONE
+        } else {
+            subtitle.visibility = View.VISIBLE
+            statusChecking.visibility = View.GONE
+        }
+
         checkmarkIcon.visibility = if (item.selected) View.VISIBLE else View.GONE
     }
 

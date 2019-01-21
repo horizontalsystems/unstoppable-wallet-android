@@ -8,12 +8,13 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.FullTransactionIcon
 import io.horizontalsystems.bankwallet.entities.FullTransactionItem
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider.DataProviderSettingsModule
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
@@ -76,9 +77,9 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
             }
         })
 
-        viewModel.openProviderSettingsEvent.observe(this, Observer { coinCode ->
-            coinCode?.let {
-                DataProviderSettingsModule.start(this, coinCode)
+        viewModel.openProviderSettingsEvent.observe(this, Observer { data ->
+            data?.let { (coinCode, transactionHash) ->
+                DataProviderSettingsModule.start(this, coinCode, transactionHash)
             }
         })
 
@@ -178,9 +179,20 @@ class SectionViewAdapter(val context: Context) : RecyclerView.Adapter<RecyclerVi
 
             }
             is SectionProviderViewHolder -> {
-                holder.sectionProvider.bind(title = "Source", value = viewModel.delegate.providerName, icon = null)
+                val providerName = viewModel.delegate.providerName
+                holder.sectionProvider.bind(title = context.getString(R.string.FullInfo_Source), value = providerName, dimmed = false, icon = null)
                 holder.sectionProvider.setOnClickListener {
                     viewModel.delegate.onTapProvider()
+                }
+
+                providerName?.let {
+                    val changeProviderStyle = SpannableString(providerName)
+                    changeProviderStyle.setSpan(UnderlineSpan(), 0, changeProviderStyle.length, 0)
+
+                    holder.providerSite.text = changeProviderStyle
+                    holder.providerSite.setOnClickListener {
+                        viewModel.delegate.onTapResource()
+                    }
                 }
             }
         }
@@ -215,23 +227,7 @@ class SectionItemViewAdapter(val context: Context, val viewModel: FullTransactio
     private fun bindTransaction(item: FullTransactionItem, showBorder: Boolean, viewItem: FullTransactionInfoItemView) {
         val title = if (item.titleResId != null) context.getString(item.titleResId) else item.title
 
-        viewItem.bind(title, item.value, item.icon, showBorder)
-
-//        when {
-//            item.icon == FullTransactionIcon.PERSON -> viewItem.bindAddress(title, item.value, showBorder)
-//            item.icon == FullTransactionIcon.HASH -> viewItem.bindTransactionId(address = item.value)
-//            else -> {
-//                val icon = when (item.icon) {
-//                    FullTransactionIcon.TIME -> R.drawable.pending_grey
-//                    FullTransactionIcon.BLOCK -> R.drawable.blocks
-//                    FullTransactionIcon.CHECK -> R.drawable.checkmark_grey
-//                    else -> null
-//                }
-//
-//                icon?.let { viewItem.bindTypeIcon(it) }
-//                viewItem.bind(title, item.value, showBorder)
-//            }
-//        }
+        viewItem.bind(title, item.value, item.icon, item.dimmed, showBorder)
 
         if (item.clickable) {
             viewItem.setOnClickListener {

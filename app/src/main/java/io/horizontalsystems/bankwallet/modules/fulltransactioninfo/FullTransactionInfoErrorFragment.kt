@@ -32,7 +32,7 @@ class FullTransactionInfoErrorFragment : Fragment() {
         providerName.text = provider
         providerError.text = getString(R.string.FullInfo_Error_Subtitle)
 
-        val changeProviderStyle = SpannableString(getString(R.string.FullInfoError_ChangeSource))
+        val changeProviderStyle = SpannableString(getString(R.string.FullInfo_Error_ChangeSource))
         changeProviderStyle.setSpan(UnderlineSpan(), 0, changeProviderStyle.length, 0)
         changeProvider.text = changeProviderStyle
 

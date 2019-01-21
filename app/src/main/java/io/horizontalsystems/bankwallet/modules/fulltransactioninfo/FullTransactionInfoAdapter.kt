@@ -35,11 +35,11 @@ class FullTransactionBitcoinAdapter(val provider: FullTransactionInfoModule.Bitc
         val transactionItems = mutableListOf(FullTransactionItem(R.string.FullInfo_Fee, value = "${ValueFormatter.format(data.fee)} $coinCode"))
 
         data.size?.let {
-            transactionItems.add(FullTransactionItem(R.string.FullInfo_Size, value = "$it (bytes)"))
+            transactionItems.add(FullTransactionItem(R.string.FullInfo_Size, value = "$it (bytes)", dimmed = true))
         }
 
         data.feePerByte?.let { feePerByte ->
-            transactionItems.add(FullTransactionItem(R.string.FullInfo_FeeRate, value = "${ValueFormatter.format(feePerByte)} (satoshi)"))
+            transactionItems.add(FullTransactionItem(R.string.FullInfo_FeeRate, value = "${ValueFormatter.format(feePerByte)} (satoshi)", dimmed = true))
         }
 
         sections.add(FullTransactionSection(items = transactionItems))
@@ -90,25 +90,28 @@ class FullTransactionEthereumAdapter(val provider: FullTransactionInfoModule.Eth
 
         sections.add(FullTransactionSection(items = blockItems))
 
+        blockItems.add(FullTransactionItem(R.string.FullInfo_GasLimit, value = "${data.gasLimit} GWei", dimmed = true))
+        blockItems.add(FullTransactionItem(R.string.FullInfo_GasPrice, value = "${data.gasPrice} GWei", dimmed = true))
+
         val transactionItems = mutableListOf<FullTransactionItem>()
-        if (data.size != null) {
-            transactionItems.add(FullTransactionItem(R.string.FullInfo_Size, value = "${data.size} (bytes)"))
-        }
-
-        blockItems.add(FullTransactionItem(R.string.FullInfo_GasLimit, value = "${data.gasLimit} GWei"))
-        blockItems.add(FullTransactionItem(R.string.FullInfo_GasPrice, value = "${data.gasPrice} GWei"))
-
-        data.gasUsed?.let {
-            transactionItems.add(FullTransactionItem(R.string.FullInfo_GasUsed, value = "${data.gasUsed} GWei"))
-        }
-
         data.fee?.let {
             transactionItems.add(FullTransactionItem(R.string.FullInfo_Fee, value = "${ValueFormatter.format(it.toDouble())} $coinCode"))
         }
 
-        sections.add(FullTransactionSection(items = transactionItems))
+        if (data.size != null) {
+            transactionItems.add(FullTransactionItem(R.string.FullInfo_Size, value = "${data.size} (bytes)", dimmed = true))
+        }
+
+        data.gasUsed?.let {
+            transactionItems.add(FullTransactionItem(R.string.FullInfo_GasUsed, value = "${data.gasUsed} GWei", dimmed = true))
+        }
+
+        transactionItems.add(FullTransactionItem(R.string.FullInfoEth_Nonce, value = data.nonce, dimmed = true))
+
+        if (transactionItems.size > 0)
+            sections.add(FullTransactionSection(items = transactionItems))
+
         sections.add(FullTransactionSection(items = listOf(
-                FullTransactionItem(R.string.FullInfoEth_Nonce, value = data.nonce),
                 FullTransactionItem(R.string.FullInfoEth_Value, value = "${data.value} $coinCode"),
                 FullTransactionItem(R.string.FullInfo_From, value = data.from, clickable = true, icon = FullTransactionIcon.PERSON),
                 FullTransactionItem(R.string.FullInfo_To, value = data.to, clickable = true, icon = FullTransactionIcon.PERSON)

@@ -6,7 +6,8 @@ data class FullTransactionItem(
         val value: String? = null,
         val clickable: Boolean = false,
         val url: String? = null,
-        val icon: FullTransactionIcon? = null
+        val icon: FullTransactionIcon? = null,
+        val dimmed: Boolean = false
 )
 
 data class FullTransactionSection(val items: List<FullTransactionItem>)

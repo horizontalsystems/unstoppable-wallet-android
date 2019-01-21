@@ -34,7 +34,7 @@ class FullTransactionInfoItemView : ConstraintLayout {
         ConstraintLayout.inflate(context, R.layout.view_transaction_full_info_item, this)
     }
 
-    fun bind(title: String? = null, value: String? = null, icon: FullTransactionIcon?, bottomBorder: Boolean = false) {
+    fun bind(title: String? = null, value: String? = null, icon: FullTransactionIcon?, dimmed: Boolean = false, bottomBorder: Boolean = false) {
         txtTitle.text = title
 
         var address = false
@@ -65,6 +65,10 @@ class FullTransactionInfoItemView : ConstraintLayout {
                 valueText.visibility = View.VISIBLE
                 addressView.visibility = View.GONE
             }
+        }
+
+        if (dimmed) {
+            valueText.setTextColor(valueText.resources.getColor(R.color.grey))
         }
 
         border.visibility = if (bottomBorder) View.VISIBLE else View.GONE

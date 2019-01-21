@@ -2,13 +2,43 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider
 
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 
-class DataProviderSettingsPresenter(val coinCode: CoinCode, private val interactor: DataProviderSettingsModule.Interactor)
+class DataProviderSettingsPresenter(val coinCode: CoinCode, val transactionHash: String, private val interactor: DataProviderSettingsModule.Interactor)
     : DataProviderSettingsModule.ViewDelegate, DataProviderSettingsModule.InteractorDelegate {
 
     var view: DataProviderSettingsModule.View? = null
+    var items: List<DataProviderSettingsItem> = listOf()
 
     override fun viewDidLoad() {
-        showItems()
+        val baseProvider = interactor.baseProvider(coinCode)
+        val allProviders = interactor.providers(coinCode)
+
+        allProviders.forEach { provider ->
+            interactor.pingProvider(provider.name, provider.apiUrl(transactionHash))
+        }
+
+        items = allProviders.map {
+            DataProviderSettingsItem(name = it.name, online = false, selected = it.name == baseProvider.name, checking = true)
+        }
+
+        view?.show(items)
+    }
+
+    override fun onPingSuccess(name: String) {
+        items.filter { it.name == name }.map {
+            it.online = true
+            it.checking = false
+        }
+
+        view?.show(items)
+    }
+
+    override fun onPingFailure(name: String) {
+        items.filter { it.name == name }.map {
+            it.online = false
+            it.checking = false
+        }
+
+        view?.show(items)
     }
 
     override fun onSelect(item: DataProviderSettingsItem) {
@@ -21,13 +51,4 @@ class DataProviderSettingsPresenter(val coinCode: CoinCode, private val interact
         view?.close()
     }
 
-    private fun showItems() {
-        val baseProviderName = interactor.baseProvider(coinCode).name
-
-        val items = interactor.providers(coinCode).map {
-            DataProviderSettingsItem(name = it.name, online = true, selected = it.name == baseProviderName)
-        }
-
-        view?.show(items)
-    }
 }

@@ -111,7 +111,7 @@ class BlockchairBTCResponse(@SerializedName("data") val data: Map<String, Data>)
 class BlockchairETHResponse(@SerializedName("data") val data: Map<String, Data>) : FullTransactionResponse {
 
     class Data(@SerializedName("transaction") val transaction: Transaction) : EthereumResponse() {
-        override val size: Int? get() = transaction.size
+        override val size: Int? get() = null
         override val hash get() = transaction.hash
         override val height get() = transaction.height.toString()
         override val fee get() = (transaction.fee.toDouble() / ethRate).toString()

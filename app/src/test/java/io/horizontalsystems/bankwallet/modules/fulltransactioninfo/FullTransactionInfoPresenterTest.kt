@@ -74,14 +74,14 @@ class FullTransactionInfoPresenterTest {
     fun onTapProvider() {
         presenter.onTapProvider()
 
-        verify(view).openProviderSettings(state.coinCode)
+        verify(view).openProviderSettings(state.coinCode, state.transactionHash)
     }
 
     @Test
     fun onTapChangeProvider() {
         presenter.onTapChangeProvider()
 
-        verify(view).openProviderSettings(state.coinCode)
+        verify(view).openProviderSettings(state.coinCode, state.transactionHash)
     }
 
     @Test
