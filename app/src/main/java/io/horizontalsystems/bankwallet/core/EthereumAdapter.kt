@@ -8,6 +8,7 @@ import io.horizontalsystems.ethereumkit.EthereumKit.NetworkType
 import io.horizontalsystems.ethereumkit.models.Transaction
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
+import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
@@ -111,8 +112,8 @@ class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, Eth
         transactionRecordsSubject.onNext(records)
     }
 
-    override fun getTransactionsObservable(hashFrom: String?, limit: Int): Flowable<List<TransactionRecord>> {
-        return Flowable.just(listOf())
+    override fun getTransactionsObservable(hashFrom: String?, limit: Int): Single<List<TransactionRecord>> {
+        return Single.just(listOf())
     }
 
     private fun transactionRecord(transaction: Transaction): TransactionRecord {
@@ -128,17 +129,14 @@ class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, Eth
         to.address = transaction.to
         to.mine = transaction.to.toLowerCase() == mineAddress
 
-        val record = TransactionRecord()
-
-        record.transactionHash = transaction.hash
-        record.blockHeight = transaction.blockNumber
-        record.amount = amountEther * if (from.mine) -1 else 1
-        record.timestamp = transaction.timeStamp
-
-        record.from = listOf(from)
-        record.to = listOf(to)
-
-        return record
+        return TransactionRecord(
+                transaction.hash,
+                transaction.blockNumber,
+                amountEther * if (from.mine) -1 else 1,
+                transaction.timeStamp,
+                listOf(from),
+                listOf(to)
+        )
     }
 
     private fun weisToEther(amount: String): Double? = try {

@@ -17,15 +17,39 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, Transa
         TransactionInfoModule.init(this, this)
     }
 
-    override fun showTransactionItem(transactionViewItem: TransactionViewItem) {
-        transactionLiveData.value = transactionViewItem
-    }
-
     override fun showCopied() {
         showCopiedLiveEvent.call()
     }
 
-    override fun showFullInfo(transactionHash: String, coinCode: CoinCode) {
+    override fun openFullInfo(transactionHash: String, coinCode: CoinCode) {
         showFullInfoLiveEvent.value = Pair(transactionHash, coinCode)
+    }
+
+    fun setViewItem(transactionViewItem: TransactionViewItem) {
+        transactionLiveData.value = transactionViewItem
+    }
+
+    fun onClickTransactionId() {
+        transactionLiveData.value?.let {
+            delegate.onCopy(it.transactionHash)
+        }
+    }
+
+    fun onClickOpenFillInfo() {
+        transactionLiveData.value?.let {
+            delegate.openFullInfo(it.transactionHash, it.coinValue.coinCode)
+        }
+    }
+
+    fun onClickFrom() {
+        transactionLiveData.value?.from?.let {
+            delegate.onCopy(it)
+        }
+    }
+
+    fun onClickTo() {
+        transactionLiveData.value?.to?.let {
+            delegate.onCopy(it)
+        }
     }
 }

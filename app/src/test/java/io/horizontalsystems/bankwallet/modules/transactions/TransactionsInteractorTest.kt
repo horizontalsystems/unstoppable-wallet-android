@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
 import io.reactivex.Flowable
+import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import org.junit.Before
 import org.junit.Test
@@ -43,13 +44,17 @@ class TransactionsInteractorTest {
 
         whenever(walletManager.walletsUpdatedSignal).thenReturn(walletsUpdatedSignal)
         whenever(currencyManager.baseCurrencyUpdatedSignal).thenReturn(baseCurrencyUpdatedSignal)
+
+        whenever(wallet1.adapter).thenReturn(adapter1)
+        whenever(wallet2.adapter).thenReturn(adapter2)
+        whenever(adapter1.transactionRecordsSubject).thenReturn(PublishSubject.create())
+        whenever(adapter2.transactionRecordsSubject).thenReturn(PublishSubject.create())
     }
 
     @Test
     fun fetchLastBlockHeights() {
         val lastBlockHeight = 12312
         val confirmationThreshold = 12312
-        val adapter1 = mock(IAdapter::class.java)
         val wallets = listOf(wallet1)
         val coinCode1 = "BTC"
 
@@ -59,7 +64,6 @@ class TransactionsInteractorTest {
         whenever(adapter1.lastBlockHeightUpdatedSignal).thenReturn(mockSubject)
         whenever(adapter1.lastBlockHeight).thenReturn(lastBlockHeight)
         whenever(adapter1.confirmationsThreshold).thenReturn(confirmationThreshold)
-        whenever(wallet1.adapter).thenReturn(adapter1)
         whenever(wallet1.coinCode).thenReturn(coinCode1)
         whenever(walletManager.wallets).thenReturn(wallets)
 
@@ -106,6 +110,26 @@ class TransactionsInteractorTest {
         interactor.initialFetch()
 
         verify(delegate).onUpdateCoinCodes(allCoinCodes)
+    }
+
+    @Test
+    fun initialFetch_handleTransactionUpdates() {
+        val wallets = listOf(wallet1)
+        val coinCode1 = "BTC"
+
+        val transactionRecordsSubject = PublishSubject.create<List<TransactionRecord>>()
+        val transactionRecords1 = listOf(mock(TransactionRecord::class.java))
+
+        whenever(adapter1.transactionRecordsSubject).thenReturn(transactionRecordsSubject)
+        whenever(wallet1.adapter).thenReturn(adapter1)
+        whenever(wallet1.coinCode).thenReturn(coinCode1)
+        whenever(walletManager.wallets).thenReturn(wallets)
+
+        interactor.initialFetch()
+
+        transactionRecordsSubject.onNext(transactionRecords1)
+
+        verify(delegate).didUpdateRecords(transactionRecords1, coinCode1)
     }
 
     @Test
@@ -176,8 +200,8 @@ class TransactionsInteractorTest {
         whenever(wallet2.coinCode).thenReturn("ETH")
         whenever(wallet1.adapter).thenReturn(adapter1)
         whenever(wallet2.adapter).thenReturn(adapter2)
-        whenever(adapter1.getTransactionsObservable(hashFrom1, limit1)).thenReturn(Flowable.just(transactionRecords1))
-        whenever(adapter2.getTransactionsObservable(hashFrom2, limit2)).thenReturn(Flowable.just(transactionRecords2))
+        whenever(adapter1.getTransactionsObservable(hashFrom1, limit1)).thenReturn(Single.just(transactionRecords1))
+        whenever(adapter2.getTransactionsObservable(hashFrom2, limit2)).thenReturn(Single.just(transactionRecords2))
 
         interactor.fetchRecords(fetchDataList)
 

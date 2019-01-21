@@ -4,7 +4,9 @@ import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.ISystemInfoManager
+import io.horizontalsystems.bankwallet.core.IWordsManager
 import io.horizontalsystems.bankwallet.core.managers.AuthManager
 import io.horizontalsystems.bankwallet.entities.BiometryType
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
@@ -19,8 +21,6 @@ class SecuritySettingsInteractorTest {
 
     private val delegate = mock(SecuritySettingsModule.ISecuritySettingsInteractorDelegate::class.java)
     private val authManager = mock(AuthManager::class.java)
-    private val transactionRepository = mock(ITransactionRecordStorage::class.java)
-    private val exchangeRateRepository = mock(IRateStorage::class.java)
 
     private lateinit var interactor: SecuritySettingsInteractor
     private lateinit var localStorage: ILocalStorage

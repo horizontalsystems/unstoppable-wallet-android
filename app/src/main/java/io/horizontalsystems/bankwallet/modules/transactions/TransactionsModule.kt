@@ -34,7 +34,7 @@ object TransactionsModule {
     interface IView {
         fun showFilters(filters: List<CoinCode?>)
         fun reload(fromIndex: Int? = null, count: Int? = null)
-        fun reloadItems(indexes: List<Int>)
+        fun reloadItems(updatedIndexes: List<Int>)
     }
 
     interface IViewDelegate {
@@ -65,14 +65,15 @@ object TransactionsModule {
         fun onUpdateConfirmationThreshold(coinCode: CoinCode, confirmationThreshold: Int)
         fun onUpdateBaseCurrency()
         fun didFetchRate(rateValue: Double, coinCode: CoinCode, currency: Currency, timestamp: Long)
+        fun didUpdateRecords(records: List<TransactionRecord>, coinCode: CoinCode)
     }
 
     interface IRouter {
-        fun openTransactionInfo(transactionHash: String)
+        fun openTransactionInfo(transactionViewItem: TransactionViewItem)
     }
 
     fun initModule(view: TransactionsViewModel, router: IRouter) {
-        val dataSource = TransactionRecordDataSource()
+        val dataSource = TransactionRecordDataSource(PoolRepo(), TransactionItemDataSource(), TransactionItemFactory())
         val interactor = TransactionsInteractor(App.walletManager, App.currencyManager, App.rateManager)
         val transactionsLoader = TransactionsLoader(dataSource)
         val presenter = TransactionsPresenter(interactor, router, TransactionViewItemFactory(App.walletManager, App.currencyManager, App.rateManager), transactionsLoader, TransactionMetadataDataSource())

@@ -4,71 +4,107 @@ import io.horizontalsystems.bankwallet.entities.TransactionItem
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule.FetchData
 
-class TransactionRecordDataSource {
+class TransactionRecordDataSource(
+        private val poolRepo: PoolRepo,
+        private val itemsDataSource: TransactionItemDataSource,
+        private val factory: TransactionItemFactory,
+        private val limit: Int = 10) {
 
     val itemsCount
-        get() = items.size
+        get() = itemsDataSource.count
 
     val allShown
-        get() = coinCodes.all { pools[it]!!.allShown }
+        get() = poolRepo.activePools.all { it.allShown }
 
     val allRecords: Map<CoinCode, List<TransactionRecord>>
-        get() = pools.map {
-            Pair(it.key, it.value.records)
+        get() = poolRepo.activePools.map {
+            Pair(it.coinCode, it.records)
         }.toMap()
 
-    private var pools = mutableMapOf<CoinCode, Pool>()
-    private val items = mutableListOf<TransactionItem>()
-    private var coinCodes = listOf<CoinCode>()
-    private val limit = 10
+    fun itemForIndex(index: Int): TransactionItem =
+            itemsDataSource.itemForIndex(index)
 
-    fun getFetchDataList() = coinCodes.mapNotNull { coinCode ->
-        pools[coinCode]?.getFetchData(coinCode, limit)
+    fun itemIndexesForTimestamp(coinCode: CoinCode, timestamp: Long): List<Int> =
+            itemsDataSource.itemIndexesForTimestamp(coinCode, timestamp)
+
+    fun getFetchDataList(): List<FetchData> = poolRepo.activePools.mapNotNull {
+        it.getFetchData(limit)
     }
 
     fun handleNextRecords(records: Map<CoinCode, List<TransactionRecord>>) {
         records.forEach { (coinCode, transactionRecords) ->
-            pools[coinCode]?.add(transactionRecords)
+            poolRepo.getPool(coinCode)?.add(transactionRecords)
         }
-        increasePage()
+    }
+
+    fun handleUpdatedRecords(records: List<TransactionRecord>, coinCode: CoinCode): Boolean {
+        val pool = poolRepo.getPool(coinCode) ?: return false
+
+        val (updatedRecords, insertedRecords) = pool.handleUpdatedRecords(records)
+
+        if (!poolRepo.isPoolActiveByCoinCode(coinCode)) return false
+
+        if (updatedRecords.isEmpty() && insertedRecords.isEmpty()) return false
+
+        val updatedItems = updatedRecords.map { factory.createTransactionItem(coinCode, it) }
+        val insertedItems = insertedRecords.map { factory.createTransactionItem(coinCode, it) }
+
+        itemsDataSource.handleModifiedItems(updatedItems, insertedItems)
+
+        return true
     }
 
     fun increasePage() {
         val unusedItems = mutableListOf<TransactionItem>()
 
-        coinCodes.forEach { coinCode ->
-            pools[coinCode]?.unusedRecords()?.forEach {
-                unusedItems.add(TransactionItem(coinCode, it))
-            }
+        poolRepo.activePools.forEach { pool ->
+            unusedItems.addAll(pool.unusedRecords.map { record ->
+                factory.createTransactionItem(pool.coinCode, record)
+            })
         }
 
         unusedItems.sortByDescending { it.record.timestamp }
 
         val usedItems = unusedItems.take(limit)
 
-        items.addAll(usedItems)
+        itemsDataSource.add(usedItems)
 
         usedItems.forEach {
-            pools[it.coinCode]?.increaseFirstUnusedIndex()
+            poolRepo.getPool(it.coinCode)?.increaseFirstUnusedIndex()
         }
     }
-
-    fun itemForIndex(index: Int) = items[index]
 
     fun setCoinCodes(coinCodes: List<CoinCode>) {
-        pools.values.forEach {
-            it.resetLastUnusedIndex()
+        poolRepo.allPools.forEach {
+            it.resetFirstUnusedIndex()
         }
+        poolRepo.activatePools(coinCodes)
+        itemsDataSource.clear()
+    }
 
-        coinCodes.forEach {
-            if (!pools.containsKey(it)) {
-                pools[it] = Pool()
-            }
-        }
+}
 
-        this.coinCodes = coinCodes
+class TransactionItemFactory {
+    fun createTransactionItem(coinCode: CoinCode, record: TransactionRecord): TransactionItem {
+        return TransactionItem(coinCode, record)
+    }
+}
+
+class TransactionItemDataSource {
+    val count
+        get() = items.size
+
+    private val items = mutableListOf<TransactionItem>()
+
+    fun clear() {
         items.clear()
     }
+
+    fun add(items: List<TransactionItem>) {
+        this.items.addAll(items)
+    }
+
+    fun itemForIndex(index: Int): TransactionItem = items[index]
 
     fun itemIndexesForTimestamp(coinCode: CoinCode, timestamp: Long): List<Int> {
         val indexes = mutableListOf<Int>()
@@ -81,39 +117,77 @@ class TransactionRecordDataSource {
 
         return indexes
     }
+
+    fun handleModifiedItems(updatedItems: List<TransactionItem>, insertedItems: List<TransactionItem>) {
+        items.removeAll(updatedItems)
+        items.addAll(updatedItems)
+        items.addAll(insertedItems)
+
+        items.sortByDescending { it.record.timestamp }
+    }
+
 }
 
-class Pool {
+class PoolRepo {
+    val activePools: List<Pool>
+        get() = activePoolCoinCodes.mapNotNull { pools[it] }
+
+    val allPools: List<Pool>
+        get() = pools.values.toList()
+
+    private var pools = mutableMapOf<CoinCode, Pool>()
+    private var activePoolCoinCodes = listOf<CoinCode>()
+
+    fun activatePools(coinCodes: List<CoinCode>) {
+        coinCodes.forEach { coinCode ->
+            if (!pools.containsKey(coinCode)) {
+                pools[coinCode] = Pool(coinCode)
+            }
+        }
+
+        this.activePoolCoinCodes = coinCodes
+    }
+
+    fun getPool(coinCode: CoinCode): Pool? {
+        return pools[coinCode]
+    }
+
+    fun isPoolActiveByCoinCode(coinCode: CoinCode): Boolean {
+        return activePoolCoinCodes.contains(coinCode)
+    }
+
+}
+
+class Pool(val coinCode: CoinCode) {
 
     val records = mutableListOf<TransactionRecord>()
-    private var firstUnusedIndex = 0
-    var allLoaded = false
-        private set
 
     val allShown: Boolean
-        get() = allLoaded && unusedRecords().isEmpty()
+        get() = allLoaded && unusedRecords.isEmpty()
 
-    fun unusedRecords(): List<TransactionRecord> {
-        return when {
+    val unusedRecords: List<TransactionRecord>
+        get() = when {
             records.isEmpty() -> listOf()
             else -> records.subList(firstUnusedIndex, records.size)
         }
-    }
+
+    private var firstUnusedIndex = 0
+    private var allLoaded = false
 
     fun increaseFirstUnusedIndex() {
         firstUnusedIndex++
     }
 
-    fun resetLastUnusedIndex() {
+    fun resetFirstUnusedIndex() {
         firstUnusedIndex = 0
     }
 
-    fun getFetchData(coinCode: CoinCode, limit: Int): FetchData? {
+    fun getFetchData(limit: Int): FetchData? {
         if (allLoaded) {
             return null
         }
 
-        val unusedRecordsSize = unusedRecords().size
+        val unusedRecordsSize = unusedRecords.size
         if (unusedRecordsSize > limit) {
             return null
         }
@@ -122,7 +196,6 @@ class Pool {
         val fetchLimit = limit + 1 - unusedRecordsSize
 
         return FetchData(coinCode, hashFrom, fetchLimit)
-
     }
 
     fun add(transactionRecords: List<TransactionRecord>) {
@@ -131,6 +204,50 @@ class Pool {
         } else {
             records.addAll(transactionRecords)
         }
+    }
+
+    fun handleUpdatedRecords(records: List<TransactionRecord>): Pair<List<TransactionRecord>, List<TransactionRecord>> {
+
+        val updatedUsedRecords = mutableListOf<TransactionRecord>()
+        val insertedUsedRecords = mutableListOf<TransactionRecord>()
+
+        records.forEach { updatedRecord ->
+            val updatedRecordIndex = this.records.indexOfFirst {
+                it.transactionHash == updatedRecord.transactionHash
+            }
+
+            if (updatedRecordIndex != -1) {
+                this.records[updatedRecordIndex] = updatedRecord
+
+                if (updatedRecordIndex < firstUnusedIndex) {
+                    updatedUsedRecords.add(updatedRecord)
+                }
+            } else {
+
+                val nearestNextRecordIndex = this.records.indexOfFirst {
+                    it.timestamp < updatedRecord.timestamp
+                }
+
+                if (nearestNextRecordIndex != -1) {
+                    this.records.add(nearestNextRecordIndex, updatedRecord)
+
+                    if (nearestNextRecordIndex < firstUnusedIndex) {
+                        insertedUsedRecords.add(updatedRecord)
+                        increaseFirstUnusedIndex()
+                    }
+                }
+//                else if (this.records.isEmpty()) {
+//                    this.records.add(updatedRecord)
+//                    insertedUsedRecords.add(updatedRecord)
+//                    increaseFirstUnusedIndex()
+//                } else {
+//                    allLoaded = false
+//                }
+
+            }
+        }
+
+        return Pair(updatedUsedRecords, insertedUsedRecords)
     }
 
 }

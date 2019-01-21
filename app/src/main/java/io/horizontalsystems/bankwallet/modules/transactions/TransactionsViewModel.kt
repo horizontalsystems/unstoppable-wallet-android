@@ -9,7 +9,7 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
     lateinit var delegate: TransactionsModule.IViewDelegate
 
     val filterItems = MutableLiveData<List<String?>>()
-    val showTransactionInfoLiveEvent = SingleLiveEvent<String>()
+    val transactionViewItemLiveEvent = SingleLiveEvent<TransactionViewItem>()
     val didRefreshLiveEvent = SingleLiveEvent<Void>()
     val reloadLiveEvent = SingleLiveEvent<Pair<Int?, Int?>>()
     val reloadItemsLiveEvent = SingleLiveEvent<List<Int>>()
@@ -27,12 +27,12 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
         reloadLiveEvent.postValue(Pair(fromIndex, count))
     }
 
-    override fun reloadItems(indexes: List<Int>) {
-        reloadItemsLiveEvent.postValue(indexes)
+    override fun reloadItems(updatedIndexes: List<Int>) {
+        reloadItemsLiveEvent.postValue(updatedIndexes)
     }
 
-    override fun openTransactionInfo(transactionHash: String) {
-        showTransactionInfoLiveEvent.value = transactionHash
+    override fun openTransactionInfo(transactionViewItem: TransactionViewItem) {
+        transactionViewItemLiveEvent.value = transactionViewItem
     }
 
     override fun onCleared() {

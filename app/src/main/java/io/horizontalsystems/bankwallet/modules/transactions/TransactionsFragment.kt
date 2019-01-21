@@ -65,9 +65,9 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
             }
         })
 
-        viewModel.showTransactionInfoLiveEvent.observe(this, Observer { transactionHash ->
-            transactionHash?.let { transactHash ->
-                transInfoViewModel.delegate.getTransaction(transactHash)
+        viewModel.transactionViewItemLiveEvent.observe(this, Observer { transactionViewItem ->
+            transactionViewItem?.let {
+                transInfoViewModel.setViewItem(it)
             }
         })
 
@@ -84,10 +84,8 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
         })
 
         viewModel.reloadItemsLiveEvent.observe(this, Observer {
-            it?.let {
-                it.forEach { index ->
-                    transactionsAdapter.notifyItemChanged(index)
-                }
+            it?.forEach { index ->
+                transactionsAdapter.notifyItemChanged(index)
             }
         })
 
@@ -124,8 +122,8 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
         transInfoViewModel = ViewModelProviders.of(this).get(TransactionInfoViewModel::class.java)
         transInfoViewModel.init()
 
-        transactionIdView.setOnClickListener { transInfoViewModel.delegate.onCopyId() }
-        txtFullInfo.setOnClickListener { transInfoViewModel.delegate.showFullInfo() }
+        transactionIdView.setOnClickListener { transInfoViewModel.onClickTransactionId() }
+        txtFullInfo.setOnClickListener { transInfoViewModel.onClickOpenFillInfo() }
         transactionsDim.setOnClickListener { bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED }
 
         transInfoViewModel.showCopiedLiveEvent.observe(this, Observer {
@@ -167,13 +165,13 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
                 transactionIdView.bindTransactionId(txRec.transactionHash)
 
                 itemFrom.apply {
-                    setOnClickListener { transInfoViewModel.delegate.onCopyFromAddress() }
+                    setOnClickListener { transInfoViewModel.onClickFrom() }
                     visibility = if (txRec.from.isNullOrEmpty()) View.GONE else View.VISIBLE
                     bindAddress(title = getString(R.string.TransactionInfo_From), address = txRec.from, showBottomBorder = true)
                 }
 
                 itemTo.apply {
-                    setOnClickListener { transInfoViewModel.delegate.onCopyToAddress() }
+                    setOnClickListener { transInfoViewModel.onClickTo() }
                     visibility = if (txRec.to.isNullOrEmpty()) View.GONE else View.VISIBLE
                     bindAddress(title = getString(R.string.TransactionInfo_To), address = txRec.to, showBottomBorder = true)
                 }

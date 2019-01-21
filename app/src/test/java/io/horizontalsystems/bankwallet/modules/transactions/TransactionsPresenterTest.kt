@@ -246,4 +246,15 @@ class TransactionsPresenterTest {
         verifyNoMoreInteractions(view)
     }
 
+    @Test
+    fun didUpdateRecords() {
+        val records = listOf(mock(TransactionRecord::class.java))
+        val coinCode = "BTC"
+
+        presenter.didUpdateRecords(records, coinCode)
+
+        verify(loader).didUpdateRecords(records, coinCode)
+    }
+
+
 }

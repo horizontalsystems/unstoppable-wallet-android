@@ -9,10 +9,9 @@ import io.horizontalsystems.bitcoinkit.models.BlockInfo
 import io.horizontalsystems.bitcoinkit.models.TransactionInfo
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
+import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
-import java.util.*
-import kotlin.math.min
 
 class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, newWallet: Boolean, walletId: String?) : IAdapter, BitcoinKit.Listener {
 
@@ -85,25 +84,8 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
         bitcoinKit.validateAddress(address)
     }
 
-    override fun getTransactionsObservable(hashFrom: String?, limit: Int): Flowable<List<TransactionRecord>> {
-        val transactions = bitcoinKit.transactions.sortedByDescending { it.timestamp }
-
-        val res = if (hashFrom == null) {
-            transactions.take(limit)
-        } else {
-            val firstIndex = transactions.indexOfFirst { it.transactionHash == hashFrom }
-
-            if (firstIndex == -1) {
-                listOf()
-            } else if (firstIndex + 1 >= transactions.size) {
-                listOf()
-            } else {
-                transactions.subList(firstIndex + 1, min(firstIndex + limit + 1, transactions.size))
-            }
-        }
-
-        return Flowable.just(res.map { transactionRecord(it) })
-
+    override fun getTransactionsObservable(hashFrom: String?, limit: Int): Single<List<TransactionRecord>> {
+        return bitcoinKit.transactions(hashFrom, limit).map { it.map { transactionRecord(it) } }
     }
 
     //
@@ -151,30 +133,25 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
 
     }
 
-    private fun transactionRecord(transaction: TransactionInfo): TransactionRecord {
-        val record = TransactionRecord()
-
-        record.transactionHash = transaction.transactionHash
-        record.blockHeight = transaction.blockHeight?.toLong() ?: 0
-        record.amount = transaction.amount / satoshisInBitcoin
-        record.timestamp = transaction.timestamp ?: Date().time / 1000
-
-        record.from = transaction.from.map {
-            val address = TransactionAddress()
-            address.address = it.address
-            address.mine = it.mine
-            address
-        }
-
-        record.to = transaction.to.map {
-            val address = TransactionAddress()
-            address.address = it.address
-            address.mine = it.mine
-            address
-        }
-
-        return record
-    }
+    private fun transactionRecord(transaction: TransactionInfo) =
+            TransactionRecord(
+                    transaction.transactionHash,
+                    transaction.blockHeight?.toLong() ?: 0,
+                    transaction.amount / satoshisInBitcoin,
+                    transaction.timestamp,
+                    transaction.from.map {
+                        val address = TransactionAddress()
+                        address.address = it.address
+                        address.mine = it.mine
+                        address
+                    },
+                    transaction.to.map {
+                        val address = TransactionAddress()
+                        address.address = it.address
+                        address.mine = it.mine
+                        address
+                    }
+            )
 
     companion object {
 

@@ -10,8 +10,6 @@ import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bankwallet.core.storage.RatesRepository
-import io.horizontalsystems.bankwallet.core.storage.StorableCoinsRepository
-import io.horizontalsystems.bankwallet.core.storage.TransactionRepository
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
 import io.horizontalsystems.bitcoinkit.BitcoinKit
 import io.horizontalsystems.ethereumkit.EthereumKit
@@ -43,12 +41,8 @@ class App : Application() {
         lateinit var rateSyncer: RateSyncer
         lateinit var rateManager: RateManager
         lateinit var networkAvailabilityManager: NetworkAvailabilityManager
-        lateinit var transactionRateSyncer: ITransactionRateSyncer
-        lateinit var transactionManager: TransactionManager
         lateinit var appDatabase: AppDatabase
-        lateinit var transactionStorage: ITransactionRecordStorage
         lateinit var rateStorage: IRateStorage
-        lateinit var coinsStorage: ICoinStorage
         lateinit var transactionInfoFactory: FullTransactionInfoFactory
         lateinit var transactionDataProviderManager: TransactionDataProviderManager
         lateinit var appCloseManager: AppCloseManager
@@ -82,45 +76,38 @@ class App : Application() {
 
         val fallbackLanguage = Locale("en")
 
-        appConfigProvider = AppConfigProvider()
         backgroundManager = BackgroundManager(this)
         encryptionManager = EncryptionManager()
         secureStorage = SecuredStorageManager(encryptionManager)
-
-        appDatabase = AppDatabase.getInstance(this)
-        transactionStorage = TransactionRepository(appDatabase)
-        rateStorage = RatesRepository(appDatabase)
-        coinsStorage = StorableCoinsRepository(appDatabase)
         localStorage = LocalStorageManager()
-
-        coinManager = CoinManager(appConfigProvider, coinsStorage)
-        authManager = AuthManager(secureStorage, localStorage, coinManager)
-
         wordsManager = WordsManager(localStorage)
+        authManager = AuthManager(secureStorage, localStorage)
         randomManager = RandomProvider()
         networkManager = NetworkManager()
         systemInfoManager = SystemInfoManager()
         pinManager = PinManager(secureStorage)
         lockManager = LockManager(secureStorage, authManager)
+        appConfigProvider = AppConfigProvider()
         languageManager = LanguageManager(localStorage, appConfigProvider, fallbackLanguage)
         currencyManager = CurrencyManager(localStorage, appConfigProvider)
+        coinManager = CoinManager(appConfigProvider)
+        walletManager = WalletManager(coinManager, authManager, WalletFactory(AdapterFactory(appConfigProvider)))
 
         networkAvailabilityManager = NetworkAvailabilityManager()
 
-        walletManager = WalletManager(coinManager, authManager, WalletFactory(AdapterFactory(appConfigProvider)))
-        rateManager = RateManager(rateStorage, networkManager)
-        rateSyncer = RateSyncer(rateManager, walletManager, currencyManager, networkAvailabilityManager)
+        appDatabase = AppDatabase.getInstance(this)
 
         appCloseManager = AppCloseManager()
 
-        transactionRateSyncer = TransactionRateSyncer(transactionStorage, networkManager)
-        transactionManager = TransactionManager(transactionStorage, transactionRateSyncer, walletManager, currencyManager, wordsManager, networkAvailabilityManager)
+        rateStorage = RatesRepository(appDatabase)
+        rateManager = RateManager(rateStorage, networkManager)
+        rateSyncer = RateSyncer(rateManager, walletManager, currencyManager, networkAvailabilityManager)
+
         transactionDataProviderManager = TransactionDataProviderManager(appConfigProvider, localStorage)
         transactionInfoFactory = FullTransactionInfoFactory(networkManager, transactionDataProviderManager)
 
         authManager.walletManager = walletManager
         authManager.pinManager = pinManager
-        authManager.transactionManager = transactionManager
     }
 
 }

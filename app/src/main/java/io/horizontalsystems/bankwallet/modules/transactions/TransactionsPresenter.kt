@@ -17,7 +17,7 @@ class TransactionsPresenter(private val interactor: TransactionsModule.IInteract
     }
 
     override fun onTransactionItemClick(transaction: TransactionViewItem) {
-        router.openTransactionInfo(transaction.transactionHash)
+        router.openTransactionInfo(transaction)
     }
 
     override fun onFilterSelect(coinCode: CoinCode?) {
@@ -91,6 +91,10 @@ class TransactionsPresenter(private val interactor: TransactionsModule.IInteract
         if (itemIndexes.isNotEmpty()) {
             view?.reloadItems(itemIndexes)
         }
+    }
+
+    override fun didUpdateRecords(records: List<TransactionRecord>, coinCode: CoinCode) {
+        loader.didUpdateRecords(records, coinCode)
     }
 
     override fun didChangeData() {

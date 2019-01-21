@@ -116,4 +116,28 @@ class TransactionsLoaderTest {
 
         Assert.assertEquals(indexes, loader.itemIndexesForTimestamp(coinCode, timestamp))
     }
+
+    @Test
+    fun didUpdateRecords_reloadRequired() {
+        val records = listOf(mock(TransactionRecord::class.java))
+        val coinCode = "BTC"
+
+        whenever(dataSource.handleUpdatedRecords(records, coinCode)).thenReturn(true)
+
+        loader.didUpdateRecords(records, coinCode)
+
+        verify(delegate).didChangeData()
+    }
+
+    @Test
+    fun didUpdateRecords_reloadNotRequired() {
+        val records = listOf(mock(TransactionRecord::class.java))
+        val coinCode = "BTC"
+
+        whenever(dataSource.handleUpdatedRecords(records, coinCode)).thenReturn(false)
+
+        loader.didUpdateRecords(records, coinCode)
+
+        verify(delegate, never()).didChangeData()
+    }
 }
