@@ -82,28 +82,28 @@
     <string name="TransactionInfo_To">宛先</string>
     <string name="TransactionInfo_From">差出人</string>
     <string name="TransactionInfo_Time">時間</string>
-    <string name="TransactionInfo_ButtonMore">More</string>
+    <string name="TransactionInfo_ButtonMore">その他</string>
     <!--Full Info-->
-    <string name="FullInfo_Title">Transaction</string>
+    <string name="FullInfo_Title">トランザクション</string>
     <string name="FullInfo_Time">時間</string>
     <string name="FullInfo_Block">ブロック</string>
     <string name="FullInfo_Confirmations">確認</string>
-    <string name="FullInfo_Inputs">Inputs</string>
-    <string name="FullInfo_Outputs">Outputs</string>
+    <string name="FullInfo_Inputs">入力</string>
+    <string name="FullInfo_Outputs">出力</string>
     <string name="FullInfo_Size">サイズ</string>
     <string name="FullInfo_Fee">料金</string>
     <string name="FullInfo_Rate">Rate</string>
     <string name="FullInfo_Source">Source</string>
-    <string name="FullInfo_To">To</string>
-    <string name="FullInfo_From">From</string>
+    <string name="FullInfo_To">宛先</string>
+    <string name="FullInfo_From">差出人</string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
     <string name="FullInfo_Source_Title">Source</string>
     <string name="FullInfo_Source_Online">Online</string>
-    <string name="FullInfo_Source_Offline">Offline</string>
-    <string name="FullInfo_Error_Subtitle">Offline</string>
-    <string name="FullInfo_Error_Retry">Retry</string>
+    <string name="FullInfo_Source_Offline">オフライン</string>
+    <string name="FullInfo_Error_Subtitle">オフライン</string>
+    <string name="FullInfo_Error_Retry">リトライ</string>
     <string name="FullInfo_Error_ChangeSource">Change Source</string>
     <!--no used-->
     <string name="FullInfo_Id">ID</string>
@@ -177,7 +177,7 @@
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Disabled until: %s</string>
     <!--Set Pin-->
-    <string name="SetPin_Title">Passcode</string>
+    <string name="SetPin_Title">パスコード</string>
     <string name="SetPin_Info">Your passcode will be used to unlock wallet app</string>
     <string name="SetPin_ErrorShortPin">Please enter all digits.</string>
     <string name="SetPin_ConfirmInfo">確定する</string>
