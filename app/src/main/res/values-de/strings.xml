@@ -51,7 +51,7 @@
     <string name="Send_Button_Paste">Einfügen</string>
     <string name="Send_Button_More">Mehr</string>
     <string name="Send_Button_Send">Senden</string>
-    <string name="Send_Button_Max">Max</string>
+    <string name="Send_Button_Max">Max.</string>
     <string name="Send_ScanQrCode">QR-Code Scannen</string>
     <string name="Send_Success">Gesendet!</string>
     <string name="Send_Error_InvalidAddress">Eingegebene Adresse scheint ungültig zu sein. Bitte überprüfen Sie und versuchen es erneut!</string>
@@ -82,20 +82,20 @@
     <string name="TransactionInfo_To">An</string>
     <string name="TransactionInfo_From">Von</string>
     <string name="TransactionInfo_Time">Zeit</string>
-    <string name="TransactionInfo_ButtonMore">More</string>
+    <string name="TransactionInfo_ButtonMore">Mehr</string>
     <!--Full Info-->
-    <string name="FullInfo_Title">Transaction</string>
+    <string name="FullInfo_Title">Transaktion</string>
     <string name="FullInfo_Time">Zeit</string>
     <string name="FullInfo_Block">Block</string>
     <string name="FullInfo_Confirmations">Bestätigungen</string>
-    <string name="FullInfo_Inputs">Inputs</string>
-    <string name="FullInfo_Outputs">Outputs</string>
-    <string name="FullInfo_Size">Size</string>
+    <string name="FullInfo_Inputs">Eingänge</string>
+    <string name="FullInfo_Outputs">Ausgänge</string>
+    <string name="FullInfo_Size">Größe</string>
     <string name="FullInfo_Fee">Gebühr</string>
     <string name="FullInfo_Rate">Rate</string>
     <string name="FullInfo_Source">Source</string>
-    <string name="FullInfo_To">To</string>
-    <string name="FullInfo_From">From</string>
+    <string name="FullInfo_To">An</string>
+    <string name="FullInfo_From">Von</string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
@@ -109,7 +109,7 @@
     <string name="FullInfo_Id">ID</string>
     <string name="FullInfo_TotalInput">Insgesamt Eingang</string>
     <string name="FullInfo_TotalOutput">Insgesamte Ausgänge</string>
-    <string name="FullInfo_FeePerByte">Fee per byte</string>
+    <string name="FullInfo_FeePerByte">Gebühr pro byte</string>
     <string name="FullInfo_FeeRate">Fee Rate</string>
     <string name="FullInfo_NoAddress">No Available</string>
     <string name="FullInfo_SatByte">sat/B</string>
@@ -117,7 +117,7 @@
     <string name="FullInfo_SubtitleInputs">Eingänge</string>
     <string name="FullInfo_SubtitleOutputs">Ausgänge</string>
     <string name="FullInfoEth_Nonce">Nonce</string>
-    <string name="FullInfoEth_Value">Value</string>
+    <string name="FullInfoEth_Value">Wert</string>
     <!--Settings-->
     <string name="Settings_Title">Einstellungen</string>
     <string name="Settings_SecurityCenter">Sicherheits-Center</string>
