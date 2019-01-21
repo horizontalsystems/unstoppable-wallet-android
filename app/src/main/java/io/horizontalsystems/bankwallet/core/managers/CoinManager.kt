@@ -12,9 +12,9 @@ class CoinManager(private val appConfigProvider: IAppConfigProvider) {
         get() {
             val suffix = if (appConfigProvider.testMode) "t" else ""
             val coins = mutableListOf<Coin>()
-            coins.add(Coin("Bitcoin", "BTC$suffix", true, CoinType.Bitcoin, 0))
-            coins.add(Coin("Bitcoin Cash", "BCH$suffix", true, CoinType.BitcoinCash, 1))
-            coins.add(Coin("Ethereum", "ETH$suffix", true, CoinType.Ethereum, 2))
+            coins.add(Coin("Bitcoin", "BTC$suffix", CoinType.Bitcoin))
+            coins.add(Coin("Bitcoin Cash", "BCH$suffix", CoinType.BitcoinCash))
+            coins.add(Coin("Ethereum", "ETH$suffix", CoinType.Ethereum))
             return coins
         }
 

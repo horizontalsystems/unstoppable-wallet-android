@@ -10,17 +10,17 @@ class ManageCoinsInteractor : ManageCoinsModule.IInteractor {
 
     override fun loadCoins() {
         val allCoins = mutableListOf(
-                Coin("Bitcoin", "BTC", false, CoinType.Bitcoin),
-                Coin("Ethereum", "ETH", false, CoinType.Ethereum),
-                Coin("DASH Coin", "DASH", false, CoinType.Ethereum),
-                Coin("Litecoin", "LTC", false, CoinType.BitcoinCash),
-                Coin("XRP", "XRP", false, CoinType.Ethereum),
-                Coin("Bitcoin Cash", "BCH", false, CoinType.BitcoinCash)
+                Coin("Bitcoin", "BTC", CoinType.Bitcoin),
+                Coin("Ethereum", "ETH", CoinType.Ethereum),
+                Coin("DASH Coin", "DASH", CoinType.Ethereum),
+                Coin("Litecoin", "LTC", CoinType.BitcoinCash),
+                Coin("XRP", "XRP", CoinType.Ethereum),
+                Coin("Bitcoin Cash", "BCH", CoinType.BitcoinCash)
         )
         val enabledCoins = mutableListOf(
-                Coin("Bitcoin", "BTC", true, CoinType.Bitcoin),
-                Coin("XRP", "XRP", true, CoinType.Ethereum),
-                Coin("Litecoin", "LTC", true, CoinType.BitcoinCash))
+                Coin("Bitcoin", "BTC", CoinType.Bitcoin),
+                Coin("XRP", "XRP", CoinType.Ethereum),
+                Coin("Litecoin", "LTC", CoinType.BitcoinCash))
         delegate?.didLoadCoins(allCoins, enabledCoins)
     }
 

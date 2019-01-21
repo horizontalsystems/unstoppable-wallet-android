@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "be7370d9ca25ea81cbc71a3f7bf5537a",
+    "identityHash": "8d418eefe14fc86ca5dafbde661920d0",
     "entities": [
       {
         "tableName": "TransactionRecord",
@@ -106,18 +106,24 @@
         "foreignKeys": []
       },
       {
-        "tableName": "Coin",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`title` TEXT NOT NULL, `code` TEXT NOT NULL, `enabled` INTEGER NOT NULL, `type` TEXT NOT NULL, `order` INTEGER, PRIMARY KEY(`code`))",
+        "tableName": "StorableCoin",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`coinCode` TEXT NOT NULL, `coinTitle` TEXT NOT NULL, `coinType` TEXT NOT NULL, `enabled` INTEGER NOT NULL, `order` INTEGER, PRIMARY KEY(`coinCode`))",
         "fields": [
           {
-            "fieldPath": "title",
-            "columnName": "title",
+            "fieldPath": "coinCode",
+            "columnName": "coinCode",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "code",
-            "columnName": "code",
+            "fieldPath": "coinTitle",
+            "columnName": "coinTitle",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "coinType",
+            "columnName": "coinType",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -125,12 +131,6 @@
             "fieldPath": "enabled",
             "columnName": "enabled",
             "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "type",
-            "columnName": "type",
-            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -142,7 +142,7 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "code"
+            "coinCode"
           ],
           "autoGenerate": false
         },
@@ -152,7 +152,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"be7370d9ca25ea81cbc71a3f7bf5537a\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"8d418eefe14fc86ca5dafbde661920d0\")"
     ]
   }
 }

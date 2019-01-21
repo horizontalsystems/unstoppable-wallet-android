@@ -187,9 +187,9 @@ interface IRateStorage {
 }
 
 interface ICoinStorage {
-    fun coinObservable(coinCode: CoinCode): Flowable<Coin>
-    fun save(coin: Coin)
-    fun getAll(): Flowable<List<Coin>>
+    fun coinObservable(coinCode: CoinCode): Flowable<StorableCoin>
+    fun save(coin: StorableCoin)
+    fun getAll(): Flowable<List<StorableCoin>>
     fun deleteAll()
 }
 

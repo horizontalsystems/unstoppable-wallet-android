@@ -6,18 +6,18 @@ import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.migration.Migration
 import android.content.Context
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Rate
+import io.horizontalsystems.bankwallet.entities.StorableCoin
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 
-@Database(entities = [TransactionRecord::class, Rate::class, Coin::class], version = 3, exportSchema = true)
+@Database(entities = [TransactionRecord::class, Rate::class, StorableCoin::class], version = 3, exportSchema = true)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun transactionDao(): TransactionDao
 
     abstract fun ratesDao(): RatesDao
 
-    abstract fun coinsDao(): CoinsDao
+    abstract fun coinsDao(): StorableCoinsDao
 
     companion object {
 
@@ -53,7 +53,7 @@ abstract class AppDatabase : RoomDatabase() {
         private val MIGRATION_2_3: Migration = object : Migration(2, 3) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 //create new table Coin
-                database.execSQL("CREATE TABLE IF NOT EXISTS Coin (`title` TEXT NOT NULL, `code` TEXT NOT NULL, `enabled` INTEGER NOT NULL, `type` TEXT NOT NULL, `order` INTEGER, PRIMARY KEY(`code`))")
+                database.execSQL("CREATE TABLE IF NOT EXISTS StorableCoin (`coinTitle` TEXT NOT NULL, `coinCode` TEXT NOT NULL, `coinType` TEXT NOT NULL, `enabled` INTEGER NOT NULL, `order` INTEGER, PRIMARY KEY(`coinCode`))")
             }
         }
 
