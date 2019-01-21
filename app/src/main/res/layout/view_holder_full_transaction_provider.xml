@@ -12,7 +12,7 @@
         android:paddingTop="16dp"
         android:paddingRight="16dp"
         android:paddingBottom="5dp"
-        android:text="@string/FullInfo_SubtitleProvider"
+        android:text="@string/FullInfo_Source"
         android:textColor="@color/grey"
         android:textSize="14sp" />
 

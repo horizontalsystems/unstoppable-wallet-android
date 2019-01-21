@@ -118,21 +118,43 @@
     <string name="TransactionInfo_To">To</string>
     <string name="TransactionInfo_From">From</string>
     <string name="TransactionInfo_Time">Time</string>
-    <string name="TransactionInfo_ButtonMore">Full Info</string>
+    <string name="TransactionInfo_ButtonMore">More</string>
 
 
     <!--Full Info-->
 
-    <string name="FullInfo_Title">Full Info</string>
-    <string name="FullInfo_Id">ID</string>
-    <string name="FullInfo_Status">Status</string>
+    <string name="FullInfo_Title">Transaction</string>
     <string name="FullInfo_Time">Time</string>
     <string name="FullInfo_Block">Block</string>
     <string name="FullInfo_Confirmations">Confirmations</string>
-    <string name="FullInfo_TotalInput">Total Input</string>
-    <string name="FullInfo_TotalOutput">Total Output</string>
+    <string name="FullInfo_Inputs">Inputs</string>
+    <string name="FullInfo_Outputs">Outputs</string>
     <string name="FullInfo_Size">Size</string>
     <string name="FullInfo_Fee">Fee</string>
+    <string name="FullInfo_Rate">Rate</string>
+    <string name="FullInfo_Source">Source</string>
+    <string name="FullInfo_To">To</string>
+    <string name="FullInfo_From">From</string>
+
+    <string name="FullInfo_GasLimit">Gas Limit</string>
+    <string name="FullInfo_GasUsed">Gas Used</string>
+    <string name="FullInfo_GasPrice">Gas Price</string>
+
+    <string name="FullInfo_Source_Title">Source</string>
+    <string name="FullInfo_Source_Online">Online</string>
+    <string name="FullInfo_Source_Offline">Offline</string>
+
+
+    <string name="FullInfo_Error_Subtitle">Offline</string>
+    <string name="FullInfo_Error_Retry">Retry</string>
+    <string name="FullInfo_Error_ChangeSource">Change Source</string>
+
+
+
+    <!--no used-->
+    <string name="FullInfo_Id">ID</string>
+    <string name="FullInfo_TotalInput">Total Input</string>
+    <string name="FullInfo_TotalOutput">Total Output</string>
     <string name="FullInfo_FeePerByte">Fee per byte</string>
     <string name="FullInfo_FeeRate">Fee Rate</string>
     <string name="FullInfo_NoAddress">No Available</string>
@@ -140,22 +162,10 @@
     <string name="FullInfo_Bytes">Bytes</string>
     <string name="FullInfo_SubtitleInputs">Inputs</string>
     <string name="FullInfo_SubtitleOutputs">Outputs</string>
-    <string name="FullInfo_SubtitleProvider">Data Provider</string>
-
-    <!--Full Info Ethereum-->
-    <string name="FullInfoEth_To">To</string>
-    <string name="FullInfoEth_From">From</string>
-    <string name="FullInfoEth_GasLimit">Gas Limit</string>
-    <string name="FullInfoEth_GasUsed">Gas Used</string>
-    <string name="FullInfoEth_GasPrice">Gas Price</string>
     <string name="FullInfoEth_Nonce">Nonce</string>
     <string name="FullInfoEth_Value">Value</string>
 
-    <!--Full Info Error-->
 
-    <string name="FullInfoError_SubtitleOffline">Offline</string>
-    <string name="FullInfoError_Retry">Retry</string>
-    <string name="FullInfoError_ChangeSource">Change Source</string>
 
 
     <!--Settings-->

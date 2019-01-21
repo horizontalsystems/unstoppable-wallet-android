@@ -28,7 +28,7 @@ class FullTransactionInfoErrorFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         providerName.text = provider
-        providerError.text = getString(R.string.FullInfoError_SubtitleOffline)
+        providerError.text = getString(R.string.FullInfo_Error_Subtitle)
 
         btnRetry.setOnClickListener {
             listener?.onRetry()
