@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.core.storage
 
 import io.horizontalsystems.bankwallet.core.ICoinStorage
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.StorableCoin
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.Flowable
 import java.util.concurrent.Executors
 
@@ -10,18 +10,37 @@ class StorableCoinsRepository(private val appDatabase: AppDatabase) : ICoinStora
 
     private val executor = Executors.newSingleThreadExecutor()
 
-    override fun coinObservable(coinCode: CoinCode): Flowable<StorableCoin> {
-        return appDatabase.coinsDao().getCoin(coinCode)
+    override fun enabledCoinsObservable(): Flowable<List<Coin>> {
+        return appDatabase.coinsDao().getEnabledCoin()
+                .flatMap { list ->
+                    Flowable.just(list.map { Coin(it.coinTitle, it.coinCode, it.coinType) })
+                }
     }
 
-    override fun save(storableCoin: StorableCoin) {
+    override fun allCoinsObservable(): Flowable<List<Coin>> {
+        return appDatabase.coinsDao().getAllCoins()
+                .flatMap { list ->
+                    Flowable.just(list.map { Coin(it.coinTitle, it.coinCode, it.coinType) })
+                }
+    }
+
+    override fun save(coins: List<Coin>) {
+
         executor.execute {
-            appDatabase.coinsDao().insert(storableCoin)
-        }
-    }
+            //update stored coins enabled as false, and order as null
+            appDatabase.coinsDao().resetCoinsState()
 
-    override fun getAll(): Flowable<List<StorableCoin>> {
-        return appDatabase.coinsDao().getAll()
+            //save coin list
+            coins.forEachIndexed { index, coin ->
+                val storableCoin = StorableCoin(
+                        coinCode = coin.code,
+                        coinTitle = coin.title,
+                        coinType = coin.type,
+                        enabled = true,
+                        order = index)
+                appDatabase.coinsDao().insert(storableCoin)
+            }
+        }
     }
 
     override fun deleteAll() {

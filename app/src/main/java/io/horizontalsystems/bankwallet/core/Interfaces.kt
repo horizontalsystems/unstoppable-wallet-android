@@ -173,6 +173,7 @@ interface IAppConfigProvider {
     val testMode: Boolean
     val localizations: List<String>
     val currencies: List<Currency>
+    val defaultCoins: List<Coin>
 }
 
 interface IOneTimerDelegate {
@@ -187,9 +188,9 @@ interface IRateStorage {
 }
 
 interface ICoinStorage {
-    fun coinObservable(coinCode: CoinCode): Flowable<StorableCoin>
-    fun save(coin: StorableCoin)
-    fun getAll(): Flowable<List<StorableCoin>>
+    fun enabledCoinsObservable(): Flowable<List<Coin>>
+    fun allCoinsObservable(): Flowable<List<Coin>>
+    fun save(coins: List<Coin>)
     fun deleteAll()
 }
 
@@ -225,6 +226,13 @@ interface ILockoutUntilDateFactory {
 
 interface ICurrentDateProvider {
     val currentDate: Date
+}
+
+interface ICoinManager {
+    val coinsUpdatedSignal: PublishSubject<Unit>
+    var coins: List<Coin>
+    val allCoinsObservable: Flowable<List<Coin>>
+    fun enableDefaultCoins()
 }
 
 sealed class Error : Exception() {

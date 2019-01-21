@@ -41,8 +41,14 @@ class ManageCoinsPresenterTest {
     }
 
     @Test
-    fun didLoadCoins() {
-        presenter.didLoadCoins(allCoins, enabledCoins)
+    fun didLoadEnabledCoins() {
+        presenter.didLoadEnabledCoins(enabledCoins)
+        verify(view).updateCoins()
+    }
+
+    @Test
+    fun didLoadAllCoins() {
+        presenter.didLoadAllCoins(allCoins)
         verify(view).updateCoins()
     }
 

@@ -2,29 +2,44 @@ package io.horizontalsystems.bankwallet.modules.managecoins
 
 import android.content.Context
 import android.content.Intent
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
 
 object ManageCoinsModule {
 
     class ManageCoinsPresenterState {
         var allCoins = listOf<Coin>()
-        var enabledCoins = mutableListOf<Coin>()
-        val disabledCoins: List<Coin>
-            get() {
-                return allCoins.minus(enabledCoins)
+            set(value) {
+                field = value
+                setDisabledCoins()
             }
+
+        var enabledCoins = mutableListOf<Coin>()
+            set(value) {
+                field = value
+                setDisabledCoins()
+            }
+
+        var disabledCoins = listOf<Coin>()
 
         fun enable(coin: Coin) {
             enabledCoins.add(coin)
+            setDisabledCoins()
         }
 
         fun disable(coin: Coin) {
             enabledCoins.remove(coin)
+            setDisabledCoins()
         }
 
         fun move(coin: Coin, index: Int) {
             enabledCoins.remove(coin)
             enabledCoins.add(index, coin)
+        }
+
+        private fun setDisabledCoins() {
+            val coins = allCoins
+            disabledCoins = coins.minus(enabledCoins)
         }
     }
 
@@ -52,7 +67,8 @@ object ManageCoinsModule {
     }
 
     interface IInteractorDelegate {
-        fun didLoadCoins(allCoins: List<Coin>, enabledCoins: List<Coin>)
+        fun didLoadEnabledCoins(enabledCoins: List<Coin>)
+        fun didLoadAllCoins(allCoins: List<Coin>)
         fun didSaveChanges()
         fun didFailedToSave()
     }
@@ -63,7 +79,7 @@ object ManageCoinsModule {
 
 
     fun init(view: ManageCoinsViewModel, router: IRouter) {
-        val interactor = ManageCoinsInteractor()
+        val interactor = ManageCoinsInteractor(App.coinManager, App.coinsStorage)
         val presenter = ManageCoinsPresenter(interactor, router, ManageCoinsPresenterState())
 
         view.delegate = presenter

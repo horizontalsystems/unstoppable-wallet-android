@@ -17,7 +17,22 @@ sealed class CoinType {
 data class Coin(
         val title: String,
         val code: String,
-        val type: CoinType)
+        val type: CoinType) {
+
+    override fun equals(other: Any?): Boolean {
+        if (other is Coin) {
+            return code == other.code
+        }
+        return super.equals(other)
+    }
+
+    override fun hashCode(): Int {
+        var result = title.hashCode()
+        result = 31 * result + code.hashCode()
+        result = 31 * result + type.hashCode()
+        return result
+    }
+}
 
 
 @Entity

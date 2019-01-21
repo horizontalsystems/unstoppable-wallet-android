@@ -1,31 +1,37 @@
 package io.horizontalsystems.bankwallet.modules.managecoins
 
-import android.util.Log
+import io.horizontalsystems.bankwallet.core.ICoinManager
+import io.horizontalsystems.bankwallet.core.ICoinStorage
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CoinType
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
-class ManageCoinsInteractor : ManageCoinsModule.IInteractor {
+class ManageCoinsInteractor(
+        private val coinManager: ICoinManager,
+        private val coinStorage: ICoinStorage) : ManageCoinsModule.IInteractor {
 
     var delegate: ManageCoinsModule.IInteractorDelegate? = null
+    private val disposables = CompositeDisposable()
 
     override fun loadCoins() {
-        val allCoins = mutableListOf(
-                Coin("Bitcoin", "BTC", CoinType.Bitcoin),
-                Coin("Ethereum", "ETH", CoinType.Ethereum),
-                Coin("DASH Coin", "DASH", CoinType.Ethereum),
-                Coin("Litecoin", "LTC", CoinType.BitcoinCash),
-                Coin("XRP", "XRP", CoinType.Ethereum),
-                Coin("Bitcoin Cash", "BCH", CoinType.BitcoinCash)
-        )
-        val enabledCoins = mutableListOf(
-                Coin("Bitcoin", "BTC", CoinType.Bitcoin),
-                Coin("XRP", "XRP", CoinType.Ethereum),
-                Coin("Litecoin", "LTC", CoinType.BitcoinCash))
-        delegate?.didLoadCoins(allCoins, enabledCoins)
+        disposables.add(coinManager.allCoinsObservable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { allCoins ->
+                    delegate?.didLoadAllCoins(allCoins)
+                })
+
+        disposables.add(coinStorage.enabledCoinsObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { enabledCoins ->
+                    delegate?.didLoadEnabledCoins(enabledCoins)
+                })
     }
 
     override fun saveEnabledCoins(enabledCoins: List<Coin>) {
-        Log.e("ManageCoinsInter","Enabled Coins save")
+        coinStorage.save(enabledCoins)
         delegate?.didSaveChanges()
     }
 
