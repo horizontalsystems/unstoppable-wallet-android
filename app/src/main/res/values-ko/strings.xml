@@ -6,7 +6,7 @@
     <string name="Alert_Cancel">취소</string>
     <string name="Alert_Copy">복사</string>
     <string name="Alert_Share">Share</string>
-    <string name="Alert_Close">Close</string>
+    <string name="Alert_Close">가까운, 닫힌</string>
     <string name="Alert_Success">Success</string>
     <string name="Alert_Copied">복사됨</string>
     <string name="Button_Cancel">취소</string>
@@ -49,7 +49,7 @@
     <string name="Send_Hint_Address">주소</string>
     <string name="Send_Hint_Amount">양</string>
     <string name="Send_Button_Paste">붙여넣기</string>
-    <string name="Send_Button_More">More</string>
+    <string name="Send_Button_More">보다</string>
     <string name="Send_Button_Send">전송</string>
     <string name="Send_Button_Max">Max</string>
     <string name="Send_ScanQrCode">Scan QR Code</string>
@@ -79,32 +79,32 @@
     <string name="TransactionInfo_Title">거래기록</string>
     <string name="TransactionInfo_Status">상태</string>
     <string name="TransactionInfo_Id">ID</string>
-    <string name="TransactionInfo_To">To</string>
-    <string name="TransactionInfo_From">From</string>
-    <string name="TransactionInfo_Time">Time</string>
-    <string name="TransactionInfo_ButtonMore">More</string>
+    <string name="TransactionInfo_To">에게</string>
+    <string name="TransactionInfo_From">로 부터</string>
+    <string name="TransactionInfo_Time">시간</string>
+    <string name="TransactionInfo_ButtonMore">보다</string>
     <!--Full Info-->
-    <string name="FullInfo_Title">Transaction</string>
+    <string name="FullInfo_Title">거래기록</string>
     <string name="FullInfo_Time">시간</string>
-    <string name="FullInfo_Block">Block</string>
-    <string name="FullInfo_Confirmations">Confirmations</string>
-    <string name="FullInfo_Inputs">Inputs</string>
-    <string name="FullInfo_Outputs">Outputs</string>
-    <string name="FullInfo_Size">Size</string>
+    <string name="FullInfo_Block">덩어리</string>
+    <string name="FullInfo_Confirmations">확인</string>
+    <string name="FullInfo_Inputs">입력값</string>
+    <string name="FullInfo_Outputs">산출값</string>
+    <string name="FullInfo_Size">크기</string>
     <string name="FullInfo_Fee">수수료</string>
-    <string name="FullInfo_Rate">Rate</string>
-    <string name="FullInfo_Source">Source</string>
-    <string name="FullInfo_To">To</string>
-    <string name="FullInfo_From">From</string>
+    <string name="FullInfo_Rate">비율, 속도, 평가</string>
+    <string name="FullInfo_Source">원천, 자료</string>
+    <string name="FullInfo_To">에게</string>
+    <string name="FullInfo_From">로 부터</string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
-    <string name="FullInfo_Source_Title">Source</string>
-    <string name="FullInfo_Source_Online">Online</string>
-    <string name="FullInfo_Source_Offline">Offline</string>
-    <string name="FullInfo_Error_Subtitle">Offline</string>
-    <string name="FullInfo_Error_Retry">Retry</string>
-    <string name="FullInfo_Error_ChangeSource">Change Source</string>
+    <string name="FullInfo_Source_Title">원천, 자료</string>
+    <string name="FullInfo_Source_Online">온라인</string>
+    <string name="FullInfo_Source_Offline">오프라인</string>
+    <string name="FullInfo_Error_Subtitle">오프라인</string>
+    <string name="FullInfo_Error_Retry">재시도</string>
+    <string name="FullInfo_Error_ChangeSource">출처를 변경하다</string>
     <!--no used-->
     <string name="FullInfo_Id">ID</string>
     <string name="FullInfo_TotalInput">Total Input</string>
@@ -114,17 +114,17 @@
     <string name="FullInfo_NoAddress">No Available</string>
     <string name="FullInfo_SatByte">sat/B</string>
     <string name="FullInfo_Bytes">Bytes</string>
-    <string name="FullInfo_SubtitleInputs">Inputs</string>
-    <string name="FullInfo_SubtitleOutputs">Outputs</string>
+    <string name="FullInfo_SubtitleInputs">입력값</string>
+    <string name="FullInfo_SubtitleOutputs">산출값</string>
     <string name="FullInfoEth_Nonce">Nonce</string>
     <string name="FullInfoEth_Value">Value</string>
     <!--Settings-->
     <string name="Settings_Title">설정</string>
-    <string name="Settings_SecurityCenter">Security Center</string>
-    <string name="Settings_BaseCurrency">Base Currency</string>
-    <string name="Settings_Language">Language</string>
-    <string name="Settings_LightMode">Light Mode</string>
-    <string name="Settings_About">About</string>
+    <string name="Settings_SecurityCenter">보안 센터</string>
+    <string name="Settings_BaseCurrency">기초 통화</string>
+    <string name="Settings_Language">언어</string>
+    <string name="Settings_LightMode">밝은 모드</string>
+    <string name="Settings_About">에 대해</string>
     <string name="Settings_InfoTitleWithVersion">Bank Wallet %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <!--Settings-->
@@ -132,17 +132,17 @@
     <string name="Settings_Error_NoFingerprintAddedYet">You have not enabled fingerprint on this device. Go to Settings &gt; Security to set up fingerprint access.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Fingerprint</string>
-    <string name="SettingsSecurity_EditPin">Edit Passcode</string>
-    <string name="SettingsSecurity_BackupWallet">Backup Wallet</string>
-    <string name="SettingsSecurity_UnlinkFromThisDevice">Unlink from this device</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_1">This action will remove the currently installed wallet from this device.</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_2">Make sure you have backed up Secret Key or you will not be able to access your funds in the future.</string>
+    <string name="SettingsSecurity_EditPin">비밀번호 변경</string>
+    <string name="SettingsSecurity_BackupWallet">백업용 지갑</string>
+    <string name="SettingsSecurity_UnlinkFromThisDevice">이 장치로부터 연결되지 않은</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_1">이 장치로부터 현재 설치되지 않은 지갑을 제거해줄 것입니다.</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_2">안전 키를 백업을 확인하거나 너가 너의 자금에 미래에 접근할 수 없을 것입니다.</string>
     <!--Setting_Currency-->
-    <string name="SettingsCurrency_Title">Base Currency</string>
+    <string name="SettingsCurrency_Title">기초 통화</string>
     <!--Setting_Language-->
-    <string name="SettingsLanguage_Title">Language</string>
+    <string name="SettingsLanguage_Title">언어</string>
     <!--Setting_About-->
-    <string name="SettingsAbout_Title">About</string>
+    <string name="SettingsAbout_Title">에 대해</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Terms &amp; Privacy:</string>
     <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
 \n\nIt works everywhere as long as there is internet. No entity can block this app from working or to block someone from using it.
@@ -158,7 +158,7 @@
     <string name="Alert_NoDeviceLockDescription">Set up a lock screen on this device to continue. Go to “Settings” &gt; “Security” &gt; “Screen Lock” and enable the lock screen setting.</string>
     <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
     <!--Unlock-->
-    <string name="Unlock_Page_EnterYourPin">Passcode</string>
+    <string name="Unlock_Page_EnterYourPin">비밀번호</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Unsupported currency</string>
     <!--Hud texts-->
@@ -171,13 +171,13 @@
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">Fingerprint login</string>
     <string name="Fingerprint_Hint">Touch sensor</string>
-    <string name="Fingerprint_EnterPin">Passcode</string>
+    <string name="Fingerprint_EnterPin">비밀번호</string>
     <string name="Fingerprint_NotRecognized">Fingerprint not recognized. Try again</string>
     <string name="Fingerprint_Success">Success!</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">~때까지 사용 안 함: %s</string>
     <!--Set Pin-->
-    <string name="SetPin_Title">Passcode</string>
+    <string name="SetPin_Title">비밀번호</string>
     <string name="SetPin_Info">Your passcode will be used to unlock wallet app</string>
     <string name="SetPin_ErrorShortPin">Please enter all digits.</string>
     <string name="SetPin_ConfirmInfo">확인</string>
@@ -185,10 +185,10 @@
     <string name="SetPin_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
     <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">Edit Passcode</string>
-    <string name="EditPin_UnlockInfo">Current Passcode</string>
-    <string name="EditPin_NewPinInfo">New Passcode</string>
+    <string name="EditPin_Title">비밀번호 변경</string>
+    <string name="EditPin_UnlockInfo">현재 비밀번호</string>
+    <string name="EditPin_NewPinInfo">새로운 비밀번호</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Wallets</string>
+    <string name="ManageCoins_title">지갑</string>
     <string name="ManageCoins_save">Save</string>
 </resources>
