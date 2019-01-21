@@ -51,7 +51,7 @@
     <string name="Send_Button_Paste">Вставить</string>
     <string name="Send_Button_More">Ещё</string>
     <string name="Send_Button_Send">Отправить</string>
-    <string name="Send_Button_Max">Max</string>
+    <string name="Send_Button_Max">Макс.</string>
     <string name="Send_ScanQrCode">Сканировать QR-код</string>
     <string name="Send_Success">Отправлено!</string>
     <string name="Send_Error_InvalidAddress">Адрес недействителен. Попробуйте еще раз!</string>
@@ -64,7 +64,7 @@
     <!--Deposit-->
     <string name="Deposit_Title">Получено %s</string>
     <string name="Deposit_Share">Поделиться</string>
-    <string name="Deposit_Your_Address">Your Address</string>
+    <string name="Deposit_Your_Address">Ваш Адрес</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">только что</string>
     <string name="Timestamp_MinAgo">%dm. мин назад</string>
@@ -82,36 +82,36 @@
     <string name="TransactionInfo_To">Кому</string>
     <string name="TransactionInfo_From">От</string>
     <string name="TransactionInfo_Time">Время</string>
-    <string name="TransactionInfo_ButtonMore">More</string>
+    <string name="TransactionInfo_ButtonMore">Ещё</string>
     <!--Full Info-->
-    <string name="FullInfo_Title">Transaction</string>
+    <string name="FullInfo_Title">Транзакция</string>
     <string name="FullInfo_Time">Время</string>
     <string name="FullInfo_Block">Блок</string>
     <string name="FullInfo_Confirmations">Подтверждения</string>
-    <string name="FullInfo_Inputs">Inputs</string>
-    <string name="FullInfo_Outputs">Outputs</string>
+    <string name="FullInfo_Inputs">Входы</string>
+    <string name="FullInfo_Outputs">Выходы</string>
     <string name="FullInfo_Size">Размер</string>
     <string name="FullInfo_Fee">Комиссия</string>
-    <string name="FullInfo_Rate">Rate</string>
-    <string name="FullInfo_Source">Source</string>
-    <string name="FullInfo_To">To</string>
-    <string name="FullInfo_From">From</string>
+    <string name="FullInfo_Rate">Ставка</string>
+    <string name="FullInfo_Source">Источник</string>
+    <string name="FullInfo_To">Кому</string>
+    <string name="FullInfo_From">От</string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
-    <string name="FullInfo_Source_Title">Source</string>
-    <string name="FullInfo_Source_Online">Online</string>
-    <string name="FullInfo_Source_Offline">Offline</string>
-    <string name="FullInfo_Error_Subtitle">Offline</string>
-    <string name="FullInfo_Error_Retry">Retry</string>
-    <string name="FullInfo_Error_ChangeSource">Change Source</string>
+    <string name="FullInfo_Source_Title">Источник</string>
+    <string name="FullInfo_Source_Online">В сети</string>
+    <string name="FullInfo_Source_Offline">Не в сети</string>
+    <string name="FullInfo_Error_Subtitle">Не в сети</string>
+    <string name="FullInfo_Error_Retry">Повторить</string>
+    <string name="FullInfo_Error_ChangeSource">Сменить Источник</string>
     <!--no used-->
     <string name="FullInfo_Id">ID</string>
     <string name="FullInfo_TotalInput">Всего Входов</string>
     <string name="FullInfo_TotalOutput">Всего Выходов</string>
-    <string name="FullInfo_FeePerByte">Fee per byte</string>
-    <string name="FullInfo_FeeRate">Fee Rate</string>
-    <string name="FullInfo_NoAddress">No Available</string>
+    <string name="FullInfo_FeePerByte">Комиссия за байт</string>
+    <string name="FullInfo_FeeRate">Комиссия</string>
+    <string name="FullInfo_NoAddress">Недоступно</string>
     <string name="FullInfo_SatByte">sat/B</string>
     <string name="FullInfo_Bytes">Bytes</string>
     <string name="FullInfo_SubtitleInputs">Входы</string>
