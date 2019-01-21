@@ -5,15 +5,15 @@
     <string name="Alert_Ok">확인</string>
     <string name="Alert_Cancel">취소</string>
     <string name="Alert_Copy">복사</string>
-    <string name="Alert_Share">Share</string>
+    <string name="Alert_Share">공유</string>
     <string name="Alert_Close">가까운, 닫힌</string>
     <string name="Alert_Success">성공</string>
     <string name="Alert_Copied">복사됨</string>
     <string name="Button_Cancel">취소</string>
     <string name="Button_Back">뒤로</string>
     <string name="Button_Ok">확인</string>
-    <string name="Button_Share">Share</string>
-    <string name="Error">Error</string>
+    <string name="Button_Share">공유</string>
+    <string name="Error">오류</string>
     <!--Guest-->
     <string name="Guest_Title">Bank Wallet</string>
     <string name="Guest_CreateWallet">새 지갑</string>
@@ -52,7 +52,7 @@
     <string name="Send_Button_More">보다</string>
     <string name="Send_Button_Send">전송</string>
     <string name="Send_Button_Max">Max</string>
-    <string name="Send_ScanQrCode">Scan QR Code</string>
+    <string name="Send_ScanQrCode">QR 코드 스캔</string>
     <string name="Send_Success">Sent!</string>
     <string name="Send_Error_InvalidAddress">Address seems invalid. Please check and try again!</string>
     <string name="Send_Error_InsufficientBalance">Not enough funds.</string>
@@ -63,14 +63,14 @@
     <string name="Send_DialogTotal">합계:</string>
     <!--Deposit-->
     <string name="Deposit_Title">수신%s</string>
-    <string name="Deposit_Share">Share</string>
+    <string name="Deposit_Share">공유</string>
     <string name="Deposit_Your_Address">Your Address</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">지금 막</string>
     <string name="Timestamp_MinAgo">%dm. ago</string>
     <string name="Timestamp_HoursAgo">%dh. ago</string>
-    <string name="Timestamp_Today">Тoday</string>
-    <string name="Timestamp_Yesterday">Yesterday</string>
+    <string name="Timestamp_Today">오늘</string>
+    <string name="Timestamp_Yesterday">어제</string>
     <!--Transactions-->
     <string name="Transactions_Title">거래기록</string>
     <string name="Transactions_FilterAll">모든</string>
@@ -131,7 +131,7 @@
     <string name="Settings_Error_FingerprintNotEnabled">Fingerprint Not Enabled</string>
     <string name="Settings_Error_NoFingerprintAddedYet">You have not enabled fingerprint on this device. Go to Settings &gt; Security to set up fingerprint access.</string>
     <!--Setting_Security-->
-    <string name="SettingsSecurity_Fingerprint">Fingerprint</string>
+    <string name="SettingsSecurity_Fingerprint">지문</string>
     <string name="SettingsSecurity_EditPin">비밀번호 변경</string>
     <string name="SettingsSecurity_BackupWallet">백업용 지갑</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">이 장치로부터 연결되지 않은</string>
@@ -160,7 +160,7 @@
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android Keystore Error</string>
     <string name="Alert_KeysInvalidatedDescription">The encrypted data holding your wallet was recently invalidated because your Android lock screen was changed</string>
-    <string name="Alert_TitleWarning">Warning</string>
+    <string name="Alert_TitleWarning">경고</string>
     <string name="Alert_NoDeviceLockDescription">Set up a lock screen on this device to continue. Go to “Settings” &gt; “Security” &gt; “Screen Lock” and enable the lock screen setting.</string>
     <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
     <!--Unlock-->
@@ -168,7 +168,7 @@
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Unsupported currency</string>
     <!--Hud texts-->
-    <string name="Hud_Text_Unlock">Unlock</string>
+    <string name="Hud_Text_Unlock">잠금 해제</string>
     <string name="Hud_Text_Success">성공</string>
     <string name="Hud_Text_Error">오류</string>
     <string name="Hud_Text_NoInternet">No Internet</string>
@@ -176,7 +176,7 @@
     <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">Fingerprint login</string>
-    <string name="Fingerprint_Hint">Touch sensor</string>
+    <string name="Fingerprint_Hint">터치 센서</string>
     <string name="Fingerprint_EnterPin">비밀번호</string>
     <string name="Fingerprint_NotRecognized">Fingerprint not recognized. Try again</string>
     <string name="Fingerprint_Success">성공!</string>
