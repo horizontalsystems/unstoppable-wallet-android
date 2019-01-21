@@ -170,7 +170,7 @@
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Unlock</string>
     <string name="Hud_Text_Success">Success</string>
-    <string name="Hud_Text_Error">Error</string>
+    <string name="Hud_Text_Error">오류</string>
     <string name="Hud_Text_NoInternet">No Internet</string>
     <string name="Hud_Text_Copied">복사됨</string>
     <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
@@ -196,5 +196,5 @@
     <string name="EditPin_NewPinInfo">새로운 비밀번호</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">지갑</string>
-    <string name="ManageCoins_save">Save</string>
+    <string name="ManageCoins_save">저장</string>
 </resources>
