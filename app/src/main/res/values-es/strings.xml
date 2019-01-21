@@ -19,7 +19,7 @@
     <string name="Guest_CreateWallet">Nueva cartera</string>
     <string name="Guest_RestoreWallet">Restaurar cartera</string>
     <!--Restore-->
-    <string name="Restore_Title">Enter Secret Key</string>
+    <string name="Restore_Title">Ingresar clave secreta</string>
     <string name="Restore_ValidationFailed">Clave secreta incorrecta</string>
     <string name="Restore_RestoreFailed">Error al restaurar la cartera</string>
     <!--Backup-->
@@ -63,7 +63,7 @@
     <string name="Send_DialogTotal">Total:</string>
     <!--Deposit-->
     <string name="Deposit_Title">Recibir %s</string>
-    <string name="Deposit_Share">Share</string>
+    <string name="Deposit_Share">Compartir</string>
     <string name="Deposit_Your_Address">Your Address</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">reciente</string>
@@ -82,20 +82,20 @@
     <string name="TransactionInfo_To">Para</string>
     <string name="TransactionInfo_From">Desde </string>
     <string name="TransactionInfo_Time">Hora</string>
-    <string name="TransactionInfo_ButtonMore">More</string>
+    <string name="TransactionInfo_ButtonMore">Más</string>
     <!--Full Info-->
-    <string name="FullInfo_Title">Transaction</string>
+    <string name="FullInfo_Title">Transacción</string>
     <string name="FullInfo_Time">Hora</string>
     <string name="FullInfo_Block">Bloque</string>
     <string name="FullInfo_Confirmations">Confirmaciones</string>
-    <string name="FullInfo_Inputs">Inputs</string>
-    <string name="FullInfo_Outputs">Outputs</string>
-    <string name="FullInfo_Size">Size</string>
+    <string name="FullInfo_Inputs">Inversiones</string>
+    <string name="FullInfo_Outputs">Producciones</string>
+    <string name="FullInfo_Size">Tamaño</string>
     <string name="FullInfo_Fee">Comisión</string>
     <string name="FullInfo_Rate">Rate</string>
     <string name="FullInfo_Source">Source</string>
-    <string name="FullInfo_To">To</string>
-    <string name="FullInfo_From">From</string>
+    <string name="FullInfo_To">Para</string>
+    <string name="FullInfo_From">Desde </string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
@@ -109,8 +109,8 @@
     <string name="FullInfo_Id">Identificación</string>
     <string name="FullInfo_TotalInput">Inversión total</string>
     <string name="FullInfo_TotalOutput">Rendimiento total</string>
-    <string name="FullInfo_FeePerByte">Fee per byte</string>
-    <string name="FullInfo_FeeRate">Fee Rate</string>
+    <string name="FullInfo_FeePerByte">Comisión por byte</string>
+    <string name="FullInfo_FeeRate">Rate</string>
     <string name="FullInfo_NoAddress">No Available</string>
     <string name="FullInfo_SatByte">sat/B</string>
     <string name="FullInfo_Bytes">Bytes</string>
@@ -132,7 +132,7 @@
     <string name="Settings_Error_NoFingerprintAddedYet">No ha activado su huella digital en este dispositivo. Vaya a Ajustes &gt; seguridad para configurar el acceso a su huella digital.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Huella digital</string>
-    <string name="SettingsSecurity_EditPin">Edit Passcode</string>
+    <string name="SettingsSecurity_EditPin">Editar el código </string>
     <string name="SettingsSecurity_BackupWallet">Copia de Seguridad de Cartera</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">Desconectarse desde este dispositivo</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">Esta acción eliminará de este dispositivo la carpeta instalada actualmente </string>
@@ -191,7 +191,7 @@ Algunos datos genéricos de carácter público de esta app se guardan en centros
     <string name="SetPin_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
     <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">Edit Passcode</string>
+    <string name="EditPin_Title">Editar el código </string>
     <string name="EditPin_UnlockInfo">Código Actual</string>
     <string name="EditPin_NewPinInfo">Código Nuevo</string>
     <!--Manage Coins-->
