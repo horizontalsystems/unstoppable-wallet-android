@@ -119,7 +119,7 @@
     <string name="TransactionInfo_From">From</string>
     <string name="TransactionInfo_Time">Time</string>
     <string name="TransactionInfo_ButtonMore">More</string>
-
+    <string name="TransactionInfo_Status_Pending">Pending</string>
 
     <!--Full Info-->
 

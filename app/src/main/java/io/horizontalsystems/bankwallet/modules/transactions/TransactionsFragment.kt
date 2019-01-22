@@ -135,8 +135,6 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
                 (activity as? MainActivity)?.setBottomNavigationVisible(false)
                 bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
 
-                val txStatus = txRec.status
-
                 fiatValue.apply {
                     text = txRec.currencyValue?.let { ValueFormatter.format(it, showNegativeSign = true, realNumber = true) }
                     setTextColor(resources.getColor(if (txRec.incoming) R.color.green_crypto else R.color.yellow_crypto, null))
@@ -151,7 +149,7 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
                 }
 
                 itemStatus.apply {
-                    bindStatus(txStatus)
+                    bindStatus(txRec.status)
                 }
 
                 transactionIdView.bindTransactionId(txRec.transactionHash)

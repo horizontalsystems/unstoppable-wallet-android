@@ -92,8 +92,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/border2"
-        app:title="@string/TransactionInfo_Time"
-        app:value="June 6, 2018, 15:02"
         />
 
     <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
@@ -103,8 +101,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/itemTime"
-        app:title="@string/TransactionInfo_Status"
-        app:value="COMPLETED"
         />
 
     <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
@@ -114,8 +110,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/itemStatus"
-        app:title="@string/TransactionInfo_From"
-        app:value="1111111"
         />
 
     <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
@@ -126,8 +120,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/itemFrom"
-        app:title="@string/TransactionInfo_To"
-        app:value="222222"
         />
 
     <TextView
