@@ -67,8 +67,8 @@
     <string name="Deposit_Your_Address">Your Address</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">şimdi</string>
-    <string name="Timestamp_MinAgo">%dm dk önce</string>
-    <string name="Timestamp_HoursAgo">%dh saat önce</string>
+    <string name="Timestamp_MinAgo">%d dk önce</string>
+    <string name="Timestamp_HoursAgo">%d saat önce</string>
     <string name="Timestamp_Today">Bugün</string>
     <string name="Timestamp_Yesterday">Dün</string>
     <!--Transactions-->
@@ -100,7 +100,7 @@
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
     <string name="FullInfo_Source_Title">Source</string>
-    <string name="FullInfo_Source_Online">Online</string>
+    <string name="FullInfo_Source_Online">Çevrimiçi</string>
     <string name="FullInfo_Source_Offline">Offline</string>
     <string name="FullInfo_Error_Subtitle">Offline</string>
     <string name="FullInfo_Error_Retry">Retry</string>
