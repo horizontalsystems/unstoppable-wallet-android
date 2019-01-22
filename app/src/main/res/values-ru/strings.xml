@@ -129,7 +129,7 @@
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Отпечаток пальца не включен</string>
-    <string name="Settings_Error_NoFingerprintAddedYet">У вас недоступен отпечаток пальцев на этом устройстве. Перейдите в настройки &gt; Безопасность и выберите отпечатки пальцев.</string>
+    <string name="Settings_Error_NoFingerprintAddedYet">У вас не включен отпечаток пальца на этом устройстве. Перейдите в настройки </string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Отпечаток пальца</string>
     <string name="SettingsSecurity_EditPin">Изменить Код</string>
@@ -155,7 +155,7 @@
     <string name="Alert_KeysInvalidatedTitle">Ошибка Android Keystore</string>
     <string name="Alert_KeysInvalidatedDescription">Ваши зашифрованные данные были недавно аннулированы, потому что  Android lock screen был изменен</string>
     <string name="Alert_TitleWarning">Внимание</string>
-    <string name="Alert_NoDeviceLockDescription">Установите блокировку экрана на этом устройстве. Перейдите в «Настройки» &gt; «Безопасность» &gt; «Блокировка экрана» и включите параметр экрана блокировки.</string>
+    <string name="Alert_NoDeviceLockDescription">Set up a lock screen on this device to continue. Go to “Settings” &gt; “Security” &gt; “Screen Lock” and enable the lock screen setting.</string>
     <string name="Alert_CustomKeyboardIsUsed">Вы используете стороннюю клавиатуру. Вам необходимо использовать клавиатуру по умолчанию.</string>
     <!--Unlock-->
     <string name="Unlock_Page_EnterYourPin">Код</string>
