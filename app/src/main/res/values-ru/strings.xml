@@ -67,8 +67,8 @@
     <string name="Deposit_Your_Address">Ваш Адрес</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">только что</string>
-    <string name="Timestamp_MinAgo">%dm. мин назад</string>
-    <string name="Timestamp_HoursAgo">%dh. ч назад</string>
+    <string name="Timestamp_MinAgo">%d мин назад</string>
+    <string name="Timestamp_HoursAgo">%d ч назад</string>
     <string name="Timestamp_Today">Сегодня</string>
     <string name="Timestamp_Yesterday">Вчера</string>
     <!--Transactions-->
