@@ -9,7 +9,9 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import io.horizontalsystems.bankwallet.BuildConfig
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.Rate
+import io.horizontalsystems.bankwallet.entities.StorableCoin
+import io.horizontalsystems.bankwallet.entities.TransactionRecord
 
 
 @Database(entities = [TransactionRecord::class, Rate::class, StorableCoin::class], version = 3, exportSchema = true)
@@ -60,21 +62,31 @@ abstract class AppDatabase : RoomDatabase() {
                 database.execSQL("CREATE TABLE IF NOT EXISTS StorableCoin (`coinTitle` TEXT NOT NULL, `coinCode` TEXT NOT NULL, `coinType` TEXT NOT NULL, `enabled` INTEGER NOT NULL, `order` INTEGER, PRIMARY KEY(`coinCode`))")
                 //save default coin
                 val suffix = if (BuildConfig.testMode) "t" else ""
-                val coins = mutableListOf<Coin>()
-                coins.add(Coin("Bitcoin", "BTC$suffix", CoinType.Bitcoin))
-                coins.add(Coin("Bitcoin Cash", "BCH$suffix", CoinType.BitcoinCash))
-                coins.add(Coin("Ethereum", "ETH$suffix", CoinType.Ethereum))
 
-                val converter = CoinTypeConverter()
-                coins.forEachIndexed { index, coin ->
-                    val contentValues = ContentValues()
-                    contentValues.put("coinCode", coin.code)
-                    contentValues.put("coinTitle", coin.title)
-                    contentValues.put("coinType", converter.coinTypeToString(coin.type))
-                    contentValues.put("enabled", true)
-                    contentValues.put("`order`", index)
-                    database.insert("StorableCoin", SQLiteDatabase.CONFLICT_REPLACE, contentValues)
-                }
+                val bitcoinValues = ContentValues()
+                bitcoinValues.put("coinCode", "BTC$suffix")
+                bitcoinValues.put("coinTitle", "Bitcoin")
+                bitcoinValues.put("coinType", "bitcoin_key")
+                bitcoinValues.put("enabled", true)
+                bitcoinValues.put("`order`", 0)
+
+                val bitcoinCashValues = ContentValues()
+                bitcoinCashValues.put("coinCode", "BCH$suffix")
+                bitcoinCashValues.put("coinTitle", "Bitcoin Cash")
+                bitcoinCashValues.put("coinType", "bitcoin_cash_key")
+                bitcoinCashValues.put("enabled", true)
+                bitcoinCashValues.put("`order`", 1)
+
+                val ethereumValues = ContentValues()
+                ethereumValues.put("coinCode", "ETH$suffix")
+                ethereumValues.put("coinTitle", "Ethereum")
+                ethereumValues.put("coinType", "ethereum_key")
+                ethereumValues.put("enabled", true)
+                ethereumValues.put("`order`", 2)
+
+                database.insert("StorableCoin", SQLiteDatabase.CONFLICT_REPLACE, bitcoinValues)
+                database.insert("StorableCoin", SQLiteDatabase.CONFLICT_REPLACE, bitcoinCashValues)
+                database.insert("StorableCoin", SQLiteDatabase.CONFLICT_REPLACE, ethereumValues)
             }
         }
 
