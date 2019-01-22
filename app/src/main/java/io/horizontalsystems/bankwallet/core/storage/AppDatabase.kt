@@ -5,10 +5,15 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.migration.Migration
+import android.content.ContentValues
 import android.content.Context
+import android.database.sqlite.SQLiteDatabase
+import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.entities.StorableCoin
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
+
+
 
 @Database(entities = [TransactionRecord::class, Rate::class, StorableCoin::class], version = 3, exportSchema = true)
 abstract class AppDatabase : RoomDatabase() {
@@ -19,14 +24,19 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun coinsDao(): StorableCoinsDao
 
+
+
     companion object {
 
         @Volatile private var INSTANCE: AppDatabase? = null
+        private var appConfigProvider: IAppConfigProvider? = null
 
-        fun getInstance(context: Context): AppDatabase =
-                INSTANCE ?: synchronized(this) {
-                    INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
-                }
+        fun getInstance(context: Context, appConfigProvider: IAppConfigProvider): AppDatabase {
+            this.appConfigProvider = appConfigProvider
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
+            }
+        }
 
         private fun buildDatabase(context: Context): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, "dbBankWallet")
@@ -54,6 +64,18 @@ abstract class AppDatabase : RoomDatabase() {
             override fun migrate(database: SupportSQLiteDatabase) {
                 //create new table Coin
                 database.execSQL("CREATE TABLE IF NOT EXISTS StorableCoin (`coinTitle` TEXT NOT NULL, `coinCode` TEXT NOT NULL, `coinType` TEXT NOT NULL, `enabled` INTEGER NOT NULL, `order` INTEGER, PRIMARY KEY(`coinCode`))")
+                //save default coin
+                val defaultCoins = appConfigProvider?.defaultCoins
+                val converter = CoinTypeConverter()
+                defaultCoins?.forEachIndexed { index, coin ->
+                    val contentValues = ContentValues()
+                    contentValues.put("coinCode", coin.code)
+                    contentValues.put("coinTitle", coin.title)
+                    contentValues.put("coinType", converter.coinTypeToString(coin.type))
+                    contentValues.put("enabled", true)
+                    contentValues.put("`order`", index)
+                    database.insert("StorableCoin", SQLiteDatabase.CONFLICT_REPLACE, contentValues)
+                }
             }
         }
 
