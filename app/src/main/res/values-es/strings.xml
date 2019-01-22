@@ -101,9 +101,9 @@
     <string name="FullInfo_GasPrice">Gas Price</string>
     <string name="FullInfo_Source_Title">Source</string>
     <string name="FullInfo_Source_Online">En línea</string>
-    <string name="FullInfo_Source_Offline">Offline</string>
-    <string name="FullInfo_Error_Subtitle">Offline</string>
-    <string name="FullInfo_Error_Retry">Retry</string>
+    <string name="FullInfo_Source_Offline">Desconectado</string>
+    <string name="FullInfo_Error_Subtitle">Desconectado</string>
+    <string name="FullInfo_Error_Retry">Volver a intentarlo</string>
     <string name="FullInfo_Error_ChangeSource">Change Source</string>
     <!--no used-->
     <string name="FullInfo_Id">Identificación</string>
