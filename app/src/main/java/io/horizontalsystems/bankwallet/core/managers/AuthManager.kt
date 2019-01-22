@@ -42,6 +42,7 @@ class AuthManager(
         pinManager?.clear()
         transactionManager?.clear()
         localStorage.clearAll()
+        coinManager.clearCoins()
 
 //        todo: clear authData from secureStorage
 //        secureStorage.clearAuthData()

@@ -8,11 +8,8 @@ import android.arch.persistence.room.migration.Migration
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
-import io.horizontalsystems.bankwallet.core.IAppConfigProvider
-import io.horizontalsystems.bankwallet.entities.Rate
-import io.horizontalsystems.bankwallet.entities.StorableCoin
-import io.horizontalsystems.bankwallet.entities.TransactionRecord
-
+import io.horizontalsystems.bankwallet.BuildConfig
+import io.horizontalsystems.bankwallet.entities.*
 
 
 @Database(entities = [TransactionRecord::class, Rate::class, StorableCoin::class], version = 3, exportSchema = true)
@@ -25,14 +22,11 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun coinsDao(): StorableCoinsDao
 
 
-
     companion object {
 
         @Volatile private var INSTANCE: AppDatabase? = null
-        private var appConfigProvider: IAppConfigProvider? = null
 
-        fun getInstance(context: Context, appConfigProvider: IAppConfigProvider): AppDatabase {
-            this.appConfigProvider = appConfigProvider
+        fun getInstance(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
                 INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
             }
@@ -65,9 +59,14 @@ abstract class AppDatabase : RoomDatabase() {
                 //create new table Coin
                 database.execSQL("CREATE TABLE IF NOT EXISTS StorableCoin (`coinTitle` TEXT NOT NULL, `coinCode` TEXT NOT NULL, `coinType` TEXT NOT NULL, `enabled` INTEGER NOT NULL, `order` INTEGER, PRIMARY KEY(`coinCode`))")
                 //save default coin
-                val defaultCoins = appConfigProvider?.defaultCoins
+                val suffix = if (BuildConfig.testMode) "t" else ""
+                val coins = mutableListOf<Coin>()
+                coins.add(Coin("Bitcoin", "BTC$suffix", CoinType.Bitcoin))
+                coins.add(Coin("Bitcoin Cash", "BCH$suffix", CoinType.BitcoinCash))
+                coins.add(Coin("Ethereum", "ETH$suffix", CoinType.Ethereum))
+
                 val converter = CoinTypeConverter()
-                defaultCoins?.forEachIndexed { index, coin ->
+                coins.forEachIndexed { index, coin ->
                     val contentValues = ContentValues()
                     contentValues.put("coinCode", coin.code)
                     contentValues.put("coinTitle", coin.title)

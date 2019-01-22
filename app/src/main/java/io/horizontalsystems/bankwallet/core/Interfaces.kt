@@ -233,6 +233,7 @@ interface ICoinManager {
     var coins: List<Coin>
     val allCoinsObservable: Flowable<List<Coin>>
     fun enableDefaultCoins()
+    fun clearCoins()
 }
 
 sealed class Error : Exception() {

@@ -87,7 +87,7 @@ class App : Application() {
         encryptionManager = EncryptionManager()
         secureStorage = SecuredStorageManager(encryptionManager)
 
-        appDatabase = AppDatabase.getInstance(this, appConfigProvider)
+        appDatabase = AppDatabase.getInstance(this)
         transactionStorage = TransactionRepository(appDatabase)
         rateStorage = RatesRepository(appDatabase)
         coinsStorage = StorableCoinsRepository(appDatabase)

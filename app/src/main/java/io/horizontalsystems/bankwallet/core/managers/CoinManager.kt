@@ -42,4 +42,8 @@ class CoinManager(private val appConfigProvider: IAppConfigProvider, private val
     override fun enableDefaultCoins() {
         coinStorage.save(appConfigProvider.defaultCoins)
     }
+
+    override fun clearCoins() {
+        coinStorage.deleteAll()
+    }
 }
