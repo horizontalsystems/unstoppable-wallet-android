@@ -78,6 +78,9 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
         viewModel.reloadLiveEvent.observe(this, Observer {
             Log.e("BBB", "reloadLiveEvent")
             transactionsAdapter.notifyDataSetChanged()
+            if (transactionsAdapter.itemCount == 0) {
+                viewModel.delegate.onBottomReached()
+            }
 
             recyclerTransactions.visibility = if (viewModel.delegate.itemsCount == 0) View.GONE else View.VISIBLE
             emptyListText.visibility = if (viewModel.delegate.itemsCount == 0) View.VISIBLE else View.GONE
@@ -226,7 +229,7 @@ class TransactionsAdapter(private var listener: Listener) : RecyclerView.Adapter
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         Log.e("BBB", "onBindViewHolder: $position")
 
-        if (position == itemCount - 2) {
+        if (position > itemCount - 3) {
             viewModel.delegate.onBottomReached()
         }
 

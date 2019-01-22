@@ -40,11 +40,22 @@ class TransactionRecordDataSource(
     fun handleUpdatedRecords(records: List<TransactionRecord>, coinCode: CoinCode): Boolean {
         val pool = poolRepo.getPool(coinCode) ?: return false
 
-        val (updatedRecords, insertedRecords) = pool.handleUpdatedRecords(records)
+        val updatedRecords = mutableListOf<TransactionRecord>()
+        val insertedRecords = mutableListOf<TransactionRecord>()
+        var newData = false
+
+        records.forEach {
+            when (pool.handleUpdatedRecord(it)) {
+                Pool.HandleResult.UPDATED -> updatedRecords.add(it)
+                Pool.HandleResult.INSERTED -> insertedRecords.add(it)
+                Pool.HandleResult.NEW_DATA -> newData = true
+                Pool.HandleResult.IGNORED -> {}
+            }
+        }
 
         if (!poolRepo.isPoolActiveByCoinCode(coinCode)) return false
 
-        if (updatedRecords.isEmpty() && insertedRecords.isEmpty()) return false
+        if (updatedRecords.isEmpty() && insertedRecords.isEmpty()) return newData
 
         val updatedItems = updatedRecords.map { factory.createTransactionItem(coinCode, it) }
         val insertedItems = insertedRecords.map { factory.createTransactionItem(coinCode, it) }
@@ -84,170 +95,3 @@ class TransactionRecordDataSource(
 
 }
 
-class TransactionItemFactory {
-    fun createTransactionItem(coinCode: CoinCode, record: TransactionRecord): TransactionItem {
-        return TransactionItem(coinCode, record)
-    }
-}
-
-class TransactionItemDataSource {
-    val count
-        get() = items.size
-
-    private val items = mutableListOf<TransactionItem>()
-
-    fun clear() {
-        items.clear()
-    }
-
-    fun add(items: List<TransactionItem>) {
-        this.items.addAll(items)
-    }
-
-    fun itemForIndex(index: Int): TransactionItem = items[index]
-
-    fun itemIndexesForTimestamp(coinCode: CoinCode, timestamp: Long): List<Int> {
-        val indexes = mutableListOf<Int>()
-
-        items.forEachIndexed { index, transactionItem ->
-            if (transactionItem.coinCode == coinCode && transactionItem.record.timestamp == timestamp) {
-                indexes.add(index)
-            }
-        }
-
-        return indexes
-    }
-
-    fun handleModifiedItems(updatedItems: List<TransactionItem>, insertedItems: List<TransactionItem>) {
-        items.removeAll(updatedItems)
-        items.addAll(updatedItems)
-        items.addAll(insertedItems)
-
-        items.sortByDescending { it.record.timestamp }
-    }
-
-}
-
-class PoolRepo {
-    val activePools: List<Pool>
-        get() = activePoolCoinCodes.mapNotNull { pools[it] }
-
-    val allPools: List<Pool>
-        get() = pools.values.toList()
-
-    private var pools = mutableMapOf<CoinCode, Pool>()
-    private var activePoolCoinCodes = listOf<CoinCode>()
-
-    fun activatePools(coinCodes: List<CoinCode>) {
-        coinCodes.forEach { coinCode ->
-            if (!pools.containsKey(coinCode)) {
-                pools[coinCode] = Pool(coinCode)
-            }
-        }
-
-        this.activePoolCoinCodes = coinCodes
-    }
-
-    fun getPool(coinCode: CoinCode): Pool? {
-        return pools[coinCode]
-    }
-
-    fun isPoolActiveByCoinCode(coinCode: CoinCode): Boolean {
-        return activePoolCoinCodes.contains(coinCode)
-    }
-
-}
-
-class Pool(val coinCode: CoinCode) {
-
-    val records = mutableListOf<TransactionRecord>()
-
-    val allShown: Boolean
-        get() = allLoaded && unusedRecords.isEmpty()
-
-    val unusedRecords: List<TransactionRecord>
-        get() = when {
-            records.isEmpty() -> listOf()
-            else -> records.subList(firstUnusedIndex, records.size)
-        }
-
-    private var firstUnusedIndex = 0
-    private var allLoaded = false
-
-    fun increaseFirstUnusedIndex() {
-        firstUnusedIndex++
-    }
-
-    fun resetFirstUnusedIndex() {
-        firstUnusedIndex = 0
-    }
-
-    fun getFetchData(limit: Int): FetchData? {
-        if (allLoaded) {
-            return null
-        }
-
-        val unusedRecordsSize = unusedRecords.size
-        if (unusedRecordsSize > limit) {
-            return null
-        }
-
-        val hashFrom = records.lastOrNull()?.transactionHash
-        val fetchLimit = limit + 1 - unusedRecordsSize
-
-        return FetchData(coinCode, hashFrom, fetchLimit)
-    }
-
-    fun add(transactionRecords: List<TransactionRecord>) {
-        if (transactionRecords.isEmpty()) {
-            allLoaded = true
-        } else {
-            records.addAll(transactionRecords)
-        }
-    }
-
-    fun handleUpdatedRecords(records: List<TransactionRecord>): Pair<List<TransactionRecord>, List<TransactionRecord>> {
-
-        val updatedUsedRecords = mutableListOf<TransactionRecord>()
-        val insertedUsedRecords = mutableListOf<TransactionRecord>()
-
-        records.forEach { updatedRecord ->
-            val updatedRecordIndex = this.records.indexOfFirst {
-                it.transactionHash == updatedRecord.transactionHash
-            }
-
-            if (updatedRecordIndex != -1) {
-                this.records[updatedRecordIndex] = updatedRecord
-
-                if (updatedRecordIndex < firstUnusedIndex) {
-                    updatedUsedRecords.add(updatedRecord)
-                }
-            } else {
-
-                val nearestNextRecordIndex = this.records.indexOfFirst {
-                    it.timestamp < updatedRecord.timestamp
-                }
-
-                if (nearestNextRecordIndex != -1) {
-                    this.records.add(nearestNextRecordIndex, updatedRecord)
-
-                    if (nearestNextRecordIndex < firstUnusedIndex) {
-                        insertedUsedRecords.add(updatedRecord)
-                        increaseFirstUnusedIndex()
-                    }
-                }
-//                else if (this.records.isEmpty()) {
-//                    this.records.add(updatedRecord)
-//                    insertedUsedRecords.add(updatedRecord)
-//                    increaseFirstUnusedIndex()
-//                } else {
-//                    allLoaded = false
-//                }
-
-            }
-        }
-
-        return Pair(updatedUsedRecords, insertedUsedRecords)
-    }
-
-}
