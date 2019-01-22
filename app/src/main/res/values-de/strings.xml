@@ -67,8 +67,8 @@
     <string name="Deposit_Your_Address">Your Address</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">gerade eben</string>
-    <string name="Timestamp_MinAgo">Vor %dm. Min</string>
-    <string name="Timestamp_HoursAgo">Vor %dh. St</string>
+    <string name="Timestamp_MinAgo">Vor %d Min</string>
+    <string name="Timestamp_HoursAgo">Vor %d St</string>
     <string name="Timestamp_Today">Heute</string>
     <string name="Timestamp_Yesterday">Gestern</string>
     <!--Transactions-->
