@@ -51,7 +51,7 @@ class BlockExplorerResponse(
 
     override val date get() = Date(time * 1000)
     override val fee get() = fees
-    override val feePerByte: Double? = null
+    override val feePerByte get() = fees * btcRate / size
     override val confirmations get() = confirms.toString()
     override val inputs get() = vin as ArrayList<Input>
     override val outputs get() = vout as ArrayList<Output>
@@ -62,7 +62,7 @@ class BlockExplorerResponse(
 
     class Vout(@SerializedName("value") val amount: String, @SerializedName("scriptPubKey") val pubKey: PubKey) : Output() {
         override val value: Double get() = amount.toDouble()
-        override val address: String get() = pubKey.addresses.firstOrNull() ?: ""
+        override val address: String get() = pubKey.addresses.firstOrNull() ?: "..."
     }
 
     class PubKey(@SerializedName("addresses") val addresses: ArrayList<String>)

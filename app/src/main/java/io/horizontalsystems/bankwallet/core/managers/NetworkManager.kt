@@ -47,6 +47,11 @@ class NetworkManager : INetworkManager {
         return ServiceFullTransaction.service(host)
                 .getFullTransaction(path)
     }
+
+    override fun ping(host: String, url: String): Flowable<JsonObject> {
+        return ServicePing.service(host)
+                .ping(url)
+    }
 }
 
 object ServiceExchangeApi {
@@ -94,8 +99,20 @@ object ServiceFullTransaction {
 
 }
 
+object ServicePing {
+    fun service(apiURL: String): FullTransactionAPI {
+        return APIClient.retrofit(apiURL, timeout = 8)
+                .create(FullTransactionAPI::class.java)
+    }
+
+    interface FullTransactionAPI {
+        @GET
+        fun ping(@Url path: String): Flowable<JsonObject>
+    }
+}
+
 object APIClient {
-    fun retrofit(apiURL: String): Retrofit {
+    fun retrofit(apiURL: String, timeout: Long = 60): Retrofit {
 
         val logger = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BASIC
@@ -103,8 +120,8 @@ object APIClient {
 
         val httpClient = OkHttpClient.Builder()
         httpClient.addInterceptor(logger)
-        httpClient.connectTimeout(60, TimeUnit.SECONDS)
-        httpClient.readTimeout(60, TimeUnit.SECONDS)
+        httpClient.connectTimeout(timeout, TimeUnit.SECONDS)
+        httpClient.readTimeout(timeout, TimeUnit.SECONDS)
 
         val gsonBuilder = GsonBuilder().setLenient()
 

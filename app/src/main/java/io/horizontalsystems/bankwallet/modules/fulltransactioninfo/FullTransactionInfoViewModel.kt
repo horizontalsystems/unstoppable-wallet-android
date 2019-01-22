@@ -14,8 +14,8 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
     val showCopiedLiveEvent = SingleLiveEvent<Unit>()
     val showErrorLiveEvent = SingleLiveEvent<Pair<Boolean, String?>>()
     val showShareLiveEvent = SingleLiveEvent<String>()
-    val openLinkLiveEvent = SingleLiveEvent<CoinCode>()
-    val openProviderSettingsEvent = SingleLiveEvent<CoinCode>()
+    val openLinkLiveEvent = SingleLiveEvent<String>()
+    val openProviderSettingsEvent = SingleLiveEvent<Pair<CoinCode, String>>()
 
     fun init(transactionHash: String, coinCode: CoinCode) {
         FullTransactionInfoModule.init(this, this, coinCode, transactionHash)
@@ -64,8 +64,8 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
         showCopiedLiveEvent.call()
     }
 
-    override fun openProviderSettings(coinCode: CoinCode) {
-        openProviderSettingsEvent.value = coinCode
+    override fun openProviderSettings(coinCode: CoinCode, transactionHash: String) {
+        openProviderSettingsEvent.value = Pair(coinCode, transactionHash)
     }
 
     override fun openUrl(url: String) {

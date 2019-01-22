@@ -12,8 +12,8 @@ class DataProviderSettingsViewModel : ViewModel(), DataProviderSettingsModule.Vi
     val providerItems = MutableLiveData<List<DataProviderSettingsItem>>()
     val closeLiveEvent = SingleLiveEvent<Unit>()
 
-    fun init(coinCode: CoinCode) {
-        DataProviderSettingsModule.init(coinCode, this)
+    fun init(coinCode: CoinCode, transactionHash: String) {
+        DataProviderSettingsModule.init(coinCode, transactionHash, this)
         delegate.viewDidLoad()
     }
 

@@ -6,7 +6,6 @@ import android.util.AttributeSet
 import android.view.View
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.FullTransactionIcon
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_transaction_info_item.view.*
@@ -36,24 +35,6 @@ class TransactionInfoItemView : ConstraintLayout {
 
     private fun initializeViews() {
         ConstraintLayout.inflate(context, R.layout.view_transaction_info_item, this)
-    }
-
-    fun bind(title: String? = null, value: String? = null, valueIcon: FullTransactionIcon? = null, showBottomBorder: Boolean = false) {
-        txtTitle.text = title
-
-        when (valueIcon) {
-            FullTransactionIcon.PERSON -> value?.let { addressView.bind(value) }
-            FullTransactionIcon.HASH -> value?.let { addressView.bindTransactionId(value) }
-            else -> {
-                valueText.text = value
-                valueText.visibility = View.VISIBLE
-            }
-        }
-
-        addressView.visibility = if (valueIcon == null) View.GONE else View.VISIBLE
-        border.visibility = if (showBottomBorder) View.VISIBLE else View.GONE
-
-        invalidate()
     }
 
     fun bindAddress(title: String? = null, address: String? = null, showBottomBorder: Boolean = false) {

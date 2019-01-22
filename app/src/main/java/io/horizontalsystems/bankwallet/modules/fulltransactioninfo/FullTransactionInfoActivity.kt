@@ -8,6 +8,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +19,6 @@ import io.horizontalsystems.bankwallet.entities.FullTransactionItem
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider.DataProviderSettingsModule
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_full_transaction_info.*
 import kotlinx.android.synthetic.main.view_holder_full_transaction.*
@@ -68,17 +69,17 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
             HudHelper.showSuccessMessage(R.string.Hud_Text_Copied)
         })
 
-        viewModel.openLinkLiveEvent.observe(this, Observer { coinCode ->
-            coinCode?.let {
+        viewModel.openLinkLiveEvent.observe(this, Observer { url ->
+            url?.let {
                 val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(coinCode)
+                intent.data = Uri.parse(url)
                 startActivity(intent)
             }
         })
 
-        viewModel.openProviderSettingsEvent.observe(this, Observer { coinCode ->
-            coinCode?.let {
-                DataProviderSettingsModule.start(this, coinCode)
+        viewModel.openProviderSettingsEvent.observe(this, Observer { data ->
+            data?.let { (coinCode, transactionHash) ->
+                DataProviderSettingsModule.start(this, coinCode, transactionHash)
             }
         })
 
@@ -169,14 +170,6 @@ class SectionViewAdapter(val context: Context) : RecyclerView.Adapter<RecyclerVi
         when (holder) {
             is SectionViewHolder -> {
                 viewModel.delegate.getSection(position)?.let { section ->
-                    if (section.translationId == null) {
-                        holder.sectionLabel.setPadding(0, 0, 0, 0)
-                        holder.sectionLabel.text = null
-                    } else {
-                        holder.sectionLabel.setPadding(LayoutHelper.dp(16f, context), LayoutHelper.dp(16f, context), LayoutHelper.dp(16f, context), LayoutHelper.dp(5f, context))
-                        holder.sectionLabel.text = context.getString(section.translationId)
-                    }
-
                     holder.sectionRecyclerView.hasFixedSize()
                     holder.sectionRecyclerView.isNestedScrollingEnabled = false
 
@@ -186,9 +179,20 @@ class SectionViewAdapter(val context: Context) : RecyclerView.Adapter<RecyclerVi
 
             }
             is SectionProviderViewHolder -> {
-                holder.sectionProvider.bind(title = viewModel.delegate.providerName)
+                val providerName = viewModel.delegate.providerName
+                holder.sectionProvider.bind(title = context.getString(R.string.FullInfo_Source), value = providerName, dimmed = false, icon = null)
                 holder.sectionProvider.setOnClickListener {
                     viewModel.delegate.onTapProvider()
+                }
+
+                providerName?.let {
+                    val changeProviderStyle = SpannableString(providerName)
+                    changeProviderStyle.setSpan(UnderlineSpan(), 0, changeProviderStyle.length, 0)
+
+                    holder.providerSite.text = changeProviderStyle
+                    holder.providerSite.setOnClickListener {
+                        viewModel.delegate.onTapResource()
+                    }
                 }
             }
         }
@@ -213,25 +217,21 @@ class SectionItemViewAdapter(val context: Context, val viewModel: FullTransactio
         when (holder) {
             is SectionItemViewHolder -> {
                 val item = items[position]
-                val last = items.size == position + 1
+                val notLast = items.size != position + 1
 
-                val title = if (item.translationId != null) context.getString(item.translationId) else item.title
-                var value = item.value
-                if (item.valueUnit != null) {
-                    value = "$value ${context.getString(item.valueUnit)}"
-                }
+                bindTransaction(item, notLast, holder.sectionItem)
+            }
+        }
+    }
 
-                holder.sectionItem.bind(
-                        title = title,
-                        value = value,
-                        valueIcon = item.icon,
-                        showBottomBorder = !last)
+    private fun bindTransaction(item: FullTransactionItem, showBorder: Boolean, viewItem: FullTransactionInfoItemView) {
+        val title = if (item.titleResId != null) context.getString(item.titleResId) else item.title
 
-                if (item.clickable) {
-                    holder.sectionItem.setOnClickListener {
-                        viewModel.delegate.onTapItem(item)
-                    }
-                }
+        viewItem.bind(title, item.value, item.icon, item.dimmed, showBorder)
+
+        if (item.clickable) {
+            viewItem.setOnClickListener {
+                viewModel.delegate.onTapItem(item)
             }
         }
     }

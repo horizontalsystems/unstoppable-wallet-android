@@ -3,6 +3,8 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +31,10 @@ class FullTransactionInfoErrorFragment : Fragment() {
 
         providerName.text = provider
         providerError.text = getString(R.string.FullInfo_Error_Subtitle)
+
+        val changeProviderStyle = SpannableString(getString(R.string.FullInfo_Error_ChangeSource))
+        changeProviderStyle.setSpan(UnderlineSpan(), 0, changeProviderStyle.length, 0)
+        changeProvider.text = changeProviderStyle
 
         btnRetry.setOnClickListener {
             listener?.onRetry()

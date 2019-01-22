@@ -1,20 +1,50 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ITransactionDataProviderManager
-import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule.BitcoinForksProvider
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule.EthereumForksProvider
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule.Provider
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers.*
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.subjects.PublishSubject
 
-class TransactionDataProviderManager(val localStorage: ILocalStorage) : ITransactionDataProviderManager {
+class TransactionDataProviderManager(private val appConfig: IAppConfigProvider, private val localStorage: ILocalStorage)
+    : ITransactionDataProviderManager {
+
+    private val bitcoinProviders
+        get() = when {
+            appConfig.testMode -> arrayListOf(HorsysBitcoinProvider(testMode = true))
+            else -> arrayListOf(
+                    HorsysBitcoinProvider(testMode = false),
+                    BlockChairBitcoinProvider(),
+                    BlockExplorerBitcoinProvider(),
+                    BtcComBitcoinProvider())
+        }
+
+    private val bitcoinCashProviders
+        get() = when {
+            appConfig.testMode -> arrayListOf(HorsysBitcoinCashProvider(testMode = true))
+            else -> arrayListOf(
+                    HorsysBitcoinCashProvider(testMode = false),
+                    BlockChairBitcoinCashProvider(),
+                    BlockExplorerBitcoinCashProvider(),
+                    BtcComBitcoinCashProvider())
+        }
+
+    private val ethereumProviders
+        get() = when {
+            appConfig.testMode -> arrayListOf(HorsysEthereumProvider(testMode = true))
+            else -> arrayListOf(
+                    HorsysEthereumProvider(testMode = false),
+                    EtherscanEthereumProvider(),
+                    BlockChairEthereumProvider())
+        }
 
     override val baseProviderUpdatedSignal = PublishSubject.create<Unit>()
 
-    //
-    // For interactor
-    //
-    override fun providers(coinCode: CoinCode): List<FullTransactionInfoModule.Provider> {
+    override fun providers(coinCode: CoinCode): List<Provider> {
         return when {
             coinCode.contains("BTC") -> bitcoinProviders
             coinCode.contains("BCH") -> bitcoinCashProviders
@@ -22,7 +52,7 @@ class TransactionDataProviderManager(val localStorage: ILocalStorage) : ITransac
         }
     }
 
-    override fun baseProvider(coinCode: CoinCode): FullTransactionInfoModule.Provider {
+    override fun baseProvider(coinCode: CoinCode): Provider {
         if (coinCode.contains("ETH")) {
             return ethereum(localStorage.baseEthereumProvider ?: ethereumProviders[0].name)
         }
@@ -43,40 +73,21 @@ class TransactionDataProviderManager(val localStorage: ILocalStorage) : ITransac
     //
     // Providers
     //
-    override fun bitcoin(name: String): FullTransactionInfoModule.BitcoinForksProvider {
-        return bitcoinProviders.find { it.name == name }
-                ?: HorsysBitcoinProvider(testMode = false)
+    override fun bitcoin(name: String): BitcoinForksProvider {
+        bitcoinProviders.let { list ->
+            return list.find { it.name == name } ?: list[0]
+        }
     }
 
-    override fun bitcoinCash(name: String): FullTransactionInfoModule.BitcoinForksProvider {
-        return bitcoinCashProviders.find { it.name == name }
-                ?: HorsysBitcoinCashProvider(testMode = false)
+    override fun bitcoinCash(name: String): BitcoinForksProvider {
+        bitcoinCashProviders.let { list ->
+            return list.find { it.name == name } ?: list[0]
+        }
     }
 
-    override fun ethereum(name: String): FullTransactionInfoModule.EthereumForksProvider {
-        return ethereumProviders.find { it.name == name }
-                ?: HorsysEthereumProvider(testMode = false)
-    }
-
-    companion object {
-        val bitcoinProviders = arrayListOf(
-                HorsysBitcoinProvider(testMode = false),
-                BlockChairBitcoinProvider(),
-                BlockExplorerBitcoinProvider(),
-                BtcComBitcoinProvider()
-        )
-
-        val bitcoinCashProviders = arrayListOf(
-                HorsysBitcoinCashProvider(testMode = false),
-                BlockChairBitcoinCashProvider(),
-                BlockExplorerBitcoinCashProvider(),
-                BtcComBitcoinCashProvider()
-        )
-
-        val ethereumProviders = arrayListOf(
-                HorsysEthereumProvider(testMode = false),
-                EtherscanEthereumProvider(),
-                BlockChairEthereumProvider()
-        )
+    override fun ethereum(name: String): EthereumForksProvider {
+        ethereumProviders.let { list ->
+            return list.find { it.name == name } ?: list[0]
+        }
     }
 }

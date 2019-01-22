@@ -50,12 +50,12 @@ class FullTransactionInfoPresenter(val interactor: FullTransactionInfoInteractor
     }
 
     override fun onTapProvider() {
-        view?.openProviderSettings(state.coinCode)
+        view?.openProviderSettings(state.coinCode, state.transactionHash)
     }
 
 
     override fun onTapChangeProvider() {
-        view?.openProviderSettings(state.coinCode)
+        view?.openProviderSettings(state.coinCode, state.transactionHash)
     }
 
     override fun onTapResource() {
