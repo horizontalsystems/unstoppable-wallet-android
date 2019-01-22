@@ -332,6 +332,17 @@
         <item name="android:src">@drawable/status_progress_bar_grey</item>
     </style>
 
+    <style name="TransactionInfoStatusProgressBarSmall">
+        <item name="android:layout_width">2dp</item>
+        <item name="android:layout_height">8dp</item>
+        <item name="android:layout_marginStart">2dp</item>
+        <item name="android:src">@drawable/status_progress_bar_grey_20_small</item>
+    </style>
+
+    <style name="TransactionInfoStatusProgressBarSmallPending" parent="TransactionInfoStatusProgressBarSmall">
+        <item name="android:layout_height">10dp</item>
+    </style>
+
     <style name="Widget.Shadow.AppBar" parent="">
         <item name="android:background">?AppBarBackground</item>
         <item name="android:layout_height">4dp</item>
