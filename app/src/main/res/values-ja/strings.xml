@@ -83,6 +83,7 @@
     <string name="TransactionInfo_From">差出人</string>
     <string name="TransactionInfo_Time">時間</string>
     <string name="TransactionInfo_ButtonMore">その他</string>
+    <string name="TransactionInfo_Status_Pending">Pending</string>
     <!--Full Info-->
     <string name="FullInfo_Title">トランザクション</string>
     <string name="FullInfo_Time">時間</string>
