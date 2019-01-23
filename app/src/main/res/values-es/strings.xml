@@ -184,12 +184,12 @@ Algunos datos genéricos de carácter público de esta app se guardan en centros
     <string name="UnlockPin_WalletDisabledUntil">Inhabilitado hasta: %s</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Código</string>
-    <string name="SetPin_Info">Your passcode will be used to unlock wallet app</string>
+    <string name="SetPin_Info">Su código servirá para abrir su monedero y enviar dinero</string>
     <string name="SetPin_ErrorShortPin">Por favor, introduzca todos los dígitos.</string>
     <string name="SetPin_ConfirmInfo">Confirmar</string>
     <string name="SetPin_Success">Lock passcode was set successfully!</string>
-    <string name="SetPin_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
-    <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
+    <string name="SetPin_ErrorPinsDontMatch">El código no coincide. Inténtelo de nuevo</string>
+    <string name="SetPin_ErrorFailedToSavePin">Se ha producido un error al intentar guardar su código. Inténtelo de nuevo.</string>
     <!--Edit Pin-->
     <string name="EditPin_Title">Editar el código </string>
     <string name="EditPin_UnlockInfo">Código Actual</string>
