@@ -4,6 +4,8 @@ import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.Currency
 
 class AppConfigProvider : IAppConfigProvider {
@@ -26,5 +28,15 @@ class AppConfigProvider : IAppConfigProvider {
         get() {
             val coinsString = App.instance.getString(R.string.localizations)
             return coinsString.split(",")
+        }
+
+    override val defaultCoins: List<Coin>
+        get() {
+            val suffix = if (testMode) "t" else ""
+            val coins = mutableListOf<Coin>()
+            coins.add(Coin("Bitcoin", "BTC$suffix", CoinType.Bitcoin))
+            coins.add(Coin("Bitcoin Cash", "BCH$suffix", CoinType.BitcoinCash))
+            coins.add(Coin("Ethereum", "ETH$suffix", CoinType.Ethereum))
+            return coins
         }
 }

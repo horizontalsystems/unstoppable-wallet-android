@@ -15,9 +15,13 @@ class ManageCoinsPresenter(
         interactor.loadCoins()
     }
 
-    override fun didLoadCoins(allCoins: List<Coin>, enabledCoins: List<Coin>) {
-        state.allCoins = allCoins.toMutableList()
+    override fun didLoadEnabledCoins(enabledCoins: List<Coin>) {
         state.enabledCoins = enabledCoins.toMutableList()
+        view?.updateCoins()
+    }
+
+    override fun didLoadAllCoins(allCoins: List<Coin>) {
+        state.allCoins = allCoins.toMutableList()
         view?.updateCoins()
     }
 

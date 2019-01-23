@@ -9,7 +9,10 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
-class WalletManager(private val coinManager: CoinManager, private val authManager: AuthManager, private val walletFactory: WalletFactory) : IWalletManager, HandlerThread("A") {
+class WalletManager(
+        private val coinManager: CoinManager,
+        private val authManager: AuthManager,
+        private val walletFactory: WalletFactory) : IWalletManager, HandlerThread("A") {
 
     private val handler: Handler
     private val disposables = CompositeDisposable()
@@ -18,7 +21,13 @@ class WalletManager(private val coinManager: CoinManager, private val authManage
         start()
         handler = Handler(looper)
 
-        initWallets()
+        disposables.add(coinManager.coinsUpdatedSignal
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe {
+                    initWallets()
+                }
+        )
 
         disposables.add(authManager.authDataSignal
                 .subscribeOn(Schedulers.io())

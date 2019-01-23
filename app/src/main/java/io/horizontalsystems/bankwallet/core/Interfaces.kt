@@ -173,6 +173,7 @@ interface IAppConfigProvider {
     val testMode: Boolean
     val localizations: List<String>
     val currencies: List<Currency>
+    val defaultCoins: List<Coin>
 }
 
 interface IOneTimerDelegate {
@@ -183,6 +184,13 @@ interface IRateStorage {
     fun rateObservable(coinCode: CoinCode, currencyCode: String): Flowable<Rate>
     fun save(rate: Rate)
     fun getAll(): Flowable<List<Rate>>
+    fun deleteAll()
+}
+
+interface ICoinStorage {
+    fun enabledCoinsObservable(): Flowable<List<Coin>>
+    fun allCoinsObservable(): Flowable<List<Coin>>
+    fun save(coins: List<Coin>)
     fun deleteAll()
 }
 
@@ -220,6 +228,15 @@ interface ICurrentDateProvider {
     val currentDate: Date
 }
 
+interface ICoinManager {
+    val coinsUpdatedSignal: PublishSubject<Unit>
+    var coins: List<Coin>
+    val allCoinsObservable: Flowable<List<Coin>>
+    fun enableDefaultCoins()
+    fun clearCoins()
+}
+
 sealed class Error : Exception() {
     class InsufficientAmount(val fee: Double) : Error()
+    class CoinTypeException : Error()
 }

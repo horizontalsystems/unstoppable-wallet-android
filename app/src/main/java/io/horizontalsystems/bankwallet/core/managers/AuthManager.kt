@@ -1,14 +1,14 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import android.security.keystore.UserNotAuthenticatedException
-import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.core.IPinManager
-import io.horizontalsystems.bankwallet.core.ISecuredStorage
-import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.AuthData
 import io.reactivex.subjects.PublishSubject
 
-class AuthManager(private val secureStorage: ISecuredStorage, private val localStorage: ILocalStorage) {
+class AuthManager(
+        private val secureStorage: ISecuredStorage,
+        private val localStorage: ILocalStorage,
+        private val coinManager: ICoinManager) {
 
     var walletManager: IWalletManager? = null
     var pinManager: IPinManager? = null
@@ -32,6 +32,7 @@ class AuthManager(private val secureStorage: ISecuredStorage, private val localS
         AuthData(words).let {
             secureStorage.saveAuthData(it)
             authData = it
+            coinManager.enableDefaultCoins()
             walletManager?.initWallets()
         }
     }
@@ -41,6 +42,7 @@ class AuthManager(private val secureStorage: ISecuredStorage, private val localS
         pinManager?.clear()
         transactionManager?.clear()
         localStorage.clearAll()
+        coinManager.clearCoins()
 
 //        todo: clear authData from secureStorage
 //        secureStorage.clearAuthData()
