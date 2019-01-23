@@ -24,12 +24,6 @@
             app:titleTextAppearance="@style/TabTitle"
             />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/grey_20"
-            />
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerTags"
             android:layout_width="match_parent"

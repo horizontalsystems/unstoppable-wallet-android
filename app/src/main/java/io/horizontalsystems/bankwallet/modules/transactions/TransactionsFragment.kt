@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.transactions
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.annotation.NonNull
 import android.support.design.widget.BottomSheetBehavior
@@ -12,14 +11,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoViewModel
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import io.horizontalsystems.bankwallet.viewHelpers.ValueFormatter
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
@@ -135,8 +132,6 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
                 (activity as? MainActivity)?.setBottomNavigationVisible(false)
                 bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
 
-                val txStatus = txRec.status
-
                 fiatValue.apply {
                     text = txRec.currencyValue?.let { ValueFormatter.format(it, showNegativeSign = true, realNumber = true) }
                     setTextColor(resources.getColor(if (txRec.incoming) R.color.green_crypto else R.color.yellow_crypto, null))
@@ -151,7 +146,7 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
                 }
 
                 itemStatus.apply {
-                    bindStatus(txStatus)
+                    bindStatus(txRec.status)
                 }
 
                 transactionIdView.bindTransactionId(txRec.transactionHash)
@@ -226,16 +221,8 @@ class ViewHolderTransaction(override val containerView: View) : RecyclerView.Vie
         txValueInFiat.text = transactionRecord.currencyValue?.let { ValueFormatter.formatForTransactions(it, transactionRecord.incoming) }
         txValueInCoin.text = ValueFormatter.format(transactionRecord.coinValue, true)
         txDate.text = transactionRecord.date?.let { DateHelper.getShortDateForTransaction(it) }
-        txTime.text = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }
-        statusIcon.setImageDrawable(getStatusIcon(transactionRecord.status))
-        pendingShade.visibility = if (transactionRecord.status == TransactionStatus.Pending) View.VISIBLE else View.GONE
-    }
-
-    private fun getStatusIcon(status: TransactionStatus?): Drawable? {
-        return if (status is TransactionStatus.Completed)
-            LayoutHelper.d(R.drawable.checkmark_small_grey, App.instance)
-        else
-            LayoutHelper.d(R.drawable.pending, App.instance)
+        val time = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }
+        txStatusWithTimeView.bind(transactionRecord.status, time)
     }
 }
 
@@ -245,44 +232,49 @@ class FilterAdapter(private var listener: Listener) : RecyclerView.Adapter<Recyc
         fun onFilterItemClick(item: TransactionFilterItem)
     }
 
-    var selectedFilterId: String? = null
+    private var selectedFilterId: String? = null
+
+    private val firstTag = TransactionFilterItem(null, "All")
     var filters: List<TransactionFilterItem> = listOf()
 
-    override fun getItemCount() = filters.size
+    private val allFilters: MutableList<TransactionFilterItem>
+        get() {
+            val items = mutableListOf(firstTag)
+            items.addAll(filters)
+            return items
+        }
+
+    override fun getItemCount() = allFilters.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
             ViewHolderFilter(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_filter, parent, false))
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is ViewHolderFilter -> holder.bind(xxx(filters[position].name), active = selectedFilterId == filters[position].adapterId) {
-                listener.onFilterItemClick(filters[position])
-                selectedFilterId = filters[position].adapterId
+            is ViewHolderFilter -> holder.bind(
+                    allFilters[position].name,
+                    active = selectedFilterId == allFilters[position].adapterId,
+                    firstButton = position == 0) {
+                listener.onFilterItemClick(allFilters[position])
+                selectedFilterId = allFilters[position].adapterId
                 notifyDataSetChanged()
             }
         }
     }
 
-    fun xxx(coinCode: CoinCode) = when (coinCode) {
-        "BTC" -> "Bitcoin"
-        "BTCt" -> "Bitcoin-T"
-        "BTCr" -> "Bitcoin-R"
-        "BCH" -> "Bitcoin Cash"
-        "BCHt" -> "Bitcoin Cash-T"
-        "ETH" -> "Ethereum"
-        "ETHt" -> "Ethereum-T"
-        else -> coinCode
-    }
-
-
 }
 
 class ViewHolderFilter(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(filterName: String, active: Boolean, onClick: () -> (Unit)) {
+    fun bind(filterName: String, active: Boolean, firstButton: Boolean, onClick: () -> (Unit)) {
         filter_text.setOnClickListener { onClick.invoke() }
 
-        filter_text.text = filterName
+        if (firstButton) {
+            val localizedFirstButtonTitle = containerView.context.getString(R.string.Transactions_FilterAll)
+            filter_text.text = localizedFirstButtonTitle
+        } else {
+            filter_text.text = filterName
+        }
         filter_text.isActivated = active
     }
 }

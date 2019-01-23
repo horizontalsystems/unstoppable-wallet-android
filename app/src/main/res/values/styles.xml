@@ -47,6 +47,7 @@
     <attr name="CurrencySwitcherTitleColor" format="reference|color" />
     <attr name="PendingTransactionShadeColor" format="reference|color" />
     <attr name="PinScreenBackground" format="reference|color" />
+    <attr name="TransactionTagColor" format="reference|color" />
 
     <!-- Base application theme. -->
     <style name="DarkModeAppTheme" parent="Theme.AppCompat.NoActionBar">
@@ -77,7 +78,7 @@
         <item name="AboutLongTextColor">@color/steel_grey</item>
         <item name="TransactionItemBackgroundColor">@color/transaction_item_background_dark</item>
         <item name="CoinItemBackgroundColor">@color/coin_item_background_dark</item>
-        <item name="FilterButtonBackgroundColor">@color/appBackground</item>
+        <item name="FilterButtonBackgroundColor">@color/grey_20</item>
         <item name="SettingItemBackgroundColor">@color/setting_item_background_dark</item>
         <item name="DraggableCoinBackgroundColor">@color/manage_coin_background_dark</item>
         <item name="AddWalletIcon">@drawable/add_dark</item>
@@ -109,6 +110,7 @@
         <item name="CurrencySwitcherTitleColor">@color/bars_color</item>
         <item name="PendingTransactionShadeColor">@color/dark_50</item>
         <item name="PinScreenBackground">@color/dark</item>
+        <item name="TransactionTagColor">@color/stateful_tag_filter_text_color_dark</item>
     </style>
 
     <style name="LightModeAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -139,7 +141,7 @@
         <item name="AboutLongTextColor">@color/dark</item>
         <item name="TransactionItemBackgroundColor">@color/transaction_item_background_light</item>
         <item name="CoinItemBackgroundColor">@color/coin_item_background_light</item>
-        <item name="FilterButtonBackgroundColor">@color/bars_color</item>
+        <item name="FilterButtonBackgroundColor">#efeff4</item>
         <item name="SettingItemBackgroundColor">@color/setting_item_background_light</item>
         <item name="DraggableCoinBackgroundColor">@color/setting_item_background_light</item>
         <item name="AddWalletIcon">@drawable/add_light</item>
@@ -171,6 +173,7 @@
         <item name="CurrencySwitcherTitleColor">@color/dark</item>
         <item name="PendingTransactionShadeColor">@color/white_50</item>
         <item name="PinScreenBackground">@color/bars_color</item>
+        <item name="TransactionTagColor">@color/dark</item>
     </style>
 
     <style name="Button" parent="Widget.AppCompat.Button.Borderless">
@@ -322,11 +325,22 @@
         <item name="android:includeFontPadding">false</item>
     </style>
 
-    <style name="TransactionInfoStatusProgressBar">
+    <style name="TransactionInfoStatusProgressBarBig">
         <item name="android:layout_width">4dp</item>
         <item name="android:layout_height">16dp</item>
         <item name="android:layout_marginStart">4dp</item>
         <item name="android:src">@drawable/status_progress_bar_grey</item>
+    </style>
+
+    <style name="TransactionInfoStatusProgressBarSmall">
+        <item name="android:layout_width">2dp</item>
+        <item name="android:layout_height">8dp</item>
+        <item name="android:layout_marginStart">2dp</item>
+        <item name="android:src">@drawable/status_progress_bar_grey_20_small</item>
+    </style>
+
+    <style name="TransactionInfoStatusProgressBarSmallPending" parent="TransactionInfoStatusProgressBarSmall">
+        <item name="android:layout_height">10dp</item>
     </style>
 
     <style name="Widget.Shadow.AppBar" parent="">

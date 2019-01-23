@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <ImageView
+        android:id="@+id/pendingIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/pending"
+        android:layout_marginTop="2dp"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/pendingProgressBarWrapper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:visibility="visible"
+        app:layout_constraintStart_toEndOf="@+id/pendingIcon"
+        app:layout_constraintTop_toTopOf="@+id/pendingIcon"
+        app:layout_constraintBottom_toBottomOf="@+id/pendingIcon"
+        >
+        <ImageView
+            android:id="@+id/pendingProgressBar1"
+            style="@style/TransactionInfoStatusProgressBarSmallPending"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <ImageView
+            android:id="@+id/pendingProgressBar2"
+            style="@style/TransactionInfoStatusProgressBarSmallPending"
+            app:layout_constraintStart_toEndOf="@id/pendingProgressBar1"
+            app:layout_constraintTop_toTopOf="@id/pendingProgressBar1"
+            />
+
+        <ImageView
+            android:id="@+id/pendingProgressBar3"
+            style="@style/TransactionInfoStatusProgressBarSmallPending"
+            app:layout_constraintStart_toEndOf="@id/pendingProgressBar2"
+            app:layout_constraintTop_toTopOf="@id/pendingProgressBar2"
+            />
+
+        <ImageView
+            android:id="@+id/pendingProgressBar4"
+            style="@style/TransactionInfoStatusProgressBarSmallPending"
+            app:layout_constraintStart_toEndOf="@id/pendingProgressBar3"
+            app:layout_constraintTop_toTopOf="@id/pendingProgressBar3"
+            />
+
+        <ImageView
+            android:id="@+id/pendingProgressBar5"
+            style="@style/TransactionInfoStatusProgressBarSmallPending"
+            app:layout_constraintStart_toEndOf="@id/pendingProgressBar4"
+            app:layout_constraintTop_toTopOf="@id/pendingProgressBar4"
+            />
+
+        <ImageView
+            android:id="@+id/pendingProgressBar6"
+            style="@style/TransactionInfoStatusProgressBarSmallPending"
+            app:layout_constraintStart_toEndOf="@id/pendingProgressBar5"
+            app:layout_constraintTop_toTopOf="@id/pendingProgressBar5"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="4dp"
+            />
+    </android.support.constraint.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/txTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/grey"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="12:30"
+        />
+
+    <ImageView
+        android:id="@+id/completedIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/checkmark_small_grey"
+        android:visibility="visible"
+        android:layout_marginStart="6.3dp"
+        app:layout_constraintStart_toEndOf="@+id/txTime"
+        app:layout_constraintTop_toTopOf="@+id/txTime"
+        app:layout_constraintBottom_toBottomOf="@+id/txTime"
+        />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/progressBarWrapper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="4dp"
+        android:visibility="visible"
+        app:layout_constraintStart_toEndOf="@+id/txTime"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+        <ImageView
+            android:id="@+id/progressBar1"
+            style="@style/TransactionInfoStatusProgressBarSmall"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <ImageView
+            android:id="@+id/progressBar2"
+            style="@style/TransactionInfoStatusProgressBarSmall"
+            app:layout_constraintStart_toEndOf="@id/progressBar1"
+            app:layout_constraintTop_toTopOf="@id/progressBar1"
+            />
+
+        <ImageView
+            android:id="@+id/progressBar3"
+            style="@style/TransactionInfoStatusProgressBarSmall"
+            app:layout_constraintStart_toEndOf="@id/progressBar2"
+            app:layout_constraintTop_toTopOf="@id/progressBar1"
+            />
+
+        <ImageView
+            android:id="@+id/progressBar4"
+            style="@style/TransactionInfoStatusProgressBarSmall"
+            app:layout_constraintStart_toEndOf="@id/progressBar3"
+            app:layout_constraintTop_toTopOf="@id/progressBar1"
+            />
+
+        <ImageView
+            android:id="@+id/progressBar5"
+            style="@style/TransactionInfoStatusProgressBarSmall"
+            app:layout_constraintStart_toEndOf="@id/progressBar4"
+            app:layout_constraintTop_toTopOf="@id/progressBar1"
+            />
+
+        <ImageView
+            android:id="@+id/progressBar6"
+            style="@style/TransactionInfoStatusProgressBarSmall"
+            app:layout_constraintStart_toEndOf="@id/progressBar5"
+            app:layout_constraintTop_toTopOf="@id/progressBar1"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="4dp"
+            />
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>
