@@ -19,9 +19,10 @@
 
 免责声明
 
-1。 这个钱包是在其早期, 就像任何其他软件产品, 它可能有未发现的问题, 这可能会导致钱包有问题, 如失去访问特定的交易。 While the wallet has been thoroughly tested over and over no one can say for sure that it's error-free. We believe it to be very secure, more than any crypto currency app out there.
+1。 这个钱包是在其早期, 就像任何其他软件产品, 它可能有未发现的问题, 这可能会导致钱包有问题, 如失去访问特定的交易。 虽然钱包经过了彻底测试，但没人敢肯定它是没有任何问题的。 我们认为它是非常安全的，比任何加密货币软件安全得多。
 
-2. DO NOT EVER install the BANK wallet on a jailbroken or tempered device due to substantial security risks. A jailbroken Android cannot guarantee the security of your private keys. 这意味着在越狱设备上运行的一些恶意应用程序可能会存取您的资金甚至窃取它们。
+
+2。 DO NOT EVER install the BANK wallet on a jailbroken or tempered device due to substantial security risks. A jailbroken Android cannot guarantee the security of your private keys. 这意味着在越狱设备上运行的一些恶意应用程序可能会存取您的资金甚至窃取它们。
 
 3. Source Code: https://github.com/horizontalsystems
 
