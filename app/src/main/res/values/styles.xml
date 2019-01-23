@@ -34,6 +34,7 @@
     <attr name="TransactionTextBoxBackground" format="reference|color" />
     <attr name="TransactionDetailValueTextColor" format="reference|color" />
     <attr name="TransactionDetailBottomBarBackground" format="reference|color" />
+    <attr name="TransactionInfoMoreButtonBackground" format="reference" />
     <attr name="BottomTransactionInfoBackground" format="reference|color" />
     <attr name="BottomSendBackground" format="reference|color" />
     <attr name="BottomSendInputBackground" format="reference|color" />
@@ -42,7 +43,7 @@
     <attr name="BottomSendImageButtonTint" format="reference|color" />
     <attr name="BottomDialogTextColor" format="reference|color" />
     <attr name="ConfirmationDialogBackground" format="reference|color" />
-    <attr name="ConfirmationAddressBackground" format="reference|color" />
+    <attr name="AddressBackground" format="reference|color" />
     <attr name="ConfirmationMiddlePartBackground" format="reference|color" />
     <attr name="CurrencySwitcherTitleColor" format="reference|color" />
     <attr name="PendingTransactionShadeColor" format="reference|color" />
@@ -97,6 +98,7 @@
         <item name="TransactionTextBoxBackground">@color/text_box_background_dark</item>
         <item name="TransactionDetailValueTextColor">@color/bars_color</item>
         <item name="TransactionDetailBottomBarBackground">@color/dark</item>
+        <item name="TransactionInfoMoreButtonBackground">@drawable/transaction_info_more_button_background_dark</item>
         <item name="BottomTransactionInfoBackground">@color/dark</item>
         <item name="BottomSendBackground">@color/dark</item>
         <item name="BottomSendInputBackground">@color/grey_20</item>
@@ -105,7 +107,7 @@
         <item name="BottomSendImageButtonTint">@color/white</item>
         <item name="BottomDialogTextColor">@color/white</item>
         <item name="ConfirmationDialogBackground">@color/dark</item>
-        <item name="ConfirmationAddressBackground">@color/grey_20</item>
+        <item name="AddressBackground">@color/address_background_dark</item>
         <item name="ConfirmationMiddlePartBackground">@color/grey_20</item>
         <item name="CurrencySwitcherTitleColor">@color/bars_color</item>
         <item name="PendingTransactionShadeColor">@color/dark_50</item>
@@ -160,6 +162,7 @@
         <item name="TransactionTextBoxBackground">@color/text_box_background_light</item>
         <item name="TransactionDetailValueTextColor">@color/dark</item>
         <item name="TransactionDetailBottomBarBackground">#f5fafafa</item>
+        <item name="TransactionInfoMoreButtonBackground">@drawable/transaction_info_more_button_background_light</item>
         <item name="BottomTransactionInfoBackground">@color/bars_color</item>
         <item name="BottomSendBackground">@color/bars_color</item>
         <item name="BottomSendInputBackground">@color/white</item>
@@ -168,7 +171,7 @@
         <item name="BottomSendImageButtonTint">@color/black</item>
         <item name="BottomDialogTextColor">@color/black</item>
         <item name="ConfirmationDialogBackground">@color/bars_color</item>
-        <item name="ConfirmationAddressBackground">@color/lightBackground</item>
+        <item name="AddressBackground">@color/address_background_light</item>
         <item name="ConfirmationMiddlePartBackground">@color/transparent</item>
         <item name="CurrencySwitcherTitleColor">@color/dark</item>
         <item name="PendingTransactionShadeColor">@color/white_50</item>

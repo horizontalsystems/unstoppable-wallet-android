@@ -1,7 +1,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
        android:shape="rectangle"
     >
-    <solid android:color="?ConfirmationAddressBackground"/>
+    <solid android:color="?attr/AddressBackground"/>
     <corners android:radius="2dp"/>
     <stroke
         android:width="0.5dp"
