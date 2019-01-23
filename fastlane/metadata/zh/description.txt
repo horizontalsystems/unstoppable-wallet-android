@@ -17,11 +17,11 @@
 
 注意: 由于存在严重的安全风险, 请勿将银行钱包安装在越狱的设备上。 越狱的 android 操作系统无法保证您的私人密钥的安全。 这意味着在越狱设备上运行的一些恶意应用程序可能会存取您的资金甚至窃取它们。
 
-DISCLAIMER:
+免责声明
 
-1. This Wallet is in its early days and just like any other software product it may have undiscovered issues which may potentially result in wallet having problems, like say the loss of access to specific transactions. While the wallet has been thoroughly tested over and over no one can say for sure that it's error-free. We believe it to be very secure, more than any crypto currency app out there.
+1。 这个钱包是在其早期, 就像任何其他软件产品, 它可能有未发现的问题, 这可能会导致钱包有问题, 如失去访问特定的交易。 While the wallet has been thoroughly tested over and over no one can say for sure that it's error-free. We believe it to be very secure, more than any crypto currency app out there.
 
-2. DO NOT EVER install the BANK wallet on a jailbroken or tempered device due to substantial security risks. A jailbroken Android cannot guarantee the security of your private keys. This means that some malicious app running on jailbroken device can potentially access the private keys for your funds and steal them.
+2. DO NOT EVER install the BANK wallet on a jailbroken or tempered device due to substantial security risks. A jailbroken Android cannot guarantee the security of your private keys. 这意味着在越狱设备上运行的一些恶意应用程序可能会存取您的资金甚至窃取它们。
 
 3. Source Code: https://github.com/horizontalsystems
 
