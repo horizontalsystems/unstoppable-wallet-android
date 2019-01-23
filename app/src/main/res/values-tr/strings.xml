@@ -63,7 +63,7 @@
     <string name="Send_DialogTotal">Toplam:</string>
     <!--Deposit-->
     <string name="Deposit_Title">%s al</string>
-    <string name="Deposit_Share">Share</string>
+    <string name="Deposit_Share">Paylaş</string>
     <string name="Deposit_Your_Address">Your Address</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">şimdi</string>
@@ -82,21 +82,21 @@
     <string name="TransactionInfo_To">Alan</string>
     <string name="TransactionInfo_From">Gönderen</string>
     <string name="TransactionInfo_Time">Tarih</string>
-    <string name="TransactionInfo_ButtonMore">More</string>
-    <string name="TransactionInfo_Status_Pending">Pending</string>
+    <string name="TransactionInfo_ButtonMore">Daha fazlası</string>
+    <string name="TransactionInfo_Status_Pending">Devam ediyor</string>
     <!--Full Info-->
-    <string name="FullInfo_Title">Transaction</string>
+    <string name="FullInfo_Title">Hesap işlemi</string>
     <string name="FullInfo_Time">Tarih</string>
-    <string name="FullInfo_Block">Block</string>
+    <string name="FullInfo_Block">Blok numarası</string>
     <string name="FullInfo_Confirmations">Onaylama</string>
-    <string name="FullInfo_Inputs">Inputs</string>
-    <string name="FullInfo_Outputs">Outputs</string>
-    <string name="FullInfo_Size">Size</string>
+    <string name="FullInfo_Inputs">Girişler</string>
+    <string name="FullInfo_Outputs">Çıkışlar</string>
+    <string name="FullInfo_Size">Boyut</string>
     <string name="FullInfo_Fee">Masraf</string>
     <string name="FullInfo_Rate">Rate</string>
     <string name="FullInfo_Source">Source</string>
-    <string name="FullInfo_To">To</string>
-    <string name="FullInfo_From">From</string>
+    <string name="FullInfo_To">Alan</string>
+    <string name="FullInfo_From">Gönderen</string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
@@ -108,15 +108,15 @@
     <string name="FullInfo_Error_ChangeSource">Change Source</string>
     <!--no used-->
     <string name="FullInfo_Id">Kimlik</string>
-    <string name="FullInfo_TotalInput">Total Input</string>
-    <string name="FullInfo_TotalOutput">Total Output</string>
-    <string name="FullInfo_FeePerByte">Fee per byte</string>
-    <string name="FullInfo_FeeRate">Fee Rate</string>
+    <string name="FullInfo_TotalInput">Toplam Giriş</string>
+    <string name="FullInfo_TotalOutput">Toplam Çıkış</string>
+    <string name="FullInfo_FeePerByte">Bayt başına ücret</string>
+    <string name="FullInfo_FeeRate">Ücret oranı</string>
     <string name="FullInfo_NoAddress">No Available</string>
     <string name="FullInfo_SatByte">sat/B</string>
     <string name="FullInfo_Bytes">Bytes</string>
-    <string name="FullInfo_SubtitleInputs">Inputs</string>
-    <string name="FullInfo_SubtitleOutputs">Outputs</string>
+    <string name="FullInfo_SubtitleInputs">Girişler</string>
+    <string name="FullInfo_SubtitleOutputs">Çıkışlar</string>
     <string name="FullInfoEth_Nonce">Nonce</string>
     <string name="FullInfoEth_Value">Value</string>
     <!--Settings-->
