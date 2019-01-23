@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.entities.TransactionItem
+import io.horizontalsystems.bankwallet.entities.TransactionRecord
 
 class TransactionItemDataSource {
     val count
@@ -36,6 +37,10 @@ class TransactionItemDataSource {
         items.addAll(insertedItems)
 
         items.sortByDescending { it.record.timestamp }
+    }
+
+    fun shouldInsertRecord(record: TransactionRecord): Boolean {
+        return items.lastOrNull()?.record?.let { it.timestamp < record.timestamp } ?: true
     }
 
 }

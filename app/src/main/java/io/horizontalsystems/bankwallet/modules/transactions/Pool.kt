@@ -101,12 +101,16 @@ class Pool(val state: State) {
             if (insertIndex < state.firstUnusedIndex) {
                 increaseFirstUnusedIndex()
                 return HandleResult.INSERTED
+            } else if (insertIndex == 0) {
+                return HandleResult.NEW_DATA
             } else {
                 return HandleResult.IGNORED
             }
-        } else {
-            state.allLoaded = false
+        } else if (state.allLoaded && unusedRecords.isEmpty()) {
+            state.add(listOf(record))
             return HandleResult.NEW_DATA
+        } else {
+            return HandleResult.IGNORED
         }
     }
 

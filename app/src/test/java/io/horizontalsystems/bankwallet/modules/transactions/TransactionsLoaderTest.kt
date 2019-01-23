@@ -1,6 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockito_kotlin.never
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
+import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.entities.TransactionItem
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import org.junit.Assert
@@ -49,36 +52,61 @@ class TransactionsLoaderTest {
 
     @Test
     fun setCoinCodes() {
-        val coinCodes = listOf<CoinCode>("ABC", "DEF")
+        val coinCodes = listOf("ABC", "DEF")
 
         loader.setCoinCodes(coinCodes)
 
         verify(dataSource).setCoinCodes(coinCodes)
-        verify(delegate).didChangeData()
     }
 
     @Test
-    fun loadNext_dataSourceAllShown() {
+    fun loadNextInitial_dataSourceAllShown() {
         whenever(dataSource.allShown).thenReturn(true)
 
-        loader.loadNext()
+        loader.loadNext(true)
 
         verify(dataSource).allShown
+        verify(delegate).didChangeData()
         verifyNoMoreInteractions(dataSource)
         verifyNoMoreInteractions(delegate)
     }
 
     @Test
-    fun loadNext_dataSourceFetchDataListIsEmpty() {
+    fun loadNextNotInitial_dataSourceAllShown() {
+        whenever(dataSource.allShown).thenReturn(true)
+
+        loader.loadNext(false)
+
+        verify(dataSource).allShown
+        verify(delegate, never()).didChangeData()
+        verifyNoMoreInteractions(dataSource)
+        verifyNoMoreInteractions(delegate)
+    }
+
+    @Test
+    fun loadNext_dataSourceFetchDataListIsEmpty_dataChanged() {
         whenever(dataSource.allShown).thenReturn(false)
         whenever(dataSource.getFetchDataList()).thenReturn(listOf())
 
-        loader.loadNext()
+        whenever(dataSource.increasePage()).thenReturn(true)
 
-        inOrder(dataSource, delegate).let {
-            it.verify(dataSource).increasePage()
-            it.verify(delegate).didChangeData()
-        }
+        loader.loadNext(false)
+
+        verify(dataSource).increasePage()
+        verify(delegate).didChangeData()
+    }
+
+    @Test
+    fun loadNext_dataSourceFetchDataListIsEmpty_dataNotChanged() {
+        whenever(dataSource.allShown).thenReturn(false)
+        whenever(dataSource.getFetchDataList()).thenReturn(listOf())
+
+        whenever(dataSource.increasePage()).thenReturn(false)
+
+        loader.loadNext(false)
+
+        verify(dataSource).increasePage()
+        verify(delegate, never()).didChangeData()
     }
 
     @Test
@@ -87,7 +115,7 @@ class TransactionsLoaderTest {
         whenever(dataSource.allShown).thenReturn(false)
         whenever(dataSource.getFetchDataList()).thenReturn(fetchDataList)
 
-        loader.loadNext()
+        loader.loadNext(false)
 
         verify(delegate).fetchRecords(fetchDataList)
         verifyNoMoreInteractions(delegate)
@@ -96,14 +124,29 @@ class TransactionsLoaderTest {
     }
 
     @Test
-    fun didFetchRecords() {
+    fun didFetchRecords_dataChanged() {
         val records = mapOf<CoinCode, List<TransactionRecord>>("BTC" to listOf())
+
+        whenever(dataSource.increasePage()).thenReturn(true)
 
         loader.didFetchRecords(records)
 
         verify(dataSource).handleNextRecords(records)
         verify(dataSource).increasePage()
         verify(delegate).didChangeData()
+    }
+
+    @Test
+    fun didFetchRecords_dataNotChanged() {
+        val records = mapOf<CoinCode, List<TransactionRecord>>("BTC" to listOf())
+
+        whenever(dataSource.increasePage()).thenReturn(false)
+
+        loader.didFetchRecords(records)
+
+        verify(dataSource).handleNextRecords(records)
+        verify(dataSource).increasePage()
+        verify(delegate, never()).didChangeData()
     }
 
     @Test

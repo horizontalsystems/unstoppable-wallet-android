@@ -154,18 +154,47 @@ class PoolTest {
     }
 
     @Test
-    fun handleUpdatedRecord_noIndexToInsert() {
+    fun handleUpdatedRecord_noIndexToInsert_allLoaded_noUnusedRecords() {
         val record = mock(TransactionRecord::class.java)
 
         whenever(state.indexOf(record)).thenReturn(-1)
         whenever(state.insertIndexOf(record)).thenReturn(-1)
-        whenever(state.records).thenReturn(mutableListOf(mock(TransactionRecord::class.java)))
+        whenever(state.allLoaded).thenReturn(true)
+        whenever(state.unusedRecords).thenReturn(listOf())
 
         val result = pool.handleUpdatedRecord(record)
 
-        verify(state).allLoaded = false
-        verify(state, never()).firstUnusedIndex
+        verify(state).add(listOf(record))
 
+        Assert.assertEquals(Pool.HandleResult.NEW_DATA, result)
+    }
+
+    @Test
+    fun handleUpdatedRecord_noIndexToInsert_allLoaded_hasUnusedRecords() {
+        val record = mock(TransactionRecord::class.java)
+
+        whenever(state.indexOf(record)).thenReturn(-1)
+        whenever(state.insertIndexOf(record)).thenReturn(-1)
+        whenever(state.allLoaded).thenReturn(true)
+        whenever(state.unusedRecords).thenReturn(listOf(mock(TransactionRecord::class.java)))
+
+        val result = pool.handleUpdatedRecord(record)
+
+        Assert.assertEquals(Pool.HandleResult.IGNORED, result)
+    }
+
+    @Test
+    fun handleUpdatedRecord_insertedIntoEmpty() {
+        val insertIndex = 0
+        val record = mock(TransactionRecord::class.java)
+
+        whenever(state.indexOf(record)).thenReturn(-1)
+        whenever(state.insertIndexOf(record)).thenReturn(insertIndex)
+        whenever(state.firstUnusedIndex).thenReturn(0)
+
+        val result = pool.handleUpdatedRecord(record)
+
+        verify(state).insertRecord(insertIndex, record)
         Assert.assertEquals(Pool.HandleResult.NEW_DATA, result)
     }
 

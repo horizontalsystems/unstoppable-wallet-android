@@ -74,7 +74,7 @@ class TransactionRecordDataSourceTest {
     }
 
     @Test
-    fun increasePage() {
+    fun increasePage_true() {
         val dataSource = TransactionRecordDataSource(poolRepo, itemsDataSource, factory, 3)
 
         val coinCodeBtc = "BTC"
@@ -112,15 +112,37 @@ class TransactionRecordDataSourceTest {
         whenever(factory.createTransactionItem(coinCodeEth, recordEth1)).thenReturn(itemEth1)
         whenever(factory.createTransactionItem(coinCodeEth, recordEth2)).thenReturn(itemEth2)
 
-        dataSource.increasePage()
+        val result = dataSource.increasePage()
 
         val items = listOf(itemEth2, itemBtc1, itemEth1)
 
         verify(itemsDataSource).add(items)
         verify(poolBtc).increaseFirstUnusedIndex()
         verify(poolEth, times(2)).increaseFirstUnusedIndex()
+
+        Assert.assertTrue(result)
     }
-    
+
+    @Test
+    fun increasePage_false() {
+        val coinCodeBtc = "BTC"
+        val coinCodeEth = "ETH"
+
+        val poolBtc = mock(Pool::class.java)
+        val poolEth = mock(Pool::class.java)
+
+        whenever(poolRepo.activePools).thenReturn(listOf(poolBtc, poolEth))
+        whenever(poolRepo.getPool(coinCodeBtc)).thenReturn(poolBtc)
+        whenever(poolRepo.getPool(coinCodeEth)).thenReturn(poolEth)
+
+        whenever(poolBtc.unusedRecords).thenReturn(listOf())
+        whenever(poolEth.unusedRecords).thenReturn(listOf())
+
+        val result = dataSource.increasePage()
+
+        Assert.assertFalse(result)
+    }
+
     @Test
     fun itemForIndex() {
         val index = 123
@@ -223,7 +245,7 @@ class TransactionRecordDataSourceTest {
     }
 
     @Test
-    fun handleUpdatedRecords_emptyModifiedLists_newData() {
+    fun handleUpdatedRecords_emptyModifiedLists_newData_shouldNotInsertRecord() {
         val record1 = mock(TransactionRecord::class.java)
         val records = listOf(record1)
         val coinCodeBtc = "BTC"
@@ -232,8 +254,31 @@ class TransactionRecordDataSourceTest {
         whenever(poolRepo.getPool(coinCodeBtc)).thenReturn(pool)
         whenever(poolRepo.isPoolActiveByCoinCode(coinCodeBtc)).thenReturn(true)
         whenever(pool.handleUpdatedRecord(record1)).thenReturn(Pool.HandleResult.NEW_DATA)
+        whenever(itemsDataSource.shouldInsertRecord(record1)).thenReturn(false)
 
         val result = dataSource.handleUpdatedRecords(records, coinCodeBtc)
+
+        Assert.assertTrue(result)
+    }
+
+    @Test
+    fun handleUpdatedRecords_newData_shouldInsertRecord() {
+        val record1 = mock(TransactionRecord::class.java)
+        val records = listOf(record1)
+        val coinCodeBtc = "BTC"
+        val pool = mock(Pool::class.java)
+        val transactionItem = mock(TransactionItem::class.java)
+
+        whenever(poolRepo.getPool(coinCodeBtc)).thenReturn(pool)
+        whenever(poolRepo.isPoolActiveByCoinCode(coinCodeBtc)).thenReturn(true)
+        whenever(pool.handleUpdatedRecord(record1)).thenReturn(Pool.HandleResult.NEW_DATA)
+        whenever(itemsDataSource.shouldInsertRecord(record1)).thenReturn(true)
+        whenever(factory.createTransactionItem(coinCodeBtc, record1)).thenReturn(transactionItem)
+
+        val result = dataSource.handleUpdatedRecords(records, coinCodeBtc)
+
+        verify(pool).increaseFirstUnusedIndex()
+        verify(itemsDataSource).handleModifiedItems(listOf(), listOf(transactionItem))
 
         Assert.assertTrue(result)
     }

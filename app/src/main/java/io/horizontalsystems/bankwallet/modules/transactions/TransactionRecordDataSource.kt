@@ -48,8 +48,15 @@ class TransactionRecordDataSource(
             when (pool.handleUpdatedRecord(it)) {
                 Pool.HandleResult.UPDATED -> updatedRecords.add(it)
                 Pool.HandleResult.INSERTED -> insertedRecords.add(it)
-                Pool.HandleResult.NEW_DATA -> newData = true
-                Pool.HandleResult.IGNORED -> {}
+                Pool.HandleResult.NEW_DATA -> {
+                    if (itemsDataSource.shouldInsertRecord(it)) {
+                        insertedRecords.add(it)
+                        pool.increaseFirstUnusedIndex()
+                    }
+                    newData = true
+                }
+                Pool.HandleResult.IGNORED -> {
+                }
             }
         }
 
@@ -65,7 +72,7 @@ class TransactionRecordDataSource(
         return true
     }
 
-    fun increasePage() {
+    fun increasePage(): Boolean {
         val unusedItems = mutableListOf<TransactionItem>()
 
         poolRepo.activePools.forEach { pool ->
@@ -73,6 +80,8 @@ class TransactionRecordDataSource(
                 factory.createTransactionItem(pool.coinCode, record)
             })
         }
+
+        if (unusedItems.isEmpty()) return false
 
         unusedItems.sortByDescending { it.record.timestamp }
 
@@ -83,6 +92,8 @@ class TransactionRecordDataSource(
         usedItems.forEach {
             poolRepo.getPool(it.coinCode)?.increaseFirstUnusedIndex()
         }
+
+        return true
     }
 
     fun setCoinCodes(coinCodes: List<CoinCode>) {

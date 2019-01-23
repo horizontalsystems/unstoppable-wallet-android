@@ -23,16 +23,26 @@ class TransactionsLoader(private val dataSource: TransactionRecordDataSource) {
 
     fun setCoinCodes(coinCodes: List<CoinCode>) {
         dataSource.setCoinCodes(coinCodes)
-        delegate?.didChangeData()
     }
 
-    fun loadNext() {
-        if (dataSource.allShown) return
+    fun loadNext(initial: Boolean = false) {
+        if (loading) return
+        loading = true
+
+        if (dataSource.allShown) {
+            if (initial) {
+                delegate?.didChangeData()
+            }
+            loading = false
+            return
+        }
 
         val fetchDataList = dataSource.getFetchDataList()
         if (fetchDataList.isEmpty()) {
-            dataSource.increasePage()
-            delegate?.didChangeData()
+            if (dataSource.increasePage()) {
+                delegate?.didChangeData()
+            }
+            loading = false
         } else {
             delegate?.fetchRecords(fetchDataList)
         }
@@ -40,8 +50,10 @@ class TransactionsLoader(private val dataSource: TransactionRecordDataSource) {
 
     fun didFetchRecords(records: Map<CoinCode, List<TransactionRecord>>) {
         dataSource.handleNextRecords(records)
-        dataSource.increasePage()
-        delegate?.didChangeData()
+        if (dataSource.increasePage()) {
+            delegate?.didChangeData()
+        }
+        loading = false
     }
 
     fun itemIndexesForTimestamp(coinCode: CoinCode, timestamp: Long): List<Int> {

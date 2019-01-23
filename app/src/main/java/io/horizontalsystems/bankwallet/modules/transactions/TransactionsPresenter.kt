@@ -42,15 +42,12 @@ class TransactionsPresenter(private val interactor: TransactionsModule.IInteract
     }
 
     override fun onBottomReached() {
-        if (!loader.loading) {
-            loader.loading = true
-            loader.loadNext()
-        }
+        loader.loadNext(false)
     }
 
     override fun onUpdateCoinCodes(allCoinCodes: List<CoinCode>) {
         loader.setCoinCodes(allCoinCodes)
-        loader.loadNext()
+        loader.loadNext(true)
 
         view?.showFilters(listOf(null).plus(allCoinCodes))
 
@@ -59,7 +56,7 @@ class TransactionsPresenter(private val interactor: TransactionsModule.IInteract
 
     override fun onUpdateSelectedCoinCodes(selectedCoinCodes: List<CoinCode>) {
         loader.setCoinCodes(selectedCoinCodes)
-        loader.loadNext()
+        loader.loadNext(true)
     }
 
     override fun didFetchRecords(records: Map<CoinCode, List<TransactionRecord>>) {
@@ -97,7 +94,6 @@ class TransactionsPresenter(private val interactor: TransactionsModule.IInteract
     }
 
     override fun didChangeData() {
-        loader.loading = false
         view?.reload()
     }
 

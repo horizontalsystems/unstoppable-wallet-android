@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
 import com.nhaarman.mockito_kotlin.inOrder
-import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
 import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
@@ -95,8 +94,7 @@ class TransactionsPresenterTest {
         presenter.onUpdateCoinCodes(allCoinCodes)
 
         verify(loader).setCoinCodes(allCoinCodes)
-        verify(loader).loading = false
-        verify(loader).loadNext()
+        verify(loader).loadNext(true)
         verify(view).showFilters(listOf(null, "BTC", "ETH"))
         verify(interactor).fetchLastBlockHeights()
     }
@@ -108,8 +106,7 @@ class TransactionsPresenterTest {
         presenter.onUpdateSelectedCoinCodes(coinCodes)
 
         verify(loader).setCoinCodes(coinCodes)
-        verify(loader).loading = false
-        verify(loader).loadNext()
+        verify(loader).loadNext(true)
     }
 
     @Test
@@ -129,29 +126,16 @@ class TransactionsPresenterTest {
     }
 
     @Test
-    fun bottomReached_loaderLoading() {
-        whenever(loader.loading).thenReturn(true)
-
+    fun bottomReached() {
         presenter.onBottomReached()
 
-        verify(loader, never()).loadNext()
-
-    }
-
-    @Test
-    fun bottomReached_loaderNotLoading() {
-        whenever(loader.loading).thenReturn(false)
-
-        presenter.onBottomReached()
-
-        verify(loader).loadNext()
+        verify(loader).loadNext(false)
     }
 
     @Test
     fun didChangeData() {
         presenter.didChangeData()
 
-        verify(loader).loading = false
         verify(view).reload()
     }
 
