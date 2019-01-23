@@ -63,8 +63,8 @@
     <string name="Send_DialogTotal">Gesamt:</string>
     <!--Deposit-->
     <string name="Deposit_Title">Erhalten %s</string>
-    <string name="Deposit_Share">Share</string>
-    <string name="Deposit_Your_Address">Your Address</string>
+    <string name="Deposit_Share">Teilen</string>
+    <string name="Deposit_Your_Address">Ihre Adresse</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">gerade eben</string>
     <string name="Timestamp_MinAgo">Vor %d Min</string>
@@ -92,26 +92,26 @@
     <string name="FullInfo_Outputs">Ausgänge</string>
     <string name="FullInfo_Size">Größe</string>
     <string name="FullInfo_Fee">Gebühr</string>
-    <string name="FullInfo_Rate">Rate</string>
-    <string name="FullInfo_Source">Source</string>
+    <string name="FullInfo_Rate">Bewerten</string>
+    <string name="FullInfo_Source">Quelle</string>
     <string name="FullInfo_To">An</string>
     <string name="FullInfo_From">Von</string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
-    <string name="FullInfo_Source_Title">Source</string>
+    <string name="FullInfo_Source_Title">Quelle</string>
     <string name="FullInfo_Source_Online">Online</string>
     <string name="FullInfo_Source_Offline">Offline</string>
     <string name="FullInfo_Error_Subtitle">Offline</string>
-    <string name="FullInfo_Error_Retry">Retry</string>
-    <string name="FullInfo_Error_ChangeSource">Change Source</string>
+    <string name="FullInfo_Error_Retry">Wiederholen</string>
+    <string name="FullInfo_Error_ChangeSource">Quelle ändern</string>
     <!--no used-->
     <string name="FullInfo_Id">ID</string>
     <string name="FullInfo_TotalInput">Insgesamt Eingang</string>
     <string name="FullInfo_TotalOutput">Insgesamte Ausgänge</string>
     <string name="FullInfo_FeePerByte">Gebühr pro byte</string>
     <string name="FullInfo_FeeRate">Fee Rate</string>
-    <string name="FullInfo_NoAddress">No Available</string>
+    <string name="FullInfo_NoAddress">Nicht verfügbar</string>
     <string name="FullInfo_SatByte">sat/B</string>
     <string name="FullInfo_Bytes">Bytes</string>
     <string name="FullInfo_SubtitleInputs">Eingänge</string>
