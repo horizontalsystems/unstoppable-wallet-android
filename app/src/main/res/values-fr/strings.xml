@@ -24,7 +24,7 @@
     <string name="Restore_RestoreFailed">Échec de la restauration du porte-monnaie</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Le mot secret</string>
-    <string name="Backup_Intro_Subtitle">Votre clé secrete est le seul moyen de restaurer votre porte-monnaie et vos fonds si votre téléphone est perdu, volé, cassé ou mis à jour.\n\n Elle contient 12 mots. Stockez-le en toute sécurité hors ligne.</string>
+    <string name="Backup_Intro_Subtitle">Votre clé secrete est le seul moyen de restaurer votre porte-monnaie et vos fonds si votre téléphone est perdu, volé, cassé ou mis à jour.\n\nElle contient 12 mots. Stockez-le en toute sécurité hors ligne.</string>
     <string name="Backup_Intro_Later">Plus tard</string>
     <string name="Backup_Intro_BackupNow">Sauvegarde</string>
     <string name="Backup_Words_Title">Le mot secret</string>
