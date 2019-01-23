@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.core.storage
 
 import android.arch.persistence.room.TypeConverter
+import io.horizontalsystems.bankwallet.core.Error
 import io.horizontalsystems.bankwallet.entities.CoinType
-
 
 class CoinTypeConverter {
 
@@ -14,31 +14,31 @@ class CoinTypeConverter {
 
     @TypeConverter
     fun stringToCoinType(value: String): CoinType {
-        return when(value) {
+        return when (value) {
             bitcoinKey -> CoinType.Bitcoin
             bitcoinCashKey -> CoinType.BitcoinCash
             ethereumKey -> CoinType.Ethereum
             else -> {
                 if (value.contains(erc20Key)) {
-                    val parts = value.split(";")
-                    if (parts.size == 3) {
-                        CoinType.Erc20(parts[1], parts[2].toInt())
-                    }
+                    try {
+                        val parts = value.split(";")
+                        if (parts.size == 3) {
+                            return CoinType.Erc20(parts[1], parts[2].toInt())
+                        }
+                    } catch (e: Exception) { }
                 }
-                throw Throwable()
+                throw Error.CoinTypeException()
             }
         }
     }
 
     @TypeConverter
     fun coinTypeToString(value: CoinType): String {
-        return when(value) {
+        return when (value) {
             is CoinType.Bitcoin -> bitcoinKey
             is CoinType.BitcoinCash -> bitcoinCashKey
             is CoinType.Ethereum -> ethereumKey
-            is CoinType.Erc20 -> {
-                "$erc20Key;${value.address};${value.decimal}"
-            }
+            is CoinType.Erc20 -> "$erc20Key;${value.address};${value.decimal}"
         }
     }
 }

@@ -238,4 +238,5 @@ interface ICoinManager {
 
 sealed class Error : Exception() {
     class InsufficientAmount(val fee: Double) : Error()
+    class CoinTypeException : Error()
 }
