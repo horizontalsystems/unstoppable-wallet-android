@@ -3,9 +3,12 @@ package io.horizontalsystems.bankwallet.modules.restore
 import com.nhaarman.mockito_kotlin.KArgumentCaptor
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.argumentCaptor
+import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.managers.AuthManager
 import io.horizontalsystems.bankwallet.core.managers.WordsManager
+import io.horizontalsystems.hdwalletkit.Mnemonic
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Captor
@@ -13,6 +16,7 @@ import org.mockito.Mockito.*
 
 class RestoreInteractorTest {
 
+    private val authManager = mock(AuthManager::class.java)
     private val wordsManager = mock(WordsManager::class.java)
     private val delegate = mock(RestoreModule.IInteractorDelegate::class.java)
     private val keystoreSafeExecute = mock(IKeyStoreSafeExecute::class.java)
@@ -29,7 +33,7 @@ class RestoreInteractorTest {
 
     @Before
     fun before() {
-        interactor = RestoreInteractor(wordsManager, localStorage, keystoreSafeExecute)
+        interactor = RestoreInteractor(authManager, wordsManager, localStorage, keystoreSafeExecute)
         interactor.delegate = delegate
     }
 
@@ -47,7 +51,7 @@ class RestoreInteractorTest {
         actionRunnable.run()
         successRunnable.run()
 
-        verify(wordsManager).restore(words)
+        verify(authManager).login(words)
     }
 
     @Test
@@ -85,6 +89,22 @@ class RestoreInteractorTest {
 
         verify(delegate).didFailToRestore(any())
         verifyNoMoreInteractions(delegate)
+    }
+
+    @Test
+    fun validate() {
+        val words = listOf("yahoo", "google", "facebook")
+        interactor.validate(words)
+        verify(delegate).didValidate()
+    }
+
+    @Test
+    fun validate_failed() {
+        val words = listOf("yahoo", "google", "facebook")
+        val mnemonicException = Mnemonic.MnemonicException("error")
+        whenever(wordsManager.validate(words)).thenThrow(mnemonicException)
+        interactor.validate(words)
+        verify(delegate).didFailToValidate(mnemonicException)
     }
 
 }

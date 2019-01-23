@@ -41,6 +41,7 @@ object SendModule {
         fun onDeleteClicked()
         fun onSendClicked()
         fun onConfirmClicked()
+        fun onMaxClicked()
     }
 
     interface IInteractor {
@@ -51,9 +52,10 @@ object SendModule {
         fun retrieveRate()
         fun parsePaymentAddress(address: String): PaymentRequestAddress
         fun convertedAmountForInputType(inputType: InputType, amount: Double): Double?
-        fun stateForUserInput(input: UserInput): State
+        fun stateForUserInput(input: UserInput, senderPay: Boolean = true): State
 
         fun send(userInput: UserInput)
+        fun getTotalBalanceMinusFee(inputType: InputType, address: String?): Double
     }
 
     interface IInteractorDelegate {
@@ -62,21 +64,19 @@ object SendModule {
         fun didFailToSend(error: Throwable)
     }
 
-    interface IRouter {
-    }
 
-    fun init(view: SendViewModel, router: IRouter, coinCode: String) {
+    fun init(view: SendViewModel, coinCode: String) {
         val wallet = App.walletManager.wallets.first { it.coinCode == coinCode }
-        val interactor = SendInteractor(App.currencyManager, App.rateManager, TextHelper, wallet)
-        val presenter = SendPresenter(interactor, router, StateViewItemFactory(), UserInput())
-//
+        val interactor = SendInteractor(App.currencyManager, App.rateStorage, TextHelper, wallet)
+        val presenter = SendPresenter(interactor, StateViewItemFactory(), UserInput())
+
         view.delegate = presenter
         presenter.view = view
         interactor.delegate = presenter
     }
 
     fun start(activity: FragmentActivity, coin: String) {
-        SendFragment.show(activity, coin)
+        SendBottomSheetFragment.show(activity, coin)
     }
 
     enum class InputType {
@@ -119,7 +119,6 @@ object SendModule {
         var inputType: InputType = InputType.COIN
         var amount: Double = 0.0
         var address: String? = null
-
     }
 
     class State(var inputType: InputType) {

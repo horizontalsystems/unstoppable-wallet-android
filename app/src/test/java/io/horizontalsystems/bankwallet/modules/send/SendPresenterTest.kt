@@ -11,7 +11,6 @@ import org.mockito.Mockito.mock
 class SendPresenterTest {
 
     private val interactor = mock(SendModule.IInteractor::class.java)
-    private val router = mock(SendModule.IRouter::class.java)
     private val view = mock(SendModule.IView::class.java)
     private val factory = mock(StateViewItemFactory::class.java)
     private val userInput = mock(SendModule.UserInput::class.java)
@@ -27,11 +26,11 @@ class SendPresenterTest {
     fun setup() {
 
         whenever(interactor.parsePaymentAddress(any())).thenReturn(prAddress)
-        whenever(interactor.stateForUserInput(any())).thenReturn(state)
+        whenever(interactor.stateForUserInput(any(), any())).thenReturn(state)
         whenever(factory.viewItemForState(any())).thenReturn(viewItem)
         whenever(factory.confirmationViewItemForState(any())).thenReturn(viewItemConfirm)
 
-        presenter = SendPresenter(interactor, router, factory, userInput)
+        presenter = SendPresenter(interactor, factory, userInput)
         presenter.view = view
     }
 
@@ -40,10 +39,20 @@ class SendPresenterTest {
     @Test
     fun onViewDidLoad() {
         whenever(interactor.clipboardHasPrimaryClip).thenReturn(true)
+        whenever(interactor.coinCode).thenReturn("COIN")
         presenter.onViewDidLoad()
 
-        verify(interactor).retrieveRate()
+        verify(view).setCoin("COIN")
+        verify(view).setAmountInfo(viewItem.amountInfo)
+        verify(view).setSwitchButtonEnabled(viewItem.switchButtonEnabled)
+        verify(view).setHintInfo(viewItem.hintInfo)
+        verify(view).setAddressInfo(viewItem.addressInfo)
+        verify(view).setPrimaryFeeInfo(viewItem.primaryFeeInfo)
+        verify(view).setSecondaryFeeInfo(viewItem.secondaryFeeInfo)
+        verify(view).setSendButtonEnabled(viewItem.sendButtonEnabled)
         verify(view).setPasteButtonState(true)
+
+        verify(interactor).retrieveRate()
     }
 
     @Test
@@ -106,14 +115,9 @@ class SendPresenterTest {
     fun didRateRetrieve() {
         presenter.didRateRetrieve()
 
-        verify(view).setCoin(interactor.coinCode)
-        verify(view).setAmountInfo(viewItem.amountInfo)
         verify(view).setSwitchButtonEnabled(viewItem.switchButtonEnabled)
         verify(view).setHintInfo(viewItem.hintInfo)
-        verify(view).setAddressInfo(viewItem.addressInfo)
-        verify(view).setPrimaryFeeInfo(viewItem.primaryFeeInfo)
         verify(view).setSecondaryFeeInfo(viewItem.secondaryFeeInfo)
-        verify(view).setSendButtonEnabled(viewItem.sendButtonEnabled)
     }
 
     @Test
@@ -130,4 +134,12 @@ class SendPresenterTest {
         presenter.didFailToSend(exception)
         verify(view).showError(exception)
     }
+
+    @Test
+    fun onMaxClicked() {
+        presenter.onMaxClicked()
+        verify(interactor).getTotalBalanceMinusFee(userInput.inputType, userInput.address)
+        verify(view).setAmountInfo(viewItem.amountInfo)
+    }
+
 }

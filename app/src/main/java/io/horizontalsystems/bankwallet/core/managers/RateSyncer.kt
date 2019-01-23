@@ -1,27 +1,36 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.INetworkManager
-import io.horizontalsystems.bankwallet.core.IRateSyncerDelegate
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.horizontalsystems.bankwallet.core.ICurrencyManager
+import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 
-class RateSyncer(private val networkManager: INetworkManager, private val timer: PeriodicTimer) {
+class RateSyncer(private val rateManager: RateManager,
+                 private val walletManager: IWalletManager,
+                 private val currencyManager: ICurrencyManager,
+                 private val networkAvailabilityManager: NetworkAvailabilityManager,
+                 timerSignal: Observable<Unit> = Observable.interval(0L, 3L, TimeUnit.MINUTES).map { Unit }) {
 
-    private var disposables: CompositeDisposable = CompositeDisposable()
-    var delegate: IRateSyncerDelegate? = null
+    private val disposables = CompositeDisposable()
 
-    fun sync(coins: List<String>, currencyCode: String) {
-        disposables.clear()
-        coins.forEach { coin ->
-            disposables.add(networkManager.getLatestRate(coin = coin, currency = currencyCode)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { value ->
-                        delegate?.didSync(coin = coin, currencyCode = currencyCode, latestRate = value)
-                    })
+    init {
+        disposables.add(Observable.merge(
+                walletManager.walletsUpdatedSignal,
+                currencyManager.baseCurrencyUpdatedSignal,
+                networkAvailabilityManager.networkAvailabilitySignal,
+                timerSignal)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe {
+                    requestRefresh()
+                })
+    }
+
+    private fun requestRefresh() {
+        if (networkAvailabilityManager.isConnected) {
+            rateManager.refreshRates(walletManager.wallets.map { it.coinCode }, currencyManager.baseCurrency.code)
         }
-
-        timer.schedule()
     }
 }

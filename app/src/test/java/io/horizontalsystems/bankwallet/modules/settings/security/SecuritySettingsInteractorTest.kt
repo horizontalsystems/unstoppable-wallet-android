@@ -1,8 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.settings.security
 
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockito_kotlin.doReturn
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
 import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.core.managers.WalletManager
+import io.horizontalsystems.bankwallet.core.managers.AuthManager
 import io.horizontalsystems.bankwallet.entities.BiometryType
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
 import io.reactivex.subjects.PublishSubject
@@ -15,7 +18,7 @@ import org.mockito.Mockito.mock
 class SecuritySettingsInteractorTest {
 
     private val delegate = mock(SecuritySettingsModule.ISecuritySettingsInteractorDelegate::class.java)
-    private val walletManager = mock(WalletManager::class.java)
+    private val authManager = mock(AuthManager::class.java)
     private val transactionRepository = mock(ITransactionRecordStorage::class.java)
     private val exchangeRateRepository = mock(IRateStorage::class.java)
 
@@ -24,7 +27,7 @@ class SecuritySettingsInteractorTest {
     private lateinit var wordsManager: IWordsManager
     private lateinit var systemInfoManager: ISystemInfoManager
 
-    private val backedUpSubject = PublishSubject.create<Boolean>()
+    private val backedUpSignal = PublishSubject.create<Unit>()
 
     @Before
     fun setup() {
@@ -32,7 +35,7 @@ class SecuritySettingsInteractorTest {
 
         wordsManager = mock {
             on { isBackedUp } doReturn true
-            on { backedUpSubject } doReturn backedUpSubject
+            on { backedUpSignal } doReturn backedUpSignal
         }
 
         localStorage = mock {
@@ -43,7 +46,7 @@ class SecuritySettingsInteractorTest {
             on { biometryType } doReturn BiometryType.FINGER
         }
 
-        interactor = SecuritySettingsInteractor(walletManager, wordsManager, localStorage, transactionRepository, exchangeRateRepository, systemInfoManager)
+        interactor = SecuritySettingsInteractor(authManager, wordsManager, localStorage, systemInfoManager)
         interactor.delegate = delegate
     }
 
@@ -71,9 +74,9 @@ class SecuritySettingsInteractorTest {
     fun isNotBackedUp() {
         wordsManager = mock {
             on { isBackedUp } doReturn false
-            on { backedUpSubject } doReturn backedUpSubject
+            on { backedUpSignal } doReturn backedUpSignal
         }
-        interactor = SecuritySettingsInteractor(walletManager, wordsManager, localStorage, transactionRepository, exchangeRateRepository, systemInfoManager)
+        interactor = SecuritySettingsInteractor(authManager, wordsManager, localStorage, systemInfoManager)
         interactor.delegate = delegate
 
         assertFalse(interactor.isBackedUp)
@@ -84,7 +87,7 @@ class SecuritySettingsInteractorTest {
         localStorage = mock {
             on { isBiometricOn } doReturn false
         }
-        interactor = SecuritySettingsInteractor(walletManager, wordsManager, localStorage, transactionRepository, exchangeRateRepository, systemInfoManager)
+        interactor = SecuritySettingsInteractor(authManager, wordsManager, localStorage, systemInfoManager)
         interactor.delegate = delegate
 
         assertFalse(interactor.getBiometricUnlockOn())
@@ -100,22 +103,13 @@ class SecuritySettingsInteractorTest {
     fun unlinkWallet() {
         interactor.unlinkWallet()
 
-        verify(walletManager).clearWallets()
-        verify(localStorage).clearAll()
-        verify(transactionRepository).deleteAll()
-        verify(exchangeRateRepository).deleteAll()
+        verify(authManager).logout()
         verify(delegate).didUnlinkWallet()
     }
 
     @Test
-    fun testBackedUpSubjectTrue() {
-        backedUpSubject.onNext(true)
+    fun testBackedUpSignal() {
+        backedUpSignal.onNext(Unit)
         verify(delegate).didBackup()
-    }
-
-    @Test
-    fun testBackedUpSubjectFalse() {
-        backedUpSubject.onNext(false)
-        verify(delegate, never()).didBackup()
     }
 }

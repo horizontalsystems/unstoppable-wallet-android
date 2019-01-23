@@ -3,7 +3,9 @@ package io.horizontalsystems.bankwallet.modules.receive
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.receive.viewitems.AddressItem
 
-class ReceivePresenter(private val interactor: ReceiveModule.IInteractor) : ReceiveModule.IViewDelegate, ReceiveModule.IInteractorDelegate {
+class ReceivePresenter(
+        private val interactor: ReceiveModule.IInteractor,
+        private val router: ReceiveModule.IRouter) : ReceiveModule.IViewDelegate, ReceiveModule.IInteractorDelegate {
 
     var view: ReceiveModule.IView? = null
     private var receiveAddresses: List<AddressItem> = mutableListOf()
@@ -21,8 +23,8 @@ class ReceivePresenter(private val interactor: ReceiveModule.IInteractor) : Rece
         view?.showError(R.string.Error)
     }
 
-    override fun onCopyClick(index: Int) {
-        interactor.copyToClipboard(receiveAddresses[index].address)
+    override fun onShareClick(index: Int) {
+        router.shareAddress(receiveAddresses[index].address)
     }
 
     override fun didCopyToClipboard() {

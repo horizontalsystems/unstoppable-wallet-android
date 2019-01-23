@@ -3,51 +3,34 @@ package io.horizontalsystems.bankwallet.core.managers
 import android.os.Handler
 import android.os.HandlerThread
 import io.horizontalsystems.bankwallet.core.IWalletManager
-import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
-import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.core.factories.WalletFactory
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
-class WalletManager(private val adapterFactory: AdapterFactory) : IWalletManager, HandlerThread("A") {
+class WalletManager(private val coinManager: CoinManager, private val authManager: AuthManager, private val walletFactory: WalletFactory) : IWalletManager, HandlerThread("A") {
 
     private val handler: Handler
+    private val disposables = CompositeDisposable()
 
     init {
         start()
         handler = Handler(looper)
+
+        initWallets()
+
+        disposables.add(authManager.authDataSignal
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe {
+                    initWallets()
+                }
+        )
     }
 
     override var wallets: List<Wallet> = listOf()
-    override val walletsSubject = PublishSubject.create<List<Wallet>>()
-
-    override fun initWallets(words: List<String>, coins: List<Coin>, newWallet: Boolean, walletId: String?) {
-        handler.post {
-            val newWallets = mutableListOf<Wallet>()
-
-            wallets = coins.mapNotNull { coin ->
-                var wallet = wallets.firstOrNull { it.coinCode == coin.code }
-
-                if (wallet != null) {
-                    wallet
-                } else {
-                    val adapter = adapterFactory.adapterForCoin(coin.type, words, newWallet, walletId)
-
-                    if (adapter == null) {
-                        null
-                    } else {
-                        wallet = Wallet(coin.title, coin.code, adapter)
-
-                        newWallets.add(wallet)
-                        wallet
-                    }
-                }
-            }
-
-            walletsSubject.onNext(wallets)
-
-            newWallets.forEach { it.adapter.start() }
-        }
-    }
+    override val walletsUpdatedSignal = PublishSubject.create<Unit>()
 
     override fun refreshWallets() {
         handler.post {
@@ -55,10 +38,24 @@ class WalletManager(private val adapterFactory: AdapterFactory) : IWalletManager
         }
     }
 
+    override fun initWallets() {
+        authManager.authData?.let { authData ->
+            handler.post {
+                wallets = coinManager.coins.mapNotNull { coin ->
+                    wallets.find { it.coinCode == coin.code }
+                            ?: walletFactory.createWallet(coin, authData)
+                }
+
+                walletsUpdatedSignal.onNext(Unit)
+            }
+        }
+    }
+
     override fun clearWallets() {
         handler.post {
             wallets.forEach { it.adapter.clear() }
             wallets = listOf()
+            walletsUpdatedSignal.onNext(Unit)
         }
     }
 }

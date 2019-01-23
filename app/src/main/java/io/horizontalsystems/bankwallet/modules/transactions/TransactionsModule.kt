@@ -26,21 +26,6 @@ sealed class TransactionStatus {
     object Completed : TransactionStatus()
 }
 
-
-//extension TransactionStatus: Equatable {
-//
-//    public static func ==(lhs: TransactionStatus, rhs: TransactionStatus) -> Bool {
-//        switch (lhs, rhs) {
-//        case (.pending, .pending): return true
-//        case (let .processing(lhsProgress), let .processing(rhsProgress)): return lhsProgress == rhsProgress
-//        case (.completed, .completed): return true
-//        default: return false
-//        }
-//    }
-//
-//}
-//
-
 object TransactionsModule {
 
     interface IView {
@@ -94,10 +79,6 @@ object TransactionsModule {
     }
 
     fun initModule(view: TransactionsViewModel, router: IRouter) {
-//        App.walletManager.initWallets(
-//                listOf("subway", "plate", "brick", "pattern", "inform", "used", "oblige", "identify", "cherry", "drop", "flush", "balance"),
-//                listOf("BTCt", "ETHt")
-//        )
 
         val dataSource = TransactionRecordDataSource(App.appDatabase)
         val interactor = TransactionsInteractor(App.walletManager, dataSource)

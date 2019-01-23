@@ -6,7 +6,6 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.annotation.NonNull
 import android.support.design.widget.BottomSheetBehavior
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -115,7 +114,7 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
         transInfoViewModel = ViewModelProviders.of(this).get(TransactionInfoViewModel::class.java)
         transInfoViewModel.init()
 
-        transactionId.setOnClickListener { transInfoViewModel.delegate.onCopyId() }
+        transactionIdView.setOnClickListener { transInfoViewModel.delegate.onCopyId() }
         txtFullInfo.setOnClickListener { transInfoViewModel.delegate.showFullInfo() }
         transactionsDim.setOnClickListener { bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED }
 
@@ -123,10 +122,10 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
             HudHelper.showSuccessMessage(R.string.Hud_Text_Copied)
         })
 
-        transInfoViewModel.showFullInfoLiveEvent.observe(this, Observer { transactionHash ->
-            transactionHash?.let {
+        transInfoViewModel.showFullInfoLiveEvent.observe(this, Observer { pair ->
+            pair?.let {
                 activity?.let { activity ->
-                    FullTransactionInfoModule.start(activity)
+                    FullTransactionInfoModule.start(activity, transactionHash = it.first, coinCode = it.second)
                 }
             }
         })
@@ -139,38 +138,34 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
                 val txStatus = txRec.status
 
                 fiatValue.apply {
-                    text = txRec.currencyValue?.let { ValueFormatter.format(it, showNegativeSign = true) }
+                    text = txRec.currencyValue?.let { ValueFormatter.format(it, showNegativeSign = true, realNumber = true) }
                     setTextColor(resources.getColor(if (txRec.incoming) R.color.green_crypto else R.color.yellow_crypto, null))
                 }
 
                 coinValue.apply {
-                    text = ValueFormatter.format(txRec.coinValue, true)
+                    text = ValueFormatter.format(txRec.coinValue, true, true)
                 }
 
                 itemTime.apply {
-                    bind(title = getString(R.string.TransactionInfo_Time),
-                            valueTitle = txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) } ?: "",
-                            showBottomBorder = true)
+                    bindTime(title = getString(R.string.TransactionInfo_Time), time = txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) } ?: "")
                 }
 
                 itemStatus.apply {
                     bindStatus(txStatus)
                 }
 
-                transactionId.apply {
-                    text = txRec.transactionHash
-                }
+                transactionIdView.bindTransactionId(txRec.transactionHash)
 
                 itemFrom.apply {
                     setOnClickListener { transInfoViewModel.delegate.onCopyFromAddress() }
                     visibility = if (txRec.from.isNullOrEmpty()) View.GONE else View.VISIBLE
-                    bind(title = getString(R.string.TransactionInfo_From), valueTitle = txRec.from, valueIcon = R.drawable.round_person_18px, showBottomBorder = true)
+                    bindAddress(title = getString(R.string.TransactionInfo_From), address = txRec.from, showBottomBorder = true)
                 }
 
                 itemTo.apply {
                     setOnClickListener { transInfoViewModel.delegate.onCopyToAddress() }
                     visibility = if (txRec.to.isNullOrEmpty()) View.GONE else View.VISIBLE
-                    bind(title = getString(R.string.TransactionInfo_To), valueTitle = txRec.to, valueIcon = R.drawable.round_person_18px, showBottomBorder = true)
+                    bindAddress(title = getString(R.string.TransactionInfo_To), address = txRec.to, showBottomBorder = true)
                 }
             }
         })
@@ -205,8 +200,12 @@ class TransactionsAdapter(private var listener: Listener) : RecyclerView.Adapter
 
     override fun getItemCount() = viewModel.delegate.itemsCount
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-            ViewHolderTransaction(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_transaction, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.view_holder_transaction, parent, false)
+
+        return ViewHolderTransaction(view)
+    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
@@ -224,13 +223,10 @@ class ViewHolderTransaction(override val containerView: View) : RecyclerView.Vie
     fun bind(transactionRecord: TransactionViewItem, onClick: () -> (Unit)) {
 
         containerView.setOnSingleClickListener { onClick.invoke() }
-
-        val amountTextColor = if (transactionRecord.incoming) R.color.green_crypto else R.color.yellow_crypto
-        txAmount.setTextColor(ContextCompat.getColor(itemView.context, amountTextColor))
-        txAmount.text = ValueFormatter.format(transactionRecord.coinValue, true)
+        txValueInFiat.text = transactionRecord.currencyValue?.let { ValueFormatter.formatForTransactions(it, transactionRecord.incoming) }
+        txValueInCoin.text = ValueFormatter.format(transactionRecord.coinValue, true)
         txDate.text = transactionRecord.date?.let { DateHelper.getShortDateForTransaction(it) }
         txTime.text = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }
-        txValueInFiat.text = transactionRecord.currencyValue?.let { ValueFormatter.format(it, true, false) }
         statusIcon.setImageDrawable(getStatusIcon(transactionRecord.status))
         pendingShade.visibility = if (transactionRecord.status == TransactionStatus.Pending) View.VISIBLE else View.GONE
     }

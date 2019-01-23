@@ -1,0 +1,269 @@
+package io.horizontalsystems.bankwallet.modules.balance
+
+import com.nhaarman.mockito_kotlin.whenever
+import io.horizontalsystems.bankwallet.core.AdapterState
+import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.Rate
+import org.junit.Assert
+import org.junit.Test
+import org.mockito.Mockito.mock
+
+class BalanceViewItemFactoryTest {
+
+    private val factory = BalanceViewItemFactory()
+    val currency = mock(Currency::class.java)
+
+    @Test
+    fun createViewItem_coinValue() {
+        val coinCode = "coinCode"
+        val balance = 12.23
+        val item = BalanceModule.BalanceItem("title", coinCode, balance)
+
+        val viewItem = factory.createViewItem(item, null)
+
+        Assert.assertEquals(CoinValue(coinCode, balance), viewItem.coinValue)
+    }
+
+    @Test
+    fun createViewItem_rateExpired_noRate() {
+        val item = BalanceModule.BalanceItem("title", "coinCode")
+
+        val viewItem = factory.createViewItem(item, null)
+
+        Assert.assertFalse(viewItem.rateExpired)
+    }
+
+    @Test
+    fun createViewItem_rateExpired_withRate() {
+        val rate = mock(Rate::class.java)
+        val item = BalanceModule.BalanceItem("title", "coinCode", rate = rate)
+
+        whenever(rate.expired).thenReturn(true)
+
+        val viewItem = factory.createViewItem(item, null)
+
+        Assert.assertTrue(viewItem.rateExpired)
+    }
+
+    @Test
+    fun createViewItem_state() {
+        val state = AdapterState.Synced
+        val item = BalanceModule.BalanceItem("title", "coinCode", state = state)
+
+        val viewItem = factory.createViewItem(item, null)
+
+        Assert.assertEquals(state, viewItem.state)
+    }
+
+    @Test
+    fun createViewItem_exchangeValue_currencyValue_noRate_withCurrency() {
+        val item = BalanceModule.BalanceItem("title", "coinCode")
+
+        val viewItem = factory.createViewItem(item, currency)
+
+        Assert.assertNull(viewItem.exchangeValue)
+        Assert.assertNull(viewItem.currencyValue)
+    }
+
+    @Test
+    fun createViewItem_exchangeValue_currencyValue_withRate_noCurrency() {
+        val item = BalanceModule.BalanceItem("title", "coinCode", rate = Rate("coinCode", "", 123.123))
+
+        val viewItem = factory.createViewItem(item, null)
+
+        Assert.assertNull(viewItem.exchangeValue)
+        Assert.assertNull(viewItem.currencyValue)
+    }
+
+    @Test
+    fun createViewItem_exchangeValue_currencyValue() {
+        val balance = 234.345
+        val rate = 123.123123
+        val exchangeValue = CurrencyValue(currency, rate)
+        val currencyValue = CurrencyValue(currency, rate * balance)
+        val item = BalanceModule.BalanceItem("title", "coinCode", balance = balance, rate = Rate("coinCode", "", rate))
+
+        val viewItem = factory.createViewItem(item, currency)
+
+        Assert.assertEquals(exchangeValue, viewItem.exchangeValue)
+        Assert.assertEquals(currencyValue, viewItem.currencyValue)
+    }
+
+    @Test
+    fun createHeaderViewItem_currencyValue_nullCurrency() {
+        val viewItem = factory.createHeaderViewItem(listOf(), null)
+
+        Assert.assertNull(viewItem.currencyValue)
+    }
+
+    @Test
+    fun createHeaderViewItem_currencyValue() {
+        val currency = mock(Currency::class.java)
+
+        val balance1 = 10.0
+        val rate1 = 123.0
+        val rateObject1 = mock(Rate::class.java)
+        val balanceItem1 = mock(BalanceModule.BalanceItem::class.java)
+
+        val balance2 = 13.0
+        val rate2 = 1245.0
+        val rateObject2 = mock(Rate::class.java)
+        val balanceItem2 = mock(BalanceModule.BalanceItem::class.java)
+
+        val expectedCurrencyValue = CurrencyValue(currency, balance1 * rate1 + balance2 * rate2)
+
+        whenever(balanceItem1.balance).thenReturn(balance1)
+        whenever(balanceItem1.rate).thenReturn(rateObject1)
+        whenever(rateObject1.value).thenReturn(rate1)
+
+        whenever(balanceItem2.balance).thenReturn(balance2)
+        whenever(balanceItem2.rate).thenReturn(rateObject2)
+        whenever(rateObject2.value).thenReturn(rate2)
+
+        val viewItem = factory.createHeaderViewItem(listOf(balanceItem1, balanceItem2), currency)
+
+        Assert.assertEquals(expectedCurrencyValue, viewItem.currencyValue)
+    }
+
+    @Test
+    fun createHeaderViewItem_currencyValue_withNoRate() {
+        val currency = mock(Currency::class.java)
+
+        val balance1 = 10.0
+        val rate1 = 123.0
+        val rateObject1 = mock(Rate::class.java)
+        val balanceItem1 = mock(BalanceModule.BalanceItem::class.java)
+
+        val balance2 = 13.0
+        val balanceItem2 = mock(BalanceModule.BalanceItem::class.java)
+
+        val expectedCurrencyValue = CurrencyValue(currency, balance1 * rate1)
+
+        whenever(balanceItem1.balance).thenReturn(balance1)
+        whenever(balanceItem1.rate).thenReturn(rateObject1)
+        whenever(rateObject1.value).thenReturn(rate1)
+
+        whenever(balanceItem2.balance).thenReturn(balance2)
+        whenever(balanceItem2.rate).thenReturn(null)
+
+        val viewItem = factory.createHeaderViewItem(listOf(balanceItem1, balanceItem2), currency)
+
+        Assert.assertEquals(expectedCurrencyValue, viewItem.currencyValue)
+    }
+
+    @Test
+    fun createHeaderViewItem_upToDate() {
+        val currency = mock(Currency::class.java)
+
+        val balance1 = 10.0
+        val rate1 = 123.0
+        val rateObject1 = mock(Rate::class.java)
+        val balanceItem1 = mock(BalanceModule.BalanceItem::class.java)
+
+        val balance2 = 13.0
+        val rate2 = 1245.0
+        val rateObject2 = mock(Rate::class.java)
+        val balanceItem2 = mock(BalanceModule.BalanceItem::class.java)
+
+        whenever(balanceItem1.balance).thenReturn(balance1)
+        whenever(balanceItem1.state).thenReturn(AdapterState.Synced)
+        whenever(balanceItem1.rate).thenReturn(rateObject1)
+        whenever(rateObject1.value).thenReturn(rate1)
+
+        whenever(balanceItem2.balance).thenReturn(balance2)
+        whenever(balanceItem2.state).thenReturn(AdapterState.Synced)
+        whenever(balanceItem2.rate).thenReturn(rateObject2)
+        whenever(rateObject2.value).thenReturn(rate2)
+
+        val viewItem = factory.createHeaderViewItem(listOf(balanceItem1, balanceItem2), currency)
+
+        Assert.assertTrue(viewItem.upToDate)
+    }
+
+    @Test
+    fun createHeaderViewItem_upToDate_rateExpired() {
+        val currency = mock(Currency::class.java)
+
+        val balance1 = 10.0
+        val rate1 = 123.0
+        val rateObject1 = mock(Rate::class.java)
+        val balanceItem1 = mock(BalanceModule.BalanceItem::class.java)
+
+        val balance2 = 13.0
+        val rate2 = 1245.0
+        val rateObject2 = mock(Rate::class.java)
+        val balanceItem2 = mock(BalanceModule.BalanceItem::class.java)
+
+        whenever(balanceItem1.balance).thenReturn(balance1)
+        whenever(balanceItem1.rate).thenReturn(rateObject1)
+        whenever(rateObject1.value).thenReturn(rate1)
+        whenever(rateObject1.expired).thenReturn(false)
+
+        whenever(balanceItem2.balance).thenReturn(balance2)
+        whenever(balanceItem2.rate).thenReturn(rateObject2)
+        whenever(rateObject2.value).thenReturn(rate2)
+        whenever(rateObject2.expired).thenReturn(true)
+
+        val viewItem = factory.createHeaderViewItem(listOf(balanceItem1, balanceItem2), currency)
+
+        Assert.assertFalse(viewItem.upToDate)
+    }
+
+    @Test
+    fun createHeaderViewItem_upToDate_itemNotSynced() {
+        val currency = mock(Currency::class.java)
+
+        val balance1 = 10.0
+        val rate1 = 123.0
+        val rateObject1 = mock(Rate::class.java)
+        val balanceItem1 = mock(BalanceModule.BalanceItem::class.java)
+
+        val balance2 = 13.0
+        val rate2 = 1245.0
+        val rateObject2 = mock(Rate::class.java)
+        val balanceItem2 = mock(BalanceModule.BalanceItem::class.java)
+
+        whenever(balanceItem1.balance).thenReturn(balance1)
+        whenever(balanceItem1.state).thenReturn(AdapterState.Synced)
+        whenever(balanceItem1.rate).thenReturn(rateObject1)
+        whenever(rateObject1.value).thenReturn(rate1)
+        whenever(rateObject1.expired).thenReturn(false)
+
+        whenever(balanceItem2.balance).thenReturn(balance2)
+        whenever(balanceItem2.rate).thenReturn(rateObject2)
+        whenever(balanceItem2.state).thenReturn(AdapterState.NotSynced)
+        whenever(rateObject2.value).thenReturn(rate2)
+        whenever(rateObject2.expired).thenReturn(false)
+
+        val viewItem = factory.createHeaderViewItem(listOf(balanceItem1, balanceItem2), currency)
+
+        Assert.assertFalse(viewItem.upToDate)
+    }
+
+    @Test
+    fun createHeaderViewItem_upToDate_noRate() {
+        val currency = mock(Currency::class.java)
+
+        val balance1 = 10.0
+        val rate1 = 123.0
+        val rateObject1 = mock(Rate::class.java)
+        val balanceItem1 = mock(BalanceModule.BalanceItem::class.java)
+
+        val balance2 = 13.0
+        val balanceItem2 = mock(BalanceModule.BalanceItem::class.java)
+
+        whenever(balanceItem1.balance).thenReturn(balance1)
+        whenever(balanceItem1.rate).thenReturn(rateObject1)
+        whenever(rateObject1.value).thenReturn(rate1)
+
+        whenever(balanceItem2.balance).thenReturn(balance2)
+        whenever(balanceItem2.rate).thenReturn(null)
+
+        val viewItem = factory.createHeaderViewItem(listOf(balanceItem1, balanceItem2), currency)
+
+        Assert.assertFalse(viewItem.upToDate)
+    }
+
+}

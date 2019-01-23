@@ -1,13 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.pin.unlock
 
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.managers.AuthManager
 import io.horizontalsystems.bankwallet.core.managers.OneTimeTimer
 import io.horizontalsystems.bankwallet.entities.LockoutState
 
 class UnlockPinInteractor(
         private val keystoreSafeExecute: IKeyStoreSafeExecute,
         private val localStorage: ILocalStorage,
-        private val wordsManager: IWordsManager,
+        private val authManager: AuthManager,
         private val pinManager: IPinManager,
         private val lockManager: ILockManager,
         private val encryptionManager: IEncryptionManager,
@@ -27,9 +28,8 @@ class UnlockPinInteractor(
                     if (pinManager.pin.isNullOrEmpty() && pinManager.isPinSet) {
                         pinManager.safeLoad()
                     }
-                    if (wordsManager.words == null || wordsManager.words?.isEmpty() == true) {
-                        wordsManager.safeLoad()
-                        wordsManager.loggedInSubject.onNext(LogInState.RESUME)
+                    if (authManager.authData == null) {
+                        authManager.safeLoad()
                     }
                     if (isBiometricOn()) {
                         encryptionManager.getCryptoObject()?.let { delegate?.setCryptoObject(it) }

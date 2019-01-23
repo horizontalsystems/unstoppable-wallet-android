@@ -1,21 +1,24 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
+import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.Flowable
 import io.reactivex.Maybe
+import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import java.util.*
 
 interface IWalletManager {
     val wallets: List<Wallet>
-    val walletsSubject: PublishSubject<List<Wallet>>
+    val walletsUpdatedSignal: Observable<Unit>
 
-    fun initWallets(words: List<String>, coins: List<Coin>, newWallet: Boolean, walletId: String?)
     fun refreshWallets()
+    fun initWallets()
     fun clearWallets()
 }
 
@@ -27,15 +30,18 @@ interface ILocalStorage {
     var iUnderstand: Boolean
     var baseCurrencyCode: String?
     var blockTillDate: Long?
-    fun clearAll()
     var isNewWallet: Boolean
     var failedAttempts: Int?
     var lockoutUptime: Long?
+    var baseBitcoinProvider: String?
+    var baseEthereumProvider: String?
+
+    fun clearAll()
 }
 
 interface ISecuredStorage {
-    val authData: List<String>?
-    fun saveAuthData(words: List<String>)
+    val authData: AuthData?
+    fun saveAuthData(authData: AuthData)
     fun noAuthData(): Boolean
     val savedPin: String?
     fun savePin(pin: String)
@@ -49,6 +55,8 @@ interface IRandomProvider {
 interface INetworkManager {
     fun getLatestRate(coin: String, currency: String): Flowable<LatestRate>
     fun getRate(coinCode: String, currency: String, timestamp: Long): Flowable<Double>
+    fun getTransaction(host: String, path: String): Flowable<JsonObject>
+    fun ping(host: String, url: String): Flowable<JsonObject>
 }
 
 interface IEncryptionManager {
@@ -65,9 +73,21 @@ interface IClipboardManager {
 
 interface ICurrencyManager {
     val baseCurrency: Currency
+    val baseCurrencyUpdatedSignal: Observable<Unit>
     val currencies: List<Currency>
-    var subject: PublishSubject<Currency>
     fun setBaseCurrency(code: String)
+}
+
+interface ITransactionDataProviderManager {
+    val baseProviderUpdatedSignal: Observable<Unit>
+
+    fun providers(coinCode: CoinCode): List<FullTransactionInfoModule.Provider>
+    fun baseProvider(coinCode: CoinCode): FullTransactionInfoModule.Provider
+    fun setBaseProvider(name: String, coinCode: CoinCode)
+
+    fun bitcoin(name: String): FullTransactionInfoModule.BitcoinForksProvider
+    fun bitcoinCash(name: String): FullTransactionInfoModule.BitcoinForksProvider
+    fun ethereum(name: String): FullTransactionInfoModule.EthereumForksProvider
 }
 
 interface IKeyStoreSafeExecute {
@@ -75,21 +95,11 @@ interface IKeyStoreSafeExecute {
 }
 
 interface IWordsManager {
-    fun safeLoad()
-    var words: List<String>?
-    var walletId: String?
     var isBackedUp: Boolean
-    var isLoggedIn: Boolean
-    var loggedInSubject: PublishSubject<LogInState>
-    var backedUpSubject: PublishSubject<Boolean>
-    fun createWords()
-    fun validate(words: List<String>)
-    fun restore(words: List<String>)
-    fun logout()
-}
+    var backedUpSignal: PublishSubject<Unit>
 
-enum class LogInState {
-    CREATE, RESTORE, RESUME, LOGOUT
+    fun validate(words: List<String>)
+    fun generateWords(): List<String>
 }
 
 interface ILanguageManager {
@@ -106,10 +116,9 @@ sealed class AdapterState {
 
 interface IAdapter {
     val balance: Double
-    val balanceSubject: PublishSubject<Double>
 
-    val state: AdapterState
-    val stateSubject: PublishSubject<AdapterState>
+    val balanceObservable: Flowable<Double>
+    val stateObservable: Flowable<AdapterState>
 
     val confirmationsThreshold: Int
     val lastBlockHeight: Int?
@@ -149,6 +158,7 @@ interface IPinManager {
     val isPinSet: Boolean
     fun store(pin: String)
     fun validate(pin: String): Boolean
+    fun clear()
 }
 
 interface ILockManager {
@@ -165,21 +175,13 @@ interface IAppConfigProvider {
     val currencies: List<Currency>
 }
 
-interface IPeriodicTimerDelegate {
-    fun onFire()
-}
-
 interface IOneTimerDelegate {
     fun onFire()
 }
 
-interface IRateSyncerDelegate {
-    fun didSync(coin: String, currencyCode: String, latestRate: LatestRate)
-}
-
 interface IRateStorage {
-    fun rate(coinCode: CoinCode, currencyCode: String): Maybe<Rate>
-    fun save(latestRate: LatestRate, coinCode: CoinCode, currencyCode: String)
+    fun rateObservable(coinCode: CoinCode, currencyCode: String): Flowable<Rate>
+    fun save(rate: Rate)
     fun getAll(): Flowable<List<Rate>>
     fun deleteAll()
 }
@@ -218,6 +220,6 @@ interface ICurrentDateProvider {
     val currentDate: Date
 }
 
-sealed class Error: Exception() {
+sealed class Error : Exception() {
     class InsufficientAmount(val fee: Double) : Error()
 }

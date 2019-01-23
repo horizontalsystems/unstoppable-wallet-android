@@ -5,11 +5,13 @@ import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import com.squareup.leakcanary.LeakCanary
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
+import io.horizontalsystems.bankwallet.core.factories.WalletFactory
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bankwallet.core.storage.RatesRepository
 import io.horizontalsystems.bankwallet.core.storage.TransactionRepository
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
 import io.horizontalsystems.bitcoinkit.BitcoinKit
 import io.horizontalsystems.ethereumkit.EthereumKit
 import java.util.*
@@ -24,6 +26,7 @@ class App : Application() {
         lateinit var localStorage: ILocalStorage
         lateinit var encryptionManager: EncryptionManager
         lateinit var wordsManager: WordsManager
+        lateinit var authManager: AuthManager
         lateinit var randomManager: IRandomProvider
         lateinit var networkManager: INetworkManager
         lateinit var currencyManager: ICurrencyManager
@@ -38,13 +41,15 @@ class App : Application() {
 
         lateinit var rateSyncer: RateSyncer
         lateinit var rateManager: RateManager
-        lateinit var periodicTimer: PeriodicTimer
         lateinit var networkAvailabilityManager: NetworkAvailabilityManager
         lateinit var transactionRateSyncer: ITransactionRateSyncer
         lateinit var transactionManager: TransactionManager
         lateinit var appDatabase: AppDatabase
         lateinit var transactionStorage: ITransactionRecordStorage
         lateinit var rateStorage: IRateStorage
+        lateinit var transactionInfoFactory: FullTransactionInfoFactory
+        lateinit var transactionDataProviderManager: TransactionDataProviderManager
+        lateinit var appCloseManager: AppCloseManager
 
         val testMode = true
 
@@ -79,33 +84,38 @@ class App : Application() {
         encryptionManager = EncryptionManager()
         secureStorage = SecuredStorageManager(encryptionManager)
         localStorage = LocalStorageManager()
-        wordsManager = WordsManager(localStorage, secureStorage)
+        wordsManager = WordsManager(localStorage)
+        authManager = AuthManager(secureStorage, localStorage)
         randomManager = RandomProvider()
         networkManager = NetworkManager()
         systemInfoManager = SystemInfoManager()
         pinManager = PinManager(secureStorage)
-        lockManager = LockManager(secureStorage, wordsManager)
+        lockManager = LockManager(secureStorage, authManager)
         appConfigProvider = AppConfigProvider()
         languageManager = LanguageManager(localStorage, appConfigProvider, fallbackLanguage)
         currencyManager = CurrencyManager(localStorage, appConfigProvider)
-        walletManager = WalletManager(AdapterFactory(appConfigProvider))
-        coinManager = CoinManager(wordsManager, walletManager, appConfigProvider)
+        coinManager = CoinManager(appConfigProvider)
+        walletManager = WalletManager(coinManager, authManager, WalletFactory(AdapterFactory(appConfigProvider)))
 
         networkAvailabilityManager = NetworkAvailabilityManager()
-        periodicTimer = PeriodicTimer(delay = 3 * 60 * 1000)
-        rateSyncer = RateSyncer(networkManager, periodicTimer)
 
         appDatabase = AppDatabase.getInstance(this)
         transactionStorage = TransactionRepository(appDatabase)
 
-        rateStorage = RatesRepository(appDatabase)
-        rateManager = RateManager(rateStorage, rateSyncer, walletManager, currencyManager, wordsManager, networkAvailabilityManager, periodicTimer)
+        appCloseManager = AppCloseManager()
 
-        rateSyncer.delegate = rateManager
+        rateStorage = RatesRepository(appDatabase)
+        rateManager = RateManager(rateStorage, networkManager)
+        rateSyncer = RateSyncer(rateManager, walletManager, currencyManager, networkAvailabilityManager)
 
         transactionRateSyncer = TransactionRateSyncer(transactionStorage, networkManager)
         transactionManager = TransactionManager(transactionStorage, transactionRateSyncer, walletManager, currencyManager, wordsManager, networkAvailabilityManager)
+        transactionDataProviderManager = TransactionDataProviderManager(appConfigProvider, localStorage)
+        transactionInfoFactory = FullTransactionInfoFactory(networkManager, transactionDataProviderManager)
 
+        authManager.walletManager = walletManager
+        authManager.pinManager = pinManager
+        authManager.transactionManager = transactionManager
     }
 
 }
