@@ -83,6 +83,7 @@
     <string name="TransactionInfo_From">От</string>
     <string name="TransactionInfo_Time">Время</string>
     <string name="TransactionInfo_ButtonMore">Ещё</string>
+    <string name="TransactionInfo_Status_Pending">Pending</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Транзакция</string>
     <string name="FullInfo_Time">Время</string>
