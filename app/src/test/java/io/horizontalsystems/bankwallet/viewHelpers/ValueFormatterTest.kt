@@ -14,93 +14,36 @@ class ValueFormatterTest {
     private val btcCoinCode: CoinCode = "BTC"
 
 
-    //Currency formatting
     @Test
-    fun format_Currency_12_03903() {
-        val value = CurrencyValue(usdCurrency,12.03903)
-        val formatted = formatter.format(value)
-        val expected = "$ 12.04"
-        Assert.assertEquals(expected, formatted)
+    fun format_Currency() {
+        assertCurrencyFormatter(12.03903, "$ 12.04")
+        assertCurrencyFormatter(12.03203, "$ 12.03")
+        assertCurrencyFormatter(1203.903, "$ 1,204")
+        assertCurrencyFormatter(0.0003903, "$ 0.01")
+        assertCurrencyFormatter(-0.0003903, "- $ 0.01")
     }
 
     @Test
-    fun format_Currency_12_03203() {
-        val value = CurrencyValue(usdCurrency,12.03203)
-        val formatted = formatter.format(value)
-        val expected = "$ 12.03"
-        Assert.assertEquals(expected, formatted)
+    fun format_Coin() {
+        assertCoinFormatter(12.03903001, "12.039 BTC")
+        assertCoinFormatter(12.0000000012345, "12 BTC")
+        assertCoinFormatter(12.00000000, "12 BTC")
+        assertCoinFormatter(0.000030012345, "0.00003001 BTC")
+        assertCoinFormatter(0.0000000012345, "0 BTC")
+        assertCoinFormatter(0.123456789, "0.1235 BTC")
     }
 
-    @Test
-    fun format_Currency_1203_903() {
-        val value = CurrencyValue(usdCurrency,1203.903)
-        val formatted = formatter.format(value)
-        val expected = "$ 1,204"
-        Assert.assertEquals(expected, formatted)
-    }
 
-    @Test
-    fun format_Currency_0_000903() {
-        val value = CurrencyValue(usdCurrency,0.0003903)
-        val formatted = formatter.format(value)
-        val expected = "$ 0.01"
-        Assert.assertEquals(expected, formatted)
-    }
-
-    @Test
-    fun format_Currency_negative_0_000903() {
-        val value = CurrencyValue(usdCurrency,-0.0003903)
+    private fun assertCurrencyFormatter(input: Double, expected: String) {
+        val value = CurrencyValue(usdCurrency, input)
         val formatted = formatter.format(value, showNegativeSign = true)
-        val expected = "- $ 0.01"
         Assert.assertEquals(expected, formatted)
     }
 
-    //Coin formatting
-    @Test
-    fun format_Coin_12_039030012345() {
-        val value = CoinValue(btcCoinCode,12.039030012345)
+    private fun assertCoinFormatter(input: Double, expected: String) {
+        val value = CoinValue(btcCoinCode, input)
         val formatted = formatter.format(value)
-        val expected = "12.039 BTC"
         Assert.assertEquals(expected, formatted)
     }
 
-    @Test
-    fun format_Coin_12_0000000012345() {
-        val value = CoinValue(btcCoinCode,12.0000000012345)
-        val formatted = formatter.format(value)
-        val expected = "12 BTC"
-        Assert.assertEquals(expected, formatted)
-    }
-
-    @Test
-    fun format_Coin_12_00000000() {
-        val value = CoinValue(btcCoinCode,12.00000000)
-        val formatted = formatter.format(value)
-        val expected = "12 BTC"
-        Assert.assertEquals(expected, formatted)
-    }
-
-    @Test
-    fun format_Coin_0_000030012345() {
-        val value = CoinValue(btcCoinCode,0.000030012345)
-        val formatted = formatter.format(value)
-        val expected = "0.00003001 BTC"
-        Assert.assertEquals(expected, formatted)
-    }
-
-    @Test
-    fun format_Coin_0_0000000012345() {
-        val value = CoinValue(btcCoinCode,0.0000000012345)
-        val formatted = formatter.format(value)
-        val expected = "0 BTC"
-        Assert.assertEquals(expected, formatted)
-    }
-
-    @Test
-    fun format_Coin_0_123456789() {
-        val value = CoinValue(btcCoinCode,0.123456789)
-        val formatted = formatter.format(value)
-        val expected = "0.1235 BTC"
-        Assert.assertEquals(expected, formatted)
-    }
 }
