@@ -83,6 +83,7 @@
     <string name="TransactionInfo_From">Gönderen</string>
     <string name="TransactionInfo_Time">Tarih</string>
     <string name="TransactionInfo_ButtonMore">More</string>
+    <string name="TransactionInfo_Status_Pending">Pending</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Transaction</string>
     <string name="FullInfo_Time">Tarih</string>
