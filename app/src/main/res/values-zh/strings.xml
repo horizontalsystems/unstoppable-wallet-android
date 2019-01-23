@@ -117,7 +117,7 @@
     <string name="FullInfo_Bytes">字节</string>
     <string name="FullInfo_SubtitleInputs">收入</string>
     <string name="FullInfo_SubtitleOutputs">转出</string>
-    <string name="FullInfoEth_Nonce">临时</string>
+    <string name="FullInfoEth_Nonce">Nonce</string>
     <string name="FullInfoEth_Value">价值</string>
     <!--Settings-->
     <string name="Settings_Title">设置</string>
