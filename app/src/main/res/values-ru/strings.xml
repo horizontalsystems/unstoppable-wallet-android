@@ -118,7 +118,7 @@
     <string name="FullInfo_SubtitleInputs">Входы</string>
     <string name="FullInfo_SubtitleOutputs">Выходы</string>
     <string name="FullInfoEth_Nonce">Nonce</string>
-    <string name="FullInfoEth_Value">Value</string>
+    <string name="FullInfoEth_Value">Значение</string>
     <!--Settings-->
     <string name="Settings_Title">Настройки</string>
     <string name="Settings_SecurityCenter">Центр Безопасности</string>
