@@ -83,7 +83,7 @@
     <string name="TransactionInfo_From">发件人：</string>
     <string name="TransactionInfo_Time">时间</string>
     <string name="TransactionInfo_ButtonMore">更多</string>
-    <string name="TransactionInfo_Status_Pending">Pending</string>
+    <string name="TransactionInfo_Status_Pending">在过程中</string>
     <!--Full Info-->
     <string name="FullInfo_Title">交易</string>
     <string name="FullInfo_Time">时间</string>
