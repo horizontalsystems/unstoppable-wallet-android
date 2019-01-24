@@ -19,18 +19,18 @@
     <string name="Guest_CreateWallet">Nueva cartera</string>
     <string name="Guest_RestoreWallet">Restaurar cartera</string>
     <!--Restore-->
-    <string name="Restore_Title">Enter Secret Key</string>
+    <string name="Restore_Title">Ingresar clave secreta</string>
     <string name="Restore_ValidationFailed">Clave secreta incorrecta</string>
     <string name="Restore_RestoreFailed">Error al restaurar la cartera</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Clave secreta</string>
-    <string name="Backup_Intro_Subtitle">Your secret key is the only way to restore your wallet and funds if your phone is ever lost, stolen, broken, or upgraded.\n\n It consists of 12 words. Store it safely offline.</string>
+    <string name="Backup_Intro_Subtitle">Su clave secreta es la única manera de recuperar su cartera y otros fondos si su teléfono alguna vez se pierde, se rompe, es sustraído o se actualiza a otra versión.</string>
     <string name="Backup_Intro_Later">Posterior</string>
     <string name="Backup_Intro_BackupNow">Copia de seguridad</string>
     <string name="Backup_Words_Title">Clave secreta</string>
     <string name="Backup_Confirmation_Understand">Entiendo que mis datos y mi monedero se guardan de manera segura en este dispositivo y no en ningún otro servidor</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I have just written down and saved in a secure place.</string>
-    <string name="Backup_Confirmation_LockAppWarn">Changing the unlock PIN or deleting app data in your Android OS settings would reset the wallet. You will need your Secret Key to restore your wallet after that.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">Entiendo que si esta aplicación se elimina o deja de funcionar por alguna razón, mi monedero sólo puede ser recuperado utilizando mi clave secreta, que he anotado y guardado en un lugar seguro.</string>
+    <string name="Backup_Confirmation_LockAppWarn">Cambiar el PIN de desbloqueo de su teléfono en el sistema operativo Android reiniciará la cartera. Usted necesitará su frase de seguridad para restaurar su cartera después de eso.</string>
     <string name="Backup_Confirmation_Title">Insertar palabras de su clave secreta</string>
     <string name="Backup_Confirmation_Description">Insertar palabras de su clave secreta.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Las contraseñas no coinciden</string>
@@ -51,6 +51,7 @@
     <string name="Send_Button_Paste">Pegar</string>
     <string name="Send_Button_More">Más</string>
     <string name="Send_Button_Send">Enviar</string>
+    <string name="Send_Button_Max">Máx.</string>
     <string name="Send_ScanQrCode">Escanee el código QR</string>
     <string name="Send_Success">Enviado!</string>
     <string name="Send_Error_InvalidAddress">La dirección parece no válida. ¡Por favor verifíquela e inténtelo de nuevo!</string>
@@ -62,11 +63,12 @@
     <string name="Send_DialogTotal">Total:</string>
     <!--Deposit-->
     <string name="Deposit_Title">Recibir %s</string>
-    <string name="Deposit_Share">Copiar</string>
+    <string name="Deposit_Share">Compartir</string>
+    <string name="Deposit_Your_Address">Su dirección</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">reciente</string>
-    <string name="Timestamp_MinAgo">Hace %dm</string>
-    <string name="Timestamp_HoursAgo">Hace %dh</string>
+    <string name="Timestamp_MinAgo">Hace %d minutos</string>
+    <string name="Timestamp_HoursAgo">Hace %d hora</string>
     <string name="Timestamp_Today">Hoy</string>
     <string name="Timestamp_Yesterday">Ayer</string>
     <!--Transactions-->
@@ -80,25 +82,43 @@
     <string name="TransactionInfo_To">Para</string>
     <string name="TransactionInfo_From">Desde </string>
     <string name="TransactionInfo_Time">Hora</string>
-    <string name="TransactionInfo_ButtonMore">Información completa</string>
+    <string name="TransactionInfo_ButtonMore">Más</string>
+    <string name="TransactionInfo_Status_Pending">Pendiente</string>
     <!--Full Info-->
-    <string name="FullInfo_Title">Información completa</string>
-    <string name="FullInfo_Id">Identificación</string>
-    <string name="FullInfo_Status">Estado</string>
+    <string name="FullInfo_Title">Transacción</string>
     <string name="FullInfo_Time">Hora</string>
     <string name="FullInfo_Block">Bloque</string>
     <string name="FullInfo_Confirmations">Confirmaciones</string>
+    <string name="FullInfo_Inputs">Inversiones</string>
+    <string name="FullInfo_Outputs">Producciones</string>
+    <string name="FullInfo_Size">Tamaño</string>
+    <string name="FullInfo_Fee">Comisión</string>
+    <string name="FullInfo_Rate">Tasa</string>
+    <string name="FullInfo_Source">Fuente</string>
+    <string name="FullInfo_To">Para</string>
+    <string name="FullInfo_From">Desde </string>
+    <string name="FullInfo_GasLimit">Gas Limit</string>
+    <string name="FullInfo_GasUsed">Gas Used</string>
+    <string name="FullInfo_GasPrice">Gas Price</string>
+    <string name="FullInfo_Source_Title">Fuente</string>
+    <string name="FullInfo_Source_Online">En línea</string>
+    <string name="FullInfo_Source_Offline">Desconectado</string>
+    <string name="FullInfo_Error_Subtitle">Desconectado</string>
+    <string name="FullInfo_Error_Retry">Volver a procesar</string>
+    <string name="FullInfo_Error_ChangeSource">Cambiar la fuente</string>
+    <!--no used-->
+    <string name="FullInfo_Id">Identificación</string>
     <string name="FullInfo_TotalInput">Inversión total</string>
     <string name="FullInfo_TotalOutput">Rendimiento total</string>
-    <string name="FullInfo_Fee">Comisión</string>
-    <string name="FullInfo_SubtitleFrom">Desde </string>
+    <string name="FullInfo_FeePerByte">Comisión por byte</string>
+    <string name="FullInfo_FeeRate">Rate</string>
+    <string name="FullInfo_NoAddress">No disponible</string>
+    <string name="FullInfo_SatByte">sat/B</string>
+    <string name="FullInfo_Bytes">Bytes</string>
     <string name="FullInfo_SubtitleInputs">Inversiones</string>
     <string name="FullInfo_SubtitleOutputs">Rendimientos</string>
-    <string name="FullInfo_SubtitleProvider">Proveedor de datos</string>
-    <string name="FullTransactionInfo_From">Desde </string>
-    <string name="FullTransactionInfo_To">Para</string>
-    <string name="FullTransactionInfo_Amount">Importe</string>
-    <string name="FullTransactionInfo_Block">Bloque</string>
+    <string name="FullInfoEth_Nonce">Nonce</string>
+    <string name="FullInfoEth_Value">Value</string>
     <!--Settings-->
     <string name="Settings_Title">Configuraciones</string>
     <string name="Settings_SecurityCenter">Centro de Seguridad</string>
@@ -113,7 +133,7 @@
     <string name="Settings_Error_NoFingerprintAddedYet">No ha activado su huella digital en este dispositivo. Vaya a Ajustes &gt; seguridad para configurar el acceso a su huella digital.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Huella digital</string>
-    <string name="SettingsSecurity_EditPin">Edit Passcode</string>
+    <string name="SettingsSecurity_EditPin">Editar el código </string>
     <string name="SettingsSecurity_BackupWallet">Copia de Seguridad de Cartera</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">Desconectarse desde este dispositivo</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">Esta acción eliminará de este dispositivo la carpeta instalada actualmente </string>
@@ -145,7 +165,7 @@ Algunos datos genéricos de carácter público de esta app se guardan en centros
     <string name="Alert_NoDeviceLockDescription">Configurar bloqueo de pantalla de este dispositivo para continuar. Ir a \"Ajustes\" &amp;gt; &amp;gt;  \"Seguridad\" \"Bloqueo de pantalla\" y establezca la configuración de la pantalla de bloqueo.</string>
     <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
     <!--Unlock-->
-    <string name="Unlock_Page_EnterYourPin">Passcode</string>
+    <string name="Unlock_Page_EnterYourPin">Código</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Divisa no admitida</string>
     <!--Hud texts-->
@@ -154,28 +174,28 @@ Algunos datos genéricos de carácter público de esta app se guardan en centros
     <string name="Hud_Text_Error">Error</string>
     <string name="Hud_Text_NoInternet">Sin conexión a Internet</string>
     <string name="Hud_Text_Copied">Copiado</string>
-    <string name="Hud_Text_InvalidPinError">PIN incorrecto</string>
+    <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">Inicio de sesión de huella digital</string>
     <string name="Fingerprint_Hint">Sensor táctil</string>
-    <string name="Fingerprint_EnterPin">Introduzca PIN</string>
+    <string name="Fingerprint_EnterPin">Código</string>
     <string name="Fingerprint_NotRecognized">Huella digital no reconocida. Por favor inténtelo de nuevo.</string>
     <string name="Fingerprint_Success">Operación realizada correctamente</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Inhabilitado hasta: %s</string>
     <!--Set Pin-->
-    <string name="SetPin_Title">Passcode</string>
-    <string name="SetPin_Info">Your passcode will be used to unlock wallet app</string>
+    <string name="SetPin_Title">Código</string>
+    <string name="SetPin_Info">Su código servirá para abrir su monedero y enviar dinero</string>
     <string name="SetPin_ErrorShortPin">Por favor, introduzca todos los dígitos.</string>
-    <string name="SetPin_ConfirmInfo">Confirm</string>
+    <string name="SetPin_ConfirmInfo">Confirmar</string>
     <string name="SetPin_Success">Lock passcode was set successfully!</string>
-    <string name="SetPin_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
-    <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
+    <string name="SetPin_ErrorPinsDontMatch">El código no coincide. Inténtelo de nuevo</string>
+    <string name="SetPin_ErrorFailedToSavePin">Se ha producido un error al intentar guardar su código. Inténtelo de nuevo.</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">Edit Passcode</string>
-    <string name="EditPin_UnlockInfo">Current Passcode</string>
-    <string name="EditPin_NewPinInfo">New Passcode</string>
+    <string name="EditPin_Title">Editar el código </string>
+    <string name="EditPin_UnlockInfo">Código Actual</string>
+    <string name="EditPin_NewPinInfo">Código Nuevo</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Gestionar monedas</string>
+    <string name="ManageCoins_title">Monederos</string>
     <string name="ManageCoins_save">Guardar</string>
 </resources>

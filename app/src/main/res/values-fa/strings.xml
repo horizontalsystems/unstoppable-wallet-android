@@ -51,6 +51,7 @@
     <string name="Send_Button_Paste">جاگذازي</string>
     <string name="Send_Button_More">بیشتر</string>
     <string name="Send_Button_Send">ارسال</string>
+    <string name="Send_Button_Max">Max</string>
     <string name="Send_ScanQrCode">اسكن كنيد Qr را</string>
     <string name="Send_Success">ارسال شد!</string>
     <string name="Send_Error_InvalidAddress">ادرس كي وارد كرديد غلط است دوباره چك نماييد ادرس تان را!</string>
@@ -62,7 +63,8 @@
     <string name="Send_DialogTotal">مجموع:</string>
     <!--Deposit-->
     <string name="Deposit_Title">دریافت s%</string>
-    <string name="Deposit_Share">رونوشت</string>
+    <string name="Deposit_Share">Share</string>
+    <string name="Deposit_Your_Address">Your Address</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">همين آلان</string>
     <string name="Timestamp_MinAgo">%d؜دقيقه پيش</string>
@@ -80,25 +82,43 @@
     <string name="TransactionInfo_To">To</string>
     <string name="TransactionInfo_From">From</string>
     <string name="TransactionInfo_Time">Time</string>
-    <string name="TransactionInfo_ButtonMore">Full Info</string>
+    <string name="TransactionInfo_ButtonMore">More</string>
+    <string name="TransactionInfo_Status_Pending">Pending</string>
     <!--Full Info-->
-    <string name="FullInfo_Title">Full Info</string>
-    <string name="FullInfo_Id">ID</string>
-    <string name="FullInfo_Status">Status</string>
+    <string name="FullInfo_Title">Transaction</string>
     <string name="FullInfo_Time">Time</string>
     <string name="FullInfo_Block">Block</string>
     <string name="FullInfo_Confirmations">Confirmations</string>
+    <string name="FullInfo_Inputs">Inputs</string>
+    <string name="FullInfo_Outputs">Outputs</string>
+    <string name="FullInfo_Size">Size</string>
+    <string name="FullInfo_Fee">Fee</string>
+    <string name="FullInfo_Rate">Rate</string>
+    <string name="FullInfo_Source">Source</string>
+    <string name="FullInfo_To">To</string>
+    <string name="FullInfo_From">From</string>
+    <string name="FullInfo_GasLimit">Gas Limit</string>
+    <string name="FullInfo_GasUsed">Gas Used</string>
+    <string name="FullInfo_GasPrice">Gas Price</string>
+    <string name="FullInfo_Source_Title">Source</string>
+    <string name="FullInfo_Source_Online">Online</string>
+    <string name="FullInfo_Source_Offline">Offline</string>
+    <string name="FullInfo_Error_Subtitle">Offline</string>
+    <string name="FullInfo_Error_Retry">Retry</string>
+    <string name="FullInfo_Error_ChangeSource">Change Source</string>
+    <!--no used-->
+    <string name="FullInfo_Id">ID</string>
     <string name="FullInfo_TotalInput">Total Input</string>
     <string name="FullInfo_TotalOutput">Total Output</string>
-    <string name="FullInfo_Fee">Fee</string>
-    <string name="FullInfo_SubtitleFrom">From</string>
+    <string name="FullInfo_FeePerByte">Fee per byte</string>
+    <string name="FullInfo_FeeRate">Fee Rate</string>
+    <string name="FullInfo_NoAddress">No Available</string>
+    <string name="FullInfo_SatByte">sat/B</string>
+    <string name="FullInfo_Bytes">Bytes</string>
     <string name="FullInfo_SubtitleInputs">Inputs</string>
     <string name="FullInfo_SubtitleOutputs">Outputs</string>
-    <string name="FullInfo_SubtitleProvider">Data Provider</string>
-    <string name="FullTransactionInfo_From">از</string>
-    <string name="FullTransactionInfo_To">به</string>
-    <string name="FullTransactionInfo_Amount">مقدار</string>
-    <string name="FullTransactionInfo_Block">مسدود</string>
+    <string name="FullInfoEth_Nonce">Nonce</string>
+    <string name="FullInfoEth_Value">Value</string>
     <!--Settings-->
     <string name="Settings_Title">تنظيمات</string>
     <string name="Settings_SecurityCenter">مركز امنيتي</string>
@@ -152,11 +172,11 @@
     <string name="Hud_Text_Error">خطا</string>
     <string name="Hud_Text_NoInternet">انترنت نداريد</string>
     <string name="Hud_Text_Copied">کپی انجام شد</string>
-    <string name="Hud_Text_InvalidPinError">پين غلط است</string>
+    <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">ورود با اثر انگشت</string>
     <string name="Fingerprint_Hint">حسگر لمسي</string>
-    <string name="Fingerprint_EnterPin">پين را وارد كنيد</string>
+    <string name="Fingerprint_EnterPin">Passcode</string>
     <string name="Fingerprint_NotRecognized">اثر انگشت شناخته نشد. دوباره كوشش كنيد</string>
     <string name="Fingerprint_Success">موفقيت!</string>
     <!--Unlock Pin-->
@@ -174,6 +194,6 @@
     <string name="EditPin_UnlockInfo">Current Passcode</string>
     <string name="EditPin_NewPinInfo">New Passcode</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Manage Coins</string>
+    <string name="ManageCoins_title">Wallets</string>
     <string name="ManageCoins_save">Save</string>
 </resources>
