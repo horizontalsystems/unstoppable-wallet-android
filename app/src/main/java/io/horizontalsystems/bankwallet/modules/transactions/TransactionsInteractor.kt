@@ -17,6 +17,7 @@ class TransactionsInteractor(private val walletManager: IWalletManager, private 
     private val ratesDisposables = CompositeDisposable()
     private val lastBlockHeightDisposables = CompositeDisposable()
     private val transactionUpdatesDisposables = CompositeDisposable()
+    private val requestedTimestamps = mutableMapOf<CoinCode, MutableList<Long>>()
 
     override fun initialFetch() {
         onUpdateCoinCodes()
@@ -33,6 +34,7 @@ class TransactionsInteractor(private val walletManager: IWalletManager, private 
                 .observeOn(Schedulers.io())
                 .subscribe {
                     ratesDisposables.clear()
+                    requestedTimestamps.clear()
                     delegate?.onUpdateBaseCurrency()
                 })
     }
@@ -104,7 +106,14 @@ class TransactionsInteractor(private val walletManager: IWalletManager, private 
 
         timestamps.forEach {
             val coinCode = it.key
-            it.value.forEach { timestamp ->
+            for (timestamp in it.value) {
+                if (requestedTimestamps[coinCode]?.contains(timestamp) == true) continue
+
+                if (!requestedTimestamps.containsKey(coinCode)) {
+                    requestedTimestamps[coinCode] = mutableListOf()
+                }
+                requestedTimestamps[coinCode]?.add(timestamp)
+
                 ratesDisposables.add(rateManager.rateValueObservable(coinCode, currencyCode, timestamp)
                         .subscribeOn(Schedulers.io())
                         .observeOn(Schedulers.io())

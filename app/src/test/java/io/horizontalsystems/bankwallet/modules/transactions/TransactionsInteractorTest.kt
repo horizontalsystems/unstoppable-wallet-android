@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
@@ -235,6 +232,57 @@ class TransactionsInteractorTest {
 
         verify(delegate).didFetchRate(rate1Value, coinCode1, currency, timestamp1)
         verify(delegate).didFetchRate(rate2Value, coinCode1, currency, timestamp2)
+    }
+
+    @Test
+    fun fetchRates_duplicate() {
+        val coinCode1 = "BTC"
+        val currencyCode = "USD"
+        val timestamp1 = 123456L
+        val timestamp2 = 34556L
+        val timestamp3 = 123123L
+        val timestamps1 = mapOf(coinCode1 to listOf(timestamp1, timestamp2, timestamp1))
+        val timestamps2 = mapOf(coinCode1 to listOf(timestamp2, timestamp3))
+        val currency = mock(Currency::class.java)
+
+        whenever(currency.code).thenReturn(currencyCode)
+        whenever(currencyManager.baseCurrency).thenReturn(currency)
+
+        whenever(rateManager.rateValueObservable(coinCode1, currencyCode, timestamp1)).thenReturn(Flowable.empty())
+        whenever(rateManager.rateValueObservable(coinCode1, currencyCode, timestamp2)).thenReturn(Flowable.empty())
+        whenever(rateManager.rateValueObservable(coinCode1, currencyCode, timestamp3)).thenReturn(Flowable.empty())
+
+        interactor.fetchRates(timestamps1)
+        interactor.fetchRates(timestamps2)
+
+        verify(rateManager).rateValueObservable(coinCode1, currencyCode, timestamp1)
+        verify(rateManager).rateValueObservable(coinCode1, currencyCode, timestamp2)
+        verify(rateManager).rateValueObservable(coinCode1, currencyCode, timestamp3)
+    }
+
+    @Test
+    fun fetchRates_sameTimestamp_baseCurencyChanged() {
+        interactor.initialFetch()
+
+        val coinCode1 = "BTC"
+        val currencyCode = "USD"
+        val timestamp1 = 123456L
+        val timestamps1 = mapOf(coinCode1 to listOf(timestamp1))
+        val timestamps2 = mapOf(coinCode1 to listOf(timestamp1))
+        val currency = mock(Currency::class.java)
+
+        whenever(currency.code).thenReturn(currencyCode)
+        whenever(currencyManager.baseCurrency).thenReturn(currency)
+
+        whenever(rateManager.rateValueObservable(coinCode1, currencyCode, timestamp1)).thenReturn(Flowable.empty())
+
+        interactor.fetchRates(timestamps1)
+
+        baseCurrencyUpdatedSignal.onNext(Unit)
+
+        interactor.fetchRates(timestamps2)
+
+        verify(rateManager, times(2)).rateValueObservable(coinCode1, currencyCode, timestamp1)
     }
 
 }

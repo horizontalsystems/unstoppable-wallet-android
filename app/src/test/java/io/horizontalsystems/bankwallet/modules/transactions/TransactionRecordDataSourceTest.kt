@@ -74,7 +74,7 @@ class TransactionRecordDataSourceTest {
     }
 
     @Test
-    fun increasePage_true() {
+    fun increasePage_inserted() {
         val dataSource = TransactionRecordDataSource(poolRepo, itemsDataSource, factory, 3)
 
         val coinCodeBtc = "BTC"
@@ -120,11 +120,11 @@ class TransactionRecordDataSourceTest {
         verify(poolBtc).increaseFirstUnusedIndex()
         verify(poolEth, times(2)).increaseFirstUnusedIndex()
 
-        Assert.assertTrue(result)
+        Assert.assertEquals(3, result)
     }
 
     @Test
-    fun increasePage_false() {
+    fun increasePage_zero() {
         val coinCodeBtc = "BTC"
         val coinCodeEth = "ETH"
 
@@ -140,7 +140,7 @@ class TransactionRecordDataSourceTest {
 
         val result = dataSource.increasePage()
 
-        Assert.assertFalse(result)
+        Assert.assertEquals(0, result)
     }
 
     @Test

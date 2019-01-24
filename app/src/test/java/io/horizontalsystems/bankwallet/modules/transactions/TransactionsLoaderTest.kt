@@ -84,16 +84,17 @@ class TransactionsLoaderTest {
     }
 
     @Test
-    fun loadNext_dataSourceFetchDataListIsEmpty_dataChanged() {
+    fun loadNext_dataSourceFetchDataListIsEmpty_didInsertData() {
         whenever(dataSource.allShown).thenReturn(false)
         whenever(dataSource.getFetchDataList()).thenReturn(listOf())
 
-        whenever(dataSource.increasePage()).thenReturn(true)
+        whenever(dataSource.itemsCount).thenReturn(4)
+        whenever(dataSource.increasePage()).thenReturn(10)
 
         loader.loadNext(false)
 
         verify(dataSource).increasePage()
-        verify(delegate).didChangeData()
+        verify(delegate).didInsertData(4, 10)
     }
 
     @Test
@@ -101,7 +102,7 @@ class TransactionsLoaderTest {
         whenever(dataSource.allShown).thenReturn(false)
         whenever(dataSource.getFetchDataList()).thenReturn(listOf())
 
-        whenever(dataSource.increasePage()).thenReturn(false)
+        whenever(dataSource.increasePage()).thenReturn(0)
 
         loader.loadNext(false)
 
@@ -124,23 +125,24 @@ class TransactionsLoaderTest {
     }
 
     @Test
-    fun didFetchRecords_dataChanged() {
+    fun didFetchRecords_dataInserted() {
         val records = mapOf<CoinCode, List<TransactionRecord>>("BTC" to listOf())
 
-        whenever(dataSource.increasePage()).thenReturn(true)
+        whenever(dataSource.itemsCount).thenReturn(123)
+        whenever(dataSource.increasePage()).thenReturn(10)
 
         loader.didFetchRecords(records)
 
         verify(dataSource).handleNextRecords(records)
         verify(dataSource).increasePage()
-        verify(delegate).didChangeData()
+        verify(delegate).didInsertData(123, 10)
     }
 
     @Test
     fun didFetchRecords_dataNotChanged() {
         val records = mapOf<CoinCode, List<TransactionRecord>>("BTC" to listOf())
 
-        whenever(dataSource.increasePage()).thenReturn(false)
+        whenever(dataSource.increasePage()).thenReturn(0)
 
         loader.didFetchRecords(records)
 
