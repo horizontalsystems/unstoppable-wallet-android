@@ -16,6 +16,7 @@ object ValueFormatter {
 
     private const val COIN_BIG_NUMBER_EDGE = 0.0001
     private const val FIAT_BIG_NUMBER_EDGE = 100.0
+    private const val FIAT_SMALL_NUMBER_EDGE = 0.01
 
     private val coinFormatter: NumberFormat
         get() {
@@ -67,14 +68,16 @@ object ValueFormatter {
 
         value = Math.abs(value)
 
-        val formatter = currencyFormatter
+        var result: String = when {
+            value < FIAT_SMALL_NUMBER_EDGE -> "0.01"
+            else -> {
+                val formatter = currencyFormatter
 
-        if (!realNumber && (value >= FIAT_BIG_NUMBER_EDGE || approximate)) {
-            formatter.maximumFractionDigits = 0
-        }
-
-        var result: String = formatter.format(value) ?: kotlin.run {
-            return null
+                if (!realNumber && (value >= FIAT_BIG_NUMBER_EDGE || approximate)) {
+                    formatter.maximumFractionDigits = 0
+                }
+                formatter.format(value)
+            }
         }
 
         result = "${currencyValue.currency.symbol} $result"
@@ -90,7 +93,7 @@ object ValueFormatter {
         return result
     }
 
-    fun formatForTransactions(currencyValue: CurrencyValue, isIncoming: Boolean) : SpannableString {
+    fun formatForTransactions(currencyValue: CurrencyValue, isIncoming: Boolean): SpannableString {
         val spannable = SpannableString(format(currencyValue))
 
         //set currency sign size
