@@ -8,9 +8,8 @@ import io.horizontalsystems.bankwallet.core.IRateStorage
 import io.horizontalsystems.bankwallet.entities.LatestRate
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
-import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.Single
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
@@ -24,13 +23,9 @@ class RateManagerTest {
 
     private val storage = mock(IRateStorage::class.java)
 
-    private val zeroRatesSubject = PublishSubject.create<List<Rate>>()
-
     @Before
     fun setup() {
         RxBaseTest.setup()
-
-        whenever(storage.zeroRatesObservables()).thenReturn(zeroRatesSubject.toFlowable(BackpressureStrategy.DROP))
 
         rateManager = RateManager(storage, networkManager)
     }
@@ -116,39 +111,43 @@ class RateManagerTest {
         val coinCode = "BTC"
         val currencyCode = "USD"
         val timestamp = 23412L
+        val rateValueFromNetwork = 123.2300
 
         whenever(storage.rateObservable(coinCode, currencyCode, timestamp)).thenReturn(Flowable.just(listOf()))
+        whenever(networkManager.getRate(coinCode, currencyCode, timestamp)).thenReturn(Flowable.just(rateValueFromNetwork))
 
         rateManager.rateValueObservable(coinCode, currencyCode, timestamp)
                 .test()
                 .assertNoValues()
 
         verify(storage).save(Rate(coinCode, currencyCode, 0.0, timestamp, false))
+        verify(networkManager).getRate(coinCode, currencyCode, timestamp)
+        verify(storage).save(Rate(coinCode, currencyCode, rateValueFromNetwork, timestamp, false))
     }
 
     @Test
-    fun handleZeroRate() {
+    fun refreshZeroRates() {
         val coinCode1 = "BTC"
-        val currencyCode1 = "USD"
+        val currencyCode = "USD"
         val timestamp1 = 123L
         val fetchedRateValue1 = 123.123
 
         val coinCode2 = "ETH"
-        val currencyCode2 = "EUR"
         val timestamp2 = 876L
         val fetchedRateValue2 = 23423.34
 
-        val rate1 = Rate(coinCode1, currencyCode1, 0.0, timestamp1, false)
-        val rate2 = Rate(coinCode2, currencyCode2, 0.0, timestamp2, false)
+        val rate1 = Rate(coinCode1, currencyCode, 0.0, timestamp1, false)
+        val rate2 = Rate(coinCode2, currencyCode, 0.0, timestamp2, false)
 
-        whenever(networkManager.getRate(coinCode1, currencyCode1, timestamp1)).thenReturn(Flowable.just(fetchedRateValue1))
-        whenever(networkManager.getRate(coinCode2, currencyCode2, timestamp2)).thenReturn(Flowable.just(fetchedRateValue2))
+        whenever(storage.zeroRatesObservable(currencyCode)).thenReturn(Single.just(listOf(rate1, rate2)))
 
-        zeroRatesSubject.onNext(listOf(rate1))
-        zeroRatesSubject.onNext(listOf(rate2))
+        whenever(networkManager.getRate(coinCode1, currencyCode, timestamp1)).thenReturn(Flowable.just(fetchedRateValue1))
+        whenever(networkManager.getRate(coinCode2, currencyCode, timestamp2)).thenReturn(Flowable.just(fetchedRateValue2))
 
-        verify(storage).save(Rate(coinCode1, currencyCode1, fetchedRateValue1, timestamp1, false))
-        verify(storage).save(Rate(coinCode2, currencyCode2, fetchedRateValue2, timestamp2, false))
+        rateManager.refreshZeroRates(currencyCode)
+
+        verify(storage).save(Rate(coinCode1, currencyCode, fetchedRateValue1, timestamp1, false))
+        verify(storage).save(Rate(coinCode2, currencyCode, fetchedRateValue2, timestamp2, false))
     }
 
 }

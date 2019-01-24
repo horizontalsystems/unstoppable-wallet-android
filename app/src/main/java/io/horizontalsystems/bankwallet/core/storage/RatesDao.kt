@@ -4,6 +4,7 @@ import android.arch.persistence.room.*
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.Flowable
+import io.reactivex.Single
 
 @Dao
 interface RatesDao {
@@ -23,10 +24,10 @@ interface RatesDao {
     @Query("DELETE FROM Rate")
     fun deleteAll()
 
-    @Query("SELECT * FROM Rate WHERE coinCode = :coinCode AND currencyCode = :currencyCode AND timestamp = :timestamp")
+    @Query("SELECT * FROM Rate WHERE coinCode = :coinCode AND currencyCode = :currencyCode AND timestamp = :timestamp AND isLatest = 0")
     fun getRate(coinCode: CoinCode, currencyCode: String, timestamp: Long): Flowable<List<Rate>>
 
-    @Query("SELECT * FROM Rate WHERE value = 0.0")
-    fun getZeroRates(): Flowable<List<Rate>>
+    @Query("SELECT * FROM Rate WHERE value = 0.0 AND currencyCode = :currencyCode AND isLatest = 0")
+    fun getZeroRates(currencyCode: String): Single<List<Rate>>
 
 }

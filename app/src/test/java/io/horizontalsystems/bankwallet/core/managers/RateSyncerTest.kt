@@ -61,6 +61,7 @@ class RateSyncerTest {
         rateSyncer = RateSyncer(rateManager, walletManager, currencyManager, networkAvailabilityManager, timerSignal)
 
         verify(rateManager).refreshLatestRates(coins1, currencyCode1)
+        verify(rateManager).refreshZeroRates(currencyCode1)
         verifyNoMoreInteractions(rateManager)
     }
 
@@ -134,7 +135,39 @@ class RateSyncerTest {
         val inOrder = inOrder(rateManager)
         inOrder.verify(rateManager).refreshLatestRates(coins1, currencyCode1)
         inOrder.verify(rateManager).refreshLatestRates(coins1, currencyCode2)
-        inOrder.verifyNoMoreInteractions()
+    }
+
+    @Test
+    fun refreshZeroRates_networkConnected() {
+        whenever(networkAvailabilityManager.isConnected).thenReturn(false)
+
+        rateSyncer = RateSyncer(rateManager, walletManager, currencyManager, networkAvailabilityManager, timerSignal)
+
+        whenever(networkAvailabilityManager.isConnected).thenReturn(true)
+
+        networkAvailabilitySignal.onNext(Unit)
+
+        verify(rateManager).refreshZeroRates(currencyCode1)
+    }
+
+    @Test
+    fun refreshZeroRates_baseCurrencyUpdated() {
+        rateSyncer = RateSyncer(rateManager, walletManager, currencyManager, networkAvailabilityManager, timerSignal)
+
+        baseCurrencyUpdatedSignal.onNext(Unit)
+
+        verify(rateManager, times(2)).refreshZeroRates(currencyCode1)
+    }
+
+    @Test
+    fun refreshZeroRates_baseCurrencyUpdated_noInternet() {
+        whenever(networkAvailabilityManager.isConnected).thenReturn(false)
+
+        rateSyncer = RateSyncer(rateManager, walletManager, currencyManager, networkAvailabilityManager, timerSignal)
+
+        baseCurrencyUpdatedSignal.onNext(Unit)
+
+        verify(rateManager, never()).refreshZeroRates(currencyCode1)
     }
 
 }

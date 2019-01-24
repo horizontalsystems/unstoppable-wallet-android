@@ -186,7 +186,7 @@ interface IRateStorage {
     fun save(rate: Rate)
     fun getAll(): Flowable<List<Rate>>
     fun deleteAll()
-    fun zeroRatesObservables(): Flowable<List<Rate>>
+    fun zeroRatesObservable(currencyCode: String): Single<List<Rate>>
 }
 
 interface ILockoutManager {
