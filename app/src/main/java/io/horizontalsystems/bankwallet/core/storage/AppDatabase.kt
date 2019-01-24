@@ -11,13 +11,10 @@ import android.database.sqlite.SQLiteDatabase
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.entities.StorableCoin
-import io.horizontalsystems.bankwallet.entities.TransactionRecord
 
 
-@Database(entities = [TransactionRecord::class, Rate::class, StorableCoin::class], version = 3, exportSchema = true)
+@Database(entities = [Rate::class, StorableCoin::class], version = 4, exportSchema = true)
 abstract class AppDatabase : RoomDatabase() {
-
-    abstract fun transactionDao(): TransactionDao
 
     abstract fun ratesDao(): RatesDao
 

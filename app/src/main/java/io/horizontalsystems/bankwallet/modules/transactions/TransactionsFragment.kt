@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.transactions
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.annotation.NonNull
 import android.support.design.widget.BottomSheetBehavior
@@ -12,14 +11,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoViewModel
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import io.horizontalsystems.bankwallet.viewHelpers.ValueFormatter
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
@@ -260,16 +257,8 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         txValueInFiat.text = transactionRecord.currencyValue?.let { ValueFormatter.formatForTransactions(it, transactionRecord.incoming) }
         txValueInCoin.text = ValueFormatter.format(transactionRecord.coinValue, true)
         txDate.text = transactionRecord.date?.let { DateHelper.getShortDateForTransaction(it) }
-        txTime.text = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }
-        statusIcon.setImageDrawable(getStatusIcon(transactionRecord.status))
-        pendingShade.visibility = if (transactionRecord.status == TransactionStatus.Pending) View.VISIBLE else View.GONE
-    }
-
-    private fun getStatusIcon(status: TransactionStatus?): Drawable? {
-        return if (status is TransactionStatus.Completed)
-            LayoutHelper.d(R.drawable.checkmark_small_grey, App.instance)
-        else
-            LayoutHelper.d(R.drawable.pending, App.instance)
+        val time = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }
+        txStatusWithTimeView.bind(transactionRecord.status, time)
     }
 }
 

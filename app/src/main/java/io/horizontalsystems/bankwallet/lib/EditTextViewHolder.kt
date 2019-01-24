@@ -25,10 +25,6 @@ class EditTextViewHolder(private val editText: EditText, listener: WordsChangedL
 
     fun bind(position: Int) {
         editText.hint = "${position + 1}"
-
-        val words = listOf("used", "ugly", "meat", "glad", "balance", "divorce", "inner", "artwork", "hire", "invest", "already", "piano")
-
-        editText.setText(words[position])
     }
 
 }
