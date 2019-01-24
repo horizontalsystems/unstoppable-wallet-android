@@ -6,6 +6,7 @@ class TransactionsLoader(private val dataSource: TransactionRecordDataSource) {
 
     interface Delegate {
         fun didChangeData()
+        fun didInsertData(fromIndex: Int, count: Int)
         fun fetchRecords(fetchDataList: List<TransactionsModule.FetchData>)
     }
 
@@ -39,8 +40,10 @@ class TransactionsLoader(private val dataSource: TransactionRecordDataSource) {
 
         val fetchDataList = dataSource.getFetchDataList()
         if (fetchDataList.isEmpty()) {
-            if (dataSource.increasePage()) {
-                delegate?.didChangeData()
+            val currentItemsCount = dataSource.itemsCount
+            val insertedCount = dataSource.increasePage()
+            if (insertedCount > 0) {
+                delegate?.didInsertData(currentItemsCount, insertedCount)
             }
             loading = false
         } else {
@@ -50,8 +53,10 @@ class TransactionsLoader(private val dataSource: TransactionRecordDataSource) {
 
     fun didFetchRecords(records: Map<CoinCode, List<TransactionRecord>>) {
         dataSource.handleNextRecords(records)
-        if (dataSource.increasePage()) {
-            delegate?.didChangeData()
+        val currentItemsCount = dataSource.itemsCount
+        val insertedCount = dataSource.increasePage()
+        if (insertedCount > 0) {
+            delegate?.didInsertData(currentItemsCount, insertedCount)
         }
         loading = false
     }

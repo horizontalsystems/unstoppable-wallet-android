@@ -8,7 +8,6 @@ import android.support.annotation.NonNull
 import android.support.design.widget.BottomSheetBehavior
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,6 +48,7 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
         transactionsAdapter.viewModel = viewModel
         toolbar.setTitle(R.string.Transactions_Title)
 
+        recyclerTransactions.setHasFixedSize(true)
         recyclerTransactions.adapter = transactionsAdapter
         recyclerTransactions.layoutManager = LinearLayoutManager(context)
         recyclerTags.adapter = filterAdapter
@@ -76,7 +76,6 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
         })
 
         viewModel.reloadLiveEvent.observe(this, Observer {
-            Log.e("BBB", "reloadLiveEvent")
             transactionsAdapter.notifyDataSetChanged()
             if (transactionsAdapter.itemCount == 0) {
                 viewModel.delegate.onBottomReached()
@@ -84,6 +83,12 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
 
             recyclerTransactions.visibility = if (viewModel.delegate.itemsCount == 0) View.GONE else View.VISIBLE
             emptyListText.visibility = if (viewModel.delegate.itemsCount == 0) View.VISIBLE else View.GONE
+        })
+
+        viewModel.addItemsLiveEvent.observe(this, Observer {
+            it?.let { (fromIndex, count) ->
+                transactionsAdapter.notifyItemRangeInserted(fromIndex, count)
+            }
         })
 
         viewModel.reloadItemsLiveEvent.observe(this, Observer {
@@ -201,14 +206,14 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
 }
 
 
-class TransactionsAdapter(private var listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class TransactionsAdapter(private var listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), ViewHolderTransaction.ClickListener {
 
     init {
         setHasStableIds(true)
     }
 
     override fun getItemId(position: Int): Long {
-        return viewModel.delegate.itemForIndex(position).transactionHash.hashCode().toLong()
+        return viewModel.delegate.idForIndex(position)
     }
 
     interface Listener {
@@ -218,36 +223,40 @@ class TransactionsAdapter(private var listener: Listener) : RecyclerView.Adapter
     lateinit var viewModel: TransactionsViewModel
 
     override fun getItemCount(): Int {
-        val itemsCount = viewModel.delegate.itemsCount
-        Log.e("BBB", "itemsCount: $itemsCount")
-        return itemsCount
+        return viewModel.delegate.itemsCount
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-            ViewHolderTransaction(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_transaction, parent, false))
+            ViewHolderTransaction(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_transaction, parent, false), this)
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        Log.e("BBB", "onBindViewHolder: $position")
-
         if (position > itemCount - 3) {
             viewModel.delegate.onBottomReached()
         }
 
         when (holder) {
             is ViewHolderTransaction -> {
-                val transactionRecord = viewModel.delegate.itemForIndex(position)
-                holder.bind(transactionRecord) { listener.onItemClick(transactionRecord) }
+                holder.bind(viewModel.delegate.itemForIndex(position))
             }
         }
     }
 
+    override fun onClick(position: Int) {
+        listener.onItemClick(viewModel.delegate.itemForIndex(position))
+    }
 }
 
-class ViewHolderTransaction(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class ViewHolderTransaction(override val containerView: View, private val l: ClickListener ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(transactionRecord: TransactionViewItem, onClick: () -> (Unit)) {
+    interface ClickListener {
+        fun onClick(position: Int)
+    }
 
-        containerView.setOnSingleClickListener { onClick.invoke() }
+    init {
+        containerView.setOnSingleClickListener { l.onClick(adapterPosition) }
+    }
+
+    fun bind(transactionRecord: TransactionViewItem) {
         txValueInFiat.text = transactionRecord.currencyValue?.let { ValueFormatter.formatForTransactions(it, transactionRecord.incoming) }
         txValueInCoin.text = ValueFormatter.format(transactionRecord.coinValue, true)
         txDate.text = transactionRecord.date?.let { DateHelper.getShortDateForTransaction(it) }

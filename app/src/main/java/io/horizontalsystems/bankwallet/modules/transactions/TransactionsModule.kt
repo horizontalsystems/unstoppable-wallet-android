@@ -33,8 +33,9 @@ object TransactionsModule {
 
     interface IView {
         fun showFilters(filters: List<CoinCode?>)
-        fun reload(fromIndex: Int? = null, count: Int? = null)
+        fun reload()
         fun reloadItems(updatedIndexes: List<Int>)
+        fun addItems(fromIndex: Int, count: Int)
     }
 
     interface IViewDelegate {
@@ -45,6 +46,7 @@ object TransactionsModule {
 
         val itemsCount: Int
         fun itemForIndex(index: Int): TransactionViewItem
+        fun idForIndex(index: Int): Long
         fun onBottomReached()
     }
 

@@ -41,6 +41,10 @@ class TransactionsPresenter(private val interactor: TransactionsModule.IInteract
         return factory.item(transactionItem, lastBlockHeight, threshold, rate)
     }
 
+    override fun idForIndex(index: Int): Long {
+        return loader.itemForIndex(index).record.transactionHash.hashCode().toLong()
+    }
+
     override fun onBottomReached() {
         loader.loadNext(false)
     }
@@ -95,6 +99,10 @@ class TransactionsPresenter(private val interactor: TransactionsModule.IInteract
 
     override fun didChangeData() {
         view?.reload()
+    }
+
+    override fun didInsertData(fromIndex: Int, count: Int) {
+        view?.addItems(fromIndex, count)
     }
 
     override fun fetchRecords(fetchDataList: List<TransactionsModule.FetchData>) {
