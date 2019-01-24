@@ -22,6 +22,7 @@
     <attr name="BottomNavigationBackgroundColor" format="reference|color" />
     <attr name="StatusBarColor" format="reference|color" />
     <attr name="RippleColor" format="reference|color" />
+    <attr name="RoundRippleColor" format="reference|color" />
     <attr name="NumpadDeleteButton" format="reference" />
     <attr name="NumpadFingerprintButton" format="reference" />
     <attr name="AppBarBackground" format="reference" />
@@ -86,6 +87,7 @@
         <item name="BottomNavigationBackgroundColor">@color/dark</item>
         <item name="StatusBarColor">@color/dark</item>
         <item name="RippleColor">@color/ripple_white</item>
+        <item name="RoundRippleColor">@color/white_50</item>
         <item name="NumpadDeleteButton">@drawable/round_backspace_24px</item>
         <item name="NumpadFingerprintButton">@drawable/fingerprint_outline_white</item>
         <item name="AppBarBackground">@drawable/shadow_top_navigation</item>
@@ -150,6 +152,7 @@
         <item name="BottomNavigationBackgroundColor">@color/bars_color</item>
         <item name="StatusBarColor">@color/bars_color</item>
         <item name="RippleColor">@color/ripple_black</item>
+        <item name="RoundRippleColor">@color/grey_light</item>
         <item name="NumpadDeleteButton">@drawable/round_backspace_dark_24px</item>
         <item name="NumpadFingerprintButton">@drawable/fingerprint_outline_black</item>
         <item name="AppBarBackground">@drawable/shadow_top_navigation_light</item>
