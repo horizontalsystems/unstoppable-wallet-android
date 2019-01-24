@@ -101,9 +101,9 @@
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
     <string name="FullInfo_Source_Title">Источник</string>
-    <string name="FullInfo_Source_Online">В сети</string>
-    <string name="FullInfo_Source_Offline">Не в сети</string>
-    <string name="FullInfo_Error_Subtitle">Не в сети</string>
+    <string name="FullInfo_Source_Online">доступен</string>
+    <string name="FullInfo_Source_Offline">недоступен</string>
+    <string name="FullInfo_Error_Subtitle">недоступен</string>
     <string name="FullInfo_Error_Retry">Повторить</string>
     <string name="FullInfo_Error_ChangeSource">Сменить Источник</string>
     <!--no used-->
