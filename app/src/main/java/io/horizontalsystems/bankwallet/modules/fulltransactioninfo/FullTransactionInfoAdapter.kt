@@ -39,7 +39,7 @@ class FullTransactionBitcoinAdapter(val provider: FullTransactionInfoModule.Bitc
         }
 
         data.feePerByte?.let { feePerByte ->
-            transactionItems.add(FullTransactionItem(R.string.FullInfo_FeeRate, value = "${ValueFormatter.format(feePerByte)} (satoshi)", dimmed = true))
+            transactionItems.add(FullTransactionItem(R.string.FullInfo_Rate, value = "${ValueFormatter.format(feePerByte)} (satoshi)", dimmed = true))
         }
 
         sections.add(FullTransactionSection(items = transactionItems))
