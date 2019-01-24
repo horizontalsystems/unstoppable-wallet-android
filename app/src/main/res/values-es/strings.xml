@@ -29,7 +29,7 @@
     <string name="Backup_Intro_BackupNow">Copia de seguridad</string>
     <string name="Backup_Words_Title">Clave secreta</string>
     <string name="Backup_Confirmation_Understand">Entiendo que mis datos y mi monedero se guardan de manera segura en este dispositivo y no en ningún otro servidor</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">Entiendo que si esta aplicación se elimina o deja de funcionar por alguna razón, mi monedero sólo puede ser recuperado utilizando mi clave secreta, que he anotado y guardado en un lugar seguro.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I have just written down and saved in a secure place.</string>
     <string name="Backup_Confirmation_LockAppWarn">Cambiar el PIN de desbloqueo de su teléfono en el sistema operativo Android reiniciará la cartera. Usted necesitará su frase de seguridad para restaurar su cartera después de eso.</string>
     <string name="Backup_Confirmation_Title">Insertar palabras de su clave secreta</string>
     <string name="Backup_Confirmation_Description">Insertar palabras de su clave secreta.</string>
@@ -93,19 +93,19 @@
     <string name="FullInfo_Outputs">Producciones</string>
     <string name="FullInfo_Size">Tamaño</string>
     <string name="FullInfo_Fee">Comisión</string>
-    <string name="FullInfo_Rate">Tasa</string>
-    <string name="FullInfo_Source">Fuente</string>
+    <string name="FullInfo_Rate">Rate</string>
+    <string name="FullInfo_Source">Source</string>
     <string name="FullInfo_To">Para</string>
     <string name="FullInfo_From">Desde </string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
-    <string name="FullInfo_Source_Title">Fuente</string>
+    <string name="FullInfo_Source_Title">Source</string>
     <string name="FullInfo_Source_Online">En línea</string>
-    <string name="FullInfo_Source_Offline">Desconectado</string>
-    <string name="FullInfo_Error_Subtitle">Desconectado</string>
-    <string name="FullInfo_Error_Retry">Volver a procesar</string>
-    <string name="FullInfo_Error_ChangeSource">Cambiar la fuente</string>
+    <string name="FullInfo_Source_Offline">Offline</string>
+    <string name="FullInfo_Error_Subtitle">Offline</string>
+    <string name="FullInfo_Error_Retry">Retry</string>
+    <string name="FullInfo_Error_ChangeSource">Change Source</string>
     <!--no used-->
     <string name="FullInfo_Id">Identificación</string>
     <string name="FullInfo_TotalInput">Inversión total</string>
