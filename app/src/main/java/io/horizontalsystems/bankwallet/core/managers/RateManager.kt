@@ -82,4 +82,8 @@ class RateManager(private val storage: IRateStorage, private val networkManager:
                 })
     }
 
+    fun clear() {
+        storage.deleteAll()
+    }
+
 }

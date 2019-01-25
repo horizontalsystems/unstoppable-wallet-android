@@ -60,7 +60,7 @@ class WalletManager(
         }
     }
 
-    override fun clearWallets() {
+    override fun clear() {
         handler.post {
             wallets.forEach { it.adapter.clear() }
             wallets = listOf()

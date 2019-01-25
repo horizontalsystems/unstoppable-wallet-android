@@ -88,12 +88,13 @@ class App : Application() {
         coinsStorage = StorableCoinsRepository(appDatabase)
         localStorage = LocalStorageManager()
 
+        networkManager = NetworkManager()
+        rateManager = RateManager(rateStorage, networkManager)
         coinManager = CoinManager(appConfigProvider, coinsStorage)
-        authManager = AuthManager(secureStorage, localStorage, coinManager)
+        authManager = AuthManager(secureStorage, localStorage, coinManager, rateManager)
 
         wordsManager = WordsManager(localStorage)
         randomManager = RandomProvider()
-        networkManager = NetworkManager()
         systemInfoManager = SystemInfoManager()
         pinManager = PinManager(secureStorage)
         lockManager = LockManager(secureStorage, authManager)
@@ -103,7 +104,6 @@ class App : Application() {
         networkAvailabilityManager = NetworkAvailabilityManager()
 
         walletManager = WalletManager(coinManager, authManager, WalletFactory(AdapterFactory(appConfigProvider)))
-        rateManager = RateManager(rateStorage, networkManager)
         rateSyncer = RateSyncer(rateManager, walletManager, currencyManager, networkAvailabilityManager)
 
         appCloseManager = AppCloseManager()
