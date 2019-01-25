@@ -4,14 +4,19 @@ import io.horizontalsystems.bankwallet.core.IRateStorage
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.Flowable
+import io.reactivex.Single
 import java.util.concurrent.Executors
 
 class RatesRepository(private val appDatabase: AppDatabase) : IRateStorage {
 
     private val executor = Executors.newSingleThreadExecutor()
 
-    override fun rateObservable(coinCode: CoinCode, currencyCode: String): Flowable<Rate> {
-        return appDatabase.ratesDao().getRate(coinCode, currencyCode)
+    override fun latestRateObservable(coinCode: CoinCode, currencyCode: String): Flowable<Rate> {
+        return appDatabase.ratesDao().getLatestRate(coinCode, currencyCode)
+    }
+
+    override fun rateObservable(coinCode: CoinCode, currencyCode: String, timestamp: Long): Flowable<List<Rate>> {
+        return appDatabase.ratesDao().getRate(coinCode, currencyCode, timestamp)
     }
 
     override fun save(rate: Rate) {
@@ -20,8 +25,11 @@ class RatesRepository(private val appDatabase: AppDatabase) : IRateStorage {
         }
     }
 
-    override fun getAll(): Flowable<List<Rate>> {
-        return appDatabase.ratesDao().getAll()
+    override fun saveLatest(rate: Rate) {
+        executor.execute {
+            appDatabase.ratesDao().deleteLatest(rate.coinCode, rate.currencyCode)
+            appDatabase.ratesDao().insert(rate)
+        }
     }
 
     override fun deleteAll() {
@@ -30,4 +38,7 @@ class RatesRepository(private val appDatabase: AppDatabase) : IRateStorage {
         }
     }
 
+    override fun zeroRatesObservable(currencyCode: String): Single<List<Rate>> {
+        return appDatabase.ratesDao().getZeroRates(currencyCode)
+    }
 }

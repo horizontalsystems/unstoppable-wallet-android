@@ -26,7 +26,7 @@ class SendInteractorTest {
 
     private val currency = Currency("USD", symbol = "\u0024")
     private val coin = CoinCode()
-    private val rate = Rate(coin, currency.code, 0.1, timestamp = System.currentTimeMillis())
+    private val rate = Rate(coin, currency.code, 0.1, System.currentTimeMillis(), true)
     private val userInput = mock(SendModule.UserInput::class.java)
     private val balance = 123.0
 
@@ -39,7 +39,7 @@ class SendInteractorTest {
         whenever(wallet.coinCode).thenReturn(coin)
         whenever(wallet.adapter).thenReturn(adapter)
         whenever(currencyManager.baseCurrency).thenReturn(currency)
-        whenever(rateStorage.rateObservable(coin, currency.code)).thenReturn(Flowable.just(rate))
+        whenever(rateStorage.latestRateObservable(coin, currency.code)).thenReturn(Flowable.just(rate))
         whenever(adapter.balance).thenReturn(balance)
 
         interactor = SendInteractor(currencyManager, rateStorage, clipboardManager, wallet)
@@ -50,7 +50,7 @@ class SendInteractorTest {
     fun retrieveRate() {
         interactor.retrieveRate()
 
-        verify(rateStorage).rateObservable(coin, currency.code)
+        verify(rateStorage).latestRateObservable(coin, currency.code)
     }
 
     @Test

@@ -45,13 +45,14 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
         transactionsAdapter.viewModel = viewModel
         toolbar.setTitle(R.string.Transactions_Title)
 
+        recyclerTransactions.setHasFixedSize(true)
         recyclerTransactions.adapter = transactionsAdapter
         recyclerTransactions.layoutManager = LinearLayoutManager(context)
         recyclerTags.adapter = filterAdapter
         recyclerTags.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
         pullToRefresh.setOnRefreshListener {
-            viewModel.delegate.refresh()
+            pullToRefresh.isRefreshing = false
         }
 
         viewModel.filterItems.observe(this, Observer { filters ->
@@ -61,9 +62,9 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
             }
         })
 
-        viewModel.showTransactionInfoLiveEvent.observe(this, Observer { transactionHash ->
-            transactionHash?.let { transactHash ->
-                transInfoViewModel.delegate.getTransaction(transactHash)
+        viewModel.transactionViewItemLiveEvent.observe(this, Observer { transactionViewItem ->
+            transactionViewItem?.let {
+                transInfoViewModel.setViewItem(it)
             }
         })
 
@@ -73,9 +74,24 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
 
         viewModel.reloadLiveEvent.observe(this, Observer {
             transactionsAdapter.notifyDataSetChanged()
+            if (transactionsAdapter.itemCount == 0) {
+                viewModel.delegate.onBottomReached()
+            }
 
             recyclerTransactions.visibility = if (viewModel.delegate.itemsCount == 0) View.GONE else View.VISIBLE
             emptyListText.visibility = if (viewModel.delegate.itemsCount == 0) View.VISIBLE else View.GONE
+        })
+
+        viewModel.addItemsLiveEvent.observe(this, Observer {
+            it?.let { (fromIndex, count) ->
+                transactionsAdapter.notifyItemRangeInserted(fromIndex, count)
+            }
+        })
+
+        viewModel.reloadItemsLiveEvent.observe(this, Observer {
+            it?.forEach { index ->
+                transactionsAdapter.notifyItemChanged(index)
+            }
         })
 
         setBottomSheet()
@@ -111,8 +127,8 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
         transInfoViewModel = ViewModelProviders.of(this).get(TransactionInfoViewModel::class.java)
         transInfoViewModel.init()
 
-        transactionIdView.setOnClickListener { transInfoViewModel.delegate.onCopyId() }
-        txtFullInfo.setOnClickListener { transInfoViewModel.delegate.showFullInfo() }
+        transactionIdView.setOnClickListener { transInfoViewModel.onClickTransactionId() }
+        txtFullInfo.setOnClickListener { transInfoViewModel.onClickOpenFillInfo() }
         transactionsDim.setOnClickListener { bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED }
 
         transInfoViewModel.showCopiedLiveEvent.observe(this, Observer {
@@ -132,6 +148,8 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
                 (activity as? MainActivity)?.setBottomNavigationVisible(false)
                 bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
 
+                val txStatus = txRec.status
+
                 fiatValue.apply {
                     text = txRec.currencyValue?.let { ValueFormatter.format(it, showNegativeSign = true, realNumber = true) }
                     setTextColor(resources.getColor(if (txRec.incoming) R.color.green_crypto else R.color.yellow_crypto, null))
@@ -146,19 +164,19 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
                 }
 
                 itemStatus.apply {
-                    bindStatus(txRec.status)
+                    bindStatus(txStatus)
                 }
 
                 transactionIdView.bindTransactionId(txRec.transactionHash)
 
                 itemFrom.apply {
-                    setOnClickListener { transInfoViewModel.delegate.onCopyFromAddress() }
+                    setOnClickListener { transInfoViewModel.onClickFrom() }
                     visibility = if (txRec.from.isNullOrEmpty()) View.GONE else View.VISIBLE
                     bindAddress(title = getString(R.string.TransactionInfo_From), address = txRec.from, showBottomBorder = true)
                 }
 
                 itemTo.apply {
-                    setOnClickListener { transInfoViewModel.delegate.onCopyToAddress() }
+                    setOnClickListener { transInfoViewModel.onClickTo() }
                     visibility = if (txRec.to.isNullOrEmpty()) View.GONE else View.VISIBLE
                     bindAddress(title = getString(R.string.TransactionInfo_To), address = txRec.to, showBottomBorder = true)
                 }
@@ -170,8 +188,8 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
         viewModel.delegate.onTransactionItemClick(item)
     }
 
-    override fun onFilterItemClick(item: TransactionFilterItem) {
-        viewModel.delegate.onFilterSelect(item.adapterId)
+    override fun onFilterItemClick(item: String?) {
+        viewModel.delegate.onFilterSelect(item)
     }
 
     fun onBackPressed(): Boolean {
@@ -185,7 +203,15 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
 }
 
 
-class TransactionsAdapter(private var listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class TransactionsAdapter(private var listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), ViewHolderTransaction.ClickListener {
+
+    init {
+        setHasStableIds(true)
+    }
+
+    override fun getItemId(position: Int): Long {
+        return viewModel.delegate.idForIndex(position)
+    }
 
     interface Listener {
         fun onItemClick(item: TransactionViewItem)
@@ -193,31 +219,41 @@ class TransactionsAdapter(private var listener: Listener) : RecyclerView.Adapter
 
     lateinit var viewModel: TransactionsViewModel
 
-    override fun getItemCount() = viewModel.delegate.itemsCount
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.view_holder_transaction, parent, false)
-
-        return ViewHolderTransaction(view)
+    override fun getItemCount(): Int {
+        return viewModel.delegate.itemsCount
     }
 
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
+            ViewHolderTransaction(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_transaction, parent, false), this)
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (position > itemCount - 3) {
+            viewModel.delegate.onBottomReached()
+        }
+
         when (holder) {
             is ViewHolderTransaction -> {
-                val transactionRecord = viewModel.delegate.itemForIndex(position)
-                holder.bind(transactionRecord) { listener.onItemClick(transactionRecord) }
+                holder.bind(viewModel.delegate.itemForIndex(position))
             }
         }
     }
 
+    override fun onClick(position: Int) {
+        listener.onItemClick(viewModel.delegate.itemForIndex(position))
+    }
 }
 
-class ViewHolderTransaction(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class ViewHolderTransaction(override val containerView: View, private val l: ClickListener ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(transactionRecord: TransactionViewItem, onClick: () -> (Unit)) {
+    interface ClickListener {
+        fun onClick(position: Int)
+    }
 
-        containerView.setOnSingleClickListener { onClick.invoke() }
+    init {
+        containerView.setOnSingleClickListener { l.onClick(adapterPosition) }
+    }
+
+    fun bind(transactionRecord: TransactionViewItem) {
         txValueInFiat.text = transactionRecord.currencyValue?.let { ValueFormatter.formatForTransactions(it, transactionRecord.incoming) }
         txValueInCoin.text = ValueFormatter.format(transactionRecord.coinValue, true)
         txDate.text = transactionRecord.date?.let { DateHelper.getShortDateForTransaction(it) }
@@ -229,34 +265,22 @@ class ViewHolderTransaction(override val containerView: View) : RecyclerView.Vie
 class FilterAdapter(private var listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface Listener {
-        fun onFilterItemClick(item: TransactionFilterItem)
+        fun onFilterItemClick(item: String?)
     }
 
-    private var selectedFilterId: String? = null
+    var selectedFilterId: String? = null
+    var filters: List<String?> = listOf()
 
-    private val firstTag = TransactionFilterItem(null, "All")
-    var filters: List<TransactionFilterItem> = listOf()
-
-    private val allFilters: MutableList<TransactionFilterItem>
-        get() {
-            val items = mutableListOf(firstTag)
-            items.addAll(filters)
-            return items
-        }
-
-    override fun getItemCount() = allFilters.size
+    override fun getItemCount() = filters.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
             ViewHolderFilter(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_filter, parent, false))
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is ViewHolderFilter -> holder.bind(
-                    allFilters[position].name,
-                    active = selectedFilterId == allFilters[position].adapterId,
-                    firstButton = position == 0) {
-                listener.onFilterItemClick(allFilters[position])
-                selectedFilterId = allFilters[position].adapterId
+            is ViewHolderFilter -> holder.bind(filters[position], active = selectedFilterId == filters[position]) {
+                listener.onFilterItemClick(filters[position])
+                selectedFilterId = filters[position]
                 notifyDataSetChanged()
             }
         }
@@ -266,15 +290,10 @@ class FilterAdapter(private var listener: Listener) : RecyclerView.Adapter<Recyc
 
 class ViewHolderFilter(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(filterName: String, active: Boolean, firstButton: Boolean, onClick: () -> (Unit)) {
+    fun bind(filterName: String?, active: Boolean, onClick: () -> (Unit)) {
         filter_text.setOnClickListener { onClick.invoke() }
 
-        if (firstButton) {
-            val localizedFirstButtonTitle = containerView.context.getString(R.string.Transactions_FilterAll)
-            filter_text.text = localizedFirstButtonTitle
-        } else {
-            filter_text.text = filterName
-        }
+        filter_text.text = filterName ?: containerView.context.getString(R.string.Transactions_FilterAll)
         filter_text.isActivated = active
     }
 }

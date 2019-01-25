@@ -12,7 +12,6 @@ class AuthManager(
 
     var walletManager: IWalletManager? = null
     var pinManager: IPinManager? = null
-    var transactionManager: TransactionManager? = null
 
     var authData: AuthData? = null
     var authDataSignal = PublishSubject.create<Unit>()
@@ -40,7 +39,6 @@ class AuthManager(
     fun logout() {
         walletManager?.clearWallets()
         pinManager?.clear()
-        transactionManager?.clear()
         localStorage.clearAll()
         coinManager.clearCoins()
 

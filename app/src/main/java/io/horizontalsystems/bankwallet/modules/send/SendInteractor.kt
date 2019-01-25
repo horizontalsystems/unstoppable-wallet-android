@@ -36,7 +36,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
 
     override fun retrieveRate() {
         disposables.add(
-                rateStorage.rateObservable(wallet.coinCode, currencyManager.baseCurrency.code)
+                rateStorage.latestRateObservable(wallet.coinCode, currencyManager.baseCurrency.code)
                         .take(1)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())

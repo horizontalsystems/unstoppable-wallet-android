@@ -26,11 +26,28 @@ class RateSyncer(private val rateManager: RateManager,
                 .subscribe {
                     requestRefresh()
                 })
+
+        requestRefreshZeroRates()
+
+        disposables.add(Observable.merge(
+                currencyManager.baseCurrencyUpdatedSignal,
+                networkAvailabilityManager.networkAvailabilitySignal)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe {
+                    requestRefreshZeroRates()
+                })
+    }
+
+    private fun requestRefreshZeroRates() {
+        if (networkAvailabilityManager.isConnected) {
+            rateManager.refreshZeroRates(currencyManager.baseCurrency.code)
+        }
     }
 
     private fun requestRefresh() {
         if (networkAvailabilityManager.isConnected) {
-            rateManager.refreshRates(walletManager.wallets.map { it.coinCode }, currencyManager.baseCurrency.code)
+            rateManager.refreshLatestRates(walletManager.wallets.map { it.coinCode }, currencyManager.baseCurrency.code)
         }
     }
 }

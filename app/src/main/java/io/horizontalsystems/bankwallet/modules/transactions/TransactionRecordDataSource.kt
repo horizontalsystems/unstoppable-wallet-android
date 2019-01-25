@@ -1,50 +1,108 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import io.horizontalsystems.bankwallet.core.storage.AppDatabase
+import io.horizontalsystems.bankwallet.entities.TransactionItem
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
-import io.reactivex.Flowable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule.FetchData
 
-class TransactionRecordDataSource(private val appDatabase: AppDatabase) : TransactionsModule.ITransactionRecordDataSource {
+class TransactionRecordDataSource(
+        private val poolRepo: PoolRepo,
+        private val itemsDataSource: TransactionItemDataSource,
+        private val factory: TransactionItemFactory,
+        private val limit: Int = 10) {
 
-    private var results: List<TransactionRecord> = listOf()
-    private var disposable: Disposable? = null
+    val itemsCount
+        get() = itemsDataSource.count
 
-    override var delegate: TransactionsModule.ITransactionRecordDataSourceDelegate? = null
+    val allShown
+        get() = poolRepo.activePools.all { it.allShown }
 
-    override val count: Int
-        get() = results.count()
+    val allRecords: Map<CoinCode, List<TransactionRecord>>
+        get() = poolRepo.activePools.map {
+            Pair(it.coinCode, it.records)
+        }.toMap()
 
-    override fun recordForIndex(index: Int): TransactionRecord {
-        return results[index]
+    fun itemForIndex(index: Int): TransactionItem =
+            itemsDataSource.itemForIndex(index)
+
+    fun itemIndexesForTimestamp(coinCode: CoinCode, timestamp: Long): List<Int> =
+            itemsDataSource.itemIndexesForTimestamp(coinCode, timestamp)
+
+    fun getFetchDataList(): List<FetchData> = poolRepo.activePools.mapNotNull {
+        it.getFetchData(limit)
     }
 
-    override fun setCoin(coinCode: CoinCode?) {
-        subscribe(coinCode)
+    fun handleNextRecords(records: Map<CoinCode, List<TransactionRecord>>) {
+        records.forEach { (coinCode, transactionRecords) ->
+            poolRepo.getPool(coinCode)?.add(transactionRecords)
+        }
     }
 
-    init {
-        subscribe()
-    }
+    fun handleUpdatedRecords(records: List<TransactionRecord>, coinCode: CoinCode): Boolean {
+        val pool = poolRepo.getPool(coinCode) ?: return false
 
-    private fun subscribe(coinCode: CoinCode? = null) {
-        disposable?.dispose()
+        val updatedRecords = mutableListOf<TransactionRecord>()
+        val insertedRecords = mutableListOf<TransactionRecord>()
+        var newData = false
 
-        disposable = getTransactionRecords(coinCode)
-                .subscribeOn(io.reactivex.schedulers.Schedulers.io())
-                .unsubscribeOn(io.reactivex.schedulers.Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    results = it
-                    delegate?.onUpdateResults()
+        records.forEach {
+            when (pool.handleUpdatedRecord(it)) {
+                Pool.HandleResult.UPDATED -> updatedRecords.add(it)
+                Pool.HandleResult.INSERTED -> insertedRecords.add(it)
+                Pool.HandleResult.NEW_DATA -> {
+                    if (itemsDataSource.shouldInsertRecord(it)) {
+                        insertedRecords.add(it)
+                        pool.increaseFirstUnusedIndex()
+                    }
+                    newData = true
                 }
+                Pool.HandleResult.IGNORED -> {
+                }
+            }
+        }
+
+        if (!poolRepo.isPoolActiveByCoinCode(coinCode)) return false
+
+        if (updatedRecords.isEmpty() && insertedRecords.isEmpty()) return newData
+
+        val updatedItems = updatedRecords.map { factory.createTransactionItem(coinCode, it) }
+        val insertedItems = insertedRecords.map { factory.createTransactionItem(coinCode, it) }
+
+        itemsDataSource.handleModifiedItems(updatedItems, insertedItems)
+
+        return true
     }
 
-    private fun getTransactionRecords(coinCode: CoinCode? = null): Flowable<List<TransactionRecord>> =
-            if (coinCode == null)
-                appDatabase.transactionDao().getAll()
-            else
-                appDatabase.transactionDao().getAll(coinCode)
+    fun increasePage(): Int {
+        val unusedItems = mutableListOf<TransactionItem>()
+
+        poolRepo.activePools.forEach { pool ->
+            unusedItems.addAll(pool.unusedRecords.map { record ->
+                factory.createTransactionItem(pool.coinCode, record)
+            })
+        }
+
+        if (unusedItems.isEmpty()) return 0
+
+        unusedItems.sortByDescending { it.record.timestamp }
+
+        val usedItems = unusedItems.take(limit)
+
+        itemsDataSource.add(usedItems)
+
+        usedItems.forEach {
+            poolRepo.getPool(it.coinCode)?.increaseFirstUnusedIndex()
+        }
+
+        return usedItems.size
+    }
+
+    fun setCoinCodes(coinCodes: List<CoinCode>) {
+        poolRepo.allPools.forEach {
+            it.resetFirstUnusedIndex()
+        }
+        poolRepo.activatePools(coinCodes)
+        itemsDataSource.clear()
+    }
 
 }
+

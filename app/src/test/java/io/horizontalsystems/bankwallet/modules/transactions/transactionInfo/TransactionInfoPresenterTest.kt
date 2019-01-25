@@ -13,7 +13,7 @@ class TransactionInfoPresenterTest {
     private val transactionFactory = Mockito.mock(TransactionViewItemFactory::class.java)
     private val view = Mockito.mock(TransactionInfoModule.View::class.java)
 
-    private val presenter = TransactionInfoPresenter(interactor, router, transactionFactory)
+    private val presenter = TransactionInfoPresenter(interactor, router)
 
     @Before
     fun setUp() {
@@ -22,25 +22,24 @@ class TransactionInfoPresenterTest {
 
 
     @Test
-    fun getTransaction() {
-        presenter.getTransaction(transHash)
+    fun onCopy() {
+        val value = "some string"
 
-        verify(interactor).getTransaction(transHash)
+        presenter.onCopy(value)
+
+        verify(interactor).onCopy(value)
+        verify(view).showCopied()
     }
 
-//    @Test
-//    fun onCopyFromAddress() {
-//        presenter.onCopyFromAddress()
-//        verify(interactor).onTapItem()
-//    }
 
     @Test
-    fun didGetTransaction() {
-//        val transactionRecord = Mockito.mock(TransactionRecord::class.java)
-//        val transactionViewItem = Mockito.mock(TransactionViewItem::class.java)
-//        presenter.didGetTransaction(transactionRecord)
-//
-//        view.showTransactionItem(transactionViewItem)
+    fun openFullInfo() {
+        val transactionHash = "hash"
+        val coinCode = "BTC"
+
+        presenter.openFullInfo(transactionHash, coinCode)
+
+        verify(router).openFullInfo(transactionHash, coinCode)
     }
 
 }

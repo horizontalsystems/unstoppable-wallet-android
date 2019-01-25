@@ -7,8 +7,8 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.Flowable
-import io.reactivex.Maybe
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import java.util.*
@@ -122,7 +122,7 @@ interface IAdapter {
 
     val confirmationsThreshold: Int
     val lastBlockHeight: Int?
-    val lastBlockHeightSubject: PublishSubject<Int>
+    val lastBlockHeightUpdatedSignal: PublishSubject<Unit>
 
     val transactionRecordsSubject: PublishSubject<List<TransactionRecord>>
 
@@ -143,6 +143,7 @@ interface IAdapter {
     fun validate(address: String)
 
     val receiveAddress: String
+    fun getTransactionsObservable(hashFrom: String?, limit: Int): Single<List<TransactionRecord>>
 }
 
 interface ISystemInfoManager {
@@ -181,31 +182,18 @@ interface IOneTimerDelegate {
 }
 
 interface IRateStorage {
-    fun rateObservable(coinCode: CoinCode, currencyCode: String): Flowable<Rate>
+    fun latestRateObservable(coinCode: CoinCode, currencyCode: String): Flowable<Rate>
+    fun rateObservable(coinCode: CoinCode, currencyCode: String, timestamp: Long): Flowable<List<Rate>>
     fun save(rate: Rate)
-    fun getAll(): Flowable<List<Rate>>
+    fun saveLatest(rate: Rate)
     fun deleteAll()
+    fun zeroRatesObservable(currencyCode: String): Single<List<Rate>>
 }
 
 interface ICoinStorage {
     fun enabledCoinsObservable(): Flowable<List<Coin>>
     fun allCoinsObservable(): Flowable<List<Coin>>
     fun save(coins: List<Coin>)
-    fun deleteAll()
-}
-
-interface ITransactionRateSyncer {
-    fun sync(currencyCode: String)
-    fun cancelCurrentSync()
-}
-
-interface ITransactionRecordStorage {
-    fun record(hash: String): Maybe<TransactionRecord>
-    val nonFilledRecords: Maybe<List<TransactionRecord>>
-    fun set(rate: Double, transactionHash: String)
-    fun clearRates()
-
-    fun update(records: List<TransactionRecord>)
     fun deleteAll()
 }
 

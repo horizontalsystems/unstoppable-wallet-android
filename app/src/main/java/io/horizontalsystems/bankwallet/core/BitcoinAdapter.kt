@@ -9,9 +9,9 @@ import io.horizontalsystems.bitcoinkit.models.BlockInfo
 import io.horizontalsystems.bitcoinkit.models.TransactionInfo
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
+import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
-import java.util.*
 
 class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, newWallet: Boolean, walletId: String?) : IAdapter, BitcoinKit.Listener {
 
@@ -31,7 +31,7 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
 
     override val confirmationsThreshold: Int = 6
     override val lastBlockHeight: Int get() = bitcoinKit.lastBlockHeight
-    override val lastBlockHeightSubject: PublishSubject<Int> = PublishSubject.create()
+    override val lastBlockHeightUpdatedSignal: PublishSubject<Unit> = PublishSubject.create()
 
     override val transactionRecordsSubject: PublishSubject<List<TransactionRecord>> = PublishSubject.create()
 
@@ -84,6 +84,10 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
         bitcoinKit.validateAddress(address)
     }
 
+    override fun getTransactionsObservable(hashFrom: String?, limit: Int): Single<List<TransactionRecord>> {
+        return bitcoinKit.transactions(hashFrom, limit).map { it.map { transactionRecord(it) } }
+    }
+
     //
     // BitcoinKit Listener implementations
     //
@@ -92,7 +96,7 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
     }
 
     override fun onLastBlockInfoUpdate(bitcoinKit: BitcoinKit, blockInfo: BlockInfo) {
-        lastBlockHeightSubject.onNext(blockInfo.height)
+        lastBlockHeightUpdatedSignal.onNext(Unit)
     }
 
     override fun onKitStateUpdate(bitcoinKit: BitcoinKit, state: BitcoinKit.KitState) {
@@ -129,30 +133,25 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
 
     }
 
-    private fun transactionRecord(transaction: TransactionInfo): TransactionRecord {
-        val record = TransactionRecord()
-
-        record.transactionHash = transaction.transactionHash
-        record.blockHeight = transaction.blockHeight?.toLong() ?: 0
-        record.amount = transaction.amount / satoshisInBitcoin
-        record.timestamp = transaction.timestamp ?: Date().time / 1000
-
-        record.from = transaction.from.map {
-            val address = TransactionAddress()
-            address.address = it.address
-            address.mine = it.mine
-            address
-        }
-
-        record.to = transaction.to.map {
-            val address = TransactionAddress()
-            address.address = it.address
-            address.mine = it.mine
-            address
-        }
-
-        return record
-    }
+    private fun transactionRecord(transaction: TransactionInfo) =
+            TransactionRecord(
+                    transaction.transactionHash,
+                    transaction.blockHeight?.toLong() ?: 0,
+                    transaction.amount / satoshisInBitcoin,
+                    transaction.timestamp,
+                    transaction.from.map {
+                        val address = TransactionAddress()
+                        address.address = it.address
+                        address.mine = it.mine
+                        address
+                    },
+                    transaction.to.map {
+                        val address = TransactionAddress()
+                        address.address = it.address
+                        address.mine = it.mine
+                        address
+                    }
+            )
 
     companion object {
 

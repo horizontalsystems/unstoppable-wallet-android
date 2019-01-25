@@ -45,7 +45,7 @@ class BalanceInteractor(
         rateDisposables.clear()
 
         coinCodes.forEach {
-            rateDisposables.add(rateStorage.rateObservable(it, currencyCode)
+            rateDisposables.add(rateStorage.latestRateObservable(it, currencyCode)
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
                     .subscribe {
