@@ -19,7 +19,7 @@
     <string name="Guest_CreateWallet">کیف پول جدید</string>
     <string name="Guest_RestoreWallet">بازگرداندن كيف پول</string>
     <!--Restore-->
-    <string name="Restore_Title">Enter Secret Key</string>
+    <string name="Restore_Title">کلید مخفی را وارد کنید</string>
     <string name="Restore_ValidationFailed">کلید مخفی نادرست</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>
     <!--Backup-->
@@ -78,7 +78,7 @@
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">معاملات</string>
     <string name="TransactionInfo_Status">وضيعت</string>
-    <string name="TransactionInfo_Id">ID</string>
+    <string name="TransactionInfo_Id">شناس نامه</string>
     <string name="TransactionInfo_To">به</string>
     <string name="TransactionInfo_From">از</string>
     <string name="TransactionInfo_Time">Time</string>
