@@ -49,11 +49,22 @@ class TransactionsPresenter(private val interactor: TransactionsModule.IInteract
         loader.loadNext(false)
     }
 
-    override fun onUpdateCoinCodes(allCoinCodes: List<CoinCode>) {
-        loader.setCoinCodes(allCoinCodes)
+    override fun onUpdateCoinsData(allCoinData: List<Triple<String, Int, Int?>>) {
+        val coinCodes = allCoinData.map { it.first }
+
+        loader.setCoinCodes(coinCodes)
+
+        allCoinData.forEach { (coinCode, confirmationThreshold, lastBlockHeight) ->
+            metadataDataSource.setConfirmationThreshold(confirmationThreshold, coinCode)
+            lastBlockHeight?.let {
+                metadataDataSource.setLastBlockHeight(it, coinCode)
+            }
+        }
+
+
         loader.loadNext(true)
 
-        view?.showFilters(listOf(null).plus(allCoinCodes))
+        view?.showFilters(listOf(null).plus(coinCodes))
 
         interactor.fetchLastBlockHeights()
     }
@@ -71,10 +82,6 @@ class TransactionsPresenter(private val interactor: TransactionsModule.IInteract
     override fun onUpdateLastBlockHeight(coinCode: CoinCode, lastBlockHeight: Int) {
         metadataDataSource.setLastBlockHeight(lastBlockHeight, coinCode)
         view?.reload()
-    }
-
-    override fun onUpdateConfirmationThreshold(coinCode: CoinCode, confirmationThreshold: Int) {
-        metadataDataSource.setConfirmationThreshold(confirmationThreshold, coinCode)
     }
 
     override fun onUpdateBaseCurrency() {

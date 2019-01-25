@@ -49,31 +49,8 @@ class TransactionsInteractorTest {
     }
 
     @Test
-    fun fetchLastBlockHeights() {
-        val lastBlockHeight = 12312
-        val confirmationThreshold = 12312
-        val wallets = listOf(wallet1)
-        val coinCode1 = "BTC"
-
-        val mockSubject = mock<PublishSubject<Unit>>()
-        whenever(mockSubject.throttleLast(any(), any())).thenReturn(PublishSubject.create())
-
-        whenever(adapter1.lastBlockHeightUpdatedSignal).thenReturn(mockSubject)
-        whenever(adapter1.lastBlockHeight).thenReturn(lastBlockHeight)
-        whenever(adapter1.confirmationsThreshold).thenReturn(confirmationThreshold)
-        whenever(wallet1.coinCode).thenReturn(coinCode1)
-        whenever(walletManager.wallets).thenReturn(wallets)
-
-        interactor.fetchLastBlockHeights()
-
-        verify(delegate).onUpdateLastBlockHeight(coinCode1, lastBlockHeight)
-        verify(delegate).onUpdateConfirmationThreshold(coinCode1, confirmationThreshold)
-    }
-
-    @Test
     fun fetchLastBlockHeights_update() {
         val lastBlockHeightUpdatedSignal1 = PublishSubject.create<Unit>()
-        val lastBlockHeight = 12312
         val lastBlockHeightUpdated = 345345
         val adapter1 = mock(IAdapter::class.java)
         val wallets = listOf(wallet1)
@@ -83,7 +60,7 @@ class TransactionsInteractorTest {
         whenever(mockSubject.throttleLast(any(), any())).thenReturn(lastBlockHeightUpdatedSignal1)
 
         whenever(adapter1.lastBlockHeightUpdatedSignal).thenReturn(mockSubject)
-        whenever(adapter1.lastBlockHeight).thenReturn(lastBlockHeight, lastBlockHeightUpdated)
+        whenever(adapter1.lastBlockHeight).thenReturn(lastBlockHeightUpdated)
         whenever(wallet1.adapter).thenReturn(adapter1)
         whenever(wallet1.coinCode).thenReturn(coinCode1)
         whenever(walletManager.wallets).thenReturn(wallets)
@@ -92,21 +69,25 @@ class TransactionsInteractorTest {
 
         lastBlockHeightUpdatedSignal1.onNext(Unit)
 
-        verify(delegate).onUpdateLastBlockHeight(coinCode1, lastBlockHeight)
         verify(delegate).onUpdateLastBlockHeight(coinCode1, lastBlockHeightUpdated)
     }
 
     @Test
     fun initialFetch() {
         val wallets = listOf(wallet1)
-        val allCoinCodes = listOf("BTC")
+        val lastBlockHeight1 = 123
+        val confirmationsThreshold1 = 6
+        val coinCode1 = "BTC"
+        val allCoinData = listOf(Triple(coinCode1, confirmationsThreshold1,  lastBlockHeight1))
 
-        whenever(wallet1.coinCode).thenReturn("BTC")
+        whenever(adapter1.lastBlockHeight).thenReturn(lastBlockHeight1)
+        whenever(adapter1.confirmationsThreshold).thenReturn(confirmationsThreshold1)
+        whenever(wallet1.coinCode).thenReturn(coinCode1)
         whenever(walletManager.wallets).thenReturn(wallets)
 
         interactor.initialFetch()
 
-        verify(delegate).onUpdateCoinCodes(allCoinCodes)
+        verify(delegate).onUpdateCoinsData(allCoinData)
     }
 
     @Test
@@ -142,8 +123,13 @@ class TransactionsInteractorTest {
     fun initialFetch_walletsUpdated() {
         val wallets: List<Wallet> = listOf()
         val walletUpdated: List<Wallet> = listOf(wallet1)
-        val allCoinCodes = listOf("BTC")
+        val lastBlockHeight1 = 123
+        val confirmationsThreshold1 = 6
+        val coinCode1 = "BTC"
+        val allCoinData = listOf(Triple(coinCode1, confirmationsThreshold1,  lastBlockHeight1))
 
+        whenever(adapter1.lastBlockHeight).thenReturn(lastBlockHeight1)
+        whenever(adapter1.confirmationsThreshold).thenReturn(confirmationsThreshold1)
         whenever(wallet1.coinCode).thenReturn("BTC")
         whenever(walletManager.wallets).thenReturn(wallets, walletUpdated)
 
@@ -151,8 +137,8 @@ class TransactionsInteractorTest {
 
         walletsUpdatedSignal.onNext(Unit)
 
-        verify(delegate).onUpdateCoinCodes(listOf())
-        verify(delegate).onUpdateCoinCodes(allCoinCodes)
+        verify(delegate).onUpdateCoinsData(listOf())
+        verify(delegate).onUpdateCoinsData(allCoinData)
     }
 
     @Test

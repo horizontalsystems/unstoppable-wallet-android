@@ -87,9 +87,6 @@ class TransactionsInteractor(private val walletManager: IWalletManager, private 
         lastBlockHeightDisposables.clear()
 
         walletManager.wallets.forEach { wallet ->
-            onUpdateLastBlockHeight(wallet)
-            delegate?.onUpdateConfirmationThreshold(wallet.coinCode, wallet.adapter.confirmationsThreshold)
-
             lastBlockHeightDisposables.add(wallet.adapter.lastBlockHeightUpdatedSignal
                     .throttleLast(3, TimeUnit.SECONDS)
                     .subscribeOn(Schedulers.io())
@@ -137,7 +134,8 @@ class TransactionsInteractor(private val walletManager: IWalletManager, private 
     }
 
     private fun onUpdateCoinCodes() {
-        delegate?.onUpdateCoinCodes(walletManager.wallets.map { it.coinCode })
+        delegate?.onUpdateCoinsData(walletManager.wallets.map { Triple(it.coinCode, it.adapter.confirmationsThreshold, it.adapter.lastBlockHeight) })
+
         walletManager.wallets.forEach { wallet ->
             transactionUpdatesDisposables.add(wallet.adapter.transactionRecordsSubject
                     .subscribeOn(Schedulers.io())

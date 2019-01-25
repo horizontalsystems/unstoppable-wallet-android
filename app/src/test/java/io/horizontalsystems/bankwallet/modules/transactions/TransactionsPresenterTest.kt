@@ -88,14 +88,26 @@ class TransactionsPresenterTest {
     }
 
     @Test
-    fun onUpdateCoinCodes() {
-        val allCoinCodes = listOf("BTC", "ETH")
+    fun onUpdateCoinsData() {
+        val coinCode1 = "BTC"
+        val coinCode2 = "ETH"
+        val confirmationThreshold1 = 6
+        val lastBlockHeight1 = 123
+        val confirmationThreshold2 = 12
+        val lastBlockHeight2 = null
+        val allCoinsData = listOf(
+                Triple(coinCode1, confirmationThreshold1, lastBlockHeight1),
+                Triple(coinCode2, confirmationThreshold2, lastBlockHeight2)
+        )
 
-        presenter.onUpdateCoinCodes(allCoinCodes)
+        presenter.onUpdateCoinsData(allCoinsData)
 
-        verify(loader).setCoinCodes(allCoinCodes)
+        verify(loader).setCoinCodes(listOf(coinCode1, coinCode2))
+        verify(metadataDataSource).setConfirmationThreshold(confirmationThreshold1, coinCode1)
+        verify(metadataDataSource).setConfirmationThreshold(confirmationThreshold2, coinCode2)
+        verify(metadataDataSource).setLastBlockHeight(lastBlockHeight1, coinCode1)
         verify(loader).loadNext(true)
-        verify(view).showFilters(listOf(null, "BTC", "ETH"))
+        verify(view).showFilters(listOf(null, coinCode1, coinCode2))
         verify(interactor).fetchLastBlockHeights()
     }
 
@@ -157,16 +169,6 @@ class TransactionsPresenterTest {
 
         verify(metadataDataSource).setLastBlockHeight(lastBlockHeight, coinCode)
         verify(view).reload()
-    }
-
-    @Test
-    fun onUpdateConfirmationThreshold() {
-        val coinCode = "coinCode"
-        val threshold = 123123
-
-        presenter.onUpdateConfirmationThreshold(coinCode, threshold)
-
-        verify(metadataDataSource).setConfirmationThreshold(threshold, coinCode)
     }
 
     @Test

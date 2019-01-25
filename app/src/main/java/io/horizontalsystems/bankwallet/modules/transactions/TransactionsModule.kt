@@ -60,11 +60,10 @@ object TransactionsModule {
     }
 
     interface IInteractorDelegate {
-        fun onUpdateCoinCodes(allCoinCodes: List<CoinCode>)
+        fun onUpdateCoinsData(allCoinData: List<Triple<String, Int, Int?>>)
         fun onUpdateSelectedCoinCodes(selectedCoinCodes: List<CoinCode>)
         fun didFetchRecords(records: Map<CoinCode, List<TransactionRecord>>)
         fun onUpdateLastBlockHeight(coinCode: CoinCode, lastBlockHeight: Int)
-        fun onUpdateConfirmationThreshold(coinCode: CoinCode, confirmationThreshold: Int)
         fun onUpdateBaseCurrency()
         fun didFetchRate(rateValue: Double, coinCode: CoinCode, currency: Currency, timestamp: Long)
         fun didUpdateRecords(records: List<TransactionRecord>, coinCode: CoinCode)
