@@ -21,6 +21,7 @@ class ValueFormatterTest {
         assertCurrencyFormatter(1203.903, "$ 1,204")
         assertCurrencyFormatter(0.0003903, "$ 0.01")
         assertCurrencyFormatter(-0.0003903, "- $ 0.01")
+        assertCurrencyFormatter(0.0, "$ 0")
     }
 
     @Test
