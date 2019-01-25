@@ -24,7 +24,7 @@
     <string name="Restore_RestoreFailed">Error al restaurar la cartera</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Clave secreta</string>
-    <string name="Backup_Intro_Subtitle">Su clave secreta es la única manera de recuperar su cartera y otros fondos si su teléfono alguna vez se pierde, se rompe, es sustraído o se actualiza a otra versión.</string>
+    <string name="Backup_Intro_Subtitle">Your secret key is the only way to restore your wallet and funds if your phone is ever lost, stolen, broken, or upgraded.\n\n It consists of 12 words. Store it safely offline.</string>
     <string name="Backup_Intro_Later">Posterior</string>
     <string name="Backup_Intro_BackupNow">Copia de seguridad</string>
     <string name="Backup_Words_Title">Clave secreta</string>
@@ -83,7 +83,7 @@
     <string name="TransactionInfo_From">Desde </string>
     <string name="TransactionInfo_Time">Hora</string>
     <string name="TransactionInfo_ButtonMore">Más</string>
-    <string name="TransactionInfo_Status_Pending">Pendiente</string>
+    <string name="TransactionInfo_Status_Pending">Pending</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Transacción</string>
     <string name="FullInfo_Time">Hora</string>
