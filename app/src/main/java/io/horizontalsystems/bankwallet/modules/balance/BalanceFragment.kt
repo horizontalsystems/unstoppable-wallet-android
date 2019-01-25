@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SimpleItemAnimator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -99,6 +100,7 @@ class BalanceFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener
         coinsAdapter.viewDelegate = viewModel.delegate
         recyclerCoins.adapter = coinsAdapter
         recyclerCoins.layoutManager = LinearLayoutManager(context)
+        (recyclerCoins.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
 
         manageCoins.setOnSingleClickListener { viewModel.delegate.openManageCoins() }
 

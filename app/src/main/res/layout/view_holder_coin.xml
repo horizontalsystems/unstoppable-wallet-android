@@ -98,6 +98,7 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="14dp"
         android:orientation="horizontal"
+        android:gravity="bottom"
         >
 
         <TextView
