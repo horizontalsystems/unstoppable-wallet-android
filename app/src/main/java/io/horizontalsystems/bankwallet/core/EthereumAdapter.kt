@@ -61,7 +61,7 @@ class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, Eth
     }
 
     override fun fee(value: Double, address: String?, senderPay: Boolean): Double {
-        val fee = ethereumKit.fee() / weisInEther
+        val fee = ethereumKit.fee()
         if (balance - value - fee < 0) {
             throw Error.InsufficientAmount(fee)
         }
@@ -73,7 +73,7 @@ class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, Eth
     }
 
     override fun balanceUpdated(balance: Double) {
-        balanceSubject.onNext(balance / weisInEther)
+        balanceSubject.onNext(balance)
     }
 
     override fun lastBlockHeightUpdated(height: Int) {
@@ -113,7 +113,7 @@ class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, Eth
     }
 
     override fun getTransactionsObservable(hashFrom: String?, limit: Int): Single<List<TransactionRecord>> {
-        return Single.just(listOf())
+        return ethereumKit.transactions(hashFrom, limit).map { it.map { transactionRecord(it) } }
     }
 
     private fun transactionRecord(transaction: Transaction): TransactionRecord {
