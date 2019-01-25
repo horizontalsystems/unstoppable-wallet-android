@@ -22,6 +22,7 @@
     <attr name="BottomNavigationBackgroundColor" format="reference|color" />
     <attr name="StatusBarColor" format="reference|color" />
     <attr name="RippleColor" format="reference|color" />
+    <attr name="RoundRippleColor" format="reference|color" />
     <attr name="NumpadDeleteButton" format="reference" />
     <attr name="NumpadFingerprintButton" format="reference" />
     <attr name="AppBarBackground" format="reference" />
@@ -34,6 +35,7 @@
     <attr name="TransactionTextBoxBackground" format="reference|color" />
     <attr name="TransactionDetailValueTextColor" format="reference|color" />
     <attr name="TransactionDetailBottomBarBackground" format="reference|color" />
+    <attr name="TransactionInfoMoreButtonBackground" format="reference" />
     <attr name="BottomTransactionInfoBackground" format="reference|color" />
     <attr name="BottomSendBackground" format="reference|color" />
     <attr name="BottomSendInputBackground" format="reference|color" />
@@ -42,7 +44,7 @@
     <attr name="BottomSendImageButtonTint" format="reference|color" />
     <attr name="BottomDialogTextColor" format="reference|color" />
     <attr name="ConfirmationDialogBackground" format="reference|color" />
-    <attr name="ConfirmationAddressBackground" format="reference|color" />
+    <attr name="AddressBackground" format="reference|color" />
     <attr name="ConfirmationMiddlePartBackground" format="reference|color" />
     <attr name="CurrencySwitcherTitleColor" format="reference|color" />
     <attr name="PendingTransactionShadeColor" format="reference|color" />
@@ -64,8 +66,8 @@
         <item name="colorControlNormal">@color/grey</item>
         <item name="colorControlActivated">@color/yellow_crypto</item>
 
-        <item name="NumpadNumberBackground">@color/grey_20</item>
-        <item name="NumpadNumberBackgroundHighlight">@color/grey_40</item>
+        <item name="NumpadNumberBackground">@color/steel_20</item>
+        <item name="NumpadNumberBackgroundHighlight">@color/steel_40</item>
         <item name="NumpadNumberColor">@color/white</item>
         <item name="NumpadBorderColor">@color/transparent</item>
         <item name="BallanceCoinNameColor">@color/white</item>
@@ -78,13 +80,14 @@
         <item name="AboutLongTextColor">@color/steel_grey</item>
         <item name="TransactionItemBackgroundColor">@color/transaction_item_background_dark</item>
         <item name="CoinItemBackgroundColor">@color/coin_item_background_dark</item>
-        <item name="FilterButtonBackgroundColor">@color/grey_20</item>
+        <item name="FilterButtonBackgroundColor">@color/steel_20</item>
         <item name="SettingItemBackgroundColor">@color/setting_item_background_dark</item>
         <item name="DraggableCoinBackgroundColor">@color/manage_coin_background_dark</item>
         <item name="AddWalletIcon">@drawable/add_dark</item>
         <item name="BottomNavigationBackgroundColor">@color/dark</item>
         <item name="StatusBarColor">@color/dark</item>
         <item name="RippleColor">@color/ripple_white</item>
+        <item name="RoundRippleColor">@color/white_50</item>
         <item name="NumpadDeleteButton">@drawable/round_backspace_24px</item>
         <item name="NumpadFingerprintButton">@drawable/fingerprint_outline_white</item>
         <item name="AppBarBackground">@drawable/shadow_top_navigation</item>
@@ -93,20 +96,21 @@
         <item name="HudBackground">@color/black_85</item>
         <item name="HudTextColor">@color/white</item>
         <item name="TransactionDateColor">@color/steel_grey</item>
-        <item name="TransactionDetailBackground">@color/grey_20</item>
+        <item name="TransactionDetailBackground">@color/steel_20</item>
         <item name="TransactionTextBoxBackground">@color/text_box_background_dark</item>
         <item name="TransactionDetailValueTextColor">@color/bars_color</item>
         <item name="TransactionDetailBottomBarBackground">@color/dark</item>
+        <item name="TransactionInfoMoreButtonBackground">@drawable/transaction_info_more_button_background_dark</item>
         <item name="BottomTransactionInfoBackground">@color/dark</item>
         <item name="BottomSendBackground">@color/dark</item>
-        <item name="BottomSendInputBackground">@color/grey_20</item>
-        <item name="BottomSendButtonColor">@color/grey_20</item>
+        <item name="BottomSendInputBackground">@color/steel_20</item>
+        <item name="BottomSendButtonColor">@color/steel_20</item>
         <item name="BottomSendButtonHighlightedColor">@color/grey_50</item>
         <item name="BottomSendImageButtonTint">@color/white</item>
         <item name="BottomDialogTextColor">@color/white</item>
         <item name="ConfirmationDialogBackground">@color/dark</item>
-        <item name="ConfirmationAddressBackground">@color/grey_20</item>
-        <item name="ConfirmationMiddlePartBackground">@color/grey_20</item>
+        <item name="AddressBackground">@color/address_background_dark</item>
+        <item name="ConfirmationMiddlePartBackground">@color/steel_20</item>
         <item name="CurrencySwitcherTitleColor">@color/bars_color</item>
         <item name="PendingTransactionShadeColor">@color/dark_50</item>
         <item name="PinScreenBackground">@color/dark</item>
@@ -130,7 +134,7 @@
         <item name="NumpadNumberBackground">@color/white</item>
         <item name="NumpadNumberBackgroundHighlight">@color/lightBackground</item>
         <item name="NumpadNumberColor">@color/dark</item>
-        <item name="NumpadBorderColor">@color/grey_20</item>
+        <item name="NumpadBorderColor">@color/steel_20</item>
         <item name="BallanceCoinNameColor">@color/dark</item>
         <item name="BallanceCoinAmountColor">@color/dark</item>
         <item name="TitleColor">@color/dark</item>
@@ -148,6 +152,7 @@
         <item name="BottomNavigationBackgroundColor">@color/bars_color</item>
         <item name="StatusBarColor">@color/bars_color</item>
         <item name="RippleColor">@color/ripple_black</item>
+        <item name="RoundRippleColor">@color/grey_light</item>
         <item name="NumpadDeleteButton">@drawable/round_backspace_dark_24px</item>
         <item name="NumpadFingerprintButton">@drawable/fingerprint_outline_black</item>
         <item name="AppBarBackground">@drawable/shadow_top_navigation_light</item>
@@ -160,6 +165,7 @@
         <item name="TransactionTextBoxBackground">@color/text_box_background_light</item>
         <item name="TransactionDetailValueTextColor">@color/dark</item>
         <item name="TransactionDetailBottomBarBackground">#f5fafafa</item>
+        <item name="TransactionInfoMoreButtonBackground">@drawable/transaction_info_more_button_background_light</item>
         <item name="BottomTransactionInfoBackground">@color/bars_color</item>
         <item name="BottomSendBackground">@color/bars_color</item>
         <item name="BottomSendInputBackground">@color/white</item>
@@ -168,7 +174,7 @@
         <item name="BottomSendImageButtonTint">@color/black</item>
         <item name="BottomDialogTextColor">@color/black</item>
         <item name="ConfirmationDialogBackground">@color/bars_color</item>
-        <item name="ConfirmationAddressBackground">@color/lightBackground</item>
+        <item name="AddressBackground">@color/address_background_light</item>
         <item name="ConfirmationMiddlePartBackground">@color/transparent</item>
         <item name="CurrencySwitcherTitleColor">@color/dark</item>
         <item name="PendingTransactionShadeColor">@color/white_50</item>

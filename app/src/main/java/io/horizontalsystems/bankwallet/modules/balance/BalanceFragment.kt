@@ -242,7 +242,7 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
         textExchangeRate.text = balanceViewItem.exchangeValue?.let { exchangeValue ->
             containerView.context.getString(R.string.Balance_RatePerCoin, ValueFormatter.format(exchangeValue), balanceViewItem.coinValue.coinCode)
         } ?: ""
-        textExchangeRate.setTextColor(ContextCompat.getColor(containerView.context, if (balanceViewItem.rateExpired) R.color.grey_40 else R.color.grey))
+        textExchangeRate.setTextColor(ContextCompat.getColor(containerView.context, if (balanceViewItem.rateExpired) R.color.steel_40 else R.color.grey))
 
         buttonPay.setOnSingleClickListener {
             onSendClick?.invoke()
