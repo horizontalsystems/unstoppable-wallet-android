@@ -2,12 +2,13 @@ package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.entities.TransactionItem
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import java.util.concurrent.CopyOnWriteArrayList
 
 class TransactionItemDataSource {
     val count
         get() = items.size
 
-    private val items = mutableListOf<TransactionItem>()
+    private val items = CopyOnWriteArrayList<TransactionItem>()
 
     fun clear() {
         items.clear()
