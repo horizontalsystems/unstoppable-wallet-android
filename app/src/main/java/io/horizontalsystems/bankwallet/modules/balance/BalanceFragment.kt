@@ -134,7 +134,7 @@ class BalanceFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener
     }
 
     override fun onItemClick(position: Int) {
-        recyclerCoins.findViewHolderForAdapterPosition(position)?.itemView?.performClick()
+        coinsAdapter.toggleViewHolder(position)
     }
 }
 
@@ -146,14 +146,26 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
         fun onItemClick(position: Int)
     }
 
-    private var expandedViewPosition = -1
+    private var expandedViewPosition: Int? = null
 
     lateinit var viewDelegate: BalanceModule.IViewDelegate
+
+    fun toggleViewHolder(position: Int) {
+        expandedViewPosition?.let {
+            notifyItemChanged(it, false)
+        }
+
+        if (expandedViewPosition != position) {
+            notifyItemChanged(position, true)
+        }
+
+        expandedViewPosition = if (expandedViewPosition == position) null else position
+    }
 
     override fun getItemCount() = viewDelegate.itemsCount
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-            ViewHolderCoin(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_coin, parent, false))
+            ViewHolderCoin(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_coin, parent, false), listener)
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {}
 
@@ -165,38 +177,21 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: MutableList<Any>) {
-        when (holder) {
-            is ViewHolderCoin ->
-                if (payloads.isEmpty()) {
-                    val balanceViewItem = viewDelegate.getViewItem(position)
-                    holder.bind(balanceViewItem,
-                            onSendClick = { listener.onSendClicked(position) },
-                            onReceiveClick = { listener.onReceiveClicked(position) },
-                            onHolderClicked = {
-                                val oldExpandedViewPosition = expandedViewPosition
-                                expandedViewPosition = if (expandedViewPosition == position) -1 else position
-                                notifyItemChanged(expandedViewPosition, true)
-                                if (oldExpandedViewPosition != -1) {
-                                    notifyItemChanged(oldExpandedViewPosition, false)
-                                }
-                            },
-                            expanded = expandedViewPosition == position)
-                } else {
-                    for (payload in payloads) {
-                        if (payload is Boolean) {
-                            holder.bindPartial(expanded = expandedViewPosition == position)
-                        }
-                    }
-                }
+        if (holder !is ViewHolderCoin) return
+
+        if (payloads.isEmpty()) {
+            holder.bind(viewDelegate.getViewItem(position), expandedViewPosition == position)
+        } else if (payloads.any { it is Boolean }) {
+            holder.bindPartial(expandedViewPosition == position)
         }
     }
 }
 
-class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class ViewHolderCoin(override val containerView: View, private val listener: CoinsAdapter.Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     private var disposable: Disposable? = null
 
-    fun bind(balanceViewItem: BalanceViewItem, onSendClick: (() -> (Unit))? = null, onReceiveClick: (() -> (Unit))? = null, onHolderClicked: (() -> Unit)? = null, expanded: Boolean) {
+    fun bind(balanceViewItem: BalanceViewItem, expanded: Boolean) {
         buttonPay.isEnabled = false
         imgSyncFailed.visibility = View.GONE
         textCurrencyAmount.visibility = View.GONE
@@ -210,6 +205,7 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
                     progressSync.visibility = View.VISIBLE
                     textSyncProgress.visibility = View.VISIBLE
 
+                    disposable?.dispose()
                     disposable = adapterState.progressSubject
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe {
@@ -245,17 +241,17 @@ class ViewHolderCoin(override val containerView: View) : RecyclerView.ViewHolder
         textExchangeRate.setTextColor(ContextCompat.getColor(containerView.context, if (balanceViewItem.rateExpired) R.color.steel_40 else R.color.grey))
 
         buttonPay.setOnSingleClickListener {
-            onSendClick?.invoke()
+            listener.onSendClicked(adapterPosition)
         }
 
         buttonReceive.setOnSingleClickListener {
-            onReceiveClick?.invoke()
+            listener.onReceiveClicked(adapterPosition)
         }
 
         viewHolderRoot.isSelected = expanded
         buttonsWrapper.visibility = if (expanded) View.VISIBLE else View.GONE
         containerView.setOnClickListener {
-            onHolderClicked?.invoke()
+            listener.onItemClick(adapterPosition)
         }
     }
 
