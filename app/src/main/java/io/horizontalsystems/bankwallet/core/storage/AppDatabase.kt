@@ -34,7 +34,7 @@ abstract class AppDatabase : RoomDatabase() {
         private fun buildDatabase(context: Context): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, "dbBankWallet")
                     .fallbackToDestructiveMigration()
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
                     .build()
         }
 
@@ -84,6 +84,14 @@ abstract class AppDatabase : RoomDatabase() {
                 database.insert("StorableCoin", SQLiteDatabase.CONFLICT_REPLACE, bitcoinValues)
                 database.insert("StorableCoin", SQLiteDatabase.CONFLICT_REPLACE, bitcoinCashValues)
                 database.insert("StorableCoin", SQLiteDatabase.CONFLICT_REPLACE, ethereumValues)
+            }
+        }
+
+        private val MIGRATION_3_4: Migration = object : Migration(3, 4) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("DROP TABLE IF EXISTS TransactionRecord")
+                database.execSQL("DROP TABLE IF EXISTS Rate")
+                database.execSQL("CREATE TABLE Rate (`coinCode` TEXT NOT NULL,`currencyCode` TEXT NOT NULL,`value` REAL NOT NULL,`timestamp` INTEGER NOT NULL, `isLatest` INTEGER NOT NULL, PRIMARY KEY(`coinCode`,`currencyCode`,`timestamp`,`isLatest`))")
             }
         }
 
