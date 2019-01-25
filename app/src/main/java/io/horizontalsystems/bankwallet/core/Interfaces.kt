@@ -19,7 +19,7 @@ interface IWalletManager {
 
     fun refreshWallets()
     fun initWallets()
-    fun clearWallets()
+    fun clear()
 }
 
 interface ILocalStorage {
@@ -36,7 +36,7 @@ interface ILocalStorage {
     var baseBitcoinProvider: String?
     var baseEthereumProvider: String?
 
-    fun clearAll()
+    fun clear()
 }
 
 interface ISecuredStorage {
@@ -221,7 +221,7 @@ interface ICoinManager {
     var coins: List<Coin>
     val allCoinsObservable: Flowable<List<Coin>>
     fun enableDefaultCoins()
-    fun clearCoins()
+    fun clear()
 }
 
 sealed class Error : Exception() {

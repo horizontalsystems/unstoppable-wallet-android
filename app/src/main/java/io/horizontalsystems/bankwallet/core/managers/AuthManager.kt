@@ -8,7 +8,8 @@ import io.reactivex.subjects.PublishSubject
 class AuthManager(
         private val secureStorage: ISecuredStorage,
         private val localStorage: ILocalStorage,
-        private val coinManager: ICoinManager) {
+        private val coinManager: ICoinManager,
+        private val rateManager: RateManager) {
 
     var walletManager: IWalletManager? = null
     var pinManager: IPinManager? = null
@@ -37,12 +38,13 @@ class AuthManager(
     }
 
     fun logout() {
-        walletManager?.clearWallets()
+        walletManager?.clear()
         pinManager?.clear()
-        localStorage.clearAll()
-        coinManager.clearCoins()
+        localStorage.clear()
+        coinManager.clear()
+        rateManager.clear()
 
-//        todo: clear authData from secureStorage
+//        todo: clear authData from secureStorage. note clearing localstorage also clears auth data
 //        secureStorage.clearAuthData()
         authData = null
 

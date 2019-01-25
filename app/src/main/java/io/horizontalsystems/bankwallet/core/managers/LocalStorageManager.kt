@@ -114,7 +114,7 @@ class LocalStorageManager : ILocalStorage {
             App.preferences.edit().putString(BASE_ETHEREUM_PROVIDER, value).apply()
         }
 
-    override fun clearAll() {
+    override fun clear() {
         App.preferences.edit().clear().apply()
     }
 
