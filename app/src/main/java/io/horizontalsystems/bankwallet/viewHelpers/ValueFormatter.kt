@@ -69,7 +69,7 @@ object ValueFormatter {
         value = Math.abs(value)
 
         var result: String = when {
-            value < FIAT_SMALL_NUMBER_EDGE -> "0.01"
+            value > 0 && value < FIAT_SMALL_NUMBER_EDGE -> "0.01"
             else -> {
                 val formatter = currencyFormatter
 
