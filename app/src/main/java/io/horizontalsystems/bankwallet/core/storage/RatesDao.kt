@@ -18,8 +18,8 @@ interface RatesDao {
     @Delete
     fun delete(rate: Rate)
 
-    @Query("SELECT * FROM Rate")
-    fun getAll(): Flowable<List<Rate>>
+    @Query("DELETE FROM Rate WHERE isLatest = 1 AND coinCode = :coinCode AND currencyCode = :currencyCode")
+    fun deleteLatest(coinCode: CoinCode, currencyCode: String)
 
     @Query("DELETE FROM Rate")
     fun deleteAll()

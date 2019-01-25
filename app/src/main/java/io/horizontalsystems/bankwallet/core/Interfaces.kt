@@ -185,7 +185,7 @@ interface IRateStorage {
     fun latestRateObservable(coinCode: CoinCode, currencyCode: String): Flowable<Rate>
     fun rateObservable(coinCode: CoinCode, currencyCode: String, timestamp: Long): Flowable<List<Rate>>
     fun save(rate: Rate)
-    fun getAll(): Flowable<List<Rate>>
+    fun saveLatest(rate: Rate)
     fun deleteAll()
     fun zeroRatesObservable(currencyCode: String): Single<List<Rate>>
 }

@@ -26,7 +26,7 @@ class RateManager(private val storage: IRateStorage, private val networkManager:
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe({
-                    storage.save(it)
+                    storage.saveLatest(it)
                 }, {
 
                 }))
@@ -54,10 +54,20 @@ class RateManager(private val storage: IRateStorage, private val networkManager:
                         retrieveFromNetwork(coinCode, currencyCode, timestamp)
                     }
 
-                    if (rate == null || rate.value == 0.0) {
+                    if (rate != null && rate.value != 0.0) {
+                        Flowable.just(rate.value)
+                    } else if (timestamp < ((System.currentTimeMillis() / 1000) - 3600)) {
                         Flowable.empty()
                     } else {
-                        Flowable.just(rate.value)
+                        storage.latestRateObservable(coinCode, currencyCode)
+                                .flatMap {
+                                    if (it.expired) {
+                                        Flowable.empty<Double>()
+                                    } else {
+                                        Flowable.just(it.value)
+                                    }
+                                }
+
                     }
                 }
                 .distinctUntilChanged()

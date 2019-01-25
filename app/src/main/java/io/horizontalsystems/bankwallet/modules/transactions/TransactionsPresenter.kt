@@ -102,6 +102,7 @@ class TransactionsPresenter(private val interactor: TransactionsModule.IInteract
 
     override fun didUpdateRecords(records: List<TransactionRecord>, coinCode: CoinCode) {
         loader.didUpdateRecords(records, coinCode)
+        fetchRatesForRecords(mapOf(coinCode to records))
     }
 
     override fun didChangeData() {

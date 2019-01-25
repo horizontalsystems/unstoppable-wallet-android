@@ -40,9 +40,9 @@ class RateManagerTest {
 
         rateManager.refreshLatestRates(coins, currencyCode)
 
-        verify(storage).save(Rate(coins[0], currencyCode, 123.12, 1000, true))
-        verify(storage).save(Rate(coins[1], currencyCode, 456.45, 2000, true))
-        verify(storage, atMost(2)).save(any())
+        verify(storage).saveLatest(Rate(coins[0], currencyCode, 123.12, 1000, true))
+        verify(storage).saveLatest(Rate(coins[1], currencyCode, 456.45, 2000, true))
+        verify(storage, atMost(2)).saveLatest(any())
     }
 
     @Test
@@ -55,8 +55,8 @@ class RateManagerTest {
 
         rateManager.refreshLatestRates(coins, currencyCode)
 
-        verify(storage).save(Rate(coins[1], currencyCode, 456.45, 2000, true))
-        verify(storage, atMost(1)).save(any())
+        verify(storage).saveLatest(Rate(coins[1], currencyCode, 456.45, 2000, true))
+        verify(storage, atMost(1)).saveLatest(any())
     }
 
     @Test
@@ -69,8 +69,8 @@ class RateManagerTest {
 
         rateManager.refreshLatestRates(coins, currencyCode)
 
-        verify(storage).save(Rate(coins[1], currencyCode, 456.45, 2000, true))
-        verify(storage, atMost(1)).save(any())
+        verify(storage).saveLatest(Rate(coins[1], currencyCode, 456.45, 2000, true))
+        verify(storage, atMost(1)).saveLatest(any())
     }
 
     @Test
@@ -123,6 +123,80 @@ class RateManagerTest {
         verify(storage).save(Rate(coinCode, currencyCode, 0.0, timestamp, false))
         verify(networkManager).getRate(coinCode, currencyCode, timestamp)
         verify(storage).save(Rate(coinCode, currencyCode, rateValueFromNetwork, timestamp, false))
+    }
+
+    @Test
+    fun rateValueObservable_noRate_latestRateFallback_earlierThen1Hour() {
+        val coinCode = "BTC"
+        val currencyCode = "USD"
+        val timestamp = ((System.currentTimeMillis() / 1000) - 3600) - 1
+        val rateValueFromNetwork = 123.2300
+        val latestRate = mock(Rate::class.java)
+        val rateValue = 234.23
+
+        whenever(storage.rateObservable(coinCode, currencyCode, timestamp)).thenReturn(Flowable.just(listOf()))
+        whenever(storage.latestRateObservable(coinCode, currencyCode)).thenReturn(Flowable.just(latestRate))
+        whenever(networkManager.getRate(coinCode, currencyCode, timestamp)).thenReturn(Flowable.just(rateValueFromNetwork))
+        whenever(latestRate.expired).thenReturn(false)
+        whenever(latestRate.value).thenReturn(rateValue)
+
+        rateManager.rateValueObservable(coinCode, currencyCode, timestamp)
+                .test()
+                .assertNoValues()
+    }
+
+    @Test
+    fun rateValueObservable_noRate_latestRateFallback_notEarlierThen1Hour_notExpired() {
+        val coinCode = "BTC"
+        val currencyCode = "USD"
+        val timestamp = ((System.currentTimeMillis() / 1000) - 3600) + 1
+        val rateValueFromNetwork = 123.2300
+        val latestRate = mock(Rate::class.java)
+        val rateValue = 234.23
+
+        whenever(storage.rateObservable(coinCode, currencyCode, timestamp)).thenReturn(Flowable.just(listOf()))
+        whenever(storage.latestRateObservable(coinCode, currencyCode)).thenReturn(Flowable.just(latestRate))
+        whenever(networkManager.getRate(coinCode, currencyCode, timestamp)).thenReturn(Flowable.just(rateValueFromNetwork))
+        whenever(latestRate.expired).thenReturn(false)
+        whenever(latestRate.value).thenReturn(rateValue)
+
+        rateManager.rateValueObservable(coinCode, currencyCode, timestamp)
+                .test()
+                .assertValue(rateValue)
+    }
+
+    @Test
+    fun rateValueObservable_noRate_latestRateFallback_notEarlierThen1Hour_expired() {
+        val coinCode = "BTC"
+        val currencyCode = "USD"
+        val timestamp = ((System.currentTimeMillis() / 1000) - 3600) + 1
+        val rateValueFromNetwork = 123.2300
+        val latestRate = mock(Rate::class.java)
+
+        whenever(storage.rateObservable(coinCode, currencyCode, timestamp)).thenReturn(Flowable.just(listOf()))
+        whenever(storage.latestRateObservable(coinCode, currencyCode)).thenReturn(Flowable.just(latestRate))
+        whenever(networkManager.getRate(coinCode, currencyCode, timestamp)).thenReturn(Flowable.just(rateValueFromNetwork))
+        whenever(latestRate.expired).thenReturn(true)
+
+        rateManager.rateValueObservable(coinCode, currencyCode, timestamp)
+                .test()
+                .assertNoValues()
+    }
+
+    @Test
+    fun rateValueObservable_noRate_latestRateFallback_notEarlierThen1Hour_emptyLatestRate() {
+        val coinCode = "BTC"
+        val currencyCode = "USD"
+        val timestamp = ((System.currentTimeMillis() / 1000) - 3600) + 1
+        val rateValueFromNetwork = 123.2300
+
+        whenever(storage.rateObservable(coinCode, currencyCode, timestamp)).thenReturn(Flowable.just(listOf()))
+        whenever(storage.latestRateObservable(coinCode, currencyCode)).thenReturn(Flowable.empty())
+        whenever(networkManager.getRate(coinCode, currencyCode, timestamp)).thenReturn(Flowable.just(rateValueFromNetwork))
+
+        rateManager.rateValueObservable(coinCode, currencyCode, timestamp)
+                .test()
+                .assertNoValues()
     }
 
     @Test

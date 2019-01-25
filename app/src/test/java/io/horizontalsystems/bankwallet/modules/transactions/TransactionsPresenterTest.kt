@@ -234,13 +234,17 @@ class TransactionsPresenterTest {
 
     @Test
     fun didUpdateRecords() {
-        val records = listOf(mock(TransactionRecord::class.java))
+        val record = mock(TransactionRecord::class.java)
+        val records = listOf(record)
         val coinCode = "BTC"
+        val timestamp = 123123L
+
+        whenever(record.timestamp).thenReturn(timestamp)
 
         presenter.didUpdateRecords(records, coinCode)
 
         verify(loader).didUpdateRecords(records, coinCode)
+        verify(interactor).fetchRates(mapOf(coinCode to listOf(timestamp)))
     }
-
 
 }

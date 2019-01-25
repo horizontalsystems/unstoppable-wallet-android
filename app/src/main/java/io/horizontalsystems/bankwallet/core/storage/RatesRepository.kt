@@ -21,13 +21,15 @@ class RatesRepository(private val appDatabase: AppDatabase) : IRateStorage {
 
     override fun save(rate: Rate) {
         executor.execute {
-            appDatabase.ratesDao().delete(rate)
             appDatabase.ratesDao().insert(rate)
         }
     }
 
-    override fun getAll(): Flowable<List<Rate>> {
-        return appDatabase.ratesDao().getAll()
+    override fun saveLatest(rate: Rate) {
+        executor.execute {
+            appDatabase.ratesDao().deleteLatest(rate.coinCode, rate.currencyCode)
+            appDatabase.ratesDao().insert(rate)
+        }
     }
 
     override fun deleteAll() {
