@@ -188,9 +188,9 @@
     <string name="SetPin_Info">당신의 비밀번호는 지갑 어플을 장금해체하는데 사용할 것 입니다.</string>
     <string name="SetPin_ErrorShortPin">모든 숫자를 입력하세요.</string>
     <string name="SetPin_ConfirmInfo">확인</string>
-    <string name="SetPin_Success">Lock passcode was set successfully!</string>
-    <string name="SetPin_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
-    <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
+    <string name="SetPin_Success">비밀번호 장금이 성공적으로 설정되었습니다!</string>
+    <string name="SetPin_ErrorPinsDontMatch">비밀번호가 일치하지 않습니다. 다시 시도하세요.</string>
+    <string name="SetPin_ErrorFailedToSavePin">당신의 비밀번호를 저장하는 동안 오류가 발생했습니다. 다시 시도하세요.</string>
     <!--Edit Pin-->
     <string name="EditPin_Title">비밀번호 변경</string>
     <string name="EditPin_UnlockInfo">현재 비밀번호</string>
