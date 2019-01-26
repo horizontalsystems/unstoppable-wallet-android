@@ -36,7 +36,7 @@
     <string name="Backup_Confirmation_FailureAlertText">암호가 일치 하지 않습니다.</string>
     <string name="Backup_Button_Confirm">확인</string>
     <string name="Backup_Button_Next">다음</string>
-    <string name="Backup_Button_Submit">Submit</string>
+    <string name="Backup_Button_Submit">제출하기</string>
     <!--Balance-->
     <string name="Balance_Title">잔액</string>
     <string name="Balance_Deposit">수신</string>
@@ -45,36 +45,36 @@
     <!--Send-->
     <string name="Send_Title1">전송</string>
     <string name="Send_Title">전송 %s</string>
-    <string name="Send_Hint_PaymentReference">Payment Reference</string>
+    <string name="Send_Hint_PaymentReference">결제 참조</string>
     <string name="Send_Hint_Address">주소</string>
     <string name="Send_Hint_Amount">양</string>
     <string name="Send_Button_Paste">붙여넣기</string>
     <string name="Send_Button_More">보다</string>
     <string name="Send_Button_Send">전송</string>
-    <string name="Send_Button_Max">Max</string>
+    <string name="Send_Button_Max">최대</string>
     <string name="Send_ScanQrCode">QR 코드 스캔</string>
-    <string name="Send_Success">Sent!</string>
-    <string name="Send_Error_InvalidAddress">Address seems invalid. Please check and try again!</string>
-    <string name="Send_Error_InsufficientBalance">Not enough funds.</string>
-    <string name="Send_Error_IncorrectAddress">Incorrect Address</string>
+    <string name="Send_Success">보냄!</string>
+    <string name="Send_Error_InvalidAddress">주소가 올바르지 않습니다. 다시 확인하고 시도해주세요!</string>
+    <string name="Send_Error_InsufficientBalance">잔액이 부족합니다.</string>
+    <string name="Send_Error_IncorrectAddress">잘못된 주소</string>
     <string name="Send_Error_BalanceAmount">잔액%s</string>
-    <string name="Send_DialogTitle">Confirm Transaction</string>
+    <string name="Send_DialogTitle">거래를 확인해라</string>
     <string name="Send_DialogFee">수수료:</string>
     <string name="Send_DialogTotal">합계:</string>
     <!--Deposit-->
     <string name="Deposit_Title">수신%s</string>
     <string name="Deposit_Share">공유</string>
-    <string name="Deposit_Your_Address">Your Address</string>
+    <string name="Deposit_Your_Address">당신의 주소</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">지금 막</string>
-    <string name="Timestamp_MinAgo">%dm. ago</string>
-    <string name="Timestamp_HoursAgo">%dh. ago</string>
+    <string name="Timestamp_MinAgo">%d분 전</string>
+    <string name="Timestamp_HoursAgo">%d시간 전</string>
     <string name="Timestamp_Today">오늘</string>
     <string name="Timestamp_Yesterday">어제</string>
     <!--Transactions-->
     <string name="Transactions_Title">거래기록</string>
     <string name="Transactions_FilterAll">모든</string>
-    <string name="Transactions_EmptyList">You don\’t have any transactions yet</string>
+    <string name="Transactions_EmptyList">당신은 아직 거래를 하지 않았습니다.</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">거래기록</string>
     <string name="TransactionInfo_Status">상태</string>
@@ -83,7 +83,7 @@
     <string name="TransactionInfo_From">로 부터</string>
     <string name="TransactionInfo_Time">시간</string>
     <string name="TransactionInfo_ButtonMore">보다</string>
-    <string name="TransactionInfo_Status_Pending">Pending</string>
+    <string name="TransactionInfo_Status_Pending">보류 중</string>
     <!--Full Info-->
     <string name="FullInfo_Title">거래기록</string>
     <string name="FullInfo_Time">시간</string>
@@ -112,7 +112,7 @@
     <string name="FullInfo_TotalOutput">Total Output</string>
     <string name="FullInfo_FeePerByte">Fee per byte</string>
     <string name="FullInfo_FeeRate">Fee Rate</string>
-    <string name="FullInfo_NoAddress">No Available</string>
+    <string name="FullInfo_NoAddress">사용가능하지 않습니다.</string>
     <string name="FullInfo_SatByte">sat/B</string>
     <string name="FullInfo_Bytes">Bytes</string>
     <string name="FullInfo_SubtitleInputs">입력값</string>
@@ -129,7 +129,7 @@
     <string name="Settings_InfoTitleWithVersion">Bank Wallet %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <!--Settings-->
-    <string name="Settings_Error_FingerprintNotEnabled">Fingerprint Not Enabled</string>
+    <string name="Settings_Error_FingerprintNotEnabled">지문을 사용할 수 없습니다.</string>
     <string name="Settings_Error_NoFingerprintAddedYet">You have not enabled fingerprint on this device. Go to Settings &gt; Security to set up fingerprint access.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">지문</string>
