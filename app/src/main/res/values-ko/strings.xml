@@ -160,7 +160,7 @@
 \n\n통화 환율과 같은 총괄적이고 사적이지 않은 데이터는 분산된 저장소(IPFS)에 저장될 것입니다.</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">안드로이드 키저장 에러</string>
-    <string name="Alert_KeysInvalidatedDescription">The encrypted data holding your wallet was recently invalidated because your Android lock screen was changed</string>
+    <string name="Alert_KeysInvalidatedDescription">당신의 안드로이드 스크린 장금이 변했기 때문에 당신의 지갑에 암호화된 데이터들은 지금 이용할 수 없습니다.</string>
     <string name="Alert_TitleWarning">경고</string>
     <string name="Alert_NoDeviceLockDescription">Set up a lock screen on this device to continue. Go to “Settings” &gt; “Security” &gt; “Screen Lock” and enable the lock screen setting.</string>
     <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
