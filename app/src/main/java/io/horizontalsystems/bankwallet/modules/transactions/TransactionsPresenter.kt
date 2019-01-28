@@ -61,10 +61,14 @@ class TransactionsPresenter(private val interactor: TransactionsModule.IInteract
             }
         }
 
-
         loader.loadNext(true)
 
-        view?.showFilters(listOf(null).plus(coinCodes))
+        val filters = when {
+            coinCodes.size < 2 -> listOf()
+            else -> listOf(null).plus(coinCodes)
+        }
+
+        view?.showFilters(filters)
 
         interactor.fetchLastBlockHeights()
     }
