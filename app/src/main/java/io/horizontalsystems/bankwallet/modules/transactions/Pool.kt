@@ -6,7 +6,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 class Pool(val state: State) {
 
     class State(val coinCode: CoinCode) {
-        val records = CopyOnWriteArrayList<TransactionRecord>()
+        val records: MutableList<TransactionRecord> = CopyOnWriteArrayList<TransactionRecord>()
 
         var firstUnusedIndex = 0
         var allLoaded = false

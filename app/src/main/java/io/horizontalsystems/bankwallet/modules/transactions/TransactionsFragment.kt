@@ -51,10 +51,6 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
         recyclerTags.adapter = filterAdapter
         recyclerTags.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
-        pullToRefresh.setOnRefreshListener {
-            pullToRefresh.isRefreshing = false
-        }
-
         viewModel.filterItems.observe(this, Observer { filters ->
             filters?.let {
                 filterAdapter.filters = it
@@ -66,10 +62,6 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
             transactionViewItem?.let {
                 transInfoViewModel.setViewItem(it)
             }
-        })
-
-        viewModel.didRefreshLiveEvent.observe(this, Observer {
-            pullToRefresh.isRefreshing = false
         })
 
         viewModel.reloadLiveEvent.observe(this, Observer {

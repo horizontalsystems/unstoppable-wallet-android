@@ -10,7 +10,6 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
 
     val filterItems = MutableLiveData<List<String?>>()
     val transactionViewItemLiveEvent = SingleLiveEvent<TransactionViewItem>()
-    val didRefreshLiveEvent = SingleLiveEvent<Void>()
     val reloadLiveEvent = SingleLiveEvent<Unit>()
     val reloadItemsLiveEvent = SingleLiveEvent<List<Int>>()
     val addItemsLiveEvent = SingleLiveEvent<Pair<Int, Int>>()
