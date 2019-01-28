@@ -26,7 +26,7 @@
     <string name="Backup_Intro_Title">Секретный Ключ</string>
     <string name="Backup_Intro_Subtitle">Ваш секретный ключ является единственным способом для восстановления вашего кошелька.\n\nОн состоит из 12 слов. Храните его в безопасном месте.</string>
     <string name="Backup_Intro_Later">Позже</string>
-    <string name="Backup_Intro_BackupNow">Записать ключ</string>
+    <string name="Backup_Intro_BackupNow">Резервное копирование</string>
     <string name="Backup_Words_Title">Секретный Ключ</string>
     <string name="Backup_Confirmation_Understand">Я понимаю, что мой кошелек и токены хранятся только на этом устройстве.</string>
     <string name="Backup_Confirmation_DeleteAppWarn">Я понимаю, что если это приложение удаляется или устанавливается на другое устройство, мой кошелек можно восстановить только с помощью секретного ключа, который я храню в безопасном месте.</string>
@@ -83,7 +83,7 @@
     <string name="TransactionInfo_From">От</string>
     <string name="TransactionInfo_Time">Время</string>
     <string name="TransactionInfo_ButtonMore">Ещё</string>
-    <string name="TransactionInfo_Status_Pending">Pending</string>
+    <string name="TransactionInfo_Status_Pending">В процессе</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Транзакция</string>
     <string name="FullInfo_Time">Время</string>
