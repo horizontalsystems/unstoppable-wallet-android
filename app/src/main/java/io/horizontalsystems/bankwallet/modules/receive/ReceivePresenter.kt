@@ -27,6 +27,10 @@ class ReceivePresenter(
         router.shareAddress(receiveAddresses[index].address)
     }
 
+    override fun onAddressClick(index: Int) {
+        interactor.copyToClipboard(receiveAddresses[index].address)
+    }
+
     override fun didCopyToClipboard() {
         view?.showCopied()
     }

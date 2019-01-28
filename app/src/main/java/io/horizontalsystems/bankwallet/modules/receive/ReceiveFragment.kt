@@ -48,6 +48,7 @@ class ReceiveFragment : BottomSheetDialogFragment() {
         mDialog?.window?.setGravity(Gravity.BOTTOM)
 
         mDialog?.findViewById<Button>(R.id.btnShare)?.setOnClickListener { viewModel.delegate.onShareClick(itemIndex) }
+        mDialog?.findViewById<AddressView>(R.id.addressView)?.setOnClickListener { viewModel.delegate.onAddressClick(itemIndex) }
 
         viewModel.showAddressesLiveData.observe(this, Observer { addresses ->
             addresses?.apply {
