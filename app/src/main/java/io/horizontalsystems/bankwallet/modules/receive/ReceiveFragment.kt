@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.receive
 import android.app.Dialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.BottomSheetDialogFragment
@@ -20,6 +19,9 @@ import io.horizontalsystems.bankwallet.ui.extensions.AddressView
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
+import android.support.v4.app.ShareCompat
+
+
 
 class ReceiveFragment : BottomSheetDialogFragment() {
 
@@ -46,6 +48,7 @@ class ReceiveFragment : BottomSheetDialogFragment() {
         mDialog?.window?.setGravity(Gravity.BOTTOM)
 
         mDialog?.findViewById<Button>(R.id.btnShare)?.setOnClickListener { viewModel.delegate.onShareClick(itemIndex) }
+        mDialog?.findViewById<AddressView>(R.id.addressView)?.setOnClickListener { viewModel.delegate.onAddressClick(itemIndex) }
 
         viewModel.showAddressesLiveData.observe(this, Observer { addresses ->
             addresses?.apply {
@@ -75,12 +78,10 @@ class ReceiveFragment : BottomSheetDialogFragment() {
 
         viewModel.shareAddressLiveEvent.observe(this, Observer { address ->
             address?.let {
-                val sendIntent: Intent = Intent().apply {
-                    action = Intent.ACTION_SEND
-                    putExtra(Intent.EXTRA_TEXT, it)
-                    type = "text/plain"
-                }
-                startActivity(sendIntent)
+                ShareCompat.IntentBuilder.from(activity)
+                        .setType("text/plain")
+                        .setText(it)
+                        .startChooser()
             }
         })
 

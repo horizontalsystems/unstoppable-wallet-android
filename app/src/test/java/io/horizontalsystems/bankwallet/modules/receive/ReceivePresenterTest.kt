@@ -59,4 +59,19 @@ class ReceivePresenterTest {
         verify(router).shareAddress(addressItem.address)
     }
 
+    @Test
+    fun onAddressClick() {
+        presenter.didReceiveAddresses(addresses)
+        presenter.onAddressClick(any())
+
+        verify(interactor).copyToClipboard(addressItem.address)
+    }
+
+    @Test
+    fun didCopyToClipboard() {
+        presenter.didCopyToClipboard()
+
+        verify(view).showCopied()
+    }
+
 }
