@@ -112,6 +112,18 @@ class TransactionsPresenterTest {
     }
 
     @Test
+    fun onUpdateCoinsData_lessThen2Coins() {
+        val coinCode1 = "BTC"
+        val confirmationThreshold1 = 6
+        val lastBlockHeight1 = 123
+        val allCoinsData = listOf(Triple(coinCode1, confirmationThreshold1, lastBlockHeight1))
+
+        presenter.onUpdateCoinsData(allCoinsData)
+
+        verify(view).showFilters(listOf())
+    }
+
+    @Test
     fun onUpdateSelectedCoinCodes() {
         val coinCodes = listOf("BTC")
 
