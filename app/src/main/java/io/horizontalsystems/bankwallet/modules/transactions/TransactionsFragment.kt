@@ -7,6 +7,7 @@ import android.support.annotation.NonNull
 import android.support.design.widget.BottomSheetBehavior
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,6 +49,12 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
         recyclerTransactions.setHasFixedSize(true)
         recyclerTransactions.adapter = transactionsAdapter
         recyclerTransactions.layoutManager = LinearLayoutManager(context)
+        recyclerTransactions.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                filterAdapter.filterChangeable = newState == SCROLL_STATE_IDLE
+            }
+        })
+
         recyclerTags.adapter = filterAdapter
         recyclerTags.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
@@ -254,38 +261,45 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
     }
 }
 
-class FilterAdapter(private var listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class FilterAdapter(private var listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), ViewHolderFilter.ClickListener {
 
     interface Listener {
         fun onFilterItemClick(item: String?)
     }
 
-    var selectedFilterId: String? = null
+    private var selectedFilterId: String? = null
     var filters: List<String?> = listOf()
+    var filterChangeable = true
 
     override fun getItemCount() = filters.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-            ViewHolderFilter(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_filter, parent, false))
+            ViewHolderFilter(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_filter, parent, false), this)
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is ViewHolderFilter -> holder.bind(filters[position], active = selectedFilterId == filters[position]) {
-                listener.onFilterItemClick(filters[position])
-                selectedFilterId = filters[position]
-                notifyDataSetChanged()
-            }
+            is ViewHolderFilter -> holder.bind(filters[position], selectedFilterId == filters[position])
         }
     }
 
+    override fun onClickItem(position: Int) {
+        if (filterChangeable) {
+            listener.onFilterItemClick(filters[position])
+            selectedFilterId = filters[position]
+            notifyDataSetChanged()
+        }
+    }
 }
 
-class ViewHolderFilter(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class ViewHolderFilter(override val containerView: View, private val l: ClickListener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(filterName: String?, active: Boolean, onClick: () -> (Unit)) {
-        filter_text.setOnClickListener { onClick.invoke() }
+    interface ClickListener {
+        fun onClickItem(position: Int)
+    }
 
+    fun bind(filterName: String?, active: Boolean) {
         filter_text.text = filterName ?: containerView.context.getString(R.string.Transactions_FilterAll)
         filter_text.isActivated = active
+        filter_text.setOnClickListener { l.onClickItem(adapterPosition) }
     }
 }
