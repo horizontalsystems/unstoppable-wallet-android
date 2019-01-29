@@ -8,15 +8,41 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.NumberFormat
 
 
 object ValueFormatter {
 
-    private const val COIN_BIG_NUMBER_EDGE = 0.0001
-    private const val FIAT_BIG_NUMBER_EDGE = 100.0
-    private const val FIAT_SMALL_NUMBER_EDGE = 0.01
+    private val COIN_BIG_NUMBER_EDGE = "0.0001".toBigDecimal()
+    private val FIAT_BIG_NUMBER_EDGE = "100".toBigDecimal()
+    private val FIAT_SMALL_NUMBER_EDGE = "0.01".toBigDecimal()
+
+    private val currencyFormatter: NumberFormat
+        get() {
+            return NumberFormat.getInstance()
+        }
+
+    fun format(coinValue: CoinValue, explicitSign: Boolean = false, realNumber: Boolean = false): String? {
+        var value = if (explicitSign) coinValue.value.abs() else coinValue.value
+
+        value = when {
+            !realNumber && value.compareTo(COIN_BIG_NUMBER_EDGE) != -1 -> value.setScale(4, RoundingMode.HALF_EVEN)
+            value.compareTo(BigDecimal.ZERO) == 0 -> value.setScale(0, RoundingMode.HALF_EVEN)
+            else -> value.setScale(8, RoundingMode.HALF_EVEN)
+        }
+        value = value.stripTrailingZeros()
+
+        var result = "${value.toPlainString()} ${coinValue.coinCode}"
+
+        if (explicitSign) {
+            val sign = if (coinValue.value.compareTo(BigDecimal.ZERO) == -1) "-" else "+"
+            result = "$sign $result"
+        }
+
+        return result
+    }
 
     private val coinFormatter: NumberFormat
         get() {
@@ -24,35 +50,6 @@ object ValueFormatter {
             format.maximumFractionDigits = 8
             return format
         }
-
-    private val currencyFormatter: NumberFormat
-        get() {
-            val format: NumberFormat = NumberFormat.getInstance()
-            format.maximumFractionDigits = 2
-            format.roundingMode = RoundingMode.HALF_EVEN
-            return format
-        }
-
-    fun format(coinValue: CoinValue, explicitSign: Boolean = false, realNumber: Boolean = false): String? {
-        val value = if (explicitSign) Math.abs(coinValue.value) else coinValue.value
-
-        val customFormatter = coinFormatter
-
-        if (!realNumber && value >= COIN_BIG_NUMBER_EDGE) {
-            customFormatter.maximumFractionDigits = 4
-        }
-
-        val formattedValue = customFormatter.format(value) ?: run { return null }
-
-        var result = "$formattedValue ${coinValue.coinCode}"
-
-        if (explicitSign) {
-            val sign = if (coinValue.value < 0) "-" else "+"
-            result = "$sign $result"
-        }
-
-        return result
-    }
 
     fun format(value: Double): String {
         val customFormatter = coinFormatter
@@ -66,24 +63,23 @@ object ValueFormatter {
     fun format(currencyValue: CurrencyValue, approximate: Boolean = false, showNegativeSign: Boolean = true, realNumber: Boolean = false): String? {
         var value = currencyValue.value
 
-        value = Math.abs(value)
+        value = value.abs()
 
         var result: String = when {
-            value == 0.0 -> "0"
-            value < FIAT_SMALL_NUMBER_EDGE -> "0.01"
+            value.compareTo(BigDecimal.ZERO) == 0 -> "0"
+            value.compareTo(FIAT_SMALL_NUMBER_EDGE) == -1 -> "0.01"
             else -> {
-                val formatter = currencyFormatter
-
-                if (!realNumber && (value >= FIAT_BIG_NUMBER_EDGE || approximate)) {
-                    formatter.maximumFractionDigits = 0
+                value = when {
+                    !realNumber && (value >= FIAT_BIG_NUMBER_EDGE || approximate) -> value.setScale(0, RoundingMode.HALF_EVEN)
+                    else -> value.setScale(2, RoundingMode.HALF_EVEN)
                 }
-                formatter.format(value)
+                currencyFormatter.format(value)
             }
         }
 
         result = "${currencyValue.currency.symbol} $result"
 
-        if (showNegativeSign && currencyValue.value < 0) {
+        if (showNegativeSign && currencyValue.value.compareTo(BigDecimal.ZERO) == -1) {
             result = "- $result"
         }
 
@@ -98,7 +94,7 @@ object ValueFormatter {
         val spannable = SpannableString(format(currencyValue))
 
         //set currency sign size
-        val endOffset = if (currencyValue.value < 0) 3 else 1
+        val endOffset = if (currencyValue.value.compareTo(BigDecimal.ZERO) == -1) 3 else 1
         spannable.setSpan(RelativeSizeSpan(0.75f), 0, endOffset, 0)
 
         //set color
@@ -110,7 +106,8 @@ object ValueFormatter {
     }
 
     fun formatSimple(currencyValue: CurrencyValue): String? {
-        val result = currencyFormatter.format(currencyValue.value) ?: return null
-        return "${currencyValue.currency.symbol}$result"
+        val result = currencyValue.value.setScale(2, RoundingMode.HALF_EVEN)
+        val formatted = currencyFormatter.format(result)
+        return "${currencyValue.currency.symbol}$formatted"
     }
 }

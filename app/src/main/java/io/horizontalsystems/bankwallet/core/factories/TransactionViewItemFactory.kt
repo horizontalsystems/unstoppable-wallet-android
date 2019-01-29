@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.TransactionItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
+import java.math.BigDecimal
 import java.util.*
 
 class TransactionViewItemFactory(
@@ -34,7 +35,7 @@ class TransactionViewItemFactory(
             }
         }
 
-        val incoming = record.amount > 0
+        val incoming = record.amount.compareTo(BigDecimal.ZERO) == 1
 
         val toAddress = when (incoming) {
             true -> record.to.find { it.mine }?.address

@@ -11,6 +11,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
+import java.math.BigDecimal
 import java.util.*
 
 interface IWalletManager {
@@ -54,7 +55,7 @@ interface IRandomProvider {
 
 interface INetworkManager {
     fun getLatestRate(coin: String, currency: String): Flowable<LatestRate>
-    fun getRate(coinCode: String, currency: String, timestamp: Long): Flowable<Double>
+    fun getRate(coinCode: String, currency: String, timestamp: Long): Flowable<BigDecimal>
     fun getTransaction(host: String, path: String): Flowable<JsonObject>
     fun ping(host: String, url: String): Flowable<JsonObject>
 }
@@ -115,9 +116,9 @@ sealed class AdapterState {
 }
 
 interface IAdapter {
-    val balance: Double
+    val balance: BigDecimal
 
-    val balanceObservable: Flowable<Double>
+    val balanceObservable: Flowable<BigDecimal>
     val stateObservable: Flowable<AdapterState>
 
     val confirmationsThreshold: Int
@@ -134,10 +135,10 @@ interface IAdapter {
 
     fun parsePaymentAddress(address: String): PaymentRequestAddress
 
-    fun send(address: String, value: Double, completion: ((Throwable?) -> (Unit))? = null)
+    fun send(address: String, value: BigDecimal, completion: ((Throwable?) -> (Unit))? = null)
 
     @Throws(Error.InsufficientAmount::class)
-    fun fee(value: Double, address: String?, senderPay: Boolean): Double
+    fun fee(value: BigDecimal, address: String?, senderPay: Boolean): BigDecimal
 
     @Throws
     fun validate(address: String)
@@ -225,6 +226,6 @@ interface ICoinManager {
 }
 
 sealed class Error : Exception() {
-    class InsufficientAmount(val fee: Double) : Error()
+    class InsufficientAmount(val fee: BigDecimal) : Error()
     class CoinTypeException : Error()
 }

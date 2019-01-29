@@ -111,7 +111,7 @@ class BalancePresenterTest {
     fun didUpdateBalance() {
         val coinCode = "coinCode"
         val position = 5
-        val balance = 123123.123
+        val balance = 123123.123.toBigDecimal()
 
         whenever(dataSource.getPosition(coinCode)).thenReturn(position)
 

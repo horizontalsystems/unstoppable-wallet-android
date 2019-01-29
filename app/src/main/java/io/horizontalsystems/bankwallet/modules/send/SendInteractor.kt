@@ -9,6 +9,8 @@ import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 class SendInteractor(private val currencyManager: ICurrencyManager,
                      private val rateStorage: IRateStorage,
@@ -51,21 +53,30 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
         return wallet.adapter.parsePaymentAddress(address)
     }
 
-    override fun convertedAmountForInputType(inputType: SendModule.InputType, amount: Double): Double? {
+    override fun convertedAmountForInputType(inputType: SendModule.InputType, amount: BigDecimal): BigDecimal? {
         val rate = this.rate ?: return null
 
         return when (inputType) {
-            SendModule.InputType.COIN -> amount * rate.value
-            SendModule.InputType.CURRENCY -> amount / rate.value
+            SendModule.InputType.COIN -> amount.times(rate.value)
+            SendModule.InputType.CURRENCY -> amount.divide(rate.value, 8, RoundingMode.DOWN).stripTrailingZeros()
         }
     }
 
-    override fun getTotalBalanceMinusFee(inputType: SendModule.InputType, address: String?): Double {
-        val fee = wallet.adapter.fee(wallet.adapter.balance, address, false)
-        val balanceMinusFee = wallet.adapter.balance- fee
-        return when(inputType){
-            SendModule.InputType.COIN -> balanceMinusFee
-            else -> balanceMinusFee * (rate?.value ?: 0.0)
+    override fun getTotalBalanceMinusFee(inputType: SendModule.InputType, address: String?): BigDecimal {
+        return try{
+            val fee = wallet.adapter.fee(wallet.adapter.balance, address, false)
+            when(inputType){
+                SendModule.InputType.COIN -> wallet.adapter.balance.minus(fee)
+                else -> {
+                    val safeRate = rate?.value ?: BigDecimal.ZERO
+                    var feeInCurrency = fee.multiply(safeRate)
+                    feeInCurrency = feeInCurrency.setScale(2, RoundingMode.CEILING)
+                    val balanceInCurrency = wallet.adapter.balance.multiply(safeRate)
+                    balanceInCurrency.subtract(feeInCurrency)
+                }
+            }
+        } catch (e:  Error.InsufficientAmount) {
+            wallet.adapter.balance
         }
     }
 
@@ -93,13 +104,13 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
             SendModule.InputType.COIN -> {
                 state.coinValue = CoinValue(coin, input.amount)
                 rateValue?.let {
-                    state.currencyValue = CurrencyValue(baseCurrency, input.amount * it)
+                    state.currencyValue = CurrencyValue(baseCurrency, input.amount.times(it))
                 }
             }
             SendModule.InputType.CURRENCY -> {
                 state.currencyValue = CurrencyValue(baseCurrency, input.amount)
                 rateValue?.let {
-                    state.coinValue = CoinValue(coin, input.amount / it)
+                    state.coinValue = CoinValue(coin, input.amount.divide(it, 8, RoundingMode.HALF_EVEN))
                 }
             }
         }
@@ -115,17 +126,17 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
 
         rateValue?.let {
             state.feeCoinValue?.let { feeCoinValue ->
-                state.feeCurrencyValue = CurrencyValue(baseCurrency, rateValue * feeCoinValue.value)
+                state.feeCurrencyValue = CurrencyValue(baseCurrency, feeCoinValue.value.times(rateValue))
             }
         }
 
         return state
     }
 
-    private fun getAmountError(inputType: SendModule.InputType, fee: Double): SendModule.AmountError? {
+    private fun getAmountError(inputType: SendModule.InputType, fee: BigDecimal): SendModule.AmountError? {
         var balanceMinusFee = wallet.adapter.balance - fee
-        if (balanceMinusFee < 0) {
-            balanceMinusFee = 0.0
+        if (balanceMinusFee.compareTo(BigDecimal.ZERO) == -1) {
+            balanceMinusFee = BigDecimal.ZERO
         }
 
         return when (inputType) {
@@ -148,7 +159,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
             return
         }
 
-        var computedAmount: Double? = null
+        var computedAmount: BigDecimal? = null
 
         if (userInput.inputType == SendModule.InputType.COIN) {
             computedAmount = userInput.amount

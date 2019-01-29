@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import java.math.BigDecimal
 import java.util.*
 
 typealias CoinCode = String
@@ -65,7 +66,7 @@ object TransactionsModule {
         fun didFetchRecords(records: Map<CoinCode, List<TransactionRecord>>)
         fun onUpdateLastBlockHeight(coinCode: CoinCode, lastBlockHeight: Int)
         fun onUpdateBaseCurrency()
-        fun didFetchRate(rateValue: Double, coinCode: CoinCode, currency: Currency, timestamp: Long)
+        fun didFetchRate(rateValue: BigDecimal, coinCode: CoinCode, currency: Currency, timestamp: Long)
         fun didUpdateRecords(records: List<TransactionRecord>, coinCode: CoinCode)
     }
 

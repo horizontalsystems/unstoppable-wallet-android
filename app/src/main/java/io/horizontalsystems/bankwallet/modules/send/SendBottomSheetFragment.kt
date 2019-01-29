@@ -35,6 +35,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
+import java.math.RoundingMode
 import java.util.concurrent.TimeUnit
 
 class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.Listener {
@@ -44,7 +45,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
     private var inputConnection: InputConnection? = null
 
     private var amountEditTxt: EditText? = null
-    private val amountChangeSubject: PublishSubject<Double> = PublishSubject.create()
+    private val amountChangeSubject: PublishSubject<BigDecimal> = PublishSubject.create()
 
     private var coin: String? = null
 
@@ -179,20 +180,20 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
         })
 
         viewModel.amountInfoLiveData.observe(this, Observer { amountInfo ->
-            var amountNumber = 0.0
+            var amountNumber = BigDecimal.ZERO
             when (amountInfo) {
                 is SendModule.AmountInfo.CoinValueInfo -> {
                     amountPrefixTxt?.text = amountInfo.coinValue.coinCode
-                    amountNumber = Math.round(amountInfo.coinValue.value * 100_000_000.0) / 100_000_000.0
+                    amountNumber = amountInfo.coinValue.value.setScale(8, RoundingMode.HALF_EVEN)
                 }
                 is SendModule.AmountInfo.CurrencyValueInfo -> {
                     amountPrefixTxt?.text = amountInfo.currencyValue.currency.symbol
-                    amountNumber = Math.round(amountInfo.currencyValue.value * 100.0) / 100.0
+                    amountNumber = amountInfo.currencyValue.value.setScale(2, RoundingMode.HALF_EVEN)
                 }
             }
 
-            if (amountNumber > 0) {
-                amountEditTxt?.setText(BigDecimal.valueOf(amountNumber).toPlainString())
+            if (amountNumber.compareTo(BigDecimal.ZERO) == 1) {
+                amountEditTxt?.setText(amountNumber.stripTrailingZeros().toPlainString())
                 amountEditTxt?.setSelection(amountEditTxt?.text?.length ?: 0)
             }
         })
@@ -297,9 +298,9 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
     private val textChangeListener = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
             val amountText = s?.toString() ?: ""
-            var amountNumber = 0.0
+            var amountNumber = BigDecimal.ZERO
             try {
-                amountNumber = amountText.toDouble()
+                amountNumber = amountText.toBigDecimal()
             } catch (e: NumberFormatException) {
                 Log.e("SendFragment", "Exception", e)
             }

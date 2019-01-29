@@ -18,7 +18,7 @@ class BalanceViewItemFactoryTest {
     @Test
     fun createViewItem_coinValue() {
         val coinCode = "coinCode"
-        val balance = 12.23
+        val balance = 12.23.toBigDecimal()
         val item = BalanceModule.BalanceItem("title", coinCode, balance)
 
         val viewItem = factory.createViewItem(item, null)
@@ -69,7 +69,7 @@ class BalanceViewItemFactoryTest {
 
     @Test
     fun createViewItem_exchangeValue_currencyValue_withRate_noCurrency() {
-        val item = BalanceModule.BalanceItem("title", "coinCode", rate = Rate("coinCode", "", 123.123, 123L, false))
+        val item = BalanceModule.BalanceItem("title", "coinCode", rate = Rate("coinCode", "", 123.123.toBigDecimal(), 123L, false))
 
         val viewItem = factory.createViewItem(item, null)
 
@@ -79,8 +79,8 @@ class BalanceViewItemFactoryTest {
 
     @Test
     fun createViewItem_exchangeValue_currencyValue() {
-        val balance = 234.345
-        val rate = 123.123123
+        val balance = 234.345.toBigDecimal()
+        val rate = 123.123123.toBigDecimal()
         val exchangeValue = CurrencyValue(currency, rate)
         val currencyValue = CurrencyValue(currency, rate * balance)
         val item = BalanceModule.BalanceItem("title", "coinCode", balance = balance, rate = Rate("coinCode", "", rate, 123L, false))
@@ -102,13 +102,13 @@ class BalanceViewItemFactoryTest {
     fun createHeaderViewItem_currencyValue() {
         val currency = mock(Currency::class.java)
 
-        val balance1 = 10.0
-        val rate1 = 123.0
+        val balance1 = 10.toBigDecimal()
+        val rate1 = 123.toBigDecimal()
         val rateObject1 = mock(Rate::class.java)
         val balanceItem1 = mock(BalanceModule.BalanceItem::class.java)
 
-        val balance2 = 13.0
-        val rate2 = 1245.0
+        val balance2 = 13.toBigDecimal()
+        val rate2 = 1245.toBigDecimal()
         val rateObject2 = mock(Rate::class.java)
         val balanceItem2 = mock(BalanceModule.BalanceItem::class.java)
 
@@ -131,12 +131,12 @@ class BalanceViewItemFactoryTest {
     fun createHeaderViewItem_currencyValue_withNoRate() {
         val currency = mock(Currency::class.java)
 
-        val balance1 = 10.0
-        val rate1 = 123.0
+        val balance1 = 10.toBigDecimal()
+        val rate1 = 123.toBigDecimal()
         val rateObject1 = mock(Rate::class.java)
         val balanceItem1 = mock(BalanceModule.BalanceItem::class.java)
 
-        val balance2 = 13.0
+        val balance2 = 13.toBigDecimal()
         val balanceItem2 = mock(BalanceModule.BalanceItem::class.java)
 
         val expectedCurrencyValue = CurrencyValue(currency, balance1 * rate1)
@@ -157,13 +157,13 @@ class BalanceViewItemFactoryTest {
     fun createHeaderViewItem_upToDate() {
         val currency = mock(Currency::class.java)
 
-        val balance1 = 10.0
-        val rate1 = 123.0
+        val balance1 = 10.toBigDecimal()
+        val rate1 = 123.toBigDecimal()
         val rateObject1 = mock(Rate::class.java)
         val balanceItem1 = mock(BalanceModule.BalanceItem::class.java)
 
-        val balance2 = 13.0
-        val rate2 = 1245.0
+        val balance2 = 13.toBigDecimal()
+        val rate2 = 1245.toBigDecimal()
         val rateObject2 = mock(Rate::class.java)
         val balanceItem2 = mock(BalanceModule.BalanceItem::class.java)
 
@@ -186,13 +186,13 @@ class BalanceViewItemFactoryTest {
     fun createHeaderViewItem_upToDate_rateExpired() {
         val currency = mock(Currency::class.java)
 
-        val balance1 = 10.0
-        val rate1 = 123.0
+        val balance1 = 10.toBigDecimal()
+        val rate1 = 123.toBigDecimal()
         val rateObject1 = mock(Rate::class.java)
         val balanceItem1 = mock(BalanceModule.BalanceItem::class.java)
 
-        val balance2 = 13.0
-        val rate2 = 1245.0
+        val balance2 = 13.toBigDecimal()
+        val rate2 = 1245.toBigDecimal()
         val rateObject2 = mock(Rate::class.java)
         val balanceItem2 = mock(BalanceModule.BalanceItem::class.java)
 
@@ -215,13 +215,13 @@ class BalanceViewItemFactoryTest {
     fun createHeaderViewItem_upToDate_itemNotSynced() {
         val currency = mock(Currency::class.java)
 
-        val balance1 = 10.0
-        val rate1 = 123.0
+        val balance1 = 10.toBigDecimal()
+        val rate1 = 123.toBigDecimal()
         val rateObject1 = mock(Rate::class.java)
         val balanceItem1 = mock(BalanceModule.BalanceItem::class.java)
 
-        val balance2 = 13.0
-        val rate2 = 1245.0
+        val balance2 = 13.toBigDecimal()
+        val rate2 = 1245.toBigDecimal()
         val rateObject2 = mock(Rate::class.java)
         val balanceItem2 = mock(BalanceModule.BalanceItem::class.java)
 
@@ -246,12 +246,12 @@ class BalanceViewItemFactoryTest {
     fun createHeaderViewItem_upToDate_noRate() {
         val currency = mock(Currency::class.java)
 
-        val balance1 = 10.0
-        val rate1 = 123.0
+        val balance1 = 10.toBigDecimal()
+        val rate1 = 123.toBigDecimal()
         val rateObject1 = mock(Rate::class.java)
         val balanceItem1 = mock(BalanceModule.BalanceItem::class.java)
 
-        val balance2 = 13.0
+        val balance2 = 13.toBigDecimal()
         val balanceItem2 = mock(BalanceModule.BalanceItem::class.java)
 
         whenever(balanceItem1.balance).thenReturn(balance1)

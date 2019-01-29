@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.transactions
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import java.math.BigDecimal
 
 class TransactionsPresenter(private val interactor: TransactionsModule.IInteractor,
                             private val router: TransactionsModule.IRouter,
@@ -95,7 +96,7 @@ class TransactionsPresenter(private val interactor: TransactionsModule.IInteract
         fetchRatesForRecords(loader.allRecords)
     }
 
-    override fun didFetchRate(rateValue: Double, coinCode: CoinCode, currency: Currency, timestamp: Long) {
+    override fun didFetchRate(rateValue: BigDecimal, coinCode: CoinCode, currency: Currency, timestamp: Long) {
         metadataDataSource.setRate(rateValue, coinCode, currency, timestamp)
 
         val itemIndexes = loader.itemIndexesForTimestamp(coinCode, timestamp)

@@ -1,3 +1,5 @@
 package io.horizontalsystems.bankwallet.entities
 
-data class CurrencyValue(val currency: Currency, val value: Double)
+import java.math.BigDecimal
+
+data class CurrencyValue(val currency: Currency, val value: BigDecimal)

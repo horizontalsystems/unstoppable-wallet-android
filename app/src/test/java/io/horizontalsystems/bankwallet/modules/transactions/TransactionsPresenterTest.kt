@@ -205,7 +205,7 @@ class TransactionsPresenterTest {
 
     @Test
     fun didFetchRate() {
-        val rateValue = 123.123
+        val rateValue = 123.123.toBigDecimal()
         val coinCode = "BTC"
         val currency = mock(Currency::class.java)
         val timestamp = 123345123L
@@ -217,7 +217,7 @@ class TransactionsPresenterTest {
 
     @Test
     fun didFetchRate_needToUpdateViewItem() {
-        val rateValue = 123.123
+        val rateValue = 123.123.toBigDecimal()
         val coinCode = "BTC"
         val currency = mock(Currency::class.java)
         val timestamp = 123345123L
@@ -232,7 +232,7 @@ class TransactionsPresenterTest {
 
     @Test
     fun didFetchRate_notNeedToUpdateViewItem() {
-        val rateValue = 123.123
+        val rateValue = 123.123.toBigDecimal()
         val coinCode = "BTC"
         val currency = mock(Currency::class.java)
         val timestamp = 123345123L

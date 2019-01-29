@@ -36,13 +36,13 @@ class ValueFormatterTest {
 
 
     private fun assertCurrencyFormatter(input: Double, expected: String) {
-        val value = CurrencyValue(usdCurrency, input)
+        val value = CurrencyValue(usdCurrency, input.toBigDecimal())
         val formatted = formatter.format(value, showNegativeSign = true)
         Assert.assertEquals(expected, formatted)
     }
 
     private fun assertCoinFormatter(input: Double, expected: String) {
-        val value = CoinValue(btcCoinCode, input)
+        val value = CoinValue(btcCoinCode, input.toBigDecimal())
         val formatted = formatter.format(value)
         Assert.assertEquals(expected, formatted)
     }

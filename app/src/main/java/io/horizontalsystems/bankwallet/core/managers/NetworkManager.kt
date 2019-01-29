@@ -16,18 +16,19 @@ import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Path
 import retrofit2.http.Url
+import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 
 class NetworkManager : INetworkManager {
 
-    override fun getRate(coinCode: String, currency: String, timestamp: Long): Flowable<Double> {
+    override fun getRate(coinCode: String, currency: String, timestamp: Long): Flowable<BigDecimal> {
         val cleanedCoin = TextHelper.getCleanCoinCode(coinCode)
 
         return ServiceExchangeApi.service
                 .getRatesByHour(cleanedCoin, currency, DateHelper.formatDateInUTC(timestamp, "yyyy/MM/dd/HH"))
                 .flatMap { minuteRates ->
                     val minute = DateHelper.formatDateInUTC(timestamp, "mm")
-                    Flowable.just(minuteRates[minute]!!)
+                    Flowable.just(minuteRates.getValue(minute))
                 }
                 .onErrorResumeNext(
                         ServiceExchangeApi.service
@@ -67,14 +68,14 @@ object ServiceExchangeApi {
                 @Path("coin") coinCode: String,
                 @Path("fiat") currency: String,
                 @Path("datePath") datePath: String
-        ): Flowable<Double>
+        ): Flowable<BigDecimal>
 
         @GET("{coin}/{fiat}/{datePath}/index.json")
         fun getRatesByHour(
                 @Path("coin") coinCode: String,
                 @Path("fiat") currency: String,
                 @Path("datePath") datePath: String
-        ): Flowable<Map<String, Double>>
+        ): Flowable<Map<String, BigDecimal>>
 
         @GET("{coin}/{fiat}/index.json")
         fun getLatestRate(

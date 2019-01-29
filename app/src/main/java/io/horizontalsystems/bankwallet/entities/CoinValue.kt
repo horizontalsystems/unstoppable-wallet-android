@@ -1,8 +1,9 @@
 package io.horizontalsystems.bankwallet.entities
 
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import java.math.BigDecimal
 
-data class CoinValue(val coinCode: CoinCode, val value: Double) {
+data class CoinValue(val coinCode: CoinCode, val value: BigDecimal) {
 
     override fun equals(other: Any?): Boolean {
         if (other is CoinValue) {

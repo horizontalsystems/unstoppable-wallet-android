@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.send
 
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import java.math.BigDecimal
 
 class StateViewItemFactory {
 
@@ -50,7 +51,7 @@ class StateViewItemFactory {
             }
         }
 
-        val zeroAmount = state.coinValue?.let { it.value == 0.0 } ?: true
+        val zeroAmount = state.coinValue?.let { it.value.compareTo(BigDecimal.ZERO) == 0 } ?: true
         viewItem.sendButtonEnabled = !zeroAmount && state.address != null && state.amountError == null && state.addressError == null
 
         return viewItem

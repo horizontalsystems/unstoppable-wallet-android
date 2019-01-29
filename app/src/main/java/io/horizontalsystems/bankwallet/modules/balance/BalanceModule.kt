@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import java.math.BigDecimal
 
 object BalanceModule {
 
@@ -37,7 +38,7 @@ object BalanceModule {
     interface IInteractorDelegate {
         fun didUpdateWallets(wallets: List<Wallet>)
         fun didUpdateCurrency(currency: Currency)
-        fun didUpdateBalance(coinCode: CoinCode, balance: Double)
+        fun didUpdateBalance(coinCode: CoinCode, balance: BigDecimal)
         fun didUpdateState(coinCode: String, state: AdapterState)
         fun didUpdateRate(rate: Rate)
         fun didRefresh()
@@ -70,7 +71,7 @@ object BalanceModule {
             return items.indexOfFirst { it.coinCode == coinCode }
         }
 
-        fun setBalance(position: Int, balance: Double) {
+        fun setBalance(position: Int, balance: BigDecimal) {
             items[position].balance = balance
         }
 
@@ -92,7 +93,7 @@ object BalanceModule {
     data class BalanceItem(
             val title: String,
             val coinCode: CoinCode,
-            var balance: Double = 0.0,
+            var balance: BigDecimal = BigDecimal.ZERO,
             var state: AdapterState = AdapterState.NotSynced,
             var rate: Rate? = null
     )
