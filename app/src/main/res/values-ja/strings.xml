@@ -101,7 +101,7 @@
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
     <string name="FullInfo_Source_Title">Source</string>
-    <string name="FullInfo_Source_Online">Online</string>
+    <string name="FullInfo_Source_Online">オンライン</string>
     <string name="FullInfo_Source_Offline">オフライン</string>
     <string name="FullInfo_Error_Subtitle">オフライン</string>
     <string name="FullInfo_Error_Retry">リトライ</string>
