@@ -145,18 +145,19 @@
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Info</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">ANB &amp; Datenschutz:</string>
-    <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
-\n\nIt works everywhere as long as there is internet. No entity can block this app from working or to block someone from using it.
-\n\nYour funds are securely stored on the phone itself, not anywhere else.
-\n\nIt’s your responsibility to backup your Secret Key and keep it private. Never show it to anyone. If it’s lost, forgotten or stollen your funds can be used by the person who has your Secret key.
-\n\nDo not jailbreak your phone, do not install apps from unknown (untrusted) sources, do not give your device to untrusted people, and keep the Operating System on your phone up to date. The security of your wallet depends on this.
-\n\nThe entire code powering this app been open to the public scrutiny since the beginning. We tried to build the most secure and decentralized wallet we could, however there are no guarantees that there are no unintended software issues. That said, this wallet is likely to be significantly more secure than any smartphone wallet app out there.
-\n\nSome generic non-private app data like currency exchange rates are stored on decentralized storage (IPFS).</string>
+    <string name="SettingsAbout_TermsPrivacyText">\n\nDiese Anwendung ist vollständig dezentralisiert
+\n\nDie Leistung dieser Anwendung hängt nicht von Servern von Drittanbietern oder einem technischen Supportteam ab.
+\n\nDie Anwendung funktioniert überall, solange es Internet gibt. Dieser Wallet oder deren Benutzer können von niemandem blockiert werden.
+\n\nDein Geld wird nur auf Ihrem Telefon gespeichert.
+\n\nDu bist allein für die sichere Aufbewahrung des Offlineschlüssels verantwortlich. Teil deinen Offlineschlüssel nie mit jemandem. Wenn der Offlineschlüssel verloren geht, gestohlen oder vergessen wird, erhält derjenige, der über deinen Offlineschlüssel verfügt, die Kontrolle über dein Geld.
+Hack dein Telefon nicht, installier keine Anwendungen von inoffiziellen Quellen und gib dein Telefon niemals den anderen. Die Sicherheit  deiner Wallet hängt direkt davon ab.
+\n\nDer gesamte Programmcode dieser Anwendung ist kostenlos und für die Öffentlichkeit zugänglich. Wir haben versucht, die sicherste und gleichzeitig dezentralisierte Wallet zu schaffen, aber es gibt keine Garantie dafür, dass der Anwendungscode fehlerfrei ist. Wir glauben jedoch, dass dieser Wallet in Bezug auf die Sicherheit fast alle heute verfügbare mobile Kryptobörsen deutlich übertrifft.
+\n\nEinige von der Anwendung verwendete öffentliche Daten, wie z. B. Wechselkurse, werden im dezentralen Repository (IPFS) gespeichert</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android Keystore Fehler</string>
     <string name="Alert_KeysInvalidatedDescription">Deine verschlüsselten Daten wurden kürzlich ungültig gemacht, weil dein Android-Sperrbildschirm geändert wurde</string>
     <string name="Alert_TitleWarning">Warnung</string>
-    <string name="Alert_NoDeviceLockDescription">Richten Sie ein Sperrbildschirm auf diesem Gerät weiter. Gehen Sie auf \"Einstellungen\" &gt; \"Security\" &gt; \"Bildschirmsperre\" und aktivieren Sie die Sperre Bildschirmeinstellung.</string>
+    <string name="Alert_NoDeviceLockDescription">Richten Sie ein Sperrbildschirm auf diesem Gerät weiter. Gehen Sie zu \"Einstellungen\" </string>
     <string name="Alert_CustomKeyboardIsUsed">Sie verwenden eine Fremdanbieter-Tastatur. Sie müssen Standard-Tastatur verwenden.</string>
     <!--Unlock-->
     <string name="Unlock_Page_EnterYourPin">Code</string>
@@ -179,7 +180,7 @@
     <string name="UnlockPin_WalletDisabledUntil">Deaktiviert bis: %s </string>
     <!--Set Pin-->
     <string name="SetPin_Title">Code</string>
-    <string name="SetPin_Info">Ihr Code wird verwendet werden, um Ihren Geldbörse zu entsperren und Geld schicken</string>
+    <string name="SetPin_Info">Ihr Code wird verwendet werden, um Ihren Wallet zu entsperren und Geld schicken</string>
     <string name="SetPin_ErrorShortPin">Gib bitte nur Zahlen ein.</string>
     <string name="SetPin_ConfirmInfo">Bestätigen</string>
     <string name="SetPin_Success">Lock code wurde erfolgreich gesetzt!</string>
