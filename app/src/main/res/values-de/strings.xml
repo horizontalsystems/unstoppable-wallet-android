@@ -17,19 +17,19 @@
     <!--Guest-->
     <string name="Guest_Title">Bank Wallet</string>
     <string name="Guest_CreateWallet">Wallet Erstellen</string>
-    <string name="Guest_RestoreWallet">Geldbörse Wiederherstellen</string>
+    <string name="Guest_RestoreWallet">Wallet Wiederherstellen</string>
     <!--Restore-->
     <string name="Restore_Title">Offlineschlüssel eingeben</string>
     <string name="Restore_ValidationFailed">Falscher Offlineschlüssel</string>
-    <string name="Restore_RestoreFailed">Fehler beim Wiederherstellen des Geldbörse</string>
+    <string name="Restore_RestoreFailed">Fehler beim Wiederherstellen des Wallet</string>
     <!--Backup-->
-    <string name="Backup_Intro_Title">Sicherung</string>
+    <string name="Backup_Intro_Title">Offlineschlüssel</string>
     <string name="Backup_Intro_Subtitle">Ihr Offlineschlüssel ist die einzige Möglichkeit, deine Geldbörse wiederherzustellen, falls du dein Smartphone verlierst, austauscht, es gestohlen wird oder kaputtgeht. \n\nEs besteht aus 12 Wörtern. Speichen Sie es sicher offline.</string>
     <string name="Backup_Intro_Later">Später</string>
     <string name="Backup_Intro_BackupNow">Sicherung</string>
-    <string name="Backup_Words_Title">Sicherung</string>
-    <string name="Backup_Confirmation_Understand">Ich verstehe, dass meine Geldbörse und Token auf diesem Gerät nur ist.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">Ich verstehe, dass wenn diese app auf ein anderes Gerät verschoben wird oder gelöscht, mein Geldbörse nur mit dem Offlineschlüssel wiederhergestellt werden können, die ich aufgeschrieben und an einem sicheren Ort gespeichert.</string>
+    <string name="Backup_Words_Title">Offlineschlüssel</string>
+    <string name="Backup_Confirmation_Understand">Ich  stimme zu, dass mein Wallet und meinen Token nur auf diesem Gerät verfügbar sind.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">Ich stimme zu,  dass bei einer Verschiebung  oder Entfernung dieser App, der Zugang zu meinem Walletkonto nur bei Verwendung den Offlineschlüsseln erfolgt , der sicher gespeichert werden muss.</string>
     <string name="Backup_Confirmation_LockAppWarn">PIN zum Entsperren des Telefons ändern in Ihrem Android OS würde Einstellungen die Geldbörse. Sie benötigen Ihr backup Satz Ihrer Geldbörse danach wiederherstellen.</string>
     <string name="Backup_Confirmation_Title">Gib die folgenden Wörter deines Offlineschlüssels ein</string>
     <string name="Backup_Confirmation_Description">Gib die folgenden Wörter deines Offlineschlüssels ein.</string>
