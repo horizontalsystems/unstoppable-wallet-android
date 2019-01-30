@@ -47,7 +47,7 @@ class ConfirmationFragment : DialogFragment() {
             }
         })
 
-        viewModel.coinLiveData.observe(this, Observer { coin ->
+        viewModel.coinCodeLiveData.observe(this, Observer { coin ->
             coin?.let { coinCode ->
                 context?.let {
                     val coinDrawable = ContextCompat.getDrawable(it, LayoutHelper.getCoinDrawableResource(coinCode))

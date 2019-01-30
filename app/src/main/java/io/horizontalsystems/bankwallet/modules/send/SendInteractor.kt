@@ -31,6 +31,9 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
 
     var delegate: SendModule.IInteractorDelegate? = null
 
+    override val coinTitle: String
+        get() = wallet.title
+
     override val coinCode: CoinCode
         get() = wallet.coinCode
 
@@ -121,7 +124,11 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
 
         try {
             state.coinValue?.let { coinValue ->
-                state.feeCoinValue = CoinValue(coin, adapter.fee(coinValue.value, input.address, senderPay))
+                if ((state.coinValue?.value ?: BigDecimal.ZERO) > BigDecimal.ZERO) {
+                    state.feeCoinValue = CoinValue(coin, adapter.fee(coinValue.value, input.address, senderPay))
+                } else {
+                    state.feeCoinValue = CoinValue(coin, BigDecimal.ZERO)
+                }
             }
         } catch (e: Error.InsufficientAmount) {
             state.feeCoinValue = CoinValue(coin, e.fee)

@@ -11,7 +11,8 @@ class SendViewModel : ViewModel(), SendModule.IView {
 
     val hintInfoLiveData = MutableLiveData<SendModule.HintInfo>()
     val sendButtonEnabledLiveData = MutableLiveData<Boolean>()
-    val coinLiveData = MutableLiveData<CoinCode>()
+    val coinTitleLiveData = MutableLiveData<String>()
+    val coinCodeLiveData = MutableLiveData<CoinCode>()
     val amountInfoLiveData = MutableLiveData<SendModule.AmountInfo>()
     val switchButtonEnabledLiveData = MutableLiveData<Boolean>()
     val addressInfoLiveData = MutableLiveData<SendModule.AddressInfo>()
@@ -26,7 +27,8 @@ class SendViewModel : ViewModel(), SendModule.IView {
     fun init(coin: String) {
         hintInfoLiveData.value = null
         sendButtonEnabledLiveData.value = null
-        coinLiveData.value = null
+        coinTitleLiveData.value = null
+        coinCodeLiveData.value = null
         amountInfoLiveData.value = null
         switchButtonEnabledLiveData.value = null
         addressInfoLiveData.value = null
@@ -43,8 +45,12 @@ class SendViewModel : ViewModel(), SendModule.IView {
         pasteButtonEnabledLiveData.value = enabled
     }
 
-    override fun setCoin(coinCode: CoinCode) {
-        coinLiveData.value = coinCode
+    override fun setCoinTitle(coinTitle: String) {
+        coinTitleLiveData.value = coinTitle
+    }
+
+    override fun setCoinCode(coinCode: CoinCode) {
+        coinCodeLiveData.value = coinCode
     }
 
     override fun setAmountInfo(amountInfo: SendModule.AmountInfo?) {

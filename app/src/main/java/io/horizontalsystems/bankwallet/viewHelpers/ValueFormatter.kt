@@ -29,7 +29,7 @@ object ValueFormatter {
 
         value = when {
             !realNumber && value >= COIN_BIG_NUMBER_EDGE -> value.setScale(4, RoundingMode.HALF_EVEN)
-            value == BigDecimal.ZERO -> value.setScale(0, RoundingMode.HALF_EVEN)
+            value.compareTo(BigDecimal.ZERO) == 0 -> value.setScale(0, RoundingMode.HALF_EVEN)
             else -> value.setScale(8, RoundingMode.HALF_EVEN)
         }
         value = value.stripTrailingZeros()
@@ -66,7 +66,7 @@ object ValueFormatter {
         value = value.abs()
 
         var result: String = when {
-            value == BigDecimal.ZERO -> "0"
+            value.compareTo(BigDecimal.ZERO) == 0 -> "0"
             value < FIAT_SMALL_NUMBER_EDGE -> "0.01"
             else -> {
                 value = when {

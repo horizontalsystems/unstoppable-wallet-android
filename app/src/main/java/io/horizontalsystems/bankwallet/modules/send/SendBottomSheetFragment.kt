@@ -45,6 +45,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
     private var inputConnection: InputConnection? = null
 
     private var amountEditTxt: EditText? = null
+    private var maxButton: Button? = null
     private val amountChangeSubject: PublishSubject<BigDecimal> = PublishSubject.create()
 
     private var coin: String? = null
@@ -88,7 +89,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
         val addressErrorTxt: TextView? = mDialog?.findViewById(R.id.txtAddressError)
         val amountPrefixTxt: TextView? = mDialog?.findViewById(R.id.topAmountPrefix)
         val switchButton: ImageButton? = mDialog?.findViewById(R.id.btnSwitch)
-        val maxButton: Button? = mDialog?.findViewById(R.id.btnMax)
+        maxButton = mDialog?.findViewById(R.id.btnMax)
         val pasteButton: Button? = mDialog?.findViewById(R.id.btnPaste)
         val scanBarcodeButton: ImageButton? = mDialog?.findViewById(R.id.btnBarcodeScan)
         val deleteAddressButton: ImageButton? = mDialog?.findViewById(R.id.btnDeleteAddress)
@@ -129,13 +130,18 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
             enabled?.let { switchButton?.isEnabled = it }
         })
 
-        viewModel.coinLiveData.observe(this, Observer { coin ->
-            coin?.let { coinCode ->
+        viewModel.coinTitleLiveData.observe(this, Observer { coinTitle ->
+            coinTitle?.let {
+                mDialog?.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.Send_Title, it)
+            }
+        })
+
+        viewModel.coinCodeLiveData.observe(this, Observer { coinCode ->
+            coinCode?.let { code ->
                 context?.let {
-                    val coinDrawable = ContextCompat.getDrawable(it, LayoutHelper.getCoinDrawableResource(coinCode))
+                    val coinDrawable = ContextCompat.getDrawable(it, LayoutHelper.getCoinDrawableResource(code))
                     mDialog?.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
                 }
-                mDialog?.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.Send_Title, coinCode)
             }
         })
 
@@ -305,6 +311,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
                 Log.e("SendFragment", "Exception", e)
             }
 
+            maxButton?.visibility = if (amountText.isEmpty()) View.VISIBLE else View.GONE
             amountChangeSubject.onNext(amountNumber)
         }
 
