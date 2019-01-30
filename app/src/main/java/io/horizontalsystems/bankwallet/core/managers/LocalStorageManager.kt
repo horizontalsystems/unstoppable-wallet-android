@@ -10,7 +10,7 @@ class LocalStorageManager : ILocalStorage {
     private val CURRENT_LANGUAGE = "current_language"
     private val LIGHT_MODE_ENABLED = "light_mode_enabled"
     private val FINGERPRINT_ENABLED = "fingerprint_enabled"
-    private val SEND_INPUT_TYPE = "fingerprint_enabled"
+    private val SEND_INPUT_TYPE = "send_input_type"
     private val WORDLIST_BACKUP = "wordlist_backup"
     private val I_UNDERSTAND = "i_understand"
     private val BLOCK_TILL_DATE = "unblock_date"
