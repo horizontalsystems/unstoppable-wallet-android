@@ -61,7 +61,7 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
 
     override fun send(address: String, value: BigDecimal, completion: ((Throwable?) -> (Unit))?) {
         try {
-            bitcoinKit.send(address, (value * satoshisInBitcoin).toInt())
+            bitcoinKit.send(address, (value * satoshisInBitcoin).toLong())
             completion?.invoke(null)
         } catch (ex: Exception) {
             completion?.invoke(ex)
@@ -70,7 +70,7 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
 
     override fun fee(value: BigDecimal, address: String?, senderPay: Boolean): BigDecimal {
         try {
-            val amount = (value * satoshisInBitcoin).toInt()
+            val amount = (value * satoshisInBitcoin).toLong()
             val fee = bitcoinKit.fee(amount, address, senderPay)
             return fee.toBigDecimal().divide(satoshisInBitcoin, 8, RoundingMode.HALF_EVEN)
         } catch (e: UnspentOutputSelector.Error.InsufficientUnspentOutputs) {
