@@ -13,11 +13,11 @@ class HorsysBitcoinProvider(val testMode: Boolean) : FullTransactionInfoModule.B
     override val name = "HorizontalSystems.xyz"
 
     override fun url(hash: String): String {
-        return "${if (testMode) "http://btc-testnet" else "https://btc"}.horizontalsystems.xyz/tx/$hash"
+        return "${if (testMode) "http://btc-testnet" else "https://btc"}.horizontalsystems.xyz/apg/tx/$hash"
     }
 
     override fun apiUrl(hash: String): String {
-        return "${if (testMode) "http://btc-testnet" else "https://btc"}.horizontalsystems.xyz/tx/$hash"
+        return "${if (testMode) "http://btc-testnet" else "https://btc"}.horizontalsystems.xyz/apg/tx/$hash"
     }
 
     override fun convert(json: JsonObject): BitcoinResponse {
@@ -29,11 +29,11 @@ class HorsysBitcoinCashProvider(val testMode: Boolean) : FullTransactionInfoModu
     override val name: String = "HorizontalSystems.xyz"
 
     override fun url(hash: String): String {
-        return "${if (testMode) "http://bch-testnet" else "https://bch"}.horizontalsystems.xyz/tx/$hash"
+        return "${if (testMode) "http://bch-testnet" else "https://bch"}.horizontalsystems.xyz/apg/tx/$hash"
     }
 
     override fun apiUrl(hash: String): String {
-        return "${if (testMode) "http://bch-testnet" else "https://bch"}.horizontalsystems.xyz/tx/$hash"
+        return "${if (testMode) "http://bch-testnet" else "https://bch"}.horizontalsystems.xyz/apg/tx/$hash"
     }
 
     override fun convert(json: JsonObject): BitcoinResponse {
@@ -46,11 +46,11 @@ class HorsysEthereumProvider(val testMode: Boolean) : FullTransactionInfoModule.
     override val name: String = "HorizontalSystems.xyz"
 
     override fun url(hash: String): String {
-        return "${if (testMode) "http://eth-testnet" else "https://eth"}.horizontalsystems.xyz/tx/$hash"
+        return "${if (testMode) "http://eth-testnet" else "https://eth"}.horizontalsystems.xyz/apg/tx/$hash"
     }
 
     override fun apiUrl(hash: String): String {
-        return "${if (testMode) "http://eth-testnet" else "https://eth"}.horizontalsystems.xyz/tx/$hash"
+        return "${if (testMode) "http://eth-testnet" else "https://eth"}.horizontalsystems.xyz/apg/tx/$hash"
     }
 
     override fun convert(json: JsonObject): EthereumResponse {
