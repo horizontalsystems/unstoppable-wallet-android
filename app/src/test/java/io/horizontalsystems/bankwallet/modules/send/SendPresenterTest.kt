@@ -38,9 +38,15 @@ class SendPresenterTest {
 
     @Test
     fun onViewDidLoad() {
+        val inputType = mock(SendModule.InputType::class.java)
+
+        whenever(interactor.defaultInputType).thenReturn(inputType)
         whenever(interactor.clipboardHasPrimaryClip).thenReturn(true)
         whenever(interactor.coinCode).thenReturn("COIN")
+
         presenter.onViewDidLoad()
+
+        verify(userInput).inputType = inputType
 
         verify(view).setCoin("COIN")
         verify(view).setAmountInfo(viewItem.amountInfo)
@@ -78,6 +84,7 @@ class SendPresenterTest {
         verify(view).setHintInfo(viewItem.hintInfo)
         verify(view).setPrimaryFeeInfo(viewItem.primaryFeeInfo)
         verify(view).setSecondaryFeeInfo(viewItem.secondaryFeeInfo)
+        verify(interactor).defaultInputType = SendModule.InputType.CURRENCY
     }
 
     @Test

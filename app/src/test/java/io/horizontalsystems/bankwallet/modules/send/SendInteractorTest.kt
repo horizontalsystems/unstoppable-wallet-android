@@ -18,6 +18,7 @@ import java.math.BigDecimal
 class SendInteractorTest {
 
     private val delegate = mock(SendModule.IInteractorDelegate::class.java)
+    private val localStorage = mock(ILocalStorage::class.java)
     private val clipboardManager = mock(IClipboardManager::class.java)
 
     private val currencyManager = mock(ICurrencyManager::class.java)
@@ -45,8 +46,33 @@ class SendInteractorTest {
         whenever(rateStorage.latestRateObservable(coin, currency.code)).thenReturn(Flowable.just(rate))
         whenever(adapter.balance).thenReturn(balance)
 
-        interactor = SendInteractor(currencyManager, rateStorage, clipboardManager, wallet)
+        interactor = SendInteractor(currencyManager, rateStorage, localStorage, clipboardManager, wallet)
         interactor.delegate = delegate
+    }
+
+    @Test
+    fun defaultInputType_get() {
+        val inputType = mock(SendModule.InputType::class.java)
+
+        whenever(localStorage.sendInputType).thenReturn(inputType)
+
+        Assert.assertEquals(inputType, interactor.defaultInputType)
+    }
+
+    @Test
+    fun defaultInputType_getDefault() {
+        whenever(localStorage.sendInputType).thenReturn(null)
+
+        Assert.assertEquals(SendModule.InputType.COIN, interactor.defaultInputType)
+    }
+
+    @Test
+    fun defaultInputType_set() {
+        val inputType = mock(SendModule.InputType::class.java)
+
+        interactor.defaultInputType = inputType
+
+        verify(localStorage).sendInputType = inputType
     }
 
     @Test

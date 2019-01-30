@@ -14,6 +14,8 @@ class SendPresenter(
     // IViewDelegate
     //
     override fun onViewDidLoad() {
+        userInput.inputType = interactor.defaultInputType
+
         val state = interactor.stateForUserInput(userInput)
         val viewItem = factory.viewItemForState(state)
 
@@ -56,11 +58,13 @@ class SendPresenter(
         val convertedAmount = interactor.convertedAmountForInputType(userInput.inputType, userInput.amount)
                 ?: return
 
-        userInput.amount = convertedAmount
-        userInput.inputType = when (userInput.inputType) {
+        val newInputType = when (userInput.inputType) {
             SendModule.InputType.CURRENCY -> SendModule.InputType.COIN
             else -> SendModule.InputType.CURRENCY
         }
+
+        userInput.amount = convertedAmount
+        userInput.inputType = newInputType
 
         val state = interactor.stateForUserInput(userInput)
         val viewItem = factory.viewItemForState(state)
@@ -69,6 +73,8 @@ class SendPresenter(
         view?.setHintInfo(viewItem.hintInfo)
         view?.setPrimaryFeeInfo(viewItem.primaryFeeInfo)
         view?.setSecondaryFeeInfo(viewItem.secondaryFeeInfo)
+
+        interactor.defaultInputType = newInputType
     }
 
     override fun onPasteClicked() {
