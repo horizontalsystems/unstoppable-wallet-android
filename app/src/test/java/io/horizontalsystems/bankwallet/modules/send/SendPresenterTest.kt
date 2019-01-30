@@ -42,13 +42,15 @@ class SendPresenterTest {
 
         whenever(interactor.defaultInputType).thenReturn(inputType)
         whenever(interactor.clipboardHasPrimaryClip).thenReturn(true)
-        whenever(interactor.coinCode).thenReturn("COIN")
+        whenever(interactor.coinTitle).thenReturn("Bitcoin")
+        whenever(interactor.coinCode).thenReturn("BTC")
 
         presenter.onViewDidLoad()
 
         verify(userInput).inputType = inputType
 
-        verify(view).setCoin("COIN")
+        verify(view).setCoinCode("BTC")
+        verify(view).setCoinTitle("Bitcoin")
         verify(view).setAmountInfo(viewItem.amountInfo)
         verify(view).setSwitchButtonEnabled(viewItem.switchButtonEnabled)
         verify(view).setHintInfo(viewItem.hintInfo)

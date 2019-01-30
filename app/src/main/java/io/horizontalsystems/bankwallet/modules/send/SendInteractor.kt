@@ -31,6 +31,9 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
 
     var delegate: SendModule.IInteractorDelegate? = null
 
+    override val coinTitle: String
+        get() = wallet.title
+
     override val coinCode: CoinCode
         get() = wallet.coinCode
 

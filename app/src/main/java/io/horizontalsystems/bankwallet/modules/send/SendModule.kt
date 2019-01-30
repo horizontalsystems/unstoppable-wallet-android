@@ -13,7 +13,8 @@ import java.math.BigDecimal
 object SendModule {
 
     interface IView {
-        fun setCoin(coinCode: CoinCode)
+        fun setCoinTitle(coinTitle: String)
+        fun setCoinCode(coinCode: CoinCode)
 
         fun setAmountInfo(amountInfo: AmountInfo?)
         fun setSwitchButtonEnabled(enabled: Boolean)
@@ -47,8 +48,9 @@ object SendModule {
 
     interface IInteractor {
         val clipboardHasPrimaryClip: Boolean
-        var defaultInputType: SendModule.InputType
+        val coinTitle: String
         val coinCode: CoinCode
+        var defaultInputType: SendModule.InputType
         val addressFromClipboard: String?
 
         fun retrieveRate()
