@@ -63,7 +63,7 @@ class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, Eth
 
     override fun fee(value: BigDecimal, address: String?, senderPay: Boolean): BigDecimal {
         val fee = ethereumKit.fee().toBigDecimal()
-        if (senderPay && balance.minus(value).minus(fee).compareTo(BigDecimal.ZERO) == -1) {
+        if (senderPay && balance.minus(value).minus(fee) < BigDecimal.ZERO) {
             throw Error.InsufficientAmount(fee)
         }
         return fee

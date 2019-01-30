@@ -192,7 +192,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
                 }
             }
 
-            if (amountNumber.compareTo(BigDecimal.ZERO) == 1) {
+            if (amountNumber > BigDecimal.ZERO) {
                 amountEditTxt?.setText(amountNumber.stripTrailingZeros().toPlainString())
                 amountEditTxt?.setSelection(amountEditTxt?.text?.length ?: 0)
             }

@@ -55,7 +55,7 @@ class RateManager(private val storage: IRateStorage, private val networkManager:
                         retrieveFromNetwork(coinCode, currencyCode, timestamp)
                     }
 
-                    if (rate != null && rate.value.compareTo(BigDecimal.ZERO) != 0) {
+                    if (rate != null && rate.value != BigDecimal.ZERO) {
                         Flowable.just(rate.value)
                     } else if (timestamp < ((System.currentTimeMillis() / 1000) - 3600)) {
                         Flowable.empty()

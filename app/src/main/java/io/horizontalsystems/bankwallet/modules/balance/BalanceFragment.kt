@@ -217,7 +217,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
                             }
                 }
                 is AdapterState.Synced -> {
-                    if (balanceViewItem.coinValue.value.compareTo(BigDecimal.ZERO) == 1) {
+                    if (balanceViewItem.coinValue.value > BigDecimal.ZERO) {
                         textCurrencyAmount.visibility = View.VISIBLE
                         textCurrencyAmount.text = balanceViewItem.currencyValue?.let { ValueFormatter.format(it) }
                         textCurrencyAmount.setTextColor(ContextCompat.getColor(containerView.context, if (balanceViewItem.rateExpired) R.color.yellow_crypto_40 else R.color.yellow_crypto))

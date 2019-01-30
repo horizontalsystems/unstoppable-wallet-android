@@ -28,8 +28,8 @@ object ValueFormatter {
         var value = if (explicitSign) coinValue.value.abs() else coinValue.value
 
         value = when {
-            !realNumber && value.compareTo(COIN_BIG_NUMBER_EDGE) != -1 -> value.setScale(4, RoundingMode.HALF_EVEN)
-            value.compareTo(BigDecimal.ZERO) == 0 -> value.setScale(0, RoundingMode.HALF_EVEN)
+            !realNumber && value >= COIN_BIG_NUMBER_EDGE -> value.setScale(4, RoundingMode.HALF_EVEN)
+            value == BigDecimal.ZERO -> value.setScale(0, RoundingMode.HALF_EVEN)
             else -> value.setScale(8, RoundingMode.HALF_EVEN)
         }
         value = value.stripTrailingZeros()
@@ -37,7 +37,7 @@ object ValueFormatter {
         var result = "${value.toPlainString()} ${coinValue.coinCode}"
 
         if (explicitSign) {
-            val sign = if (coinValue.value.compareTo(BigDecimal.ZERO) == -1) "-" else "+"
+            val sign = if (coinValue.value < BigDecimal.ZERO) "-" else "+"
             result = "$sign $result"
         }
 
@@ -66,8 +66,8 @@ object ValueFormatter {
         value = value.abs()
 
         var result: String = when {
-            value.compareTo(BigDecimal.ZERO) == 0 -> "0"
-            value.compareTo(FIAT_SMALL_NUMBER_EDGE) == -1 -> "0.01"
+            value == BigDecimal.ZERO -> "0"
+            value < FIAT_SMALL_NUMBER_EDGE -> "0.01"
             else -> {
                 value = when {
                     !realNumber && (value >= FIAT_BIG_NUMBER_EDGE || approximate) -> value.setScale(0, RoundingMode.HALF_EVEN)
@@ -79,7 +79,7 @@ object ValueFormatter {
 
         result = "${currencyValue.currency.symbol} $result"
 
-        if (showNegativeSign && currencyValue.value.compareTo(BigDecimal.ZERO) == -1) {
+        if (showNegativeSign && currencyValue.value < BigDecimal.ZERO) {
             result = "- $result"
         }
 
@@ -94,7 +94,7 @@ object ValueFormatter {
         val spannable = SpannableString(format(currencyValue))
 
         //set currency sign size
-        val endOffset = if (currencyValue.value.compareTo(BigDecimal.ZERO) == -1) 3 else 1
+        val endOffset = if (currencyValue.value < BigDecimal.ZERO) 3 else 1
         spannable.setSpan(RelativeSizeSpan(0.75f), 0, endOffset, 0)
 
         //set color

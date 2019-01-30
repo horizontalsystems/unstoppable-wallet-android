@@ -35,7 +35,7 @@ class TransactionViewItemFactory(
             }
         }
 
-        val incoming = record.amount.compareTo(BigDecimal.ZERO) == 1
+        val incoming = record.amount > BigDecimal.ZERO
 
         val toAddress = when (incoming) {
             true -> record.to.find { it.mine }?.address

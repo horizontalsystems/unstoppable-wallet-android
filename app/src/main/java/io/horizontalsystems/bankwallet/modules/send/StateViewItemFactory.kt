@@ -51,7 +51,7 @@ class StateViewItemFactory {
             }
         }
 
-        val zeroAmount = state.coinValue?.let { it.value.compareTo(BigDecimal.ZERO) == 0 } ?: true
+        val zeroAmount = state.coinValue?.let { it.value == BigDecimal.ZERO } ?: true
         viewItem.sendButtonEnabled = !zeroAmount && state.address != null && state.amountError == null && state.addressError == null
 
         return viewItem

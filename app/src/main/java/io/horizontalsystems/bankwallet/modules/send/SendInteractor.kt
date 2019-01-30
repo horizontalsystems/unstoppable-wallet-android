@@ -135,7 +135,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
 
     private fun getAmountError(inputType: SendModule.InputType, fee: BigDecimal): SendModule.AmountError? {
         var balanceMinusFee = wallet.adapter.balance - fee
-        if (balanceMinusFee.compareTo(BigDecimal.ZERO) == -1) {
+        if (balanceMinusFee < BigDecimal.ZERO) {
             balanceMinusFee = BigDecimal.ZERO
         }
 
