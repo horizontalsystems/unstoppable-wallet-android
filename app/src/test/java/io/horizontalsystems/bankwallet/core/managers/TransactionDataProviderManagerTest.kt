@@ -86,7 +86,7 @@ class TransactionDataProviderManagerTest {
         val bitcoin = dataProviderManager.bitcoin("HorizontalSystems.xyz")
 
         assertThat(bitcoin, instanceOf(HorsysBitcoinProvider::class.java))
-        assertEquals(bitcoin.url("abc"), "https://btc.horizontalsystems.xyz/tx/abc")
+        assertEquals(bitcoin.url("abc"), "https://btc.horizontalsystems.xyz/apg/tx/abc")
     }
 
     @Test
@@ -96,6 +96,6 @@ class TransactionDataProviderManagerTest {
         val bitcoin = dataProviderManager.bitcoin("HorizontalSystems.xyz")
 
         assertThat(bitcoin, instanceOf(HorsysBitcoinProvider::class.java))
-        assertEquals(bitcoin.url("abc"), "http://btc-testnet.horizontalsystems.xyz/tx/abc")
+        assertEquals(bitcoin.url("abc"), "http://btc-testnet.horizontalsystems.xyz/apg/tx/abc")
     }
 }

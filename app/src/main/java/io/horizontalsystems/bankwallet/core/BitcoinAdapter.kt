@@ -15,7 +15,7 @@ import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, newWallet: Boolean, walletId: String?) : IAdapter, BitcoinKit.Listener {
+class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, newWallet: Boolean, walletId: String) : IAdapter, BitcoinKit.Listener {
 
     private var bitcoinKit = BitcoinKit(words, network, newWallet = newWallet, walletId = walletId)
     private val satoshisInBitcoin = Math.pow(10.0, 8.0).toBigDecimal()
@@ -126,12 +126,12 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
         for (info in inserted) {
             records.add(transactionRecord(info))
         }
+
         for (info in updated) {
             records.add(transactionRecord(info))
         }
 
         transactionRecordsSubject.onNext(records)
-
     }
 
     private fun transactionRecord(transaction: TransactionInfo) =
@@ -156,13 +156,19 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
 
     companion object {
 
-        fun createBitcoin(words: List<String>, testMode: Boolean, newWallet: Boolean, walletId: String?): BitcoinAdapter {
-            val network = if (testMode) BitcoinKit.NetworkType.TestNet else BitcoinKit.NetworkType.MainNet
+        fun createBitcoin(words: List<String>, testMode: Boolean, newWallet: Boolean, walletId: String): BitcoinAdapter {
+            val network = if (testMode)
+                BitcoinKit.NetworkType.TestNet else
+                BitcoinKit.NetworkType.MainNet
+
             return BitcoinAdapter(words, network, newWallet, walletId)
         }
 
-        fun createBitcoinCash(words: List<String>, testMode: Boolean, newWallet: Boolean, walletId: String?): BitcoinAdapter {
-            val network = if (testMode) BitcoinKit.NetworkType.TestNetBitCash else BitcoinKit.NetworkType.MainNetBitCash
+        fun createBitcoinCash(words: List<String>, testMode: Boolean, newWallet: Boolean, walletId: String): BitcoinAdapter {
+            val network = if (testMode)
+                BitcoinKit.NetworkType.TestNetBitCash else
+                BitcoinKit.NetworkType.MainNetBitCash
+
             return BitcoinAdapter(words, network, newWallet, walletId)
         }
     }
