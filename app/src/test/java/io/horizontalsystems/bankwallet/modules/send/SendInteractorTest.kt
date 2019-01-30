@@ -141,6 +141,19 @@ class SendInteractorTest {
     }
 
     @Test
+    fun stateForUserInput_setCoinFee_asZero() {
+        val expectedFee = BigDecimal.ZERO
+        val input = SendModule.UserInput()
+        input.address = "address"
+        input.amount = BigDecimal.ZERO
+        input.inputType = SendModule.InputType.COIN
+
+        val state = interactor.stateForUserInput(input)
+
+        Assert.assertEquals(state.feeCoinValue, CoinValue(coin, value= expectedFee))
+    }
+
+    @Test
     fun stateForUserInput_setCoinFee() {
         val fee = BigDecimal("0.123")
         val input = SendModule.UserInput()
