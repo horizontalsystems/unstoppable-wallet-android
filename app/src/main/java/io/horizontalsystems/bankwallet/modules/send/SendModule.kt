@@ -114,7 +114,7 @@ object SendModule {
                 ValueFormatter.format(this.coinValue)
             }
             is SendModule.AmountInfo.CurrencyValueInfo -> {
-                ValueFormatter.formatSimple(this.currencyValue)
+                ValueFormatter.format(this.currencyValue)
             }
         }
     }

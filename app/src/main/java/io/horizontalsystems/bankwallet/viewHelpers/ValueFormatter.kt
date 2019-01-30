@@ -105,9 +105,4 @@ object ValueFormatter {
         return spannable
     }
 
-    fun formatSimple(currencyValue: CurrencyValue): String? {
-        val result = currencyValue.value.setScale(2, RoundingMode.HALF_EVEN)
-        val formatted = currencyFormatter.format(result)
-        return "${currencyValue.currency.symbol}$formatted"
-    }
 }
