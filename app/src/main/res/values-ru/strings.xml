@@ -26,13 +26,13 @@
     <string name="Backup_Intro_Title">Секретный Ключ</string>
     <string name="Backup_Intro_Subtitle">Ваш секретный ключ является единственным способом для восстановления вашего кошелька.\n\nОн состоит из 12 слов. Храните его в безопасном месте.</string>
     <string name="Backup_Intro_Later">Позже</string>
-    <string name="Backup_Intro_BackupNow">Записать ключ</string>
+    <string name="Backup_Intro_BackupNow">Резервная копия</string>
     <string name="Backup_Words_Title">Секретный Ключ</string>
     <string name="Backup_Confirmation_Understand">Я понимаю, что мой кошелек и токены хранятся только на этом устройстве.</string>
     <string name="Backup_Confirmation_DeleteAppWarn">Я понимаю, что если это приложение удаляется или устанавливается на другое устройство, мой кошелек можно восстановить только с помощью секретного ключа, который я храню в безопасном месте.</string>
-    <string name="Backup_Confirmation_LockAppWarn">Изменение PIN-кода телефона на вашем Android OS, сбросит кошелек . Вам необходима фраза резервного копирования для восстановления  вашего кошелька.</string>
+    <string name="Backup_Confirmation_LockAppWarn">Изменение PIN-кода телефона на вашем Android OS, сбросит кошелек . Вам понадобится ваш Секретный Ключ для восстановления кошелька.</string>
     <string name="Backup_Confirmation_Title">Введите слова из вашего Cекретного Ключа</string>
-    <string name="Backup_Confirmation_Description">Введите слова из секретного ключа.</string>
+    <string name="Backup_Confirmation_Description">Введите слова из вашего секретного ключа.</string>
     <string name="Backup_Confirmation_FailureAlertText">Слова не совпадают</string>
     <string name="Backup_Button_Confirm">Подтвердить</string>
     <string name="Backup_Button_Next">Далее</string>
@@ -56,7 +56,7 @@
     <string name="Send_Success">Отправлено!</string>
     <string name="Send_Error_InvalidAddress">Адрес недействителен. Попробуйте еще раз!</string>
     <string name="Send_Error_InsufficientBalance">Недостаточно средств.</string>
-    <string name="Send_Error_IncorrectAddress">Неверный адрес</string>
+    <string name="Send_Error_IncorrectAddress">Неверный Адрес</string>
     <string name="Send_Error_BalanceAmount">Баланс %s</string>
     <string name="Send_DialogTitle">Подтвердить Транзакцию</string>
     <string name="Send_DialogFee">Комиссия:</string>
@@ -83,7 +83,7 @@
     <string name="TransactionInfo_From">От</string>
     <string name="TransactionInfo_Time">Время</string>
     <string name="TransactionInfo_ButtonMore">Ещё</string>
-    <string name="TransactionInfo_Status_Pending">Pending</string>
+    <string name="TransactionInfo_Status_Pending">В процессе</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Транзакция</string>
     <string name="FullInfo_Time">Время</string>
@@ -101,9 +101,9 @@
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
     <string name="FullInfo_Source_Title">Источник</string>
-    <string name="FullInfo_Source_Online">В сети</string>
-    <string name="FullInfo_Source_Offline">Не в сети</string>
-    <string name="FullInfo_Error_Subtitle">Не в сети</string>
+    <string name="FullInfo_Source_Online">доступен</string>
+    <string name="FullInfo_Source_Offline">недоступен</string>
+    <string name="FullInfo_Error_Subtitle">недоступен</string>
     <string name="FullInfo_Error_Retry">Повторить</string>
     <string name="FullInfo_Error_ChangeSource">Сменить Источник</string>
     <!--no used-->
@@ -134,7 +134,7 @@
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Отпечаток пальца</string>
     <string name="SettingsSecurity_EditPin">Изменить Код</string>
-    <string name="SettingsSecurity_BackupWallet">Записать Кошелёк</string>
+    <string name="SettingsSecurity_BackupWallet">Резервная копия</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">Отсоединить это устройство</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">Это действие удалит ваш кошелёк с этого устройства.</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_2">Убедитесь, что у вас есть свой Секретный Ключ, иначе вы не сможете получить доступ к денежным средствам.</string>
@@ -166,7 +166,7 @@
     <string name="Hud_Text_Unlock">Разблокировать</string>
     <string name="Hud_Text_Success">Успешно</string>
     <string name="Hud_Text_Error">Ошибка</string>
-    <string name="Hud_Text_NoInternet">Нет интернета</string>
+    <string name="Hud_Text_NoInternet">Нет Интернета</string>
     <string name="Hud_Text_Copied">Скопировано</string>
     <string name="Hud_Text_InvalidPinError">Неверный Код</string>
     <!--Fingerprint texts-->

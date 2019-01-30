@@ -118,7 +118,7 @@
     <string name="FullInfo_SubtitleInputs">Entrées</string>
     <string name="FullInfo_SubtitleOutputs">Sorties</string>
     <string name="FullInfoEth_Nonce">Nonce</string>
-    <string name="FullInfoEth_Value">Value</string>
+    <string name="FullInfoEth_Value">Valeur</string>
     <!--Settings-->
     <string name="Settings_Title">Paramètres</string>
     <string name="Settings_SecurityCenter">Centre de Sécurité</string>

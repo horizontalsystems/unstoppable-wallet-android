@@ -17,29 +17,29 @@
     <!--Guest-->
     <string name="Guest_Title">Bank Wallet</string>
     <string name="Guest_CreateWallet">Wallet Erstellen</string>
-    <string name="Guest_RestoreWallet">Geldbörse Wiederherstellen</string>
+    <string name="Guest_RestoreWallet">Wallet Wiederherstellen</string>
     <!--Restore-->
     <string name="Restore_Title">Offlineschlüssel eingeben</string>
     <string name="Restore_ValidationFailed">Falscher Offlineschlüssel</string>
-    <string name="Restore_RestoreFailed">Fehler beim Wiederherstellen des Geldbörse</string>
+    <string name="Restore_RestoreFailed">Fehler beim Wiederherstellen des Wallet</string>
     <!--Backup-->
-    <string name="Backup_Intro_Title">Sicherung</string>
+    <string name="Backup_Intro_Title">Offlineschlüssel</string>
     <string name="Backup_Intro_Subtitle">Ihr Offlineschlüssel ist die einzige Möglichkeit, deine Geldbörse wiederherzustellen, falls du dein Smartphone verlierst, austauscht, es gestohlen wird oder kaputtgeht. \n\nEs besteht aus 12 Wörtern. Speichen Sie es sicher offline.</string>
     <string name="Backup_Intro_Later">Später</string>
     <string name="Backup_Intro_BackupNow">Sicherung</string>
-    <string name="Backup_Words_Title">Sicherung</string>
-    <string name="Backup_Confirmation_Understand">Ich verstehe, dass meine Geldbörse und Token auf diesem Gerät nur ist.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">Ich verstehe, dass wenn diese app auf ein anderes Gerät verschoben wird oder gelöscht, mein Geldbörse nur mit dem Offlineschlüssel wiederhergestellt werden können, die ich aufgeschrieben und an einem sicheren Ort gespeichert.</string>
-    <string name="Backup_Confirmation_LockAppWarn">PIN zum Entsperren des Telefons ändern in Ihrem Android OS würde Einstellungen die Geldbörse. Sie benötigen Ihr backup Satz Ihrer Geldbörse danach wiederherstellen.</string>
-    <string name="Backup_Confirmation_Title">Gib die folgenden Wörter deines Offlineschlüssels ein</string>
+    <string name="Backup_Words_Title">Offlineschlüssel</string>
+    <string name="Backup_Confirmation_Understand">Ich  stimme zu, dass mein Wallet und meinen Token nur auf diesem Gerät verfügbar sind.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">Ich stimme zu,  dass bei einer Verschiebung  oder Entfernung dieser App, der Zugang zu meinem Walletkonto nur bei Verwendung den Offlineschlüsseln erfolgt , der sicher gespeichert werden muss.</string>
+    <string name="Backup_Confirmation_LockAppWarn">PIN zum Entsperren des Telefons ändern in Ihrem Android OS würde Einstellungen des Wallet. Sie benötigen Ihr backup Satz Ihrer Wallet danach wiederherstellen.</string>
+    <string name="Backup_Confirmation_Title">Geben Sie bitte die folgenden Wörter deines Offlineschlüssels ein</string>
     <string name="Backup_Confirmation_Description">Gib die folgenden Wörter deines Offlineschlüssels ein.</string>
-    <string name="Backup_Confirmation_FailureAlertText"> Die eingegebenen Passwörter stimmen nicht überein</string>
+    <string name="Backup_Confirmation_FailureAlertText">Die Wörter stimmen nicht überein</string>
     <string name="Backup_Button_Confirm">Bestätigen</string>
     <string name="Backup_Button_Next">Weiter</string>
     <string name="Backup_Button_Submit">Abschicken</string>
     <!--Balance-->
     <string name="Balance_Title">Guthaben</string>
-    <string name="Balance_Deposit">Empfangen</string>
+    <string name="Balance_Deposit">Anfordern</string>
     <string name="Balance_Send">Senden</string>
     <string name="Balance_RatePerCoin">%s pro %s</string>
     <!--Send-->
@@ -62,7 +62,7 @@
     <string name="Send_DialogFee">Gebühr:</string>
     <string name="Send_DialogTotal">Gesamt:</string>
     <!--Deposit-->
-    <string name="Deposit_Title">Erhalten %s</string>
+    <string name="Deposit_Title">Anfordern %s</string>
     <string name="Deposit_Share">Teilen</string>
     <string name="Deposit_Your_Address">Ihre Adresse</string>
     <!--Timestamp-->
@@ -74,7 +74,7 @@
     <!--Transactions-->
     <string name="Transactions_Title">Transaktionen</string>
     <string name="Transactions_FilterAll">Alle</string>
-    <string name="Transactions_EmptyList">Noch keine Transaktionen vorhanden</string>
+    <string name="Transactions_EmptyList">Transaktionsliste ist leer</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Transaktion</string>
     <string name="TransactionInfo_Status">Status</string>
@@ -121,8 +121,8 @@
     <string name="FullInfoEth_Value">Wert</string>
     <!--Settings-->
     <string name="Settings_Title">Einstellungen</string>
-    <string name="Settings_SecurityCenter">Sicherheits-Center</string>
-    <string name="Settings_BaseCurrency">Basiswährung</string>
+    <string name="Settings_SecurityCenter">Sicherheit</string>
+    <string name="Settings_BaseCurrency">Währung</string>
     <string name="Settings_Language">Sprache</string>
     <string name="Settings_LightMode">Licht Modus</string>
     <string name="Settings_About">Info</string>
@@ -130,16 +130,16 @@
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Fingerabdruck Nicht Aktivieren</string>
-    <string name="Settings_Error_NoFingerprintAddedYet">Fingerabdruck auf diesem Gerät aktiviert nicht. Gehen Sie zu Einstellungen &gt; Sicherheit Fingerabdruck einrichten.</string>
+    <string name="Settings_Error_NoFingerprintAddedYet">Fingerabdruck auf diesem Gerät aktiviert nicht. Gehen Sie zu Einstellungen </string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Fingerabdruck</string>
     <string name="SettingsSecurity_EditPin">Code bearbeiten</string>
     <string name="SettingsSecurity_BackupWallet">Wallet sichern</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">Verknüpfung mit diesem Gerät aufheben</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_1">Diese Aktion entfernt deine Geldbörse von diesem Gerät.</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_1">Diese Aktion entfernt dein Wallet von diesem Gerät.</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_2">Stellen Sie sicher, Sie haben ihre geheimen Offlineschlüssel oder Sie werden nicht in der Lage, den Zugang zu Mitteln darauf in Zukunft.</string>
     <!--Setting_Currency-->
-    <string name="SettingsCurrency_Title">Basiswährung</string>
+    <string name="SettingsCurrency_Title">Währung</string>
     <!--Setting_Language-->
     <string name="SettingsLanguage_Title">Sprache</string>
     <!--Setting_About-->
@@ -147,17 +147,17 @@
     <string name="SettingsAbout_TermsPrivacySubtitle">ANB &amp; Datenschutz:</string>
     <string name="SettingsAbout_TermsPrivacyText">\n\nDiese Anwendung ist vollständig dezentralisiert
 \n\nDie Leistung dieser Anwendung hängt nicht von Servern von Drittanbietern oder einem technischen Supportteam ab.
-\n\nDie Anwendung funktioniert überall, solange es Internet gibt. Diese Geldbörse oder deren Benutzer können von niemandem blockiert werden.
+\n\nDie Anwendung funktioniert überall, solange es Internet gibt. Dieser Wallet oder deren Benutzer können von niemandem blockiert werden.
 \n\nDein Geld wird nur auf Ihrem Telefon gespeichert.
 \n\nDu bist allein für die sichere Aufbewahrung des Offlineschlüssels verantwortlich. Teil deinen Offlineschlüssel nie mit jemandem. Wenn der Offlineschlüssel verloren geht, gestohlen oder vergessen wird, erhält derjenige, der über deinen Offlineschlüssel verfügt, die Kontrolle über dein Geld.
-Hack dein Telefon nicht, installier keine Anwendungen von inoffiziellen Quellen und gib dein Telefon niemals den anderen. Die Sicherheit  deiner Geldbörse hängt direkt davon ab.
-\n\nDer gesamte Programmcode dieser Anwendung ist kostenlos und für die Öffentlichkeit zugänglich. Wir haben versucht, die sicherste und gleichzeitig dezentralisierte Geldbörse zu schaffen, aber es gibt keine Garantie dafür, dass der Anwendungscode fehlerfrei ist. Wir glauben jedoch, dass diese Geldbörse in Bezug auf die Sicherheit fast alle heute verfügbare mobile Kryptobörsen deutlich übertrifft.
+Hack dein Telefon nicht, installier keine Anwendungen von inoffiziellen Quellen und gib dein Telefon niemals den anderen. Die Sicherheit  deiner Wallet hängt direkt davon ab.
+\n\nDer gesamte Programmcode dieser Anwendung ist kostenlos und für die Öffentlichkeit zugänglich. Wir haben versucht, die sicherste und gleichzeitig dezentralisierte Wallet zu schaffen, aber es gibt keine Garantie dafür, dass der Anwendungscode fehlerfrei ist. Wir glauben jedoch, dass dieser Wallet in Bezug auf die Sicherheit fast alle heute verfügbare mobile Kryptobörsen deutlich übertrifft.
 \n\nEinige von der Anwendung verwendete öffentliche Daten, wie z. B. Wechselkurse, werden im dezentralen Repository (IPFS) gespeichert</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android Keystore Fehler</string>
     <string name="Alert_KeysInvalidatedDescription">Deine verschlüsselten Daten wurden kürzlich ungültig gemacht, weil dein Android-Sperrbildschirm geändert wurde</string>
     <string name="Alert_TitleWarning">Warnung</string>
-    <string name="Alert_NoDeviceLockDescription">Richten Sie ein Sperrbildschirm auf diesem Gerät weiter. Gehen Sie auf \"Einstellungen\" &gt; \"Security\" &gt; \"Bildschirmsperre\" und aktivieren Sie die Sperre Bildschirmeinstellung.</string>
+    <string name="Alert_NoDeviceLockDescription">Richten Sie ein Sperrbildschirm auf diesem Gerät weiter. Gehen Sie zu \"Einstellungen\" </string>
     <string name="Alert_CustomKeyboardIsUsed">Sie verwenden eine Fremdanbieter-Tastatur. Sie müssen Standard-Tastatur verwenden.</string>
     <!--Unlock-->
     <string name="Unlock_Page_EnterYourPin">Code</string>
@@ -180,7 +180,7 @@ Hack dein Telefon nicht, installier keine Anwendungen von inoffiziellen Quellen 
     <string name="UnlockPin_WalletDisabledUntil">Deaktiviert bis: %s </string>
     <!--Set Pin-->
     <string name="SetPin_Title">Code</string>
-    <string name="SetPin_Info">Ihr Code wird verwendet werden, um Ihren Geldbörse zu entsperren und Geld schicken</string>
+    <string name="SetPin_Info">Ihr Code wird verwendet werden, um Ihren Wallet zu entsperren und Geld schicken</string>
     <string name="SetPin_ErrorShortPin">Gib bitte nur Zahlen ein.</string>
     <string name="SetPin_ConfirmInfo">Bestätigen</string>
     <string name="SetPin_Success">Lock code wurde erfolgreich gesetzt!</string>

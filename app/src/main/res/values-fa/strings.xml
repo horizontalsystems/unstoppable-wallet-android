@@ -19,7 +19,7 @@
     <string name="Guest_CreateWallet">کیف پول جدید</string>
     <string name="Guest_RestoreWallet">بازگرداندن كيف پول</string>
     <!--Restore-->
-    <string name="Restore_Title">Enter Secret Key</string>
+    <string name="Restore_Title">کلید مخفی را وارد کنید</string>
     <string name="Restore_ValidationFailed">کلید مخفی نادرست</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>
     <!--Backup-->
@@ -63,7 +63,7 @@
     <string name="Send_DialogTotal">مجموع:</string>
     <!--Deposit-->
     <string name="Deposit_Title">دریافت s%</string>
-    <string name="Deposit_Share">Share</string>
+    <string name="Deposit_Share">به اشتراك گذاشتن</string>
     <string name="Deposit_Your_Address">Your Address</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">همين آلان</string>
@@ -77,26 +77,26 @@
     <string name="Transactions_EmptyList">شما معاملات نداشته ايد تا هنوز</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">معاملات</string>
-    <string name="TransactionInfo_Status">Status</string>
-    <string name="TransactionInfo_Id">ID</string>
-    <string name="TransactionInfo_To">To</string>
-    <string name="TransactionInfo_From">From</string>
+    <string name="TransactionInfo_Status">وضيعت</string>
+    <string name="TransactionInfo_Id">شناس نامه</string>
+    <string name="TransactionInfo_To">به</string>
+    <string name="TransactionInfo_From">از</string>
     <string name="TransactionInfo_Time">Time</string>
-    <string name="TransactionInfo_ButtonMore">More</string>
-    <string name="TransactionInfo_Status_Pending">Pending</string>
+    <string name="TransactionInfo_ButtonMore">بیشتر</string>
+    <string name="TransactionInfo_Status_Pending">در حالت انتظار</string>
     <!--Full Info-->
-    <string name="FullInfo_Title">Transaction</string>
-    <string name="FullInfo_Time">Time</string>
-    <string name="FullInfo_Block">Block</string>
-    <string name="FullInfo_Confirmations">Confirmations</string>
+    <string name="FullInfo_Title">معاملات</string>
+    <string name="FullInfo_Time">زمان</string>
+    <string name="FullInfo_Block">مسدود</string>
+    <string name="FullInfo_Confirmations">تاييدات</string>
     <string name="FullInfo_Inputs">Inputs</string>
     <string name="FullInfo_Outputs">Outputs</string>
-    <string name="FullInfo_Size">Size</string>
-    <string name="FullInfo_Fee">Fee</string>
+    <string name="FullInfo_Size">اندازه</string>
+    <string name="FullInfo_Fee">هزينه</string>
     <string name="FullInfo_Rate">Rate</string>
     <string name="FullInfo_Source">Source</string>
-    <string name="FullInfo_To">To</string>
-    <string name="FullInfo_From">From</string>
+    <string name="FullInfo_To">به</string>
+    <string name="FullInfo_From">از</string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
@@ -107,11 +107,11 @@
     <string name="FullInfo_Error_Retry">Retry</string>
     <string name="FullInfo_Error_ChangeSource">Change Source</string>
     <!--no used-->
-    <string name="FullInfo_Id">ID</string>
+    <string name="FullInfo_Id">شناس نامه</string>
     <string name="FullInfo_TotalInput">Total Input</string>
     <string name="FullInfo_TotalOutput">Total Output</string>
     <string name="FullInfo_FeePerByte">Fee per byte</string>
-    <string name="FullInfo_FeeRate">Fee Rate</string>
+    <string name="FullInfo_FeeRate">نرخ هزينه</string>
     <string name="FullInfo_NoAddress">No Available</string>
     <string name="FullInfo_SatByte">sat/B</string>
     <string name="FullInfo_Bytes">Bytes</string>
