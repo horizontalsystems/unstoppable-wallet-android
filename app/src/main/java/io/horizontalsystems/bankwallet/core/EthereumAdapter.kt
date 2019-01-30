@@ -12,21 +12,22 @@ import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
+import java.math.RoundingMode
 
 class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, EthereumKit.Listener {
 
     private var ethereumKit = EthereumKit(words, network)
-    private val weisInEther = Math.pow(10.0, 18.0)
+    private val weisInEther = Math.pow(10.0, 18.0).toBigDecimal()
 
     private val progressSubject: BehaviorSubject<Double> = BehaviorSubject.createDefault(1.0)
 
-    private val balanceSubject: BehaviorSubject<Double> = BehaviorSubject.createDefault(balance)
+    private val balanceSubject: BehaviorSubject<BigDecimal> = BehaviorSubject.createDefault(balance)
     private val stateSubject: BehaviorSubject<AdapterState> = BehaviorSubject.createDefault(AdapterState.Syncing(progressSubject))
 
-    override val balance: Double
-        get() = ethereumKit.balance
+    override val balance: BigDecimal
+        get() = ethereumKit.balance.toBigDecimal()
 
-    override val balanceObservable: Flowable<Double> = balanceSubject.toFlowable(BackpressureStrategy.DROP)
+    override val balanceObservable: Flowable<BigDecimal> = balanceSubject.toFlowable(BackpressureStrategy.DROP)
     override val stateObservable: Flowable<AdapterState> = stateSubject.toFlowable(BackpressureStrategy.DROP)
 
     override val confirmationsThreshold: Int = 12
@@ -56,13 +57,13 @@ class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, Eth
         return PaymentRequestAddress(address)
     }
 
-    override fun send(address: String, value: Double, completion: ((Throwable?) -> (Unit))?) {
-        ethereumKit.send(address, value, completion)
+    override fun send(address: String, value: BigDecimal, completion: ((Throwable?) -> (Unit))?) {
+        ethereumKit.send(address, value.toDouble(), completion)
     }
 
-    override fun fee(value: Double, address: String?, senderPay: Boolean): Double {
-        val fee = ethereumKit.fee()
-        if (balance - value - fee < 0) {
+    override fun fee(value: BigDecimal, address: String?, senderPay: Boolean): BigDecimal {
+        val fee = ethereumKit.fee().toBigDecimal()
+        if (senderPay && balance.minus(value).minus(fee) < BigDecimal.ZERO) {
             throw Error.InsufficientAmount(fee)
         }
         return fee
@@ -73,7 +74,7 @@ class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, Eth
     }
 
     override fun balanceUpdated(balance: Double) {
-        balanceSubject.onNext(balance)
+        balanceSubject.onNext(balance.toBigDecimal())
     }
 
     override fun lastBlockHeightUpdated(height: Int) {
@@ -117,7 +118,7 @@ class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, Eth
     }
 
     private fun transactionRecord(transaction: Transaction): TransactionRecord {
-        val amountEther: Double = weisToEther(transaction.value) ?: 0.0
+        val amountEther: BigDecimal = weisToEther(transaction.value) ?: BigDecimal.ZERO
 
         val mineAddress = ethereumKit.receiveAddress().toLowerCase()
 
@@ -132,15 +133,15 @@ class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, Eth
         return TransactionRecord(
                 transaction.hash,
                 transaction.blockNumber,
-                amountEther * if (from.mine) -1 else 1,
+                if (from.mine) amountEther.unaryMinus() else amountEther,
                 transaction.timeStamp,
                 listOf(from),
                 listOf(to)
         )
     }
 
-    private fun weisToEther(amount: String): Double? = try {
-        BigDecimal(amount).toDouble() / weisInEther
+    private fun weisToEther(amount: String): BigDecimal? = try {
+        BigDecimal(amount).divide(weisInEther, 18, RoundingMode.HALF_EVEN)
     } catch (ex: Exception) {
         null
     }

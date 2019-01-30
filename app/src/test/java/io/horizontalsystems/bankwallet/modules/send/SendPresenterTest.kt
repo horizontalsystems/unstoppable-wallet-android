@@ -57,7 +57,7 @@ class SendPresenterTest {
 
     @Test
     fun onAmountChanged() {
-        presenter.onAmountChanged(0.5)
+        presenter.onAmountChanged(0.5.toBigDecimal())
 
         verify(view).setHintInfo(viewItem.hintInfo)
         verify(view).setPrimaryFeeInfo(viewItem.primaryFeeInfo)
@@ -68,6 +68,7 @@ class SendPresenterTest {
     @Test
     fun onSwitchClicked() {
         whenever(userInput.inputType).thenReturn(SendModule.InputType.COIN)
+        whenever(interactor.convertedAmountForInputType(userInput.inputType, userInput.amount)).thenReturn(0.toBigDecimal())
 
         presenter.onSwitchClicked()
 

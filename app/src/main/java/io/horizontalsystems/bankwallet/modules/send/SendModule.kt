@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import io.horizontalsystems.bankwallet.viewHelpers.ValueFormatter
+import java.math.BigDecimal
 
 object SendModule {
 
@@ -34,7 +35,7 @@ object SendModule {
 
     interface IViewDelegate {
         fun onViewDidLoad()
-        fun onAmountChanged(amount: Double)
+        fun onAmountChanged(amount: BigDecimal)
         fun onSwitchClicked()
         fun onPasteClicked()
         fun onScanAddress(address: String)
@@ -51,11 +52,11 @@ object SendModule {
 
         fun retrieveRate()
         fun parsePaymentAddress(address: String): PaymentRequestAddress
-        fun convertedAmountForInputType(inputType: InputType, amount: Double): Double?
+        fun convertedAmountForInputType(inputType: InputType, amount: BigDecimal): BigDecimal?
         fun stateForUserInput(input: UserInput, senderPay: Boolean = true): State
 
         fun send(userInput: UserInput)
-        fun getTotalBalanceMinusFee(inputType: InputType, address: String?): Double
+        fun getTotalBalanceMinusFee(inputType: InputType, address: String?): BigDecimal
     }
 
     interface IInteractorDelegate {
@@ -117,7 +118,7 @@ object SendModule {
 
     class UserInput {
         var inputType: InputType = InputType.COIN
-        var amount: Double = 0.0
+        var amount: BigDecimal = BigDecimal.ZERO
         var address: String? = null
     }
 

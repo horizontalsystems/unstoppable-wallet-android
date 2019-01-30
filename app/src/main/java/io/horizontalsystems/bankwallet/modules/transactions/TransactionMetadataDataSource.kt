@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import java.math.BigDecimal
 
 class TransactionMetadataDataSource {
 
@@ -24,7 +25,7 @@ class TransactionMetadataDataSource {
     fun getConfirmationThreshold(coinCode: CoinCode): Int? =
             thresholds[coinCode]
 
-    fun setRate(rateValue: Double, coinCode: CoinCode, currency: Currency, timestamp: Long) {
+    fun setRate(rateValue: BigDecimal, coinCode: CoinCode, currency: Currency, timestamp: Long) {
         if (!rates.containsKey(coinCode)) {
             rates[coinCode] = mutableMapOf()
         }

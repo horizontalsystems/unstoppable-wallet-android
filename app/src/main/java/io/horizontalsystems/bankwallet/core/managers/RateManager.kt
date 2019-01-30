@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import java.math.BigDecimal
 
 class RateManager(private val storage: IRateStorage, private val networkManager: INetworkManager) {
 
@@ -44,17 +45,17 @@ class RateManager(private val storage: IRateStorage, private val networkManager:
         )
     }
 
-    fun rateValueObservable(coinCode: CoinCode, currencyCode: String, timestamp: Long): Flowable<Double> {
+    fun rateValueObservable(coinCode: CoinCode, currencyCode: String, timestamp: Long): Flowable<BigDecimal> {
         return storage.rateObservable(coinCode, currencyCode, timestamp)
                 .flatMap {
                     val rate = it.firstOrNull()
 
                     if (rate == null) {
-                        storage.save(Rate(coinCode, currencyCode, 0.0, timestamp, false))
+                        storage.save(Rate(coinCode, currencyCode, BigDecimal.ZERO, timestamp, false))
                         retrieveFromNetwork(coinCode, currencyCode, timestamp)
                     }
 
-                    if (rate != null && rate.value != 0.0) {
+                    if (rate != null && rate.value != BigDecimal.ZERO) {
                         Flowable.just(rate.value)
                     } else if (timestamp < ((System.currentTimeMillis() / 1000) - 3600)) {
                         Flowable.empty()
@@ -62,7 +63,7 @@ class RateManager(private val storage: IRateStorage, private val networkManager:
                         storage.latestRateObservable(coinCode, currencyCode)
                                 .flatMap {
                                     if (it.expired) {
-                                        Flowable.empty<Double>()
+                                        Flowable.empty<BigDecimal>()
                                     } else {
                                         Flowable.just(it.value)
                                     }

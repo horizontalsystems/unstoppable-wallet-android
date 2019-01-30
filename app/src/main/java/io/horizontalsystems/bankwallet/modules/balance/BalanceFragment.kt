@@ -25,6 +25,7 @@ import io.reactivex.disposables.Disposable
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import kotlinx.android.synthetic.main.view_holder_coin.*
+import java.math.BigDecimal
 
 
 class BalanceFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener {
@@ -216,7 +217,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
                             }
                 }
                 is AdapterState.Synced -> {
-                    if (balanceViewItem.coinValue.value > 0) {
+                    if (balanceViewItem.coinValue.value > BigDecimal.ZERO) {
                         textCurrencyAmount.visibility = View.VISIBLE
                         textCurrencyAmount.text = balanceViewItem.currencyValue?.let { ValueFormatter.format(it) }
                         textCurrencyAmount.setTextColor(ContextCompat.getColor(containerView.context, if (balanceViewItem.rateExpired) R.color.yellow_crypto_40 else R.color.yellow_crypto))

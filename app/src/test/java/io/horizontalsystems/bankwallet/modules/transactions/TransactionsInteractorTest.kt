@@ -202,8 +202,8 @@ class TransactionsInteractorTest {
         val timestamps = mapOf(coinCode1 to listOf(timestamp1, timestamp2))
         val currency = mock(Currency::class.java)
 
-        val rate1Value = 213.123
-        val rate2Value = 234.12
+        val rate1Value = 213.123.toBigDecimal()
+        val rate2Value = 234.12.toBigDecimal()
 
         whenever(currency.code).thenReturn(currencyCode)
         whenever(currencyManager.baseCurrency).thenReturn(currency)

@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import java.math.BigDecimal
 
 class BalancePresenter(
         private var interactor: BalanceModule.IInteractor,
@@ -62,7 +63,7 @@ class BalancePresenter(
         view?.reload()
     }
 
-    override fun didUpdateBalance(coinCode: CoinCode, balance: Double) {
+    override fun didUpdateBalance(coinCode: CoinCode, balance: BigDecimal) {
         val position = dataSource.getPosition(coinCode)
         dataSource.setBalance(position, balance)
         view?.updateItem(position)

@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.send
 
+import java.math.BigDecimal
+
 class SendPresenter(
         private val interactor: SendModule.IInteractor,
         private val factory: StateViewItemFactory,
@@ -28,7 +30,7 @@ class SendPresenter(
         interactor.retrieveRate()
     }
 
-    override fun onAmountChanged(amount: Double) {
+    override fun onAmountChanged(amount: BigDecimal) {
         userInput.amount = amount
 
         val state = interactor.stateForUserInput(userInput)

@@ -153,7 +153,7 @@ class BalanceInteractorTest {
     @Test
     fun initWallets_balanceUpdate() {
         val coinCode = "coinCode"
-        val balance = 1.0
+        val balance = 1.toBigDecimal()
 
         val wallet = mock(Wallet::class.java)
         val adapter = mock(IAdapter::class.java)
@@ -174,9 +174,9 @@ class BalanceInteractorTest {
     @Test
     fun initWallets_balanceUpdate_twice() {
         val coinCode = "coinCode"
-        val balance = 1.0
-        val balance1Updated = 1123.0
-        val balance2 = 2.0
+        val balance = 1.toBigDecimal()
+        val balance1Updated = 1123.toBigDecimal()
+        val balance2 = 2.toBigDecimal()
 
         val wallet = mock(Wallet::class.java)
         val adapter = mock(IAdapter::class.java)

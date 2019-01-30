@@ -35,13 +35,13 @@ class RateManagerTest {
         val coins = listOf("BTC", "ETH")
         val currencyCode = "USD"
 
-        whenever(networkManager.getLatestRate(coins[0], currencyCode)).thenReturn(Flowable.just(LatestRate(123.12, 1000)))
-        whenever(networkManager.getLatestRate(coins[1], currencyCode)).thenReturn(Flowable.just(LatestRate(456.45, 2000)))
+        whenever(networkManager.getLatestRate(coins[0], currencyCode)).thenReturn(Flowable.just(LatestRate(123.12.toBigDecimal(), 1000)))
+        whenever(networkManager.getLatestRate(coins[1], currencyCode)).thenReturn(Flowable.just(LatestRate(456.45.toBigDecimal(), 2000)))
 
         rateManager.refreshLatestRates(coins, currencyCode)
 
-        verify(storage).saveLatest(Rate(coins[0], currencyCode, 123.12, 1000, true))
-        verify(storage).saveLatest(Rate(coins[1], currencyCode, 456.45, 2000, true))
+        verify(storage).saveLatest(Rate(coins[0], currencyCode, 123.12.toBigDecimal(), 1000, true))
+        verify(storage).saveLatest(Rate(coins[1], currencyCode, 456.45.toBigDecimal(), 2000, true))
         verify(storage, atMost(2)).saveLatest(any())
     }
 
@@ -51,11 +51,11 @@ class RateManagerTest {
         val currencyCode = "USD"
 
         whenever(networkManager.getLatestRate(coins[0], currencyCode)).thenReturn(Flowable.empty())
-        whenever(networkManager.getLatestRate(coins[1], currencyCode)).thenReturn(Flowable.just(LatestRate(456.45, 2000)))
+        whenever(networkManager.getLatestRate(coins[1], currencyCode)).thenReturn(Flowable.just(LatestRate(456.45.toBigDecimal(), 2000)))
 
         rateManager.refreshLatestRates(coins, currencyCode)
 
-        verify(storage).saveLatest(Rate(coins[1], currencyCode, 456.45, 2000, true))
+        verify(storage).saveLatest(Rate(coins[1], currencyCode, 456.45.toBigDecimal(), 2000, true))
         verify(storage, atMost(1)).saveLatest(any())
     }
 
@@ -65,11 +65,11 @@ class RateManagerTest {
         val currencyCode = "USD"
 
         whenever(networkManager.getLatestRate(coins[0], currencyCode)).thenReturn(Flowable.error(Exception()))
-        whenever(networkManager.getLatestRate(coins[1], currencyCode)).thenReturn(Flowable.just(LatestRate(456.45, 2000)))
+        whenever(networkManager.getLatestRate(coins[1], currencyCode)).thenReturn(Flowable.just(LatestRate(456.45.toBigDecimal(), 2000)))
 
         rateManager.refreshLatestRates(coins, currencyCode)
 
-        verify(storage).saveLatest(Rate(coins[1], currencyCode, 456.45, 2000, true))
+        verify(storage).saveLatest(Rate(coins[1], currencyCode, 456.45.toBigDecimal(), 2000, true))
         verify(storage, atMost(1)).saveLatest(any())
     }
 
@@ -79,7 +79,7 @@ class RateManagerTest {
         val currencyCode = "USD"
         val timestamp = 23412L
         val rate = mock(Rate::class.java)
-        val rateValue = 123.23
+        val rateValue = 123.23.toBigDecimal()
 
         whenever(rate.value).thenReturn(rateValue)
         whenever(storage.rateObservable(coinCode, currencyCode, timestamp)).thenReturn(Flowable.just(listOf(rate)))
@@ -96,7 +96,7 @@ class RateManagerTest {
         val currencyCode = "USD"
         val timestamp = 23412L
         val rate = mock(Rate::class.java)
-        val rateValue = 0.0
+        val rateValue = 0.toBigDecimal()
 
         whenever(rate.value).thenReturn(rateValue)
         whenever(storage.rateObservable(coinCode, currencyCode, timestamp)).thenReturn(Flowable.just(listOf(rate)))
@@ -111,7 +111,7 @@ class RateManagerTest {
         val coinCode = "BTC"
         val currencyCode = "USD"
         val timestamp = 23412L
-        val rateValueFromNetwork = 123.2300
+        val rateValueFromNetwork = 123.2300.toBigDecimal()
 
         whenever(storage.rateObservable(coinCode, currencyCode, timestamp)).thenReturn(Flowable.just(listOf()))
         whenever(networkManager.getRate(coinCode, currencyCode, timestamp)).thenReturn(Flowable.just(rateValueFromNetwork))
@@ -120,7 +120,7 @@ class RateManagerTest {
                 .test()
                 .assertNoValues()
 
-        verify(storage).save(Rate(coinCode, currencyCode, 0.0, timestamp, false))
+        verify(storage).save(Rate(coinCode, currencyCode, 0.toBigDecimal(), timestamp, false))
         verify(networkManager).getRate(coinCode, currencyCode, timestamp)
         verify(storage).save(Rate(coinCode, currencyCode, rateValueFromNetwork, timestamp, false))
     }
@@ -130,9 +130,9 @@ class RateManagerTest {
         val coinCode = "BTC"
         val currencyCode = "USD"
         val timestamp = ((System.currentTimeMillis() / 1000) - 3600) - 1
-        val rateValueFromNetwork = 123.2300
+        val rateValueFromNetwork = 123.2300.toBigDecimal()
         val latestRate = mock(Rate::class.java)
-        val rateValue = 234.23
+        val rateValue = 234.23.toBigDecimal()
 
         whenever(storage.rateObservable(coinCode, currencyCode, timestamp)).thenReturn(Flowable.just(listOf()))
         whenever(storage.latestRateObservable(coinCode, currencyCode)).thenReturn(Flowable.just(latestRate))
@@ -150,9 +150,9 @@ class RateManagerTest {
         val coinCode = "BTC"
         val currencyCode = "USD"
         val timestamp = ((System.currentTimeMillis() / 1000) - 3600) + 1
-        val rateValueFromNetwork = 123.2300
+        val rateValueFromNetwork = 123.2300.toBigDecimal()
         val latestRate = mock(Rate::class.java)
-        val rateValue = 234.23
+        val rateValue = 234.23.toBigDecimal()
 
         whenever(storage.rateObservable(coinCode, currencyCode, timestamp)).thenReturn(Flowable.just(listOf()))
         whenever(storage.latestRateObservable(coinCode, currencyCode)).thenReturn(Flowable.just(latestRate))
@@ -170,7 +170,7 @@ class RateManagerTest {
         val coinCode = "BTC"
         val currencyCode = "USD"
         val timestamp = ((System.currentTimeMillis() / 1000) - 3600) + 1
-        val rateValueFromNetwork = 123.2300
+        val rateValueFromNetwork = 123.2300.toBigDecimal()
         val latestRate = mock(Rate::class.java)
 
         whenever(storage.rateObservable(coinCode, currencyCode, timestamp)).thenReturn(Flowable.just(listOf()))
@@ -188,7 +188,7 @@ class RateManagerTest {
         val coinCode = "BTC"
         val currencyCode = "USD"
         val timestamp = ((System.currentTimeMillis() / 1000) - 3600) + 1
-        val rateValueFromNetwork = 123.2300
+        val rateValueFromNetwork = 123.2300.toBigDecimal()
 
         whenever(storage.rateObservable(coinCode, currencyCode, timestamp)).thenReturn(Flowable.just(listOf()))
         whenever(storage.latestRateObservable(coinCode, currencyCode)).thenReturn(Flowable.empty())
@@ -204,14 +204,14 @@ class RateManagerTest {
         val coinCode1 = "BTC"
         val currencyCode = "USD"
         val timestamp1 = 123L
-        val fetchedRateValue1 = 123.123
+        val fetchedRateValue1 = 123.123.toBigDecimal()
 
         val coinCode2 = "ETH"
         val timestamp2 = 876L
-        val fetchedRateValue2 = 23423.34
+        val fetchedRateValue2 = 23423.34.toBigDecimal()
 
-        val rate1 = Rate(coinCode1, currencyCode, 0.0, timestamp1, false)
-        val rate2 = Rate(coinCode2, currencyCode, 0.0, timestamp2, false)
+        val rate1 = Rate(coinCode1, currencyCode, 0.toBigDecimal(), timestamp1, false)
+        val rate2 = Rate(coinCode2, currencyCode, 0.toBigDecimal(), timestamp2, false)
 
         whenever(storage.zeroRatesObservable(currencyCode)).thenReturn(Single.just(listOf(rate1, rate2)))
 
