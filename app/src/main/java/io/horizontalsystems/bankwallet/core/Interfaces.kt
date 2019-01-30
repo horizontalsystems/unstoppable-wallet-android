@@ -5,6 +5,7 @@ import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
+import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -27,6 +28,7 @@ interface ILocalStorage {
     var currentLanguage: String?
     var isBackedUp: Boolean
     var isBiometricOn: Boolean
+    var sendInputType: SendModule.InputType?
     var isLightModeOn: Boolean
     var iUnderstand: Boolean
     var baseCurrencyCode: String?

@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send
 
-import io.horizontalsystems.bankwallet.core.Error
-import io.horizontalsystems.bankwallet.core.IClipboardManager
-import io.horizontalsystems.bankwallet.core.ICurrencyManager
-import io.horizontalsystems.bankwallet.core.IRateStorage
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -14,6 +11,7 @@ import java.math.RoundingMode
 
 class SendInteractor(private val currencyManager: ICurrencyManager,
                      private val rateStorage: IRateStorage,
+                     private val localStorage: ILocalStorage,
                      private val clipboardManager: IClipboardManager,
                      private val wallet: Wallet) : SendModule.IInteractor {
 
@@ -21,6 +19,12 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
         class NoAddress : SendError()
         class NoAmount : SendError()
     }
+
+    override var defaultInputType: SendModule.InputType
+        get() = localStorage.sendInputType ?: SendModule.InputType.COIN
+        set(value) {
+            localStorage.sendInputType = value
+        }
 
     override val clipboardHasPrimaryClip: Boolean
         get() = clipboardManager.hasPrimaryClip

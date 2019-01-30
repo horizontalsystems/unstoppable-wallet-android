@@ -47,6 +47,7 @@ object SendModule {
 
     interface IInteractor {
         val clipboardHasPrimaryClip: Boolean
+        var defaultInputType: SendModule.InputType
         val coinCode: CoinCode
         val addressFromClipboard: String?
 
@@ -68,7 +69,7 @@ object SendModule {
 
     fun init(view: SendViewModel, coinCode: String) {
         val wallet = App.walletManager.wallets.first { it.coinCode == coinCode }
-        val interactor = SendInteractor(App.currencyManager, App.rateStorage, TextHelper, wallet)
+        val interactor = SendInteractor(App.currencyManager, App.rateStorage, App.localStorage, TextHelper, wallet)
         val presenter = SendPresenter(interactor, StateViewItemFactory(), UserInput())
 
         view.delegate = presenter

@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.modules.send.SendModule
 
 
 class LocalStorageManager : ILocalStorage {
@@ -9,6 +10,7 @@ class LocalStorageManager : ILocalStorage {
     private val CURRENT_LANGUAGE = "current_language"
     private val LIGHT_MODE_ENABLED = "light_mode_enabled"
     private val FINGERPRINT_ENABLED = "fingerprint_enabled"
+    private val SEND_INPUT_TYPE = "fingerprint_enabled"
     private val WORDLIST_BACKUP = "wordlist_backup"
     private val I_UNDERSTAND = "i_understand"
     private val BLOCK_TILL_DATE = "unblock_date"
@@ -35,6 +37,22 @@ class LocalStorageManager : ILocalStorage {
         get() = App.preferences.getBoolean(FINGERPRINT_ENABLED, false)
         set(enabled) {
             App.preferences.edit().putBoolean(FINGERPRINT_ENABLED, enabled).apply()
+        }
+
+    override var sendInputType: SendModule.InputType?
+        get() = App.preferences.getString(SEND_INPUT_TYPE, null)?.let {
+            try {
+                SendModule.InputType.valueOf(it)
+            } catch (e: IllegalArgumentException) {
+                null
+            }
+        }
+        set(value) {
+            val editor = App.preferences.edit()
+            when (value) {
+                null -> editor.remove(SEND_INPUT_TYPE).apply()
+                else -> editor.putString(SEND_INPUT_TYPE, value.name).apply()
+            }
         }
 
     override var isLightModeOn: Boolean
