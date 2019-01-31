@@ -5,28 +5,28 @@ import io.horizontalsystems.bankwallet.entities.StorableCoin
 import io.reactivex.Flowable
 
 @Dao
-abstract class StorableCoinsDao {
+interface StorableCoinsDao {
 
     @Query("SELECT * FROM StorableCoin WHERE coinCode = :coinCode")
-    abstract fun getCoin(coinCode: String): Flowable<StorableCoin>
+    fun getCoin(coinCode: String): Flowable<StorableCoin>
 
     @Query("SELECT * FROM StorableCoin ORDER BY `coinTitle` ASC")
-    abstract fun getAllCoins(): Flowable<List<StorableCoin>>
+    fun getAllCoins(): Flowable<List<StorableCoin>>
 
     @Query("SELECT * FROM StorableCoin WHERE enabled = 1 ORDER BY `order` ASC")
-    abstract fun getEnabledCoin(): Flowable<List<StorableCoin>>
+    fun getEnabledCoin(): Flowable<List<StorableCoin>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(storableCoin: StorableCoin)
+    fun insert(storableCoin: StorableCoin)
 
     @Query("DELETE FROM StorableCoin")
-    abstract fun deleteAll()
+    fun deleteAll()
 
     @Query("UPDATE StorableCoin SET enabled = 0, `order` = null")
-    protected abstract fun resetCoinsState()
+    fun resetCoinsState()
 
     @Transaction
-    open fun setEnabledCoins(coins: List<StorableCoin>) {
+    fun setEnabledCoins(coins: List<StorableCoin>) {
         resetCoinsState()
         coins.forEach { insert(it) }
     }
