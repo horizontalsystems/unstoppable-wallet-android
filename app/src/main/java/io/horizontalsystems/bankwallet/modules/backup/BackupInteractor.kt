@@ -34,7 +34,7 @@ class BackupInteractor(
     }
 
     override fun shouldShowTermsConfirmation(): Boolean {
-        return !localStorage.iUnderstand
+        return !localStorage.iUnderstand || !wordsManager.isBackedUp
     }
 
     override fun validate(confirmationWords: HashMap<Int, String>) {
@@ -48,8 +48,8 @@ class BackupInteractor(
             }
 
             if (valid) {
-                wordsManager.isBackedUp = true
                 delegate?.didValidateSuccess()
+                wordsManager.isBackedUp = true
             } else {
                 delegate?.didValidateFailure()
             }

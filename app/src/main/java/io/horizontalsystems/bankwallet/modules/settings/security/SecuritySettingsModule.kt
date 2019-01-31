@@ -26,21 +26,25 @@ object SecuritySettingsModule {
 
     interface ISecuritySettingsInteractor {
         var isBackedUp: Boolean
-        var biometryType: BiometryType
+        val biometryType: BiometryType
         fun getBiometricUnlockOn(): Boolean
         fun setBiometricUnlockOn(biometricUnlockOn: Boolean)
         fun unlinkWallet()
+        fun didTapOnBackupWallet()
     }
 
     interface ISecuritySettingsInteractorDelegate {
         fun didBackup()
         fun didUnlinkWallet()
+        fun openBackupWallet()
+        fun accessIsRestricted()
     }
 
     interface ISecuritySettingsRouter{
         fun showEditPin()
         fun showBackupWallet()
         fun showRestoreWallet()
+        fun showPinUnlock()
     }
 
     fun start(context: Context) {
@@ -49,7 +53,7 @@ object SecuritySettingsModule {
     }
 
     fun init(view: SecuritySettingsViewModel, router: ISecuritySettingsRouter) {
-        val interactor = SecuritySettingsInteractor(App.authManager, App.wordsManager, App.localStorage, App.systemInfoManager)
+        val interactor = SecuritySettingsInteractor(App.authManager, App.wordsManager, App.localStorage, App.systemInfoManager, App.lockManager)
         val presenter = SecuritySettingsPresenter(router, interactor)
 
         view.delegate = presenter
