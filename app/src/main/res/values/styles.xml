@@ -27,6 +27,7 @@
     <attr name="NumpadFingerprintButton" format="reference" />
     <attr name="AppBarBackground" format="reference" />
     <attr name="BottomNavBackground" format="reference" />
+    <attr name="BlockScreenLockIcon" format="reference" />
     <attr name="HudIconTint" format="reference|color" />
     <attr name="HudBackground" format="reference|color" />
     <attr name="HudTextColor" format="reference|color" />
@@ -92,6 +93,7 @@
         <item name="NumpadFingerprintButton">@drawable/fingerprint_outline_white</item>
         <item name="AppBarBackground">@drawable/shadow_top_navigation</item>
         <item name="BottomNavBackground">@drawable/shadow_bottom_navigation</item>
+        <item name="BlockScreenLockIcon">@drawable/ic_blocked_dark</item>
         <item name="HudIconTint">@color/steel_grey</item>
         <item name="HudBackground">@color/black_85</item>
         <item name="HudTextColor">@color/white</item>
@@ -157,6 +159,7 @@
         <item name="NumpadFingerprintButton">@drawable/fingerprint_outline_black</item>
         <item name="AppBarBackground">@drawable/shadow_top_navigation_light</item>
         <item name="BottomNavBackground">@drawable/shadow_bottom_navigation_light</item>
+        <item name="BlockScreenLockIcon">@drawable/ic_blocked_light</item>
         <item name="HudIconTint">@color/dark</item>
         <item name="HudBackground">@color/bars_color_95</item>
         <item name="HudTextColor">@color/dark</item>
