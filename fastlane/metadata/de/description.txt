@@ -1,4 +1,4 @@
-  Control Your Money!
+  Kontrollieren dein Geld!
 Die BANK-Geldbörse ist eine sichere und vollständig dezentralisierte Kryptobörse, die die wichtigsten Kryptowährungen einhält, darunter Bitcoin, Ethereum, Bitcoin Cash und ERC 20-Token. Die Anzahl der unterstützten Währungen wird mit jedem Release nach und nach hinzugefügt.
 
 Die BANK-Geldbörse gewährt sicheres Mittel, mit Bitcoins und anderen Kryptowährungen arbeiten anzufangen. Sie müssen die inneren Abläufe der Kryptowährung nicht verstehen, um sie verwenden zu können.
@@ -30,7 +30,8 @@ DISCLAIMER:
 
 1. This Wallet is in its early days and just like any other software product it may have undiscovered issues which may potentially result in wallet having problems, like say the loss of access to specific transactions. While the wallet has been thoroughly tested over and over no one can say for sure that it's error-free. We believe it to be very secure, more than any crypto currency app out there.
 
-2. DO NOT EVER install the BANK wallet on a jailbroken or tempered device due to substantial security risks. A jailbroken Android cannot guarantee the security of your private keys. This means that some malicious app running on jailbroken device can potentially access the private keys for your funds and steal them.
+2.  HINWEIS. Installieren Sie die BANK-Geldbörse auf einem gehackten Gerät wegen erheblicher Sicherheitsrisiken nicht.  Das gebrochene iOS Betriebssystem kann die Sicherheit Ihrer privaten Offlineschlüssel nicht gewährleisten. Dies bedeutet, dass einige schädliche Anwendungen, die auf einem gehackten Gerät funktionieren, Zugriff auf private Offlineschlüssel erhalten und Ihr Geld stehlen können.
 
-3. Source Code: https://github.com/horizontalsystems
+
+3. Quellcode: https://github.com/horizontalsystems
 
