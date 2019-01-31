@@ -103,7 +103,7 @@
             android:layout_marginStart="12dp"
             android:background="@android:color/transparent"
             android:hint="@string/Send_Hint_Amount"
-            android:inputType="text"
+            android:inputType="number|numberDecimal"
             android:maxLines="1"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/topAmountPrefix"
