@@ -49,16 +49,15 @@
             />
 
         <TextView
-            android:id="@+id/textCurrencyAmount"
+            android:id="@+id/textCoinAmount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:layout_weight="1"
             android:fontFamily="@font/noto_sans"
-            android:textColor="@color/yellow_crypto"
+            android:textColor="?BallanceCoinAmountColor"
             android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textCoinName"
             app:layout_constraintEnd_toStartOf="@+id/progressSync"
-            tools:text="$52.50"
+            tools:text="0.000078 BTC"
             />
 
         <ProgressBar
@@ -113,13 +112,13 @@
             />
 
         <TextView
-            android:id="@+id/textCoinAmount"
+            android:id="@+id/textCurrencyAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/noto_sans_bold"
-            android:textColor="?BallanceCoinAmountColor"
+            android:textColor="@color/yellow_crypto"
             android:textSize="17sp"
-            tools:text="0.000078 BTC"
+            tools:text="$52.50"
             />
 
         <TextView
