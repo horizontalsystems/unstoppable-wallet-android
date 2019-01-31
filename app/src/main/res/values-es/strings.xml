@@ -24,7 +24,7 @@
     <string name="Restore_RestoreFailed">Error al restaurar la cartera</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Clave secreta</string>
-    <string name="Backup_Intro_Subtitle">Your secret key is the only way to restore your wallet and funds if your phone is ever lost, stolen, broken, or upgraded.\n\n It consists of 12 words. Store it safely offline.</string>
+    <string name="Backup_Intro_Subtitle">Su clave secreta es la única manera de recuperar su cartera y otros fondos si su teléfono alguna vez se pierde, se rompe, es sustraído o se actualiza a otra versión.\n\n Consiste de 12 palabras. Almacen esta desconectado sin peligro.</string>
     <string name="Backup_Intro_Later">Posterior</string>
     <string name="Backup_Intro_BackupNow">Copia de seguridad</string>
     <string name="Backup_Words_Title">Clave secreta</string>
@@ -163,7 +163,7 @@ Algunos datos genéricos de carácter público de esta app se guardan en centros
     <string name="Alert_KeysInvalidatedDescription">Los datos encriptados de su monedero han sido recientemente  invalidados porque se cambió la pantalla de bloqueo de Android</string>
     <string name="Alert_TitleWarning">Aviso</string>
     <string name="Alert_NoDeviceLockDescription">Configurar bloqueo de pantalla de este dispositivo para continuar. Ir a \"Ajustes\" &amp;gt; &amp;gt;  \"Seguridad\" \"Bloqueo de pantalla\" y establezca la configuración de la pantalla de bloqueo.</string>
-    <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
+    <string name="Alert_CustomKeyboardIsUsed">Usted está utilizando un teclado de terceros. Tiene que usar el teclado por defecto.</string>
     <!--Unlock-->
     <string name="Unlock_Page_EnterYourPin">Código</string>
     <!--Errors-->
