@@ -83,7 +83,7 @@
     <string name="TransactionInfo_From">Desde </string>
     <string name="TransactionInfo_Time">Hora</string>
     <string name="TransactionInfo_ButtonMore">Más</string>
-    <string name="TransactionInfo_Status_Pending">Pending</string>
+    <string name="TransactionInfo_Status_Pending">Pendiente</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Transacción</string>
     <string name="FullInfo_Time">Hora</string>
@@ -93,19 +93,19 @@
     <string name="FullInfo_Outputs">Producciones</string>
     <string name="FullInfo_Size">Tamaño</string>
     <string name="FullInfo_Fee">Comisión</string>
-    <string name="FullInfo_Rate">Rate</string>
-    <string name="FullInfo_Source">Source</string>
+    <string name="FullInfo_Rate">Puntuación</string>
+    <string name="FullInfo_Source">Origen</string>
     <string name="FullInfo_To">Para</string>
     <string name="FullInfo_From">Desde </string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
-    <string name="FullInfo_Source_Title">Source</string>
+    <string name="FullInfo_Source_Title">Origen</string>
     <string name="FullInfo_Source_Online">En línea</string>
-    <string name="FullInfo_Source_Offline">Offline</string>
-    <string name="FullInfo_Error_Subtitle">Offline</string>
-    <string name="FullInfo_Error_Retry">Retry</string>
-    <string name="FullInfo_Error_ChangeSource">Change Source</string>
+    <string name="FullInfo_Source_Offline">Desconectado</string>
+    <string name="FullInfo_Error_Subtitle">Desconectado</string>
+    <string name="FullInfo_Error_Retry">Reintentar</string>
+    <string name="FullInfo_Error_ChangeSource">Cambiar Origen</string>
     <!--no used-->
     <string name="FullInfo_Id">Identificación</string>
     <string name="FullInfo_TotalInput">Inversión total</string>
