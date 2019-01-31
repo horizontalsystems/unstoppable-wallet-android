@@ -25,21 +25,10 @@ class StorableCoinsRepository(private val appDatabase: AppDatabase) : ICoinStora
     }
 
     override fun save(coins: List<Coin>) {
-
         executor.execute {
-            //update stored coins enabled as false, and order as null
-            appDatabase.coinsDao().resetCoinsState()
-
-            //save coin list
-            coins.forEachIndexed { index, coin ->
-                val storableCoin = StorableCoin(
-                        coinCode = coin.code,
-                        coinTitle = coin.title,
-                        coinType = coin.type,
-                        enabled = true,
-                        order = index)
-                appDatabase.coinsDao().insert(storableCoin)
-            }
+            appDatabase.coinsDao().setEnabledCoins(coins.mapIndexed { index, coin ->
+                StorableCoin(coin.code, coin.title, coin.type, true, index)
+            })
         }
     }
 
