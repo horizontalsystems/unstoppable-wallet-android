@@ -100,7 +100,11 @@ class BalanceFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener
 
         coinsAdapter.viewDelegate = viewModel.delegate
         recyclerCoins.adapter = coinsAdapter
-        recyclerCoins.layoutManager = LinearLayoutManager(context)
+        recyclerCoins.layoutManager = object : LinearLayoutManager(context) {
+            override fun supportsPredictiveItemAnimations(): Boolean {
+                return false
+            }
+        }
         (recyclerCoins.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
 
         manageCoins.setOnSingleClickListener { viewModel.delegate.openManageCoins() }
