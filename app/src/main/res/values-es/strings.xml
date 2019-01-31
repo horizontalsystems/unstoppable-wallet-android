@@ -174,7 +174,7 @@ Algunos datos genéricos de carácter público de esta app se guardan en centros
     <string name="Hud_Text_Error">Error</string>
     <string name="Hud_Text_NoInternet">Sin conexión a Internet</string>
     <string name="Hud_Text_Copied">Copiado</string>
-    <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
+    <string name="Hud_Text_InvalidPinError">Contraseña incorrecta</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">Inicio de sesión de huella digital</string>
     <string name="Fingerprint_Hint">Sensor táctil</string>
@@ -188,7 +188,7 @@ Algunos datos genéricos de carácter público de esta app se guardan en centros
     <string name="SetPin_Info">Su código servirá para abrir su monedero y enviar dinero</string>
     <string name="SetPin_ErrorShortPin">Por favor, introduzca todos los dígitos.</string>
     <string name="SetPin_ConfirmInfo">Confirmar</string>
-    <string name="SetPin_Success">Lock passcode was set successfully!</string>
+    <string name="SetPin_Success">Tu contraseña fue establecida con éxito!</string>
     <string name="SetPin_ErrorPinsDontMatch">El código no coincide. Inténtelo de nuevo</string>
     <string name="SetPin_ErrorFailedToSavePin">Se ha producido un error al intentar guardar su código. Inténtelo de nuevo.</string>
     <!--Edit Pin-->
