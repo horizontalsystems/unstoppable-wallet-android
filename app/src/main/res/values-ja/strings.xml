@@ -187,8 +187,8 @@
     <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
     <!--Edit Pin-->
     <string name="EditPin_Title">パスコードを編集</string>
-    <string name="EditPin_UnlockInfo">Current Passcode</string>
-    <string name="EditPin_NewPinInfo">New Passcode</string>
+    <string name="EditPin_UnlockInfo">現在のパスコード</string>
+    <string name="EditPin_NewPinInfo">新しいパスコード</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">ウォレット</string>
     <string name="ManageCoins_save">保存</string>
