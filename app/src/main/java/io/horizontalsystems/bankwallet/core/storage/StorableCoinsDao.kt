@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.core.storage
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 import io.horizontalsystems.bankwallet.entities.StorableCoin
 import io.reactivex.Flowable
 
@@ -27,5 +24,11 @@ interface StorableCoinsDao {
 
     @Query("UPDATE StorableCoin SET enabled = 0, `order` = null")
     fun resetCoinsState()
+
+    @Transaction
+    fun setEnabledCoins(coins: List<StorableCoin>) {
+        resetCoinsState()
+        coins.forEach { insert(it) }
+    }
 
 }

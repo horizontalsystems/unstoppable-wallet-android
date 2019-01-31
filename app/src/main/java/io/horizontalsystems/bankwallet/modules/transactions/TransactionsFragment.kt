@@ -60,8 +60,7 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
 
         viewModel.filterItems.observe(this, Observer { filters ->
             filters?.let {
-                filterAdapter.filters = it
-                filterAdapter.notifyDataSetChanged()
+                filterAdapter.setFilters(it)
             }
         })
 
@@ -267,9 +266,16 @@ class FilterAdapter(private var listener: Listener) : RecyclerView.Adapter<Recyc
         fun onFilterItemClick(item: String?)
     }
 
-    private var selectedFilterId: String? = null
-    var filters: List<String?> = listOf()
     var filterChangeable = true
+
+    private var selectedFilterId: String? = null
+    private var filters: List<String?> = listOf()
+
+    fun setFilters(filters: List<String?>) {
+        this.filters = filters
+        selectedFilterId = null
+        notifyDataSetChanged()
+    }
 
     override fun getItemCount() = filters.size
 
