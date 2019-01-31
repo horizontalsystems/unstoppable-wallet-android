@@ -5,6 +5,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.ILockManager
 import io.horizontalsystems.bankwallet.core.ISystemInfoManager
 import io.horizontalsystems.bankwallet.core.IWordsManager
 import io.horizontalsystems.bankwallet.core.managers.AuthManager
@@ -26,8 +27,10 @@ class SecuritySettingsInteractorTest {
     private lateinit var localStorage: ILocalStorage
     private lateinit var wordsManager: IWordsManager
     private lateinit var systemInfoManager: ISystemInfoManager
+    private lateinit var lockManager: ILockManager
 
     private val backedUpSignal = PublishSubject.create<Unit>()
+    private val lockStateUpdateSignal = PublishSubject.create<Unit>()
 
     @Before
     fun setup() {
@@ -46,7 +49,12 @@ class SecuritySettingsInteractorTest {
             on { biometryType } doReturn BiometryType.FINGER
         }
 
-        interactor = SecuritySettingsInteractor(authManager, wordsManager, localStorage, systemInfoManager)
+        lockManager = mock {
+            on { lockStateUpdatedSignal } doReturn lockStateUpdateSignal
+            on { isLocked } doReturn false
+        }
+
+        interactor = SecuritySettingsInteractor(authManager, wordsManager, localStorage, systemInfoManager, lockManager)
         interactor.delegate = delegate
     }
 
@@ -76,7 +84,7 @@ class SecuritySettingsInteractorTest {
             on { isBackedUp } doReturn false
             on { backedUpSignal } doReturn backedUpSignal
         }
-        interactor = SecuritySettingsInteractor(authManager, wordsManager, localStorage, systemInfoManager)
+        interactor = SecuritySettingsInteractor(authManager, wordsManager, localStorage, systemInfoManager, lockManager)
         interactor.delegate = delegate
 
         assertFalse(interactor.isBackedUp)
@@ -87,7 +95,7 @@ class SecuritySettingsInteractorTest {
         localStorage = mock {
             on { isBiometricOn } doReturn false
         }
-        interactor = SecuritySettingsInteractor(authManager, wordsManager, localStorage, systemInfoManager)
+        interactor = SecuritySettingsInteractor(authManager, wordsManager, localStorage, systemInfoManager, lockManager)
         interactor.delegate = delegate
 
         assertFalse(interactor.getBiometricUnlockOn())
@@ -111,5 +119,25 @@ class SecuritySettingsInteractorTest {
     fun testBackedUpSignal() {
         backedUpSignal.onNext(Unit)
         verify(delegate).didBackup()
+    }
+
+    @Test
+    fun didTapOnBackupWallet() {
+        val lockSubject = PublishSubject.create<Unit>()
+
+        lockManager = mock {
+            on { lockStateUpdatedSignal } doReturn lockSubject
+            on { isLocked } doReturn false
+        }
+
+        interactor = SecuritySettingsInteractor(authManager, wordsManager, localStorage, systemInfoManager, lockManager)
+        interactor.delegate = delegate
+
+
+        interactor.didTapOnBackupWallet()
+        verify(delegate).accessIsRestricted()
+
+        lockSubject.onNext(Unit)
+        verify(delegate).openBackupWallet()
     }
 }

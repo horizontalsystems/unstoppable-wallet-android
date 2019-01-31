@@ -18,6 +18,7 @@ class SecuritySettingsViewModel: ViewModel(), SecuritySettingsModule.ISecuritySe
     val openBackupWalletLiveEvent = SingleLiveEvent<Unit>()
     val openRestoreWalletLiveEvent = SingleLiveEvent<Unit>()
     val reloadAppLiveEvent = SingleLiveEvent<Unit>()
+    val showPinUnlockLiveEvent = SingleLiveEvent<Unit>()
 
     fun init() {
         SecuritySettingsModule.init(this, this)
@@ -54,5 +55,9 @@ class SecuritySettingsViewModel: ViewModel(), SecuritySettingsModule.ISecuritySe
 
     override fun reloadApp() {
         reloadAppLiveEvent.call()
+    }
+
+    override fun showPinUnlock() {
+        showPinUnlockLiveEvent.call()
     }
 }
