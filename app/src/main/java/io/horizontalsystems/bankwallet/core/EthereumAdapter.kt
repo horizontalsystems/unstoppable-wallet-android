@@ -14,9 +14,9 @@ import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, EthereumKit.Listener {
+class EthereumAdapter(words: List<String>, network: NetworkType, walletId: String) : IAdapter, EthereumKit.Listener {
 
-    private var ethereumKit = EthereumKit(words, network)
+    private var ethereumKit = EthereumKit(words, network, walletId)
     private val weisInEther = Math.pow(10.0, 18.0).toBigDecimal()
 
     private val progressSubject: BehaviorSubject<Double> = BehaviorSubject.createDefault(1.0)
@@ -38,7 +38,7 @@ class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, Eth
 
     override val debugInfo: String = ""
 
-    override val receiveAddress: String get() = ethereumKit.receiveAddress()
+    override val receiveAddress: String get() = ethereumKit.receiveAddress
 
     override fun start() {
         ethereumKit.listener = this
@@ -73,11 +73,11 @@ class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, Eth
         ethereumKit.validateAddress(address)
     }
 
-    override fun balanceUpdated(balance: Double) {
+    override fun onBalanceUpdate(balance: Double) {
         balanceSubject.onNext(balance.toBigDecimal())
     }
 
-    override fun lastBlockHeightUpdated(height: Int) {
+    override fun onLastBlockHeightUpdate(height: Int) {
         lastBlockHeightUpdatedSignal.onNext(Unit)
     }
 
@@ -99,7 +99,7 @@ class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, Eth
         }
     }
 
-    override fun transactionsUpdated(inserted: List<Transaction>, updated: List<Transaction>, deleted: List<Int>) {
+    override fun onTransactionsUpdate(inserted: List<Transaction>, updated: List<Transaction>, deleted: List<Int>) {
         val records = mutableListOf<TransactionRecord>()
 
         for (info in inserted) {
@@ -119,8 +119,7 @@ class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, Eth
 
     private fun transactionRecord(transaction: Transaction): TransactionRecord {
         val amountEther: BigDecimal = weisToEther(transaction.value) ?: BigDecimal.ZERO
-
-        val mineAddress = ethereumKit.receiveAddress().toLowerCase()
+        val mineAddress = ethereumKit.receiveAddress.toLowerCase()
 
         val from = TransactionAddress()
         from.address = transaction.from
@@ -146,18 +145,14 @@ class EthereumAdapter(words: List<String>, network: NetworkType) : IAdapter, Eth
         null
     }
 
-//    private fun calculateFee(gasUsed: String, gasPrice: String): Double {
-//        val feeInWeis = BigDecimal(gasUsed).multiply(BigDecimal(gasPrice))
-//        return feeInWeis.divide(weisInEther.toBigDecimal()).toDouble()
-//    }
-//
-
     companion object {
 
-        fun createEthereum(words: List<String>, testMode: Boolean): EthereumAdapter {
-            val network = if (testMode) EthereumKit.NetworkType.Kovan else EthereumKit.NetworkType.MainNet
-            return EthereumAdapter(words, network)
+        fun createEthereum(words: List<String>, testMode: Boolean, walletId: String): EthereumAdapter {
+            val network = if (testMode)
+                EthereumKit.NetworkType.Ropsten else
+                EthereumKit.NetworkType.MainNet
+
+            return EthereumAdapter(words, network, walletId)
         }
     }
-
 }
