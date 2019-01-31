@@ -26,7 +26,7 @@ class RestoreInteractor(
     override fun restore(words: List<String>) {
         keystoreSafeExecute.safeExecute(
                 action = Runnable {
-                    authManager.login(words)
+                    authManager.login(words, false)
                 },
                 onSuccess = Runnable {
                     wordsManager.isBackedUp = true
