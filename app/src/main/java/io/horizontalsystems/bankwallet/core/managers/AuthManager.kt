@@ -28,9 +28,10 @@ class AuthManager(
     }
 
     @Throws(UserNotAuthenticatedException::class)
-    fun login(words: List<String>) {
+    fun login(words: List<String>, newWallet: Boolean) {
         AuthData(words).let {
             secureStorage.saveAuthData(it)
+            localStorage.isNewWallet = newWallet
             authData = it
             coinManager.enableDefaultCoins()
             walletManager?.initWallets()

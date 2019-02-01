@@ -14,7 +14,7 @@ class GuestInteractor(
     override fun createWallet() {
         keystoreSafeExecute.safeExecute(
                 action = Runnable {
-                    authManager.login(wordsManager.generateWords())
+                    authManager.login(wordsManager.generateWords(), true)
                 },
                 onSuccess = Runnable { delegate?.didCreateWallet() },
                 onFailure = Runnable { delegate?.didFailToCreateWallet() }

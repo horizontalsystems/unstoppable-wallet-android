@@ -103,7 +103,7 @@ class App : Application() {
 
         networkAvailabilityManager = NetworkAvailabilityManager()
 
-        walletManager = WalletManager(coinManager, authManager, WalletFactory(AdapterFactory(appConfigProvider)))
+        walletManager = WalletManager(coinManager, authManager, WalletFactory(AdapterFactory(appConfigProvider, localStorage)))
         rateSyncer = RateSyncer(rateManager, walletManager, currencyManager, networkAvailabilityManager)
 
         appCloseManager = AppCloseManager()
