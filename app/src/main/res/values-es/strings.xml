@@ -126,7 +126,7 @@
     <string name="Settings_Language">Idioma</string>
     <string name="Settings_LightMode">Modo de brillo</string>
     <string name="Settings_About">Acerca de</string>
-    <string name="Settings_InfoTitleWithVersion">Cartera bancaria %s</string>
+    <string name="Settings_InfoTitleWithVersion">Bank Wallet %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Huella digital no habilitada</string>
