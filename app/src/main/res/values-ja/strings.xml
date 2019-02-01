@@ -31,8 +31,8 @@
     <string name="Backup_Confirmation_Understand">私は私の財布とトークンは、ほかのサーバーではなく、このデバイスだけに安全に開催されること理解します。</string>
     <string name="Backup_Confirmation_DeleteAppWarn">私は、このアプリケーションが別のデバイスは、削除または誤動作に移動した場合、私の財布回復できるのは、安全な場所に保存されている秘密鍵だけのを理解します。</string>
     <string name="Backup_Confirmation_LockAppWarn">アンドロイド OS 設定のアプリ  PINロック解除  を変更またはデータ削除する際、財布はリセットされます。その後あなたの財布を復元するのには、秘密キーを必要があります。</string>
-    <string name="Backup_Confirmation_Title">Enter following words from your Secret Key</string>
-    <string name="Backup_Confirmation_Description">Enter words from your secret key.</string>
+    <string name="Backup_Confirmation_Title">秘密キーの後に、次の言葉にを入力してください。</string>
+    <string name="Backup_Confirmation_Description">あなたの秘密鍵の単語を入力してください。</string>
     <string name="Backup_Confirmation_FailureAlertText"> 言葉が一致しません</string>
     <string name="Backup_Button_Confirm">確定する</string>
     <string name="Backup_Button_Next">次</string>
@@ -83,7 +83,7 @@
     <string name="TransactionInfo_From">差出人</string>
     <string name="TransactionInfo_Time">時間</string>
     <string name="TransactionInfo_ButtonMore">その他</string>
-    <string name="TransactionInfo_Status_Pending">Pending</string>
+    <string name="TransactionInfo_Status_Pending">ペンディング</string>
     <!--Full Info-->
     <string name="FullInfo_Title">トランザクション</string>
     <string name="FullInfo_Time">時間</string>
@@ -130,7 +130,7 @@
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">指紋認証が無効</string>
-    <string name="Settings_Error_NoFingerprintAddedYet">You have not enabled fingerprint on this device. Go to Settings &gt; Security to set up fingerprint access.</string>
+    <string name="Settings_Error_NoFingerprintAddedYet">このデバイスの指紋を有効にしていません。指紋認証アクセスを設定するにはセキュリティ設定 &gt; にて設定してください。</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">指紋</string>
     <string name="SettingsSecurity_EditPin">パスコードを編集</string>
