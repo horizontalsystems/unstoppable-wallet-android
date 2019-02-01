@@ -16,7 +16,7 @@ import java.text.NumberFormat
 import java.util.*
 
 
-class AppNumberFormatter(private val languageManager: ILanguageManager): IAppNumberFormatter {
+class NumberFormatter(private val languageManager: ILanguageManager): IAppNumberFormatter {
 
     private val COIN_BIG_NUMBER_EDGE = "0.0001".toBigDecimal()
     private val FIAT_BIG_NUMBER_EDGE = "100".toBigDecimal()

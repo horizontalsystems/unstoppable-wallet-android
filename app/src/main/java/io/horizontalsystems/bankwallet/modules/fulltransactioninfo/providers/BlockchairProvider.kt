@@ -117,7 +117,7 @@ class BlockchairETHResponse(@SerializedName("data") val data: Map<String, Data>)
         override val fee get() = (transaction.fee.toDouble() / ethRate).toString()
         override val from get() = transaction.sender
         override val to get() = transaction.recipient
-        override val value get() = App.appNumberFormatter.format(transaction.value.toBigInteger().toDouble() / ethRate)
+        override val value get() = App.numberFormatter.format(transaction.value.toBigInteger().toDouble() / ethRate)
         override val nonce get() = transaction.nonce.toInt().toString()
         override val gasLimit get() = transaction.gasLimit.toString()
         override val gasPrice get() = (transaction.gasPrice / gweiRate).toString()

@@ -12,11 +12,11 @@ import org.junit.Test
 import org.mockito.Mockito
 import java.util.*
 
-class AppNumberFormatterTest {
+class NumberFormatterTest {
 
     private val languageManager = Mockito.mock(ILanguageManager::class.java)
 
-    private lateinit var formatter: AppNumberFormatter
+    private lateinit var formatter: NumberFormatter
     private val usdCurrency = Currency(code = "USD", symbol = "$")
     private val btcCoinCode: CoinCode = "BTC"
     private val defaultLocale = Locale("en")
@@ -24,7 +24,7 @@ class AppNumberFormatterTest {
     @Before
     fun setup() {
         whenever(languageManager.currentLanguage).thenReturn(defaultLocale)
-        formatter = AppNumberFormatter(languageManager)
+        formatter = NumberFormatter(languageManager)
     }
 
     @Test
@@ -50,7 +50,7 @@ class AppNumberFormatterTest {
     @Test
     fun format_Currency_by_russian_locale() {
         whenever(languageManager.currentLanguage).thenReturn(Locale("ru"))
-        formatter = AppNumberFormatter(languageManager)
+        formatter = NumberFormatter(languageManager)
         assertCurrencyFormatter(0.0003903, "$ 0,01")
         assertCurrencyFormatter(12.03903, "$ 12,04")
     }

@@ -110,10 +110,10 @@ object SendModule {
 
         fun getFormatted(): String? = when (this) {
             is SendModule.AmountInfo.CoinValueInfo -> {
-                App.appNumberFormatter.format(this.coinValue)
+                App.numberFormatter.format(this.coinValue)
             }
             is SendModule.AmountInfo.CurrencyValueInfo -> {
-                App.appNumberFormatter.format(this.currencyValue)
+                App.numberFormatter.format(this.currencyValue)
             }
         }
     }

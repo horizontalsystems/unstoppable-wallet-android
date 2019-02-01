@@ -45,7 +45,7 @@ class EtherscanResponse(
         get() = Integer.parseInt(blockNumber.substring(2), 16).toString()
 
     override val value: String
-        get() = App.appNumberFormatter.format(BigInteger(amount.substring(2), 16).toDouble() / ethRate)
+        get() = App.numberFormatter.format(BigInteger(amount.substring(2), 16).toDouble() / ethRate)
 
     override val nonce: String
         get() = Integer.parseInt(gNonce.substring(2), 16).toString()

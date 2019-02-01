@@ -47,7 +47,7 @@ class BalanceFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener
 
 
         viewModel.totalBalanceLiveData.observe(this, Observer { total ->
-            ballanceText.text = total?.let { App.appNumberFormatter.format(it) } ?: ""
+            ballanceText.text = total?.let { App.numberFormatter.format(it) } ?: ""
         })
 
         viewModel.openReceiveDialog.observe(this, Observer { adapterId ->
@@ -123,7 +123,7 @@ class BalanceFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener
         }
 
         ballanceText.text = headerViewItem.currencyValue?.let {
-            App.appNumberFormatter.format(it)
+            App.numberFormatter.format(it)
         }
     }
 
@@ -223,13 +223,13 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
                 is AdapterState.Synced -> {
                     if (balanceViewItem.coinValue.value > BigDecimal.ZERO) {
                         textCurrencyAmount.visibility = View.VISIBLE
-                        textCurrencyAmount.text = balanceViewItem.currencyValue?.let { App.appNumberFormatter.format(it) }
+                        textCurrencyAmount.text = balanceViewItem.currencyValue?.let { App.numberFormatter.format(it) }
                         textCurrencyAmount.setTextColor(ContextCompat.getColor(containerView.context, if (balanceViewItem.rateExpired) R.color.yellow_crypto_40 else R.color.yellow_crypto))
                         buttonPay.isEnabled = true
                     }
 
                     textCoinAmount.visibility = View.VISIBLE
-                    textCoinAmount.text = App.appNumberFormatter.format(balanceViewItem.coinValue)
+                    textCoinAmount.text = App.numberFormatter.format(balanceViewItem.coinValue)
                 }
                 is AdapterState.NotSynced -> {
                     imgSyncFailed.visibility = View.VISIBLE
@@ -243,7 +243,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
         textCoinName.text = balanceViewItem.coinValue.coinCode
 
         textExchangeRate.text = balanceViewItem.exchangeValue?.let { exchangeValue ->
-            containerView.context.getString(R.string.Balance_RatePerCoin, App.appNumberFormatter.format(exchangeValue), balanceViewItem.coinValue.coinCode)
+            containerView.context.getString(R.string.Balance_RatePerCoin, App.numberFormatter.format(exchangeValue), balanceViewItem.coinValue.coinCode)
         } ?: ""
         textExchangeRate.setTextColor(ContextCompat.getColor(containerView.context, if (balanceViewItem.rateExpired) R.color.steel_40 else R.color.grey))
 

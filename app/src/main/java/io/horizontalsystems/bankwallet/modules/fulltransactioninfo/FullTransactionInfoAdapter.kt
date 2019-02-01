@@ -29,23 +29,23 @@ class FullTransactionBitcoinAdapter(val provider: FullTransactionInfoModule.Bitc
 
         sections.add(FullTransactionSection(items = blockItems))
 
-        val transactionItems = mutableListOf(FullTransactionItem(R.string.FullInfo_Fee, value = "${App.appNumberFormatter.format(data.fee)} $coinCode"))
+        val transactionItems = mutableListOf(FullTransactionItem(R.string.FullInfo_Fee, value = "${App.numberFormatter.format(data.fee)} $coinCode"))
 
         data.size?.let {
             transactionItems.add(FullTransactionItem(R.string.FullInfo_Size, value = "$it (bytes)", dimmed = true))
         }
 
         data.feePerByte?.let { feePerByte ->
-            transactionItems.add(FullTransactionItem(R.string.FullInfo_Rate, value = "${App.appNumberFormatter.format(feePerByte)} (satoshi)", dimmed = true))
+            transactionItems.add(FullTransactionItem(R.string.FullInfo_Rate, value = "${App.numberFormatter.format(feePerByte)} (satoshi)", dimmed = true))
         }
 
         sections.add(FullTransactionSection(items = transactionItems))
 
         if (data.inputs.isNotEmpty()) {
-            val totalInput = App.appNumberFormatter.format(data.inputs.sumByDouble { it.value })
+            val totalInput = App.numberFormatter.format(data.inputs.sumByDouble { it.value })
             val inputs = mutableListOf(FullTransactionItem(R.string.FullInfo_SubtitleInputs, value = "$totalInput $coinCode"))
             data.inputs.map {
-                val amount = App.appNumberFormatter.format(it.value)
+                val amount = App.numberFormatter.format(it.value)
                 inputs.add(FullTransactionItem(title = "$amount $coinCode", value = it.address, clickable = true, icon = FullTransactionIcon.PERSON))
             }
 
@@ -53,11 +53,11 @@ class FullTransactionBitcoinAdapter(val provider: FullTransactionInfoModule.Bitc
         }
 
         if (data.outputs.isNotEmpty()) {
-            val totalOutput = App.appNumberFormatter.format(data.outputs.sumByDouble { it.value })
+            val totalOutput = App.numberFormatter.format(data.outputs.sumByDouble { it.value })
             val outputs = mutableListOf(FullTransactionItem(R.string.FullInfo_SubtitleOutputs, value = "$totalOutput $coinCode"))
 
             data.outputs.map {
-                val amount = App.appNumberFormatter.format(it.value)
+                val amount = App.numberFormatter.format(it.value)
                 outputs.add(FullTransactionItem(title = "$amount $coinCode", value = it.address, clickable = true, icon = FullTransactionIcon.PERSON))
             }
 
@@ -93,7 +93,7 @@ class FullTransactionEthereumAdapter(val provider: FullTransactionInfoModule.Eth
 
         mutableListOf<FullTransactionItem>().let { section ->
             data.fee?.let {
-                section.add(FullTransactionItem(R.string.FullInfo_Fee, value = "${App.appNumberFormatter.format(it.toDouble())} $coinCode"))
+                section.add(FullTransactionItem(R.string.FullInfo_Fee, value = "${App.numberFormatter.format(it.toDouble())} $coinCode"))
             }
             if (data.size != null) {
                 section.add(FullTransactionItem(R.string.FullInfo_Size, value = "${data.size} (bytes)", dimmed = true))
