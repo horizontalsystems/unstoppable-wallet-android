@@ -145,7 +145,7 @@
     <!--Setting_About-->
     <string name="SettingsAbout_Title">À propos de</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Terms &amp; Confidentialité:</string>
-    <string name="SettingsAbout_TermsPrivacyText">\n\nCette application est décentralisé. Cela ne dépend pas du personnel du service d\'assistance Web.
+    <string name="SettingsAbout_TermsPrivacyText">Cette application est décentralisé. Cela ne dépend pas du personnel du service d\'assistance Web.
 \n\nCela fonctionne partout tant qu\'il y a internet. Aucune entité ne peut empêcher cette application de fonctionner ou d\'empêcher quelqu\'un de l\'utiliser.
 \n\nVos fonds stockés en sécurité sur votre portable, pas sur autres.
 \n\nIl est de votre responsabilité de sauvegarder votre clé secrète et de la garder privée. Ne le montre jamais à personne. En cas de perte, d’oubli ou de vol, vos fonds peuvent être utilisés par la personne qui détient votre clé secrète.
