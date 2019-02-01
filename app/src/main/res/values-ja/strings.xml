@@ -24,15 +24,15 @@
     <string name="Restore_RestoreFailed">ウォレットを作成できませんでした</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">秘密鍵</string>
-    <string name="Backup_Intro_Subtitle">Your secret key is the only way to restore your wallet and funds if your phone is ever lost, stolen, broken, or upgraded.\n\n It consists of 12 words. Store it safely offline.</string>
+    <string name="Backup_Intro_Subtitle">あなたの電話は今まで紛失、盗難、破損、またはアップグレードする場合、あなたの秘密鍵は、あなたの財布と資金を復元する唯一の方法です。\n\n それは 12 の単語で構成されています。オフラインに安全に保管してください。</string>
     <string name="Backup_Intro_Later">後で</string>
     <string name="Backup_Intro_BackupNow">バックアップ</string>
     <string name="Backup_Words_Title">秘密鍵</string>
-    <string name="Backup_Confirmation_Understand">I understand that my wallet and tokens are held securely on this device only and not any servers.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I have just written down and saved in a secure place.</string>
-    <string name="Backup_Confirmation_LockAppWarn">Changing the unlock PIN or deleting app data in your Android OS settings would reset the wallet. You will need your Secret Key to restore your wallet after that.</string>
-    <string name="Backup_Confirmation_Title">Enter following words from your Secret Key</string>
-    <string name="Backup_Confirmation_Description">Enter words from your secret key.</string>
+    <string name="Backup_Confirmation_Understand">私は私の財布とトークンは、ほかのサーバーではなく、このデバイスだけに安全に開催されること理解します。</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">私は、このアプリケーションが別のデバイスは、削除または誤動作に移動した場合、私の財布回復できるのは、安全な場所に保存されている秘密鍵だけのを理解します。</string>
+    <string name="Backup_Confirmation_LockAppWarn">アンドロイド OS 設定のアプリ  PINロック解除  を変更またはデータ削除する際、財布はリセットされます。その後あなたの財布を復元するのには、秘密キーを必要があります。</string>
+    <string name="Backup_Confirmation_Title">秘密キーの後に、次の言葉にを入力してください。</string>
+    <string name="Backup_Confirmation_Description">あなたの秘密鍵の単語を入力してください。</string>
     <string name="Backup_Confirmation_FailureAlertText"> 言葉が一致しません</string>
     <string name="Backup_Button_Confirm">確定する</string>
     <string name="Backup_Button_Next">次</string>
@@ -83,7 +83,7 @@
     <string name="TransactionInfo_From">差出人</string>
     <string name="TransactionInfo_Time">時間</string>
     <string name="TransactionInfo_ButtonMore">その他</string>
-    <string name="TransactionInfo_Status_Pending">Pending</string>
+    <string name="TransactionInfo_Status_Pending">ペンディング</string>
     <!--Full Info-->
     <string name="FullInfo_Title">トランザクション</string>
     <string name="FullInfo_Time">時間</string>
@@ -130,21 +130,21 @@
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">指紋認証が無効</string>
-    <string name="Settings_Error_NoFingerprintAddedYet">You have not enabled fingerprint on this device. Go to Settings &gt; Security to set up fingerprint access.</string>
+    <string name="Settings_Error_NoFingerprintAddedYet">このデバイスの指紋を有効にしていません。指紋認証アクセスを設定するにはセキュリティ設定 &gt; にて設定してください。</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">指紋</string>
     <string name="SettingsSecurity_EditPin">パスコードを編集</string>
     <string name="SettingsSecurity_BackupWallet">ウォレットをバックアップ</string>
-    <string name="SettingsSecurity_UnlinkFromThisDevice">Unlink from this device</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_1">This action will remove the currently installed wallet from this device.</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_2">Make sure you have backed up Secret Key or you will not be able to access your funds in the future.</string>
+    <string name="SettingsSecurity_UnlinkFromThisDevice">このデバイスからアンリンク</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_1">この操作は、現在インストールされている財布をこのデバイスから削除されます。</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_2">秘密キーを確実にバックアップしないと、将来的にあなたの資金にアクセスすることができなくなります。</string>
     <!--Setting_Currency-->
-    <string name="SettingsCurrency_Title">Base Currency</string>
+    <string name="SettingsCurrency_Title">基本通貨</string>
     <!--Setting_Language-->
     <string name="SettingsLanguage_Title">言語</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">について</string>
-    <string name="SettingsAbout_TermsPrivacySubtitle">Terms &amp; Privacy:</string>
+    <string name="SettingsAbout_TermsPrivacySubtitle">利用規約とプライバシーポリシー</string>
     <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
 \n\nIt works everywhere as long as there is internet. No entity can block this app from working or to block someone from using it.
 \n\nYour funds are securely stored on the phone itself, not anywhere else.
@@ -153,15 +153,15 @@
 \n\nThe entire code powering this app been open to the public scrutiny since the beginning. We tried to build the most secure and decentralized wallet we could, however there are no guarantees that there are no unintended software issues. That said, this wallet is likely to be significantly more secure than any smartphone wallet app out there.
 \n\nSome generic non-private app data like currency exchange rates are stored on decentralized storage (IPFS).</string>
     <!--Alert-->
-    <string name="Alert_KeysInvalidatedTitle">Android Keystore Error</string>
-    <string name="Alert_KeysInvalidatedDescription">The encrypted data holding your wallet was recently invalidated because your Android lock screen was changed</string>
+    <string name="Alert_KeysInvalidatedTitle">アンドロイドのキーストア エラー</string>
+    <string name="Alert_KeysInvalidatedDescription">あなたの財布を保持している暗号化されたデータは、アンドロイド ロック画面が変更されたために無効になりました。</string>
     <string name="Alert_TitleWarning">警告</string>
-    <string name="Alert_NoDeviceLockDescription">Set up a lock screen on this device to continue. Go to “Settings” &gt; “Security” &gt; “Screen Lock” and enable the lock screen setting.</string>
-    <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
+    <string name="Alert_NoDeviceLockDescription">このデバイスのロック画面を続行する設定します。「設定」 &gt; 「セキュリティ」 &gt; 「ロック画面」に移動し、ロック画面の設定を有効にします。</string>
+    <string name="Alert_CustomKeyboardIsUsed">サードパーティ製のキーボードを使用しています。既定のキーボードを使用する必要です。</string>
     <!--Unlock-->
     <string name="Unlock_Page_EnterYourPin">パスコード</string>
     <!--Errors-->
-    <string name="Error_UnsupportedBlockchain">Unsupported currency</string>
+    <string name="Error_UnsupportedBlockchain">サポートされていない通貨</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">解除する</string>
     <string name="Hud_Text_Success">成功</string>
@@ -173,18 +173,18 @@
     <string name="Fingerprint_DialogTitle">指紋使用ログイン</string>
     <string name="Fingerprint_Hint">タッチセンサー</string>
     <string name="Fingerprint_EnterPin">パスコード</string>
-    <string name="Fingerprint_NotRecognized">Fingerprint not recognized. Try again</string>
+    <string name="Fingerprint_NotRecognized">指紋が認識できませんでした。もう一度やり直してください</string>
     <string name="Fingerprint_Success">成功!</string>
     <!--Unlock Pin-->
-    <string name="UnlockPin_WalletDisabledUntil">Disabled until: %s</string>
+    <string name="UnlockPin_WalletDisabledUntil">までに無効: %s</string>
     <!--Set Pin-->
     <string name="SetPin_Title">パスコード</string>
-    <string name="SetPin_Info">Your passcode will be used to unlock wallet app</string>
-    <string name="SetPin_ErrorShortPin">Please enter all digits.</string>
+    <string name="SetPin_Info">財布アプリのロックを解除するにはあなたのパスコードが使用されます。</string>
+    <string name="SetPin_ErrorShortPin">数字のみを入力してください。</string>
     <string name="SetPin_ConfirmInfo">確定する</string>
-    <string name="SetPin_Success">Lock passcode was set successfully!</string>
-    <string name="SetPin_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
-    <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
+    <string name="SetPin_Success">パスワードが設定されました</string>
+    <string name="SetPin_ErrorPinsDontMatch">パスワードが一致しません。もう一度やり直してください。</string>
+    <string name="SetPin_ErrorFailedToSavePin">あなたのパスコードを保存中にエラーが発生しました。もう一度やり直してください。</string>
     <!--Edit Pin-->
     <string name="EditPin_Title">パスコードを編集</string>
     <string name="EditPin_UnlockInfo">現在のパスコード</string>
