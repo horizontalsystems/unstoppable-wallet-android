@@ -135,16 +135,16 @@
     <string name="SettingsSecurity_Fingerprint">指紋</string>
     <string name="SettingsSecurity_EditPin">パスコードを編集</string>
     <string name="SettingsSecurity_BackupWallet">ウォレットをバックアップ</string>
-    <string name="SettingsSecurity_UnlinkFromThisDevice">Unlink from this device</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_1">This action will remove the currently installed wallet from this device.</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_2">Make sure you have backed up Secret Key or you will not be able to access your funds in the future.</string>
+    <string name="SettingsSecurity_UnlinkFromThisDevice">このデバイスからアンリンク</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_1">この操作は、現在インストールされている財布をこのデバイスから削除されます。</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_2">秘密キーを確実にバックアップしないと、将来的にあなたの資金にアクセスすることができなくなります。</string>
     <!--Setting_Currency-->
-    <string name="SettingsCurrency_Title">Base Currency</string>
+    <string name="SettingsCurrency_Title">基本通貨</string>
     <!--Setting_Language-->
     <string name="SettingsLanguage_Title">言語</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">について</string>
-    <string name="SettingsAbout_TermsPrivacySubtitle">Terms &amp; Privacy:</string>
+    <string name="SettingsAbout_TermsPrivacySubtitle">利用規約とプライバシーポリシー</string>
     <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
 \n\nIt works everywhere as long as there is internet. No entity can block this app from working or to block someone from using it.
 \n\nYour funds are securely stored on the phone itself, not anywhere else.
