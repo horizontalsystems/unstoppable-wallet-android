@@ -46,6 +46,10 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
         bitcoinKit.start()
     }
 
+    override fun stop() {
+        bitcoinKit.stop()
+    }
+
     override fun refresh() {
         bitcoinKit.refresh()
     }

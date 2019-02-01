@@ -22,7 +22,7 @@ class RestoreWalletActivity : BaseActivity(), BottomConfirmAlert.Listener {
 
     private lateinit var viewModel: RestoreViewModel
 
-    private val words = MutableList(12, { "" })
+    private val words = MutableList(12) { "" }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,12 +67,12 @@ class RestoreWalletActivity : BaseActivity(), BottomConfirmAlert.Listener {
             BottomConfirmAlert.show(this, confirmationList, this)
         })
 
+        recyclerInputs.layoutManager = GridLayoutManager(this, 2)
         recyclerInputs.adapter = WordsInputAdapter(object : EditTextViewHolder.WordsChangedListener {
             override fun set(position: Int, value: String) {
                 words[position] = value
             }
         })
-        recyclerInputs.layoutManager = GridLayoutManager(this, 2)
     }
 
     override fun onSupportNavigateUp(): Boolean {
