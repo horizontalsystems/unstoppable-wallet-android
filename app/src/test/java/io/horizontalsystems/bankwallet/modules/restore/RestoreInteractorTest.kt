@@ -51,7 +51,7 @@ class RestoreInteractorTest {
         actionRunnable.run()
         successRunnable.run()
 
-        verify(authManager).login(words)
+        verify(authManager).login(words, false)
     }
 
     @Test

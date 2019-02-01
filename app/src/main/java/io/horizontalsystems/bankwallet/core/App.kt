@@ -48,6 +48,7 @@ class App : Application() {
         lateinit var transactionInfoFactory: FullTransactionInfoFactory
         lateinit var transactionDataProviderManager: TransactionDataProviderManager
         lateinit var appCloseManager: AppCloseManager
+        lateinit var appNumberFormatter: IAppNumberFormatter
 
         val testMode = true
 
@@ -100,6 +101,7 @@ class App : Application() {
         lockManager = LockManager(secureStorage, authManager)
         languageManager = LanguageManager(localStorage, appConfigProvider, fallbackLanguage)
         currencyManager = CurrencyManager(localStorage, appConfigProvider)
+        appNumberFormatter = AppNumberFormatter(languageManager)
 
         networkAvailabilityManager = NetworkAvailabilityManager()
 

@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
+import android.text.SpannableString
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.Currency
@@ -225,6 +226,13 @@ interface ICoinManager {
     val allCoinsObservable: Flowable<List<Coin>>
     fun enableDefaultCoins()
     fun clear()
+}
+
+interface IAppNumberFormatter {
+    fun format(coinValue: CoinValue, explicitSign: Boolean = false, realNumber: Boolean = false): String?
+    fun format(currencyValue: CurrencyValue, approximate: Boolean = false, showNegativeSign: Boolean = true, realNumber: Boolean = false): String?
+    fun formatForTransactions(currencyValue: CurrencyValue, isIncoming: Boolean): SpannableString
+    fun format(value: Double): String
 }
 
 sealed class Error : Exception() {

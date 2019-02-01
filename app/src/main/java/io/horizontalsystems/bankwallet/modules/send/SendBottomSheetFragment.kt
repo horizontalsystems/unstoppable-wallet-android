@@ -25,12 +25,12 @@ import android.view.inputmethod.InputConnection
 import android.widget.*
 import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.ui.extensions.NumPadItem
 import io.horizontalsystems.bankwallet.ui.extensions.NumPadItemType
 import io.horizontalsystems.bankwallet.ui.extensions.NumPadItemsAdapter
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
-import io.horizontalsystems.bankwallet.viewHelpers.ValueFormatter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
@@ -162,16 +162,16 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
                 when (hint) {
                     is SendModule.HintInfo.Amount -> {
                         hintInfoTxt?.text = when (hint.amountInfo) {
-                            is SendModule.AmountInfo.CoinValueInfo -> ValueFormatter.format(hint.amountInfo.coinValue)
-                            is SendModule.AmountInfo.CurrencyValueInfo -> ValueFormatter.format(hint.amountInfo.currencyValue)
+                            is SendModule.AmountInfo.CoinValueInfo -> App.appNumberFormatter.format(hint.amountInfo.coinValue)
+                            is SendModule.AmountInfo.CurrencyValueInfo -> App.appNumberFormatter.format(hint.amountInfo.currencyValue)
                         }
                     }
                     is SendModule.HintInfo.ErrorInfo -> {
                         when (hint.error) {
                             is SendModule.AmountError.InsufficientBalance -> {
                                 val balanceAmount = when (hint.error.amountInfo) {
-                                    is SendModule.AmountInfo.CoinValueInfo -> ValueFormatter.format(hint.error.amountInfo.coinValue)
-                                    is SendModule.AmountInfo.CurrencyValueInfo -> ValueFormatter.format(hint.error.amountInfo.currencyValue)
+                                    is SendModule.AmountInfo.CoinValueInfo -> App.appNumberFormatter.format(hint.error.amountInfo.coinValue)
+                                    is SendModule.AmountInfo.CurrencyValueInfo -> App.appNumberFormatter.format(hint.error.amountInfo.currencyValue)
                                 }
                                 hintInfoTxt?.text = hintInfoTxt?.context?.getString(R.string.Send_Error_BalanceAmount, balanceAmount)
                             }
@@ -230,8 +230,8 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
         viewModel.primaryFeeAmountInfoLiveData.observe(this, Observer { amountInfo ->
             amountInfo?.let {
                 feePrimaryTxt?.text = when (it) {
-                    is SendModule.AmountInfo.CurrencyValueInfo -> ValueFormatter.format(it.currencyValue)
-                    is SendModule.AmountInfo.CoinValueInfo -> ValueFormatter.format(it.coinValue)
+                    is SendModule.AmountInfo.CurrencyValueInfo -> App.appNumberFormatter.format(it.currencyValue)
+                    is SendModule.AmountInfo.CoinValueInfo -> App.appNumberFormatter.format(it.coinValue)
                 }
             }
         })
@@ -239,8 +239,8 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
         viewModel.secondaryFeeAmountInfoLiveData.observe(this, Observer { amountInfo ->
             amountInfo?.let {
                 feeSecondaryTxt?.text = when (it) {
-                    is SendModule.AmountInfo.CurrencyValueInfo -> ValueFormatter.format(it.currencyValue)
-                    is SendModule.AmountInfo.CoinValueInfo -> ValueFormatter.format(it.coinValue)
+                    is SendModule.AmountInfo.CurrencyValueInfo -> App.appNumberFormatter.format(it.currencyValue)
+                    is SendModule.AmountInfo.CoinValueInfo -> App.appNumberFormatter.format(it.coinValue)
                 }
             }
         })

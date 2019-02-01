@@ -12,13 +12,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoViewModel
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
-import io.horizontalsystems.bankwallet.viewHelpers.ValueFormatter
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
 import kotlinx.android.synthetic.main.transaction_info_bottom_sheet.*
@@ -149,12 +149,12 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
                 val txStatus = txRec.status
 
                 fiatValue.apply {
-                    text = txRec.currencyValue?.let { ValueFormatter.format(it, showNegativeSign = true, realNumber = true) }
+                    text = txRec.currencyValue?.let { App.appNumberFormatter.format(it, showNegativeSign = true, realNumber = true) }
                     setTextColor(resources.getColor(if (txRec.incoming) R.color.green_crypto else R.color.yellow_crypto, null))
                 }
 
                 coinValue.apply {
-                    text = ValueFormatter.format(txRec.coinValue, true, true)
+                    text = App.appNumberFormatter.format(txRec.coinValue, true, true)
                 }
 
                 itemTime.apply {
@@ -252,8 +252,8 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
     }
 
     fun bind(transactionRecord: TransactionViewItem) {
-        txValueInFiat.text = transactionRecord.currencyValue?.let { ValueFormatter.formatForTransactions(it, transactionRecord.incoming) }
-        txValueInCoin.text = ValueFormatter.format(transactionRecord.coinValue, true)
+        txValueInFiat.text = transactionRecord.currencyValue?.let { App.appNumberFormatter.formatForTransactions(it, transactionRecord.incoming) }
+        txValueInCoin.text = App.appNumberFormatter.format(transactionRecord.coinValue, true)
         txDate.text = transactionRecord.date?.let { DateHelper.getShortDateForTransaction(it) }
         val time = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }
         txStatusWithTimeView.bind(transactionRecord.status, time)
