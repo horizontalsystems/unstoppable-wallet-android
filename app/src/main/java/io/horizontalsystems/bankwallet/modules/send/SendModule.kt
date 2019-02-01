@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
-import io.horizontalsystems.bankwallet.viewHelpers.ValueFormatter
 import java.math.BigDecimal
 
 object SendModule {
@@ -111,10 +110,10 @@ object SendModule {
 
         fun getFormatted(): String? = when (this) {
             is SendModule.AmountInfo.CoinValueInfo -> {
-                ValueFormatter.format(this.coinValue)
+                App.numberFormatter.format(this.coinValue)
             }
             is SendModule.AmountInfo.CurrencyValueInfo -> {
-                ValueFormatter.format(this.currencyValue)
+                App.numberFormatter.format(this.currencyValue)
             }
         }
     }

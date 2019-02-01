@@ -1,18 +1,31 @@
-package io.horizontalsystems.bankwallet.viewHelpers
+package io.horizontalsystems.bankwallet.core.managers
 
+import com.nhaarman.mockito_kotlin.whenever
+import io.horizontalsystems.bankwallet.core.ILanguageManager
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
+import org.mockito.Mockito
+import java.util.*
 
-class ValueFormatterTest {
+class NumberFormatterTest {
 
-    private val formatter = ValueFormatter
+    private val languageManager = Mockito.mock(ILanguageManager::class.java)
+
+    private lateinit var formatter: NumberFormatter
     private val usdCurrency = Currency(code = "USD", symbol = "$")
     private val btcCoinCode: CoinCode = "BTC"
+    private val defaultLocale = Locale("en")
 
+    @Before
+    fun setup() {
+        whenever(languageManager.currentLanguage).thenReturn(defaultLocale)
+        formatter = NumberFormatter(languageManager)
+    }
 
     @Test
     fun format_Currency() {
@@ -34,6 +47,14 @@ class ValueFormatterTest {
         assertCoinFormatter(0.123456789, "0.1235 BTC")
     }
 
+    @Test
+    fun format_Currency_by_russian_locale() {
+        whenever(languageManager.currentLanguage).thenReturn(Locale("ru"))
+        formatter = NumberFormatter(languageManager)
+        assertCurrencyFormatter(0.0003903, "$ 0,01")
+        assertCurrencyFormatter(12.03903, "$ 12,04")
+    }
+
 
     private fun assertCurrencyFormatter(input: Double, expected: String) {
         val value = CurrencyValue(usdCurrency, input.toBigDecimal())
@@ -46,5 +67,4 @@ class ValueFormatterTest {
         val formatted = formatter.format(value)
         Assert.assertEquals(expected, formatted)
     }
-
 }

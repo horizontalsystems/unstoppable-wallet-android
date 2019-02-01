@@ -2,13 +2,13 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
 
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.FullTransactionIcon
 import io.horizontalsystems.bankwallet.entities.FullTransactionItem
 import io.horizontalsystems.bankwallet.entities.FullTransactionRecord
 import io.horizontalsystems.bankwallet.entities.FullTransactionSection
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
-import io.horizontalsystems.bankwallet.viewHelpers.ValueFormatter
 
 class FullTransactionBitcoinAdapter(val provider: FullTransactionInfoModule.BitcoinForksProvider, val coinCode: CoinCode)
     : FullTransactionInfoModule.Adapter {
@@ -29,23 +29,23 @@ class FullTransactionBitcoinAdapter(val provider: FullTransactionInfoModule.Bitc
 
         sections.add(FullTransactionSection(items = blockItems))
 
-        val transactionItems = mutableListOf(FullTransactionItem(R.string.FullInfo_Fee, value = "${ValueFormatter.format(data.fee)} $coinCode"))
+        val transactionItems = mutableListOf(FullTransactionItem(R.string.FullInfo_Fee, value = "${App.numberFormatter.format(data.fee)} $coinCode"))
 
         data.size?.let {
             transactionItems.add(FullTransactionItem(R.string.FullInfo_Size, value = "$it (bytes)", dimmed = true))
         }
 
         data.feePerByte?.let { feePerByte ->
-            transactionItems.add(FullTransactionItem(R.string.FullInfo_Rate, value = "${ValueFormatter.format(feePerByte)} (satoshi)", dimmed = true))
+            transactionItems.add(FullTransactionItem(R.string.FullInfo_Rate, value = "${App.numberFormatter.format(feePerByte)} (satoshi)", dimmed = true))
         }
 
         sections.add(FullTransactionSection(items = transactionItems))
 
         if (data.inputs.isNotEmpty()) {
-            val totalInput = ValueFormatter.format(data.inputs.sumByDouble { it.value })
+            val totalInput = App.numberFormatter.format(data.inputs.sumByDouble { it.value })
             val inputs = mutableListOf(FullTransactionItem(R.string.FullInfo_SubtitleInputs, value = "$totalInput $coinCode"))
             data.inputs.map {
-                val amount = ValueFormatter.format(it.value)
+                val amount = App.numberFormatter.format(it.value)
                 inputs.add(FullTransactionItem(title = "$amount $coinCode", value = it.address, clickable = true, icon = FullTransactionIcon.PERSON))
             }
 
@@ -53,11 +53,11 @@ class FullTransactionBitcoinAdapter(val provider: FullTransactionInfoModule.Bitc
         }
 
         if (data.outputs.isNotEmpty()) {
-            val totalOutput = ValueFormatter.format(data.outputs.sumByDouble { it.value })
+            val totalOutput = App.numberFormatter.format(data.outputs.sumByDouble { it.value })
             val outputs = mutableListOf(FullTransactionItem(R.string.FullInfo_SubtitleOutputs, value = "$totalOutput $coinCode"))
 
             data.outputs.map {
-                val amount = ValueFormatter.format(it.value)
+                val amount = App.numberFormatter.format(it.value)
                 outputs.add(FullTransactionItem(title = "$amount $coinCode", value = it.address, clickable = true, icon = FullTransactionIcon.PERSON))
             }
 
@@ -93,7 +93,7 @@ class FullTransactionEthereumAdapter(val provider: FullTransactionInfoModule.Eth
 
         mutableListOf<FullTransactionItem>().let { section ->
             data.fee?.let {
-                section.add(FullTransactionItem(R.string.FullInfo_Fee, value = "${ValueFormatter.format(it.toDouble())} $coinCode"))
+                section.add(FullTransactionItem(R.string.FullInfo_Fee, value = "${App.numberFormatter.format(it.toDouble())} $coinCode"))
             }
             if (data.size != null) {
                 section.add(FullTransactionItem(R.string.FullInfo_Size, value = "${data.size} (bytes)", dimmed = true))

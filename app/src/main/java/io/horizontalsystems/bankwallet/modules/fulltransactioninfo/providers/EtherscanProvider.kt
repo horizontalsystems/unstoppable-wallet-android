@@ -3,9 +3,9 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.EthereumResponse
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
-import io.horizontalsystems.bankwallet.viewHelpers.ValueFormatter
 import java.math.BigInteger
 import java.util.*
 
@@ -45,7 +45,7 @@ class EtherscanResponse(
         get() = Integer.parseInt(blockNumber.substring(2), 16).toString()
 
     override val value: String
-        get() = ValueFormatter.format(BigInteger(amount.substring(2), 16).toDouble() / ethRate)
+        get() = App.numberFormatter.format(BigInteger(amount.substring(2), 16).toDouble() / ethRate)
 
     override val nonce: String
         get() = Integer.parseInt(gNonce.substring(2), 16).toString()

@@ -3,11 +3,11 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.BitcoinResponse
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.EthereumResponse
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionResponse
-import io.horizontalsystems.bankwallet.viewHelpers.ValueFormatter
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -117,7 +117,7 @@ class BlockchairETHResponse(@SerializedName("data") val data: Map<String, Data>)
         override val fee get() = (transaction.fee.toDouble() / ethRate).toString()
         override val from get() = transaction.sender
         override val to get() = transaction.recipient
-        override val value get() = ValueFormatter.format(transaction.value.toBigInteger().toDouble() / ethRate)
+        override val value get() = App.numberFormatter.format(transaction.value.toBigInteger().toDouble() / ethRate)
         override val nonce get() = transaction.nonce.toInt().toString()
         override val gasLimit get() = transaction.gasLimit.toString()
         override val gasPrice get() = (transaction.gasPrice / gweiRate).toString()
