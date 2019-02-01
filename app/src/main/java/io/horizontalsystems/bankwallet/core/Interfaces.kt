@@ -107,7 +107,6 @@ interface IWordsManager {
 
 interface ILanguageManager {
     var currentLanguage: Locale
-    var preferredLanguage: Locale?
     val availableLanguages: List<Locale>
 }
 
