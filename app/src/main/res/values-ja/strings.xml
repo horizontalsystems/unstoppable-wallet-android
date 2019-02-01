@@ -24,7 +24,7 @@
     <string name="Restore_RestoreFailed">ウォレットを作成できませんでした</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">秘密鍵</string>
-    <string name="Backup_Intro_Subtitle">Your secret key is the only way to restore your wallet and funds if your phone is ever lost, stolen, broken, or upgraded.\n\n It consists of 12 words. Store it safely offline.</string>
+    <string name="Backup_Intro_Subtitle">あなたの電話は今まで紛失、盗難、破損、またはアップグレードする場合、あなたの秘密鍵は、あなたの財布と資金を復元する唯一の方法です。\n\n それは 12 の単語で構成されています。オフラインに安全に保管してください。</string>
     <string name="Backup_Intro_Later">後で</string>
     <string name="Backup_Intro_BackupNow">バックアップ</string>
     <string name="Backup_Words_Title">秘密鍵</string>
