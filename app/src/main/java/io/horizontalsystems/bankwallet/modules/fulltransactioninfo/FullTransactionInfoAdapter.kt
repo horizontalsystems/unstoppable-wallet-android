@@ -17,11 +17,8 @@ class FullTransactionBitcoinAdapter(val provider: FullTransactionInfoModule.Bitc
         val data = provider.convert(json)
         val sections = mutableListOf<FullTransactionSection>()
 
-        sections.add(FullTransactionSection(items = listOf(
-                FullTransactionItem(R.string.FullInfo_Id, value = data.hash, clickable = true, icon = FullTransactionIcon.HASH)
-        )))
-
         val blockItems = mutableListOf(
+                FullTransactionItem(R.string.FullInfo_Id, value = data.hash, clickable = true, icon = FullTransactionIcon.HASH),
                 FullTransactionItem(R.string.FullInfo_Time, value = DateHelper.getFullDateWithShortMonth(data.date), icon = FullTransactionIcon.TIME),
                 FullTransactionItem(R.string.FullInfo_Block, value = data.height.toString(), icon = FullTransactionIcon.BLOCK)
         )
@@ -79,43 +76,43 @@ class FullTransactionEthereumAdapter(val provider: FullTransactionInfoModule.Eth
         val data = provider.convert(json)
         val sections = mutableListOf<FullTransactionSection>()
 
-        sections.add(FullTransactionSection(items = listOf(
-                FullTransactionItem(R.string.FullInfo_Id, value = data.hash, clickable = true, icon = FullTransactionIcon.HASH)
-        )))
+        mutableListOf<FullTransactionItem>().let { section ->
+            section.add(FullTransactionItem(R.string.FullInfo_Id, value = data.hash, clickable = true, icon = FullTransactionIcon.HASH))
+            data.date?.let {
+                section.add(FullTransactionItem(R.string.FullInfo_Time, value = DateHelper.getFullDateWithShortMonth(it), icon = FullTransactionIcon.TIME))
+            }
+            section.add(FullTransactionItem(R.string.FullInfo_Block, value = data.height, icon = FullTransactionIcon.BLOCK))
+            data.confirmations?.let {
+                section.add(FullTransactionItem(R.string.FullInfo_Confirmations, value = it.toString(), icon = FullTransactionIcon.CHECK))
+            }
+            section.add(FullTransactionItem(R.string.FullInfoEth_Value, value = "${data.value} $coinCode"))
+            section.add(FullTransactionItem(R.string.FullInfoEth_Nonce, value = data.nonce, dimmed = true))
 
-        val blockItems = mutableListOf<FullTransactionItem>()
-        data.date?.let { FullTransactionItem(R.string.FullInfo_Time, value = DateHelper.getFullDateWithShortMonth(it)) }
-        blockItems.add(FullTransactionItem(R.string.FullInfo_Block, value = data.height))
-        data.confirmations?.let { FullTransactionItem(R.string.FullInfo_Confirmations, value = it.toString()) }
-
-        sections.add(FullTransactionSection(items = blockItems))
-
-        blockItems.add(FullTransactionItem(R.string.FullInfo_GasLimit, value = "${data.gasLimit} GWei", dimmed = true))
-        blockItems.add(FullTransactionItem(R.string.FullInfo_GasPrice, value = "${data.gasPrice} GWei", dimmed = true))
-
-        val transactionItems = mutableListOf<FullTransactionItem>()
-        data.fee?.let {
-            transactionItems.add(FullTransactionItem(R.string.FullInfo_Fee, value = "${ValueFormatter.format(it.toDouble())} $coinCode"))
+            sections.add(FullTransactionSection(section))
         }
 
-        if (data.size != null) {
-            transactionItems.add(FullTransactionItem(R.string.FullInfo_Size, value = "${data.size} (bytes)", dimmed = true))
+        mutableListOf<FullTransactionItem>().let { section ->
+            data.fee?.let {
+                section.add(FullTransactionItem(R.string.FullInfo_Fee, value = "${ValueFormatter.format(it.toDouble())} $coinCode"))
+            }
+            if (data.size != null) {
+                section.add(FullTransactionItem(R.string.FullInfo_Size, value = "${data.size} (bytes)", dimmed = true))
+            }
+            section.add(FullTransactionItem(R.string.FullInfo_GasLimit, value = "${data.gasLimit} GWei", dimmed = true))
+            section.add(FullTransactionItem(R.string.FullInfo_GasPrice, value = "${data.gasPrice} GWei", dimmed = true))
+            data.gasUsed?.let {
+                section.add(FullTransactionItem(R.string.FullInfo_GasUsed, value = "${data.gasUsed} GWei", dimmed = true))
+            }
+
+            sections.add(FullTransactionSection(section))
         }
 
-        data.gasUsed?.let {
-            transactionItems.add(FullTransactionItem(R.string.FullInfo_GasUsed, value = "${data.gasUsed} GWei", dimmed = true))
+        mutableListOf<FullTransactionItem>().let { section ->
+            section.add(FullTransactionItem(R.string.FullInfo_From, value = data.from, clickable = true, icon = FullTransactionIcon.PERSON))
+            section.add(FullTransactionItem(R.string.FullInfo_To, value = data.to, clickable = true, icon = FullTransactionIcon.PERSON))
+
+            sections.add(FullTransactionSection(section))
         }
-
-        transactionItems.add(FullTransactionItem(R.string.FullInfoEth_Nonce, value = data.nonce, dimmed = true))
-
-        if (transactionItems.size > 0)
-            sections.add(FullTransactionSection(items = transactionItems))
-
-        sections.add(FullTransactionSection(items = listOf(
-                FullTransactionItem(R.string.FullInfoEth_Value, value = "${data.value} $coinCode"),
-                FullTransactionItem(R.string.FullInfo_From, value = data.from, clickable = true, icon = FullTransactionIcon.PERSON),
-                FullTransactionItem(R.string.FullInfo_To, value = data.to, clickable = true, icon = FullTransactionIcon.PERSON)
-        )))
 
         return FullTransactionRecord(provider.name, sections)
     }
