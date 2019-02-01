@@ -24,12 +24,12 @@
     <string name="Restore_RestoreFailed">Error al restaurar la cartera</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Clave secreta</string>
-    <string name="Backup_Intro_Subtitle">Your secret key is the only way to restore your wallet and funds if your phone is ever lost, stolen, broken, or upgraded.\n\n It consists of 12 words. Store it safely offline.</string>
+    <string name="Backup_Intro_Subtitle">Su clave secreta es la única manera de recuperar su cartera y otros fondos si su teléfono alguna vez se pierde, se rompe, es sustraído o se actualiza a otra versión.\n\n Consiste de 12 palabras. Almacen esta desconectado sin peligro.</string>
     <string name="Backup_Intro_Later">Posterior</string>
     <string name="Backup_Intro_BackupNow">Copia de seguridad</string>
     <string name="Backup_Words_Title">Clave secreta</string>
     <string name="Backup_Confirmation_Understand">Entiendo que mis datos y mi monedero se guardan de manera segura en este dispositivo y no en ningún otro servidor</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I have just written down and saved in a secure place.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">Entiendo que si esta aplicación se elimina o deja de funcionar por alguna razón, mi monedero sólo puede ser recuperado utilizando mi clave secreta, que esta escrita abajo y guardada en un lugar seguro.</string>
     <string name="Backup_Confirmation_LockAppWarn">Cambiar el PIN de desbloqueo de su teléfono en el sistema operativo Android reiniciará la cartera. Usted necesitará su frase de seguridad para restaurar su cartera después de eso.</string>
     <string name="Backup_Confirmation_Title">Insertar palabras de su clave secreta</string>
     <string name="Backup_Confirmation_Description">Insertar palabras de su clave secreta.</string>
@@ -83,7 +83,7 @@
     <string name="TransactionInfo_From">Desde </string>
     <string name="TransactionInfo_Time">Hora</string>
     <string name="TransactionInfo_ButtonMore">Más</string>
-    <string name="TransactionInfo_Status_Pending">Pending</string>
+    <string name="TransactionInfo_Status_Pending">Pendiente</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Transacción</string>
     <string name="FullInfo_Time">Hora</string>
@@ -93,19 +93,19 @@
     <string name="FullInfo_Outputs">Producciones</string>
     <string name="FullInfo_Size">Tamaño</string>
     <string name="FullInfo_Fee">Comisión</string>
-    <string name="FullInfo_Rate">Rate</string>
-    <string name="FullInfo_Source">Source</string>
+    <string name="FullInfo_Rate">Puntuación</string>
+    <string name="FullInfo_Source">Origen</string>
     <string name="FullInfo_To">Para</string>
     <string name="FullInfo_From">Desde </string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
-    <string name="FullInfo_Source_Title">Source</string>
+    <string name="FullInfo_Source_Title">Origen</string>
     <string name="FullInfo_Source_Online">En línea</string>
-    <string name="FullInfo_Source_Offline">Offline</string>
-    <string name="FullInfo_Error_Subtitle">Offline</string>
-    <string name="FullInfo_Error_Retry">Retry</string>
-    <string name="FullInfo_Error_ChangeSource">Change Source</string>
+    <string name="FullInfo_Source_Offline">Desconectado</string>
+    <string name="FullInfo_Error_Subtitle">Desconectado</string>
+    <string name="FullInfo_Error_Retry">Reintentar</string>
+    <string name="FullInfo_Error_ChangeSource">Cambiar Origen</string>
     <!--no used-->
     <string name="FullInfo_Id">Identificación</string>
     <string name="FullInfo_TotalInput">Inversión total</string>
@@ -118,7 +118,7 @@
     <string name="FullInfo_SubtitleInputs">Inversiones</string>
     <string name="FullInfo_SubtitleOutputs">Rendimientos</string>
     <string name="FullInfoEth_Nonce">Nonce</string>
-    <string name="FullInfoEth_Value">Value</string>
+    <string name="FullInfoEth_Value">Valor</string>
     <!--Settings-->
     <string name="Settings_Title">Configuraciones</string>
     <string name="Settings_SecurityCenter">Centro de Seguridad</string>
@@ -137,7 +137,7 @@
     <string name="SettingsSecurity_BackupWallet">Copia de Seguridad de Cartera</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">Desconectarse desde este dispositivo</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">Esta acción eliminará de este dispositivo la carpeta instalada actualmente </string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_2">Make sure you have backed up Secret Key or you will not be able to access your funds in the future.</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_2">Asegúrese de que usted tiene su clave secreta o no podrá acceder a los fondos en el futuro.</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Divisa principal</string>
     <!--Setting_Language-->
@@ -163,7 +163,7 @@ Algunos datos genéricos de carácter público de esta app se guardan en centros
     <string name="Alert_KeysInvalidatedDescription">Los datos encriptados de su monedero han sido recientemente  invalidados porque se cambió la pantalla de bloqueo de Android</string>
     <string name="Alert_TitleWarning">Aviso</string>
     <string name="Alert_NoDeviceLockDescription">Configurar bloqueo de pantalla de este dispositivo para continuar. Ir a \"Ajustes\" &amp;gt; &amp;gt;  \"Seguridad\" \"Bloqueo de pantalla\" y establezca la configuración de la pantalla de bloqueo.</string>
-    <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
+    <string name="Alert_CustomKeyboardIsUsed">Usted está utilizando un teclado de terceros. Tiene que usar el teclado por defecto.</string>
     <!--Unlock-->
     <string name="Unlock_Page_EnterYourPin">Código</string>
     <!--Errors-->
@@ -174,7 +174,7 @@ Algunos datos genéricos de carácter público de esta app se guardan en centros
     <string name="Hud_Text_Error">Error</string>
     <string name="Hud_Text_NoInternet">Sin conexión a Internet</string>
     <string name="Hud_Text_Copied">Copiado</string>
-    <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
+    <string name="Hud_Text_InvalidPinError">Codigo incorrecto</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">Inicio de sesión de huella digital</string>
     <string name="Fingerprint_Hint">Sensor táctil</string>
@@ -188,7 +188,7 @@ Algunos datos genéricos de carácter público de esta app se guardan en centros
     <string name="SetPin_Info">Su código servirá para abrir su monedero y enviar dinero</string>
     <string name="SetPin_ErrorShortPin">Por favor, introduzca todos los dígitos.</string>
     <string name="SetPin_ConfirmInfo">Confirmar</string>
-    <string name="SetPin_Success">Lock passcode was set successfully!</string>
+    <string name="SetPin_Success">Tu contraseña fue establecida con éxito!</string>
     <string name="SetPin_ErrorPinsDontMatch">El código no coincide. Inténtelo de nuevo</string>
     <string name="SetPin_ErrorFailedToSavePin">Se ha producido un error al intentar guardar su código. Inténtelo de nuevo.</string>
     <!--Edit Pin-->

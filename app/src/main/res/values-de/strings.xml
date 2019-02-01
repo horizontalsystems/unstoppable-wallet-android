@@ -24,14 +24,14 @@
     <string name="Restore_RestoreFailed">Fehler beim Wiederherstellen des Wallet</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Offlineschlüssel</string>
-    <string name="Backup_Intro_Subtitle">Ihr Offlineschlüssel ist die einzige Möglichkeit, deine Geldbörse wiederherzustellen, falls du dein Smartphone verlierst, austauscht, es gestohlen wird oder kaputtgeht. \n\nEs besteht aus 12 Wörtern. Speichen Sie es sicher offline.</string>
+    <string name="Backup_Intro_Subtitle">Dein Offlineschlüssel ist die einzige Möglichkeit, dein Wallet wiederherzustellen, falls du dein Smartphone verlierst, austauscht, es gestohlen wird oder kaputtgeht. \n\nEs besteht aus 12 Wörtern. Speich es sicher offline.</string>
     <string name="Backup_Intro_Later">Später</string>
-    <string name="Backup_Intro_BackupNow">Sicherung</string>
+    <string name="Backup_Intro_BackupNow">Backup</string>
     <string name="Backup_Words_Title">Offlineschlüssel</string>
-    <string name="Backup_Confirmation_Understand">Ich  stimme zu, dass mein Wallet und meinen Token nur auf diesem Gerät verfügbar sind.</string>
+    <string name="Backup_Confirmation_Understand">Ich stimme zu, dass mein Wallet und meinen Token nur auf diesem Gerät verfügbar sind.</string>
     <string name="Backup_Confirmation_DeleteAppWarn">Ich stimme zu,  dass bei einer Verschiebung  oder Entfernung dieser App, der Zugang zu meinem Walletkonto nur bei Verwendung den Offlineschlüsseln erfolgt , der sicher gespeichert werden muss.</string>
     <string name="Backup_Confirmation_LockAppWarn">PIN zum Entsperren des Telefons ändern in Ihrem Android OS würde Einstellungen des Wallet. Sie benötigen Ihr backup Satz Ihrer Wallet danach wiederherstellen.</string>
-    <string name="Backup_Confirmation_Title">Geben Sie bitte die folgenden Wörter deines Offlineschlüssels ein</string>
+    <string name="Backup_Confirmation_Title">Gib bitte die folgenden Wörter deines Offlineschlüssels ein</string>
     <string name="Backup_Confirmation_Description">Gib die folgenden Wörter deines Offlineschlüssels ein.</string>
     <string name="Backup_Confirmation_FailureAlertText">Die Wörter stimmen nicht überein</string>
     <string name="Backup_Button_Confirm">Bestätigen</string>
@@ -60,11 +60,11 @@
     <string name="Send_Error_BalanceAmount">Guthaben %s</string>
     <string name="Send_DialogTitle">Transaktion bestätigen</string>
     <string name="Send_DialogFee">Gebühr:</string>
-    <string name="Send_DialogTotal">Gesamt:</string>
+    <string name="Send_DialogTotal">Insgesamt:</string>
     <!--Deposit-->
-    <string name="Deposit_Title">Anfordern %s</string>
+    <string name="Deposit_Title">%s Anfordern</string>
     <string name="Deposit_Share">Teilen</string>
-    <string name="Deposit_Your_Address">Ihre Adresse</string>
+    <string name="Deposit_Your_Address">Deine Adresse</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">gerade eben</string>
     <string name="Timestamp_MinAgo">Vor %d Min</string>
@@ -130,7 +130,7 @@
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Fingerabdruck Nicht Aktivieren</string>
-    <string name="Settings_Error_NoFingerprintAddedYet">Fingerabdruck auf diesem Gerät aktiviert nicht. Gehen Sie zu Einstellungen </string>
+    <string name="Settings_Error_NoFingerprintAddedYet">Fingerabdruck auf diesem Gerät aktiviert nicht. Geh zu Einstellungen </string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Fingerabdruck</string>
     <string name="SettingsSecurity_EditPin">Code bearbeiten</string>
@@ -158,7 +158,7 @@ Hack dein Telefon nicht, installier keine Anwendungen von inoffiziellen Quellen 
     <string name="Alert_KeysInvalidatedDescription">Deine verschlüsselten Daten wurden kürzlich ungültig gemacht, weil dein Android-Sperrbildschirm geändert wurde</string>
     <string name="Alert_TitleWarning">Warnung</string>
     <string name="Alert_NoDeviceLockDescription">Richten Sie ein Sperrbildschirm auf diesem Gerät weiter. Gehen Sie zu \"Einstellungen\" </string>
-    <string name="Alert_CustomKeyboardIsUsed">Sie verwenden eine Fremdanbieter-Tastatur. Sie müssen Standard-Tastatur verwenden.</string>
+    <string name="Alert_CustomKeyboardIsUsed">Du verwendest eine Fremdanbieter-Tastatur. Du musst Standard-Tastatur verwenden.</string>
     <!--Unlock-->
     <string name="Unlock_Page_EnterYourPin">Code</string>
     <!--Errors-->
@@ -180,7 +180,7 @@ Hack dein Telefon nicht, installier keine Anwendungen von inoffiziellen Quellen 
     <string name="UnlockPin_WalletDisabledUntil">Deaktiviert bis: %s </string>
     <!--Set Pin-->
     <string name="SetPin_Title">Code</string>
-    <string name="SetPin_Info">Ihr Code wird verwendet werden, um Ihren Wallet zu entsperren und Geld schicken</string>
+    <string name="SetPin_Info">Dein Code wird verwendet werden, um deinen Wallet zu entsperren und Geld schicken</string>
     <string name="SetPin_ErrorShortPin">Gib bitte nur Zahlen ein.</string>
     <string name="SetPin_ConfirmInfo">Bestätigen</string>
     <string name="SetPin_Success">Lock code wurde erfolgreich gesetzt!</string>
@@ -191,6 +191,6 @@ Hack dein Telefon nicht, installier keine Anwendungen von inoffiziellen Quellen 
     <string name="EditPin_UnlockInfo">Aktuelle Code </string>
     <string name="EditPin_NewPinInfo">Neue Code</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Geldbörsen</string>
+    <string name="ManageCoins_title">Wallets</string>
     <string name="ManageCoins_save">Speichern</string>
 </resources>

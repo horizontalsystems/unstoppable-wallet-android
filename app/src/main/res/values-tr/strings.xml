@@ -24,13 +24,13 @@
     <string name="Restore_RestoreFailed">Cüzdan geri yüklenemedi</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Gizli Anahtar</string>
-    <string name="Backup_Intro_Subtitle">Your secret key is the only way to restore your wallet and funds if your phone is ever lost, stolen, broken, or upgraded.\n\n It consists of 12 words. Store it safely offline.</string>
+    <string name="Backup_Intro_Subtitle">Gizli Anahtar, telefonunuzun kaybolması, bozulması, çalınması ve güncelleme gibi herhangi bir sebepten dolayı hesabınıza ulaşamadığınızda hesabınıza tekrar erişim sağlamanın tek yoludur.\n\n 12 kelimeden oluşur. Internet ve telefon haricinde güvenli bir yerde saklayınız (misal: Çelik kasa).</string>
     <string name="Backup_Intro_Later">Sonra</string>
     <string name="Backup_Intro_BackupNow">Yedekle</string>
     <string name="Backup_Words_Title">Gizli Anahtar</string>
     <string name="Backup_Confirmation_Understand">Cüzdanımın güvenle, sadece bu cihazda bulunduğunu ve herhangi bir sunucuda olmadığını biliyorum.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I have just written down and saved in a secure place.</string>
-    <string name="Backup_Confirmation_LockAppWarn">Changing the unlock PIN or deleting app data in your Android OS settings would reset the wallet. You will need your Secret Key to restore your wallet after that.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">Uygulamanın silinmesi, hatalı davranması, taşınması ve benzeri bir durumda hesabıma ulaşamadığımda, hesabımı kurtarmanın tek yolunun Gizli Anahtar olduğunu biliyorum. Bu sebepten dolayı Gizli Anahtarı güvenli bir yerde sakladım.</string>
+    <string name="Backup_Confirmation_LockAppWarn">Cihaz şifresini değiştirmek veya uygulamayı veya uygulama verisini silmek, cihazda bulunan hesapları sıfırlayacaktır. Bu durumda hesabınızı geri yükleyebilmeniz için Gizli Anahtara ihtiyacınız olacak.</string>
     <string name="Backup_Confirmation_Title">Gizli Anahtarınızda ki istenen kelimeleri giriniz</string>
     <string name="Backup_Confirmation_Description">Gizli Anahtarınızda ki kelimeleri girin.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Kelimeler eşleşmiyor</string>
@@ -51,7 +51,7 @@
     <string name="Send_Button_Paste">Yapıştır</string>
     <string name="Send_Button_More">Daha fazlası</string>
     <string name="Send_Button_Send">Gönder</string>
-    <string name="Send_Button_Max">Max</string>
+    <string name="Send_Button_Max">Azami</string>
     <string name="Send_ScanQrCode">QR Kod Okuma</string>
     <string name="Send_Success">Gönderildi!</string>
     <string name="Send_Error_InvalidAddress">Geçersiz adres. Lütfen kontrol edip tekrar deneyin!</string>
@@ -64,7 +64,7 @@
     <!--Deposit-->
     <string name="Deposit_Title">%s al</string>
     <string name="Deposit_Share">Paylaş</string>
-    <string name="Deposit_Your_Address">Your Address</string>
+    <string name="Deposit_Your_Address">Adresiniz</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">şimdi</string>
     <string name="Timestamp_MinAgo">%d dk önce</string>
@@ -93,32 +93,32 @@
     <string name="FullInfo_Outputs">Çıkışlar</string>
     <string name="FullInfo_Size">Boyut</string>
     <string name="FullInfo_Fee">Masraf</string>
-    <string name="FullInfo_Rate">Rate</string>
-    <string name="FullInfo_Source">Source</string>
+    <string name="FullInfo_Rate">Oran</string>
+    <string name="FullInfo_Source">Kaynak</string>
     <string name="FullInfo_To">Alan</string>
     <string name="FullInfo_From">Gönderen</string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
-    <string name="FullInfo_Source_Title">Source</string>
+    <string name="FullInfo_Source_Title">Kaynak</string>
     <string name="FullInfo_Source_Online">Çevrimiçi</string>
-    <string name="FullInfo_Source_Offline">Offline</string>
-    <string name="FullInfo_Error_Subtitle">Offline</string>
-    <string name="FullInfo_Error_Retry">Retry</string>
-    <string name="FullInfo_Error_ChangeSource">Change Source</string>
+    <string name="FullInfo_Source_Offline">Çevrimdışı</string>
+    <string name="FullInfo_Error_Subtitle">Çevrimdışı</string>
+    <string name="FullInfo_Error_Retry">Yeniden Dene</string>
+    <string name="FullInfo_Error_ChangeSource">Kaynağı Değiştir</string>
     <!--no used-->
     <string name="FullInfo_Id">Kimlik</string>
     <string name="FullInfo_TotalInput">Toplam Giriş</string>
     <string name="FullInfo_TotalOutput">Toplam Çıkış</string>
     <string name="FullInfo_FeePerByte">Bayt başına ücret</string>
     <string name="FullInfo_FeeRate">Ücret oranı</string>
-    <string name="FullInfo_NoAddress">No Available</string>
+    <string name="FullInfo_NoAddress">Uygun Değil</string>
     <string name="FullInfo_SatByte">sat/B</string>
     <string name="FullInfo_Bytes">Bytes</string>
     <string name="FullInfo_SubtitleInputs">Girişler</string>
     <string name="FullInfo_SubtitleOutputs">Çıkışlar</string>
     <string name="FullInfoEth_Nonce">Nonce</string>
-    <string name="FullInfoEth_Value">Value</string>
+    <string name="FullInfoEth_Value">Değer</string>
     <!--Settings-->
     <string name="Settings_Title">Ayarlar</string>
     <string name="Settings_SecurityCenter">Güvenlik Merkezi</string>
@@ -133,11 +133,11 @@
     <string name="Settings_Error_NoFingerprintAddedYet">Kayıtlı parmak izi bulunmadı. Parmak izi eklemek için, Ayarlar &gt; Güvenlik bölümüne gidin.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Parmak izi</string>
-    <string name="SettingsSecurity_EditPin">Edit Passcode</string>
+    <string name="SettingsSecurity_EditPin">Şifreyi Değiştir</string>
     <string name="SettingsSecurity_BackupWallet">Cüzdanı yedekle</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">Bu cihazla bağlantıyı kes</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">Bu işlemle, cüzdan cihazdan kaldırılacak.</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_2">Make sure you have backed up Secret Key or you will not be able to access your funds in the future.</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_2">Gizli Anahtarı yedeklediğinizden emin olun. Yoksa, gelecekte hesabınıza ulaşamayabilirsiniz.</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Para birimi</string>
     <!--Setting_Language-->
@@ -155,11 +155,11 @@
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android anahtar deposu hatası</string>
     <string name="Alert_KeysInvalidatedDescription">Android cihazınızın kilidi değiştirildiğinden cüzdan bilginizi tutan şifreli dosya artık geçersiz</string>
-    <string name="Alert_TitleWarning">Warning</string>
+    <string name="Alert_TitleWarning">Uyarı</string>
     <string name="Alert_NoDeviceLockDescription">Devam edebilmek için cihaz kilidi oluşturmalısınız. Ekran kilidi oluşturmak için, Ayarlarlarda ki Güvenlik &gt; Ekran Kilidi bölümene gidin.</string>
-    <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
+    <string name="Alert_CustomKeyboardIsUsed">Cihaz harici klavye kullanıyorsunuz. Asıl klavyeyi kullanmanız gerekiyor.</string>
     <!--Unlock-->
-    <string name="Unlock_Page_EnterYourPin">Passcode</string>
+    <string name="Unlock_Page_EnterYourPin">Şifre</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Desteklenmeyen para birimi</string>
     <!--Hud texts-->
@@ -168,28 +168,28 @@
     <string name="Hud_Text_Error">Hata</string>
     <string name="Hud_Text_NoInternet">Internet Bağlantısı Yok</string>
     <string name="Hud_Text_Copied">Kopyalandı</string>
-    <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
+    <string name="Hud_Text_InvalidPinError">Geçersiz Şifre</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">Parmak iziyle giriş</string>
     <string name="Fingerprint_Hint">Dokunmatik sensör</string>
-    <string name="Fingerprint_EnterPin">Passcode</string>
+    <string name="Fingerprint_EnterPin">Şifre</string>
     <string name="Fingerprint_NotRecognized">Parmak izi tanınmadı. Tekrar deneyin</string>
     <string name="Fingerprint_Success">Başarılı!</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Engellendi: %s</string>
     <!--Set Pin-->
-    <string name="SetPin_Title">Passcode</string>
-    <string name="SetPin_Info">Your passcode will be used to unlock wallet app</string>
+    <string name="SetPin_Title">Şifre</string>
+    <string name="SetPin_Info">Şifre, cüzdan kilidini açmak için kullanılacak</string>
     <string name="SetPin_ErrorShortPin">Lütfen bütün rakamları giriniz.</string>
-    <string name="SetPin_ConfirmInfo">Confirm</string>
-    <string name="SetPin_Success">Lock passcode was set successfully!</string>
-    <string name="SetPin_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
-    <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
+    <string name="SetPin_ConfirmInfo">Onayla</string>
+    <string name="SetPin_Success">Kilit şifresi başarıyla oluşturuldu!</string>
+    <string name="SetPin_ErrorPinsDontMatch">Şifre uyuşmadı. Tekrar deneyin.</string>
+    <string name="SetPin_ErrorFailedToSavePin">Şifre kaydedilirken hata oluştu. Tekrar deneyin.</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">Edit Passcode</string>
-    <string name="EditPin_UnlockInfo">Current Passcode</string>
-    <string name="EditPin_NewPinInfo">New Passcode</string>
+    <string name="EditPin_Title">Şifreyi Değiştir</string>
+    <string name="EditPin_UnlockInfo">Şimdi ki Şifre</string>
+    <string name="EditPin_NewPinInfo">Yeni Şifre</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Wallets</string>
-    <string name="ManageCoins_save">Save</string>
+    <string name="ManageCoins_title">Cüzdanlar</string>
+    <string name="ManageCoins_save">Kaydet</string>
 </resources>

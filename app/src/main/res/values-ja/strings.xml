@@ -93,19 +93,19 @@
     <string name="FullInfo_Outputs">出力</string>
     <string name="FullInfo_Size">サイズ</string>
     <string name="FullInfo_Fee">料金</string>
-    <string name="FullInfo_Rate">Rate</string>
-    <string name="FullInfo_Source">Source</string>
+    <string name="FullInfo_Rate">換算率</string>
+    <string name="FullInfo_Source">ソース</string>
     <string name="FullInfo_To">宛先</string>
     <string name="FullInfo_From">差出人</string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
-    <string name="FullInfo_Source_Title">Source</string>
+    <string name="FullInfo_Source_Title">ソース</string>
     <string name="FullInfo_Source_Online">オンライン</string>
     <string name="FullInfo_Source_Offline">オフライン</string>
     <string name="FullInfo_Error_Subtitle">オフライン</string>
     <string name="FullInfo_Error_Retry">リトライ</string>
-    <string name="FullInfo_Error_ChangeSource">Change Source</string>
+    <string name="FullInfo_Error_ChangeSource">ソースの変更</string>
     <!--no used-->
     <string name="FullInfo_Id">ID</string>
     <string name="FullInfo_TotalInput">合計入力数</string>
@@ -122,7 +122,7 @@
     <!--Settings-->
     <string name="Settings_Title">設定</string>
     <string name="Settings_SecurityCenter">セキュリティ センター</string>
-    <string name="Settings_BaseCurrency">Base Currency</string>
+    <string name="Settings_BaseCurrency">基本通貨</string>
     <string name="Settings_Language">言語</string>
     <string name="Settings_LightMode">ライトモード</string>
     <string name="Settings_About">について</string>
@@ -187,8 +187,8 @@
     <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
     <!--Edit Pin-->
     <string name="EditPin_Title">パスコードを編集</string>
-    <string name="EditPin_UnlockInfo">Current Passcode</string>
-    <string name="EditPin_NewPinInfo">New Passcode</string>
+    <string name="EditPin_UnlockInfo">現在のパスコード</string>
+    <string name="EditPin_NewPinInfo">新しいパスコード</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">ウォレット</string>
     <string name="ManageCoins_save">保存</string>
