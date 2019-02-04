@@ -61,6 +61,7 @@
     <string name="Send_DialogTitle">معامله را تایید کنید</string>
     <string name="Send_DialogFee">هزينه:</string>
     <string name="Send_DialogTotal">مجموع:</string>
+    <string name="Send_ERC_Alert">%s is an ERC20 token on Ethereum. To send such token get some ETH on your balance.</string>
     <!--Deposit-->
     <string name="Deposit_Title">دریافت s%</string>
     <string name="Deposit_Share">به اشتراك گذاشتن</string>
