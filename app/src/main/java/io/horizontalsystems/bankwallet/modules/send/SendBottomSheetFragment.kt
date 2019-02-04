@@ -20,6 +20,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import android.widget.*
@@ -162,7 +163,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
                 when (hint) {
                     is SendModule.HintInfo.Amount -> {
                         hintInfoTxt?.text = when (hint.amountInfo) {
-                            is SendModule.AmountInfo.CoinValueInfo -> App.numberFormatter.format(hint.amountInfo.coinValue)
+                            is SendModule.AmountInfo.CoinValueInfo -> App.numberFormatter.format(hint.amountInfo.coinValue, realNumber = true)
                             is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(hint.amountInfo.currencyValue)
                         }
                     }
@@ -309,6 +310,18 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
                 amountNumber = amountText.toBigDecimal()
             } catch (e: NumberFormatException) {
                 Log.e("SendFragment", "Exception", e)
+            }
+
+            viewModel.decimalSize?.let {
+                if (amountNumber.scale() > it) {
+                    amountNumber = amountNumber.setScale(it, RoundingMode.FLOOR)
+                    val newString = amountNumber.toPlainString()
+                    amountEditTxt?.setText(newString)
+                    amountEditTxt?.setSelection(newString.length)
+
+                    val shake = AnimationUtils.loadAnimation(context, R.anim.shake_edittext)
+                    amountEditTxt?.startAnimation(shake)
+                }
             }
 
             maxButton?.visibility = if (amountText.isEmpty()) View.VISIBLE else View.GONE

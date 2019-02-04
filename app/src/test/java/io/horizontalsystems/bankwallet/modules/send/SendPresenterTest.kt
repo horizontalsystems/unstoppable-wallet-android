@@ -16,8 +16,8 @@ class SendPresenterTest {
     private val userInput = mock(SendModule.UserInput::class.java)
     private val prAddress = mock(PaymentRequestAddress::class.java)
 
-    private val state = SendModule.State(SendModule.InputType.COIN)
-    private val viewItem = SendModule.StateViewItem()
+    private val state = SendModule.State(2, SendModule.InputType.COIN)
+    private val viewItem = SendModule.StateViewItem(8)
     private val viewItemConfirm = mock(SendModule.SendConfirmationViewItem::class.java)
 
     private lateinit var presenter: SendPresenter
@@ -51,6 +51,7 @@ class SendPresenterTest {
 
         verify(view).setCoinCode("BTC")
         verify(view).setCoinTitle("Bitcoin")
+        verify(view).setDecimal(viewItem.decimal)
         verify(view).setAmountInfo(viewItem.amountInfo)
         verify(view).setSwitchButtonEnabled(viewItem.switchButtonEnabled)
         verify(view).setHintInfo(viewItem.hintInfo)
@@ -82,6 +83,7 @@ class SendPresenterTest {
 
         verify(userInput).inputType = SendModule.InputType.CURRENCY
 
+        verify(view).setDecimal(viewItem.decimal)
         verify(view).setAmountInfo(viewItem.amountInfo)
         verify(view).setHintInfo(viewItem.hintInfo)
         verify(view).setPrimaryFeeInfo(viewItem.primaryFeeInfo)

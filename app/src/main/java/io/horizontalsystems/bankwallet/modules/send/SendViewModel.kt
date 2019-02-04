@@ -23,6 +23,7 @@ class SendViewModel : ViewModel(), SendModule.IView {
     val sendConfirmationViewItemLiveData = MutableLiveData<SendModule.SendConfirmationViewItem>()
     val showConfirmationLiveEvent = SingleLiveEvent<Unit>()
     val pasteButtonEnabledLiveData = MutableLiveData<Boolean>()
+    var decimalSize: Int? = null
 
     fun init(coin: String) {
         hintInfoLiveData.value = null
@@ -51,6 +52,10 @@ class SendViewModel : ViewModel(), SendModule.IView {
 
     override fun setCoinCode(coinCode: CoinCode) {
         coinCodeLiveData.value = coinCode
+    }
+
+    override fun setDecimal(decimal: Int) {
+        decimalSize = decimal
     }
 
     override fun setAmountInfo(amountInfo: SendModule.AmountInfo?) {

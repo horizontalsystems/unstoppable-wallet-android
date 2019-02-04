@@ -13,7 +13,8 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
                      private val rateStorage: IRateStorage,
                      private val localStorage: ILocalStorage,
                      private val clipboardManager: IClipboardManager,
-                     private val wallet: Wallet) : SendModule.IInteractor {
+                     private val wallet: Wallet,
+                     private val appConfigProvider: IAppConfigProvider) : SendModule.IInteractor {
 
     sealed class SendError : Exception() {
         class NoAddress : SendError()
@@ -94,7 +95,9 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
         val baseCurrency = currencyManager.baseCurrency
         val rateValue = rate?.value
 
-        val state = SendModule.State(input.inputType)
+        val decimal = if(input.inputType == SendModule.InputType.COIN) Math.min(adapter.decimal, appConfigProvider.maxDecimal) else appConfigProvider.fiatDecimal
+
+        val state = SendModule.State(decimal, input.inputType)
 
         state.address = input.address
         val address = input.address

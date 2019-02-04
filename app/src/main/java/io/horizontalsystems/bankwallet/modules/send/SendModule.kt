@@ -30,6 +30,7 @@ object SendModule {
         fun showError(error: Throwable)
         fun dismissWithSuccess()
         fun setPasteButtonState(enabled: Boolean)
+        fun setDecimal(decimal: Int)
 
     }
 
@@ -70,7 +71,7 @@ object SendModule {
 
     fun init(view: SendViewModel, coinCode: String) {
         val wallet = App.walletManager.wallets.first { it.coinCode == coinCode }
-        val interactor = SendInteractor(App.currencyManager, App.rateStorage, App.localStorage, TextHelper, wallet)
+        val interactor = SendInteractor(App.currencyManager, App.rateStorage, App.localStorage, TextHelper, wallet, App.appConfigProvider)
         val presenter = SendPresenter(interactor, StateViewItemFactory(), UserInput())
 
         view.delegate = presenter
@@ -124,7 +125,7 @@ object SendModule {
         var address: String? = null
     }
 
-    class State(var inputType: InputType) {
+    class State(var decimal: Int, var inputType: InputType) {
         var coinValue: CoinValue? = null
         var currencyValue: CurrencyValue? = null
         var amountError: AmountError? = null
@@ -134,7 +135,7 @@ object SendModule {
         var feeCurrencyValue: CurrencyValue? = null
     }
 
-    class StateViewItem {
+    class StateViewItem(val decimal: Int) {
         var amountInfo: AmountInfo? = null
         var switchButtonEnabled: Boolean = false
         var hintInfo: HintInfo? = null
