@@ -11,7 +11,7 @@ import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-abstract class EthereumBaseAdapter(protected val ethereumKit: EthereumKit, private val decimal: Int)
+abstract class EthereumBaseAdapter(protected val ethereumKit: EthereumKit, final override val decimal: Int)
     : IAdapter, EthereumKit.Listener {
 
     private val weisInEther = Math.pow(10.0, decimal.toDouble()).toBigDecimal()
