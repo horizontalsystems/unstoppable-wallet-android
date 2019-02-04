@@ -82,10 +82,11 @@
     <string name="Send_Error_IncorrectAddress">Incorrect Address</string>
     <string name="Send_Error_BalanceAmount">Balance %s</string>
 
-
     <string name="Send_DialogTitle">Confirm Transaction</string>
     <string name="Send_DialogFee">Fee:</string>
     <string name="Send_DialogTotal">Total:</string>
+
+    <string name="Send_ERC_Alert">%s is an ERC20 token on Ethereum. To send such token get some ETH on your balance.</string>
 
 
     <!--Deposit-->
