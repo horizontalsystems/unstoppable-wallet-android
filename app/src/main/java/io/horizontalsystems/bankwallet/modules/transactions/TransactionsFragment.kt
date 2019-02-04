@@ -203,14 +203,6 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
 
 class TransactionsAdapter(private var listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), ViewHolderTransaction.ClickListener {
 
-    init {
-        setHasStableIds(true)
-    }
-
-    override fun getItemId(position: Int): Long {
-        return viewModel.delegate.idForIndex(position)
-    }
-
     interface Listener {
         fun onItemClick(item: TransactionViewItem)
     }
