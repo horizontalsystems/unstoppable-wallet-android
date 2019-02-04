@@ -13,4 +13,7 @@ class WalletFactory(private val adapterFactory: AdapterFactory) {
         return Wallet(coin.title, coin.code, adapter)
     }
 
+    fun unlinkWallet(wallet: Wallet) {
+        adapterFactory.unlinkAdapter(wallet.adapter)
+    }
 }

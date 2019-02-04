@@ -214,11 +214,12 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
 
                     disposable?.dispose()
                     disposable = adapterState.progressSubject
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe {
+                            ?.observeOn(AndroidSchedulers.mainThread())
+                            ?.subscribe {
                                 val progress = (it * 100).toInt()
                                 textSyncProgress.text = "$progress%"
                             }
+
                 }
                 is AdapterState.Synced -> {
                     if (balanceViewItem.coinValue.value > BigDecimal.ZERO) {

@@ -5,11 +5,11 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.AuthData
 import io.reactivex.subjects.PublishSubject
 
-class AuthManager(
-        private val secureStorage: ISecuredStorage,
-        private val localStorage: ILocalStorage,
-        private val coinManager: ICoinManager,
-        private val rateManager: RateManager) {
+class AuthManager(private val secureStorage: ISecuredStorage,
+                  private val localStorage: ILocalStorage,
+                  private val coinManager: ICoinManager,
+                  private val rateManager: RateManager,
+                  private val ethereumKitManager: IEthereumKitManager) {
 
     var walletManager: IWalletManager? = null
     var pinManager: IPinManager? = null
@@ -40,6 +40,7 @@ class AuthManager(
 
     fun logout() {
         walletManager?.clear()
+        ethereumKitManager.clear()
         pinManager?.clear()
         localStorage.clear()
         coinManager.clear()

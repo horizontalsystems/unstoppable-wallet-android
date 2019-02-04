@@ -48,6 +48,7 @@ class App : Application() {
         lateinit var transactionInfoFactory: FullTransactionInfoFactory
         lateinit var transactionDataProviderManager: TransactionDataProviderManager
         lateinit var appCloseManager: AppCloseManager
+        lateinit var ethereumKitManager: IEthereumKitManager
         lateinit var numberFormatter: IAppNumberFormatter
 
         val testMode = true
@@ -83,6 +84,7 @@ class App : Application() {
         backgroundManager = BackgroundManager(this)
         encryptionManager = EncryptionManager()
         secureStorage = SecuredStorageManager(encryptionManager)
+        ethereumKitManager = EthereumKitManager(appConfigProvider)
 
         appDatabase = AppDatabase.getInstance(this)
         rateStorage = RatesRepository(appDatabase)
@@ -92,7 +94,7 @@ class App : Application() {
         networkManager = NetworkManager()
         rateManager = RateManager(rateStorage, networkManager)
         coinManager = CoinManager(appConfigProvider, coinsStorage)
-        authManager = AuthManager(secureStorage, localStorage, coinManager, rateManager)
+        authManager = AuthManager(secureStorage, localStorage, coinManager, rateManager, ethereumKitManager)
 
         wordsManager = WordsManager(localStorage)
         randomManager = RandomProvider()
@@ -105,7 +107,7 @@ class App : Application() {
 
         networkAvailabilityManager = NetworkAvailabilityManager()
 
-        walletManager = WalletManager(coinManager, authManager, WalletFactory(AdapterFactory(appConfigProvider, localStorage)))
+        walletManager = WalletManager(coinManager, authManager, WalletFactory(AdapterFactory(appConfigProvider, localStorage, ethereumKitManager)))
         rateSyncer = RateSyncer(rateManager, walletManager, currencyManager, networkAvailabilityManager)
 
         appCloseManager = AppCloseManager()

@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import io.horizontalsystems.ethereumkit.EthereumKit
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -113,8 +114,14 @@ interface ILanguageManager {
 
 sealed class AdapterState {
     object Synced : AdapterState()
-    class Syncing(val progressSubject: BehaviorSubject<Double>) : AdapterState()
+    class Syncing(val progressSubject: BehaviorSubject<Double>?) : AdapterState()
     object NotSynced : AdapterState()
+}
+
+interface IEthereumKitManager {
+    fun ethereumKit(authData: AuthData): EthereumKit
+    fun clear()
+    fun unlink()
 }
 
 interface IAdapter {
@@ -132,6 +139,7 @@ interface IAdapter {
     val debugInfo: String
 
     fun start()
+    fun stop()
     fun refresh()
     fun clear()
 
