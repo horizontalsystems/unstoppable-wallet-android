@@ -42,10 +42,6 @@ class TransactionsPresenter(private val interactor: TransactionsModule.IInteract
         return factory.item(transactionItem, lastBlockHeight, threshold, rate)
     }
 
-    override fun idForIndex(index: Int): Long {
-        return loader.itemForIndex(index).record.transactionHash.hashCode().toLong()
-    }
-
     override fun onBottomReached() {
         loader.loadNext(false)
     }

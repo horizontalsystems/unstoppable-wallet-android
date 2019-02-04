@@ -47,7 +47,6 @@ object TransactionsModule {
 
         val itemsCount: Int
         fun itemForIndex(index: Int): TransactionViewItem
-        fun idForIndex(index: Int): Long
         fun onBottomReached()
     }
 
