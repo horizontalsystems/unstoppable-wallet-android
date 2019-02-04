@@ -5,7 +5,7 @@ import io.horizontalsystems.ethereumkit.EthereumKit
 import io.reactivex.Single
 import java.math.BigDecimal
 
-class Erc20Adapter(kit: EthereumKit, override val contractAddress: String, override val decimal: Int)
+class Erc20Adapter(kit: EthereumKit, override val contractAddress: String, decimal: Int)
     : EthereumBaseAdapter(kit, decimal), EthereumKit.ListenerERC20 {
 
     init {

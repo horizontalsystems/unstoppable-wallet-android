@@ -15,10 +15,13 @@ import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, newWallet: Boolean, walletId: String) : IAdapter, BitcoinKit.Listener {
+class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, newWallet: Boolean, walletId: String)
+    : IAdapter, BitcoinKit.Listener {
+
+    override val decimal = 8
 
     private var bitcoinKit = BitcoinKit(words, network, newWallet = newWallet, walletId = walletId)
-    private val satoshisInBitcoin = Math.pow(10.0, 8.0).toBigDecimal()
+    private val satoshisInBitcoin = Math.pow(10.0, decimal.toDouble()).toBigDecimal()
 
     private val progressSubject: BehaviorSubject<Double> = BehaviorSubject.createDefault(0.0)
 
@@ -26,7 +29,7 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
     private val stateSubject: BehaviorSubject<AdapterState> = BehaviorSubject.createDefault(AdapterState.Syncing(progressSubject))
 
     override val balance: BigDecimal
-        get() = bitcoinKit.balance.toBigDecimal().divide(satoshisInBitcoin, 8, RoundingMode.HALF_EVEN)
+        get() = bitcoinKit.balance.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN)
 
     override val balanceObservable: Flowable<BigDecimal> = balanceSubject.toFlowable(BackpressureStrategy.DROP)
     override val stateObservable: Flowable<AdapterState> = stateSubject.toFlowable(BackpressureStrategy.DROP)
@@ -76,9 +79,9 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
         try {
             val amount = (value * satoshisInBitcoin).toLong()
             val fee = bitcoinKit.fee(amount, address, senderPay)
-            return fee.toBigDecimal().divide(satoshisInBitcoin, 8, RoundingMode.HALF_EVEN)
+            return fee.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN)
         } catch (e: UnspentOutputSelector.Error.InsufficientUnspentOutputs) {
-            val fee = e.fee.toBigDecimal().divide(satoshisInBitcoin, 8, RoundingMode.HALF_EVEN)
+            val fee = e.fee.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN)
             throw Error.InsufficientAmount(fee)
         } catch (e: UnspentOutputSelector.Error.EmptyUnspentOutputs) {
             throw Error.InsufficientAmount(BigDecimal.ZERO)
@@ -97,7 +100,7 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
     // BitcoinKit Listener implementations
     //
     override fun onBalanceUpdate(bitcoinKit: BitcoinKit, balance: Long) {
-        balanceSubject.onNext(balance.toBigDecimal().divide(satoshisInBitcoin, 8, RoundingMode.HALF_EVEN))
+        balanceSubject.onNext(balance.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN))
     }
 
     override fun onLastBlockInfoUpdate(bitcoinKit: BitcoinKit, blockInfo: BlockInfo) {
@@ -142,7 +145,7 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
             TransactionRecord(
                     transaction.transactionHash,
                     transaction.blockHeight?.toLong() ?: 0,
-                    transaction.amount.toBigDecimal().divide(satoshisInBitcoin, 8, RoundingMode.HALF_EVEN),
+                    transaction.amount.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN),
                     transaction.timestamp,
                     transaction.from.map {
                         val address = TransactionAddress()

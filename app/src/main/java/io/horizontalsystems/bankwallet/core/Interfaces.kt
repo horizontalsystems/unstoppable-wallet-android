@@ -125,6 +125,7 @@ interface IEthereumKitManager {
 }
 
 interface IAdapter {
+    val decimal: Int
     val balance: BigDecimal
 
     val balanceObservable: Flowable<BigDecimal>
