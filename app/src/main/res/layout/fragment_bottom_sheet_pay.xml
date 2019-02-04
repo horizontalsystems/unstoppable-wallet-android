@@ -142,9 +142,9 @@
             android:layout_height="36dp"
             android:layout_marginEnd="24dp"
             android:src="@drawable/round_import_export_24_px"
-            app:layout_constraintBottom_toBottomOf="@+id/amountDivider"
+            app:layout_constraintBottom_toBottomOf="@+id/divider2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/amountDivider"
+            app:layout_constraintTop_toTopOf="parent"
             />
 
         <TextView
@@ -163,7 +163,7 @@
             android:id="@+id/divider2"
             android:layout_width="0dp"
             android:layout_height="0.5dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="18dp"
             android:background="@color/steel_20"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
