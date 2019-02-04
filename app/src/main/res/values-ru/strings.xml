@@ -61,6 +61,7 @@
     <string name="Send_DialogTitle">Подтвердить Транзакцию</string>
     <string name="Send_DialogFee">Комиссия:</string>
     <string name="Send_DialogTotal">Итого:</string>
+    <string name="Send_ERC_Alert">%s is an ERC20 token on Ethereum. To send such token get some ETH on your balance.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Получено %s</string>
     <string name="Deposit_Share">Поделиться</string>
