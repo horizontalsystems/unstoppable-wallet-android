@@ -3,7 +3,9 @@ package io.horizontalsystems.bankwallet.modules.receive
 import android.app.Dialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.DialogInterface
 import android.os.Bundle
+import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.BottomSheetDialogFragment
 import android.support.v4.app.FragmentActivity
@@ -20,7 +22,7 @@ import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import android.support.v4.app.ShareCompat
-
+import android.view.View
 
 
 class ReceiveFragment : BottomSheetDialogFragment() {
@@ -82,6 +84,14 @@ class ReceiveFragment : BottomSheetDialogFragment() {
                         .setType("text/plain")
                         .setText(it)
                         .startChooser()
+            }
+        })
+
+        mDialog?.setOnShowListener(object : DialogInterface.OnShowListener {
+            override fun onShow(dialog: DialogInterface?) {
+                val bottomSheet = mDialog?.findViewById<View>(android.support.design.R.id.design_bottom_sheet)
+                BottomSheetBehavior.from(bottomSheet).state = BottomSheetBehavior.STATE_EXPANDED
+                BottomSheetBehavior.from(bottomSheet).isFitToContents = true
             }
         })
 
