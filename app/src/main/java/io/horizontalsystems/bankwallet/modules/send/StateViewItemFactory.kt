@@ -3,21 +3,30 @@ package io.horizontalsystems.bankwallet.modules.send
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import java.math.BigDecimal
+import java.math.RoundingMode
 
 class StateViewItemFactory {
 
     fun viewItemForState(state: SendModule.State): SendModule.StateViewItem {
-        val viewItem = SendModule.StateViewItem()
+        val viewItem = SendModule.StateViewItem(state.decimal)
 
         when (state.inputType) {
             SendModule.InputType.COIN -> {
 
-                viewItem.amountInfo = state.coinValue?.let { SendModule.AmountInfo.CoinValueInfo(it) }
+                viewItem.amountInfo = state.coinValue?.let {
+                    val rounded = it.value.setScale(state.decimal, RoundingMode.DOWN)
+                    val coinValue = CoinValue(it.coinCode, rounded)
+                    SendModule.AmountInfo.CoinValueInfo(coinValue)
+                }
                 viewItem.primaryFeeInfo = state.feeCoinValue?.let { SendModule.AmountInfo.CoinValueInfo(it) }
                 viewItem.secondaryFeeInfo = state.feeCurrencyValue?.let { SendModule.AmountInfo.CurrencyValueInfo(it) }
             }
             SendModule.InputType.CURRENCY -> {
-                viewItem.amountInfo = state.currencyValue?.let { SendModule.AmountInfo.CurrencyValueInfo(it) }
+                viewItem.amountInfo = state.currencyValue?.let {
+                    val rounded = it.value.setScale(state.decimal, RoundingMode.CEILING)
+                    val currencyValue = CurrencyValue(it.currency, rounded)
+                    SendModule.AmountInfo.CurrencyValueInfo(currencyValue)
+                }
                 viewItem.primaryFeeInfo = state.feeCurrencyValue?.let { SendModule.AmountInfo.CurrencyValueInfo(it) }
                 viewItem.secondaryFeeInfo = state.feeCoinValue?.let { SendModule.AmountInfo.CoinValueInfo(it) }
             }

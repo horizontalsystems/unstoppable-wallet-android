@@ -20,6 +20,7 @@ class SendInteractorTest {
     private val delegate = mock(SendModule.IInteractorDelegate::class.java)
     private val localStorage = mock(ILocalStorage::class.java)
     private val clipboardManager = mock(IClipboardManager::class.java)
+    private val appConfigProvider = mock(IAppConfigProvider::class.java)
 
     private val currencyManager = mock(ICurrencyManager::class.java)
     private val rateStorage = mock(IRateStorage::class.java)
@@ -33,6 +34,8 @@ class SendInteractorTest {
     private val balance = BigDecimal(123)
     private val zero = BigDecimal.ZERO
     private val one = BigDecimal.ONE
+    private val fiatDecimal = 2
+    private val maxDecimal = 8
 
     private lateinit var interactor: SendInteractor
 
@@ -45,8 +48,11 @@ class SendInteractorTest {
         whenever(currencyManager.baseCurrency).thenReturn(currency)
         whenever(rateStorage.latestRateObservable(coin, currency.code)).thenReturn(Flowable.just(rate))
         whenever(adapter.balance).thenReturn(balance)
+        whenever(adapter.decimal).thenReturn(fiatDecimal)
+        whenever(appConfigProvider.fiatDecimal).thenReturn(fiatDecimal)
+        whenever(appConfigProvider.maxDecimal).thenReturn(maxDecimal)
 
-        interactor = SendInteractor(currencyManager, rateStorage, localStorage, clipboardManager, wallet)
+        interactor = SendInteractor(currencyManager, rateStorage, localStorage, clipboardManager, wallet, appConfigProvider)
         interactor.delegate = delegate
     }
 
@@ -273,6 +279,40 @@ class SendInteractorTest {
         assertCurrencyConvertToCurrency("0.00778011", "0.0778011")
     }
 
+    @Test
+    fun testState_numberOfDecimals_coin() {
+        val decimal = 8
+        whenever(adapter.decimal).thenReturn(decimal)
+        val input = SendModule.UserInput()
+        val state = interactor.stateForUserInput(input)
+
+        Assert.assertEquals(state.decimal, decimal)
+    }
+
+    @Test
+    fun testState_numberOfDecimals_fiat() {
+        val input = SendModule.UserInput()
+        input.inputType = SendModule.InputType.CURRENCY
+
+        val state = interactor.stateForUserInput(input)
+
+        Assert.assertEquals(state.decimal, fiatDecimal)
+    }
+
+    @Test
+    fun testState_numberOfDecimals_maxDecimal() {
+        val expectedDecimal = 8
+
+        whenever(adapter.decimal).thenReturn(18)
+
+        val input = SendModule.UserInput()
+        input.inputType = SendModule.InputType.COIN
+        val state = interactor.stateForUserInput(input)
+
+        Assert.assertEquals(expectedDecimal, state.decimal)
+    }
+
+
     private fun assertCurrencyConvertToCoin(input: String, expected: String) {
         val inputDecimal = BigDecimal(input)
         val expectedDecimal = BigDecimal(expected)
@@ -286,5 +326,6 @@ class SendInteractorTest {
         val converted = interactor.convertedAmountForInputType(SendModule.InputType.CURRENCY, inputDecimal)
         Assert.assertEquals(expectedDecimal, converted)
     }
+
 
 }

@@ -10,6 +10,9 @@ import io.horizontalsystems.bankwallet.entities.Currency
 
 class AppConfigProvider : IAppConfigProvider {
 
+    override val fiatDecimal: Int = 2
+    override val maxDecimal: Int = 8
+
     override val testMode: Boolean = BuildConfig.testMode
 
     override val currencies: List<Currency> = listOf(

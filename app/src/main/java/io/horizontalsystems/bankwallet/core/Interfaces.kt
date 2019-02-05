@@ -184,6 +184,8 @@ interface ILockManager {
 }
 
 interface IAppConfigProvider {
+    val fiatDecimal: Int
+    val maxDecimal: Int
     val testMode: Boolean
     val localizations: List<String>
     val currencies: List<Currency>
