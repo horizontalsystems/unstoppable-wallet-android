@@ -53,33 +53,16 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         >
 
-        <LinearLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerCoins"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
+            android:layout_height="wrap_content"
             android:background="?WalletBackgroundColor"
-            >
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerCoins"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                />
-
-            <ImageView
-                android:id="@+id/manageCoins"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="50dp"
-                android:src="@drawable/stateful_wallet_add_icon"
-                />
-        </LinearLayout>
+            android:clipToPadding="false"
+            android:paddingBottom="18dp"
+            android:paddingTop="8dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
