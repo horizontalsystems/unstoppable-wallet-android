@@ -1,8 +1,6 @@
 package io.horizontalsystems.bankwallet.core
 
-import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
-import io.horizontalsystems.bankwallet.entities.TransactionAddress
-import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bitcoinkit.BitcoinKit
 import io.horizontalsystems.bitcoinkit.managers.UnspentOutputSelector
 import io.horizontalsystems.bitcoinkit.models.BlockInfo
@@ -13,15 +11,29 @@ import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, newWallet: Boolean, walletId: String)
+class BitcoinAdapter(override val coin: Coin, authData: AuthData, newWallet: Boolean, testMode: Boolean)
     : IAdapter, BitcoinKit.Listener {
 
     override val decimal = 8
 
-    private var bitcoinKit = BitcoinKit(words, network, newWallet = newWallet, walletId = walletId)
+    private val bitcoinKit: BitcoinKit
     private val satoshisInBitcoin = Math.pow(10.0, decimal.toDouble()).toBigDecimal()
 
     private val progressSubject: BehaviorSubject<Double> = BehaviorSubject.createDefault(0.0)
+
+    init {
+        val networkType: BitcoinKit.NetworkType =
+                when (coin.type) {
+                    is CoinType.Bitcoin -> {
+                        if (testMode) BitcoinKit.NetworkType.TestNet else BitcoinKit.NetworkType.MainNet
+                    }
+                    is CoinType.BitcoinCash -> {
+                        if (testMode) BitcoinKit.NetworkType.TestNetBitCash else BitcoinKit.NetworkType.MainNetBitCash
+                    }
+                    else -> throw Exception("Not supported Coin Type ${coin.type} for BitcoinAdapter")
+                }
+        bitcoinKit = BitcoinKit(authData.words, networkType, newWallet = newWallet, walletId = authData.walletId)
+    }
 
     override val balance: BigDecimal
         get() = bitcoinKit.balance.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN)
@@ -162,24 +174,5 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
                         address
                     }
             )
-
-    companion object {
-
-        fun createBitcoin(words: List<String>, testMode: Boolean, newWallet: Boolean, walletId: String): BitcoinAdapter {
-            val network = if (testMode)
-                BitcoinKit.NetworkType.TestNet else
-                BitcoinKit.NetworkType.MainNet
-
-            return BitcoinAdapter(words, network, newWallet, walletId)
-        }
-
-        fun createBitcoinCash(words: List<String>, testMode: Boolean, newWallet: Boolean, walletId: String): BitcoinAdapter {
-            val network = if (testMode)
-                BitcoinKit.NetworkType.TestNetBitCash else
-                BitcoinKit.NetworkType.MainNetBitCash
-
-            return BitcoinAdapter(words, network, newWallet, walletId)
-        }
-    }
 
 }

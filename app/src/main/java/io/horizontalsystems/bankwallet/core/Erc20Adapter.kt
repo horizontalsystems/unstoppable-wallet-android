@@ -1,12 +1,13 @@
 package io.horizontalsystems.bankwallet.core
 
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.ethereumkit.EthereumKit
 import io.reactivex.Single
 import java.math.BigDecimal
 
-class Erc20Adapter(kit: EthereumKit, override val contractAddress: String, decimal: Int)
-    : EthereumBaseAdapter(kit, decimal), EthereumKit.ListenerERC20 {
+class Erc20Adapter(coin: Coin, kit: EthereumKit, override val contractAddress: String, decimal: Int)
+    : EthereumBaseAdapter(coin, kit, decimal), EthereumKit.ListenerERC20 {
 
     init {
         ethereumKit.register(this)
@@ -46,8 +47,8 @@ class Erc20Adapter(kit: EthereumKit, override val contractAddress: String, decim
     }
 
     companion object {
-        fun adapter(ethereumKit: EthereumKit, contractAddress: String, decimal: Int): Erc20Adapter {
-            return Erc20Adapter(ethereumKit, contractAddress, decimal)
+        fun adapter(coin: Coin, ethereumKit: EthereumKit, contractAddress: String, decimal: Int): Erc20Adapter {
+            return Erc20Adapter(coin, ethereumKit, contractAddress, decimal)
         }
     }
 }

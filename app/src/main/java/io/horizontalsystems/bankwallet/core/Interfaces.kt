@@ -125,6 +125,7 @@ interface IEthereumKitManager {
 }
 
 interface IAdapter {
+    val coin: Coin
     val decimal: Int
     val balance: BigDecimal
     val balanceUpdatedSignal: PublishSubject<Unit>

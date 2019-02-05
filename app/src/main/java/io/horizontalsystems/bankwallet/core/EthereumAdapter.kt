@@ -1,11 +1,12 @@
 package io.horizontalsystems.bankwallet.core
 
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.ethereumkit.EthereumKit
 import io.reactivex.Single
 import java.math.BigDecimal
 
-class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, 18) {
+class EthereumAdapter(coin: Coin, kit: EthereumKit) : EthereumBaseAdapter(coin, kit, 18) {
 
     override val balance: BigDecimal get() = ethereumKit.balance.toBigDecimal()
 
@@ -43,6 +44,6 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, 18) {
     }
 
     companion object {
-        fun adapter(ethereumKit: EthereumKit) = EthereumAdapter(ethereumKit)
+        fun adapter(coin: Coin, ethereumKit: EthereumKit) = EthereumAdapter(coin, ethereumKit)
     }
 }
