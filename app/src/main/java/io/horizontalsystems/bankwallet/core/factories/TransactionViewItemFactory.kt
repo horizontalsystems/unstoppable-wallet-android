@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.core.factories
 
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
-import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.managers.RateManager
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -12,7 +12,7 @@ import java.math.BigDecimal
 import java.util.*
 
 class TransactionViewItemFactory(
-        private val walletManager: IWalletManager,
+        private val adapterManager: IAdapterManager,
         private val currencyManager: ICurrencyManager,
         private val rateManager: RateManager) {
 

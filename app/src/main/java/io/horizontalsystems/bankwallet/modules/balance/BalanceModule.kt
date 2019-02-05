@@ -2,9 +2,10 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAdapter
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Rate
-import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import java.math.BigDecimal
 
@@ -31,12 +32,12 @@ object BalanceModule {
 
     interface IInteractor {
         fun refresh()
-        fun initWallets()
+        fun initAdapters()
         fun fetchRates(currencyCode: String, coinCodes: List<CoinCode>)
     }
 
     interface IInteractorDelegate {
-        fun didUpdateWallets(wallets: List<Wallet>)
+        fun didUpdateAdapters(adapters: List<IAdapter>)
         fun didUpdateCurrency(currency: Currency)
         fun didUpdateBalance(coinCode: CoinCode, balance: BigDecimal)
         fun didUpdateState(coinCode: String, state: AdapterState)
@@ -57,7 +58,7 @@ object BalanceModule {
         var currency: Currency? = null
 
         val coinCodes: List<CoinCode>
-            get() = items.map { it.coinCode }
+            get() = items.map { it.coin.code }
 
         var items = listOf<BalanceItem>()
 
@@ -68,7 +69,7 @@ object BalanceModule {
         }
 
         fun getPosition(coinCode: CoinCode): Int {
-            return items.indexOfFirst { it.coinCode == coinCode }
+            return items.indexOfFirst { it.coin.code == coinCode }
         }
 
         fun setBalance(position: Int, balance: BigDecimal) {
@@ -91,15 +92,14 @@ object BalanceModule {
     }
 
     data class BalanceItem(
-            val title: String,
-            val coinCode: CoinCode,
+            val coin: Coin,
             var balance: BigDecimal = BigDecimal.ZERO,
             var state: AdapterState = AdapterState.NotSynced,
             var rate: Rate? = null
     )
 
     fun init(view: BalanceViewModel, router: IRouter) {
-        val interactor = BalanceInteractor(App.walletManager, App.rateStorage, App.currencyManager)
+        val interactor = BalanceInteractor(App.adapterManager, App.rateStorage, App.currencyManager)
         val presenter = BalancePresenter(interactor, router, BalanceItemDataSource(), BalanceViewItemFactory())
 
         presenter.view = view

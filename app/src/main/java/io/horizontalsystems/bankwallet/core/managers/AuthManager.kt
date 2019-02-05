@@ -11,7 +11,7 @@ class AuthManager(private val secureStorage: ISecuredStorage,
                   private val rateManager: RateManager,
                   private val ethereumKitManager: IEthereumKitManager) {
 
-    var walletManager: IWalletManager? = null
+    var adapterManager: IAdapterManager? = null
     var pinManager: IPinManager? = null
 
     var authData: AuthData? = null
@@ -34,12 +34,12 @@ class AuthManager(private val secureStorage: ISecuredStorage,
             localStorage.isNewWallet = newWallet
             authData = it
             coinManager.enableDefaultCoins()
-            walletManager?.initWallets()
+            adapterManager?.initAdapters()
         }
     }
 
     fun logout() {
-        walletManager?.clear()
+        adapterManager?.clear()
         ethereumKitManager.clear()
         pinManager?.clear()
         localStorage.clear()

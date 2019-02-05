@@ -3,9 +3,9 @@ package io.horizontalsystems.bankwallet.modules.receive
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.core.IAdapter
+import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IClipboardManager
-import io.horizontalsystems.bankwallet.core.IWalletManager
-import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.receive.viewitems.AddressItem
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import org.junit.Before
@@ -14,41 +14,39 @@ import org.mockito.Mockito.mock
 
 class ReceiveInteractorTest {
     private val clipboardManager = mock(IClipboardManager::class.java)
-    private var walletManager = mock(IWalletManager::class.java)
-    private var wallet = mock(Wallet::class.java)
+    private var adapterManager = mock(IAdapterManager::class.java)
     private val adapter = mock(IAdapter::class.java)
     private val delegate = mock(ReceiveModule.IInteractorDelegate::class.java)
 
-    private lateinit var coin: CoinCode
+    private val coinTitle = "Bitcoin"
+    private val coinCode: CoinCode = "coinCode"
+    private val coin = mock(Coin::class.java)
     private lateinit var interactor: ReceiveInteractor
 
     private val coinAddress = "[coin_address]"
 
     @Before
     fun setup() {
-        coin = CoinCode()
-        interactor = ReceiveInteractor(coin, walletManager, clipboardManager)
+        whenever(coin.code).thenReturn(coinCode)
+        whenever(coin.title).thenReturn(coinTitle)
+
+        interactor = ReceiveInteractor(coinCode, adapterManager, clipboardManager)
         interactor.delegate = delegate
     }
 
     @Test
     fun didReceiveAddress() {
-        val coinTitle = "Bitcoin"
-
+        whenever(adapter.coin).thenReturn(coin)
         whenever(adapter.receiveAddress).thenReturn(coinAddress)
-        whenever(wallet.coinCode).thenReturn(coin)
-        whenever(wallet.adapter).thenReturn(adapter)
-        whenever(wallet.title).thenReturn(coinTitle)
-        whenever(walletManager.wallets).thenReturn(listOf(wallet))
+        whenever(adapterManager.adapters).thenReturn(listOf(adapter))
 
         interactor.getReceiveAddress()
 
-        verify(delegate).didReceiveAddresses(listOf(AddressItem(coinAddress, coin, coinTitle)))
+        verify(delegate).didReceiveAddresses(listOf(AddressItem(coinAddress, coinCode, coinTitle)))
     }
 
     @Test
     fun copyToClipboard() {
-
         interactor.copyToClipboard(coinAddress)
 
         verify(clipboardManager).copyText(coinAddress)

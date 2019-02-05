@@ -21,11 +21,11 @@ class SendInteractorTest {
 
     private val currencyManager = mock(ICurrencyManager::class.java)
     private val rateStorage = mock(IRateStorage::class.java)
-    private val wallet = mock(Wallet::class.java)
+    private val coin = mock(Coin::class.java)
     private val adapter = mock(IAdapter::class.java)
 
     private val currency = Currency("USD", symbol = "\u0024")
-    private val coin = CoinCode()
+    private val coinCode = CoinCode()
     private val rate = mock(Rate::class.java)
     private val userInput = mock(SendModule.UserInput::class.java)
     private val balance = BigDecimal(123)
@@ -42,16 +42,16 @@ class SendInteractorTest {
 
         whenever(userInput.inputType).thenReturn(SendModule.InputType.COIN)
         whenever(rate.value).thenReturn(BigDecimal("0.1"))
-        whenever(wallet.coinCode).thenReturn(coin)
-        whenever(wallet.adapter).thenReturn(adapter)
+        whenever(coin.code).thenReturn(coinCode)
         whenever(currencyManager.baseCurrency).thenReturn(currency)
-        whenever(rateStorage.latestRateObservable(coin, currency.code)).thenReturn(Flowable.just(rate))
+        whenever(rateStorage.latestRateObservable(coinCode, currency.code)).thenReturn(Flowable.just(rate))
+        whenever(adapter.coin).thenReturn(coin)
         whenever(adapter.balance).thenReturn(balance)
         whenever(adapter.decimal).thenReturn(fiatDecimal)
         whenever(appConfigProvider.fiatDecimal).thenReturn(fiatDecimal)
         whenever(appConfigProvider.maxDecimal).thenReturn(maxDecimal)
 
-        interactor = SendInteractor(currencyManager, rateStorage, localStorage, clipboardManager, wallet, appConfigProvider)
+        interactor = SendInteractor(currencyManager, rateStorage, localStorage, clipboardManager, adapter, appConfigProvider)
         interactor.delegate = delegate
     }
 
@@ -84,7 +84,7 @@ class SendInteractorTest {
     fun retrieveRate() {
         interactor.retrieveRate()
 
-        verify(rateStorage).latestRateObservable(coin, currency.code)
+        verify(rateStorage).latestRateObservable(coinCode, currency.code)
     }
 
     @Test
@@ -172,7 +172,7 @@ class SendInteractorTest {
 
         val state = interactor.stateForUserInput(input)
 
-        Assert.assertEquals(state.feeCoinValue, CoinValue(coin, value= expectedFee))
+        Assert.assertEquals(state.feeCoinValue, CoinValue(coinCode, value= expectedFee))
     }
 
     @Test
@@ -186,7 +186,7 @@ class SendInteractorTest {
         whenever(adapter.fee(any(), any(), any())).thenReturn(fee)
         val state = interactor.stateForUserInput(input)
 
-        Assert.assertEquals(state.feeCoinValue, CoinValue(coin, value= fee))
+        Assert.assertEquals(state.feeCoinValue, CoinValue(coinCode, value= fee))
     }
 
     @Test
@@ -202,10 +202,10 @@ class SendInteractorTest {
 
         val state = interactor.stateForUserInput(input)
 
-        Assert.assertEquals(state.feeCoinValue, CoinValue(coin, value= fee))
+        Assert.assertEquals(state.feeCoinValue, CoinValue(coinCode, value= fee))
 
         val balanceMinusFee = balance - fee
-        val error = SendModule.AmountError.InsufficientBalance(SendModule.AmountInfo.CoinValueInfo(CoinValue(wallet.coinCode, balanceMinusFee)))
+        val error = SendModule.AmountError.InsufficientBalance(SendModule.AmountInfo.CoinValueInfo(CoinValue(coinCode, balanceMinusFee)))
         Assert.assertEquals(state.amountError, error)
     }
 
@@ -253,7 +253,7 @@ class SendInteractorTest {
         input.address = "address"
         input.inputType = SendModule.InputType.COIN
 
-        whenever(wallet.adapter.fee(any(), any(), any())).thenReturn(fee)
+        whenever(adapter.fee(any(), any(), any())).thenReturn(fee)
 
         val expectedBalanceMinusFee =  BigDecimal("122.877")
         val balanceMinusFee = interactor.getTotalBalanceMinusFee(input.inputType, input.address)
@@ -270,7 +270,7 @@ class SendInteractorTest {
         input.inputType = SendModule.InputType.CURRENCY
 
         whenever(adapter.balance).thenReturn(balanceAmount)
-        whenever(wallet.adapter.fee(any(), any(), any())).thenReturn(fee)
+        whenever(adapter.fee(any(), any(), any())).thenReturn(fee)
 
         interactor.retrieveRate()
 

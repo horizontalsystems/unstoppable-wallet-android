@@ -70,8 +70,8 @@ object SendModule {
 
 
     fun init(view: SendViewModel, coinCode: String) {
-        val wallet = App.walletManager.wallets.first { it.coinCode == coinCode }
-        val interactor = SendInteractor(App.currencyManager, App.rateStorage, App.localStorage, TextHelper, wallet, App.appConfigProvider)
+        val adapter = App.adapterManager.adapters.first { it.coin.code == coinCode }
+        val interactor = SendInteractor(App.currencyManager, App.rateStorage, App.localStorage, TextHelper, adapter, App.appConfigProvider)
         val presenter = SendPresenter(interactor, StateViewItemFactory(), UserInput())
 
         view.delegate = presenter

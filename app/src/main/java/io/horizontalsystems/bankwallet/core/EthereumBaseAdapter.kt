@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core
 
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
@@ -9,7 +10,7 @@ import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-abstract class EthereumBaseAdapter(protected val ethereumKit: EthereumKit, final override val decimal: Int)
+abstract class EthereumBaseAdapter(override val coin: Coin, protected val ethereumKit: EthereumKit, final override val decimal: Int)
     : IAdapter, EthereumKit.Listener {
 
     private val weisInEther = Math.pow(10.0, decimal.toDouble()).toBigDecimal()

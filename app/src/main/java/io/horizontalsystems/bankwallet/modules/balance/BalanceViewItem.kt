@@ -33,7 +33,7 @@ class BalanceViewItemFactory {
         }
 
         return BalanceViewItem(
-                CoinValue(item.coinCode, item.balance),
+                CoinValue(item.coin.code, item.balance),
                 exchangeValue,
                 currencyValue,
                 item.state,

@@ -6,9 +6,9 @@ import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.IAdapter
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Rate
-import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import org.junit.Assert
 import org.junit.Before
@@ -35,7 +35,7 @@ class BalancePresenterTest {
     fun viewDidLoad() {
         presenter.viewDidLoad()
 
-        verify(interactor).initWallets()
+        verify(interactor).initAdapters()
     }
 
     @Test
@@ -81,28 +81,33 @@ class BalancePresenterTest {
         val coinCode = "coinCode"
         val currencyCode = "currencyCode"
         val currency = mock(Currency::class.java)
+        val coin = mock(Coin::class.java)
         val coinCodes = listOf(coinCode)
 
-        val wallets = listOf(Wallet(title, coinCode, mock(IAdapter::class.java)))
+        val adapter = mock(IAdapter::class.java)
+        val adapters = listOf(adapter)
 
-        val items = listOf(BalanceModule.BalanceItem(title, coinCode))
+        val items = listOf(BalanceModule.BalanceItem(coin))
 
+        whenever(coin.code).thenReturn(coinCode)
+        whenever(coin.title).thenReturn(title)
+        whenever(adapter.coin).thenReturn(coin)
         whenever(currency.code).thenReturn(currencyCode)
         whenever(dataSource.currency).thenReturn(currency)
         whenever(dataSource.coinCodes).thenReturn(coinCodes)
 
-        presenter.didUpdateWallets(wallets)
+        presenter.didUpdateAdapters(adapters)
 
         verify(dataSource).reset(items)
         verify(interactor).fetchRates(currencyCode, coinCodes)
         verify(view).reload()
-
     }
+
     @Test
     fun didUpdateWallets_nullCurrency() {
         whenever(dataSource.currency).thenReturn(null)
 
-        presenter.didUpdateWallets(listOf())
+        presenter.didUpdateAdapters(listOf())
 
         verify(interactor, never()).fetchRates(any(), any())
     }
@@ -175,9 +180,11 @@ class BalancePresenterTest {
         val position = 5
         val coinCode = "coinCode"
         val item = mock(BalanceModule.BalanceItem::class.java)
+        val coin = mock(Coin::class.java)
 
         whenever(dataSource.getItem(position)).thenReturn(item)
-        whenever(item.coinCode).thenReturn(coinCode)
+        whenever(coin.code).thenReturn(coinCode)
+        whenever(item.coin).thenReturn(coin)
 
         presenter.onReceive(position)
 
@@ -189,9 +196,11 @@ class BalancePresenterTest {
         val position = 5
         val coinCode = "coinCode"
         val item = mock(BalanceModule.BalanceItem::class.java)
+        val coin = mock(Coin::class.java)
 
         whenever(dataSource.getItem(position)).thenReturn(item)
-        whenever(item.coinCode).thenReturn(coinCode)
+        whenever(coin.code).thenReturn(coinCode)
+        whenever(item.coin).thenReturn(coin)
 
         presenter.onPay(position)
 

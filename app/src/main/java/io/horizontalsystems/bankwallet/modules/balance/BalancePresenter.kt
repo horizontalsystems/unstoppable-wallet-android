@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.AdapterState
+import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Rate
-import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import java.math.BigDecimal
 
@@ -23,7 +23,7 @@ class BalancePresenter(
 
 
     override fun viewDidLoad() {
-        interactor.initWallets()
+        interactor.initAdapters()
     }
 
     override fun getViewItem(position: Int) =
@@ -37,18 +37,18 @@ class BalancePresenter(
     }
 
     override fun onReceive(position: Int) {
-        router.openReceiveDialog(dataSource.getItem(position).coinCode)
+        router.openReceiveDialog(dataSource.getItem(position).coin.code)
     }
 
     override fun onPay(position: Int) {
-        router.openSendDialog(dataSource.getItem(position).coinCode)
+        router.openSendDialog(dataSource.getItem(position).coin.code)
     }
 
     //
     // BalanceModule.IInteractorDelegate
     //
-    override fun didUpdateWallets(wallets: List<Wallet>) {
-        dataSource.reset(wallets.map { BalanceModule.BalanceItem(it.title, it.coinCode) })
+    override fun didUpdateAdapters(adapters: List<IAdapter>) {
+        dataSource.reset(adapters.map { BalanceModule.BalanceItem(it.coin) })
         dataSource.currency?.let {
             interactor.fetchRates(it.code, dataSource.coinCodes)
         }

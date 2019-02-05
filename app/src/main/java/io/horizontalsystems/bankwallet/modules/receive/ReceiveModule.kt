@@ -36,7 +36,7 @@ object ReceiveModule {
     }
 
     fun init(coinCode: CoinCode?, view: ReceiveViewModel, router: IRouter) {
-        val interactor = ReceiveInteractor(coinCode, App.walletManager, TextHelper)
+        val interactor = ReceiveInteractor(coinCode, App.adapterManager, TextHelper)
         val presenter = ReceivePresenter(interactor, router)
 
         view.delegate = presenter
