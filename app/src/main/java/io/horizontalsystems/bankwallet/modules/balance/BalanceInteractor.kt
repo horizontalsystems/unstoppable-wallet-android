@@ -66,6 +66,9 @@ class BalanceInteractor(
         walletDisposables.clear()
 
         wallets.forEach { wallet ->
+            delegate?.didUpdateBalance(wallet.coinCode, wallet.adapter.balance)
+            delegate?.didUpdateState(wallet.coinCode, wallet.adapter.state)
+
             walletDisposables.add(wallet.adapter.balanceUpdatedSignal
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
