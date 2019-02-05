@@ -17,12 +17,12 @@ import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.util.*
 
-interface IWalletManager {
-    val wallets: List<Wallet>
-    val walletsUpdatedSignal: Observable<Unit>
+interface IAdapterManager {
+    val adapters: List<IAdapter>
+    val adaptersUpdatedSignal: Observable<Unit>
 
-    fun refreshWallets()
-    fun initWallets()
+    fun refreshAdapters()
+    fun initAdapters()
     fun clear()
 }
 

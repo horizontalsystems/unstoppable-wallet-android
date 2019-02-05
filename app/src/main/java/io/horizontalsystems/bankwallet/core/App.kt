@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import com.squareup.leakcanary.LeakCanary
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
-import io.horizontalsystems.bankwallet.core.factories.WalletFactory
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
@@ -36,7 +35,7 @@ class App : Application() {
         lateinit var pinManager: IPinManager
         lateinit var lockManager: ILockManager
         lateinit var appConfigProvider: IAppConfigProvider
-        lateinit var walletManager: IWalletManager
+        lateinit var adapterManager: IAdapterManager
         lateinit var coinManager: CoinManager
 
         lateinit var rateSyncer: RateSyncer
@@ -107,15 +106,15 @@ class App : Application() {
 
         networkAvailabilityManager = NetworkAvailabilityManager()
 
-        walletManager = WalletManager(coinManager, authManager, WalletFactory(AdapterFactory(appConfigProvider, localStorage, ethereumKitManager)))
-        rateSyncer = RateSyncer(rateManager, walletManager, currencyManager, networkAvailabilityManager)
+        adapterManager = AdapterManager(coinManager, authManager, AdapterFactory(appConfigProvider, localStorage, ethereumKitManager))
+        rateSyncer = RateSyncer(rateManager, adapterManager, currencyManager, networkAvailabilityManager)
 
         appCloseManager = AppCloseManager()
 
         transactionDataProviderManager = TransactionDataProviderManager(appConfigProvider, localStorage)
         transactionInfoFactory = FullTransactionInfoFactory(networkManager, transactionDataProviderManager)
 
-        authManager.walletManager = walletManager
+        authManager.adapterManager = adapterManager
         authManager.pinManager = pinManager
     }
 

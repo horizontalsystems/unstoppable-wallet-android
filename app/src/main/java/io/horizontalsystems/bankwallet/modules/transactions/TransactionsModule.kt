@@ -75,9 +75,9 @@ object TransactionsModule {
 
     fun initModule(view: TransactionsViewModel, router: IRouter) {
         val dataSource = TransactionRecordDataSource(PoolRepo(), TransactionItemDataSource(), TransactionItemFactory())
-        val interactor = TransactionsInteractor(App.walletManager, App.currencyManager, App.rateManager)
+        val interactor = TransactionsInteractor(App.adapterManager, App.currencyManager, App.rateManager)
         val transactionsLoader = TransactionsLoader(dataSource)
-        val presenter = TransactionsPresenter(interactor, router, TransactionViewItemFactory(App.walletManager, App.currencyManager, App.rateManager), transactionsLoader, TransactionMetadataDataSource())
+        val presenter = TransactionsPresenter(interactor, router, TransactionViewItemFactory(App.adapterManager, App.currencyManager, App.rateManager), transactionsLoader, TransactionMetadataDataSource())
 
         presenter.view = view
         interactor.delegate = presenter

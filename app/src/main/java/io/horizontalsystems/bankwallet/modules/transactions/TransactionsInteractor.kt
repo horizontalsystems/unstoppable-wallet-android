@@ -1,16 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
+import io.horizontalsystems.bankwallet.core.IAdapter
+import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
-import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.managers.RateManager
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
-import io.horizontalsystems.bankwallet.entities.Wallet
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
-class TransactionsInteractor(private val walletManager: IWalletManager, private val currencyManager: ICurrencyManager, private val rateManager: RateManager) : TransactionsModule.IInteractor {
+class TransactionsInteractor(private val adapterManager: IAdapterManager, private val currencyManager: ICurrencyManager, private val rateManager: RateManager) : TransactionsModule.IInteractor {
     var delegate: TransactionsModule.IInteractorDelegate? = null
 
     private val disposables = CompositeDisposable()
@@ -22,7 +22,7 @@ class TransactionsInteractor(private val walletManager: IWalletManager, private 
     override fun initialFetch() {
         onUpdateCoinCodes()
 
-        disposables.add(walletManager.walletsUpdatedSignal
+        disposables.add(adapterManager.adaptersUpdatedSignal
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe {
@@ -48,7 +48,7 @@ class TransactionsInteractor(private val walletManager: IWalletManager, private 
         val flowables = mutableListOf<Single<Pair<CoinCode, List<TransactionRecord>>>>()
 
         fetchDataList.forEach { fetchData ->
-            val adapter = walletManager.wallets.find { it.coinCode == fetchData.coinCode }?.adapter
+            val adapter = adapterManager.adapters.find { it.coin.code == fetchData.coinCode }
 
             val flowable = when (adapter) {
                 null -> Single.just(Pair(fetchData.coinCode, listOf()))
@@ -80,19 +80,19 @@ class TransactionsInteractor(private val walletManager: IWalletManager, private 
     }
 
     override fun setSelectedCoinCodes(selectedCoinCodes: List<String>) {
-        delegate?.onUpdateSelectedCoinCodes(if (selectedCoinCodes.isEmpty()) walletManager.wallets.map { it.coinCode } else selectedCoinCodes)
+        delegate?.onUpdateSelectedCoinCodes(if (selectedCoinCodes.isEmpty()) adapterManager.adapters.map { it.coin.code } else selectedCoinCodes)
     }
 
     override fun fetchLastBlockHeights() {
         lastBlockHeightDisposables.clear()
 
-        walletManager.wallets.forEach { wallet ->
-            lastBlockHeightDisposables.add(wallet.adapter.lastBlockHeightUpdatedSignal
+        adapterManager.adapters.forEach { adapter ->
+            lastBlockHeightDisposables.add(adapter.lastBlockHeightUpdatedSignal
                     .throttleLast(3, TimeUnit.SECONDS)
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
                     .subscribe {
-                        onUpdateLastBlockHeight(wallet)
+                        onUpdateLastBlockHeight(adapter)
                     })
         }
     }
@@ -127,21 +127,21 @@ class TransactionsInteractor(private val walletManager: IWalletManager, private 
         ratesDisposables.clear()
     }
 
-    private fun onUpdateLastBlockHeight(wallet: Wallet) {
-        wallet.adapter.lastBlockHeight?.let { lastBlockHeight ->
-            delegate?.onUpdateLastBlockHeight(wallet.coinCode, lastBlockHeight)
+    private fun onUpdateLastBlockHeight(adapter: IAdapter) {
+        adapter.lastBlockHeight?.let { lastBlockHeight ->
+            delegate?.onUpdateLastBlockHeight(adapter.coin.code, lastBlockHeight)
         }
     }
 
     private fun onUpdateCoinCodes() {
-        delegate?.onUpdateCoinsData(walletManager.wallets.map { Triple(it.coinCode, it.adapter.confirmationsThreshold, it.adapter.lastBlockHeight) })
+        delegate?.onUpdateCoinsData(adapterManager.adapters.map { Triple(it.coin.code, it.confirmationsThreshold, it.lastBlockHeight) })
 
-        walletManager.wallets.forEach { wallet ->
-            transactionUpdatesDisposables.add(wallet.adapter.transactionRecordsSubject
+        adapterManager.adapters.forEach { adapter ->
+            transactionUpdatesDisposables.add(adapter.transactionRecordsSubject
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
                     .subscribe {
-                        delegate?.didUpdateRecords(it, wallet.coinCode)
+                        delegate?.didUpdateRecords(it, adapter.coin.code)
                     })
         }
     }

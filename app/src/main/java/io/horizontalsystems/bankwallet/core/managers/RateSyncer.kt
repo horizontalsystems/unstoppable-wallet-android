@@ -1,14 +1,14 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
-import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 class RateSyncer(private val rateManager: RateManager,
-                 private val walletManager: IWalletManager,
+                 private val adapterManager: IAdapterManager,
                  private val currencyManager: ICurrencyManager,
                  private val networkAvailabilityManager: NetworkAvailabilityManager,
                  timerSignal: Observable<Unit> = Observable.interval(0L, 3L, TimeUnit.MINUTES).map { Unit }) {
@@ -17,7 +17,7 @@ class RateSyncer(private val rateManager: RateManager,
 
     init {
         disposables.add(Observable.merge(
-                walletManager.walletsUpdatedSignal,
+                adapterManager.adaptersUpdatedSignal,
                 currencyManager.baseCurrencyUpdatedSignal,
                 networkAvailabilityManager.networkAvailabilitySignal,
                 timerSignal)
@@ -47,7 +47,7 @@ class RateSyncer(private val rateManager: RateManager,
 
     private fun requestRefresh() {
         if (networkAvailabilityManager.isConnected) {
-            rateManager.refreshLatestRates(walletManager.wallets.map { it.coinCode }, currencyManager.baseCurrency.code)
+            rateManager.refreshLatestRates(adapterManager.adapters.map { it.coin.code }, currencyManager.baseCurrency.code)
         }
     }
 }

@@ -1,7 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.send
 
 import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
+import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -13,7 +16,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
                      private val rateStorage: IRateStorage,
                      private val localStorage: ILocalStorage,
                      private val clipboardManager: IClipboardManager,
-                     private val wallet: Wallet,
+                     private val adapter: IAdapter,
                      private val appConfigProvider: IAppConfigProvider) : SendModule.IInteractor {
 
     sealed class SendError : Exception() {
@@ -33,10 +36,10 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
     var delegate: SendModule.IInteractorDelegate? = null
 
     override val coinTitle: String
-        get() = wallet.title
+        get() = adapter.coin.title
 
     override val coinCode: CoinCode
-        get() = wallet.coinCode
+        get() = adapter.coin.code
 
     override val addressFromClipboard: String?
         get() = clipboardManager.getCopiedText()
@@ -46,7 +49,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
 
     override fun retrieveRate() {
         disposables.add(
-                rateStorage.latestRateObservable(wallet.coinCode, currencyManager.baseCurrency.code)
+                rateStorage.latestRateObservable(adapter.coin.code, currencyManager.baseCurrency.code)
                         .take(1)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -58,7 +61,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
     }
 
     override fun parsePaymentAddress(address: String): PaymentRequestAddress {
-        return wallet.adapter.parsePaymentAddress(address)
+        return adapter.parsePaymentAddress(address)
     }
 
     override fun convertedAmountForInputType(inputType: SendModule.InputType, amount: BigDecimal): BigDecimal? {
@@ -72,26 +75,25 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
 
     override fun getTotalBalanceMinusFee(inputType: SendModule.InputType, address: String?): BigDecimal {
         return try{
-            val fee = wallet.adapter.fee(wallet.adapter.balance, address, false)
+            val fee = adapter.fee(adapter.balance, address, false)
             when(inputType){
-                SendModule.InputType.COIN -> wallet.adapter.balance.minus(fee)
+                SendModule.InputType.COIN -> adapter.balance.minus(fee)
                 else -> {
                     val safeRate = rate?.value ?: BigDecimal.ZERO
                     var feeInCurrency = fee.multiply(safeRate)
                     feeInCurrency = feeInCurrency.setScale(2, RoundingMode.CEILING)
-                    val balanceInCurrency = wallet.adapter.balance.multiply(safeRate)
+                    val balanceInCurrency = adapter.balance.multiply(safeRate)
                     balanceInCurrency.subtract(feeInCurrency)
                 }
             }
         } catch (e:  Error.InsufficientAmount) {
-            wallet.adapter.balance
+            adapter.balance
         }
     }
 
     override fun stateForUserInput(input: SendModule.UserInput, senderPay: Boolean): SendModule.State {
 
-        val coin = wallet.coinCode
-        val adapter = wallet.adapter
+        val coin = adapter.coin.code
         val baseCurrency = currencyManager.baseCurrency
         val rateValue = rate?.value
 
@@ -148,14 +150,14 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
     }
 
     private fun getAmountError(inputType: SendModule.InputType, fee: BigDecimal): SendModule.AmountError? {
-        var balanceMinusFee = wallet.adapter.balance - fee
+        var balanceMinusFee = adapter.balance - fee
         if (balanceMinusFee < BigDecimal.ZERO) {
             balanceMinusFee = BigDecimal.ZERO
         }
 
         return when (inputType) {
             SendModule.InputType.COIN -> {
-                SendModule.AmountError.InsufficientBalance(SendModule.AmountInfo.CoinValueInfo(CoinValue(wallet.coinCode, balanceMinusFee)))
+                SendModule.AmountError.InsufficientBalance(SendModule.AmountInfo.CoinValueInfo(CoinValue(adapter.coin.code, balanceMinusFee)))
             }
             SendModule.InputType.CURRENCY -> {
                 rate?.value?.let {
@@ -183,7 +185,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
             return
         }
 
-        wallet.adapter.send(address, computedAmount) { error ->
+        adapter.send(address, computedAmount) { error ->
             when (error) {
                 null -> delegate?.didSend()
                 else -> delegate?.didFailToSend(error)

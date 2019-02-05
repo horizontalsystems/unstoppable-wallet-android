@@ -1,15 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
 import android.os.Handler
+import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
 import io.horizontalsystems.bankwallet.core.IRateStorage
-import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 class BalanceInteractor(
-        private val walletManager: IWalletManager,
+        private val adapterManager: IAdapterManager,
         private val rateStorage: IRateStorage,
         private val currencyManager: ICurrencyManager,
         private val refreshTimeout: Double = 2.0
@@ -18,17 +18,17 @@ class BalanceInteractor(
     var delegate: BalanceModule.IInteractorDelegate? = null
 
     private var disposables: CompositeDisposable = CompositeDisposable()
-    private var walletDisposables: CompositeDisposable = CompositeDisposable()
+    private var adapterDisposables: CompositeDisposable = CompositeDisposable()
     private var rateDisposables: CompositeDisposable = CompositeDisposable()
 
-    override fun initWallets() {
-        onUpdateWallets()
+    override fun initAdapters() {
+        onUpdateAdapters()
 
-        disposables.add(walletManager.walletsUpdatedSignal
+        disposables.add(adapterManager.adaptersUpdatedSignal
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe {
-                    onUpdateWallets()
+                    onUpdateAdapters()
                 })
 
         onUpdateCurrency()
@@ -58,35 +58,35 @@ class BalanceInteractor(
         delegate?.didUpdateCurrency(currencyManager.baseCurrency)
     }
 
-    private fun onUpdateWallets() {
-        val wallets = walletManager.wallets
+    private fun onUpdateAdapters() {
+        val adapters = adapterManager.adapters
 
-        delegate?.didUpdateWallets(wallets)
+        delegate?.didUpdateAdapters(adapters)
 
-        walletDisposables.clear()
+        adapterDisposables.clear()
 
-        wallets.forEach { wallet ->
-            delegate?.didUpdateBalance(wallet.coinCode, wallet.adapter.balance)
-            delegate?.didUpdateState(wallet.coinCode, wallet.adapter.state)
+        adapters.forEach { adapter ->
+            delegate?.didUpdateBalance(adapter.coin.code, adapter.balance)
+            delegate?.didUpdateState(adapter.coin.code, adapter.state)
 
-            walletDisposables.add(wallet.adapter.balanceUpdatedSignal
+            adapterDisposables.add(adapter.balanceUpdatedSignal
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
                     .subscribe {
-                        delegate?.didUpdateBalance(wallet.coinCode, wallet.adapter.balance)
+                        delegate?.didUpdateBalance(adapter.coin.code, adapter.balance)
                     })
 
-            walletDisposables.add(wallet.adapter.stateUpdatedSignal
+            adapterDisposables.add(adapter.stateUpdatedSignal
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
                     .subscribe { state ->
-                        delegate?.didUpdateState(wallet.coinCode, wallet.adapter.state)
+                        delegate?.didUpdateState(adapter.coin.code, adapter.state)
                     })
         }
     }
 
     override fun refresh() {
-        walletManager.refreshWallets()
+        adapterManager.refreshAdapters()
 
         Handler().postDelayed({
             delegate?.didRefresh()
