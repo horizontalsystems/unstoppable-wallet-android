@@ -66,18 +66,18 @@ class BalanceInteractor(
         walletDisposables.clear()
 
         wallets.forEach { wallet ->
-            walletDisposables.add(wallet.adapter.balanceObservable
+            walletDisposables.add(wallet.adapter.balanceUpdatedSignal
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
-                    .subscribe { balance ->
-                        delegate?.didUpdateBalance(wallet.coinCode, balance)
+                    .subscribe {
+                        delegate?.didUpdateBalance(wallet.coinCode, wallet.adapter.balance)
                     })
 
-            walletDisposables.add(wallet.adapter.stateObservable
+            walletDisposables.add(wallet.adapter.stateUpdatedSignal
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
                     .subscribe { state ->
-                        delegate?.didUpdateState(wallet.coinCode, state)
+                        delegate?.didUpdateState(wallet.coinCode, wallet.adapter.state)
                     })
         }
     }

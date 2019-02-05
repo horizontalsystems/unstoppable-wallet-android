@@ -127,9 +127,10 @@ interface IEthereumKitManager {
 interface IAdapter {
     val decimal: Int
     val balance: BigDecimal
+    val balanceUpdatedSignal: PublishSubject<Unit>
 
-    val balanceObservable: Flowable<BigDecimal>
-    val stateObservable: Flowable<AdapterState>
+    val state: AdapterState
+    val stateUpdatedSignal: PublishSubject<Unit>
 
     val confirmationsThreshold: Int
     val lastBlockHeight: Int?
