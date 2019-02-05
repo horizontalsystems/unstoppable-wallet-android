@@ -5,7 +5,7 @@
     <string name="Alert_Ok">تأیید</string>
     <string name="Alert_Cancel">انصراف</string>
     <string name="Alert_Copy">رونوشت</string>
-    <string name="Alert_Share">به اشتراك گذاشتن</string>
+    <string name="Alert_Share">Forward</string>
     <string name="Alert_Close">ببند</string>
     <string name="Alert_Success">موفقیت</string>
     <string name="Alert_Copied">کپی انجام شد</string>
@@ -64,7 +64,7 @@
     <string name="Send_ERC_Alert">%s is an ERC20 token on Ethereum. To send such token get some ETH on your balance.</string>
     <!--Deposit-->
     <string name="Deposit_Title">دریافت s%</string>
-    <string name="Deposit_Share">به اشتراك گذاشتن</string>
+    <string name="Deposit_Share">Forward</string>
     <string name="Deposit_Your_Address">Your Address</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">همين آلان</string>
@@ -195,6 +195,6 @@
     <string name="EditPin_UnlockInfo">Current Passcode</string>
     <string name="EditPin_NewPinInfo">New Passcode</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Wallets</string>
+    <string name="ManageCoins_title">Coin Manger</string>
     <string name="ManageCoins_save">Save</string>
 </resources>
