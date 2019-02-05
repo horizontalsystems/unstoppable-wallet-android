@@ -5,7 +5,7 @@
     <string name="Alert_Ok">Хорошо</string>
     <string name="Alert_Cancel">Отменить</string>
     <string name="Alert_Copy">Скопировать</string>
-    <string name="Alert_Share">Forward</string>
+    <string name="Alert_Share">Переслать</string>
     <string name="Alert_Close">Закрыть</string>
     <string name="Alert_Success">Успешно</string>
     <string name="Alert_Copied">Скопировано</string>
@@ -64,7 +64,7 @@
     <string name="Send_ERC_Alert">%s is an ERC20 token on Ethereum. To send such token get some ETH on your balance.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Получено %s</string>
-    <string name="Deposit_Share">Forward</string>
+    <string name="Deposit_Share">Переслать</string>
     <string name="Deposit_Your_Address">Ваш Адрес</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">только что</string>
@@ -191,6 +191,6 @@
     <string name="EditPin_UnlockInfo">Текущий Код</string>
     <string name="EditPin_NewPinInfo">Новый Код</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Coin Manger</string>
+    <string name="ManageCoins_title">Крипто Валюты</string>
     <string name="ManageCoins_save">Сохранить</string>
 </resources>
