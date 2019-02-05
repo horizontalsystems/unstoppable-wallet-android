@@ -5,7 +5,7 @@
     <string name="Alert_Ok">OK</string>
     <string name="Alert_Cancel">Cancel</string>
     <string name="Alert_Copy">Copy</string>
-    <string name="Alert_Share">Share</string>
+    <string name="Alert_Share">Forward</string>
     <string name="Alert_Close">Close</string>
     <string name="Alert_Success">Success</string>
     <string name="Alert_Copied">Copied</string>
@@ -92,7 +92,7 @@
     <!--Deposit-->
 
     <string name="Deposit_Title">Receive %s</string>
-    <string name="Deposit_Share">Share</string>
+    <string name="Deposit_Share">Forward</string>
     <string name="Deposit_Your_Address">Your Address</string>
 
 
@@ -283,7 +283,7 @@
 
     <!--Manage Coins-->
 
-    <string name="ManageCoins_title">Wallets</string>
+    <string name="ManageCoins_title">Coin Manger</string>
     <string name="ManageCoins_save">Save</string>
 
 </resources>
