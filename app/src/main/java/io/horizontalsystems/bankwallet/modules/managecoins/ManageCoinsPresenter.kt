@@ -2,16 +2,13 @@ package io.horizontalsystems.bankwallet.modules.managecoins
 
 import io.horizontalsystems.bankwallet.entities.Coin
 
-class ManageCoinsPresenter(
-        private val interactor: ManageCoinsModule.IInteractor,
-        private val router: ManageCoinsModule.IRouter,
-        private val state: ManageCoinsModule.ManageCoinsPresenterState
-) : ManageCoinsModule.IViewDelegate, ManageCoinsModule.IInteractorDelegate {
-
+class ManageCoinsPresenter(private val interactor: ManageCoinsModule.IInteractor, private val router: ManageCoinsModule.IRouter, private val state: ManageCoinsModule.ManageCoinsPresenterState)
+    : ManageCoinsModule.IViewDelegate, ManageCoinsModule.IInteractorDelegate {
 
     var view: ManageCoinsModule.IView? = null
 
     override fun viewDidLoad() {
+        interactor.syncCoins()
         interactor.loadCoins()
     }
 

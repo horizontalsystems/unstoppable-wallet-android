@@ -38,7 +38,8 @@ data class Coin(
 @Entity
 @TypeConverters(CoinTypeConverter::class)
 data class StorableCoin(
-        @PrimaryKey val coinCode: String,
+        @PrimaryKey
+        val coinCode: String,
         var coinTitle: String,
         val coinType: CoinType,
         var enabled: Boolean,
