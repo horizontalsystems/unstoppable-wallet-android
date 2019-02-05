@@ -223,8 +223,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
     fun bind(balanceViewItem: BalanceViewItem, expanded: Boolean) {
         buttonPay.isEnabled = false
         imgSyncFailed.visibility = View.GONE
-        textCurrencyAmount.visibility = View.GONE
-        textCoinAmount.visibility = View.GONE
+        textExchangeRate.visibility = View.GONE
         progressSync.visibility = View.GONE
         textSyncProgress.visibility = View.GONE
 
@@ -245,14 +244,13 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
                 }
                 is AdapterState.Synced -> {
                     if (balanceViewItem.coinValue.value > BigDecimal.ZERO) {
-                        textCurrencyAmount.visibility = View.VISIBLE
                         textCurrencyAmount.text = balanceViewItem.currencyValue?.let { App.numberFormatter.format(it) }
                         textCurrencyAmount.setTextColor(ContextCompat.getColor(containerView.context, if (balanceViewItem.rateExpired) R.color.yellow_crypto_40 else R.color.yellow_crypto))
                         buttonPay.isEnabled = true
                     }
 
-                    textCoinAmount.visibility = View.VISIBLE
                     textCoinAmount.text = App.numberFormatter.format(balanceViewItem.coinValue)
+                    textExchangeRate.visibility = View.VISIBLE
                 }
                 is AdapterState.NotSynced -> {
                     imgSyncFailed.visibility = View.VISIBLE
