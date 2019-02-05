@@ -5,7 +5,7 @@
     <string name="Alert_Ok">OK</string>
     <string name="Alert_Cancel">Cancelar</string>
     <string name="Alert_Copy">Copiar</string>
-    <string name="Alert_Share">Compartir</string>
+    <string name="Alert_Share">Forward</string>
     <string name="Alert_Close">Cerrar</string>
     <string name="Alert_Success">Completado</string>
     <string name="Alert_Copied">Copiado</string>
@@ -64,7 +64,7 @@
     <string name="Send_ERC_Alert">%s is an ERC20 token on Ethereum. To send such token get some ETH on your balance.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Recibir %s</string>
-    <string name="Deposit_Share">Compartir</string>
+    <string name="Deposit_Share">Forward</string>
     <string name="Deposit_Your_Address">Su dirección</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">reciente</string>
@@ -197,6 +197,6 @@
     <string name="EditPin_UnlockInfo">Código Actual</string>
     <string name="EditPin_NewPinInfo">Código Nuevo</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Monederos</string>
+    <string name="ManageCoins_title">Coin Manger</string>
     <string name="ManageCoins_save">Guardar</string>
 </resources>
