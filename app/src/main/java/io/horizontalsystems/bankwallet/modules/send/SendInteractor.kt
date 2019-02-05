@@ -173,25 +173,17 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
             return
         }
 
-        var computedAmount: BigDecimal? = null
-
-        if (userInput.inputType == SendModule.InputType.COIN) {
-            computedAmount = userInput.amount
-        } else {
-            val rateValue = rate?.value
-            if (rateValue != null) {
-                computedAmount = userInput.amount / rateValue
-            }
+        val computedAmount = when(userInput.inputType) {
+            SendModule.InputType.COIN -> userInput.amount
+            SendModule.InputType.CURRENCY -> convertedAmountForInputType(SendModule.InputType.CURRENCY, userInput.amount)
         }
 
-        val amount = computedAmount
-
-        if (amount == null) {
+        if (computedAmount == null || computedAmount.compareTo(BigDecimal.ZERO) == 0) {
             delegate?.didFailToSend(SendError.NoAmount())
             return
         }
 
-        wallet.adapter.send(address, amount) { error ->
+        wallet.adapter.send(address, computedAmount) { error ->
             when (error) {
                 null -> delegate?.didSend()
                 else -> delegate?.didFailToSend(error)

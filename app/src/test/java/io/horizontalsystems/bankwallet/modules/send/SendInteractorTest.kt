@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send
 
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.argThat
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
@@ -29,7 +26,7 @@ class SendInteractorTest {
 
     private val currency = Currency("USD", symbol = "\u0024")
     private val coin = CoinCode()
-    private val rate = Rate(coin, currency.code, BigDecimal("0.1"), System.currentTimeMillis(), true)
+    private val rate = mock(Rate::class.java)
     private val userInput = mock(SendModule.UserInput::class.java)
     private val balance = BigDecimal(123)
     private val zero = BigDecimal.ZERO
@@ -43,6 +40,8 @@ class SendInteractorTest {
     fun setup() {
         RxBaseTest.setup()
 
+        whenever(userInput.inputType).thenReturn(SendModule.InputType.COIN)
+        whenever(rate.value).thenReturn(BigDecimal("0.1"))
         whenever(wallet.coinCode).thenReturn(coin)
         whenever(wallet.adapter).thenReturn(adapter)
         whenever(currencyManager.baseCurrency).thenReturn(currency)
@@ -86,6 +85,23 @@ class SendInteractorTest {
         interactor.retrieveRate()
 
         verify(rateStorage).latestRateObservable(coin, currency.code)
+    }
+
+    @Test
+    fun send_inCurrency() {
+        interactor.retrieveRate() // set rate
+
+        whenever(rate.value).thenReturn(BigDecimal(1024))
+        whenever(userInput.inputType).thenReturn(SendModule.InputType.CURRENCY)
+        whenever(userInput.address).thenReturn("abc")
+        whenever(userInput.amount).thenReturn(one)
+        whenever(adapter.decimal).thenReturn(8)
+
+        interactor.send(userInput)
+
+        val expectedAmountToSend = BigDecimal.valueOf(0.00097656) // 0.0009765625
+
+        verify(adapter).send(eq("abc"), eq(expectedAmountToSend), any())
     }
 
     @Test
