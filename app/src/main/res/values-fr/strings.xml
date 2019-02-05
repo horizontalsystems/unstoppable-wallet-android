@@ -191,6 +191,6 @@
     <string name="EditPin_UnlockInfo">Le code actuel</string>
     <string name="EditPin_NewPinInfo">Le code nouveu</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Coin Manger</string>
+    <string name="ManageCoins_title">Crypto Monnaie</string>
     <string name="ManageCoins_save">Sauvegarder</string>
 </resources>
