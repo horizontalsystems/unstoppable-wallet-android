@@ -5,7 +5,7 @@
     <string name="Alert_Ok">확인</string>
     <string name="Alert_Cancel">취소</string>
     <string name="Alert_Copy">복사</string>
-    <string name="Alert_Share">공유</string>
+    <string name="Alert_Share">Forward</string>
     <string name="Alert_Close">가까운, 닫힌</string>
     <string name="Alert_Success">성공</string>
     <string name="Alert_Copied">복사됨</string>
@@ -64,7 +64,7 @@
     <string name="Send_ERC_Alert">%s is an ERC20 token on Ethereum. To send such token get some ETH on your balance.</string>
     <!--Deposit-->
     <string name="Deposit_Title">수신%s</string>
-    <string name="Deposit_Share">공유</string>
+    <string name="Deposit_Share">Forward</string>
     <string name="Deposit_Your_Address">당신의 주소</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">지금 막</string>
@@ -197,6 +197,6 @@
     <string name="EditPin_UnlockInfo">현재 비밀번호</string>
     <string name="EditPin_NewPinInfo">새로운 비밀번호</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">지갑</string>
+    <string name="ManageCoins_title">Coin Manger</string>
     <string name="ManageCoins_save">저장</string>
 </resources>
