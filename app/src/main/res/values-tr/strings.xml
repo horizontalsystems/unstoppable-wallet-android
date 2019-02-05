@@ -5,7 +5,7 @@
     <string name="Alert_Ok">Tamam</string>
     <string name="Alert_Cancel">İptal</string>
     <string name="Alert_Copy">Kopyala</string>
-    <string name="Alert_Share">Paylaş</string>
+    <string name="Alert_Share">Forward</string>
     <string name="Alert_Close">Kapat</string>
     <string name="Alert_Success">Başarılı</string>
     <string name="Alert_Copied">Kopyalandı</string>
@@ -64,7 +64,7 @@
     <string name="Send_ERC_Alert">%s is an ERC20 token on Ethereum. To send such token get some ETH on your balance.</string>
     <!--Deposit-->
     <string name="Deposit_Title">%s al</string>
-    <string name="Deposit_Share">Paylaş</string>
+    <string name="Deposit_Share">Forward</string>
     <string name="Deposit_Your_Address">Adresiniz</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">şimdi</string>
@@ -191,6 +191,6 @@
     <string name="EditPin_UnlockInfo">Şimdi ki Şifre</string>
     <string name="EditPin_NewPinInfo">Yeni Şifre</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Cüzdanlar</string>
+    <string name="ManageCoins_title">Coin Manger</string>
     <string name="ManageCoins_save">Kaydet</string>
 </resources>
