@@ -28,6 +28,10 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
     override val balanceUpdatedSignal = PublishSubject.create<Unit>()
 
     override var state: AdapterState = AdapterState.Syncing(progressSubject)
+        set(value) {
+            field = value
+            stateUpdatedSignal.onNext(Unit)
+        }
     override var stateUpdatedSignal: PublishSubject<Unit> = PublishSubject.create()
 
     override val confirmationsThreshold: Int = 6
