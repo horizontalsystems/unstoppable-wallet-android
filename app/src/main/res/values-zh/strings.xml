@@ -5,7 +5,7 @@
     <string name="Alert_Ok">确定</string>
     <string name="Alert_Cancel">取消</string>
     <string name="Alert_Copy">复制</string>
-    <string name="Alert_Share">分享</string>
+    <string name="Alert_Share">Forward</string>
     <string name="Alert_Close">关闭</string>
     <string name="Alert_Success">成功</string>
     <string name="Alert_Copied">复制成功</string>
@@ -64,7 +64,7 @@
     <string name="Send_ERC_Alert">%s is an ERC20 token on Ethereum. To send such token get some ETH on your balance.</string>
     <!--Deposit-->
     <string name="Deposit_Title">收到%s</string>
-    <string name="Deposit_Share">分享</string>
+    <string name="Deposit_Share">Forward</string>
     <string name="Deposit_Your_Address">您的地址</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">刚才</string>
@@ -196,6 +196,6 @@
     <string name="EditPin_UnlockInfo">当前密码</string>
     <string name="EditPin_NewPinInfo">新密碼</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">钱包</string>
+    <string name="ManageCoins_title">Coin Manger</string>
     <string name="ManageCoins_save">保存</string>
 </resources>
