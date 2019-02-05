@@ -24,6 +24,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_wallet.*
+import kotlinx.android.synthetic.main.view_holder_add_coin.*
 import kotlinx.android.synthetic.main.view_holder_coin.*
 import java.math.BigDecimal
 
@@ -107,8 +108,6 @@ class BalanceFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener
         }
         (recyclerCoins.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
 
-        manageCoins.setOnSingleClickListener { viewModel.delegate.openManageCoins() }
-
         pullToRefresh.setOnRefreshListener {
             viewModel.delegate.refresh()
         }
@@ -143,6 +142,10 @@ class BalanceFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener
     override fun onItemClick(position: Int) {
         coinsAdapter.toggleViewHolder(position)
     }
+
+    override fun onAddCoinClick() {
+        viewModel.delegate.openManageCoins()
+    }
 }
 
 class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -151,7 +154,11 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
         fun onSendClicked(position: Int)
         fun onReceiveClicked(position: Int)
         fun onItemClick(position: Int)
+        fun onAddCoinClick()
     }
+
+    private val coinType = 1
+    private val addCoinType = 2
 
     private var expandedViewPosition: Int? = null
 
@@ -169,12 +176,17 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
         expandedViewPosition = if (expandedViewPosition == position) null else position
     }
 
-    override fun getItemCount() = viewDelegate.itemsCount
+    override fun getItemCount() = viewDelegate.itemsCount + 1
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-            ViewHolderCoin(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_coin, parent, false), listener)
+    override fun getItemViewType(position: Int): Int {
+        return if (position == itemCount - 1) addCoinType else coinType
+    }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {}
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
+            when(viewType) {
+                addCoinType -> ViewHolderAddCoin(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_add_coin, parent, false), listener)
+                else ->  ViewHolderCoin(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_coin, parent, false), listener)
+            }
 
     override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
         super.onViewDetachedFromWindow(holder)
@@ -183,6 +195,8 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
         }
     }
 
+    override fun onBindViewHolder(p0: RecyclerView.ViewHolder, p1: Int) {}
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: MutableList<Any>) {
         if (holder !is ViewHolderCoin) return
 
@@ -190,6 +204,14 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
             holder.bind(viewDelegate.getViewItem(position), expandedViewPosition == position)
         } else if (payloads.any { it is Boolean }) {
             holder.bindPartial(expandedViewPosition == position)
+        }
+    }
+}
+
+class ViewHolderAddCoin(override val containerView: View, listener: CoinsAdapter.Listener): RecyclerView.ViewHolder(containerView), LayoutContainer {
+    init {
+        manageCoins.setOnSingleClickListener{
+            listener.onAddCoinClick()
         }
     }
 }
