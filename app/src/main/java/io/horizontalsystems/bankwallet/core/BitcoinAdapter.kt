@@ -7,8 +7,6 @@ import io.horizontalsystems.bitcoinkit.BitcoinKit
 import io.horizontalsystems.bitcoinkit.managers.UnspentOutputSelector
 import io.horizontalsystems.bitcoinkit.models.BlockInfo
 import io.horizontalsystems.bitcoinkit.models.TransactionInfo
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
@@ -25,14 +23,12 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
 
     private val progressSubject: BehaviorSubject<Double> = BehaviorSubject.createDefault(0.0)
 
-    private val balanceSubject: BehaviorSubject<BigDecimal> = BehaviorSubject.createDefault(balance)
-    private val stateSubject: BehaviorSubject<AdapterState> = BehaviorSubject.createDefault(AdapterState.Syncing(progressSubject))
-
     override val balance: BigDecimal
         get() = bitcoinKit.balance.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN)
+    override val balanceUpdatedSignal = PublishSubject.create<Unit>()
 
-    override val balanceObservable: Flowable<BigDecimal> = balanceSubject.toFlowable(BackpressureStrategy.DROP)
-    override val stateObservable: Flowable<AdapterState> = stateSubject.toFlowable(BackpressureStrategy.DROP)
+    override var state: AdapterState = AdapterState.Syncing(progressSubject)
+    override var stateUpdatedSignal: PublishSubject<Unit> = PublishSubject.create()
 
     override val confirmationsThreshold: Int = 6
     override val lastBlockHeight: Int get() = bitcoinKit.lastBlockHeight
@@ -100,7 +96,7 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
     // BitcoinKit Listener implementations
     //
     override fun onBalanceUpdate(bitcoinKit: BitcoinKit, balance: Long) {
-        balanceSubject.onNext(balance.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN))
+        balanceUpdatedSignal.onNext(Unit)
     }
 
     override fun onLastBlockInfoUpdate(bitcoinKit: BitcoinKit, blockInfo: BlockInfo) {
@@ -110,18 +106,20 @@ class BitcoinAdapter(val words: List<String>, network: BitcoinKit.NetworkType, n
     override fun onKitStateUpdate(bitcoinKit: BitcoinKit, state: BitcoinKit.KitState) {
         when (state) {
             is BitcoinKit.KitState.Synced -> {
-                if (stateSubject.value !is AdapterState.Synced) {
-                    stateSubject.onNext(AdapterState.Synced)
+                if (this.state !is AdapterState.Synced) {
+                    this.state = AdapterState.Synced
                 }
             }
             is BitcoinKit.KitState.NotSynced -> {
-                stateSubject.onNext(AdapterState.NotSynced)
+                if (this.state !is AdapterState.NotSynced) {
+                    this.state = AdapterState.NotSynced
+                }
             }
             is BitcoinKit.KitState.Syncing -> {
                 progressSubject.onNext(state.progress)
 
-                if (stateSubject.value !is AdapterState.Syncing) {
-                    stateSubject.onNext(AdapterState.Syncing(progressSubject))
+                if (this.state !is AdapterState.Syncing) {
+                    this.state = AdapterState.Syncing(progressSubject)
                 }
             }
         }

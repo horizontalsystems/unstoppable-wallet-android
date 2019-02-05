@@ -5,8 +5,6 @@ import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.ethereumkit.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Transaction
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -16,18 +14,17 @@ abstract class EthereumBaseAdapter(protected val ethereumKit: EthereumKit, final
 
     private val weisInEther = Math.pow(10.0, decimal.toDouble()).toBigDecimal()
 
-    private var state: AdapterState = AdapterState.Syncing(null)
-
-    private val balanceSubject = PublishSubject.create<BigDecimal>()
-    private val stateSubject = PublishSubject.create<AdapterState>()
-
     //
     // Adapter
     //
     override val transactionRecordsSubject: PublishSubject<List<TransactionRecord>> = PublishSubject.create()
-
-    override val balanceObservable: Flowable<BigDecimal> = balanceSubject.toFlowable(BackpressureStrategy.DROP)
-    override val stateObservable: Flowable<AdapterState> = stateSubject.toFlowable(BackpressureStrategy.DROP)
+    override val balanceUpdatedSignal = PublishSubject.create<Unit>()
+    override var state: AdapterState = AdapterState.Syncing(null)
+        set(value) {
+            field = value
+            stateUpdatedSignal.onNext(Unit)
+        }
+    override val stateUpdatedSignal = PublishSubject.create<Unit>()
 
     override val confirmationsThreshold: Int = 12
     override val lastBlockHeight: Int? get() = ethereumKit.lastBlockHeight
@@ -50,7 +47,7 @@ abstract class EthereumBaseAdapter(protected val ethereumKit: EthereumKit, final
     //
 
     override fun onBalanceUpdate(balance: Double) {
-        balanceSubject.onNext(balance.toBigDecimal())
+        balanceUpdatedSignal.onNext(Unit)
     }
 
     override fun onLastBlockHeightUpdate(height: Int) {
@@ -62,19 +59,16 @@ abstract class EthereumBaseAdapter(protected val ethereumKit: EthereumKit, final
             is EthereumKit.KitState.Synced -> {
                 if (this.state != AdapterState.Synced) {
                     this.state = AdapterState.Synced
-                    stateSubject.onNext(AdapterState.Synced)
                 }
             }
             is EthereumKit.KitState.NotSynced -> {
                 if (this.state != AdapterState.NotSynced) {
                     this.state = AdapterState.NotSynced
-                    stateSubject.onNext(AdapterState.NotSynced)
                 }
             }
             is EthereumKit.KitState.Syncing -> {
                 if (this.state != AdapterState.Syncing(null)) {
                     this.state = AdapterState.Syncing(null)
-                    stateSubject.onNext(AdapterState.Syncing(null))
                 }
             }
         }
