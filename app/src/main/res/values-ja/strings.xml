@@ -5,7 +5,7 @@
     <string name="Alert_Ok">はい</string>
     <string name="Alert_Cancel">キャンセル</string>
     <string name="Alert_Copy">コピー</string>
-    <string name="Alert_Share">共有</string>
+    <string name="Alert_Share">Forward</string>
     <string name="Alert_Close">閉じる</string>
     <string name="Alert_Success">成功</string>
     <string name="Alert_Copied">コピー完了</string>
@@ -64,7 +64,7 @@
     <string name="Send_ERC_Alert">%s is an ERC20 token on Ethereum. To send such token get some ETH on your balance.</string>
     <!--Deposit-->
     <string name="Deposit_Title">受取 %s</string>
-    <string name="Deposit_Share">共有</string>
+    <string name="Deposit_Share">Forward</string>
     <string name="Deposit_Your_Address">お客様のアドレス</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">ただ今</string>
@@ -191,6 +191,6 @@
     <string name="EditPin_UnlockInfo">現在のパスコード</string>
     <string name="EditPin_NewPinInfo">新しいパスコード</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">ウォレット</string>
+    <string name="ManageCoins_title">Coin Manger</string>
     <string name="ManageCoins_save">保存</string>
 </resources>
