@@ -29,7 +29,7 @@
     <string name="Backup_Intro_BackupNow">백업</string>
     <string name="Backup_Words_Title">비밀 키</string>
     <string name="Backup_Confirmation_Understand">나는 내 지갑과 토큰이 다른 서버가 아닌 이 장치에만 안전하게 존재하고 있음을 이해한다.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">나는 이 앱이 다른 장치로 이동, 삭제 또는 오작동하는 경우 내 지갑이 내가 작성하고 안전한 장소에 저장한 비밀 키로만 복구 될 수 있음을 이해한다.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I store safely offline.</string>
     <string name="Backup_Confirmation_LockAppWarn">장금 해제 핀을 변경하거나 안드로이드 오에스설정에서 어플 데이터를 삭제하는것은 지갑을 재설정합니다. 그러고 난 후, 당신은 당신의 지갑을 복구하기 위해서 당신의 비밀키가 필요합니다.</string>
     <string name="Backup_Confirmation_Title">비밀 키에서 단어를 입력</string>
     <string name="Backup_Confirmation_Description">비밀 키에서 단어를 입력.</string>
@@ -197,6 +197,6 @@
     <string name="EditPin_UnlockInfo">현재 비밀번호</string>
     <string name="EditPin_NewPinInfo">새로운 비밀번호</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Coin Manger</string>
+    <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_save">저장</string>
 </resources>
