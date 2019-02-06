@@ -29,7 +29,7 @@
     <string name="Backup_Intro_BackupNow">バックアップ</string>
     <string name="Backup_Words_Title">秘密鍵</string>
     <string name="Backup_Confirmation_Understand">私は私の財布とトークンは、ほかのサーバーではなく、このデバイスだけに安全に開催されること理解します。</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">私は、このアプリケーションが別のデバイスは、削除または誤動作に移動した場合、私の財布回復できるのは、安全な場所に保存されている秘密鍵だけのを理解します。</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I store safely offline.</string>
     <string name="Backup_Confirmation_LockAppWarn">アンドロイド OS 設定のアプリ  PINロック解除  を変更またはデータ削除する際、財布はリセットされます。その後あなたの財布を復元するのには、秘密キーを必要があります。</string>
     <string name="Backup_Confirmation_Title">秘密キーの後に、次の言葉にを入力してください。</string>
     <string name="Backup_Confirmation_Description">あなたの秘密鍵の単語を入力してください。</string>
@@ -191,6 +191,6 @@
     <string name="EditPin_UnlockInfo">現在のパスコード</string>
     <string name="EditPin_NewPinInfo">新しいパスコード</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Coin Manger</string>
+    <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_save">保存</string>
 </resources>
