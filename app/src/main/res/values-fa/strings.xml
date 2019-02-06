@@ -29,7 +29,7 @@
     <string name="Backup_Intro_BackupNow">پيشتيباني</string>
     <string name="Backup_Words_Title">رقم مخفی</string>
     <string name="Backup_Confirmation_Understand">من فهميدم كي پول كيف من و توكن هاي من همه شان حفظ و امانط است در اين دستگاه و نخير در ديگر سيرفير ها.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I have just written down and saved in a secure place.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I store safely offline.</string>
     <string name="Backup_Confirmation_LockAppWarn">Changing the unlock PIN or deleting app data in your Android OS settings would reset the wallet. You will need your Secret Key to restore your wallet after that.</string>
     <string name="Backup_Confirmation_Title">تعقيب كنيد حرف هاي رمز مخفي خود را</string>
     <string name="Backup_Confirmation_Description">حرف هاي رمز تات را وارد كنيد.</string>
@@ -195,6 +195,6 @@
     <string name="EditPin_UnlockInfo">Current Passcode</string>
     <string name="EditPin_NewPinInfo">New Passcode</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Coin Manger</string>
+    <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_save">Save</string>
 </resources>
