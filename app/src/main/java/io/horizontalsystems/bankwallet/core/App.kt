@@ -91,7 +91,7 @@ class App : Application() {
         coinsStorage = StorableCoinsRepository(appDatabase)
         localStorage = LocalStorageManager()
 
-        networkManager = NetworkManager()
+        networkManager = NetworkManager(appConfigProvider)
         rateManager = RateManager(rateStorage, networkManager)
         tokenSyncer = TokenSyncer(networkManager, coinsStorage)
         coinManager = CoinManager(appConfigProvider, coinsStorage)
