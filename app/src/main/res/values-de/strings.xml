@@ -29,7 +29,7 @@
     <string name="Backup_Intro_BackupNow">Backup</string>
     <string name="Backup_Words_Title">Offlineschlüssel</string>
     <string name="Backup_Confirmation_Understand">Ich stimme zu, dass mein Wallet und meinen Token nur auf diesem Gerät verfügbar sind.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">Ich stimme zu,  dass bei einer Verschiebung  oder Entfernung dieser App, der Zugang zu meinem Walletkonto nur bei Verwendung den Offlineschlüsseln erfolgt , der sicher gespeichert werden muss.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I store safely offline.</string>
     <string name="Backup_Confirmation_LockAppWarn">PIN zum Entsperren des Telefons ändern in Ihrem Android OS würde Einstellungen des Wallet. Sie benötigen Ihr backup Satz Ihrer Wallet danach wiederherstellen.</string>
     <string name="Backup_Confirmation_Title">Gib bitte die folgenden Wörter deines Offlineschlüssels ein</string>
     <string name="Backup_Confirmation_Description">Gib die folgenden Wörter deines Offlineschlüssels ein.</string>
@@ -191,6 +191,6 @@
     <string name="EditPin_UnlockInfo">Aktuelle Code </string>
     <string name="EditPin_NewPinInfo">Neue Code</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Kryptowährung</string>
+    <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_save">Speichern</string>
 </resources>
