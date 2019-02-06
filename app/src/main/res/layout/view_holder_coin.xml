@@ -15,17 +15,16 @@
     android:orientation="vertical"
     android:paddingEnd="8dp"
     android:paddingStart="8dp"
-    android:paddingTop="12dp"
+    android:paddingTop="8dp"
     >
 
+    <!-- first line -->
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="78dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="4dp"
         android:layout_marginStart="4dp"
         >
-
-        <!-- first line -->
 
         <ImageView
             android:id="@+id/imgCoin"
@@ -61,70 +60,72 @@
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="0.000078 BTC"
             />
+    </android.support.constraint.ConstraintLayout>
 
-        <!-- second line -->
-
-        <android.support.constraint.Guideline
-            android:id="@+id/secondLineGuideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent=".85"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imgCoin"
-            />
+    <!-- second line -->
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="23dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="14dp"
+        >
 
         <ImageView
             android:id="@+id/imgSyncFailed"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginStart="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
             android:indeterminateTint="@color/grey"
             android:indeterminateTintMode="src_atop"
             android:src="@drawable/attention"
             android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="@+id/secondLineGuideline"
             />
 
         <ProgressBar
             android:id="@+id/progressSync"
             style="?android:attr/progressBarStyle"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginBottom="3dp"
             android:backgroundTint="@color/grey"
             android:indeterminate="true"
             android:indeterminateTint="@color/grey"
             android:indeterminateTintMode="src_atop"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imgSyncFailed"
-            app:layout_constraintBottom_toBottomOf="@+id/secondLineGuideline"
             />
 
         <TextView
             android:id="@+id/textSyncProgress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:fontFamily="@font/noto_sans"
+            android:includeFontPadding="false"
             android:textColor="@color/grey"
             android:textSize="14sp"
-            android:visibility="visible"
-            android:layout_marginStart="8dp"
-            tools:text="45%"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/progressSync"
-            app:layout_constraintTop_toTopOf="@+id/progressSync"
-            app:layout_constraintBottom_toBottomOf="@+id/progressSync"
+            tools:text="45%"
             />
 
         <TextView
             android:id="@+id/textExchangeRate"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="21dp"
             android:fontFamily="@font/noto_sans"
+            android:includeFontPadding="false"
             android:textColor="@color/grey"
             android:textSize="14sp"
-            tools:text="$6500 per BTC"
-            app:layout_constraintBottom_toBottomOf="@+id/secondLineGuideline"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            tools:text="$6500 per BTC"
             />
 
         <TextView
@@ -132,13 +133,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/noto_sans_bold"
+            android:includeFontPadding="false"
             android:textColor="@color/yellow_crypto"
             android:textSize="17sp"
-            tools:text="$52.50"
-            app:layout_constraintBottom_toBottomOf="@+id/secondLineGuideline"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="$52.50"
             />
-
     </android.support.constraint.ConstraintLayout>
 
     <LinearLayout
