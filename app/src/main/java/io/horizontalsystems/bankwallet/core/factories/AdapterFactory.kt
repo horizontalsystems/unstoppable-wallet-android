@@ -23,8 +23,6 @@ class AdapterFactory(private val appConfigProvider: IAppConfigProvider, private 
     }
 
     fun unlinkAdapter(adapter: IAdapter) {
-        adapter.stop()
-
         when (adapter) {
             is EthereumBaseAdapter -> {
                 ethereumKitManager.unlink()
