@@ -29,7 +29,7 @@
     <string name="Backup_Intro_BackupNow">Yedekle</string>
     <string name="Backup_Words_Title">Gizli Anahtar</string>
     <string name="Backup_Confirmation_Understand">Cüzdanımın güvenle, sadece bu cihazda bulunduğunu ve herhangi bir sunucuda olmadığını biliyorum.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">Uygulamanın silinmesi, hatalı davranması, taşınması ve benzeri bir durumda hesabıma ulaşamadığımda, hesabımı kurtarmanın tek yolunun Gizli Anahtar olduğunu biliyorum. Bu sebepten dolayı Gizli Anahtarı güvenli bir yerde sakladım.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I store safely offline.</string>
     <string name="Backup_Confirmation_LockAppWarn">Cihaz şifresini değiştirmek veya uygulamayı veya uygulama verisini silmek, cihazda bulunan hesapları sıfırlayacaktır. Bu durumda hesabınızı geri yükleyebilmeniz için Gizli Anahtara ihtiyacınız olacak.</string>
     <string name="Backup_Confirmation_Title">Gizli Anahtarınızda ki istenen kelimeleri giriniz</string>
     <string name="Backup_Confirmation_Description">Gizli Anahtarınızda ki kelimeleri girin.</string>
@@ -191,6 +191,6 @@
     <string name="EditPin_UnlockInfo">Şimdi ki Şifre</string>
     <string name="EditPin_NewPinInfo">Yeni Şifre</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Coin Manger</string>
+    <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_save">Kaydet</string>
 </resources>
