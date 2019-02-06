@@ -14,10 +14,12 @@ class BalanceViewItemFactoryTest {
     val currency = mock(Currency::class.java)
     val coin = mock(Coin::class.java)
     val coinCode = "coinCode"
+    val coinTitle = "coinTitle"
 
     @Before
     fun setup() {
-        whenever(coin.code).thenReturn("coinCode")
+        whenever(coin.code).thenReturn(coinCode)
+        whenever(coin.title).thenReturn(coinTitle)
     }
 
     @Test
