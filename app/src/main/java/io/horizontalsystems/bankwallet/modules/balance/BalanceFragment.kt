@@ -265,7 +265,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
         val iconDrawable = ContextCompat.getDrawable(containerView.context, LayoutHelper.getCoinDrawableResource(TextHelper.getCleanCoinCode(balanceViewItem.coinValue.coinCode)))
         imgCoin.setImageDrawable(iconDrawable)
 
-        textCoinName.text = balanceViewItem.coinValue.coinCode
+        textCoinName.text = balanceViewItem.title
 
         textExchangeRate.text = balanceViewItem.exchangeValue?.let { exchangeValue ->
             containerView.context.getString(R.string.Balance_RatePerCoin, App.numberFormatter.format(exchangeValue), balanceViewItem.coinValue.coinCode)
