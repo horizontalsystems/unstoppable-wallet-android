@@ -29,7 +29,7 @@
     <string name="Backup_Intro_BackupNow">备份</string>
     <string name="Backup_Words_Title">密钥</string>
     <string name="Backup_Confirmation_Understand">我的钱包和代币仅在这个设备上，而不是在任何服务器上安全地保存着。这个重点我都理解。</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">此应用程序因任何原因移动到其他设备被删除或出了故障，则只有使用密钥，才能恢复钱包。这个重点我都理解。</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I store safely offline.</string>
     <string name="Backup_Confirmation_LockAppWarn">更改 PIN 码或删除 Android 操作系统设置中的应用数据会导致钱包重置。在这种情况下, 你需要你的密钥来恢复你的钱包。</string>
     <string name="Backup_Confirmation_Title">请输入你密钥中的词</string>
     <string name="Backup_Confirmation_Description">请输入你密钥中的词.</string>
@@ -196,6 +196,6 @@
     <string name="EditPin_UnlockInfo">当前密码</string>
     <string name="EditPin_NewPinInfo">新密碼</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Coin Manger</string>
+    <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_save">保存</string>
 </resources>
