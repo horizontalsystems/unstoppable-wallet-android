@@ -193,6 +193,10 @@ class MyDragHelperCallback(private var listener: Listener) : ItemTouchHelper.Cal
         fun onItemMoveEnded(from: Int, to: Int)
     }
 
+    override fun isLongPressDragEnabled(): Boolean {
+        return false
+    }
+
     private val drawMovementFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
 
     override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
@@ -207,7 +211,7 @@ class MyDragHelperCallback(private var listener: Listener) : ItemTouchHelper.Cal
         val fromPosition = viewHolder.adapterPosition
         val toPosition = target.adapterPosition
         if(dragFrom == -1) {
-            dragFrom =  fromPosition
+            dragFrom = fromPosition
         }
         dragTo = toPosition
 
