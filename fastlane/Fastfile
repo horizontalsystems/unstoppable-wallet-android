@@ -11,7 +11,7 @@ platform :android do
     build_number = options[:build_number]
 
     gradle(task: "clean")
-    gradle(task: "assembleDevMainnetDebug")
+    gradle(task: "assembleDevMainnetDebug", flags: "--stacktrace --no-daemon")
 
     upload_to_hockey(notes: "Author: #{commit[:author]}, changes: #{commit[:message]}")
   end
@@ -22,7 +22,7 @@ platform :android do
     build_number = options[:build_number]
 
     gradle(task: "clean")
-    gradle(task: "assembleDevTestnetDebug")
+    gradle(task: "assembleDevTestnetDebug", flags: "--stacktrace --no-daemon")
 
     upload_to_hockey(notes: "Author: #{commit[:author]}, changes: #{commit[:message]}")
   end
