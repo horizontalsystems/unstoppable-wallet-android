@@ -62,6 +62,7 @@ interface INetworkManager {
     fun getRate(coinCode: String, currency: String, timestamp: Long): Flowable<BigDecimal>
     fun getTransaction(host: String, path: String): Flowable<JsonObject>
     fun ping(host: String, url: String): Flowable<JsonObject>
+    fun getTokens(): Flowable<List<Coin>>
 }
 
 interface IEncryptionManager {
@@ -211,6 +212,7 @@ interface ICoinStorage {
     fun enabledCoinsObservable(): Flowable<List<Coin>>
     fun allCoinsObservable(): Flowable<List<Coin>>
     fun save(coins: List<Coin>)
+    fun update(inserted: List<Coin>, deleted: List<Coin>)
     fun deleteAll()
 }
 

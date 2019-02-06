@@ -16,6 +16,9 @@ interface StorableCoinsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(storableCoin: StorableCoin)
 
+    @Query("DELETE FROM StorableCoin WHERE coinCode = :coinCode")
+    fun deleteByCode(coinCode: String)
+
     @Query("DELETE FROM StorableCoin")
     fun deleteAll()
 
@@ -25,6 +28,11 @@ interface StorableCoinsDao {
     @Transaction
     fun setEnabledCoins(coins: List<StorableCoin>) {
         resetCoinsState()
+        coins.forEach { insert(it) }
+    }
+
+    @Transaction
+    fun insertCoins(coins: List<StorableCoin>) {
         coins.forEach { insert(it) }
     }
 

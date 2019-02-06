@@ -39,6 +39,7 @@ class App : Application() {
         lateinit var coinManager: CoinManager
 
         lateinit var rateSyncer: RateSyncer
+        lateinit var tokenSyncer: TokenSyncer
         lateinit var rateManager: RateManager
         lateinit var networkAvailabilityManager: NetworkAvailabilityManager
         lateinit var appDatabase: AppDatabase
@@ -92,6 +93,7 @@ class App : Application() {
 
         networkManager = NetworkManager()
         rateManager = RateManager(rateStorage, networkManager)
+        tokenSyncer = TokenSyncer(networkManager, coinsStorage)
         coinManager = CoinManager(appConfigProvider, coinsStorage)
         authManager = AuthManager(secureStorage, localStorage, coinManager, rateManager, ethereumKitManager)
 

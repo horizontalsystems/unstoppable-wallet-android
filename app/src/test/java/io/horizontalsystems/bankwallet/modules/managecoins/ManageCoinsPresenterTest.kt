@@ -37,6 +37,8 @@ class ManageCoinsPresenterTest {
     @Test
     fun viewDidLoad() {
         presenter.viewDidLoad()
+
+        verify(interactor).syncCoins()
         verify(interactor).loadCoins()
     }
 
