@@ -187,6 +187,7 @@ interface ILockManager {
 }
 
 interface IAppConfigProvider {
+    val ipfsUrl: String
     val fiatDecimal: Int
     val maxDecimal: Int
     val testMode: Boolean

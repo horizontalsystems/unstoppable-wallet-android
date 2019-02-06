@@ -1,10 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.managecoins
 
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 
-class ManageCoinsViewModel: ViewModel(), ManageCoinsModule.IView, ManageCoinsModule.IRouter {
+class ManageCoinsViewModel : ViewModel(), ManageCoinsModule.IView, ManageCoinsModule.IRouter {
 
     val coinsLoadedLiveEvent = SingleLiveEvent<Void>()
     val closeLiveDate = SingleLiveEvent<Void>()

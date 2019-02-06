@@ -38,8 +38,7 @@ object ManageCoinsModule {
         }
 
         private fun setDisabledCoins() {
-            val coins = allCoins
-            disabledCoins = coins.minus(enabledCoins)
+            disabledCoins = allCoins.filter { !enabledCoins.contains(it)}
         }
     }
 
