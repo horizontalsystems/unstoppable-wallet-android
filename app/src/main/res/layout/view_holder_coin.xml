@@ -52,7 +52,7 @@
 
         <TextView
             android:id="@+id/textCoinAmount"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/noto_sans"
             android:textColor="?BallanceCoinAmountColor"
