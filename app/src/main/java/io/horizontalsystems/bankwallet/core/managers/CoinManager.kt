@@ -33,10 +33,10 @@ class CoinManager(private val appConfigProvider: IAppConfigProvider, private val
             val allCoins = allCoinsFromDb.toMutableList()
             appConfigProvider.defaultCoins.forEach { coin ->
                 if (!allCoinsFromDb.contains(coin)) {
-                    allCoins.add(coin)
+                    allCoins.add(0, coin)
                 }
             }
-            return@flatMap Flowable.just(allCoins)
+            Flowable.just(allCoins)
         }
 
     override fun enableDefaultCoins() {

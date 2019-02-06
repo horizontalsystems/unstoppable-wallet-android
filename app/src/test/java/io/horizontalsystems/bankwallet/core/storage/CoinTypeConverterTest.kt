@@ -27,7 +27,6 @@ class CoinTypeConverterTest {
     fun coinTypeToString_erc20() {
         val erc20Type = CoinType.Erc20("address", 12)
         val erc20String = converter.coinTypeToString(erc20Type)
-        print("erc: $erc20String")
         val expectedString = "erc_20_key;address;12"
         Assert.assertEquals(expectedString, erc20String)
     }
