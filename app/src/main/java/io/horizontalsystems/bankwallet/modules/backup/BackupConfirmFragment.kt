@@ -7,9 +7,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.Utils
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_backup_words_confirm.*
 
@@ -28,12 +26,6 @@ class BackupConfirmFragment : Fragment() {
 
         activity?.let {
             viewModel = ViewModelProviders.of(it).get(BackupViewModel::class.java)
-        }
-
-        context?.let {
-            if (Utils.isUsingCustomKeyboard(it) ) {
-                (activity as? BaseActivity)?.showCustomKeyboardAlert()
-            }
         }
 
         viewModel.wordIndexesToConfirmLiveData.observe(this, Observer { list ->
