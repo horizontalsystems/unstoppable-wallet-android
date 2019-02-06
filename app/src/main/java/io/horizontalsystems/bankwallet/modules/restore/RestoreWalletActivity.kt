@@ -28,10 +28,6 @@ class RestoreWalletActivity : BaseActivity(), BottomConfirmAlert.Listener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_restore_wallet)
 
-        if (Utils.isUsingCustomKeyboard(this) ) {
-            showCustomKeyboardAlert()
-        }
-
         setSupportActionBar(toolbar)
 
         supportActionBar?.title = getString(R.string.Restore_Title)
@@ -70,9 +66,19 @@ class RestoreWalletActivity : BaseActivity(), BottomConfirmAlert.Listener {
         recyclerInputs.layoutManager = GridLayoutManager(this, 2)
         recyclerInputs.adapter = WordsInputAdapter(object : EditTextViewHolder.WordsChangedListener {
             override fun set(position: Int, value: String) {
-                words[position] = value
+                if (isUsingNativeKeyboard()) {
+                    words[position] = value
+                }
             }
         })
+    }
+
+    private fun isUsingNativeKeyboard(): Boolean {
+        if (Utils.isUsingCustomKeyboard(this)) {
+            showCustomKeyboardAlert()
+            return false
+        }
+        return true
     }
 
     override fun onSupportNavigateUp(): Boolean {
