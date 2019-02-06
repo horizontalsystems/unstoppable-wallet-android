@@ -29,7 +29,7 @@
     <string name="Backup_Intro_BackupNow">Sauvegarde</string>
     <string name="Backup_Words_Title">Le mot secret</string>
     <string name="Backup_Confirmation_Understand">Je comprends que mon porte-monnaie et mes tokens sont en toute sécurité sur cet appareil uniquement et pas sur les autres appareils.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">Je comprends que si cette appli est déplacée vers un autre appareil ou supprimée, mon porte-monnaie ne peut être récupéré qu\'avec la clé secrète que je viens d\'écrire et de sauvegarder dans un endroit sécurisé.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I store safely offline.</string>
     <string name="Backup_Confirmation_LockAppWarn">Changer le code ou de suppression de données d’application dans les paramètres de votre système d’exploitation Android remettrait à zéro le porte-monnaie. Vous aurez besoin de votre clé secrète pour restaurer votre porte-monnaie après cela.</string>
     <string name="Backup_Confirmation_Title">Entrez les mots de votre clé secrète</string>
     <string name="Backup_Confirmation_Description">Entrez les mots de votre clé secrète.</string>
@@ -191,6 +191,6 @@
     <string name="EditPin_UnlockInfo">Le code actuel</string>
     <string name="EditPin_NewPinInfo">Le code nouveu</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Crypto Monnaie</string>
+    <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_save">Sauvegarder</string>
 </resources>
