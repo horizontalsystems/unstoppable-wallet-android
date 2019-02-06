@@ -29,7 +29,7 @@
     <string name="Backup_Intro_BackupNow">Резервная копия</string>
     <string name="Backup_Words_Title">Секретный Ключ</string>
     <string name="Backup_Confirmation_Understand">Я понимаю, что мой кошелек и токены хранятся только на этом устройстве.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I store safely offline.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">Я понимаю, что если это приложение удаляется или устанавливается на другое устройство, мой кошелек можно восстановить только с помощью секретного ключа, который я храню в безопасном месте.</string>
     <string name="Backup_Confirmation_LockAppWarn">Изменение PIN-кода телефона на вашем Android OS, сбросит кошелек . Вам понадобится ваш Секретный Ключ для восстановления кошелька.</string>
     <string name="Backup_Confirmation_Title">Введите слова из вашего Cекретного Ключа</string>
     <string name="Backup_Confirmation_Description">Введите слова из вашего секретного ключа.</string>
