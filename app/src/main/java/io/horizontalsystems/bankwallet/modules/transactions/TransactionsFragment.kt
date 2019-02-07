@@ -46,6 +46,7 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
         transactionsAdapter.viewModel = viewModel
         toolbar.setTitle(R.string.Transactions_Title)
 
+        recyclerTransactions.itemAnimator = null
         recyclerTransactions.setHasFixedSize(true)
         recyclerTransactions.adapter = transactionsAdapter
         recyclerTransactions.layoutManager = LinearLayoutManager(context)
