@@ -59,11 +59,11 @@ class BalanceInteractor(
     }
 
     private fun onUpdateAdapters() {
+        adapterDisposables.clear()
+
         val adapters = adapterManager.adapters
 
         delegate?.didUpdateAdapters(adapters)
-
-        adapterDisposables.clear()
 
         adapters.forEach { adapter ->
             delegate?.didUpdateBalance(adapter.coin.code, adapter.balance)
