@@ -49,8 +49,6 @@ class SendPresenterTest {
 
         presenter.onViewDidLoad()
 
-        verify(userInput).inputType = inputType
-
         verify(view).setCoin(interactor.coin)
         verify(view).setDecimal(viewItem.decimal)
         verify(view).setAmountInfo(viewItem.amountInfo)
