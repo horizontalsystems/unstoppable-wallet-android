@@ -48,7 +48,9 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {
                             rate = if (it.expired) null else it
-                            delegate?.didRateRetrieve()
+                            if (rate != null) {
+                                delegate?.didRateRetrieve()
+                            }
                         }
         )
     }

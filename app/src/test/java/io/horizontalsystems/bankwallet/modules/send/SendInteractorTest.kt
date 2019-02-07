@@ -88,6 +88,16 @@ class SendInteractorTest {
     }
 
     @Test
+    fun retrieveRate_expiredRate() {
+        whenever(rate.expired).thenReturn(true)
+        whenever(rateStorage.latestRateObservable(coinCode, currency.code)).thenReturn(Flowable.just(rate))
+
+        interactor.retrieveRate()
+
+        verify(delegate, never()).didRateRetrieve()
+    }
+
+    @Test
     fun send_inCurrency() {
         interactor.retrieveRate() // set rate
 

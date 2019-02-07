@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
+import java.math.BigDecimal
 
 class SendPresenterTest {
 
@@ -130,6 +131,17 @@ class SendPresenterTest {
         verify(view).setSwitchButtonEnabled(viewItem.switchButtonEnabled)
         verify(view).setHintInfo(viewItem.hintInfo)
         verify(view).setSecondaryFeeInfo(viewItem.secondaryFeeInfo)
+    }
+
+    @Test
+    fun didRateRetrieve_withDefaultInputTypeAsCurrency() {
+        val inputType = SendModule.InputType.CURRENCY
+
+        whenever(userInput.amount).thenReturn(BigDecimal.ZERO)
+        whenever(interactor.defaultInputType).thenReturn(inputType)
+
+        presenter.didRateRetrieve()
+        verify(userInput).inputType = SendModule.InputType.CURRENCY
     }
 
     @Test
