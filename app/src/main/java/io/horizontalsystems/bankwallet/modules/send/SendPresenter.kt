@@ -19,8 +19,7 @@ class SendPresenter(
         val state = interactor.stateForUserInput(userInput)
         val viewItem = factory.viewItemForState(state)
 
-        view?.setCoinTitle(interactor.coinTitle)
-        view?.setCoinCode(interactor.coinCode)
+        view?.setCoin(interactor.coin)
         view?.setDecimal(viewItem.decimal)
         view?.setAmountInfo(viewItem.amountInfo)
         view?.setSwitchButtonEnabled(viewItem.switchButtonEnabled)

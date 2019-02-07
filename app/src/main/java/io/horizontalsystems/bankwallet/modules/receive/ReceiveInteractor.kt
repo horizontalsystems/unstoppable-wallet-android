@@ -14,7 +14,7 @@ class ReceiveInteractor(
 
     override fun getReceiveAddress() {
         val addresses = adapterManager.adapters.filter { coinCode == null || it.coin.code == coinCode }.map {
-            AddressItem(it.receiveAddress, it.coin.code, it.coin.title)
+            AddressItem(it.receiveAddress, it.coin)
         }
 
         if (addresses.isNotEmpty()) {

@@ -2,18 +2,17 @@ package io.horizontalsystems.bankwallet.modules.send
 
 import android.support.v4.app.FragmentActivity
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import java.math.BigDecimal
 
 object SendModule {
 
     interface IView {
-        fun setCoinTitle(coinTitle: String)
-        fun setCoinCode(coinCode: CoinCode)
+        fun setCoin(coin: Coin)
 
         fun setAmountInfo(amountInfo: AmountInfo?)
         fun setSwitchButtonEnabled(enabled: Boolean)
@@ -47,9 +46,8 @@ object SendModule {
     }
 
     interface IInteractor {
+        val coin: Coin
         val clipboardHasPrimaryClip: Boolean
-        val coinTitle: String
-        val coinCode: CoinCode
         var defaultInputType: SendModule.InputType
         val addressFromClipboard: String?
 

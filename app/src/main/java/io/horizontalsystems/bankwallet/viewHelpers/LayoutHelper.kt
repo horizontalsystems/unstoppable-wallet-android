@@ -6,6 +6,7 @@ import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
+import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.Menu
 import io.horizontalsystems.bankwallet.R
@@ -49,7 +50,7 @@ object LayoutHelper {
     }
 
     fun getCoinDrawableResource(coinCode: String): Int {
-        return when(coinCode) {
+        return when (coinCode) {
             "BCH" -> R.drawable.coin_bitcoin_cash
             "LTC" -> R.drawable.coin_litecoin
             "DASH" -> R.drawable.coin_dash
@@ -74,4 +75,15 @@ object LayoutHelper {
         return infoBadge
     }
 
+    fun getDeviceDensity(context: Context): String {
+        return when (context.resources.displayMetrics.densityDpi) {
+            DisplayMetrics.DENSITY_LOW -> "ldpi"
+            DisplayMetrics.DENSITY_MEDIUM -> "mdpi"
+            DisplayMetrics.DENSITY_HIGH -> "hdpi"
+            DisplayMetrics.DENSITY_XHIGH -> "xhdpi"
+            DisplayMetrics.DENSITY_XXHIGH -> "xxhdpi"
+            DisplayMetrics.DENSITY_XXXHIGH -> "xxxhdpi"
+            else -> ""
+        }
+    }
 }

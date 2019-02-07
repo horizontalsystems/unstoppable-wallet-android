@@ -1,11 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.send
 
 import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
-import io.horizontalsystems.bankwallet.entities.Rate
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import io.horizontalsystems.bankwallet.entities.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -35,11 +31,8 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
 
     var delegate: SendModule.IInteractorDelegate? = null
 
-    override val coinTitle: String
-        get() = adapter.coin.title
-
-    override val coinCode: CoinCode
-        get() = adapter.coin.code
+    override val coin: Coin
+        get() = adapter.coin
 
     override val addressFromClipboard: String?
         get() = clipboardManager.getCopiedText()

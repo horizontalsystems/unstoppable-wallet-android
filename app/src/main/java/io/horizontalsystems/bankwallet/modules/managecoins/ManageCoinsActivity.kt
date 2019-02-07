@@ -159,9 +159,8 @@ class ViewHolderEnabledCoin(override val containerView: View) : RecyclerView.Vie
     fun bind(coin: Coin, onClick: () -> (Unit)) {
         coinTitle.text = coin.title
         coinCode.text = coin.code
+        coinIcon.bind(coin)
 
-        val iconDrawable = ContextCompat.getDrawable(containerView.context, LayoutHelper.getCoinDrawableResource(TextHelper.getCleanCoinCode(coin.code)))
-        coinIcon.setImageDrawable(iconDrawable)
         minusIcon.setOnSingleClickListener { onClick.invoke() }
     }
 
@@ -172,9 +171,8 @@ class ViewHolderDisabledCoin(override val containerView: View) : RecyclerView.Vi
     fun bind(coin: Coin, onClick: () -> (Unit)) {
         disableCoinTitle.text = coin.title
         disableCoinCode.text = coin.code
+        disableCoinIcon.bind(coin)
 
-        val iconDrawable = ContextCompat.getDrawable(containerView.context, LayoutHelper.getCoinDrawableResource(TextHelper.getCleanCoinCode(coin.code)))
-        disableCoinIcon.setImageDrawable(iconDrawable)
         plusIcon.setOnSingleClickListener { onClick.invoke() }
     }
 

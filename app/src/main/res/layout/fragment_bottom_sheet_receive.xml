@@ -9,17 +9,14 @@
     android:backgroundTint="?BottomSendBackground"
     >
 
-    <ImageView
-        android:id="@+id/coinImg"
+    <io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
+        android:id="@+id/coinIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:src="@drawable/coin_bitcoin"
-        android:tint="@color/grey"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txtTitle"
@@ -32,9 +29,9 @@
         android:fontFamily="@font/noto_sans_bold"
         android:singleLine="true"
         android:textSize="17sp"
-        app:layout_constraintBottom_toBottomOf="@+id/coinImg"
-        app:layout_constraintStart_toEndOf="@+id/coinImg"
-        app:layout_constraintTop_toTopOf="@+id/coinImg"
+        app:layout_constraintBottom_toBottomOf="@+id/coinIcon"
+        app:layout_constraintStart_toEndOf="@+id/coinIcon"
+        app:layout_constraintTop_toTopOf="@+id/coinIcon"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="Receive Bitcoin"
         />

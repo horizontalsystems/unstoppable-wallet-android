@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.receive
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.verify
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.receive.viewitems.AddressItem
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
@@ -15,10 +15,9 @@ class ReceivePresenterTest {
     private val router = Mockito.mock(ReceiveModule.IRouter::class.java)
     private val view = Mockito.mock(ReceiveModule.IView::class.java)
 
-    private var coin = CoinCode()
+    private var coin = Mockito.mock(Coin::class.java)
     private val coinAddress = "[coin_address]"
-    private val coinTitle = "[coin_address]"
-    private val addressItem = AddressItem(address = coinAddress, coinCode = coin, coinTitle = coinTitle)
+    private val addressItem = AddressItem(address = coinAddress, coin = coin)
     private val addresses = listOf(addressItem)
 
     private lateinit var presenter: ReceivePresenter

@@ -11,7 +11,6 @@ import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.BottomSheetDialogFragment
 import android.support.v4.app.FragmentActivity
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
@@ -23,10 +22,14 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.TextView
 import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
 import io.horizontalsystems.bankwallet.ui.extensions.NumPadItem
 import io.horizontalsystems.bankwallet.ui.extensions.NumPadItemType
 import io.horizontalsystems.bankwallet.ui.extensions.NumPadItemsAdapter
@@ -118,12 +121,9 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
         //disable BottomSheet dragging in numpad area
         numpadRecyclerView?.setOnTouchListener { _, event ->
             when (event?.action) {
-                MotionEvent.ACTION_DOWN, MotionEvent.ACTION_UP -> {
-                    false
-                }
-                else -> {
-                    true
-                }
+                MotionEvent.ACTION_DOWN,
+                MotionEvent.ACTION_UP -> false
+                else -> true
             }
         }
 
@@ -131,17 +131,11 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
             enabled?.let { switchButton?.isEnabled = it }
         })
 
-        viewModel.coinTitleLiveData.observe(this, Observer { coinTitle ->
-            coinTitle?.let {
-                mDialog?.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.Send_Title, it)
-            }
-        })
-
-        viewModel.coinCodeLiveData.observe(this, Observer { coinCode ->
-            coinCode?.let { code ->
+        viewModel.coinLiveData.observe(this, Observer { coin ->
+            coin?.let { coin1 ->
                 context?.let {
-                    val coinDrawable = ContextCompat.getDrawable(it, LayoutHelper.getCoinDrawableResource(code))
-                    mDialog?.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
+                    mDialog?.findViewById<CoinIconView>(R.id.coinIcon)?.bind(coin1)
+                    mDialog?.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.Send_Title, coin1.title)
                 }
             }
         })

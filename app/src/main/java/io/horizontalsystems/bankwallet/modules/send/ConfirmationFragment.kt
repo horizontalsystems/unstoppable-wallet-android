@@ -6,16 +6,14 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentActivity
-import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.ui.extensions.AddressView
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
+import io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
 
 class ConfirmationFragment : DialogFragment() {
 
@@ -47,13 +45,12 @@ class ConfirmationFragment : DialogFragment() {
             }
         })
 
-        viewModel.coinCodeLiveData.observe(this, Observer { coin ->
-            coin?.let { coinCode ->
+        viewModel.coinLiveData.observe(this, Observer { coin ->
+            coin?.let { coin1 ->
                 context?.let {
-                    val coinDrawable = ContextCompat.getDrawable(it, LayoutHelper.getCoinDrawableResource(coinCode))
-                    rootView.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
+                    rootView.findViewById<CoinIconView>(R.id.coinIcon)?.bind(coin1)
                 }
-                rootView.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.Send_Title, coinCode)
+                rootView.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.Send_Title, coin1.code)
             }
         })
 
