@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core.storage
 
 import android.arch.persistence.room.*
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.StorableCoin
 import io.reactivex.Flowable
 
@@ -16,11 +17,11 @@ interface StorableCoinsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(storableCoin: StorableCoin)
 
-    @Query("DELETE FROM StorableCoin WHERE coinCode = :coinCode")
-    fun deleteByCode(coinCode: String)
-
     @Query("DELETE FROM StorableCoin")
     fun deleteAll()
+
+    @Query("DELETE FROM StorableCoin WHERE coinCode IN (:codes)")
+    fun deleteCoins(codes: List<String>)
 
     @Query("UPDATE StorableCoin SET enabled = 0, `order` = null")
     fun resetCoinsState()
@@ -36,4 +37,9 @@ interface StorableCoinsDao {
         coins.forEach { insert(it) }
     }
 
+    @Transaction
+    fun bulkUpdate(inserted: List<Coin>, deleted: List<Coin>) {
+        insertCoins(inserted.map { StorableCoin(it.code, it.title, it.type, false, null) })
+        deleteCoins(deleted.map { it.code })
+    }
 }

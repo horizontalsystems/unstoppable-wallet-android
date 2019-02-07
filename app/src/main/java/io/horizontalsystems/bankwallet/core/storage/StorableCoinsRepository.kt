@@ -34,13 +34,7 @@ class StorableCoinsRepository(private val appDatabase: AppDatabase) : ICoinStora
 
     override fun update(inserted: List<Coin>, deleted: List<Coin>) {
         executor.execute {
-            appDatabase.coinsDao().insertCoins(inserted.map { coin ->
-                StorableCoin(coin.code, coin.title, coin.type, false, null)
-            })
-
-            deleted.forEach {
-                appDatabase.coinsDao().deleteByCode(it.code)
-            }
+            appDatabase.coinsDao().bulkUpdate(inserted, deleted)
         }
     }
 
