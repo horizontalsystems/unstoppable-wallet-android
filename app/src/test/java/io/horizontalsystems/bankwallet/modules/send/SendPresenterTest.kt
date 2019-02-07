@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.send
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
 import org.junit.Before
 import org.junit.Test
@@ -15,6 +16,7 @@ class SendPresenterTest {
     private val factory = mock(StateViewItemFactory::class.java)
     private val userInput = mock(SendModule.UserInput::class.java)
     private val prAddress = mock(PaymentRequestAddress::class.java)
+    private val coin = mock(Coin::class.java)
 
     private val state = SendModule.State(2, SendModule.InputType.COIN)
     private val viewItem = SendModule.StateViewItem(8)
@@ -25,6 +27,7 @@ class SendPresenterTest {
     @Before
     fun setup() {
 
+        whenever(interactor.coin).thenReturn(coin)
         whenever(interactor.parsePaymentAddress(any())).thenReturn(prAddress)
         whenever(interactor.stateForUserInput(any(), any())).thenReturn(state)
         whenever(factory.viewItemForState(any())).thenReturn(viewItem)
@@ -42,15 +45,12 @@ class SendPresenterTest {
 
         whenever(interactor.defaultInputType).thenReturn(inputType)
         whenever(interactor.clipboardHasPrimaryClip).thenReturn(true)
-        whenever(interactor.coinTitle).thenReturn("Bitcoin")
-        whenever(interactor.coinCode).thenReturn("BTC")
 
         presenter.onViewDidLoad()
 
         verify(userInput).inputType = inputType
 
-        verify(view).setCoinCode("BTC")
-        verify(view).setCoinTitle("Bitcoin")
+        verify(view).setCoin(interactor.coin)
         verify(view).setDecimal(viewItem.decimal)
         verify(view).setAmountInfo(viewItem.amountInfo)
         verify(view).setSwitchButtonEnabled(viewItem.switchButtonEnabled)

@@ -9,8 +9,9 @@ import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.BottomSheetDialogFragment
 import android.support.v4.app.FragmentActivity
-import android.support.v4.content.ContextCompat
+import android.support.v4.app.ShareCompat
 import android.view.Gravity
+import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
@@ -18,12 +19,9 @@ import android.widget.TextView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.bankwallet.ui.extensions.AddressView
+import io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
-import android.support.v4.app.ShareCompat
-import android.view.View
-
 
 class ReceiveFragment : BottomSheetDialogFragment() {
 
@@ -56,12 +54,11 @@ class ReceiveFragment : BottomSheetDialogFragment() {
             addresses?.apply {
                 if (addresses.isNotEmpty()) {
                     val address = addresses[itemIndex]
-                    context?.let { ctx ->
-                        val coinDrawable = ContextCompat.getDrawable(ctx, LayoutHelper.getCoinDrawableResource(address.coinCode))
-                        mDialog?.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
+                    context?.let {
+                        mDialog?.findViewById<CoinIconView>(R.id.coinIcon)?.bind(address.coin)
                     }
-                    mDialog?.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.Deposit_Title, address.coinTitle)
-                    mDialog?.findViewById<AddressView>(R.id.addressView)?.let { it.bind(address.address) }
+                    mDialog?.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.Deposit_Title, address.coin.title)
+                    mDialog?.findViewById<AddressView>(R.id.addressView)?.bind(address.address)
                     mDialog?.findViewById<ImageView>(R.id.imgQrCode)?.setImageBitmap(TextHelper.getQrCodeBitmapFromAddress(address.address))
                 }
             }

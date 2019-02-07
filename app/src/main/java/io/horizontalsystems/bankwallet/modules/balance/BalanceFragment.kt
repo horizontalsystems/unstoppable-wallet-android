@@ -18,8 +18,6 @@ import io.horizontalsystems.bankwallet.modules.managecoins.ManageCoinsModule
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.viewHelpers.AnimationHelper
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
-import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.android.extensions.LayoutContainer
@@ -27,7 +25,6 @@ import kotlinx.android.synthetic.main.fragment_wallet.*
 import kotlinx.android.synthetic.main.view_holder_add_coin.*
 import kotlinx.android.synthetic.main.view_holder_coin.*
 import java.math.BigDecimal
-
 
 class BalanceFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener {
 
@@ -45,7 +42,6 @@ class BalanceFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener
 
         viewModel = ViewModelProviders.of(this).get(BalanceViewModel::class.java)
         viewModel.init()
-
 
         viewModel.totalBalanceLiveData.observe(this, Observer { total ->
             ballanceText.text = total?.let { App.numberFormatter.format(it) } ?: ""
@@ -183,9 +179,9 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-            when(viewType) {
+            when (viewType) {
                 addCoinType -> ViewHolderAddCoin(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_add_coin, parent, false), listener)
-                else ->  ViewHolderCoin(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_coin, parent, false), listener)
+                else -> ViewHolderCoin(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_coin, parent, false), listener)
             }
 
     override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
@@ -208,9 +204,9 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
     }
 }
 
-class ViewHolderAddCoin(override val containerView: View, listener: CoinsAdapter.Listener): RecyclerView.ViewHolder(containerView), LayoutContainer {
+class ViewHolderAddCoin(override val containerView: View, listener: CoinsAdapter.Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
     init {
-        manageCoins.setOnSingleClickListener{
+        manageCoins.setOnSingleClickListener {
             listener.onAddCoinClick()
         }
     }
@@ -232,7 +228,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
             textCurrencyAmount.text = App.numberFormatter.format(it)
             textCurrencyAmount.visibility = View.VISIBLE
             textCurrencyAmount.setTextColor(ContextCompat.getColor(containerView.context, if (balanceViewItem.rateExpired) R.color.yellow_crypto_40 else R.color.yellow_crypto))
-        } ?: run{ textCurrencyAmount.visibility = View.GONE }
+        } ?: run { textCurrencyAmount.visibility = View.GONE }
 
         balanceViewItem.state.let { adapterState ->
             when (adapterState) {
@@ -262,10 +258,8 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
             }
         }
 
-        val iconDrawable = ContextCompat.getDrawable(containerView.context, LayoutHelper.getCoinDrawableResource(TextHelper.getCleanCoinCode(balanceViewItem.coinValue.coinCode)))
-        imgCoin.setImageDrawable(iconDrawable)
-
-        textCoinName.text = balanceViewItem.title
+        coinIcon.bind(balanceViewItem.coin)
+        textCoinName.text = balanceViewItem.coin.title
 
         textExchangeRate.text = balanceViewItem.exchangeValue?.let { exchangeValue ->
             containerView.context.getString(R.string.Balance_RatePerCoin, App.numberFormatter.format(exchangeValue), balanceViewItem.coinValue.coinCode)

@@ -43,7 +43,6 @@ class AppConfigProvider : IAppConfigProvider {
             coins.add(Coin("Bitcoin", "BTC$suffix", CoinType.Bitcoin))
             coins.add(Coin("Bitcoin Cash", "BCH$suffix", CoinType.BitcoinCash))
             coins.add(Coin("Ethereum", "ETH$suffix", CoinType.Ethereum))
-            coins.add(Coin("PundiX", "NPXS$suffix", CoinType.Erc20("0xA15C7Ebe1f07CaF6bFF097D8a589fb8AC49Ae5B3", 18)))
             return coins
         }
 }

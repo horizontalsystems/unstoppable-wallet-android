@@ -26,15 +26,12 @@
         android:layout_marginStart="4dp"
         >
 
-        <ImageView
-            android:id="@+id/imgCoin"
+        <io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
+            android:id="@+id/coinIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/coin_bitcoin"
-            android:tint="@color/grey"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textCoinName"
@@ -44,8 +41,8 @@
             android:fontFamily="@font/noto_sans_bold"
             android:textColor="?BallanceCoinNameColor"
             android:textSize="17sp"
-            app:layout_constraintBottom_toBottomOf="@+id/imgCoin"
-            app:layout_constraintStart_toEndOf="@+id/imgCoin"
+            app:layout_constraintBottom_toBottomOf="@+id/coinIcon"
+            app:layout_constraintStart_toEndOf="@+id/coinIcon"
             tools:text="Bitcoin"
             />
 

@@ -52,12 +52,10 @@
         tools:text="BTC"
         />
 
-    <ImageView
+    <io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
         android:id="@+id/disableCoinIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/coin_bitcoin"
-        android:tint="@color/grey"
         android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

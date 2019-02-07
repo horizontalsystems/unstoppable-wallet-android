@@ -1,13 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.AdapterState
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import java.math.BigDecimal
 
 data class BalanceViewItem(
-        val title: String,
+        val coin: Coin,
         val coinValue: CoinValue,
         val exchangeValue: CurrencyValue?,
         val currencyValue: CurrencyValue?,
@@ -34,7 +35,7 @@ class BalanceViewItemFactory {
         }
 
         return BalanceViewItem(
-                item.coin.title,
+                item.coin,
                 CoinValue(item.coin.code, item.balance),
                 exchangeValue,
                 currencyValue,

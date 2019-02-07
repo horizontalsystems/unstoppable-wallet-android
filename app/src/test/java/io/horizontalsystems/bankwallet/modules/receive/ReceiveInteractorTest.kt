@@ -42,7 +42,7 @@ class ReceiveInteractorTest {
 
         interactor.getReceiveAddress()
 
-        verify(delegate).didReceiveAddresses(listOf(AddressItem(coinAddress, coinCode, coinTitle)))
+        verify(delegate).didReceiveAddresses(listOf(AddressItem(coinAddress, coin)))
     }
 
     @Test
