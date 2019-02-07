@@ -14,8 +14,6 @@ class SendPresenter(
     // IViewDelegate
     //
     override fun onViewDidLoad() {
-        userInput.inputType = interactor.defaultInputType
-
         val state = interactor.stateForUserInput(userInput)
         val viewItem = factory.viewItemForState(state)
 
@@ -109,11 +107,18 @@ class SendPresenter(
     // IInteractorDelegate
     //
     override fun didRateRetrieve() {
+        if (interactor.defaultInputType == SendModule.InputType.CURRENCY && userInput.amount == BigDecimal.ZERO) {
+            userInput.inputType = interactor.defaultInputType
+        }
+
         val state = interactor.stateForUserInput(userInput)
         val viewItem = factory.viewItemForState(state)
 
+        view?.setDecimal(viewItem.decimal)
+        view?.setAmountInfo(viewItem.amountInfo)
         view?.setSwitchButtonEnabled(viewItem.switchButtonEnabled)
         view?.setHintInfo(viewItem.hintInfo)
+        view?.setPrimaryFeeInfo(viewItem.primaryFeeInfo)
         view?.setSecondaryFeeInfo(viewItem.secondaryFeeInfo)
     }
 
