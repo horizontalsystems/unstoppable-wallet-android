@@ -125,6 +125,7 @@ class TransactionsInteractor(private val adapterManager: IAdapterManager, privat
         disposables.clear()
         lastBlockHeightDisposables.clear()
         ratesDisposables.clear()
+        transactionUpdatesDisposables.clear()
     }
 
     private fun onUpdateLastBlockHeight(adapter: IAdapter) {
@@ -134,6 +135,8 @@ class TransactionsInteractor(private val adapterManager: IAdapterManager, privat
     }
 
     private fun onUpdateCoinCodes() {
+        transactionUpdatesDisposables.clear()
+
         delegate?.onUpdateCoinsData(adapterManager.adapters.map { Triple(it.coin.code, it.confirmationsThreshold, it.lastBlockHeight) })
 
         adapterManager.adapters.forEach { adapter ->
