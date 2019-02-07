@@ -2,8 +2,10 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import com.nhaarman.mockito_kotlin.inOrder
 import com.nhaarman.mockito_kotlin.whenever
-import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.core.IAdapter
+import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.ICurrencyManager
+import io.horizontalsystems.bankwallet.core.IRateStorage
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
@@ -14,7 +16,6 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
-import java.math.BigDecimal
 
 class BalanceInteractorTest {
 
@@ -49,31 +50,6 @@ class BalanceInteractorTest {
 
         verify(delegate).didUpdateAdapters(adapters)
         verify(delegate).didUpdateCurrency(currency)
-    }
-
-    @Test
-    fun initWallets_initialUpdateForCoin() {
-        val coinCode = "coinCode"
-        val balance = BigDecimal.ONE
-        val state = AdapterState.Synced
-
-        val coin = mock(Coin::class.java)
-        val adapter = mock(IAdapter::class.java)
-
-        val adapters = listOf(adapter)
-
-        whenever(adapterManager.adapters).thenReturn(adapters)
-        whenever(adapter.coin).thenReturn(coin)
-        whenever(coin.code).thenReturn(coinCode)
-        whenever(adapter.balance).thenReturn(balance)
-        whenever(adapter.state).thenReturn(state)
-        whenever(adapter.balanceUpdatedSignal).thenReturn(PublishSubject.create())
-        whenever(adapter.stateUpdatedSignal).thenReturn(PublishSubject.create())
-
-        interactor.initAdapters()
-
-        verify(delegate).didUpdateState(coinCode, state)
-        verify(delegate).didUpdateBalance(coinCode, balance)
     }
 
     @Test

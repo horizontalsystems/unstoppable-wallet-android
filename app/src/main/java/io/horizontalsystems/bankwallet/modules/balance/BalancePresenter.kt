@@ -48,7 +48,7 @@ class BalancePresenter(
     // BalanceModule.IInteractorDelegate
     //
     override fun didUpdateAdapters(adapters: List<IAdapter>) {
-        dataSource.reset(adapters.map { BalanceModule.BalanceItem(it.coin) })
+        dataSource.reset(adapters.map { BalanceModule.BalanceItem(it.coin, it.balance, it.state) })
         dataSource.currency?.let {
             interactor.fetchRates(it.code, dataSource.coinCodes)
         }

@@ -14,6 +14,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
+import java.math.BigDecimal
 
 class BalancePresenterTest {
 
@@ -82,16 +83,20 @@ class BalancePresenterTest {
         val currencyCode = "currencyCode"
         val currency = mock(Currency::class.java)
         val coin = mock(Coin::class.java)
+        val balance = BigDecimal(12.23)
+        val state = mock(AdapterState::class.java)
         val coinCodes = listOf(coinCode)
 
         val adapter = mock(IAdapter::class.java)
         val adapters = listOf(adapter)
 
-        val items = listOf(BalanceModule.BalanceItem(coin))
+        val items = listOf(BalanceModule.BalanceItem(coin, balance, state))
 
         whenever(coin.code).thenReturn(coinCode)
         whenever(coin.title).thenReturn(title)
         whenever(adapter.coin).thenReturn(coin)
+        whenever(adapter.balance).thenReturn(balance)
+        whenever(adapter.state).thenReturn(state)
         whenever(currency.code).thenReturn(currencyCode)
         whenever(dataSource.currency).thenReturn(currency)
         whenever(dataSource.coinCodes).thenReturn(coinCodes)
