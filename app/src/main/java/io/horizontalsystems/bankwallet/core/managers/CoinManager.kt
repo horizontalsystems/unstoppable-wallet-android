@@ -29,14 +29,11 @@ class CoinManager(private val appConfigProvider: IAppConfigProvider, private val
         }
 
     override val allCoinsObservable: Flowable<List<Coin>>
-        get() = coinStorage.allCoinsObservable().flatMap { allCoinsFromDb ->
-            val allCoins = allCoinsFromDb.toMutableList()
-            appConfigProvider.defaultCoins.forEach { coin ->
-                if (!allCoinsFromDb.contains(coin)) {
-                    allCoins.add(0, coin)
-                }
-            }
-            Flowable.just(allCoins)
+        get() = coinStorage.allCoinsObservable().flatMap { all ->
+            val defaults = appConfigProvider.defaultCoins
+            val allCoins = all.filter { !defaults.contains(it) }
+
+            Flowable.just(defaults + allCoins)
         }
 
     override fun enableDefaultCoins() {
