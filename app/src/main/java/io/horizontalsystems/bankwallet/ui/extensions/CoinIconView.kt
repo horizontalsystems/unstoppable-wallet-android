@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
+import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import kotlinx.android.synthetic.main.view_coin_icon.view.*
 
 class CoinIconView : ConstraintLayout {
@@ -34,7 +35,9 @@ class CoinIconView : ConstraintLayout {
                 dynamicCoinIcon.setImageURI("${ipfsUrl}blockchain/ETH/erc20/${coin.type.address}/icons/android/drawable-$density/icon.png")
             }
             else -> {
-                dynamicCoinIcon.setActualImageResource(LayoutHelper.getCoinDrawableResource(coin.code))
+                dynamicCoinIcon.setActualImageResource(LayoutHelper.getCoinDrawableResource(
+                        TextHelper.getCleanCoinCode(coin.code)
+                ))
             }
         }
     }
