@@ -4,7 +4,6 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SimpleItemAnimator
 import android.view.LayoutInflater
@@ -17,6 +16,7 @@ import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageCoinsModule
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.bankwallet.viewHelpers.AnimationHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -97,11 +97,7 @@ class BalanceFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener
 
         coinsAdapter.viewDelegate = viewModel.delegate
         recyclerCoins.adapter = coinsAdapter
-        recyclerCoins.layoutManager = object : LinearLayoutManager(context) {
-            override fun supportsPredictiveItemAnimations(): Boolean {
-                return false
-            }
-        }
+        recyclerCoins.layoutManager = context?.let { NpaLinearLayoutManager(it) }
         (recyclerCoins.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
 
         pullToRefresh.setOnRefreshListener {
