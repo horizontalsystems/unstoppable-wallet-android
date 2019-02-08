@@ -49,7 +49,7 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
 
         recyclerTransactions.setHasFixedSize(true)
         recyclerTransactions.adapter = transactionsAdapter
-        recyclerTransactions.layoutManager = context?.let { NpaLinearLayoutManager(it) }
+        recyclerTransactions.layoutManager = NpaLinearLayoutManager(context)
         recyclerTransactions.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 filterAdapter.filterChangeable = newState == SCROLL_STATE_IDLE
