@@ -16,13 +16,10 @@ class EthereumAdapter(coin: Coin, kit: EthereumKit) : EthereumBaseAdapter(coin, 
     }
 
     override fun stop() {}
+    override fun clear() {}
 
     override fun refresh() {
         ethereumKit.refresh()
-    }
-
-    override fun clear() {
-        ethereumKit.clear()
     }
 
     override fun send(address: String, value: BigDecimal, completion: ((Throwable?) -> (Unit))?) {

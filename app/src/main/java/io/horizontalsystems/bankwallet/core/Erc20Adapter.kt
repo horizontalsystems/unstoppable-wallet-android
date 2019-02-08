@@ -26,7 +26,6 @@ class Erc20Adapter(coin: Coin, kit: EthereumKit, override val contractAddress: S
         ethereumKit.refresh(contractAddress)
     }
 
-
     override fun send(address: String, value: BigDecimal, completion: ((Throwable?) -> Unit)?) {
         ethereumKit.sendERC20(address, contractAddress, value.toDouble(), completion)
     }
