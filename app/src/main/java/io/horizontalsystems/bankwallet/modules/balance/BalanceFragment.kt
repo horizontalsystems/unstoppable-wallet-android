@@ -97,7 +97,7 @@ class BalanceFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener
 
         coinsAdapter.viewDelegate = viewModel.delegate
         recyclerCoins.adapter = coinsAdapter
-        recyclerCoins.layoutManager = context?.let { NpaLinearLayoutManager(it) }
+        recyclerCoins.layoutManager = NpaLinearLayoutManager(context)
         (recyclerCoins.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
 
         pullToRefresh.setOnRefreshListener {
