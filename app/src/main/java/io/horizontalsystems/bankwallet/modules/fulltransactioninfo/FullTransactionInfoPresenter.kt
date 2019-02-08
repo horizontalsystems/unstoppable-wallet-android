@@ -70,6 +70,10 @@ class FullTransactionInfoPresenter(val interactor: FullTransactionInfoInteractor
         }
     }
 
+    override fun onClear() {
+        interactor.clear()
+    }
+
     //
     // InteractorDelegate
     //

@@ -75,4 +75,9 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
     override fun share(url: String) {
         showShareLiveEvent.value = url
     }
+
+    override fun onCleared() {
+        delegate.onClear()
+    }
+
 }

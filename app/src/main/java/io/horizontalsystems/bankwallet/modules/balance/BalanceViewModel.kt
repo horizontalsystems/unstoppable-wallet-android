@@ -61,4 +61,9 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     override fun openManageCoins() {
         openManageCoinsLiveEvent.call()
     }
+
+    override fun onCleared() {
+        delegate.onClear()
+    }
+
 }

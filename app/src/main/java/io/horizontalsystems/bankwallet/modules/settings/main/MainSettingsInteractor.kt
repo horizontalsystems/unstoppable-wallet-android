@@ -49,4 +49,8 @@ class MainSettingsInteractor(
         delegate?.didUpdateLightMode()
     }
 
+    override fun clear() {
+        disposables.clear()
+    }
+
 }

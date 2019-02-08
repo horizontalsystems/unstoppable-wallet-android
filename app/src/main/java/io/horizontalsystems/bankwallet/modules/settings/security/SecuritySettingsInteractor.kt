@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.ISystemInfoManager
 import io.horizontalsystems.bankwallet.core.IWordsManager
 import io.horizontalsystems.bankwallet.core.managers.AuthManager
 import io.horizontalsystems.bankwallet.entities.BiometryType
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
 class SecuritySettingsInteractor(
@@ -13,15 +14,16 @@ class SecuritySettingsInteractor(
         private val wordsManager: IWordsManager,
         private val localStorage: ILocalStorage,
         private val systemInfoManager: ISystemInfoManager,
-        private val lockManager: ILockManager): SecuritySettingsModule.ISecuritySettingsInteractor {
+        private val lockManager: ILockManager) : SecuritySettingsModule.ISecuritySettingsInteractor {
 
     var delegate: SecuritySettingsModule.ISecuritySettingsInteractorDelegate? = null
     private var lockStateUpdateDisposable: Disposable? = null
+    private var disposables: CompositeDisposable = CompositeDisposable()
 
     init {
-        val backupDisposable = wordsManager.backedUpSignal.subscribe {
+        wordsManager.backedUpSignal.subscribe {
             onUpdateBackedUp()
-        }
+        }.let { disposables.add(it) }
     }
 
     private fun onUpdateBackedUp() {
@@ -58,4 +60,9 @@ class SecuritySettingsInteractor(
             }
         }
     }
+
+    override fun clear() {
+        disposables.clear()
+    }
+
 }

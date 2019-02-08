@@ -164,4 +164,11 @@ class SendPresenterTest {
         verify(view).setAmountInfo(viewItem.amountInfo)
     }
 
+    @Test
+    fun onClear() {
+        presenter.onClear()
+
+        verify(interactor).clear()
+    }
+
 }

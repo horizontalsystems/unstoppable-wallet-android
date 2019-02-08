@@ -43,6 +43,7 @@ object SendModule {
         fun onSendClicked()
         fun onConfirmClicked()
         fun onMaxClicked()
+        fun onClear()
     }
 
     interface IInteractor {
@@ -58,6 +59,7 @@ object SendModule {
 
         fun send(userInput: UserInput)
         fun getTotalBalanceMinusFee(inputType: InputType, address: String?): BigDecimal
+        fun clear()
     }
 
     interface IInteractorDelegate {

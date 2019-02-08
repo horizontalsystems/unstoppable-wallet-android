@@ -51,6 +51,10 @@ class FullTransactionInfoInteractor(private val transactionInfoFactory: FullTran
         clipboardManager.copyText(value)
     }
 
+    override fun clear() {
+        disposables.clear()
+    }
+
     //
     // ProviderDelegate implementations
     //

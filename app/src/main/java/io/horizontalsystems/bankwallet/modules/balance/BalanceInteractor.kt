@@ -90,4 +90,10 @@ class BalanceInteractor(
         }, (refreshTimeout * 1000).toLong())
     }
 
+    override fun clear() {
+        disposables.clear()
+        adapterDisposables.clear()
+        rateDisposables.clear()
+    }
+
 }

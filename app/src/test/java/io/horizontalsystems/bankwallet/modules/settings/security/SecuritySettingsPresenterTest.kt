@@ -140,4 +140,12 @@ class SecuritySettingsPresenterTest {
         presenter.didUnlinkWallet()
         verify(view).reloadApp()
     }
+
+    @Test
+    fun onClear() {
+        presenter.onClear()
+
+        verify(interactor).clear()
+    }
+
 }

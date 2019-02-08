@@ -62,4 +62,9 @@ class ManageCoinsPresenter(private val interactor: ManageCoinsModule.IInteractor
 
     override val disabledCoinsCount: Int
         get() = state.disabledCoins.size
+
+    override fun onClear() {
+        interactor.clear()
+    }
+
 }

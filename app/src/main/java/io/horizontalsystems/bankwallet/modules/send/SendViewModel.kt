@@ -93,4 +93,8 @@ class SendViewModel : ViewModel(), SendModule.IView {
         dismissWithSuccessLiveEvent.call()
     }
 
+    override fun onCleared() {
+        delegate.onClear()
+    }
+
 }

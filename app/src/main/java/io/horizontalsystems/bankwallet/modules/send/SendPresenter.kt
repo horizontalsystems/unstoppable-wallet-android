@@ -103,6 +103,10 @@ class SendPresenter(
         interactor.send(userInput)
     }
 
+    override fun onClear() {
+        interactor.clear()
+    }
+
     //
     // IInteractorDelegate
     //
