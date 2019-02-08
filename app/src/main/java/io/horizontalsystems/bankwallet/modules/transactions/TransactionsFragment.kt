@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoViewModel
+import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.extensions.LayoutContainer
@@ -46,10 +47,9 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
         transactionsAdapter.viewModel = viewModel
         toolbar.setTitle(R.string.Transactions_Title)
 
-        recyclerTransactions.itemAnimator = null
         recyclerTransactions.setHasFixedSize(true)
         recyclerTransactions.adapter = transactionsAdapter
-        recyclerTransactions.layoutManager = LinearLayoutManager(context)
+        recyclerTransactions.layoutManager = context?.let { NpaLinearLayoutManager(it) }
         recyclerTransactions.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 filterAdapter.filterChangeable = newState == SCROLL_STATE_IDLE
