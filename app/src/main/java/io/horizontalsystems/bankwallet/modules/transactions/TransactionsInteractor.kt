@@ -8,6 +8,8 @@ import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
 
 class TransactionsInteractor(private val adapterManager: IAdapterManager, private val currencyManager: ICurrencyManager, private val rateManager: RateManager) : TransactionsModule.IInteractor {
@@ -17,7 +19,7 @@ class TransactionsInteractor(private val adapterManager: IAdapterManager, privat
     private val ratesDisposables = CompositeDisposable()
     private val lastBlockHeightDisposables = CompositeDisposable()
     private val transactionUpdatesDisposables = CompositeDisposable()
-    private val requestedTimestamps = mutableMapOf<CoinCode, MutableList<Long>>()
+    private val requestedTimestamps = ConcurrentHashMap<CoinCode, MutableList<Long>>()
 
     override fun initialFetch() {
         onUpdateCoinCodes()
@@ -107,7 +109,7 @@ class TransactionsInteractor(private val adapterManager: IAdapterManager, privat
                 if (requestedTimestamps[coinCode]?.contains(timestamp) == true) continue
 
                 if (!requestedTimestamps.containsKey(coinCode)) {
-                    requestedTimestamps[coinCode] = mutableListOf()
+                    requestedTimestamps[coinCode] = CopyOnWriteArrayList()
                 }
                 requestedTimestamps[coinCode]?.add(timestamp)
 
