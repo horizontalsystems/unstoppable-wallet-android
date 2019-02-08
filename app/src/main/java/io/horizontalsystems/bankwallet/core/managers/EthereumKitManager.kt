@@ -17,7 +17,7 @@ class EthereumKitManager(appConfig: IAppConfigProvider) : IEthereumKitManager {
         useCount += 1
 
         kit?.let { return it }
-        kit = EthereumKit(authData.words, network, authData.walletId)
+        kit = EthereumKit(authData.seed, network, authData.walletId)
         kit?.start()
 
         return kit!!

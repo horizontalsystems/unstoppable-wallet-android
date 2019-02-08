@@ -32,7 +32,7 @@ class BitcoinAdapter(override val coin: Coin, authData: AuthData, newWallet: Boo
                     }
                     else -> throw Exception("Not supported Coin Type ${coin.type} for BitcoinAdapter")
                 }
-        bitcoinKit = BitcoinKit(authData.words, networkType, newWallet = newWallet, walletId = authData.walletId)
+        bitcoinKit = BitcoinKit(authData.seed, networkType, newWallet = newWallet, walletId = authData.walletId)
     }
 
     override val balance: BigDecimal

@@ -16,18 +16,13 @@ class SecuredStorageManager(private val encryptionManager: IEncryptionManager) :
     override val authData: AuthData?
         get() {
             App.preferences.getString(AUTH_DATA, null)?.let { string ->
-                val words = encryptionManager.decrypt(string).split(" ").filter { it.isNotBlank() }
-
-                words.getOrNull(12)?.let { walletId ->
-                    return AuthData(words.subList(0, 12), walletId)
-                }
+                return AuthData(encryptionManager.decrypt(string))
             }
-
             return null
         }
 
     override fun saveAuthData(authData: AuthData) {
-        App.preferences.edit().putString(AUTH_DATA, encryptionManager.encrypt(authData.words.plus(authData.walletId).joinToString(" "))).apply()
+        App.preferences.edit().putString(AUTH_DATA, encryptionManager.encrypt(authData.toString())).apply()
     }
 
     override fun noAuthData(): Boolean {

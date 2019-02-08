@@ -47,7 +47,7 @@ abstract class EthereumBaseAdapter(override val coin: Coin, protected val ethere
     // EthereumKit Listener
     //
 
-    override fun onBalanceUpdate(balance: Double) {
+    override fun onBalanceUpdate(balance: BigDecimal) {
         balanceUpdatedSignal.onNext(Unit)
     }
 

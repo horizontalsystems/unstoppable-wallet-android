@@ -13,7 +13,7 @@ class Erc20Adapter(coin: Coin, kit: EthereumKit, override val contractAddress: S
         ethereumKit.register(this)
     }
 
-    override val balance get() = ethereumKit.balanceERC20(contractAddress).toBigDecimal()
+    override val balance get() = ethereumKit.balanceERC20(contractAddress)
 
     override fun start() {}
     override fun clear() {}

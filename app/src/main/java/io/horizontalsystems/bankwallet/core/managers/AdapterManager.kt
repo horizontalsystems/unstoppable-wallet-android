@@ -59,16 +59,16 @@ class AdapterManager(private val coinManager: CoinManager, private val authManag
                     adapter
                 }
 
+                adaptersUpdatedSignal.onNext(Unit)
+
                 oldAdapters.forEach { oldAdapter ->
-                    val adapter = adapters.find { it.coin.code == oldAdapter.coin.code }
-                    if (adapter == null) {
+                    if (adapters.none { it.coin.code == oldAdapter.coin.code }) {
+                        oldAdapter.stop()
                         adapterFactory.unlinkAdapter(oldAdapter)
                     }
                 }
 
                 oldAdapters.clear()
-
-                adaptersUpdatedSignal.onNext(Unit)
             }
         }
     }

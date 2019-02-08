@@ -8,7 +8,7 @@ import java.math.BigDecimal
 
 class EthereumAdapter(coin: Coin, kit: EthereumKit) : EthereumBaseAdapter(coin, kit, 18) {
 
-    override val balance: BigDecimal get() = ethereumKit.balance.toBigDecimal()
+    override val balance: BigDecimal get() = ethereumKit.balance
 
     override fun start() {
         ethereumKit.listener = this
@@ -23,11 +23,11 @@ class EthereumAdapter(coin: Coin, kit: EthereumKit) : EthereumBaseAdapter(coin, 
     }
 
     override fun send(address: String, value: BigDecimal, completion: ((Throwable?) -> (Unit))?) {
-        ethereumKit.send(address, value.toDouble(), completion)
+        ethereumKit.send(address, value, completion)
     }
 
     override fun fee(value: BigDecimal, address: String?, senderPay: Boolean): BigDecimal {
-        val fee = ethereumKit.fee().toBigDecimal()
+        val fee = ethereumKit.fee()
         if (senderPay && balance.minus(value).minus(fee) < BigDecimal.ZERO) {
             throw Error.InsufficientAmount(fee)
         }
