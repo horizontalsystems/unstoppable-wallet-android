@@ -9,9 +9,10 @@ class AuthData {
     var words: List<String> = listOf()
     var walletId: String = ""
     var seed: ByteArray = byteArrayOf()
+    private var version = 2
 
-    private val wordsSeparator = ","
-    private val partsSeparator = ";"
+    private val wordsSeparator = " "
+    private val partsSeparator = "|"
 
     constructor(words: List<String>, walletId: String = UUID.randomUUID().toString()) {
         this.words = words
@@ -20,14 +21,23 @@ class AuthData {
     }
 
     constructor(serialized: String) {
-        val (wordsString, walletId, seedString) = serialized.split(partsSeparator)
+        if (!serialized.contains(partsSeparator)) {
+            val wordsAndWalletId = serialized.split(wordsSeparator)
+            version = 1
+            words = wordsAndWalletId.subList(0, 12)
+            wordsAndWalletId.getOrNull(12)?.let { walletId = it }
+            seed = Mnemonic().toSeed(words)
+        } else {
+            val (version, wordsString, walletId, seedString) = serialized.split(partsSeparator)
 
-        this.words = wordsString.split(wordsSeparator)
-        this.walletId = walletId
-        this.seed = seedString.hexStringToByteArray()
+            this.version = version.toInt()
+            this.words = wordsString.split(wordsSeparator)
+            this.walletId = walletId
+            this.seed = seedString.hexStringToByteArray()
+        }
     }
 
     override fun toString(): String {
-        return listOf(words.joinToString(wordsSeparator), walletId, seed.toHexString()).joinToString(partsSeparator)
+        return listOf(version, words.joinToString(wordsSeparator), walletId, seed.toHexString()).joinToString(partsSeparator)
     }
 }
