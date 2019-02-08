@@ -129,4 +129,11 @@ class FullTransactionInfoPresenterTest {
         verify(interactor).retrieveTransactionInfo(transactionHash)
     }
 
+    @Test
+    fun onClear() {
+        presenter.onClear()
+
+        verify(interactor).clear()
+    }
+
 }

@@ -39,4 +39,8 @@ class ManageCoinsInteractor(private val coinManager: ICoinManager, private val c
         delegate?.didSaveChanges()
     }
 
+    override fun clear() {
+        disposables.clear()
+    }
+
 }

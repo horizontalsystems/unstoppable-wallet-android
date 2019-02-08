@@ -53,6 +53,7 @@ object ManageCoinsModule {
         fun disableCoin(position: Int)
         fun saveChanges()
         fun moveCoin(fromIndex: Int, toIndex: Int)
+        fun onClear()
 
         fun enabledItemForIndex(position: Int): Coin
         fun disabledItemForIndex(position: Int): Coin
@@ -64,6 +65,7 @@ object ManageCoinsModule {
         fun syncCoins()
         fun loadCoins()
         fun saveEnabledCoins(enabledCoins: List<Coin>)
+        fun clear()
     }
 
     interface IInteractorDelegate {

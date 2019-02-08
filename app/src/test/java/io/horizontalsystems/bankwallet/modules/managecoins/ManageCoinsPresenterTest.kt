@@ -113,4 +113,11 @@ class ManageCoinsPresenterTest {
         Assert.assertEquals(disabledCoins.size, presenter.disabledCoinsCount)
     }
 
+    @Test
+    fun onClear() {
+        presenter.onClear()
+
+        verify(interactor).clear()
+    }
+
 }

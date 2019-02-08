@@ -28,12 +28,14 @@ object BalanceModule {
         fun onReceive(position: Int)
         fun onPay(position: Int)
         fun openManageCoins()
+        fun onClear()
     }
 
     interface IInteractor {
         fun refresh()
         fun initAdapters()
         fun fetchRates(currencyCode: String, coinCodes: List<CoinCode>)
+        fun clear()
     }
 
     interface IInteractorDelegate {

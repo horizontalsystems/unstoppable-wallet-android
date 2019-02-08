@@ -92,4 +92,12 @@ class MainSettingsPresenterTest {
         presenter.didUpdateLightMode()
         verify(router).reloadAppInterface()
     }
+
+    @Test
+    fun onClear() {
+        presenter.onClear()
+
+        verify(interactor).clear()
+    }
+
 }

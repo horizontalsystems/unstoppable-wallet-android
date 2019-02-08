@@ -36,6 +36,7 @@ object FullTransactionInfoModule {
         fun onTapResource()
         fun onTapChangeProvider()
         fun onShare()
+        fun onClear()
     }
 
     interface Interactor {
@@ -46,6 +47,7 @@ object FullTransactionInfoModule {
 
         fun retrieveTransactionInfo(transactionHash: String)
         fun copyToClipboard(value: String)
+        fun clear()
     }
 
     interface InteractorDelegate {

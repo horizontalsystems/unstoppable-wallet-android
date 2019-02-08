@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.BiometryType
 
-class SecuritySettingsViewModel: ViewModel(), SecuritySettingsModule.ISecuritySettingsView, SecuritySettingsModule.ISecuritySettingsRouter {
+class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecuritySettingsView, SecuritySettingsModule.ISecuritySettingsRouter {
 
     lateinit var delegate: SecuritySettingsModule.ISecuritySettingsViewDelegate
 
@@ -60,4 +60,9 @@ class SecuritySettingsViewModel: ViewModel(), SecuritySettingsModule.ISecuritySe
     override fun showPinUnlock() {
         showPinUnlockLiveEvent.call()
     }
+
+    override fun onCleared() {
+        delegate.onClear()
+    }
+
 }

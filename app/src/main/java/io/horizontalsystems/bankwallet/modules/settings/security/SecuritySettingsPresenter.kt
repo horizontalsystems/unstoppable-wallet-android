@@ -51,4 +51,9 @@ class SecuritySettingsPresenter(
     override fun didUnlinkWallet() {
         view?.reloadApp()
     }
+
+    override fun onClear() {
+        interactor.clear()
+    }
+
 }

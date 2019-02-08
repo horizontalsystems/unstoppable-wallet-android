@@ -44,6 +44,10 @@ class BalancePresenter(
         router.openSendDialog(dataSource.getItem(position).coin.code)
     }
 
+    override fun onClear() {
+        interactor.clear()
+    }
+
     //
     // BalanceModule.IInteractorDelegate
     //

@@ -22,6 +22,7 @@ object SecuritySettingsModule {
         fun didTapBackupWallet()
         fun didTapRestoreWallet()
         fun confirmedUnlinkWallet()
+        fun onClear()
     }
 
     interface ISecuritySettingsInteractor {
@@ -31,6 +32,7 @@ object SecuritySettingsModule {
         fun setBiometricUnlockOn(biometricUnlockOn: Boolean)
         fun unlinkWallet()
         fun didTapOnBackupWallet()
+        fun clear()
     }
 
     interface ISecuritySettingsInteractorDelegate {

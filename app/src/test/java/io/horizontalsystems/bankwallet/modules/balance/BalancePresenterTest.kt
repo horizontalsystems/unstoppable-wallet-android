@@ -211,4 +211,12 @@ class BalancePresenterTest {
 
         verify(router).openSendDialog(coinCode)
     }
+
+    @Test
+    fun onClear() {
+        presenter.onClear()
+
+        verify(interactor).clear()
+    }
+
 }

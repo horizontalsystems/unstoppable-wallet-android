@@ -69,9 +69,9 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
     }
 
     override fun getTotalBalanceMinusFee(inputType: SendModule.InputType, address: String?): BigDecimal {
-        return try{
+        return try {
             val fee = adapter.fee(adapter.balance, address, false)
-            when(inputType){
+            when (inputType) {
                 SendModule.InputType.COIN -> adapter.balance.minus(fee)
                 else -> {
                     val safeRate = rate?.value ?: BigDecimal.ZERO
@@ -81,7 +81,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
                     balanceInCurrency.subtract(feeInCurrency)
                 }
             }
-        } catch (e:  Error.InsufficientAmount) {
+        } catch (e: Error.InsufficientAmount) {
             adapter.balance
         }
     }
@@ -92,7 +92,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
         val baseCurrency = currencyManager.baseCurrency
         val rateValue = rate?.value
 
-        val decimal = if(input.inputType == SendModule.InputType.COIN) Math.min(adapter.decimal, appConfigProvider.maxDecimal) else appConfigProvider.fiatDecimal
+        val decimal = if (input.inputType == SendModule.InputType.COIN) Math.min(adapter.decimal, appConfigProvider.maxDecimal) else appConfigProvider.fiatDecimal
 
         val state = SendModule.State(decimal, input.inputType)
 
@@ -170,7 +170,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
             return
         }
 
-        val computedAmount = when(userInput.inputType) {
+        val computedAmount = when (userInput.inputType) {
             SendModule.InputType.COIN -> userInput.amount
             SendModule.InputType.CURRENCY -> convertedAmountForInputType(SendModule.InputType.CURRENCY, userInput.amount)
         }
@@ -187,4 +187,9 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
             }
         }
     }
+
+    override fun clear() {
+        disposables.clear()
+    }
+
 }
