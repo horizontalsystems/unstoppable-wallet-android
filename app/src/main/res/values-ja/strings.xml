@@ -191,6 +191,6 @@
     <string name="EditPin_UnlockInfo">現在のパスコード</string>
     <string name="EditPin_NewPinInfo">新しいパスコード</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">コイン マネージャー</string>
+    <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_save">保存</string>
 </resources>
