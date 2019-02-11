@@ -18,7 +18,6 @@ import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.bankwallet.viewHelpers.AnimationHelper
-import io.reactivex.disposables.Disposable
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import kotlinx.android.synthetic.main.view_holder_add_coin.*
@@ -179,13 +178,6 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
                 else -> ViewHolderCoin(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_coin, parent, false), listener)
             }
 
-    override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
-        super.onViewDetachedFromWindow(holder)
-        when (holder) {
-            is ViewHolderCoin -> holder.unbind()
-        }
-    }
-
     override fun onBindViewHolder(p0: RecyclerView.ViewHolder, p1: Int) {}
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: MutableList<Any>) {
@@ -208,8 +200,6 @@ class ViewHolderAddCoin(override val containerView: View, listener: CoinsAdapter
 }
 
 class ViewHolderCoin(override val containerView: View, private val listener: CoinsAdapter.Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-
-    private var disposable: Disposable? = null
 
     fun bind(balanceViewItem: BalanceViewItem, expanded: Boolean) {
         buttonPay.isEnabled = false
@@ -276,10 +266,6 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
             AnimationHelper.collapse(buttonsWrapper)
         }
 
-    }
-
-    fun unbind() {
-        disposable?.dispose()
     }
 
 }
