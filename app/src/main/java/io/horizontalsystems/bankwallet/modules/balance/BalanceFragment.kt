@@ -18,7 +18,6 @@ import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.bankwallet.viewHelpers.AnimationHelper
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_wallet.*
@@ -231,15 +230,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
                 is AdapterState.Syncing -> {
                     progressSync.visibility = View.VISIBLE
                     textSyncProgress.visibility = View.VISIBLE
-
-                    disposable?.dispose()
-                    disposable = adapterState.progressSubject
-                            ?.observeOn(AndroidSchedulers.mainThread())
-                            ?.subscribe {
-                                val progress = (it * 100).toInt()
-                                textSyncProgress.text = "$progress%"
-                            }
-
+                    textSyncProgress.text = "${adapterState.progress}%"
                 }
                 is AdapterState.Synced -> {
                     if (balanceViewItem.coinValue.value > BigDecimal.ZERO) {

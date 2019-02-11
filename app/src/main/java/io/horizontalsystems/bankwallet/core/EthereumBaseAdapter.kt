@@ -21,7 +21,7 @@ abstract class EthereumBaseAdapter(override val coin: Coin, protected val ethere
     override val feeCoinCode: String? = null
     override val transactionRecordsSubject: PublishSubject<List<TransactionRecord>> = PublishSubject.create()
     override val balanceUpdatedSignal = PublishSubject.create<Unit>()
-    override var state: AdapterState = AdapterState.Syncing(null)
+    override var state: AdapterState = AdapterState.Synced
         set(value) {
             field = value
             stateUpdatedSignal.onNext(Unit)
@@ -69,8 +69,8 @@ abstract class EthereumBaseAdapter(override val coin: Coin, protected val ethere
                 }
             }
             is EthereumKit.KitState.Syncing -> {
-                if (this.state != AdapterState.Syncing(null)) {
-                    this.state = AdapterState.Syncing(null)
+                if (this.state != AdapterState.Synced) {
+                    this.state = AdapterState.Synced
                 }
             }
         }
