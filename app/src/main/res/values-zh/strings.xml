@@ -61,7 +61,7 @@
     <string name="Send_DialogTitle">确认交易</string>
     <string name="Send_DialogFee">费用:</string>
     <string name="Send_DialogTotal">总额:</string>
-    <string name="Send_ERC_Alert">%s is an ERC20 token on Ethereum. To send such token get some ETH on your balance.</string>
+    <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You don\&apos;t have %s ETH.</string>
     <!--Deposit-->
     <string name="Deposit_Title">收到%s</string>
     <string name="Deposit_Share">Forward</string>
