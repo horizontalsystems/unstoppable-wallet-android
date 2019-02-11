@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.ethereumkit.EthereumKit
 import io.reactivex.Single
+import org.web3j.crypto.Keys
 import java.math.BigDecimal
 
 class Erc20Adapter(coin: Coin, kit: EthereumKit, override val contractAddress: String, decimal: Int)
@@ -60,7 +61,7 @@ class Erc20Adapter(coin: Coin, kit: EthereumKit, override val contractAddress: S
 
     companion object {
         fun adapter(coin: Coin, ethereumKit: EthereumKit, contractAddress: String, decimal: Int): Erc20Adapter {
-            return Erc20Adapter(coin, ethereumKit, contractAddress, decimal)
+            return Erc20Adapter(coin, ethereumKit, Keys.toChecksumAddress(contractAddress), decimal)
         }
     }
 }

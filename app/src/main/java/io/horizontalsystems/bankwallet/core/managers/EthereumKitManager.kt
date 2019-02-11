@@ -18,7 +18,6 @@ class EthereumKitManager(appConfig: IAppConfigProvider) : IEthereumKitManager {
 
         kit?.let { return it }
         kit = EthereumKit(authData.seed, network, authData.walletId)
-        kit?.start()
 
         return kit!!
     }
