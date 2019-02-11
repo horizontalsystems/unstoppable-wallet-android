@@ -6,7 +6,6 @@ import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
-import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.Menu
 import io.horizontalsystems.bankwallet.R
@@ -76,14 +75,14 @@ object LayoutHelper {
     }
 
     fun getDeviceDensity(context: Context): String {
-        return when (context.resources.displayMetrics.densityDpi) {
-            DisplayMetrics.DENSITY_LOW -> "ldpi"
-            DisplayMetrics.DENSITY_MEDIUM -> "mdpi"
-            DisplayMetrics.DENSITY_HIGH -> "hdpi"
-            DisplayMetrics.DENSITY_XHIGH -> "xhdpi"
-            DisplayMetrics.DENSITY_XXHIGH -> "xxhdpi"
-            DisplayMetrics.DENSITY_XXXHIGH -> "xxxhdpi"
-            else -> ""
+        val density = context.resources.displayMetrics.density
+        return when {
+            density >= 4.0 -> "xxxhdpi"
+            density >= 3.0 -> "xxhdpi"
+            density >= 2.0 -> "xhdpi"
+            density >= 1.5 -> "hdpi"
+            density >= 1.0 -> "mdpi"
+            else -> "ldpi"
         }
     }
 }
