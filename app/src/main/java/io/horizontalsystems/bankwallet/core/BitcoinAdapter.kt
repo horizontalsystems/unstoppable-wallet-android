@@ -6,10 +6,10 @@ import io.horizontalsystems.bitcoinkit.managers.UnspentOutputSelector
 import io.horizontalsystems.bitcoinkit.models.BlockInfo
 import io.horizontalsystems.bitcoinkit.models.TransactionInfo
 import io.reactivex.Single
-import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.util.*
 
 class BitcoinAdapter(override val coin: Coin, authData: AuthData, newWallet: Boolean, testMode: Boolean)
     : IAdapter, BitcoinKit.Listener {
@@ -18,8 +18,6 @@ class BitcoinAdapter(override val coin: Coin, authData: AuthData, newWallet: Boo
 
     private val bitcoinKit: BitcoinKit
     private val satoshisInBitcoin = Math.pow(10.0, decimal.toDouble()).toBigDecimal()
-
-    private val progressSubject: BehaviorSubject<Double> = BehaviorSubject.createDefault(0.0)
 
     init {
         val networkType: BitcoinKit.NetworkType =
@@ -39,7 +37,7 @@ class BitcoinAdapter(override val coin: Coin, authData: AuthData, newWallet: Boo
         get() = bitcoinKit.balance.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN)
     override val balanceUpdatedSignal = PublishSubject.create<Unit>()
 
-    override var state: AdapterState = AdapterState.Syncing(progressSubject)
+    override var state: AdapterState = AdapterState.Syncing(0, null)
         set(value) {
             field = value
             stateUpdatedSignal.onNext(Unit)
@@ -47,7 +45,7 @@ class BitcoinAdapter(override val coin: Coin, authData: AuthData, newWallet: Boo
     override var stateUpdatedSignal: PublishSubject<Unit> = PublishSubject.create()
 
     override val confirmationsThreshold: Int = 6
-    override val lastBlockHeight: Int get() = bitcoinKit.lastBlockHeight
+    override val lastBlockHeight get() = bitcoinKit.lastBlockInfo?.height
     override val lastBlockHeightUpdatedSignal: PublishSubject<Unit> = PublishSubject.create()
 
     override val transactionRecordsSubject: PublishSubject<List<TransactionRecord>> = PublishSubject.create()
@@ -143,10 +141,13 @@ class BitcoinAdapter(override val coin: Coin, authData: AuthData, newWallet: Boo
                 }
             }
             is BitcoinKit.KitState.Syncing -> {
-                progressSubject.onNext(state.progress)
+                this.state.let { currentState ->
+                    val newProgress = (state.progress * 100).toInt()
 
-                if (this.state !is AdapterState.Syncing) {
-                    this.state = AdapterState.Syncing(progressSubject)
+                    if (currentState is AdapterState.Syncing && currentState.progress == newProgress)
+                        return
+
+                    this.state = AdapterState.Syncing(newProgress, bitcoinKit.lastBlockInfo?.timestamp?.let { Date(it * 1000) })
                 }
             }
         }

@@ -12,7 +12,6 @@ import io.horizontalsystems.ethereumkit.EthereumKit
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.util.*
@@ -115,7 +114,7 @@ interface ILanguageManager {
 
 sealed class AdapterState {
     object Synced : AdapterState()
-    class Syncing(val progressSubject: BehaviorSubject<Double>?) : AdapterState()
+    class Syncing(val progress: Int, val lastBlockDate: Date?) : AdapterState()
     object NotSynced : AdapterState()
 }
 
