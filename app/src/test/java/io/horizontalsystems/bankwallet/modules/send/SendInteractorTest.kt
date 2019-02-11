@@ -42,6 +42,7 @@ class SendInteractorTest {
 
         whenever(userInput.inputType).thenReturn(SendModule.InputType.COIN)
         whenever(rate.value).thenReturn(BigDecimal("0.1"))
+        whenever(rate.expired).thenReturn(false)
         whenever(coin.code).thenReturn(coinCode)
         whenever(currencyManager.baseCurrency).thenReturn(currency)
         whenever(rateStorage.latestRateObservable(coinCode, currency.code)).thenReturn(Flowable.just(rate))
@@ -173,16 +174,26 @@ class SendInteractorTest {
     }
 
     @Test
-    fun stateForUserInput_setCoinFee_asZero() {
+    fun stateForUserInput_setFees_asZero() {
+        val fee = BigDecimal("0.123")
         val expectedFee = BigDecimal.ZERO
         val input = SendModule.UserInput()
+        val rateValue = BigDecimal("0.1")
+        val expectedCurrencyFee = expectedFee * rateValue
+
         input.address = "address"
         input.amount = BigDecimal.ZERO
         input.inputType = SendModule.InputType.COIN
 
+        whenever(rate.value).thenReturn(rateValue)
+        whenever(adapter.fee(any(), any())).thenReturn(fee)
+
+        interactor.retrieveRate()
+
         val state = interactor.stateForUserInput(input)
 
-        Assert.assertEquals(state.feeCoinValue, CoinValue(coinCode, value= expectedFee))
+        Assert.assertEquals(CoinValue(coinCode, value = expectedFee), state.feeCoinValue)
+        Assert.assertEquals(CurrencyValue(currency, value = expectedCurrencyFee), state.feeCurrencyValue)
     }
 
     @Test
@@ -193,30 +204,33 @@ class SendInteractorTest {
         input.amount = BigDecimal(123)
         input.inputType = SendModule.InputType.COIN
 
-        whenever(adapter.fee(any(), any(), any())).thenReturn(fee)
+        whenever(adapter.fee(any(), any())).thenReturn(fee)
         val state = interactor.stateForUserInput(input)
 
-        Assert.assertEquals(state.feeCoinValue, CoinValue(coinCode, value= fee))
+        Assert.assertEquals(state.feeCoinValue, CoinValue(coinCode, value = fee))
     }
 
     @Test
     fun stateForUserInput_setCoinFee_InsufficientAmountError() {
         val fee = BigDecimal("0.123")
+        val balance = BigDecimal(123)
         val input = SendModule.UserInput()
         input.address = "address"
         input.amount = BigDecimal(123)
         input.inputType = SendModule.InputType.COIN
 
-        val insufficientAmountError = Error.InsufficientAmount(fee)
-        whenever(adapter.fee(any(), any(), any())).thenThrow(insufficientAmountError)
+        val balanceMinusFee = balance - fee
+        val errors = mutableListOf(SendStateError.InsufficientAmount)
+        whenever(adapter.availableBalance(any())).thenReturn(balanceMinusFee)
+        whenever(adapter.validate(any(), any())).thenReturn(errors)
+        whenever(adapter.fee(any(), any())).thenReturn(fee)
 
         val state = interactor.stateForUserInput(input)
 
-        Assert.assertEquals(state.feeCoinValue, CoinValue(coinCode, value= fee))
+        Assert.assertEquals(state.feeCoinValue, CoinValue(coinCode, value = fee))
 
-        val balanceMinusFee = balance - fee
         val error = SendModule.AmountError.InsufficientBalance(SendModule.AmountInfo.CoinValueInfo(CoinValue(coinCode, balanceMinusFee)))
-        Assert.assertEquals(state.amountError, error)
+        Assert.assertEquals(error, state.amountError)
     }
 
     @Test
@@ -227,12 +241,12 @@ class SendInteractorTest {
         input.amount = BigDecimal(123)
         input.inputType = SendModule.InputType.CURRENCY
 
-        whenever(adapter.fee(any(), any(), any())).thenReturn(fee)
+        whenever(adapter.fee(any(), any())).thenReturn(fee)
 
         interactor.retrieveRate()
         val state = interactor.stateForUserInput(input)
 
-        Assert.assertEquals(state.feeCurrencyValue, CurrencyValue(currency, value= fee * rate.value))
+        Assert.assertEquals(state.feeCurrencyValue, CurrencyValue(currency, value = fee * rate.value))
     }
 
     @Test
@@ -243,29 +257,35 @@ class SendInteractorTest {
         input.amount = BigDecimal(123)
         input.inputType = SendModule.InputType.CURRENCY
 
-        val insufficientAmountError = Error.InsufficientAmount(fee)
-        whenever(adapter.fee(any(), any(), any())).thenThrow(insufficientAmountError)
+        val balanceMinusFee = balance - fee
+        val errors = mutableListOf(SendStateError.InsufficientAmount)
+        whenever(adapter.availableBalance(any())).thenReturn(balanceMinusFee)
+        whenever(adapter.validate(any(), any())).thenReturn(errors)
+        whenever(adapter.fee(any(), any())).thenReturn(fee)
 
         interactor.retrieveRate()
         val state = interactor.stateForUserInput(input)
 
-        Assert.assertEquals(state.feeCurrencyValue, CurrencyValue(currency, value= fee * rate.value))
+        Assert.assertEquals(state.feeCurrencyValue, CurrencyValue(currency, value = fee * rate.value))
 
-        val balanceMinusFee = (balance - fee) * rate.value
-        val error = SendModule.AmountError.InsufficientBalance(SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(currency, balanceMinusFee)))
-        Assert.assertEquals(state.amountError, error)
+        val balanceMinusFeeInCurrency = balanceMinusFee * rate.value
+        val error = SendModule.AmountError.InsufficientBalance(SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(currency, balanceMinusFeeInCurrency)))
+        Assert.assertEquals(error, state.amountError)
     }
 
     @Test
     fun getTotalBalanceMinusFee_coin() {
         val fee = BigDecimal("0.123")
         val input = SendModule.UserInput()
+        val balanceAmount = BigDecimal("123")
+        val availableBalance = balanceAmount - fee
         input.address = "address"
         input.inputType = SendModule.InputType.COIN
 
-        whenever(adapter.fee(any(), any(), any())).thenReturn(fee)
+        whenever(adapter.fee(any(), any())).thenReturn(fee)
+        whenever(adapter.availableBalance(any())).thenReturn(availableBalance)
 
-        val expectedBalanceMinusFee =  BigDecimal("122.877")
+        val expectedBalanceMinusFee = BigDecimal("122.877")
         val balanceMinusFee = interactor.getTotalBalanceMinusFee(input.inputType, input.address)
 
         Assert.assertEquals(expectedBalanceMinusFee, balanceMinusFee)
@@ -276,40 +296,51 @@ class SendInteractorTest {
         val fee = BigDecimal("0.0000044")
         val input = SendModule.UserInput()
         val balanceAmount = BigDecimal("123")
+        val availableBalance = balanceAmount - fee
         input.address = "address"
         input.inputType = SendModule.InputType.CURRENCY
 
         whenever(adapter.balance).thenReturn(balanceAmount)
-        whenever(adapter.fee(any(), any(), any())).thenReturn(fee)
+        whenever(adapter.availableBalance(any())).thenReturn(availableBalance)
+        whenever(adapter.fee(any(), any())).thenReturn(fee)
 
         interactor.retrieveRate()
 
-        val expectedBalanceMinusFee = BigDecimal("12.29")
+        val expectedBalanceMinusFee = BigDecimal("12.29999956")
         val balanceMinusFee = interactor.getTotalBalanceMinusFee(input.inputType, input.address)
 
         Assert.assertEquals(expectedBalanceMinusFee, balanceMinusFee)
     }
 
     @Test
-    fun convertedAmountForInputType_toCoinType() {
-        interactor.retrieveRate()
-        assertCurrencyConvertToCoin("12.5", "1.25")
-        assertCurrencyConvertToCoin("1223.5", "122.35")
-        assertCurrencyConvertToCoin("0.852", "0.0852")
-    }
+    fun testState_FeeError_CoinType_InsufficientFeeBalance() {
+        val feeCoinCode = "ETH"
+        val erc20CoinCode = "TNT"
+        val erc20Coin = Coin("trinitrotoluene", erc20CoinCode, type = CoinType.Erc20("some_address", 3))
+        val fee = BigDecimal("0.00004")
+        val expectedFeeError = SendModule.AmountError.Erc20FeeError(erc20CoinCode, CoinValue(feeCoinCode, fee))
 
-    @Test
-    fun convertedAmountForInputType_toCurrencyType() {
-        interactor.retrieveRate()
-        assertCurrencyConvertToCurrency("12.5", "125")
-        assertCurrencyConvertToCurrency("0.00778011", "0.0778011")
+        whenever(adapter.fee(any(), any())).thenReturn(fee)
+        whenever(adapter.validate(any(), any())).thenReturn(mutableListOf(SendStateError.InsufficientFeeBalance))
+        whenever(adapter.feeCoinCode).thenReturn(feeCoinCode)
+        whenever(adapter.coin).thenReturn(erc20Coin)
+
+        val input = SendModule.UserInput()
+        input.address = "address"
+        val state = interactor.stateForUserInput(input)
+
+        Assert.assertEquals(expectedFeeError, state.feeError)
     }
 
     @Test
     fun testState_numberOfDecimals_coin() {
         val decimal = 8
+        val fee = BigDecimal("0.0000044")
         whenever(adapter.decimal).thenReturn(decimal)
+        whenever(adapter.fee(any(), any())).thenReturn(fee)
+
         val input = SendModule.UserInput()
+        input.address = "address"
         val state = interactor.stateForUserInput(input)
 
         Assert.assertEquals(state.decimal, decimal)
@@ -318,6 +349,7 @@ class SendInteractorTest {
     @Test
     fun testState_numberOfDecimals_fiat() {
         val input = SendModule.UserInput()
+        input.address = "address"
         input.inputType = SendModule.InputType.CURRENCY
 
         val state = interactor.stateForUserInput(input)
@@ -328,30 +360,17 @@ class SendInteractorTest {
     @Test
     fun testState_numberOfDecimals_maxDecimal() {
         val expectedDecimal = 8
+        val fee = BigDecimal("0.0000044")
 
         whenever(adapter.decimal).thenReturn(18)
+        whenever(adapter.fee(any(), any())).thenReturn(fee)
 
         val input = SendModule.UserInput()
+        input.address = "address"
         input.inputType = SendModule.InputType.COIN
         val state = interactor.stateForUserInput(input)
 
         Assert.assertEquals(expectedDecimal, state.decimal)
     }
-
-
-    private fun assertCurrencyConvertToCoin(input: String, expected: String) {
-        val inputDecimal = BigDecimal(input)
-        val expectedDecimal = BigDecimal(expected)
-        val converted = interactor.convertedAmountForInputType(SendModule.InputType.COIN, inputDecimal)
-        Assert.assertEquals(expectedDecimal, converted)
-    }
-
-    private fun assertCurrencyConvertToCurrency(input: String, expected: String) {
-        val inputDecimal = BigDecimal(input)
-        val expectedDecimal = BigDecimal(expected)
-        val converted = interactor.convertedAmountForInputType(SendModule.InputType.CURRENCY, inputDecimal)
-        Assert.assertEquals(expectedDecimal, converted)
-    }
-
 
 }

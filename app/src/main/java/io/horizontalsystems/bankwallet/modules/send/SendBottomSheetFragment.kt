@@ -98,6 +98,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
         val scanBarcodeButton: ImageButton? = mDialog?.findViewById(R.id.btnBarcodeScan)
         val deleteAddressButton: ImageButton? = mDialog?.findViewById(R.id.btnDeleteAddress)
         val feePrimaryTxt: TextView? = mDialog?.findViewById(R.id.txtFeePrimary)
+        val feeErrorTxt: TextView? = mDialog?.findViewById(R.id.feeError)
         val feeSecondaryTxt: TextView? = mDialog?.findViewById(R.id.txtFeeSecondary)
         amountEditTxt = mDialog?.findViewById(R.id.editTxtAmount)
         val sendButton: Button? = mDialog?.findViewById(R.id.btnSend)
@@ -222,21 +223,34 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
             }
         })
 
-        viewModel.primaryFeeAmountInfoLiveData.observe(this, Observer { amountInfo ->
-            amountInfo?.let {
-                feePrimaryTxt?.text = when (it) {
-                    is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(it.currencyValue)
-                    is SendModule.AmountInfo.CoinValueInfo -> App.numberFormatter.format(it.coinValue)
-                }
-            }
-        })
+        viewModel.feeInfoLiveData.observe(this, Observer { feeInfo ->
+            feeInfo?.let {
+                feePrimaryTxt?.visibility = if (it.error == null) View.VISIBLE else View.GONE
+                feeSecondaryTxt?.visibility = if (it.error == null) View.VISIBLE else View.GONE
+                feeErrorTxt?.visibility = if (it.error == null) View.GONE else View.VISIBLE
 
-        viewModel.secondaryFeeAmountInfoLiveData.observe(this, Observer { amountInfo ->
-            amountInfo?.let {
-                feeSecondaryTxt?.text = when (it) {
-                    is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(it.currencyValue)
-                    is SendModule.AmountInfo.CoinValueInfo -> App.numberFormatter.format(it.coinValue)
+                it.error?.let { erc20Error ->
+                    feeErrorTxt?.text = getString(R.string.Send_ERC_Alert, erc20Error.erc20CoinCode, erc20Error.coinValue.value.toPlainString())
+                } ?: run {
+
+                    val primaryFeeInfo = it.primaryFeeInfo
+                    val secondaryFeeInfo = it.secondaryFeeInfo
+
+                    val primaryFee = when (primaryFeeInfo) {
+                        is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(primaryFeeInfo.currencyValue)
+                        is SendModule.AmountInfo.CoinValueInfo -> App.numberFormatter.format(primaryFeeInfo.coinValue)
+                        else -> ""
+                    }
+                    val primaryFeeText = "${getString(R.string.Send_DialogFee)} $primaryFee"
+                    feePrimaryTxt?.text = primaryFeeText
+
+                    feeSecondaryTxt?.text = when (secondaryFeeInfo) {
+                        is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(secondaryFeeInfo.currencyValue)
+                        is SendModule.AmountInfo.CoinValueInfo -> App.numberFormatter.format(secondaryFeeInfo.coinValue)
+                        else -> ""
+                    }
                 }
+
             }
         })
 

@@ -17,7 +17,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <TextView
         android:id="@+id/txtTitle"
@@ -250,42 +251,61 @@
             app:layout_constraintTop_toBottomOf="@+id/divider2"
             />
 
-        <TextView
-            android:id="@+id/txtFeeTitle"
-            android:layout_width="0dp"
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/feeInfoArea"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15.5dp"
-            android:text="@string/Send_DialogFee"
-            android:textColor="@color/grey"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="@+id/topAmountPrefix"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider3"
-            />
+            >
+            <TextView
+                android:id="@+id/feeError"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="9dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@color/red_warning"
+                android:textSize="12sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:text="Transaction fees for USDT (ERC20) paid in Ethereum. You don&apos;t have 0,00028 ETH."
+                />
 
-        <TextView
-            android:id="@+id/txtFeePrimary"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="15.5dp"
-            android:textColor="@color/grey"
-            android:textSize="14sp"
-            app:layout_constraintStart_toEndOf="@+id/txtFeeTitle"
-            app:layout_constraintTop_toBottomOf="@+id/divider3"
-            tools:text="0.02 BTC"
-            />
+            <TextView
+                android:id="@+id/txtFeePrimary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17dp"
+                android:layout_marginBottom="16dp"
+                android:textColor="@color/grey"
+                android:textSize="14sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/txtFeeSecondary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:text="0.02 BTC"
+                />
 
-        <TextView
-            android:id="@+id/txtFeeSecondary"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textAlignment="textEnd"
-            android:textColor="@color/grey"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="@+id/btnSwitch"
-            app:layout_constraintTop_toTopOf="@+id/txtFeePrimary"
-            tools:text="$0.02"
-            />
+            <TextView
+                android:id="@+id/txtFeeSecondary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAlignment="textEnd"
+                android:textColor="@color/grey"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/txtFeePrimary"
+                tools:text="$0.02"
+                />
+        </android.support.constraint.ConstraintLayout>
 
         <Button
             android:id="@+id/btnSend"
@@ -295,12 +315,11 @@
             android:layout_marginBottom="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
             android:text="@string/Balance_Send"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtFeePrimary"
+            app:layout_constraintTop_toBottomOf="@+id/feeInfoArea"
             />
 
     </android.support.constraint.ConstraintLayout>

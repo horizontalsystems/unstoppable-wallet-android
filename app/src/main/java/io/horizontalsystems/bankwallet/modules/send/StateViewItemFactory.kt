@@ -7,8 +7,10 @@ import java.math.RoundingMode
 
 class StateViewItemFactory {
 
-    fun viewItemForState(state: SendModule.State): SendModule.StateViewItem {
+    fun viewItemForState(state: SendModule.State, forcedRoundDown: Boolean = false): SendModule.StateViewItem {
         val viewItem = SendModule.StateViewItem(state.decimal)
+
+        viewItem.feeInfo = SendModule.FeeInfo()
 
         when (state.inputType) {
             SendModule.InputType.COIN -> {
@@ -18,21 +20,22 @@ class StateViewItemFactory {
                     val coinValue = CoinValue(it.coinCode, rounded)
                     SendModule.AmountInfo.CoinValueInfo(coinValue)
                 }
-                viewItem.primaryFeeInfo = state.feeCoinValue?.let { SendModule.AmountInfo.CoinValueInfo(it) }
-                viewItem.secondaryFeeInfo = state.feeCurrencyValue?.let { SendModule.AmountInfo.CurrencyValueInfo(it) }
+                viewItem.feeInfo?.primaryFeeInfo = state.feeCoinValue?.let { SendModule.AmountInfo.CoinValueInfo(it) }
+                viewItem.feeInfo?.secondaryFeeInfo = state.feeCurrencyValue?.let { SendModule.AmountInfo.CurrencyValueInfo(it) }
             }
             SendModule.InputType.CURRENCY -> {
                 viewItem.amountInfo = state.currencyValue?.let {
-                    val rounded = it.value.setScale(state.decimal, RoundingMode.CEILING)
+                    val rounded = it.value.setScale(state.decimal, if (forcedRoundDown) RoundingMode.DOWN else RoundingMode.CEILING)
                     val currencyValue = CurrencyValue(it.currency, rounded)
                     SendModule.AmountInfo.CurrencyValueInfo(currencyValue)
                 }
-                viewItem.primaryFeeInfo = state.feeCurrencyValue?.let { SendModule.AmountInfo.CurrencyValueInfo(it) }
-                viewItem.secondaryFeeInfo = state.feeCoinValue?.let { SendModule.AmountInfo.CoinValueInfo(it) }
+                viewItem.feeInfo?.primaryFeeInfo = state.feeCurrencyValue?.let { SendModule.AmountInfo.CurrencyValueInfo(it) }
+                viewItem.feeInfo?.secondaryFeeInfo = state.feeCoinValue?.let { SendModule.AmountInfo.CoinValueInfo(it) }
             }
         }
 
         viewItem.switchButtonEnabled = state.currencyValue != null
+        viewItem.feeInfo?.error = state.feeError
 
         val amountError = state.amountError
 
@@ -61,7 +64,7 @@ class StateViewItemFactory {
         }
 
         val zeroAmount = state.coinValue?.let { it.value.compareTo(BigDecimal.ZERO) == 0 } ?: true
-        viewItem.sendButtonEnabled = !zeroAmount && state.address != null && state.amountError == null && state.addressError == null
+        viewItem.sendButtonEnabled = !zeroAmount && state.address != null && state.amountError == null && state.addressError == null && viewItem.feeInfo?.error == null
 
         return viewItem
     }

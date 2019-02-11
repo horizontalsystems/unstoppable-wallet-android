@@ -18,6 +18,7 @@ abstract class EthereumBaseAdapter(override val coin: Coin, protected val ethere
     //
     // Adapter
     //
+    override val feeCoinCode: String? = null
     override val transactionRecordsSubject: PublishSubject<List<TransactionRecord>> = PublishSubject.create()
     override val balanceUpdatedSignal = PublishSubject.create<Unit>()
     override var state: AdapterState = AdapterState.Syncing(null)

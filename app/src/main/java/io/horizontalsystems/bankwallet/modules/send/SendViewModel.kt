@@ -16,8 +16,7 @@ class SendViewModel : ViewModel(), SendModule.IView {
     val switchButtonEnabledLiveData = MutableLiveData<Boolean>()
     val addressInfoLiveData = MutableLiveData<SendModule.AddressInfo>()
     val dismissWithSuccessLiveEvent = SingleLiveEvent<Unit>()
-    val primaryFeeAmountInfoLiveData = MutableLiveData<SendModule.AmountInfo>()
-    val secondaryFeeAmountInfoLiveData = MutableLiveData<SendModule.AmountInfo>()
+    val feeInfoLiveData = MutableLiveData<SendModule.FeeInfo>()
     val errorLiveData = MutableLiveData<Throwable>()
     val sendConfirmationViewItemLiveData = MutableLiveData<SendModule.SendConfirmationViewItem>()
     val showConfirmationLiveEvent = SingleLiveEvent<Unit>()
@@ -31,8 +30,7 @@ class SendViewModel : ViewModel(), SendModule.IView {
         amountInfoLiveData.value = null
         switchButtonEnabledLiveData.value = null
         addressInfoLiveData.value = null
-        primaryFeeAmountInfoLiveData.value = null
-        secondaryFeeAmountInfoLiveData.value = null
+        feeInfoLiveData.value = null
         errorLiveData.value = null
         sendConfirmationViewItemLiveData.value = null
 
@@ -68,12 +66,8 @@ class SendViewModel : ViewModel(), SendModule.IView {
         addressInfoLiveData.value = addressInfo
     }
 
-    override fun setPrimaryFeeInfo(primaryFeeInfo: SendModule.AmountInfo?) {
-        primaryFeeAmountInfoLiveData.value = primaryFeeInfo
-    }
-
-    override fun setSecondaryFeeInfo(secondaryFeeInfo: SendModule.AmountInfo?) {
-        secondaryFeeAmountInfoLiveData.value = secondaryFeeInfo
+    override fun setFeeInfo(feeInfo: SendModule.FeeInfo?) {
+        feeInfoLiveData.value = feeInfo
     }
 
     override fun setSendButtonEnabled(sendButtonEnabled: Boolean) {

@@ -13,7 +13,7 @@ import java.math.RoundingMode
 
 class BitcoinAdapter(override val coin: Coin, authData: AuthData, newWallet: Boolean, testMode: Boolean)
     : IAdapter, BitcoinKit.Listener {
-
+    override val feeCoinCode: String? = null
     override val decimal = 8
 
     private val bitcoinKit: BitcoinKit
@@ -87,17 +87,28 @@ class BitcoinAdapter(override val coin: Coin, authData: AuthData, newWallet: Boo
         }
     }
 
-    override fun fee(value: BigDecimal, address: String?, senderPay: Boolean): BigDecimal {
+    override fun fee(value: BigDecimal, address: String?): BigDecimal {
         try {
             val amount = (value * satoshisInBitcoin).toLong()
-            val fee = bitcoinKit.fee(amount, address, senderPay)
-            return fee.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN)
+            val fee = bitcoinKit.fee(amount, address, true)
+            return fee.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
         } catch (e: UnspentOutputSelector.Error.InsufficientUnspentOutputs) {
-            val fee = e.fee.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN)
-            throw Error.InsufficientAmount(fee)
-        } catch (e: UnspentOutputSelector.Error.EmptyUnspentOutputs) {
-            throw Error.InsufficientAmount(BigDecimal.ZERO)
+            return e.fee.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
+        } catch (e: Exception) {
+            return BigDecimal.ZERO
         }
+    }
+
+    override fun availableBalance(address: String?): BigDecimal {
+        return BigDecimal.ZERO.max(balance.subtract(fee(balance, address)))
+    }
+
+    override fun validate(amount: BigDecimal, address: String?): List<SendStateError> {
+        val errors = mutableListOf<SendStateError>()
+        if (amount > availableBalance(address)) {
+            errors.add(SendStateError.InsufficientAmount)
+        }
+        return errors
     }
 
     override fun validate(address: String) {

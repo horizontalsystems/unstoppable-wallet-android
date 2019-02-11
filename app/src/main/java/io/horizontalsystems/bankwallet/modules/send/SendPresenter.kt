@@ -23,8 +23,7 @@ class SendPresenter(
         view?.setSwitchButtonEnabled(viewItem.switchButtonEnabled)
         view?.setHintInfo(viewItem.hintInfo)
         view?.setAddressInfo(viewItem.addressInfo)
-        view?.setPrimaryFeeInfo(viewItem.primaryFeeInfo)
-        view?.setSecondaryFeeInfo(viewItem.secondaryFeeInfo)
+        view?.setFeeInfo(viewItem.feeInfo)
         view?.setSendButtonEnabled(viewItem.sendButtonEnabled)
         updatePasteButtonState()
 
@@ -38,8 +37,7 @@ class SendPresenter(
         val viewItem = factory.viewItemForState(state)
 
         view?.setHintInfo(viewItem.hintInfo)
-        view?.setPrimaryFeeInfo(viewItem.primaryFeeInfo)
-        view?.setSecondaryFeeInfo(viewItem.secondaryFeeInfo)
+        view?.setFeeInfo(viewItem.feeInfo)
         view?.setSendButtonEnabled(viewItem.sendButtonEnabled)
     }
 
@@ -48,7 +46,7 @@ class SendPresenter(
         userInput.amount = totalBalanceMinusFee
 
         val state = interactor.stateForUserInput(userInput)
-        val viewItem = factory.viewItemForState(state)
+        val viewItem = factory.viewItemForState(state, true)
 
         view?.setAmountInfo(viewItem.amountInfo)
     }
@@ -71,8 +69,7 @@ class SendPresenter(
         view?.setDecimal(viewItem.decimal)
         view?.setAmountInfo(viewItem.amountInfo)
         view?.setHintInfo(viewItem.hintInfo)
-        view?.setPrimaryFeeInfo(viewItem.primaryFeeInfo)
-        view?.setSecondaryFeeInfo(viewItem.secondaryFeeInfo)
+        view?.setFeeInfo(viewItem.feeInfo)
 
         interactor.defaultInputType = newInputType
     }
@@ -122,8 +119,7 @@ class SendPresenter(
         view?.setAmountInfo(viewItem.amountInfo)
         view?.setSwitchButtonEnabled(viewItem.switchButtonEnabled)
         view?.setHintInfo(viewItem.hintInfo)
-        view?.setPrimaryFeeInfo(viewItem.primaryFeeInfo)
-        view?.setSecondaryFeeInfo(viewItem.secondaryFeeInfo)
+        view?.setFeeInfo(viewItem.feeInfo)
     }
 
     override fun didSend() {
@@ -158,8 +154,7 @@ class SendPresenter(
 
         view?.setAddressInfo(viewItem.addressInfo)
         view?.setAmountInfo(viewItem.amountInfo)
-        view?.setPrimaryFeeInfo(viewItem.primaryFeeInfo)
-        view?.setSecondaryFeeInfo(viewItem.secondaryFeeInfo)
+        view?.setFeeInfo(viewItem.feeInfo)
         view?.setSendButtonEnabled(viewItem.sendButtonEnabled)
     }
 
