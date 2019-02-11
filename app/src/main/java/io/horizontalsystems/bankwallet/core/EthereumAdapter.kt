@@ -26,12 +26,20 @@ class EthereumAdapter(coin: Coin, kit: EthereumKit) : EthereumBaseAdapter(coin, 
         ethereumKit.send(address, value, completion)
     }
 
-    override fun fee(value: BigDecimal, address: String?, senderPay: Boolean): BigDecimal {
-        val fee = ethereumKit.fee()
-        if (senderPay && balance.minus(value).minus(fee) < BigDecimal.ZERO) {
-            throw Error.InsufficientAmount(fee)
+    override fun fee(value: BigDecimal, address: String?): BigDecimal {
+        return ethereumKit.fee()
+    }
+
+    override fun availableBalance(address: String?): BigDecimal {
+        return BigDecimal.ZERO.max(balance - fee(balance, address))
+    }
+
+    override fun validate(amount: BigDecimal, address: String?): List<SendStateError> {
+        val errors = mutableListOf<SendStateError>()
+        if (amount > availableBalance(address)) {
+            errors.add(SendStateError.InsufficientAmount)
         }
-        return fee
+        return errors
     }
 
     override fun getTransactionsObservable(hashFrom: String?, limit: Int): Single<List<TransactionRecord>> {

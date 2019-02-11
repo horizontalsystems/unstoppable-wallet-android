@@ -20,8 +20,7 @@ object SendModule {
 
         fun setAddressInfo(addressInfo: AddressInfo?)
 
-        fun setPrimaryFeeInfo(primaryFeeInfo: AmountInfo?)
-        fun setSecondaryFeeInfo(secondaryFeeInfo: AmountInfo?)
+        fun setFeeInfo(feeInfo: FeeInfo?)
 
         fun setSendButtonEnabled(sendButtonEnabled: Boolean)
 
@@ -55,7 +54,7 @@ object SendModule {
         fun retrieveRate()
         fun parsePaymentAddress(address: String): PaymentRequestAddress
         fun convertedAmountForInputType(inputType: InputType, amount: BigDecimal): BigDecimal?
-        fun stateForUserInput(input: UserInput, senderPay: Boolean = true): State
+        fun stateForUserInput(input: UserInput): State
 
         fun send(userInput: UserInput)
         fun getTotalBalanceMinusFee(inputType: InputType, address: String?): BigDecimal
@@ -89,6 +88,7 @@ object SendModule {
 
     open class AmountError : Exception() {
         data class InsufficientBalance(val amountInfo: AmountInfo) : AmountError()
+        data class Erc20FeeError(val erc20CoinCode: String, val coinValue: CoinValue) : AmountError()
     }
 
     open class AddressError : Exception() {
@@ -119,6 +119,12 @@ object SendModule {
         }
     }
 
+    class FeeInfo {
+        var primaryFeeInfo: AmountInfo? = null
+        var secondaryFeeInfo: AmountInfo? = null
+        var error: AmountError.Erc20FeeError? = null
+    }
+
     class UserInput {
         var inputType: InputType = InputType.COIN
         var amount: BigDecimal = BigDecimal.ZERO
@@ -129,6 +135,7 @@ object SendModule {
         var coinValue: CoinValue? = null
         var currencyValue: CurrencyValue? = null
         var amountError: AmountError? = null
+        var feeError: AmountError.Erc20FeeError? = null
         var address: String? = null
         var addressError: AddressError? = null
         var feeCoinValue: CoinValue? = null
@@ -140,8 +147,7 @@ object SendModule {
         var switchButtonEnabled: Boolean = false
         var hintInfo: HintInfo? = null
         var addressInfo: AddressInfo? = null
-        var primaryFeeInfo: AmountInfo? = null
-        var secondaryFeeInfo: AmountInfo? = null
+        var feeInfo: FeeInfo? = null
         var sendButtonEnabled: Boolean = false
     }
 

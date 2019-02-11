@@ -64,29 +64,19 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
 
         return when (inputType) {
             SendModule.InputType.COIN -> amount.times(rate.value)
-            SendModule.InputType.CURRENCY -> amount.divide(rate.value, 8, RoundingMode.DOWN).stripTrailingZeros()
+            SendModule.InputType.CURRENCY -> amount.divide(rate.value, 8, RoundingMode.DOWN)
         }
     }
 
     override fun getTotalBalanceMinusFee(inputType: SendModule.InputType, address: String?): BigDecimal {
-        return try {
-            val fee = adapter.fee(adapter.balance, address, false)
-            when (inputType) {
-                SendModule.InputType.COIN -> adapter.balance.minus(fee)
-                else -> {
-                    val safeRate = rate?.value ?: BigDecimal.ZERO
-                    var feeInCurrency = fee.multiply(safeRate)
-                    feeInCurrency = feeInCurrency.setScale(2, RoundingMode.CEILING)
-                    val balanceInCurrency = adapter.balance.multiply(safeRate)
-                    balanceInCurrency.subtract(feeInCurrency)
-                }
-            }
-        } catch (e: Error.InsufficientAmount) {
-            adapter.balance
+        val availableBalance = adapter.availableBalance(address)
+        return when (inputType) {
+            SendModule.InputType.COIN -> availableBalance
+            else -> availableBalance.multiply(rate?.value ?: BigDecimal.ZERO)
         }
     }
 
-    override fun stateForUserInput(input: SendModule.UserInput, senderPay: Boolean): SendModule.State {
+    override fun stateForUserInput(input: SendModule.UserInput): SendModule.State {
 
         val coin = adapter.coin.code
         val baseCurrency = currencyManager.baseCurrency
@@ -122,17 +112,21 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
             }
         }
 
-        try {
-            state.coinValue?.let { coinValue ->
-                if ((state.coinValue?.value ?: BigDecimal.ZERO) > BigDecimal.ZERO) {
-                    state.feeCoinValue = CoinValue(coin, adapter.fee(coinValue.value, input.address, senderPay))
-                } else {
-                    state.feeCoinValue = CoinValue(coin, BigDecimal.ZERO)
-                }
+        val errors = adapter.validate(state.coinValue?.value ?: BigDecimal.ZERO, address)
+
+        for (error in errors) {
+            when (error) {
+                SendStateError.InsufficientAmount -> state.amountError = getAmountError(input)
+                SendStateError.InsufficientFeeBalance -> state.feeError = getFeeError(input)
             }
-        } catch (e: Error.InsufficientAmount) {
-            state.feeCoinValue = CoinValue(coin, e.fee)
-            state.amountError = getAmountError(input.inputType, e.fee)
+        }
+
+        state.coinValue?.let { coinValue ->
+            if ((state.coinValue?.value ?: BigDecimal.ZERO) > BigDecimal.ZERO) {
+                state.feeCoinValue = CoinValue(coin, adapter.fee(coinValue.value, input.address))
+            } else {
+                state.feeCoinValue = CoinValue(coin, BigDecimal.ZERO)
+            }
         }
 
         rateValue?.let {
@@ -144,13 +138,21 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
         return state
     }
 
-    private fun getAmountError(inputType: SendModule.InputType, fee: BigDecimal): SendModule.AmountError? {
-        var balanceMinusFee = adapter.balance - fee
+    private fun getFeeError(input: SendModule.UserInput): SendModule.AmountError.Erc20FeeError? {
+        adapter.feeCoinCode?.let {
+            val fee = adapter.fee(input.amount, input.address)
+            val coinValue = CoinValue(it, fee)
+            return SendModule.AmountError.Erc20FeeError(adapter.coin.code, coinValue)
+        } ?: return null
+    }
+
+    private fun getAmountError(input: SendModule.UserInput): SendModule.AmountError? {
+        var balanceMinusFee = adapter.availableBalance(input.address)
         if (balanceMinusFee < BigDecimal.ZERO) {
             balanceMinusFee = BigDecimal.ZERO
         }
 
-        return when (inputType) {
+        return when (input.inputType) {
             SendModule.InputType.COIN -> {
                 SendModule.AmountError.InsufficientBalance(SendModule.AmountInfo.CoinValueInfo(CoinValue(adapter.coin.code, balanceMinusFee)))
             }

@@ -13,6 +13,8 @@ class Erc20Adapter(coin: Coin, kit: EthereumKit, override val contractAddress: S
         ethereumKit.register(this)
     }
 
+    override val feeCoinCode: String? = "ETH"
+
     override val balance get() = ethereumKit.balanceERC20(contractAddress)
 
     override fun start() {}
@@ -26,17 +28,28 @@ class Erc20Adapter(coin: Coin, kit: EthereumKit, override val contractAddress: S
         ethereumKit.refresh(contractAddress)
     }
 
+
     override fun send(address: String, value: BigDecimal, completion: ((Throwable?) -> Unit)?) {
         ethereumKit.sendERC20(address, contractAddress, value.toDouble(), completion)
     }
 
-    override fun fee(value: BigDecimal, address: String?, senderPay: Boolean): BigDecimal {
-        val fee = ethereumKit.feeERC20().toBigDecimal()
-        if (senderPay && balance.minus(value).minus(fee) < BigDecimal.ZERO) {
-            throw Error.InsufficientAmount(fee)
-        }
+    override fun fee(value: BigDecimal, address: String?): BigDecimal {
+        return ethereumKit.feeERC20().toBigDecimal()
+    }
 
-        return fee
+    override fun availableBalance(address: String?): BigDecimal {
+        return balance
+    }
+
+    override fun validate(amount: BigDecimal, address: String?): List<SendStateError> {
+        val errors = mutableListOf<SendStateError>()
+        if (amount > availableBalance(address)) {
+            errors.add(SendStateError.InsufficientAmount)
+        }
+        if (ethereumKit.balance < fee(amount, address)) {
+            errors.add(SendStateError.InsufficientFeeBalance)
+        }
+        return errors
     }
 
     override fun getTransactionsObservable(hashFrom: String?, limit: Int): Single<List<TransactionRecord>> {

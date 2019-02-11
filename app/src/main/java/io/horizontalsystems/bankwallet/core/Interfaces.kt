@@ -127,6 +127,7 @@ interface IEthereumKitManager {
 
 interface IAdapter {
     val coin: Coin
+    val feeCoinCode: String?
     val decimal: Int
     val balance: BigDecimal
     val balanceUpdatedSignal: PublishSubject<Unit>
@@ -150,12 +151,14 @@ interface IAdapter {
     fun parsePaymentAddress(address: String): PaymentRequestAddress
 
     fun send(address: String, value: BigDecimal, completion: ((Throwable?) -> (Unit))? = null)
+    fun availableBalance(address: String?): BigDecimal
 
-    @Throws(Error.InsufficientAmount::class)
-    fun fee(value: BigDecimal, address: String?, senderPay: Boolean): BigDecimal
+    fun fee(value: BigDecimal, address: String?): BigDecimal
 
     @Throws
     fun validate(address: String)
+
+    fun validate(amount: BigDecimal, address: String?): List<SendStateError>
 
     val receiveAddress: String
     fun getTransactionsObservable(hashFrom: String?, limit: Int): Single<List<TransactionRecord>>
@@ -252,6 +255,10 @@ interface IAppNumberFormatter {
 }
 
 sealed class Error : Exception() {
-    class InsufficientAmount(val fee: BigDecimal) : Error()
     class CoinTypeException : Error()
+}
+
+sealed class SendStateError {
+    object InsufficientAmount: SendStateError()
+    object InsufficientFeeBalance: SendStateError()
 }

@@ -30,8 +30,8 @@ class SendPresenterTest {
 
         whenever(interactor.coin).thenReturn(coin)
         whenever(interactor.parsePaymentAddress(any())).thenReturn(prAddress)
-        whenever(interactor.stateForUserInput(any(), any())).thenReturn(state)
-        whenever(factory.viewItemForState(any())).thenReturn(viewItem)
+        whenever(interactor.stateForUserInput(any())).thenReturn(state)
+        whenever(factory.viewItemForState(any(), any())).thenReturn(viewItem)
         whenever(factory.confirmationViewItemForState(any())).thenReturn(viewItemConfirm)
 
         presenter = SendPresenter(interactor, factory, userInput)
@@ -55,8 +55,7 @@ class SendPresenterTest {
         verify(view).setSwitchButtonEnabled(viewItem.switchButtonEnabled)
         verify(view).setHintInfo(viewItem.hintInfo)
         verify(view).setAddressInfo(viewItem.addressInfo)
-        verify(view).setPrimaryFeeInfo(viewItem.primaryFeeInfo)
-        verify(view).setSecondaryFeeInfo(viewItem.secondaryFeeInfo)
+        verify(view).setFeeInfo(viewItem.feeInfo)
         verify(view).setSendButtonEnabled(viewItem.sendButtonEnabled)
         verify(view).setPasteButtonState(true)
 
@@ -68,8 +67,7 @@ class SendPresenterTest {
         presenter.onAmountChanged(0.5.toBigDecimal())
 
         verify(view).setHintInfo(viewItem.hintInfo)
-        verify(view).setPrimaryFeeInfo(viewItem.primaryFeeInfo)
-        verify(view).setSecondaryFeeInfo(viewItem.secondaryFeeInfo)
+        verify(view).setFeeInfo(viewItem.feeInfo)
         verify(view).setSendButtonEnabled(viewItem.sendButtonEnabled)
     }
 
@@ -85,8 +83,7 @@ class SendPresenterTest {
         verify(view).setDecimal(viewItem.decimal)
         verify(view).setAmountInfo(viewItem.amountInfo)
         verify(view).setHintInfo(viewItem.hintInfo)
-        verify(view).setPrimaryFeeInfo(viewItem.primaryFeeInfo)
-        verify(view).setSecondaryFeeInfo(viewItem.secondaryFeeInfo)
+        verify(view).setFeeInfo(viewItem.feeInfo)
         verify(interactor).defaultInputType = SendModule.InputType.CURRENCY
     }
 
@@ -128,7 +125,7 @@ class SendPresenterTest {
 
         verify(view).setSwitchButtonEnabled(viewItem.switchButtonEnabled)
         verify(view).setHintInfo(viewItem.hintInfo)
-        verify(view).setSecondaryFeeInfo(viewItem.secondaryFeeInfo)
+        verify(view).setFeeInfo(viewItem.feeInfo)
     }
 
     @Test
