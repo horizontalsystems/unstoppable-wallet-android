@@ -4,9 +4,6 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.INetworkManager
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CoinType
-import io.horizontalsystems.bankwallet.entities.Erc20Token
 import io.horizontalsystems.bankwallet.entities.LatestRate
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
@@ -24,17 +21,6 @@ import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 
 class NetworkManager(private val appConfig: IAppConfigProvider) : INetworkManager {
-
-    override fun getTokens(): Flowable<List<Coin>> {
-        return ServiceTokenApi.service(appConfig.ipfsUrl)
-                .getTokens()
-                .map { tokens ->
-                    tokens.map {
-                        Coin(it.name, it.code, CoinType.Erc20(it.contract, it.decimal))
-                    }
-                }
-                .onErrorResumeNext(Flowable.empty())
-    }
 
     override fun getRate(coinCode: String, currency: String, timestamp: Long): Flowable<BigDecimal> {
         val apiService = ServiceExchangeApi.service(appConfig.ipfsUrl)
@@ -66,18 +52,6 @@ class NetworkManager(private val appConfig: IAppConfigProvider) : INetworkManage
     override fun ping(host: String, url: String): Flowable<JsonObject> {
         return ServicePing.service(host)
                 .ping(url)
-    }
-}
-
-object ServiceTokenApi {
-    fun service(apiURL: String): ServiceToken {
-        return APIClient.retrofit(apiURL)
-                .create(ServiceToken::class.java)
-    }
-
-    interface ServiceToken {
-        @GET("blockchain/ETH/erc20/index.json")
-        fun getTokens(): Flowable<List<Erc20Token>>
     }
 }
 

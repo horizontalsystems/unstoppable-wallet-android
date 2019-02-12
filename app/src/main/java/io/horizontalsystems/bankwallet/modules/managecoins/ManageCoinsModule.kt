@@ -62,7 +62,6 @@ object ManageCoinsModule {
     }
 
     interface IInteractor {
-        fun syncCoins()
         fun loadCoins()
         fun saveEnabledCoins(enabledCoins: List<Coin>)
         fun clear()
@@ -81,7 +80,7 @@ object ManageCoinsModule {
 
 
     fun init(view: ManageCoinsViewModel, router: IRouter) {
-        val interactor = ManageCoinsInteractor(App.coinManager, App.coinsStorage, App.tokenSyncer)
+        val interactor = ManageCoinsInteractor(App.coinManager, App.coinsStorage)
         val presenter = ManageCoinsPresenter(interactor, router, ManageCoinsPresenterState())
 
         view.delegate = presenter

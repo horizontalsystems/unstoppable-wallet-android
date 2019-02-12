@@ -61,7 +61,6 @@ interface INetworkManager {
     fun getRate(coinCode: String, currency: String, timestamp: Long): Flowable<BigDecimal>
     fun getTransaction(host: String, path: String): Flowable<JsonObject>
     fun ping(host: String, url: String): Flowable<JsonObject>
-    fun getTokens(): Flowable<List<Coin>>
 }
 
 interface IEncryptionManager {
@@ -196,6 +195,7 @@ interface IAppConfigProvider {
     val localizations: List<String>
     val currencies: List<Currency>
     val defaultCoins: List<Coin>
+    val erc20tokens: List<Coin>
 }
 
 interface IOneTimerDelegate {
@@ -213,7 +213,6 @@ interface IRateStorage {
 
 interface ICoinStorage {
     fun enabledCoinsObservable(): Flowable<List<Coin>>
-    fun allCoinsObservable(): Flowable<List<Coin>>
     fun save(coins: List<Coin>)
     fun update(inserted: List<Coin>, deleted: List<Coin>)
     fun deleteAll()
@@ -241,7 +240,7 @@ interface ICurrentDateProvider {
 interface ICoinManager {
     val coinsUpdatedSignal: PublishSubject<Unit>
     var coins: List<Coin>
-    val allCoinsObservable: Flowable<List<Coin>>
+    val allCoins: List<Coin>
     fun enableDefaultCoins()
     fun clear()
 }

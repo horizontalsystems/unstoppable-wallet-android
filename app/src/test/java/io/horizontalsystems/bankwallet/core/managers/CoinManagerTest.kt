@@ -24,7 +24,7 @@ class CoinManagerTest {
     private val ethereumCoin = Coin("Ethereum", "ETH", CoinType.Ethereum)
     private val enabledCoins = listOf(bitCoin, ethereumCoin)
     private val defaultCoins = mutableListOf(bitCashCoin)
-    private val allCoins = listOf(bitCoin, ethereumCoin, bitCashCoin)
+    private val erc20tokens = mutableListOf(mock<Coin>(), mock<Coin>())
 
     @Before
     fun setUp() {
@@ -32,23 +32,18 @@ class CoinManagerTest {
 
         coinStorage = mock {
             on { enabledCoinsObservable() } doReturn Flowable.just(enabledCoins)
-            on { allCoinsObservable() } doReturn Flowable.just(allCoins)
         }
         configProvider = mock {
             on { defaultCoins } doReturn defaultCoins
+            on { erc20tokens } doReturn erc20tokens
         }
 
         coinManager = CoinManager(configProvider, coinStorage)
     }
 
     @Test
-    fun getAllCoinsObservable() {
-        var fetchedFromDbCoins = listOf<Coin>()
-        coinManager.allCoinsObservable.subscribe {
-            fetchedFromDbCoins = it
-        }
-        val expectedCoins = allCoins
-        Assert.assertTrue(expectedCoins.containsAll(fetchedFromDbCoins))
+    fun allCoins() {
+        Assert.assertArrayEquals((defaultCoins + erc20tokens).toTypedArray(), coinManager.allCoins.toTypedArray())
     }
 
     @Test
