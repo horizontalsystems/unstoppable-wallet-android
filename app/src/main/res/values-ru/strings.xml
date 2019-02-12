@@ -42,6 +42,8 @@
     <string name="Balance_Deposit">Получить</string>
     <string name="Balance_Send">Отправить</string>
     <string name="Balance_RatePerCoin">%s за %s</string>
+    <string name="Balance_SyncedUntil">Until %s</string>
+    <string name="Balance_Syncing">Syncing&#8230;</string>
     <!--Send-->
     <string name="Send_Title1">Отправить</string>
     <string name="Send_Title">Отправить %s</string>
