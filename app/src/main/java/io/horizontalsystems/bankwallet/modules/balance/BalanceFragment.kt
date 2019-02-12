@@ -204,7 +204,6 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
         syncing = false
         buttonPay.isEnabled = false
         imgSyncFailed.visibility = View.GONE
-        textExchangeRate.visibility = View.GONE
         iconProgress.visibility = View.GONE
 
         textCoinAmount.text = App.numberFormatter.format(balanceViewItem.coinValue)
@@ -220,7 +219,6 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
                     syncing = true
                     iconProgress.visibility = View.VISIBLE
                     iconProgress.setProgress(adapterState.progress.toFloat())
-                    textSyncProgress.visibility = if (expanded) View.VISIBLE else View.GONE
                     adapterState.lastBlockDate?.let {
                         textSyncProgress.text = containerView.context.getString(R.string.Balance_SyncedUntil, DateHelper.formatDate(it, "MMM d.yyyy"))
                     } ?:run { textSyncProgress.text = containerView.context.getString(R.string.Balance_Syncing) }
@@ -229,8 +227,6 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
                     if (balanceViewItem.coinValue.value > BigDecimal.ZERO) {
                         buttonPay.isEnabled = true
                     }
-                    textSyncProgress.visibility = View.GONE
-                    textExchangeRate.visibility = View.VISIBLE
                     coinIcon.visibility = View.VISIBLE
                 }
                 is AdapterState.NotSynced -> {
@@ -239,6 +235,9 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
                 }
             }
         }
+
+        textSyncProgress.visibility = if (expanded && syncing) View.VISIBLE else View.GONE
+        textExchangeRate.visibility = if (expanded && syncing) View.GONE else View.VISIBLE
 
         coinIcon.bind(balanceViewItem.coin)
         textCoinName.text = balanceViewItem.coin.title
@@ -266,6 +265,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
     fun bindPartial(expanded: Boolean) {
         viewHolderRoot.isSelected = expanded
         textSyncProgress.visibility = if (expanded && syncing) View.VISIBLE else View.GONE
+        textExchangeRate.visibility = if (expanded && syncing) View.GONE else View.VISIBLE
         if (expanded) {
             AnimationHelper.expand(buttonsWrapper)
         } else {
