@@ -42,7 +42,7 @@
     <string name="Balance_Deposit">Recibir</string>
     <string name="Balance_Send">Enviar</string>
     <string name="Balance_RatePerCoin">%s por %s</string>
-    <string name="Balance_SyncedUntil">Until %s</string>
+    <string name="Balance_SyncedUntil">until: %s</string>
     <string name="Balance_Syncing">Syncing&#8230;</string>
     <!--Send-->
     <string name="Send_Title1">Enviar</string>
@@ -63,7 +63,7 @@
     <string name="Send_DialogTitle">Confirmar transacción</string>
     <string name="Send_DialogFee">Comisión:</string>
     <string name="Send_DialogTotal">Total:</string>
-    <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You don\&apos;t have %s ETH.</string>
+    <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Recibir %s</string>
     <string name="Deposit_Share">Forward</string>
