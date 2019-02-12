@@ -113,7 +113,6 @@
             android:includeFontPadding="false"
             android:textColor="@color/grey"
             android:textSize="14sp"
-            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:text="$6500 per BTC"
