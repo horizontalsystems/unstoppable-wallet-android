@@ -16,7 +16,6 @@ import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -142,38 +141,33 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
         })
 
         viewModel.hintInfoLiveData.observe(this, Observer { hintInfo ->
-
-            hintInfo?.let { hint ->
-
-                if (hint is SendModule.HintInfo.ErrorInfo) {
-                    hintInfoTxt?.let { it.setTextColor(it.resources.getColor(R.color.red_warning, null)) }
-                } else {
+            when (hintInfo) {
+                is SendModule.HintInfo.Amount -> {
                     activity?.theme?.let { theme ->
                         LayoutHelper.getAttr(R.attr.BottomDialogTextColor, theme)?.let {
                             hintInfoTxt?.setTextColor(it)
                         }
                     }
-                }
 
-                when (hint) {
-                    is SendModule.HintInfo.Amount -> {
-                        hintInfoTxt?.text = when (hint.amountInfo) {
-                            is SendModule.AmountInfo.CoinValueInfo -> App.numberFormatter.format(hint.amountInfo.coinValue, realNumber = true)
-                            is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(hint.amountInfo.currencyValue)
-                        }
+                    hintInfoTxt?.text = when (hintInfo.amountInfo) {
+                        is SendModule.AmountInfo.CoinValueInfo -> App.numberFormatter.format(hintInfo.amountInfo.coinValue, realNumber = true)
+                        is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(hintInfo.amountInfo.currencyValue)
                     }
-                    is SendModule.HintInfo.ErrorInfo -> {
-                        when (hint.error) {
-                            is SendModule.AmountError.InsufficientBalance -> {
-                                val balanceAmount = when (hint.error.amountInfo) {
-                                    is SendModule.AmountInfo.CoinValueInfo -> App.numberFormatter.format(hint.error.amountInfo.coinValue)
-                                    is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(hint.error.amountInfo.currencyValue)
-                                }
-                                hintInfoTxt?.text = hintInfoTxt?.context?.getString(R.string.Send_Error_BalanceAmount, balanceAmount)
+                }
+                is SendModule.HintInfo.ErrorInfo -> {
+                    hintInfoTxt?.let { it.setTextColor(it.resources.getColor(R.color.red_warning, null)) }
+
+                    when (hintInfo.error) {
+                        is SendModule.AmountError.InsufficientBalance -> {
+                            val balanceAmount = when (hintInfo.error.amountInfo) {
+                                is SendModule.AmountInfo.CoinValueInfo -> App.numberFormatter.format(hintInfo.error.amountInfo.coinValue)
+                                is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(hintInfo.error.amountInfo.currencyValue)
                             }
+                            hintInfoTxt?.text = hintInfoTxt?.context?.getString(R.string.Send_Error_BalanceAmount, balanceAmount)
                         }
                     }
                 }
+                null -> hintInfoTxt?.text = null
             }
         })
 
@@ -313,13 +307,10 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
     private val textChangeListener = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
             val amountText = s?.toString() ?: ""
-            var amountNumber = BigDecimal.ZERO
-            try {
-                amountNumber = amountText.toBigDecimal()
-            } catch (e: NumberFormatException) {
-                Log.e("SendFragment", "Exception", e)
+            var amountNumber = when {
+                amountText != "" -> amountText.toBigDecimalOrNull() ?: BigDecimal.ZERO
+                else -> BigDecimal.ZERO
             }
-
             viewModel.decimalSize?.let {
                 if (amountNumber.scale() > it) {
                     amountNumber = amountNumber.setScale(it, RoundingMode.FLOOR)
