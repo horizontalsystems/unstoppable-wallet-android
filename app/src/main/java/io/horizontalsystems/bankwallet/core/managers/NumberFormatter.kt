@@ -46,10 +46,10 @@ class NumberFormatter(private val languageManager: ILanguageManager): IAppNumber
         return result
     }
 
-    override fun format(currencyValue: CurrencyValue, approximate: Boolean, showNegativeSign: Boolean, realNumber: Boolean): String? {
-        var value = currencyValue.value
+    override fun format(currencyValue: CurrencyValue, showNegativeSign: Boolean, realNumber: Boolean, canUseLessSymbol: Boolean): String? {
 
-        value = value.abs()
+        val absValue = currencyValue.value.abs()
+        var value = absValue
 
         val customFormatter = getFormatter(languageManager.currentLanguage) ?: return null
 
@@ -64,7 +64,7 @@ class NumberFormatter(private val languageManager: ILanguageManager): IAppNumber
             }
             else -> {
                 when {
-                    !realNumber && (value >= FIAT_BIG_NUMBER_EDGE || approximate) -> {
+                    !realNumber && (value >= FIAT_BIG_NUMBER_EDGE) -> {
                         customFormatter.maximumFractionDigits = 0
                     }
                     else -> {
@@ -82,15 +82,15 @@ class NumberFormatter(private val languageManager: ILanguageManager): IAppNumber
             result = "- $result"
         }
 
-        if (approximate) {
-            result = "~ $result"
+        if (canUseLessSymbol && absValue < FIAT_SMALL_NUMBER_EDGE && absValue > BigDecimal.ZERO) {
+            result = "< $result"
         }
 
         return result
     }
 
     override fun formatForTransactions(currencyValue: CurrencyValue, isIncoming: Boolean): SpannableString {
-        val spannable = SpannableString(format(currencyValue))
+        val spannable = SpannableString(format(currencyValue, canUseLessSymbol = false))
 
         //set currency sign size
         val endOffset = if (currencyValue.value < BigDecimal.ZERO) 3 else 1

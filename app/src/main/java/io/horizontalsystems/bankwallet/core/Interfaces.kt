@@ -248,7 +248,7 @@ interface ICoinManager {
 
 interface IAppNumberFormatter {
     fun format(coinValue: CoinValue, explicitSign: Boolean = false, realNumber: Boolean = false): String?
-    fun format(currencyValue: CurrencyValue, approximate: Boolean = false, showNegativeSign: Boolean = true, realNumber: Boolean = false): String?
+    fun format(currencyValue: CurrencyValue, showNegativeSign: Boolean = true, realNumber: Boolean = false, canUseLessSymbol: Boolean = true): String?
     fun formatForTransactions(currencyValue: CurrencyValue, isIncoming: Boolean): SpannableString
     fun format(value: Double): String
 }

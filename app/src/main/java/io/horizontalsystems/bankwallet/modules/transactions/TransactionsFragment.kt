@@ -150,7 +150,7 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
                 val txStatus = txRec.status
 
                 fiatValue.apply {
-                    text = txRec.currencyValue?.let { App.numberFormatter.format(it, showNegativeSign = true, realNumber = true) }
+                    text = txRec.currencyValue?.let { App.numberFormatter.format(it, showNegativeSign = true, realNumber = true, canUseLessSymbol = false) }
                     setTextColor(resources.getColor(if (txRec.incoming) R.color.green_crypto else R.color.yellow_crypto, null))
                 }
 

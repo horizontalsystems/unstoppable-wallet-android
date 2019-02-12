@@ -42,10 +42,6 @@ class BalanceFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener
         viewModel = ViewModelProviders.of(this).get(BalanceViewModel::class.java)
         viewModel.init()
 
-        viewModel.totalBalanceLiveData.observe(this, Observer { total ->
-            ballanceText.text = total?.let { App.numberFormatter.format(it) } ?: ""
-        })
-
         viewModel.openReceiveDialog.observe(this, Observer { adapterId ->
             adapterId?.let { id ->
                 activity?.let {
@@ -113,7 +109,7 @@ class BalanceFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener
         }
 
         ballanceText.text = headerViewItem.currencyValue?.let {
-            App.numberFormatter.format(it)
+            App.numberFormatter.format(it, realNumber = true)
         }
     }
 
