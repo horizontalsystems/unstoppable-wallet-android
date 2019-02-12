@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.ICoinStorage
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
@@ -28,13 +27,8 @@ class CoinManager(private val appConfigProvider: IAppConfigProvider, private val
             coinsUpdatedSignal.onNext(Unit)
         }
 
-    override val allCoinsObservable: Flowable<List<Coin>>
-        get() = coinStorage.allCoinsObservable().flatMap { all ->
-            val defaults = appConfigProvider.defaultCoins
-            val allCoins = all.filter { !defaults.contains(it) }
-
-            Flowable.just(defaults + allCoins)
-        }
+    override val allCoins: List<Coin>
+        get() = appConfigProvider.defaultCoins + appConfigProvider.erc20tokens
 
     override fun enableDefaultCoins() {
         coinStorage.save(appConfigProvider.defaultCoins)

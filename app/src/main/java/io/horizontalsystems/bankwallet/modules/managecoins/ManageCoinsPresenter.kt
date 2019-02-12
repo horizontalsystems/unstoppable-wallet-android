@@ -8,7 +8,6 @@ class ManageCoinsPresenter(private val interactor: ManageCoinsModule.IInteractor
     var view: ManageCoinsModule.IView? = null
 
     override fun viewDidLoad() {
-        interactor.syncCoins()
         interactor.loadCoins()
     }
 

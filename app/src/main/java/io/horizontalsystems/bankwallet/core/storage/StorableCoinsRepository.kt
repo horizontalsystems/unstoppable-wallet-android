@@ -17,13 +17,6 @@ class StorableCoinsRepository(private val appDatabase: AppDatabase) : ICoinStora
                 }
     }
 
-    override fun allCoinsObservable(): Flowable<List<Coin>> {
-        return appDatabase.coinsDao().getAllCoins()
-                .flatMap { list ->
-                    Flowable.just(list.map { Coin(it.coinTitle, it.coinCode, it.coinType) })
-                }
-    }
-
     override fun save(coins: List<Coin>) {
         executor.execute {
             appDatabase.coinsDao().setEnabledCoins(coins.mapIndexed { index, coin ->

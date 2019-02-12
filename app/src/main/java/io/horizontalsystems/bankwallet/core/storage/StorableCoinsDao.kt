@@ -8,9 +8,6 @@ import io.reactivex.Flowable
 @Dao
 interface StorableCoinsDao {
 
-    @Query("SELECT * FROM StorableCoin ORDER BY `coinTitle` ASC")
-    fun getAllCoins(): Flowable<List<StorableCoin>>
-
     @Query("SELECT * FROM StorableCoin WHERE enabled = 1 ORDER BY `order` ASC")
     fun getEnabledCoin(): Flowable<List<StorableCoin>>
 
