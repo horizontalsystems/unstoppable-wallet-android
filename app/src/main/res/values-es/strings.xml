@@ -5,7 +5,7 @@
     <string name="Alert_Ok">OK</string>
     <string name="Alert_Cancel">Cancelar</string>
     <string name="Alert_Copy">Copiar</string>
-    <string name="Alert_Share">Compartir</string>
+    <string name="Alert_Share">Forward</string>
     <string name="Alert_Close">Cerrar</string>
     <string name="Alert_Success">Completado</string>
     <string name="Alert_Copied">Copiado</string>
@@ -29,7 +29,7 @@
     <string name="Backup_Intro_BackupNow">Copia de seguridad</string>
     <string name="Backup_Words_Title">Clave secreta</string>
     <string name="Backup_Confirmation_Understand">Entiendo que mis datos y mi monedero se guardan de manera segura en este dispositivo y no en ningún otro servidor</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">Entiendo que si esta aplicación se elimina o deja de funcionar por alguna razón, mi monedero sólo puede ser recuperado utilizando mi clave secreta, que esta escrita abajo y guardada en un lugar seguro.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I store safely offline.</string>
     <string name="Backup_Confirmation_LockAppWarn">Cambiar el PIN de desbloqueo de su teléfono en el sistema operativo Android reiniciará la cartera. Usted necesitará su frase de seguridad para restaurar su cartera después de eso.</string>
     <string name="Backup_Confirmation_Title">Insertar palabras de su clave secreta</string>
     <string name="Backup_Confirmation_Description">Insertar palabras de su clave secreta.</string>
@@ -42,6 +42,8 @@
     <string name="Balance_Deposit">Recibir</string>
     <string name="Balance_Send">Enviar</string>
     <string name="Balance_RatePerCoin">%s por %s</string>
+    <string name="Balance_SyncedUntil">until: %s</string>
+    <string name="Balance_Syncing">Syncing&#8230;</string>
     <!--Send-->
     <string name="Send_Title1">Enviar</string>
     <string name="Send_Title">Enviar %s</string>
@@ -61,9 +63,10 @@
     <string name="Send_DialogTitle">Confirmar transacción</string>
     <string name="Send_DialogFee">Comisión:</string>
     <string name="Send_DialogTotal">Total:</string>
+    <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Recibir %s</string>
-    <string name="Deposit_Share">Compartir</string>
+    <string name="Deposit_Share">Forward</string>
     <string name="Deposit_Your_Address">Su dirección</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">reciente</string>
@@ -196,6 +199,6 @@
     <string name="EditPin_UnlockInfo">Código Actual</string>
     <string name="EditPin_NewPinInfo">Código Nuevo</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Monederos</string>
+    <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_save">Guardar</string>
 </resources>

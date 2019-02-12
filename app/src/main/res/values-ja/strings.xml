@@ -5,7 +5,7 @@
     <string name="Alert_Ok">はい</string>
     <string name="Alert_Cancel">キャンセル</string>
     <string name="Alert_Copy">コピー</string>
-    <string name="Alert_Share">共有</string>
+    <string name="Alert_Share">転送</string>
     <string name="Alert_Close">閉じる</string>
     <string name="Alert_Success">成功</string>
     <string name="Alert_Copied">コピー完了</string>
@@ -29,7 +29,7 @@
     <string name="Backup_Intro_BackupNow">バックアップ</string>
     <string name="Backup_Words_Title">秘密鍵</string>
     <string name="Backup_Confirmation_Understand">私は私の財布とトークンは、ほかのサーバーではなく、このデバイスだけに安全に開催されること理解します。</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">私は、このアプリケーションが別のデバイスは、削除または誤動作に移動した場合、私の財布回復できるのは、安全な場所に保存されている秘密鍵だけのを理解します。</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I store safely offline.</string>
     <string name="Backup_Confirmation_LockAppWarn">アンドロイド OS 設定のアプリ  PINロック解除  を変更またはデータ削除する際、財布はリセットされます。その後あなたの財布を復元するのには、秘密キーを必要があります。</string>
     <string name="Backup_Confirmation_Title">秘密キーの後に、次の言葉にを入力してください。</string>
     <string name="Backup_Confirmation_Description">あなたの秘密鍵の単語を入力してください。</string>
@@ -42,6 +42,8 @@
     <string name="Balance_Deposit">受取</string>
     <string name="Balance_Send">送る</string>
     <string name="Balance_RatePerCoin">%s 毎 %s</string>
+    <string name="Balance_SyncedUntil">until: %s</string>
+    <string name="Balance_Syncing">Syncing&#8230;</string>
     <!--Send-->
     <string name="Send_Title1">送る</string>
     <string name="Send_Title">%s を送る</string>
@@ -61,9 +63,10 @@
     <string name="Send_DialogTitle">取引を承認する</string>
     <string name="Send_DialogFee">料金:</string>
     <string name="Send_DialogTotal">合計:</string>
+    <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
     <!--Deposit-->
     <string name="Deposit_Title">受取 %s</string>
-    <string name="Deposit_Share">共有</string>
+    <string name="Deposit_Share">転送</string>
     <string name="Deposit_Your_Address">お客様のアドレス</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">ただ今</string>
@@ -145,13 +148,13 @@
     <!--Setting_About-->
     <string name="SettingsAbout_Title">について</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">利用規約とプライバシーポリシー</string>
-    <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
-\n\nIt works everywhere as long as there is internet. No entity can block this app from working or to block someone from using it.
-\n\nYour funds are securely stored on the phone itself, not anywhere else.
-\n\nIt’s your responsibility to backup your Secret Key and keep it private. Never show it to anyone. If it’s lost, forgotten or stollen your funds can be used by the person who has your Secret key.
-\n\nDo not jailbreak your phone, do not install apps from unknown (untrusted) sources, do not give your device to untrusted people, and keep the Operating System on your phone up to date. The security of your wallet depends on this.
-\n\nThe entire code powering this app been open to the public scrutiny since the beginning. We tried to build the most secure and decentralized wallet we could, however there are no guarantees that there are no unintended software issues. That said, this wallet is likely to be significantly more secure than any smartphone wallet app out there.
-\n\nSome generic non-private app data like currency exchange rates are stored on decentralized storage (IPFS).</string>
+    <string name="SettingsAbout_TermsPrivacyText">このアプリはピアツーピアです。 Webサーバーや技術サポート担当者の機能に依存しません。
+\n\nインターネットがある限りどこでも動作します。このアプリの動作をブロックしたり、他のユーザーによる使用をブロックしたりすることはできません。
+\n\nあなたの資金は安全な場所に保管されています。
+\n\nあなたの秘密鍵をバックアップし秘密にしておくのはあなたの責任です。絶対に他人に見せないでください。それが紛失、忘れられ、または盗まれた場合、あなたの資金はあなたの秘密鍵を持っている人が使うことができます。
+\n\nあなたの電話を脱獄したり、未知の（信頼できない）ソースからアプリをインストールしたり、あなたのデバイスを信頼できない人に与えたりしないでください。そしてあなたの電話のオペレーティングシステムを常にアップグレードしてください。あなたの財布の安全はこれらにかかっています。
+\n\nこのアプリの原動力となっているコード全体は、最初から世間に公開しています。私たちは、可能な限り最も安全な財布を構築しようとしましたが、予期しないソフトウェアの問題がないという保証はできません。とは言っても、この財布は他のスマートフォンの財布アプリよりもはるかに安全である可能性があります。
+\n\n為替レートなどの一般的な非公開でないアプリデータは、分散ストレージ（IPFS）に保存されています。</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">アンドロイドのキーストア エラー</string>
     <string name="Alert_KeysInvalidatedDescription">あなたの財布を保持している暗号化されたデータは、アンドロイド ロック画面が変更されたために無効になりました。</string>
@@ -190,6 +193,6 @@
     <string name="EditPin_UnlockInfo">現在のパスコード</string>
     <string name="EditPin_NewPinInfo">新しいパスコード</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">ウォレット</string>
+    <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_save">保存</string>
 </resources>

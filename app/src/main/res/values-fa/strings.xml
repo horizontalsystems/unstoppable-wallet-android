@@ -5,7 +5,7 @@
     <string name="Alert_Ok">تأیید</string>
     <string name="Alert_Cancel">انصراف</string>
     <string name="Alert_Copy">رونوشت</string>
-    <string name="Alert_Share">به اشتراك گذاشتن</string>
+    <string name="Alert_Share">Forward</string>
     <string name="Alert_Close">ببند</string>
     <string name="Alert_Success">موفقیت</string>
     <string name="Alert_Copied">کپی انجام شد</string>
@@ -29,7 +29,7 @@
     <string name="Backup_Intro_BackupNow">پيشتيباني</string>
     <string name="Backup_Words_Title">رقم مخفی</string>
     <string name="Backup_Confirmation_Understand">من فهميدم كي پول كيف من و توكن هاي من همه شان حفظ و امانط است در اين دستگاه و نخير در ديگر سيرفير ها.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I have just written down and saved in a secure place.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I store safely offline.</string>
     <string name="Backup_Confirmation_LockAppWarn">Changing the unlock PIN or deleting app data in your Android OS settings would reset the wallet. You will need your Secret Key to restore your wallet after that.</string>
     <string name="Backup_Confirmation_Title">تعقيب كنيد حرف هاي رمز مخفي خود را</string>
     <string name="Backup_Confirmation_Description">حرف هاي رمز تات را وارد كنيد.</string>
@@ -42,6 +42,8 @@
     <string name="Balance_Deposit">دريافت</string>
     <string name="Balance_Send">ارسال</string>
     <string name="Balance_RatePerCoin">%sدر هر%s</string>
+    <string name="Balance_SyncedUntil">until: %s</string>
+    <string name="Balance_Syncing">Syncing&#8230;</string>
     <!--Send-->
     <string name="Send_Title1">ارسال</string>
     <string name="Send_Title">ارسال%s</string>
@@ -61,9 +63,10 @@
     <string name="Send_DialogTitle">معامله را تایید کنید</string>
     <string name="Send_DialogFee">هزينه:</string>
     <string name="Send_DialogTotal">مجموع:</string>
+    <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
     <!--Deposit-->
     <string name="Deposit_Title">دریافت s%</string>
-    <string name="Deposit_Share">به اشتراك گذاشتن</string>
+    <string name="Deposit_Share">Forward</string>
     <string name="Deposit_Your_Address">Your Address</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">همين آلان</string>
@@ -194,6 +197,6 @@
     <string name="EditPin_UnlockInfo">Current Passcode</string>
     <string name="EditPin_NewPinInfo">New Passcode</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Wallets</string>
+    <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_save">Save</string>
 </resources>

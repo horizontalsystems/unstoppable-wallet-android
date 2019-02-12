@@ -5,7 +5,7 @@
     <string name="Alert_Ok">확인</string>
     <string name="Alert_Cancel">취소</string>
     <string name="Alert_Copy">복사</string>
-    <string name="Alert_Share">공유</string>
+    <string name="Alert_Share">Forward</string>
     <string name="Alert_Close">가까운, 닫힌</string>
     <string name="Alert_Success">성공</string>
     <string name="Alert_Copied">복사됨</string>
@@ -29,7 +29,7 @@
     <string name="Backup_Intro_BackupNow">백업</string>
     <string name="Backup_Words_Title">비밀 키</string>
     <string name="Backup_Confirmation_Understand">나는 내 지갑과 토큰이 다른 서버가 아닌 이 장치에만 안전하게 존재하고 있음을 이해한다.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">나는 이 앱이 다른 장치로 이동, 삭제 또는 오작동하는 경우 내 지갑이 내가 작성하고 안전한 장소에 저장한 비밀 키로만 복구 될 수 있음을 이해한다.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I store safely offline.</string>
     <string name="Backup_Confirmation_LockAppWarn">장금 해제 핀을 변경하거나 안드로이드 오에스설정에서 어플 데이터를 삭제하는것은 지갑을 재설정합니다. 그러고 난 후, 당신은 당신의 지갑을 복구하기 위해서 당신의 비밀키가 필요합니다.</string>
     <string name="Backup_Confirmation_Title">비밀 키에서 단어를 입력</string>
     <string name="Backup_Confirmation_Description">비밀 키에서 단어를 입력.</string>
@@ -42,6 +42,8 @@
     <string name="Balance_Deposit">수신</string>
     <string name="Balance_Send">전송</string>
     <string name="Balance_RatePerCoin">%s 당 %s</string>
+    <string name="Balance_SyncedUntil">until: %s</string>
+    <string name="Balance_Syncing">Syncing&#8230;</string>
     <!--Send-->
     <string name="Send_Title1">전송</string>
     <string name="Send_Title">전송 %s</string>
@@ -61,9 +63,10 @@
     <string name="Send_DialogTitle">거래를 확인해라</string>
     <string name="Send_DialogFee">수수료:</string>
     <string name="Send_DialogTotal">합계:</string>
+    <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
     <!--Deposit-->
     <string name="Deposit_Title">수신%s</string>
-    <string name="Deposit_Share">공유</string>
+    <string name="Deposit_Share">Forward</string>
     <string name="Deposit_Your_Address">당신의 주소</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">지금 막</string>
