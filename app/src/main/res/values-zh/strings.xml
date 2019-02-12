@@ -42,7 +42,7 @@
     <string name="Balance_Deposit">收到</string>
     <string name="Balance_Send">发送​​</string>
     <string name="Balance_RatePerCoin">每%s %s</string>
-    <string name="Balance_SyncedUntil">Until %s</string>
+    <string name="Balance_SyncedUntil">until: %s</string>
     <string name="Balance_Syncing">Syncing&#8230;</string>
     <!--Send-->
     <string name="Send_Title1">发送​​</string>
@@ -63,7 +63,7 @@
     <string name="Send_DialogTitle">确认交易</string>
     <string name="Send_DialogFee">费用:</string>
     <string name="Send_DialogTotal">总额:</string>
-    <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You don\&apos;t have %s ETH.</string>
+    <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
     <!--Deposit-->
     <string name="Deposit_Title">收到%s</string>
     <string name="Deposit_Share">Forward</string>
