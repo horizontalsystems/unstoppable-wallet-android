@@ -42,7 +42,7 @@
     <string name="Balance_Deposit">Al</string>
     <string name="Balance_Send">Gönder</string>
     <string name="Balance_RatePerCoin">%s için %s</string>
-    <string name="Balance_SyncedUntil">Until %s</string>
+    <string name="Balance_SyncedUntil">until: %s</string>
     <string name="Balance_Syncing">Syncing&#8230;</string>
     <!--Send-->
     <string name="Send_Title1">Gönder</string>
@@ -63,7 +63,7 @@
     <string name="Send_DialogTitle">İşlemi Onayla</string>
     <string name="Send_DialogFee">Masraf:</string>
     <string name="Send_DialogTotal">Toplam:</string>
-    <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You don\&apos;t have %s ETH.</string>
+    <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
     <!--Deposit-->
     <string name="Deposit_Title">%s al</string>
     <string name="Deposit_Share">Forward</string>
