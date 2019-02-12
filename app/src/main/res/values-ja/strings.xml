@@ -42,7 +42,7 @@
     <string name="Balance_Deposit">受取</string>
     <string name="Balance_Send">送る</string>
     <string name="Balance_RatePerCoin">%s 毎 %s</string>
-    <string name="Balance_SyncedUntil">Until %s</string>
+    <string name="Balance_SyncedUntil">until: %s</string>
     <string name="Balance_Syncing">Syncing&#8230;</string>
     <!--Send-->
     <string name="Send_Title1">送る</string>
@@ -63,7 +63,7 @@
     <string name="Send_DialogTitle">取引を承認する</string>
     <string name="Send_DialogFee">料金:</string>
     <string name="Send_DialogTotal">合計:</string>
-    <string name="Send_ERC_Alert">Ethereum で %s (ERC20) の手数料を支払いました。Don\&apos;t %s ETHがありませんでした。</string>
+    <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
     <!--Deposit-->
     <string name="Deposit_Title">受取 %s</string>
     <string name="Deposit_Share">転送</string>
