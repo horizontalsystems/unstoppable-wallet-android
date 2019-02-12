@@ -42,6 +42,8 @@
     <string name="Balance_Deposit">دريافت</string>
     <string name="Balance_Send">ارسال</string>
     <string name="Balance_RatePerCoin">%sدر هر%s</string>
+    <string name="Balance_SyncedUntil">Until %s</string>
+    <string name="Balance_Syncing">Syncing&#8230;</string>
     <!--Send-->
     <string name="Send_Title1">ارسال</string>
     <string name="Send_Title">ارسال%s</string>
