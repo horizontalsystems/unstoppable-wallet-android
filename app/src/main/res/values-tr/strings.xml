@@ -42,6 +42,8 @@
     <string name="Balance_Deposit">Al</string>
     <string name="Balance_Send">Gönder</string>
     <string name="Balance_RatePerCoin">%s için %s</string>
+    <string name="Balance_SyncedUntil">Until %s</string>
+    <string name="Balance_Syncing">Syncing&#8230;</string>
     <!--Send-->
     <string name="Send_Title1">Gönder</string>
     <string name="Send_Title">%s gönder</string>
