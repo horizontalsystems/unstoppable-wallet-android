@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.bankwallet.viewHelpers.AnimationHelper
+import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import kotlinx.android.synthetic.main.view_holder_add_coin.*
@@ -201,12 +202,14 @@ class ViewHolderAddCoin(override val containerView: View, listener: CoinsAdapter
 
 class ViewHolderCoin(override val containerView: View, private val listener: CoinsAdapter.Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
+    private var syncing = false
+
     fun bind(balanceViewItem: BalanceViewItem, expanded: Boolean) {
+        syncing = false
         buttonPay.isEnabled = false
         imgSyncFailed.visibility = View.GONE
         textExchangeRate.visibility = View.GONE
-        progressSync.visibility = View.GONE
-        textSyncProgress.visibility = View.GONE
+        iconProgress.visibility = View.GONE
 
         textCoinAmount.text = App.numberFormatter.format(balanceViewItem.coinValue)
         balanceViewItem.currencyValue?.let {
@@ -218,19 +221,25 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
         balanceViewItem.state.let { adapterState ->
             when (adapterState) {
                 is AdapterState.Syncing -> {
-                    progressSync.visibility = View.VISIBLE
-                    textSyncProgress.visibility = View.VISIBLE
-                    textSyncProgress.text = "${adapterState.progress}%"
+                    syncing = true
+                    iconProgress.visibility = View.VISIBLE
+                    iconProgress.setProgress(adapterState.progress.toFloat())
+                    textSyncProgress.visibility = if (expanded) View.VISIBLE else View.GONE
+                    adapterState.lastBlockDate?.let {
+                        textSyncProgress.text = containerView.context.getString(R.string.Balance_SyncedUntil, DateHelper.formatDate(it, "MMM d.yyyy"))
+                    } ?:run { textSyncProgress.text = containerView.context.getString(R.string.Balance_Syncing) }
                 }
                 is AdapterState.Synced -> {
                     if (balanceViewItem.coinValue.value > BigDecimal.ZERO) {
                         buttonPay.isEnabled = true
                     }
-
+                    textSyncProgress.visibility = View.GONE
                     textExchangeRate.visibility = View.VISIBLE
+                    coinIcon.visibility = View.VISIBLE
                 }
                 is AdapterState.NotSynced -> {
                     imgSyncFailed.visibility = View.VISIBLE
+                    coinIcon.visibility = View.GONE
                 }
             }
         }
@@ -260,6 +269,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
 
     fun bindPartial(expanded: Boolean) {
         viewHolderRoot.isSelected = expanded
+        textSyncProgress.visibility = if (expanded && syncing) View.VISIBLE else View.GONE
         if (expanded) {
             AnimationHelper.expand(buttonsWrapper)
         } else {

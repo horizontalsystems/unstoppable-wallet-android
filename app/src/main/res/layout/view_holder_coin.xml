@@ -28,21 +28,43 @@
 
         <io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
             android:id="@+id/coinIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <io.horizontalsystems.bankwallet.ui.extensions.RotatingCircleProgressView
+            android:id="@+id/iconProgress"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@+id/coinIcon"
+            app:layout_constraintTop_toTopOf="@+id/coinIcon"
+            />
+
+        <ImageView
+            android:id="@+id/imgSyncFailed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:indeterminateTint="@color/grey"
+            android:indeterminateTintMode="src_atop"
+            android:src="@drawable/attention_icon"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            />
 
         <TextView
             android:id="@+id/textCoinName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="32dp"
             android:fontFamily="@font/noto_sans_bold"
             android:textColor="?BallanceCoinNameColor"
             android:textSize="17sp"
-            app:layout_constraintBottom_toBottomOf="@+id/coinIcon"
-            app:layout_constraintStart_toEndOf="@+id/coinIcon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="Bitcoin"
             />
 
@@ -69,52 +91,24 @@
         android:layout_marginTop="14dp"
         >
 
-        <ImageView
-            android:id="@+id/imgSyncFailed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="1dp"
-            android:indeterminateTint="@color/grey"
-            android:indeterminateTintMode="src_atop"
-            android:src="@drawable/attention"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            />
-
-        <ProgressBar
-            android:id="@+id/progressSync"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="14dp"
-            android:layout_height="14dp"
-            android:layout_marginBottom="3dp"
-            android:backgroundTint="@color/grey"
-            android:indeterminate="true"
-            android:indeterminateTint="@color/grey"
-            android:indeterminateTintMode="src_atop"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imgSyncFailed"
-            />
-
         <TextView
             android:id="@+id/textSyncProgress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:fontFamily="@font/noto_sans"
             android:includeFontPadding="false"
             android:textColor="@color/grey"
             android:textSize="14sp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/progressSync"
-            tools:text="45%"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Until Dec 17. 2018"
             />
 
         <TextView
             android:id="@+id/textExchangeRate"
             android:layout_width="wrap_content"
-            android:layout_height="21dp"
+            android:layout_height="wrap_content"
             android:fontFamily="@font/noto_sans"
             android:includeFontPadding="false"
             android:textColor="@color/grey"
