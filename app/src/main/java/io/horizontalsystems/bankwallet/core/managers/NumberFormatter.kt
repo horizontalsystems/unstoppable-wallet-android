@@ -83,7 +83,7 @@ class NumberFormatter(private val languageManager: ILanguageManager): IAppNumber
         }
 
         if (canUseLessSymbol && absValue < FIAT_SMALL_NUMBER_EDGE && absValue > BigDecimal.ZERO) {
-            result = "> $result"
+            result = "< $result"
         }
 
         return result
