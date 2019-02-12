@@ -42,8 +42,8 @@
     <string name="Balance_Deposit">受取</string>
     <string name="Balance_Send">送る</string>
     <string name="Balance_RatePerCoin">%s 毎 %s</string>
-    <string name="Balance_SyncedUntil">until: %s</string>
-    <string name="Balance_Syncing">Syncing…</string>
+    <string name="Balance_SyncedUntil">%s まで</string>
+    <string name="Balance_Syncing">同期中...</string>
     <!--Send-->
     <string name="Send_Title1">送る</string>
     <string name="Send_Title">%s を送る</string>
