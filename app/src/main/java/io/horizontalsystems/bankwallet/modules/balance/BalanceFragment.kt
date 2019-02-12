@@ -187,7 +187,7 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
         if (payloads.isEmpty()) {
             holder.bind(viewDelegate.getViewItem(position), expandedViewPosition == position)
         } else if (payloads.any { it is Boolean }) {
-            holder.bindPartial(expandedViewPosition == position, viewDelegate.getViewItem(position).state is AdapterState.Syncing)
+            holder.bindPartial(expandedViewPosition == position)
         }
     }
 }
@@ -202,7 +202,10 @@ class ViewHolderAddCoin(override val containerView: View, listener: CoinsAdapter
 
 class ViewHolderCoin(override val containerView: View, private val listener: CoinsAdapter.Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
+    private var syncing = false
+
     fun bind(balanceViewItem: BalanceViewItem, expanded: Boolean) {
+        syncing = false
         buttonPay.isEnabled = false
         imgSyncFailed.visibility = View.GONE
         textExchangeRate.visibility = View.GONE
@@ -218,6 +221,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
         balanceViewItem.state.let { adapterState ->
             when (adapterState) {
                 is AdapterState.Syncing -> {
+                    syncing = true
                     iconProgress.visibility = View.VISIBLE
                     iconProgress.setProgress(adapterState.progress.toFloat())
                     textSyncProgress.visibility = if (expanded) View.VISIBLE else View.GONE
@@ -263,7 +267,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
         }
     }
 
-    fun bindPartial(expanded: Boolean, syncing: Boolean) {
+    fun bindPartial(expanded: Boolean) {
         viewHolderRoot.isSelected = expanded
         textSyncProgress.visibility = if (expanded && syncing) View.VISIBLE else View.GONE
         if (expanded) {
