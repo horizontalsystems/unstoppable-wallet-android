@@ -3,13 +3,11 @@ package io.horizontalsystems.bankwallet.modules.balance
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 
 class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter {
 
     lateinit var delegate: BalanceModule.IViewDelegate
 
-    val totalBalanceLiveData = MutableLiveData<CurrencyValue>()
     val openSendDialog = SingleLiveEvent<String>()
     val openReceiveDialog = SingleLiveEvent<String>()
     val balanceColorLiveDate = MutableLiveData<Int>()
