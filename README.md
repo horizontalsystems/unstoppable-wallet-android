@@ -39,7 +39,7 @@ Source code: https://github.com/horizontalsystems/bank-wallet-android-app
 ## Install
 
 - Play Market Version: https://play.google.com/store/apps/details?id=io.horizontalsystems.bankwallet
-- Version 1.0: https://github.com/horizontalsystems/bank-wallet-android/releases/download/1.0.0/bank-wallet.apk
+- Version 0.1.1: https://github.com/horizontalsystems/bank-wallet-android/releases/download/0.1.1/bank-wallet-0.1.1.apk
 
 ## License
 
