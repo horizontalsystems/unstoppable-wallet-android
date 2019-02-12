@@ -42,6 +42,8 @@
     <string name="Balance_Deposit">收到</string>
     <string name="Balance_Send">发送​​</string>
     <string name="Balance_RatePerCoin">每%s %s</string>
+    <string name="Balance_SyncedUntil">Until %s</string>
+    <string name="Balance_Syncing">Syncing&#8230;</string>
     <!--Send-->
     <string name="Send_Title1">发送​​</string>
     <string name="Send_Title">发送%s</string>
