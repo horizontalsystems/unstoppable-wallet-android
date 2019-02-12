@@ -42,7 +42,7 @@
     <string name="Balance_Deposit">Получить</string>
     <string name="Balance_Send">Отправить</string>
     <string name="Balance_RatePerCoin">%s за %s</string>
-    <string name="Balance_SyncedUntil">До %s</string>
+    <string name="Balance_SyncedUntil">until: %s</string>
     <string name="Balance_Syncing">Syncing&#8230;</string>
     <!--Send-->
     <string name="Send_Title1">Отправить</string>
@@ -63,7 +63,7 @@
     <string name="Send_DialogTitle">Подтвердить Транзакцию</string>
     <string name="Send_DialogFee">Комиссия:</string>
     <string name="Send_DialogTotal">Итого:</string>
-    <string name="Send_ERC_Alert">Комиссия за отправку %s (ERC20) взимается в ETH. Необходимо %s ETH.</string>
+    <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Получено %s</string>
     <string name="Deposit_Share">Переслать</string>
