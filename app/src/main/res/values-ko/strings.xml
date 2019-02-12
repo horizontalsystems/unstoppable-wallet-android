@@ -197,6 +197,6 @@
     <string name="EditPin_UnlockInfo">현재 비밀번호</string>
     <string name="EditPin_NewPinInfo">새로운 비밀번호</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Coin Manager</string>
+    <string name="ManageCoins_title">지갑</string>
     <string name="ManageCoins_save">저장</string>
 </resources>
