@@ -16,7 +16,6 @@ import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -308,13 +307,10 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
     private val textChangeListener = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
             val amountText = s?.toString() ?: ""
-            var amountNumber = BigDecimal.ZERO
-            try {
-                amountNumber = amountText.toBigDecimal()
-            } catch (e: NumberFormatException) {
-                Log.e("SendFragment", "Exception", e)
+            var amountNumber = when {
+                amountText != "" -> amountText.toBigDecimalOrNull() ?: BigDecimal.ZERO
+                else -> BigDecimal.ZERO
             }
-
             viewModel.decimalSize?.let {
                 if (amountNumber.scale() > it) {
                     amountNumber = amountNumber.setScale(it, RoundingMode.FLOOR)
