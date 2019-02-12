@@ -46,8 +46,8 @@ class AdapterManager(private val coinManager: CoinManager, private val authManag
     }
 
     override fun initAdapters() {
-        authManager.authData?.let { authData ->
-            handler.post {
+        handler.post {
+            authManager.authData?.let { authData ->
                 val oldAdapters = adapters.toMutableList()
 
                 adapters = coinManager.coins.mapNotNull { coin ->
