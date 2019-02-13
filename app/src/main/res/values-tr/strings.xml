@@ -29,7 +29,7 @@
     <string name="Backup_Intro_BackupNow">Yedekle</string>
     <string name="Backup_Words_Title">Gizli Anahtar</string>
     <string name="Backup_Confirmation_Understand">Cüzdanımın güvenle, sadece bu cihazda bulunduğunu ve herhangi bir sunucuda olmadığını biliyorum.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I store safely offline.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key.</string>
     <string name="Backup_Confirmation_LockAppWarn">Cihaz şifresini değiştirmek veya uygulamayı veya uygulama verisini silmek, cihazda bulunan hesapları sıfırlayacaktır. Bu durumda hesabınızı geri yükleyebilmeniz için Gizli Anahtara ihtiyacınız olacak.</string>
     <string name="Backup_Confirmation_Title">Gizli Anahtarınızda ki istenen kelimeleri giriniz</string>
     <string name="Backup_Confirmation_Description">Gizli Anahtarınızda ki kelimeleri girin.</string>
@@ -76,7 +76,7 @@
     <string name="Timestamp_Yesterday">Dün</string>
     <!--Transactions-->
     <string name="Transactions_Title">Hesap işlemleri</string>
-    <string name="Transactions_FilterAll">Hepsi</string>
+    <string name="Transactions_FilterAll">ALL</string>
     <string name="Transactions_EmptyList">Henüz hesap işlemi bulunmuyor</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Hesap işlemi</string>
@@ -182,7 +182,7 @@
     <string name="UnlockPin_WalletDisabledUntil">Engellendi: %s</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Şifre</string>
-    <string name="SetPin_Info">Şifre, cüzdan kilidini açmak için kullanılacak</string>
+    <string name="SetPin_Info">Your passcode will be used to unlock your wallet and send money</string>
     <string name="SetPin_ErrorShortPin">Lütfen bütün rakamları giriniz.</string>
     <string name="SetPin_ConfirmInfo">Onayla</string>
     <string name="SetPin_Success">Kilit şifresi başarıyla oluşturuldu!</string>
