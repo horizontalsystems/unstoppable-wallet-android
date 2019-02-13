@@ -29,7 +29,7 @@
     <string name="Backup_Intro_BackupNow">Sauvegarde</string>
     <string name="Backup_Words_Title">Le mot secret</string>
     <string name="Backup_Confirmation_Understand">Je comprends que mon porte-monnaie et mes tokens sont en toute sécurité sur cet appareil uniquement et pas sur les autres appareils.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I store safely offline.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key.</string>
     <string name="Backup_Confirmation_LockAppWarn">Changer le code ou de suppression de données d’application dans les paramètres de votre système d’exploitation Android remettrait à zéro le porte-monnaie. Vous aurez besoin de votre clé secrète pour restaurer votre porte-monnaie après cela.</string>
     <string name="Backup_Confirmation_Title">Entrez les mots de votre clé secrète</string>
     <string name="Backup_Confirmation_Description">Entrez les mots de votre clé secrète.</string>
@@ -76,7 +76,7 @@
     <string name="Timestamp_Yesterday">Hier</string>
     <!--Transactions-->
     <string name="Transactions_Title">Transactions</string>
-    <string name="Transactions_FilterAll">Tous</string>
+    <string name="Transactions_FilterAll">ALL</string>
     <string name="Transactions_EmptyList">Vous n’avez aucune transaction</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Transactions</string>
@@ -182,7 +182,7 @@
     <string name="UnlockPin_WalletDisabledUntil">Désactivé jusqu\'à: %s</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Code</string>
-    <string name="SetPin_Info">Votre code sera utilisé pour déverrouiller l\'appli de porte-monnaie</string>
+    <string name="SetPin_Info">Your passcode will be used to unlock your wallet and send money</string>
     <string name="SetPin_ErrorShortPin">S\'il vous plaît entrez tous les chiffres.</string>
     <string name="SetPin_ConfirmInfo">Confirmer</string>
     <string name="SetPin_Success">Votre code a été défini avec succès!</string>
