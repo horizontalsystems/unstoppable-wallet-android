@@ -16,12 +16,15 @@ import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 class RotatingCircleProgressView : View {
 
     private lateinit var mCirclePaint: Paint
+    private lateinit var donutPaint: Paint
     private lateinit var circleBackgroundPaint: Paint
     private var mThickness: Float = 0.toFloat()
 
     private lateinit var mCircleRect: RectF
     @ColorInt
     private var mCircleColor: Int = 0
+    @ColorInt
+    private var donutColor: Int = 0
     @ColorInt
     private var circleBackgroundColor: Int = 0
     private var mSize: Int = 0
@@ -49,19 +52,6 @@ class RotatingCircleProgressView : View {
         init()
     }
 
-    private fun init() {
-        decelerateInterpolator = DecelerateInterpolator()
-        mCirclePaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        circleBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-
-        mCircleRect = RectF()
-        mThickness = LayoutHelper.dp(2f, context).toFloat()
-        mCircleColor = ContextCompat.getColor(context, R.color.dark)
-        circleBackgroundColor = ContextCompat.getColor(context, R.color.grey)
-        setPaint()
-        lastUpdateTime = System.currentTimeMillis()
-    }
-
     fun setProgress(value: Float) {
         if (value > 10) {
             currentProgress = value/100
@@ -75,12 +65,32 @@ class RotatingCircleProgressView : View {
         invalidate()
     }
 
-    private fun setPaint() {
+    private fun init() {
+        decelerateInterpolator = DecelerateInterpolator()
+        mCircleRect = RectF()
+        mThickness = LayoutHelper.dp(2f, context).toFloat()
+        donutColor = ContextCompat.getColor(context, R.color.grey_pressed)
+        circleBackgroundColor = ContextCompat.getColor(context, R.color.grey)
+        lastUpdateTime = System.currentTimeMillis()
+        val themedColor = LayoutHelper.getAttr(R.attr.ProgressbarSpinnerColor, context.theme)
+        mCircleColor = themedColor ?: ContextCompat.getColor(context, R.color.dark)
+        setPaints()
+    }
+
+    private fun setPaints() {
+        mCirclePaint = Paint(Paint.ANTI_ALIAS_FLAG)
         mCirclePaint.color = mCircleColor
         mCirclePaint.style = Paint.Style.STROKE
         mCirclePaint.strokeWidth = mThickness
         mCirclePaint.strokeCap = Paint.Cap.BUTT
 
+        donutPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+        donutPaint.color = donutColor
+        donutPaint.style = Paint.Style.STROKE
+        donutPaint.strokeWidth = mThickness
+        donutPaint.strokeCap = Paint.Cap.BUTT
+
+        circleBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         circleBackgroundPaint.style = Paint.Style.FILL
         circleBackgroundPaint.color = circleBackgroundColor
     }
@@ -90,6 +100,7 @@ class RotatingCircleProgressView : View {
         super.onDraw(canvas)
         val radius = (mSize/2).toFloat()
         canvas.drawCircle(radius, radius, radius, circleBackgroundPaint)
+        canvas.drawArc(mCircleRect, 0f, 360f, false, donutPaint)
         canvas.drawArc(mCircleRect, radOffset, Math.max(4f, 360 * animatedProgressValue), false, mCirclePaint)
         updateAnimation()
     }
