@@ -97,7 +97,7 @@
         <item name="HudIconTint">@color/steel_grey</item>
         <item name="HudBackground">@color/black_85</item>
         <item name="HudTextColor">@color/white</item>
-        <item name="TransactionDateColor">@color/steel_grey</item>
+        <item name="TransactionDateColor">@color/grey_light</item>
         <item name="TransactionDetailBackground">@color/steel_20</item>
         <item name="TransactionTextBoxBackground">@color/text_box_background_dark</item>
         <item name="TransactionDetailValueTextColor">@color/bars_color</item>
@@ -332,13 +332,9 @@
 
     <style name="TransactionInfoStatusProgressBarSmall">
         <item name="android:layout_width">2dp</item>
-        <item name="android:layout_height">8dp</item>
+        <item name="android:layout_height">10dp</item>
         <item name="android:layout_marginStart">2dp</item>
         <item name="android:src">@drawable/status_progress_bar_grey_20_small</item>
-    </style>
-
-    <style name="TransactionInfoStatusProgressBarSmallPending" parent="TransactionInfoStatusProgressBarSmall">
-        <item name="android:layout_height">10dp</item>
     </style>
 
     <style name="Widget.Shadow.AppBar" parent="">
@@ -347,6 +343,17 @@
         <item name="android:layout_width">match_parent</item>
         <item name="layout_anchorGravity">bottom</item>
         <item name="android:layout_gravity">bottom</item>
+    </style>
+
+    <style name="BaseSbThemed">
+        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
+        <item name="android:textColor">?TransactionDateColor</item>
+    </style>
+
+    <style name="Body1Grey">
+        <item name="android:fontFamily">@font/noto_sans_regular</item>
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
 </resources>

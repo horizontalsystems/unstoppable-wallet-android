@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.core.managers
 import android.support.v4.content.ContextCompat
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
-import android.text.style.RelativeSizeSpan
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
@@ -91,10 +90,6 @@ class NumberFormatter(private val languageManager: ILanguageManager): IAppNumber
 
     override fun formatForTransactions(currencyValue: CurrencyValue, isIncoming: Boolean): SpannableString {
         val spannable = SpannableString(format(currencyValue, canUseLessSymbol = false))
-
-        //set currency sign size
-        val endOffset = if (currencyValue.value < BigDecimal.ZERO) 3 else 1
-        spannable.setSpan(RelativeSizeSpan(0.75f), 0, endOffset, 0)
 
         //set color
         val amountTextColor = if (isIncoming) R.color.green_crypto else R.color.yellow_crypto

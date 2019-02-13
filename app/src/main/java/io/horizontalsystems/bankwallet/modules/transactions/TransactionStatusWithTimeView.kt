@@ -33,7 +33,6 @@ open class TransactionStatusWithTimeView : ConstraintLayout {
         progressBarWrapper.visibility = View.GONE
         pendingIcon.visibility = View.GONE
         completedIcon.visibility = View.GONE
-        pendingProgressBarWrapper.visibility = View.GONE
         when (transactionStatus) {
             is TransactionStatus.Completed -> {
                 completedIcon.visibility = View.VISIBLE
@@ -45,13 +44,14 @@ open class TransactionStatusWithTimeView : ConstraintLayout {
             else -> {
                 txTime.visibility = View.GONE
                 pendingIcon.visibility = View.VISIBLE
-                pendingProgressBarWrapper.visibility = View.VISIBLE
+                progressBarWrapper.visibility = View.VISIBLE
+                fillProgress()
             }
         }
         invalidate()
     }
 
-    private fun fillProgress(transactionStatus: TransactionStatus.Processing) {
+    private fun fillProgress(transactionStatus: TransactionStatus.Processing = TransactionStatus.Processing(0)) {
         val grey20Bar = R.drawable.status_progress_bar_grey_20_small
         val solidGreyBar = R.drawable.status_progress_bar_grey_small
 
