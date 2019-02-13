@@ -63,7 +63,7 @@
     <string name="Send_DialogTitle">Confirmer la transaction</string>
     <string name="Send_DialogFee">Frais:</string>
     <string name="Send_DialogTotal">Total:</string>
-    <string name="Send_ERC_Alert">Frais de transaction pour %s (ERC20) payé en ETH. Il est nécessaire %s ETH.</string>
+    <string name="Send_ERC_Alert">Frais de transaction pour %s (ERC20) payé en Ethereum. Il est nécessaire %s ETH.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Recevoir %s</string>
     <string name="Deposit_Share">Transférer</string>
