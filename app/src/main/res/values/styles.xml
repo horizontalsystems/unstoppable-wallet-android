@@ -223,20 +223,9 @@
         <item name="android:background">@drawable/button_green_background_12</item>
     </style>
 
-    <style name="ButtonGreen_4" parent="Button">
-        <item name="android:background">@drawable/button_green_background_4</item>
-        <item name="android:paddingLeft">4dp</item>
-        <item name="android:paddingRight">4dp</item>
-    </style>
-
     <style name="ButtonYellow" parent="Button">
         <item name="android:textColor">@color/button_yellow_text_color_selector</item>
         <item name="android:background">@drawable/button_yellow_background_12</item>
-    </style>
-
-    <style name="ButtonYellowOnDark" parent="Button">
-        <item name="android:textColor">@color/button_yellow_on_dark_text_color_selector</item>
-        <item name="android:background">@drawable/button_yellow_on_dark_background_12</item>
     </style>
 
     <style name="ButtonNegative" parent="Button">
