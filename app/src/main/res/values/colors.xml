@@ -4,10 +4,11 @@
     <color name="dark_50">#801f2129</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="lightBackground">#ebebf0</color>
-    <color name="green_pressed">#1ba65E</color>
+    <color name="green_pressed">#1aa65d</color>
     <color name="green_crypto">#1ebf6b</color>
     <color name="green_crypto_20">#331ebf6b</color>
     <color name="grey">#8a8a8f</color>
+    <color name="grey_pressed">#717175</color>
     <color name="grey_50">#808a8a8f</color>
     <color name="steel_grey">#c8c7cc</color>
     <color name="steel_20">#3373798C</color>
@@ -17,7 +18,7 @@
     <color name="yellow_crypto">#ff9e00</color>
     <color name="yellow_crypto_40">#66ff9e00</color>
     <color name="yellow">#ffad00</color>
-    <color name="yellow_pressed">#e09d0b</color>
+    <color name="yellow_pressed">#e68e00</color>
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
     <color name="white_50">#80ffffff</color>
