@@ -63,7 +63,7 @@
     <string name="Send_DialogTitle">确认交易</string>
     <string name="Send_DialogFee">费用:</string>
     <string name="Send_DialogTotal">总额:</string>
-    <string name="Send_ERC_Alert">以 ETH 支付的 %s (ERC20) 交易费用。你需要 %s ETH。</string>
+    <string name="Send_ERC_Alert">以 Ethereum 支付的 %s (ERC20) 交易费用。你需要 %s ETH。</string>
     <!--Deposit-->
     <string name="Deposit_Title">收到%s</string>
     <string name="Deposit_Share">转发</string>
@@ -76,7 +76,7 @@
     <string name="Timestamp_Yesterday">昨天</string>
     <!--Transactions-->
     <string name="Transactions_Title">交易记录</string>
-    <string name="Transactions_FilterAll">ALL</string>
+    <string name="Transactions_FilterAll">全部</string>
     <string name="Transactions_EmptyList">您还没有任何交易记录。</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">交易</string>
