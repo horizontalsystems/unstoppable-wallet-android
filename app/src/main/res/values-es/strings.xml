@@ -29,7 +29,7 @@
     <string name="Backup_Intro_BackupNow">Copia de seguridad</string>
     <string name="Backup_Words_Title">Clave secreta</string>
     <string name="Backup_Confirmation_Understand">Entiendo que mis datos y mi monedero se guardan de manera segura en este dispositivo y no en ningún otro servidor</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I store safely offline.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key.</string>
     <string name="Backup_Confirmation_LockAppWarn">Cambiar el PIN de desbloqueo de su teléfono en el sistema operativo Android reiniciará la cartera. Usted necesitará su frase de seguridad para restaurar su cartera después de eso.</string>
     <string name="Backup_Confirmation_Title">Insertar palabras de su clave secreta</string>
     <string name="Backup_Confirmation_Description">Insertar palabras de su clave secreta.</string>
@@ -76,7 +76,7 @@
     <string name="Timestamp_Yesterday">Ayer</string>
     <!--Transactions-->
     <string name="Transactions_Title">Transacciones</string>
-    <string name="Transactions_FilterAll">Todo</string>
+    <string name="Transactions_FilterAll">ALL</string>
     <string name="Transactions_EmptyList">Aún no tiene ninguna transacción</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Transacción</string>
@@ -188,7 +188,7 @@
     <string name="UnlockPin_WalletDisabledUntil">Inhabilitado hasta: %s</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Código</string>
-    <string name="SetPin_Info">Su código servirá para abrir su monedero y enviar dinero</string>
+    <string name="SetPin_Info">Your passcode will be used to unlock your wallet and send money</string>
     <string name="SetPin_ErrorShortPin">Por favor, introduzca todos los dígitos.</string>
     <string name="SetPin_ConfirmInfo">Confirmar</string>
     <string name="SetPin_Success">Tu contraseña fue establecida con éxito!</string>
