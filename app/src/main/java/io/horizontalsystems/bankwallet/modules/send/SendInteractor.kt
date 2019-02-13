@@ -38,6 +38,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
         get() = clipboardManager.getCopiedText()
 
     private var rate: Rate? = null
+    private var feeRate: Rate? = null
     private val disposables = CompositeDisposable()
 
     override fun retrieveRate() {
@@ -53,6 +54,21 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
                             }
                         }
         )
+
+        adapter.feeCoinCode?.let{
+            disposables.add(
+                    rateStorage.latestRateObservable(it, currencyManager.baseCurrency.code)
+                            .take(1)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe { fetchedRate ->
+                                feeRate = if (fetchedRate.expired) null else fetchedRate
+                                if (feeRate != null) {
+                                    delegate?.didRateRetrieve()
+                                }
+                            }
+            )
+        }
     }
 
     override fun parsePaymentAddress(address: String): PaymentRequestAddress {
@@ -122,16 +138,24 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
         }
 
         state.coinValue?.let { coinValue ->
+            val coinCode = adapter.feeCoinCode ?: adapter.coin.code
             if ((state.coinValue?.value ?: BigDecimal.ZERO) > BigDecimal.ZERO) {
-                state.feeCoinValue = CoinValue(coin, adapter.fee(coinValue.value, input.address))
+                state.feeCoinValue = CoinValue(coinCode, adapter.fee(coinValue.value, input.address))
             } else {
-                state.feeCoinValue = CoinValue(coin, BigDecimal.ZERO)
+                state.feeCoinValue = CoinValue(coinCode, BigDecimal.ZERO)
             }
         }
 
-        rateValue?.let {
+        var feeCurrencyRate: BigDecimal? = null
+        adapter.feeCoinCode?.let {
+            feeCurrencyRate = feeRate?.value
+        } ?:run {
+            feeCurrencyRate = rateValue
+        }
+
+        feeCurrencyRate?.let { feeRate ->
             state.feeCoinValue?.let { feeCoinValue ->
-                state.feeCurrencyValue = CurrencyValue(baseCurrency, feeCoinValue.value.times(rateValue))
+                state.feeCurrencyValue = CurrencyValue(baseCurrency, feeCoinValue.value.times(feeRate))
             }
         }
 
