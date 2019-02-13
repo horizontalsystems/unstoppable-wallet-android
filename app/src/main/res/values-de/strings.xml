@@ -29,7 +29,7 @@
     <string name="Backup_Intro_BackupNow">Backup</string>
     <string name="Backup_Words_Title">Offlineschlüssel</string>
     <string name="Backup_Confirmation_Understand">Ich stimme zu, dass mein Wallet und meinen Token nur auf diesem Gerät verfügbar sind.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I store safely offline.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key.</string>
     <string name="Backup_Confirmation_LockAppWarn">PIN zum Entsperren des Telefons ändern in Ihrem Android OS würde Einstellungen des Wallet. Sie benötigen Ihr backup Satz Ihrer Wallet danach wiederherstellen.</string>
     <string name="Backup_Confirmation_Title">Gib bitte die folgenden Wörter deines Offlineschlüssels ein</string>
     <string name="Backup_Confirmation_Description">Gib die folgenden Wörter deines Offlineschlüssels ein.</string>
@@ -76,7 +76,7 @@
     <string name="Timestamp_Yesterday">Gestern</string>
     <!--Transactions-->
     <string name="Transactions_Title">Transaktionen</string>
-    <string name="Transactions_FilterAll">Alle</string>
+    <string name="Transactions_FilterAll">ALL</string>
     <string name="Transactions_EmptyList">Transaktionsliste ist leer</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Transaktion</string>
@@ -182,7 +182,7 @@
     <string name="UnlockPin_WalletDisabledUntil">Deaktiviert bis: %s </string>
     <!--Set Pin-->
     <string name="SetPin_Title">Code</string>
-    <string name="SetPin_Info">Dein Code wird verwendet werden, um deinen Wallet zu entsperren und Geld schicken</string>
+    <string name="SetPin_Info">Your passcode will be used to unlock your wallet and send money</string>
     <string name="SetPin_ErrorShortPin">Gib bitte nur Zahlen ein.</string>
     <string name="SetPin_ConfirmInfo">Bestätigen</string>
     <string name="SetPin_Success">Lock code wurde erfolgreich gesetzt!</string>
