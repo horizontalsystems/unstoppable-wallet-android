@@ -124,7 +124,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:15b5ff5'
 
     // EthereumKit
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:ce04781'
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:78474b8'
 
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
