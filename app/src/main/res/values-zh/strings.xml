@@ -29,7 +29,7 @@
     <string name="Backup_Intro_BackupNow">备份</string>
     <string name="Backup_Words_Title">密钥</string>
     <string name="Backup_Confirmation_Understand">我的钱包和代币仅在这个设备上，而不是在任何服务器上安全地保存着。这个重点我都理解。</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I store safely offline.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key.</string>
     <string name="Backup_Confirmation_LockAppWarn">更改 PIN 码或删除 Android 操作系统设置中的应用数据会导致钱包重置。在这种情况下, 你需要你的密钥来恢复你的钱包。</string>
     <string name="Backup_Confirmation_Title">请输入你密钥中的词</string>
     <string name="Backup_Confirmation_Description">请输入你密钥中的词.</string>
@@ -76,7 +76,7 @@
     <string name="Timestamp_Yesterday">昨天</string>
     <!--Transactions-->
     <string name="Transactions_Title">交易记录</string>
-    <string name="Transactions_FilterAll">全部</string>
+    <string name="Transactions_FilterAll">ALL</string>
     <string name="Transactions_EmptyList">您还没有任何交易记录。</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">交易</string>
@@ -187,7 +187,7 @@
     <string name="UnlockPin_WalletDisabledUntil">禁用至: %s</string>
     <!--Set Pin-->
     <string name="SetPin_Title">密码</string>
-    <string name="SetPin_Info">您的密码将用于解锁钱包app。</string>
+    <string name="SetPin_Info">Your passcode will be used to unlock your wallet and send money</string>
     <string name="SetPin_ErrorShortPin">请只输入数字。</string>
     <string name="SetPin_ConfirmInfo">确认</string>
     <string name="SetPin_Success">锁定密码设置成功!</string>
