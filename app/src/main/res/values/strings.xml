@@ -41,7 +41,7 @@
     <string name="Backup_Words_Title">Secret Key</string>
 
     <string name="Backup_Confirmation_Understand">I understand that my wallet and tokens are held securely on this device only and not any servers.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I store safely offline.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key.</string>
     <string name="Backup_Confirmation_LockAppWarn">Changing the unlock PIN or deleting app data in your Android OS settings would reset the wallet. You will need your Secret Key to restore your wallet after that.</string>
     <string name="Backup_Confirmation_Title">Enter following words from your Secret Key</string>
     <string name="Backup_Confirmation_Description">Enter words from your secret key.</string>
@@ -111,7 +111,7 @@
     <!--Transactions-->
 
     <string name="Transactions_Title">Transactions</string>
-    <string name="Transactions_FilterAll">All</string>
+    <string name="Transactions_FilterAll">ALL</string>
     <string name="Transactions_EmptyList">You don\’t have any transactions yet</string>
 
     <!--Transaction Info-->
@@ -269,7 +269,7 @@
     <!--Set Pin-->
 
     <string name="SetPin_Title">Passcode</string>
-    <string name="SetPin_Info">Your passcode will be used to unlock wallet app</string>
+    <string name="SetPin_Info">Your passcode will be used to unlock your wallet and send money</string>
     <string name="SetPin_ErrorShortPin">Please enter all digits.</string>
     <string name="SetPin_ConfirmInfo">Confirm</string>
     <string name="SetPin_Success">Lock passcode was set successfully!</string>
