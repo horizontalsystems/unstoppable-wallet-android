@@ -24,7 +24,7 @@ class NumberFormatter(private val languageManager: ILanguageManager): IAppNumber
     private var formatters: MutableMap<String, NumberFormat> = mutableMapOf()
 
     override fun format(coinValue: CoinValue, explicitSign: Boolean, realNumber: Boolean): String? {
-        val value = if (explicitSign) coinValue.value.abs() else coinValue.value
+        val value = coinValue.value.abs()
 
         val customFormatter = getFormatter(languageManager.currentLanguage) ?: return null
 

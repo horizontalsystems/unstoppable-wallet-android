@@ -349,7 +349,7 @@
     </style>
 
     <style name="BaseSbThemed">
-        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
+        <item name="android:fontFamily">@font/noto_sans_medium</item>
         <item name="android:textColor">?TransactionDateColor</item>
     </style>
 

@@ -246,7 +246,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
 
     fun bind(transactionRecord: TransactionViewItem) {
         txValueInFiat.text = transactionRecord.currencyValue?.let { App.numberFormatter.formatForTransactions(it, transactionRecord.incoming) }
-        txValueInCoin.text = App.numberFormatter.format(transactionRecord.coinValue, true)
+        txValueInCoin.text = App.numberFormatter.format(transactionRecord.coinValue)
         txDate.text = transactionRecord.date?.let { DateHelper.getShortDateForTransaction(it) }
         val time = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }
         txStatusWithTimeView.bind(transactionRecord.status, time)
