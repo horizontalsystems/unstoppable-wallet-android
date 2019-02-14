@@ -69,7 +69,7 @@ class StateViewItemFactory {
         return viewItem
     }
 
-    fun confirmationViewItemForState(state: SendModule.State) : SendModule.SendConfirmationViewItem? {
+    fun confirmationViewItemForState(state: SendModule.State): SendModule.SendConfirmationViewItem? {
         val coinValue = state.coinValue ?: return null
         val address = state.address ?: return null
 
@@ -78,7 +78,7 @@ class StateViewItemFactory {
 
         val feeCurrencyValue = state.feeCurrencyValue
 
-        if (feeCurrencyValue != null) {
+        if (feeCurrencyValue != null && state.currencyValue != null) {
             stateFeeInfo = SendModule.AmountInfo.CurrencyValueInfo(feeCurrencyValue)
 
             val currencyValue = state.currencyValue
@@ -90,12 +90,14 @@ class StateViewItemFactory {
             val feeCoinValue = state.feeCoinValue
             if (feeCoinValue != null) {
                 stateFeeInfo = SendModule.AmountInfo.CoinValueInfo(feeCoinValue)
-                stateTotalInfo = SendModule.AmountInfo.CoinValueInfo(CoinValue(coinValue. coinCode, coinValue.value + feeCoinValue.value))
+                if (coinValue.coinCode == feeCoinValue.coinCode) {
+                    stateTotalInfo = SendModule.AmountInfo.CoinValueInfo(CoinValue(coinValue.coinCode, coinValue.value + feeCoinValue.value))
+                }
             }
         }
 
         val feeInfo = stateFeeInfo ?: return null
-        val totalInfo = stateTotalInfo ?: return null
+        val totalInfo = stateTotalInfo
 
         val viewItem = SendModule.SendConfirmationViewItem(coinValue, address, feeInfo, totalInfo)
         viewItem.currencyValue = state.currencyValue

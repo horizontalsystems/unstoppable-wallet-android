@@ -1,9 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.send
 
-import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.*
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
 import java.math.BigDecimal
 
@@ -11,10 +10,17 @@ class StateViewItemFactoryTest {
 
     private val factory = StateViewItemFactory()
     private val state = SendModule.State(8, SendModule.InputType.COIN)
+    private val confirmation = SendModule.State(8, SendModule.InputType.COIN)
     private val coinValue = CoinValue("BTC", BigDecimal("123.45"))
     private val usdCurrency = Currency(code = "USD", symbol = "$")
     private val currencyValue = CurrencyValue(usdCurrency, BigDecimal("0.116699446"))
+    private val coin = Coin("Bitcoin", "BTC", CoinType.Bitcoin)
 
+    @Before
+    fun setup() {
+        confirmation.coinValue = coinValue
+        confirmation.address = "address"
+    }
 
     @Test
     fun testDecimal() {
@@ -114,6 +120,15 @@ class StateViewItemFactoryTest {
         val viewItem = factory.viewItemForState(state, false)
 
         Assert.assertFalse(viewItem.sendButtonEnabled)
+    }
+
+    @Test
+    fun testConfirmation_TotalInfo_erc20_WithoutCurrencyValue() {
+        confirmation.feeCoinValue = CoinValue("ETH", BigDecimal("0.012"))
+
+        val viewItem = factory.confirmationViewItemForState(confirmation)
+
+        Assert.assertEquals(null, viewItem?.totalInfo)
     }
 
 }

@@ -41,7 +41,12 @@ class ConfirmationFragment : DialogFragment() {
                 rootView.findViewById<TextView>(R.id.txtCryptoAmount)?.text = App.numberFormatter.format(sendConfirmationViewItem.coinValue)
                 rootView.findViewById<AddressView>(R.id.addressView)?.bind(sendConfirmationViewItem.address)
                 rootView.findViewById<TextView>(R.id.txtFeeValue)?.text = sendConfirmationViewItem.feeInfo.getFormatted()
-                rootView.findViewById<TextView>(R.id.txtTotalValue)?.text = sendConfirmationViewItem.totalInfo.getFormatted()
+                sendConfirmationViewItem.totalInfo?.getFormatted()?.let {
+                    rootView.findViewById<TextView>(R.id.txtTotalValue)?.text = it
+                } ?: run {
+                    rootView.findViewById<TextView>(R.id.txtTotalTitle)?.visibility = View.GONE
+                    rootView.findViewById<TextView>(R.id.txtTotalValue)?.visibility = View.GONE
+                }
             }
         })
 

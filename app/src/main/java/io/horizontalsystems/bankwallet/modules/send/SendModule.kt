@@ -151,7 +151,7 @@ object SendModule {
         var sendButtonEnabled: Boolean = false
     }
 
-    class SendConfirmationViewItem(val coinValue: CoinValue, val address: String, val feeInfo: AmountInfo, val totalInfo: AmountInfo) {
+    class SendConfirmationViewItem(val coinValue: CoinValue, val address: String, val feeInfo: AmountInfo, val totalInfo: AmountInfo?) {
         var currencyValue: CurrencyValue? = null
     }
 }
