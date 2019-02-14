@@ -5,7 +5,7 @@
     <string name="Alert_Ok">确定</string>
     <string name="Alert_Cancel">取消</string>
     <string name="Alert_Copy">复制</string>
-    <string name="Alert_Share">Forward</string>
+    <string name="Alert_Share">转发</string>
     <string name="Alert_Close">关闭</string>
     <string name="Alert_Success">成功</string>
     <string name="Alert_Copied">复制成功</string>
@@ -29,7 +29,7 @@
     <string name="Backup_Intro_BackupNow">备份</string>
     <string name="Backup_Words_Title">密钥</string>
     <string name="Backup_Confirmation_Understand">我的钱包和代币仅在这个设备上，而不是在任何服务器上安全地保存着。这个重点我都理解。</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I store safely offline.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">我理解, 如果此app被移动到另一个设备、删除或故障，密钥是恢复我钱包的唯一方法。</string>
     <string name="Backup_Confirmation_LockAppWarn">更改 PIN 码或删除 Android 操作系统设置中的应用数据会导致钱包重置。在这种情况下, 你需要你的密钥来恢复你的钱包。</string>
     <string name="Backup_Confirmation_Title">请输入你密钥中的词</string>
     <string name="Backup_Confirmation_Description">请输入你密钥中的词.</string>
@@ -42,8 +42,8 @@
     <string name="Balance_Deposit">收到</string>
     <string name="Balance_Send">发送​​</string>
     <string name="Balance_RatePerCoin">每%s %s</string>
-    <string name="Balance_SyncedUntil">until: %s</string>
-    <string name="Balance_Syncing">Syncing&#8230;</string>
+    <string name="Balance_SyncedUntil">直到 %s</string>
+    <string name="Balance_Syncing">同步...</string>
     <!--Send-->
     <string name="Send_Title1">发送​​</string>
     <string name="Send_Title">发送%s</string>
@@ -63,10 +63,10 @@
     <string name="Send_DialogTitle">确认交易</string>
     <string name="Send_DialogFee">费用:</string>
     <string name="Send_DialogTotal">总额:</string>
-    <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
+    <string name="Send_ERC_Alert">以 Ethereum 支付的 %s (ERC20) 交易费用。你需要 %s ETH。</string>
     <!--Deposit-->
     <string name="Deposit_Title">收到%s</string>
-    <string name="Deposit_Share">Forward</string>
+    <string name="Deposit_Share">转发</string>
     <string name="Deposit_Your_Address">您的地址</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">刚才</string>
@@ -198,6 +198,6 @@
     <string name="EditPin_UnlockInfo">当前密码</string>
     <string name="EditPin_NewPinInfo">新密碼</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Coin Manager</string>
+    <string name="ManageCoins_title">钱包</string>
     <string name="ManageCoins_save">保存</string>
 </resources>

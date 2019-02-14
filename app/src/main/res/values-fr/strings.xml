@@ -5,7 +5,7 @@
     <string name="Alert_Ok">OK</string>
     <string name="Alert_Cancel">Annuler</string>
     <string name="Alert_Copy">Copier</string>
-    <string name="Alert_Share">Forward</string>
+    <string name="Alert_Share">Transférer</string>
     <string name="Alert_Close">Fermer</string>
     <string name="Alert_Success">Effectué</string>
     <string name="Alert_Copied">Copié</string>
@@ -29,7 +29,7 @@
     <string name="Backup_Intro_BackupNow">Sauvegarde</string>
     <string name="Backup_Words_Title">Le mot secret</string>
     <string name="Backup_Confirmation_Understand">Je comprends que mon porte-monnaie et mes tokens sont en toute sécurité sur cet appareil uniquement et pas sur les autres appareils.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I store safely offline.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">Je comprends que si cette appli est déplacée vers un autre appareil ou supprimée, mon porte-monnaie ne peut être récupéré qu\'avec la clé secrète.</string>
     <string name="Backup_Confirmation_LockAppWarn">Changer le code ou de suppression de données d’application dans les paramètres de votre système d’exploitation Android remettrait à zéro le porte-monnaie. Vous aurez besoin de votre clé secrète pour restaurer votre porte-monnaie après cela.</string>
     <string name="Backup_Confirmation_Title">Entrez les mots de votre clé secrète</string>
     <string name="Backup_Confirmation_Description">Entrez les mots de votre clé secrète.</string>
@@ -42,8 +42,8 @@
     <string name="Balance_Deposit">Recevoir</string>
     <string name="Balance_Send">Envoyer</string>
     <string name="Balance_RatePerCoin">%s par %s</string>
-    <string name="Balance_SyncedUntil">until: %s</string>
-    <string name="Balance_Syncing">Syncing&#8230;</string>
+    <string name="Balance_SyncedUntil">jusqu\'à: %s</string>
+    <string name="Balance_Syncing">Synchronisation…</string>
     <!--Send-->
     <string name="Send_Title1">Envoyer</string>
     <string name="Send_Title">Envoyer %s</string>
@@ -63,10 +63,10 @@
     <string name="Send_DialogTitle">Confirmer la transaction</string>
     <string name="Send_DialogFee">Frais:</string>
     <string name="Send_DialogTotal">Total:</string>
-    <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
+    <string name="Send_ERC_Alert">Frais de transaction pour %s (ERC20) payé en Ethereum. Il est nécessaire %s ETH.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Recevoir %s</string>
-    <string name="Deposit_Share">Forward</string>
+    <string name="Deposit_Share">Transférer</string>
     <string name="Deposit_Your_Address">Votre address</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">à l\'instant</string>
@@ -76,7 +76,7 @@
     <string name="Timestamp_Yesterday">Hier</string>
     <!--Transactions-->
     <string name="Transactions_Title">Transactions</string>
-    <string name="Transactions_FilterAll">Tous</string>
+    <string name="Transactions_FilterAll">TOUS</string>
     <string name="Transactions_EmptyList">Vous n’avez aucune transaction</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Transactions</string>
@@ -182,7 +182,7 @@
     <string name="UnlockPin_WalletDisabledUntil">Désactivé jusqu\'à: %s</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Code</string>
-    <string name="SetPin_Info">Votre code sera utilisé pour déverrouiller l\'appli de porte-monnaie</string>
+    <string name="SetPin_Info">Votre code sera utilisé pour déverrouiller votre porte-monnaie et envoyer de l’argent</string>
     <string name="SetPin_ErrorShortPin">S\'il vous plaît entrez tous les chiffres.</string>
     <string name="SetPin_ConfirmInfo">Confirmer</string>
     <string name="SetPin_Success">Votre code a été défini avec succès!</string>
@@ -193,6 +193,6 @@
     <string name="EditPin_UnlockInfo">Le code actuel</string>
     <string name="EditPin_NewPinInfo">Le code nouveu</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Coin Manager</string>
+    <string name="ManageCoins_title">Portefeuilles</string>
     <string name="ManageCoins_save">Sauvegarder</string>
 </resources>

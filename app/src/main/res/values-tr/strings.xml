@@ -5,7 +5,7 @@
     <string name="Alert_Ok">Tamam</string>
     <string name="Alert_Cancel">İptal</string>
     <string name="Alert_Copy">Kopyala</string>
-    <string name="Alert_Share">Forward</string>
+    <string name="Alert_Share">İlet</string>
     <string name="Alert_Close">Kapat</string>
     <string name="Alert_Success">Başarılı</string>
     <string name="Alert_Copied">Kopyalandı</string>
@@ -29,7 +29,7 @@
     <string name="Backup_Intro_BackupNow">Yedekle</string>
     <string name="Backup_Words_Title">Gizli Anahtar</string>
     <string name="Backup_Confirmation_Understand">Cüzdanımın güvenle, sadece bu cihazda bulunduğunu ve herhangi bir sunucuda olmadığını biliyorum.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I store safely offline.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">Uygulamanın silinmesi, hatalı davranması, taşınması ve benzeri bir durumda hesabıma ulaşamadığımda, hesabımı kurtarmanın tek yolunun Gizli Anahtar oldugunu biliyourum. </string>
     <string name="Backup_Confirmation_LockAppWarn">Cihaz şifresini değiştirmek veya uygulamayı veya uygulama verisini silmek, cihazda bulunan hesapları sıfırlayacaktır. Bu durumda hesabınızı geri yükleyebilmeniz için Gizli Anahtara ihtiyacınız olacak.</string>
     <string name="Backup_Confirmation_Title">Gizli Anahtarınızda ki istenen kelimeleri giriniz</string>
     <string name="Backup_Confirmation_Description">Gizli Anahtarınızda ki kelimeleri girin.</string>
@@ -42,8 +42,8 @@
     <string name="Balance_Deposit">Al</string>
     <string name="Balance_Send">Gönder</string>
     <string name="Balance_RatePerCoin">%s için %s</string>
-    <string name="Balance_SyncedUntil">until: %s</string>
-    <string name="Balance_Syncing">Syncing&#8230;</string>
+    <string name="Balance_SyncedUntil">%s kadar</string>
+    <string name="Balance_Syncing">Eşitleniyor…</string>
     <!--Send-->
     <string name="Send_Title1">Gönder</string>
     <string name="Send_Title">%s gönder</string>
@@ -63,10 +63,10 @@
     <string name="Send_DialogTitle">İşlemi Onayla</string>
     <string name="Send_DialogFee">Masraf:</string>
     <string name="Send_DialogTotal">Toplam:</string>
-    <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
+    <string name="Send_ERC_Alert">%s (ERC20) için ișlem ücreti Ethereum hesabından ödenir. Asgari %s ETH gerekiyor</string>
     <!--Deposit-->
     <string name="Deposit_Title">%s al</string>
-    <string name="Deposit_Share">Forward</string>
+    <string name="Deposit_Share">İlet</string>
     <string name="Deposit_Your_Address">Adresiniz</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">şimdi</string>
@@ -76,7 +76,7 @@
     <string name="Timestamp_Yesterday">Dün</string>
     <!--Transactions-->
     <string name="Transactions_Title">Hesap işlemleri</string>
-    <string name="Transactions_FilterAll">Hepsi</string>
+    <string name="Transactions_FilterAll">HEPSI</string>
     <string name="Transactions_EmptyList">Henüz hesap işlemi bulunmuyor</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Hesap işlemi</string>
@@ -182,7 +182,7 @@
     <string name="UnlockPin_WalletDisabledUntil">Engellendi: %s</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Şifre</string>
-    <string name="SetPin_Info">Şifre, cüzdan kilidini açmak için kullanılacak</string>
+    <string name="SetPin_Info">Şifre, programı açmak ve para göndermek için kullanılacak</string>
     <string name="SetPin_ErrorShortPin">Lütfen bütün rakamları giriniz.</string>
     <string name="SetPin_ConfirmInfo">Onayla</string>
     <string name="SetPin_Success">Kilit şifresi başarıyla oluşturuldu!</string>
@@ -193,6 +193,6 @@
     <string name="EditPin_UnlockInfo">Şimdi ki Şifre</string>
     <string name="EditPin_NewPinInfo">Yeni Şifre</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Coin Manager</string>
+    <string name="ManageCoins_title">Cüzdanlar</string>
     <string name="ManageCoins_save">Kaydet</string>
 </resources>

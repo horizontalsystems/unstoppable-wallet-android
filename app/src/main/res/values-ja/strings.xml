@@ -29,7 +29,7 @@
     <string name="Backup_Intro_BackupNow">バックアップ</string>
     <string name="Backup_Words_Title">秘密鍵</string>
     <string name="Backup_Confirmation_Understand">私は私の財布とトークンは、ほかのサーバーではなく、このデバイスだけに安全に開催されること理解します。</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I store safely offline.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key.</string>
     <string name="Backup_Confirmation_LockAppWarn">アンドロイド OS 設定のアプリ  PINロック解除  を変更またはデータ削除する際、財布はリセットされます。その後あなたの財布を復元するのには、秘密キーを必要があります。</string>
     <string name="Backup_Confirmation_Title">秘密キーの後に、次の言葉にを入力してください。</string>
     <string name="Backup_Confirmation_Description">あなたの秘密鍵の単語を入力してください。</string>
@@ -42,8 +42,8 @@
     <string name="Balance_Deposit">受取</string>
     <string name="Balance_Send">送る</string>
     <string name="Balance_RatePerCoin">%s 毎 %s</string>
-    <string name="Balance_SyncedUntil">until: %s</string>
-    <string name="Balance_Syncing">Syncing&#8230;</string>
+    <string name="Balance_SyncedUntil">%s まで</string>
+    <string name="Balance_Syncing">同期中...</string>
     <!--Send-->
     <string name="Send_Title1">送る</string>
     <string name="Send_Title">%s を送る</string>
@@ -76,7 +76,7 @@
     <string name="Timestamp_Yesterday">昨日</string>
     <!--Transactions-->
     <string name="Transactions_Title">トランザクション</string>
-    <string name="Transactions_FilterAll">すべて</string>
+    <string name="Transactions_FilterAll">ALL</string>
     <string name="Transactions_EmptyList">振込歴ありません。</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">トランザクション</string>
@@ -182,7 +182,7 @@
     <string name="UnlockPin_WalletDisabledUntil">までに無効: %s</string>
     <!--Set Pin-->
     <string name="SetPin_Title">パスコード</string>
-    <string name="SetPin_Info">財布アプリのロックを解除するにはあなたのパスコードが使用されます。</string>
+    <string name="SetPin_Info">Your passcode will be used to unlock your wallet and send money</string>
     <string name="SetPin_ErrorShortPin">数字のみを入力してください。</string>
     <string name="SetPin_ConfirmInfo">確定する</string>
     <string name="SetPin_Success">パスワードが設定されました</string>

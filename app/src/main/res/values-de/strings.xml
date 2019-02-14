@@ -29,7 +29,7 @@
     <string name="Backup_Intro_BackupNow">Backup</string>
     <string name="Backup_Words_Title">Offlineschlüssel</string>
     <string name="Backup_Confirmation_Understand">Ich stimme zu, dass mein Wallet und meinen Token nur auf diesem Gerät verfügbar sind.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I store safely offline.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">Ich stimme zu, dass bei einer Verschiebung oder Entfernung dieser App, der Zugang zu meinem Walletkonto nur bei Verwendung den Offlineschlüsseln erfolgt werden muss.</string>
     <string name="Backup_Confirmation_LockAppWarn">PIN zum Entsperren des Telefons ändern in Ihrem Android OS würde Einstellungen des Wallet. Sie benötigen Ihr backup Satz Ihrer Wallet danach wiederherstellen.</string>
     <string name="Backup_Confirmation_Title">Gib bitte die folgenden Wörter deines Offlineschlüssels ein</string>
     <string name="Backup_Confirmation_Description">Gib die folgenden Wörter deines Offlineschlüssels ein.</string>
@@ -42,8 +42,8 @@
     <string name="Balance_Deposit">Anfordern</string>
     <string name="Balance_Send">Senden</string>
     <string name="Balance_RatePerCoin">%s pro %s</string>
-    <string name="Balance_SyncedUntil">until: %s</string>
-    <string name="Balance_Syncing">Syncing&#8230;</string>
+    <string name="Balance_SyncedUntil">bis: %s</string>
+    <string name="Balance_Syncing">Synchronisieren…</string>
     <!--Send-->
     <string name="Send_Title1">Senden</string>
     <string name="Send_Title">%s senden</string>
@@ -63,7 +63,7 @@
     <string name="Send_DialogTitle">Transaktion bestätigen</string>
     <string name="Send_DialogFee">Gebühr:</string>
     <string name="Send_DialogTotal">Insgesamt:</string>
-    <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
+    <string name="Send_ERC_Alert">Transaktionsgebühren für %s (ERC20) in Ethereum bezahlt. Du brauchst %s ETH.</string>
     <!--Deposit-->
     <string name="Deposit_Title">%s Anfordern</string>
     <string name="Deposit_Share">Teilen</string>
@@ -76,7 +76,7 @@
     <string name="Timestamp_Yesterday">Gestern</string>
     <!--Transactions-->
     <string name="Transactions_Title">Transaktionen</string>
-    <string name="Transactions_FilterAll">Alle</string>
+    <string name="Transactions_FilterAll">ALLE</string>
     <string name="Transactions_EmptyList">Transaktionsliste ist leer</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Transaktion</string>
@@ -193,6 +193,6 @@
     <string name="EditPin_UnlockInfo">Aktuelle Code </string>
     <string name="EditPin_NewPinInfo">Neue Code</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Coin Manager</string>
+    <string name="ManageCoins_title">Wallets</string>
     <string name="ManageCoins_save">Speichern</string>
 </resources>

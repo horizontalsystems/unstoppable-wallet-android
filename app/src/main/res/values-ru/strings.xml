@@ -29,7 +29,7 @@
     <string name="Backup_Intro_BackupNow">Резервная копия</string>
     <string name="Backup_Words_Title">Секретный Ключ</string>
     <string name="Backup_Confirmation_Understand">Я понимаю, что мой кошелек и токены хранятся только на этом устройстве.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">Я понимаю, что если это приложение удаляется или устанавливается на другое устройство, мой кошелек можно восстановить только с помощью секретного ключа, который я храню в безопасном месте.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">Я понимаю, что если это приложение удаляется или устанавливается на другое устройство, мой кошелек можно восстановить только с помощью Секретного Ключа.</string>
     <string name="Backup_Confirmation_LockAppWarn">Изменение PIN-кода телефона на вашем Android OS, сбросит кошелек . Вам понадобится ваш Секретный Ключ для восстановления кошелька.</string>
     <string name="Backup_Confirmation_Title">Введите слова из вашего Cекретного Ключа</string>
     <string name="Backup_Confirmation_Description">Введите слова из вашего секретного ключа.</string>
@@ -42,8 +42,8 @@
     <string name="Balance_Deposit">Получить</string>
     <string name="Balance_Send">Отправить</string>
     <string name="Balance_RatePerCoin">%s за %s</string>
-    <string name="Balance_SyncedUntil">until: %s</string>
-    <string name="Balance_Syncing">Syncing&#8230;</string>
+    <string name="Balance_SyncedUntil">до: %s</string>
+    <string name="Balance_Syncing">Синхронизация…</string>
     <!--Send-->
     <string name="Send_Title1">Отправить</string>
     <string name="Send_Title">Отправить %s</string>
@@ -63,7 +63,7 @@
     <string name="Send_DialogTitle">Подтвердить Транзакцию</string>
     <string name="Send_DialogFee">Комиссия:</string>
     <string name="Send_DialogTotal">Итого:</string>
-    <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
+    <string name="Send_ERC_Alert">Комиссия за отправку %s (ERC20) взимается в ETH. Необходимо %s ETH.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Получено %s</string>
     <string name="Deposit_Share">Переслать</string>
@@ -76,7 +76,7 @@
     <string name="Timestamp_Yesterday">Вчера</string>
     <!--Transactions-->
     <string name="Transactions_Title">Транзакции</string>
-    <string name="Transactions_FilterAll">Все</string>
+    <string name="Transactions_FilterAll">ВСЕ</string>
     <string name="Transactions_EmptyList">У Вас нет транзакций!</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Транзакция</string>
@@ -182,7 +182,7 @@
     <string name="UnlockPin_WalletDisabledUntil">Отключено до: %s</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Код Доступа</string>
-    <string name="SetPin_Info">Ваш код будет использоваться для разблокировки кошелька</string>
+    <string name="SetPin_Info">Ваш код будет использоваться для разблокировки вашего кошелька и отправки денег</string>
     <string name="SetPin_ErrorShortPin">Пожалуйста, введите только символы цифр.</string>
     <string name="SetPin_ConfirmInfo">Подтвердить</string>
     <string name="SetPin_Success">Код доступа успешно установлен!</string>

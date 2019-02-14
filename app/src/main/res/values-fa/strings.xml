@@ -29,7 +29,7 @@
     <string name="Backup_Intro_BackupNow">پيشتيباني</string>
     <string name="Backup_Words_Title">رقم مخفی</string>
     <string name="Backup_Confirmation_Understand">من فهميدم كي پول كيف من و توكن هاي من همه شان حفظ و امانط است در اين دستگاه و نخير در ديگر سيرفير ها.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key that I store safely offline.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key.</string>
     <string name="Backup_Confirmation_LockAppWarn">Changing the unlock PIN or deleting app data in your Android OS settings would reset the wallet. You will need your Secret Key to restore your wallet after that.</string>
     <string name="Backup_Confirmation_Title">تعقيب كنيد حرف هاي رمز مخفي خود را</string>
     <string name="Backup_Confirmation_Description">حرف هاي رمز تات را وارد كنيد.</string>
@@ -43,7 +43,7 @@
     <string name="Balance_Send">ارسال</string>
     <string name="Balance_RatePerCoin">%sدر هر%s</string>
     <string name="Balance_SyncedUntil">until: %s</string>
-    <string name="Balance_Syncing">Syncing&#8230;</string>
+    <string name="Balance_Syncing">Syncing…</string>
     <!--Send-->
     <string name="Send_Title1">ارسال</string>
     <string name="Send_Title">ارسال%s</string>
@@ -76,7 +76,7 @@
     <string name="Timestamp_Yesterday">ديروز</string>
     <!--Transactions-->
     <string name="Transactions_Title">معاملات</string>
-    <string name="Transactions_FilterAll">همه</string>
+    <string name="Transactions_FilterAll">ALL</string>
     <string name="Transactions_EmptyList">شما معاملات نداشته ايد تا هنوز</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">معاملات</string>
@@ -186,7 +186,7 @@
     <string name="UnlockPin_WalletDisabledUntil">Disabled until: %s</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Passcode</string>
-    <string name="SetPin_Info">Your passcode will be used to unlock wallet app</string>
+    <string name="SetPin_Info">Your passcode will be used to unlock your wallet and send money</string>
     <string name="SetPin_ErrorShortPin">لطفلاً تمام ارقام را وارد كنيد.</string>
     <string name="SetPin_ConfirmInfo">Confirm</string>
     <string name="SetPin_Success">Lock passcode was set successfully!</string>
