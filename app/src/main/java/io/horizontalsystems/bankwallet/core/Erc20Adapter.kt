@@ -26,7 +26,7 @@ class Erc20Adapter(coin: Coin, kit: EthereumKit, override val contractAddress: S
     }
 
     override fun refresh() {
-        ethereumKit.refresh(contractAddress)
+        ethereumKit.refresh()
     }
 
 
