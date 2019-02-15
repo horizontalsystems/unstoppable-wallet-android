@@ -12,56 +12,27 @@
 
     <TextView
         android:id="@+id/txDate"
+        style="@style/BaseSbThemed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:fontFamily="@font/noto_sans_bold"
+        android:layout_marginTop="9.5dp"
         android:textAllCaps="true"
-        android:textColor="?TransactionDateColor"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/txTime"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
         tools:text="Jun 3"
         />
 
-    <TextView
-        android:id="@+id/txTime"
+    <io.horizontalsystems.bankwallet.modules.transactions.TransactionStatusWithTimeView
+        android:id="@+id/txStatusWithTimeView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:textColor="@color/grey"
-        android:textSize="14sp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="9dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/txDate"
         app:layout_constraintTop_toBottomOf="@+id/txDate"
-        tools:text="12:30"
-        />
-
-    <ImageView
-        android:id="@+id/statusIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
-        app:layout_constraintLeft_toRightOf="@id/txTime"
-        app:layout_constraintTop_toTopOf="@+id/txTime"
-        />
-
-    <TextView
-        android:id="@+id/txAmount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="@font/noto_sans_bold"
-        android:textColor="@color/green_crypto"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/txValueInFiat"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        tools:text="+ 0,006482 BTC"
         />
 
     <TextView
@@ -69,13 +40,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:fontFamily="@font/noto_sans"
+        android:fontFamily="@font/noto_sans_semi_bold"
+        android:textColor="@color/green_crypto"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txDate"
+        tools:text="$400"
+        />
+
+    <TextView
+        android:id="@+id/txValueInCoin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/noto_sans_regular"
         android:textColor="@color/grey"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:includeFontPadding="false"
+        app:layout_constraintBottom_toBottomOf="@+id/txStatusWithTimeView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txAmount"
-        tools:text="$400"
+        tools:text="+ 0,006482 BTC"
         />
 
     <View
@@ -92,10 +76,10 @@
         android:layout_height="0dp"
         android:background="?PendingTransactionShadeColor"
         android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         />
 
 </android.support.constraint.ConstraintLayout>

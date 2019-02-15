@@ -24,4 +24,8 @@ class PinManager(private val securedStorage: ISecuredStorage): IPinManager {
     override fun validate(pin: String): Boolean {
         return this.pin == pin
     }
+
+    override fun clear() {
+        pin = null
+    }
 }

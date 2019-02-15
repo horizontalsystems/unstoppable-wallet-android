@@ -1,10 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.settings.security
 
-import io.horizontalsystems.bankwallet.entities.BiometryType
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
+import io.horizontalsystems.bankwallet.entities.BiometryType
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
@@ -114,7 +114,7 @@ class SecuritySettingsPresenterTest {
     @Test
     fun didTapBackupWallet() {
         presenter.didTapBackupWallet()
-        verify(router).showBackupWallet()
+        verify(interactor).didTapOnBackupWallet()
     }
 
     @Test
@@ -140,4 +140,12 @@ class SecuritySettingsPresenterTest {
         presenter.didUnlinkWallet()
         verify(view).reloadApp()
     }
+
+    @Test
+    fun onClear() {
+        presenter.onClear()
+
+        verify(interactor).clear()
+    }
+
 }

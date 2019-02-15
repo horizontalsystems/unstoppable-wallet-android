@@ -28,6 +28,7 @@ class PinViewModel: ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter,
     val keyStoreSafeExecute = SingleLiveEvent<Triple<Runnable, Runnable?, Runnable?>>()
     val showAttemptsLeftError = MutableLiveData<Pair<Int, Int>>()
     val showLockedView = SingleLiveEvent<Date>()
+    val closeApplicationLiveEvent = SingleLiveEvent<Unit>()
 
 
     fun init(interactionType: PinInteractionType) {
@@ -91,6 +92,10 @@ class PinViewModel: ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter,
         if (didUnlock) {
             dismissLiveEvent.call()
         }
+    }
+
+    override fun closeApplication() {
+        closeApplicationLiveEvent.call()
     }
 
     override fun dismiss() {

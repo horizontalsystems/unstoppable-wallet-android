@@ -1,99 +1,106 @@
 package io.horizontalsystems.bankwallet.modules.send
 
-import io.horizontalsystems.bankwallet.core.IClipboardManager
-import io.horizontalsystems.bankwallet.core.ICurrencyManager
-import io.horizontalsystems.bankwallet.core.managers.RateManager
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.modules.transactions.Coin
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 class SendInteractor(private val currencyManager: ICurrencyManager,
-                     private val rateManager: RateManager,
+                     private val rateStorage: IRateStorage,
+                     private val localStorage: ILocalStorage,
                      private val clipboardManager: IClipboardManager,
-                     private val wallet: Wallet) : SendModule.IInteractor {
+                     private val adapter: IAdapter,
+                     private val appConfigProvider: IAppConfigProvider) : SendModule.IInteractor {
 
     sealed class SendError : Exception() {
         class NoAddress : SendError()
         class NoAmount : SendError()
     }
 
+    override var defaultInputType: SendModule.InputType
+        get() = localStorage.sendInputType ?: SendModule.InputType.COIN
+        set(value) {
+            localStorage.sendInputType = value
+        }
+
+    override val clipboardHasPrimaryClip: Boolean
+        get() = clipboardManager.hasPrimaryClip
+
     var delegate: SendModule.IInteractorDelegate? = null
 
     override val coin: Coin
-        get() = wallet.coin
+        get() = adapter.coin
 
     override val addressFromClipboard: String?
         get() = clipboardManager.getCopiedText()
 
     private var rate: Rate? = null
+    private var feeRate: Rate? = null
     private val disposables = CompositeDisposable()
 
     override fun retrieveRate() {
         disposables.add(
-                rateManager.rate(wallet.coin, currencyManager.baseCurrency.code)
+                rateStorage.latestRateObservable(adapter.coin.code, currencyManager.baseCurrency.code)
+                        .take(1)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .doFinally {
-                            delegate?.didRateRetrieve()
-                        }
                         .subscribe {
                             rate = if (it.expired) null else it
+                            if (rate != null) {
+                                delegate?.didRateRetrieve()
+                            }
                         }
         )
+
+        adapter.feeCoinCode?.let{
+            disposables.add(
+                    rateStorage.latestRateObservable(it, currencyManager.baseCurrency.code)
+                            .take(1)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe { fetchedRate ->
+                                feeRate = if (fetchedRate.expired) null else fetchedRate
+                                if (feeRate != null) {
+                                    delegate?.didRateRetrieve()
+                                }
+                            }
+            )
+        }
     }
 
     override fun parsePaymentAddress(address: String): PaymentRequestAddress {
-        return wallet.adapter.parsePaymentAddress(address)
+        return adapter.parsePaymentAddress(address)
     }
 
-    override fun convertedAmountForInputType(inputType: SendModule.InputType, amount: Double): Double? {
+    override fun convertedAmountForInputType(inputType: SendModule.InputType, amount: BigDecimal): BigDecimal? {
         val rate = this.rate ?: return null
 
         return when (inputType) {
-            SendModule.InputType.COIN -> amount * rate.value
-            SendModule.InputType.CURRENCY -> amount / rate.value
+            SendModule.InputType.COIN -> amount.times(rate.value)
+            SendModule.InputType.CURRENCY -> amount.divide(rate.value, 8, RoundingMode.DOWN)
+        }
+    }
+
+    override fun getTotalBalanceMinusFee(inputType: SendModule.InputType, address: String?): BigDecimal {
+        val availableBalance = adapter.availableBalance(address)
+        return when (inputType) {
+            SendModule.InputType.COIN -> availableBalance
+            else -> availableBalance.multiply(rate?.value ?: BigDecimal.ZERO)
         }
     }
 
     override fun stateForUserInput(input: SendModule.UserInput): SendModule.State {
 
-        val coin = wallet.coin
-        val adapter = wallet.adapter
+        val coin = adapter.coin.code
         val baseCurrency = currencyManager.baseCurrency
         val rateValue = rate?.value
 
-        val state = SendModule.State(input.inputType)
+        val decimal = if (input.inputType == SendModule.InputType.COIN) Math.min(adapter.decimal, appConfigProvider.maxDecimal) else appConfigProvider.fiatDecimal
 
-        when (input.inputType) {
-            SendModule.InputType.COIN -> {
-                state.coinValue = CoinValue(coin, input.amount)
-                rateValue?.let {
-                    state.currencyValue = CurrencyValue(baseCurrency, input.amount * it)
-                }
-
-                val balance = adapter.balance
-                if (balance < input.amount) {
-                    state.amountError = SendModule.AmountError.InsufficientBalance(SendModule.AmountInfo.CoinValueInfo(CoinValue(coin, balance)))
-                }
-
-            }
-            SendModule.InputType.CURRENCY -> {
-                rateValue?.let {
-                    state.coinValue = CoinValue(coin, input.amount / it)
-                }
-                state.currencyValue = CurrencyValue(baseCurrency, input.amount)
-
-                if (rateValue != null) {
-                    val currencyBalance = adapter.balance * rateValue
-                    if (currencyBalance < input.amount) {
-                        state.amountError = SendModule.AmountError.InsufficientBalance(SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(baseCurrency, currencyBalance)))
-                    }
-                }
-
-            }
-        }
+        val state = SendModule.State(decimal, input.inputType)
 
         state.address = input.address
         val address = input.address
@@ -106,20 +113,80 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
             }
         }
 
-        try {
-            state.coinValue?.let { coinValue ->
-                state.feeCoinValue = CoinValue(coin, adapter.fee(coinValue.value, input.address, true))
+        when (input.inputType) {
+            SendModule.InputType.COIN -> {
+                state.coinValue = CoinValue(coin, input.amount)
+                rateValue?.let {
+                    state.currencyValue = CurrencyValue(baseCurrency, input.amount.times(it))
+                }
             }
-        } catch (e: Exception) {
+            SendModule.InputType.CURRENCY -> {
+                state.currencyValue = CurrencyValue(baseCurrency, input.amount)
+                rateValue?.let {
+                    state.coinValue = CoinValue(coin, input.amount.divide(it, 8, RoundingMode.HALF_EVEN))
+                }
+            }
         }
 
-        rateValue?.let {
+        val errors = adapter.validate(state.coinValue?.value ?: BigDecimal.ZERO, address)
+
+        for (error in errors) {
+            when (error) {
+                SendStateError.InsufficientAmount -> state.amountError = getAmountError(input)
+                SendStateError.InsufficientFeeBalance -> state.feeError = getFeeError(input)
+            }
+        }
+
+        state.coinValue?.let { coinValue ->
+            val coinCode = adapter.feeCoinCode ?: adapter.coin.code
+            if ((state.coinValue?.value ?: BigDecimal.ZERO) > BigDecimal.ZERO) {
+                state.feeCoinValue = CoinValue(coinCode, adapter.fee(coinValue.value, input.address))
+            } else {
+                state.feeCoinValue = CoinValue(coinCode, BigDecimal.ZERO)
+            }
+        }
+
+        var feeCurrencyRate: BigDecimal? = null
+        adapter.feeCoinCode?.let {
+            feeCurrencyRate = feeRate?.value
+        } ?:run {
+            feeCurrencyRate = rateValue
+        }
+
+        feeCurrencyRate?.let { feeRate ->
             state.feeCoinValue?.let { feeCoinValue ->
-                state.feeCurrencyValue = CurrencyValue(baseCurrency, rateValue * feeCoinValue.value)
+                state.feeCurrencyValue = CurrencyValue(baseCurrency, feeCoinValue.value.times(feeRate))
             }
         }
 
         return state
+    }
+
+    private fun getFeeError(input: SendModule.UserInput): SendModule.AmountError.Erc20FeeError? {
+        adapter.feeCoinCode?.let {
+            val fee = adapter.fee(input.amount, input.address)
+            val coinValue = CoinValue(it, fee)
+            return SendModule.AmountError.Erc20FeeError(adapter.coin.code, coinValue)
+        } ?: return null
+    }
+
+    private fun getAmountError(input: SendModule.UserInput): SendModule.AmountError? {
+        var balanceMinusFee = adapter.availableBalance(input.address)
+        if (balanceMinusFee < BigDecimal.ZERO) {
+            balanceMinusFee = BigDecimal.ZERO
+        }
+
+        return when (input.inputType) {
+            SendModule.InputType.COIN -> {
+                SendModule.AmountError.InsufficientBalance(SendModule.AmountInfo.CoinValueInfo(CoinValue(adapter.coin.code, balanceMinusFee)))
+            }
+            SendModule.InputType.CURRENCY -> {
+                rate?.value?.let {
+                    val currencyBalanceMinusFee = balanceMinusFee * it
+                    SendModule.AmountError.InsufficientBalance(SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(currencyManager.baseCurrency, currencyBalanceMinusFee)))
+                }
+            }
+        }
     }
 
     override fun send(userInput: SendModule.UserInput) {
@@ -129,29 +196,26 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
             return
         }
 
-        var computedAmount: Double? = null
-
-        if (userInput.inputType == SendModule.InputType.COIN) {
-            computedAmount = userInput.amount
-        } else {
-            val rateValue = rate?.value
-            if (rateValue != null) {
-                computedAmount = userInput.amount / rateValue
-            }
+        val computedAmount = when (userInput.inputType) {
+            SendModule.InputType.COIN -> userInput.amount
+            SendModule.InputType.CURRENCY -> convertedAmountForInputType(SendModule.InputType.CURRENCY, userInput.amount)
         }
 
-        val amount = computedAmount
-
-        if (amount == null) {
+        if (computedAmount == null || computedAmount.compareTo(BigDecimal.ZERO) == 0) {
             delegate?.didFailToSend(SendError.NoAmount())
             return
         }
 
-        wallet.adapter.send(address, amount) { error ->
+        adapter.send(address, computedAmount) { error ->
             when (error) {
                 null -> delegate?.didSend()
                 else -> delegate?.didFailToSend(error)
             }
         }
     }
+
+    override fun clear() {
+        disposables.clear()
+    }
+
 }

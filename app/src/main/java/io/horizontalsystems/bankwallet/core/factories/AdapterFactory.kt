@@ -1,22 +1,32 @@
 package io.horizontalsystems.bankwallet.core.factories
 
-import io.horizontalsystems.bankwallet.core.BitcoinAdapter
-import io.horizontalsystems.bankwallet.core.EthereumAdapter
-import io.horizontalsystems.bankwallet.modules.transactions.Coin
-import io.horizontalsystems.bitcoinkit.BitcoinKit
-import io.horizontalsystems.ethereumkit.EthereumKit
+import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.entities.AuthData
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinType
 
-class AdapterFactory {
+class AdapterFactory(private val appConfigProvider: IAppConfigProvider, private val localStorage: ILocalStorage, private val ethereumKitManager: IEthereumKitManager) {
 
-    fun adapterForCoin(coin: Coin, words: List<String>, newWallet: Boolean, walletId: String?) = when (coin) {
-        "BTC" -> BitcoinAdapter(words, BitcoinKit.NetworkType.MainNet, newWallet, walletId)
-        "BTCt" -> BitcoinAdapter(words, BitcoinKit.NetworkType.TestNet, newWallet, walletId)
-        "BTCr" -> BitcoinAdapter(words, BitcoinKit.NetworkType.RegTest, newWallet, walletId)
-        "BCH" -> BitcoinAdapter(words, BitcoinKit.NetworkType.MainNetBitCash, newWallet, walletId)
-        "BCHt" -> BitcoinAdapter(words, BitcoinKit.NetworkType.TestNetBitCash, newWallet, walletId)
-        "ETH" -> EthereumAdapter(words, EthereumKit.NetworkType.MainNet)
-        "ETHt" -> EthereumAdapter(words, EthereumKit.NetworkType.Kovan)
-        else -> null
+    fun adapterForCoin(coin: Coin, authData: AuthData): IAdapter? = when (coin.type) {
+        is CoinType.Bitcoin -> {
+            BitcoinAdapter(coin, authData, localStorage.isNewWallet, appConfigProvider.testMode)
+        }
+        is CoinType.BitcoinCash -> {
+            BitcoinAdapter(coin, authData, localStorage.isNewWallet, appConfigProvider.testMode)
+        }
+        is CoinType.Ethereum -> {
+            EthereumAdapter.adapter(coin, ethereumKitManager.ethereumKit(authData))
+        }
+        is CoinType.Erc20 -> {
+            Erc20Adapter.adapter(coin, ethereumKitManager.ethereumKit(authData), coin.type.address, coin.type.decimal)
+        }
     }
 
+    fun unlinkAdapter(adapter: IAdapter) {
+        when (adapter) {
+            is EthereumBaseAdapter -> {
+                ethereumKitManager.unlink()
+            }
+        }
+    }
 }

@@ -2,7 +2,9 @@ package io.horizontalsystems.bankwallet.core.security
 
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
+import android.util.Log
 import java.security.KeyStore
+import java.security.KeyStoreException
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 
@@ -47,5 +49,11 @@ class KeyStoreWrapper {
         null
     }
 
-    fun removeAndroidKeyStoreKey(alias: String) = keyStore.deleteEntry(alias)
+    fun removeAndroidKeyStoreKey(alias: String) {
+        try {
+            keyStore.deleteEntry(alias)
+        } catch (e: KeyStoreException) {
+            Log.e("KeyStoreWrapper", "Exception", e)
+        }
+    }
 }

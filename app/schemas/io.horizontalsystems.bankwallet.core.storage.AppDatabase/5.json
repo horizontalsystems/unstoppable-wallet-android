@@ -1,0 +1,104 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 5,
+    "identityHash": "ecbc894f6037a516ef43719d3e9cbd0d",
+    "entities": [
+      {
+        "tableName": "Rate",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`coinCode` TEXT NOT NULL, `currencyCode` TEXT NOT NULL, `value` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, `isLatest` INTEGER NOT NULL, PRIMARY KEY(`coinCode`, `currencyCode`, `timestamp`, `isLatest`))",
+        "fields": [
+          {
+            "fieldPath": "coinCode",
+            "columnName": "coinCode",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "currencyCode",
+            "columnName": "currencyCode",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "value",
+            "columnName": "value",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isLatest",
+            "columnName": "isLatest",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "coinCode",
+            "currencyCode",
+            "timestamp",
+            "isLatest"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "StorableCoin",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`coinCode` TEXT NOT NULL, `coinTitle` TEXT NOT NULL, `coinType` TEXT NOT NULL, `enabled` INTEGER NOT NULL, `order` INTEGER, PRIMARY KEY(`coinCode`))",
+        "fields": [
+          {
+            "fieldPath": "coinCode",
+            "columnName": "coinCode",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "coinTitle",
+            "columnName": "coinTitle",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "coinType",
+            "columnName": "coinType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "enabled",
+            "columnName": "enabled",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "order",
+            "columnName": "order",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "coinCode"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"ecbc894f6037a516ef43719d3e9cbd0d\")"
+    ]
+  }
+}

@@ -1,3 +1,5 @@
 files:
   - source: /**/main/res/values/strings.xml
     translation: /**/main/res/values-%two_letters_code%/%original_file_name%
+  - source: /**/fastlane/metadata/android/en-US/*.txt
+    translation: /**/fastlane/metadata/%two_letters_code%/%original_file_name%

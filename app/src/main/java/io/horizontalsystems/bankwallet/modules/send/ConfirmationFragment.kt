@@ -6,15 +6,14 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentActivity
-import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
-import io.horizontalsystems.bankwallet.viewHelpers.ValueFormatter
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.ui.extensions.AddressView
+import io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
 
 class ConfirmationFragment : DialogFragment() {
 
@@ -36,26 +35,27 @@ class ConfirmationFragment : DialogFragment() {
 
         viewModel.sendConfirmationViewItemLiveData.observe(this, Observer { viewItem ->
             viewItem?.let { sendConfirmationViewItem ->
-                rootView.findViewById<TextView>(R.id.txtAmountInCrypto)?.text = ValueFormatter.format(sendConfirmationViewItem.coinValue)
-                sendConfirmationViewItem.currencyValue?.let { currencyValue ->
-                    rootView.findViewById<TextView>(R.id.txtAmountInFiat)?.let {
-                        it.visibility = View.VISIBLE
-                        it.text = ValueFormatter.formatSimple(currencyValue)
-                    }
+                rootView.findViewById<TextView>(R.id.txtFiatAmount)?.text = sendConfirmationViewItem.currencyValue?.let {
+                    App.numberFormatter.format(it)
                 }
-                rootView.findViewById<TextView>(R.id.txtAddressTo)?.text = sendConfirmationViewItem.address
+                rootView.findViewById<TextView>(R.id.txtCryptoAmount)?.text = App.numberFormatter.format(sendConfirmationViewItem.coinValue)
+                rootView.findViewById<AddressView>(R.id.addressView)?.bind(sendConfirmationViewItem.address)
                 rootView.findViewById<TextView>(R.id.txtFeeValue)?.text = sendConfirmationViewItem.feeInfo.getFormatted()
-                rootView.findViewById<TextView>(R.id.txtTotalValue)?.text = sendConfirmationViewItem.totalInfo.getFormatted()
+                sendConfirmationViewItem.totalInfo?.getFormatted()?.let {
+                    rootView.findViewById<TextView>(R.id.txtTotalValue)?.text = it
+                } ?: run {
+                    rootView.findViewById<TextView>(R.id.txtTotalTitle)?.visibility = View.GONE
+                    rootView.findViewById<TextView>(R.id.txtTotalValue)?.visibility = View.GONE
+                }
             }
         })
 
         viewModel.coinLiveData.observe(this, Observer { coin ->
-            coin?.let { coinCode ->
+            coin?.let { coin1 ->
                 context?.let {
-                    val coinDrawable = ContextCompat.getDrawable(it, LayoutHelper.getCoinDrawableResource(coinCode))
-                    rootView.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
+                    rootView.findViewById<CoinIconView>(R.id.coinIcon)?.bind(coin1)
                 }
-                rootView.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.Send_Title, coinCode)
+                rootView.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.Send_Title, coin1.code)
             }
         })
 

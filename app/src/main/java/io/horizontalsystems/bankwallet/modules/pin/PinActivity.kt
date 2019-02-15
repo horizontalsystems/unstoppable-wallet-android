@@ -24,11 +24,15 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.security.FingerprintAuthenticationDialogFragment
 import io.horizontalsystems.bankwallet.modules.main.MainModule
+import io.horizontalsystems.bankwallet.ui.extensions.NumPadItem
+import io.horizontalsystems.bankwallet.ui.extensions.NumPadItemType
+import io.horizontalsystems.bankwallet.ui.extensions.NumPadItemsAdapter
 import io.horizontalsystems.bankwallet.ui.extensions.SmoothLinearLayoutManager
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_pin.*
 import kotlinx.android.synthetic.main.custom_tall_toolbar.*
+
 
 class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuthenticationDialogFragment.Callback {
 
@@ -65,23 +69,10 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
         viewModel = ViewModelProviders.of(this).get(PinViewModel::class.java)
         viewModel.init(interactionType)
 
-        val numpadAdapter = NumPadItemsAdapter(listOf(
-                NumPadItem(NumPadItemType.NUMBER, 1, ""),
-                NumPadItem(NumPadItemType.NUMBER, 2, "abc"),
-                NumPadItem(NumPadItemType.NUMBER, 3, "def"),
-                NumPadItem(NumPadItemType.NUMBER, 4, "ghi"),
-                NumPadItem(NumPadItemType.NUMBER, 5, "jkl"),
-                NumPadItem(NumPadItemType.NUMBER, 6, "mno"),
-                NumPadItem(NumPadItemType.NUMBER, 7, "pqrs"),
-                NumPadItem(NumPadItemType.NUMBER, 8, "tuv"),
-                NumPadItem(NumPadItemType.NUMBER, 9, "wxyz"),
-                NumPadItem(NumPadItemType.FINGER, 0, "FINGER"),
-                NumPadItem(NumPadItemType.NUMBER, 0, ""),
-                NumPadItem(NumPadItemType.DELETE, 0, "DEL")
-        ), this)
+        val numpadAdapter = NumPadItemsAdapter(this, NumPadItemType.FINGER)
 
-        numPadItems.adapter = numpadAdapter
-        numPadItems.layoutManager = GridLayoutManager(this, 3)
+        numPadItemsRecyclerView.adapter = numpadAdapter
+        numPadItemsRecyclerView.layoutManager = GridLayoutManager(this, 3)
 
         viewModel.titleLiveDate.observe(this, Observer { title ->
             title?.let { toolbarTitle.text = getString(it) }
@@ -117,7 +108,7 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
 
         viewModel.showErrorForPage.observe(this, Observer { errorForPage ->
             errorForPage?.let { (error, pageIndex) ->
-                pinPagesAdapter.setErrorForPage(pageIndex, error?.let { getString(error) } ?: null )
+                pinPagesAdapter.setErrorForPage(pageIndex, error?.let { getString(error) } ?: null)
             }
         })
 
@@ -186,6 +177,11 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
             }
         })
 
+        viewModel.closeApplicationLiveEvent.observe(this, Observer {
+            App.appCloseManager.appCloseSignal.onNext(Unit)
+            moveTaskToBack(false)
+        })
+
     }
 
     override fun onBackPressed() {
@@ -194,15 +190,9 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
 
     override fun onItemClick(item: NumPadItem) {
         when (item.type) {
-            NumPadItemType.NUMBER -> {
-                viewModel.delegate.onEnter(item.number.toString(), layoutManager.findFirstVisibleItemPosition())
-            }
-            NumPadItemType.DELETE -> {
-                viewModel.delegate.onDelete(layoutManager.findFirstVisibleItemPosition())
-            }
-            NumPadItemType.FINGER -> {
-                viewModel.delegate.showBiometricUnlock()
-            }
+            NumPadItemType.NUMBER -> viewModel.delegate.onEnter(item.number.toString(), layoutManager.findFirstVisibleItemPosition())
+            NumPadItemType.DELETE -> viewModel.delegate.onDelete(layoutManager.findFirstVisibleItemPosition())
+            NumPadItemType.FINGER -> viewModel.delegate.showBiometricUnlock()
         }
     }
 
@@ -239,10 +229,6 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
     }
 }
 
-enum class NumPadItemType {
-    NUMBER, DELETE, FINGER
-}
-
 //PinPage part
 class PinPage(val description: Int, var enteredDidgitsLength: Int = 0, var error: String? = null)
 
@@ -269,7 +255,7 @@ class PinPagesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is PinPageViewHolder) {
-            holder.bind(pinPages[position], shakePageIndex == position)//, { listener.onItemClick(numPadItems[position]) }, listener.isFingerPrintEnabled())
+            holder.bind(pinPages[position], shakePageIndex == position)//, { listener.onChangeProvider(numPadItems[position]) }, listener.isFingerPrintEnabled())
         }
     }
 
@@ -307,73 +293,5 @@ class PinPageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         imgPinMask4.setImageResource(if (length > 3) filledCircle else emptyCircle)
         imgPinMask5.setImageResource(if (length > 4) filledCircle else emptyCircle)
         imgPinMask6.setImageResource(if (length > 5) filledCircle else emptyCircle)
-    }
-}
-
-//NumPad part
-data class NumPadItem(val type: NumPadItemType, val number: Int, val letters: String)
-
-class NumPadItemsAdapter(private val numPadItems: List<NumPadItem>, private val listener: Listener)
-    : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    interface Listener {
-        fun onItemClick(item: NumPadItem)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return NumPadItemViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_numpad_button, parent, false))
-    }
-
-    override fun getItemCount() = numPadItems.count()
-
-    var showFingerPrintButton = false
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is NumPadItemViewHolder) {
-            holder.bind(numPadItems[position], showFingerPrintButton) { listener.onItemClick(numPadItems[position]) }
-        }
-    }
-}
-
-class NumPadItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-    private var txtNumber: TextView = itemView.findViewById(R.id.txtNumPadNumber)
-    private var txtLetters: TextView = itemView.findViewById(R.id.txtNumPadText)
-    private var imgBackSpace: ImageView = itemView.findViewById(R.id.imgBackSpace)
-    private var imgFingerprint: ImageView = itemView.findViewById(R.id.imgFingerprint)
-
-
-    fun bind(item: NumPadItem, isFingerprintEnabled: Boolean, onClick: () -> (Unit)) {
-
-        itemView.setOnClickListener { onClick.invoke() }
-
-        txtNumber.visibility = View.GONE
-        txtLetters.visibility = View.GONE
-        imgBackSpace.visibility = View.GONE
-        imgFingerprint.visibility = View.GONE
-
-        itemView.background = null
-
-        when (item.type) {
-            NumPadItemType.DELETE -> {
-                imgBackSpace.visibility = View.VISIBLE
-            }
-
-            NumPadItemType.NUMBER -> {
-                txtNumber.visibility = View.VISIBLE
-                txtLetters.visibility = if (item.number == 0) View.GONE else View.VISIBLE
-                txtNumber.text = item.number.toString()
-                txtLetters.text = item.letters
-                itemView.setBackgroundResource(R.drawable.numpad_button_background)
-            }
-
-            NumPadItemType.FINGER -> {
-                imgFingerprint.visibility = if (isFingerprintEnabled) View.VISIBLE else View.GONE
-            }
-        }
     }
 }

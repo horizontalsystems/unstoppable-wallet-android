@@ -4,7 +4,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 
-class MainSettingsViewModel: ViewModel(), MainSettingsModule.IMainSettingsView, MainSettingsModule.IMainSettingsRouter {
+class MainSettingsViewModel : ViewModel(), MainSettingsModule.IMainSettingsView, MainSettingsModule.IMainSettingsRouter {
 
     lateinit var delegate: MainSettingsModule.IMainSettingsViewDelegate
 
@@ -79,6 +79,10 @@ class MainSettingsViewModel: ViewModel(), MainSettingsModule.IMainSettingsView, 
 
     override fun reloadAppInterface() {
         reloadAppLiveEvent.call()
+    }
+
+    override fun onCleared() {
+        delegate.onClear()
     }
 
 }

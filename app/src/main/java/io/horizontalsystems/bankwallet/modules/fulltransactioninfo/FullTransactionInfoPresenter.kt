@@ -1,43 +1,115 @@
 package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
 
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionRecordViewItem
+import io.horizontalsystems.bankwallet.entities.FullTransactionItem
+import io.horizontalsystems.bankwallet.entities.FullTransactionRecord
+import io.horizontalsystems.bankwallet.entities.FullTransactionSection
 
-class FullTransactionInfoPresenter(private val interactor: FullTransactionInfoModule.IInteractor, private val router: FullTransactionInfoModule.IRouter) : FullTransactionInfoModule.IViewDelegate, FullTransactionInfoModule.IInteractorDelegate {
-    var view: FullTransactionInfoModule.IView? = null
+class FullTransactionInfoPresenter(val interactor: FullTransactionInfoInteractor, val router: FullTransactionInfoModule.Router, private val state: FullTransactionInfoState)
+    : FullTransactionInfoModule.ViewDelegate, FullTransactionInfoModule.InteractorDelegate {
 
+    var view: FullTransactionInfoModule.View? = null
+
+    //
+    // State
+    //
+    override val providerName: String?
+        get() = state.transactionRecord?.providerName
+
+    override val sectionCount: Int
+        get() = state.transactionRecord?.sections?.size ?: 0
+
+    override fun getSection(row: Int): FullTransactionSection? {
+        return state.transactionRecord?.sections?.get(row)
+    }
+
+    //
+    // ViewDelegate
+    //
     override fun viewDidLoad() {
-        interactor.retrieveTransaction()
+        interactor.didLoad()
+        interactor.updateProvider(state.coinCode)
+
+        retryLoadInfo()
     }
 
-    override fun didGetTransactionInfo(txRecordViewItem: TransactionRecordViewItem) {
-        view?.showTransactionItem(txRecordViewItem)
+    override fun onRetryLoad() {
+        if (state.transactionRecord == null) {
+            tryLoadInfo()
+        }
     }
 
-    override fun didCopyToClipboard() {
-        view?.showCopied()
+    override fun onTapItem(item: FullTransactionItem) {
+        if (item.clickable) {
+            if (item.url != null) {
+                view?.openUrl(item.url)
+            } else if (item.value != null) {
+                interactor.copyToClipboard(item.value)
+                view?.showCopied()
+            }
+        }
     }
 
-    override fun showBlockInfo(txRecordViewItem: TransactionRecordViewItem) {
-        router.showBlockInfo(txRecordViewItem)
+    override fun onTapProvider() {
+        view?.openProviderSettings(state.coinCode, state.transactionHash)
     }
 
-    override fun openShareDialog(txRecordViewItem: TransactionRecordViewItem) {
-        router.shareTransaction(txRecordViewItem)
+
+    override fun onTapChangeProvider() {
+        view?.openProviderSettings(state.coinCode, state.transactionHash)
     }
 
-    override fun onShareClick() {
-        interactor.openShareDialog()
+    override fun onTapResource() {
+        interactor.url(state.transactionHash)?.let {
+            view?.openUrl(it)
+        }
     }
 
-    override fun onTransactionIdClick() {
-        interactor.onCopyTransactionId()
+    override fun onShare() {
+        interactor.url(state.transactionHash)?.let {
+            view?.share(it)
+        }
     }
 
-    override fun onFromFieldClick() {
-        interactor.onCopyFromAddress()
+    override fun onClear() {
+        interactor.clear()
     }
 
-    override fun onToFieldClick() {
-        interactor.onCopyToAddress()
+    //
+    // InteractorDelegate
+    //
+    override fun onProviderChange() {
+        state.transactionRecord = null
+        view?.reload()
+
+        interactor.updateProvider(state.coinCode)
+
+        retryLoadInfo()
+    }
+
+    override fun onReceiveTransactionInfo(transactionRecord: FullTransactionRecord) {
+        state.transactionRecord = transactionRecord
+        view?.hideLoading()
+        view?.reload()
+    }
+
+    override fun onError(providerName: String?) {
+        view?.hideLoading()
+        view?.showError(providerName)
+    }
+
+    override fun retryLoadInfo() {
+        if (state.transactionRecord == null) {
+            tryLoadInfo()
+        }
+    }
+
+    //
+    // Private
+    //
+    private fun tryLoadInfo() {
+        view?.hideError()
+        view?.showLoading()
+
+        interactor.retrieveTransactionInfo(state.transactionHash)
     }
 }

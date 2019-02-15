@@ -13,19 +13,8 @@ class LanguageManager(
         private val appConfigProvider: IAppConfigProvider,
         fallbackLanguage: Locale) : ILanguageManager {
 
-    override var preferredLanguage: Locale? = null
-        get() {
-            return when {
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.N -> App.instance.resources.configuration.locales.get(0)
-                else -> App.instance.resources.configuration.locale
-            }
-        }
-
     override val availableLanguages: List<Locale>
         get() = appConfigProvider.localizations.map { Locale(it) }
-
-    private var language: Locale = localStorage.currentLanguage?.let { Locale(localStorage.currentLanguage) }
-            ?: preferredLanguage ?: fallbackLanguage
 
     override var currentLanguage: Locale
         get() = language
@@ -41,6 +30,17 @@ class LanguageManager(
             } else {
                 val displayMetrics = App.instance.resources.displayMetrics
                 App.instance.resources.updateConfiguration(configuration, displayMetrics)
+            }
+        }
+
+    private var language: Locale = localStorage.currentLanguage?.let { Locale(localStorage.currentLanguage) }
+            ?: preferredSystemLanguage ?: fallbackLanguage
+
+    private val preferredSystemLanguage: Locale?
+        get() {
+            return when {
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.N -> App.instance.resources.configuration.locales.get(0)
+                else -> App.instance.resources.configuration.locale
             }
         }
 

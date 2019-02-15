@@ -49,7 +49,7 @@ object LayoutHelper {
     }
 
     fun getCoinDrawableResource(coinCode: String): Int {
-        return when(coinCode) {
+        return when (coinCode) {
             "BCH" -> R.drawable.coin_bitcoin_cash
             "LTC" -> R.drawable.coin_litecoin
             "DASH" -> R.drawable.coin_dash
@@ -74,4 +74,15 @@ object LayoutHelper {
         return infoBadge
     }
 
+    fun getDeviceDensity(context: Context): String {
+        val density = context.resources.displayMetrics.density
+        return when {
+            density >= 4.0 -> "xxxhdpi"
+            density >= 3.0 -> "xxhdpi"
+            density >= 2.0 -> "xhdpi"
+            density >= 1.5 -> "hdpi"
+            density >= 1.0 -> "mdpi"
+            else -> "ldpi"
+        }
+    }
 }

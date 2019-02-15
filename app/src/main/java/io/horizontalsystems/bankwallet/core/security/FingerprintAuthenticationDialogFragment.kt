@@ -49,8 +49,8 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(), FingerprintCal
     private lateinit var iconBackgroundImg: ImageView
     private lateinit var errorTextView: TextView
 
-    private lateinit var callback: Callback
-    private lateinit var cryptoObject: FingerprintManagerCompat.CryptoObject
+    private var callback: Callback? = null
+    private var cryptoObject: FingerprintManagerCompat.CryptoObject? = null
     private var authCallbackHandler: FingerprintAuthenticationHandler? = null
 
      private val ERROR_TIMEOUT_MILLIS: Long = 1900
@@ -85,7 +85,7 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(), FingerprintCal
 
         cancelButton.setOnClickListener { dismiss() }
 
-        authCallbackHandler = FingerprintAuthenticationHandler(this, cryptoObject)
+        authCallbackHandler = cryptoObject?.let { FingerprintAuthenticationHandler(this, it) }
     }
 
     override fun onPause() {
@@ -122,7 +122,7 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(), FingerprintCal
         }
         iconBackgroundImg.run {
             setImageTintColor(iconBackgroundImg, R.color.green_crypto)
-            postDelayed({ callback.onFingerprintAuthSucceed() }, SUCCESS_DELAY_MILLIS)
+            postDelayed({ callback?.onFingerprintAuthSucceed() }, SUCCESS_DELAY_MILLIS)
         }
     }
 

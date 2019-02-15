@@ -56,4 +56,9 @@ class MainSettingsPresenter(
     override fun didUpdateLightMode() {
         router.reloadAppInterface()
     }
+
+    override fun onClear() {
+        interactor.clear()
+    }
+
 }

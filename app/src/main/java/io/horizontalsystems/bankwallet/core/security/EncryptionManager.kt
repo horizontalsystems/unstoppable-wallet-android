@@ -70,7 +70,7 @@ class EncryptionManager : IEncryptionManager {
             AlertDialogFragment.newInstance(R.string.Alert_KeysInvalidatedTitle, R.string.Alert_KeysInvalidatedDescription, R.string.Alert_Ok,
                     object : AlertDialogFragment.Listener {
                         override fun onButtonClick() {
-                            App.wordsManager.logout()
+                            App.authManager.logout()
                             KeyStoreWrapper().removeAndroidKeyStoreKey(MASTER_KEY)
 
                             val intent = Intent(activity, LauncherActivity::class.java)
@@ -83,7 +83,7 @@ class EncryptionManager : IEncryptionManager {
         }
 
         fun showNoDeviceLockWarning(activity: FragmentActivity) {
-            AlertDialogFragment.newInstance(R.string.Alert_NoDeviceLockTitle, R.string.Alert_NoDeviceLockDescription, R.string.Alert_Close,
+            AlertDialogFragment.newInstance(R.string.Alert_TitleWarning, R.string.Alert_NoDeviceLockDescription, R.string.Alert_Close,
                     object : AlertDialogFragment.Listener {
                         override fun onButtonClick() {
                             activity.finish()

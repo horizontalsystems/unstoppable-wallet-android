@@ -1,3 +1,5 @@
 package io.horizontalsystems.bankwallet.entities
 
-class PaymentRequestAddress(val address: String, val amount: Double? = null)
+import java.math.BigDecimal
+
+class PaymentRequestAddress(val address: String, val amount: BigDecimal? = null)

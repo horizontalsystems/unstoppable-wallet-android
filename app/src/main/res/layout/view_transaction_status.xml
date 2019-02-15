@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="19dp"
+    >
+
+    <ImageView
+        android:id="@+id/pendingIcon"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:src="@drawable/ic_pending"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/progressBarWrapper"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/txTime"
+        style="@style/Body1Grey"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:text="12:30"
+        />
+
+    <ImageView
+        android:id="@+id/completedIcon"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginStart="6.3dp"
+        android:src="@drawable/ic_checkmark"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/txTime"
+        app:layout_constraintStart_toEndOf="@+id/txTime"
+        app:layout_constraintTop_toTopOf="@+id/txTime"
+        />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/progressBarWrapper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintStart_toEndOf="@+id/txTime"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <ImageView
+            android:id="@+id/progressBar1"
+            style="@style/TransactionInfoStatusProgressBarSmall"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <ImageView
+            android:id="@+id/progressBar2"
+            style="@style/TransactionInfoStatusProgressBarSmall"
+            app:layout_constraintStart_toEndOf="@id/progressBar1"
+            app:layout_constraintTop_toTopOf="@id/progressBar1"
+            />
+
+        <ImageView
+            android:id="@+id/progressBar3"
+            style="@style/TransactionInfoStatusProgressBarSmall"
+            app:layout_constraintStart_toEndOf="@id/progressBar2"
+            app:layout_constraintTop_toTopOf="@id/progressBar1"
+            />
+
+        <ImageView
+            android:id="@+id/progressBar4"
+            style="@style/TransactionInfoStatusProgressBarSmall"
+            app:layout_constraintStart_toEndOf="@id/progressBar3"
+            app:layout_constraintTop_toTopOf="@id/progressBar1"
+            />
+
+        <ImageView
+            android:id="@+id/progressBar5"
+            style="@style/TransactionInfoStatusProgressBarSmall"
+            app:layout_constraintStart_toEndOf="@id/progressBar4"
+            app:layout_constraintTop_toTopOf="@id/progressBar1"
+            />
+
+        <ImageView
+            android:id="@+id/progressBar6"
+            style="@style/TransactionInfoStatusProgressBarSmall"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/progressBar5"
+            app:layout_constraintTop_toTopOf="@id/progressBar1"
+            />
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>

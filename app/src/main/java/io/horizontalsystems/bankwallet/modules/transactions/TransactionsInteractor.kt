@@ -1,80 +1,154 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import android.os.Handler
-import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.IAdapter
+import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.ICurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.RateManager
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
-import io.horizontalsystems.bankwallet.entities.Wallet
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
 
-class TransactionsInteractor(
-        private val walletManager: IWalletManager,
-        private val dataSource: TransactionsModule.ITransactionRecordDataSource,
-        private val refreshTimeout: Double = 2.0
-) : TransactionsModule.IInteractor, TransactionsModule.ITransactionRecordDataSourceDelegate {
-
-    private val disposables = CompositeDisposable()
-    private var lastBlockHeightDisposable: Disposable? = null
-
+class TransactionsInteractor(private val adapterManager: IAdapterManager, private val currencyManager: ICurrencyManager, private val rateManager: RateManager) : TransactionsModule.IInteractor {
     var delegate: TransactionsModule.IInteractorDelegate? = null
 
-    init {
-        resubscribeToLastBlockHeightSubjects(walletManager.wallets)
+    private val disposables = CompositeDisposable()
+    private val ratesDisposables = CompositeDisposable()
+    private val lastBlockHeightDisposables = CompositeDisposable()
+    private val transactionUpdatesDisposables = CompositeDisposable()
+    private val requestedTimestamps = ConcurrentHashMap<CoinCode, MutableList<Long>>()
 
-        disposables.add(walletManager.walletsSubject.subscribe {
-            resubscribeToLastBlockHeightSubjects(it)
-        })
-    }
+    override fun initialFetch() {
+        onUpdateCoinCodes()
 
-    override fun retrieveFilters() {
-        delegate?.didRetrieveFilters(walletManager.wallets.map { it.coin })
-
-        disposables.add(walletManager.walletsSubject
-                .observeOn(AndroidSchedulers.mainThread())
+        disposables.add(adapterManager.adaptersUpdatedSignal
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
                 .subscribe {
-                    delegate?.didRetrieveFilters(it.map { it.coin })
+                    onUpdateCoinCodes()
+                })
+
+        disposables.add(currencyManager.baseCurrencyUpdatedSignal
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe {
+                    ratesDisposables.clear()
+                    requestedTimestamps.clear()
+                    delegate?.onUpdateBaseCurrency()
                 })
     }
 
-    override fun refresh() {
-        Handler().postDelayed({
-            delegate?.didRefresh()
-        }, (refreshTimeout * 1000).toLong())
+    override fun fetchRecords(fetchDataList: List<TransactionsModule.FetchData>) {
+        if (fetchDataList.isEmpty()) {
+            delegate?.didFetchRecords(mapOf())
+            return
+        }
+
+        val flowables = mutableListOf<Single<Pair<CoinCode, List<TransactionRecord>>>>()
+
+        fetchDataList.forEach { fetchData ->
+            val adapter = adapterManager.adapters.find { it.coin.code == fetchData.coinCode }
+
+            val flowable = when (adapter) {
+                null -> Single.just(Pair(fetchData.coinCode, listOf()))
+                else -> {
+                    adapter.getTransactionsObservable(fetchData.hashFrom, fetchData.limit)
+                            .map {
+                                Pair(fetchData.coinCode, it)
+                            }
+                }
+            }
+
+            flowables.add(flowable)
+        }
+
+        disposables.add(
+                Single.zip(flowables) {
+                    val res = mutableMapOf<CoinCode, List<TransactionRecord>>()
+                    it.forEach {
+                        it as Pair<CoinCode, List<TransactionRecord>>
+                        res[it.first] = it.second
+                    }
+                    res.toMap()
+                }
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(Schedulers.io())
+                        .subscribe { records, t2 ->
+                            delegate?.didFetchRecords(records)
+                        })
     }
 
-    override fun setCoin(coin: Coin?) {
-        dataSource.setCoin(coin)
+    override fun setSelectedCoinCodes(selectedCoinCodes: List<String>) {
+        delegate?.onUpdateSelectedCoinCodes(if (selectedCoinCodes.isEmpty()) adapterManager.adapters.map { it.coin.code } else selectedCoinCodes)
     }
 
-    override val recordsCount: Int
-        get() = dataSource.count
+    override fun fetchLastBlockHeights() {
+        lastBlockHeightDisposables.clear()
 
-    override fun recordForIndex(index: Int): TransactionRecord {
-        return dataSource.recordForIndex(index)
+        adapterManager.adapters.forEach { adapter ->
+            lastBlockHeightDisposables.add(adapter.lastBlockHeightUpdatedSignal
+                    .throttleLast(3, TimeUnit.SECONDS)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .subscribe {
+                        onUpdateLastBlockHeight(adapter)
+                    })
+        }
+    }
+
+    override fun fetchRates(timestamps: Map<CoinCode, List<Long>>) {
+        val baseCurrency = currencyManager.baseCurrency
+        val currencyCode = baseCurrency.code
+
+        timestamps.forEach {
+            val coinCode = it.key
+            for (timestamp in it.value) {
+                if (requestedTimestamps[coinCode]?.contains(timestamp) == true) continue
+
+                if (!requestedTimestamps.containsKey(coinCode)) {
+                    requestedTimestamps[coinCode] = CopyOnWriteArrayList()
+                }
+                requestedTimestamps[coinCode]?.add(timestamp)
+
+                ratesDisposables.add(rateManager.rateValueObservable(coinCode, currencyCode, timestamp)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(Schedulers.io())
+                        .subscribe {
+                            delegate?.didFetchRate(it, coinCode, baseCurrency, timestamp)
+                        })
+            }
+        }
     }
 
     override fun clear() {
         disposables.clear()
+        lastBlockHeightDisposables.clear()
+        ratesDisposables.clear()
+        transactionUpdatesDisposables.clear()
     }
 
-    override fun onUpdateResults() {
-        delegate?.didUpdateDataSource()
-    }
-
-    private fun resubscribeToLastBlockHeightSubjects(wallets: List<Wallet>) {
-        lastBlockHeightDisposable?.dispose()
-        lastBlockHeightDisposable = Observable.merge(wallets.map { it.adapter.lastBlockHeightSubject })
-                .throttleLast(3, TimeUnit.SECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    delegate?.didUpdateDataSource()
-                }
-
-        lastBlockHeightDisposable?.let {
-            disposables.add(it)
+    private fun onUpdateLastBlockHeight(adapter: IAdapter) {
+        adapter.lastBlockHeight?.let { lastBlockHeight ->
+            delegate?.onUpdateLastBlockHeight(adapter.coin.code, lastBlockHeight)
         }
     }
+
+    private fun onUpdateCoinCodes() {
+        transactionUpdatesDisposables.clear()
+
+        delegate?.onUpdateCoinsData(adapterManager.adapters.map { Triple(it.coin.code, it.confirmationsThreshold, it.lastBlockHeight) })
+
+        adapterManager.adapters.forEach { adapter ->
+            transactionUpdatesDisposables.add(adapter.transactionRecordsSubject
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .subscribe {
+                        delegate?.didUpdateRecords(it, adapter.coin.code)
+                    })
+        }
+    }
+
 }

@@ -5,7 +5,7 @@
     <string name="Alert_Ok">Хорошо</string>
     <string name="Alert_Cancel">Отменить</string>
     <string name="Alert_Copy">Скопировать</string>
-    <string name="Alert_Share">Поделиться</string>
+    <string name="Alert_Share">Переслать</string>
     <string name="Alert_Close">Закрыть</string>
     <string name="Alert_Success">Успешно</string>
     <string name="Alert_Copied">Скопировано</string>
@@ -19,21 +19,21 @@
     <string name="Guest_CreateWallet">Создать Кошелек</string>
     <string name="Guest_RestoreWallet">Восстановить Кошелек</string>
     <!--Restore-->
-    <string name="Restore_Title">Cекретный Ключ</string>
+    <string name="Restore_Title">Введите Секретный Ключ</string>
     <string name="Restore_ValidationFailed">Неверный Секретный Ключ</string>
     <string name="Restore_RestoreFailed">Не удалось восстановить кошелек</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Секретный Ключ</string>
-    <string name="Backup_Intro_Subtitle">Ваш секретный ключ является единственным способом для восстановления вашего кошелька.\n\nМы покажем вам список слов, чтобы вы записали их на бумаге и хранили в безопасном месте.</string>
+    <string name="Backup_Intro_Subtitle">Ваш секретный ключ является единственным способом для восстановления вашего кошелька.\n\nОн состоит из 12 слов. Храните его в безопасном месте.</string>
     <string name="Backup_Intro_Later">Позже</string>
-    <string name="Backup_Intro_BackupNow">Записать ключ</string>
+    <string name="Backup_Intro_BackupNow">Резервная копия</string>
     <string name="Backup_Words_Title">Секретный Ключ</string>
     <string name="Backup_Confirmation_Understand">Я понимаю, что мой кошелек и токены хранятся только на этом устройстве.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">Я понимаю, что если это приложение удаляется или устанавливается на другое устройство, мой кошелек можно восстановить только ключом, который я храню в безопасном месте.</string>
-    <string name="Backup_Confirmation_LockAppWarn">Изменение PIN-кода  блокировки телефона на вашем Android OS, сбросит кошелек . Вам необходима фраза резервного копирования для восстановления  вашего кошелька.</string>
-    <string name="Backup_Confirmation_Title">Введите слова из вашего секретного ключа</string>
-    <string name="Backup_Confirmation_Description">Введите слова из секретного ключа.</string>
-    <string name="Backup_Confirmation_FailureAlertText"> Слова не совпадают</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">Я понимаю, что если это приложение удаляется или устанавливается на другое устройство, мой кошелек можно восстановить только с помощью Секретного Ключа.</string>
+    <string name="Backup_Confirmation_LockAppWarn">Изменение PIN-кода телефона на вашем Android OS, сбросит кошелек . Вам понадобится ваш Секретный Ключ для восстановления кошелька.</string>
+    <string name="Backup_Confirmation_Title">Введите слова из вашего Cекретного Ключа</string>
+    <string name="Backup_Confirmation_Description">Введите слова из вашего секретного ключа.</string>
+    <string name="Backup_Confirmation_FailureAlertText">Слова не совпадают</string>
     <string name="Backup_Button_Confirm">Подтвердить</string>
     <string name="Backup_Button_Next">Далее</string>
     <string name="Backup_Button_Submit">Отправить</string>
@@ -42,6 +42,8 @@
     <string name="Balance_Deposit">Получить</string>
     <string name="Balance_Send">Отправить</string>
     <string name="Balance_RatePerCoin">%s за %s</string>
+    <string name="Balance_SyncedUntil">до: %s</string>
+    <string name="Balance_Syncing">Синхронизация…</string>
     <!--Send-->
     <string name="Send_Title1">Отправить</string>
     <string name="Send_Title">Отправить %s</string>
@@ -51,82 +53,102 @@
     <string name="Send_Button_Paste">Вставить</string>
     <string name="Send_Button_More">Ещё</string>
     <string name="Send_Button_Send">Отправить</string>
+    <string name="Send_Button_Max">Макс.</string>
     <string name="Send_ScanQrCode">Сканировать QR-код</string>
     <string name="Send_Success">Отправлено!</string>
     <string name="Send_Error_InvalidAddress">Адрес недействителен. Попробуйте еще раз!</string>
     <string name="Send_Error_InsufficientBalance">Недостаточно средств.</string>
-    <string name="Send_Error_IncorrectAddress">Неверный адрес</string>
+    <string name="Send_Error_IncorrectAddress">Неверный Адрес</string>
     <string name="Send_Error_BalanceAmount">Баланс %s</string>
     <string name="Send_DialogTitle">Подтвердить Транзакцию</string>
     <string name="Send_DialogFee">Комиссия:</string>
     <string name="Send_DialogTotal">Итого:</string>
+    <string name="Send_ERC_Alert">Комиссия за отправку %s (ERC20) взимается в ETH. Необходимо %s ETH.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Получено %s</string>
-    <string name="Deposit_Copy">Скопировать</string>
+    <string name="Deposit_Share">Переслать</string>
+    <string name="Deposit_Your_Address">Ваш Адрес</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">только что</string>
-    <string name="Timestamp_MinAgo">%dm. мин назад</string>
-    <string name="Timestamp_HoursAgo">%dh. ч назад</string>
+    <string name="Timestamp_MinAgo">%d мин назад</string>
+    <string name="Timestamp_HoursAgo">%d ч назад</string>
     <string name="Timestamp_Today">Сегодня</string>
     <string name="Timestamp_Yesterday">Вчера</string>
     <!--Transactions-->
     <string name="Transactions_Title">Транзакции</string>
-    <string name="Transactions_FilterAll">Все</string>
-    <string name="Transactions_EmptyList">У Вас не было транзакций!</string>
+    <string name="Transactions_FilterAll">ВСЕ</string>
+    <string name="Transactions_EmptyList">У Вас нет транзакций!</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Транзакция</string>
-    <string name="TransactionInfo_Status">Статус:</string>
-    <string name="TransactionInfo_Completed">Завершено</string>
-    <string name="TransactionInfo_Pending">Ожидание</string>
-    <string name="TransactionInfo_Processing">Обработка %d%%</string>
-    <string name="TransactionInfo_Close">Закрыть</string>
-    <string name="TransactionInfo_Id">ID:</string>
-    <string name="TransactionInfo_To">Кому:</string>
-    <string name="TransactionInfo_From">От:</string>
-    <!--Full Transaction-->
-    <string name="FullTransactionInfo_Title">Транзакция</string>
-    <string name="FullTransactionInfo_Size">Размер</string>
-    <string name="FullTransactionInfo_FeeRate">Комиссия</string>
-    <string name="FullransactionInfo_ReceivedTime">Время Получения</string>
-    <string name="FullTransactionInfo_MinedTime">Время Записи</string>
-    <string name="FullTransactionInfo_IncludedInBblock">Записан в Блок</string>
-    <string name="FullTransactionInfo_Confirmations">Подтверждения</string>
-    <string name="FullTransactionInfo_LockTime">Время Блокировки</string>
-    <string name="FullTransactionInfo_Time">Время</string>
-    <string name="FullTransactionInfo_From">От</string>
-    <string name="FullTransactionInfo_To">Кому</string>
-    <string name="FullTransactionInfo_Received">Получено</string>
-    <string name="FullTransactionInfo_Sent">Отправлено</string>
-    <string name="FullTransactionInfo_Amount">Сумма</string>
-    <string name="FullTransactionInfo_Fee">Комиссия</string>
-    <string name="FullTransactionInfo_Block">Заблокировать</string>
+    <string name="TransactionInfo_Status">Статус</string>
+    <string name="TransactionInfo_Id">ID</string>
+    <string name="TransactionInfo_To">Кому</string>
+    <string name="TransactionInfo_From">От</string>
+    <string name="TransactionInfo_Time">Время</string>
+    <string name="TransactionInfo_ButtonMore">Ещё</string>
+    <string name="TransactionInfo_Status_Pending">В процессе</string>
+    <!--Full Info-->
+    <string name="FullInfo_Title">Транзакция</string>
+    <string name="FullInfo_Time">Время</string>
+    <string name="FullInfo_Block">Блок</string>
+    <string name="FullInfo_Confirmations">Подтверждения</string>
+    <string name="FullInfo_Inputs">Входы</string>
+    <string name="FullInfo_Outputs">Выходы</string>
+    <string name="FullInfo_Size">Размер</string>
+    <string name="FullInfo_Fee">Комиссия</string>
+    <string name="FullInfo_Rate">Ставка</string>
+    <string name="FullInfo_Source">Источник</string>
+    <string name="FullInfo_To">Кому</string>
+    <string name="FullInfo_From">От</string>
+    <string name="FullInfo_GasLimit">Gas Limit</string>
+    <string name="FullInfo_GasUsed">Gas Used</string>
+    <string name="FullInfo_GasPrice">Gas Price</string>
+    <string name="FullInfo_Source_Title">Источник</string>
+    <string name="FullInfo_Source_Online">доступен</string>
+    <string name="FullInfo_Source_Offline">недоступен</string>
+    <string name="FullInfo_Error_Subtitle">недоступен</string>
+    <string name="FullInfo_Error_Retry">Повторить</string>
+    <string name="FullInfo_Error_ChangeSource">Сменить Источник</string>
+    <!--no used-->
+    <string name="FullInfo_Id">ID</string>
+    <string name="FullInfo_TotalInput">Всего Входов</string>
+    <string name="FullInfo_TotalOutput">Всего Выходов</string>
+    <string name="FullInfo_FeePerByte">Комиссия за байт</string>
+    <string name="FullInfo_FeeRate">Комиссия</string>
+    <string name="FullInfo_NoAddress">Недоступно</string>
+    <string name="FullInfo_SatByte">sat/B</string>
+    <string name="FullInfo_Bytes">Bytes</string>
+    <string name="FullInfo_SubtitleInputs">Входы</string>
+    <string name="FullInfo_SubtitleOutputs">Выходы</string>
+    <string name="FullInfoEth_Nonce">Nonce</string>
+    <string name="FullInfoEth_Value">Значение</string>
     <!--Settings-->
     <string name="Settings_Title">Настройки</string>
     <string name="Settings_SecurityCenter">Центр Безопасности</string>
     <string name="Settings_BaseCurrency">Базовая Валюта</string>
     <string name="Settings_Language">Язык</string>
     <string name="Settings_LightMode">Светлый Режим</string>
-    <string name="Settings_About">О программе</string>
+    <string name="Settings_About">О приложении</string>
     <string name="Settings_InfoTitleWithVersion">Bank Wallet %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Отпечаток пальца не включен</string>
-    <string name="Settings_Error_NoFingerprintAddedYet">У вас недоступен отпечаток пальцев на этом устройстве. Перейдите в настройки &gt; Безопасность и выберите отпечатки пальцев.</string>
+    <string name="Settings_Error_NoFingerprintAddedYet">У вас не включен отпечаток пальца на этом устройстве. Перейдите в настройки </string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Отпечаток пальца</string>
-    <string name="SettingsSecurity_EditPin">Изменить PIN-код</string>
-    <string name="SettingsSecurity_BackupWallet">Записать Кошелёк</string>
+    <string name="SettingsSecurity_EditPin">Изменить Код</string>
+    <string name="SettingsSecurity_BackupWallet">Резервная копия</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">Отсоединить это устройство</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">Это действие удалит ваш кошелёк с этого устройства.</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_2">Убедитесь, что у вас есть свой секретный ключ, иначе вы не сможете получить доступ к денежным средствам.</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_2">Убедитесь, что у вас есть свой Секретный Ключ, иначе вы не сможете получить доступ к денежным средствам.</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Базовая Валюта</string>
     <!--Setting_Language-->
     <string name="SettingsLanguage_Title">Язык</string>
     <!--Setting_About-->
-    <string name="SettingsAbout_Title">О программе</string>
+    <string name="SettingsAbout_Title">О приложении</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Условия &amp; Политика конфиденциальности:</string>
-    <string name="SettingsAbout_TermsPrivacyText">\n\nЭто приложение полностью децентрализованно. Работоспособность этого приложения не зависит от сторонних серверов или какой-либо команды тех поддержки.
+    <string name="SettingsAbout_TermsPrivacyText">Это приложение полностью децентрализованно. Работоспособность этого приложения не зависит от сторонних серверов или какой-либо команды тех поддержки.
 \n\nПриложение работает везде, пока есть интернет. Этот кошелек или его пользователи не могут быть заблокированы кем-либо.
 \n\nВаши средства хранятся только на вашем телефоне.
 \n\nВы несëте полную ответственность за безопасное хранение секретного ключа. Никогда никому не показывайте ваш секретный ключ. Если ключ будет утерян, украден или забыт то контроль над вашими средствами попадет к тому у кого окажется ваш секретный ключ.
@@ -136,37 +158,41 @@
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Ошибка Android Keystore</string>
     <string name="Alert_KeysInvalidatedDescription">Ваши зашифрованные данные были недавно аннулированы, потому что  Android lock screen был изменен</string>
-    <string name="Alert_NoDeviceLockTitle">Внимание</string>
-    <string name="Alert_NoDeviceLockDescription">Установите блокировку экрана на этом устройстве. Перейдите в «Настройки» &gt; «Безопасность» &gt; «Блокировка экрана» и включите параметр экрана блокировки.</string>
+    <string name="Alert_TitleWarning">Внимание</string>
+    <string name="Alert_NoDeviceLockDescription">Установите блокировку экрана на этом устройстве. Перейдите в «Настройки» </string>
+    <string name="Alert_CustomKeyboardIsUsed">Вы используете стороннюю клавиатуру. Вам необходимо использовать клавиатуру по умолчанию.</string>
     <!--Unlock-->
-    <string name="Unlock_Page_EnterYourPin">Введите PIN-код</string>
+    <string name="Unlock_Page_EnterYourPin">Код Доступа</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Неподдерживаемая валюта</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Разблокировать</string>
     <string name="Hud_Text_Success">Успешно</string>
     <string name="Hud_Text_Error">Ошибка</string>
-    <string name="Hud_Text_NoInternet">Нет интернета</string>
+    <string name="Hud_Text_NoInternet">Нет Интернета</string>
     <string name="Hud_Text_Copied">Скопировано</string>
-    <string name="Hud_Text_InvalidPinError">Неверный PIN-код</string>
+    <string name="Hud_Text_InvalidPinError">Неверный Код</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">Отпечаток пальца для входа</string>
     <string name="Fingerprint_Hint">Коснитесь датчика</string>
-    <string name="Fingerprint_EnterPin">Введите PIN</string>
+    <string name="Fingerprint_EnterPin">Код Доступа</string>
     <string name="Fingerprint_NotRecognized">Отпечаток не распознан. Повторите ещё раз</string>
     <string name="Fingerprint_Success">Успешно!</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Отключено до: %s</string>
     <!--Set Pin-->
-    <string name="SetPin_Title">Установить PIN-код</string>
-    <string name="SetPin_Info">Ваш PIN-код будет использоваться для разблокировки кошелька</string>
+    <string name="SetPin_Title">Код Доступа</string>
+    <string name="SetPin_Info">Ваш код будет использоваться для разблокировки вашего кошелька и отправки денег</string>
     <string name="SetPin_ErrorShortPin">Пожалуйста, введите только символы цифр.</string>
-    <string name="SetPin_ConfirmInfo">Подтвердить PIN-код</string>
-    <string name="SetPin_Success">PIN-код блокировки успешно установлен!</string>
-    <string name="SetPin_ErrorPinsDontMatch">PIN-код не совпадает.</string>
-    <string name="SetPin_ErrorFailedToSavePin">При сохранении вашего PIN-код произошла ошибка. Повторите попытку.</string>
+    <string name="SetPin_ConfirmInfo">Подтвердить</string>
+    <string name="SetPin_Success">Код доступа успешно установлен!</string>
+    <string name="SetPin_ErrorPinsDontMatch">Код не совпадает. Попробуйте еще раз.</string>
+    <string name="SetPin_ErrorFailedToSavePin">При сохранении вашего кода произошла ошибка. Повторите попытку.</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">Обновить PIN-код</string>
-    <string name="EditPin_UnlockInfo">Введите текущий PIN-код</string>
-    <string name="EditPin_NewPinInfo">Введите новый PIN-код</string>
+    <string name="EditPin_Title">Изменить Код</string>
+    <string name="EditPin_UnlockInfo">Текущий Код</string>
+    <string name="EditPin_NewPinInfo">Новый Код</string>
+    <!--Manage Coins-->
+    <string name="ManageCoins_title">Кошельки</string>
+    <string name="ManageCoins_save">Сохранить</string>
 </resources>

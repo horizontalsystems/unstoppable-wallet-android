@@ -5,7 +5,7 @@
     <string name="Alert_Ok">OK</string>
     <string name="Alert_Cancel">Annuler</string>
     <string name="Alert_Copy">Copier</string>
-    <string name="Alert_Share">Partager</string>
+    <string name="Alert_Share">Transférer</string>
     <string name="Alert_Close">Fermer</string>
     <string name="Alert_Success">Effectué</string>
     <string name="Alert_Copied">Copié</string>
@@ -21,16 +21,16 @@
     <!--Restore-->
     <string name="Restore_Title">Entrez la clé secrete</string>
     <string name="Restore_ValidationFailed">Clé secrète incorrecte</string>
-    <string name="Restore_RestoreFailed">Failed to restore wallet</string>
+    <string name="Restore_RestoreFailed">Échec de la restauration du porte-monnaie</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Le mot secret</string>
-    <string name="Backup_Intro_Subtitle">Votre clé secrete est le seul moyen de restaurer votre porte-monnaie et vos fonds si votre téléphone est perdu, volé, cassé ou mis à jour.\n\n Elle contient 12 mots. Ecrivez-les sur un morceau de papier et ne les montrez jamais à personne.</string>
+    <string name="Backup_Intro_Subtitle">Votre clé secrete est le seul moyen de restaurer votre porte-monnaie et vos fonds si votre téléphone est perdu, volé, cassé ou mis à jour.\n\nElle contient 12 mots. Stockez-le en toute sécurité hors ligne.</string>
     <string name="Backup_Intro_Later">Plus tard</string>
     <string name="Backup_Intro_BackupNow">Sauvegarde</string>
     <string name="Backup_Words_Title">Le mot secret</string>
     <string name="Backup_Confirmation_Understand">Je comprends que mon porte-monnaie et mes tokens sont en toute sécurité sur cet appareil uniquement et pas sur les autres appareils.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">Je comprends que si cette appli est déplacée vers un autre appareil ou supprimée, mon porte-monnaie ne peut être récupéré qu\'avec la clé secrète que je viens d\'écrire et de sauvegarder dans un endroit sécurisé.</string>
-    <string name="Backup_Confirmation_LockAppWarn">Le changement du code PIN du téléphone dans les paramètres de votre Android OS réinitialiserait le porte-monnaie. Vous aurez besoin de votre phrase de sauvegarde pour restaurer votre portporte-monnaie après.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">Je comprends que si cette appli est déplacée vers un autre appareil ou supprimée, mon porte-monnaie ne peut être récupéré qu\'avec la clé secrète.</string>
+    <string name="Backup_Confirmation_LockAppWarn">Changer le code ou de suppression de données d’application dans les paramètres de votre système d’exploitation Android remettrait à zéro le porte-monnaie. Vous aurez besoin de votre clé secrète pour restaurer votre porte-monnaie après cela.</string>
     <string name="Backup_Confirmation_Title">Entrez les mots de votre clé secrète</string>
     <string name="Backup_Confirmation_Description">Entrez les mots de votre clé secrète.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Les mots ne correspondent pas</string>
@@ -42,6 +42,8 @@
     <string name="Balance_Deposit">Recevoir</string>
     <string name="Balance_Send">Envoyer</string>
     <string name="Balance_RatePerCoin">%s par %s</string>
+    <string name="Balance_SyncedUntil">jusqu\'à: %s</string>
+    <string name="Balance_Syncing">Synchronisation…</string>
     <!--Send-->
     <string name="Send_Title1">Envoyer</string>
     <string name="Send_Title">Envoyer %s</string>
@@ -51,6 +53,7 @@
     <string name="Send_Button_Paste">Coller</string>
     <string name="Send_Button_More">Plus</string>
     <string name="Send_Button_Send">Envoyer</string>
+    <string name="Send_Button_Max">Max</string>
     <string name="Send_ScanQrCode">Scanner le Code QR</string>
     <string name="Send_Success">Envoyé!</string>
     <string name="Send_Error_InvalidAddress">L\'adresse semble invalide. Vérifiez et réessayez!</string>
@@ -60,46 +63,65 @@
     <string name="Send_DialogTitle">Confirmer la transaction</string>
     <string name="Send_DialogFee">Frais:</string>
     <string name="Send_DialogTotal">Total:</string>
+    <string name="Send_ERC_Alert">Frais de transaction pour %s (ERC20) payé en Ethereum. Il est nécessaire %s ETH.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Recevoir %s</string>
-    <string name="Deposit_Copy">Copy</string>
+    <string name="Deposit_Share">Transférer</string>
+    <string name="Deposit_Your_Address">Votre address</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">à l\'instant</string>
-    <string name="Timestamp_MinAgo">Il y a %dm min</string>
-    <string name="Timestamp_HoursAgo">Il y a %dh h</string>
+    <string name="Timestamp_MinAgo">Il y a %d minute</string>
+    <string name="Timestamp_HoursAgo">Il y a %d heures</string>
     <string name="Timestamp_Today">Aujourd\'hui</string>
     <string name="Timestamp_Yesterday">Hier</string>
     <!--Transactions-->
     <string name="Transactions_Title">Transactions</string>
-    <string name="Transactions_FilterAll">Tous</string>
+    <string name="Transactions_FilterAll">TOUS</string>
     <string name="Transactions_EmptyList">Vous n’avez aucune transaction</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Transactions</string>
-    <string name="TransactionInfo_Status">État :</string>
-    <string name="TransactionInfo_Completed">Terminé</string>
-    <string name="TransactionInfo_Pending">En attente</string>
-    <string name="TransactionInfo_Processing">Traitement en cours %d%%</string>
-    <string name="TransactionInfo_Close">Fermer</string>
-    <string name="TransactionInfo_Id">ID:</string>
-    <string name="TransactionInfo_To">À:</string>
-    <string name="TransactionInfo_From">De:</string>
-    <!--Full Transaction-->
-    <string name="FullTransactionInfo_Title">Transaction</string>
-    <string name="FullTransactionInfo_Size">Taille</string>
-    <string name="FullTransactionInfo_FeeRate">Taux de frais</string>
-    <string name="FullransactionInfo_ReceivedTime">Heure de Réception</string>
-    <string name="FullTransactionInfo_MinedTime">Heure miné</string>
-    <string name="FullTransactionInfo_IncludedInBblock">Inclus dans le Block</string>
-    <string name="FullTransactionInfo_Confirmations">Confirmation</string>
-    <string name="FullTransactionInfo_LockTime">Heure de verrouillage</string>
-    <string name="FullTransactionInfo_Time">Heure</string>
-    <string name="FullTransactionInfo_From">De</string>
-    <string name="FullTransactionInfo_To">À</string>
-    <string name="FullTransactionInfo_Received">Reçue</string>
-    <string name="FullTransactionInfo_Sent">Envoyée</string>
-    <string name="FullTransactionInfo_Amount">Montant</string>
-    <string name="FullTransactionInfo_Fee">Frais</string>
-    <string name="FullTransactionInfo_Block">Bloc</string>
+    <string name="TransactionInfo_Status">Statut</string>
+    <string name="TransactionInfo_Id">ID</string>
+    <string name="TransactionInfo_To">À</string>
+    <string name="TransactionInfo_From">De</string>
+    <string name="TransactionInfo_Time">Heure</string>
+    <string name="TransactionInfo_ButtonMore">Plus</string>
+    <string name="TransactionInfo_Status_Pending">En attente</string>
+    <!--Full Info-->
+    <string name="FullInfo_Title">Transaction</string>
+    <string name="FullInfo_Time">Heure</string>
+    <string name="FullInfo_Block">Bloc</string>
+    <string name="FullInfo_Confirmations">Confirmation</string>
+    <string name="FullInfo_Inputs">Entrées</string>
+    <string name="FullInfo_Outputs">Sorties</string>
+    <string name="FullInfo_Size">Taille</string>
+    <string name="FullInfo_Fee">Frais</string>
+    <string name="FullInfo_Rate">Taux</string>
+    <string name="FullInfo_Source">Source</string>
+    <string name="FullInfo_To">À</string>
+    <string name="FullInfo_From">De</string>
+    <string name="FullInfo_GasLimit">Gas Limit</string>
+    <string name="FullInfo_GasUsed">Gas Used</string>
+    <string name="FullInfo_GasPrice">Gas Price</string>
+    <string name="FullInfo_Source_Title">Source</string>
+    <string name="FullInfo_Source_Online">En ligne</string>
+    <string name="FullInfo_Source_Offline">Déconnecté</string>
+    <string name="FullInfo_Error_Subtitle">Déconnecté</string>
+    <string name="FullInfo_Error_Retry">Réessayer</string>
+    <string name="FullInfo_Error_ChangeSource">Changer la Source</string>
+    <!--no used-->
+    <string name="FullInfo_Id">ID</string>
+    <string name="FullInfo_TotalInput">Total des entrées</string>
+    <string name="FullInfo_TotalOutput">Total des sorties</string>
+    <string name="FullInfo_FeePerByte">Fee per byte</string>
+    <string name="FullInfo_FeeRate">Fee Rate</string>
+    <string name="FullInfo_NoAddress">Non disponible</string>
+    <string name="FullInfo_SatByte">sat/B</string>
+    <string name="FullInfo_Bytes">Bytes</string>
+    <string name="FullInfo_SubtitleInputs">Entrées</string>
+    <string name="FullInfo_SubtitleOutputs">Sorties</string>
+    <string name="FullInfoEth_Nonce">Nonce</string>
+    <string name="FullInfoEth_Value">Valeur</string>
     <!--Settings-->
     <string name="Settings_Title">Paramètres</string>
     <string name="Settings_SecurityCenter">Centre de Sécurité</string>
@@ -114,7 +136,7 @@
     <string name="Settings_Error_NoFingerprintAddedYet">Vous n’avez pas activé d’empreintes digitales sur ce appareil. Allez à paramètres &gt; sécurité à mettre en place un accès d’empreinte digitale.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Empreinte digitale</string>
-    <string name="SettingsSecurity_EditPin">Modifier le PIN</string>
+    <string name="SettingsSecurity_EditPin">Modifier le code </string>
     <string name="SettingsSecurity_BackupWallet">Porte-monnaie de Sauvegarde</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">Supprimer le lien de cet appareil</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">Cette action supprimera le porte-monnaie actuellement installé sur cet appareil.</string>
@@ -126,7 +148,7 @@
     <!--Setting_About-->
     <string name="SettingsAbout_Title">À propos de</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Terms &amp; Confidentialité:</string>
-    <string name="SettingsAbout_TermsPrivacyText">\n\nCette application est décentralisé. Cela ne dépend pas du personnel du service d\'assistance Web.
+    <string name="SettingsAbout_TermsPrivacyText">Cette application est décentralisé. Cela ne dépend pas du personnel du service d\'assistance Web.
 \n\nCela fonctionne partout tant qu\'il y a internet. Aucune entité ne peut empêcher cette application de fonctionner ou d\'empêcher quelqu\'un de l\'utiliser.
 \n\nVos fonds stockés en sécurité sur votre portable, pas sur autres.
 \n\nIl est de votre responsabilité de sauvegarder votre clé secrète et de la garder privée. Ne le montre jamais à personne. En cas de perte, d’oubli ou de vol, vos fonds peuvent être utilisés par la personne qui détient votre clé secrète.
@@ -136,10 +158,11 @@
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Erreur de Keystore Android</string>
     <string name="Alert_KeysInvalidatedDescription">Les données cryptées contenant votre porte-monnaie ont récemment été invalidées car votre écran de verrouillage Android a été modifié</string>
-    <string name="Alert_NoDeviceLockTitle">Attention</string>
+    <string name="Alert_TitleWarning">Attention</string>
     <string name="Alert_NoDeviceLockDescription">Installez un écran de verrouillage sur cet appareil pour continuer. Allez dans « Paramètres » &gt; « Sécurité » &gt; « Screen Lock » et activez le paramètre d’écran de verrouillage.</string>
+    <string name="Alert_CustomKeyboardIsUsed">Vous utilisez un clavier de tierces parties. Vous devez utiliser le clavier par défaut.</string>
     <!--Unlock-->
-    <string name="Unlock_Page_EnterYourPin">Entrez PIN</string>
+    <string name="Unlock_Page_EnterYourPin">Code</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Devise non supportée</string>
     <!--Hud texts-->
@@ -148,25 +171,28 @@
     <string name="Hud_Text_Error">Erreur</string>
     <string name="Hud_Text_NoInternet">Aucune connexion Internet</string>
     <string name="Hud_Text_Copied">Copié</string>
-    <string name="Hud_Text_InvalidPinError">PIN incorrect</string>
+    <string name="Hud_Text_InvalidPinError">Le code incorrect</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">Prise d\'empreintes digitales</string>
     <string name="Fingerprint_Hint">Détecteur tactile</string>
-    <string name="Fingerprint_EnterPin">Entrez PIN</string>
+    <string name="Fingerprint_EnterPin">Code</string>
     <string name="Fingerprint_NotRecognized">Empreinte digitale non reconnue. Réessayez</string>
     <string name="Fingerprint_Success">Effectué!</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Désactivé jusqu\'à: %s</string>
     <!--Set Pin-->
-    <string name="SetPin_Title">Définir le PIN</string>
-    <string name="SetPin_Info">Votre code PIN sera utilisé pour déverrouiller l\'appli de porte-monnaie</string>
+    <string name="SetPin_Title">Code</string>
+    <string name="SetPin_Info">Votre code sera utilisé pour déverrouiller votre porte-monnaie et envoyer de l’argent</string>
     <string name="SetPin_ErrorShortPin">S\'il vous plaît entrez tous les chiffres.</string>
-    <string name="SetPin_ConfirmInfo">Confirmez le PIN</string>
-    <string name="SetPin_Success">Le code PIN de verrouillage a été configuré!</string>
-    <string name="SetPin_ErrorPinsDontMatch">Le PIN ne correspond pas. Réessayez.</string>
-    <string name="SetPin_ErrorFailedToSavePin">Une erreur est apparue lors de l\'enregistrement de votre code PIN. Veuillez réessayer.</string>
+    <string name="SetPin_ConfirmInfo">Confirmer</string>
+    <string name="SetPin_Success">Votre code a été défini avec succès!</string>
+    <string name="SetPin_ErrorPinsDontMatch">Le code ne correspond pas. Réessayez.</string>
+    <string name="SetPin_ErrorFailedToSavePin">Une erreur est apparue lors de l\'enregistrement de votre code. Veuillez réessayer.</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">Modifier le PIN</string>
-    <string name="EditPin_UnlockInfo">Entrez le PIN actuel</string>
-    <string name="EditPin_NewPinInfo">Entrez le nouveau PIN</string>
+    <string name="EditPin_Title">Modifier le code </string>
+    <string name="EditPin_UnlockInfo">Le code actuel</string>
+    <string name="EditPin_NewPinInfo">Le code nouveu</string>
+    <!--Manage Coins-->
+    <string name="ManageCoins_title">Portefeuilles</string>
+    <string name="ManageCoins_save">Sauvegarder</string>
 </resources>

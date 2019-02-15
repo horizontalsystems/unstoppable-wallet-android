@@ -1,29 +1,41 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
-import io.horizontalsystems.bankwallet.core.IWalletManager
-import io.horizontalsystems.bankwallet.core.IWordsManager
-import io.horizontalsystems.bankwallet.core.LogInState
-import io.reactivex.disposables.CompositeDisposable
+import io.horizontalsystems.bankwallet.core.ICoinManager
+import io.horizontalsystems.bankwallet.core.ICoinStorage
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 
-class CoinManager(private val wordsManager: IWordsManager,
-                  private val walletManager: IWalletManager,
-                  private val appConfigProvider: IAppConfigProvider) {
+class CoinManager(private val appConfigProvider: IAppConfigProvider, private val coinStorage: ICoinStorage) : ICoinManager {
 
-    private var disposables: CompositeDisposable = CompositeDisposable()
+    override val coinsUpdatedSignal: PublishSubject<Unit> = PublishSubject.create()
 
     init {
-        wordsManager.loggedInSubject.subscribe { logInState ->
-            syncWallets(logInState == LogInState.CREATE)
-        }.let {
-            disposables.add(it)
+        val disposable = coinStorage.enabledCoinsObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    coins = it
+                }
+    }
+
+    override var coins: List<Coin> = listOf()
+        set(value) {
+            field = value
+            coinsUpdatedSignal.onNext(Unit)
         }
+
+    override val allCoins: List<Coin>
+        get() = appConfigProvider.defaultCoins + appConfigProvider.erc20tokens
+
+    override fun enableDefaultCoins() {
+        coinStorage.save(appConfigProvider.defaultCoins)
     }
 
-    private fun syncWallets(newWallet: Boolean) {
-        wordsManager.words?.let {
-            walletManager.initWallets(it, appConfigProvider.enabledCoins, newWallet, wordsManager.walletId)
-        } ?: walletManager.clearWallets()
+    override fun clear() {
+        coins = listOf()
+        coinStorage.deleteAll()
     }
-
 }

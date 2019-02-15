@@ -9,19 +9,24 @@ object RestoreModule {
 
     interface IView {
         fun showError(error: Int)
+        fun showConfirmationDialog()
     }
 
     interface IViewDelegate {
         fun restoreDidClick(words: List<String>)
+        fun didConfirm(words: List<String>)
     }
 
     interface IInteractor {
         fun restore(words: List<String>)
+        fun validate(words: List<String>)
     }
 
     interface IInteractorDelegate {
         fun didRestore()
         fun didFailToRestore(exception: Exception)
+        fun didFailToValidate(exception: Exception)
+        fun didValidate()
     }
 
     interface IRouter {
@@ -34,7 +39,7 @@ object RestoreModule {
     }
 
     fun init(view: RestoreViewModel, router: IRouter, keystoreSafeExecute: IKeyStoreSafeExecute) {
-        val interactor = RestoreInteractor(App.wordsManager, App.localStorage, keystoreSafeExecute)
+        val interactor = RestoreInteractor(App.authManager, App.wordsManager, App.localStorage, keystoreSafeExecute)
         val presenter = RestorePresenter(interactor, router)
 
         view.delegate = presenter
