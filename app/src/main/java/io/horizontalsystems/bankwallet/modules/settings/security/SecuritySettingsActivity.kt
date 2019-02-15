@@ -121,6 +121,10 @@ class SecuritySettingsActivity : BaseActivity(), BottomConfirmAlert.Listener {
             startActivity(intent)
         })
 
+        viewModel.showPinUnlockLiveEvent.observe(this, Observer {
+            PinModule.startForUnlock()
+        })
+
     }
 
     override fun onConfirmationSuccess() {

@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="?PinScreenBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
@@ -32,14 +33,14 @@
             android:id="@+id/pinPagesRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/numPadItems"
+            app:layout_constraintBottom_toTopOf="@+id/numPadItemsRecyclerView"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             />
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/numPadItems"
+            android:id="@+id/numPadItemsRecyclerView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
@@ -63,7 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
-            android:src="@drawable/ic_blocked"
+            android:src="?BlockScreenLockIcon"
             app:layout_constraintBottom_toTopOf="@+id/blockedScreenMessage"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.receive
 import android.support.v4.app.FragmentActivity
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.receive.viewitems.AddressItem
-import io.horizontalsystems.bankwallet.modules.transactions.Coin
+import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 
 object ReceiveModule {
@@ -16,7 +16,8 @@ object ReceiveModule {
 
     interface IViewDelegate {
         fun viewDidLoad()
-        fun onCopyClick(index: Int)
+        fun onShareClick(index: Int)
+        fun onAddressClick(index: Int)
     }
 
     interface IInteractor {
@@ -30,17 +31,21 @@ object ReceiveModule {
         fun didCopyToClipboard()
     }
 
-    fun init(view: ReceiveViewModel, coin: Coin?) {
-        val interactor = ReceiveInteractor(coin, App.walletManager, TextHelper)
-        val presenter = ReceivePresenter(interactor)
+    interface IRouter{
+        fun shareAddress(address: String)
+    }
+
+    fun init(coinCode: CoinCode?, view: ReceiveViewModel, router: IRouter) {
+        val interactor = ReceiveInteractor(coinCode, App.adapterManager, TextHelper)
+        val presenter = ReceivePresenter(interactor, router)
 
         view.delegate = presenter
         presenter.view = view
         interactor.delegate = presenter
     }
 
-    fun start(activity: FragmentActivity, coin: Coin) {
-        ReceiveFragment.show(activity, coin)
+    fun start(activity: FragmentActivity, coinCode: CoinCode) {
+        ReceiveFragment.show(activity, coinCode)
     }
 
 }

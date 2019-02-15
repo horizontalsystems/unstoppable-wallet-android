@@ -3,23 +3,27 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ILockManager
 import io.horizontalsystems.bankwallet.core.ISecuredStorage
-import io.horizontalsystems.bankwallet.core.IWordsManager
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
+import io.reactivex.subjects.PublishSubject
 import java.util.*
-
-
 
 class LockManager(
         private val securedStorage: ISecuredStorage,
-        private val wordsManager: IWordsManager): ILockManager {
+        private val authManager: AuthManager) : ILockManager {
 
     private val lockTimeout: Double = 60.0
 
+    override val lockStateUpdatedSignal: PublishSubject<Unit> = PublishSubject.create()
+
     override var isLocked: Boolean = false
+        set(value) {
+            field = value
+            lockStateUpdatedSignal.onNext(Unit)
+        }
 
     override fun didEnterBackground() {
-        if (!wordsManager.isLoggedIn || isLocked) {
+        if (!authManager.isLoggedIn || isLocked) {
             return
         }
 
@@ -27,7 +31,7 @@ class LockManager(
     }
 
     override fun willEnterForeground() {
-        if (!wordsManager.isLoggedIn || isLocked || securedStorage.pinIsEmpty()) {
+        if (!authManager.isLoggedIn || isLocked || securedStorage.pinIsEmpty()) {
             return
         }
 

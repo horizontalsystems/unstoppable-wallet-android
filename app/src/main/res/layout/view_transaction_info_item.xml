@@ -23,83 +23,63 @@
         tools:text="From"
         />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="0dp"
-        android:layout_height="28dp"
-        android:max="100"
-        android:progressDrawable="@drawable/transaction_progress"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/valueWrapper"
-        app:layout_constraintEnd_toEndOf="@+id/valueWrapper"
-        app:layout_constraintStart_toStartOf="@+id/valueWrapper"
-        app:layout_constraintTop_toTopOf="@+id/valueWrapper"
-        />
-
-    <LinearLayout
-        android:id="@+id/valueWrapper"
+    <ImageView
+        android:id="@+id/statusIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="4dp"
-        android:background="@drawable/text_grey_background"
-        android:minHeight="27dp"
-        android:orientation="horizontal"
+        android:src="@drawable/pending"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        >
+        />
 
-        <ImageView
-            android:id="@+id/valueLeftIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="8dp"
-            android:src="@drawable/pending"
-            android:visibility="gone"
-            />
+    <io.horizontalsystems.bankwallet.ui.extensions.AddressView
+        android:id="@+id/addressView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="48dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@+id/txtTitle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="3dp"
-            android:gravity="end"
-            android:orientation="vertical"
-            >
+    <TextView
+        android:id="@+id/valueText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="4dp"
+        android:textColor="?BottomDialogTextColor"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="June 6, 2019, 15:02"
+        />
 
-            <TextView
-                android:id="@+id/txtValueTitle"
-                style="@style/TransactionInfoFieldValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="middle"
-                android:maxWidth="150dp"
-                android:singleLine="true"
-                android:textAlignment="textEnd"
-                tools:text="1AYHMDV1XR8DHDNKBKJBDEEF8DFA8KMNBBYDF9PQ"
-                />
-
-            <TextView
-                android:id="@+id/txtValueSubtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/grey"
-                android:textSize="14sp"
-                android:visibility="gone"
-                tools:text="Subtitle"
-                />
-        </LinearLayout>
-    </LinearLayout>
+    <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoStatusView
+        android:id="@+id/transactionStatusView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="4dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <View
         android:id="@+id/border"
         android:layout_width="0dp"
         android:layout_height="0.5dp"
-        android:background="@color/grey_20"
+        android:background="@color/steel_20"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

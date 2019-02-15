@@ -42,11 +42,7 @@ class BackupConfirmFragment : Fragment() {
             showError(it)
         })
 
-        buttonBack.setOnClickListener {
-            viewModel.delegate.hideConfirmationDidClick()
-        }
-
-        buttonSubmit.setOnClickListener {
+        viewModel.validateWordsLiveEvent.observe(this, Observer {
             if (editWord1.text?.isEmpty() == true || editWord2.text?.isEmpty() == true) {
                 showError(R.string.Backup_Confirmation_Description)
             } else {
@@ -55,7 +51,7 @@ class BackupConfirmFragment : Fragment() {
                                 wordIndex2 to editWord2.text.toString())
                 )
             }
-        }
+        })
     }
 
     private fun showError(errorMsgId: Int?) {

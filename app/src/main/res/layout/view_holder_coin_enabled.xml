@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:background="@drawable/clickable_manage_coin_bg"
+    android:clickable="true"
+    android:focusable="true"
+    >
+
+    <ImageView
+        android:id="@+id/minusIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:src="@drawable/remove"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/coinTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/noto_sans"
+        android:textColor="?TitleColor"
+        android:textSize="16sp"
+        android:ellipsize="end"
+        android:layout_marginEnd="16dp"
+        android:maxLines="1"
+        app:layout_constraintBottom_toTopOf="@+id/coinCode"
+        app:layout_constraintStart_toEndOf="@+id/minusIcon"
+        app:layout_constraintEnd_toStartOf="@+id/coinIcon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Bitcoin Cash with very long name"
+        />
+
+    <TextView
+        android:id="@+id/coinCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:textColor="@color/grey"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/coinTitle"
+        app:layout_constraintTop_toBottomOf="@+id/coinTitle"
+        tools:text="BTC"
+        />
+
+    <io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
+        android:id="@+id/coinIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/dragIcon"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/dragIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:src="@drawable/drag"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+</android.support.constraint.ConstraintLayout>

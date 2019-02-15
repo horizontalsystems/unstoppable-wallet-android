@@ -1,16 +1,17 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.app.Application
-import android.arch.persistence.room.Room
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import com.facebook.drawee.backends.pipeline.Fresco
 import com.squareup.leakcanary.LeakCanary
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bankwallet.core.storage.RatesRepository
-import io.horizontalsystems.bankwallet.core.storage.TransactionRepository
+import io.horizontalsystems.bankwallet.core.storage.StorableCoinsRepository
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
 import io.horizontalsystems.bitcoinkit.BitcoinKit
 import io.horizontalsystems.ethereumkit.EthereumKit
 import java.util.*
@@ -25,6 +26,7 @@ class App : Application() {
         lateinit var localStorage: ILocalStorage
         lateinit var encryptionManager: EncryptionManager
         lateinit var wordsManager: WordsManager
+        lateinit var authManager: AuthManager
         lateinit var randomManager: IRandomProvider
         lateinit var networkManager: INetworkManager
         lateinit var currencyManager: ICurrencyManager
@@ -34,18 +36,20 @@ class App : Application() {
         lateinit var pinManager: IPinManager
         lateinit var lockManager: ILockManager
         lateinit var appConfigProvider: IAppConfigProvider
-        lateinit var walletManager: IWalletManager
+        lateinit var adapterManager: IAdapterManager
         lateinit var coinManager: CoinManager
 
         lateinit var rateSyncer: RateSyncer
         lateinit var rateManager: RateManager
-        lateinit var periodicTimer: PeriodicTimer
         lateinit var networkAvailabilityManager: NetworkAvailabilityManager
-        lateinit var transactionRateSyncer: ITransactionRateSyncer
-        lateinit var transactionManager: TransactionManager
         lateinit var appDatabase: AppDatabase
-        lateinit var transactionStorage: ITransactionRecordStorage
         lateinit var rateStorage: IRateStorage
+        lateinit var coinsStorage: ICoinStorage
+        lateinit var transactionInfoFactory: FullTransactionInfoFactory
+        lateinit var transactionDataProviderManager: TransactionDataProviderManager
+        lateinit var appCloseManager: AppCloseManager
+        lateinit var ethereumKitManager: IEthereumKitManager
+        lateinit var numberFormatter: IAppNumberFormatter
 
         val testMode = true
 
@@ -76,37 +80,45 @@ class App : Application() {
 
         val fallbackLanguage = Locale("en")
 
+        appConfigProvider = AppConfigProvider()
         backgroundManager = BackgroundManager(this)
         encryptionManager = EncryptionManager()
         secureStorage = SecuredStorageManager(encryptionManager)
+        ethereumKitManager = EthereumKitManager(appConfigProvider)
+
+        appDatabase = AppDatabase.getInstance(this)
+        rateStorage = RatesRepository(appDatabase)
+        coinsStorage = StorableCoinsRepository(appDatabase)
         localStorage = LocalStorageManager()
-        wordsManager = WordsManager(localStorage, secureStorage)
+
+        networkManager = NetworkManager(appConfigProvider)
+        rateManager = RateManager(rateStorage, networkManager)
+        coinManager = CoinManager(appConfigProvider, coinsStorage)
+        authManager = AuthManager(secureStorage, localStorage, coinManager, rateManager, ethereumKitManager)
+
+        wordsManager = WordsManager(localStorage)
         randomManager = RandomProvider()
-        networkManager = NetworkManager()
         systemInfoManager = SystemInfoManager()
         pinManager = PinManager(secureStorage)
-        lockManager = LockManager(secureStorage, wordsManager)
-        appConfigProvider = AppConfigProvider()
+        lockManager = LockManager(secureStorage, authManager)
         languageManager = LanguageManager(localStorage, appConfigProvider, fallbackLanguage)
         currencyManager = CurrencyManager(localStorage, appConfigProvider)
-        walletManager = WalletManager(AdapterFactory())
-        coinManager = CoinManager(wordsManager, walletManager, appConfigProvider)
+        numberFormatter = NumberFormatter(languageManager)
 
         networkAvailabilityManager = NetworkAvailabilityManager()
-        periodicTimer = PeriodicTimer(delay = 3 * 60 * 1000)
-        rateSyncer = RateSyncer(networkManager, periodicTimer)
 
-        appDatabase = Room.databaseBuilder(this, AppDatabase::class.java, "dbBankWallet").build()
-        transactionStorage = TransactionRepository(appDatabase)
+        adapterManager = AdapterManager(coinManager, authManager, AdapterFactory(appConfigProvider, localStorage, ethereumKitManager))
+        rateSyncer = RateSyncer(rateManager, adapterManager, currencyManager, networkAvailabilityManager)
 
-        rateStorage = RatesRepository(appDatabase)
-        rateManager = RateManager(rateStorage, rateSyncer, walletManager, currencyManager, wordsManager, networkAvailabilityManager, periodicTimer)
+        appCloseManager = AppCloseManager()
 
-        rateSyncer.delegate = rateManager
+        transactionDataProviderManager = TransactionDataProviderManager(appConfigProvider, localStorage)
+        transactionInfoFactory = FullTransactionInfoFactory(networkManager, transactionDataProviderManager)
 
-        transactionRateSyncer = TransactionRateSyncer(transactionStorage, networkManager)
-        transactionManager = TransactionManager(transactionStorage, transactionRateSyncer, walletManager, currencyManager, wordsManager, networkAvailabilityManager)
+        authManager.adapterManager = adapterManager
+        authManager.pinManager = pinManager
 
+        Fresco.initialize(this)
     }
 
 }

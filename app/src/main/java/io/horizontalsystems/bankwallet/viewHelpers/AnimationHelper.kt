@@ -28,7 +28,7 @@ object AnimationHelper {
         }
 
         // 1dp/ms
-        a.duration = (((targetHeight / v.context.resources.displayMetrics.density)) * 4).toLong()
+        a.duration = (((targetHeight / v.context.resources.displayMetrics.density)) * 2).toLong()
         v.startAnimation(a)
     }
 
@@ -54,7 +54,7 @@ object AnimationHelper {
         }
 
         // 1dp/ms
-        a.duration = (((initialHeight / v.context.resources.displayMetrics.density)) * 4).toLong()
+        a.duration = (((initialHeight / v.context.resources.displayMetrics.density)) * 2).toLong()
         v.startAnimation(a)
     }
 }

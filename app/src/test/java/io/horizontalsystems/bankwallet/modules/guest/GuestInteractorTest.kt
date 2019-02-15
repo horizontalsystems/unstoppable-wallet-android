@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.guest
 import com.nhaarman.mockito_kotlin.KArgumentCaptor
 import com.nhaarman.mockito_kotlin.argumentCaptor
 import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
+import io.horizontalsystems.bankwallet.core.managers.AuthManager
 import io.horizontalsystems.bankwallet.core.managers.WordsManager
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
 import org.junit.Before
@@ -13,10 +14,11 @@ import org.mockito.Mockito.*
 
 class GuestInteractorTest {
 
+    private val authManager = mock(AuthManager::class.java)
     private val wordsManager = mock(WordsManager::class.java)
     private val delegate = mock(GuestModule.IInteractorDelegate::class.java)
     private val keystoreSafeExecute = Mockito.mock(IKeyStoreSafeExecute::class.java)
-    private val interactor = GuestInteractor(wordsManager, keystoreSafeExecute)
+    private val interactor = GuestInteractor(authManager, wordsManager, keystoreSafeExecute)
 
     @Captor
     private val actionRunnableCaptor: KArgumentCaptor<Runnable> = argumentCaptor()

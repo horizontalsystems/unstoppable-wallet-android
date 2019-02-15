@@ -5,26 +5,31 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import io.horizontalsystems.bankwallet.core.App
 import io.reactivex.subjects.PublishSubject
 
 class NetworkAvailabilityManager {
 
-    val stateSubject: PublishSubject<Boolean> = PublishSubject.create()
     private val connectivityManager = App.instance.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-    val activeNetworkInfo: NetworkInfo?
-        get() = connectivityManager.activeNetworkInfo
-
-    val isNetworkAvailable: Boolean
-        get() = activeNetworkInfo?.isConnected ?: false
+    var isConnected = connectivityManager.activeNetworkInfo?.isConnected ?: false
+    val networkAvailabilitySignal = PublishSubject.create<Unit>()
 
     init {
         App.instance.registerReceiver(object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
-                stateSubject.onNext(isNetworkAvailable)
+                onUpdateStatus()
             }
         }, IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"))
     }
+
+    private fun onUpdateStatus() {
+        val newIsConnected = connectivityManager.activeNetworkInfo?.isConnected ?: false
+
+        if (isConnected != newIsConnected) {
+            isConnected = newIsConnected
+            networkAvailabilitySignal.onNext(Unit)
+        }
+    }
+
 }

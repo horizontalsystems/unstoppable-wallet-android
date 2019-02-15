@@ -22,6 +22,7 @@ object MainSettingsModule {
         fun didSwitchLightMode(lightMode: Boolean)
         fun didTapAbout()
         fun didTapAppLink()
+        fun onClear()
     }
 
     interface IMainSettingsInteractor {
@@ -31,6 +32,7 @@ object MainSettingsModule {
         var appVersion: String
         fun getLightMode(): Boolean
         fun setLightMode(lightMode: Boolean)
+        fun clear()
     }
 
     interface IMainSettingsInteractorDelegate {

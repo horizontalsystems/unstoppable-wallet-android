@@ -1,27 +1,33 @@
 package io.horizontalsystems.bankwallet.core.storage
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 import io.horizontalsystems.bankwallet.entities.Rate
-import io.horizontalsystems.bankwallet.modules.transactions.Coin
+import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.Flowable
-import io.reactivex.Maybe
+import io.reactivex.Single
 
 @Dao
 interface RatesDao {
 
-    @Query("SELECT * FROM Rate WHERE coin = :coin AND currencyCode = :currencyCode")
-    fun getRate(coin: Coin, currencyCode: String): Maybe<Rate>
+    @Query("SELECT * FROM Rate WHERE coinCode = :coinCode AND currencyCode = :currencyCode AND isLatest = 1")
+    fun getLatestRate(coinCode: CoinCode, currencyCode: String): Flowable<Rate>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(rate: Rate)
 
-    @Query("SELECT * FROM Rate")
-    fun getAll(): Flowable<List<Rate>>
+    @Delete
+    fun delete(rate: Rate)
+
+    @Query("DELETE FROM Rate WHERE isLatest = 1 AND coinCode = :coinCode AND currencyCode = :currencyCode")
+    fun deleteLatest(coinCode: CoinCode, currencyCode: String)
 
     @Query("DELETE FROM Rate")
     fun deleteAll()
+
+    @Query("SELECT * FROM Rate WHERE coinCode = :coinCode AND currencyCode = :currencyCode AND timestamp = :timestamp AND isLatest = 0")
+    fun getRate(coinCode: CoinCode, currencyCode: String, timestamp: Long): Flowable<List<Rate>>
+
+    @Query("SELECT * FROM Rate WHERE value = 0.0 AND currencyCode = :currencyCode AND isLatest = 0")
+    fun getZeroRates(currencyCode: String): Single<List<Rate>>
 
 }

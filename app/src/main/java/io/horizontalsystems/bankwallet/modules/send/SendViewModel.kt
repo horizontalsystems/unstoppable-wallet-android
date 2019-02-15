@@ -3,9 +3,9 @@ package io.horizontalsystems.bankwallet.modules.send
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
-import io.horizontalsystems.bankwallet.modules.transactions.Coin
+import io.horizontalsystems.bankwallet.entities.Coin
 
-class SendViewModel : ViewModel(), SendModule.IRouter, SendModule.IView {
+class SendViewModel : ViewModel(), SendModule.IView {
 
     lateinit var delegate: SendModule.IViewDelegate
 
@@ -16,11 +16,12 @@ class SendViewModel : ViewModel(), SendModule.IRouter, SendModule.IView {
     val switchButtonEnabledLiveData = MutableLiveData<Boolean>()
     val addressInfoLiveData = MutableLiveData<SendModule.AddressInfo>()
     val dismissWithSuccessLiveEvent = SingleLiveEvent<Unit>()
-    val primaryFeeAmountInfoLiveData = MutableLiveData<SendModule.AmountInfo>()
-    val secondaryFeeAmountInfoLiveData = MutableLiveData<SendModule.AmountInfo>()
+    val feeInfoLiveData = MutableLiveData<SendModule.FeeInfo>()
     val errorLiveData = MutableLiveData<Throwable>()
     val sendConfirmationViewItemLiveData = MutableLiveData<SendModule.SendConfirmationViewItem>()
     val showConfirmationLiveEvent = SingleLiveEvent<Unit>()
+    val pasteButtonEnabledLiveData = MutableLiveData<Boolean>()
+    var decimalSize: Int? = null
 
     fun init(coin: String) {
         hintInfoLiveData.value = null
@@ -29,17 +30,24 @@ class SendViewModel : ViewModel(), SendModule.IRouter, SendModule.IView {
         amountInfoLiveData.value = null
         switchButtonEnabledLiveData.value = null
         addressInfoLiveData.value = null
-        primaryFeeAmountInfoLiveData.value = null
-        secondaryFeeAmountInfoLiveData.value = null
+        feeInfoLiveData.value = null
         errorLiveData.value = null
         sendConfirmationViewItemLiveData.value = null
 
-        SendModule.init(this, this, coin)
+        SendModule.init(this, coin)
         delegate.onViewDidLoad()
+    }
+
+    override fun setPasteButtonState(enabled: Boolean) {
+        pasteButtonEnabledLiveData.value = enabled
     }
 
     override fun setCoin(coin: Coin) {
         coinLiveData.value = coin
+    }
+
+    override fun setDecimal(decimal: Int) {
+        decimalSize = decimal
     }
 
     override fun setAmountInfo(amountInfo: SendModule.AmountInfo?) {
@@ -58,12 +66,8 @@ class SendViewModel : ViewModel(), SendModule.IRouter, SendModule.IView {
         addressInfoLiveData.value = addressInfo
     }
 
-    override fun setPrimaryFeeInfo(primaryFeeInfo: SendModule.AmountInfo?) {
-        primaryFeeAmountInfoLiveData.value = primaryFeeInfo
-    }
-
-    override fun setSecondaryFeeInfo(secondaryFeeInfo: SendModule.AmountInfo?) {
-        secondaryFeeAmountInfoLiveData.value = secondaryFeeInfo
+    override fun setFeeInfo(feeInfo: SendModule.FeeInfo?) {
+        feeInfoLiveData.value = feeInfo
     }
 
     override fun setSendButtonEnabled(sendButtonEnabled: Boolean) {
@@ -81,6 +85,10 @@ class SendViewModel : ViewModel(), SendModule.IRouter, SendModule.IView {
 
     override fun dismissWithSuccess() {
         dismissWithSuccessLiveEvent.call()
+    }
+
+    override fun onCleared() {
+        delegate.onClear()
     }
 
 }

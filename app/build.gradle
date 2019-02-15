@@ -11,7 +11,7 @@ androidExtensions {
 }
 
 def computeVersionCode() {
-    ext.buildNumber = System.getenv("BUILD_NUMBER") ?: 0
+    ext.buildNumber = System.getenv("BUILD_NUMBER") ?: 1
     return "$buildNumber".toInteger()
 }
 
@@ -26,6 +26,12 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         resValue "string", "localizations", buildProperties.get("localizations")
+
+        kapt {
+            arguments {
+                arg("room.schemaLocation", "$projectDir/schemas".toString())
+            }
+        }
     }
     buildTypes {
         debug {
@@ -42,15 +48,15 @@ android {
     flavorDimensions "network"
     productFlavors {
         devTestnet {
-            resValue "string", "enabled_coins", buildProperties.get("enabled_coins_testnet")
+            buildConfigField "boolean", "testMode", "true"
             applicationIdSuffix ".dev.testnet"
         }
         devMainnet {
-            resValue "string", "enabled_coins", buildProperties.get("enabled_coins_mainnet")
+            buildConfigField "boolean", "testMode", "false"
             applicationIdSuffix ".dev"
         }
         productionMainnet {
-            resValue "string", "enabled_coins", buildProperties.get("enabled_coins_mainnet")
+            buildConfigField "boolean", "testMode", "false"
         }
     }
     compileOptions {
@@ -93,9 +99,9 @@ dependencies {
     implementation 'com.android.support:design:28.0.0'
 
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
-// Because RxAndroid releases are few and far between, it is recommended you also
-// explicitly depend on RxJava's latest version for bug fixes and new features.
-// (see https://github.com/ReactiveX/RxJava/releases for latest 2.x.x version)
+    // Because RxAndroid releases are few and far between, it is recommended you also
+    // explicitly depend on RxJava's latest version for bug fixes and new features.
+    // (see https://github.com/ReactiveX/RxJava/releases for latest 2.x.x version)
     implementation 'io.reactivex.rxjava2:rxjava:2.1.14'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
@@ -108,14 +114,17 @@ dependencies {
 
     api 'com.journeyapps:zxing-android-embedded:3.6.0'
 
+    // For images
+    implementation 'com.facebook.fresco:fresco:1.12.0'
+
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.2'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
 
     // BitcoinKit
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:0.1.1'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:15b5ff5'
 
     // EthereumKit
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:0.1.0'
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:f7c42ba'
 
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
@@ -132,4 +141,3 @@ dependencies {
 configurations.all {
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
-

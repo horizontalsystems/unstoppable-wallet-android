@@ -140,5 +140,10 @@ class UnlockPinPresenterTest {
         verify(view, never()).showAttemptsLeft(any(), any())
     }
 
+    @Test
+    fun onBackPressed() {
+        presenter.onBackPressed()
+        verify(router).closeApplication()
+    }
 
 }

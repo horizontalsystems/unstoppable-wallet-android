@@ -4,18 +4,19 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.modules.receive.viewitems.AddressItem
-import io.horizontalsystems.bankwallet.modules.transactions.Coin
+import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 
-class ReceiveViewModel : ViewModel(), ReceiveModule.IView {
+class ReceiveViewModel : ViewModel(), ReceiveModule.IView, ReceiveModule.IRouter {
 
     lateinit var delegate: ReceiveModule.IViewDelegate
 
     val showAddressesLiveData = MutableLiveData<List<AddressItem>>()
     val showErrorLiveData = MutableLiveData<Int>()
     val showCopiedLiveEvent = SingleLiveEvent<Unit>()
+    val shareAddressLiveEvent = SingleLiveEvent<String>()
 
-    fun init(coin: Coin) {
-        ReceiveModule.init(this, coin)
+    fun init(coinCode: CoinCode) {
+        ReceiveModule.init(coinCode, this, this)
         delegate.viewDidLoad()
     }
 
@@ -31,4 +32,7 @@ class ReceiveViewModel : ViewModel(), ReceiveModule.IView {
         showCopiedLiveEvent.call()
     }
 
+    override fun shareAddress(address: String) {
+        shareAddressLiveEvent.value = address
+    }
 }

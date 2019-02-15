@@ -9,22 +9,20 @@ object BackupModule {
 
     interface IView {
         fun showWords(words: List<String>)
-        fun showConfirmationWithIndexes(indexes: List<Int>)
-        fun hideWords()
-        fun hideConfirmation()
+        fun showConfirmationWords(indexes: List<Int>)
         fun showConfirmationError()
         fun showTermsConfirmDialog()
+
+        fun loadPage(page: Int)
+        fun validateWords()
     }
 
     interface IViewDelegate {
-        fun showWordsDidClick()
-        fun hideWordsDidClick()
-        fun showConfirmationDidClick()
-        fun hideConfirmationDidClick()
+        fun viewDidLoad()
+        fun onNextClick()
+        fun onBackClick()
         fun validateDidClick(confirmationWords: HashMap<Int, String>)
         fun onTermsConfirm()
-        fun onLaterClick()
-        fun wordsListViewLoaded()
     }
 
     interface IInteractor {
@@ -44,7 +42,6 @@ object BackupModule {
 
     interface IRouter {
         fun navigateToSetPin()
-        fun openWordsListScreen()
         fun close()
     }
 
@@ -55,14 +52,34 @@ object BackupModule {
     }
 
     fun init(view: BackupViewModel, router: IRouter, keystoreSafeExecute: IKeyStoreSafeExecute, dismissMode: BackupPresenter.DismissMode) {
-        val interactor = BackupInteractor(App.wordsManager, App.randomManager, App.localStorage, keystoreSafeExecute)
-        val presenter = BackupPresenter(interactor, router, dismissMode)
+        val interactor = BackupInteractor(App.authManager, App.wordsManager, App.randomManager, App.localStorage, keystoreSafeExecute)
+        val presenter = BackupPresenter(interactor, router, dismissMode, BackupModuleState())
 
         presenter.view = view
 
         interactor.delegate = presenter
 
         view.delegate = presenter
+    }
+
+    class BackupModuleState {
+        private val pagesCount: Int = 3
+        var currentPage: Int = 0
+
+        fun canLoadNextPage(): Boolean {
+            if ((currentPage + 1) < pagesCount) {
+                currentPage++
+                return true
+            }
+            return false
+        }
+        fun canLoadPrevPage(): Boolean{
+            if (currentPage > 0) {
+                currentPage--
+                return true
+            }
+            return false
+        }
     }
 
 }
