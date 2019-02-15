@@ -45,6 +45,14 @@ class NumberFormatter(private val languageManager: ILanguageManager): IAppNumber
         return result
     }
 
+    override fun formatForTransactions(coinValue: CoinValue): String? {
+        var formatted = format(coinValue)
+        if (coinValue.value < BigDecimal.ZERO) {
+            formatted = "- $formatted"
+        }
+        return formatted
+    }
+
     override fun format(currencyValue: CurrencyValue, showNegativeSign: Boolean, realNumber: Boolean, canUseLessSymbol: Boolean): String? {
 
         val absValue = currencyValue.value.abs()
