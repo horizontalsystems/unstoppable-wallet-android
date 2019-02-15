@@ -31,7 +31,7 @@ object DateHelper {
     fun getShortDateForTransaction(date: Date): String = if (isThisYear(date)) {
         formatDate(date, "MMM d")
     } else {
-        formatDate(date, "MM/dd/yyyy")
+        formatDate(date, "MMM dd, yyyy")
     }
 
     fun formatDateInUTC(timestamp: Long, dateFormat: String): String {

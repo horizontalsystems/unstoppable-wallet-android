@@ -1,9 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.settings.main
 
+import com.nhaarman.mockito_kotlin.doReturn
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
-import com.nhaarman.mockito_kotlin.*
 import io.reactivex.subjects.PublishSubject
 import org.junit.After
 import org.junit.Assert
@@ -23,7 +26,7 @@ class MainSettingsInteractorTest {
 
     private lateinit var interactor: MainSettingsInteractor
 
-    private val backedUpSubject = PublishSubject.create<Boolean>()
+    private val backedUpSignal = PublishSubject.create<Unit>()
 
     val currentLanguage : Locale = Locale("en")
 
@@ -38,7 +41,7 @@ class MainSettingsInteractorTest {
 
         wordsManager = mock {
             on { isBackedUp } doReturn true
-            on { backedUpSubject } doReturn backedUpSubject
+            on { backedUpSignal } doReturn backedUpSignal
         }
 
         localStorage = mock {
@@ -55,7 +58,7 @@ class MainSettingsInteractorTest {
         }
 
         currencyManager = mock{
-            on { subject } doReturn PublishSubject.create<Currency>()
+            on { baseCurrencyUpdatedSignal } doReturn PublishSubject.create<Unit>()
             on { baseCurrency } doReturn currency
         }
 
@@ -79,7 +82,7 @@ class MainSettingsInteractorTest {
     fun isNotBackedUp() {
         wordsManager = mock {
             on { isBackedUp } doReturn false
-            on { backedUpSubject } doReturn backedUpSubject
+            on { backedUpSignal } doReturn backedUpSignal
         }
         interactor = MainSettingsInteractor(localStorage, wordsManager, languageManager, sysInfoManager, currencyManager)
         interactor.delegate = delegate
@@ -127,14 +130,9 @@ class MainSettingsInteractorTest {
     }
 
     @Test
-    fun testBackedUpSubjectTrue() {
-        backedUpSubject.onNext(true)
+    fun testBackedUpSignal() {
+        backedUpSignal.onNext(Unit)
         verify(delegate).didBackup()
     }
 
-    @Test
-    fun testBackedUpSubjectFalse() {
-        backedUpSubject.onNext(false)
-        verify(delegate, never()).didBackup()
-    }
 }

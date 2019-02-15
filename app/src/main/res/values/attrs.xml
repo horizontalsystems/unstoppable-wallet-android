@@ -11,4 +11,9 @@
         <attr name="showValueBackground" format="boolean"/>
         <attr name="valueIcon" format="integer"/>
     </declare-styleable>
+    <declare-styleable name="FullTransactionInfoItemView">
+        <attr name="infoTitle" format="string"/>
+        <attr name="infoValue" format="string"/>
+        <attr name="infoValueIcon" format="integer"/>
+    </declare-styleable>
 </resources>

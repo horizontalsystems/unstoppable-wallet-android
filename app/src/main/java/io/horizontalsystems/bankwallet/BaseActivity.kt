@@ -8,6 +8,7 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.UserNotAuthenticatedException
 import android.support.v7.app.AppCompatActivity
@@ -15,6 +16,7 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
+import io.horizontalsystems.bankwallet.lib.AlertDialogFragment
 import java.util.*
 
 abstract class BaseActivity : AppCompatActivity() {
@@ -77,6 +79,20 @@ abstract class BaseActivity : AppCompatActivity() {
 
     protected fun hideSoftKeyboard() {
         getSystemService(InputMethodManager::class.java)?.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+    }
+
+    fun showCustomKeyboardAlert() {
+        AlertDialogFragment.newInstance(R.string.Alert_TitleWarning, R.string.Alert_CustomKeyboardIsUsed, R.string.Alert_Ok,
+                object : AlertDialogFragment.Listener {
+                    override fun onButtonClick() {
+                        val imeManager = App.instance.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imeManager.showInputMethodPicker()
+
+                        Handler().postDelayed({
+                            onBackPressed()
+                        }, (1 * 750).toLong())
+                    }
+                }).show(supportFragmentManager, "custom_keyboard_alert")
     }
 
     private fun updateBaseContextLocale(context: Context): Context {

@@ -1,76 +1,90 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.entities.LatestRate
+import io.horizontalsystems.bankwallet.core.INetworkManager
+import io.horizontalsystems.bankwallet.core.IRateStorage
 import io.horizontalsystems.bankwallet.entities.Rate
-import io.reactivex.Maybe
+import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.schedulers.Schedulers
+import java.math.BigDecimal
 
-class RateManager(
-        private val storage: IRateStorage,
-        private val syncer: RateSyncer,
-        private val walletManager: IWalletManager,
-        private val currencyManager: ICurrencyManager,
-        private val wordsManager: IWordsManager,
-        networkAvailabilityManager: NetworkAvailabilityManager,
-        timer: PeriodicTimer) : IPeriodicTimerDelegate, IRateSyncerDelegate {
-
-    val subject: PublishSubject<Boolean> = PublishSubject.create()
-    val latestRates = mutableMapOf<String, MutableMap<String, LatestRate>>()
+class RateManager(private val storage: IRateStorage, private val networkManager: INetworkManager) {
 
     private var disposables: CompositeDisposable = CompositeDisposable()
+    private var refreshDisposables: CompositeDisposable = CompositeDisposable()
 
-    init {
-        timer.delegate = this
+    fun refreshLatestRates(coinCodes: List<String>, currencyCode: String) {
+        refreshDisposables.clear()
 
-        disposables.add(walletManager.walletsSubject.subscribe {
-            updateRates()
-        })
+        refreshDisposables.add(Flowable.mergeDelayError(
+                coinCodes.map { coinCode ->
+                    networkManager.getLatestRate(coinCode, currencyCode)
+                            .map {
+                                Rate(coinCode, currencyCode, it.value, it.timestamp, true)
+                            }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe({
+                    storage.saveLatest(it)
+                }, {
 
-        disposables.add(currencyManager.subject.subscribe {
-            updateRates()
-        })
+                }))
+    }
 
-        disposables.add(networkAvailabilityManager.stateSubject.subscribe { connected ->
-            if (connected) {
-                updateRates()
-            }
-        })
-
-        disposables.add(storage.getAll().subscribe {
-            subject.onNext(true)
-        })
-
-        disposables.add(wordsManager.loggedInSubject
-                .subscribe { logInState ->
-                    if (logInState == LogInState.LOGOUT) {
-                        storage.deleteAll()
+    fun refreshZeroRates(currencyCode: String) {
+        disposables.add(storage.zeroRatesObservable(currencyCode)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe { rates ->
+                    rates.forEach { rate ->
+                        retrieveFromNetwork(rate.coinCode, rate.currencyCode, rate.timestamp)
                     }
+                }
+        )
+    }
+
+    fun rateValueObservable(coinCode: CoinCode, currencyCode: String, timestamp: Long): Flowable<BigDecimal> {
+        return storage.rateObservable(coinCode, currencyCode, timestamp)
+                .flatMap {
+                    val rate = it.firstOrNull()
+
+                    if (rate == null) {
+                        storage.save(Rate(coinCode, currencyCode, BigDecimal.ZERO, timestamp, false))
+                        retrieveFromNetwork(coinCode, currencyCode, timestamp)
+                    }
+
+                    if (rate != null && rate.value != BigDecimal.ZERO) {
+                        Flowable.just(rate.value)
+                    } else if (timestamp < ((System.currentTimeMillis() / 1000) - 3600)) {
+                        Flowable.empty()
+                    } else {
+                        storage.latestRateObservable(coinCode, currencyCode)
+                                .flatMap {
+                                    if (it.expired) {
+                                        Flowable.empty<BigDecimal>()
+                                    } else {
+                                        Flowable.just(it.value)
+                                    }
+                                }
+
+                    }
+                }
+                .distinctUntilChanged()
+    }
+
+    private fun retrieveFromNetwork(coinCode: CoinCode, currencyCode: String, timestamp: Long) {
+        disposables.add(networkManager.getRate(coinCode, currencyCode, timestamp)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe { rateValue ->
+                    storage.save(Rate(coinCode, currencyCode, rateValue, timestamp, false))
                 })
     }
 
-    fun rate(coin: String, currencyCode: String): Maybe<Rate> {
-        return storage.rate(coin, currencyCode)
+    fun clear() {
+        storage.deleteAll()
     }
 
-    private fun updateRates() {
-        val coins = walletManager.wallets.map { it.coin }
-        val currencyCode = currencyManager.baseCurrency.code
-
-        syncer.sync(coins = coins, currencyCode = currencyCode)
-    }
-
-    override fun didSync(coin: String, currencyCode: String, latestRate: LatestRate) {
-        if (latestRates[coin] == null) {
-            latestRates[coin] = mutableMapOf()
-        }
-        latestRates[coin]?.set(currencyCode, latestRate)
-
-        storage.save(latestRate = latestRate, coin = coin, currencyCode = currencyCode)
-    }
-
-    override fun onFire() {
-        updateRates()
-    }
 }

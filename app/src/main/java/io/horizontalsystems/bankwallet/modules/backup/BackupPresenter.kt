@@ -2,7 +2,11 @@ package io.horizontalsystems.bankwallet.modules.backup
 
 import java.util.*
 
-class BackupPresenter(private val interactor: BackupModule.IInteractor, private val router: BackupModule.IRouter, private val dismissMode: DismissMode) : BackupModule.IViewDelegate, BackupModule.IInteractorDelegate {
+class BackupPresenter(
+        private val interactor: BackupModule.IInteractor,
+        private val router: BackupModule.IRouter,
+        private val dismissMode: DismissMode,
+        private val state: BackupModule.BackupModuleState) : BackupModule.IViewDelegate, BackupModule.IInteractorDelegate {
 
     enum class DismissMode {
         SET_PIN, DISMISS_SELF
@@ -12,20 +16,28 @@ class BackupPresenter(private val interactor: BackupModule.IInteractor, private 
 
     // view delegate
 
-    override fun showWordsDidClick() {
-        router.openWordsListScreen()
+    override fun viewDidLoad() {
+        loadPage()
     }
 
-    override fun hideWordsDidClick() {
-        view?.hideWords()
+    override fun onNextClick() {
+        if (state.canLoadNextPage()) {
+            when {
+                state.currentPage == 1 -> interactor.fetchWords()
+                state.currentPage == 2 -> interactor.fetchConfirmationIndexes()
+            }
+            loadPage()
+        } else {
+            view?.validateWords()
+        }
     }
 
-    override fun showConfirmationDidClick() {
-        interactor.fetchConfirmationIndexes()
-    }
-
-    override fun hideConfirmationDidClick() {
-        view?.hideConfirmation()
+    override fun onBackClick() {
+        if (state.canLoadPrevPage()) {
+            loadPage()
+        } else {
+            dismissOrShowConfirmationDialog()
+        }
     }
 
     override fun validateDidClick(confirmationWords: HashMap<Int, String>) {
@@ -37,14 +49,6 @@ class BackupPresenter(private val interactor: BackupModule.IInteractor, private 
         dismiss()
     }
 
-    override fun onLaterClick() {
-        dismissOrShowConfirmationDialog()
-    }
-
-    override fun wordsListViewLoaded() {
-        interactor.fetchWords()
-    }
-
     // interactor delegate
 
     override fun didFetchWords(words: List<String>) {
@@ -52,11 +56,15 @@ class BackupPresenter(private val interactor: BackupModule.IInteractor, private 
     }
 
     override fun didFetchConfirmationIndexes(indexes: List<Int>) {
-        view?.showConfirmationWithIndexes(indexes)
+        view?.showConfirmationWords(indexes)
     }
 
     override fun didValidateSuccess() {
         dismissOrShowConfirmationDialog()
+    }
+
+    override fun didValidateFailure() {
+        view?.showConfirmationError()
     }
 
     private fun dismissOrShowConfirmationDialog() {
@@ -67,8 +75,8 @@ class BackupPresenter(private val interactor: BackupModule.IInteractor, private 
         }
     }
 
-    override fun didValidateFailure() {
-        view?.showConfirmationError()
+    private fun loadPage() {
+        view?.loadPage(state.currentPage)
     }
 
     private fun dismiss() = when (dismissMode) {

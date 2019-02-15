@@ -9,18 +9,20 @@ import android.view.Menu
 import android.view.MenuItem
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.Utils
 import io.horizontalsystems.bankwallet.lib.EditTextViewHolder
 import io.horizontalsystems.bankwallet.lib.WordsInputAdapter
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
+import io.horizontalsystems.bankwallet.ui.dialogs.BottomConfirmAlert
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.activity_restore_wallet.*
 
-class RestoreWalletActivity : BaseActivity() {
+class RestoreWalletActivity : BaseActivity(), BottomConfirmAlert.Listener {
 
     private lateinit var viewModel: RestoreViewModel
 
-    private val words = MutableList(12, { "" })
+    private val words = MutableList(12) { "" }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,12 +54,31 @@ class RestoreWalletActivity : BaseActivity() {
             }
         })
 
+        viewModel.showConfirmationDialogLiveEvent.observe(this, Observer {
+            val confirmationList = mutableListOf(
+                    R.string.Backup_Confirmation_Understand,
+                    R.string.Backup_Confirmation_DeleteAppWarn,
+                    R.string.Backup_Confirmation_LockAppWarn
+            )
+            BottomConfirmAlert.show(this, confirmationList, this)
+        })
+
+        recyclerInputs.layoutManager = GridLayoutManager(this, 2)
         recyclerInputs.adapter = WordsInputAdapter(object : EditTextViewHolder.WordsChangedListener {
             override fun set(position: Int, value: String) {
-                words[position] = value
+                if (isUsingNativeKeyboard()) {
+                    words[position] = value
+                }
             }
         })
-        recyclerInputs.layoutManager = GridLayoutManager(this, 2)
+    }
+
+    private fun isUsingNativeKeyboard(): Boolean {
+        if (Utils.isUsingCustomKeyboard(this)) {
+            showCustomKeyboardAlert()
+            return false
+        }
+        return true
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -82,5 +103,7 @@ class RestoreWalletActivity : BaseActivity() {
         }
     }
 
+    override fun onConfirmationSuccess() {
+        viewModel.delegate.didConfirm(words)
+    }
 }
-

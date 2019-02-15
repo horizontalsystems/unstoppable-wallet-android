@@ -87,4 +87,8 @@ class UnlockPinPresenter(
             is LockoutState.Locked -> view?.showLockView(state.until)
         }
     }
+
+    override fun onBackPressed() {
+        router.closeApplication()
+    }
 }

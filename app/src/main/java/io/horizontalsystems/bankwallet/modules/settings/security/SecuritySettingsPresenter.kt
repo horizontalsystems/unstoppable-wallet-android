@@ -25,6 +25,14 @@ class SecuritySettingsPresenter(
     }
 
     override fun didTapBackupWallet() {
+        interactor.didTapOnBackupWallet()
+    }
+
+    override fun accessIsRestricted() {
+        router.showPinUnlock()
+    }
+
+    override fun openBackupWallet() {
         router.showBackupWallet()
     }
 
@@ -43,4 +51,9 @@ class SecuritySettingsPresenter(
     override fun didUnlinkWallet() {
         view?.reloadApp()
     }
+
+    override fun onClear() {
+        interactor.clear()
+    }
+
 }

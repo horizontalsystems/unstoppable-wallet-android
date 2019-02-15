@@ -46,6 +46,10 @@
             android:screenOrientation="portrait"/>
 
         <activity
+            android:name="io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider.DataProviderSettingsActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
             android:name="io.horizontalsystems.bankwallet.modules.settings.language.LanguageSettingsActivity"
             android:screenOrientation="portrait"/>
 
@@ -62,6 +66,9 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name="io.horizontalsystems.bankwallet.modules.settings.basecurrency.BaseCurrencySettingsActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".modules.managecoins.ManageCoinsActivity"
             android:screenOrientation="portrait"/>
 
         <meta-data

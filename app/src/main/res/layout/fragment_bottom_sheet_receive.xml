@@ -6,36 +6,34 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bottom_sheet_background"
+    android:backgroundTint="?BottomSendBackground"
     >
 
-    <ImageView
-        android:id="@+id/coinImg"
+    <io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
+        android:id="@+id/coinIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:tint="@color/dark"
-        android:src="@drawable/coin_bitcoin"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txtTitle"
         style="@style/BottomDialogText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:fontFamily="@font/noto_sans_bold"
-        android:textColor="@color/dark"
+        android:layout_marginStart="16dp"
         android:ellipsize="end"
+        android:fontFamily="@font/noto_sans_bold"
         android:singleLine="true"
         android:textSize="17sp"
-        app:layout_constraintStart_toEndOf="@+id/coinImg"
-        app:layout_constraintTop_toTopOf="@+id/coinImg"
-        app:layout_constraintBottom_toBottomOf="@+id/coinImg"
-        tools:text="Receive Bitcoin (BTC)"
+        app:layout_constraintBottom_toBottomOf="@+id/coinIcon"
+        app:layout_constraintStart_toEndOf="@+id/coinIcon"
+        app:layout_constraintTop_toTopOf="@+id/coinIcon"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="Receive Bitcoin"
         />
 
     <View
@@ -43,21 +41,10 @@
         android:layout_width="0dp"
         android:layout_height="0.5dp"
         android:layout_marginTop="16dp"
-        android:background="@color/grey_20"
+        android:background="@color/steel_20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtTitle"
-        />
-
-    <View
-        android:id="@+id/backgroundColorView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/bars_color"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/border"
         />
 
     <ImageView
@@ -74,37 +61,43 @@
         />
 
     <TextView
-        android:id="@+id/txtAddress"
-        android:layout_width="184dp"
+        android:id="@+id/txtYourAddress"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="18dp"
-        android:fontFamily="@font/noto_sans"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        android:singleLine="true"
-        android:ellipsize="middle"
+        android:layout_marginTop="16dp"
+        android:text="@string/Deposit_Your_Address"
+        android:textColor="@color/grey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imgQrCode"
-        tools:text="1AYHMDV1XR8HWaReC3Rr4Qv79vJiSR8RCU"
+        />
+
+    <io.horizontalsystems.bankwallet.ui.extensions.AddressView
+        android:id="@+id/addressView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/btnShare"
+        app:layout_constraintStart_toStartOf="@+id/btnShare"
+        app:layout_constraintTop_toBottomOf="@+id/txtYourAddress"
         />
 
     <Button
-        android:id="@+id/btnCopy"
+        android:id="@+id/btnShare"
         style="@style/ButtonGreen_12"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginBottom="24dp"
-        android:text="@string/Deposit_Copy"
+        android:layout_marginTop="24dp"
+        android:text="@string/Deposit_Share"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtAddress"
+        app:layout_constraintTop_toBottomOf="@+id/addressView"
         />
 
 </android.support.constraint.ConstraintLayout>

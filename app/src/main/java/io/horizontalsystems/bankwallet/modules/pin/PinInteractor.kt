@@ -1,12 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.pin
 
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
+import io.horizontalsystems.bankwallet.core.IPinManager
+import io.horizontalsystems.bankwallet.core.managers.AuthManager
 
 class PinInteractor(
         private val pinManager: IPinManager,
-        private val wordsManager: IWordsManager,
-        private val keystoreSafeExecute: IKeyStoreSafeExecute,
-        private val localStorage: ILocalStorage) : PinModule.IPinInteractor {
+        private val authManager: AuthManager,
+        private val keystoreSafeExecute: IKeyStoreSafeExecute) : PinModule.IPinInteractor {
 
     var delegate: PinModule.IPinInteractorDelegate? = null
     private var storedPin: String? = null
@@ -21,9 +22,7 @@ class PinInteractor(
 
     override fun save(pin: String) {
         keystoreSafeExecute.safeExecute(
-                action = Runnable {
-                    pinManager.store(pin)
-                },
+                action = Runnable { pinManager.store(pin) },
                 onSuccess = Runnable { delegate?.didSavePin() },
                 onFailure = Runnable { delegate?.didFailToSavePin() }
         )
@@ -35,10 +34,7 @@ class PinInteractor(
 
     override fun startAdapters() {
         keystoreSafeExecute.safeExecute(
-                action = Runnable {
-                    wordsManager.safeLoad()
-                    wordsManager.loggedInSubject.onNext(if (localStorage.isNewWallet) LogInState.CREATE else LogInState.RESTORE)
-                },
+                action = Runnable { authManager.safeLoad() },
                 onSuccess = Runnable { delegate?.didStartedAdapters() }
         )
     }

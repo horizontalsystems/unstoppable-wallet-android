@@ -1,13 +1,18 @@
 package io.horizontalsystems.bankwallet.entities
 
 import android.arch.persistence.room.Entity
+import android.arch.persistence.room.TypeConverters
+import io.horizontalsystems.bankwallet.core.storage.DatabaseConverters
+import java.math.BigDecimal
 import java.util.*
 
-@Entity(primaryKeys = ["coin", "currencyCode"])
-data class Rate(var coin: String,
+@Entity(primaryKeys = ["coinCode", "currencyCode", "timestamp", "isLatest"])
+@TypeConverters(DatabaseConverters::class)
+data class Rate(var coinCode: String,
                 var currencyCode: String,
-                var value: Double,
-                var timestamp: Long = 0) {
+                var value: BigDecimal,
+                var timestamp: Long,
+                var isLatest: Boolean) {
 
     val expired: Boolean
         get() {

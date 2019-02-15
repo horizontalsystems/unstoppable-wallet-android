@@ -1,33 +1,35 @@
 package io.horizontalsystems.bankwallet.modules.receive
 
-import android.app.AlertDialog
 import android.app.Dialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.DialogInterface
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
+import android.support.design.widget.BottomSheetBehavior
+import android.support.design.widget.BottomSheetDialog
+import android.support.design.widget.BottomSheetDialogFragment
 import android.support.v4.app.FragmentActivity
-import android.support.v4.content.ContextCompat
+import android.support.v4.app.ShareCompat
 import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.transactions.Coin
+import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import io.horizontalsystems.bankwallet.ui.extensions.AddressView
+import io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 
-class ReceiveFragment : DialogFragment() {
+class ReceiveFragment : BottomSheetDialogFragment() {
 
     private var mDialog: Dialog? = null
 
     private lateinit var viewModel: ReceiveViewModel
 
-    private var coin: Coin? = null
+    private var coinCode: CoinCode? = null
 
     private var itemIndex = 0
 
@@ -35,59 +37,68 @@ class ReceiveFragment : DialogFragment() {
         super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProviders.of(this).get(ReceiveViewModel::class.java)
-        coin?.let { viewModel.init(it) } ?:  dismiss()
+        coinCode?.let { viewModel.init(it) } ?:  dismiss()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = activity?.let { AlertDialog.Builder(it, R.style.BottomDialog) }
+        mDialog = activity?.let { BottomSheetDialog(it, R.style.BottomDialog) }
+        mDialog?.setContentView(R.layout.fragment_bottom_sheet_receive)
 
-        val rootView = View.inflate(context, R.layout.fragment_bottom_sheet_receive, null) as ViewGroup
-        builder?.setView(rootView)
-
-        mDialog = builder?.create()
         mDialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
         mDialog?.window?.setGravity(Gravity.BOTTOM)
 
-        rootView.findViewById<Button>(R.id.btnCopy)?.setOnClickListener { viewModel.delegate.onCopyClick(itemIndex) }
+        mDialog?.findViewById<Button>(R.id.btnShare)?.setOnClickListener { viewModel.delegate.onShareClick(itemIndex) }
+        mDialog?.findViewById<AddressView>(R.id.addressView)?.setOnClickListener { viewModel.delegate.onAddressClick(itemIndex) }
 
         viewModel.showAddressesLiveData.observe(this, Observer { addresses ->
             addresses?.apply {
                 if (addresses.isNotEmpty()) {
                     val address = addresses[itemIndex]
-                    context?.let { ctx ->
-                        val coinDrawable = ContextCompat.getDrawable(ctx, LayoutHelper.getCoinDrawableResource(address.coin))
-                        rootView.findViewById<ImageView>(R.id.coinImg)?.setImageDrawable(coinDrawable)
+                    context?.let {
+                        mDialog?.findViewById<CoinIconView>(R.id.coinIcon)?.bind(address.coin)
                     }
-                    rootView.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.Deposit_Title, address.coin)
-                    rootView.findViewById<TextView>(R.id.txtAddress)?.let { it.text = address.address }
-                    rootView.findViewById<ImageView>(R.id.imgQrCode)?.setImageBitmap(TextHelper.getQrCodeBitmapFromAddress(address.address))
+                    mDialog?.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.Deposit_Title, address.coin.title)
+                    mDialog?.findViewById<AddressView>(R.id.addressView)?.bind(address.address)
+                    mDialog?.findViewById<ImageView>(R.id.imgQrCode)?.setImageBitmap(TextHelper.getQrCodeBitmapFromAddress(address.address))
                 }
             }
         })
 
         viewModel.showErrorLiveData.observe(this, Observer { error ->
-            //todo remove after Wallet starts to work
-            val someAddress = TextHelper.randomHashGenerator()
-            rootView.findViewById<TextView>(R.id.txtAddress)?.let { it.text = someAddress }
-            rootView.findViewById<ImageView>(R.id.imgQrCode)?.setImageBitmap(TextHelper.getQrCodeBitmapFromAddress(someAddress))
-            //uncomment me
-//            error?.let {
-//                HudHelper.showErrorMessage(it, activity)
-//            }
-//            dismiss()
+            error?.let {
+                HudHelper.showErrorMessage(it)
+            }
+            dismiss()
         })
 
         viewModel.showCopiedLiveEvent.observe(this, Observer {
             HudHelper.showSuccessMessage(R.string.Hud_Text_Copied)
         })
 
+        viewModel.shareAddressLiveEvent.observe(this, Observer { address ->
+            address?.let {
+                ShareCompat.IntentBuilder.from(activity)
+                        .setType("text/plain")
+                        .setText(it)
+                        .startChooser()
+            }
+        })
+
+        mDialog?.setOnShowListener(object : DialogInterface.OnShowListener {
+            override fun onShow(dialog: DialogInterface?) {
+                val bottomSheet = mDialog?.findViewById<View>(android.support.design.R.id.design_bottom_sheet)
+                BottomSheetBehavior.from(bottomSheet).state = BottomSheetBehavior.STATE_EXPANDED
+                BottomSheetBehavior.from(bottomSheet).isFitToContents = true
+            }
+        })
+
         return mDialog as Dialog
     }
 
     companion object {
-        fun show(activity: FragmentActivity, coin: Coin) {
+        fun show(activity: FragmentActivity, coinCode: CoinCode) {
             val fragment = ReceiveFragment()
-            fragment.coin = coin
+            fragment.coinCode = coinCode
             fragment.show(activity.supportFragmentManager, "receive_fragment")
         }
     }

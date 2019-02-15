@@ -2,12 +2,12 @@ package io.horizontalsystems.bankwallet.modules.send
 
 import android.support.v4.app.FragmentActivity
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
-import io.horizontalsystems.bankwallet.modules.transactions.Coin
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
-import io.horizontalsystems.bankwallet.viewHelpers.ValueFormatter
+import java.math.BigDecimal
 
 object SendModule {
 
@@ -20,38 +20,45 @@ object SendModule {
 
         fun setAddressInfo(addressInfo: AddressInfo?)
 
-        fun setPrimaryFeeInfo(primaryFeeInfo: AmountInfo?)
-        fun setSecondaryFeeInfo(secondaryFeeInfo: AmountInfo?)
+        fun setFeeInfo(feeInfo: FeeInfo?)
 
         fun setSendButtonEnabled(sendButtonEnabled: Boolean)
 
         fun showConfirmation(viewItem: SendConfirmationViewItem)
         fun showError(error: Throwable)
         fun dismissWithSuccess()
+        fun setPasteButtonState(enabled: Boolean)
+        fun setDecimal(decimal: Int)
 
     }
 
     interface IViewDelegate {
         fun onViewDidLoad()
-        fun onAmountChanged(amount: Double)
+        fun onAmountChanged(amount: BigDecimal)
         fun onSwitchClicked()
         fun onPasteClicked()
         fun onScanAddress(address: String)
         fun onDeleteClicked()
         fun onSendClicked()
         fun onConfirmClicked()
+        fun onMaxClicked()
+        fun onClear()
     }
 
     interface IInteractor {
         val coin: Coin
+        val clipboardHasPrimaryClip: Boolean
+        var defaultInputType: SendModule.InputType
         val addressFromClipboard: String?
 
         fun retrieveRate()
         fun parsePaymentAddress(address: String): PaymentRequestAddress
-        fun convertedAmountForInputType(inputType: InputType, amount: Double): Double?
+        fun convertedAmountForInputType(inputType: InputType, amount: BigDecimal): BigDecimal?
         fun stateForUserInput(input: UserInput): State
 
         fun send(userInput: UserInput)
+        fun getTotalBalanceMinusFee(inputType: InputType, address: String?): BigDecimal
+        fun clear()
     }
 
     interface IInteractorDelegate {
@@ -60,21 +67,19 @@ object SendModule {
         fun didFailToSend(error: Throwable)
     }
 
-    interface IRouter {
-    }
 
-    fun init(view: SendViewModel, router: IRouter, coin: String) {
-        val wallet = App.walletManager.wallets.first { it.coin == coin }
-        val interactor = SendInteractor(App.currencyManager, App.rateManager, TextHelper, wallet)
-        val presenter = SendPresenter(interactor, router, StateViewItemFactory(), UserInput())
-//
+    fun init(view: SendViewModel, coinCode: String) {
+        val adapter = App.adapterManager.adapters.first { it.coin.code == coinCode }
+        val interactor = SendInteractor(App.currencyManager, App.rateStorage, App.localStorage, TextHelper, adapter, App.appConfigProvider)
+        val presenter = SendPresenter(interactor, StateViewItemFactory(), UserInput())
+
         view.delegate = presenter
         presenter.view = view
         interactor.delegate = presenter
     }
 
     fun start(activity: FragmentActivity, coin: String) {
-        SendFragment.show(activity, coin)
+        SendBottomSheetFragment.show(activity, coin)
     }
 
     enum class InputType {
@@ -83,6 +88,7 @@ object SendModule {
 
     open class AmountError : Exception() {
         data class InsufficientBalance(val amountInfo: AmountInfo) : AmountError()
+        data class Erc20FeeError(val erc20CoinCode: String, val coinValue: CoinValue) : AmountError()
     }
 
     open class AddressError : Exception() {
@@ -105,42 +111,47 @@ object SendModule {
 
         fun getFormatted(): String? = when (this) {
             is SendModule.AmountInfo.CoinValueInfo -> {
-                ValueFormatter.format(this.coinValue)
+                App.numberFormatter.format(this.coinValue)
             }
             is SendModule.AmountInfo.CurrencyValueInfo -> {
-                ValueFormatter.formatSimple(this.currencyValue)
+                App.numberFormatter.format(this.currencyValue)
             }
         }
     }
 
-    class UserInput {
-        var inputType: InputType = InputType.COIN
-        var amount: Double = 0.0
-        var address: String? = null
-
+    class FeeInfo {
+        var primaryFeeInfo: AmountInfo? = null
+        var secondaryFeeInfo: AmountInfo? = null
+        var error: AmountError.Erc20FeeError? = null
     }
 
-    class State(var inputType: InputType) {
+    class UserInput {
+        var inputType: InputType = InputType.COIN
+        var amount: BigDecimal = BigDecimal.ZERO
+        var address: String? = null
+    }
+
+    class State(var decimal: Int, var inputType: InputType) {
         var coinValue: CoinValue? = null
         var currencyValue: CurrencyValue? = null
         var amountError: AmountError? = null
+        var feeError: AmountError.Erc20FeeError? = null
         var address: String? = null
         var addressError: AddressError? = null
         var feeCoinValue: CoinValue? = null
         var feeCurrencyValue: CurrencyValue? = null
     }
 
-    class StateViewItem {
+    class StateViewItem(val decimal: Int) {
         var amountInfo: AmountInfo? = null
         var switchButtonEnabled: Boolean = false
         var hintInfo: HintInfo? = null
         var addressInfo: AddressInfo? = null
-        var primaryFeeInfo: AmountInfo? = null
-        var secondaryFeeInfo: AmountInfo? = null
+        var feeInfo: FeeInfo? = null
         var sendButtonEnabled: Boolean = false
     }
 
-    class SendConfirmationViewItem(val coinValue: CoinValue, val address: String, val feeInfo: AmountInfo, val totalInfo: AmountInfo) {
+    class SendConfirmationViewItem(val coinValue: CoinValue, val address: String, val feeInfo: AmountInfo, val totalInfo: AmountInfo?) {
         var currencyValue: CurrencyValue? = null
     }
 }

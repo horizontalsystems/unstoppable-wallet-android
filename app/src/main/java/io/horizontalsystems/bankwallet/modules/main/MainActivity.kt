@@ -3,16 +3,19 @@ package io.horizontalsystems.bankwallet.modules.main
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
-import io.horizontalsystems.bankwallet.BaseActivity
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
+import io.horizontalsystems.bankwallet.BaseActivity
+import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_dashboard.*
 
 class MainActivity : BaseActivity() {
 
     private lateinit var adapter: MainTabsAdapter
+    private var disposable: Disposable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +26,7 @@ class MainActivity : BaseActivity() {
 
         viewPager.adapter = adapter
         viewPager.offscreenPageLimit = 2
-        viewPager.setPagingEnabled(true)
+        viewPager.setPagingEnabled(false)
 
         LayoutHelper.getAttr(R.attr.BottomNavigationBackgroundColor, theme)?.let {
             bottomNavigation.defaultBackgroundColor = it
@@ -63,6 +66,30 @@ class MainActivity : BaseActivity() {
         activeTab?.let {
             bottomNavigation.currentItem = it
         }
+
+        disposable = App.appCloseManager.appCloseSignal.subscribe {
+            moveTaskToBack(false)
+        }
+    }
+
+    override fun onBackPressed() {
+        if (adapter.currentItem == 1 && adapter.getTransactionFragment().onBackPressed()) {
+            return
+        } else if (adapter.currentItem > 0) {
+            viewPager.currentItem = 0
+            return
+        }
+        super.onBackPressed()
+    }
+
+    override fun onDestroy() {
+        disposable?.dispose()
+        super.onDestroy()
+    }
+
+    fun setBottomNavigationVisible(visible: Boolean) {
+        bottomNavigation.animate().translationY(if (visible) 0f else (bottomNavigation.height).toFloat()).duration = 150
+        bottomNavigationBarShadow.animate().translationY(if (visible) 0f else (bottomNavigation.height).toFloat()).duration = 150
     }
 
     fun updateSettingsTabCounter(count: Int) {

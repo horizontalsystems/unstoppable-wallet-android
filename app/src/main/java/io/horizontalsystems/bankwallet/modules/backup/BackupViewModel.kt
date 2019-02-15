@@ -9,14 +9,12 @@ import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
 class BackupViewModel : ViewModel(), BackupModule.IView, BackupModule.IRouter, IKeyStoreSafeExecute {
     lateinit var delegate: BackupModule.IViewDelegate
 
-    val errorLiveData = MutableLiveData<Int>()
+    val loadPageLiveEvent = SingleLiveEvent<Int>()
+    val errorLiveData = SingleLiveEvent<Int>()
     val wordsLiveData = MutableLiveData<List<String>>()
     val wordIndexesToConfirmLiveData = MutableLiveData<List<Int>>()
-
-    val navigationWordsLiveEvent = SingleLiveEvent<Void>()
-    val navigationConfirmLiveEvent = SingleLiveEvent<Void>()
+    val validateWordsLiveEvent = SingleLiveEvent<Void>()
     val closeLiveEvent = SingleLiveEvent<Void>()
-    val navigateBackLiveEvent = SingleLiveEvent<Void>()
     val navigateToSetPinLiveEvent = SingleLiveEvent<Void>()
     val showConfirmationCheckDialogLiveEvent = SingleLiveEvent<Void>()
     val keyStoreSafeExecute = SingleLiveEvent<Triple<Runnable, Runnable?, Runnable?>>()
@@ -27,26 +25,16 @@ class BackupViewModel : ViewModel(), BackupModule.IView, BackupModule.IRouter, I
 
     // view
 
-    override fun openWordsListScreen() {
-        navigationWordsLiveEvent.call()
+    override fun loadPage(page: Int) {
+        loadPageLiveEvent.value = page
     }
 
     override fun showWords(words: List<String>) {
         wordsLiveData.value = words
     }
 
-    override fun showConfirmationWithIndexes(indexes: List<Int>) {
+    override fun showConfirmationWords(indexes: List<Int>) {
         wordIndexesToConfirmLiveData.value = indexes
-        navigationConfirmLiveEvent.call()
-    }
-
-    override fun hideWords() {
-        navigateBackLiveEvent.call()
-    }
-
-    override fun hideConfirmation() {
-        errorLiveData.value = null
-        navigateBackLiveEvent.call()
     }
 
     override fun showConfirmationError() {
@@ -55,6 +43,10 @@ class BackupViewModel : ViewModel(), BackupModule.IView, BackupModule.IRouter, I
 
     override fun showTermsConfirmDialog() {
         showConfirmationCheckDialogLiveEvent.call()
+    }
+
+    override fun validateWords() {
+        validateWordsLiveEvent.call()
     }
 
     // router

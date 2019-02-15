@@ -1,28 +1,26 @@
 package io.horizontalsystems.bankwallet.entities
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
-import android.arch.persistence.room.TypeConverters
-import io.horizontalsystems.bankwallet.core.storage.TransactionAddressTypeConverter
+import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import java.math.BigDecimal
 
-@Entity
-open class TransactionRecord {
-
-    @PrimaryKey
-    var transactionHash = ""
-    var blockHeight: Long = 0
-    var coin = ""
-    var amount: Double = 0.0
-    var timestamp: Long = 0
-    var rate: Double = 0.0
-
-    @TypeConverters(TransactionAddressTypeConverter::class)
+data class TransactionRecord(var transactionHash: String) {
+    var blockHeight: Long = 0L
+    var amount: BigDecimal = BigDecimal.ZERO
+    var timestamp: Long = 0L
     var from: List<TransactionAddress> = listOf()
-
-    @TypeConverters(TransactionAddressTypeConverter::class)
     var to: List<TransactionAddress> = listOf()
 
+    constructor(transactionHash: String, blockHeight: Long, amount: BigDecimal, timestamp: Long, from: List<TransactionAddress>, to: List<TransactionAddress>) : this(transactionHash) {
+        this.blockHeight = blockHeight
+        this.amount = amount
+        this.timestamp = timestamp
+        this.from = from
+        this.to = to
+    }
+
 }
+
+data class TransactionItem(val coinCode: CoinCode, val record: TransactionRecord)
 
 class TransactionAddress {
     var address = ""
