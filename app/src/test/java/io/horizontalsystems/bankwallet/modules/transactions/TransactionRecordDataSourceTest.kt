@@ -330,4 +330,15 @@ class TransactionRecordDataSourceTest {
 
         Assert.assertTrue(result)
     }
+
+    @Test
+    fun itemIndexesForPending() {
+        val coinCode = "BTC"
+        val lastBlockHeight = 100
+        val threshold = 6
+
+        dataSource.itemIndexesForPending(coinCode, lastBlockHeight, threshold)
+
+        verify(itemsDataSource).itemIndexesForPending(coinCode, lastBlockHeight, threshold)
+    }
 }

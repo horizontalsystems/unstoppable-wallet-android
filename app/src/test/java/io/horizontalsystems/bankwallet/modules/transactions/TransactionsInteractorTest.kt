@@ -79,7 +79,7 @@ class TransactionsInteractorTest {
         val lastBlockHeight1 = 123
         val confirmationsThreshold1 = 6
         val coinCode1 = "BTC"
-        val allCoinData = listOf(Triple(coinCode1, confirmationsThreshold1,  lastBlockHeight1))
+        val allCoinData = listOf(Triple(coinCode1, confirmationsThreshold1, lastBlockHeight1))
 
         whenever(coin1.code).thenReturn(coinCode1)
         whenever(adapter1.lastBlockHeight).thenReturn(lastBlockHeight1)
@@ -126,7 +126,7 @@ class TransactionsInteractorTest {
         val lastBlockHeight1 = 123
         val confirmationsThreshold1 = 6
         val coinCode1 = "BTC"
-        val allCoinData = listOf(Triple(coinCode1, confirmationsThreshold1,  lastBlockHeight1))
+        val allCoinData = listOf(Triple(coinCode1, confirmationsThreshold1, lastBlockHeight1))
 
         whenever(coin1.code).thenReturn(coinCode1)
         whenever(adapter1.lastBlockHeight).thenReturn(lastBlockHeight1)

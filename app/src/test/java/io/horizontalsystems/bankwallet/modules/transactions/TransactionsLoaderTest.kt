@@ -185,4 +185,15 @@ class TransactionsLoaderTest {
 
         verify(delegate, never()).didChangeData()
     }
+
+    @Test
+    fun itemIndexesForPending() {
+        val coinCode = "BTC"
+        val lastBlockHeight = 100
+        val threshold = 6
+
+        loader.itemIndexesForPending(coinCode, lastBlockHeight, threshold)
+
+        verify(dataSource).itemIndexesForPending(coinCode, lastBlockHeight, threshold)
+    }
 }

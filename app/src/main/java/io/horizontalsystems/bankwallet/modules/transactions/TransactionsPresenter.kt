@@ -82,7 +82,15 @@ class TransactionsPresenter(private val interactor: TransactionsModule.IInteract
 
     override fun onUpdateLastBlockHeight(coinCode: CoinCode, lastBlockHeight: Int) {
         metadataDataSource.setLastBlockHeight(lastBlockHeight, coinCode)
-        view?.reload()
+
+        val threshold = metadataDataSource.getConfirmationThreshold(coinCode) ?: return run {
+            view?.reload()
+        }
+
+        val indexes = loader.itemIndexesForPending(coinCode, lastBlockHeight, threshold)
+        if (indexes.isNotEmpty()) {
+            view?.reloadItems(indexes)
+        }
     }
 
     override fun onUpdateBaseCurrency() {

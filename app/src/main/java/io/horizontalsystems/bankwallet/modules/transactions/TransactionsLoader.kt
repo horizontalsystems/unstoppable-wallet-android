@@ -65,6 +65,10 @@ class TransactionsLoader(private val dataSource: TransactionRecordDataSource) {
         return dataSource.itemIndexesForTimestamp(coinCode, timestamp)
     }
 
+    fun itemIndexesForPending(coinCode: CoinCode, lastBlockHeight: Int, threshold: Int): List<Int> {
+        return dataSource.itemIndexesForPending(coinCode, lastBlockHeight, threshold)
+    }
+
     fun didUpdateRecords(records: List<TransactionRecord>, coinCode: CoinCode) {
         if (dataSource.handleUpdatedRecords(records, coinCode)) {
             delegate?.didChangeData()

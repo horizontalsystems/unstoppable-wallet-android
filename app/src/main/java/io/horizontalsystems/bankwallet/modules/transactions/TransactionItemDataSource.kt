@@ -32,6 +32,18 @@ class TransactionItemDataSource {
         return indexes
     }
 
+    fun itemIndexesForPending(coinCode: CoinCode, lastBlockHeight: Int, threshold: Int): List<Int> {
+        val indexes = mutableListOf<Int>()
+
+        items.forEachIndexed { index, item ->
+            if (item.coinCode == coinCode && lastBlockHeight - item.record.blockHeight <= threshold) {
+                indexes.add(index)
+            }
+        }
+
+        return indexes
+    }
+
     fun handleModifiedItems(updatedItems: List<TransactionItem>, insertedItems: List<TransactionItem>) {
         val tmpList = items.toMutableList()
         tmpList.removeAll(updatedItems)
@@ -46,5 +58,4 @@ class TransactionItemDataSource {
     fun shouldInsertRecord(record: TransactionRecord): Boolean {
         return items.lastOrNull()?.record?.let { it.timestamp < record.timestamp } ?: true
     }
-
 }

@@ -27,6 +27,10 @@ class TransactionRecordDataSource(
     fun itemIndexesForTimestamp(coinCode: CoinCode, timestamp: Long): List<Int> =
             itemsDataSource.itemIndexesForTimestamp(coinCode, timestamp)
 
+
+    fun itemIndexesForPending(coinCode: CoinCode, lastBlockHeight: Int, threshold: Int): List<Int> =
+            itemsDataSource.itemIndexesForPending(coinCode, lastBlockHeight, threshold)
+
     fun getFetchDataList(): List<FetchData> = poolRepo.activePools.mapNotNull {
         it.getFetchData(limit)
     }
@@ -103,6 +107,5 @@ class TransactionRecordDataSource(
         poolRepo.activatePools(coinCodes)
         itemsDataSource.clear()
     }
-
 }
 

@@ -177,10 +177,26 @@ class TransactionsPresenterTest {
         val coinCode = "coinCode"
         val lastBlockHeight = 123123
 
+        whenever(metadataDataSource.getConfirmationThreshold(coinCode)).thenReturn(null)
+
         presenter.onUpdateLastBlockHeight(coinCode, lastBlockHeight)
 
         verify(metadataDataSource).setLastBlockHeight(lastBlockHeight, coinCode)
         verify(view).reload()
+    }
+
+    @Test
+    fun onUpdateLastBlockHeight_threshold() {
+        val coinCode = "coinCode"
+        val lastBlockHeight = 123123
+
+        whenever(metadataDataSource.getConfirmationThreshold(coinCode)).thenReturn(1)
+        whenever(loader.itemIndexesForPending(coinCode, lastBlockHeight, 1)).thenReturn(listOf(1))
+
+        presenter.onUpdateLastBlockHeight(coinCode, lastBlockHeight)
+
+        verify(metadataDataSource).setLastBlockHeight(lastBlockHeight, coinCode)
+        verify(view).reloadItems(listOf(1))
     }
 
     @Test
