@@ -189,9 +189,12 @@ class TransactionsPresenterTest {
     fun onUpdateLastBlockHeight_threshold() {
         val coinCode = "coinCode"
         val lastBlockHeight = 123123
+        val oldBlockHeight = 123122
+        val threshold = 1
 
-        whenever(metadataDataSource.getConfirmationThreshold(coinCode)).thenReturn(1)
-        whenever(loader.itemIndexesForPending(coinCode, lastBlockHeight, 1)).thenReturn(listOf(1))
+        whenever(metadataDataSource.getConfirmationThreshold(coinCode)).thenReturn(threshold)
+        whenever(metadataDataSource.getLastBlockHeight(coinCode)).thenReturn(oldBlockHeight)
+        whenever(loader.itemIndexesForPending(coinCode, oldBlockHeight - threshold)).thenReturn(listOf(1))
 
         presenter.onUpdateLastBlockHeight(coinCode, lastBlockHeight)
 

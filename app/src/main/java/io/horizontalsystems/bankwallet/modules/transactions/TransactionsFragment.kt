@@ -73,6 +73,18 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
 
         viewModel.reloadLiveEvent.observe(this, Observer {
             transactionsAdapter.notifyDataSetChanged()
+
+            if (transactionsAdapter.itemCount == 0) {
+                viewModel.delegate.onBottomReached()
+            }
+
+            recyclerTransactions.visibility = if (viewModel.delegate.itemsCount == 0) View.GONE else View.VISIBLE
+            emptyListText.visibility = if (viewModel.delegate.itemsCount == 0) View.VISIBLE else View.GONE
+        })
+
+        viewModel.reloadChangeEvent.observe(this, Observer { diff ->
+            diff?.dispatchUpdatesTo(transactionsAdapter)
+
             if (transactionsAdapter.itemCount == 0) {
                 viewModel.delegate.onBottomReached()
             }
@@ -201,7 +213,6 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
 
 }
 
-
 class TransactionsAdapter(private var listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), ViewHolderTransaction.ClickListener {
 
     interface Listener {
@@ -234,7 +245,7 @@ class TransactionsAdapter(private var listener: Listener) : RecyclerView.Adapter
     }
 }
 
-class ViewHolderTransaction(override val containerView: View, private val l: ClickListener ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class ViewHolderTransaction(override val containerView: View, private val l: ClickListener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     interface ClickListener {
         fun onClick(position: Int)

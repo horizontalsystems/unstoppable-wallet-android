@@ -1,15 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
+import android.support.v7.util.DiffUtil
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import java.math.BigDecimal
 
-class TransactionsPresenter(private val interactor: TransactionsModule.IInteractor,
-                            private val router: TransactionsModule.IRouter,
-                            private val factory: TransactionViewItemFactory,
-                            private val loader: TransactionsLoader,
-                            private val metadataDataSource: TransactionMetadataDataSource) : TransactionsModule.IViewDelegate, TransactionsModule.IInteractorDelegate, TransactionsLoader.Delegate {
+class TransactionsPresenter(
+        private val interactor: TransactionsModule.IInteractor,
+        private val router: TransactionsModule.IRouter,
+        private val factory: TransactionViewItemFactory,
+        private val loader: TransactionsLoader,
+        private val metadataDataSource: TransactionMetadataDataSource)
+    : TransactionsModule.IViewDelegate, TransactionsModule.IInteractorDelegate, TransactionsLoader.Delegate {
 
     var view: TransactionsModule.IView? = null
 
@@ -81,13 +84,17 @@ class TransactionsPresenter(private val interactor: TransactionsModule.IInteract
     }
 
     override fun onUpdateLastBlockHeight(coinCode: CoinCode, lastBlockHeight: Int) {
+        val oldBlockHeight = metadataDataSource.getLastBlockHeight(coinCode)
+        val threshold = metadataDataSource.getConfirmationThreshold(coinCode)
+
         metadataDataSource.setLastBlockHeight(lastBlockHeight, coinCode)
 
-        val threshold = metadataDataSource.getConfirmationThreshold(coinCode) ?: return run {
+        if (threshold == null || oldBlockHeight == null) {
             view?.reload()
+            return
         }
 
-        val indexes = loader.itemIndexesForPending(coinCode, lastBlockHeight, threshold)
+        val indexes = loader.itemIndexesForPending(coinCode, oldBlockHeight - threshold)
         if (indexes.isNotEmpty()) {
             view?.reloadItems(indexes)
         }
@@ -111,7 +118,16 @@ class TransactionsPresenter(private val interactor: TransactionsModule.IInteract
 
     override fun didUpdateRecords(records: List<TransactionRecord>, coinCode: CoinCode) {
         loader.didUpdateRecords(records, coinCode)
+
         fetchRatesForRecords(mapOf(coinCode to records))
+    }
+
+    //
+    // TransactionsLoader Delegate
+    //
+
+    override fun onChange(diff: DiffUtil.DiffResult) {
+        view?.reloadChange(diff)
     }
 
     override fun didChangeData() {

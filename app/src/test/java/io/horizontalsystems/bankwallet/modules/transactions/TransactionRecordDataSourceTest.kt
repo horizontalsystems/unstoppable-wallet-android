@@ -226,8 +226,7 @@ class TransactionRecordDataSourceTest {
 
         whenever(poolRepo.getPool(coinCodeBtc)).thenReturn(null)
 
-        Assert.assertFalse(dataSource.handleUpdatedRecords(records, coinCodeBtc))
-
+        Assert.assertNull(dataSource.handleUpdatedRecords(records, coinCodeBtc))
     }
 
     @Test
@@ -239,9 +238,7 @@ class TransactionRecordDataSourceTest {
         whenever(poolRepo.getPool(coinCodeBtc)).thenReturn(pool)
         whenever(poolRepo.isPoolActiveByCoinCode(coinCodeBtc)).thenReturn(false)
 
-        val result = dataSource.handleUpdatedRecords(records, coinCodeBtc)
-
-        Assert.assertFalse(result)
+        Assert.assertNull(dataSource.handleUpdatedRecords(records, coinCodeBtc))
     }
 
     @Test
@@ -256,9 +253,7 @@ class TransactionRecordDataSourceTest {
         whenever(pool.handleUpdatedRecord(record1)).thenReturn(Pool.HandleResult.NEW_DATA)
         whenever(itemsDataSource.shouldInsertRecord(record1)).thenReturn(false)
 
-        val result = dataSource.handleUpdatedRecords(records, coinCodeBtc)
-
-        Assert.assertTrue(result)
+        Assert.assertNull(dataSource.handleUpdatedRecords(records, coinCodeBtc))
     }
 
     @Test
@@ -280,7 +275,7 @@ class TransactionRecordDataSourceTest {
         verify(pool).increaseFirstUnusedIndex()
         verify(itemsDataSource).handleModifiedItems(listOf(), listOf(transactionItem))
 
-        Assert.assertTrue(result)
+        Assert.assertNull(result)
     }
 
     @Test
@@ -294,9 +289,7 @@ class TransactionRecordDataSourceTest {
         whenever(poolRepo.isPoolActiveByCoinCode(coinCodeBtc)).thenReturn(true)
         whenever(pool.handleUpdatedRecord(record1)).thenReturn(Pool.HandleResult.IGNORED)
 
-        val result = dataSource.handleUpdatedRecords(records, coinCodeBtc)
-
-        Assert.assertFalse(result)
+        Assert.assertNull(dataSource.handleUpdatedRecords(records, coinCodeBtc))
     }
 
     @Test
@@ -324,21 +317,18 @@ class TransactionRecordDataSourceTest {
         whenever(factory.createTransactionItem(coinCodeBtc, updatedRecord2)).thenReturn(updatedItem2)
         whenever(factory.createTransactionItem(coinCodeBtc, insertedRecord1)).thenReturn(insertedItem1)
 
-        val result = dataSource.handleUpdatedRecords(records, coinCodeBtc)
+        dataSource.handleUpdatedRecords(records, coinCodeBtc)
 
         verify(itemsDataSource).handleModifiedItems(listOf(updatedItem1, updatedItem2), listOf(insertedItem1))
-
-        Assert.assertTrue(result)
     }
 
     @Test
     fun itemIndexesForPending() {
         val coinCode = "BTC"
         val lastBlockHeight = 100
-        val threshold = 6
 
-        dataSource.itemIndexesForPending(coinCode, lastBlockHeight, threshold)
+        dataSource.itemIndexesForPending(coinCode, lastBlockHeight)
 
-        verify(itemsDataSource).itemIndexesForPending(coinCode, lastBlockHeight, threshold)
+        verify(itemsDataSource).itemIndexesForPending(coinCode, lastBlockHeight)
     }
 }
