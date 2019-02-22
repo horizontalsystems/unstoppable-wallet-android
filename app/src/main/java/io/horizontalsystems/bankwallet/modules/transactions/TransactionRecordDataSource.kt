@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
+import android.support.v7.util.DiffUtil
 import io.horizontalsystems.bankwallet.entities.TransactionItem
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule.FetchData
@@ -27,6 +28,10 @@ class TransactionRecordDataSource(
     fun itemIndexesForTimestamp(coinCode: CoinCode, timestamp: Long): List<Int> =
             itemsDataSource.itemIndexesForTimestamp(coinCode, timestamp)
 
+
+    fun itemIndexesForPending(coinCode: CoinCode, thresholdBlockHeight: Int): List<Int> =
+            itemsDataSource.itemIndexesForPending(coinCode, thresholdBlockHeight)
+
     fun getFetchDataList(): List<FetchData> = poolRepo.activePools.mapNotNull {
         it.getFetchData(limit)
     }
@@ -37,12 +42,11 @@ class TransactionRecordDataSource(
         }
     }
 
-    fun handleUpdatedRecords(records: List<TransactionRecord>, coinCode: CoinCode): Boolean {
-        val pool = poolRepo.getPool(coinCode) ?: return false
+    fun handleUpdatedRecords(records: List<TransactionRecord>, coinCode: CoinCode): DiffUtil.DiffResult? {
+        val pool = poolRepo.getPool(coinCode) ?: return null
 
         val updatedRecords = mutableListOf<TransactionRecord>()
         val insertedRecords = mutableListOf<TransactionRecord>()
-        var newData = false
 
         records.forEach {
             when (pool.handleUpdatedRecord(it)) {
@@ -53,23 +57,18 @@ class TransactionRecordDataSource(
                         insertedRecords.add(it)
                         pool.increaseFirstUnusedIndex()
                     }
-                    newData = true
                 }
                 Pool.HandleResult.IGNORED -> {
                 }
             }
         }
 
-        if (!poolRepo.isPoolActiveByCoinCode(coinCode)) return false
-
-        if (updatedRecords.isEmpty() && insertedRecords.isEmpty()) return newData
+        if (!poolRepo.isPoolActiveByCoinCode(coinCode)) return null
 
         val updatedItems = updatedRecords.map { factory.createTransactionItem(coinCode, it) }
         val insertedItems = insertedRecords.map { factory.createTransactionItem(coinCode, it) }
 
-        itemsDataSource.handleModifiedItems(updatedItems, insertedItems)
-
-        return true
+        return itemsDataSource.handleModifiedItems(updatedItems, insertedItems)
     }
 
     fun increasePage(): Int {
@@ -103,6 +102,5 @@ class TransactionRecordDataSource(
         poolRepo.activatePools(coinCodes)
         itemsDataSource.clear()
     }
-
 }
 

@@ -89,13 +89,12 @@ class TransactionsInteractor(private val adapterManager: IAdapterManager, privat
         lastBlockHeightDisposables.clear()
 
         adapterManager.adapters.forEach { adapter ->
-            lastBlockHeightDisposables.add(adapter.lastBlockHeightUpdatedSignal
+            adapter.lastBlockHeightUpdatedSignal
                     .throttleLast(3, TimeUnit.SECONDS)
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
-                    .subscribe {
-                        onUpdateLastBlockHeight(adapter)
-                    })
+                    .subscribe { onUpdateLastBlockHeight(adapter) }
+                    .let { lastBlockHeightDisposables.add(it) }
         }
     }
 

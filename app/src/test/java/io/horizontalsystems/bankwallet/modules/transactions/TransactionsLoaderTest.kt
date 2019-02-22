@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
+import android.support.v7.util.DiffUtil
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
@@ -15,6 +16,7 @@ class TransactionsLoaderTest {
 
     private val dataSource = mock(TransactionRecordDataSource::class.java)
     private val delegate = mock(TransactionsLoader.Delegate::class.java)
+    private val diffResult = mock(DiffUtil.DiffResult::class.java)
     private lateinit var loader: TransactionsLoader
 
     @Before
@@ -167,11 +169,12 @@ class TransactionsLoaderTest {
         val records = listOf(mock(TransactionRecord::class.java))
         val coinCode = "BTC"
 
-        whenever(dataSource.handleUpdatedRecords(records, coinCode)).thenReturn(true)
+        whenever(dataSource.handleUpdatedRecords(records, coinCode))
+                .thenReturn(diffResult)
 
         loader.didUpdateRecords(records, coinCode)
 
-        verify(delegate).didChangeData()
+        verify(delegate).onChange(diffResult)
     }
 
     @Test
@@ -179,10 +182,20 @@ class TransactionsLoaderTest {
         val records = listOf(mock(TransactionRecord::class.java))
         val coinCode = "BTC"
 
-        whenever(dataSource.handleUpdatedRecords(records, coinCode)).thenReturn(false)
+        whenever(dataSource.handleUpdatedRecords(records, coinCode)).thenReturn(null)
 
         loader.didUpdateRecords(records, coinCode)
 
         verify(delegate, never()).didChangeData()
+    }
+
+    @Test
+    fun itemIndexesForPending() {
+        val coinCode = "BTC"
+        val lastBlockHeight = 100
+
+        loader.itemIndexesForPending(coinCode, lastBlockHeight)
+
+        verify(dataSource).itemIndexesForPending(coinCode, lastBlockHeight)
     }
 }
