@@ -54,7 +54,7 @@ class TransactionDataProviderManager(private val appConfig: IAppConfigProvider, 
     }
 
     override fun baseProvider(coin: Coin): Provider {
-        if (coin.type is CoinType.Ethereum) {
+        if (coin.type is CoinType.Ethereum || coin.type is CoinType.Erc20) {
             return ethereum(localStorage.baseEthereumProvider ?: ethereumProviders[0].name)
         }
 
@@ -62,7 +62,7 @@ class TransactionDataProviderManager(private val appConfig: IAppConfigProvider, 
     }
 
     override fun setBaseProvider(name: String, coin: Coin) {
-        if (coin.type is CoinType.Ethereum) {
+        if (coin.type is CoinType.Ethereum || coin.type is CoinType.Erc20) {
             localStorage.baseEthereumProvider = name
         } else {
             localStorage.baseBitcoinProvider = name
