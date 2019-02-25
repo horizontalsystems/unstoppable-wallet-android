@@ -8,10 +8,14 @@ import java.math.BigDecimal
 
 class EthereumAdapter(coin: Coin, kit: EthereumKit) : EthereumBaseAdapter(coin, kit, 18) {
 
-    override val balance: BigDecimal get() = ethereumKit.balance
+    init {
+        ethereumKit.listener = this
+    }
+
+    override val balanceString: String?
+        get() = ethereumKit.balance
 
     override fun start() {
-        ethereumKit.listener = this
         ethereumKit.start()
     }
 
@@ -19,11 +23,11 @@ class EthereumAdapter(coin: Coin, kit: EthereumKit) : EthereumBaseAdapter(coin, 
     override fun clear() {}
 
     override fun refresh() {
-        ethereumKit.refresh()
+        ethereumKit.start()
     }
 
-    override fun send(address: String, value: BigDecimal, completion: ((Throwable?) -> (Unit))?) {
-        ethereumKit.send(address, value, completion)
+    override fun sendSingle(address: String, amount: String): Single<Unit> {
+        return ethereumKit.send(address, amount).map { Unit }
     }
 
     override fun fee(value: BigDecimal, address: String?): BigDecimal {
@@ -45,6 +49,13 @@ class EthereumAdapter(coin: Coin, kit: EthereumKit) : EthereumBaseAdapter(coin, 
     override fun getTransactionsObservable(hashFrom: String?, limit: Int): Single<List<TransactionRecord>> {
         return ethereumKit.transactions(hashFrom, limit).map {
             it.map { tx -> transactionRecord(tx) }
+        }
+    }
+
+    override fun onSyncStateUpdate() {
+        val newState = convertState(ethereumKit.syncState)
+        if (state != newState) {
+            state = newState
         }
     }
 

@@ -73,7 +73,7 @@ class BalanceInteractor(
                         delegate?.didUpdateBalance(adapter.coin.code, adapter.balance)
                     })
 
-            adapterDisposables.add(adapter.stateUpdatedSignal
+            adapterDisposables.add(adapter.adapterStateUpdatedSubject
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
                     .subscribe { state ->

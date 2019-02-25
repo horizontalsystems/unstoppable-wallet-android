@@ -40,9 +40,9 @@ class BitcoinAdapter(override val coin: Coin, authData: AuthData, newWallet: Boo
     override var state: AdapterState = AdapterState.Syncing(0, null)
         set(value) {
             field = value
-            stateUpdatedSignal.onNext(Unit)
+            adapterStateUpdatedSubject.onNext(Unit)
         }
-    override var stateUpdatedSignal: PublishSubject<Unit> = PublishSubject.create()
+    override var adapterStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
 
     override val confirmationsThreshold: Int = 6
     override val lastBlockHeight get() = bitcoinKit.lastBlockInfo?.height
@@ -173,18 +173,8 @@ class BitcoinAdapter(override val coin: Coin, authData: AuthData, newWallet: Boo
                     transaction.blockHeight?.toLong() ?: 0,
                     transaction.amount.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN),
                     transaction.timestamp,
-                    transaction.from.map {
-                        val address = TransactionAddress()
-                        address.address = it.address
-                        address.mine = it.mine
-                        address
-                    },
-                    transaction.to.map {
-                        val address = TransactionAddress()
-                        address.address = it.address
-                        address.mine = it.mine
-                        address
-                    }
+                    transaction.from.map { TransactionAddress(it.address, it.mine) },
+                    transaction.to.map { TransactionAddress(it.address, it.mine) }
             )
 
 }
