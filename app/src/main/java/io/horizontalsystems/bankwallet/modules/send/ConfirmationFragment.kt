@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.ui.extensions.AddressView
 import io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
 
@@ -35,10 +34,8 @@ class ConfirmationFragment : DialogFragment() {
 
         viewModel.sendConfirmationViewItemLiveData.observe(this, Observer { viewItem ->
             viewItem?.let { sendConfirmationViewItem ->
-                rootView.findViewById<TextView>(R.id.txtFiatAmount)?.text = sendConfirmationViewItem.currencyValue?.let {
-                    App.numberFormatter.format(it)
-                }
-                rootView.findViewById<TextView>(R.id.txtCryptoAmount)?.text = App.numberFormatter.format(sendConfirmationViewItem.coinValue)
+                rootView.findViewById<TextView>(R.id.primaryAmountText)?.text = sendConfirmationViewItem.primaryAmountInfo.getFormatted()
+                rootView.findViewById<TextView>(R.id.secondaryAmountText)?.text = sendConfirmationViewItem.secondaryAmountInfo?.getFormatted()
                 rootView.findViewById<AddressView>(R.id.addressView)?.bind(sendConfirmationViewItem.address)
                 rootView.findViewById<TextView>(R.id.txtFeeValue)?.text = sendConfirmationViewItem.feeInfo.getFormatted()
                 sendConfirmationViewItem.totalInfo?.getFormatted()?.let {
