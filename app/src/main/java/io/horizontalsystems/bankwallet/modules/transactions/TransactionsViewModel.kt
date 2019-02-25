@@ -4,12 +4,13 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.support.v7.util.DiffUtil
 import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.bankwallet.entities.Coin
 
 class TransactionsViewModel : ViewModel(), TransactionsModule.IView, TransactionsModule.IRouter {
 
     lateinit var delegate: TransactionsModule.IViewDelegate
 
-    val filterItems = MutableLiveData<List<String?>>()
+    val filterItems = MutableLiveData<List<Coin?>>()
     val transactionViewItemLiveEvent = SingleLiveEvent<TransactionViewItem>()
     val reloadChangeEvent = SingleLiveEvent<DiffUtil.DiffResult>()
     val reloadLiveEvent = SingleLiveEvent<Unit>()
@@ -21,7 +22,7 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
         delegate.viewDidLoad()
     }
 
-    override fun showFilters(filters: List<String?>) {
+    override fun showFilters(filters: List<Coin?>) {
         filterItems.postValue(filters)
     }
 

@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.RateManager
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
@@ -19,7 +20,7 @@ class TransactionsInteractor(private val adapterManager: IAdapterManager, privat
     private val ratesDisposables = CompositeDisposable()
     private val lastBlockHeightDisposables = CompositeDisposable()
     private val transactionUpdatesDisposables = CompositeDisposable()
-    private val requestedTimestamps = ConcurrentHashMap<CoinCode, MutableList<Long>>()
+    private val requestedTimestamps = ConcurrentHashMap<Coin, MutableList<Long>>()
 
     override fun initialFetch() {
         onUpdateCoinCodes()
@@ -47,17 +48,17 @@ class TransactionsInteractor(private val adapterManager: IAdapterManager, privat
             return
         }
 
-        val flowables = mutableListOf<Single<Pair<CoinCode, List<TransactionRecord>>>>()
+        val flowables = mutableListOf<Single<Pair<Coin, List<TransactionRecord>>>>()
 
         fetchDataList.forEach { fetchData ->
-            val adapter = adapterManager.adapters.find { it.coin.code == fetchData.coinCode }
+            val adapter = adapterManager.adapters.find { it.coin == fetchData.coin }
 
             val flowable = when (adapter) {
-                null -> Single.just(Pair(fetchData.coinCode, listOf()))
+                null -> Single.just(Pair(fetchData.coin, listOf()))
                 else -> {
                     adapter.getTransactionsObservable(fetchData.hashFrom, fetchData.limit)
                             .map {
-                                Pair(fetchData.coinCode, it)
+                                Pair(fetchData.coin, it)
                             }
                 }
             }
@@ -67,9 +68,9 @@ class TransactionsInteractor(private val adapterManager: IAdapterManager, privat
 
         disposables.add(
                 Single.zip(flowables) {
-                    val res = mutableMapOf<CoinCode, List<TransactionRecord>>()
+                    val res = mutableMapOf<Coin, List<TransactionRecord>>()
                     it.forEach {
-                        it as Pair<CoinCode, List<TransactionRecord>>
+                        it as Pair<Coin, List<TransactionRecord>>
                         res[it.first] = it.second
                     }
                     res.toMap()
@@ -81,8 +82,8 @@ class TransactionsInteractor(private val adapterManager: IAdapterManager, privat
                         })
     }
 
-    override fun setSelectedCoinCodes(selectedCoinCodes: List<String>) {
-        delegate?.onUpdateSelectedCoinCodes(if (selectedCoinCodes.isEmpty()) adapterManager.adapters.map { it.coin.code } else selectedCoinCodes)
+    override fun setSelectedCoinCodes(selectedCoins: List<Coin>) {
+        delegate?.onUpdateSelectedCoinCodes(if (selectedCoins.isEmpty()) adapterManager.adapters.map { it.coin } else selectedCoins)
     }
 
     override fun fetchLastBlockHeights() {
@@ -98,25 +99,25 @@ class TransactionsInteractor(private val adapterManager: IAdapterManager, privat
         }
     }
 
-    override fun fetchRates(timestamps: Map<CoinCode, List<Long>>) {
+    override fun fetchRates(timestamps: Map<Coin, List<Long>>) {
         val baseCurrency = currencyManager.baseCurrency
         val currencyCode = baseCurrency.code
 
         timestamps.forEach {
-            val coinCode = it.key
+            val coin = it.key
             for (timestamp in it.value) {
-                if (requestedTimestamps[coinCode]?.contains(timestamp) == true) continue
+                if (requestedTimestamps[coin]?.contains(timestamp) == true) continue
 
-                if (!requestedTimestamps.containsKey(coinCode)) {
-                    requestedTimestamps[coinCode] = CopyOnWriteArrayList()
+                if (!requestedTimestamps.containsKey(coin)) {
+                    requestedTimestamps[coin] = CopyOnWriteArrayList()
                 }
-                requestedTimestamps[coinCode]?.add(timestamp)
+                requestedTimestamps[coin]?.add(timestamp)
 
-                ratesDisposables.add(rateManager.rateValueObservable(coinCode, currencyCode, timestamp)
+                ratesDisposables.add(rateManager.rateValueObservable(coin.code, currencyCode, timestamp)
                         .subscribeOn(Schedulers.io())
                         .observeOn(Schedulers.io())
                         .subscribe {
-                            delegate?.didFetchRate(it, coinCode, baseCurrency, timestamp)
+                            delegate?.didFetchRate(it, coin, baseCurrency, timestamp)
                         })
             }
         }
@@ -131,21 +132,21 @@ class TransactionsInteractor(private val adapterManager: IAdapterManager, privat
 
     private fun onUpdateLastBlockHeight(adapter: IAdapter) {
         adapter.lastBlockHeight?.let { lastBlockHeight ->
-            delegate?.onUpdateLastBlockHeight(adapter.coin.code, lastBlockHeight)
+            delegate?.onUpdateLastBlockHeight(adapter.coin, lastBlockHeight)
         }
     }
 
     private fun onUpdateCoinCodes() {
         transactionUpdatesDisposables.clear()
 
-        delegate?.onUpdateCoinsData(adapterManager.adapters.map { Triple(it.coin.code, it.confirmationsThreshold, it.lastBlockHeight) })
+        delegate?.onUpdateCoinsData(adapterManager.adapters.map { Triple(it.coin, it.confirmationsThreshold, it.lastBlockHeight) })
 
         adapterManager.adapters.forEach { adapter ->
             transactionUpdatesDisposables.add(adapter.transactionRecordsSubject
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
                     .subscribe {
-                        delegate?.didUpdateRecords(it, adapter.coin.code)
+                        delegate?.didUpdateRecords(it, adapter.coin)
                     })
         }
     }

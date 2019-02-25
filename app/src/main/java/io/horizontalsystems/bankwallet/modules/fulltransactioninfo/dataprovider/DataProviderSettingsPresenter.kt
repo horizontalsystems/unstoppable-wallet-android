@@ -1,16 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider
 
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import io.horizontalsystems.bankwallet.entities.Coin
 
-class DataProviderSettingsPresenter(val coinCode: CoinCode, val transactionHash: String, private val interactor: DataProviderSettingsModule.Interactor)
+class DataProviderSettingsPresenter(val coin: Coin, val transactionHash: String, private val interactor: DataProviderSettingsModule.Interactor)
     : DataProviderSettingsModule.ViewDelegate, DataProviderSettingsModule.InteractorDelegate {
 
     var view: DataProviderSettingsModule.View? = null
     var items: List<DataProviderSettingsItem> = listOf()
 
     override fun viewDidLoad() {
-        val baseProvider = interactor.baseProvider(coinCode)
-        val allProviders = interactor.providers(coinCode)
+        val baseProvider = interactor.baseProvider(coin)
+        val allProviders = interactor.providers(coin)
 
         allProviders.forEach { provider ->
             interactor.pingProvider(provider.name, provider.apiUrl(transactionHash))
@@ -43,7 +43,7 @@ class DataProviderSettingsPresenter(val coinCode: CoinCode, val transactionHash:
 
     override fun onSelect(item: DataProviderSettingsItem) {
         if (!item.selected) {
-            interactor.setBaseProvider(item.name, coinCode)
+            interactor.setBaseProvider(item.name, coin)
         }
     }
 

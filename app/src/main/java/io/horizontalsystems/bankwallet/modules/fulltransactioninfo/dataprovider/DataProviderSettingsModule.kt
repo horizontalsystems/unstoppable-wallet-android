@@ -3,11 +3,11 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider
 import android.content.Context
 import android.content.Intent
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 
 object DataProviderSettingsModule {
-    const val COIN_CODE = "coin_code"
+    const val COIN_STRING = "coin"
     const val TRANSACTION_HASH = "transaction_hash"
 
     interface View {
@@ -22,9 +22,9 @@ object DataProviderSettingsModule {
 
     interface Interactor {
         fun pingProvider(name: String, url: String)
-        fun providers(coinCode: CoinCode): List<FullTransactionInfoModule.Provider>
-        fun baseProvider(coinCode: CoinCode): FullTransactionInfoModule.Provider
-        fun setBaseProvider(name: String, coinCode: CoinCode)
+        fun providers(coin: Coin): List<FullTransactionInfoModule.Provider>
+        fun baseProvider(coin: Coin): FullTransactionInfoModule.Provider
+        fun setBaseProvider(name: String, coin: Coin)
     }
 
     interface InteractorDelegate {
@@ -33,18 +33,18 @@ object DataProviderSettingsModule {
         fun onSetDataProvider()
     }
 
-    fun init(coinCode: CoinCode, transactionHash: String, view: DataProviderSettingsViewModel) {
+    fun init(coin: Coin, transactionHash: String, view: DataProviderSettingsViewModel) {
         val interactor = DataProviderSettingsInteractor(App.transactionDataProviderManager, App.networkManager)
-        val presenter = DataProviderSettingsPresenter(coinCode, transactionHash, interactor)
+        val presenter = DataProviderSettingsPresenter(coin, transactionHash, interactor)
 
         view.delegate = presenter
         presenter.view = view
         interactor.delegate = presenter
     }
 
-    fun start(context: Context, coinCode: CoinCode, transactionHash: String) {
+    fun start(context: Context, coin: Coin, transactionHash: String) {
         val intent = Intent(context, DataProviderSettingsActivity::class.java)
-        intent.putExtra(COIN_CODE, coinCode)
+        intent.putExtra(COIN_STRING, coin)
         intent.putExtra(TRANSACTION_HASH, transactionHash)
         context.startActivity(intent)
     }

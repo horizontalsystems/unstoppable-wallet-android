@@ -3,10 +3,8 @@ package io.horizontalsystems.bankwallet.modules.transactions
 import android.support.v7.util.DiffUtil
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
-import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import java.math.BigDecimal
 import java.util.*
 
@@ -14,6 +12,7 @@ typealias CoinCode = String
 
 data class TransactionViewItem(
         val transactionHash: String,
+        val coin: Coin,
         val coinValue: CoinValue,
         val currencyValue: CurrencyValue?,
         val from: String?,
@@ -31,10 +30,10 @@ sealed class TransactionStatus {
 
 object TransactionsModule {
 
-    data class FetchData(val coinCode: CoinCode, val hashFrom: String?, val limit: Int)
+    data class FetchData(val coin: Coin, val hashFrom: String?, val limit: Int)
 
     interface IView {
-        fun showFilters(filters: List<CoinCode?>)
+        fun showFilters(filters: List<Coin?>)
         fun reload()
         fun reloadChange(diff: DiffUtil.DiffResult)
         fun reloadItems(updatedIndexes: List<Int>)
@@ -44,7 +43,7 @@ object TransactionsModule {
     interface IViewDelegate {
         fun viewDidLoad()
         fun onTransactionItemClick(transaction: TransactionViewItem)
-        fun onFilterSelect(coinCode: CoinCode?)
+        fun onFilterSelect(coin: Coin?)
         fun onClear()
 
         val itemsCount: Int
@@ -56,19 +55,19 @@ object TransactionsModule {
         fun initialFetch()
         fun clear()
         fun fetchRecords(fetchDataList: List<FetchData>)
-        fun setSelectedCoinCodes(selectedCoinCodes: List<CoinCode>)
+        fun setSelectedCoinCodes(selectedCoins: List<Coin>)
         fun fetchLastBlockHeights()
-        fun fetchRates(timestamps: Map<CoinCode, List<Long>>)
+        fun fetchRates(timestamps: Map<Coin, List<Long>>)
     }
 
     interface IInteractorDelegate {
-        fun onUpdateCoinsData(allCoinData: List<Triple<String, Int, Int?>>)
-        fun onUpdateSelectedCoinCodes(selectedCoinCodes: List<CoinCode>)
-        fun didFetchRecords(records: Map<CoinCode, List<TransactionRecord>>)
-        fun onUpdateLastBlockHeight(coinCode: CoinCode, lastBlockHeight: Int)
+        fun onUpdateCoinsData(allCoinData: List<Triple<Coin, Int, Int?>>)
+        fun onUpdateSelectedCoinCodes(selectedCoinCodes: List<Coin>)
+        fun didFetchRecords(records: Map<Coin, List<TransactionRecord>>)
+        fun onUpdateLastBlockHeight(coin: Coin, lastBlockHeight: Int)
         fun onUpdateBaseCurrency()
-        fun didFetchRate(rateValue: BigDecimal, coinCode: CoinCode, currency: Currency, timestamp: Long)
-        fun didUpdateRecords(records: List<TransactionRecord>, coinCode: CoinCode)
+        fun didFetchRate(rateValue: BigDecimal, coin: Coin, currency: Currency, timestamp: Long)
+        fun didUpdateRecords(records: List<TransactionRecord>, coin: Coin)
     }
 
     interface IRouter {

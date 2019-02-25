@@ -27,6 +27,7 @@ class TransactionsInteractorTest {
     private val adapter2 = mock(IAdapter::class.java)
     private val coin1 = mock(Coin::class.java)
     private val coin2 = mock(Coin::class.java)
+    private val coin3 = mock(Coin::class.java)
     private val adaptersUpdatedSignal = PublishSubject.create<Unit>()
     private val baseCurrencyUpdatedSignal = PublishSubject.create<Unit>()
 
@@ -42,6 +43,10 @@ class TransactionsInteractorTest {
         whenever(adapterManager.adaptersUpdatedSignal).thenReturn(adaptersUpdatedSignal)
         whenever(currencyManager.baseCurrencyUpdatedSignal).thenReturn(baseCurrencyUpdatedSignal)
 
+        whenever(coin1.code).thenReturn("BTC")
+        whenever(coin2.code).thenReturn("ETH")
+        whenever(coin3.code).thenReturn("BCH")
+
         whenever(adapter1.coin).thenReturn(coin1)
         whenever(adapter2.coin).thenReturn(coin2)
         whenever(adapter1.transactionRecordsSubject).thenReturn(PublishSubject.create())
@@ -55,7 +60,6 @@ class TransactionsInteractorTest {
         val adapter1 = mock(IAdapter::class.java)
         val adapters = listOf(adapter1)
         val coinCode1 = "BTC"
-        val coin1 = mock(Coin::class.java)
 
         val mockSubject = mock<PublishSubject<Unit>>()
         whenever(mockSubject.throttleLast(any(), any())).thenReturn(lastBlockHeightUpdatedSignal1)
@@ -70,7 +74,7 @@ class TransactionsInteractorTest {
 
         lastBlockHeightUpdatedSignal1.onNext(Unit)
 
-        verify(delegate).onUpdateLastBlockHeight(coinCode1, lastBlockHeightUpdated)
+        verify(delegate).onUpdateLastBlockHeight(coin1, lastBlockHeightUpdated)
     }
 
     @Test
@@ -79,7 +83,7 @@ class TransactionsInteractorTest {
         val lastBlockHeight1 = 123
         val confirmationsThreshold1 = 6
         val coinCode1 = "BTC"
-        val allCoinData = listOf(Triple(coinCode1, confirmationsThreshold1, lastBlockHeight1))
+        val allCoinData = listOf(Triple(coin1, confirmationsThreshold1, lastBlockHeight1))
 
         whenever(coin1.code).thenReturn(coinCode1)
         whenever(adapter1.lastBlockHeight).thenReturn(lastBlockHeight1)
@@ -107,7 +111,7 @@ class TransactionsInteractorTest {
 
         transactionRecordsSubject.onNext(transactionRecords1)
 
-        verify(delegate).didUpdateRecords(transactionRecords1, coinCode1)
+        verify(delegate).didUpdateRecords(transactionRecords1, coin1)
     }
 
     @Test
@@ -126,7 +130,7 @@ class TransactionsInteractorTest {
         val lastBlockHeight1 = 123
         val confirmationsThreshold1 = 6
         val coinCode1 = "BTC"
-        val allCoinData = listOf(Triple(coinCode1, confirmationsThreshold1, lastBlockHeight1))
+        val allCoinData = listOf(Triple(coin1, confirmationsThreshold1, lastBlockHeight1))
 
         whenever(coin1.code).thenReturn(coinCode1)
         whenever(adapter1.lastBlockHeight).thenReturn(lastBlockHeight1)
@@ -143,15 +147,15 @@ class TransactionsInteractorTest {
 
     @Test
     fun setSelectedCoinCodes() {
-        interactor.setSelectedCoinCodes(listOf("BTC"))
+        interactor.setSelectedCoinCodes(listOf(coin1))
 
-        verify(delegate).onUpdateSelectedCoinCodes(listOf("BTC"))
+        verify(delegate).onUpdateSelectedCoinCodes(listOf(coin1))
     }
 
     @Test
     fun setSelectedCoinCodes_empty() {
         val adapters = listOf(adapter1, adapter2)
-        val allCoinCodes = listOf("BTC", "ETH")
+        val allCoinCodes = listOf(coin1, coin2)
 
         whenever(coin1.code).thenReturn("BTC")
         whenever(coin2.code).thenReturn("ETH")
@@ -171,9 +175,9 @@ class TransactionsInteractorTest {
         val limit2 = 12
 
         val fetchDataList = listOf(
-                TransactionsModule.FetchData("BTC", hashFrom1, limit1),
-                TransactionsModule.FetchData("ETH", hashFrom2, limit2),
-                TransactionsModule.FetchData("BCH", null, 17)
+                TransactionsModule.FetchData(coin1, hashFrom1, limit1),
+                TransactionsModule.FetchData(coin2, hashFrom2, limit2),
+                TransactionsModule.FetchData(coin3, null, 17)
         )
         val transactionRecords1 = listOf<TransactionRecord>(mock(TransactionRecord::class.java))
         val transactionRecords2 = listOf<TransactionRecord>(mock(TransactionRecord::class.java))
@@ -186,7 +190,7 @@ class TransactionsInteractorTest {
 
         interactor.fetchRecords(fetchDataList)
 
-        val records = mapOf("BTC" to transactionRecords1, "ETH" to transactionRecords2, "BCH" to listOf())
+        val records = mapOf(coin1 to transactionRecords1, coin2 to transactionRecords2, coin3 to listOf())
 
         verify(delegate).didFetchRecords(records)
     }
@@ -197,7 +201,7 @@ class TransactionsInteractorTest {
         val currencyCode = "USD"
         val timestamp1 = 123456L
         val timestamp2 = 34556L
-        val timestamps = mapOf(coinCode1 to listOf(timestamp1, timestamp2))
+        val timestamps = mapOf(coin1 to listOf(timestamp1, timestamp2))
         val currency = mock(Currency::class.java)
 
         val rate1Value = 213.123.toBigDecimal()
@@ -214,8 +218,8 @@ class TransactionsInteractorTest {
         verify(rateManager).rateValueObservable(coinCode1, currencyCode, timestamp1)
         verify(rateManager).rateValueObservable(coinCode1, currencyCode, timestamp2)
 
-        verify(delegate).didFetchRate(rate1Value, coinCode1, currency, timestamp1)
-        verify(delegate).didFetchRate(rate2Value, coinCode1, currency, timestamp2)
+        verify(delegate).didFetchRate(rate1Value, coin1, currency, timestamp1)
+        verify(delegate).didFetchRate(rate2Value, coin1, currency, timestamp2)
     }
 
     @Test
@@ -225,8 +229,8 @@ class TransactionsInteractorTest {
         val timestamp1 = 123456L
         val timestamp2 = 34556L
         val timestamp3 = 123123L
-        val timestamps1 = mapOf(coinCode1 to listOf(timestamp1, timestamp2, timestamp1))
-        val timestamps2 = mapOf(coinCode1 to listOf(timestamp2, timestamp3))
+        val timestamps1 = mapOf(coin1 to listOf(timestamp1, timestamp2, timestamp1))
+        val timestamps2 = mapOf(coin1 to listOf(timestamp2, timestamp3))
         val currency = mock(Currency::class.java)
 
         whenever(currency.code).thenReturn(currencyCode)
@@ -251,8 +255,8 @@ class TransactionsInteractorTest {
         val coinCode1 = "BTC"
         val currencyCode = "USD"
         val timestamp1 = 123456L
-        val timestamps1 = mapOf(coinCode1 to listOf(timestamp1))
-        val timestamps2 = mapOf(coinCode1 to listOf(timestamp1))
+        val timestamps1 = mapOf(coin1 to listOf(timestamp1))
+        val timestamps2 = mapOf(coin1 to listOf(timestamp1))
         val currency = mock(Currency::class.java)
 
         whenever(currency.code).thenReturn(currencyCode)

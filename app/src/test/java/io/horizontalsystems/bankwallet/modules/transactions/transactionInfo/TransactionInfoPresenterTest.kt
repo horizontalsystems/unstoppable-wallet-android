@@ -1,22 +1,25 @@
 package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 
-import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
+import com.nhaarman.mockito_kotlin.whenever
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinType
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.verify
 
 class TransactionInfoPresenterTest {
-    private val transHash = "0123"
     private val interactor = Mockito.mock(TransactionInfoModule.Interactor::class.java)
     private val router = Mockito.mock(TransactionInfoModule.Router::class.java)
-    private val transactionFactory = Mockito.mock(TransactionViewItemFactory::class.java)
     private val view = Mockito.mock(TransactionInfoModule.View::class.java)
+    private val coin = Mockito.mock(Coin::class.java)
 
-    private val presenter = TransactionInfoPresenter(interactor, router)
+    private lateinit var presenter: TransactionInfoPresenter
 
     @Before
     fun setUp() {
+        whenever(coin.type).thenReturn(Mockito.mock(CoinType.Bitcoin::class.java))
+        presenter = TransactionInfoPresenter(interactor, router)
         presenter.view = view
     }
 
@@ -35,11 +38,9 @@ class TransactionInfoPresenterTest {
     @Test
     fun openFullInfo() {
         val transactionHash = "hash"
-        val coinCode = "BTC"
 
-        presenter.openFullInfo(transactionHash, coinCode)
-
-        verify(router).openFullInfo(transactionHash, coinCode)
+        presenter.openFullInfo(transactionHash, coin)
+        verify(router).openFullInfo(transactionHash, coin)
     }
 
 }

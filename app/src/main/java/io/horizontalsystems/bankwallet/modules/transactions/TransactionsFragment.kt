@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoViewModel
@@ -149,7 +150,7 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
         transInfoViewModel.showFullInfoLiveEvent.observe(this, Observer { pair ->
             pair?.let {
                 activity?.let { activity ->
-                    FullTransactionInfoModule.start(activity, transactionHash = it.first, coinCode = it.second)
+                    FullTransactionInfoModule.start(activity, transactionHash = it.first, coin = it.second)
                 }
             }
         })
@@ -171,7 +172,8 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
                 }
 
                 itemTime.apply {
-                    bindTime(title = getString(R.string.TransactionInfo_Time), time = txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) } ?: "")
+                    bindTime(title = getString(R.string.TransactionInfo_Time), time = txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) }
+                            ?: "")
                 }
 
                 itemStatus.apply {
@@ -199,7 +201,7 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
         viewModel.delegate.onTransactionItemClick(item)
     }
 
-    override fun onFilterItemClick(item: String?) {
+    override fun onFilterItemClick(item: Coin?) {
         viewModel.delegate.onFilterSelect(item)
     }
 
@@ -267,15 +269,15 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
 class FilterAdapter(private var listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), ViewHolderFilter.ClickListener {
 
     interface Listener {
-        fun onFilterItemClick(item: String?)
+        fun onFilterItemClick(item: Coin?)
     }
 
     var filterChangeable = true
 
-    private var selectedFilterId: String? = null
-    private var filters: List<String?> = listOf()
+    private var selectedFilterId: Coin? = null
+    private var filters: List<Coin?> = listOf()
 
-    fun setFilters(filters: List<String?>) {
+    fun setFilters(filters: List<Coin?>) {
         this.filters = filters
         selectedFilterId = null
         notifyDataSetChanged()
@@ -307,8 +309,9 @@ class ViewHolderFilter(override val containerView: View, private val l: ClickLis
         fun onClickItem(position: Int)
     }
 
-    fun bind(filterName: String?, active: Boolean) {
-        filter_text.text = filterName ?: containerView.context.getString(R.string.Transactions_FilterAll)
+    fun bind(coin: Coin?, active: Boolean) {
+        filter_text.text = coin?.code
+                ?: containerView.context.getString(R.string.Transactions_FilterAll)
         filter_text.isActivated = active
         filter_text.setOnClickListener { l.onClickItem(adapterPosition) }
     }

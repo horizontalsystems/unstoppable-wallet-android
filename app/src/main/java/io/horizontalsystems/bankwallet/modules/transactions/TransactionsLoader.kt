@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
 import android.support.v7.util.DiffUtil
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 
 class TransactionsLoader(private val dataSource: TransactionRecordDataSource) {
@@ -18,14 +19,14 @@ class TransactionsLoader(private val dataSource: TransactionRecordDataSource) {
         get() = dataSource.itemsCount
 
     var loading: Boolean = false
-    val allRecords: Map<CoinCode, List<TransactionRecord>>
+    val allRecords: Map<Coin, List<TransactionRecord>>
         get() = dataSource.allRecords
 
     fun itemForIndex(index: Int) =
             dataSource.itemForIndex(index)
 
-    fun setCoinCodes(coinCodes: List<CoinCode>) {
-        dataSource.setCoinCodes(coinCodes)
+    fun setCoinCodes(coins: List<Coin>) {
+        dataSource.setCoinCodes(coins)
     }
 
     fun loadNext(initial: Boolean = false) {
@@ -53,7 +54,7 @@ class TransactionsLoader(private val dataSource: TransactionRecordDataSource) {
         }
     }
 
-    fun didFetchRecords(records: Map<CoinCode, List<TransactionRecord>>) {
+    fun didFetchRecords(records: Map<Coin, List<TransactionRecord>>) {
         dataSource.handleNextRecords(records)
         val currentItemsCount = dataSource.itemsCount
         val insertedCount = dataSource.increasePage()
@@ -63,16 +64,16 @@ class TransactionsLoader(private val dataSource: TransactionRecordDataSource) {
         loading = false
     }
 
-    fun itemIndexesForTimestamp(coinCode: CoinCode, timestamp: Long): List<Int> {
-        return dataSource.itemIndexesForTimestamp(coinCode, timestamp)
+    fun itemIndexesForTimestamp(coin: Coin, timestamp: Long): List<Int> {
+        return dataSource.itemIndexesForTimestamp(coin, timestamp)
     }
 
-    fun itemIndexesForPending(coinCode: CoinCode, thresholdBlockHeight: Int): List<Int> {
-        return dataSource.itemIndexesForPending(coinCode, thresholdBlockHeight)
+    fun itemIndexesForPending(coin: Coin, thresholdBlockHeight: Int): List<Int> {
+        return dataSource.itemIndexesForPending(coin, thresholdBlockHeight)
     }
 
-    fun didUpdateRecords(records: List<TransactionRecord>, coinCode: CoinCode) {
-        dataSource.handleUpdatedRecords(records, coinCode)?.let {
+    fun didUpdateRecords(records: List<TransactionRecord>, coin: Coin) {
+        dataSource.handleUpdatedRecords(records, coin)?.let {
             delegate?.onChange(it)
         }
     }

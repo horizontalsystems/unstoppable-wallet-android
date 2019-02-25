@@ -15,9 +15,9 @@ import android.view.View
 import android.view.ViewGroup
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.FullTransactionItem
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider.DataProviderSettingsModule
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_full_transaction_info.*
@@ -34,10 +34,10 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
         super.onCreate(savedInstanceState)
 
         val transactionHash = intent.extras.getString(transactionHashKey)
-        val coinCodeString = intent.extras.getString(coinCodeKey)
+        val coin = intent.extras.getSerializable(coinKey)
 
         viewModel = ViewModelProviders.of(this).get(FullTransactionInfoViewModel::class.java)
-        viewModel.init(transactionHash, coinCodeString)
+        viewModel.init(transactionHash, coin as Coin)
 
         setContentView(R.layout.activity_full_transaction_info)
 
@@ -78,8 +78,8 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
         })
 
         viewModel.openProviderSettingsEvent.observe(this, Observer { data ->
-            data?.let { (coinCode, transactionHash) ->
-                DataProviderSettingsModule.start(this, coinCode, transactionHash)
+            data?.let { (coin, transactionHash) ->
+                DataProviderSettingsModule.start(this, coin, transactionHash)
             }
         })
 
@@ -128,12 +128,12 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
 
     companion object {
         const val transactionHashKey = "transaction_hash"
-        const val coinCodeKey = "coin_code"
+        const val coinKey = "coin"
 
-        fun start(context: Context, transactionHash: String, coinCode: CoinCode) {
+        fun start(context: Context, transactionHash: String, coin: Coin) {
             val intents = Intent(context, FullTransactionInfoActivity::class.java)
             intents.putExtra(transactionHashKey, transactionHash)
-            intents.putExtra(coinCodeKey, coinCode)
+            intents.putExtra(coinKey, coin)
             context.startActivity(intents)
         }
     }
