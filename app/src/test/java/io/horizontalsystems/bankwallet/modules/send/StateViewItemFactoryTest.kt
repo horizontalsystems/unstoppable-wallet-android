@@ -12,8 +12,10 @@ class StateViewItemFactoryTest {
     private val state = SendModule.State(8, SendModule.InputType.COIN)
     private val confirmation = SendModule.State(8, SendModule.InputType.COIN)
     private val coinValue = CoinValue("BTC", BigDecimal("123.45"))
+    private val feeCoinValue = CoinValue("BTC", BigDecimal("0.05"))
     private val usdCurrency = Currency(code = "USD", symbol = "$")
     private val currencyValue = CurrencyValue(usdCurrency, BigDecimal("0.116699446"))
+    private val feeCurrencyValue = CurrencyValue(usdCurrency, BigDecimal("0.001699446"))
     private val coin = Coin("Bitcoin", "BTC", CoinType.Bitcoin)
 
     @Before
@@ -120,6 +122,60 @@ class StateViewItemFactoryTest {
         val viewItem = factory.viewItemForState(state, false)
 
         Assert.assertFalse(viewItem.sendButtonEnabled)
+    }
+
+    @Test
+    fun testConfirmation_primaryAmount_coinInputType() {
+        confirmation.feeCoinValue = feeCoinValue
+        confirmation.inputType = SendModule.InputType.COIN
+
+        val viewItem = factory.confirmationViewItemForState(confirmation)
+
+        Assert.assertEquals(SendModule.AmountInfo.CoinValueInfo(coinValue), viewItem?.primaryAmountInfo)
+    }
+
+    @Test
+    fun testConfirmation_primaryAmount_currencyInputType() {
+        confirmation.feeCurrencyValue = feeCurrencyValue
+        confirmation.currencyValue = currencyValue
+        confirmation.inputType = SendModule.InputType.CURRENCY
+
+        val viewItem = factory.confirmationViewItemForState(confirmation)
+
+        Assert.assertEquals(SendModule.AmountInfo.CurrencyValueInfo(currencyValue), viewItem?.primaryAmountInfo)
+    }
+
+    @Test
+    fun testConfirmation_secondaryAmount_coinInputType() {
+        confirmation.feeCoinValue = feeCoinValue
+        confirmation.inputType = SendModule.InputType.COIN
+        confirmation.currencyValue = currencyValue
+
+        val viewItem = factory.confirmationViewItemForState(confirmation)
+
+        Assert.assertEquals(SendModule.AmountInfo.CurrencyValueInfo(currencyValue), viewItem?.secondaryAmountInfo)
+    }
+
+    @Test
+    fun testConfirmation_secondaryAmount_coinInputType_noCurrencyValue() {
+        confirmation.feeCoinValue = feeCoinValue
+        confirmation.inputType = SendModule.InputType.COIN
+        confirmation.currencyValue = null
+
+        val viewItem = factory.confirmationViewItemForState(confirmation)
+
+        Assert.assertEquals(null, viewItem?.secondaryAmountInfo)
+    }
+
+    @Test
+    fun testConfirmation_secondaryAmount_currencyInputType() {
+        confirmation.feeCoinValue = feeCoinValue
+        confirmation.inputType = SendModule.InputType.CURRENCY
+        confirmation.currencyValue = currencyValue
+
+        val viewItem = factory.confirmationViewItemForState(confirmation)
+
+        Assert.assertEquals(SendModule.AmountInfo.CoinValueInfo(coinValue), viewItem?.secondaryAmountInfo)
     }
 
     @Test
