@@ -128,16 +128,15 @@ interface IAdapter {
     val feeCoinCode: String?
     val decimal: Int
     val balance: BigDecimal
+
     val balanceUpdatedSignal: PublishSubject<Unit>
+    val lastBlockHeightUpdatedSignal: PublishSubject<Unit>
+    val adapterStateUpdatedSubject: PublishSubject<Unit>
+    val transactionRecordsSubject: PublishSubject<List<TransactionRecord>>
 
     val state: AdapterState
-    val stateUpdatedSignal: PublishSubject<Unit>
-
     val confirmationsThreshold: Int
     val lastBlockHeight: Int?
-    val lastBlockHeightUpdatedSignal: PublishSubject<Unit>
-
-    val transactionRecordsSubject: PublishSubject<List<TransactionRecord>>
 
     val debugInfo: String
 
