@@ -66,6 +66,16 @@ object DateHelper {
         return differenceInMillis / 1000
     }
 
+    fun isSameDay(date: Date, date2: Date): Boolean {
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+
+        val calendar2 = Calendar.getInstance()
+        calendar2.time = date2
+
+        return calendar.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == calendar2.get(Calendar.DAY_OF_YEAR)
+    }
+
     private fun isToday(date: Date): Boolean {
         val today = Calendar.getInstance()
         return isSameDay(date, today)
