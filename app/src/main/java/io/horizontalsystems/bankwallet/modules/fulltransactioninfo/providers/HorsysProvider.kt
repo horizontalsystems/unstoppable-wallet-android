@@ -75,7 +75,7 @@ class HorsysBTCResponse(
     override val fee: Double get() = fees / btcRate
     override val size: Int? get() = ((fee / feePerByte) * btcRate).toInt()
 
-    class Vin(@SerializedName("coin") val coin: Coin) : Input() {
+    class Vin(@SerializedName("coin") val coin: BCoin) : Input() {
         override val value get() = coin.amount.toDouble() / btcRate
         override val address get() = coin.addr
     }
@@ -85,7 +85,7 @@ class HorsysBTCResponse(
         override val address get() = addr
     }
 
-    class Coin(@SerializedName("value") val amount: Int, @SerializedName("address") val addr: String)
+    class BCoin(@SerializedName("value") val amount: Int, @SerializedName("address") val addr: String)
 }
 
 class HorsysETHResponse(

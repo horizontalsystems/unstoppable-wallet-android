@@ -6,6 +6,8 @@ import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.ITransactionDataProviderManager
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
 import io.reactivex.Flowable
 import org.junit.Before
@@ -17,12 +19,15 @@ class DataProviderSettingsInteractorTest {
     private val dataProviderManager = mock(ITransactionDataProviderManager::class.java)
     private val networkManager = mock(INetworkManager::class.java)
     private val delegate = mock(DataProviderSettingsModule.InteractorDelegate::class.java)
+    private val coin = mock(Coin::class.java)
 
     private lateinit var interactor: DataProviderSettingsInteractor
 
     @Before
     fun setup() {
         RxBaseTest.setup()
+
+        whenever(coin.type).thenReturn(mock(CoinType.Bitcoin::class.java))
 
         interactor = DataProviderSettingsInteractor(dataProviderManager, networkManager)
         interactor.delegate = delegate
@@ -50,23 +55,23 @@ class DataProviderSettingsInteractorTest {
 
     @Test
     fun providers() {
-        interactor.providers("BTC")
+        interactor.providers(coin)
 
-        verify(dataProviderManager).providers("BTC")
+        verify(dataProviderManager).providers(coin)
     }
 
     @Test
     fun baseProvider() {
-        interactor.baseProvider("BTC")
+        interactor.baseProvider(coin)
 
-        verify(dataProviderManager).baseProvider("BTC")
+        verify(dataProviderManager).baseProvider(coin)
     }
 
     @Test
     fun setBaseProvider() {
-        interactor.setBaseProvider("abc.com", "BTC")
+        interactor.setBaseProvider("abc.com", coin)
 
-        verify(dataProviderManager).setBaseProvider("abc.com", "BTC")
+        verify(dataProviderManager).setBaseProvider("abc.com", coin)
         verify(delegate).onSetDataProvider()
     }
 

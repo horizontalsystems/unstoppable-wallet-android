@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider
 
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.ITransactionDataProviderManager
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -29,16 +29,16 @@ class DataProviderSettingsInteractor(private val dataProviderManager: ITransacti
                 }))
     }
 
-    override fun providers(coinCode: CoinCode): List<FullTransactionInfoModule.Provider> {
-        return dataProviderManager.providers(coinCode)
+    override fun providers(coin: Coin): List<FullTransactionInfoModule.Provider> {
+        return dataProviderManager.providers(coin)
     }
 
-    override fun baseProvider(coinCode: CoinCode): FullTransactionInfoModule.Provider {
-        return dataProviderManager.baseProvider(coinCode)
+    override fun baseProvider(coin: Coin): FullTransactionInfoModule.Provider {
+        return dataProviderManager.baseProvider(coin)
     }
 
-    override fun setBaseProvider(name: String, coinCode: CoinCode) {
-        dataProviderManager.setBaseProvider(name, coinCode)
+    override fun setBaseProvider(name: String, coin: Coin) {
+        dataProviderManager.setBaseProvider(name, coin)
 
         delegate?.onSetDataProvider()
     }

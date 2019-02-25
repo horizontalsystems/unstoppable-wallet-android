@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.transactions
 
 import android.support.v7.util.DiffUtil
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import java.math.BigDecimal
@@ -24,8 +25,8 @@ class TransactionsPresenter(
         router.openTransactionInfo(transaction)
     }
 
-    override fun onFilterSelect(coinCode: CoinCode?) {
-        interactor.setSelectedCoinCodes(coinCode?.let { listOf(coinCode) } ?: listOf())
+    override fun onFilterSelect(coin: Coin?) {
+        interactor.setSelectedCoinCodes(coin?.let { listOf(coin) } ?: listOf())
     }
 
     override fun onClear() {
@@ -37,10 +38,10 @@ class TransactionsPresenter(
 
     override fun itemForIndex(index: Int): TransactionViewItem {
         val transactionItem = loader.itemForIndex(index)
-        val coinCode = transactionItem.coinCode
-        val lastBlockHeight = metadataDataSource.getLastBlockHeight(coinCode)
-        val threshold = metadataDataSource.getConfirmationThreshold(coinCode)
-        val rate = metadataDataSource.getRate(coinCode, transactionItem.record.timestamp)
+        val coin = transactionItem.coin
+        val lastBlockHeight = metadataDataSource.getLastBlockHeight(coin)
+        val threshold = metadataDataSource.getConfirmationThreshold(coin)
+        val rate = metadataDataSource.getRate(coin, transactionItem.record.timestamp)
 
         return factory.item(transactionItem, lastBlockHeight, threshold, rate)
     }
@@ -49,10 +50,10 @@ class TransactionsPresenter(
         loader.loadNext(false)
     }
 
-    override fun onUpdateCoinsData(allCoinData: List<Triple<String, Int, Int?>>) {
-        val coinCodes = allCoinData.map { it.first }
+    override fun onUpdateCoinsData(allCoinData: List<Triple<Coin, Int, Int?>>) {
+        val coins = allCoinData.map { it.first }
 
-        loader.setCoinCodes(coinCodes)
+        loader.setCoinCodes(coins)
 
         allCoinData.forEach { (coinCode, confirmationThreshold, lastBlockHeight) ->
             metadataDataSource.setConfirmationThreshold(confirmationThreshold, coinCode)
@@ -64,8 +65,8 @@ class TransactionsPresenter(
         loader.loadNext(true)
 
         val filters = when {
-            coinCodes.size < 2 -> listOf()
-            else -> listOf(null).plus(coinCodes)
+            coins.size < 2 -> listOf()
+            else -> listOf(null).plus(coins)
         }
 
         view?.showFilters(filters)
@@ -73,28 +74,28 @@ class TransactionsPresenter(
         interactor.fetchLastBlockHeights()
     }
 
-    override fun onUpdateSelectedCoinCodes(selectedCoinCodes: List<CoinCode>) {
-        loader.setCoinCodes(selectedCoinCodes)
+    override fun onUpdateSelectedCoinCodes(selectedCoins: List<Coin>) {
+        loader.setCoinCodes(selectedCoins)
         loader.loadNext(true)
     }
 
-    override fun didFetchRecords(records: Map<CoinCode, List<TransactionRecord>>) {
+    override fun didFetchRecords(records: Map<Coin, List<TransactionRecord>>) {
         loader.didFetchRecords(records)
         fetchRatesForRecords(records)
     }
 
-    override fun onUpdateLastBlockHeight(coinCode: CoinCode, lastBlockHeight: Int) {
-        val oldBlockHeight = metadataDataSource.getLastBlockHeight(coinCode)
-        val threshold = metadataDataSource.getConfirmationThreshold(coinCode)
+    override fun onUpdateLastBlockHeight(coin: Coin, lastBlockHeight: Int) {
+        val oldBlockHeight = metadataDataSource.getLastBlockHeight(coin)
+        val threshold = metadataDataSource.getConfirmationThreshold(coin)
 
-        metadataDataSource.setLastBlockHeight(lastBlockHeight, coinCode)
+        metadataDataSource.setLastBlockHeight(lastBlockHeight, coin)
 
         if (threshold == null || oldBlockHeight == null) {
             view?.reload()
             return
         }
 
-        val indexes = loader.itemIndexesForPending(coinCode, oldBlockHeight - threshold)
+        val indexes = loader.itemIndexesForPending(coin, oldBlockHeight - threshold)
         if (indexes.isNotEmpty()) {
             view?.reloadItems(indexes)
         }
@@ -107,19 +108,19 @@ class TransactionsPresenter(
         fetchRatesForRecords(loader.allRecords)
     }
 
-    override fun didFetchRate(rateValue: BigDecimal, coinCode: CoinCode, currency: Currency, timestamp: Long) {
-        metadataDataSource.setRate(rateValue, coinCode, currency, timestamp)
+    override fun didFetchRate(rateValue: BigDecimal, coin: Coin, currency: Currency, timestamp: Long) {
+        metadataDataSource.setRate(rateValue, coin, currency, timestamp)
 
-        val itemIndexes = loader.itemIndexesForTimestamp(coinCode, timestamp)
+        val itemIndexes = loader.itemIndexesForTimestamp(coin, timestamp)
         if (itemIndexes.isNotEmpty()) {
             view?.reloadItems(itemIndexes)
         }
     }
 
-    override fun didUpdateRecords(records: List<TransactionRecord>, coinCode: CoinCode) {
-        loader.didUpdateRecords(records, coinCode)
+    override fun didUpdateRecords(records: List<TransactionRecord>, coin: Coin) {
+        loader.didUpdateRecords(records, coin)
 
-        fetchRatesForRecords(mapOf(coinCode to records))
+        fetchRatesForRecords(mapOf(coin to records))
     }
 
     //
@@ -142,7 +143,7 @@ class TransactionsPresenter(
         interactor.fetchRecords(fetchDataList)
     }
 
-    private fun fetchRatesForRecords(records: Map<CoinCode, List<TransactionRecord>>) {
+    private fun fetchRatesForRecords(records: Map<Coin, List<TransactionRecord>>) {
         interactor.fetchRates(records.map { Pair(it.key, it.value.map { it.timestamp }.distinct().sortedDescending()) }.toMap())
     }
 }

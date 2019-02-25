@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
 import android.support.v4.app.FragmentActivity
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.FullTransactionItem
 import io.horizontalsystems.bankwallet.entities.FullTransactionRecord
 import io.horizontalsystems.bankwallet.entities.FullTransactionSection
@@ -20,7 +21,7 @@ object FullTransactionInfoModule {
         fun showError(providerName: String?)
         fun showCopied()
         fun openUrl(url: String)
-        fun openProviderSettings(coinCode: CoinCode, transactionHash: String)
+        fun openProviderSettings(coin: Coin, transactionHash: String)
         fun share(url: String)
     }
 
@@ -41,7 +42,7 @@ object FullTransactionInfoModule {
 
     interface Interactor {
         fun didLoad()
-        fun updateProvider(coinCode: CoinCode)
+        fun updateProvider(coin: Coin)
 
         fun url(hash: String): String?
 
@@ -92,7 +93,7 @@ object FullTransactionInfoModule {
     }
 
     interface ProviderFactory {
-        fun providerFor(coinCode: CoinCode): FullProvider
+        fun providerFor(coin: Coin): FullProvider
     }
 
     interface ProviderDelegate {
@@ -100,21 +101,21 @@ object FullTransactionInfoModule {
     }
 
     interface State {
-        val coinCode: CoinCode
+        val coin: Coin
         val transactionHash: String
         var transactionRecord: FullTransactionRecord?
     }
 
-    fun init(view: FullTransactionInfoViewModel, router: Router, coinCode: CoinCode, transactionHash: String) {
+    fun init(view: FullTransactionInfoViewModel, router: Router, coin: Coin, transactionHash: String) {
         val interactor = FullTransactionInfoInteractor(App.transactionInfoFactory, App.transactionDataProviderManager, TextHelper)
-        val presenter = FullTransactionInfoPresenter(interactor, router, FullTransactionInfoState(coinCode, transactionHash))
+        val presenter = FullTransactionInfoPresenter(interactor, router, FullTransactionInfoState(coin, transactionHash))
 
         view.delegate = presenter
         presenter.view = view
         interactor.delegate = presenter
     }
 
-    fun start(activity: FragmentActivity, transactionHash: String, coinCode: CoinCode) {
-        FullTransactionInfoActivity.start(activity, transactionHash, coinCode)
+    fun start(activity: FragmentActivity, transactionHash: String, coin: Coin) {
+        FullTransactionInfoActivity.start(activity, transactionHash, coin)
     }
 }

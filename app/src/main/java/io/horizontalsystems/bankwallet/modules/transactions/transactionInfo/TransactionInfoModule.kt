@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 
@@ -10,7 +11,7 @@ object TransactionInfoModule {
 
     interface ViewDelegate {
         fun onCopy(value: String)
-        fun openFullInfo(transactionHash: String, coinCode: CoinCode)
+        fun openFullInfo(transactionHash: String, coin: Coin)
     }
 
     interface Interactor {
@@ -20,7 +21,7 @@ object TransactionInfoModule {
     interface InteractorDelegate
 
     interface Router {
-        fun openFullInfo(transactionHash: String, coinCode: CoinCode)
+        fun openFullInfo(transactionHash: String, coin: Coin)
     }
 
     fun init(view: TransactionInfoViewModel, router: Router) {

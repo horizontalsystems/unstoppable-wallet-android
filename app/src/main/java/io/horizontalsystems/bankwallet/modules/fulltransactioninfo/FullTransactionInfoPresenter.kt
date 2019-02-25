@@ -27,7 +27,7 @@ class FullTransactionInfoPresenter(val interactor: FullTransactionInfoInteractor
     //
     override fun viewDidLoad() {
         interactor.didLoad()
-        interactor.updateProvider(state.coinCode)
+        interactor.updateProvider(state.coin)
 
         retryLoadInfo()
     }
@@ -50,12 +50,12 @@ class FullTransactionInfoPresenter(val interactor: FullTransactionInfoInteractor
     }
 
     override fun onTapProvider() {
-        view?.openProviderSettings(state.coinCode, state.transactionHash)
+        view?.openProviderSettings(state.coin, state.transactionHash)
     }
 
 
     override fun onTapChangeProvider() {
-        view?.openProviderSettings(state.coinCode, state.transactionHash)
+        view?.openProviderSettings(state.coin, state.transactionHash)
     }
 
     override fun onTapResource() {
@@ -81,7 +81,7 @@ class FullTransactionInfoPresenter(val interactor: FullTransactionInfoInteractor
         state.transactionRecord = null
         view?.reload()
 
-        interactor.updateProvider(state.coinCode)
+        interactor.updateProvider(state.coin)
 
         retryLoadInfo()
     }

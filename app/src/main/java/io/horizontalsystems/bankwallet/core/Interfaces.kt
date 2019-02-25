@@ -85,9 +85,9 @@ interface ICurrencyManager {
 interface ITransactionDataProviderManager {
     val baseProviderUpdatedSignal: Observable<Unit>
 
-    fun providers(coinCode: CoinCode): List<FullTransactionInfoModule.Provider>
-    fun baseProvider(coinCode: CoinCode): FullTransactionInfoModule.Provider
-    fun setBaseProvider(name: String, coinCode: CoinCode)
+    fun providers(coin: Coin): List<FullTransactionInfoModule.Provider>
+    fun baseProvider(coin: Coin): FullTransactionInfoModule.Provider
+    fun setBaseProvider(name: String, coin: Coin)
 
     fun bitcoin(name: String): FullTransactionInfoModule.BitcoinForksProvider
     fun bitcoinCash(name: String): FullTransactionInfoModule.BitcoinForksProvider

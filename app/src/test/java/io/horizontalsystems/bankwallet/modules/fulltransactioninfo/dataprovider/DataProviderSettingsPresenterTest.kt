@@ -2,6 +2,8 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider
 
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import org.junit.Before
 import org.junit.Test
@@ -12,18 +14,19 @@ class DataProviderSettingsPresenterTest {
     private val provider = mock(FullTransactionInfoModule.Provider::class.java)
     private val interactor = mock(DataProviderSettingsModule.Interactor::class.java)
     private val view = mock(DataProviderSettingsModule.View::class.java)
-    private val coinCode = "BTC"
     private val transactionHash = "abc"
+    private val coin = mock(Coin::class.java)
 
     private lateinit var presenter: DataProviderSettingsPresenter
 
     @Before
     fun setup() {
+        whenever(coin.type).thenReturn(mock(CoinType.Bitcoin::class.java))
         whenever(provider.name).thenReturn("abc.com")
-        whenever(interactor.baseProvider(coinCode)).thenReturn(provider)
-        whenever(interactor.providers(coinCode)).thenReturn(listOf(provider))
+        whenever(interactor.baseProvider(coin)).thenReturn(provider)
+        whenever(interactor.providers(coin)).thenReturn(listOf(provider))
 
-        presenter = DataProviderSettingsPresenter(coinCode, transactionHash, interactor)
+        presenter = DataProviderSettingsPresenter(coin, transactionHash, interactor)
         presenter.view = view
     }
 
@@ -31,8 +34,8 @@ class DataProviderSettingsPresenterTest {
     fun viewDidLoad() {
         presenter.viewDidLoad()
 
-        verify(interactor).baseProvider(coinCode)
-        verify(interactor).providers(coinCode)
+        verify(interactor).baseProvider(coin)
+        verify(interactor).providers(coin)
 
         val items = listOf(DataProviderSettingsItem(name = "abc.com", online = false, selected = true, checking = true))
         verify(view).show(items)
@@ -44,7 +47,7 @@ class DataProviderSettingsPresenterTest {
 
         presenter.onSelect(item)
 
-        verify(interactor).setBaseProvider(item.name, coinCode)
+        verify(interactor).setBaseProvider(item.name, coin)
     }
 
     @Test

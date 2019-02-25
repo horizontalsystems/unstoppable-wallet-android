@@ -42,6 +42,6 @@ data class TransactionRecord(var transactionHash: String) {
     }
 }
 
-data class TransactionItem(val coinCode: CoinCode, val record: TransactionRecord)
+data class TransactionItem(val coin: Coin, val record: TransactionRecord)
 
 class TransactionAddress(val address: String, val mine: Boolean)

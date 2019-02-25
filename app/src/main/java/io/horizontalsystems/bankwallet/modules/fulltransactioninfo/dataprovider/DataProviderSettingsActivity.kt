@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.ui.view.ViewHolderProgressbar
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_explorer_switcher.*
@@ -27,10 +28,10 @@ class DataProviderSettingsActivity : BaseActivity(), DataProviderSettingsAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val coinCode = intent.extras.getString(DataProviderSettingsModule.COIN_CODE)
+        val coin = intent.extras.getSerializable(DataProviderSettingsModule.COIN_STRING)
         val txHash = intent.extras.getString(DataProviderSettingsModule.TRANSACTION_HASH)
         viewModel = ViewModelProviders.of(this).get(DataProviderSettingsViewModel::class.java)
-        viewModel.init(coinCode, txHash)
+        viewModel.init(coin as Coin, txHash)
 
         setContentView(R.layout.activity_explorer_switcher)
 
