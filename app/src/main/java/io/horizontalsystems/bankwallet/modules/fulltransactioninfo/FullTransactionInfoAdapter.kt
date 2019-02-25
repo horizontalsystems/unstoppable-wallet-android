@@ -98,11 +98,11 @@ class FullTransactionEthereumAdapter(val provider: FullTransactionInfoModule.Eth
             if (data.size != null) {
                 section.add(FullTransactionItem(R.string.FullInfo_Size, value = "${data.size} (bytes)", dimmed = true))
             }
-            section.add(FullTransactionItem(R.string.FullInfo_GasLimit, value = "${data.gasLimit} GWei", dimmed = true))
-            section.add(FullTransactionItem(R.string.FullInfo_GasPrice, value = "${data.gasPrice} GWei", dimmed = true))
+            section.add(FullTransactionItem(R.string.FullInfo_GasLimit, value = data.gasLimit, dimmed = true))
             data.gasUsed?.let {
-                section.add(FullTransactionItem(R.string.FullInfo_GasUsed, value = "${data.gasUsed} GWei", dimmed = true))
+                section.add(FullTransactionItem(R.string.FullInfo_GasUsed, value = data.gasUsed, dimmed = true))
             }
+            section.add(FullTransactionItem(R.string.FullInfo_GasPrice, value = "${data.gasPrice} GWei", dimmed = true))
 
             sections.add(FullTransactionSection(section))
         }
