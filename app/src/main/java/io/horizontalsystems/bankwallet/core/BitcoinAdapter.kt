@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core
 
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bitcoinkit.BitcoinKit
 import io.horizontalsystems.bitcoinkit.managers.UnspentOutputSelector
 import io.horizontalsystems.bitcoinkit.models.BlockInfo
@@ -143,11 +144,16 @@ class BitcoinAdapter(override val coin: Coin, authData: AuthData, newWallet: Boo
             is BitcoinKit.KitState.Syncing -> {
                 this.state.let { currentState ->
                     val newProgress = (state.progress * 100).toInt()
+                    val newDate = bitcoinKit.lastBlockInfo?.timestamp?.let { Date(it * 1000) }
 
-                    if (currentState is AdapterState.Syncing && currentState.progress == newProgress)
-                        return
+                    if (currentState is AdapterState.Syncing && currentState.progress == newProgress) {
+                        val currentDate = currentState.lastBlockDate
+                        if (newDate != null && currentDate != null && DateHelper.isSameDay(newDate, currentDate)) {
+                            return
+                        }
+                    }
 
-                    this.state = AdapterState.Syncing(newProgress, bitcoinKit.lastBlockInfo?.timestamp?.let { Date(it * 1000) })
+                    this.state = AdapterState.Syncing(newProgress, newDate)
                 }
             }
         }
