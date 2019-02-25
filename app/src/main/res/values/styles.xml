@@ -52,6 +52,8 @@
     <attr name="PinScreenBackground" format="reference|color" />
     <attr name="TransactionTagColor" format="reference|color" />
     <attr name="ProgressbarSpinnerColor" format="reference|color" />
+    <attr name="SwipeRefreshSpinnerColor" format="reference|color" />
+    <attr name="SwipeRefreshBackgroundColor" format="reference|color" />
 
     <!-- Base application theme. -->
     <style name="DarkModeAppTheme" parent="Theme.AppCompat.NoActionBar">
@@ -119,6 +121,8 @@
         <item name="PinScreenBackground">@color/dark</item>
         <item name="TransactionTagColor">@color/stateful_tag_filter_text_color_dark</item>
         <item name="ProgressbarSpinnerColor">@color/dark</item>
+        <item name="SwipeRefreshSpinnerColor">@color/bars_color</item>
+        <item name="SwipeRefreshBackgroundColor">@color/dark</item>
     </style>
 
     <style name="LightModeAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -186,6 +190,8 @@
         <item name="PinScreenBackground">@color/bars_color</item>
         <item name="TransactionTagColor">@color/dark</item>
         <item name="ProgressbarSpinnerColor">@color/bars_color</item>
+        <item name="SwipeRefreshSpinnerColor">@color/dark</item>
+        <item name="SwipeRefreshBackgroundColor">@color/bars_color</item>
     </style>
 
     <style name="Button" parent="Widget.AppCompat.Button.Borderless">
