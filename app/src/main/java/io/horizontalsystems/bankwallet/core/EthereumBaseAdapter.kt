@@ -9,6 +9,7 @@ import io.horizontalsystems.ethereumkit.models.EthereumTransaction
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 
@@ -66,7 +67,7 @@ abstract class EthereumBaseAdapter(override val coin: Coin, protected val ethere
 
     override fun send(address: String, value: BigDecimal, completion: ((Throwable?) -> Unit)?) {
         sendSingle(address, value)
-                .subscribeOn(io.reactivex.schedulers.Schedulers.io())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     //success
