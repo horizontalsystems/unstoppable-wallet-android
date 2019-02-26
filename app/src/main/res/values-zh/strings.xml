@@ -99,8 +99,9 @@
     <string name="FullInfo_Fee">费用</string>
     <string name="FullInfo_Rate">费率</string>
     <string name="FullInfo_Source">信息源</string>
-    <string name="FullInfo_To">收件人</string>
+    <string name="FullInfo_Token">Token</string>
     <string name="FullInfo_From">发件人</string>
+    <string name="FullInfo_To">收件人</string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
