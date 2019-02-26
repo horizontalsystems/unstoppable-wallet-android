@@ -99,8 +99,9 @@
     <string name="FullInfo_Fee">Gebühr</string>
     <string name="FullInfo_Rate">Bewerten</string>
     <string name="FullInfo_Source">Quelle</string>
-    <string name="FullInfo_To">An</string>
+    <string name="FullInfo_Token">Token</string>
     <string name="FullInfo_From">Von</string>
+    <string name="FullInfo_To">An</string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
