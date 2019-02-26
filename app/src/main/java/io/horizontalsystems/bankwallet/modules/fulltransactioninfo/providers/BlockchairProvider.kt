@@ -3,11 +3,12 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.EthInputParser
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.BitcoinResponse
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.EthereumResponse
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionResponse
+import java.math.BigInteger
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -115,9 +116,9 @@ class BlockchairETHResponse(@SerializedName("data") val data: Map<String, Data>)
         override val hash get() = transaction.hash
         override val height get() = transaction.height.toString()
         override val fee get() = (transaction.fee.toDouble() / ethRate).toString()
-        override val from get() = transaction.sender
-        override val to get() = transaction.recipient
-        override val value get() = App.numberFormatter.format(transaction.value.toBigInteger().toDouble() / ethRate)
+        override val from get() = transaction.from
+        override val to get() = transaction.to
+        override val value get() = transaction.amount
         override val nonce get() = transaction.nonce.toInt().toString()
         override val gasLimit get() = transaction.gasLimit.toString()
         override val gasPrice get() = (transaction.gasPrice / gweiRate).toString()
@@ -141,7 +142,32 @@ class BlockchairETHResponse(@SerializedName("data") val data: Map<String, Data>)
             @SerializedName("gas_used") val gasUsed: Long,
             @SerializedName("nonce") val nonce: String,
             @SerializedName("value") val value: String,
-            @SerializedName("sender") val sender: String,
-            @SerializedName("recipient") val recipient: String
-    )
+            @SerializedName("sender") val from: String,
+            @SerializedName("recipient") var recipient: String,
+            @SerializedName("input_hex") val input: String
+    ) {
+        val amount: BigInteger
+            get() {
+                var data = BigInteger(value)
+                if (input != "") {
+                    EthInputParser.parse(input)?.let {
+                        data = BigInteger(it.value, 16)
+                    }
+                }
+
+                return data
+            }
+
+        val to: String
+            get() {
+                var address = recipient
+                if (input != "") {
+                    EthInputParser.parse(input)?.let {
+                        address = "0x${it.to}"
+                    }
+                }
+
+                return address
+            }
+    }
 }

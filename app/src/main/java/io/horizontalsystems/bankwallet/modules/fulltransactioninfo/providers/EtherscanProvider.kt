@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.EthInputParser
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.EthereumResponse
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import java.math.BigInteger
@@ -28,9 +28,10 @@ class EtherscanEthereumProvider : FullTransactionInfoModule.EthereumForksProvide
 class EtherscanResponse(
         @SerializedName("hash") override val hash: String,
         @SerializedName("from") override val from: String,
-        @SerializedName("to") override val to: String,
+        @SerializedName("to") override var to: String,
         @SerializedName("nonce") val gNonce: String,
         @SerializedName("value") val amount: String,
+        @SerializedName("input") val input: String,
         @SerializedName("gas") val gLimit: String,
         @SerializedName("gasPrice") val price: String,
         @SerializedName("blockNumber") val blockNumber: String) : EthereumResponse() {
@@ -44,8 +45,18 @@ class EtherscanResponse(
     override val height: String
         get() = Integer.parseInt(blockNumber.substring(2), 16).toString()
 
-    override val value: String
-        get() = App.numberFormatter.format(BigInteger(amount.substring(2), 16).toDouble() / ethRate)
+    override val value: BigInteger
+        get() {
+            var amountData = amount.substring(2)
+            if (input != "0x") {
+                EthInputParser.parse(input)?.let {
+                    amountData = it.value
+                    to = "0x${it.to}"
+                }
+            }
+
+            return BigInteger(amountData, 16)
+        }
 
     override val nonce: String
         get() = Integer.parseInt(gNonce.substring(2), 16).toString()
