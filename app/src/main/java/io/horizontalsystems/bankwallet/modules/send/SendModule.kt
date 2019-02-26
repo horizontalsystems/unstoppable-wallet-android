@@ -25,7 +25,7 @@ object SendModule {
         fun setSendButtonEnabled(sendButtonEnabled: Boolean)
 
         fun showConfirmation(viewItem: SendConfirmationViewItem)
-        fun showError(error: Throwable)
+        fun showError(errorText: Int)
         fun dismissWithSuccess()
         fun setPasteButtonState(enabled: Boolean)
         fun setDecimal(decimal: Int)

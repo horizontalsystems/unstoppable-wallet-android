@@ -29,7 +29,7 @@ object HudHelper {
         val toastText = toast.view.findViewById(android.R.id.message) as TextView
         toastText.setTextColor(ContextCompat.getColor(toast.view.context, R.color.white))
         toast.view.background.setColorFilter(ContextCompat.getColor(toast.view.context, backgroundColor), PorterDuff.Mode.SRC_IN)
-        toast.setGravity(Gravity.CENTER, 0, 0)
+        toast.setGravity(Gravity.TOP, 0, 120)
         toast.show()
     }
 }

@@ -78,7 +78,7 @@
     <string name="Send_Button_Max">Max</string>
 
     <string name="Send_ScanQrCode">Scan QR Code</string>
-    <string name="Send_Success">Sent!</string>
+    <string name="Send_Success">\u2713 Sent</string>
 
     <string name="Send_Error_InvalidAddress">Address seems invalid. Please check and try again!</string>
     <string name="Send_Error_InsufficientBalance">Not enough funds.</string>
@@ -88,6 +88,7 @@
     <string name="Send_DialogTitle">Confirm Transaction</string>
     <string name="Send_DialogFee">Fee:</string>
     <string name="Send_DialogTotal">Total:</string>
+    <string name="Send_Sending">Sending</string>
 
     <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
 
@@ -250,6 +251,7 @@
     <string name="Hud_Text_NoInternet">No Internet</string>
     <string name="Hud_Text_Copied">Copied</string>
     <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
+    <string name="Hud_Text_Socket_Timeout_Exception">Network issues. Try again in a short moment</string>
 
 
     <!--Fingerprint texts-->
