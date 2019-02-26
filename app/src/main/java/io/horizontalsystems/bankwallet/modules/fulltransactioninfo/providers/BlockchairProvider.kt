@@ -124,6 +124,14 @@ class BlockchairETHResponse(@SerializedName("data") val data: Map<String, Data>)
         override val gasPrice get() = (transaction.gasPrice / gweiRate).toString()
         override val gasUsed get () = transaction.gasUsed.toString()
         override val confirmations: Int? get() = null
+        override val contractAddress: String?
+            get() {
+                return if (transaction.input != "") {
+                    transaction.recipient
+                } else {
+                    null
+                }
+            }
         override val date: Date
             get() {
                 val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")

@@ -112,6 +112,10 @@ class FullTransactionEthereumAdapter(val provider: FullTransactionInfoModule.Eth
         }
 
         mutableListOf<FullTransactionItem>().let { section ->
+            data.contractAddress?.let {
+                section.add(FullTransactionItem(R.string.FullInfo_Token, value = data.contractAddress, clickable = true, icon = FullTransactionIcon.TOKEN))
+            }
+
             section.add(FullTransactionItem(R.string.FullInfo_From, value = data.from, clickable = true, icon = FullTransactionIcon.PERSON))
             section.add(FullTransactionItem(R.string.FullInfo_To, value = data.to, clickable = true, icon = FullTransactionIcon.PERSON))
 

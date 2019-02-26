@@ -100,6 +100,7 @@ class HorsysETHResponse(
         @SerializedName("gas") override val gasLimit: String,
         @SerializedName("gasUsed") override val gasUsed: String) : EthereumResponse() {
 
+    override val contractAddress: String? get() = null
     override val size: Int? get() = null
     override val date: Date? get() = null
     override val confirmations: Int? get() = null

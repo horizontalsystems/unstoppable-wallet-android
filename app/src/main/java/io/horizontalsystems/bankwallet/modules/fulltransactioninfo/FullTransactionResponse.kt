@@ -47,6 +47,7 @@ abstract class EthereumResponse : FullTransactionResponse {
     abstract val nonce: String
     abstract val from: String
     abstract val to: String
+    abstract val contractAddress: String?
 
     companion object {
         const val ethRate: Double = 1_000_000_000_000_000_000.0

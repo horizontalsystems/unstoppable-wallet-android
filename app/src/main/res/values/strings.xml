@@ -138,8 +138,9 @@
     <string name="FullInfo_Fee">Fee</string>
     <string name="FullInfo_Rate">Rate</string>
     <string name="FullInfo_Source">Source</string>
-    <string name="FullInfo_To">To</string>
+    <string name="FullInfo_Token">Token</string>
     <string name="FullInfo_From">From</string>
+    <string name="FullInfo_To">To</string>
 
     <string name="FullInfo_GasLimit">Gas Limit</string>
     <string name="FullInfo_GasUsed">Gas Used</string>
