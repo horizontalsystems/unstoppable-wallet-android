@@ -17,6 +17,9 @@ class Erc20Adapter(coin: Coin, kit: EthereumKit, private val contractAddress: St
     override val balanceString: String?
         get() = ethereumKit.balanceERC20(contractAddress)
 
+    override val balance: BigDecimal
+        get() = balanceInBigDecimal(balanceString, decimal)
+
     override val feeCoinCode: String? = "ETH"
 
     override fun start() {}
@@ -47,7 +50,7 @@ class Erc20Adapter(coin: Coin, kit: EthereumKit, private val contractAddress: St
         if (amount > availableBalance(address)) {
             errors.add(SendStateError.InsufficientAmount)
         }
-        if (balance < fee(amount, address)) {
+        if (balanceInBigDecimal(ethereumKit.balance, decimal) < fee(amount, address)) {
             errors.add(SendStateError.InsufficientFeeBalance)
         }
         return errors
