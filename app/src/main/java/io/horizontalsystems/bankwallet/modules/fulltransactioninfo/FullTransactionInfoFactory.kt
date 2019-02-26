@@ -20,21 +20,21 @@ class FullTransactionInfoFactory(private val networkManager: INetworkManager, pr
                 val providerBTC = dataProviderManager.bitcoin(baseProvider.name)
 
                 provider = providerBTC
-                adapter = FullTransactionBitcoinAdapter(providerBTC, coin.code)
+                adapter = FullTransactionBitcoinAdapter(providerBTC, coin)
             }
             // BCH, BCHt
             coin.type is CoinType.BitcoinCash -> {
                 val providerBCH = dataProviderManager.bitcoinCash(baseProvider.name)
 
                 provider = providerBCH
-                adapter = FullTransactionBitcoinAdapter(providerBCH, coin.code)
+                adapter = FullTransactionBitcoinAdapter(providerBCH, coin)
             }
             // ETH, ETHt
             else -> {
                 val providerETH = dataProviderManager.ethereum(baseProvider.name)
 
                 provider = providerETH
-                adapter = FullTransactionEthereumAdapter(providerETH, coin.code)
+                adapter = FullTransactionEthereumAdapter(providerETH, coin)
             }
         }
 

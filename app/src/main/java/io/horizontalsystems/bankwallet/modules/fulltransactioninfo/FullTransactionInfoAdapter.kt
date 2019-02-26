@@ -3,14 +3,11 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.FullTransactionIcon
-import io.horizontalsystems.bankwallet.entities.FullTransactionItem
-import io.horizontalsystems.bankwallet.entities.FullTransactionRecord
-import io.horizontalsystems.bankwallet.entities.FullTransactionSection
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
+import java.math.BigInteger
 
-class FullTransactionBitcoinAdapter(val provider: FullTransactionInfoModule.BitcoinForksProvider, val coinCode: CoinCode)
+class FullTransactionBitcoinAdapter(val provider: FullTransactionInfoModule.BitcoinForksProvider, val coin: Coin)
     : FullTransactionInfoModule.Adapter {
 
     override fun convert(json: JsonObject): FullTransactionRecord {
@@ -29,7 +26,7 @@ class FullTransactionBitcoinAdapter(val provider: FullTransactionInfoModule.Bitc
 
         sections.add(FullTransactionSection(items = blockItems))
 
-        val transactionItems = mutableListOf(FullTransactionItem(R.string.FullInfo_Fee, value = "${App.numberFormatter.format(data.fee)} $coinCode"))
+        val transactionItems = mutableListOf(FullTransactionItem(R.string.FullInfo_Fee, value = "${App.numberFormatter.format(data.fee)} ${coin.code}"))
 
         data.size?.let {
             transactionItems.add(FullTransactionItem(R.string.FullInfo_Size, value = "$it (bytes)", dimmed = true))
@@ -43,10 +40,10 @@ class FullTransactionBitcoinAdapter(val provider: FullTransactionInfoModule.Bitc
 
         if (data.inputs.isNotEmpty()) {
             val totalInput = App.numberFormatter.format(data.inputs.sumByDouble { it.value })
-            val inputs = mutableListOf(FullTransactionItem(R.string.FullInfo_SubtitleInputs, value = "$totalInput $coinCode"))
+            val inputs = mutableListOf(FullTransactionItem(R.string.FullInfo_SubtitleInputs, value = "$totalInput ${coin.code}"))
             data.inputs.map {
                 val amount = App.numberFormatter.format(it.value)
-                inputs.add(FullTransactionItem(title = "$amount $coinCode", value = it.address, clickable = true, icon = FullTransactionIcon.PERSON))
+                inputs.add(FullTransactionItem(title = "$amount ${coin.code}", value = it.address, clickable = true, icon = FullTransactionIcon.PERSON))
             }
 
             sections.add(FullTransactionSection(inputs))
@@ -54,11 +51,11 @@ class FullTransactionBitcoinAdapter(val provider: FullTransactionInfoModule.Bitc
 
         if (data.outputs.isNotEmpty()) {
             val totalOutput = App.numberFormatter.format(data.outputs.sumByDouble { it.value })
-            val outputs = mutableListOf(FullTransactionItem(R.string.FullInfo_SubtitleOutputs, value = "$totalOutput $coinCode"))
+            val outputs = mutableListOf(FullTransactionItem(R.string.FullInfo_SubtitleOutputs, value = "$totalOutput ${coin.code}"))
 
             data.outputs.map {
                 val amount = App.numberFormatter.format(it.value)
-                outputs.add(FullTransactionItem(title = "$amount $coinCode", value = it.address, clickable = true, icon = FullTransactionIcon.PERSON))
+                outputs.add(FullTransactionItem(title = "$amount ${coin.code}", value = it.address, clickable = true, icon = FullTransactionIcon.PERSON))
             }
 
             sections.add(FullTransactionSection(outputs))
@@ -69,7 +66,7 @@ class FullTransactionBitcoinAdapter(val provider: FullTransactionInfoModule.Bitc
 
 }
 
-class FullTransactionEthereumAdapter(val provider: FullTransactionInfoModule.EthereumForksProvider, val coinCode: CoinCode)
+class FullTransactionEthereumAdapter(val provider: FullTransactionInfoModule.EthereumForksProvider, val coin: Coin)
     : FullTransactionInfoModule.Adapter {
 
     override fun convert(json: JsonObject): FullTransactionRecord {
@@ -85,7 +82,14 @@ class FullTransactionEthereumAdapter(val provider: FullTransactionInfoModule.Eth
             data.confirmations?.let {
                 section.add(FullTransactionItem(R.string.FullInfo_Confirmations, value = it.toString(), icon = FullTransactionIcon.CHECK))
             }
-            section.add(FullTransactionItem(R.string.FullInfoEth_Value, value = "${data.value} $coinCode"))
+
+            val amount = if (coin.type is CoinType.Erc20) {
+                data.value.divide(BigInteger.TEN.pow(coin.type.decimal)).toDouble()
+            } else {
+                data.value.toDouble() / EthereumResponse.ethRate
+            }
+
+            section.add(FullTransactionItem(R.string.FullInfoEth_Value, value = "${App.numberFormatter.format(amount)} ${coin.code}"))
             section.add(FullTransactionItem(R.string.FullInfoEth_Nonce, value = data.nonce, dimmed = true))
 
             sections.add(FullTransactionSection(section))
@@ -93,21 +97,25 @@ class FullTransactionEthereumAdapter(val provider: FullTransactionInfoModule.Eth
 
         mutableListOf<FullTransactionItem>().let { section ->
             data.fee?.let {
-                section.add(FullTransactionItem(R.string.FullInfo_Fee, value = "${App.numberFormatter.format(it.toDouble())} $coinCode"))
+                section.add(FullTransactionItem(R.string.FullInfo_Fee, value = "${App.numberFormatter.format(it.toDouble())} ETH"))
             }
             if (data.size != null) {
                 section.add(FullTransactionItem(R.string.FullInfo_Size, value = "${data.size} (bytes)", dimmed = true))
             }
-            section.add(FullTransactionItem(R.string.FullInfo_GasLimit, value = "${data.gasLimit} GWei", dimmed = true))
-            section.add(FullTransactionItem(R.string.FullInfo_GasPrice, value = "${data.gasPrice} GWei", dimmed = true))
+            section.add(FullTransactionItem(R.string.FullInfo_GasLimit, value = data.gasLimit, dimmed = true))
             data.gasUsed?.let {
-                section.add(FullTransactionItem(R.string.FullInfo_GasUsed, value = "${data.gasUsed} GWei", dimmed = true))
+                section.add(FullTransactionItem(R.string.FullInfo_GasUsed, value = data.gasUsed, dimmed = true))
             }
+            section.add(FullTransactionItem(R.string.FullInfo_GasPrice, value = "${data.gasPrice} GWei", dimmed = true))
 
             sections.add(FullTransactionSection(section))
         }
 
         mutableListOf<FullTransactionItem>().let { section ->
+            data.contractAddress?.let {
+                section.add(FullTransactionItem(R.string.FullInfo_Token, value = data.contractAddress, clickable = true, icon = FullTransactionIcon.TOKEN))
+            }
+
             section.add(FullTransactionItem(R.string.FullInfo_From, value = data.from, clickable = true, icon = FullTransactionIcon.PERSON))
             section.add(FullTransactionItem(R.string.FullInfo_To, value = data.to, clickable = true, icon = FullTransactionIcon.PERSON))
 
