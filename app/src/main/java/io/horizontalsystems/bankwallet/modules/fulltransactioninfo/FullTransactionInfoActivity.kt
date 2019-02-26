@@ -23,7 +23,8 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_full_transaction_info.*
 import kotlinx.android.synthetic.main.view_holder_full_transaction.*
 import kotlinx.android.synthetic.main.view_holder_full_transaction_item.*
-import kotlinx.android.synthetic.main.view_holder_full_transaction_provider.*
+import kotlinx.android.synthetic.main.view_holder_full_transaction_link.*
+import kotlinx.android.synthetic.main.view_holder_full_transaction_source.*
 
 class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFragment.Listener {
 
@@ -142,34 +143,50 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
 class SectionViewAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     lateinit var viewModel: FullTransactionInfoViewModel
 
+    private val sectionViewSource = 0
     private val sectionView = 1
-    private val sectionViewProvider = 2
+    private val sectionViewLink = 2
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context)
-        return if (viewType == sectionView) {
+
+        return if (viewType == sectionViewSource) {
+            SectionSourceViewHolder(view.inflate(R.layout.view_holder_full_transaction_source, parent, false))
+        } else if (viewType == sectionView) {
             SectionViewHolder(view.inflate(R.layout.view_holder_full_transaction, parent, false))
         } else {
-            SectionProviderViewHolder(view.inflate(R.layout.view_holder_full_transaction_provider, parent, false))
+            SectionLinkViewHolder(view.inflate(R.layout.view_holder_full_transaction_link, parent, false))
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position == itemCount - 1) {
-            sectionViewProvider
+        return if (position == 0) {
+            sectionViewSource
+        } else if (position == itemCount - 1) {
+            sectionViewLink
         } else {
             sectionView
         }
     }
 
     override fun getItemCount(): Int {
-        return viewModel.delegate.sectionCount + 1
+        return viewModel.delegate.sectionCount + 2
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val providerName = viewModel.delegate.providerName
+
         when (holder) {
+            is SectionSourceViewHolder -> {
+                holder.transactionSource.bind(title = context.getString(R.string.FullInfo_Source), value = providerName, dimmed = false, icon = null)
+                holder.transactionSource.setOnClickListener {
+                    viewModel.delegate.onTapProvider()
+                }
+            }
             is SectionViewHolder -> {
-                viewModel.delegate.getSection(position)?.let { section ->
+                val posWithoutSource = position - 1
+
+                viewModel.delegate.getSection(posWithoutSource)?.let { section ->
                     holder.sectionRecyclerView.hasFixedSize()
                     holder.sectionRecyclerView.isNestedScrollingEnabled = false
 
@@ -178,19 +195,13 @@ class SectionViewAdapter(val context: Context) : RecyclerView.Adapter<RecyclerVi
                 }
 
             }
-            is SectionProviderViewHolder -> {
-                val providerName = viewModel.delegate.providerName
-                holder.sectionProvider.bind(title = context.getString(R.string.FullInfo_Source), value = providerName, dimmed = false, icon = null)
-                holder.sectionProvider.setOnClickListener {
-                    viewModel.delegate.onTapProvider()
-                }
-
+            is SectionLinkViewHolder -> {
                 providerName?.let {
                     val changeProviderStyle = SpannableString(providerName)
                     changeProviderStyle.setSpan(UnderlineSpan(), 0, changeProviderStyle.length, 0)
 
-                    holder.providerSite.text = changeProviderStyle
-                    holder.providerSite.setOnClickListener {
+                    holder.transactionLink.text = changeProviderStyle
+                    holder.transactionLink.setOnClickListener {
                         viewModel.delegate.onTapResource()
                     }
                 }
@@ -238,5 +249,6 @@ class SectionItemViewAdapter(val context: Context, val viewModel: FullTransactio
 }
 
 class SectionViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
-class SectionProviderViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
+class SectionSourceViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
+class SectionLinkViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
 class SectionItemViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
