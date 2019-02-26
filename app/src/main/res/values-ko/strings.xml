@@ -55,7 +55,7 @@
     <string name="Send_Button_Send">전송</string>
     <string name="Send_Button_Max">최대</string>
     <string name="Send_ScanQrCode">QR 코드 스캔</string>
-    <string name="Send_Success">보냄!</string>
+    <string name="Send_Success">\u2713 Sent</string>
     <string name="Send_Error_InvalidAddress">주소가 올바르지 않습니다. 다시 확인하고 시도해주세요!</string>
     <string name="Send_Error_InsufficientBalance">잔액이 부족합니다.</string>
     <string name="Send_Error_IncorrectAddress">잘못된 주소</string>
@@ -63,6 +63,7 @@
     <string name="Send_DialogTitle">거래를 확인해라</string>
     <string name="Send_DialogFee">수수료:</string>
     <string name="Send_DialogTotal">합계:</string>
+    <string name="Send_Sending">Sending</string>
     <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
     <!--Deposit-->
     <string name="Deposit_Title">수신%s</string>
@@ -178,6 +179,7 @@
     <string name="Hud_Text_NoInternet">인터넷에 연결되지 않음</string>
     <string name="Hud_Text_Copied">복사됨</string>
     <string name="Hud_Text_InvalidPinError">잘못된 비밀번호</string>
+    <string name="Hud_Text_Socket_Timeout_Exception">Network issues. Try again in a short moment</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">지문인식 로그인</string>
     <string name="Fingerprint_Hint">터치 센서</string>
