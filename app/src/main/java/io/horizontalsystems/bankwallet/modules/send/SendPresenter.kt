@@ -1,6 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.send
 
+import io.horizontalsystems.bankwallet.R
 import java.math.BigDecimal
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 class SendPresenter(
         private val interactor: SendModule.IInteractor,
@@ -127,7 +130,16 @@ class SendPresenter(
     }
 
     override fun didFailToSend(error: Throwable) {
-        view?.showError(error)
+        val textResourceId = getErrorText(error)
+        view?.showError(textResourceId)
+    }
+
+    private fun getErrorText(error: Throwable): Int {
+        return when(error){
+            is UnknownHostException -> R.string.Hud_Text_NoInternet
+            is SocketTimeoutException -> R.string.Hud_Text_Socket_Timeout_Exception
+            else -> R.string.Error
+        }
     }
 
     //

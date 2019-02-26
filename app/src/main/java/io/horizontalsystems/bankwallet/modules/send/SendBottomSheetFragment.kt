@@ -249,12 +249,13 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
         })
 
         viewModel.dismissWithSuccessLiveEvent.observe(this, Observer {
+            HudHelper.showSuccessMessage(R.string.Send_Success)
             dismiss()
         })
 
         viewModel.errorLiveData.observe(this, Observer { error ->
             error?.let {
-                HudHelper.showErrorMessage(R.string.Error)
+                HudHelper.showErrorMessage(it)
             }
         })
 

@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.extensions.AddressView
+import io.horizontalsystems.bankwallet.ui.extensions.ButtonWithProgressbarView
 import io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
 
 class ConfirmationFragment : DialogFragment() {
@@ -56,11 +57,24 @@ class ConfirmationFragment : DialogFragment() {
             }
         })
 
+        viewModel.dismissConfirmationLiveEvent.observe(this, Observer {
+            dismiss()
+        })
 
-        rootView.findViewById<TextView>(R.id.buttonConfirm)?.let { buttonConfirm ->
+        viewModel.errorLiveData.observe(this, Observer {
+            rootView.findViewById<ButtonWithProgressbarView>(R.id.buttonConfirm)?.let { buttonConfirm ->
+                isCancelable = true
+                buttonConfirm.bind(R.string.Backup_Button_Confirm)
+            }
+        })
+
+        rootView.findViewById<ButtonWithProgressbarView>(R.id.buttonConfirm)?.let { buttonConfirm ->
+            buttonConfirm.bind(R.string.Backup_Button_Confirm)
+
             buttonConfirm.setOnClickListener {
                 viewModel.delegate.onConfirmClicked()
-                dismiss()
+                isCancelable = false
+                buttonConfirm.bind(R.string.Send_Sending, false, true)
             }
         }
 
