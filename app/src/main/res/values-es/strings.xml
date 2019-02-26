@@ -55,7 +55,7 @@
     <string name="Send_Button_Send">Enviar</string>
     <string name="Send_Button_Max">Máx.</string>
     <string name="Send_ScanQrCode">Escanee el código QR</string>
-    <string name="Send_Success">Enviado!</string>
+    <string name="Send_Success">\u2713 Sent</string>
     <string name="Send_Error_InvalidAddress">La dirección parece no válida. ¡Por favor verifíquela e inténtelo de nuevo!</string>
     <string name="Send_Error_InsufficientBalance">Saldo insuficiente</string>
     <string name="Send_Error_IncorrectAddress">Código incorrecto</string>
@@ -63,6 +63,7 @@
     <string name="Send_DialogTitle">Confirmar transacción</string>
     <string name="Send_DialogFee">Comisión:</string>
     <string name="Send_DialogTotal">Total:</string>
+    <string name="Send_Sending">Sending</string>
     <string name="Send_ERC_Alert">Tarifas de transacción para %s (ERC20) pagado en Ethereum. Es necesario %s ETH.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Recibir %s</string>
@@ -178,6 +179,7 @@
     <string name="Hud_Text_NoInternet">Sin conexión a Internet</string>
     <string name="Hud_Text_Copied">Copiado</string>
     <string name="Hud_Text_InvalidPinError">Codigo incorrecto</string>
+    <string name="Hud_Text_Socket_Timeout_Exception">Network issues. Try again in a short moment</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">Inicio de sesión de huella digital</string>
     <string name="Fingerprint_Hint">Sensor táctil</string>
