@@ -49,7 +49,7 @@ class NetworkManager(private val appConfig: IAppConfigProvider) : INetworkManage
                 .getFullTransaction(path)
     }
 
-    override fun ping(host: String, url: String): Flowable<JsonObject> {
+    override fun ping(host: String, url: String): Flowable<Any> {
         return ServicePing.service(host)
                 .ping(url)
     }
@@ -109,7 +109,7 @@ object ServicePing {
 
     interface FullTransactionAPI {
         @GET
-        fun ping(@Url path: String): Flowable<JsonObject>
+        fun ping(@Url path: String): Flowable<Any>
     }
 }
 
