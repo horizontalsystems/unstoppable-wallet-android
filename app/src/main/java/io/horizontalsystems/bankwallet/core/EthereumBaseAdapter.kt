@@ -50,16 +50,6 @@ abstract class EthereumBaseAdapter(override val coin: Coin, protected val ethere
         ethereumKit.validateAddress(address)
     }
 
-    override val balance: BigDecimal
-        get() {
-            balanceString?.toBigDecimalOrNull()?.let {
-                val converted = it.movePointLeft(decimal)
-                return converted.stripTrailingZeros()
-            }
-
-            return BigDecimal.ZERO
-        }
-
     open val balanceString: String?
         get() {
             return null
@@ -75,6 +65,13 @@ abstract class EthereumBaseAdapter(override val coin: Coin, protected val ethere
                 }, {
                     completion?.invoke(it)
                 })?.let { disposables.add(it) }
+    }
+
+    protected fun balanceInBigDecimal(balanceString: String?, decimal: Int): BigDecimal {
+        balanceString?.toBigDecimalOrNull()?.let {
+            val converted = it.movePointLeft(decimal)
+            return converted.stripTrailingZeros()
+        } ?: return BigDecimal.ZERO
     }
 
     private fun sendSingle(address: String, amount: BigDecimal): Single<Unit> {
@@ -100,13 +97,12 @@ abstract class EthereumBaseAdapter(override val coin: Coin, protected val ethere
         lastBlockHeightUpdatedSignal.onNext(Unit)
     }
 
-    override fun onSyncStateUpdate() { }
+    override fun onSyncStateUpdate() {}
 
     override fun onTransactionsUpdate(transactions: List<EthereumTransaction>) {
         val transactionRecords = transactions.map { transactionRecord(it) }
         transactionRecordsSubject.onNext(transactionRecords)
     }
-
 
 
     //

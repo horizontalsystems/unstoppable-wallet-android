@@ -15,6 +15,9 @@ class EthereumAdapter(coin: Coin, kit: EthereumKit) : EthereumBaseAdapter(coin, 
     override val balanceString: String?
         get() = ethereumKit.balance
 
+    override val balance: BigDecimal
+        get() = balanceInBigDecimal(balanceString, decimal)
+
     override fun start() {
         ethereumKit.start()
     }
