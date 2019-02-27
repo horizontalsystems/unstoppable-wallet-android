@@ -17,18 +17,14 @@ data class Coin(val title: String, val code: String, val type: CoinType) : Seria
 
     override fun equals(other: Any?): Boolean {
         if (other is Coin) {
-            return title == other.title
-                    && code == other.code
-                    && type == other.type
+            return title == other.title && code == other.code
         }
+
         return super.equals(other)
     }
 
     override fun hashCode(): Int {
-        var result = title.hashCode()
-        result = 31 * result + code.hashCode()
-        result = 31 * result + type.hashCode()
-        return result
+        return title.hashCode() * 31 + code.hashCode()
     }
 }
 
