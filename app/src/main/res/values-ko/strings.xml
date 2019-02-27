@@ -99,7 +99,7 @@
     <string name="FullInfo_Fee">수수료</string>
     <string name="FullInfo_Rate">비율, 속도, 평가</string>
     <string name="FullInfo_Source">원천, 자료</string>
-    <string name="FullInfo_Token">Token</string>
+    <string name="FullInfo_Contract">Contract</string>
     <string name="FullInfo_From">로 부터</string>
     <string name="FullInfo_To">에게</string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
@@ -180,7 +180,7 @@
     <string name="Hud_Text_NoInternet">인터넷에 연결되지 않음</string>
     <string name="Hud_Text_Copied">복사됨</string>
     <string name="Hud_Text_InvalidPinError">잘못된 비밀번호</string>
-    <string name="Hud_Text_Socket_Timeout_Exception">Network issues. Try again in a short moment</string>
+    <string name="Hud_Network_Issue">Network issues. Try again in a short moment</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">지문인식 로그인</string>
     <string name="Fingerprint_Hint">터치 센서</string>
