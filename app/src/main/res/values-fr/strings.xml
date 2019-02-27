@@ -99,7 +99,7 @@
     <string name="FullInfo_Fee">Frais</string>
     <string name="FullInfo_Rate">Taux</string>
     <string name="FullInfo_Source">Source</string>
-    <string name="FullInfo_Token">Token</string>
+    <string name="FullInfo_Contract">Contract</string>
     <string name="FullInfo_From">De</string>
     <string name="FullInfo_To">À</string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
@@ -174,7 +174,7 @@
     <string name="Hud_Text_NoInternet">Aucune connexion Internet</string>
     <string name="Hud_Text_Copied">Copié</string>
     <string name="Hud_Text_InvalidPinError">Le code incorrect</string>
-    <string name="Hud_Text_Socket_Timeout_Exception">Network issues. Try again in a short moment</string>
+    <string name="Hud_Network_Issue">Network issues. Try again in a short moment</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">Prise d\'empreintes digitales</string>
     <string name="Fingerprint_Hint">Détecteur tactile</string>
