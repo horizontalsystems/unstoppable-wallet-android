@@ -9,6 +9,8 @@
     <string name="Alert_Close">Close</string>
     <string name="Alert_Success">Success</string>
     <string name="Alert_Copied">Copied</string>
+    <string name="Alert_NoInternet">No Internet</string>
+
 
     <string name="Button_Cancel">Cancel</string>
     <string name="Button_Back">Back</string>
