@@ -19,6 +19,9 @@ class TransactionDiffCallback(private val oldTxList: List<TransactionItem>, priv
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldTxList[oldItemPosition].record == newTxList[newItemPosition].record
+        val old = oldTxList[oldItemPosition].record
+        val new = newTxList[newItemPosition].record
+
+        return old.blockHeight == new.blockHeight && old.timestamp == new.timestamp
     }
 }

@@ -16,29 +16,6 @@ data class TransactionRecord(var transactionHash: String) {
         this.from = from
         this.to = to
     }
-
-    override fun equals(other: Any?): Boolean {
-        if (other is TransactionRecord) {
-            return transactionHash == other.transactionHash
-                    && blockHeight == other.blockHeight
-                    && amount == other.amount
-                    && timestamp == other.timestamp
-                    && from == other.from
-                    && to == other.to
-        }
-
-        return super.equals(other)
-    }
-
-    override fun hashCode(): Int {
-        var result = transactionHash.hashCode()
-        result = 31 * result + blockHeight.hashCode()
-        result = 31 * result + amount.hashCode()
-        result = 31 * result + timestamp.hashCode()
-        result = 31 * result + from.hashCode()
-        result = 31 * result + to.hashCode()
-        return result
-    }
 }
 
 data class TransactionItem(val coin: Coin, val record: TransactionRecord)
