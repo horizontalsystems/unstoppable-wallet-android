@@ -17,23 +17,23 @@ import java.util.*
 
 class NumberFormatter(private val languageManager: ILanguageManager): IAppNumberFormatter {
 
-    private val COIN_BIG_NUMBER_EDGE = "0.0001".toBigDecimal()
-    private val FIAT_BIG_NUMBER_EDGE = "100".toBigDecimal()
+    private val COIN_BIG_NUMBER_EDGE = "0.01".toBigDecimal()
+    private val FIAT_BIG_NUMBER_EDGE = "1000".toBigDecimal()
     private val FIAT_SMALL_NUMBER_EDGE = "0.01".toBigDecimal()
 
     private var formatters: MutableMap<String, NumberFormat> = mutableMapOf()
 
     override fun format(coinValue: CoinValue, explicitSign: Boolean, realNumber: Boolean): String? {
-        val value = coinValue.value.abs()
+        var value = coinValue.value.abs()
 
         val customFormatter = getFormatter(languageManager.currentLanguage) ?: return null
 
         when {
-            !realNumber && value >= COIN_BIG_NUMBER_EDGE -> customFormatter.maximumFractionDigits = 4
+            !realNumber && value > COIN_BIG_NUMBER_EDGE -> customFormatter.maximumFractionDigits = 4
             value.compareTo(BigDecimal.ZERO) == 0 -> customFormatter.maximumFractionDigits = 0
             else -> customFormatter.maximumFractionDigits = 8
         }
-
+        value = value.stripTrailingZeros()
         val formatted = customFormatter.format(value)
         var result = "$formatted ${coinValue.coinCode}"
 
@@ -63,7 +63,7 @@ class NumberFormatter(private val languageManager: ILanguageManager): IAppNumber
         when {
             value.compareTo(BigDecimal.ZERO) == 0 -> {
                 value = BigDecimal.ZERO
-                customFormatter.maximumFractionDigits = 0
+                customFormatter.minimumFractionDigits = if (realNumber) 2 else 0
             }
             value < FIAT_SMALL_NUMBER_EDGE -> {
                 value = BigDecimal("0.01")
@@ -83,21 +83,21 @@ class NumberFormatter(private val languageManager: ILanguageManager): IAppNumber
 
         val formatted = customFormatter.format(value)
 
-        var result = "${currencyValue.currency.symbol} $formatted"
+        var result = "${currencyValue.currency.symbol}$formatted"
+
+        if (canUseLessSymbol && absValue <= FIAT_SMALL_NUMBER_EDGE && absValue > BigDecimal.ZERO) {
+            result = "< $result"
+        }
 
         if (showNegativeSign && currencyValue.value < BigDecimal.ZERO) {
             result = "- $result"
-        }
-
-        if (canUseLessSymbol && absValue < FIAT_SMALL_NUMBER_EDGE && absValue > BigDecimal.ZERO) {
-            result = "< $result"
         }
 
         return result
     }
 
     override fun formatForTransactions(currencyValue: CurrencyValue, isIncoming: Boolean): SpannableString {
-        val spannable = SpannableString(format(currencyValue, canUseLessSymbol = false))
+        val spannable = SpannableString(format(currencyValue, showNegativeSign = true, canUseLessSymbol = true))
 
         //set color
         val amountTextColor = if (isIncoming) R.color.green_crypto else R.color.yellow_crypto

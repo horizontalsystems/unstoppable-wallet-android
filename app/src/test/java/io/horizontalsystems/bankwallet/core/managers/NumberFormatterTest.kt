@@ -29,13 +29,13 @@ class NumberFormatterTest {
 
     @Test
     fun format_Currency() {
-        assertCurrencyFormatter(12.03903, "$ 12.04")
-        assertCurrencyFormatter(12.03203, "$ 12.03")
-        assertCurrencyFormatter(1203.903, "$ 1,204")
-        assertCurrencyFormatter(0.0003903, "< $ 0.01")
-        assertCurrencyFormatter(0.0100, "$ 0.01")
-        assertCurrencyFormatter(-0.0003903, "< - $ 0.01")
-        assertCurrencyFormatter(0.0, "$ 0")
+        assertCurrencyFormatter(12.03903, "$12.04")
+        assertCurrencyFormatter(12.03203, "$12.03")
+        assertCurrencyFormatter(1203.903, "$1,204")
+        assertCurrencyFormatter(0.0003903, "< $0.01")
+        assertCurrencyFormatter(0.0100, "< $0.01")
+        assertCurrencyFormatter(-0.0003903, "- < $0.01")
+        assertCurrencyFormatter(0.0, "$0")
     }
 
     @Test
@@ -52,8 +52,8 @@ class NumberFormatterTest {
     fun format_Currency_by_russian_locale() {
         whenever(languageManager.currentLanguage).thenReturn(Locale("ru"))
         formatter = NumberFormatter(languageManager)
-        assertCurrencyFormatter(0.0003903, "< $ 0,01")
-        assertCurrencyFormatter(12.03903, "$ 12,04")
+        assertCurrencyFormatter(0.0003903, "< $0,01")
+        assertCurrencyFormatter(12.03903, "$12,04")
     }
 
 
