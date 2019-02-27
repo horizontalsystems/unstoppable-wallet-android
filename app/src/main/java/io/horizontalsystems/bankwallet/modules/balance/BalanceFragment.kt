@@ -219,7 +219,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
 
         textCoinAmount.text = App.numberFormatter.format(balanceViewItem.coinValue)
         balanceViewItem.currencyValue?.let {
-            textCurrencyAmount.text = App.numberFormatter.format(it)
+            textCurrencyAmount.text = App.numberFormatter.format(it, canUseLessSymbol = true)
             textCurrencyAmount.visibility = View.VISIBLE
             textCurrencyAmount.setTextColor(ContextCompat.getColor(containerView.context, if (balanceViewItem.rateExpired) R.color.yellow_crypto_40 else R.color.yellow_crypto))
         } ?: run { textCurrencyAmount.visibility = View.GONE }
