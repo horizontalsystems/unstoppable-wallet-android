@@ -99,7 +99,7 @@
     <string name="FullInfo_Fee">هزينه</string>
     <string name="FullInfo_Rate">Rate</string>
     <string name="FullInfo_Source">Source</string>
-    <string name="FullInfo_Token">Token</string>
+    <string name="FullInfo_Contract">Contract</string>
     <string name="FullInfo_From">از</string>
     <string name="FullInfo_To">به</string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
@@ -178,7 +178,7 @@
     <string name="Hud_Text_NoInternet">انترنت نداريد</string>
     <string name="Hud_Text_Copied">کپی انجام شد</string>
     <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
-    <string name="Hud_Text_Socket_Timeout_Exception">Network issues. Try again in a short moment</string>
+    <string name="Hud_Network_Issue">Network issues. Try again in a short moment</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">ورود با اثر انگشت</string>
     <string name="Fingerprint_Hint">حسگر لمسي</string>
