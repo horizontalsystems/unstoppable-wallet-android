@@ -150,7 +150,7 @@ class SendPresenterTest {
     @Test
     fun didFailToSend() {
         val exception = Throwable()
-        val errorTextId = R.string.Error
+        val errorTextId = R.string.Hud_Network_Issue
 
         presenter.didFailToSend(exception)
         verify(view).showError(errorTextId)

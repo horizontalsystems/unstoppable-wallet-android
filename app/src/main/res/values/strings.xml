@@ -252,7 +252,7 @@
     <string name="Hud_Text_NoInternet">No Internet</string>
     <string name="Hud_Text_Copied">Copied</string>
     <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
-    <string name="Hud_Text_Socket_Timeout_Exception">Network issues. Try again in a short moment</string>
+    <string name="Hud_Network_Issue">Network issues. Try again in a short moment</string>
 
 
     <!--Fingerprint texts-->
