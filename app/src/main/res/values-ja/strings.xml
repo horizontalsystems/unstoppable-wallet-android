@@ -99,7 +99,7 @@
     <string name="FullInfo_Fee">料金</string>
     <string name="FullInfo_Rate">換算率</string>
     <string name="FullInfo_Source">ソース</string>
-    <string name="FullInfo_Token">Token</string>
+    <string name="FullInfo_Contract">Contract</string>
     <string name="FullInfo_From">差出人</string>
     <string name="FullInfo_To">宛先</string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
@@ -174,7 +174,7 @@
     <string name="Hud_Text_NoInternet">インタネットに繋がっていません。</string>
     <string name="Hud_Text_Copied">コピー完了</string>
     <string name="Hud_Text_InvalidPinError">正しくないパスワード</string>
-    <string name="Hud_Text_Socket_Timeout_Exception">Network issues. Try again in a short moment</string>
+    <string name="Hud_Network_Issue">Network issues. Try again in a short moment</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">指紋使用ログイン</string>
     <string name="Fingerprint_Hint">タッチセンサー</string>
