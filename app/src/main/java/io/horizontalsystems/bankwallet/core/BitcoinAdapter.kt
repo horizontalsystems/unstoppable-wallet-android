@@ -159,7 +159,7 @@ class BitcoinAdapter(override val coin: Coin, authData: AuthData, newWallet: Boo
         }
     }
 
-    override fun onTransactionsUpdate(bitcoinKit: BitcoinKit, inserted: List<TransactionInfo>, updated: List<TransactionInfo>, deleted: List<Int>) {
+    override fun onTransactionsUpdate(bitcoinKit: BitcoinKit, inserted: List<TransactionInfo>, updated: List<TransactionInfo>) {
         val records = mutableListOf<TransactionRecord>()
 
         for (info in inserted) {
@@ -171,6 +171,10 @@ class BitcoinAdapter(override val coin: Coin, authData: AuthData, newWallet: Boo
         }
 
         transactionRecordsSubject.onNext(records)
+    }
+
+    override fun onTransactionsDelete(hashes: List<String>) {
+        // ignored for now
     }
 
     private fun transactionRecord(transaction: TransactionInfo) =
