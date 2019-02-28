@@ -56,8 +56,8 @@ object PinModule {
         PinActivity.start(context, PinInteractionType.EDIT_PIN)
     }
 
-    fun startForUnlock() {
-        PinActivity.startForUnlock()
+    fun startForUnlock(appStart: Boolean = false) {
+        PinActivity.startForUnlock(appStart)
     }
 }
 
