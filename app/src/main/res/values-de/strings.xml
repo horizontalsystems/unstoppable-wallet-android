@@ -55,7 +55,7 @@
     <string name="Send_Button_Send">Senden</string>
     <string name="Send_Button_Max">Max.</string>
     <string name="Send_ScanQrCode">QR-Code Scannen</string>
-    <string name="Send_Success">Gesendet!</string>
+    <string name="Send_Success">\u2713 Gesendet</string>
     <string name="Send_Error_InvalidAddress">Eingegebene Adresse scheint ungültig zu sein. Bitte überprüfen Sie und versuchen es erneut!</string>
     <string name="Send_Error_InsufficientBalance">Nicht genug Geldmittel.</string>
     <string name="Send_Error_IncorrectAddress">Falscher Adresse</string>
@@ -63,6 +63,7 @@
     <string name="Send_DialogTitle">Transaktion bestätigen</string>
     <string name="Send_DialogFee">Gebühr:</string>
     <string name="Send_DialogTotal">Insgesamt:</string>
+    <string name="Send_Sending">Wird gesendet</string>
     <string name="Send_ERC_Alert">Transaktionsgebühren für %s (ERC20) in Ethereum bezahlt. Du brauchst %s ETH.</string>
     <!--Deposit-->
     <string name="Deposit_Title">%s Anfordern</string>
@@ -98,8 +99,9 @@
     <string name="FullInfo_Fee">Gebühr</string>
     <string name="FullInfo_Rate">Bewerten</string>
     <string name="FullInfo_Source">Quelle</string>
-    <string name="FullInfo_To">An</string>
+    <string name="FullInfo_Contract">Vertrag</string>
     <string name="FullInfo_From">Von</string>
+    <string name="FullInfo_To">An</string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
@@ -115,13 +117,13 @@
     <string name="FullInfo_TotalOutput">Insgesamte Ausgänge</string>
     <string name="FullInfo_FeePerByte">Gebühr pro byte</string>
     <string name="FullInfo_FeeRate">Fee Rate</string>
-    <string name="FullInfo_NoAddress">Nicht verfügbar</string>
+    <string name="FullInfo_NoAddress">Leere Adresse</string>
     <string name="FullInfo_SatByte">sat/B</string>
     <string name="FullInfo_Bytes">Bytes</string>
     <string name="FullInfo_SubtitleInputs">Eingänge</string>
     <string name="FullInfo_SubtitleOutputs">Ausgänge</string>
     <string name="FullInfoEth_Nonce">Nonce</string>
-    <string name="FullInfoEth_Value">Wert</string>
+    <string name="FullInfoEth_Amount">Betrag</string>
     <!--Settings-->
     <string name="Settings_Title">Einstellungen</string>
     <string name="Settings_SecurityCenter">Sicherheit</string>
@@ -172,6 +174,7 @@
     <string name="Hud_Text_NoInternet">Kein Internet</string>
     <string name="Hud_Text_Copied">Kopiert</string>
     <string name="Hud_Text_InvalidPinError">Falscher Code</string>
+    <string name="Hud_Network_Issue">Netzwerkprobleme. Bitte noch einmal versuchen.</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">Anmeldung per Fingerabdruck</string>
     <string name="Fingerprint_Hint">Touchsensor</string>

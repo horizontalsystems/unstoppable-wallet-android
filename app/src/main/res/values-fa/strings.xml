@@ -55,7 +55,7 @@
     <string name="Send_Button_Send">ارسال</string>
     <string name="Send_Button_Max">Max</string>
     <string name="Send_ScanQrCode">اسكن كنيد Qr را</string>
-    <string name="Send_Success">ارسال شد!</string>
+    <string name="Send_Success">\u2713 Sent</string>
     <string name="Send_Error_InvalidAddress">ادرس كي وارد كرديد غلط است دوباره چك نماييد ادرس تان را!</string>
     <string name="Send_Error_InsufficientBalance">بودجه شما كافي نيست.</string>
     <string name="Send_Error_IncorrectAddress">Incorrect Address</string>
@@ -63,6 +63,7 @@
     <string name="Send_DialogTitle">معامله را تایید کنید</string>
     <string name="Send_DialogFee">هزينه:</string>
     <string name="Send_DialogTotal">مجموع:</string>
+    <string name="Send_Sending">Sending</string>
     <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
     <!--Deposit-->
     <string name="Deposit_Title">دریافت s%</string>
@@ -98,8 +99,9 @@
     <string name="FullInfo_Fee">هزينه</string>
     <string name="FullInfo_Rate">Rate</string>
     <string name="FullInfo_Source">Source</string>
-    <string name="FullInfo_To">به</string>
+    <string name="FullInfo_Contract">Contract</string>
     <string name="FullInfo_From">از</string>
+    <string name="FullInfo_To">به</string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
@@ -115,13 +117,13 @@
     <string name="FullInfo_TotalOutput">Total Output</string>
     <string name="FullInfo_FeePerByte">Fee per byte</string>
     <string name="FullInfo_FeeRate">نرخ هزينه</string>
-    <string name="FullInfo_NoAddress">No Available</string>
+    <string name="FullInfo_NoAddress">Empty Address</string>
     <string name="FullInfo_SatByte">sat/B</string>
     <string name="FullInfo_Bytes">Bytes</string>
     <string name="FullInfo_SubtitleInputs">Inputs</string>
     <string name="FullInfo_SubtitleOutputs">Outputs</string>
     <string name="FullInfoEth_Nonce">Nonce</string>
-    <string name="FullInfoEth_Value">Value</string>
+    <string name="FullInfoEth_Amount">Amount</string>
     <!--Settings-->
     <string name="Settings_Title">تنظيمات</string>
     <string name="Settings_SecurityCenter">مركز امنيتي</string>
@@ -176,6 +178,7 @@
     <string name="Hud_Text_NoInternet">انترنت نداريد</string>
     <string name="Hud_Text_Copied">کپی انجام شد</string>
     <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
+    <string name="Hud_Network_Issue">Network issues. Try again in a short moment</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">ورود با اثر انگشت</string>
     <string name="Fingerprint_Hint">حسگر لمسي</string>

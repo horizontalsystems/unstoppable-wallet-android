@@ -55,7 +55,7 @@
     <string name="Send_Button_Send">Отправить</string>
     <string name="Send_Button_Max">Макс.</string>
     <string name="Send_ScanQrCode">Сканировать QR-код</string>
-    <string name="Send_Success">Отправлено!</string>
+    <string name="Send_Success">\u2713 Отправлено</string>
     <string name="Send_Error_InvalidAddress">Адрес недействителен. Попробуйте еще раз!</string>
     <string name="Send_Error_InsufficientBalance">Недостаточно средств.</string>
     <string name="Send_Error_IncorrectAddress">Неверный Адрес</string>
@@ -63,6 +63,7 @@
     <string name="Send_DialogTitle">Подтвердить Транзакцию</string>
     <string name="Send_DialogFee">Комиссия:</string>
     <string name="Send_DialogTotal">Итого:</string>
+    <string name="Send_Sending">Отправка</string>
     <string name="Send_ERC_Alert">Комиссия за отправку %s (ERC20) взимается в ETH. Необходимо %s ETH.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Получено %s</string>
@@ -98,8 +99,9 @@
     <string name="FullInfo_Fee">Комиссия</string>
     <string name="FullInfo_Rate">Ставка</string>
     <string name="FullInfo_Source">Источник</string>
-    <string name="FullInfo_To">Кому</string>
+    <string name="FullInfo_Contract">Контракт</string>
     <string name="FullInfo_From">От</string>
+    <string name="FullInfo_To">Кому</string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
@@ -115,13 +117,13 @@
     <string name="FullInfo_TotalOutput">Всего Выходов</string>
     <string name="FullInfo_FeePerByte">Комиссия за байт</string>
     <string name="FullInfo_FeeRate">Комиссия</string>
-    <string name="FullInfo_NoAddress">Недоступно</string>
+    <string name="FullInfo_NoAddress">Пустой адрес</string>
     <string name="FullInfo_SatByte">sat/B</string>
     <string name="FullInfo_Bytes">Bytes</string>
     <string name="FullInfo_SubtitleInputs">Входы</string>
     <string name="FullInfo_SubtitleOutputs">Выходы</string>
     <string name="FullInfoEth_Nonce">Nonce</string>
-    <string name="FullInfoEth_Value">Значение</string>
+    <string name="FullInfoEth_Amount">Сумма</string>
     <!--Settings-->
     <string name="Settings_Title">Настройки</string>
     <string name="Settings_SecurityCenter">Центр Безопасности</string>
@@ -172,6 +174,7 @@
     <string name="Hud_Text_NoInternet">Нет Интернета</string>
     <string name="Hud_Text_Copied">Скопировано</string>
     <string name="Hud_Text_InvalidPinError">Неверный Код</string>
+    <string name="Hud_Network_Issue">Проблемы с сетью. Попробуйте еще раз </string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">Отпечаток пальца для входа</string>
     <string name="Fingerprint_Hint">Коснитесь датчика</string>
