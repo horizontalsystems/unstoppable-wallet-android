@@ -156,20 +156,19 @@
     <string name="FullInfo_Error_ChangeSource">Change Source</string>
 
 
-
     <!--no used-->
     <string name="FullInfo_Id">ID</string>
     <string name="FullInfo_TotalInput">Total Input</string>
     <string name="FullInfo_TotalOutput">Total Output</string>
     <string name="FullInfo_FeePerByte">Fee per byte</string>
     <string name="FullInfo_FeeRate">Fee Rate</string>
-    <string name="FullInfo_NoAddress">No Available</string>
+    <string name="FullInfo_NoAddress">Empty Address</string>
     <string name="FullInfo_SatByte">sat/B</string>
     <string name="FullInfo_Bytes">Bytes</string>
     <string name="FullInfo_SubtitleInputs">Inputs</string>
     <string name="FullInfo_SubtitleOutputs">Outputs</string>
     <string name="FullInfoEth_Nonce">Nonce</string>
-    <string name="FullInfoEth_Value">Value</string>
+    <string name="FullInfoEth_Amount">Amount</string>
 
 
 

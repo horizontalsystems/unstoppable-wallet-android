@@ -89,7 +89,7 @@ class FullTransactionEthereumAdapter(val provider: FullTransactionInfoModule.Eth
                 data.value.toDouble() / EthereumResponse.ethRate
             }
 
-            section.add(FullTransactionItem(R.string.FullInfoEth_Value, value = "${App.numberFormatter.format(amount)} ${coin.code}"))
+            section.add(FullTransactionItem(R.string.FullInfoEth_Amount, value = "${App.numberFormatter.format(amount)} ${coin.code}"))
             section.add(FullTransactionItem(R.string.FullInfoEth_Nonce, value = data.nonce, dimmed = true))
 
             sections.add(FullTransactionSection(section))
