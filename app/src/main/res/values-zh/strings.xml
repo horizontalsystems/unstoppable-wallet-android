@@ -117,13 +117,13 @@
     <string name="FullInfo_TotalOutput">转出总额</string>
     <string name="FullInfo_FeePerByte">每字节存储数据的费用</string>
     <string name="FullInfo_FeeRate">手续费汇率</string>
-    <string name="FullInfo_NoAddress">无效</string>
+    <string name="FullInfo_NoAddress">Empty Address</string>
     <string name="FullInfo_SatByte">sat/B</string>
     <string name="FullInfo_Bytes">字节</string>
     <string name="FullInfo_SubtitleInputs">收入</string>
     <string name="FullInfo_SubtitleOutputs">转出</string>
     <string name="FullInfoEth_Nonce">Nonce</string>
-    <string name="FullInfoEth_Value">价值</string>
+    <string name="FullInfoEth_Amount">Amount</string>
     <!--Settings-->
     <string name="Settings_Title">设置</string>
     <string name="Settings_SecurityCenter">安全中心</string>
