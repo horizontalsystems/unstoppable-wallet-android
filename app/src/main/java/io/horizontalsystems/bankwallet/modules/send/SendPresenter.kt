@@ -109,11 +109,19 @@ class SendPresenter(
     //
     // IInteractorDelegate
     //
+    override fun didFeeRateRetrieve() {
+        updateViewItem()
+    }
+
     override fun didRateRetrieve() {
         if (interactor.defaultInputType == SendModule.InputType.CURRENCY && userInput.amount == BigDecimal.ZERO) {
             userInput.inputType = interactor.defaultInputType
         }
 
+        updateViewItem()
+    }
+
+    private fun updateViewItem() {
         val state = interactor.stateForUserInput(userInput)
         val viewItem = factory.viewItemForState(state)
 

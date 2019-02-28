@@ -63,6 +63,7 @@ object SendModule {
 
     interface IInteractorDelegate {
         fun didRateRetrieve()
+        fun didFeeRateRetrieve()
         fun didSend()
         fun didFailToSend(error: Throwable)
     }
