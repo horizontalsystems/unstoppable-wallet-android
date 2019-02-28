@@ -117,13 +117,13 @@
     <string name="FullInfo_TotalOutput">Toplam Çıkış</string>
     <string name="FullInfo_FeePerByte">Bayt başına ücret</string>
     <string name="FullInfo_FeeRate">Ücret oranı</string>
-    <string name="FullInfo_NoAddress">Uygun Değil</string>
+    <string name="FullInfo_NoAddress">Empty Address</string>
     <string name="FullInfo_SatByte">sat/B</string>
     <string name="FullInfo_Bytes">Bytes</string>
     <string name="FullInfo_SubtitleInputs">Girişler</string>
     <string name="FullInfo_SubtitleOutputs">Çıkışlar</string>
     <string name="FullInfoEth_Nonce">Nonce</string>
-    <string name="FullInfoEth_Value">Değer</string>
+    <string name="FullInfoEth_Amount">Amount</string>
     <!--Settings-->
     <string name="Settings_Title">Ayarlar</string>
     <string name="Settings_SecurityCenter">Güvenlik Merkezi</string>
