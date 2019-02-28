@@ -117,13 +117,13 @@
     <string name="FullInfo_TotalOutput">Rendimiento total</string>
     <string name="FullInfo_FeePerByte">Comisión por byte</string>
     <string name="FullInfo_FeeRate">Rate</string>
-    <string name="FullInfo_NoAddress">No disponible</string>
+    <string name="FullInfo_NoAddress">Empty Address</string>
     <string name="FullInfo_SatByte">sat/B</string>
     <string name="FullInfo_Bytes">Bytes</string>
     <string name="FullInfo_SubtitleInputs">Inversiones</string>
     <string name="FullInfo_SubtitleOutputs">Rendimientos</string>
     <string name="FullInfoEth_Nonce">Nonce</string>
-    <string name="FullInfoEth_Value">Valor</string>
+    <string name="FullInfoEth_Amount">Amount</string>
     <!--Settings-->
     <string name="Settings_Title">Configuraciones</string>
     <string name="Settings_SecurityCenter">Centro de Seguridad</string>
