@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import io.horizontalsystems.bankwallet.entities.Coin
 
 class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View, FullTransactionInfoModule.Router {
 
@@ -15,10 +15,10 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
     val showErrorLiveEvent = SingleLiveEvent<Pair<Boolean, String?>>()
     val showShareLiveEvent = SingleLiveEvent<String>()
     val openLinkLiveEvent = SingleLiveEvent<String>()
-    val openProviderSettingsEvent = SingleLiveEvent<Pair<CoinCode, String>>()
+    val openProviderSettingsEvent = SingleLiveEvent<Pair<Coin, String>>()
 
-    fun init(transactionHash: String, coinCode: CoinCode) {
-        FullTransactionInfoModule.init(this, this, coinCode, transactionHash)
+    fun init(transactionHash: String, coin: Coin) {
+        FullTransactionInfoModule.init(this, this, coin, transactionHash)
         delegate.viewDidLoad()
     }
 
@@ -64,8 +64,8 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
         showCopiedLiveEvent.call()
     }
 
-    override fun openProviderSettings(coinCode: CoinCode, transactionHash: String) {
-        openProviderSettingsEvent.value = Pair(coinCode, transactionHash)
+    override fun openProviderSettings(coin: Coin, transactionHash: String) {
+        openProviderSettingsEvent.value = Pair(coin, transactionHash)
     }
 
     override fun openUrl(url: String) {

@@ -64,7 +64,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
                             .subscribe { fetchedRate ->
                                 feeRate = if (fetchedRate.expired) null else fetchedRate
                                 if (feeRate != null) {
-                                    delegate?.didRateRetrieve()
+                                    delegate?.didFeeRateRetrieve()
                                 }
                             }
             )

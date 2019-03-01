@@ -4,6 +4,8 @@ import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule.BitcoinForksProvider
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule.EthereumForksProvider
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers.HorsysBitcoinProvider
@@ -19,36 +21,44 @@ class TransactionDataProviderManagerTest {
     private val appConfig = mock(IAppConfigProvider::class.java)
     private val localStorage = mock(ILocalStorage::class.java)
 
+    private val btc = mock(Coin::class.java)
+    private val bch = mock(Coin::class.java)
+    private val eth = mock(Coin::class.java)
+
     private lateinit var dataProviderManager: TransactionDataProviderManager
 
     @Before
     fun setup() {
+        whenever(btc.type).thenReturn(mock(CoinType.Bitcoin::class.java))
+        whenever(bch.type).thenReturn(mock(CoinType.BitcoinCash::class.java))
+        whenever(eth.type).thenReturn(mock(CoinType.Ethereum::class.java))
+
         dataProviderManager = TransactionDataProviderManager(appConfig, localStorage)
     }
 
     @Test
     fun providers() {
-        dataProviderManager.providers("BTC").forEach {
+        dataProviderManager.providers(btc).forEach {
             assertThat(it, instanceOf(BitcoinForksProvider::class.java))
         }
-        dataProviderManager.providers("BCH").forEach {
+        dataProviderManager.providers(bch).forEach {
             assertThat(it, instanceOf(BitcoinForksProvider::class.java))
         }
-        dataProviderManager.providers("ETH").forEach {
+        dataProviderManager.providers(eth).forEach {
             assertThat(it, instanceOf(EthereumForksProvider::class.java))
         }
     }
 
     @Test
     fun baseProvider() {
-        assertThat(dataProviderManager.baseProvider("BTC"), instanceOf(BitcoinForksProvider::class.java))
-        assertThat(dataProviderManager.baseProvider("BCH"), instanceOf(BitcoinForksProvider::class.java))
-        assertThat(dataProviderManager.baseProvider("ETH"), instanceOf(EthereumForksProvider::class.java))
+        assertThat(dataProviderManager.baseProvider(btc), instanceOf(BitcoinForksProvider::class.java))
+        assertThat(dataProviderManager.baseProvider(bch), instanceOf(BitcoinForksProvider::class.java))
+        assertThat(dataProviderManager.baseProvider(eth), instanceOf(EthereumForksProvider::class.java))
     }
 
     @Test
     fun setBaseProvider() {
-        dataProviderManager.setBaseProvider("BTC.com", "BTC")
+        dataProviderManager.setBaseProvider("BTC.com", btc)
 
         verify(localStorage).baseBitcoinProvider = "BTC.com"
     }

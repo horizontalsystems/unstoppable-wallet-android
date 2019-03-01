@@ -55,7 +55,7 @@
     <string name="Send_Button_Send">전송</string>
     <string name="Send_Button_Max">최대</string>
     <string name="Send_ScanQrCode">QR 코드 스캔</string>
-    <string name="Send_Success">보냄!</string>
+    <string name="Send_Success">\u2713 Sent</string>
     <string name="Send_Error_InvalidAddress">주소가 올바르지 않습니다. 다시 확인하고 시도해주세요!</string>
     <string name="Send_Error_InsufficientBalance">잔액이 부족합니다.</string>
     <string name="Send_Error_IncorrectAddress">잘못된 주소</string>
@@ -63,6 +63,7 @@
     <string name="Send_DialogTitle">거래를 확인해라</string>
     <string name="Send_DialogFee">수수료:</string>
     <string name="Send_DialogTotal">합계:</string>
+    <string name="Send_Sending">Sending</string>
     <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
     <!--Deposit-->
     <string name="Deposit_Title">수신%s</string>
@@ -76,7 +77,7 @@
     <string name="Timestamp_Yesterday">어제</string>
     <!--Transactions-->
     <string name="Transactions_Title">거래기록</string>
-    <string name="Transactions_FilterAll">ALL</string>
+    <string name="Transactions_FilterAll">전부</string>
     <string name="Transactions_EmptyList">당신은 아직 거래를 하지 않았습니다.</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">거래기록</string>
@@ -98,8 +99,9 @@
     <string name="FullInfo_Fee">수수료</string>
     <string name="FullInfo_Rate">비율, 속도, 평가</string>
     <string name="FullInfo_Source">원천, 자료</string>
-    <string name="FullInfo_To">에게</string>
+    <string name="FullInfo_Contract">Contract</string>
     <string name="FullInfo_From">로 부터</string>
+    <string name="FullInfo_To">에게</string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
@@ -115,13 +117,13 @@
     <string name="FullInfo_TotalOutput">Total Output</string>
     <string name="FullInfo_FeePerByte">Fee per byte</string>
     <string name="FullInfo_FeeRate">Fee Rate</string>
-    <string name="FullInfo_NoAddress">사용가능하지 않습니다.</string>
+    <string name="FullInfo_NoAddress">Empty Address</string>
     <string name="FullInfo_SatByte">sat/B</string>
     <string name="FullInfo_Bytes">Bytes</string>
     <string name="FullInfo_SubtitleInputs">입력값</string>
     <string name="FullInfo_SubtitleOutputs">산출값</string>
     <string name="FullInfoEth_Nonce">Nonce</string>
-    <string name="FullInfoEth_Value">Value</string>
+    <string name="FullInfoEth_Amount">양</string>
     <!--Settings-->
     <string name="Settings_Title">설정</string>
     <string name="Settings_SecurityCenter">보안 센터</string>
@@ -178,6 +180,7 @@
     <string name="Hud_Text_NoInternet">인터넷에 연결되지 않음</string>
     <string name="Hud_Text_Copied">복사됨</string>
     <string name="Hud_Text_InvalidPinError">잘못된 비밀번호</string>
+    <string name="Hud_Network_Issue">Network issues. Try again in a short moment</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">지문인식 로그인</string>
     <string name="Fingerprint_Hint">터치 센서</string>
@@ -188,7 +191,7 @@
     <string name="UnlockPin_WalletDisabledUntil">~때까지 사용 안 함: %s</string>
     <!--Set Pin-->
     <string name="SetPin_Title">비밀번호</string>
-    <string name="SetPin_Info">Your passcode will be used to unlock your wallet and send money</string>
+    <string name="SetPin_Info">너의 비밀번호는 너의 지갑을 열어주고 돈을 보내는데 사용될 것입니다.</string>
     <string name="SetPin_ErrorShortPin">모든 숫자를 입력하세요.</string>
     <string name="SetPin_ConfirmInfo">확인</string>
     <string name="SetPin_Success">비밀번호 장금이 성공적으로 설정되었습니다!</string>

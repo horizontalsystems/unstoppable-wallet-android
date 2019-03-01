@@ -8,20 +8,23 @@ import io.horizontalsystems.bankwallet.modules.RxBaseTest
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito
+import org.mockito.Mockito.mock
 import org.mockito.Mockito.reset
 import java.util.*
 
 class UnlockPinPresenterTest {
 
-    private val interactor = Mockito.mock(UnlockPinModule.IUnlockPinInteractor::class.java)
-    private val router = Mockito.mock(UnlockPinModule.IUnlockPinRouter::class.java)
-    private val view = Mockito.mock(PinModule.IPinView::class.java)
-    private var presenter = UnlockPinPresenter(interactor, router)
+    private val interactor = mock(UnlockPinModule.IUnlockPinInteractor::class.java)
+    private val router = mock(UnlockPinModule.IUnlockPinRouter::class.java)
+    private val view = mock(PinModule.IPinView::class.java)
+    private val appStart = false
+    private lateinit var presenter : UnlockPinPresenter
 
     @Before
     fun setUp() {
         RxBaseTest.setup()
+
+        presenter = UnlockPinPresenter(interactor, router, appStart)
         presenter.view = view
     }
 
@@ -98,8 +101,15 @@ class UnlockPinPresenterTest {
         verify(interactor).onUnlock()
     }
 
+    @Test
+    fun onUnlock_onAppStart() {
+        val appStart = true
+        presenter = UnlockPinPresenter(interactor, router, appStart)
+        presenter.view = view
 
-
+        presenter.unlock()
+        verify(router).navigateToMain()
+    }
 
     @Test
     fun onViewDidLoad_UpdateLockoutState() {

@@ -8,7 +8,6 @@ import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.modules.backup.BackupModule
 import io.horizontalsystems.bankwallet.modules.backup.BackupPresenter
 import io.horizontalsystems.bankwallet.modules.guest.GuestModule
-import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import java.security.UnrecoverableKeyException
 
@@ -38,7 +37,7 @@ class LauncherActivity : AppCompatActivity() {
         } else if(App.secureStorage.pinIsEmpty()) {
             PinModule.startForSetPin(this)
         } else {
-            MainModule.start(this)
+            PinModule.startForUnlock(appStart = true)
         }
         finish()
     }

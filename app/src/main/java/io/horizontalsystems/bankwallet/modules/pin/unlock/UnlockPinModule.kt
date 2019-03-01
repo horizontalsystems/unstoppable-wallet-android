@@ -15,6 +15,7 @@ object UnlockPinModule {
     interface IUnlockPinRouter {
         fun dismiss(didUnlock: Boolean)
         fun closeApplication()
+        fun navigateToMain()
     }
 
     interface IUnlockPinInteractor {
@@ -33,12 +34,12 @@ object UnlockPinModule {
         fun updateLockoutState(state: LockoutState)
     }
 
-    fun init(view: PinViewModel, router: IUnlockPinRouter, keystoreSafeExecute: IKeyStoreSafeExecute) {
+    fun init(view: PinViewModel, router: IUnlockPinRouter, keystoreSafeExecute: IKeyStoreSafeExecute, appStart: Boolean) {
 
         val lockoutManager = LockoutManager(App.localStorage, UptimeProvider(), LockoutUntilDateFactory(CurrentDateProvider()))
         val timer = OneTimeTimer()
         val interactor = UnlockPinInteractor(keystoreSafeExecute, App.localStorage, App.authManager, App.pinManager, App.lockManager, App.encryptionManager, lockoutManager, timer)
-        val presenter = UnlockPinPresenter(interactor, router)
+        val presenter = UnlockPinPresenter(interactor, router, appStart)
 
         view.delegate = presenter
         presenter.view = view

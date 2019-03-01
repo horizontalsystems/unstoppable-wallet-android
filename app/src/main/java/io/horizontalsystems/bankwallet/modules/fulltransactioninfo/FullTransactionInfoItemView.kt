@@ -44,6 +44,10 @@ class FullTransactionInfoItemView : ConstraintLayout {
                 address = true
                 addressView.bind(it)
             }
+            FullTransactionIcon.TOKEN -> value?.let {
+                address = true
+                addressView.bind(it, R.drawable.token)
+            }
             FullTransactionIcon.HASH -> value?.let {
                 address = true
                 addressView.bindTransactionId(it, withIcon = false)

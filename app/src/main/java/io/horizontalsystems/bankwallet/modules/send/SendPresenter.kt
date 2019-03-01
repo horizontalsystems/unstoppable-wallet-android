@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.send
 
+import io.horizontalsystems.bankwallet.R
 import java.math.BigDecimal
+import java.net.UnknownHostException
 
 class SendPresenter(
         private val interactor: SendModule.IInteractor,
@@ -107,11 +109,19 @@ class SendPresenter(
     //
     // IInteractorDelegate
     //
+    override fun didFeeRateRetrieve() {
+        updateViewItem()
+    }
+
     override fun didRateRetrieve() {
         if (interactor.defaultInputType == SendModule.InputType.CURRENCY && userInput.amount == BigDecimal.ZERO) {
             userInput.inputType = interactor.defaultInputType
         }
 
+        updateViewItem()
+    }
+
+    private fun updateViewItem() {
         val state = interactor.stateForUserInput(userInput)
         val viewItem = factory.viewItemForState(state)
 
@@ -127,7 +137,15 @@ class SendPresenter(
     }
 
     override fun didFailToSend(error: Throwable) {
-        view?.showError(error)
+        val textResourceId = getErrorText(error)
+        view?.showError(textResourceId)
+    }
+
+    private fun getErrorText(error: Throwable): Int {
+        return when(error){
+            is UnknownHostException -> R.string.Hud_Text_NoInternet
+            else -> R.string.Hud_Network_Issue
+        }
     }
 
     //

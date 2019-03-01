@@ -3,11 +3,12 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ITransactionDataProviderManager
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule.BitcoinForksProvider
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule.EthereumForksProvider
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule.Provider
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers.*
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.subjects.PublishSubject
 
 class TransactionDataProviderManager(private val appConfig: IAppConfigProvider, private val localStorage: ILocalStorage)
@@ -37,31 +38,31 @@ class TransactionDataProviderManager(private val appConfig: IAppConfigProvider, 
         get() = when {
             appConfig.testMode -> arrayListOf(HorsysEthereumProvider(testMode = true))
             else -> arrayListOf(
-                    HorsysEthereumProvider(testMode = false),
                     EtherscanEthereumProvider(),
+                    HorsysEthereumProvider(testMode = false),
                     BlockChairEthereumProvider())
         }
 
     override val baseProviderUpdatedSignal = PublishSubject.create<Unit>()
 
-    override fun providers(coinCode: CoinCode): List<Provider> {
+    override fun providers(coin: Coin): List<Provider> {
         return when {
-            coinCode.contains("BTC") -> bitcoinProviders
-            coinCode.contains("BCH") -> bitcoinCashProviders
+            coin.type is CoinType.Bitcoin -> bitcoinProviders
+            coin.type is CoinType.BitcoinCash -> bitcoinCashProviders
             else -> ethereumProviders
         }
     }
 
-    override fun baseProvider(coinCode: CoinCode): Provider {
-        if (coinCode.contains("ETH")) {
+    override fun baseProvider(coin: Coin): Provider {
+        if (coin.type is CoinType.Ethereum || coin.type is CoinType.Erc20) {
             return ethereum(localStorage.baseEthereumProvider ?: ethereumProviders[0].name)
         }
 
         return bitcoin(localStorage.baseBitcoinProvider ?: bitcoinProviders[0].name)
     }
 
-    override fun setBaseProvider(name: String, coinCode: CoinCode) {
-        if (coinCode.contains("ETH")) {
+    override fun setBaseProvider(name: String, coin: Coin) {
+        if (coin.type is CoinType.Ethereum || coin.type is CoinType.Erc20) {
             localStorage.baseEthereumProvider = name
         } else {
             localStorage.baseBitcoinProvider = name

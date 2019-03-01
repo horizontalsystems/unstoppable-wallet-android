@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.send
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
 import org.junit.Before
@@ -149,9 +150,10 @@ class SendPresenterTest {
     @Test
     fun didFailToSend() {
         val exception = Throwable()
+        val errorTextId = R.string.Hud_Network_Issue
 
         presenter.didFailToSend(exception)
-        verify(view).showError(exception)
+        verify(view).showError(errorTextId)
     }
 
     @Test

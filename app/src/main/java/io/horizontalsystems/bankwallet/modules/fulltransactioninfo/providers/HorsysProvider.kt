@@ -46,15 +46,15 @@ class HorsysEthereumProvider(val testMode: Boolean) : FullTransactionInfoModule.
     override val name: String = "HorizontalSystems.xyz"
 
     override fun url(hash: String): String {
-        return "${if (testMode) "http://eth-testnet" else "https://eth"}.horizontalsystems.xyz/apg/tx/$hash"
+        return "${if (testMode) "http://eth-testnet" else "https://eth"}.horizontalsystems.xyz/tx/$hash"
     }
 
     override fun apiUrl(hash: String): String {
-        return "${if (testMode) "http://eth-testnet" else "https://eth"}.horizontalsystems.xyz/apg/tx/$hash"
+        return "${if (testMode) "http://eth-testnet" else "https://eth"}.horizontalsystems.xyz/tx/$hash"
     }
 
     override fun convert(json: JsonObject): EthereumResponse {
-        return Gson().fromJson(json, HorsysETHResponse::class.java)
+        return Gson().fromJson(json["tx"], HorsysETHResponse::class.java)
     }
 }
 
@@ -75,7 +75,7 @@ class HorsysBTCResponse(
     override val fee: Double get() = fees / btcRate
     override val size: Int? get() = ((fee / feePerByte) * btcRate).toInt()
 
-    class Vin(@SerializedName("coin") val coin: Coin) : Input() {
+    class Vin(@SerializedName("coin") val coin: BCoin) : Input() {
         override val value get() = coin.amount.toDouble() / btcRate
         override val address get() = coin.addr
     }
@@ -85,7 +85,7 @@ class HorsysBTCResponse(
         override val address get() = addr
     }
 
-    class Coin(@SerializedName("value") val amount: Int, @SerializedName("address") val addr: String)
+    class BCoin(@SerializedName("value") val amount: Int, @SerializedName("address") val addr: String)
 }
 
 class HorsysETHResponse(
@@ -100,14 +100,15 @@ class HorsysETHResponse(
         @SerializedName("gas") override val gasLimit: String,
         @SerializedName("gasUsed") override val gasUsed: String) : EthereumResponse() {
 
+    override val contractAddress: String? get() = null
     override val size: Int? get() = null
     override val date: Date? get() = null
     override val confirmations: Int? get() = null
     override val height: String
         get() = Integer.parseInt(blockNumber, 16).toString()
 
-    override val value: String
-        get() = (amount.toDouble() / ethRate).toString()
+    override val value: BigInteger
+        get() = BigInteger(amount)
 
     override val nonce: String
         get() = Integer.parseInt(gNonce, 16).toString()

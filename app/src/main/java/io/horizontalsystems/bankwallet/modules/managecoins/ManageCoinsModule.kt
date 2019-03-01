@@ -38,7 +38,7 @@ object ManageCoinsModule {
         }
 
         private fun setDisabledCoins() {
-            disabledCoins = allCoins.filter { !enabledCoins.contains(it)}
+            disabledCoins = allCoins.filter { !enabledCoins.contains(it) }
         }
     }
 

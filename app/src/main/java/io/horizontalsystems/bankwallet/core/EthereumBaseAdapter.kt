@@ -5,7 +5,11 @@ import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.ethereumkit.EthereumKit
-import io.horizontalsystems.ethereumkit.models.Transaction
+import io.horizontalsystems.ethereumkit.models.EthereumTransaction
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -13,24 +17,27 @@ import java.math.RoundingMode
 abstract class EthereumBaseAdapter(override val coin: Coin, protected val ethereumKit: EthereumKit, final override val decimal: Int)
     : IAdapter, EthereumKit.Listener {
 
-    private val weisInEther = Math.pow(10.0, decimal.toDouble()).toBigDecimal()
+    private val disposables = CompositeDisposable()
 
     //
     // Adapter
     //
     override val feeCoinCode: String? = null
     override val transactionRecordsSubject: PublishSubject<List<TransactionRecord>> = PublishSubject.create()
+
     override val balanceUpdatedSignal = PublishSubject.create<Unit>()
+    override val adapterStateUpdatedSubject = PublishSubject.create<Unit>()
+    override val lastBlockHeightUpdatedSignal: PublishSubject<Unit> = PublishSubject.create()
+
+
     override var state: AdapterState = AdapterState.Synced
         set(value) {
             field = value
-            stateUpdatedSignal.onNext(Unit)
+            adapterStateUpdatedSubject.onNext(Unit)
         }
-    override val stateUpdatedSignal = PublishSubject.create<Unit>()
 
     override val confirmationsThreshold: Int = 12
     override val lastBlockHeight: Int? get() = ethereumKit.lastBlockHeight
-    override val lastBlockHeightUpdatedSignal: PublishSubject<Unit> = PublishSubject.create()
 
     override val debugInfo: String = ""
 
@@ -44,85 +51,98 @@ abstract class EthereumBaseAdapter(override val coin: Coin, protected val ethere
         ethereumKit.validateAddress(address)
     }
 
+    open val balanceString: String?
+        get() {
+            return null
+        }
+
+    override fun send(address: String, value: BigDecimal, completion: ((Throwable?) -> Unit)?) {
+        sendSingle(address, value)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    //success
+                    completion?.invoke(null)
+                }, {
+                    completion?.invoke(it)
+                })?.let { disposables.add(it) }
+    }
+
+    protected fun balanceInBigDecimal(balanceString: String?, decimal: Int): BigDecimal {
+        balanceString?.toBigDecimalOrNull()?.let {
+            val converted = it.movePointLeft(decimal)
+            return converted.stripTrailingZeros()
+        } ?: return BigDecimal.ZERO
+    }
+
+    private fun sendSingle(address: String, amount: BigDecimal): Single<Unit> {
+        val poweredDecimal = amount.scaleByPowerOfTen(decimal)
+        val noScaleDecimal = poweredDecimal.setScale(0, RoundingMode.HALF_DOWN)
+
+        return sendSingle(address, noScaleDecimal.toPlainString())
+    }
+
+    open fun sendSingle(address: String, amount: String): Single<Unit> {
+        return Single.just(Unit)
+    }
+
     //
     // EthereumKit Listener
     //
 
-    override fun onBalanceUpdate(balance: BigDecimal) {
+    override fun onBalanceUpdate() {
         balanceUpdatedSignal.onNext(Unit)
     }
 
-    override fun onLastBlockHeightUpdate(height: Int) {
+    override fun onLastBlockHeightUpdate() {
         lastBlockHeightUpdatedSignal.onNext(Unit)
     }
 
-    override fun onKitStateUpdate(state: EthereumKit.KitState) {
-        when (state) {
-            is EthereumKit.KitState.Synced -> {
-                if (this.state != AdapterState.Synced) {
-                    this.state = AdapterState.Synced
-                }
-            }
-            is EthereumKit.KitState.NotSynced -> {
-                if (this.state != AdapterState.NotSynced) {
-                    this.state = AdapterState.NotSynced
-                }
-            }
-            is EthereumKit.KitState.Syncing -> {
-                if (this.state != AdapterState.Synced) {
-                    this.state = AdapterState.Synced
-                }
-            }
-        }
+    override fun onSyncStateUpdate() {}
+
+    override fun onTransactionsUpdate(transactions: List<EthereumTransaction>) {
+        val transactionRecords = transactions.map { transactionRecord(it) }
+        transactionRecordsSubject.onNext(transactionRecords)
     }
 
-    override fun onTransactionsUpdate(inserted: List<Transaction>, updated: List<Transaction>, deleted: List<Int>) {
-        val records = mutableListOf<TransactionRecord>()
-
-        for (info in inserted) {
-            records.add(transactionRecord(info))
-        }
-
-        for (info in updated) {
-            records.add(transactionRecord(info))
-        }
-
-        transactionRecordsSubject.onNext(records)
-    }
 
     //
     // Helpers
     //
 
-    protected fun transactionRecord(transaction: Transaction): TransactionRecord {
-        val amountEther: BigDecimal = convertToValue(transaction.value) ?: BigDecimal.ZERO
-        val mineAddress = ethereumKit.receiveAddress.toLowerCase()
+    protected fun convertState(kitState: EthereumKit.SyncState): AdapterState {
+        return when (kitState) {
+            is EthereumKit.SyncState.Synced -> AdapterState.Synced
+            is EthereumKit.SyncState.NotSynced -> AdapterState.NotSynced
+            is EthereumKit.SyncState.Syncing -> AdapterState.Synced
+        }
+    }
 
-        val from = TransactionAddress()
-        from.address = transaction.from
-        from.mine = transaction.from.toLowerCase() == mineAddress
+    protected fun transactionRecord(transaction: EthereumTransaction): TransactionRecord {
 
-        val to = TransactionAddress()
-        to.address = transaction.to
-        to.mine = transaction.to.toLowerCase() == mineAddress
+        val mineAddress = ethereumKit.receiveAddress
 
-        val transactionAmount = if (from.mine)
-            amountEther.unaryMinus() else
-            amountEther
+        val from = TransactionAddress(transaction.from, transaction.from == mineAddress)
+
+        val to = TransactionAddress(transaction.to, transaction.to == mineAddress)
+
+        var amount: BigDecimal = BigDecimal.valueOf(0.0)
+
+        transaction.value.toBigDecimalOrNull()?.let {
+            amount = it.movePointLeft(decimal)
+            if (from.mine) {
+                amount = amount.unaryMinus()
+            }
+        }
 
         return TransactionRecord(
                 transaction.hash,
                 transaction.blockNumber,
-                transactionAmount,
+                amount,
                 transaction.timeStamp,
                 listOf(from),
                 listOf(to)
         )
     }
 
-    private fun convertToValue(amount: String): BigDecimal? = try {
-        BigDecimal(amount).divide(weisInEther, decimal, RoundingMode.HALF_EVEN)
-    } catch (ex: Exception) {
-        null
-    }
 }

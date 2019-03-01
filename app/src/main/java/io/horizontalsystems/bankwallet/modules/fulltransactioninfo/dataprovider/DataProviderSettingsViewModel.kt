@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import io.horizontalsystems.bankwallet.entities.Coin
 
 class DataProviderSettingsViewModel : ViewModel(), DataProviderSettingsModule.View {
 
@@ -12,8 +12,8 @@ class DataProviderSettingsViewModel : ViewModel(), DataProviderSettingsModule.Vi
     val providerItems = MutableLiveData<List<DataProviderSettingsItem>>()
     val closeLiveEvent = SingleLiveEvent<Unit>()
 
-    fun init(coinCode: CoinCode, transactionHash: String) {
-        DataProviderSettingsModule.init(coinCode, transactionHash, this)
+    fun init(coin: Coin, transactionHash: String) {
+        DataProviderSettingsModule.init(coin, transactionHash, this)
         delegate.viewDidLoad()
     }
 

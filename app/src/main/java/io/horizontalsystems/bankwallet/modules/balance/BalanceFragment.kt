@@ -19,6 +19,7 @@ import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.bankwallet.viewHelpers.AnimationHelper
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
+import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import kotlinx.android.synthetic.main.view_holder_add_coin.*
@@ -98,6 +99,16 @@ class BalanceFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener
         pullToRefresh.setOnRefreshListener {
             viewModel.delegate.refresh()
         }
+
+        activity?.theme?.let { theme ->
+            LayoutHelper.getAttr(R.attr.SwipeRefreshBackgroundColor, theme)?.let {color ->
+                pullToRefresh.setProgressBackgroundColorSchemeColor(color)
+            }
+            LayoutHelper.getAttr(R.attr.SwipeRefreshSpinnerColor, theme)?.let {color ->
+                pullToRefresh.setColorSchemeColors(color)
+            }
+        }
+
     }
 
     private fun reloadHeader() {
@@ -208,8 +219,8 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
 
         textCoinAmount.text = App.numberFormatter.format(balanceViewItem.coinValue)
         balanceViewItem.currencyValue?.let {
-            textCurrencyAmount.text = App.numberFormatter.format(it)
-            textCurrencyAmount.visibility = View.VISIBLE
+            textCurrencyAmount.text = App.numberFormatter.format(it, canUseLessSymbol = true)
+            textCurrencyAmount.visibility = if(it.value.compareTo(BigDecimal.ZERO) == 0) View.GONE else View.VISIBLE
             textCurrencyAmount.setTextColor(ContextCompat.getColor(containerView.context, if (balanceViewItem.rateExpired) R.color.yellow_crypto_40 else R.color.yellow_crypto))
         } ?: run { textCurrencyAmount.visibility = View.GONE }
 

@@ -25,8 +25,9 @@ class AddressView : ConstraintLayout {
         ConstraintLayout.inflate(context, R.layout.view_address, this)
     }
 
-    fun bind(address: String) {
+    fun bind(address: String, icon: Int? = null) {
         txtAddress.text = address
+        icon?.let { iconImage.setImageResource(icon) }
         invalidate()
     }
 

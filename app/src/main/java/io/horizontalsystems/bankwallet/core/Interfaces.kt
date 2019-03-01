@@ -60,7 +60,7 @@ interface INetworkManager {
     fun getLatestRate(coin: String, currency: String): Flowable<LatestRate>
     fun getRate(coinCode: String, currency: String, timestamp: Long): Flowable<BigDecimal>
     fun getTransaction(host: String, path: String): Flowable<JsonObject>
-    fun ping(host: String, url: String): Flowable<JsonObject>
+    fun ping(host: String, url: String): Flowable<Any>
 }
 
 interface IEncryptionManager {
@@ -85,9 +85,9 @@ interface ICurrencyManager {
 interface ITransactionDataProviderManager {
     val baseProviderUpdatedSignal: Observable<Unit>
 
-    fun providers(coinCode: CoinCode): List<FullTransactionInfoModule.Provider>
-    fun baseProvider(coinCode: CoinCode): FullTransactionInfoModule.Provider
-    fun setBaseProvider(name: String, coinCode: CoinCode)
+    fun providers(coin: Coin): List<FullTransactionInfoModule.Provider>
+    fun baseProvider(coin: Coin): FullTransactionInfoModule.Provider
+    fun setBaseProvider(name: String, coin: Coin)
 
     fun bitcoin(name: String): FullTransactionInfoModule.BitcoinForksProvider
     fun bitcoinCash(name: String): FullTransactionInfoModule.BitcoinForksProvider
@@ -128,16 +128,15 @@ interface IAdapter {
     val feeCoinCode: String?
     val decimal: Int
     val balance: BigDecimal
+
     val balanceUpdatedSignal: PublishSubject<Unit>
+    val lastBlockHeightUpdatedSignal: PublishSubject<Unit>
+    val adapterStateUpdatedSubject: PublishSubject<Unit>
+    val transactionRecordsSubject: PublishSubject<List<TransactionRecord>>
 
     val state: AdapterState
-    val stateUpdatedSignal: PublishSubject<Unit>
-
     val confirmationsThreshold: Int
     val lastBlockHeight: Int?
-    val lastBlockHeightUpdatedSignal: PublishSubject<Unit>
-
-    val transactionRecordsSubject: PublishSubject<List<TransactionRecord>>
 
     val debugInfo: String
 

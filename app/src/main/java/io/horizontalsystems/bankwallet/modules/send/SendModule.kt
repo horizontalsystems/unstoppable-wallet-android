@@ -25,7 +25,7 @@ object SendModule {
         fun setSendButtonEnabled(sendButtonEnabled: Boolean)
 
         fun showConfirmation(viewItem: SendConfirmationViewItem)
-        fun showError(error: Throwable)
+        fun showError(errorText: Int)
         fun dismissWithSuccess()
         fun setPasteButtonState(enabled: Boolean)
         fun setDecimal(decimal: Int)
@@ -63,6 +63,7 @@ object SendModule {
 
     interface IInteractorDelegate {
         fun didRateRetrieve()
+        fun didFeeRateRetrieve()
         fun didSend()
         fun didFailToSend(error: Throwable)
     }
@@ -151,7 +152,7 @@ object SendModule {
         var sendButtonEnabled: Boolean = false
     }
 
-    class SendConfirmationViewItem(val coinValue: CoinValue, val address: String, val feeInfo: AmountInfo, val totalInfo: AmountInfo?) {
-        var currencyValue: CurrencyValue? = null
+    class SendConfirmationViewItem(val primaryAmountInfo: AmountInfo, val address: String, val feeInfo: AmountInfo, val totalInfo: AmountInfo?){
+        var secondaryAmountInfo: AmountInfo? = null
     }
 }

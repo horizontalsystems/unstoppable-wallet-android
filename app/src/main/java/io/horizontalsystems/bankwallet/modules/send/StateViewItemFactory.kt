@@ -77,15 +77,11 @@ class StateViewItemFactory {
         var stateTotalInfo: SendModule.AmountInfo? = null
 
         val feeCurrencyValue = state.feeCurrencyValue
+        val currencyValue = state.currencyValue
 
-        if (feeCurrencyValue != null && state.currencyValue != null) {
+        if (feeCurrencyValue != null && currencyValue != null) {
             stateFeeInfo = SendModule.AmountInfo.CurrencyValueInfo(feeCurrencyValue)
-
-            val currencyValue = state.currencyValue
-
-            if (currencyValue != null) {
-                stateTotalInfo = SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(currencyValue.currency, currencyValue.value + feeCurrencyValue.value))
-            }
+            stateTotalInfo = SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(currencyValue.currency, currencyValue.value + feeCurrencyValue.value))
         } else {
             val feeCoinValue = state.feeCoinValue
             if (feeCoinValue != null) {
@@ -96,11 +92,21 @@ class StateViewItemFactory {
             }
         }
 
+        val primaryAmountInfo = when {
+            state.inputType == SendModule.InputType.CURRENCY && currencyValue != null -> SendModule.AmountInfo.CurrencyValueInfo(currencyValue)
+            else -> SendModule.AmountInfo.CoinValueInfo(coinValue)
+        }
+
         val feeInfo = stateFeeInfo ?: return null
         val totalInfo = stateTotalInfo
 
-        val viewItem = SendModule.SendConfirmationViewItem(coinValue, address, feeInfo, totalInfo)
-        viewItem.currencyValue = state.currencyValue
+        val viewItem = SendModule.SendConfirmationViewItem(primaryAmountInfo, address, feeInfo, totalInfo)
+
+        if (primaryAmountInfo is SendModule.AmountInfo.CurrencyValueInfo) {
+            viewItem.secondaryAmountInfo = SendModule.AmountInfo.CoinValueInfo(coinValue)
+        } else {
+            viewItem.secondaryAmountInfo = state.currencyValue?.let { SendModule.AmountInfo.CurrencyValueInfo(it) }
+        }
 
         return viewItem
     }

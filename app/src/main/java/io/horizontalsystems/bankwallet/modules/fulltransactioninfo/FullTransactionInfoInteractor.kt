@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
 
 import io.horizontalsystems.bankwallet.core.managers.TransactionDataProviderManager
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.FullTransactionRecord
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -25,8 +25,8 @@ class FullTransactionInfoInteractor(private val transactionInfoFactory: FullTran
         })
     }
 
-    override fun updateProvider(coinCode: CoinCode) {
-        provider = transactionInfoFactory.providerFor(coinCode)
+    override fun updateProvider(coin: Coin) {
+        provider = transactionInfoFactory.providerFor(coin)
     }
 
     override fun url(hash: String): String? {

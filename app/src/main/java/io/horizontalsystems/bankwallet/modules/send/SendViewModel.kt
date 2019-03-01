@@ -16,8 +16,9 @@ class SendViewModel : ViewModel(), SendModule.IView {
     val switchButtonEnabledLiveData = MutableLiveData<Boolean>()
     val addressInfoLiveData = MutableLiveData<SendModule.AddressInfo>()
     val dismissWithSuccessLiveEvent = SingleLiveEvent<Unit>()
+    val dismissConfirmationLiveEvent = SingleLiveEvent<Unit>()
     val feeInfoLiveData = MutableLiveData<SendModule.FeeInfo>()
-    val errorLiveData = MutableLiveData<Throwable>()
+    val errorLiveData = MutableLiveData<Int>()
     val sendConfirmationViewItemLiveData = MutableLiveData<SendModule.SendConfirmationViewItem>()
     val showConfirmationLiveEvent = SingleLiveEvent<Unit>()
     val pasteButtonEnabledLiveData = MutableLiveData<Boolean>()
@@ -79,12 +80,13 @@ class SendViewModel : ViewModel(), SendModule.IView {
         showConfirmationLiveEvent.call()
     }
 
-    override fun showError(error: Throwable) {
+    override fun showError(error: Int) {
         errorLiveData.value = error
     }
 
     override fun dismissWithSuccess() {
         dismissWithSuccessLiveEvent.call()
+        dismissConfirmationLiveEvent.call()
     }
 
     override fun onCleared() {

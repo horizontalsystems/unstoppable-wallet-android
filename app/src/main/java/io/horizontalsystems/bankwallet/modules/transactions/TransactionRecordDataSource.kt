@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
+import android.support.v7.util.DiffUtil
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.TransactionItem
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule.FetchData
@@ -16,33 +18,36 @@ class TransactionRecordDataSource(
     val allShown
         get() = poolRepo.activePools.all { it.allShown }
 
-    val allRecords: Map<CoinCode, List<TransactionRecord>>
+    val allRecords: Map<Coin, List<TransactionRecord>>
         get() = poolRepo.activePools.map {
-            Pair(it.coinCode, it.records)
+            Pair(it.coin, it.records)
         }.toMap()
 
     fun itemForIndex(index: Int): TransactionItem =
             itemsDataSource.itemForIndex(index)
 
-    fun itemIndexesForTimestamp(coinCode: CoinCode, timestamp: Long): List<Int> =
-            itemsDataSource.itemIndexesForTimestamp(coinCode, timestamp)
+    fun itemIndexesForTimestamp(coin: Coin, timestamp: Long): List<Int> =
+            itemsDataSource.itemIndexesForTimestamp(coin, timestamp)
+
+
+    fun itemIndexesForPending(coin: Coin, thresholdBlockHeight: Int): List<Int> =
+            itemsDataSource.itemIndexesForPending(coin, thresholdBlockHeight)
 
     fun getFetchDataList(): List<FetchData> = poolRepo.activePools.mapNotNull {
         it.getFetchData(limit)
     }
 
-    fun handleNextRecords(records: Map<CoinCode, List<TransactionRecord>>) {
-        records.forEach { (coinCode, transactionRecords) ->
-            poolRepo.getPool(coinCode)?.add(transactionRecords)
+    fun handleNextRecords(records: Map<Coin, List<TransactionRecord>>) {
+        records.forEach { (coin, transactionRecords) ->
+            poolRepo.getPool(coin)?.add(transactionRecords)
         }
     }
 
-    fun handleUpdatedRecords(records: List<TransactionRecord>, coinCode: CoinCode): Boolean {
-        val pool = poolRepo.getPool(coinCode) ?: return false
+    fun handleUpdatedRecords(records: List<TransactionRecord>, coin: Coin): DiffUtil.DiffResult? {
+        val pool = poolRepo.getPool(coin) ?: return null
 
         val updatedRecords = mutableListOf<TransactionRecord>()
         val insertedRecords = mutableListOf<TransactionRecord>()
-        var newData = false
 
         records.forEach {
             when (pool.handleUpdatedRecord(it)) {
@@ -53,23 +58,18 @@ class TransactionRecordDataSource(
                         insertedRecords.add(it)
                         pool.increaseFirstUnusedIndex()
                     }
-                    newData = true
                 }
                 Pool.HandleResult.IGNORED -> {
                 }
             }
         }
 
-        if (!poolRepo.isPoolActiveByCoinCode(coinCode)) return false
+        if (!poolRepo.isPoolActiveByCoinCode(coin)) return null
 
-        if (updatedRecords.isEmpty() && insertedRecords.isEmpty()) return newData
+        val updatedItems = updatedRecords.map { factory.createTransactionItem(coin, it) }
+        val insertedItems = insertedRecords.map { factory.createTransactionItem(coin, it) }
 
-        val updatedItems = updatedRecords.map { factory.createTransactionItem(coinCode, it) }
-        val insertedItems = insertedRecords.map { factory.createTransactionItem(coinCode, it) }
-
-        itemsDataSource.handleModifiedItems(updatedItems, insertedItems)
-
-        return true
+        return itemsDataSource.handleModifiedItems(updatedItems, insertedItems)
     }
 
     fun increasePage(): Int {
@@ -77,7 +77,7 @@ class TransactionRecordDataSource(
 
         poolRepo.activePools.forEach { pool ->
             unusedItems.addAll(pool.unusedRecords.map { record ->
-                factory.createTransactionItem(pool.coinCode, record)
+                factory.createTransactionItem(pool.coin, record)
             })
         }
 
@@ -90,19 +90,18 @@ class TransactionRecordDataSource(
         itemsDataSource.add(usedItems)
 
         usedItems.forEach {
-            poolRepo.getPool(it.coinCode)?.increaseFirstUnusedIndex()
+            poolRepo.getPool(it.coin)?.increaseFirstUnusedIndex()
         }
 
         return usedItems.size
     }
 
-    fun setCoinCodes(coinCodes: List<CoinCode>) {
+    fun setCoinCodes(coins: List<Coin>) {
         poolRepo.allPools.forEach {
             it.resetFirstUnusedIndex()
         }
-        poolRepo.activatePools(coinCodes)
+        poolRepo.activatePools(coins)
         itemsDataSource.clear()
     }
-
 }
 

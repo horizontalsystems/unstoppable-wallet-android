@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core
 
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bitcoinkit.BitcoinKit
 import io.horizontalsystems.bitcoinkit.managers.UnspentOutputSelector
 import io.horizontalsystems.bitcoinkit.models.BlockInfo
@@ -40,9 +41,9 @@ class BitcoinAdapter(override val coin: Coin, authData: AuthData, newWallet: Boo
     override var state: AdapterState = AdapterState.Syncing(0, null)
         set(value) {
             field = value
-            stateUpdatedSignal.onNext(Unit)
+            adapterStateUpdatedSubject.onNext(Unit)
         }
-    override var stateUpdatedSignal: PublishSubject<Unit> = PublishSubject.create()
+    override var adapterStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
 
     override val confirmationsThreshold: Int = 6
     override val lastBlockHeight get() = bitcoinKit.lastBlockInfo?.height
@@ -143,17 +144,22 @@ class BitcoinAdapter(override val coin: Coin, authData: AuthData, newWallet: Boo
             is BitcoinKit.KitState.Syncing -> {
                 this.state.let { currentState ->
                     val newProgress = (state.progress * 100).toInt()
+                    val newDate = bitcoinKit.lastBlockInfo?.timestamp?.let { Date(it * 1000) }
 
-                    if (currentState is AdapterState.Syncing && currentState.progress == newProgress)
-                        return
+                    if (currentState is AdapterState.Syncing && currentState.progress == newProgress) {
+                        val currentDate = currentState.lastBlockDate
+                        if (newDate != null && currentDate != null && DateHelper.isSameDay(newDate, currentDate)) {
+                            return
+                        }
+                    }
 
-                    this.state = AdapterState.Syncing(newProgress, bitcoinKit.lastBlockInfo?.timestamp?.let { Date(it * 1000) })
+                    this.state = AdapterState.Syncing(newProgress, newDate)
                 }
             }
         }
     }
 
-    override fun onTransactionsUpdate(bitcoinKit: BitcoinKit, inserted: List<TransactionInfo>, updated: List<TransactionInfo>, deleted: List<Int>) {
+    override fun onTransactionsUpdate(bitcoinKit: BitcoinKit, inserted: List<TransactionInfo>, updated: List<TransactionInfo>) {
         val records = mutableListOf<TransactionRecord>()
 
         for (info in inserted) {
@@ -167,24 +173,18 @@ class BitcoinAdapter(override val coin: Coin, authData: AuthData, newWallet: Boo
         transactionRecordsSubject.onNext(records)
     }
 
+    override fun onTransactionsDelete(hashes: List<String>) {
+        // ignored for now
+    }
+
     private fun transactionRecord(transaction: TransactionInfo) =
             TransactionRecord(
                     transaction.transactionHash,
                     transaction.blockHeight?.toLong() ?: 0,
                     transaction.amount.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN),
                     transaction.timestamp,
-                    transaction.from.map {
-                        val address = TransactionAddress()
-                        address.address = it.address
-                        address.mine = it.mine
-                        address
-                    },
-                    transaction.to.map {
-                        val address = TransactionAddress()
-                        address.address = it.address
-                        address.mine = it.mine
-                        address
-                    }
+                    transaction.from.map { TransactionAddress(it.address, it.mine) },
+                    transaction.to.map { TransactionAddress(it.address, it.mine) }
             )
 
 }

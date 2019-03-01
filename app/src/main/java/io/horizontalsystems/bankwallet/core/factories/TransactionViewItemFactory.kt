@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.core.factories
 
-import io.horizontalsystems.bankwallet.core.ICurrencyManager
 import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.ICurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.RateManager
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -46,7 +46,8 @@ class TransactionViewItemFactory(
 
         return TransactionViewItem(
                 record.transactionHash,
-                CoinValue(transactionItem.coinCode, record.amount),
+                transactionItem.coin,
+                CoinValue(transactionItem.coin.code, record.amount),
                 currencyValue,
                 record.from.firstOrNull { it.mine != incoming }?.address,
                 toAddress,

@@ -56,7 +56,7 @@
         />
 
     <TextView
-        android:id="@+id/txtFiatAmount"
+        android:id="@+id/primaryAmountText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -73,7 +73,7 @@
         />
 
     <TextView
-        android:id="@+id/txtCryptoAmount"
+        android:id="@+id/secondaryAmountText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -81,7 +81,7 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtFiatAmount"
+        app:layout_constraintTop_toBottomOf="@+id/primaryAmountText"
         tools:text="0.0006482 BTC"
         />
 
@@ -96,7 +96,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/inputBackgroundView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtCryptoAmount"
+        app:layout_constraintTop_toBottomOf="@+id/secondaryAmountText"
         />
 
     <TextView
@@ -153,7 +153,7 @@
         tools:text="$123.5"
         />
 
-    <Button
+    <io.horizontalsystems.bankwallet.ui.extensions.ButtonWithProgressbarView
         android:id="@+id/buttonConfirm"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -161,7 +161,6 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/Backup_Button_Confirm"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -4,10 +4,7 @@ import com.nhaarman.mockito_kotlin.inOrder
 import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
 import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
-import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.TransactionItem
-import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.*
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -22,6 +19,10 @@ class TransactionsPresenterTest {
     private val factory = mock(TransactionViewItemFactory::class.java)
     private val loader = mock(TransactionsLoader::class.java)
     private val metadataDataSource = mock(TransactionMetadataDataSource::class.java)
+
+    private val coin1 = mock(Coin::class.java)
+    private val coin2 = mock(Coin::class.java)
+    private val coin3 = mock(Coin::class.java)
 
     private lateinit var presenter: TransactionsPresenter
 
@@ -45,7 +46,6 @@ class TransactionsPresenterTest {
         val index = 42
         val lastBlockHeight = 123
         val threshold = 6
-        val coinCode = "BTC"
         val viewItem = mock(TransactionViewItem::class.java)
         val transactionItem = mock(TransactionItem::class.java)
         val transactionRecord = mock(TransactionRecord::class.java)
@@ -54,11 +54,11 @@ class TransactionsPresenterTest {
 
         whenever(transactionRecord.timestamp).thenReturn(timestamp)
         whenever(transactionItem.record).thenReturn(transactionRecord)
-        whenever(transactionItem.coinCode).thenReturn(coinCode)
+        whenever(transactionItem.coin).thenReturn(coin1)
         whenever(loader.itemForIndex(index)).thenReturn(transactionItem)
-        whenever(metadataDataSource.getLastBlockHeight(coinCode)).thenReturn(lastBlockHeight)
-        whenever(metadataDataSource.getConfirmationThreshold(coinCode)).thenReturn(threshold)
-        whenever(metadataDataSource.getRate(coinCode, timestamp)).thenReturn(rateCurrencyValue)
+        whenever(metadataDataSource.getLastBlockHeight(coin1)).thenReturn(lastBlockHeight)
+        whenever(metadataDataSource.getConfirmationThreshold(coin1)).thenReturn(threshold)
+        whenever(metadataDataSource.getRate(coin1, timestamp)).thenReturn(rateCurrencyValue)
         whenever(factory.item(transactionItem, lastBlockHeight, threshold, rateCurrencyValue)).thenReturn(viewItem)
 
         Assert.assertEquals(viewItem, presenter.itemForIndex(index))
@@ -80,43 +80,38 @@ class TransactionsPresenterTest {
 
     @Test
     fun onFilterSelect() {
-        val coinCode = "BTC"
+        presenter.onFilterSelect(coin1)
 
-        presenter.onFilterSelect(coinCode)
-
-        verify(interactor).setSelectedCoinCodes(listOf(coinCode))
+        verify(interactor).setSelectedCoinCodes(listOf(coin1))
     }
 
     @Test
     fun onUpdateCoinsData() {
-        val coinCode1 = "BTC"
-        val coinCode2 = "ETH"
         val confirmationThreshold1 = 6
         val lastBlockHeight1 = 123
         val confirmationThreshold2 = 12
         val lastBlockHeight2 = null
         val allCoinsData = listOf(
-                Triple(coinCode1, confirmationThreshold1, lastBlockHeight1),
-                Triple(coinCode2, confirmationThreshold2, lastBlockHeight2)
+                Triple(coin1, confirmationThreshold1, lastBlockHeight1),
+                Triple(coin2, confirmationThreshold2, lastBlockHeight2)
         )
 
         presenter.onUpdateCoinsData(allCoinsData)
 
-        verify(loader).setCoinCodes(listOf(coinCode1, coinCode2))
-        verify(metadataDataSource).setConfirmationThreshold(confirmationThreshold1, coinCode1)
-        verify(metadataDataSource).setConfirmationThreshold(confirmationThreshold2, coinCode2)
-        verify(metadataDataSource).setLastBlockHeight(lastBlockHeight1, coinCode1)
+        verify(loader).setCoinCodes(listOf(coin1, coin2))
+        verify(metadataDataSource).setConfirmationThreshold(confirmationThreshold1, coin1)
+        verify(metadataDataSource).setConfirmationThreshold(confirmationThreshold2, coin2)
+        verify(metadataDataSource).setLastBlockHeight(lastBlockHeight1, coin1)
         verify(loader).loadNext(true)
-        verify(view).showFilters(listOf(null, coinCode1, coinCode2))
+        verify(view).showFilters(listOf(null, coin1, coin2))
         verify(interactor).fetchLastBlockHeights()
     }
 
     @Test
     fun onUpdateCoinsData_lessThen2Coins() {
-        val coinCode1 = "BTC"
         val confirmationThreshold1 = 6
         val lastBlockHeight1 = 123
-        val allCoinsData = listOf(Triple(coinCode1, confirmationThreshold1, lastBlockHeight1))
+        val allCoinsData = listOf(Triple(coin1, confirmationThreshold1, lastBlockHeight1))
 
         presenter.onUpdateCoinsData(allCoinsData)
 
@@ -125,28 +120,27 @@ class TransactionsPresenterTest {
 
     @Test
     fun onUpdateSelectedCoinCodes() {
-        val coinCodes = listOf("BTC")
+        val coins = listOf(coin1)
 
-        presenter.onUpdateSelectedCoinCodes(coinCodes)
+        presenter.onUpdateSelectedCoinCodes(coins)
 
-        verify(loader).setCoinCodes(coinCodes)
+        verify(loader).setCoinCodes(coins)
         verify(loader).loadNext(true)
     }
 
     @Test
     fun didFetchRecords() {
-        val coinCode1 = "BTC"
         val record1 = mock(TransactionRecord::class.java)
         val timestamp1 = 123435L
         val timestamps = listOf(timestamp1)
-        val records = mapOf(coinCode1 to listOf<TransactionRecord>(record1))
+        val records = mapOf(coin1 to listOf<TransactionRecord>(record1))
 
         whenever(record1.timestamp).thenReturn(timestamp1)
 
         presenter.didFetchRecords(records)
 
         verify(loader).didFetchRecords(records)
-        verify(interactor).fetchRates(mapOf(coinCode1 to timestamps))
+        verify(interactor).fetchRates(mapOf(coin1 to timestamps))
     }
 
     @Test
@@ -174,22 +168,38 @@ class TransactionsPresenterTest {
 
     @Test
     fun onUpdateLastBlockHeight() {
-        val coinCode = "coinCode"
         val lastBlockHeight = 123123
 
-        presenter.onUpdateLastBlockHeight(coinCode, lastBlockHeight)
+        whenever(metadataDataSource.getConfirmationThreshold(coin1)).thenReturn(null)
 
-        verify(metadataDataSource).setLastBlockHeight(lastBlockHeight, coinCode)
+        presenter.onUpdateLastBlockHeight(coin1, lastBlockHeight)
+
+        verify(metadataDataSource).setLastBlockHeight(lastBlockHeight, coin1)
         verify(view).reload()
     }
 
     @Test
+    fun onUpdateLastBlockHeight_threshold() {
+        val lastBlockHeight = 123123
+        val oldBlockHeight = 123122
+        val threshold = 1
+
+        whenever(metadataDataSource.getConfirmationThreshold(coin1)).thenReturn(threshold)
+        whenever(metadataDataSource.getLastBlockHeight(coin1)).thenReturn(oldBlockHeight)
+        whenever(loader.itemIndexesForPending(coin1, oldBlockHeight - threshold)).thenReturn(listOf(1))
+
+        presenter.onUpdateLastBlockHeight(coin1, lastBlockHeight)
+
+        verify(metadataDataSource).setLastBlockHeight(lastBlockHeight, coin1)
+        verify(view).reloadItems(listOf(1))
+    }
+
+    @Test
     fun onUpdateBaseCurrency() {
-        val coinCode1 = "BTC"
         val record1 = mock(TransactionRecord::class.java)
         val timestamp1 = 123435L
         val timestamps = listOf(timestamp1)
-        val transactionRecords = mapOf(coinCode1 to listOf<TransactionRecord>(record1))
+        val transactionRecords = mapOf(coin1 to listOf<TransactionRecord>(record1))
 
         whenever(record1.timestamp).thenReturn(timestamp1)
         whenever(loader.allRecords).thenReturn(transactionRecords)
@@ -199,33 +209,31 @@ class TransactionsPresenterTest {
         inOrder(metadataDataSource, view, interactor).let {
             it.verify(metadataDataSource).clearRates()
             it.verify(view).reload()
-            it.verify(interactor).fetchRates(mapOf(coinCode1 to timestamps))
+            it.verify(interactor).fetchRates(mapOf(coin1 to timestamps))
         }
     }
 
     @Test
     fun didFetchRate() {
         val rateValue = 123.123.toBigDecimal()
-        val coinCode = "BTC"
         val currency = mock(Currency::class.java)
         val timestamp = 123345123L
 
-        presenter.didFetchRate(rateValue, coinCode, currency, timestamp)
+        presenter.didFetchRate(rateValue, coin1, currency, timestamp)
 
-        verify(metadataDataSource).setRate(rateValue, coinCode, currency, timestamp)
+        verify(metadataDataSource).setRate(rateValue, coin1, currency, timestamp)
     }
 
     @Test
     fun didFetchRate_needToUpdateViewItem() {
         val rateValue = 123.123.toBigDecimal()
-        val coinCode = "BTC"
         val currency = mock(Currency::class.java)
         val timestamp = 123345123L
         val itemIndexes = listOf(123)
 
-        whenever(loader.itemIndexesForTimestamp(coinCode, timestamp)).thenReturn(itemIndexes)
+        whenever(loader.itemIndexesForTimestamp(coin1, timestamp)).thenReturn(itemIndexes)
 
-        presenter.didFetchRate(rateValue, coinCode, currency, timestamp)
+        presenter.didFetchRate(rateValue, coin1, currency, timestamp)
 
         verify(view).reloadItems(itemIndexes)
     }
@@ -233,13 +241,12 @@ class TransactionsPresenterTest {
     @Test
     fun didFetchRate_notNeedToUpdateViewItem() {
         val rateValue = 123.123.toBigDecimal()
-        val coinCode = "BTC"
         val currency = mock(Currency::class.java)
         val timestamp = 123345123L
 
-        whenever(loader.itemIndexesForTimestamp(coinCode, timestamp)).thenReturn(listOf())
+        whenever(loader.itemIndexesForTimestamp(coin1, timestamp)).thenReturn(listOf())
 
-        presenter.didFetchRate(rateValue, coinCode, currency, timestamp)
+        presenter.didFetchRate(rateValue, coin1, currency, timestamp)
 
         verifyNoMoreInteractions(view)
     }
@@ -248,15 +255,14 @@ class TransactionsPresenterTest {
     fun didUpdateRecords() {
         val record = mock(TransactionRecord::class.java)
         val records = listOf(record)
-        val coinCode = "BTC"
         val timestamp = 123123L
 
         whenever(record.timestamp).thenReturn(timestamp)
 
-        presenter.didUpdateRecords(records, coinCode)
+        presenter.didUpdateRecords(records, coin1)
 
-        verify(loader).didUpdateRecords(records, coinCode)
-        verify(interactor).fetchRates(mapOf(coinCode to listOf(timestamp)))
+        verify(loader).didUpdateRecords(records, coin1)
+        verify(interactor).fetchRates(mapOf(coin1 to listOf(timestamp)))
     }
 
 }

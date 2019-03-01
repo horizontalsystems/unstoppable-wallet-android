@@ -1,9 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
+import android.support.v7.util.DiffUtil
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
 import com.nhaarman.mockito_kotlin.whenever
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.TransactionItem
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import org.junit.Assert
@@ -15,10 +18,18 @@ class TransactionsLoaderTest {
 
     private val dataSource = mock(TransactionRecordDataSource::class.java)
     private val delegate = mock(TransactionsLoader.Delegate::class.java)
+    private val diffResult = mock(DiffUtil.DiffResult::class.java)
+
+    private val btc = mock(Coin::class.java)
+    private val eth = mock(Coin::class.java)
+
     private lateinit var loader: TransactionsLoader
 
     @Before
     fun setup() {
+        whenever(btc.type).thenReturn(mock(CoinType.Bitcoin::class.java))
+        whenever(eth.type).thenReturn(mock(CoinType.Ethereum::class.java))
+
         loader = TransactionsLoader(dataSource)
         loader.delegate = delegate
     }
@@ -52,11 +63,11 @@ class TransactionsLoaderTest {
 
     @Test
     fun setCoinCodes() {
-        val coinCodes = listOf("ABC", "DEF")
+        val coins = listOf(btc, eth)
 
-        loader.setCoinCodes(coinCodes)
+        loader.setCoinCodes(coins)
 
-        verify(dataSource).setCoinCodes(coinCodes)
+        verify(dataSource).setCoinCodes(coins)
     }
 
     @Test
@@ -126,7 +137,7 @@ class TransactionsLoaderTest {
 
     @Test
     fun didFetchRecords_dataInserted() {
-        val records = mapOf<CoinCode, List<TransactionRecord>>("BTC" to listOf())
+        val records = mapOf<Coin, List<TransactionRecord>>(btc to listOf())
 
         whenever(dataSource.itemsCount).thenReturn(123)
         whenever(dataSource.increasePage()).thenReturn(10)
@@ -140,7 +151,7 @@ class TransactionsLoaderTest {
 
     @Test
     fun didFetchRecords_dataNotChanged() {
-        val records = mapOf<CoinCode, List<TransactionRecord>>("BTC" to listOf())
+        val records = mapOf<Coin, List<TransactionRecord>>(btc to listOf())
 
         whenever(dataSource.increasePage()).thenReturn(0)
 
@@ -153,36 +164,47 @@ class TransactionsLoaderTest {
 
     @Test
     fun itemIndexesForTimestamp() {
-        val coinCode = "BTC"
+        val coin = btc
         val timestamp = 123123L
         val indexes = listOf(1231, 12323)
 
-        whenever(dataSource.itemIndexesForTimestamp(coinCode, timestamp)).thenReturn(indexes)
+        whenever(dataSource.itemIndexesForTimestamp(coin, timestamp)).thenReturn(indexes)
 
-        Assert.assertEquals(indexes, loader.itemIndexesForTimestamp(coinCode, timestamp))
+        Assert.assertEquals(indexes, loader.itemIndexesForTimestamp(coin, timestamp))
     }
 
     @Test
     fun didUpdateRecords_reloadRequired() {
         val records = listOf(mock(TransactionRecord::class.java))
-        val coinCode = "BTC"
+        val coin = btc
 
-        whenever(dataSource.handleUpdatedRecords(records, coinCode)).thenReturn(true)
+        whenever(dataSource.handleUpdatedRecords(records, coin))
+                .thenReturn(diffResult)
 
-        loader.didUpdateRecords(records, coinCode)
+        loader.didUpdateRecords(records, coin)
 
-        verify(delegate).didChangeData()
+        verify(delegate).onChange(diffResult)
     }
 
     @Test
     fun didUpdateRecords_reloadNotRequired() {
         val records = listOf(mock(TransactionRecord::class.java))
-        val coinCode = "BTC"
+        val coin = btc
 
-        whenever(dataSource.handleUpdatedRecords(records, coinCode)).thenReturn(false)
+        whenever(dataSource.handleUpdatedRecords(records, coin)).thenReturn(null)
 
-        loader.didUpdateRecords(records, coinCode)
+        loader.didUpdateRecords(records, coin)
 
         verify(delegate, never()).didChangeData()
+    }
+
+    @Test
+    fun itemIndexesForPending() {
+        val coin = btc
+        val lastBlockHeight = 100
+
+        loader.itemIndexesForPending(coin, lastBlockHeight)
+
+        verify(dataSource).itemIndexesForPending(coin, lastBlockHeight)
     }
 }

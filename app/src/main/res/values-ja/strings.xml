@@ -55,7 +55,7 @@
     <string name="Send_Button_Send">送る</string>
     <string name="Send_Button_Max">最大</string>
     <string name="Send_ScanQrCode">QR コードを読み取る</string>
-    <string name="Send_Success">送信完了!</string>
+    <string name="Send_Success">\u2713 Sent</string>
     <string name="Send_Error_InvalidAddress">住所確認できませんでした。もう一回やり直してください。</string>
     <string name="Send_Error_InsufficientBalance">残高は足りません。</string>
     <string name="Send_Error_IncorrectAddress">住所誤り</string>
@@ -63,6 +63,7 @@
     <string name="Send_DialogTitle">取引を承認する</string>
     <string name="Send_DialogFee">料金:</string>
     <string name="Send_DialogTotal">合計:</string>
+    <string name="Send_Sending">Sending</string>
     <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
     <!--Deposit-->
     <string name="Deposit_Title">受取 %s</string>
@@ -98,8 +99,9 @@
     <string name="FullInfo_Fee">料金</string>
     <string name="FullInfo_Rate">換算率</string>
     <string name="FullInfo_Source">ソース</string>
-    <string name="FullInfo_To">宛先</string>
+    <string name="FullInfo_Contract">Contract</string>
     <string name="FullInfo_From">差出人</string>
+    <string name="FullInfo_To">宛先</string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
@@ -115,13 +117,13 @@
     <string name="FullInfo_TotalOutput">総支出</string>
     <string name="FullInfo_FeePerByte">byteごと手数料</string>
     <string name="FullInfo_FeeRate">手数料率</string>
-    <string name="FullInfo_NoAddress">利用不可</string>
+    <string name="FullInfo_NoAddress">Empty Address</string>
     <string name="FullInfo_SatByte">sat/B</string>
     <string name="FullInfo_Bytes">バイト</string>
     <string name="FullInfo_SubtitleInputs">入力</string>
     <string name="FullInfo_SubtitleOutputs">出力</string>
     <string name="FullInfoEth_Nonce">Nonce</string>
-    <string name="FullInfoEth_Value">値</string>
+    <string name="FullInfoEth_Amount">Amount</string>
     <!--Settings-->
     <string name="Settings_Title">設定</string>
     <string name="Settings_SecurityCenter">セキュリティ センター</string>
@@ -172,6 +174,7 @@
     <string name="Hud_Text_NoInternet">インタネットに繋がっていません。</string>
     <string name="Hud_Text_Copied">コピー完了</string>
     <string name="Hud_Text_InvalidPinError">正しくないパスワード</string>
+    <string name="Hud_Network_Issue">Network issues. Try again in a short moment</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">指紋使用ログイン</string>
     <string name="Fingerprint_Hint">タッチセンサー</string>

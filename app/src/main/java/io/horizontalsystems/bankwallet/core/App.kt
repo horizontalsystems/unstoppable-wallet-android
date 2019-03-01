@@ -13,7 +13,6 @@ import io.horizontalsystems.bankwallet.core.storage.RatesRepository
 import io.horizontalsystems.bankwallet.core.storage.StorableCoinsRepository
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
 import io.horizontalsystems.bitcoinkit.BitcoinKit
-import io.horizontalsystems.ethereumkit.EthereumKit
 import java.util.*
 
 class App : Application() {
@@ -71,9 +70,6 @@ class App : Application() {
 
         // Initialize BitcoinKit
         BitcoinKit.init(this)
-
-        // Initialize EthereumKit
-        EthereumKit.init(this)
 
         instance = this
         preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
