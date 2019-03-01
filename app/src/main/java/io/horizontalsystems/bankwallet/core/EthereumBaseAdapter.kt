@@ -12,6 +12,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
+import java.math.RoundingMode
 
 abstract class EthereumBaseAdapter(override val coin: Coin, protected val ethereumKit: EthereumKit, final override val decimal: Int)
     : IAdapter, EthereumKit.Listener {
@@ -76,7 +77,7 @@ abstract class EthereumBaseAdapter(override val coin: Coin, protected val ethere
 
     private fun sendSingle(address: String, amount: BigDecimal): Single<Unit> {
         val poweredDecimal = amount.scaleByPowerOfTen(decimal)
-        val noScaleDecimal = poweredDecimal.setScale(0)
+        val noScaleDecimal = poweredDecimal.setScale(0, RoundingMode.HALF_DOWN)
 
         return sendSingle(address, noScaleDecimal.toPlainString())
     }
