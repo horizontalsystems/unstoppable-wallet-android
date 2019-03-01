@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.guest
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.view.WindowManager
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
@@ -18,6 +19,8 @@ class GuestActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
 
         setContentView(R.layout.activity_add_wallet)
 
@@ -35,6 +38,10 @@ class GuestActivity : BaseActivity() {
 
         viewModel.showErrorDialog.observe(this, Observer {
             HudHelper.showErrorMessage(R.string.Error)
+        })
+
+        viewModel.appVersionLiveData.observe(this, Observer { appVersion ->
+            appVersion?.let { textVersion.text = getString(R.string.Guest_Version, it) }
         })
 
         buttonCreate.setOnSingleClickListener {

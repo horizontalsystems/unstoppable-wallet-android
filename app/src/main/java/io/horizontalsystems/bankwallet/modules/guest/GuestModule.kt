@@ -9,15 +9,18 @@ object GuestModule {
 
     interface IView {
         fun showError()
+        fun setAppVersion(appVersion: String)
     }
 
     interface IViewDelegate {
         fun createWalletDidClick()
         fun restoreWalletDidClick()
+        fun onViewDidLoad()
     }
 
     interface IInteractor {
         fun createWallet()
+        val appVersion: String
     }
 
     interface IInteractorDelegate {
@@ -36,7 +39,7 @@ object GuestModule {
     }
 
     fun init(view: GuestViewModel, router: IRouter, keystoreSafeExecute: IKeyStoreSafeExecute) {
-        val interactor = GuestInteractor(App.authManager, App.wordsManager, keystoreSafeExecute)
+        val interactor = GuestInteractor(App.authManager, App.wordsManager, keystoreSafeExecute, App.systemInfoManager)
         val presenter = GuestPresenter(interactor, router)
 
         view.delegate = presenter
