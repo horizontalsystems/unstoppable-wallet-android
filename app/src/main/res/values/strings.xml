@@ -23,6 +23,7 @@
     <string name="Guest_Subtitle" translatable="false">Decentralized App</string>
     <string name="Guest_CreateWallet">New Wallet</string>
     <string name="Guest_RestoreWallet">Restore Wallet</string>
+    <string name="Guest_Version" translatable="false">v.%s</string>
 
 
     <!--Restore-->

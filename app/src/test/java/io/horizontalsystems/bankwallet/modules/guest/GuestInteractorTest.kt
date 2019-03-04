@@ -2,10 +2,13 @@ package io.horizontalsystems.bankwallet.modules.guest
 
 import com.nhaarman.mockito_kotlin.KArgumentCaptor
 import com.nhaarman.mockito_kotlin.argumentCaptor
+import com.nhaarman.mockito_kotlin.doReturn
 import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
+import io.horizontalsystems.bankwallet.core.ISystemInfoManager
 import io.horizontalsystems.bankwallet.core.managers.AuthManager
 import io.horizontalsystems.bankwallet.core.managers.WordsManager
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Captor
@@ -18,7 +21,9 @@ class GuestInteractorTest {
     private val wordsManager = mock(WordsManager::class.java)
     private val delegate = mock(GuestModule.IInteractorDelegate::class.java)
     private val keystoreSafeExecute = Mockito.mock(IKeyStoreSafeExecute::class.java)
-    private val interactor = GuestInteractor(authManager, wordsManager, keystoreSafeExecute)
+    private lateinit var sysInfoManager: ISystemInfoManager
+    private lateinit var interactor: GuestInteractor
+    private val appVersion = "1,01"
 
     @Captor
     private val actionRunnableCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
@@ -33,7 +38,17 @@ class GuestInteractorTest {
     fun before() {
         RxBaseTest.setup()
 
+        sysInfoManager = com.nhaarman.mockito_kotlin.mock {
+            on { appVersion } doReturn appVersion
+        }
+
+        interactor = GuestInteractor(authManager, wordsManager, keystoreSafeExecute, sysInfoManager)
         interactor.delegate = delegate
+    }
+
+    @Test
+    fun getAppVersion() {
+        Assert.assertEquals(interactor.appVersion, appVersion)
     }
 
     @Test
