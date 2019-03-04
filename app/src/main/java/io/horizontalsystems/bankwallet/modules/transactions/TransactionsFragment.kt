@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.annotation.NonNull
 import android.support.design.widget.BottomSheetBehavior
+import android.support.design.widget.BottomSheetBehavior.STATE_EXPANDED
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE
@@ -120,7 +121,10 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
         var bottomSheetSlideOffOld = 0f
 
         bottomSheetBehavior?.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-            override fun onStateChanged(@NonNull bottomSheet: View, newState: Int) {}
+            override fun onStateChanged(@NonNull bottomSheet: View, newState: Int) {
+                val enabled = newState != STATE_EXPANDED
+                (activity as? MainActivity)?.setSwipeEnabled(enabled)
+            }
 
             override fun onSlide(@NonNull bottomSheet: View, slideOffset: Float) {
                 transactionsDim.alpha = slideOffset

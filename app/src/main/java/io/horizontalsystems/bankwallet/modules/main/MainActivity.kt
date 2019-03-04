@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.main
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
+import android.view.WindowManager
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import io.horizontalsystems.bankwallet.BaseActivity
@@ -20,13 +21,15 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+
         setContentView(R.layout.activity_dashboard)
 
         adapter = MainTabsAdapter(supportFragmentManager)
 
         viewPager.adapter = adapter
         viewPager.offscreenPageLimit = 2
-        viewPager.setPagingEnabled(false)
+        setSwipeEnabled(true)
 
         LayoutHelper.getAttr(R.attr.BottomNavigationBackgroundColor, theme)?.let {
             bottomNavigation.defaultBackgroundColor = it
@@ -96,6 +99,10 @@ class MainActivity : BaseActivity() {
         val countText = if (count < 1) "" else count.toString()
         val settingsTabPosition = 2
         bottomNavigation.setNotification(countText, settingsTabPosition)
+    }
+
+    fun setSwipeEnabled(enabled: Boolean) {
+        viewPager.setPagingEnabled(enabled)
     }
 
     companion object {
