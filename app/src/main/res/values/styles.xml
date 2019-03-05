@@ -54,6 +54,7 @@
     <attr name="ProgressbarSpinnerColor" format="reference|color" />
     <attr name="SwipeRefreshSpinnerColor" format="reference|color" />
     <attr name="SwipeRefreshBackgroundColor" format="reference|color" />
+    <attr name="InputBackground" format="reference|color" />
 
     <!-- Base application theme. -->
     <style name="DarkModeAppTheme" parent="Theme.AppCompat.NoActionBar">
@@ -123,6 +124,7 @@
         <item name="ProgressbarSpinnerColor">@color/dark</item>
         <item name="SwipeRefreshSpinnerColor">@color/bars_color</item>
         <item name="SwipeRefreshBackgroundColor">@color/dark</item>
+        <item name="InputBackground">@color/steel_dark</item>
     </style>
 
     <style name="LightModeAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -192,6 +194,7 @@
         <item name="ProgressbarSpinnerColor">@color/bars_color</item>
         <item name="SwipeRefreshSpinnerColor">@color/dark</item>
         <item name="SwipeRefreshBackgroundColor">@color/bars_color</item>
+        <item name="InputBackground">@color/white</item>
     </style>
 
     <style name="Button" parent="Widget.AppCompat.Button.Borderless">
@@ -205,32 +208,42 @@
         <item name="android:background">@drawable/button_yellow_background_12</item>
     </style>
 
-    <style name="ButtonSmallGrey_4" parent="Button">
-        <item name="android:background">@drawable/button_grey_background_4_themed</item>
-        <item name="android:minHeight">0dp</item>
-        <item name="android:minWidth">0dp</item>
-        <item name="android:paddingTop">6dp</item>
-        <item name="android:paddingBottom">7dp</item>
-        <item name="android:paddingEnd">12dp</item>
-        <item name="android:paddingStart">12dp</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/stateful_button_text_color</item>
-    </style>
-
     <style name="ButtonDark" parent="Button">
         <item name="android:background">@drawable/button_steel_background_12</item>
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="ImageButtonSmallGrey_4" parent="ButtonSmallGrey_4">
-        <item name="android:paddingTop">8dp</item>
-        <item name="android:paddingBottom">8dp</item>
+    <style name="SendButtonSmallGrey" parent="Button">
+        <item name="android:background">@drawable/button_grey_background_4_themed</item>
+        <item name="android:textColor">@color/stateful_button_text_color</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:paddingTop">3dp</item>
+        <item name="android:paddingBottom">3dp</item>
         <item name="android:paddingEnd">8dp</item>
         <item name="android:paddingStart">8dp</item>
     </style>
 
-    <style name="ThemedImageButtonSmallGrey_4" parent="ImageButtonSmallGrey_4">
+    <style name="SendButtonSmallGrey_text14" parent="SendButtonSmallGrey">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="SendImageButtonSmallGrey" parent="SendButtonSmallGrey">
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="android:paddingEnd">3dp</item>
+        <item name="android:paddingStart">3dp</item>
+        <item name="android:scaleType">fitCenter</item>
         <item name="android:tint">@color/button_image_tint_color_selector</item>
+    </style>
+
+    <style name="ButtonSmallGrey_4" parent="SendButtonSmallGrey">
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingBottom">7dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="ButtonGreen_12" parent="Button">
@@ -310,10 +323,9 @@
         <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
     </style>
 
-    <style name="BottomDialogText">
+    <style name="BottomDialogText" parent="Body1Grey">
         <item name="android:textColorHint">@color/grey_50</item>
         <item name="android:textColor">?BottomDialogTextColor</item>
-        <item name="android:fontFamily">@font/noto_sans</item>
     </style>
 
     <style name="SwitchTheme" parent="ThemeOverlay.AppCompat.Dark">
@@ -364,10 +376,18 @@
         <item name="android:textColor">?TransactionDateColor</item>
     </style>
 
+    <!--Text Styles-->
+
     <style name="Body1Grey">
         <item name="android:fontFamily">@font/noto_sans_regular</item>
         <item name="android:textColor">@color/grey</item>
         <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="CaptionRegularRed">
+        <item name="android:fontFamily">@font/noto_sans_regular</item>
+        <item name="android:textColor">@color/red_warning</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
 </resources>

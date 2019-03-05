@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:background="@drawable/input_background_themed"
+    android:paddingEnd="6dp"
+    android:paddingStart="12dp"
+    >
+
+    <TextView
+        android:id="@+id/inputPrefix"
+        style="@style/Body1Grey"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/addressInputWrapper"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="12."
+        />
+
+    <LinearLayout
+        android:id="@+id/addressInputWrapper"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/inputPrefix"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/txtAddress"
+                style="@style/BottomDialogText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="middle"
+                android:hint="@string/Send_Hint_Address"
+                android:singleLine="true"
+                />
+
+            <TextView
+                android:id="@+id/txtAddressError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                style="@style/CaptionRegularRed"
+                android:visibility="gone"
+                tools:text="@string/Send_Error_IncorrectAddress"
+                />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnAmpersand"
+            style="@style/SendButtonSmallGrey_text14"
+            android:layout_width="wrap_content"
+            android:layout_height="28dp"
+            android:layout_marginEnd="8dp"
+            android:text="\@"
+            android:visibility="visible"
+            />
+
+        <ImageButton
+            android:id="@+id/btnBarcodeScan"
+            style="@style/SendImageButtonSmallGrey"
+            android:layout_width="wrap_content"
+            android:layout_height="28dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/qr_code"
+            android:visibility="visible"
+            />
+
+        <Button
+            android:id="@+id/btnPaste"
+            style="@style/SendButtonSmallGrey"
+            android:layout_width="wrap_content"
+            android:layout_height="28dp"
+            android:text="@string/Send_Button_Paste"
+            android:visibility="visible"
+            />
+
+        <ImageButton
+            android:id="@+id/btnDeleteAddress"
+            style="@style/SendImageButtonSmallGrey"
+            android:layout_width="wrap_content"
+            android:layout_height="28dp"
+            android:src="@drawable/round_delete_24_px"
+            android:visibility="visible"
+            />
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

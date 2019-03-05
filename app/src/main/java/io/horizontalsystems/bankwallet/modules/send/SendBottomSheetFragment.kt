@@ -16,22 +16,17 @@ import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
+import android.widget.*
 import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
-import io.horizontalsystems.bankwallet.ui.extensions.NumPadItem
-import io.horizontalsystems.bankwallet.ui.extensions.NumPadItemType
-import io.horizontalsystems.bankwallet.ui.extensions.NumPadItemsAdapter
+import io.horizontalsystems.bankwallet.ui.extensions.*
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -88,29 +83,30 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
 
         val numpadRecyclerView = mDialog?.findViewById<RecyclerView>(R.id.numPadItemsRecyclerView)
         val hintInfoTxt: TextView? = mDialog?.findViewById(R.id.txtHintInfo)
-        val addressTxt: TextView? = mDialog?.findViewById(R.id.txtAddress)
-        val addressErrorTxt: TextView? = mDialog?.findViewById(R.id.txtAddressError)
         val amountPrefixTxt: TextView? = mDialog?.findViewById(R.id.topAmountPrefix)
         val switchButton: ImageButton? = mDialog?.findViewById(R.id.btnSwitch)
         maxButton = mDialog?.findViewById(R.id.btnMax)
-        val pasteButton: Button? = mDialog?.findViewById(R.id.btnPaste)
-        val scanBarcodeButton: ImageButton? = mDialog?.findViewById(R.id.btnBarcodeScan)
-        val deleteAddressButton: ImageButton? = mDialog?.findViewById(R.id.btnDeleteAddress)
         val feePrimaryTxt: TextView? = mDialog?.findViewById(R.id.txtFeePrimary)
         val feeErrorTxt: TextView? = mDialog?.findViewById(R.id.feeError)
         val feeSecondaryTxt: TextView? = mDialog?.findViewById(R.id.txtFeeSecondary)
         amountEditTxt = mDialog?.findViewById(R.id.editTxtAmount)
         val sendButton: Button? = mDialog?.findViewById(R.id.btnSend)
+        val seekBar: SeekBar? = mDialog?.findViewById(R.id.seekBarFeeRate)
+        val addressInput: InputAddressView? = mDialog?.findViewById(R.id.addressInput)
+
+        addressInput?.bindAddressInputInitial(
+                onAmpersandClick = null,
+                onBarcodeClick = { startScanner() },
+                onPasteClick = { viewModel.delegate.onPasteClicked() },
+                onDeleteClick = { viewModel.delegate.onDeleteClicked() }
+                )
 
         amountEditTxt?.showSoftInputOnFocus = false
         inputConnection = amountEditTxt?.onCreateInputConnection(EditorInfo())
         sendButton?.isEnabled = false
 
         switchButton?.setOnClickListener { viewModel.delegate.onSwitchClicked() }
-        scanBarcodeButton?.setOnClickListener { startScanner() }
         maxButton?.setOnClickListener { viewModel.delegate.onMaxClicked() }
-        pasteButton?.setOnClickListener { viewModel.delegate.onPasteClicked() }
-        deleteAddressButton?.setOnClickListener { viewModel.delegate.onDeleteClicked() }
         sendButton?.setOnClickListener { viewModel.delegate.onSendClicked() }
 
         amountEditTxt?.addTextChangedListener(textChangeListener)
@@ -126,6 +122,15 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
                 else -> true
             }
         }
+
+        seekBar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                Log.e("SendFragm", "onProgressChanged progress: $progress")
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
 
         viewModel.switchButtonEnabledLiveData.observe(this, Observer { enabled ->
             enabled?.let { switchButton?.isEnabled = it }
@@ -195,26 +200,23 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
         })
 
         viewModel.addressInfoLiveData.observe(this, Observer { addressInfo ->
-            deleteAddressButton?.visibility = if (addressInfo == null) View.GONE else View.VISIBLE
-            pasteButton?.visibility = if (addressInfo == null) View.VISIBLE else View.GONE
-            scanBarcodeButton?.visibility = if (addressInfo == null) View.VISIBLE else View.GONE
+
+            var addressText = ""
+            var errorText: String? = null
 
             addressInfo?.let {
                 when (it) {
                     is SendModule.AddressInfo.ValidAddressInfo -> {
-                        addressTxt?.text = it.address
-                        addressErrorTxt?.visibility = View.GONE
+                        addressText = it.address
                     }
                     is SendModule.AddressInfo.InvalidAddressInfo -> {
-                        addressTxt?.text = it.address
-                        addressErrorTxt?.setText(R.string.Send_Error_IncorrectAddress)
-                        addressErrorTxt?.visibility = View.VISIBLE
+                        addressText = it.address
+                        errorText = context?.getString(R.string.Send_Error_IncorrectAddress)
                     }
                 }
-            } ?: run {
-                addressErrorTxt?.visibility = View.GONE
-                addressTxt?.text = ""
             }
+
+            addressInput?.updateInput(addressText, errorText)
         })
 
         viewModel.feeInfoLiveData.observe(this, Observer { feeInfo ->
@@ -264,7 +266,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
         })
 
         viewModel.pasteButtonEnabledLiveData.observe(this, Observer { enabled ->
-            enabled?.let { pasteButton?.isEnabled = it }
+            enabled?.let { addressInput?.enablePasteButton(it) }
         })
 
         return mDialog as Dialog

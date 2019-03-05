@@ -67,7 +67,7 @@
     <string name="Send_Title">Send %s</string>
 
     <string name="Send_Hint_PaymentReference">Payment Reference</string>
-    <string name="Send_Hint_Address">Address</string>
+    <string name="Send_Hint_Address">\@ \u00A0 Address</string>
     <string name="Send_Hint_Amount">Amount</string>
 
     <string name="Send_Button_Paste">Paste</string>
