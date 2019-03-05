@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.support.constraint.ConstraintLayout
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.BottomSheetDialogFragment
@@ -88,6 +89,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
         maxButton = mDialog?.findViewById(R.id.btnMax)
         val feePrimaryTxt: TextView? = mDialog?.findViewById(R.id.txtFeePrimary)
         val feeErrorTxt: TextView? = mDialog?.findViewById(R.id.feeError)
+        val feeElements: ConstraintLayout? = mDialog?.findViewById(R.id.feeElements)
         val feeSecondaryTxt: TextView? = mDialog?.findViewById(R.id.txtFeeSecondary)
         amountEditTxt = mDialog?.findViewById(R.id.editTxtAmount)
         val sendButton: Button? = mDialog?.findViewById(R.id.btnSend)
@@ -224,6 +226,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
                 feePrimaryTxt?.visibility = if (it.error == null) View.VISIBLE else View.GONE
                 feeSecondaryTxt?.visibility = if (it.error == null) View.VISIBLE else View.GONE
                 feeErrorTxt?.visibility = if (it.error == null) View.GONE else View.VISIBLE
+                feeElements?.visibility = if (it.error == null) View.VISIBLE else View.GONE
 
                 it.error?.let { erc20Error ->
                     feeErrorTxt?.text = getString(R.string.Send_ERC_Alert, erc20Error.erc20CoinCode, erc20Error.coinValue.value.toPlainString())

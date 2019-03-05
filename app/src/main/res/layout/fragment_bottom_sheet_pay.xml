@@ -160,9 +160,9 @@
         <io.horizontalsystems.bankwallet.ui.extensions.InputAddressView
             android:id="@+id/addressInput"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_height="40dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
             app:layout_constraintBottom_toTopOf="@+id/feeInfoArea"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -172,95 +172,102 @@
         <android.support.constraint.ConstraintLayout
             android:id="@+id/feeInfoArea"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="53dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/addressInput"
             >
+
             <TextView
                 android:id="@+id/feeError"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="9dp"
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:textColor="@color/red_warning"
                 android:textSize="12sp"
-                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="Transaction fees for USDT (ERC20) paid in Ethereum. You don&apos;t have 0,00028 ETH."
                 />
 
-            <TextView
-                android:id="@+id/txtFeePrimary"
-                android:layout_width="0dp"
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/feeElements"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="17dp"
-                android:layout_marginBottom="16dp"
-                android:textColor="@color/grey"
-                android:textSize="14sp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/txtFeeSecondary"
-                app:layout_constraintStart_toStartOf="parent"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
-                tools:text="0.02 BTC"
-                />
-
-            <TextView
-                android:id="@+id/txtFeeSecondary"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textAlignment="textEnd"
-                android:textColor="@color/grey"
-                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/txtFeePrimary"
-                tools:text="$0.02"
-                />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                >
+
+                <TextView
+                    android:id="@+id/txtFeePrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/grey"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toStartOf="@+id/txtFeeSecondary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="0.02 BTC"
+                    />
+
+                <TextView
+                    android:id="@+id/txtFeeSecondary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/grey"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/txtFeePrimary"
+                    tools:text="$0.02"
+                    />
+
+                <ImageView
+                    android:id="@+id/seekBarTurtle"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="4dp"
+                    android:src="@drawable/ic_seekbar_turtle"
+                    android:tint="@color/grey"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtFeePrimary"
+                    />
+
+                <SeekBar
+                    android:id="@+id/seekBarFeeRate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:progress="50"
+                    android:progressBackgroundTint="@color/grey"
+                    android:progressTint="@color/grey"
+                    android:thumbTint="@color/grey"
+                    app:layout_constraintBottom_toBottomOf="@id/seekBarTurtle"
+                    app:layout_constraintEnd_toStartOf="@+id/seekBarRabbit"
+                    app:layout_constraintStart_toEndOf="@+id/seekBarTurtle"
+                    app:layout_constraintTop_toTopOf="@id/seekBarTurtle"
+                    />
+
+                <ImageView
+                    android:id="@+id/seekBarRabbit"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_seekbar_rabbit"
+                    android:tint="@color/grey"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/seekBarTurtle"
+                    />
+            </android.support.constraint.ConstraintLayout>
         </android.support.constraint.ConstraintLayout>
-
-        <ImageView
-            android:id="@+id/seekBarTurtle"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_seekbar_turtle"
-            android:tint="@color/grey"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="2dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/feeInfoArea"
-            />
-
-        <SeekBar
-            android:id="@+id/seekBarFeeRate"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:progress="50"
-            android:progressBackgroundTint="@color/grey"
-            android:progressTint="@color/grey"
-            android:thumbTint="@color/grey"
-            app:layout_constraintTop_toTopOf="@id/seekBarTurtle"
-            app:layout_constraintBottom_toBottomOf="@id/seekBarTurtle"
-            app:layout_constraintStart_toEndOf="@+id/seekBarTurtle"
-            app:layout_constraintEnd_toStartOf="@+id/seekBarRabbit"
-            />
-
-        <ImageView
-            android:id="@+id/seekBarRabbit"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_seekbar_rabbit"
-            android:tint="@color/grey"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/seekBarTurtle"
-            />
 
         <Button
             android:id="@+id/btnSend"
@@ -275,7 +282,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/seekBarTurtle"
+            app:layout_constraintTop_toBottomOf="@+id/feeInfoArea"
             />
 
     </android.support.constraint.ConstraintLayout>
