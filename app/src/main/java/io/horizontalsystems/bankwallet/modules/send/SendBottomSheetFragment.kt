@@ -23,13 +23,15 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.SeekBar
+import android.widget.TextView
 import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.ui.extensions.*
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
@@ -44,7 +46,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
     private var inputConnection: InputConnection? = null
 
     private var amountEditTxt: EditText? = null
-    private var maxButton: Button? = null
+    private var amountInput: InputAmountView? = null
     private val amountChangeSubject: PublishSubject<BigDecimal> = PublishSubject.create()
 
     private var coin: String? = null
@@ -83,10 +85,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
         val numpadAdapter = NumPadItemsAdapter(this, NumPadItemType.DOT, false)
 
         val numpadRecyclerView = mDialog?.findViewById<RecyclerView>(R.id.numPadItemsRecyclerView)
-        val hintInfoTxt: TextView? = mDialog?.findViewById(R.id.txtHintInfo)
-        val amountPrefixTxt: TextView? = mDialog?.findViewById(R.id.topAmountPrefix)
-        val switchButton: ImageButton? = mDialog?.findViewById(R.id.btnSwitch)
-        maxButton = mDialog?.findViewById(R.id.btnMax)
+        amountInput = mDialog?.findViewById(R.id.amountInput)
         val feePrimaryTxt: TextView? = mDialog?.findViewById(R.id.txtFeePrimary)
         val feeErrorTxt: TextView? = mDialog?.findViewById(R.id.feeError)
         val feeElements: ConstraintLayout? = mDialog?.findViewById(R.id.feeElements)
@@ -107,8 +106,11 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
         inputConnection = amountEditTxt?.onCreateInputConnection(EditorInfo())
         sendButton?.isEnabled = false
 
-        switchButton?.setOnClickListener { viewModel.delegate.onSwitchClicked() }
-        maxButton?.setOnClickListener { viewModel.delegate.onMaxClicked() }
+        amountInput?.bindInitial(
+                onMaxClick = { viewModel.delegate.onMaxClicked() },
+                onSwitchClick = { viewModel.delegate.onSwitchClicked() }
+        )
+
         sendButton?.setOnClickListener { viewModel.delegate.onSendClicked() }
 
         amountEditTxt?.addTextChangedListener(textChangeListener)
@@ -135,7 +137,9 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
         })
 
         viewModel.switchButtonEnabledLiveData.observe(this, Observer { enabled ->
-            enabled?.let { switchButton?.isEnabled = it }
+            enabled?.let {
+                amountInput?.enableSwitchBtn(it)
+            }
         })
 
         viewModel.coinLiveData.observe(this, Observer { coin ->
@@ -150,31 +154,26 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
         viewModel.hintInfoLiveData.observe(this, Observer { hintInfo ->
             when (hintInfo) {
                 is SendModule.HintInfo.Amount -> {
-                    activity?.theme?.let { theme ->
-                        LayoutHelper.getAttr(R.attr.BottomDialogTextColor, theme)?.let {
-                            hintInfoTxt?.setTextColor(it)
-                        }
-                    }
-
-                    hintInfoTxt?.text = when (hintInfo.amountInfo) {
+                    val hintText = when (hintInfo.amountInfo) {
                         is SendModule.AmountInfo.CoinValueInfo -> App.numberFormatter.format(hintInfo.amountInfo.coinValue, realNumber = true)
                         is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(hintInfo.amountInfo.currencyValue, realNumber = true)
                     }
+                    amountInput?.updateInput(hint = hintText)
                 }
                 is SendModule.HintInfo.ErrorInfo -> {
-                    hintInfoTxt?.let { it.setTextColor(it.resources.getColor(R.color.red_warning, null)) }
-
-                    when (hintInfo.error) {
+                    val errorText: String? = when (hintInfo.error) {
                         is SendModule.AmountError.InsufficientBalance -> {
                             val balanceAmount = when (hintInfo.error.amountInfo) {
                                 is SendModule.AmountInfo.CoinValueInfo -> App.numberFormatter.format(hintInfo.error.amountInfo.coinValue)
                                 is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(hintInfo.error.amountInfo.currencyValue, realNumber = true)
                             }
-                            hintInfoTxt?.text = hintInfoTxt?.context?.getString(R.string.Send_Error_BalanceAmount, balanceAmount)
+                            context?.getString(R.string.Send_Error_BalanceAmount, balanceAmount)
                         }
+                        else -> null
                     }
+                    amountInput?.updateInput(error = errorText)
                 }
-                null -> hintInfoTxt?.text = null
+                null -> amountInput?.updateInput()
             }
         })
 
@@ -186,11 +185,11 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
             var amountNumber = BigDecimal.ZERO
             when (amountInfo) {
                 is SendModule.AmountInfo.CoinValueInfo -> {
-                    amountPrefixTxt?.text = amountInfo.coinValue.coinCode
+                    amountInput?.updateAmountPrefix(amountInfo.coinValue.coinCode)
                     amountNumber = amountInfo.coinValue.value.setScale(8, RoundingMode.HALF_EVEN)
                 }
                 is SendModule.AmountInfo.CurrencyValueInfo -> {
-                    amountPrefixTxt?.text = amountInfo.currencyValue.currency.symbol
+                    amountInput?.updateAmountPrefix(amountInfo.currencyValue.currency.symbol)
                     amountNumber = amountInfo.currencyValue.value.setScale(2, RoundingMode.HALF_EVEN)
                 }
             }
@@ -329,7 +328,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
                 }
             }
 
-            maxButton?.visibility = if (amountText.isEmpty()) View.VISIBLE else View.GONE
+            amountInput?.setMaxBtnVisible(amountText.isEmpty())
             amountChangeSubject.onNext(amountNumber)
         }
 

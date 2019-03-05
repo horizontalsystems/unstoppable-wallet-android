@@ -55,6 +55,7 @@
     <attr name="SwipeRefreshSpinnerColor" format="reference|color" />
     <attr name="SwipeRefreshBackgroundColor" format="reference|color" />
     <attr name="InputBackground" format="reference|color" />
+    <attr name="BarsOrDarkTextColor" format="reference|color" />
 
     <!-- Base application theme. -->
     <style name="DarkModeAppTheme" parent="Theme.AppCompat.NoActionBar">
@@ -125,6 +126,7 @@
         <item name="SwipeRefreshSpinnerColor">@color/bars_color</item>
         <item name="SwipeRefreshBackgroundColor">@color/dark</item>
         <item name="InputBackground">@color/steel_dark</item>
+        <item name="BarsOrDarkTextColor">@color/bars_color</item>
     </style>
 
     <style name="LightModeAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -195,6 +197,7 @@
         <item name="SwipeRefreshSpinnerColor">@color/dark</item>
         <item name="SwipeRefreshBackgroundColor">@color/bars_color</item>
         <item name="InputBackground">@color/white</item>
+        <item name="BarsOrDarkTextColor">@color/dark</item>
     </style>
 
     <style name="Button" parent="Widget.AppCompat.Button.Borderless">
@@ -216,6 +219,8 @@
     <style name="SendButtonSmallGrey" parent="Button">
         <item name="android:background">@drawable/button_grey_background_4_themed</item>
         <item name="android:textColor">@color/stateful_button_text_color</item>
+        <item name="android:fontFamily">@font/noto_sans</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:minHeight">0dp</item>
         <item name="android:minWidth">0dp</item>
         <item name="android:textSize">12sp</item>
@@ -323,7 +328,7 @@
         <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
     </style>
 
-    <style name="BottomDialogText" parent="Body1Grey">
+    <style name="BottomDialogText" parent="Base">
         <item name="android:textColorHint">@color/grey_50</item>
         <item name="android:textColor">?BottomDialogTextColor</item>
     </style>
@@ -384,10 +389,30 @@
         <item name="android:textSize">14sp</item>
     </style>
 
-    <style name="CaptionRegularRed">
+    <style name="Base">
         <item name="android:fontFamily">@font/noto_sans_regular</item>
-        <item name="android:textColor">@color/red_warning</item>
+        <item name="android:textColor">@color/bars_color</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Body1">
+        <item name="android:fontFamily">@font/noto_sans_regular</item>
+        <item name="android:textColor">@color/bars_color</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="FormInputTextThemed" parent="Base">
+        <item name="android:textColorHint">@color/grey_50</item>
+        <item name="android:textColor">?attr/BarsOrDarkTextColor</item>
+    </style>
+
+    <style name="CaptionRegular">
+        <item name="android:fontFamily">@font/noto_sans_regular</item>
         <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="CaptionRegularRed" parent="CaptionRegular">
+        <item name="android:textColor">@color/red_warning</item>
     </style>
 
 </resources>

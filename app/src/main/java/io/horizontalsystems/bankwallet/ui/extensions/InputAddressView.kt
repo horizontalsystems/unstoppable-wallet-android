@@ -30,7 +30,6 @@ class InputAddressView : ConstraintLayout {
                          onPasteClick: (() -> (Unit))? = null,
                          onDeleteClick: (() -> (Unit))? = null
     ) {
-        btnAmpersand.visibility = View.VISIBLE
         btnBarcodeScan.visibility =  View.VISIBLE
         btnPaste.visibility =  View.VISIBLE
         btnDeleteAddress.visibility =  View.GONE
@@ -45,11 +44,12 @@ class InputAddressView : ConstraintLayout {
 
     fun updateInput(address: String = "", errorText: String? = null) {
         val empty = address.isEmpty()
-        btnAmpersand.visibility = if (empty) View.VISIBLE else View.GONE
         btnBarcodeScan.visibility =  if (empty) View.VISIBLE else View.GONE
         btnPaste.visibility =  if (empty) View.VISIBLE else View.GONE
 
         btnDeleteAddress.visibility =  if (empty) View.GONE else View.VISIBLE
+
+        txtAddress.text = address
 
         errorText?.let {
             txtAddressError.visibility = View.VISIBLE

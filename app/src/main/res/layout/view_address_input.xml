@@ -4,9 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
+    android:layout_height="44dp"
     android:background="@drawable/input_background_themed"
-    android:paddingEnd="6dp"
+    android:paddingEnd="8dp"
     android:paddingStart="12dp"
     >
 
@@ -52,14 +52,14 @@
                 />
         </LinearLayout>
 
-        <Button
+        <ImageButton
             android:id="@+id/btnAmpersand"
-            style="@style/SendButtonSmallGrey_text14"
+            style="@style/SendImageButtonSmallGrey"
             android:layout_width="wrap_content"
             android:layout_height="28dp"
             android:layout_marginEnd="8dp"
-            android:text="\@"
-            android:visibility="visible"
+            android:src="@drawable/ic_small_contact"
+            android:visibility="gone"
             />
 
         <ImageButton
@@ -68,7 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="28dp"
             android:layout_marginEnd="8dp"
-            android:src="@drawable/qr_code"
+            android:src="@drawable/ic_scan_qr_copy"
             android:visibility="visible"
             />
 
