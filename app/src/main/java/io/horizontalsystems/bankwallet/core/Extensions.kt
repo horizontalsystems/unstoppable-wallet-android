@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.core
 
+import android.app.Activity
+import android.graphics.Color
 import android.view.View
 import io.horizontalsystems.bankwallet.ui.view.SingleClickListener
 import io.reactivex.disposables.CompositeDisposable
@@ -60,4 +62,8 @@ fun View.setOnSingleClickListener(l: ((v: View) -> Unit)) {
                     l.invoke(v)
                 }
             })
+}
+
+fun Activity.setTransparentStatusBar() {
+    window.statusBarColor = Color.TRANSPARENT
 }

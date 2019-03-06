@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.main
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
-import android.view.WindowManager
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import io.horizontalsystems.bankwallet.BaseActivity
@@ -20,8 +19,6 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
 
         setContentView(R.layout.activity_dashboard)
 

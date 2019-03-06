@@ -8,8 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.ui.extensions.InputTextView
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
-import kotlinx.android.synthetic.main.fragment_backup_words_confirm.*
 
 class BackupConfirmFragment : Fragment() {
     private lateinit var viewModel: BackupViewModel
@@ -24,14 +24,17 @@ class BackupConfirmFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val wordOne: InputTextView? = view.findViewById(R.id.wordOne)
+        val wordTwo: InputTextView? = view.findViewById(R.id.wordTwo)
+
         activity?.let {
             viewModel = ViewModelProviders.of(it).get(BackupViewModel::class.java)
         }
 
         viewModel.wordIndexesToConfirmLiveData.observe(this, Observer { list ->
             list?.let {
-                textWordNumber1.text = "${it[0]}."
-                textWordNumber2.text = "${it[1]}."
+                wordOne?.bindPrefix("${it[0]}.")
+                wordTwo?.bindPrefix("${it[1]}.")
 
                 wordIndex1 = it[0]
                 wordIndex2 = it[1]
@@ -43,12 +46,13 @@ class BackupConfirmFragment : Fragment() {
         })
 
         viewModel.validateWordsLiveEvent.observe(this, Observer {
-            if (editWord1.text?.isEmpty() == true || editWord2.text?.isEmpty() == true) {
+            val wordOneEntry = wordOne?.getEnteredText()
+            val wordTwoEntry = wordOne?.getEnteredText()
+            if (wordOneEntry.isNullOrEmpty() || wordTwoEntry.isNullOrEmpty()) {
                 showError(R.string.Backup_Confirmation_Description)
             } else {
                 viewModel.delegate.validateDidClick(
-                        hashMapOf(wordIndex1 to editWord1.text.toString(),
-                                wordIndex2 to editWord2.text.toString())
+                        hashMapOf(wordIndex1 to wordOneEntry, wordIndex2 to wordTwoEntry)
                 )
             }
         })

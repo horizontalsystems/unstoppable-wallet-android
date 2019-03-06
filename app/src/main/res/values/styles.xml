@@ -49,7 +49,6 @@
     <attr name="ConfirmationMiddlePartBackground" format="reference|color" />
     <attr name="CurrencySwitcherTitleColor" format="reference|color" />
     <attr name="PendingTransactionShadeColor" format="reference|color" />
-    <attr name="PinScreenBackground" format="reference|color" />
     <attr name="TransactionTagColor" format="reference|color" />
     <attr name="ProgressbarSpinnerColor" format="reference|color" />
     <attr name="SwipeRefreshSpinnerColor" format="reference|color" />
@@ -64,7 +63,7 @@
         <item name="colorPrimaryDark">@color/black</item>
         <item name="colorAccent">@color/yellow_crypto</item>
         <item name="buttonStyle">@style/Button</item>
-        <item name="android:colorBackground">@color/appBackground</item>
+        <item name="android:colorBackground">@color/dark</item>
         <item name="android:navigationBarColor">@color/black</item>
         <item name="android:statusBarColor">@color/dark</item>
         <item name="android:windowLightStatusBar">false</item>
@@ -120,7 +119,6 @@
         <item name="ConfirmationMiddlePartBackground">@color/steel_20</item>
         <item name="CurrencySwitcherTitleColor">@color/bars_color</item>
         <item name="PendingTransactionShadeColor">@color/dark_50</item>
-        <item name="PinScreenBackground">@color/dark</item>
         <item name="TransactionTagColor">@color/stateful_tag_filter_text_color_dark</item>
         <item name="ProgressbarSpinnerColor">@color/dark</item>
         <item name="SwipeRefreshSpinnerColor">@color/bars_color</item>
@@ -135,7 +133,7 @@
         <item name="colorPrimaryDark">@color/bars_color</item>
         <item name="colorAccent">@color/yellow_crypto</item>
         <item name="buttonStyle">@style/Button</item>
-        <item name="android:colorBackground">@color/lightBackground</item>
+        <item name="android:colorBackground">@color/bars_color</item>
         <item name="android:navigationBarColor">@color/black</item>
         <item name="android:statusBarColor">@color/bars_color</item>
         <item name="android:windowLightStatusBar">true</item>
@@ -191,7 +189,6 @@
         <item name="ConfirmationMiddlePartBackground">@color/transparent</item>
         <item name="CurrencySwitcherTitleColor">@color/dark</item>
         <item name="PendingTransactionShadeColor">@color/white_50</item>
-        <item name="PinScreenBackground">@color/bars_color</item>
         <item name="TransactionTagColor">@color/dark</item>
         <item name="ProgressbarSpinnerColor">@color/bars_color</item>
         <item name="SwipeRefreshSpinnerColor">@color/dark</item>
@@ -263,19 +260,6 @@
     <style name="ButtonNegative" parent="Button">
         <item name="android:background">@drawable/button_grey_background_12</item>
         <item name="android:textColor">@color/black</item>
-    </style>
-
-    <style name="Title">
-        <item name="android:fontFamily">@font/noto_sans_bold</item>
-        <item name="android:textColor">?TitleColor</item>
-        <item name="android:textSize">42sp</item>
-    </style>
-
-    <style name="Description">
-        <item name="android:fontFamily">@font/noto_sans</item>
-        <item name="android:letterSpacing">-0.02</item>
-        <item name="android:textColor">@color/grey</item>
-        <item name="android:textSize">17sp</item>
     </style>
 
     <style name="Error">
@@ -383,6 +367,18 @@
 
     <!--Text Styles-->
 
+    <style name="Title1">
+        <item name="android:fontFamily">@font/noto_sans_bold</item>
+        <item name="android:textColor">?TitleColor</item>
+        <item name="android:textSize">32sp</item>
+    </style>
+
+    <style name="Title2Yellow">
+        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
+        <item name="android:textColor">@color/yellow_crypto</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
     <style name="Body1Grey">
         <item name="android:fontFamily">@font/noto_sans_regular</item>
         <item name="android:textColor">@color/grey</item>
@@ -391,8 +387,8 @@
 
     <style name="Base">
         <item name="android:fontFamily">@font/noto_sans_regular</item>
-        <item name="android:textColor">@color/bars_color</item>
         <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/grey</item>
     </style>
 
     <style name="Body1">

@@ -23,6 +23,7 @@ import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.security.FingerprintAuthenticationDialogFragment
+import io.horizontalsystems.bankwallet.core.setTransparentStatusBar
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.ui.extensions.NumPadItem
 import io.horizontalsystems.bankwallet.ui.extensions.NumPadItemType
@@ -42,6 +43,8 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setTransparentStatusBar()
 
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
 

@@ -2,74 +2,48 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
 
     <TextView
-        android:id="@+id/textWordNumber1"
+        android:id="@+id/pageTitle"
+        style="@style/Title1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:letterSpacing="0.01"
-        android:textColor="?TitleColor"
-        android:textSize="22sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/editWord1"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="49dp"
+        android:text="@string/Backup_Confirmation_CheckTitle"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="10."
+        app:layout_constraintTop_toTopOf="parent"
         />
 
+    <io.horizontalsystems.bankwallet.ui.extensions.InputTextView
+        android:id="@+id/wordOne"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pageTitle"
+        />
 
-    <android.support.v7.widget.AppCompatEditText
-        android:id="@+id/editWord1"
-        android:layout_width="0dp"
+    <io.horizontalsystems.bankwallet.ui.extensions.InputTextView
+        android:id="@+id/wordTwo"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:ems="10"
-        android:inputType="text"
-        android:textColor="?TitleColor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/textWordNumber1"
-        app:layout_constraintTop_toBottomOf="@+id/textDescription"
-        tools:text="first"
-        />
-
-    <TextView
-        android:id="@+id/textWordNumber2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:letterSpacing="0.01"
-        android:textColor="?TitleColor"
-        android:textSize="22sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/editWord2"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="8."
-        />
-
-    <android.support.v7.widget.AppCompatEditText
-        android:id="@+id/editWord2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:inputType="text"
-        android:textColor="?TitleColor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textWordNumber2"
-        app:layout_constraintTop_toBottomOf="@+id/editWord1"
-        tools:text="second"
+        app:layout_constraintTop_toBottomOf="@+id/wordOne"
         />
 
     <TextView
         android:id="@+id/textDescription"
-        style="@style/Description"
+        style="@style/Base"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
@@ -78,7 +52,7 @@
         android:text="@string/Backup_Confirmation_Title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/wordTwo"
         />
 
 </android.support.constraint.ConstraintLayout>
