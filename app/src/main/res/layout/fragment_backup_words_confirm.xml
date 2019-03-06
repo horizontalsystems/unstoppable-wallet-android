@@ -43,7 +43,7 @@
 
     <TextView
         android:id="@+id/textDescription"
-        style="@style/Base"
+        style="@style/Body1Grey"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"

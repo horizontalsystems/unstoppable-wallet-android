@@ -2,40 +2,30 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?AboutBackgroundColor"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     >
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar_layout"
+    <io.horizontalsystems.bankwallet.ui.extensions.ShadowlessToolbarView
+        android:id="@+id/shadowlessToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="bottom"
-        >
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?android:attr/actionBarSize"
-            android:theme="@style/ToolbarStyle"
-            app:titleMarginStart="16dp"
-            app:titleTextAppearance="@style/TabTitleSmall"
-            />
-    </android.support.design.widget.AppBarLayout>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?android:attr/actionBarSize"
+        android:layout_height="0dp"
+        android:background="?AboutBackgroundColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shadowlessToolbar"
         >
 
         <android.support.constraint.ConstraintLayout
@@ -49,7 +39,7 @@
                 android:id="@+id/appIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="14dp"
                 android:src="@mipmap/bitcoin_launcher"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -57,24 +47,22 @@
 
             <TextView
                 android:id="@+id/appName"
+                style="@style/Title2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="28dp"
-                android:fontFamily="@font/noto_sans_bold"
                 android:text="@string/Guest_Title"
-                android:textSize="20sp"
-                android:textColor="?TitleColor"
+                android:textColor="?Title2Color"
                 app:layout_constraintStart_toEndOf="@+id/appIcon"
                 app:layout_constraintTop_toTopOf="@+id/appIcon"
                 />
 
             <TextView
                 android:id="@+id/appShortDescription"
+                style="@style/Body1Grey"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/noto_sans"
                 android:text="@string/Guest_Subtitle"
-                android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="@+id/appName"
                 app:layout_constraintTop_toBottomOf="@+id/appName"
                 />
@@ -95,7 +83,7 @@
                 style="@style/AboutSubTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/SettingsAbout_TermsPrivacySubtitle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -104,13 +92,12 @@
 
             <TextView
                 android:id="@+id/termsText"
+                style="@style/Body1Grey"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="17dp"
+                android:layout_marginTop="16dp"
                 android:paddingBottom="24dp"
                 android:text="@string/SettingsAbout_TermsPrivacyText"
-                android:textColor="?AboutLongTextColor"
-                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/termsSubTitle"

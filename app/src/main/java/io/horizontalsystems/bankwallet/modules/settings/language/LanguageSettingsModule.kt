@@ -8,7 +8,6 @@ import java.util.*
 object LanguageSettingsModule {
 
     interface ILanguageSettingsView {
-        fun setTitle(title: Int)
         fun show(items: List<LanguageItem>)
     }
 

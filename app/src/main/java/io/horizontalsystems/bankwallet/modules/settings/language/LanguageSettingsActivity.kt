@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import io.horizontalsystems.bankwallet.BaseActivity
@@ -14,12 +13,13 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
+import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import io.horizontalsystems.bankwallet.ui.view.ViewHolderProgressbar
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_language_settings.*
 import kotlinx.android.synthetic.main.view_holder_language_item.*
 
-class LanguageSettingsActivity: BaseActivity(), LanguageSettingsAdapter.Listener {
+class LanguageSettingsActivity : BaseActivity(), LanguageSettingsAdapter.Listener {
 
     private lateinit var viewModel: LanguageSettingsViewModel
     private var adapter: LanguageSettingsAdapter? = null
@@ -31,9 +31,10 @@ class LanguageSettingsActivity: BaseActivity(), LanguageSettingsAdapter.Listener
 
         setContentView(R.layout.activity_language_settings)
 
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.back)
+        shadowlessToolbar.bind(
+                title = getString(R.string.SettingsLanguage_Title),
+                leftBtnItem = TopMenuItem(R.drawable.back, { onBackPressed() })
+                )
 
         adapter = LanguageSettingsAdapter(this)
         recyclerView.adapter = adapter
@@ -50,21 +51,6 @@ class LanguageSettingsActivity: BaseActivity(), LanguageSettingsAdapter.Listener
             MainModule.startAsNewTask(this, MainActivity.SETTINGS_TAB_POSITION)
         })
 
-        viewModel.titleLiveDate.observe(this, Observer { title ->
-            title?.let {
-                supportActionBar?.title = getString(it)
-            }
-        })
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                onBackPressed()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onItemClick(item: LanguageItem) {
@@ -84,7 +70,7 @@ class LanguageSettingsAdapter(private var listener: Listener) : RecyclerView.Ada
 
     override fun getItemCount() = if (items.isEmpty()) 1 else items.size
 
-    override fun getItemViewType(position: Int): Int = if(items.isEmpty()) {
+    override fun getItemViewType(position: Int): Int = if (items.isEmpty()) {
         VIEW_TYPE_LOADING
     } else {
         VIEW_TYPE_ITEM

@@ -8,11 +8,10 @@
     <attr name="BallanceCoinNameColor" format="reference|color" />
     <attr name="BallanceCoinAmountColor" format="reference|color" />
     <attr name="TitleColor" format="reference|color" />
-    <attr name="SettingBackgroundColor" format="reference|color" />
+    <attr name="Title2Color" format="reference|color" />
     <attr name="WalletBackgroundColor" format="reference|color" />
     <attr name="TransactionsBackgroundColor" format="reference|color" />
     <attr name="AboutBackgroundColor" format="reference|color" />
-    <attr name="AboutLongTextColor" format="reference|color" />
     <attr name="TransactionItemBackgroundColor" format="reference|color" />
     <attr name="SettingItemBackgroundColor" format="reference|color" />
     <attr name="DraggableCoinBackgroundColor" format="reference|color" />
@@ -78,11 +77,10 @@
         <item name="BallanceCoinNameColor">@color/white</item>
         <item name="BallanceCoinAmountColor">@color/white</item>
         <item name="TitleColor">@color/white</item>
-        <item name="SettingBackgroundColor">@color/dark</item>
+        <item name="Title2Color">@color/grey_light</item>
         <item name="WalletBackgroundColor">@color/dark</item>
         <item name="TransactionsBackgroundColor">@color/dark</item>
-        <item name="AboutBackgroundColor">@color/dark</item>
-        <item name="AboutLongTextColor">@color/steel_grey</item>
+        <item name="AboutBackgroundColor">@color/transparent</item>
         <item name="TransactionItemBackgroundColor">@color/transaction_item_background_dark</item>
         <item name="CoinItemBackgroundColor">@color/coin_item_background_dark</item>
         <item name="FilterButtonBackgroundColor">@color/steel_20</item>
@@ -133,7 +131,7 @@
         <item name="colorPrimaryDark">@color/bars_color</item>
         <item name="colorAccent">@color/yellow_crypto</item>
         <item name="buttonStyle">@style/Button</item>
-        <item name="android:colorBackground">@color/bars_color</item>
+        <item name="android:windowBackground">@drawable/light_gradient_background</item>
         <item name="android:navigationBarColor">@color/black</item>
         <item name="android:statusBarColor">@color/bars_color</item>
         <item name="android:windowLightStatusBar">true</item>
@@ -148,11 +146,10 @@
         <item name="BallanceCoinNameColor">@color/dark</item>
         <item name="BallanceCoinAmountColor">@color/dark</item>
         <item name="TitleColor">@color/dark</item>
-        <item name="SettingBackgroundColor">@color/lightBackground</item>
+        <item name="Title2Color">@color/dark</item>
         <item name="WalletBackgroundColor">@color/lightBackground</item>
         <item name="TransactionsBackgroundColor">@color/white</item>
         <item name="AboutBackgroundColor">@color/white</item>
-        <item name="AboutLongTextColor">@color/dark</item>
         <item name="TransactionItemBackgroundColor">@color/transaction_item_background_light</item>
         <item name="CoinItemBackgroundColor">@color/coin_item_background_light</item>
         <item name="FilterButtonBackgroundColor">#efeff4</item>
@@ -352,14 +349,6 @@
         <item name="android:src">@drawable/status_progress_bar_grey_20_small</item>
     </style>
 
-    <style name="Widget.Shadow.AppBar" parent="">
-        <item name="android:background">?AppBarBackground</item>
-        <item name="android:layout_height">4dp</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="layout_anchorGravity">bottom</item>
-        <item name="android:layout_gravity">bottom</item>
-    </style>
-
     <style name="BaseSbThemed">
         <item name="android:fontFamily">@font/noto_sans_medium</item>
         <item name="android:textColor">?TransactionDateColor</item>
@@ -376,6 +365,11 @@
     <style name="Title2Yellow">
         <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
         <item name="android:textColor">@color/yellow_crypto</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="Title2">
+        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
         <item name="android:textSize">20sp</item>
     </style>
 

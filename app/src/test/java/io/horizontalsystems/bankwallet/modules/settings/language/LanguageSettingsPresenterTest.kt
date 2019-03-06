@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.settings.language
 
-import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
 import com.nhaarman.mockito_kotlin.whenever
@@ -41,7 +40,6 @@ class LanguageSettingsPresenterTest {
     @Test
     fun viewDidLoad() {
         presenter.viewDidLoad()
-        verify(view).setTitle(any())
         verify(view).show(items)
     }
 

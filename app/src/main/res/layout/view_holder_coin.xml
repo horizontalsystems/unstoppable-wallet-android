@@ -11,7 +11,7 @@
     android:layout_marginStart="16dp"
     android:layout_marginTop="4dp"
     android:background="@drawable/clickable_coin_holder_background"
-    android:elevation="1dp"
+    android:elevation="2dp"
     android:orientation="vertical"
     android:paddingEnd="8dp"
     android:paddingStart="8dp"

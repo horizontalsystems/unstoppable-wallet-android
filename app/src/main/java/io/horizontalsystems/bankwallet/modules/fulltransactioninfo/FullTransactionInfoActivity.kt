@@ -42,8 +42,7 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
 
         setContentView(R.layout.activity_full_transaction_info)
 
-        setSupportActionBar(toolbar)
-        supportActionBar?.title = getString(R.string.FullInfo_Title)
+        shadowlessToolbar.bindTitle(getString(R.string.FullInfo_Title))
 
         closeBtn.setOnClickListener { onBackPressed() }
         shareBtn.setOnClickListener { viewModel.share() }

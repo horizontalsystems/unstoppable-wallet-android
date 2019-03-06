@@ -12,6 +12,7 @@
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/transparent"
         app:elevation="0dp"
         app:layout_behavior="io.horizontalsystems.bankwallet.ui.extensions.FixAppBarLayoutBehavior"
         >
@@ -23,12 +24,6 @@
             android:gravity="bottom"
             app:layout_scrollFlags="scroll|enterAlways"
             app:titleTextAppearance="@style/TabTitle"
-            />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/steel_20"
             />
 
         <TextView
@@ -57,7 +52,6 @@
             android:id="@+id/recyclerCoins"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?WalletBackgroundColor"
             android:clipToPadding="false"
             android:paddingBottom="18dp"
             android:paddingTop="8dp"
@@ -66,8 +60,4 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <View
-        style="@style/Widget.Shadow.AppBar"
-        app:layout_anchor="@id/app_bar_layout"
-        />
 </android.support.design.widget.CoordinatorLayout>

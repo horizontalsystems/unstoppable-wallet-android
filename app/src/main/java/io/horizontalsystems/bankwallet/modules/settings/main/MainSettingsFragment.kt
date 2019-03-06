@@ -33,6 +33,8 @@ class MainSettingsFragment : android.support.v4.app.Fragment() {
         viewModel = ViewModelProviders.of(this).get(MainSettingsViewModel::class.java)
         viewModel.init()
 
+        shadowlessToolbar.bindTitle(getString(R.string.Settings_Title))
+
         securityCenter.setOnClickListener {
             viewModel.delegate.didTapSecurity()
         }
@@ -62,12 +64,6 @@ class MainSettingsFragment : android.support.v4.app.Fragment() {
         about.setOnClickListener {
             viewModel.delegate.didTapAbout()
         }
-
-
-
-        viewModel.titleLiveDate.observe(this, Observer { title ->
-            title?.let { toolbar.setTitle(it) }
-        })
 
         viewModel.baseCurrencyLiveDate.observe(this, Observer { currency ->
             currency?.let {

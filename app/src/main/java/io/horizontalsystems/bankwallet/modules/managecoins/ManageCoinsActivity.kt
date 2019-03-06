@@ -3,17 +3,19 @@ package io.horizontalsystems.bankwallet.modules.managecoins
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.core.setTransparentStatusBar
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
-import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
+import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_manage_coins.*
 import kotlinx.android.synthetic.main.view_holder_coin_disabled.*
@@ -30,6 +32,8 @@ class ManageCoinsActivity : BaseActivity(), ManageCoinsAdapter.Listener, StartDr
         viewModel = ViewModelProviders.of(this).get(ManageCoinsViewModel::class.java)
         viewModel.init()
 
+        setTransparentStatusBar()
+
         setContentView(R.layout.activity_manage_coins)
 
         val adapter = ManageCoinsAdapter(this, this)
@@ -39,10 +43,11 @@ class ManageCoinsActivity : BaseActivity(), ManageCoinsAdapter.Listener, StartDr
         itemTouchHelper = ItemTouchHelper(MyDragHelperCallback(adapter))
         itemTouchHelper?.attachToRecyclerView(recyclerView)
 
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.close)
-        supportActionBar?.title = getString(R.string.ManageCoins_title)
+        shadowlessToolbar.bind(
+                title = getString(R.string.ManageCoins_title),
+                leftBtnItem = TopMenuItem(R.drawable.back, { onBackPressed() }),
+                rightBtnItem = TopMenuItem(R.drawable.checkmark_orange, { viewModel.delegate.saveChanges() })
+        )
 
         viewModel.coinsLoadedLiveEvent.observe(this, Observer {
             adapter.notifyDataSetChanged()
@@ -51,24 +56,6 @@ class ManageCoinsActivity : BaseActivity(), ManageCoinsAdapter.Listener, StartDr
         viewModel.closeLiveDate.observe(this, Observer {
             finish()
         })
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_manage_coins, menu)
-        LayoutHelper.tintMenuIcons(menu, ContextCompat.getColor(this, R.color.yellow_crypto))
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
-        android.R.id.home -> {
-            onBackPressed()
-            true
-        }
-        R.id.action_done -> {
-            viewModel.delegate.saveChanges()
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
     }
 
     override fun onEnabledItemClick(position: Int) {
