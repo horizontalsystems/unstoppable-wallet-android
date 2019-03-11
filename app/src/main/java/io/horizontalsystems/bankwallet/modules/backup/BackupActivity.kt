@@ -48,9 +48,9 @@ class BackupActivity : BaseActivity(), BottomConfirmAlert.Listener {
 
         viewModel.showConfirmationCheckDialogLiveEvent.observe(this, Observer {
             val confirmationList = mutableListOf(
-                    R.string.Backup_Confirmation_Understand,
-                    R.string.Backup_Confirmation_DeleteAppWarn,
-                    R.string.Backup_Confirmation_LockAppWarn
+                    R.string.Backup_Confirmation1,
+                    R.string.Backup_Confirmation2,
+                    R.string.Backup_Confirmation3
             )
             BottomConfirmAlert.show(this, confirmationList, this)
         })
