@@ -9,21 +9,16 @@ import kotlinx.android.synthetic.main.view_address_input.view.*
 
 class InputAddressView : ConstraintLayout {
 
-    constructor(context: Context) : super(context) {
-        initializeViews()
-    }
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        initializeViews()
-    }
-
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        initializeViews()
-    }
-
-    private fun initializeViews() {
+    init {
         ConstraintLayout.inflate(context, R.layout.view_address_input, this)
     }
+
+    constructor(context: Context) : super(context)
+
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+
 
     fun bindAddressInputInitial(onAmpersandClick: (() -> (Unit))? = null,
                          onBarcodeClick: (() -> (Unit))? = null,

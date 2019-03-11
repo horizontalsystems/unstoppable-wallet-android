@@ -12,19 +12,18 @@ import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import kotlinx.android.synthetic.main.view_coin_icon.view.*
 
 class CoinIconView : ConstraintLayout {
+
+    init {
+        ConstraintLayout.inflate(context, R.layout.view_coin_icon, this)
+    }
+
     private val ipfsUrl = App.appConfigProvider.ipfsUrl
 
-    constructor(context: Context) : super(context) {
-        initializeViews()
-    }
+    constructor(context: Context) : super(context)
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        initializeViews()
-    }
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        initializeViews()
-    }
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     fun bind(coin: Coin) {
         when (coin.type) {
@@ -42,7 +41,4 @@ class CoinIconView : ConstraintLayout {
         }
     }
 
-    private fun initializeViews() {
-        ConstraintLayout.inflate(context, R.layout.view_coin_icon, this)
-    }
 }
