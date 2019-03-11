@@ -15,7 +15,6 @@
     <string name="Button_Share">Share</string>
     <string name="Error">Error</string>
 
-
     <!--Guest-->
 
     <string name="Guest_Title">Bank Wallet</string>
@@ -44,7 +43,6 @@
     <string name="Backup_Confirmation3">I understand that if this app is moved, deleted or malfunctions, the access to funds on my wallet can be only recovered with my Secret Key.  </string>
     <string name="Backup_Confirmation4">I understand that changing the phone unlock PIN or deleting app data in Android settings deletes the Secret Key from device. I would need to provide my Secret Key to the app in order to regain access to my wallet after that.</string>
     <string name="Backup_Confirmation5">I understand that Horizontal Systems team can not be held responsible for any unintended bugs or issues that may arise while using this app.</string>
-
 
     <string name="Backup_Confirmation_Title">Enter following words from your Secret Key</string>
     <string name="Backup_Confirmation_Description">Enter words from your secret key.</string>
@@ -146,7 +144,6 @@
     <string name="FullInfo_Source_Title">Source</string>
     <string name="FullInfo_Source_Online">Online</string>
     <string name="FullInfo_Source_Offline">Offline</string>
-
 
     <string name="FullInfo_Error_Subtitle">Offline</string>
     <string name="FullInfo_Error_Retry">Retry</string>
