@@ -17,16 +17,12 @@ import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
-import android.widget.Button
-import android.widget.EditText
-import android.widget.SeekBar
-import android.widget.TextView
+import android.widget.*
 import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -92,6 +88,8 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
         val feeSecondaryTxt: TextView? = mDialog?.findViewById(R.id.txtFeeSecondary)
         amountEditTxt = mDialog?.findViewById(R.id.editTxtAmount)
         val sendButton: Button? = mDialog?.findViewById(R.id.btnSend)
+        val seekbarLeftImage: ImageView? = mDialog?.findViewById(R.id.seekbarLeftImage)
+        val seekbarRightImage: ImageView? = mDialog?.findViewById(R.id.seekbarRightImage)
         val seekBar: SeekBar? = mDialog?.findViewById(R.id.seekBarFeeRate)
         val addressInput: InputAddressView? = mDialog?.findViewById(R.id.addressInput)
 
@@ -129,7 +127,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
 
         seekBar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                Log.e("SendFragm", "onProgressChanged progress: $progress")
+                viewModel.delegate.onFeeMultiplierChange(progress)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -269,6 +267,21 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
 
         viewModel.pasteButtonEnabledLiveData.observe(this, Observer { enabled ->
             enabled?.let { addressInput?.enablePasteButton(it) }
+        })
+
+        viewModel.feeSliderProgressLiveEvent.observe(this, Observer {progressValue ->
+            progressValue?.let {
+                seekBar?.progress = progressValue
+            }
+        })
+
+        viewModel.feeIsAdjustableLiveData.observe(this, Observer {feeIsAdjustable ->
+            feeIsAdjustable?.let {
+                val visible = if (it) View.VISIBLE else View.GONE
+                seekbarLeftImage?.visibility = visible
+                seekBar?.visibility = visible
+                seekbarRightImage?.visibility = visible
+            }
         })
 
         return mDialog as Dialog

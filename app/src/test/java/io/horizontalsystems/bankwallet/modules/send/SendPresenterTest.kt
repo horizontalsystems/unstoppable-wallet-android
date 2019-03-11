@@ -4,8 +4,10 @@ import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.FeeRates
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
@@ -18,11 +20,13 @@ class SendPresenterTest {
     private val factory = mock(StateViewItemFactory::class.java)
     private val userInput = mock(SendModule.UserInput::class.java)
     private val prAddress = mock(PaymentRequestAddress::class.java)
+    private val feeRateConverter = mock(FeeRateSliderConverter::class.java)
     private val coin = mock(Coin::class.java)
 
     private val state = SendModule.State(2, SendModule.InputType.COIN)
     private val viewItem = SendModule.StateViewItem(8)
     private val viewItemConfirm = mock(SendModule.SendConfirmationViewItem::class.java)
+    private val feeRate = 13
 
     private lateinit var presenter: SendPresenter
 
@@ -35,7 +39,7 @@ class SendPresenterTest {
         whenever(factory.viewItemForState(any(), any())).thenReturn(viewItem)
         whenever(factory.confirmationViewItemForState(any())).thenReturn(viewItemConfirm)
 
-        presenter = SendPresenter(interactor, factory, userInput)
+        presenter = SendPresenter(interactor, factory, userInput, feeRateConverter)
         presenter.view = view
     }
 
@@ -43,12 +47,18 @@ class SendPresenterTest {
 
     @Test
     fun onViewDidLoad() {
+        val medium = 5
+        val feeRate = FeeRates(1, medium, 10)
+
         val inputType = mock(SendModule.InputType::class.java)
 
         whenever(interactor.defaultInputType).thenReturn(inputType)
         whenever(interactor.clipboardHasPrimaryClip).thenReturn(true)
+        whenever(interactor.feeRates).thenReturn(feeRate)
 
         presenter.onViewDidLoad()
+
+        verify(userInput).feeRate = medium
 
         verify(view).setCoin(interactor.coin)
         verify(view).setDecimal(viewItem.decimal)
@@ -61,6 +71,20 @@ class SendPresenterTest {
         verify(view).setPasteButtonState(true)
 
         verify(interactor).retrieveRate()
+    }
+
+    @Test
+    fun onViewDidLoad_setFeeRate() {
+        val medium = 5
+        val feeRate = FeeRates(1, medium, 10)
+        val sliderPosition = 30
+
+        whenever(interactor.feeRates).thenReturn(feeRate)
+        whenever(feeRateConverter.percent(medium)).thenReturn(sliderPosition)
+
+        presenter.onViewDidLoad()
+
+        verify(view).setFeeSliderPosition(sliderPosition)
     }
 
     @Test
@@ -158,8 +182,9 @@ class SendPresenterTest {
 
     @Test
     fun onMaxClicked() {
+        whenever(userInput.feeRate).thenReturn(feeRate)
         presenter.onMaxClicked()
-        verify(interactor).getTotalBalanceMinusFee(userInput.inputType, userInput.address)
+        verify(interactor).getTotalBalanceMinusFee(userInput.inputType, userInput.address, feeRate)
         verify(view).setAmountInfo(viewItem.amountInfo)
     }
 
@@ -168,6 +193,48 @@ class SendPresenterTest {
         presenter.onClear()
 
         verify(interactor).clear()
+    }
+
+    @Test
+    fun onFeeMultiplierChange_converterIsNull() {
+        val medium = 5
+        val feeRate = FeeRates(1, medium, 10)
+        val percent = 35
+
+        whenever(interactor.feeRates).thenReturn(feeRate)
+
+        presenter = SendPresenter(interactor, factory, userInput, null)
+
+        presenter.onFeeMultiplierChange(percent)
+
+        verify(userInput).feeRate = medium
+    }
+
+    @Test
+    fun onFeeMultiplierChange() {
+        val feeRate = FeeRates(1, 5, 10)
+        val percent = 35
+        val unit = 3
+
+        whenever(interactor.feeRates).thenReturn(feeRate)
+        whenever(feeRateConverter.percent(percent)).thenReturn(unit)
+
+        presenter.onFeeMultiplierChange(percent)
+
+        verify(userInput).feeRate = unit
+    }
+
+    @Test
+    fun test_FeeAdjustable() {
+        val feeAdjustable = presenter.feeAdjustable
+        Assert.assertEquals(true, feeAdjustable)
+    }
+
+    @Test
+    fun test_FeeAdjustable_false() {
+        presenter = SendPresenter(interactor, factory, userInput, null)
+        val feeAdjustable = presenter.feeAdjustable
+        Assert.assertEquals(false, feeAdjustable)
     }
 
 }

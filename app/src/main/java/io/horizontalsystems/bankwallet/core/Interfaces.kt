@@ -128,6 +128,7 @@ interface IAdapter {
     val feeCoinCode: String?
     val decimal: Int
     val balance: BigDecimal
+    val feeRates: FeeRates
 
     val balanceUpdatedSignal: PublishSubject<Unit>
     val lastBlockHeightUpdatedSignal: PublishSubject<Unit>
@@ -147,15 +148,15 @@ interface IAdapter {
 
     fun parsePaymentAddress(address: String): PaymentRequestAddress
 
-    fun send(address: String, value: BigDecimal, completion: ((Throwable?) -> (Unit))? = null)
-    fun availableBalance(address: String?): BigDecimal
+    fun send(address: String, value: BigDecimal, feeRate: Int, completion: ((Throwable?) -> (Unit))? = null)
+    fun availableBalance(address: String?, feeRate: Int): BigDecimal
 
-    fun fee(value: BigDecimal, address: String?): BigDecimal
+    fun fee(value: BigDecimal, address: String?, feeRate: Int): BigDecimal
 
     @Throws
     fun validate(address: String)
 
-    fun validate(amount: BigDecimal, address: String?): List<SendStateError>
+    fun validate(amount: BigDecimal, address: String?, feeRate: Int): List<SendStateError>
 
     val receiveAddress: String
     fun getTransactionsObservable(hashFrom: String?, limit: Int): Single<List<TransactionRecord>>
@@ -260,3 +261,5 @@ sealed class SendStateError {
     object InsufficientAmount: SendStateError()
     object InsufficientFeeBalance: SendStateError()
 }
+
+data class FeeRates(val lowest: Int, val medium: Int, val highest: Int)

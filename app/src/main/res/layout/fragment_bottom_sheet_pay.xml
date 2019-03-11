@@ -92,7 +92,7 @@
         <android.support.constraint.ConstraintLayout
             android:id="@+id/feeInfoArea"
             android:layout_width="match_parent"
-            android:layout_height="53dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -102,13 +102,12 @@
             <TextView
                 android:id="@+id/feeError"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="34dp"
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:textColor="@color/red_warning"
                 android:textSize="12sp"
                 android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -119,8 +118,8 @@
                 android:id="@+id/feeElements"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="34dp"
                 android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -151,7 +150,7 @@
                     />
 
                 <ImageView
-                    android:id="@+id/seekBarTurtle"
+                    android:id="@+id/seekbarLeftImage"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginTop="4dp"
@@ -169,20 +168,20 @@
                     android:progressBackgroundTint="@color/grey"
                     android:progressTint="@color/grey"
                     android:thumbTint="@color/grey"
-                    app:layout_constraintBottom_toBottomOf="@id/seekBarTurtle"
-                    app:layout_constraintEnd_toStartOf="@+id/seekBarRabbit"
-                    app:layout_constraintStart_toEndOf="@+id/seekBarTurtle"
-                    app:layout_constraintTop_toTopOf="@id/seekBarTurtle"
+                    app:layout_constraintBottom_toBottomOf="@id/seekbarLeftImage"
+                    app:layout_constraintEnd_toStartOf="@+id/seekbarRightImage"
+                    app:layout_constraintStart_toEndOf="@+id/seekbarLeftImage"
+                    app:layout_constraintTop_toTopOf="@id/seekbarLeftImage"
                     />
 
                 <ImageView
-                    android:id="@+id/seekBarRabbit"
+                    android:id="@+id/seekbarRightImage"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_seekbar_rabbit"
                     android:tint="@color/grey"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/seekBarTurtle"
+                    app:layout_constraintTop_toTopOf="@id/seekbarLeftImage"
                     />
             </android.support.constraint.ConstraintLayout>
         </android.support.constraint.ConstraintLayout>

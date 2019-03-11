@@ -7,18 +7,26 @@ import java.net.UnknownHostException
 class SendPresenter(
         private val interactor: SendModule.IInteractor,
         private val factory: StateViewItemFactory,
-        private val userInput: SendModule.UserInput
+        private val userInput: SendModule.UserInput,
+        private val feeRateSliderConverter: FeeRateSliderConverter?
 ) : SendModule.IViewDelegate, SendModule.IInteractorDelegate {
 
     var view: SendModule.IView? = null
+
+    override val feeAdjustable: Boolean
+        get() = true && feeRateSliderConverter != null
 
     //
     // IViewDelegate
     //
     override fun onViewDidLoad() {
+        val mediumFeeRate = interactor.feeRates.medium
+        userInput.feeRate = mediumFeeRate
+
         val state = interactor.stateForUserInput(userInput)
         val viewItem = factory.viewItemForState(state)
 
+        view?.setFeeSliderPosition(feeRateSliderConverter?.percent(mediumFeeRate))
         view?.setCoin(interactor.coin)
         view?.setDecimal(viewItem.decimal)
         view?.setAmountInfo(viewItem.amountInfo)
@@ -44,7 +52,7 @@ class SendPresenter(
     }
 
     override fun onMaxClicked() {
-        val totalBalanceMinusFee = interactor.getTotalBalanceMinusFee(userInput.inputType, userInput.address)
+        val totalBalanceMinusFee = interactor.getTotalBalanceMinusFee(userInput.inputType, userInput.address, userInput.feeRate)
         userInput.amount = totalBalanceMinusFee
 
         val state = interactor.stateForUserInput(userInput)
@@ -104,6 +112,10 @@ class SendPresenter(
 
     override fun onClear() {
         interactor.clear()
+    }
+
+    override fun onFeeMultiplierChange(value: Int) {
+        userInput.feeRate = feeRateSliderConverter?.percent(value) ?: interactor.feeRates.medium
     }
 
     //
