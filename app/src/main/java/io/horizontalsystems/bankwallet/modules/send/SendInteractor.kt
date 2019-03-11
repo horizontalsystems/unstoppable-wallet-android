@@ -40,8 +40,8 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
     override val feeRates: FeeRates
         get() = adapter.feeRates
 
-    private var rate: Rate? = null
-    private var fiatFeeRate: Rate? = null
+    private var exchangeRate: Rate? = null
+    private var exchangeFeeRate: Rate? = null
     private val disposables = CompositeDisposable()
 
     override fun retrieveRate() {
@@ -51,8 +51,8 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {
-                            rate = if (it.expired) null else it
-                            if (rate != null) {
+                            exchangeRate = if (it.expired) null else it
+                            if (exchangeRate != null) {
                                 delegate?.didRateRetrieve()
                             }
                         }
@@ -65,8 +65,8 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe { fetchedRate ->
-                                fiatFeeRate = if (fetchedRate.expired) null else fetchedRate
-                                if (fiatFeeRate != null) {
+                                exchangeFeeRate = if (fetchedRate.expired) null else fetchedRate
+                                if (exchangeFeeRate != null) {
                                     delegate?.didFeeRateRetrieve()
                                 }
                             }
@@ -79,7 +79,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
     }
 
     override fun convertedAmountForInputType(inputType: SendModule.InputType, amount: BigDecimal): BigDecimal? {
-        val rate = this.rate ?: return null
+        val rate = this.exchangeRate ?: return null
 
         return when (inputType) {
             SendModule.InputType.COIN -> amount.times(rate.value)
@@ -91,7 +91,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
         val availableBalance = adapter.availableBalance(address, feeRate)
         return when (inputType) {
             SendModule.InputType.COIN -> availableBalance
-            else -> availableBalance.multiply(rate?.value ?: BigDecimal.ZERO)
+            else -> availableBalance.multiply(exchangeRate?.value ?: BigDecimal.ZERO)
         }
     }
 
@@ -99,7 +99,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
 
         val coin = adapter.coin.code
         val baseCurrency = currencyManager.baseCurrency
-        val rateValue = rate?.value
+        val rateValue = exchangeRate?.value
 
         val decimal = if (input.inputType == SendModule.InputType.COIN) Math.min(adapter.decimal, appConfigProvider.maxDecimal) else appConfigProvider.fiatDecimal
 
@@ -151,7 +151,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
 
         var feeCurrencyRate: BigDecimal? = null
         adapter.feeCoinCode?.let {
-            feeCurrencyRate = fiatFeeRate?.value
+            feeCurrencyRate = exchangeFeeRate?.value
         } ?:run {
             feeCurrencyRate = rateValue
         }
@@ -184,7 +184,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
                 SendModule.AmountError.InsufficientBalance(SendModule.AmountInfo.CoinValueInfo(CoinValue(adapter.coin.code, balanceMinusFee)))
             }
             SendModule.InputType.CURRENCY -> {
-                rate?.value?.let {
+                exchangeRate?.value?.let {
                     val currencyBalanceMinusFee = balanceMinusFee * it
                     SendModule.AmountError.InsufficientBalance(SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(currencyManager.baseCurrency, currencyBalanceMinusFee)))
                 }
