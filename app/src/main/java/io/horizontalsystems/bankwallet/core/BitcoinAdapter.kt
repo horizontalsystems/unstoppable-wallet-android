@@ -39,7 +39,7 @@ class BitcoinAdapter(override val coin: Coin, authData: AuthData, newWallet: Boo
     override val balanceUpdatedSignal = PublishSubject.create<Unit>()
 
     override val feeRates: FeeRates
-        get() = FeeRates(1, 4, 8)
+        get() = FeeRates(3, 13, 26)
 
     override var state: AdapterState = AdapterState.Syncing(0, null)
         set(value) {
