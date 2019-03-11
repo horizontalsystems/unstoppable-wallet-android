@@ -148,15 +148,15 @@ interface IAdapter {
 
     fun parsePaymentAddress(address: String): PaymentRequestAddress
 
-    fun send(address: String, value: BigDecimal, feeRate: Int, completion: ((Throwable?) -> (Unit))? = null)
-    fun availableBalance(address: String?, feeRate: Int): BigDecimal
+    fun send(address: String, value: BigDecimal, feeRate: Int?, completion: ((Throwable?) -> (Unit))? = null)
+    fun availableBalance(address: String?, feeRate: Int?): BigDecimal
 
-    fun fee(value: BigDecimal, address: String?, feeRate: Int): BigDecimal
+    fun fee(value: BigDecimal, address: String?, feeRate: Int?): BigDecimal
 
     @Throws
     fun validate(address: String)
 
-    fun validate(amount: BigDecimal, address: String?, feeRate: Int): List<SendStateError>
+    fun validate(amount: BigDecimal, address: String?, feeRate: Int?): List<SendStateError>
 
     val receiveAddress: String
     fun getTransactionsObservable(hashFrom: String?, limit: Int): Single<List<TransactionRecord>>

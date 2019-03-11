@@ -62,7 +62,7 @@ object SendModule {
         fun stateForUserInput(input: UserInput): State
 
         fun send(userInput: UserInput)
-        fun getTotalBalanceMinusFee(inputType: InputType, address: String?, feeRate: Int): BigDecimal
+        fun getTotalBalanceMinusFee(inputType: InputType, address: String?, feeRate: Int?): BigDecimal
         fun clear()
     }
 
@@ -136,7 +136,7 @@ object SendModule {
         var inputType: InputType = InputType.COIN
         var amount: BigDecimal = BigDecimal.ZERO
         var address: String? = null
-        var feeRate: Int = 1
+        var feeRate: Int? = null
     }
 
     class State(var decimal: Int, var inputType: InputType) {
