@@ -47,7 +47,7 @@ class BackupConfirmFragment : Fragment() {
 
         viewModel.validateWordsLiveEvent.observe(this, Observer {
             val wordOneEntry = wordOne?.getEnteredText()
-            val wordTwoEntry = wordOne?.getEnteredText()
+            val wordTwoEntry = wordTwo?.getEnteredText()
             if (wordOneEntry.isNullOrEmpty() || wordTwoEntry.isNullOrEmpty()) {
                 showError(R.string.Backup_Confirmation_Description)
             } else {

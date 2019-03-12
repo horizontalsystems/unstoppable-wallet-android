@@ -8,7 +8,6 @@ import android.os.Bundle
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.core.setTransparentStatusBar
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.ui.dialogs.BottomConfirmAlert
 import kotlinx.android.synthetic.main.activity_backup_words.*
