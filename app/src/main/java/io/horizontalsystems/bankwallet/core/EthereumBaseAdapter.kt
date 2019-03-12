@@ -22,9 +22,6 @@ abstract class EthereumBaseAdapter(override val coin: Coin, protected val ethere
     //
     // Adapter
     //
-    override val feeRates: FeeRates
-        get() = FeeRates(8, 40, 80)
-
     override val feeCoinCode: String? = null
     override val transactionRecordsSubject: PublishSubject<List<TransactionRecord>> = PublishSubject.create()
 
@@ -59,7 +56,7 @@ abstract class EthereumBaseAdapter(override val coin: Coin, protected val ethere
             return null
         }
 
-    override fun send(address: String, value: BigDecimal, feeRate: Int?, completion: ((Throwable?) -> Unit)?) {
+    override fun send(address: String, value: BigDecimal, feePriority: FeeRatePriority, completion: ((Throwable?) -> Unit)?) {
         sendSingle(address, value)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

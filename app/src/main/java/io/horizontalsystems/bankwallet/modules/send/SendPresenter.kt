@@ -1,32 +1,28 @@
 package io.horizontalsystems.bankwallet.modules.send
 
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import java.math.BigDecimal
 import java.net.UnknownHostException
 
 class SendPresenter(
         private val interactor: SendModule.IInteractor,
         private val factory: StateViewItemFactory,
-        private val userInput: SendModule.UserInput,
-        private val feeRateSliderConverter: FeeRateSliderConverter?
+        private val userInput: SendModule.UserInput
 ) : SendModule.IViewDelegate, SendModule.IInteractorDelegate {
 
     var view: SendModule.IView? = null
 
     override val feeAdjustable: Boolean
-        get() = true && feeRateSliderConverter != null
+        get() = true
 
     //
     // IViewDelegate
     //
     override fun onViewDidLoad() {
-        val mediumFeeRate = interactor.feeRates.medium
-        userInput.feeRate = mediumFeeRate
-
         val state = interactor.stateForUserInput(userInput)
         val viewItem = factory.viewItemForState(state)
 
-        view?.setFeeSliderPosition(feeRateSliderConverter?.percent(mediumFeeRate))
         view?.setCoin(interactor.coin)
         view?.setDecimal(viewItem.decimal)
         view?.setAmountInfo(viewItem.amountInfo)
@@ -52,7 +48,7 @@ class SendPresenter(
     }
 
     override fun onMaxClicked() {
-        val totalBalanceMinusFee = interactor.getTotalBalanceMinusFee(userInput.inputType, userInput.address, userInput.feeRate)
+        val totalBalanceMinusFee = interactor.getTotalBalanceMinusFee(userInput.inputType, userInput.address, userInput.feePriority)
         userInput.amount = totalBalanceMinusFee
 
         val state = interactor.stateForUserInput(userInput)
@@ -114,8 +110,8 @@ class SendPresenter(
         interactor.clear()
     }
 
-    override fun onFeeMultiplierChange(value: Int) {
-        userInput.feeRate = feeRateSliderConverter?.percent(value) ?: interactor.feeRates.medium
+    override fun onFeeSliderChange(value: Int) {
+        userInput.feePriority = FeeRatePriority.valueOf(value)
     }
 
     //

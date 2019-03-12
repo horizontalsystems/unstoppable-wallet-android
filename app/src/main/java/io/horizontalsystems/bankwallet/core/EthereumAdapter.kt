@@ -33,17 +33,17 @@ class EthereumAdapter(coin: Coin, kit: EthereumKit) : EthereumBaseAdapter(coin, 
         return ethereumKit.send(address, amount).map { Unit }
     }
 
-    override fun fee(value: BigDecimal, address: String?, feeRate: Int?): BigDecimal {
+    override fun fee(value: BigDecimal, address: String?, feePriority: FeeRatePriority): BigDecimal {
         return ethereumKit.fee()
     }
 
-    override fun availableBalance(address: String?, feeRate: Int?): BigDecimal {
-        return BigDecimal.ZERO.max(balance - fee(balance, address, feeRate))
+    override fun availableBalance(address: String?, feePriority: FeeRatePriority): BigDecimal {
+        return BigDecimal.ZERO.max(balance - fee(balance, address, feePriority))
     }
 
-    override fun validate(amount: BigDecimal, address: String?, feeRate: Int?): List<SendStateError> {
+    override fun validate(amount: BigDecimal, address: String?, feePriority: FeeRatePriority): List<SendStateError> {
         val errors = mutableListOf<SendStateError>()
-        if (amount > availableBalance(address, feeRate)) {
+        if (amount > availableBalance(address, feePriority)) {
             errors.add(SendStateError.InsufficientAmount)
         }
         return errors

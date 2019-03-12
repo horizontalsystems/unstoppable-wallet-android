@@ -37,9 +37,6 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
     override val addressFromClipboard: String?
         get() = clipboardManager.getCopiedText()
 
-    override val feeRates: FeeRates
-        get() = adapter.feeRates
-
     private var exchangeRate: Rate? = null
     private var exchangeFeeRate: Rate? = null
     private val disposables = CompositeDisposable()
@@ -87,7 +84,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
         }
     }
 
-    override fun getTotalBalanceMinusFee(inputType: SendModule.InputType, address: String?, feeRate: Int?): BigDecimal {
+    override fun getTotalBalanceMinusFee(inputType: SendModule.InputType, address: String?, feeRate: FeeRatePriority): BigDecimal {
         val availableBalance = adapter.availableBalance(address, feeRate)
         return when (inputType) {
             SendModule.InputType.COIN -> availableBalance
@@ -131,19 +128,19 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
             }
         }
 
-        val errors = adapter.validate(state.coinValue?.value ?: BigDecimal.ZERO, address, input.feeRate)
+        val errors = adapter.validate(state.coinValue?.value ?: BigDecimal.ZERO, address, input.feePriority)
 
         for (error in errors) {
             when (error) {
-                SendStateError.InsufficientAmount -> state.amountError = getAmountError(input, input.feeRate)
-                SendStateError.InsufficientFeeBalance -> state.feeError = getFeeError(input, input.feeRate)
+                SendStateError.InsufficientAmount -> state.amountError = getAmountError(input, input.feePriority)
+                SendStateError.InsufficientFeeBalance -> state.feeError = getFeeError(input, input.feePriority)
             }
         }
 
         state.coinValue?.let { coinValue ->
             val coinCode = adapter.feeCoinCode ?: adapter.coin.code
             if (coinValue.value > BigDecimal.ZERO) {
-                state.feeCoinValue = CoinValue(coinCode, adapter.fee(coinValue.value, input.address, input.feeRate))
+                state.feeCoinValue = CoinValue(coinCode, adapter.fee(coinValue.value, input.address, input.feePriority))
             } else {
                 state.feeCoinValue = CoinValue(coinCode, BigDecimal.ZERO)
             }
@@ -165,16 +162,16 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
         return state
     }
 
-    private fun getFeeError(input: SendModule.UserInput, feeRate: Int?): SendModule.AmountError.Erc20FeeError? {
+    private fun getFeeError(input: SendModule.UserInput, feePriority: FeeRatePriority): SendModule.AmountError.Erc20FeeError? {
         adapter.feeCoinCode?.let {
-            val fee = adapter.fee(input.amount, input.address, feeRate)
+            val fee = adapter.fee(input.amount, input.address, feePriority)
             val coinValue = CoinValue(it, fee)
             return SendModule.AmountError.Erc20FeeError(adapter.coin.code, coinValue)
         } ?: return null
     }
 
-    private fun getAmountError(input: SendModule.UserInput, feeRate: Int?): SendModule.AmountError? {
-        var balanceMinusFee = adapter.availableBalance(input.address, feeRate)
+    private fun getAmountError(input: SendModule.UserInput, feePriority: FeeRatePriority): SendModule.AmountError? {
+        var balanceMinusFee = adapter.availableBalance(input.address, feePriority)
         if (balanceMinusFee < BigDecimal.ZERO) {
             balanceMinusFee = BigDecimal.ZERO
         }
@@ -209,7 +206,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
             return
         }
 
-        adapter.send(address, computedAmount, userInput.feeRate) { error ->
+        adapter.send(address, computedAmount, userInput.feePriority) { error ->
             when (error) {
                 null -> delegate?.didSend()
                 else -> delegate?.didFailToSend(error)

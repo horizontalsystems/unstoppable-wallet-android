@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.send
 
 import android.support.v4.app.FragmentActivity
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.FeeRates
+import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -26,11 +26,10 @@ object SendModule {
         fun setSendButtonEnabled(sendButtonEnabled: Boolean)
 
         fun showConfirmation(viewItem: SendConfirmationViewItem)
-        fun showError(errorText: Int)
+        fun showError(error: Int)
         fun dismissWithSuccess()
         fun setPasteButtonState(enabled: Boolean)
         fun setDecimal(decimal: Int)
-        fun setFeeSliderPosition(sliderProgress: Int?)
 
     }
 
@@ -46,7 +45,7 @@ object SendModule {
         fun onConfirmClicked()
         fun onMaxClicked()
         fun onClear()
-        fun onFeeMultiplierChange(value: Int)
+        fun onFeeSliderChange(value: Int)
     }
 
     interface IInteractor {
@@ -54,7 +53,6 @@ object SendModule {
         val clipboardHasPrimaryClip: Boolean
         var defaultInputType: SendModule.InputType
         val addressFromClipboard: String?
-        val feeRates: FeeRates
 
         fun retrieveRate()
         fun parsePaymentAddress(address: String): PaymentRequestAddress
@@ -62,7 +60,7 @@ object SendModule {
         fun stateForUserInput(input: UserInput): State
 
         fun send(userInput: UserInput)
-        fun getTotalBalanceMinusFee(inputType: InputType, address: String?, feeRate: Int?): BigDecimal
+        fun getTotalBalanceMinusFee(inputType: InputType, address: String?, feeRate: FeeRatePriority): BigDecimal
         fun clear()
     }
 
@@ -76,9 +74,8 @@ object SendModule {
 
     fun init(view: SendViewModel, coinCode: String) {
         val adapter = App.adapterManager.adapters.first { it.coin.code == coinCode }
-        val feeRatesSlider = try { FeeRateSliderConverter(adapter.feeRates) } catch (e: Exception) { null }
         val interactor = SendInteractor(App.currencyManager, App.rateStorage, App.localStorage, TextHelper, adapter, App.appConfigProvider)
-        val presenter = SendPresenter(interactor, StateViewItemFactory(), UserInput(), feeRatesSlider)
+        val presenter = SendPresenter(interactor, StateViewItemFactory(), UserInput())
 
         view.delegate = presenter
         presenter.view = view
@@ -136,7 +133,7 @@ object SendModule {
         var inputType: InputType = InputType.COIN
         var amount: BigDecimal = BigDecimal.ZERO
         var address: String? = null
-        var feeRate: Int? = null
+        var feePriority: FeeRatePriority = FeeRatePriority.MEDIUM
     }
 
     class State(var decimal: Int, var inputType: InputType) {

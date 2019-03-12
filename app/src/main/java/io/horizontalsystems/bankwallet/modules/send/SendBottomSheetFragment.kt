@@ -127,7 +127,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
 
         seekBar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                viewModel.delegate.onFeeMultiplierChange(progress)
+                viewModel.delegate.onFeeSliderChange(progress)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -267,12 +267,6 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
 
         viewModel.pasteButtonEnabledLiveData.observe(this, Observer { enabled ->
             enabled?.let { addressInput?.enablePasteButton(it) }
-        })
-
-        viewModel.feeSliderProgressLiveEvent.observe(this, Observer {progressValue ->
-            progressValue?.let {
-                seekBar?.progress = progressValue
-            }
         })
 
         viewModel.feeIsAdjustableLiveData.observe(this, Observer {feeIsAdjustable ->

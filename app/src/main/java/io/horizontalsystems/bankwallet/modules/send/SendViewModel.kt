@@ -21,7 +21,6 @@ class SendViewModel : ViewModel(), SendModule.IView {
     val errorLiveData = MutableLiveData<Int>()
     val sendConfirmationViewItemLiveData = MutableLiveData<SendModule.SendConfirmationViewItem>()
     val showConfirmationLiveEvent = SingleLiveEvent<Unit>()
-    val feeSliderProgressLiveEvent = SingleLiveEvent<Int>()
     val pasteButtonEnabledLiveData = MutableLiveData<Boolean>()
     val feeIsAdjustableLiveData = MutableLiveData<Boolean>()
     var decimalSize: Int? = null
@@ -90,10 +89,6 @@ class SendViewModel : ViewModel(), SendModule.IView {
     override fun dismissWithSuccess() {
         dismissWithSuccessLiveEvent.call()
         dismissConfirmationLiveEvent.call()
-    }
-
-    override fun setFeeSliderPosition(sliderProgress: Int?) {
-        feeSliderProgressLiveEvent.value = sliderProgress
     }
 
     override fun onCleared() {
