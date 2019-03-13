@@ -19,7 +19,8 @@
     <string name="Guest_CreateWallet">新的钱包</string>
     <string name="Guest_RestoreWallet">恢复钱包</string>
     <!--Restore-->
-    <string name="Restore_Title">输入密钥</string>
+    <string name="Restore_Title">Restore</string>
+    <string name="Restore_Subtitle">Enter Secret Key</string>
     <string name="Restore_ValidationFailed">密钥不正确</string>
     <string name="Restore_RestoreFailed">无法创建钱包</string>
     <!--Backup-->
