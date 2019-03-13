@@ -36,6 +36,7 @@
     <string name="Backup_Confirmation_Title">Введите слова из вашего Cекретного Ключа</string>
     <string name="Backup_Confirmation_Description">Введите слова из вашего секретного ключа.</string>
     <string name="Backup_Confirmation_FailureAlertText">Слова не совпадают</string>
+    <string name="Backup_Confirmation_CheckTitle">Check…</string>
     <string name="Backup_Button_Confirm">Подтвердить</string>
     <string name="Backup_Button_Next">Далее</string>
     <string name="Backup_Button_Submit">Отправить</string>
