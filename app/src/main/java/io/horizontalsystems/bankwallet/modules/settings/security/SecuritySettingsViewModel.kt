@@ -9,7 +9,6 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
 
     lateinit var delegate: SecuritySettingsModule.ISecuritySettingsViewDelegate
 
-    val titleLiveDate = MutableLiveData<Int>()
     val biometryTypeLiveDate = MutableLiveData<BiometryType>()
 
     val backedUpLiveData = MutableLiveData<Boolean>()
@@ -23,10 +22,6 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
     fun init() {
         SecuritySettingsModule.init(this, this)
         delegate.viewDidLoad()
-    }
-
-    override fun setTitle(title: Int) {
-        titleLiveDate.value = title
     }
 
     override fun setBiometricUnlockOn(biometricUnlockOn: Boolean) {

@@ -19,6 +19,8 @@ class BackupActivity : BaseActivity(), BottomConfirmAlert.Listener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setTransparentStatusBar()
+
         setContentView(R.layout.activity_backup_words)
 
         viewModel = ViewModelProviders.of(this).get(BackupViewModel::class.java)

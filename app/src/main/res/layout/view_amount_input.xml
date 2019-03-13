@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:background="@drawable/input_background_themed"
+    android:paddingEnd="8dp"
+    android:paddingStart="10dp"
+    >
+
+    <TextView
+        android:id="@+id/topAmountPrefix"
+        style="@style/Base"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:includeFontPadding="true"
+        android:textColor="?attr/BarsOrDarkTextColor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="BTC"
+        />
+
+    <EditText
+        android:id="@+id/editTxtAmount"
+        style="@style/FormInputTextThemed"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="9dp"
+        android:background="@android:color/transparent"
+        android:hint="@string/Send_Hint_Amount"
+        android:inputType="number|numberDecimal"
+        android:maxLines="1"
+        app:layout_constraintBottom_toBottomOf="@+id/topAmountPrefix"
+        app:layout_constraintEnd_toStartOf="@+id/btnMax"
+        app:layout_constraintStart_toEndOf="@+id/topAmountPrefix"
+        tools:text="0.0021"
+        />
+
+    <View
+        android:id="@+id/amountDivider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="6dp"
+        android:background="@color/steel_20"
+        app:layout_constraintEnd_toStartOf="@+id/btnMax"
+        app:layout_constraintStart_toStartOf="@+id/topAmountPrefix"
+        app:layout_constraintTop_toBottomOf="@+id/topAmountPrefix"
+        />
+
+    <Button
+        android:id="@+id/btnMax"
+        style="@style/SendButtonSmallGrey"
+        android:layout_width="wrap_content"
+        android:layout_height="28dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/Send_Button_Max"
+        app:layout_constraintEnd_toStartOf="@+id/btnSwitch"
+        app:layout_constraintTop_toTopOf="@+id/btnSwitch"
+        />
+
+    <ImageButton
+        android:id="@+id/btnSwitch"
+        style="@style/SendImageButtonSmallGrey"
+        android:layout_width="wrap_content"
+        android:layout_height="28dp"
+        android:src="@drawable/ic_switch"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/txtHintInfo"
+        style="@style/CaptionRegular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2.5dp"
+        android:textColor="?attr/BarsOrDarkTextColor"
+        app:layout_constraintStart_toStartOf="@+id/topAmountPrefix"
+        app:layout_constraintTop_toBottomOf="@+id/amountDivider"
+        tools:text="$ 210"
+        />
+
+    <TextView
+        android:id="@+id/txtHintError"
+        style="@style/CaptionRegular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2.5dp"
+        android:textColor="@color/red_warning"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/topAmountPrefix"
+        app:layout_constraintTop_toBottomOf="@+id/amountDivider"
+        tools:text="$ 210"
+        />
+
+</android.support.constraint.ConstraintLayout>

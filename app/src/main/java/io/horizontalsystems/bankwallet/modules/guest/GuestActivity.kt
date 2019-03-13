@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.guest
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.view.WindowManager
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
@@ -20,7 +19,7 @@ class GuestActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+        setTransparentStatusBar()
 
         setContentView(R.layout.activity_add_wallet)
 

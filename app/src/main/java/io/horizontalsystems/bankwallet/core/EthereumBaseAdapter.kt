@@ -56,7 +56,7 @@ abstract class EthereumBaseAdapter(override val coin: Coin, protected val ethere
             return null
         }
 
-    override fun send(address: String, value: BigDecimal, completion: ((Throwable?) -> Unit)?) {
+    override fun send(address: String, value: BigDecimal, feePriority: FeeRatePriority, completion: ((Throwable?) -> Unit)?) {
         sendSingle(address, value)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

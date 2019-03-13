@@ -47,6 +47,7 @@
     <string name="Backup_Confirmation_Title">Enter following words from your Secret Key</string>
     <string name="Backup_Confirmation_Description">Enter words from your secret key.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Words do not match</string>
+    <string name="Backup_Confirmation_CheckTitle">Check…</string>
 
     <string name="Backup_Button_Confirm">Confirm</string>
     <string name="Backup_Button_Next">Next</string>

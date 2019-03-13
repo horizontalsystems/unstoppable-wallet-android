@@ -15,12 +15,22 @@ import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 
 class RotatingCircleProgressView : View {
 
+    init {
+        mThickness = LayoutHelper.dp(2f, context).toFloat()
+        donutColor = ContextCompat.getColor(context, R.color.grey_pressed)
+        circleBackgroundColor = ContextCompat.getColor(context, R.color.grey)
+        lastUpdateTime = System.currentTimeMillis()
+        val themedColor = LayoutHelper.getAttr(R.attr.ProgressbarSpinnerColor, context.theme)
+        mCircleColor = themedColor ?: ContextCompat.getColor(context, R.color.dark)
+        setPaints()
+    }
+
     private lateinit var mCirclePaint: Paint
     private lateinit var donutPaint: Paint
     private lateinit var circleBackgroundPaint: Paint
     private var mThickness: Float = 0.toFloat()
 
-    private lateinit var mCircleRect: RectF
+    private var mCircleRect: RectF = RectF()
     @ColorInt
     private var mCircleColor: Int = 0
     @ColorInt
@@ -37,20 +47,14 @@ class RotatingCircleProgressView : View {
     private var currentProgressTime: Long = 0
     private var animatedProgressValue = 0f
 
-    private lateinit var decelerateInterpolator: DecelerateInterpolator
+    private var decelerateInterpolator: DecelerateInterpolator = DecelerateInterpolator()
 
 
-    constructor(context: Context) : super(context) {
-        init()
-    }
+    constructor(context: Context) : super(context)
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init()
-    }
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        init()
-    }
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     fun setProgress(value: Float) {
         if (value > 10) {
@@ -63,18 +67,6 @@ class RotatingCircleProgressView : View {
         currentProgressTime = 0
 
         invalidate()
-    }
-
-    private fun init() {
-        decelerateInterpolator = DecelerateInterpolator()
-        mCircleRect = RectF()
-        mThickness = LayoutHelper.dp(2f, context).toFloat()
-        donutColor = ContextCompat.getColor(context, R.color.grey_pressed)
-        circleBackgroundColor = ContextCompat.getColor(context, R.color.grey)
-        lastUpdateTime = System.currentTimeMillis()
-        val themedColor = LayoutHelper.getAttr(R.attr.ProgressbarSpinnerColor, context.theme)
-        mCircleColor = themedColor ?: ContextCompat.getColor(context, R.color.dark)
-        setPaints()
     }
 
     private fun setPaints() {

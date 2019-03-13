@@ -3,30 +3,25 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="?PinScreenBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar_layout"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <io.horizontalsystems.bankwallet.ui.extensions.ShadowlessToolbarView
+        android:id="@+id/shadowlessToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="bottom"
-        app:elevation="0dp"
-        >
-
-        <include layout="@layout/custom_tall_toolbar"/>
-    </android.support.design.widget.AppBarLayout>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/pinUnlock"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/app_bar_layout"
+        app:layout_constraintTop_toBottomOf="@id/shadowlessToolbar"
         >
 
         <android.support.v7.widget.RecyclerView
@@ -57,7 +52,7 @@
         android:layout_height="0dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/app_bar_layout"
+        app:layout_constraintTop_toBottomOf="@id/shadowlessToolbar"
         >
 
         <ImageView
@@ -83,10 +78,4 @@
             />
     </android.support.constraint.ConstraintLayout>
 
-    <View
-        style="@style/Widget.Shadow.AppBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout"
-        />
 </android.support.constraint.ConstraintLayout>

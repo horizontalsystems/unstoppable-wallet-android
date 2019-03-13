@@ -7,13 +7,13 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import io.horizontalsystems.bankwallet.ui.view.ViewHolderProgressbar
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_explorer_switcher.*
@@ -35,10 +35,10 @@ class DataProviderSettingsActivity : BaseActivity(), DataProviderSettingsAdapter
 
         setContentView(R.layout.activity_explorer_switcher)
 
-        setSupportActionBar(toolbar)
-        supportActionBar?.title = getString(R.string.FullInfo_Source)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.back)
+        shadowlessToolbar.bind(
+                title = getString(R.string.FullInfo_Source),
+                leftBtnItem = TopMenuItem(R.drawable.back, { onBackPressed() })
+        )
 
         adapter = DataProviderSettingsAdapter(this)
 
@@ -55,17 +55,6 @@ class DataProviderSettingsActivity : BaseActivity(), DataProviderSettingsAdapter
         viewModel.closeLiveEvent.observe(this, Observer {
             finish()
         })
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                onBackPressed()
-                return true
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onChangeProvider(item: DataProviderSettingsItem) {

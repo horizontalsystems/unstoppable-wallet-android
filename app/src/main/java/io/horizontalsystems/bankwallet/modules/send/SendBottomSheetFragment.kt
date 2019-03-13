@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.support.constraint.ConstraintLayout
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.BottomSheetDialogFragment
@@ -23,17 +24,12 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.TextView
 import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
-import io.horizontalsystems.bankwallet.ui.extensions.NumPadItem
-import io.horizontalsystems.bankwallet.ui.extensions.NumPadItemType
-import io.horizontalsystems.bankwallet.ui.extensions.NumPadItemsAdapter
+import io.horizontalsystems.bankwallet.ui.extensions.*
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
@@ -48,7 +44,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
     private var inputConnection: InputConnection? = null
 
     private var amountEditTxt: EditText? = null
-    private var maxButton: Button? = null
+    private var amountInput: InputAmountView? = null
     private val amountChangeSubject: PublishSubject<BigDecimal> = PublishSubject.create()
 
     private var coin: String? = null
@@ -87,30 +83,32 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
         val numpadAdapter = NumPadItemsAdapter(this, NumPadItemType.DOT, false)
 
         val numpadRecyclerView = mDialog?.findViewById<RecyclerView>(R.id.numPadItemsRecyclerView)
-        val hintInfoTxt: TextView? = mDialog?.findViewById(R.id.txtHintInfo)
-        val addressTxt: TextView? = mDialog?.findViewById(R.id.txtAddress)
-        val addressErrorTxt: TextView? = mDialog?.findViewById(R.id.txtAddressError)
-        val amountPrefixTxt: TextView? = mDialog?.findViewById(R.id.topAmountPrefix)
-        val switchButton: ImageButton? = mDialog?.findViewById(R.id.btnSwitch)
-        maxButton = mDialog?.findViewById(R.id.btnMax)
-        val pasteButton: Button? = mDialog?.findViewById(R.id.btnPaste)
-        val scanBarcodeButton: ImageButton? = mDialog?.findViewById(R.id.btnBarcodeScan)
-        val deleteAddressButton: ImageButton? = mDialog?.findViewById(R.id.btnDeleteAddress)
+        amountInput = mDialog?.findViewById(R.id.amountInput)
         val feePrimaryTxt: TextView? = mDialog?.findViewById(R.id.txtFeePrimary)
         val feeErrorTxt: TextView? = mDialog?.findViewById(R.id.feeError)
+        val feeElements: ConstraintLayout? = mDialog?.findViewById(R.id.feeElements)
         val feeSecondaryTxt: TextView? = mDialog?.findViewById(R.id.txtFeeSecondary)
         amountEditTxt = mDialog?.findViewById(R.id.editTxtAmount)
         val sendButton: Button? = mDialog?.findViewById(R.id.btnSend)
+        val addressInput: InputAddressView? = mDialog?.findViewById(R.id.addressInput)
+        val seekbar: SeekbarView? = mDialog?.findViewById(R.id.feeRateSeekbar)
+
+        addressInput?.bindAddressInputInitial(
+                onAmpersandClick = null,
+                onBarcodeClick = { startScanner() },
+                onPasteClick = { viewModel.delegate.onPasteClicked() },
+                onDeleteClick = { viewModel.delegate.onDeleteClicked() }
+        )
 
         amountEditTxt?.showSoftInputOnFocus = false
         inputConnection = amountEditTxt?.onCreateInputConnection(EditorInfo())
         sendButton?.isEnabled = false
 
-        switchButton?.setOnClickListener { viewModel.delegate.onSwitchClicked() }
-        scanBarcodeButton?.setOnClickListener { startScanner() }
-        maxButton?.setOnClickListener { viewModel.delegate.onMaxClicked() }
-        pasteButton?.setOnClickListener { viewModel.delegate.onPasteClicked() }
-        deleteAddressButton?.setOnClickListener { viewModel.delegate.onDeleteClicked() }
+        amountInput?.bindInitial(
+                onMaxClick = { viewModel.delegate.onMaxClicked() },
+                onSwitchClick = { viewModel.delegate.onSwitchClicked() }
+        )
+
         sendButton?.setOnClickListener { viewModel.delegate.onSendClicked() }
 
         amountEditTxt?.addTextChangedListener(textChangeListener)
@@ -127,8 +125,14 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
             }
         }
 
+        seekbar?.bind { progress ->
+            viewModel.delegate.onFeeSliderChange(progress)
+        }
+
         viewModel.switchButtonEnabledLiveData.observe(this, Observer { enabled ->
-            enabled?.let { switchButton?.isEnabled = it }
+            enabled?.let {
+                amountInput?.enableSwitchBtn(it)
+            }
         })
 
         viewModel.coinLiveData.observe(this, Observer { coin ->
@@ -143,31 +147,26 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
         viewModel.hintInfoLiveData.observe(this, Observer { hintInfo ->
             when (hintInfo) {
                 is SendModule.HintInfo.Amount -> {
-                    activity?.theme?.let { theme ->
-                        LayoutHelper.getAttr(R.attr.BottomDialogTextColor, theme)?.let {
-                            hintInfoTxt?.setTextColor(it)
-                        }
-                    }
-
-                    hintInfoTxt?.text = when (hintInfo.amountInfo) {
+                    val hintText = when (hintInfo.amountInfo) {
                         is SendModule.AmountInfo.CoinValueInfo -> App.numberFormatter.format(hintInfo.amountInfo.coinValue, realNumber = true)
                         is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(hintInfo.amountInfo.currencyValue, realNumber = true)
                     }
+                    amountInput?.updateInput(hint = hintText)
                 }
                 is SendModule.HintInfo.ErrorInfo -> {
-                    hintInfoTxt?.let { it.setTextColor(it.resources.getColor(R.color.red_warning, null)) }
-
-                    when (hintInfo.error) {
+                    val errorText: String? = when (hintInfo.error) {
                         is SendModule.AmountError.InsufficientBalance -> {
                             val balanceAmount = when (hintInfo.error.amountInfo) {
                                 is SendModule.AmountInfo.CoinValueInfo -> App.numberFormatter.format(hintInfo.error.amountInfo.coinValue)
                                 is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(hintInfo.error.amountInfo.currencyValue, realNumber = true)
                             }
-                            hintInfoTxt?.text = hintInfoTxt?.context?.getString(R.string.Send_Error_BalanceAmount, balanceAmount)
+                            context?.getString(R.string.Send_Error_BalanceAmount, balanceAmount)
                         }
+                        else -> null
                     }
+                    amountInput?.updateInput(error = errorText)
                 }
-                null -> hintInfoTxt?.text = null
+                null -> amountInput?.updateInput()
             }
         })
 
@@ -179,11 +178,11 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
             var amountNumber = BigDecimal.ZERO
             when (amountInfo) {
                 is SendModule.AmountInfo.CoinValueInfo -> {
-                    amountPrefixTxt?.text = amountInfo.coinValue.coinCode
+                    amountInput?.updateAmountPrefix(amountInfo.coinValue.coinCode)
                     amountNumber = amountInfo.coinValue.value.setScale(8, RoundingMode.HALF_EVEN)
                 }
                 is SendModule.AmountInfo.CurrencyValueInfo -> {
-                    amountPrefixTxt?.text = amountInfo.currencyValue.currency.symbol
+                    amountInput?.updateAmountPrefix(amountInfo.currencyValue.currency.symbol)
                     amountNumber = amountInfo.currencyValue.value.setScale(2, RoundingMode.HALF_EVEN)
                 }
             }
@@ -195,26 +194,23 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
         })
 
         viewModel.addressInfoLiveData.observe(this, Observer { addressInfo ->
-            deleteAddressButton?.visibility = if (addressInfo == null) View.GONE else View.VISIBLE
-            pasteButton?.visibility = if (addressInfo == null) View.VISIBLE else View.GONE
-            scanBarcodeButton?.visibility = if (addressInfo == null) View.VISIBLE else View.GONE
+
+            var addressText = ""
+            var errorText: String? = null
 
             addressInfo?.let {
                 when (it) {
                     is SendModule.AddressInfo.ValidAddressInfo -> {
-                        addressTxt?.text = it.address
-                        addressErrorTxt?.visibility = View.GONE
+                        addressText = it.address
                     }
                     is SendModule.AddressInfo.InvalidAddressInfo -> {
-                        addressTxt?.text = it.address
-                        addressErrorTxt?.setText(R.string.Send_Error_IncorrectAddress)
-                        addressErrorTxt?.visibility = View.VISIBLE
+                        addressText = it.address
+                        errorText = context?.getString(R.string.Send_Error_IncorrectAddress)
                     }
                 }
-            } ?: run {
-                addressErrorTxt?.visibility = View.GONE
-                addressTxt?.text = ""
             }
+
+            addressInput?.updateInput(addressText, errorText)
         })
 
         viewModel.feeInfoLiveData.observe(this, Observer { feeInfo ->
@@ -222,6 +218,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
                 feePrimaryTxt?.visibility = if (it.error == null) View.VISIBLE else View.GONE
                 feeSecondaryTxt?.visibility = if (it.error == null) View.VISIBLE else View.GONE
                 feeErrorTxt?.visibility = if (it.error == null) View.GONE else View.VISIBLE
+                feeElements?.visibility = if (it.error == null) View.VISIBLE else View.GONE
 
                 it.error?.let { erc20Error ->
                     feeErrorTxt?.text = getString(R.string.Send_ERC_Alert, erc20Error.erc20CoinCode, erc20Error.coinValue.value.toPlainString())
@@ -264,7 +261,13 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
         })
 
         viewModel.pasteButtonEnabledLiveData.observe(this, Observer { enabled ->
-            enabled?.let { pasteButton?.isEnabled = it }
+            enabled?.let { addressInput?.enablePasteButton(it) }
+        })
+
+        viewModel.feeIsAdjustableLiveData.observe(this, Observer { feeIsAdjustable ->
+            feeIsAdjustable?.let {
+                seekbar?.visibility = if (it) View.VISIBLE else View.GONE
+            }
         })
 
         return mDialog as Dialog
@@ -324,7 +327,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
                 }
             }
 
-            maxButton?.visibility = if (amountText.isEmpty()) View.VISIBLE else View.GONE
+            amountInput?.setMaxBtnVisible(amountText.isEmpty())
             amountChangeSubject.onNext(amountNumber)
         }
 

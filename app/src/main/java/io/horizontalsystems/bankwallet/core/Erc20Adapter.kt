@@ -37,20 +37,20 @@ class Erc20Adapter(coin: Coin, kit: EthereumKit, private val contractAddress: St
         return ethereumKit.sendERC20(address, contractAddress, amount).map { Unit }
     }
 
-    override fun fee(value: BigDecimal, address: String?): BigDecimal {
+    override fun fee(value: BigDecimal, address: String?, feePriority: FeeRatePriority): BigDecimal {
         return ethereumKit.feeERC20()
     }
 
-    override fun availableBalance(address: String?): BigDecimal {
+    override fun availableBalance(address: String?, feePriority: FeeRatePriority): BigDecimal {
         return balance
     }
 
-    override fun validate(amount: BigDecimal, address: String?): List<SendStateError> {
+    override fun validate(amount: BigDecimal, address: String?, feePriority: FeeRatePriority): List<SendStateError> {
         val errors = mutableListOf<SendStateError>()
-        if (amount > availableBalance(address)) {
+        if (amount > availableBalance(address, feePriority)) {
             errors.add(SendStateError.InsufficientAmount)
         }
-        if (balanceInBigDecimal(ethereumKit.balance, decimal) < fee(amount, address)) {
+        if (balanceInBigDecimal(ethereumKit.balance, decimal) < fee(amount, address, feePriority)) {
             errors.add(SendStateError.InsufficientFeeBalance)
         }
         return errors

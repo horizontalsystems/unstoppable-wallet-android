@@ -4,8 +4,10 @@ import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
@@ -158,8 +160,9 @@ class SendPresenterTest {
 
     @Test
     fun onMaxClicked() {
+        whenever(userInput.feePriority).thenReturn(FeeRatePriority.MEDIUM)
         presenter.onMaxClicked()
-        verify(interactor).getTotalBalanceMinusFee(userInput.inputType, userInput.address)
+        verify(interactor).getTotalBalanceMinusFee(userInput.inputType, userInput.address, FeeRatePriority.MEDIUM)
         verify(view).setAmountInfo(viewItem.amountInfo)
     }
 
@@ -168,6 +171,19 @@ class SendPresenterTest {
         presenter.onClear()
 
         verify(interactor).clear()
+    }
+
+    @Test
+    fun onFeeSliderChange() {
+        presenter.onFeeSliderChange(4)
+
+        verify(userInput).feePriority = FeeRatePriority.HIGHEST
+    }
+
+    @Test
+    fun test_FeeAdjustable() {
+        val feeAdjustable = presenter.feeAdjustable
+        Assert.assertEquals(true, feeAdjustable)
     }
 
 }

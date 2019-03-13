@@ -3,7 +3,6 @@
     android:id="@+id/coordinator"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
@@ -12,6 +11,7 @@
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/transparent"
         app:elevation="0dp"
         >
 
@@ -53,31 +53,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="50dp"
-        android:background="?TransactionsBackgroundColor"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         />
 
     <View
-        style="@style/Widget.Shadow.AppBar"
-        app:layout_anchor="@id/app_bar_layout"
-        />
-
-    <View
         android:id="@+id/transactionsDim"
-        android:background="#99000000"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:background="#99000000"
+        />
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/bottom_sheet_background"
+        android:backgroundTint="?BottomTransactionInfoBackground"
         android:clipToPadding="true"
         app:behavior_hideable="true"
         app:behavior_peekHeight="0dp"
         app:layout_behavior="@string/bottom_sheet_behavior"
-        android:background="@drawable/bottom_sheet_background"
-        android:backgroundTint="?BottomTransactionInfoBackground"
         >
 
         <include layout="@layout/transaction_info_bottom_sheet"/>

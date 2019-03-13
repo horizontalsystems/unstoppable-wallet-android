@@ -147,15 +147,15 @@ interface IAdapter {
 
     fun parsePaymentAddress(address: String): PaymentRequestAddress
 
-    fun send(address: String, value: BigDecimal, completion: ((Throwable?) -> (Unit))? = null)
-    fun availableBalance(address: String?): BigDecimal
+    fun send(address: String, value: BigDecimal, feePriority: FeeRatePriority, completion: ((Throwable?) -> (Unit))? = null)
+    fun availableBalance(address: String?, feePriority: FeeRatePriority): BigDecimal
 
-    fun fee(value: BigDecimal, address: String?): BigDecimal
+    fun fee(value: BigDecimal, address: String?, feePriority: FeeRatePriority): BigDecimal
 
     @Throws
     fun validate(address: String)
 
-    fun validate(amount: BigDecimal, address: String?): List<SendStateError>
+    fun validate(amount: BigDecimal, address: String?, feePriority: FeeRatePriority): List<SendStateError>
 
     val receiveAddress: String
     fun getTransactionsObservable(hashFrom: String?, limit: Int): Single<List<TransactionRecord>>
@@ -257,6 +257,18 @@ sealed class Error : Exception() {
 }
 
 sealed class SendStateError {
-    object InsufficientAmount: SendStateError()
-    object InsufficientFeeBalance: SendStateError()
+    object InsufficientAmount : SendStateError()
+    object InsufficientFeeBalance : SendStateError()
+}
+
+enum class FeeRatePriority(val value: Int) {
+    LOWEST(0),
+    LOW(1),
+    MEDIUM(2),
+    HIGH(3),
+    HIGHEST(4);
+
+    companion object {
+        fun valueOf(value: Int): FeeRatePriority = FeeRatePriority.values().firstOrNull { it.value == value } ?: MEDIUM
+    }
 }

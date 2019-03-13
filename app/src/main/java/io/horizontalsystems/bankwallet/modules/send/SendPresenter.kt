@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.send
 
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import java.math.BigDecimal
 import java.net.UnknownHostException
 
@@ -11,6 +12,9 @@ class SendPresenter(
 ) : SendModule.IViewDelegate, SendModule.IInteractorDelegate {
 
     var view: SendModule.IView? = null
+
+    override val feeAdjustable: Boolean
+        get() = true
 
     //
     // IViewDelegate
@@ -44,7 +48,7 @@ class SendPresenter(
     }
 
     override fun onMaxClicked() {
-        val totalBalanceMinusFee = interactor.getTotalBalanceMinusFee(userInput.inputType, userInput.address)
+        val totalBalanceMinusFee = interactor.getTotalBalanceMinusFee(userInput.inputType, userInput.address, userInput.feePriority)
         userInput.amount = totalBalanceMinusFee
 
         val state = interactor.stateForUserInput(userInput)
@@ -104,6 +108,10 @@ class SendPresenter(
 
     override fun onClear() {
         interactor.clear()
+    }
+
+    override fun onFeeSliderChange(value: Int) {
+        userInput.feePriority = FeeRatePriority.valueOf(value)
     }
 
     //

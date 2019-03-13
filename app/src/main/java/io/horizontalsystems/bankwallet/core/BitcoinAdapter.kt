@@ -77,7 +77,7 @@ class BitcoinAdapter(override val coin: Coin, authData: AuthData, newWallet: Boo
         return PaymentRequestAddress(paymentData.address, paymentData.amount?.toBigDecimal())
     }
 
-    override fun send(address: String, value: BigDecimal, completion: ((Throwable?) -> (Unit))?) {
+    override fun send(address: String, value: BigDecimal, feePriority: FeeRatePriority, completion: ((Throwable?) -> (Unit))?) {
         try {
             bitcoinKit.send(address, (value * satoshisInBitcoin).toLong())
             completion?.invoke(null)
@@ -86,7 +86,7 @@ class BitcoinAdapter(override val coin: Coin, authData: AuthData, newWallet: Boo
         }
     }
 
-    override fun fee(value: BigDecimal, address: String?): BigDecimal {
+    override fun fee(value: BigDecimal, address: String?, feePriority: FeeRatePriority): BigDecimal {
         try {
             val amount = (value * satoshisInBitcoin).toLong()
             val fee = bitcoinKit.fee(amount, address, true)
@@ -98,13 +98,13 @@ class BitcoinAdapter(override val coin: Coin, authData: AuthData, newWallet: Boo
         }
     }
 
-    override fun availableBalance(address: String?): BigDecimal {
-        return BigDecimal.ZERO.max(balance.subtract(fee(balance, address)))
+    override fun availableBalance(address: String?, feePriority: FeeRatePriority): BigDecimal {
+        return BigDecimal.ZERO.max(balance.subtract(fee(balance, address, feePriority)))
     }
 
-    override fun validate(amount: BigDecimal, address: String?): List<SendStateError> {
+    override fun validate(amount: BigDecimal, address: String?, feePriority: FeeRatePriority): List<SendStateError> {
         val errors = mutableListOf<SendStateError>()
-        if (amount > availableBalance(address)) {
+        if (amount > availableBalance(address, feePriority)) {
             errors.add(SendStateError.InsufficientAmount)
         }
         return errors

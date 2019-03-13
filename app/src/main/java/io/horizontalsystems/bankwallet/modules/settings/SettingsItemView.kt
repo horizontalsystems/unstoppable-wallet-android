@@ -20,7 +20,6 @@ class SettingsItemView : ConstraintLayout {
     private lateinit var titleTextView: TextView
     private lateinit var selectedValueTextView: TextView
     private lateinit var switch: Switch
-    private lateinit var checkMarkImageView: ImageView
     private lateinit var badgeImageView: ImageView
 
     var titleTextColor: Int? = null
@@ -52,12 +51,6 @@ class SettingsItemView : ConstraintLayout {
         set(value) {
             selectedValueTextView.visibility = if (value != null) View.VISIBLE else View.GONE
             selectedValueTextView.text = value
-            invalidate()
-        }
-
-    var checkMarkIsShown: Boolean = false
-        set(isShown) {
-            checkMarkImageView.visibility = if (isShown) View.VISIBLE else View.GONE
             invalidate()
         }
 
@@ -105,7 +98,6 @@ class SettingsItemView : ConstraintLayout {
         selectedValueTextView = findViewById(R.id.setting_value)
         switch = findViewById(R.id.setting_switch)
         switch.isClickable = false
-        checkMarkImageView = findViewById(R.id.setting_check_mark)
         badgeImageView = findViewById(R.id.setting_badge)
 
         settingIconImageView.apply {

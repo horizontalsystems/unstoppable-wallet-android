@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -79,6 +80,10 @@ abstract class BaseActivity : AppCompatActivity() {
 
     protected fun hideSoftKeyboard() {
         getSystemService(InputMethodManager::class.java)?.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+    }
+
+    protected fun setTransparentStatusBar() {
+        window.statusBarColor = Color.TRANSPARENT
     }
 
     fun showCustomKeyboardAlert() {

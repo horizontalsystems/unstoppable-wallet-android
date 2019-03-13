@@ -24,14 +24,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.security.FingerprintAuthenticationDialogFragment
 import io.horizontalsystems.bankwallet.modules.main.MainModule
-import io.horizontalsystems.bankwallet.ui.extensions.NumPadItem
-import io.horizontalsystems.bankwallet.ui.extensions.NumPadItemType
-import io.horizontalsystems.bankwallet.ui.extensions.NumPadItemsAdapter
-import io.horizontalsystems.bankwallet.ui.extensions.SmoothLinearLayoutManager
+import io.horizontalsystems.bankwallet.ui.extensions.*
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_pin.*
-import kotlinx.android.synthetic.main.custom_tall_toolbar.*
 
 
 class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuthenticationDialogFragment.Callback {
@@ -43,13 +39,11 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setTransparentStatusBar()
+
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
 
         setContentView(R.layout.activity_pin)
-
-        setSupportActionBar(toolbar)
-        backButton.visibility = View.GONE
-        backButton.setOnClickListener { viewModel.delegate.onBackPressed() }
 
         val interactionType = intent.getSerializableExtra(keyInteractionType) as PinInteractionType
         val appStart = intent.getBooleanExtra(keyIsAppStart, false)
@@ -75,20 +69,19 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
         numPadItemsRecyclerView.adapter = numpadAdapter
         numPadItemsRecyclerView.layoutManager = GridLayoutManager(this, 3)
 
-        viewModel.titleLiveDate.observe(this, Observer { title ->
-            title?.let { toolbarTitle.text = getString(it) }
-        })
 
         viewModel.hideToolbar.observe(this, Observer {
-            supportActionBar?.hide()
+            shadowlessToolbar.visibility = View.GONE
         })
 
         viewModel.showBackButton.observe(this, Observer {
-            backButton.visibility = View.VISIBLE
+            shadowlessToolbar.bindLeftButton(TopMenuItem(R.drawable.back, { viewModel.delegate.onBackPressed() }))
         })
 
         viewModel.titleLiveDate.observe(this, Observer { title ->
-            title?.let { supportActionBar?.title = getString(it) }
+                        title?.let {
+                            shadowlessToolbar.bindTitle(getString(it))
+                        }
         })
 
         viewModel.addPagesEvent.observe(this, Observer { pinPages ->
