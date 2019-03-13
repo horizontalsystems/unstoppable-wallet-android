@@ -19,7 +19,8 @@
     <string name="Guest_CreateWallet">新規ウォレット</string>
     <string name="Guest_RestoreWallet">ウォレットを復元する</string>
     <!--Restore-->
-    <string name="Restore_Title">秘密キーを入力する</string>
+    <string name="Restore_Title">Restore</string>
+    <string name="Restore_Subtitle">Enter Secret Key</string>
     <string name="Restore_ValidationFailed">正しくない秘密鍵</string>
     <string name="Restore_RestoreFailed">ウォレットを作成できませんでした</string>
     <!--Backup-->
