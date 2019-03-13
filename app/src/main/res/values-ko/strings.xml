@@ -36,6 +36,7 @@
     <string name="Backup_Confirmation_Title">비밀 키에서 단어를 입력</string>
     <string name="Backup_Confirmation_Description">비밀 키에서 단어를 입력.</string>
     <string name="Backup_Confirmation_FailureAlertText">암호가 일치 하지 않습니다.</string>
+    <string name="Backup_Confirmation_CheckTitle">Check…</string>
     <string name="Backup_Button_Confirm">확인</string>
     <string name="Backup_Button_Next">다음</string>
     <string name="Backup_Button_Submit">제출하기</string>
