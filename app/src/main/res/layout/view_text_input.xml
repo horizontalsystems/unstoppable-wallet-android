@@ -29,6 +29,8 @@
         android:layout_marginStart="10dp"
         android:background="@android:color/transparent"
         android:maxLines="1"
+        android:inputType="text"
+        android:imeOptions="actionNext"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/txtPrefix"
