@@ -22,7 +22,9 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
 import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -88,17 +90,15 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
         val feeSecondaryTxt: TextView? = mDialog?.findViewById(R.id.txtFeeSecondary)
         amountEditTxt = mDialog?.findViewById(R.id.editTxtAmount)
         val sendButton: Button? = mDialog?.findViewById(R.id.btnSend)
-        val seekbarLeftImage: ImageView? = mDialog?.findViewById(R.id.seekbarLeftImage)
-        val seekbarRightImage: ImageView? = mDialog?.findViewById(R.id.seekbarRightImage)
-        val seekBar: SeekBar? = mDialog?.findViewById(R.id.seekBarFeeRate)
         val addressInput: InputAddressView? = mDialog?.findViewById(R.id.addressInput)
+        val seekbar: SeekbarView? = mDialog?.findViewById(R.id.feeRateSeekbar)
 
         addressInput?.bindAddressInputInitial(
                 onAmpersandClick = null,
                 onBarcodeClick = { startScanner() },
                 onPasteClick = { viewModel.delegate.onPasteClicked() },
                 onDeleteClick = { viewModel.delegate.onDeleteClicked() }
-                )
+        )
 
         amountEditTxt?.showSoftInputOnFocus = false
         inputConnection = amountEditTxt?.onCreateInputConnection(EditorInfo())
@@ -125,14 +125,9 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
             }
         }
 
-        seekBar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                viewModel.delegate.onFeeSliderChange(progress)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
+        seekbar?.bind { progress ->
+            viewModel.delegate.onFeeSliderChange(progress)
+        }
 
         viewModel.switchButtonEnabledLiveData.observe(this, Observer { enabled ->
             enabled?.let {
@@ -269,12 +264,9 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
             enabled?.let { addressInput?.enablePasteButton(it) }
         })
 
-        viewModel.feeIsAdjustableLiveData.observe(this, Observer {feeIsAdjustable ->
+        viewModel.feeIsAdjustableLiveData.observe(this, Observer { feeIsAdjustable ->
             feeIsAdjustable?.let {
-                val visible = if (it) View.VISIBLE else View.GONE
-                seekbarLeftImage?.visibility = visible
-                seekBar?.visibility = visible
-                seekbarRightImage?.visibility = visible
+                seekbar?.visibility = if (it) View.VISIBLE else View.GONE
             }
         })
 

@@ -54,6 +54,7 @@
     <attr name="SwipeRefreshBackgroundColor" format="reference|color" />
     <attr name="InputBackground" format="reference|color" />
     <attr name="BarsOrDarkTextColor" format="reference|color" />
+    <attr name="SeekbarNonActiveColor" format="reference|color" />
 
     <!-- Base application theme. -->
     <style name="DarkModeAppTheme" parent="Theme.AppCompat.NoActionBar">
@@ -123,6 +124,7 @@
         <item name="SwipeRefreshBackgroundColor">@color/dark</item>
         <item name="InputBackground">@color/steel_dark</item>
         <item name="BarsOrDarkTextColor">@color/bars_color</item>
+        <item name="SeekbarNonActiveColor">@color/steel_dark</item>
     </style>
 
     <style name="LightModeAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -192,6 +194,7 @@
         <item name="SwipeRefreshBackgroundColor">@color/bars_color</item>
         <item name="InputBackground">@color/white</item>
         <item name="BarsOrDarkTextColor">@color/dark</item>
+        <item name="SeekbarNonActiveColor">@color/grey_light</item>
     </style>
 
     <style name="Button" parent="Widget.AppCompat.Button.Borderless">

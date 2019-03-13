@@ -149,41 +149,16 @@
                     tools:text="$0.02"
                     />
 
-                <ImageView
-                    android:id="@+id/seekbarLeftImage"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginTop="4dp"
-                    android:src="@drawable/ic_seekbar_turtle"
-                    android:tint="@color/grey"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtFeePrimary"
-                    />
-
-                <SeekBar
-                    android:id="@+id/seekBarFeeRate"
+                <io.horizontalsystems.bankwallet.ui.extensions.SeekbarView
+                    android:id="@+id/feeRateSeekbar"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:progress="2"
-                    android:max="4"
-                    android:progressBackgroundTint="@color/grey"
-                    android:progressTint="@color/grey"
-                    android:thumbTint="@color/grey"
-                    app:layout_constraintBottom_toBottomOf="@id/seekbarLeftImage"
-                    app:layout_constraintEnd_toStartOf="@+id/seekbarRightImage"
-                    app:layout_constraintStart_toEndOf="@+id/seekbarLeftImage"
-                    app:layout_constraintTop_toTopOf="@id/seekbarLeftImage"
+                    android:layout_marginTop="4dp"
+                    app:layout_constraintTop_toBottomOf="@+id/txtFeePrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     />
 
-                <ImageView
-                    android:id="@+id/seekbarRightImage"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_seekbar_rabbit"
-                    android:tint="@color/grey"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/seekbarLeftImage"
-                    />
             </android.support.constraint.ConstraintLayout>
         </android.support.constraint.ConstraintLayout>
 
