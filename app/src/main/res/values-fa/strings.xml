@@ -36,6 +36,7 @@
     <string name="Backup_Confirmation_Title">تعقيب كنيد حرف هاي رمز مخفي خود را</string>
     <string name="Backup_Confirmation_Description">حرف هاي رمز تات را وارد كنيد.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Words do not match</string>
+    <string name="Backup_Confirmation_CheckTitle">Check…</string>
     <string name="Backup_Button_Confirm">تاييد</string>
     <string name="Backup_Button_Next">بعدي</string>
     <string name="Backup_Button_Submit">ثبت</string>
