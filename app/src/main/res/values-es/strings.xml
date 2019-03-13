@@ -19,7 +19,8 @@
     <string name="Guest_CreateWallet">Nueva cartera</string>
     <string name="Guest_RestoreWallet">Restaurar cartera</string>
     <!--Restore-->
-    <string name="Restore_Title">Ingresar clave secreta</string>
+    <string name="Restore_Title">Restore</string>
+    <string name="Restore_Subtitle">Enter Secret Key</string>
     <string name="Restore_ValidationFailed">Clave secreta incorrecta</string>
     <string name="Restore_RestoreFailed">Error al restaurar la cartera</string>
     <!--Backup-->
