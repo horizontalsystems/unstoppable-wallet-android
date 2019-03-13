@@ -5,16 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bottom_sheet_background"
-    android:paddingTop="3dp"
+    android:backgroundTint="?BottomSendBackground"
     >
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        android:scrollbars="vertical"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constrainedHeight="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnConfirm"
         />
 
     <Button
@@ -25,7 +30,7 @@
         android:layout_marginBottom="24dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="16dp"
         android:enabled="false"
         android:text="@string/Backup_Button_Confirm"
         app:layout_constraintBottom_toBottomOf="parent"
