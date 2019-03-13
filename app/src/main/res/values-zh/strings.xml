@@ -36,6 +36,7 @@
     <string name="Backup_Confirmation_Title">请输入你密钥中的词</string>
     <string name="Backup_Confirmation_Description">请输入你密钥中的词.</string>
     <string name="Backup_Confirmation_FailureAlertText"> 单词不匹配</string>
+    <string name="Backup_Confirmation_CheckTitle">Check…</string>
     <string name="Backup_Button_Confirm">确认</string>
     <string name="Backup_Button_Next">继续</string>
     <string name="Backup_Button_Submit">提交</string>
