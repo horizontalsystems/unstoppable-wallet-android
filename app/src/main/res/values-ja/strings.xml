@@ -36,6 +36,7 @@
     <string name="Backup_Confirmation_Title">秘密キーの後に、次の言葉にを入力してください。</string>
     <string name="Backup_Confirmation_Description">あなたの秘密鍵の単語を入力してください。</string>
     <string name="Backup_Confirmation_FailureAlertText"> 言葉が一致しません</string>
+    <string name="Backup_Confirmation_CheckTitle">Check…</string>
     <string name="Backup_Button_Confirm">確定する</string>
     <string name="Backup_Button_Next">次</string>
     <string name="Backup_Button_Submit">提出</string>
