@@ -25,7 +25,8 @@
 
     <!--Restore-->
 
-    <string name="Restore_Title">Enter Secret Key</string>
+    <string name="Restore_Title">Restore</string>
+    <string name="Restore_Subtitle">Enter Secret Key</string>
     <string name="Restore_ValidationFailed">Incorrect Secret Key</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>
 
