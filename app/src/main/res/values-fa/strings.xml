@@ -19,7 +19,8 @@
     <string name="Guest_CreateWallet">کیف پول جدید</string>
     <string name="Guest_RestoreWallet">بازگرداندن كيف پول</string>
     <!--Restore-->
-    <string name="Restore_Title">کلید مخفی را وارد کنید</string>
+    <string name="Restore_Title">Restore</string>
+    <string name="Restore_Subtitle">Enter Secret Key</string>
     <string name="Restore_ValidationFailed">کلید مخفی نادرست</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>
     <!--Backup-->
