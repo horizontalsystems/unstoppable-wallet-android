@@ -7,7 +7,7 @@ import android.support.v7.widget.GridLayoutManager
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Utils
-import io.horizontalsystems.bankwallet.lib.EditTextViewHolder
+import io.horizontalsystems.bankwallet.lib.InputTextViewHolder
 import io.horizontalsystems.bankwallet.lib.WordsInputAdapter
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.ui.dialogs.BottomConfirmAlert
@@ -61,8 +61,9 @@ class RestoreWalletActivity : BaseActivity(), BottomConfirmAlert.Listener {
             BottomConfirmAlert.show(this, confirmationList, this)
         })
 
+        recyclerInputs.isNestedScrollingEnabled = false
         recyclerInputs.layoutManager = GridLayoutManager(this, 2)
-        recyclerInputs.adapter = WordsInputAdapter(object : EditTextViewHolder.WordsChangedListener {
+        recyclerInputs.adapter = WordsInputAdapter(object : InputTextViewHolder.WordsChangedListener {
             override fun set(position: Int, value: String) {
                 if (isUsingNativeKeyboard()) {
                     words[position] = value

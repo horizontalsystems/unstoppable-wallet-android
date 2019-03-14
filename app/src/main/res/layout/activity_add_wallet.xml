@@ -2,36 +2,35 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     >
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitStart"
         android:src="@drawable/welcome_image_3_x"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         />
 
     <TextView
         android:id="@+id/textTitle"
+        style="@style/Title1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
         android:maxLines="1"
         android:text="@string/Guest_Title"
         android:textAlignment="center"
-        android:layout_marginBottom="16dp"
-        android:textSize="32sp"
-        android:textColor="@color/white"
-        android:fontFamily="@font/noto_sans_bold"
         app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toTopOf="@+id/buttonCreate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/buttonCreate"
         />
 
     <Button
@@ -39,9 +38,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="@string/Guest_CreateWallet"
-        android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
+        android:layout_marginStart="32dp"
+        android:text="@string/Guest_CreateWallet"
         app:layout_constraintBottom_toTopOf="@+id/buttonRestore"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -53,9 +52,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="@string/Guest_RestoreWallet"
-        android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
+        android:layout_marginStart="32dp"
+        android:text="@string/Guest_RestoreWallet"
         app:layout_constraintBottom_toTopOf="@+id/textVersion"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,12 +62,11 @@
 
     <TextView
         android:id="@+id/textVersion"
+        style="@style/CaptionRegular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:textSize="12sp"
-        android:textColor="@color/grey"
         android:layout_marginBottom="8dp"
+        android:textColor="@color/grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -202,12 +202,12 @@
 
     <style name="Button" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">17sp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:paddingTop">13dp</item>
         <item name="android:paddingBottom">14dp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:fontFamily">@font/noto_sans_bold</item>
+        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
         <item name="android:background">@drawable/button_yellow_background_12</item>
     </style>
 
