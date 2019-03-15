@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import io.horizontalsystems.bankwallet.ui.view.ViewHolderProgressbar
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_currency_switcher.*
-import kotlinx.android.synthetic.main.view_holder_currency_item.*
+import kotlinx.android.synthetic.main.view_holder_item_with_checkmark.*
 
 class BaseCurrencySettingsActivity : BaseActivity(), CurrencySwitcherAdapter.Listener {
 
@@ -102,7 +102,7 @@ class ViewHolderCurrency(override val containerView: View) : RecyclerView.ViewHo
 
     companion object {
         val layoutResourceId: Int
-            get() = R.layout.view_holder_currency_item
+            get() = R.layout.view_holder_item_with_checkmark
     }
 
 }

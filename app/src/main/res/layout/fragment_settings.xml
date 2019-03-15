@@ -20,7 +20,7 @@
         android:id="@+id/scrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:paddingBottom="50dp"
+        android:paddingBottom="42dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,22 +32,14 @@
             android:layout_height="wrap_content"
             >
 
-            <View
-                android:id="@+id/divider_0"
-                android:layout_width="match_parent"
-                android:layout_height="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                />
-
             <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
                 android:id="@+id/securityCenter"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider_0"
+                app:layout_constraintTop_toTopOf="parent"
                 app:setting_icon="@drawable/security"
                 app:setting_title="@string/Settings_SecurityCenter"
                 />
@@ -55,7 +47,7 @@
             <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
                 android:id="@+id/baseCurrency"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/securityCenter"
@@ -64,9 +56,10 @@
                 />
 
             <View
-                android:id="@+id/divider_1"
+                android:id="@+id/bottomShade_1"
                 android:layout_width="match_parent"
-                android:layout_height="16dp"
+                android:layout_height="0.5dp"
+                android:background="?SettingsSectionBottomShadeColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/baseCurrency"
@@ -75,10 +68,11 @@
             <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
                 android:id="@+id/language"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider_1"
+                app:layout_constraintTop_toBottomOf="@+id/baseCurrency"
                 app:setting_icon="@drawable/language"
                 app:setting_title="@string/Settings_Language"
                 />
@@ -86,7 +80,7 @@
             <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
                 android:id="@+id/lightMode"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/language"
@@ -95,9 +89,10 @@
                 />
 
             <View
-                android:id="@+id/divider_2"
+                android:id="@+id/bottomShade_2"
                 android:layout_width="match_parent"
-                android:layout_height="16dp"
+                android:layout_height="0.5dp"
+                android:background="?SettingsSectionBottomShadeColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lightMode"
@@ -106,22 +101,33 @@
             <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
                 android:id="@+id/about"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider_2"
+                app:layout_constraintTop_toBottomOf="@+id/lightMode"
                 app:setting_icon="@drawable/info"
                 app:setting_title="@string/Settings_About"
                 />
 
+            <View
+                android:id="@+id/bottomShade_3"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="?SettingsSectionBottomShadeColor"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/about"
+                />
+
             <TextView
                 android:id="@+id/appName"
+                style="@style/CaptionRegular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="37dp"
+                android:layout_marginTop="32dp"
                 android:textAllCaps="true"
                 android:textColor="@color/grey"
-                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/about"
@@ -132,7 +138,7 @@
                 android:id="@+id/lineView"
                 android:layout_width="0dp"
                 android:layout_height="0.5dp"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="4dp"
                 android:background="@color/grey"
                 app:layout_constraintEnd_toEndOf="@+id/appName"
                 app:layout_constraintStart_toStartOf="@+id/appName"
@@ -141,12 +147,12 @@
 
             <TextView
                 android:id="@+id/decentralizedAppBy"
+                style="@style/CaptionRegular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1.5dp"
+                android:layout_marginTop="3.5dp"
                 android:text="@string/Settings_InfoSubtitle"
                 android:textColor="@color/grey"
-                android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lineView"
@@ -157,7 +163,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="42dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="26dp"
                 android:background="?android:selectableItemBackground"
                 android:padding="6dp"
                 android:src="@drawable/hs_center"

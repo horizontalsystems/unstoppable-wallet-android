@@ -9,6 +9,7 @@
     <attr name="BallanceCoinAmountColor" format="reference|color" />
     <attr name="TitleColor" format="reference|color" />
     <attr name="TextColorGreyLightToDark" format="reference|color" />
+    <attr name="TextColorBarsToDark" format="reference|color" />
     <attr name="WalletBackgroundColor" format="reference|color" />
     <attr name="TransactionsBackgroundColor" format="reference|color" />
     <attr name="AboutBackgroundColor" format="reference|color" />
@@ -56,6 +57,7 @@
     <attr name="BarsOrDarkTextColor" format="reference|color" />
     <attr name="SeekbarNonActiveColor" format="reference|color" />
     <attr name="ConfirmationTextColor" format="reference|color" />
+    <attr name="SettingsSectionBottomShadeColor" format="reference|color" />
 
     <!-- Base application theme. -->
     <style name="DarkModeAppTheme" parent="Theme.AppCompat.NoActionBar">
@@ -80,6 +82,7 @@
         <item name="BallanceCoinAmountColor">@color/white</item>
         <item name="TitleColor">@color/white</item>
         <item name="TextColorGreyLightToDark">@color/grey_light</item>
+        <item name="TextColorBarsToDark">@color/bars_color</item>
         <item name="WalletBackgroundColor">@color/dark</item>
         <item name="TransactionsBackgroundColor">@color/dark</item>
         <item name="AboutBackgroundColor">@color/transparent</item>
@@ -127,6 +130,7 @@
         <item name="BarsOrDarkTextColor">@color/bars_color</item>
         <item name="SeekbarNonActiveColor">@color/steel_dark</item>
         <item name="ConfirmationTextColor">@color/lightBackground</item>
+        <item name="SettingsSectionBottomShadeColor">@color/black_20</item>
     </style>
 
     <style name="LightModeAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -151,6 +155,7 @@
         <item name="BallanceCoinAmountColor">@color/dark</item>
         <item name="TitleColor">@color/dark</item>
         <item name="TextColorGreyLightToDark">@color/dark</item>
+        <item name="TextColorBarsToDark">@color/dark</item>
         <item name="WalletBackgroundColor">@color/lightBackground</item>
         <item name="TransactionsBackgroundColor">@color/white</item>
         <item name="AboutBackgroundColor">@color/white</item>
@@ -198,6 +203,7 @@
         <item name="BarsOrDarkTextColor">@color/dark</item>
         <item name="SeekbarNonActiveColor">@color/grey_light</item>
         <item name="ConfirmationTextColor">@color/dark</item>
+        <item name="SettingsSectionBottomShadeColor">@color/steel_20</item>
     </style>
 
     <style name="Button" parent="Widget.AppCompat.Button.Borderless">
@@ -274,12 +280,6 @@
         <item name="android:fontFamily">@font/noto_sans_bold</item>
         <item name="android:textColor">?TitleColor</item>
         <item name="android:textSize">34sp</item>
-    </style>
-
-    <style name="AboutSubTitle">
-        <item name="android:fontFamily">@font/noto_sans_bold</item>
-        <item name="android:textColor">@color/yellow_crypto</item>
-        <item name="android:textSize">17sp</item>
     </style>
 
     <style name="TabTitleSmall" parent="TabTitle">
@@ -386,7 +386,14 @@
     <style name="Base">
         <item name="android:fontFamily">@font/noto_sans_regular</item>
         <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="BaseGrey" parent="Base">
         <item name="android:textColor">@color/grey</item>
+    </style>
+
+    <style name="BaseMedium" parent="Base">
+        <item name="android:fontFamily">@font/noto_sans_medium</item>
     </style>
 
     <style name="Body1">

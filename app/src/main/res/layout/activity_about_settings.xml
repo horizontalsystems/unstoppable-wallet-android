@@ -50,7 +50,7 @@
                 style="@style/Title2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="28dp"
+                android:layout_marginStart="24dp"
                 android:text="@string/Guest_Title"
                 android:textColor="?TextColorGreyLightToDark"
                 app:layout_constraintStart_toEndOf="@+id/appIcon"
@@ -80,10 +80,12 @@
 
             <TextView
                 android:id="@+id/termsSubTitle"
-                style="@style/AboutSubTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:fontFamily="@font/noto_sans_bold"
+                android:textSize="17sp"
+                android:textColor="@color/yellow_crypto"
                 android:text="@string/SettingsAbout_TermsPrivacySubtitle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
