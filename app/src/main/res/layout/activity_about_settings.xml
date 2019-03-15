@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="28dp"
                 android:text="@string/Guest_Title"
-                android:textColor="?Title2Color"
+                android:textColor="?TextColorGreyLightToDark"
                 app:layout_constraintStart_toEndOf="@+id/appIcon"
                 app:layout_constraintTop_toTopOf="@+id/appIcon"
                 />

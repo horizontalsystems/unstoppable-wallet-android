@@ -8,7 +8,7 @@
     <attr name="BallanceCoinNameColor" format="reference|color" />
     <attr name="BallanceCoinAmountColor" format="reference|color" />
     <attr name="TitleColor" format="reference|color" />
-    <attr name="Title2Color" format="reference|color" />
+    <attr name="TextColorGreyLightToDark" format="reference|color" />
     <attr name="WalletBackgroundColor" format="reference|color" />
     <attr name="TransactionsBackgroundColor" format="reference|color" />
     <attr name="AboutBackgroundColor" format="reference|color" />
@@ -79,7 +79,7 @@
         <item name="BallanceCoinNameColor">@color/white</item>
         <item name="BallanceCoinAmountColor">@color/white</item>
         <item name="TitleColor">@color/white</item>
-        <item name="Title2Color">@color/grey_light</item>
+        <item name="TextColorGreyLightToDark">@color/grey_light</item>
         <item name="WalletBackgroundColor">@color/dark</item>
         <item name="TransactionsBackgroundColor">@color/dark</item>
         <item name="AboutBackgroundColor">@color/transparent</item>
@@ -150,7 +150,7 @@
         <item name="BallanceCoinNameColor">@color/dark</item>
         <item name="BallanceCoinAmountColor">@color/dark</item>
         <item name="TitleColor">@color/dark</item>
-        <item name="Title2Color">@color/dark</item>
+        <item name="TextColorGreyLightToDark">@color/dark</item>
         <item name="WalletBackgroundColor">@color/lightBackground</item>
         <item name="TransactionsBackgroundColor">@color/white</item>
         <item name="AboutBackgroundColor">@color/white</item>
@@ -368,15 +368,13 @@
         <item name="android:textSize">32sp</item>
     </style>
 
-    <style name="Title2Yellow">
-        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
-        <item name="android:textColor">@color/yellow_crypto</item>
-        <item name="android:textSize">20sp</item>
-    </style>
-
     <style name="Title2">
         <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
         <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="Title2Yellow" parent="Title2">
+        <item name="android:textColor">@color/yellow_crypto</item>
     </style>
 
     <style name="Body1Grey">
