@@ -17,7 +17,7 @@ import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import io.horizontalsystems.bankwallet.ui.view.ViewHolderProgressbar
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_language_settings.*
-import kotlinx.android.synthetic.main.view_holder_language_item.*
+import kotlinx.android.synthetic.main.view_holder_item_with_checkmark.*
 
 class LanguageSettingsActivity : BaseActivity(), LanguageSettingsAdapter.Listener {
 
@@ -84,7 +84,6 @@ class LanguageSettingsAdapter(private var listener: Listener) : RecyclerView.Ada
         }
     }
 
-
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ViewHolderLanguageItem -> holder.bind(items[position]) { listener.onItemClick(items[position]) }
@@ -105,6 +104,6 @@ class ViewHolderLanguageItem(override val containerView: View) : RecyclerView.Vi
 
     companion object {
         val layoutResourceId: Int
-            get() = R.layout.view_holder_language_item
+            get() = R.layout.view_holder_item_with_checkmark
     }
 }

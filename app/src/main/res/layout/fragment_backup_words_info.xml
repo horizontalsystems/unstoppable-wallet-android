@@ -22,7 +22,7 @@
 
     <TextView
         android:id="@+id/textDescription"
-        style="@style/Base"
+        style="@style/BaseGrey"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"

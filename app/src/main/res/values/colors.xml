@@ -27,6 +27,7 @@
     <color name="bars_color">#f9f9f9</color>
     <color name="bars_color_95">#f2f9f9f9</color>
     <color name="black_85">#d9000000</color>
+    <color name="black_20">#33000000</color>
     <color name="steel_dark">#2f323c</color>
     <!-- eof base colors -->
 

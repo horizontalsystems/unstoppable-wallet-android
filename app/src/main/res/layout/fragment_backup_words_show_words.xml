@@ -10,13 +10,13 @@
 
     <TextView
         android:id="@+id/textDescription"
+        style="@style/Title2Yellow"
         android:layout_width="wrap_content"
-        android:layout_height="26dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="@string/Backup_Words_Title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        style="@style/Title2Yellow"
         />
 
     <android.support.v7.widget.RecyclerView
