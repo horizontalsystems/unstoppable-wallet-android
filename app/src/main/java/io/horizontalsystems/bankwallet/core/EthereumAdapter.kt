@@ -29,12 +29,12 @@ class EthereumAdapter(coin: Coin, kit: EthereumKit) : EthereumBaseAdapter(coin, 
         ethereumKit.start()
     }
 
-    override fun sendSingle(address: String, amount: String): Single<Unit> {
-        return ethereumKit.send(address, amount).map { Unit }
+    override fun sendSingle(address: String, amount: String, feePriority: FeeRatePriority): Single<Unit> {
+        return ethereumKit.send(address, amount, getKitFeePriority(feePriority)).map { Unit }
     }
 
     override fun fee(value: BigDecimal, address: String?, feePriority: FeeRatePriority): BigDecimal {
-        return ethereumKit.fee()
+        return ethereumKit.fee(getKitFeePriority(feePriority))
     }
 
     override fun availableBalance(address: String?, feePriority: FeeRatePriority): BigDecimal {

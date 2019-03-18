@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.ethereumkit.EthereumKit
 import io.horizontalsystems.ethereumkit.models.EthereumTransaction
+import io.horizontalsystems.ethereumkit.models.FeePriority
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -57,7 +58,7 @@ abstract class EthereumBaseAdapter(override val coin: Coin, protected val ethere
         }
 
     override fun send(address: String, value: BigDecimal, feePriority: FeeRatePriority, completion: ((Throwable?) -> Unit)?) {
-        sendSingle(address, value)
+        sendSingle(address, value, feePriority)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -68,6 +69,16 @@ abstract class EthereumBaseAdapter(override val coin: Coin, protected val ethere
                 })?.let { disposables.add(it) }
     }
 
+    protected fun getKitFeePriority(feePriority: FeeRatePriority): FeePriority {
+        return when (feePriority) {
+            FeeRatePriority.LOWEST -> FeePriority.Lowest
+            FeeRatePriority.LOW -> FeePriority.Low
+            FeeRatePriority.MEDIUM -> FeePriority.Medium
+            FeeRatePriority.HIGH -> FeePriority.High
+            FeeRatePriority.HIGHEST -> FeePriority.Highest
+        }
+    }
+
     protected fun balanceInBigDecimal(balanceString: String?, decimal: Int): BigDecimal {
         balanceString?.toBigDecimalOrNull()?.let {
             val converted = it.movePointLeft(decimal)
@@ -75,14 +86,14 @@ abstract class EthereumBaseAdapter(override val coin: Coin, protected val ethere
         } ?: return BigDecimal.ZERO
     }
 
-    private fun sendSingle(address: String, amount: BigDecimal): Single<Unit> {
+    private fun sendSingle(address: String, amount: BigDecimal, feePriority: FeeRatePriority): Single<Unit> {
         val poweredDecimal = amount.scaleByPowerOfTen(decimal)
         val noScaleDecimal = poweredDecimal.setScale(0, RoundingMode.HALF_DOWN)
 
-        return sendSingle(address, noScaleDecimal.toPlainString())
+        return sendSingle(address, noScaleDecimal.toPlainString(), feePriority)
     }
 
-    open fun sendSingle(address: String, amount: String): Single<Unit> {
+    open fun sendSingle(address: String, amount: String, feePriority: FeeRatePriority): Single<Unit> {
         return Single.just(Unit)
     }
 
