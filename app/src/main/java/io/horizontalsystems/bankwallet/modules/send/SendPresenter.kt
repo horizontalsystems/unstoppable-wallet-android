@@ -112,6 +112,13 @@ class SendPresenter(
 
     override fun onFeeSliderChange(value: Int) {
         userInput.feePriority = FeeRatePriority.valueOf(value)
+
+        val state = interactor.stateForUserInput(userInput)
+        val viewItem = factory.viewItemForState(state)
+
+        view?.setHintInfo(viewItem.hintInfo)
+        view?.setFeeInfo(viewItem.feeInfo)
+        view?.setSendButtonEnabled(viewItem.sendButtonEnabled)
     }
 
     //

@@ -178,6 +178,10 @@ class SendPresenterTest {
         presenter.onFeeSliderChange(4)
 
         verify(userInput).feePriority = FeeRatePriority.HIGHEST
+
+        verify(view).setHintInfo(viewItem.hintInfo)
+        verify(view).setFeeInfo(viewItem.feeInfo)
+        verify(view).setSendButtonEnabled(viewItem.sendButtonEnabled)
     }
 
     @Test

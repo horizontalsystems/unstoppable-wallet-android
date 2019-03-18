@@ -33,12 +33,12 @@ class Erc20Adapter(coin: Coin, kit: EthereumKit, private val contractAddress: St
         ethereumKit.start()
     }
 
-    override fun sendSingle(address: String, amount: String): Single<Unit> {
-        return ethereumKit.sendERC20(address, contractAddress, amount).map { Unit }
+    override fun sendSingle(address: String, amount: String, feePriority: FeeRatePriority): Single<Unit> {
+        return ethereumKit.sendERC20(address, contractAddress, amount, getKitFeePriority(feePriority)).map { Unit }
     }
 
     override fun fee(value: BigDecimal, address: String?, feePriority: FeeRatePriority): BigDecimal {
-        return ethereumKit.feeERC20()
+        return ethereumKit.feeERC20(getKitFeePriority(feePriority))
     }
 
     override fun availableBalance(address: String?, feePriority: FeeRatePriority): BigDecimal {
