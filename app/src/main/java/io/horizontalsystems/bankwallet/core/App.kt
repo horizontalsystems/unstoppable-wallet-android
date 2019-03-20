@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.core
 import android.app.Application
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import com.facebook.drawee.backends.pipeline.Fresco
 import com.squareup.leakcanary.LeakCanary
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.managers.*
@@ -114,7 +113,6 @@ class App : Application() {
         authManager.adapterManager = adapterManager
         authManager.pinManager = pinManager
 
-        Fresco.initialize(this)
     }
 
 }

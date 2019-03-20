@@ -120,9 +120,6 @@ dependencies {
 
     api 'com.journeyapps:zxing-android-embedded:3.6.0'
 
-    // For images
-    implementation 'com.facebook.fresco:fresco:1.12.0'
-
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.2'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
 
