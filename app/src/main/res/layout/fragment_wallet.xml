@@ -28,14 +28,13 @@
 
         <TextView
             android:id="@+id/ballanceText"
+            style="@style/Title2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="9dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:fontFamily="@font/noto_sans_bold"
             android:textColor="@color/yellow_crypto_40"
-            android:textSize="22sp"
             tools:text="$ 200,234.90"
             />
 

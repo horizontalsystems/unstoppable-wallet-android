@@ -15,7 +15,6 @@ class FullTransactionBitcoinAdapter(val provider: FullTransactionInfoModule.Bitc
         val sections = mutableListOf<FullTransactionSection>()
 
         val blockItems = mutableListOf(
-                FullTransactionItem(R.string.FullInfo_Id, value = data.hash, clickable = true, icon = FullTransactionIcon.HASH),
                 FullTransactionItem(R.string.FullInfo_Time, value = DateHelper.getFullDateWithShortMonth(data.date), icon = FullTransactionIcon.TIME),
                 FullTransactionItem(R.string.FullInfo_Block, value = data.height.toString(), icon = FullTransactionIcon.BLOCK)
         )
@@ -74,7 +73,6 @@ class FullTransactionEthereumAdapter(val provider: FullTransactionInfoModule.Eth
         val sections = mutableListOf<FullTransactionSection>()
 
         mutableListOf<FullTransactionItem>().let { section ->
-            section.add(FullTransactionItem(R.string.FullInfo_Id, value = data.hash, clickable = true, icon = FullTransactionIcon.HASH))
             data.date?.let {
                 section.add(FullTransactionItem(R.string.FullInfo_Time, value = DateHelper.getFullDateWithShortMonth(it), icon = FullTransactionIcon.TIME))
             }

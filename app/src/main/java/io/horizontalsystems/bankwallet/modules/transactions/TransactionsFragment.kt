@@ -166,23 +166,18 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
 
                 val txStatus = txRec.status
 
+                coinIcon.bind(txRec.coin)
+
                 fiatValue.apply {
                     text = txRec.currencyValue?.let { App.numberFormatter.format(it, showNegativeSign = true, realNumber = true, canUseLessSymbol = false) }
                     setTextColor(resources.getColor(if (txRec.incoming) R.color.green_crypto else R.color.yellow_crypto, null))
                 }
 
-                coinValue.apply {
-                    text = App.numberFormatter.format(txRec.coinValue, true, true)
-                }
+                coinValue.text = App.numberFormatter.format(txRec.coinValue, true, true)
 
-                itemTime.apply {
-                    bindTime(title = getString(R.string.TransactionInfo_Time), time = txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) }
-                            ?: "")
-                }
+                itemTime.bindTime(title = getString(R.string.TransactionInfo_Time), time = txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) } ?: "")
 
-                itemStatus.apply {
-                    bindStatus(txStatus)
-                }
+                itemStatus.bindStatus(txStatus)
 
                 transactionIdView.bindTransactionId(txRec.transactionHash)
 
@@ -262,7 +257,9 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
     }
 
     fun bind(transactionRecord: TransactionViewItem) {
-        txValueInFiat.text = transactionRecord.currencyValue?.let { App.numberFormatter.formatForTransactions(it, transactionRecord.incoming) }
+        txValueInFiat.text = transactionRecord.currencyValue?.let {
+            App.numberFormatter.formatForTransactions(it, transactionRecord.incoming)
+        }
         txValueInCoin.text = App.numberFormatter.formatForTransactions(transactionRecord.coinValue)
         txDate.text = transactionRecord.date?.let { DateHelper.getShortDateForTransaction(it) }
         val time = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }

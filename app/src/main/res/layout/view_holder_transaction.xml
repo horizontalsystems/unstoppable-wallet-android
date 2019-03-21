@@ -12,13 +12,13 @@
 
     <TextView
         android:id="@+id/txDate"
-        style="@style/BaseSbThemed"
+        style="@style/BaseSb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="9.5dp"
         android:textAllCaps="true"
-        android:textSize="16sp"
+        android:textColor="?TransactionDateColor"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Jun 3"
@@ -37,12 +37,11 @@
 
     <TextView
         android:id="@+id/txValueInFiat"
+        style="@style/Title2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:fontFamily="@font/noto_sans_semi_bold"
         android:textColor="@color/green_crypto"
-        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/txDate"
         tools:text="$400"
@@ -50,12 +49,11 @@
 
     <TextView
         android:id="@+id/txValueInCoin"
+        style="@style/Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:fontFamily="@font/noto_sans_regular"
         android:textColor="@color/grey"
-        android:textSize="14sp"
         android:includeFontPadding="false"
         app:layout_constraintBottom_toBottomOf="@+id/txStatusWithTimeView"
         app:layout_constraintEnd_toEndOf="parent"
