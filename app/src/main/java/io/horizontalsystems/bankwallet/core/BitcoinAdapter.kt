@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bitcoinkit.BitcoinKit
 import io.horizontalsystems.bitcoinkit.managers.UnspentOutputSelector
 import io.horizontalsystems.bitcoinkit.models.BlockInfo
+import io.horizontalsystems.bitcoinkit.models.FeePriority
 import io.horizontalsystems.bitcoinkit.models.TransactionInfo
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
@@ -79,7 +80,7 @@ class BitcoinAdapter(override val coin: Coin, authData: AuthData, newWallet: Boo
 
     override fun send(address: String, value: BigDecimal, feePriority: FeeRatePriority, completion: ((Throwable?) -> (Unit))?) {
         try {
-            bitcoinKit.send(address, (value * satoshisInBitcoin).toLong())
+            bitcoinKit.send(address, (value * satoshisInBitcoin).toLong(), feePriority = getKitFeePriority(feePriority))
             completion?.invoke(null)
         } catch (ex: Exception) {
             completion?.invoke(ex)
@@ -89,7 +90,7 @@ class BitcoinAdapter(override val coin: Coin, authData: AuthData, newWallet: Boo
     override fun fee(value: BigDecimal, address: String?, feePriority: FeeRatePriority): BigDecimal {
         try {
             val amount = (value * satoshisInBitcoin).toLong()
-            val fee = bitcoinKit.fee(amount, address, true)
+            val fee = bitcoinKit.fee(amount, address, true, feePriority = getKitFeePriority(feePriority))
             return fee.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
         } catch (e: UnspentOutputSelector.Error.InsufficientUnspentOutputs) {
             return e.fee.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
@@ -175,6 +176,16 @@ class BitcoinAdapter(override val coin: Coin, authData: AuthData, newWallet: Boo
 
     override fun onTransactionsDelete(hashes: List<String>) {
         // ignored for now
+    }
+
+    private fun getKitFeePriority(feePriority: FeeRatePriority): FeePriority {
+        return when (feePriority) {
+            FeeRatePriority.LOWEST -> FeePriority.Lowest
+            FeeRatePriority.LOW -> FeePriority.Low
+            FeeRatePriority.MEDIUM -> FeePriority.Medium
+            FeeRatePriority.HIGH -> FeePriority.High
+            FeeRatePriority.HIGHEST -> FeePriority.Highest
+        }
     }
 
     private fun transactionRecord(transaction: TransactionInfo) =
