@@ -24,7 +24,7 @@ class UnlockPinPresenterTest {
     fun setUp() {
         RxBaseTest.setup()
 
-        presenter = UnlockPinPresenter(interactor, router, appStart)
+        presenter = UnlockPinPresenter(interactor, router, appStart, false)
         presenter.view = view
     }
 
@@ -32,6 +32,22 @@ class UnlockPinPresenterTest {
     fun testAddPages() {
         presenter.viewDidLoad()
         verify(view).addPages(any())
+    }
+
+    @Test
+    fun viewDidLoad() {
+        presenter.viewDidLoad()
+        verify(view).hideToolbar()
+        verify(interactor).updateLockoutState()
+    }
+
+    @Test
+    fun viewDidLoad_showCancelButton() {
+        presenter = UnlockPinPresenter(interactor, router, appStart, true)
+        presenter.view = view
+        presenter.viewDidLoad()
+        verify(view).showBackButton()
+        verify(interactor).updateLockoutState()
     }
 
     @Test
@@ -52,12 +68,6 @@ class UnlockPinPresenterTest {
     }
 
     @Test
-    fun onCancel() {
-        presenter.onCancel()
-        verify(router).dismiss(false)
-    }
-
-    @Test
     fun onDelete() {
         val pin ="12345"
         presenter.onEnter(pin, 0)
@@ -70,19 +80,13 @@ class UnlockPinPresenterTest {
     @Test
     fun didBiometricUnlock() {
         presenter.didBiometricUnlock()
-        verify(router).dismiss(true)
+        verify(router).dismiss()
     }
 
     @Test
     fun unlock() {
         presenter.unlock()
-        verify(router).dismiss(true)
-    }
-
-    @Test
-    fun showFingerprintInput() {
-//        presenter.showFingerprintInput(cryptoObject)
-//        verify(view).showFingerprintDialog(cryptoObject)
+        verify(router).dismiss()
     }
 
     @Test
@@ -104,7 +108,7 @@ class UnlockPinPresenterTest {
     @Test
     fun onUnlock_onAppStart() {
         val appStart = true
-        presenter = UnlockPinPresenter(interactor, router, appStart)
+        presenter = UnlockPinPresenter(interactor, router, appStart, false)
         presenter.view = view
 
         presenter.unlock()
@@ -154,6 +158,13 @@ class UnlockPinPresenterTest {
     fun onBackPressed() {
         presenter.onBackPressed()
         verify(router).closeApplication()
+    }
+
+    @Test
+    fun onBackPressed_withShowCancelButton() {
+        presenter = UnlockPinPresenter(interactor, router, appStart, true)
+        presenter.onBackPressed()
+        verify(router).dismiss()
     }
 
 }

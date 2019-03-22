@@ -13,7 +13,7 @@ import io.horizontalsystems.bankwallet.modules.pin.PinViewModel
 
 object UnlockPinModule {
     interface IUnlockPinRouter {
-        fun dismiss(didUnlock: Boolean)
+        fun dismiss()
         fun closeApplication()
         fun navigateToMain()
     }
@@ -34,12 +34,12 @@ object UnlockPinModule {
         fun updateLockoutState(state: LockoutState)
     }
 
-    fun init(view: PinViewModel, router: IUnlockPinRouter, keystoreSafeExecute: IKeyStoreSafeExecute, appStart: Boolean) {
+    fun init(view: PinViewModel, router: IUnlockPinRouter, keystoreSafeExecute: IKeyStoreSafeExecute, appStart: Boolean, showCancelButton: Boolean) {
 
         val lockoutManager = LockoutManager(App.localStorage, UptimeProvider(), LockoutUntilDateFactory(CurrentDateProvider()))
         val timer = OneTimeTimer()
         val interactor = UnlockPinInteractor(keystoreSafeExecute, App.localStorage, App.authManager, App.pinManager, App.lockManager, App.encryptionManager, lockoutManager, timer)
-        val presenter = UnlockPinPresenter(interactor, router, appStart)
+        val presenter = UnlockPinPresenter(interactor, router, appStart, showCancelButton)
 
         view.delegate = presenter
         presenter.view = view

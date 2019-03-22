@@ -37,7 +37,7 @@ class LauncherActivity : AppCompatActivity() {
         } else if(App.secureStorage.pinIsEmpty()) {
             PinModule.startForSetPin(this)
         } else {
-            PinModule.startForUnlock(appStart = true)
+            PinModule.startForUnlockFromAppStart()
         }
         finish()
     }

@@ -5,9 +5,8 @@ import io.horizontalsystems.bankwallet.modules.pin.ManagePinPresenter
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.pin.PinPage
 
-class EditPinPresenter(
-        interactor: PinModule.IPinInteractor,
-        private val router: EditPinModule.IEditPinRouter): ManagePinPresenter(interactor, pages = listOf(Page.UNLOCK, Page.ENTER, Page.CONFIRM)) {
+class EditPinPresenter(interactor: PinModule.IPinInteractor, private val router: EditPinModule.IEditPinRouter)
+    : ManagePinPresenter(interactor, pages = listOf(Page.UNLOCK, Page.ENTER, Page.CONFIRM)) {
 
     override fun viewDidLoad() {
         view?.setTitle(R.string.EditPin_Title)
@@ -21,11 +20,7 @@ class EditPinPresenter(
             }
         }
         view?.addPages(pinPages)
-        view?.showCancel()
-    }
-
-    override fun onCancel() {
-        router.dismiss()
+        view?.showBackButton()
     }
 
     override fun didSavePin() {

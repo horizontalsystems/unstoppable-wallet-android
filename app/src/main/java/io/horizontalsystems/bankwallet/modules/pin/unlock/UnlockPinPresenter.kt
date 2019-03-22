@@ -9,7 +9,8 @@ import io.horizontalsystems.bankwallet.modules.pin.PinPage
 class UnlockPinPresenter(
         private val interactor: UnlockPinModule.IUnlockPinInteractor,
         private val router: UnlockPinModule.IUnlockPinRouter,
-        private val appStart: Boolean) : PinModule.IPinViewDelegate, UnlockPinModule.IUnlockPinInteractorDelegate {
+        private val appStart: Boolean,
+        private val showCancelButton: Boolean) : PinModule.IPinViewDelegate, UnlockPinModule.IUnlockPinInteractorDelegate {
 
     private val unlockPageIndex = 0
     private var enteredPin = ""
@@ -18,8 +19,13 @@ class UnlockPinPresenter(
 
     override fun viewDidLoad() {
         interactor.cacheSecuredData()
-        view?.hideToolbar()
         view?.addPages(listOf(PinPage(R.string.Unlock_Page_EnterYourPin)))
+
+        if (showCancelButton) {
+            view?.showBackButton()
+        } else {
+            view?.hideToolbar()
+        }
 
         interactor.updateLockoutState()
     }
@@ -38,10 +44,6 @@ class UnlockPinPresenter(
                 enteredPin = ""
             }
         }
-    }
-
-    override fun onCancel() {
-        router.dismiss(false)
     }
 
     override fun resetPin() {
@@ -67,7 +69,7 @@ class UnlockPinPresenter(
         if (appStart) {
             router.navigateToMain()
         } else {
-            router.dismiss(true)
+            router.dismiss()
         }
     }
 
@@ -98,6 +100,10 @@ class UnlockPinPresenter(
     }
 
     override fun onBackPressed() {
-        router.closeApplication()
+        if(showCancelButton) {
+            router.dismiss()
+        } else {
+            router.closeApplication()
+        }
     }
 }

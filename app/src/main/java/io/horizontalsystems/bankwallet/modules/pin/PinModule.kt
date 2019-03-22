@@ -15,7 +15,7 @@ object PinModule {
         fun showErrorForPage(error: Int, pageIndex: Int)
         fun showError(error: Int)
         fun showPinWrong(pageIndex: Int)
-        fun showCancel()
+        fun showBackButton()
         fun fillCircles(length: Int, pageIndex: Int)
         fun hideToolbar()
         fun showFingerprintDialog(cryptoObject: FingerprintManagerCompat.CryptoObject)
@@ -26,7 +26,6 @@ object PinModule {
     interface IPinViewDelegate {
         fun viewDidLoad()
         fun onEnter(pin: String, pageIndex: Int)
-        fun onCancel()
         fun onDelete(pageIndex: Int)
         fun onBackPressed()
         fun onBiometricUnlock() {}
@@ -56,8 +55,12 @@ object PinModule {
         PinActivity.start(context, PinInteractionType.EDIT_PIN)
     }
 
-    fun startForUnlock(appStart: Boolean = false) {
-        PinActivity.startForUnlock(appStart)
+    fun startForUnlock(showCancel: Boolean = false) {
+        PinActivity.startForUnlock(showCancel)
+    }
+
+    fun startForUnlockFromAppStart() {
+        PinActivity.startForUnlockFromAppStart()
     }
 }
 
