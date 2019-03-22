@@ -19,7 +19,8 @@
     <string name="Guest_CreateWallet">Wallet Erstellen</string>
     <string name="Guest_RestoreWallet">Wallet Wiederherstellen</string>
     <!--Restore-->
-    <string name="Restore_Title">Offlineschlüssel eingeben</string>
+    <string name="Restore_Title">Restore</string>
+    <string name="Restore_Subtitle">Enter Secret Key</string>
     <string name="Restore_ValidationFailed">Falscher Offlineschlüssel</string>
     <string name="Restore_RestoreFailed">Fehler beim Wiederherstellen des Wallet</string>
     <!--Backup-->
@@ -28,12 +29,14 @@
     <string name="Backup_Intro_Later">Später</string>
     <string name="Backup_Intro_BackupNow">Backup</string>
     <string name="Backup_Words_Title">Offlineschlüssel</string>
-    <string name="Backup_Confirmation_Understand">Ich stimme zu, dass mein Wallet und meinen Token nur auf diesem Gerät verfügbar sind.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">Ich stimme zu, dass bei einer Verschiebung oder Entfernung dieser App, der Zugang zu meinem Walletkonto nur bei Verwendung den Offlineschlüsseln erfolgt werden muss.</string>
-    <string name="Backup_Confirmation_LockAppWarn">PIN zum Entsperren des Telefons ändern in Ihrem Android OS würde Einstellungen des Wallet. Sie benötigen Ihr backup Satz Ihrer Wallet danach wiederherstellen.</string>
+    <string name="Backup_Confirmation_SecretKey">I understand that I am a sole owner of a private 12-word Secret Key which is securely stored on my phone and enables me to control funds on my wallet.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is ever moved, deleted or malfunctions, the access to my wallet can be only recovered with that Secret Key.</string>
+    <string name="Backup_Confirmation_LockAppWarn">I understand that changing the phone\s unlock PIN or deleting app data in Android settings deletes the Secret Key from device. I would need to re-enter my Secret Key to regain access to my wallet.</string>
+    <string name="Backup_Confirmation_Disclaimer">I understand that developers of this app can not be held responsible for any unintended bugs or issues that may arise while using this app.</string>
     <string name="Backup_Confirmation_Title">Gib bitte die folgenden Wörter deines Offlineschlüssels ein</string>
     <string name="Backup_Confirmation_Description">Gib die folgenden Wörter deines Offlineschlüssels ein.</string>
     <string name="Backup_Confirmation_FailureAlertText">Die Wörter stimmen nicht überein</string>
+    <string name="Backup_Confirmation_CheckTitle">Check…</string>
     <string name="Backup_Button_Confirm">Bestätigen</string>
     <string name="Backup_Button_Next">Weiter</string>
     <string name="Backup_Button_Submit">Abschicken</string>

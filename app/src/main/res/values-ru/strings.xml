@@ -19,7 +19,8 @@
     <string name="Guest_CreateWallet">Создать Кошелек</string>
     <string name="Guest_RestoreWallet">Восстановить Кошелек</string>
     <!--Restore-->
-    <string name="Restore_Title">Введите Секретный Ключ</string>
+    <string name="Restore_Title">Restore</string>
+    <string name="Restore_Subtitle">Enter Secret Key</string>
     <string name="Restore_ValidationFailed">Неверный Секретный Ключ</string>
     <string name="Restore_RestoreFailed">Не удалось восстановить кошелек</string>
     <!--Backup-->
@@ -28,12 +29,14 @@
     <string name="Backup_Intro_Later">Позже</string>
     <string name="Backup_Intro_BackupNow">Резервная копия</string>
     <string name="Backup_Words_Title">Секретный Ключ</string>
-    <string name="Backup_Confirmation_Understand">Я понимаю, что мой кошелек и токены хранятся только на этом устройстве.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">Я понимаю, что если это приложение удаляется или устанавливается на другое устройство, мой кошелек можно восстановить только с помощью Секретного Ключа.</string>
-    <string name="Backup_Confirmation_LockAppWarn">Изменение PIN-кода телефона на вашем Android OS, сбросит кошелек . Вам понадобится ваш Секретный Ключ для восстановления кошелька.</string>
+    <string name="Backup_Confirmation_SecretKey">I understand that I am a sole owner of a private 12-word Secret Key which is securely stored on my phone and enables me to control funds on my wallet.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is ever moved, deleted or malfunctions, the access to my wallet can be only recovered with that Secret Key.</string>
+    <string name="Backup_Confirmation_LockAppWarn">I understand that changing the phone\s unlock PIN or deleting app data in Android settings deletes the Secret Key from device. I would need to re-enter my Secret Key to regain access to my wallet.</string>
+    <string name="Backup_Confirmation_Disclaimer">I understand that developers of this app can not be held responsible for any unintended bugs or issues that may arise while using this app.</string>
     <string name="Backup_Confirmation_Title">Введите слова из вашего Cекретного Ключа</string>
     <string name="Backup_Confirmation_Description">Введите слова из вашего секретного ключа.</string>
     <string name="Backup_Confirmation_FailureAlertText">Слова не совпадают</string>
+    <string name="Backup_Confirmation_CheckTitle">Check…</string>
     <string name="Backup_Button_Confirm">Подтвердить</string>
     <string name="Backup_Button_Next">Далее</string>
     <string name="Backup_Button_Submit">Отправить</string>

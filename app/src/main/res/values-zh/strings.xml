@@ -19,7 +19,8 @@
     <string name="Guest_CreateWallet">新的钱包</string>
     <string name="Guest_RestoreWallet">恢复钱包</string>
     <!--Restore-->
-    <string name="Restore_Title">输入密钥</string>
+    <string name="Restore_Title">Restore</string>
+    <string name="Restore_Subtitle">Enter Secret Key</string>
     <string name="Restore_ValidationFailed">密钥不正确</string>
     <string name="Restore_RestoreFailed">无法创建钱包</string>
     <!--Backup-->
@@ -28,12 +29,14 @@
     <string name="Backup_Intro_Later">稍后</string>
     <string name="Backup_Intro_BackupNow">备份</string>
     <string name="Backup_Words_Title">密钥</string>
-    <string name="Backup_Confirmation_Understand">我的钱包和代币仅在这个设备上，而不是在任何服务器上安全地保存着。这个重点我都理解。</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">我理解, 如果此app被移动到另一个设备、删除或故障，密钥是恢复我钱包的唯一方法。</string>
-    <string name="Backup_Confirmation_LockAppWarn">更改 PIN 码或删除 Android 操作系统设置中的应用数据会导致钱包重置。在这种情况下, 你需要你的密钥来恢复你的钱包。</string>
+    <string name="Backup_Confirmation_SecretKey">I understand that I am a sole owner of a private 12-word Secret Key which is securely stored on my phone and enables me to control funds on my wallet.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is ever moved, deleted or malfunctions, the access to my wallet can be only recovered with that Secret Key.</string>
+    <string name="Backup_Confirmation_LockAppWarn">I understand that changing the phone\s unlock PIN or deleting app data in Android settings deletes the Secret Key from device. I would need to re-enter my Secret Key to regain access to my wallet.</string>
+    <string name="Backup_Confirmation_Disclaimer">I understand that developers of this app can not be held responsible for any unintended bugs or issues that may arise while using this app.</string>
     <string name="Backup_Confirmation_Title">请输入你密钥中的词</string>
     <string name="Backup_Confirmation_Description">请输入你密钥中的词.</string>
     <string name="Backup_Confirmation_FailureAlertText"> 单词不匹配</string>
+    <string name="Backup_Confirmation_CheckTitle">Check…</string>
     <string name="Backup_Button_Confirm">确认</string>
     <string name="Backup_Button_Next">继续</string>
     <string name="Backup_Button_Submit">提交</string>

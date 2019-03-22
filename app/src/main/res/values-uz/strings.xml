@@ -19,7 +19,8 @@
     <string name="Guest_CreateWallet">New Wallet</string>
     <string name="Guest_RestoreWallet">Restore Wallet</string>
     <!--Restore-->
-    <string name="Restore_Title">Enter Secret Key</string>
+    <string name="Restore_Title">Restore</string>
+    <string name="Restore_Subtitle">Enter Secret Key</string>
     <string name="Restore_ValidationFailed">Incorrect Secret Key</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>
     <!--Backup-->
@@ -28,12 +29,14 @@
     <string name="Backup_Intro_Later">Later</string>
     <string name="Backup_Intro_BackupNow">Backup</string>
     <string name="Backup_Words_Title">Secret Key</string>
-    <string name="Backup_Confirmation_Understand">I understand that my wallet and tokens are held securely on this device only and not any servers.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key.</string>
-    <string name="Backup_Confirmation_LockAppWarn">Changing the unlock PIN or deleting app data in your Android OS settings would reset the wallet. You will need your Secret Key to restore your wallet after that.</string>
+    <string name="Backup_Confirmation_SecretKey">I understand that I am a sole owner of a private 12-word Secret Key which is securely stored on my phone and enables me to control funds on my wallet.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is ever moved, deleted or malfunctions, the access to my wallet can be only recovered with that Secret Key.</string>
+    <string name="Backup_Confirmation_LockAppWarn">I understand that changing the phone\s unlock PIN or deleting app data in Android settings deletes the Secret Key from device. I would need to re-enter my Secret Key to regain access to my wallet.</string>
+    <string name="Backup_Confirmation_Disclaimer">I understand that developers of this app can not be held responsible for any unintended bugs or issues that may arise while using this app.</string>
     <string name="Backup_Confirmation_Title">Enter following words from your Secret Key</string>
     <string name="Backup_Confirmation_Description">Enter words from your secret key.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Words do not match</string>
+    <string name="Backup_Confirmation_CheckTitle">Check…</string>
     <string name="Backup_Button_Confirm">Confirm</string>
     <string name="Backup_Button_Next">Next</string>
     <string name="Backup_Button_Submit">Submit</string>

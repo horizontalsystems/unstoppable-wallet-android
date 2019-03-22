@@ -19,7 +19,8 @@
     <string name="Guest_CreateWallet">Nueva cartera</string>
     <string name="Guest_RestoreWallet">Restaurar cartera</string>
     <!--Restore-->
-    <string name="Restore_Title">Ingresar clave secreta</string>
+    <string name="Restore_Title">Restore</string>
+    <string name="Restore_Subtitle">Enter Secret Key</string>
     <string name="Restore_ValidationFailed">Clave secreta incorrecta</string>
     <string name="Restore_RestoreFailed">Error al restaurar la cartera</string>
     <!--Backup-->
@@ -28,12 +29,14 @@
     <string name="Backup_Intro_Later">Posterior</string>
     <string name="Backup_Intro_BackupNow">Copia de seguridad</string>
     <string name="Backup_Words_Title">Clave secreta</string>
-    <string name="Backup_Confirmation_Understand">Entiendo que mis datos y mi monedero se guardan de manera segura en este dispositivo y no en ningún otro servidor</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">Entiendo que si esta aplicación se elimina o deja de funcionar por alguna razón, mi monedero sólo puede ser recuperado utilizando mi clave secreta.</string>
-    <string name="Backup_Confirmation_LockAppWarn">Cambiar el PIN de desbloqueo de su teléfono en el sistema operativo Android reiniciará la cartera. Usted necesitará su frase de seguridad para restaurar su cartera después de eso.</string>
+    <string name="Backup_Confirmation_SecretKey">I understand that I am a sole owner of a private 12-word Secret Key which is securely stored on my phone and enables me to control funds on my wallet.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is ever moved, deleted or malfunctions, the access to my wallet can be only recovered with that Secret Key.</string>
+    <string name="Backup_Confirmation_LockAppWarn">I understand that changing the phone\s unlock PIN or deleting app data in Android settings deletes the Secret Key from device. I would need to re-enter my Secret Key to regain access to my wallet.</string>
+    <string name="Backup_Confirmation_Disclaimer">I understand that developers of this app can not be held responsible for any unintended bugs or issues that may arise while using this app.</string>
     <string name="Backup_Confirmation_Title">Insertar palabras de su clave secreta</string>
     <string name="Backup_Confirmation_Description">Insertar palabras de su clave secreta.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Las contraseñas no coinciden</string>
+    <string name="Backup_Confirmation_CheckTitle">Check…</string>
     <string name="Backup_Button_Confirm">Confirmar</string>
     <string name="Backup_Button_Next">Siguiente</string>
     <string name="Backup_Button_Submit">Enviar</string>

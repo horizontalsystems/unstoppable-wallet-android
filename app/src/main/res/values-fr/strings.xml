@@ -19,7 +19,8 @@
     <string name="Guest_CreateWallet">Nouveau porte-monnaie</string>
     <string name="Guest_RestoreWallet">Restaurer le porte-monnaie</string>
     <!--Restore-->
-    <string name="Restore_Title">Entrez la clé secrete</string>
+    <string name="Restore_Title">Restore</string>
+    <string name="Restore_Subtitle">Enter Secret Key</string>
     <string name="Restore_ValidationFailed">Clé secrète incorrecte</string>
     <string name="Restore_RestoreFailed">Échec de la restauration du porte-monnaie</string>
     <!--Backup-->
@@ -28,12 +29,14 @@
     <string name="Backup_Intro_Later">Plus tard</string>
     <string name="Backup_Intro_BackupNow">Sauvegarde</string>
     <string name="Backup_Words_Title">Le mot secret</string>
-    <string name="Backup_Confirmation_Understand">Je comprends que mon porte-monnaie et mes tokens sont en toute sécurité sur cet appareil uniquement et pas sur les autres appareils.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">Je comprends que si cette appli est déplacée vers un autre appareil ou supprimée, mon porte-monnaie ne peut être récupéré qu\'avec la clé secrète.</string>
-    <string name="Backup_Confirmation_LockAppWarn">Changer le code ou de suppression de données d’application dans les paramètres de votre système d’exploitation Android remettrait à zéro le porte-monnaie. Vous aurez besoin de votre clé secrète pour restaurer votre porte-monnaie après cela.</string>
+    <string name="Backup_Confirmation_SecretKey">I understand that I am a sole owner of a private 12-word Secret Key which is securely stored on my phone and enables me to control funds on my wallet.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is ever moved, deleted or malfunctions, the access to my wallet can be only recovered with that Secret Key.</string>
+    <string name="Backup_Confirmation_LockAppWarn">I understand that changing the phone\s unlock PIN or deleting app data in Android settings deletes the Secret Key from device. I would need to re-enter my Secret Key to regain access to my wallet.</string>
+    <string name="Backup_Confirmation_Disclaimer">I understand that developers of this app can not be held responsible for any unintended bugs or issues that may arise while using this app.</string>
     <string name="Backup_Confirmation_Title">Entrez les mots de votre clé secrète</string>
     <string name="Backup_Confirmation_Description">Entrez les mots de votre clé secrète.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Les mots ne correspondent pas</string>
+    <string name="Backup_Confirmation_CheckTitle">Check…</string>
     <string name="Backup_Button_Confirm">Confirmer</string>
     <string name="Backup_Button_Next">Suivant</string>
     <string name="Backup_Button_Submit">Soumettre</string>
