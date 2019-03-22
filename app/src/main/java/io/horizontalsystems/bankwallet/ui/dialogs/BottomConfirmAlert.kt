@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentActivity
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -50,6 +51,7 @@ class BottomConfirmAlert : DialogFragment(), ConfirmationsAdapter.Listener {
         }
 
         btnConfirm.setBackgroundResource(getBackgroundResId(color))
+        context?.let { btnConfirm.setTextColor(ContextCompat.getColor(it, getTextColorResId(color))) }
 
         return mDialog as Dialog
     }
@@ -71,6 +73,11 @@ class BottomConfirmAlert : DialogFragment(), ConfirmationsAdapter.Listener {
     private fun getBackgroundResId(color: BottomButtonColor): Int = when (color) {
         BottomButtonColor.RED -> R.drawable.button_red_background_12
         BottomButtonColor.YELLOW -> R.drawable.button_yellow_background_12
+    }
+
+    private fun getTextColorResId(color: BottomButtonColor): Int = when (color) {
+        BottomButtonColor.RED -> R.color.button_red_text_color_selector
+        BottomButtonColor.YELLOW -> R.color.button_yellow_text_color_selector
     }
 
     private fun checkConfirmations() {

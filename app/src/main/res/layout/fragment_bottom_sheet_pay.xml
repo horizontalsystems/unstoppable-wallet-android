@@ -165,7 +165,7 @@
             style="@style/ButtonYellow"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="12dp"
             android:layout_marginTop="16dp"
             android:text="@string/Balance_Send"
             app:layout_constraintBottom_toBottomOf="parent"

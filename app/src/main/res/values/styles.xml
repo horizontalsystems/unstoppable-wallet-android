@@ -17,7 +17,7 @@
     <attr name="SettingItemBackgroundColor" format="reference|color" />
     <attr name="DraggableCoinBackgroundColor" format="reference|color" />
     <attr name="AddWalletIcon" format="reference" />
-    <attr name="CoinItemBackgroundColor" format="reference|color" />
+    <attr name="CoinItemBackground" format="reference" />
     <attr name="FilterButtonBackgroundColor" format="reference|color" />
     <attr name="BottomNavigationBackgroundColor" format="reference|color" />
     <attr name="StatusBarColor" format="reference|color" />
@@ -75,7 +75,7 @@
 
         <item name="NumpadNumberBackground">@color/steel_20</item>
         <item name="NumpadNumberBackgroundHighlight">@color/steel_40</item>
-        <item name="NumpadNumberColor">@color/white</item>
+        <item name="NumpadNumberColor">@color/grey_light</item>
         <item name="NumpadBorderColor">@color/transparent</item>
         <item name="BallanceCoinNameColor">@color/white</item>
         <item name="BallanceCoinAmountColor">@color/white</item>
@@ -86,7 +86,7 @@
         <item name="TransactionsBackgroundColor">@color/dark</item>
         <item name="AboutBackgroundColor">@color/transparent</item>
         <item name="TransactionItemBackgroundColor">@color/transaction_item_background_dark</item>
-        <item name="CoinItemBackgroundColor">@color/coin_item_background_dark</item>
+        <item name="CoinItemBackground">@drawable/coinholder_bg</item>
         <item name="FilterButtonBackgroundColor">@color/steel_20</item>
         <item name="SettingItemBackgroundColor">@color/setting_item_background_dark</item>
         <item name="DraggableCoinBackgroundColor">@color/manage_coin_background_dark</item>
@@ -158,7 +158,7 @@
         <item name="TransactionsBackgroundColor">@color/white</item>
         <item name="AboutBackgroundColor">@color/white</item>
         <item name="TransactionItemBackgroundColor">@color/transaction_item_background_light</item>
-        <item name="CoinItemBackgroundColor">@color/coin_item_background_light</item>
+        <item name="CoinItemBackground">@drawable/coinholder_bg_light</item>
         <item name="FilterButtonBackgroundColor">#efeff4</item>
         <item name="SettingItemBackgroundColor">@color/setting_item_background_light</item>
         <item name="DraggableCoinBackgroundColor">@color/setting_item_background_light</item>
