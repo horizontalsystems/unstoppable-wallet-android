@@ -15,7 +15,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
@@ -40,8 +39,6 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
         super.onCreate(savedInstanceState)
 
         setTransparentStatusBar()
-
-        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
 
         setContentView(R.layout.activity_pin)
 
@@ -289,7 +286,7 @@ class PinPageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private fun updatePinCircles(length: Int) {
         val filledCircle = R.drawable.pin_circle_filled
-        val emptyCircle = R.drawable.pin_circle_empty
+        val emptyCircle = R.drawable.ic_circle_steel_20_with_border
 
         imgPinMask1.setImageResource(if (length > 0) filledCircle else emptyCircle)
         imgPinMask2.setImageResource(if (length > 1) filledCircle else emptyCircle)

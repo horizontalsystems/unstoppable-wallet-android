@@ -46,7 +46,7 @@
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/pin_circle_empty"
+            app:srcCompat="@drawable/ic_circle_steel_20_with_border"
             />
 
         <ImageView
@@ -58,7 +58,7 @@
             app:layout_constraintEnd_toStartOf="@+id/imgPinMaskThree"
             app:layout_constraintStart_toEndOf="@+id/imgPinMaskOne"
             app:layout_constraintTop_toTopOf="@+id/imgPinMaskOne"
-            app:srcCompat="@drawable/pin_circle_empty"
+            app:srcCompat="@drawable/ic_circle_steel_20_with_border"
             />
 
         <ImageView
@@ -70,7 +70,7 @@
             app:layout_constraintEnd_toStartOf="@+id/imgPinMaskFour"
             app:layout_constraintStart_toEndOf="@+id/imgPinMaskTwo"
             app:layout_constraintTop_toTopOf="@+id/imgPinMaskTwo"
-            app:srcCompat="@drawable/pin_circle_empty"
+            app:srcCompat="@drawable/ic_circle_steel_20_with_border"
             />
 
         <ImageView
@@ -82,7 +82,7 @@
             app:layout_constraintEnd_toStartOf="@+id/imgPinMaskFive"
             app:layout_constraintStart_toEndOf="@+id/imgPinMaskThree"
             app:layout_constraintTop_toTopOf="@+id/imgPinMaskThree"
-            app:srcCompat="@drawable/pin_circle_empty"
+            app:srcCompat="@drawable/ic_circle_steel_20_with_border"
             />
 
         <ImageView
@@ -94,7 +94,7 @@
             app:layout_constraintEnd_toStartOf="@+id/imgPinMaskSix"
             app:layout_constraintStart_toEndOf="@+id/imgPinMaskFour"
             app:layout_constraintTop_toTopOf="@+id/imgPinMaskFour"
-            app:srcCompat="@drawable/pin_circle_empty"
+            app:srcCompat="@drawable/ic_circle_steel_20_with_border"
             />
 
         <ImageView
@@ -106,7 +106,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imgPinMaskFive"
             app:layout_constraintTop_toTopOf="@+id/imgPinMaskFive"
-            app:srcCompat="@drawable/pin_circle_empty"
+            app:srcCompat="@drawable/ic_circle_steel_20_with_border"
             />
     </android.support.constraint.ConstraintLayout>
 
