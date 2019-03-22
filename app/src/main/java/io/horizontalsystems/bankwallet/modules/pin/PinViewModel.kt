@@ -31,10 +31,10 @@ class PinViewModel: ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter,
     val closeApplicationLiveEvent = SingleLiveEvent<Unit>()
 
 
-    fun init(interactionType: PinInteractionType, appStart: Boolean = false) {
+    fun init(interactionType: PinInteractionType, appStart: Boolean, showCancelButton: Boolean) {
         when(interactionType) {
             PinInteractionType.SET_PIN -> SetPinModule.init(this, this, this)
-            PinInteractionType.UNLOCK -> UnlockPinModule.init(this, this, this, appStart)
+            PinInteractionType.UNLOCK -> UnlockPinModule.init(this, this, this, appStart, showCancelButton)
             PinInteractionType.EDIT_PIN -> EditPinModule.init(this, this, this)
         }
         delegate.viewDidLoad()
@@ -72,7 +72,7 @@ class PinViewModel: ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter,
         showFingerprintInputLiveEvent.value = cryptoObject
     }
 
-    override fun showCancel() {
+    override fun showBackButton() {
         showBackButton.call()
     }
 
@@ -86,12 +86,6 @@ class PinViewModel: ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter,
 
     override fun safeExecute(action: Runnable, onSuccess: Runnable?, onFailure: Runnable?) {
         keyStoreSafeExecute.value = Triple(action, onSuccess, onFailure)
-    }
-
-    override fun dismiss(didUnlock: Boolean) {
-        if (didUnlock) {
-            dismissLiveEvent.call()
-        }
     }
 
     override fun closeApplication() {

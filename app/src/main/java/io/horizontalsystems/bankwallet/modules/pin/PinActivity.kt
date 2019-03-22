@@ -47,6 +47,7 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
 
         val interactionType = intent.getSerializableExtra(keyInteractionType) as PinInteractionType
         val appStart = intent.getBooleanExtra(keyIsAppStart, false)
+        val showCancelButton = intent.getBooleanExtra(keyShowCancel, false)
 
         pinPagesAdapter = PinPagesAdapter()
         layoutManager = SmoothLinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -62,7 +63,7 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
 
 
         viewModel = ViewModelProviders.of(this).get(PinViewModel::class.java)
-        viewModel.init(interactionType, appStart)
+        viewModel.init(interactionType, appStart, showCancelButton)
 
         val numpadAdapter = NumPadItemsAdapter(this, NumPadItemType.FINGER)
 
@@ -206,6 +207,7 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
 
         private const val keyInteractionType = "interaction_type"
         private const val keyIsAppStart = "is_app_start"
+        private const val keyShowCancel = "show_cancel"
 
         fun start(context: Context, interactionType: PinInteractionType) {
             val intent = Intent(context, PinActivity::class.java)
@@ -213,9 +215,17 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
             context.startActivity(intent)
         }
 
-        fun startForUnlock(appStart: Boolean) {
+        fun startForUnlock(showCancel: Boolean) {
             val intent = Intent(App.instance, PinActivity::class.java)
-            intent.putExtra(keyIsAppStart, appStart)
+            intent.putExtra(keyShowCancel, showCancel)
+            intent.putExtra(keyInteractionType, PinInteractionType.UNLOCK)
+            intent.flags = Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            App.instance.startActivity(intent)
+        }
+
+        fun startForUnlockFromAppStart() {
+            val intent = Intent(App.instance, PinActivity::class.java)
+            intent.putExtra(keyIsAppStart, true)
             intent.putExtra(keyInteractionType, PinInteractionType.UNLOCK)
             intent.flags = Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             App.instance.startActivity(intent)
