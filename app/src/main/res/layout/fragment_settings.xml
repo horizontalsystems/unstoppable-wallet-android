@@ -40,7 +40,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:setting_icon="@drawable/security"
+                app:setting_icon="@drawable/ic_security"
                 app:setting_title="@string/Settings_SecurityCenter"
                 />
 
@@ -51,7 +51,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/securityCenter"
-                app:setting_icon="@drawable/currency"
+                app:setting_icon="@drawable/ic_currency"
                 app:setting_title="@string/Settings_BaseCurrency"
                 />
 
@@ -73,7 +73,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/baseCurrency"
-                app:setting_icon="@drawable/language"
+                app:setting_icon="@drawable/ic_language"
                 app:setting_title="@string/Settings_Language"
                 />
 
@@ -84,7 +84,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/language"
-                app:setting_icon="@drawable/light_mode"
+                app:setting_icon="@drawable/ic_light_mode"
                 app:setting_title="@string/Settings_LightMode"
                 />
 
@@ -106,7 +106,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lightMode"
-                app:setting_icon="@drawable/info"
+                app:setting_icon="@drawable/ic_info"
                 app:setting_title="@string/Settings_About"
                 />
 

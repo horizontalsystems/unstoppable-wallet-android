@@ -54,7 +54,6 @@
     <attr name="SwipeRefreshSpinnerColor" format="reference|color" />
     <attr name="SwipeRefreshBackgroundColor" format="reference|color" />
     <attr name="InputBackground" format="reference|color" />
-    <attr name="BarsOrDarkTextColor" format="reference|color" />
     <attr name="SeekbarNonActiveColor" format="reference|color" />
     <attr name="ConfirmationTextColor" format="reference|color" />
     <attr name="SettingsSectionBottomShadeColor" format="reference|color" />
@@ -127,7 +126,6 @@
         <item name="SwipeRefreshSpinnerColor">@color/bars_color</item>
         <item name="SwipeRefreshBackgroundColor">@color/dark</item>
         <item name="InputBackground">@color/steel_dark</item>
-        <item name="BarsOrDarkTextColor">@color/bars_color</item>
         <item name="SeekbarNonActiveColor">@color/steel_dark</item>
         <item name="ConfirmationTextColor">@color/lightBackground</item>
         <item name="SettingsSectionBottomShadeColor">@color/black_20</item>
@@ -192,7 +190,7 @@
         <item name="BottomDialogTextColor">@color/black</item>
         <item name="ConfirmationDialogBackground">@color/bars_color</item>
         <item name="AddressBackground">@color/address_background_light</item>
-        <item name="ConfirmationMiddlePartBackground">@color/transparent</item>
+        <item name="ConfirmationMiddlePartBackground">@color/white</item>
         <item name="CurrencySwitcherTitleColor">@color/dark</item>
         <item name="PendingTransactionShadeColor">@color/white_50</item>
         <item name="TransactionTagColor">@color/dark</item>
@@ -200,7 +198,6 @@
         <item name="SwipeRefreshSpinnerColor">@color/dark</item>
         <item name="SwipeRefreshBackgroundColor">@color/bars_color</item>
         <item name="InputBackground">@color/white</item>
-        <item name="BarsOrDarkTextColor">@color/dark</item>
         <item name="SeekbarNonActiveColor">@color/grey_light</item>
         <item name="ConfirmationTextColor">@color/dark</item>
         <item name="SettingsSectionBottomShadeColor">@color/steel_20</item>
@@ -225,7 +222,7 @@
     <style name="SendButtonSmallGrey" parent="Button">
         <item name="android:background">@drawable/button_grey_background_4_themed</item>
         <item name="android:textColor">@color/stateful_button_text_color</item>
-        <item name="android:fontFamily">@font/noto_sans</item>
+        <item name="android:fontFamily">@font/noto_sans_regular</item>
         <item name="android:letterSpacing">0</item>
         <item name="android:minHeight">0dp</item>
         <item name="android:minWidth">0dp</item>
@@ -271,11 +268,6 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="Error">
-        <item name="android:textColor">@color/red_error</item>
-        <item name="android:textSize">20sp</item>
-    </style>
-
     <style name="TabTitle">
         <item name="android:fontFamily">@font/noto_sans_bold</item>
         <item name="android:textColor">?TitleColor</item>
@@ -315,30 +307,11 @@
         <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
     </style>
 
-    <style name="BottomDialogText" parent="Base">
-        <item name="android:textColorHint">@color/grey_50</item>
-        <item name="android:textColor">?BottomDialogTextColor</item>
-    </style>
-
     <style name="SwitchTheme" parent="ThemeOverlay.AppCompat.Dark">
         <item name="colorControlActivated">@color/green_crypto</item>
         <item name="colorControlNormal">@color/grey</item>
         <item name="colorSwitchThumbNormal">@color/grey</item>
         <item name="android:colorForeground">@color/grey</item>
-    </style>
-
-    <style name="TransactionInfoFieldName">
-        <item name="android:textColor">@color/grey</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:fontFamily">@font/noto_sans</item>
-        <item name="android:includeFontPadding">false</item>
-    </style>
-
-    <style name="TransactionInfoFieldValue">
-        <item name="android:textColor">?TransactionDetailValueTextColor</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:fontFamily">@font/noto_sans</item>
-        <item name="android:includeFontPadding">false</item>
     </style>
 
     <style name="TransactionInfoStatusProgressBarBig">
@@ -353,11 +326,6 @@
         <item name="android:layout_height">10dp</item>
         <item name="android:layout_marginStart">2dp</item>
         <item name="android:src">@drawable/status_progress_bar_grey_20_small</item>
-    </style>
-
-    <style name="BaseSbThemed">
-        <item name="android:fontFamily">@font/noto_sans_medium</item>
-        <item name="android:textColor">?TransactionDateColor</item>
     </style>
 
     <!--Text Styles-->
@@ -396,6 +364,10 @@
         <item name="android:fontFamily">@font/noto_sans_medium</item>
     </style>
 
+    <style name="BaseSb" parent="Base">
+        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
+    </style>
+
     <style name="Body1">
         <item name="android:fontFamily">@font/noto_sans_regular</item>
         <item name="android:textColor">@color/bars_color</item>
@@ -404,7 +376,7 @@
 
     <style name="FormInputTextThemed" parent="Base">
         <item name="android:textColorHint">@color/grey_50</item>
-        <item name="android:textColor">?attr/BarsOrDarkTextColor</item>
+        <item name="android:textColor">?attr/TextColorBarsToDark</item>
     </style>
 
     <style name="CaptionRegular">
