@@ -69,7 +69,7 @@
     <string name="Send_Sending">Отправка</string>
     <string name="Send_ERC_Alert">Комиссия за отправку %s (ERC20) взимается в ETH. Необходимо %s ETH.</string>
     <!--Deposit-->
-    <string name="Deposit_Title">Получено %s</string>
+    <string name="Deposit_Title">Получить %s</string>
     <string name="Deposit_Share">Переслать</string>
     <string name="Deposit_Your_Address">Ваш Адрес</string>
     <!--Timestamp-->
