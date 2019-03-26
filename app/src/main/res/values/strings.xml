@@ -115,12 +115,14 @@
 
     <string name="TransactionInfo_Title">Transaction</string>
     <string name="TransactionInfo_Status">Status</string>
+    <string name="TransactionInfo_Status_Confirmed">CONFIRMED</string>
     <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_To">To</string>
     <string name="TransactionInfo_From">From</string>
     <string name="TransactionInfo_Time">Time</string>
-    <string name="TransactionInfo_ButtonMore">More</string>
+    <string name="TransactionInfo_ButtonVerify">Verify</string>
     <string name="TransactionInfo_Status_Pending">Pending</string>
+    <string name="TransactionInfo_HistoricalRate">Historical Rat</string>
 
     <!--Full Info-->
 
