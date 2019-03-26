@@ -48,7 +48,7 @@ class AppConfigProvider : IAppConfigProvider {
 
     override val erc20tokens: List<Coin> = listOf(
             Coin("0x", "ZRX", CoinType.Erc20("0xE41d2489571d322189246DaFA5ebDe1F4699F498", 18)),
-            Coin("Aurora DAO", "AURA", CoinType.Erc20("0xcdcfc0f66c522fd086a1b725ea3c0eeb9f9e8814", 18)),
+            Coin("Aurora DAO", "AURA", CoinType.Erc20("0xCdCFc0f66c522Fd086A1b725ea3c0Eeb9F9e8814", 18)),
             Coin("Bancor", "BNT", CoinType.Erc20("0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C", 18)),
             Coin("Basic Attention Token", "BAT", CoinType.Erc20("0x0D8775F648430679A709E98d2b0Cb6250d2887EF", 18)),
             Coin("Binance Coin", "BNB", CoinType.Erc20("0xB8c77482e45F1F44dE1745F52C74426C631bDD52", 18)),
@@ -58,11 +58,11 @@ class AppConfigProvider : IAppConfigProvider {
             Coin("Decentraland", "MANA", CoinType.Erc20("0x0F5D2fB29fb7d3CFeE444a200298f468908cC942", 18)),
             Coin("Digix DAO", "DGD", CoinType.Erc20("0xE0B7927c4aF23765Cb51314A0E0521A9645F0E2A", 9)),
             Coin("Digix Gold", "DGX", CoinType.Erc20("0x4f3AfEC4E5a3F2A6a1A411DEF7D7dFe50eE057bF", 9)),
-            Coin("EnjinCoin", "ENJ", CoinType.Erc20("0xF629cBd94d3791C9250152BD8dfBDF380E2a3B9c", 9)),
+            Coin("EnjinCoin", "ENJ", CoinType.Erc20("0xF629cBd94d3791C9250152BD8dfBDF380E2a3B9c", 18)),
             Coin("Gemini Dollar", "GUSD", CoinType.Erc20("0x056Fd409E1d7A124BD7017459dFEa2F387b6d5Cd", 2)),
             Coin("Golem", "GNT", CoinType.Erc20("0xa74476443119A942dE498590Fe1f2454d7D4aC0d", 18)),
             Coin("Huobi Token", "HT", CoinType.Erc20("0x6f259637dcD74C767781E37Bc6133cd6A68aa161", 18)),
-            Coin("IDEX Membership", "IDXM", CoinType.Erc20("0xcc13fc627effd6e35d2d2706ea3c4d7396c610ea", 8)),
+            Coin("IDEX Membership", "IDXM", CoinType.Erc20("0xCc13Fc627EFfd6E35D2D2706Ea3C4D7396c610ea", 8)),
             Coin("KuCoin Shares", "KCS", CoinType.Erc20("0x039B5649A59967e3e936D7471f9c3700100Ee1ab", 6)),
             Coin("Kyber Network", "KNC", CoinType.Erc20("0xdd974D5C2e2928deA5F71b9825b8b646686BD200", 18)),
             Coin("Loom", "LOOM", CoinType.Erc20("0xA4e8C3Ec456107eA67d3075bF9e3DF3A75823DB0", 18)),
