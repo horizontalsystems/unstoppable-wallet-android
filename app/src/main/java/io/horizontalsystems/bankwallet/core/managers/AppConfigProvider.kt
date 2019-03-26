@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.Currency
 
 class AppConfigProvider : IAppConfigProvider {
-    override val ipfsUrl = "https://gateway.ipfs.io/ipns/Qmd4Gv2YVPqs6dmSy1XEq7pQRSgLihqYKL2JjK7DMUFPVz/io-hs/data/"
+    override val ipfsUrl = "https://ipfs.io/ipns/QmXTJZBMMRmBbPun6HFt3tmb3tfYF2usLPxFoacL7G5uMX/"
 
     override val fiatDecimal: Int = 2
     override val maxDecimal: Int = 8
@@ -40,9 +40,9 @@ class AppConfigProvider : IAppConfigProvider {
         get() {
             val suffix = if (testMode) "t" else ""
             val coins = mutableListOf<Coin>()
-            coins.add(Coin("Bitcoin", "BTC$suffix", CoinType.Bitcoin))
-            coins.add(Coin("Bitcoin Cash", "BCH$suffix", CoinType.BitcoinCash))
-            coins.add(Coin("Ethereum", "ETH$suffix", CoinType.Ethereum))
+            coins.add(Coin("Bitcoin($suffix)", "BTC", CoinType.Bitcoin))
+            coins.add(Coin("Bitcoin Cash($suffix)", "BCH", CoinType.BitcoinCash))
+            coins.add(Coin("Ethereum($suffix)", "ETH", CoinType.Ethereum))
             return coins
         }
 

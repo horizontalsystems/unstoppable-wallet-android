@@ -4,12 +4,14 @@ import com.nhaarman.mockito_kotlin.*
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.NetworkAvailabilityManager
 import io.horizontalsystems.bankwallet.core.managers.RateManager
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
-import io.reactivex.Flowable
+import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import org.junit.Before
@@ -22,6 +24,7 @@ class TransactionsInteractorTest {
     private val currencyManager = mock(ICurrencyManager::class.java)
     private val rateManager = mock(RateManager::class.java)
     private val delegate = mock(TransactionsModule.IInteractorDelegate::class.java)
+    private val networkAvailability = mock(NetworkAvailabilityManager::class.java)
 
     private val adapter1 = mock(IAdapter::class.java)
     private val adapter2 = mock(IAdapter::class.java)
@@ -30,6 +33,7 @@ class TransactionsInteractorTest {
     private val coin3 = mock(Coin::class.java)
     private val adaptersUpdatedSignal = PublishSubject.create<Unit>()
     private val baseCurrencyUpdatedSignal = PublishSubject.create<Unit>()
+    private val networkAvailabilitySignal = PublishSubject.create<Unit>()
 
     private lateinit var interactor: TransactionsInteractor
 
@@ -37,11 +41,12 @@ class TransactionsInteractorTest {
     fun before() {
         RxBaseTest.setup()
 
-        interactor = TransactionsInteractor(adapterManager, currencyManager, rateManager)
+        interactor = TransactionsInteractor(adapterManager, currencyManager, rateManager, networkAvailability)
         interactor.delegate = delegate
 
         whenever(adapterManager.adaptersUpdatedSignal).thenReturn(adaptersUpdatedSignal)
         whenever(currencyManager.baseCurrencyUpdatedSignal).thenReturn(baseCurrencyUpdatedSignal)
+        whenever(networkAvailability.networkAvailabilitySignal).thenReturn(networkAvailabilitySignal)
 
         whenever(coin1.code).thenReturn("BTC")
         whenever(coin2.code).thenReturn("ETH")
@@ -201,8 +206,8 @@ class TransactionsInteractorTest {
         val currencyCode = "USD"
         val timestamp1 = 123456L
         val timestamp2 = 34556L
-        val timestamps = mapOf(coin1 to listOf(timestamp1, timestamp2))
         val currency = mock(Currency::class.java)
+        val coin = Coin("Bitcoin", coinCode1, CoinType.Bitcoin)
 
         val rate1Value = 213.123.toBigDecimal()
         val rate2Value = 234.12.toBigDecimal()
@@ -210,16 +215,17 @@ class TransactionsInteractorTest {
         whenever(currency.code).thenReturn(currencyCode)
         whenever(currencyManager.baseCurrency).thenReturn(currency)
 
-        whenever(rateManager.rateValueObservable(coinCode1, currencyCode, timestamp1)).thenReturn(Flowable.just(rate1Value))
-        whenever(rateManager.rateValueObservable(coinCode1, currencyCode, timestamp2)).thenReturn(Flowable.just(rate2Value))
+        whenever(rateManager.rateValueObservable(coinCode1, currencyCode, timestamp1)).thenReturn(Maybe.just(rate1Value))
+        whenever(rateManager.rateValueObservable(coinCode1, currencyCode, timestamp2)).thenReturn(Maybe.just(rate2Value))
 
-        interactor.fetchRates(timestamps)
+        interactor.fetchRate(coin, timestamp1)
+        interactor.fetchRate(coin, timestamp2)
 
         verify(rateManager).rateValueObservable(coinCode1, currencyCode, timestamp1)
         verify(rateManager).rateValueObservable(coinCode1, currencyCode, timestamp2)
 
-        verify(delegate).didFetchRate(rate1Value, coin1, currency, timestamp1)
-        verify(delegate).didFetchRate(rate2Value, coin1, currency, timestamp2)
+        verify(delegate).didFetchRate(rate1Value, coin, currency, timestamp1)
+        verify(delegate).didFetchRate(rate2Value, coin, currency, timestamp2)
     }
 
     @Test
@@ -229,19 +235,20 @@ class TransactionsInteractorTest {
         val timestamp1 = 123456L
         val timestamp2 = 34556L
         val timestamp3 = 123123L
-        val timestamps1 = mapOf(coin1 to listOf(timestamp1, timestamp2, timestamp1))
-        val timestamps2 = mapOf(coin1 to listOf(timestamp2, timestamp3))
         val currency = mock(Currency::class.java)
+        val coin = Coin("Bitcoin", coinCode1, CoinType.Bitcoin)
 
         whenever(currency.code).thenReturn(currencyCode)
         whenever(currencyManager.baseCurrency).thenReturn(currency)
 
-        whenever(rateManager.rateValueObservable(coinCode1, currencyCode, timestamp1)).thenReturn(Flowable.empty())
-        whenever(rateManager.rateValueObservable(coinCode1, currencyCode, timestamp2)).thenReturn(Flowable.empty())
-        whenever(rateManager.rateValueObservable(coinCode1, currencyCode, timestamp3)).thenReturn(Flowable.empty())
+        whenever(rateManager.rateValueObservable(coinCode1, currencyCode, timestamp1)).thenReturn(Maybe.empty())
+        whenever(rateManager.rateValueObservable(coinCode1, currencyCode, timestamp2)).thenReturn(Maybe.empty())
+        whenever(rateManager.rateValueObservable(coinCode1, currencyCode, timestamp3)).thenReturn(Maybe.empty())
 
-        interactor.fetchRates(timestamps1)
-        interactor.fetchRates(timestamps2)
+        interactor.fetchRate(coin, timestamp1)
+        interactor.fetchRate(coin, timestamp2)
+        interactor.fetchRate(coin, timestamp3)
+        interactor.fetchRate(coin, timestamp2)
 
         verify(rateManager).rateValueObservable(coinCode1, currencyCode, timestamp1)
         verify(rateManager).rateValueObservable(coinCode1, currencyCode, timestamp2)
@@ -255,20 +262,20 @@ class TransactionsInteractorTest {
         val coinCode1 = "BTC"
         val currencyCode = "USD"
         val timestamp1 = 123456L
-        val timestamps1 = mapOf(coin1 to listOf(timestamp1))
-        val timestamps2 = mapOf(coin1 to listOf(timestamp1))
         val currency = mock(Currency::class.java)
+        val coin = Coin("Bitcoin", coinCode1, CoinType.Bitcoin)
+
 
         whenever(currency.code).thenReturn(currencyCode)
         whenever(currencyManager.baseCurrency).thenReturn(currency)
 
-        whenever(rateManager.rateValueObservable(coinCode1, currencyCode, timestamp1)).thenReturn(Flowable.empty())
+        whenever(rateManager.rateValueObservable(coinCode1, currencyCode, timestamp1)).thenReturn(Maybe.empty())
 
-        interactor.fetchRates(timestamps1)
+        interactor.fetchRate(coin, timestamp1)
 
         baseCurrencyUpdatedSignal.onNext(Unit)
 
-        interactor.fetchRates(timestamps2)
+        interactor.fetchRate(coin, timestamp1)
 
         verify(rateManager, times(2)).rateValueObservable(coinCode1, currencyCode, timestamp1)
     }

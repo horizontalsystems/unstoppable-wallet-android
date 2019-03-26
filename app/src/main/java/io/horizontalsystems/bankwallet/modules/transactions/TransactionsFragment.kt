@@ -110,6 +110,13 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
         setBottomSheet()
     }
 
+    override fun setMenuVisibility(menuVisible: Boolean) {
+        super.setMenuVisibility(menuVisible)
+        if (menuVisible) {
+            viewModel.delegate.onVisible()
+        }
+    }
+
     //Bottom sheet shows TransactionInfo
     private fun setBottomSheet() {
 
@@ -230,7 +237,7 @@ class TransactionsAdapter(private var listener: Listener) : RecyclerView.Adapter
             ViewHolderTransaction(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_transaction, parent, false), this)
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (position > itemCount - 3) {
+        if (position > itemCount - 9) {
             viewModel.delegate.onBottomReached()
         }
 

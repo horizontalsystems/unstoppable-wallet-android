@@ -4,10 +4,10 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.INetworkManager
-import io.horizontalsystems.bankwallet.entities.LatestRate
+import io.horizontalsystems.bankwallet.entities.LatestRateData
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
-import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import io.reactivex.Flowable
+import io.reactivex.Maybe
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -22,25 +22,22 @@ import java.util.concurrent.TimeUnit
 
 class NetworkManager(private val appConfig: IAppConfigProvider) : INetworkManager {
 
-    override fun getRate(coinCode: String, currency: String, timestamp: Long): Flowable<BigDecimal> {
+    override fun getRate(coinCode: String, currency: String, timestamp: Long): Maybe<BigDecimal> {
         val apiService = ServiceExchangeApi.service(appConfig.ipfsUrl)
-        val cleanedCoin = TextHelper.getCleanCoinCode(coinCode)
 
-        return apiService
-                .getRatesByHour(cleanedCoin, currency, DateHelper.formatDateInUTC(timestamp, "yyyy/MM/dd/HH"))
+        val hourFlowable = apiService.getRateByHour(coinCode, currency, DateHelper.formatDateInUTC(timestamp, "yyyy/MM/dd/HH"))
+        val dayFlowable = apiService.getRateByDay(coinCode, currency, DateHelper.formatDateInUTC(timestamp, "yyyy/MM/dd"))
+
+        return hourFlowable
                 .flatMap { minuteRates ->
-                    Flowable.just(minuteRates.getValue(DateHelper.formatDateInUTC(timestamp, "mm")))
+                    Maybe.just(minuteRates.getValue(DateHelper.formatDateInUTC(timestamp, "mm")).toBigDecimal())
                 }
-                .onErrorResumeNext(
-                        apiService
-                                .getRate(cleanedCoin, currency, DateHelper.formatDateInUTC(timestamp, "yyyy/MM/dd"))
-                                .onErrorResumeNext(Flowable.empty())
-                )
+                .onErrorResumeNext(dayFlowable.map { it.toBigDecimal() })
     }
 
-    override fun getLatestRate(coin: String, currency: String): Flowable<LatestRate> {
+    override fun getLatestRateData(currency: String): Flowable<LatestRateData> {
         return ServiceExchangeApi.service(appConfig.ipfsUrl)
-                .getLatestRate(TextHelper.getCleanCoinCode(coin), currency)
+                .getLatestRate(currency)
                 .onErrorResumeNext(Flowable.empty())
     }
 
@@ -64,25 +61,24 @@ object ServiceExchangeApi {
 
     interface IExchangeRate {
 
-        @GET("xrates/{coin}/{fiat}/{datePath}/index.json")
-        fun getRate(
+        @GET("xrates/historical/{coin}/{fiat}/{datePath}/index.json")
+        fun getRateByDay(
                 @Path("coin") coinCode: String,
                 @Path("fiat") currency: String,
                 @Path("datePath") datePath: String
-        ): Flowable<BigDecimal>
+        ): Maybe<String>
 
-        @GET("xrates/{coin}/{fiat}/{datePath}/index.json")
-        fun getRatesByHour(
+        @GET("xrates/historical/{coin}/{fiat}/{datePath}/index.json")
+        fun getRateByHour(
                 @Path("coin") coinCode: String,
                 @Path("fiat") currency: String,
                 @Path("datePath") datePath: String
-        ): Flowable<Map<String, BigDecimal>>
+        ): Maybe<Map<String, String>>
 
-        @GET("xrates/{coin}/{fiat}/index.json")
+        @GET("xrates/latest/{fiat}/index.json")
         fun getLatestRate(
-                @Path("coin") coinCode: String,
                 @Path("fiat") currency: String
-        ): Flowable<LatestRate>
+        ): Flowable<LatestRateData>
 
     }
 }
