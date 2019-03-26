@@ -122,7 +122,7 @@
     <string name="TransactionInfo_Time">Time</string>
     <string name="TransactionInfo_ButtonVerify">Verify</string>
     <string name="TransactionInfo_Status_Pending">Pending</string>
-    <string name="TransactionInfo_HistoricalRate">Historical Rat</string>
+    <string name="TransactionInfo_HistoricalRate">Historical Rate</string>
 
     <!--Full Info-->
 
