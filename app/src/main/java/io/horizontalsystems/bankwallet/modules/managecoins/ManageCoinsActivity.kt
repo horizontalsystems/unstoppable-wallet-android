@@ -106,7 +106,11 @@ class ManageCoinsAdapter(
         when (holder) {
             is ViewHolderEnabledCoin -> {
                 val transactionRecord = viewModel.delegate.enabledItemForIndex(position)
-                holder.bind(transactionRecord) { listener.onEnabledItemClick(position) }
+                holder.bind(
+                        coin = transactionRecord,
+                        showBottomShadow = (position == viewModel.delegate.enabledCoinsCount-1),
+                        onClick = { listener.onEnabledItemClick(position) }
+                )
 
                 holder.dragIcon.setOnTouchListener { _, event ->
                     if (event.action == MotionEvent.ACTION_DOWN) {
@@ -117,7 +121,11 @@ class ManageCoinsAdapter(
             }
             is ViewHolderDisabledCoin -> {
                 val transactionRecord = viewModel.delegate.disabledItemForIndex(disabledIndex(position))
-                holder.bind(transactionRecord) { listener.onDisabledItemClick(disabledIndex(position)) }
+                holder.bind(
+                        coin = transactionRecord,
+                        showBottomShadow = (position == itemCount - 1),
+                        onClick = { listener.onDisabledItemClick(disabledIndex(position)) }
+                )
             }
         }
 
@@ -142,10 +150,11 @@ class ManageCoinsAdapter(
 
 class ViewHolderEnabledCoin(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(coin: Coin, onClick: () -> (Unit)) {
+    fun bind(coin: Coin, showBottomShadow: Boolean, onClick: () -> (Unit)) {
         coinTitle.text = coin.title
         coinCode.text = coin.code
         coinIcon.bind(coin)
+        enabledBottomShade.visibility = if (showBottomShadow) View.VISIBLE else View.GONE
 
         minusIcon.setOnSingleClickListener { onClick.invoke() }
     }
@@ -154,10 +163,11 @@ class ViewHolderEnabledCoin(override val containerView: View) : RecyclerView.Vie
 
 class ViewHolderDisabledCoin(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(coin: Coin, onClick: () -> (Unit)) {
+    fun bind(coin: Coin, showBottomShadow: Boolean, onClick: () -> (Unit)) {
         disableCoinTitle.text = coin.title
         disableCoinCode.text = coin.code
         disableCoinIcon.bind(coin)
+        disabledBottomShade.visibility = if (showBottomShadow) View.VISIBLE else View.GONE
 
         plusIcon.setOnSingleClickListener { onClick.invoke() }
     }
