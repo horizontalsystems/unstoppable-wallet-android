@@ -78,6 +78,7 @@
         android:paddingTop="4dp"
         android:textAlignment="center"
         android:textColor="@color/grey"
+        android:fontFamily="@font/noto_sans_medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fiatValue"
