@@ -85,12 +85,14 @@
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Transaktion</string>
     <string name="TransactionInfo_Status">Status</string>
+    <string name="TransactionInfo_Status_Confirmed">CONFIRMED</string>
     <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_To">An</string>
     <string name="TransactionInfo_From">Von</string>
     <string name="TransactionInfo_Time">Zeit</string>
-    <string name="TransactionInfo_ButtonMore">Mehr</string>
+    <string name="TransactionInfo_ButtonVerify">Verify</string>
     <string name="TransactionInfo_Status_Pending">Anstehend</string>
+    <string name="TransactionInfo_HistoricalRate">Historical Rate</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Transaktion</string>
     <string name="FullInfo_Time">Zeit</string>
