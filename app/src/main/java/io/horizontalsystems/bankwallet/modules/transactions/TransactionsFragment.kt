@@ -243,7 +243,7 @@ class TransactionsAdapter(private var listener: Listener) : RecyclerView.Adapter
 
         when (holder) {
             is ViewHolderTransaction -> {
-                holder.bind(viewModel.delegate.itemForIndex(position))
+                holder.bind(viewModel.delegate.itemForIndex(position), showBottomShade = (position == itemCount - 1))
             }
         }
     }
@@ -263,7 +263,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         containerView.setOnSingleClickListener { l.onClick(adapterPosition) }
     }
 
-    fun bind(transactionRecord: TransactionViewItem) {
+    fun bind(transactionRecord: TransactionViewItem, showBottomShade: Boolean) {
         txValueInFiat.text = transactionRecord.currencyValue?.let {
             App.numberFormatter.formatForTransactions(it, transactionRecord.incoming)
         }
@@ -271,6 +271,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         txDate.text = transactionRecord.date?.let { DateHelper.getShortDateForTransaction(it) }
         val time = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }
         txStatusWithTimeView.bind(transactionRecord.status, time)
+        bottomShade.visibility = if (showBottomShade) View.VISIBLE else View.GONE
     }
 }
 

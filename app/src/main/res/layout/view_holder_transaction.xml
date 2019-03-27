@@ -10,6 +10,14 @@
     android:focusable="true"
     >
 
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#338a8a8f"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
     <TextView
         android:id="@+id/txDate"
         style="@style/BaseSb"
@@ -61,10 +69,13 @@
         />
 
     <View
-        android:id="@+id/divider"
+        android:id="@+id/bottomShade"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="#338a8a8f"
+        android:background="?SettingsSectionBottomShadeColor"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         />
 

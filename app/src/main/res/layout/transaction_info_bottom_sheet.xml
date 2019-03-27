@@ -139,7 +139,7 @@
         android:fontFamily="@font/noto_sans_semi_bold"
         android:paddingBottom="13dp"
         android:paddingTop="12dp"
-        android:text="@string/TransactionInfo_ButtonMore"
+        android:text="@string/TransactionInfo_ButtonVerify"
         android:textAlignment="center"
         android:textColor="@color/grey"
         android:textSize="16sp"

@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.Context
+import android.graphics.PorterDuff
 import android.support.constraint.ConstraintLayout
 import android.util.AttributeSet
 import android.view.View
@@ -26,7 +27,7 @@ class InputAmountView : ConstraintLayout {
 
         btnMax?.setOnClickListener { onMaxClick?.invoke() }
         btnSwitch?.setOnClickListener { onSwitchClick?.invoke() }
-
+        btnSwitch.imageTintMode = PorterDuff.Mode.SRC_IN
         invalidate()
     }
 
