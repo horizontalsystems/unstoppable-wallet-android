@@ -51,9 +51,23 @@ class BottomConfirmAlert : DialogFragment(), ConfirmationsAdapter.Listener {
         }
 
         btnConfirm.setBackgroundResource(getBackgroundResId(color))
-        context?.let { btnConfirm.setTextColor(ContextCompat.getColor(it, getTextColorResId(color))) }
+        setButtonTextColor(color, false)
 
         return mDialog as Dialog
+    }
+
+    private fun setButtonTextColor(buttonColor: BottomButtonColor, enabled: Boolean) {
+        val colorRes: Int = when {
+            enabled -> when (buttonColor) {
+                BottomButtonColor.RED -> R.color.white
+                BottomButtonColor.YELLOW -> R.color.black
+            }
+            else -> R.color.grey_50
+        }
+
+        context?.let {
+            btnConfirm.setTextColor(ContextCompat.getColor(it, colorRes))
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -75,14 +89,11 @@ class BottomConfirmAlert : DialogFragment(), ConfirmationsAdapter.Listener {
         BottomButtonColor.YELLOW -> R.drawable.button_yellow_background_12
     }
 
-    private fun getTextColorResId(color: BottomButtonColor): Int = when (color) {
-        BottomButtonColor.RED -> R.color.button_red_text_color_selector
-        BottomButtonColor.YELLOW -> R.color.button_yellow_text_color_selector
-    }
-
     private fun checkConfirmations() {
         val uncheckedCount = checkboxItemList.asSequence().filter { !it.checked }.count()
-        btnConfirm.isEnabled = uncheckedCount == 0
+        val isEnabled = uncheckedCount == 0
+        btnConfirm.isEnabled = isEnabled
+        setButtonTextColor(color, isEnabled)
     }
 
     companion object {

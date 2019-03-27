@@ -5,7 +5,7 @@
     <solid android:color="@color/stateful_button_steel_color"/>
     <stroke
         android:width="0.5dp"
-        android:color="@color/steel_20"
+        android:color="@color/steel_15"
         />
     <corners android:radius="12dp"/>
 </shape>
