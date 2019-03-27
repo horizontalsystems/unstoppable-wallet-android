@@ -85,12 +85,14 @@
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">トランザクション</string>
     <string name="TransactionInfo_Status">状況</string>
+    <string name="TransactionInfo_Status_Confirmed">CONFIRMED</string>
     <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_To">宛先</string>
     <string name="TransactionInfo_From">差出人</string>
     <string name="TransactionInfo_Time">時間</string>
-    <string name="TransactionInfo_ButtonMore">その他</string>
+    <string name="TransactionInfo_ButtonVerify">Verify</string>
     <string name="TransactionInfo_Status_Pending">ペンディング</string>
+    <string name="TransactionInfo_HistoricalRate">Historical Rate</string>
     <!--Full Info-->
     <string name="FullInfo_Title">トランザクション</string>
     <string name="FullInfo_Time">時間</string>
