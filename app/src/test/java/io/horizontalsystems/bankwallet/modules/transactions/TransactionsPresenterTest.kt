@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
 import com.nhaarman.mockito_kotlin.inOrder
+import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
 import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
@@ -22,7 +23,6 @@ class TransactionsPresenterTest {
 
     private val coin1 = mock(Coin::class.java)
     private val coin2 = mock(Coin::class.java)
-    private val coin3 = mock(Coin::class.java)
 
     private lateinit var presenter: TransactionsPresenter
 
@@ -62,6 +62,31 @@ class TransactionsPresenterTest {
         whenever(factory.item(transactionItem, lastBlockHeight, threshold, rateCurrencyValue)).thenReturn(viewItem)
 
         Assert.assertEquals(viewItem, presenter.itemForIndex(index))
+        verify(interactor, never()).fetchRate(coin1, timestamp)
+    }
+
+    @Test
+    fun itemForIndex_fetchRate() {
+        val index = 42
+        val timestamp = 123123L
+        val transactionItem = mock(TransactionItem::class.java)
+        val transactionRecord = mock(TransactionRecord::class.java)
+
+        whenever(loader.itemForIndex(index)).thenReturn(transactionItem)
+        whenever(transactionRecord.timestamp).thenReturn(timestamp)
+        whenever(transactionItem.record).thenReturn(transactionRecord)
+        whenever(transactionItem.coin).thenReturn(coin1)
+        whenever(metadataDataSource.getRate(coin1, timestamp)).thenReturn(null)
+
+        presenter.itemForIndex(index)
+
+        verify(interactor).fetchRate(coin1, timestamp)
+    }
+
+    @Test
+    fun onVisible(){
+        presenter.onVisible()
+        verify(view).reload()
     }
 
     @Test
@@ -132,7 +157,6 @@ class TransactionsPresenterTest {
     fun didFetchRecords() {
         val record1 = mock(TransactionRecord::class.java)
         val timestamp1 = 123435L
-        val timestamps = listOf(timestamp1)
         val records = mapOf(coin1 to listOf<TransactionRecord>(record1))
 
         whenever(record1.timestamp).thenReturn(timestamp1)
@@ -140,7 +164,6 @@ class TransactionsPresenterTest {
         presenter.didFetchRecords(records)
 
         verify(loader).didFetchRecords(records)
-        verify(interactor).fetchRates(mapOf(coin1 to timestamps))
     }
 
     @Test
@@ -198,7 +221,6 @@ class TransactionsPresenterTest {
     fun onUpdateBaseCurrency() {
         val record1 = mock(TransactionRecord::class.java)
         val timestamp1 = 123435L
-        val timestamps = listOf(timestamp1)
         val transactionRecords = mapOf(coin1 to listOf<TransactionRecord>(record1))
 
         whenever(record1.timestamp).thenReturn(timestamp1)
@@ -209,7 +231,6 @@ class TransactionsPresenterTest {
         inOrder(metadataDataSource, view, interactor).let {
             it.verify(metadataDataSource).clearRates()
             it.verify(view).reload()
-            it.verify(interactor).fetchRates(mapOf(coin1 to timestamps))
         }
     }
 
@@ -262,7 +283,6 @@ class TransactionsPresenterTest {
         presenter.didUpdateRecords(records, coin1)
 
         verify(loader).didUpdateRecords(records, coin1)
-        verify(interactor).fetchRates(mapOf(coin1 to listOf(timestamp)))
     }
 
 }

@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.ethereumkit.EthereumKit
 import io.reactivex.Flowable
+import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
@@ -57,8 +58,8 @@ interface IRandomProvider {
 }
 
 interface INetworkManager {
-    fun getLatestRate(coin: String, currency: String): Flowable<LatestRate>
-    fun getRate(coinCode: String, currency: String, timestamp: Long): Flowable<BigDecimal>
+    fun getLatestRateData(currency: String): Flowable<LatestRateData>
+    fun getRate(coinCode: String, currency: String, timestamp: Long): Maybe<BigDecimal>
     fun getTransaction(host: String, path: String): Flowable<JsonObject>
     fun ping(host: String, url: String): Flowable<Any>
 }
@@ -203,7 +204,7 @@ interface IOneTimerDelegate {
 
 interface IRateStorage {
     fun latestRateObservable(coinCode: CoinCode, currencyCode: String): Flowable<Rate>
-    fun rateObservable(coinCode: CoinCode, currencyCode: String, timestamp: Long): Flowable<List<Rate>>
+    fun rateMaybe(coinCode: CoinCode, currencyCode: String, timestamp: Long): Maybe<Rate>
     fun save(rate: Rate)
     fun saveLatest(rate: Rate)
     fun deleteAll()
