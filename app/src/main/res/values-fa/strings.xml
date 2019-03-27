@@ -85,12 +85,14 @@
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">معاملات</string>
     <string name="TransactionInfo_Status">وضيعت</string>
+    <string name="TransactionInfo_Status_Confirmed">CONFIRMED</string>
     <string name="TransactionInfo_Id">شناس نامه</string>
     <string name="TransactionInfo_To">به</string>
     <string name="TransactionInfo_From">از</string>
     <string name="TransactionInfo_Time">Time</string>
-    <string name="TransactionInfo_ButtonMore">بیشتر</string>
+    <string name="TransactionInfo_ButtonVerify">Verify</string>
     <string name="TransactionInfo_Status_Pending">در حالت انتظار</string>
+    <string name="TransactionInfo_HistoricalRate">Historical Rate</string>
     <!--Full Info-->
     <string name="FullInfo_Title">معاملات</string>
     <string name="FullInfo_Time">زمان</string>
