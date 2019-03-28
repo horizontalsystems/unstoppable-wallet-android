@@ -1,12 +1,16 @@
 package io.horizontalsystems.bankwallet.core
 
+import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.ethereumkit.EthereumKit
 import io.reactivex.Single
 import java.math.BigDecimal
 
-class EthereumAdapter(coin: Coin, kit: EthereumKit) : EthereumBaseAdapter(coin, kit, 18) {
+class EthereumAdapter(
+        coin: Coin,
+        kit: EthereumKit,
+        addressParser: AddressParser) : EthereumBaseAdapter(coin, kit, 18, addressParser) {
 
     init {
         ethereumKit.listener = this
@@ -63,6 +67,6 @@ class EthereumAdapter(coin: Coin, kit: EthereumKit) : EthereumBaseAdapter(coin, 
     }
 
     companion object {
-        fun adapter(coin: Coin, ethereumKit: EthereumKit) = EthereumAdapter(coin, ethereumKit)
+        fun adapter(coin: Coin, ethereumKit: EthereumKit, addressParser: AddressParser) = EthereumAdapter(coin, ethereumKit, addressParser)
     }
 }

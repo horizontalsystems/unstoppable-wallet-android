@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core
 
+import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
@@ -15,8 +16,11 @@ import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-abstract class EthereumBaseAdapter(override val coin: Coin, protected val ethereumKit: EthereumKit, final override val decimal: Int)
-    : IAdapter, EthereumKit.Listener {
+abstract class EthereumBaseAdapter(
+        override val coin: Coin,
+        protected val ethereumKit:
+        EthereumKit, final override val decimal: Int,
+        protected val addressParser: AddressParser) : IAdapter, EthereumKit.Listener {
 
     private val disposables = CompositeDisposable()
 
@@ -45,7 +49,8 @@ abstract class EthereumBaseAdapter(override val coin: Coin, protected val ethere
     override val receiveAddress: String get() = ethereumKit.receiveAddress
 
     override fun parsePaymentAddress(address: String): PaymentRequestAddress {
-        return PaymentRequestAddress(address)
+        val paymentData = addressParser.parse(address)
+        return PaymentRequestAddress(paymentData.address, paymentData.amount?.toBigDecimal())
     }
 
     override fun validate(address: String) {
