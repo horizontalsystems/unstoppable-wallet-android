@@ -1,8 +1,5 @@
 package io.horizontalsystems.bankwallet.core.factories
 
-import io.horizontalsystems.bankwallet.core.IAdapterManager
-import io.horizontalsystems.bankwallet.core.ICurrencyManager
-import io.horizontalsystems.bankwallet.core.managers.RateManager
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.TransactionItem
@@ -11,12 +8,7 @@ import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import java.math.BigDecimal
 import java.util.*
 
-class TransactionViewItemFactory(
-        private val adapterManager: IAdapterManager,
-        private val currencyManager: ICurrencyManager,
-        private val rateManager: RateManager) {
-
-    private val latestRateFallbackThreshold: Long = 60 // minutes
+class TransactionViewItemFactory {
 
     fun item(transactionItem: TransactionItem, lastBlockHeight: Int?, threshold: Int?, rate: CurrencyValue?): TransactionViewItem {
         val record = transactionItem.record
@@ -37,10 +29,8 @@ class TransactionViewItemFactory(
 
         val incoming = record.amount > BigDecimal.ZERO
 
-        val toAddress = when (incoming) {
-            true -> record.to.find { it.mine }?.address
-            false -> record.to.find { !it.mine }?.address ?: record.to.find { it.mine }?.address
-        }
+        val toAddress = if (incoming) null else record.to.find { !it.mine }?.address
+        val fromAddress = if (!incoming) null else record.from.firstOrNull { !it.mine }?.address
 
         val currencyValue = rate?.let { CurrencyValue(it.currency, record.amount * it.value) }
 
@@ -49,7 +39,7 @@ class TransactionViewItemFactory(
                 transactionItem.coin,
                 CoinValue(transactionItem.coin.code, record.amount),
                 currencyValue,
-                record.from.firstOrNull { it.mine != incoming }?.address,
+                fromAddress,
                 toAddress,
                 incoming,
                 if (record.timestamp == 0L) null else Date(record.timestamp * 1000),
