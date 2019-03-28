@@ -74,10 +74,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?TransactionDetailBackground"
-        android:paddingBottom="16dp"
-        android:paddingTop="4dp"
+        android:paddingTop="2dp"
         android:textAlignment="center"
-        android:textColor="@color/grey"
+        android:textColor="?TextColorGreyLightToDark"
         android:fontFamily="@font/noto_sans_medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -85,12 +84,27 @@
         tools:text="+ 0,0006482 BTC"
         />
 
+    <TextView
+        android:id="@+id/coinName"
+        style="@style/CaptionRegular"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?TransactionDetailBackground"
+        android:paddingBottom="12dp"
+        android:textAlignment="center"
+        android:textColor="@color/grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/coinValue"
+        tools:text="Bitocin"
+        />
+
     <View
         android:id="@+id/border2"
         android:layout_width="0dp"
         android:layout_height="0.5dp"
         android:background="@color/steel_15"
-        app:layout_constraintBottom_toBottomOf="@+id/coinValue"
+        app:layout_constraintBottom_toBottomOf="@+id/coinName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />
