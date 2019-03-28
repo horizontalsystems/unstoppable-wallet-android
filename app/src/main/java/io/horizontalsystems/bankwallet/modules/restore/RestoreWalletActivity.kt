@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.Utils
+import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.lib.InputTextViewHolder
 import io.horizontalsystems.bankwallet.lib.WordsInputAdapter
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
