@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core
 
+import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bitcoinkit.BitcoinKit
@@ -13,8 +14,13 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
 
-class BitcoinAdapter(override val coin: Coin, authData: AuthData, newWallet: Boolean, testMode: Boolean)
-    : IAdapter, BitcoinKit.Listener {
+class BitcoinAdapter(
+        override val coin: Coin,
+        authData: AuthData,
+        newWallet: Boolean,
+        private val addressParser: AddressParser,
+        testMode: Boolean) : IAdapter, BitcoinKit.Listener {
+
     override val feeCoinCode: String? = null
     override val decimal = 8
 
@@ -74,7 +80,7 @@ class BitcoinAdapter(override val coin: Coin, authData: AuthData, newWallet: Boo
     }
 
     override fun parsePaymentAddress(address: String): PaymentRequestAddress {
-        val paymentData = bitcoinKit.parsePaymentAddress(address)
+        val paymentData = addressParser.parse(address)
         return PaymentRequestAddress(paymentData.address, paymentData.amount?.toBigDecimal())
     }
 

@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core
 
+import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.ethereumkit.EthereumKit
@@ -7,8 +8,12 @@ import io.reactivex.Single
 import org.web3j.crypto.Keys
 import java.math.BigDecimal
 
-class Erc20Adapter(coin: Coin, kit: EthereumKit, private val contractAddress: String, decimal: Int)
-    : EthereumBaseAdapter(coin, kit, decimal) {
+class Erc20Adapter(
+        coin: Coin,
+        kit: EthereumKit,
+        private val contractAddress: String,
+        decimal: Int,
+        addressParser: AddressParser) : EthereumBaseAdapter(coin, kit, decimal, addressParser) {
 
     init {
         ethereumKit.register(contractAddress, this)
@@ -70,8 +75,8 @@ class Erc20Adapter(coin: Coin, kit: EthereumKit, private val contractAddress: St
     }
 
     companion object {
-        fun adapter(coin: Coin, ethereumKit: EthereumKit, contractAddress: String, decimal: Int): Erc20Adapter {
-            return Erc20Adapter(coin, ethereumKit, Keys.toChecksumAddress(contractAddress), decimal)
+        fun adapter(coin: Coin, ethereumKit: EthereumKit, contractAddress: String, decimal: Int, addressParser: AddressParser): Erc20Adapter {
+            return Erc20Adapter(coin, ethereumKit, Keys.toChecksumAddress(contractAddress), decimal, addressParser)
         }
     }
 }
