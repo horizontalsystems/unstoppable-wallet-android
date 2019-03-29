@@ -85,7 +85,7 @@
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">معاملات</string>
     <string name="TransactionInfo_Status">وضيعت</string>
-    <string name="TransactionInfo_Status_Confirmed">CONFIRMED</string>
+    <string name="TransactionInfo_Status_Confirmed">Confirmed</string>
     <string name="TransactionInfo_Id">شناس نامه</string>
     <string name="TransactionInfo_To">به</string>
     <string name="TransactionInfo_From">از</string>
