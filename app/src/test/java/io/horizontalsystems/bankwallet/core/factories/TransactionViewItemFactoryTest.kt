@@ -50,7 +50,8 @@ class TransactionViewItemFactoryTest {
                 null,
                 incoming,
                 Date(txRecordIncoming.timestamp * 1000),
-                TransactionStatus.Completed
+                TransactionStatus.Completed,
+                rate
         )
 
         val item = txViewItemFactory.item(txItem, lastBlockHeight, 6, rate)
@@ -73,7 +74,8 @@ class TransactionViewItemFactoryTest {
                 txRecordOutgoing.from.firstOrNull { !it.mine }?.address,
                 incoming,
                 Date(txRecordOutgoing.timestamp * 1000),
-                TransactionStatus.Completed
+                TransactionStatus.Completed,
+                rate
         )
 
         val item = txViewItemFactory.item(txItem, lastBlockHeight, 6, rate)

@@ -19,7 +19,8 @@ data class TransactionViewItem(
         val to: String?,
         val incoming: Boolean,
         val date: Date?,
-        val status: TransactionStatus)
+        val status: TransactionStatus,
+        val rate: CurrencyValue?)
 
 
 sealed class TransactionStatus {

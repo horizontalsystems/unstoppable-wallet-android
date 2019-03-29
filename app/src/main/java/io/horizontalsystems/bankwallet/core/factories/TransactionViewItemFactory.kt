@@ -43,7 +43,8 @@ class TransactionViewItemFactory {
                 toAddress,
                 incoming,
                 if (record.timestamp == 0L) null else Date(record.timestamp * 1000),
-                status
+                status,
+                rate
         )
     }
 }
