@@ -85,7 +85,7 @@
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Hesap işlemi</string>
     <string name="TransactionInfo_Status">Durum</string>
-    <string name="TransactionInfo_Status_Confirmed">CONFIRMED</string>
+    <string name="TransactionInfo_Status_Confirmed">Confirmed</string>
     <string name="TransactionInfo_Id">Kimlik</string>
     <string name="TransactionInfo_To">Alan</string>
     <string name="TransactionInfo_From">Gönderen</string>
