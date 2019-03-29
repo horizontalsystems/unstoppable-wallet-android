@@ -85,7 +85,7 @@
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">トランザクション</string>
     <string name="TransactionInfo_Status">状況</string>
-    <string name="TransactionInfo_Status_Confirmed">CONFIRMED</string>
+    <string name="TransactionInfo_Status_Confirmed">Confirmed</string>
     <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_To">宛先</string>
     <string name="TransactionInfo_From">差出人</string>
