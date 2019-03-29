@@ -188,6 +188,9 @@
     <string name="Fingerprint_Success">成功!</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">までに無効: %s</string>
+    <!--OS Pin-->
+    <string name="OSPin_Confirm_Title">Title</string>
+    <string name="OSPin_Confirm_Desciption">Description</string>
     <!--Set Pin-->
     <string name="SetPin_Title">パスコード</string>
     <string name="SetPin_Info">Your passcode will be used to unlock your wallet and send money</string>
