@@ -168,9 +168,6 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
 
         transInfoViewModel.transactionLiveData.observe(this, Observer { txRecord ->
             txRecord?.let { txRec ->
-                (activity as? MainActivity)?.setBottomNavigationVisible(false)
-                bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
-
                 val txStatus = txRec.status
 
                 coinIcon.bind(txRec.coin)
@@ -180,9 +177,18 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
                     setTextColor(resources.getColor(if (txRec.incoming) R.color.green_crypto else R.color.yellow_crypto, null))
                 }
 
-                coinValue.text = App.numberFormatter.format(txRec.coinValue, true, true)
+                coinValue.text = App.numberFormatter.format(txRec.coinValue, explicitSign = true, realNumber = true)
+                coinName.text = txRec.coin.title
 
-                itemTime.bindTime(title = getString(R.string.TransactionInfo_Time), time = txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) } ?: "")
+                itemRate.apply {
+                    txRec.rate?.let {
+                        val rate = getString(R.string.Balance_RatePerCoin, App.numberFormatter.format(it), txRec.coin.code)
+                        bind(title = getString(R.string.TransactionInfo_HistoricalRate), value = rate)
+                    }
+                    visibility = if (txRec.rate == null) View.GONE else View.VISIBLE
+                }
+
+                itemTime.bind(title = getString(R.string.TransactionInfo_Time), value = txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) } ?: "")
 
                 itemStatus.bindStatus(txStatus)
 
@@ -199,6 +205,9 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
                     visibility = if (txRec.to.isNullOrEmpty()) View.GONE else View.VISIBLE
                     bindAddress(title = getString(R.string.TransactionInfo_To), address = txRec.to, showBottomBorder = true)
                 }
+
+                (activity as? MainActivity)?.setBottomNavigationVisible(false)
+                bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
             }
         })
     }

@@ -11,7 +11,7 @@
         android:id="@+id/pendingIcon"
         android:layout_width="12dp"
         android:layout_height="12dp"
-        android:src="@drawable/ic_pending"
+        android:src="@drawable/ic_pending_grey"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/progressBarWrapper"

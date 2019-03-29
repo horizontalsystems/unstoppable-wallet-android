@@ -27,6 +27,13 @@ class TransactionInfoItemView : ConstraintLayout {
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) { loadAttributes(attrs) }
 
+    fun bind(title: String? = null, value: String? = null) {
+        txtTitle.text = title
+        valueText.text = value
+        valueText.visibility = if (value == null) View.GONE else View.VISIBLE
+        border.visibility = View.VISIBLE
+    }
+
     fun bindAddress(title: String? = null, address: String? = null, showBottomBorder: Boolean = false) {
         txtTitle.text = title
         address?.let { addressView.bind(it) }
@@ -34,13 +41,6 @@ class TransactionInfoItemView : ConstraintLayout {
         border.visibility = if (showBottomBorder) View.VISIBLE else View.GONE
 
         invalidate()
-    }
-
-    fun bindTime(title: String? = null, time: String? = null) {
-        txtTitle.text = title
-        valueText.text = time
-        valueText.visibility = if (time == null) View.GONE else View.VISIBLE
-        border.visibility = View.VISIBLE
     }
 
     fun bindStatus(transactionStatus: TransactionStatus) {

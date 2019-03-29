@@ -19,7 +19,8 @@ data class TransactionViewItem(
         val to: String?,
         val incoming: Boolean,
         val date: Date?,
-        val status: TransactionStatus)
+        val status: TransactionStatus,
+        val rate: CurrencyValue?)
 
 
 sealed class TransactionStatus {
@@ -80,7 +81,7 @@ object TransactionsModule {
         val dataSource = TransactionRecordDataSource(PoolRepo(), TransactionItemDataSource(), TransactionItemFactory())
         val interactor = TransactionsInteractor(App.adapterManager, App.currencyManager, App.rateManager, App.networkAvailabilityManager)
         val transactionsLoader = TransactionsLoader(dataSource)
-        val presenter = TransactionsPresenter(interactor, router, TransactionViewItemFactory(App.adapterManager, App.currencyManager, App.rateManager), transactionsLoader, TransactionMetadataDataSource())
+        val presenter = TransactionsPresenter(interactor, router, TransactionViewItemFactory(), transactionsLoader, TransactionMetadataDataSource())
 
         presenter.view = view
         interactor.delegate = presenter
