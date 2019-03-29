@@ -252,8 +252,8 @@
 
     <!--OS Pin-->
 
-    <string name="OSPin_Title">Title</string>
-    <string name="OSPin_Desciption">Description</string>
+    <string name="OSPin_Confirm_Title">Title</string>
+    <string name="OSPin_Confirm_Desciption">Description</string>
 
     <!--Set Pin-->
 
