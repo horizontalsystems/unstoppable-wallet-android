@@ -93,7 +93,7 @@ class DataProviderSettingsAdapter(private var listener: Listener) : RecyclerView
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is ViewHolderDataProviderSettings -> holder.bind(items[position]) { listener.onChangeProvider(items[position]) }
+            is ViewHolderDataProviderSettings -> holder.bind(items[position], showBottomShade = (position == itemCount - 1)) { listener.onChangeProvider(items[position]) }
         }
     }
 
@@ -101,7 +101,7 @@ class DataProviderSettingsAdapter(private var listener: Listener) : RecyclerView
 
 class ViewHolderDataProviderSettings(private val context: Context, override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(item: DataProviderSettingsItem, onClick: () -> (Unit)) {
+    fun bind(item: DataProviderSettingsItem, showBottomShade: Boolean, onClick: () -> (Unit)) {
 
         containerView.setOnSingleClickListener { onClick.invoke() }
         title.text = item.name
@@ -122,11 +122,11 @@ class ViewHolderDataProviderSettings(private val context: Context, override val 
         }
 
         checkmarkIcon.visibility = if (item.selected) View.VISIBLE else View.GONE
+        bottomShade.visibility = if (showBottomShade) View.VISIBLE else View.GONE
     }
 
     companion object {
-        val layoutResourceId: Int
-            get() = R.layout.view_holder_explorer_item
+        val layoutResourceId= R.layout.view_holder_explorer_item
     }
 
 }
