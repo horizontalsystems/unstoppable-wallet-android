@@ -250,6 +250,11 @@
 
     <string name="UnlockPin_WalletDisabledUntil">Disabled until: %s</string>
 
+    <!--OS Pin-->
+
+    <string name="OSPin_Confirm_Title">Title</string>
+    <string name="OSPin_Confirm_Desciption">Description</string>
+
     <!--Set Pin-->
 
     <string name="SetPin_Title">Passcode</string>
