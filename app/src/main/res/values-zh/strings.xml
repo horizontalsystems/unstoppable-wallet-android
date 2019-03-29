@@ -85,7 +85,7 @@
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">交易</string>
     <string name="TransactionInfo_Status">状态</string>
-    <string name="TransactionInfo_Status_Confirmed">CONFIRMED</string>
+    <string name="TransactionInfo_Status_Confirmed">Confirmed</string>
     <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_To">收件人：</string>
     <string name="TransactionInfo_From">发件人：</string>
