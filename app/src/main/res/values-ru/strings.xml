@@ -85,7 +85,7 @@
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Транзакция</string>
     <string name="TransactionInfo_Status">Статус</string>
-    <string name="TransactionInfo_Status_Confirmed">CONFIRMED</string>
+    <string name="TransactionInfo_Status_Confirmed">Confirmed</string>
     <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_To">Кому</string>
     <string name="TransactionInfo_From">От</string>
