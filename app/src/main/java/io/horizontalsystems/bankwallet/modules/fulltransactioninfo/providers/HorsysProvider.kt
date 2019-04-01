@@ -46,11 +46,11 @@ class HorsysEthereumProvider(val testMode: Boolean) : FullTransactionInfoModule.
     override val name: String = "HorizontalSystems.xyz"
 
     override fun url(hash: String): String {
-        return "${if (testMode) "http://eth-testnet" else "https://eth"}.horizontalsystems.xyz/tx/$hash"
+        return "${if (testMode) "http://eth-ropsten" else "https://eth"}.horizontalsystems.xyz/tx/$hash"
     }
 
     override fun apiUrl(hash: String): String {
-        return "${if (testMode) "http://eth-testnet" else "https://eth"}.horizontalsystems.xyz/tx/$hash"
+        return "${if (testMode) "http://eth-ropsten" else "https://eth"}.horizontalsystems.xyz/tx/$hash"
     }
 
     override fun convert(json: JsonObject): EthereumResponse {
