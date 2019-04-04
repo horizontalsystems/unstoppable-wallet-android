@@ -38,6 +38,7 @@ class NetworkManager(private val appConfig: IAppConfigProvider) : INetworkManage
     override fun getLatestRateData(currency: String): Flowable<LatestRateData> {
         return ServiceExchangeApi.service(appConfig.ipfsUrl)
                 .getLatestRate(currency)
+                .map { LatestRateData(it.rates, it.currency, it.timestamp/1000) }
                 .onErrorResumeNext(Flowable.empty())
     }
 

@@ -16,7 +16,7 @@ data class Rate(var coinCode: String,
 
     val expired: Boolean
         get() {
-            val diff = Date().time - timestamp
-            return diff > 60 * 10 * 1000
+            val diff = (Date().time / 1000) - timestamp
+            return diff > 60 * 10
         }
 }
