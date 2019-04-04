@@ -162,7 +162,11 @@ class TransactionsPresenter(
     }
 
     override fun didChangeData() {
-        updateViewItems()
+        if (loader.itemsCount == 0) {
+            didInsertData(0, 0)
+        } else {
+            updateViewItems()
+        }
     }
 
     override fun didInsertData(fromIndex: Int, count: Int) {
