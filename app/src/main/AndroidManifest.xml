@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="io.horizontalsystems.bankwallet"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+          xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -14,7 +15,8 @@
         android:label="@string/App_Name"
         android:roundIcon="@mipmap/bitcoin_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/DarkModeAppTheme">
+        android:theme="@style/DarkModeAppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity android:name="io.horizontalsystems.bankwallet.LauncherActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

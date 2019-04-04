@@ -111,6 +111,11 @@ class BalanceFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        coinsAdapter.notifyDataSetChanged()
+    }
+
     private fun reloadHeader() {
         val headerViewItem = viewModel.delegate.getHeaderViewItem()
 
