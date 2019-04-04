@@ -215,14 +215,14 @@ class TransactionsInteractorTest {
         whenever(currency.code).thenReturn(currencyCode)
         whenever(currencyManager.baseCurrency).thenReturn(currency)
 
-        whenever(rateManager.rateValueObservable(coinCode1, currencyCode, timestamp1)).thenReturn(Maybe.just(rate1Value))
-        whenever(rateManager.rateValueObservable(coinCode1, currencyCode, timestamp2)).thenReturn(Maybe.just(rate2Value))
+        whenever(rateManager.rateValueFromNetworkObservable(coinCode1, currencyCode, timestamp1)).thenReturn(Maybe.just(rate1Value))
+        whenever(rateManager.rateValueFromNetworkObservable(coinCode1, currencyCode, timestamp2)).thenReturn(Maybe.just(rate2Value))
 
         interactor.fetchRate(coin, timestamp1)
         interactor.fetchRate(coin, timestamp2)
 
-        verify(rateManager).rateValueObservable(coinCode1, currencyCode, timestamp1)
-        verify(rateManager).rateValueObservable(coinCode1, currencyCode, timestamp2)
+        verify(rateManager).rateValueFromNetworkObservable(coinCode1, currencyCode, timestamp1)
+        verify(rateManager).rateValueFromNetworkObservable(coinCode1, currencyCode, timestamp2)
 
         verify(delegate).didFetchRate(rate1Value, coin, currency, timestamp1)
         verify(delegate).didFetchRate(rate2Value, coin, currency, timestamp2)
@@ -241,18 +241,18 @@ class TransactionsInteractorTest {
         whenever(currency.code).thenReturn(currencyCode)
         whenever(currencyManager.baseCurrency).thenReturn(currency)
 
-        whenever(rateManager.rateValueObservable(coinCode1, currencyCode, timestamp1)).thenReturn(Maybe.empty())
-        whenever(rateManager.rateValueObservable(coinCode1, currencyCode, timestamp2)).thenReturn(Maybe.empty())
-        whenever(rateManager.rateValueObservable(coinCode1, currencyCode, timestamp3)).thenReturn(Maybe.empty())
+        whenever(rateManager.rateValueFromNetworkObservable(coinCode1, currencyCode, timestamp1)).thenReturn(Maybe.empty())
+        whenever(rateManager.rateValueFromNetworkObservable(coinCode1, currencyCode, timestamp2)).thenReturn(Maybe.empty())
+        whenever(rateManager.rateValueFromNetworkObservable(coinCode1, currencyCode, timestamp3)).thenReturn(Maybe.empty())
 
         interactor.fetchRate(coin, timestamp1)
         interactor.fetchRate(coin, timestamp2)
         interactor.fetchRate(coin, timestamp3)
         interactor.fetchRate(coin, timestamp2)
 
-        verify(rateManager).rateValueObservable(coinCode1, currencyCode, timestamp1)
-        verify(rateManager).rateValueObservable(coinCode1, currencyCode, timestamp2)
-        verify(rateManager).rateValueObservable(coinCode1, currencyCode, timestamp3)
+        verify(rateManager).rateValueFromNetworkObservable(coinCode1, currencyCode, timestamp1)
+        verify(rateManager).rateValueFromNetworkObservable(coinCode1, currencyCode, timestamp2)
+        verify(rateManager).rateValueFromNetworkObservable(coinCode1, currencyCode, timestamp3)
     }
 
     @Test
@@ -269,7 +269,7 @@ class TransactionsInteractorTest {
         whenever(currency.code).thenReturn(currencyCode)
         whenever(currencyManager.baseCurrency).thenReturn(currency)
 
-        whenever(rateManager.rateValueObservable(coinCode1, currencyCode, timestamp1)).thenReturn(Maybe.empty())
+        whenever(rateManager.rateValueFromNetworkObservable(coinCode1, currencyCode, timestamp1)).thenReturn(Maybe.empty())
 
         interactor.fetchRate(coin, timestamp1)
 
@@ -277,7 +277,7 @@ class TransactionsInteractorTest {
 
         interactor.fetchRate(coin, timestamp1)
 
-        verify(rateManager, times(2)).rateValueObservable(coinCode1, currencyCode, timestamp1)
+        verify(rateManager, times(2)).rateValueFromNetworkObservable(coinCode1, currencyCode, timestamp1)
     }
 
 }

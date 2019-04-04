@@ -178,7 +178,7 @@ class TransactionsLoaderTest {
         val records = listOf(mock(TransactionRecord::class.java))
         val coin = btc
 
-        whenever(dataSource.handleUpdatedRecords(records, coin))
+        whenever(dataSource.updatedRecordsSuccessfully(records, coin))
                 .thenReturn(diffResult)
 
         loader.didUpdateRecords(records, coin)
@@ -191,7 +191,7 @@ class TransactionsLoaderTest {
         val records = listOf(mock(TransactionRecord::class.java))
         val coin = btc
 
-        whenever(dataSource.handleUpdatedRecords(records, coin)).thenReturn(null)
+        whenever(dataSource.updatedRecordsSuccessfully(records, coin)).thenReturn(null)
 
         loader.didUpdateRecords(records, coin)
 

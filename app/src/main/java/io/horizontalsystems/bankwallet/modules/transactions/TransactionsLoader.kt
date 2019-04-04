@@ -1,13 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import android.support.v7.util.DiffUtil
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 
 class TransactionsLoader(private val dataSource: TransactionRecordDataSource) {
 
     interface Delegate {
-        fun onChange(diff: DiffUtil.DiffResult)
+        fun onChange()
         fun didChangeData()
         fun didInsertData(fromIndex: Int, count: Int)
         fun fetchRecords(fetchDataList: List<TransactionsModule.FetchData>)
@@ -18,7 +17,7 @@ class TransactionsLoader(private val dataSource: TransactionRecordDataSource) {
     val itemsCount: Int
         get() = dataSource.itemsCount
 
-    var loading: Boolean = false
+    private var loading: Boolean = false
     val allRecords: Map<Coin, List<TransactionRecord>>
         get() = dataSource.allRecords
 
@@ -64,17 +63,9 @@ class TransactionsLoader(private val dataSource: TransactionRecordDataSource) {
         loading = false
     }
 
-    fun itemIndexesForTimestamp(coin: Coin, timestamp: Long): List<Int> {
-        return dataSource.itemIndexesForTimestamp(coin, timestamp)
-    }
-
-    fun itemIndexesForPending(coin: Coin, thresholdBlockHeight: Int): List<Int> {
-        return dataSource.itemIndexesForPending(coin, thresholdBlockHeight)
-    }
-
     fun didUpdateRecords(records: List<TransactionRecord>, coin: Coin) {
         dataSource.handleUpdatedRecords(records, coin)?.let {
-            delegate?.onChange(it)
+            delegate?.onChange()
         }
     }
 

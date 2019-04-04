@@ -97,7 +97,7 @@ class RateManagerTest {
 //        whenever(rate.value).thenReturn(rateValue)
 //        whenever(storage.rateMaybe(coinCode, currencyCode, timestamp)).thenReturn(Maybe.just(rate))
 //
-//        rateManager.rateValueObservable(coinCode, currencyCode, timestamp)
+//        rateManager.rateValueFromNetworkObservable(coinCode, currencyCode, timestamp)
 //                .test()
 //                .assertResult(rateValue)
     }
@@ -112,7 +112,7 @@ class RateManagerTest {
         whenever(storage.rateMaybe(coinCode, currencyCode, timestamp)).thenReturn(Maybe.empty())
         whenever(networkManager.getRate(coinCode, currencyCode, timestamp)).thenReturn(Maybe.just(rateValueFromNetwork))
 
-        rateManager.rateValueObservable(coinCode, currencyCode, timestamp)
+        rateManager.rateValueFromNetworkObservable(coinCode, currencyCode, timestamp)
                 .test()
 
         verify(networkManager).getRate(coinCode, currencyCode, timestamp)
@@ -133,7 +133,7 @@ class RateManagerTest {
         whenever(latestRate.expired).thenReturn(true)
         whenever(latestRate.value).thenReturn(rateValue)
 
-        rateManager.rateValueObservable(coinCode, currencyCode, timestamp)
+        rateManager.rateValueFromNetworkObservable(coinCode, currencyCode, timestamp)
                 .test()
                 .assertNoValues()
     }
@@ -152,7 +152,7 @@ class RateManagerTest {
         whenever(latestRate.expired).thenReturn(false)
         whenever(latestRate.value).thenReturn(rateValue)
 
-        rateManager.rateValueObservable(coinCode, currencyCode, timestamp)
+        rateManager.rateValueFromNetworkObservable(coinCode, currencyCode, timestamp)
                 .test()
     }
 
@@ -168,7 +168,7 @@ class RateManagerTest {
         whenever(networkManager.getRate(coinCode, currencyCode, timestamp)).thenReturn(Maybe.error(Exception()))
         whenever(latestRate.expired).thenReturn(true)
 
-        rateManager.rateValueObservable(coinCode, currencyCode, timestamp)
+        rateManager.rateValueFromNetworkObservable(coinCode, currencyCode, timestamp)
                 .test()
                 .assertNoValues()
     }
@@ -183,7 +183,7 @@ class RateManagerTest {
         whenever(storage.latestRateObservable(coinCode, currencyCode)).thenReturn(Flowable.empty())
         whenever(networkManager.getRate(coinCode, currencyCode, timestamp)).thenReturn(Maybe.error(Exception()))
 
-        rateManager.rateValueObservable(coinCode, currencyCode, timestamp)
+        rateManager.rateValueFromNetworkObservable(coinCode, currencyCode, timestamp)
                 .test()
                 .assertNoValues()
     }

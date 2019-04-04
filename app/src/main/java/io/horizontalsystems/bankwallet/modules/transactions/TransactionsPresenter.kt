@@ -1,28 +1,47 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
 import android.support.v7.util.DiffUtil
+import android.util.Log
+import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemCacheFactory
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
+import java.util.concurrent.TimeUnit
 
 class TransactionsPresenter(
         private val interactor: TransactionsModule.IInteractor,
         private val router: TransactionsModule.IRouter,
-        private val factory: TransactionViewItemFactory,
+        private val viewFactory: TransactionViewItemFactory,
+        private val viewCacheFactory: TransactionViewItemCacheFactory,
         private val loader: TransactionsLoader,
         private val metadataDataSource: TransactionMetadataDataSource)
     : TransactionsModule.IViewDelegate, TransactionsModule.IInteractorDelegate, TransactionsLoader.Delegate {
 
+    private val disposables = CompositeDisposable()
     var view: TransactionsModule.IView? = null
+    private var flushSubject = PublishSubject.create<Unit>()
+    private var viewItems = listOf<TransactionViewItemCache>()
+
+    private fun updateItems(updatedItems: List<TransactionViewItemCache>) {
+        viewItems = updatedItems
+    }
 
     override fun viewDidLoad() {
         interactor.initialFetch()
-    }
 
-    override fun onVisible() {
-        view?.reload()
+        flushSubject
+                .debounce(1, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext { unit -> updateByDiffUtils() }
+                .subscribe()?.let { disposables.add(it) }
     }
 
     override fun onTransactionItemClick(transaction: TransactionViewItem) {
@@ -38,7 +57,17 @@ class TransactionsPresenter(
     }
 
     override val itemsCount: Int
-        get() = loader.itemsCount
+        get() = viewItems.size
+
+    override fun viewItem(index: Int): TransactionViewItemCache {
+        val item = viewItems[index]
+        if (item.fiatValueString == null) {
+            val transactionItem = loader.itemForIndex(index)
+            val coin = transactionItem.coin
+            interactor.fetchRate(coin, transactionItem.record.timestamp)
+        }
+        return viewItems[index]
+    }
 
     override fun itemForIndex(index: Int): TransactionViewItem {
         val transactionItem = loader.itemForIndex(index)
@@ -47,11 +76,17 @@ class TransactionsPresenter(
         val threshold = metadataDataSource.getConfirmationThreshold(coin)
         val rate = metadataDataSource.getRate(coin, transactionItem.record.timestamp)
 
-        if (rate == null) {
-            interactor.fetchRate(coin, transactionItem.record.timestamp)
-        }
+        return viewFactory.item(transactionItem, lastBlockHeight, threshold, rate)
+    }
 
-        return factory.item(transactionItem, lastBlockHeight, threshold, rate)
+    override fun itemCacheForIndex(index: Int): TransactionViewItemCache {
+        val transactionItem = loader.itemForIndex(index)
+        val coin = transactionItem.coin
+        val lastBlockHeight = metadataDataSource.getLastBlockHeight(coin)
+        val threshold = metadataDataSource.getConfirmationThreshold(coin)
+        val rate = metadataDataSource.getRate(coin, transactionItem.record.timestamp)
+
+        return viewCacheFactory.item(transactionItem, lastBlockHeight, threshold, rate)
     }
 
     override fun onBottomReached() {
@@ -92,34 +127,22 @@ class TransactionsPresenter(
     }
 
     override fun onUpdateLastBlockHeight(coin: Coin, lastBlockHeight: Int) {
-        val oldBlockHeight = metadataDataSource.getLastBlockHeight(coin)
-        val threshold = metadataDataSource.getConfirmationThreshold(coin)
-
         metadataDataSource.setLastBlockHeight(lastBlockHeight, coin)
-
-        if (threshold == null || oldBlockHeight == null) {
-            view?.reload()
-            return
-        }
-
-        val indexes = loader.itemIndexesForPending(coin, oldBlockHeight - threshold)
-        if (indexes.isNotEmpty()) {
-            view?.reloadItems(indexes)
-        }
+        updateViewItems()
     }
 
     override fun onUpdateBaseCurrency() {
         metadataDataSource.clearRates()
-        view?.reload()
+        updateViewItems()
+    }
+
+    override fun didFetchRateNoUpdate(rateValue: BigDecimal, coin: Coin, currency: Currency, timestamp: Long) {
+        metadataDataSource.setRate(rateValue, coin, currency, timestamp)
     }
 
     override fun didFetchRate(rateValue: BigDecimal, coin: Coin, currency: Currency, timestamp: Long) {
         metadataDataSource.setRate(rateValue, coin, currency, timestamp)
-
-        val itemIndexes = loader.itemIndexesForTimestamp(coin, timestamp)
-        if (itemIndexes.isNotEmpty()) {
-            view?.reloadItems(itemIndexes)
-        }
+        updateViewItems()
     }
 
     override fun didUpdateRecords(records: List<TransactionRecord>, coin: Coin) {
@@ -127,23 +150,84 @@ class TransactionsPresenter(
     }
 
     override fun onConnectionRestore() {
-        view?.reload()
+        updateViewItems()
     }
 
     //
     // TransactionsLoader Delegate
     //
 
-    override fun onChange(diff: DiffUtil.DiffResult) {
-        view?.reloadChange(diff)
+    override fun onChange() {
+        updateViewItems()
     }
 
     override fun didChangeData() {
-        view?.reload()
+        updateViewItems()
     }
 
     override fun didInsertData(fromIndex: Int, count: Int) {
-        view?.addItems(fromIndex, count)
+        if (fromIndex == 0) {
+            viewItems = listOf()
+        }
+
+        val copyOfViewItems = viewItems.toMutableList()
+
+        Single.just(copyOfViewItems)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap { oldItems ->
+                    val tempList = mutableListOf<TransactionViewItemCache>()
+                    for (i in fromIndex until fromIndex + count) {
+                        tempList.add(itemCacheForIndex(i))
+                    }
+                    oldItems.addAll(tempList)
+
+                    val diffCallback = TransactionViewItemDiffCallback(oldItems, viewItems)
+                    val diffResult = DiffUtil.calculateDiff(diffCallback)
+
+                    Single.just(Pair(diffResult, oldItems))
+                }
+                .subscribe({ (diffResult, updatedList) ->
+                    if (fromIndex == 0) {
+                        updateItems(updatedList)
+                        view?.initialLoad()
+                    } else {
+                        updateItems(updatedList)
+                        view?.reloadChange(diffResult)
+                    }
+                }, {
+                    Log.e("TxPresent", "error", it)
+                })?.let { disposables.add(it) }
+
+    }
+
+    private fun updateByDiffUtils() {
+        val copyOfViewItems = viewItems.toMutableList()
+
+        Single.just(copyOfViewItems)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap { oldItems ->
+                    val updatedItems = mutableListOf<TransactionViewItemCache>()
+                    for (i in 0 until loader.itemsCount) {
+                        updatedItems.add(itemCacheForIndex(i))
+                    }
+
+                    val diffCallback = TransactionViewItemDiffCallback(oldItems, updatedItems)
+                    val diffResult = DiffUtil.calculateDiff(diffCallback)
+
+                    Single.just(Pair(diffResult, updatedItems))
+                }
+                .subscribe({ (diffResult, updatedList) ->
+                    updateItems(updatedList)
+                    view?.reloadChange(diffResult)
+                }, {
+                    Log.e("TxPresent", "error", it)
+                })?.let { disposables.add(it) }
+    }
+
+    private fun updateViewItems(){
+        flushSubject.onNext(Unit)
     }
 
     override fun fetchRecords(fetchDataList: List<TransactionsModule.FetchData>) {

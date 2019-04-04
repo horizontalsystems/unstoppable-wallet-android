@@ -9,6 +9,7 @@ import android.support.design.widget.BottomSheetBehavior.STATE_EXPANDED
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE
+import android.text.SpannableString
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +28,7 @@ import kotlinx.android.synthetic.main.fragment_transactions.*
 import kotlinx.android.synthetic.main.transaction_info_bottom_sheet.*
 import kotlinx.android.synthetic.main.view_holder_filter.*
 import kotlinx.android.synthetic.main.view_holder_transaction.*
+
 
 class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdapter.Listener, FilterAdapter.Listener {
 
@@ -73,47 +75,30 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
             }
         })
 
-        viewModel.reloadLiveEvent.observe(this, Observer {
-            transactionsAdapter.notifyDataSetChanged()
-
-            if (transactionsAdapter.itemCount == 0) {
-                viewModel.delegate.onBottomReached()
-            }
-
-            recyclerTransactions.visibility = if (viewModel.delegate.itemsCount == 0) View.GONE else View.VISIBLE
-            emptyListText.visibility = if (viewModel.delegate.itemsCount == 0) View.VISIBLE else View.GONE
-        })
-
         viewModel.reloadChangeEvent.observe(this, Observer { diff ->
             diff?.dispatchUpdatesTo(transactionsAdapter)
-
-            if (transactionsAdapter.itemCount == 0) {
-                viewModel.delegate.onBottomReached()
-            }
-
-            recyclerTransactions.visibility = if (viewModel.delegate.itemsCount == 0) View.GONE else View.VISIBLE
-            emptyListText.visibility = if (viewModel.delegate.itemsCount == 0) View.VISIBLE else View.GONE
+            showHideEmptyScreen()
         })
 
-        viewModel.addItemsLiveEvent.observe(this, Observer {
-            it?.let { (fromIndex, count) ->
-                transactionsAdapter.notifyItemRangeInserted(fromIndex, count)
-            }
-        })
-
-        viewModel.reloadItemsLiveEvent.observe(this, Observer {
-            it?.forEach { index ->
-                transactionsAdapter.notifyItemChanged(index)
-            }
+        viewModel.initialLoadLiveEvent.observe(this, Observer {
+            transactionsAdapter.notifyDataSetChanged()
+            showHideEmptyScreen()
         })
 
         setBottomSheet()
     }
 
+    private fun showHideEmptyScreen() {
+        recyclerTransactions.visibility = if (viewModel.delegate.itemsCount == 0) View.GONE else View.VISIBLE
+        emptyListText.visibility = if (viewModel.delegate.itemsCount == 0) View.VISIBLE else View.GONE
+    }
+
     override fun setMenuVisibility(menuVisible: Boolean) {
         super.setMenuVisibility(menuVisible)
         if (menuVisible) {
-            viewModel.delegate.onVisible()
+            if (transactionsAdapter.itemCount == 0) {
+                viewModel.delegate.onBottomReached()
+            }
         }
     }
 
@@ -245,14 +230,32 @@ class TransactionsAdapter(private var listener: Listener) : RecyclerView.Adapter
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
             ViewHolderTransaction(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_transaction, parent, false), this)
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (position > itemCount - 9) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) { }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: MutableList<Any>) {
+        if (position > itemCount - 30) {
             viewModel.delegate.onBottomReached()
         }
 
-        when (holder) {
-            is ViewHolderTransaction -> {
-                holder.bind(viewModel.delegate.itemForIndex(position), showBottomShade = (position == itemCount - 1))
+        if (payloads.isEmpty()) {
+            when (holder) {
+                is ViewHolderTransaction -> {
+                    holder.bind(viewModel.delegate.viewItem(position), showBottomShade = (position == itemCount - 1))
+                }
+            }
+        } else {
+            when (holder) {
+                is ViewHolderTransaction -> {
+                    val item = viewModel.delegate.viewItem(position)
+                    val o = payloads[0] as List<*>
+                    o.forEach { key ->
+                        when(key) {
+                            "fiatValue" -> holder.bindFiatValue(item.fiatValueString)
+                            "status" -> holder.bindStatus(item)
+                            "date" -> holder.bindDate(item.dateString)
+                        }
+                    }
+                }
             }
         }
     }
@@ -272,15 +275,30 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         containerView.setOnSingleClickListener { l.onClick(adapterPosition) }
     }
 
-    fun bind(transactionRecord: TransactionViewItem, showBottomShade: Boolean) {
-        txValueInFiat.text = transactionRecord.currencyValue?.let {
-            App.numberFormatter.formatForTransactions(it, transactionRecord.incoming)
-        }
-        txValueInCoin.text = App.numberFormatter.formatForTransactions(transactionRecord.coinValue)
-        txDate.text = transactionRecord.date?.let { DateHelper.getShortDateForTransaction(it) }
-        val time = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }
-        txStatusWithTimeView.bind(transactionRecord.status, time)
+    fun bind(tx: TransactionViewItemCache, showBottomShade: Boolean) {
+        txValueInFiat.text = tx.fiatValueString
+        txValueInCoin.text = tx.coinValueString
+        txDate.text = tx.dateString
+        txStatusWithTimeView.bind(tx.status, tx.timeString)
         bottomShade.visibility = if (showBottomShade) View.VISIBLE else View.GONE
+    }
+
+    fun bindFiatValue(fiatValue: SpannableString?) {
+        if(txValueInFiat.text.isEmpty()) {
+            txValueInFiat.text = fiatValue
+            txValueInFiat.alpha = 0f
+            txValueInFiat.animate().alpha(1f)
+        } else {
+            txValueInFiat.text = fiatValue
+        }
+    }
+
+    fun bindStatus(tx: TransactionViewItemCache) {
+        txStatusWithTimeView.bind(tx.status, tx.timeString)
+    }
+
+    fun bindDate(dateString: String?) {
+        txDate.text = dateString
     }
 }
 
@@ -328,8 +346,7 @@ class ViewHolderFilter(override val containerView: View, private val l: ClickLis
     }
 
     fun bind(coin: Coin?, active: Boolean) {
-        filter_text.text = coin?.code
-                ?: containerView.context.getString(R.string.Transactions_FilterAll)
+        filter_text.text = coin?.code ?: containerView.context.getString(R.string.Transactions_FilterAll)
         filter_text.isActivated = active
         filter_text.setOnClickListener { l.onClickItem(adapterPosition) }
     }

@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.managers.NetworkAvailabilityManager
 import io.horizontalsystems.bankwallet.core.managers.RateManager
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -93,8 +94,31 @@ class TransactionsInteractor(
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe { records, t2 ->
-                    delegate?.didFetchRecords(records)
+                    setRatesFromDb(records)
                 }
+                .let { disposables.add(it) }
+    }
+
+    private fun setRatesFromDb(records: Map<Coin, List<TransactionRecord>>) {
+        val baseCurrency = currencyManager.baseCurrency
+        val currencyCode = baseCurrency.code
+
+        Maybe.fromCallable {
+            records.forEach { rec ->
+                rec.value.forEach { tx ->
+                    rateManager.rateValueFromDbObservable(rec.key.code, currencyCode, tx.timestamp)
+                            .doOnSuccess { delegate?.didFetchRateNoUpdate(it, rec.key, baseCurrency, tx.timestamp) }
+                            .blockingGet()
+                }
+            }
+        }
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe({
+                    delegate?.didFetchRecords(records)
+                }, {
+                    delegate?.didFetchRecords(records)
+                })
                 .let { disposables.add(it) }
     }
 
@@ -124,7 +148,7 @@ class TransactionsInteractor(
 
         requestedTimestamps[composedKey] = timestamp
 
-        rateManager.rateValueObservable(coin.code, currencyCode, timestamp)
+        rateManager.rateValueFromNetworkObservable(coin.code, currencyCode, timestamp)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe({

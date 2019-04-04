@@ -235,7 +235,7 @@ class TransactionRecordDataSourceTest {
 
         whenever(poolRepo.getPool(btc)).thenReturn(null)
 
-        Assert.assertNull(dataSource.handleUpdatedRecords(records, btc))
+        Assert.assertNull(dataSource.updatedRecordsSuccessfully(records, btc))
     }
 
     @Test
@@ -247,7 +247,7 @@ class TransactionRecordDataSourceTest {
         whenever(poolRepo.getPool(btc)).thenReturn(pool)
         whenever(poolRepo.isPoolActiveByCoinCode(btc)).thenReturn(false)
 
-        Assert.assertNull(dataSource.handleUpdatedRecords(records, btc))
+        Assert.assertNull(dataSource.updatedRecordsSuccessfully(records, btc))
     }
 
     @Test
@@ -262,7 +262,7 @@ class TransactionRecordDataSourceTest {
         whenever(pool.handleUpdatedRecord(record1)).thenReturn(Pool.HandleResult.NEW_DATA)
         whenever(itemsDataSource.shouldInsertRecord(record1)).thenReturn(false)
 
-        Assert.assertNull(dataSource.handleUpdatedRecords(records, btc))
+        Assert.assertNull(dataSource.updatedRecordsSuccessfully(records, btc))
     }
 
     @Test
@@ -279,7 +279,7 @@ class TransactionRecordDataSourceTest {
         whenever(itemsDataSource.shouldInsertRecord(record1)).thenReturn(true)
         whenever(factory.createTransactionItem(btc, record1)).thenReturn(transactionItem)
 
-        val result = dataSource.handleUpdatedRecords(records, btc)
+        val result = dataSource.updatedRecordsSuccessfully(records, btc)
 
         verify(pool).increaseFirstUnusedIndex()
         verify(itemsDataSource).handleModifiedItems(listOf(), listOf(transactionItem))
@@ -298,7 +298,7 @@ class TransactionRecordDataSourceTest {
         whenever(poolRepo.isPoolActiveByCoinCode(btc)).thenReturn(true)
         whenever(pool.handleUpdatedRecord(record1)).thenReturn(Pool.HandleResult.IGNORED)
 
-        Assert.assertNull(dataSource.handleUpdatedRecords(records, btc))
+        Assert.assertNull(dataSource.updatedRecordsSuccessfully(records, btc))
     }
 
     @Test
@@ -326,7 +326,7 @@ class TransactionRecordDataSourceTest {
         whenever(factory.createTransactionItem(btc, updatedRecord2)).thenReturn(updatedItem2)
         whenever(factory.createTransactionItem(btc, insertedRecord1)).thenReturn(insertedItem1)
 
-        dataSource.handleUpdatedRecords(records, btc)
+        dataSource.updatedRecordsSuccessfully(records, btc)
 
         verify(itemsDataSource).handleModifiedItems(listOf(updatedItem1, updatedItem2), listOf(insertedItem1))
     }

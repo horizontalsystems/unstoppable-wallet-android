@@ -42,25 +42,25 @@ class RateManager(private val storage: IRateStorage, private val networkManager:
                 .firstElement()
                 .flatMap {
                     if (it.expired) {
-                         Maybe.empty()
+                        Maybe.empty()
                     } else {
                         Maybe.just(it.value)
                     }
                 }
     }
 
-    fun rateValueObservable(coinCode: CoinCode, currencyCode: String, timestamp: Long): Maybe<BigDecimal> {
-        return storage.rateMaybe(coinCode, currencyCode, timestamp)
-                .map { it.value }
-                .switchIfEmpty (
-                    networkManager.getRate(coinCode, currencyCode, timestamp)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .doOnSuccess { rateFromNetwork ->
-                                storage.save(Rate(coinCode, currencyCode, rateFromNetwork, timestamp, false))
-                            }
-                            .switchIfEmpty(getLatestRateFallbackFlowable(coinCode, currencyCode, timestamp))
-                )
+    fun rateValueFromNetworkObservable(coinCode: CoinCode, currencyCode: String, timestamp: Long): Maybe<BigDecimal> {
+        return networkManager.getRate(coinCode, currencyCode, timestamp)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSuccess { rateFromNetwork ->
+                    storage.save(Rate(coinCode, currencyCode, rateFromNetwork, timestamp, false))
+                }
+                .switchIfEmpty(getLatestRateFallbackFlowable(coinCode, currencyCode, timestamp))
+    }
+
+    fun rateValueFromDbObservable(coinCode: CoinCode, currencyCode: String, timestamp: Long): Maybe<BigDecimal> {
+        return storage.rateMaybe(coinCode, currencyCode, timestamp).map { it.value }
     }
 
     fun clear() {

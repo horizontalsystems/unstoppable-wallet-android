@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import android.support.v7.util.DiffUtil
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.TransactionItem
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
@@ -10,7 +9,7 @@ class TransactionRecordDataSource(
         private val poolRepo: PoolRepo,
         private val itemsDataSource: TransactionItemDataSource,
         private val factory: TransactionItemFactory,
-        private val limit: Int = 10) {
+        private val limit: Int = 40) {
 
     val itemsCount
         get() = itemsDataSource.count
@@ -26,13 +25,6 @@ class TransactionRecordDataSource(
     fun itemForIndex(index: Int): TransactionItem =
             itemsDataSource.itemForIndex(index)
 
-    fun itemIndexesForTimestamp(coin: Coin, timestamp: Long): List<Int> =
-            itemsDataSource.itemIndexesForTimestamp(coin, timestamp)
-
-
-    fun itemIndexesForPending(coin: Coin, thresholdBlockHeight: Int): List<Int> =
-            itemsDataSource.itemIndexesForPending(coin, thresholdBlockHeight)
-
     fun getFetchDataList(): List<FetchData> = poolRepo.activePools.mapNotNull {
         it.getFetchData(limit)
     }
@@ -43,7 +35,7 @@ class TransactionRecordDataSource(
         }
     }
 
-    fun handleUpdatedRecords(records: List<TransactionRecord>, coin: Coin): DiffUtil.DiffResult? {
+    fun handleUpdatedRecords(records: List<TransactionRecord>, coin: Coin): List<TransactionItem>? {
         val pool = poolRepo.getPool(coin) ?: return null
 
         val updatedRecords = mutableListOf<TransactionRecord>()
@@ -104,4 +96,3 @@ class TransactionRecordDataSource(
         itemsDataSource.clear()
     }
 }
-

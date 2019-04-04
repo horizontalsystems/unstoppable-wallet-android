@@ -13,37 +13,23 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
     val filterItems = MutableLiveData<List<Coin?>>()
     val transactionViewItemLiveEvent = SingleLiveEvent<TransactionViewItem>()
     val reloadChangeEvent = SingleLiveEvent<DiffUtil.DiffResult>()
-    val reloadLiveEvent = SingleLiveEvent<Unit>()
-    val reloadItemsLiveEvent = SingleLiveEvent<List<Int>>()
-    val addItemsLiveEvent = SingleLiveEvent<Pair<Int, Int>>()
+    val initialLoadLiveEvent = SingleLiveEvent<Unit>()
 
     fun init() {
         TransactionsModule.initModule(this, this)
         delegate.viewDidLoad()
     }
 
+    override fun initialLoad() {
+        initialLoadLiveEvent.call()
+    }
+
     override fun showFilters(filters: List<Coin?>) {
         filterItems.postValue(filters)
     }
 
-    override fun reload() {
-        reloadLiveEvent.postValue(Unit)
-    }
-
     override fun reloadChange(diff: DiffUtil.DiffResult) {
         reloadChangeEvent.postValue(diff)
-    }
-
-    override fun reloadItems(updatedIndexes: List<Int>) {
-        reloadItemsLiveEvent.postValue(updatedIndexes)
-    }
-
-    override fun addItems(fromIndex: Int, count: Int) {
-        if (fromIndex == 0) {
-            reload()
-        } else {
-            addItemsLiveEvent.postValue(Pair(fromIndex, count))
-        }
     }
 
     override fun openTransactionInfo(transactionViewItem: TransactionViewItem) {
