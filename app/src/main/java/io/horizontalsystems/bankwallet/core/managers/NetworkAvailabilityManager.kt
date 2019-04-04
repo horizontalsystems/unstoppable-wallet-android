@@ -1,12 +1,13 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import io.horizontalsystems.bankwallet.core.App
 import io.reactivex.subjects.PublishSubject
+
 
 class NetworkAvailabilityManager {
 
@@ -16,11 +17,7 @@ class NetworkAvailabilityManager {
     val networkAvailabilitySignal = PublishSubject.create<Unit>()
 
     init {
-        App.instance.registerReceiver(object : BroadcastReceiver() {
-            override fun onReceive(context: Context, intent: Intent) {
-                onUpdateStatus()
-            }
-        }, IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"))
+        listenNetworkViaConnectivityManager()
     }
 
     private fun onUpdateStatus() {
@@ -30,6 +27,24 @@ class NetworkAvailabilityManager {
             isConnected = newIsConnected
             networkAvailabilitySignal.onNext(Unit)
         }
+    }
+
+    private fun listenNetworkViaConnectivityManager() {
+        val request = NetworkRequest.Builder()
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)
+                .build()
+
+        connectivityManager.registerNetworkCallback(request, object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) {
+                onUpdateStatus()
+            }
+
+            override fun onLost(network: Network?) {
+                onUpdateStatus()
+            }
+        })
+
     }
 
 }
