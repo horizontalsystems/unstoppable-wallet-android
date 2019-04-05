@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.extensions.InputTextView
 
-class WordsInputAdapter(private val listener: InputTextViewHolder.WordsChangedListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class WordsInputAdapter(private val listener: InputTextViewHolder.WordsChangedListener) : RecyclerView.Adapter<InputTextViewHolder>() {
 
     override fun getItemCount() = 12
 
@@ -15,8 +15,8 @@ class WordsInputAdapter(private val listener: InputTextViewHolder.WordsChangedLi
         return InputTextViewHolder(inputTextView, listener)
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as? InputTextViewHolder)?.bind(position)
+    override fun onBindViewHolder(holder: InputTextViewHolder, position: Int) {
+        holder.bind(position)
     }
 
 }
