@@ -19,8 +19,8 @@
     <string name="Guest_CreateWallet">새 지갑</string>
     <string name="Guest_RestoreWallet">지갑 복원</string>
     <!--Restore-->
-    <string name="Restore_Title">Restore</string>
-    <string name="Restore_Subtitle">Enter Secret Key</string>
+    <string name="Restore_Title">복구</string>
+    <string name="Restore_Subtitle">비밀 키를 입력</string>
     <string name="Restore_ValidationFailed">잘못 된 비밀 키</string>
     <string name="Restore_RestoreFailed">지갑 복구에 실패하였습니다.</string>
     <!--Backup-->
@@ -36,7 +36,7 @@
     <string name="Backup_Confirmation_Title">비밀 키에서 단어를 입력</string>
     <string name="Backup_Confirmation_Description">비밀 키에서 단어를 입력.</string>
     <string name="Backup_Confirmation_FailureAlertText">암호가 일치 하지 않습니다.</string>
-    <string name="Backup_Confirmation_CheckTitle">Check…</string>
+    <string name="Backup_Confirmation_CheckTitle">확인 중…</string>
     <string name="Backup_Button_Confirm">확인</string>
     <string name="Backup_Button_Next">다음</string>
     <string name="Backup_Button_Submit">제출하기</string>
