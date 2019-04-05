@@ -189,8 +189,8 @@
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Désactivé jusqu\'à: %s</string>
     <!--OS Pin-->
-    <string name="OSPin_Confirm_Title">Title</string>
-    <string name="OSPin_Confirm_Desciption">Description</string>
+    <string name="OSPin_Confirm_Title">-</string>
+    <string name="OSPin_Confirm_Desciption">-</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Code</string>
     <string name="SetPin_Info">Votre code sera utilisé pour déverrouiller votre porte-monnaie et envoyer de l’argent</string>
