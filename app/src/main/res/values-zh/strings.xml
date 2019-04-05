@@ -19,8 +19,8 @@
     <string name="Guest_CreateWallet">新的钱包</string>
     <string name="Guest_RestoreWallet">恢复钱包</string>
     <!--Restore-->
-    <string name="Restore_Title">Restore</string>
-    <string name="Restore_Subtitle">Enter Secret Key</string>
+    <string name="Restore_Title">恢复</string>
+    <string name="Restore_Subtitle">输入密钥</string>
     <string name="Restore_ValidationFailed">密钥不正确</string>
     <string name="Restore_RestoreFailed">无法创建钱包</string>
     <!--Backup-->
@@ -36,7 +36,7 @@
     <string name="Backup_Confirmation_Title">请输入你密钥中的词</string>
     <string name="Backup_Confirmation_Description">请输入你密钥中的词.</string>
     <string name="Backup_Confirmation_FailureAlertText"> 单词不匹配</string>
-    <string name="Backup_Confirmation_CheckTitle">Check…</string>
+    <string name="Backup_Confirmation_CheckTitle">正在检查...</string>
     <string name="Backup_Button_Confirm">确认</string>
     <string name="Backup_Button_Next">继续</string>
     <string name="Backup_Button_Submit">提交</string>
