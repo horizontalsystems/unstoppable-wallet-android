@@ -19,8 +19,8 @@
     <string name="Guest_CreateWallet">Wallet Erstellen</string>
     <string name="Guest_RestoreWallet">Wallet Wiederherstellen</string>
     <!--Restore-->
-    <string name="Restore_Title">Restore</string>
-    <string name="Restore_Subtitle">Enter Secret Key</string>
+    <string name="Restore_Title">Wiederherstellen</string>
+    <string name="Restore_Subtitle">Offlineschlüssel eingeben</string>
     <string name="Restore_ValidationFailed">Falscher Offlineschlüssel</string>
     <string name="Restore_RestoreFailed">Fehler beim Wiederherstellen des Wallet</string>
     <!--Backup-->
