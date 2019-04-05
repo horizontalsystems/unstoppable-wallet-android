@@ -38,11 +38,10 @@ class AppConfigProvider : IAppConfigProvider {
 
     override val defaultCoins: List<Coin>
         get() {
-            val suffix = if (testMode) "(t)" else ""
             val coins = mutableListOf<Coin>()
-            coins.add(Coin("Bitcoin$suffix", "BTC", CoinType.Bitcoin))
-            coins.add(Coin("Bitcoin Cash$suffix", "BCH", CoinType.BitcoinCash))
-            coins.add(Coin("Ethereum$suffix", "ETH", CoinType.Ethereum))
+            coins.add(Coin("Bitcoin", "BTC", CoinType.Bitcoin))
+            coins.add(Coin("Bitcoin Cash", "BCH", CoinType.BitcoinCash))
+            coins.add(Coin("Ethereum", "ETH", CoinType.Ethereum))
             return coins
         }
 
