@@ -52,6 +52,7 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
 
     override fun reloadItems(updatedIndexes: List<Int>) {
         indexesToUpdate.addAll(updatedIndexes)
+        indexesToUpdate = indexesToUpdate.distinct().toMutableList()
         flushSubject.onNext(Unit)
     }
 
