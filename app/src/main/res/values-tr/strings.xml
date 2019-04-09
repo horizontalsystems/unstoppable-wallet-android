@@ -19,8 +19,8 @@
     <string name="Guest_CreateWallet">Yeni Cüzdan</string>
     <string name="Guest_RestoreWallet">Cüzdanı Geri Yükle</string>
     <!--Restore-->
-    <string name="Restore_Title">Restore</string>
-    <string name="Restore_Subtitle">Enter Secret Key</string>
+    <string name="Restore_Title">Geri Yükle</string>
+    <string name="Restore_Subtitle">Gizli Anahtarı girin</string>
     <string name="Restore_ValidationFailed">Hatalı Gizli anahtar</string>
     <string name="Restore_RestoreFailed">Cüzdan geri yüklenemedi</string>
     <!--Backup-->
@@ -36,7 +36,7 @@
     <string name="Backup_Confirmation_Title">Gizli Anahtarınızda ki istenen kelimeleri giriniz</string>
     <string name="Backup_Confirmation_Description">Gizli Anahtarınızda ki kelimeleri girin.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Kelimeler eşleşmiyor</string>
-    <string name="Backup_Confirmation_CheckTitle">Check…</string>
+    <string name="Backup_Confirmation_CheckTitle">Kontrol etme…</string>
     <string name="Backup_Button_Confirm">Onayla</string>
     <string name="Backup_Button_Next">İleri</string>
     <string name="Backup_Button_Submit">Onayla</string>
