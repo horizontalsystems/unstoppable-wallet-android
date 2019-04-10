@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
-import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.entities.LatestRateData
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
@@ -20,26 +19,26 @@ import retrofit2.http.Url
 import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 
-class NetworkManager(private val appConfig: IAppConfigProvider) : INetworkManager {
+class NetworkManager : INetworkManager {
 
-    override fun getRate(coinCode: String, currency: String, timestamp: Long): Maybe<BigDecimal> {
-        val apiService = ServiceExchangeApi.service(appConfig.ipfsUrl)
+    override fun getRateByDay(requestUrl: String, coinCode: String, currency: String, timestamp: Long): Maybe<BigDecimal> {
+        return ServiceExchangeApi.service(requestUrl)
+                .getRateByDay(coinCode, currency, DateHelper.formatDateInUTC(timestamp, "yyyy/MM/dd"))
+                .map { it.toBigDecimal() }
+    }
 
-        val hourFlowable = apiService.getRateByHour(coinCode, currency, DateHelper.formatDateInUTC(timestamp, "yyyy/MM/dd/HH"))
-        val dayFlowable = apiService.getRateByDay(coinCode, currency, DateHelper.formatDateInUTC(timestamp, "yyyy/MM/dd"))
-
-        return hourFlowable
+    override fun getRateByHour(requestUrl: String, coinCode: String, currency: String, timestamp: Long): Maybe<BigDecimal> {
+        return ServiceExchangeApi.service(requestUrl)
+                .getRateByHour(coinCode, currency, DateHelper.formatDateInUTC(timestamp, "yyyy/MM/dd/HH"))
                 .flatMap { minuteRates ->
                     Maybe.just(minuteRates.getValue(DateHelper.formatDateInUTC(timestamp, "mm")).toBigDecimal())
                 }
-                .onErrorResumeNext(dayFlowable.map { it.toBigDecimal() })
     }
 
-    override fun getLatestRateData(currency: String): Flowable<LatestRateData> {
-        return ServiceExchangeApi.service(appConfig.ipfsUrl)
+    override fun getLatestRateData(requestUrl: String, currency: String): Maybe<LatestRateData> {
+        return ServiceExchangeApi.service(requestUrl)
                 .getLatestRate(currency)
-                .map { LatestRateData(it.rates, it.currency, it.timestamp/1000) }
-                .onErrorResumeNext(Flowable.empty())
+                .map { LatestRateData(it.rates, it.currency, it.timestamp / 1000) }
     }
 
     override fun getTransaction(host: String, path: String): Flowable<JsonObject> {
@@ -79,7 +78,7 @@ object ServiceExchangeApi {
         @GET("xrates/latest/{fiat}/index.json")
         fun getLatestRate(
                 @Path("fiat") currency: String
-        ): Flowable<LatestRateData>
+        ): Maybe<LatestRateData>
 
     }
 }
@@ -111,7 +110,7 @@ object ServicePing {
 }
 
 object APIClient {
-    fun retrofit(apiURL: String, timeout: Long = 60): Retrofit {
+    fun retrofit(apiURL: String, timeout: Long = 30): Retrofit {
 
         val logger = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BASIC

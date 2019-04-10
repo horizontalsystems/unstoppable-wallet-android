@@ -9,7 +9,10 @@ import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.Currency
 
 class AppConfigProvider : IAppConfigProvider {
-    override val ipfsUrl = "https://ipfs.io/ipns/QmXTJZBMMRmBbPun6HFt3tmb3tfYF2usLPxFoacL7G5uMX/"
+
+    override val ipfsId = "QmXTJZBMMRmBbPun6HFt3tmb3tfYF2usLPxFoacL7G5uMX"
+    override val ipfsMainGateway=  "ipfs.io"
+    override val ipfsFallbackGateway = "ipfs-ext.horizontalsystems.xyz"
 
     override val fiatDecimal: Int = 2
     override val maxDecimal: Int = 8

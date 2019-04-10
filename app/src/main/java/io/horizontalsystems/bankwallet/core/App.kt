@@ -86,8 +86,8 @@ class App : Application() {
         coinsStorage = StorableCoinsRepository(appDatabase)
         localStorage = LocalStorageManager()
 
-        networkManager = NetworkManager(appConfigProvider)
-        rateManager = RateManager(rateStorage, networkManager)
+        networkManager = NetworkManager()
+        rateManager = RateManager(rateStorage, networkManager, appConfigProvider)
         coinManager = CoinManager(appConfigProvider, coinsStorage)
         authManager = AuthManager(secureStorage, localStorage, coinManager, rateManager, ethereumKitManager)
 
