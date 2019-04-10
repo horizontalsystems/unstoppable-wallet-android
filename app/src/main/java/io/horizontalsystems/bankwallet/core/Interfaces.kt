@@ -58,8 +58,9 @@ interface IRandomProvider {
 }
 
 interface INetworkManager {
-    fun getLatestRateData(currency: String): Flowable<LatestRateData>
-    fun getRate(coinCode: String, currency: String, timestamp: Long): Maybe<BigDecimal>
+    fun getLatestRateData(requestUrl: String, currency: String): Maybe<LatestRateData>
+    fun getRateByDay(requestUrl: String, coinCode: String, currency: String, timestamp: Long): Maybe<BigDecimal>
+    fun getRateByHour(requestUrl: String, coinCode: String, currency: String, timestamp: Long): Maybe<BigDecimal>
     fun getTransaction(host: String, path: String): Flowable<JsonObject>
     fun ping(host: String, url: String): Flowable<Any>
 }
@@ -188,7 +189,9 @@ interface ILockManager {
 }
 
 interface IAppConfigProvider {
-    val ipfsUrl: String
+    val ipfsId: String
+    val ipfsMainGateway: String
+    val ipfsFallbackGateway: String
     val fiatDecimal: Int
     val maxDecimal: Int
     val testMode: Boolean
