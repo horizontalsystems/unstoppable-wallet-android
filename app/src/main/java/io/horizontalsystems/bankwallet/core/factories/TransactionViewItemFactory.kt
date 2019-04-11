@@ -29,8 +29,13 @@ class TransactionViewItemFactory {
 
         val incoming = record.amount > BigDecimal.ZERO
 
-        val toAddress = if (incoming) null else record.to.find { !it.mine }?.address
-        val fromAddress = if (!incoming) null else record.from.firstOrNull { !it.mine }?.address
+        var toAddress = if (incoming) null else record.to.firstOrNull { !it.mine }?.address
+        var fromAddress = if (!incoming) null else record.from.firstOrNull { !it.mine }?.address
+
+        if (toAddress == null && fromAddress == null) {
+            toAddress = record.to.firstOrNull()?.address
+            fromAddress = record.from.firstOrNull()?.address
+        }
 
         val currencyValue = rate?.let { CurrencyValue(it.currency, record.amount * it.value) }
 
