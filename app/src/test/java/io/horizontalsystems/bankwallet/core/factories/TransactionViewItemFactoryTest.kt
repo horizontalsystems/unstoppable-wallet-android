@@ -21,7 +21,7 @@ class TransactionViewItemFactoryTest {
 
     private val txRecordOutgoing = TransactionRecord(hash).apply {
         blockHeight = 900
-        amount = 123.toBigDecimal()
+        amount = (-123).toBigDecimal()
         timestamp = 1553769996L
         from = listOf(myTxAddress)
         to = listOf(toTxAddress)
@@ -63,7 +63,7 @@ class TransactionViewItemFactoryTest {
     fun getItem_outgoing() {
         val txItem = TransactionItem(bitCoin, txRecordOutgoing)
         val currencyValue = CurrencyValue(rate.currency, txRecordOutgoing.amount * rate.value)
-        val incoming = true
+        val incoming = false
 
         val expectedItem = TransactionViewItem(
                 txRecordOutgoing.transactionHash,
@@ -71,7 +71,7 @@ class TransactionViewItemFactoryTest {
                 CoinValue(txItem.coin.code, txRecordOutgoing.amount),
                 currencyValue,
                 null,
-                txRecordOutgoing.from.firstOrNull { !it.mine }?.address,
+                toTxAddress.address,
                 incoming,
                 Date(txRecordOutgoing.timestamp * 1000),
                 TransactionStatus.Completed,
@@ -80,6 +80,40 @@ class TransactionViewItemFactoryTest {
 
         val item = txViewItemFactory.item(txItem, lastBlockHeight, 6, rate)
 
+        Assert.assertEquals(expectedItem, item)
+    }
+
+    @Test
+    fun getItem_forTransactionToYourself() {
+
+        val txRecordToMyself = TransactionRecord(hash).apply {
+            blockHeight = 900
+            amount = 123.toBigDecimal()
+            timestamp = 1553769996L
+            from = listOf(myTxAddress)
+            to = listOf(myTxAddress)
+        }
+
+        val txItem = TransactionItem(bitCoin, txRecordToMyself)
+        val currencyValue = CurrencyValue(rate.currency, txRecordToMyself.amount * rate.value)
+        val incoming = true
+
+        val expectedItem = TransactionViewItem(
+                txRecordToMyself.transactionHash,
+                txItem.coin,
+                CoinValue(txItem.coin.code, txRecordToMyself.amount),
+                currencyValue,
+                myTxAddress.address,
+                myTxAddress.address,
+                incoming,
+                Date(txRecordToMyself.timestamp * 1000),
+                TransactionStatus.Completed,
+                rate
+        )
+
+        val item = txViewItemFactory.item(txItem, lastBlockHeight, 6, rate)
+
         Assert.assertEquals(item, expectedItem)
     }
+
 }
