@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
+import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.entities.LatestRateData
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
@@ -19,27 +20,36 @@ import retrofit2.http.Url
 import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 
-class NetworkManager : INetworkManager {
+class NetworkManager(val appConfigProvider: IAppConfigProvider) : INetworkManager {
 
-    override fun getRateByDay(requestUrl: String, coinCode: String, currency: String, timestamp: Long): Maybe<BigDecimal> {
-        return ServiceExchangeApi.service(requestUrl)
+    private val mainRateClient: ServiceExchangeApi.IExchangeRate = APIClient
+            .retrofit("https://${appConfigProvider.ipfsMainGateway}/ipns/${appConfigProvider.ipfsId}/")
+            .create(ServiceExchangeApi.IExchangeRate::class.java)
+
+    private val fallbackRateClient: ServiceExchangeApi.IExchangeRate = APIClient
+            .retrofit("https://${appConfigProvider.ipfsFallbackGateway}/ipns/${appConfigProvider.ipfsId}/")
+            .create(ServiceExchangeApi.IExchangeRate::class.java)
+
+    override fun getRateByDay(hostType: ServiceExchangeApi.HostType, coinCode: String, currency: String, timestamp: Long): Maybe<BigDecimal> {
+        return rateApiClient(hostType)
                 .getRateByDay(coinCode, currency, DateHelper.formatDateInUTC(timestamp, "yyyy/MM/dd"))
                 .map { it.toBigDecimal() }
     }
 
-    override fun getRateByHour(requestUrl: String, coinCode: String, currency: String, timestamp: Long): Maybe<BigDecimal> {
-        return ServiceExchangeApi.service(requestUrl)
+    override fun getRateByHour(hostType: ServiceExchangeApi.HostType, coinCode: String, currency: String, timestamp: Long): Maybe<BigDecimal> {
+        return rateApiClient(hostType)
                 .getRateByHour(coinCode, currency, DateHelper.formatDateInUTC(timestamp, "yyyy/MM/dd/HH"))
                 .flatMap { minuteRates ->
                     Maybe.just(minuteRates.getValue(DateHelper.formatDateInUTC(timestamp, "mm")).toBigDecimal())
                 }
     }
 
-    override fun getLatestRateData(requestUrl: String, currency: String): Maybe<LatestRateData> {
-        return ServiceExchangeApi.service(requestUrl)
+    override fun getLatestRateData(hostType: ServiceExchangeApi.HostType, currency: String): Maybe<LatestRateData> {
+        return rateApiClient(hostType)
                 .getLatestRate(currency)
                 .map { LatestRateData(it.rates, it.currency, it.timestamp / 1000) }
     }
+
 
     override fun getTransaction(host: String, path: String): Flowable<JsonObject> {
         return ServiceFullTransaction.service(host)
@@ -50,13 +60,19 @@ class NetworkManager : INetworkManager {
         return ServicePing.service(host)
                 .ping(url)
     }
+
+    private fun rateApiClient(hostType: ServiceExchangeApi.HostType): ServiceExchangeApi.IExchangeRate {
+        return when(hostType) {
+            ServiceExchangeApi.HostType.MAIN -> mainRateClient
+            else -> fallbackRateClient
+        }
+    }
 }
 
 object ServiceExchangeApi {
 
-    fun service(apiURL: String): IExchangeRate {
-        return APIClient.retrofit(apiURL)
-                .create(IExchangeRate::class.java)
+    enum class HostType {
+        MAIN, FALLBACK
     }
 
     interface IExchangeRate {

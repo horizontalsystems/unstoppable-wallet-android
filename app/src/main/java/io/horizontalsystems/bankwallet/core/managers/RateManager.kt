@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.IRateStorage
 import io.horizontalsystems.bankwallet.entities.Rate
@@ -13,10 +12,7 @@ import retrofit2.HttpException
 import java.math.BigDecimal
 import java.net.SocketTimeoutException
 
-class RateManager(private val storage: IRateStorage, private val networkManager: INetworkManager, appConfigProvider: IAppConfigProvider) {
-
-    private val mainUrl = "https://${appConfigProvider.ipfsMainGateway}/ipns/${appConfigProvider.ipfsId}/"
-    private val fallbackUrl = "https://${appConfigProvider.ipfsFallbackGateway}/ipns/${appConfigProvider.ipfsId}/"
+class RateManager(private val storage: IRateStorage, private val networkManager: INetworkManager) {
 
     private var refreshDisposables: CompositeDisposable = CompositeDisposable()
 
@@ -25,18 +21,21 @@ class RateManager(private val storage: IRateStorage, private val networkManager:
 
         //mainUrl sometime returns expired rates, thus currently first request is done to fallbackUrl
         refreshDisposables.add(
-                networkManager.getLatestRateData(fallbackUrl, currencyCode)
-                        .onErrorResumeNext(networkManager.getLatestRateData(mainUrl, currencyCode))
+                networkManager.getLatestRateData(ServiceExchangeApi.HostType.FALLBACK, currencyCode)
+                        .onErrorResumeNext(networkManager.getLatestRateData(ServiceExchangeApi.HostType.MAIN, currencyCode))
                         .subscribeOn(Schedulers.io())
                         .observeOn(Schedulers.io())
-                        .subscribe{ latestRateData ->
+                        .subscribe ({ latestRateData ->
                             coinCodes.forEach { coinCode ->
                                 latestRateData.rates[coinCode]?.toBigDecimalOrNull()?.let {
                                     val rate = Rate(coinCode, latestRateData.currency, it, latestRateData.timestamp, true)
                                     storage.saveLatest(rate)
                                 }
                             }
+                        }, {
+                            //request failed
                         })
+        )
     }
 
     private fun getLatestRateFallbackFlowable(coinCode: CoinCode, currencyCode: String, timestamp: Long): Maybe<BigDecimal> {
@@ -59,17 +58,19 @@ class RateManager(private val storage: IRateStorage, private val networkManager:
         return storage.rateMaybe(coinCode, currencyCode, timestamp)
                 .map { it.value }
                 .switchIfEmpty(
-                        networkManager.getRateByHour(mainUrl, coinCode, currencyCode, timestamp)
+                        networkManager.getRateByHour(ServiceExchangeApi.HostType.MAIN, coinCode, currencyCode, timestamp)
                                 .onErrorResumeNext { t: Throwable ->
                                     when (t) {
-                                        is SocketTimeoutException -> networkManager.getRateByHour(fallbackUrl, coinCode, currencyCode, timestamp)
-                                                .onErrorResumeNext (networkManager.getRateByDay(fallbackUrl, coinCode, currencyCode, timestamp))
-                                        is HttpException -> networkManager.getRateByDay(mainUrl, coinCode, currencyCode, timestamp)
-                                                .onErrorResumeNext (networkManager.getRateByDay(fallbackUrl, coinCode, currencyCode, timestamp))
+                                        is SocketTimeoutException ->
+                                            networkManager.getRateByHour(ServiceExchangeApi.HostType.FALLBACK, coinCode, currencyCode, timestamp)
+                                                    .onErrorResumeNext(networkManager.getRateByDay(ServiceExchangeApi.HostType.FALLBACK, coinCode, currencyCode, timestamp))
+                                        is HttpException ->
+                                            networkManager.getRateByDay(ServiceExchangeApi.HostType.MAIN, coinCode, currencyCode, timestamp)
+                                                    .onErrorResumeNext(networkManager.getRateByDay(ServiceExchangeApi.HostType.FALLBACK, coinCode, currencyCode, timestamp))
                                         else -> throw t
                                     }
                                 }
-                                .doOnSuccess {rateFromNetwork ->
+                                .doOnSuccess { rateFromNetwork ->
                                     storage.save(Rate(coinCode, currencyCode, rateFromNetwork, timestamp, false))
                                 }
                                 .onErrorResumeNext(getLatestRateFallbackFlowable(coinCode, currencyCode, timestamp))

@@ -15,6 +15,8 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
+import retrofit2.HttpException
+import java.net.SocketTimeoutException
 
 class RateManagerTest {
 
@@ -22,7 +24,10 @@ class RateManagerTest {
 
     private val networkManager = mock(INetworkManager::class.java)
 
+    private val httpException = mock(HttpException::class.java)
     private val storage = mock(IRateStorage::class.java)
+    private val mainHost = ServiceExchangeApi.HostType.MAIN
+    private val fallbackHost = ServiceExchangeApi.HostType.FALLBACK
 
     @Before
     fun setup() {
@@ -37,7 +42,8 @@ class RateManagerTest {
         val currencyCode = "USD"
         val rates = hashMapOf("BTC" to "3981.05", "ETH" to "138.27")
 
-        whenever(networkManager.getLatestRateData(currencyCode)).thenReturn(Flowable.just(LatestRateData(rates, "USD", 1000L)))
+        whenever(networkManager.getLatestRateData(mainHost, currencyCode)).thenReturn(Maybe.just(LatestRateData(rates, "USD", 1000L)))
+        whenever(networkManager.getLatestRateData(fallbackHost, currencyCode)).thenReturn(Maybe.just(LatestRateData(rates, "USD", 1000L)))
 
         rateManager.refreshLatestRates(coins, currencyCode)
 
@@ -52,7 +58,8 @@ class RateManagerTest {
         val currencyCode = "USD"
         val rates = hashMapOf("ETH" to "138.27")
 
-        whenever(networkManager.getLatestRateData(currencyCode)).thenReturn(Flowable.just(LatestRateData(rates, "USD", 1000L)))
+        whenever(networkManager.getLatestRateData(mainHost, currencyCode)).thenReturn(Maybe.just(LatestRateData(rates, "USD", 1000L)))
+        whenever(networkManager.getLatestRateData(fallbackHost, currencyCode)).thenReturn(Maybe.just(LatestRateData(rates, "USD", 1000L)))
 
         rateManager.refreshLatestRates(coins, currencyCode)
 
@@ -66,7 +73,8 @@ class RateManagerTest {
         val currencyCode = "USD"
         val rates = hashMapOf("BTC" to "", "ETH" to "138.27")
 
-        whenever(networkManager.getLatestRateData(currencyCode)).thenReturn(Flowable.just(LatestRateData(rates, "USD", 1000L)))
+        whenever(networkManager.getLatestRateData(mainHost, currencyCode)).thenReturn(Maybe.just(LatestRateData(rates, "USD", 1000L)))
+        whenever(networkManager.getLatestRateData(fallbackHost, currencyCode)).thenReturn(Maybe.just(LatestRateData(rates, "USD", 1000L)))
 
         rateManager.refreshLatestRates(coins, currencyCode)
 
@@ -79,11 +87,28 @@ class RateManagerTest {
         val coins = listOf("BTC", "ETH")
         val currencyCode = "USD"
 
-        whenever(networkManager.getLatestRateData(currencyCode)).thenReturn(Flowable.error(Exception()))
+        whenever(networkManager.getLatestRateData(fallbackHost, currencyCode)).thenReturn(Maybe.error(Exception()))
+        whenever(networkManager.getLatestRateData(mainHost, currencyCode)).thenReturn(Maybe.error(Exception()))
 
         rateManager.refreshLatestRates(coins, currencyCode)
 
         verify(storage, never()).saveLatest(any())
+    }
+
+    @Test
+    fun refreshRates_fromFallbackHost() {
+        val coins = listOf("BTC", "ETH")
+        val currencyCode = "USD"
+        val rates = hashMapOf("BTC" to "3981.05", "ETH" to "138.27")
+
+        whenever(networkManager.getLatestRateData(fallbackHost, currencyCode)).thenReturn(Maybe.error(Exception()))
+        whenever(networkManager.getLatestRateData(mainHost, currencyCode)).thenReturn(Maybe.just(LatestRateData(rates, "USD", 1000L)))
+
+        rateManager.refreshLatestRates(coins, currencyCode)
+
+        verify(storage).saveLatest(Rate(coins[0], currencyCode, 3981.05.toBigDecimal(), 1000, true))
+        verify(storage).saveLatest(Rate(coins[1], currencyCode, 138.27.toBigDecimal(), 1000, true))
+        verify(storage, atMost(2)).saveLatest(any())
     }
 
     @Test
@@ -110,12 +135,12 @@ class RateManagerTest {
         val rateValueFromNetwork = 123.2300.toBigDecimal()
 
         whenever(storage.rateMaybe(coinCode, currencyCode, timestamp)).thenReturn(Maybe.empty())
-        whenever(networkManager.getRate(coinCode, currencyCode, timestamp)).thenReturn(Maybe.just(rateValueFromNetwork))
+        whenever(networkManager.getRateByHour(mainHost, coinCode, currencyCode, timestamp)).thenReturn(Maybe.just(rateValueFromNetwork))
 
         rateManager.rateValueObservable(coinCode, currencyCode, timestamp)
                 .test()
 
-        verify(networkManager).getRate(coinCode, currencyCode, timestamp)
+        verify(networkManager).getRateByHour(mainHost, coinCode, currencyCode, timestamp)
         verify(storage).save(Rate(coinCode, currencyCode, rateValueFromNetwork, timestamp, false))
     }
 
@@ -129,7 +154,7 @@ class RateManagerTest {
 
         whenever(storage.rateMaybe(coinCode, currencyCode, timestamp)).thenReturn(Maybe.empty())
         whenever(storage.latestRateObservable(coinCode, currencyCode)).thenReturn(Flowable.just(latestRate))
-        whenever(networkManager.getRate(coinCode, currencyCode, timestamp)).thenReturn(Maybe.error(Exception()))
+        whenever(networkManager.getRateByHour(mainHost, coinCode, currencyCode, timestamp)).thenReturn(Maybe.error(Exception()))
         whenever(latestRate.expired).thenReturn(true)
         whenever(latestRate.value).thenReturn(rateValue)
 
@@ -148,7 +173,7 @@ class RateManagerTest {
 
         whenever(storage.rateMaybe(coinCode, currencyCode, timestamp)).thenReturn(Maybe.empty())
         whenever(storage.latestRateObservable(coinCode, currencyCode)).thenReturn(Flowable.just(latestRate))
-        whenever(networkManager.getRate(coinCode, currencyCode, timestamp)).thenReturn(Maybe.error(Exception()))
+        whenever(networkManager.getRateByHour(mainHost, coinCode, currencyCode, timestamp)).thenReturn(Maybe.error(Exception()))
         whenever(latestRate.expired).thenReturn(false)
         whenever(latestRate.value).thenReturn(rateValue)
 
@@ -165,7 +190,7 @@ class RateManagerTest {
 
         whenever(storage.rateMaybe(coinCode, currencyCode, timestamp)).thenReturn(Maybe.empty())
         whenever(storage.latestRateObservable(coinCode, currencyCode)).thenReturn(Flowable.just(latestRate))
-        whenever(networkManager.getRate(coinCode, currencyCode, timestamp)).thenReturn(Maybe.error(Exception()))
+        whenever(networkManager.getRateByHour(mainHost, coinCode, currencyCode, timestamp)).thenReturn(Maybe.error(Exception()))
         whenever(latestRate.expired).thenReturn(true)
 
         rateManager.rateValueObservable(coinCode, currencyCode, timestamp)
@@ -181,11 +206,70 @@ class RateManagerTest {
 
         whenever(storage.rateMaybe(coinCode, currencyCode, timestamp)).thenReturn(Maybe.empty())
         whenever(storage.latestRateObservable(coinCode, currencyCode)).thenReturn(Flowable.empty())
-        whenever(networkManager.getRate(coinCode, currencyCode, timestamp)).thenReturn(Maybe.error(Exception()))
+        whenever(networkManager.getRateByHour(mainHost, coinCode, currencyCode, timestamp)).thenReturn(Maybe.error(Exception()))
 
         rateManager.rateValueObservable(coinCode, currencyCode, timestamp)
                 .test()
                 .assertNoValues()
+    }
+
+    @Test
+    fun rateValueObservable_RateFromFallbackHost() {
+        val coinCode = "BTC"
+        val currencyCode = "USD"
+        val timestamp = System.currentTimeMillis()
+        val rateValueFromNetwork = 234.23.toBigDecimal()
+
+        whenever(storage.rateMaybe(coinCode, currencyCode, timestamp)).thenReturn(Maybe.empty())
+        whenever(networkManager.getRateByHour(mainHost, coinCode, currencyCode, timestamp)).thenReturn(Maybe.error(SocketTimeoutException()))
+        whenever(networkManager.getRateByHour(fallbackHost, coinCode, currencyCode, timestamp)).thenReturn(Maybe.just(rateValueFromNetwork))
+        whenever(networkManager.getRateByDay(fallbackHost, coinCode, currencyCode, timestamp)).thenReturn(Maybe.just(rateValueFromNetwork))
+
+        rateManager.rateValueObservable(coinCode, currencyCode, timestamp)
+                .test()
+
+        verify(networkManager).getRateByHour(mainHost, coinCode, currencyCode, timestamp)
+        verify(networkManager).getRateByHour(fallbackHost, coinCode, currencyCode, timestamp)
+        verify(storage).save(Rate(coinCode, currencyCode, rateValueFromNetwork, timestamp, false))
+    }
+
+    @Test
+    fun rateValueObservable_RateByDayFromFallbackHost() {
+        val coinCode = "BTC"
+        val currencyCode = "USD"
+        val timestamp = System.currentTimeMillis()
+        val rateValueFromNetwork = 234.23.toBigDecimal()
+
+        whenever(storage.rateMaybe(coinCode, currencyCode, timestamp)).thenReturn(Maybe.empty())
+        whenever(networkManager.getRateByHour(mainHost, coinCode, currencyCode, timestamp)).thenReturn(Maybe.error(SocketTimeoutException()))
+        whenever(networkManager.getRateByHour(fallbackHost, coinCode, currencyCode, timestamp)).thenReturn(Maybe.error(Exception()))
+        whenever(networkManager.getRateByDay(fallbackHost, coinCode, currencyCode, timestamp)).thenReturn(Maybe.just(rateValueFromNetwork))
+
+        rateManager.rateValueObservable(coinCode, currencyCode, timestamp)
+                .test()
+
+        verify(networkManager).getRateByHour(mainHost, coinCode, currencyCode, timestamp)
+        verify(networkManager).getRateByHour(fallbackHost, coinCode, currencyCode, timestamp)
+        verify(storage).save(Rate(coinCode, currencyCode, rateValueFromNetwork, timestamp, false))
+    }
+
+    @Test
+    fun rateValueObservable_RateByDayFromMainHost() {
+        val coinCode = "BTC"
+        val currencyCode = "USD"
+        val timestamp = System.currentTimeMillis()
+        val rateValueFromNetwork = 234.23.toBigDecimal()
+
+        whenever(storage.rateMaybe(coinCode, currencyCode, timestamp)).thenReturn(Maybe.empty())
+        whenever(networkManager.getRateByHour(mainHost, coinCode, currencyCode, timestamp)).thenReturn(Maybe.error(httpException))
+        whenever(networkManager.getRateByDay(mainHost, coinCode, currencyCode, timestamp)).thenReturn(Maybe.just(rateValueFromNetwork))
+        whenever(networkManager.getRateByDay(fallbackHost, coinCode, currencyCode, timestamp)).thenReturn(Maybe.just(rateValueFromNetwork))
+
+        rateManager.rateValueObservable(coinCode, currencyCode, timestamp)
+                .test()
+
+        verify(networkManager).getRateByDay(mainHost, coinCode, currencyCode, timestamp)
+        verify(storage).save(Rate(coinCode, currencyCode, rateValueFromNetwork, timestamp, false))
     }
 
 }
