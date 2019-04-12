@@ -88,7 +88,10 @@ class FullTransactionEthereumAdapter(val provider: FullTransactionInfoModule.Eth
             }
 
             section.add(FullTransactionItem(R.string.FullInfoEth_Amount, value = "${App.numberFormatter.format(amount)} ${coin.code}"))
-            section.add(FullTransactionItem(R.string.FullInfoEth_Nonce, value = data.nonce, dimmed = true))
+
+            data.nonce?.let {
+                section.add(FullTransactionItem(R.string.FullInfoEth_Nonce, value = it, dimmed = true))
+            }
 
             sections.add(FullTransactionSection(section))
         }
@@ -104,7 +107,9 @@ class FullTransactionEthereumAdapter(val provider: FullTransactionInfoModule.Eth
             data.gasUsed?.let {
                 section.add(FullTransactionItem(R.string.FullInfo_GasUsed, value = data.gasUsed, dimmed = true))
             }
-            section.add(FullTransactionItem(R.string.FullInfo_GasPrice, value = "${data.gasPrice} GWei", dimmed = true))
+            data.gasPrice?.let {
+                section.add(FullTransactionItem(R.string.FullInfo_GasPrice, value = "$it GWei", dimmed = true))
+            }
 
             sections.add(FullTransactionSection(section))
         }

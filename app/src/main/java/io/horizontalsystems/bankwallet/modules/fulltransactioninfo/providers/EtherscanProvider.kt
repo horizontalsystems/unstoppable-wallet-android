@@ -9,16 +9,16 @@ import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransacti
 import java.math.BigInteger
 import java.util.*
 
-class EtherscanEthereumProvider : FullTransactionInfoModule.EthereumForksProvider {
+class EtherscanEthereumProvider(val testMode: Boolean) : FullTransactionInfoModule.EthereumForksProvider {
+
+    private val url = if (testMode)  "https://ropsten.etherscan.io/tx/" else "https://etherscan.io/tx/"
+    private val apiUrl = if (testMode)  "https://api-ropsten.etherscan.io/api?module=proxy&action=eth_getTransactionByHash&txhash=" else "https://api.etherscan.io/api?module=proxy&action=eth_getTransactionByHash&txhash="
+
     override val name: String = "Etherscan.io"
 
-    override fun url(hash: String): String {
-        return "https://etherscan.io/tx/$hash"
-    }
+    override fun url(hash: String): String = "$url$hash"
 
-    override fun apiUrl(hash: String): String {
-        return "https://api.etherscan.io/api?module=proxy&action=eth_getTransactionByHash&txhash=$hash"
-    }
+    override fun apiUrl(hash: String): String = "$apiUrl$hash"
 
     override fun convert(json: JsonObject): EthereumResponse {
         return Gson().fromJson(json["result"], EtherscanResponse::class.java)
@@ -41,14 +41,7 @@ class EtherscanResponse(
     override val gasUsed: String? get() = null
     override val fee: String? = null
     override val size: Int? get() = null
-    override val contractAddress: String?
-        get() {
-            return if (input != "0x") {
-                receiver
-            } else {
-                null
-            }
-        }
+    override val contractAddress: String?= if (input != "0x") receiver else null
 
     override val to: String
         get() {
