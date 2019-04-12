@@ -19,8 +19,8 @@
     <string name="Guest_CreateWallet">新的钱包</string>
     <string name="Guest_RestoreWallet">恢复钱包</string>
     <!--Restore-->
-    <string name="Restore_Title">Restore</string>
-    <string name="Restore_Subtitle">Enter Secret Key</string>
+    <string name="Restore_Title">恢复</string>
+    <string name="Restore_Subtitle">输入密钥</string>
     <string name="Restore_ValidationFailed">密钥不正确</string>
     <string name="Restore_RestoreFailed">无法创建钱包</string>
     <!--Backup-->
@@ -36,7 +36,7 @@
     <string name="Backup_Confirmation_Title">请输入你密钥中的词</string>
     <string name="Backup_Confirmation_Description">请输入你密钥中的词.</string>
     <string name="Backup_Confirmation_FailureAlertText"> 单词不匹配</string>
-    <string name="Backup_Confirmation_CheckTitle">Check…</string>
+    <string name="Backup_Confirmation_CheckTitle">正在检查...</string>
     <string name="Backup_Button_Confirm">确认</string>
     <string name="Backup_Button_Next">继续</string>
     <string name="Backup_Button_Submit">提交</string>
@@ -85,12 +85,14 @@
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">交易</string>
     <string name="TransactionInfo_Status">状态</string>
+    <string name="TransactionInfo_Status_Confirmed">Confirmed</string>
     <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_To">收件人：</string>
     <string name="TransactionInfo_From">发件人：</string>
     <string name="TransactionInfo_Time">时间</string>
-    <string name="TransactionInfo_ButtonMore">更多</string>
+    <string name="TransactionInfo_ButtonVerify">Verify</string>
     <string name="TransactionInfo_Status_Pending">在过程中</string>
+    <string name="TransactionInfo_HistoricalRate">Historical Rate</string>
     <!--Full Info-->
     <string name="FullInfo_Title">交易</string>
     <string name="FullInfo_Time">时间</string>
@@ -191,6 +193,9 @@
     <string name="Fingerprint_Success">成功!</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">禁用至: %s</string>
+    <!--OS Pin-->
+    <string name="OSPin_Confirm_Title">Phone PIN</string>
+    <string name="OSPin_Confirm_Desciption">This app requires your phone\'s PIN in order to keep sensitive data from your wallet in Android\'s secure storage and not in the app itself.</string>
     <!--Set Pin-->
     <string name="SetPin_Title">密码</string>
     <string name="SetPin_Info">您的密码将用于解锁钱包app。</string>

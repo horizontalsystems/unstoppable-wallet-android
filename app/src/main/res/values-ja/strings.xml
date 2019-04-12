@@ -85,12 +85,14 @@
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">トランザクション</string>
     <string name="TransactionInfo_Status">状況</string>
+    <string name="TransactionInfo_Status_Confirmed">Confirmed</string>
     <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_To">宛先</string>
     <string name="TransactionInfo_From">差出人</string>
     <string name="TransactionInfo_Time">時間</string>
-    <string name="TransactionInfo_ButtonMore">その他</string>
+    <string name="TransactionInfo_ButtonVerify">Verify</string>
     <string name="TransactionInfo_Status_Pending">ペンディング</string>
+    <string name="TransactionInfo_HistoricalRate">Historical Rate</string>
     <!--Full Info-->
     <string name="FullInfo_Title">トランザクション</string>
     <string name="FullInfo_Time">時間</string>
@@ -186,6 +188,9 @@
     <string name="Fingerprint_Success">成功!</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">までに無効: %s</string>
+    <!--OS Pin-->
+    <string name="OSPin_Confirm_Title">Phone PIN</string>
+    <string name="OSPin_Confirm_Desciption">This app requires your phone\'s PIN in order to keep sensitive data from your wallet in Android\'s secure storage and not in the app itself.</string>
     <!--Set Pin-->
     <string name="SetPin_Title">パスコード</string>
     <string name="SetPin_Info">Your passcode will be used to unlock your wallet and send money</string>

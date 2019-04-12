@@ -19,8 +19,8 @@
     <string name="Guest_CreateWallet">새 지갑</string>
     <string name="Guest_RestoreWallet">지갑 복원</string>
     <!--Restore-->
-    <string name="Restore_Title">Restore</string>
-    <string name="Restore_Subtitle">Enter Secret Key</string>
+    <string name="Restore_Title">복구</string>
+    <string name="Restore_Subtitle">비밀 키를 입력</string>
     <string name="Restore_ValidationFailed">잘못 된 비밀 키</string>
     <string name="Restore_RestoreFailed">지갑 복구에 실패하였습니다.</string>
     <!--Backup-->
@@ -36,7 +36,7 @@
     <string name="Backup_Confirmation_Title">비밀 키에서 단어를 입력</string>
     <string name="Backup_Confirmation_Description">비밀 키에서 단어를 입력.</string>
     <string name="Backup_Confirmation_FailureAlertText">암호가 일치 하지 않습니다.</string>
-    <string name="Backup_Confirmation_CheckTitle">Check…</string>
+    <string name="Backup_Confirmation_CheckTitle">확인 중…</string>
     <string name="Backup_Button_Confirm">확인</string>
     <string name="Backup_Button_Next">다음</string>
     <string name="Backup_Button_Submit">제출하기</string>
@@ -85,12 +85,14 @@
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">거래기록</string>
     <string name="TransactionInfo_Status">상태</string>
+    <string name="TransactionInfo_Status_Confirmed">Confirmed</string>
     <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_To">에게</string>
     <string name="TransactionInfo_From">로 부터</string>
     <string name="TransactionInfo_Time">시간</string>
-    <string name="TransactionInfo_ButtonMore">보다</string>
+    <string name="TransactionInfo_ButtonVerify">Verify</string>
     <string name="TransactionInfo_Status_Pending">보류 중</string>
+    <string name="TransactionInfo_HistoricalRate">Historical Rate</string>
     <!--Full Info-->
     <string name="FullInfo_Title">거래기록</string>
     <string name="FullInfo_Time">시간</string>
@@ -192,6 +194,9 @@
     <string name="Fingerprint_Success">성공!</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">~때까지 사용 안 함: %s</string>
+    <!--OS Pin-->
+    <string name="OSPin_Confirm_Title">Phone PIN</string>
+    <string name="OSPin_Confirm_Desciption">This app requires your phone\'s PIN in order to keep sensitive data from your wallet in Android\'s secure storage and not in the app itself.</string>
     <!--Set Pin-->
     <string name="SetPin_Title">비밀번호</string>
     <string name="SetPin_Info">너의 비밀번호는 너의 지갑을 열어주고 돈을 보내는데 사용될 것입니다.</string>

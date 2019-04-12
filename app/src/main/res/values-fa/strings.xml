@@ -85,12 +85,14 @@
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">معاملات</string>
     <string name="TransactionInfo_Status">وضيعت</string>
+    <string name="TransactionInfo_Status_Confirmed">Confirmed</string>
     <string name="TransactionInfo_Id">شناس نامه</string>
     <string name="TransactionInfo_To">به</string>
     <string name="TransactionInfo_From">از</string>
     <string name="TransactionInfo_Time">Time</string>
-    <string name="TransactionInfo_ButtonMore">بیشتر</string>
+    <string name="TransactionInfo_ButtonVerify">Verify</string>
     <string name="TransactionInfo_Status_Pending">در حالت انتظار</string>
+    <string name="TransactionInfo_HistoricalRate">Historical Rate</string>
     <!--Full Info-->
     <string name="FullInfo_Title">معاملات</string>
     <string name="FullInfo_Time">زمان</string>
@@ -190,6 +192,9 @@
     <string name="Fingerprint_Success">موفقيت!</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Disabled until: %s</string>
+    <!--OS Pin-->
+    <string name="OSPin_Confirm_Title">Phone PIN</string>
+    <string name="OSPin_Confirm_Desciption">This app requires your phone\'s PIN in order to keep sensitive data from your wallet in Android\'s secure storage and not in the app itself.</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Passcode</string>
     <string name="SetPin_Info">Your passcode will be used to unlock your wallet and send money</string>
