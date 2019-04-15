@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.ethereumkit.EthereumKit
 import io.horizontalsystems.ethereumkit.models.EthereumTransaction
-import io.horizontalsystems.ethereumkit.models.FeePriority
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -18,11 +17,11 @@ import java.math.RoundingMode
 
 abstract class EthereumBaseAdapter(
         override val coin: Coin,
-        protected val ethereumKit:
-        EthereumKit, final override val decimal: Int,
-        protected val addressParser: AddressParser) : IAdapter, EthereumKit.Listener {
+        protected val ethereumKit: EthereumKit,
+        final override val decimal: Int) : IAdapter, EthereumKit.Listener {
 
     private val disposables = CompositeDisposable()
+    private val addressParser = AddressParser("ethereum", true)
 
     //
     // Adapter
@@ -72,16 +71,6 @@ abstract class EthereumBaseAdapter(
                 }, {
                     completion?.invoke(it)
                 })?.let { disposables.add(it) }
-    }
-
-    protected fun getKitFeePriority(feePriority: FeeRatePriority): FeePriority {
-        return when (feePriority) {
-            FeeRatePriority.LOWEST -> FeePriority.Lowest
-            FeeRatePriority.LOW -> FeePriority.Low
-            FeeRatePriority.MEDIUM -> FeePriority.Medium
-            FeeRatePriority.HIGH -> FeePriority.High
-            FeeRatePriority.HIGHEST -> FeePriority.Highest
-        }
     }
 
     protected fun balanceInBigDecimal(balanceString: String?, decimal: Int): BigDecimal {

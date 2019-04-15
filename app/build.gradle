@@ -124,10 +124,13 @@ dependencies {
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
 
     // BitcoinKit
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:71b3278'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:affdbed'
 
     // EthereumKit
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:16daeb1'
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:28ff3cd'
+
+    //FeeRate
+    implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:7a94d70'
 
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
