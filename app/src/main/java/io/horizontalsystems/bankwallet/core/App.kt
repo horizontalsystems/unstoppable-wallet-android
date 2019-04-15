@@ -20,6 +20,7 @@ class App : Application() {
 
         lateinit var preferences: SharedPreferences
 
+        lateinit var feeRateProvider: IFeeRateProvider
         lateinit var secureStorage: ISecuredStorage
         lateinit var localStorage: ILocalStorage
         lateinit var encryptionManager: EncryptionManager
@@ -75,6 +76,8 @@ class App : Application() {
 
         val fallbackLanguage = Locale("en")
 
+
+        feeRateProvider = FeeRateProvider(instance)
         appConfigProvider = AppConfigProvider()
         backgroundManager = BackgroundManager(this)
         encryptionManager = EncryptionManager()
@@ -102,7 +105,7 @@ class App : Application() {
 
         networkAvailabilityManager = NetworkAvailabilityManager()
 
-        adapterManager = AdapterManager(coinManager, authManager, AdapterFactory(appConfigProvider, localStorage, ethereumKitManager))
+        adapterManager = AdapterManager(coinManager, authManager, AdapterFactory(appConfigProvider, localStorage, ethereumKitManager, feeRateProvider))
         rateSyncer = RateSyncer(rateManager, adapterManager, currencyManager, networkAvailabilityManager)
 
         appCloseManager = AppCloseManager()

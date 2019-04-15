@@ -257,6 +257,12 @@ interface IAppNumberFormatter {
     fun format(value: Double): String
 }
 
+interface IFeeRateProvider{
+    fun ethereumGasPrice(priority: FeeRatePriority): Long
+    fun bitcoinFeeRate(priority: FeeRatePriority): Long
+    fun bitcoinCashFeeRate(priority: FeeRatePriority): Long
+}
+
 sealed class Error : Exception() {
     class CoinTypeException : Error()
 }

@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.core
 
-import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.ethereumkit.EthereumKit
@@ -10,7 +9,7 @@ import java.math.BigDecimal
 class EthereumAdapter(
         coin: Coin,
         kit: EthereumKit,
-        addressParser: AddressParser) : EthereumBaseAdapter(coin, kit, 18, addressParser) {
+        private val feeRateProvider: IFeeRateProvider) : EthereumBaseAdapter(coin, kit, 18) {
 
     init {
         ethereumKit.listener = this
@@ -34,11 +33,11 @@ class EthereumAdapter(
     }
 
     override fun sendSingle(address: String, amount: String, feePriority: FeeRatePriority): Single<Unit> {
-        return ethereumKit.send(address, amount, getKitFeePriority(feePriority)).map { Unit }
+        return ethereumKit.send(address, amount, feeRateProvider.ethereumGasPrice(feePriority)).map { Unit }
     }
 
     override fun fee(value: BigDecimal, address: String?, feePriority: FeeRatePriority): BigDecimal {
-        return ethereumKit.fee(getKitFeePriority(feePriority))
+        return ethereumKit.fee(feeRateProvider.ethereumGasPrice(feePriority))
     }
 
     override fun availableBalance(address: String?, feePriority: FeeRatePriority): BigDecimal {
@@ -66,7 +65,4 @@ class EthereumAdapter(
         }
     }
 
-    companion object {
-        fun adapter(coin: Coin, ethereumKit: EthereumKit, addressParser: AddressParser) = EthereumAdapter(coin, ethereumKit, addressParser)
-    }
 }
