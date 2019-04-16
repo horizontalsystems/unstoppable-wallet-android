@@ -17,11 +17,11 @@
 
 توجه: کیف پول بانک در دستگاه جیلبریک با توجه به خطرات امنیتی قابل توجهی نصب. جیل بریک شده سیستم عامل آندروید می تواند امنیت کلیدهای خصوصی شما را تضمین نمی کند. این به این معنی که برخی از برنامه های مخرب بر روی جیلبریک دستگاه بالقوه می تواند دسترسی به کلیدهای خصوصی برای سرمایه خود و آنها را سرقت.
 
-DISCLAIMER:
+سلب مسءلويت:
 
-1. This Wallet is in its early days and just like any other software product it may have undiscovered issues which may potentially result in wallet having problems, like say the loss of access to specific transactions. While the wallet has been thoroughly tested over and over no one can say for sure that it's error-free. We believe it to be very secure, more than any crypto currency app out there.
+1. این کیف پول در آن روزهای اولیه است و مانند هر محصول نرم افزار آن می گویند که به طور بالقوه ممکن است منجر به کیف پول داشتن مشکلات، مانند از دست دادن دسترسی به معاملات خاص ناشناخته است ممکن است. در حالی که کیف پول کاملا بارها و بارها تست شده است هیچ کس برای اطمینان می گویند به آن است که عاری از خطا. ما اعتقاد داریم آن را به بسیار امن تر از هر app پرکردن ارز وجود دارد.
 
-2. DO NOT EVER install the BANK wallet on a jailbroken or tempered device due to substantial security risks. A jailbroken Android cannot guarantee the security of your private keys. This means that some malicious app running on jailbroken device can potentially access the private keys for your funds and steal them.
+۲. هيچ وقت كيف پول را در تيليوفن حك شده و غير مطمعاً انستال نكنيد تا باعث ضرر به شما نشود. جیل بریک شده سیستم عامل آندروید می تواند امنیت کلیدهای خصوصی شما را تضمین نمی کند. این به این معنی که برخی از برنامه های مخرب بر روی جیلبریک دستگاه بالقوه می تواند دسترسی به کلیدهای خصوصی برای سرمایه خود و آنها را سرقت.
 
-3. Source Code: https://github.com/horizontalsystems
+3. کد منبع: https://github.com/horizontalsystems
 
