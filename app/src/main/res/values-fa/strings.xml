@@ -197,14 +197,14 @@
     <string name="OSPin_Confirm_Desciption">اين كاربرد به كد گوشي شما نياز دارد تا معلومات را در حافظه گوشي شما ثبت نمايد نه در كاربرد.</string>
     <!--Set Pin-->
     <string name="SetPin_Title">رمز عبور</string>
-    <string name="SetPin_Info">Your passcode will be used to unlock your wallet and send money</string>
+    <string name="SetPin_Info">رمز شما استفاده ميشود تا تيليفون همراي شما را باز نمايد و پول ارساد كند</string>
     <string name="SetPin_ErrorShortPin">لطفلاً تمام ارقام را وارد كنيد.</string>
-    <string name="SetPin_ConfirmInfo">Confirm</string>
-    <string name="SetPin_Success">Lock passcode was set successfully!</string>
-    <string name="SetPin_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
-    <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
+    <string name="SetPin_ConfirmInfo">تاييد</string>
+    <string name="SetPin_Success">رمز قفل نمودن موفقانه انجام شد!</string>
+    <string name="SetPin_ErrorPinsDontMatch">رمز شباهت ندارد. دوباره تلاش نماييد</string>
+    <string name="SetPin_ErrorFailedToSavePin">مشكلي در وقت ثبت نمودن رمز به وجود آمد. لطفاً،دوباره تلاش نماييد.</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">Edit Passcode</string>
+    <string name="EditPin_Title">تعغير رمز</string>
     <string name="EditPin_UnlockInfo">رمز عبور فعلي</string>
     <string name="EditPin_NewPinInfo">رمز عبور جديد</string>
     <!--Manage Coins-->
