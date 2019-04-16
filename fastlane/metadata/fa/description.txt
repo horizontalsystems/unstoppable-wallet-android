@@ -1,10 +1,10 @@
-  Control Your Money!
-Wallet BANK is a secure and a fully decentralized crypto wallet app that supports major cryptocurrencies, including Bitcoin, Ethereum, Bitcoin Cash and ERC 20 tokens. The number of supported currencies being gradually added with every release.
-This BANK wallet provides a seamless way to get started with Bitcoin and other crypto currencies for masses. You don't need to understand the inner workings of cryptocurrencies to be able to use it.
-It has been built using best practices from the design of the interface to the implementation of blockchain protocols.
+  پول خود را كنترل كنيد!
+بانك كيف پول به طور تمام محفوظ ميباشد از شر سرمايه گذاري هاي غير متمركز و در عين زمان كاربرد كيف پول به كساني كي از بتكوين. زر. ايودريم،پول و اي ار سي ٢٠ سكه استفاده ميكند امنيت كامل ميدهد. تمام ارقام پول در ظرف يك دقيقه با تمام معلومات روز بر كاربرد رها ميشود.
+اين كاربرد كيف پول بهترين و جديد راه ها را براي استفاده از بتكوين به شما نشان ميدهد. شما نياز به فهميدن رمزنگارب ارز نداريد تا از ان استفاده كنيد.
+ساخته شده است با استفاده از بهترین روش ها از طراحی رابط کاربری به اجرای پروتکل های blockchain است.
 
-  Independent & Decentralized
-The BANK wallet is fully peer-to-peer and works without any centrally managed servers. It can't be stopped, blocked or taken down. The wallet connects directly to the currency networks i.e. Bitcoin without the need for intermediary. Such approach enables the BANK wallet to operate anywhere and remain censorship-resistant. Only the user is in control of the money.
+  مستقل & غیر متمرکز
+کیف پول بانک کاملا نقطه به نقطه و بدون هر گونه سرور مرکزی مدیریت کار می کند. آن نمی تواند متوقف شد، مسدود شده یا گرفته شده پایین. کیف پول را به طور مستقیم به شبکه های ارز Bitcoin یعنی بدون نیاز به واسطه وصل می شود. Such approach enables the BANK wallet to operate anywhere and remain censorship-resistant. Only the user is in control of the money.
 Most crypto wallet apps out there are centralized. The funds are stored on a remote server which is operated by the wallet provider. Due to the unregulated nature of the cryptocurrencies there are no mechanisms in place to guarantee that a wallet provider doesn't cheat or that provider's servers not get hacked.
 Being a fully decentralized app the BANK wallet implements all of its functionality in a decentralized manner. Every single feature in the app is implemented in a decentralized manner substantially increasing the security and privacy aspects of the wallet.
 There are no centrally managed servers that can fail, and as a result stop app from functioning.
