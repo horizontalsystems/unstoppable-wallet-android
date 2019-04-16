@@ -118,17 +118,17 @@
     <string name="FullInfo_Error_ChangeSource">تغییر منبع</string>
     <!--no used-->
     <string name="FullInfo_Id">شناس نامه</string>
-    <string name="FullInfo_TotalInput">Total Input</string>
-    <string name="FullInfo_TotalOutput">Total Output</string>
-    <string name="FullInfo_FeePerByte">Fee per byte</string>
+    <string name="FullInfo_TotalInput">تمام ورودي ها</string>
+    <string name="FullInfo_TotalOutput">تمام خورجي ها</string>
+    <string name="FullInfo_FeePerByte">هزینه در هر بایت</string>
     <string name="FullInfo_FeeRate">نرخ هزينه</string>
-    <string name="FullInfo_NoAddress">Empty Address</string>
+    <string name="FullInfo_NoAddress">آدرس خالي است</string>
     <string name="FullInfo_SatByte">sat/B</string>
     <string name="FullInfo_Bytes">Bytes</string>
-    <string name="FullInfo_SubtitleInputs">Inputs</string>
-    <string name="FullInfo_SubtitleOutputs">Outputs</string>
+    <string name="FullInfo_SubtitleInputs">ورودي ها</string>
+    <string name="FullInfo_SubtitleOutputs">خروجي ها</string>
     <string name="FullInfoEth_Nonce">Nonce</string>
-    <string name="FullInfoEth_Amount">Amount</string>
+    <string name="FullInfoEth_Amount">مقدار</string>
     <!--Settings-->
     <string name="Settings_Title">تنظيمات</string>
     <string name="Settings_SecurityCenter">مركز امنيتي</string>
@@ -143,11 +143,11 @@
     <string name="Settings_Error_NoFingerprintAddedYet">اثر انگشت در اين دستگاه فعال نشده است.بر تنظيمات برويد&gt;قفل دستگاه تا با اثر انگشت دست يابي شود.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">اثر انگشت</string>
-    <string name="SettingsSecurity_EditPin">Edit Passcode</string>
+    <string name="SettingsSecurity_EditPin">تعغير كد</string>
     <string name="SettingsSecurity_BackupWallet">پيشتيبان گيري كيف پول</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">لغو پيوند ازين دست گاه</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">اين اكشن از اين دستگاه و پول كيف ثبت شده خاظر حذف ميشود.</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_2">Make sure you have backed up Secret Key or you will not be able to access your funds in the future.</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_2">مطمعاً باشيد كي رمز مخفي را با خود داريد و گرنه شما در آينده توانايي دسترسي به منابع مالي نداريد.</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">ارز مرجع</string>
     <!--Setting_Language-->
@@ -169,11 +169,11 @@
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">اندرايد keystore خطا</string>
     <string name="Alert_KeysInvalidatedDescription">Data شما ديگر نامتعبر است بخاطر تعغير دادن قفل صفحه</string>
-    <string name="Alert_TitleWarning">Warning</string>
+    <string name="Alert_TitleWarning">هشدار</string>
     <string name="Alert_NoDeviceLockDescription">پرده نمايش را بر تيليفون خود ثبت نمايد برويد به تنظيمات&amp;gt امنيت&amp;gt قفل صفحه و روشن نمايد قفل صفحه را</string>
-    <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
+    <string name="Alert_CustomKeyboardIsUsed">شما از كيبورد سوم استفاده ميكنيد. شما بايد همراي كيبورد صحفه تيليفون استفاده كنيد.</string>
     <!--Unlock-->
-    <string name="Unlock_Page_EnterYourPin">Passcode</string>
+    <string name="Unlock_Page_EnterYourPin">رمز عبور</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">پول رايج شده پيشيباني ندارد</string>
     <!--Hud texts-->
@@ -182,12 +182,12 @@
     <string name="Hud_Text_Error">خطا</string>
     <string name="Hud_Text_NoInternet">انترنت نداريد</string>
     <string name="Hud_Text_Copied">کپی انجام شد</string>
-    <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
-    <string name="Hud_Network_Issue">Network issues. Try again in a short moment</string>
+    <string name="Hud_Text_InvalidPinError">رمز عبور غلط ميباشد</string>
+    <string name="Hud_Network_Issue">مشكل انترنت. لطفاً چند دقيقه بعد كوشش كنيد</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">ورود با اثر انگشت</string>
     <string name="Fingerprint_Hint">حسگر لمسي</string>
-    <string name="Fingerprint_EnterPin">Passcode</string>
+    <string name="Fingerprint_EnterPin">رمز عبور</string>
     <string name="Fingerprint_NotRecognized">اثر انگشت شناخته نشد. دوباره كوشش كنيد</string>
     <string name="Fingerprint_Success">موفقيت!</string>
     <!--Unlock Pin-->
