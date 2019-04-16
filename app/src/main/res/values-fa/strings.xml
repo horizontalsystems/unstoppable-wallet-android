@@ -193,10 +193,10 @@
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">غير فعال تا:٪؜s</string>
     <!--OS Pin-->
-    <string name="OSPin_Confirm_Title">Phone PIN</string>
-    <string name="OSPin_Confirm_Desciption">This app requires your phone\'s PIN in order to keep sensitive data from your wallet in Android\'s secure storage and not in the app itself.</string>
+    <string name="OSPin_Confirm_Title">كد گوشي همراه</string>
+    <string name="OSPin_Confirm_Desciption">اين كاربرد به كد گوشي شما نياز دارد تا معلومات را در حافظه گوشي شما ثبت نمايد نه در كاربرد.</string>
     <!--Set Pin-->
-    <string name="SetPin_Title">Passcode</string>
+    <string name="SetPin_Title">رمز عبور</string>
     <string name="SetPin_Info">Your passcode will be used to unlock your wallet and send money</string>
     <string name="SetPin_ErrorShortPin">لطفلاً تمام ارقام را وارد كنيد.</string>
     <string name="SetPin_ConfirmInfo">Confirm</string>
@@ -205,9 +205,9 @@
     <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
     <!--Edit Pin-->
     <string name="EditPin_Title">Edit Passcode</string>
-    <string name="EditPin_UnlockInfo">Current Passcode</string>
-    <string name="EditPin_NewPinInfo">New Passcode</string>
+    <string name="EditPin_UnlockInfo">رمز عبور فعلي</string>
+    <string name="EditPin_NewPinInfo">رمز عبور جديد</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Coin Manager</string>
-    <string name="ManageCoins_save">Save</string>
+    <string name="ManageCoins_title">ميديت سكه</string>
+    <string name="ManageCoins_save">ذخیره</string>
 </resources>
