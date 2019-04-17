@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import android.support.v7.util.DiffUtil
+import androidx.recyclerview.widget.DiffUtil
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.TransactionItem
 import io.horizontalsystems.bankwallet.entities.TransactionRecord

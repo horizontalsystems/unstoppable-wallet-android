@@ -1,9 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 
 class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, TransactionInfoModule.Router {

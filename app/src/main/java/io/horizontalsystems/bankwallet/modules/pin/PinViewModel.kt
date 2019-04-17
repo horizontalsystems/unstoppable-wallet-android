@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.pin
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
-import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
 import io.horizontalsystems.bankwallet.modules.pin.edit.EditPinModule

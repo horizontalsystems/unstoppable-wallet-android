@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.receive
 
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.FragmentActivity
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.receive.viewitems.AddressItem
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode

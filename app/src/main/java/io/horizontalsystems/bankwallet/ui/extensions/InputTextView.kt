@@ -1,17 +1,17 @@
 package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.Context
-import android.support.constraint.ConstraintLayout
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
+import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
 import kotlinx.android.synthetic.main.view_text_input.view.*
 
 class InputTextView : ConstraintLayout {
 
     init {
-        ConstraintLayout.inflate(context, R.layout.view_text_input, this)
+        inflate(context, R.layout.view_text_input, this)
     }
 
     constructor(context: Context) : super(context)

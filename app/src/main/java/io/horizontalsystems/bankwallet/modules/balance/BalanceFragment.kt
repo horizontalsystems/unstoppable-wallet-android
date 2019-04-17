@@ -1,14 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SimpleItemAnimator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
@@ -26,7 +27,7 @@ import kotlinx.android.synthetic.main.view_holder_add_coin.*
 import kotlinx.android.synthetic.main.view_holder_coin.*
 import java.math.BigDecimal
 
-class BalanceFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener {
+class BalanceFragment : Fragment(), CoinsAdapter.Listener {
 
     private lateinit var viewModel: BalanceViewModel
     private var coinsAdapter = CoinsAdapter(this)

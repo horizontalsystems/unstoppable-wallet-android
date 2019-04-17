@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.pin
 
 import android.content.Context
-import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat
 import java.util.*
 
 object PinModule {

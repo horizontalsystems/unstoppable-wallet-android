@@ -1,14 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.send
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v4.app.FragmentActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.extensions.AddressView
 import io.horizontalsystems.bankwallet.ui.extensions.ButtonWithProgressbarView
@@ -24,7 +24,7 @@ class ConfirmationFragment : DialogFragment() {
         activity?.let {
             viewModel = ViewModelProviders.of(it).get(SendViewModel::class.java)
         }
-        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.AlertDialog)
+        setStyle(STYLE_NO_TITLE, R.style.AlertDialog)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

@@ -2,18 +2,9 @@ package io.horizontalsystems.bankwallet.modules.send
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.support.constraint.ConstraintLayout
-import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.BottomSheetDialog
-import android.support.design.widget.BottomSheetDialogFragment
-import android.support.v4.app.FragmentActivity
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -25,6 +16,14 @@ import android.view.inputmethod.InputConnection
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -74,7 +73,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
 
         mDialog?.setOnShowListener(object : DialogInterface.OnShowListener {
             override fun onShow(dialog: DialogInterface?) {
-                val bottomSheet = mDialog.findViewById<View>(android.support.design.R.id.design_bottom_sheet)
+                val bottomSheet = mDialog.findViewById<View>(R.id.design_bottom_sheet)
                 BottomSheetBehavior.from(bottomSheet).state = BottomSheetBehavior.STATE_EXPANDED
                 BottomSheetBehavior.from(bottomSheet).isFitToContents = true
             }
@@ -337,7 +336,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
     }
 
     companion object {
-        fun show(activity: FragmentActivity, coin: String) {
+        fun show(activity: androidx.fragment.app.FragmentActivity, coin: String) {
             val fragment = SendBottomSheetFragment()
             fragment.coin = coin
             fragment.show(activity.supportFragmentManager, "pay_fragment")

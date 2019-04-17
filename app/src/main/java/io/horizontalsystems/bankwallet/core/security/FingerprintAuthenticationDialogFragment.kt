@@ -25,15 +25,15 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.hardware.fingerprint.FingerprintManager
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
-import android.support.v4.widget.ImageViewCompat
 import android.view.*
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat
+import androidx.core.widget.ImageViewCompat
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 

@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.settings.main
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -9,6 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
@@ -20,7 +21,7 @@ import io.horizontalsystems.bankwallet.modules.settings.security.SecuritySetting
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.fragment_settings.*
 
-class MainSettingsFragment : android.support.v4.app.Fragment() {
+class MainSettingsFragment : Fragment() {
     private lateinit var viewModel: MainSettingsViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

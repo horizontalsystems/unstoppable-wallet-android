@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.core.storage
 
-import android.arch.persistence.room.*
+import androidx.room.*
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.Flowable

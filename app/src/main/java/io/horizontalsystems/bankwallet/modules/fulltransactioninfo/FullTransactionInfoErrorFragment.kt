@@ -2,12 +2,12 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import io.horizontalsystems.bankwallet.R
 import kotlinx.android.synthetic.main.fragment_full_transaction_info_error.*
 

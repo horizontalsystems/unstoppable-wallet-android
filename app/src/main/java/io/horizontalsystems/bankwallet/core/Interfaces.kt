@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.core
 
-import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import android.text.SpannableString
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.managers.ServiceExchangeApi
 import io.horizontalsystems.bankwallet.entities.*

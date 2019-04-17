@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.entities
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.TypeConverters
+import androidx.room.Entity
+import androidx.room.TypeConverters
 import io.horizontalsystems.bankwallet.core.storage.DatabaseConverters
 import java.math.BigDecimal
 import java.util.*

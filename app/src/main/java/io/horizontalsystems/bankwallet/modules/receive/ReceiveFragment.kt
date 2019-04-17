@@ -1,15 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.receive
 
 import android.app.Dialog
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import android.content.DialogInterface
 import android.os.Bundle
-import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.BottomSheetDialog
-import android.support.design.widget.BottomSheetDialogFragment
-import android.support.v4.app.FragmentActivity
-import android.support.v4.app.ShareCompat
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import androidx.fragment.app.FragmentActivity
+import androidx.core.app.ShareCompat
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
@@ -84,7 +84,7 @@ class ReceiveFragment : BottomSheetDialogFragment() {
 
         mDialog?.setOnShowListener(object : DialogInterface.OnShowListener {
             override fun onShow(dialog: DialogInterface?) {
-                val bottomSheet = mDialog?.findViewById<View>(android.support.design.R.id.design_bottom_sheet)
+                val bottomSheet = mDialog?.findViewById<View>(R.id.design_bottom_sheet)
                 BottomSheetBehavior.from(bottomSheet).state = BottomSheetBehavior.STATE_EXPANDED
                 BottomSheetBehavior.from(bottomSheet).isFitToContents = true
             }

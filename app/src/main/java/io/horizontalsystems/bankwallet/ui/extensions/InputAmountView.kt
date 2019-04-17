@@ -2,16 +2,16 @@ package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.Context
 import android.graphics.PorterDuff
-import android.support.constraint.ConstraintLayout
 import android.util.AttributeSet
 import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
 import kotlinx.android.synthetic.main.view_amount_input.view.*
 
 class InputAmountView : ConstraintLayout {
 
     init {
-        ConstraintLayout.inflate(context, R.layout.view_amount_input, this)
+        inflate(context, R.layout.view_amount_input, this)
     }
 
     constructor(context: Context) : super(context)

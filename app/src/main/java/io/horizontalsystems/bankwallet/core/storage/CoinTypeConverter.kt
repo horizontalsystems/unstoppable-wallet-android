@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.core.storage
 
-import android.arch.persistence.room.TypeConverter
+import androidx.room.TypeConverter
 import io.horizontalsystems.bankwallet.core.Error
 import io.horizontalsystems.bankwallet.entities.CoinType
 

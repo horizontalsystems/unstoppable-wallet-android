@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.lib
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.ui.extensions.InputTextView
 
 class InputTextViewHolder(private val inputTextView: InputTextView, listener: WordsChangedListener)

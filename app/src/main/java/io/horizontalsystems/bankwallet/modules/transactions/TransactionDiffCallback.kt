@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import android.support.v7.util.DiffUtil
+import androidx.recyclerview.widget.DiffUtil
 import io.horizontalsystems.bankwallet.entities.TransactionItem
 
 class TransactionDiffCallback(private val oldTxList: List<TransactionItem>, private val newTxList: List<TransactionItem>)

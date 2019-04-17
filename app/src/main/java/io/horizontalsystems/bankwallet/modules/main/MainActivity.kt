@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.main
 
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v4.view.ViewPager
+import androidx.core.content.ContextCompat
+import androidx.viewpager.widget.ViewPager
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import io.horizontalsystems.bankwallet.BaseActivity
