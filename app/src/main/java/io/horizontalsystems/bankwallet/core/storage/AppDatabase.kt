@@ -13,7 +13,7 @@ import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.entities.StorableCoin
 
 
-@Database(entities = [Rate::class, StorableCoin::class], version = 5, exportSchema = true)
+@Database(entities = [Rate::class, StorableCoin::class], version = 6, exportSchema = true)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun ratesDao(): RatesDao
@@ -23,7 +23,8 @@ abstract class AppDatabase : RoomDatabase() {
 
     companion object {
 
-        @Volatile private var INSTANCE: AppDatabase? = null
+        @Volatile
+        private var INSTANCE: AppDatabase? = null
 
         fun getInstance(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
@@ -34,7 +35,13 @@ abstract class AppDatabase : RoomDatabase() {
         private fun buildDatabase(context: Context): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, "dbBankWallet")
                     .fallbackToDestructiveMigration()
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
+                    .addMigrations(
+                            MIGRATION_1_2,
+                            MIGRATION_2_3,
+                            MIGRATION_3_4,
+                            MIGRATION_4_5,
+                            MIGRATION_5_6
+                    )
                     .build()
         }
 
@@ -99,6 +106,12 @@ abstract class AppDatabase : RoomDatabase() {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("DROP TABLE IF EXISTS Rate")
                 database.execSQL("CREATE TABLE Rate (`coinCode` TEXT NOT NULL,`currencyCode` TEXT NOT NULL,`value` TEXT NOT NULL,`timestamp` INTEGER NOT NULL, `isLatest` INTEGER NOT NULL, PRIMARY KEY(`coinCode`,`currencyCode`,`timestamp`,`isLatest`))")
+            }
+        }
+
+        private val MIGRATION_5_6: Migration = object : Migration(5, 6) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("DELETE FROM Rate")
             }
         }
 
