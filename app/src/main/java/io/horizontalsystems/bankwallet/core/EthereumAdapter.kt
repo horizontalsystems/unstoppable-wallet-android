@@ -6,7 +6,10 @@ import io.horizontalsystems.ethereumkit.EthereumKit
 import io.reactivex.Single
 import java.math.BigDecimal
 
-class EthereumAdapter(coin: Coin, kit: EthereumKit) : EthereumBaseAdapter(coin, kit, 18) {
+class EthereumAdapter(
+        coin: Coin,
+        kit: EthereumKit,
+        private val feeRateProvider: IFeeRateProvider) : EthereumBaseAdapter(coin, kit, 18) {
 
     init {
         ethereumKit.listener = this
@@ -29,21 +32,21 @@ class EthereumAdapter(coin: Coin, kit: EthereumKit) : EthereumBaseAdapter(coin, 
         ethereumKit.start()
     }
 
-    override fun sendSingle(address: String, amount: String): Single<Unit> {
-        return ethereumKit.send(address, amount).map { Unit }
+    override fun sendSingle(address: String, amount: String, feePriority: FeeRatePriority): Single<Unit> {
+        return ethereumKit.send(address, amount, feeRateProvider.ethereumGasPrice(feePriority)).map { Unit }
     }
 
-    override fun fee(value: BigDecimal, address: String?): BigDecimal {
-        return ethereumKit.fee()
+    override fun fee(value: BigDecimal, address: String?, feePriority: FeeRatePriority): BigDecimal {
+        return ethereumKit.fee(feeRateProvider.ethereumGasPrice(feePriority))
     }
 
-    override fun availableBalance(address: String?): BigDecimal {
-        return BigDecimal.ZERO.max(balance - fee(balance, address))
+    override fun availableBalance(address: String?, feePriority: FeeRatePriority): BigDecimal {
+        return BigDecimal.ZERO.max(balance - fee(balance, address, feePriority))
     }
 
-    override fun validate(amount: BigDecimal, address: String?): List<SendStateError> {
+    override fun validate(amount: BigDecimal, address: String?, feePriority: FeeRatePriority): List<SendStateError> {
         val errors = mutableListOf<SendStateError>()
-        if (amount > availableBalance(address)) {
+        if (amount > availableBalance(address, feePriority)) {
             errors.add(SendStateError.InsufficientAmount)
         }
         return errors
@@ -62,7 +65,4 @@ class EthereumAdapter(coin: Coin, kit: EthereumKit) : EthereumBaseAdapter(coin, 
         }
     }
 
-    companion object {
-        fun adapter(coin: Coin, ethereumKit: EthereumKit) = EthereumAdapter(coin, ethereumKit)
-    }
 }

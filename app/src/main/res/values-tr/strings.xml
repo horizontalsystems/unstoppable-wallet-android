@@ -19,7 +19,8 @@
     <string name="Guest_CreateWallet">Yeni Cüzdan</string>
     <string name="Guest_RestoreWallet">Cüzdanı Geri Yükle</string>
     <!--Restore-->
-    <string name="Restore_Title">Gizli Anahtarı girin</string>
+    <string name="Restore_Title">Geri Yükle</string>
+    <string name="Restore_Subtitle">Gizli Anahtarı girin</string>
     <string name="Restore_ValidationFailed">Hatalı Gizli anahtar</string>
     <string name="Restore_RestoreFailed">Cüzdan geri yüklenemedi</string>
     <!--Backup-->
@@ -28,12 +29,14 @@
     <string name="Backup_Intro_Later">Sonra</string>
     <string name="Backup_Intro_BackupNow">Yedekle</string>
     <string name="Backup_Words_Title">Gizli Anahtar</string>
-    <string name="Backup_Confirmation_Understand">Cüzdanımın güvenle, sadece bu cihazda bulunduğunu ve herhangi bir sunucuda olmadığını biliyorum.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">Uygulamanın silinmesi, hatalı davranması, taşınması ve benzeri bir durumda hesabıma ulaşamadığımda, hesabımı kurtarmanın tek yolunun Gizli Anahtar oldugunu biliyourum. </string>
-    <string name="Backup_Confirmation_LockAppWarn">Cihaz şifresini değiştirmek veya uygulamayı veya uygulama verisini silmek, cihazda bulunan hesapları sıfırlayacaktır. Bu durumda hesabınızı geri yükleyebilmeniz için Gizli Anahtara ihtiyacınız olacak.</string>
+    <string name="Backup_Confirmation_SecretKey">Cüzdanıma erişmemi sağlayan 12 kelimeli Gizli Anahtarın tek sahibinin olduğumu ve bu anahtarın telefonumun güvenli hafızasında tutulduğunu kabul ediyorum.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">Uygulamanın silinmesi, hatalı davranması, taşınması ve benzeri bir durumda hesabıma ulaşamadığımda, hesabımı kurtarmanın tek yolunun Gizli Anahtar olduğunu biliyourum.</string>
+    <string name="Backup_Confirmation_LockAppWarn">Anladığım kadarıyla telefonun PİN kodunun değiştirmesi veya uygulama verisinin Android ayarlarından silmesi durumunda gizli anahtar telefon hafızasından silenir. Yeniden cüzdanımı erişebilmem için gizli anahtarı yeniden girmem gerekir.</string>
+    <string name="Backup_Confirmation_Disclaimer">Uygulama geliştiricilerinin, istenmeyen herhangi bir hatadan veya bu uygulamayı kullanırken ortaya çıkabilecek sorunlardan sorumlu tutulamayacağını kabul ediyorum.</string>
     <string name="Backup_Confirmation_Title">Gizli Anahtarınızda ki istenen kelimeleri giriniz</string>
     <string name="Backup_Confirmation_Description">Gizli Anahtarınızda ki kelimeleri girin.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Kelimeler eşleşmiyor</string>
+    <string name="Backup_Confirmation_CheckTitle">Kontrol etme…</string>
     <string name="Backup_Button_Confirm">Onayla</string>
     <string name="Backup_Button_Next">İleri</string>
     <string name="Backup_Button_Submit">Onayla</string>
@@ -82,12 +85,14 @@
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Hesap işlemi</string>
     <string name="TransactionInfo_Status">Durum</string>
+    <string name="TransactionInfo_Status_Confirmed">Onaylandı</string>
     <string name="TransactionInfo_Id">Kimlik</string>
     <string name="TransactionInfo_To">Alan</string>
     <string name="TransactionInfo_From">Gönderen</string>
     <string name="TransactionInfo_Time">Tarih</string>
-    <string name="TransactionInfo_ButtonMore">Daha fazlası</string>
+    <string name="TransactionInfo_ButtonVerify">Doğrula</string>
     <string name="TransactionInfo_Status_Pending">Devam ediyor</string>
+    <string name="TransactionInfo_HistoricalRate">Geçmiş Kur</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Hesap işlemi</string>
     <string name="FullInfo_Time">Tarih</string>
@@ -154,7 +159,7 @@
 \n\n  İnternet olduğu sürece her yerde çalışır. Hiç kimse bu uygulamanın çalışmasını veya birisinin programı kullanmasını engelleyemez.
 \n\n  Fonlarınız kendiliğinden telefonda güvenli bir şekilde saklanır, başka bir yerde değil.  
 \n\nGizli Anahtarınızı yedeklemek ve gizli tutmak sizin sorumluluğunuzdadır. Asla kimseye göstermeyin. Kaybolursa, unutursanız veya çalınırsa fonlarınız Gizli Anahtarınıza sahip olan kişi tarafından kullanılabilir.
- \n\Telefonunuzun yazılımını kırmayın, bilinmeyen (güvenilmeyen) kaynaklardan uygulamalar yüklemeyin, cihazınızı güvenilmeyen kişilere vermeyin ve İşletim Sistemini telefonunuzda güncel tutun. Cüzdanınızın güvenliği buna bağlı.  
+ \n\nTelefonunuzun yazılımını kırmayın, bilinmeyen (güvenilmeyen) kaynaklardan uygulamalar yüklemeyin, cihazınızı güvenilmeyen kişilere vermeyin ve İşletim Sistemini telefonunuzda güncel tutun. Cüzdanınızın güvenliği buna bağlı.  
 \n\nBu uygulamayı destekleyen kodun tamamı, başından beri kamu denetimine açıktı. Yapabileceğimiz en güvenilir ve merkezi olmayan cüzdanı oluşturmaya çalıştık, yine de istenmeyen yazılım sorunu olmadığının garantisi yoktur. Bununla birlikte, bu cüzdanın herhangi bir akıllı telefon cüzdan uygulamasından çok daha güvenli olacağı muhtemel.  
 \n\nDöviz kurları gibi bazı 	jenerik resmi olmayan uygulama verileri merkezi olmayan IPFS sisteminde depolanır. </string>
     <!--Alert-->
@@ -183,6 +188,9 @@
     <string name="Fingerprint_Success">Başarılı!</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Engellendi: %s</string>
+    <!--OS Pin-->
+    <string name="OSPin_Confirm_Title">Telefon PİN\'i</string>
+    <string name="OSPin_Confirm_Desciption">Bu uygulama, hassas bilgileri kendi deposunda tutmaktansa Android\'in güvenli deposunda tutmak için telefonun PİN\'ine ihtiyaç duyar.</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Şifre</string>
     <string name="SetPin_Info">Şifre, programı açmak ve para göndermek için kullanılacak</string>

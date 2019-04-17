@@ -50,25 +50,62 @@ object LayoutHelper {
 
     fun getCoinDrawableResource(coinCode: String): Int {
         return when (coinCode) {
-            "BCH" -> R.drawable.coin_bitcoin_cash
-            "LTC" -> R.drawable.coin_litecoin
+            "BCH" -> R.drawable.coin_bch
+            "LTC" -> R.drawable.coin_ltc
             "DASH" -> R.drawable.coin_dash
             "EOS" -> R.drawable.coin_eos
-            "XMR" -> R.drawable.coin_monero
+            "XMR" -> R.drawable.coin_xmr
             "XRP" -> R.drawable.coin_xrp
-            "ZEC" -> R.drawable.coin_zcash
-            "ETH" -> R.drawable.coin_ether
-            "ADA" -> R.drawable.coin_cardano
-            "XLM" -> R.drawable.coin_stellar
-            "USDT" -> R.drawable.coin_tether
-            else -> R.drawable.coin_bitcoin
+            "ZEC" -> R.drawable.coin_zec
+            "ETH" -> R.drawable.coin_eth
+            "ADA" -> R.drawable.coin_ada
+            "XLM" -> R.drawable.coin_xlm
+            "USDT" -> R.drawable.coin_usdt
+            "BAT" -> R.drawable.coin_bat
+            "AURA" -> R.drawable.coin_aura
+            "BNB" -> R.drawable.coin_bnb
+            "BNT" -> R.drawable.coin_bnt
+            "DAI" -> R.drawable.coin_dai
+            "DAT" -> R.drawable.coin_dat
+            "DGD" -> R.drawable.coin_dgd
+            "DGX" -> R.drawable.coin_dgx
+            "ENJ" -> R.drawable.coin_enj
+            "EURS" -> R.drawable.coin_eurs
+            "GNT" -> R.drawable.coin_gnt
+            "GUSD" -> R.drawable.coin_gusd
+            "HT" -> R.drawable.coin_ht
+            "IDXM" -> R.drawable.coin_idxm
+            "KCS" -> R.drawable.coin_kcs
+            "KNC" -> R.drawable.coin_knc
+            "LINK" -> R.drawable.coin_link
+            "LOOM" -> R.drawable.coin_loom
+            "MANA" -> R.drawable.coin_mana
+            "MCO" -> R.drawable.coin_mco
+            "MITH" -> R.drawable.coin_mith
+            "MKR" -> R.drawable.coin_mkr
+            "NEXO" -> R.drawable.coin_nexo
+            "NPXS" -> R.drawable.coin_npxs
+            "OMG" -> R.drawable.coin_omg
+            "PAX" -> R.drawable.coin_pax
+            "POLY" -> R.drawable.coin_poly
+            "PPT" -> R.drawable.coin_ppt
+            "R" -> R.drawable.coin_r
+            "REP" -> R.drawable.coin_rep
+            "SNT" -> R.drawable.coin_snt
+            "TUSD" -> R.drawable.coin_tusd
+            "USDC" -> R.drawable.coin_usdc
+            "WTC" -> R.drawable.coin_wtc
+            "WAX" -> R.drawable.coin_wax
+            "ZIL" -> R.drawable.coin_zil
+            "ZRX" -> R.drawable.coin_zrx
+            else -> R.drawable.coin_btc
         }
     }
 
     fun getInfoBadge(wordListBackedUp: Boolean, resources: Resources): Drawable? {
         var infoBadge: Drawable? = null
         if (!wordListBackedUp) {
-            infoBadge = resources.getDrawable(R.drawable.info, null)
+            infoBadge = resources.getDrawable(R.drawable.ic_info, null)
             infoBadge?.setTint(resources.getColor(R.color.red_warning, null))
         }
         return infoBadge

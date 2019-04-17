@@ -4,7 +4,6 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import android.widget.CompoundButton
 import io.horizontalsystems.bankwallet.BaseActivity
@@ -19,6 +18,7 @@ import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
 import io.horizontalsystems.bankwallet.ui.dialogs.BottomButtonColor
 import io.horizontalsystems.bankwallet.ui.dialogs.BottomConfirmAlert
+import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.activity_settings_security.*
 
@@ -41,9 +41,10 @@ class SecuritySettingsActivity : BaseActivity(), BottomConfirmAlert.Listener {
 
         setContentView(R.layout.activity_settings_security)
 
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.back)
+        shadowlessToolbar.bind(
+                title = getString(R.string.Settings_SecurityCenter),
+                leftBtnItem = TopMenuItem(R.drawable.back, { onBackPressed() })
+        )
 
         changePin.setOnClickListener { viewModel.delegate.didTapEditPin() }
 
@@ -78,7 +79,6 @@ class SecuritySettingsActivity : BaseActivity(), BottomConfirmAlert.Listener {
         })
 
         viewModel.openEditPinLiveEvent.observe(this, Observer {
-//            PinModule.startForEditPinAuth(this)
             PinModule.startForEditPin(this)
         })
 
@@ -88,10 +88,6 @@ class SecuritySettingsActivity : BaseActivity(), BottomConfirmAlert.Listener {
 
         viewModel.openBackupWalletLiveEvent.observe(this, Observer {
             BackupModule.start(this@SecuritySettingsActivity, BackupPresenter.DismissMode.DISMISS_SELF)
-        })
-
-        viewModel.titleLiveDate.observe(this, Observer { title ->
-            title?.let { supportActionBar?.title = getString(it) }
         })
 
         viewModel.biometryTypeLiveDate.observe(this, Observer { biometryType ->
@@ -122,7 +118,7 @@ class SecuritySettingsActivity : BaseActivity(), BottomConfirmAlert.Listener {
         })
 
         viewModel.showPinUnlockLiveEvent.observe(this, Observer {
-            PinModule.startForUnlock()
+            PinModule.startForUnlock(true)
         })
 
     }
@@ -132,16 +128,6 @@ class SecuritySettingsActivity : BaseActivity(), BottomConfirmAlert.Listener {
             Action.OPEN_RESTORE -> viewModel.delegate.didTapRestoreWallet()
             Action.CLEAR_WALLETS -> viewModel.delegate.confirmedUnlinkWallet()
         }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                onBackPressed()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun fingerprintCanBeEnabled(): Boolean {

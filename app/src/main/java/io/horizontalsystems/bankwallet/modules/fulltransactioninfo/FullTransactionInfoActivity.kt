@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.FullTransactionItem
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider.DataProviderSettingsModule
+import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_full_transaction_info.*
@@ -42,8 +43,12 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
 
         setContentView(R.layout.activity_full_transaction_info)
 
-        setSupportActionBar(toolbar)
-        supportActionBar?.title = getString(R.string.FullInfo_Title)
+        transactionHash?.let { transactionIdView.bindTransactionId(it) }
+
+        shadowlessToolbar.bind(
+                title = getString(R.string.FullInfo_Title),
+                leftBtnItem = TopMenuItem(R.drawable.back) { onBackPressed() }
+        )
 
         closeBtn.setOnClickListener { onBackPressed() }
         shareBtn.setOnClickListener { viewModel.share() }

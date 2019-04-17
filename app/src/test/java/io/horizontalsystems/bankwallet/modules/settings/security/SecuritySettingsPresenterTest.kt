@@ -1,13 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.settings.security
 
-import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import io.horizontalsystems.bankwallet.entities.BiometryType
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito
 
 class SecuritySettingsPresenterTest {
 
@@ -28,13 +26,6 @@ class SecuritySettingsPresenterTest {
         presenter.view = view
     }
 
-
-    @Test
-    fun showTitle() {
-        presenter.viewDidLoad()
-
-        Mockito.verify(view).setTitle(any())
-    }
 
     @Test
     fun testSetBiometricUnlockOnOnLoad() {

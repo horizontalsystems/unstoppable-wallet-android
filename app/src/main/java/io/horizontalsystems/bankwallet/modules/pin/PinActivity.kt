@@ -15,7 +15,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
@@ -24,14 +23,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.security.FingerprintAuthenticationDialogFragment
 import io.horizontalsystems.bankwallet.modules.main.MainModule
-import io.horizontalsystems.bankwallet.ui.extensions.NumPadItem
-import io.horizontalsystems.bankwallet.ui.extensions.NumPadItemType
-import io.horizontalsystems.bankwallet.ui.extensions.NumPadItemsAdapter
-import io.horizontalsystems.bankwallet.ui.extensions.SmoothLinearLayoutManager
+import io.horizontalsystems.bankwallet.ui.extensions.*
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_pin.*
-import kotlinx.android.synthetic.main.custom_tall_toolbar.*
 
 
 class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuthenticationDialogFragment.Callback {
@@ -43,16 +38,13 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+        setTransparentStatusBar()
 
         setContentView(R.layout.activity_pin)
 
-        setSupportActionBar(toolbar)
-        backButton.visibility = View.GONE
-        backButton.setOnClickListener { viewModel.delegate.onBackPressed() }
-
         val interactionType = intent.getSerializableExtra(keyInteractionType) as PinInteractionType
         val appStart = intent.getBooleanExtra(keyIsAppStart, false)
+        val showCancelButton = intent.getBooleanExtra(keyShowCancel, false)
 
         pinPagesAdapter = PinPagesAdapter()
         layoutManager = SmoothLinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -68,27 +60,26 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
 
 
         viewModel = ViewModelProviders.of(this).get(PinViewModel::class.java)
-        viewModel.init(interactionType, appStart)
+        viewModel.init(interactionType, appStart, showCancelButton)
 
         val numpadAdapter = NumPadItemsAdapter(this, NumPadItemType.FINGER)
 
         numPadItemsRecyclerView.adapter = numpadAdapter
         numPadItemsRecyclerView.layoutManager = GridLayoutManager(this, 3)
 
-        viewModel.titleLiveDate.observe(this, Observer { title ->
-            title?.let { toolbarTitle.text = getString(it) }
-        })
 
         viewModel.hideToolbar.observe(this, Observer {
-            supportActionBar?.hide()
+            shadowlessToolbar.visibility = View.GONE
         })
 
         viewModel.showBackButton.observe(this, Observer {
-            backButton.visibility = View.VISIBLE
+            shadowlessToolbar.bindLeftButton(TopMenuItem(R.drawable.back, { viewModel.delegate.onBackPressed() }))
         })
 
         viewModel.titleLiveDate.observe(this, Observer { title ->
-            title?.let { supportActionBar?.title = getString(it) }
+                        title?.let {
+                            shadowlessToolbar.bindTitle(getString(it))
+                        }
         })
 
         viewModel.addPagesEvent.observe(this, Observer { pinPages ->
@@ -213,6 +204,7 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
 
         private const val keyInteractionType = "interaction_type"
         private const val keyIsAppStart = "is_app_start"
+        private const val keyShowCancel = "show_cancel"
 
         fun start(context: Context, interactionType: PinInteractionType) {
             val intent = Intent(context, PinActivity::class.java)
@@ -220,9 +212,17 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
             context.startActivity(intent)
         }
 
-        fun startForUnlock(appStart: Boolean) {
+        fun startForUnlock(showCancel: Boolean) {
             val intent = Intent(App.instance, PinActivity::class.java)
-            intent.putExtra(keyIsAppStart, appStart)
+            intent.putExtra(keyShowCancel, showCancel)
+            intent.putExtra(keyInteractionType, PinInteractionType.UNLOCK)
+            intent.flags = Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            App.instance.startActivity(intent)
+        }
+
+        fun startForUnlockFromAppStart() {
+            val intent = Intent(App.instance, PinActivity::class.java)
+            intent.putExtra(keyIsAppStart, true)
             intent.putExtra(keyInteractionType, PinInteractionType.UNLOCK)
             intent.flags = Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             App.instance.startActivity(intent)
@@ -286,7 +286,7 @@ class PinPageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private fun updatePinCircles(length: Int) {
         val filledCircle = R.drawable.pin_circle_filled
-        val emptyCircle = R.drawable.pin_circle_empty
+        val emptyCircle = R.drawable.ic_circle_steel_20_with_border
 
         imgPinMask1.setImageResource(if (length > 0) filledCircle else emptyCircle)
         imgPinMask2.setImageResource(if (length > 1) filledCircle else emptyCircle)

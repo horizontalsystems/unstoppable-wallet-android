@@ -19,7 +19,8 @@
     <string name="Guest_CreateWallet">Nouveau porte-monnaie</string>
     <string name="Guest_RestoreWallet">Restaurer le porte-monnaie</string>
     <!--Restore-->
-    <string name="Restore_Title">Entrez la clé secrete</string>
+    <string name="Restore_Title">Restaurer</string>
+    <string name="Restore_Subtitle">Entrez la clé secrete</string>
     <string name="Restore_ValidationFailed">Clé secrète incorrecte</string>
     <string name="Restore_RestoreFailed">Échec de la restauration du porte-monnaie</string>
     <!--Backup-->
@@ -28,12 +29,14 @@
     <string name="Backup_Intro_Later">Plus tard</string>
     <string name="Backup_Intro_BackupNow">Sauvegarde</string>
     <string name="Backup_Words_Title">Le mot secret</string>
-    <string name="Backup_Confirmation_Understand">Je comprends que mon porte-monnaie et mes tokens sont en toute sécurité sur cet appareil uniquement et pas sur les autres appareils.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">Je comprends que si cette appli est déplacée vers un autre appareil ou supprimée, mon porte-monnaie ne peut être récupéré qu\'avec la clé secrète.</string>
-    <string name="Backup_Confirmation_LockAppWarn">Changer le code ou de suppression de données d’application dans les paramètres de votre système d’exploitation Android remettrait à zéro le porte-monnaie. Vous aurez besoin de votre clé secrète pour restaurer votre porte-monnaie après cela.</string>
+    <string name="Backup_Confirmation_SecretKey">Je comprends que je suis propriétaire d\'une clé secrète privée de 12 mots, qui est stockée en toute sécurité sur mon téléphone portable et me permet de contrôler les fonds sur mon porte-monnaie.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">Je comprends que si cette appli ne fonction plus, est déplacée vers un autre appareil ou supprimée, mon porte-monnaie ne peut être récupéré qu\'avec la clé secrète.</string>
+    <string name="Backup_Confirmation_LockAppWarn">Je comprends que changer le PIN téléphone ou supprimer les données d\'application dans les paramètres Android supprime la clé secrète de l\'appareil. Je devrais entrer à nouveau ma clé secrète pour retrouver l\'accès à mon porte-monnaie.</string>
+    <string name="Backup_Confirmation_Disclaimer">Je comprends que les développeurs de cette application ne peuvent pas être responsables de tout bogue ou problème non désiré qui pourrait apparaître lors de l\'utilisation de cette application.</string>
     <string name="Backup_Confirmation_Title">Entrez les mots de votre clé secrète</string>
     <string name="Backup_Confirmation_Description">Entrez les mots de votre clé secrète.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Les mots ne correspondent pas</string>
+    <string name="Backup_Confirmation_CheckTitle">Vérification…</string>
     <string name="Backup_Button_Confirm">Confirmer</string>
     <string name="Backup_Button_Next">Suivant</string>
     <string name="Backup_Button_Submit">Soumettre</string>
@@ -58,7 +61,7 @@
     <string name="Send_Success">\u2713 Envoyé</string>
     <string name="Send_Error_InvalidAddress">L\'adresse semble invalide. Vérifiez et réessayez!</string>
     <string name="Send_Error_InsufficientBalance">Fonds insuffisants.</string>
-    <string name="Send_Error_IncorrectAddress">Adresse incorrecte</string>
+    <string name="Send_Error_IncorrectAddress">Adresse incorrect</string>
     <string name="Send_Error_BalanceAmount">Balance %s</string>
     <string name="Send_DialogTitle">Confirmer la transaction</string>
     <string name="Send_DialogFee">Frais:</string>
@@ -82,12 +85,14 @@
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Transactions</string>
     <string name="TransactionInfo_Status">Statut</string>
+    <string name="TransactionInfo_Status_Confirmed">Confirmé</string>
     <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_To">À</string>
     <string name="TransactionInfo_From">De</string>
     <string name="TransactionInfo_Time">Heure</string>
-    <string name="TransactionInfo_ButtonMore">Plus</string>
+    <string name="TransactionInfo_ButtonVerify">Vérifiez</string>
     <string name="TransactionInfo_Status_Pending">En attente</string>
+    <string name="TransactionInfo_HistoricalRate">Taux historique</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Transaction</string>
     <string name="FullInfo_Time">Heure</string>
@@ -183,6 +188,9 @@
     <string name="Fingerprint_Success">Effectué!</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Désactivé jusqu\'à: %s</string>
+    <!--OS Pin-->
+    <string name="OSPin_Confirm_Title">PIN de téléphone</string>
+    <string name="OSPin_Confirm_Desciption">Cette application demande le PIN de votre téléphone portable afin de garder des données sensibles de votre porte-monnaie dans le stockage sécurisé d\'Android et pas dans l\'application elle-même.</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Code</string>
     <string name="SetPin_Info">Votre code sera utilisé pour déverrouiller votre porte-monnaie et envoyer de l’argent</string>

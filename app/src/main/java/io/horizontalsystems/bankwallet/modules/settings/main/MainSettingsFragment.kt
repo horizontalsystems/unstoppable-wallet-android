@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
+import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
@@ -31,6 +32,8 @@ class MainSettingsFragment : android.support.v4.app.Fragment() {
 
         viewModel = ViewModelProviders.of(this).get(MainSettingsViewModel::class.java)
         viewModel.init()
+
+        shadowlessToolbar.bindTitle(getString(R.string.Settings_Title))
 
         securityCenter.setOnClickListener {
             viewModel.delegate.didTapSecurity()
@@ -61,12 +64,6 @@ class MainSettingsFragment : android.support.v4.app.Fragment() {
         about.setOnClickListener {
             viewModel.delegate.didTapAbout()
         }
-
-
-
-        viewModel.titleLiveDate.observe(this, Observer { title ->
-            title?.let { toolbar.setTitle(it) }
-        })
 
         viewModel.baseCurrencyLiveDate.observe(this, Observer { currency ->
             currency?.let {
@@ -127,7 +124,13 @@ class MainSettingsFragment : android.support.v4.app.Fragment() {
         })
 
         viewModel.appVersionLiveDate.observe(this, Observer { version ->
-            version?.let { appName.text = getString(R.string.Settings_InfoTitleWithVersion, it) }
+            version?.let {
+                var appVersion = getString(R.string.Settings_InfoTitleWithVersion, it)
+                if (getString(R.string.is_release) == "false") {
+                    appVersion = "$appVersion (${BuildConfig.VERSION_CODE})"
+                }
+                appName.text = appVersion
+            }
         })
 
         viewModel.showAppLinkLiveEvent.observe(this, Observer {

@@ -3,19 +3,16 @@ package io.horizontalsystems.bankwallet.modules.restore
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
-import android.view.Menu
-import android.view.MenuItem
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.Utils
-import io.horizontalsystems.bankwallet.lib.EditTextViewHolder
+import io.horizontalsystems.bankwallet.core.utils.Utils
+import io.horizontalsystems.bankwallet.lib.InputTextViewHolder
 import io.horizontalsystems.bankwallet.lib.WordsInputAdapter
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.ui.dialogs.BottomConfirmAlert
+import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.activity_restore_wallet.*
 
 class RestoreWalletActivity : BaseActivity(), BottomConfirmAlert.Listener {
@@ -28,11 +25,11 @@ class RestoreWalletActivity : BaseActivity(), BottomConfirmAlert.Listener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_restore_wallet)
 
-        setSupportActionBar(toolbar)
-
-        supportActionBar?.title = getString(R.string.Restore_Title)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.back)
+        shadowlessToolbar.bind(
+                title = getString(R.string.Restore_Title),
+                leftBtnItem = TopMenuItem(R.drawable.back, { onBackPressed() }),
+                rightBtnItem = TopMenuItem(R.drawable.checkmark_orange, { viewModel.delegate.restoreDidClick(words) })
+        )
 
         viewModel = ViewModelProviders.of(this).get(RestoreViewModel::class.java)
         viewModel.init()
@@ -56,15 +53,17 @@ class RestoreWalletActivity : BaseActivity(), BottomConfirmAlert.Listener {
 
         viewModel.showConfirmationDialogLiveEvent.observe(this, Observer {
             val confirmationList = mutableListOf(
-                    R.string.Backup_Confirmation_Understand,
+                    R.string.Backup_Confirmation_SecretKey,
                     R.string.Backup_Confirmation_DeleteAppWarn,
-                    R.string.Backup_Confirmation_LockAppWarn
+                    R.string.Backup_Confirmation_LockAppWarn,
+                    R.string.Backup_Confirmation_Disclaimer
             )
             BottomConfirmAlert.show(this, confirmationList, this)
         })
 
+        recyclerInputs.isNestedScrollingEnabled = false
         recyclerInputs.layoutManager = GridLayoutManager(this, 2)
-        recyclerInputs.adapter = WordsInputAdapter(object : EditTextViewHolder.WordsChangedListener {
+        recyclerInputs.adapter = WordsInputAdapter(object : InputTextViewHolder.WordsChangedListener {
             override fun set(position: Int, value: String) {
                 if (isUsingNativeKeyboard()) {
                     words[position] = value
@@ -84,23 +83,6 @@ class RestoreWalletActivity : BaseActivity(), BottomConfirmAlert.Listener {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_restore_wallet, menu)
-        LayoutHelper.tintMenuIcons(menu, ContextCompat.getColor(this, R.color.yellow_crypto))
-
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.action_done -> {
-            viewModel.delegate.restoreDidClick(words)
-            true
-        }
-        else -> {
-            super.onOptionsItemSelected(item)
-        }
     }
 
     override fun onConfirmationSuccess() {

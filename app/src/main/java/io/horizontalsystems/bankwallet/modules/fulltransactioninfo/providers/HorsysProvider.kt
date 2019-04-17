@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
+import io.horizontalsystems.bankwallet.core.utils.EthInputParser
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.BitcoinResponse
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.EthereumResponse
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
@@ -43,18 +44,17 @@ class HorsysBitcoinCashProvider(val testMode: Boolean) : FullTransactionInfoModu
 
 class HorsysEthereumProvider(val testMode: Boolean) : FullTransactionInfoModule.EthereumForksProvider {
 
+    private val url = if (testMode)  "http://eth-ropsten.horizontalsystems.xyz/tx/" else "https://eth.horizontalsystems.xyz/tx/"
+    private val apiUrl = if (testMode)  "http://eth-ropsten.horizontalsystems.xyz/api?module=transaction&action=gettxinfo&txhash=" else "https://eth.horizontalsystems.xyz/api?module=transaction&action=gettxinfo&txhash="
+
     override val name: String = "HorizontalSystems.xyz"
 
-    override fun url(hash: String): String {
-        return "${if (testMode) "http://eth-testnet" else "https://eth"}.horizontalsystems.xyz/tx/$hash"
-    }
+    override fun url(hash: String): String = "$url$hash"
 
-    override fun apiUrl(hash: String): String {
-        return "${if (testMode) "http://eth-testnet" else "https://eth"}.horizontalsystems.xyz/tx/$hash"
-    }
+    override fun apiUrl(hash: String): String = "$apiUrl$hash"
 
     override fun convert(json: JsonObject): EthereumResponse {
-        return Gson().fromJson(json["tx"], HorsysETHResponse::class.java)
+        return Gson().fromJson(json["result"], HorsysETHResponse::class.java)
     }
 }
 
@@ -89,30 +89,49 @@ class HorsysBTCResponse(
 }
 
 class HorsysETHResponse(
-        @SerializedName("nonce") val gNonce: String,
-        @SerializedName("value") val amount: String,
-        @SerializedName("gasPrice") val price: String,
+        @SerializedName("timeStamp") val time: String?,
+        @SerializedName("nonce") val gNonce: String?,
+        @SerializedName("value") val valueString: String,
         @SerializedName("blockNumber") val blockNumber: String,
+        @SerializedName("confirmations") val confirmationsString: String?,
         @SerializedName("hash") override val hash: String,
         @SerializedName("from") override val from: String,
-        @SerializedName("to") override val to: String,
+        @SerializedName("to") val receiver: String,
         @SerializedName("fee") override val fee: String,
-        @SerializedName("gas") override val gasLimit: String,
+        @SerializedName("input") val input: String,
+        @SerializedName("gasLimit") override val gasLimit: String,
         @SerializedName("gasUsed") override val gasUsed: String) : EthereumResponse() {
 
-    override val contractAddress: String? get() = null
+    override val contractAddress: String? get() = if (input != "0x") receiver else null
     override val size: Int? get() = null
-    override val date: Date? get() = null
-    override val confirmations: Int? get() = null
-    override val height: String
-        get() = Integer.parseInt(blockNumber, 16).toString()
+    override val date: Date? get() = time?.let{ Date(it.toLong() * 1000) }
+    override val confirmations: Int? get() = confirmationsString?.toIntOrNull()
+    override val height: String get() = Integer.parseInt(blockNumber, 16).toString()
+    override val gasPrice: String? get() = null
 
     override val value: BigInteger
-        get() = BigInteger(amount)
+        get() {
+            var amountData = valueString.substring(2)
+            if (input != "0x") {
+                EthInputParser.parse(input)?.let {
+                    amountData = it.value
+                }
+            }
 
-    override val nonce: String
-        get() = Integer.parseInt(gNonce, 16).toString()
+            return BigInteger(amountData, 16)
+        }
 
-    override val gasPrice: String
-        get() = (BigInteger(price, 16).toDouble() / gweiRate).toInt().toString()
+    override val nonce: String?
+        get() = gNonce?.let { Integer.parseInt(it, 16).toString() }
+
+    override val to: String
+        get() {
+            if (input != "0x") {
+                EthInputParser.parse(input)?.let {
+                    return "0x${it.to}"
+                }
+            }
+
+            return receiver
+        }
 }

@@ -5,20 +5,28 @@
     android:layout_width="match_parent"
     android:layout_height="72dp"
     android:background="@drawable/clickable_setting_item_bg"
-    android:paddingStart="16dp"
-    android:paddingTop="15dp"
-    android:paddingEnd="16dp"
-    android:paddingBottom="15dp">
+    >
+
+    <View
+        android:id="@+id/topShade"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/steel_15"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <TextView
         android:id="@+id/title"
+        style="@style/BaseMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/noto_sans"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="16dp"
         android:textColor="?CurrencySwitcherTitleColor"
-        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topShade"
         tools:text="Data Provider" />
 
     <ProgressBar
@@ -40,6 +48,7 @@
         android:layout_height="19dp"
         android:textColor="@color/green_crypto"
         android:textSize="14sp"
+        android:fontFamily="@font/noto_sans_regular"
         android:visibility="invisible"
         app:layout_constraintStart_toStartOf="@+id/title"
         app:layout_constraintTop_toBottomOf="@+id/title"
@@ -50,8 +59,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/checkmark_orange"
+        android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/bottomShade"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:visibility="gone"
+        android:background="?SettingsSectionBottomShadeColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 
 </android.support.constraint.ConstraintLayout>

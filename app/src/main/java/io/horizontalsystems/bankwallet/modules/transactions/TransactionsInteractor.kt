@@ -3,43 +3,60 @@ package io.horizontalsystems.bankwallet.modules.transactions
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.NetworkAvailabilityManager
 import io.horizontalsystems.bankwallet.core.managers.RateManager
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
 
-class TransactionsInteractor(private val adapterManager: IAdapterManager, private val currencyManager: ICurrencyManager, private val rateManager: RateManager) : TransactionsModule.IInteractor {
+class TransactionsInteractor(
+        private val adapterManager: IAdapterManager,
+        private val currencyManager: ICurrencyManager,
+        private val rateManager: RateManager,
+        private val networkAvailabilityManager: NetworkAvailabilityManager) : TransactionsModule.IInteractor {
+
     var delegate: TransactionsModule.IInteractorDelegate? = null
 
     private val disposables = CompositeDisposable()
     private val ratesDisposables = CompositeDisposable()
     private val lastBlockHeightDisposables = CompositeDisposable()
     private val transactionUpdatesDisposables = CompositeDisposable()
-    private val requestedTimestamps = ConcurrentHashMap<Coin, MutableList<Long>>()
+    private var requestedTimestamps = hashMapOf<String, Long>()
 
     override fun initialFetch() {
         onUpdateCoinCodes()
 
-        disposables.add(adapterManager.adaptersUpdatedSignal
+        adapterManager.adaptersUpdatedSignal
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe {
                     onUpdateCoinCodes()
-                })
+                }
+                .let { disposables.add(it) }
 
-        disposables.add(currencyManager.baseCurrencyUpdatedSignal
+        currencyManager.baseCurrencyUpdatedSignal
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe {
                     ratesDisposables.clear()
                     requestedTimestamps.clear()
                     delegate?.onUpdateBaseCurrency()
-                })
+                }
+                .let { disposables.add(it) }
+
+        networkAvailabilityManager.networkAvailabilitySignal
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe {
+                    if (networkAvailabilityManager.isConnected) {
+                        delegate?.onConnectionRestore()
+                    }
+                }
+                .let { disposables.add(it) }
     }
 
     override fun fetchRecords(fetchDataList: List<TransactionsModule.FetchData>) {
@@ -66,20 +83,20 @@ class TransactionsInteractor(private val adapterManager: IAdapterManager, privat
             flowables.add(flowable)
         }
 
-        disposables.add(
-                Single.zip(flowables) {
-                    val res = mutableMapOf<Coin, List<TransactionRecord>>()
-                    it.forEach {
-                        it as Pair<Coin, List<TransactionRecord>>
-                        res[it.first] = it.second
-                    }
-                    res.toMap()
+        Single.zip(flowables) {
+            val res = mutableMapOf<Coin, List<TransactionRecord>>()
+            it.forEach {
+                it as Pair<Coin, List<TransactionRecord>>
+                res[it.first] = it.second
+            }
+            res.toMap()
+        }
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe { records, t2 ->
+                    delegate?.didFetchRecords(records)
                 }
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(Schedulers.io())
-                        .subscribe { records, t2 ->
-                            delegate?.didFetchRecords(records)
-                        })
+                .let { disposables.add(it) }
     }
 
     override fun setSelectedCoinCodes(selectedCoins: List<Coin>) {
@@ -99,28 +116,24 @@ class TransactionsInteractor(private val adapterManager: IAdapterManager, privat
         }
     }
 
-    override fun fetchRates(timestamps: Map<Coin, List<Long>>) {
+    override fun fetchRate(coin: Coin, timestamp: Long) {
         val baseCurrency = currencyManager.baseCurrency
         val currencyCode = baseCurrency.code
+        val composedKey = coin.code + timestamp
 
-        timestamps.forEach {
-            val coin = it.key
-            for (timestamp in it.value) {
-                if (requestedTimestamps[coin]?.contains(timestamp) == true) continue
+        if (requestedTimestamps.containsKey(composedKey)) return
 
-                if (!requestedTimestamps.containsKey(coin)) {
-                    requestedTimestamps[coin] = CopyOnWriteArrayList()
-                }
-                requestedTimestamps[coin]?.add(timestamp)
+        requestedTimestamps[composedKey] = timestamp
 
-                ratesDisposables.add(rateManager.rateValueObservable(coin.code, currencyCode, timestamp)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(Schedulers.io())
-                        .subscribe {
-                            delegate?.didFetchRate(it, coin, baseCurrency, timestamp)
-                        })
-            }
-        }
+        rateManager.rateValueObservable(coin.code, currencyCode, timestamp)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    delegate?.didFetchRate(it, coin, baseCurrency, timestamp)
+                }, {
+                    requestedTimestamps.remove(composedKey)
+                })
+                .let { ratesDisposables.add(it) }
     }
 
     override fun clear() {
@@ -142,12 +155,13 @@ class TransactionsInteractor(private val adapterManager: IAdapterManager, privat
         delegate?.onUpdateCoinsData(adapterManager.adapters.map { Triple(it.coin, it.confirmationsThreshold, it.lastBlockHeight) })
 
         adapterManager.adapters.forEach { adapter ->
-            transactionUpdatesDisposables.add(adapter.transactionRecordsSubject
+            adapter.transactionRecordsSubject
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
                     .subscribe {
                         delegate?.didUpdateRecords(it, adapter.coin)
-                    })
+                    }
+                    .let { transactionUpdatesDisposables.add(it) }
         }
     }
 

@@ -19,7 +19,8 @@
     <string name="Guest_CreateWallet">새 지갑</string>
     <string name="Guest_RestoreWallet">지갑 복원</string>
     <!--Restore-->
-    <string name="Restore_Title">비밀 키를 입력</string>
+    <string name="Restore_Title">복구</string>
+    <string name="Restore_Subtitle">비밀 키를 입력</string>
     <string name="Restore_ValidationFailed">잘못 된 비밀 키</string>
     <string name="Restore_RestoreFailed">지갑 복구에 실패하였습니다.</string>
     <!--Backup-->
@@ -28,12 +29,14 @@
     <string name="Backup_Intro_Later">나중에</string>
     <string name="Backup_Intro_BackupNow">백업</string>
     <string name="Backup_Words_Title">비밀 키</string>
-    <string name="Backup_Confirmation_Understand">나는 내 지갑과 토큰이 다른 서버가 아닌 이 장치에만 안전하게 존재하고 있음을 이해한다.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key.</string>
-    <string name="Backup_Confirmation_LockAppWarn">장금 해제 핀을 변경하거나 안드로이드 오에스설정에서 어플 데이터를 삭제하는것은 지갑을 재설정합니다. 그러고 난 후, 당신은 당신의 지갑을 복구하기 위해서 당신의 비밀키가 필요합니다.</string>
+    <string name="Backup_Confirmation_SecretKey">I understand that I am a sole owner of a private 12-word Secret Key which is securely stored on my phone and enables me to control funds on my wallet.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is ever moved, deleted or malfunctions, the access to my wallet can be only recovered with that Secret Key.</string>
+    <string name="Backup_Confirmation_LockAppWarn">I understand that changing the phone\s unlock PIN or deleting app data in Android settings deletes the Secret Key from device. I would need to re-enter my Secret Key to regain access to my wallet.</string>
+    <string name="Backup_Confirmation_Disclaimer">I understand that developers of this app can not be held responsible for any unintended bugs or issues that may arise while using this app.</string>
     <string name="Backup_Confirmation_Title">비밀 키에서 단어를 입력</string>
     <string name="Backup_Confirmation_Description">비밀 키에서 단어를 입력.</string>
     <string name="Backup_Confirmation_FailureAlertText">암호가 일치 하지 않습니다.</string>
+    <string name="Backup_Confirmation_CheckTitle">확인 중…</string>
     <string name="Backup_Button_Confirm">확인</string>
     <string name="Backup_Button_Next">다음</string>
     <string name="Backup_Button_Submit">제출하기</string>
@@ -82,12 +85,14 @@
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">거래기록</string>
     <string name="TransactionInfo_Status">상태</string>
+    <string name="TransactionInfo_Status_Confirmed">Confirmed</string>
     <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_To">에게</string>
     <string name="TransactionInfo_From">로 부터</string>
     <string name="TransactionInfo_Time">시간</string>
-    <string name="TransactionInfo_ButtonMore">보다</string>
+    <string name="TransactionInfo_ButtonVerify">Verify</string>
     <string name="TransactionInfo_Status_Pending">보류 중</string>
+    <string name="TransactionInfo_HistoricalRate">Historical Rate</string>
     <!--Full Info-->
     <string name="FullInfo_Title">거래기록</string>
     <string name="FullInfo_Time">시간</string>
@@ -189,6 +194,9 @@
     <string name="Fingerprint_Success">성공!</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">~때까지 사용 안 함: %s</string>
+    <!--OS Pin-->
+    <string name="OSPin_Confirm_Title">Phone PIN</string>
+    <string name="OSPin_Confirm_Desciption">This app requires your phone\'s PIN in order to keep sensitive data from your wallet in Android\'s secure storage and not in the app itself.</string>
     <!--Set Pin-->
     <string name="SetPin_Title">비밀번호</string>
     <string name="SetPin_Info">너의 비밀번호는 너의 지갑을 열어주고 돈을 보내는데 사용될 것입니다.</string>

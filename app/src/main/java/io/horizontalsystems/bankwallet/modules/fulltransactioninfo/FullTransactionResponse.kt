@@ -38,13 +38,13 @@ abstract class EthereumResponse : FullTransactionResponse {
     abstract val height: String
 
     abstract val size: Int?
-    abstract val gasPrice: String
+    abstract val gasPrice: String?
     abstract val gasUsed: String?
     abstract val gasLimit: String
     abstract val fee: String?
     abstract val value: BigInteger
 
-    abstract val nonce: String
+    abstract val nonce: String?
     abstract val from: String
     abstract val to: String
     abstract val contractAddress: String?

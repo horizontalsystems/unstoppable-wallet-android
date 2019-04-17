@@ -8,16 +8,16 @@
     <attr name="BallanceCoinNameColor" format="reference|color" />
     <attr name="BallanceCoinAmountColor" format="reference|color" />
     <attr name="TitleColor" format="reference|color" />
-    <attr name="SettingBackgroundColor" format="reference|color" />
+    <attr name="TextColorGreyLightToDark" format="reference|color" />
+    <attr name="TextColorBarsToDark" format="reference|color" />
     <attr name="WalletBackgroundColor" format="reference|color" />
     <attr name="TransactionsBackgroundColor" format="reference|color" />
     <attr name="AboutBackgroundColor" format="reference|color" />
-    <attr name="AboutLongTextColor" format="reference|color" />
     <attr name="TransactionItemBackgroundColor" format="reference|color" />
     <attr name="SettingItemBackgroundColor" format="reference|color" />
     <attr name="DraggableCoinBackgroundColor" format="reference|color" />
     <attr name="AddWalletIcon" format="reference" />
-    <attr name="CoinItemBackgroundColor" format="reference|color" />
+    <attr name="CoinItemBackground" format="reference" />
     <attr name="FilterButtonBackgroundColor" format="reference|color" />
     <attr name="BottomNavigationBackgroundColor" format="reference|color" />
     <attr name="StatusBarColor" format="reference|color" />
@@ -49,11 +49,14 @@
     <attr name="ConfirmationMiddlePartBackground" format="reference|color" />
     <attr name="CurrencySwitcherTitleColor" format="reference|color" />
     <attr name="PendingTransactionShadeColor" format="reference|color" />
-    <attr name="PinScreenBackground" format="reference|color" />
     <attr name="TransactionTagColor" format="reference|color" />
     <attr name="ProgressbarSpinnerColor" format="reference|color" />
     <attr name="SwipeRefreshSpinnerColor" format="reference|color" />
     <attr name="SwipeRefreshBackgroundColor" format="reference|color" />
+    <attr name="InputBackground" format="reference|color" />
+    <attr name="SeekbarNonActiveColor" format="reference|color" />
+    <attr name="ConfirmationTextColor" format="reference|color" />
+    <attr name="SettingsSectionBottomShadeColor" format="reference|color" />
 
     <!-- Base application theme. -->
     <style name="DarkModeAppTheme" parent="Theme.AppCompat.NoActionBar">
@@ -62,7 +65,7 @@
         <item name="colorPrimaryDark">@color/black</item>
         <item name="colorAccent">@color/yellow_crypto</item>
         <item name="buttonStyle">@style/Button</item>
-        <item name="android:colorBackground">@color/appBackground</item>
+        <item name="android:colorBackground">@color/dark</item>
         <item name="android:navigationBarColor">@color/black</item>
         <item name="android:statusBarColor">@color/dark</item>
         <item name="android:windowLightStatusBar">false</item>
@@ -70,21 +73,21 @@
         <item name="colorControlNormal">@color/grey</item>
         <item name="colorControlActivated">@color/yellow_crypto</item>
 
-        <item name="NumpadNumberBackground">@color/steel_20</item>
+        <item name="NumpadNumberBackground">@color/steel_15</item>
         <item name="NumpadNumberBackgroundHighlight">@color/steel_40</item>
-        <item name="NumpadNumberColor">@color/white</item>
+        <item name="NumpadNumberColor">@color/grey_light</item>
         <item name="NumpadBorderColor">@color/transparent</item>
         <item name="BallanceCoinNameColor">@color/white</item>
         <item name="BallanceCoinAmountColor">@color/white</item>
         <item name="TitleColor">@color/white</item>
-        <item name="SettingBackgroundColor">@color/dark</item>
+        <item name="TextColorGreyLightToDark">@color/grey_light</item>
+        <item name="TextColorBarsToDark">@color/bars_color</item>
         <item name="WalletBackgroundColor">@color/dark</item>
         <item name="TransactionsBackgroundColor">@color/dark</item>
-        <item name="AboutBackgroundColor">@color/dark</item>
-        <item name="AboutLongTextColor">@color/steel_grey</item>
+        <item name="AboutBackgroundColor">@color/transparent</item>
         <item name="TransactionItemBackgroundColor">@color/transaction_item_background_dark</item>
-        <item name="CoinItemBackgroundColor">@color/coin_item_background_dark</item>
-        <item name="FilterButtonBackgroundColor">@color/steel_20</item>
+        <item name="CoinItemBackground">@drawable/coinholder_bg</item>
+        <item name="FilterButtonBackgroundColor">@color/steel_15</item>
         <item name="SettingItemBackgroundColor">@color/setting_item_background_dark</item>
         <item name="DraggableCoinBackgroundColor">@color/manage_coin_background_dark</item>
         <item name="AddWalletIcon">@drawable/add_dark</item>
@@ -101,28 +104,31 @@
         <item name="HudBackground">@color/black_85</item>
         <item name="HudTextColor">@color/white</item>
         <item name="TransactionDateColor">@color/grey_light</item>
-        <item name="TransactionDetailBackground">@color/steel_20</item>
+        <item name="TransactionDetailBackground">@color/steel_15</item>
         <item name="TransactionTextBoxBackground">@color/text_box_background_dark</item>
         <item name="TransactionDetailValueTextColor">@color/bars_color</item>
         <item name="TransactionDetailBottomBarBackground">@color/dark</item>
         <item name="TransactionInfoMoreButtonBackground">@drawable/transaction_info_more_button_background_dark</item>
         <item name="BottomTransactionInfoBackground">@color/dark</item>
         <item name="BottomSendBackground">@color/dark</item>
-        <item name="BottomSendInputBackground">@color/steel_20</item>
-        <item name="BottomSendButtonColor">@color/steel_20</item>
+        <item name="BottomSendInputBackground">@color/steel_15</item>
+        <item name="BottomSendButtonColor">@color/steel_15</item>
         <item name="BottomSendButtonHighlightedColor">@color/grey_50</item>
         <item name="BottomSendImageButtonTint">@color/white</item>
         <item name="BottomDialogTextColor">@color/white</item>
         <item name="ConfirmationDialogBackground">@color/dark</item>
         <item name="AddressBackground">@color/address_background_dark</item>
-        <item name="ConfirmationMiddlePartBackground">@color/steel_20</item>
+        <item name="ConfirmationMiddlePartBackground">@color/steel_15</item>
         <item name="CurrencySwitcherTitleColor">@color/bars_color</item>
         <item name="PendingTransactionShadeColor">@color/dark_50</item>
-        <item name="PinScreenBackground">@color/dark</item>
         <item name="TransactionTagColor">@color/stateful_tag_filter_text_color_dark</item>
         <item name="ProgressbarSpinnerColor">@color/dark</item>
         <item name="SwipeRefreshSpinnerColor">@color/bars_color</item>
         <item name="SwipeRefreshBackgroundColor">@color/dark</item>
+        <item name="InputBackground">@color/steel_dark</item>
+        <item name="SeekbarNonActiveColor">@color/steel_dark</item>
+        <item name="ConfirmationTextColor">@color/lightBackground</item>
+        <item name="SettingsSectionBottomShadeColor">@color/black_20</item>
     </style>
 
     <style name="LightModeAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -131,7 +137,7 @@
         <item name="colorPrimaryDark">@color/bars_color</item>
         <item name="colorAccent">@color/yellow_crypto</item>
         <item name="buttonStyle">@style/Button</item>
-        <item name="android:colorBackground">@color/lightBackground</item>
+        <item name="android:windowBackground">@drawable/light_gradient_background</item>
         <item name="android:navigationBarColor">@color/black</item>
         <item name="android:statusBarColor">@color/bars_color</item>
         <item name="android:windowLightStatusBar">true</item>
@@ -142,17 +148,17 @@
         <item name="NumpadNumberBackground">@color/white</item>
         <item name="NumpadNumberBackgroundHighlight">@color/lightBackground</item>
         <item name="NumpadNumberColor">@color/dark</item>
-        <item name="NumpadBorderColor">@color/steel_20</item>
+        <item name="NumpadBorderColor">@color/steel_15</item>
         <item name="BallanceCoinNameColor">@color/dark</item>
         <item name="BallanceCoinAmountColor">@color/dark</item>
         <item name="TitleColor">@color/dark</item>
-        <item name="SettingBackgroundColor">@color/lightBackground</item>
+        <item name="TextColorGreyLightToDark">@color/dark</item>
+        <item name="TextColorBarsToDark">@color/dark</item>
         <item name="WalletBackgroundColor">@color/lightBackground</item>
         <item name="TransactionsBackgroundColor">@color/white</item>
         <item name="AboutBackgroundColor">@color/white</item>
-        <item name="AboutLongTextColor">@color/dark</item>
         <item name="TransactionItemBackgroundColor">@color/transaction_item_background_light</item>
-        <item name="CoinItemBackgroundColor">@color/coin_item_background_light</item>
+        <item name="CoinItemBackground">@drawable/coinholder_bg_light</item>
         <item name="FilterButtonBackgroundColor">#efeff4</item>
         <item name="SettingItemBackgroundColor">@color/setting_item_background_light</item>
         <item name="DraggableCoinBackgroundColor">@color/setting_item_background_light</item>
@@ -184,48 +190,68 @@
         <item name="BottomDialogTextColor">@color/black</item>
         <item name="ConfirmationDialogBackground">@color/bars_color</item>
         <item name="AddressBackground">@color/address_background_light</item>
-        <item name="ConfirmationMiddlePartBackground">@color/transparent</item>
+        <item name="ConfirmationMiddlePartBackground">@color/white</item>
         <item name="CurrencySwitcherTitleColor">@color/dark</item>
         <item name="PendingTransactionShadeColor">@color/white_50</item>
-        <item name="PinScreenBackground">@color/bars_color</item>
         <item name="TransactionTagColor">@color/dark</item>
         <item name="ProgressbarSpinnerColor">@color/bars_color</item>
         <item name="SwipeRefreshSpinnerColor">@color/dark</item>
         <item name="SwipeRefreshBackgroundColor">@color/bars_color</item>
+        <item name="InputBackground">@color/white</item>
+        <item name="SeekbarNonActiveColor">@color/grey_light</item>
+        <item name="ConfirmationTextColor">@color/dark</item>
+        <item name="SettingsSectionBottomShadeColor">@color/steel_15</item>
     </style>
 
     <style name="Button" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">17sp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:paddingTop">13dp</item>
         <item name="android:paddingBottom">14dp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:fontFamily">@font/noto_sans_bold</item>
+        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
         <item name="android:background">@drawable/button_yellow_background_12</item>
     </style>
 
-    <style name="ButtonSmallGrey_4" parent="Button">
+    <style name="ButtonDark" parent="Button">
+        <item name="android:background">@drawable/button_steel_background_12</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="SendButtonSmallGrey" parent="Button">
         <item name="android:background">@drawable/button_grey_background_4_themed</item>
+        <item name="android:textColor">@color/stateful_button_text_color</item>
+        <item name="android:fontFamily">@font/noto_sans_regular</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:minHeight">0dp</item>
         <item name="android:minWidth">0dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:paddingTop">3dp</item>
+        <item name="android:paddingBottom">3dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:paddingStart">8dp</item>
+    </style>
+
+    <style name="SendButtonSmallGrey_text14" parent="SendButtonSmallGrey">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="SendImageButtonSmallGrey" parent="SendButtonSmallGrey">
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="android:paddingEnd">3dp</item>
+        <item name="android:paddingStart">3dp</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:tint">@color/button_image_tint_color_selector</item>
+    </style>
+
+    <style name="ButtonSmallGrey_4" parent="SendButtonSmallGrey">
         <item name="android:paddingTop">6dp</item>
         <item name="android:paddingBottom">7dp</item>
         <item name="android:paddingEnd">12dp</item>
         <item name="android:paddingStart">12dp</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/stateful_button_text_color</item>
-    </style>
-
-    <style name="ImageButtonSmallGrey_4" parent="ButtonSmallGrey_4">
-        <item name="android:paddingTop">8dp</item>
-        <item name="android:paddingBottom">8dp</item>
-        <item name="android:paddingEnd">8dp</item>
-        <item name="android:paddingStart">8dp</item>
-    </style>
-
-    <style name="ThemedImageButtonSmallGrey_4" parent="ImageButtonSmallGrey_4">
-        <item name="android:tint">@color/button_image_tint_color_selector</item>
     </style>
 
     <style name="ButtonGreen_12" parent="Button">
@@ -242,34 +268,10 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="Title">
-        <item name="android:fontFamily">@font/noto_sans_bold</item>
-        <item name="android:textColor">?TitleColor</item>
-        <item name="android:textSize">42sp</item>
-    </style>
-
-    <style name="Description">
-        <item name="android:fontFamily">@font/noto_sans</item>
-        <item name="android:letterSpacing">-0.02</item>
-        <item name="android:textColor">@color/grey</item>
-        <item name="android:textSize">17sp</item>
-    </style>
-
-    <style name="Error">
-        <item name="android:textColor">@color/red_error</item>
-        <item name="android:textSize">20sp</item>
-    </style>
-
     <style name="TabTitle">
         <item name="android:fontFamily">@font/noto_sans_bold</item>
         <item name="android:textColor">?TitleColor</item>
         <item name="android:textSize">34sp</item>
-    </style>
-
-    <style name="AboutSubTitle">
-        <item name="android:fontFamily">@font/noto_sans_bold</item>
-        <item name="android:textColor">@color/yellow_crypto</item>
-        <item name="android:textSize">17sp</item>
     </style>
 
     <style name="TabTitleSmall" parent="TabTitle">
@@ -305,31 +307,11 @@
         <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
     </style>
 
-    <style name="BottomDialogText">
-        <item name="android:textColorHint">@color/grey_50</item>
-        <item name="android:textColor">?BottomDialogTextColor</item>
-        <item name="android:fontFamily">@font/noto_sans</item>
-    </style>
-
     <style name="SwitchTheme" parent="ThemeOverlay.AppCompat.Dark">
         <item name="colorControlActivated">@color/green_crypto</item>
         <item name="colorControlNormal">@color/grey</item>
         <item name="colorSwitchThumbNormal">@color/grey</item>
         <item name="android:colorForeground">@color/grey</item>
-    </style>
-
-    <style name="TransactionInfoFieldName">
-        <item name="android:textColor">@color/grey</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:fontFamily">@font/noto_sans</item>
-        <item name="android:includeFontPadding">false</item>
-    </style>
-
-    <style name="TransactionInfoFieldValue">
-        <item name="android:textColor">?TransactionDetailValueTextColor</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:fontFamily">@font/noto_sans</item>
-        <item name="android:includeFontPadding">false</item>
     </style>
 
     <style name="TransactionInfoStatusProgressBarBig">
@@ -346,23 +328,64 @@
         <item name="android:src">@drawable/status_progress_bar_grey_20_small</item>
     </style>
 
-    <style name="Widget.Shadow.AppBar" parent="">
-        <item name="android:background">?AppBarBackground</item>
-        <item name="android:layout_height">4dp</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="layout_anchorGravity">bottom</item>
-        <item name="android:layout_gravity">bottom</item>
+    <!--Text Styles-->
+
+    <style name="Title1">
+        <item name="android:fontFamily">@font/noto_sans_bold</item>
+        <item name="android:textColor">?TitleColor</item>
+        <item name="android:textSize">32sp</item>
     </style>
 
-    <style name="BaseSbThemed">
-        <item name="android:fontFamily">@font/noto_sans_medium</item>
-        <item name="android:textColor">?TransactionDateColor</item>
+    <style name="Title2">
+        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="Title2Yellow" parent="Title2">
+        <item name="android:textColor">@color/yellow_crypto</item>
     </style>
 
     <style name="Body1Grey">
         <item name="android:fontFamily">@font/noto_sans_regular</item>
         <item name="android:textColor">@color/grey</item>
         <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Base">
+        <item name="android:fontFamily">@font/noto_sans_regular</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="BaseGrey" parent="Base">
+        <item name="android:textColor">@color/grey</item>
+    </style>
+
+    <style name="BaseMedium" parent="Base">
+        <item name="android:fontFamily">@font/noto_sans_medium</item>
+    </style>
+
+    <style name="BaseSb" parent="Base">
+        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
+    </style>
+
+    <style name="Body1">
+        <item name="android:fontFamily">@font/noto_sans_regular</item>
+        <item name="android:textColor">@color/bars_color</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="FormInputTextThemed" parent="Base">
+        <item name="android:textColorHint">@color/grey_50</item>
+        <item name="android:textColor">?attr/TextColorBarsToDark</item>
+    </style>
+
+    <style name="CaptionRegular">
+        <item name="android:fontFamily">@font/noto_sans_regular</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="CaptionRegularRed" parent="CaptionRegular">
+        <item name="android:textColor">@color/red_warning</item>
     </style>
 
 </resources>

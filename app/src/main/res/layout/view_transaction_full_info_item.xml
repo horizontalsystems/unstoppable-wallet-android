@@ -21,12 +21,13 @@
 
     <TextView
         android:id="@+id/txtTitle"
-        style="@style/TransactionInfoFieldName"
+        style="@style/Body1Grey"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="14dp"
         android:layout_marginBottom="14dp"
+        android:includeFontPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toEndOf="@id/typeIcon"
@@ -46,6 +47,7 @@
 
     <TextView
         android:id="@+id/valueText"
+        style="@style/Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
@@ -61,7 +63,7 @@
         android:id="@+id/border"
         android:layout_width="0dp"
         android:layout_height="0.5dp"
-        android:background="@color/steel_20"
+        android:background="@color/steel_15"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

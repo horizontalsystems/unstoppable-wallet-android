@@ -56,13 +56,19 @@ class EncryptionManager : IEncryptionManager {
 
         fun showAuthenticationScreen(activity: Activity, requestCode: Int) {
             val mKeyguardManager = activity.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
-            val intent: Intent? = mKeyguardManager.createConfirmDeviceCredentialIntent("Authorization required", "")
+            val intent: Intent? = mKeyguardManager.createConfirmDeviceCredentialIntent(
+                    activity.getString(R.string.OSPin_Confirm_Title),
+                    activity.getString(R.string.OSPin_Confirm_Desciption)
+            )
             activity.startActivityForResult(intent, requestCode)
         }
 
         fun showAuthenticationScreen(fragment: Fragment, requestCode: Int) {
             val mKeyguardManager = fragment.activity?.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
-            val intent: Intent? = mKeyguardManager.createConfirmDeviceCredentialIntent("Authorization required", "")
+            val intent: Intent? = mKeyguardManager.createConfirmDeviceCredentialIntent(
+                    fragment.getString(R.string.OSPin_Confirm_Title),
+                    fragment.getString(R.string.OSPin_Confirm_Desciption)
+            )
             fragment.startActivityForResult(intent, requestCode)
         }
 

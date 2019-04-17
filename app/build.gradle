@@ -39,6 +39,7 @@ android {
             minifyEnabled false
             resValue "string", "infuraKey", "2a1306f1d12f4c109a4d4fb9be46b02e"
             resValue "string", "etherscanKey", "GKNHXT22ED7PRVCKZATFZQD1YI7FK9AAYE"
+            resValue "string", "is_release", "false"
         }
         release {
             debuggable false
@@ -46,6 +47,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             resValue "string", "infuraKey", ""
             resValue "string", "etherscanKey", ""
+            resValue "string", "is_release", "true"
         }
     }
 
@@ -118,17 +120,17 @@ dependencies {
 
     api 'com.journeyapps:zxing-android-embedded:3.6.0'
 
-    // For images
-    implementation 'com.facebook.fresco:fresco:1.12.0'
-
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.2'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
 
     // BitcoinKit
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:0.2.0'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:affdbed'
 
     // EthereumKit
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:0.2.0'
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:28ff3cd'
+
+    //FeeRate
+    implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:7a94d70'
 
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

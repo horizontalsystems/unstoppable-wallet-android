@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import android.text.SpannableString
 import com.google.gson.JsonObject
+import io.horizontalsystems.bankwallet.core.managers.ServiceExchangeApi
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
@@ -10,6 +11,7 @@ import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.ethereumkit.EthereumKit
 import io.reactivex.Flowable
+import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
@@ -57,8 +59,9 @@ interface IRandomProvider {
 }
 
 interface INetworkManager {
-    fun getLatestRate(coin: String, currency: String): Flowable<LatestRate>
-    fun getRate(coinCode: String, currency: String, timestamp: Long): Flowable<BigDecimal>
+    fun getLatestRateData(hostType: ServiceExchangeApi.HostType, currency: String): Maybe<LatestRateData>
+    fun getRateByDay(hostType: ServiceExchangeApi.HostType, coinCode: String, currency: String, timestamp: Long): Maybe<BigDecimal>
+    fun getRateByHour(hostType: ServiceExchangeApi.HostType, coinCode: String, currency: String, timestamp: Long): Maybe<BigDecimal>
     fun getTransaction(host: String, path: String): Flowable<JsonObject>
     fun ping(host: String, url: String): Flowable<Any>
 }
@@ -147,15 +150,15 @@ interface IAdapter {
 
     fun parsePaymentAddress(address: String): PaymentRequestAddress
 
-    fun send(address: String, value: BigDecimal, completion: ((Throwable?) -> (Unit))? = null)
-    fun availableBalance(address: String?): BigDecimal
+    fun send(address: String, value: BigDecimal, feePriority: FeeRatePriority, completion: ((Throwable?) -> (Unit))? = null)
+    fun availableBalance(address: String?, feePriority: FeeRatePriority): BigDecimal
 
-    fun fee(value: BigDecimal, address: String?): BigDecimal
+    fun fee(value: BigDecimal, address: String?, feePriority: FeeRatePriority): BigDecimal
 
     @Throws
     fun validate(address: String)
 
-    fun validate(amount: BigDecimal, address: String?): List<SendStateError>
+    fun validate(amount: BigDecimal, address: String?, feePriority: FeeRatePriority): List<SendStateError>
 
     val receiveAddress: String
     fun getTransactionsObservable(hashFrom: String?, limit: Int): Single<List<TransactionRecord>>
@@ -187,7 +190,9 @@ interface ILockManager {
 }
 
 interface IAppConfigProvider {
-    val ipfsUrl: String
+    val ipfsId: String
+    val ipfsMainGateway: String
+    val ipfsFallbackGateway: String
     val fiatDecimal: Int
     val maxDecimal: Int
     val testMode: Boolean
@@ -203,7 +208,7 @@ interface IOneTimerDelegate {
 
 interface IRateStorage {
     fun latestRateObservable(coinCode: CoinCode, currencyCode: String): Flowable<Rate>
-    fun rateObservable(coinCode: CoinCode, currencyCode: String, timestamp: Long): Flowable<List<Rate>>
+    fun rateMaybe(coinCode: CoinCode, currencyCode: String, timestamp: Long): Maybe<Rate>
     fun save(rate: Rate)
     fun saveLatest(rate: Rate)
     fun deleteAll()
@@ -252,11 +257,29 @@ interface IAppNumberFormatter {
     fun format(value: Double): String
 }
 
+interface IFeeRateProvider{
+    fun ethereumGasPrice(priority: FeeRatePriority): Long
+    fun bitcoinFeeRate(priority: FeeRatePriority): Long
+    fun bitcoinCashFeeRate(priority: FeeRatePriority): Long
+}
+
 sealed class Error : Exception() {
     class CoinTypeException : Error()
 }
 
 sealed class SendStateError {
-    object InsufficientAmount: SendStateError()
-    object InsufficientFeeBalance: SendStateError()
+    object InsufficientAmount : SendStateError()
+    object InsufficientFeeBalance : SendStateError()
+}
+
+enum class FeeRatePriority(val value: Int) {
+    LOWEST(0),
+    LOW(1),
+    MEDIUM(2),
+    HIGH(3),
+    HIGHEST(4);
+
+    companion object {
+        fun valueOf(value: Int): FeeRatePriority = FeeRatePriority.values().firstOrNull { it.value == value } ?: MEDIUM
+    }
 }

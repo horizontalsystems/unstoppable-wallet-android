@@ -35,17 +35,20 @@ open class TransactionInfoStatusView : ConstraintLayout {
         statusPendingText.visibility = View.GONE
         when (transactionStatus) {
             is TransactionStatus.Completed -> {
-                statusIcon.setImageDrawable(LayoutHelper.d(R.drawable.checkmark_green, App.instance))
+                statusIcon.setImageDrawable(LayoutHelper.d(R.drawable.ic_checkmark_green, App.instance))
                 statusIcon.visibility = View.VISIBLE
+                statusPendingText.visibility = View.VISIBLE
+                statusPendingText.text = context.getString(R.string.TransactionInfo_Status_Confirmed)
             }
             is TransactionStatus.Processing -> {
                 progressBarWrapper.visibility = View.VISIBLE
                 fillProgress(transactionStatus)
             }
             else -> {
-                statusIcon.setImageDrawable(LayoutHelper.d(R.drawable.pending, App.instance))
+                statusIcon.setImageDrawable(LayoutHelper.d(R.drawable.ic_pending_grey, App.instance))
                 statusIcon.visibility = View.VISIBLE
                 statusPendingText.visibility = View.VISIBLE
+                statusPendingText.text = context.getString(R.string.TransactionInfo_Status_Pending)
             }
         }
         invalidate()

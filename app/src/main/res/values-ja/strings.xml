@@ -19,7 +19,8 @@
     <string name="Guest_CreateWallet">新規ウォレット</string>
     <string name="Guest_RestoreWallet">ウォレットを復元する</string>
     <!--Restore-->
-    <string name="Restore_Title">秘密キーを入力する</string>
+    <string name="Restore_Title">Restore</string>
+    <string name="Restore_Subtitle">Enter Secret Key</string>
     <string name="Restore_ValidationFailed">正しくない秘密鍵</string>
     <string name="Restore_RestoreFailed">ウォレットを作成できませんでした</string>
     <!--Backup-->
@@ -28,12 +29,14 @@
     <string name="Backup_Intro_Later">後で</string>
     <string name="Backup_Intro_BackupNow">バックアップ</string>
     <string name="Backup_Words_Title">秘密鍵</string>
-    <string name="Backup_Confirmation_Understand">私は私の財布とトークンは、ほかのサーバーではなく、このデバイスだけに安全に開催されること理解します。</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key.</string>
-    <string name="Backup_Confirmation_LockAppWarn">アンドロイド OS 設定のアプリ  PINロック解除  を変更またはデータ削除する際、財布はリセットされます。その後あなたの財布を復元するのには、秘密キーを必要があります。</string>
+    <string name="Backup_Confirmation_SecretKey">I understand that I am a sole owner of a private 12-word Secret Key which is securely stored on my phone and enables me to control funds on my wallet.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is ever moved, deleted or malfunctions, the access to my wallet can be only recovered with that Secret Key.</string>
+    <string name="Backup_Confirmation_LockAppWarn">I understand that changing the phone\s unlock PIN or deleting app data in Android settings deletes the Secret Key from device. I would need to re-enter my Secret Key to regain access to my wallet.</string>
+    <string name="Backup_Confirmation_Disclaimer">I understand that developers of this app can not be held responsible for any unintended bugs or issues that may arise while using this app.</string>
     <string name="Backup_Confirmation_Title">秘密キーの後に、次の言葉にを入力してください。</string>
     <string name="Backup_Confirmation_Description">あなたの秘密鍵の単語を入力してください。</string>
     <string name="Backup_Confirmation_FailureAlertText"> 言葉が一致しません</string>
+    <string name="Backup_Confirmation_CheckTitle">Check…</string>
     <string name="Backup_Button_Confirm">確定する</string>
     <string name="Backup_Button_Next">次</string>
     <string name="Backup_Button_Submit">提出</string>
@@ -82,12 +85,14 @@
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">トランザクション</string>
     <string name="TransactionInfo_Status">状況</string>
+    <string name="TransactionInfo_Status_Confirmed">Confirmed</string>
     <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_To">宛先</string>
     <string name="TransactionInfo_From">差出人</string>
     <string name="TransactionInfo_Time">時間</string>
-    <string name="TransactionInfo_ButtonMore">その他</string>
+    <string name="TransactionInfo_ButtonVerify">Verify</string>
     <string name="TransactionInfo_Status_Pending">ペンディング</string>
+    <string name="TransactionInfo_HistoricalRate">Historical Rate</string>
     <!--Full Info-->
     <string name="FullInfo_Title">トランザクション</string>
     <string name="FullInfo_Time">時間</string>
@@ -183,6 +188,9 @@
     <string name="Fingerprint_Success">成功!</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">までに無効: %s</string>
+    <!--OS Pin-->
+    <string name="OSPin_Confirm_Title">Phone PIN</string>
+    <string name="OSPin_Confirm_Desciption">This app requires your phone\'s PIN in order to keep sensitive data from your wallet in Android\'s secure storage and not in the app itself.</string>
     <!--Set Pin-->
     <string name="SetPin_Title">パスコード</string>
     <string name="SetPin_Info">Your passcode will be used to unlock your wallet and send money</string>
