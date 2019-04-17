@@ -19,6 +19,8 @@ class BackupActivity : BaseActivity(), BottomConfirmAlert.Listener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setTransparentStatusBar()
+
         setContentView(R.layout.activity_backup_words)
 
         viewModel = ViewModelProviders.of(this).get(BackupViewModel::class.java)
@@ -48,9 +50,10 @@ class BackupActivity : BaseActivity(), BottomConfirmAlert.Listener {
 
         viewModel.showConfirmationCheckDialogLiveEvent.observe(this, Observer {
             val confirmationList = mutableListOf(
-                    R.string.Backup_Confirmation_Understand,
+                    R.string.Backup_Confirmation_SecretKey,
                     R.string.Backup_Confirmation_DeleteAppWarn,
-                    R.string.Backup_Confirmation_LockAppWarn
+                    R.string.Backup_Confirmation_LockAppWarn,
+                    R.string.Backup_Confirmation_Disclaimer
             )
             BottomConfirmAlert.show(this, confirmationList, this)
         })

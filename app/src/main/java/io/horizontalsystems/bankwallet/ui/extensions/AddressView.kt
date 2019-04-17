@@ -9,21 +9,15 @@ import kotlinx.android.synthetic.main.view_address.view.*
 
 class AddressView : ConstraintLayout {
 
-    constructor(context: Context) : super(context) {
-        initializeViews()
-    }
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        initializeViews()
-    }
-
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        initializeViews()
-    }
-
-    private fun initializeViews() {
+    init {
         ConstraintLayout.inflate(context, R.layout.view_address, this)
     }
+
+    constructor(context: Context) : super(context)
+
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     fun bind(address: String, icon: Int? = null) {
         txtAddress.text = address

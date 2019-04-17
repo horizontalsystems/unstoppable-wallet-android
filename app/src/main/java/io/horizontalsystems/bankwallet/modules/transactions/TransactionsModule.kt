@@ -19,7 +19,8 @@ data class TransactionViewItem(
         val to: String?,
         val incoming: Boolean,
         val date: Date?,
-        val status: TransactionStatus)
+        val status: TransactionStatus,
+        val rate: CurrencyValue?)
 
 
 sealed class TransactionStatus {
@@ -49,6 +50,7 @@ object TransactionsModule {
         val itemsCount: Int
         fun itemForIndex(index: Int): TransactionViewItem
         fun onBottomReached()
+        fun onVisible()
     }
 
     interface IInteractor {
@@ -57,7 +59,7 @@ object TransactionsModule {
         fun fetchRecords(fetchDataList: List<FetchData>)
         fun setSelectedCoinCodes(selectedCoins: List<Coin>)
         fun fetchLastBlockHeights()
-        fun fetchRates(timestamps: Map<Coin, List<Long>>)
+        fun fetchRate(coin: Coin, timestamp: Long)
     }
 
     interface IInteractorDelegate {
@@ -68,6 +70,7 @@ object TransactionsModule {
         fun onUpdateBaseCurrency()
         fun didFetchRate(rateValue: BigDecimal, coin: Coin, currency: Currency, timestamp: Long)
         fun didUpdateRecords(records: List<TransactionRecord>, coin: Coin)
+        fun onConnectionRestore()
     }
 
     interface IRouter {
@@ -76,9 +79,9 @@ object TransactionsModule {
 
     fun initModule(view: TransactionsViewModel, router: IRouter) {
         val dataSource = TransactionRecordDataSource(PoolRepo(), TransactionItemDataSource(), TransactionItemFactory())
-        val interactor = TransactionsInteractor(App.adapterManager, App.currencyManager, App.rateManager)
+        val interactor = TransactionsInteractor(App.adapterManager, App.currencyManager, App.rateManager, App.networkAvailabilityManager)
         val transactionsLoader = TransactionsLoader(dataSource)
-        val presenter = TransactionsPresenter(interactor, router, TransactionViewItemFactory(App.adapterManager, App.currencyManager, App.rateManager), transactionsLoader, TransactionMetadataDataSource())
+        val presenter = TransactionsPresenter(interactor, router, TransactionViewItemFactory(), transactionsLoader, TransactionMetadataDataSource())
 
         presenter.view = view
         interactor.delegate = presenter

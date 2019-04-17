@@ -5,6 +5,11 @@ import android.arch.lifecycle.ViewModel
 import android.support.v7.util.DiffUtil
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
+import java.util.concurrent.TimeUnit
 
 class TransactionsViewModel : ViewModel(), TransactionsModule.IView, TransactionsModule.IRouter {
 
@@ -17,9 +22,20 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
     val reloadItemsLiveEvent = SingleLiveEvent<List<Int>>()
     val addItemsLiveEvent = SingleLiveEvent<Pair<Int, Int>>()
 
+    private var flushSubject = PublishSubject.create<Unit>()
+    private var indexesToUpdate = mutableListOf<Int>()
+    private val disposables = CompositeDisposable()
+
     fun init() {
         TransactionsModule.initModule(this, this)
         delegate.viewDidLoad()
+
+        flushSubject
+                .debounce(200, TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext { unit -> reloadWithBuffer() }
+                .subscribe()?.let { disposables.add(it) }
     }
 
     override fun showFilters(filters: List<Coin?>) {
@@ -35,7 +51,14 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
     }
 
     override fun reloadItems(updatedIndexes: List<Int>) {
-        reloadItemsLiveEvent.postValue(updatedIndexes)
+        indexesToUpdate.addAll(updatedIndexes)
+        indexesToUpdate = indexesToUpdate.distinct().toMutableList()
+        flushSubject.onNext(Unit)
+    }
+
+    private fun reloadWithBuffer() {
+        reloadItemsLiveEvent.value = indexesToUpdate
+        indexesToUpdate.clear()
     }
 
     override fun addItems(fromIndex: Int, count: Int) {

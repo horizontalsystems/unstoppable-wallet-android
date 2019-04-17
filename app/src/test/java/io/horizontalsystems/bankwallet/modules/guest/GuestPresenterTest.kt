@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.guest
 
 import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
@@ -16,6 +17,14 @@ class GuestPresenterTest {
     @Before
     fun before() {
         presenter.view = view
+    }
+
+    @Test
+    fun viewDidLoad() {
+        val appVersion = "v.1.2"
+        whenever(interactor.appVersion).thenReturn(appVersion)
+        presenter.onViewDidLoad()
+        verify(view).setAppVersion(appVersion)
     }
 
     @Test

@@ -1,27 +1,27 @@
-  Control Your Money!
-Wallet BANK is a secure and a fully decentralized crypto wallet app that supports major cryptocurrencies, including Bitcoin, Ethereum, Bitcoin Cash and ERC 20 tokens. The number of supported currencies being gradually added with every release.
-This BANK wallet provides a seamless way to get started with Bitcoin and other crypto currencies for masses. You don't need to understand the inner workings of cryptocurrencies to be able to use it.
-It has been built using best practices from the design of the interface to the implementation of blockchain protocols.
+  پول خود را كنترل كنيد!
+بانك كيف پول به طور تمام محفوظ ميباشد از شر سرمايه گذاري هاي غير متمركز و در عين زمان كاربرد كيف پول به كساني كي از بتكوين. زر. ايودريم،پول و اي ار سي ٢٠ سكه استفاده ميكند امنيت كامل ميدهد. تمام ارقام پول در ظرف يك دقيقه با تمام معلومات روز بر كاربرد رها ميشود.
+اين كاربرد كيف پول بهترين و جديد راه ها را براي استفاده از بتكوين به شما نشان ميدهد. شما نياز به فهميدن رمزنگارب ارز نداريد تا از ان استفاده كنيد.
+ساخته شده است با استفاده از بهترین روش ها از طراحی رابط کاربری به اجرای پروتکل های blockchain است.
 
-  Independent & Decentralized
-The BANK wallet is fully peer-to-peer and works without any centrally managed servers. It can't be stopped, blocked or taken down. The wallet connects directly to the currency networks i.e. Bitcoin without the need for intermediary. Such approach enables the BANK wallet to operate anywhere and remain censorship-resistant. Only the user is in control of the money.
-Most crypto wallet apps out there are centralized. The funds are stored on a remote server which is operated by the wallet provider. Due to the unregulated nature of the cryptocurrencies there are no mechanisms in place to guarantee that a wallet provider doesn't cheat or that provider's servers not get hacked.
-Being a fully decentralized app the BANK wallet implements all of its functionality in a decentralized manner. Every single feature in the app is implemented in a decentralized manner substantially increasing the security and privacy aspects of the wallet.
-There are no centrally managed servers that can fail, and as a result stop app from functioning.
+  مستقل & غیر متمرکز
+کیف پول بانک کاملا نقطه به نقطه و بدون هر گونه سرور مرکزی مدیریت کار می کند. آن نمی تواند متوقف شد، مسدود شده یا گرفته شده پایین. کیف پول را به طور مستقیم به شبکه های ارز Bitcoin یعنی بدون نیاز به واسطه وصل می شود. این رویکرد را قادر می سازد کیف پول بانک را به کار در هر نقطه و مقاوم در برابر سانسور باقی می بماند. تنها کاربر در کنترل پول ميباشد.
+بيشتر كاربرد هاي ديگر به تمركز ارز تمركز دارند. بودجه می تواند بر روی سرور از راه دور است که توسط ارائه دهنده کیف پول عمل ذخیره شود. با توجه به ماهیت غیر قابل تنظیم cryptocurrencies هیچ مکانیسم های در محل برای تضمین که ارائه دهنده کیف پول تقلب نمی کند و یا ارائه دهنده سرویس دهنده هک کنید که وجود دارد.
+بودن تمام ارز هاي متمركز و بانك از كار ميندازد ارزش خود را. از هر ویژگی در برنامه در صورت غیر متمرکز قابل ملاحظه ای افزایش امنیت و حریم خصوصی جنبه کیف پول اجرا شده است.
+هیچ سرور مرکزی مدیریت است که می تواند شکست و در نتیجه جلوگیری از برنامه از عملکرد وجود دارد.
 
-  Secure & Open Source
-The entire code of the BANK wallet is public and open-source, giving an option for anyone to analyze all of its code. It works exactly as shown in the code. It can't cheat!
-The BANK wallet stores user's private keys and funds encrypted on a device itself using secure native storage mechanisms provided by Android operating systems. Only user can access and use his or her funds.
-In case of a device loss or replacement the user may easily restore the wallet using a secret 12-word recovery phrase. 
-In fact, with the help of these secret phrase the user may restore the wallet and access funds on any deterministic wallet (aka HD wallet) not just the BANK wallet 
+  منبع امن & باز
+تمام کد بانک کیف پول دادن گزینه ای را برای هر کسی که به همه کد آن را تجزیه و تحلیل عمومی و منبع باز است. دقیقا در کد نشان داده شده کار می کند. نمی تواند تقلب كند!
+با استفاده از مکانیزم های ذخیره سازی بومی امن ارائه شده توسط سیستم عامل های آندروید بانک کیف پول فروشگاه کاربر کلید های خصوصی و صندوق های رمزگذاری شده در دستگاه خود. تنها کاربر می تواند دسترسی و استفاده از صندوق های خود.
+در مورد دستگاه از دست دادن و یا تعویض کاربر به راحتی کیف پول با استفاده از عبارت مخفی 12 کلمه عبور بازیابی ممکن است. 
+در واقع با کمک این عبارت برای مخفی کاربر وجوه کیف پول و دسترسی در هر کیف پول قطعی (کیف پول HD به نام دیگر) نه فقط کیف پول بانک ممکن است بازیابی 
 
-NOTE: DO NOT install the BANK wallet on a jailbroken device due to substantial security risks. A jailbroken Android operating system cannot guarantee the security of your private keys. This means that some malicious app running on jailbroken device can potentially access the private keys for your funds and steal them.
+توجه: کیف پول بانک در دستگاه جیلبریک با توجه به خطرات امنیتی قابل توجهی نصب. جیل بریک شده سیستم عامل آندروید می تواند امنیت کلیدهای خصوصی شما را تضمین نمی کند. این به این معنی که برخی از برنامه های مخرب بر روی جیلبریک دستگاه بالقوه می تواند دسترسی به کلیدهای خصوصی برای سرمایه خود و آنها را سرقت.
 
-DISCLAIMER:
+سلب مسءلويت:
 
-1. This Wallet is in its early days and just like any other software product it may have undiscovered issues which may potentially result in wallet having problems, like say the loss of access to specific transactions. While the wallet has been thoroughly tested over and over no one can say for sure that it's error-free. We believe it to be very secure, more than any crypto currency app out there.
+1. این کیف پول در آن روزهای اولیه است و مانند هر محصول نرم افزار آن می گویند که به طور بالقوه ممکن است منجر به کیف پول داشتن مشکلات، مانند از دست دادن دسترسی به معاملات خاص ناشناخته است ممکن است. در حالی که کیف پول کاملا بارها و بارها تست شده است هیچ کس برای اطمینان می گویند به آن است که عاری از خطا. ما اعتقاد داریم آن را به بسیار امن تر از هر app پرکردن ارز وجود دارد.
 
-2. DO NOT EVER install the BANK wallet on a jailbroken or tempered device due to substantial security risks. A jailbroken Android cannot guarantee the security of your private keys. This means that some malicious app running on jailbroken device can potentially access the private keys for your funds and steal them.
+۲. هيچ وقت كيف پول را در تيليوفن حك شده و غير مطمعاً انستال نكنيد تا باعث ضرر به شما نشود. جیل بریک شده سیستم عامل آندروید می تواند امنیت کلیدهای خصوصی شما را تضمین نمی کند. این به این معنی که برخی از برنامه های مخرب بر روی جیلبریک دستگاه بالقوه می تواند دسترسی به کلیدهای خصوصی برای سرمایه خود و آنها را سرقت.
 
-3. Source Code: https://github.com/horizontalsystems
+3. کد منبع: https://github.com/horizontalsystems
 

@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.send
 
 import android.support.v4.app.FragmentActivity
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -25,7 +26,7 @@ object SendModule {
         fun setSendButtonEnabled(sendButtonEnabled: Boolean)
 
         fun showConfirmation(viewItem: SendConfirmationViewItem)
-        fun showError(errorText: Int)
+        fun showError(error: Int)
         fun dismissWithSuccess()
         fun setPasteButtonState(enabled: Boolean)
         fun setDecimal(decimal: Int)
@@ -33,6 +34,7 @@ object SendModule {
     }
 
     interface IViewDelegate {
+        val feeAdjustable: Boolean
         fun onViewDidLoad()
         fun onAmountChanged(amount: BigDecimal)
         fun onSwitchClicked()
@@ -43,6 +45,7 @@ object SendModule {
         fun onConfirmClicked()
         fun onMaxClicked()
         fun onClear()
+        fun onFeeSliderChange(value: Int)
     }
 
     interface IInteractor {
@@ -57,7 +60,7 @@ object SendModule {
         fun stateForUserInput(input: UserInput): State
 
         fun send(userInput: UserInput)
-        fun getTotalBalanceMinusFee(inputType: InputType, address: String?): BigDecimal
+        fun getTotalBalanceMinusFee(inputType: InputType, address: String?, feeRate: FeeRatePriority): BigDecimal
         fun clear()
     }
 
@@ -130,6 +133,7 @@ object SendModule {
         var inputType: InputType = InputType.COIN
         var amount: BigDecimal = BigDecimal.ZERO
         var address: String? = null
+        var feePriority: FeeRatePriority = FeeRatePriority.MEDIUM
     }
 
     class State(var decimal: Int, var inputType: InputType) {

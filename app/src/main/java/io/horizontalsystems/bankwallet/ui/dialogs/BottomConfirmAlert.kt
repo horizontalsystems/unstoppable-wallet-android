@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentActivity
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -50,8 +51,23 @@ class BottomConfirmAlert : DialogFragment(), ConfirmationsAdapter.Listener {
         }
 
         btnConfirm.setBackgroundResource(getBackgroundResId(color))
+        setButtonTextColor(color, false)
 
         return mDialog as Dialog
+    }
+
+    private fun setButtonTextColor(buttonColor: BottomButtonColor, enabled: Boolean) {
+        val colorRes: Int = when {
+            enabled -> when (buttonColor) {
+                BottomButtonColor.RED -> R.color.white
+                BottomButtonColor.YELLOW -> R.color.black
+            }
+            else -> R.color.grey_50
+        }
+
+        context?.let {
+            btnConfirm.setTextColor(ContextCompat.getColor(it, colorRes))
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -75,7 +91,9 @@ class BottomConfirmAlert : DialogFragment(), ConfirmationsAdapter.Listener {
 
     private fun checkConfirmations() {
         val uncheckedCount = checkboxItemList.asSequence().filter { !it.checked }.count()
-        btnConfirm.isEnabled = uncheckedCount == 0
+        val isEnabled = uncheckedCount == 0
+        btnConfirm.isEnabled = isEnabled
+        setButtonTextColor(color, isEnabled)
     }
 
     companion object {

@@ -3,17 +3,18 @@ package io.horizontalsystems.bankwallet.modules.managecoins
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
-import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
+import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_manage_coins.*
 import kotlinx.android.synthetic.main.view_holder_coin_disabled.*
@@ -30,6 +31,8 @@ class ManageCoinsActivity : BaseActivity(), ManageCoinsAdapter.Listener, StartDr
         viewModel = ViewModelProviders.of(this).get(ManageCoinsViewModel::class.java)
         viewModel.init()
 
+        setTransparentStatusBar()
+
         setContentView(R.layout.activity_manage_coins)
 
         val adapter = ManageCoinsAdapter(this, this)
@@ -39,10 +42,11 @@ class ManageCoinsActivity : BaseActivity(), ManageCoinsAdapter.Listener, StartDr
         itemTouchHelper = ItemTouchHelper(MyDragHelperCallback(adapter))
         itemTouchHelper?.attachToRecyclerView(recyclerView)
 
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.close)
-        supportActionBar?.title = getString(R.string.ManageCoins_title)
+        shadowlessToolbar.bind(
+                title = getString(R.string.ManageCoins_title),
+                leftBtnItem = TopMenuItem(R.drawable.back, { onBackPressed() }),
+                rightBtnItem = TopMenuItem(R.drawable.checkmark_orange, { viewModel.delegate.saveChanges() })
+        )
 
         viewModel.coinsLoadedLiveEvent.observe(this, Observer {
             adapter.notifyDataSetChanged()
@@ -51,24 +55,6 @@ class ManageCoinsActivity : BaseActivity(), ManageCoinsAdapter.Listener, StartDr
         viewModel.closeLiveDate.observe(this, Observer {
             finish()
         })
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_manage_coins, menu)
-        LayoutHelper.tintMenuIcons(menu, ContextCompat.getColor(this, R.color.yellow_crypto))
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
-        android.R.id.home -> {
-            onBackPressed()
-            true
-        }
-        R.id.action_done -> {
-            viewModel.delegate.saveChanges()
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
     }
 
     override fun onEnabledItemClick(position: Int) {
@@ -120,7 +106,11 @@ class ManageCoinsAdapter(
         when (holder) {
             is ViewHolderEnabledCoin -> {
                 val transactionRecord = viewModel.delegate.enabledItemForIndex(position)
-                holder.bind(transactionRecord) { listener.onEnabledItemClick(position) }
+                holder.bind(
+                        coin = transactionRecord,
+                        showBottomShadow = (position == viewModel.delegate.enabledCoinsCount-1),
+                        onClick = { listener.onEnabledItemClick(position) }
+                )
 
                 holder.dragIcon.setOnTouchListener { _, event ->
                     if (event.action == MotionEvent.ACTION_DOWN) {
@@ -131,7 +121,11 @@ class ManageCoinsAdapter(
             }
             is ViewHolderDisabledCoin -> {
                 val transactionRecord = viewModel.delegate.disabledItemForIndex(disabledIndex(position))
-                holder.bind(transactionRecord) { listener.onDisabledItemClick(disabledIndex(position)) }
+                holder.bind(
+                        coin = transactionRecord,
+                        showBottomShadow = (position == itemCount - 1),
+                        onClick = { listener.onDisabledItemClick(disabledIndex(position)) }
+                )
             }
         }
 
@@ -156,10 +150,11 @@ class ManageCoinsAdapter(
 
 class ViewHolderEnabledCoin(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(coin: Coin, onClick: () -> (Unit)) {
+    fun bind(coin: Coin, showBottomShadow: Boolean, onClick: () -> (Unit)) {
         coinTitle.text = coin.title
         coinCode.text = coin.code
         coinIcon.bind(coin)
+        enabledBottomShade.visibility = if (showBottomShadow) View.VISIBLE else View.GONE
 
         minusIcon.setOnSingleClickListener { onClick.invoke() }
     }
@@ -168,10 +163,11 @@ class ViewHolderEnabledCoin(override val containerView: View) : RecyclerView.Vie
 
 class ViewHolderDisabledCoin(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(coin: Coin, onClick: () -> (Unit)) {
+    fun bind(coin: Coin, showBottomShadow: Boolean, onClick: () -> (Unit)) {
         disableCoinTitle.text = coin.title
         disableCoinCode.text = coin.code
         disableCoinIcon.bind(coin)
+        disabledBottomShade.visibility = if (showBottomShadow) View.VISIBLE else View.GONE
 
         plusIcon.setOnSingleClickListener { onClick.invoke() }
     }

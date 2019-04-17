@@ -19,7 +19,8 @@
     <string name="Guest_CreateWallet">Nueva cartera</string>
     <string name="Guest_RestoreWallet">Restaurar cartera</string>
     <!--Restore-->
-    <string name="Restore_Title">Ingresar clave secreta</string>
+    <string name="Restore_Title">Restaurar</string>
+    <string name="Restore_Subtitle">Ingresar clave secreta</string>
     <string name="Restore_ValidationFailed">Clave secreta incorrecta</string>
     <string name="Restore_RestoreFailed">Error al restaurar la cartera</string>
     <!--Backup-->
@@ -28,12 +29,14 @@
     <string name="Backup_Intro_Later">Posterior</string>
     <string name="Backup_Intro_BackupNow">Copia de seguridad</string>
     <string name="Backup_Words_Title">Clave secreta</string>
-    <string name="Backup_Confirmation_Understand">Entiendo que mis datos y mi monedero se guardan de manera segura en este dispositivo y no en ningún otro servidor</string>
+    <string name="Backup_Confirmation_SecretKey">Entiendo que soy un único propietario de una clave secreta privada de 12 palabras que se almacena de forma segura en mi teléfono y me permite controlar los fondos en mi cartera.</string>
     <string name="Backup_Confirmation_DeleteAppWarn">Entiendo que si esta aplicación se elimina o deja de funcionar por alguna razón, mi monedero sólo puede ser recuperado utilizando mi clave secreta.</string>
-    <string name="Backup_Confirmation_LockAppWarn">Cambiar el PIN de desbloqueo de su teléfono en el sistema operativo Android reiniciará la cartera. Usted necesitará su frase de seguridad para restaurar su cartera después de eso.</string>
+    <string name="Backup_Confirmation_LockAppWarn">Entiendo que cambiar el PIN de desbloqueo del teléfono o eliminar los datos de la aplicación en la configuración de Android borra la clave secreta del dispositivo. Tendría que volver a introducir mi Clave Secreta para recuperar el acceso a mi monedero.</string>
+    <string name="Backup_Confirmation_Disclaimer">Entiendo que los desarrolladores de esta aplicación no pueden ser responsables de ningún error o problemas no intencionados que puedan surgir mientras se usa esta aplicación.</string>
     <string name="Backup_Confirmation_Title">Insertar palabras de su clave secreta</string>
     <string name="Backup_Confirmation_Description">Insertar palabras de su clave secreta.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Las contraseñas no coinciden</string>
+    <string name="Backup_Confirmation_CheckTitle">Comprobar…</string>
     <string name="Backup_Button_Confirm">Confirmar</string>
     <string name="Backup_Button_Next">Siguiente</string>
     <string name="Backup_Button_Submit">Enviar</string>
@@ -82,12 +85,14 @@
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Transacción</string>
     <string name="TransactionInfo_Status">Estado</string>
+    <string name="TransactionInfo_Status_Confirmed">Confirmado</string>
     <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_To">Para</string>
     <string name="TransactionInfo_From">Desde </string>
     <string name="TransactionInfo_Time">Hora</string>
-    <string name="TransactionInfo_ButtonMore">Más</string>
+    <string name="TransactionInfo_ButtonVerify">Verificar</string>
     <string name="TransactionInfo_Status_Pending">Pendiente</string>
+    <string name="TransactionInfo_HistoricalRate">Estado histórico</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Transacción</string>
     <string name="FullInfo_Time">Hora</string>
@@ -189,6 +194,9 @@
     <string name="Fingerprint_Success">Operación realizada correctamente</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Inhabilitado hasta: %s</string>
+    <!--OS Pin-->
+    <string name="OSPin_Confirm_Title">PIN de teléfono</string>
+    <string name="OSPin_Confirm_Desciption">Esta aplicación requiere el PIN de tu teléfono para mantener datos sensibles de tu monedero en el almacenamiento seguro de Android y no en la propia aplicación.</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Código</string>
     <string name="SetPin_Info">Su código servirá para abrir su monedero y enviar dinero</string>

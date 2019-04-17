@@ -1,7 +1,6 @@
 <resources>
     <string name="App_Name">Bank</string>
 
-
     <string name="Alert_Ok">OK</string>
     <string name="Alert_Cancel">Cancel</string>
     <string name="Alert_Copy">Copy</string>
@@ -16,18 +15,18 @@
     <string name="Button_Share">Share</string>
     <string name="Error">Error</string>
 
-
     <!--Guest-->
 
     <string name="Guest_Title">Bank Wallet</string>
     <string name="Guest_Subtitle" translatable="false">Decentralized App</string>
     <string name="Guest_CreateWallet">New Wallet</string>
     <string name="Guest_RestoreWallet">Restore Wallet</string>
-
+    <string name="Guest_Version" translatable="false">v.%s</string>
 
     <!--Restore-->
 
-    <string name="Restore_Title">Enter Secret Key</string>
+    <string name="Restore_Title">Restore</string>
+    <string name="Restore_Subtitle">Enter Secret Key</string>
     <string name="Restore_ValidationFailed">Incorrect Secret Key</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>
 
@@ -40,18 +39,19 @@
 
     <string name="Backup_Words_Title">Secret Key</string>
 
-    <string name="Backup_Confirmation_Understand">I understand that my wallet and tokens are held securely on this device only and not any servers.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key.</string>
-    <string name="Backup_Confirmation_LockAppWarn">Changing the unlock PIN or deleting app data in your Android OS settings would reset the wallet. You will need your Secret Key to restore your wallet after that.</string>
+    <string name="Backup_Confirmation_SecretKey">I understand that I am a sole owner of a private 12-word Secret Key which is securely stored on my phone and enables me to control funds on my wallet.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is ever moved, deleted or malfunctions, the access to my wallet can be only recovered with that Secret Key.</string>
+    <string name="Backup_Confirmation_LockAppWarn">I understand that changing the phone\s unlock PIN or deleting app data in Android settings deletes the Secret Key from device. I would need to re-enter my Secret Key to regain access to my wallet.</string>
+    <string name="Backup_Confirmation_Disclaimer">I understand that developers of this app can not be held responsible for any unintended bugs or issues that may arise while using this app.</string>
+
     <string name="Backup_Confirmation_Title">Enter following words from your Secret Key</string>
     <string name="Backup_Confirmation_Description">Enter words from your secret key.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Words do not match</string>
+    <string name="Backup_Confirmation_CheckTitle">Check…</string>
 
     <string name="Backup_Button_Confirm">Confirm</string>
     <string name="Backup_Button_Next">Next</string>
     <string name="Backup_Button_Submit">Submit</string>
-
-
 
     <!--Balance-->
 
@@ -61,7 +61,6 @@
     <string name="Balance_RatePerCoin">%s per %s</string>
     <string name="Balance_SyncedUntil">until: %s</string>
     <string name="Balance_Syncing">Syncing…</string>
-
 
     <!--Send-->
 
@@ -92,13 +91,11 @@
 
     <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
 
-
     <!--Deposit-->
 
     <string name="Deposit_Title">Receive %s</string>
     <string name="Deposit_Share">Forward</string>
     <string name="Deposit_Your_Address">Your Address</string>
-
 
     <!--Timestamp-->
 
@@ -107,7 +104,6 @@
     <string name="Timestamp_HoursAgo">%dh. ago</string>
     <string name="Timestamp_Today">Тoday</string>
     <string name="Timestamp_Yesterday">Yesterday</string>
-
 
     <!--Transactions-->
 
@@ -119,12 +115,14 @@
 
     <string name="TransactionInfo_Title">Transaction</string>
     <string name="TransactionInfo_Status">Status</string>
+    <string name="TransactionInfo_Status_Confirmed">Confirmed</string>
     <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_To">To</string>
     <string name="TransactionInfo_From">From</string>
     <string name="TransactionInfo_Time">Time</string>
-    <string name="TransactionInfo_ButtonMore">More</string>
+    <string name="TransactionInfo_ButtonVerify">Verify</string>
     <string name="TransactionInfo_Status_Pending">Pending</string>
+    <string name="TransactionInfo_HistoricalRate">Historical Rate</string>
 
     <!--Full Info-->
 
@@ -150,11 +148,9 @@
     <string name="FullInfo_Source_Online">Online</string>
     <string name="FullInfo_Source_Offline">Offline</string>
 
-
     <string name="FullInfo_Error_Subtitle">Offline</string>
     <string name="FullInfo_Error_Retry">Retry</string>
     <string name="FullInfo_Error_ChangeSource">Change Source</string>
-
 
     <!--no used-->
     <string name="FullInfo_Id">ID</string>
@@ -169,9 +165,6 @@
     <string name="FullInfo_SubtitleOutputs">Outputs</string>
     <string name="FullInfoEth_Nonce">Nonce</string>
     <string name="FullInfoEth_Amount">Amount</string>
-
-
-
 
     <!--Settings-->
 
@@ -190,7 +183,6 @@
     <string name="Settings_Error_FingerprintNotEnabled">Fingerprint Not Enabled</string>
     <string name="Settings_Error_NoFingerprintAddedYet">You have not enabled fingerprint on this device. Go to Settings > Security to set up fingerprint access.</string>
 
-
     <!--Setting_Security-->
 
     <string name="SettingsSecurity_Fingerprint">Fingerprint</string>
@@ -200,16 +192,13 @@
     <string name="SettingsSecurity_ImportWalletConfirmation_1">This action will remove the currently installed wallet from this device.</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_2">Make sure you have backed up Secret Key or you will not be able to access your funds in the future.</string>
 
-
     <!--Setting_Currency-->
 
     <string name="SettingsCurrency_Title">Base Currency</string>
 
-
     <!--Setting_Language-->
 
     <string name="SettingsLanguage_Title">Language</string>
-
 
     <!--Setting_About-->
 
@@ -223,7 +212,6 @@
 \n\nThe entire code powering this app been open to the public scrutiny since the beginning. We tried to build the most secure and decentralized wallet we could, however there are no guarantees that there are no unintended software issues. That said, this wallet is likely to be significantly more secure than any smartphone wallet app out there.
 \n\nSome generic non-private app data like currency exchange rates are stored on decentralized storage (IPFS).</string>
 
-
     <!--Alert-->
 
     <string name="Alert_KeysInvalidatedTitle">Android Keystore Error</string>
@@ -232,16 +220,13 @@
     <string name="Alert_NoDeviceLockDescription">Set up a lock screen on this device to continue. Go to “Settings” > “Security” > “Screen Lock” and enable the lock screen setting.</string>
     <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
 
-
     <!--Unlock-->
 
     <string name="Unlock_Page_EnterYourPin">Passcode</string>
 
-
     <!--Errors-->
 
     <string name="Error_UnsupportedBlockchain">Unsupported currency</string>
-
 
     <!--Hud texts-->
 
@@ -253,7 +238,6 @@
     <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
     <string name="Hud_Network_Issue">Network issues. Try again in a short moment</string>
 
-
     <!--Fingerprint texts-->
 
     <string name="Fingerprint_DialogTitle">Fingerprint login</string>
@@ -262,11 +246,14 @@
     <string name="Fingerprint_NotRecognized">Fingerprint not recognized. Try again</string>
     <string name="Fingerprint_Success">Success!</string>
 
-
     <!--Unlock Pin-->
 
     <string name="UnlockPin_WalletDisabledUntil">Disabled until: %s</string>
 
+    <!--OS Pin-->
+
+    <string name="OSPin_Confirm_Title">Phone PIN</string>
+    <string name="OSPin_Confirm_Desciption">This app requires your phone\'s PIN in order to keep sensitive data from your wallet in Android\'s secure storage and not in the app itself.</string>
 
     <!--Set Pin-->
 
@@ -278,13 +265,11 @@
     <string name="SetPin_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
     <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
 
-
     <!--Edit Pin-->
 
     <string name="EditPin_Title">Edit Passcode</string>
     <string name="EditPin_UnlockInfo">Current Passcode</string>
     <string name="EditPin_NewPinInfo">New Passcode</string>
-
 
     <!--Manage Coins-->
 

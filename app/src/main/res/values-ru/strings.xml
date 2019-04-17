@@ -19,7 +19,8 @@
     <string name="Guest_CreateWallet">Создать Кошелек</string>
     <string name="Guest_RestoreWallet">Восстановить Кошелек</string>
     <!--Restore-->
-    <string name="Restore_Title">Введите Секретный Ключ</string>
+    <string name="Restore_Title">Восстановить</string>
+    <string name="Restore_Subtitle">Введите Секретный Ключ</string>
     <string name="Restore_ValidationFailed">Неверный Секретный Ключ</string>
     <string name="Restore_RestoreFailed">Не удалось восстановить кошелек</string>
     <!--Backup-->
@@ -28,12 +29,14 @@
     <string name="Backup_Intro_Later">Позже</string>
     <string name="Backup_Intro_BackupNow">Резервная копия</string>
     <string name="Backup_Words_Title">Секретный Ключ</string>
-    <string name="Backup_Confirmation_Understand">Я понимаю, что мой кошелек и токены хранятся только на этом устройстве.</string>
+    <string name="Backup_Confirmation_SecretKey">Я понимаю, что я единственный владелец  Секретного Ключа, который надежно хранится на моем телефоне и позволяет мне контролировать средства в моем кошельке.</string>
     <string name="Backup_Confirmation_DeleteAppWarn">Я понимаю, что если это приложение удаляется или устанавливается на другое устройство, мой кошелек можно восстановить только с помощью Секретного Ключа.</string>
-    <string name="Backup_Confirmation_LockAppWarn">Изменение PIN-кода телефона на вашем Android OS, сбросит кошелек . Вам понадобится ваш Секретный Ключ для восстановления кошелька.</string>
+    <string name="Backup_Confirmation_LockAppWarn">Я понимаю, что изменение ПИН-кода телефона или удаление данных приложения в настройках Android удалит секретный ключ с устройства. Мне нужно повторно ввести мой секретный ключ, чтобы восстановить доступ к моему кошельку.</string>
+    <string name="Backup_Confirmation_Disclaimer">Я понимаю, что разработчики этого приложения не могут нести ответственность за любые непреднамеренные ошибки или проблемы, которые могут возникнуть при использовании этого приложения.</string>
     <string name="Backup_Confirmation_Title">Введите слова из вашего Cекретного Ключа</string>
     <string name="Backup_Confirmation_Description">Введите слова из вашего секретного ключа.</string>
     <string name="Backup_Confirmation_FailureAlertText">Слова не совпадают</string>
+    <string name="Backup_Confirmation_CheckTitle">Проверка…</string>
     <string name="Backup_Button_Confirm">Подтвердить</string>
     <string name="Backup_Button_Next">Далее</string>
     <string name="Backup_Button_Submit">Отправить</string>
@@ -66,7 +69,7 @@
     <string name="Send_Sending">Отправка</string>
     <string name="Send_ERC_Alert">Комиссия за отправку %s (ERC20) взимается в ETH. Необходимо %s ETH.</string>
     <!--Deposit-->
-    <string name="Deposit_Title">Получено %s</string>
+    <string name="Deposit_Title">Получить %s</string>
     <string name="Deposit_Share">Переслать</string>
     <string name="Deposit_Your_Address">Ваш Адрес</string>
     <!--Timestamp-->
@@ -82,12 +85,14 @@
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Транзакция</string>
     <string name="TransactionInfo_Status">Статус</string>
+    <string name="TransactionInfo_Status_Confirmed">Подтверждено</string>
     <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_To">Кому</string>
     <string name="TransactionInfo_From">От</string>
     <string name="TransactionInfo_Time">Время</string>
-    <string name="TransactionInfo_ButtonMore">Ещё</string>
+    <string name="TransactionInfo_ButtonVerify">Проверить</string>
     <string name="TransactionInfo_Status_Pending">В процессе</string>
+    <string name="TransactionInfo_HistoricalRate">Исторический Курс</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Транзакция</string>
     <string name="FullInfo_Time">Время</string>
@@ -183,6 +188,9 @@
     <string name="Fingerprint_Success">Успешно!</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Отключено до: %s</string>
+    <!--OS Pin-->
+    <string name="OSPin_Confirm_Title">PIN-код телефона</string>
+    <string name="OSPin_Confirm_Desciption">Это приложение требует PIN-код вашего телефона, чтобы сохранить конфиденциальные данные  вашего кошелька в безопасном хранилище Android, а не в самом приложении.</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Код Доступа</string>
     <string name="SetPin_Info">Ваш код будет использоваться для разблокировки вашего кошелька и отправки денег</string>

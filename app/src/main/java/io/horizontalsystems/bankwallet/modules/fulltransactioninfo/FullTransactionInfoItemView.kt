@@ -12,27 +12,19 @@ import kotlinx.android.synthetic.main.view_transaction_full_info_item.view.*
 
 class FullTransactionInfoItemView : ConstraintLayout {
 
+    init {
+        ConstraintLayout.inflate(context, R.layout.view_transaction_full_info_item, this)
+    }
+
     private var attrTitle: String? = null
     private var attrValue: String? = null
     private var attrValueIcon: String? = null
 
-    constructor(context: Context) : super(context) {
-        initializeViews()
-    }
+    constructor(context: Context) : super(context)
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        initializeViews()
-        loadAttributes(attrs)
-    }
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) { loadAttributes(attrs) }
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        initializeViews()
-        loadAttributes(attrs)
-    }
-
-    private fun initializeViews() {
-        ConstraintLayout.inflate(context, R.layout.view_transaction_full_info_item, this)
-    }
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) { loadAttributes(attrs) }
 
     fun bind(title: String? = null, value: String? = null, icon: FullTransactionIcon?, dimmed: Boolean = false, bottomBorder: Boolean = false) {
         txtTitle.text = title
@@ -48,12 +40,7 @@ class FullTransactionInfoItemView : ConstraintLayout {
                 address = true
                 addressView.bind(it, R.drawable.token)
             }
-            FullTransactionIcon.HASH -> value?.let {
-                address = true
-                addressView.bindTransactionId(it, withIcon = false)
-                showTypeIcon(R.drawable.hash_grey)
-                txtTitle.visibility = View.INVISIBLE
-            }
+
             FullTransactionIcon.TIME -> showTypeIcon(R.drawable.pending_grey)
             FullTransactionIcon.BLOCK -> showTypeIcon(R.drawable.blocks)
             FullTransactionIcon.CHECK -> showTypeIcon(R.drawable.checkmark_grey)

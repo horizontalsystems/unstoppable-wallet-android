@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.core
 import android.app.Application
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import com.facebook.drawee.backends.pipeline.Fresco
 import com.squareup.leakcanary.LeakCanary
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.managers.*
@@ -21,6 +20,7 @@ class App : Application() {
 
         lateinit var preferences: SharedPreferences
 
+        lateinit var feeRateProvider: IFeeRateProvider
         lateinit var secureStorage: ISecuredStorage
         lateinit var localStorage: ILocalStorage
         lateinit var encryptionManager: EncryptionManager
@@ -76,6 +76,8 @@ class App : Application() {
 
         val fallbackLanguage = Locale("en")
 
+
+        feeRateProvider = FeeRateProvider(instance)
         appConfigProvider = AppConfigProvider()
         backgroundManager = BackgroundManager(this)
         encryptionManager = EncryptionManager()
@@ -103,7 +105,7 @@ class App : Application() {
 
         networkAvailabilityManager = NetworkAvailabilityManager()
 
-        adapterManager = AdapterManager(coinManager, authManager, AdapterFactory(appConfigProvider, localStorage, ethereumKitManager))
+        adapterManager = AdapterManager(coinManager, authManager, AdapterFactory(appConfigProvider, localStorage, ethereumKitManager, feeRateProvider))
         rateSyncer = RateSyncer(rateManager, adapterManager, currencyManager, networkAvailabilityManager)
 
         appCloseManager = AppCloseManager()
@@ -114,7 +116,6 @@ class App : Application() {
         authManager.adapterManager = adapterManager
         authManager.pinManager = pinManager
 
-        Fresco.initialize(this)
     }
 
 }

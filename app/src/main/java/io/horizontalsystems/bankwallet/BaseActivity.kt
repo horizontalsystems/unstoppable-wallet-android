@@ -6,14 +6,19 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.UserNotAuthenticatedException
 import android.support.v7.app.AppCompatActivity
+import android.view.Gravity
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import android.widget.FrameLayout
+import android.widget.TextView
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.lib.AlertDialogFragment
@@ -77,8 +82,19 @@ abstract class BaseActivity : AppCompatActivity() {
         } ?: super.attachBaseContext(newBase)
     }
 
+    override fun setContentView(layoutResID: Int) {
+        super.setContentView(layoutResID)
+        if (App.appConfigProvider.testMode) {
+            showTestLabel()
+        }
+    }
+
     protected fun hideSoftKeyboard() {
         getSystemService(InputMethodManager::class.java)?.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+    }
+
+    protected fun setTransparentStatusBar() {
+        window.statusBarColor = Color.TRANSPARENT
     }
 
     fun showCustomKeyboardAlert() {
@@ -93,6 +109,22 @@ abstract class BaseActivity : AppCompatActivity() {
                         }, (1 * 750).toLong())
                     }
                 }).show(supportFragmentManager, "custom_keyboard_alert")
+    }
+
+    private fun showTestLabel() {
+        val rootView = findViewById<ViewGroup>(android.R.id.content)
+        val testLabelTv = TextView(this)
+        testLabelTv.text = "Test"
+        testLabelTv.setPadding(5, 3, 5, 3)
+        testLabelTv.includeFontPadding = false
+        testLabelTv.setBackgroundColor(Color.RED)
+        testLabelTv.setTextColor(Color.WHITE)
+        testLabelTv.textSize = 12f
+        val layoutParams = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
+        layoutParams.gravity = Gravity.CENTER_HORIZONTAL
+        testLabelTv.layoutParams = layoutParams
+        rootView.addView(testLabelTv)
     }
 
     private fun updateBaseContextLocale(context: Context): Context {

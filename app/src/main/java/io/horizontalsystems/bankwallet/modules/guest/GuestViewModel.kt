@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.guest
 
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
@@ -12,9 +13,15 @@ class GuestViewModel: ViewModel(), GuestModule.IView, GuestModule.IRouter, IKeyS
     val openRestoreWalletScreenLiveEvent = SingleLiveEvent<Void>()
     val showErrorDialog = SingleLiveEvent<Void>()
     val keyStoreSafeExecute = SingleLiveEvent<Triple<Runnable, Runnable?, Runnable?>>()
+    val appVersionLiveData = MutableLiveData<String>()
 
     fun init() {
         GuestModule.init(this, this, this)
+        delegate.onViewDidLoad()
+    }
+
+    override fun setAppVersion(appVersion: String) {
+        appVersionLiveData.value = appVersion
     }
 
     // router

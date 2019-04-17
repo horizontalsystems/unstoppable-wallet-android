@@ -11,7 +11,7 @@
     <color name="grey_pressed">#717175</color>
     <color name="grey_50">#808a8a8f</color>
     <color name="steel_grey">#c8c7cc</color>
-    <color name="steel_20">#3373798C</color>
+    <color name="steel_15">#2673798C</color>
     <color name="steel_30">#4d73798C</color>
     <color name="steel_40">#6673798C</color>
     <color name="grey_light">#e0e0e0</color>
@@ -27,11 +27,12 @@
     <color name="bars_color">#f9f9f9</color>
     <color name="bars_color_95">#f2f9f9f9</color>
     <color name="black_85">#d9000000</color>
+    <color name="black_20">#33000000</color>
+    <color name="steel_dark">#2f323c</color>
     <!-- eof base colors -->
 
     <color name="navigation_bar">?attr/BottomNavigationBackgroundColor</color>
 
-    <color name="appBackground">@color/dark</color>
     <color name="ripple_white">#b2ffffff</color>
     <color name="ripple_black">#1f000000</color>
     <color name="status_bar_light_color">#4c000000</color>

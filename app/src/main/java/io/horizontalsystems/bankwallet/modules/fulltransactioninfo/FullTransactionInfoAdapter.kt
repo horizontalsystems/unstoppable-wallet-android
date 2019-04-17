@@ -15,7 +15,6 @@ class FullTransactionBitcoinAdapter(val provider: FullTransactionInfoModule.Bitc
         val sections = mutableListOf<FullTransactionSection>()
 
         val blockItems = mutableListOf(
-                FullTransactionItem(R.string.FullInfo_Id, value = data.hash, clickable = true, icon = FullTransactionIcon.HASH),
                 FullTransactionItem(R.string.FullInfo_Time, value = DateHelper.getFullDateWithShortMonth(data.date), icon = FullTransactionIcon.TIME),
                 FullTransactionItem(R.string.FullInfo_Block, value = data.height.toString(), icon = FullTransactionIcon.BLOCK)
         )
@@ -74,7 +73,6 @@ class FullTransactionEthereumAdapter(val provider: FullTransactionInfoModule.Eth
         val sections = mutableListOf<FullTransactionSection>()
 
         mutableListOf<FullTransactionItem>().let { section ->
-            section.add(FullTransactionItem(R.string.FullInfo_Id, value = data.hash, clickable = true, icon = FullTransactionIcon.HASH))
             data.date?.let {
                 section.add(FullTransactionItem(R.string.FullInfo_Time, value = DateHelper.getFullDateWithShortMonth(it), icon = FullTransactionIcon.TIME))
             }
@@ -90,7 +88,10 @@ class FullTransactionEthereumAdapter(val provider: FullTransactionInfoModule.Eth
             }
 
             section.add(FullTransactionItem(R.string.FullInfoEth_Amount, value = "${App.numberFormatter.format(amount)} ${coin.code}"))
-            section.add(FullTransactionItem(R.string.FullInfoEth_Nonce, value = data.nonce, dimmed = true))
+
+            data.nonce?.let {
+                section.add(FullTransactionItem(R.string.FullInfoEth_Nonce, value = it, dimmed = true))
+            }
 
             sections.add(FullTransactionSection(section))
         }
@@ -106,7 +107,9 @@ class FullTransactionEthereumAdapter(val provider: FullTransactionInfoModule.Eth
             data.gasUsed?.let {
                 section.add(FullTransactionItem(R.string.FullInfo_GasUsed, value = data.gasUsed, dimmed = true))
             }
-            section.add(FullTransactionItem(R.string.FullInfo_GasPrice, value = "${data.gasPrice} GWei", dimmed = true))
+            data.gasPrice?.let {
+                section.add(FullTransactionItem(R.string.FullInfo_GasPrice, value = "$it GWei", dimmed = true))
+            }
 
             sections.add(FullTransactionSection(section))
         }

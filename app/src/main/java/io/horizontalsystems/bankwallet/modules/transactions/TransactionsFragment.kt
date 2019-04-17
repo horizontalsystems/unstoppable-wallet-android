@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.annotation.NonNull
 import android.support.design.widget.BottomSheetBehavior
+import android.support.design.widget.BottomSheetBehavior.STATE_EXPANDED
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE
@@ -109,6 +110,13 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
         setBottomSheet()
     }
 
+    override fun setMenuVisibility(menuVisible: Boolean) {
+        super.setMenuVisibility(menuVisible)
+        if (menuVisible) {
+            viewModel.delegate.onVisible()
+        }
+    }
+
     //Bottom sheet shows TransactionInfo
     private fun setBottomSheet() {
 
@@ -120,7 +128,10 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
         var bottomSheetSlideOffOld = 0f
 
         bottomSheetBehavior?.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-            override fun onStateChanged(@NonNull bottomSheet: View, newState: Int) {}
+            override fun onStateChanged(@NonNull bottomSheet: View, newState: Int) {
+                val enabled = newState != STATE_EXPANDED
+                (activity as? MainActivity)?.setSwipeEnabled(enabled)
+            }
 
             override fun onSlide(@NonNull bottomSheet: View, slideOffset: Float) {
                 transactionsDim.alpha = slideOffset
@@ -157,28 +168,29 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
 
         transInfoViewModel.transactionLiveData.observe(this, Observer { txRecord ->
             txRecord?.let { txRec ->
-                (activity as? MainActivity)?.setBottomNavigationVisible(false)
-                bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
-
                 val txStatus = txRec.status
+
+                coinIcon.bind(txRec.coin)
 
                 fiatValue.apply {
                     text = txRec.currencyValue?.let { App.numberFormatter.format(it, showNegativeSign = true, realNumber = true, canUseLessSymbol = false) }
                     setTextColor(resources.getColor(if (txRec.incoming) R.color.green_crypto else R.color.yellow_crypto, null))
                 }
 
-                coinValue.apply {
-                    text = App.numberFormatter.format(txRec.coinValue, true, true)
+                coinValue.text = App.numberFormatter.format(txRec.coinValue, explicitSign = true, realNumber = true)
+                coinName.text = txRec.coin.title
+
+                itemRate.apply {
+                    txRec.rate?.let {
+                        val rate = getString(R.string.Balance_RatePerCoin, App.numberFormatter.format(it), txRec.coin.code)
+                        bind(title = getString(R.string.TransactionInfo_HistoricalRate), value = rate)
+                    }
+                    visibility = if (txRec.rate == null) View.GONE else View.VISIBLE
                 }
 
-                itemTime.apply {
-                    bindTime(title = getString(R.string.TransactionInfo_Time), time = txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) }
-                            ?: "")
-                }
+                itemTime.bind(title = getString(R.string.TransactionInfo_Time), value = txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) } ?: "")
 
-                itemStatus.apply {
-                    bindStatus(txStatus)
-                }
+                itemStatus.bindStatus(txStatus)
 
                 transactionIdView.bindTransactionId(txRec.transactionHash)
 
@@ -193,6 +205,9 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
                     visibility = if (txRec.to.isNullOrEmpty()) View.GONE else View.VISIBLE
                     bindAddress(title = getString(R.string.TransactionInfo_To), address = txRec.to, showBottomBorder = true)
                 }
+
+                (activity as? MainActivity)?.setBottomNavigationVisible(false)
+                bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
             }
         })
     }
@@ -231,13 +246,13 @@ class TransactionsAdapter(private var listener: Listener) : RecyclerView.Adapter
             ViewHolderTransaction(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_transaction, parent, false), this)
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (position > itemCount - 3) {
+        if (position > itemCount - 9) {
             viewModel.delegate.onBottomReached()
         }
 
         when (holder) {
             is ViewHolderTransaction -> {
-                holder.bind(viewModel.delegate.itemForIndex(position))
+                holder.bind(viewModel.delegate.itemForIndex(position), showBottomShade = (position == itemCount - 1))
             }
         }
     }
@@ -257,12 +272,15 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         containerView.setOnSingleClickListener { l.onClick(adapterPosition) }
     }
 
-    fun bind(transactionRecord: TransactionViewItem) {
-        txValueInFiat.text = transactionRecord.currencyValue?.let { App.numberFormatter.formatForTransactions(it, transactionRecord.incoming) }
+    fun bind(transactionRecord: TransactionViewItem, showBottomShade: Boolean) {
+        txValueInFiat.text = transactionRecord.currencyValue?.let {
+            App.numberFormatter.formatForTransactions(it, transactionRecord.incoming)
+        }
         txValueInCoin.text = App.numberFormatter.formatForTransactions(transactionRecord.coinValue)
         txDate.text = transactionRecord.date?.let { DateHelper.getShortDateForTransaction(it) }
         val time = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }
         txStatusWithTimeView.bind(transactionRecord.status, time)
+        bottomShade.visibility = if (showBottomShade) View.VISIBLE else View.GONE
     }
 }
 

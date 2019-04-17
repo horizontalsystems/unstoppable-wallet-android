@@ -26,7 +26,7 @@ class MainActivity : BaseActivity() {
 
         viewPager.adapter = adapter
         viewPager.offscreenPageLimit = 2
-        viewPager.setPagingEnabled(false)
+        setSwipeEnabled(true)
 
         LayoutHelper.getAttr(R.attr.BottomNavigationBackgroundColor, theme)?.let {
             bottomNavigation.defaultBackgroundColor = it
@@ -96,6 +96,10 @@ class MainActivity : BaseActivity() {
         val countText = if (count < 1) "" else count.toString()
         val settingsTabPosition = 2
         bottomNavigation.setNotification(countText, settingsTabPosition)
+    }
+
+    fun setSwipeEnabled(enabled: Boolean) {
+        viewPager.setPagingEnabled(enabled)
     }
 
     companion object {

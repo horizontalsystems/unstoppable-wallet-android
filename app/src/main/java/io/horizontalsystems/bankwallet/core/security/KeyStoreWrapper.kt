@@ -16,7 +16,7 @@ class KeyStoreWrapper {
         private const val BLOCK_MODE = KeyProperties.BLOCK_MODE_CBC
         private const val PADDING = KeyProperties.ENCRYPTION_PADDING_PKCS7
 
-        private const val AUTH_DURATION_SEC = 1800 //30 minute
+        private const val AUTH_DURATION_SEC = 86400 //24 hours in seconds (24x60x60)
     }
 
     private val keyStore: KeyStore = getAndroidKeyStore()

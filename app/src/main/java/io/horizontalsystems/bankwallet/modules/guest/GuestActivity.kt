@@ -19,6 +19,8 @@ class GuestActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setTransparentStatusBar()
+
         setContentView(R.layout.activity_add_wallet)
 
         viewModel = ViewModelProviders.of(this).get(GuestViewModel::class.java)
@@ -35,6 +37,10 @@ class GuestActivity : BaseActivity() {
 
         viewModel.showErrorDialog.observe(this, Observer {
             HudHelper.showErrorMessage(R.string.Error)
+        })
+
+        viewModel.appVersionLiveData.observe(this, Observer { appVersion ->
+            appVersion?.let { textVersion.text = getString(R.string.Guest_Version, it) }
         })
 
         buttonCreate.setOnSingleClickListener {

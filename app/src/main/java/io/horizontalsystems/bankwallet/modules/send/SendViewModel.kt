@@ -22,6 +22,7 @@ class SendViewModel : ViewModel(), SendModule.IView {
     val sendConfirmationViewItemLiveData = MutableLiveData<SendModule.SendConfirmationViewItem>()
     val showConfirmationLiveEvent = SingleLiveEvent<Unit>()
     val pasteButtonEnabledLiveData = MutableLiveData<Boolean>()
+    val feeIsAdjustableLiveData = MutableLiveData<Boolean>()
     var decimalSize: Int? = null
 
     fun init(coin: String) {
@@ -37,6 +38,7 @@ class SendViewModel : ViewModel(), SendModule.IView {
 
         SendModule.init(this, coin)
         delegate.onViewDidLoad()
+        feeIsAdjustableLiveData.value = delegate.feeAdjustable
     }
 
     override fun setPasteButtonState(enabled: Boolean) {

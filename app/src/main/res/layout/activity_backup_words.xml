@@ -1,7 +1,6 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
@@ -33,7 +32,7 @@
         android:text="@string/Button_Back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/buttonNext"
-        app:layout_constraintHorizontal_weight="0.34"
+        app:layout_constraintHorizontal_weight="0.41"
         app:layout_constraintStart_toStartOf="parent"
         />
 
@@ -47,7 +46,7 @@
         android:text="@string/Backup_Button_Next"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_weight="0.66"
+        app:layout_constraintHorizontal_weight="0.56"
         app:layout_constraintStart_toEndOf="@+id/buttonBack"
         />
 </android.support.constraint.ConstraintLayout>

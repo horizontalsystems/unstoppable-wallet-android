@@ -4,11 +4,14 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.ethereumkit.EthereumKit
 import io.reactivex.Single
-import org.web3j.crypto.Keys
 import java.math.BigDecimal
 
-class Erc20Adapter(coin: Coin, kit: EthereumKit, private val contractAddress: String, decimal: Int)
-    : EthereumBaseAdapter(coin, kit, decimal) {
+class Erc20Adapter(
+        coin: Coin,
+        kit: EthereumKit,
+        decimal: Int,
+        private val contractAddress: String,
+        private val feeRateProvider: IFeeRateProvider) : EthereumBaseAdapter(coin, kit, decimal) {
 
     init {
         ethereumKit.register(contractAddress, this)
@@ -33,24 +36,24 @@ class Erc20Adapter(coin: Coin, kit: EthereumKit, private val contractAddress: St
         ethereumKit.start()
     }
 
-    override fun sendSingle(address: String, amount: String): Single<Unit> {
-        return ethereumKit.sendERC20(address, contractAddress, amount).map { Unit }
+    override fun sendSingle(address: String, amount: String, feePriority: FeeRatePriority): Single<Unit> {
+        return ethereumKit.sendERC20(address, contractAddress, amount, feeRateProvider.ethereumGasPrice(feePriority)).map { Unit }
     }
 
-    override fun fee(value: BigDecimal, address: String?): BigDecimal {
-        return ethereumKit.feeERC20()
+    override fun fee(value: BigDecimal, address: String?, feePriority: FeeRatePriority): BigDecimal {
+        return ethereumKit.feeERC20(feeRateProvider.ethereumGasPrice(feePriority))
     }
 
-    override fun availableBalance(address: String?): BigDecimal {
+    override fun availableBalance(address: String?, feePriority: FeeRatePriority): BigDecimal {
         return balance
     }
 
-    override fun validate(amount: BigDecimal, address: String?): List<SendStateError> {
+    override fun validate(amount: BigDecimal, address: String?, feePriority: FeeRatePriority): List<SendStateError> {
         val errors = mutableListOf<SendStateError>()
-        if (amount > availableBalance(address)) {
+        if (amount > availableBalance(address, feePriority)) {
             errors.add(SendStateError.InsufficientAmount)
         }
-        if (balanceInBigDecimal(ethereumKit.balance, decimal) < fee(amount, address)) {
+        if (balanceInBigDecimal(ethereumKit.balance, decimal) < fee(amount, address, feePriority)) {
             errors.add(SendStateError.InsufficientFeeBalance)
         }
         return errors
@@ -69,9 +72,4 @@ class Erc20Adapter(coin: Coin, kit: EthereumKit, private val contractAddress: St
         }
     }
 
-    companion object {
-        fun adapter(coin: Coin, ethereumKit: EthereumKit, contractAddress: String, decimal: Int): Erc20Adapter {
-            return Erc20Adapter(coin, ethereumKit, Keys.toChecksumAddress(contractAddress), decimal)
-        }
-    }
 }
