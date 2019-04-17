@@ -2,16 +2,16 @@ package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.Context
 import android.graphics.PointF
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.LinearSmoothScroller
-import android.support.v7.widget.RecyclerView
 import android.util.DisplayMetrics
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.RecyclerView
 
 class SmoothLinearLayoutManager : LinearLayoutManager {
 
     private val millisecondsPreInch = 45f //default is 25f (bigger = slower)
 
-    constructor(context: Context) : super(context, LinearLayoutManager.VERTICAL, false)
+    constructor(context: Context) : super(context, RecyclerView.VERTICAL, false)
 
     constructor(context: Context, orientation: Int, reverseLayout: Boolean) : super(context, orientation, reverseLayout)
 

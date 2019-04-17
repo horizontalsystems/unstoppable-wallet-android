@@ -17,7 +17,7 @@
     >
 
     <!-- first line -->
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="4dp"
@@ -75,10 +75,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="0.000078 BTC"
             />
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- second line -->
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="23dp"
         android:layout_marginBottom="12dp"
@@ -123,7 +123,7 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="$52.50"
             />
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:id="@+id/buttonsWrapper"

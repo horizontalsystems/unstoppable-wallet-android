@@ -1,17 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.annotation.NonNull
-import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.BottomSheetBehavior.STATE_EXPANDED
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.NonNull
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.*
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
@@ -28,7 +29,7 @@ import kotlinx.android.synthetic.main.transaction_info_bottom_sheet.*
 import kotlinx.android.synthetic.main.view_holder_filter.*
 import kotlinx.android.synthetic.main.view_holder_transaction.*
 
-class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdapter.Listener, FilterAdapter.Listener {
+class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAdapter.Listener {
 
     private lateinit var viewModel: TransactionsViewModel
     private lateinit var transInfoViewModel: TransactionInfoViewModel
@@ -52,7 +53,7 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
         recyclerTransactions.setHasFixedSize(true)
         recyclerTransactions.adapter = transactionsAdapter
         recyclerTransactions.layoutManager = NpaLinearLayoutManager(context)
-        recyclerTransactions.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        recyclerTransactions.addOnScrollListener(object : OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 filterAdapter.filterChangeable = newState == SCROLL_STATE_IDLE
             }
@@ -230,7 +231,7 @@ class TransactionsFragment : android.support.v4.app.Fragment(), TransactionsAdap
 
 }
 
-class TransactionsAdapter(private var listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), ViewHolderTransaction.ClickListener {
+class TransactionsAdapter(private var listener: Listener) : Adapter<ViewHolder>(), ViewHolderTransaction.ClickListener {
 
     interface Listener {
         fun onItemClick(item: TransactionViewItem)
@@ -242,10 +243,10 @@ class TransactionsAdapter(private var listener: Listener) : RecyclerView.Adapter
         return viewModel.delegate.itemsCount
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
             ViewHolderTransaction(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_transaction, parent, false), this)
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (position > itemCount - 9) {
             viewModel.delegate.onBottomReached()
         }
@@ -262,7 +263,7 @@ class TransactionsAdapter(private var listener: Listener) : RecyclerView.Adapter
     }
 }
 
-class ViewHolderTransaction(override val containerView: View, private val l: ClickListener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class ViewHolderTransaction(override val containerView: View, private val l: ClickListener) : ViewHolder(containerView), LayoutContainer {
 
     interface ClickListener {
         fun onClick(position: Int)
@@ -284,7 +285,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
     }
 }
 
-class FilterAdapter(private var listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), ViewHolderFilter.ClickListener {
+class FilterAdapter(private var listener: Listener) : Adapter<ViewHolder>(), ViewHolderFilter.ClickListener {
 
     interface Listener {
         fun onFilterItemClick(item: Coin?)
@@ -303,10 +304,10 @@ class FilterAdapter(private var listener: Listener) : RecyclerView.Adapter<Recyc
 
     override fun getItemCount() = filters.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
             ViewHolderFilter(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_filter, parent, false), this)
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
             is ViewHolderFilter -> holder.bind(filters[position], selectedFilterId == filters[position])
         }
@@ -321,7 +322,7 @@ class FilterAdapter(private var listener: Listener) : RecyclerView.Adapter<Recyc
     }
 }
 
-class ViewHolderFilter(override val containerView: View, private val l: ClickListener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class ViewHolderFilter(override val containerView: View, private val l: ClickListener) : ViewHolder(containerView), LayoutContainer {
 
     interface ClickListener {
         fun onClickItem(position: Int)

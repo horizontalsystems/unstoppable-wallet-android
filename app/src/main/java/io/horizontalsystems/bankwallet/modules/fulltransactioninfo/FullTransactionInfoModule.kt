@@ -1,13 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
 
-import android.support.v4.app.FragmentActivity
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.FullTransactionItem
 import io.horizontalsystems.bankwallet.entities.FullTransactionRecord
 import io.horizontalsystems.bankwallet.entities.FullTransactionSection
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import io.reactivex.Flowable
 
@@ -115,7 +113,7 @@ object FullTransactionInfoModule {
         interactor.delegate = presenter
     }
 
-    fun start(activity: FragmentActivity, transactionHash: String, coin: Coin) {
+    fun start(activity: androidx.fragment.app.FragmentActivity, transactionHash: String, coin: Coin) {
         FullTransactionInfoActivity.start(activity, transactionHash, coin)
     }
 }

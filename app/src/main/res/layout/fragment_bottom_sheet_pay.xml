@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/root_wrapper"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -57,7 +57,7 @@
         app:layout_constraintTop_toBottomOf="@+id/divider1"
         />
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/sendForm"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -89,7 +89,7 @@
             app:layout_constraintTop_toBottomOf="@+id/amountInput"
             />
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/feeInfoArea"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -114,7 +114,7 @@
                 tools:text="Transaction fees for USDT (ERC20) paid in Ethereum. You don&apos;t have 0,00028 ETH."
                 />
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/feeElements"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -157,8 +157,8 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     />
 
-            </android.support.constraint.ConstraintLayout>
-        </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
             android:id="@+id/btnSend"
@@ -174,9 +174,9 @@
             app:layout_constraintTop_toBottomOf="@+id/feeInfoArea"
             />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/numPadItemsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -189,4 +189,4 @@
         app:layout_constraintTop_toBottomOf="@+id/sendForm"
         app:layout_constraintVertical_weight=".35"
         />
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

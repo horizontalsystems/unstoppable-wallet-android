@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send
 
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.FragmentActivity
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.entities.Coin

@@ -1,15 +1,16 @@
 package io.horizontalsystems.bankwallet.ui.extensions
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView.Adapter
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import io.horizontalsystems.bankwallet.R
 
-class NumPadItemsAdapter(private val listener: Listener, bottomLeftButtonType: NumPadItemType, private val showLetters: Boolean = true) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class NumPadItemsAdapter(private val listener: Listener, bottomLeftButtonType: NumPadItemType, private val showLetters: Boolean = true) : Adapter<ViewHolder>() {
 
     interface Listener {
         fun onItemClick(item: NumPadItem)
@@ -30,7 +31,7 @@ class NumPadItemsAdapter(private val listener: Listener, bottomLeftButtonType: N
             NumPadItem(NumPadItemType.DELETE, 0, "Bottom Right")
     )
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return NumPadItemViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_numpad_button, parent, false))
     }
 
@@ -42,7 +43,7 @@ class NumPadItemsAdapter(private val listener: Listener, bottomLeftButtonType: N
             notifyDataSetChanged()
         }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (holder is NumPadItemViewHolder) {
             holder.bind(numPadItems[position], showFingerPrintButton, showLetters) { listener.onItemClick(numPadItems[position]) }
         }
@@ -57,7 +58,7 @@ enum class NumPadItemType {
     NUMBER, DELETE, FINGER, DOT
 }
 
-class NumPadItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class NumPadItemViewHolder(itemView: View) : ViewHolder(itemView) {
 
     private var txtNumber: TextView = itemView.findViewById(R.id.txtNumPadNumber)
     private var txtLetters: TextView = itemView.findViewById(R.id.txtNumPadText)

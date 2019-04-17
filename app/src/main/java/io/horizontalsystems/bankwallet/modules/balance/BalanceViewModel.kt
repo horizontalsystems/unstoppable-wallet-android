@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 
 class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter {

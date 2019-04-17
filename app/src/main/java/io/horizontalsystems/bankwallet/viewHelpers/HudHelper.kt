@@ -1,10 +1,10 @@
 package io.horizontalsystems.bankwallet.viewHelpers
 
 import android.graphics.PorterDuff
-import android.support.v4.content.ContextCompat
 import android.view.Gravity
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 

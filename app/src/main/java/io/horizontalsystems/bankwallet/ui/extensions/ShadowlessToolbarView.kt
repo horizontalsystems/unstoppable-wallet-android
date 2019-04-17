@@ -1,16 +1,16 @@
 package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.Context
-import android.support.constraint.ConstraintLayout
 import android.util.AttributeSet
 import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
 import kotlinx.android.synthetic.main.view_shadowless_toolbar.view.*
 
 class ShadowlessToolbarView : ConstraintLayout {
 
     init {
-        ConstraintLayout.inflate(context, R.layout.view_shadowless_toolbar, this)
+        inflate(context, R.layout.view_shadowless_toolbar, this)
     }
 
     constructor(context: Context) : super(context)
