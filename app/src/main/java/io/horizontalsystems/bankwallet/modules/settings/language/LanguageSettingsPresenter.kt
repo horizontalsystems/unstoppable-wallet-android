@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.settings.language
 
-import io.horizontalsystems.bankwallet.R
-
 class LanguageSettingsPresenter(
         private val router: LanguageSettingsModule.ILanguageSettingsRouter,
         private val interactor: LanguageSettingsModule.ILanguageSettingsInteractor)
@@ -14,7 +12,6 @@ class LanguageSettingsPresenter(
     }
 
     override fun viewDidLoad() {
-        view?.setTitle(R.string.SettingsLanguage_Title)
         view?.show(items = interactor.items)
     }
 

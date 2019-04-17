@@ -10,6 +10,10 @@ import kotlinx.android.synthetic.main.view_transaction_info_item.view.*
 
 class TransactionInfoItemView : ConstraintLayout {
 
+    init {
+        ConstraintLayout.inflate(context, R.layout.view_transaction_info_item, this)
+    }
+
     private var attrTitle: String? = null
     private var attrValue: String? = null
     private var attrValueSubtitle: String? = null
@@ -17,22 +21,17 @@ class TransactionInfoItemView : ConstraintLayout {
     private var attrValueIcon: String? = null
 
 
-    constructor(context: Context) : super(context) {
-        initializeViews()
-    }
+    constructor(context: Context) : super(context) {}
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        initializeViews()
-        loadAttributes(attrs)
-    }
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) { loadAttributes(attrs) }
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        initializeViews()
-        loadAttributes(attrs)
-    }
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) { loadAttributes(attrs) }
 
-    private fun initializeViews() {
-        ConstraintLayout.inflate(context, R.layout.view_transaction_info_item, this)
+    fun bind(title: String? = null, value: String? = null) {
+        txtTitle.text = title
+        valueText.text = value
+        valueText.visibility = if (value == null) View.GONE else View.VISIBLE
+        border.visibility = View.VISIBLE
     }
 
     fun bindAddress(title: String? = null, address: String? = null, showBottomBorder: Boolean = false) {
@@ -42,13 +41,6 @@ class TransactionInfoItemView : ConstraintLayout {
         border.visibility = if (showBottomBorder) View.VISIBLE else View.GONE
 
         invalidate()
-    }
-
-    fun bindTime(title: String? = null, time: String? = null) {
-        txtTitle.text = title
-        valueText.text = time
-        valueText.visibility = if (time == null) View.GONE else View.VISIBLE
-        border.visibility = View.VISIBLE
     }
 
     fun bindStatus(transactionStatus: TransactionStatus) {

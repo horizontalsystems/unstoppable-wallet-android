@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core
 
+import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
@@ -14,10 +15,13 @@ import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-abstract class EthereumBaseAdapter(override val coin: Coin, protected val ethereumKit: EthereumKit, final override val decimal: Int)
-    : IAdapter, EthereumKit.Listener {
+abstract class EthereumBaseAdapter(
+        override val coin: Coin,
+        protected val ethereumKit: EthereumKit,
+        final override val decimal: Int) : IAdapter, EthereumKit.Listener {
 
     private val disposables = CompositeDisposable()
+    private val addressParser = AddressParser("ethereum", true)
 
     //
     // Adapter
@@ -44,7 +48,8 @@ abstract class EthereumBaseAdapter(override val coin: Coin, protected val ethere
     override val receiveAddress: String get() = ethereumKit.receiveAddress
 
     override fun parsePaymentAddress(address: String): PaymentRequestAddress {
-        return PaymentRequestAddress(address)
+        val paymentData = addressParser.parse(address)
+        return PaymentRequestAddress(paymentData.address, paymentData.amount?.toBigDecimal())
     }
 
     override fun validate(address: String) {
@@ -56,8 +61,8 @@ abstract class EthereumBaseAdapter(override val coin: Coin, protected val ethere
             return null
         }
 
-    override fun send(address: String, value: BigDecimal, completion: ((Throwable?) -> Unit)?) {
-        sendSingle(address, value)
+    override fun send(address: String, value: BigDecimal, feePriority: FeeRatePriority, completion: ((Throwable?) -> Unit)?) {
+        sendSingle(address, value, feePriority)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -75,14 +80,14 @@ abstract class EthereumBaseAdapter(override val coin: Coin, protected val ethere
         } ?: return BigDecimal.ZERO
     }
 
-    private fun sendSingle(address: String, amount: BigDecimal): Single<Unit> {
+    private fun sendSingle(address: String, amount: BigDecimal, feePriority: FeeRatePriority): Single<Unit> {
         val poweredDecimal = amount.scaleByPowerOfTen(decimal)
         val noScaleDecimal = poweredDecimal.setScale(0, RoundingMode.HALF_DOWN)
 
-        return sendSingle(address, noScaleDecimal.toPlainString())
+        return sendSingle(address, noScaleDecimal.toPlainString(), feePriority)
     }
 
-    open fun sendSingle(address: String, amount: String): Single<Unit> {
+    open fun sendSingle(address: String, amount: String, feePriority: FeeRatePriority): Single<Unit> {
         return Single.just(Unit)
     }
 

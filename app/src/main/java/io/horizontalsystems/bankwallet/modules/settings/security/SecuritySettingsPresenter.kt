@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.settings.security
 
-import io.horizontalsystems.bankwallet.R
-
 class SecuritySettingsPresenter(
         private val router: SecuritySettingsModule.ISecuritySettingsRouter,
         private val interactor: SecuritySettingsModule.ISecuritySettingsInteractor)
@@ -10,7 +8,6 @@ class SecuritySettingsPresenter(
     var view: SecuritySettingsModule.ISecuritySettingsView? = null
 
     override fun viewDidLoad() {
-        view?.setTitle(R.string.Settings_SecurityCenter)
         view?.setBiometricUnlockOn(interactor.getBiometricUnlockOn())
         view?.setBiometryType(interactor.biometryType)
         view?.setBackedUp(interactor.isBackedUp)

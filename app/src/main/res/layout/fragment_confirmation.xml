@@ -5,8 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="25dp"
-    android:layout_marginRight="25dp"
     android:background="@drawable/alert_background_themed"
     >
 
@@ -14,31 +12,32 @@
         android:id="@+id/coinIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="10dp"
         android:src="@drawable/coin_dash"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <TextView
         android:id="@+id/txtTitle"
-        style="@style/BottomDialogText"
+        style="@style/BaseSb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:fontFamily="@font/noto_sans_bold"
-        android:textSize="17sp"
+        android:textColor="?BottomDialogTextColor"
         app:layout_constraintBottom_toBottomOf="@+id/coinIcon"
         app:layout_constraintStart_toEndOf="@+id/coinIcon"
         app:layout_constraintTop_toTopOf="@+id/coinIcon"
-        tools:text="Send BTC" />
+        tools:text="Send BTC"
+        />
 
     <View
         android:id="@+id/border1"
         android:layout_width="0dp"
         android:layout_height="0.5dp"
-        android:layout_marginTop="16dp"
-        android:background="@color/steel_20"
+        android:layout_marginTop="11dp"
+        android:background="@color/steel_15"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtTitle"
@@ -54,18 +53,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/border1"
         />
+    <View
+        android:id="@+id/bottomShade_1"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="?SettingsSectionBottomShadeColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputBackgroundView"
+        />
 
     <TextView
         android:id="@+id/primaryAmountText"
+        style="@style/Title2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="25dp"
-        android:fontFamily="@font/noto_sans_bold"
+        android:layout_marginTop="16dp"
         android:maxLines="1"
         android:textColor="@color/yellow_crypto"
-        android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/border1"
@@ -77,12 +84,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:textColor="@color/grey"
+        android:fontFamily="@font/noto_sans_medium"
+        android:textColor="?TextColorGreyLightToDark"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/primaryAmountText"
+        app:layout_goneMarginTop="2dp"
         tools:text="0.0006482 BTC"
+        />
+
+    <View
+        android:id="@+id/border2"
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/steel_15"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/secondaryAmountText"
         />
 
     <io.horizontalsystems.bankwallet.ui.extensions.AddressView
@@ -92,36 +112,34 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="29dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/inputBackgroundView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/secondaryAmountText"
+        app:layout_constraintTop_toBottomOf="@+id/border2"
         />
 
     <TextView
         android:id="@+id/txtFeeTitle"
+        style="@style/Body1Grey"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:paddingTop="4dp"
         android:text="@string/Send_DialogFee"
-        android:textColor="@color/grey"
-        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addressView"
         />
 
     <TextView
         android:id="@+id/txtFeeValue"
+        style="@style/Body1Grey"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:paddingTop="4dp"
         android:textAlignment="textEnd"
-        android:textColor="@color/grey"
-        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/txtFeeTitle"
         tools:text="$0.15"
@@ -129,25 +147,23 @@
 
     <TextView
         android:id="@+id/txtTotalTitle"
+        style="@style/Body1Grey"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
         android:text="@string/Send_DialogTotal"
-        android:textColor="@color/grey"
-        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtFeeTitle"
         />
 
     <TextView
         android:id="@+id/txtTotalValue"
+        style="@style/Body1Grey"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:textAlignment="textEnd"
-        android:textColor="@color/grey"
-        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/txtTotalTitle"
         tools:text="$123.5"

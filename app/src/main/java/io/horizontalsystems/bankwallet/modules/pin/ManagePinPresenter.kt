@@ -45,9 +45,6 @@ open class ManagePinPresenter(
         }
     }
 
-    override fun onCancel() {
-    }
-
     override fun didSavePin() {
     }
 

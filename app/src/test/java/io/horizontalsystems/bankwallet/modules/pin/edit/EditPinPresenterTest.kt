@@ -32,13 +32,7 @@ class EditPinPresenterTest {
     fun viewDidLoad() {
         presenter.viewDidLoad()
         verify(view).addPages(any())
-        verify(view).showCancel()
-    }
-
-    @Test
-    fun onCancel() {
-        presenter.onCancel()
-        verify(router).dismiss()
+        verify(view).showBackButton()
     }
 
     @Test

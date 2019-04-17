@@ -8,7 +8,6 @@ import io.horizontalsystems.bankwallet.entities.BiometryType
 object SecuritySettingsModule {
 
     interface ISecuritySettingsView {
-        fun setTitle(title: Int)
         fun setBiometricUnlockOn(biometricUnlockOn: Boolean)
         fun setBiometryType(biometryType: BiometryType)
         fun setBackedUp(backedUp: Boolean)

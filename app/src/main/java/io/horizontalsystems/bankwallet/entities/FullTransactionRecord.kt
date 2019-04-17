@@ -16,4 +16,4 @@ data class FullTransactionRecord(
         val sections: List<FullTransactionSection>
 )
 
-enum class FullTransactionIcon { HASH, TIME, PERSON, BLOCK, CHECK, TOKEN }
+enum class FullTransactionIcon { TIME, PERSON, BLOCK, CHECK, TOKEN }

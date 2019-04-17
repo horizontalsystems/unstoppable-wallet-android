@@ -5,7 +5,7 @@
     <string name="Alert_Ok">تأیید</string>
     <string name="Alert_Cancel">انصراف</string>
     <string name="Alert_Copy">رونوشت</string>
-    <string name="Alert_Share">Forward</string>
+    <string name="Alert_Share">فرستادن به ديگران</string>
     <string name="Alert_Close">ببند</string>
     <string name="Alert_Success">موفقیت</string>
     <string name="Alert_Copied">کپی انجام شد</string>
@@ -19,21 +19,24 @@
     <string name="Guest_CreateWallet">کیف پول جدید</string>
     <string name="Guest_RestoreWallet">بازگرداندن كيف پول</string>
     <!--Restore-->
-    <string name="Restore_Title">کلید مخفی را وارد کنید</string>
+    <string name="Restore_Title">بازگرداني</string>
+    <string name="Restore_Subtitle">كليد مخفي را وارد كنيد</string>
     <string name="Restore_ValidationFailed">کلید مخفی نادرست</string>
-    <string name="Restore_RestoreFailed">Failed to restore wallet</string>
+    <string name="Restore_RestoreFailed">بازگرداني كيف پول ناموفق شد</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">رقم مخفی</string>
-    <string name="Backup_Intro_Subtitle">Your secret key is the only way to restore your wallet and funds if your phone is ever lost, stolen, broken, or upgraded.\n\n It consists of 12 words. Store it safely offline.</string>
+    <string name="Backup_Intro_Subtitle">رمز مخيفي شما ميتواند كيف پول شما را دوباره پروگرام كند اگر تيليفون شما گم شود،خراب شود يا دزدي  شود پس هميشه رمز مخفي خود را پيش خود داشته باشد و فراموش نكيد.n\n\ رمز مخفي ١٢ رقم ميخواهد.</string>
     <string name="Backup_Intro_Later">بعداً</string>
     <string name="Backup_Intro_BackupNow">پيشتيباني</string>
     <string name="Backup_Words_Title">رقم مخفی</string>
-    <string name="Backup_Confirmation_Understand">من فهميدم كي پول كيف من و توكن هاي من همه شان حفظ و امانط است در اين دستگاه و نخير در ديگر سيرفير ها.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is moved to another device, deleted or malfunctions, my wallet can be only recovered with the Secret Key.</string>
-    <string name="Backup_Confirmation_LockAppWarn">Changing the unlock PIN or deleting app data in your Android OS settings would reset the wallet. You will need your Secret Key to restore your wallet after that.</string>
+    <string name="Backup_Confirmation_SecretKey">من قبول ميكنم كي تنها من صاحب اين ١٢ عدد مخفي ميباشم كي اين عداد در گوشي همراه من ميباشد و تنها من ميتوانم با اين عداد كيف پول و مقدار پول خود را فعال كنم.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">من قبول ميكنم كي اگر اين كاربرد تكان بخورد،حذف شود و يا اشكال در عملكرد به وحود بياد، فقط تنها رمز مخفي ميتواند دوباره بهبوديافت كند.</string>
+    <string name="Backup_Confirmation_LockAppWarn">من قبول ميكنم كي تعغير رمز گوشي همراه و يا حذف كردن تاريخچه كاربرد رمز مخفي را حذف ميكند. و من دوباره بايد رمز مخفي خود را وارد كنم تا بتوانم از كاربرد استفاده نمايم.</string>
+    <string name="Backup_Confirmation_Disclaimer">من قبول ميكنم كي سازنده اين كاربرد هيچ نوع معصوليت در مقابل ويروس و ادم هاي تقلبي ندارد كي شما به ان متواجه شديد.</string>
     <string name="Backup_Confirmation_Title">تعقيب كنيد حرف هاي رمز مخفي خود را</string>
     <string name="Backup_Confirmation_Description">حرف هاي رمز تات را وارد كنيد.</string>
-    <string name="Backup_Confirmation_FailureAlertText"> Words do not match</string>
+    <string name="Backup_Confirmation_FailureAlertText"> ارقام با هم شباهت ندارند</string>
+    <string name="Backup_Confirmation_CheckTitle">بررسي…</string>
     <string name="Backup_Button_Confirm">تاييد</string>
     <string name="Backup_Button_Next">بعدي</string>
     <string name="Backup_Button_Submit">ثبت</string>
@@ -42,8 +45,8 @@
     <string name="Balance_Deposit">دريافت</string>
     <string name="Balance_Send">ارسال</string>
     <string name="Balance_RatePerCoin">%sدر هر%s</string>
-    <string name="Balance_SyncedUntil">until: %s</string>
-    <string name="Balance_Syncing">Syncing…</string>
+    <string name="Balance_SyncedUntil">تا:٪؜</string>
+    <string name="Balance_Syncing">درحال همگام‌سازی…</string>
     <!--Send-->
     <string name="Send_Title1">ارسال</string>
     <string name="Send_Title">ارسال%s</string>
@@ -53,22 +56,22 @@
     <string name="Send_Button_Paste">جاگذازي</string>
     <string name="Send_Button_More">بیشتر</string>
     <string name="Send_Button_Send">ارسال</string>
-    <string name="Send_Button_Max">Max</string>
+    <string name="Send_Button_Max">حداکثر</string>
     <string name="Send_ScanQrCode">اسكن كنيد Qr را</string>
-    <string name="Send_Success">\u2713 Sent</string>
+    <string name="Send_Success">\u2713 ارسال شد</string>
     <string name="Send_Error_InvalidAddress">ادرس كي وارد كرديد غلط است دوباره چك نماييد ادرس تان را!</string>
     <string name="Send_Error_InsufficientBalance">بودجه شما كافي نيست.</string>
-    <string name="Send_Error_IncorrectAddress">Incorrect Address</string>
+    <string name="Send_Error_IncorrectAddress">آدرس اشتباه است</string>
     <string name="Send_Error_BalanceAmount">مانده حساب %s</string>
     <string name="Send_DialogTitle">معامله را تایید کنید</string>
     <string name="Send_DialogFee">هزينه:</string>
     <string name="Send_DialogTotal">مجموع:</string>
-    <string name="Send_Sending">Sending</string>
-    <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
+    <string name="Send_Sending">در حال ارسال</string>
+    <string name="Send_ERC_Alert">پرداخت هزینه های معامله برای %s (ERC20) در Ethereum. شما نیاز به %s ETH.</string>
     <!--Deposit-->
     <string name="Deposit_Title">دریافت s%</string>
-    <string name="Deposit_Share">Forward</string>
-    <string name="Deposit_Your_Address">Your Address</string>
+    <string name="Deposit_Share">فرستادن به ديگران</string>
+    <string name="Deposit_Your_Address">آدرس شما</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">همين آلان</string>
     <string name="Timestamp_MinAgo">%d؜دقيقه پيش</string>
@@ -77,53 +80,55 @@
     <string name="Timestamp_Yesterday">ديروز</string>
     <!--Transactions-->
     <string name="Transactions_Title">معاملات</string>
-    <string name="Transactions_FilterAll">ALL</string>
+    <string name="Transactions_FilterAll">همه</string>
     <string name="Transactions_EmptyList">شما معاملات نداشته ايد تا هنوز</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">معاملات</string>
     <string name="TransactionInfo_Status">وضيعت</string>
+    <string name="TransactionInfo_Status_Confirmed">تاييد شد</string>
     <string name="TransactionInfo_Id">شناس نامه</string>
     <string name="TransactionInfo_To">به</string>
     <string name="TransactionInfo_From">از</string>
-    <string name="TransactionInfo_Time">Time</string>
-    <string name="TransactionInfo_ButtonMore">بیشتر</string>
+    <string name="TransactionInfo_Time">زمان</string>
+    <string name="TransactionInfo_ButtonVerify">تامين كنيد</string>
     <string name="TransactionInfo_Status_Pending">در حالت انتظار</string>
+    <string name="TransactionInfo_HistoricalRate">چارت هاي تاريخي</string>
     <!--Full Info-->
     <string name="FullInfo_Title">معاملات</string>
     <string name="FullInfo_Time">زمان</string>
     <string name="FullInfo_Block">مسدود</string>
     <string name="FullInfo_Confirmations">تاييدات</string>
-    <string name="FullInfo_Inputs">Inputs</string>
-    <string name="FullInfo_Outputs">Outputs</string>
+    <string name="FullInfo_Inputs">ورودی</string>
+    <string name="FullInfo_Outputs">خروجی ها</string>
     <string name="FullInfo_Size">اندازه</string>
     <string name="FullInfo_Fee">هزينه</string>
-    <string name="FullInfo_Rate">Rate</string>
-    <string name="FullInfo_Source">Source</string>
-    <string name="FullInfo_Contract">Contract</string>
+    <string name="FullInfo_Rate">امتیاز</string>
+    <string name="FullInfo_Source">منبع</string>
+    <string name="FullInfo_Contract">قرارداد</string>
     <string name="FullInfo_From">از</string>
     <string name="FullInfo_To">به</string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
-    <string name="FullInfo_Source_Title">Source</string>
-    <string name="FullInfo_Source_Online">Online</string>
-    <string name="FullInfo_Source_Offline">Offline</string>
-    <string name="FullInfo_Error_Subtitle">Offline</string>
-    <string name="FullInfo_Error_Retry">Retry</string>
-    <string name="FullInfo_Error_ChangeSource">Change Source</string>
+    <string name="FullInfo_Source_Title">منبع</string>
+    <string name="FullInfo_Source_Online">آنلاین</string>
+    <string name="FullInfo_Source_Offline">آفلاین</string>
+    <string name="FullInfo_Error_Subtitle">آفلاین</string>
+    <string name="FullInfo_Error_Retry">تلاش دوباره</string>
+    <string name="FullInfo_Error_ChangeSource">تغییر منبع</string>
     <!--no used-->
     <string name="FullInfo_Id">شناس نامه</string>
-    <string name="FullInfo_TotalInput">Total Input</string>
-    <string name="FullInfo_TotalOutput">Total Output</string>
-    <string name="FullInfo_FeePerByte">Fee per byte</string>
+    <string name="FullInfo_TotalInput">تمام ورودي ها</string>
+    <string name="FullInfo_TotalOutput">تمام خورجي ها</string>
+    <string name="FullInfo_FeePerByte">هزینه در هر بایت</string>
     <string name="FullInfo_FeeRate">نرخ هزينه</string>
-    <string name="FullInfo_NoAddress">Empty Address</string>
+    <string name="FullInfo_NoAddress">آدرس خالي است</string>
     <string name="FullInfo_SatByte">sat/B</string>
     <string name="FullInfo_Bytes">Bytes</string>
-    <string name="FullInfo_SubtitleInputs">Inputs</string>
-    <string name="FullInfo_SubtitleOutputs">Outputs</string>
+    <string name="FullInfo_SubtitleInputs">ورودي ها</string>
+    <string name="FullInfo_SubtitleOutputs">خروجي ها</string>
     <string name="FullInfoEth_Nonce">Nonce</string>
-    <string name="FullInfoEth_Amount">Amount</string>
+    <string name="FullInfoEth_Amount">مقدار</string>
     <!--Settings-->
     <string name="Settings_Title">تنظيمات</string>
     <string name="Settings_SecurityCenter">مركز امنيتي</string>
@@ -138,11 +143,11 @@
     <string name="Settings_Error_NoFingerprintAddedYet">اثر انگشت در اين دستگاه فعال نشده است.بر تنظيمات برويد&gt;قفل دستگاه تا با اثر انگشت دست يابي شود.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">اثر انگشت</string>
-    <string name="SettingsSecurity_EditPin">Edit Passcode</string>
+    <string name="SettingsSecurity_EditPin">تعغير كد</string>
     <string name="SettingsSecurity_BackupWallet">پيشتيبان گيري كيف پول</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">لغو پيوند ازين دست گاه</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">اين اكشن از اين دستگاه و پول كيف ثبت شده خاظر حذف ميشود.</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_2">Make sure you have backed up Secret Key or you will not be able to access your funds in the future.</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_2">مطمعاً باشيد كي رمز مخفي را با خود داريد و گرنه شما در آينده توانايي دسترسي به منابع مالي نداريد.</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">ارز مرجع</string>
     <!--Setting_Language-->
@@ -164,11 +169,11 @@
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">اندرايد keystore خطا</string>
     <string name="Alert_KeysInvalidatedDescription">Data شما ديگر نامتعبر است بخاطر تعغير دادن قفل صفحه</string>
-    <string name="Alert_TitleWarning">Warning</string>
+    <string name="Alert_TitleWarning">هشدار</string>
     <string name="Alert_NoDeviceLockDescription">پرده نمايش را بر تيليفون خود ثبت نمايد برويد به تنظيمات&amp;gt امنيت&amp;gt قفل صفحه و روشن نمايد قفل صفحه را</string>
-    <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
+    <string name="Alert_CustomKeyboardIsUsed">شما از كيبورد سوم استفاده ميكنيد. شما بايد همراي كيبورد صحفه تيليفون استفاده كنيد.</string>
     <!--Unlock-->
-    <string name="Unlock_Page_EnterYourPin">Passcode</string>
+    <string name="Unlock_Page_EnterYourPin">رمز عبور</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">پول رايج شده پيشيباني ندارد</string>
     <!--Hud texts-->
@@ -177,29 +182,32 @@
     <string name="Hud_Text_Error">خطا</string>
     <string name="Hud_Text_NoInternet">انترنت نداريد</string>
     <string name="Hud_Text_Copied">کپی انجام شد</string>
-    <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
-    <string name="Hud_Network_Issue">Network issues. Try again in a short moment</string>
+    <string name="Hud_Text_InvalidPinError">رمز عبور غلط ميباشد</string>
+    <string name="Hud_Network_Issue">مشكل انترنت. لطفاً چند دقيقه بعد كوشش كنيد</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">ورود با اثر انگشت</string>
     <string name="Fingerprint_Hint">حسگر لمسي</string>
-    <string name="Fingerprint_EnterPin">Passcode</string>
+    <string name="Fingerprint_EnterPin">رمز عبور</string>
     <string name="Fingerprint_NotRecognized">اثر انگشت شناخته نشد. دوباره كوشش كنيد</string>
     <string name="Fingerprint_Success">موفقيت!</string>
     <!--Unlock Pin-->
-    <string name="UnlockPin_WalletDisabledUntil">Disabled until: %s</string>
+    <string name="UnlockPin_WalletDisabledUntil">غير فعال تا:٪؜s</string>
+    <!--OS Pin-->
+    <string name="OSPin_Confirm_Title">كد گوشي همراه</string>
+    <string name="OSPin_Confirm_Desciption">اين كاربرد به كد گوشي شما نياز دارد تا معلومات را در حافظه گوشي شما ثبت نمايد نه در كاربرد.</string>
     <!--Set Pin-->
-    <string name="SetPin_Title">Passcode</string>
-    <string name="SetPin_Info">Your passcode will be used to unlock your wallet and send money</string>
+    <string name="SetPin_Title">رمز عبور</string>
+    <string name="SetPin_Info">رمز شما استفاده ميشود تا تيليفون همراي شما را باز نمايد و پول ارساد كند</string>
     <string name="SetPin_ErrorShortPin">لطفلاً تمام ارقام را وارد كنيد.</string>
-    <string name="SetPin_ConfirmInfo">Confirm</string>
-    <string name="SetPin_Success">Lock passcode was set successfully!</string>
-    <string name="SetPin_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
-    <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
+    <string name="SetPin_ConfirmInfo">تاييد</string>
+    <string name="SetPin_Success">رمز قفل نمودن موفقانه انجام شد!</string>
+    <string name="SetPin_ErrorPinsDontMatch">رمز شباهت ندارد. دوباره تلاش نماييد</string>
+    <string name="SetPin_ErrorFailedToSavePin">مشكلي در وقت ثبت نمودن رمز به وجود آمد. لطفاً،دوباره تلاش نماييد.</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">Edit Passcode</string>
-    <string name="EditPin_UnlockInfo">Current Passcode</string>
-    <string name="EditPin_NewPinInfo">New Passcode</string>
+    <string name="EditPin_Title">تعغير رمز</string>
+    <string name="EditPin_UnlockInfo">رمز عبور فعلي</string>
+    <string name="EditPin_NewPinInfo">رمز عبور جديد</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Coin Manager</string>
-    <string name="ManageCoins_save">Save</string>
+    <string name="ManageCoins_title">ميديت سكه</string>
+    <string name="ManageCoins_save">ذخیره</string>
 </resources>

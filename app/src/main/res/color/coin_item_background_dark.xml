@@ -3,5 +3,5 @@
           android:enterFadeDuration="150" android:exitFadeDuration="150">
     <item android:state_selected="true" android:color="@color/steel_30"/>
     <item android:state_pressed="true" android:color="@color/steel_30"/>
-    <item android:color="@color/steel_20"/>
+    <item android:color="@color/steel_15"/>
 </selector>

@@ -6,9 +6,11 @@
 
     <TextView
         android:id="@+id/transactionLink"
+        style="@style/Body1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="27dp"
+        android:textColor="?TextColorBarsToDark"
         android:paddingTop="16dp"
         android:textAlignment="center" />
 

@@ -4,6 +4,10 @@ class GuestPresenter(private val interactor: GuestModule.IInteractor, private va
 
     var view: GuestModule.IView? = null
 
+    override fun onViewDidLoad() {
+        view?.setAppVersion(interactor.appVersion)
+    }
+
     override fun createWalletDidClick() {
         interactor.createWallet()
     }

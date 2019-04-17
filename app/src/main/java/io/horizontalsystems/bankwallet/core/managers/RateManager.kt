@@ -4,83 +4,79 @@ import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.IRateStorage
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
-import io.reactivex.Flowable
+import io.reactivex.Maybe
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import retrofit2.HttpException
 import java.math.BigDecimal
+import java.net.SocketTimeoutException
 
 class RateManager(private val storage: IRateStorage, private val networkManager: INetworkManager) {
 
-    private var disposables: CompositeDisposable = CompositeDisposable()
     private var refreshDisposables: CompositeDisposable = CompositeDisposable()
 
     fun refreshLatestRates(coinCodes: List<String>, currencyCode: String) {
         refreshDisposables.clear()
 
-        refreshDisposables.add(Flowable.mergeDelayError(
-                coinCodes.map { coinCode ->
-                    networkManager.getLatestRate(coinCode, currencyCode)
-                            .map {
-                                Rate(coinCode, currencyCode, it.value, it.timestamp, true)
+        //mainUrl sometime returns expired rates, thus currently first request is done to fallbackUrl
+        refreshDisposables.add(
+                networkManager.getLatestRateData(ServiceExchangeApi.HostType.FALLBACK, currencyCode)
+                        .onErrorResumeNext(networkManager.getLatestRateData(ServiceExchangeApi.HostType.MAIN, currencyCode))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(Schedulers.io())
+                        .subscribe ({ latestRateData ->
+                            coinCodes.forEach { coinCode ->
+                                latestRateData.rates[coinCode]?.toBigDecimalOrNull()?.let {
+                                    val rate = Rate(coinCode, latestRateData.currency, it, latestRateData.timestamp, true)
+                                    storage.saveLatest(rate)
+                                }
                             }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe({
-                    storage.saveLatest(it)
-                }, {
-
-                }))
-    }
-
-    fun refreshZeroRates(currencyCode: String) {
-        disposables.add(storage.zeroRatesObservable(currencyCode)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe { rates ->
-                    rates.forEach { rate ->
-                        retrieveFromNetwork(rate.coinCode, rate.currencyCode, rate.timestamp)
-                    }
-                }
+                        }, {
+                            //request failed
+                        })
         )
     }
 
-    fun rateValueObservable(coinCode: CoinCode, currencyCode: String, timestamp: Long): Flowable<BigDecimal> {
-        return storage.rateObservable(coinCode, currencyCode, timestamp)
+    private fun getLatestRateFallbackFlowable(coinCode: CoinCode, currencyCode: String, timestamp: Long): Maybe<BigDecimal> {
+        if (timestamp > ((System.currentTimeMillis() / 1000) - 3600)) {
+            return Maybe.empty()
+        }
+
+        return storage.latestRateObservable(coinCode, currencyCode)
+                .firstElement()
                 .flatMap {
-                    val rate = it.firstOrNull()
-
-                    if (rate == null) {
-                        storage.save(Rate(coinCode, currencyCode, BigDecimal.ZERO, timestamp, false))
-                        retrieveFromNetwork(coinCode, currencyCode, timestamp)
-                    }
-
-                    if (rate != null && rate.value != BigDecimal.ZERO) {
-                        Flowable.just(rate.value)
-                    } else if (timestamp < ((System.currentTimeMillis() / 1000) - 3600)) {
-                        Flowable.empty()
+                    if (it.expired) {
+                        Maybe.empty()
                     } else {
-                        storage.latestRateObservable(coinCode, currencyCode)
-                                .flatMap {
-                                    if (it.expired) {
-                                        Flowable.empty<BigDecimal>()
-                                    } else {
-                                        Flowable.just(it.value)
-                                    }
-                                }
-
+                        Maybe.just(it.value)
                     }
                 }
-                .distinctUntilChanged()
     }
 
-    private fun retrieveFromNetwork(coinCode: CoinCode, currencyCode: String, timestamp: Long) {
-        disposables.add(networkManager.getRate(coinCode, currencyCode, timestamp)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe { rateValue ->
-                    storage.save(Rate(coinCode, currencyCode, rateValue, timestamp, false))
-                })
+    fun rateValueObservable(coinCode: CoinCode, currencyCode: String, timestamp: Long): Maybe<BigDecimal> {
+        return storage.rateMaybe(coinCode, currencyCode, timestamp)
+                .map { it.value }
+                .switchIfEmpty(
+                        networkManager.getRateByHour(ServiceExchangeApi.HostType.MAIN, coinCode, currencyCode, timestamp)
+                                .onErrorResumeNext { t: Throwable ->
+                                    when (t) {
+                                        is SocketTimeoutException ->
+                                            networkManager.getRateByHour(ServiceExchangeApi.HostType.FALLBACK, coinCode, currencyCode, timestamp)
+                                                    .onErrorResumeNext(networkManager.getRateByDay(ServiceExchangeApi.HostType.FALLBACK, coinCode, currencyCode, timestamp))
+                                        is HttpException ->
+                                            networkManager.getRateByDay(ServiceExchangeApi.HostType.MAIN, coinCode, currencyCode, timestamp)
+                                                    .onErrorResumeNext(networkManager.getRateByDay(ServiceExchangeApi.HostType.FALLBACK, coinCode, currencyCode, timestamp))
+                                        else -> throw t
+                                    }
+                                }
+                                .doOnSuccess { rateFromNetwork ->
+                                    storage.save(Rate(coinCode, currencyCode, rateFromNetwork, timestamp, false))
+                                }
+                                .onErrorResumeNext(getLatestRateFallbackFlowable(coinCode, currencyCode, timestamp))
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                )
     }
 
     fun clear() {

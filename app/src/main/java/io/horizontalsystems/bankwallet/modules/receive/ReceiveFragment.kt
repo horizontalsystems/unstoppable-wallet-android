@@ -54,9 +54,7 @@ class ReceiveFragment : BottomSheetDialogFragment() {
             addresses?.apply {
                 if (addresses.isNotEmpty()) {
                     val address = addresses[itemIndex]
-                    context?.let {
-                        mDialog?.findViewById<CoinIconView>(R.id.coinIcon)?.bind(address.coin)
-                    }
+                    mDialog?.findViewById<CoinIconView>(R.id.coinIcon)?.bind(address.coin)
                     mDialog?.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.Deposit_Title, address.coin.title)
                     mDialog?.findViewById<AddressView>(R.id.addressView)?.bind(address.address)
                     mDialog?.findViewById<ImageView>(R.id.imgQrCode)?.setImageBitmap(TextHelper.getQrCodeBitmapFromAddress(address.address))

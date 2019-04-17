@@ -21,6 +21,10 @@ class TransactionsPresenter(
         interactor.initialFetch()
     }
 
+    override fun onVisible() {
+        view?.reload()
+    }
+
     override fun onTransactionItemClick(transaction: TransactionViewItem) {
         router.openTransactionInfo(transaction)
     }
@@ -42,6 +46,10 @@ class TransactionsPresenter(
         val lastBlockHeight = metadataDataSource.getLastBlockHeight(coin)
         val threshold = metadataDataSource.getConfirmationThreshold(coin)
         val rate = metadataDataSource.getRate(coin, transactionItem.record.timestamp)
+
+        if (rate == null) {
+            interactor.fetchRate(coin, transactionItem.record.timestamp)
+        }
 
         return factory.item(transactionItem, lastBlockHeight, threshold, rate)
     }
@@ -81,7 +89,6 @@ class TransactionsPresenter(
 
     override fun didFetchRecords(records: Map<Coin, List<TransactionRecord>>) {
         loader.didFetchRecords(records)
-        fetchRatesForRecords(records)
     }
 
     override fun onUpdateLastBlockHeight(coin: Coin, lastBlockHeight: Int) {
@@ -104,8 +111,6 @@ class TransactionsPresenter(
     override fun onUpdateBaseCurrency() {
         metadataDataSource.clearRates()
         view?.reload()
-
-        fetchRatesForRecords(loader.allRecords)
     }
 
     override fun didFetchRate(rateValue: BigDecimal, coin: Coin, currency: Currency, timestamp: Long) {
@@ -119,8 +124,10 @@ class TransactionsPresenter(
 
     override fun didUpdateRecords(records: List<TransactionRecord>, coin: Coin) {
         loader.didUpdateRecords(records, coin)
+    }
 
-        fetchRatesForRecords(mapOf(coin to records))
+    override fun onConnectionRestore() {
+        view?.reload()
     }
 
     //
@@ -143,7 +150,4 @@ class TransactionsPresenter(
         interactor.fetchRecords(fetchDataList)
     }
 
-    private fun fetchRatesForRecords(records: Map<Coin, List<TransactionRecord>>) {
-        interactor.fetchRates(records.map { Pair(it.key, it.value.map { it.timestamp }.distinct().sortedDescending()) }.toMap())
-    }
 }
