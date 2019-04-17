@@ -15,6 +15,7 @@ import java.net.SocketTimeoutException
 class RateManager(private val storage: IRateStorage, private val networkManager: INetworkManager) {
 
     private var refreshDisposables: CompositeDisposable = CompositeDisposable()
+    private val latestRateFallbackThresholdInSeconds = 600 // 10 minutes
 
     fun refreshLatestRates(coinCodes: List<String>, currencyCode: String) {
         refreshDisposables.clear()
@@ -39,7 +40,7 @@ class RateManager(private val storage: IRateStorage, private val networkManager:
     }
 
     private fun getLatestRateFallbackFlowable(coinCode: CoinCode, currencyCode: String, timestamp: Long): Maybe<BigDecimal> {
-        if (timestamp > ((System.currentTimeMillis() / 1000) - 3600)) {
+        if (timestamp < ((System.currentTimeMillis() / 1000) - latestRateFallbackThresholdInSeconds)) {
             return Maybe.empty()
         }
 
