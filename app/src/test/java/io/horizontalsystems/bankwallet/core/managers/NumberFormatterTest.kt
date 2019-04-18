@@ -39,6 +39,14 @@ class NumberFormatterTest {
     }
 
     @Test
+    fun format_Currency_forLatestRate() {
+        assertCurrencyFormatterForLatestRates(1203.903, "$1,204")
+        assertCurrencyFormatterForLatestRates(0.0005, "$0.0005")
+        assertCurrencyFormatterForLatestRates(0.5005, "$0.5")
+        assertCurrencyFormatterForLatestRates(0.0805, "$0.0805")
+    }
+
+    @Test
     fun format_Coin() {
         assertCoinFormatter(12.03903001, "12.039 BTC")
         assertCoinFormatter(12.0000000012345, "12 BTC")
@@ -57,9 +65,15 @@ class NumberFormatterTest {
     }
 
 
+    private fun assertCurrencyFormatterForLatestRates(input: Double, expected: String) {
+        val value = CurrencyValue(usdCurrency, input.toBigDecimal())
+        val formatted = formatter.format(value, trimmable = true, canUseLessSymbol = false)
+        Assert.assertEquals(expected, formatted)
+    }
+
     private fun assertCurrencyFormatter(input: Double, expected: String) {
         val value = CurrencyValue(usdCurrency, input.toBigDecimal())
-        val formatted = formatter.format(value, showNegativeSign = true)
+        val formatted = formatter.format(value, showNegativeSign = true, trimmable = true)
         Assert.assertEquals(expected, formatted)
     }
 

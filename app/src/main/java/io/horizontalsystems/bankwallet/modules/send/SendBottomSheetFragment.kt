@@ -148,7 +148,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
                 is SendModule.HintInfo.Amount -> {
                     val hintText = when (hintInfo.amountInfo) {
                         is SendModule.AmountInfo.CoinValueInfo -> App.numberFormatter.format(hintInfo.amountInfo.coinValue, realNumber = true)
-                        is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(hintInfo.amountInfo.currencyValue, realNumber = true)
+                        is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(hintInfo.amountInfo.currencyValue)
                     }
                     amountInput?.updateInput(hint = hintText)
                 }
@@ -157,7 +157,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
                         is SendModule.AmountError.InsufficientBalance -> {
                             val balanceAmount = when (hintInfo.error.amountInfo) {
                                 is SendModule.AmountInfo.CoinValueInfo -> App.numberFormatter.format(hintInfo.error.amountInfo.coinValue)
-                                is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(hintInfo.error.amountInfo.currencyValue, realNumber = true)
+                                is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(hintInfo.error.amountInfo.currencyValue)
                             }
                             context?.getString(R.string.Send_Error_BalanceAmount, balanceAmount)
                         }
@@ -227,7 +227,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
                     val secondaryFeeInfo = it.secondaryFeeInfo
 
                     val primaryFee = when (primaryFeeInfo) {
-                        is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(primaryFeeInfo.currencyValue, realNumber = true)
+                        is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(primaryFeeInfo.currencyValue)
                         is SendModule.AmountInfo.CoinValueInfo -> App.numberFormatter.format(primaryFeeInfo.coinValue)
                         else -> ""
                     }
@@ -235,7 +235,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
                     feePrimaryTxt?.text = primaryFeeText
 
                     feeSecondaryTxt?.text = when (secondaryFeeInfo) {
-                        is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(secondaryFeeInfo.currencyValue, realNumber = true)
+                        is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(secondaryFeeInfo.currencyValue)
                         is SendModule.AmountInfo.CoinValueInfo -> App.numberFormatter.format(secondaryFeeInfo.coinValue)
                         else -> ""
                     }
