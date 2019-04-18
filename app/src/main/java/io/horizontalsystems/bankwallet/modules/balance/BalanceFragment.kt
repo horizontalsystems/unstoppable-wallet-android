@@ -126,7 +126,7 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener {
         }
 
         ballanceText.text = headerViewItem.currencyValue?.let {
-            App.numberFormatter.format(it, realNumber = true)
+            App.numberFormatter.format(it)
         }
     }
 
@@ -225,7 +225,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
 
         textCoinAmount.text = App.numberFormatter.format(balanceViewItem.coinValue)
         balanceViewItem.currencyValue?.let {
-            textCurrencyAmount.text = App.numberFormatter.format(it, canUseLessSymbol = true)
+            textCurrencyAmount.text = App.numberFormatter.format(it, trimmable = true)
             textCurrencyAmount.visibility = if(it.value.compareTo(BigDecimal.ZERO) == 0) View.GONE else View.VISIBLE
             textCurrencyAmount.setTextColor(ContextCompat.getColor(containerView.context, if (balanceViewItem.rateExpired) R.color.yellow_crypto_40 else R.color.yellow_crypto))
         } ?: run { textCurrencyAmount.visibility = View.GONE }
@@ -260,7 +260,8 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
         textCoinName.text = balanceViewItem.coin.title
 
         textExchangeRate.text = balanceViewItem.exchangeValue?.let { exchangeValue ->
-            containerView.context.getString(R.string.Balance_RatePerCoin, App.numberFormatter.format(exchangeValue), balanceViewItem.coinValue.coinCode)
+            val rateString = App.numberFormatter.format(exchangeValue, trimmable = true, canUseLessSymbol = false)
+            containerView.context.getString(R.string.Balance_RatePerCoin, rateString, balanceViewItem.coinValue.coinCode)
         } ?: ""
         textExchangeRate.setTextColor(ContextCompat.getColor(containerView.context, if (balanceViewItem.rateExpired) R.color.steel_40 else R.color.grey))
 

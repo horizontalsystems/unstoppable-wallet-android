@@ -174,7 +174,7 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
                 coinIcon.bind(txRec.coin)
 
                 fiatValue.apply {
-                    text = txRec.currencyValue?.let { App.numberFormatter.format(it, showNegativeSign = true, realNumber = true, canUseLessSymbol = false) }
+                    text = txRec.currencyValue?.let { App.numberFormatter.format(it, showNegativeSign = true, canUseLessSymbol = false) }
                     setTextColor(resources.getColor(if (txRec.incoming) R.color.green_crypto else R.color.yellow_crypto, null))
                 }
 
@@ -183,7 +183,7 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
 
                 itemRate.apply {
                     txRec.rate?.let {
-                        val rate = getString(R.string.Balance_RatePerCoin, App.numberFormatter.format(it), txRec.coin.code)
+                        val rate = getString(R.string.Balance_RatePerCoin, App.numberFormatter.format(it, canUseLessSymbol = false), txRec.coin.code)
                         bind(title = getString(R.string.TransactionInfo_HistoricalRate), value = rate)
                     }
                     visibility = if (txRec.rate == null) View.GONE else View.VISIBLE
