@@ -299,6 +299,7 @@
         <item name="android:backgroundDimAmount">0.7</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowMinWidthMinor">85%</item>
+        <item name="android:windowMinWidthMajor">65%</item>
         <item name="android:windowSoftInputMode">adjustResize|stateHidden</item>
     </style>
 
