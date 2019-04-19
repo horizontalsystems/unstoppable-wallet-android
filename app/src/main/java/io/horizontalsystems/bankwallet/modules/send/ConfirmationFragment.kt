@@ -34,7 +34,7 @@ class ConfirmationFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.sendConfirmationViewItemLiveData.observe(this, Observer { viewItem ->
+        viewModel.sendConfirmationViewItemLiveData.observe(viewLifecycleOwner, Observer { viewItem ->
             viewItem?.let { sendConfirmationViewItem ->
                 view.findViewById<TextView>(R.id.primaryAmountText)?.text = sendConfirmationViewItem.primaryAmountInfo.getFormatted()
                 view.findViewById<TextView>(R.id.secondaryAmountText)?.text = sendConfirmationViewItem.secondaryAmountInfo?.getFormatted()
@@ -49,7 +49,7 @@ class ConfirmationFragment : DialogFragment() {
             }
         })
 
-        viewModel.coinLiveData.observe(this, Observer { coin ->
+        viewModel.coinLiveData.observe(viewLifecycleOwner, Observer { coin ->
             coin?.let { coin1 ->
                 context?.let {
                     view.findViewById<CoinIconView>(R.id.coinIcon)?.bind(coin1)
@@ -58,11 +58,11 @@ class ConfirmationFragment : DialogFragment() {
             }
         })
 
-        viewModel.dismissConfirmationLiveEvent.observe(this, Observer {
+        viewModel.dismissConfirmationLiveEvent.observe(viewLifecycleOwner, Observer {
             dismiss()
         })
 
-        viewModel.errorLiveData.observe(this, Observer {
+        viewModel.errorLiveData.observe(viewLifecycleOwner, Observer {
             view.findViewById<ButtonWithProgressbarView>(R.id.buttonConfirm)?.let { buttonConfirm ->
                 isCancelable = true
                 buttonConfirm.bind(R.string.Backup_Button_Confirm)

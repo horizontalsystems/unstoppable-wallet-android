@@ -62,19 +62,19 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
         recyclerTags.adapter = filterAdapter
         recyclerTags.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
-        viewModel.filterItems.observe(this, Observer { filters ->
+        viewModel.filterItems.observe(viewLifecycleOwner, Observer { filters ->
             filters?.let {
                 filterAdapter.setFilters(it)
             }
         })
 
-        viewModel.transactionViewItemLiveEvent.observe(this, Observer { transactionViewItem ->
+        viewModel.transactionViewItemLiveEvent.observe(viewLifecycleOwner, Observer { transactionViewItem ->
             transactionViewItem?.let {
                 transInfoViewModel.setViewItem(it)
             }
         })
 
-        viewModel.reloadLiveEvent.observe(this, Observer {
+        viewModel.reloadLiveEvent.observe(viewLifecycleOwner, Observer {
             transactionsAdapter.notifyDataSetChanged()
 
             if (transactionsAdapter.itemCount == 0) {
@@ -85,7 +85,7 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
             emptyListText.visibility = if (viewModel.delegate.itemsCount == 0) View.VISIBLE else View.GONE
         })
 
-        viewModel.reloadChangeEvent.observe(this, Observer { diff ->
+        viewModel.reloadChangeEvent.observe(viewLifecycleOwner, Observer { diff ->
             diff?.dispatchUpdatesTo(transactionsAdapter)
 
             if (transactionsAdapter.itemCount == 0) {
@@ -96,13 +96,13 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
             emptyListText.visibility = if (viewModel.delegate.itemsCount == 0) View.VISIBLE else View.GONE
         })
 
-        viewModel.addItemsLiveEvent.observe(this, Observer {
+        viewModel.addItemsLiveEvent.observe(viewLifecycleOwner, Observer {
             it?.let { (fromIndex, count) ->
                 transactionsAdapter.notifyItemRangeInserted(fromIndex, count)
             }
         })
 
-        viewModel.reloadItemsLiveEvent.observe(this, Observer {
+        viewModel.reloadItemsLiveEvent.observe(viewLifecycleOwner, Observer {
             it?.forEach { index ->
                 transactionsAdapter.notifyItemChanged(index)
             }
@@ -155,11 +155,11 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
         txtFullInfo.setOnClickListener { transInfoViewModel.onClickOpenFillInfo() }
         transactionsDim.setOnClickListener { bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED }
 
-        transInfoViewModel.showCopiedLiveEvent.observe(this, Observer {
+        transInfoViewModel.showCopiedLiveEvent.observe(viewLifecycleOwner, Observer {
             HudHelper.showSuccessMessage(R.string.Hud_Text_Copied)
         })
 
-        transInfoViewModel.showFullInfoLiveEvent.observe(this, Observer { pair ->
+        transInfoViewModel.showFullInfoLiveEvent.observe(viewLifecycleOwner, Observer { pair ->
             pair?.let {
                 activity?.let { activity ->
                     FullTransactionInfoModule.start(activity, transactionHash = it.first, coin = it.second)
@@ -167,7 +167,7 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
             }
         })
 
-        transInfoViewModel.transactionLiveData.observe(this, Observer { txRecord ->
+        transInfoViewModel.transactionLiveData.observe(viewLifecycleOwner, Observer { txRecord ->
             txRecord?.let { txRec ->
                 val txStatus = txRec.status
 
