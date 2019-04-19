@@ -1,6 +1,9 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.view.View
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.ui.view.SingleClickListener
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -49,6 +52,11 @@ fun io.reactivex.Completable.subscribeAsync(disposables: CompositeDisposable, on
 
     disposables.add(disposable)
     return disposable
+}
+
+fun <T> LiveData<T>.reObserve(owner: LifecycleOwner, observer: Observer<T>) {
+    removeObserver(observer)
+    observe(owner, observer)
 }
 
 //View

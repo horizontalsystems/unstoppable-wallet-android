@@ -27,6 +27,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.reObserve
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.ui.extensions.*
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -41,12 +43,139 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
     private lateinit var viewModel: SendViewModel
     private var disposable: Disposable? = null
     private var inputConnection: InputConnection? = null
-
     private var amountEditTxt: EditText? = null
     private var amountInput: InputAmountView? = null
     private val amountChangeSubject: PublishSubject<BigDecimal> = PublishSubject.create()
-
     private var coin: String? = null
+
+    //Observers starts
+    private val errorLiveDataObserver = Observer<Int?> { error ->  error?.let { HudHelper.showErrorMessage(it) } }
+
+    private val showConfirmationObserver = Observer<Unit> { activity?.let { ConfirmationFragment.show(it) } }
+
+    private val dismissWithSuccessObserver = Observer<Unit> {
+        HudHelper.showSuccessMessage(R.string.Send_Success)
+        dismiss()
+    }
+
+    private val pasteButtonEnabledObserver = Observer<Boolean?> { enabled ->
+        enabled?.let { dialog?.findViewById<InputAddressView>(R.id.addressInput)?.enablePasteButton(it) }
+    }
+
+    private val feeIsAdjustableObserver = Observer<Boolean?> { feeIsAdjustable ->
+        feeIsAdjustable?.let { dialog?.findViewById<SeekbarView>(R.id.feeRateSeekbar)?.visibility = if (it) View.VISIBLE else View.GONE }
+    }
+
+    private val switchButtonEnabledObserver = Observer<Boolean?> { enabled ->
+        enabled?.let {  amountInput?.enableSwitchBtn(it) }
+    }
+
+    private val coinLiveDataObserver = Observer<Coin?> { coin ->
+        coin?.let {
+            dialog?.findViewById<CoinIconView>(R.id.coinIcon)?.bind(it)
+            dialog?.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.Send_Title, it.title)
+        }
+    }
+
+    private val sendButtonEnabledObserver = Observer<Boolean?> { enabled ->
+        enabled?.let { dialog?.findViewById<Button>(R.id.btnSend)?.isEnabled = it }
+    }
+
+    private val hintInfoObserver = Observer<SendModule.HintInfo> { hintInfo ->
+        when (hintInfo) {
+            is SendModule.HintInfo.Amount -> {
+                val hintText = when (hintInfo.amountInfo) {
+                    is SendModule.AmountInfo.CoinValueInfo -> App.numberFormatter.format(hintInfo.amountInfo.coinValue, realNumber = true)
+                    is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(hintInfo.amountInfo.currencyValue)
+                }
+                amountInput?.updateInput(hint = hintText)
+            }
+            is SendModule.HintInfo.ErrorInfo -> {
+                val errorText: String? = when (hintInfo.error) {
+                    is SendModule.AmountError.InsufficientBalance -> {
+                        val balanceAmount = when (hintInfo.error.amountInfo) {
+                            is SendModule.AmountInfo.CoinValueInfo -> App.numberFormatter.format(hintInfo.error.amountInfo.coinValue)
+                            is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(hintInfo.error.amountInfo.currencyValue)
+                        }
+                        context?.getString(R.string.Send_Error_BalanceAmount, balanceAmount)
+                    }
+                    else -> null
+                }
+                amountInput?.updateInput(error = errorText)
+            }
+            null -> amountInput?.updateInput()
+        }
+    }
+
+    private val amountInfoObserver = Observer<SendModule.AmountInfo> { amountInfo ->
+        var amountNumber = BigDecimal.ZERO
+        when (amountInfo) {
+            is SendModule.AmountInfo.CoinValueInfo -> {
+                amountInput?.updateAmountPrefix(amountInfo.coinValue.coinCode)
+                amountNumber = amountInfo.coinValue.value.setScale(8, RoundingMode.HALF_EVEN)
+            }
+            is SendModule.AmountInfo.CurrencyValueInfo -> {
+                amountInput?.updateAmountPrefix(amountInfo.currencyValue.currency.symbol)
+                amountNumber = amountInfo.currencyValue.value.setScale(2, RoundingMode.HALF_EVEN)
+            }
+        }
+
+        if (amountNumber > BigDecimal.ZERO) {
+            amountEditTxt?.setText(amountNumber.stripTrailingZeros().toPlainString())
+            amountEditTxt?.setSelection(amountEditTxt?.text?.length ?: 0)
+        }
+    }
+
+    private val addressInfoObserver = Observer<SendModule.AddressInfo> { addressInfo ->
+        var addressText = ""
+        var errorText: String? = null
+
+        addressInfo?.let {
+            when (it) {
+                is SendModule.AddressInfo.ValidAddressInfo -> {
+                    addressText = it.address
+                }
+                is SendModule.AddressInfo.InvalidAddressInfo -> {
+                    addressText = it.address
+                    errorText = context?.getString(R.string.Send_Error_IncorrectAddress)
+                }
+            }
+        }
+
+        dialog?.findViewById<InputAddressView>(R.id.addressInput)?.updateInput(addressText, errorText)
+    }
+
+    private val feeInfoObserver = Observer<SendModule.FeeInfo> {feeInfo ->
+        feeInfo?.let {
+            dialog?.findViewById<TextView>(R.id.txtFeePrimary)?.visibility = if (it.error == null) View.VISIBLE else View.GONE
+            dialog?.findViewById<TextView>(R.id.txtFeeSecondary)?.visibility = if (it.error == null) View.VISIBLE else View.GONE
+            dialog?.findViewById<TextView>(R.id.feeError)?.visibility = if (it.error == null) View.GONE else View.VISIBLE
+            dialog?.findViewById<ConstraintLayout>(R.id.feeElements)?.visibility = if (it.error == null) View.VISIBLE else View.GONE
+
+            it.error?.let { erc20Error ->
+                dialog?.findViewById<TextView>(R.id.feeError)?.text = getString(R.string.Send_ERC_Alert, erc20Error.erc20CoinCode, erc20Error.coinValue.value.toPlainString())
+            } ?: run {
+
+                val primaryFeeInfo = it.primaryFeeInfo
+                val secondaryFeeInfo = it.secondaryFeeInfo
+
+                val primaryFee = when (primaryFeeInfo) {
+                    is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(primaryFeeInfo.currencyValue)
+                    is SendModule.AmountInfo.CoinValueInfo -> App.numberFormatter.format(primaryFeeInfo.coinValue)
+                    else -> ""
+                }
+                val primaryFeeText = "${getString(R.string.Send_DialogFee)} $primaryFee"
+                dialog?.findViewById<TextView>(R.id.txtFeePrimary)?.text = primaryFeeText
+
+                dialog?.findViewById<TextView>(R.id.txtFeeSecondary)?.text = when (secondaryFeeInfo) {
+                    is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(secondaryFeeInfo.currencyValue)
+                    is SendModule.AmountInfo.CoinValueInfo -> App.numberFormatter.format(secondaryFeeInfo.coinValue)
+                    else -> ""
+                }
+            }
+        }
+    }
+    //Observers ends
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,10 +212,6 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
 
         val numpadRecyclerView = mDialog?.findViewById<RecyclerView>(R.id.numPadItemsRecyclerView)
         amountInput = mDialog?.findViewById(R.id.amountInput)
-        val feePrimaryTxt: TextView? = mDialog?.findViewById(R.id.txtFeePrimary)
-        val feeErrorTxt: TextView? = mDialog?.findViewById(R.id.feeError)
-        val feeElements: ConstraintLayout? = mDialog?.findViewById(R.id.feeElements)
-        val feeSecondaryTxt: TextView? = mDialog?.findViewById(R.id.txtFeeSecondary)
         amountEditTxt = mDialog?.findViewById(R.id.editTxtAmount)
         val sendButton: Button? = mDialog?.findViewById(R.id.btnSend)
         val addressInput: InputAddressView? = mDialog?.findViewById(R.id.addressInput)
@@ -128,148 +253,23 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
             viewModel.delegate.onFeeSliderChange(progress)
         }
 
-        viewModel.switchButtonEnabledLiveData.observe(this, Observer { enabled ->
-            enabled?.let {
-                amountInput?.enableSwitchBtn(it)
-            }
-        })
-
-        viewModel.coinLiveData.observe(this, Observer { coin ->
-            coin?.let { coin1 ->
-                context?.let {
-                    mDialog?.findViewById<CoinIconView>(R.id.coinIcon)?.bind(coin1)
-                    mDialog?.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.Send_Title, coin1.title)
-                }
-            }
-        })
-
-        viewModel.hintInfoLiveData.observe(this, Observer { hintInfo ->
-            when (hintInfo) {
-                is SendModule.HintInfo.Amount -> {
-                    val hintText = when (hintInfo.amountInfo) {
-                        is SendModule.AmountInfo.CoinValueInfo -> App.numberFormatter.format(hintInfo.amountInfo.coinValue, realNumber = true)
-                        is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(hintInfo.amountInfo.currencyValue)
-                    }
-                    amountInput?.updateInput(hint = hintText)
-                }
-                is SendModule.HintInfo.ErrorInfo -> {
-                    val errorText: String? = when (hintInfo.error) {
-                        is SendModule.AmountError.InsufficientBalance -> {
-                            val balanceAmount = when (hintInfo.error.amountInfo) {
-                                is SendModule.AmountInfo.CoinValueInfo -> App.numberFormatter.format(hintInfo.error.amountInfo.coinValue)
-                                is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(hintInfo.error.amountInfo.currencyValue)
-                            }
-                            context?.getString(R.string.Send_Error_BalanceAmount, balanceAmount)
-                        }
-                        else -> null
-                    }
-                    amountInput?.updateInput(error = errorText)
-                }
-                null -> amountInput?.updateInput()
-            }
-        })
-
-        viewModel.sendButtonEnabledLiveData.observe(this, Observer { enabled ->
-            enabled?.let { sendButton?.isEnabled = it }
-        })
-
-        viewModel.amountInfoLiveData.observe(this, Observer { amountInfo ->
-            var amountNumber = BigDecimal.ZERO
-            when (amountInfo) {
-                is SendModule.AmountInfo.CoinValueInfo -> {
-                    amountInput?.updateAmountPrefix(amountInfo.coinValue.coinCode)
-                    amountNumber = amountInfo.coinValue.value.setScale(8, RoundingMode.HALF_EVEN)
-                }
-                is SendModule.AmountInfo.CurrencyValueInfo -> {
-                    amountInput?.updateAmountPrefix(amountInfo.currencyValue.currency.symbol)
-                    amountNumber = amountInfo.currencyValue.value.setScale(2, RoundingMode.HALF_EVEN)
-                }
-            }
-
-            if (amountNumber > BigDecimal.ZERO) {
-                amountEditTxt?.setText(amountNumber.stripTrailingZeros().toPlainString())
-                amountEditTxt?.setSelection(amountEditTxt?.text?.length ?: 0)
-            }
-        })
-
-        viewModel.addressInfoLiveData.observe(this, Observer { addressInfo ->
-
-            var addressText = ""
-            var errorText: String? = null
-
-            addressInfo?.let {
-                when (it) {
-                    is SendModule.AddressInfo.ValidAddressInfo -> {
-                        addressText = it.address
-                    }
-                    is SendModule.AddressInfo.InvalidAddressInfo -> {
-                        addressText = it.address
-                        errorText = context?.getString(R.string.Send_Error_IncorrectAddress)
-                    }
-                }
-            }
-
-            addressInput?.updateInput(addressText, errorText)
-        })
-
-        viewModel.feeInfoLiveData.observe(this, Observer { feeInfo ->
-            feeInfo?.let {
-                feePrimaryTxt?.visibility = if (it.error == null) View.VISIBLE else View.GONE
-                feeSecondaryTxt?.visibility = if (it.error == null) View.VISIBLE else View.GONE
-                feeErrorTxt?.visibility = if (it.error == null) View.GONE else View.VISIBLE
-                feeElements?.visibility = if (it.error == null) View.VISIBLE else View.GONE
-
-                it.error?.let { erc20Error ->
-                    feeErrorTxt?.text = getString(R.string.Send_ERC_Alert, erc20Error.erc20CoinCode, erc20Error.coinValue.value.toPlainString())
-                } ?: run {
-
-                    val primaryFeeInfo = it.primaryFeeInfo
-                    val secondaryFeeInfo = it.secondaryFeeInfo
-
-                    val primaryFee = when (primaryFeeInfo) {
-                        is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(primaryFeeInfo.currencyValue)
-                        is SendModule.AmountInfo.CoinValueInfo -> App.numberFormatter.format(primaryFeeInfo.coinValue)
-                        else -> ""
-                    }
-                    val primaryFeeText = "${getString(R.string.Send_DialogFee)} $primaryFee"
-                    feePrimaryTxt?.text = primaryFeeText
-
-                    feeSecondaryTxt?.text = when (secondaryFeeInfo) {
-                        is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(secondaryFeeInfo.currencyValue)
-                        is SendModule.AmountInfo.CoinValueInfo -> App.numberFormatter.format(secondaryFeeInfo.coinValue)
-                        else -> ""
-                    }
-                }
-
-            }
-        })
-
-        viewModel.dismissWithSuccessLiveEvent.observe(this, Observer {
-            HudHelper.showSuccessMessage(R.string.Send_Success)
-            dismiss()
-        })
-
-        viewModel.errorLiveData.observe(this, Observer { error ->
-            error?.let {
-                HudHelper.showErrorMessage(it)
-            }
-        })
-
-        viewModel.showConfirmationLiveEvent.observe(this, Observer {
-            activity?.let { ConfirmationFragment.show(it) }
-        })
-
-        viewModel.pasteButtonEnabledLiveData.observe(this, Observer { enabled ->
-            enabled?.let { addressInput?.enablePasteButton(it) }
-        })
-
-        viewModel.feeIsAdjustableLiveData.observe(this, Observer { feeIsAdjustable ->
-            feeIsAdjustable?.let {
-                seekbar?.visibility = if (it) View.VISIBLE else View.GONE
-            }
-        })
-
         return mDialog as Dialog
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel.errorLiveData.reObserve(this, errorLiveDataObserver)
+        viewModel.showConfirmationLiveEvent.reObserve(this, showConfirmationObserver)
+        viewModel.pasteButtonEnabledLiveData.reObserve(this, pasteButtonEnabledObserver)
+        viewModel.feeIsAdjustableLiveData.reObserve(this, feeIsAdjustableObserver)
+        viewModel.dismissWithSuccessLiveEvent.reObserve(this, dismissWithSuccessObserver)
+        viewModel.switchButtonEnabledLiveData.reObserve(this, switchButtonEnabledObserver)
+        viewModel.coinLiveData.reObserve(this, coinLiveDataObserver)
+        viewModel.hintInfoLiveData.reObserve(this, hintInfoObserver)
+        viewModel.sendButtonEnabledLiveData.reObserve(this, sendButtonEnabledObserver)
+        viewModel.amountInfoLiveData.reObserve(this, amountInfoObserver)
+        viewModel.addressInfoLiveData.reObserve(this, addressInfoObserver)
+        viewModel.feeInfoLiveData.reObserve(this, feeInfoObserver)
     }
 
     override fun onItemClick(item: NumPadItem) {
