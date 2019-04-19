@@ -31,7 +31,7 @@ class BackupConfirmFragment : Fragment() {
             viewModel = ViewModelProviders.of(it).get(BackupViewModel::class.java)
         }
 
-        viewModel.wordIndexesToConfirmLiveData.observe(this, Observer { list ->
+        viewModel.wordIndexesToConfirmLiveData.observe(viewLifecycleOwner, Observer { list ->
             list?.let {
                 wordOne?.bindPrefix("${it[0]}.")
                 wordTwo?.bindPrefix("${it[1]}.")
@@ -41,11 +41,11 @@ class BackupConfirmFragment : Fragment() {
             }
         })
 
-        viewModel.errorLiveData.observe(this, Observer {
+        viewModel.errorLiveData.observe(viewLifecycleOwner, Observer {
             showError(it)
         })
 
-        viewModel.validateWordsLiveEvent.observe(this, Observer {
+        viewModel.validateWordsLiveEvent.observe(viewLifecycleOwner, Observer {
             val wordOneEntry = wordOne?.getEnteredText()
             val wordTwoEntry = wordTwo?.getEnteredText()
             if (wordOneEntry.isNullOrEmpty() || wordTwoEntry.isNullOrEmpty()) {

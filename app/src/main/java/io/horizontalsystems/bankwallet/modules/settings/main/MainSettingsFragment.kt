@@ -66,29 +66,29 @@ class MainSettingsFragment : Fragment() {
             viewModel.delegate.didTapAbout()
         }
 
-        viewModel.baseCurrencyLiveDate.observe(this, Observer { currency ->
+        viewModel.baseCurrencyLiveDate.observe(viewLifecycleOwner, Observer { currency ->
             currency?.let {
                 baseCurrency.selectedValue = it
             }
         })
 
-        viewModel.backedUpLiveDate.observe(this, Observer { backedUp ->
+        viewModel.backedUpLiveDate.observe(viewLifecycleOwner, Observer { backedUp ->
             backedUp?.let {
                 securityCenter.badge = LayoutHelper.getInfoBadge(it, resources)
             }
         })
 
-        viewModel.showBaseCurrencySettingsLiveEvent.observe(this, Observer {
+        viewModel.showBaseCurrencySettingsLiveEvent.observe(viewLifecycleOwner, Observer {
             context?.let { context -> BaseCurrencySettingsModule.start(context) }
         })
 
-        viewModel.languageLiveDate.observe(this, Observer { languageCode ->
+        viewModel.languageLiveDate.observe(viewLifecycleOwner, Observer { languageCode ->
             languageCode?.let {
                 language.selectedValue = it.capitalize()
             }
         })
 
-        viewModel.lightModeLiveDate.observe(this, Observer { lightModeValue ->
+        viewModel.lightModeLiveDate.observe(viewLifecycleOwner, Observer { lightModeValue ->
             lightModeValue?.let {
                 lightMode.apply {
                     switchIsChecked = it
@@ -100,23 +100,23 @@ class MainSettingsFragment : Fragment() {
             }
         })
 
-        viewModel.showLanguageSettingsLiveEvent.observe(this, Observer {
+        viewModel.showLanguageSettingsLiveEvent.observe(viewLifecycleOwner, Observer {
             context?.let { context -> LanguageSettingsModule.start(context) }
         })
 
-        viewModel.showAboutLiveEvent.observe(this, Observer {
+        viewModel.showAboutLiveEvent.observe(viewLifecycleOwner, Observer {
             activity?.let {
                 AboutSettingsActivity.start(it)
             }
         })
 
-        viewModel.showSecuritySettingsLiveEvent.observe(this, Observer {
+        viewModel.showSecuritySettingsLiveEvent.observe(viewLifecycleOwner, Observer {
             context?.let {
                 SecuritySettingsModule.start(it)
             }
         })
 
-        viewModel.tabItemBadgeLiveDate.observe(this, Observer { count ->
+        viewModel.tabItemBadgeLiveDate.observe(viewLifecycleOwner, Observer { count ->
             activity?.let { activity ->
                 count?.let {
                     (activity as? MainActivity)?.updateSettingsTabCounter(it)
@@ -124,7 +124,7 @@ class MainSettingsFragment : Fragment() {
             }
         })
 
-        viewModel.appVersionLiveDate.observe(this, Observer { version ->
+        viewModel.appVersionLiveDate.observe(viewLifecycleOwner, Observer { version ->
             version?.let {
                 var appVersion = getString(R.string.Settings_InfoTitleWithVersion, it)
                 if (getString(R.string.is_release) == "false") {
@@ -134,13 +134,13 @@ class MainSettingsFragment : Fragment() {
             }
         })
 
-        viewModel.showAppLinkLiveEvent.observe(this, Observer {
+        viewModel.showAppLinkLiveEvent.observe(viewLifecycleOwner, Observer {
             val uri = Uri.parse(getString(R.string.Settings_InfoLink))
             val intent = Intent(Intent.ACTION_VIEW, uri)
             activity?.startActivity(intent)
         })
 
-        viewModel.reloadAppLiveEvent.observe(this, Observer {
+        viewModel.reloadAppLiveEvent.observe(viewLifecycleOwner, Observer {
             context?.let { context -> MainModule.startAsNewTask(context, MainActivity.SETTINGS_TAB_POSITION) }
         })
 

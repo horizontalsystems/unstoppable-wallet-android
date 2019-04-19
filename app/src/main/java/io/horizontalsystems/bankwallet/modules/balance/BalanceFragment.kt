@@ -44,7 +44,7 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener {
         viewModel = ViewModelProviders.of(this).get(BalanceViewModel::class.java)
         viewModel.init()
 
-        viewModel.openReceiveDialog.observe(this, Observer { adapterId ->
+        viewModel.openReceiveDialog.observe(viewLifecycleOwner, Observer { adapterId ->
             adapterId?.let { id ->
                 activity?.let {
                     ReceiveModule.start(it, id)
@@ -52,7 +52,7 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener {
             }
         })
 
-        viewModel.openSendDialog.observe(this, Observer { iAdapter ->
+        viewModel.openSendDialog.observe(viewLifecycleOwner, Observer { iAdapter ->
             iAdapter?.let { coin ->
                 activity?.let {
                     SendModule.start(it, coin)
@@ -60,7 +60,7 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener {
             }
         })
 
-        viewModel.balanceColorLiveDate.observe(this, Observer { color ->
+        viewModel.balanceColorLiveDate.observe(viewLifecycleOwner, Observer { color ->
             color?.let { colorRes ->
                 context?.let { it ->
                     ballanceText.setTextColor(ContextCompat.getColor(it, colorRes))
@@ -68,24 +68,24 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener {
             }
         })
 
-        viewModel.didRefreshLiveEvent.observe(this, Observer {
+        viewModel.didRefreshLiveEvent.observe(viewLifecycleOwner, Observer {
             pullToRefresh.isRefreshing = false
         })
 
-        viewModel.openManageCoinsLiveEvent.observe(this, Observer {
+        viewModel.openManageCoinsLiveEvent.observe(viewLifecycleOwner, Observer {
             context?.let { context -> ManageCoinsModule.start(context) }
         })
 
-        viewModel.reloadLiveEvent.observe(this, Observer {
+        viewModel.reloadLiveEvent.observe(viewLifecycleOwner, Observer {
             coinsAdapter.notifyDataSetChanged()
             reloadHeader()
         })
 
-        viewModel.reloadHeaderLiveEvent.observe(this, Observer {
+        viewModel.reloadHeaderLiveEvent.observe(viewLifecycleOwner, Observer {
             reloadHeader()
         })
 
-        viewModel.reloadItemLiveEvent.observe(this, Observer { position ->
+        viewModel.reloadItemLiveEvent.observe(viewLifecycleOwner, Observer { position ->
             position?.let {
                 coinsAdapter.notifyItemChanged(it)
             }
