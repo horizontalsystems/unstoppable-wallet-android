@@ -20,10 +20,9 @@ class RateManager(private val storage: IRateStorage, private val networkManager:
     fun refreshLatestRates(coinCodes: List<String>, currencyCode: String) {
         refreshDisposables.clear()
 
-        //mainUrl sometime returns expired rates, thus currently first request is done to fallbackUrl
         refreshDisposables.add(
-                networkManager.getLatestRateData(ServiceExchangeApi.HostType.FALLBACK, currencyCode)
-                        .onErrorResumeNext(networkManager.getLatestRateData(ServiceExchangeApi.HostType.MAIN, currencyCode))
+                networkManager.getLatestRateData(ServiceExchangeApi.HostType.MAIN, currencyCode)
+                        .onErrorResumeNext(networkManager.getLatestRateData(ServiceExchangeApi.HostType.FALLBACK, currencyCode))
                         .subscribeOn(Schedulers.io())
                         .observeOn(Schedulers.io())
                         .subscribe ({ latestRateData ->
