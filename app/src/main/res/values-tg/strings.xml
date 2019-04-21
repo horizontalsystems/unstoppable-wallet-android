@@ -9,14 +9,14 @@
     <string name="Alert_Close">Пӯшидан</string>
     <string name="Alert_Success">Нагз</string>
     <string name="Alert_Copied">Copied</string>
-    <string name="Button_Cancel">Cancel</string>
+    <string name="Button_Cancel">Глшкун</string>
     <string name="Button_Back">Back</string>
-    <string name="Button_Ok">OK</string>
-    <string name="Button_Share">Share</string>
-    <string name="Error">Error</string>
+    <string name="Button_Ok">Дуруст</string>
+    <string name="Button_Share">Интешар</string>
+    <string name="Error">Хата</string>
     <!--Guest-->
     <string name="Guest_Title">Bank Wallet</string>
-    <string name="Guest_CreateWallet">New Wallet</string>
+    <string name="Guest_CreateWallet">Кортҳои нав</string>
     <string name="Guest_RestoreWallet">Restore Wallet</string>
     <!--Restore-->
     <string name="Restore_Title">Restore</string>
