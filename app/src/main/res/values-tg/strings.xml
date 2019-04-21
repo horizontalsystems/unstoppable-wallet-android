@@ -52,7 +52,7 @@
     <string name="Send_Title">Send %s</string>
     <string name="Send_Hint_PaymentReference">Payment Reference</string>
     <string name="Send_Hint_Address">Address</string>
-    <string name="Send_Hint_Amount">Amount</string>
+    <string name="Send_Hint_Amount">Миқдор</string>
     <string name="Send_Button_Paste">Paste</string>
     <string name="Send_Button_More">More</string>
     <string name="Send_Button_Send">Send</string>
