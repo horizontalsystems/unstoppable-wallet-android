@@ -132,8 +132,8 @@
     <!--Settings-->
     <string name="Settings_Title">Танзим</string>
     <string name="Settings_SecurityCenter">Маркази амниятӣ</string>
-    <string name="Settings_BaseCurrency">Base Currency</string>
-    <string name="Settings_Language">Language</string>
+    <string name="Settings_BaseCurrency">Асос валюта</string>
+    <string name="Settings_Language">Забон</string>
     <string name="Settings_LightMode">Light Mode</string>
     <string name="Settings_About">About</string>
     <string name="Settings_InfoTitleWithVersion">Bank Wallet %s</string>
