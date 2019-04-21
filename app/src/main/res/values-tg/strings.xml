@@ -115,23 +115,23 @@
     <string name="FullInfo_Source_Offline">Офлйн</string>
     <string name="FullInfo_Error_Subtitle">Офлйн</string>
     <string name="FullInfo_Error_Retry">Добара</string>
-    <string name="FullInfo_Error_ChangeSource">Change Source</string>
+    <string name="FullInfo_Error_ChangeSource">Тагйр сарчашма</string>
     <!--no used-->
     <string name="FullInfo_Id">ID</string>
-    <string name="FullInfo_TotalInput">Total Input</string>
-    <string name="FullInfo_TotalOutput">Total Output</string>
-    <string name="FullInfo_FeePerByte">Fee per byte</string>
-    <string name="FullInfo_FeeRate">Fee Rate</string>
-    <string name="FullInfo_NoAddress">Empty Address</string>
-    <string name="FullInfo_SatByte">sat/B</string>
-    <string name="FullInfo_Bytes">Bytes</string>
-    <string name="FullInfo_SubtitleInputs">Inputs</string>
-    <string name="FullInfo_SubtitleOutputs">Outputs</string>
-    <string name="FullInfoEth_Nonce">Nonce</string>
-    <string name="FullInfoEth_Amount">Amount</string>
+    <string name="FullInfo_TotalInput">Тамаман ворид кунед</string>
+    <string name="FullInfo_TotalOutput">Тамаман хариж кунед</string>
+    <string name="FullInfo_FeePerByte">Ройгон як бйт</string>
+    <string name="FullInfo_FeeRate">Меъёри ройгон</string>
+    <string name="FullInfo_NoAddress">Холй адрес</string>
+    <string name="FullInfo_SatByte">сат/В</string>
+    <string name="FullInfo_Bytes">Бут на</string>
+    <string name="FullInfo_SubtitleInputs">Ворид кунед</string>
+    <string name="FullInfo_SubtitleOutputs">Харйж кнйд</string>
+    <string name="FullInfoEth_Nonce">Данное время</string>
+    <string name="FullInfoEth_Amount">Миқдор</string>
     <!--Settings-->
-    <string name="Settings_Title">Settings</string>
-    <string name="Settings_SecurityCenter">Security Center</string>
+    <string name="Settings_Title">Танзим</string>
+    <string name="Settings_SecurityCenter">Маркази амниятӣ</string>
     <string name="Settings_BaseCurrency">Base Currency</string>
     <string name="Settings_Language">Language</string>
     <string name="Settings_LightMode">Light Mode</string>
