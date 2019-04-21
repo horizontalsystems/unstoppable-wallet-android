@@ -8,27 +8,27 @@
     <string name="Alert_Share">Ба дга раувнйш кун</string>
     <string name="Alert_Close">Пӯшидан</string>
     <string name="Alert_Success">Нагз</string>
-    <string name="Alert_Copied">Copied</string>
+    <string name="Alert_Copied">Нусхабардорӣ</string>
     <string name="Button_Cancel">Глшкун</string>
-    <string name="Button_Back">Back</string>
+    <string name="Button_Back">Ьанк</string>
     <string name="Button_Ok">Дуруст</string>
     <string name="Button_Share">Интешар</string>
     <string name="Error">Хата</string>
     <!--Guest-->
     <string name="Guest_Title">Bank Wallet</string>
     <string name="Guest_CreateWallet">Кортҳои нав</string>
-    <string name="Guest_RestoreWallet">Restore Wallet</string>
+    <string name="Guest_RestoreWallet">Барқарор кардани пӯст</string>
     <!--Restore-->
-    <string name="Restore_Title">Restore</string>
-    <string name="Restore_Subtitle">Enter Secret Key</string>
-    <string name="Restore_ValidationFailed">Incorrect Secret Key</string>
-    <string name="Restore_RestoreFailed">Failed to restore wallet</string>
+    <string name="Restore_Title">Барқарор кардани</string>
+    <string name="Restore_Subtitle">Калиди махфиро ворид кунед</string>
+    <string name="Restore_ValidationFailed">Калиди махфии нодуруст</string>
+    <string name="Restore_RestoreFailed">Ноком шодан барқарор карданд</string>
     <!--Backup-->
-    <string name="Backup_Intro_Title">Secret Key</string>
+    <string name="Backup_Intro_Title">Калиди махфӣ</string>
     <string name="Backup_Intro_Subtitle">Your secret key is the only way to restore your wallet and funds if your phone is ever lost, stolen, broken, or upgraded.\n\n It consists of 12 words. Store it safely offline.</string>
-    <string name="Backup_Intro_Later">Later</string>
-    <string name="Backup_Intro_BackupNow">Backup</string>
-    <string name="Backup_Words_Title">Secret Key</string>
+    <string name="Backup_Intro_Later">Баъдтар</string>
+    <string name="Backup_Intro_BackupNow">Нусхабардорӣ</string>
+    <string name="Backup_Words_Title">Калиди махфӣ</string>
     <string name="Backup_Confirmation_SecretKey">I understand that I am a sole owner of a private 12-word Secret Key which is securely stored on my phone and enables me to control funds on my wallet.</string>
     <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is ever moved, deleted or malfunctions, the access to my wallet can be only recovered with that Secret Key.</string>
     <string name="Backup_Confirmation_LockAppWarn">I understand that changing the phone\s unlock PIN or deleting app data in Android settings deletes the Secret Key from device. I would need to re-enter my Secret Key to regain access to my wallet.</string>
@@ -85,13 +85,13 @@
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">Transaction</string>
     <string name="TransactionInfo_Status">Status</string>
-    <string name="TransactionInfo_Status_Confirmed">Confirmed</string>
+    <string name="TransactionInfo_Status_Confirmed">Тасдиқ карда шуд</string>
     <string name="TransactionInfo_Id">ID</string>
-    <string name="TransactionInfo_To">To</string>
-    <string name="TransactionInfo_From">From</string>
-    <string name="TransactionInfo_Time">Time</string>
-    <string name="TransactionInfo_ButtonVerify">Verify</string>
-    <string name="TransactionInfo_Status_Pending">Pending</string>
+    <string name="TransactionInfo_To">Ба</string>
+    <string name="TransactionInfo_From">Аз</string>
+    <string name="TransactionInfo_Time">Заман</string>
+    <string name="TransactionInfo_ButtonVerify">Санҷед</string>
+    <string name="TransactionInfo_Status_Pending">Интизорӣ</string>
     <string name="TransactionInfo_HistoricalRate">Historical Rate</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Transaction</string>
