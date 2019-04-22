@@ -22,22 +22,14 @@ import java.util.concurrent.TimeUnit
 
 class NetworkManager(val appConfigProvider: IAppConfigProvider) : INetworkManager {
 
-    private val mainRateClient: ServiceExchangeApi.IExchangeRate = APIClient
-            .retrofit("https://${appConfigProvider.ipfsMainGateway}/ipns/${appConfigProvider.ipfsId}/")
-            .create(ServiceExchangeApi.IExchangeRate::class.java)
-
-    private val fallbackRateClient: ServiceExchangeApi.IExchangeRate = APIClient
-            .retrofit("https://${appConfigProvider.ipfsFallbackGateway}/ipns/${appConfigProvider.ipfsId}/")
-            .create(ServiceExchangeApi.IExchangeRate::class.java)
-
     override fun getRateByDay(hostType: ServiceExchangeApi.HostType, coinCode: String, currency: String, timestamp: Long): Maybe<BigDecimal> {
-        return rateApiClient(hostType)
+        return historicalRateApiClient(hostType)
                 .getRateByDay(coinCode, currency, DateHelper.formatDateInUTC(timestamp, "yyyy/MM/dd"))
                 .map { it.toBigDecimal() }
     }
 
     override fun getRateByHour(hostType: ServiceExchangeApi.HostType, coinCode: String, currency: String, timestamp: Long): Maybe<BigDecimal> {
-        return rateApiClient(hostType)
+        return historicalRateApiClient(hostType)
                 .getRateByHour(coinCode, currency, DateHelper.formatDateInUTC(timestamp, "yyyy/MM/dd/HH"))
                 .flatMap { minuteRates ->
                     Maybe.just(minuteRates.getValue(DateHelper.formatDateInUTC(timestamp, "mm")).toBigDecimal())
@@ -45,7 +37,7 @@ class NetworkManager(val appConfigProvider: IAppConfigProvider) : INetworkManage
     }
 
     override fun getLatestRateData(hostType: ServiceExchangeApi.HostType, currency: String): Maybe<LatestRateData> {
-        return rateApiClient(hostType)
+        return latestRateApiClient(hostType)
                 .getLatestRate(currency)
                 .map { LatestRateData(it.rates, it.currency, it.timestamp / 1000) }
     }
@@ -61,10 +53,33 @@ class NetworkManager(val appConfigProvider: IAppConfigProvider) : INetworkManage
                 .ping(url)
     }
 
-    private fun rateApiClient(hostType: ServiceExchangeApi.HostType): ServiceExchangeApi.IExchangeRate {
+    private val latestRateMainClient: ServiceExchangeApi.IExchangeRate = APIClient
+            .retrofit("https://${appConfigProvider.ipfsMainGateway}/ipns/${appConfigProvider.ipfsId}/", timeout = 10)
+            .create(ServiceExchangeApi.IExchangeRate::class.java)
+
+    private val latestRateFallbackClient: ServiceExchangeApi.IExchangeRate = APIClient
+            .retrofit("https://${appConfigProvider.ipfsFallbackGateway}/ipns/${appConfigProvider.ipfsId}/")
+            .create(ServiceExchangeApi.IExchangeRate::class.java)
+
+    private val historicalRateMainClient: ServiceExchangeApi.IExchangeRate = APIClient
+            .retrofit("https://${appConfigProvider.ipfsMainGateway}/ipns/${appConfigProvider.ipfsId}/", timeout = 5)
+            .create(ServiceExchangeApi.IExchangeRate::class.java)
+
+    private val historicalRateFallbackClient: ServiceExchangeApi.IExchangeRate = APIClient
+            .retrofit("https://${appConfigProvider.ipfsFallbackGateway}/ipns/${appConfigProvider.ipfsId}/")
+            .create(ServiceExchangeApi.IExchangeRate::class.java)
+
+    private fun latestRateApiClient(hostType: ServiceExchangeApi.HostType): ServiceExchangeApi.IExchangeRate {
         return when(hostType) {
-            ServiceExchangeApi.HostType.MAIN -> mainRateClient
-            else -> fallbackRateClient
+            ServiceExchangeApi.HostType.MAIN -> latestRateMainClient
+            else -> latestRateFallbackClient
+        }
+    }
+
+    private fun historicalRateApiClient(hostType: ServiceExchangeApi.HostType): ServiceExchangeApi.IExchangeRate {
+        return when(hostType) {
+            ServiceExchangeApi.HostType.MAIN -> historicalRateMainClient
+            else -> historicalRateFallbackClient
         }
     }
 }
