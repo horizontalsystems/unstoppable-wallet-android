@@ -15,6 +15,7 @@ class SendViewModel : ViewModel(), SendModule.IView {
     val amountInfoLiveData = MutableLiveData<SendModule.AmountInfo>()
     val switchButtonEnabledLiveData = MutableLiveData<Boolean>()
     val addressInfoLiveData = MutableLiveData<SendModule.AddressInfo>()
+    val dismissLiveEvent = SingleLiveEvent<Unit>()
     val dismissWithSuccessLiveEvent = SingleLiveEvent<Unit>()
     val dismissConfirmationLiveEvent = SingleLiveEvent<Unit>()
     val feeInfoLiveData = MutableLiveData<SendModule.FeeInfo>()
@@ -89,6 +90,10 @@ class SendViewModel : ViewModel(), SendModule.IView {
     override fun dismissWithSuccess() {
         dismissWithSuccessLiveEvent.call()
         dismissConfirmationLiveEvent.call()
+    }
+
+    override fun dismiss() {
+        dismissLiveEvent.call()
     }
 
     override fun onCleared() {

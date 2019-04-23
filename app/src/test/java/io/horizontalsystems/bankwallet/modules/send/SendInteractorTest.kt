@@ -102,7 +102,7 @@ class SendInteractorTest {
 
         interactor.retrieveRate()
 
-        verify(delegate, never()).didRateRetrieve()
+        verify(delegate).didRateRetrieve(null)
     }
 
     @Test
@@ -493,7 +493,7 @@ class SendInteractorTest {
 
         interactor.retrieveRate()
 
-        verify(delegate, atLeastOnce()).didRateRetrieve()
+        verify(delegate, atLeastOnce()).didRateRetrieve(rate)
     }
 
 }
