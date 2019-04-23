@@ -64,7 +64,6 @@ class ConfirmationFragment : DialogFragment() {
 
         viewModel.errorLiveData.observe(viewLifecycleOwner, Observer {
             view.findViewById<ButtonWithProgressbarView>(R.id.buttonConfirm)?.let { buttonConfirm ->
-                isCancelable = true
                 buttonConfirm.bind(R.string.Backup_Button_Confirm)
             }
         })
@@ -74,7 +73,6 @@ class ConfirmationFragment : DialogFragment() {
 
             buttonConfirm.setOnClickListener {
                 viewModel.delegate.onConfirmClicked()
-                isCancelable = false
                 buttonConfirm.bind(R.string.Send_Sending, false, true)
             }
         }
