@@ -134,18 +134,18 @@
     <string name="Settings_SecurityCenter">Маркази амниятӣ</string>
     <string name="Settings_BaseCurrency">Асос валюта</string>
     <string name="Settings_Language">Забон</string>
-    <string name="Settings_LightMode">Light Mode</string>
-    <string name="Settings_About">About</string>
+    <string name="Settings_LightMode">Холат нор</string>
+    <string name="Settings_About">Барнома</string>
     <string name="Settings_InfoTitleWithVersion">Bank Wallet %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <!--Settings-->
-    <string name="Settings_Error_FingerprintNotEnabled">Fingerprint Not Enabled</string>
-    <string name="Settings_Error_NoFingerprintAddedYet">You have not enabled fingerprint on this device. Go to Settings &gt; Security to set up fingerprint access.</string>
+    <string name="Settings_Error_FingerprintNotEnabled">Ангуштзании ангушт надоштааст</string>
+    <string name="Settings_Error_NoFingerprintAddedYet">Шума дастрасй ва ангошт надорйд ва танзим вравед &gt; амният ангошт ра фаъол кунед.</string>
     <!--Setting_Security-->
-    <string name="SettingsSecurity_Fingerprint">Fingerprint</string>
-    <string name="SettingsSecurity_EditPin">Edit Passcode</string>
-    <string name="SettingsSecurity_BackupWallet">Backup Wallet</string>
-    <string name="SettingsSecurity_UnlinkFromThisDevice">Unlink from this device</string>
+    <string name="SettingsSecurity_Fingerprint">Ангуштзанӣ</string>
+    <string name="SettingsSecurity_EditPin">Код ра таҳрир кунед</string>
+    <string name="SettingsSecurity_BackupWallet">Нусхабардорӣ Wallet</string>
+    <string name="SettingsSecurity_UnlinkFromThisDevice">Аз ин дастгоҳ ҷудо кунед</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">This action will remove the currently installed wallet from this device.</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_2">Make sure you have backed up Secret Key or you will not be able to access your funds in the future.</string>
     <!--Setting_Currency-->
