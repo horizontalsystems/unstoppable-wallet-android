@@ -146,15 +146,15 @@
     <string name="SettingsSecurity_EditPin">Код ра таҳрир кунед</string>
     <string name="SettingsSecurity_BackupWallet">Нусхабардорӣ Wallet</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">Аз ин дастгоҳ ҷудо кунед</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_1">This action will remove the currently installed wallet from this device.</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_2">Make sure you have backed up Secret Key or you will not be able to access your funds in the future.</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_1">Ин амал ин дастгоҳро аз ин дастгоҳ бароварда месозад.</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_2">Боварӣ ҳосил намоед, ки шумо калиди махфиро пуштибонӣ кардед ё шумо наметавонед ба фондҳои шумо дар оянда дастрас шавед.</string>
     <!--Setting_Currency-->
-    <string name="SettingsCurrency_Title">Base Currency</string>
+    <string name="SettingsCurrency_Title">Асос валюта</string>
     <!--Setting_Language-->
-    <string name="SettingsLanguage_Title">Language</string>
+    <string name="SettingsLanguage_Title">Забон</string>
     <!--Setting_About-->
-    <string name="SettingsAbout_Title">About</string>
-    <string name="SettingsAbout_TermsPrivacySubtitle">Terms &amp; Privacy:</string>
+    <string name="SettingsAbout_Title">Барнома</string>
+    <string name="SettingsAbout_TermsPrivacySubtitle">Мафҳумҳо &amp; махфият:</string>
     <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
 \n\nIt works everywhere as long as there is internet. No entity can block this app from working or to block someone from using it.
 \n\nYour funds are securely stored on the phone itself, not anywhere else.
@@ -163,23 +163,23 @@
 \n\nThe entire code powering this app been open to the public scrutiny since the beginning. We tried to build the most secure and decentralized wallet we could, however there are no guarantees that there are no unintended software issues. That said, this wallet is likely to be significantly more secure than any smartphone wallet app out there.
 \n\nSome generic non-private app data like currency exchange rates are stored on decentralized storage (IPFS).</string>
     <!--Alert-->
-    <string name="Alert_KeysInvalidatedTitle">Android Keystore Error</string>
-    <string name="Alert_KeysInvalidatedDescription">The encrypted data holding your wallet was recently invalidated because your Android lock screen was changed</string>
-    <string name="Alert_TitleWarning">Warning</string>
-    <string name="Alert_NoDeviceLockDescription">Set up a lock screen on this device to continue. Go to “Settings” &gt; “Security” &gt; “Screen Lock” and enable the lock screen setting.</string>
-    <string name="Alert_CustomKeyboardIsUsed">You are using a third-party keyboard. You have to use default keyboard.</string>
+    <string name="Alert_KeysInvalidatedTitle">Andriod keystore хатогӣ</string>
+    <string name="Alert_KeysInvalidatedDescription">Иттилооти рамзкардашудае, ки ҳамён дошт, акнун беэътибор дониста шуд, чунки экрани компютери шумо иваз карда шуд</string>
+    <string name="Alert_TitleWarning">Диққат</string>
+    <string name="Alert_NoDeviceLockDescription">Барои идома додани экрани дастгоҳ дар ин дастгоҳ насб кунед. Ба \"Танзимотҳо\" &amp; gt; \"Амният\" &amp; gt; \"Клавиатура\" -ро интихоб кунед ва танзимоти экранро қулф кунед.</string>
+    <string name="Alert_CustomKeyboardIsUsed">Шумо клавиатураи сеюмро истифода мебаред. Шумо бояд клавиатураи стандартиро истифода баред.</string>
     <!--Unlock-->
     <string name="Unlock_Page_EnterYourPin">Passcode</string>
     <!--Errors-->
-    <string name="Error_UnsupportedBlockchain">Unsupported currency</string>
+    <string name="Error_UnsupportedBlockchain">Номаълум валюта</string>
     <!--Hud texts-->
-    <string name="Hud_Text_Unlock">Unlock</string>
-    <string name="Hud_Text_Success">Success</string>
-    <string name="Hud_Text_Error">Error</string>
+    <string name="Hud_Text_Unlock">Кушодан</string>
+    <string name="Hud_Text_Success">Нагз</string>
+    <string name="Hud_Text_Error">Хата</string>
     <string name="Hud_Text_NoInternet">No Internet</string>
-    <string name="Hud_Text_Copied">Copied</string>
-    <string name="Hud_Text_InvalidPinError">Incorrect Passcode</string>
-    <string name="Hud_Network_Issue">Network issues. Try again in a short moment</string>
+    <string name="Hud_Text_Copied">Нусхабардорӣ</string>
+    <string name="Hud_Text_InvalidPinError">Passcode нодуруст</string>
+    <string name="Hud_Network_Issue">Масъалаҳои шабака. Боз як бори дигар кӯшиш кунед</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">Fingerprint login</string>
     <string name="Fingerprint_Hint">Touch sensor</string>
