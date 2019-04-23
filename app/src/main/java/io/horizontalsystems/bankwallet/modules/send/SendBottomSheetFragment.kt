@@ -53,6 +53,8 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
 
     private val showConfirmationObserver = Observer<Unit> { activity?.let { ConfirmationFragment.show(it) } }
 
+    private val dismissObserver = Observer<Unit> { dismiss() }
+
     private val dismissWithSuccessObserver = Observer<Unit> {
         HudHelper.showSuccessMessage(R.string.Send_Success)
         dismiss()
@@ -262,6 +264,7 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
         viewModel.showConfirmationLiveEvent.reObserve(this, showConfirmationObserver)
         viewModel.pasteButtonEnabledLiveData.reObserve(this, pasteButtonEnabledObserver)
         viewModel.feeIsAdjustableLiveData.reObserve(this, feeIsAdjustableObserver)
+        viewModel.dismissLiveEvent.reObserve(this, dismissObserver)
         viewModel.dismissWithSuccessLiveEvent.reObserve(this, dismissWithSuccessObserver)
         viewModel.switchButtonEnabledLiveData.reObserve(this, switchButtonEnabledObserver)
         viewModel.coinLiveData.reObserve(this, coinLiveDataObserver)
@@ -270,6 +273,11 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
         viewModel.amountInfoLiveData.reObserve(this, amountInfoObserver)
         viewModel.addressInfoLiveData.reObserve(this, addressInfoObserver)
         viewModel.feeInfoLiveData.reObserve(this, feeInfoObserver)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.delegate.onViewResumed()
     }
 
     override fun onItemClick(item: NumPadItem) {
