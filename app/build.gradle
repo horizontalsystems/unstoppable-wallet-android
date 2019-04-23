@@ -132,6 +132,8 @@ dependencies {
     //FeeRate
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:a4504a4'
 
+    implementation 'com.github.horizontalsystems:hd-wallet-kit-android:a3666d8'
+
     androidTestImplementation 'androidx.test:runner:1.2.0-alpha03'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-alpha03'
 
