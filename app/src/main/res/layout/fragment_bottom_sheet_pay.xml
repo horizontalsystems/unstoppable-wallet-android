@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     android:id="@+id/root_wrapper"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -8,173 +8,127 @@
     android:layout_height="wrap_content"
     android:background="@drawable/bottom_sheet_background"
     android:backgroundTint="?BottomSendBackground"
+    android:orientation="vertical"
     >
 
-    <io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
-        android:id="@+id/coinIcon"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/headerWrapper"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/divider1"
-        />
+        android:orientation="horizontal"
+        >
 
-    <TextView
-        android:id="@+id/txtTitle"
-        style="@style/BaseSb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="12dp"
-        android:textColor="?BottomDialogTextColor"
-        app:layout_constraintBottom_toBottomOf="@+id/coinIcon"
-        app:layout_constraintStart_toEndOf="@+id/coinIcon"
-        app:layout_constraintTop_toTopOf="@+id/coinIcon"
-        tools:text="Send BTC"
-        />
+        <io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
+            android:id="@+id/coinIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="10dp"
+            />
+
+        <TextView
+            android:id="@+id/txtTitle"
+            style="@style/BaseSb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="12dp"
+            android:textColor="?BottomDialogTextColor"
+            tools:text="Send BTC"
+            />
+    </LinearLayout>
 
     <View
         android:id="@+id/divider1"
-        android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/steel_15"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/coinIcon"
-        />
-
-    <View
-        android:id="@+id/backgroundView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="?BottomTransactionInfoBackground"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider1"
-        />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/sendForm"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
+        android:layout_height="0.5dp"
+        android:background="@color/steel_15"
+        />
+
+    <io.horizontalsystems.bankwallet.ui.extensions.InputAmountView
+        android:id="@+id/amountInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider1"
+        />
+
+    <io.horizontalsystems.bankwallet.ui.extensions.InputAddressView
+        android:id="@+id/addressInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        />
+
+    <TextView
+        android:id="@+id/feeError"
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="@color/red_warning"
+        android:textSize="12sp"
+        android:visibility="gone"
+        tools:text="Transaction fees for USDT (ERC20) paid in Ethereum. You don&apos;t have 0,00028 ETH."
+        />
+
+    <LinearLayout
+        android:id="@+id/feeAmountWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal"
         >
 
-        <io.horizontalsystems.bankwallet.ui.extensions.InputAmountView
-            android:id="@+id/amountInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            />
-
-        <io.horizontalsystems.bankwallet.ui.extensions.InputAddressView
-            android:id="@+id/addressInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/feeInfoArea"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/amountInput"
-            />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/feeInfoArea"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addressInput"
-            >
-
-            <TextView
-                android:id="@+id/feeError"
-                android:layout_width="match_parent"
-                android:layout_height="34dp"
-                android:ellipsize="end"
-                android:maxLines="2"
-                android:textColor="@color/red_warning"
-                android:textSize="12sp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Transaction fees for USDT (ERC20) paid in Ethereum. You don&apos;t have 0,00028 ETH."
-                />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/feeElements"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="34dp"
-                android:visibility="visible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                >
-
-                <TextView
-                    android:id="@+id/txtFeePrimary"
-                    style="@style/Body1Grey"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toStartOf="@+id/txtFeeSecondary"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="0.02 BTC"
-                    />
-
-                <TextView
-                    android:id="@+id/txtFeeSecondary"
-                    style="@style/Body1Grey"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="textEnd"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/txtFeePrimary"
-                    tools:text="$0.02"
-                    />
-
-                <io.horizontalsystems.bankwallet.ui.extensions.SeekbarView
-                    android:id="@+id/feeRateSeekbar"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    app:layout_constraintTop_toBottomOf="@+id/txtFeePrimary"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <Button
-            android:id="@+id/btnSend"
-            style="@style/ButtonYellow"
+        <TextView
+            android:id="@+id/txtFeePrimary"
+            style="@style/Body1Grey"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/Balance_Send"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/feeInfoArea"
+            android:layout_weight="1"
+            tools:text="0.02 BTC"
             />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/txtFeeSecondary"
+            style="@style/Body1Grey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="textEnd"
+            tools:text="$0.02"
+            />
+    </LinearLayout>
+
+    <io.horizontalsystems.bankwallet.ui.extensions.SeekbarView
+        android:id="@+id/feeRateSeekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        />
+
+    <Button
+        android:id="@+id/btnSend"
+        style="@style/ButtonYellow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/Balance_Send"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/numPadItemsRecyclerView"
@@ -183,10 +137,5 @@
         android:layout_marginBottom="6.5dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sendForm"
-        app:layout_constraintVertical_weight=".35"
         />
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

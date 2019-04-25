@@ -15,8 +15,8 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
@@ -152,7 +152,8 @@ class SendBottomSheetFragment : BottomSheetDialogFragment(), NumPadItemsAdapter.
             dialog?.findViewById<TextView>(R.id.txtFeePrimary)?.visibility = if (it.error == null) View.VISIBLE else View.GONE
             dialog?.findViewById<TextView>(R.id.txtFeeSecondary)?.visibility = if (it.error == null) View.VISIBLE else View.GONE
             dialog?.findViewById<TextView>(R.id.feeError)?.visibility = if (it.error == null) View.GONE else View.VISIBLE
-            dialog?.findViewById<ConstraintLayout>(R.id.feeElements)?.visibility = if (it.error == null) View.VISIBLE else View.GONE
+            dialog?.findViewById<LinearLayout>(R.id.feeAmountWrapper)?.visibility = if (it.error == null) View.VISIBLE else View.GONE
+            dialog?.findViewById<SeekbarView>(R.id.feeRateSeekbar)?.visibility = if (it.error == null) View.VISIBLE else View.GONE
 
             it.error?.let { erc20Error ->
                 dialog?.findViewById<TextView>(R.id.feeError)?.text = getString(R.string.Send_ERC_Alert, erc20Error.erc20CoinCode, erc20Error.coinValue.value.toPlainString())
