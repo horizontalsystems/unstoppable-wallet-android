@@ -81,6 +81,7 @@ class AppConfigProvider : IAppConfigProvider {
             Coin("STASIS EURS", "EURS", CoinType.Erc20("0xdB25f211AB05b1c97D595516F45794528a807ad8", 2)),
             Coin("Status", "SNT", CoinType.Erc20("0x744d70FDBE2Ba4CF95131626614a1763DF805B9E", 18)),
             Coin("TrueUSD", "TUSD", CoinType.Erc20("0x0000000000085d4780B73119b644AE5ecd22b376", 18)),
+            Coin("Tether USD", "USDT", CoinType.Erc20("0xdAC17F958D2ee523a2206206994597C13D831ec7", 6)),
             Coin("USD Coin", "USDC", CoinType.Erc20("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", 6)),
             Coin("Walton", "WTC", CoinType.Erc20("0xb7cB1C96dB6B22b0D3d9536E0108d062BD488F74", 18)),
             Coin("WAX Token", "WAX", CoinType.Erc20("0x39Bb259F66E1C59d5ABEF88375979b4D20D98022", 8)),
