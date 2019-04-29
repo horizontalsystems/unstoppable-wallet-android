@@ -98,6 +98,12 @@ object LayoutHelper {
             "WAX" -> R.drawable.coin_wax
             "ZIL" -> R.drawable.coin_zil
             "ZRX" -> R.drawable.coin_zrx
+            "ELF" -> R.drawable.coin_elf
+            "CRO" -> R.drawable.coin_cro
+            "HOT" -> R.drawable.coin_hot
+            "IOST" -> R.drawable.coin_iost
+            "LRC" -> R.drawable.coin_lrc
+            "ORBS" -> R.drawable.coin_orbs
             else -> R.drawable.coin_btc
         }
     }
