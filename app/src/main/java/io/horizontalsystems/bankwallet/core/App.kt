@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bankwallet.core.storage.RatesRepository
 import io.horizontalsystems.bankwallet.core.storage.StorableCoinsRepository
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
-import io.horizontalsystems.bitcoinkit.BitcoinKit
 import java.util.*
 
 class App : Application() {
@@ -50,8 +49,6 @@ class App : Application() {
         lateinit var ethereumKitManager: IEthereumKitManager
         lateinit var numberFormatter: IAppNumberFormatter
 
-        val testMode = true
-
         lateinit var instance: App
             private set
 
@@ -68,14 +65,10 @@ class App : Application() {
         }
         LeakCanary.install(this)
 
-        // Initialize BitcoinKit
-        BitcoinKit.init(this)
-
         instance = this
         preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
         val fallbackLanguage = Locale("en")
-
 
         feeRateProvider = FeeRateProvider(instance)
         appConfigProvider = AppConfigProvider()
