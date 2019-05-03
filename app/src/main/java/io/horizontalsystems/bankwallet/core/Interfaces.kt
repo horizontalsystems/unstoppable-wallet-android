@@ -131,6 +131,7 @@ interface IAdapter {
     val feeCoinCode: String?
     val decimal: Int
     val balance: BigDecimal
+    val receiveAddress: String
 
     val balanceUpdatedSignal: PublishSubject<Unit>
     val lastBlockHeightUpdatedSignal: PublishSubject<Unit>
@@ -160,7 +161,6 @@ interface IAdapter {
 
     fun validate(amount: BigDecimal, address: String?, feePriority: FeeRatePriority): List<SendStateError>
 
-    val receiveAddress: String
     fun getTransactionsObservable(hashFrom: String?, limit: Int): Single<List<TransactionRecord>>
 }
 
