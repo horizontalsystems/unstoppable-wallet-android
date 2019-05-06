@@ -261,6 +261,7 @@ interface IFeeRateProvider{
     fun ethereumGasPrice(priority: FeeRatePriority): Long
     fun bitcoinFeeRate(priority: FeeRatePriority): Long
     fun bitcoinCashFeeRate(priority: FeeRatePriority): Long
+    fun dashFeeRate(priority: FeeRatePriority): Long
 }
 
 sealed class Error : Exception() {

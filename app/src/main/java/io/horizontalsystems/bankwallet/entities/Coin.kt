@@ -9,6 +9,7 @@ import java.io.Serializable
 sealed class CoinType : Serializable {
     object BitcoinCash : CoinType()
     object Bitcoin : CoinType()
+    object Dash : CoinType()
     object Ethereum : CoinType()
     class Erc20(val address: String, val decimal: Int) : CoinType()
 }
