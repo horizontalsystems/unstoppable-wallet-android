@@ -83,7 +83,7 @@ class TransactionRecordDataSource(
 
         if (unusedItems.isEmpty()) return 0
 
-        unusedItems.sortByDescending { it.record.timestamp }
+        unusedItems.sortDescending()
 
         val usedItems = unusedItems.take(limit)
 

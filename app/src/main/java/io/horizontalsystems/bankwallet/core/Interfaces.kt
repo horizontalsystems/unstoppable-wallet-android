@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
-import io.horizontalsystems.ethereumkit.EthereumKit
+import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.Flowable
 import io.reactivex.Maybe
 import io.reactivex.Observable
@@ -129,39 +129,39 @@ interface IEthereumKitManager {
 interface IAdapter {
     val coin: Coin
     val feeCoinCode: String?
+
     val decimal: Int
-    val balance: BigDecimal
-    val receiveAddress: String
-
-    val balanceUpdatedSignal: PublishSubject<Unit>
-    val lastBlockHeightUpdatedSignal: PublishSubject<Unit>
-    val adapterStateUpdatedSubject: PublishSubject<Unit>
-    val transactionRecordsSubject: PublishSubject<List<TransactionRecord>>
-
-    val state: AdapterState
     val confirmationsThreshold: Int
-    val lastBlockHeight: Int?
-
-    val debugInfo: String
 
     fun start()
     fun stop()
     fun refresh()
     fun clear()
 
-    fun parsePaymentAddress(address: String): PaymentRequestAddress
+    val lastBlockHeight: Int?
+    val lastBlockHeightUpdatedFlowable: Flowable<Unit>
 
-    fun send(address: String, value: BigDecimal, feePriority: FeeRatePriority, completion: ((Throwable?) -> (Unit))? = null)
+    val state: AdapterState
+    val stateUpdatedFlowable: Flowable<Unit>
+
+    val balance: BigDecimal
+    val balanceUpdatedFlowable: Flowable<Unit>
+
+    fun getTransactions(from: Pair<String, Int>? = null, limit: Int): Single<List<TransactionRecord>>
+    val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
+
+    fun send(address: String, value: BigDecimal, feePriority: FeeRatePriority): Single<Unit>
+
     fun availableBalance(address: String?, feePriority: FeeRatePriority): BigDecimal
-
     fun fee(value: BigDecimal, address: String?, feePriority: FeeRatePriority): BigDecimal
-
     @Throws
     fun validate(address: String)
-
     fun validate(amount: BigDecimal, address: String?, feePriority: FeeRatePriority): List<SendStateError>
+    fun parsePaymentAddress(address: String): PaymentRequestAddress
 
-    fun getTransactionsObservable(hashFrom: String?, limit: Int): Single<List<TransactionRecord>>
+    val receiveAddress: String
+
+    val debugInfo: String
 }
 
 interface ISystemInfoManager {
@@ -257,7 +257,7 @@ interface IAppNumberFormatter {
     fun format(value: Double): String
 }
 
-interface IFeeRateProvider{
+interface IFeeRateProvider {
     fun ethereumGasPrice(priority: FeeRatePriority): Long
     fun bitcoinFeeRate(priority: FeeRatePriority): Long
     fun bitcoinCashFeeRate(priority: FeeRatePriority): Long
@@ -281,6 +281,7 @@ enum class FeeRatePriority(val value: Int) {
     HIGHEST(4);
 
     companion object {
-        fun valueOf(value: Int): FeeRatePriority = FeeRatePriority.values().firstOrNull { it.value == value } ?: MEDIUM
+        fun valueOf(value: Int): FeeRatePriority = FeeRatePriority.values().firstOrNull { it.value == value }
+                ?: MEDIUM
     }
 }

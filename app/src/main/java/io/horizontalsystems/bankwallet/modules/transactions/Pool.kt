@@ -28,7 +28,7 @@ class Pool(val state: State) {
 
         fun insertIndexOf(record: TransactionRecord): Int {
             return records.indexOfFirst {
-                it.timestamp < record.timestamp
+                it < record
             }
         }
 

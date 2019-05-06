@@ -8,6 +8,8 @@ import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bitcoincore.AbstractKit
 import io.horizontalsystems.bitcoincore.managers.UnspentOutputSelectorError
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
@@ -26,13 +28,29 @@ abstract class BitcoinBaseAdapter(override val coin: Coin, val bitcoinKit: Abstr
     override val decimal = 8
 
     override val confirmationsThreshold: Int = 6
-    override val lastBlockHeight get() = bitcoinKit.lastBlockInfo?.height
-    override val receiveAddress get() = bitcoinKit.receiveAddress()
+    override val lastBlockHeight: Int?
+        get() = bitcoinKit.lastBlockInfo?.height
 
-    override val balanceUpdatedSignal: PublishSubject<Unit> = PublishSubject.create()
-    override val lastBlockHeightUpdatedSignal: PublishSubject<Unit> = PublishSubject.create()
-    override val adapterStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
-    override val transactionRecordsSubject: PublishSubject<List<TransactionRecord>> = PublishSubject.create()
+    override val receiveAddress: String
+        get() = bitcoinKit.receiveAddress()
+
+    protected val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
+    protected val lastBlockHeightUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
+    protected val adapterStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
+    protected val transactionRecordsSubject: PublishSubject<List<TransactionRecord>> = PublishSubject.create()
+
+    override val balanceUpdatedFlowable: Flowable<Unit>
+        get() = balanceUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+
+    override val lastBlockHeightUpdatedFlowable: Flowable<Unit>
+        get() = lastBlockHeightUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+
+    override val stateUpdatedFlowable: Flowable<Unit>
+        get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+
+    override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
+        get() = transactionRecordsSubject.toFlowable(BackpressureStrategy.BUFFER)
+
     override val debugInfo: String = ""
 
     override val balance: BigDecimal
@@ -65,12 +83,14 @@ abstract class BitcoinBaseAdapter(override val coin: Coin, val bitcoinKit: Abstr
         return PaymentRequestAddress(paymentData.address, paymentData.amount?.toBigDecimal())
     }
 
-    override fun send(address: String, value: BigDecimal, feePriority: FeeRatePriority, completion: ((Throwable?) -> Unit)?) {
-        try {
-            bitcoinKit.send(address, (value * satoshisInBitcoin).toLong(), feeRate = feeRate(feePriority))
-            completion?.invoke(null)
-        } catch (ex: Exception) {
-            completion?.invoke(ex)
+    override fun send(address: String, value: BigDecimal, feePriority: FeeRatePriority): Single<Unit> {
+        return Single.create { emitter ->
+            try {
+                bitcoinKit.send(address, (value * satoshisInBitcoin).toLong(), feeRate = feeRate(feePriority))
+                emitter.onSuccess(Unit)
+            } catch (ex: Exception) {
+                emitter.onError(ex)
+            }
         }
     }
 
@@ -102,18 +122,20 @@ abstract class BitcoinBaseAdapter(override val coin: Coin, val bitcoinKit: Abstr
         bitcoinKit.validateAddress(address)
     }
 
-    override fun getTransactionsObservable(hashFrom: String?, limit: Int): Single<List<TransactionRecord>> {
-        return bitcoinKit.transactions(hashFrom, limit).map { tx -> tx.map { transactionRecord(it) } }
+    override fun getTransactions(from: Pair<String, Int>?, limit: Int): Single<List<TransactionRecord>> {
+        return bitcoinKit.transactions(from?.first, limit).map { it.map { tx -> transactionRecord(tx) } }
     }
 
     fun transactionRecord(transaction: TransactionInfo): TransactionRecord {
         return TransactionRecord(
-                transaction.transactionHash,
-                transaction.blockHeight?.toLong() ?: 0,
-                transaction.amount.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN),
-                transaction.timestamp,
-                transaction.from.map { TransactionAddress(it.address, it.mine) },
-                transaction.to.map { TransactionAddress(it.address, it.mine) }
+                transactionHash = transaction.transactionHash,
+                transactionIndex = transaction.transactionIndex,
+                interTransactionIndex = 0,
+                blockHeight = transaction.blockHeight?.toLong(),
+                amount = transaction.amount.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN),
+                timestamp = transaction.timestamp,
+                from = transaction.from.map { TransactionAddress(it.address, it.mine) },
+                to = transaction.to.map { TransactionAddress(it.address, it.mine) }
         )
     }
 }
