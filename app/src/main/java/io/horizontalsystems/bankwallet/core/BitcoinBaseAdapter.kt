@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bitcoincore.AbstractKit
-import io.horizontalsystems.bitcoincore.managers.UnspentOutputSelector
+import io.horizontalsystems.bitcoincore.managers.UnspentOutputSelectorError
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
@@ -26,8 +26,8 @@ abstract class BitcoinBaseAdapter(override val coin: Coin, val bitcoinKit: Abstr
     override val decimal = 8
 
     override val confirmationsThreshold: Int = 6
-    override val lastBlockHeight = bitcoinKit.lastBlockInfo?.height
-    override val receiveAddress: String = bitcoinKit.receiveAddress()
+    override val lastBlockHeight get() = bitcoinKit.lastBlockInfo?.height
+    override val receiveAddress get() = bitcoinKit.receiveAddress()
 
     override val balanceUpdatedSignal: PublishSubject<Unit> = PublishSubject.create()
     override val lastBlockHeightUpdatedSignal: PublishSubject<Unit> = PublishSubject.create()
@@ -79,7 +79,7 @@ abstract class BitcoinBaseAdapter(override val coin: Coin, val bitcoinKit: Abstr
             val amount = (value * satoshisInBitcoin).toLong()
             val fee = bitcoinKit.fee(amount, address, true, feeRate = feeRate(feePriority))
             BigDecimal.valueOf(fee).divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
-        } catch (e: UnspentOutputSelector.Error.InsufficientUnspentOutputs) {
+        } catch (e: UnspentOutputSelectorError.InsufficientUnspentOutputs) {
             BigDecimal.valueOf(e.fee).divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
         } catch (e: Exception) {
             BigDecimal.ZERO

@@ -8,15 +8,16 @@ class CoinTypeConverter {
 
     private val bitcoinKey = "bitcoin_key"
     private val bitcoinCashKey = "bitcoin_cash_key"
+    private val dash = "dash_key"
     private val ethereumKey = "ethereum_key"
     private val erc20Key = "erc_20_key"
-
 
     @TypeConverter
     fun stringToCoinType(value: String): CoinType {
         return when (value) {
             bitcoinKey -> CoinType.Bitcoin
             bitcoinCashKey -> CoinType.BitcoinCash
+            dash -> CoinType.Dash
             ethereumKey -> CoinType.Ethereum
             else -> {
                 if (value.contains(erc20Key)) {
@@ -25,7 +26,8 @@ class CoinTypeConverter {
                         if (parts.size == 3) {
                             return CoinType.Erc20(parts[1], parts[2].toInt())
                         }
-                    } catch (e: Exception) { }
+                    } catch (e: Exception) {
+                    }
                 }
                 throw Error.CoinTypeException()
             }
@@ -37,6 +39,7 @@ class CoinTypeConverter {
         return when (value) {
             is CoinType.Bitcoin -> bitcoinKey
             is CoinType.BitcoinCash -> bitcoinCashKey
+            is CoinType.Dash -> dash
             is CoinType.Ethereum -> ethereumKey
             is CoinType.Erc20 -> "$erc20Key;${value.address};${value.decimal}"
         }

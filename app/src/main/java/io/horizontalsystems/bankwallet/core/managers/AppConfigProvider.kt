@@ -44,6 +44,7 @@ class AppConfigProvider : IAppConfigProvider {
             val coins = mutableListOf<Coin>()
             coins.add(Coin("Bitcoin", "BTC", CoinType.Bitcoin))
             coins.add(Coin("Bitcoin Cash", "BCH", CoinType.BitcoinCash))
+            coins.add(Coin("Dash", "DASH", CoinType.Dash))
             coins.add(Coin("Ethereum", "ETH", CoinType.Ethereum))
             return coins
         }
