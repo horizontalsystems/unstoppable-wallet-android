@@ -15,7 +15,7 @@ class TransactionViewItemFactory {
 
         var status: TransactionStatus = TransactionStatus.Pending
 
-        if (record.blockHeight != 0L && lastBlockHeight != null) {
+        if (record.blockHeight != null && lastBlockHeight != null) {
 
             val confirmations = lastBlockHeight - record.blockHeight + 1
 

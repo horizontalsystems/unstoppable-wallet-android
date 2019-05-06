@@ -37,11 +37,11 @@ class BitcoinAdapter(override val coin: Coin, authData: AuthData, newWallet: Boo
     //
 
     override fun onBalanceUpdate(balance: Long) {
-        balanceUpdatedSignal.onNext(Unit)
+        balanceUpdatedSubject.onNext(Unit)
     }
 
     override fun onLastBlockInfoUpdate(blockInfo: BlockInfo) {
-        lastBlockHeightUpdatedSignal.onNext(Unit)
+        lastBlockHeightUpdatedSubject.onNext(Unit)
     }
 
     override fun onKitStateUpdate(state: BitcoinCore.KitState) {

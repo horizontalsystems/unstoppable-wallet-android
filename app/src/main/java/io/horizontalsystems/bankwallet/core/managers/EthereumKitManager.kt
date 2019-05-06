@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IEthereumKitManager
 import io.horizontalsystems.bankwallet.entities.AuthData
-import io.horizontalsystems.ethereumkit.EthereumKit
+import io.horizontalsystems.ethereumkit.core.EthereumKit
 
 class EthereumKitManager(appConfig: IAppConfigProvider) : IEthereumKitManager {
     private var kit: EthereumKit? = null
@@ -18,7 +18,9 @@ class EthereumKitManager(appConfig: IAppConfigProvider) : IEthereumKitManager {
         useCount += 1
 
         kit?.let { return it }
-        kit = EthereumKit.ethereumKit(App.instance, authData.seed, authData.walletId, testMode, infuraKey, etherscanKey)
+        val syncMode = EthereumKit.WordsSyncMode.ApiSyncMode(infuraKey, etherscanKey)
+        val networkType = if (testMode) EthereumKit.NetworkType.Ropsten else EthereumKit.NetworkType.MainNet
+        kit = EthereumKit.getInstance(App.instance, authData.words, syncMode, networkType, authData.walletId)
 
         return kit!!
     }

@@ -66,14 +66,14 @@ class BalanceInteractor(
         delegate?.didUpdateAdapters(adapters)
 
         adapters.forEach { adapter ->
-            adapterDisposables.add(adapter.balanceUpdatedSignal
+            adapterDisposables.add(adapter.balanceUpdatedFlowable
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
                     .subscribe {
                         delegate?.didUpdateBalance(adapter.coin.code, adapter.balance)
                     })
 
-            adapterDisposables.add(adapter.adapterStateUpdatedSubject
+            adapterDisposables.add(adapter.stateUpdatedFlowable
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
                     .subscribe { state ->

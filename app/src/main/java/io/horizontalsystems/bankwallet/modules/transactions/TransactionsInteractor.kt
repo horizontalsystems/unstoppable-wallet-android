@@ -73,7 +73,7 @@ class TransactionsInteractor(
             val flowable = when (adapter) {
                 null -> Single.just(Pair(fetchData.coin, listOf()))
                 else -> {
-                    adapter.getTransactionsObservable(fetchData.hashFrom, fetchData.limit)
+                    adapter.getTransactions(fetchData.hashFrom?.let { Pair(it, 0) }, fetchData.limit)
                             .map {
                                 Pair(fetchData.coin, it)
                             }
@@ -107,7 +107,7 @@ class TransactionsInteractor(
         lastBlockHeightDisposables.clear()
 
         adapterManager.adapters.forEach { adapter ->
-            adapter.lastBlockHeightUpdatedSignal
+            adapter.lastBlockHeightUpdatedFlowable
                     .throttleLast(3, TimeUnit.SECONDS)
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
@@ -155,7 +155,7 @@ class TransactionsInteractor(
         delegate?.onUpdateCoinsData(adapterManager.adapters.map { Triple(it.coin, it.confirmationsThreshold, it.lastBlockHeight) })
 
         adapterManager.adapters.forEach { adapter ->
-            adapter.transactionRecordsSubject
+            adapter.transactionRecordsFlowable
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
                     .subscribe {

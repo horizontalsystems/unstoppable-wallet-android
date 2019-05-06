@@ -38,7 +38,7 @@ class TransactionItemDataSource {
         val indexes = mutableListOf<Int>()
 
         items.forEachIndexed { index, item ->
-            if (item.coin == coin && (item.record.blockHeight == 0L || item.record.blockHeight >= thresholdBlockHeight)) {
+            if (item.coin == coin && (item.record.blockHeight == null || item.record.blockHeight >= thresholdBlockHeight)) {
                 indexes.add(index)
             }
         }
@@ -51,7 +51,7 @@ class TransactionItemDataSource {
         tmpList.removeAll(updatedItems)
         tmpList.addAll(updatedItems)
         tmpList.addAll(insertedItems)
-        tmpList.sortByDescending { it.record.timestamp }
+        tmpList.sortDescending()
 
         val diffCallback = TransactionDiffCallback(items.toList(), tmpList)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
@@ -63,6 +63,6 @@ class TransactionItemDataSource {
     }
 
     fun shouldInsertRecord(record: TransactionRecord): Boolean {
-        return items.lastOrNull()?.record?.let { it.timestamp < record.timestamp } ?: true
+        return items.lastOrNull()?.record?.let { it < record } ?: true
     }
 }
