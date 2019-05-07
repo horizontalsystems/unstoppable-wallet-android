@@ -37,11 +37,11 @@ class TransactionDataProviderManager(private val appConfig: IAppConfigProvider, 
     private val ethereumProviders
         get() = when {
             appConfig.testMode -> arrayListOf(
-                    HorsysEthereumProvider(testMode = true),
+//                    HorsysEthereumProvider(testMode = true),
                     EtherscanEthereumProvider(testMode = true))
             else -> arrayListOf(
                     EtherscanEthereumProvider(testMode = false),
-                    HorsysEthereumProvider(testMode = false),
+//                    HorsysEthereumProvider(testMode = false),
                     BlockChairEthereumProvider())
         }
 
