@@ -1,5 +1,5 @@
 <resources>
-    <string name="App_Name">Bank</string>
+    <string name="App_Name">Unstoppable</string>
 
     <string name="Alert_Ok">OK</string>
     <string name="Alert_Cancel">Cancel</string>
@@ -17,7 +17,7 @@
 
     <!--Guest-->
 
-    <string name="Guest_Title">Bank Wallet</string>
+    <string name="Guest_Title">Unstoppable</string>
     <string name="Guest_Subtitle" translatable="false">Decentralized App</string>
     <string name="Guest_CreateWallet">New Wallet</string>
     <string name="Guest_RestoreWallet">Restore Wallet</string>
@@ -174,7 +174,7 @@
     <string name="Settings_Language">Language</string>
     <string name="Settings_LightMode">Light Mode</string>
     <string name="Settings_About">About</string>
-    <string name="Settings_InfoTitleWithVersion">Bank Wallet %s</string>
+    <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoSubtitle" translatable="false">decentralized app</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
 
