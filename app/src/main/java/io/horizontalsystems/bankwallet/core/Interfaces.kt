@@ -41,6 +41,7 @@ interface ILocalStorage {
     var lockoutUptime: Long?
     var baseBitcoinProvider: String?
     var baseEthereumProvider: String?
+    var baseDashProvider: String?
 
     fun clear()
 }
@@ -93,6 +94,7 @@ interface ITransactionDataProviderManager {
     fun setBaseProvider(name: String, coin: Coin)
 
     fun bitcoin(name: String): FullTransactionInfoModule.BitcoinForksProvider
+    fun dash(name: String): FullTransactionInfoModule.BitcoinForksProvider
     fun bitcoinCash(name: String): FullTransactionInfoModule.BitcoinForksProvider
     fun ethereum(name: String): FullTransactionInfoModule.EthereumForksProvider
 }
