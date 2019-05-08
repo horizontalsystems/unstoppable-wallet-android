@@ -73,7 +73,7 @@ class TransactionsInteractor(
             val flowable = when (adapter) {
                 null -> Single.just(Pair(fetchData.coin, listOf()))
                 else -> {
-                    adapter.getTransactions(fetchData.hashFrom?.let { Pair(it, 0) }, fetchData.limit)
+                    adapter.getTransactions(fetchData.from, fetchData.limit)
                             .map {
                                 Pair(fetchData.coin, it)
                             }
