@@ -7,19 +7,22 @@ import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.models.BlockInfo
-import io.horizontalsystems.bitcoincore.models.TransactionInfo
 import io.horizontalsystems.dashkit.DashKit
 import io.horizontalsystems.dashkit.DashKit.NetworkType
+import io.horizontalsystems.dashkit.models.DashTransactionInfo
+import io.reactivex.Single
 import java.math.BigDecimal
 import java.util.*
 
-class DashAdapter(override val coin: Coin, authData: AuthData, newWallet: Boolean, testMode: Boolean, private val feeRateProvider: IFeeRateProvider)
-    : BitcoinBaseAdapter(coin, createKit(authData, newWallet, testMode), AddressParser("dash", true)), DashKit.Listener {
+class DashAdapter(coin: Coin, override val kit: DashKit, addressParser: AddressParser, private val feeRateProvider: IFeeRateProvider) :
+        BitcoinBaseAdapter(coin, kit, addressParser), DashKit.Listener {
+
+    constructor(coin: Coin, authData: AuthData, newWallet: Boolean, testMode: Boolean, feeRateProvider: IFeeRateProvider) :
+            this(coin, createKit(authData, newWallet, testMode), AddressParser("dash", true), feeRateProvider)
+
 
     init {
-        if (bitcoinKit is DashKit) {
-            bitcoinKit.listener = this
-        }
+        kit.listener = this
     }
 
     //
@@ -59,7 +62,7 @@ class DashAdapter(override val coin: Coin, authData: AuthData, newWallet: Boolea
             is BitcoinCore.KitState.Syncing -> {
                 this.state.let { currentState ->
                     val newProgress = (state.progress * 100).toInt()
-                    val newDate = bitcoinKit.lastBlockInfo?.timestamp?.let { Date(it * 1000) }
+                    val newDate = kit.lastBlockInfo?.timestamp?.let { Date(it * 1000) }
 
                     if (currentState is AdapterState.Syncing && currentState.progress == newProgress) {
                         val currentDate = currentState.lastBlockDate
@@ -74,7 +77,7 @@ class DashAdapter(override val coin: Coin, authData: AuthData, newWallet: Boolea
         }
     }
 
-    override fun onTransactionsUpdate(inserted: List<TransactionInfo>, updated: List<TransactionInfo>) {
+    override fun onTransactionsUpdate(inserted: List<DashTransactionInfo>, updated: List<DashTransactionInfo>) {
         val records = mutableListOf<TransactionRecord>()
 
         for (info in inserted) {
@@ -90,6 +93,10 @@ class DashAdapter(override val coin: Coin, authData: AuthData, newWallet: Boolea
 
     override fun onTransactionsDelete(hashes: List<String>) {
         // ignored for now
+    }
+
+    override fun getTransactions(from: Pair<String, Int>?, limit: Int): Single<List<TransactionRecord>> {
+        return kit.transactions(from?.first, limit).map { it.map { tx -> transactionRecord(tx) } }
     }
 
     companion object {

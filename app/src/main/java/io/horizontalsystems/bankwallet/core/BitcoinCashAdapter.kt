@@ -10,16 +10,18 @@ import io.horizontalsystems.bitcoincash.BitcoinCashKit.NetworkType
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.models.BlockInfo
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
+import io.reactivex.Single
 import java.math.BigDecimal
 import java.util.*
 
-class BitcoinCashAdapter(override val coin: Coin, authData: AuthData, newWallet: Boolean, testMode: Boolean, private val feeRateProvider: IFeeRateProvider)
-    : BitcoinBaseAdapter(coin, createKit(authData, newWallet, testMode), AddressParser("bitcoincash", false)), BitcoinCashKit.Listener {
+class BitcoinCashAdapter(coin: Coin, override val kit: BitcoinCashKit, addressParser: AddressParser, private val feeRateProvider: IFeeRateProvider)
+    : BitcoinBaseAdapter(coin, kit, addressParser), BitcoinCashKit.Listener {
+
+    constructor(coin: Coin, authData: AuthData, newWallet: Boolean, testMode: Boolean, feeRateProvider: IFeeRateProvider) :
+            this(coin, createKit(authData, newWallet, testMode), AddressParser("bitcoincash", false), feeRateProvider)
 
     init {
-        if (bitcoinKit is BitcoinCashKit) {
-            bitcoinKit.listener = this
-        }
+        kit.listener = this
     }
 
     //
@@ -59,7 +61,7 @@ class BitcoinCashAdapter(override val coin: Coin, authData: AuthData, newWallet:
             is BitcoinCore.KitState.Syncing -> {
                 this.state.let { currentState ->
                     val newProgress = (state.progress * 100).toInt()
-                    val newDate = bitcoinKit.lastBlockInfo?.timestamp?.let { Date(it * 1000) }
+                    val newDate = kit.lastBlockInfo?.timestamp?.let { Date(it * 1000) }
 
                     if (currentState is AdapterState.Syncing && currentState.progress == newProgress) {
                         val currentDate = currentState.lastBlockDate
@@ -90,6 +92,10 @@ class BitcoinCashAdapter(override val coin: Coin, authData: AuthData, newWallet:
 
     override fun onTransactionsDelete(hashes: List<String>) {
         // ignored for now
+    }
+
+    override fun getTransactions(from: Pair<String, Int>?, limit: Int): Single<List<TransactionRecord>> {
+        return kit.transactions(from?.first, limit).map { it.map { tx -> transactionRecord(tx) } }
     }
 
     companion object {
