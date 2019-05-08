@@ -15,7 +15,7 @@ import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-abstract class BitcoinBaseAdapter(override val coin: Coin, val bitcoinKit: AbstractKit, private val addressParser: AddressParser) : IAdapter {
+abstract class BitcoinBaseAdapter(override val coin: Coin, open val kit: AbstractKit, private val addressParser: AddressParser) : IAdapter {
 
     abstract val satoshisInBitcoin: BigDecimal
     abstract fun feeRate(feePriority: FeeRatePriority): Int
@@ -29,10 +29,10 @@ abstract class BitcoinBaseAdapter(override val coin: Coin, val bitcoinKit: Abstr
 
     override val confirmationsThreshold: Int = 6
     override val lastBlockHeight: Int?
-        get() = bitcoinKit.lastBlockInfo?.height
+        get() = kit.lastBlockInfo?.height
 
     override val receiveAddress: String
-        get() = bitcoinKit.receiveAddress()
+        get() = kit.receiveAddress()
 
     protected val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     protected val lastBlockHeightUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
@@ -54,7 +54,7 @@ abstract class BitcoinBaseAdapter(override val coin: Coin, val bitcoinKit: Abstr
     override val debugInfo: String = ""
 
     override val balance: BigDecimal
-        get() = BigDecimal.valueOf(bitcoinKit.balance).divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN)
+        get() = BigDecimal.valueOf(kit.balance).divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN)
 
     override var state: AdapterState = AdapterState.Syncing(0, null)
         set(value) {
@@ -63,19 +63,19 @@ abstract class BitcoinBaseAdapter(override val coin: Coin, val bitcoinKit: Abstr
         }
 
     override fun start() {
-        bitcoinKit.start()
+        kit.start()
     }
 
     override fun stop() {
-        bitcoinKit.stop()
+        kit.stop()
     }
 
     override fun refresh() {
-        bitcoinKit.refresh()
+        kit.refresh()
     }
 
     override fun clear() {
-        bitcoinKit.clear()
+        kit.clear()
     }
 
     override fun parsePaymentAddress(address: String): PaymentRequestAddress {
@@ -86,7 +86,7 @@ abstract class BitcoinBaseAdapter(override val coin: Coin, val bitcoinKit: Abstr
     override fun send(address: String, value: BigDecimal, feePriority: FeeRatePriority): Single<Unit> {
         return Single.create { emitter ->
             try {
-                bitcoinKit.send(address, (value * satoshisInBitcoin).toLong(), feeRate = feeRate(feePriority))
+                kit.send(address, (value * satoshisInBitcoin).toLong(), feeRate = feeRate(feePriority))
                 emitter.onSuccess(Unit)
             } catch (ex: Exception) {
                 emitter.onError(ex)
@@ -97,7 +97,7 @@ abstract class BitcoinBaseAdapter(override val coin: Coin, val bitcoinKit: Abstr
     override fun fee(value: BigDecimal, address: String?, feePriority: FeeRatePriority): BigDecimal {
         return try {
             val amount = (value * satoshisInBitcoin).toLong()
-            val fee = bitcoinKit.fee(amount, address, true, feeRate = feeRate(feePriority))
+            val fee = kit.fee(amount, address, true, feeRate = feeRate(feePriority))
             BigDecimal.valueOf(fee).divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
         } catch (e: UnspentOutputSelectorError.InsufficientUnspentOutputs) {
             BigDecimal.valueOf(e.fee).divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
@@ -119,11 +119,7 @@ abstract class BitcoinBaseAdapter(override val coin: Coin, val bitcoinKit: Abstr
     }
 
     override fun validate(address: String) {
-        bitcoinKit.validateAddress(address)
-    }
-
-    override fun getTransactions(from: Pair<String, Int>?, limit: Int): Single<List<TransactionRecord>> {
-        return bitcoinKit.transactions(from?.first, limit).map { it.map { tx -> transactionRecord(tx) } }
+        kit.validateAddress(address)
     }
 
     fun transactionRecord(transaction: TransactionInfo): TransactionRecord {

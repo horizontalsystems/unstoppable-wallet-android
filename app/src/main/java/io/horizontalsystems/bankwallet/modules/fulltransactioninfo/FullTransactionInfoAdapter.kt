@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import java.math.BigInteger
 
-class FullTransactionBitcoinAdapter(val provider: FullTransactionInfoModule.BitcoinForksProvider, val coin: Coin)
+class FullTransactionBitcoinAdapter(val provider: FullTransactionInfoModule.BitcoinForksProvider, val coin: Coin, val unitName: String)
     : FullTransactionInfoModule.Adapter {
 
     override fun convert(json: JsonObject): FullTransactionRecord {
@@ -32,7 +32,7 @@ class FullTransactionBitcoinAdapter(val provider: FullTransactionInfoModule.Bitc
         }
 
         data.feePerByte?.let { feePerByte ->
-            transactionItems.add(FullTransactionItem(R.string.FullInfo_Rate, value = "${App.numberFormatter.format(feePerByte)} (satoshi)", dimmed = true))
+            transactionItems.add(FullTransactionItem(R.string.FullInfo_Rate, value = "${App.numberFormatter.format(feePerByte)} ($unitName)", dimmed = true))
         }
 
         sections.add(FullTransactionSection(items = transactionItems))

@@ -42,6 +42,22 @@ class HorsysBitcoinCashProvider(val testMode: Boolean) : FullTransactionInfoModu
     }
 }
 
+class HorsysDashProvider(val testMode: Boolean) : FullTransactionInfoModule.BitcoinForksProvider {
+    override val name: String = "HorizontalSystems.xyz"
+
+    override fun url(hash: String): String {
+        return "${if (testMode) "http://dash-testnet" else "https://dash"}.horizontalsystems.xyz/insight/tx/$hash"
+    }
+
+    override fun apiUrl(hash: String): String {
+        return "${if (testMode) "http://dash-testnet" else "https://dash"}.horizontalsystems.xyz/apg/tx/$hash"
+    }
+
+    override fun convert(json: JsonObject): BitcoinResponse {
+        return Gson().fromJson(json, InsightDashResponse::class.java)
+    }
+}
+
 class HorsysEthereumProvider(val testMode: Boolean) : FullTransactionInfoModule.EthereumForksProvider {
 
     private val url = if (testMode)  "http://eth-ropsten.horizontalsystems.xyz/tx/" else "https://eth.horizontalsystems.xyz/tx/"

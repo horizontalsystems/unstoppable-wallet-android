@@ -20,6 +20,7 @@ class LocalStorageManager : ILocalStorage {
     private val LOCKOUT_TIMESTAMP = "lockout_timestamp"
     private val BASE_BITCOIN_PROVIDER = "base_bitcoin_provider"
     private val BASE_ETHEREUM_PROVIDER = "base_ethereum_provider"
+    private val BASE_DASH_PROVIDER = "base_dash_provider"
 
     override var currentLanguage: String?
         get() = App.preferences.getString(CURRENT_LANGUAGE, null)
@@ -130,6 +131,12 @@ class LocalStorageManager : ILocalStorage {
         get() = App.preferences.getString(BASE_ETHEREUM_PROVIDER, null)
         set(value) {
             App.preferences.edit().putString(BASE_ETHEREUM_PROVIDER, value).apply()
+        }
+
+    override var baseDashProvider: String?
+        get() = App.preferences.getString(BASE_DASH_PROVIDER, null)
+        set(value) {
+            App.preferences.edit().putString(BASE_DASH_PROVIDER, value).apply()
         }
 
     override fun clear() {

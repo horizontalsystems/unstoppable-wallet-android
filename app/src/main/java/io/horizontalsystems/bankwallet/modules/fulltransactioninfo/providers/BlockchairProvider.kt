@@ -52,6 +52,26 @@ class BlockChairBitcoinCashProvider : FullTransactionInfoModule.BitcoinForksProv
     }
 }
 
+class BlockChairDashProvider : FullTransactionInfoModule.BitcoinForksProvider {
+    override val name = "BlockChair.com"
+
+    override fun url(hash: String): String {
+        return "https://blockchair.com/dash/transaction/$hash"
+    }
+
+    override fun apiUrl(hash: String): String {
+        return "https://api.blockchair.com/dash/dashboards/transaction/$hash"
+    }
+
+    override fun convert(json: JsonObject): BitcoinResponse {
+        val response = Gson().fromJson(json, BlockchairBTCResponse::class.java)
+        val transaction = response.data.entries.firstOrNull()
+                ?: throw Exception("Failed to parse transaction response")
+
+        return transaction.value
+    }
+}
+
 class BlockChairEthereumProvider : FullTransactionInfoModule.EthereumForksProvider {
     override val name = "BlockChair.com"
 
