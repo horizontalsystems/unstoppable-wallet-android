@@ -18,6 +18,7 @@ class Erc20Adapter(context: Context,
                    coin: Coin,
                    kit: EthereumKit,
                    decimal: Int,
+                   private val fee: BigDecimal,
                    contractAddress: String,
                    addressParser: AddressParser,
                    feeRateProvider: IFeeRateProvider) : EthereumBaseAdapter(coin, kit, decimal, addressParser, feeRateProvider) {
@@ -54,7 +55,7 @@ class Erc20Adapter(context: Context,
     }
 
     override fun availableBalance(address: String?, feePriority: FeeRatePriority): BigDecimal {
-        return balance
+        return balance - fee
     }
 
     override fun fee(value: BigDecimal, address: String?, feePriority: FeeRatePriority): BigDecimal {

@@ -24,7 +24,7 @@ class AdapterFactory(
         }
         is CoinType.Erc20 -> {
             val addressParser = AddressParser("ethereum", true)
-            Erc20Adapter(context, coin, ethereumKitManager.ethereumKit(authData), coin.type.decimal, coin.type.address, addressParser, feeRateProvider)
+            Erc20Adapter(context, coin, ethereumKitManager.ethereumKit(authData), coin.type.decimal, coin.type.fee, coin.type.address, addressParser, feeRateProvider)
         }
     }
 

@@ -3,9 +3,10 @@ package io.horizontalsystems.bankwallet.modules.managecoins
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.core.ICoinManager
-import io.horizontalsystems.bankwallet.core.ICoinStorage
+import io.horizontalsystems.bankwallet.core.IEnabledCoinStorage
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
+import io.horizontalsystems.bankwallet.entities.EnabledCoin
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
 import io.reactivex.Flowable
 import org.junit.Before
@@ -18,12 +19,16 @@ class ManageCoinsInteractorTest {
 
     private val delegate = mock(ManageCoinsModule.IInteractorDelegate::class.java)
     private val coinManager = mock(ICoinManager::class.java)
-    private val coinStorage = mock(ICoinStorage::class.java)
+    private val coinStorage = mock(IEnabledCoinStorage::class.java)
 
     private val bitCoin = Coin("Bitcoin", "BTC", CoinType.Bitcoin)
     private val bitCashCoin = Coin("Bitcoin Cash", "BCH", CoinType.BitcoinCash)
     private val ethereumCoin = Coin("Ethereum", "ETH", CoinType.Ethereum)
-    private val enabledCoins = mutableListOf(bitCoin, ethereumCoin)
+    private val coins = mutableListOf(bitCoin, ethereumCoin)
+
+    private val enabledBitcoin = EnabledCoin("BTC", 0)
+    private val enabledEthereum = EnabledCoin( "ETH", 1)
+    private val enabledCoins = listOf(enabledBitcoin, enabledEthereum)
     private val allCoins = mutableListOf(bitCoin, ethereumCoin, bitCashCoin)
 
     @Before
@@ -39,14 +44,16 @@ class ManageCoinsInteractorTest {
 
     @Test
     fun loadCoins() {
+        val expectedCoins = listOf(bitCoin, ethereumCoin)
         interactor.loadCoins()
         verify(delegate).didLoadAllCoins(allCoins)
-        verify(delegate).didLoadEnabledCoins(enabledCoins)
+        verify(delegate).didLoadEnabledCoins(expectedCoins)
     }
 
     @Test
     fun saveEnabledCoins() {
-        interactor.saveEnabledCoins(enabledCoins)
+        interactor.saveEnabledCoins(coins)
         verify(coinStorage).save(enabledCoins)
+        verify(delegate).didSaveChanges()
     }
 }

@@ -8,8 +8,8 @@ import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
+import io.horizontalsystems.bankwallet.core.storage.EnabledCoinsRepository
 import io.horizontalsystems.bankwallet.core.storage.RatesRepository
-import io.horizontalsystems.bankwallet.core.storage.StorableCoinsRepository
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
 import java.util.*
 
@@ -42,7 +42,7 @@ class App : Application() {
         lateinit var networkAvailabilityManager: NetworkAvailabilityManager
         lateinit var appDatabase: AppDatabase
         lateinit var rateStorage: IRateStorage
-        lateinit var coinsStorage: ICoinStorage
+        lateinit var enabledCoinsStorage: IEnabledCoinStorage
         lateinit var transactionInfoFactory: FullTransactionInfoFactory
         lateinit var transactionDataProviderManager: TransactionDataProviderManager
         lateinit var appCloseManager: AppCloseManager
@@ -79,12 +79,12 @@ class App : Application() {
 
         appDatabase = AppDatabase.getInstance(this)
         rateStorage = RatesRepository(appDatabase)
-        coinsStorage = StorableCoinsRepository(appDatabase)
+        enabledCoinsStorage = EnabledCoinsRepository(appDatabase)
         localStorage = LocalStorageManager()
 
         networkManager = NetworkManager(appConfigProvider)
         rateManager = RateManager(rateStorage, networkManager)
-        coinManager = CoinManager(appConfigProvider, coinsStorage)
+        coinManager = CoinManager(appConfigProvider, enabledCoinsStorage)
         authManager = AuthManager(secureStorage, localStorage, coinManager, rateManager, ethereumKitManager)
 
         wordsManager = WordsManager(localStorage)

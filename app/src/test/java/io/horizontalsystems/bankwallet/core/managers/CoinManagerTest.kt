@@ -4,9 +4,10 @@ import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
-import io.horizontalsystems.bankwallet.core.ICoinStorage
+import io.horizontalsystems.bankwallet.core.IEnabledCoinStorage
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
+import io.horizontalsystems.bankwallet.entities.EnabledCoin
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
 import io.reactivex.Flowable
 import org.junit.Assert
@@ -17,20 +18,24 @@ class CoinManagerTest {
 
     private lateinit var coinManager: CoinManager
     private lateinit var configProvider: IAppConfigProvider
-    private lateinit var coinStorage: ICoinStorage
+    private lateinit var enabledCoinStorage: IEnabledCoinStorage
 
     private val bitCoin = Coin("Bitcoin", "BTC", CoinType.Bitcoin)
     private val bitCashCoin = Coin("Bitcoin Cash", "BCH", CoinType.BitcoinCash)
     private val ethereumCoin = Coin("Ethereum", "ETH", CoinType.Ethereum)
-    private val enabledCoins = listOf(bitCoin, ethereumCoin)
-    private val defaultCoins = mutableListOf(bitCashCoin)
+    private val coins = listOf(bitCoin, ethereumCoin)
+
+    private val bitcoinE = EnabledCoin("BTC", 0)
+    private val bitCashCoinE = EnabledCoin( "BCH", 1)
+    private val enabledCoins = listOf(bitcoinE, bitCashCoinE)
+    private val defaultCoins = mutableListOf(bitCashCoinE)
     private val erc20tokens = mutableListOf(mock<Coin>(), mock<Coin>())
 
     @Before
     fun setUp() {
         RxBaseTest.setup()
 
-        coinStorage = mock {
+        enabledCoinStorage = mock {
             on { enabledCoinsObservable() } doReturn Flowable.just(enabledCoins)
         }
         configProvider = mock {
@@ -38,7 +43,7 @@ class CoinManagerTest {
             on { erc20tokens } doReturn erc20tokens
         }
 
-        coinManager = CoinManager(configProvider, coinStorage)
+        coinManager = CoinManager(configProvider, enabledCoinStorage)
     }
 
     @Test
@@ -50,7 +55,7 @@ class CoinManagerTest {
     fun updateSignal() {
         val testObserver = coinManager.coinsUpdatedSignal.test()
 
-        coinManager.coins = enabledCoins
+        coinManager.coins = coins
 
         testObserver.assertValueCount(1)
     }
@@ -58,7 +63,7 @@ class CoinManagerTest {
     @Test
     fun enableDefaultCoins() {
         coinManager.enableDefaultCoins()
-        verify(coinStorage).save(defaultCoins)
+        verify(enabledCoinStorage).save(defaultCoins)
     }
 
 }
