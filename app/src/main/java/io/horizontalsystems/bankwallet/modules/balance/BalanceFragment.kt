@@ -223,13 +223,6 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
         imgSyncFailed.visibility = View.GONE
         iconProgress.visibility = View.GONE
 
-        textCoinAmount.text = App.numberFormatter.format(balanceViewItem.coinValue)
-        balanceViewItem.currencyValue?.let {
-            textCurrencyAmount.text = App.numberFormatter.format(it, trimmable = true)
-            textCurrencyAmount.visibility = if(it.value.compareTo(BigDecimal.ZERO) == 0) View.GONE else View.VISIBLE
-            textCurrencyAmount.setTextColor(ContextCompat.getColor(containerView.context, if (balanceViewItem.rateExpired) R.color.yellow_crypto_40 else R.color.yellow_crypto))
-        } ?: run { textCurrencyAmount.visibility = View.GONE }
-
         balanceViewItem.state.let { adapterState ->
             when (adapterState) {
                 is AdapterState.Syncing -> {
@@ -252,6 +245,15 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
                 }
             }
         }
+
+        balanceViewItem.currencyValue?.let {
+            textCurrencyAmount.text = App.numberFormatter.format(it, trimmable = true)
+            textCurrencyAmount.visibility = if(it.value.compareTo(BigDecimal.ZERO) == 0) View.GONE else View.VISIBLE
+            textCurrencyAmount.alpha = if (balanceViewItem.rateExpired || syncing) 0.5f else 1f
+        } ?: run { textCurrencyAmount.visibility = View.GONE }
+
+        textCoinAmount.text = App.numberFormatter.format(balanceViewItem.coinValue)
+        textCoinAmount.alpha = if (syncing) 0.5f else 1f
 
         textSyncProgress.visibility = if (expanded && syncing) View.VISIBLE else View.GONE
         textExchangeRate.visibility = if (expanded && syncing) View.GONE else View.VISIBLE
