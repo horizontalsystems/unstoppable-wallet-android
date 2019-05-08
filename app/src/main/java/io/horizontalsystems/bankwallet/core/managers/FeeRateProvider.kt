@@ -23,7 +23,7 @@ class FeeRateProvider(context: Context) : IFeeRateProvider, FeeRateKit.Listener 
     }
 
     override fun dashFeeRate(priority: FeeRatePriority): Long {
-        return 1 // todo: get real fee rate
+        return feeRate(feeRateKit.dash(), priority)
     }
 
     override fun onRefresh(rates: List<FeeRate>) {
