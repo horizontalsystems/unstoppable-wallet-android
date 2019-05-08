@@ -198,8 +198,8 @@ interface IAppConfigProvider {
     val testMode: Boolean
     val localizations: List<String>
     val currencies: List<Currency>
-    val defaultCoins: List<Coin>
-    val erc20tokens: List<Coin>
+    val defaultCoinCodes: List<String>
+    val coins: List<Coin>
 }
 
 interface IOneTimerDelegate {
@@ -215,10 +215,9 @@ interface IRateStorage {
     fun zeroRatesObservable(currencyCode: String): Single<List<Rate>>
 }
 
-interface ICoinStorage {
-    fun enabledCoinsObservable(): Flowable<List<Coin>>
-    fun save(coins: List<Coin>)
-    fun update(inserted: List<Coin>, deleted: List<Coin>)
+interface IEnabledCoinStorage {
+    fun enabledCoinsObservable(): Flowable<List<EnabledCoin>>
+    fun save(coins: List<EnabledCoin>)
     fun deleteAll()
 }
 

@@ -2,22 +2,28 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.ICoinManager
-import io.horizontalsystems.bankwallet.core.ICoinStorage
+import io.horizontalsystems.bankwallet.core.IEnabledCoinStorage
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.EnabledCoin
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
-class CoinManager(private val appConfigProvider: IAppConfigProvider, private val coinStorage: ICoinStorage) : ICoinManager {
+class CoinManager(private val appConfigProvider: IAppConfigProvider, private val enabledCoinStorage: IEnabledCoinStorage) : ICoinManager {
 
     override val coinsUpdatedSignal: PublishSubject<Unit> = PublishSubject.create()
 
     init {
-        val disposable = coinStorage.enabledCoinsObservable()
+        val disposable = enabledCoinStorage.enabledCoinsObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    coins = it
+                .subscribe {enabledCoinsFromDb ->
+                    val enabledCoins = mutableListOf<Coin>()
+                    enabledCoinsFromDb.forEach { enabledCoin ->
+                        allCoins.firstOrNull { coin -> coin.code == enabledCoin.coinCode}
+                                ?.let { enabledCoins.add(it) }
+                    }
+                    coins = enabledCoins
                 }
     }
 
@@ -28,14 +34,18 @@ class CoinManager(private val appConfigProvider: IAppConfigProvider, private val
         }
 
     override val allCoins: List<Coin>
-        get() = appConfigProvider.defaultCoins + appConfigProvider.erc20tokens
+        get() = appConfigProvider.coins
 
     override fun enableDefaultCoins() {
-        coinStorage.save(appConfigProvider.defaultCoins)
+        val enabledCoins = mutableListOf<EnabledCoin>()
+        appConfigProvider.defaultCoinCodes.forEachIndexed{order, coinCode ->
+            enabledCoins.add(EnabledCoin(coinCode, order))
+        }
+        enabledCoinStorage.save(enabledCoins)
     }
 
     override fun clear() {
         coins = listOf()
-        coinStorage.deleteAll()
+        enabledCoinStorage.deleteAll()
     }
 }
