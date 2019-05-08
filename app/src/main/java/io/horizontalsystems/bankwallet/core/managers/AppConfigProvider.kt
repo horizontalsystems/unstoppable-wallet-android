@@ -69,7 +69,6 @@ class AppConfigProvider : IAppConfigProvider {
             Coin("Holo", "HOT", CoinType.Erc20("0x6c6EE5e31d828De241282B9606C8e98Ea48526E2", 18)),
             Coin("Huobi", "HT", CoinType.Erc20("0x6f259637dcD74C767781E37Bc6133cd6A68aa161", 18)),
             Coin("IDEX Membership", "IDXM", CoinType.Erc20("0xCc13Fc627EFfd6E35D2D2706Ea3C4D7396c610ea", 8)),
-            Coin("IOST", "IOST", CoinType.Erc20("0xFA1a856Cfa3409CFa145Fa4e20Eb270dF3EB21ab", 18)),
             Coin("KuCoin Shares", "KCS", CoinType.Erc20("0x039B5649A59967e3e936D7471f9c3700100Ee1ab", 6)),
             Coin("Kyber Network", "KNC", CoinType.Erc20("0xdd974D5C2e2928deA5F71b9825b8b646686BD200", 18)),
             Coin("Loom", "LOOM", CoinType.Erc20("0xA4e8C3Ec456107eA67d3075bF9e3DF3A75823DB0", 18)),
