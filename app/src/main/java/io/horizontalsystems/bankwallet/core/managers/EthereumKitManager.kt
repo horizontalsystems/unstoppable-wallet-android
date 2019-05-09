@@ -25,12 +25,6 @@ class EthereumKitManager(appConfig: IAppConfigProvider) : IEthereumKitManager {
         return kit!!
     }
 
-    override fun clear() {
-        kit?.clear()
-        kit?.stop()
-        kit = null
-    }
-
     override fun unlink() {
         useCount -= 1
 

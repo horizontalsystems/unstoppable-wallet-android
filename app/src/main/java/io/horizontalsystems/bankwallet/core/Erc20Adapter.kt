@@ -73,6 +73,10 @@ class Erc20Adapter(context: Context,
         return errors
     }
 
+    override fun stop() {
+        erc20Kit.stop()
+    }
+
     private fun transactionRecord(transaction: TransactionInfo): TransactionRecord {
         val mineAddress = ethereumKit.receiveAddress
 
@@ -98,6 +102,12 @@ class Erc20Adapter(context: Context,
                 from = listOf(from),
                 to = listOf(to)
         )
+    }
+
+    companion object {
+        fun clear(context: Context) {
+            Erc20Kit.clear(context)
+        }
     }
 
 }

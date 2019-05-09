@@ -74,10 +74,6 @@ abstract class BitcoinBaseAdapter(override val coin: Coin, open val kit: Abstrac
         kit.refresh()
     }
 
-    override fun clear() {
-        kit.clear()
-    }
-
     override fun parsePaymentAddress(address: String): PaymentRequestAddress {
         val paymentData = addressParser.parse(address)
         return PaymentRequestAddress(paymentData.address, paymentData.amount?.toBigDecimal())

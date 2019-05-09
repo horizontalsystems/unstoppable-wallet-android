@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core
 
+import android.content.Context
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.bankwallet.entities.AuthData
 import io.horizontalsystems.bankwallet.entities.Coin
@@ -99,12 +100,16 @@ class BitcoinAdapter(coin: Coin, override val kit: BitcoinKit, addressParser: Ad
     }
 
     companion object {
-        private fun createKit(authData: AuthData, newWallet: Boolean, testMode: Boolean): BitcoinKit {
-            val networkType = if (testMode)
-                NetworkType.TestNet else
-                NetworkType.MainNet
 
-            return BitcoinKit(App.instance, authData.words, authData.walletId, newWallet = newWallet, networkType = networkType)
+        private fun getNetworkType(testMode: Boolean) =
+                if (testMode) NetworkType.TestNet else NetworkType.MainNet
+
+        private fun createKit(authData: AuthData, newWallet: Boolean, testMode: Boolean): BitcoinKit {
+            return BitcoinKit(App.instance, authData.words, authData.walletId, newWallet = newWallet, networkType = getNetworkType(testMode))
+        }
+
+        fun clear(context: Context, walletId: String, testMode: Boolean) {
+            BitcoinKit.clear(context, getNetworkType(testMode), walletId)
         }
     }
 }

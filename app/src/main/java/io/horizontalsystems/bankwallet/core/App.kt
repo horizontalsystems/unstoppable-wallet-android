@@ -85,7 +85,7 @@ class App : Application() {
         networkManager = NetworkManager(appConfigProvider)
         rateManager = RateManager(rateStorage, networkManager)
         coinManager = CoinManager(appConfigProvider, enabledCoinsStorage)
-        authManager = AuthManager(secureStorage, localStorage, coinManager, rateManager, ethereumKitManager)
+        authManager = AuthManager(secureStorage, localStorage, coinManager, rateManager, ethereumKitManager, appConfigProvider)
 
         wordsManager = WordsManager(localStorage)
         randomManager = RandomProvider()
