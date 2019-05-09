@@ -49,7 +49,7 @@ class TransactionRecordDataSource(
         val updatedRecords = mutableListOf<TransactionRecord>()
         val insertedRecords = mutableListOf<TransactionRecord>()
 
-        records.forEach {
+        records.sorted().forEach {
             when (pool.handleUpdatedRecord(it)) {
                 Pool.HandleResult.UPDATED -> updatedRecords.add(it)
                 Pool.HandleResult.INSERTED -> insertedRecords.add(it)
