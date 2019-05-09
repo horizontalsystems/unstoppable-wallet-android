@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.entities.LatestRateData
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.reactivex.Flowable
-import io.reactivex.Maybe
+import io.reactivex.Single
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -22,21 +22,21 @@ import java.util.concurrent.TimeUnit
 
 class NetworkManager(val appConfigProvider: IAppConfigProvider) : INetworkManager {
 
-    override fun getRateByDay(hostType: ServiceExchangeApi.HostType, coinCode: String, currency: String, timestamp: Long): Maybe<BigDecimal> {
+    override fun getRateByDay(hostType: ServiceExchangeApi.HostType, coinCode: String, currency: String, timestamp: Long): Single<BigDecimal> {
         return historicalRateApiClient(hostType)
                 .getRateByDay(coinCode, currency, DateHelper.formatDateInUTC(timestamp, "yyyy/MM/dd"))
                 .map { it.toBigDecimal() }
     }
 
-    override fun getRateByHour(hostType: ServiceExchangeApi.HostType, coinCode: String, currency: String, timestamp: Long): Maybe<BigDecimal> {
+    override fun getRateByHour(hostType: ServiceExchangeApi.HostType, coinCode: String, currency: String, timestamp: Long): Single<BigDecimal> {
         return historicalRateApiClient(hostType)
                 .getRateByHour(coinCode, currency, DateHelper.formatDateInUTC(timestamp, "yyyy/MM/dd/HH"))
                 .flatMap { minuteRates ->
-                    Maybe.just(minuteRates.getValue(DateHelper.formatDateInUTC(timestamp, "mm")).toBigDecimal())
+                    Single.just(minuteRates.getValue(DateHelper.formatDateInUTC(timestamp, "mm")).toBigDecimal())
                 }
     }
 
-    override fun getLatestRateData(hostType: ServiceExchangeApi.HostType, currency: String): Maybe<LatestRateData> {
+    override fun getLatestRateData(hostType: ServiceExchangeApi.HostType, currency: String): Single<LatestRateData> {
         return latestRateApiClient(hostType)
                 .getLatestRate(currency)
                 .map { LatestRateData(it.rates, it.currency, it.timestamp / 1000) }
@@ -97,19 +97,19 @@ object ServiceExchangeApi {
                 @Path("coin") coinCode: String,
                 @Path("fiat") currency: String,
                 @Path("datePath") datePath: String
-        ): Maybe<String>
+        ): Single<String>
 
         @GET("xrates/historical/{coin}/{fiat}/{datePath}/index.json")
         fun getRateByHour(
                 @Path("coin") coinCode: String,
                 @Path("fiat") currency: String,
                 @Path("datePath") datePath: String
-        ): Maybe<Map<String, String>>
+        ): Single<Map<String, String>>
 
         @GET("xrates/latest/{fiat}/index.json")
         fun getLatestRate(
                 @Path("fiat") currency: String
-        ): Maybe<LatestRateData>
+        ): Single<LatestRateData>
 
     }
 }

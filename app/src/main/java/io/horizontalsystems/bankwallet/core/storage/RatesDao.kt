@@ -4,7 +4,6 @@ import androidx.room.*
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.Flowable
-import io.reactivex.Maybe
 import io.reactivex.Single
 
 @Dao
@@ -26,7 +25,7 @@ interface RatesDao {
     fun deleteAll()
 
     @Query("SELECT * FROM Rate WHERE coinCode = :coinCode AND currencyCode = :currencyCode AND timestamp = :timestamp AND isLatest = 0")
-    fun getRate(coinCode: CoinCode, currencyCode: String, timestamp: Long): Maybe<Rate>
+    fun getRate(coinCode: CoinCode, currencyCode: String, timestamp: Long): Single<Rate>
 
     @Query("SELECT * FROM Rate WHERE value = 0.0 AND currencyCode = :currencyCode AND isLatest = 0")
     fun getZeroRates(currencyCode: String): Single<List<Rate>>
