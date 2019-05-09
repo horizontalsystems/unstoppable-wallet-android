@@ -9,7 +9,8 @@ class AuthManager(private val secureStorage: ISecuredStorage,
                   private val localStorage: ILocalStorage,
                   private val coinManager: ICoinManager,
                   private val rateManager: RateManager,
-                  private val ethereumKitManager: IEthereumKitManager) {
+                  private val ethereumKitManager: IEthereumKitManager,
+                  private val appConfigProvider: IAppConfigProvider) {
 
     var adapterManager: IAdapterManager? = null
     var pinManager: IPinManager? = null
@@ -39,8 +40,17 @@ class AuthManager(private val secureStorage: ISecuredStorage,
     }
 
     fun logout() {
-        adapterManager?.clear()
-        ethereumKitManager.clear()
+        adapterManager?.stopKits()
+
+        EthereumAdapter.clear(App.instance)
+        Erc20Adapter.clear(App.instance)
+
+        authData?.let { authData ->
+            BitcoinAdapter.clear(App.instance, authData.walletId, appConfigProvider.testMode)
+            BitcoinCashAdapter.clear(App.instance, authData.walletId, appConfigProvider.testMode)
+            DashAdapter.clear(App.instance, authData.walletId, appConfigProvider.testMode)
+        }
+
         pinManager?.clear()
         localStorage.clear()
         coinManager.clear()

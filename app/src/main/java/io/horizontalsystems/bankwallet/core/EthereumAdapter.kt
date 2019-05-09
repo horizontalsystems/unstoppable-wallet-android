@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core
 
+import android.content.Context
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
@@ -90,4 +91,9 @@ class EthereumAdapter(coin: Coin,
         )
     }
 
+    companion object {
+        fun clear(context: Context) {
+            EthereumKit.clear(context)
+        }
+    }
 }

@@ -29,8 +29,6 @@ abstract class EthereumBaseAdapter(
         ethereumKit.refresh()
     }
 
-    override fun clear() {}
-
     override fun stop() {
         ethereumKit.stop()
     }

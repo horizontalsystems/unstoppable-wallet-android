@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core
 
+import android.content.Context
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.bankwallet.entities.AuthData
 import io.horizontalsystems.bankwallet.entities.Coin
@@ -100,12 +101,16 @@ class DashAdapter(coin: Coin, override val kit: DashKit, addressParser: AddressP
     }
 
     companion object {
-        private fun createKit(authData: AuthData, newWallet: Boolean, testMode: Boolean): DashKit {
-            val networkType = if (testMode)
-                NetworkType.TestNet else
-                NetworkType.MainNet
 
-            return DashKit(App.instance, authData.words, authData.walletId, newWallet = newWallet, networkType = networkType)
+        private fun getNetworkType(testMode: Boolean) =
+                if (testMode) NetworkType.TestNet else NetworkType.MainNet
+
+        private fun createKit(authData: AuthData, newWallet: Boolean, testMode: Boolean): DashKit {
+            return DashKit(App.instance, authData.words, authData.walletId, newWallet = newWallet, networkType = getNetworkType(testMode))
+        }
+
+        fun clear(context: Context, walletId: String, testMode: Boolean) {
+            DashKit.clear(context, getNetworkType(testMode), walletId)
         }
     }
 }

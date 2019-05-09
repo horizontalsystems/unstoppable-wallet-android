@@ -23,7 +23,7 @@ interface IAdapterManager {
 
     fun refreshAdapters()
     fun initAdapters()
-    fun clear()
+    fun stopKits()
 }
 
 interface ILocalStorage {
@@ -123,7 +123,6 @@ sealed class AdapterState {
 
 interface IEthereumKitManager {
     fun ethereumKit(authData: AuthData): EthereumKit
-    fun clear()
     fun unlink()
 }
 
@@ -137,7 +136,6 @@ interface IAdapter {
     fun start()
     fun stop()
     fun refresh()
-    fun clear()
 
     val lastBlockHeight: Int?
     val lastBlockHeightUpdatedFlowable: Flowable<Unit>
