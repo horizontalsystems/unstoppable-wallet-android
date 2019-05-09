@@ -17,7 +17,7 @@ class AdapterFactory(
     fun adapterForCoin(coin: Coin, authData: AuthData): IAdapter? = when (coin.type) {
         is CoinType.Bitcoin -> BitcoinAdapter(coin, authData, localStorage.isNewWallet, appConfigProvider.testMode, feeRateProvider)
         is CoinType.BitcoinCash -> BitcoinCashAdapter(coin, authData, localStorage.isNewWallet, appConfigProvider.testMode, feeRateProvider)
-        is CoinType.Dash -> DashAdapter(coin, authData, true, appConfigProvider.testMode, feeRateProvider)
+        is CoinType.Dash -> DashAdapter(coin, authData, localStorage.isNewWallet, appConfigProvider.testMode, feeRateProvider)
         is CoinType.Ethereum -> {
             val addressParser = AddressParser("ethereum", true)
             EthereumAdapter(coin, ethereumKitManager.ethereumKit(authData), addressParser, feeRateProvider)
