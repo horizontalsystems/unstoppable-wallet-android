@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.Flowable
-import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
@@ -60,9 +59,9 @@ interface IRandomProvider {
 }
 
 interface INetworkManager {
-    fun getLatestRateData(hostType: ServiceExchangeApi.HostType, currency: String): Maybe<LatestRateData>
-    fun getRateByDay(hostType: ServiceExchangeApi.HostType, coinCode: String, currency: String, timestamp: Long): Maybe<BigDecimal>
-    fun getRateByHour(hostType: ServiceExchangeApi.HostType, coinCode: String, currency: String, timestamp: Long): Maybe<BigDecimal>
+    fun getLatestRateData(hostType: ServiceExchangeApi.HostType, currency: String): Single<LatestRateData>
+    fun getRateByDay(hostType: ServiceExchangeApi.HostType, coinCode: String, currency: String, timestamp: Long): Single<BigDecimal>
+    fun getRateByHour(hostType: ServiceExchangeApi.HostType, coinCode: String, currency: String, timestamp: Long): Single<BigDecimal>
     fun getTransaction(host: String, path: String): Flowable<JsonObject>
     fun ping(host: String, url: String): Flowable<Any>
 }
@@ -210,11 +209,10 @@ interface IOneTimerDelegate {
 
 interface IRateStorage {
     fun latestRateObservable(coinCode: CoinCode, currencyCode: String): Flowable<Rate>
-    fun rateMaybe(coinCode: CoinCode, currencyCode: String, timestamp: Long): Maybe<Rate>
+    fun rateSingle(coinCode: CoinCode, currencyCode: String, timestamp: Long): Single<Rate>
     fun save(rate: Rate)
     fun saveLatest(rate: Rate)
     fun deleteAll()
-    fun zeroRatesObservable(currencyCode: String): Single<List<Rate>>
 }
 
 interface IEnabledCoinStorage {
