@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import android.support.v7.util.DiffUtil
+import androidx.recyclerview.widget.DiffUtil
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.TransactionItem
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
@@ -49,7 +49,7 @@ class TransactionRecordDataSource(
         val updatedRecords = mutableListOf<TransactionRecord>()
         val insertedRecords = mutableListOf<TransactionRecord>()
 
-        records.forEach {
+        records.sorted().forEach {
             when (pool.handleUpdatedRecord(it)) {
                 Pool.HandleResult.UPDATED -> updatedRecords.add(it)
                 Pool.HandleResult.INSERTED -> insertedRecords.add(it)
@@ -83,7 +83,7 @@ class TransactionRecordDataSource(
 
         if (unusedItems.isEmpty()) return 0
 
-        unusedItems.sortByDescending { it.record.timestamp }
+        unusedItems.sortDescending()
 
         val usedItems = unusedItems.take(limit)
 

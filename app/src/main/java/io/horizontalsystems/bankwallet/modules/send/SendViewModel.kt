@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.send
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.Coin
 
@@ -15,6 +15,7 @@ class SendViewModel : ViewModel(), SendModule.IView {
     val amountInfoLiveData = MutableLiveData<SendModule.AmountInfo>()
     val switchButtonEnabledLiveData = MutableLiveData<Boolean>()
     val addressInfoLiveData = MutableLiveData<SendModule.AddressInfo>()
+    val dismissLiveEvent = SingleLiveEvent<Unit>()
     val dismissWithSuccessLiveEvent = SingleLiveEvent<Unit>()
     val dismissConfirmationLiveEvent = SingleLiveEvent<Unit>()
     val feeInfoLiveData = MutableLiveData<SendModule.FeeInfo>()
@@ -89,6 +90,10 @@ class SendViewModel : ViewModel(), SendModule.IView {
     override fun dismissWithSuccess() {
         dismissWithSuccessLiveEvent.call()
         dismissConfirmationLiveEvent.call()
+    }
+
+    override fun dismiss() {
+        dismissLiveEvent.call()
     }
 
     override fun onCleared() {

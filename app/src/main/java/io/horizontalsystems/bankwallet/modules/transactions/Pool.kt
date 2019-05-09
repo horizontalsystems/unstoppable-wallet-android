@@ -28,7 +28,7 @@ class Pool(val state: State) {
 
         fun insertIndexOf(record: TransactionRecord): Int {
             return records.indexOfFirst {
-                it.timestamp < record.timestamp
+                it < record
             }
         }
 
@@ -68,7 +68,7 @@ class Pool(val state: State) {
         val unusedRecordsSize = state.unusedRecords.size
         if (unusedRecordsSize > limit) return null
 
-        val hashFrom = state.records.lastOrNull()?.transactionHash
+        val hashFrom = state.records.lastOrNull()?.let { Pair(it.transactionHash, it.interTransactionIndex) }
         val fetchLimit = limit + 1 - unusedRecordsSize
 
         return TransactionsModule.FetchData(state.coin, hashFrom, fetchLimit)

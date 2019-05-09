@@ -2,11 +2,11 @@ package io.horizontalsystems.bankwallet.lib
 
 import android.app.Dialog
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v7.app.AlertDialog
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
 import io.horizontalsystems.bankwallet.R
 
 class AlertDialogFragment : DialogFragment() {

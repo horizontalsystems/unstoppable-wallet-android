@@ -1,14 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SimpleItemAnimator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
@@ -26,7 +27,7 @@ import kotlinx.android.synthetic.main.view_holder_add_coin.*
 import kotlinx.android.synthetic.main.view_holder_coin.*
 import java.math.BigDecimal
 
-class BalanceFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener {
+class BalanceFragment : Fragment(), CoinsAdapter.Listener {
 
     private lateinit var viewModel: BalanceViewModel
     private var coinsAdapter = CoinsAdapter(this)
@@ -43,7 +44,7 @@ class BalanceFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener
         viewModel = ViewModelProviders.of(this).get(BalanceViewModel::class.java)
         viewModel.init()
 
-        viewModel.openReceiveDialog.observe(this, Observer { adapterId ->
+        viewModel.openReceiveDialog.observe(viewLifecycleOwner, Observer { adapterId ->
             adapterId?.let { id ->
                 activity?.let {
                     ReceiveModule.start(it, id)
@@ -51,7 +52,7 @@ class BalanceFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener
             }
         })
 
-        viewModel.openSendDialog.observe(this, Observer { iAdapter ->
+        viewModel.openSendDialog.observe(viewLifecycleOwner, Observer { iAdapter ->
             iAdapter?.let { coin ->
                 activity?.let {
                     SendModule.start(it, coin)
@@ -59,7 +60,7 @@ class BalanceFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener
             }
         })
 
-        viewModel.balanceColorLiveDate.observe(this, Observer { color ->
+        viewModel.balanceColorLiveDate.observe(viewLifecycleOwner, Observer { color ->
             color?.let { colorRes ->
                 context?.let { it ->
                     ballanceText.setTextColor(ContextCompat.getColor(it, colorRes))
@@ -67,24 +68,24 @@ class BalanceFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener
             }
         })
 
-        viewModel.didRefreshLiveEvent.observe(this, Observer {
+        viewModel.didRefreshLiveEvent.observe(viewLifecycleOwner, Observer {
             pullToRefresh.isRefreshing = false
         })
 
-        viewModel.openManageCoinsLiveEvent.observe(this, Observer {
+        viewModel.openManageCoinsLiveEvent.observe(viewLifecycleOwner, Observer {
             context?.let { context -> ManageCoinsModule.start(context) }
         })
 
-        viewModel.reloadLiveEvent.observe(this, Observer {
+        viewModel.reloadLiveEvent.observe(viewLifecycleOwner, Observer {
             coinsAdapter.notifyDataSetChanged()
             reloadHeader()
         })
 
-        viewModel.reloadHeaderLiveEvent.observe(this, Observer {
+        viewModel.reloadHeaderLiveEvent.observe(viewLifecycleOwner, Observer {
             reloadHeader()
         })
 
-        viewModel.reloadItemLiveEvent.observe(this, Observer { position ->
+        viewModel.reloadItemLiveEvent.observe(viewLifecycleOwner, Observer { position ->
             position?.let {
                 coinsAdapter.notifyItemChanged(it)
             }
@@ -125,7 +126,7 @@ class BalanceFragment : android.support.v4.app.Fragment(), CoinsAdapter.Listener
         }
 
         ballanceText.text = headerViewItem.currencyValue?.let {
-            App.numberFormatter.format(it, realNumber = true)
+            App.numberFormatter.format(it)
         }
     }
 
@@ -222,13 +223,6 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
         imgSyncFailed.visibility = View.GONE
         iconProgress.visibility = View.GONE
 
-        textCoinAmount.text = App.numberFormatter.format(balanceViewItem.coinValue)
-        balanceViewItem.currencyValue?.let {
-            textCurrencyAmount.text = App.numberFormatter.format(it, canUseLessSymbol = true)
-            textCurrencyAmount.visibility = if(it.value.compareTo(BigDecimal.ZERO) == 0) View.GONE else View.VISIBLE
-            textCurrencyAmount.setTextColor(ContextCompat.getColor(containerView.context, if (balanceViewItem.rateExpired) R.color.yellow_crypto_40 else R.color.yellow_crypto))
-        } ?: run { textCurrencyAmount.visibility = View.GONE }
-
         balanceViewItem.state.let { adapterState ->
             when (adapterState) {
                 is AdapterState.Syncing -> {
@@ -252,6 +246,15 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
             }
         }
 
+        balanceViewItem.currencyValue?.let {
+            textCurrencyAmount.text = App.numberFormatter.format(it, trimmable = true)
+            textCurrencyAmount.visibility = if(it.value.compareTo(BigDecimal.ZERO) == 0) View.GONE else View.VISIBLE
+            textCurrencyAmount.alpha = if (balanceViewItem.rateExpired || syncing) 0.5f else 1f
+        } ?: run { textCurrencyAmount.visibility = View.GONE }
+
+        textCoinAmount.text = App.numberFormatter.format(balanceViewItem.coinValue)
+        textCoinAmount.alpha = if (syncing) 0.5f else 1f
+
         textSyncProgress.visibility = if (expanded && syncing) View.VISIBLE else View.GONE
         textExchangeRate.visibility = if (expanded && syncing) View.GONE else View.VISIBLE
 
@@ -259,7 +262,8 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
         textCoinName.text = balanceViewItem.coin.title
 
         textExchangeRate.text = balanceViewItem.exchangeValue?.let { exchangeValue ->
-            containerView.context.getString(R.string.Balance_RatePerCoin, App.numberFormatter.format(exchangeValue), balanceViewItem.coinValue.coinCode)
+            val rateString = App.numberFormatter.format(exchangeValue, trimmable = true, canUseLessSymbol = false)
+            containerView.context.getString(R.string.Balance_RatePerCoin, rateString, balanceViewItem.coinValue.coinCode)
         } ?: ""
         textExchangeRate.setTextColor(ContextCompat.getColor(containerView.context, if (balanceViewItem.rateExpired) R.color.steel_40 else R.color.grey))
 

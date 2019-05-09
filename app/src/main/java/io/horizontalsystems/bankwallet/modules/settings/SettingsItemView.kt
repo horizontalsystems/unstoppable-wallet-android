@@ -2,19 +2,19 @@ package io.horizontalsystems.bankwallet.modules.settings
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.support.constraint.ConstraintLayout
 import android.util.AttributeSet
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.ImageView
 import android.widget.Switch
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
 
 class SettingsItemView : ConstraintLayout {
 
     init {
-        ConstraintLayout.inflate(context, R.layout.view_setting_item, this)
+        inflate(context, R.layout.view_setting_item, this)
     }
 
     private var attrTitle: String? = null

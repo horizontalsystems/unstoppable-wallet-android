@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.core.IFeeRateProvider
 import io.horizontalsystems.feeratekit.FeeRate
 import io.horizontalsystems.feeratekit.FeeRateKit
 
-class FeeRateProvider(context: Context): IFeeRateProvider, FeeRateKit.Listener {
+class FeeRateProvider(context: Context) : IFeeRateProvider, FeeRateKit.Listener {
 
     private val feeRateKit = FeeRateKit(context, this)
 
@@ -20,6 +20,10 @@ class FeeRateProvider(context: Context): IFeeRateProvider, FeeRateKit.Listener {
 
     override fun bitcoinCashFeeRate(priority: FeeRatePriority): Long {
         return feeRate(feeRateKit.bitcoinCash(), priority)
+    }
+
+    override fun dashFeeRate(priority: FeeRatePriority): Long {
+        return feeRate(feeRateKit.dash(), priority)
     }
 
     override fun onRefresh(rates: List<FeeRate>) {

@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import android.support.v7.util.DiffUtil
+import androidx.recyclerview.widget.DiffUtil
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
 import io.horizontalsystems.bankwallet.entities.*
@@ -31,7 +31,7 @@ sealed class TransactionStatus {
 
 object TransactionsModule {
 
-    data class FetchData(val coin: Coin, val hashFrom: String?, val limit: Int)
+    data class FetchData(val coin: Coin, val from: Pair<String, Int>?, val limit: Int)
 
     interface IView {
         fun showFilters(filters: List<Coin?>)

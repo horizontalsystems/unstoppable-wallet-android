@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.pin.unlock
 
-import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
 import io.horizontalsystems.bankwallet.core.factories.LockoutUntilDateFactory

@@ -5,68 +5,73 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
-import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
-import io.horizontalsystems.bitcoinkit.BitcoinKit
-import io.horizontalsystems.bitcoinkit.managers.UnspentOutputSelector
-import io.horizontalsystems.bitcoinkit.models.BlockInfo
-import io.horizontalsystems.bitcoinkit.models.TransactionInfo
+import io.horizontalsystems.bitcoincore.AbstractKit
+import io.horizontalsystems.bitcoincore.managers.UnspentOutputSelectorError
+import io.horizontalsystems.bitcoincore.models.TransactionInfo
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.math.RoundingMode
-import java.util.*
 
-abstract class BitcoinBaseAdapter(
-        override val coin: Coin,
-        private val addressParser: AddressParser) : IAdapter, BitcoinKit.Listener {
+abstract class BitcoinBaseAdapter(override val coin: Coin, open val kit: AbstractKit, private val addressParser: AddressParser) : IAdapter {
 
-    override val feeCoinCode: String? = null
-
-    final override val decimal = 8
-
-    abstract val networkType: BitcoinKit.NetworkType
-    abstract val bitcoinKit: BitcoinKit
-    private val satoshisInBitcoin = Math.pow(10.0, decimal.toDouble()).toBigDecimal()
-
+    abstract val satoshisInBitcoin: BigDecimal
     abstract fun feeRate(feePriority: FeeRatePriority): Int
 
-    override val balance: BigDecimal
-        get() = bitcoinKit.balance.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN)
+    //
+    // Adapter implementation
+    //
 
-    override val balanceUpdatedSignal = PublishSubject.create<Unit>()
+    override val feeCoinCode: String? = null
+    override val decimal = 8
+
+    override val confirmationsThreshold: Int = 6
+    override val lastBlockHeight: Int?
+        get() = kit.lastBlockInfo?.height
+
+    override val receiveAddress: String
+        get() = kit.receiveAddress()
+
+    protected val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
+    protected val lastBlockHeightUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
+    protected val adapterStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
+    protected val transactionRecordsSubject: PublishSubject<List<TransactionRecord>> = PublishSubject.create()
+
+    override val balanceUpdatedFlowable: Flowable<Unit>
+        get() = balanceUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+
+    override val lastBlockHeightUpdatedFlowable: Flowable<Unit>
+        get() = lastBlockHeightUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+
+    override val stateUpdatedFlowable: Flowable<Unit>
+        get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+
+    override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
+        get() = transactionRecordsSubject.toFlowable(BackpressureStrategy.BUFFER)
+
+    override val debugInfo: String = ""
+
+    override val balance: BigDecimal
+        get() = BigDecimal.valueOf(kit.balance).divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN)
 
     override var state: AdapterState = AdapterState.Syncing(0, null)
         set(value) {
             field = value
             adapterStateUpdatedSubject.onNext(Unit)
         }
-    override var adapterStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
-
-    override val confirmationsThreshold: Int = 6
-    override val lastBlockHeight get() = bitcoinKit.lastBlockInfo?.height
-    override val lastBlockHeightUpdatedSignal: PublishSubject<Unit> = PublishSubject.create()
-
-    override val transactionRecordsSubject: PublishSubject<List<TransactionRecord>> = PublishSubject.create()
-
-    override val debugInfo: String = ""
-
-    override val receiveAddress: String get() = bitcoinKit.receiveAddress()
 
     override fun start() {
-        bitcoinKit.listener = this
-        bitcoinKit.start()
+        kit.start()
     }
 
     override fun stop() {
-        bitcoinKit.stop()
+        kit.stop()
     }
 
     override fun refresh() {
-        bitcoinKit.refresh()
-    }
-
-    override fun clear() {
-        bitcoinKit.clear()
+        kit.refresh()
     }
 
     override fun parsePaymentAddress(address: String): PaymentRequestAddress {
@@ -74,24 +79,26 @@ abstract class BitcoinBaseAdapter(
         return PaymentRequestAddress(paymentData.address, paymentData.amount?.toBigDecimal())
     }
 
-    override fun send(address: String, value: BigDecimal, feePriority: FeeRatePriority, completion: ((Throwable?) -> (Unit))?) {
-        try {
-            bitcoinKit.send(address, (value * satoshisInBitcoin).toLong(), feeRate = feeRate(feePriority))
-            completion?.invoke(null)
-        } catch (ex: Exception) {
-            completion?.invoke(ex)
+    override fun send(address: String, value: BigDecimal, feePriority: FeeRatePriority): Single<Unit> {
+        return Single.create { emitter ->
+            try {
+                kit.send(address, (value * satoshisInBitcoin).toLong(), feeRate = feeRate(feePriority))
+                emitter.onSuccess(Unit)
+            } catch (ex: Exception) {
+                emitter.onError(ex)
+            }
         }
     }
 
     override fun fee(value: BigDecimal, address: String?, feePriority: FeeRatePriority): BigDecimal {
-        try {
+        return try {
             val amount = (value * satoshisInBitcoin).toLong()
-            val fee = bitcoinKit.fee(amount, address, true, feeRate = feeRate(feePriority))
-            return fee.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
-        } catch (e: UnspentOutputSelector.Error.InsufficientUnspentOutputs) {
-            return e.fee.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
+            val fee = kit.fee(amount, address, true, feeRate = feeRate(feePriority))
+            BigDecimal.valueOf(fee).divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
+        } catch (e: UnspentOutputSelectorError.InsufficientUnspentOutputs) {
+            BigDecimal.valueOf(e.fee).divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
         } catch (e: Exception) {
-            return BigDecimal.ZERO
+            BigDecimal.ZERO
         }
     }
 
@@ -108,80 +115,19 @@ abstract class BitcoinBaseAdapter(
     }
 
     override fun validate(address: String) {
-        bitcoinKit.validateAddress(address)
+        kit.validateAddress(address)
     }
 
-    override fun getTransactionsObservable(hashFrom: String?, limit: Int): Single<List<TransactionRecord>> {
-        return bitcoinKit.transactions(hashFrom, limit).map { it.map { transactionRecord(it) } }
+    fun transactionRecord(transaction: TransactionInfo): TransactionRecord {
+        return TransactionRecord(
+                transactionHash = transaction.transactionHash,
+                transactionIndex = transaction.transactionIndex,
+                interTransactionIndex = 0,
+                blockHeight = transaction.blockHeight?.toLong(),
+                amount = transaction.amount.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN),
+                timestamp = transaction.timestamp,
+                from = transaction.from.map { TransactionAddress(it.address, it.mine) },
+                to = transaction.to.map { TransactionAddress(it.address, it.mine) }
+        )
     }
-
-    //
-    // BitcoinKit Listener implementations
-    //
-    override fun onBalanceUpdate(bitcoinKit: BitcoinKit, balance: Long) {
-        balanceUpdatedSignal.onNext(Unit)
-    }
-
-    override fun onLastBlockInfoUpdate(bitcoinKit: BitcoinKit, blockInfo: BlockInfo) {
-        lastBlockHeightUpdatedSignal.onNext(Unit)
-    }
-
-    override fun onKitStateUpdate(bitcoinKit: BitcoinKit, state: BitcoinKit.KitState) {
-        when (state) {
-            is BitcoinKit.KitState.Synced -> {
-                if (this.state !is AdapterState.Synced) {
-                    this.state = AdapterState.Synced
-                }
-            }
-            is BitcoinKit.KitState.NotSynced -> {
-                if (this.state !is AdapterState.NotSynced) {
-                    this.state = AdapterState.NotSynced
-                }
-            }
-            is BitcoinKit.KitState.Syncing -> {
-                this.state.let { currentState ->
-                    val newProgress = (state.progress * 100).toInt()
-                    val newDate = bitcoinKit.lastBlockInfo?.timestamp?.let { Date(it * 1000) }
-
-                    if (currentState is AdapterState.Syncing && currentState.progress == newProgress) {
-                        val currentDate = currentState.lastBlockDate
-                        if (newDate != null && currentDate != null && DateHelper.isSameDay(newDate, currentDate)) {
-                            return
-                        }
-                    }
-
-                    this.state = AdapterState.Syncing(newProgress, newDate)
-                }
-            }
-        }
-    }
-
-    override fun onTransactionsUpdate(bitcoinKit: BitcoinKit, inserted: List<TransactionInfo>, updated: List<TransactionInfo>) {
-        val records = mutableListOf<TransactionRecord>()
-
-        for (info in inserted) {
-            records.add(transactionRecord(info))
-        }
-
-        for (info in updated) {
-            records.add(transactionRecord(info))
-        }
-
-        transactionRecordsSubject.onNext(records)
-    }
-
-    override fun onTransactionsDelete(hashes: List<String>) {
-        // ignored for now
-    }
-
-    private fun transactionRecord(transaction: TransactionInfo) =
-            TransactionRecord(
-                    transaction.transactionHash,
-                    transaction.blockHeight?.toLong() ?: 0,
-                    transaction.amount.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN),
-                    transaction.timestamp,
-                    transaction.from.map { TransactionAddress(it.address, it.mine) },
-                    transaction.to.map { TransactionAddress(it.address, it.mine) }
-            )
-
 }

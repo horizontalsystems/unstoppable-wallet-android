@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.Context
-import android.support.constraint.ConstraintLayout
 import android.util.AttributeSet
+import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.view_coin_icon.view.*
 class CoinIconView : ConstraintLayout {
 
     init {
-        ConstraintLayout.inflate(context, R.layout.view_coin_icon, this)
+        inflate(context, R.layout.view_coin_icon, this)
     }
 
     constructor(context: Context) : super(context)

@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.send
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
+import io.horizontalsystems.bankwallet.entities.Rate
 import java.math.BigDecimal
 import java.net.UnknownHostException
 
@@ -32,7 +33,9 @@ class SendPresenter(
         view?.setFeeInfo(viewItem.feeInfo)
         view?.setSendButtonEnabled(viewItem.sendButtonEnabled)
         updatePasteButtonState()
+    }
 
+    override fun onViewResumed() {
         interactor.retrieveRate()
     }
 
@@ -128,7 +131,12 @@ class SendPresenter(
         updateViewItem()
     }
 
-    override fun didRateRetrieve() {
+    override fun didRateRetrieve(rate: Rate?) {
+        if (userInput.inputType == SendModule.InputType.CURRENCY && rate == null) {
+            view?.dismiss()
+            return
+        }
+
         if (interactor.defaultInputType == SendModule.InputType.CURRENCY && userInput.amount == BigDecimal.ZERO) {
             userInput.inputType = interactor.defaultInputType
         }

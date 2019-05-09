@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 
 import android.content.Context
-import android.support.constraint.ConstraintLayout
 import android.util.AttributeSet
 import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import kotlinx.android.synthetic.main.view_transaction_info_item.view.*
@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.view_transaction_info_item.view.*
 class TransactionInfoItemView : ConstraintLayout {
 
     init {
-        ConstraintLayout.inflate(context, R.layout.view_transaction_info_item, this)
+        inflate(context, R.layout.view_transaction_info_item, this)
     }
 
     private var attrTitle: String? = null

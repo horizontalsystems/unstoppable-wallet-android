@@ -1,14 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.send
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v4.app.FragmentActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.extensions.AddressView
 import io.horizontalsystems.bankwallet.ui.extensions.ButtonWithProgressbarView
@@ -24,7 +24,7 @@ class ConfirmationFragment : DialogFragment() {
         activity?.let {
             viewModel = ViewModelProviders.of(it).get(SendViewModel::class.java)
         }
-        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.AlertDialog)
+        setStyle(STYLE_NO_TITLE, R.style.AlertDialog)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -34,7 +34,7 @@ class ConfirmationFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.sendConfirmationViewItemLiveData.observe(this, Observer { viewItem ->
+        viewModel.sendConfirmationViewItemLiveData.observe(viewLifecycleOwner, Observer { viewItem ->
             viewItem?.let { sendConfirmationViewItem ->
                 view.findViewById<TextView>(R.id.primaryAmountText)?.text = sendConfirmationViewItem.primaryAmountInfo.getFormatted()
                 view.findViewById<TextView>(R.id.secondaryAmountText)?.text = sendConfirmationViewItem.secondaryAmountInfo?.getFormatted()
@@ -49,7 +49,7 @@ class ConfirmationFragment : DialogFragment() {
             }
         })
 
-        viewModel.coinLiveData.observe(this, Observer { coin ->
+        viewModel.coinLiveData.observe(viewLifecycleOwner, Observer { coin ->
             coin?.let { coin1 ->
                 context?.let {
                     view.findViewById<CoinIconView>(R.id.coinIcon)?.bind(coin1)
@@ -58,13 +58,12 @@ class ConfirmationFragment : DialogFragment() {
             }
         })
 
-        viewModel.dismissConfirmationLiveEvent.observe(this, Observer {
+        viewModel.dismissConfirmationLiveEvent.observe(viewLifecycleOwner, Observer {
             dismiss()
         })
 
-        viewModel.errorLiveData.observe(this, Observer {
+        viewModel.errorLiveData.observe(viewLifecycleOwner, Observer {
             view.findViewById<ButtonWithProgressbarView>(R.id.buttonConfirm)?.let { buttonConfirm ->
-                isCancelable = true
                 buttonConfirm.bind(R.string.Backup_Button_Confirm)
             }
         })
@@ -74,7 +73,6 @@ class ConfirmationFragment : DialogFragment() {
 
             buttonConfirm.setOnClickListener {
                 viewModel.delegate.onConfirmClicked()
-                isCancelable = false
                 buttonConfirm.bind(R.string.Send_Sending, false, true)
             }
         }

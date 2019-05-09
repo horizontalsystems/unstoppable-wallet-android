@@ -1,16 +1,16 @@
 package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.Context
-import android.support.constraint.ConstraintLayout
 import android.util.AttributeSet
 import android.widget.SeekBar
+import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
 import kotlinx.android.synthetic.main.view_seekbar.view.*
 
 class SeekbarView : ConstraintLayout {
 
     init {
-        ConstraintLayout.inflate(context, R.layout.view_seekbar, this)
+        inflate(context, R.layout.view_seekbar, this)
     }
 
     constructor(context: Context) : super(context)

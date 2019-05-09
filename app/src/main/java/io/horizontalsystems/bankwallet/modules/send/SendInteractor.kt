@@ -49,13 +49,11 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {
                             exchangeRate = if (it.expired) null else it
-                            if (exchangeRate != null) {
-                                delegate?.didRateRetrieve()
-                            }
+                            delegate?.didRateRetrieve(exchangeRate)
                         }
         )
 
-        adapter.feeCoinCode?.let{
+        adapter.feeCoinCode?.let {
             disposables.add(
                     rateStorage.latestRateObservable(it, currencyManager.baseCurrency.code)
                             .take(1)
@@ -128,7 +126,8 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
             }
         }
 
-        val errors = adapter.validate(state.coinValue?.value ?: BigDecimal.ZERO, address, input.feePriority)
+        val errors = adapter.validate(state.coinValue?.value
+                ?: BigDecimal.ZERO, address, input.feePriority)
 
         for (error in errors) {
             when (error) {
@@ -149,7 +148,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
         var feeCurrencyRate: BigDecimal? = null
         adapter.feeCoinCode?.let {
             feeCurrencyRate = exchangeFeeRate?.value
-        } ?:run {
+        } ?: run {
             feeCurrencyRate = rateValue
         }
 
@@ -206,12 +205,17 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
             return
         }
 
-        adapter.send(address, computedAmount, userInput.feePriority) { error ->
-            when (error) {
-                null -> delegate?.didSend()
-                else -> delegate?.didFailToSend(error)
-            }
-        }
+        adapter.send(address, computedAmount, userInput.feePriority)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { delegate?.didSend() },
+                        { error ->
+                            delegate?.didFailToSend(error)
+                        })
+                .let {
+                    disposables.add(it)
+                }
     }
 
     override fun clear() {

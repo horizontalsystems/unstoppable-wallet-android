@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.entities
 
-import io.horizontalsystems.bitcoinkit.core.hexStringToByteArray
-import io.horizontalsystems.bitcoinkit.core.toHexString
+import io.horizontalsystems.bitcoincore.extensions.hexToByteArray
+import io.horizontalsystems.bitcoincore.extensions.toHexString
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import java.util.*
 
@@ -33,7 +33,7 @@ class AuthData {
             this.version = version.toInt()
             this.words = wordsString.split(wordsSeparator)
             this.walletId = walletId
-            this.seed = seedString.hexStringToByteArray()
+            this.seed = seedString.hexToByteArray()
         }
     }
 

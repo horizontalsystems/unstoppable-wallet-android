@@ -8,10 +8,9 @@ import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
+import io.horizontalsystems.bankwallet.core.storage.EnabledCoinsRepository
 import io.horizontalsystems.bankwallet.core.storage.RatesRepository
-import io.horizontalsystems.bankwallet.core.storage.StorableCoinsRepository
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
-import io.horizontalsystems.bitcoinkit.BitcoinKit
 import java.util.*
 
 class App : Application() {
@@ -43,14 +42,12 @@ class App : Application() {
         lateinit var networkAvailabilityManager: NetworkAvailabilityManager
         lateinit var appDatabase: AppDatabase
         lateinit var rateStorage: IRateStorage
-        lateinit var coinsStorage: ICoinStorage
+        lateinit var enabledCoinsStorage: IEnabledCoinStorage
         lateinit var transactionInfoFactory: FullTransactionInfoFactory
         lateinit var transactionDataProviderManager: TransactionDataProviderManager
         lateinit var appCloseManager: AppCloseManager
         lateinit var ethereumKitManager: IEthereumKitManager
         lateinit var numberFormatter: IAppNumberFormatter
-
-        val testMode = true
 
         lateinit var instance: App
             private set
@@ -68,14 +65,10 @@ class App : Application() {
         }
         LeakCanary.install(this)
 
-        // Initialize BitcoinKit
-        BitcoinKit.init(this)
-
         instance = this
         preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
         val fallbackLanguage = Locale("en")
-
 
         feeRateProvider = FeeRateProvider(instance)
         appConfigProvider = AppConfigProvider()
@@ -86,13 +79,13 @@ class App : Application() {
 
         appDatabase = AppDatabase.getInstance(this)
         rateStorage = RatesRepository(appDatabase)
-        coinsStorage = StorableCoinsRepository(appDatabase)
+        enabledCoinsStorage = EnabledCoinsRepository(appDatabase)
         localStorage = LocalStorageManager()
 
         networkManager = NetworkManager(appConfigProvider)
         rateManager = RateManager(rateStorage, networkManager)
-        coinManager = CoinManager(appConfigProvider, coinsStorage)
-        authManager = AuthManager(secureStorage, localStorage, coinManager, rateManager, ethereumKitManager)
+        coinManager = CoinManager(appConfigProvider, enabledCoinsStorage)
+        authManager = AuthManager(secureStorage, localStorage, coinManager, rateManager, ethereumKitManager, appConfigProvider)
 
         wordsManager = WordsManager(localStorage)
         randomManager = RandomProvider()
@@ -105,7 +98,7 @@ class App : Application() {
 
         networkAvailabilityManager = NetworkAvailabilityManager()
 
-        adapterManager = AdapterManager(coinManager, authManager, AdapterFactory(appConfigProvider, localStorage, ethereumKitManager, feeRateProvider))
+        adapterManager = AdapterManager(coinManager, authManager, AdapterFactory(instance, appConfigProvider, localStorage, ethereumKitManager, feeRateProvider))
         rateSyncer = RateSyncer(rateManager, adapterManager, currencyManager, networkAvailabilityManager)
 
         appCloseManager = AppCloseManager()

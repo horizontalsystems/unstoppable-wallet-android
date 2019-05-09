@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.receive
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.modules.receive.viewitems.AddressItem
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode

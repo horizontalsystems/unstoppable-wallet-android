@@ -1,10 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
 
 import android.content.Context
-import android.support.constraint.ConstraintLayout
-import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.FullTransactionIcon
@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.view_transaction_full_info_item.view.*
 class FullTransactionInfoItemView : ConstraintLayout {
 
     init {
-        ConstraintLayout.inflate(context, R.layout.view_transaction_full_info_item, this)
+        inflate(context, R.layout.view_transaction_full_info_item, this)
     }
 
     private var attrTitle: String? = null

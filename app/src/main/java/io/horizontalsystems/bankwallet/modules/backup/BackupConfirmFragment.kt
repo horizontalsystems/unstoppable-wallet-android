@@ -1,12 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.backup
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.extensions.InputTextView
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
@@ -31,7 +31,7 @@ class BackupConfirmFragment : Fragment() {
             viewModel = ViewModelProviders.of(it).get(BackupViewModel::class.java)
         }
 
-        viewModel.wordIndexesToConfirmLiveData.observe(this, Observer { list ->
+        viewModel.wordIndexesToConfirmLiveData.observe(viewLifecycleOwner, Observer { list ->
             list?.let {
                 wordOne?.bindPrefix("${it[0]}.")
                 wordTwo?.bindPrefix("${it[1]}.")
@@ -41,11 +41,11 @@ class BackupConfirmFragment : Fragment() {
             }
         })
 
-        viewModel.errorLiveData.observe(this, Observer {
+        viewModel.errorLiveData.observe(viewLifecycleOwner, Observer {
             showError(it)
         })
 
-        viewModel.validateWordsLiveEvent.observe(this, Observer {
+        viewModel.validateWordsLiveEvent.observe(viewLifecycleOwner, Observer {
             val wordOneEntry = wordOne?.getEnteredText()
             val wordTwoEntry = wordTwo?.getEnteredText()
             if (wordOneEntry.isNullOrEmpty() || wordTwoEntry.isNullOrEmpty()) {

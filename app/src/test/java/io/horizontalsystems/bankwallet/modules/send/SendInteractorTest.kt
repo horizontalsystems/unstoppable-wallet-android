@@ -102,7 +102,7 @@ class SendInteractorTest {
 
         interactor.retrieveRate()
 
-        verify(delegate, never()).didRateRetrieve()
+        verify(delegate).didRateRetrieve(null)
     }
 
     @Test
@@ -121,7 +121,7 @@ class SendInteractorTest {
 
         val expectedAmountToSend = BigDecimal.valueOf(0.00097656) // 0.0009765625
 
-        verify(adapter).send(eq("abc"), eq(expectedAmountToSend), eq(feeRate), any())
+        verify(adapter).send(eq("abc"), eq(expectedAmountToSend), eq(feeRate))
     }
 
     @Test
@@ -132,7 +132,7 @@ class SendInteractorTest {
         whenever(userInput.amount).thenReturn(one)
         whenever(userInput.feePriority).thenReturn(feePriority)
 
-        whenever(adapter.send(any(), any(), any(), any())).then {
+        whenever(adapter.send(any(), any(), any())).then {
             val completion = it.arguments[3] as (Throwable?) -> (Unit)
             completion.invoke(null)
         }
@@ -174,7 +174,7 @@ class SendInteractorTest {
         whenever(userInput.address).thenReturn("abc")
         whenever(userInput.amount).thenReturn(one)
         whenever(userInput.feePriority).thenReturn(feePriority)
-        whenever(adapter.send(any(), any(), any(), any())).then {
+        whenever(adapter.send(any(), any(), any())).then {
             val completion = it.arguments[3] as (Throwable?) -> Unit
             completion.invoke(exception)
         }
@@ -493,7 +493,7 @@ class SendInteractorTest {
 
         interactor.retrieveRate()
 
-        verify(delegate, atLeastOnce()).didRateRetrieve()
+        verify(delegate, atLeastOnce()).didRateRetrieve(rate)
     }
 
 }

@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
 import android.content.Context
-import android.support.constraint.ConstraintLayout
 import android.util.AttributeSet
 import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
 import kotlinx.android.synthetic.main.view_transaction_status.view.*
 

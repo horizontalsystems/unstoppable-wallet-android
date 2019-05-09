@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.managecoins
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 
 class ManageCoinsViewModel : ViewModel(), ManageCoinsModule.IView, ManageCoinsModule.IRouter {

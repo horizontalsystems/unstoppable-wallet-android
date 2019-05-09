@@ -1,16 +1,16 @@
 package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.Context
-import android.support.constraint.ConstraintLayout
 import android.util.AttributeSet
 import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
 import kotlinx.android.synthetic.main.view_button_with_progressbar.view.*
 
 class ButtonWithProgressbarView : ConstraintLayout {
 
     init {
-        ConstraintLayout.inflate(context, R.layout.view_button_with_progressbar, this)
+        inflate(context, R.layout.view_button_with_progressbar, this)
     }
 
     constructor(context: Context) : super(context)

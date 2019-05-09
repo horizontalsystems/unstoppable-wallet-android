@@ -73,9 +73,12 @@ class AdapterManager(private val coinManager: CoinManager, private val authManag
         }
     }
 
-    override fun clear() {
+    override fun stopKits() {
         handler.post {
-            adapters.forEach { it.clear() }
+            adapters.forEach {
+                it.stop()
+                adapterFactory.unlinkAdapter(it)
+            }
             adapters = listOf()
             adaptersUpdatedSignal.onNext(Unit)
         }

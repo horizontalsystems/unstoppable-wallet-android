@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
-import android.support.v7.util.DiffUtil
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.recyclerview.widget.DiffUtil
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.reactivex.android.schedulers.AndroidSchedulers

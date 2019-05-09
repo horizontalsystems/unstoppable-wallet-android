@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import android.support.v7.util.DiffUtil
+import androidx.recyclerview.widget.DiffUtil
 import io.horizontalsystems.bankwallet.entities.TransactionItem
 
 class TransactionDiffCallback(private val oldTxList: List<TransactionItem>, private val newTxList: List<TransactionItem>)
@@ -15,13 +15,13 @@ class TransactionDiffCallback(private val oldTxList: List<TransactionItem>, priv
     }
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldTxList[oldItemPosition].record.transactionHash == newTxList[newItemPosition].record.transactionHash
+        return oldTxList[oldItemPosition] == newTxList[newItemPosition]
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         val old = oldTxList[oldItemPosition].record
         val new = newTxList[newItemPosition].record
 
-        return old.blockHeight == new.blockHeight && old.timestamp == new.timestamp
+        return old.blockHeight == new.blockHeight && old.timestamp == new.timestamp && old.interTransactionIndex == new.interTransactionIndex
     }
 }

@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import android.support.v4.content.ContextCompat
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import androidx.core.content.ContextCompat
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
@@ -20,6 +20,7 @@ class NumberFormatter(private val languageManager: ILanguageManager): IAppNumber
     private val COIN_BIG_NUMBER_EDGE = "0.01".toBigDecimal()
     private val FIAT_BIG_NUMBER_EDGE = "1000".toBigDecimal()
     private val FIAT_SMALL_NUMBER_EDGE = "0.01".toBigDecimal()
+    private val FIAT_TEN_CENT_EDGE = "0.1".toBigDecimal()
 
     private var formatters: MutableMap<String, NumberFormat> = mutableMapOf()
 
@@ -53,7 +54,7 @@ class NumberFormatter(private val languageManager: ILanguageManager): IAppNumber
         return formatted
     }
 
-    override fun format(currencyValue: CurrencyValue, showNegativeSign: Boolean, realNumber: Boolean, canUseLessSymbol: Boolean): String? {
+    override fun format(currencyValue: CurrencyValue, showNegativeSign: Boolean, trimmable: Boolean, canUseLessSymbol: Boolean): String? {
 
         val absValue = currencyValue.value.abs()
         var value = absValue
@@ -63,7 +64,10 @@ class NumberFormatter(private val languageManager: ILanguageManager): IAppNumber
         when {
             value.compareTo(BigDecimal.ZERO) == 0 -> {
                 value = BigDecimal.ZERO
-                customFormatter.minimumFractionDigits = if (realNumber) 2 else 0
+                customFormatter.minimumFractionDigits = if (trimmable) 0 else 2
+            }
+            value < FIAT_TEN_CENT_EDGE && !canUseLessSymbol -> {
+                customFormatter.maximumFractionDigits = 4
             }
             value < FIAT_SMALL_NUMBER_EDGE -> {
                 value = BigDecimal("0.01")
@@ -71,7 +75,7 @@ class NumberFormatter(private val languageManager: ILanguageManager): IAppNumber
             }
             else -> {
                 when {
-                    !realNumber && (value >= FIAT_BIG_NUMBER_EDGE) -> {
+                    trimmable && (value >= FIAT_BIG_NUMBER_EDGE) -> {
                         customFormatter.maximumFractionDigits = 0
                     }
                     else -> {
@@ -97,7 +101,7 @@ class NumberFormatter(private val languageManager: ILanguageManager): IAppNumber
     }
 
     override fun formatForTransactions(currencyValue: CurrencyValue, isIncoming: Boolean): SpannableString {
-        val spannable = SpannableString(format(currencyValue, showNegativeSign = true, canUseLessSymbol = true))
+        val spannable = SpannableString(format(currencyValue, showNegativeSign = true, trimmable = true, canUseLessSymbol = true))
 
         //set color
         val amountTextColor = if (isIncoming) R.color.green_crypto else R.color.yellow_crypto

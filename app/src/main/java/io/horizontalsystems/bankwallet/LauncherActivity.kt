@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet
 
 import android.os.Bundle
 import android.security.keystore.KeyPermanentlyInvalidatedException
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.modules.backup.BackupModule
