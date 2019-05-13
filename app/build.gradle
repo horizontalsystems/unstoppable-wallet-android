@@ -37,7 +37,8 @@ android {
         debug {
             debuggable true
             minifyEnabled false
-            resValue "string", "infuraKey", "2a1306f1d12f4c109a4d4fb9be46b02e"
+            resValue "string", "infuraProjectId", "2a1306f1d12f4c109a4d4fb9be46b02e"
+            resValue "string", "infuraSecretKey", "fc479a9290b64a84a15fa6544a130218"
             resValue "string", "etherscanKey", "GKNHXT22ED7PRVCKZATFZQD1YI7FK9AAYE"
             resValue "string", "is_release", "false"
         }
@@ -45,7 +46,8 @@ android {
             debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            resValue "string", "infuraKey", ""
+            resValue "string", "infuraProjectId", ""
+            resValue "string", "infuraSecretKey", ""
             resValue "string", "etherscanKey", ""
             resValue "string", "is_release", "true"
         }
@@ -127,7 +129,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:0.3.0'
 
     // EthereumKit
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:0.3.0'
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:0.3.1'
 
     //FeeRate
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:3b97961'
