@@ -19,21 +19,27 @@ class TransactionViewItemFactoryTest {
     private val rate = CurrencyValue(Currency(code = "USD", symbol = "$"), 3900.toBigDecimal())
     private val lastBlockHeight = 1000
 
-    private val txRecordOutgoing = TransactionRecord(hash).apply {
-        blockHeight = 900
-        amount = (-123).toBigDecimal()
-        timestamp = 1553769996L
-        from = listOf(myTxAddress)
-        to = listOf(toTxAddress)
-    }
+    private val txRecordOutgoing = TransactionRecord(
+            transactionHash = hash,
+            transactionIndex = 2,
+            interTransactionIndex = 3,
+            blockHeight = 900,
+            amount = (-123).toBigDecimal(),
+            timestamp = 1553769996L,
+            from = listOf(myTxAddress),
+            to = listOf(toTxAddress)
+    )
 
-    private val txRecordIncoming = TransactionRecord(hash).apply {
-        blockHeight = 900
-        amount = 123.toBigDecimal()
-        timestamp = 1553769996L
-        from = listOf(fromTxAddress)
-        to = listOf(myTxAddress)
-    }
+    private val txRecordIncoming = TransactionRecord(
+            transactionHash = hash,
+            transactionIndex = 2,
+            interTransactionIndex = 3,
+            blockHeight = 900,
+            amount = 123.toBigDecimal(),
+            timestamp = 1553769996L,
+            from = listOf(fromTxAddress),
+            to = listOf(myTxAddress)
+    )
 
     @Test
     fun getItem_incoming() {
@@ -86,13 +92,16 @@ class TransactionViewItemFactoryTest {
     @Test
     fun getItem_forTransactionToYourself() {
 
-        val txRecordToMyself = TransactionRecord(hash).apply {
-            blockHeight = 900
-            amount = 123.toBigDecimal()
-            timestamp = 1553769996L
-            from = listOf(myTxAddress)
-            to = listOf(myTxAddress)
-        }
+        val txRecordToMyself = TransactionRecord(
+                transactionHash = hash,
+                transactionIndex = 2,
+                interTransactionIndex = 3,
+                blockHeight = 900,
+                amount = 123.toBigDecimal(),
+                timestamp = 1553769996L,
+                from = listOf(myTxAddress),
+                to = listOf(myTxAddress)
+        )
 
         val txItem = TransactionItem(bitCoin, txRecordToMyself)
         val currencyValue = CurrencyValue(rate.currency, txRecordToMyself.amount * rate.value)

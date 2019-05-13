@@ -2,10 +2,7 @@ package io.horizontalsystems.bankwallet.modules.transactions
 
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CoinType
-import io.horizontalsystems.bankwallet.entities.TransactionItem
-import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.*
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -92,23 +89,58 @@ class TransactionRecordDataSourceTest {
     fun increasePage_inserted() {
         val dataSource = TransactionRecordDataSource(poolRepo, itemsDataSource, factory, 3)
 
-        val recordBtc1 = mock(TransactionRecord::class.java)
-        val recordBtc2 = mock(TransactionRecord::class.java)
-        val recordEth1 = mock(TransactionRecord::class.java)
-        val recordEth2 = mock(TransactionRecord::class.java)
+        val address = TransactionAddress("address", false)
+        val btc1Rec = TransactionRecord(
+                transactionHash = "btc_1_hash",
+                transactionIndex = 2,
+                interTransactionIndex = 3,
+                blockHeight = 0,
+                amount = 3.toBigDecimal(),
+                timestamp = 3,
+                from = listOf(address),
+                to = listOf(address)
+        )
 
-        val itemBtc1 = TransactionItem(btc, recordBtc1)
-        val itemBtc2 = TransactionItem(btc, recordBtc2)
-        val itemEth1 = TransactionItem(eth, recordEth1)
-        val itemEth2 = TransactionItem(eth, recordEth2)
+        val btc2Rec = TransactionRecord(
+                transactionHash = "btc_2_hash",
+                transactionIndex = 2,
+                interTransactionIndex = 3,
+                blockHeight = 0,
+                amount = 3.toBigDecimal(),
+                timestamp = 1,
+                from = listOf(address),
+                to = listOf(address)
+        )
+
+        val eth1Rec = TransactionRecord(
+                transactionHash = "eth_1_hash",
+                transactionIndex = 2,
+                interTransactionIndex = 2,
+                blockHeight = 0,
+                amount = 3.toBigDecimal(),
+                timestamp = 2,
+                from = listOf(address),
+                to = listOf(address)
+        )
+
+        val eth2Rec = TransactionRecord(
+                transactionHash = "eth_2_hash",
+                transactionIndex = 2,
+                interTransactionIndex = 3,
+                blockHeight = 0,
+                amount = 3.toBigDecimal(),
+                timestamp = 4,
+                from = listOf(address),
+                to = listOf(address)
+        )
+
+        val itemBtc1 = TransactionItem(btc, btc1Rec)
+        val itemBtc2 = TransactionItem(btc, btc2Rec)
+        val itemEth1 = TransactionItem(eth, eth1Rec)
+        val itemEth2 = TransactionItem(eth, eth2Rec)
 
         val poolBtc = mock(Pool::class.java)
         val poolEth = mock(Pool::class.java)
-
-        whenever(recordBtc1.timestamp).thenReturn(3)
-        whenever(recordBtc2.timestamp).thenReturn(1)
-        whenever(recordEth1.timestamp).thenReturn(2)
-        whenever(recordEth2.timestamp).thenReturn(4)
 
         whenever(poolRepo.activePools).thenReturn(listOf(poolBtc, poolEth))
         whenever(poolRepo.getPool(btc)).thenReturn(poolBtc)
@@ -116,13 +148,13 @@ class TransactionRecordDataSourceTest {
 
         whenever(poolBtc.coin).thenReturn(btc)
         whenever(poolEth.coin).thenReturn(eth)
-        whenever(poolBtc.unusedRecords).thenReturn(listOf(recordBtc1, recordBtc2))
-        whenever(poolEth.unusedRecords).thenReturn(listOf(recordEth1, recordEth2))
+        whenever(poolBtc.unusedRecords).thenReturn(listOf(btc1Rec, btc2Rec))
+        whenever(poolEth.unusedRecords).thenReturn(listOf(eth1Rec, eth2Rec))
 
-        whenever(factory.createTransactionItem(btc, recordBtc1)).thenReturn(itemBtc1)
-        whenever(factory.createTransactionItem(btc, recordBtc2)).thenReturn(itemBtc2)
-        whenever(factory.createTransactionItem(eth, recordEth1)).thenReturn(itemEth1)
-        whenever(factory.createTransactionItem(eth, recordEth2)).thenReturn(itemEth2)
+        whenever(factory.createTransactionItem(btc, btc1Rec)).thenReturn(itemBtc1)
+        whenever(factory.createTransactionItem(btc, btc2Rec)).thenReturn(itemBtc2)
+        whenever(factory.createTransactionItem(eth, eth1Rec)).thenReturn(itemEth1)
+        whenever(factory.createTransactionItem(eth, eth2Rec)).thenReturn(itemEth2)
 
         val result = dataSource.increasePage()
 

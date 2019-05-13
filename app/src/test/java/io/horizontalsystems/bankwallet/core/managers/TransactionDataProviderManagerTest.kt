@@ -82,7 +82,7 @@ class TransactionDataProviderManagerTest {
 
     @Test
     fun ethereum() {
-        listOf("HorizontalSystems.xyz", "Etherscan.io", "BlockChair.com").forEach {
+        listOf("Etherscan.io", "BlockChair.com").forEach {
             val bitcoinCashProvider = dataProviderManager.ethereum(it)
 
             assertEquals(it, bitcoinCashProvider.name)
@@ -102,6 +102,8 @@ class TransactionDataProviderManagerTest {
     @Test
     fun getProvider_TestNet() {
         whenever(appConfig.testMode).thenReturn(true)
+
+        dataProviderManager = TransactionDataProviderManager(appConfig, localStorage)
 
         val bitcoin = dataProviderManager.bitcoin("HorizontalSystems.xyz")
 
