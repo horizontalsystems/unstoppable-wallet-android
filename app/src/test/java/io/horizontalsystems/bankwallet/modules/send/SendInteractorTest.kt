@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.Flowable
+import io.reactivex.Single
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -107,21 +108,22 @@ class SendInteractorTest {
 
     @Test
     fun send_inCurrency() {
-        val feeRate = FeeRatePriority.MEDIUM
+        val feeRatePriority = FeeRatePriority.MEDIUM
         interactor.retrieveRate() // set rate
 
         whenever(rate.value).thenReturn(BigDecimal(1024))
         whenever(userInput.inputType).thenReturn(SendModule.InputType.CURRENCY)
         whenever(userInput.address).thenReturn("abc")
         whenever(userInput.amount).thenReturn(one)
-        whenever(userInput.feePriority).thenReturn(feeRate)
+        whenever(userInput.feePriority).thenReturn(feeRatePriority)
         whenever(adapter.decimal).thenReturn(8)
+
+        val expectedAmountToSend = BigDecimal.valueOf(0.00097656) // 0.0009765625
+        whenever(adapter.send("abc", expectedAmountToSend, feeRatePriority)).thenReturn(Single.just(Unit))
 
         interactor.send(userInput)
 
-        val expectedAmountToSend = BigDecimal.valueOf(0.00097656) // 0.0009765625
-
-        verify(adapter).send(eq("abc"), eq(expectedAmountToSend), eq(feeRate))
+        verify(delegate).didSend()
     }
 
     @Test
@@ -132,10 +134,7 @@ class SendInteractorTest {
         whenever(userInput.amount).thenReturn(one)
         whenever(userInput.feePriority).thenReturn(feePriority)
 
-        whenever(adapter.send(any(), any(), any())).then {
-            val completion = it.arguments[3] as (Throwable?) -> (Unit)
-            completion.invoke(null)
-        }
+        whenever(adapter.send(any(), any(), any())).thenReturn(Single.just(Unit))
 
         interactor.send(userInput)
 
@@ -174,10 +173,7 @@ class SendInteractorTest {
         whenever(userInput.address).thenReturn("abc")
         whenever(userInput.amount).thenReturn(one)
         whenever(userInput.feePriority).thenReturn(feePriority)
-        whenever(adapter.send(any(), any(), any())).then {
-            val completion = it.arguments[3] as (Throwable?) -> Unit
-            completion.invoke(exception)
-        }
+        whenever(adapter.send(any(), any(), any())).thenReturn(Single.error(exception))
 
         interactor.send(userInput)
 
