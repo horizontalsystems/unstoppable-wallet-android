@@ -13,12 +13,9 @@ class ReceiveInteractor(
     var delegate: ReceiveModule.IInteractorDelegate? = null
 
     override fun getReceiveAddress() {
-        val addresses = adapterManager.adapters.filter { coinCode == null || it.coin.code == coinCode }.map {
-            AddressItem(it.receiveAddress, it.coin)
-        }
-
-        if (addresses.isNotEmpty()) {
-            delegate?.didReceiveAddresses(addresses)
+        adapterManager.adapters.firstOrNull { it.coin.code == coinCode }?.let {
+            val addressItem = AddressItem(it.receiveAddress, it.coin)
+            delegate?.didReceiveAddress(addressItem)
         }
     }
 
@@ -26,5 +23,4 @@ class ReceiveInteractor(
         clipboardManager.copyText(coinAddress)
         delegate?.didCopyToClipboard()
     }
-
 }

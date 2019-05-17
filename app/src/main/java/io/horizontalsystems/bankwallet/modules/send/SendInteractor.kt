@@ -42,6 +42,8 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
     private val disposables = CompositeDisposable()
 
     override fun retrieveRate() {
+        disposables.clear()
+
         disposables.add(
                 rateStorage.latestRateObservable(adapter.coin.code, currencyManager.baseCurrency.code)
                         .take(1)

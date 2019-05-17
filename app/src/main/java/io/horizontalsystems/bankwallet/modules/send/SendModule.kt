@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.send
 
-import androidx.fragment.app.FragmentActivity
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.entities.*
@@ -50,7 +49,7 @@ object SendModule {
     interface IInteractor {
         val coin: Coin
         val clipboardHasPrimaryClip: Boolean
-        var defaultInputType: SendModule.InputType
+        var defaultInputType: InputType
         val addressFromClipboard: String?
 
         fun retrieveRate()
@@ -81,10 +80,6 @@ object SendModule {
         interactor.delegate = presenter
     }
 
-    fun start(activity: FragmentActivity, coin: String) {
-        SendBottomSheetFragment.show(activity, coin)
-    }
-
     enum class InputType {
         COIN, CURRENCY
     }
@@ -113,10 +108,10 @@ object SendModule {
         data class CurrencyValueInfo(val currencyValue: CurrencyValue) : AmountInfo()
 
         fun getFormatted(): String? = when (this) {
-            is SendModule.AmountInfo.CoinValueInfo -> {
+            is CoinValueInfo -> {
                 App.numberFormatter.format(this.coinValue)
             }
-            is SendModule.AmountInfo.CurrencyValueInfo -> {
+            is CurrencyValueInfo -> {
                 App.numberFormatter.format(this.currencyValue, trimmable = true)
             }
         }
