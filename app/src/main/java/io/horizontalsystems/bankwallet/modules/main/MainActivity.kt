@@ -287,6 +287,13 @@ class MainActivity : BaseActivity(), NumPadItemsAdapter.Listener {
         editTxtAmount.setText("")
         sendViewModel.init(coinCode)
         sendBottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+
+        disposable?.dispose()
+        disposable = amountChangeSubject.debounce(300, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    sendViewModel.delegate.onAmountChanged(it)
+                }
     }
 
     private fun closeSendDialog() {
@@ -444,12 +451,6 @@ class MainActivity : BaseActivity(), NumPadItemsAdapter.Listener {
         sendViewModel.amountInfoLiveData.reObserve(this, amountInfoObserver)
         sendViewModel.addressInfoLiveData.reObserve(this, addressInfoObserver)
         sendViewModel.feeInfoLiveData.reObserve(this, feeInfoObserver)
-
-        disposable = amountChangeSubject.debounce(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    sendViewModel.delegate.onAmountChanged(it)
-                }
 
         sendInputConnection = editTxtAmount.onCreateInputConnection(EditorInfo())
 

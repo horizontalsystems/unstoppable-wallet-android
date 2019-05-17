@@ -34,6 +34,7 @@
         <activity
             android:name="io.horizontalsystems.bankwallet.modules.main.MainActivity"
             android:launchMode="singleTask"
+            android:windowSoftInputMode="stateAlwaysHidden"
             android:screenOrientation="portrait"/>
         <activity
             android:name="io.horizontalsystems.bankwallet.modules.restore.RestoreWalletActivity"
