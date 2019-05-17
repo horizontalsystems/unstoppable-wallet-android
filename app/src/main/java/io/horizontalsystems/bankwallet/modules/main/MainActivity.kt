@@ -28,15 +28,19 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.reObserve
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveViewModel
 import io.horizontalsystems.bankwallet.modules.receive.viewitems.AddressItem
 import io.horizontalsystems.bankwallet.modules.send.ConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.send.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendViewModel
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
+import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoViewModel
 import io.horizontalsystems.bankwallet.ui.extensions.NumPadItem
 import io.horizontalsystems.bankwallet.ui.extensions.NumPadItemType
 import io.horizontalsystems.bankwallet.ui.extensions.NumPadItemsAdapter
+import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
@@ -46,8 +50,7 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.fragment_bottom_sheet_pay.*
 import kotlinx.android.synthetic.main.fragment_bottom_sheet_receive.*
-import kotlinx.android.synthetic.main.fragment_bottom_sheet_receive.btnShare
-import kotlinx.android.synthetic.main.fragment_bottom_sheet_receive.imgQrCode
+import kotlinx.android.synthetic.main.transaction_info_bottom_sheet.*
 import kotlinx.android.synthetic.main.view_amount_input.*
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -60,8 +63,10 @@ class MainActivity : BaseActivity(), NumPadItemsAdapter.Listener {
     private var disposable: Disposable? = null
     private lateinit var receiveViewModel: ReceiveViewModel
     private lateinit var sendViewModel: SendViewModel
+    private lateinit var transInfoViewModel: TransactionInfoViewModel
     private var receiveBottomSheetBehavior: BottomSheetBehavior<View>? = null
     private var sendBottomSheetBehavior: BottomSheetBehavior<View>? = null
+    private var txInfoBottomSheetBehavior: BottomSheetBehavior<View>? = null
 
     private var sendInputConnection: InputConnection? = null
     private val amountChangeSubject: PublishSubject<BigDecimal> = PublishSubject.create()
@@ -132,16 +137,20 @@ class MainActivity : BaseActivity(), NumPadItemsAdapter.Listener {
 
         receiveBottomSheetBehavior = BottomSheetBehavior.from(receiveNestedScrollView)
         sendBottomSheetBehavior = BottomSheetBehavior.from(sendNestedScrollView)
+        txInfoBottomSheetBehavior = BottomSheetBehavior.from(transactionInfoNestedScrollView)
 
         setBottomSheet(receiveBottomSheetBehavior)
         setBottomSheet(sendBottomSheetBehavior)
+        setBottomSheet(txInfoBottomSheetBehavior)
 
         setReceiveDialog()
         setSendDialog()
+        setTransactionInfoDialog()
 
         bottomSheetDim.setOnClickListener {
             receiveBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
             sendBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+            txInfoBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         }
     }
 
@@ -163,11 +172,6 @@ class MainActivity : BaseActivity(), NumPadItemsAdapter.Listener {
     override fun onDestroy() {
         disposable?.dispose()
         super.onDestroy()
-    }
-
-    fun setBottomNavigationVisible(visible: Boolean) {
-        bottomNavigation.animate().translationY(if (visible) 0f else (bottomNavigation.height).toFloat()).duration = 150
-        bottomNavigationBarShadow.animate().translationY(if (visible) 0f else (bottomNavigation.height).toFloat()).duration = 150
     }
 
     fun updateSettingsTabCounter(count: Int) {
@@ -533,6 +537,80 @@ class MainActivity : BaseActivity(), NumPadItemsAdapter.Listener {
 
     /***
     Send bottomsheet END
+     */
+
+    /***
+    TransactionInfo bottomsheet START
+     */
+
+    private fun setTransactionInfoDialog() {
+        transInfoViewModel = ViewModelProviders.of(this).get(TransactionInfoViewModel::class.java)
+        transInfoViewModel.init()
+
+        transactionIdView.setOnClickListener { transInfoViewModel.onClickTransactionId() }
+        txtFullInfo.setOnClickListener { transInfoViewModel.onClickOpenFillInfo() }
+
+        transInfoViewModel.showCopiedLiveEvent.observe(this, Observer {
+            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied)
+        })
+
+        transInfoViewModel.showFullInfoLiveEvent.observe(this, Observer { pair ->
+            pair?.let {
+                FullTransactionInfoModule.start(this, transactionHash = it.first, coin = it.second)
+            }
+        })
+
+        transInfoViewModel.transactionLiveData.observe(this, Observer { txRecord ->
+            txRecord?.let { txRec ->
+                val txStatus = txRec.status
+
+                txInfoCoinIcon.bind(txRec.coin)
+
+                fiatValue.apply {
+                    text = txRec.currencyValue?.let { App.numberFormatter.format(it, showNegativeSign = true, canUseLessSymbol = false) }
+                    setTextColor(resources.getColor(if (txRec.incoming) R.color.green_crypto else R.color.yellow_crypto, null))
+                }
+
+                coinValue.text = App.numberFormatter.format(txRec.coinValue, explicitSign = true, realNumber = true)
+                coinName.text = txRec.coin.title
+
+                itemRate.apply {
+                    txRec.rate?.let {
+                        val rate = getString(R.string.Balance_RatePerCoin, App.numberFormatter.format(it, canUseLessSymbol = false), txRec.coin.code)
+                        bind(title = getString(R.string.TransactionInfo_HistoricalRate), value = rate)
+                    }
+                    visibility = if (txRec.rate == null) View.GONE else View.VISIBLE
+                }
+
+                itemTime.bind(title = getString(R.string.TransactionInfo_Time), value = txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) } ?: "")
+
+                itemStatus.bindStatus(txStatus)
+
+                transactionIdView.bindTransactionId(txRec.transactionHash)
+
+                itemFrom.apply {
+                    setOnClickListener { transInfoViewModel.onClickFrom() }
+                    visibility = if (txRec.from.isNullOrEmpty()) View.GONE else View.VISIBLE
+                    bindAddress(title = getString(R.string.TransactionInfo_From), address = txRec.from, showBottomBorder = true)
+                }
+
+                itemTo.apply {
+                    setOnClickListener { transInfoViewModel.onClickTo() }
+                    visibility = if (txRec.to.isNullOrEmpty()) View.GONE else View.VISIBLE
+                    bindAddress(title = getString(R.string.TransactionInfo_To), address = txRec.to, showBottomBorder = true)
+                }
+
+                txInfoBottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+            }
+        })
+    }
+
+    fun setTransactionInfoItem(txInfoItem: TransactionViewItem) {
+        transInfoViewModel.setViewItem(txInfoItem)
+    }
+
+    /***
+    TransactionInfo bottomsheet END
      */
 
     private fun setTopMarginByStatusBarHeight(view: View) {

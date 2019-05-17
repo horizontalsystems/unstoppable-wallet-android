@@ -81,4 +81,20 @@
         <include layout="@layout/fragment_bottom_sheet_pay"/>
     </androidx.core.widget.NestedScrollView>
 
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/transactionInfoNestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_sheet_background"
+        android:backgroundTint="?BottomTransactionInfoBackground"
+        android:clipToPadding="true"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="0dp"
+        app:layout_anchorGravity="bottom"
+        app:layout_behavior="@string/bottom_sheet_behavior"
+        >
+
+        <include layout="@layout/transaction_info_bottom_sheet"/>
+    </androidx.core.widget.NestedScrollView>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

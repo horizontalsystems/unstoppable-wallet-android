@@ -220,7 +220,7 @@
     <style name="SendButtonSmallGrey" parent="Button">
         <item name="android:background">@drawable/button_grey_background_4_themed</item>
         <item name="android:textColor">@color/stateful_button_text_color</item>
-        <item name="android:fontFamily">@font/noto_sans_regular</item>
+        <item name="android:fontFamily">@font/noto_sans_medium</item>
         <item name="android:letterSpacing">0</item>
         <item name="android:minHeight">0dp</item>
         <item name="android:minWidth">0dp</item>
