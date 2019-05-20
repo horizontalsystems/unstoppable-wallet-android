@@ -175,7 +175,7 @@ class MainActivity : BaseActivity(), NumPadItemsAdapter.Listener {
     }
 
     fun updateSettingsTabCounter(count: Int) {
-        val countText = if (count < 1) "" else count.toString()
+        val countText = if (count < 1) "" else "!"
         val settingsTabPosition = 2
         bottomNavigation.setNotification(countText, settingsTabPosition)
     }
