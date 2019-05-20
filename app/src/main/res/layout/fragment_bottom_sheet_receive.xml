@@ -10,7 +10,7 @@
     >
 
     <io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
-        android:id="@+id/coinIcon"
+        android:id="@+id/receiveCoinIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/txtTitle"
+        android:id="@+id/receiveTxtTitle"
         style="@style/BaseSb"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -28,9 +28,9 @@
         android:ellipsize="end"
         android:singleLine="true"
         android:textColor="?BottomDialogTextColor"
-        app:layout_constraintBottom_toBottomOf="@+id/coinIcon"
-        app:layout_constraintStart_toEndOf="@+id/coinIcon"
-        app:layout_constraintTop_toTopOf="@+id/coinIcon"
+        app:layout_constraintBottom_toBottomOf="@+id/receiveCoinIcon"
+        app:layout_constraintStart_toEndOf="@+id/receiveCoinIcon"
+        app:layout_constraintTop_toTopOf="@+id/receiveCoinIcon"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="Receive Bitcoin"
         />
@@ -43,7 +43,7 @@
         android:background="@color/steel_15"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/coinIcon"
+        app:layout_constraintTop_toBottomOf="@+id/receiveCoinIcon"
         />
 
     <ImageView
@@ -56,7 +56,7 @@
         android:background="@android:color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtTitle"
+        app:layout_constraintTop_toBottomOf="@+id/receiveTxtTitle"
         />
 
     <TextView
@@ -73,7 +73,7 @@
         />
 
     <io.horizontalsystems.bankwallet.ui.extensions.AddressView
-        android:id="@+id/addressView"
+        android:id="@+id/receiveAddressView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
@@ -97,7 +97,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addressView"
+        app:layout_constraintTop_toBottomOf="@+id/receiveAddressView"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

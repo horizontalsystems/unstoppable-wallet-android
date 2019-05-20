@@ -8,7 +8,7 @@
     >
 
     <io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
-        android:id="@+id/coinIcon"
+        android:id="@+id/txInfoCoinIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
@@ -26,9 +26,9 @@
         android:text="@string/TransactionInfo_Title"
         android:ellipsize="end"
         android:textColor="?TransactionDetailValueTextColor"
-        app:layout_constraintBottom_toBottomOf="@+id/coinIcon"
-        app:layout_constraintStart_toEndOf="@+id/coinIcon"
-        app:layout_constraintTop_toTopOf="@+id/coinIcon"
+        app:layout_constraintBottom_toBottomOf="@+id/txInfoCoinIcon"
+        app:layout_constraintStart_toEndOf="@+id/txInfoCoinIcon"
+        app:layout_constraintTop_toTopOf="@+id/txInfoCoinIcon"
         app:layout_constraintEnd_toStartOf="@+id/transactionIdView"
         />
 
@@ -38,8 +38,8 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/coinIcon"
-        app:layout_constraintTop_toTopOf="@+id/coinIcon"
+        app:layout_constraintBottom_toBottomOf="@+id/txInfoCoinIcon"
+        app:layout_constraintTop_toTopOf="@+id/txInfoCoinIcon"
         />
 
     <TextView
@@ -54,7 +54,7 @@
         android:textColor="@color/green_crypto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/coinIcon"
+        app:layout_constraintTop_toBottomOf="@+id/txInfoCoinIcon"
         tools:text="$3"
         />
 

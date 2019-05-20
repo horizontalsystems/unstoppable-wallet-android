@@ -33,6 +33,7 @@ class SendPresenter(
         view?.setFeeInfo(viewItem.feeInfo)
         view?.setSendButtonEnabled(viewItem.sendButtonEnabled)
         updatePasteButtonState()
+        interactor.retrieveRate()
     }
 
     override fun onViewResumed() {

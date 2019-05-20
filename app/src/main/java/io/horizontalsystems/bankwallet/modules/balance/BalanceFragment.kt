@@ -14,26 +14,25 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageCoinsModule
-import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule
-import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.bankwallet.viewHelpers.AnimationHelper
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_wallet.*
+import kotlinx.android.synthetic.main.fragment_balance.*
 import kotlinx.android.synthetic.main.view_holder_add_coin.*
 import kotlinx.android.synthetic.main.view_holder_coin.*
 import java.math.BigDecimal
 
-class BalanceFragment : Fragment(), CoinsAdapter.Listener {
+class BalanceFragment : Fragment(), CoinsAdapter.Listener{
 
     private lateinit var viewModel: BalanceViewModel
     private var coinsAdapter = CoinsAdapter(this)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_wallet, container, false)
+        return inflater.inflate(R.layout.fragment_balance, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -44,19 +43,15 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener {
         viewModel = ViewModelProviders.of(this).get(BalanceViewModel::class.java)
         viewModel.init()
 
-        viewModel.openReceiveDialog.observe(viewLifecycleOwner, Observer { adapterId ->
-            adapterId?.let { id ->
-                activity?.let {
-                    ReceiveModule.start(it, id)
-                }
+        viewModel.openReceiveDialog.observe(viewLifecycleOwner, Observer {coinCode ->
+            coinCode?.let {
+                (activity as? MainActivity)?.openReceiveDialog(it)
             }
         })
 
-        viewModel.openSendDialog.observe(viewLifecycleOwner, Observer { iAdapter ->
-            iAdapter?.let { coin ->
-                activity?.let {
-                    SendModule.start(it, coin)
-                }
+        viewModel.openSendDialog.observe(viewLifecycleOwner, Observer { coinCode ->
+            coinCode?.let {
+                (activity as? MainActivity)?.openSendDialog(it)
             }
         })
 

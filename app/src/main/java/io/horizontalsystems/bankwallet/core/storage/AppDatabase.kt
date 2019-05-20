@@ -13,7 +13,7 @@ import io.horizontalsystems.bankwallet.entities.EnabledCoin
 import io.horizontalsystems.bankwallet.entities.Rate
 
 
-@Database(entities = [Rate::class, EnabledCoin::class], version = 7, exportSchema = true)
+@Database(entities = [Rate::class, EnabledCoin::class], version = 7, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun ratesDao(): RatesDao

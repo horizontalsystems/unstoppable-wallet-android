@@ -26,6 +26,8 @@ class SendViewModel : ViewModel(), SendModule.IView {
     val feeIsAdjustableLiveData = MutableLiveData<Boolean>()
     var decimalSize: Int? = null
 
+    private var moduleInited = false
+
     fun init(coin: String) {
         hintInfoLiveData.value = null
         sendButtonEnabledLiveData.value = null
@@ -40,6 +42,7 @@ class SendViewModel : ViewModel(), SendModule.IView {
         SendModule.init(this, coin)
         delegate.onViewDidLoad()
         feeIsAdjustableLiveData.value = delegate.feeAdjustable
+        moduleInited = true
     }
 
     override fun setPasteButtonState(enabled: Boolean) {
@@ -97,7 +100,15 @@ class SendViewModel : ViewModel(), SendModule.IView {
     }
 
     override fun onCleared() {
-        delegate.onClear()
+        if (moduleInited) {
+            delegate.onClear()
+        }
+    }
+
+    fun onViewResumed() {
+        if (moduleInited) {
+            delegate.onViewResumed()
+        }
     }
 
 }
