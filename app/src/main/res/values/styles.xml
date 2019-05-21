@@ -61,7 +61,7 @@
     <!-- Base application theme. -->
     <style name="DarkModeAppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/dark</item>
+        <item name="colorPrimary">@color/steel_grey</item>
         <item name="colorPrimaryDark">@color/black</item>
         <item name="colorAccent">@color/yellow_crypto</item>
         <item name="buttonStyle">@style/Button</item>
@@ -133,7 +133,7 @@
 
     <style name="LightModeAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/bars_color</item>
+        <item name="colorPrimary">@color/steel_grey</item>
         <item name="colorPrimaryDark">@color/bars_color</item>
         <item name="colorAccent">@color/yellow_crypto</item>
         <item name="buttonStyle">@style/Button</item>
