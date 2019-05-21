@@ -264,7 +264,7 @@ class MainActivity : BaseActivity(), NumPadItemsAdapter.Listener {
         closeReceiveDialog()
     }
 
-    private val showCopiedObserver = Observer<Unit> { HudHelper.showSuccessMessage(R.string.Hud_Text_Copied) }
+    private val showCopiedObserver = Observer<Unit> { HudHelper.showSuccessMessage(R.string.Hud_Text_Copied, 500) }
 
     private val shareAddressObserver = Observer<String?> { address ->
         address?.let {
@@ -548,7 +548,7 @@ class MainActivity : BaseActivity(), NumPadItemsAdapter.Listener {
         txtFullInfo.setOnClickListener { transInfoViewModel.onClickOpenFillInfo() }
 
         transInfoViewModel.showCopiedLiveEvent.observe(this, Observer {
-            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied)
+            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied, 500)
         })
 
         transInfoViewModel.showFullInfoLiveEvent.observe(this, Observer { pair ->
