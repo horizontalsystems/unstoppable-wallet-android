@@ -151,14 +151,20 @@ class MainActivity : BaseActivity(), NumPadItemsAdapter.Listener {
         }
     }
 
-    override fun onBackPressed() {
-        if (adapter.currentItem == 1 && adapter.getTransactionFragment().onBackPressed()) {
-            return
-        } else if (adapter.currentItem > 0) {
-            viewPager.currentItem = 0
-            return
+    override fun onBackPressed() = when {
+        txInfoBottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED -> {
+            txInfoBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         }
-        super.onBackPressed()
+        receiveBottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED -> {
+            receiveBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+        sendBottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED -> {
+            sendBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+        adapter.currentItem > 0 -> {
+            viewPager.currentItem = 0
+        }
+        else -> super.onBackPressed()
     }
 
     override fun onResume() {

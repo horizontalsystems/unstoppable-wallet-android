@@ -117,14 +117,6 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
         viewModel.delegate.onFilterSelect(item)
     }
 
-    fun onBackPressed(): Boolean {
-        if (bottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED) {
-            bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
-            return true
-        }
-        return false
-    }
-
 }
 
 class TransactionsAdapter(private var listener: Listener) : Adapter<ViewHolder>(), ViewHolderTransaction.ClickListener {
