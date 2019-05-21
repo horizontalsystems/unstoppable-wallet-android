@@ -154,7 +154,7 @@ class ViewHolderEnabledCoin(override val containerView: View) : RecyclerView.Vie
         coinIcon.bind(coin)
         enabledBottomShade.visibility = if (showBottomShadow) View.VISIBLE else View.GONE
 
-        minusIcon.setOnSingleClickListener { onClick.invoke() }
+        containerView.setOnSingleClickListener { onClick.invoke() }
     }
 
 }
@@ -167,7 +167,7 @@ class ViewHolderDisabledCoin(override val containerView: View) : RecyclerView.Vi
         disableCoinIcon.bind(coin)
         disabledBottomShade.visibility = if (showBottomShadow) View.VISIBLE else View.GONE
 
-        plusIcon.setOnSingleClickListener { onClick.invoke() }
+        containerView.setOnSingleClickListener { onClick.invoke() }
     }
 
 }
