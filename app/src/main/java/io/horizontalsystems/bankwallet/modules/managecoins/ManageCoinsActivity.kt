@@ -31,8 +31,6 @@ class ManageCoinsActivity : BaseActivity(), ManageCoinsAdapter.Listener, StartDr
         viewModel = ViewModelProviders.of(this).get(ManageCoinsViewModel::class.java)
         viewModel.init()
 
-        setTransparentStatusBar()
-
         setContentView(R.layout.activity_manage_coins)
 
         val adapter = ManageCoinsAdapter(this, this)
