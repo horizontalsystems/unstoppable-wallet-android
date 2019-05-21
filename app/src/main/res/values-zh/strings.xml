@@ -16,8 +16,8 @@
     <string name="Error">出错</string>
     <!--Guest-->
     <string name="Guest_Title">Unstoppable</string>
-    <string name="Guest_CreateWallet">新的钱包</string>
-    <string name="Guest_RestoreWallet">恢复钱包</string>
+    <string name="Guest_CreateWallet">Create Wallet</string>
+    <string name="Guest_RestoreWallet">Restore</string>
     <!--Restore-->
     <string name="Restore_Title">恢复</string>
     <string name="Restore_Subtitle">输入密钥</string>
@@ -155,7 +155,7 @@
     <!--Setting_About-->
     <string name="SettingsAbout_Title">更多</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">服务条款&amp;隐私策略</string>
-    <string name="SettingsAbout_TermsPrivacyText">此应用程序是对等的。它不依赖于任何 web 服务器或支持人员来运行的技术。
+    <string name="SettingsAbout_TermsPrivacyText">"此应用程序是对等的。它不依赖于任何 web 服务器或支持人员来运行的技术。
 \n\n只要有互联网, 它就可以被使用。任何实体都不能阻止此应用程序工作或阻止某人使用它。
 
 \n\n您的资金安全地存储在手机上, 而不是在其他任何地方。
@@ -166,10 +166,12 @@
 
 \n\n从一开始，为该应用程序提供动力的整个代码就向公众开放。我们试图建立最安全和分散的钱包, 我们可以, 但没有保证没有意外的软件问题。也就是说, 这个钱包可能比任何智能手机钱包应用都要安全得多。
 
-\n\n一些通用的非私有应用程序数据 (如货币汇率) 存储在分散存储 (ipfs) 中。 </string>
+\n\n一些通用的非私有应用程序数据 (如货币汇率) 存储在分散存储 (ipfs) 中。 "</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android密钥存储错误</string>
-    <string name="Alert_KeysInvalidatedDescription">由于您的安卓锁屏被更改，保存您钱包的加密数据已失效。</string>
+    <string name="Alert_KeysInvalidatedDescription">"由于您的安卓锁屏被更改，保存您钱包的加密数据已失效。
+
+"</string>
     <string name="Alert_TitleWarning">警示</string>
     <string name="Alert_NoDeviceLockDescription">在此设备上设置锁定屏幕以继续。转到 \"设置\" &gt; \"安全\" &gt; \"屏幕锁定\" 并启用锁定屏幕设置。</string>
     <string name="Alert_CustomKeyboardIsUsed">您使用的是第三方键盘。您必须使用默认键盘。</string>
