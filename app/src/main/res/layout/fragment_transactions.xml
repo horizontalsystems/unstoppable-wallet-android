@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/app_bar_height_tall"
             android:gravity="bottom"
-            app:layout_scrollFlags="scroll|enterAlways"
+            app:layout_scrollFlags="scroll"
             app:titleTextAppearance="@style/TabTitle"
             />
 
