@@ -16,8 +16,8 @@
     <string name="Error">Error</string>
     <!--Guest-->
     <string name="Guest_Title">Unstoppable</string>
-    <string name="Guest_CreateWallet">Nueva cartera</string>
-    <string name="Guest_RestoreWallet">Restaurar cartera</string>
+    <string name="Guest_CreateWallet">Create Wallet</string>
+    <string name="Guest_RestoreWallet">Restore</string>
     <!--Restore-->
     <string name="Restore_Title">Restaurar</string>
     <string name="Restore_Subtitle">Ingresar clave secreta</string>
@@ -155,7 +155,7 @@
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Acerca de</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Términos y privacidad:</string>
-    <string name="SettingsAbout_TermsPrivacyText">Esta aplicación es de servidor a servidor. No depende de ninguna web o tecnología personal de apoyo a la función.
+    <string name="SettingsAbout_TermsPrivacyText">"Esta aplicación es de servidor a servidor. No depende de ninguna web o tecnología personal de apoyo a la función.
 
 \n\nFunciona en cualquier lugar siempre que haya conexión a internet. Ninguna entidad puede bloquear el funcionamiento de esta aplicación o impedir el acceso de un usuario.
 
@@ -167,7 +167,8 @@
 
 \n\nLa totalidad del código que soporta esta aplicación está abierta al escrutinio público desde el inicio de la aplicación. Hemos intentado construir la cartera más segura y descentralizada posible; sin embargo, hay ninguna garantía de que no se produzca algún problema de software no deseado. Dicho esto, esta carpeta es probable que sea significativamente más segura que cualquier aplicación de gestión de cartera de smartphone del mercado
 
-\n\nAlgunos datos genéricos de carácter público de esta app se guardan en centros de almacenamiento descentralizado (IPFS).</string>
+\n\nAlgunos datos genéricos de carácter público de esta app se guardan en centros de almacenamiento descentralizado (IPFS).
+"</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Error de almacenamiento de claves de Android</string>
     <string name="Alert_KeysInvalidatedDescription">Los datos encriptados de su monedero han sido recientemente  invalidados porque se cambió la pantalla de bloqueo de Android</string>
