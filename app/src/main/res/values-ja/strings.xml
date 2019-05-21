@@ -16,8 +16,8 @@
     <string name="Error">エラー</string>
     <!--Guest-->
     <string name="Guest_Title">Unstoppable</string>
-    <string name="Guest_CreateWallet">新規ウォレット</string>
-    <string name="Guest_RestoreWallet">ウォレットを復元する</string>
+    <string name="Guest_CreateWallet">Create Wallet</string>
+    <string name="Guest_RestoreWallet">Restore</string>
     <!--Restore-->
     <string name="Restore_Title">Restore</string>
     <string name="Restore_Subtitle">Enter Secret Key</string>
@@ -155,13 +155,13 @@
     <!--Setting_About-->
     <string name="SettingsAbout_Title">について</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">利用規約とプライバシーポリシー</string>
-    <string name="SettingsAbout_TermsPrivacyText">このアプリはピアツーピアです。 Webサーバーや技術サポート担当者の機能に依存しません。
+    <string name="SettingsAbout_TermsPrivacyText">"このアプリはピアツーピアです。 Webサーバーや技術サポート担当者の機能に依存しません。
 \n\nインターネットがある限りどこでも動作します。このアプリの動作をブロックしたり、他のユーザーによる使用をブロックしたりすることはできません。
 \n\nあなたの資金は安全な場所に保管されています。
 \n\nあなたの秘密鍵をバックアップし秘密にしておくのはあなたの責任です。絶対に他人に見せないでください。それが紛失、忘れられ、または盗まれた場合、あなたの資金はあなたの秘密鍵を持っている人が使うことができます。
 \n\nあなたの電話を脱獄したり、未知の（信頼できない）ソースからアプリをインストールしたり、あなたのデバイスを信頼できない人に与えたりしないでください。そしてあなたの電話のオペレーティングシステムを常にアップグレードしてください。あなたの財布の安全はこれらにかかっています。
 \n\nこのアプリの原動力となっているコード全体は、最初から世間に公開しています。私たちは、可能な限り最も安全な財布を構築しようとしましたが、予期しないソフトウェアの問題がないという保証はできません。とは言っても、この財布は他のスマートフォンの財布アプリよりもはるかに安全である可能性があります。
-\n\n為替レートなどの一般的な非公開でないアプリデータは、分散ストレージ（IPFS）に保存されています。</string>
+\n\n為替レートなどの一般的な非公開でないアプリデータは、分散ストレージ（IPFS）に保存されています。"</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">アンドロイドのキーストア エラー</string>
     <string name="Alert_KeysInvalidatedDescription">あなたの財布を保持している暗号化されたデータは、アンドロイド ロック画面が変更されたために無効になりました。</string>
