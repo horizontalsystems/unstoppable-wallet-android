@@ -13,12 +13,14 @@ import android.os.Handler
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.UserNotAuthenticatedException
 import android.view.Gravity
+import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.lib.AlertDialogFragment
@@ -94,7 +96,8 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     protected fun setTransparentStatusBar() {
-        window.statusBarColor = Color.TRANSPARENT
+        val oldFlags = window.decorView.systemUiVisibility
+        window.decorView.systemUiVisibility = oldFlags or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
     }
 
     fun showCustomKeyboardAlert() {
@@ -109,6 +112,23 @@ abstract class BaseActivity : AppCompatActivity() {
                         }, (1 * 750).toLong())
                     }
                 }).show(supportFragmentManager, "custom_keyboard_alert")
+    }
+
+    fun setTopMarginByStatusBarHeight(view: View) {
+        val newLayoutParams = view.layoutParams as ConstraintLayout.LayoutParams
+        newLayoutParams.topMargin = getStatusBarHeight()
+        newLayoutParams.leftMargin = 0
+        newLayoutParams.rightMargin = 0
+        view.layoutParams = newLayoutParams
+    }
+
+    private fun getStatusBarHeight(): Int {
+        var result = 0
+        val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
+        if (resourceId > 0) {
+            result = resources.getDimensionPixelSize(resourceId)
+        }
+        return result
     }
 
     private fun showTestLabel() {

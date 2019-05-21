@@ -7,12 +7,10 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.View
-import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import androidx.annotation.NonNull
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -73,12 +71,11 @@ class MainActivity : BaseActivity(), NumPadItemsAdapter.Listener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTransparentStatusBar()
 
         setContentView(R.layout.activity_dashboard)
 
         setTopMarginByStatusBarHeight(viewPager)
-
-        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
 
         adapter = MainTabsAdapter(supportFragmentManager)
 
@@ -612,23 +609,6 @@ class MainActivity : BaseActivity(), NumPadItemsAdapter.Listener {
     /***
     TransactionInfo bottomsheet END
      */
-
-    private fun setTopMarginByStatusBarHeight(view: View) {
-        val newLayoutParams = view.layoutParams as ConstraintLayout.LayoutParams
-        newLayoutParams.topMargin = getStatusBarHeight()
-        newLayoutParams.leftMargin = 0
-        newLayoutParams.rightMargin = 0
-        view.layoutParams = newLayoutParams
-    }
-
-    private fun getStatusBarHeight(): Int {
-        var result = 0
-        val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
-        if (resourceId > 0) {
-            result = resources.getDimensionPixelSize(resourceId)
-        }
-        return result
-    }
 
 
     companion object {
