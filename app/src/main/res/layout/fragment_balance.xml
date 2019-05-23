@@ -17,13 +17,14 @@
         app:layout_behavior="io.horizontalsystems.bankwallet.ui.extensions.FixAppBarLayoutBehavior"
         >
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/toolbarTitle"
+            style="@style/TabTitle"
+            android:layout_width="wrap_content"
             android:layout_height="@dimen/app_bar_height_tall"
-            android:gravity="bottom"
-            app:layout_scrollFlags="scroll"
-            app:titleTextAppearance="@style/TabTitle"
+            android:layout_marginStart="16dp"
+            android:gravity="bottom|start"
+            app:layout_scrollFlags="scroll|snap"
             />
 
         <TextView
