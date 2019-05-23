@@ -387,6 +387,8 @@ class MainActivity : BaseActivity(), NumPadItemsAdapter.Listener {
         if (amountNumber > BigDecimal.ZERO) {
             editTxtAmount.setText(amountNumber.stripTrailingZeros().toPlainString())
             editTxtAmount.setSelection(editTxtAmount.text.length)
+        } else {
+            editTxtAmount.setText("")
         }
     }
 

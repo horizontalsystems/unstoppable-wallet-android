@@ -54,6 +54,8 @@ object BalanceModule {
     }
 
     class BalanceItemDataSource {
+        private var updatedPositions = mutableListOf<Int>()
+
         val count
             get() = items.count()
 
@@ -63,6 +65,16 @@ object BalanceModule {
             get() = items.map { it.coin.code }
 
         var items = listOf<BalanceItem>()
+
+        fun addUpdatedPosition(position: Int) {
+            updatedPositions.add(position)
+        }
+
+        fun clearUpdatedPositions() {
+            updatedPositions.clear()
+        }
+
+        fun getUpdatedPositions(): List<Int> = updatedPositions.distinct()
 
         fun getItem(position: Int): BalanceItem = items[position]
 
