@@ -12,8 +12,8 @@ import java.math.BigDecimal
 class AppConfigProvider : IAppConfigProvider {
 
     override val ipfsId = "QmXTJZBMMRmBbPun6HFt3tmb3tfYF2usLPxFoacL7G5uMX"
-    override val ipfsMainGateway=  "ipfs.io"
-    override val ipfsFallbackGateway = "ipfs-ext.horizontalsystems.xyz"
+    override val ipfsMainGateway=  "ipfs-ext.horizontalsystems.xyz"
+    override val ipfsFallbackGateway = "ipfs.io"
 
     override val fiatDecimal: Int = 2
     override val maxDecimal: Int = 8
