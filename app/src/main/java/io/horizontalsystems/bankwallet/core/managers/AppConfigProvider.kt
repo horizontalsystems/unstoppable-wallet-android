@@ -15,6 +15,9 @@ class AppConfigProvider : IAppConfigProvider {
     override val ipfsMainGateway=  "ipfs-ext.horizontalsystems.xyz"
     override val ipfsFallbackGateway = "ipfs.io"
 
+    override val infuraProjectId = "2a1306f1d12f4c109a4d4fb9be46b02e"
+    override val infuraProjectSecret = "fc479a9290b64a84a15fa6544a130218"
+
     override val fiatDecimal: Int = 2
     override val maxDecimal: Int = 8
 

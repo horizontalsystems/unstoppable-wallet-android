@@ -2,13 +2,19 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
+import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IFeeRateProvider
 import io.horizontalsystems.feeratekit.FeeRate
 import io.horizontalsystems.feeratekit.FeeRateKit
 
-class FeeRateProvider(context: Context) : IFeeRateProvider, FeeRateKit.Listener {
+class FeeRateProvider(context: Context, appConfig: IAppConfigProvider) : IFeeRateProvider, FeeRateKit.Listener {
 
-    private val feeRateKit = FeeRateKit(context, this)
+    private val feeRateKit = FeeRateKit(
+            infuraProjectId = appConfig.infuraProjectId,
+            infuraProjectSecret = appConfig.infuraProjectSecret,
+            context = context,
+            listener = this
+    )
 
     override fun ethereumGasPrice(priority: FeeRatePriority): Long {
         return feeRate(feeRateKit.ethereum(), priority)
@@ -32,11 +38,11 @@ class FeeRateProvider(context: Context) : IFeeRateProvider, FeeRateKit.Listener 
 
     private fun feeRate(feeRate: FeeRate, priority: FeeRatePriority): Long {
         return when (priority) {
-            FeeRatePriority.LOWEST -> feeRate.lowPriority
-            FeeRatePriority.LOW -> (feeRate.lowPriority + feeRate.mediumPriority) / 2
-            FeeRatePriority.MEDIUM -> feeRate.mediumPriority
-            FeeRatePriority.HIGH -> (feeRate.mediumPriority + feeRate.highPriority) / 2
-            FeeRatePriority.HIGHEST -> feeRate.highPriority
+            FeeRatePriority.LOWEST -> feeRate.safeLow()
+            FeeRatePriority.LOW -> (feeRate.safeLow() + feeRate.safeMedium()) / 2
+            FeeRatePriority.MEDIUM -> feeRate.safeMedium()
+            FeeRatePriority.HIGH -> (feeRate.safeMedium() + feeRate.safeHigh()) / 2
+            FeeRatePriority.HIGHEST -> feeRate.safeHigh()
         }
     }
 }
