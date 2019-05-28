@@ -192,6 +192,8 @@ interface IAppConfigProvider {
     val ipfsId: String
     val ipfsMainGateway: String
     val ipfsFallbackGateway: String
+    val infuraProjectId: String?
+    val infuraProjectSecret: String?
     val fiatDecimal: Int
     val maxDecimal: Int
     val testMode: Boolean
