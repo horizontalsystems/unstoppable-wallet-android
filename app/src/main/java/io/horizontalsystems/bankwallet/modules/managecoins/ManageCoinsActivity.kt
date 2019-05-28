@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import kotlinx.android.extensions.LayoutContainer
@@ -154,7 +153,7 @@ class ViewHolderEnabledCoin(override val containerView: View) : RecyclerView.Vie
         coinIcon.bind(coin)
         enabledBottomShade.visibility = if (showBottomShadow) View.VISIBLE else View.GONE
 
-        containerView.setOnSingleClickListener { onClick.invoke() }
+        containerView.setOnClickListener { onClick.invoke() }
     }
 
 }
@@ -167,7 +166,7 @@ class ViewHolderDisabledCoin(override val containerView: View) : RecyclerView.Vi
         disableCoinIcon.bind(coin)
         disabledBottomShade.visibility = if (showBottomShadow) View.VISIBLE else View.GONE
 
-        containerView.setOnSingleClickListener { onClick.invoke() }
+        containerView.setOnClickListener { onClick.invoke() }
     }
 
 }
