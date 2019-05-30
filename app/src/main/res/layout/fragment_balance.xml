@@ -42,7 +42,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimmerViewContainer"
+        android:id="@+id/shimmerViewWrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -50,18 +50,12 @@
 
         <!-- Adding rows of placeholders -->
         <LinearLayout
+            android:id="@+id/placeholderContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingTop="8dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <include layout="@layout/view_holder_coin_placeholder" />
-            <include layout="@layout/view_holder_coin_placeholder" />
-            <include layout="@layout/view_holder_coin_placeholder" />
-            <include layout="@layout/view_holder_coin_placeholder" />
-            <include layout="@layout/view_holder_coin_placeholder" />
-            <include layout="@layout/view_holder_coin_placeholder" />
 
         </LinearLayout>
 

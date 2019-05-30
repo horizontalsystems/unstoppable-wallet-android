@@ -57,6 +57,7 @@
     <attr name="SeekbarNonActiveColor" format="reference|color" />
     <attr name="ConfirmationTextColor" format="reference|color" />
     <attr name="SettingsSectionBottomShadeColor" format="reference|color" />
+    <attr name="AddCoinButtonPlaceholder" format="reference|color" />
 
     <!-- Base application theme. -->
     <style name="DarkModeAppTheme" parent="Theme.AppCompat.NoActionBar">
@@ -129,6 +130,7 @@
         <item name="SeekbarNonActiveColor">@color/steel_dark</item>
         <item name="ConfirmationTextColor">@color/lightBackground</item>
         <item name="SettingsSectionBottomShadeColor">@color/black_20</item>
+        <item name="AddCoinButtonPlaceholder">@color/steel_dark</item>
     </style>
 
     <style name="LightModeAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -201,6 +203,7 @@
         <item name="SeekbarNonActiveColor">@color/grey_light</item>
         <item name="ConfirmationTextColor">@color/dark</item>
         <item name="SettingsSectionBottomShadeColor">@color/steel_15</item>
+        <item name="AddCoinButtonPlaceholder">@color/bars_color</item>
     </style>
 
     <style name="Button" parent="Widget.AppCompat.Button.Borderless">
