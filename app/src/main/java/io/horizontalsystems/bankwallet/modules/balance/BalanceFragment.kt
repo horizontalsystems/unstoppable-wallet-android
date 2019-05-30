@@ -79,6 +79,24 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener {
         viewModel.reloadLiveEvent.observe(viewLifecycleOwner, Observer {
             coinsAdapter.notifyDataSetChanged()
             reloadHeader()
+            if (viewModel.delegate.itemsCount > 0) {
+                shimmerViewContainer.stopShimmer()
+                shimmerViewContainer.animate().alpha(0f)
+                recyclerCoins.animate().alpha(1f)
+            }
+        })
+
+        viewModel.enabledCoinsCountLiveEvent.observe(viewLifecycleOwner, Observer { size ->
+            size?.let {
+                if (it > 0 && viewModel.delegate.itemsCount == 0) {
+                    recyclerCoins.alpha = 0f
+                    shimmerViewContainer.alpha = 1f
+                    shimmerViewContainer.startShimmer()
+                } else if (it == 0) {
+                    recyclerCoins.alpha = 1f
+                    shimmerViewContainer.alpha = 0f
+                }
+            }
         })
 
         viewModel.reloadHeaderLiveEvent.observe(viewLifecycleOwner, Observer {

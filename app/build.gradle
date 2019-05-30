@@ -136,6 +136,9 @@ dependencies {
 
     implementation 'com.github.horizontalsystems:hd-wallet-kit-android:a3666d8'
 
+    // Shimmer
+    implementation 'com.facebook.shimmer:shimmer:0.4.0'
+
     androidTestImplementation 'androidx.test:runner:1.2.0-alpha03'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-alpha03'
 

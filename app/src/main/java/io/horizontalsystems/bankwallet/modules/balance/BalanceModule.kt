@@ -16,6 +16,7 @@ object BalanceModule {
         fun reload()
         fun updateItem(position: Int)
         fun updateHeader()
+        fun enabledCoinsCount(size: Int)
     }
 
     interface IViewDelegate {
@@ -45,6 +46,7 @@ object BalanceModule {
         fun didUpdateState(coinCode: String, state: AdapterState)
         fun didUpdateRate(rate: Rate)
         fun didRefresh()
+        fun didEnabledCoinsCountUpdated(size: Int)
     }
 
     interface IRouter {
@@ -113,7 +115,7 @@ object BalanceModule {
     )
 
     fun init(view: BalanceViewModel, router: IRouter) {
-        val interactor = BalanceInteractor(App.adapterManager, App.rateStorage, App.currencyManager)
+        val interactor = BalanceInteractor(App.adapterManager, App.rateStorage, App.enabledCoinsStorage, App.currencyManager)
         val presenter = BalancePresenter(interactor, router, BalanceItemDataSource(), BalanceViewItemFactory())
 
         presenter.view = view

@@ -29,7 +29,6 @@ class BalancePresenter(
     override val itemsCount: Int
         get() = dataSource.count
 
-
     override fun viewDidLoad() {
         interactor.initAdapters()
 
@@ -50,6 +49,10 @@ class BalancePresenter(
                         }
                     }
                 }?.let { disposables.add(it) }
+    }
+
+    override fun didEnabledCoinsCountUpdated(size: Int) {
+        view?.enabledCoinsCount(size)
     }
 
     override fun getViewItem(position: Int) =
