@@ -287,7 +287,8 @@
     <string name="CoinOption_Disable">Disable coin</string>
     <string name="CoinOption_Notice">Sync mode same as Ethereum</string>
     <string name="CoinOption_Alert_Header">Attetion</string>
-    <string name="CoinOption_Alert_Text">Mode changes run coin sync again</string>
+    <string name="CoinOption_Alert_Text">"This action will reset existing %s balance on the wallet and force it to resync itself with %s blockchain. Your funds are safe BUT it may take a really long time... Don't do it if you're not sure what that is."</string>
+    <string name="CoinOption_Button_Sync">Sync</string>
 
 
 
