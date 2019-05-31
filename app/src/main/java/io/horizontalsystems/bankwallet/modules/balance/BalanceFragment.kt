@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.google.android.material.appbar.AppBarLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
@@ -25,10 +27,6 @@ import kotlinx.android.synthetic.main.fragment_balance.*
 import kotlinx.android.synthetic.main.view_holder_add_coin.*
 import kotlinx.android.synthetic.main.view_holder_coin.*
 import java.math.BigDecimal
-import com.google.android.material.appbar.AppBarLayout
-import android.view.ViewTreeObserver
-import kotlinx.android.synthetic.main.fragment_balance.app_bar_layout
-import kotlinx.android.synthetic.main.fragment_balance.toolbarTitle
 
 
 class BalanceFragment : Fragment(), CoinsAdapter.Listener {
@@ -79,6 +77,26 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener {
         viewModel.reloadLiveEvent.observe(viewLifecycleOwner, Observer {
             coinsAdapter.notifyDataSetChanged()
             reloadHeader()
+            if (viewModel.delegate.itemsCount > 0) {
+                shimmerViewWrapper.stopShimmer()
+                shimmerViewWrapper.animate().alpha(0f)
+                recyclerCoins.animate().alpha(1f)
+            }
+        })
+
+        viewModel.enabledCoinsCountLiveEvent.observe(viewLifecycleOwner, Observer { size ->
+            size?.let {
+                if (it > 0 && viewModel.delegate.itemsCount == 0) {
+                    setPlaceholders(it)
+
+                    recyclerCoins.alpha = 0f
+                    shimmerViewWrapper.alpha = 1f
+                    shimmerViewWrapper.startShimmer()
+                } else if (it == 0) {
+                    recyclerCoins.alpha = 1f
+                    shimmerViewWrapper.alpha = 0f
+                }
+            }
         })
 
         viewModel.reloadHeaderLiveEvent.observe(viewLifecycleOwner, Observer {
@@ -111,6 +129,17 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener {
         }
 
         setAppBarAnimation()
+    }
+
+    private fun setPlaceholders(count: Int) {
+        placeholderContainer.removeAllViews()
+        val placeholdersCount = Math.min(count, 6)
+        for (i in 1..placeholdersCount) {
+            val placeholder = LayoutInflater.from(context).inflate(R.layout.view_holder_coin_placeholder, placeholderContainer, false)
+            placeholderContainer.addView(placeholder)
+        }
+        val placeholder = LayoutInflater.from(context).inflate(R.layout.add_coin_placeholder, placeholderContainer, false)
+        placeholderContainer.addView(placeholder)
     }
 
     private fun setAppBarAnimation() {
