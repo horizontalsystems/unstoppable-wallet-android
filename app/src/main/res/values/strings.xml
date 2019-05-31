@@ -277,4 +277,18 @@
     <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_save">Save</string>
 
+    <!--Coin Option-->
+
+    <string name="CoinOption_Header">Syncing with blockchain</string>
+    <string name="CoinOption_Fast">Fast(0 &#8211;2h)</string>
+    <string name="CoinOption_Slow">Slow(1 &#8211;12h)</string>
+    <string name="CoinOption_Recommended">Recommended</string>
+    <string name="CoinOption_MorePrivate">More Private</string>
+    <string name="CoinOption_Disable">Disable coin</string>
+    <string name="CoinOption_Notice">Sync mode same as Ethereum</string>
+    <string name="CoinOption_Alert_Header">Attetion</string>
+    <string name="CoinOption_Alert_Text">Mode changes run coin sync again</string>
+
+
+
 </resources>
