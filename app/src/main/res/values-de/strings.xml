@@ -25,8 +25,7 @@
     <string name="Restore_RestoreFailed">Fehler beim Wiederherstellen des Wallet</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Offlineschlüssel</string>
-    <string name="Backup_Intro_Subtitle">"Dein Offlineschlüssel ist die einzige Möglichkeit, dein Wallet wiederherzustellen, falls du dein Smartphone verlierst, austauscht, es gestohlen wird oder kaputtgeht. \n\nEs besteht aus 12 Wörtern. Speich es sicher offline.
-"</string>
+    <string name="Backup_Intro_Subtitle">Dein Offlineschlüssel ist die einzige Möglichkeit, dein Wallet wiederherzustellen, falls du dein Smartphone verlierst, austauscht, es gestohlen wird oder kaputtgeht. \n\nEs besteht aus 12 Wörtern. Speich es sicher offline.</string>
     <string name="Backup_Intro_Later">Später</string>
     <string name="Backup_Intro_BackupNow">Backup</string>
     <string name="Backup_Words_Title">Offlineschlüssel</string>
@@ -156,13 +155,13 @@
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Info</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">ANB &amp; Datenschutz:</string>
-    <string name="SettingsAbout_TermsPrivacyText">"\n\nDiese Anwendung ist vollständig dezentralisiert. Die Leistung dieser Anwendung hängt nicht von Servern von Drittanbietern oder einem technischen Supportteam ab.
+    <string name="SettingsAbout_TermsPrivacyText">\n\nDiese Anwendung ist vollständig dezentralisiert. Die Leistung dieser Anwendung hängt nicht von Servern von Drittanbietern oder einem technischen Supportteam ab.
 \n\nDie Anwendung funktioniert überall, solange es Internet gibt. Dieser Wallet oder deren Benutzer können von niemandem blockiert werden.
 \n\nDein Geld wird nur auf Ihrem Telefon gespeichert.
 \n\nDu bist allein für die sichere Aufbewahrung des Offlineschlüssels verantwortlich. Teil deinen Offlineschlüssel nie mit jemandem. Wenn der Offlineschlüssel verloren geht, gestohlen oder vergessen wird, erhält derjenige, der über deinen Offlineschlüssel verfügt, die Kontrolle über dein Geld.
 \n\nHack dein Telefon nicht, installier keine Anwendungen von inoffiziellen Quellen und gib dein Telefon niemals den anderen. Die Sicherheit  deiner Wallet hängt direkt davon ab.
 \n\nDer gesamte Programmcode dieser Anwendung ist kostenlos und für die Öffentlichkeit zugänglich. Wir haben versucht, die sicherste und gleichzeitig dezentralisierte Wallet zu schaffen, aber es gibt keine Garantie dafür, dass der Anwendungscode fehlerfrei ist. Wir glauben jedoch, dass dieser Wallet in Bezug auf die Sicherheit fast alle heute verfügbare mobile Kryptobörsen deutlich übertrifft.
-\n\nEinige von der Anwendung verwendete öffentliche Daten, wie z. B. Wechselkurse, werden im dezentralen Repository (IPFS) gespeichert"</string>
+\n\nEinige von der Anwendung verwendete öffentliche Daten, wie z. B. Wechselkurse, werden im dezentralen Repository (IPFS) gespeichert</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android Keystore Fehler</string>
     <string name="Alert_KeysInvalidatedDescription">Deine verschlüsselten Daten wurden kürzlich ungültig gemacht, weil dein Android-Sperrbildschirm geändert wurde</string>
@@ -207,4 +206,15 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">Wallets</string>
     <string name="ManageCoins_save">Speichern</string>
+    <!--Coin Option-->
+    <string name="CoinOption_Header">Syncing with blockchain</string>
+    <string name="CoinOption_Fast">Fast(0 &#8211;2h)</string>
+    <string name="CoinOption_Slow">Slow(1 &#8211;12h)</string>
+    <string name="CoinOption_Recommended">Recommended</string>
+    <string name="CoinOption_MorePrivate">More Private</string>
+    <string name="CoinOption_Disable">Disable coin</string>
+    <string name="CoinOption_Notice">Sync mode same as Ethereum</string>
+    <string name="CoinOption_Alert_Header">Attention</string>
+    <string name="CoinOption_Alert_Text">"This action will reset existing %s balance on the wallet and force it to resync itself with %s blockchain. Your funds are safe BUT it may take a really long time... Don't do it if you're not sure what that is."</string>
+    <string name="CoinOption_Button_Sync">Sync</string>
 </resources>
