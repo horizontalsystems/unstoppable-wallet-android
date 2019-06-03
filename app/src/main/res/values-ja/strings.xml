@@ -155,13 +155,13 @@
     <!--Setting_About-->
     <string name="SettingsAbout_Title">について</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">利用規約とプライバシーポリシー</string>
-    <string name="SettingsAbout_TermsPrivacyText">"このアプリはピアツーピアです。 Webサーバーや技術サポート担当者の機能に依存しません。
+    <string name="SettingsAbout_TermsPrivacyText">このアプリはピアツーピアです。 Webサーバーや技術サポート担当者の機能に依存しません。
 \n\nインターネットがある限りどこでも動作します。このアプリの動作をブロックしたり、他のユーザーによる使用をブロックしたりすることはできません。
 \n\nあなたの資金は安全な場所に保管されています。
 \n\nあなたの秘密鍵をバックアップし秘密にしておくのはあなたの責任です。絶対に他人に見せないでください。それが紛失、忘れられ、または盗まれた場合、あなたの資金はあなたの秘密鍵を持っている人が使うことができます。
 \n\nあなたの電話を脱獄したり、未知の（信頼できない）ソースからアプリをインストールしたり、あなたのデバイスを信頼できない人に与えたりしないでください。そしてあなたの電話のオペレーティングシステムを常にアップグレードしてください。あなたの財布の安全はこれらにかかっています。
 \n\nこのアプリの原動力となっているコード全体は、最初から世間に公開しています。私たちは、可能な限り最も安全な財布を構築しようとしましたが、予期しないソフトウェアの問題がないという保証はできません。とは言っても、この財布は他のスマートフォンの財布アプリよりもはるかに安全である可能性があります。
-\n\n為替レートなどの一般的な非公開でないアプリデータは、分散ストレージ（IPFS）に保存されています。"</string>
+\n\n為替レートなどの一般的な非公開でないアプリデータは、分散ストレージ（IPFS）に保存されています。</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">アンドロイドのキーストア エラー</string>
     <string name="Alert_KeysInvalidatedDescription">あなたの財布を保持している暗号化されたデータは、アンドロイド ロック画面が変更されたために無効になりました。</string>
@@ -206,4 +206,15 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_save">保存</string>
+    <!--Coin Option-->
+    <string name="CoinOption_Header">Syncing with blockchain</string>
+    <string name="CoinOption_Fast">Fast(0 &#8211;2h)</string>
+    <string name="CoinOption_Slow">Slow(1 &#8211;12h)</string>
+    <string name="CoinOption_Recommended">Recommended</string>
+    <string name="CoinOption_MorePrivate">More Private</string>
+    <string name="CoinOption_Disable">Disable coin</string>
+    <string name="CoinOption_Notice">Sync mode same as Ethereum</string>
+    <string name="CoinOption_Alert_Header">Attention</string>
+    <string name="CoinOption_Alert_Text">"This action will reset existing %s balance on the wallet and force it to resync itself with %s blockchain. Your funds are safe BUT it may take a really long time... Don't do it if you're not sure what that is."</string>
+    <string name="CoinOption_Button_Sync">Sync</string>
 </resources>
