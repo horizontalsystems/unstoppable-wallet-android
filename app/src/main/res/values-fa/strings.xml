@@ -155,7 +155,7 @@
     <!--Setting_About-->
     <string name="SettingsAbout_Title">در باره ما</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">شرايط &amp; حريم خصوصي:</string>
-    <string name="SettingsAbout_TermsPrivacyText">"Your funds are securely stored on your device. Not on any external servers.
+    <string name="SettingsAbout_TermsPrivacyText">Your funds are securely stored on your device. Not on any external servers.
 \n\nThe app does not depend on any server or person to function.
 \n\nSome generic app data like exchange rates are stored on decentralized storage (IPFS).
 \n\nThe app works everywhere as long as there is an internet connection.
@@ -165,7 +165,7 @@
 \n\nMake sure you backup a Secret Key for your wallet! Never show your secret key to anyone.
 \n\nDo not jailbreak your phone or install apps from unknown (untrusted) sources.
 \n\nDo not give your device to untrusted parties.
-\n\nYou are solely responsible for keeping your Secret Key and your device secure."</string>
+\n\nYou are solely responsible for keeping your Secret Key and your device secure.</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">اندرايد keystore خطا</string>
     <string name="Alert_KeysInvalidatedDescription">Data شما ديگر نامتعبر است بخاطر تعغير دادن قفل صفحه</string>
@@ -210,4 +210,15 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">ميديت سكه</string>
     <string name="ManageCoins_save">ذخیره</string>
+    <!--Coin Option-->
+    <string name="CoinOption_Header">Syncing with blockchain</string>
+    <string name="CoinOption_Fast">Fast(0 &#8211;2h)</string>
+    <string name="CoinOption_Slow">Slow(1 &#8211;12h)</string>
+    <string name="CoinOption_Recommended">Recommended</string>
+    <string name="CoinOption_MorePrivate">More Private</string>
+    <string name="CoinOption_Disable">Disable coin</string>
+    <string name="CoinOption_Notice">Sync mode same as Ethereum</string>
+    <string name="CoinOption_Alert_Header">Attention</string>
+    <string name="CoinOption_Alert_Text">"This action will reset existing %s balance on the wallet and force it to resync itself with %s blockchain. Your funds are safe BUT it may take a really long time... Don't do it if you're not sure what that is."</string>
+    <string name="CoinOption_Button_Sync">Sync</string>
 </resources>
