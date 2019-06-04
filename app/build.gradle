@@ -120,6 +120,10 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
     implementation 'com.google.code.gson:gson:2.8.5'
 
+    // Logging
+    implementation 'org.slf4j:slf4j-api:1.7.26'
+    implementation 'com.github.tony19:logback-android:2.0.0'
+
     api 'com.aurelhubert:ahbottomnavigation:2.2.0'
     api "org.jetbrains.anko:anko-commons:0.10.5"
 
@@ -132,7 +136,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:78e1530'
 
     // EthereumKit
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:0.3.1'
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:fb0b489'
 
     //FeeRate
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:b27e102'
