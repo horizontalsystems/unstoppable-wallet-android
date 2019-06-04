@@ -105,7 +105,7 @@ class BitcoinCashAdapter(coin: Coin, override val kit: BitcoinCashKit, addressPa
                 if (testMode) NetworkType.TestNet else NetworkType.MainNet
 
         private fun createKit(authData: AuthData, newWallet: Boolean, testMode: Boolean): BitcoinCashKit {
-            return BitcoinCashKit(App.instance, authData.words, authData.walletId, newWallet = newWallet, networkType = getNetworkType(testMode))
+            return BitcoinCashKit(App.instance, authData.words, authData.walletId, networkType = getNetworkType(testMode))
         }
 
         fun clear(context: Context, walletId: String, testMode: Boolean) {

@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.models.BlockInfo
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
+import io.horizontalsystems.bitcoincore.transactions.scripts.ScriptType
 import io.horizontalsystems.bitcoinkit.BitcoinKit
 import io.horizontalsystems.bitcoinkit.BitcoinKit.NetworkType
 import io.reactivex.Single
@@ -34,6 +35,9 @@ class BitcoinAdapter(coin: Coin, override val kit: BitcoinKit, addressParser: Ad
     override fun feeRate(feePriority: FeeRatePriority): Int {
         return feeRateProvider.bitcoinFeeRate(feePriority).toInt()
     }
+
+    override val receiveAddress: String
+        get() = kit.receiveAddress(ScriptType.P2WPKHSH)
 
     //
     // BitcoinKit Listener
@@ -105,7 +109,7 @@ class BitcoinAdapter(coin: Coin, override val kit: BitcoinKit, addressParser: Ad
                 if (testMode) NetworkType.TestNet else NetworkType.MainNet
 
         private fun createKit(authData: AuthData, newWallet: Boolean, testMode: Boolean): BitcoinKit {
-            return BitcoinKit(App.instance, authData.words, authData.walletId, newWallet = newWallet, networkType = getNetworkType(testMode))
+            return BitcoinKit(App.instance, authData.words, authData.walletId, networkType = getNetworkType(testMode))
         }
 
         fun clear(context: Context, walletId: String, testMode: Boolean) {

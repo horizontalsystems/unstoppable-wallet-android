@@ -106,7 +106,7 @@ class DashAdapter(coin: Coin, override val kit: DashKit, addressParser: AddressP
                 if (testMode) NetworkType.TestNet else NetworkType.MainNet
 
         private fun createKit(authData: AuthData, newWallet: Boolean, testMode: Boolean): DashKit {
-            return DashKit(App.instance, authData.words, authData.walletId, newWallet = newWallet, networkType = getNetworkType(testMode))
+            return DashKit(App.instance, authData.words, authData.walletId, networkType = getNetworkType(testMode))
         }
 
         fun clear(context: Context, walletId: String, testMode: Boolean) {
