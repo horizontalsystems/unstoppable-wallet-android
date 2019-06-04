@@ -71,6 +71,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    packagingOptions {
+        pickFirst("META-INF/atomicfu.kotlin_module")
+    }
 }
 
 dependencies {
@@ -126,7 +129,7 @@ dependencies {
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
 
     // BitcoinKit
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:06dcad2'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:78e1530'
 
     // EthereumKit
     implementation 'com.github.horizontalsystems:ethereum-kit-android:0.3.1'
