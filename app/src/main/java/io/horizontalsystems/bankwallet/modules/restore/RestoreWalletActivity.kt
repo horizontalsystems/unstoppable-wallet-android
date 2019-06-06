@@ -9,13 +9,12 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.lib.InputTextViewHolder
 import io.horizontalsystems.bankwallet.lib.WordsInputAdapter
-import io.horizontalsystems.bankwallet.modules.pin.PinModule
-import io.horizontalsystems.bankwallet.ui.dialogs.BottomConfirmAlert
+import io.horizontalsystems.bankwallet.modules.syncmodule.SyncModeModule
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_restore_wallet.*
 
-class RestoreWalletActivity : BaseActivity(), BottomConfirmAlert.Listener {
+class RestoreWalletActivity : BaseActivity() {
 
     private lateinit var viewModel: RestoreViewModel
 
@@ -40,25 +39,10 @@ class RestoreWalletActivity : BaseActivity(), BottomConfirmAlert.Listener {
             }
         })
 
-        viewModel.navigateToSetPinLiveEvent.observe(this, Observer {
-            PinModule.startForSetPin(this)
-        })
-
-        viewModel.keyStoreSafeExecute.observe(this, Observer { triple ->
-            triple?.let {
-                val (action, onSuccess, onFailure) = it
-                safeExecuteWithKeystore(action, onSuccess, onFailure)
+        viewModel.navigateToSetSyncModeLiveEvent.observe(this, Observer { words ->
+            words?.let {
+                SyncModeModule.start(this, it)
             }
-        })
-
-        viewModel.showConfirmationDialogLiveEvent.observe(this, Observer {
-            val confirmationList = mutableListOf(
-                    R.string.Backup_Confirmation_SecretKey,
-                    R.string.Backup_Confirmation_DeleteAppWarn,
-                    R.string.Backup_Confirmation_LockAppWarn,
-                    R.string.Backup_Confirmation_Disclaimer
-            )
-            BottomConfirmAlert.show(this, confirmationList, this)
         })
 
         recyclerInputs.isNestedScrollingEnabled = false
@@ -85,7 +69,4 @@ class RestoreWalletActivity : BaseActivity(), BottomConfirmAlert.Listener {
         return true
     }
 
-    override fun onConfirmationSuccess() {
-        viewModel.delegate.didConfirm(words)
-    }
 }

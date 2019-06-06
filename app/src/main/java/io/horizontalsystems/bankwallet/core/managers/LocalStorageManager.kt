@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 
 
@@ -21,6 +22,7 @@ class LocalStorageManager : ILocalStorage {
     private val BASE_BITCOIN_PROVIDER = "base_bitcoin_provider"
     private val BASE_ETHEREUM_PROVIDER = "base_ethereum_provider"
     private val BASE_DASH_PROVIDER = "base_dash_provider"
+    private val SYNC_MODE = "sync_mode"
 
     override var currentLanguage: String?
         get() = App.preferences.getString(CURRENT_LANGUAGE, null)
@@ -137,6 +139,15 @@ class LocalStorageManager : ILocalStorage {
         get() = App.preferences.getString(BASE_DASH_PROVIDER, null)
         set(value) {
             App.preferences.edit().putString(BASE_DASH_PROVIDER, value).apply()
+        }
+
+    override var syncMode: SyncMode
+        get() {
+            val syncString = App.preferences.getString(SYNC_MODE, SyncMode.FAST.value)
+            return syncString?.let { SyncMode.fromString(syncString) } ?: SyncMode.FAST
+        }
+        set(syncMode) {
+            App.preferences.edit().putString(SYNC_MODE, syncMode.value).apply()
         }
 
     override fun clear() {

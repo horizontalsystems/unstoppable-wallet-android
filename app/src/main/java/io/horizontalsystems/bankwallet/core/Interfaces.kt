@@ -41,6 +41,7 @@ interface ILocalStorage {
     var baseBitcoinProvider: String?
     var baseEthereumProvider: String?
     var baseDashProvider: String?
+    var syncMode: SyncMode
 
     fun clear()
 }
