@@ -19,14 +19,10 @@ class SyncModeInteractor(
         return localStorage.syncMode
     }
 
-    override fun setSyncMode(syncMode: SyncMode) {
-        localStorage.syncMode = syncMode
-    }
-
-    override fun restore(words: List<String>) {
+    override fun restore(words: List<String>, syncMode: SyncMode) {
         keystoreSafeExecute.safeExecute(
                 action = Runnable {
-                    authManager.login(words, false)
+                    authManager.login(words, syncMode)
                 },
                 onSuccess = Runnable {
                     wordsManager.isBackedUp = true

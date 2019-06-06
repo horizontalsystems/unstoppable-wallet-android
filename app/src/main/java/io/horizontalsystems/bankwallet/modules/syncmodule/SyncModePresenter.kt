@@ -32,13 +32,8 @@ class SyncModePresenter(
     }
 
     override fun didConfirm(words: List<String>) {
-        state.syncMode?.let {
-            val currentSyncMode = interactor.getSyncMode()
-            if (it != currentSyncMode) {
-                interactor.setSyncMode(it)
-            }
-        }
-        interactor.restore(words)
+        val syncMode = state.syncMode ?: interactor.getSyncMode()
+        interactor.restore(words, syncMode)
     }
 
     override fun didRestore() {

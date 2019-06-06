@@ -4,6 +4,7 @@ import android.content.Context
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.bankwallet.entities.AuthData
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bitcoincore.BitcoinCore
@@ -18,8 +19,8 @@ import java.util.*
 class DashAdapter(coin: Coin, override val kit: DashKit, addressParser: AddressParser, private val feeRateProvider: IFeeRateProvider) :
         BitcoinBaseAdapter(coin, kit, addressParser), DashKit.Listener {
 
-    constructor(coin: Coin, authData: AuthData, newWallet: Boolean, testMode: Boolean, feeRateProvider: IFeeRateProvider) :
-            this(coin, createKit(authData, newWallet, testMode), AddressParser("dash", true), feeRateProvider)
+    constructor(coin: Coin, authData: AuthData, syncMode: SyncMode, testMode: Boolean, feeRateProvider: IFeeRateProvider) :
+            this(coin, createKit(authData, syncMode, testMode), AddressParser("dash", true), feeRateProvider)
 
 
     init {
@@ -105,8 +106,8 @@ class DashAdapter(coin: Coin, override val kit: DashKit, addressParser: AddressP
         private fun getNetworkType(testMode: Boolean) =
                 if (testMode) NetworkType.TestNet else NetworkType.MainNet
 
-        private fun createKit(authData: AuthData, newWallet: Boolean, testMode: Boolean): DashKit {
-            return DashKit(App.instance, authData.words, authData.walletId, networkType = getNetworkType(testMode))
+        private fun createKit(authData: AuthData, syncMode: SyncMode, testMode: Boolean): DashKit {
+            return DashKit(App.instance, authData.words, authData.walletId, syncMode = syncMode.bitcoinKitMode(), networkType = getNetworkType(testMode))
         }
 
         fun clear(context: Context, walletId: String, testMode: Boolean) {

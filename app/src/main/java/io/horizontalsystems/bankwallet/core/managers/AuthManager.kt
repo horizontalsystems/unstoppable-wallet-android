@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.managers
 import android.security.keystore.UserNotAuthenticatedException
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.AuthData
+import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.reactivex.subjects.PublishSubject
 
 class AuthManager(private val secureStorage: ISecuredStorage,
@@ -29,13 +30,12 @@ class AuthManager(private val secureStorage: ISecuredStorage,
     }
 
     @Throws(UserNotAuthenticatedException::class)
-    fun login(words: List<String>, newWallet: Boolean) {
+    fun login(words: List<String>, syncMode: SyncMode) {
         AuthData(words).let {
             secureStorage.saveAuthData(it)
-            localStorage.isNewWallet = newWallet
+            localStorage.syncMode = syncMode
             authData = it
             coinManager.enableDefaultCoins()
-            adapterManager?.initAdapters()
         }
     }
 

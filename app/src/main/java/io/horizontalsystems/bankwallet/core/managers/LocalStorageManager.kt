@@ -16,7 +16,6 @@ class LocalStorageManager : ILocalStorage {
     private val I_UNDERSTAND = "i_understand"
     private val BLOCK_TILL_DATE = "unblock_date"
     private val BASE_CURRENCY_CODE = "base_currency_code"
-    private val NEW_WALLET = "new_wallet"
     private val FAILED_ATTEMPTS = "failed_attempts"
     private val LOCKOUT_TIMESTAMP = "lockout_timestamp"
     private val BASE_BITCOIN_PROVIDER = "base_bitcoin_provider"
@@ -87,12 +86,6 @@ class LocalStorageManager : ILocalStorage {
             } ?: run {
                 App.preferences.edit().remove(BLOCK_TILL_DATE).apply()
             }
-        }
-
-    override var isNewWallet: Boolean
-        get() = App.preferences.getBoolean(NEW_WALLET, false)
-        set(value) {
-            App.preferences.edit().putBoolean(NEW_WALLET, value).apply()
         }
 
     override var failedAttempts: Int?

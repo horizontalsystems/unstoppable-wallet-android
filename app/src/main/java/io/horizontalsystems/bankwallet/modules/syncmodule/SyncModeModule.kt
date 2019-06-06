@@ -23,8 +23,7 @@ object SyncModeModule {
 
     interface IInteractor {
         fun getSyncMode(): SyncMode
-        fun setSyncMode(syncMode: SyncMode)
-        fun restore(words: List<String>)
+        fun restore(words: List<String>, syncMode: SyncMode)
     }
 
     interface IInteractorDelegate {
