@@ -54,7 +54,7 @@ class NetworkManager(val appConfigProvider: IAppConfigProvider) : INetworkManage
     }
 
     private val latestRateMainClient: ServiceExchangeApi.IExchangeRate = APIClient
-            .retrofit("https://${appConfigProvider.ipfsMainGateway}/ipns/${appConfigProvider.ipfsId}/", timeout = 15)
+            .retrofit("https://${appConfigProvider.ipfsMainGateway}/ipns/${appConfigProvider.ipfsId}/", timeout = 10)
             .create(ServiceExchangeApi.IExchangeRate::class.java)
 
     private val latestRateFallbackClient: ServiceExchangeApi.IExchangeRate = APIClient
@@ -62,7 +62,7 @@ class NetworkManager(val appConfigProvider: IAppConfigProvider) : INetworkManage
             .create(ServiceExchangeApi.IExchangeRate::class.java)
 
     private val historicalRateMainClient: ServiceExchangeApi.IExchangeRate = APIClient
-            .retrofit("https://${appConfigProvider.ipfsMainGateway}/ipns/${appConfigProvider.ipfsId}/", timeout = 15)
+            .retrofit("https://${appConfigProvider.ipfsMainGateway}/ipns/${appConfigProvider.ipfsId}/", timeout = 10)
             .create(ServiceExchangeApi.IExchangeRate::class.java)
 
     private val historicalRateFallbackClient: ServiceExchangeApi.IExchangeRate = APIClient
@@ -141,7 +141,7 @@ object ServicePing {
 }
 
 object APIClient {
-    fun retrofit(apiURL: String, timeout: Long = 30): Retrofit {
+    fun retrofit(apiURL: String, timeout: Long = 60): Retrofit {
 
         val logger = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BASIC
