@@ -35,12 +35,12 @@ interface ILocalStorage {
     var iUnderstand: Boolean
     var baseCurrencyCode: String?
     var blockTillDate: Long?
-    var isNewWallet: Boolean
     var failedAttempts: Int?
     var lockoutUptime: Long?
     var baseBitcoinProvider: String?
     var baseEthereumProvider: String?
     var baseDashProvider: String?
+    var syncMode: SyncMode
 
     fun clear()
 }

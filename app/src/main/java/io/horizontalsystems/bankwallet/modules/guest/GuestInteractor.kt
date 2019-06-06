@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
 import io.horizontalsystems.bankwallet.core.ISystemInfoManager
 import io.horizontalsystems.bankwallet.core.IWordsManager
 import io.horizontalsystems.bankwallet.core.managers.AuthManager
+import io.horizontalsystems.bankwallet.entities.SyncMode
 
 class GuestInteractor(
         private val authManager: AuthManager,
@@ -17,7 +18,7 @@ class GuestInteractor(
 
     override fun createWallet() {
         keystoreSafeExecute.safeExecute(
-                action = Runnable { authManager.login(wordsManager.generateWords(), true) },
+                action = Runnable { authManager.login(wordsManager.generateWords(), SyncMode.NEW) },
                 onSuccess = Runnable { delegate?.didCreateWallet() },
                 onFailure = Runnable { delegate?.didFailToCreateWallet() }
         )

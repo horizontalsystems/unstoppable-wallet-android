@@ -39,7 +39,7 @@ class RestorePresenterTest {
     @Test
     fun didRestore() {
         presenter.didRestore()
-        verify(router).navigateToSetPin()
+        verify(router).navigateToSetSyncMode()
     }
 
     @Test
