@@ -136,7 +136,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:78e1530'
 
     // EthereumKit
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:fb0b489'
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:2dd6978'
 
     //FeeRate
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:b27e102'
