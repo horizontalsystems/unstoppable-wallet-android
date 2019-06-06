@@ -17,13 +17,14 @@
         app:layout_behavior="io.horizontalsystems.bankwallet.ui.extensions.FixAppBarLayoutBehavior"
         >
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/toolbarTitle"
+            style="@style/TabTitle"
+            android:layout_width="wrap_content"
             android:layout_height="@dimen/app_bar_height_tall"
-            android:gravity="bottom"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:titleTextAppearance="@style/TabTitle"
+            android:layout_marginStart="16dp"
+            android:gravity="bottom|start"
+            app:layout_scrollFlags="scroll|snap"
             />
 
         <TextView
@@ -39,6 +40,26 @@
             />
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerViewWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <!-- Adding rows of placeholders -->
+        <LinearLayout
+            android:id="@+id/placeholderContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="8dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/pullToRefresh"

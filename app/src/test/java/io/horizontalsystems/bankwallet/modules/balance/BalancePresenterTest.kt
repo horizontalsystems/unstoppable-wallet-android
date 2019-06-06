@@ -9,12 +9,16 @@ import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Rate
+import io.horizontalsystems.bankwallet.modules.RxBaseTest
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import io.reactivex.plugins.RxJavaPlugins
+import io.reactivex.schedulers.TestScheduler
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
 import java.math.BigDecimal
+import java.util.concurrent.TimeUnit
 
 class BalancePresenterTest {
 
@@ -25,9 +29,13 @@ class BalancePresenterTest {
     private val factory = mock(BalanceViewItemFactory::class.java)
 
     private lateinit var presenter: BalancePresenter
+    private val testScheduler = TestScheduler()
 
     @Before
     fun before() {
+        RxBaseTest.setup()
+        RxJavaPlugins.setComputationSchedulerHandler { testScheduler }
+
         presenter = BalancePresenter(interactor, router, dataSource, factory)
         presenter.view = view
     }
@@ -35,6 +43,7 @@ class BalancePresenterTest {
     @Test
     fun viewDidLoad() {
         presenter.viewDidLoad()
+        testScheduler.advanceTimeBy(1, TimeUnit.MINUTES)
 
         verify(interactor).initAdapters()
     }
@@ -128,7 +137,7 @@ class BalancePresenterTest {
         presenter.didUpdateBalance(coinCode, balance)
 
         verify(dataSource).setBalance(position, balance)
-        verify(view).updateItem(position)
+        verify(dataSource).addUpdatedPosition(position)
         verify(view).updateHeader()
     }
 
@@ -143,7 +152,7 @@ class BalancePresenterTest {
         presenter.didUpdateState(coinCode, state)
 
         verify(dataSource).setState(position, state)
-        verify(view).updateItem(position)
+        verify(dataSource).addUpdatedPosition(position)
         verify(view).updateHeader()
     }
 
@@ -176,7 +185,7 @@ class BalancePresenterTest {
         presenter.didUpdateRate(rate)
 
         verify(dataSource).setRate(position, rate)
-        verify(view).updateItem(position)
+        verify(dataSource).addUpdatedPosition(position)
         verify(view).updateHeader()
     }
 

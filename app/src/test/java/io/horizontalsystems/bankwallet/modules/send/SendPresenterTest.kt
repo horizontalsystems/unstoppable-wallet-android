@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send
 
 import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.R
@@ -144,16 +143,8 @@ class SendPresenterTest {
 
         presenter.didRateRetrieve(null)
 
-        verify(view).dismiss()
-    }
-
-    @Test
-    fun didRateRetrieve_withExpiredRate_onFirstOpen() {
-        whenever(userInput.inputType).thenReturn(SendModule.InputType.COIN)
-
-        presenter.didRateRetrieve(null)
-
-        verify(view, never()).dismiss()
+        verify(userInput).amount = BigDecimal.ZERO
+        verify(userInput).inputType = SendModule.InputType.COIN
     }
 
     @Test

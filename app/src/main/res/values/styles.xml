@@ -57,18 +57,19 @@
     <attr name="SeekbarNonActiveColor" format="reference|color" />
     <attr name="ConfirmationTextColor" format="reference|color" />
     <attr name="SettingsSectionBottomShadeColor" format="reference|color" />
+    <attr name="AddCoinButtonPlaceholder" format="reference|color" />
 
     <!-- Base application theme. -->
     <style name="DarkModeAppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/dark</item>
+        <item name="colorPrimary">@color/grey</item>
         <item name="colorPrimaryDark">@color/black</item>
         <item name="colorAccent">@color/yellow_crypto</item>
         <item name="buttonStyle">@style/Button</item>
         <item name="android:colorBackground">@color/dark</item>
         <item name="android:navigationBarColor">@color/black</item>
-        <item name="android:statusBarColor">@color/dark</item>
         <item name="android:windowLightStatusBar">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
 
         <item name="colorControlNormal">@color/grey</item>
         <item name="colorControlActivated">@color/yellow_crypto</item>
@@ -129,18 +130,19 @@
         <item name="SeekbarNonActiveColor">@color/steel_dark</item>
         <item name="ConfirmationTextColor">@color/lightBackground</item>
         <item name="SettingsSectionBottomShadeColor">@color/black_20</item>
+        <item name="AddCoinButtonPlaceholder">@color/steel_dark</item>
     </style>
 
     <style name="LightModeAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/bars_color</item>
+        <item name="colorPrimary">@color/steel_grey</item>
         <item name="colorPrimaryDark">@color/bars_color</item>
         <item name="colorAccent">@color/yellow_crypto</item>
         <item name="buttonStyle">@style/Button</item>
         <item name="android:windowBackground">@drawable/light_gradient_background</item>
         <item name="android:navigationBarColor">@color/black</item>
-        <item name="android:statusBarColor">@color/bars_color</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
 
         <item name="colorControlNormal">@color/grey</item>
         <item name="colorControlActivated">@color/yellow_crypto</item>
@@ -201,6 +203,7 @@
         <item name="SeekbarNonActiveColor">@color/grey_light</item>
         <item name="ConfirmationTextColor">@color/dark</item>
         <item name="SettingsSectionBottomShadeColor">@color/steel_15</item>
+        <item name="AddCoinButtonPlaceholder">@color/bars_color</item>
     </style>
 
     <style name="Button" parent="Widget.AppCompat.Button.Borderless">
@@ -222,7 +225,7 @@
     <style name="SendButtonSmallGrey" parent="Button">
         <item name="android:background">@drawable/button_grey_background_4_themed</item>
         <item name="android:textColor">@color/stateful_button_text_color</item>
-        <item name="android:fontFamily">@font/noto_sans_regular</item>
+        <item name="android:fontFamily">@font/noto_sans_medium</item>
         <item name="android:letterSpacing">0</item>
         <item name="android:minHeight">0dp</item>
         <item name="android:minWidth">0dp</item>

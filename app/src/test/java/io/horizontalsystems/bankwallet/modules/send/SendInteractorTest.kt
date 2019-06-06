@@ -6,12 +6,16 @@ import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.Flowable
+import io.reactivex.Single
+import io.reactivex.plugins.RxJavaPlugins
+import io.reactivex.schedulers.TestScheduler
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.util.concurrent.TimeUnit
 
 class SendInteractorTest {
 
@@ -38,11 +42,15 @@ class SendInteractorTest {
     private val maxDecimal = 8
     private val feePriority = FeeRatePriority.MEDIUM
 
+    private val testScheduler = TestScheduler()
+
     private lateinit var interactor: SendInteractor
 
     @Before
     fun setup() {
         RxBaseTest.setup()
+
+        RxJavaPlugins.setComputationSchedulerHandler { testScheduler }
 
         whenever(userInput.inputType).thenReturn(SendModule.InputType.COIN)
         whenever(rate.value).thenReturn(BigDecimal("0.1"))
@@ -92,6 +100,8 @@ class SendInteractorTest {
     fun retrieveRate() {
         interactor.retrieveRate()
 
+        testScheduler.advanceTimeBy(1, TimeUnit.MINUTES)
+
         verify(rateStorage).latestRateObservable(coinCode, currency.code)
     }
 
@@ -102,26 +112,31 @@ class SendInteractorTest {
 
         interactor.retrieveRate()
 
+        testScheduler.advanceTimeBy(1, TimeUnit.MINUTES)
+
         verify(delegate).didRateRetrieve(null)
     }
 
     @Test
     fun send_inCurrency() {
-        val feeRate = FeeRatePriority.MEDIUM
+        val feeRatePriority = FeeRatePriority.MEDIUM
         interactor.retrieveRate() // set rate
 
         whenever(rate.value).thenReturn(BigDecimal(1024))
         whenever(userInput.inputType).thenReturn(SendModule.InputType.CURRENCY)
         whenever(userInput.address).thenReturn("abc")
         whenever(userInput.amount).thenReturn(one)
-        whenever(userInput.feePriority).thenReturn(feeRate)
+        whenever(userInput.feePriority).thenReturn(feeRatePriority)
         whenever(adapter.decimal).thenReturn(8)
+
+        val expectedAmountToSend = BigDecimal.valueOf(0.00097656) // 0.0009765625
+        whenever(adapter.send("abc", expectedAmountToSend, feeRatePriority)).thenReturn(Single.just(Unit))
 
         interactor.send(userInput)
 
-        val expectedAmountToSend = BigDecimal.valueOf(0.00097656) // 0.0009765625
+        testScheduler.advanceTimeBy(1, TimeUnit.MINUTES)
 
-        verify(adapter).send(eq("abc"), eq(expectedAmountToSend), eq(feeRate))
+        verify(delegate).didSend()
     }
 
     @Test
@@ -132,12 +147,11 @@ class SendInteractorTest {
         whenever(userInput.amount).thenReturn(one)
         whenever(userInput.feePriority).thenReturn(feePriority)
 
-        whenever(adapter.send(any(), any(), any())).then {
-            val completion = it.arguments[3] as (Throwable?) -> (Unit)
-            completion.invoke(null)
-        }
+        whenever(adapter.send(any(), any(), any())).thenReturn(Single.just(Unit))
 
         interactor.send(userInput)
+
+        testScheduler.advanceTimeBy(1, TimeUnit.MINUTES)
 
         verify(delegate).didSend()
     }
@@ -174,10 +188,7 @@ class SendInteractorTest {
         whenever(userInput.address).thenReturn("abc")
         whenever(userInput.amount).thenReturn(one)
         whenever(userInput.feePriority).thenReturn(feePriority)
-        whenever(adapter.send(any(), any(), any())).then {
-            val completion = it.arguments[3] as (Throwable?) -> Unit
-            completion.invoke(exception)
-        }
+        whenever(adapter.send(any(), any(), any())).thenReturn(Single.error(exception))
 
         interactor.send(userInput)
 
@@ -205,6 +216,8 @@ class SendInteractorTest {
         interactor.retrieveRate()
 
         val state = interactor.stateForUserInput(input)
+
+        testScheduler.advanceTimeBy(1, TimeUnit.MINUTES)
 
         Assert.assertEquals(CoinValue(coinCode, value = expectedFee), state.feeCoinValue)
         Assert.assertEquals(CurrencyValue(currency, value = expectedCurrencyFee), state.feeCurrencyValue)
@@ -274,6 +287,8 @@ class SendInteractorTest {
         interactor.retrieveRate()
         val state = interactor.stateForUserInput(input)
 
+        testScheduler.advanceTimeBy(1, TimeUnit.MINUTES)
+
         Assert.assertEquals(state.feeCurrencyValue, CurrencyValue(currency, value = fee * rate.value))
     }
 
@@ -296,8 +311,9 @@ class SendInteractorTest {
 
         interactor.retrieveRate()
         val state = interactor.stateForUserInput(input)
+        testScheduler.advanceTimeBy(1, TimeUnit.MINUTES)
 
-        Assert.assertEquals(state.feeCurrencyValue, CurrencyValue(currency, value = fee * fiatFeeRate.value))
+        Assert.assertEquals(CurrencyValue(currency, value = fee * fiatFeeRate.value), state.feeCurrencyValue)
     }
 
     @Test
@@ -321,6 +337,8 @@ class SendInteractorTest {
 
         interactor.retrieveRate()
         val state = interactor.stateForUserInput(input)
+
+        testScheduler.advanceTimeBy(1, TimeUnit.MINUTES)
 
         Assert.assertEquals(state.feeCurrencyValue, CurrencyValue(currency, value = fee * rate.value))
 
@@ -367,6 +385,8 @@ class SendInteractorTest {
 
         val expectedBalanceMinusFee = BigDecimal("12.29999956")
         val balanceMinusFee = interactor.getTotalBalanceMinusFee(input.inputType, input.address, feePriority)
+
+        testScheduler.advanceTimeBy(1, TimeUnit.MINUTES)
 
         Assert.assertEquals(expectedBalanceMinusFee, balanceMinusFee)
     }
@@ -482,6 +502,8 @@ class SendInteractorTest {
 
         interactor.retrieveRate()
 
+        testScheduler.advanceTimeBy(1, TimeUnit.MINUTES)
+
         verify(delegate).didFeeRateRetrieve()
     }
 
@@ -492,6 +514,8 @@ class SendInteractorTest {
         whenever(adapter.feeCoinCode).thenReturn(feeCoinCode)
 
         interactor.retrieveRate()
+
+        testScheduler.advanceTimeBy(1, TimeUnit.MINUTES)
 
         verify(delegate, atLeastOnce()).didRateRetrieve(rate)
     }

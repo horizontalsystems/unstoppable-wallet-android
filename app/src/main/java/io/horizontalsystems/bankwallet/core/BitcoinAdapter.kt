@@ -4,11 +4,13 @@ import android.content.Context
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.bankwallet.entities.AuthData
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.models.BlockInfo
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
+import io.horizontalsystems.bitcoincore.transactions.scripts.ScriptType
 import io.horizontalsystems.bitcoinkit.BitcoinKit
 import io.horizontalsystems.bitcoinkit.BitcoinKit.NetworkType
 import io.reactivex.Single
@@ -18,8 +20,8 @@ import java.util.*
 class BitcoinAdapter(coin: Coin, override val kit: BitcoinKit, addressParser: AddressParser, private val feeRateProvider: IFeeRateProvider)
     : BitcoinBaseAdapter(coin, kit, addressParser), BitcoinKit.Listener {
 
-    constructor(coin: Coin, authData: AuthData, newWallet: Boolean, testMode: Boolean, feeRateProvider: IFeeRateProvider) :
-            this(coin, createKit(authData, newWallet, testMode), AddressParser("bitcoin", true), feeRateProvider)
+    constructor(coin: Coin, authData: AuthData, syncMode: SyncMode, testMode: Boolean, feeRateProvider: IFeeRateProvider) :
+            this(coin, createKit(authData, syncMode, testMode), AddressParser("bitcoin", true), feeRateProvider)
 
     init {
         kit.listener = this
@@ -34,6 +36,9 @@ class BitcoinAdapter(coin: Coin, override val kit: BitcoinKit, addressParser: Ad
     override fun feeRate(feePriority: FeeRatePriority): Int {
         return feeRateProvider.bitcoinFeeRate(feePriority).toInt()
     }
+
+    override val receiveAddress: String
+        get() = kit.receiveAddress(ScriptType.P2WPKHSH)
 
     //
     // BitcoinKit Listener
@@ -104,8 +109,8 @@ class BitcoinAdapter(coin: Coin, override val kit: BitcoinKit, addressParser: Ad
         private fun getNetworkType(testMode: Boolean) =
                 if (testMode) NetworkType.TestNet else NetworkType.MainNet
 
-        private fun createKit(authData: AuthData, newWallet: Boolean, testMode: Boolean): BitcoinKit {
-            return BitcoinKit(App.instance, authData.words, authData.walletId, newWallet = newWallet, networkType = getNetworkType(testMode))
+        private fun createKit(authData: AuthData, syncMode: SyncMode, testMode: Boolean): BitcoinKit {
+            return BitcoinKit(App.instance, authData.words, authData.walletId, syncMode = syncMode.bitcoinKitMode(), networkType = getNetworkType(testMode))
         }
 
         fun clear(context: Context, walletId: String, testMode: Boolean) {

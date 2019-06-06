@@ -4,28 +4,30 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.google.android.material.appbar.AppBarLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageCoinsModule
-import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule
-import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.bankwallet.viewHelpers.AnimationHelper
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_wallet.*
+import kotlinx.android.synthetic.main.fragment_balance.*
 import kotlinx.android.synthetic.main.view_holder_add_coin.*
 import kotlinx.android.synthetic.main.view_holder_coin.*
 import java.math.BigDecimal
+
 
 class BalanceFragment : Fragment(), CoinsAdapter.Listener {
 
@@ -33,30 +35,26 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener {
     private var coinsAdapter = CoinsAdapter(this)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_wallet, container, false)
+        return inflater.inflate(R.layout.fragment_balance, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        toolbar.setTitle(R.string.Balance_Title)
+        toolbarTitle.setText(R.string.Balance_Title)
 
         viewModel = ViewModelProviders.of(this).get(BalanceViewModel::class.java)
         viewModel.init()
 
-        viewModel.openReceiveDialog.observe(viewLifecycleOwner, Observer { adapterId ->
-            adapterId?.let { id ->
-                activity?.let {
-                    ReceiveModule.start(it, id)
-                }
+        viewModel.openReceiveDialog.observe(viewLifecycleOwner, Observer { coinCode ->
+            coinCode?.let {
+                (activity as? MainActivity)?.openReceiveDialog(it)
             }
         })
 
-        viewModel.openSendDialog.observe(viewLifecycleOwner, Observer { iAdapter ->
-            iAdapter?.let { coin ->
-                activity?.let {
-                    SendModule.start(it, coin)
-                }
+        viewModel.openSendDialog.observe(viewLifecycleOwner, Observer { coinCode ->
+            coinCode?.let {
+                (activity as? MainActivity)?.openSendDialog(it)
             }
         })
 
@@ -79,6 +77,26 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener {
         viewModel.reloadLiveEvent.observe(viewLifecycleOwner, Observer {
             coinsAdapter.notifyDataSetChanged()
             reloadHeader()
+            if (viewModel.delegate.itemsCount > 0) {
+                shimmerViewWrapper.stopShimmer()
+                shimmerViewWrapper.animate().alpha(0f)
+                recyclerCoins.animate().alpha(1f)
+            }
+        })
+
+        viewModel.enabledCoinsCountLiveEvent.observe(viewLifecycleOwner, Observer { size ->
+            size?.let {
+                if (it > 0 && viewModel.delegate.itemsCount == 0) {
+                    setPlaceholders(it)
+
+                    recyclerCoins.alpha = 0f
+                    shimmerViewWrapper.alpha = 1f
+                    shimmerViewWrapper.startShimmer()
+                } else if (it == 0) {
+                    recyclerCoins.alpha = 1f
+                    shimmerViewWrapper.alpha = 0f
+                }
+            }
         })
 
         viewModel.reloadHeaderLiveEvent.observe(viewLifecycleOwner, Observer {
@@ -102,14 +120,47 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener {
         }
 
         activity?.theme?.let { theme ->
-            LayoutHelper.getAttr(R.attr.SwipeRefreshBackgroundColor, theme)?.let {color ->
+            LayoutHelper.getAttr(R.attr.SwipeRefreshBackgroundColor, theme)?.let { color ->
                 pullToRefresh.setProgressBackgroundColorSchemeColor(color)
             }
-            LayoutHelper.getAttr(R.attr.SwipeRefreshSpinnerColor, theme)?.let {color ->
+            LayoutHelper.getAttr(R.attr.SwipeRefreshSpinnerColor, theme)?.let { color ->
                 pullToRefresh.setColorSchemeColors(color)
             }
         }
 
+        setAppBarAnimation()
+    }
+
+    private fun setPlaceholders(count: Int) {
+        placeholderContainer.removeAllViews()
+        val placeholdersCount = Math.min(count, 6)
+        for (i in 1..placeholdersCount) {
+            val placeholder = LayoutInflater.from(context).inflate(R.layout.view_holder_coin_placeholder, placeholderContainer, false)
+            placeholderContainer.addView(placeholder)
+        }
+        val placeholder = LayoutInflater.from(context).inflate(R.layout.add_coin_placeholder, placeholderContainer, false)
+        placeholderContainer.addView(placeholder)
+    }
+
+    private fun setAppBarAnimation() {
+        toolbarTitle.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                toolbarTitle.pivotX = 0f
+                toolbarTitle.pivotY = toolbarTitle.height.toFloat()
+                toolbarTitle.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
+
+        app_bar_layout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+            val fraction = Math.abs(verticalOffset).toFloat() / appBarLayout.totalScrollRange
+            var alphaFract = 1f - fraction
+            if (alphaFract < 0.20) {
+                alphaFract = 0f
+            }
+            toolbarTitle.alpha = alphaFract
+            toolbarTitle.scaleX = (1f - fraction / 3)
+            toolbarTitle.scaleY = (1f - fraction / 3)
+        })
     }
 
     override fun onResume() {
@@ -231,7 +282,8 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
                     iconProgress.setProgress(adapterState.progress.toFloat())
                     adapterState.lastBlockDate?.let {
                         textSyncProgress.text = containerView.context.getString(R.string.Balance_SyncedUntil, DateHelper.formatDate(it, "MMM d.yyyy"))
-                    } ?:run { textSyncProgress.text = containerView.context.getString(R.string.Balance_Syncing) }
+                    }
+                            ?: run { textSyncProgress.text = containerView.context.getString(R.string.Balance_Syncing) }
                 }
                 is AdapterState.Synced -> {
                     if (balanceViewItem.coinValue.value > BigDecimal.ZERO) {
@@ -248,12 +300,12 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
 
         balanceViewItem.currencyValue?.let {
             textCurrencyAmount.text = App.numberFormatter.format(it, trimmable = true)
-            textCurrencyAmount.visibility = if(it.value.compareTo(BigDecimal.ZERO) == 0) View.GONE else View.VISIBLE
-            textCurrencyAmount.alpha = if (balanceViewItem.rateExpired || syncing) 0.5f else 1f
+            textCurrencyAmount.visibility = if (it.value.compareTo(BigDecimal.ZERO) == 0) View.GONE else View.VISIBLE
+            textCurrencyAmount.alpha = if (!balanceViewItem.rateExpired && balanceViewItem.state is AdapterState.Synced) 1f else 0.5f
         } ?: run { textCurrencyAmount.visibility = View.GONE }
 
         textCoinAmount.text = App.numberFormatter.format(balanceViewItem.coinValue)
-        textCoinAmount.alpha = if (syncing) 0.5f else 1f
+        textCoinAmount.alpha = if (balanceViewItem.state is AdapterState.Synced) 1f else 0.3f
 
         textSyncProgress.visibility = if (expanded && syncing) View.VISIBLE else View.GONE
         textExchangeRate.visibility = if (expanded && syncing) View.GONE else View.VISIBLE

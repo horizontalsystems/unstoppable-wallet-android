@@ -12,7 +12,7 @@ object RxBaseTest {
 
     fun setup() {
         val immediate = object : Scheduler() {
-            override fun createWorker(): Scheduler.Worker {
+            override fun createWorker(): Worker {
                 return ExecutorScheduler.ExecutorWorker(Executor { it.run() })
             }
         }

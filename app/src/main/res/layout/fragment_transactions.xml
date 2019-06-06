@@ -15,13 +15,14 @@
         app:elevation="0dp"
         >
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/toolbarTitle"
+            style="@style/TabTitle"
+            android:layout_width="wrap_content"
             android:layout_height="@dimen/app_bar_height_tall"
-            android:gravity="bottom"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:titleTextAppearance="@style/TabTitle"
+            android:layout_marginStart="16dp"
+            android:gravity="bottom|start"
+            app:layout_scrollFlags="scroll|snap"
             />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -52,29 +53,7 @@
         android:id="@+id/recyclerTransactions"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="50dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         />
 
-    <View
-        android:id="@+id/transactionsDim"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#99000000"
-        />
-
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bottom_sheet_background"
-        android:backgroundTint="?BottomTransactionInfoBackground"
-        android:clipToPadding="true"
-        app:behavior_hideable="true"
-        app:behavior_peekHeight="0dp"
-        app:layout_behavior="@string/bottom_sheet_behavior"
-        >
-
-        <include layout="@layout/transaction_info_bottom_sheet"/>
-    </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
