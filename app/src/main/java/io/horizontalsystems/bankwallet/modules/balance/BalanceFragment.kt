@@ -301,11 +301,11 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
         balanceViewItem.currencyValue?.let {
             textCurrencyAmount.text = App.numberFormatter.format(it, trimmable = true)
             textCurrencyAmount.visibility = if (it.value.compareTo(BigDecimal.ZERO) == 0) View.GONE else View.VISIBLE
-            textCurrencyAmount.alpha = if (balanceViewItem.rateExpired || syncing) 0.5f else 1f
+            textCurrencyAmount.alpha = if (!balanceViewItem.rateExpired && balanceViewItem.state is AdapterState.Synced) 1f else 0.5f
         } ?: run { textCurrencyAmount.visibility = View.GONE }
 
         textCoinAmount.text = App.numberFormatter.format(balanceViewItem.coinValue)
-        textCoinAmount.alpha = if (syncing) 0.5f else 1f
+        textCoinAmount.alpha = if (balanceViewItem.state is AdapterState.Synced) 1f else 0.3f
 
         textSyncProgress.visibility = if (expanded && syncing) View.VISIBLE else View.GONE
         textExchangeRate.visibility = if (expanded && syncing) View.GONE else View.VISIBLE
