@@ -278,18 +278,18 @@
     <string name="ManageCoins_save">Save</string>
 
     <!--Coin Option-->
-
+    <string name="CoinOption_Title">Restore Options</string>
     <string name="CoinOption_Header">Syncing with blockchain</string>
-    <string name="CoinOption_Fast">Fast(0 &#8211;2h)</string>
-    <string name="CoinOption_Slow">Slow(1 &#8211;12h)</string>
-    <string name="CoinOption_Recommended">Recommended</string>
-    <string name="CoinOption_MorePrivate">More Private</string>
+    <string name="CoinOption_Fast">Fast</string>
+    <string name="CoinOption_Recommended">0 &#8211;2 hours (Recommended)</string>
+    <string name="CoinOption_Fast_Text">Restores your past transactions via secure third party server. For users with a long history of transactions involving very large sums this method may pose privacy risks.</string>
+    <string name="CoinOption_Slow">Slow</string>
+    <string name="CoinOption_MorePrivate">1 &#8211;12 hours (More Private)</string>
+    <string name="CoinOption_Slow_Text">Restores your past transactions directly from the network. Significantly more private but very slow. The more coins you restore the longer it takes. If the restore takes way too much time go to Security section in Settings tab and select “Unlink This Device” option.</string>
     <string name="CoinOption_Disable">Disable coin</string>
     <string name="CoinOption_Notice">Sync mode same as Ethereum</string>
     <string name="CoinOption_Alert_Header">Attention</string>
     <string name="CoinOption_Alert_Text">"This action will reset existing %s balance on the wallet and force it to resync itself with %s blockchain. Your funds are safe BUT it may take a really long time... Don't do it if you're not sure what that is."</string>
     <string name="CoinOption_Button_Sync">Sync</string>
-
-
 
 </resources>
