@@ -70,8 +70,8 @@ class App : Application() {
 
         val fallbackLanguage = Locale("en")
 
-        feeRateProvider = FeeRateProvider(instance)
         appConfigProvider = AppConfigProvider()
+        feeRateProvider = FeeRateProvider(instance, appConfigProvider)
         backgroundManager = BackgroundManager(this)
         encryptionManager = EncryptionManager()
         secureStorage = SecuredStorageManager(encryptionManager)

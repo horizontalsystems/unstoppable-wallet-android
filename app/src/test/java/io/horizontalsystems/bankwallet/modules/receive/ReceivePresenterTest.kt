@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.receive
 
-import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.verify
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
@@ -18,7 +17,6 @@ class ReceivePresenterTest {
     private var coin = Mockito.mock(Coin::class.java)
     private val coinAddress = "[coin_address]"
     private val addressItem = AddressItem(address = coinAddress, coin = coin)
-    private val addresses = listOf(addressItem)
 
     private lateinit var presenter: ReceivePresenter
 
@@ -38,9 +36,9 @@ class ReceivePresenterTest {
 
     @Test
     fun didReceiveAddress() {
-        presenter.didReceiveAddresses(addresses)
+        presenter.didReceiveAddress(addressItem)
 
-        verify(view).showAddresses(addresses)
+        verify(view).showAddress(addressItem)
     }
 
     @Test
@@ -52,16 +50,16 @@ class ReceivePresenterTest {
 
     @Test
     fun onShareClick() {
-        presenter.didReceiveAddresses(addresses)
-        presenter.onShareClick(any())
+        presenter.didReceiveAddress(addressItem)
+        presenter.onShareClick()
 
         verify(router).shareAddress(addressItem.address)
     }
 
     @Test
     fun onAddressClick() {
-        presenter.didReceiveAddresses(addresses)
-        presenter.onAddressClick(any())
+        presenter.didReceiveAddress(addressItem)
+        presenter.onAddressClick()
 
         verify(interactor).copyToClipboard(addressItem.address)
     }

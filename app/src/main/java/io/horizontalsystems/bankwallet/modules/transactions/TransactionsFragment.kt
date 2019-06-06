@@ -4,38 +4,31 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.NonNull
+import android.view.ViewTreeObserver
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.*
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
+import com.google.android.material.appbar.AppBarLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
-import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoViewModel
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
-import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
-import kotlinx.android.synthetic.main.transaction_info_bottom_sheet.*
 import kotlinx.android.synthetic.main.view_holder_filter.*
 import kotlinx.android.synthetic.main.view_holder_transaction.*
 
 class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAdapter.Listener {
 
     private lateinit var viewModel: TransactionsViewModel
-    private lateinit var transInfoViewModel: TransactionInfoViewModel
     private val transactionsAdapter = TransactionsAdapter(this)
     private val filterAdapter = FilterAdapter(this)
-    private var bottomSheetBehavior: BottomSheetBehavior<View>? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_transactions, container, false)
@@ -48,7 +41,7 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
         viewModel.init()
 
         transactionsAdapter.viewModel = viewModel
-        toolbar.setTitle(R.string.Transactions_Title)
+        toolbarTitle.setText(R.string.Transactions_Title)
 
         recyclerTransactions.setHasFixedSize(true)
         recyclerTransactions.adapter = transactionsAdapter
@@ -70,7 +63,7 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
 
         viewModel.transactionViewItemLiveEvent.observe(viewLifecycleOwner, Observer { transactionViewItem ->
             transactionViewItem?.let {
-                transInfoViewModel.setViewItem(it)
+                (activity as? MainActivity)?.setTransactionInfoItem(it)
             }
         })
 
@@ -108,7 +101,28 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
             }
         })
 
-        setBottomSheet()
+        setAppBarAnimation()
+    }
+
+    private fun setAppBarAnimation() {
+        toolbarTitle.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                toolbarTitle.pivotX = 0f
+                toolbarTitle.pivotY = toolbarTitle.height.toFloat()
+                toolbarTitle.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
+
+        app_bar_layout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+            val fraction = Math.abs(verticalOffset).toFloat() / appBarLayout.totalScrollRange
+            var alphaFract = 1f - fraction
+            if (alphaFract < 0.20) {
+                alphaFract = 0f
+            }
+            toolbarTitle.alpha = alphaFract
+            toolbarTitle.scaleX = (1f - fraction / 3)
+            toolbarTitle.scaleY = (1f - fraction / 3)
+        })
     }
 
     override fun setMenuVisibility(menuVisible: Boolean) {
@@ -118,115 +132,12 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
         }
     }
 
-    //Bottom sheet shows TransactionInfo
-    private fun setBottomSheet() {
-
-        bottomSheetBehavior = BottomSheetBehavior.from(nestedScrollView)
-
-        transactionsDim.visibility = View.GONE
-        transactionsDim.alpha = 0f
-
-        var bottomSheetSlideOffOld = 0f
-
-        bottomSheetBehavior?.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-            override fun onStateChanged(@NonNull bottomSheet: View, newState: Int) {
-                val enabled = newState != STATE_EXPANDED
-                (activity as? MainActivity)?.setSwipeEnabled(enabled)
-            }
-
-            override fun onSlide(@NonNull bottomSheet: View, slideOffset: Float) {
-                transactionsDim.alpha = slideOffset
-                if (bottomSheetSlideOffOld >= 0.7 && slideOffset < 0.7) {
-                    (activity as? MainActivity)?.setBottomNavigationVisible(true)
-                } else if (bottomSheetSlideOffOld >= 0.8 && slideOffset > 0.9) {
-                    (activity as? MainActivity)?.setBottomNavigationVisible(false)
-                }
-
-                transactionsDim.visibility = if (slideOffset == 0f) View.GONE else View.VISIBLE
-
-                bottomSheetSlideOffOld = slideOffset
-            }
-        })
-
-        transInfoViewModel = ViewModelProviders.of(this).get(TransactionInfoViewModel::class.java)
-        transInfoViewModel.init()
-
-        transactionIdView.setOnClickListener { transInfoViewModel.onClickTransactionId() }
-        txtFullInfo.setOnClickListener { transInfoViewModel.onClickOpenFillInfo() }
-        transactionsDim.setOnClickListener { bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED }
-
-        transInfoViewModel.showCopiedLiveEvent.observe(viewLifecycleOwner, Observer {
-            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied)
-        })
-
-        transInfoViewModel.showFullInfoLiveEvent.observe(viewLifecycleOwner, Observer { pair ->
-            pair?.let {
-                activity?.let { activity ->
-                    FullTransactionInfoModule.start(activity, transactionHash = it.first, coin = it.second)
-                }
-            }
-        })
-
-        transInfoViewModel.transactionLiveData.observe(viewLifecycleOwner, Observer { txRecord ->
-            txRecord?.let { txRec ->
-                val txStatus = txRec.status
-
-                coinIcon.bind(txRec.coin)
-
-                fiatValue.apply {
-                    text = txRec.currencyValue?.let { App.numberFormatter.format(it, showNegativeSign = true, canUseLessSymbol = false) }
-                    setTextColor(resources.getColor(if (txRec.incoming) R.color.green_crypto else R.color.yellow_crypto, null))
-                }
-
-                coinValue.text = App.numberFormatter.format(txRec.coinValue, explicitSign = true, realNumber = true)
-                coinName.text = txRec.coin.title
-
-                itemRate.apply {
-                    txRec.rate?.let {
-                        val rate = getString(R.string.Balance_RatePerCoin, App.numberFormatter.format(it, canUseLessSymbol = false), txRec.coin.code)
-                        bind(title = getString(R.string.TransactionInfo_HistoricalRate), value = rate)
-                    }
-                    visibility = if (txRec.rate == null) View.GONE else View.VISIBLE
-                }
-
-                itemTime.bind(title = getString(R.string.TransactionInfo_Time), value = txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) } ?: "")
-
-                itemStatus.bindStatus(txStatus)
-
-                transactionIdView.bindTransactionId(txRec.transactionHash)
-
-                itemFrom.apply {
-                    setOnClickListener { transInfoViewModel.onClickFrom() }
-                    visibility = if (txRec.from.isNullOrEmpty()) View.GONE else View.VISIBLE
-                    bindAddress(title = getString(R.string.TransactionInfo_From), address = txRec.from, showBottomBorder = true)
-                }
-
-                itemTo.apply {
-                    setOnClickListener { transInfoViewModel.onClickTo() }
-                    visibility = if (txRec.to.isNullOrEmpty()) View.GONE else View.VISIBLE
-                    bindAddress(title = getString(R.string.TransactionInfo_To), address = txRec.to, showBottomBorder = true)
-                }
-
-                (activity as? MainActivity)?.setBottomNavigationVisible(false)
-                bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
-            }
-        })
-    }
-
     override fun onItemClick(item: TransactionViewItem) {
         viewModel.delegate.onTransactionItemClick(item)
     }
 
     override fun onFilterItemClick(item: Coin?) {
         viewModel.delegate.onFilterSelect(item)
-    }
-
-    fun onBackPressed(): Boolean {
-        if (bottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED) {
-            bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
-            return true
-        }
-        return false
     }
 
 }
@@ -329,8 +240,7 @@ class ViewHolderFilter(override val containerView: View, private val l: ClickLis
     }
 
     fun bind(coin: Coin?, active: Boolean) {
-        filter_text.text = coin?.code
-                ?: containerView.context.getString(R.string.Transactions_FilterAll)
+        filter_text.text = coin?.code ?: containerView.context.getString(R.string.Transactions_FilterAll)
         filter_text.isActivated = active
         filter_text.setOnClickListener { l.onClickItem(adapterPosition) }
     }

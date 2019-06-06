@@ -57,7 +57,7 @@ object LayoutHelper {
     fun getInfoBadge(wordListBackedUp: Boolean, resources: Resources): Drawable? {
         var infoBadge: Drawable? = null
         if (!wordListBackedUp) {
-            infoBadge = resources.getDrawable(R.drawable.ic_info, null)
+            infoBadge = resources.getDrawable(R.drawable.ic_attention, null)
             infoBadge?.setTint(resources.getColor(R.color.red_warning, null))
         }
         return infoBadge

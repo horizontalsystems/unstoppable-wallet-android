@@ -3,14 +3,17 @@ package io.horizontalsystems.bankwallet.modules.balance
 import android.os.Handler
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
+import io.horizontalsystems.bankwallet.core.IEnabledCoinStorage
 import io.horizontalsystems.bankwallet.core.IRateStorage
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 class BalanceInteractor(
         private val adapterManager: IAdapterManager,
         private val rateStorage: IRateStorage,
+        private val coinStorage: IEnabledCoinStorage,
         private val currencyManager: ICurrencyManager,
         private val refreshTimeout: Double = 2.0
 ) : BalanceModule.IInteractor {
@@ -23,6 +26,13 @@ class BalanceInteractor(
 
     override fun initAdapters() {
         onUpdateAdapters()
+        disposables.add(coinStorage.enabledCoinsObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    delegate?.didEnabledCoinsCountUpdated(it.size)
+                }
+        )
 
         disposables.add(adapterManager.adaptersUpdatedSignal
                 .subscribeOn(Schedulers.io())

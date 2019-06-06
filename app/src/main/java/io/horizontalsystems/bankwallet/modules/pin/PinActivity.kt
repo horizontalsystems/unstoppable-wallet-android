@@ -27,6 +27,8 @@ import io.horizontalsystems.bankwallet.ui.extensions.*
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_pin.*
+import kotlinx.android.synthetic.main.activity_pin.shadowlessToolbar
+import kotlinx.android.synthetic.main.activity_settings_security.*
 
 
 class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuthenticationDialogFragment.Callback {
@@ -37,8 +39,6 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setTransparentStatusBar()
 
         setContentView(R.layout.activity_pin)
 

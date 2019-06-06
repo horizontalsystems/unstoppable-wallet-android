@@ -10,7 +10,7 @@ class ReceiveViewModel : ViewModel(), ReceiveModule.IView, ReceiveModule.IRouter
 
     lateinit var delegate: ReceiveModule.IViewDelegate
 
-    val showAddressesLiveData = MutableLiveData<List<AddressItem>>()
+    val showAddressLiveData = MutableLiveData<AddressItem>()
     val showErrorLiveData = MutableLiveData<Int>()
     val showCopiedLiveEvent = SingleLiveEvent<Unit>()
     val shareAddressLiveEvent = SingleLiveEvent<String>()
@@ -20,8 +20,8 @@ class ReceiveViewModel : ViewModel(), ReceiveModule.IView, ReceiveModule.IRouter
         delegate.viewDidLoad()
     }
 
-    override fun showAddresses(addresses: List<AddressItem>) {
-        showAddressesLiveData.value = addresses
+    override fun showAddress(addresses: AddressItem) {
+        showAddressLiveData.value = addresses
     }
 
     override fun showError(error: Int) {

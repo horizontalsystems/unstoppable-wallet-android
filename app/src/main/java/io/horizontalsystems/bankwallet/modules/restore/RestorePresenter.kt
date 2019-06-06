@@ -16,19 +16,8 @@ class RestorePresenter(
         view?.showError(R.string.Restore_ValidationFailed)
     }
 
-    override fun didFailToRestore(exception: Exception) {
-        view?.showError(R.string.Restore_RestoreFailed)
+    override fun didValidate(words: List<String>) {
+        router.navigateToSetSyncMode(words)
     }
 
-    override fun didValidate() {
-        view?.showConfirmationDialog()
-    }
-
-    override fun didConfirm(words: List<String>) {
-        interactor.restore(words)
-    }
-
-    override fun didRestore() {
-        router.navigateToSetPin()
-    }
 }

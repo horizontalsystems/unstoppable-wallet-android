@@ -8,27 +8,27 @@ class ReceivePresenter(
         private val router: ReceiveModule.IRouter) : ReceiveModule.IViewDelegate, ReceiveModule.IInteractorDelegate {
 
     var view: ReceiveModule.IView? = null
-    private var receiveAddresses: List<AddressItem> = mutableListOf()
+    private var receiveAddress: AddressItem? = null
 
     override fun viewDidLoad() {
         interactor.getReceiveAddress()
     }
 
-    override fun didReceiveAddresses(addresses: List<AddressItem>) {
-        this.receiveAddresses = addresses
-        view?.showAddresses(receiveAddresses)
+    override fun didReceiveAddress(address: AddressItem) {
+        this.receiveAddress = address
+        view?.showAddress(address)
     }
 
     override fun didFailToReceiveAddress(exception: Exception) {
         view?.showError(R.string.Error)
     }
 
-    override fun onShareClick(index: Int) {
-        router.shareAddress(receiveAddresses[index].address)
+    override fun onShareClick() {
+        receiveAddress?.address?.let { router.shareAddress(it) }
     }
 
-    override fun onAddressClick(index: Int) {
-        interactor.copyToClipboard(receiveAddresses[index].address)
+    override fun onAddressClick() {
+        receiveAddress?.address?.let { interactor.copyToClipboard(it) }
     }
 
     override fun didCopyToClipboard() {

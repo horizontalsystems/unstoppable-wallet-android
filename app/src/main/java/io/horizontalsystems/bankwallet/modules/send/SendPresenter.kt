@@ -33,6 +33,7 @@ class SendPresenter(
         view?.setFeeInfo(viewItem.feeInfo)
         view?.setSendButtonEnabled(viewItem.sendButtonEnabled)
         updatePasteButtonState()
+        interactor.retrieveRate()
     }
 
     override fun onViewResumed() {
@@ -132,12 +133,12 @@ class SendPresenter(
     }
 
     override fun didRateRetrieve(rate: Rate?) {
-        if (userInput.inputType == SendModule.InputType.CURRENCY && rate == null) {
-            view?.dismiss()
-            return
-        }
-
-        if (interactor.defaultInputType == SendModule.InputType.CURRENCY && userInput.amount == BigDecimal.ZERO) {
+        if (rate == null) {
+            if (userInput.inputType == SendModule.InputType.CURRENCY) {
+                userInput.amount = BigDecimal.ZERO
+            }
+            userInput.inputType = SendModule.InputType.COIN
+        } else if (interactor.defaultInputType == SendModule.InputType.CURRENCY && userInput.amount == BigDecimal.ZERO) {
             userInput.inputType = interactor.defaultInputType
         }
 

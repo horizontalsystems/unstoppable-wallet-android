@@ -72,7 +72,7 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
         })
 
         viewModel.showCopiedLiveEvent.observe(this, Observer {
-            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied)
+            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied, 500)
         })
 
         viewModel.openLinkLiveEvent.observe(this, Observer { url ->

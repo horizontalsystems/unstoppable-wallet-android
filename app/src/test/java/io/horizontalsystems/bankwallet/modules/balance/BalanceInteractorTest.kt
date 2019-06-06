@@ -2,10 +2,7 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import com.nhaarman.mockito_kotlin.inOrder
 import com.nhaarman.mockito_kotlin.whenever
-import io.horizontalsystems.bankwallet.core.IAdapter
-import io.horizontalsystems.bankwallet.core.IAdapterManager
-import io.horizontalsystems.bankwallet.core.ICurrencyManager
-import io.horizontalsystems.bankwallet.core.IRateStorage
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
@@ -23,6 +20,7 @@ class BalanceInteractorTest {
 
     private val adapterManager = mock(IAdapterManager::class.java)
     private val rateStorage = mock(IRateStorage::class.java)
+    private val coinStorage = mock(IEnabledCoinStorage::class.java)
     private val currencyManager = mock(ICurrencyManager::class.java)
 
     private lateinit var interactor: BalanceInteractor
@@ -31,11 +29,12 @@ class BalanceInteractorTest {
     fun setup() {
         RxBaseTest.setup()
 
-        interactor = BalanceInteractor(adapterManager, rateStorage, currencyManager)
+        interactor = BalanceInteractor(adapterManager, rateStorage, coinStorage, currencyManager)
         interactor.delegate = delegate
 
         whenever(adapterManager.adaptersUpdatedSignal).thenReturn(Observable.empty())
         whenever(currencyManager.baseCurrencyUpdatedSignal).thenReturn(Observable.empty())
+        whenever(coinStorage.enabledCoinsObservable()).thenReturn(Flowable.just(listOf()))
     }
 
     @Test
