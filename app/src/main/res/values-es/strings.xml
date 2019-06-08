@@ -17,7 +17,7 @@
     <!--Guest-->
     <string name="Guest_Title">Unstoppable</string>
     <string name="Guest_CreateWallet">Create Wallet</string>
-    <string name="Guest_RestoreWallet">Restore</string>
+    <string name="Guest_RestoreWallet">Restaurar</string>
     <!--Restore-->
     <string name="Restore_Title">Restaurar</string>
     <string name="Restore_Subtitle">Ingresar clave secreta</string>
