@@ -30,9 +30,9 @@
     <string name="Backup_Intro_BackupNow">备份</string>
     <string name="Backup_Words_Title">密钥</string>
     <string name="Backup_Confirmation_SecretKey">我知道, 我是一个12个字的私人密钥的唯一拥有者，该密钥安全地存储在我的手机上，使我能够控制我钱包上的资金。</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is ever moved, deleted or malfunctions, the access to my wallet can be only recovered with that Secret Key.</string>
-    <string name="Backup_Confirmation_LockAppWarn">I understand that changing the phone\s unlock PIN or deleting app data in Android settings deletes the Secret Key from device. I would need to re-enter my Secret Key to regain access to my wallet.</string>
-    <string name="Backup_Confirmation_Disclaimer">I understand that developers of this app can not be held responsible for any unintended bugs or issues that may arise while using this app.</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">我知道如果此APP被移动、删除或出现故障，只有用密钥才能恢复对我钱包的访问。</string>
+    <string name="Backup_Confirmation_LockAppWarn">我知道更改手机的解锁密码或删除Android设置中的应用程序数据会从设备中删除密钥。在这种情况下，我需要重新输入我的密钥才能重新获得我的钱包。</string>
+    <string name="Backup_Confirmation_Disclaimer">我理解这个应用程序的开发人员对使用这个应用程序时可能出现的任何意外的错误或问题不负责任。</string>
     <string name="Backup_Confirmation_Title">请输入你密钥中的词</string>
     <string name="Backup_Confirmation_Description">请输入你密钥中的词.</string>
     <string name="Backup_Confirmation_FailureAlertText"> 单词不匹配</string>
@@ -195,7 +195,7 @@
     <string name="UnlockPin_WalletDisabledUntil">禁用至: %s</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">电话PIN</string>
-    <string name="OSPin_Confirm_Desciption">This app requires your phone\'s PIN in order to keep sensitive data from your wallet in Android\'s secure storage and not in the app itself.</string>
+    <string name="OSPin_Confirm_Desciption">这个应用程序需要你的手机的密码，以便将敏感数据从你的钱包中保存在安卓的安全存储中，而不是在应用程序本身中。</string>
     <!--Set Pin-->
     <string name="SetPin_Title">密码</string>
     <string name="SetPin_Info">您的密码将用于解锁钱包app。</string>
@@ -215,7 +215,7 @@
     <string name="CoinOption_Title">恢复选项</string>
     <string name="CoinOption_Fast">过程最快</string>
     <string name="CoinOption_Recommended">0&#8211;2 小时 (推荐)</string>
-    <string name="CoinOption_Fast_Text">Restores your past transactions via secure third party server. For users with a long history of transactions involving very large sums this method may pose privacy risks.</string>
+    <string name="CoinOption_Fast_Text">通过安全的第三方服务器可以恢复以前的事务。对于拥有大量交易历史的用户来说，这种方法可能会带来隐私风险。</string>
     <string name="CoinOption_Slow">缓慢</string>
     <string name="CoinOption_MorePrivate">1&#8211;12 小时(更多隐私)</string>
     <string name="CoinOption_Slow_Text">Restores your past transactions directly from the network. Significantly more private but very slow. The more coins you restore the longer it takes. If the restore takes way too much time go to Security section in Settings tab and select “Unlink This Device” option.</string>
