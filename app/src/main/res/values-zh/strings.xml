@@ -218,5 +218,5 @@
     <string name="CoinOption_Fast_Text">通过安全的第三方服务器可以恢复以前的事务。对于拥有大量交易历史的用户来说，这种方法可能会带来隐私风险。</string>
     <string name="CoinOption_Slow">缓慢</string>
     <string name="CoinOption_MorePrivate">1&#8211;12 小时(更多隐私)</string>
-    <string name="CoinOption_Slow_Text">Restores your past transactions directly from the network. Significantly more private but very slow. If the restore takes way too much time go to Security section in Settings tab and select “Unlink This Device” option.</string>
+    <string name="CoinOption_Slow_Text">直接从网络可以恢复以前的事务。明显更私密，但速度很慢。如果恢复时间过长，请转到“设置”选项卡中的“安全”部分，然后选择“取消此设备的链接”选项。</string>
 </resources>
