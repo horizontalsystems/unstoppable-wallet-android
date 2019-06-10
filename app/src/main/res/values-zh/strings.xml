@@ -29,7 +29,7 @@
     <string name="Backup_Intro_Later">稍后</string>
     <string name="Backup_Intro_BackupNow">备份</string>
     <string name="Backup_Words_Title">密钥</string>
-    <string name="Backup_Confirmation_SecretKey">历史汇率</string>
+    <string name="Backup_Confirmation_SecretKey">我知道, 我是一个12个字的私人密钥的唯一拥有者，该密钥安全地存储在我的手机上，使我能够控制我钱包上的资金。</string>
     <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is ever moved, deleted or malfunctions, the access to my wallet can be only recovered with that Secret Key.</string>
     <string name="Backup_Confirmation_LockAppWarn">I understand that changing the phone\s unlock PIN or deleting app data in Android settings deletes the Secret Key from device. I would need to re-enter my Secret Key to regain access to my wallet.</string>
     <string name="Backup_Confirmation_Disclaimer">I understand that developers of this app can not be held responsible for any unintended bugs or issues that may arise while using this app.</string>
@@ -213,10 +213,10 @@
     <string name="ManageCoins_save">保存</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">恢复选项</string>
-    <string name="CoinOption_Fast">Fast</string>
-    <string name="CoinOption_Recommended">0&#8211;2 hours (Recommended)</string>
+    <string name="CoinOption_Fast">过程最快</string>
+    <string name="CoinOption_Recommended">0&#8211;2 小时 (推荐)</string>
     <string name="CoinOption_Fast_Text">Restores your past transactions via secure third party server. For users with a long history of transactions involving very large sums this method may pose privacy risks.</string>
-    <string name="CoinOption_Slow">Slow</string>
-    <string name="CoinOption_MorePrivate">1&#8211;12 hours (More Private)</string>
+    <string name="CoinOption_Slow">缓慢</string>
+    <string name="CoinOption_MorePrivate">1&#8211;12 小时(更多隐私)</string>
     <string name="CoinOption_Slow_Text">Restores your past transactions directly from the network. Significantly more private but very slow. The more coins you restore the longer it takes. If the restore takes way too much time go to Security section in Settings tab and select “Unlink This Device” option.</string>
 </resources>
