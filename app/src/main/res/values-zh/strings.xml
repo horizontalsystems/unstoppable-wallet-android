@@ -145,8 +145,8 @@
     <string name="SettingsSecurity_Fingerprint">指纹识别</string>
     <string name="SettingsSecurity_EditPin">修改密码</string>
     <string name="SettingsSecurity_BackupWallet">备份钱包</string>
-    <string name="SettingsSecurity_UnlinkFromThisDevice">与此设备断开连接</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_1">此操作从此设备中将删除当前安装的钱包</string>
+    <string name="SettingsSecurity_UnlinkFromThisDevice">从此设备中删除</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_1">此操作将从此设备中删除当前安装的钱包</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_2">确保你已备份钱包的密钥，否则您将无法访问资金。</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">基本货币</string>
@@ -184,7 +184,7 @@
     <string name="Hud_Text_NoInternet">没有网络连接</string>
     <string name="Hud_Text_Copied">复制成功</string>
     <string name="Hud_Text_InvalidPinError">密码不正确</string>
-    <string name="Hud_Network_Issue">网络问题。请再试一次。</string>
+    <string name="Hud_Network_Issue">网络问题。请稍后再试</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">使用指纹登录</string>
     <string name="Fingerprint_Hint">触控传感器</string>
@@ -207,9 +207,9 @@
     <!--Edit Pin-->
     <string name="EditPin_Title">修改密码</string>
     <string name="EditPin_UnlockInfo">当前密码</string>
-    <string name="EditPin_NewPinInfo">新密碼</string>
+    <string name="EditPin_NewPinInfo">新密码</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">钱包</string>
+    <string name="ManageCoins_title">硬币管理</string>
     <string name="ManageCoins_save">保存</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">恢复选项</string>
@@ -218,5 +218,5 @@
     <string name="CoinOption_Fast_Text">通过安全的第三方服务器可以恢复以前的事务。对于拥有大量交易历史的用户来说，这种方法可能会带来隐私风险。</string>
     <string name="CoinOption_Slow">缓慢</string>
     <string name="CoinOption_MorePrivate">1&#8211;12 小时(更多隐私)</string>
-    <string name="CoinOption_Slow_Text">Restores your past transactions directly from the network. Significantly more private but very slow. The more coins you restore the longer it takes. If the restore takes way too much time go to Security section in Settings tab and select “Unlink This Device” option.</string>
+    <string name="CoinOption_Slow_Text">直接从网络可以恢复以前的事务。明显更私密，但速度很慢。需要恢复的硬币越多，恢复的时间就越长。如果恢复时间过长，请转到“设置”选项卡中的“安全”部分，然后选择“取消此设备的链接”选项。</string>
 </resources>
