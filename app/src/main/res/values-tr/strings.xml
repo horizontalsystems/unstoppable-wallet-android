@@ -16,8 +16,8 @@
     <string name="Error">Hata</string>
     <!--Guest-->
     <string name="Guest_Title">Unstoppable</string>
-    <string name="Guest_CreateWallet">Create Wallet</string>
-    <string name="Guest_RestoreWallet">Restore</string>
+    <string name="Guest_CreateWallet">Cüzdan Oluştur</string>
+    <string name="Guest_RestoreWallet">Geri Yükle</string>
     <!--Restore-->
     <string name="Restore_Title">Geri Yükle</string>
     <string name="Restore_Subtitle">Gizli Anahtarı girin</string>
@@ -207,11 +207,11 @@
     <string name="ManageCoins_title">Cüzdanlar</string>
     <string name="ManageCoins_save">Kaydet</string>
     <!--Coin Option-->
-    <string name="CoinOption_Title">Restore Options</string>
-    <string name="CoinOption_Fast">Fast</string>
-    <string name="CoinOption_Recommended">0&#8211;2 hours (Recommended)</string>
-    <string name="CoinOption_Fast_Text">Restores your past transactions via secure third party server. For users with a long history of transactions involving very large sums this method may pose privacy risks.</string>
-    <string name="CoinOption_Slow">Slow</string>
-    <string name="CoinOption_MorePrivate">1&#8211;12 hours (More Private)</string>
-    <string name="CoinOption_Slow_Text">Restores your past transactions directly from the network. Significantly more private but very slow. The more coins you restore the longer it takes. If the restore takes way too much time go to Security section in Settings tab and select “Unlink This Device” option.</string>
+    <string name="CoinOption_Title">Geri yükleme seçenekleri</string>
+    <string name="CoinOption_Fast">Hızlı</string>
+    <string name="CoinOption_Recommended">0&#8211;2 saat (Tavsiye edilen)</string>
+    <string name="CoinOption_Fast_Text">Geçmiş işlemlerinizi güvenilir üçüncü şahıs sunucularıyla geri yükleyin. Uzun işlem geçmişi olan ve büyük miktarda para işlemleri yapan kullanıcılar için bu yöntem güvenlik riski oluşturabilir.</string>
+    <string name="CoinOption_Slow">Yavaş</string>
+    <string name="CoinOption_MorePrivate">1&#8211;12 saat (Daha Gizli)</string>
+    <string name="CoinOption_Slow_Text">İşlem geçmişinizi ağdan geri yükleyin. Çok daha güvenli ancak daha yavaş. Eğer gereğinden daha uzun sürerse, Ayarlardaki Güvenlik bölümünden \"Bu cihazla bağı kes\"i seçin.</string>
 </resources>

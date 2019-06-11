@@ -207,11 +207,11 @@
     <string name="ManageCoins_title">Кошельки</string>
     <string name="ManageCoins_save">Сохранить</string>
     <!--Coin Option-->
-    <string name="CoinOption_Title">Restore Options</string>
-    <string name="CoinOption_Fast">Fast</string>
-    <string name="CoinOption_Recommended">0&#8211;2 hours (Recommended)</string>
-    <string name="CoinOption_Fast_Text">Restores your past transactions via secure third party server. For users with a long history of transactions involving very large sums this method may pose privacy risks.</string>
-    <string name="CoinOption_Slow">Slow</string>
-    <string name="CoinOption_MorePrivate">1&#8211;12 hours (More Private)</string>
-    <string name="CoinOption_Slow_Text">Restores your past transactions directly from the network. Significantly more private but very slow. The more coins you restore the longer it takes. If the restore takes way too much time go to Security section in Settings tab and select “Unlink This Device” option.</string>
+    <string name="CoinOption_Title">Параметры Восстановления</string>
+    <string name="CoinOption_Fast">Быстро</string>
+    <string name="CoinOption_Recommended">0&#8211;2 часа (Рекомендуется)</string>
+    <string name="CoinOption_Fast_Text">Восстановление ваших предыдущих транзакций через сторонний защищенный сервер. Для пользователей с длинной историей транзакций и с очень большим суммами этот метод может представлять риски для конфиденциальности.</string>
+    <string name="CoinOption_Slow">Медленно</string>
+    <string name="CoinOption_MorePrivate">1&#8211;12 часов (Более Приватно)</string>
+    <string name="CoinOption_Slow_Text">Восстановление ваших предыдущих транзакций будет непосредственно из сети. Это более приватно, но очень медленно. Если восстановление занимает слишком много времени, перейдите в раздел \"Безопасность\" в Настройках и выберите опцию «Отключить это устройство».</string>
 </resources>
