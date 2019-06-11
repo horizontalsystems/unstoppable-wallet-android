@@ -207,7 +207,7 @@
     <string name="ManageCoins_title">Кошельки</string>
     <string name="ManageCoins_save">Сохранить</string>
     <!--Coin Option-->
-    <string name="CoinOption_Title">Опции Восстановления</string>
+    <string name="CoinOption_Title">Параметры Восстановления</string>
     <string name="CoinOption_Fast">Быстро</string>
     <string name="CoinOption_Recommended">0&#8211;2 часа (Рекомендуется)</string>
     <string name="CoinOption_Fast_Text">Восстановление ваших предыдущих транзакций через сторонний защищенный сервер. Для пользователей с длинной историей транзакций и с очень большим суммами этот метод может представлять риски для конфиденциальности.</string>
