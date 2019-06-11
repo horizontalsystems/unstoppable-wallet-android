@@ -16,8 +16,8 @@
     <string name="Error">出错</string>
     <!--Guest-->
     <string name="Guest_Title">Unstoppable</string>
-    <string name="Guest_CreateWallet">Create Wallet</string>
-    <string name="Guest_RestoreWallet">Restore</string>
+    <string name="Guest_CreateWallet">创建钱包</string>
+    <string name="Guest_RestoreWallet">还原</string>
     <!--Restore-->
     <string name="Restore_Title">恢复</string>
     <string name="Restore_Subtitle">输入密钥</string>
@@ -29,10 +29,10 @@
     <string name="Backup_Intro_Later">稍后</string>
     <string name="Backup_Intro_BackupNow">备份</string>
     <string name="Backup_Words_Title">密钥</string>
-    <string name="Backup_Confirmation_SecretKey">I understand that I am a sole owner of a private 12-word Secret Key which is securely stored on my phone and enables me to control funds on my wallet.</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is ever moved, deleted or malfunctions, the access to my wallet can be only recovered with that Secret Key.</string>
-    <string name="Backup_Confirmation_LockAppWarn">I understand that changing the phone\s unlock PIN or deleting app data in Android settings deletes the Secret Key from device. I would need to re-enter my Secret Key to regain access to my wallet.</string>
-    <string name="Backup_Confirmation_Disclaimer">I understand that developers of this app can not be held responsible for any unintended bugs or issues that may arise while using this app.</string>
+    <string name="Backup_Confirmation_SecretKey">我知道, 我是一个12个字的私人密钥的唯一拥有者，该密钥安全地存储在我的手机上，使我能够控制我钱包上的资金。</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">我知道如果此APP被移动、删除或出现故障，只有用密钥才能恢复对我钱包的访问。</string>
+    <string name="Backup_Confirmation_LockAppWarn">我知道更改手机的解锁密码或删除Android设置中的应用程序数据会从设备中删除密钥。在这种情况下，我需要重新输入我的密钥才能重新获得我的钱包。</string>
+    <string name="Backup_Confirmation_Disclaimer">我理解这个应用程序的开发人员对使用这个应用程序时可能出现的任何意外的错误或问题不负责任。</string>
     <string name="Backup_Confirmation_Title">请输入你密钥中的词</string>
     <string name="Backup_Confirmation_Description">请输入你密钥中的词.</string>
     <string name="Backup_Confirmation_FailureAlertText"> 单词不匹配</string>
@@ -85,14 +85,14 @@
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">交易</string>
     <string name="TransactionInfo_Status">状态</string>
-    <string name="TransactionInfo_Status_Confirmed">Confirmed</string>
+    <string name="TransactionInfo_Status_Confirmed">已确认</string>
     <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_To">收件人：</string>
     <string name="TransactionInfo_From">发件人：</string>
     <string name="TransactionInfo_Time">时间</string>
-    <string name="TransactionInfo_ButtonVerify">Verify</string>
+    <string name="TransactionInfo_ButtonVerify">验证</string>
     <string name="TransactionInfo_Status_Pending">在过程中</string>
-    <string name="TransactionInfo_HistoricalRate">Historical Rate</string>
+    <string name="TransactionInfo_HistoricalRate">历史汇率</string>
     <!--Full Info-->
     <string name="FullInfo_Title">交易</string>
     <string name="FullInfo_Time">时间</string>
@@ -145,8 +145,8 @@
     <string name="SettingsSecurity_Fingerprint">指纹识别</string>
     <string name="SettingsSecurity_EditPin">修改密码</string>
     <string name="SettingsSecurity_BackupWallet">备份钱包</string>
-    <string name="SettingsSecurity_UnlinkFromThisDevice">与此设备断开连接</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_1">此操作从此设备中将删除当前安装的钱包</string>
+    <string name="SettingsSecurity_UnlinkFromThisDevice">从此设备中删除</string>
+    <string name="SettingsSecurity_ImportWalletConfirmation_1">此操作将从此设备中删除当前安装的钱包</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_2">确保你已备份钱包的密钥，否则您将无法访问资金。</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">基本货币</string>
@@ -184,7 +184,7 @@
     <string name="Hud_Text_NoInternet">没有网络连接</string>
     <string name="Hud_Text_Copied">复制成功</string>
     <string name="Hud_Text_InvalidPinError">密码不正确</string>
-    <string name="Hud_Network_Issue">网络问题。请再试一次。</string>
+    <string name="Hud_Network_Issue">网络问题。请稍后再试</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">使用指纹登录</string>
     <string name="Fingerprint_Hint">触控传感器</string>
@@ -194,8 +194,8 @@
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">禁用至: %s</string>
     <!--OS Pin-->
-    <string name="OSPin_Confirm_Title">Phone PIN</string>
-    <string name="OSPin_Confirm_Desciption">This app requires your phone\'s PIN in order to keep sensitive data from your wallet in Android\'s secure storage and not in the app itself.</string>
+    <string name="OSPin_Confirm_Title">电话PIN</string>
+    <string name="OSPin_Confirm_Desciption">这个应用程序需要你的手机的密码，以便将敏感数据从你的钱包中保存在安卓的安全存储中，而不是在应用程序本身中。</string>
     <!--Set Pin-->
     <string name="SetPin_Title">密码</string>
     <string name="SetPin_Info">您的密码将用于解锁钱包app。</string>
@@ -207,16 +207,16 @@
     <!--Edit Pin-->
     <string name="EditPin_Title">修改密码</string>
     <string name="EditPin_UnlockInfo">当前密码</string>
-    <string name="EditPin_NewPinInfo">新密碼</string>
+    <string name="EditPin_NewPinInfo">新密码</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">钱包</string>
+    <string name="ManageCoins_title">硬币管理</string>
     <string name="ManageCoins_save">保存</string>
     <!--Coin Option-->
-    <string name="CoinOption_Title">Restore Options</string>
-    <string name="CoinOption_Fast">Fast</string>
-    <string name="CoinOption_Recommended">0&#8211;2 hours (Recommended)</string>
-    <string name="CoinOption_Fast_Text">Restores your past transactions via secure third party server. For users with a long history of transactions involving very large sums this method may pose privacy risks.</string>
-    <string name="CoinOption_Slow">Slow</string>
-    <string name="CoinOption_MorePrivate">1&#8211;12 hours (More Private)</string>
-    <string name="CoinOption_Slow_Text">Restores your past transactions directly from the network. Significantly more private but very slow. The more coins you restore the longer it takes. If the restore takes way too much time go to Security section in Settings tab and select “Unlink This Device” option.</string>
+    <string name="CoinOption_Title">恢复选项</string>
+    <string name="CoinOption_Fast">过程最快</string>
+    <string name="CoinOption_Recommended">0&#8211;2 小时 (推荐)</string>
+    <string name="CoinOption_Fast_Text">通过安全的第三方服务器可以恢复以前的事务。对于拥有大量交易历史的用户来说，这种方法可能会带来隐私风险。</string>
+    <string name="CoinOption_Slow">缓慢</string>
+    <string name="CoinOption_MorePrivate">1&#8211;12 小时(更多隐私)</string>
+    <string name="CoinOption_Slow_Text">直接从网络可以恢复以前的事务。明显更私密，但速度很慢。如果恢复时间过长，请转到“设置”选项卡中的“安全”部分，然后选择“取消此设备的链接”选项。</string>
 </resources>
