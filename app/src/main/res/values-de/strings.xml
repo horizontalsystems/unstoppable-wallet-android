@@ -16,8 +16,8 @@
     <string name="Error">Fehler</string>
     <!--Guest-->
     <string name="Guest_Title">Unstoppable</string>
-    <string name="Guest_CreateWallet">Create Wallet</string>
-    <string name="Guest_RestoreWallet">Restore</string>
+    <string name="Guest_CreateWallet">Wallet Erstellen</string>
+    <string name="Guest_RestoreWallet">Wiederherstellen</string>
     <!--Restore-->
     <string name="Restore_Title">Wiederherstellen</string>
     <string name="Restore_Subtitle">Offlineschlüssel eingeben</string>
@@ -207,11 +207,11 @@
     <string name="ManageCoins_title">Wallets</string>
     <string name="ManageCoins_save">Speichern</string>
     <!--Coin Option-->
-    <string name="CoinOption_Title">Restore Options</string>
-    <string name="CoinOption_Fast">Fast</string>
-    <string name="CoinOption_Recommended">0&#8211;2 hours (Recommended)</string>
-    <string name="CoinOption_Fast_Text">Restores your past transactions via secure third party server. For users with a long history of transactions involving very large sums this method may pose privacy risks.</string>
-    <string name="CoinOption_Slow">Slow</string>
-    <string name="CoinOption_MorePrivate">1&#8211;12 hours (More Private)</string>
-    <string name="CoinOption_Slow_Text">Restores your past transactions directly from the network. Significantly more private but very slow. The more coins you restore the longer it takes. If the restore takes way too much time go to Security section in Settings tab and select “Unlink This Device” option.</string>
+    <string name="CoinOption_Title">Optionen Wiederherstellen</string>
+    <string name="CoinOption_Fast">Schnell</string>
+    <string name="CoinOption_Recommended">0&#8211;2 Stunden (empfohlen)</string>
+    <string name="CoinOption_Fast_Text">Stellt deine bisherigen Transaktionen über sicheren Drittanbieter-Server wieder her. Für Benutzer mit einer langen Geschichte von Transaktionen mit sehr großen Summen kann diese Methode die Privatsphäre-Risiken darstellen.</string>
+    <string name="CoinOption_Slow">Langsam</string>
+    <string name="CoinOption_MorePrivate">1&#8211;12 Stunden (mehr privat)</string>
+    <string name="CoinOption_Slow_Text">Stellt deine bisherigen Transaktionen direkt aus dem Netzwerk her. Signifiziert mehr privat, aber sehr langsam. Wenn die Wiederherstellung zu viel Zeit in den Bereich Sicherheit in Einstellungen geht und wähle die Option „Dieses Gerät trennen“ aus.</string>
 </resources>
