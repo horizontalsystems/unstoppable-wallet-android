@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import io.horizontalsystems.bankwallet.ui.view.ViewHolderProgressbar
+import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_language_settings.*
 import kotlinx.android.synthetic.main.view_holder_item_with_checkmark.*
@@ -97,6 +98,7 @@ class ViewHolderLanguageItem(override val containerView: View) : RecyclerView.Vi
     fun bind(item: LanguageItem, onClick: () -> (Unit)) {
 
         containerView.setOnSingleClickListener { onClick.invoke() }
+        image.setImageResource(LayoutHelper.getLangDrawableResource(item.locale.language))
         title.text = item.locale.getDisplayLanguage(item.locale).capitalize()
         subtitle.text = item.locale.displayName.capitalize()
         checkmarkIcon.visibility = if (item.current) View.VISIBLE else View.GONE

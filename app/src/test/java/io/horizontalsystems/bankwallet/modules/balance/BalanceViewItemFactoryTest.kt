@@ -7,6 +7,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
+import java.math.BigDecimal
 
 class BalanceViewItemFactoryTest {
 
@@ -270,6 +271,20 @@ class BalanceViewItemFactoryTest {
         val viewItem = factory.createHeaderViewItem(listOf(balanceItem1, balanceItem2), currency)
 
         Assert.assertFalse(viewItem.upToDate)
+    }
+
+    @Test
+    fun createHeaderViewItem_upToDate_noRate_zeroBalance() {
+        val currency = mock(Currency::class.java)
+
+        val balanceItem = mock(BalanceModule.BalanceItem::class.java)
+
+        whenever(balanceItem.balance).thenReturn(BigDecimal.ZERO)
+        whenever(balanceItem.rate).thenReturn(null)
+
+        val viewItem = factory.createHeaderViewItem(listOf(balanceItem), currency)
+
+        Assert.assertTrue(viewItem.upToDate)
     }
 
 }

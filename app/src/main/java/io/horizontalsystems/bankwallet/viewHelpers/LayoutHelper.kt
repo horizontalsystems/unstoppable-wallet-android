@@ -54,6 +54,14 @@ object LayoutHelper {
         return App.instance.resources.getIdentifier(coinResourceName, "drawable", App.instance.packageName)
     }
 
+    fun getLangDrawableResource(languageCode: String): Int {
+        return App.instance.resources.getIdentifier("lang_$languageCode", "drawable", App.instance.packageName)
+    }
+
+    fun getCurrencyDrawableResource(currencyCode: String): Int {
+        return App.instance.resources.getIdentifier("currency_$currencyCode", "drawable", App.instance.packageName)
+    }
+
     fun getInfoBadge(wordListBackedUp: Boolean, resources: Resources): Drawable? {
         var infoBadge: Drawable? = null
         if (!wordListBackedUp) {

@@ -5,15 +5,17 @@ import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.BitcoinResponse
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 
-class InsightDashProvider : FullTransactionInfoModule.BitcoinForksProvider {
-    override val name = "Insight.dash.org"
+class BlockdozerBitcoinCashProvider(private val testMode: Boolean): FullTransactionInfoModule.BitcoinForksProvider {
+    override val name = "Blockdozer.com"
+
+    private val baseUrl = "https://${if (testMode) "tbch." else ""}blockdozer.com"
 
     override fun url(hash: String): String {
-        return "https://insight.dash.org/insight/tx/$hash"
+        return "$baseUrl/tx/$hash"
     }
 
     override fun apiUrl(hash: String): String {
-        return "https://insight.dash.org/insight-api/tx/$hash"
+        return "$baseUrl/api/tx/$hash"
     }
 
     override fun convert(json: JsonObject): BitcoinResponse {
