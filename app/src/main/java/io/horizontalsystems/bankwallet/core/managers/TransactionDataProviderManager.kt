@@ -24,9 +24,9 @@ class TransactionDataProviderManager(private val appConfig: IAppConfigProvider, 
     }
 
     private val bitcoinCashProviders = when {
-        appConfig.testMode -> listOf(HorsysBitcoinCashProvider(testMode = true))
+        appConfig.testMode -> listOf(BlockdozerBitcoinCashProvider(true))
         else -> listOf(
-                HorsysBitcoinCashProvider(testMode = false),
+                BlockdozerBitcoinCashProvider(false),
                 BlockChairBitcoinCashProvider(),
                 BlockExplorerBitcoinCashProvider(),
                 BtcComBitcoinCashProvider())
