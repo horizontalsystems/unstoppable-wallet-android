@@ -46,16 +46,20 @@ class BalanceViewItemFactory {
 
     fun createHeaderViewItem(items: List<BalanceModule.BalanceItem>, currency: Currency?): BalanceHeaderViewItem {
         var sum = BigDecimal.ZERO
-        items.forEach {
-            sum = sum.plus(it.rate?.value?.times(it.balance) ?: BigDecimal.ZERO)
-        }
-        val currencyValue = currency?.let {
-            CurrencyValue(it, sum)
+        var expired = false
+        val nonZeroItems = items.filter { it.balance > BigDecimal.ZERO }
+
+        nonZeroItems.forEach { balanceItem ->
+            val rate = balanceItem.rate
+
+            rate?.value?.times(balanceItem.balance)?.let {
+                sum += it
+            }
+
+            expired = expired || balanceItem.state != AdapterState.Synced || rate == null || rate.expired
         }
 
-        val upToDate = items.none { it.state != AdapterState.Synced || it.rate == null || it.rate?.expired == true }
-
-        return BalanceHeaderViewItem(currencyValue, upToDate)
+        return BalanceHeaderViewItem(currency?.let { CurrencyValue(it, sum) }, !expired)
     }
 
 }
