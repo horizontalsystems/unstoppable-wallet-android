@@ -14,7 +14,7 @@ class HorsysBitcoinProvider(val testMode: Boolean) : FullTransactionInfoModule.B
     override val name = "HorizontalSystems.xyz"
 
     override fun url(hash: String): String {
-        return "${if (testMode) "http://btc-testnet" else "https://btc"}.horizontalsystems.xyz/apg/tx/$hash"
+        return "${if (testMode) "http://btc-testnet" else "https://btc"}.horizontalsystems.xyz/tx/$hash"
     }
 
     override fun apiUrl(hash: String): String {
