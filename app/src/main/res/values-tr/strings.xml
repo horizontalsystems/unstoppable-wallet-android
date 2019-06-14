@@ -47,6 +47,7 @@
     <string name="Balance_RatePerCoin">%s için %s</string>
     <string name="Balance_SyncedUntil">%s kadar</string>
     <string name="Balance_Syncing">Eşitleniyor…</string>
+    <string name="Balance_AddCoins">Add Coins</string>
     <!--Send-->
     <string name="Send_Title1">Gönder</string>
     <string name="Send_Title">%s gönder</string>
