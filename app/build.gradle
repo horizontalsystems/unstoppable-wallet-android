@@ -11,7 +11,7 @@ androidExtensions {
 }
 
 def computeVersionCode() {
-    ext.buildNumber = System.getenv("BUILD_NUMBER") ?: 10
+    ext.buildNumber = System.getenv("BUILD_NUMBER") ?: 11
     return "$buildNumber".toInteger()
 }
 
@@ -133,7 +133,7 @@ dependencies {
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
 
     // BitcoinKit
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:a9c781f'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:1ecf141'
 
     // EthereumKit
     implementation 'com.github.horizontalsystems:ethereum-kit-android:2dd6978'
