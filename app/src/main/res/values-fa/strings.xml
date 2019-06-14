@@ -47,6 +47,7 @@
     <string name="Balance_RatePerCoin">%sدر هر%s</string>
     <string name="Balance_SyncedUntil">تا:٪؜</string>
     <string name="Balance_Syncing">درحال همگام‌سازی…</string>
+    <string name="Balance_AddCoins">Add Coins</string>
     <!--Send-->
     <string name="Send_Title1">ارسال</string>
     <string name="Send_Title">ارسال%s</string>
