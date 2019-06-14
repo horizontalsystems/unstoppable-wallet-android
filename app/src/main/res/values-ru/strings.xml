@@ -47,6 +47,7 @@
     <string name="Balance_RatePerCoin">%s за %s</string>
     <string name="Balance_SyncedUntil">до: %s</string>
     <string name="Balance_Syncing">Синхронизация…</string>
+    <string name="Balance_AddCoins">Add Coins</string>
     <!--Send-->
     <string name="Send_Title1">Отправить</string>
     <string name="Send_Title">Отправить %s</string>
