@@ -77,12 +77,12 @@ android {
 }
 
 dependencies {
-    def lifecycle_version = '2.1.0-alpha04'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha04'
+    implementation 'androidx.appcompat:appcompat:1.1.0-beta01'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 
+    def lifecycle_version = '2.2.0-alpha01'
     // ViewModel and LiveData
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     // alternatively - just ViewModel
@@ -95,7 +95,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime:$lifecycle_version"
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
     // Room
-    def room_version = '2.1.0-alpha06'
+    def room_version = '2.1.0-rc01'
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-rxjava2:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
@@ -104,16 +104,16 @@ dependencies {
     // optional - ReactiveStreams support for LiveData
     implementation "androidx.lifecycle:lifecycle-reactivestreams:$lifecycle_version"
 
-    implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha04'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha06'
 
     implementation 'com.aurelhubert:ahbottomnavigation:2.2.0'
-    implementation 'com.google.android.material:material:1.1.0-alpha05'
+    implementation 'com.google.android.material:material:1.1.0-alpha07'
 
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
     // Because RxAndroid releases are few and far between, it is recommended you also
     // explicitly depend on RxJava's latest version for bug fixes and new features.
     // (see https://github.com/ReactiveX/RxJava/releases for latest 2.x.x version)
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.2'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.8'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
@@ -146,12 +146,12 @@ dependencies {
     // Shimmer
     implementation 'com.facebook.shimmer:shimmer:0.4.0'
 
-    androidTestImplementation 'androidx.test:runner:1.2.0-alpha03'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-alpha03'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     // optional - Test helpers for LiveData
     testImplementation 'junit:junit:4.12'
-    testImplementation "androidx.arch.core:core-testing:2.1.0-alpha01"
+    testImplementation "androidx.arch.core:core-testing:2.1.0-beta01"
     testImplementation 'org.mockito:mockito-core'
     testImplementation 'com.nhaarman:mockito-kotlin-kt1.1:1.6.0'
     testImplementation 'org.powermock:powermock-api-mockito2:2.0.0-beta.5'
