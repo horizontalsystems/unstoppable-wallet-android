@@ -4,6 +4,7 @@ import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
+import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
@@ -43,6 +44,25 @@ class InputTextView : ConstraintLayout {
 
     fun setAutocompleteAdapter(adapter: ArrayAdapter<String>) {
         inputEditText.setAdapter(adapter)
+    }
+
+    fun setImeActionDone(onDone: () -> Unit) {
+        inputEditText.imeOptions = EditorInfo.IME_ACTION_DONE
+        inputEditText.setOnEditorActionListener { v, actionId, event ->
+            when (actionId) {
+                EditorInfo.IME_ACTION_DONE -> {
+                    onDone.invoke()
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    fun goToNextWhenItemClicked() {
+        inputEditText.setOnItemClickListener { parent, view, position, id ->
+            inputEditText.onEditorAction(EditorInfo.IME_ACTION_NEXT)
+        }
     }
 
 }

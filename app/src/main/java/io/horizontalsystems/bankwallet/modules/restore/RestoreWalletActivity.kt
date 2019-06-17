@@ -57,6 +57,11 @@ class RestoreWalletActivity : BaseActivity() {
                     words[position] = value
                 }
             }
+
+            override fun done() {
+                viewModel.delegate.restoreDidClick(words)
+            }
+
         }, autocompleteAdapter)
     }
 
