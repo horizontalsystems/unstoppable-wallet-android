@@ -73,7 +73,7 @@ class TransactionDataProviderManagerTest {
 
     @Test
     fun bitcoinCash() {
-        listOf("HorizontalSystems.xyz", "BlockChair.com", "BlockExplorer.com", "Btc.com").forEach {
+        listOf("Blockdozer.com", "BlockChair.com", "BlockExplorer.com", "Btc.com").forEach {
             val bitcoinCashProvider = dataProviderManager.bitcoinCash(it)
 
             assertEquals(it, bitcoinCashProvider.name)
@@ -96,7 +96,7 @@ class TransactionDataProviderManagerTest {
         val bitcoin = dataProviderManager.bitcoin("HorizontalSystems.xyz")
 
         assertThat(bitcoin, instanceOf(HorsysBitcoinProvider::class.java))
-        assertEquals(bitcoin.url("abc"), "https://btc.horizontalsystems.xyz/apg/tx/abc")
+        assertEquals("https://btc.horizontalsystems.xyz/tx/abc", bitcoin.url("abc"))
     }
 
     @Test
@@ -108,6 +108,6 @@ class TransactionDataProviderManagerTest {
         val bitcoin = dataProviderManager.bitcoin("HorizontalSystems.xyz")
 
         assertThat(bitcoin, instanceOf(HorsysBitcoinProvider::class.java))
-        assertEquals(bitcoin.url("abc"), "http://btc-testnet.horizontalsystems.xyz/apg/tx/abc")
+        assertEquals("http://btc-testnet.horizontalsystems.xyz/tx/abc", bitcoin.url("abc"))
     }
 }
