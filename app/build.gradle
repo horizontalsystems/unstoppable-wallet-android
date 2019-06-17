@@ -22,7 +22,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 28
         versionCode computeVersionCode()
-        versionName "0.6.0"
+        versionName "0.6.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         resValue "string", "localizations", buildProperties.get("localizations")
@@ -133,7 +133,7 @@ dependencies {
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
 
     // BitcoinKit
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:1ecf141'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:d11af3e'
 
     // EthereumKit
     implementation 'com.github.horizontalsystems:ethereum-kit-android:2dd6978'
