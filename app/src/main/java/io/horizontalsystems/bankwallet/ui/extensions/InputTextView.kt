@@ -32,9 +32,15 @@ class InputTextView : ConstraintLayout {
     }
 
     fun bindTextChangeListener(onTextChanged: ((String) -> Unit)) {
-        inputEditText.addTextChangedListener(object: TextWatcher {
+        inputEditText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
-                onTextChanged.invoke(s.toString().trim())
+                val string = s.toString()
+                if (string.isNotEmpty() && Character.isWhitespace(string.last())) {
+                    inputEditText.setText(string.trim())
+                    goToNext()
+                } else {
+                    onTextChanged.invoke(string.trim())
+                }
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
@@ -61,8 +67,12 @@ class InputTextView : ConstraintLayout {
 
     fun goToNextWhenItemClicked() {
         inputEditText.setOnItemClickListener { parent, view, position, id ->
-            inputEditText.onEditorAction(EditorInfo.IME_ACTION_NEXT)
+            goToNext()
         }
+    }
+
+    private fun goToNext() {
+        inputEditText.onEditorAction(EditorInfo.IME_ACTION_NEXT)
     }
 
 }
