@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.restore
 
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
@@ -12,6 +13,7 @@ import io.horizontalsystems.bankwallet.lib.WordsInputAdapter
 import io.horizontalsystems.bankwallet.modules.syncmodule.SyncModeModule
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
+import io.horizontalsystems.hdwalletkit.WordList
 import kotlinx.android.synthetic.main.activity_restore_wallet.*
 
 class RestoreWalletActivity : BaseActivity() {
@@ -45,6 +47,8 @@ class RestoreWalletActivity : BaseActivity() {
             }
         })
 
+        val autocompleteAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, WordList.getWords())
+
         recyclerInputs.isNestedScrollingEnabled = false
         recyclerInputs.layoutManager = GridLayoutManager(this, 2)
         recyclerInputs.adapter = WordsInputAdapter(object : InputTextViewHolder.WordsChangedListener {
@@ -53,7 +57,12 @@ class RestoreWalletActivity : BaseActivity() {
                     words[position] = value
                 }
             }
-        })
+
+            override fun done() {
+                viewModel.delegate.restoreDidClick(words)
+            }
+
+        }, autocompleteAdapter)
     }
 
     private fun isUsingNativeKeyboard(): Boolean {

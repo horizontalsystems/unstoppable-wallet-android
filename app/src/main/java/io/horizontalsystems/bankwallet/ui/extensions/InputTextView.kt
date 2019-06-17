@@ -4,6 +4,8 @@ import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
+import android.view.inputmethod.EditorInfo
+import android.widget.ArrayAdapter
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
 import kotlinx.android.synthetic.main.view_text_input.view.*
@@ -30,14 +32,47 @@ class InputTextView : ConstraintLayout {
     }
 
     fun bindTextChangeListener(onTextChanged: ((String) -> Unit)) {
-        inputEditText.addTextChangedListener(object: TextWatcher {
+        inputEditText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
-                onTextChanged.invoke(s.toString().trim())
+                val string = s.toString()
+                if (string.isNotEmpty() && Character.isWhitespace(string.last())) {
+                    inputEditText.setText(string.trim())
+                    goToNext()
+                } else {
+                    onTextChanged.invoke(string.trim())
+                }
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
         })
+    }
+
+    fun setAutocompleteAdapter(adapter: ArrayAdapter<String>) {
+        inputEditText.setAdapter(adapter)
+    }
+
+    fun setImeActionDone(onDone: () -> Unit) {
+        inputEditText.imeOptions = EditorInfo.IME_ACTION_DONE
+        inputEditText.setOnEditorActionListener { v, actionId, event ->
+            when (actionId) {
+                EditorInfo.IME_ACTION_DONE -> {
+                    onDone.invoke()
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    fun goToNextWhenItemClicked() {
+        inputEditText.setOnItemClickListener { parent, view, position, id ->
+            goToNext()
+        }
+    }
+
+    private fun goToNext() {
+        inputEditText.onEditorAction(EditorInfo.IME_ACTION_NEXT)
     }
 
 }
