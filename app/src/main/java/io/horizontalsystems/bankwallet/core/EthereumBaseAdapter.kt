@@ -22,11 +22,15 @@ abstract class EthereumBaseAdapter(
     override val confirmationsThreshold: Int = 12
 
     override fun start() {
-        ethereumKit.start()
+        // started via EthereumKitManager
     }
 
     override fun stop() {
-        ethereumKit.stop()
+        // stopped via EthereumKitManager
+    }
+
+    override fun refresh() {
+        // refreshed via EthereumKitManager
     }
 
     override val lastBlockHeight: Int? get() = ethereumKit.lastBlockHeight?.toInt()

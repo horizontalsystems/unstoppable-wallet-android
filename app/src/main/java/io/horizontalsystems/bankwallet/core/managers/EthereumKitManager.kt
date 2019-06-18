@@ -15,6 +15,9 @@ class EthereumKitManager(appConfig: IAppConfigProvider) : IEthereumKitManager {
     private val infuraSecretKey = App.instance.getString(R.string.infuraSecretKey)
     private val etherscanKey = App.instance.getString(R.string.etherscanKey)
 
+    override val ethereumKit: EthereumKit?
+        get() = kit
+
     override fun ethereumKit(authData: AuthData): EthereumKit {
         useCount += 1
 

@@ -4,12 +4,16 @@ import android.os.Handler
 import android.os.HandlerThread
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.IEthereumKitManager
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
-class AdapterManager(private val coinManager: CoinManager, private val authManager: AuthManager, private val adapterFactory: AdapterFactory)
+class AdapterManager(private val coinManager: CoinManager,
+                     private val authManager: AuthManager,
+                     private val adapterFactory: AdapterFactory,
+                     private val ethereumKitManager: IEthereumKitManager)
     : IAdapterManager, HandlerThread("A") {
 
     private val handler: Handler
@@ -39,10 +43,12 @@ class AdapterManager(private val coinManager: CoinManager, private val authManag
     override var adapters: List<IAdapter> = listOf()
     override val adaptersUpdatedSignal = PublishSubject.create<Unit>()
 
-    override fun refreshAdapters() {
+    override fun refresh() {
         handler.post {
             adapters.forEach { it.refresh() }
         }
+
+        ethereumKitManager.ethereumKit?.refresh()
     }
 
     override fun initAdapters() {
