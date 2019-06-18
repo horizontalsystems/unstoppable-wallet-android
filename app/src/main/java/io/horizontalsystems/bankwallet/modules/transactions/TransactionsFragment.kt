@@ -70,23 +70,17 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
         viewModel.reloadLiveEvent.observe(viewLifecycleOwner, Observer {
             transactionsAdapter.notifyDataSetChanged()
 
-            if (transactionsAdapter.itemCount == 0) {
+            if (viewModel.delegate.itemsCount == 0) {
                 viewModel.delegate.onBottomReached()
             }
-
-            recyclerTransactions.visibility = if (viewModel.delegate.itemsCount == 0) View.GONE else View.VISIBLE
-            emptyListText.visibility = if (viewModel.delegate.itemsCount == 0) View.VISIBLE else View.GONE
         })
 
         viewModel.reloadChangeEvent.observe(viewLifecycleOwner, Observer { diff ->
             diff?.dispatchUpdatesTo(transactionsAdapter)
 
-            if (transactionsAdapter.itemCount == 0) {
+            if (viewModel.delegate.itemsCount == 0) {
                 viewModel.delegate.onBottomReached()
             }
-
-            recyclerTransactions.visibility = if (viewModel.delegate.itemsCount == 0) View.GONE else View.VISIBLE
-            emptyListText.visibility = if (viewModel.delegate.itemsCount == 0) View.VISIBLE else View.GONE
         })
 
         viewModel.addItemsLiveEvent.observe(viewLifecycleOwner, Observer {
@@ -144,6 +138,9 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
 
 class TransactionsAdapter(private var listener: Listener) : Adapter<ViewHolder>(), ViewHolderTransaction.ClickListener {
 
+    private val noTransactionsView = 0
+    private val transactionView = 1
+
     interface Listener {
         fun onItemClick(item: TransactionViewItem)
     }
@@ -151,21 +148,27 @@ class TransactionsAdapter(private var listener: Listener) : Adapter<ViewHolder>(
     lateinit var viewModel: TransactionsViewModel
 
     override fun getItemCount(): Int {
-        return viewModel.delegate.itemsCount
+        return if (viewModel.delegate.itemsCount == 0) 1 else viewModel.delegate.itemsCount
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-            ViewHolderTransaction(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_transaction, parent, false), this)
+    override fun getItemViewType(position: Int): Int {
+        return if (viewModel.delegate.itemsCount == 0) noTransactionsView else transactionView
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return when (viewType) {
+            noTransactionsView -> ViewHolderEmptyScreen(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_empty_screen, parent, false))
+            else -> ViewHolderTransaction(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_transaction, parent, false), this)
+        }
+    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (position > itemCount - 9) {
             viewModel.delegate.onBottomReached()
         }
 
-        when (holder) {
-            is ViewHolderTransaction -> {
-                holder.bind(viewModel.delegate.itemForIndex(position), showBottomShade = (position == itemCount - 1))
-            }
+        if (holder is ViewHolderTransaction) {
+            holder.bind(viewModel.delegate.itemForIndex(position), showBottomShade = (position == itemCount - 1))
         }
     }
 
@@ -195,6 +198,8 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         bottomShade.visibility = if (showBottomShade) View.VISIBLE else View.GONE
     }
 }
+
+class ViewHolderEmptyScreen(override val containerView: View) : ViewHolder(containerView), LayoutContainer
 
 class FilterAdapter(private var listener: Listener) : Adapter<ViewHolder>(), ViewHolderFilter.ClickListener {
 
