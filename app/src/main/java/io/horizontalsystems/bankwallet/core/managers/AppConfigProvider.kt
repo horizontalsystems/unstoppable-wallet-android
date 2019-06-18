@@ -43,7 +43,7 @@ class AppConfigProvider : IAppConfigProvider {
             return coinsString.split(",")
         }
     override val defaultCoinCodes: List<String>
-        get() = listOf("BTC", "ETH", "DASH", "BCH", "USDT", "BNB", "DGX")
+        get() = listOf("BTC", "ETH")
 
     override val coins: List<Coin> = listOf(
             Coin("Bitcoin", "BTC", CoinType.Bitcoin),
