@@ -292,6 +292,7 @@ class MainActivity : BaseActivity(), NumPadItemsAdapter.Listener {
 
     fun openSendDialog(coinCode: String) {
         editTxtAmount.setText("")
+        feeRateSeekbar.reset()
         sendViewModel.init(coinCode)
         sendBottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
 
