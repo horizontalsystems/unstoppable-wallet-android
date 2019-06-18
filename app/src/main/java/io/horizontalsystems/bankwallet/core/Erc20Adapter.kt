@@ -73,6 +73,10 @@ class Erc20Adapter(context: Context,
         return errors
     }
 
+    override fun refresh() {
+
+    }
+
     override fun stop() {
         erc20Kit.stop()
     }
