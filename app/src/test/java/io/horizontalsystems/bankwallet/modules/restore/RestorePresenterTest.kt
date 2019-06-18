@@ -37,29 +37,10 @@ class RestorePresenterTest {
     }
 
     @Test
-    fun didRestore() {
-        presenter.didRestore()
-        verify(router).navigateToSetSyncMode()
-    }
-
-    @Test
-    fun didFailToRestore() {
-        val exception = RestoreModule.RestoreFailedException()
-        val errorId = R.string.Restore_RestoreFailed
-        presenter.didFailToRestore(exception)
-        verify(view).showError(errorId)
-    }
-
-    @Test
     fun didValidate() {
-        presenter.didValidate()
-        verify(view).showConfirmationDialog()
+        val words = listOf("yahoo", "google", "facebook")
+        presenter.didValidate(words)
+        verify(router).navigateToSetSyncMode(words)
     }
 
-    @Test
-    fun didConfirm() {
-        val words = listOf("yahoo", "google", "facebook")
-        presenter.didConfirm(words)
-        verify(interactor).restore(words)
-    }
 }

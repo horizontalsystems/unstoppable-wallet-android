@@ -13,7 +13,7 @@ object RxBaseTest {
     fun setup() {
         val immediate = object : Scheduler() {
             override fun createWorker(): Worker {
-                return ExecutorScheduler.ExecutorWorker(Executor { it.run() })
+                return ExecutorScheduler.ExecutorWorker(Executor { it.run() }, true)
             }
         }
         //https://medium.com/@fabioCollini/testing-asynchronous-rxjava-code-using-mockito-8ad831a16877
