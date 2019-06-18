@@ -38,10 +38,6 @@ class EthereumAdapter(coin: Coin,
         }
     }
 
-    override fun refresh() {
-        ethereumKit.refresh()
-    }
-
     override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
         get() = ethereumKit.transactionsFlowable.map { it.map { tx -> transactionRecord(tx) } }
 
