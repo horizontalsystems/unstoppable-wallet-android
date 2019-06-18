@@ -19,6 +19,9 @@ class SeekbarView : ConstraintLayout {
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
+    fun reset() {
+        seekBar.progress = 2
+    }
 
     fun bind(onProgressChanged: ((Int) -> Unit)) {
 
