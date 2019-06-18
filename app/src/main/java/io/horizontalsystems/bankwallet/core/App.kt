@@ -98,7 +98,7 @@ class App : Application() {
 
         networkAvailabilityManager = NetworkAvailabilityManager()
 
-        adapterManager = AdapterManager(coinManager, authManager, AdapterFactory(instance, appConfigProvider, localStorage, ethereumKitManager, feeRateProvider))
+        adapterManager = AdapterManager(coinManager, authManager, AdapterFactory(instance, appConfigProvider, localStorage, ethereumKitManager, feeRateProvider), ethereumKitManager)
         rateSyncer = RateSyncer(rateManager, adapterManager, currencyManager, networkAvailabilityManager)
 
         appCloseManager = AppCloseManager()

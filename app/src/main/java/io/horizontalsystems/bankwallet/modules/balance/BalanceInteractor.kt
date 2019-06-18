@@ -93,7 +93,7 @@ class BalanceInteractor(
     }
 
     override fun refresh() {
-        adapterManager.refreshAdapters()
+        adapterManager.refresh()
 
         Handler().postDelayed({
             delegate?.didRefresh()

@@ -21,7 +21,7 @@ interface IAdapterManager {
     val adapters: List<IAdapter>
     val adaptersUpdatedSignal: Observable<Unit>
 
-    fun refreshAdapters()
+    fun refresh()
     fun initAdapters()
     fun stopKits()
 }
@@ -122,6 +122,8 @@ sealed class AdapterState {
 }
 
 interface IEthereumKitManager {
+    val ethereumKit: EthereumKit?
+
     fun ethereumKit(authData: AuthData): EthereumKit
     fun unlink()
 }
