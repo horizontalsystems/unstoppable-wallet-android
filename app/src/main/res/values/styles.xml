@@ -91,7 +91,7 @@
         <item name="FilterButtonBackgroundColor">@color/steel_15</item>
         <item name="SettingItemBackgroundColor">@color/setting_item_background_dark</item>
         <item name="DraggableCoinBackgroundColor">@color/manage_coin_background_dark</item>
-        <item name="AddWalletIcon">@drawable/add_dark</item>
+        <item name="AddWalletIcon">@drawable/stateful_balance_add_icon_dark</item>
         <item name="BottomNavigationBackgroundColor">@color/dark</item>
         <item name="StatusBarColor">@color/dark</item>
         <item name="RippleColor">@color/ripple_white</item>
@@ -164,7 +164,7 @@
         <item name="FilterButtonBackgroundColor">#efeff4</item>
         <item name="SettingItemBackgroundColor">@color/setting_item_background_light</item>
         <item name="DraggableCoinBackgroundColor">@color/setting_item_background_light</item>
-        <item name="AddWalletIcon">@drawable/add_light</item>
+        <item name="AddWalletIcon">@drawable/stateful_balance_add_icon_light</item>
         <item name="BottomNavigationBackgroundColor">@color/bars_color</item>
         <item name="StatusBarColor">@color/bars_color</item>
         <item name="RippleColor">@color/ripple_black</item>
