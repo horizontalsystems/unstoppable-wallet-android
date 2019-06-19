@@ -65,7 +65,7 @@ class TransactionDataProviderManagerTest {
 
     @Test
     fun bitcoin() {
-        listOf("HorizontalSystems.xyz", "BlockChair.com", "BlockExplorer.com", "Btc.com").forEach {
+        listOf("HorizontalSystems.xyz", "BlockChair.com", "Btc.com").forEach {
             val bitcoinProvider = dataProviderManager.bitcoin(it)
             assertEquals(it, bitcoinProvider.name)
         }
@@ -73,7 +73,7 @@ class TransactionDataProviderManagerTest {
 
     @Test
     fun bitcoinCash() {
-        listOf("Blockdozer.com", "BlockChair.com", "BlockExplorer.com", "Btc.com").forEach {
+        listOf("Blockdozer.com", "BlockChair.com", "Btc.com").forEach {
             val bitcoinCashProvider = dataProviderManager.bitcoinCash(it)
 
             assertEquals(it, bitcoinCashProvider.name)

@@ -19,7 +19,7 @@ class TransactionDataProviderManager(private val appConfig: IAppConfigProvider, 
         else -> listOf(
                 HorsysBitcoinProvider(testMode = false),
                 BlockChairBitcoinProvider(),
-                BlockExplorerBitcoinProvider(),
+//                BlockExplorerBitcoinProvider(),
                 BtcComBitcoinProvider())
     }
 
@@ -28,7 +28,7 @@ class TransactionDataProviderManager(private val appConfig: IAppConfigProvider, 
         else -> listOf(
                 BlockdozerBitcoinCashProvider(false),
                 BlockChairBitcoinCashProvider(),
-                BlockExplorerBitcoinCashProvider(),
+//                BlockExplorerBitcoinCashProvider(),
                 BtcComBitcoinCashProvider())
     }
 
