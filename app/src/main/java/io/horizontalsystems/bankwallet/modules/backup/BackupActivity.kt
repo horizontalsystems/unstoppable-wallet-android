@@ -33,6 +33,7 @@ class BackupActivity : BaseActivity(), BottomConfirmAlert.Listener {
 
         viewModel.navigateToSetPinLiveEvent.observe(this, Observer {
             PinModule.startForSetPin(this)
+            finishAffinity()
         })
 
         viewModel.closeLiveEvent.observe(this, Observer {

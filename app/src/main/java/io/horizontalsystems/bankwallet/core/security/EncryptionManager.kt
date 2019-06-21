@@ -8,11 +8,11 @@ import android.security.keystore.KeyPermanentlyInvalidatedException
 import androidx.core.hardware.fingerprint.FingerprintManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import io.horizontalsystems.bankwallet.LauncherActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IEncryptionManager
 import io.horizontalsystems.bankwallet.lib.AlertDialogFragment
+import io.horizontalsystems.bankwallet.modules.main.MainModule
 import javax.crypto.Cipher
 
 class EncryptionManager : IEncryptionManager {
@@ -78,10 +78,7 @@ class EncryptionManager : IEncryptionManager {
                         override fun onButtonClick() {
                             App.authManager.logout()
                             KeyStoreWrapper().removeAndroidKeyStoreKey(MASTER_KEY)
-
-                            val intent = Intent(activity, LauncherActivity::class.java)
-                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                            activity.startActivity(intent)
+                            MainModule.startAsNewTask(activity)
 
                             activity.finish()
                         }

@@ -31,10 +31,10 @@ class PinViewModel: ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter,
     val closeApplicationLiveEvent = SingleLiveEvent<Unit>()
 
 
-    fun init(interactionType: PinInteractionType, appStart: Boolean, showCancelButton: Boolean) {
+    fun init(interactionType: PinInteractionType, showCancelButton: Boolean) {
         when(interactionType) {
             PinInteractionType.SET_PIN -> SetPinModule.init(this, this, this)
-            PinInteractionType.UNLOCK -> UnlockPinModule.init(this, this, this, appStart, showCancelButton)
+            PinInteractionType.UNLOCK -> UnlockPinModule.init(this, this, this, showCancelButton)
             PinInteractionType.EDIT_PIN -> EditPinModule.init(this, this, this)
         }
         delegate.viewDidLoad()

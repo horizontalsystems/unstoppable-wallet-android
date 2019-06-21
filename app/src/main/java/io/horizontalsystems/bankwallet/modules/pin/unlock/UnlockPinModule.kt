@@ -15,7 +15,6 @@ object UnlockPinModule {
     interface IUnlockPinRouter {
         fun dismiss()
         fun closeApplication()
-        fun navigateToMain()
     }
 
     interface IUnlockPinInteractor {
@@ -24,6 +23,7 @@ object UnlockPinModule {
         fun unlock(pin: String): Boolean
         fun isBiometricOn(): Boolean
         fun onUnlock()
+        fun cancelUnlock()
     }
 
     interface IUnlockPinInteractorDelegate {
@@ -34,12 +34,12 @@ object UnlockPinModule {
         fun updateLockoutState(state: LockoutState)
     }
 
-    fun init(view: PinViewModel, router: IUnlockPinRouter, keystoreSafeExecute: IKeyStoreSafeExecute, appStart: Boolean, showCancelButton: Boolean) {
+    fun init(view: PinViewModel, router: IUnlockPinRouter, keystoreSafeExecute: IKeyStoreSafeExecute, showCancelButton: Boolean) {
 
         val lockoutManager = LockoutManager(App.localStorage, UptimeProvider(), LockoutUntilDateFactory(CurrentDateProvider()))
         val timer = OneTimeTimer()
         val interactor = UnlockPinInteractor(keystoreSafeExecute, App.localStorage, App.authManager, App.pinManager, App.lockManager, App.encryptionManager, lockoutManager, timer)
-        val presenter = UnlockPinPresenter(interactor, router, appStart, showCancelButton)
+        val presenter = UnlockPinPresenter(interactor, router, showCancelButton)
 
         view.delegate = presenter
         presenter.view = view

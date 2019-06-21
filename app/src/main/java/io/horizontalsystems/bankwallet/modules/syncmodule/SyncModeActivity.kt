@@ -38,6 +38,7 @@ class SyncModeActivity : BaseActivity(), BottomConfirmAlert.Listener {
 
         viewModel.navigateToSetPinLiveEvent.observe(this, Observer {
             PinModule.startForSetPin(this)
+            finishAffinity()
         })
 
         viewModel.syncModeUpdatedLiveEvent.observe(this, Observer { syncMode ->
