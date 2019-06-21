@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransacti
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers.*
 import io.reactivex.subjects.PublishSubject
 
-class TransactionDataProviderManager(private val appConfig: IAppConfigProvider, private val localStorage: ILocalStorage)
+class TransactionDataProviderManager(appConfig: IAppConfigProvider, private val localStorage: ILocalStorage)
     : ITransactionDataProviderManager {
 
     private val bitcoinProviders = when {
@@ -19,7 +19,6 @@ class TransactionDataProviderManager(private val appConfig: IAppConfigProvider, 
         else -> listOf(
                 HorsysBitcoinProvider(testMode = false),
                 BlockChairBitcoinProvider(),
-//                BlockExplorerBitcoinProvider(),
                 BtcComBitcoinProvider())
     }
 
@@ -28,17 +27,14 @@ class TransactionDataProviderManager(private val appConfig: IAppConfigProvider, 
         else -> listOf(
                 BlockdozerBitcoinCashProvider(false),
                 BlockChairBitcoinCashProvider(),
-//                BlockExplorerBitcoinCashProvider(),
                 BtcComBitcoinCashProvider())
     }
 
     private val ethereumProviders = when {
         appConfig.testMode -> listOf(
-//                    HorsysEthereumProvider(testMode = true),
                 EtherscanEthereumProvider(testMode = true))
         else -> listOf(
                 EtherscanEthereumProvider(testMode = false),
-//                    HorsysEthereumProvider(testMode = false),
                 BlockChairEthereumProvider())
     }
 
