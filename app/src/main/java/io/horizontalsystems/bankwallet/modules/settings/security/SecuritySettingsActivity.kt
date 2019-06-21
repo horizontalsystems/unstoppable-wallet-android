@@ -1,19 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.settings.security
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.CompoundButton
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.BaseActivity
-import io.horizontalsystems.bankwallet.LauncherActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.BiometryType
 import io.horizontalsystems.bankwallet.lib.AlertDialogFragment
 import io.horizontalsystems.bankwallet.modules.backup.BackupModule
 import io.horizontalsystems.bankwallet.modules.backup.BackupPresenter
+import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
 import io.horizontalsystems.bankwallet.ui.dialogs.BottomButtonColor
@@ -112,9 +111,7 @@ class SecuritySettingsActivity : BaseActivity(), BottomConfirmAlert.Listener {
         })
 
         viewModel.reloadAppLiveEvent.observe(this, Observer {
-            val intent = Intent(this, LauncherActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
+            MainModule.startAsNewTask(this)
         })
 
         viewModel.showPinUnlockLiveEvent.observe(this, Observer {

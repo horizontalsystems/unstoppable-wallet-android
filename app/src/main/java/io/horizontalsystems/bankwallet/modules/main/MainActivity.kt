@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -25,8 +26,13 @@ import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.reObserve
+import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.modules.backup.BackupModule
+import io.horizontalsystems.bankwallet.modules.backup.BackupPresenter
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
+import io.horizontalsystems.bankwallet.modules.guest.GuestModule
+import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveViewModel
 import io.horizontalsystems.bankwallet.modules.receive.viewitems.AddressItem
 import io.horizontalsystems.bankwallet.modules.send.ConfirmationFragment
@@ -52,6 +58,7 @@ import kotlinx.android.synthetic.main.transaction_info_bottom_sheet.*
 import kotlinx.android.synthetic.main.view_amount_input.*
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.security.UnrecoverableKeyException
 import java.util.concurrent.TimeUnit
 
 
@@ -71,6 +78,16 @@ class MainActivity : BaseActivity(), NumPadItemsAdapter.Listener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        try {
+            redirectToCorrectPage()
+        } catch (e: Exception) {
+            when (e) {
+                is KeyPermanentlyInvalidatedException,
+                is UnrecoverableKeyException -> EncryptionManager.showKeysInvalidatedAlert(this)
+            }
+        }
+
         setTransparentStatusBar()
 
         setContentView(R.layout.activity_dashboard)
@@ -123,10 +140,26 @@ class MainActivity : BaseActivity(), NumPadItemsAdapter.Listener {
         }
 
         disposable = App.appCloseManager.appCloseSignal.subscribe {
-            moveTaskToBack(false)
+            finishAffinity()
         }
 
         setBottomSheets()
+    }
+
+    private fun redirectToCorrectPage() {
+        if (!EncryptionManager.isDeviceLockEnabled(this)) {
+            EncryptionManager.showNoDeviceLockWarning(this)
+            finish()
+        } else if (!App.authManager.isLoggedIn) {
+            GuestModule.start(this)
+            finish()
+        } else if (!App.localStorage.iUnderstand) {
+            BackupModule.start(this, BackupPresenter.DismissMode.SET_PIN)
+            finish()
+        } else if(App.secureStorage.pinIsEmpty()) {
+            PinModule.startForSetPin(this)
+            finishAffinity()
+        }
     }
 
     private fun setBottomSheets() {

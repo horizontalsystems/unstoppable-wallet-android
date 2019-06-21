@@ -50,80 +50,49 @@ class UnlockPinInteractorTest {
     @Test
     fun cacheSecuredData_pinSafeLoad() {
 
-//        whenever(pinManager.pin).thenReturn(null)
-//        whenever(pinManager.isPinSet).thenReturn(true)
-//
-//        interactor.cacheSecuredData()
-//        verify(keystoreSafeExecute).safeExecute(actionRunnableCaptor.capture(), successRunnableCaptor.capture(), failureRunnableCaptor.capture())
-//
-//        val actionRunnable = actionRunnableCaptor.firstValue
-//
-//        actionRunnable.run()
-//
-//        verify(pinManager).safeLoad()
+        whenever(pinManager.pin).thenReturn(null)
+        whenever(pinManager.isPinSet).thenReturn(true)
+
+        interactor.cacheSecuredData()
+        verify(keystoreSafeExecute).safeExecute(actionRunnableCaptor.capture(), successRunnableCaptor.capture(), failureRunnableCaptor.capture())
+
+        val actionRunnable = actionRunnableCaptor.firstValue
+
+        actionRunnable.run()
+
+        verify(pinManager).safeLoad()
     }
 
     @Test
     fun cacheSecuredData_pinSafeLoad_notNeeded() {
 
-//        whenever(pinManager.pin).thenReturn("000000")
-//        whenever(pinManager.isPinSet).thenReturn(true)
-//
-//        interactor.cacheSecuredData()
-//        verify(keystoreSafeExecute).safeExecute(actionRunnableCaptor.capture(), successRunnableCaptor.capture(), failureRunnableCaptor.capture())
-//
-//        val actionRunnable = actionRunnableCaptor.firstValue
-//
-//        actionRunnable.run()
-//
-//        verify(pinManager, never()).safeLoad()
+        whenever(pinManager.pin).thenReturn("000000")
+        whenever(pinManager.isPinSet).thenReturn(true)
+
+        interactor.cacheSecuredData()
+        verify(keystoreSafeExecute).safeExecute(actionRunnableCaptor.capture(), successRunnableCaptor.capture(), failureRunnableCaptor.capture())
+
+        val actionRunnable = actionRunnableCaptor.firstValue
+
+        actionRunnable.run()
+
+        verify(pinManager, never()).safeLoad()
     }
 
     @Test
-    fun cacheSecuredData_wordsManagerSafeLoad_NotNeeded() {
-//        val adapters = mutableListOf<IAdapter>(adapter)
-//        whenever(adapterManager.adapters).thenReturn(adapters)
-//
-//        interactor.cacheSecuredData()
-//        verify(keystoreSafeExecute).safeExecute(actionRunnableCaptor.capture(), successRunnableCaptor.capture(), failureRunnableCaptor.capture())
-//
-//        val actionRunnable = actionRunnableCaptor.firstValue
-//
-//        actionRunnable.run()
-//
-//        verify(wordsManager, never()).safeLoad()
-//        verify(adapterManager, never()).start()
-    }
+    fun biometricUnlock_enabled() {
+        whenever(localStorage.isBiometricOn).thenReturn(true)
 
-    @Test
-    fun cacheSecuredData_wordsManagerSafeLoad() {
-//        whenever(adapterManager.adapters).thenReturn(mutableListOf())
-//
-//        interactor.cacheSecuredData()
-//        verify(keystoreSafeExecute).safeExecute(actionRunnableCaptor.capture(), successRunnableCaptor.capture(), failureRunnableCaptor.capture())
-//
-//        val actionRunnable = actionRunnableCaptor.firstValue
-//
-//        actionRunnable.run()
-//
-//        verify(wordsManager).safeLoad()
-//        verify(adapterManager).start()
-    }
-
-    @Test
-    fun biometricUnlock() {
-//        whenever(localStorage.isBiometricOn).thenReturn(true)
-//
-//        interactor.showBiometricUnlock()
-//        verify(delegate).showFingerprintInput(cryptoObject)
+        val result = interactor.isBiometricOn()
+        Assert.assertEquals(true, result)
     }
 
     @Test
     fun biometricUnlock_disabled() {
-//        whenever(localStorage.isBiometricOn).thenReturn(false)
-//
-//        interactor.showBiometricUnlock()
-//        verify(delegate, never()).showFingerprintInput(cryptoObject)
+        whenever(localStorage.isBiometricOn).thenReturn(false)
+
+        val result = interactor.isBiometricOn()
+        Assert.assertEquals(false, result)
     }
 
     @Test

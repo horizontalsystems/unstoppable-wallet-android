@@ -17,14 +17,13 @@ class UnlockPinPresenterTest {
     private val interactor = mock(UnlockPinModule.IUnlockPinInteractor::class.java)
     private val router = mock(UnlockPinModule.IUnlockPinRouter::class.java)
     private val view = mock(PinModule.IPinView::class.java)
-    private val appStart = false
     private lateinit var presenter : UnlockPinPresenter
 
     @Before
     fun setUp() {
         RxBaseTest.setup()
 
-        presenter = UnlockPinPresenter(interactor, router, appStart, false)
+        presenter = UnlockPinPresenter(interactor, router, false)
         presenter.view = view
     }
 
@@ -43,7 +42,7 @@ class UnlockPinPresenterTest {
 
     @Test
     fun viewDidLoad_showCancelButton() {
-        presenter = UnlockPinPresenter(interactor, router, appStart, true)
+        presenter = UnlockPinPresenter(interactor, router, true)
         presenter.view = view
         presenter.viewDidLoad()
         verify(view).showBackButton()
@@ -107,12 +106,11 @@ class UnlockPinPresenterTest {
 
     @Test
     fun onUnlock_onAppStart() {
-        val appStart = true
-        presenter = UnlockPinPresenter(interactor, router, appStart, false)
+        presenter = UnlockPinPresenter(interactor, router, false)
         presenter.view = view
 
         presenter.unlock()
-        verify(router).navigateToMain()
+        verify(router).dismiss()
     }
 
     @Test
@@ -162,7 +160,7 @@ class UnlockPinPresenterTest {
 
     @Test
     fun onBackPressed_withShowCancelButton() {
-        presenter = UnlockPinPresenter(interactor, router, appStart, true)
+        presenter = UnlockPinPresenter(interactor, router, true)
         presenter.onBackPressed()
         verify(router).dismiss()
     }

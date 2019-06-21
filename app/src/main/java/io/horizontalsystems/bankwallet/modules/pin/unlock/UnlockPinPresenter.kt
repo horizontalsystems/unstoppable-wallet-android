@@ -9,7 +9,6 @@ import io.horizontalsystems.bankwallet.modules.pin.PinPage
 class UnlockPinPresenter(
         private val interactor: UnlockPinModule.IUnlockPinInteractor,
         private val router: UnlockPinModule.IUnlockPinRouter,
-        private val appStart: Boolean,
         private val showCancelButton: Boolean) : PinModule.IPinViewDelegate, UnlockPinModule.IUnlockPinInteractorDelegate {
 
     private val unlockPageIndex = 0
@@ -37,7 +36,7 @@ class UnlockPinPresenter(
 
             if (enteredPin.length == PinModule.PIN_COUNT) {
                 if (interactor.unlock(enteredPin)) {
-                    unlockApp()
+                    router.dismiss()
                 } else {
                     wrongPinSubmitted()
                 }
@@ -58,19 +57,11 @@ class UnlockPinPresenter(
     }
 
     override fun didBiometricUnlock() {
-        unlockApp()
+        router.dismiss()
     }
 
     override fun unlock() {
-        unlockApp()
-    }
-
-    private fun unlockApp() {
-        if (appStart) {
-            router.navigateToMain()
-        } else {
-            router.dismiss()
-        }
+        router.dismiss()
     }
 
     override fun setCryptoObject(cryptoObject: FingerprintManagerCompat.CryptoObject) {
@@ -103,6 +94,7 @@ class UnlockPinPresenter(
         if(showCancelButton) {
             router.dismiss()
         } else {
+            interactor.cancelUnlock()
             router.closeApplication()
         }
     }

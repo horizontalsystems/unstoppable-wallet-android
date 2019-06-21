@@ -14,6 +14,8 @@ class LockManager(
 
     private val lockTimeout: Double = 60.0
 
+    private var cancelled = false
+
     override val lockStateUpdatedSignal: PublishSubject<Unit> = PublishSubject.create()
 
     override var isLocked: Boolean = false
@@ -23,7 +25,7 @@ class LockManager(
         }
 
     override fun didEnterBackground() {
-        if (!authManager.isLoggedIn || isLocked) {
+        if (!authManager.isLoggedIn || isLocked || cancelled) {
             return
         }
 
@@ -40,12 +42,19 @@ class LockManager(
             return
         }
 
+        cancelled = false
+
         lock()
     }
 
     override fun lock() {
         isLocked = true
         PinModule.startForUnlock()
+    }
+
+    override fun cancelUnlock() {
+        cancelled = true
+        isLocked = false
     }
 
     override fun onUnlock() {

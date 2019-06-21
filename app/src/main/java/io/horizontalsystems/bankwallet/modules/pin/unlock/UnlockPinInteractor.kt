@@ -72,4 +72,8 @@ class UnlockPinInteractor(
 
         delegate?.updateLockoutState(state)
     }
+
+    override fun cancelUnlock() {
+        lockManager.cancelUnlock()
+    }
 }

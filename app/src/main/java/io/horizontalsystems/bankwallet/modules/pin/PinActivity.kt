@@ -27,8 +27,6 @@ import io.horizontalsystems.bankwallet.ui.extensions.*
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_pin.*
-import kotlinx.android.synthetic.main.activity_pin.shadowlessToolbar
-import kotlinx.android.synthetic.main.activity_settings_security.*
 
 
 class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuthenticationDialogFragment.Callback {
@@ -43,7 +41,6 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
         setContentView(R.layout.activity_pin)
 
         val interactionType = intent.getSerializableExtra(keyInteractionType) as PinInteractionType
-        val appStart = intent.getBooleanExtra(keyIsAppStart, false)
         val showCancelButton = intent.getBooleanExtra(keyShowCancel, false)
 
         pinPagesAdapter = PinPagesAdapter()
@@ -60,7 +57,7 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
 
 
         viewModel = ViewModelProviders.of(this).get(PinViewModel::class.java)
-        viewModel.init(interactionType, appStart, showCancelButton)
+        viewModel.init(interactionType, showCancelButton)
 
         val numpadAdapter = NumPadItemsAdapter(this, NumPadItemType.FINGER)
 
@@ -111,7 +108,7 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
         })
 
         viewModel.navigateToMainLiveEvent.observe(this, Observer {
-            MainModule.startAsNewTask(this)
+            MainModule.start(this)
             finish()
         })
 
@@ -169,7 +166,7 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
 
         viewModel.closeApplicationLiveEvent.observe(this, Observer {
             App.appCloseManager.appCloseSignal.onNext(Unit)
-            moveTaskToBack(false)
+            finishAffinity()
         })
 
     }
@@ -203,7 +200,6 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
     companion object {
 
         private const val keyInteractionType = "interaction_type"
-        private const val keyIsAppStart = "is_app_start"
         private const val keyShowCancel = "show_cancel"
 
         fun start(context: Context, interactionType: PinInteractionType) {
@@ -215,14 +211,6 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
         fun startForUnlock(showCancel: Boolean) {
             val intent = Intent(App.instance, PinActivity::class.java)
             intent.putExtra(keyShowCancel, showCancel)
-            intent.putExtra(keyInteractionType, PinInteractionType.UNLOCK)
-            intent.flags = Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            App.instance.startActivity(intent)
-        }
-
-        fun startForUnlockFromAppStart() {
-            val intent = Intent(App.instance, PinActivity::class.java)
-            intent.putExtra(keyIsAppStart, true)
             intent.putExtra(keyInteractionType, PinInteractionType.UNLOCK)
             intent.flags = Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             App.instance.startActivity(intent)

@@ -59,9 +59,6 @@ object PinModule {
         PinActivity.startForUnlock(showCancel)
     }
 
-    fun startForUnlockFromAppStart() {
-        PinActivity.startForUnlockFromAppStart()
-    }
 }
 
 enum class PinInteractionType {
