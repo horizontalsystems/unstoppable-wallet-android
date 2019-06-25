@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import io.horizontalsystems.bankwallet.ui.extensions.Direction
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -22,6 +23,7 @@ class BalancePresenter(
     var view: BalanceModule.IView? = null
     private val disposables = CompositeDisposable()
     private var flushSubject = PublishSubject.create<Unit>()
+    private val showSortingButtonThreshold = 5
 
     //
     // BalanceModule.IViewDelegate
@@ -31,6 +33,8 @@ class BalancePresenter(
 
     override fun viewDidLoad() {
         interactor.initAdapters()
+        view?.setSortButtonLabel(dataSource.balanceSortType.getTitleRes())
+        view?.setSortButtonDirection(dataSource.direction)
 
         flushSubject
                 .debounce(1, TimeUnit.SECONDS)
@@ -82,11 +86,13 @@ class BalancePresenter(
     // BalanceModule.IInteractorDelegate
     //
     override fun didUpdateAdapters(adapters: List<IAdapter>) {
-        dataSource.reset(adapters.map { BalanceModule.BalanceItem(it.coin, it.balance, it.state) })
+        val items = adapters.map { BalanceModule.BalanceItem(it.coin, it.balance, it.state) }
+        dataSource.set(items)
         dataSource.currency?.let {
             interactor.fetchRates(it.code, dataSource.coinCodes)
         }
 
+        view?.setSortingOn(items.size > showSortingButtonThreshold)
         view?.reload()
     }
 
@@ -138,4 +144,23 @@ class BalancePresenter(
         flushSubject.onNext(Unit)
     }
 
+    override fun onSortClick() {
+        router.openSortTypeDialog()
+    }
+
+    override fun onSortDirectionClick(direction: Direction) {
+        if (dataSource.direction == direction) {
+            val newSorting = if (direction == Direction.DOWN) Direction.UP else Direction.DOWN
+            dataSource.reverseSorting(newSorting)
+            view?.reload()
+            view?.setSortButtonDirection(newSorting)
+        }
+    }
+
+    override fun onSortTypeChanged(sortType: BalanceSortType) {
+        dataSource.sortBy(sortType)
+        view?.reload()
+        view?.setSortButtonLabel(sortType.getTitleRes())
+        view?.setSortButtonDirection(dataSource.direction)
+    }
 }

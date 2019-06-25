@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import io.horizontalsystems.bankwallet.ui.extensions.Direction
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.TestScheduler
 import org.junit.Assert
@@ -42,9 +43,14 @@ class BalancePresenterTest {
 
     @Test
     fun viewDidLoad() {
+        whenever(dataSource.balanceSortType).thenReturn(BalanceSortType.Custom)
+        whenever(dataSource.direction).thenReturn(Direction.UP)
+
         presenter.viewDidLoad()
         testScheduler.advanceTimeBy(1, TimeUnit.MINUTES)
 
+        verify(view).setSortButtonLabel(BalanceSortType.Custom.getTitleRes())
+        verify(view).setSortButtonDirection(Direction.UP)
         verify(interactor).initAdapters()
     }
 
@@ -112,9 +118,10 @@ class BalancePresenterTest {
 
         presenter.didUpdateAdapters(adapters)
 
-        verify(dataSource).reset(items)
+        verify(dataSource).set(items)
         verify(interactor).fetchRates(currencyCode, coinCodes)
         verify(view).reload()
+        verify(view).setSortingOn(false)
     }
 
     @Test
@@ -226,6 +233,30 @@ class BalancePresenterTest {
         presenter.onClear()
 
         verify(interactor).clear()
+    }
+
+    @Test
+    fun onSortDirectionClick() {
+        val direction = Direction.UP
+        whenever(dataSource.direction).thenReturn(Direction.UP)
+        presenter.onSortDirectionClick(direction)
+
+        verify(dataSource).reverseSorting(Direction.DOWN)
+        verify(view).reload()
+        verify(view).setSortButtonDirection(Direction.DOWN)
+    }
+
+    @Test
+    fun onSortTypeChanged() {
+        val sortType = BalanceSortType.Az
+        val title = sortType.getTitleRes()
+        whenever(dataSource.direction).thenReturn(Direction.UP)
+
+        presenter.onSortTypeChanged(sortType)
+
+        verify(view).reload()
+        verify(view).setSortButtonLabel(title)
+        verify(view).setSortButtonDirection(Direction.UP)
     }
 
 }

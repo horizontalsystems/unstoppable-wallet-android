@@ -62,6 +62,9 @@
     <string name="Balance_SyncedUntil">until: %s</string>
     <string name="Balance_Syncing">Syncing…</string>
     <string name="Balance_AddCoins">Add Coins</string>
+    <string name="Balance_Sort_Value">Value</string>
+    <string name="Balance_Sort_Az">A-Z</string>
+    <string name="Balance_Sort_Custom">Custom</string>
 
 
     <!--Send-->
