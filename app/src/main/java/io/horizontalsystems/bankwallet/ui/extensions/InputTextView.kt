@@ -5,7 +5,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.inputmethod.EditorInfo
-import android.widget.ArrayAdapter
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
 import kotlinx.android.synthetic.main.view_text_input.view.*
@@ -48,10 +47,6 @@ class InputTextView : ConstraintLayout {
         })
     }
 
-    fun setAutocompleteAdapter(adapter: ArrayAdapter<String>) {
-        inputEditText.setAdapter(adapter)
-    }
-
     fun setImeActionDone(onDone: () -> Unit) {
         inputEditText.imeOptions = EditorInfo.IME_ACTION_DONE
         inputEditText.setOnEditorActionListener { v, actionId, event ->
@@ -62,12 +57,6 @@ class InputTextView : ConstraintLayout {
                 }
                 else -> false
             }
-        }
-    }
-
-    fun goToNextWhenItemClicked() {
-        inputEditText.setOnItemClickListener { parent, view, position, id ->
-            goToNext()
         }
     }
 

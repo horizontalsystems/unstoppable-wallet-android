@@ -1,10 +1,9 @@
 package io.horizontalsystems.bankwallet.lib
 
-import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.ui.extensions.InputTextView
 
-class InputTextViewHolder(private val inputTextView: InputTextView, private val listener: WordsChangedListener, autocompleteAdapter: ArrayAdapter<String>)
+class InputTextViewHolder(private val inputTextView: InputTextView, private val listener: WordsChangedListener)
     : RecyclerView.ViewHolder(inputTextView) {
 
     interface WordsChangedListener {
@@ -13,7 +12,6 @@ class InputTextViewHolder(private val inputTextView: InputTextView, private val 
     }
 
     init {
-        inputTextView.setAutocompleteAdapter(autocompleteAdapter)
         inputTextView.bindTextChangeListener { listener.set(adapterPosition, it) }
     }
 
@@ -21,8 +19,6 @@ class InputTextViewHolder(private val inputTextView: InputTextView, private val 
         inputTextView.bindPrefix("${position + 1}")
         if (lastElement) {
             inputTextView.setImeActionDone { listener.done() }
-        } else {
-            inputTextView.goToNextWhenItemClicked()
         }
     }
 
