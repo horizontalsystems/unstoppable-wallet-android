@@ -48,6 +48,9 @@
     <string name="Balance_SyncedUntil">تا:٪؜</string>
     <string name="Balance_Syncing">درحال همگام‌سازی…</string>
     <string name="Balance_AddCoins">Add Coins</string>
+    <string name="Balance_Sort_Balance">Balance</string>
+    <string name="Balance_Sort_Az">A-Z</string>
+    <string name="Balance_Sort_Default">Default</string>
     <!--Send-->
     <string name="Send_Title1">ارسال</string>
     <string name="Send_Title">ارسال%s</string>
