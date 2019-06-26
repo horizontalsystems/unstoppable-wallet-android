@@ -76,7 +76,7 @@ object BalanceModule {
 
         private var originalItems = listOf<BalanceItem>()
         var items = listOf<BalanceItem>()
-        var balanceSortType: BalanceSortType = BalanceSortType.Custom
+        var balanceSortType: BalanceSortType = BalanceSortType.Default
         var direction = Direction.UP
 
         fun addUpdatedPosition(position: Int) {
@@ -89,7 +89,7 @@ object BalanceModule {
 
         fun set(items: List<BalanceItem>) {
             originalItems = items
-            sortBy(BalanceSortType.Custom)
+            sortBy(BalanceSortType.Default)
         }
 
         fun getUpdatedPositions(): List<Int> = updatedPositions.distinct()
@@ -121,7 +121,7 @@ object BalanceModule {
         fun sortBy(sortType: BalanceSortType) {
             balanceSortType = sortType
             when (balanceSortType) {
-                BalanceSortType.Value -> {
+                BalanceSortType.Balance -> {
                     items = originalItems.sortedByDescending { it.fiatValue }
                     direction = Direction.DOWN
                 }
@@ -129,7 +129,7 @@ object BalanceModule {
                     items = originalItems.sortedBy { it.coin.title }
                     direction = Direction.UP
                 }
-                BalanceSortType.Custom -> {
+                BalanceSortType.Default -> {
                     items = originalItems
                     direction = Direction.UP
                 }

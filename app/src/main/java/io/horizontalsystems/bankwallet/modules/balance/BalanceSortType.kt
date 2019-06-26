@@ -3,13 +3,13 @@ package io.horizontalsystems.bankwallet.modules.balance
 import io.horizontalsystems.bankwallet.R
 
 sealed class BalanceSortType {
-    object Value : BalanceSortType()
+    object Balance : BalanceSortType()
     object Az : BalanceSortType()
-    object Custom : BalanceSortType()
+    object Default : BalanceSortType()
 
     fun getTitleRes(): Int = when (this) {
-        Value -> R.string.Balance_Sort_Value
+        Balance -> R.string.Balance_Sort_Balance
         Az -> R.string.Balance_Sort_Az
-        Custom -> R.string.Balance_Sort_Custom
+        Default -> R.string.Balance_Sort_Default
     }
 }

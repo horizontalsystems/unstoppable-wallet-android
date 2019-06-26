@@ -43,13 +43,13 @@ class BalancePresenterTest {
 
     @Test
     fun viewDidLoad() {
-        whenever(dataSource.balanceSortType).thenReturn(BalanceSortType.Custom)
+        whenever(dataSource.balanceSortType).thenReturn(BalanceSortType.Default)
         whenever(dataSource.direction).thenReturn(Direction.UP)
 
         presenter.viewDidLoad()
         testScheduler.advanceTimeBy(1, TimeUnit.MINUTES)
 
-        verify(view).setSortButtonLabel(BalanceSortType.Custom.getTitleRes())
+        verify(view).setSortButtonLabel(BalanceSortType.Default.getTitleRes())
         verify(view).setSortButtonDirection(Direction.UP)
         verify(interactor).initAdapters()
     }

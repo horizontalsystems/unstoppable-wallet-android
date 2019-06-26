@@ -14,7 +14,7 @@ class BalanceSortDialogFragment : DialogFragment() {
         fun onSortItemSelect(sortType: BalanceSortType)
     }
 
-    private val sortTypes = listOf(BalanceSortType.Value, BalanceSortType.Az, BalanceSortType.Custom)
+    private val sortTypes = listOf(BalanceSortType.Balance, BalanceSortType.Az, BalanceSortType.Default)
 
     private var listener: Listener? = null
 
