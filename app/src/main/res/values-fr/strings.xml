@@ -48,6 +48,9 @@
     <string name="Balance_SyncedUntil">jusqu\'à: %s</string>
     <string name="Balance_Syncing">Synchronisation…</string>
     <string name="Balance_AddCoins">Add Coins</string>
+    <string name="Balance_Sort_Balance">Balance</string>
+    <string name="Balance_Sort_Az">A-Z</string>
+    <string name="Balance_Sort_Default">Default</string>
     <!--Send-->
     <string name="Send_Title1">Envoyer</string>
     <string name="Send_Title">Envoyer %s</string>
