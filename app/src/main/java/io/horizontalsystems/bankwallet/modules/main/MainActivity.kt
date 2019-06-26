@@ -203,6 +203,7 @@ class MainActivity : BaseActivity(), NumPadItemsAdapter.Listener {
     override fun onResume() {
         super.onResume()
         sendViewModel.onViewResumed()
+        collapseBottomSheetsOnActivityRestore()
     }
 
     override fun onDestroy() {
@@ -237,6 +238,19 @@ class MainActivity : BaseActivity(), NumPadItemsAdapter.Listener {
                     sendInputConnection?.commitText(".", 1)
                 }
             }
+        }
+    }
+
+    private fun collapseBottomSheetsOnActivityRestore() {
+        //Collapse opened empty bottomsheet dialogs on Activity restore
+        if (receiveBottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED && receiveTxtTitle.text.isEmpty()) {
+            receiveBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+        if (sendBottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED && sendTxtTitle.text.isEmpty()) {
+            sendBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+        if (txInfoBottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED && txInfoCoinName.text.isEmpty()) {
+            txInfoBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         }
     }
 
@@ -611,7 +625,7 @@ class MainActivity : BaseActivity(), NumPadItemsAdapter.Listener {
                 }
 
                 coinValue.text = App.numberFormatter.format(txRec.coinValue, explicitSign = true, realNumber = true)
-                coinName.text = txRec.coin.title
+                txInfoCoinName.text = txRec.coin.title
 
                 itemRate.apply {
                     txRec.rate?.let {
