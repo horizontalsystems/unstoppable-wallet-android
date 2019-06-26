@@ -27,17 +27,36 @@
             app:layout_scrollFlags="scroll|snap"
             />
 
-        <TextView
-            android:id="@+id/ballanceText"
-            style="@style/Title2"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="9dp"
-            android:layout_marginStart="16dp"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
-            android:textColor="@color/yellow_crypto_40"
-            tools:text="$ 200,234.90"
-            />
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            >
+            <TextView
+                android:id="@+id/ballanceText"
+                style="@style/Title2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/yellow_crypto_40"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="$ 200,234.90"
+                />
+
+            <io.horizontalsystems.bankwallet.ui.extensions.SortButtonView
+                android:id="@+id/sortButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/ballanceText"
+                app:layout_constraintBottom_toBottomOf="@+id/ballanceText"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -74,7 +93,7 @@
             android:layout_height="wrap_content"
             android:clipToPadding="false"
             android:paddingBottom="18dp"
-            android:paddingTop="8dp"
+            android:paddingTop="4dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             />
 
