@@ -51,7 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:text="@string/Guest_Title"
+                android:text="@string/SettingsAbout_AppTitle"
                 android:textColor="?TextColorGreyLightToDark"
                 app:layout_constraintStart_toEndOf="@+id/appIcon"
                 app:layout_constraintTop_toTopOf="@+id/appIcon"
@@ -62,7 +62,7 @@
                 style="@style/Body1Grey"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/About_Subtitle"
+                android:text="@string/SettingsAbout_Subtitle"
                 app:layout_constraintStart_toStartOf="@+id/appName"
                 app:layout_constraintTop_toBottomOf="@+id/appName"
                 />

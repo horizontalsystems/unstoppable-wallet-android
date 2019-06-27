@@ -22,10 +22,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.modules.backup.BackupModule
-import io.horizontalsystems.bankwallet.modules.backup.BackupPresenter
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
-import io.horizontalsystems.bankwallet.modules.guest.GuestModule
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveView
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveViewModel
@@ -187,12 +184,6 @@ class MainActivity : BaseActivity(), SendView.Listener, ReceiveView.Listener, Tr
             if (!EncryptionManager.isDeviceLockEnabled(this)) {
                 screenHide.visibility = View.VISIBLE
                 EncryptionManager.showNoDeviceLockWarning(this)
-            } else if (!App.authManager.isLoggedIn) {
-                GuestModule.start(this)
-                finish()
-            } else if (!App.localStorage.iUnderstand) {
-                BackupModule.start(this, BackupPresenter.DismissMode.SET_PIN)
-                finish()
             } else if (App.secureStorage.pinIsEmpty()) {
                 PinModule.startForSetPin(this)
                 finishAffinity()

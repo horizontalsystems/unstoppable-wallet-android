@@ -15,14 +15,6 @@
     <string name="Button_Share">Share</string>
     <string name="Error">Error</string>
 
-    <!--Guest-->
-
-    <string name="Guest_Title">Unstoppable</string>
-    <string name="Guest_Subtitle" translatable="false">IN BLOCKCHAIN WE TRUST</string>
-    <string name="Guest_CreateWallet">Create Wallet</string>
-    <string name="Guest_RestoreWallet">Restore</string>
-    <string name="Guest_Version" translatable="false">version %s</string>
-
     <!--Restore-->
 
     <string name="Restore_Title">Restore</string>
@@ -210,7 +202,8 @@
     <!--Setting_About-->
 
     <string name="SettingsAbout_Title">About</string>
-    <string name="About_Subtitle" translatable="false">Decentralized App</string>
+    <string name="SettingsAbout_AppTitle">Unstoppable</string>
+    <string name="SettingsAbout_Subtitle" translatable="false">Decentralized App</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Terms &amp; Privacy:</string>
     <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
 \n\nIt works everywhere as long as there is internet. No entity can block this app from working or to block someone from using it.
