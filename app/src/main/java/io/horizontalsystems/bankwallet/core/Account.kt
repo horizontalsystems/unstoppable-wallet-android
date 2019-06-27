@@ -1,16 +1,31 @@
 package io.horizontalsystems.bankwallet.core
 
-class Account(val name: String, val type: AccountType)
+import io.horizontalsystems.bankwallet.entities.SyncMode
+import java.util.*
 
-class AccountType {
-    data class Mnemonic(val words: List<String>, val derivation: Derivation, val salt: String)
-    data class MasterKey(val data: ByteArray) {
+class Account(val name: String, val type: AccountType, val uniqueId: String, val defaultSyncMode: SyncMode) {
+    override fun equals(other: Any?): Boolean {
+        if (other is Account) {
+            return name == other.name && type == other.type
+        }
+
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return Objects.hash(name, type)
+    }
+}
+
+sealed class AccountType {
+    data class Mnemonic(val words: List<String>, val derivation: Derivation, val salt: String) : AccountType()
+    data class MasterKey(val data: ByteArray) : AccountType() {
         override fun equals(other: Any?): Boolean {
             if (other is MasterKey) {
                 return data.contentEquals(other.data)
             }
 
-            return super.equals(other)
+            return false
         }
 
         override fun hashCode(): Int {
@@ -18,23 +33,21 @@ class AccountType {
         }
     }
 
-    data class HDMasterKey(val data: ByteArray, val derivation: Derivation) {
+    data class HDMasterKey(val data: ByteArray, val derivation: Derivation) : AccountType() {
         override fun equals(other: Any?): Boolean {
             if (other is HDMasterKey) {
                 return derivation == other.derivation && data.contentEquals(other.data)
             }
 
-            return super.equals(other)
+            return false
         }
 
         override fun hashCode(): Int {
-            var result = data.contentHashCode()
-            result = 31 * result + derivation.hashCode()
-            return result
+            return Objects.hash(data, derivation)
         }
     }
 
-    data class Eos(val account: String, val key: String)
+    data class Eos(val account: String, val key: String) : AccountType()
     enum class Derivation {
         bip39,
         bip44

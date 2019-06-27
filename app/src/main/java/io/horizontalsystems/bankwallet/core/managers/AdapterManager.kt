@@ -59,9 +59,8 @@ class AdapterManager(
             adapters = walletManager.wallets.mapNotNull { wallet ->
                 var adapter = adapters.find { it.wallet == wallet }
                 if (adapter == null) {
-                    // TODO create adapter
-                    //adapter = adapterFactory.adapterForCoin(wallet, authData)
-                    //adapter?.start()
+                    adapter = adapterFactory.adapterForCoin(wallet)
+                    adapter?.start()
                 }
                 adapter
             }

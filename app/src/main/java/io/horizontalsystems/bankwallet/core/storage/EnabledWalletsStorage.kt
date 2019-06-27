@@ -1,11 +1,11 @@
 package io.horizontalsystems.bankwallet.core.storage
 
-import io.horizontalsystems.bankwallet.core.IEnabledCoinStorage
+import io.horizontalsystems.bankwallet.core.IEnabledWalletStorage
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
 import io.reactivex.Flowable
 import java.util.concurrent.Executors
 
-class EnabledCoinsRepository(private val appDatabase: AppDatabase) : IEnabledCoinStorage {
+class EnabledWalletsStorage(private val appDatabase: AppDatabase) : IEnabledWalletStorage {
 
     private val executor = Executors.newSingleThreadExecutor()
 

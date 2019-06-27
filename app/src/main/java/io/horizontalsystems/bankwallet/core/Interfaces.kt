@@ -126,7 +126,7 @@ sealed class AdapterState {
 interface IEthereumKitManager {
     val ethereumKit: EthereumKit?
 
-    fun ethereumKit(authData: AuthData): EthereumKit
+    fun ethereumKit(wallet: Wallet): EthereumKit
     fun unlink()
 }
 
@@ -219,7 +219,7 @@ interface IRateStorage {
     fun deleteAll()
 }
 
-interface IEnabledCoinStorage {
+interface IEnabledWalletStorage {
     fun enabledCoinsObservable(): Flowable<List<EnabledWallet>>
     fun save(coins: List<EnabledWallet>)
     fun deleteAll()

@@ -10,7 +10,7 @@ import io.reactivex.schedulers.Schedulers
 class BalanceInteractor(
         private val adapterManager: IAdapterManager,
         private val rateStorage: IRateStorage,
-        private val coinStorage: IEnabledCoinStorage,
+        private val coinStorage: IEnabledWalletStorage,
         private val currencyManager: ICurrencyManager,
         private val localStorage: ILocalStorage,
         private val refreshTimeout: Double = 2.0

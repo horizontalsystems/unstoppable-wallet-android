@@ -6,5 +6,6 @@ import androidx.room.Entity
 data class EnabledWallet(
         val coinCode: String,
         var walletOrder: Int? = null,
-        var accountName: String = ""
+        val accountName: String,
+        val syncMode: SyncMode
 )

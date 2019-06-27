@@ -4,8 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
 import io.horizontalsystems.bankwallet.entities.Rate
 
@@ -13,6 +15,8 @@ import io.horizontalsystems.bankwallet.entities.Rate
     Rate::class,
     EnabledWallet::class]
 )
+
+@TypeConverters(DataTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun ratesDao(): RatesDao
@@ -96,8 +100,10 @@ abstract class AppDatabase : RoomDatabase() {
 
         private val addNameToEnabledCoin: Migration = object : Migration(7, 8) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("CREATE TABLE IF NOT EXISTS EnabledWallet (`coinCode` TEXT NOT NULL, `walletOrder` INTEGER, `accountName` TEXT NOT NULL, PRIMARY KEY(`coinCode`, `accountName`))")
-                database.execSQL("INSERT INTO EnabledWallet(`coinCode`, `accountName`, `walletOrder`) SELECT `coinCode`, 'Mnemonic', `walletOrder`FROM EnabledCoin")
+                val syncMode = App.localStorage.syncMode.value
+
+                database.execSQL("CREATE TABLE IF NOT EXISTS EnabledWallet (`coinCode` TEXT NOT NULL, `accountName` TEXT NOT NULL, `syncMode` NOT NULL, `walletOrder` INTEGER, PRIMARY KEY(`coinCode`, `accountName`))")
+                database.execSQL("INSERT INTO EnabledWallet(`coinCode`, `accountName`, `syncMode`, `walletOrder`) SELECT `coinCode`, 'Mnemonic', '$syncMode', `walletOrder` FROM EnabledCoin")
                 database.execSQL("DROP TABLE EnabledCoin")
             }
         }

@@ -1,31 +1,33 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.entities.EnabledWallet
+import io.horizontalsystems.bankwallet.core.IAppConfigProvider
+import io.horizontalsystems.bankwallet.core.ICoinManager
+import io.horizontalsystems.bankwallet.core.IEnabledWalletStorage
+import io.horizontalsystems.bankwallet.core.Wallet
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
-class WalletManager(private val appConfigProvider: IAppConfigProvider, private val enabledCoinStorage: IEnabledCoinStorage) : ICoinManager {
+class WalletManager(private val appConfigProvider: IAppConfigProvider, accountManager: AccountManager, private val enabledCoinStorage: IEnabledWalletStorage) : ICoinManager {
 
     override val walletsUpdatedSignal: PublishSubject<Unit> = PublishSubject.create()
 
     init {
-        val accounts = listOf<Account>()
+        val accounts = accountManager.accounts
         val disposable = enabledCoinStorage.enabledCoinsObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { enabledCoinsFromDb ->
 
                     val enabledWallets = mutableListOf<Wallet>()
-                    enabledCoinsFromDb.forEach { enabledCoin ->
-                        val coin = appConfigProvider.coins.find { coin -> coin.code == enabledCoin.coinCode }
+                    enabledCoinsFromDb.forEach { enabledWallet ->
+                        val coin = appConfigProvider.coins.find { coin -> coin.code == enabledWallet.coinCode }
                         val account = accounts.find {
-                            it.name == enabledCoin.accountName
+                            it.name == enabledWallet.accountName
                         }
 
                         if (coin != null && account != null) {
-                            enabledWallets.add(Wallet(coin, account))
+                            enabledWallets.add(Wallet(coin, account, enabledWallet.syncMode))
                         }
 
                     }
@@ -40,11 +42,11 @@ class WalletManager(private val appConfigProvider: IAppConfigProvider, private v
         }
 
     override fun enableDefaultWallets() {
-        val enabledCoins = mutableListOf<EnabledWallet>()
-        appConfigProvider.defaultCoinCodes.forEachIndexed { order, coinCode ->
-            enabledCoins.add(EnabledWallet(coinCode, order))
-        }
-        enabledCoinStorage.save(enabledCoins)
+        // val enabledCoins = mutableListOf<EnabledWallet>()
+        // appConfigProvider.defaultCoinCodes.forEachIndexed { order, coinCode ->
+        //     enabledCoins.add(EnabledWallet(coinCode, order))
+        // }
+        // enabledCoinStorage.save(enabledCoins)
     }
 
     override fun clear() {

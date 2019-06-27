@@ -1,15 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.managecoins
 
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
-import io.horizontalsystems.bankwallet.core.IEnabledCoinStorage
-import io.horizontalsystems.bankwallet.core.managers.AppConfigProvider
+import io.horizontalsystems.bankwallet.core.IEnabledWalletStorage
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class ManageCoinsInteractor(private val appConfigProvider: IAppConfigProvider, private val enabledCoinStorage: IEnabledCoinStorage)
+class ManageCoinsInteractor(private val appConfigProvider: IAppConfigProvider, private val enabledCoinStorage: IEnabledWalletStorage)
     : ManageCoinsModule.IInteractor {
 
     var delegate: ManageCoinsModule.IInteractorDelegate? = null
@@ -32,12 +31,12 @@ class ManageCoinsInteractor(private val appConfigProvider: IAppConfigProvider, p
     }
 
     override fun saveEnabledCoins(coins: List<Coin>) {
-        val enabledCoins = mutableListOf<EnabledWallet>()
-        coins.forEachIndexed { order, coinCode ->
-            enabledCoins.add(EnabledWallet(coinCode.code, order))
-        }
-        enabledCoinStorage.save(enabledCoins)
-        delegate?.didSaveChanges()
+        // val enabledCoins = mutableListOf<EnabledWallet>()
+        // coins.forEachIndexed { order, coinCode ->
+        //     enabledCoins.add(EnabledWallet(coinCode.code, order))
+        // }
+        // enabledCoinStorage.save(enabledCoins)
+        // delegate?.didSaveChanges()
     }
 
     override fun clear() {

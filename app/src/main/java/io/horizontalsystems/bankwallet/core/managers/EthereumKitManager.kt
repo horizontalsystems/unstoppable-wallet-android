@@ -1,10 +1,7 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.IAppConfigProvider
-import io.horizontalsystems.bankwallet.core.IEthereumKitManager
-import io.horizontalsystems.bankwallet.entities.AuthData
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 
 class EthereumKitManager(appConfig: IAppConfigProvider) : IEthereumKitManager {
@@ -18,18 +15,24 @@ class EthereumKitManager(appConfig: IAppConfigProvider) : IEthereumKitManager {
     override val ethereumKit: EthereumKit?
         get() = kit
 
-    override fun ethereumKit(authData: AuthData): EthereumKit {
-        useCount += 1
+    override fun ethereumKit(wallet: Wallet): EthereumKit {
+        val account = wallet.account
+        if (account.type is AccountType.Mnemonic) {
+            useCount += 1
 
-        kit?.let { return it }
-        val syncMode = EthereumKit.WordsSyncMode.ApiSyncMode()
-        val infuraCredentials = EthereumKit.InfuraCredentials(infuraProjectId, infuraSecretKey)
-        val networkType = if (testMode) EthereumKit.NetworkType.Ropsten else EthereumKit.NetworkType.MainNet
-        kit = EthereumKit.getInstance(App.instance, authData.words, syncMode, networkType, infuraCredentials, etherscanKey, authData.walletId)
+            kit?.let { return it }
+            val syncMode = EthereumKit.WordsSyncMode.ApiSyncMode()
+            val infuraCredentials = EthereumKit.InfuraCredentials(infuraProjectId, infuraSecretKey)
+            val networkType = if (testMode) EthereumKit.NetworkType.Ropsten else EthereumKit.NetworkType.MainNet
 
-        kit?.start()
+            kit = EthereumKit.getInstance(App.instance, account.type.words, syncMode, networkType, infuraCredentials, etherscanKey, account.uniqueId)
+            kit?.start()
 
-        return kit!!
+            return kit!!
+        }
+
+        throw UnsupportedAccountException()
+
     }
 
     override fun unlink() {

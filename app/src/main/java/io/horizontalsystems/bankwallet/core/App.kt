@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
-import io.horizontalsystems.bankwallet.core.storage.EnabledCoinsRepository
+import io.horizontalsystems.bankwallet.core.storage.EnabledWalletsStorage
 import io.horizontalsystems.bankwallet.core.storage.RatesRepository
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
 import java.util.*
@@ -36,13 +36,14 @@ class App : Application() {
         lateinit var appConfigProvider: IAppConfigProvider
         lateinit var adapterManager: IAdapterManager
         lateinit var coinManager: WalletManager
+        lateinit var accountManager: AccountManager
 
         lateinit var rateSyncer: RateSyncer
         lateinit var rateManager: RateManager
         lateinit var networkAvailabilityManager: NetworkAvailabilityManager
         lateinit var appDatabase: AppDatabase
         lateinit var rateStorage: IRateStorage
-        lateinit var enabledCoinsStorage: IEnabledCoinStorage
+        lateinit var enabledWalletsStorage: IEnabledWalletStorage
         lateinit var transactionInfoFactory: FullTransactionInfoFactory
         lateinit var transactionDataProviderManager: TransactionDataProviderManager
         lateinit var appCloseManager: AppCloseManager
@@ -79,12 +80,13 @@ class App : Application() {
 
         appDatabase = AppDatabase.getInstance(this)
         rateStorage = RatesRepository(appDatabase)
-        enabledCoinsStorage = EnabledCoinsRepository(appDatabase)
+        enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
         localStorage = LocalStorageManager()
 
         networkManager = NetworkManager(appConfigProvider)
         rateManager = RateManager(rateStorage, networkManager)
-        coinManager = WalletManager(appConfigProvider, enabledCoinsStorage)
+        accountManager = AccountManager(secureStorage)
+        coinManager = WalletManager(appConfigProvider, accountManager, enabledWalletsStorage)
         authManager = AuthManager(secureStorage, localStorage, coinManager, rateManager, ethereumKitManager, appConfigProvider)
 
         wordsManager = WordsManager(localStorage)
@@ -98,7 +100,7 @@ class App : Application() {
 
         networkAvailabilityManager = NetworkAvailabilityManager()
 
-        adapterManager = AdapterManager(coinManager, authManager, AdapterFactory(instance, appConfigProvider, localStorage, ethereumKitManager, feeRateProvider), ethereumKitManager)
+        adapterManager = AdapterManager(coinManager, authManager, AdapterFactory(instance, appConfigProvider, ethereumKitManager, feeRateProvider), ethereumKitManager)
         rateSyncer = RateSyncer(rateManager, adapterManager, currencyManager, networkAvailabilityManager)
 
         appCloseManager = AppCloseManager()

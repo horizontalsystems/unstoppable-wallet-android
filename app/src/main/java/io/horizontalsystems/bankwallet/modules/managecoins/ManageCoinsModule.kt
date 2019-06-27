@@ -80,7 +80,7 @@ object ManageCoinsModule {
 
 
     fun init(view: ManageCoinsViewModel, router: IRouter) {
-        val interactor = ManageCoinsInteractor(App.appConfigProvider, App.enabledCoinsStorage)
+        val interactor = ManageCoinsInteractor(App.appConfigProvider, App.enabledWalletsStorage)
         val presenter = ManageCoinsPresenter(interactor, router, ManageCoinsPresenterState())
 
         view.delegate = presenter
