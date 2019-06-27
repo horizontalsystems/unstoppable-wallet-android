@@ -19,10 +19,6 @@ class AuthManager(private val secureStorage: ISecuredStorage,
     var authData: AuthData? = null
     var authDataSignal = PublishSubject.create<Unit>()
 
-    var isLoggedIn: Boolean = false
-        get() = !secureStorage.noAuthData()
-
-
     @Throws(UserNotAuthenticatedException::class)
     fun safeLoad() {
         authData = secureStorage.authData

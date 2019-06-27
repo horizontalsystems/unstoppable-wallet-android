@@ -91,7 +91,7 @@ class App : Application() {
         randomManager = RandomProvider()
         systemInfoManager = SystemInfoManager()
         pinManager = PinManager(secureStorage)
-        lockManager = LockManager(secureStorage, authManager)
+        lockManager = LockManager(secureStorage)
         languageManager = LanguageManager(localStorage, appConfigProvider, fallbackLanguage)
         currencyManager = CurrencyManager(localStorage, appConfigProvider)
         numberFormatter = NumberFormatter(languageManager)

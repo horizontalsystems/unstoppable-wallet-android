@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.reactivex.subjects.PublishSubject
 import java.util.*
 
-class LockManager(private val securedStorage: ISecuredStorage, private val authManager: AuthManager) : ILockManager {
+class LockManager(private val securedStorage: ISecuredStorage) : ILockManager {
 
     private val lockTimeout: Double = 60.0
 
@@ -20,7 +20,7 @@ class LockManager(private val securedStorage: ISecuredStorage, private val authM
         }
 
     override fun didEnterBackground() {
-        if (isLocked && !authManager.isLoggedIn) {
+        if (isLocked) {
             return
         }
 
@@ -28,7 +28,7 @@ class LockManager(private val securedStorage: ISecuredStorage, private val authM
     }
 
     override fun willEnterForeground() {
-        if (isLocked || !authManager.isLoggedIn || securedStorage.pinIsEmpty()) {
+        if (isLocked || securedStorage.pinIsEmpty()) {
             return
         }
 
