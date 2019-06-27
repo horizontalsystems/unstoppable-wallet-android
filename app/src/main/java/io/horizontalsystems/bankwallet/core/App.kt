@@ -35,7 +35,7 @@ class App : Application() {
         lateinit var lockManager: ILockManager
         lateinit var appConfigProvider: IAppConfigProvider
         lateinit var adapterManager: IAdapterManager
-        lateinit var coinManager: CoinManager
+        lateinit var coinManager: WalletManager
 
         lateinit var rateSyncer: RateSyncer
         lateinit var rateManager: RateManager
@@ -84,7 +84,7 @@ class App : Application() {
 
         networkManager = NetworkManager(appConfigProvider)
         rateManager = RateManager(rateStorage, networkManager)
-        coinManager = CoinManager(appConfigProvider, enabledCoinsStorage)
+        coinManager = WalletManager(appConfigProvider, enabledCoinsStorage)
         authManager = AuthManager(secureStorage, localStorage, coinManager, rateManager, ethereumKitManager, appConfigProvider)
 
         wordsManager = WordsManager(localStorage)

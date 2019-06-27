@@ -57,8 +57,8 @@ class TransactionsInteractorTest {
         whenever(coin2.code).thenReturn("ETH")
         whenever(coin3.code).thenReturn("BCH")
 
-        whenever(adapter1.coin).thenReturn(coin1)
-        whenever(adapter2.coin).thenReturn(coin2)
+        whenever(adapter1.wallet).thenReturn(coin1)
+        whenever(adapter2.wallet).thenReturn(coin2)
         whenever(adapter1.transactionRecordsFlowable).thenReturn(Flowable.just(listOf(transactionRecordMock)))
         whenever(adapter2.transactionRecordsFlowable).thenReturn(Flowable.just(listOf(transactionRecordMock)))
     }

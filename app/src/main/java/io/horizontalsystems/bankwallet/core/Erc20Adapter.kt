@@ -2,10 +2,10 @@ package io.horizontalsystems.bankwallet.core
 
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.erc20kit.core.Erc20Kit
+import io.horizontalsystems.erc20kit.core.Erc20Kit.SyncState
 import io.horizontalsystems.erc20kit.core.TransactionKey
 import io.horizontalsystems.erc20kit.models.TransactionInfo
 import io.horizontalsystems.ethereumkit.core.EthereumKit
@@ -14,22 +14,16 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
 
-class Erc20Adapter(context: Context,
-                   coin: Coin,
-                   kit: EthereumKit,
-                   decimal: Int,
-                   private val fee: BigDecimal,
-                   contractAddress: String,
-                   addressParser: AddressParser,
-                   feeRateProvider: IFeeRateProvider) : EthereumBaseAdapter(coin, kit, decimal, addressParser, feeRateProvider) {
+class Erc20Adapter(context: Context, wallet: Wallet, kit: EthereumKit, decimal: Int, private val fee: BigDecimal, contractAddress: String, addressParser: AddressParser, feeRateProvider: IFeeRateProvider)
+    : EthereumBaseAdapter(wallet, kit, decimal, addressParser, feeRateProvider) {
 
     private val erc20Kit: Erc20Kit = Erc20Kit.getInstance(context, ethereumKit, contractAddress)
 
     override val state: AdapterState
         get() = when (erc20Kit.syncState) {
-            is Erc20Kit.SyncState.Synced -> AdapterState.Synced
-            is Erc20Kit.SyncState.NotSynced -> AdapterState.NotSynced
-            is Erc20Kit.SyncState.Syncing -> AdapterState.Syncing(50, null)
+            is SyncState.Synced -> AdapterState.Synced
+            is SyncState.NotSynced -> AdapterState.NotSynced
+            is SyncState.Syncing -> AdapterState.Syncing(50, null)
         }
 
     override val stateUpdatedFlowable: Flowable<Unit>

@@ -34,7 +34,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
     var delegate: SendModule.IInteractorDelegate? = null
 
     override val coin: Coin
-        get() = adapter.coin
+        get() = adapter.wallet.coin
 
     override val addressFromClipboard: String?
         get() = clipboardManager.getCopiedText()
@@ -47,7 +47,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
         disposables.clear()
 
         disposables.add(
-                rateStorage.latestRateObservable(adapter.coin.code, currencyManager.baseCurrency.code)
+                rateStorage.latestRateObservable(adapter.wallet.coin.code, currencyManager.baseCurrency.code)
                         .take(1)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -108,7 +108,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
 
     override fun stateForUserInput(input: SendModule.UserInput): SendModule.State {
 
-        val coin = adapter.coin.code
+        val coin = adapter.wallet.coin.code
         val baseCurrency = currencyManager.baseCurrency
         val rateValue = exchangeRate?.value
 
@@ -153,7 +153,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
         }
 
         state.coinValue?.let { coinValue ->
-            val coinCode = adapter.feeCoinCode ?: adapter.coin.code
+            val coinCode = adapter.feeCoinCode ?: adapter.wallet.coin.code
             if (coinValue.value > BigDecimal.ZERO) {
                 state.feeCoinValue = CoinValue(coinCode, adapter.fee(coinValue.value, input.address, input.feePriority))
             } else {
@@ -181,7 +181,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
         adapter.feeCoinCode?.let {
             val fee = adapter.fee(input.amount, input.address, feePriority)
             val coinValue = CoinValue(it, fee)
-            return SendModule.AmountError.Erc20FeeError(adapter.coin.code, coinValue)
+            return SendModule.AmountError.Erc20FeeError(adapter.wallet.coin.code, coinValue)
         } ?: return null
     }
 
@@ -193,7 +193,7 @@ class SendInteractor(private val currencyManager: ICurrencyManager,
 
         return when (input.inputType) {
             SendModule.InputType.COIN -> {
-                SendModule.AmountError.InsufficientBalance(SendModule.AmountInfo.CoinValueInfo(CoinValue(adapter.coin.code, balanceMinusFee)))
+                SendModule.AmountError.InsufficientBalance(SendModule.AmountInfo.CoinValueInfo(CoinValue(adapter.wallet.coin.code, balanceMinusFee)))
             }
             SendModule.InputType.CURRENCY -> {
                 exchangeRate?.value?.let {

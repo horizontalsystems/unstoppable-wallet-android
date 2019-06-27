@@ -31,7 +31,7 @@ class AuthManager(private val secureStorage: ISecuredStorage,
             secureStorage.saveAuthData(it)
             localStorage.syncMode = syncMode
             authData = it
-            coinManager.enableDefaultCoins()
+            coinManager.enableDefaultWallets()
         }
     }
 

@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.core
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.bankwallet.entities.AuthData
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
@@ -16,11 +15,11 @@ import io.reactivex.Single
 import java.math.BigDecimal
 import java.util.*
 
-class BitcoinCashAdapter(coin: Coin, override val kit: BitcoinCashKit, addressParser: AddressParser, private val feeRateProvider: IFeeRateProvider)
-    : BitcoinBaseAdapter(coin, kit, addressParser), BitcoinCashKit.Listener {
+class BitcoinCashAdapter(wallet: Wallet, override val kit: BitcoinCashKit, addressParser: AddressParser, private val feeRateProvider: IFeeRateProvider)
+    : BitcoinBaseAdapter(wallet, kit, addressParser), BitcoinCashKit.Listener {
 
-    constructor(coin: Coin, authData: AuthData, syncMode: SyncMode, testMode: Boolean, feeRateProvider: IFeeRateProvider) :
-            this(coin, createKit(authData, syncMode, testMode), AddressParser("bitcoincash", false), feeRateProvider)
+    constructor(wallet: Wallet, authData: AuthData, syncMode: SyncMode, testMode: Boolean, feeRateProvider: IFeeRateProvider) :
+            this(wallet, createKit(authData, syncMode, testMode), AddressParser("bitcoincash", false), feeRateProvider)
 
     init {
         kit.listener = this

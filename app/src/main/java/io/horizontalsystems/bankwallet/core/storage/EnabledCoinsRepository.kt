@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.core.storage
 
 import io.horizontalsystems.bankwallet.core.IEnabledCoinStorage
-import io.horizontalsystems.bankwallet.entities.EnabledCoin
+import io.horizontalsystems.bankwallet.entities.EnabledWallet
 import io.reactivex.Flowable
 import java.util.concurrent.Executors
 
@@ -9,20 +9,20 @@ class EnabledCoinsRepository(private val appDatabase: AppDatabase) : IEnabledCoi
 
     private val executor = Executors.newSingleThreadExecutor()
 
-    override fun enabledCoinsObservable(): Flowable<List<EnabledCoin>> {
-        return appDatabase.coinsDao().getEnabledCoins()
+    override fun enabledCoinsObservable(): Flowable<List<EnabledWallet>> {
+        return appDatabase.walletsDao().getEnabledCoins()
     }
 
-    override fun save(coins: List<EnabledCoin>) {
+    override fun save(coins: List<EnabledWallet>) {
         executor.execute {
-            appDatabase.coinsDao().deleteAll()
-            appDatabase.coinsDao().insertCoins(coins)
+            appDatabase.walletsDao().deleteAll()
+            appDatabase.walletsDao().insertCoins(coins)
         }
     }
 
     override fun deleteAll() {
         executor.execute {
-            appDatabase.coinsDao().deleteAll()
+            appDatabase.walletsDao().deleteAll()
         }
     }
 

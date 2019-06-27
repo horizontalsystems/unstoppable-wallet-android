@@ -105,7 +105,7 @@ class BalancePresenterTest {
 
         whenever(coin.code).thenReturn(coinCode)
         whenever(coin.title).thenReturn(title)
-        whenever(adapter.coin).thenReturn(coin)
+        whenever(adapter.wallet).thenReturn(coin)
         whenever(adapter.balance).thenReturn(balance)
         whenever(adapter.state).thenReturn(state)
         whenever(currency.code).thenReturn(currencyCode)

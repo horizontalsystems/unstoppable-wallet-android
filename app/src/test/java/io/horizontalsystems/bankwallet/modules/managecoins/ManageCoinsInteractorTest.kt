@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.IEnabledCoinStorage
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
-import io.horizontalsystems.bankwallet.entities.EnabledCoin
+import io.horizontalsystems.bankwallet.entities.EnabledWallet
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
 import io.reactivex.Flowable
 import org.junit.Before
@@ -26,8 +26,8 @@ class ManageCoinsInteractorTest {
     private val ethereumCoin = Coin("Ethereum", "ETH", CoinType.Ethereum)
     private val coins = mutableListOf(bitCoin, ethereumCoin)
 
-    private val enabledBitcoin = EnabledCoin("BTC", 0)
-    private val enabledEthereum = EnabledCoin( "ETH", 1)
+    private val enabledBitcoin = EnabledWallet("BTC", 0)
+    private val enabledEthereum = EnabledWallet( "ETH", 1)
     private val enabledCoins = listOf(enabledBitcoin, enabledEthereum)
     private val allCoins = mutableListOf(bitCoin, ethereumCoin, bitCashCoin)
 

@@ -68,7 +68,7 @@ class TransactionsInteractor(
         val flowables = mutableListOf<Single<Pair<Coin, List<TransactionRecord>>>>()
 
         fetchDataList.forEach { fetchData ->
-            val adapter = adapterManager.adapters.find { it.coin == fetchData.coin }
+            val adapter = adapterManager.adapters.find { it.wallet.coin == fetchData.coin }
 
             val flowable = when (adapter) {
                 null -> Single.just(Pair(fetchData.coin, listOf()))
@@ -100,7 +100,7 @@ class TransactionsInteractor(
     }
 
     override fun setSelectedCoinCodes(selectedCoins: List<Coin>) {
-        delegate?.onUpdateSelectedCoinCodes(if (selectedCoins.isEmpty()) adapterManager.adapters.map { it.coin } else selectedCoins)
+        delegate?.onUpdateSelectedCoinCodes(if (selectedCoins.isEmpty()) adapterManager.adapters.map { it.wallet.coin } else selectedCoins)
     }
 
     override fun fetchLastBlockHeights() {
@@ -145,21 +145,21 @@ class TransactionsInteractor(
 
     private fun onUpdateLastBlockHeight(adapter: IAdapter) {
         adapter.lastBlockHeight?.let { lastBlockHeight ->
-            delegate?.onUpdateLastBlockHeight(adapter.coin, lastBlockHeight)
+            delegate?.onUpdateLastBlockHeight(adapter.wallet.coin, lastBlockHeight)
         }
     }
 
     private fun onUpdateCoinCodes() {
         transactionUpdatesDisposables.clear()
 
-        delegate?.onUpdateCoinsData(adapterManager.adapters.map { Triple(it.coin, it.confirmationsThreshold, it.lastBlockHeight) })
+        delegate?.onUpdateCoinsData(adapterManager.adapters.map { Triple(it.wallet.coin, it.confirmationsThreshold, it.lastBlockHeight) })
 
         adapterManager.adapters.forEach { adapter ->
             adapter.transactionRecordsFlowable
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
                     .subscribe {
-                        delegate?.didUpdateRecords(it, adapter.coin)
+                        delegate?.didUpdateRecords(it, adapter.wallet.coin)
                     }
                     .let { transactionUpdatesDisposables.add(it) }
         }

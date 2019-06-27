@@ -36,7 +36,7 @@ class ReceiveInteractorTest {
 
     @Test
     fun didReceiveAddress() {
-        whenever(adapter.coin).thenReturn(coin)
+        whenever(adapter.wallet).thenReturn(coin)
         whenever(adapter.receiveAddress).thenReturn(coinAddress)
         whenever(adapterManager.adapters).thenReturn(listOf(adapter))
 

@@ -37,7 +37,7 @@
 //
 //    @Test
 //    fun initAdapters() {
-//        whenever(coinManager.coins).thenReturn(listOf(bitCoin))
+//        whenever(coinManager.wallets).thenReturn(listOf(bitCoin))
 //
 //        adapterManager.initAdapters()
 //        verify(adapterFactory).adapterForCoin(bitCoin, authData)
@@ -46,7 +46,7 @@
 //
 //    @Test
 //    fun initWallets_addNew() {
-//        whenever(coinManager.coins).thenReturn(listOf(ethereumCoin))
+//        whenever(coinManager.wallets).thenReturn(listOf(ethereumCoin))
 //
 //        adapterManager.adapters = listOf(adapter)
 //        adapterManager.initAdapters()

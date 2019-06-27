@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.core
 
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.Flowable
@@ -10,12 +9,7 @@ import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.RoundingMode
 
-abstract class EthereumBaseAdapter(
-        override val coin: Coin,
-        protected val ethereumKit: EthereumKit,
-        final override val decimal: Int,
-        private val addressParser: AddressParser,
-        protected val feeRateProvider: IFeeRateProvider) : IAdapter {
+abstract class EthereumBaseAdapter(override val wallet: Wallet, protected val ethereumKit: EthereumKit, final override val decimal: Int, private val addressParser: AddressParser, protected val feeRateProvider: IFeeRateProvider) : IAdapter {
 
     override val feeCoinCode: String? = "ETH"
 

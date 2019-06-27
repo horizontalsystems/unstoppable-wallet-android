@@ -1,25 +1,22 @@
 package io.horizontalsystems.bankwallet.core.storage
 
-import android.content.ContentValues
 import android.content.Context
-import android.database.sqlite.SQLiteDatabase
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import io.horizontalsystems.bankwallet.BuildConfig
-import io.horizontalsystems.bankwallet.entities.EnabledCoin
+import io.horizontalsystems.bankwallet.entities.EnabledWallet
 import io.horizontalsystems.bankwallet.entities.Rate
 
-
-@Database(entities = [Rate::class, EnabledCoin::class], version = 7, exportSchema = false)
+@Database(version = 8, exportSchema = false, entities = [
+    Rate::class,
+    EnabledWallet::class]
+)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun ratesDao(): RatesDao
-
-    abstract fun coinsDao(): EnabledCoinsDao
-
+    abstract fun walletsDao(): EnabledWalletsDao
 
     companion object {
 
@@ -41,7 +38,8 @@ abstract class AppDatabase : RoomDatabase() {
                             MIGRATION_3_4,
                             MIGRATION_4_5,
                             MIGRATION_5_6,
-                            MIGRATION_6_7
+                            MIGRATION_6_7,
+                            addNameToEnabledCoin
                     )
                     .build()
         }
@@ -63,35 +61,7 @@ abstract class AppDatabase : RoomDatabase() {
 
         private val MIGRATION_2_3: Migration = object : Migration(2, 3) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                //create new table Coin
-                database.execSQL("CREATE TABLE IF NOT EXISTS StorableCoin (`coinTitle` TEXT NOT NULL, `coinCode` TEXT NOT NULL, `coinType` TEXT NOT NULL, `enabled` INTEGER NOT NULL, `order` INTEGER, PRIMARY KEY(`coinCode`))")
-                //save default coin
-                val suffix = if (BuildConfig.testMode) "t" else ""
-
-                val bitcoinValues = ContentValues()
-                bitcoinValues.put("coinCode", "BTC$suffix")
-                bitcoinValues.put("coinTitle", "Bitcoin")
-                bitcoinValues.put("coinType", "bitcoin_key")
-                bitcoinValues.put("enabled", true)
-                bitcoinValues.put("`order`", 0)
-
-                val bitcoinCashValues = ContentValues()
-                bitcoinCashValues.put("coinCode", "BCH$suffix")
-                bitcoinCashValues.put("coinTitle", "Bitcoin Cash")
-                bitcoinCashValues.put("coinType", "bitcoin_cash_key")
-                bitcoinCashValues.put("enabled", true)
-                bitcoinCashValues.put("`order`", 1)
-
-                val ethereumValues = ContentValues()
-                ethereumValues.put("coinCode", "ETH$suffix")
-                ethereumValues.put("coinTitle", "Ethereum")
-                ethereumValues.put("coinType", "ethereum_key")
-                ethereumValues.put("enabled", true)
-                ethereumValues.put("`order`", 2)
-
-                database.insert("StorableCoin", SQLiteDatabase.CONFLICT_REPLACE, bitcoinValues)
-                database.insert("StorableCoin", SQLiteDatabase.CONFLICT_REPLACE, bitcoinCashValues)
-                database.insert("StorableCoin", SQLiteDatabase.CONFLICT_REPLACE, ethereumValues)
+                database.execSQL("CREATE TABLE IF NOT EXISTS StorableCoin (`coinTitle` TEXT NOT NULL, `coinCode` TEXT NOT NULL, `coinType` TEXT NOT NULL, `enabled` INTEGER NOT NULL, `walletOrder` INTEGER, PRIMARY KEY(`coinCode`))")
             }
         }
 
@@ -118,12 +88,18 @@ abstract class AppDatabase : RoomDatabase() {
 
         private val MIGRATION_6_7: Migration = object : Migration(6, 7) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("CREATE TABLE IF NOT EXISTS EnabledCoin (`coinCode` TEXT NOT NULL, `order` INTEGER, PRIMARY KEY(`coinCode`))")
-                database.execSQL("INSERT INTO EnabledCoin (`coinCode`,`order`) SELECT `coinCode`,`order` FROM StorableCoin")
+                database.execSQL("CREATE TABLE IF NOT EXISTS EnabledCoin (`coinCode` TEXT NOT NULL, `walletOrder` INTEGER, PRIMARY KEY(`coinCode`))")
+                database.execSQL("INSERT INTO EnabledCoin (`coinCode`,`walletOrder`) SELECT `coinCode`,`order` FROM StorableCoin")
                 database.execSQL("DROP TABLE StorableCoin")
             }
         }
 
+        private val addNameToEnabledCoin: Migration = object : Migration(7, 8) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("CREATE TABLE IF NOT EXISTS EnabledWallet (`coinCode` TEXT NOT NULL, `walletOrder` INTEGER, `accountName` TEXT NOT NULL, PRIMARY KEY(`coinCode`, `accountName`))")
+                database.execSQL("INSERT INTO EnabledWallet(`coinCode`, `accountName`, `walletOrder`) SELECT `coinCode`, 'Mnemonic', `walletOrder`FROM EnabledCoin")
+                database.execSQL("DROP TABLE EnabledCoin")
+            }
+        }
     }
-
 }

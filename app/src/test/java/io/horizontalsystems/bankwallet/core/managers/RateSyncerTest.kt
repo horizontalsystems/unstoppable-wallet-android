@@ -45,7 +45,7 @@ class RateSyncerTest {
             val adapter = mock(IAdapter::class.java)
 
             whenever(coin.code).thenReturn(coinCode)
-            whenever(adapter.coin).thenReturn(coin)
+            whenever(adapter.wallet).thenReturn(coin)
 
             adapter
         }
@@ -55,7 +55,7 @@ class RateSyncerTest {
             val adapter = mock(IAdapter::class.java)
 
             whenever(coin.code).thenReturn(coinCode)
-            whenever(adapter.coin).thenReturn(coin)
+            whenever(adapter.wallet).thenReturn(coin)
 
             adapter
         }

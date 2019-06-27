@@ -61,7 +61,7 @@ class SendInteractorTest {
         whenever(currencyManager.baseCurrency).thenReturn(currency)
         whenever(rateStorage.latestRateObservable(coinCode, currency.code)).thenReturn(Flowable.just(rate))
         whenever(rateStorage.latestRateObservable(feeCoinCode, currency.code)).thenReturn(Flowable.just(fiatFeeRate))
-        whenever(adapter.coin).thenReturn(coin)
+        whenever(adapter.wallet).thenReturn(coin)
         whenever(adapter.balance).thenReturn(balance)
         whenever(adapter.decimal).thenReturn(fiatDecimal)
         whenever(appConfigProvider.fiatDecimal).thenReturn(fiatDecimal)
@@ -410,7 +410,7 @@ class SendInteractorTest {
         whenever(adapter.fee(amount, address, feePriority)).thenReturn(fee)
         whenever(adapter.validate(amount, address, feePriority)).thenReturn(mutableListOf(SendStateError.InsufficientFeeBalance))
         whenever(adapter.feeCoinCode).thenReturn(feeCoinCode)
-        whenever(adapter.coin).thenReturn(erc20Coin)
+        whenever(adapter.wallet).thenReturn(erc20Coin)
 
         val state = interactor.stateForUserInput(input)
 
@@ -483,7 +483,7 @@ class SendInteractorTest {
         whenever(adapter.decimal).thenReturn(decimal)
         whenever(adapter.feeCoinCode).thenReturn(feeCoinCode)
         whenever(adapter.fee(amount, address, feePriority)).thenReturn(fee)
-        whenever(adapter.coin).thenReturn(erc20Coin)
+        whenever(adapter.wallet).thenReturn(erc20Coin)
 
         val input = SendModule.UserInput()
         input.address = address

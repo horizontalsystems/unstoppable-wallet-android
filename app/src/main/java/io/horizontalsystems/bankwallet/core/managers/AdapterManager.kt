@@ -10,10 +10,11 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
-class AdapterManager(private val coinManager: CoinManager,
-                     private val authManager: AuthManager,
-                     private val adapterFactory: AdapterFactory,
-                     private val ethereumKitManager: IEthereumKitManager)
+class AdapterManager(
+        private val walletManager: WalletManager,
+        private val authManager: AuthManager,
+        private val adapterFactory: AdapterFactory,
+        private val ethereumKitManager: IEthereumKitManager)
     : IAdapterManager, HandlerThread("A") {
 
     private val handler: Handler
@@ -23,7 +24,7 @@ class AdapterManager(private val coinManager: CoinManager,
         start()
         handler = Handler(looper)
 
-        disposables.add(coinManager.coinsUpdatedSignal
+        disposables.add(walletManager.walletsUpdatedSignal
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe {
@@ -53,29 +54,28 @@ class AdapterManager(private val coinManager: CoinManager,
 
     override fun initAdapters() {
         handler.post {
-            authManager.authData?.let { authData ->
-                val oldAdapters = adapters.toMutableList()
+            val oldAdapters = adapters.toMutableList()
 
-                adapters = coinManager.coins.mapNotNull { coin ->
-                    var adapter = adapters.find { it.coin.code == coin.code }
-                    if (adapter == null) {
-                        adapter = adapterFactory.adapterForCoin(coin, authData)
-                        adapter?.start()
-                    }
-                    adapter
+            adapters = walletManager.wallets.mapNotNull { wallet ->
+                var adapter = adapters.find { it.wallet == wallet }
+                if (adapter == null) {
+                    // TODO create adapter
+                    //adapter = adapterFactory.adapterForCoin(wallet, authData)
+                    //adapter?.start()
                 }
-
-                adaptersUpdatedSignal.onNext(Unit)
-
-                oldAdapters.forEach { oldAdapter ->
-                    if (adapters.none { it.coin.code == oldAdapter.coin.code }) {
-                        oldAdapter.stop()
-                        adapterFactory.unlinkAdapter(oldAdapter)
-                    }
-                }
-
-                oldAdapters.clear()
+                adapter
             }
+
+            adaptersUpdatedSignal.onNext(Unit)
+
+            oldAdapters.forEach { oldAdapter ->
+                if (adapters.none { it.wallet == oldAdapter.wallet }) {
+                    oldAdapter.stop()
+                    adapterFactory.unlinkAdapter(oldAdapter)
+                }
+            }
+
+            oldAdapters.clear()
         }
     }
 

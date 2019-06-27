@@ -13,8 +13,8 @@ class ReceiveInteractor(
     var delegate: ReceiveModule.IInteractorDelegate? = null
 
     override fun getReceiveAddress() {
-        adapterManager.adapters.firstOrNull { it.coin.code == coinCode }?.let {
-            val addressItem = AddressItem(it.receiveAddress, it.coin)
+        adapterManager.adapters.firstOrNull { it.wallet.coin.code == coinCode }?.let {
+            val addressItem = AddressItem(it.receiveAddress, it.wallet.coin)
             delegate?.didReceiveAddress(addressItem)
         }
     }

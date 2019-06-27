@@ -131,7 +131,7 @@ interface IEthereumKitManager {
 }
 
 interface IAdapter {
-    val coin: Coin
+    val wallet: Wallet
     val feeCoinCode: String?
 
     val decimal: Int
@@ -159,6 +159,7 @@ interface IAdapter {
     fun fee(value: BigDecimal, address: String?, feePriority: FeeRatePriority): BigDecimal
     @Throws
     fun validate(address: String)
+
     fun validate(amount: BigDecimal, address: String?, feePriority: FeeRatePriority): List<SendStateError>
     fun parsePaymentAddress(address: String): PaymentRequestAddress
 
@@ -219,8 +220,8 @@ interface IRateStorage {
 }
 
 interface IEnabledCoinStorage {
-    fun enabledCoinsObservable(): Flowable<List<EnabledCoin>>
-    fun save(coins: List<EnabledCoin>)
+    fun enabledCoinsObservable(): Flowable<List<EnabledWallet>>
+    fun save(coins: List<EnabledWallet>)
     fun deleteAll()
 }
 
@@ -244,10 +245,9 @@ interface ICurrentDateProvider {
 }
 
 interface ICoinManager {
-    val coinsUpdatedSignal: PublishSubject<Unit>
-    var coins: List<Coin>
-    val allCoins: List<Coin>
-    fun enableDefaultCoins()
+    val walletsUpdatedSignal: PublishSubject<Unit>
+    var wallets: List<Wallet>
+    fun enableDefaultWallets()
     fun clear()
 }
 

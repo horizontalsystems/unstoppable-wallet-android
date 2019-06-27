@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.core
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.bankwallet.entities.AuthData
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
@@ -17,11 +16,11 @@ import io.reactivex.Single
 import java.math.BigDecimal
 import java.util.*
 
-class BitcoinAdapter(coin: Coin, override val kit: BitcoinKit, addressParser: AddressParser, private val feeRateProvider: IFeeRateProvider)
-    : BitcoinBaseAdapter(coin, kit, addressParser), BitcoinKit.Listener {
+class BitcoinAdapter(wallet: Wallet, override val kit: BitcoinKit, addressParser: AddressParser, private val feeRateProvider: IFeeRateProvider)
+    : BitcoinBaseAdapter(wallet, kit, addressParser), BitcoinKit.Listener {
 
-    constructor(coin: Coin, authData: AuthData, syncMode: SyncMode, testMode: Boolean, feeRateProvider: IFeeRateProvider) :
-            this(coin, createKit(authData, syncMode, testMode), AddressParser("bitcoin", true), feeRateProvider)
+    constructor(wallet: Wallet, authData: AuthData, syncMode: SyncMode, testMode: Boolean, feeRateProvider: IFeeRateProvider) :
+            this(wallet, createKit(authData, syncMode, testMode), AddressParser("bitcoin", true), feeRateProvider)
 
     init {
         kit.listener = this

@@ -80,14 +80,14 @@ class BalanceInteractor(
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
                     .subscribe {
-                        delegate?.didUpdateBalance(adapter.coin.code, adapter.balance)
+                        delegate?.didUpdateBalance(adapter.wallet.coin.code, adapter.balance)
                     })
 
             adapterDisposables.add(adapter.stateUpdatedFlowable
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
-                    .subscribe { state ->
-                        delegate?.didUpdateState(adapter.coin.code, adapter.state)
+                    .subscribe {
+                        delegate?.didUpdateState(adapter.wallet.coin.code, adapter.state)
                     })
         }
     }

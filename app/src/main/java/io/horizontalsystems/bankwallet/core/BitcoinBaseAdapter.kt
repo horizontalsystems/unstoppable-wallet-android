@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.core
 
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
@@ -15,7 +14,7 @@ import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-abstract class BitcoinBaseAdapter(override val coin: Coin, open val kit: AbstractKit, private val addressParser: AddressParser) : IAdapter {
+abstract class BitcoinBaseAdapter(override val wallet: Wallet, open val kit: AbstractKit, private val addressParser: AddressParser) : IAdapter {
 
     abstract val satoshisInBitcoin: BigDecimal
     abstract fun feeRate(feePriority: FeeRatePriority): Int
