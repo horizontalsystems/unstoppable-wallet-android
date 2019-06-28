@@ -27,6 +27,8 @@ class EthereumKitManager(appConfig: IAppConfigProvider) : IEthereumKitManager {
         val networkType = if (testMode) EthereumKit.NetworkType.Ropsten else EthereumKit.NetworkType.MainNet
         kit = EthereumKit.getInstance(App.instance, authData.words, syncMode, networkType, infuraCredentials, etherscanKey, authData.walletId)
 
+        kit?.start()
+
         return kit!!
     }
 
