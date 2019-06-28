@@ -1,36 +1,35 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
-import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.IEnabledWalletStorage
+import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.Wallet
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
-class WalletManager(private val appConfigProvider: IAppConfigProvider, accountManager: AccountManager, private val enabledCoinStorage: IEnabledWalletStorage) : ICoinManager {
+class WalletManager(private val appConfigProvider: IAppConfigProvider, accountManager: AccountManager, private val walletStorage: IEnabledWalletStorage) : IWalletManager {
 
     override val walletsUpdatedSignal: PublishSubject<Unit> = PublishSubject.create()
 
     init {
-        val accounts = accountManager.accounts
-        val disposable = enabledCoinStorage.enabledCoinsObservable()
+        val disposable = walletStorage.enabledCoinsObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { enabledCoinsFromDb ->
+                .subscribe { enabledWallet ->
 
+                    val accounts = accountManager.accounts
                     val enabledWallets = mutableListOf<Wallet>()
-                    enabledCoinsFromDb.forEach { enabledWallet ->
-                        val coin = appConfigProvider.coins.find { coin -> coin.code == enabledWallet.coinCode }
-                        val account = accounts.find {
-                            it.name == enabledWallet.accountName
-                        }
+
+                    enabledWallet.forEach { wallet ->
+                        val coin = appConfigProvider.coins.find { it.code == wallet.coinCode }
+                        val account = accounts.find { it.name == wallet.accountName }
 
                         if (coin != null && account != null) {
-                            enabledWallets.add(Wallet(coin, account, enabledWallet.syncMode))
+                            enabledWallets.add(Wallet(coin, account, wallet.syncMode))
                         }
-
                     }
+
                     wallets = enabledWallets
                 }
     }
@@ -46,11 +45,11 @@ class WalletManager(private val appConfigProvider: IAppConfigProvider, accountMa
         // appConfigProvider.defaultCoinCodes.forEachIndexed { order, coinCode ->
         //     enabledCoins.add(EnabledWallet(coinCode, order))
         // }
-        // enabledCoinStorage.save(enabledCoins)
+        // walletStorage.save(enabledCoins)
     }
 
     override fun clear() {
         wallets = listOf()
-        enabledCoinStorage.deleteAll()
+        walletStorage.deleteAll()
     }
 }

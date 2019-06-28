@@ -20,7 +20,7 @@ class BalanceInteractorTest {
 
     private val adapterManager = mock(IAdapterManager::class.java)
     private val rateStorage = mock(IRateStorage::class.java)
-    private val coinStorage = mock(IEnabledCoinStorage::class.java)
+    private val coinStorage = mock(IEnabledWalletStorage::class.java)
     private val currencyManager = mock(ICurrencyManager::class.java)
     private val localStorage = mock(ILocalStorage::class.java)
 

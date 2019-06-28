@@ -6,6 +6,7 @@ import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
+import io.horizontalsystems.bankwallet.core.Wallet
 import io.horizontalsystems.bankwallet.core.managers.NetworkAvailabilityManager
 import io.horizontalsystems.bankwallet.core.managers.RateManager
 import io.horizontalsystems.bankwallet.entities.Coin
@@ -35,6 +36,8 @@ class TransactionsInteractorTest {
     private val coin1 = mock(Coin::class.java)
     private val coin2 = mock(Coin::class.java)
     private val coin3 = mock(Coin::class.java)
+    private val wallet1 = mock(Wallet::class.java)
+    private val wallet2 = mock(Wallet::class.java)
     private val transactionRecordMock = mock(TransactionRecord::class.java)
     private val adaptersUpdatedSignal = PublishSubject.create<Unit>()
     private val baseCurrencyUpdatedSignal = PublishSubject.create<Unit>()
@@ -56,9 +59,11 @@ class TransactionsInteractorTest {
         whenever(coin1.code).thenReturn("BTC")
         whenever(coin2.code).thenReturn("ETH")
         whenever(coin3.code).thenReturn("BCH")
+        whenever(wallet1.coin).thenReturn(coin1)
+        whenever(wallet2.coin).thenReturn(coin2)
 
-        whenever(adapter1.wallet).thenReturn(coin1)
-        whenever(adapter2.wallet).thenReturn(coin2)
+        whenever(adapter1.wallet).thenReturn(wallet1)
+        whenever(adapter2.wallet).thenReturn(wallet2)
         whenever(adapter1.transactionRecordsFlowable).thenReturn(Flowable.just(listOf(transactionRecordMock)))
         whenever(adapter2.transactionRecordsFlowable).thenReturn(Flowable.just(listOf(transactionRecordMock)))
     }

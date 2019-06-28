@@ -2,19 +2,22 @@ package io.horizontalsystems.bankwallet.modules.managecoins
 
 import android.content.Context
 import android.content.Intent
+import io.horizontalsystems.bankwallet.core.Account
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.Wallet
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinType
 
-object ManageCoinsModule {
+object ManageWalletsModule {
 
-    class ManageCoinsPresenterState {
+    class ManageWalletsPresenterState {
         var allCoins = listOf<Coin>()
             set(value) {
                 field = value
                 setDisabledCoins()
             }
 
-        var enabledCoins = mutableListOf<Coin>()
+        var enabledCoins = mutableListOf<Wallet>()
             set(value) {
                 field = value
                 setDisabledCoins()
@@ -22,23 +25,25 @@ object ManageCoinsModule {
 
         var disabledCoins = listOf<Coin>()
 
-        fun enable(coin: Coin) {
+        fun enable(coin: Wallet) {
             enabledCoins.add(coin)
             setDisabledCoins()
         }
 
-        fun disable(coin: Coin) {
-            enabledCoins.remove(coin)
+        fun disable(wallet: Wallet) {
+            enabledCoins.remove(wallet)
             setDisabledCoins()
         }
 
-        fun move(coin: Coin, index: Int) {
-            enabledCoins.remove(coin)
-            enabledCoins.add(index, coin)
+        fun move(wallet: Wallet, index: Int) {
+            enabledCoins.remove(wallet)
+            enabledCoins.add(index, wallet)
         }
 
         private fun setDisabledCoins() {
-            disabledCoins = allCoins.filter { !enabledCoins.contains(it) }
+            disabledCoins = allCoins.filter { coin ->
+                enabledCoins.find { it.coin === coin } === null
+            }
         }
     }
 
@@ -55,21 +60,21 @@ object ManageCoinsModule {
         fun moveCoin(fromIndex: Int, toIndex: Int)
         fun onClear()
 
-        fun enabledItemForIndex(position: Int): Coin
+        fun enabledItemForIndex(position: Int): Wallet
         fun disabledItemForIndex(position: Int): Coin
         val enabledCoinsCount: Int
         val disabledCoinsCount: Int
     }
 
     interface IInteractor {
-        fun loadCoins()
-        fun saveEnabledCoins(coins: List<Coin>)
+        fun load()
+        fun saveWallets(wallets: List<Wallet>)
+        fun accounts(coinType: CoinType): List<Account>
         fun clear()
     }
 
     interface IInteractorDelegate {
-        fun didLoadEnabledCoins(enabledCoins: List<Coin>)
-        fun didLoadAllCoins(allCoins: List<Coin>)
+        fun didLoad(coins: List<Coin>, wallets: List<Wallet>)
         fun didSaveChanges()
         fun didFailedToSave()
     }
@@ -78,10 +83,9 @@ object ManageCoinsModule {
         fun close()
     }
 
-
-    fun init(view: ManageCoinsViewModel, router: IRouter) {
-        val interactor = ManageCoinsInteractor(App.appConfigProvider, App.enabledWalletsStorage)
-        val presenter = ManageCoinsPresenter(interactor, router, ManageCoinsPresenterState())
+    fun init(view: ManageWalletsViewModel, router: IRouter) {
+        val interactor = ManageWalletsInteractor(App.appConfigProvider, App.coinManager, App.accountManager, App.enabledWalletsStorage)
+        val presenter = ManageWalletsPresenter(interactor, router, ManageWalletsPresenterState())
 
         view.delegate = presenter
         presenter.view = view
@@ -89,8 +93,7 @@ object ManageCoinsModule {
     }
 
     fun start(context: Context) {
-        val intent = Intent(context, ManageCoinsActivity::class.java)
+        val intent = Intent(context, ManageWalletsActivity::class.java)
         context.startActivity(intent)
     }
-
 }

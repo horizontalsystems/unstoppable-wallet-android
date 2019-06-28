@@ -22,9 +22,6 @@
             android:name=".modules.syncmodule.SyncModeActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".modules.guest.GuestActivity"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".modules.backup.BackupActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"/>
@@ -65,7 +62,7 @@
             android:name=".modules.settings.basecurrency.BaseCurrencySettingsActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".modules.managecoins.ManageCoinsActivity"
+            android:name=".modules.managecoins.ManageWalletsActivity"
             android:screenOrientation="portrait"/>
 
         <meta-data

@@ -8,7 +8,7 @@ import io.reactivex.subjects.PublishSubject
 
 class AuthManager(private val secureStorage: ISecuredStorage,
                   private val localStorage: ILocalStorage,
-                  private val coinManager: ICoinManager,
+                  private val coinManager: IWalletManager,
                   private val rateManager: RateManager,
                   private val ethereumKitManager: IEthereumKitManager,
                   private val appConfigProvider: IAppConfigProvider) {

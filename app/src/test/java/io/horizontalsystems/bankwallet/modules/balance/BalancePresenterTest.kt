@@ -6,6 +6,7 @@ import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.IAdapter
+import io.horizontalsystems.bankwallet.core.Wallet
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Rate
@@ -94,6 +95,7 @@ class BalancePresenterTest {
         val currencyCode = "currencyCode"
         val currency = mock(Currency::class.java)
         val coin = mock(Coin::class.java)
+        val wallet = mock(Wallet::class.java)
         val balance = BigDecimal(12.23)
         val state = mock(AdapterState::class.java)
         val coinCodes = listOf(coinCode)
@@ -105,7 +107,8 @@ class BalancePresenterTest {
 
         whenever(coin.code).thenReturn(coinCode)
         whenever(coin.title).thenReturn(title)
-        whenever(adapter.wallet).thenReturn(coin)
+        whenever(wallet.coin).thenReturn(coin)
+        whenever(adapter.wallet).thenReturn(wallet)
         whenever(adapter.balance).thenReturn(balance)
         whenever(adapter.state).thenReturn(state)
         whenever(currency.code).thenReturn(currencyCode)

@@ -20,19 +20,19 @@ import kotlinx.android.synthetic.main.view_holder_coin_disabled.*
 import kotlinx.android.synthetic.main.view_holder_coin_enabled.*
 
 
-class ManageCoinsActivity : BaseActivity(), ManageCoinsAdapter.Listener, StartDragListener {
+class ManageWalletsActivity : BaseActivity(), ManageWalletsAdapter.Listener, StartDragListener {
 
-    private lateinit var viewModel: ManageCoinsViewModel
+    private lateinit var viewModel: ManageWalletsViewModel
     private var itemTouchHelper: ItemTouchHelper? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(ManageCoinsViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(ManageWalletsViewModel::class.java)
         viewModel.init()
 
         setContentView(R.layout.activity_manage_coins)
 
-        val adapter = ManageCoinsAdapter(this, this)
+        val adapter = ManageWalletsAdapter(this, this)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter.viewModel = viewModel
@@ -67,9 +67,7 @@ class ManageCoinsActivity : BaseActivity(), ManageCoinsAdapter.Listener, StartDr
     }
 }
 
-class ManageCoinsAdapter(
-        private var listener: Listener,
-        private var startDragListener: StartDragListener)
+class ManageWalletsAdapter(private var listener: Listener, private var startDragListener: StartDragListener)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>(), MyDragHelperCallback.Listener {
 
     interface Listener {
@@ -77,7 +75,7 @@ class ManageCoinsAdapter(
         fun onDisabledItemClick(position: Int)
     }
 
-    lateinit var viewModel: ManageCoinsViewModel
+    lateinit var viewModel: ManageWalletsViewModel
 
     private val typeEnabled = 0
     private val typeDisabled = 1
@@ -102,9 +100,9 @@ class ManageCoinsAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ViewHolderEnabledCoin -> {
-                val transactionRecord = viewModel.delegate.enabledItemForIndex(position)
+                val wallet = viewModel.delegate.enabledItemForIndex(position)
                 holder.bind(
-                        coin = transactionRecord,
+                        coin = wallet.coin,
                         showBottomShadow = (position == viewModel.delegate.enabledCoinsCount-1),
                         onClick = { listener.onEnabledItemClick(position) }
                 )

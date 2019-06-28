@@ -23,6 +23,7 @@ class AdapterFactory(
             val addressParser = AddressParser("ethereum", true)
             Erc20Adapter(context, wallet, ethereumKitManager.ethereumKit(wallet), wallet.coin.type.decimal, wallet.coin.type.fee, wallet.coin.type.address, addressParser, feeRateProvider)
         }
+        is CoinType.Eos -> null
     }
 
     fun unlinkAdapter(adapter: IAdapter) {

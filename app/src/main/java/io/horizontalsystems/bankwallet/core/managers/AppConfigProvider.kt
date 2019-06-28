@@ -12,7 +12,7 @@ import java.math.BigDecimal
 class AppConfigProvider : IAppConfigProvider {
 
     override val ipfsId = "QmXTJZBMMRmBbPun6HFt3tmb3tfYF2usLPxFoacL7G5uMX"
-    override val ipfsMainGateway=  "ipfs-ext.horizontalsystems.xyz"
+    override val ipfsMainGateway = "ipfs-ext.horizontalsystems.xyz"
     override val ipfsFallbackGateway = "ipfs.io"
 
     override val infuraProjectId = "2a1306f1d12f4c109a4d4fb9be46b02e"
@@ -50,6 +50,7 @@ class AppConfigProvider : IAppConfigProvider {
             Coin("Bitcoin Cash", "BCH", CoinType.BitcoinCash),
             Coin("Dash", "DASH", CoinType.Dash),
             Coin("Ethereum", "ETH", CoinType.Ethereum),
+            Coin("EOS", "EOS", CoinType.Eos("eosio.token", "EOS")),
             Coin("0x", "ZRX", CoinType.Erc20("0xE41d2489571d322189246DaFA5ebDe1F4699F498", 18)),
             Coin("Aelf", "ELF", CoinType.Erc20("0xbf2179859fc6D5BEE9Bf9158632Dc51678a4100e", 18)),
             Coin("Aurora DAO", "AURA", CoinType.Erc20("0xCdCFc0f66c522Fd086A1b725ea3c0Eeb9F9e8814", 18)),
@@ -85,7 +86,7 @@ class AppConfigProvider : IAppConfigProvider {
             Coin("Pundi X", "NPXS", CoinType.Erc20("0xA15C7Ebe1f07CaF6bFF097D8a589fb8AC49Ae5B3", 18)),
             Coin("Reputation (Augur)", "REP", CoinType.Erc20("0x1985365e9f78359a9B6AD760e32412f4a445E862", 18)),
             Coin("Revain", "R", CoinType.Erc20("0x48f775EFBE4F5EcE6e0DF2f7b5932dF56823B990", 0)),
-            Coin("STASIS EURS", "EURS", CoinType.Erc20("0xdB25f211AB05b1c97D595516F45794528a807ad8", 2, fee= BigDecimal(0.5))),
+            Coin("STASIS EURS", "EURS", CoinType.Erc20("0xdB25f211AB05b1c97D595516F45794528a807ad8", 2, fee = BigDecimal(0.5))),
             Coin("Status", "SNT", CoinType.Erc20("0x744d70FDBE2Ba4CF95131626614a1763DF805B9E", 18)),
             Coin("TrueUSD", "TUSD", CoinType.Erc20("0x0000000000085d4780B73119b644AE5ecd22b376", 18)),
             Coin("Tether USD", "USDT", CoinType.Erc20("0xdAC17F958D2ee523a2206206994597C13D831ec7", 6)),

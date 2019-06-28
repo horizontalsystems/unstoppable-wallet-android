@@ -3,16 +3,16 @@ package io.horizontalsystems.bankwallet.modules.managecoins
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 
-class ManageCoinsViewModel : ViewModel(), ManageCoinsModule.IView, ManageCoinsModule.IRouter {
+class ManageWalletsViewModel : ViewModel(), ManageWalletsModule.IView, ManageWalletsModule.IRouter {
 
     val coinsLoadedLiveEvent = SingleLiveEvent<Void>()
     val closeLiveDate = SingleLiveEvent<Void>()
 
-    lateinit var delegate: ManageCoinsModule.IViewDelegate
+    lateinit var delegate: ManageWalletsModule.IViewDelegate
 
 
     fun init() {
-        ManageCoinsModule.init(this, this)
+        ManageWalletsModule.init(this, this)
         delegate.viewDidLoad()
     }
 

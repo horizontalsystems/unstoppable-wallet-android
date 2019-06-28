@@ -1,5 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.managecoins
 
+import com.nhaarman.mockito_kotlin.doReturn
+import com.nhaarman.mockito_kotlin.mock
+import io.horizontalsystems.bankwallet.core.Wallet
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
 import org.junit.Assert
@@ -8,36 +11,39 @@ import org.junit.Test
 
 class ManageCoinsPresenterStateTest {
 
-    private lateinit var state: ManageCoinsModule.ManageCoinsPresenterState
+    private lateinit var state: ManageWalletsModule.ManageWalletsPresenterState
 
     private val bitCoin = Coin("Bitcoin", "BTC", CoinType.Bitcoin)
     private val bitCashCoin = Coin("Bitcoin Cash", "BCH", CoinType.BitcoinCash)
     private val ethereumCoin = Coin("Ethereum", "ETH", CoinType.Ethereum)
-    private val enabledCoins = mutableListOf(bitCoin, ethereumCoin)
     private val allCoins = mutableListOf(bitCoin, ethereumCoin, bitCashCoin)
+
+    private val wallet1 = mock<Wallet> { on { coin } doReturn bitCoin }
+    private val wallet2 = mock<Wallet> { on { coin } doReturn ethereumCoin }
+    private val wallet3 = mock<Wallet> { on { coin } doReturn bitCashCoin }
+    private val enabledCoins = mutableListOf(wallet1, wallet2)
 
     @Before
     fun setUp() {
-        state = ManageCoinsModule.ManageCoinsPresenterState()
+        state = ManageWalletsModule.ManageWalletsPresenterState()
     }
 
     @Test
     fun enable() {
         state.allCoins = allCoins
         state.enabledCoins = enabledCoins
-        state.enable(bitCashCoin)
+        state.enable(wallet3)
 
-        val expectedEnabledCoins = mutableListOf(bitCoin, ethereumCoin, bitCashCoin)
-        Assert.assertEquals(state.enabledCoins, expectedEnabledCoins)
+        Assert.assertEquals(state.enabledCoins, mutableListOf(wallet1, wallet2, wallet3))
     }
 
     @Test
     fun disable() {
         state.allCoins = allCoins
         state.enabledCoins = enabledCoins
-        state.disable(bitCoin)
+        state.disable(wallet1)
 
-        val expectedEnabledCoins = mutableListOf(ethereumCoin)
+        val expectedEnabledCoins = mutableListOf(wallet2)
         Assert.assertEquals(state.enabledCoins, expectedEnabledCoins)
     }
 
@@ -45,16 +51,16 @@ class ManageCoinsPresenterStateTest {
     fun move() {
         state.allCoins = allCoins
         state.enabledCoins = enabledCoins
-        state.move(bitCoin, 1)
+        state.move(wallet1, 1)
 
-        val expectedEnabledCoins = mutableListOf(ethereumCoin, bitCoin)
+        val expectedEnabledCoins = mutableListOf(wallet2, wallet1)
         Assert.assertEquals(state.enabledCoins, expectedEnabledCoins)
     }
 
     @Test
     fun disabled() {
         state.allCoins = allCoins
-        state.enabledCoins = mutableListOf(bitCoin, bitCashCoin)
+        state.enabledCoins = mutableListOf(wallet1, wallet3)
 
         val expectedDisabledCoins = mutableListOf(ethereumCoin)
         Assert.assertEquals(expectedDisabledCoins, state.disabledCoins)

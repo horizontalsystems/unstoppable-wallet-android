@@ -27,6 +27,7 @@ class SendInteractorTest {
     private val currencyManager = mock(ICurrencyManager::class.java)
     private val rateStorage = mock(IRateStorage::class.java)
     private val coin = mock(Coin::class.java)
+    private val wallet = mock(Wallet::class.java)
     private val adapter = mock(IAdapter::class.java)
 
     private val currency = Currency("USD", symbol = "\u0024")
@@ -58,10 +59,11 @@ class SendInteractorTest {
         whenever(fiatFeeRate.value).thenReturn(BigDecimal("0.4"))
         whenever(fiatFeeRate.expired).thenReturn(false)
         whenever(coin.code).thenReturn(coinCode)
+        whenever(wallet.coin).thenReturn(coin)
         whenever(currencyManager.baseCurrency).thenReturn(currency)
         whenever(rateStorage.latestRateObservable(coinCode, currency.code)).thenReturn(Flowable.just(rate))
         whenever(rateStorage.latestRateObservable(feeCoinCode, currency.code)).thenReturn(Flowable.just(fiatFeeRate))
-        whenever(adapter.wallet).thenReturn(coin)
+        whenever(adapter.wallet).thenReturn(wallet)
         whenever(adapter.balance).thenReturn(balance)
         whenever(adapter.decimal).thenReturn(fiatDecimal)
         whenever(appConfigProvider.fiatDecimal).thenReturn(fiatDecimal)
@@ -401,6 +403,7 @@ class SendInteractorTest {
         val fee = BigDecimal("0.00004")
         val expectedFeeError = SendModule.AmountError.Erc20FeeError(erc20CoinCode, CoinValue(feeCoinCode, fee))
 
+
         val input = SendModule.UserInput()
         input.amount = amount
         input.feePriority = feePriority
@@ -410,7 +413,9 @@ class SendInteractorTest {
         whenever(adapter.fee(amount, address, feePriority)).thenReturn(fee)
         whenever(adapter.validate(amount, address, feePriority)).thenReturn(mutableListOf(SendStateError.InsufficientFeeBalance))
         whenever(adapter.feeCoinCode).thenReturn(feeCoinCode)
-        whenever(adapter.wallet).thenReturn(erc20Coin)
+        val erc20Wallet = mock(Wallet::class.java)
+        whenever(erc20Wallet.coin).thenReturn(erc20Coin)
+        whenever(adapter.wallet).thenReturn(erc20Wallet)
 
         val state = interactor.stateForUserInput(input)
 
@@ -483,7 +488,10 @@ class SendInteractorTest {
         whenever(adapter.decimal).thenReturn(decimal)
         whenever(adapter.feeCoinCode).thenReturn(feeCoinCode)
         whenever(adapter.fee(amount, address, feePriority)).thenReturn(fee)
-        whenever(adapter.wallet).thenReturn(erc20Coin)
+
+        val erc20Wallet = mock(Wallet::class.java)
+        whenever(erc20Wallet.coin).thenReturn(erc20Coin)
+        whenever(adapter.wallet).thenReturn(erc20Wallet)
 
         val input = SendModule.UserInput()
         input.address = address

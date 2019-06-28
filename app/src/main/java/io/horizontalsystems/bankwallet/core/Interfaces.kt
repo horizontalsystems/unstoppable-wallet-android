@@ -244,7 +244,7 @@ interface ICurrentDateProvider {
     val currentDate: Date
 }
 
-interface ICoinManager {
+interface IWalletManager {
     val walletsUpdatedSignal: PublishSubject<Unit>
     var wallets: List<Wallet>
     fun enableDefaultWallets()
