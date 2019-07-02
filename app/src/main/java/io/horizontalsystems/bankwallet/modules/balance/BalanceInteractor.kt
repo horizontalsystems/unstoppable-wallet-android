@@ -24,7 +24,7 @@ class BalanceInteractor(
 
     override fun initAdapters() {
         onUpdateAdapters()
-        disposables.add(coinStorage.enabledCoinsObservable()
+        disposables.add(coinStorage.enabledWallets()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {

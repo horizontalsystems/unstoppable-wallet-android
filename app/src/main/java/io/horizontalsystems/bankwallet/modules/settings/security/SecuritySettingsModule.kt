@@ -17,6 +17,7 @@ object SecuritySettingsModule {
     interface ISecuritySettingsViewDelegate {
         fun viewDidLoad()
         fun didSwitchBiometricUnlock(biometricUnlockOn: Boolean)
+        fun didTapManageKeys()
         fun didTapEditPin()
         fun didTapBackupWallet()
         fun didTapRestoreWallet()
@@ -42,6 +43,7 @@ object SecuritySettingsModule {
     }
 
     interface ISecuritySettingsRouter{
+        fun showManageKeys()
         fun showEditPin()
         fun showBackupWallet()
         fun showRestoreWallet()

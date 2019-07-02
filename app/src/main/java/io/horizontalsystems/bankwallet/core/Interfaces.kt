@@ -232,7 +232,7 @@ interface IRateStorage {
 }
 
 interface IEnabledWalletStorage {
-    fun enabledCoinsObservable(): Flowable<List<EnabledWallet>>
+    fun enabledWallets(): Flowable<List<EnabledWallet>>
     fun save(coins: List<EnabledWallet>)
     fun deleteAll()
 }

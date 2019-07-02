@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.modules.backup.BackupPresenter
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
-import io.horizontalsystems.bankwallet.ui.dialogs.BottomButtonColor
+import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysModule
 import io.horizontalsystems.bankwallet.ui.dialogs.BottomConfirmAlert
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import kotlinx.android.synthetic.main.activity_settings_security.*
@@ -33,53 +33,17 @@ class SecuritySettingsActivity : BaseActivity(), BottomConfirmAlert.Listener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_settings_security)
 
         viewModel = ViewModelProviders.of(this).get(SecuritySettingsViewModel::class.java)
         viewModel.init()
 
-        setContentView(R.layout.activity_settings_security)
+        shadowlessToolbar.bind(title = getString(R.string.Settings_SecurityCenter), leftBtnItem = TopMenuItem(R.drawable.back) { onBackPressed() })
+        changePin.setOnClickListener { viewModel.delegate.didTapEditPin() }
+        manageKeys.setOnClickListener { viewModel.delegate.didTapManageKeys() }
 
-        shadowlessToolbar.bind(
-                title = getString(R.string.Settings_SecurityCenter),
-                leftBtnItem = TopMenuItem(R.drawable.back, { onBackPressed() })
-        )
-
-        changePin.apply {
-            showArrow()
-            setOnClickListener { viewModel.delegate.didTapEditPin() }
-        }
-
-        backupWallet.apply {
-            showArrow()
-            setOnClickListener { viewModel.delegate.didTapBackupWallet() }
-        }
-
-
-        importWallet.setOnClickListener {
-            selectedAction = Action.OPEN_RESTORE
-            val confirmationList = mutableListOf(
-                    R.string.SettingsSecurity_ImportWalletConfirmation_1,
-                    R.string.SettingsSecurity_ImportWalletConfirmation_2
-            )
-            BottomConfirmAlert.show(this, confirmationList, this)
-        }
-
-        unlink.setOnClickListener {
-            selectedAction = Action.CLEAR_WALLETS
-            val confirmationList = mutableListOf(
-                    R.string.SettingsSecurity_ImportWalletConfirmation_1,
-                    R.string.SettingsSecurity_ImportWalletConfirmation_2
-            )
-            BottomConfirmAlert.show(this, confirmationList, this, BottomButtonColor.RED)
-        }
-
-        unlink.titleTextColor = R.color.red_warning
-
-
-        viewModel.backedUpLiveData.observe(this, Observer { wordListBackedUp ->
-            wordListBackedUp?.let { wordListIsBackedUp ->
-                backupWallet.setInfoBadgeVisibility(!wordListIsBackedUp)
-            }
+        viewModel.openManageKeysLiveEvent.observe(this, Observer {
+            ManageKeysModule.start(this)
         })
 
         viewModel.openEditPinLiveEvent.observe(this, Observer {
@@ -120,7 +84,7 @@ class SecuritySettingsActivity : BaseActivity(), BottomConfirmAlert.Listener {
         })
 
         viewModel.showPinUnlockLiveEvent.observe(this, Observer {
-            PinModule.startForUnlock(this,true)
+            PinModule.startForUnlock(this, true)
         })
 
     }

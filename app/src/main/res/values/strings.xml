@@ -186,6 +186,7 @@
 
     <string name="SettingsSecurity_Fingerprint">Fingerprint</string>
     <string name="SettingsSecurity_EditPin">Edit Passcode</string>
+    <string name="SettingsSecurity_ManageKeys">Manage Keys</string>
     <string name="SettingsSecurity_BackupWallet">Backup Wallet</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">Unlink from this device</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">This action will remove the currently installed wallet from this device.</string>
@@ -282,6 +283,12 @@
 
     <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_save">Save</string>
+
+    <!--Manage Keys-->
+
+    <string name="ManageKeys_title">Manage Keys</string>
+    <string name="ManageKeys_Unlink">Unlink</string>
+    <string name="ManageKeys_Backup">Backup</string>
 
     <!--Coin Option-->
     <string name="CoinOption_Title">Restore Options</string>

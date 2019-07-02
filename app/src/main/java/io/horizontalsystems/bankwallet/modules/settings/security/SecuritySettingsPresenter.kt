@@ -17,20 +17,16 @@ class SecuritySettingsPresenter(
         interactor.setBiometricUnlockOn(biometricUnlockOn)
     }
 
+    override fun didTapManageKeys() {
+        router.showManageKeys()
+    }
+
     override fun didTapEditPin() {
         router.showEditPin()
     }
 
     override fun didTapBackupWallet() {
         interactor.didTapOnBackupWallet()
-    }
-
-    override fun accessIsRestricted() {
-        router.showPinUnlock()
-    }
-
-    override fun openBackupWallet() {
-        router.showBackupWallet()
     }
 
     override fun didTapRestoreWallet() {
@@ -41,6 +37,12 @@ class SecuritySettingsPresenter(
         interactor.unlinkWallet()
     }
 
+    override fun onClear() {
+        interactor.clear()
+    }
+
+    // ISecuritySettingsInteractorDelegate
+
     override fun didBackup() {
         view?.setBackedUp(true)
     }
@@ -49,8 +51,12 @@ class SecuritySettingsPresenter(
         view?.reloadApp()
     }
 
-    override fun onClear() {
-        interactor.clear()
+    override fun openBackupWallet() {
+        router.showBackupWallet()
+    }
+
+    override fun accessIsRestricted() {
+        router.showPinUnlock()
     }
 
 }

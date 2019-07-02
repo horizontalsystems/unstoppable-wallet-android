@@ -13,6 +13,7 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
 
     val backedUpLiveData = MutableLiveData<Boolean>()
     val biometricUnlockOnLiveDate = MutableLiveData<Boolean>()
+    val openManageKeysLiveEvent = SingleLiveEvent<Unit>()
     val openEditPinLiveEvent = SingleLiveEvent<Unit>()
     val openBackupWalletLiveEvent = SingleLiveEvent<Unit>()
     val openRestoreWalletLiveEvent = SingleLiveEvent<Unit>()
@@ -24,6 +25,14 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
         delegate.viewDidLoad()
     }
 
+    //  ViewModel
+
+    override fun onCleared() {
+        delegate.onClear()
+    }
+
+    //  ISecuritySettingsView
+
     override fun setBiometricUnlockOn(biometricUnlockOn: Boolean) {
         biometricUnlockOnLiveDate.value = biometricUnlockOn
     }
@@ -34,6 +43,16 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
 
     override fun setBackedUp(backedUp: Boolean) {
         backedUpLiveData.value = backedUp
+    }
+
+    override fun reloadApp() {
+        reloadAppLiveEvent.call()
+    }
+
+    //  ISecuritySettingsRouter
+
+    override fun showManageKeys() {
+        openManageKeysLiveEvent.call()
     }
 
     override fun showEditPin() {
@@ -48,16 +67,8 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
         openRestoreWalletLiveEvent.call()
     }
 
-    override fun reloadApp() {
-        reloadAppLiveEvent.call()
-    }
-
     override fun showPinUnlock() {
         showPinUnlockLiveEvent.call()
-    }
-
-    override fun onCleared() {
-        delegate.onClear()
     }
 
 }

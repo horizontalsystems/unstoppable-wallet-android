@@ -9,7 +9,7 @@ class EnabledWalletsStorage(private val appDatabase: AppDatabase) : IEnabledWall
 
     private val executor = Executors.newSingleThreadExecutor()
 
-    override fun enabledCoinsObservable(): Flowable<List<EnabledWallet>> {
+    override fun enabledWallets(): Flowable<List<EnabledWallet>> {
         return appDatabase.walletsDao().getEnabledCoins()
     }
 

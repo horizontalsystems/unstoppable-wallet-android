@@ -64,6 +64,9 @@
         <activity
             android:name=".modules.managecoins.ManageWalletsActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".modules.settings.managekeys.ManageKeysActivity"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="preloaded_fonts"

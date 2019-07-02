@@ -35,7 +35,7 @@ class BalanceInteractorTest {
 
         whenever(adapterManager.adaptersUpdatedSignal).thenReturn(Observable.empty())
         whenever(currencyManager.baseCurrencyUpdatedSignal).thenReturn(Observable.empty())
-        whenever(coinStorage.enabledCoinsObservable()).thenReturn(Flowable.just(listOf()))
+        whenever(coinStorage.enabledWallets()).thenReturn(Flowable.just(listOf()))
     }
 
     @Test
