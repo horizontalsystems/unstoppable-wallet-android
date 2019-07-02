@@ -4,13 +4,14 @@ import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
+import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ILockManager
 import io.horizontalsystems.bankwallet.core.ISystemInfoManager
-import io.horizontalsystems.bankwallet.core.IWordsManager
 import io.horizontalsystems.bankwallet.core.managers.AuthManager
 import io.horizontalsystems.bankwallet.entities.BiometryType
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
+import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
 import org.junit.After
 import org.junit.Assert.*
@@ -25,20 +26,19 @@ class SecuritySettingsInteractorTest {
 
     private lateinit var interactor: SecuritySettingsInteractor
     private lateinit var localStorage: ILocalStorage
-    private lateinit var wordsManager: IWordsManager
+    private lateinit var accountManager: IAccountManager
     private lateinit var systemInfoManager: ISystemInfoManager
     private lateinit var lockManager: ILockManager
 
-    private val backedUpSignal = PublishSubject.create<Unit>()
-    private val lockStateUpdateSignal = PublishSubject.create<Unit>()
+    private val backedUpSignal = Flowable.empty<Int>()
 
     @Before
     fun setup() {
         RxBaseTest.setup()
 
-        wordsManager = mock {
-            on { isBackedUp } doReturn true
-            on { backedUpSignal } doReturn backedUpSignal
+        accountManager = mock {
+            on { nonBackedUpCount } doReturn 0
+            on { nonBackedUpCountFlowable } doReturn backedUpSignal
         }
 
         localStorage = mock {
@@ -50,11 +50,10 @@ class SecuritySettingsInteractorTest {
         }
 
         lockManager = mock {
-            on { lockStateUpdatedSignal } doReturn lockStateUpdateSignal
             on { isLocked } doReturn false
         }
 
-        interactor = SecuritySettingsInteractor(authManager, wordsManager, localStorage, systemInfoManager, lockManager)
+        interactor = SecuritySettingsInteractor(authManager, accountManager, localStorage, systemInfoManager, lockManager)
         interactor.delegate = delegate
     }
 
@@ -70,7 +69,7 @@ class SecuritySettingsInteractorTest {
 
     @Test
     fun isBackedUp() {
-        assertTrue(interactor.isBackedUp)
+        assertTrue(interactor.nonBackedUpCount == 0)
     }
 
     @Test
@@ -80,14 +79,14 @@ class SecuritySettingsInteractorTest {
 
     @Test
     fun isNotBackedUp() {
-        wordsManager = mock {
-            on { isBackedUp } doReturn false
-            on { backedUpSignal } doReturn backedUpSignal
+        accountManager = mock {
+            on { nonBackedUpCount } doReturn 1
+            on { nonBackedUpCountFlowable } doReturn backedUpSignal
         }
-        interactor = SecuritySettingsInteractor(authManager, wordsManager, localStorage, systemInfoManager, lockManager)
+        interactor = SecuritySettingsInteractor(authManager, accountManager, localStorage, systemInfoManager, lockManager)
         interactor.delegate = delegate
 
-        assertFalse(interactor.isBackedUp)
+        assertFalse(interactor.nonBackedUpCount == 0)
     }
 
     @Test
@@ -95,7 +94,7 @@ class SecuritySettingsInteractorTest {
         localStorage = mock {
             on { isBiometricOn } doReturn false
         }
-        interactor = SecuritySettingsInteractor(authManager, wordsManager, localStorage, systemInfoManager, lockManager)
+        interactor = SecuritySettingsInteractor(authManager, accountManager, localStorage, systemInfoManager, lockManager)
         interactor.delegate = delegate
 
         assertFalse(interactor.getBiometricUnlockOn())
@@ -116,12 +115,6 @@ class SecuritySettingsInteractorTest {
     }
 
     @Test
-    fun testBackedUpSignal() {
-        backedUpSignal.onNext(Unit)
-        verify(delegate).didBackup()
-    }
-
-    @Test
     fun didTapOnBackupWallet() {
         val lockSubject = PublishSubject.create<Unit>()
 
@@ -130,7 +123,7 @@ class SecuritySettingsInteractorTest {
             on { isLocked } doReturn false
         }
 
-        interactor = SecuritySettingsInteractor(authManager, wordsManager, localStorage, systemInfoManager, lockManager)
+        interactor = SecuritySettingsInteractor(authManager, accountManager, localStorage, systemInfoManager, lockManager)
         interactor.delegate = delegate
 
 

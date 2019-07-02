@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysModule
 import io.horizontalsystems.bankwallet.ui.dialogs.BottomConfirmAlert
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
+import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.activity_settings_security.*
 
 class SecuritySettingsActivity : BaseActivity(), BottomConfirmAlert.Listener {
@@ -87,6 +88,9 @@ class SecuritySettingsActivity : BaseActivity(), BottomConfirmAlert.Listener {
             PinModule.startForUnlock(this, true)
         })
 
+        viewModel.backedUpLiveData.observe(this, Observer {
+            manageKeys.badge = LayoutHelper.getInfoBadge(it, resources)
+        })
     }
 
     override fun onConfirmationSuccess() {

@@ -19,7 +19,7 @@ class SecuritySettingsPresenterTest {
         interactor = mock {
             on { getBiometricUnlockOn() } doReturn true
             on { biometryType } doReturn BiometryType.FINGER
-            on { isBackedUp } doReturn true
+            on { nonBackedUpCount } doReturn 0
         }
 
         presenter = SecuritySettingsPresenter(router, interactor)
@@ -79,7 +79,7 @@ class SecuritySettingsPresenterTest {
     @Test
     fun testSetBackedUpFalseOnLoad() {
         interactor = mock {
-            on { isBackedUp } doReturn false
+            on { nonBackedUpCount } doReturn 1
         }
 
         presenter = SecuritySettingsPresenter(router, interactor)
@@ -122,7 +122,7 @@ class SecuritySettingsPresenterTest {
 
     @Test
     fun didBackup() {
-        presenter.didBackup()
+        presenter.didBackup(0)
         verify(view).setBackedUp(true)
     }
 

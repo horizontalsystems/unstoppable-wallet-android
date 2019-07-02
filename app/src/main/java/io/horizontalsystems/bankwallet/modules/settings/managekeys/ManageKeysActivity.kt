@@ -94,6 +94,10 @@ class KeysViewHolder(private val viewModel: ManageKeysViewModel, override val co
             is AccountType.MasterKey -> "BTC, BCH, DASH, ETH, ERC20"
         }
 
+        if (!account.isBackedUp) {
+            backupBadge.visibility = View.VISIBLE
+        }
+
         buttonUnlink.setOnClickListener {
             viewModel.onUnlink(account)
         }

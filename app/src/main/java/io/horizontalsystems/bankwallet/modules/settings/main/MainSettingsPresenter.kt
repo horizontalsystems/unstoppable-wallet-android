@@ -11,13 +11,13 @@ class MainSettingsPresenter(
 
     override fun viewDidLoad() {
         view?.setTitle(R.string.Settings_Title)
-        view?.setBackedUp(interactor.isBackedUp)
+        view?.setBackedUp(interactor.nonBackedUpCount == 0)
         view?.setBaseCurrency(interactor.baseCurrency)
         view?.setLanguage(interactor.currentLanguage)
         view?.setLightMode(interactor.getLightMode())
         view?.setAppVersion(interactor.appVersion)
 
-        view?.setTabItemBadge(if (interactor.isBackedUp) 0 else 1)
+        view?.setTabItemBadge(interactor.nonBackedUpCount)
     }
 
     override fun didTapSecurity() {
@@ -44,9 +44,9 @@ class MainSettingsPresenter(
         router.openAppLink()
     }
 
-    override fun didBackup() {
-        view?.setBackedUp(true)
-        view?.setTabItemBadge(0)
+    override fun didUpdateNonBackedUp(count: Int) {
+        view?.setBackedUp(count == 0)
+        view?.setTabItemBadge(count)
     }
 
     override fun didUpdateBaseCurrency(baseCurrency: String) {

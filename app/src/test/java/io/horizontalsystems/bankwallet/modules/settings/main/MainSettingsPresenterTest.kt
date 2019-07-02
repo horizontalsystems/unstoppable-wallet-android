@@ -74,7 +74,7 @@ class MainSettingsPresenterTest {
     @Test
     fun didBackup() {
         val backedUp = true
-        presenter.didBackup()
+        presenter.didUpdateNonBackedUp(0)
 
         verify(view).setBackedUp(backedUp)
         verify(view).setTabItemBadge(0)

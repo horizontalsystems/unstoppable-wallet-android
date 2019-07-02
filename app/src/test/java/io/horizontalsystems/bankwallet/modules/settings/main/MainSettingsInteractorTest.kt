@@ -7,7 +7,8 @@ import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.Flowable
+import io.reactivex.Observable
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -19,19 +20,19 @@ class MainSettingsInteractorTest {
     private val delegate = mock<MainSettingsModule.IMainSettingsInteractorDelegate>()
 
     private lateinit var localStorage: ILocalStorage
-    private lateinit var wordsManager: IWordsManager
+    private lateinit var accountManager: IAccountManager
     private lateinit var languageManager: ILanguageManager
     private lateinit var sysInfoManager: ISystemInfoManager
     private lateinit var currencyManager: ICurrencyManager
 
     private lateinit var interactor: MainSettingsInteractor
 
-    private val backedUpSignal = PublishSubject.create<Unit>()
+    private val backedUpSignal = Flowable.empty<Int>()
+    private val baseCurrencyUpdatedSignal = Observable.empty<Unit>()
 
-    val currentLanguage : Locale = Locale("en")
+    val currentLanguage: Locale = Locale("en")
 
     private val currency = Currency(code = "USD", symbol = "\u0024")
-
 
     private val appVersion = "1,01"
 
@@ -39,9 +40,9 @@ class MainSettingsInteractorTest {
     fun setUp() {
         RxBaseTest.setup()
 
-        wordsManager = mock {
-            on { isBackedUp } doReturn true
-            on { backedUpSignal } doReturn backedUpSignal
+        accountManager = mock {
+            on { nonBackedUpCount } doReturn 1
+            on { nonBackedUpCountFlowable } doReturn backedUpSignal
         }
 
         localStorage = mock {
@@ -49,21 +50,21 @@ class MainSettingsInteractorTest {
             on { baseCurrencyCode } doReturn currency.code
         }
 
-        languageManager = mock{
+        languageManager = mock {
             on { currentLanguage } doReturn currentLanguage
         }
 
-        sysInfoManager = mock{
+        sysInfoManager = mock {
             on { appVersion } doReturn appVersion
         }
 
-        currencyManager = mock{
-            on { baseCurrencyUpdatedSignal } doReturn PublishSubject.create<Unit>()
+        currencyManager = mock {
+            on { baseCurrencyUpdatedSignal } doReturn baseCurrencyUpdatedSignal
             on { baseCurrency } doReturn currency
         }
 
 
-        interactor = MainSettingsInteractor(localStorage, wordsManager, languageManager, sysInfoManager, currencyManager)
+        interactor = MainSettingsInteractor(localStorage, accountManager, languageManager, sysInfoManager, currencyManager)
 
         interactor.delegate = delegate
     }
@@ -74,20 +75,15 @@ class MainSettingsInteractorTest {
     }
 
     @Test
-    fun isBackedUp() {
-        Assert.assertTrue(interactor.isBackedUp)
-    }
-
-    @Test
     fun isNotBackedUp() {
-        wordsManager = mock {
-            on { isBackedUp } doReturn false
-            on { backedUpSignal } doReturn backedUpSignal
+        accountManager = mock {
+            on { nonBackedUpCount } doReturn 1
+            on { nonBackedUpCountFlowable } doReturn backedUpSignal
         }
-        interactor = MainSettingsInteractor(localStorage, wordsManager, languageManager, sysInfoManager, currencyManager)
+        interactor = MainSettingsInteractor(localStorage, accountManager, languageManager, sysInfoManager, currencyManager)
         interactor.delegate = delegate
 
-        Assert.assertFalse(interactor.isBackedUp)
+        Assert.assertFalse(interactor.nonBackedUpCount == 0)
     }
 
     @Test
@@ -116,7 +112,7 @@ class MainSettingsInteractorTest {
             on { isLightModeOn } doReturn false
             on { baseCurrencyCode } doReturn currency.code
         }
-        interactor = MainSettingsInteractor(localStorage, wordsManager, languageManager, sysInfoManager, currencyManager)
+        interactor = MainSettingsInteractor(localStorage, accountManager, languageManager, sysInfoManager, currencyManager)
         interactor.delegate = delegate
 
         Assert.assertFalse(interactor.getLightMode())
@@ -127,12 +123,6 @@ class MainSettingsInteractorTest {
         interactor.setLightMode(true)
         verify(localStorage).isLightModeOn = true
         verify(delegate).didUpdateLightMode()
-    }
-
-    @Test
-    fun testBackedUpSignal() {
-        backedUpSignal.onNext(Unit)
-        verify(delegate).didBackup()
     }
 
 }

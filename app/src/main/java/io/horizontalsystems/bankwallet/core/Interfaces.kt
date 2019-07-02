@@ -62,6 +62,8 @@ interface ISecuredStorage {
 interface IAccountManager {
     val accounts: List<Account>
     val accountsFlowable: Flowable<List<Account>>
+    val nonBackedUpCount: Int
+    val nonBackedUpCountFlowable: Flowable<Int>
 
     fun save(account: Account)
     fun delete(id: String)

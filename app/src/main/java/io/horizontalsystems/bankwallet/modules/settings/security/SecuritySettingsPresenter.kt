@@ -10,7 +10,7 @@ class SecuritySettingsPresenter(
     override fun viewDidLoad() {
         view?.setBiometricUnlockOn(interactor.getBiometricUnlockOn())
         view?.setBiometryType(interactor.biometryType)
-        view?.setBackedUp(interactor.isBackedUp)
+        view?.setBackedUp(interactor.nonBackedUpCount == 0)
     }
 
     override fun didSwitchBiometricUnlock(biometricUnlockOn: Boolean) {
@@ -43,8 +43,8 @@ class SecuritySettingsPresenter(
 
     // ISecuritySettingsInteractorDelegate
 
-    override fun didBackup() {
-        view?.setBackedUp(true)
+    override fun didBackup(count: Int) {
+        view?.setBackedUp(count == 0)
     }
 
     override fun didUnlinkWallet() {
