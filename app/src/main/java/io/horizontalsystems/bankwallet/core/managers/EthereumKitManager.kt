@@ -25,7 +25,7 @@ class EthereumKitManager(appConfig: IAppConfigProvider) : IEthereumKitManager {
             val infuraCredentials = EthereumKit.InfuraCredentials(infuraProjectId, infuraSecretKey)
             val networkType = if (testMode) EthereumKit.NetworkType.Ropsten else EthereumKit.NetworkType.MainNet
 
-            kit = EthereumKit.getInstance(App.instance, account.type.words, syncMode, networkType, infuraCredentials, etherscanKey, account.uniqueId)
+            kit = EthereumKit.getInstance(App.instance, account.type.words, syncMode, networkType, infuraCredentials, etherscanKey, account.id)
             kit?.start()
 
             return kit!!

@@ -3,7 +3,12 @@ package io.horizontalsystems.bankwallet.core
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import java.util.*
 
-class Account(val name: String, val type: AccountType, val uniqueId: String, val defaultSyncMode: SyncMode) {
+class Account(val id: String,
+              val name: String,
+              val type: AccountType,
+              val defaultSyncMode: SyncMode,
+              var isBackedUp: Boolean = false) {
+
     override fun equals(other: Any?): Boolean {
         if (other is Account) {
             return name == other.name && type == other.type

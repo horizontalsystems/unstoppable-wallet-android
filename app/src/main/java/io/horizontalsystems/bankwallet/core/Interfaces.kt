@@ -54,6 +54,18 @@ interface ISecuredStorage {
     val savedPin: String?
     fun savePin(pin: String)
     fun pinIsEmpty(): Boolean
+
+    val accounts: List<Account>
+    fun saveAccounts(accounts: List<Account>)
+}
+
+interface IAccountManager {
+    val accounts: List<Account>
+    val accountsFlowable: Flowable<List<Account>>
+
+    fun save(account: Account)
+    fun delete(id: String)
+    fun setIsBackedUp(id: String)
 }
 
 interface IRandomProvider {

@@ -106,7 +106,7 @@ class BitcoinCashAdapter(wallet: Wallet, override val kit: BitcoinCashKit, addre
         private fun createKit(wallet: Wallet, testMode: Boolean): BitcoinCashKit {
             val account = wallet.account
             if (account.type is AccountType.Mnemonic) {
-                return BitcoinCashKit(App.instance, account.type.words, account.uniqueId, syncMode = SyncMode.fromSyncMode(account.defaultSyncMode), networkType = getNetworkType(testMode))
+                return BitcoinCashKit(App.instance, account.type.words, account.id, syncMode = SyncMode.fromSyncMode(account.defaultSyncMode), networkType = getNetworkType(testMode))
             }
 
             throw UnsupportedAccountException()

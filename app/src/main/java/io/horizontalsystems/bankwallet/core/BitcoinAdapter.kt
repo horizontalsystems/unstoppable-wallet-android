@@ -111,7 +111,7 @@ class BitcoinAdapter(wallet: Wallet, override val kit: BitcoinKit, addressParser
         private fun createKit(wallet: Wallet, testMode: Boolean): BitcoinKit {
             val account = wallet.account
             if (account.type is AccountType.Mnemonic) {
-                return BitcoinKit(App.instance, account.type.words, account.uniqueId, syncMode = SyncMode.fromSyncMode(account.defaultSyncMode), networkType = getNetworkType(testMode))
+                return BitcoinKit(App.instance, account.type.words, account.id, syncMode = SyncMode.fromSyncMode(account.defaultSyncMode), networkType = getNetworkType(testMode))
             }
 
             throw UnsupportedAccountException()
