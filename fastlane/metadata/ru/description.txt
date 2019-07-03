@@ -22,29 +22,29 @@ It can’t be blocked or censored
 
   Transact freely and unconditionally regardless of where you live. No entity can stop you from sending/receiving crypto in Unstoppable wallet.   
 
-You’re the only person with control and access to your crypto finances. The Secret Key (that give you ownership over crypto assets) never leaves your device.
+Вы единственный человек с контролем и доступом к вашим крипто финансам Секретный ключ(который дает вам право собственности на криптоактивы)никогда не покинет ваше устройство
 
 (2) GENUINE PRIVACY
 
   Stay truly private without revealing any personal data. There are no accounts, emails, phone numbers, identity checks or 3rd party servers storing your data.  
 
-Unlike most wallets in the market the Unstoppable wallet connects users directly to decentralized blockchains without any restrictions or intermediaries.
+В отличие от большинства кошельков на рынке, Unstoppable  Wallet соединяет пользователя непосредственно с децентрализованными блокчейнами без каких-либо ограничений или посредников
 
-(3) HIGHLY SECURE
+(3) Высокая Защита
 
-  Keep your crypto assets safe on your phone using safe storage mechanisms provided by phone's operating system. Your secret keys never leaves your device the device.
+Держите ваши криптоактивы в безопасности на вашем телефоне с помощью безопасных механизмов хранения, предоставляемых операционной системой Ваши секретные ключи никогда не покидают ваше устройство
 
-  In case of a device loss or replacement you may easily restore your wallet using Secret Key. Unstoppable makes it really easy to switch to another wallet or migrate funds from another wallet.
+В случае утери устройства или замены, вы можете легко восстановить ваш кошелек с помощью секретного ключа Unstoppable Wallet, дает возможность легко переключиться на другой кошелек  или переместить средства из другого кошелька.
 
- (4) ALWAYS ONLINE
+(4) Всегда ОНЛАЙН
 
-Access your funds from anywhere at any time.   Unstoppable wallet was engineered to remain online and functional independent of any third party servers.   
+Доступ к курсу всегда и везде Unstoppable Wallet был разработан для того чтобы оставаться онлайн и функционально независимым от любых сторонних серверов.   
 
 No single entity can take the wallet down and cause it's main features to malfunction. Not even the Horizontal Systems team able to interfere with it.
 
 (5) ADVANCED & AHEAD
 
-Use the most technologically advanced and decentralized wallet ever built.   It’s the only mobile wallet that implements all major blockchains in a fully decentralized manner.
+Используйте самый технический развитый и децентрализованный кошелек. Это единственный мобильный кошелек, который реализует все основные блокчейны полностью децентрализованно
 
 Over 2500 engineering hours being put into this wallet every month. This wallet is being constantly improved further and continuously integrates latest enhancements in all blockchains such as segwit or real-time transaction fee estimator.
   
