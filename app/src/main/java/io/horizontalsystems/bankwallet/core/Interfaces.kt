@@ -54,15 +54,10 @@ interface ISecuredStorage {
     val savedPin: String?
     fun savePin(pin: String)
     fun pinIsEmpty(): Boolean
-
-    val accounts: List<Account>
-    fun saveAccounts(accounts: List<Account>)
 }
 
 interface IAccountManager {
-    val accounts: List<Account>
     val accountsFlowable: Flowable<List<Account>>
-    val nonBackedUpCount: Int
     val nonBackedUpCountFlowable: Flowable<Int>
 
     fun save(account: Account)
@@ -231,6 +226,14 @@ interface IRateStorage {
     fun save(rate: Rate)
     fun saveLatest(rate: Rate)
     fun deleteAll()
+}
+
+interface IAccountsStorage {
+    fun getAll(): Flowable<List<Account>>
+    fun save(account: Account)
+    fun delete(id: String)
+    fun setIsBackedUp(id: String)
+    fun getNonBackedUpCount(): Flowable<Int>
 }
 
 interface IEnabledWalletStorage {

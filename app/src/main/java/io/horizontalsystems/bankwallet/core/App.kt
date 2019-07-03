@@ -7,6 +7,7 @@ import com.squareup.leakcanary.LeakCanary
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
+import io.horizontalsystems.bankwallet.core.storage.AccountsStorage
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bankwallet.core.storage.EnabledWalletsStorage
 import io.horizontalsystems.bankwallet.core.storage.RatesRepository
@@ -43,6 +44,7 @@ class App : Application() {
         lateinit var networkAvailabilityManager: NetworkAvailabilityManager
         lateinit var appDatabase: AppDatabase
         lateinit var rateStorage: IRateStorage
+        lateinit var accountsStorage: IAccountsStorage
         lateinit var enabledWalletsStorage: IEnabledWalletStorage
         lateinit var transactionInfoFactory: FullTransactionInfoFactory
         lateinit var transactionDataProviderManager: TransactionDataProviderManager
@@ -74,18 +76,20 @@ class App : Application() {
         appConfigProvider = AppConfigProvider()
         feeRateProvider = FeeRateProvider(instance, appConfigProvider)
         backgroundManager = BackgroundManager(this)
-        encryptionManager = EncryptionManager()
+        encryptionManager = EncryptionManager
         secureStorage = SecuredStorageManager(encryptionManager)
         ethereumKitManager = EthereumKitManager(appConfigProvider)
 
         appDatabase = AppDatabase.getInstance(this)
         rateStorage = RatesRepository(appDatabase)
+        accountsStorage = AccountsStorage(appDatabase)
+
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
         localStorage = LocalStorageManager()
 
         networkManager = NetworkManager(appConfigProvider)
         rateManager = RateManager(rateStorage, networkManager)
-        accountManager = AccountManager(secureStorage)
+        accountManager = AccountManager(accountsStorage)
         coinManager = WalletManager(appConfigProvider, accountManager, enabledWalletsStorage)
         authManager = AuthManager(secureStorage, localStorage, coinManager, rateManager, ethereumKitManager, appConfigProvider)
 

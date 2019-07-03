@@ -1,12 +1,9 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import android.text.TextUtils
-import com.google.gson.reflect.TypeToken
-import io.horizontalsystems.bankwallet.core.Account
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IEncryptionManager
 import io.horizontalsystems.bankwallet.core.ISecuredStorage
-import io.horizontalsystems.bankwallet.core.utils.JsonUtils
 import io.horizontalsystems.bankwallet.entities.AuthData
 
 
@@ -14,8 +11,6 @@ class SecuredStorageManager(private val encryptionManager: IEncryptionManager) :
 
     private val AUTH_DATA = "auth_data"
     private val LOCK_PIN = "lock_pin"
-    private val ACCOUNTS = "accounts"
-
 
     override val authData: AuthData?
         get() {
@@ -51,21 +46,6 @@ class SecuredStorageManager(private val encryptionManager: IEncryptionManager) :
     override fun pinIsEmpty(): Boolean {
         val string = App.preferences.getString(LOCK_PIN, null)
         return string.isNullOrEmpty()
-    }
-
-    override val accounts: List<Account>
-        get() {
-            val accountsEncrypted = App.preferences.getString(ACCOUNTS, null) ?: return listOf()
-            val accountsJson = encryptionManager.decrypt(accountsEncrypted)
-
-            return JsonUtils.gson.fromJson(accountsJson, object : TypeToken<List<Account>>() {}.type)
-        }
-
-    override fun saveAccounts(accounts: List<Account>) {
-        val accountsJson = JsonUtils.gson.toJson(accounts)
-        val accountsEncrypted = encryptionManager.encrypt(accountsJson)
-
-        App.preferences.edit().putString(ACCOUNTS, accountsEncrypted).apply()
     }
 
 }

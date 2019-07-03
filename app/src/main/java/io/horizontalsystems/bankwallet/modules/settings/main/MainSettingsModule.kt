@@ -26,7 +26,7 @@ object MainSettingsModule {
     }
 
     interface IMainSettingsInteractor {
-        val nonBackedUpCount: Int
+        // val nonBackedUpCount: Int
         var currentLanguage: String
         val baseCurrency: String
         var appVersion: String

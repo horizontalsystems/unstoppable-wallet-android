@@ -22,7 +22,7 @@ sealed class CoinType : Serializable {
             is Ethereum,
             is Erc20 -> {
                 return (accountType is AccountType.Mnemonic ||
-                        accountType is AccountType.MasterKey)
+                        accountType is AccountType.PrivateKey)
             }
             is Eos -> {
                 return accountType is AccountType.Eos

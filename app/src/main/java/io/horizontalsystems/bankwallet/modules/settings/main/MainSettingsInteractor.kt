@@ -24,8 +24,8 @@ class MainSettingsInteractor(
         })
     }
 
-    override val nonBackedUpCount: Int
-        get() = accountManager.nonBackedUpCount
+    // override val nonBackedUpCount: Int
+    //     get() = accountManager.nonBackedUpCount
 
     override var currentLanguage: String = languageManager.currentLanguage.displayLanguage
 

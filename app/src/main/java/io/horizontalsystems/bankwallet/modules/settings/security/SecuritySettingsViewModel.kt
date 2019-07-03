@@ -42,7 +42,7 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
     }
 
     override fun setBackedUp(backedUp: Boolean) {
-        backedUpLiveData.value = backedUp
+        backedUpLiveData.postValue(backedUp)
     }
 
     override fun reloadApp() {

@@ -26,7 +26,7 @@ object SecuritySettingsModule {
     }
 
     interface ISecuritySettingsInteractor {
-        val nonBackedUpCount: Int
+//        val nonBackedUpCount: Int
         val biometryType: BiometryType
         fun getBiometricUnlockOn(): Boolean
         fun setBiometricUnlockOn(biometricUnlockOn: Boolean)

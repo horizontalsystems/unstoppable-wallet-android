@@ -1,12 +1,10 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.IAppConfigProvider
-import io.horizontalsystems.bankwallet.core.IEnabledWalletStorage
-import io.horizontalsystems.bankwallet.core.IWalletManager
-import io.horizontalsystems.bankwallet.core.Wallet
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import org.jetbrains.anko.collections.forEachWithIndex
@@ -18,16 +16,18 @@ class WalletManager(private val appConfigProvider: IAppConfigProvider, accountMa
     override val walletsUpdatedSignal: PublishSubject<Unit> = PublishSubject.create()
 
     init {
-        walletStorage.enabledWallets()
+        walletStorage.enabledWallets().zipWith(accountManager.accountsFlowable,
+                BiFunction { enabledWallets: List<EnabledWallet>, accounts: List<Account> ->
+                    Pair(enabledWallets, accounts)
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { enabledWallet ->
-                    val accounts = accountManager.accounts
+                .subscribe { (enabledWallet, accounts) ->
                     val enabledWallets = mutableListOf<Wallet>()
 
                     enabledWallet.forEach { wallet ->
                         val coin = appConfigProvider.coins.find { it.code == wallet.coinCode }
-                        val account = accounts.find { it.name == wallet.accountName }
+                        val account = accounts.find { it.id == wallet.accountId }
 
                         if (coin != null && account != null) {
                             enabledWallets.add(Wallet(coin, account, wallet.syncMode))
@@ -46,7 +46,7 @@ class WalletManager(private val appConfigProvider: IAppConfigProvider, accountMa
 
                     val wallets = wallets.filter { accounts.contains(it.account) }
                     wallets.forEachWithIndex { i, wallet ->
-                        enabledWallets.add(EnabledWallet(wallet.coin.code, i, wallet.account.name, wallet.syncMode))
+                        enabledWallets.add(EnabledWallet(wallet.coin.code,  wallet.account.id, i, wallet.syncMode))
                     }
 
                     this.wallets = wallets

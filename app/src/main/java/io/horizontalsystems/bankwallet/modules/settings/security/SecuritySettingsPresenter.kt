@@ -10,7 +10,7 @@ class SecuritySettingsPresenter(
     override fun viewDidLoad() {
         view?.setBiometricUnlockOn(interactor.getBiometricUnlockOn())
         view?.setBiometryType(interactor.biometryType)
-        view?.setBackedUp(interactor.nonBackedUpCount == 0)
+//        view?.setBackedUp(interactor.nonBackedUpCount == 0)
     }
 
     override fun didSwitchBiometricUnlock(biometricUnlockOn: Boolean) {

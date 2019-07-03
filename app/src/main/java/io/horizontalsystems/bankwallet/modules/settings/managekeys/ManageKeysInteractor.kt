@@ -12,7 +12,7 @@ class ManageKeysInteractor(private val accountManager: AccountManager) : ManageK
     private val disposables = CompositeDisposable()
 
     override fun loadAccounts() {
-        delegate?.didLoad(accountManager.accounts)
+//        delegate?.didLoad(accountManager.accounts)
 
         accountManager.accountsFlowable
                 .subscribeOn(Schedulers.io())

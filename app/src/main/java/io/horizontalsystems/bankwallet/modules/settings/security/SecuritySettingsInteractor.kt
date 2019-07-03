@@ -29,8 +29,8 @@ class SecuritySettingsInteractor(
     override val biometryType: BiometryType
         get() = systemInfoManager.biometryType
 
-    override val nonBackedUpCount: Int
-        get() = accountManager.nonBackedUpCount
+//    override val nonBackedUpCount: Int
+//        get() = accountManager.nonBackedUpCount
 
     override fun getBiometricUnlockOn(): Boolean {
         return localStorage.isBiometricOn

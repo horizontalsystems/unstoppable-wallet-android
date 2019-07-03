@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.managers.AccountManager
 import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
+import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 
 class ManageWalletsInteractor(private val appConfigProvider: IAppConfigProvider, private val walletManager: WalletManager, private val accountManager: AccountManager, private val enabledCoinStorage: IEnabledWalletStorage)
@@ -23,14 +24,16 @@ class ManageWalletsInteractor(private val appConfigProvider: IAppConfigProvider,
     override fun saveWallets(wallets: List<Wallet>) {
         val enabledCoins = mutableListOf<EnabledWallet>()
         wallets.forEachIndexed { order, wallet ->
-            enabledCoins.add(EnabledWallet(wallet.coin.code, order, wallet.account.name, wallet.syncMode))
+            enabledCoins.add(EnabledWallet(wallet.coin.code, wallet.account.id, order, wallet.syncMode))
         }
         enabledCoinStorage.save(enabledCoins)
         delegate?.didSaveChanges()
     }
 
-    override fun accounts(coinType: CoinType): List<Account> {
-        return accountManager.accounts.filter { coinType.canSupport(it.type) }
+    override fun accounts(coinType: CoinType): Flowable<List<Account>> {
+        return accountManager.accountsFlowable.map { accountsList ->
+            accountsList.filter { coinType.canSupport(it.type) }
+        }
     }
 
     override fun clear() {

@@ -2,12 +2,13 @@ package io.horizontalsystems.bankwallet.modules.managecoins
 
 import io.horizontalsystems.bankwallet.core.Wallet
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.reactivex.disposables.CompositeDisposable
 
 class ManageWalletsPresenter(private val interactor: ManageWalletsModule.IInteractor, private val router: ManageWalletsModule.IRouter, private val state: ManageWalletsModule.ManageWalletsPresenterState)
     : ManageWalletsModule.IViewDelegate, ManageWalletsModule.IInteractorDelegate {
 
     var view: ManageWalletsModule.IView? = null
-
+    val disposables = CompositeDisposable()
     // IViewDelegate
 
     override fun viewDidLoad() {
@@ -16,11 +17,16 @@ class ManageWalletsPresenter(private val interactor: ManageWalletsModule.IIntera
 
     override fun enableCoin(position: Int) {
         val coin = state.disabledCoins[position]
-        val account = interactor.accounts(coin.type).firstOrNull() ?: return
-        val wallet = Wallet(coin, account, account.defaultSyncMode)
+        interactor.accounts(coin.type).subscribe { accounts ->
+            accounts.firstOrNull()?.let { account ->
+                val wallet = Wallet(coin, account, account.defaultSyncMode)
+                state.enable(wallet)
+                view?.updateCoins()
+            }
+        }.let {
+            disposables.add(it)
+        }
 
-        state.enable(wallet)
-        view?.updateCoins()
     }
 
     override fun disableCoin(position: Int) {
@@ -53,6 +59,7 @@ class ManageWalletsPresenter(private val interactor: ManageWalletsModule.IIntera
 
     override fun onClear() {
         interactor.clear()
+        disposables.clear()
     }
 
     // IInteractorDelegate

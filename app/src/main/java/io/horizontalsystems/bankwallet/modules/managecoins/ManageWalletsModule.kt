@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Wallet
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
+import io.reactivex.Flowable
 
 object ManageWalletsModule {
 
@@ -69,7 +70,7 @@ object ManageWalletsModule {
     interface IInteractor {
         fun load()
         fun saveWallets(wallets: List<Wallet>)
-        fun accounts(coinType: CoinType): List<Account>
+        fun accounts(coinType: CoinType): Flowable<List<Account>>
         fun clear()
     }
 

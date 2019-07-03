@@ -91,7 +91,7 @@ class KeysViewHolder(private val viewModel: ManageKeysViewModel, override val co
             is AccountType.Eos -> "EOS"
             is AccountType.Mnemonic,
             is AccountType.HDMasterKey,
-            is AccountType.MasterKey -> "BTC, BCH, DASH, ETH, ERC20"
+            is AccountType.PrivateKey -> "BTC, BCH, DASH, ETH, ERC20"
         }
 
         if (!account.isBackedUp) {

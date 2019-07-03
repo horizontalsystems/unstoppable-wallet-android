@@ -13,14 +13,16 @@ import io.horizontalsystems.bankwallet.entities.Rate
 
 @Database(version = 8, exportSchema = false, entities = [
     Rate::class,
-    EnabledWallet::class]
+    EnabledWallet::class,
+    AccountRecord::class]
 )
 
-@TypeConverters(DataTypeConverter::class)
+@TypeConverters(DatabaseConverters::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun ratesDao(): RatesDao
     abstract fun walletsDao(): EnabledWalletsDao
+    abstract fun accountsDao(): AccountsDao
 
     companion object {
 
@@ -43,7 +45,7 @@ abstract class AppDatabase : RoomDatabase() {
                             MIGRATION_4_5,
                             MIGRATION_5_6,
                             MIGRATION_6_7,
-                            addNameToEnabledCoin
+                            migrateToAccountStructure
                     )
                     .build()
         }
@@ -65,7 +67,7 @@ abstract class AppDatabase : RoomDatabase() {
 
         private val MIGRATION_2_3: Migration = object : Migration(2, 3) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("CREATE TABLE IF NOT EXISTS StorableCoin (`coinTitle` TEXT NOT NULL, `coinCode` TEXT NOT NULL, `coinType` TEXT NOT NULL, `enabled` INTEGER NOT NULL, `walletOrder` INTEGER, PRIMARY KEY(`coinCode`))")
+                database.execSQL("CREATE TABLE IF NOT EXISTS StorableCoin (`coinTitle` TEXT NOT NULL, `coinCode` TEXT NOT NULL, `coinType` TEXT NOT NULL, `enabled` INTEGER NOT NULL, `order` INTEGER, PRIMARY KEY(`coinCode`))")
             }
         }
 
@@ -92,20 +94,34 @@ abstract class AppDatabase : RoomDatabase() {
 
         private val MIGRATION_6_7: Migration = object : Migration(6, 7) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("CREATE TABLE IF NOT EXISTS EnabledCoin (`coinCode` TEXT NOT NULL, `walletOrder` INTEGER, PRIMARY KEY(`coinCode`))")
-                database.execSQL("INSERT INTO EnabledCoin (`coinCode`,`walletOrder`) SELECT `coinCode`,`order` FROM StorableCoin")
+                database.execSQL("CREATE TABLE IF NOT EXISTS EnabledCoin (`coinCode` TEXT NOT NULL, `order` INTEGER, PRIMARY KEY(`coinCode`))")
+                database.execSQL("INSERT INTO EnabledCoin (`coinCode`,`order`) SELECT `coinCode`,`order` FROM StorableCoin")
                 database.execSQL("DROP TABLE StorableCoin")
             }
         }
 
-        private val addNameToEnabledCoin: Migration = object : Migration(7, 8) {
+        private val migrateToAccountStructure: Migration = object : Migration(7, 8) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                val syncMode = App.localStorage.syncMode.value
 
-                database.execSQL("CREATE TABLE IF NOT EXISTS EnabledWallet (`coinCode` TEXT NOT NULL, `accountName` TEXT NOT NULL, `syncMode` NOT NULL, `walletOrder` INTEGER, PRIMARY KEY(`coinCode`, `accountName`))")
-                database.execSQL("INSERT INTO EnabledWallet(`coinCode`, `accountName`, `syncMode`, `walletOrder`) SELECT `coinCode`, 'Mnemonic', '$syncMode', `walletOrder` FROM EnabledCoin")
+                database.execSQL("CREATE TABLE IF NOT EXISTS `AccountRecord` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `type` TEXT NOT NULL, `isBackedUp` INTEGER NOT NULL, `syncMode` TEXT, `words` TEXT, `derivation` TEXT, `salt` TEXT, `key` TEXT, `eosAccount` TEXT, PRIMARY KEY(`id`))")
+                database.execSQL("CREATE TABLE IF NOT EXISTS `EnabledWallet` (`coinCode` TEXT NOT NULL, `accountId` TEXT NOT NULL, `walletOrder` INTEGER, `syncMode` TEXT NOT NULL, PRIMARY KEY(`coinCode`, `accountId`), FOREIGN KEY(`accountId`) REFERENCES `AccountRecord`(`id`) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED)")
+
+                val syncMode = App.localStorage.syncMode.value
+                val authData = App.secureStorage.authData
+                authData?.let {
+                    val isBackedUp = if (App.localStorage.isBackedUp) 1 else 0
+                    val encryptedWords = App.encryptionManager.encrypt(authData.words.joinToString(separator = ","))
+
+                    database.execSQL("INSERT OR REPLACE INTO `AccountRecord`(`id`,`name`,`type`,`isBackedUp`,`syncMode`,`words`,`derivation`,`salt`,`key`,`eosAccount`) " +
+                            "VALUES ('${authData.walletId}', 'Mnemonic', 'mnemonic', $isBackedUp, '$syncMode', '$encryptedWords','bip44', NULL, NULL, NULL)")
+
+                    database.execSQL("INSERT OR REPLACE INTO `EnabledWallet`(`coinCode`, `accountId`, `walletOrder`, `syncMode`) " +
+                            " SELECT `coinCode`, '${authData.walletId}', '$syncMode', `order` FROM `EnabledCoin`")
+                }
+
                 database.execSQL("DROP TABLE EnabledCoin")
             }
         }
+
     }
 }
