@@ -26,7 +26,7 @@ It can’t be blocked or censored
 
 (2) GENUINE PRIVACY
 
-  Stay truly private without revealing any personal data. There are no accounts, emails, phone numbers, identity checks or 3rd party servers storing your data.  
+Оставайся анонимным без раскрытия личных данных. Нет учетных записей, электронных писем, номеров телефонов, проверки личности или сторонних серверов, хранящих ваши данные
 
 В отличие от большинства кошельков на рынке, Unstoppable  Wallet соединяет пользователя непосредственно с децентрализованными блокчейнами без каких-либо ограничений или посредников
 
@@ -40,7 +40,7 @@ It can’t be blocked or censored
 
 Доступ к курсу всегда и везде. Unstoppable Wallet был разработан для того чтобы оставаться онлайн и функционально независимым от любых сторонних серверов.   
 
-No single entity can take the wallet down and cause it's main features to malfunction. Not even the Horizontal Systems team able to interfere with it.
+никто не может взять кошелек и вызвать неисправность основных функций. Даже команда Horizontal Systems не может вмешиваться в это.
 
 (5) ADVANCED & AHEAD
 
