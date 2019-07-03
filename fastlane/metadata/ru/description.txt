@@ -46,9 +46,9 @@ No single entity can take the wallet down and cause it's main features to malfun
 
 Используйте самый технический развитый и децентрализованный кошелек. Это единственный мобильный кошелек, который реализует все основные блокчейны полностью децентрализованно
 
-Over 2500 engineering hours being put into this wallet every month. This wallet is being constantly improved further and continuously integrates latest enhancements in all blockchains such as segwit or real-time transaction fee estimator.
+Более 2500 часов инженерного времени вложено в этот кошелек ежемесячно Этот кошелек постоянно улучшается и постоянно интегрирует последние улучшения во всех блокчейнах, таких как оценка segwit или комиссионных платежей в реальном времени.
   
-(6) BEAUTIFUL  
+(6) КРАСОТА
 
 Deal with crypto without complexitites. You don’t need to understand technicalities powering different blockchains to be able to transact with them.   
 
