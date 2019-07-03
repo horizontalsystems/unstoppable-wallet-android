@@ -1,23 +1,23 @@
-If you’re a type of person who needs unrestricted access to invest in blockchains and require unconditional control over your crypto investments this wallet is for you.
+Если вы являетесь лицом, который нуждается в неограниченном доступе для инвестирования в блокчейны и требует безусловного контроля над вашими крипто вложениями, этот кошелек для вас.
 
-This wallet was built to enable any freedom loving individual to invest and grow crypto currency portfolio without limitations, in a private manner, regardless of regulatory landscape.
+Этот кошелек был построен для того, чтобы позволить любому свободолюбивому человеку инвестировать и увеличивать криптовалютный портфель без ограничений, в частном порядке, независимо от регулирующего ландшафта.
 
-Exercise full unconditional control over your assets. Bitcoin, Ethereum, Dash and other crypto assets.
+Имейте полный безоговорочный контроль над вашими активами. Bitcoin, Ethereum, Dash и другие криптоактивы.
 
- Why Unstoppable Wallet
+Почему Unstoppable Wallet
 
-It keeps crypto assets safe on your device
-It can only be controlled by yourself
-It doesn’t know who you are
-It doesn’t collect any data
+Он хранит криптоактивы в безопасности на вашем устройстве
+Он может контролируется только вами
+Он не знает кто вы
+Он не собирает данные
 It's easy to migrate to/from
-It’s not dependent on any entity to function
-It integrates blockchains in a decentralized manner
-It implements latest improvements for each blockchain
+Он не зависит от чего-либо 
+Он интегрирует блокчейны децентрализованно
+Он реализует последние улучшения для каждого блокчейна
 It can’t be blocked or censored
-It provides real time transaction fees
-It’s fast and beautiful  
-It's the most advanced wallet to date
+Он предоставляет комиссионные за транзакции в реальном времени
+Это быстро и красиво
+Это самый продвинутый кошелек
 (1) UNRESTRICTED CONTROL
 
   Transact freely and unconditionally regardless of where you live. No entity can stop you from sending/receiving crypto in Unstoppable wallet.   
