@@ -47,11 +47,12 @@
                 tools:text="$ 200,234.90"
                 />
 
-            <io.horizontalsystems.bankwallet.ui.extensions.SortButtonView
+            <ImageView
                 android:id="@+id/sortButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:src="@drawable/stateful_balance_sort_icon"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/ballanceText"
                 app:layout_constraintBottom_toBottomOf="@+id/ballanceText"

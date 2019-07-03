@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
-import io.horizontalsystems.bankwallet.ui.extensions.Direction
 import java.math.BigDecimal
 
 object BalanceModule {
@@ -18,8 +17,6 @@ object BalanceModule {
         fun updateItem(position: Int)
         fun updateHeader()
         fun enabledCoinsCount(size: Int)
-        fun setSortButtonLabel(titleRes: Int)
-        fun setSortButtonDirection(direction: Direction)
         fun setSortingOn(isOn: Boolean)
     }
 
@@ -35,7 +32,6 @@ object BalanceModule {
         fun openManageCoins()
         fun onClear()
         fun onSortClick()
-        fun onSortDirectionClick(direction: Direction)
         fun onSortTypeChanged(sortType: BalanceSortType)
     }
 
@@ -77,7 +73,6 @@ object BalanceModule {
         private var originalItems = listOf<BalanceItem>()
         var items = listOf<BalanceItem>()
         var balanceSortType: BalanceSortType = BalanceSortType.Default
-        var direction = Direction.UP
 
         fun addUpdatedPosition(position: Int) {
             updatedPositions.add(position)
@@ -123,24 +118,17 @@ object BalanceModule {
             when (balanceSortType) {
                 BalanceSortType.Balance -> {
                     items = originalItems.sortedByDescending { it.fiatValue }
-                    direction = Direction.DOWN
                 }
                 BalanceSortType.Az ->{
                     items = originalItems.sortedBy { it.coin.title }
-                    direction = Direction.UP
                 }
                 BalanceSortType.Default -> {
                     items = originalItems
-                    direction = Direction.UP
                 }
             }
 
         }
 
-        fun reverseSorting(newDirection: Direction) {
-            direction = newDirection
-            items = items.reversed()
-        }
     }
 
     data class BalanceItem(

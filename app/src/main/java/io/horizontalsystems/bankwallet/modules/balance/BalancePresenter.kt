@@ -5,7 +5,6 @@ import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
-import io.horizontalsystems.bankwallet.ui.extensions.Direction
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -33,8 +32,6 @@ class BalancePresenter(
 
     override fun viewDidLoad() {
         interactor.initAdapters()
-        view?.setSortButtonLabel(dataSource.balanceSortType.getTitleRes())
-        view?.setSortButtonDirection(dataSource.direction)
 
         flushSubject
                 .debounce(1, TimeUnit.SECONDS)
@@ -148,19 +145,8 @@ class BalancePresenter(
         router.openSortTypeDialog()
     }
 
-    override fun onSortDirectionClick(direction: Direction) {
-        if (dataSource.direction == direction) {
-            val newSorting = if (direction == Direction.DOWN) Direction.UP else Direction.DOWN
-            dataSource.reverseSorting(newSorting)
-            view?.reload()
-            view?.setSortButtonDirection(newSorting)
-        }
-    }
-
     override fun onSortTypeChanged(sortType: BalanceSortType) {
         dataSource.sortBy(sortType)
         view?.reload()
-        view?.setSortButtonLabel(sortType.getTitleRes())
-        view?.setSortButtonDirection(dataSource.direction)
     }
 }

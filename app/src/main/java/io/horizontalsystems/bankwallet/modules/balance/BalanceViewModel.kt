@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.balance
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
-import io.horizontalsystems.bankwallet.ui.extensions.Direction
 
 class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter {
 
@@ -20,8 +19,6 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     val reloadHeaderLiveEvent = SingleLiveEvent<Void>()
     val reloadItemLiveEvent = SingleLiveEvent<Int>()
     val enabledCoinsCountLiveEvent = SingleLiveEvent<Int>()
-    val sortButtonLabelLiveDate = MutableLiveData<Int>()
-    val sortButtonDirectionLiveDate = MutableLiveData<Direction>()
     val setSortingOnLiveEvent = SingleLiveEvent<Boolean>()
 
     fun init() {
@@ -76,14 +73,6 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
 
     override fun openSortTypeDialog() {
         openSortTypeDialogLiveEvent.call()
-    }
-
-    override fun setSortButtonLabel(titleRes: Int) {
-        sortButtonLabelLiveDate.value = titleRes
-    }
-
-    override fun setSortButtonDirection(direction: Direction) {
-        sortButtonDirectionLiveDate.value = direction
     }
 
     override fun setSortingOn(isOn: Boolean) {
