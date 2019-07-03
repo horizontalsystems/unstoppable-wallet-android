@@ -1,10 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
 import android.os.Handler
-import io.horizontalsystems.bankwallet.core.IAdapterManager
-import io.horizontalsystems.bankwallet.core.ICurrencyManager
-import io.horizontalsystems.bankwallet.core.IEnabledCoinStorage
-import io.horizontalsystems.bankwallet.core.IRateStorage
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -15,6 +12,7 @@ class BalanceInteractor(
         private val rateStorage: IRateStorage,
         private val coinStorage: IEnabledCoinStorage,
         private val currencyManager: ICurrencyManager,
+        private val localStorage: ILocalStorage,
         private val refreshTimeout: Double = 2.0
 ) : BalanceModule.IInteractor {
 
@@ -64,6 +62,8 @@ class BalanceInteractor(
         }
     }
 
+    override fun getSortingType() = localStorage.sortType
+
     private fun onUpdateCurrency() {
         delegate?.didUpdateCurrency(currencyManager.baseCurrency)
     }
@@ -106,4 +106,7 @@ class BalanceInteractor(
         rateDisposables.clear()
     }
 
+    override fun saveSortingType(sortType: BalanceSortType) {
+        localStorage.sortType = sortType
+    }
 }

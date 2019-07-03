@@ -110,10 +110,12 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener, BalanceSortDialogFrag
             }
         })
 
-        viewModel.openSortTypeDialogLiveEvent.observe(viewLifecycleOwner, Observer {
-            BalanceSortDialogFragment
-                    .newInstance(this)
-                    .show(childFragmentManager, "select_sorting_type_alert")
+        viewModel.openSortingTypeDialogLiveEvent.observe(viewLifecycleOwner, Observer { sortingType ->
+            sortingType?.let {
+                BalanceSortDialogFragment
+                        .newInstance(this, it)
+                        .show(childFragmentManager, "select_sorting_type_alert")
+            }
         })
 
         viewModel.setSortingOnLiveEvent.observe(viewLifecycleOwner, Observer { isOn ->

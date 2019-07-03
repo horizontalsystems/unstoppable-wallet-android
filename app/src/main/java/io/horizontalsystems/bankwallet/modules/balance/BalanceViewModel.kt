@@ -13,7 +13,7 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     val balanceColorLiveDate = MutableLiveData<Int>()
     val didRefreshLiveEvent = SingleLiveEvent<Void>()
     val openManageCoinsLiveEvent = SingleLiveEvent<Void>()
-    val openSortTypeDialogLiveEvent = SingleLiveEvent<Void>()
+    val openSortingTypeDialogLiveEvent = SingleLiveEvent<BalanceSortType>()
 
     val reloadLiveEvent = SingleLiveEvent<Void>()
     val reloadHeaderLiveEvent = SingleLiveEvent<Void>()
@@ -71,8 +71,8 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
         delegate.onClear()
     }
 
-    override fun openSortTypeDialog() {
-        openSortTypeDialogLiveEvent.call()
+    override fun openSortTypeDialog(sortingType: BalanceSortType) {
+        openSortingTypeDialogLiveEvent.postValue(sortingType)
     }
 
     override fun setSortingOn(isOn: Boolean) {

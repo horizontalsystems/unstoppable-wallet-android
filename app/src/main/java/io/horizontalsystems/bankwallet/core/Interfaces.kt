@@ -6,6 +6,7 @@ import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.managers.ServiceExchangeApi
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
@@ -41,6 +42,7 @@ interface ILocalStorage {
     var baseEthereumProvider: String?
     var baseDashProvider: String?
     var syncMode: SyncMode
+    var sortType: BalanceSortType
 
     fun clear()
 }

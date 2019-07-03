@@ -39,7 +39,9 @@ object BalanceModule {
         fun refresh()
         fun initAdapters()
         fun fetchRates(currencyCode: String, coinCodes: List<CoinCode>)
+        fun getSortingType(): BalanceSortType
         fun clear()
+        fun saveSortingType(sortType: BalanceSortType)
     }
 
     interface IInteractorDelegate {
@@ -56,7 +58,7 @@ object BalanceModule {
         fun openReceiveDialog(coin: String)
         fun openSendDialog(coin: String)
         fun openManageCoins()
-        fun openSortTypeDialog()
+        fun openSortTypeDialog(sortingType: BalanceSortType)
     }
 
     class BalanceItemDataSource {
@@ -142,7 +144,7 @@ object BalanceModule {
     }
 
     fun init(view: BalanceViewModel, router: IRouter) {
-        val interactor = BalanceInteractor(App.adapterManager, App.rateStorage, App.enabledCoinsStorage, App.currencyManager)
+        val interactor = BalanceInteractor(App.adapterManager, App.rateStorage, App.enabledCoinsStorage, App.currencyManager, App.localStorage)
         val presenter = BalancePresenter(interactor, router, BalanceItemDataSource(), BalanceViewItemFactory())
 
         presenter.view = view

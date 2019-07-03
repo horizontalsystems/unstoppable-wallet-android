@@ -142,10 +142,11 @@ class BalancePresenter(
     }
 
     override fun onSortClick() {
-        router.openSortTypeDialog()
+        router.openSortTypeDialog(interactor.getSortingType())
     }
 
     override fun onSortTypeChanged(sortType: BalanceSortType) {
+        interactor.saveSortingType(sortType)
         dataSource.sortBy(sortType)
         view?.reload()
     }

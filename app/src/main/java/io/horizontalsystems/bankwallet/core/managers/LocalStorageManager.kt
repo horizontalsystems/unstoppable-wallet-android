@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.entities.SyncMode
+import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 
 
@@ -22,6 +23,7 @@ class LocalStorageManager : ILocalStorage {
     private val BASE_ETHEREUM_PROVIDER = "base_ethereum_provider"
     private val BASE_DASH_PROVIDER = "base_dash_provider"
     private val SYNC_MODE = "sync_mode"
+    private val SORT_TYPE = "balance_sort_type"
 
     override var currentLanguage: String?
         get() = App.preferences.getString(CURRENT_LANGUAGE, null)
@@ -141,6 +143,15 @@ class LocalStorageManager : ILocalStorage {
         }
         set(syncMode) {
             App.preferences.edit().putString(SYNC_MODE, syncMode.value).apply()
+        }
+
+    override var sortType: BalanceSortType
+        get() {
+            val sortString = App.preferences.getString(SORT_TYPE, BalanceSortType.Default.getAsString()) ?: BalanceSortType.Default.getAsString()
+            return BalanceSortType.getTypeFromString(sortString)
+        }
+        set(sortType) {
+            App.preferences.edit().putString(SORT_TYPE, sortType.getAsString()).apply()
         }
 
     override fun clear() {
