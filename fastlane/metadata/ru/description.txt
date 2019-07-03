@@ -50,24 +50,24 @@ No single entity can take the wallet down and cause it's main features to malfun
   
 (6) КРАСОТА
 
-Deal with crypto without complexitites. You don’t need to understand technicalities powering different blockchains to be able to transact with them.   
+Сделка с крипто без сложности. Вам не нужно понимать технические возможности, которые приводят к различным блокчейнам ,чтобы иметь возможность осуществлять их.   
 
 This wallet keeps complexities under the hood giving you a straightforward user interface to the world of blockchains.
 
-It’s fast, multi-lingual and highly customizable when it comes to the look and feel.   Don’t take our word for it, give it a try yourself.  
+Это быстро, многоязычно и очень настраиваемо, когда дело доходит до внешнего вида.   Don’t take our word for it, give it a try yourself.  
 
-(7) OPEN & PUBLIC 
+(7) ОТКРЫТО & ПУБЛИЧНО
 
 The code powering Unstoppable wallet is fully public and open source enabling anyone to unconditionally copy and reuse its code.
 
 https://github.com/horizontalsystems/unstoppable-wallet-ios
 
-(8) SUPPORTED CURRENCIES
+(8) ПОДДЕРЖИВАЕМЫЕ ВАЛЮТЫ
 
 Bitcoin
 Ethereum
 Dash
 Bitcoin Cash
 50+ ERC20 tokens
-(in progress) EOS and EOS based tokens
+(в процессе) EOS и токены на базе EOS
 (in progress) Binance Token and Binance-based tokens
