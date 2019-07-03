@@ -38,7 +38,7 @@ It can’t be blocked or censored
 
 (4) Всегда ОНЛАЙН
 
-Доступ к курсу всегда и везде Unstoppable Wallet был разработан для того чтобы оставаться онлайн и функционально независимым от любых сторонних серверов.   
+Доступ к курсу всегда и везде. Unstoppable Wallet был разработан для того чтобы оставаться онлайн и функционально независимым от любых сторонних серверов.   
 
 No single entity can take the wallet down and cause it's main features to malfunction. Not even the Horizontal Systems team able to interfere with it.
 
@@ -70,4 +70,4 @@ Dash
 Bitcoin Cash
 50+ ERC20 tokens
 (в процессе) EOS и токены на базе EOS
-(in progress) Binance Token and Binance-based tokens
+(в процессе) Binance Token и токены на базе Binance
