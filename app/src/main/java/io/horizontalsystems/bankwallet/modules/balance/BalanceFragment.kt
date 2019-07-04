@@ -19,9 +19,7 @@ import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.lib.BalanceSortDialogFragment
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageCoinsModule
-import io.horizontalsystems.bankwallet.ui.extensions.Direction
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
-import io.horizontalsystems.bankwallet.ui.extensions.SortButtonView
 import io.horizontalsystems.bankwallet.viewHelpers.AnimationHelper
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
@@ -32,7 +30,7 @@ import kotlinx.android.synthetic.main.view_holder_coin.*
 import java.math.BigDecimal
 
 
-class BalanceFragment : Fragment(), CoinsAdapter.Listener, BalanceSortDialogFragment.Listener, SortButtonView.Listener {
+class BalanceFragment : Fragment(), CoinsAdapter.Listener, BalanceSortDialogFragment.Listener {
 
     private lateinit var viewModel: BalanceViewModel
     private var coinsAdapter = CoinsAdapter(this)
@@ -112,20 +110,12 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener, BalanceSortDialogFrag
             }
         })
 
-        viewModel.openSortTypeDialogLiveEvent.observe(viewLifecycleOwner, Observer {
-            BalanceSortDialogFragment
-                    .newInstance(this)
-                    .show(childFragmentManager, "select_sorting_type_alert")
-        })
-
-        viewModel.sortButtonLabelLiveDate.observe(viewLifecycleOwner, Observer { titleRes ->
-            titleRes?.let {
-                sortButton.bind(text = getString(it))
+        viewModel.openSortingTypeDialogLiveEvent.observe(viewLifecycleOwner, Observer { sortingType ->
+            sortingType?.let {
+                BalanceSortDialogFragment
+                        .newInstance(this, it)
+                        .show(childFragmentManager, "select_sorting_type_alert")
             }
-        })
-
-        viewModel.sortButtonDirectionLiveDate.observe(viewLifecycleOwner, Observer { direction ->
-            direction?.let { sortButton.bind(direction = it) }
         })
 
         viewModel.setSortingOnLiveEvent.observe(viewLifecycleOwner, Observer { isOn ->
@@ -153,20 +143,15 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener, BalanceSortDialogFrag
             }
         }
 
-        sortButton.bindListener(this)
+        sortButton.setOnClickListener {
+            viewModel.delegate.onSortClick()
+        }
+
         setAppBarAnimation()
     }
 
     override fun onSortItemSelect(sortType: BalanceSortType) {
         viewModel.delegate.onSortTypeChanged(sortType)
-    }
-
-    override fun onSortBtnTextClick() {
-        viewModel.delegate.onSortClick()
-    }
-
-    override fun onSortBtnDirectionClick(direction: Direction) {
-        viewModel.delegate.onSortDirectionClick(direction)
     }
 
     private fun setPlaceholders(count: Int) {

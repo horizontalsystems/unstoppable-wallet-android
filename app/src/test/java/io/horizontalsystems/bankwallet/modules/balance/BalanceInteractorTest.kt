@@ -22,6 +22,7 @@ class BalanceInteractorTest {
     private val rateStorage = mock(IRateStorage::class.java)
     private val coinStorage = mock(IEnabledCoinStorage::class.java)
     private val currencyManager = mock(ICurrencyManager::class.java)
+    private val localStorage = mock(ILocalStorage::class.java)
 
     private lateinit var interactor: BalanceInteractor
 
@@ -29,7 +30,7 @@ class BalanceInteractorTest {
     fun setup() {
         RxBaseTest.setup()
 
-        interactor = BalanceInteractor(adapterManager, rateStorage, coinStorage, currencyManager)
+        interactor = BalanceInteractor(adapterManager, rateStorage, coinStorage, currencyManager, localStorage)
         interactor.delegate = delegate
 
         whenever(adapterManager.adaptersUpdatedSignal).thenReturn(Observable.empty())

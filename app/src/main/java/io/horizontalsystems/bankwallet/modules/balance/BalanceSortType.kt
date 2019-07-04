@@ -12,4 +12,18 @@ sealed class BalanceSortType {
         Az -> R.string.Balance_Sort_Az
         Default -> R.string.Balance_Sort_Default
     }
+
+    fun getAsString(): String = when (this) {
+        Balance -> "balance"
+        Az -> "az"
+        Default -> "default"
+    }
+
+    companion object {
+        fun getTypeFromString(value: String): BalanceSortType = when (value) {
+            "balance" -> Balance
+            "az" -> Az
+            else -> Default
+        }
+    }
 }
