@@ -41,7 +41,6 @@ class MainSettingsInteractorTest {
         RxBaseTest.setup()
 
         accountManager = mock {
-            on { nonBackedUpCount } doReturn 1
             on { nonBackedUpCountFlowable } doReturn backedUpSignal
         }
 
@@ -72,18 +71,6 @@ class MainSettingsInteractorTest {
     @After
     fun tearDown() {
         verifyNoMoreInteractions(delegate)
-    }
-
-    @Test
-    fun isNotBackedUp() {
-        accountManager = mock {
-            on { nonBackedUpCount } doReturn 1
-            on { nonBackedUpCountFlowable } doReturn backedUpSignal
-        }
-        interactor = MainSettingsInteractor(localStorage, accountManager, languageManager, sysInfoManager, currencyManager)
-        interactor.delegate = delegate
-
-        Assert.assertFalse(interactor.nonBackedUpCount == 0)
     }
 
     @Test

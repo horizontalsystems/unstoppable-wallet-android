@@ -12,6 +12,8 @@ import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Account
 import io.horizontalsystems.bankwallet.core.AccountType
+import io.horizontalsystems.bankwallet.modules.backup.BackupModule
+import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.ui.dialogs.BottomButtonColor
 import io.horizontalsystems.bankwallet.ui.dialogs.BottomConfirmAlert
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
@@ -41,17 +43,30 @@ class ManageKeysActivity : BaseActivity() {
         })
 
         viewModel.unlinkAccountEvent.observe(this, Observer { account ->
-            val confirmationList = mutableListOf(
-                    R.string.SettingsSecurity_ImportWalletConfirmation_1,
-                    R.string.SettingsSecurity_ImportWalletConfirmation_2)
+            account?.let {
+                val confirmationList = mutableListOf(
+                        R.string.SettingsSecurity_ImportWalletConfirmation_1,
+                        R.string.SettingsSecurity_ImportWalletConfirmation_2
+                )
 
-            val confirmListener = object : BottomConfirmAlert.Listener {
-                override fun onConfirmationSuccess() {
-                    viewModel.delegate.unlinkAccount(account.id)
+                val confirmListener = object : BottomConfirmAlert.Listener {
+                    override fun onConfirmationSuccess() {
+                        viewModel.delegate.unlinkAccount(account.id)
+                    }
                 }
-            }
 
-            BottomConfirmAlert.show(this, confirmationList, confirmListener, BottomButtonColor.RED)
+                BottomConfirmAlert.show(this, confirmationList, confirmListener, BottomButtonColor.RED)
+            }
+        })
+
+        viewModel.showPinUnlockLiveEvent.observe(this, Observer {
+            PinModule.startForUnlock(true)
+        })
+
+        viewModel.openBackupWalletLiveEvent.observe(this, Observer { account ->
+            account?.let {
+                BackupModule.start(this, account)
+            }
         })
 
         viewModel.showItemsEvent.observe(this, Observer { list ->
@@ -61,7 +76,6 @@ class ManageKeysActivity : BaseActivity() {
             }
         })
     }
-
 }
 
 class ManageKeysAdapter(private val viewModel: ManageKeysViewModel)
@@ -100,6 +114,10 @@ class KeysViewHolder(private val viewModel: ManageKeysViewModel, override val co
 
         buttonUnlink.setOnClickListener {
             viewModel.onUnlink(account)
+        }
+
+        buttonBackup.setOnClickListener {
+            viewModel.delegate.backupAccount(account)
         }
     }
 }

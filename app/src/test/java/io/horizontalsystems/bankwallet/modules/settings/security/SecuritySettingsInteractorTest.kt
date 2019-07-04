@@ -12,7 +12,6 @@ import io.horizontalsystems.bankwallet.core.managers.AuthManager
 import io.horizontalsystems.bankwallet.entities.BiometryType
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
 import io.reactivex.Flowable
-import io.reactivex.subjects.PublishSubject
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -22,7 +21,6 @@ import org.mockito.Mockito.mock
 class SecuritySettingsInteractorTest {
 
     private val delegate = mock(SecuritySettingsModule.ISecuritySettingsInteractorDelegate::class.java)
-    private val authManager = mock(AuthManager::class.java)
 
     private lateinit var interactor: SecuritySettingsInteractor
     private lateinit var localStorage: ILocalStorage
@@ -37,7 +35,6 @@ class SecuritySettingsInteractorTest {
         RxBaseTest.setup()
 
         accountManager = mock {
-            on { nonBackedUpCount } doReturn 0
             on { nonBackedUpCountFlowable } doReturn backedUpSignal
         }
 
@@ -53,7 +50,7 @@ class SecuritySettingsInteractorTest {
             on { isLocked } doReturn false
         }
 
-        interactor = SecuritySettingsInteractor(authManager, accountManager, localStorage, systemInfoManager, lockManager)
+        interactor = SecuritySettingsInteractor(accountManager, localStorage, systemInfoManager)
         interactor.delegate = delegate
     }
 
@@ -68,25 +65,8 @@ class SecuritySettingsInteractorTest {
     }
 
     @Test
-    fun isBackedUp() {
-        assertTrue(interactor.nonBackedUpCount == 0)
-    }
-
-    @Test
     fun getBiometricUnlockOn() {
         assertTrue(interactor.getBiometricUnlockOn())
-    }
-
-    @Test
-    fun isNotBackedUp() {
-        accountManager = mock {
-            on { nonBackedUpCount } doReturn 1
-            on { nonBackedUpCountFlowable } doReturn backedUpSignal
-        }
-        interactor = SecuritySettingsInteractor(authManager, accountManager, localStorage, systemInfoManager, lockManager)
-        interactor.delegate = delegate
-
-        assertFalse(interactor.nonBackedUpCount == 0)
     }
 
     @Test
@@ -94,7 +74,7 @@ class SecuritySettingsInteractorTest {
         localStorage = mock {
             on { isBiometricOn } doReturn false
         }
-        interactor = SecuritySettingsInteractor(authManager, accountManager, localStorage, systemInfoManager, lockManager)
+        interactor = SecuritySettingsInteractor(accountManager, localStorage, systemInfoManager)
         interactor.delegate = delegate
 
         assertFalse(interactor.getBiometricUnlockOn())
@@ -106,31 +86,4 @@ class SecuritySettingsInteractorTest {
         verify(localStorage).isBiometricOn = false
     }
 
-    @Test
-    fun unlinkWallet() {
-        interactor.unlinkWallet()
-
-        verify(authManager).logout()
-        verify(delegate).didUnlinkWallet()
-    }
-
-    @Test
-    fun didTapOnBackupWallet() {
-        val lockSubject = PublishSubject.create<Unit>()
-
-        lockManager = mock {
-            on { lockStateUpdatedSignal } doReturn lockSubject
-            on { isLocked } doReturn false
-        }
-
-        interactor = SecuritySettingsInteractor(authManager, accountManager, localStorage, systemInfoManager, lockManager)
-        interactor.delegate = delegate
-
-
-        interactor.didTapOnBackupWallet()
-        verify(delegate).accessIsRestricted()
-
-        lockSubject.onNext(Unit)
-        verify(delegate).openBackupWallet()
-    }
 }

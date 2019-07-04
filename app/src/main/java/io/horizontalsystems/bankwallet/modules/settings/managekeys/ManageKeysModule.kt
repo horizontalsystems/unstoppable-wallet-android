@@ -15,27 +15,33 @@ object ManageKeysModule {
         val items: List<Account>
 
         fun viewDidLoad()
+        fun backupAccount(account: Account)
         fun unlinkAccount(id: String)
         fun onClear()
     }
 
     interface Interactor {
         fun loadAccounts()
+        fun backupAccount(account: Account)
         fun deleteAccount(id: String)
         fun clear()
     }
 
     interface InteractorDelegate {
         fun didLoad(accounts: List<Account>)
+        fun accessIsRestricted()
+        fun openBackupWallet(account: Account)
     }
 
     interface Router {
+        fun showPinUnlock()
+        fun showBackupWallet(account: Account)
         fun close()
     }
 
     fun init(view: ManageKeysViewModel, router: Router) {
-        val interactor = ManageKeysInteractor(App.accountManager)
-        val presenter = ManageKeysPresenter(interactor)
+        val interactor = ManageKeysInteractor(App.accountManager, App.lockManager)
+        val presenter = ManageKeysPresenter(interactor, router)
 
         view.delegate = presenter
         presenter.view = view

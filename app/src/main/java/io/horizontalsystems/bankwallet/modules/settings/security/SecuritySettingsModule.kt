@@ -11,7 +11,6 @@ object SecuritySettingsModule {
         fun setBiometricUnlockOn(biometricUnlockOn: Boolean)
         fun setBiometryType(biometryType: BiometryType)
         fun setBackedUp(backedUp: Boolean)
-        fun reloadApp()
     }
 
     interface ISecuritySettingsViewDelegate {
@@ -19,9 +18,6 @@ object SecuritySettingsModule {
         fun didSwitchBiometricUnlock(biometricUnlockOn: Boolean)
         fun didTapManageKeys()
         fun didTapEditPin()
-        fun didTapBackupWallet()
-        fun didTapRestoreWallet()
-        fun confirmedUnlinkWallet()
         fun onClear()
     }
 
@@ -30,33 +26,24 @@ object SecuritySettingsModule {
         val biometryType: BiometryType
         fun getBiometricUnlockOn(): Boolean
         fun setBiometricUnlockOn(biometricUnlockOn: Boolean)
-        fun unlinkWallet()
-        fun didTapOnBackupWallet()
         fun clear()
     }
 
     interface ISecuritySettingsInteractorDelegate {
         fun didBackup(count: Int)
-        fun didUnlinkWallet()
-        fun openBackupWallet()
-        fun accessIsRestricted()
     }
 
     interface ISecuritySettingsRouter {
         fun showManageKeys()
         fun showEditPin()
-        fun showBackupWallet()
-        fun showRestoreWallet()
-        fun showPinUnlock()
     }
 
     fun start(context: Context) {
-        val intent = Intent(context, SecuritySettingsActivity::class.java)
-        context.startActivity(intent)
+        context.startActivity(Intent(context, SecuritySettingsActivity::class.java))
     }
 
     fun init(view: SecuritySettingsViewModel, router: ISecuritySettingsRouter) {
-        val interactor = SecuritySettingsInteractor(App.authManager, App.accountManager, App.localStorage, App.systemInfoManager, App.lockManager)
+        val interactor = SecuritySettingsInteractor(App.accountManager, App.localStorage, App.systemInfoManager)
         val presenter = SecuritySettingsPresenter(router, interactor)
 
         view.delegate = presenter

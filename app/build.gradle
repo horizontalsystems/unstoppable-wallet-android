@@ -156,6 +156,11 @@ dependencies {
     testImplementation 'com.nhaarman:mockito-kotlin-kt1.1:1.6.0'
     testImplementation 'org.powermock:powermock-api-mockito2:2.0.0-beta.5'
     testImplementation 'org.powermock:powermock-module-junit4:2.0.0-beta.5'
+
+    // Spek
+    testImplementation "org.spekframework.spek2:spek-dsl-jvm:2.0.5"
+    testRuntimeOnly "org.spekframework.spek2:spek-runner-junit5:2.0.5"
+    testRuntimeOnly "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 }
 
 configurations.all {

@@ -1,8 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.settings.security
 
-class SecuritySettingsPresenter(
-        private val router: SecuritySettingsModule.ISecuritySettingsRouter,
-        private val interactor: SecuritySettingsModule.ISecuritySettingsInteractor)
+class SecuritySettingsPresenter(private val router: SecuritySettingsModule.ISecuritySettingsRouter, private val interactor: SecuritySettingsModule.ISecuritySettingsInteractor)
     : SecuritySettingsModule.ISecuritySettingsViewDelegate, SecuritySettingsModule.ISecuritySettingsInteractorDelegate {
 
     var view: SecuritySettingsModule.ISecuritySettingsView? = null
@@ -25,18 +23,6 @@ class SecuritySettingsPresenter(
         router.showEditPin()
     }
 
-    override fun didTapBackupWallet() {
-        interactor.didTapOnBackupWallet()
-    }
-
-    override fun didTapRestoreWallet() {
-        router.showRestoreWallet()
-    }
-
-    override fun confirmedUnlinkWallet() {
-        interactor.unlinkWallet()
-    }
-
     override fun onClear() {
         interactor.clear()
     }
@@ -46,17 +32,4 @@ class SecuritySettingsPresenter(
     override fun didBackup(count: Int) {
         view?.setBackedUp(count == 0)
     }
-
-    override fun didUnlinkWallet() {
-        view?.reloadApp()
-    }
-
-    override fun openBackupWallet() {
-        router.showBackupWallet()
-    }
-
-    override fun accessIsRestricted() {
-        router.showPinUnlock()
-    }
-
 }

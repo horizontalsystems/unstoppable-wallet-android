@@ -4,9 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.SingleLiveEvent
-import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
 
-class BackupViewModel : ViewModel(), BackupModule.IView, BackupModule.IRouter, IKeyStoreSafeExecute {
+class BackupViewModel : ViewModel(), BackupModule.IView, BackupModule.IRouter {
+
     lateinit var delegate: BackupModule.IViewDelegate
 
     val loadPageLiveEvent = SingleLiveEvent<Int>()
@@ -15,12 +15,9 @@ class BackupViewModel : ViewModel(), BackupModule.IView, BackupModule.IRouter, I
     val wordIndexesToConfirmLiveData = MutableLiveData<List<Int>>()
     val validateWordsLiveEvent = SingleLiveEvent<Void>()
     val closeLiveEvent = SingleLiveEvent<Void>()
-    val navigateToSetPinLiveEvent = SingleLiveEvent<Void>()
-    val showConfirmationCheckDialogLiveEvent = SingleLiveEvent<Void>()
-    val keyStoreSafeExecute = SingleLiveEvent<Triple<Runnable, Runnable?, Runnable?>>()
 
-    fun init(dismissMode: BackupPresenter.DismissMode) {
-        BackupModule.init(this, this, this, dismissMode)
+    fun init(accountId: String) {
+        BackupModule.init(this, this, accountId)
     }
 
     // view
@@ -41,10 +38,6 @@ class BackupViewModel : ViewModel(), BackupModule.IView, BackupModule.IRouter, I
         errorLiveData.value = R.string.Backup_Confirmation_FailureAlertText
     }
 
-    override fun showTermsConfirmDialog() {
-        showConfirmationCheckDialogLiveEvent.call()
-    }
-
     override fun validateWords() {
         validateWordsLiveEvent.call()
     }
@@ -53,13 +46,5 @@ class BackupViewModel : ViewModel(), BackupModule.IView, BackupModule.IRouter, I
 
     override fun close() {
         closeLiveEvent.call()
-    }
-
-    override fun navigateToSetPin() {
-        navigateToSetPinLiveEvent.call()
-    }
-
-    override fun safeExecute(action: Runnable, onSuccess: Runnable?, onFailure: Runnable?) {
-        keyStoreSafeExecute.value = Triple(action, onSuccess, onFailure)
     }
 }

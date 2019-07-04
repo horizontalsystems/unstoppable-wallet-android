@@ -8,11 +8,9 @@ import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.modules.pin.PinModule
-import io.horizontalsystems.bankwallet.ui.dialogs.BottomConfirmAlert
 import kotlinx.android.synthetic.main.activity_backup_words.*
 
-class BackupActivity : BaseActivity(), BottomConfirmAlert.Listener {
+class BackupActivity : BaseActivity() {
 
     private lateinit var viewModel: BackupViewModel
 
@@ -22,7 +20,7 @@ class BackupActivity : BaseActivity(), BottomConfirmAlert.Listener {
         setContentView(R.layout.activity_backup_words)
 
         viewModel = ViewModelProviders.of(this).get(BackupViewModel::class.java)
-        viewModel.init(BackupPresenter.DismissMode.valueOf(intent.getStringExtra(dismissModeKey)))
+        viewModel.init(intent.getStringExtra(accountIdKey))
 
         if (savedInstanceState == null) {
             viewModel.delegate.viewDidLoad()
@@ -31,82 +29,60 @@ class BackupActivity : BaseActivity(), BottomConfirmAlert.Listener {
         buttonBack.setOnSingleClickListener { viewModel.delegate.onBackClick() }
         buttonNext.setOnSingleClickListener { viewModel.delegate.onNextClick() }
 
-        viewModel.navigateToSetPinLiveEvent.observe(this, Observer {
-            PinModule.startForSetPin(this)
-            finishAffinity()
-        })
-
         viewModel.closeLiveEvent.observe(this, Observer {
             finish()
         })
 
-        viewModel.keyStoreSafeExecute.observe(this, Observer { triple ->
-            triple?.let {
-                val (action, onSuccess, onFailure) = it
-                safeExecuteWithKeystore(action, onSuccess, onFailure)
-            }
-        })
-
-        viewModel.showConfirmationCheckDialogLiveEvent.observe(this, Observer {
-            val confirmationList = mutableListOf(
-                    R.string.Backup_Confirmation_SecretKey,
-                    R.string.Backup_Confirmation_DeleteAppWarn,
-                    R.string.Backup_Confirmation_LockAppWarn,
-                    R.string.Backup_Confirmation_Disclaimer
-            )
-            BottomConfirmAlert.show(this, confirmationList, this)
-        })
-
         viewModel.loadPageLiveEvent.observe(this, Observer { page ->
             page?.let {
-                val fragment = when(it) {
+                val fragment = when (page) {
                     0 -> BackupInfoFragment()
                     1 -> BackupWordsFragment()
                     else -> BackupConfirmFragment()
                 }
-                val transaction = supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.fragmentContainer, fragment)
-                transaction.addToBackStack(null)
-                transaction.commit()
 
-                setButtons(it)
+                supportFragmentManager.beginTransaction().apply {
+                    replace(R.id.fragmentContainer, fragment)
+                    addToBackStack(null)
+                    commit()
+                }
+
+                // set buttons
+                when (page) {
+                    0 -> {
+                        buttonBack.setText(R.string.Backup_Intro_Later)
+                        buttonNext.setText(R.string.Backup_Intro_BackupNow)
+                    }
+                    1 -> {
+                        buttonBack.setText(R.string.Button_Back)
+                        buttonNext.setText(R.string.Backup_Button_Next)
+                    }
+                    else -> {
+                        buttonBack.setText(R.string.Button_Back)
+                        buttonNext.setText(R.string.Backup_Button_Submit)
+                    }
+                }
             }
         })
 
-    }
-
-    private fun setButtons(page: Int) {
-        when(page) {
-            0 -> {
-                buttonBack.setText(R.string.Backup_Intro_Later)
-                buttonNext.setText(R.string.Backup_Intro_BackupNow)
-            }
-            1 -> {
-                buttonBack.setText(R.string.Button_Back)
-                buttonNext.setText(R.string.Backup_Button_Next)
-            }
-            else -> {
-                buttonBack.setText(R.string.Button_Back)
-                buttonNext.setText(R.string.Backup_Button_Submit)
-            }
-        }
     }
 
     override fun onBackPressed() {
         viewModel.delegate.onBackClick()
     }
 
-    override fun onConfirmationSuccess() {
-        viewModel.delegate.onTermsConfirm()
-    }
-
     companion object {
-        private const val dismissModeKey = "DismissMode"
+        private const val accountIdKey = "AccountIdKey"
 
-        fun start(context: Context, dismissMode: BackupPresenter.DismissMode) {
-            val intent = Intent(context, BackupActivity::class.java)
-            intent.putExtra(dismissModeKey, dismissMode.name)
-            context.startActivity(intent)
+        fun start(context: Context, accountId: String) {
+            try {
+                val intent = Intent(context, BackupActivity::class.java).apply {
+                    putExtra(accountIdKey, accountId)
+                }
+                context.startActivity(intent)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 }

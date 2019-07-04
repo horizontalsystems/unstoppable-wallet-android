@@ -1,8 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.backup
 
 import android.content.Context
+import io.horizontalsystems.bankwallet.core.Account
+import io.horizontalsystems.bankwallet.core.AccountType
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
 import java.util.*
 
 object BackupModule {
@@ -11,10 +12,13 @@ object BackupModule {
         fun showWords(words: List<String>)
         fun showConfirmationWords(indexes: List<Int>)
         fun showConfirmationError()
-        fun showTermsConfirmDialog()
 
         fun loadPage(page: Int)
         fun validateWords()
+    }
+
+    interface IPresenter : IInteractorDelegate, IViewDelegate {
+        var view: IView?
     }
 
     interface IViewDelegate {
@@ -22,64 +26,38 @@ object BackupModule {
         fun onNextClick()
         fun onBackClick()
         fun validateDidClick(confirmationWords: HashMap<Int, String>)
-        fun onTermsConfirm()
     }
 
     interface IInteractor {
-        fun fetchWords()
-        fun fetchConfirmationIndexes()
-        fun validate(confirmationWords: HashMap<Int, String>)
-        fun onTermsConfirm()
-        fun shouldShowTermsConfirmation(): Boolean
+        fun getAccount(id: String)
+        fun setBackedUp(accountId: String)
+        fun fetchConfirmationIndexes(): List<Int>
     }
 
     interface IInteractorDelegate {
-        fun didFetchWords(words: List<String>)
-        fun didFetchConfirmationIndexes(indexes: List<Int>)
-        fun didValidateSuccess()
-        fun didValidateFailure()
+        fun onGetAccount(account: Account)
+        fun onGetAccountFailed()
     }
 
     interface IRouter {
-        fun navigateToSetPin()
         fun close()
     }
 
-    // helpers
+    //  helpers
 
-    fun start(context: Context, dismissMode: BackupPresenter.DismissMode) {
-        BackupActivity.start(context, dismissMode)
+    fun start(context: Context, account: Account) {
+        if (account.type is AccountType.Mnemonic) {
+            BackupActivity.start(context, account.id)
+        }
     }
 
-    fun init(view: BackupViewModel, router: IRouter, keystoreSafeExecute: IKeyStoreSafeExecute, dismissMode: BackupPresenter.DismissMode) {
-        val interactor = BackupInteractor(App.authManager, App.wordsManager, App.randomManager, App.localStorage, keystoreSafeExecute)
-        val presenter = BackupPresenter(interactor, router, dismissMode, BackupModuleState())
-
-        presenter.view = view
-
-        interactor.delegate = presenter
+    fun init(view: BackupViewModel, router: IRouter, accountId: String) {
+        val interactor = BackupInteractor(App.accountManager, App.randomManager)
+        val presenter = BackupPresenter(interactor, router, accountId)
 
         view.delegate = presenter
-    }
-
-    class BackupModuleState {
-        private val pagesCount: Int = 3
-        var currentPage: Int = 0
-
-        fun canLoadNextPage(): Boolean {
-            if ((currentPage + 1) < pagesCount) {
-                currentPage++
-                return true
-            }
-            return false
-        }
-        fun canLoadPrevPage(): Boolean{
-            if (currentPage > 0) {
-                currentPage--
-                return true
-            }
-            return false
-        }
+        presenter.view = view
+        interactor.delegate = presenter
     }
 
 }

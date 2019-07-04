@@ -52,14 +52,6 @@ class ManageCoinsPresenterTest {
     }
 
     @Test
-    fun enableCoin() {
-        whenever(interactor.accounts(wallet3.coin.type)).thenReturn(listOf(account))
-        presenter.enableCoin(0)
-        verify(state).enable(any<Wallet>())
-        verify(view).updateCoins()
-    }
-
-    @Test
     fun disableCoin() {
         presenter.disableCoin(0)
         verify(state).disable(wallet1)

@@ -9,6 +9,8 @@ class ManageKeysViewModel : ViewModel(), ManageKeysModule.View, ManageKeysModule
     val showItemsEvent = SingleLiveEvent<List<Account>>()
     val closeLiveEvent = SingleLiveEvent<Void>()
     val unlinkAccountEvent = SingleLiveEvent<Account>()
+    val showPinUnlockLiveEvent = SingleLiveEvent<Unit>()
+    val openBackupWalletLiveEvent = SingleLiveEvent<Account>()
 
     lateinit var delegate: ManageKeysModule.ViewDelegate
 
@@ -28,6 +30,14 @@ class ManageKeysViewModel : ViewModel(), ManageKeysModule.View, ManageKeysModule
     }
 
     //  Router
+
+    override fun showPinUnlock() {
+        showPinUnlockLiveEvent.call()
+    }
+
+    override fun showBackupWallet(account: Account) {
+        openBackupWalletLiveEvent.postValue(account)
+    }
 
     override fun close() {
         closeLiveEvent.call()
