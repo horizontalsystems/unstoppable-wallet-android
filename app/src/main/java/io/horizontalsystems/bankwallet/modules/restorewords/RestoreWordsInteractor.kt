@@ -1,11 +1,11 @@
-package io.horizontalsystems.bankwallet.modules.restore
+package io.horizontalsystems.bankwallet.modules.restorewords
 
 import io.horizontalsystems.bankwallet.core.managers.WordsManager
 import io.horizontalsystems.hdwalletkit.Mnemonic
 
-class RestoreInteractor(private val wordsManager: WordsManager) : RestoreModule.IInteractor {
+class RestoreWordsInteractor(private val wordsManager: WordsManager) : RestoreWordsModule.IInteractor {
 
-    var delegate: RestoreModule.IInteractorDelegate? = null
+    var delegate: RestoreWordsModule.IInteractorDelegate? = null
 
     override fun validate(words: List<String>) {
         try {

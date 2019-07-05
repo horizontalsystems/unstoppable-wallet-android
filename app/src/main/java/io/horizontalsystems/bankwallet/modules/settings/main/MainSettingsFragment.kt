@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
+import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
 import io.horizontalsystems.bankwallet.modules.settings.AboutSettingsActivity
 import io.horizontalsystems.bankwallet.modules.settings.basecurrency.BaseCurrencySettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.language.LanguageSettingsModule
@@ -38,6 +39,10 @@ class MainSettingsFragment : Fragment() {
         securityCenter.apply {
             showArrow()
             setOnClickListener { viewModel.delegate.didTapSecurity() }
+        }
+
+        restoreWallet.setOnClickListener {
+            viewModel.delegate.didTapRestore()
         }
 
         baseCurrency.apply {
@@ -111,6 +116,10 @@ class MainSettingsFragment : Fragment() {
             context?.let {
                 SecuritySettingsModule.start(it)
             }
+        })
+
+        viewModel.showRestoreLiveEvent.observe(viewLifecycleOwner, Observer {
+            activity?.let { RestoreModule.start(it) }
         })
 
         viewModel.tabItemBadgeLiveDate.observe(viewLifecycleOwner, Observer { count ->

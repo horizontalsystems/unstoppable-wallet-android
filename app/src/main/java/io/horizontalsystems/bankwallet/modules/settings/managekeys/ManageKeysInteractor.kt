@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.settings.managekeys
 
 import io.horizontalsystems.bankwallet.core.Account
+import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ILockManager
 import io.horizontalsystems.bankwallet.core.managers.AccountManager
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -8,7 +9,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class ManageKeysInteractor(private val accountManager: AccountManager, private val lockManager: ILockManager) : ManageKeysModule.Interactor {
+class ManageKeysInteractor(private val accountManager: IAccountManager, private val lockManager: ILockManager) : ManageKeysModule.Interactor {
 
     var delegate: ManageKeysModule.InteractorDelegate? = null
 

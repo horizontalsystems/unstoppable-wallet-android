@@ -2,45 +2,33 @@ package io.horizontalsystems.bankwallet.modules.restore
 
 import android.content.Context
 import android.content.Intent
+import io.horizontalsystems.bankwallet.core.AccountType
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
+import io.horizontalsystems.bankwallet.entities.SyncMode
 
 object RestoreModule {
 
-    interface IView {
-        fun showError(error: Int)
+    interface View
+
+    interface ViewDelegate {
+        fun onSelect(accountType: PredefinedAccountType)
+        fun didRestore(accountType: AccountType, syncMode: SyncMode)
     }
 
-    interface IViewDelegate {
-        fun restoreDidClick(words: List<String>)
-    }
-
-    interface IInteractor {
-        fun validate(words: List<String>)
-    }
-
-    interface IInteractorDelegate {
-        fun didFailToValidate(exception: Exception)
-        fun didValidate(words: List<String>)
-    }
-
-    interface IRouter {
-        fun navigateToSetSyncMode(words: List<String>)
+    interface Router {
+        fun navigateToRestoreWords()
+        fun close()
     }
 
     fun start(context: Context) {
-        val intent = Intent(context, RestoreWalletActivity::class.java)
-        context.startActivity(intent)
+        context.startActivity(Intent(context, RestoreActivity::class.java))
     }
 
-    fun init(view: RestoreViewModel, router: IRouter) {
-        val interactor = RestoreInteractor(App.wordsManager)
-        val presenter = RestorePresenter(interactor, router)
+    fun init(view: RestoreViewModel, router: Router) {
+        val presenter = RestorePresenter(router, App.accountCreator)
 
         view.delegate = presenter
         presenter.view = view
-        interactor.delegate = presenter
     }
-
-    class RestoreFailedException : Exception()
-
 }

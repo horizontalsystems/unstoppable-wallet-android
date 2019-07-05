@@ -9,7 +9,7 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import org.jetbrains.anko.collections.forEachWithIndex
 
-class WalletManager(private val appConfigProvider: IAppConfigProvider, accountManager: AccountManager, private val walletStorage: IEnabledWalletStorage) : IWalletManager {
+class WalletManager(private val appConfigProvider: IAppConfigProvider, accountManager: IAccountManager, private val walletStorage: IEnabledWalletStorage) : IWalletManager {
 
     private val disposables = CompositeDisposable()
 

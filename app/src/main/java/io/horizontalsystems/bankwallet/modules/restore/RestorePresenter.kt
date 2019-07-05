@@ -1,23 +1,29 @@
 package io.horizontalsystems.bankwallet.modules.restore
 
-import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.AccountType
+import io.horizontalsystems.bankwallet.core.IAccountCreator
+import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
+import io.horizontalsystems.bankwallet.entities.SyncMode
 
-class RestorePresenter(
-        private val interactor: RestoreModule.IInteractor,
-        private val router: RestoreModule.IRouter) : RestoreModule.IViewDelegate, RestoreModule.IInteractorDelegate {
+class RestorePresenter(private val router: RestoreModule.Router, private val accountCreator: IAccountCreator) : RestoreModule.ViewDelegate {
 
-    var view: RestoreModule.IView? = null
+    var view: RestoreModule.View? = null
 
-    override fun restoreDidClick(words: List<String>) {
-        interactor.validate(words)
+    //  View Delegate
+
+    override fun onSelect(accountType: PredefinedAccountType) {
+        when (accountType) {
+            PredefinedAccountType.MNEMONIC -> {
+                router.navigateToRestoreWords()
+            }
+            else -> {
+
+            }
+        }
     }
 
-    override fun didFailToValidate(exception: Exception) {
-        view?.showError(R.string.Restore_ValidationFailed)
+    override fun didRestore(accountType: AccountType, syncMode: SyncMode) {
+        accountCreator.createRestoredAccount(accountType, syncMode)
+        router.close()
     }
-
-    override fun didValidate(words: List<String>) {
-        router.navigateToSetSyncMode(words)
-    }
-
 }

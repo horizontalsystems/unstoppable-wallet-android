@@ -49,12 +49,6 @@ class SyncModePresenterTest {
     }
 
     @Test
-    fun onNextClick() {
-        presenter.onNextClick()
-        verify(view).showConfirmationDialog()
-    }
-
-    @Test
     fun didConfirm() {
         val words = listOf("first", "second", "etc")
         state.syncMode = SyncMode.FAST
@@ -69,7 +63,7 @@ class SyncModePresenterTest {
     @Test
     fun didRestore() {
         presenter.didRestore()
-        verify(router).navigateToSetPin()
+        verify(router).navigateToMain()
     }
 
     @Test

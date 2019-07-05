@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Account
 import io.horizontalsystems.bankwallet.core.AccountType
+import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.backup.BackupModule
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.ui.dialogs.BottomButtonColor
@@ -102,10 +103,11 @@ class KeysViewHolder(private val viewModel: ManageKeysViewModel, override val co
     fun bind(account: Account) {
         accountName.text = account.name
         accountCoin.text = when (account.type) {
-            is AccountType.Eos -> "EOS"
+            is AccountType.Eos -> PredefinedAccountType.EOS.coinCodes
             is AccountType.Mnemonic,
             is AccountType.HDMasterKey,
-            is AccountType.PrivateKey -> "BTC, BCH, DASH, ETH, ERC20"
+            is AccountType.PrivateKey -> PredefinedAccountType.MNEMONIC.coinCodes
+            else -> PredefinedAccountType.MNEMONIC.coinCodes
         }
 
         if (!account.isBackedUp) {

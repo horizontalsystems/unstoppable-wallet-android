@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.restore
+package io.horizontalsystems.bankwallet.modules.restorewords
 
 import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.core.managers.WordsManager
@@ -11,12 +11,12 @@ import org.mockito.Mockito.verify
 class RestoreInteractorTest {
 
     private val wordsManager = mock(WordsManager::class.java)
-    private val delegate = mock(RestoreModule.IInteractorDelegate::class.java)
-    private lateinit var interactor: RestoreInteractor
+    private val delegate = mock(RestoreWordsModule.IInteractorDelegate::class.java)
+    private lateinit var interactor: RestoreWordsInteractor
 
     @Before
     fun before() {
-        interactor = RestoreInteractor(wordsManager)
+        interactor = RestoreWordsInteractor(wordsManager)
         interactor.delegate = delegate
     }
 

@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.restore
+package io.horizontalsystems.bankwallet.modules.restorewords
 
 import com.nhaarman.mockito_kotlin.verify
 import io.horizontalsystems.bankwallet.R
@@ -9,15 +9,15 @@ import org.mockito.Mockito
 
 class RestorePresenterTest {
 
-    private val interactor = Mockito.mock(RestoreModule.IInteractor::class.java)
-    private val router = Mockito.mock(RestoreModule.IRouter::class.java)
-    private val view = Mockito.mock(RestoreModule.IView::class.java)
+    private val interactor = Mockito.mock(RestoreWordsModule.IInteractor::class.java)
+    private val router = Mockito.mock(RestoreWordsModule.IRouter::class.java)
+    private val view = Mockito.mock(RestoreWordsModule.IView::class.java)
 
-    private lateinit var presenter: RestorePresenter
+    private lateinit var presenter: RestoreWordsPresenter
 
     @Before
     fun setUp() {
-        presenter = RestorePresenter(interactor, router)
+        presenter = RestoreWordsPresenter(interactor, router)
         presenter.view = view
     }
 

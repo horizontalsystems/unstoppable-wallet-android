@@ -1,17 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.managecoins
 
-import io.horizontalsystems.bankwallet.core.Account
-import io.horizontalsystems.bankwallet.core.IAppConfigProvider
-import io.horizontalsystems.bankwallet.core.IEnabledWalletStorage
-import io.horizontalsystems.bankwallet.core.Wallet
-import io.horizontalsystems.bankwallet.core.managers.AccountManager
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 
-class ManageWalletsInteractor(private val appConfigProvider: IAppConfigProvider, private val walletManager: WalletManager, private val accountManager: AccountManager, private val enabledCoinStorage: IEnabledWalletStorage)
+class ManageWalletsInteractor(private val appConfigProvider: IAppConfigProvider, private val walletManager: WalletManager, private val accountManager: IAccountManager, private val enabledCoinStorage: IEnabledWalletStorage)
     : ManageWalletsModule.IInteractor {
 
     var delegate: ManageWalletsModule.IInteractorDelegate? = null

@@ -1,13 +1,16 @@
 package io.horizontalsystems.bankwallet.core
 
+import android.os.Parcelable
 import io.horizontalsystems.bankwallet.entities.SyncMode
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
+@Parcelize
 class Account(val id: String,
               val name: String,
               val type: AccountType,
               var isBackedUp: Boolean = false,
-              val defaultSyncMode: SyncMode = SyncMode.FAST) {
+              val defaultSyncMode: SyncMode = SyncMode.FAST) : Parcelable {
 
     override fun equals(other: Any?): Boolean {
         if (other is Account) {
@@ -20,21 +23,14 @@ class Account(val id: String,
     override fun hashCode(): Int {
         return Objects.hash(name, type)
     }
-
-    override fun toString(): String {
-        val accountType = when (type) {
-            is AccountType.Mnemonic -> "Mnemonic [words: ${type.words.joinToString(separator = ", ")}, derivation: ${type.derivation.name}, salt: ${type.salt}]"
-            is AccountType.PrivateKey -> "PrivateKey [key: ${type.key.toHexString()}]"
-            is AccountType.HDMasterKey -> "HDMasterKey [key: ${type.key.toHexString()}, derivation: ${type.derivation}]"
-            is AccountType.Eos -> "Eos [activePrivateKey: ${type.activePrivateKey.toHexString()}, account: ${type.account}]"
-        }
-        return "Account: [id: $id, name: $name, type: $accountType, isBackedUp: $isBackedUp, defaultSyncMode: $defaultSyncMode]"
-    }
 }
 
-sealed class AccountType {
+@Parcelize
+open class AccountType : Parcelable {
+    @Parcelize
     data class Mnemonic(val words: List<String>, val derivation: Derivation, val salt: String) : AccountType()
 
+    @Parcelize
     data class PrivateKey(val key: ByteArray) : AccountType() {
         override fun equals(other: Any?): Boolean {
             if (other is PrivateKey) {
@@ -49,6 +45,7 @@ sealed class AccountType {
         }
     }
 
+    @Parcelize
     data class HDMasterKey(val key: ByteArray, val derivation: Derivation) : AccountType() {
         override fun equals(other: Any?): Boolean {
             if (other is HDMasterKey) {
@@ -63,9 +60,11 @@ sealed class AccountType {
         }
     }
 
+    @Parcelize
     data class Eos(val account: String, val activePrivateKey: ByteArray) : AccountType()
 
-    enum class Derivation {
+    @Parcelize
+    enum class Derivation : Parcelable {
         bip39,
         bip44
     }

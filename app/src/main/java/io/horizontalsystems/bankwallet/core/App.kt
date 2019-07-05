@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import com.squareup.leakcanary.LeakCanary
+import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
@@ -37,7 +38,8 @@ class App : Application() {
         lateinit var appConfigProvider: IAppConfigProvider
         lateinit var adapterManager: IAdapterManager
         lateinit var coinManager: WalletManager
-        lateinit var accountManager: AccountManager
+        lateinit var accountManager: IAccountManager
+        lateinit var accountCreator: IAccountCreator
 
         lateinit var rateSyncer: RateSyncer
         lateinit var rateManager: RateManager
@@ -90,6 +92,7 @@ class App : Application() {
         networkManager = NetworkManager(appConfigProvider)
         rateManager = RateManager(rateStorage, networkManager)
         accountManager = AccountManager(accountsStorage)
+        accountCreator = AccountCreator(accountManager, AccountFactory())
         coinManager = WalletManager(appConfigProvider, accountManager, enabledWalletsStorage)
         authManager = AuthManager(secureStorage, localStorage, coinManager, rateManager, ethereumKitManager, appConfigProvider)
 

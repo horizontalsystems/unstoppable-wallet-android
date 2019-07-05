@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
     <io.horizontalsystems.bankwallet.ui.extensions.ShadowlessToolbarView
         android:id="@+id/shadowlessToolbar"
@@ -13,8 +11,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
@@ -23,13 +20,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shadowlessToolbar"
-        >
+        app:layout_constraintTop_toBottomOf="@+id/shadowlessToolbar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
                 android:id="@+id/securityCenter"
@@ -40,19 +35,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:setting_icon="@drawable/ic_security"
-                app:setting_title="@string/Settings_SecurityCenter"
-                />
+                app:setting_title="@string/Settings_SecurityCenter" />
 
             <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
-                android:id="@+id/baseCurrency"
+                android:id="@+id/restoreWallet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/securityCenter"
-                app:setting_icon="@drawable/ic_currency"
-                app:setting_title="@string/Settings_BaseCurrency"
-                />
+                app:setting_icon="@drawable/ic_restore"
+                app:setting_title="@string/Settings_RestoreWallet" />
 
             <View
                 android:id="@+id/bottomShade_1"
@@ -61,20 +54,28 @@
                 android:background="?SettingsSectionBottomShadeColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/baseCurrency"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/restoreWallet" />
 
             <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
-                android:id="@+id/language"
+                android:id="@+id/baseCurrency"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/restoreWallet"
+                app:setting_icon="@drawable/ic_currency"
+                app:setting_title="@string/Settings_BaseCurrency" />
+
+            <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
+                android:id="@+id/language"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/baseCurrency"
                 app:setting_icon="@drawable/ic_language"
-                app:setting_title="@string/Settings_Language"
-                />
+                app:setting_title="@string/Settings_Language" />
 
             <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
                 android:id="@+id/lightMode"
@@ -84,8 +85,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/language"
                 app:setting_icon="@drawable/ic_light_mode"
-                app:setting_title="@string/Settings_LightMode"
-                />
+                app:setting_title="@string/Settings_LightMode" />
 
             <View
                 android:id="@+id/bottomShade_2"
@@ -94,8 +94,7 @@
                 android:background="?SettingsSectionBottomShadeColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lightMode"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/lightMode" />
 
             <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
                 android:id="@+id/about"
@@ -106,8 +105,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lightMode"
                 app:setting_icon="@drawable/ic_attention"
-                app:setting_title="@string/Settings_About"
-                />
+                app:setting_title="@string/Settings_About" />
 
             <View
                 android:id="@+id/bottomShade_3"
@@ -116,8 +114,7 @@
                 android:background="?SettingsSectionBottomShadeColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/about"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/about" />
 
             <TextView
                 android:id="@+id/appName"
@@ -130,8 +127,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/about"
-                tools:text="Wallet Bank 1.01"
-                />
+                tools:text="Wallet Bank 1.01" />
 
             <View
                 android:id="@+id/lineView"
@@ -141,8 +137,7 @@
                 android:background="@color/grey"
                 app:layout_constraintEnd_toEndOf="@+id/appName"
                 app:layout_constraintStart_toStartOf="@+id/appName"
-                app:layout_constraintTop_toBottomOf="@+id/appName"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/appName" />
 
             <TextView
                 android:id="@+id/decentralizedAppBy"
@@ -154,23 +149,21 @@
                 android:textColor="@color/grey"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lineView"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/lineView" />
 
             <ImageView
                 android:id="@+id/companyLogo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="42dp"
                 android:layout_marginTop="26dp"
+                android:layout_marginBottom="42dp"
                 android:background="?android:selectableItemBackground"
                 android:padding="6dp"
                 android:src="@drawable/hs_center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/decentralizedAppBy"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/decentralizedAppBy" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

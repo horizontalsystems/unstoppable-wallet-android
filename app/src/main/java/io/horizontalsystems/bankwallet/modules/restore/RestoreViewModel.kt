@@ -1,26 +1,26 @@
 package io.horizontalsystems.bankwallet.modules.restore
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 
-class RestoreViewModel : ViewModel(), RestoreModule.IView, RestoreModule.IRouter {
+class RestoreViewModel : ViewModel(), RestoreModule.View, RestoreModule.Router {
 
-    lateinit var delegate: RestoreModule.IViewDelegate
+    lateinit var delegate: RestoreModule.ViewDelegate
 
-    val errorLiveData = MutableLiveData<Int>()
-    val navigateToSetSyncModeLiveEvent = SingleLiveEvent<List<String>>()
+    val closeLiveEvent = SingleLiveEvent<Unit>()
+    val goToRestoreWordsLiveEvent = SingleLiveEvent<Unit>()
 
     fun init() {
         RestoreModule.init(this, this)
     }
 
-    override fun showError(error: Int) {
-        errorLiveData.value = error
+    // Router
+
+    override fun navigateToRestoreWords() {
+        goToRestoreWordsLiveEvent.call()
     }
 
-    override fun navigateToSetSyncMode(words: List<String>) {
-        navigateToSetSyncModeLiveEvent.value = words
+    override fun close() {
+        closeLiveEvent.call()
     }
-
 }

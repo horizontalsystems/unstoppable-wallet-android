@@ -51,7 +51,6 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                 words = accountType.words
                 derivation = accountType.derivation
                 salt = accountType.salt
-
             }
             is AccountType.PrivateKey -> {
                 accountTypeCode = PRIVATE_KEY
@@ -68,6 +67,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                 key = accountType.activePrivateKey.toHexString()
                 eosAccount = accountType.account
             }
+            else -> throw Exception("Cannot save account with type: $accountType")
         }
 
         executor.execute {

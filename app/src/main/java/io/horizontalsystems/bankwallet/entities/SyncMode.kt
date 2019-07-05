@@ -1,8 +1,11 @@
 package io.horizontalsystems.bankwallet.entities
 
+import android.os.Parcelable
 import io.horizontalsystems.bitcoincore.BitcoinCore
+import kotlinx.android.parcel.Parcelize
 
-enum class SyncMode(val value: String) {
+@Parcelize
+enum class SyncMode(val value: String) : Parcelable {
     FAST("fast"),
     SLOW("slow"),
     NEW("new");

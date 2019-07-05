@@ -168,6 +168,7 @@
 
     <string name="Settings_Title">Settings</string>
     <string name="Settings_SecurityCenter">Security Center</string>
+    <string name="Settings_RestoreWallet">Restore Wallet</string>
     <string name="Settings_BaseCurrency">Base Currency</string>
     <string name="Settings_Language">Language</string>
     <string name="Settings_LightMode">Light Mode</string>
@@ -289,6 +290,12 @@
     <string name="ManageKeys_title">Manage Keys</string>
     <string name="ManageKeys_Unlink">Unlink</string>
     <string name="ManageKeys_Backup">Backup</string>
+
+    <!-- Account Types -->
+
+    <string name="ManageKeys_12_words">12 Words Key</string>
+    <string name="ManageKeys_eos">EOS Account</string>
+    <string name="ManageKeys_24_words">24 Words Key</string>
 
     <!--Coin Option-->
     <string name="CoinOption_Title">Restore Options</string>

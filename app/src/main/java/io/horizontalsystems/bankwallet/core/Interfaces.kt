@@ -65,6 +65,11 @@ interface IAccountManager {
     fun setIsBackedUp(id: String)
 }
 
+interface IAccountCreator {
+    fun createRestoredAccount(accountType: AccountType, syncMode: SyncMode): Account
+    fun createNewAccount(type: PredefinedAccountType): Account
+}
+
 interface IRandomProvider {
     fun getRandomIndexes(count: Int): List<Int>
 }
