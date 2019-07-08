@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="dark">#1f2129</color>
-    <color name="dark_50">#801f2129</color>
+    <color name="dark">#13151A</color>
+    <color name="dark_50">#8013151A</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="lightBackground">#ebebf0</color>
     <color name="green_pressed">#1aa65d</color>
     <color name="green_crypto">#1ebf6b</color>
     <color name="green_crypto_20">#331ebf6b</color>
-    <color name="grey">#8a8a8f</color>
+    <color name="grey">#808085</color>
     <color name="grey_pressed">#717175</color>
-    <color name="grey_50">#808a8a8f</color>
+    <color name="grey_50">#80808085</color>
     <color name="steel_grey">#c8c7cc</color>
     <color name="steel_15">#2673798C</color>
     <color name="steel_30">#4d73798C</color>
@@ -24,11 +24,11 @@
     <color name="white_50">#80ffffff</color>
     <color name="red_error">#deff3434</color>
     <color name="red_warning">#ff5e3a</color>
-    <color name="bars_color">#f9f9f9</color>
-    <color name="bars_color_95">#f2f9f9f9</color>
+    <color name="bars_color">#f5f5f5</color>
+    <color name="bars_color_95">#f2f5f5f5</color>
     <color name="black_85">#d9000000</color>
     <color name="black_20">#33000000</color>
-    <color name="steel_dark">#2f323c</color>
+    <color name="steel_dark">#262830</color>
     <!-- eof base colors -->
 
     <color name="navigation_bar">?attr/BottomNavigationBackgroundColor</color>
