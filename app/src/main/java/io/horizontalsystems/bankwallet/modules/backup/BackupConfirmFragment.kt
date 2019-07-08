@@ -46,8 +46,8 @@ class BackupConfirmFragment : Fragment() {
         })
 
         viewModel.validateWordsLiveEvent.observe(viewLifecycleOwner, Observer {
-            val wordOneEntry = wordOne?.getEnteredText()
-            val wordTwoEntry = wordTwo?.getEnteredText()
+            val wordOneEntry = wordOne?.getEnteredText()?.toLowerCase()
+            val wordTwoEntry = wordTwo?.getEnteredText()?.toLowerCase()
             if (wordOneEntry.isNullOrEmpty() || wordTwoEntry.isNullOrEmpty()) {
                 showError(R.string.Backup_Confirmation_Description)
             } else {
