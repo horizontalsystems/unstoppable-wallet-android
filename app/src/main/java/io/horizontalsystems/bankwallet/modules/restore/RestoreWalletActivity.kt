@@ -50,7 +50,7 @@ class RestoreWalletActivity : BaseActivity() {
         recyclerInputs.adapter = WordsInputAdapter(object : InputTextViewHolder.WordsChangedListener {
             override fun set(position: Int, value: String) {
                 if (isUsingNativeKeyboard()) {
-                    words[position] = value
+                    words[position] = value.toLowerCase()
                 }
             }
 
