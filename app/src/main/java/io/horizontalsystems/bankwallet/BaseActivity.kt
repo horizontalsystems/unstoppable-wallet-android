@@ -24,6 +24,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.lib.AlertDialogFragment
+import io.horizontalsystems.bankwallet.modules.pin.PinActivity
+import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import java.util.*
 
 abstract class BaseActivity : AppCompatActivity() {
@@ -39,6 +41,13 @@ abstract class BaseActivity : AppCompatActivity() {
         setTheme(if (lightMode) R.style.LightModeAppTheme else R.style.DarkModeAppTheme)
 
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (this !is PinActivity && App.lockManager.isLocked){
+            PinModule.startForUnlock(this, false)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

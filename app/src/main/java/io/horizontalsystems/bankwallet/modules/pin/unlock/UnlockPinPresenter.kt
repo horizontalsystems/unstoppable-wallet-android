@@ -94,7 +94,6 @@ class UnlockPinPresenter(
         if(showCancelButton) {
             router.dismiss()
         } else {
-            interactor.cancelUnlock()
             router.closeApplication()
         }
     }

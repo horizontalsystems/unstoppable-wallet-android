@@ -37,7 +37,6 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_pin)
 
         val interactionType = intent.getSerializableExtra(keyInteractionType) as PinInteractionType
@@ -165,7 +164,6 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
         })
 
         viewModel.closeApplicationLiveEvent.observe(this, Observer {
-            App.appCloseManager.appCloseSignal.onNext(Unit)
             finishAffinity()
         })
 
@@ -208,12 +206,11 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
             context.startActivity(intent)
         }
 
-        fun startForUnlock(showCancel: Boolean) {
+        fun startForUnlock(context: Context, showCancel: Boolean) {
             val intent = Intent(App.instance, PinActivity::class.java)
             intent.putExtra(keyShowCancel, showCancel)
             intent.putExtra(keyInteractionType, PinInteractionType.UNLOCK)
-            intent.flags = Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            App.instance.startActivity(intent)
+            context.startActivity(intent)
         }
     }
 }

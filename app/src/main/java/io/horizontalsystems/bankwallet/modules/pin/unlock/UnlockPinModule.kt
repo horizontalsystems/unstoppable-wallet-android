@@ -23,7 +23,6 @@ object UnlockPinModule {
         fun unlock(pin: String): Boolean
         fun isBiometricOn(): Boolean
         fun onUnlock()
-        fun cancelUnlock()
     }
 
     interface IUnlockPinInteractorDelegate {
