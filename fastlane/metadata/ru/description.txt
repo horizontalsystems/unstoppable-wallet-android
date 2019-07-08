@@ -39,13 +39,13 @@ It's the most advanced wallet to date
 
 ВСЕГДА ОНЛАЙН
 
-Доступ к средствам всегда и везде.   Unstoppable wallet was engineered to remain online and functional independent of any third party servers.   
+Доступ к средствам всегда и везде. Unstoppable Wallet был разработан для того, чтобы оставаться онлайн и функционально независимым от любых сторонних серверов.   
 
-No single entity can take the wallet down and cause it's main features to malfunction. Not even the Horizontal Systems team able to interfere with it.
+Никто не может взломать ваш кошелек или вызвать неисправность основных функций. Даже команда Horizontal Systems не может вмешиваться в это.
 
 (5) ADVANCED & AHEAD
 
-Use the most technologically advanced and decentralized wallet ever built.   It’s the only mobile wallet that implements all major blockchains in a fully decentralized manner.
+Используйте самый технологичный и децентрализованный кошелек.   It’s the only mobile wallet that implements all major blockchains in a fully decentralized manner.
 
 Over 2500 engineering hours being put into this wallet every month. Этот кошелек постоянно улучшается и постоянно интегрирует последние улучшения во всех блокчейнах, таких как оценка segwit или комиссионных платежей в реальном времени.
   
