@@ -115,7 +115,7 @@ class SecuritySettingsActivity : BaseActivity(), BottomConfirmAlert.Listener {
         })
 
         viewModel.showPinUnlockLiveEvent.observe(this, Observer {
-            PinModule.startForUnlock(true)
+            PinModule.startForUnlock(this,true)
         })
 
     }

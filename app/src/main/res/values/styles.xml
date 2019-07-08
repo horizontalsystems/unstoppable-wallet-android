@@ -60,6 +60,7 @@
     <attr name="AddCoinButtonPlaceholder" format="reference|color" />
     <attr name="SortDialogItemTextColor" format="reference|color" />
     <attr name="ListAlertTextColor" format="reference|color" />
+    <attr name="ScreenHideColor" format="reference|color" />
 
     <!-- Base application theme. -->
     <style name="DarkModeAppTheme" parent="Theme.AppCompat.NoActionBar">
@@ -135,6 +136,7 @@
         <item name="AddCoinButtonPlaceholder">@color/steel_dark</item>
         <item name="SortDialogItemTextColor">@color/bars_color</item>
         <item name="ListAlertTextColor">@color/bars_color</item>
+        <item name="ScreenHideColor">@color/dark</item>
     </style>
 
     <style name="LightModeAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -210,6 +212,7 @@
         <item name="AddCoinButtonPlaceholder">@color/bars_color</item>
         <item name="SortDialogItemTextColor">@color/dark</item>
         <item name="ListAlertTextColor">@color/dark</item>
+        <item name="ScreenHideColor">@color/white</item>
     </style>
 
     <style name="Button" parent="Widget.AppCompat.Button.Borderless">

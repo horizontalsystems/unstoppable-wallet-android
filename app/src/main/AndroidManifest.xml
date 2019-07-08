@@ -61,7 +61,6 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".modules.pin.PinActivity"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".modules.settings.basecurrency.BaseCurrencySettingsActivity"

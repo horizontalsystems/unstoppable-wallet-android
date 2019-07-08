@@ -63,7 +63,7 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
 
         viewModel.transactionViewItemLiveEvent.observe(viewLifecycleOwner, Observer { transactionViewItem ->
             transactionViewItem?.let {
-                (activity as? MainActivity)?.setTransactionInfoItem(it)
+                (activity as? MainActivity)?.openTransactionInfo(it)
             }
         })
 
