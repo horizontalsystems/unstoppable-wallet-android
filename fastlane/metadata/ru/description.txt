@@ -27,19 +27,19 @@ It's the most advanced wallet to date
 
 (2) GENUINE PRIVACY
 
-  Stay truly private without revealing any personal data. There are no accounts, emails, phone numbers, identity checks or 3rd party servers storing your data.  
+Будь действительно приватным, никакого сбора личных данных. Никаких подтверждений личности, учетных записей, электронных писем, номеров телефонов и сторонних серверов.
 
-Unlike most wallets in the market the Unstoppable wallet connects users directly to decentralized blockchains without any restrictions or intermediaries.
+В отличие от большинства кошельков, Unstoppable Wallet соединяет пользователей непосредственно с децентрализованными блокчейнами без каких-либо ограничений или посредников.
 
 (3) HIGHLY SECURE
 
-  Keep your crypto assets safe on your phone using safe storage mechanisms provided by phone's operating system. Your secret keys never leaves your device the device.
+Держите ваши криптоактивы в безопасности на вашем устройстве с помощью безопасных механизмов хранения, предоставляемых операционной системой телефона. Ваши секретные ключи никогда не покинут ваше устройство.
 
-  In case of a device loss or replacement you may easily restore your wallet using Secret Key. Unstoppable makes it really easy to switch to another wallet or migrate funds from another wallet.
+В случае утери устройства или замены, вы можете легко восстановить ваш кошелек с помощью Секретного ключа. Unstoppable Wallet дает возможность переключаться на другой кошелек или переместить средства из другого кошелька.
 
- (4) ALWAYS ONLINE
+ВСЕГДА ОНЛАЙН
 
-Access your funds from anywhere at any time.   Unstoppable wallet was engineered to remain online and functional independent of any third party servers.   
+Доступ к средствам всегда и везде.   Unstoppable wallet was engineered to remain online and functional independent of any third party servers.   
 
 No single entity can take the wallet down and cause it's main features to malfunction. Not even the Horizontal Systems team able to interfere with it.
 
