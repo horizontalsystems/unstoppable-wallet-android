@@ -141,6 +141,7 @@
     <string name="Settings_Language">언어</string>
     <string name="Settings_LightMode">밝은 모드</string>
     <string name="Settings_About">에 대해</string>
+    <string name="Settings_ShareThisWallet">Tell Friends</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <!--Settings-->
@@ -173,6 +174,9 @@
 \n\n이 어플을 작동시키는 전체코드는 시작할 때부터 대중의 감시에 공개됩니다. 의도하지 않은 소프트웨어 문제들이 없다는 보장은 없지만, 우리는 가장 안전하고 분권화된 지갑을 만들기 위해 시도할 것입니다. 즉, 이 지갑은 어떠한 스마트폰 어플보다 안전할 것입니다.
 
 \n\n통화 환율과 같은 총괄적이고 사적이지 않은 데이터는 분산된 저장소(IPFS)에 저장될 것입니다.</string>
+    <!--Setting_Tell Friends-->
+    <string name="SettingsShare_Title">Share</string>
+    <string name="SettingsShare_Text">Unstoppable Wallet - Nice App!</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">안드로이드 키저장 에러</string>
     <string name="Alert_KeysInvalidatedDescription">당신의 안드로이드 스크린 장금이 변했기 때문에 당신의 지갑에 암호화된 데이터들은 지금 이용할 수 없습니다.</string>
