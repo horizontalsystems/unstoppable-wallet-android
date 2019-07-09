@@ -141,6 +141,7 @@
     <string name="Settings_Language">言語</string>
     <string name="Settings_LightMode">ライトモード</string>
     <string name="Settings_About">について</string>
+    <string name="Settings_ShareThisWallet">Tell Friends</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <!--Settings-->
@@ -167,6 +168,9 @@
 \n\nあなたの電話を脱獄したり、未知の（信頼できない）ソースからアプリをインストールしたり、あなたのデバイスを信頼できない人に与えたりしないでください。そしてあなたの電話のオペレーティングシステムを常にアップグレードしてください。あなたの財布の安全はこれらにかかっています。
 \n\nこのアプリの原動力となっているコード全体は、最初から世間に公開しています。私たちは、可能な限り最も安全な財布を構築しようとしましたが、予期しないソフトウェアの問題がないという保証はできません。とは言っても、この財布は他のスマートフォンの財布アプリよりもはるかに安全である可能性があります。
 \n\n為替レートなどの一般的な非公開でないアプリデータは、分散ストレージ（IPFS）に保存されています。</string>
+    <!--Setting_Tell Friends-->
+    <string name="SettingsShare_Title">Share</string>
+    <string name="SettingsShare_Text">Unstoppable Wallet - Nice App!</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">アンドロイドのキーストア エラー</string>
     <string name="Alert_KeysInvalidatedDescription">あなたの財布を保持している暗号化されたデータは、アンドロイド ロック画面が変更されたために無効になりました。</string>
