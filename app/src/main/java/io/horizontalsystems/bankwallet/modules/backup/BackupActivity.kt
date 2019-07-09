@@ -7,7 +7,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.Account
+import io.horizontalsystems.bankwallet.core.AccountType
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.core.utils.ModuleCode
+import io.horizontalsystems.bankwallet.modules.backup.words.BackupWordsActivity
+import io.horizontalsystems.bankwallet.modules.backup.words.BackupWordsModule
+import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import kotlinx.android.synthetic.main.activity_backup_words.*
 
 class BackupActivity : BaseActivity() {
@@ -16,73 +22,60 @@ class BackupActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_backup_words)
+        setContentView(R.layout.activity_backup)
 
         viewModel = ViewModelProviders.of(this).get(BackupViewModel::class.java)
-        viewModel.init(intent.getStringExtra(accountIdKey))
+        viewModel.init(intent.getParcelableExtra(ACCOUNT_KEY))
 
-        if (savedInstanceState == null) {
-            viewModel.delegate.viewDidLoad()
-        }
+        buttonBack.setOnSingleClickListener { viewModel.delegate.onClickCancel() }
+        buttonNext.setOnSingleClickListener { viewModel.delegate.onClickBackup() }
 
-        buttonBack.setOnSingleClickListener { viewModel.delegate.onBackClick() }
-        buttonNext.setOnSingleClickListener { viewModel.delegate.onNextClick() }
+        viewModel.startPinModuleEvent.observe(this, Observer {
+            PinModule.startForUnlock(this)
+        })
+
+        viewModel.startBackupEvent.observe(this, Observer { account ->
+            account?.let {
+                when (account.type) {
+                    is AccountType.Mnemonic -> {
+                        BackupWordsModule.start(this, account.type.words, account.id)
+                    }
+                }
+            }
+        })
 
         viewModel.closeLiveEvent.observe(this, Observer {
             finish()
         })
+    }
 
-        viewModel.loadPageLiveEvent.observe(this, Observer { page ->
-            page?.let {
-                val fragment = when (page) {
-                    0 -> BackupInfoFragment()
-                    1 -> BackupWordsFragment()
-                    else -> BackupConfirmFragment()
-                }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
-                supportFragmentManager.beginTransaction().apply {
-                    replace(R.id.fragmentContainer, fragment)
-                    addToBackStack(null)
-                    commit()
-                }
+        if (data == null || resultCode != RESULT_OK) return
 
-                // set buttons
-                when (page) {
-                    0 -> {
-                        buttonBack.setText(R.string.Backup_Intro_Later)
-                        buttonNext.setText(R.string.Backup_Intro_BackupNow)
-                    }
-                    1 -> {
-                        buttonBack.setText(R.string.Button_Back)
-                        buttonNext.setText(R.string.Backup_Button_Next)
-                    }
-                    else -> {
-                        buttonBack.setText(R.string.Button_Back)
-                        buttonNext.setText(R.string.Backup_Button_Submit)
-                    }
-                }
+        when (requestCode) {
+            ModuleCode.BACKUP_WORDS -> {
+                val accountId = data.getStringExtra(BackupWordsActivity.ACCOUNT_ID_KEY)
+                viewModel.delegate.onBackedUp(accountId)
+                finish()
             }
-        })
-
+        }
     }
 
     override fun onBackPressed() {
-        viewModel.delegate.onBackClick()
+        viewModel.delegate.onClickCancel()
     }
 
     companion object {
-        private const val accountIdKey = "AccountIdKey"
+        const val ACCOUNT_KEY = "account_key"
 
-        fun start(context: Context, accountId: String) {
-            try {
-                val intent = Intent(context, BackupActivity::class.java).apply {
-                    putExtra(accountIdKey, accountId)
-                }
-                context.startActivity(intent)
-            } catch (e: Exception) {
-                e.printStackTrace()
+        fun start(context: Context, account: Account) {
+            val intent = Intent(context, BackupActivity::class.java).apply {
+                putExtra(ACCOUNT_KEY, account)
             }
+
+            context.startActivity(intent)
         }
     }
 }

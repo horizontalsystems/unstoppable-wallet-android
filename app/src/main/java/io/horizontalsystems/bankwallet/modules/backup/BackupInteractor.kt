@@ -1,39 +1,29 @@
 package io.horizontalsystems.bankwallet.modules.backup
 
 import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.core.IRandomProvider
-import io.reactivex.disposables.CompositeDisposable
+import io.horizontalsystems.bankwallet.core.ILockManager
+import io.reactivex.disposables.Disposable
 
-class BackupInteractor(private val accountManager: IAccountManager, private val indexesProvider: IRandomProvider)
-    : BackupModule.IInteractor {
+class BackupInteractor(private val router: BackupModule.Router, private val lockManager: ILockManager, private val accountManager: IAccountManager)
+    : BackupModule.Interactor {
 
-    var delegate: BackupModule.IInteractorDelegate? = null
+    var delegate: BackupModule.InteractorDelegate? = null
 
-    private var disposables: CompositeDisposable = CompositeDisposable()
+    private var lockStateUpdateDisposable: Disposable? = null
 
-    override fun getAccount(id: String) {
-        accountManager.accountsFlowable
-                .subscribe({ list ->
-                    val account = list.find { it.id == id }
-                    if (account == null) {
-                        delegate?.onGetAccountFailed()
-                    } else {
-                        delegate?.onGetAccount(account)
-                    }
-                }, {
-                    delegate?.onGetAccountFailed()
-                })
-                .let {
-                    disposables.add(it)
-                }
+    override fun backup() {
+        router.startPinModule()
+
+        lockStateUpdateDisposable?.dispose()
+        lockStateUpdateDisposable = lockManager.lockStateUpdatedSignal.subscribe {
+            if (!lockManager.isLocked) {
+                delegate?.onPinUnlock()
+                lockStateUpdateDisposable?.dispose()
+            }
+        }
     }
 
     override fun setBackedUp(accountId: String) {
         accountManager.setIsBackedUp(accountId)
     }
-
-    override fun fetchConfirmationIndexes(): List<Int> {
-        return indexesProvider.getRandomIndexes(2)
-    }
-
 }

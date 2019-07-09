@@ -1,23 +1,47 @@
 package io.horizontalsystems.bankwallet.entities
 
-import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.AccountType
+import io.horizontalsystems.bankwallet.core.DefaultAccountType
+import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 
-enum class PredefinedAccountType {
-    MNEMONIC,
-    EOS,
-    BINANCE;
+class Words12AccountType : IPredefinedAccountType {
+    override val title = "12 Words Key"
+    override val coinCodes = "BTC, BCH, DASH, ETH, ERC-20"
+    override val defaultAccountType: DefaultAccountType?
+        get() = DefaultAccountType.Mnemonic(12)
 
-    val title
-        get() = when (this) {
-            MNEMONIC -> R.string.ManageKeys_12_words
-            EOS -> R.string.ManageKeys_eos
-            BINANCE -> R.string.ManageKeys_24_words
+    override fun supports(accountType: AccountType): Boolean {
+        if (accountType is AccountType.Mnemonic) {
+            return accountType.words.size == 12
         }
 
-    val coinCodes
-        get() = when (this) {
-            MNEMONIC -> "BTC, BCH, DASH, ETH, ERC-20"
-            EOS -> "EOS"
-            BINANCE -> "BNB"
+        return false
+    }
+}
+
+class Words24AccountType : IPredefinedAccountType {
+    override val title = "24 Words Key"
+    override val coinCodes = "BNB, CHN"
+    override val defaultAccountType: DefaultAccountType?
+        get() = DefaultAccountType.Mnemonic(24)
+
+    override fun supports(accountType: AccountType): Boolean {
+        if (accountType is AccountType.Mnemonic) {
+            return accountType.words.size == 24
         }
+
+        return false
+    }
+}
+
+
+class EosAccountType : IPredefinedAccountType {
+    override val title = "Eos Account"
+    override val coinCodes = "EOS"
+    override val defaultAccountType: DefaultAccountType?
+        get() = null
+
+    override fun supports(accountType: AccountType): Boolean {
+        return accountType is AccountType.Eos
+    }
 }

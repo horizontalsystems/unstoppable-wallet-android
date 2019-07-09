@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.backup
+package io.horizontalsystems.bankwallet.modules.backup.words
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.fragment_backup_words_show_words.*
 
 class BackupWordsFragment : Fragment() {
 
-    private lateinit var viewModel: BackupViewModel
+    private lateinit var viewModel: BackupWordsViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_backup_words_show_words, container, false)
@@ -25,7 +25,7 @@ class BackupWordsFragment : Fragment() {
         val wordsAdapter = WordsAdapter()
 
         activity?.let {
-            viewModel = ViewModelProviders.of(it).get(BackupViewModel::class.java)
+            viewModel = ViewModelProviders.of(it).get(BackupWordsViewModel::class.java)
         }
 
         recyclerWords.adapter = wordsAdapter

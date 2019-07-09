@@ -2,58 +2,42 @@ package io.horizontalsystems.bankwallet.modules.backup
 
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.Account
-import io.horizontalsystems.bankwallet.core.AccountType
 import io.horizontalsystems.bankwallet.core.App
-import java.util.*
 
 object BackupModule {
 
-    interface IView {
-        fun showWords(words: List<String>)
-        fun showConfirmationWords(indexes: List<Int>)
-        fun showConfirmationError()
+    interface View
 
-        fun loadPage(page: Int)
-        fun validateWords()
+    interface ViewDelegate {
+        fun onClickCancel()
+        fun onClickBackup()
+        fun onBackedUp(accountId: String)
     }
 
-    interface IPresenter : IInteractorDelegate, IViewDelegate {
-        var view: IView?
-    }
-
-    interface IViewDelegate {
-        fun viewDidLoad()
-        fun onNextClick()
-        fun onBackClick()
-        fun validateDidClick(confirmationWords: HashMap<Int, String>)
-    }
-
-    interface IInteractor {
-        fun getAccount(id: String)
+    interface Interactor {
+        fun backup()
         fun setBackedUp(accountId: String)
-        fun fetchConfirmationIndexes(): List<Int>
     }
 
-    interface IInteractorDelegate {
-        fun onGetAccount(account: Account)
-        fun onGetAccountFailed()
+    interface InteractorDelegate {
+        fun onPinUnlock()
     }
 
-    interface IRouter {
+    interface Router {
+        fun startPinModule()
+        fun startBackupModule(account: Account)
         fun close()
     }
 
     //  helpers
 
     fun start(context: Context, account: Account) {
-        if (account.type is AccountType.Mnemonic) {
-            BackupActivity.start(context, account.id)
-        }
+        BackupActivity.start(context, account)
     }
 
-    fun init(view: BackupViewModel, router: IRouter, accountId: String) {
-        val interactor = BackupInteractor(App.accountManager, App.randomManager)
-        val presenter = BackupPresenter(interactor, router, accountId)
+    fun init(view: BackupViewModel, router: Router, account: Account) {
+        val interactor = BackupInteractor(router, App.lockManager, App.accountManager)
+        val presenter = BackupPresenter(interactor, router, account)
 
         view.delegate = presenter
         presenter.view = view

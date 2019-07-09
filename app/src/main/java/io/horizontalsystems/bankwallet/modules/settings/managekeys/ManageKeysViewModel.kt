@@ -6,11 +6,11 @@ import io.horizontalsystems.bankwallet.core.Account
 
 class ManageKeysViewModel : ViewModel(), ManageKeysModule.View, ManageKeysModule.Router {
 
-    val showItemsEvent = SingleLiveEvent<List<Account>>()
+    val showItemsEvent = SingleLiveEvent<List<ManageAccountItem>>()
     val closeLiveEvent = SingleLiveEvent<Void>()
-    val unlinkAccountEvent = SingleLiveEvent<Account>()
-    val showPinUnlockLiveEvent = SingleLiveEvent<Unit>()
-    val openBackupWalletLiveEvent = SingleLiveEvent<Account>()
+    val confirmUnlinkEvent = SingleLiveEvent<Account>()
+    val startBackupModuleLiveEvent = SingleLiveEvent<Account>()
+    val startRestoreWordsLiveEvent = SingleLiveEvent<Unit>()
 
     lateinit var delegate: ManageKeysModule.ViewDelegate
 
@@ -19,24 +19,24 @@ class ManageKeysViewModel : ViewModel(), ManageKeysModule.View, ManageKeysModule
         delegate.viewDidLoad()
     }
 
-    fun onUnlink(account: Account) {
-        unlinkAccountEvent.value = account
+    fun confirmUnlink(account: Account) {
+        confirmUnlinkEvent.value = account
     }
 
     //  View
 
-    override fun show(items: List<Account>) {
-        showItemsEvent.value = items
+    override fun show(items: List<ManageAccountItem>) {
+        showItemsEvent.postValue(items)
     }
 
     //  Router
 
-    override fun showPinUnlock() {
-        showPinUnlockLiveEvent.call()
+    override fun startBackupModule(account: Account) {
+        startBackupModuleLiveEvent.postValue(account)
     }
 
-    override fun showBackupWallet(account: Account) {
-        openBackupWalletLiveEvent.postValue(account)
+    override fun startRestoreWords() {
+        startRestoreWordsLiveEvent.call()
     }
 
     override fun close() {

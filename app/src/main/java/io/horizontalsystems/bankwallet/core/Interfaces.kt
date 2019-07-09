@@ -57,8 +57,11 @@ interface ISecuredStorage {
 }
 
 interface IAccountManager {
+    val accounts: MutableList<Account>
     val accountsFlowable: Flowable<List<Account>>
     val nonBackedUpCountFlowable: Flowable<Int>
+
+    fun account(predefinedAccountType: IPredefinedAccountType): Account?
 
     fun save(account: Account)
     fun delete(id: String)
@@ -66,8 +69,23 @@ interface IAccountManager {
 }
 
 interface IAccountCreator {
-    fun createRestoredAccount(accountType: AccountType, syncMode: SyncMode): Account
-    fun createNewAccount(type: PredefinedAccountType): Account
+    fun createRestoredAccount(accountType: AccountType, syncMode: SyncMode?): Account
+    fun createNewAccount(defaultAccountType: DefaultAccountType): Account
+}
+
+interface IPredefinedAccountTypeManager {
+    val allTypes: List<IPredefinedAccountType>
+}
+
+interface IPredefinedAccountType {
+    val title: String
+    val coinCodes: String
+    val defaultAccountType: DefaultAccountType?
+    fun supports(accountType: AccountType): Boolean
+}
+
+sealed class DefaultAccountType {
+    class Mnemonic(val wordsCount: Int) : DefaultAccountType()
 }
 
 interface IRandomProvider {
@@ -219,6 +237,7 @@ interface IAppConfigProvider {
     val currencies: List<Currency>
     val defaultCoinCodes: List<String>
     val coins: List<Coin>
+    val predefinedAccountTypes: List<IPredefinedAccountType>
 }
 
 interface IOneTimerDelegate {

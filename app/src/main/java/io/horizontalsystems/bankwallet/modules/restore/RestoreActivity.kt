@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.restore
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AccountType
+import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
-import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.modules.restorewords.RestoreWordsModule
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
@@ -35,10 +34,16 @@ class RestoreActivity : BaseActivity() {
         viewModel = ViewModelProviders.of(this).get(RestoreViewModel::class.java)
         viewModel.init()
 
-        recyclerView.adapter = RestoreNavigationAdapter(viewModel)
+        val adapter = RestoreNavigationAdapter(viewModel)
+        recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        viewModel.goToRestoreWordsLiveEvent.observe(this, Observer {
+        viewModel.reloadLiveEvent.observe(this, Observer {
+            adapter.items = it
+            adapter.notifyDataSetChanged()
+        })
+
+        viewModel.startRestoreWordsLiveEvent.observe(this, Observer {
             RestoreWordsModule.startForResult(this, ModuleCode.RESTORE_WORDS)
         })
 
@@ -62,10 +67,10 @@ class RestoreActivity : BaseActivity() {
 class RestoreNavigationAdapter(private val viewModel: RestoreViewModel)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val items = PredefinedAccountType.values()
+    var items = listOf<IPredefinedAccountType>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return KeysViewHolder(parent.context, LayoutInflater.from(parent.context).inflate(R.layout.view_holder_account_restore, parent, false))
+        return KeysViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_account_restore, parent, false))
     }
 
     override fun getItemCount() = items.size
@@ -81,11 +86,11 @@ class RestoreNavigationAdapter(private val viewModel: RestoreViewModel)
     }
 }
 
-class KeysViewHolder(private val context: Context, override val containerView: View)
+class KeysViewHolder(override val containerView: View)
     : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(accountType: PredefinedAccountType) {
-        accountName.text = context.getString(accountType.title)
+    fun bind(accountType: IPredefinedAccountType) {
+        accountName.text = accountType.title
         accountCoin.text = accountType.coinCodes
     }
 }

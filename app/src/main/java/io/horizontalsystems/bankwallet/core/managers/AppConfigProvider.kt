@@ -4,9 +4,8 @@ import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CoinType
-import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
+import io.horizontalsystems.bankwallet.entities.*
 import java.math.BigDecimal
 
 class AppConfigProvider : IAppConfigProvider {
@@ -94,5 +93,11 @@ class AppConfigProvider : IAppConfigProvider {
             Coin("Walton", "WTC", CoinType.Erc20("0xb7cB1C96dB6B22b0D3d9536E0108d062BD488F74", 18)),
             Coin("WAX", "WAX", CoinType.Erc20("0x39Bb259F66E1C59d5ABEF88375979b4D20D98022", 8)),
             Coin("Zilliqa", "ZIL", CoinType.Erc20("0x05f4a42e251f2d52b8ed15E9FEdAacFcEF1FAD27", 12))
+    )
+
+    override val predefinedAccountTypes: List<IPredefinedAccountType> = listOf(
+            Words12AccountType(),
+            EosAccountType(),
+            Words24AccountType()
     )
 }

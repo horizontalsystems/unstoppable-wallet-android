@@ -22,29 +22,29 @@
         android:layout_marginStart="4dp"
         android:layout_marginEnd="4dp">
 
+        <ImageView
+            android:id="@+id/backupBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateTint="@color/grey"
+            android:indeterminateTintMode="src_atop"
+            android:src="@drawable/ic_key"
+            android:tint="@color/yellow_crypto"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/accountName"
             style="@style/BaseSb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:textColor="?BallanceCoinNameColor"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/backupBadge"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/backupBadge"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Bitcoin" />
 
-        <ImageView
-            android:id="@+id/backupBadge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_attention"
-            android:tint="@color/red_warning"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -83,14 +83,37 @@
         android:visibility="visible">
 
         <Button
-            android:id="@+id/buttonUnlink"
-            style="@style/ButtonRedText"
+            android:id="@+id/buttonNew"
+            style="@style/ButtonYellowText"
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_marginEnd="4dp"
+            android:layout_marginStart="4dp"
             android:layout_marginBottom="8dp"
             android:layout_weight="1"
-            android:text="@string/ManageKeys_Unlink" />
+            android:text="@string/ManageKeys_New"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/buttonImport"
+            style="@style/ButtonYellowText"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1"
+            android:text="@string/ManageKeys_Import"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/buttonUnlink"
+            style="@style/ButtonYellowText"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1"
+            android:text="@string/ManageKeys_Unlink"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/buttonBackup"
@@ -100,7 +123,19 @@
             android:layout_marginStart="4dp"
             android:layout_marginBottom="8dp"
             android:layout_weight="1"
-            android:text="@string/ManageKeys_Backup" />
+            android:text="@string/ManageKeys_Backup"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/buttonShow"
+            style="@style/ButtonYellowText"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1"
+            android:text="@string/ManageKeys_Show"
+            android:visibility="gone" />
 
     </LinearLayout>
 

@@ -20,29 +20,29 @@ import kotlinx.android.synthetic.main.view_holder_coin_disabled.*
 import kotlinx.android.synthetic.main.view_holder_coin_enabled.*
 
 
-class ManageWalletsActivity : BaseActivity(), ManageWalletsAdapter.Listener, StartDragListener {
+class ManageWalletsActivity : BaseActivity(), ManageWalletsAdapter.StartDragListener {
 
     private lateinit var viewModel: ManageWalletsViewModel
     private var itemTouchHelper: ItemTouchHelper? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_manage_coins)
+
         viewModel = ViewModelProviders.of(this).get(ManageWalletsViewModel::class.java)
         viewModel.init()
 
-        setContentView(R.layout.activity_manage_coins)
-
-        val adapter = ManageWalletsAdapter(this, this)
+        val adapter = ManageWalletsAdapter(viewModel.delegate, this)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter.viewModel = viewModel
-        itemTouchHelper = ItemTouchHelper(MyDragHelperCallback(adapter))
+
+        itemTouchHelper = ItemTouchHelper(ManageWalletsDragHelper(adapter))
         itemTouchHelper?.attachToRecyclerView(recyclerView)
 
         shadowlessToolbar.bind(
                 title = getString(R.string.ManageCoins_title),
-                leftBtnItem = TopMenuItem(R.drawable.back, { onBackPressed() }),
-                rightBtnItem = TopMenuItem(R.drawable.checkmark_orange, { viewModel.delegate.saveChanges() })
+                leftBtnItem = TopMenuItem(R.drawable.back) { onBackPressed() },
+                rightBtnItem = TopMenuItem(R.drawable.checkmark_orange) { viewModel.delegate.saveChanges() }
         )
 
         viewModel.coinsLoadedLiveEvent.observe(this, Observer {
@@ -54,38 +54,27 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsAdapter.Listener, Sta
         })
     }
 
-    override fun onEnabledItemClick(position: Int) {
-        viewModel.delegate.disableCoin(position)
-    }
-
-    override fun onDisabledItemClick(position: Int) {
-        viewModel.delegate.enableCoin(position)
-    }
-
     override fun requestDrag(viewHolder: RecyclerView.ViewHolder) {
         itemTouchHelper?.startDrag(viewHolder)
     }
 }
 
-class ManageWalletsAdapter(private var listener: Listener, private var startDragListener: StartDragListener)
-    : RecyclerView.Adapter<RecyclerView.ViewHolder>(), MyDragHelperCallback.Listener {
+class ManageWalletsAdapter(private val viewDelegate: ManageWalletsModule.IViewDelegate, private var startDragListener: StartDragListener)
+    : RecyclerView.Adapter<RecyclerView.ViewHolder>(), ManageWalletsDragHelper.Listener {
 
-    interface Listener {
-        fun onEnabledItemClick(position: Int)
-        fun onDisabledItemClick(position: Int)
+    interface StartDragListener {
+        fun requestDrag(viewHolder: RecyclerView.ViewHolder)
     }
-
-    lateinit var viewModel: ManageWalletsViewModel
 
     private val typeEnabled = 0
     private val typeDisabled = 1
     private val typeDivider = 2
 
-    override fun getItemCount() = viewModel.delegate.enabledCoinsCount + viewModel.delegate.disabledCoinsCount + (if (showDivider) 1 else 0)
+    override fun getItemCount() = viewDelegate.enabledCoinsCount + viewDelegate.disabledCoinsCount + (if (showDivider) 1 else 0)
 
     override fun getItemViewType(position: Int): Int = when {
-        position < viewModel.delegate.enabledCoinsCount -> typeEnabled
-        showDivider && position == viewModel.delegate.enabledCoinsCount -> typeDivider
+        position < viewDelegate.enabledCoinsCount -> typeEnabled
+        showDivider && position == viewDelegate.enabledCoinsCount -> typeDivider
         else -> typeDisabled
     }
 
@@ -100,12 +89,9 @@ class ManageWalletsAdapter(private var listener: Listener, private var startDrag
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ViewHolderEnabledCoin -> {
-                val wallet = viewModel.delegate.enabledItemForIndex(position)
-                holder.bind(
-                        coin = wallet.coin,
-                        showBottomShadow = (position == viewModel.delegate.enabledCoinsCount-1),
-                        onClick = { listener.onEnabledItemClick(position) }
-                )
+                holder.bind(coin = viewDelegate.enabledItemForIndex(position).coin, showBottomShadow = (position == viewDelegate.enabledCoinsCount - 1)) {
+                    viewDelegate.disableCoin(position)
+                }
 
                 holder.dragIcon.setOnTouchListener { _, event ->
                     if (event.action == MotionEvent.ACTION_DOWN) {
@@ -115,30 +101,29 @@ class ManageWalletsAdapter(private var listener: Listener, private var startDrag
                 }
             }
             is ViewHolderDisabledCoin -> {
-                val transactionRecord = viewModel.delegate.disabledItemForIndex(disabledIndex(position))
-                holder.bind(
-                        coin = transactionRecord,
-                        showBottomShadow = (position == itemCount - 1),
-                        onClick = { listener.onDisabledItemClick(disabledIndex(position)) }
-                )
+                holder.bind(coin = viewDelegate.disabledItemForIndex(disabledIndex(position)), showBottomShadow = (position == itemCount - 1)) {
+                    viewDelegate.enableCoin(disabledIndex(position))
+                }
             }
         }
 
     }
+
+    // Drag Listener
 
     override fun onItemMoved(from: Int, to: Int) {
         notifyItemMoved(from, to)
     }
 
     override fun onItemMoveEnded(from: Int, to: Int) {
-        viewModel.delegate.moveCoin(from, to)
+        viewDelegate.moveCoin(from, to)
     }
 
     private val showDivider
-        get() = viewModel.delegate.enabledCoinsCount > 0
+        get() = viewDelegate.enabledCoinsCount > 0
 
     private fun disabledIndex(position: Int): Int = when {
-        showDivider -> position - viewModel.delegate.enabledCoinsCount - 1
+        showDivider -> position - viewDelegate.enabledCoinsCount - 1
         else -> position
     }
 }
@@ -170,58 +155,3 @@ class ViewHolderDisabledCoin(override val containerView: View) : RecyclerView.Vi
 }
 
 class ViewHolderDivider(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
-
-
-class MyDragHelperCallback(private var listener: Listener) : ItemTouchHelper.Callback() {
-
-    var dragFrom = -1
-    var dragTo = -1
-
-    interface Listener {
-        fun onItemMoved(from: Int, to: Int)
-        fun onItemMoveEnded(from: Int, to: Int)
-    }
-
-    override fun isLongPressDragEnabled(): Boolean {
-        return false
-    }
-
-    private val drawMovementFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
-
-    override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-        return makeMovementFlags(drawMovementFlags, 0)
-    }
-
-    override fun canDropOver(recyclerView: RecyclerView, current: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-        return current.itemViewType == target.itemViewType
-    }
-
-    override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-        val fromPosition = viewHolder.adapterPosition
-        val toPosition = target.adapterPosition
-        if(dragFrom == -1) {
-            dragFrom = fromPosition
-        }
-        dragTo = toPosition
-
-        listener.onItemMoved(viewHolder.adapterPosition, target.adapterPosition)
-        return true
-    }
-
-    override fun onSwiped(recyclerView: RecyclerView.ViewHolder, position: Int) { }
-
-    override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
-        super.clearView(recyclerView, viewHolder)
-
-        if(dragFrom != -1 && dragTo != -1 && dragFrom != dragTo) {
-            listener.onItemMoveEnded(dragFrom, dragTo)
-        }
-
-        dragFrom = -1
-        dragTo = -1
-    }
-}
-
-interface StartDragListener {
-    fun requestDrag(viewHolder: RecyclerView.ViewHolder)
-}

@@ -1,48 +1,30 @@
 package io.horizontalsystems.bankwallet.modules.backup
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.bankwallet.core.Account
 
-class BackupViewModel : ViewModel(), BackupModule.IView, BackupModule.IRouter {
+class BackupViewModel : ViewModel(), BackupModule.View, BackupModule.Router {
 
-    lateinit var delegate: BackupModule.IViewDelegate
+    lateinit var delegate: BackupModule.ViewDelegate
 
-    val loadPageLiveEvent = SingleLiveEvent<Int>()
-    val errorLiveData = SingleLiveEvent<Int>()
-    val wordsLiveData = MutableLiveData<List<String>>()
-    val wordIndexesToConfirmLiveData = MutableLiveData<List<Int>>()
-    val validateWordsLiveEvent = SingleLiveEvent<Void>()
+    val startPinModuleEvent = SingleLiveEvent<Void>()
+    val startBackupEvent = SingleLiveEvent<Account>()
     val closeLiveEvent = SingleLiveEvent<Void>()
 
-    fun init(accountId: String) {
-        BackupModule.init(this, this, accountId)
-    }
-
-    // view
-
-    override fun loadPage(page: Int) {
-        loadPageLiveEvent.value = page
-    }
-
-    override fun showWords(words: List<String>) {
-        wordsLiveData.value = words
-    }
-
-    override fun showConfirmationWords(indexes: List<Int>) {
-        wordIndexesToConfirmLiveData.value = indexes
-    }
-
-    override fun showConfirmationError() {
-        errorLiveData.value = R.string.Backup_Confirmation_FailureAlertText
-    }
-
-    override fun validateWords() {
-        validateWordsLiveEvent.call()
+    fun init(account: Account) {
+        BackupModule.init(this, this, account)
     }
 
     // router
+
+    override fun startPinModule() {
+        startPinModuleEvent.call()
+    }
+
+    override fun startBackupModule(account: Account) {
+        startBackupEvent.value = account
+    }
 
     override fun close() {
         closeLiveEvent.call()

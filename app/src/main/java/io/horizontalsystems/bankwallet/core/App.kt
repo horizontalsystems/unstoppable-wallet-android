@@ -40,6 +40,7 @@ class App : Application() {
         lateinit var coinManager: WalletManager
         lateinit var accountManager: IAccountManager
         lateinit var accountCreator: IAccountCreator
+        lateinit var predefinedAccountTypeManager: IPredefinedAccountTypeManager
 
         lateinit var rateSyncer: RateSyncer
         lateinit var rateManager: RateManager
@@ -93,6 +94,7 @@ class App : Application() {
         rateManager = RateManager(rateStorage, networkManager)
         accountManager = AccountManager(accountsStorage)
         accountCreator = AccountCreator(accountManager, AccountFactory())
+        predefinedAccountTypeManager = PredefinedAccountTypeManager(appConfigProvider, accountManager)
         coinManager = WalletManager(appConfigProvider, accountManager, enabledWalletsStorage)
         authManager = AuthManager(secureStorage, localStorage, coinManager, rateManager, ethereumKitManager, appConfigProvider)
 

@@ -4,20 +4,25 @@ import android.content.Context
 import android.content.Intent
 import io.horizontalsystems.bankwallet.core.AccountType
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
+import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
 
 object RestoreModule {
 
-    interface View
+    interface View {
+        fun reload(items: List<IPredefinedAccountType>)
+    }
 
     interface ViewDelegate {
-        fun onSelect(accountType: PredefinedAccountType)
+        val items: List<IPredefinedAccountType>
+
+        fun viewDidLoad()
+        fun onSelect(accountType: IPredefinedAccountType)
         fun didRestore(accountType: AccountType, syncMode: SyncMode)
     }
 
     interface Router {
-        fun navigateToRestoreWords()
+        fun startRestoreWordsModule()
         fun close()
     }
 
@@ -26,7 +31,7 @@ object RestoreModule {
     }
 
     fun init(view: RestoreViewModel, router: Router) {
-        val presenter = RestorePresenter(router, App.accountCreator)
+        val presenter = RestorePresenter(router, App.accountCreator, App.predefinedAccountTypeManager)
 
         view.delegate = presenter
         presenter.view = view

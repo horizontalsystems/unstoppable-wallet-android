@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.settings.managekeys
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,11 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.Account
 import io.horizontalsystems.bankwallet.core.AccountType
-import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
+import io.horizontalsystems.bankwallet.core.utils.ModuleCode
+import io.horizontalsystems.bankwallet.entities.EosAccountType
+import io.horizontalsystems.bankwallet.entities.SyncMode
+import io.horizontalsystems.bankwallet.entities.Words12AccountType
+import io.horizontalsystems.bankwallet.entities.Words24AccountType
 import io.horizontalsystems.bankwallet.modules.backup.BackupModule
-import io.horizontalsystems.bankwallet.modules.pin.PinModule
+import io.horizontalsystems.bankwallet.modules.restorewords.RestoreWordsModule
 import io.horizontalsystems.bankwallet.ui.dialogs.BottomButtonColor
 import io.horizontalsystems.bankwallet.ui.dialogs.BottomConfirmAlert
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
@@ -39,11 +44,7 @@ class ManageKeysActivity : BaseActivity() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        viewModel.closeLiveEvent.observe(this, Observer {
-            finish()
-        })
-
-        viewModel.unlinkAccountEvent.observe(this, Observer { account ->
+        viewModel.confirmUnlinkEvent.observe(this, Observer { account ->
             account?.let {
                 val confirmationList = mutableListOf(
                         R.string.SettingsSecurity_ImportWalletConfirmation_1,
@@ -60,14 +61,16 @@ class ManageKeysActivity : BaseActivity() {
             }
         })
 
-        viewModel.showPinUnlockLiveEvent.observe(this, Observer {
-            PinModule.startForUnlock(true)
+        viewModel.startBackupModuleLiveEvent.observe(this, Observer { account ->
+            account?.let { BackupModule.start(this, account) }
         })
 
-        viewModel.openBackupWalletLiveEvent.observe(this, Observer { account ->
-            account?.let {
-                BackupModule.start(this, account)
-            }
+        viewModel.startRestoreWordsLiveEvent.observe(this, Observer {
+            RestoreWordsModule.startForResult(this, ModuleCode.RESTORE_WORDS)
+        })
+
+        viewModel.closeLiveEvent.observe(this, Observer {
+            finish()
         })
 
         viewModel.showItemsEvent.observe(this, Observer { list ->
@@ -77,15 +80,30 @@ class ManageKeysActivity : BaseActivity() {
             }
         })
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (data == null || resultCode != RESULT_OK) return
+
+        when (requestCode) {
+            ModuleCode.RESTORE_WORDS -> {
+                val syncMode = data.getParcelableExtra<SyncMode>("syncMode")
+                val accountType = data.getParcelableExtra<AccountType>("accountType")
+
+                viewModel.delegate.onRestore(accountType, syncMode)
+            }
+        }
+    }
 }
 
 class ManageKeysAdapter(private val viewModel: ManageKeysViewModel)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var items = listOf<Account>()
+    var items = listOf<ManageAccountItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return KeysViewHolder(viewModel, LayoutInflater.from(parent.context).inflate(R.layout.view_holder_account, parent, false))
+        return KeysViewHolder(viewModel, parent.context, LayoutInflater.from(parent.context).inflate(R.layout.view_holder_account, parent, false))
     }
 
     override fun getItemCount() = items.size
@@ -97,29 +115,51 @@ class ManageKeysAdapter(private val viewModel: ManageKeysViewModel)
     }
 }
 
-class KeysViewHolder(private val viewModel: ManageKeysViewModel, override val containerView: View)
+class KeysViewHolder(private val viewModel: ManageKeysViewModel, val context: Context, override val containerView: View)
     : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(account: Account) {
-        accountName.text = account.name
-        accountCoin.text = when (account.type) {
-            is AccountType.Eos -> PredefinedAccountType.EOS.coinCodes
-            is AccountType.Mnemonic,
-            is AccountType.HDMasterKey,
-            is AccountType.PrivateKey -> PredefinedAccountType.MNEMONIC.coinCodes
-            else -> PredefinedAccountType.MNEMONIC.coinCodes
+    fun bind(item: ManageAccountItem) {
+        hideButtons()
+
+        val pAccountType = item.predefinedAccountType
+        accountName.text = pAccountType.title
+        accountCoin.text = pAccountType.coinCodes
+
+        if (item.account == null) {
+            when (pAccountType) {
+                is EosAccountType -> {
+                    buttonImport.visibility = View.VISIBLE
+                }
+                is Words12AccountType,
+                is Words24AccountType -> {
+                    buttonNew.visibility = View.VISIBLE
+                    buttonImport.visibility = View.VISIBLE
+                }
+            }
+
+            buttonNew.setOnClickListener { }
+            buttonImport.setOnClickListener { viewModel.delegate.restoreAccount(pAccountType) }
+
+            return
         }
 
-        if (!account.isBackedUp) {
-            backupBadge.visibility = View.VISIBLE
+        val account = item.account
+        if (account.isBackedUp) {
+            buttonShow.visibility = View.VISIBLE
+        } else {
+            buttonBackup.visibility = View.VISIBLE
         }
 
-        buttonUnlink.setOnClickListener {
-            viewModel.onUnlink(account)
-        }
+        buttonUnlink.visibility = View.VISIBLE
+        buttonUnlink.setOnClickListener { viewModel.confirmUnlink(account) }
+        buttonBackup.setOnClickListener { viewModel.delegate.backupAccount(account) }
+    }
 
-        buttonBackup.setOnClickListener {
-            viewModel.delegate.backupAccount(account)
-        }
+    private fun hideButtons() {
+        buttonNew.visibility = View.GONE
+        buttonImport.visibility = View.GONE
+        buttonUnlink.visibility = View.GONE
+        buttonShow.visibility = View.GONE
+        buttonBackup.visibility = View.GONE
     }
 }

@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.backup
+package io.horizontalsystems.bankwallet.modules.backup.words
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,8 +11,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.extensions.InputTextView
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 
-class BackupConfirmFragment : Fragment() {
-    private lateinit var viewModel: BackupViewModel
+class BackupWordsConfirmFragment : Fragment() {
+    private lateinit var viewModel: BackupWordsViewModel
 
     private var wordIndex1 = -1
     private var wordIndex2 = -1
@@ -28,7 +28,7 @@ class BackupConfirmFragment : Fragment() {
         val wordTwo: InputTextView? = view.findViewById(R.id.wordTwo)
 
         activity?.let {
-            viewModel = ViewModelProviders.of(it).get(BackupViewModel::class.java)
+            viewModel = ViewModelProviders.of(it).get(BackupWordsViewModel::class.java)
         }
 
         viewModel.wordIndexesToConfirmLiveData.observe(viewLifecycleOwner, Observer { list ->

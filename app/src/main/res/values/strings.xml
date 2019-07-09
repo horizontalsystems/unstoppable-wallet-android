@@ -288,8 +288,11 @@
     <!--Manage Keys-->
 
     <string name="ManageKeys_title">Manage Keys</string>
+    <string name="ManageKeys_New">New</string>
+    <string name="ManageKeys_Import">Import</string>
     <string name="ManageKeys_Unlink">Unlink</string>
     <string name="ManageKeys_Backup">Backup</string>
+    <string name="ManageKeys_Show">Show</string>
 
     <!-- Account Types -->
 
