@@ -141,6 +141,7 @@
     <string name="Settings_Language">Sprache</string>
     <string name="Settings_LightMode">Licht Modus</string>
     <string name="Settings_About">Info</string>
+    <string name="Settings_ShareThisWallet">Tell Friends</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <!--Settings-->
@@ -167,6 +168,9 @@
 \n\nHack dein Telefon nicht, installier keine Anwendungen von inoffiziellen Quellen und gib dein Telefon niemals den anderen. Die Sicherheit  deiner Wallet hängt direkt davon ab.
 \n\nDer gesamte Programmcode dieser Anwendung ist kostenlos und für die Öffentlichkeit zugänglich. Wir haben versucht, die sicherste und gleichzeitig dezentralisierte Wallet zu schaffen, aber es gibt keine Garantie dafür, dass der Anwendungscode fehlerfrei ist. Wir glauben jedoch, dass dieser Wallet in Bezug auf die Sicherheit fast alle heute verfügbare mobile Kryptobörsen deutlich übertrifft.
 \n\nEinige von der Anwendung verwendete öffentliche Daten, wie z. B. Wechselkurse, werden im dezentralen Repository (IPFS) gespeichert</string>
+    <!--Setting_Tell Friends-->
+    <string name="SettingsShare_Title">Share</string>
+    <string name="SettingsShare_Text">Unstoppable Wallet - Nice App!</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android Keystore Fehler</string>
     <string name="Alert_KeysInvalidatedDescription">Deine verschlüsselten Daten wurden kürzlich ungültig gemacht, weil dein Android-Sperrbildschirm geändert wurde</string>
