@@ -66,6 +66,16 @@ class FullTransactionInfoItemView : ConstraintLayout {
         invalidate()
     }
 
+    fun bindSourceProvider(title: String, value: String?) {
+        txtTitle.text = title
+        sourceProviderText.text = value
+
+        sourceProviderText.visibility = View.VISIBLE
+        rightArrow.visibility = View.VISIBLE
+        valueText.visibility = View.GONE
+        addressView.visibility = View.GONE
+    }
+
     private fun showTypeIcon(icon: Int) {
         typeIcon.setImageDrawable(ContextCompat.getDrawable(App.instance, icon))
         typeIcon.visibility = View.VISIBLE

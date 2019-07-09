@@ -46,9 +46,8 @@
     <View
         android:id="@+id/inputBackgroundView"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="138dp"
         android:background="?ConfirmationMiddlePartBackground"
-        app:layout_constraintBottom_toTopOf="@+id/txtFeeTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/border1"
@@ -98,25 +97,23 @@
         android:id="@+id/border2"
         android:layout_width="0dp"
         android:layout_height="0.5dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginBottom="10dp"
         android:background="@color/steel_15"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/secondaryAmountText"
+        app:layout_constraintBottom_toTopOf="@+id/addressView"
         />
 
     <io.horizontalsystems.bankwallet.ui.extensions.AddressView
         android:id="@+id/addressView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/inputBackgroundView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/border2"
         />
 
     <TextView
@@ -126,10 +123,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:paddingTop="4dp"
         android:text="@string/Send_DialogFee"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addressView"
+        app:layout_constraintTop_toBottomOf="@+id/inputBackgroundView"
         />
 
     <TextView
@@ -138,7 +134,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:paddingTop="4dp"
         android:textAlignment="textEnd"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/txtFeeTitle"
@@ -176,7 +171,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -36,7 +36,7 @@
         android:id="@+id/transactionIdView"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@+id/txInfoCoinIcon"
         app:layout_constraintTop_toTopOf="@+id/txInfoCoinIcon"
