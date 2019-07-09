@@ -14,7 +14,7 @@
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="#338a8a8f"
+        android:background="#33808085"
         app:layout_constraintTop_toTopOf="parent"
         />
 
