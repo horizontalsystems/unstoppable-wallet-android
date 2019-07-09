@@ -18,7 +18,6 @@ import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
 import io.horizontalsystems.bankwallet.ui.dialogs.BottomButtonColor
 import io.horizontalsystems.bankwallet.ui.dialogs.BottomConfirmAlert
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.activity_settings_security.*
 
 class SecuritySettingsActivity : BaseActivity(), BottomConfirmAlert.Listener {
@@ -45,9 +44,15 @@ class SecuritySettingsActivity : BaseActivity(), BottomConfirmAlert.Listener {
                 leftBtnItem = TopMenuItem(R.drawable.back, { onBackPressed() })
         )
 
-        changePin.setOnClickListener { viewModel.delegate.didTapEditPin() }
+        changePin.apply {
+            showArrow()
+            setOnClickListener { viewModel.delegate.didTapEditPin() }
+        }
 
-        backupWallet.setOnClickListener { viewModel.delegate.didTapBackupWallet() }
+        backupWallet.apply {
+            showArrow()
+            setOnClickListener { viewModel.delegate.didTapBackupWallet() }
+        }
 
 
         importWallet.setOnClickListener {
@@ -72,8 +77,8 @@ class SecuritySettingsActivity : BaseActivity(), BottomConfirmAlert.Listener {
 
 
         viewModel.backedUpLiveData.observe(this, Observer { wordListBackedUp ->
-            wordListBackedUp?.let {
-                backupWallet.badge = LayoutHelper.getInfoBadge(it, resources)
+            wordListBackedUp?.let { wordListIsBackedUp ->
+                backupWallet.setInfoBadgeVisibility(!wordListIsBackedUp)
             }
         })
 

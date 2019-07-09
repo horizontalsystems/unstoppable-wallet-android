@@ -183,7 +183,7 @@ class SectionViewAdapter(val context: Context) : RecyclerView.Adapter<RecyclerVi
 
         when (holder) {
             is SectionSourceViewHolder -> {
-                holder.transactionSource.bind(title = context.getString(R.string.FullInfo_Source), value = providerName, dimmed = false, icon = null)
+                holder.transactionSource.bindSourceProvider(context.getString(R.string.FullInfo_Source), providerName)
                 holder.transactionSource.setOnClickListener {
                     viewModel.delegate.onTapProvider()
                 }

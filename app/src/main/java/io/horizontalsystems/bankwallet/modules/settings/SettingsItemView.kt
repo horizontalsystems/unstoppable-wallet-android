@@ -24,6 +24,7 @@ class SettingsItemView : ConstraintLayout {
     private lateinit var titleTextView: TextView
     private lateinit var selectedValueTextView: TextView
     private lateinit var switch: Switch
+    private lateinit var arrowImageView: ImageView
     private lateinit var badgeImageView: ImageView
 
     constructor(context: Context) : super(context)
@@ -55,6 +56,7 @@ class SettingsItemView : ConstraintLayout {
         switch = findViewById(R.id.setting_switch)
         switch.isClickable = false
         badgeImageView = findViewById(R.id.setting_badge)
+        arrowImageView = findViewById(R.id.setting_arrow_right)
 
         settingIconImageView.apply {
             visibility = if (attrIcon == null) View.GONE else View.VISIBLE
@@ -62,6 +64,8 @@ class SettingsItemView : ConstraintLayout {
         }
 
         titleTextView.text = attrTitle
+        arrowImageView.visibility = View.GONE
+        badgeImageView.visibility = View.GONE
 
     }
 
@@ -77,6 +81,7 @@ class SettingsItemView : ConstraintLayout {
             switchOnCheckedChangeListener = null
             switch.isChecked = isChecked
             switch.visibility = View.VISIBLE
+            field = isChecked
             invalidate()
         }
 
@@ -94,14 +99,15 @@ class SettingsItemView : ConstraintLayout {
         set(value) {
             selectedValueTextView.visibility = if (value != null) View.VISIBLE else View.GONE
             selectedValueTextView.text = value
+            field = value
             invalidate()
         }
 
-    var badge: Drawable? = null
-        set(badge) {
-            badgeImageView.visibility = if (badge != null) View.VISIBLE else View.GONE
-            badgeImageView.setImageDrawable(badge)
-            invalidate()
-        }
+    fun setInfoBadgeVisibility(isVisible: Boolean){
+        badgeImageView.visibility = if(isVisible) View.VISIBLE else View.GONE
+    }
 
+    fun showArrow() {
+        arrowImageView.visibility = View.VISIBLE
+    }
 }

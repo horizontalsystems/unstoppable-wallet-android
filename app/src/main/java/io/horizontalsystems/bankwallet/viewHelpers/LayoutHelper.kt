@@ -8,7 +8,6 @@ import android.util.TypedValue
 import android.view.Menu
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 
 object LayoutHelper {
@@ -60,15 +59,6 @@ object LayoutHelper {
 
     fun getCurrencyDrawableResource(currencyCode: String): Int {
         return App.instance.resources.getIdentifier("currency_$currencyCode", "drawable", App.instance.packageName)
-    }
-
-    fun getInfoBadge(wordListBackedUp: Boolean, resources: Resources): Drawable? {
-        var infoBadge: Drawable? = null
-        if (!wordListBackedUp) {
-            infoBadge = resources.getDrawable(R.drawable.ic_attention, null)
-            infoBadge?.setTint(resources.getColor(R.color.red_warning, null))
-        }
-        return infoBadge
     }
 
     fun getDeviceDensity(context: Context): String {

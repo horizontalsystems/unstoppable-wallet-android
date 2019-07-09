@@ -59,6 +59,32 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="June 6, 2019, 15:02" />
 
+    <TextView
+        android:id="@+id/sourceProviderText"
+        style="@style/Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="2dp"
+        android:textColor="?BottomDialogTextColor"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/rightArrow"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Provider" />
+
+    <ImageView
+        android:id="@+id/rightArrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:src="@drawable/ic_right_arrrow"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
     <View
         android:id="@+id/border"
         android:layout_width="0dp"

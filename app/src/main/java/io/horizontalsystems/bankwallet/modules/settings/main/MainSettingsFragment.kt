@@ -18,7 +18,6 @@ import io.horizontalsystems.bankwallet.modules.settings.AboutSettingsActivity
 import io.horizontalsystems.bankwallet.modules.settings.basecurrency.BaseCurrencySettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.language.LanguageSettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.security.SecuritySettingsModule
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.fragment_settings.*
 
 class MainSettingsFragment : Fragment() {
@@ -36,34 +35,32 @@ class MainSettingsFragment : Fragment() {
 
         shadowlessToolbar.bindTitle(getString(R.string.Settings_Title))
 
-        securityCenter.setOnClickListener {
-            viewModel.delegate.didTapSecurity()
+        securityCenter.apply {
+            showArrow()
+            setOnClickListener { viewModel.delegate.didTapSecurity() }
         }
 
         baseCurrency.apply {
-            setOnClickListener {
-                viewModel.delegate.didTapBaseCurrency()
-            }
+            showArrow()
+            setOnClickListener { viewModel.delegate.didTapBaseCurrency() }
         }
 
         language.apply {
-            setOnClickListener {
-                viewModel.delegate.didTapLanguage()
-            }
+            showArrow()
+            setOnClickListener { viewModel.delegate.didTapLanguage() }
         }
 
         lightMode.apply {
-            setOnClickListener {
-                switchToggle()
-            }
+            setOnClickListener { switchToggle() }
         }
 
         companyLogo.setOnClickListener {
             viewModel.delegate.didTapAppLink()
         }
 
-        about.setOnClickListener {
-            viewModel.delegate.didTapAbout()
+        about.apply {
+            showArrow()
+            setOnClickListener { viewModel.delegate.didTapAbout() }
         }
 
         viewModel.baseCurrencyLiveDate.observe(viewLifecycleOwner, Observer { currency ->
@@ -72,9 +69,9 @@ class MainSettingsFragment : Fragment() {
             }
         })
 
-        viewModel.backedUpLiveDate.observe(viewLifecycleOwner, Observer { backedUp ->
-            backedUp?.let {
-                securityCenter.badge = LayoutHelper.getInfoBadge(it, resources)
+        viewModel.backedUpLiveDate.observe(viewLifecycleOwner, Observer { wordListBackedUp ->
+            wordListBackedUp?.let {wordListIsBackedUp ->
+                securityCenter.setInfoBadgeVisibility(!wordListIsBackedUp)
             }
         })
 

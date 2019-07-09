@@ -8,10 +8,10 @@
 
     <TextView
         android:id="@+id/statusPendingText"
+        style="@style/Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:textColor="@color/grey"
+        android:textColor="@color/steel_dark"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="4dp"
         android:visibility="gone"
