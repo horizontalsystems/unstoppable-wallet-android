@@ -83,7 +83,7 @@
         android:layout_marginStart="14dp"
         android:background="@drawable/rounded_ripple_24dp"
         android:padding="10dp"
-        android:src="@drawable/share"
+        android:src="@drawable/ic_share"
         app:layout_constraintBottom_toBottomOf="@+id/bottomBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/bottomBar"

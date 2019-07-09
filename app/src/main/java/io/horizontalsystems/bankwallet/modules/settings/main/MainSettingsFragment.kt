@@ -20,6 +20,7 @@ import io.horizontalsystems.bankwallet.modules.settings.language.LanguageSetting
 import io.horizontalsystems.bankwallet.modules.settings.security.SecuritySettingsModule
 import kotlinx.android.synthetic.main.fragment_settings.*
 
+
 class MainSettingsFragment : Fragment() {
     private lateinit var viewModel: MainSettingsViewModel
 
@@ -61,6 +62,10 @@ class MainSettingsFragment : Fragment() {
         about.apply {
             showArrow()
             setOnClickListener { viewModel.delegate.didTapAbout() }
+        }
+
+        shareApp.setOnClickListener {
+            shareAppLink()
         }
 
         viewModel.baseCurrencyLiveDate.observe(viewLifecycleOwner, Observer { currency ->
@@ -141,6 +146,15 @@ class MainSettingsFragment : Fragment() {
             context?.let { context -> MainModule.startAsNewTask(context, MainActivity.SETTINGS_TAB_POSITION) }
         })
 
+    }
+
+    private fun shareAppLink() {
+        val shareMessage = getString(R.string.SettingsShare_Text) + "\n" + getString(R.string.SettingsShare_Link) + "\n"
+
+        val shareIntent = Intent(Intent.ACTION_SEND)
+        shareIntent.type = "text/plain"
+        shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
+        startActivity(Intent.createChooser(shareIntent, getString(R.string.SettingsShare_Title)))
     }
 
 }
