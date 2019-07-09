@@ -180,6 +180,7 @@
     <string name="Settings_Language">Language</string>
     <string name="Settings_LightMode">Light Mode</string>
     <string name="Settings_About">About</string>
+    <string name="Settings_ShareThisWallet">Tell Friends</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoSubtitle" translatable="false">decentralized app</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
@@ -218,6 +219,12 @@
 \n\nDo not jailbreak your phone, do not install apps from unknown (untrusted) sources, do not give your device to untrusted people, and keep the Operating System on your phone up to date. The security of your wallet depends on this.
 \n\nThe entire code powering this app been open to the public scrutiny since the beginning. We tried to build the most secure and decentralized wallet we could, however there are no guarantees that there are no unintended software issues. That said, this wallet is likely to be significantly more secure than any smartphone wallet app out there.
 \n\nSome generic non-private app data like currency exchange rates are stored on decentralized storage (IPFS).</string>
+
+    <!--Setting_Tell Friends-->
+
+    <string name="SettingsShare_Title">Share</string>
+    <string name="SettingsShare_Text">Unstoppable Wallet - Nice App!</string>
+    <string name="SettingsShare_Link" translatable="false">https://play.google.com/store/apps/details?id=io.horizontalsystems.bankwallet</string>
 
     <!--Alert-->
 
