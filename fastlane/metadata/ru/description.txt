@@ -1,22 +1,22 @@
 If you’re a type of person who needs unrestricted access to invest in blockchains and require unconditional control over your crypto investments this wallet is for you.
 
-This wallet was built to enable any freedom loving individual to invest and grow crypto currency portfolio without limitations, in a private manner, regardless of regulatory landscape.
+Этот кошелек был создан, чтобы позволить человеку свободно инвестировать и пополнять криптовалютный портфель без ограничений, независимо от регулирующего органа.
 
 Имейте полный безоговорочный контроль над вашими средствами.
  Bitcoin, Ethereum, Dash и другие криптоактивы.
 
 Зачем Unstoppable Wallet
 
-It keeps crypto assets safe on your device
+Это безопасное хранение криптоактивов на вашем устройстве
 It can only be controlled by yourself
 It doesn’t know who you are
-It doesn’t collect any data
+Это никакого сбора данных
 It's easy to migrate to/from
-It’s not dependent on any entity to function
-It integrates blockchains in a decentralized manner
-It implements latest improvements for each blockchain
-It can’t be blocked or censored
-It provides real time transaction fees
+Он не зависит от чего-либо  для полноценной работы
+Он интегрирует блокчейны децентрализованно
+Он реализует последние улучшения для каждого блокчейна
+Нельзя заблокировать или зацензурить
+Он предоставляет комиссию за транзакции в реальном времени
 It’s fast and beautiful  
 It's the most advanced wallet to date
 (1) UNRESTRICTED CONTROL
