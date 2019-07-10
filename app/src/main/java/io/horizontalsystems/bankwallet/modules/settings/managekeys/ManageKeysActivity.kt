@@ -1,11 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.settings.managekeys
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -53,7 +53,7 @@ class ManageKeysActivity : BaseActivity() {
 
                 val confirmListener = object : BottomConfirmAlert.Listener {
                     override fun onConfirmationSuccess() {
-                        viewModel.delegate.unlinkAccount(account.id)
+                        viewModel.delegate.onClickUnlink(account.id)
                     }
                 }
 
@@ -91,7 +91,7 @@ class ManageKeysActivity : BaseActivity() {
                 val syncMode = data.getParcelableExtra<SyncMode>("syncMode")
                 val accountType = data.getParcelableExtra<AccountType>("accountType")
 
-                viewModel.delegate.onRestore(accountType, syncMode)
+                viewModel.delegate.onClickRestore(accountType, syncMode)
             }
         }
     }
@@ -103,7 +103,7 @@ class ManageKeysAdapter(private val viewModel: ManageKeysViewModel)
     var items = listOf<ManageAccountItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return KeysViewHolder(viewModel, parent.context, LayoutInflater.from(parent.context).inflate(R.layout.view_holder_account, parent, false))
+        return KeysViewHolder(viewModel, LayoutInflater.from(parent.context).inflate(R.layout.view_holder_account, parent, false))
     }
 
     override fun getItemCount() = items.size
@@ -115,7 +115,7 @@ class ManageKeysAdapter(private val viewModel: ManageKeysViewModel)
     }
 }
 
-class KeysViewHolder(private val viewModel: ManageKeysViewModel, val context: Context, override val containerView: View)
+class KeysViewHolder(private val viewModel: ManageKeysViewModel, override val containerView: View)
     : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     fun bind(item: ManageAccountItem) {
@@ -132,13 +132,19 @@ class KeysViewHolder(private val viewModel: ManageKeysViewModel, val context: Co
                 }
                 is Words12AccountType,
                 is Words24AccountType -> {
-                    buttonNew.visibility = View.VISIBLE
                     buttonImport.visibility = View.VISIBLE
+                    buttonNew.visibility = View.VISIBLE
+                    buttonNew.setOnClickListener {
+                        viewModel.delegate.onClickNew(pAccountType)
+                    }
                 }
             }
 
-            buttonNew.setOnClickListener { }
-            buttonImport.setOnClickListener { viewModel.delegate.restoreAccount(pAccountType) }
+            buttonImport.setOnClickListener { viewModel.delegate.onClickRestore(pAccountType) }
+
+            keyIcon.setColorFilter(ContextCompat.getColor(containerView.context, R.color.grey))
+            accountName.setTextColor(containerView.resources.getColor(R.color.grey))
+            accountCoin.setTextColor(containerView.resources.getColor(R.color.grey))
 
             return
         }
@@ -152,7 +158,7 @@ class KeysViewHolder(private val viewModel: ManageKeysViewModel, val context: Co
 
         buttonUnlink.visibility = View.VISIBLE
         buttonUnlink.setOnClickListener { viewModel.confirmUnlink(account) }
-        buttonBackup.setOnClickListener { viewModel.delegate.backupAccount(account) }
+        buttonBackup.setOnClickListener { viewModel.delegate.onClickBackup(account) }
     }
 
     private fun hideButtons() {

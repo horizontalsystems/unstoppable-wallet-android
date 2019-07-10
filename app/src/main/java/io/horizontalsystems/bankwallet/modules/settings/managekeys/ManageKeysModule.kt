@@ -15,10 +15,11 @@ object ManageKeysModule {
         val items: List<ManageAccountItem>
 
         fun viewDidLoad()
-        fun backupAccount(account: Account)
-        fun restoreAccount(accountType: IPredefinedAccountType)
-        fun unlinkAccount(id: String)
-        fun onRestore(accountType: AccountType, syncMode: SyncMode)
+        fun onClickBackup(account: Account)
+        fun onClickRestore(accountType: IPredefinedAccountType)
+        fun onClickUnlink(accountId: String)
+        fun onClickRestore(accountType: AccountType, syncMode: SyncMode)
+        fun onClickNew(accountType: IPredefinedAccountType)
         fun onClear()
     }
 

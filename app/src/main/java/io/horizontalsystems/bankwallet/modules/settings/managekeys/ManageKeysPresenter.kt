@@ -19,11 +19,11 @@ class ManageKeysPresenter(private val interactor: ManageKeysModule.Interactor, p
         interactor.loadAccounts()
     }
 
-    override fun backupAccount(account: Account) {
+    override fun onClickBackup(account: Account) {
         router.startBackupModule(account)
     }
 
-    override fun restoreAccount(accountType: IPredefinedAccountType) {
+    override fun onClickRestore(accountType: IPredefinedAccountType) {
         when (accountType) {
             is Words12AccountType -> {
                 router.startRestoreWords()
@@ -31,12 +31,18 @@ class ManageKeysPresenter(private val interactor: ManageKeysModule.Interactor, p
         }
     }
 
-    override fun unlinkAccount(id: String) {
-        interactor.deleteAccount(id)
+    override fun onClickUnlink(accountId: String) {
+        interactor.deleteAccount(accountId)
     }
 
-    override fun onRestore(accountType: AccountType, syncMode: SyncMode) {
+    override fun onClickRestore(accountType: AccountType, syncMode: SyncMode) {
         interactor.restoreAccount(accountType, syncMode)
+    }
+
+    override fun onClickNew(accountType: IPredefinedAccountType) {
+        accountType.defaultAccountType?.let {
+            interactor.createAccount(it)
+        }
     }
 
     override fun onClear() {

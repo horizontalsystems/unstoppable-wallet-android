@@ -90,15 +90,15 @@ class App : Application() {
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
         localStorage = LocalStorageManager()
 
+        wordsManager = WordsManager(localStorage)
         networkManager = NetworkManager(appConfigProvider)
         rateManager = RateManager(rateStorage, networkManager)
         accountManager = AccountManager(accountsStorage)
-        accountCreator = AccountCreator(accountManager, AccountFactory())
+        accountCreator = AccountCreator(accountManager, AccountFactory(), wordsManager)
         predefinedAccountTypeManager = PredefinedAccountTypeManager(appConfigProvider, accountManager)
         coinManager = WalletManager(appConfigProvider, accountManager, enabledWalletsStorage)
         authManager = AuthManager(secureStorage, localStorage, coinManager, rateManager, ethereumKitManager, appConfigProvider)
 
-        wordsManager = WordsManager(localStorage)
         randomManager = RandomProvider()
         systemInfoManager = SystemInfoManager()
         pinManager = PinManager(secureStorage)

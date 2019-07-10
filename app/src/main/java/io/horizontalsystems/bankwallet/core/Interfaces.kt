@@ -141,7 +141,7 @@ interface IWordsManager {
     var backedUpSignal: PublishSubject<Unit>
 
     fun validate(words: List<String>)
-    fun generateWords(): List<String>
+    fun generateWords(count: Int = 12): List<String>
 }
 
 interface ILanguageManager {
