@@ -10,6 +10,7 @@ class RestoreViewModel : ViewModel(), RestoreModule.View, RestoreModule.Router {
 
     val reloadLiveEvent = SingleLiveEvent<List<IPredefinedAccountType>>()
     val startRestoreWordsLiveEvent = SingleLiveEvent<Unit>()
+    val startMainModuleLiveEvent = SingleLiveEvent<Unit>()
     val closeLiveEvent = SingleLiveEvent<Unit>()
 
     fun init() {
@@ -17,14 +18,20 @@ class RestoreViewModel : ViewModel(), RestoreModule.View, RestoreModule.Router {
         delegate.viewDidLoad()
     }
 
-    // Router
+    //  View
 
     override fun reload(items: List<IPredefinedAccountType>) {
         reloadLiveEvent.postValue(items)
     }
 
+    //  Router
+
     override fun startRestoreWordsModule() {
         startRestoreWordsLiveEvent.call()
+    }
+
+    override fun startMainModule() {
+        startMainModuleLiveEvent.call()
     }
 
     override fun close() {

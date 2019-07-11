@@ -16,7 +16,7 @@ interface AccountsDao {
     fun delete(id: String)
 
     @Query("SELECT * FROM AccountRecord")
-    fun getAll(): Flowable<List<AccountRecord>>
+    fun getAll(): List<AccountRecord>
 
     @Query("UPDATE AccountRecord SET isBackedUp = 1 WHERE id=:id")
     fun setIsBackedUp(id: String)

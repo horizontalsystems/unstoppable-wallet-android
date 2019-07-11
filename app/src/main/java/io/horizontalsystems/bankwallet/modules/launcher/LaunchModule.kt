@@ -18,8 +18,7 @@ object LaunchModule {
         val isDeviceLockDisabled: Boolean
     }
 
-    interface IInteractorDelegate {
-    }
+    interface IInteractorDelegate
 
     interface IRouter {
         fun openWelcomeModule()

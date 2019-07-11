@@ -17,22 +17,20 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         private const val EOS = "eos"
     }
 
-    override fun getAll(): Flowable<List<Account>> {
+    override fun getAll(): List<Account> {
         return dao.getAll()
-                .map { accountRecords ->
-                    accountRecords.mapNotNull { record ->
-                        try {
-                            val accountType = when (record.type) {
-                                MNEMONIC -> AccountType.Mnemonic(record.words!!.list, record.derivation!!, record.salt!!.value)
-                                PRIVATE_KEY -> AccountType.PrivateKey(record.key!!.value.hexToByteArray())
-                                HD_MASTER_KEY -> AccountType.HDMasterKey(record.key!!.value.hexToByteArray(), record.derivation!!)
-                                EOS -> AccountType.Eos(record.eosAccount!!, record.key!!.value.hexToByteArray())
-                                else -> null
-                            }
-                            Account(record.id, record.name, accountType!!, record.isBackedUp, record.syncMode!!)
-                        } catch (ex: Exception) {
-                            null
+                .mapNotNull { record ->
+                    try {
+                        val accountType = when (record.type) {
+                            MNEMONIC -> AccountType.Mnemonic(record.words!!.list, record.derivation!!, record.salt!!.value)
+                            PRIVATE_KEY -> AccountType.PrivateKey(record.key!!.value.hexToByteArray())
+                            HD_MASTER_KEY -> AccountType.HDMasterKey(record.key!!.value.hexToByteArray(), record.derivation!!)
+                            EOS -> AccountType.Eos(record.eosAccount!!, record.key!!.value.hexToByteArray())
+                            else -> null
                         }
+                        Account(record.id, record.name, accountType!!, record.isBackedUp, record.syncMode!!)
+                    } catch (ex: Exception) {
+                        null
                     }
                 }
     }

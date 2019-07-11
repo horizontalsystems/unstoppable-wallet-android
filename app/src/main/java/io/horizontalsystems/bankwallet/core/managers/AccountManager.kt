@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.core.IAccountsStorage
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
-import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 
 class AccountManager(private val accountsStorage: IAccountsStorage) : IAccountManager {
@@ -14,24 +13,17 @@ class AccountManager(private val accountsStorage: IAccountsStorage) : IAccountMa
     val nonBackedUpCount: Int
         get() = accounts.filter { !it.isBackedUp }.size
 
-    override var accounts = mutableListOf<Account>()
+    override var accounts = accountsStorage.getAll().toMutableList()
         private set
 
     private val accountsSubject = PublishSubject.create<List<Account>>()
     private val nonBackedUpCountSubject = PublishSubject.create<Int>()
-    private var disposable: Disposable? = null
-
-    init {
-        accountsStorage.getAll()
-                .subscribe { accounts = it.toMutableList() }
-                .let { disposable = it }
-    }
 
     override val accountsFlowable: Flowable<List<Account>>
         get() = accountsSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     override val nonBackedUpCountFlowable: Flowable<Int>
-        get() = accountsStorage.getNonBackedUpCount()
+        get() = nonBackedUpCountSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     override fun account(predefinedAccountType: IPredefinedAccountType): Account? {
         return accounts.find { predefinedAccountType.supports(it.type) }

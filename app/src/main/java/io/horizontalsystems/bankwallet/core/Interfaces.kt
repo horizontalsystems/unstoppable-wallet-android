@@ -268,7 +268,7 @@ interface IRateStorage {
 }
 
 interface IAccountsStorage {
-    fun getAll(): Flowable<List<Account>>
+    fun getAll(): List<Account>
     fun save(account: Account)
     fun delete(id: String)
     fun setIsBackedUp(id: String)

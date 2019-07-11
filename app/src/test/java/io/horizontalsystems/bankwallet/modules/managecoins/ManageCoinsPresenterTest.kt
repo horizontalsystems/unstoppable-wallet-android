@@ -1,11 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.managecoins
 
-import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.core.Account
 import io.horizontalsystems.bankwallet.core.Wallet
+import io.horizontalsystems.bankwallet.core.managers.WalletCreator
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.SyncMode
@@ -19,6 +19,7 @@ class ManageCoinsPresenterTest {
     private lateinit var presenter: ManageWalletsPresenter
     private val interactor = mock(ManageWalletsModule.IInteractor::class.java)
     private val router = mock(ManageWalletsModule.IRouter::class.java)
+    private val walletCreator = mock(WalletCreator::class.java)
     private val view = mock(ManageWalletsModule.IView::class.java)
     private val state = mock(ManageWalletsModule.ManageWalletsPresenterState::class.java)
 
@@ -35,7 +36,7 @@ class ManageCoinsPresenterTest {
 
     @Before
     fun setUp() {
-        presenter = ManageWalletsPresenter(interactor, router, state)
+        presenter = ManageWalletsPresenter(interactor, router, walletCreator, state)
         presenter.view = view
 
         whenever(state.enabledCoins).thenReturn(enabledCoins)

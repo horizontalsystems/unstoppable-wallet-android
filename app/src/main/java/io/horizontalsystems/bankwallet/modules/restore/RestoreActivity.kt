@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.core.AccountType
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.entities.SyncMode
+import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.restorewords.RestoreWordsModule
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import kotlinx.android.extensions.LayoutContainer
@@ -47,6 +48,11 @@ class RestoreActivity : BaseActivity() {
             RestoreWordsModule.startForResult(this, ModuleCode.RESTORE_WORDS)
         })
 
+        viewModel.startMainModuleLiveEvent.observe(this, Observer {
+            MainModule.startAsNewTask(this)
+            finish()
+        })
+
         viewModel.closeLiveEvent.observe(this, Observer {
             finish()
         })
@@ -59,7 +65,7 @@ class RestoreActivity : BaseActivity() {
             val syncMode = data.getParcelableExtra<SyncMode>("syncMode")
             val accountType = data.getParcelableExtra<AccountType>("accountType")
 
-            viewModel.delegate.didRestore(accountType, syncMode)
+            viewModel.delegate.onRestore(accountType, syncMode)
         }
     }
 }

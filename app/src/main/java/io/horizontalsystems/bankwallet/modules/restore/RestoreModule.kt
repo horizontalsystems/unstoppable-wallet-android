@@ -18,11 +18,21 @@ object RestoreModule {
 
         fun viewDidLoad()
         fun onSelect(accountType: IPredefinedAccountType)
-        fun didRestore(accountType: AccountType, syncMode: SyncMode)
+        fun onRestore(accountType: AccountType, syncMode: SyncMode)
+    }
+
+    interface Interactor {
+        fun restore(accountType: AccountType, syncMode: SyncMode)
+    }
+
+    interface InteractorDelegate {
+        fun didRestore()
+        fun didFailRestore(e: Exception)
     }
 
     interface Router {
         fun startRestoreWordsModule()
+        fun startMainModule()
         fun close()
     }
 
@@ -31,9 +41,11 @@ object RestoreModule {
     }
 
     fun init(view: RestoreViewModel, router: Router) {
-        val presenter = RestorePresenter(router, App.accountCreator, App.predefinedAccountTypeManager)
+        val interactor = RestoreInteractor(App.accountCreator)
+        val presenter = RestorePresenter(router, interactor, App.predefinedAccountTypeManager)
 
         view.delegate = presenter
         presenter.view = view
+        interactor.delegate = presenter
     }
 }

@@ -36,7 +36,7 @@ object BackupModule {
     }
 
     fun init(view: BackupViewModel, router: Router, account: Account) {
-        val interactor = BackupInteractor(router, App.lockManager, App.accountManager)
+        val interactor = BackupInteractor(router, App.lockManager, App.accountManager, App.pinManager)
         val presenter = BackupPresenter(interactor, router, account)
 
         view.delegate = presenter
