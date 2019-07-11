@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysModule
+import io.horizontalsystems.bankwallet.ui.dialogs.BottomManageKeysAlert
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_manage_coins.*
@@ -47,6 +49,20 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsAdapter.StartDragList
 
         viewModel.coinsLoadedLiveEvent.observe(this, Observer {
             adapter.notifyDataSetChanged()
+        })
+
+        viewModel.showNoAccountLiveEvent.observe(this, Observer { coin ->
+            coin?.let {
+                BottomManageKeysAlert.show(this, coin, object : BottomManageKeysAlert.Listener {
+                    override fun onClickManageKeys() {
+                        viewModel.delegate.onClickManageKeys()
+                    }
+                })
+            }
+        })
+
+        viewModel.startManageKeysLiveEvent.observe(this, Observer {
+            ManageKeysModule.start(this)
         })
 
         viewModel.closeLiveDate.observe(this, Observer {

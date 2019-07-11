@@ -17,7 +17,6 @@ object MainSettingsModule {
     interface IMainSettingsViewDelegate {
         fun viewDidLoad()
         fun didTapSecurity()
-        fun didTapRestore()
         fun didTapBaseCurrency()
         fun didTapLanguage()
         fun didSwitchLightMode(lightMode: Boolean)
@@ -44,7 +43,6 @@ object MainSettingsModule {
 
     interface IMainSettingsRouter {
         fun showSecuritySettings()
-        fun showRestore()
         fun showBaseCurrencySettings()
         fun showLanguageSettings()
         fun showAbout()

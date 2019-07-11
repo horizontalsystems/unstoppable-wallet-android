@@ -4,37 +4,36 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
-import org.jetbrains.anko.collections.forEachWithIndex
 
-class WalletManager(private val appConfigProvider: IAppConfigProvider, accountManager: IAccountManager, private val walletStorage: IEnabledWalletStorage) : IWalletManager {
+class WalletManager(
+        private val appConfigProvider: IAppConfigProvider,
+        accountManager: IAccountManager,
+        private val walletStorage: IEnabledWalletStorage)
+    : IWalletManager {
 
     private val disposables = CompositeDisposable()
 
     override val walletsUpdatedSignal: PublishSubject<Unit> = PublishSubject.create()
 
     init {
-        walletStorage.enabledWallets().zipWith(accountManager.accountsFlowable,
-                BiFunction { enabledWallets: List<EnabledWallet>, accounts: List<Account> ->
-                    Pair(enabledWallets, accounts)
-                })
+        walletStorage.enabledWallets()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { (enabledWallet, accounts) ->
-                    val enabledWallets = mutableListOf<Wallet>()
+                .subscribe { enabledWallets ->
+                    val wallets = mutableListOf<Wallet>()
 
-                    enabledWallet.forEach { wallet ->
+                    enabledWallets.forEach { wallet ->
                         val coin = appConfigProvider.coins.find { it.code == wallet.coinCode }
-                        val account = accounts.find { it.id == wallet.accountId }
+                        val account = accountManager.accounts.find { it.name == wallet.accountId }
 
                         if (coin != null && account != null) {
-                            enabledWallets.add(Wallet(coin, account, wallet.syncMode))
+                            wallets.add(Wallet(coin, account, wallet.syncMode))
                         }
                     }
 
-                    wallets = enabledWallets
+                    this.wallets = wallets
                 }
                 .let { disposables.add(it) }
 
@@ -42,15 +41,7 @@ class WalletManager(private val appConfigProvider: IAppConfigProvider, accountMa
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { accounts ->
-                    val enabledWallets = mutableListOf<EnabledWallet>()
-
-                    val wallets = wallets.filter { accounts.contains(it.account) }
-                    wallets.forEachWithIndex { i, wallet ->
-                        enabledWallets.add(EnabledWallet(wallet.coin.code,  wallet.account.id, i, wallet.syncMode))
-                    }
-
-                    this.wallets = wallets
-                    walletStorage.save(enabledWallets)
+                    enable(wallets.filter { accounts.contains(it.account) })
                 }
                 .let { disposables.add(it) }
     }
@@ -60,6 +51,16 @@ class WalletManager(private val appConfigProvider: IAppConfigProvider, accountMa
             field = value
             walletsUpdatedSignal.onNext(Unit)
         }
+
+    override fun enable(wallets: List<Wallet>) {
+        val enabledWallets = wallets.mapIndexed { order, wallet ->
+            EnabledWallet(wallet.coin.code, wallet.account.id, order, wallet.syncMode)
+        }
+
+        this.wallets = wallets
+        walletStorage.save(enabledWallets)
+        walletsUpdatedSignal.onNext(Unit)
+    }
 
     override fun enableDefaultWallets() {
         // val enabledCoins = mutableListOf<EnabledWallet>()

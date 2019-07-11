@@ -1,13 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.managecoins
 
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.Account
+import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.IAppConfigProvider
+import io.horizontalsystems.bankwallet.core.Wallet
 import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.entities.CoinType
-import io.horizontalsystems.bankwallet.entities.EnabledWallet
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 
-class ManageWalletsInteractor(private val appConfigProvider: IAppConfigProvider, private val walletManager: WalletManager, private val accountManager: IAccountManager, private val enabledCoinStorage: IEnabledWalletStorage)
+class ManageWalletsInteractor(
+        private val appConfigProvider: IAppConfigProvider,
+        private val walletManager: WalletManager,
+        private val accountManager: IAccountManager)
     : ManageWalletsModule.IInteractor {
 
     var delegate: ManageWalletsModule.IInteractorDelegate? = null
@@ -18,11 +23,7 @@ class ManageWalletsInteractor(private val appConfigProvider: IAppConfigProvider,
     }
 
     override fun saveWallets(wallets: List<Wallet>) {
-        val enabledCoins = mutableListOf<EnabledWallet>()
-        wallets.forEachIndexed { order, wallet ->
-            enabledCoins.add(EnabledWallet(wallet.coin.code, wallet.account.id, order, wallet.syncMode))
-        }
-        enabledCoinStorage.save(enabledCoins)
+        walletManager.enable(wallets)
         delegate?.didSaveChanges()
     }
 

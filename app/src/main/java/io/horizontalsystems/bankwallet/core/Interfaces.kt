@@ -73,6 +73,19 @@ interface IAccountCreator {
     fun createNewAccount(defaultAccountType: DefaultAccountType): Account
 }
 
+interface IWalletCreator {
+    fun wallet(coin: Coin): Wallet?
+    fun wallet(coin: Coin, account: Account): Wallet
+}
+
+interface IAccountFactory {
+    fun account(type: AccountType, backedUp: Boolean, defaultSyncMode: SyncMode?): Account
+}
+
+interface IWalletFactory {
+    fun wallet(coin: Coin, account: Account): Wallet
+}
+
 interface IPredefinedAccountTypeManager {
     val allTypes: List<IPredefinedAccountType>
 }
@@ -286,9 +299,10 @@ interface ICurrentDateProvider {
 }
 
 interface IWalletManager {
-    val walletsUpdatedSignal: PublishSubject<Unit>
     var wallets: List<Wallet>
+    val walletsUpdatedSignal: PublishSubject<Unit>
     fun enableDefaultWallets()
+    fun enable(wallets: List<Wallet>)
     fun clear()
 }
 

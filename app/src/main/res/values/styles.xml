@@ -278,16 +278,6 @@
         <item name="android:background">@drawable/button_yellow_background_12</item>
     </style>
 
-    <style name="ButtonYellowText" parent="Button">
-        <item name="android:textColor">@color/stateful_button_yellow_color</item>
-        <item name="android:background">@drawable/button_grey_background_12_themed</item>
-    </style>
-
-    <style name="ButtonRedText" parent="Button">
-        <item name="android:textColor">@color/red_warning</item>
-        <item name="android:background">@drawable/button_grey_background_12_themed</item>
-    </style>
-
     <style name="ButtonNegative" parent="Button">
         <item name="android:background">@drawable/button_grey_background_12</item>
         <item name="android:textColor">@color/black</item>

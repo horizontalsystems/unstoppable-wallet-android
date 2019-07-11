@@ -294,6 +294,11 @@
     <string name="ManageKeys_Backup">Backup</string>
     <string name="ManageKeys_Show">Show</string>
 
+    <!-- Manage Keys Alert -->
+    <string name="AddCoin_title">Add %s</string>
+    <string name="AddCoin_description">You don\'t have the keys for this coin yet. You need to import the secret key first.</string>
+    <string name="AddCoin_ManageKeys">Manage Keys</string>
+
     <!-- Account Types -->
 
     <string name="ManageKeys_12_words">12 Words Key</string>

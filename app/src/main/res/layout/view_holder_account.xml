@@ -97,7 +97,8 @@
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:layout_weight="1"
-            android:text="@string/ManageKeys_Import" />
+            android:text="@string/ManageKeys_Import"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/buttonUnlink"
@@ -107,7 +108,8 @@
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:layout_weight="1"
-            android:text="@string/ManageKeys_Unlink" />
+            android:text="@string/ManageKeys_Unlink"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/buttonShow"
@@ -117,7 +119,8 @@
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:layout_weight="1"
-            android:text="@string/ManageKeys_Show" />
+            android:text="@string/ManageKeys_Show"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/buttonBackup"
@@ -139,9 +142,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/noto_sans_medium"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
-                android:text="@string/ManageKeys_Backup" />
+                android:text="@string/ManageKeys_Backup"
+                android:textColor="@color/stateful_button_text_color"
+                android:textSize="12sp" />
 
         </LinearLayout>
 

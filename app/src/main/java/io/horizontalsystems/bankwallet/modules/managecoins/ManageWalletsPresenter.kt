@@ -1,32 +1,41 @@
 package io.horizontalsystems.bankwallet.modules.managecoins
 
+import io.horizontalsystems.bankwallet.core.IWalletCreator
 import io.horizontalsystems.bankwallet.core.Wallet
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.reactivex.disposables.CompositeDisposable
 
-class ManageWalletsPresenter(private val interactor: ManageWalletsModule.IInteractor, private val router: ManageWalletsModule.IRouter, private val state: ManageWalletsModule.ManageWalletsPresenterState)
+class ManageWalletsPresenter(
+        private val interactor: ManageWalletsModule.IInteractor,
+        private val router: ManageWalletsModule.IRouter,
+        private val walletCreator: IWalletCreator,
+        private val state: ManageWalletsModule.ManageWalletsPresenterState)
     : ManageWalletsModule.IViewDelegate, ManageWalletsModule.IInteractorDelegate {
 
     var view: ManageWalletsModule.IView? = null
-    val disposables = CompositeDisposable()
-    // IViewDelegate
+
+    private val disposables = CompositeDisposable()
+
+    //  IViewDelegate
 
     override fun viewDidLoad() {
         interactor.load()
     }
 
+    override fun onClickManageKeys() {
+        router.startManageKeysModule()
+    }
+
     override fun enableCoin(position: Int) {
         val coin = state.disabledCoins[position]
-        interactor.accounts(coin.type).subscribe { accounts ->
-            accounts.firstOrNull()?.let { account ->
-                val wallet = Wallet(coin, account, account.defaultSyncMode)
-                state.enable(wallet)
-                view?.updateCoins()
-            }
-        }.let {
-            disposables.add(it)
-        }
 
+        val wallet = walletCreator.wallet(coin)
+        if (wallet == null) {
+            view?.showNoAccount(coin)
+        } else {
+            state.enable(wallet)
+            view?.updateCoins()
+        }
     }
 
     override fun disableCoin(position: Int) {

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -141,10 +140,6 @@ class KeysViewHolder(private val viewModel: ManageKeysViewModel, override val co
             }
 
             buttonImport.setOnClickListener { viewModel.delegate.onClickRestore(pAccountType) }
-
-            keyIcon.setColorFilter(ContextCompat.getColor(containerView.context, R.color.grey))
-            accountName.setTextColor(containerView.resources.getColor(R.color.grey))
-            accountCoin.setTextColor(containerView.resources.getColor(R.color.grey))
 
             return
         }

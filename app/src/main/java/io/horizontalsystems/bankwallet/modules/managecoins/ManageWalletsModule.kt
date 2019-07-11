@@ -50,11 +50,13 @@ object ManageWalletsModule {
 
     interface IView {
         fun updateCoins()
+        fun showNoAccount(coin: Coin)
         fun showFailedToSaveError()
     }
 
     interface IViewDelegate {
         fun viewDidLoad()
+        fun onClickManageKeys()
         fun enableCoin(position: Int)
         fun disableCoin(position: Int)
         fun saveChanges()
@@ -81,12 +83,13 @@ object ManageWalletsModule {
     }
 
     interface IRouter {
+        fun startManageKeysModule()
         fun close()
     }
 
     fun init(view: ManageWalletsViewModel, router: IRouter) {
-        val interactor = ManageWalletsInteractor(App.appConfigProvider, App.coinManager, App.accountManager, App.enabledWalletsStorage)
-        val presenter = ManageWalletsPresenter(interactor, router, ManageWalletsPresenterState())
+        val interactor = ManageWalletsInteractor(App.appConfigProvider, App.coinManager, App.accountManager)
+        val presenter = ManageWalletsPresenter(interactor, router, App.walletCreator, ManageWalletsPresenterState())
 
         view.delegate = presenter
         presenter.view = view
