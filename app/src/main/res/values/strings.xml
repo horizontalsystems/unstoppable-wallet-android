@@ -15,6 +15,14 @@
     <string name="Button_Share">Share</string>
     <string name="Error">Error</string>
 
+    <!--Welcome-->
+
+    <string name="Welcome_Title">Unstoppable</string>
+    <string name="Welcome_Subtitle" translatable="false">IN BLOCKCHAIN WE TRUST</string>
+    <string name="Welcome_CreateWallet">Create Wallet</string>
+    <string name="Welcome_RestoreWallet">Restore</string>
+    <string name="Welcome_Version" translatable="false">version %s</string>
+
     <!--Restore-->
 
     <string name="Restore_Title">Restore</string>

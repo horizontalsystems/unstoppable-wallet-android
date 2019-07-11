@@ -19,6 +19,14 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
+            android:name=".modules.launcher.LauncherActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".modules.syncmodule.SyncModeActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -32,12 +40,7 @@
         <activity
             android:name=".modules.main.MainActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".modules.restorewords.RestoreWordsActivity"
             android:screenOrientation="portrait" />
@@ -73,6 +76,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.restore.RestoreActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".modules.welcome.WelcomeActivity"
             android:screenOrientation="portrait" />
 
         <meta-data

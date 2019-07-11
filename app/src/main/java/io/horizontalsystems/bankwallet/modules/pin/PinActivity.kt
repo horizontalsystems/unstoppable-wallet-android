@@ -207,7 +207,7 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
         }
 
         fun startForUnlock(context: Context, showCancel: Boolean) {
-            val intent = Intent(App.instance, PinActivity::class.java)
+            val intent = Intent(context, PinActivity::class.java)
             intent.putExtra(keyShowCancel, showCancel)
             intent.putExtra(keyInteractionType, PinInteractionType.UNLOCK)
             context.startActivity(intent)

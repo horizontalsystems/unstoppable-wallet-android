@@ -221,9 +221,11 @@ interface ISystemInfoManager {
 }
 
 interface IPinManager {
-    fun safeLoad()
+    val isDeviceLockEnabled: Boolean
     var pin: String?
     val isPinSet: Boolean
+
+    fun safeLoad()
     fun store(pin: String)
     fun validate(pin: String): Boolean
     fun clear()

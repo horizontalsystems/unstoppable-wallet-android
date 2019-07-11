@@ -1,10 +1,19 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import android.app.Activity
+import android.app.KeyguardManager
 import android.security.keystore.UserNotAuthenticatedException
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IPinManager
 import io.horizontalsystems.bankwallet.core.ISecuredStorage
 
-class PinManager(private val securedStorage: ISecuredStorage): IPinManager {
+class PinManager(private val securedStorage: ISecuredStorage) : IPinManager {
+
+    override val isDeviceLockEnabled: Boolean
+        get() {
+            val keyguardManager = App.instance.getSystemService(Activity.KEYGUARD_SERVICE) as KeyguardManager
+            return keyguardManager.isKeyguardSecure
+        }
 
     override var pin: String? = null
 

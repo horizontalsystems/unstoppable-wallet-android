@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.main
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.text.TextUtils
 import android.view.View
 import android.view.ViewStub
@@ -20,10 +19,8 @@ import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
-import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveView
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveViewModel
 import io.horizontalsystems.bankwallet.modules.send.ConfirmationFragment
@@ -37,7 +34,6 @@ import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.main_activity_view_pager_layout.*
-import java.security.UnrecoverableKeyException
 
 
 class MainActivity : BaseActivity(), SendView.Listener, ReceiveView.Listener, TransactionInfoView.Listener {
@@ -56,8 +52,6 @@ class MainActivity : BaseActivity(), SendView.Listener, ReceiveView.Listener, Tr
 
         setContentView(R.layout.activity_dashboard)
         setTransparentStatusBar()
-
-        redirectToCorrectPage()
 
         adapter = MainTabsAdapter(supportFragmentManager)
 
@@ -176,24 +170,6 @@ class MainActivity : BaseActivity(), SendView.Listener, ReceiveView.Listener, Tr
 
     override fun opemTransactionInfo() {
         txInfoBottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
-    }
-
-
-    private fun redirectToCorrectPage() {
-        try {
-            if (!EncryptionManager.isDeviceLockEnabled(this)) {
-                screenHide.visibility = View.VISIBLE
-                EncryptionManager.showNoDeviceLockWarning(this)
-            } else if (App.secureStorage.pinIsEmpty()) {
-                PinModule.startForSetPin(this)
-                finishAffinity()
-            }
-        } catch (e: Exception) {
-            when (e) {
-                is KeyPermanentlyInvalidatedException,
-                is UnrecoverableKeyException -> EncryptionManager.showKeysInvalidatedAlert(this)
-            }
-        }
     }
 
     private fun loadViewPager() {
