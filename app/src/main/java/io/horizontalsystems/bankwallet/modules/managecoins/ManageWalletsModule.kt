@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.managecoins
 
 import android.content.Context
 import android.content.Intent
-import io.horizontalsystems.bankwallet.core.Account
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Wallet
 import io.horizontalsystems.bankwallet.entities.Coin

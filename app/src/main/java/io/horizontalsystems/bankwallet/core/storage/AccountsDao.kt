@@ -18,9 +18,6 @@ interface AccountsDao {
     @Query("SELECT * FROM AccountRecord")
     fun getAll(): List<AccountRecord>
 
-    @Query("UPDATE AccountRecord SET isBackedUp = 1 WHERE id=:id")
-    fun setIsBackedUp(id: String)
-
     @Query("SELECT COUNT(*) FROM AccountRecord WHERE isBackedUp = 0")
     fun getNonBackedUpCount(): Flowable<Int>
 

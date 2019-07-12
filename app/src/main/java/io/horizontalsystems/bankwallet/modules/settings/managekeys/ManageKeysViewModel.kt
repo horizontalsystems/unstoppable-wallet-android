@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.settings.managekeys
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
-import io.horizontalsystems.bankwallet.core.Account
+import io.horizontalsystems.bankwallet.entities.Account
 
 class ManageKeysViewModel : ViewModel(), ManageKeysModule.View, ManageKeysModule.Router {
 

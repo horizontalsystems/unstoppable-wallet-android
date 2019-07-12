@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.core.storage
 
 import androidx.room.Entity
-import io.horizontalsystems.bankwallet.core.AccountType
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
 
 

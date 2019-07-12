@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.restorewords
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
-import io.horizontalsystems.bankwallet.core.AccountType
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.SyncMode
 

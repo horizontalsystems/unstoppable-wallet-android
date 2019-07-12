@@ -2,12 +2,13 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.DefaultAccountType.Mnemonic
-import io.horizontalsystems.bankwallet.core.factories.AccountFactory
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
 
 class AccountCreator(
         private val accountManager: IAccountManager,
-        private val accountFactory: AccountFactory,
+        private val accountFactory: IAccountFactory,
         private val wordsManager: IWordsManager)
     : IAccountCreator {
 

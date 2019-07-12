@@ -26,7 +26,7 @@ object MainSettingsModule {
     }
 
     interface IMainSettingsInteractor {
-        // val nonBackedUpCount: Int
+        val nonBackedUpCount: Int
         var currentLanguage: String
         val baseCurrency: String
         var appVersion: String
@@ -53,7 +53,7 @@ object MainSettingsModule {
     fun init(view: MainSettingsViewModel, router: IMainSettingsRouter) {
         val interactor = MainSettingsInteractor(
                 localStorage = App.localStorage,
-                accountManager = App.accountManager,
+                backupManager = App.backupManager,
                 languageManager = App.languageManager,
                 systemInfoManager = App.systemInfoManager,
                 currencyManager = App.currencyManager

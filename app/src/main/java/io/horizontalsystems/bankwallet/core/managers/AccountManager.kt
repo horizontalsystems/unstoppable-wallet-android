@@ -1,60 +1,55 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.Account
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IAccountsStorage
-import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
 
-class AccountManager(private val accountsStorage: IAccountsStorage) : IAccountManager {
+class AccountManager(private val storage: IAccountsStorage) : IAccountManager {
 
-    val nonBackedUpCount: Int
-        get() = accounts.filter { !it.isBackedUp }.size
-
-    override var accounts = accountsStorage.getAll().toMutableList()
-        private set
-
+    private val cache = AccountsCache()
     private val accountsSubject = PublishSubject.create<List<Account>>()
-    private val nonBackedUpCountSubject = PublishSubject.create<Int>()
+
+    override val accounts: List<Account>
+        get() = cache.accountsSet.toList()
 
     override val accountsFlowable: Flowable<List<Account>>
         get() = accountsSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    override val nonBackedUpCountFlowable: Flowable<Int>
-        get() = nonBackedUpCountSubject.toFlowable(BackpressureStrategy.BUFFER)
-
-    override fun account(predefinedAccountType: IPredefinedAccountType): Account? {
-        return accounts.find { predefinedAccountType.supports(it.type) }
+    override fun preloadAccounts() {
+        cache.set(storage.allAccounts())
     }
 
     override fun save(account: Account) {
-        accounts.removeAll { it.id == account.id }
-        accounts.add(account)
+        cache.add(account)
 
-        accountsStorage.save(account)
-        notifyAccountsChanged()
+        storage.save(account)
+        accountsSubject.onNext(accounts)
     }
 
     override fun delete(id: String) {
-        accounts.removeAll { it.id == id }
-        accountsStorage.delete(id)
+        cache.delete(id)
+        storage.delete(id)
 
-        notifyAccountsChanged()
+        accountsSubject.onNext(accounts)
     }
 
-    override fun setIsBackedUp(id: String) {
-        accounts.find { it.id == id }?.let { account ->
-            account.isBackedUp = true
+    private class AccountsCache {
+        var accountsSet = mutableSetOf<Account>()
+            private set
+
+        fun add(account: Account) {
+            accountsSet.add(account)
         }
 
-        accountsStorage.setIsBackedUp(id)
-        notifyAccountsChanged()
-    }
+        fun set(accounts: List<Account>) {
+            accountsSet = accounts.toMutableSet()
+        }
 
-    private fun notifyAccountsChanged() {
-        accountsSubject.onNext(accounts)
-        nonBackedUpCountSubject.onNext(nonBackedUpCount)
+        fun delete(id: String) {
+            accountsSet.removeAll { it.id == id }
+        }
     }
 }

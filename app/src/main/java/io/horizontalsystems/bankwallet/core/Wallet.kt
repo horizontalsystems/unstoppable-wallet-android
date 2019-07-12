@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core
 
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.SyncMode
 

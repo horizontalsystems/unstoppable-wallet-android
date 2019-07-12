@@ -22,8 +22,9 @@ object SecuritySettingsModule {
     }
 
     interface ISecuritySettingsInteractor {
-//        val nonBackedUpCount: Int
+        val nonBackedUpCount: Int
         val biometryType: BiometryType
+
         fun getBiometricUnlockOn(): Boolean
         fun setBiometricUnlockOn(biometricUnlockOn: Boolean)
         fun clear()
@@ -43,7 +44,7 @@ object SecuritySettingsModule {
     }
 
     fun init(view: SecuritySettingsViewModel, router: ISecuritySettingsRouter) {
-        val interactor = SecuritySettingsInteractor(App.accountManager, App.localStorage, App.systemInfoManager)
+        val interactor = SecuritySettingsInteractor(App.backupManager, App.localStorage, App.systemInfoManager)
         val presenter = SecuritySettingsPresenter(router, interactor)
 
         view.delegate = presenter

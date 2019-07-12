@@ -3,6 +3,8 @@ package io.horizontalsystems.bankwallet.modules.settings.managekeys
 import android.content.Context
 import android.content.Intent
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
 
 object ManageKeysModule {

@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.backup
 
-import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.ILockManager
 import io.horizontalsystems.bankwallet.core.IPinManager
 import io.reactivex.disposables.Disposable
@@ -8,7 +8,7 @@ import io.reactivex.disposables.Disposable
 class BackupInteractor(
         private val router: BackupModule.Router,
         private val lockManager: ILockManager,
-        private val accountManager: IAccountManager,
+        private val backupManager: IBackupManager,
         private val pinManager: IPinManager)
     : BackupModule.Interactor {
 
@@ -34,6 +34,6 @@ class BackupInteractor(
     }
 
     override fun setBackedUp(accountId: String) {
-        accountManager.setIsBackedUp(accountId)
+        backupManager.setIsBackedUp(accountId)
     }
 }

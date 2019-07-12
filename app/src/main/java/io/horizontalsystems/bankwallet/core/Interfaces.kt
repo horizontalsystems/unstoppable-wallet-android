@@ -57,15 +57,22 @@ interface ISecuredStorage {
 }
 
 interface IAccountManager {
-    val accounts: MutableList<Account>
+    val accounts: List<Account>
     val accountsFlowable: Flowable<List<Account>>
-    val nonBackedUpCountFlowable: Flowable<Int>
 
-    fun account(predefinedAccountType: IPredefinedAccountType): Account?
-
+    fun preloadAccounts()
     fun save(account: Account)
     fun delete(id: String)
+}
+
+interface IBackupManager {
+    val nonBackedUpCount: Int
+    val nonBackedUpCountFlowable: Flowable<Int>
     fun setIsBackedUp(id: String)
+}
+
+interface ILaunchManager {
+    fun onStart()
 }
 
 interface IAccountCreator {
@@ -79,7 +86,7 @@ interface IWalletCreator {
 }
 
 interface IAccountFactory {
-    fun account(type: AccountType, backedUp: Boolean, defaultSyncMode: SyncMode?): Account
+    fun account(type: AccountType, backedUp: Boolean, defaultSyncMode: SyncMode): Account
 }
 
 interface IWalletFactory {
@@ -88,6 +95,7 @@ interface IWalletFactory {
 
 interface IPredefinedAccountTypeManager {
     val allTypes: List<IPredefinedAccountType>
+    fun account(predefinedAccountType: IPredefinedAccountType): Account?
 }
 
 interface IPredefinedAccountType {
@@ -268,10 +276,9 @@ interface IRateStorage {
 }
 
 interface IAccountsStorage {
-    fun getAll(): List<Account>
+    fun allAccounts(): List<Account>
     fun save(account: Account)
     fun delete(id: String)
-    fun setIsBackedUp(id: String)
     fun getNonBackedUpCount(): Flowable<Int>
 }
 
@@ -321,10 +328,6 @@ interface IFeeRateProvider {
     fun bitcoinFeeRate(priority: FeeRatePriority): Long
     fun bitcoinCashFeeRate(priority: FeeRatePriority): Long
     fun dashFeeRate(priority: FeeRatePriority): Long
-}
-
-sealed class Error : Exception() {
-    class CoinTypeException : Error()
 }
 
 sealed class SendStateError {

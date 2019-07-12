@@ -11,13 +11,13 @@ class MainSettingsPresenter(
 
     override fun viewDidLoad() {
         view?.setTitle(R.string.Settings_Title)
-        // view?.setBackedUp(interactor.nonBackedUpCount == 0)
+        view?.setBackedUp(interactor.nonBackedUpCount == 0)
         view?.setBaseCurrency(interactor.baseCurrency)
         view?.setLanguage(interactor.currentLanguage)
         view?.setLightMode(interactor.getLightMode())
         view?.setAppVersion(interactor.appVersion)
 
-        // view?.setTabItemBadge(interactor.nonBackedUpCount)
+        view?.setTabItemBadge(interactor.nonBackedUpCount)
     }
 
     override fun didTapSecurity() {

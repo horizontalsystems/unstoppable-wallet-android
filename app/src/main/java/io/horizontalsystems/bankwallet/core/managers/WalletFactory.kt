@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.Account
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.core.IWalletFactory
 import io.horizontalsystems.bankwallet.core.Wallet
 import io.horizontalsystems.bankwallet.entities.Coin

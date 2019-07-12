@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.core.storage
 
 import androidx.room.TypeConverter
-import io.horizontalsystems.bankwallet.core.AccountType
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import java.math.BigDecimal

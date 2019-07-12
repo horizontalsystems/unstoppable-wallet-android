@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.entities
 
-import io.horizontalsystems.bankwallet.core.AccountType
 import java.io.Serializable
 import java.math.BigDecimal
 

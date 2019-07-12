@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.managecoins
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
-import io.horizontalsystems.bankwallet.core.Account
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.core.Wallet
 import io.horizontalsystems.bankwallet.core.managers.WalletCreator
 import io.horizontalsystems.bankwallet.entities.Coin

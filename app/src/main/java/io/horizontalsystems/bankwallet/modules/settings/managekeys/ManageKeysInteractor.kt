@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.settings.managekeys
 
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -17,7 +19,7 @@ class ManageKeysInteractor(private val accountManager: IAccountManager, private 
         get() = predefinedAccountTypeManager.allTypes
 
     override fun account(predefinedAccountType: IPredefinedAccountType): Account? {
-        return accountManager.account(predefinedAccountType)
+        return predefinedAccountTypeManager.account(predefinedAccountType)
     }
 
     override fun createAccount(defaultAccountType: DefaultAccountType) {
@@ -50,7 +52,7 @@ class ManageKeysInteractor(private val accountManager: IAccountManager, private 
 
     private fun mapAccounts(): List<ManageAccountItem> {
         return predefinedAccountTypes.map {
-            ManageAccountItem(it, account = accountManager.account(it))
+            ManageAccountItem(it, account = predefinedAccountTypeManager.account(it))
         }
     }
 }

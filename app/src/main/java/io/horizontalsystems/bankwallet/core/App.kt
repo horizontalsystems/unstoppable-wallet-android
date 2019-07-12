@@ -39,6 +39,7 @@ class App : Application() {
         lateinit var adapterManager: IAdapterManager
         lateinit var coinManager: WalletManager
         lateinit var accountManager: IAccountManager
+        lateinit var backupManager: IBackupManager
         lateinit var accountCreator: IAccountCreator
         lateinit var walletCreator: IWalletCreator
         lateinit var predefinedAccountTypeManager: IPredefinedAccountTypeManager
@@ -55,6 +56,7 @@ class App : Application() {
         lateinit var appCloseManager: AppCloseManager
         lateinit var ethereumKitManager: IEthereumKitManager
         lateinit var numberFormatter: IAppNumberFormatter
+        lateinit var appManager: ILaunchManager
 
         lateinit var instance: App
             private set
@@ -95,6 +97,7 @@ class App : Application() {
         networkManager = NetworkManager(appConfigProvider)
         rateManager = RateManager(rateStorage, networkManager)
         accountManager = AccountManager(accountsStorage)
+        backupManager = BackupManager(accountManager)
         accountCreator = AccountCreator(accountManager, AccountFactory(), wordsManager)
         walletCreator = WalletCreator(accountManager, WalletFactory())
         predefinedAccountTypeManager = PredefinedAccountTypeManager(appConfigProvider, accountManager)
@@ -122,6 +125,8 @@ class App : Application() {
         authManager.adapterManager = adapterManager
         authManager.pinManager = pinManager
 
+        appManager = AppManager(accountManager)
+        appManager.onStart()
     }
 
 }

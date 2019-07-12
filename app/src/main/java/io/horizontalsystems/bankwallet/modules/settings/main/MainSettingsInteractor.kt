@@ -5,7 +5,7 @@ import io.reactivex.disposables.CompositeDisposable
 
 class MainSettingsInteractor(
         private val localStorage: ILocalStorage,
-        private val accountManager: IAccountManager,
+        private val backupManager: IBackupManager,
         languageManager: ILanguageManager,
         systemInfoManager: ISystemInfoManager,
         private val currencyManager: ICurrencyManager) : MainSettingsModule.IMainSettingsInteractor {
@@ -15,7 +15,7 @@ class MainSettingsInteractor(
     var delegate: MainSettingsModule.IMainSettingsInteractorDelegate? = null
 
     init {
-        disposables.add(accountManager.nonBackedUpCountFlowable.subscribe {
+        disposables.add(backupManager.nonBackedUpCountFlowable.subscribe {
             delegate?.didUpdateNonBackedUp(it)
         })
 
@@ -24,8 +24,8 @@ class MainSettingsInteractor(
         })
     }
 
-    // override val nonBackedUpCount: Int
-    //     get() = accountManager.nonBackedUpCount
+    override val nonBackedUpCount: Int
+        get() = backupManager.nonBackedUpCount
 
     override var currentLanguage: String = languageManager.currentLanguage.displayLanguage
 

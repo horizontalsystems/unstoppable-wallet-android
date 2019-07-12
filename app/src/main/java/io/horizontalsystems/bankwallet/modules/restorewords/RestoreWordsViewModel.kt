@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.restorewords
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
-import io.horizontalsystems.bankwallet.core.AccountType
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
 
 class RestoreWordsViewModel : ViewModel(), RestoreWordsModule.IView, RestoreWordsModule.IRouter {

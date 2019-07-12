@@ -1,13 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.settings.security
 
-import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ISystemInfoManager
 import io.horizontalsystems.bankwallet.entities.BiometryType
 import io.reactivex.disposables.CompositeDisposable
 
 class SecuritySettingsInteractor(
-        private val accountManager: IAccountManager,
+        private val backupManager: IBackupManager,
         private val localStorage: ILocalStorage,
         private val systemInfoManager: ISystemInfoManager)
     : SecuritySettingsModule.ISecuritySettingsInteractor {
@@ -16,7 +16,7 @@ class SecuritySettingsInteractor(
     private var disposables: CompositeDisposable = CompositeDisposable()
 
     init {
-        accountManager.nonBackedUpCountFlowable
+        backupManager.nonBackedUpCountFlowable
                 .subscribe { delegate?.didBackup(it) }
                 .let { disposables.add(it) }
     }
@@ -24,8 +24,8 @@ class SecuritySettingsInteractor(
     override val biometryType: BiometryType
         get() = systemInfoManager.biometryType
 
-//    override val nonBackedUpCount: Int
-//        get() = accountManager.nonBackedUpCount
+    override val nonBackedUpCount: Int
+        get() = backupManager.nonBackedUpCount
 
     override fun getBiometricUnlockOn(): Boolean {
         return localStorage.isBiometricOn

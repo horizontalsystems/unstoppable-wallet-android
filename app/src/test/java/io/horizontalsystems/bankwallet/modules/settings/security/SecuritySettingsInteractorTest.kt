@@ -4,11 +4,7 @@ import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
-import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.core.ILockManager
-import io.horizontalsystems.bankwallet.core.ISystemInfoManager
-import io.horizontalsystems.bankwallet.core.managers.AuthManager
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.BiometryType
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
 import io.reactivex.Flowable
@@ -24,7 +20,7 @@ class SecuritySettingsInteractorTest {
 
     private lateinit var interactor: SecuritySettingsInteractor
     private lateinit var localStorage: ILocalStorage
-    private lateinit var accountManager: IAccountManager
+    private lateinit var backupManager: IBackupManager
     private lateinit var systemInfoManager: ISystemInfoManager
     private lateinit var lockManager: ILockManager
 
@@ -34,7 +30,7 @@ class SecuritySettingsInteractorTest {
     fun setup() {
         RxBaseTest.setup()
 
-        accountManager = mock {
+        backupManager = mock {
             on { nonBackedUpCountFlowable } doReturn backedUpSignal
         }
 
@@ -50,7 +46,7 @@ class SecuritySettingsInteractorTest {
             on { isLocked } doReturn false
         }
 
-        interactor = SecuritySettingsInteractor(accountManager, localStorage, systemInfoManager)
+        interactor = SecuritySettingsInteractor(backupManager, localStorage, systemInfoManager)
         interactor.delegate = delegate
     }
 
@@ -74,7 +70,7 @@ class SecuritySettingsInteractorTest {
         localStorage = mock {
             on { isBiometricOn } doReturn false
         }
-        interactor = SecuritySettingsInteractor(accountManager, localStorage, systemInfoManager)
+        interactor = SecuritySettingsInteractor(backupManager, localStorage, systemInfoManager)
         interactor.delegate = delegate
 
         assertFalse(interactor.getBiometricUnlockOn())

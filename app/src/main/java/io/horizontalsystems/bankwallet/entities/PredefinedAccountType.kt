@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.entities
 
-import io.horizontalsystems.bankwallet.core.AccountType
 import io.horizontalsystems.bankwallet.core.DefaultAccountType
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 

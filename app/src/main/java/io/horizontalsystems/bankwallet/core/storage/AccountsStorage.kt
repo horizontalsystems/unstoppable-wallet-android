@@ -1,6 +1,10 @@
 package io.horizontalsystems.bankwallet.core.storage
 
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.IAccountsStorage
+import io.horizontalsystems.bankwallet.core.hexToByteArray
+import io.horizontalsystems.bankwallet.core.toHexString
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.reactivex.Flowable
 import java.util.concurrent.Executors
 
@@ -17,7 +21,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         private const val EOS = "eos"
     }
 
-    override fun getAll(): List<Account> {
+    override fun allAccounts(): List<Account> {
         return dao.getAll()
                 .mapNotNull { record ->
                     try {
@@ -85,12 +89,6 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
     override fun delete(id: String) {
         executor.execute {
             dao.delete(id)
-        }
-    }
-
-    override fun setIsBackedUp(id: String) {
-        executor.execute {
-            dao.setIsBackedUp(id)
         }
     }
 

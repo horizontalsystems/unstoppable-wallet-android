@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core
 
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper

@@ -1,7 +1,6 @@
-package io.horizontalsystems.bankwallet.core
+package io.horizontalsystems.bankwallet.entities
 
 import android.os.Parcelable
-import io.horizontalsystems.bankwallet.entities.SyncMode
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 
@@ -14,7 +13,7 @@ class Account(val id: String,
 
     override fun equals(other: Any?): Boolean {
         if (other is Account) {
-            return name == other.name && type == other.type
+            return id == other.id && type == other.type
         }
 
         return false

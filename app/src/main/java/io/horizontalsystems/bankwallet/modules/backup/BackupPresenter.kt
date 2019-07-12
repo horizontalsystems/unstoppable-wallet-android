@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.backup
 
-import io.horizontalsystems.bankwallet.core.Account
+import io.horizontalsystems.bankwallet.entities.Account
 
 class BackupPresenter(
         private val interactor: BackupModule.Interactor,

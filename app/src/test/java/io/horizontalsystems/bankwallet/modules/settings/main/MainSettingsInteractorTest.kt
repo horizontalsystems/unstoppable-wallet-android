@@ -20,7 +20,7 @@ class MainSettingsInteractorTest {
     private val delegate = mock<MainSettingsModule.IMainSettingsInteractorDelegate>()
 
     private lateinit var localStorage: ILocalStorage
-    private lateinit var accountManager: IAccountManager
+    private lateinit var backupManager: IBackupManager
     private lateinit var languageManager: ILanguageManager
     private lateinit var sysInfoManager: ISystemInfoManager
     private lateinit var currencyManager: ICurrencyManager
@@ -40,7 +40,7 @@ class MainSettingsInteractorTest {
     fun setUp() {
         RxBaseTest.setup()
 
-        accountManager = mock {
+        backupManager = mock {
             on { nonBackedUpCountFlowable } doReturn backedUpSignal
         }
 
@@ -63,7 +63,7 @@ class MainSettingsInteractorTest {
         }
 
 
-        interactor = MainSettingsInteractor(localStorage, accountManager, languageManager, sysInfoManager, currencyManager)
+        interactor = MainSettingsInteractor(localStorage, backupManager, languageManager, sysInfoManager, currencyManager)
 
         interactor.delegate = delegate
     }
@@ -99,7 +99,7 @@ class MainSettingsInteractorTest {
             on { isLightModeOn } doReturn false
             on { baseCurrencyCode } doReturn currency.code
         }
-        interactor = MainSettingsInteractor(localStorage, accountManager, languageManager, sysInfoManager, currencyManager)
+        interactor = MainSettingsInteractor(localStorage, backupManager, languageManager, sysInfoManager, currencyManager)
         interactor.delegate = delegate
 
         Assert.assertFalse(interactor.getLightMode())

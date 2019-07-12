@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.settings.managekeys
 
-import io.horizontalsystems.bankwallet.core.Account
-import io.horizontalsystems.bankwallet.core.AccountType
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.Words12AccountType

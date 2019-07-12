@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Coin
 
 class WalletCreator(private val accountManager: IAccountManager, private val walletFactory: IWalletFactory) : IWalletCreator {
