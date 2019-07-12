@@ -68,8 +68,8 @@ class App : Application() {
         }
         LeakCanary.install(this)
 
-        if (!BuildConfig.DEBUG || !BuildConfig.testMode) {
-            //Disable logging for lower levels in Release or MainNet builds
+        if (!BuildConfig.DEBUG) {
+            //Disable logging for lower levels in Release build
             Logger.getLogger("").level = Level.SEVERE
         }
 
