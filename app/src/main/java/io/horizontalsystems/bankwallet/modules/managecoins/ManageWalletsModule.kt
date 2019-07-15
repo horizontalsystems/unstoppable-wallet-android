@@ -96,7 +96,7 @@ object ManageWalletsModule {
     }
 
     fun init(view: ManageWalletsViewModel, router: IRouter) {
-        val interactor = ManageWalletsInteractor(App.appConfigProvider, App.accountCreator, App.walletCreator, App.walletManager)
+        val interactor = ManageWalletsInteractor(App.appConfigProvider, App.accountCreator, App.walletCreator, App.walletManager, App.predefinedAccountTypeManager)
         val presenter = ManageWalletsPresenter(interactor, router, App.walletCreator, ManageWalletsPresenterState())
 
         view.delegate = presenter

@@ -77,7 +77,7 @@ interface ILaunchManager {
 
 interface IAccountCreator {
     fun createRestoredAccount(accountType: AccountType, syncMode: SyncMode?): Account
-    fun createNewAccount(defaultAccountType: DefaultAccountType): Account
+    fun createNewAccount(accountType: AccountType): Account
 }
 
 interface IWalletCreator {
@@ -96,6 +96,8 @@ interface IWalletFactory {
 interface IPredefinedAccountTypeManager {
     val allTypes: List<IPredefinedAccountType>
     fun account(predefinedAccountType: IPredefinedAccountType): Account?
+    fun createAccount(predefinedAccountType: IPredefinedAccountType): Account?
+    fun createAllAccounts()
 }
 
 interface IPredefinedAccountType {

@@ -28,7 +28,7 @@ object ManageKeysModule {
     interface Interactor {
         val predefinedAccountTypes: List<IPredefinedAccountType>
         fun account(predefinedAccountType: IPredefinedAccountType): Account?
-        fun createAccount(defaultAccountType: DefaultAccountType)
+        fun createAccount(predefinedAccountType: IPredefinedAccountType)
         fun restoreAccount(accountType: AccountType, syncMode: SyncMode)
 
         fun loadAccounts()

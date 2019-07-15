@@ -49,7 +49,7 @@ object WelcomeModule {
     }
 
     fun init(view: WelcomeViewModel, router: IRouter) {
-        val interactor = WelcomeInteractor(App.accountCreator, App.predefinedAccountTypeManager, App.systemInfoManager)
+        val interactor = WelcomeInteractor(App.predefinedAccountTypeManager, App.systemInfoManager)
         val presenter = WelcomePresenter(interactor, router)
 
         view.delegate = presenter

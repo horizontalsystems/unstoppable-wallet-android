@@ -2,17 +2,16 @@ package io.horizontalsystems.bankwallet.modules.managecoins
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.WalletManager
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CoinType
-import io.horizontalsystems.bankwallet.entities.SyncMode
+import io.horizontalsystems.bankwallet.entities.*
 import io.reactivex.disposables.CompositeDisposable
 
 class ManageWalletsInteractor(
         private val appConfigProvider: IAppConfigProvider,
         private val accountCreator: IAccountCreator,
         private val walletCreator: IWalletCreator,
-        private val walletManager: WalletManager) : ManageWalletsModule.IInteractor {
+        private val walletManager: WalletManager,
+        private val predefinedAccountTypeManager: IPredefinedAccountTypeManager)
+    : ManageWalletsModule.IInteractor {
 
     var delegate: ManageWalletsModule.IInteractorDelegate? = null
     private val disposables = CompositeDisposable()
@@ -32,12 +31,14 @@ class ManageWalletsInteractor(
             is CoinType.BitcoinCash,
             is CoinType.Dash,
             is CoinType.Ethereum,
-            is CoinType.Erc20 -> DefaultAccountType.Mnemonic(12)
-
+            is CoinType.Erc20 -> Words12AccountType()
             else -> throw Exception("New wallet creation is not supported for coin: ${coin.code}")
         }
 
-        val account = accountCreator.createNewAccount(defaultAccountType)
+        val account = predefinedAccountTypeManager.createAccount(defaultAccountType)
+        if (account == null) {
+            throw Exception("New wallet creation is not supported for coin: ${coin.code}")
+        }
 
         return walletCreator.wallet(coin, account)
     }

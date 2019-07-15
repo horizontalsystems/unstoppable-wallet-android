@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.settings.managekeys
 
+import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.Words12AccountType
 
@@ -40,9 +40,7 @@ class ManageKeysPresenter(private val interactor: ManageKeysModule.Interactor, p
     }
 
     override fun onClickNew(accountType: IPredefinedAccountType) {
-        accountType.defaultAccountType?.let {
-            interactor.createAccount(it)
-        }
+        interactor.createAccount(accountType)
     }
 
     override fun onClear() {

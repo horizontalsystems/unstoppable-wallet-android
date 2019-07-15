@@ -8,7 +8,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class ManageKeysInteractor(private val accountManager: IAccountManager, private val accountCreator: IAccountCreator, private val predefinedAccountTypeManager: IPredefinedAccountTypeManager)
+class ManageKeysInteractor(
+        private val accountManager: IAccountManager,
+        private val accountCreator: IAccountCreator,
+        private val predefinedAccountTypeManager: IPredefinedAccountTypeManager)
     : ManageKeysModule.Interactor {
 
     var delegate: ManageKeysModule.InteractorDelegate? = null
@@ -22,8 +25,8 @@ class ManageKeysInteractor(private val accountManager: IAccountManager, private 
         return predefinedAccountTypeManager.account(predefinedAccountType)
     }
 
-    override fun createAccount(defaultAccountType: DefaultAccountType) {
-        accountCreator.createNewAccount(defaultAccountType)
+    override fun createAccount(predefinedAccountType: IPredefinedAccountType) {
+        predefinedAccountTypeManager.createAccount(predefinedAccountType)
     }
 
     override fun restoreAccount(accountType: AccountType, syncMode: SyncMode) {

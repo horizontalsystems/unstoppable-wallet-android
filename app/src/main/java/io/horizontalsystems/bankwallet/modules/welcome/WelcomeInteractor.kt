@@ -1,11 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.welcome
 
-import io.horizontalsystems.bankwallet.core.IAccountCreator
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountTypeManager
 import io.horizontalsystems.bankwallet.core.ISystemInfoManager
 
 class WelcomeInteractor(
-        private val accountCreator: IAccountCreator,
         private val predefinedAccountTypeManager: IPredefinedAccountTypeManager,
         private val systemInfoManager: ISystemInfoManager) : WelcomeModule.IInteractor {
 
@@ -16,11 +14,7 @@ class WelcomeInteractor(
 
     override fun createWallet() {
         try {
-            predefinedAccountTypeManager.allTypes.forEach { predefinedAccountType ->
-                predefinedAccountType.defaultAccountType?.let {
-                    accountCreator.createNewAccount(it)
-                }
-            }
+            predefinedAccountTypeManager.createAllAccounts()
             delegate?.didCreateWallet()
 
         } catch (ex: Exception) {

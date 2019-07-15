@@ -98,9 +98,9 @@ class App : Application() {
         rateManager = RateManager(rateStorage, networkManager)
         accountManager = AccountManager(accountsStorage)
         backupManager = BackupManager(accountManager)
-        accountCreator = AccountCreator(accountManager, AccountFactory(), wordsManager)
+        accountCreator = AccountCreator(accountManager, AccountFactory())
         walletCreator = WalletCreator(accountManager, WalletFactory())
-        predefinedAccountTypeManager = PredefinedAccountTypeManager(appConfigProvider, accountManager)
+        predefinedAccountTypeManager = PredefinedAccountTypeManager(appConfigProvider, accountManager, accountCreator, wordsManager)
         walletManager = WalletManager(appConfigProvider, accountManager, enabledWalletsStorage)
         authManager = AuthManager(secureStorage, localStorage, walletManager, rateManager, ethereumKitManager, appConfigProvider)
 
