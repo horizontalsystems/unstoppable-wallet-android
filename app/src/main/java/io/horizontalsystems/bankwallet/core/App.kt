@@ -37,12 +37,15 @@ class App : Application() {
         lateinit var lockManager: ILockManager
         lateinit var appConfigProvider: IAppConfigProvider
         lateinit var adapterManager: IAdapterManager
-        lateinit var walletManager: WalletManager
+        lateinit var walletManager: IWalletManager
+        lateinit var walletFactory: IWalletFactory
+        lateinit var walletStorage: IWalletStorage
         lateinit var accountManager: IAccountManager
         lateinit var backupManager: IBackupManager
         lateinit var accountCreator: IAccountCreator
-        lateinit var walletCreator: IWalletCreator
         lateinit var predefinedAccountTypeManager: IPredefinedAccountTypeManager
+        lateinit var defaultWalletCreator: DefaultWalletCreator
+        lateinit var walletRemover: WalletRemover
 
         lateinit var rateSyncer: RateSyncer
         lateinit var rateManager: RateManager
@@ -90,7 +93,9 @@ class App : Application() {
         rateStorage = RatesRepository(appDatabase)
         accountsStorage = AccountsStorage(appDatabase)
 
+        walletFactory = WalletFactory()
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
+        walletStorage = WalletStorage(appConfigProvider, walletFactory, enabledWalletsStorage)
         localStorage = LocalStorageManager()
 
         wordsManager = WordsManager(localStorage)
@@ -98,11 +103,12 @@ class App : Application() {
         rateManager = RateManager(rateStorage, networkManager)
         accountManager = AccountManager(accountsStorage)
         backupManager = BackupManager(accountManager)
-        accountCreator = AccountCreator(accountManager, AccountFactory())
-        walletCreator = WalletCreator(accountManager, WalletFactory())
-        predefinedAccountTypeManager = PredefinedAccountTypeManager(appConfigProvider, accountManager, accountCreator, wordsManager)
-        walletManager = WalletManager(appConfigProvider, accountManager, enabledWalletsStorage)
+        walletManager = WalletManager(accountManager, walletFactory, walletStorage)
+        defaultWalletCreator = DefaultWalletCreator(walletManager, appConfigProvider, walletFactory)
+        accountCreator = AccountCreator(accountManager, AccountFactory(), wordsManager, defaultWalletCreator)
+        predefinedAccountTypeManager = PredefinedAccountTypeManager(appConfigProvider, accountManager, accountCreator)
         authManager = AuthManager(secureStorage, localStorage, walletManager, rateManager, ethereumKitManager, appConfigProvider)
+        walletRemover = WalletRemover(accountManager, walletManager)
 
         randomManager = RandomProvider()
         systemInfoManager = SystemInfoManager()
@@ -114,7 +120,7 @@ class App : Application() {
 
         networkAvailabilityManager = NetworkAvailabilityManager()
 
-        adapterManager = AdapterManager(walletManager, authManager, AdapterFactory(instance, appConfigProvider, ethereumKitManager, feeRateProvider), ethereumKitManager)
+        adapterManager = AdapterManager(walletManager, AdapterFactory(instance, appConfigProvider, ethereumKitManager, feeRateProvider), ethereumKitManager)
         rateSyncer = RateSyncer(rateManager, adapterManager, currencyManager, networkAvailabilityManager)
 
         appCloseManager = AppCloseManager()
@@ -125,7 +131,7 @@ class App : Application() {
         authManager.adapterManager = adapterManager
         authManager.pinManager = pinManager
 
-        appManager = AppManager(accountManager)
+        appManager = AppManager(accountManager, walletManager)
         appManager.onStart()
     }
 

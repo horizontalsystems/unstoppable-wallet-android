@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.entities
 
+import io.horizontalsystems.bankwallet.core.DefaultAccountType
 import java.io.Serializable
 import java.math.BigDecimal
 
@@ -28,4 +29,12 @@ sealed class CoinType : Serializable {
             }
         }
     }
+
+    val defaultAccountType: DefaultAccountType
+        get() = when (this) {
+            is Erc20, Bitcoin, BitcoinCash, Dash, Ethereum -> {
+                DefaultAccountType.Mnemonic(wordsCount = 12)
+            }
+            is Eos -> DefaultAccountType.Eos()
+        }
 }

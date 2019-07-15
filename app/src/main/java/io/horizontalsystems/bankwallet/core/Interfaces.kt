@@ -23,7 +23,7 @@ interface IAdapterManager {
     val adaptersUpdatedSignal: Observable<Unit>
 
     fun refresh()
-    fun initAdapters()
+    fun initAdapters(wallets: List<Wallet>)
     fun stopKits()
 }
 
@@ -59,9 +59,12 @@ interface ISecuredStorage {
 interface IAccountManager {
     val accounts: List<Account>
     val accountsFlowable: Flowable<List<Account>>
+    val deleteAccountObservable: Flowable<String>
 
+    fun account(coinType: CoinType): Account?
     fun preloadAccounts()
-    fun save(account: Account)
+    fun create(account: Account)
+    fun update(account: Account)
     fun delete(id: String)
 }
 
@@ -77,12 +80,7 @@ interface ILaunchManager {
 
 interface IAccountCreator {
     fun createRestoredAccount(accountType: AccountType, syncMode: SyncMode?): Account
-    fun createNewAccount(accountType: AccountType): Account
-}
-
-interface IWalletCreator {
-    fun wallet(coin: Coin): Wallet?
-    fun wallet(coin: Coin, account: Account): Wallet
+    fun createNewAccount(defaultAccountType: DefaultAccountType, enabledDefaults: Boolean = false): Account
 }
 
 interface IAccountFactory {
@@ -90,7 +88,12 @@ interface IAccountFactory {
 }
 
 interface IWalletFactory {
-    fun wallet(coin: Coin, account: Account): Wallet
+    fun wallet(coin: Coin, account: Account, syncMode: SyncMode): Wallet
+}
+
+interface IWalletStorage {
+    fun wallets(accounts: List<Account>): List<Wallet>
+    fun save(wallets: List<Wallet>)
 }
 
 interface IPredefinedAccountTypeManager {
@@ -103,12 +106,13 @@ interface IPredefinedAccountTypeManager {
 interface IPredefinedAccountType {
     val title: String
     val coinCodes: String
-    val defaultAccountType: DefaultAccountType?
+    val defaultAccountType: DefaultAccountType
     fun supports(accountType: AccountType): Boolean
 }
 
 sealed class DefaultAccountType {
     class Mnemonic(val wordsCount: Int) : DefaultAccountType()
+    class Eos : DefaultAccountType()
 }
 
 interface IRandomProvider {
@@ -285,7 +289,8 @@ interface IAccountsStorage {
 }
 
 interface IEnabledWalletStorage {
-    fun enabledWallets(): Flowable<List<EnabledWallet>>
+    val enabledWallets: List<EnabledWallet>
+    fun enabledWalletsFlowable(): Flowable<List<EnabledWallet>>
     fun save(coins: List<EnabledWallet>)
     fun deleteAll()
 }
@@ -310,9 +315,11 @@ interface ICurrentDateProvider {
 }
 
 interface IWalletManager {
-    var wallets: List<Wallet>
-    val walletsUpdatedSignal: PublishSubject<Unit>
-    fun enableDefaultWallets()
+    val wallets: List<Wallet>
+    val walletsObservable: Flowable<List<Wallet>>
+    fun wallet(coin: Coin): Wallet?
+
+    fun preloadWallets()
     fun enable(wallets: List<Wallet>)
     fun clear()
 }
@@ -345,7 +352,6 @@ enum class FeeRatePriority(val value: Int) {
     HIGHEST(4);
 
     companion object {
-        fun valueOf(value: Int): FeeRatePriority = FeeRatePriority.values().firstOrNull { it.value == value }
-                ?: MEDIUM
+        fun valueOf(value: Int): FeeRatePriority = values().find { it.value == value } ?: MEDIUM
     }
 }

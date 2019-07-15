@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 class Words12AccountType : IPredefinedAccountType {
     override val title = "12 Words Key"
     override val coinCodes = "BTC, BCH, DASH, ETH, ERC-20"
-    override val defaultAccountType: DefaultAccountType?
+    override val defaultAccountType: DefaultAccountType
         get() = DefaultAccountType.Mnemonic(12)
 
     override fun supports(accountType: AccountType): Boolean {
@@ -21,7 +21,7 @@ class Words12AccountType : IPredefinedAccountType {
 class Words24AccountType : IPredefinedAccountType {
     override val title = "24 Words Key"
     override val coinCodes = "BNB, CHN"
-    override val defaultAccountType: DefaultAccountType?
+    override val defaultAccountType: DefaultAccountType
         get() = DefaultAccountType.Mnemonic(24)
 
     override fun supports(accountType: AccountType): Boolean {
@@ -37,8 +37,8 @@ class Words24AccountType : IPredefinedAccountType {
 class EosAccountType : IPredefinedAccountType {
     override val title = "Eos Account"
     override val coinCodes = "EOS"
-    override val defaultAccountType: DefaultAccountType?
-        get() = null
+    override val defaultAccountType: DefaultAccountType
+        get() = DefaultAccountType.Eos()
 
     override fun supports(accountType: AccountType): Boolean {
         return accountType is AccountType.Eos

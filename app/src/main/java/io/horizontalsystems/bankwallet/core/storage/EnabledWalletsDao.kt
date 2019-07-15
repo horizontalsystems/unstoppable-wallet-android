@@ -8,7 +8,10 @@ import io.reactivex.Flowable
 interface EnabledWalletsDao {
 
     @Query("SELECT * FROM EnabledWallet ORDER BY `walletOrder` ASC")
-    fun getEnabledCoins(): Flowable<List<EnabledWallet>>
+    fun enabledCoins(): List<EnabledWallet>
+
+    @Query("SELECT * FROM EnabledWallet ORDER BY `walletOrder` ASC")
+    fun enabledCoinsFlowable(): Flowable<List<EnabledWallet>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(storableCoin: EnabledWallet)

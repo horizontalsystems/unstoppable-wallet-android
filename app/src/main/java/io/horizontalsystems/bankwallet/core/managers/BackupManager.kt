@@ -17,7 +17,7 @@ class BackupManager(private val accountManager: IAccountManager) : IBackupManage
     override fun setIsBackedUp(id: String) {
         accountManager.accounts.find { it.id == id }?.let { account ->
             account.isBackedUp = true
-            accountManager.save(account)
+            accountManager.update(account)
         }
     }
 }

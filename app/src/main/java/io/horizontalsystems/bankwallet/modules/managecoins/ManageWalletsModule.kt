@@ -43,9 +43,7 @@ object ManageWalletsModule {
         }
 
         private fun setDisabledCoins() {
-            disabledCoins = allCoins.filter { coin ->
-                enabledCoins.find { it.coin === coin } === null
-            }
+            disabledCoins = allCoins.filter { coin -> enabledCoins.find { it.coin == coin } == null }
         }
     }
 
@@ -79,8 +77,8 @@ object ManageWalletsModule {
         fun load()
         fun saveWallets(wallets: List<Wallet>)
         fun clear()
-        fun createWalletForCoin(coin: Coin): Wallet
-        fun restoreWallet(coin:Coin, accountType: AccountType, syncMode: SyncMode): Wallet
+        fun createWallet(coin: Coin): Wallet
+        fun restoreWallet(coin: Coin, accountType: AccountType, syncMode: SyncMode): Wallet
     }
 
     interface IInteractorDelegate {
@@ -96,8 +94,8 @@ object ManageWalletsModule {
     }
 
     fun init(view: ManageWalletsViewModel, router: IRouter) {
-        val interactor = ManageWalletsInteractor(App.appConfigProvider, App.accountCreator, App.walletCreator, App.walletManager, App.predefinedAccountTypeManager)
-        val presenter = ManageWalletsPresenter(interactor, router, App.walletCreator, ManageWalletsPresenterState())
+        val interactor = ManageWalletsInteractor(App.appConfigProvider, App.walletManager, App.accountCreator, App.walletFactory)
+        val presenter = ManageWalletsPresenter(interactor, router, App.walletManager, ManageWalletsPresenterState())
 
         view.delegate = presenter
         presenter.view = view

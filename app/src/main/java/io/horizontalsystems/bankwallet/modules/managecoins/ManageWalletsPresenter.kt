@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.managecoins
 
-import io.horizontalsystems.bankwallet.core.IWalletCreator
+import io.horizontalsystems.bankwallet.core.DefaultAccountType
+import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.Wallet
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
@@ -11,7 +12,7 @@ import io.reactivex.disposables.CompositeDisposable
 class ManageWalletsPresenter(
         private val interactor: ManageWalletsModule.IInteractor,
         private val router: ManageWalletsModule.IRouter,
-        private val walletCreator: IWalletCreator,
+        private val walletManager: IWalletManager,
         private val state: ManageWalletsModule.ManageWalletsPresenterState)
     : ManageWalletsModule.IViewDelegate, ManageWalletsModule.IInteractorDelegate {
 
@@ -27,18 +28,24 @@ class ManageWalletsPresenter(
 
     override fun onClickCreateKey(coin: Coin) {
         val wallet = try {
-            interactor.createWalletForCoin(coin)
+            interactor.createWallet(coin)
         } catch (ex: Exception) {
             view?.showFailedToCreateKey()
             return
         }
+
         state.enable(wallet)
         view?.updateCoins()
     }
 
     override fun onClickRestoreKey(coin: Coin) {
         state.restoringKeyForCoin = coin
-        router.openRestoreWordsModule()
+
+        when (coin.type.defaultAccountType) {
+            is DefaultAccountType.Mnemonic -> {
+                router.openRestoreWordsModule()
+            }
+        }
     }
 
     override fun onRestore(accountType: AccountType, syncMode: SyncMode) {
@@ -60,7 +67,7 @@ class ManageWalletsPresenter(
     override fun enableCoin(position: Int) {
         val coin = state.disabledCoins[position]
 
-        val wallet = walletCreator.wallet(coin)
+        val wallet = walletManager.wallet(coin)
         if (wallet == null) {
             if (coin.type is CoinType.Eos) {
                 view?.showRestoreKeyDialog(coin)
@@ -111,6 +118,7 @@ class ManageWalletsPresenter(
     override fun didLoad(coins: List<Coin>, wallets: List<Wallet>) {
         state.allCoins = coins.toMutableList()
         state.enabledCoins = wallets.toMutableList()
+        view?.updateCoins()
     }
 
     override fun didSaveChanges() {
