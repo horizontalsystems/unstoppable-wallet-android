@@ -295,7 +295,7 @@
 
     <!--Manage Keys-->
 
-    <string name="ManageKeys_title">Manage Keys</string>
+    <string name="ManageKeys_Title">Manage Keys</string>
     <string name="ManageKeys_New">New</string>
     <string name="ManageKeys_Import">Import</string>
     <string name="ManageKeys_Unlink">Unlink</string>
@@ -303,9 +303,10 @@
     <string name="ManageKeys_Show">Show</string>
 
     <!-- Manage Keys Alert -->
-    <string name="AddCoin_title">Add %s</string>
-    <string name="AddCoin_description">You don\'t have the keys for this coin yet. You need to import the secret key first.</string>
-    <string name="AddCoin_ManageKeys">Manage Keys</string>
+    <string name="AddCoin_Title">Add Key for %s</string>
+    <string name="AddCoin_Description">You need to have a cryptographic key before you can add %s</string>
+    <string name="AddCoin_CreateKey">Create New</string>
+    <string name="AddCoin_RestoreKey">I already have</string>
 
     <!-- Account Types -->
 

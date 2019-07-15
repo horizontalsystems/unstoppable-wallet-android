@@ -2,7 +2,10 @@ package io.horizontalsystems.bankwallet.modules.managecoins
 
 import io.horizontalsystems.bankwallet.core.IWalletCreator
 import io.horizontalsystems.bankwallet.core.Wallet
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinType
+import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.reactivex.disposables.CompositeDisposable
 
 class ManageWalletsPresenter(
@@ -22,8 +25,36 @@ class ManageWalletsPresenter(
         interactor.load()
     }
 
-    override fun onClickManageKeys() {
-        router.startManageKeysModule()
+    override fun onClickCreateKey(coin: Coin) {
+        val wallet = try {
+            interactor.createWalletForCoin(coin)
+        } catch (ex: Exception) {
+            view?.showFailedToCreateKey()
+            return
+        }
+        state.enable(wallet)
+        view?.updateCoins()
+    }
+
+    override fun onClickRestoreKey(coin: Coin) {
+        state.restoringKeyForCoin = coin
+        router.openRestoreWordsModule()
+    }
+
+    override fun onRestore(accountType: AccountType, syncMode: SyncMode) {
+        val coin = state.restoringKeyForCoin ?: return
+
+        val wallet = try {
+            interactor.restoreWallet(coin, accountType, syncMode)
+        } catch (ex: Exception) {
+            view?.showFailedToRestoreKey()
+            return
+        } finally {
+            state.restoringKeyForCoin = null
+        }
+
+        state.enable(wallet)
+        view?.updateCoins()
     }
 
     override fun enableCoin(position: Int) {
@@ -31,7 +62,11 @@ class ManageWalletsPresenter(
 
         val wallet = walletCreator.wallet(coin)
         if (wallet == null) {
-            view?.showNoAccount(coin)
+            if (coin.type is CoinType.Eos) {
+                view?.showRestoreKeyDialog(coin)
+            } else {
+                view?.showCreateAndRestoreKeyDialog(coin)
+            }
         } else {
             state.enable(wallet)
             view?.updateCoins()

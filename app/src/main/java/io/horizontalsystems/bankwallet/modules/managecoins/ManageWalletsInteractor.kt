@@ -1,19 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.managecoins
 
-import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.core.IAppConfigProvider
-import io.horizontalsystems.bankwallet.core.Wallet
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.WalletManager
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
-import io.reactivex.Flowable
+import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.reactivex.disposables.CompositeDisposable
 
 class ManageWalletsInteractor(
         private val appConfigProvider: IAppConfigProvider,
-        private val walletManager: WalletManager,
-        private val accountManager: IAccountManager)
-    : ManageWalletsModule.IInteractor {
+        private val accountCreator: IAccountCreator,
+        private val walletCreator: IWalletCreator,
+        private val walletManager: WalletManager) : ManageWalletsModule.IInteractor {
 
     var delegate: ManageWalletsModule.IInteractorDelegate? = null
     private val disposables = CompositeDisposable()
@@ -27,10 +26,25 @@ class ManageWalletsInteractor(
         delegate?.didSaveChanges()
     }
 
-    override fun accounts(coinType: CoinType): Flowable<List<Account>> {
-        return accountManager.accountsFlowable.map { accountsList ->
-            accountsList.filter { coinType.canSupport(it.type) }
+    override fun createWalletForCoin(coin: Coin): Wallet {
+        val defaultAccountType = when (coin.type) {
+            is CoinType.Bitcoin,
+            is CoinType.BitcoinCash,
+            is CoinType.Dash,
+            is CoinType.Ethereum,
+            is CoinType.Erc20 -> DefaultAccountType.Mnemonic(12)
+
+            else -> throw Exception("New wallet creation is not supported for coin: ${coin.code}")
         }
+
+        val account = accountCreator.createNewAccount(defaultAccountType)
+
+        return walletCreator.wallet(coin, account)
+    }
+
+    override fun restoreWallet(coin: Coin, accountType: AccountType, syncMode: SyncMode): Wallet {
+        val account = accountCreator.createRestoredAccount(accountType, syncMode)
+        return walletCreator.wallet(coin, account)
     }
 
     override fun clear() {

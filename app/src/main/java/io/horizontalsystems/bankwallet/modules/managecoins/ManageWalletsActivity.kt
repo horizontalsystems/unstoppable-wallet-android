@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.managecoins
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -12,9 +13,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.utils.ModuleCode
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.SyncMode
+import io.horizontalsystems.bankwallet.modules.restorewords.RestoreWordsModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysModule
-import io.horizontalsystems.bankwallet.ui.dialogs.BottomManageKeysAlert
+import io.horizontalsystems.bankwallet.ui.dialogs.ManageKeysDialog
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_manage_coins.*
@@ -51,14 +56,16 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsAdapter.StartDragList
             adapter.notifyDataSetChanged()
         })
 
-        viewModel.showNoAccountLiveEvent.observe(this, Observer { coin ->
-            coin?.let {
-                BottomManageKeysAlert.show(this, coin, object : BottomManageKeysAlert.Listener {
-                    override fun onClickManageKeys() {
-                        viewModel.delegate.onClickManageKeys()
-                    }
-                })
-            }
+        viewModel.showRestoreKeyDialog.observe(this, Observer { coin ->
+            ManageKeysDialog.showWithoutCreateOption(this, coin, ManageKeysDialogListener(coin))
+        })
+
+        viewModel.showCreateAndRestoreKeyDialog.observe(this, Observer { coin ->
+            ManageKeysDialog.show(this, coin, ManageKeysDialogListener(coin))
+        })
+
+        viewModel.openRestoreWordsModule.observe(this, Observer {
+            RestoreWordsModule.startForResult(this, ModuleCode.RESTORE_WORDS)
         })
 
         viewModel.startManageKeysLiveEvent.observe(this, Observer {
@@ -73,6 +80,28 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsAdapter.StartDragList
     override fun requestDrag(viewHolder: RecyclerView.ViewHolder) {
         itemTouchHelper?.startDrag(viewHolder)
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == ModuleCode.RESTORE_WORDS && data != null && resultCode == RESULT_OK) {
+            val syncMode = data.getParcelableExtra<SyncMode>("syncMode")
+            val accountType = data.getParcelableExtra<AccountType>("accountType")
+
+            viewModel.delegate.onRestore(accountType, syncMode)
+        }
+    }
+
+    inner class ManageKeysDialogListener(private val coin: Coin) : ManageKeysDialog.Listener {
+        override fun onClickCreateKey() {
+            viewModel.delegate.onClickCreateKey(coin)
+        }
+
+        override fun onClickRestoreKey() {
+            viewModel.delegate.onClickRestoreKey(coin)
+        }
+    }
+
 }
 
 class ManageWalletsAdapter(private val viewDelegate: ManageWalletsModule.IViewDelegate, private var startDragListener: StartDragListener)

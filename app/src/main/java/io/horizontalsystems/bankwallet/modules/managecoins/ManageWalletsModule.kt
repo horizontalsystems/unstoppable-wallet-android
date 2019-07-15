@@ -2,12 +2,11 @@ package io.horizontalsystems.bankwallet.modules.managecoins
 
 import android.content.Context
 import android.content.Intent
-import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Wallet
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CoinType
-import io.reactivex.Flowable
+import io.horizontalsystems.bankwallet.entities.SyncMode
 
 object ManageWalletsModule {
 
@@ -25,6 +24,8 @@ object ManageWalletsModule {
             }
 
         var disabledCoins = listOf<Coin>()
+
+        var restoringKeyForCoin: Coin? = null
 
         fun enable(coin: Wallet) {
             enabledCoins.add(coin)
@@ -50,13 +51,18 @@ object ManageWalletsModule {
 
     interface IView {
         fun updateCoins()
-        fun showNoAccount(coin: Coin)
         fun showFailedToSaveError()
+        fun showRestoreKeyDialog(coin: Coin)
+        fun showCreateAndRestoreKeyDialog(coin: Coin)
+        fun showFailedToCreateKey()
+        fun showFailedToRestoreKey()
     }
 
     interface IViewDelegate {
         fun viewDidLoad()
-        fun onClickManageKeys()
+        fun onClickCreateKey(coin: Coin)
+        fun onClickRestoreKey(coin: Coin)
+        fun onRestore(accountType: AccountType, syncMode: SyncMode)
         fun enableCoin(position: Int)
         fun disableCoin(position: Int)
         fun saveChanges()
@@ -72,8 +78,9 @@ object ManageWalletsModule {
     interface IInteractor {
         fun load()
         fun saveWallets(wallets: List<Wallet>)
-        fun accounts(coinType: CoinType): Flowable<List<Account>>
         fun clear()
+        fun createWalletForCoin(coin: Coin): Wallet
+        fun restoreWallet(coin:Coin, accountType: AccountType, syncMode: SyncMode): Wallet
     }
 
     interface IInteractorDelegate {
@@ -85,10 +92,11 @@ object ManageWalletsModule {
     interface IRouter {
         fun startManageKeysModule()
         fun close()
+        fun openRestoreWordsModule()
     }
 
     fun init(view: ManageWalletsViewModel, router: IRouter) {
-        val interactor = ManageWalletsInteractor(App.appConfigProvider, App.coinManager, App.accountManager)
+        val interactor = ManageWalletsInteractor(App.appConfigProvider, App.accountCreator, App.walletCreator, App.walletManager)
         val presenter = ManageWalletsPresenter(interactor, router, App.walletCreator, ManageWalletsPresenterState())
 
         view.delegate = presenter

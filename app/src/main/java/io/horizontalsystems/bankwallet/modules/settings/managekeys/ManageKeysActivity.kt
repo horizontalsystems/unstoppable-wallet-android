@@ -11,12 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
-import io.horizontalsystems.bankwallet.entities.EosAccountType
-import io.horizontalsystems.bankwallet.entities.SyncMode
-import io.horizontalsystems.bankwallet.entities.Words12AccountType
-import io.horizontalsystems.bankwallet.entities.Words24AccountType
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.backup.BackupModule
 import io.horizontalsystems.bankwallet.modules.restorewords.RestoreWordsModule
 import io.horizontalsystems.bankwallet.ui.dialogs.BottomButtonColor
@@ -37,7 +33,7 @@ class ManageKeysActivity : BaseActivity() {
         viewModel.init()
 
         setContentView(R.layout.activity_manage_keys)
-        shadowlessToolbar.bind(getString(R.string.ManageKeys_title), TopMenuItem(R.drawable.back) { onBackPressed() })
+        shadowlessToolbar.bind(getString(R.string.ManageKeys_Title), TopMenuItem(R.drawable.back) { onBackPressed() })
 
         val adapter = ManageKeysAdapter(viewModel)
         recyclerView.adapter = adapter

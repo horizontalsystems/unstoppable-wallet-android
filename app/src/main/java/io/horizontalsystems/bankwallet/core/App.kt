@@ -37,7 +37,7 @@ class App : Application() {
         lateinit var lockManager: ILockManager
         lateinit var appConfigProvider: IAppConfigProvider
         lateinit var adapterManager: IAdapterManager
-        lateinit var coinManager: WalletManager
+        lateinit var walletManager: WalletManager
         lateinit var accountManager: IAccountManager
         lateinit var backupManager: IBackupManager
         lateinit var accountCreator: IAccountCreator
@@ -101,8 +101,8 @@ class App : Application() {
         accountCreator = AccountCreator(accountManager, AccountFactory(), wordsManager)
         walletCreator = WalletCreator(accountManager, WalletFactory())
         predefinedAccountTypeManager = PredefinedAccountTypeManager(appConfigProvider, accountManager)
-        coinManager = WalletManager(appConfigProvider, accountManager, enabledWalletsStorage)
-        authManager = AuthManager(secureStorage, localStorage, coinManager, rateManager, ethereumKitManager, appConfigProvider)
+        walletManager = WalletManager(appConfigProvider, accountManager, enabledWalletsStorage)
+        authManager = AuthManager(secureStorage, localStorage, walletManager, rateManager, ethereumKitManager, appConfigProvider)
 
         randomManager = RandomProvider()
         systemInfoManager = SystemInfoManager()
@@ -114,7 +114,7 @@ class App : Application() {
 
         networkAvailabilityManager = NetworkAvailabilityManager()
 
-        adapterManager = AdapterManager(coinManager, authManager, AdapterFactory(instance, appConfigProvider, ethereumKitManager, feeRateProvider), ethereumKitManager)
+        adapterManager = AdapterManager(walletManager, authManager, AdapterFactory(instance, appConfigProvider, ethereumKitManager, feeRateProvider), ethereumKitManager)
         rateSyncer = RateSyncer(rateManager, adapterManager, currencyManager, networkAvailabilityManager)
 
         appCloseManager = AppCloseManager()
