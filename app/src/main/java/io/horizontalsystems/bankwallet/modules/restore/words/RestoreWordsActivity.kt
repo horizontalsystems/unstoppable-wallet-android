@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.restorewords
+package io.horizontalsystems.bankwallet.modules.restore.words
 
 import android.content.Intent
 import android.os.Bundle

@@ -10,6 +10,7 @@ class RestoreViewModel : ViewModel(), RestoreModule.View, RestoreModule.Router {
 
     val reloadLiveEvent = SingleLiveEvent<List<IPredefinedAccountType>>()
     val startRestoreWordsLiveEvent = SingleLiveEvent<Unit>()
+    val startRestoreEosLiveEvent = SingleLiveEvent<Unit>()
     val startMainModuleLiveEvent = SingleLiveEvent<Unit>()
     val closeLiveEvent = SingleLiveEvent<Unit>()
 
@@ -28,6 +29,10 @@ class RestoreViewModel : ViewModel(), RestoreModule.View, RestoreModule.Router {
 
     override fun startRestoreWordsModule() {
         startRestoreWordsLiveEvent.call()
+    }
+
+    override fun startRestoreEosModule() {
+        startRestoreEosLiveEvent.call()
     }
 
     override fun startMainModule() {

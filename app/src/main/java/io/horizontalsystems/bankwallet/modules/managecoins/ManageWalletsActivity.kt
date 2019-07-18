@@ -17,7 +17,7 @@ import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.SyncMode
-import io.horizontalsystems.bankwallet.modules.restorewords.RestoreWordsModule
+import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysModule
 import io.horizontalsystems.bankwallet.ui.dialogs.ManageKeysDialog
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem

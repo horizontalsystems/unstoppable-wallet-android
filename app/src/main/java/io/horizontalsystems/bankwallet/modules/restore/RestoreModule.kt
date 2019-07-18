@@ -2,9 +2,9 @@ package io.horizontalsystems.bankwallet.modules.restore
 
 import android.content.Context
 import android.content.Intent
-import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
 
 object RestoreModule {
@@ -32,6 +32,7 @@ object RestoreModule {
 
     interface Router {
         fun startRestoreWordsModule()
+        fun startRestoreEosModule()
         fun startMainModule()
         fun close()
     }

@@ -11,12 +11,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.modules.main.MainModule
-import io.horizontalsystems.bankwallet.modules.restorewords.RestoreWordsModule
+import io.horizontalsystems.bankwallet.modules.restore.eos.RestoreEosModule
+import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_restore.*
@@ -46,6 +47,10 @@ class RestoreActivity : BaseActivity() {
 
         viewModel.startRestoreWordsLiveEvent.observe(this, Observer {
             RestoreWordsModule.startForResult(this, ModuleCode.RESTORE_WORDS)
+        })
+
+        viewModel.startRestoreEosLiveEvent.observe(this, Observer {
+            RestoreEosModule.startForResult(this, ModuleCode.RESTORE_EOS)
         })
 
         viewModel.startMainModuleLiveEvent.observe(this, Observer {

@@ -30,6 +30,9 @@
     <string name="Restore_ValidationFailed">Incorrect Secret Key</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>
 
+    <string name="Restore_EosAccountName">Account Name</string>
+    <string name="Restore_EosActivePrivateKey">Active Private Key</string>
+
     <!--Backup-->
 
     <string name="Backup_Intro_Title">Secret Key</string>

@@ -1,9 +1,9 @@
-package io.horizontalsystems.bankwallet.modules.restorewords
+package io.horizontalsystems.bankwallet.modules.restore.words
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
-import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
 
 object RestoreWordsModule {

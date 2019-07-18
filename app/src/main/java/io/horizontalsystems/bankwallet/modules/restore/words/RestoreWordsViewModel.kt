@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.restorewords
+package io.horizontalsystems.bankwallet.modules.restore.words
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

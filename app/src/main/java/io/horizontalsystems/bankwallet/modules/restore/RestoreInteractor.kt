@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.restore
 
-import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.core.IAccountCreator
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
 
 class RestoreInteractor(private val accountCreator: IAccountCreator) : RestoreModule.Interactor {

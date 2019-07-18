@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.restorewords
+package io.horizontalsystems.bankwallet.modules.restore.words
 
 import io.horizontalsystems.bankwallet.core.managers.WordsManager
 import io.horizontalsystems.hdwalletkit.Mnemonic

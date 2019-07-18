@@ -14,7 +14,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.backup.BackupModule
-import io.horizontalsystems.bankwallet.modules.restorewords.RestoreWordsModule
+import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule
 import io.horizontalsystems.bankwallet.ui.dialogs.BottomButtonColor
 import io.horizontalsystems.bankwallet.ui.dialogs.BottomConfirmAlert
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem

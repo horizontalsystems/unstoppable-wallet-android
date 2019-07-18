@@ -1,8 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.restore
 
-import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountTypeManager
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.EosAccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.Words12AccountType
 
@@ -27,6 +28,9 @@ class RestorePresenter(
         when (accountType) {
             is Words12AccountType -> {
                 router.startRestoreWordsModule()
+            }
+            is EosAccountType -> {
+                router.startRestoreEosModule()
             }
         }
     }
