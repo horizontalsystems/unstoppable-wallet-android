@@ -7,45 +7,9 @@ import io.horizontalsystems.bankwallet.core.Wallet
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.SyncMode
+import io.horizontalsystems.bankwallet.modules.managecoins.views.ManageWalletsActivity
 
 object ManageWalletsModule {
-
-    class ManageWalletsPresenterState {
-        var allCoins = listOf<Coin>()
-            set(value) {
-                field = value
-                setDisabledCoins()
-            }
-
-        var enabledCoins = mutableListOf<Wallet>()
-            set(value) {
-                field = value
-                setDisabledCoins()
-            }
-
-        var disabledCoins = listOf<Coin>()
-
-        var restoringKeyForCoin: Coin? = null
-
-        fun enable(coin: Wallet) {
-            enabledCoins.add(coin)
-            setDisabledCoins()
-        }
-
-        fun disable(wallet: Wallet) {
-            enabledCoins.remove(wallet)
-            setDisabledCoins()
-        }
-
-        fun move(wallet: Wallet, index: Int) {
-            enabledCoins.remove(wallet)
-            enabledCoins.add(index, wallet)
-        }
-
-        private fun setDisabledCoins() {
-            disabledCoins = allCoins.filter { coin -> enabledCoins.find { it.coin == coin } == null }
-        }
-    }
 
     interface IView {
         fun updateCoins()
@@ -58,31 +22,37 @@ object ManageWalletsModule {
 
     interface IViewDelegate {
         fun viewDidLoad()
-        fun onClickCreateKey(coin: Coin)
-        fun onClickRestoreKey(coin: Coin)
+
+        fun onClickCreateKey()
+        fun onClickRestoreKey()
+        fun onClickCancel()
         fun onRestore(accountType: AccountType, syncMode: SyncMode)
+
+        val popularItemsCount: Int
+        fun popularItem(position: Int): ManageWalletViewItem
+        val itemsCount: Int
+        fun item(position: Int): ManageWalletViewItem
+
+        fun enablePopularCoin(position: Int)
+        fun disablePopularCoin(position: Int)
+
         fun enableCoin(position: Int)
         fun disableCoin(position: Int)
-        fun saveChanges()
-        fun moveCoin(fromIndex: Int, toIndex: Int)
-        fun onClear()
 
-        fun enabledItemForIndex(position: Int): Wallet
-        fun disabledItemForIndex(position: Int): Coin
-        val enabledCoinsCount: Int
-        val disabledCoinsCount: Int
+        fun saveChanges()
+        fun onClear() {}
     }
 
     interface IInteractor {
-        fun load()
+        val coins: List<Coin>
+        val wallets: List<Wallet>
+        fun wallet(coin: Coin): Wallet?
         fun saveWallets(wallets: List<Wallet>)
-        fun clear()
         fun createWallet(coin: Coin): Wallet
         fun restoreWallet(coin: Coin, accountType: AccountType, syncMode: SyncMode): Wallet
     }
 
     interface IInteractorDelegate {
-        fun didLoad(coins: List<Coin>, wallets: List<Wallet>)
         fun didSaveChanges()
         fun didFailedToSave()
     }
@@ -95,7 +65,7 @@ object ManageWalletsModule {
 
     fun init(view: ManageWalletsViewModel, router: IRouter) {
         val interactor = ManageWalletsInteractor(App.appConfigProvider, App.walletManager, App.accountCreator, App.walletFactory)
-        val presenter = ManageWalletsPresenter(interactor, router, App.walletManager, ManageWalletsPresenterState())
+        val presenter = ManageWalletsPresenter(interactor, router)
 
         view.delegate = presenter
         presenter.view = view

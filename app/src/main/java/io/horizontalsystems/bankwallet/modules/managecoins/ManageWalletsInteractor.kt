@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.SyncMode
-import io.reactivex.disposables.CompositeDisposable
 
 class ManageWalletsInteractor(
         private val appConfigProvider: IAppConfigProvider,
@@ -14,10 +13,15 @@ class ManageWalletsInteractor(
     : ManageWalletsModule.IInteractor {
 
     var delegate: ManageWalletsModule.IInteractorDelegate? = null
-    private val disposables = CompositeDisposable()
 
-    override fun load() {
-        delegate?.didLoad(appConfigProvider.coins, walletManager.wallets)
+    override val coins: List<Coin>
+        get() = appConfigProvider.coins
+
+    override val wallets: List<Wallet>
+        get() = walletManager.wallets
+
+    override fun wallet(coin: Coin): Wallet? {
+        return walletManager.wallet(coin)
     }
 
     override fun saveWallets(wallets: List<Wallet>) {
@@ -35,9 +39,5 @@ class ManageWalletsInteractor(
         val account = accountCreator.createRestoredAccount(accountType, syncMode)
 
         return walletFactory.wallet(coin, account, syncMode)
-    }
-
-    override fun clear() {
-        disposables.clear()
     }
 }

@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.ui.dialogs
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -17,13 +18,13 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
 
-class ManageKeysDialog(private val coin: Coin,
-                       private val listener: Listener,
-                       private val showCreateOption: Boolean = true) : DialogFragment() {
+class ManageKeysDialog(private val coin: Coin, private val listener: Listener, private val showCreateOption: Boolean = true)
+    : DialogFragment() {
 
     interface Listener {
         fun onClickCreateKey()
         fun onClickRestoreKey()
+        fun onCancel()
     }
 
     private var mDialog: Dialog? = null
@@ -55,7 +56,6 @@ class ManageKeysDialog(private val coin: Coin,
 
         addCoinIcon.bind(coin)
 
-
         if (!showCreateOption) {
             buttonCreateKey.visibility = View.INVISIBLE
         } else {
@@ -72,6 +72,11 @@ class ManageKeysDialog(private val coin: Coin,
         }
 
         return mDialog as Dialog
+    }
+
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        listener.onCancel()
     }
 
     companion object {

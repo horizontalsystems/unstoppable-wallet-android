@@ -69,7 +69,7 @@
             android:name=".modules.settings.basecurrency.BaseCurrencySettingsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.managecoins.ManageWalletsActivity"
+            android:name=".modules.managecoins.views.ManageWalletsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.settings.managekeys.ManageKeysActivity"
