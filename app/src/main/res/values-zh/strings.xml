@@ -14,15 +14,17 @@
     <string name="Button_Ok">确定</string>
     <string name="Button_Share">分享</string>
     <string name="Error">出错</string>
-    <!--Guest-->
-    <string name="Guest_Title">Unstoppable</string>
-    <string name="Guest_CreateWallet">创建钱包</string>
-    <string name="Guest_RestoreWallet">还原</string>
+    <!--Welcome-->
+    <string name="Welcome_Title">Unstoppable</string>
+    <string name="Welcome_CreateWallet">Create Wallet</string>
+    <string name="Welcome_RestoreWallet">Restore</string>
     <!--Restore-->
     <string name="Restore_Title">恢复</string>
     <string name="Restore_Subtitle">输入密钥</string>
     <string name="Restore_ValidationFailed">密钥不正确</string>
     <string name="Restore_RestoreFailed">无法创建钱包</string>
+    <string name="Restore_EosAccountName">Account Name</string>
+    <string name="Restore_EosActivePrivateKey">Active Private Key</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">密钥</string>
     <string name="Backup_Intro_Subtitle">如果您的手机被丢失、被盗、损坏、或更新，您的密钥是恢复钱包和资金的唯一方法。\n\n密钥由12个单词组成。必须要保管好自己的密钥。</string>
@@ -137,6 +139,7 @@
     <!--Settings-->
     <string name="Settings_Title">设置</string>
     <string name="Settings_SecurityCenter">安全中心</string>
+    <string name="Settings_RestoreWallet">Restore Wallet</string>
     <string name="Settings_BaseCurrency">基本货币</string>
     <string name="Settings_Language">语言</string>
     <string name="Settings_LightMode">简单模式</string>
@@ -150,6 +153,7 @@
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">指纹识别</string>
     <string name="SettingsSecurity_EditPin">修改密码</string>
+    <string name="SettingsSecurity_ManageKeys">Manage Keys</string>
     <string name="SettingsSecurity_BackupWallet">备份钱包</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">从此设备中删除</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">此操作将从此设备中删除当前安装的钱包</string>
@@ -160,6 +164,7 @@
     <string name="SettingsLanguage_Title">语言</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">更多</string>
+    <string name="SettingsAbout_AppTitle">Unstoppable</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">服务条款&amp;隐私策略</string>
     <string name="SettingsAbout_TermsPrivacyText">此应用程序是对等的。它不依赖于任何 web 服务器或支持人员来运行的技术。
 \n\n只要有互联网, 它就可以被使用。任何实体都不能阻止此应用程序工作或阻止某人使用它。
@@ -220,6 +225,22 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">硬币管理</string>
     <string name="ManageCoins_save">保存</string>
+    <!--Manage Keys-->
+    <string name="ManageKeys_Title">Manage Keys</string>
+    <string name="ManageKeys_New">New</string>
+    <string name="ManageKeys_Import">Import</string>
+    <string name="ManageKeys_Unlink">Unlink</string>
+    <string name="ManageKeys_Backup">Backup</string>
+    <string name="ManageKeys_Show">Show</string>
+    <!-- Manage Keys Alert -->
+    <string name="AddCoin_Title">Add Key for %s</string>
+    <string name="AddCoin_Description">You need to have a cryptographic key before you can add %s</string>
+    <string name="AddCoin_CreateKey">Create New</string>
+    <string name="AddCoin_RestoreKey">I already have</string>
+    <!-- Account Types -->
+    <string name="ManageKeys_12_words">12 Words Key</string>
+    <string name="ManageKeys_eos">EOS Account</string>
+    <string name="ManageKeys_24_words">24 Words Key</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">恢复选项</string>
     <string name="CoinOption_Fast">过程最快</string>
