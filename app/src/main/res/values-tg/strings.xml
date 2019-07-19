@@ -14,15 +14,17 @@
     <string name="Button_Ok">Дуруст</string>
     <string name="Button_Share">Интешар</string>
     <string name="Error">Хата</string>
-    <!--Guest-->
-    <string name="Guest_Title">Unstoppable</string>
-    <string name="Guest_CreateWallet">Create Wallet</string>
-    <string name="Guest_RestoreWallet">Restore</string>
+    <!--Welcome-->
+    <string name="Welcome_Title">Unstoppable</string>
+    <string name="Welcome_CreateWallet">Create Wallet</string>
+    <string name="Welcome_RestoreWallet">Restore</string>
     <!--Restore-->
     <string name="Restore_Title">Барқарор кардани</string>
     <string name="Restore_Subtitle">Калиди махфиро ворид кунед</string>
     <string name="Restore_ValidationFailed">Калиди махфии нодуруст</string>
     <string name="Restore_RestoreFailed">Ноком шодан барқарор карданд</string>
+    <string name="Restore_EosAccountName">Account Name</string>
+    <string name="Restore_EosActivePrivateKey">Active Private Key</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Калиди махфӣ</string>
     <string name="Backup_Intro_Subtitle">Your secret key is the only way to restore your wallet and funds if your phone is ever lost, stolen, broken, or upgraded.\n\n It consists of 12 words. Store it safely offline.</string>
@@ -137,6 +139,7 @@
     <!--Settings-->
     <string name="Settings_Title">Танзим</string>
     <string name="Settings_SecurityCenter">Маркази амниятӣ</string>
+    <string name="Settings_RestoreWallet">Restore Wallet</string>
     <string name="Settings_BaseCurrency">Асос валюта</string>
     <string name="Settings_Language">Забон</string>
     <string name="Settings_LightMode">Холат нор</string>
@@ -150,6 +153,7 @@
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Ангуштзанӣ</string>
     <string name="SettingsSecurity_EditPin">Код ра таҳрир кунед</string>
+    <string name="SettingsSecurity_ManageKeys">Manage Keys</string>
     <string name="SettingsSecurity_BackupWallet">Нусхабардорӣ Wallet</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">Аз ин дастгоҳ ҷудо кунед</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">Ин амал ин дастгоҳро аз ин дастгоҳ бароварда месозад.</string>
@@ -160,6 +164,7 @@
     <string name="SettingsLanguage_Title">Забон</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Барнома</string>
+    <string name="SettingsAbout_AppTitle">Unstoppable</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Мафҳумҳо &amp; махфият:</string>
     <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
 \n\nIt works everywhere as long as there is internet. No entity can block this app from working or to block someone from using it.
@@ -215,6 +220,22 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_save">Save</string>
+    <!--Manage Keys-->
+    <string name="ManageKeys_Title">Manage Keys</string>
+    <string name="ManageKeys_New">New</string>
+    <string name="ManageKeys_Import">Import</string>
+    <string name="ManageKeys_Unlink">Unlink</string>
+    <string name="ManageKeys_Backup">Backup</string>
+    <string name="ManageKeys_Show">Show</string>
+    <!-- Manage Keys Alert -->
+    <string name="AddCoin_Title">Add Key for %s</string>
+    <string name="AddCoin_Description">You need to have a cryptographic key before you can add %s</string>
+    <string name="AddCoin_CreateKey">Create New</string>
+    <string name="AddCoin_RestoreKey">I already have</string>
+    <!-- Account Types -->
+    <string name="ManageKeys_12_words">12 Words Key</string>
+    <string name="ManageKeys_eos">EOS Account</string>
+    <string name="ManageKeys_24_words">24 Words Key</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">Restore Options</string>
     <string name="CoinOption_Fast">Fast</string>
