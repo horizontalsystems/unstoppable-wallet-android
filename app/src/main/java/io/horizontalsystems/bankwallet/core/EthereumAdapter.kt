@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.core
 
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.ethereumkit.core.EthereumKit
@@ -11,10 +10,8 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
 
-class EthereumAdapter(coin: Coin,
-                      kit: EthereumKit,
-                      addressParser: AddressParser,
-                      feeRateProvider: IFeeRateProvider) : EthereumBaseAdapter(coin, kit, 18, addressParser, feeRateProvider) {
+class EthereumAdapter(wallet: Wallet, kit: EthereumKit, addressParser: AddressParser, feeRateProvider: IFeeRateProvider)
+    : EthereumBaseAdapter(wallet, kit, 18, addressParser, feeRateProvider) {
 
     override val state: AdapterState
         get() = when (ethereumKit.syncState) {

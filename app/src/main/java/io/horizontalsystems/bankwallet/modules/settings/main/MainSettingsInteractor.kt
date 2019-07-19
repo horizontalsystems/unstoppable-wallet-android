@@ -5,18 +5,18 @@ import io.reactivex.disposables.CompositeDisposable
 
 class MainSettingsInteractor(
         private val localStorage: ILocalStorage,
-        private val wordsManager: IWordsManager,
+        private val backupManager: IBackupManager,
         languageManager: ILanguageManager,
         systemInfoManager: ISystemInfoManager,
-        private val currencyManager: ICurrencyManager): MainSettingsModule.IMainSettingsInteractor {
+        private val currencyManager: ICurrencyManager) : MainSettingsModule.IMainSettingsInteractor {
 
     private var disposables: CompositeDisposable = CompositeDisposable()
 
     var delegate: MainSettingsModule.IMainSettingsInteractorDelegate? = null
 
     init {
-        disposables.add(wordsManager.backedUpSignal.subscribe {
-            onUpdateBackedUp()
+        disposables.add(backupManager.nonBackedUpCountFlowable.subscribe {
+            delegate?.didUpdateNonBackedUp(it)
         })
 
         disposables.add(currencyManager.baseCurrencyUpdatedSignal.subscribe {
@@ -24,14 +24,8 @@ class MainSettingsInteractor(
         })
     }
 
-    private fun onUpdateBackedUp() {
-        if (wordsManager.isBackedUp) {
-            delegate?.didBackup()
-        }
-    }
-
-
-    override var isBackedUp: Boolean = wordsManager.isBackedUp
+    override val nonBackedUpCount: Int
+        get() = backupManager.nonBackedUpCount
 
     override var currentLanguage: String = languageManager.currentLanguage.displayLanguage
 

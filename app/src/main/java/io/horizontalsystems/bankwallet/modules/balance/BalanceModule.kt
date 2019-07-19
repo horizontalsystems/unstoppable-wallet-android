@@ -144,7 +144,7 @@ object BalanceModule {
     }
 
     fun init(view: BalanceViewModel, router: IRouter) {
-        val interactor = BalanceInteractor(App.adapterManager, App.rateStorage, App.enabledCoinsStorage, App.currencyManager, App.localStorage)
+        val interactor = BalanceInteractor(App.adapterManager, App.rateStorage, App.enabledWalletsStorage, App.currencyManager, App.localStorage)
         val presenter = BalancePresenter(interactor, router, BalanceItemDataSource(), BalanceViewItemFactory())
 
         presenter.view = view

@@ -1,62 +1,39 @@
 package io.horizontalsystems.bankwallet.modules.backup
 
-import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
-import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.core.IRandomProvider
-import io.horizontalsystems.bankwallet.core.managers.AuthManager
-import io.horizontalsystems.bankwallet.core.managers.WordsManager
-import java.util.*
+import io.horizontalsystems.bankwallet.core.IBackupManager
+import io.horizontalsystems.bankwallet.core.ILockManager
+import io.horizontalsystems.bankwallet.core.IPinManager
+import io.reactivex.disposables.Disposable
 
 class BackupInteractor(
-        private val authManager: AuthManager,
-        private val wordsManager: WordsManager,
-        private val indexesProvider: IRandomProvider,
-        private val localStorage: ILocalStorage,
-        private val keystoreSafeExecute: IKeyStoreSafeExecute) : BackupModule.IInteractor {
+        private val router: BackupModule.Router,
+        private val lockManager: ILockManager,
+        private val backupManager: IBackupManager,
+        private val pinManager: IPinManager)
+    : BackupModule.Interactor {
 
-    var delegate: BackupModule.IInteractorDelegate? = null
+    var delegate: BackupModule.InteractorDelegate? = null
 
-    override fun fetchWords() {
-        authManager.authData?.let {
-            delegate?.didFetchWords(it.words)
-        } ?:run {
-            keystoreSafeExecute.safeExecute(
-                    action = Runnable {
-                        authManager.safeLoad()
-                        authManager.authData?.let { delegate?.didFetchWords(it.words) }
-                    }
-            )
+    private var lockStateUpdateDisposable: Disposable? = null
+
+    override fun backup() {
+        if (!pinManager.isPinSet) {
+            delegate?.onPinUnlock()
+            return
+        }
+
+        router.startPinModule()
+
+        lockStateUpdateDisposable?.dispose()
+        lockStateUpdateDisposable = lockManager.lockStateUpdatedSignal.subscribe {
+            if (!lockManager.isLocked) {
+                delegate?.onPinUnlock()
+                lockStateUpdateDisposable?.dispose()
+            }
         }
     }
 
-    override fun fetchConfirmationIndexes() {
-        delegate?.didFetchConfirmationIndexes(indexesProvider.getRandomIndexes(2))
-    }
-
-    override fun shouldShowTermsConfirmation(): Boolean {
-        return !localStorage.iUnderstand || !wordsManager.isBackedUp
-    }
-
-    override fun validate(confirmationWords: HashMap<Int, String>) {
-        authManager.authData?.let { authData ->
-            val wordList = authData.words
-            var valid = true
-            for ((index, word) in confirmationWords) {
-                if (wordList[index - 1] != word.trim()) {
-                    valid = false
-                }
-            }
-
-            if (valid) {
-                delegate?.didValidateSuccess()
-                wordsManager.isBackedUp = true
-            } else {
-                delegate?.didValidateFailure()
-            }
-        } ?: run { delegate?.didValidateFailure() }
-    }
-
-    override fun onTermsConfirm() {
-        localStorage.iUnderstand = true
+    override fun setBackedUp(accountId: String) {
+        backupManager.setIsBackedUp(accountId)
     }
 }

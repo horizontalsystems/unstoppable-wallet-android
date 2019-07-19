@@ -23,7 +23,7 @@ interface IAdapterManager {
     val adaptersUpdatedSignal: Observable<Unit>
 
     fun refresh()
-    fun initAdapters()
+    fun initAdapters(wallets: List<Wallet>)
     fun stopKits()
 }
 
@@ -54,6 +54,65 @@ interface ISecuredStorage {
     val savedPin: String?
     fun savePin(pin: String)
     fun pinIsEmpty(): Boolean
+}
+
+interface IAccountManager {
+    val accounts: List<Account>
+    val accountsFlowable: Flowable<List<Account>>
+    val deleteAccountObservable: Flowable<String>
+
+    fun account(coinType: CoinType): Account?
+    fun preloadAccounts()
+    fun create(account: Account)
+    fun update(account: Account)
+    fun delete(id: String)
+}
+
+interface IBackupManager {
+    val nonBackedUpCount: Int
+    val nonBackedUpCountFlowable: Flowable<Int>
+    fun setIsBackedUp(id: String)
+}
+
+interface ILaunchManager {
+    fun onStart()
+}
+
+interface IAccountCreator {
+    fun createRestoredAccount(accountType: AccountType, syncMode: SyncMode?): Account
+    fun createNewAccount(defaultAccountType: DefaultAccountType, enabledDefaults: Boolean = false): Account
+}
+
+interface IAccountFactory {
+    fun account(type: AccountType, backedUp: Boolean, defaultSyncMode: SyncMode): Account
+}
+
+interface IWalletFactory {
+    fun wallet(coin: Coin, account: Account, syncMode: SyncMode): Wallet
+}
+
+interface IWalletStorage {
+    fun wallets(accounts: List<Account>): List<Wallet>
+    fun save(wallets: List<Wallet>)
+}
+
+interface IPredefinedAccountTypeManager {
+    val allTypes: List<IPredefinedAccountType>
+    fun account(predefinedAccountType: IPredefinedAccountType): Account?
+    fun createAccount(predefinedAccountType: IPredefinedAccountType): Account?
+    fun createAllAccounts()
+}
+
+interface IPredefinedAccountType {
+    val title: String
+    val coinCodes: String
+    val defaultAccountType: DefaultAccountType
+    fun supports(accountType: AccountType): Boolean
+}
+
+sealed class DefaultAccountType {
+    class Mnemonic(val wordsCount: Int) : DefaultAccountType()
+    class Eos : DefaultAccountType()
 }
 
 interface IRandomProvider {
@@ -109,7 +168,7 @@ interface IWordsManager {
     var backedUpSignal: PublishSubject<Unit>
 
     fun validate(words: List<String>)
-    fun generateWords(): List<String>
+    fun generateWords(count: Int = 12): List<String>
 }
 
 interface ILanguageManager {
@@ -126,12 +185,12 @@ sealed class AdapterState {
 interface IEthereumKitManager {
     val ethereumKit: EthereumKit?
 
-    fun ethereumKit(authData: AuthData): EthereumKit
+    fun ethereumKit(wallet: Wallet): EthereumKit
     fun unlink()
 }
 
 interface IAdapter {
-    val coin: Coin
+    val wallet: Wallet
     val feeCoinCode: String?
 
     val decimal: Int
@@ -159,6 +218,7 @@ interface IAdapter {
     fun fee(value: BigDecimal, address: String?, feePriority: FeeRatePriority): BigDecimal
     @Throws
     fun validate(address: String)
+
     fun validate(amount: BigDecimal, address: String?, feePriority: FeeRatePriority): List<SendStateError>
     fun parsePaymentAddress(address: String): PaymentRequestAddress
 
@@ -175,9 +235,11 @@ interface ISystemInfoManager {
 }
 
 interface IPinManager {
-    fun safeLoad()
+    val isDeviceLockEnabled: Boolean
     var pin: String?
     val isPinSet: Boolean
+
+    fun safeLoad()
     fun store(pin: String)
     fun validate(pin: String): Boolean
     fun clear()
@@ -204,6 +266,7 @@ interface IAppConfigProvider {
     val currencies: List<Currency>
     val defaultCoinCodes: List<String>
     val coins: List<Coin>
+    val predefinedAccountTypes: List<IPredefinedAccountType>
 }
 
 interface IOneTimerDelegate {
@@ -218,9 +281,17 @@ interface IRateStorage {
     fun deleteAll()
 }
 
-interface IEnabledCoinStorage {
-    fun enabledCoinsObservable(): Flowable<List<EnabledCoin>>
-    fun save(coins: List<EnabledCoin>)
+interface IAccountsStorage {
+    fun allAccounts(): List<Account>
+    fun save(account: Account)
+    fun delete(id: String)
+    fun getNonBackedUpCount(): Flowable<Int>
+}
+
+interface IEnabledWalletStorage {
+    val enabledWallets: List<EnabledWallet>
+    fun enabledWalletsFlowable(): Flowable<List<EnabledWallet>>
+    fun save(coins: List<EnabledWallet>)
     fun deleteAll()
 }
 
@@ -243,11 +314,13 @@ interface ICurrentDateProvider {
     val currentDate: Date
 }
 
-interface ICoinManager {
-    val coinsUpdatedSignal: PublishSubject<Unit>
-    var coins: List<Coin>
-    val allCoins: List<Coin>
-    fun enableDefaultCoins()
+interface IWalletManager {
+    val wallets: List<Wallet>
+    val walletsObservable: Flowable<List<Wallet>>
+    fun wallet(coin: Coin): Wallet?
+
+    fun preloadWallets()
+    fun enable(wallets: List<Wallet>)
     fun clear()
 }
 
@@ -266,10 +339,6 @@ interface IFeeRateProvider {
     fun dashFeeRate(priority: FeeRatePriority): Long
 }
 
-sealed class Error : Exception() {
-    class CoinTypeException : Error()
-}
-
 sealed class SendStateError {
     object InsufficientAmount : SendStateError()
     object InsufficientFeeBalance : SendStateError()
@@ -283,7 +352,6 @@ enum class FeeRatePriority(val value: Int) {
     HIGHEST(4);
 
     companion object {
-        fun valueOf(value: Int): FeeRatePriority = FeeRatePriority.values().firstOrNull { it.value == value }
-                ?: MEDIUM
+        fun valueOf(value: Int): FeeRatePriority = values().find { it.value == value } ?: MEDIUM
     }
 }

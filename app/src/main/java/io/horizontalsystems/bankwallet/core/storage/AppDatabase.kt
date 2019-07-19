@@ -1,25 +1,28 @@
 package io.horizontalsystems.bankwallet.core.storage
 
-import android.content.ContentValues
 import android.content.Context
-import android.database.sqlite.SQLiteDatabase
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import io.horizontalsystems.bankwallet.BuildConfig
-import io.horizontalsystems.bankwallet.entities.EnabledCoin
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.EnabledWallet
 import io.horizontalsystems.bankwallet.entities.Rate
 
+@Database(version = 8, exportSchema = false, entities = [
+    Rate::class,
+    EnabledWallet::class,
+    AccountRecord::class]
+)
 
-@Database(entities = [Rate::class, EnabledCoin::class], version = 7, exportSchema = false)
+@TypeConverters(DatabaseConverters::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun ratesDao(): RatesDao
-
-    abstract fun coinsDao(): EnabledCoinsDao
-
+    abstract fun walletsDao(): EnabledWalletsDao
+    abstract fun accountsDao(): AccountsDao
 
     companion object {
 
@@ -35,13 +38,15 @@ abstract class AppDatabase : RoomDatabase() {
         private fun buildDatabase(context: Context): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, "dbBankWallet")
                     .fallbackToDestructiveMigration()
+                    .allowMainThreadQueries()
                     .addMigrations(
                             MIGRATION_1_2,
                             MIGRATION_2_3,
                             MIGRATION_3_4,
                             MIGRATION_4_5,
                             MIGRATION_5_6,
-                            MIGRATION_6_7
+                            MIGRATION_6_7,
+                            migrateToAccountStructure
                     )
                     .build()
         }
@@ -63,35 +68,7 @@ abstract class AppDatabase : RoomDatabase() {
 
         private val MIGRATION_2_3: Migration = object : Migration(2, 3) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                //create new table Coin
                 database.execSQL("CREATE TABLE IF NOT EXISTS StorableCoin (`coinTitle` TEXT NOT NULL, `coinCode` TEXT NOT NULL, `coinType` TEXT NOT NULL, `enabled` INTEGER NOT NULL, `order` INTEGER, PRIMARY KEY(`coinCode`))")
-                //save default coin
-                val suffix = if (BuildConfig.testMode) "t" else ""
-
-                val bitcoinValues = ContentValues()
-                bitcoinValues.put("coinCode", "BTC$suffix")
-                bitcoinValues.put("coinTitle", "Bitcoin")
-                bitcoinValues.put("coinType", "bitcoin_key")
-                bitcoinValues.put("enabled", true)
-                bitcoinValues.put("`order`", 0)
-
-                val bitcoinCashValues = ContentValues()
-                bitcoinCashValues.put("coinCode", "BCH$suffix")
-                bitcoinCashValues.put("coinTitle", "Bitcoin Cash")
-                bitcoinCashValues.put("coinType", "bitcoin_cash_key")
-                bitcoinCashValues.put("enabled", true)
-                bitcoinCashValues.put("`order`", 1)
-
-                val ethereumValues = ContentValues()
-                ethereumValues.put("coinCode", "ETH$suffix")
-                ethereumValues.put("coinTitle", "Ethereum")
-                ethereumValues.put("coinType", "ethereum_key")
-                ethereumValues.put("enabled", true)
-                ethereumValues.put("`order`", 2)
-
-                database.insert("StorableCoin", SQLiteDatabase.CONFLICT_REPLACE, bitcoinValues)
-                database.insert("StorableCoin", SQLiteDatabase.CONFLICT_REPLACE, bitcoinCashValues)
-                database.insert("StorableCoin", SQLiteDatabase.CONFLICT_REPLACE, ethereumValues)
             }
         }
 
@@ -124,6 +101,28 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
-    }
+        private val migrateToAccountStructure: Migration = object : Migration(7, 8) {
+            override fun migrate(database: SupportSQLiteDatabase) {
 
+                database.execSQL("CREATE TABLE IF NOT EXISTS `AccountRecord` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `type` TEXT NOT NULL, `isBackedUp` INTEGER NOT NULL, `syncMode` TEXT, `words` TEXT, `derivation` TEXT, `salt` TEXT, `key` TEXT, `eosAccount` TEXT, PRIMARY KEY(`id`))")
+                database.execSQL("CREATE TABLE IF NOT EXISTS `EnabledWallet` (`coinCode` TEXT NOT NULL, `accountId` TEXT NOT NULL, `walletOrder` INTEGER, `syncMode` TEXT NOT NULL, PRIMARY KEY(`coinCode`, `accountId`), FOREIGN KEY(`accountId`) REFERENCES `AccountRecord`(`id`) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED)")
+
+                val syncMode = App.localStorage.syncMode.value
+                val authData = App.secureStorage.authData
+                authData?.let {
+                    val isBackedUp = if (App.localStorage.isBackedUp) 1 else 0
+                    val encryptedWords = App.encryptionManager.encrypt(authData.words.joinToString(separator = ","))
+
+                    database.execSQL("INSERT OR REPLACE INTO `AccountRecord`(`id`,`name`,`type`,`isBackedUp`,`syncMode`,`words`,`derivation`,`salt`,`key`,`eosAccount`) " +
+                            "VALUES ('${authData.walletId}', 'Mnemonic', 'mnemonic', $isBackedUp, '$syncMode', '$encryptedWords','bip44', NULL, NULL, NULL)")
+
+                    database.execSQL("INSERT OR REPLACE INTO `EnabledWallet`(`coinCode`, `accountId`, `walletOrder`, `syncMode`) " +
+                            " SELECT `coinCode`, '${authData.walletId}', '$syncMode', `order` FROM `EnabledCoin`")
+                }
+
+                database.execSQL("DROP TABLE EnabledCoin")
+            }
+        }
+
+    }
 }

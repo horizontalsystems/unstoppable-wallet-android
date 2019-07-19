@@ -2,8 +2,7 @@ package io.horizontalsystems.bankwallet.core
 
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
-import io.horizontalsystems.bankwallet.entities.AuthData
-import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
@@ -17,11 +16,11 @@ import io.reactivex.Single
 import java.math.BigDecimal
 import java.util.*
 
-class BitcoinAdapter(coin: Coin, override val kit: BitcoinKit, addressParser: AddressParser, private val feeRateProvider: IFeeRateProvider)
-    : BitcoinBaseAdapter(coin, kit, addressParser), BitcoinKit.Listener {
+class BitcoinAdapter(wallet: Wallet, override val kit: BitcoinKit, addressParser: AddressParser, private val feeRateProvider: IFeeRateProvider)
+    : BitcoinBaseAdapter(wallet, kit, addressParser), BitcoinKit.Listener {
 
-    constructor(coin: Coin, authData: AuthData, syncMode: SyncMode, testMode: Boolean, feeRateProvider: IFeeRateProvider) :
-            this(coin, createKit(authData, syncMode, testMode), AddressParser("bitcoin", true), feeRateProvider)
+    constructor(wallet: Wallet, testMode: Boolean, feeRateProvider: IFeeRateProvider) :
+            this(wallet, createKit(wallet, testMode), AddressParser("bitcoin", true), feeRateProvider)
 
     init {
         kit.listener = this
@@ -109,8 +108,14 @@ class BitcoinAdapter(coin: Coin, override val kit: BitcoinKit, addressParser: Ad
         private fun getNetworkType(testMode: Boolean) =
                 if (testMode) NetworkType.TestNet else NetworkType.MainNet
 
-        private fun createKit(authData: AuthData, syncMode: SyncMode, testMode: Boolean): BitcoinKit {
-            return BitcoinKit(App.instance, authData.words, authData.walletId, syncMode = syncMode.bitcoinKitMode(), networkType = getNetworkType(testMode))
+
+        private fun createKit(wallet: Wallet, testMode: Boolean): BitcoinKit {
+            val account = wallet.account
+            if (account.type is AccountType.Mnemonic) {
+                return BitcoinKit(App.instance, account.type.words, account.id, syncMode = SyncMode.fromSyncMode(account.defaultSyncMode), networkType = getNetworkType(testMode))
+            }
+
+            throw UnsupportedAccountException()
         }
 
         fun clear(context: Context, walletId: String, testMode: Boolean) {

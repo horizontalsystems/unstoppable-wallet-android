@@ -83,7 +83,7 @@ class BalancePresenter(
     // BalanceModule.IInteractorDelegate
     //
     override fun didUpdateAdapters(adapters: List<IAdapter>) {
-        val items = adapters.map { BalanceModule.BalanceItem(it.coin, it.balance, it.state) }
+        val items = adapters.map { BalanceModule.BalanceItem(it.wallet.coin, it.balance, it.state) }
         dataSource.set(items)
         dataSource.currency?.let {
             interactor.fetchRates(it.code, dataSource.coinCodes)

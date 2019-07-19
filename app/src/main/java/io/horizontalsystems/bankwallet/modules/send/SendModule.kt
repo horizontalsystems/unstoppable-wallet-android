@@ -71,7 +71,7 @@ object SendModule {
 
 
     fun init(view: SendViewModel, coinCode: String) {
-        val adapter = App.adapterManager.adapters.first { it.coin.code == coinCode }
+        val adapter = App.adapterManager.adapters.first { it.wallet.coin.code == coinCode }
         val interactor = SendInteractor(App.currencyManager, App.rateStorage, App.localStorage, TextHelper, adapter, App.appConfigProvider)
         val presenter = SendPresenter(interactor, StateViewItemFactory(), UserInput())
 
@@ -150,7 +150,7 @@ object SendModule {
         var sendButtonEnabled: Boolean = false
     }
 
-    class SendConfirmationViewItem(val primaryAmountInfo: AmountInfo, val address: String, val feeInfo: AmountInfo, val totalInfo: AmountInfo?){
+    class SendConfirmationViewItem(val primaryAmountInfo: AmountInfo, val address: String, val feeInfo: AmountInfo, val totalInfo: AmountInfo?) {
         var secondaryAmountInfo: AmountInfo? = null
     }
 }

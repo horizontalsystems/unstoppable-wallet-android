@@ -54,6 +54,7 @@ class TransactionDataProviderManager(appConfig: IAppConfigProvider, private val 
         is CoinType.BitcoinCash -> bitcoinCashProviders
         is CoinType.Ethereum, is CoinType.Erc20 -> ethereumProviders
         is CoinType.Dash -> dashProviders
+        is CoinType.Eos -> listOf()
     }
 
     override fun baseProvider(coin: Coin) = when (coin.type) {
@@ -65,6 +66,9 @@ class TransactionDataProviderManager(appConfig: IAppConfigProvider, private val 
         }
         is CoinType.Dash -> {
             dash(localStorage.baseDashProvider ?: dashProviders[0].name)
+        }
+        is CoinType.Eos -> {
+            TODO("not implemented")
         }
     }
 

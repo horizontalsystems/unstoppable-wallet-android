@@ -10,7 +10,7 @@ import io.reactivex.schedulers.Schedulers
 class BalanceInteractor(
         private val adapterManager: IAdapterManager,
         private val rateStorage: IRateStorage,
-        private val coinStorage: IEnabledCoinStorage,
+        private val coinStorage: IEnabledWalletStorage,
         private val currencyManager: ICurrencyManager,
         private val localStorage: ILocalStorage,
         private val refreshTimeout: Double = 2.0
@@ -24,7 +24,7 @@ class BalanceInteractor(
 
     override fun initAdapters() {
         onUpdateAdapters()
-        disposables.add(coinStorage.enabledCoinsObservable()
+        disposables.add(coinStorage.enabledWalletsFlowable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -80,14 +80,14 @@ class BalanceInteractor(
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
                     .subscribe {
-                        delegate?.didUpdateBalance(adapter.coin.code, adapter.balance)
+                        delegate?.didUpdateBalance(adapter.wallet.coin.code, adapter.balance)
                     })
 
             adapterDisposables.add(adapter.stateUpdatedFlowable
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
-                    .subscribe { state ->
-                        delegate?.didUpdateState(adapter.coin.code, adapter.state)
+                    .subscribe {
+                        delegate?.didUpdateState(adapter.wallet.coin.code, adapter.state)
                     })
         }
     }

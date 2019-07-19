@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/viewHolderRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="13dp"
+    android:layout_marginEnd="13dp"
+    android:background="?CoinItemBackground"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <!-- First line-->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp">
+
+        <ImageView
+            android:id="@+id/keyIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateTint="@color/grey"
+            android:indeterminateTintMode="src_atop"
+            android:src="@drawable/ic_key"
+            android:tint="@color/yellow_crypto"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/accountName"
+            style="@style/BaseSb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textColor="?BallanceCoinNameColor"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/keyIcon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Bitcoin" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Second line-->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="23dp"
+        android:layout_marginStart="37dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/accountCoin"
+            style="@style/Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:text="BTC, BCH, DASH, ETH, ERC20"
+            android:textColor="@color/grey"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Actions -->
+
+    <LinearLayout
+        android:id="@+id/buttonsWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+        <Button
+            android:id="@+id/buttonNew"
+            style="@style/SendButtonSmallGrey"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1"
+            android:text="@string/ManageKeys_New" />
+
+        <Button
+            android:id="@+id/buttonImport"
+            style="@style/SendButtonSmallGrey"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1"
+            android:text="@string/ManageKeys_Import"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/buttonUnlink"
+            style="@style/SendButtonSmallGrey"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1"
+            android:text="@string/ManageKeys_Unlink"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/buttonShow"
+            style="@style/SendButtonSmallGrey"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1"
+            android:text="@string/ManageKeys_Show"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/buttonBackup"
+            style="@style/SendButtonSmallGrey"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="16dp"
+                android:src="@drawable/ic_attention"
+                android:tint="@color/red_warning" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/noto_sans_medium"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:text="@string/ManageKeys_Backup"
+                android:textColor="@color/stateful_button_text_color"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,23 +1,51 @@
 package io.horizontalsystems.bankwallet.modules.restore
 
-import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
+import io.horizontalsystems.bankwallet.core.IPredefinedAccountTypeManager
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.EosAccountType
+import io.horizontalsystems.bankwallet.entities.SyncMode
+import io.horizontalsystems.bankwallet.entities.Words12AccountType
 
 class RestorePresenter(
-        private val interactor: RestoreModule.IInteractor,
-        private val router: RestoreModule.IRouter) : RestoreModule.IViewDelegate, RestoreModule.IInteractorDelegate {
+        private val router: RestoreModule.Router,
+        private val interactor: RestoreModule.Interactor,
+        private val predefinedAccountTypeManager: IPredefinedAccountTypeManager)
+    : RestoreModule.ViewDelegate, RestoreModule.InteractorDelegate {
 
-    var view: RestoreModule.IView? = null
+    var view: RestoreModule.View? = null
 
-    override fun restoreDidClick(words: List<String>) {
-        interactor.validate(words)
+    //  View Delegate
+
+    override var items = listOf<IPredefinedAccountType>()
+
+    override fun viewDidLoad() {
+        items = predefinedAccountTypeManager.allTypes
+        view?.reload(items)
     }
 
-    override fun didFailToValidate(exception: Exception) {
-        view?.showError(R.string.Restore_ValidationFailed)
+    override fun onSelect(accountType: IPredefinedAccountType) {
+        when (accountType) {
+            is Words12AccountType -> {
+                router.startRestoreWordsModule()
+            }
+            is EosAccountType -> {
+                router.startRestoreEosModule()
+            }
+        }
     }
 
-    override fun didValidate(words: List<String>) {
-        router.navigateToSetSyncMode(words)
+    override fun onRestore(accountType: AccountType, syncMode: SyncMode) {
+        interactor.restore(accountType, syncMode)
     }
 
+    // Interactor Delegate
+
+    override fun didRestore() {
+        router.startMainModule()
+    }
+
+    override fun didFailRestore(e: Exception) {
+        TODO("not implemented")
+    }
 }

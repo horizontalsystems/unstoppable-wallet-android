@@ -9,55 +9,44 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
 
     lateinit var delegate: SecuritySettingsModule.ISecuritySettingsViewDelegate
 
-    val biometryTypeLiveDate = MutableLiveData<BiometryType>()
-
+    val biometryTypeLiveData = MutableLiveData<BiometryType>()
     val backedUpLiveData = MutableLiveData<Boolean>()
-    val biometricUnlockOnLiveDate = MutableLiveData<Boolean>()
+    val biometricUnlockOnLiveData = MutableLiveData<Boolean>()
+    val openManageKeysLiveEvent = SingleLiveEvent<Unit>()
     val openEditPinLiveEvent = SingleLiveEvent<Unit>()
-    val openBackupWalletLiveEvent = SingleLiveEvent<Unit>()
-    val openRestoreWalletLiveEvent = SingleLiveEvent<Unit>()
-    val reloadAppLiveEvent = SingleLiveEvent<Unit>()
-    val showPinUnlockLiveEvent = SingleLiveEvent<Unit>()
 
     fun init() {
         SecuritySettingsModule.init(this, this)
         delegate.viewDidLoad()
     }
 
-    override fun setBiometricUnlockOn(biometricUnlockOn: Boolean) {
-        biometricUnlockOnLiveDate.value = biometricUnlockOn
-    }
-
-    override fun setBiometryType(biometryType: BiometryType) {
-        biometryTypeLiveDate.value = biometryType
-    }
-
-    override fun setBackedUp(backedUp: Boolean) {
-        backedUpLiveData.value = backedUp
-    }
-
-    override fun showEditPin() {
-        openEditPinLiveEvent.call()
-    }
-
-    override fun showBackupWallet() {
-        openBackupWalletLiveEvent.call()
-    }
-
-    override fun showRestoreWallet() {
-        openRestoreWalletLiveEvent.call()
-    }
-
-    override fun reloadApp() {
-        reloadAppLiveEvent.call()
-    }
-
-    override fun showPinUnlock() {
-        showPinUnlockLiveEvent.call()
-    }
+    //  ViewModel
 
     override fun onCleared() {
         delegate.onClear()
     }
 
+    //  ISecuritySettingsView
+
+    override fun setBiometricUnlockOn(biometricUnlockOn: Boolean) {
+        biometricUnlockOnLiveData.value = biometricUnlockOn
+    }
+
+    override fun setBiometryType(biometryType: BiometryType) {
+        biometryTypeLiveData.value = biometryType
+    }
+
+    override fun setBackedUp(backedUp: Boolean) {
+        backedUpLiveData.postValue(backedUp)
+    }
+
+    //  ISecuritySettingsRouter
+
+    override fun showManageKeys() {
+        openManageKeysLiveEvent.call()
+    }
+
+    override fun showEditPin() {
+        openEditPinLiveEvent.call()
+    }
 }

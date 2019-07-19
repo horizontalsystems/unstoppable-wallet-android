@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bottom_sheet_background"
+    android:backgroundTint="?BottomSendBackground">
+
+    <io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
+        android:id="@+id/addKeyIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/addKeyTitle"
+        style="@style/BaseSb"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="14dp"
+        android:layout_marginStart="12dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="?BottomDialogTextColor"
+        app:layout_constraintBottom_toBottomOf="@+id/addKeyIcon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/addKeyIcon"
+        app:layout_constraintTop_toTopOf="@+id/addKeyIcon"
+        tools:text="@string/AddCoin_Title"
+        />
+
+    <View
+        android:id="@+id/border"
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/steel_15"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addKeyIcon"
+        />
+
+    <TextView
+        android:id="@+id/addKeyDescription"
+        style="@style/Body1Grey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/AddCoin_Description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/border"
+        />
+
+    <Button
+        android:id="@+id/btnCreateKey"
+        style="@style/ButtonYellow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/AddCoin_CreateKey"
+        app:layout_constraintBottom_toTopOf="@+id/btnRestoreKey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addKeyDescription"
+        />
+
+    <Button
+        android:id="@+id/btnRestoreKey"
+        style="@style/ButtonNegative"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/AddCoin_RestoreKey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnCreateKey"
+        app:layout_constraintVertical_bias="1.0"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

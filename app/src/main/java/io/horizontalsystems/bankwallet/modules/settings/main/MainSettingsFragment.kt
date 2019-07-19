@@ -25,7 +25,7 @@ class MainSettingsFragment : Fragment() {
     private lateinit var viewModel: MainSettingsViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_settings, container, false);
+        return inflater.inflate(R.layout.fragment_settings, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -75,7 +75,7 @@ class MainSettingsFragment : Fragment() {
         })
 
         viewModel.backedUpLiveDate.observe(viewLifecycleOwner, Observer { wordListBackedUp ->
-            wordListBackedUp?.let {wordListIsBackedUp ->
+            wordListBackedUp?.let { wordListIsBackedUp ->
                 securityCenter.setInfoBadgeVisibility(!wordListIsBackedUp)
             }
         })

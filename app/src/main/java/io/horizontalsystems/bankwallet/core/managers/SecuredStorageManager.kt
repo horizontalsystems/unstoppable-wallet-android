@@ -12,7 +12,6 @@ class SecuredStorageManager(private val encryptionManager: IEncryptionManager) :
     private val AUTH_DATA = "auth_data"
     private val LOCK_PIN = "lock_pin"
 
-
     override val authData: AuthData?
         get() {
             App.preferences.getString(AUTH_DATA, null)?.let { string ->

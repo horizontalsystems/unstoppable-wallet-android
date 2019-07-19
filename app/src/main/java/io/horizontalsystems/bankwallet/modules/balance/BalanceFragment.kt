@@ -18,7 +18,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.lib.BalanceSortDialogFragment
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
-import io.horizontalsystems.bankwallet.modules.managecoins.ManageCoinsModule
+import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.bankwallet.viewHelpers.AnimationHelper
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
@@ -72,7 +72,7 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener, BalanceSortDialogFrag
         })
 
         viewModel.openManageCoinsLiveEvent.observe(viewLifecycleOwner, Observer {
-            context?.let { context -> ManageCoinsModule.start(context) }
+            context?.let { context -> ManageWalletsModule.start(context) }
         })
 
         viewModel.reloadLiveEvent.observe(viewLifecycleOwner, Observer {

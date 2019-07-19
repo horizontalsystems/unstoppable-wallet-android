@@ -4,12 +4,14 @@ import android.app.Application
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import com.squareup.leakcanary.LeakCanary
+import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
+import io.horizontalsystems.bankwallet.core.storage.AccountsStorage
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
-import io.horizontalsystems.bankwallet.core.storage.EnabledCoinsRepository
+import io.horizontalsystems.bankwallet.core.storage.EnabledWalletsStorage
 import io.horizontalsystems.bankwallet.core.storage.RatesRepository
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
 import java.util.*
@@ -38,19 +40,29 @@ class App : Application() {
         lateinit var lockManager: ILockManager
         lateinit var appConfigProvider: IAppConfigProvider
         lateinit var adapterManager: IAdapterManager
-        lateinit var coinManager: CoinManager
+        lateinit var walletManager: IWalletManager
+        lateinit var walletFactory: IWalletFactory
+        lateinit var walletStorage: IWalletStorage
+        lateinit var accountManager: IAccountManager
+        lateinit var backupManager: IBackupManager
+        lateinit var accountCreator: IAccountCreator
+        lateinit var predefinedAccountTypeManager: IPredefinedAccountTypeManager
+        lateinit var defaultWalletCreator: DefaultWalletCreator
+        lateinit var walletRemover: WalletRemover
 
         lateinit var rateSyncer: RateSyncer
         lateinit var rateManager: RateManager
         lateinit var networkAvailabilityManager: NetworkAvailabilityManager
         lateinit var appDatabase: AppDatabase
         lateinit var rateStorage: IRateStorage
-        lateinit var enabledCoinsStorage: IEnabledCoinStorage
+        lateinit var accountsStorage: IAccountsStorage
+        lateinit var enabledWalletsStorage: IEnabledWalletStorage
         lateinit var transactionInfoFactory: FullTransactionInfoFactory
         lateinit var transactionDataProviderManager: TransactionDataProviderManager
         lateinit var appCloseManager: AppCloseManager
         lateinit var ethereumKitManager: IEthereumKitManager
         lateinit var numberFormatter: IAppNumberFormatter
+        lateinit var appManager: ILaunchManager
 
         lateinit var instance: App
             private set
@@ -81,32 +93,42 @@ class App : Application() {
         appConfigProvider = AppConfigProvider()
         feeRateProvider = FeeRateProvider(instance, appConfigProvider)
         backgroundManager = BackgroundManager(this)
-        encryptionManager = EncryptionManager()
+        encryptionManager = EncryptionManager
         secureStorage = SecuredStorageManager(encryptionManager)
         ethereumKitManager = EthereumKitManager(appConfigProvider)
 
         appDatabase = AppDatabase.getInstance(this)
         rateStorage = RatesRepository(appDatabase)
-        enabledCoinsStorage = EnabledCoinsRepository(appDatabase)
+        accountsStorage = AccountsStorage(appDatabase)
+
+        walletFactory = WalletFactory()
+        enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
+        walletStorage = WalletStorage(appConfigProvider, walletFactory, enabledWalletsStorage)
         localStorage = LocalStorageManager()
 
+        wordsManager = WordsManager(localStorage)
         networkManager = NetworkManager(appConfigProvider)
         rateManager = RateManager(rateStorage, networkManager)
-        coinManager = CoinManager(appConfigProvider, enabledCoinsStorage)
-        authManager = AuthManager(secureStorage, localStorage, coinManager, rateManager, ethereumKitManager, appConfigProvider)
+        accountManager = AccountManager(accountsStorage)
+        backupManager = BackupManager(accountManager)
+        walletManager = WalletManager(accountManager, walletFactory, walletStorage)
+        defaultWalletCreator = DefaultWalletCreator(walletManager, appConfigProvider, walletFactory)
+        accountCreator = AccountCreator(accountManager, AccountFactory(), wordsManager, defaultWalletCreator)
+        predefinedAccountTypeManager = PredefinedAccountTypeManager(appConfigProvider, accountManager, accountCreator)
+        authManager = AuthManager(secureStorage, localStorage, walletManager, rateManager, ethereumKitManager, appConfigProvider)
+        walletRemover = WalletRemover(accountManager, walletManager)
 
-        wordsManager = WordsManager(localStorage)
         randomManager = RandomProvider()
         systemInfoManager = SystemInfoManager()
         pinManager = PinManager(secureStorage)
-        lockManager = LockManager(secureStorage, authManager)
+        lockManager = LockManager(secureStorage)
         languageManager = LanguageManager(localStorage, appConfigProvider, fallbackLanguage)
         currencyManager = CurrencyManager(localStorage, appConfigProvider)
         numberFormatter = NumberFormatter(languageManager)
 
         networkAvailabilityManager = NetworkAvailabilityManager()
 
-        adapterManager = AdapterManager(coinManager, authManager, AdapterFactory(instance, appConfigProvider, localStorage, ethereumKitManager, feeRateProvider), ethereumKitManager)
+        adapterManager = AdapterManager(walletManager, AdapterFactory(instance, appConfigProvider, ethereumKitManager, feeRateProvider), ethereumKitManager)
         rateSyncer = RateSyncer(rateManager, adapterManager, currencyManager, networkAvailabilityManager)
 
         appCloseManager = AppCloseManager()
@@ -117,6 +139,8 @@ class App : Application() {
         authManager.adapterManager = adapterManager
         authManager.pinManager = pinManager
 
+        appManager = AppManager(accountManager, walletManager)
+        appManager.onStart()
     }
 
 }

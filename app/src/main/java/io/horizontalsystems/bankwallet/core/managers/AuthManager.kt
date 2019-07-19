@@ -8,7 +8,7 @@ import io.reactivex.subjects.PublishSubject
 
 class AuthManager(private val secureStorage: ISecuredStorage,
                   private val localStorage: ILocalStorage,
-                  private val coinManager: ICoinManager,
+                  private val coinManager: IWalletManager,
                   private val rateManager: RateManager,
                   private val ethereumKitManager: IEthereumKitManager,
                   private val appConfigProvider: IAppConfigProvider) {
@@ -18,10 +18,6 @@ class AuthManager(private val secureStorage: ISecuredStorage,
 
     var authData: AuthData? = null
     var authDataSignal = PublishSubject.create<Unit>()
-
-    var isLoggedIn: Boolean = false
-        get() = !secureStorage.noAuthData()
-
 
     @Throws(UserNotAuthenticatedException::class)
     fun safeLoad() {
@@ -35,7 +31,7 @@ class AuthManager(private val secureStorage: ISecuredStorage,
             secureStorage.saveAuthData(it)
             localStorage.syncMode = syncMode
             authData = it
-            coinManager.enableDefaultCoins()
+            // coinManager.enableDefaultWallets()
         }
     }
 

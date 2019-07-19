@@ -34,7 +34,7 @@ class MainSettingsViewModel : ViewModel(), MainSettingsModule.IMainSettingsView,
     }
 
     override fun setBackedUp(backedUp: Boolean) {
-        backedUpLiveDate.value = backedUp
+        backedUpLiveDate.postValue(backedUp)
     }
 
     override fun setBaseCurrency(currency: String) {
@@ -54,8 +54,10 @@ class MainSettingsViewModel : ViewModel(), MainSettingsModule.IMainSettingsView,
     }
 
     override fun setTabItemBadge(count: Int) {
-        tabItemBadgeLiveDate.value = count
+        tabItemBadgeLiveDate.postValue(count)
     }
+
+    //  Router
 
     override fun showSecuritySettings() {
         showSecuritySettingsLiveEvent.call()
@@ -80,6 +82,8 @@ class MainSettingsViewModel : ViewModel(), MainSettingsModule.IMainSettingsView,
     override fun reloadAppInterface() {
         reloadAppLiveEvent.call()
     }
+
+    //  ViewModel
 
     override fun onCleared() {
         delegate.onClear()

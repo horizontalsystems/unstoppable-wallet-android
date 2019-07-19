@@ -1,47 +1,27 @@
 package io.horizontalsystems.bankwallet.modules.syncmodule
 
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.SyncMode
 
-class SyncModePresenter(
-        private val interactor: SyncModeModule.IInteractor,
-        private val router: SyncModeModule.IRouter,
-        private val state: SyncModeModule.State) : SyncModeModule.IViewDelegate, SyncModeModule.IInteractorDelegate {
+class SyncModePresenter(private val router: SyncModeModule.IRouter, private val state: SyncModeModule.State)
+    : SyncModeModule.IViewDelegate {
 
     var view: SyncModeModule.IView? = null
 
     override fun viewDidLoad() {
-        val currentSyncMode = interactor.getSyncMode()
-        view?.updateSyncMode(currentSyncMode)
+        view?.update(state.syncMode)
     }
 
-    override fun onFastSyncModeSelect() {
-        val syncMode = SyncMode.FAST
-        state.syncMode = syncMode
-        view?.updateSyncMode(syncMode)
+    override fun onSyncModeSelect(isFast: Boolean) {
+        state.syncMode = if (isFast) {
+            SyncMode.FAST
+        } else {
+            SyncMode.SLOW
+        }
+
+        view?.update(state.syncMode)
     }
 
-    override fun onSlowSyncModeSelect() {
-        val syncMode = SyncMode.SLOW
-        state.syncMode = syncMode
-        view?.updateSyncMode(syncMode)
+    override fun didConfirm() {
+        router.notifyOnSelect(state.syncMode)
     }
-
-    override fun onNextClick() {
-        view?.showConfirmationDialog()
-    }
-
-    override fun didConfirm(words: List<String>) {
-        val syncMode = state.syncMode ?: interactor.getSyncMode()
-        interactor.restore(words, syncMode)
-    }
-
-    override fun didRestore() {
-        router.navigateToSetPin()
-    }
-
-    override fun didFailToRestore(exception: Exception) {
-        view?.showError(R.string.Restore_RestoreFailed)
-    }
-
 }

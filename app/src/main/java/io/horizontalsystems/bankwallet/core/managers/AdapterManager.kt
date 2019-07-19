@@ -2,18 +2,13 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import android.os.Handler
 import android.os.HandlerThread
-import io.horizontalsystems.bankwallet.core.IAdapter
-import io.horizontalsystems.bankwallet.core.IAdapterManager
-import io.horizontalsystems.bankwallet.core.IEthereumKitManager
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
-class AdapterManager(private val coinManager: CoinManager,
-                     private val authManager: AuthManager,
-                     private val adapterFactory: AdapterFactory,
-                     private val ethereumKitManager: IEthereumKitManager)
+class AdapterManager(walletManager: IWalletManager, private val adapterFactory: AdapterFactory, private val ethereumKitManager: IEthereumKitManager)
     : IAdapterManager, HandlerThread("A") {
 
     private val handler: Handler
@@ -23,19 +18,11 @@ class AdapterManager(private val coinManager: CoinManager,
         start()
         handler = Handler(looper)
 
-        disposables.add(coinManager.coinsUpdatedSignal
+        disposables.add(walletManager.walletsObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe {
-                    initAdapters()
-                }
-        )
-
-        disposables.add(authManager.authDataSignal
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe {
-                    initAdapters()
+                    initAdapters(it)
                 }
         )
     }
@@ -51,31 +38,29 @@ class AdapterManager(private val coinManager: CoinManager,
         ethereumKitManager.ethereumKit?.refresh()
     }
 
-    override fun initAdapters() {
+    override fun initAdapters(wallets: List<Wallet>) {
         handler.post {
-            authManager.authData?.let { authData ->
-                val oldAdapters = adapters.toMutableList()
+            val oldAdapters = adapters.toMutableList()
 
-                adapters = coinManager.coins.mapNotNull { coin ->
-                    var adapter = adapters.find { it.coin.code == coin.code }
-                    if (adapter == null) {
-                        adapter = adapterFactory.adapterForCoin(coin, authData)
-                        adapter?.start()
-                    }
-                    adapter
+            adapters = wallets.mapNotNull { wallet ->
+                var adapter = adapters.find { it.wallet == wallet }
+                if (adapter == null) {
+                    adapter = adapterFactory.adapterForCoin(wallet)
+                    adapter?.start()
                 }
-
-                adaptersUpdatedSignal.onNext(Unit)
-
-                oldAdapters.forEach { oldAdapter ->
-                    if (adapters.none { it.coin.code == oldAdapter.coin.code }) {
-                        oldAdapter.stop()
-                        adapterFactory.unlinkAdapter(oldAdapter)
-                    }
-                }
-
-                oldAdapters.clear()
+                adapter
             }
+
+            adaptersUpdatedSignal.onNext(Unit)
+
+            oldAdapters.forEach { oldAdapter ->
+                if (adapters.none { it.wallet == oldAdapter.wallet }) {
+                    oldAdapter.stop()
+                    adapterFactory.unlinkAdapter(oldAdapter)
+                }
+            }
+
+            oldAdapters.clear()
         }
     }
 

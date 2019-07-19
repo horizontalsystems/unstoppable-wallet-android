@@ -5,6 +5,7 @@ import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IClipboardManager
+import io.horizontalsystems.bankwallet.core.Wallet
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.receive.viewitems.AddressItem
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
@@ -21,6 +22,7 @@ class ReceiveInteractorTest {
     private val coinTitle = "Bitcoin"
     private val coinCode: CoinCode = "coinCode"
     private val coin = mock(Coin::class.java)
+    private val wallet = mock(Wallet::class.java)
     private lateinit var interactor: ReceiveInteractor
 
     private val coinAddress = "[coin_address]"
@@ -29,6 +31,7 @@ class ReceiveInteractorTest {
     fun setup() {
         whenever(coin.code).thenReturn(coinCode)
         whenever(coin.title).thenReturn(coinTitle)
+        whenever(wallet.coin).thenReturn(coin)
 
         interactor = ReceiveInteractor(coinCode, adapterManager, clipboardManager)
         interactor.delegate = delegate
@@ -36,7 +39,7 @@ class ReceiveInteractorTest {
 
     @Test
     fun didReceiveAddress() {
-        whenever(adapter.coin).thenReturn(coin)
+        whenever(adapter.wallet).thenReturn(wallet)
         whenever(adapter.receiveAddress).thenReturn(coinAddress)
         whenever(adapterManager.adapters).thenReturn(listOf(adapter))
 

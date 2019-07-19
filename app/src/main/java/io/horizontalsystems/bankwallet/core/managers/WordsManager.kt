@@ -21,8 +21,13 @@ class WordsManager(private val localStorage: ILocalStorage) : IWordsManager {
         Mnemonic().validate(words)
     }
 
-    override fun generateWords() : List<String> {
-        return Mnemonic().generate()
+    override fun generateWords(count: Int): List<String> {
+        val strength = when (count) {
+            24 -> Mnemonic.Strength.VeryHigh
+            else -> Mnemonic.Strength.Default
+        }
+
+        return Mnemonic().generate(strength)
     }
 
 }

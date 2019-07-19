@@ -3,44 +3,50 @@ package io.horizontalsystems.bankwallet.modules.restore
 import android.content.Context
 import android.content.Intent
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.SyncMode
 
 object RestoreModule {
 
-    interface IView {
-        fun showError(error: Int)
+    interface View {
+        fun reload(items: List<IPredefinedAccountType>)
     }
 
-    interface IViewDelegate {
-        fun restoreDidClick(words: List<String>)
+    interface ViewDelegate {
+        val items: List<IPredefinedAccountType>
+
+        fun viewDidLoad()
+        fun onSelect(accountType: IPredefinedAccountType)
+        fun onRestore(accountType: AccountType, syncMode: SyncMode)
     }
 
-    interface IInteractor {
-        fun validate(words: List<String>)
+    interface Interactor {
+        fun restore(accountType: AccountType, syncMode: SyncMode)
     }
 
-    interface IInteractorDelegate {
-        fun didFailToValidate(exception: Exception)
-        fun didValidate(words: List<String>)
+    interface InteractorDelegate {
+        fun didRestore()
+        fun didFailRestore(e: Exception)
     }
 
-    interface IRouter {
-        fun navigateToSetSyncMode(words: List<String>)
+    interface Router {
+        fun startRestoreWordsModule()
+        fun startRestoreEosModule()
+        fun startMainModule()
+        fun close()
     }
 
     fun start(context: Context) {
-        val intent = Intent(context, RestoreWalletActivity::class.java)
-        context.startActivity(intent)
+        context.startActivity(Intent(context, RestoreActivity::class.java))
     }
 
-    fun init(view: RestoreViewModel, router: IRouter) {
-        val interactor = RestoreInteractor(App.wordsManager)
-        val presenter = RestorePresenter(interactor, router)
+    fun init(view: RestoreViewModel, router: Router) {
+        val interactor = RestoreInteractor(App.accountCreator)
+        val presenter = RestorePresenter(router, interactor, App.predefinedAccountTypeManager)
 
         view.delegate = presenter
         presenter.view = view
         interactor.delegate = presenter
     }
-
-    class RestoreFailedException : Exception()
-
 }

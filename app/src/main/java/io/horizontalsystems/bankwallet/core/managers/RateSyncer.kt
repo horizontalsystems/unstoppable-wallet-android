@@ -33,7 +33,7 @@ class RateSyncer(private val rateManager: RateManager,
         if (networkAvailabilityManager.isConnected) {
             val coinCodes = mutableSetOf<CoinCode>()
             adapterManager.adapters.forEach {
-                coinCodes.add(it.coin.code)
+                coinCodes.add(it.wallet.coin.code)
                 it.feeCoinCode?.let { feeCoinCode ->
                     coinCodes.add(feeCoinCode)
                 }

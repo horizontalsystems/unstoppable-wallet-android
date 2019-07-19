@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.syncmodule
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -8,18 +7,15 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.putParcelableExtra
 import io.horizontalsystems.bankwallet.entities.SyncMode
-import io.horizontalsystems.bankwallet.modules.pin.PinModule
-import io.horizontalsystems.bankwallet.ui.dialogs.BottomConfirmAlert
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
-import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_about_settings.shadowlessToolbar
 import kotlinx.android.synthetic.main.activity_sync_mode.*
 
-class SyncModeActivity : BaseActivity(), BottomConfirmAlert.Listener {
+class SyncModeActivity : BaseActivity() {
 
     private lateinit var viewModel: SyncModeViewModel
-    private var wordList: List<String> = listOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,17 +24,22 @@ class SyncModeActivity : BaseActivity(), BottomConfirmAlert.Listener {
         shadowlessToolbar.bind(
                 title = getString(R.string.CoinOption_Title),
                 leftBtnItem = TopMenuItem(R.drawable.back) { onBackPressed() },
-                rightBtnItem = TopMenuItem(R.drawable.checkmark_orange) { viewModel.delegate.onNextClick() }
+                rightBtnItem = TopMenuItem(R.drawable.checkmark_orange) {
+                    viewModel.delegate.didConfirm()
+                }
         )
-
-        intent?.getStringExtra(keyWords)?.let { wordList = it.split(", ") }
 
         viewModel = ViewModelProviders.of(this).get(SyncModeViewModel::class.java)
         viewModel.init()
 
-        viewModel.navigateToSetPinLiveEvent.observe(this, Observer {
-            PinModule.startForSetPin(this)
-            finishAffinity()
+        viewModel.notifySyncModeSelected.observe(this, Observer { syncMode: SyncMode? ->
+            syncMode?.let {
+                val intent = Intent().apply {
+                    putParcelableExtra("syncMode", it)
+                }
+                setResult(RESULT_OK, intent)
+                finish()
+            }
         })
 
         viewModel.syncModeUpdatedLiveEvent.observe(this, Observer { syncMode ->
@@ -48,43 +49,7 @@ class SyncModeActivity : BaseActivity(), BottomConfirmAlert.Listener {
             }
         })
 
-        viewModel.showConfirmationDialogLiveEvent.observe(this, Observer {
-            val confirmationList = mutableListOf(
-                    R.string.Backup_Confirmation_SecretKey,
-                    R.string.Backup_Confirmation_DeleteAppWarn,
-                    R.string.Backup_Confirmation_LockAppWarn,
-                    R.string.Backup_Confirmation_Disclaimer
-            )
-            BottomConfirmAlert.show(this, confirmationList, this)
-        })
-
-        viewModel.keyStoreSafeExecute.observe(this, Observer { triple ->
-            triple?.let {
-                val (action, onSuccess, onFailure) = it
-                safeExecuteWithKeystore(action, onSuccess, onFailure)
-            }
-        })
-
-        viewModel.errorLiveData.observe(this, Observer { errorId ->
-            errorId?.let { HudHelper.showErrorMessage(it) }
-        })
-
-        fastSync.setOnClickListener { viewModel.delegate.onFastSyncModeSelect() }
-        slowSync.setOnClickListener { viewModel.delegate.onSlowSyncModeSelect() }
+        fastSync.setOnClickListener { viewModel.delegate.onSyncModeSelect(isFast = true) }
+        slowSync.setOnClickListener { viewModel.delegate.onSyncModeSelect(isFast = false) }
     }
-
-    override fun onConfirmationSuccess() {
-        viewModel.delegate.didConfirm(wordList)
-    }
-
-    companion object {
-        private const val keyWords = "key_words"
-
-        fun start(context: Context, words: List<String>) {
-            val intent = Intent(context, SyncModeActivity::class.java)
-            intent.putExtra(keyWords, words.joinToString())
-            context.startActivity(intent)
-        }
-    }
-
 }

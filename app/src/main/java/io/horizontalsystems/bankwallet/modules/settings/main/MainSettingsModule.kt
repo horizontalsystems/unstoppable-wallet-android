@@ -26,7 +26,7 @@ object MainSettingsModule {
     }
 
     interface IMainSettingsInteractor {
-        var isBackedUp: Boolean
+        val nonBackedUpCount: Int
         var currentLanguage: String
         val baseCurrency: String
         var appVersion: String
@@ -36,12 +36,12 @@ object MainSettingsModule {
     }
 
     interface IMainSettingsInteractorDelegate {
-        fun didBackup()
+        fun didUpdateNonBackedUp(count: Int)
         fun didUpdateBaseCurrency(baseCurrency: String)
         fun didUpdateLightMode()
     }
 
-    interface IMainSettingsRouter{
+    interface IMainSettingsRouter {
         fun showSecuritySettings()
         fun showBaseCurrencySettings()
         fun showLanguageSettings()
@@ -53,7 +53,7 @@ object MainSettingsModule {
     fun init(view: MainSettingsViewModel, router: IMainSettingsRouter) {
         val interactor = MainSettingsInteractor(
                 localStorage = App.localStorage,
-                wordsManager = App.wordsManager,
+                backupManager = App.backupManager,
                 languageManager = App.languageManager,
                 systemInfoManager = App.systemInfoManager,
                 currencyManager = App.currencyManager

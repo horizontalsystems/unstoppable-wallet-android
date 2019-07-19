@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.entities
 
 import java.io.Serializable
+import java.util.Objects
 
 data class Coin(val title: String, val code: String, val type: CoinType) : Serializable {
 
@@ -13,6 +14,6 @@ data class Coin(val title: String, val code: String, val type: CoinType) : Seria
     }
 
     override fun hashCode(): Int {
-        return title.hashCode() * 31 + code.hashCode()
+        return Objects.hash(title, code)
     }
 }

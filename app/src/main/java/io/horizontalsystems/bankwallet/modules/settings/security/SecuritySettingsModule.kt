@@ -11,50 +11,40 @@ object SecuritySettingsModule {
         fun setBiometricUnlockOn(biometricUnlockOn: Boolean)
         fun setBiometryType(biometryType: BiometryType)
         fun setBackedUp(backedUp: Boolean)
-        fun reloadApp()
     }
 
     interface ISecuritySettingsViewDelegate {
         fun viewDidLoad()
         fun didSwitchBiometricUnlock(biometricUnlockOn: Boolean)
+        fun didTapManageKeys()
         fun didTapEditPin()
-        fun didTapBackupWallet()
-        fun didTapRestoreWallet()
-        fun confirmedUnlinkWallet()
         fun onClear()
     }
 
     interface ISecuritySettingsInteractor {
-        var isBackedUp: Boolean
+        val nonBackedUpCount: Int
         val biometryType: BiometryType
+
         fun getBiometricUnlockOn(): Boolean
         fun setBiometricUnlockOn(biometricUnlockOn: Boolean)
-        fun unlinkWallet()
-        fun didTapOnBackupWallet()
         fun clear()
     }
 
     interface ISecuritySettingsInteractorDelegate {
-        fun didBackup()
-        fun didUnlinkWallet()
-        fun openBackupWallet()
-        fun accessIsRestricted()
+        fun didBackup(count: Int)
     }
 
-    interface ISecuritySettingsRouter{
+    interface ISecuritySettingsRouter {
+        fun showManageKeys()
         fun showEditPin()
-        fun showBackupWallet()
-        fun showRestoreWallet()
-        fun showPinUnlock()
     }
 
     fun start(context: Context) {
-        val intent = Intent(context, SecuritySettingsActivity::class.java)
-        context.startActivity(intent)
+        context.startActivity(Intent(context, SecuritySettingsActivity::class.java))
     }
 
     fun init(view: SecuritySettingsViewModel, router: ISecuritySettingsRouter) {
-        val interactor = SecuritySettingsInteractor(App.authManager, App.wordsManager, App.localStorage, App.systemInfoManager, App.lockManager)
+        val interactor = SecuritySettingsInteractor(App.backupManager, App.localStorage, App.systemInfoManager)
         val presenter = SecuritySettingsPresenter(router, interactor)
 
         view.delegate = presenter

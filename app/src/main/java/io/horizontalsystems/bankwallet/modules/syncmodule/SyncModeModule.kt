@@ -1,54 +1,39 @@
 package io.horizontalsystems.bankwallet.modules.syncmodule
 
-import android.content.Context
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import io.horizontalsystems.bankwallet.entities.SyncMode
 
 object SyncModeModule {
 
     interface IView {
-        fun updateSyncMode(syncMode: SyncMode)
-        fun showError(error: Int)
-        fun showConfirmationDialog()
+        fun update(syncMode: SyncMode)
     }
 
     interface IViewDelegate {
         fun viewDidLoad()
-        fun onNextClick()
-        fun onFastSyncModeSelect()
-        fun onSlowSyncModeSelect()
-        fun didConfirm(words: List<String>)
+        fun onSyncModeSelect(isFast: Boolean)
+        fun didConfirm()
     }
 
-    interface IInteractor {
-        fun getSyncMode(): SyncMode
-        fun restore(words: List<String>, syncMode: SyncMode)
-    }
-
-    interface IInteractorDelegate {
-        fun didRestore()
-        fun didFailToRestore(exception: Exception)
-    }
+    interface IInteractor
 
     interface IRouter {
-        fun navigateToSetPin()
+        fun notifyOnSelect(syncMode: SyncMode)
     }
 
-    fun start(context: Context, words: List<String>) {
-        SyncModeActivity.start(context, words)
+    fun startForResult(context: AppCompatActivity, requestCode: Int) {
+        context.startActivityForResult(Intent(context, SyncModeActivity::class.java), requestCode)
     }
 
-    fun init(view: SyncModeViewModel, router: IRouter, keystoreSafeExecute: IKeyStoreSafeExecute) {
-        val interactor = SyncModeInteractor(App.localStorage, App.authManager, App.wordsManager, keystoreSafeExecute)
-        val presenter = SyncModePresenter(interactor, router, State())
+    fun init(view: SyncModeViewModel, router: IRouter) {
+        val presenter = SyncModePresenter(router, State())
 
         view.delegate = presenter
         presenter.view = view
-        interactor.delegate = presenter
     }
 
-    class State{
-        var syncMode: SyncMode? = null
+    class State {
+        var syncMode: SyncMode = SyncMode.FAST
     }
 }

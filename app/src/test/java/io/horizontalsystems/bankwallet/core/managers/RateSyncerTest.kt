@@ -4,6 +4,7 @@ import com.nhaarman.mockito_kotlin.*
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
+import io.horizontalsystems.bankwallet.core.Wallet
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
@@ -42,20 +43,24 @@ class RateSyncerTest {
 
         adapters1 = coinCodes1.map { coinCode ->
             val coin = mock(Coin::class.java)
+            val wallet = mock(Wallet::class.java)
             val adapter = mock(IAdapter::class.java)
 
             whenever(coin.code).thenReturn(coinCode)
-            whenever(adapter.coin).thenReturn(coin)
+            whenever(wallet.coin).thenReturn(coin)
+            whenever(adapter.wallet).thenReturn(wallet)
 
             adapter
         }
 
         adapters2 = coinCodes2.map { coinCode ->
             val coin = mock(Coin::class.java)
+            val wallet = mock(Wallet::class.java)
             val adapter = mock(IAdapter::class.java)
 
             whenever(coin.code).thenReturn(coinCode)
-            whenever(adapter.coin).thenReturn(coin)
+            whenever(wallet.coin).thenReturn(coin)
+            whenever(adapter.wallet).thenReturn(wallet)
 
             adapter
         }

@@ -1,19 +1,19 @@
 package io.horizontalsystems.bankwallet.modules.restore
 
-import io.horizontalsystems.bankwallet.core.managers.WordsManager
-import io.horizontalsystems.hdwalletkit.Mnemonic
+import io.horizontalsystems.bankwallet.core.IAccountCreator
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.SyncMode
 
-class RestoreInteractor(private val wordsManager: WordsManager) : RestoreModule.IInteractor {
+class RestoreInteractor(private val accountCreator: IAccountCreator) : RestoreModule.Interactor {
 
-    var delegate: RestoreModule.IInteractorDelegate? = null
+    var delegate: RestoreModule.InteractorDelegate? = null
 
-    override fun validate(words: List<String>) {
+    override fun restore(accountType: AccountType, syncMode: SyncMode) {
         try {
-            wordsManager.validate(words)
-            delegate?.didValidate(words)
-        } catch (e: Mnemonic.MnemonicException) {
-            delegate?.didFailToValidate(e)
+            accountCreator.createRestoredAccount(accountType, syncMode)
+            delegate?.didRestore()
+        } catch (e: Exception) {
+            delegate?.didFailRestore(e)
         }
     }
-
 }

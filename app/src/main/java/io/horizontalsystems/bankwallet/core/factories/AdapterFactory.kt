@@ -3,29 +3,27 @@ package io.horizontalsystems.bankwallet.core.factories
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
-import io.horizontalsystems.bankwallet.entities.AuthData
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
 
 class AdapterFactory(
         private val context: Context,
         private val appConfigProvider: IAppConfigProvider,
-        private val localStorage: ILocalStorage,
         private val ethereumKitManager: IEthereumKitManager,
         private val feeRateProvider: IFeeRateProvider) {
 
-    fun adapterForCoin(coin: Coin, authData: AuthData): IAdapter? = when (coin.type) {
-        is CoinType.Bitcoin -> BitcoinAdapter(coin, authData, localStorage.syncMode, appConfigProvider.testMode, feeRateProvider)
-        is CoinType.BitcoinCash -> BitcoinCashAdapter(coin, authData, localStorage.syncMode, appConfigProvider.testMode, feeRateProvider)
-        is CoinType.Dash -> DashAdapter(coin, authData, localStorage.syncMode, appConfigProvider.testMode, feeRateProvider)
+    fun adapterForCoin(wallet: Wallet): IAdapter? = when (wallet.coin.type) {
+        is CoinType.Bitcoin -> BitcoinAdapter(wallet, appConfigProvider.testMode, feeRateProvider)
+        is CoinType.BitcoinCash -> BitcoinCashAdapter(wallet, appConfigProvider.testMode, feeRateProvider)
+        is CoinType.Dash -> DashAdapter(wallet, appConfigProvider.testMode, feeRateProvider)
         is CoinType.Ethereum -> {
             val addressParser = AddressParser("ethereum", true)
-            EthereumAdapter(coin, ethereumKitManager.ethereumKit(authData), addressParser, feeRateProvider)
+            EthereumAdapter(wallet, ethereumKitManager.ethereumKit(wallet), addressParser, feeRateProvider)
         }
         is CoinType.Erc20 -> {
             val addressParser = AddressParser("ethereum", true)
-            Erc20Adapter(context, coin, ethereumKitManager.ethereumKit(authData), coin.type.decimal, coin.type.fee, coin.type.address, addressParser, feeRateProvider)
+            Erc20Adapter(context, wallet, ethereumKitManager.ethereumKit(wallet), wallet.coin.type.decimal, wallet.coin.type.fee, wallet.coin.type.address, addressParser, feeRateProvider)
         }
+        is CoinType.Eos -> null
     }
 
     fun unlinkAdapter(adapter: IAdapter) {

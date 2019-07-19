@@ -1,26 +1,45 @@
 package io.horizontalsystems.bankwallet.modules.restore
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 
-class RestoreViewModel : ViewModel(), RestoreModule.IView, RestoreModule.IRouter {
+class RestoreViewModel : ViewModel(), RestoreModule.View, RestoreModule.Router {
 
-    lateinit var delegate: RestoreModule.IViewDelegate
+    lateinit var delegate: RestoreModule.ViewDelegate
 
-    val errorLiveData = MutableLiveData<Int>()
-    val navigateToSetSyncModeLiveEvent = SingleLiveEvent<List<String>>()
+    val reloadLiveEvent = SingleLiveEvent<List<IPredefinedAccountType>>()
+    val startRestoreWordsLiveEvent = SingleLiveEvent<Unit>()
+    val startRestoreEosLiveEvent = SingleLiveEvent<Unit>()
+    val startMainModuleLiveEvent = SingleLiveEvent<Unit>()
+    val closeLiveEvent = SingleLiveEvent<Unit>()
 
     fun init() {
         RestoreModule.init(this, this)
+        delegate.viewDidLoad()
     }
 
-    override fun showError(error: Int) {
-        errorLiveData.value = error
+    //  View
+
+    override fun reload(items: List<IPredefinedAccountType>) {
+        reloadLiveEvent.postValue(items)
     }
 
-    override fun navigateToSetSyncMode(words: List<String>) {
-        navigateToSetSyncModeLiveEvent.value = words
+    //  Router
+
+    override fun startRestoreWordsModule() {
+        startRestoreWordsLiveEvent.call()
     }
 
+    override fun startRestoreEosModule() {
+        startRestoreEosLiveEvent.call()
+    }
+
+    override fun startMainModule() {
+        startMainModuleLiveEvent.call()
+    }
+
+    override fun close() {
+        closeLiveEvent.call()
+    }
 }

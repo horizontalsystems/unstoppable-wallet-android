@@ -15,13 +15,13 @@
     <string name="Button_Share">Share</string>
     <string name="Error">Error</string>
 
-    <!--Guest-->
+    <!--Welcome-->
 
-    <string name="Guest_Title">Unstoppable</string>
-    <string name="Guest_Subtitle" translatable="false">IN BLOCKCHAIN WE TRUST</string>
-    <string name="Guest_CreateWallet">Create Wallet</string>
-    <string name="Guest_RestoreWallet">Restore</string>
-    <string name="Guest_Version" translatable="false">version %s</string>
+    <string name="Welcome_Title">Unstoppable</string>
+    <string name="Welcome_Subtitle" translatable="false">IN BLOCKCHAIN WE TRUST</string>
+    <string name="Welcome_CreateWallet">Create Wallet</string>
+    <string name="Welcome_RestoreWallet">Restore</string>
+    <string name="Welcome_Version" translatable="false">version %s</string>
 
     <!--Restore-->
 
@@ -29,6 +29,9 @@
     <string name="Restore_Subtitle">Enter Secret Key</string>
     <string name="Restore_ValidationFailed">Incorrect Secret Key</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>
+
+    <string name="Restore_EosAccountName">Account Name</string>
+    <string name="Restore_EosActivePrivateKey">Active Private Key</string>
 
     <!--Backup-->
 
@@ -176,6 +179,7 @@
 
     <string name="Settings_Title">Settings</string>
     <string name="Settings_SecurityCenter">Security Center</string>
+    <string name="Settings_RestoreWallet">Restore Wallet</string>
     <string name="Settings_BaseCurrency">Base Currency</string>
     <string name="Settings_Language">Language</string>
     <string name="Settings_LightMode">Light Mode</string>
@@ -194,6 +198,7 @@
 
     <string name="SettingsSecurity_Fingerprint">Fingerprint</string>
     <string name="SettingsSecurity_EditPin">Edit Passcode</string>
+    <string name="SettingsSecurity_ManageKeys">Manage Keys</string>
     <string name="SettingsSecurity_BackupWallet">Backup Wallet</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">Unlink from this device</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">This action will remove the currently installed wallet from this device.</string>
@@ -210,7 +215,8 @@
     <!--Setting_About-->
 
     <string name="SettingsAbout_Title">About</string>
-    <string name="About_Subtitle" translatable="false">Decentralized App</string>
+    <string name="SettingsAbout_AppTitle">Unstoppable</string>
+    <string name="SettingsAbout_Subtitle" translatable="false">Decentralized App</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Terms &amp; Privacy:</string>
     <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
 \n\nIt works everywhere as long as there is internet. No entity can block this app from working or to block someone from using it.
@@ -289,6 +295,27 @@
 
     <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_save">Save</string>
+
+    <!--Manage Keys-->
+
+    <string name="ManageKeys_Title">Manage Keys</string>
+    <string name="ManageKeys_New">New</string>
+    <string name="ManageKeys_Import">Import</string>
+    <string name="ManageKeys_Unlink">Unlink</string>
+    <string name="ManageKeys_Backup">Backup</string>
+    <string name="ManageKeys_Show">Show</string>
+
+    <!-- Manage Keys Alert -->
+    <string name="AddCoin_Title">Add Key for %s</string>
+    <string name="AddCoin_Description">You need to have a cryptographic key before you can add %s</string>
+    <string name="AddCoin_CreateKey">Create New</string>
+    <string name="AddCoin_RestoreKey">I already have</string>
+
+    <!-- Account Types -->
+
+    <string name="ManageKeys_12_words">12 Words Key</string>
+    <string name="ManageKeys_eos">EOS Account</string>
+    <string name="ManageKeys_24_words">24 Words Key</string>
 
     <!--Coin Option-->
     <string name="CoinOption_Title">Restore Options</string>

@@ -12,14 +12,13 @@ class SecuritySettingsPresenterTest {
     private lateinit var interactor: SecuritySettingsModule.ISecuritySettingsInteractor
     private val router = mock<SecuritySettingsModule.ISecuritySettingsRouter>()
     private val view = mock<SecuritySettingsModule.ISecuritySettingsView>()
-    private lateinit var presenter:SecuritySettingsPresenter
+    private lateinit var presenter: SecuritySettingsPresenter
 
     @Before
     fun setUp() {
         interactor = mock {
             on { getBiometricUnlockOn() } doReturn true
             on { biometryType } doReturn BiometryType.FINGER
-            on { isBackedUp } doReturn true
         }
 
         presenter = SecuritySettingsPresenter(router, interactor)
@@ -70,27 +69,6 @@ class SecuritySettingsPresenterTest {
     }
 
     @Test
-    fun testSetBackedUpTrueOnLoad() {
-        presenter.viewDidLoad()
-
-        verify(view).setBackedUp(true)
-    }
-
-    @Test
-    fun testSetBackedUpFalseOnLoad() {
-        interactor = mock {
-            on { isBackedUp } doReturn false
-        }
-
-        presenter = SecuritySettingsPresenter(router, interactor)
-        presenter.view = view
-
-        presenter.viewDidLoad()
-
-        verify(view).setBackedUp(false)
-    }
-
-    @Test
     fun didSwitchBiometricUnlock() {
         presenter.didSwitchBiometricUnlock(true)
         verify(interactor).setBiometricUnlockOn(true)
@@ -103,33 +81,9 @@ class SecuritySettingsPresenterTest {
     }
 
     @Test
-    fun didTapBackupWallet() {
-        presenter.didTapBackupWallet()
-        verify(interactor).didTapOnBackupWallet()
-    }
-
-    @Test
-    fun didTapRestoreWallet() {
-        presenter.didTapRestoreWallet()
-        verify(router).showRestoreWallet()
-    }
-
-    @Test
-    fun confirmedUnlinkWallet() {
-        presenter.confirmedUnlinkWallet()
-        verify(interactor).unlinkWallet()
-    }
-
-    @Test
     fun didBackup() {
-        presenter.didBackup()
+        presenter.didBackup(0)
         verify(view).setBackedUp(true)
-    }
-
-    @Test
-    fun didUnlinkWallet() {
-        presenter.didUnlinkWallet()
-        verify(view).reloadApp()
     }
 
     @Test
