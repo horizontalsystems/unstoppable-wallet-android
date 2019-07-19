@@ -14,15 +14,17 @@
     <string name="Button_Ok">はい</string>
     <string name="Button_Share">共有</string>
     <string name="Error">エラー</string>
-    <!--Guest-->
-    <string name="Guest_Title">Unstoppable</string>
-    <string name="Guest_CreateWallet">Create Wallet</string>
-    <string name="Guest_RestoreWallet">Restore</string>
+    <!--Welcome-->
+    <string name="Welcome_Title">Unstoppable</string>
+    <string name="Welcome_CreateWallet">Create Wallet</string>
+    <string name="Welcome_RestoreWallet">Restore</string>
     <!--Restore-->
     <string name="Restore_Title">Restore</string>
     <string name="Restore_Subtitle">Enter Secret Key</string>
     <string name="Restore_ValidationFailed">正しくない秘密鍵</string>
     <string name="Restore_RestoreFailed">ウォレットを作成できませんでした</string>
+    <string name="Restore_EosAccountName">Account Name</string>
+    <string name="Restore_EosActivePrivateKey">Active Private Key</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">秘密鍵</string>
     <string name="Backup_Intro_Subtitle">あなたの電話は今まで紛失、盗難、破損、またはアップグレードする場合、あなたの秘密鍵は、あなたの財布と資金を復元する唯一の方法です。\n\n それは 12 の単語で構成されています。オフラインに安全に保管してください。</string>
@@ -137,6 +139,7 @@
     <!--Settings-->
     <string name="Settings_Title">設定</string>
     <string name="Settings_SecurityCenter">セキュリティ センター</string>
+    <string name="Settings_RestoreWallet">Restore Wallet</string>
     <string name="Settings_BaseCurrency">基本通貨</string>
     <string name="Settings_Language">言語</string>
     <string name="Settings_LightMode">ライトモード</string>
@@ -150,6 +153,7 @@
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">指紋</string>
     <string name="SettingsSecurity_EditPin">パスコードを編集</string>
+    <string name="SettingsSecurity_ManageKeys">Manage Keys</string>
     <string name="SettingsSecurity_BackupWallet">ウォレットをバックアップ</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">このデバイスからアンリンク</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">この操作は、現在インストールされている財布をこのデバイスから削除されます。</string>
@@ -160,6 +164,7 @@
     <string name="SettingsLanguage_Title">言語</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">について</string>
+    <string name="SettingsAbout_AppTitle">Unstoppable</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">利用規約とプライバシーポリシー</string>
     <string name="SettingsAbout_TermsPrivacyText">このアプリはピアツーピアです。 Webサーバーや技術サポート担当者の機能に依存しません。
 \n\nインターネットがある限りどこでも動作します。このアプリの動作をブロックしたり、他のユーザーによる使用をブロックしたりすることはできません。
@@ -215,6 +220,22 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_save">保存</string>
+    <!--Manage Keys-->
+    <string name="ManageKeys_Title">Manage Keys</string>
+    <string name="ManageKeys_New">New</string>
+    <string name="ManageKeys_Import">Import</string>
+    <string name="ManageKeys_Unlink">Unlink</string>
+    <string name="ManageKeys_Backup">Backup</string>
+    <string name="ManageKeys_Show">Show</string>
+    <!-- Manage Keys Alert -->
+    <string name="AddCoin_Title">Add Key for %s</string>
+    <string name="AddCoin_Description">You need to have a cryptographic key before you can add %s</string>
+    <string name="AddCoin_CreateKey">Create New</string>
+    <string name="AddCoin_RestoreKey">I already have</string>
+    <!-- Account Types -->
+    <string name="ManageKeys_12_words">12 Words Key</string>
+    <string name="ManageKeys_eos">EOS Account</string>
+    <string name="ManageKeys_24_words">24 Words Key</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">Restore Options</string>
     <string name="CoinOption_Fast">Fast</string>
