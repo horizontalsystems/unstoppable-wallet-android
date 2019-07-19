@@ -14,15 +14,17 @@
     <string name="Button_Ok">Tamam</string>
     <string name="Button_Share">Paylaş</string>
     <string name="Error">Hata</string>
-    <!--Guest-->
-    <string name="Guest_Title">Unstoppable</string>
-    <string name="Guest_CreateWallet">Cüzdan Oluştur</string>
-    <string name="Guest_RestoreWallet">Geri Yükle</string>
+    <!--Welcome-->
+    <string name="Welcome_Title">Unstoppable</string>
+    <string name="Welcome_CreateWallet">Create Wallet</string>
+    <string name="Welcome_RestoreWallet">Restore</string>
     <!--Restore-->
     <string name="Restore_Title">Geri Yükle</string>
     <string name="Restore_Subtitle">Gizli Anahtarı girin</string>
     <string name="Restore_ValidationFailed">Hatalı Gizli anahtar</string>
     <string name="Restore_RestoreFailed">Cüzdan geri yüklenemedi</string>
+    <string name="Restore_EosAccountName">Account Name</string>
+    <string name="Restore_EosActivePrivateKey">Active Private Key</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Gizli Anahtar</string>
     <string name="Backup_Intro_Subtitle">Gizli Anahtar, telefonunuzun kaybolması, bozulması, çalınması ve güncelleme gibi herhangi bir sebepten dolayı hesabınıza ulaşamadığınızda hesabınıza tekrar erişim sağlamanın tek yoludur.\n\n 12 kelimeden oluşur. Internet ve telefon haricinde güvenli bir yerde saklayınız (misal: Çelik kasa).</string>
@@ -137,6 +139,7 @@
     <!--Settings-->
     <string name="Settings_Title">Ayarlar</string>
     <string name="Settings_SecurityCenter">Güvenlik Merkezi</string>
+    <string name="Settings_RestoreWallet">Restore Wallet</string>
     <string name="Settings_BaseCurrency">Para birimi</string>
     <string name="Settings_Language">Dil</string>
     <string name="Settings_LightMode">Aydınlık mod</string>
@@ -150,6 +153,7 @@
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Parmak izi</string>
     <string name="SettingsSecurity_EditPin">Şifreyi Değiştir</string>
+    <string name="SettingsSecurity_ManageKeys">Manage Keys</string>
     <string name="SettingsSecurity_BackupWallet">Cüzdanı yedekle</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">Bu cihazla bağlantıyı kes</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">Bu işlemle, cüzdan cihazdan kaldırılacak.</string>
@@ -160,6 +164,7 @@
     <string name="SettingsLanguage_Title">Dil</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Hakkında</string>
+    <string name="SettingsAbout_AppTitle">Unstoppable</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Şartlar &amp; Gizlilik Politikası:</string>
     <string name="SettingsAbout_TermsPrivacyText">Bu uygulama uçtan uca bir ağdır. Herhangi bir web sunucusuna veya teknik destek personeline bağlı değildir.
 \n\n  İnternet olduğu sürece her yerde çalışır. Hiç kimse bu uygulamanın çalışmasını veya birisinin programı kullanmasını engelleyemez.
@@ -215,6 +220,22 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">Cüzdanlar</string>
     <string name="ManageCoins_save">Kaydet</string>
+    <!--Manage Keys-->
+    <string name="ManageKeys_Title">Manage Keys</string>
+    <string name="ManageKeys_New">New</string>
+    <string name="ManageKeys_Import">Import</string>
+    <string name="ManageKeys_Unlink">Unlink</string>
+    <string name="ManageKeys_Backup">Backup</string>
+    <string name="ManageKeys_Show">Show</string>
+    <!-- Manage Keys Alert -->
+    <string name="AddCoin_Title">Add Key for %s</string>
+    <string name="AddCoin_Description">You need to have a cryptographic key before you can add %s</string>
+    <string name="AddCoin_CreateKey">Create New</string>
+    <string name="AddCoin_RestoreKey">I already have</string>
+    <!-- Account Types -->
+    <string name="ManageKeys_12_words">12 Words Key</string>
+    <string name="ManageKeys_eos">EOS Account</string>
+    <string name="ManageKeys_24_words">24 Words Key</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">Geri yükleme seçenekleri</string>
     <string name="CoinOption_Fast">Hızlı</string>
