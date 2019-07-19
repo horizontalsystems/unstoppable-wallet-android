@@ -14,15 +14,17 @@
     <string name="Button_Ok">OK</string>
     <string name="Button_Share">Partager</string>
     <string name="Error">Erreur</string>
-    <!--Guest-->
-    <string name="Guest_Title">Unstoppable</string>
-    <string name="Guest_CreateWallet">Nouveu Porte-Monnaie</string>
-    <string name="Guest_RestoreWallet">Restaurer</string>
+    <!--Welcome-->
+    <string name="Welcome_Title">Unstoppable</string>
+    <string name="Welcome_CreateWallet">Create Wallet</string>
+    <string name="Welcome_RestoreWallet">Restore</string>
     <!--Restore-->
     <string name="Restore_Title">Restaurer</string>
     <string name="Restore_Subtitle">Entrez la clé secrete</string>
     <string name="Restore_ValidationFailed">Clé secrète incorrecte</string>
     <string name="Restore_RestoreFailed">Échec de la restauration du porte-monnaie</string>
+    <string name="Restore_EosAccountName">Account Name</string>
+    <string name="Restore_EosActivePrivateKey">Active Private Key</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Le mot secret</string>
     <string name="Backup_Intro_Subtitle">Votre clé secrete est le seul moyen de restaurer votre porte-monnaie et vos fonds si votre téléphone est perdu, volé, cassé ou mis à jour.\n\nElle contient 12 mots. Stockez-le en toute sécurité hors ligne.</string>
@@ -137,6 +139,7 @@
     <!--Settings-->
     <string name="Settings_Title">Paramètres</string>
     <string name="Settings_SecurityCenter">Centre de Sécurité</string>
+    <string name="Settings_RestoreWallet">Restore Wallet</string>
     <string name="Settings_BaseCurrency">Devise de Base</string>
     <string name="Settings_Language">Langue</string>
     <string name="Settings_LightMode">Mode lumineux</string>
@@ -150,6 +153,7 @@
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Empreinte digitale</string>
     <string name="SettingsSecurity_EditPin">Modifier le code </string>
+    <string name="SettingsSecurity_ManageKeys">Manage Keys</string>
     <string name="SettingsSecurity_BackupWallet">Porte-monnaie de Sauvegarde</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">Supprimer le lien de cet appareil</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">Cette action supprimera le porte-monnaie actuellement installé sur cet appareil.</string>
@@ -160,6 +164,7 @@
     <string name="SettingsLanguage_Title">Langue</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">À propos de</string>
+    <string name="SettingsAbout_AppTitle">Unstoppable</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Terms &amp; Confidentialité:</string>
     <string name="SettingsAbout_TermsPrivacyText">Cette application est décentralisé. Cela ne dépend pas du personnel du service d\'assistance Web.
 \n\nCela fonctionne partout tant qu\'il y a internet. Aucune entité ne peut empêcher cette application de fonctionner ou d\'empêcher quelqu\'un de l\'utiliser.
@@ -215,6 +220,22 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">Portefeuilles</string>
     <string name="ManageCoins_save">Sauvegarder</string>
+    <!--Manage Keys-->
+    <string name="ManageKeys_Title">Manage Keys</string>
+    <string name="ManageKeys_New">New</string>
+    <string name="ManageKeys_Import">Import</string>
+    <string name="ManageKeys_Unlink">Unlink</string>
+    <string name="ManageKeys_Backup">Backup</string>
+    <string name="ManageKeys_Show">Show</string>
+    <!-- Manage Keys Alert -->
+    <string name="AddCoin_Title">Add Key for %s</string>
+    <string name="AddCoin_Description">You need to have a cryptographic key before you can add %s</string>
+    <string name="AddCoin_CreateKey">Create New</string>
+    <string name="AddCoin_RestoreKey">I already have</string>
+    <!-- Account Types -->
+    <string name="ManageKeys_12_words">12 Words Key</string>
+    <string name="ManageKeys_eos">EOS Account</string>
+    <string name="ManageKeys_24_words">24 Words Key</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">Restaurer les options</string>
     <string name="CoinOption_Fast">Rapide</string>
