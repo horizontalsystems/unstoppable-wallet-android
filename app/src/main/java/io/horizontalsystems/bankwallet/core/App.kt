@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import com.squareup.leakcanary.LeakCanary
 import io.horizontalsystems.bankwallet.core.factories.AccountFactory
+import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
@@ -14,6 +15,8 @@ import io.horizontalsystems.bankwallet.core.storage.EnabledWalletsStorage
 import io.horizontalsystems.bankwallet.core.storage.RatesRepository
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
 import java.util.*
+import java.util.logging.Level
+import java.util.logging.Logger
 
 class App : Application() {
 
@@ -76,6 +79,11 @@ class App : Application() {
             return
         }
         LeakCanary.install(this)
+
+        if (!BuildConfig.DEBUG) {
+            //Disable logging for lower levels in Release build
+            Logger.getLogger("").level = Level.SEVERE
+        }
 
         instance = this
         preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)

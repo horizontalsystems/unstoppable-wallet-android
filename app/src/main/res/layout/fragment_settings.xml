@@ -97,6 +97,17 @@
                 app:setting_icon="@drawable/ic_attention"
                 app:setting_title="@string/Settings_About" />
 
+            <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
+                android:id="@+id/shareApp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/about"
+                app:setting_icon="@drawable/ic_share"
+                app:setting_title="@string/Settings_ShareThisWallet"
+                />
+
             <View
                 android:id="@+id/bottomShade_3"
                 android:layout_width="match_parent"
@@ -105,6 +116,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/about" />
+                app:layout_constraintTop_toBottomOf="@+id/shareApp"
+                />
 
             <TextView
                 android:id="@+id/appName"
@@ -118,6 +131,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/about"
                 tools:text="Wallet Bank 1.01" />
+                app:layout_constraintTop_toBottomOf="@+id/shareApp"
+                tools:text="Wallet Bank 1.01"
+                />
 
             <View
                 android:id="@+id/lineView"
