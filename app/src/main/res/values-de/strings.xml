@@ -14,15 +14,17 @@
     <string name="Button_Ok">OK</string>
     <string name="Button_Share">Teilen</string>
     <string name="Error">Fehler</string>
-    <!--Guest-->
-    <string name="Guest_Title">Unstoppable</string>
-    <string name="Guest_CreateWallet">Wallet Erstellen</string>
-    <string name="Guest_RestoreWallet">Wiederherstellen</string>
+    <!--Welcome-->
+    <string name="Welcome_Title">Unstoppable</string>
+    <string name="Welcome_CreateWallet">Create Wallet</string>
+    <string name="Welcome_RestoreWallet">Restore</string>
     <!--Restore-->
     <string name="Restore_Title">Wiederherstellen</string>
     <string name="Restore_Subtitle">Offlineschlüssel eingeben</string>
     <string name="Restore_ValidationFailed">Falscher Offlineschlüssel</string>
     <string name="Restore_RestoreFailed">Fehler beim Wiederherstellen des Wallet</string>
+    <string name="Restore_EosAccountName">Account Name</string>
+    <string name="Restore_EosActivePrivateKey">Active Private Key</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Offlineschlüssel</string>
     <string name="Backup_Intro_Subtitle">Dein Offlineschlüssel ist die einzige Möglichkeit, dein Wallet wiederherzustellen, falls du dein Smartphone verlierst, austauscht, es gestohlen wird oder kaputtgeht. \n\nEs besteht aus 12 Wörtern. Speich es sicher offline.</string>
@@ -137,6 +139,7 @@
     <!--Settings-->
     <string name="Settings_Title">Einstellungen</string>
     <string name="Settings_SecurityCenter">Sicherheit</string>
+    <string name="Settings_RestoreWallet">Restore Wallet</string>
     <string name="Settings_BaseCurrency">Währung</string>
     <string name="Settings_Language">Sprache</string>
     <string name="Settings_LightMode">Licht Modus</string>
@@ -150,6 +153,7 @@
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Fingerabdruck</string>
     <string name="SettingsSecurity_EditPin">Code bearbeiten</string>
+    <string name="SettingsSecurity_ManageKeys">Manage Keys</string>
     <string name="SettingsSecurity_BackupWallet">Wallet sichern</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">Verknüpfung mit diesem Gerät aufheben</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">Diese Aktion entfernt dein Wallet von diesem Gerät.</string>
@@ -160,6 +164,7 @@
     <string name="SettingsLanguage_Title">Sprache</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Info</string>
+    <string name="SettingsAbout_AppTitle">Unstoppable</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">ANB &amp; Datenschutz:</string>
     <string name="SettingsAbout_TermsPrivacyText">\n\nDiese Anwendung ist vollständig dezentralisiert. Die Leistung dieser Anwendung hängt nicht von Servern von Drittanbietern oder einem technischen Supportteam ab.
 \n\nDie Anwendung funktioniert überall, solange es Internet gibt. Dieser Wallet oder deren Benutzer können von niemandem blockiert werden.
@@ -215,6 +220,22 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">Wallets</string>
     <string name="ManageCoins_save">Speichern</string>
+    <!--Manage Keys-->
+    <string name="ManageKeys_Title">Manage Keys</string>
+    <string name="ManageKeys_New">New</string>
+    <string name="ManageKeys_Import">Import</string>
+    <string name="ManageKeys_Unlink">Unlink</string>
+    <string name="ManageKeys_Backup">Backup</string>
+    <string name="ManageKeys_Show">Show</string>
+    <!-- Manage Keys Alert -->
+    <string name="AddCoin_Title">Add Key for %s</string>
+    <string name="AddCoin_Description">You need to have a cryptographic key before you can add %s</string>
+    <string name="AddCoin_CreateKey">Create New</string>
+    <string name="AddCoin_RestoreKey">I already have</string>
+    <!-- Account Types -->
+    <string name="ManageKeys_12_words">12 Words Key</string>
+    <string name="ManageKeys_eos">EOS Account</string>
+    <string name="ManageKeys_24_words">24 Words Key</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">Optionen Wiederherstellen</string>
     <string name="CoinOption_Fast">Schnell</string>
