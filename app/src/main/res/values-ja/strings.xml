@@ -152,6 +152,7 @@
     <string name="Settings_Error_NoFingerprintAddedYet">このデバイスの指紋を有効にしていません。指紋認証アクセスを設定するにはセキュリティ設定 &gt; にて設定してください。</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">指紋</string>
+    <string name="SettingsSecurity_EnablePin">Passcode</string>
     <string name="SettingsSecurity_EditPin">パスコードを編集</string>
     <string name="SettingsSecurity_ManageKeys">Manage Keys</string>
     <string name="SettingsSecurity_BackupWallet">ウォレットをバックアップ</string>
