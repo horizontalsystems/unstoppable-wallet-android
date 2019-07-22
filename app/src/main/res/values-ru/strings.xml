@@ -25,6 +25,8 @@
     <string name="Restore_RestoreFailed">Не удалось восстановить кошелек</string>
     <string name="Restore_EosAccountName">Account Name</string>
     <string name="Restore_EosActivePrivateKey">Активировать Приватный Ключ</string>
+    <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
+    <string name="Restore_EosKeyIncorrect">Incorrect Key</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Секретный Ключ</string>
     <string name="Backup_Intro_Subtitle">Ваш секретный ключ является единственным способом для восстановления вашего кошелька.\n\nОн состоит из 12 слов. Храните его в безопасном месте.</string>
