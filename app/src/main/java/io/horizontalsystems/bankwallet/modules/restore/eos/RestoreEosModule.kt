@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 
 object RestoreEosModule {
 
-    interface IView
+    interface IView {
+        fun showError(resId: Int)
+    }
 
     interface IViewDelegate {
         fun onClickDone(accountName: String, privateKey: String)
@@ -17,7 +19,8 @@ object RestoreEosModule {
 
     interface IInteractorDelegate {
         fun onValidationSuccess(accountName: String, privateKey: String)
-        fun onValidationFail(error: Exception)
+        fun onInvalidAccount()
+        fun onInvalidKey()
     }
 
     interface IRouter {
