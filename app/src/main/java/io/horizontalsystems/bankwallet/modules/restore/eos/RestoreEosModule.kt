@@ -7,17 +7,25 @@ object RestoreEosModule {
 
     interface IView
 
-    interface IViewDelegate
+    interface IViewDelegate {
+        fun onClickDone(accountName: String, privateKey: String)
+    }
 
-    interface IInteractor
+    interface IInteractor {
+        fun validate(accountName: String, privateKey: String)
+    }
 
-    interface IInteractorDelegate
+    interface IInteractorDelegate {
+        fun onValidationSuccess(accountName: String, privateKey: String)
+        fun onValidationFail(error: Exception)
+    }
 
-    interface IRouter
+    interface IRouter {
+        fun finishWithSuccess(accountName: String, privateKey: String)
+    }
 
     fun startForResult(context: AppCompatActivity, requestCode: Int) {
-        val intent = Intent(context, RestoreEosActivity::class.java)
-        context.startActivityForResult(intent, requestCode)
+        context.startActivityForResult(Intent(context, RestoreEosActivity::class.java), requestCode)
     }
 
     fun init(view: RestoreEosViewModel, router: IRouter) {

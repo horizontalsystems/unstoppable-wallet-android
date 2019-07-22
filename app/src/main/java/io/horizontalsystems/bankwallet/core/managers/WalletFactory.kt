@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.entities.SyncMode
 
 class WalletFactory : IWalletFactory {
 
-    override fun wallet(coin: Coin, account: Account, syncMode: SyncMode): Wallet {
+    override fun wallet(coin: Coin, account: Account, syncMode: SyncMode?): Wallet {
         return Wallet(coin, account, syncMode)
     }
 

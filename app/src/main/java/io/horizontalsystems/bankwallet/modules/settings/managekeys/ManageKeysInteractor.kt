@@ -1,6 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.settings.managekeys
 
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.IAccountCreator
+import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
+import io.horizontalsystems.bankwallet.core.IPredefinedAccountTypeManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
@@ -29,8 +32,8 @@ class ManageKeysInteractor(
         predefinedAccountTypeManager.createAccount(predefinedAccountType)
     }
 
-    override fun restoreAccount(accountType: AccountType, syncMode: SyncMode) {
-        accountCreator.createRestoredAccount(accountType, syncMode)
+    override fun restoreAccount(accountType: AccountType, syncMode: SyncMode?) {
+        accountCreator.createRestoredAccount(accountType, syncMode, createDefaultWallets = true)
     }
 
     override fun loadAccounts() {

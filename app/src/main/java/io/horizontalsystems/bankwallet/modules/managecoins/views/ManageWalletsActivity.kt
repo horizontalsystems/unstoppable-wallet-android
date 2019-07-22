@@ -8,15 +8,14 @@ import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsViewModel
+import io.horizontalsystems.bankwallet.modules.restore.eos.RestoreEosModule
 import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule
-import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysModule
 import io.horizontalsystems.bankwallet.ui.dialogs.ManageKeysDialog
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import kotlinx.android.synthetic.main.activity_manage_coins.*
 
-class ManageWalletsActivity : BaseActivity() {
+class ManageWalletsActivity : BaseActivity(), ManageKeysDialog.Listener {
 
     private lateinit var viewModel: ManageWalletsViewModel
 
@@ -41,19 +40,19 @@ class ManageWalletsActivity : BaseActivity() {
         })
 
         viewModel.showRestoreKeyDialog.observe(this, Observer { coin ->
-            ManageKeysDialog.showWithoutCreateOption(this, coin, ManageKeysDialogListener())
+            ManageKeysDialog.showWithoutCreateOption(this, coin, this)
         })
 
         viewModel.showCreateAndRestoreKeyDialog.observe(this, Observer { coin ->
-            ManageKeysDialog.show(this, coin, ManageKeysDialogListener())
+            ManageKeysDialog.show(this, coin, this)
         })
 
         viewModel.openRestoreWordsModule.observe(this, Observer {
             RestoreWordsModule.startForResult(this, ModuleCode.RESTORE_WORDS)
         })
 
-        viewModel.startManageKeysLiveEvent.observe(this, Observer {
-            ManageKeysModule.start(this)
+        viewModel.openRestoreEosModule.observe(this, Observer {
+            RestoreEosModule.startForResult(this, ModuleCode.RESTORE_EOS)
         })
 
         viewModel.closeLiveDate.observe(this, Observer {
@@ -64,25 +63,32 @@ class ManageWalletsActivity : BaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == ModuleCode.RESTORE_WORDS && data != null && resultCode == RESULT_OK) {
-            val syncMode = data.getParcelableExtra<SyncMode>("syncMode")
-            val accountType = data.getParcelableExtra<AccountType>("accountType")
+        if (data == null || resultCode != RESULT_OK)
+            return
 
-            viewModel.delegate.onRestore(accountType, syncMode)
+        val accountType = data.getParcelableExtra<AccountType>("accountType")
+
+        when (requestCode) {
+            ModuleCode.RESTORE_WORDS -> {
+                viewModel.delegate.onRestore(accountType, data.getParcelableExtra("syncMode"))
+            }
+            ModuleCode.RESTORE_EOS -> {
+                viewModel.delegate.onRestore(accountType)
+            }
         }
     }
 
-    inner class ManageKeysDialogListener : ManageKeysDialog.Listener {
-        override fun onClickCreateKey() {
-            viewModel.delegate.onClickCreateKey()
-        }
+    //  ManageKeysDialog listener
 
-        override fun onClickRestoreKey() {
-            viewModel.delegate.onClickRestoreKey()
-        }
+    override fun onClickCreateKey() {
+        viewModel.delegate.onClickCreateKey()
+    }
 
-        override fun onCancel() {
-            viewModel.delegate.onClickCancel()
-        }
+    override fun onClickRestoreKey() {
+        viewModel.delegate.onClickRestoreKey()
+    }
+
+    override fun onCancel() {
+        viewModel.delegate.onClickCancel()
     }
 }

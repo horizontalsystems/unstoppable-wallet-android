@@ -14,7 +14,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.restore.eos.RestoreEosModule
 import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule
@@ -66,11 +65,18 @@ class RestoreActivity : BaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == ModuleCode.RESTORE_WORDS && data != null && resultCode == RESULT_OK) {
-            val syncMode = data.getParcelableExtra<SyncMode>("syncMode")
-            val accountType = data.getParcelableExtra<AccountType>("accountType")
+        if (data == null || resultCode != RESULT_OK)
+            return
 
-            viewModel.delegate.onRestore(accountType, syncMode)
+        val accountType = data.getParcelableExtra<AccountType>("accountType")
+
+        when (requestCode) {
+            ModuleCode.RESTORE_WORDS -> {
+                viewModel.delegate.onRestore(accountType, data.getParcelableExtra("syncMode"))
+            }
+            ModuleCode.RESTORE_EOS -> {
+                viewModel.delegate.onRestore(accountType)
+            }
         }
     }
 }

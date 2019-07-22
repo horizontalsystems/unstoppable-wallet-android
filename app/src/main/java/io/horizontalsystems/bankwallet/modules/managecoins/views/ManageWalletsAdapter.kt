@@ -71,10 +71,9 @@ class ManageWalletsAdapter(private val viewDelegate: ManageWalletsModule.IViewDe
         coinIcon.bind(coin)
         bottomShade.visibility = if (showBottomShadow) View.VISIBLE else View.GONE
 
+        toggleSwitch.setOnCheckedChangeListener(null)
         toggleSwitch.isChecked = item.enabled
-        toggleSwitch.setOnCheckedChangeListener { _, isChecked ->
-            onClick.invoke(isChecked)
-        }
+        toggleSwitch.setOnCheckedChangeListener { _, isChecked -> onClick.invoke(isChecked) }
     }
 
     class ViewHolderPopularCoin(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer

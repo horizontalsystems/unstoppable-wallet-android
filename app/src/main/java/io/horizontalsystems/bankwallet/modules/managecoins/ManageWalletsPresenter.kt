@@ -52,7 +52,7 @@ class ManageWalletsPresenter(private val interactor: ManageWalletsModule.IIntera
                 router.openRestoreWordsModule()
             }
             is DefaultAccountType.Eos -> {
-                view?.updateCoins()
+                router.openRestoreEosModule()
             }
         }
     }
@@ -61,7 +61,7 @@ class ManageWalletsPresenter(private val interactor: ManageWalletsModule.IIntera
         view?.updateCoins()
     }
 
-    override fun onRestore(accountType: AccountType, syncMode: SyncMode) {
+    override fun onRestore(accountType: AccountType, syncMode: SyncMode?) {
         val item = currentItem ?: return
 
         try {
@@ -138,7 +138,7 @@ class ManageWalletsPresenter(private val interactor: ManageWalletsModule.IIntera
     }
 
     private fun viewItem(item: ManageWalletItem): ManageWalletViewItem {
-        return ManageWalletViewItem(item.coin, item.wallet != null)
+        return ManageWalletViewItem(item.coin, enabled = item.wallet != null)
     }
 }
 

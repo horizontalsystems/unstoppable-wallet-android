@@ -26,8 +26,7 @@ object RestoreWordsModule {
     }
 
     interface IRouter {
-        fun navigateToSetSyncMode(words: List<String>)
-        fun notifyRestored(accountType: AccountType, syncMode: SyncMode)
+        fun startSyncModeModule(words: List<String>)
     }
 
     fun startForResult(context: AppCompatActivity, requestCode: Int) {

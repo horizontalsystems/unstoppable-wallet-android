@@ -35,7 +35,7 @@ class RestorePresenter(
         }
     }
 
-    override fun onRestore(accountType: AccountType, syncMode: SyncMode) {
+    override fun onRestore(accountType: AccountType, syncMode: SyncMode?) {
         interactor.restore(accountType, syncMode)
     }
 

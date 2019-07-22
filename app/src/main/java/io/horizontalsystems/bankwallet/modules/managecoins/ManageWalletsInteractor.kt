@@ -30,13 +30,13 @@ class ManageWalletsInteractor(
     }
 
     override fun createWallet(coin: Coin): Wallet {
-        val account = accountCreator.createNewAccount(coin.type.defaultAccountType)
+        val account = accountCreator.createNewAccount(coin.type.defaultAccountType, createDefaultWallets = false)
 
         return walletFactory.wallet(coin, account, account.defaultSyncMode)
     }
 
-    override fun restoreWallet(coin: Coin, accountType: AccountType, syncMode: SyncMode): Wallet {
-        val account = accountCreator.createRestoredAccount(accountType, syncMode)
+    override fun restoreWallet(coin: Coin, accountType: AccountType, syncMode: SyncMode?): Wallet {
+        val account = accountCreator.createRestoredAccount(accountType, syncMode, createDefaultWallets = false)
 
         return walletFactory.wallet(coin, account, syncMode)
     }

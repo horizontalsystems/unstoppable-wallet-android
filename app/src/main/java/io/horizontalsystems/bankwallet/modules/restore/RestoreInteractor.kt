@@ -8,9 +8,9 @@ class RestoreInteractor(private val accountCreator: IAccountCreator) : RestoreMo
 
     var delegate: RestoreModule.InteractorDelegate? = null
 
-    override fun restore(accountType: AccountType, syncMode: SyncMode) {
+    override fun restore(accountType: AccountType, syncMode: SyncMode?) {
         try {
-            accountCreator.createRestoredAccount(accountType, syncMode)
+            accountCreator.createRestoredAccount(accountType, syncMode, createDefaultWallets = true)
             delegate?.didRestore()
         } catch (e: Exception) {
             delegate?.didFailRestore(e)

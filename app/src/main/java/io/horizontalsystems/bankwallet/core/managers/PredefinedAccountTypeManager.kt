@@ -14,7 +14,7 @@ class PredefinedAccountTypeManager(private val appConfigProvider: IAppConfigProv
     }
 
     override fun createAccount(predefinedAccountType: IPredefinedAccountType): Account? {
-        return accountCreator.createNewAccount(predefinedAccountType.defaultAccountType, enabledDefaults = true)
+        return accountCreator.createNewAccount(predefinedAccountType.defaultAccountType, createDefaultWallets = true)
     }
 
     override fun createAllAccounts() {

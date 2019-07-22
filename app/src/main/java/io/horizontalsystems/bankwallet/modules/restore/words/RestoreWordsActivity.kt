@@ -46,7 +46,7 @@ class RestoreWordsActivity : BaseActivity() {
             }
         })
 
-        viewModel.goToSetSyncModeLiveEvent.observe(this, Observer {
+        viewModel.startSyncModeModule.observe(this, Observer {
             SyncModeModule.startForResult(this, ModuleCode.SYNC_MODE)
         })
 

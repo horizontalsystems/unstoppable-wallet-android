@@ -29,10 +29,10 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                             MNEMONIC -> AccountType.Mnemonic(record.words!!.list, record.derivation!!, record.salt!!.value)
                             PRIVATE_KEY -> AccountType.PrivateKey(record.key!!.value.hexToByteArray())
                             HD_MASTER_KEY -> AccountType.HDMasterKey(record.key!!.value.hexToByteArray(), record.derivation!!)
-                            EOS -> AccountType.Eos(record.eosAccount!!, record.key!!.value.hexToByteArray())
+                            EOS -> AccountType.Eos(record.eosAccount!!, record.key!!.value)
                             else -> null
                         }
-                        Account(record.id, record.name, accountType!!, record.isBackedUp, record.syncMode!!)
+                        Account(record.id, record.name, accountType!!, record.isBackedUp, record.syncMode)
                     } catch (ex: Exception) {
                         null
                     }
@@ -66,7 +66,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
             }
             is AccountType.Eos -> {
                 accountTypeCode = EOS
-                key = accountType.activePrivateKey.toHexString()
+                key = accountType.activePrivateKey
                 eosAccount = accountType.account
             }
             else -> throw Exception("Cannot save account with type: $accountType")

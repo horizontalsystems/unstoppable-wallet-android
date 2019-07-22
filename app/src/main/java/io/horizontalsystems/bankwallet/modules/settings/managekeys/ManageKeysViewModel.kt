@@ -11,6 +11,7 @@ class ManageKeysViewModel : ViewModel(), ManageKeysModule.View, ManageKeysModule
     val confirmUnlinkEvent = SingleLiveEvent<Account>()
     val startBackupModuleLiveEvent = SingleLiveEvent<Account>()
     val startRestoreWordsLiveEvent = SingleLiveEvent<Unit>()
+    val startRestoreEosLiveEvent = SingleLiveEvent<Unit>()
 
     lateinit var delegate: ManageKeysModule.ViewDelegate
 
@@ -37,6 +38,10 @@ class ManageKeysViewModel : ViewModel(), ManageKeysModule.View, ManageKeysModule
 
     override fun startRestoreWords() {
         startRestoreWordsLiveEvent.call()
+    }
+
+    override fun startRestoreEos() {
+        startRestoreEosLiveEvent.call()
     }
 
     override fun close() {

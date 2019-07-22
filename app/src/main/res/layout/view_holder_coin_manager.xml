@@ -60,8 +60,6 @@
         android:layout_width="wrap_content"
         android:layout_height="34dp"
         android:layout_marginEnd="8dp"
-        android:checked="true"
-        android:saveEnabled="false"
         android:theme="@style/SwitchTheme"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
