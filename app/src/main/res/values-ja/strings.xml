@@ -25,6 +25,8 @@
     <string name="Restore_RestoreFailed">ウォレットを作成できませんでした</string>
     <string name="Restore_EosAccountName">Account Name</string>
     <string name="Restore_EosActivePrivateKey">Active Private Key</string>
+    <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
+    <string name="Restore_EosKeyIncorrect">Incorrect Key</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">秘密鍵</string>
     <string name="Backup_Intro_Subtitle">あなたの電話は今まで紛失、盗難、破損、またはアップグレードする場合、あなたの秘密鍵は、あなたの財布と資金を復元する唯一の方法です。\n\n それは 12 の単語で構成されています。オフラインに安全に保管してください。</string>
