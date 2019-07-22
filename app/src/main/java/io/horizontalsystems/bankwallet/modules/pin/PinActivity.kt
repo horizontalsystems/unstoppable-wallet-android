@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.pin
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.hardware.fingerprint.FingerprintManagerCompat
 import androidx.lifecycle.Observer
@@ -23,6 +25,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.security.FingerprintAuthenticationDialogFragment
 import io.horizontalsystems.bankwallet.modules.main.MainModule
+import io.horizontalsystems.bankwallet.modules.restore.eos.RestoreEosActivity
 import io.horizontalsystems.bankwallet.ui.extensions.*
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
@@ -73,9 +76,9 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
         })
 
         viewModel.titleLiveDate.observe(this, Observer { title ->
-                        title?.let {
-                            shadowlessToolbar.bindTitle(getString(it))
-                        }
+            title?.let {
+                shadowlessToolbar.bindTitle(getString(it))
+            }
         })
 
         viewModel.addPagesEvent.observe(this, Observer { pinPages ->
@@ -124,7 +127,13 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
             }
         })
 
-        viewModel.dismissLiveEvent.observe(this, Observer {
+        viewModel.dismissWithCancelLiveEvent.observe(this, Observer {
+            setResult(Activity.RESULT_CANCELED)
+            finish()
+        })
+
+        viewModel.dismissWithSuccessLiveEvent.observe(this, Observer {
+            setResult(Activity.RESULT_OK)
             finish()
         })
 
@@ -206,11 +215,12 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
             context.startActivity(intent)
         }
 
-        fun startForUnlock(context: Context, showCancel: Boolean) {
+        fun startForResult(context: AppCompatActivity, requestCode: Int, interactionType: PinInteractionType, showCancel: Boolean = true) {
             val intent = Intent(context, PinActivity::class.java)
+            intent.putExtra(keyInteractionType, interactionType)
             intent.putExtra(keyShowCancel, showCancel)
-            intent.putExtra(keyInteractionType, PinInteractionType.UNLOCK)
-            context.startActivity(intent)
+
+            context.startActivityForResult(intent, requestCode)
         }
     }
 }

@@ -13,7 +13,8 @@ import io.horizontalsystems.bankwallet.modules.pin.PinViewModel
 
 object UnlockPinModule {
     interface IUnlockPinRouter {
-        fun dismiss()
+        fun dismissModuleWithSuccess()
+        fun dismissModuleWithCancel()
         fun closeApplication()
     }
 
@@ -26,7 +27,6 @@ object UnlockPinModule {
     }
 
     interface IUnlockPinInteractorDelegate {
-        fun didBiometricUnlock()
         fun unlock()
         fun wrongPinSubmitted()
         fun setCryptoObject(cryptoObject: FingerprintManagerCompat.CryptoObject)

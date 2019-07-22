@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.launcher
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -41,8 +43,26 @@ class LauncherActivity : AppCompatActivity() {
         })
 
         viewModel.openUnlockModule.observe(this, Observer {
-            PinModule.startForUnlock(this)
+            PinModule.startForUnlock(this, REQUEST_CODE_UNLOCK_PIN)
+        })
+
+        viewModel.closeApplication.observe(this, Observer {
+            finishAffinity()
         })
     }
 
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_UNLOCK_PIN) {
+            when (resultCode) {
+                Activity.RESULT_OK -> viewModel.delegate.didUnlock()
+                Activity.RESULT_CANCELED -> viewModel.delegate.didCancelUnlock()
+            }
+        }
+    }
+
+    companion object {
+        const val REQUEST_CODE_UNLOCK_PIN = 1
+    }
 }

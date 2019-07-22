@@ -13,7 +13,7 @@ class EditPinPresenter(interactor: PinModule.IPinInteractor, private val router:
         val pinPages = mutableListOf<PinPage>()
 
         pages.forEach { page ->
-            when(page) {
+            when (page) {
                 Page.UNLOCK -> pinPages.add(PinPage(R.string.EditPin_UnlockInfo))
                 Page.ENTER -> pinPages.add(PinPage(R.string.EditPin_NewPinInfo))
                 Page.CONFIRM -> pinPages.add(PinPage(R.string.SetPin_ConfirmInfo))
@@ -24,10 +24,10 @@ class EditPinPresenter(interactor: PinModule.IPinInteractor, private val router:
     }
 
     override fun didSavePin() {
-        router.dismiss()
+        router.dismissModuleWithSuccess()
     }
 
     override fun onBackPressed() {
-        router.dismiss()
+        router.dismissModuleWithCancel()
     }
 }

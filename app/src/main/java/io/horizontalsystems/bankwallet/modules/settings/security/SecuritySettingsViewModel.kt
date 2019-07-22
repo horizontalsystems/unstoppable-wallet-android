@@ -14,6 +14,8 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
     val biometricUnlockOnLiveData = MutableLiveData<Boolean>()
     val openManageKeysLiveEvent = SingleLiveEvent<Unit>()
     val openEditPinLiveEvent = SingleLiveEvent<Unit>()
+    val openSetPinLiveEvent = SingleLiveEvent<Unit>()
+    val pinEnabledLiveEvent = MutableLiveData<Boolean>()
 
     fun init() {
         SecuritySettingsModule.init(this, this)
@@ -40,6 +42,10 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
         backedUpLiveData.postValue(backedUp)
     }
 
+    override fun setPinEnabled(enabled: Boolean) {
+        pinEnabledLiveEvent.postValue(enabled)
+    }
+
     //  ISecuritySettingsRouter
 
     override fun showManageKeys() {
@@ -48,5 +54,9 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
 
     override fun showEditPin() {
         openEditPinLiveEvent.call()
+    }
+
+    override fun showSetPin() {
+        openSetPinLiveEvent.call()
     }
 }

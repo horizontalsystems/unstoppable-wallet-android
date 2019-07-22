@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
+import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.lib.AlertDialogFragment
 import io.horizontalsystems.bankwallet.modules.pin.PinActivity
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
@@ -45,8 +46,8 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (this !is PinActivity && App.lockManager.isLocked){
-            PinModule.startForUnlock(this, false)
+        if (this !is PinActivity && App.lockManager.isLocked) {
+            PinModule.startForUnlock(this, ModuleCode.UNLOCK_PIN)
         }
     }
 

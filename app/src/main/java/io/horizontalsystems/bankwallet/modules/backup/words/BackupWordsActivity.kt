@@ -9,7 +9,6 @@ import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
-import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import kotlinx.android.synthetic.main.activity_backup_words.*
 
 class BackupWordsActivity : BaseActivity() {
@@ -56,10 +55,6 @@ class BackupWordsActivity : BaseActivity() {
                     }
                 }
             }
-        })
-
-        viewModel.startPinModuleEvent.observe(this, Observer {
-            PinModule.startForUnlock(this)
         })
 
         viewModel.notifyBackedUpEvent.observe(this, Observer { accountId ->

@@ -53,6 +53,7 @@ interface ISecuredStorage {
     fun noAuthData(): Boolean
     val savedPin: String?
     fun savePin(pin: String)
+    fun removePin()
     fun pinIsEmpty(): Boolean
 }
 

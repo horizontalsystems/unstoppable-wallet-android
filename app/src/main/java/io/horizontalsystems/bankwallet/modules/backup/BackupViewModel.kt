@@ -18,7 +18,7 @@ class BackupViewModel : ViewModel(), BackupModule.View, BackupModule.Router {
 
     // router
 
-    override fun startPinModule() {
+    override fun startUnlockPinModule() {
         startPinModuleEvent.call()
     }
 

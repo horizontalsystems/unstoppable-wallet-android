@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.backup
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -7,10 +8,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.backup.words.BackupWordsActivity
 import io.horizontalsystems.bankwallet.modules.backup.words.BackupWordsModule
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
@@ -31,7 +32,7 @@ class BackupActivity : BaseActivity() {
         buttonNext.setOnSingleClickListener { viewModel.delegate.onClickBackup() }
 
         viewModel.startPinModuleEvent.observe(this, Observer {
-            PinModule.startForUnlock(this)
+            PinModule.startForUnlock(this, ModuleCode.UNLOCK_PIN, true)
         })
 
         viewModel.startBackupEvent.observe(this, Observer { account ->
@@ -52,13 +53,19 @@ class BackupActivity : BaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (data == null || resultCode != RESULT_OK) return
 
         when (requestCode) {
             ModuleCode.BACKUP_WORDS -> {
+                if (data == null || resultCode != RESULT_OK) return
                 val accountId = data.getStringExtra(BackupWordsActivity.ACCOUNT_ID_KEY)
-                viewModel.delegate.onBackedUp(accountId)
+                viewModel.delegate.didBackUp(accountId)
                 finish()
+            }
+            ModuleCode.UNLOCK_PIN -> {
+                when (resultCode ) {
+                    Activity.RESULT_OK -> viewModel.delegate.didUnlock()
+                    Activity.RESULT_CANCELED -> viewModel.delegate.didCancelUnlock()
+                }
             }
         }
     }

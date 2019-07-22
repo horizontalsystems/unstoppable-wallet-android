@@ -10,6 +10,8 @@ object LaunchModule {
 
     interface IViewDelegate {
         fun viewDidLoad()
+        fun didUnlock()
+        fun didCancelUnlock()
     }
 
     interface IInteractor {
@@ -24,6 +26,7 @@ object LaunchModule {
         fun openWelcomeModule()
         fun openMainModule()
         fun openUnlockModule()
+        fun closeApplication()
     }
 
     fun init(view: LaunchViewModel, router: IRouter) {

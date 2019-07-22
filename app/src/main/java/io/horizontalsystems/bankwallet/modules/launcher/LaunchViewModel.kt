@@ -11,6 +11,7 @@ class LaunchViewModel : ViewModel(), LaunchModule.IView, LaunchModule.IRouter {
     val openWelcomeModule = SingleLiveEvent<Void>()
     val openMainModule = SingleLiveEvent<Void>()
     val openUnlockModule = SingleLiveEvent<Void>()
+    val closeApplication = SingleLiveEvent<Void>()
 
     fun init() {
         LaunchModule.init(this, this)
@@ -37,4 +38,7 @@ class LaunchViewModel : ViewModel(), LaunchModule.IView, LaunchModule.IRouter {
         openUnlockModule.call()
     }
 
+    override fun closeApplication() {
+        closeApplication.call()
+    }
 }
