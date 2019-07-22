@@ -152,6 +152,7 @@
     <string name="Settings_Error_NoFingerprintAddedYet">Шума дастрасй ва ангошт надорйд ва танзим вравед &gt; амният ангошт ра фаъол кунед.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Ангуштзанӣ</string>
+    <string name="SettingsSecurity_EnablePin">Passcode</string>
     <string name="SettingsSecurity_EditPin">Код ра таҳрир кунед</string>
     <string name="SettingsSecurity_ManageKeys">Manage Keys</string>
     <string name="SettingsSecurity_BackupWallet">Нусхабардорӣ Wallet</string>
