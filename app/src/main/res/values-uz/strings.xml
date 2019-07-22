@@ -152,6 +152,7 @@
     <string name="Settings_Error_NoFingerprintAddedYet">You have not enabled fingerprint on this device. Go to Settings &gt; Security to set up fingerprint access.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Fingerprint</string>
+    <string name="SettingsSecurity_EnablePin">Passcode</string>
     <string name="SettingsSecurity_EditPin">Edit Passcode</string>
     <string name="SettingsSecurity_ManageKeys">Manage Keys</string>
     <string name="SettingsSecurity_BackupWallet">Backup Wallet</string>
