@@ -120,10 +120,6 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
     implementation 'com.google.code.gson:gson:2.8.5'
 
-    // Logging
-    implementation 'org.slf4j:slf4j-api:1.7.26'
-    implementation 'com.github.tony19:logback-android:2.0.0'
-
     api 'com.aurelhubert:ahbottomnavigation:2.2.0'
     api "org.jetbrains.anko:anko-commons:0.10.5"
 
