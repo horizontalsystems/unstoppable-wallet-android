@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.restore.eos
 
+import io.horizontalsystems.bankwallet.R
+
 class RestoreEosPresenter(private val interactor: RestoreEosModule.IInteractor, private val router: RestoreEosModule.IRouter)
     : RestoreEosModule.IViewDelegate, RestoreEosModule.IInteractorDelegate {
 
@@ -17,7 +19,11 @@ class RestoreEosPresenter(private val interactor: RestoreEosModule.IInteractor, 
         router.finishWithSuccess(accountName, privateKey)
     }
 
-    override fun onValidationFail(error: Exception) {
-        TODO("not implemented")
+    override fun onInvalidAccount() {
+        view?.showError(R.string.Restore_EosAccountIncorrect)
+    }
+
+    override fun onInvalidKey() {
+        view?.showError(R.string.Restore_EosKeyIncorrect)
     }
 }

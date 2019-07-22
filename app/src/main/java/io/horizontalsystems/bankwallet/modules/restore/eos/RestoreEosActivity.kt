@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
+import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_restore_eos.*
 import kotlinx.android.synthetic.main.activity_restore_words.shadowlessToolbar
 
@@ -27,14 +28,16 @@ class RestoreEosActivity : BaseActivity() {
         viewModel = ViewModelProviders.of(this).get(RestoreEosViewModel::class.java)
         viewModel.init()
 
-        viewModel.finishLiveEvent.observe(this, Observer {
-            it?.let { pair ->
-                setResult(RESULT_OK, Intent().apply {
-                    putExtra("accountType", AccountType.Eos(pair.first, pair.second))
-                })
+        viewModel.finishLiveEvent.observe(this, Observer { pair ->
+            setResult(RESULT_OK, Intent().apply {
+                putExtra("accountType", AccountType.Eos(pair.first, pair.second))
+            })
 
-                finish()
-            }
+            finish()
+        })
+
+        viewModel.errorLiveEvent.observe(this, Observer { resId ->
+            HudHelper.showErrorMessage(resId)
         })
     }
 
