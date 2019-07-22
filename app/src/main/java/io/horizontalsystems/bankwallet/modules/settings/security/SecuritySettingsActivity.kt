@@ -50,7 +50,7 @@ class SecuritySettingsActivity : BaseActivity() {
             PinModule.startForEditPin(this)
         })
 
-        viewModel.openSetPinLiveEvent.observe(this, Observer { requestCode ->
+        viewModel.openSetPinLiveEvent.observe(this, Observer {
             PinModule.startForSetPin(this, REQUEST_CODE_SET_PIN)
         })
 

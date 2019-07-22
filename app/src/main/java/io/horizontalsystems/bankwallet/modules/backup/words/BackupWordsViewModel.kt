@@ -15,7 +15,6 @@ class BackupWordsViewModel : ViewModel(), BackupWordsModule.IView, BackupWordsMo
     val wordIndexesToConfirmLiveData = MutableLiveData<List<Int>>()
     val validateWordsLiveEvent = SingleLiveEvent<Void>()
     val notifyBackedUpEvent = SingleLiveEvent<String>()
-    val startPinModuleEvent = SingleLiveEvent<Void>()
     val closeLiveEvent = SingleLiveEvent<Void>()
 
     fun init(accountId: String, words: List<String>) {
@@ -45,10 +44,6 @@ class BackupWordsViewModel : ViewModel(), BackupWordsModule.IView, BackupWordsMo
     }
 
     // router
-
-    override fun startPinModule() {
-        startPinModuleEvent.call()
-    }
 
     override fun notifyBackedUp(accountId: String) {
         notifyBackedUpEvent.value = accountId

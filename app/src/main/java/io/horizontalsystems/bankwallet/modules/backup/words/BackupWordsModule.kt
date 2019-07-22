@@ -37,7 +37,6 @@ object BackupWordsModule {
     }
 
     interface IRouter {
-        fun startPinModule()
         fun notifyBackedUp(accountId: String)
         fun close()
     }

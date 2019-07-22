@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.backup
 
 import android.content.Context
-import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.Account
 
 object BackupModule {
 
@@ -11,20 +11,21 @@ object BackupModule {
     interface ViewDelegate {
         fun onClickCancel()
         fun onClickBackup()
-        fun onBackedUp(accountId: String)
+        fun didBackUp(accountId: String)
+        fun didUnlock()
+        fun didCancelUnlock()
     }
 
     interface Interactor {
-        fun backup()
+        val isPinSet: Boolean
+
         fun setBackedUp(accountId: String)
     }
 
-    interface InteractorDelegate {
-        fun onPinUnlock()
-    }
+    interface InteractorDelegate
 
     interface Router {
-        fun startPinModule()
+        fun startUnlockPinModule()
         fun startBackupModule(account: Account)
         fun close()
     }
@@ -36,7 +37,7 @@ object BackupModule {
     }
 
     fun init(view: BackupViewModel, router: Router, account: Account) {
-        val interactor = BackupInteractor(router, App.lockManager, App.backupManager, App.pinManager)
+        val interactor = BackupInteractor(App.backupManager, App.pinManager)
         val presenter = BackupPresenter(interactor, router, account)
 
         view.delegate = presenter

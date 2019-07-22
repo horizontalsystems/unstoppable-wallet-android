@@ -12,12 +12,6 @@ class BackupPresenter(
 
     var view: BackupModule.View? = null
 
-    //  Interactor delegate
-
-    override fun onPinUnlock() {
-        router.startBackupModule(account)
-    }
-
     //  View delegates
 
     override fun onClickCancel() {
@@ -25,10 +19,22 @@ class BackupPresenter(
     }
 
     override fun onClickBackup() {
-        interactor.backup()
+        if (interactor.isPinSet) {
+            router.startUnlockPinModule()
+        } else {
+            router.startBackupModule(account)
+        }
     }
 
-    override fun onBackedUp(accountId: String) {
+    override fun didUnlock() {
+        router.startBackupModule(account)
+    }
+
+    override fun didCancelUnlock() {
+
+    }
+
+    override fun didBackUp(accountId: String) {
         interactor.setBackedUp(accountId)
     }
 }

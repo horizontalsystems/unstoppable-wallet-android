@@ -57,10 +57,6 @@ class BackupWordsActivity : BaseActivity() {
             }
         })
 
-        viewModel.startPinModuleEvent.observe(this, Observer {
-//            PinModule.startForUnlock(this)
-        })
-
         viewModel.notifyBackedUpEvent.observe(this, Observer { accountId ->
             accountId?.let {
                 val intent = Intent().apply {

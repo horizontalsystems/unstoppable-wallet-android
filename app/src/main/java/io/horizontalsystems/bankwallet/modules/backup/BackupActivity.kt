@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.backup
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -57,11 +58,14 @@ class BackupActivity : BaseActivity() {
             ModuleCode.BACKUP_WORDS -> {
                 if (data == null || resultCode != RESULT_OK) return
                 val accountId = data.getStringExtra(BackupWordsActivity.ACCOUNT_ID_KEY)
-                viewModel.delegate.onBackedUp(accountId)
+                viewModel.delegate.didBackUp(accountId)
                 finish()
             }
             ModuleCode.UNLOCK_PIN -> {
-
+                when (resultCode ) {
+                    Activity.RESULT_OK -> viewModel.delegate.didUnlock()
+                    Activity.RESULT_CANCELED -> viewModel.delegate.didCancelUnlock()
+                }
             }
         }
     }
