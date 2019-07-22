@@ -152,6 +152,7 @@
     <string name="Settings_Error_NoFingerprintAddedYet">Kayıtlı parmak izi bulunmadı. Parmak izi eklemek için, Ayarlar &gt; Güvenlik bölümüne gidin.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Parmak izi</string>
+    <string name="SettingsSecurity_EnablePin">Passcode</string>
     <string name="SettingsSecurity_EditPin">Şifreyi Değiştir</string>
     <string name="SettingsSecurity_ManageKeys">Manage Keys</string>
     <string name="SettingsSecurity_BackupWallet">Cüzdanı yedekle</string>
