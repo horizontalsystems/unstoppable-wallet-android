@@ -231,7 +231,6 @@
 
     <string name="SettingsShare_Title">Share</string>
     <string name="SettingsShare_Text">Unstoppable Wallet - Nice App!</string>
-    <string name="SettingsShare_Link" translatable="false">https://play.google.com/store/apps/details?id=io.horizontalsystems.bankwallet</string>
 
     <!--Alert-->
 
