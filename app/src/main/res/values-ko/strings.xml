@@ -25,6 +25,8 @@
     <string name="Restore_RestoreFailed">지갑 복구에 실패하였습니다.</string>
     <string name="Restore_EosAccountName">Account Name</string>
     <string name="Restore_EosActivePrivateKey">Active Private Key</string>
+    <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
+    <string name="Restore_EosKeyIncorrect">Incorrect Key</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">비밀 키</string>
     <string name="Backup_Intro_Subtitle">비밀 키는 귀하의 휴대 전화를 분실, 도난, 고장, 또는 업그레이드 하는 경우 당신의 지갑과 자금을 복원 하는 유일한 방법입니다.\n\n12 단어로 구성 됩니다. \n\n 안전하게 오프라인으로 저장하세요.</string>
