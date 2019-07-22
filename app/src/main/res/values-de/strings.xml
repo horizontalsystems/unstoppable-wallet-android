@@ -25,6 +25,8 @@
     <string name="Restore_RestoreFailed">Fehler beim Wiederherstellen des Wallet</string>
     <string name="Restore_EosAccountName">Account Name</string>
     <string name="Restore_EosActivePrivateKey">Active Private Key</string>
+    <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
+    <string name="Restore_EosKeyIncorrect">Incorrect Key</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Offlineschlüssel</string>
     <string name="Backup_Intro_Subtitle">Dein Offlineschlüssel ist die einzige Möglichkeit, dein Wallet wiederherzustellen, falls du dein Smartphone verlierst, austauscht, es gestohlen wird oder kaputtgeht. \n\nEs besteht aus 12 Wörtern. Speich es sicher offline.</string>
