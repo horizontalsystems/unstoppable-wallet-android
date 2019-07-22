@@ -20,8 +20,8 @@ object ManageKeysModule {
         fun onClickBackup(account: Account)
         fun onClickRestore(accountType: IPredefinedAccountType)
         fun onClickUnlink(accountId: String)
-        fun onClickRestore(accountType: AccountType, syncMode: SyncMode)
         fun onClickNew(accountType: IPredefinedAccountType)
+        fun onRestore(accountType: AccountType, syncMode: SyncMode? = null)
         fun onClear()
     }
 
@@ -29,7 +29,7 @@ object ManageKeysModule {
         val predefinedAccountTypes: List<IPredefinedAccountType>
         fun account(predefinedAccountType: IPredefinedAccountType): Account?
         fun createAccount(predefinedAccountType: IPredefinedAccountType)
-        fun restoreAccount(accountType: AccountType, syncMode: SyncMode)
+        fun restoreAccount(accountType: AccountType, syncMode: SyncMode?)
 
         fun loadAccounts()
         fun deleteAccount(id: String)
@@ -43,6 +43,7 @@ object ManageKeysModule {
     interface Router {
         fun startBackupModule(account: Account)
         fun startRestoreWords()
+        fun startRestoreEos()
         fun close()
     }
 

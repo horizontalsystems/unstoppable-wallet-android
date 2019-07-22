@@ -26,7 +26,7 @@ object ManageWalletsModule {
         fun onClickCreateKey()
         fun onClickRestoreKey()
         fun onClickCancel()
-        fun onRestore(accountType: AccountType, syncMode: SyncMode)
+        fun onRestore(accountType: AccountType, syncMode: SyncMode? = null)
 
         val popularItemsCount: Int
         fun popularItem(position: Int): ManageWalletViewItem
@@ -49,7 +49,7 @@ object ManageWalletsModule {
         fun wallet(coin: Coin): Wallet?
         fun saveWallets(wallets: List<Wallet>)
         fun createWallet(coin: Coin): Wallet
-        fun restoreWallet(coin: Coin, accountType: AccountType, syncMode: SyncMode): Wallet
+        fun restoreWallet(coin: Coin, accountType: AccountType, syncMode: SyncMode?): Wallet
     }
 
     interface IInteractorDelegate {
@@ -58,9 +58,9 @@ object ManageWalletsModule {
     }
 
     interface IRouter {
-        fun startManageKeysModule()
-        fun close()
+        fun openRestoreEosModule()
         fun openRestoreWordsModule()
+        fun close()
     }
 
     fun init(view: ManageWalletsViewModel, router: IRouter) {

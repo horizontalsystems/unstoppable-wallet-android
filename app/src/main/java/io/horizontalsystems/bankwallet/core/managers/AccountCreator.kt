@@ -12,24 +12,22 @@ class AccountCreator(
         private val defaultWalletCreator: DefaultWalletCreator)
     : IAccountCreator {
 
-    override fun createRestoredAccount(accountType: AccountType, syncMode: SyncMode?): Account {
-        return createAccount(accountType, isBackedUp = true, defaultSyncMode = syncMode)
+    override fun createRestoredAccount(accountType: AccountType, syncMode: SyncMode?, createDefaultWallets: Boolean): Account {
+        return createAccount(accountType, isBackedUp = true, defaultSyncMode = syncMode, createDefaultWallets = createDefaultWallets)
     }
 
-    override fun createNewAccount(defaultAccountType: DefaultAccountType, enabledDefaults: Boolean): Account {
-        val account = createAccount(createAccountType(defaultAccountType), isBackedUp = false, defaultSyncMode = SyncMode.NEW)
-        if (enabledDefaults) {
-            defaultWalletCreator.handleCreate(account)
-        }
-
-        return account
+    override fun createNewAccount(defaultAccountType: DefaultAccountType, createDefaultWallets: Boolean): Account {
+        return createAccount(createAccountType(defaultAccountType), isBackedUp = false, defaultSyncMode = SyncMode.NEW, createDefaultWallets = createDefaultWallets)
     }
 
-    private fun createAccount(accountType: AccountType, isBackedUp: Boolean, defaultSyncMode: SyncMode?): Account {
-        val syncMode = defaultSyncMode ?: SyncMode.FAST
-        val account = accountFactory.account(accountType, isBackedUp, syncMode)
+    private fun createAccount(accountType: AccountType, isBackedUp: Boolean, defaultSyncMode: SyncMode?, createDefaultWallets: Boolean): Account {
+        val account = accountFactory.account(accountType, isBackedUp, defaultSyncMode)
 
         accountManager.create(account)
+
+        if (createDefaultWallets) {
+            defaultWalletCreator.handleCreate(account)
+        }
 
         return account
     }

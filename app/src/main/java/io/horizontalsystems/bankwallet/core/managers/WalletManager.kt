@@ -26,6 +26,7 @@ class WalletManager(private val accountManager: IAccountManager, private val wal
 
     override fun preloadWallets() {
         cache.set(storage.wallets(accountManager.accounts))
+        walletsSubject.onNext(wallets)
     }
 
     override fun enable(wallets: List<Wallet>) {

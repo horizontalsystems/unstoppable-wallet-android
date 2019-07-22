@@ -9,6 +9,7 @@ class AdapterFactory(
         private val context: Context,
         private val appConfigProvider: IAppConfigProvider,
         private val ethereumKitManager: IEthereumKitManager,
+        private val eosKitManager: IEosKitManager,
         private val feeRateProvider: IFeeRateProvider) {
 
     fun adapterForCoin(wallet: Wallet): IAdapter? = when (wallet.coin.type) {
@@ -23,13 +24,18 @@ class AdapterFactory(
             val addressParser = AddressParser("ethereum", true)
             Erc20Adapter(context, wallet, ethereumKitManager.ethereumKit(wallet), wallet.coin.type.decimal, wallet.coin.type.fee, wallet.coin.type.address, addressParser, feeRateProvider)
         }
-        is CoinType.Eos -> null
+        is CoinType.Eos -> {
+            EosAdapter(wallet, wallet.coin.type, eosKitManager.eosKit(wallet))
+        }
     }
 
     fun unlinkAdapter(adapter: IAdapter) {
         when (adapter) {
             is EthereumBaseAdapter -> {
                 ethereumKitManager.unlink()
+            }
+            is EosBaseAdapter -> {
+                eosKitManager.unlink()
             }
         }
     }

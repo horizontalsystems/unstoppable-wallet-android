@@ -57,7 +57,7 @@ class ManageKeysDialog(private val coin: Coin, private val listener: Listener, p
         addCoinIcon.bind(coin)
 
         if (!showCreateOption) {
-            buttonCreateKey.visibility = View.INVISIBLE
+            buttonCreateKey.visibility = View.GONE
         } else {
             buttonCreateKey.visibility = View.VISIBLE
             buttonCreateKey.setOnClickListener {

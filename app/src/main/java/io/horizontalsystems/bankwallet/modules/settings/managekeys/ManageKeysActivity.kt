@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.backup.BackupModule
+import io.horizontalsystems.bankwallet.modules.restore.eos.RestoreEosModule
 import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule
 import io.horizontalsystems.bankwallet.ui.dialogs.BottomButtonColor
 import io.horizontalsystems.bankwallet.ui.dialogs.BottomConfirmAlert
@@ -64,6 +65,10 @@ class ManageKeysActivity : BaseActivity() {
             RestoreWordsModule.startForResult(this, ModuleCode.RESTORE_WORDS)
         })
 
+        viewModel.startRestoreEosLiveEvent.observe(this, Observer {
+            RestoreEosModule.startForResult(this, ModuleCode.RESTORE_EOS)
+        })
+
         viewModel.closeLiveEvent.observe(this, Observer {
             finish()
         })
@@ -79,14 +84,17 @@ class ManageKeysActivity : BaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (data == null || resultCode != RESULT_OK) return
+        if (data == null || resultCode != RESULT_OK)
+            return
+
+        val accountType = data.getParcelableExtra<AccountType>("accountType")
 
         when (requestCode) {
             ModuleCode.RESTORE_WORDS -> {
-                val syncMode = data.getParcelableExtra<SyncMode>("syncMode")
-                val accountType = data.getParcelableExtra<AccountType>("accountType")
-
-                viewModel.delegate.onClickRestore(accountType, syncMode)
+                viewModel.delegate.onRestore(accountType, data.getParcelableExtra("syncMode"))
+            }
+            ModuleCode.RESTORE_EOS -> {
+                viewModel.delegate.onRestore(accountType)
             }
         }
     }

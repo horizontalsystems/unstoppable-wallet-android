@@ -9,7 +9,7 @@ class Account(val id: String,
               val name: String,
               val type: AccountType,
               var isBackedUp: Boolean = false,
-              val defaultSyncMode: SyncMode = SyncMode.FAST) : Parcelable {
+              val defaultSyncMode: SyncMode?) : Parcelable {
 
     override fun equals(other: Any?): Boolean {
         if (other is Account) {
@@ -60,7 +60,7 @@ open class AccountType : Parcelable {
     }
 
     @Parcelize
-    data class Eos(val account: String, val activePrivateKey: ByteArray) : AccountType()
+    data class Eos(val account: String, val activePrivateKey: String) : AccountType()
 
     @Parcelize
     enum class Derivation : Parcelable {

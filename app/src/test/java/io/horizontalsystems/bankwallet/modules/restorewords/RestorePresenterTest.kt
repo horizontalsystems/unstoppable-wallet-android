@@ -42,7 +42,7 @@ class RestorePresenterTest {
     fun didValidate() {
         val words = listOf("yahoo", "google", "facebook")
         presenter.didValidate(words)
-        verify(router).navigateToSetSyncMode(words)
+        verify(router).startSyncModeModule(words)
     }
 
 }

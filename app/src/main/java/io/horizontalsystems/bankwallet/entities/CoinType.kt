@@ -11,7 +11,7 @@ sealed class CoinType : Serializable {
     object Ethereum : CoinType()
 
     class Erc20(val address: String, val decimal: Int, val fee: BigDecimal = BigDecimal.ZERO) : CoinType()
-    class Eos(val token: String, symbol: String) : CoinType()
+    class Eos(val token: String, val symbol: String) : CoinType()
 
     fun canSupport(accountType: AccountType): Boolean {
         when (this) {

@@ -8,7 +8,11 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
-class AdapterManager(walletManager: IWalletManager, private val adapterFactory: AdapterFactory, private val ethereumKitManager: IEthereumKitManager)
+class AdapterManager(
+        walletManager: IWalletManager,
+        private val adapterFactory: AdapterFactory,
+        private val ethereumKitManager: IEthereumKitManager,
+        private val esoKitManager: IEosKitManager)
     : IAdapterManager, HandlerThread("A") {
 
     private val handler: Handler
@@ -36,6 +40,7 @@ class AdapterManager(walletManager: IWalletManager, private val adapterFactory: 
         }
 
         ethereumKitManager.ethereumKit?.refresh()
+        esoKitManager.eosKit?.refresh()
     }
 
     override fun initAdapters(wallets: List<Wallet>) {

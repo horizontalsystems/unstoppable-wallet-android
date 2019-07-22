@@ -1,10 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.settings.managekeys
 
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
-import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.SyncMode
-import io.horizontalsystems.bankwallet.entities.Words12AccountType
+import io.horizontalsystems.bankwallet.entities.*
 
 class ManageKeysPresenter(private val interactor: ManageKeysModule.Interactor, private val router: ManageKeysModule.Router)
     : ManageKeysModule.ViewDelegate, ManageKeysModule.InteractorDelegate {
@@ -28,6 +25,9 @@ class ManageKeysPresenter(private val interactor: ManageKeysModule.Interactor, p
             is Words12AccountType -> {
                 router.startRestoreWords()
             }
+            is EosAccountType -> {
+                router.startRestoreEos()
+            }
         }
     }
 
@@ -35,7 +35,7 @@ class ManageKeysPresenter(private val interactor: ManageKeysModule.Interactor, p
         interactor.deleteAccount(accountId)
     }
 
-    override fun onClickRestore(accountType: AccountType, syncMode: SyncMode) {
+    override fun onRestore(accountType: AccountType, syncMode: SyncMode?) {
         interactor.restoreAccount(accountType, syncMode)
     }
 

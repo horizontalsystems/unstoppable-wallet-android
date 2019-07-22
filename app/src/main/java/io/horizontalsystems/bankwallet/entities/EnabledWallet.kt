@@ -13,9 +13,10 @@ import io.horizontalsystems.bankwallet.core.storage.AccountRecord
                 onDelete = ForeignKey.CASCADE,
                 deferred = true)
         ])
+
 data class EnabledWallet(
         val coinCode: String,
         val accountId: String,
-        var walletOrder: Int? = null,
-        val syncMode: SyncMode
+        val walletOrder: Int? = null,
+        val syncMode: SyncMode? = null
 )

@@ -9,8 +9,8 @@ class ManageWalletsViewModel : ViewModel(), ManageWalletsModule.IView, ManageWal
     val coinsLoadedLiveEvent = SingleLiveEvent<Void>()
     val showRestoreKeyDialog = SingleLiveEvent<Coin>()
     val showCreateAndRestoreKeyDialog = SingleLiveEvent<Coin>()
-    val startManageKeysLiveEvent = SingleLiveEvent<Coin>()
     val openRestoreWordsModule = SingleLiveEvent<Void>()
+    val openRestoreEosModule = SingleLiveEvent<Coin>()
     val closeLiveDate = SingleLiveEvent<Void>()
 
     lateinit var delegate: ManageWalletsModule.IViewDelegate
@@ -49,16 +49,16 @@ class ManageWalletsViewModel : ViewModel(), ManageWalletsModule.IView, ManageWal
 
     // Router
 
-    override fun startManageKeysModule() {
-        startManageKeysLiveEvent.call()
+    override fun openRestoreWordsModule() {
+        openRestoreWordsModule.call()
+    }
+
+    override fun openRestoreEosModule() {
+        openRestoreEosModule.call()
     }
 
     override fun close() {
         closeLiveDate.call()
-    }
-
-    override fun openRestoreWordsModule() {
-        openRestoreWordsModule.call()
     }
 
     // View model

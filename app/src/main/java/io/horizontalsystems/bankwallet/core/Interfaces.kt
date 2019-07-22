@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import io.horizontalsystems.eoskit.EosKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -80,16 +81,16 @@ interface ILaunchManager {
 }
 
 interface IAccountCreator {
-    fun createRestoredAccount(accountType: AccountType, syncMode: SyncMode?): Account
-    fun createNewAccount(defaultAccountType: DefaultAccountType, enabledDefaults: Boolean = false): Account
+    fun createRestoredAccount(accountType: AccountType, syncMode: SyncMode?, createDefaultWallets: Boolean): Account
+    fun createNewAccount(defaultAccountType: DefaultAccountType, createDefaultWallets: Boolean): Account
 }
 
 interface IAccountFactory {
-    fun account(type: AccountType, backedUp: Boolean, defaultSyncMode: SyncMode): Account
+    fun account(type: AccountType, backedUp: Boolean, defaultSyncMode: SyncMode?): Account
 }
 
 interface IWalletFactory {
-    fun wallet(coin: Coin, account: Account, syncMode: SyncMode): Wallet
+    fun wallet(coin: Coin, account: Account, syncMode: SyncMode?): Wallet
 }
 
 interface IWalletStorage {
@@ -187,6 +188,13 @@ interface IEthereumKitManager {
     val ethereumKit: EthereumKit?
 
     fun ethereumKit(wallet: Wallet): EthereumKit
+    fun unlink()
+}
+
+interface IEosKitManager {
+    val eosKit: EosKit?
+    fun eosKit(wallet: Wallet): EosKit
+
     fun unlink()
 }
 

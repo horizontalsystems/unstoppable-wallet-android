@@ -4,8 +4,8 @@ import android.app.Application
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import com.squareup.leakcanary.LeakCanary
-import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.BuildConfig
+import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
@@ -61,6 +61,7 @@ class App : Application() {
         lateinit var transactionDataProviderManager: TransactionDataProviderManager
         lateinit var appCloseManager: AppCloseManager
         lateinit var ethereumKitManager: IEthereumKitManager
+        lateinit var eosKitManager: IEosKitManager
         lateinit var numberFormatter: IAppNumberFormatter
         lateinit var appManager: ILaunchManager
 
@@ -96,6 +97,7 @@ class App : Application() {
         encryptionManager = EncryptionManager
         secureStorage = SecuredStorageManager(encryptionManager)
         ethereumKitManager = EthereumKitManager(appConfigProvider)
+        eosKitManager = EosKitManager(appConfigProvider)
 
         appDatabase = AppDatabase.getInstance(this)
         rateStorage = RatesRepository(appDatabase)
@@ -128,7 +130,7 @@ class App : Application() {
 
         networkAvailabilityManager = NetworkAvailabilityManager()
 
-        adapterManager = AdapterManager(walletManager, AdapterFactory(instance, appConfigProvider, ethereumKitManager, feeRateProvider), ethereumKitManager)
+        adapterManager = AdapterManager(walletManager, AdapterFactory(instance, appConfigProvider, ethereumKitManager, eosKitManager, feeRateProvider), ethereumKitManager, eosKitManager)
         rateSyncer = RateSyncer(rateManager, adapterManager, currencyManager, networkAvailabilityManager)
 
         appCloseManager = AppCloseManager()

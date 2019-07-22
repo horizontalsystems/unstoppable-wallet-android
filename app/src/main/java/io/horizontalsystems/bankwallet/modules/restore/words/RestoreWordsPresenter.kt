@@ -20,7 +20,7 @@ class RestoreWordsPresenter(private val interactor: RestoreWordsModule.IInteract
     }
 
     override fun didValidate(words: List<String>) {
-        router.navigateToSetSyncMode(words)
+        router.startSyncModeModule(words)
     }
 
 }

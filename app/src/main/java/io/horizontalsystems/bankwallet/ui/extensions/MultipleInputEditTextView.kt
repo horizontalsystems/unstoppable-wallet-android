@@ -42,6 +42,10 @@ class MultipleInputEditTextView : ConstraintLayout {
         }
     }
 
+    fun getText(): String {
+        return txtInput.text.toString()
+    }
+
     override fun onFinishInflate() {
         super.onFinishInflate()
 
@@ -64,6 +68,7 @@ class MultipleInputEditTextView : ConstraintLayout {
                     btnDeleteInput.visibility = View.VISIBLE
                 }
             }
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
         })
