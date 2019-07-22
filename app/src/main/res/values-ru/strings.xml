@@ -17,14 +17,14 @@
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
     <string name="Welcome_CreateWallet">Создать Кошелек</string>
-    <string name="Welcome_RestoreWallet">Restore</string>
+    <string name="Welcome_RestoreWallet">Восстановить</string>
     <!--Restore-->
     <string name="Restore_Title">Восстановить</string>
     <string name="Restore_Subtitle">Введите Секретный Ключ</string>
     <string name="Restore_ValidationFailed">Неверный Секретный Ключ</string>
     <string name="Restore_RestoreFailed">Не удалось восстановить кошелек</string>
     <string name="Restore_EosAccountName">Account Name</string>
-    <string name="Restore_EosActivePrivateKey">Active Private Key</string>
+    <string name="Restore_EosActivePrivateKey">Активировать Приватный Ключ</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Секретный Ключ</string>
     <string name="Backup_Intro_Subtitle">Ваш секретный ключ является единственным способом для восстановления вашего кошелька.\n\nОн состоит из 12 слов. Храните его в безопасном месте.</string>
@@ -50,10 +50,10 @@
     <string name="Balance_SyncedUntil">до: %s</string>
     <string name="Balance_Syncing">Синхронизация…</string>
     <string name="Balance_AddCoins">Add Coins</string>
-    <string name="Balance_Sort_Balance">Balance</string>
-    <string name="Balance_Sort_PopupTitle">Sort by</string>
-    <string name="Balance_Sort_Az">A-Z</string>
-    <string name="Balance_Sort_Default">Default</string>
+    <string name="Balance_Sort_Balance">Баланс</string>
+    <string name="Balance_Sort_PopupTitle">Сортировать по</string>
+    <string name="Balance_Sort_Az">А-Я</string>
+    <string name="Balance_Sort_Default">По умолчанию</string>
     <!--Send-->
     <string name="Send_Title1">Отправить</string>
     <string name="Send_Title">Отправить %s</string>
@@ -139,12 +139,12 @@
     <!--Settings-->
     <string name="Settings_Title">Настройки</string>
     <string name="Settings_SecurityCenter">Центр Безопасности</string>
-    <string name="Settings_RestoreWallet">Restore Wallet</string>
+    <string name="Settings_RestoreWallet">Восстановить Кошелек</string>
     <string name="Settings_BaseCurrency">Базовая Валюта</string>
     <string name="Settings_Language">Язык</string>
     <string name="Settings_LightMode">Светлый Режим</string>
     <string name="Settings_About">О приложении</string>
-    <string name="Settings_ShareThisWallet">Tell Friends</string>
+    <string name="Settings_ShareThisWallet">Рассказать Друзьям</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <!--Settings-->
@@ -153,7 +153,7 @@
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Отпечаток пальца</string>
     <string name="SettingsSecurity_EditPin">Изменить Код</string>
-    <string name="SettingsSecurity_ManageKeys">Manage Keys</string>
+    <string name="SettingsSecurity_ManageKeys">Управление Ключами</string>
     <string name="SettingsSecurity_BackupWallet">Резервная копия</string>
     <string name="SettingsSecurity_UnlinkFromThisDevice">Отсоединить это устройство</string>
     <string name="SettingsSecurity_ImportWalletConfirmation_1">Это действие удалит ваш кошелёк с этого устройства.</string>
@@ -174,8 +174,8 @@
 \n\nВесь программный код этого приложения является бесплатным и открытым для общественности. Мы старались сделать самый безопасный и в то же время децентрализованный кошелек, но нет гарантий, что в коде приложения не имеется ошибок. Тем не менее, мы верим что по уровню безопасности этот кошелек значительно превосходит почти все доступные мобильные криптокошельки на сегодня.
 \n\nНекоторые публичные данные используемые приложением такие, как обменные курсы валют хранятся в децентрализованном хранилище (IPFS).</string>
     <!--Setting_Tell Friends-->
-    <string name="SettingsShare_Title">Share</string>
-    <string name="SettingsShare_Text">Unstoppable Wallet - Nice App!</string>
+    <string name="SettingsShare_Title">Поделиться</string>
+    <string name="SettingsShare_Text">Unstoppable Wallet - Отличное Приложение!</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Ошибка Android Keystore</string>
     <string name="Alert_KeysInvalidatedDescription">Ваши зашифрованные данные были недавно аннулированы, потому что  Android lock screen был изменен</string>
@@ -221,20 +221,20 @@
     <string name="ManageCoins_title">Кошельки</string>
     <string name="ManageCoins_save">Сохранить</string>
     <!--Manage Keys-->
-    <string name="ManageKeys_Title">Manage Keys</string>
-    <string name="ManageKeys_New">New</string>
-    <string name="ManageKeys_Import">Import</string>
-    <string name="ManageKeys_Unlink">Unlink</string>
-    <string name="ManageKeys_Backup">Backup</string>
-    <string name="ManageKeys_Show">Show</string>
+    <string name="ManageKeys_Title">Управление Ключами</string>
+    <string name="ManageKeys_New">Новый</string>
+    <string name="ManageKeys_Import">Импорт</string>
+    <string name="ManageKeys_Unlink">Отсоединить</string>
+    <string name="ManageKeys_Backup">Резервная копия</string>
+    <string name="ManageKeys_Show">Показать</string>
     <!-- Manage Keys Alert -->
-    <string name="AddCoin_Title">Add Key for %s</string>
-    <string name="AddCoin_Description">You need to have a cryptographic key before you can add %s</string>
-    <string name="AddCoin_CreateKey">Create New</string>
-    <string name="AddCoin_RestoreKey">I already have</string>
+    <string name="AddCoin_Title">Добавить ключ для %s</string>
+    <string name="AddCoin_Description">Вам нужно иметь криптографический ключ, прежде чем вы добавите %s</string>
+    <string name="AddCoin_CreateKey">Создать Новый</string>
+    <string name="AddCoin_RestoreKey">У меня уже есть</string>
     <!-- Account Types -->
     <string name="ManageKeys_12_words">12 Words Key</string>
-    <string name="ManageKeys_eos">EOS Account</string>
+    <string name="ManageKeys_eos">EOS аккаунт</string>
     <string name="ManageKeys_24_words">24 Words Key</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">Параметры Восстановления</string>
