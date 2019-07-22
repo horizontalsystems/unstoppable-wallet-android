@@ -25,6 +25,8 @@
     <string name="Restore_RestoreFailed">Error al restaurar la cartera</string>
     <string name="Restore_EosAccountName">Account Name</string>
     <string name="Restore_EosActivePrivateKey">Active Private Key</string>
+    <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
+    <string name="Restore_EosKeyIncorrect">Incorrect Key</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Clave secreta</string>
     <string name="Backup_Intro_Subtitle">Su clave secreta es la única manera de recuperar su cartera y otros fondos si su teléfono alguna vez se pierde, se rompe, es sustraído o se actualiza a otra versión.\n\n Consiste de 12 palabras. Almacen esta desconectado sin peligro.</string>
