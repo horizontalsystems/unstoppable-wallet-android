@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.pin
 
 import android.content.Context
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.hardware.fingerprint.FingerprintManagerCompat
 import java.util.*
 
@@ -47,16 +48,16 @@ object PinModule {
         fun didStartedAdapters()
     }
 
-    fun startForSetPin(context: Context) {
-        PinActivity.start(context, PinInteractionType.SET_PIN)
+    fun startForSetPin(context: AppCompatActivity, requestCode: Int) {
+        PinActivity.startForResult(context, requestCode, PinInteractionType.SET_PIN)
     }
 
     fun startForEditPin(context: Context) {
         PinActivity.start(context, PinInteractionType.EDIT_PIN)
     }
 
-    fun startForUnlock(context: Context, showCancel: Boolean = false) {
-        PinActivity.startForUnlock(context, showCancel)
+    fun startForUnlock(context: AppCompatActivity, requestCode: Int, showCancel: Boolean = false) {
+        PinActivity.startForResult(context, requestCode, PinInteractionType.UNLOCK, showCancel)
     }
 
 }

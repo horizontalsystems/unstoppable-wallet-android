@@ -15,4 +15,13 @@ class LaunchPresenter(private val interactor: LaunchModule.IInteractor,
             else -> router.openUnlockModule()
         }
     }
+
+    override fun didUnlock() {
+        router.openMainModule()
+    }
+
+    override fun didCancelUnlock() {
+        router.closeApplication()
+    }
+
 }

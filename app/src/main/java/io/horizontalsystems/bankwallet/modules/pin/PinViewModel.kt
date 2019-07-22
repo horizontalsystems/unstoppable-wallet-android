@@ -21,7 +21,8 @@ class PinViewModel: ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter,
     val fillPinCircles = MutableLiveData<Pair<Int, Int>>()
     val navigateToMainLiveEvent = SingleLiveEvent<Unit>()
     val hideToolbar = SingleLiveEvent<Unit>()
-    val dismissLiveEvent = SingleLiveEvent<Unit>()
+    val dismissWithCancelLiveEvent = SingleLiveEvent<Unit>()
+    val dismissWithSuccessLiveEvent = SingleLiveEvent<Unit>()
     val showBackButton = SingleLiveEvent<Unit>()
     val showFingerprintInputLiveEvent = SingleLiveEvent<FingerprintManagerCompat.CryptoObject>()
     val resetCirclesWithShakeAndDelayForPage = SingleLiveEvent<Int>()
@@ -92,8 +93,12 @@ class PinViewModel: ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter,
         closeApplicationLiveEvent.call()
     }
 
-    override fun dismiss() {
-        dismissLiveEvent.call()
+    override fun dismissModuleWithCancel() {
+        dismissWithCancelLiveEvent.call()
+    }
+
+    override fun dismissModuleWithSuccess() {
+        dismissWithSuccessLiveEvent.call()
     }
 
     override fun showLockView(until: Date) {

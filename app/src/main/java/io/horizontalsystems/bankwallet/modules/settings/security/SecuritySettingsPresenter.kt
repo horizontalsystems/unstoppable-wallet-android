@@ -9,6 +9,7 @@ class SecuritySettingsPresenter(private val router: SecuritySettingsModule.ISecu
         view?.setBiometricUnlockOn(interactor.getBiometricUnlockOn())
         view?.setBiometryType(interactor.biometryType)
         view?.setBackedUp(interactor.nonBackedUpCount == 0)
+        view?.setPinEnabled(interactor.isPinSet)
     }
 
     override fun didSwitchBiometricUnlock(biometricUnlockOn: Boolean) {
@@ -21,6 +22,23 @@ class SecuritySettingsPresenter(private val router: SecuritySettingsModule.ISecu
 
     override fun didTapEditPin() {
         router.showEditPin()
+    }
+
+    override fun didTapEnablePin(enable: Boolean) {
+        if (enable) {
+            router.showSetPin()
+        } else {
+            interactor.disablePin()
+            view?.setPinEnabled(false)
+        }
+    }
+
+    override fun didSetPin() {
+        view?.setPinEnabled(true)
+    }
+
+    override fun didCancelSetPin() {
+        view?.setPinEnabled(false)
     }
 
     override fun onClear() {

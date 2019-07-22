@@ -8,7 +8,8 @@ import io.horizontalsystems.bankwallet.modules.pin.PinViewModel
 object EditPinModule {
 
     interface IEditPinRouter {
-        fun dismiss()
+        fun dismissModuleWithSuccess()
+        fun dismissModuleWithCancel()
     }
 
     fun init(view: PinViewModel, router: IEditPinRouter, keystoreSafeExecute: IKeyStoreSafeExecute) {

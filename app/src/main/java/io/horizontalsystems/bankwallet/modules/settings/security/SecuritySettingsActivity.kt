@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.settings.security
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.CompoundButton
@@ -13,7 +15,6 @@ import io.horizontalsystems.bankwallet.lib.AlertDialogFragment
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysModule
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.activity_settings_security.*
 
 class SecuritySettingsActivity : BaseActivity() {
@@ -49,6 +50,10 @@ class SecuritySettingsActivity : BaseActivity() {
             PinModule.startForEditPin(this)
         })
 
+        viewModel.openSetPinLiveEvent.observe(this, Observer { requestCode ->
+            PinModule.startForSetPin(this, REQUEST_CODE_SET_PIN)
+        })
+
         viewModel.biometryTypeLiveData.observe(this, Observer { biometryType ->
             fingerprint.visibility = if (biometryType == BiometryType.FINGER) View.VISIBLE else View.GONE
         })
@@ -75,6 +80,30 @@ class SecuritySettingsActivity : BaseActivity() {
                 manageKeys.setInfoBadgeVisibility(!wordListIsBackedUp)
             }
         })
+
+        viewModel.pinEnabledLiveEvent.observe(this, Observer { pinEnabled ->
+            enablePin.apply {
+                switchIsChecked = pinEnabled
+                setOnClickListener {
+                    switchToggle()
+                }
+                switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
+                    viewModel.delegate.didTapEnablePin(isChecked)
+                }
+            }
+            changePin.visibility = if (pinEnabled) View.VISIBLE else View.GONE
+        })
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_CODE_SET_PIN) {
+            when (resultCode) {
+                Activity.RESULT_OK -> viewModel.delegate.didSetPin()
+                Activity.RESULT_CANCELED -> viewModel.delegate.didCancelSetPin()
+            }
+        }
     }
 
     private fun fingerprintCanBeEnabled(): Boolean {
@@ -86,5 +115,9 @@ class SecuritySettingsActivity : BaseActivity() {
             return false
         }
         return true
+    }
+
+    companion object {
+        const val REQUEST_CODE_SET_PIN = 1
     }
 }

@@ -36,7 +36,7 @@ class UnlockPinPresenter(
 
             if (enteredPin.length == PinModule.PIN_COUNT) {
                 if (interactor.unlock(enteredPin)) {
-                    router.dismiss()
+                    router.dismissModuleWithSuccess()
                 } else {
                     wrongPinSubmitted()
                 }
@@ -56,12 +56,8 @@ class UnlockPinPresenter(
         }
     }
 
-    override fun didBiometricUnlock() {
-        router.dismiss()
-    }
-
     override fun unlock() {
-        router.dismiss()
+        router.dismissModuleWithSuccess()
     }
 
     override fun setCryptoObject(cryptoObject: FingerprintManagerCompat.CryptoObject) {
@@ -92,7 +88,7 @@ class UnlockPinPresenter(
 
     override fun onBackPressed() {
         if(showCancelButton) {
-            router.dismiss()
+            router.dismissModuleWithCancel()
         } else {
             router.closeApplication()
         }
