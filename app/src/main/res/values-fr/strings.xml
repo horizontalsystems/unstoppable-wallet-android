@@ -25,6 +25,8 @@
     <string name="Restore_RestoreFailed">Échec de la restauration du porte-monnaie</string>
     <string name="Restore_EosAccountName">Account Name</string>
     <string name="Restore_EosActivePrivateKey">Active Private Key</string>
+    <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
+    <string name="Restore_EosKeyIncorrect">Incorrect Key</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Le mot secret</string>
     <string name="Backup_Intro_Subtitle">Votre clé secrete est le seul moyen de restaurer votre porte-monnaie et vos fonds si votre téléphone est perdu, volé, cassé ou mis à jour.\n\nElle contient 12 mots. Stockez-le en toute sécurité hors ligne.</string>
