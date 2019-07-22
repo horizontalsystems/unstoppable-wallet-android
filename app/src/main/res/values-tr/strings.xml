@@ -25,6 +25,8 @@
     <string name="Restore_RestoreFailed">Cüzdan geri yüklenemedi</string>
     <string name="Restore_EosAccountName">Account Name</string>
     <string name="Restore_EosActivePrivateKey">Active Private Key</string>
+    <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
+    <string name="Restore_EosKeyIncorrect">Incorrect Key</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Gizli Anahtar</string>
     <string name="Backup_Intro_Subtitle">Gizli Anahtar, telefonunuzun kaybolması, bozulması, çalınması ve güncelleme gibi herhangi bir sebepten dolayı hesabınıza ulaşamadığınızda hesabınıza tekrar erişim sağlamanın tek yoludur.\n\n 12 kelimeden oluşur. Internet ve telefon haricinde güvenli bir yerde saklayınız (misal: Çelik kasa).</string>
