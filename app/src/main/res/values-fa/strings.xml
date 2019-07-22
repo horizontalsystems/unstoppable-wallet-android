@@ -25,6 +25,8 @@
     <string name="Restore_RestoreFailed">بازگرداني كيف پول ناموفق شد</string>
     <string name="Restore_EosAccountName">Account Name</string>
     <string name="Restore_EosActivePrivateKey">Active Private Key</string>
+    <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
+    <string name="Restore_EosKeyIncorrect">Incorrect Key</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">رقم مخفی</string>
     <string name="Backup_Intro_Subtitle">رمز مخيفي شما ميتواند كيف پول شما را دوباره پروگرام كند اگر تيليفون شما گم شود،خراب شود يا دزدي  شود پس هميشه رمز مخفي خود را پيش خود داشته باشد و فراموش نكيد.n\n\ رمز مخفي ١٢ رقم ميخواهد.</string>
