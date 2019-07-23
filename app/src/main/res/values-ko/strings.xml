@@ -20,7 +20,7 @@
     <string name="Welcome_RestoreWallet">Restore</string>
     <!--Restore-->
     <string name="Restore_Title">복구</string>
-    <string name="Restore_Subtitle">비밀 키를 입력</string>
+    <string name="Restore_Subtitle">Enter Key</string>
     <string name="Restore_ValidationFailed">잘못 된 비밀 키</string>
     <string name="Restore_RestoreFailed">지갑 복구에 실패하였습니다.</string>
     <string name="Restore_EosAccountName">Account Name</string>
@@ -28,11 +28,11 @@
     <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
     <string name="Restore_EosKeyIncorrect">Incorrect Key</string>
     <!--Backup-->
-    <string name="Backup_Intro_Title">비밀 키</string>
-    <string name="Backup_Intro_Subtitle">비밀 키는 귀하의 휴대 전화를 분실, 도난, 고장, 또는 업그레이드 하는 경우 당신의 지갑과 자금을 복원 하는 유일한 방법입니다.\n\n12 단어로 구성 됩니다. \n\n 안전하게 오프라인으로 저장하세요.</string>
+    <string name="Backup_Intro_Title">Backup</string>
+    <string name="Backup_Intro_Subtitle"> The key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc. Make sure that no one is watching your screen. \n\nCoins: %s</string>
     <string name="Backup_Intro_Later">나중에</string>
     <string name="Backup_Intro_BackupNow">백업</string>
-    <string name="Backup_Words_Title">비밀 키</string>
+    <string name="Backup_Words_Title">Backup</string>
     <string name="Backup_Confirmation_SecretKey">I understand that I am a sole owner of a private 12-word Secret Key which is securely stored on my phone and enables me to control funds on my wallet.</string>
     <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is ever moved, deleted or malfunctions, the access to my wallet can be only recovered with that Secret Key.</string>
     <string name="Backup_Confirmation_LockAppWarn">I understand that changing the phone\s unlock PIN or deleting app data in Android settings deletes the Secret Key from device. I would need to re-enter my Secret Key to regain access to my wallet.</string>
@@ -159,9 +159,6 @@
     <string name="SettingsSecurity_EditPin">비밀번호 변경</string>
     <string name="SettingsSecurity_ManageKeys">Manage Keys</string>
     <string name="SettingsSecurity_BackupWallet">백업용 지갑</string>
-    <string name="SettingsSecurity_UnlinkFromThisDevice">이 장치로부터 연결되지 않은</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_1">이 장치로부터 현재 설치되지 않은 지갑을 제거해줄 것입니다.</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_2">안전 키를 백업을 확인하거나 너가 너의 자금에 미래에 접근할 수 없을 것입니다.</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">기초 통화</string>
     <!--Setting_Language-->
@@ -230,13 +227,21 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">지갑</string>
     <string name="ManageCoins_save">저장</string>
+    <string name="ManageCoins_AddCoin_Title">Add %s Coin</string>
+    <string name="ManageCoins_AddCoin_Text">This action will generate a new key(wallet) for the following coins: %s </string>
+    <string name="ManageCoins_AddCoin_TextBackup">Anyone with access to your Keys can steal your wallet funds. Store them safely and never show them to anyone. [2 line breaks] Backup each key to be able to restore funds if you loose or break your phone, or simply the wallet app gets deleted.</string>
+    <string name="ManageCoins_EOSAlert_CreateButton">At this point, the wallet is not able to create new EOS wallet accounts. You\'re only able to restore the existing one.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Manage Keys</string>
-    <string name="ManageKeys_New">New</string>
-    <string name="ManageKeys_Import">Import</string>
+    <string name="ManageKeys_Create">Create</string>
+    <string name="ManageKeys_Restore">Restore</string>
     <string name="ManageKeys_Unlink">Unlink</string>
     <string name="ManageKeys_Backup">Backup</string>
     <string name="ManageKeys_Show">Show</string>
+    <string name="ManageKeys_Unlink_ConfirmationRemove">This action will remove the [key_title] key (wallet) from this device.</string>
+    <string name="ManageKeys_Unlink_ConfirmationDisable">Coins that will be disabled: [same coin list as on the key cell on KEYs page]</string>
+    <string name="ManageKeys_Unlink_ConfirmationLoose">If you don\'t have a backup of this key you will loose the respective funds.</string>
+    <string name="ManageKeys_UnlinkAlert">You need to backup this key before you may unlink it.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">Add Key for %s</string>
     <string name="AddCoin_Description">You need to have a cryptographic key before you can add %s</string>
