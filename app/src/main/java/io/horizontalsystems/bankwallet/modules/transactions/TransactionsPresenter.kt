@@ -97,7 +97,7 @@ class TransactionsPresenter(
 
         metadataDataSource.setLastBlockHeight(lastBlockHeight, coin)
 
-        if (threshold == null || oldBlockHeight == null) {
+        if (oldBlockHeight == null) {
             view?.reload()
             return
         }

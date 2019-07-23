@@ -3,15 +3,16 @@ package io.horizontalsystems.bankwallet.entities
 import java.math.BigDecimal
 import java.util.*
 
-data class TransactionRecord(val transactionHash: String,
-                             val transactionIndex: Int,
-                             val interTransactionIndex: Int,
-                             val blockHeight: Long?,
-                             val amount: BigDecimal,
-                             val timestamp: Long,
-
-                             val from: List<TransactionAddress>,
-                             val to: List<TransactionAddress>) : Comparable<TransactionRecord> {
+data class TransactionRecord(
+        val transactionHash: String,
+        val transactionIndex: Int,
+        val interTransactionIndex: Int,
+        val blockHeight: Long?,
+        val amount: BigDecimal,
+        val timestamp: Long,
+        val from: List<TransactionAddress>,
+        val to: List<TransactionAddress>)
+    : Comparable<TransactionRecord> {
 
     override fun compareTo(other: TransactionRecord): Int {
         return when {

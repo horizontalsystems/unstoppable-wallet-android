@@ -10,19 +10,18 @@ import java.util.*
 
 class TransactionViewItemFactory {
 
-    fun item(transactionItem: TransactionItem, lastBlockHeight: Int?, threshold: Int?, rate: CurrencyValue?): TransactionViewItem {
+    fun item(transactionItem: TransactionItem, lastBlockHeight: Int?, threshold: Int, rate: CurrencyValue?): TransactionViewItem {
         val record = transactionItem.record
 
         var status: TransactionStatus = TransactionStatus.Pending
 
         if (record.blockHeight != null && lastBlockHeight != null) {
 
-            val confirmations = lastBlockHeight - record.blockHeight + 1
-
+            val confirmations = lastBlockHeight - record.blockHeight.toInt() + 1
             if (confirmations >= 0) {
                 status = when {
-                    confirmations >= threshold ?: 1 -> TransactionStatus.Completed
-                    else -> TransactionStatus.Processing(confirmations.toInt())
+                    confirmations >= threshold -> TransactionStatus.Completed
+                    else -> TransactionStatus.Processing(confirmations.toDouble() / threshold.toDouble())
                 }
             }
         }

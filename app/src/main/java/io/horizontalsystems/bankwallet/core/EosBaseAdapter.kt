@@ -10,11 +10,13 @@ import java.math.BigDecimal
 abstract class EosBaseAdapter(eos: CoinType.Eos, protected val eosKit: EosKit) : IAdapter {
     val token = eosKit.register(eos.token, eos.symbol)
 
+    private val irreversibleThreshold = 330
+
     override val decimal: Int = 4
 
     override val feeCoinCode: String? = eos.symbol
 
-    override val confirmationsThreshold: Int = 0
+    override val confirmationsThreshold: Int = irreversibleThreshold
 
     override fun start() {
         // started via EosKitManager
@@ -28,7 +30,9 @@ abstract class EosBaseAdapter(eos: CoinType.Eos, protected val eosKit: EosKit) :
         // refreshed via EosKitManager
     }
 
-    override val lastBlockHeight: Int? get() = eosKit.irreversibleBlockHeight
+    override val lastBlockHeight: Int?
+        get() = eosKit.irreversibleBlockHeight?.let { it + confirmationsThreshold }
+
     override val lastBlockHeightUpdatedFlowable: Flowable<Unit>
         get() = eosKit.irreversibleBlockFlowable.map { Unit }
 
