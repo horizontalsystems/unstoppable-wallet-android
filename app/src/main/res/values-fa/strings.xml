@@ -20,7 +20,7 @@
     <string name="Welcome_RestoreWallet">Restore</string>
     <!--Restore-->
     <string name="Restore_Title">بازگرداني</string>
-    <string name="Restore_Subtitle">كليد مخفي را وارد كنيد</string>
+    <string name="Restore_Subtitle">Enter Key</string>
     <string name="Restore_ValidationFailed">کلید مخفی نادرست</string>
     <string name="Restore_RestoreFailed">بازگرداني كيف پول ناموفق شد</string>
     <string name="Restore_EosAccountName">Account Name</string>
@@ -28,11 +28,11 @@
     <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
     <string name="Restore_EosKeyIncorrect">Incorrect Key</string>
     <!--Backup-->
-    <string name="Backup_Intro_Title">رقم مخفی</string>
-    <string name="Backup_Intro_Subtitle">رمز مخيفي شما ميتواند كيف پول شما را دوباره پروگرام كند اگر تيليفون شما گم شود،خراب شود يا دزدي  شود پس هميشه رمز مخفي خود را پيش خود داشته باشد و فراموش نكيد.n\n\ رمز مخفي ١٢ رقم ميخواهد.</string>
+    <string name="Backup_Intro_Title">Backup</string>
+    <string name="Backup_Intro_Subtitle"> The key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc. Make sure that no one is watching your screen. \n\nCoins: %s</string>
     <string name="Backup_Intro_Later">بعداً</string>
     <string name="Backup_Intro_BackupNow">پيشتيباني</string>
-    <string name="Backup_Words_Title">رقم مخفی</string>
+    <string name="Backup_Words_Title">Backup</string>
     <string name="Backup_Confirmation_SecretKey">من قبول ميكنم كي تنها من صاحب اين ١٢ عدد مخفي ميباشم كي اين عداد در گوشي همراه من ميباشد و تنها من ميتوانم با اين عداد كيف پول و مقدار پول خود را فعال كنم.</string>
     <string name="Backup_Confirmation_DeleteAppWarn">من قبول ميكنم كي اگر اين كاربرد تكان بخورد،حذف شود و يا اشكال در عملكرد به وحود بياد، فقط تنها رمز مخفي ميتواند دوباره بهبوديافت كند.</string>
     <string name="Backup_Confirmation_LockAppWarn">من قبول ميكنم كي تعغير رمز گوشي همراه و يا حذف كردن تاريخچه كاربرد رمز مخفي را حذف ميكند. و من دوباره بايد رمز مخفي خود را وارد كنم تا بتوانم از كاربرد استفاده نمايم.</string>
@@ -159,9 +159,6 @@
     <string name="SettingsSecurity_EditPin">تعغير كد</string>
     <string name="SettingsSecurity_ManageKeys">Manage Keys</string>
     <string name="SettingsSecurity_BackupWallet">پيشتيبان گيري كيف پول</string>
-    <string name="SettingsSecurity_UnlinkFromThisDevice">لغو پيوند ازين دست گاه</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_1">اين اكشن از اين دستگاه و پول كيف ثبت شده خاظر حذف ميشود.</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_2">مطمعاً باشيد كي رمز مخفي را با خود داريد و گرنه شما در آينده توانايي دسترسي به منابع مالي نداريد.</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">ارز مرجع</string>
     <!--Setting_Language-->
@@ -228,13 +225,21 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">ميديت سكه</string>
     <string name="ManageCoins_save">ذخیره</string>
+    <string name="ManageCoins_AddCoin_Title">Add %s Coin</string>
+    <string name="ManageCoins_AddCoin_Text">This action will generate a new key(wallet) for the following coins: %s </string>
+    <string name="ManageCoins_AddCoin_TextBackup">Anyone with access to your Keys can steal your wallet funds. Store them safely and never show them to anyone. [2 line breaks] Backup each key to be able to restore funds if you loose or break your phone, or simply the wallet app gets deleted.</string>
+    <string name="ManageCoins_EOSAlert_CreateButton">At this point, the wallet is not able to create new EOS wallet accounts. You\'re only able to restore the existing one.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Manage Keys</string>
-    <string name="ManageKeys_New">New</string>
-    <string name="ManageKeys_Import">Import</string>
+    <string name="ManageKeys_Create">Create</string>
+    <string name="ManageKeys_Restore">Restore</string>
     <string name="ManageKeys_Unlink">Unlink</string>
     <string name="ManageKeys_Backup">Backup</string>
     <string name="ManageKeys_Show">Show</string>
+    <string name="ManageKeys_Unlink_ConfirmationRemove">This action will remove the [key_title] key (wallet) from this device.</string>
+    <string name="ManageKeys_Unlink_ConfirmationDisable">Coins that will be disabled: [same coin list as on the key cell on KEYs page]</string>
+    <string name="ManageKeys_Unlink_ConfirmationLoose">If you don\'t have a backup of this key you will loose the respective funds.</string>
+    <string name="ManageKeys_UnlinkAlert">You need to backup this key before you may unlink it.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">Add Key for %s</string>
     <string name="AddCoin_Description">You need to have a cryptographic key before you can add %s</string>
