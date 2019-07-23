@@ -87,7 +87,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:layout_weight="1"
-            android:text="@string/ManageKeys_New" />
+            android:text="@string/ManageKeys_Create" />
 
         <Button
             android:id="@+id/buttonImport"
@@ -97,7 +97,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:layout_weight="1"
-            android:text="@string/ManageKeys_Import"
+            android:text="@string/ManageKeys_Restore"
             android:visibility="gone" />
 
         <Button
