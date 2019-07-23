@@ -141,6 +141,7 @@
     <!--Settings-->
     <string name="Settings_Title">Танзим</string>
     <string name="Settings_SecurityCenter">Маркази амниятӣ</string>
+    <string name="Settings_ManageCoins">Manage Coins</string>
     <string name="Settings_RestoreWallet">Restore Wallet</string>
     <string name="Settings_BaseCurrency">Асос валюта</string>
     <string name="Settings_Language">Забон</string>
