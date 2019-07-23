@@ -34,6 +34,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:setting_arrow="true"
                 app:setting_icon="@drawable/ic_security"
                 app:setting_title="@string/Settings_SecurityCenter" />
 
@@ -44,6 +45,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/securityCenter"
+                app:setting_arrow="true"
                 app:setting_icon="@drawable/ic_manage_coins"
                 app:setting_title="@string/Settings_ManageCoins" />
 
@@ -64,6 +66,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/manageCoins"
+                app:setting_arrow="true"
                 app:setting_icon="@drawable/ic_currency"
                 app:setting_title="@string/Settings_BaseCurrency" />
 
@@ -74,6 +77,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/baseCurrency"
+                app:setting_arrow="true"
                 app:setting_icon="@drawable/ic_language"
                 app:setting_title="@string/Settings_Language" />
 
@@ -104,6 +108,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lightMode"
+                app:setting_arrow="true"
                 app:setting_icon="@drawable/ic_attention"
                 app:setting_title="@string/Settings_About" />
 

@@ -37,41 +37,24 @@ class MainSettingsFragment : Fragment() {
 
         shadowlessToolbar.bindTitle(getString(R.string.Settings_Title))
 
-        securityCenter.apply {
-            showArrow()
-            setOnClickListener { viewModel.delegate.didTapSecurity() }
-        }
+        securityCenter.setOnClickListener { viewModel.delegate.didTapSecurity() }
 
-        manageCoins.apply {
-            showArrow()
-            setOnClickListener { viewModel.delegate.didManageCoins() }
-        }
+        manageCoins.setOnClickListener { viewModel.delegate.didManageCoins() }
 
-        baseCurrency.apply {
-            showArrow()
-            setOnClickListener { viewModel.delegate.didTapBaseCurrency() }
-        }
+        baseCurrency.setOnClickListener { viewModel.delegate.didTapBaseCurrency() }
 
-        language.apply {
-            showArrow()
-            setOnClickListener { viewModel.delegate.didTapLanguage() }
-        }
+        language.setOnClickListener { viewModel.delegate.didTapLanguage() }
 
-        lightMode.apply {
-            setOnClickListener { switchToggle() }
+        lightMode.setOnClickListener { lightMode.switchToggle() }
+
+        about.setOnClickListener { viewModel.delegate.didTapAbout() }
+
+        shareApp.setOnClickListener {
+            shareAppLink()
         }
 
         companyLogo.setOnClickListener {
             viewModel.delegate.didTapAppLink()
-        }
-
-        about.apply {
-            showArrow()
-            setOnClickListener { viewModel.delegate.didTapAbout() }
-        }
-
-        shareApp.setOnClickListener {
-            shareAppLink()
         }
 
         viewModel.baseCurrencyLiveDate.observe(viewLifecycleOwner, Observer { currency ->

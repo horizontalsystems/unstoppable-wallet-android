@@ -30,15 +30,9 @@ class SecuritySettingsActivity : BaseActivity() {
 
         shadowlessToolbar.bind(getString(R.string.Settings_SecurityCenter), TopMenuItem(R.drawable.back) { onBackPressed() })
 
-        changePin.apply {
-            showArrow()
-            setOnClickListener { viewModel.delegate.didTapEditPin() }
-        }
+        changePin.setOnClickListener { viewModel.delegate.didTapEditPin() }
 
-        manageKeys.apply {
-            showArrow()
-            setOnClickListener { viewModel.delegate.didTapManageKeys() }
-        }
+        manageKeys.setOnClickListener { viewModel.delegate.didTapManageKeys() }
 
         //  Handling view model live events
 

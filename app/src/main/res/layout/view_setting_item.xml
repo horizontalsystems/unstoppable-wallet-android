@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="44.5dp"
-    android:background="@drawable/clickable_setting_item_bg"
-    >
+    android:background="@drawable/clickable_setting_item_bg">
 
     <View
         android:id="@+id/topShade"
@@ -15,8 +13,7 @@
         android:background="@color/steel_15"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/setting_icon"
@@ -29,8 +26,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_attention"
-        />
+        app:srcCompat="@drawable/ic_attention" />
 
     <TextView
         android:id="@+id/setting_title"
@@ -42,8 +38,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/setting_icon"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="App Version"
-        />
+        tools:text="App Version" />
 
     <Switch
         android:id="@+id/setting_switch"
@@ -56,8 +51,7 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/setting_value"
@@ -70,8 +64,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/setting_arrow_right"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="USD"
-        />
+        tools:text="USD" />
 
     <ImageView
         android:id="@+id/setting_badge"
@@ -83,18 +76,16 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/setting_arrow_right"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/setting_arrow_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_right_arrrow"
         android:layout_marginEnd="4dp"
+        android:src="@drawable/ic_right_arrrow"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
