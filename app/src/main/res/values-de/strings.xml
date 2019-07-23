@@ -20,7 +20,7 @@
     <string name="Welcome_RestoreWallet">Restore</string>
     <!--Restore-->
     <string name="Restore_Title">Wiederherstellen</string>
-    <string name="Restore_Subtitle">Offlineschlüssel eingeben</string>
+    <string name="Restore_Subtitle">Enter Key</string>
     <string name="Restore_ValidationFailed">Falscher Offlineschlüssel</string>
     <string name="Restore_RestoreFailed">Fehler beim Wiederherstellen des Wallet</string>
     <string name="Restore_EosAccountName">Account Name</string>
@@ -28,11 +28,11 @@
     <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
     <string name="Restore_EosKeyIncorrect">Incorrect Key</string>
     <!--Backup-->
-    <string name="Backup_Intro_Title">Offlineschlüssel</string>
-    <string name="Backup_Intro_Subtitle">Dein Offlineschlüssel ist die einzige Möglichkeit, dein Wallet wiederherzustellen, falls du dein Smartphone verlierst, austauscht, es gestohlen wird oder kaputtgeht. \n\nEs besteht aus 12 Wörtern. Speich es sicher offline.</string>
+    <string name="Backup_Intro_Title">Backup</string>
+    <string name="Backup_Intro_Subtitle"> The key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc. Make sure that no one is watching your screen. \n\nCoins: %s</string>
     <string name="Backup_Intro_Later">Später</string>
     <string name="Backup_Intro_BackupNow">Backup</string>
-    <string name="Backup_Words_Title">Offlineschlüssel</string>
+    <string name="Backup_Words_Title">Backup</string>
     <string name="Backup_Confirmation_SecretKey">Ich stimme zu, dass ich allein Inhaber eines privaten 12-Wort Offlineschlüssels bin, der sicher auf meinem Telefon gespeichert wird und mir ermöglicht, Geld auf meinem Wallet zu steuern.</string>
     <string name="Backup_Confirmation_DeleteAppWarn">Ich stimme zu, dass bei einer Verschiebung oder Entfernung dieser App, der Zugang zu meinem Walletkonto nur bei Verwendung den Offlineschlüsseln erfolgt werden muss.</string>
     <string name="Backup_Confirmation_LockAppWarn">Ich stimme zu, dass das Ändern der PIN oder das Löschen von App-Daten in Android-Einstellungen den Offlineschlüssel vom Gerät löschen. Ich muss meinen Geheimschlüssel erneut eingeben, um den Zugriff auf meine Wallet wiederherzustellen.</string>
@@ -159,9 +159,6 @@
     <string name="SettingsSecurity_EditPin">Code bearbeiten</string>
     <string name="SettingsSecurity_ManageKeys">Manage Keys</string>
     <string name="SettingsSecurity_BackupWallet">Wallet sichern</string>
-    <string name="SettingsSecurity_UnlinkFromThisDevice">Verknüpfung mit diesem Gerät aufheben</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_1">Diese Aktion entfernt dein Wallet von diesem Gerät.</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_2">Stellen Sie sicher, Sie haben ihre geheimen Offlineschlüssel oder Sie werden nicht in der Lage, den Zugang zu Mitteln darauf in Zukunft.</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Währung</string>
     <!--Setting_Language-->
@@ -224,13 +221,21 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">Wallets</string>
     <string name="ManageCoins_save">Speichern</string>
+    <string name="ManageCoins_AddCoin_Title">Add %s Coin</string>
+    <string name="ManageCoins_AddCoin_Text">This action will generate a new key(wallet) for the following coins: %s </string>
+    <string name="ManageCoins_AddCoin_TextBackup">Anyone with access to your Keys can steal your wallet funds. Store them safely and never show them to anyone. [2 line breaks] Backup each key to be able to restore funds if you loose or break your phone, or simply the wallet app gets deleted.</string>
+    <string name="ManageCoins_EOSAlert_CreateButton">At this point, the wallet is not able to create new EOS wallet accounts. You\'re only able to restore the existing one.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Manage Keys</string>
-    <string name="ManageKeys_New">New</string>
-    <string name="ManageKeys_Import">Import</string>
+    <string name="ManageKeys_Create">Create</string>
+    <string name="ManageKeys_Restore">Restore</string>
     <string name="ManageKeys_Unlink">Unlink</string>
     <string name="ManageKeys_Backup">Backup</string>
     <string name="ManageKeys_Show">Show</string>
+    <string name="ManageKeys_Unlink_ConfirmationRemove">This action will remove the [key_title] key (wallet) from this device.</string>
+    <string name="ManageKeys_Unlink_ConfirmationDisable">Coins that will be disabled: [same coin list as on the key cell on KEYs page]</string>
+    <string name="ManageKeys_Unlink_ConfirmationLoose">If you don\'t have a backup of this key you will loose the respective funds.</string>
+    <string name="ManageKeys_UnlinkAlert">You need to backup this key before you may unlink it.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">Add Key for %s</string>
     <string name="AddCoin_Description">You need to have a cryptographic key before you can add %s</string>
