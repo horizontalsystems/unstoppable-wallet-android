@@ -141,6 +141,7 @@
     <!--Settings-->
     <string name="Settings_Title">Ayarlar</string>
     <string name="Settings_SecurityCenter">Güvenlik Merkezi</string>
+    <string name="Settings_ManageCoins">Manage Coins</string>
     <string name="Settings_RestoreWallet">Restore Wallet</string>
     <string name="Settings_BaseCurrency">Para birimi</string>
     <string name="Settings_Language">Dil</string>
