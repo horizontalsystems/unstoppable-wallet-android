@@ -13,6 +13,7 @@
     <string name="Button_Back">Back</string>
     <string name="Button_Ok">OK</string>
     <string name="Button_Share">Share</string>
+
     <string name="Error">Error</string>
 
     <!--Welcome-->
@@ -26,7 +27,7 @@
     <!--Restore-->
 
     <string name="Restore_Title">Restore</string>
-    <string name="Restore_Subtitle">Enter Secret Key</string>
+    <string name="Restore_Subtitle">Enter Key</string>
     <string name="Restore_ValidationFailed">Incorrect Secret Key</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>
 
@@ -38,12 +39,12 @@
 
     <!--Backup-->
 
-    <string name="Backup_Intro_Title">Secret Key</string>
-    <string name="Backup_Intro_Subtitle">Your secret key is the only way to restore your wallet and funds if your phone is ever lost, stolen, broken, or upgraded.\n\n It consists of 12 words. Store it safely offline.</string>
+    <string name="Backup_Intro_Title">Backup</string>
+    <string name="Backup_Intro_Subtitle"> The key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc. Make sure that no one is watching your screen. \n\nCoins: %s</string>
     <string name="Backup_Intro_Later">Later</string>
     <string name="Backup_Intro_BackupNow">Backup</string>
 
-    <string name="Backup_Words_Title">Secret Key</string>
+    <string name="Backup_Words_Title">Backup</string>
 
     <string name="Backup_Confirmation_SecretKey">I understand that I am a sole owner of a private 12-word Secret Key which is securely stored on my phone and enables me to control funds on my wallet.</string>
     <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is ever moved, deleted or malfunctions, the access to my wallet can be only recovered with that Secret Key.</string>
@@ -204,9 +205,6 @@
     <string name="SettingsSecurity_EditPin">Edit Passcode</string>
     <string name="SettingsSecurity_ManageKeys">Manage Keys</string>
     <string name="SettingsSecurity_BackupWallet">Backup Wallet</string>
-    <string name="SettingsSecurity_UnlinkFromThisDevice">Unlink from this device</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_1">This action will remove the currently installed wallet from this device.</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_2">Make sure you have backed up Secret Key or you will not be able to access your funds in the future.</string>
 
     <!--Setting_Currency-->
 
@@ -299,17 +297,26 @@
 
     <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_save">Save</string>
+    <string name="ManageCoins_AddCoin_Title">Add %s Coin</string>
+    <string name="ManageCoins_AddCoin_Text">This action will generate a new key(wallet) for the following coins: %s </string>
+    <string name="ManageCoins_AddCoin_TextBackup">Anyone with access to your Keys can steal your wallet funds. Store them safely and never show them to anyone. [2 line breaks] Backup each key to be able to restore funds if you loose or break your phone, or simply the wallet app gets deleted.</string>
+    <string name="ManageCoins_EOSAlert_CreateButton">At this point, the wallet is not able to create new EOS wallet accounts. You\'re only able to restore the existing one.</string>
 
     <!--Manage Keys-->
 
     <string name="ManageKeys_Title">Manage Keys</string>
-    <string name="ManageKeys_New">New</string>
-    <string name="ManageKeys_Import">Import</string>
+    <string name="ManageKeys_Create">Create</string>
+    <string name="ManageKeys_Restore">Restore</string>
     <string name="ManageKeys_Unlink">Unlink</string>
     <string name="ManageKeys_Backup">Backup</string>
-    <string name="ManageKeys_Show">Show</string>
+
+    <string name="ManageKeys_Unlink_ConfirmationRemove">This action will remove the [key_title] key (wallet) from this device.</string>
+    <string name="ManageKeys_Unlink_ConfirmationDisable">Coins that will be disabled: [same coin list as on the key cell on KEYs page]</string>
+    <string name="ManageKeys_Unlink_ConfirmationLoose">If you don\'t have a backup of this key you will loose the respective funds.</string>
+    <string name="ManageKeys_UnlinkAlert">You need to backup this key before you may unlink it.</string>
 
     <!-- Manage Keys Alert -->
+
     <string name="AddCoin_Title">Add Key for %s</string>
     <string name="AddCoin_Description">You need to have a cryptographic key before you can add %s</string>
     <string name="AddCoin_CreateKey">Create New</string>
@@ -322,6 +329,7 @@
     <string name="ManageKeys_24_words">24 Words Key</string>
 
     <!--Coin Option-->
+
     <string name="CoinOption_Title">Restore Options</string>
     <string name="CoinOption_Fast">Fast</string>
     <string name="CoinOption_Recommended">0&#8211;2 hours (Recommended)</string>
