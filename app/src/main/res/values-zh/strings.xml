@@ -20,7 +20,7 @@
     <string name="Welcome_RestoreWallet">Restore</string>
     <!--Restore-->
     <string name="Restore_Title">恢复</string>
-    <string name="Restore_Subtitle">输入密钥</string>
+    <string name="Restore_Subtitle">Enter Key</string>
     <string name="Restore_ValidationFailed">密钥不正确</string>
     <string name="Restore_RestoreFailed">无法创建钱包</string>
     <string name="Restore_EosAccountName">Account Name</string>
@@ -28,11 +28,11 @@
     <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
     <string name="Restore_EosKeyIncorrect">Incorrect Key</string>
     <!--Backup-->
-    <string name="Backup_Intro_Title">密钥</string>
-    <string name="Backup_Intro_Subtitle">如果您的手机被丢失、被盗、损坏、或更新，您的密钥是恢复钱包和资金的唯一方法。\n\n密钥由12个单词组成。必须要保管好自己的密钥。</string>
+    <string name="Backup_Intro_Title">Backup</string>
+    <string name="Backup_Intro_Subtitle"> The key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc. Make sure that no one is watching your screen. \n\nCoins: %s</string>
     <string name="Backup_Intro_Later">稍后</string>
     <string name="Backup_Intro_BackupNow">备份</string>
-    <string name="Backup_Words_Title">密钥</string>
+    <string name="Backup_Words_Title">Backup</string>
     <string name="Backup_Confirmation_SecretKey">我知道, 我是一个12个字的私人密钥的唯一拥有者，该密钥安全地存储在我的手机上，使我能够控制我钱包上的资金。</string>
     <string name="Backup_Confirmation_DeleteAppWarn">我知道如果此APP被移动、删除或出现故障，只有用密钥才能恢复对我钱包的访问。</string>
     <string name="Backup_Confirmation_LockAppWarn">我知道更改手机的解锁密码或删除Android设置中的应用程序数据会从设备中删除密钥。在这种情况下，我需要重新输入我的密钥才能重新获得我的钱包。</string>
@@ -159,9 +159,6 @@
     <string name="SettingsSecurity_EditPin">修改密码</string>
     <string name="SettingsSecurity_ManageKeys">Manage Keys</string>
     <string name="SettingsSecurity_BackupWallet">备份钱包</string>
-    <string name="SettingsSecurity_UnlinkFromThisDevice">从此设备中删除</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_1">此操作将从此设备中删除当前安装的钱包</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_2">确保你已备份钱包的密钥，否则您将无法访问资金。</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">基本货币</string>
     <!--Setting_Language-->
@@ -229,13 +226,21 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">硬币管理</string>
     <string name="ManageCoins_save">保存</string>
+    <string name="ManageCoins_AddCoin_Title">Add %s Coin</string>
+    <string name="ManageCoins_AddCoin_Text">This action will generate a new key(wallet) for the following coins: %s </string>
+    <string name="ManageCoins_AddCoin_TextBackup">Anyone with access to your Keys can steal your wallet funds. Store them safely and never show them to anyone. [2 line breaks] Backup each key to be able to restore funds if you loose or break your phone, or simply the wallet app gets deleted.</string>
+    <string name="ManageCoins_EOSAlert_CreateButton">At this point, the wallet is not able to create new EOS wallet accounts. You\'re only able to restore the existing one.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Manage Keys</string>
-    <string name="ManageKeys_New">New</string>
-    <string name="ManageKeys_Import">Import</string>
+    <string name="ManageKeys_Create">Create</string>
+    <string name="ManageKeys_Restore">Restore</string>
     <string name="ManageKeys_Unlink">Unlink</string>
     <string name="ManageKeys_Backup">Backup</string>
     <string name="ManageKeys_Show">Show</string>
+    <string name="ManageKeys_Unlink_ConfirmationRemove">This action will remove the [key_title] key (wallet) from this device.</string>
+    <string name="ManageKeys_Unlink_ConfirmationDisable">Coins that will be disabled: [same coin list as on the key cell on KEYs page]</string>
+    <string name="ManageKeys_Unlink_ConfirmationLoose">If you don\'t have a backup of this key you will loose the respective funds.</string>
+    <string name="ManageKeys_UnlinkAlert">You need to backup this key before you may unlink it.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">Add Key for %s</string>
     <string name="AddCoin_Description">You need to have a cryptographic key before you can add %s</string>
