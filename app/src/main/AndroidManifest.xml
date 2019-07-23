@@ -45,7 +45,7 @@
             android:name=".modules.restore.words.RestoreWordsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.send.QRScannerActivity"
+            android:name=".modules.qrscanner.QRScannerActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.fulltransactioninfo.FullTransactionInfoActivity"
