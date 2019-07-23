@@ -309,6 +309,7 @@
     <string name="ManageKeys_Restore">Restore</string>
     <string name="ManageKeys_Unlink">Unlink</string>
     <string name="ManageKeys_Backup">Backup</string>
+    <string name="ManageKeys_Show">Show</string>
 
     <string name="ManageKeys_Unlink_ConfirmationRemove">This action will remove the [key_title] key (wallet) from this device.</string>
     <string name="ManageKeys_Unlink_ConfirmationDisable">Coins that will be disabled: [same coin list as on the key cell on KEYs page]</string>
