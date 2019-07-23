@@ -141,6 +141,7 @@
     <!--Settings-->
     <string name="Settings_Title">설정</string>
     <string name="Settings_SecurityCenter">보안 센터</string>
+    <string name="Settings_ManageCoins">Manage Coins</string>
     <string name="Settings_RestoreWallet">Restore Wallet</string>
     <string name="Settings_BaseCurrency">기초 통화</string>
     <string name="Settings_Language">언어</string>
