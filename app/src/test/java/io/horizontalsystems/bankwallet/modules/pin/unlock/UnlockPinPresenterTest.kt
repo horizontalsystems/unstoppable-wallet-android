@@ -17,7 +17,7 @@ class UnlockPinPresenterTest {
     private val interactor = mock(UnlockPinModule.IUnlockPinInteractor::class.java)
     private val router = mock(UnlockPinModule.IUnlockPinRouter::class.java)
     private val view = mock(PinModule.IPinView::class.java)
-    private lateinit var presenter : UnlockPinPresenter
+    private lateinit var presenter: UnlockPinPresenter
 
     @Before
     fun setUp() {
@@ -51,7 +51,7 @@ class UnlockPinPresenterTest {
 
     @Test
     fun onUnlockEnter() {
-        val pin ="000000"
+        val pin = "000000"
         presenter.onEnter(pin, 0)
 
         verify(view).fillCircles(pin.length, 0)
@@ -60,7 +60,7 @@ class UnlockPinPresenterTest {
 
     @Test
     fun onUnlockEnter_notEnough() {
-        val pin ="00000"
+        val pin = "00000"
         presenter.onEnter(pin, 0)
 
         verify(interactor, never()).unlock(pin)
@@ -68,7 +68,7 @@ class UnlockPinPresenterTest {
 
     @Test
     fun onDelete() {
-        val pin ="12345"
+        val pin = "12345"
         presenter.onEnter(pin, 0)
         verify(view).fillCircles(5, 0)
         reset(view)
@@ -76,21 +76,10 @@ class UnlockPinPresenterTest {
         verify(view).fillCircles(4, 0)
     }
 
-    @Test
-    fun didBiometricUnlock() {
-        presenter.didBiometricUnlock()
-        verify(router).dismiss()
-    }
-
-    @Test
-    fun unlock() {
-        presenter.unlock()
-        verify(router).dismiss()
-    }
 
     @Test
     fun wrongPinSubmitted() {
-        val pin ="12345"
+        val pin = "12345"
         presenter.onEnter(pin, 0)
         verify(view).fillCircles(5, 0)
         reset(view)
@@ -110,7 +99,7 @@ class UnlockPinPresenterTest {
         presenter.view = view
 
         presenter.unlock()
-        verify(router).dismiss()
+        verify(router).dismissModuleWithSuccess()
     }
 
     @Test
@@ -162,7 +151,8 @@ class UnlockPinPresenterTest {
     fun onBackPressed_withShowCancelButton() {
         presenter = UnlockPinPresenter(interactor, router, true)
         presenter.onBackPressed()
-        verify(router).dismiss()
+
+        verify(router).dismissModuleWithCancel()
     }
 
 }

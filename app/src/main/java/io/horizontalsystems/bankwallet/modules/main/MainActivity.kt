@@ -21,10 +21,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
+import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerModule
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveView
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveViewModel
 import io.horizontalsystems.bankwallet.modules.send.ConfirmationFragment
-import io.horizontalsystems.bankwallet.modules.send.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.send.SendView
 import io.horizontalsystems.bankwallet.modules.send.SendViewModel
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
@@ -34,7 +34,6 @@ import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.main_activity_view_pager_layout.*
-
 
 class MainActivity : BaseActivity(), SendView.Listener, ReceiveView.Listener, TransactionInfoView.Listener {
 
@@ -143,13 +142,7 @@ class MainActivity : BaseActivity(), SendView.Listener, ReceiveView.Listener, Tr
     }
 
     override fun openSendScanner() {
-        val intentIntegrator = IntentIntegrator(this)
-        intentIntegrator.captureActivity = QRScannerActivity::class.java
-        intentIntegrator.setOrientationLocked(true)
-        intentIntegrator.setPrompt("")
-        intentIntegrator.setBeepEnabled(false)
-        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
-        intentIntegrator.initiateScan()
+        QRScannerModule.start(this)
     }
 
     override fun showSendConfirmationDialog() {

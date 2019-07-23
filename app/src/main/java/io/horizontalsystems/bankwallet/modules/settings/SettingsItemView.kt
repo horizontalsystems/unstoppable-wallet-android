@@ -19,13 +19,14 @@ class SettingsItemView : ConstraintLayout {
 
     private var attrTitle: String? = null
     private var attrIcon: Drawable? = null
+    private var attrArrow: Boolean = false
 
     private lateinit var settingIconImageView: ImageView
     private lateinit var titleTextView: TextView
     private lateinit var selectedValueTextView: TextView
     private lateinit var switch: Switch
-    private lateinit var arrowImageView: ImageView
     private lateinit var badgeImageView: ImageView
+    private lateinit var arrowImageView: ImageView
 
     constructor(context: Context) : super(context)
 
@@ -42,6 +43,7 @@ class SettingsItemView : ConstraintLayout {
         try {
             attrTitle = ta.getString(R.styleable.SettingsItemView_setting_title)
             attrIcon = ta.getDrawable(R.styleable.SettingsItemView_setting_icon)
+            attrArrow = ta.getBoolean(R.styleable.SettingsItemView_setting_arrow, false)
         } finally {
             ta.recycle()
         }
@@ -64,17 +66,9 @@ class SettingsItemView : ConstraintLayout {
         }
 
         titleTextView.text = attrTitle
-        arrowImageView.visibility = View.GONE
         badgeImageView.visibility = View.GONE
-
+        arrowImageView.visibility = if (attrArrow) View.VISIBLE else View.GONE
     }
-
-    var titleTextColor: Int? = null
-        set(colorId) {
-            colorId?.let {
-                titleTextView.setTextColor(resources.getColor(colorId, null))
-            }
-        }
 
     var switchIsChecked: Boolean = false
         set(isChecked) {
@@ -103,11 +97,7 @@ class SettingsItemView : ConstraintLayout {
             invalidate()
         }
 
-    fun setInfoBadgeVisibility(isVisible: Boolean){
-        badgeImageView.visibility = if(isVisible) View.VISIBLE else View.GONE
-    }
-
-    fun showArrow() {
-        arrowImageView.visibility = View.VISIBLE
+    fun setInfoBadgeVisibility(isVisible: Boolean) {
+        badgeImageView.visibility = if (isVisible) View.VISIBLE else View.GONE
     }
 }

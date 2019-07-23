@@ -13,6 +13,22 @@ class RestoreEosPresenter(private val interactor: RestoreEosModule.IInteractor, 
         interactor.validate(accountName, privateKey)
     }
 
+    override fun onClickScan() {
+        router.startQRScanner()
+    }
+
+    override fun onPasteAccount() {
+        interactor.textFromClipboard?.let { view?.setAccount(it) }
+    }
+
+    override fun onPasteKey() {
+        interactor.textFromClipboard?.let { view?.setPrivateKey(it) }
+    }
+
+    override fun onQRCodeScan(key: String?) {
+        key?.let { view?.setPrivateKey(key) }
+    }
+
     //  InteractorDelegate
 
     override fun onValidationSuccess(accountName: String, privateKey: String) {

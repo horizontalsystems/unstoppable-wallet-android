@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.send
+package io.horizontalsystems.bankwallet.modules.qrscanner
 
 import android.os.Bundle
 import android.view.KeyEvent

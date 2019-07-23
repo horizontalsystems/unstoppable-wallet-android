@@ -17,6 +17,7 @@ class MainSettingsViewModel : ViewModel(), MainSettingsModule.IMainSettingsView,
     val tabItemBadgeLiveDate = MutableLiveData<Int>()
 
     val showSecuritySettingsLiveEvent = SingleLiveEvent<Unit>()
+    val showManageCoinsLiveEvent = SingleLiveEvent<Unit>()
     val showBaseCurrencySettingsLiveEvent = SingleLiveEvent<Unit>()
     val showLanguageSettingsLiveEvent = SingleLiveEvent<Unit>()
     val showAboutLiveEvent = SingleLiveEvent<Unit>()
@@ -61,6 +62,10 @@ class MainSettingsViewModel : ViewModel(), MainSettingsModule.IMainSettingsView,
 
     override fun showSecuritySettings() {
         showSecuritySettingsLiveEvent.call()
+    }
+
+    override fun showManageCoins() {
+        showManageCoinsLiveEvent.call()
     }
 
     override fun showBaseCurrencySettings() {

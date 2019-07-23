@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
+import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.settings.AboutSettingsActivity
 import io.horizontalsystems.bankwallet.modules.settings.basecurrency.BaseCurrencySettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.language.LanguageSettingsModule
@@ -36,36 +37,24 @@ class MainSettingsFragment : Fragment() {
 
         shadowlessToolbar.bindTitle(getString(R.string.Settings_Title))
 
-        securityCenter.apply {
-            showArrow()
-            setOnClickListener { viewModel.delegate.didTapSecurity() }
-        }
+        securityCenter.setOnClickListener { viewModel.delegate.didTapSecurity() }
 
-        baseCurrency.apply {
-            showArrow()
-            setOnClickListener { viewModel.delegate.didTapBaseCurrency() }
-        }
+        manageCoins.setOnClickListener { viewModel.delegate.didManageCoins() }
 
-        language.apply {
-            showArrow()
-            setOnClickListener { viewModel.delegate.didTapLanguage() }
-        }
+        baseCurrency.setOnClickListener { viewModel.delegate.didTapBaseCurrency() }
 
-        lightMode.apply {
-            setOnClickListener { switchToggle() }
+        language.setOnClickListener { viewModel.delegate.didTapLanguage() }
+
+        lightMode.setOnClickListener { lightMode.switchToggle() }
+
+        about.setOnClickListener { viewModel.delegate.didTapAbout() }
+
+        shareApp.setOnClickListener {
+            shareAppLink()
         }
 
         companyLogo.setOnClickListener {
             viewModel.delegate.didTapAppLink()
-        }
-
-        about.apply {
-            showArrow()
-            setOnClickListener { viewModel.delegate.didTapAbout() }
-        }
-
-        shareApp.setOnClickListener {
-            shareAppLink()
         }
 
         viewModel.baseCurrencyLiveDate.observe(viewLifecycleOwner, Observer { currency ->
@@ -116,6 +105,10 @@ class MainSettingsFragment : Fragment() {
             context?.let {
                 SecuritySettingsModule.start(it)
             }
+        })
+
+        viewModel.showManageCoinsLiveEvent.observe(viewLifecycleOwner, Observer {
+            context?.let { ManageWalletsModule.start(it) }
         })
 
         viewModel.tabItemBadgeLiveDate.observe(viewLifecycleOwner, Observer { count ->

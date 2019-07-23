@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="SettingsItemView">
-        <attr name="setting_title" format="string"/>
-        <attr name="setting_icon" format="integer"/>
+        <attr name="setting_title" format="string" />
+        <attr name="setting_icon" format="integer" />
+        <attr name="setting_arrow" format="boolean" />
     </declare-styleable>
     <declare-styleable name="TransactionInfoItemView">
-        <attr name="title" format="string"/>
-        <attr name="value" format="string"/>
-        <attr name="valueSubtitle" format="string"/>
-        <attr name="showValueBackground" format="boolean"/>
-        <attr name="valueIcon" format="integer"/>
+        <attr name="title" format="string" />
+        <attr name="value" format="string" />
+        <attr name="valueSubtitle" format="string" />
+        <attr name="showValueBackground" format="boolean" />
+        <attr name="valueIcon" format="integer" />
     </declare-styleable>
     <declare-styleable name="FullTransactionInfoItemView">
-        <attr name="infoTitle" format="string"/>
-        <attr name="infoValue" format="string"/>
-        <attr name="infoValueIcon" format="integer"/>
+        <attr name="infoTitle" format="string" />
+        <attr name="infoValue" format="string" />
+        <attr name="infoValueIcon" format="integer" />
     </declare-styleable>
     <declare-styleable name="MultipleInputEditTextView">
-        <attr name="inputFromQRCode" format="boolean"/>
-        <attr name="inputFromClipboard" format="boolean"/>
-        <attr name="inputHint" format="string"/>
-        <attr name="inputMaxLines" format="integer"/>
+        <attr name="inputFromQRCode" format="boolean" />
+        <attr name="inputFromClipboard" format="boolean" />
+        <attr name="inputHint" format="string" />
+        <attr name="inputMaxLines" format="integer" />
     </declare-styleable>
 </resources>
