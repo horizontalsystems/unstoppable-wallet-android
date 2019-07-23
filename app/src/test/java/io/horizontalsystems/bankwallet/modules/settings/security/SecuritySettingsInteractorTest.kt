@@ -23,6 +23,7 @@ class SecuritySettingsInteractorTest {
     private lateinit var backupManager: IBackupManager
     private lateinit var systemInfoManager: ISystemInfoManager
     private lateinit var lockManager: ILockManager
+    private lateinit var pinManager: IPinManager
 
     private val backedUpSignal = Flowable.empty<Int>()
 
@@ -46,7 +47,9 @@ class SecuritySettingsInteractorTest {
             on { isLocked } doReturn false
         }
 
-        interactor = SecuritySettingsInteractor(backupManager, localStorage, systemInfoManager)
+        pinManager = mock {}
+
+        interactor = SecuritySettingsInteractor(backupManager, localStorage, systemInfoManager, pinManager)
         interactor.delegate = delegate
     }
 
@@ -70,7 +73,7 @@ class SecuritySettingsInteractorTest {
         localStorage = mock {
             on { isBiometricOn } doReturn false
         }
-        interactor = SecuritySettingsInteractor(backupManager, localStorage, systemInfoManager)
+        interactor = SecuritySettingsInteractor(backupManager, localStorage, systemInfoManager, pinManager)
         interactor.delegate = delegate
 
         assertFalse(interactor.getBiometricUnlockOn())

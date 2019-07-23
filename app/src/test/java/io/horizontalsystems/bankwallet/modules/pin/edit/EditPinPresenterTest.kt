@@ -38,12 +38,12 @@ class EditPinPresenterTest {
     @Test
     fun didSavePin() {
         presenter.didSavePin()
-        verify(router).dismiss()
+        verify(router).dismissModuleWithSuccess()
     }
 
     @Test
     fun onBackPressed() {
         presenter.onBackPressed()
-        verify(router).dismiss()
+        verify(router).dismissModuleWithCancel()
     }
 }

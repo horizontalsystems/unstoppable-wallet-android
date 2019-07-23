@@ -182,6 +182,7 @@
 
     <string name="Settings_Title">Settings</string>
     <string name="Settings_SecurityCenter">Security Center</string>
+    <string name="Settings_ManageCoins">Manage Coins</string>
     <string name="Settings_RestoreWallet">Restore Wallet</string>
     <string name="Settings_BaseCurrency">Base Currency</string>
     <string name="Settings_Language">Language</string>

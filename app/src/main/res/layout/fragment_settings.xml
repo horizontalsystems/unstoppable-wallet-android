@@ -37,6 +37,16 @@
                 app:setting_icon="@drawable/ic_security"
                 app:setting_title="@string/Settings_SecurityCenter" />
 
+            <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
+                android:id="@+id/manageCoins"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/securityCenter"
+                app:setting_icon="@drawable/ic_manage_coins"
+                app:setting_title="@string/Settings_ManageCoins" />
+
             <View
                 android:id="@+id/bottomShade_1"
                 android:layout_width="match_parent"
@@ -44,7 +54,7 @@
                 android:background="?SettingsSectionBottomShadeColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/securityCenter" />
+                app:layout_constraintTop_toBottomOf="@+id/manageCoins" />
 
             <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
                 android:id="@+id/baseCurrency"
@@ -53,7 +63,7 @@
                 android:layout_marginTop="32dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/securityCenter"
+                app:layout_constraintTop_toBottomOf="@+id/manageCoins"
                 app:setting_icon="@drawable/ic_currency"
                 app:setting_title="@string/Settings_BaseCurrency" />
 

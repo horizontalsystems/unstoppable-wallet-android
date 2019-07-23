@@ -24,6 +24,10 @@ class MainSettingsPresenter(
         router.showSecuritySettings()
     }
 
+    override fun didManageCoins() {
+        router.showManageCoins()
+    }
+
     override fun didTapBaseCurrency() {
         router.showBaseCurrencySettings()
     }
