@@ -141,6 +141,7 @@
     <!--Settings-->
     <string name="Settings_Title">Настройки</string>
     <string name="Settings_SecurityCenter">Центр Безопасности</string>
+    <string name="Settings_ManageCoins">Manage Coins</string>
     <string name="Settings_RestoreWallet">Восстановить Кошелек</string>
     <string name="Settings_BaseCurrency">Базовая Валюта</string>
     <string name="Settings_Language">Язык</string>
