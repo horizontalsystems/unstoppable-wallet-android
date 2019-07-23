@@ -43,8 +43,8 @@ class ManageKeysActivity : BaseActivity() {
         viewModel.confirmUnlinkEvent.observe(this, Observer { account ->
             account?.let {
                 val confirmationList = mutableListOf(
-                        R.string.SettingsSecurity_ImportWalletConfirmation_1,
-                        R.string.SettingsSecurity_ImportWalletConfirmation_2
+                        R.string.ManageKeys_Unlink_ConfirmationRemove,
+                        R.string.ManageKeys_Unlink_ConfirmationDisable
                 )
 
                 val confirmListener = object : BottomConfirmAlert.Listener {
