@@ -23,16 +23,16 @@ open class TransactionStatusWithTimeView : ConstraintLayout {
     }
 
     private fun initializeViews() {
-        ConstraintLayout.inflate(context, R.layout.view_transaction_status, this)
+        inflate(context, R.layout.view_transaction_status, this)
     }
 
     fun bind(transactionStatus: TransactionStatus, time: String?) {
         txTime.text = time
-
         txTime.visibility = View.VISIBLE
         progressBarWrapper.visibility = View.GONE
         pendingIcon.visibility = View.GONE
         completedIcon.visibility = View.GONE
+
         when (transactionStatus) {
             is TransactionStatus.Completed -> {
                 completedIcon.visibility = View.VISIBLE
@@ -51,16 +51,14 @@ open class TransactionStatusWithTimeView : ConstraintLayout {
         invalidate()
     }
 
-    private fun fillProgress(transactionStatus: TransactionStatus.Processing = TransactionStatus.Processing(0)) {
-        val grey20Bar = R.drawable.status_progress_bar_grey_20_small
-        val solidGreyBar = R.drawable.status_progress_bar_grey_small
+    private fun fillProgress(transactionStatus: TransactionStatus.Processing = TransactionStatus.Processing(0.0)) {
+        val bars = listOf(progressBar1, progressBar2, progressBar3, progressBar4, progressBar5, progressBar6)
+        val filledBars = bars.size * transactionStatus.progress
 
-        progressBar1.setImageResource(if (transactionStatus.progress >= 1) solidGreyBar else grey20Bar)
-        progressBar2.setImageResource(if (transactionStatus.progress >= 2) solidGreyBar else grey20Bar)
-        progressBar3.setImageResource(if (transactionStatus.progress >= 3) solidGreyBar else grey20Bar)
-        progressBar4.setImageResource(if (transactionStatus.progress >= 4) solidGreyBar else grey20Bar)
-        progressBar5.setImageResource(if (transactionStatus.progress >= 5) solidGreyBar else grey20Bar)
-        progressBar6.setImageResource(if (transactionStatus.progress >= 6) solidGreyBar else grey20Bar)
+        bars.forEachIndexed { index, bar ->
+            bar.setImageResource(if (index <= filledBars)
+                R.drawable.status_progress_bar_grey_small else
+                R.drawable.status_progress_bar_grey_20_small)
+        }
     }
-
 }

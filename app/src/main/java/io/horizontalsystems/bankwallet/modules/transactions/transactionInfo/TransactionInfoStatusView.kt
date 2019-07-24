@@ -33,6 +33,7 @@ open class TransactionInfoStatusView : ConstraintLayout {
         progressBarWrapper.visibility = View.GONE
         statusIcon.visibility = View.GONE
         statusPendingText.visibility = View.GONE
+
         when (transactionStatus) {
             is TransactionStatus.Completed -> {
                 statusIcon.setImageDrawable(LayoutHelper.d(R.drawable.ic_checkmark_green, App.instance))
@@ -55,15 +56,14 @@ open class TransactionInfoStatusView : ConstraintLayout {
     }
 
     private fun fillProgress(transactionStatus: TransactionStatus.Processing) {
-        val greyBar = R.drawable.status_progress_bar_grey
-        val greenBar = R.drawable.status_progress_bar_green
+        val bars = listOf(progressBar1, progressBar2, progressBar3, progressBar4, progressBar5, progressBar6)
+        val filledBars = bars.size * transactionStatus.progress
 
-        progressBar1.setImageResource(if (transactionStatus.progress >= 1) greenBar else greyBar)
-        progressBar2.setImageResource(if (transactionStatus.progress >= 2) greenBar else greyBar)
-        progressBar3.setImageResource(if (transactionStatus.progress >= 3) greenBar else greyBar)
-        progressBar4.setImageResource(if (transactionStatus.progress >= 4) greenBar else greyBar)
-        progressBar5.setImageResource(if (transactionStatus.progress >= 5) greenBar else greyBar)
-        progressBar6.setImageResource(if (transactionStatus.progress >= 6) greenBar else greyBar)
+        bars.forEachIndexed { index, bar ->
+            bar.setImageResource(if (index <= filledBars)
+                R.drawable.status_progress_bar_grey else
+                R.drawable.status_progress_bar_grey)
+        }
     }
 
 }

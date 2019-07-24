@@ -23,8 +23,8 @@ class TransactionMetadataDataSource {
         thresholds[coin] = confirmationThreshold
     }
 
-    fun getConfirmationThreshold(coin: Coin): Int? =
-            thresholds[coin]
+    fun getConfirmationThreshold(coin: Coin): Int =
+            thresholds[coin] ?: 1
 
     fun setRate(rateValue: BigDecimal, coin: Coin, currency: Currency, timestamp: Long) {
         if (!rates.containsKey(coin)) {

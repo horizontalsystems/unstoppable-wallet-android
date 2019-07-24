@@ -33,8 +33,8 @@ class EosAdapter(override val wallet: Wallet, eos: CoinType.Eos, kit: EosKit) : 
         get() = token.balanceFlowable.map { Unit }
 
     override fun getTransactions(from: Pair<String, Int>?, limit: Int): Single<List<TransactionRecord>> {
-        return eosKit.transactions(token, from?.second, limit).map {
-            it.map { tx -> transactionRecord(tx) }
+        return eosKit.transactions(token, from?.second, limit).map { list ->
+            list.map { transactionRecord(it) }
         }
     }
 
@@ -80,9 +80,9 @@ class EosAdapter(override val wallet: Wallet, eos: CoinType.Eos, kit: EosKit) : 
 
         return TransactionRecord(
                 transactionHash = transaction.id,
-                transactionIndex = transaction.actionSequence,
-                interTransactionIndex = 0,
-                blockHeight = 0,
+                transactionIndex = 0,
+                interTransactionIndex = transaction.actionSequence,
+                blockHeight = transaction.blockNumber.toLong(),
                 amount = amount,
                 timestamp = dateFormat.parse(transaction.date).time / 1000,
                 from = listOf(from),
