@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
+import io.horizontalsystems.bankwallet.core.security.KeyStoreManager
 import io.horizontalsystems.bankwallet.core.storage.AccountsStorage
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bankwallet.core.storage.EnabledWalletsStorage
@@ -27,9 +28,10 @@ class App : Application() {
         lateinit var feeRateProvider: IFeeRateProvider
         lateinit var secureStorage: ISecuredStorage
         lateinit var localStorage: ILocalStorage
-        lateinit var encryptionManager: EncryptionManager
+        lateinit var keyStoreManager: IKeyStoreManager
+        lateinit var keyProvider: IKeyProvider
+        lateinit var encryptionManager: IEncryptionManager
         lateinit var wordsManager: WordsManager
-        lateinit var authManager: AuthManager
         lateinit var randomManager: IRandomProvider
         lateinit var networkManager: INetworkManager
         lateinit var currencyManager: ICurrencyManager
@@ -38,6 +40,7 @@ class App : Application() {
         lateinit var systemInfoManager: ISystemInfoManager
         lateinit var pinManager: IPinManager
         lateinit var lockManager: ILockManager
+        lateinit var keyStoreChangeListener: KeyStoreChangeListener
         lateinit var appConfigProvider: IAppConfigProvider
         lateinit var adapterManager: IAdapterManager
         lateinit var walletManager: IWalletManager
@@ -59,11 +62,9 @@ class App : Application() {
         lateinit var enabledWalletsStorage: IEnabledWalletStorage
         lateinit var transactionInfoFactory: FullTransactionInfoFactory
         lateinit var transactionDataProviderManager: TransactionDataProviderManager
-        lateinit var appCloseManager: AppCloseManager
         lateinit var ethereumKitManager: IEthereumKitManager
         lateinit var eosKitManager: IEosKitManager
         lateinit var numberFormatter: IAppNumberFormatter
-        lateinit var appManager: ILaunchManager
 
         lateinit var instance: App
             private set
@@ -94,7 +95,11 @@ class App : Application() {
         appConfigProvider = AppConfigProvider()
         feeRateProvider = FeeRateProvider(instance, appConfigProvider)
         backgroundManager = BackgroundManager(this)
-        encryptionManager = EncryptionManager
+        KeyStoreManager("MASTER_KEY").apply {
+            keyStoreManager = this
+            keyProvider = this
+        }
+        encryptionManager = EncryptionManager(keyProvider)
         secureStorage = SecuredStorageManager(encryptionManager)
         ethereumKitManager = EthereumKitManager(appConfigProvider)
         eosKitManager = EosKitManager(appConfigProvider)
@@ -117,13 +122,17 @@ class App : Application() {
         defaultWalletCreator = DefaultWalletCreator(walletManager, appConfigProvider, walletFactory)
         accountCreator = AccountCreator(accountManager, AccountFactory(), wordsManager, defaultWalletCreator)
         predefinedAccountTypeManager = PredefinedAccountTypeManager(appConfigProvider, accountManager, accountCreator)
-        authManager = AuthManager(secureStorage, localStorage, walletManager, rateManager, ethereumKitManager, appConfigProvider)
         walletRemover = WalletRemover(accountManager, walletManager)
 
         randomManager = RandomProvider()
         systemInfoManager = SystemInfoManager()
         pinManager = PinManager(secureStorage)
-        lockManager = LockManager(secureStorage)
+        lockManager = LockManager(pinManager).apply {
+            backgroundManager.registerListener(this)
+        }
+        keyStoreChangeListener = KeyStoreChangeListener(systemInfoManager, keyStoreManager).apply {
+            backgroundManager.registerListener(this)
+        }
         languageManager = LanguageManager(localStorage, appConfigProvider, fallbackLanguage)
         currencyManager = CurrencyManager(localStorage, appConfigProvider)
         numberFormatter = NumberFormatter(languageManager)
@@ -133,16 +142,9 @@ class App : Application() {
         adapterManager = AdapterManager(walletManager, AdapterFactory(instance, appConfigProvider, ethereumKitManager, eosKitManager, feeRateProvider), ethereumKitManager, eosKitManager)
         rateSyncer = RateSyncer(rateManager, adapterManager, currencyManager, networkAvailabilityManager)
 
-        appCloseManager = AppCloseManager()
-
         transactionDataProviderManager = TransactionDataProviderManager(appConfigProvider, localStorage)
         transactionInfoFactory = FullTransactionInfoFactory(networkManager, transactionDataProviderManager)
 
-        authManager.adapterManager = adapterManager
-        authManager.pinManager = pinManager
-
-        appManager = AppManager(accountManager, walletManager)
-        appManager.onStart()
     }
 
 }

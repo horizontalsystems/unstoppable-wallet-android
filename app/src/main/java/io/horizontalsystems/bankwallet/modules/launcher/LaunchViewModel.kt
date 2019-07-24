@@ -7,21 +7,16 @@ class LaunchViewModel : ViewModel(), LaunchModule.IView, LaunchModule.IRouter {
 
     lateinit var delegate: LaunchModule.IViewDelegate
 
-    val showNoDeviceLockWarning = SingleLiveEvent<Void>()
     val openWelcomeModule = SingleLiveEvent<Void>()
     val openMainModule = SingleLiveEvent<Void>()
     val openUnlockModule = SingleLiveEvent<Void>()
+    val openNoSystemLockModule = SingleLiveEvent<Void>()
+    val openKeyInvalidatedModule = SingleLiveEvent<Void>()
     val closeApplication = SingleLiveEvent<Void>()
 
     fun init() {
         LaunchModule.init(this, this)
         delegate.viewDidLoad()
-    }
-
-    // IView
-
-    override fun showNoDeviceLockWarning() {
-        showNoDeviceLockWarning.call()
     }
 
     // IRouter
@@ -36,6 +31,14 @@ class LaunchViewModel : ViewModel(), LaunchModule.IView, LaunchModule.IRouter {
 
     override fun openUnlockModule() {
         openUnlockModule.call()
+    }
+
+    override fun openNoSystemLockModule() {
+        openNoSystemLockModule.call()
+    }
+
+    override fun openKeyInvalidatedModule() {
+        openKeyInvalidatedModule.call()
     }
 
     override fun closeApplication() {

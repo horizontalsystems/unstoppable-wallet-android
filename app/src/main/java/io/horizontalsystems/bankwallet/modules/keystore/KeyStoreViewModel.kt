@@ -1,0 +1,38 @@
+package io.horizontalsystems.bankwallet.modules.keystore
+
+import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.SingleLiveEvent
+
+class KeyStoreViewModel : ViewModel(), KeyStoreModule.IView, KeyStoreModule.IRouter {
+
+    lateinit var delegate: KeyStoreModule.IViewDelegate
+
+    val showNoSystemLockWarning = SingleLiveEvent<Void>()
+    val showInvalidKeyWarning = SingleLiveEvent<Void>()
+    val openLaunchModule = SingleLiveEvent<Void>()
+    val closeApplication = SingleLiveEvent<Void>()
+
+    fun init(mode: KeyStoreModule.ModeType) {
+        KeyStoreModule.init(this, this, mode)
+        delegate.viewDidLoad()
+    }
+
+    // IView
+    override fun showNoSystemLockWarning() {
+        showNoSystemLockWarning.call()
+    }
+
+    override fun showInvalidKeyWarning() {
+        showInvalidKeyWarning.call()
+    }
+
+    // IRouter
+    override fun openLaunchModule() {
+        openLaunchModule.call()
+    }
+
+    override fun closeApplication() {
+        closeApplication.call()
+    }
+
+}

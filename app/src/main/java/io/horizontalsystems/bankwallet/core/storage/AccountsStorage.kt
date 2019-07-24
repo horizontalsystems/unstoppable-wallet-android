@@ -21,6 +21,9 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         private const val EOS = "eos"
     }
 
+    override val isAccountsEmpty: Boolean
+        get() = dao.getTotalCount() == 0
+
     override fun allAccounts(): List<Account> {
         return dao.getAll()
                 .mapNotNull { record ->
@@ -94,6 +97,10 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
 
     override fun getNonBackedUpCount(): Flowable<Int> {
         return dao.getNonBackedUpCount()
+    }
+
+    override fun clear() {
+        dao.deleteAll()
     }
 
 }

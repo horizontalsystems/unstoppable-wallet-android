@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.pin.unlock
 
 import androidx.core.hardware.fingerprint.FingerprintManagerCompat
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
 import io.horizontalsystems.bankwallet.core.factories.LockoutUntilDateFactory
 import io.horizontalsystems.bankwallet.core.managers.CurrentDateProvider
 import io.horizontalsystems.bankwallet.core.managers.LockoutManager
@@ -20,7 +19,6 @@ object UnlockPinModule {
 
     interface IUnlockPinInteractor {
         fun updateLockoutState()
-        fun cacheSecuredData()
         fun unlock(pin: String): Boolean
         fun isBiometricOn(): Boolean
         fun onUnlock()
@@ -33,15 +31,16 @@ object UnlockPinModule {
         fun updateLockoutState(state: LockoutState)
     }
 
-    fun init(view: PinViewModel, router: IUnlockPinRouter, keystoreSafeExecute: IKeyStoreSafeExecute, showCancelButton: Boolean) {
+    fun init(view: PinViewModel, router: IUnlockPinRouter, showCancelButton: Boolean) {
 
         val lockoutManager = LockoutManager(App.localStorage, UptimeProvider(), LockoutUntilDateFactory(CurrentDateProvider()))
         val timer = OneTimeTimer()
-        val interactor = UnlockPinInteractor(keystoreSafeExecute, App.localStorage, App.authManager, App.pinManager, App.lockManager, App.encryptionManager, lockoutManager, timer)
+        val interactor = UnlockPinInteractor(App.localStorage, App.pinManager, App.lockManager, lockoutManager, timer)
         val presenter = UnlockPinPresenter(interactor, router, showCancelButton)
 
         view.delegate = presenter
         presenter.view = view
         interactor.delegate = presenter
     }
+
 }

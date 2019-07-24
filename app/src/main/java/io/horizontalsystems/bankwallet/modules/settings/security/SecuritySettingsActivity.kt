@@ -94,8 +94,8 @@ class SecuritySettingsActivity : BaseActivity() {
 
         if (requestCode == REQUEST_CODE_SET_PIN) {
             when (resultCode) {
-                Activity.RESULT_OK -> viewModel.delegate.didSetPin()
-                Activity.RESULT_CANCELED -> viewModel.delegate.didCancelSetPin()
+                PinModule.RESULT_OK -> viewModel.delegate.didSetPin()
+                PinModule.RESULT_CANCELLED -> viewModel.delegate.didCancelSetPin()
             }
         }
     }

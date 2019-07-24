@@ -1,17 +1,13 @@
 package io.horizontalsystems.bankwallet
 
 import android.annotation.TargetApi
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.security.keystore.KeyPermanentlyInvalidatedException
-import android.security.keystore.UserNotAuthenticatedException
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -22,18 +18,10 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.security.EncryptionManager
-import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.lib.AlertDialogFragment
-import io.horizontalsystems.bankwallet.modules.pin.PinActivity
-import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import java.util.*
 
 abstract class BaseActivity : AppCompatActivity() {
-
-    private var failureRunnable: Runnable? = null
-    private var actionRunnable: Runnable? = null
-    private var successRunnable: Runnable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,50 +30,6 @@ abstract class BaseActivity : AppCompatActivity() {
         setTheme(if (lightMode) R.style.LightModeAppTheme else R.style.DarkModeAppTheme)
 
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (this !is PinActivity && App.lockManager.isLocked) {
-            PinModule.startForUnlock(this, ModuleCode.UNLOCK_PIN)
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == AUTHENTICATE_FOR_ENCRYPTION) {
-            if (resultCode == Activity.RESULT_OK) {
-                try {
-                    actionRunnable?.run()
-                    successRunnable?.run()
-                } catch (e: Exception) {
-                    failureRunnable?.run()
-                }
-            } else {
-                failureRunnable?.run()
-            }
-            failureRunnable = null
-            actionRunnable = null
-            successRunnable = null
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
-        }
-    }
-
-    fun safeExecuteWithKeystore(action: Runnable, onSuccess: Runnable? = null, onFailure: Runnable? = null) {
-        try {
-            action.run()
-            onSuccess?.run()
-        } catch (e: UserNotAuthenticatedException) {
-            actionRunnable = action
-            successRunnable = onSuccess
-            failureRunnable = onFailure
-            EncryptionManager.showAuthenticationScreen(this, AUTHENTICATE_FOR_ENCRYPTION)
-        } catch (e: KeyPermanentlyInvalidatedException) {
-            EncryptionManager.showKeysInvalidatedAlert(this)
-        } catch (e: Exception) {
-            onFailure?.run()
-        }
-
     }
 
     override fun attachBaseContext(newBase: Context?) {
@@ -180,10 +124,6 @@ abstract class BaseActivity : AppCompatActivity() {
         configuration.locale = locale
         resources.updateConfiguration(configuration, resources.displayMetrics)
         return context
-    }
-
-    companion object {
-        const val AUTHENTICATE_FOR_ENCRYPTION = 23
     }
 
 }

@@ -7,6 +7,9 @@ import java.util.*
 
 object PinModule {
 
+    const val RESULT_OK = 1
+    const val RESULT_CANCELLED = 2
+
     const val PIN_COUNT = 6
 
     interface IPinView {
@@ -39,13 +42,11 @@ object PinModule {
         fun validate(pin: String): Boolean
         fun save(pin: String)
         fun unlock(pin: String): Boolean
-        fun startAdapters()
     }
 
     interface IPinInteractorDelegate {
         fun didSavePin()
         fun didFailToSavePin()
-        fun didStartedAdapters()
     }
 
     fun startForSetPin(context: AppCompatActivity, requestCode: Int) {

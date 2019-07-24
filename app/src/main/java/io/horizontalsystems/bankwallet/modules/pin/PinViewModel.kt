@@ -4,13 +4,12 @@ import androidx.core.hardware.fingerprint.FingerprintManagerCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
-import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
 import io.horizontalsystems.bankwallet.modules.pin.edit.EditPinModule
 import io.horizontalsystems.bankwallet.modules.pin.set.SetPinModule
 import io.horizontalsystems.bankwallet.modules.pin.unlock.UnlockPinModule
 import java.util.*
 
-class PinViewModel: ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter, EditPinModule.IEditPinRouter, IKeyStoreSafeExecute, UnlockPinModule.IUnlockPinRouter {
+class PinViewModel : ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter, EditPinModule.IEditPinRouter, UnlockPinModule.IUnlockPinRouter {
 
     lateinit var delegate: PinModule.IPinViewDelegate
     val titleLiveDate = MutableLiveData<Int>()
@@ -26,17 +25,16 @@ class PinViewModel: ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter,
     val showBackButton = SingleLiveEvent<Unit>()
     val showFingerprintInputLiveEvent = SingleLiveEvent<FingerprintManagerCompat.CryptoObject>()
     val resetCirclesWithShakeAndDelayForPage = SingleLiveEvent<Int>()
-    val keyStoreSafeExecute = SingleLiveEvent<Triple<Runnable, Runnable?, Runnable?>>()
     val showAttemptsLeftError = MutableLiveData<Pair<Int, Int>>()
     val showLockedView = SingleLiveEvent<Date>()
     val closeApplicationLiveEvent = SingleLiveEvent<Unit>()
 
 
     fun init(interactionType: PinInteractionType, showCancelButton: Boolean) {
-        when(interactionType) {
-            PinInteractionType.SET_PIN -> SetPinModule.init(this, this, this)
-            PinInteractionType.UNLOCK -> UnlockPinModule.init(this, this, this, showCancelButton)
-            PinInteractionType.EDIT_PIN -> EditPinModule.init(this, this, this)
+        when (interactionType) {
+            PinInteractionType.SET_PIN -> SetPinModule.init(this, this)
+            PinInteractionType.UNLOCK -> UnlockPinModule.init(this, this, showCancelButton)
+            PinInteractionType.EDIT_PIN -> EditPinModule.init(this, this)
         }
         delegate.viewDidLoad()
     }
@@ -83,10 +81,6 @@ class PinViewModel: ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter,
 
     override fun navigateToMain() {
         navigateToMainLiveEvent.call()
-    }
-
-    override fun safeExecute(action: Runnable, onSuccess: Runnable?, onFailure: Runnable?) {
-        keyStoreSafeExecute.value = Triple(action, onSuccess, onFailure)
     }
 
     override fun closeApplication() {

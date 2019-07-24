@@ -33,18 +33,8 @@ object WelcomeModule {
     }
 
     fun start(context: Context) {
-        start(context, false)
-    }
-
-    fun startAsNewTask(context: Context) {
-        start(context, true)
-    }
-
-    private fun start(context: Context, newTask: Boolean = false) {
         val intent = Intent(context, WelcomeActivity::class.java)
-        if (newTask) {
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         context.startActivity(intent)
     }
 

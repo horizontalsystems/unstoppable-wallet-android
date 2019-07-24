@@ -1,13 +1,14 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import android.app.Activity
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ILockManager
-import io.horizontalsystems.bankwallet.core.ISecuredStorage
+import io.horizontalsystems.bankwallet.core.IPinManager
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.reactivex.subjects.PublishSubject
 import java.util.*
 
-class LockManager(private val securedStorage: ISecuredStorage) : ILockManager {
+class LockManager(private val pinManager: IPinManager) : ILockManager, BackgroundManager.Listener {
 
     private val lockTimeout: Double = 60.0
 
@@ -27,8 +28,8 @@ class LockManager(private val securedStorage: ISecuredStorage) : ILockManager {
         App.lastExitDate = Date().time
     }
 
-    override fun willEnterForeground() {
-        if (isLocked || securedStorage.pinIsEmpty()) {
+    override fun willEnterForeground(activity: Activity) {
+        if (isLocked || !pinManager.isPinSet) {
             return
         }
 

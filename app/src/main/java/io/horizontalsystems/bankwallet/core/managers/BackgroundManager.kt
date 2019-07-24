@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.core.managers
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
-import io.horizontalsystems.bankwallet.core.App
 
 class BackgroundManager(application: Application) : Application.ActivityLifecycleCallbacks {
 
@@ -11,7 +10,23 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
         application.registerActivityLifecycleCallbacks(this)
     }
 
+    interface Listener {
+        fun willEnterForeground(activity: Activity)
+        fun didEnterBackground()
+    }
+
     private var refs: Int = 0
+    private var listeners: MutableList<Listener> = ArrayList()
+
+    @Synchronized
+    fun registerListener(listener: Listener) {
+        listeners.add(listener)
+    }
+
+    @Synchronized
+    fun unregisterListener(listener: Listener) {
+        listeners.remove(listener)
+    }
 
     val inForeground: Boolean
         get() = refs > 0
@@ -19,19 +34,24 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
     val inBackground: Boolean
         get() = refs == 0
 
-    override fun onActivityStarted(activity: Activity?) {
-        if(refs == 0) {
-            App.lockManager.willEnterForeground()
+    override fun onActivityStarted(activity: Activity) {
+        if (refs == 0) {
+            listeners.forEach { listener ->
+                listener.willEnterForeground(activity)
+            }
         }
         refs++
     }
 
-    override fun onActivityStopped(activity: Activity?) {
+    override fun onActivityStopped(activity: Activity) {
         refs--
 
         if (refs == 0) {
             //App is in background
-            App.lockManager.didEnterBackground()
+            listeners.forEach { listener ->
+                listener.didEnterBackground()
+            }
+
         }
     }
 

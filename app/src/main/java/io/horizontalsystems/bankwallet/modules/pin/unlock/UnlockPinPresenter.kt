@@ -17,7 +17,6 @@ class UnlockPinPresenter(
     var view: PinModule.IPinView? = null
 
     override fun viewDidLoad() {
-        interactor.cacheSecuredData()
         view?.addPages(listOf(PinPage(R.string.Unlock_Page_EnterYourPin)))
 
         if (showCancelButton) {

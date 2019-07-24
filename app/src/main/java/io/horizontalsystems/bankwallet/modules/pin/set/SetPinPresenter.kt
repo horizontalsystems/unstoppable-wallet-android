@@ -27,10 +27,7 @@ class SetPinPresenter(
     }
 
     override fun didSavePin() {
-        interactor.startAdapters()
-    }
-
-    override fun didStartedAdapters() {
         router.navigateToMain()
     }
+
 }

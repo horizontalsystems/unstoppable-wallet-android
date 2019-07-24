@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.pin.set
 
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
 import io.horizontalsystems.bankwallet.modules.pin.PinInteractor
 import io.horizontalsystems.bankwallet.modules.pin.PinViewModel
 
@@ -13,9 +12,9 @@ object SetPinModule {
         fun dismissModuleWithCancel()
     }
 
-    fun init(view: PinViewModel, router: ISetPinRouter, keystoreSafeExecute: IKeyStoreSafeExecute) {
+    fun init(view: PinViewModel, router: ISetPinRouter) {
 
-        val interactor = PinInteractor(App.pinManager, App.authManager, keystoreSafeExecute)
+        val interactor = PinInteractor(App.pinManager)
         val presenter = SetPinPresenter(interactor, router)
 
         view.delegate = presenter

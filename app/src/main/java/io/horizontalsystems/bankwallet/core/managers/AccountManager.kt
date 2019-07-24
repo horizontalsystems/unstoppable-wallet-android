@@ -14,6 +14,9 @@ class AccountManager(private val storage: IAccountsStorage) : IAccountManager {
     private val accountsSubject = PublishSubject.create<List<Account>>()
     private val deleteAccountSubject = PublishSubject.create<String>()
 
+    override val isAccountsEmpty: Boolean
+        get() = storage.isAccountsEmpty
+
     override val accounts: List<Account>
         get() = cache.accountsSet.toList()
 
@@ -50,6 +53,13 @@ class AccountManager(private val storage: IAccountsStorage) : IAccountManager {
 
         accountsSubject.onNext(accounts)
         deleteAccountSubject.onNext(id)
+    }
+
+    override fun clear() {
+        storage.clear()
+        cache.set(listOf())
+
+        accountsSubject.onNext(accounts)
     }
 
     private class AccountsCache {

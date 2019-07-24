@@ -18,6 +18,7 @@ import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.util.*
+import javax.crypto.SecretKey
 
 interface IAdapterManager {
     val adapters: List<IAdapter>
@@ -59,6 +60,7 @@ interface ISecuredStorage {
 }
 
 interface IAccountManager {
+    val isAccountsEmpty: Boolean
     val accounts: List<Account>
     val accountsFlowable: Flowable<List<Account>>
     val deleteAccountObservable: Flowable<String>
@@ -68,16 +70,13 @@ interface IAccountManager {
     fun create(account: Account)
     fun update(account: Account)
     fun delete(id: String)
+    fun clear()
 }
 
 interface IBackupManager {
     val nonBackedUpCount: Int
     val nonBackedUpCountFlowable: Flowable<Int>
     fun setIsBackedUp(id: String)
-}
-
-interface ILaunchManager {
-    fun onStart()
 }
 
 interface IAccountCreator {
@@ -135,6 +134,18 @@ interface IEncryptionManager {
     fun getCryptoObject(): FingerprintManagerCompat.CryptoObject?
 }
 
+interface IKeyStoreManager {
+    val isKeyInvalidated: Boolean
+
+    fun createKey(): SecretKey
+    fun getKey(): SecretKey
+    fun removeKey()
+}
+
+interface IKeyProvider {
+    fun getKey(): SecretKey
+}
+
 interface IClipboardManager {
     fun copyText(text: String)
     fun getCopiedText(): String
@@ -159,10 +170,6 @@ interface ITransactionDataProviderManager {
     fun dash(name: String): FullTransactionInfoModule.BitcoinForksProvider
     fun bitcoinCash(name: String): FullTransactionInfoModule.BitcoinForksProvider
     fun ethereum(name: String): FullTransactionInfoModule.EthereumForksProvider
-}
-
-interface IKeyStoreSafeExecute {
-    fun safeExecute(action: Runnable, onSuccess: Runnable? = null, onFailure: Runnable? = null)
 }
 
 interface IWordsManager {
@@ -237,18 +244,17 @@ interface IAdapter {
 }
 
 interface ISystemInfoManager {
-    var appVersion: String
-    var biometryType: BiometryType
+    val appVersion: String
+    val biometryType: BiometryType
+    val isSystemLockOff: Boolean
+
     fun phoneHasFingerprintSensor(): Boolean
     fun touchSensorCanBeUsed(): Boolean
 }
 
 interface IPinManager {
-    val isDeviceLockEnabled: Boolean
-    var pin: String?
     val isPinSet: Boolean
 
-    fun safeLoad()
     fun store(pin: String)
     fun validate(pin: String): Boolean
     fun clear()
@@ -258,8 +264,6 @@ interface ILockManager {
     val lockStateUpdatedSignal: PublishSubject<Unit>
     var isLocked: Boolean
     fun onUnlock()
-    fun didEnterBackground()
-    fun willEnterForeground()
 }
 
 interface IAppConfigProvider {
@@ -291,10 +295,13 @@ interface IRateStorage {
 }
 
 interface IAccountsStorage {
+    val isAccountsEmpty: Boolean
+
     fun allAccounts(): List<Account>
     fun save(account: Account)
     fun delete(id: String)
     fun getNonBackedUpCount(): Flowable<Int>
+    fun clear()
 }
 
 interface IEnabledWalletStorage {
