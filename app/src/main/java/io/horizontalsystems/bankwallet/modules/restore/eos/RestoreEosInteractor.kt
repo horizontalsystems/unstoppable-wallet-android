@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.restore.eos
 
+import io.horizontalsystems.bankwallet.core.EosAdapter
 import io.horizontalsystems.bankwallet.core.IClipboardManager
-import io.horizontalsystems.eoskit.core.EosUtils
 
 class RestoreEosInteractor(private val clipboardManager: IClipboardManager)
     : RestoreEosModule.IInteractor {
@@ -23,7 +23,7 @@ class RestoreEosInteractor(private val clipboardManager: IClipboardManager)
         }
 
         try {
-            EosUtils.validatePrivateKey(privateKey)
+            EosAdapter.validatePrivateKey(privateKey)
             delegate?.onValidationSuccess(accountName, privateKey)
         } catch (e: Exception) {
             delegate?.onInvalidKey()

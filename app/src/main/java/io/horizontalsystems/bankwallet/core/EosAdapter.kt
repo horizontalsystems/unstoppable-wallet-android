@@ -93,5 +93,9 @@ class EosAdapter(override val wallet: Wallet, eos: CoinType.Eos, kit: EosKit) : 
     companion object {
         fun clear(context: Context) {
         }
+
+        fun validatePrivateKey(key: String) {
+            EosKit.validatePrivateKey(key)
+        }
     }
 }
