@@ -95,7 +95,7 @@ object EncryptionManager : IEncryptionManager {
 
     fun isDeviceLockEnabled(ctx: Context): Boolean {
         val keyguardManager = ctx.getSystemService(Activity.KEYGUARD_SERVICE) as KeyguardManager
-        return keyguardManager.isKeyguardSecure
+        return keyguardManager.isDeviceSecure
     }
 
 
