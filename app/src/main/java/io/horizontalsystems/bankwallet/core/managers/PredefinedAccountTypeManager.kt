@@ -19,7 +19,10 @@ class PredefinedAccountTypeManager(private val appConfigProvider: IAppConfigProv
 
     override fun createAllAccounts() {
         allTypes.forEach { predefinedAccountType ->
-            createAccount(predefinedAccountType)
+            try {
+                createAccount(predefinedAccountType)
+            } catch (e: Exception) {
+            }
         }
     }
 }
