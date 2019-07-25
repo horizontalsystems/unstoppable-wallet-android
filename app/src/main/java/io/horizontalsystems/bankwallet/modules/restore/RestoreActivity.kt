@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
@@ -37,7 +36,6 @@ class RestoreActivity : BaseActivity() {
 
         val adapter = RestoreNavigationAdapter(viewModel)
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
 
         viewModel.reloadLiveEvent.observe(this, Observer {
             adapter.items = it

@@ -8,6 +8,7 @@
     <attr name="BallanceCoinNameColor" format="reference|color" />
     <attr name="BallanceCoinAmountColor" format="reference|color" />
     <attr name="TitleColor" format="reference|color" />
+    <attr name="TextDeemable" format="reference|color" />
     <attr name="TextColorGreyLightToDark" format="reference|color" />
     <attr name="TextColorBarsToDark" format="reference|color" />
     <attr name="WalletBackgroundColor" format="reference|color" />
@@ -19,6 +20,7 @@
     <attr name="AddWalletIcon" format="reference" />
     <attr name="CoinItemBackground" format="reference" />
     <attr name="PredefinedAccountBackground" format="reference" />
+    <attr name="ManageKeyBackground" format="reference" />
     <attr name="FilterButtonBackgroundColor" format="reference|color" />
     <attr name="BottomNavigationBackgroundColor" format="reference|color" />
     <attr name="StatusBarColor" format="reference|color" />
@@ -85,6 +87,7 @@
         <item name="BallanceCoinNameColor">@color/white</item>
         <item name="BallanceCoinAmountColor">@color/white</item>
         <item name="TitleColor">@color/white</item>
+        <item name="TextDeemable">@color/deemable_white</item>
         <item name="TextColorGreyLightToDark">@color/grey_light</item>
         <item name="TextColorBarsToDark">@color/bars_color</item>
         <item name="WalletBackgroundColor">@color/dark</item>
@@ -93,6 +96,7 @@
         <item name="TransactionItemBackgroundColor">@color/transaction_item_background_dark</item>
         <item name="CoinItemBackground">@drawable/coinholder_bg</item>
         <item name="PredefinedAccountBackground">@drawable/predefined_account_background_dark</item>
+        <item name="ManageKeyBackground">@drawable/manage_key_background_dark</item>
         <item name="FilterButtonBackgroundColor">@color/steel_15</item>
         <item name="SettingItemBackgroundColor">@color/setting_item_background_dark</item>
         <item name="DraggableCoinBackgroundColor">@color/manage_coin_background_dark</item>
@@ -162,6 +166,7 @@
         <item name="BallanceCoinNameColor">@color/dark</item>
         <item name="BallanceCoinAmountColor">@color/dark</item>
         <item name="TitleColor">@color/dark</item>
+        <item name="TextDeemable">@color/deemable_dark</item>
         <item name="TextColorGreyLightToDark">@color/dark</item>
         <item name="TextColorBarsToDark">@color/dark</item>
         <item name="WalletBackgroundColor">@color/lightBackground</item>
@@ -170,6 +175,7 @@
         <item name="TransactionItemBackgroundColor">@color/transaction_item_background_light</item>
         <item name="CoinItemBackground">@drawable/coinholder_bg_light</item>
         <item name="PredefinedAccountBackground">@drawable/predefined_account_background_light</item>
+        <item name="ManageKeyBackground">@drawable/manage_key_background_light</item>
         <item name="FilterButtonBackgroundColor">#efeff4</item>
         <item name="SettingItemBackgroundColor">@color/setting_item_background_light</item>
         <item name="DraggableCoinBackgroundColor">@color/setting_item_background_light</item>

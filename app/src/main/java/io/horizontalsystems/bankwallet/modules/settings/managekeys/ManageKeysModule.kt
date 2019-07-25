@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
+import io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysActivity
 
 object ManageKeysModule {
 
