@@ -90,10 +90,10 @@ class BottomConfirmAlert : DialogFragment(), ConfirmationsAdapter.Listener {
     }
 
     private fun checkConfirmations() {
-        val uncheckedCount = checkboxItemList.asSequence().filter { !it.checked }.count()
-        val isEnabled = uncheckedCount == 0
-        btnConfirm.isEnabled = isEnabled
-        setButtonTextColor(color, isEnabled)
+        val allChecked = checkboxItemList.all { it.checked }
+
+        btnConfirm.isEnabled = allChecked
+        setButtonTextColor(color, allChecked)
     }
 
     companion object {
@@ -115,38 +115,34 @@ enum class BottomButtonColor {
     YELLOW, RED
 }
 
-class ConfirmationsAdapter(private var listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
+class ConfirmationsAdapter(private var listener: Listener) : RecyclerView.Adapter<ViewHolderConfirmation>() {
     interface Listener {
         fun onItemCheckMarkClick(position: Int, checked: Boolean)
     }
 
-    var confirmations: List<CheckBoxItem> = listOf()
+    var confirmations = listOf<CheckBoxItem>()
 
     override fun getItemCount() = confirmations.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-            ViewHolderConfirmation(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_confirmation, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderConfirmation {
+        val containerView = LayoutInflater.from(parent.context).inflate(R.layout.view_holder_confirmation, parent, false)
+        return ViewHolderConfirmation(containerView, listener)
+    }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (holder) {
-            is ViewHolderConfirmation -> holder.bind(confirmations[position]) { checked ->
-                listener.onItemCheckMarkClick(position, checked)
-                notifyDataSetChanged()
-            }
-        }
+    override fun onBindViewHolder(holder: ViewHolderConfirmation, position: Int) {
+        holder.bind(confirmations[position].textRes)
     }
 }
 
-class ViewHolderConfirmation(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-
-    fun bind(checkBoxItem: CheckBoxItem, onClick: ((Boolean) -> (Unit))) {
-        confirmationCheckBox.text = containerView.context.getString(checkBoxItem.textRes)
-        confirmationCheckBox.isChecked = checkBoxItem.checked
-
-        confirmationCheckBox.setOnCheckedChangeListener { _, _ ->
-            onClick.invoke(confirmationCheckBox.isChecked)
+class ViewHolderConfirmation(override val containerView: View, val listener: ConfirmationsAdapter.Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    init {
+        confirmationCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            listener.onItemCheckMarkClick(adapterPosition, isChecked)
         }
+    }
+
+    fun bind(textRes: Int) {
+        confirmationCheckBox.text = containerView.context.getString(textRes)
     }
 }
 
