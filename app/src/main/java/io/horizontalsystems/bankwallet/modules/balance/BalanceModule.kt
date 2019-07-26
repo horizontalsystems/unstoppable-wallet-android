@@ -76,19 +76,23 @@ object BalanceModule {
         var items = listOf<BalanceItem>()
         var balanceSortType: BalanceSortType = BalanceSortType.Default
 
+        @Synchronized
         fun addUpdatedPosition(position: Int) {
             updatedPositions.add(position)
         }
 
+        @Synchronized
         fun clearUpdatedPositions() {
             updatedPositions.clear()
         }
 
         fun set(items: List<BalanceItem>) {
+            clearUpdatedPositions()
             originalItems = items
             sortBy(BalanceSortType.Default)
         }
 
+        @Synchronized
         fun getUpdatedPositions(): List<Int> = updatedPositions.distinct()
 
         fun getItem(position: Int): BalanceItem = items[position]
