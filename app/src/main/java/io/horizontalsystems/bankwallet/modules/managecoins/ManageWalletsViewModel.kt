@@ -7,10 +7,10 @@ import io.horizontalsystems.bankwallet.entities.Coin
 class ManageWalletsViewModel : ViewModel(), ManageWalletsModule.IView, ManageWalletsModule.IRouter {
 
     val coinsLoadedLiveEvent = SingleLiveEvent<Void>()
-    val showRestoreKeyDialog = SingleLiveEvent<Coin>()
-    val showCreateAndRestoreKeyDialog = SingleLiveEvent<Coin>()
+    val showManageKeysDialog = SingleLiveEvent<Coin>()
     val openRestoreWordsModule = SingleLiveEvent<Void>()
     val openRestoreEosModule = SingleLiveEvent<Coin>()
+    val showErrorEvent = SingleLiveEvent<Exception>()
     val closeLiveDate = SingleLiveEvent<Void>()
 
     lateinit var delegate: ManageWalletsModule.IViewDelegate
@@ -27,24 +27,12 @@ class ManageWalletsViewModel : ViewModel(), ManageWalletsModule.IView, ManageWal
         coinsLoadedLiveEvent.call()
     }
 
-    override fun showRestoreKeyDialog(coin: Coin) {
-        showRestoreKeyDialog.postValue(coin)
+    override fun showNoAccountDialog(coin: Coin) {
+        showManageKeysDialog.postValue(coin)
     }
 
-    override fun showCreateAndRestoreKeyDialog(coin: Coin) {
-        showCreateAndRestoreKeyDialog.postValue(coin)
-    }
-
-    override fun showFailedToSaveError() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun showFailedToCreateKey() {
-        TODO("not implemented")
-    }
-
-    override fun showFailedToRestoreKey() {
-        TODO("not implemented")
+    override fun showError(e: Exception) {
+        showErrorEvent.postValue(e)
     }
 
     // Router

@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.ui.dialogs
 
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -9,14 +10,17 @@ import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
 import io.horizontalsystems.bankwallet.viewHelpers.bottomDialog
 
-class ManageKeysDialog(private val listener: Listener, private val title: String, private val coinCodes: String)
+class ManageWalletsDialog(private val listener: Listener, private val coin: Coin)
     : DialogFragment() {
 
     interface Listener {
         fun onClickCreateKey()
+        fun onClickRestoreKey() {}
+        fun onCancel() {}
     }
 
     private lateinit var rootView: View
@@ -41,27 +45,36 @@ class ManageKeysDialog(private val listener: Listener, private val title: String
         return bottomDialog(activity, rootView)
     }
 
-    private fun bindContent() {
-        addCoinIcon.bind(R.drawable.ic_manage_keys)
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        listener.onCancel()
+    }
 
-        addKeyTitle.text = title
-        addKeyInfo.text = getString(R.string.ManageCoins_AddCoin_Text, coinCodes)
+    private fun bindContent() {
+        addCoinIcon.bind(coin)
+
+        addKeyTitle.text = getString(R.string.AddCoin_Title, coin.code)
+        addKeyInfo.text = getString(R.string.AddCoin_Description, coin.title)
     }
 
     private fun bindActions() {
-        buttonRestoreKey.visibility = View.GONE
         buttonCreateKey.setOnClickListener {
             listener.onClickCreateKey()
+            dismiss()
+        }
+
+        buttonRestoreKey.setOnClickListener {
+            listener.onClickRestoreKey()
             dismiss()
         }
     }
 
     companion object {
-        fun show(activity: FragmentActivity, listener: Listener, title: String, coinCodes: String) {
-            val fragment = ManageKeysDialog(listener, title, coinCodes)
+        fun show(activity: FragmentActivity, listener: Listener, coin: Coin) {
+            val fragment = ManageWalletsDialog(listener, coin)
             val transaction = activity.supportFragmentManager.beginTransaction()
 
-            transaction.add(fragment, "bottom_create_key_dialog")
+            transaction.add(fragment, "bottom_manage_keys_dialog")
             transaction.commitAllowingStateLoss()
         }
     }

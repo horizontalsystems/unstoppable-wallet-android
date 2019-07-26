@@ -1,5 +1,4 @@
 package io.horizontalsystems.bankwallet.core
 
-import java.lang.Exception
-
-class UnsupportedAccountException: Exception()
+class UnsupportedAccountException : Exception()
+class EosUnsupportedException : Exception()

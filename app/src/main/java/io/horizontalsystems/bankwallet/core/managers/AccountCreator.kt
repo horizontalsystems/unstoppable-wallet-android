@@ -35,7 +35,7 @@ class AccountCreator(
     private fun createAccountType(defaultAccountType: DefaultAccountType): AccountType {
         return when (defaultAccountType) {
             is DefaultAccountType.Mnemonic -> createMnemonicAccountType(defaultAccountType.wordsCount)
-            is DefaultAccountType.Eos -> throw Exception("Eos accounts not supported yet")
+            is DefaultAccountType.Eos -> throw EosUnsupportedException()
         }
     }
 

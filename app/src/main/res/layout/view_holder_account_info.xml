@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/viewHolderRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="13dp"
+    android:layout_marginEnd="13dp"
+    android:layout_marginBottom="24dp"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <TextView
+        style="@style/Body1Grey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ManageCoins_AddCoin_TextBackup" />
+
+</LinearLayout>

@@ -6,18 +6,21 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.EosUnsupportedException
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.lib.AlertDialogFragment
 import io.horizontalsystems.bankwallet.modules.backup.BackupModule
 import io.horizontalsystems.bankwallet.modules.restore.eos.RestoreEosModule
 import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysViewModel
 import io.horizontalsystems.bankwallet.ui.dialogs.BottomButtonColor
 import io.horizontalsystems.bankwallet.ui.dialogs.BottomConfirmAlert
+import io.horizontalsystems.bankwallet.ui.dialogs.ManageKeysDialog
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import kotlinx.android.synthetic.main.activity_manage_keys.*
 
-class ManageKeysActivity : BaseActivity() {
+class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
 
     private lateinit var viewModel: ManageKeysViewModel
 
@@ -33,11 +36,13 @@ class ManageKeysActivity : BaseActivity() {
         val adapter = ManageKeysAdapter(viewModel)
         recyclerView.adapter = adapter
 
-        viewModel.confirmUnlinkEvent.observe(this, Observer { account ->
-            account?.let {
+        viewModel.confirmUnlinkEvent.observe(this, Observer { item ->
+            item.account?.let { account ->
+
                 val confirmationList = mutableListOf(
-                        R.string.ManageKeys_Unlink_ConfirmationRemove,
-                        R.string.ManageKeys_Unlink_ConfirmationDisable
+                        getString(R.string.ManageKeys_Unlink_ConfirmationRemove, item.predefinedAccountType.title),
+                        getString(R.string.ManageKeys_Unlink_ConfirmationDisable, item.predefinedAccountType.coinCodes),
+                        getString(R.string.ManageKeys_Unlink_ConfirmationLoose)
                 )
 
                 val confirmListener = object : BottomConfirmAlert.Listener {
@@ -50,8 +55,22 @@ class ManageKeysActivity : BaseActivity() {
             }
         })
 
+        viewModel.confirmCreateEvent.observe(this, Observer {
+            ManageKeysDialog.show(this, this, it.first, it.second)
+        })
+
+        viewModel.showErrorEvent.observe(this, Observer {
+            if (it is EosUnsupportedException) {
+                AlertDialogFragment.newInstance(
+                        R.string.Alert_TitleWarning,
+                        R.string.ManageCoins_EOSAlert_CreateButton,
+                        R.string.Alert_Ok
+                ).show(supportFragmentManager, "alert_dialog")
+            }
+        })
+
         viewModel.startBackupModuleLiveEvent.observe(this, Observer { account ->
-            account?.let { BackupModule.start(this, account) }
+            BackupModule.start(this, account)
         })
 
         viewModel.startRestoreWordsLiveEvent.observe(this, Observer {
@@ -62,15 +81,13 @@ class ManageKeysActivity : BaseActivity() {
             RestoreEosModule.startForResult(this, ModuleCode.RESTORE_EOS)
         })
 
-        viewModel.closeLiveEvent.observe(this, Observer {
-            finish()
+        viewModel.showItemsEvent.observe(this, Observer { list ->
+            adapter.items = list
+            adapter.notifyDataSetChanged()
         })
 
-        viewModel.showItemsEvent.observe(this, Observer { list ->
-            list?.let {
-                adapter.items = it
-                adapter.notifyDataSetChanged()
-            }
+        viewModel.closeLiveEvent.observe(this, Observer {
+            finish()
         })
     }
 
@@ -91,4 +108,11 @@ class ManageKeysActivity : BaseActivity() {
             }
         }
     }
+
+    //  ManageKeysDialog Listener
+
+    override fun onClickCreateKey() {
+        viewModel.delegate.onConfirmCreate()
+    }
+
 }

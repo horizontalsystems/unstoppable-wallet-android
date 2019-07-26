@@ -4,9 +4,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.EosAccountType
-import io.horizontalsystems.bankwallet.entities.Words12AccountType
-import io.horizontalsystems.bankwallet.entities.Words24AccountType
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageAccountItem
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysViewModel
 import io.horizontalsystems.bankwallet.viewHelpers.inflate
@@ -17,15 +14,22 @@ class ManageKeysAdapter(private val viewModel: ManageKeysViewModel) : RecyclerVi
 
     var items = listOf<ManageAccountItem>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return KeysViewHolder(inflate(parent, R.layout.view_holder_account))
-    }
+    private val keys = 1
+    private val keysInfo = 2
 
-    override fun getItemCount() = items.size
+    override fun getItemCount() = items.size + 1
+    override fun getItemViewType(position: Int) = if (position == 0) keysInfo else keys
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            keys -> KeysViewHolder(inflate(parent, R.layout.view_holder_account))
+            else -> KeysInfoViewHolder(inflate(parent, R.layout.view_holder_account_info))
+        }
+    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is KeysViewHolder) {
-            holder.bind(items[position])
+            holder.bind(items[position - 1])
         }
     }
 
@@ -42,20 +46,12 @@ class ManageKeysAdapter(private val viewModel: ManageKeysViewModel) : RecyclerVi
             if (item.account == null) {
                 changeStates(isEnabled = false)
 
-                when (predefinedAccount) {
-                    is EosAccountType -> {
-                        buttonImport.visibility = View.VISIBLE
-                    }
-                    is Words12AccountType,
-                    is Words24AccountType -> {
-                        buttonImport.visibility = View.VISIBLE
-                        buttonNew.visibility = View.VISIBLE
-                        buttonNew.setOnClickListener {
-                            viewModel.delegate.onClickNew(predefinedAccount)
-                        }
-                    }
+                buttonNew.visibility = View.VISIBLE
+                buttonNew.setOnClickListener {
+                    viewModel.delegate.onClickNew(item)
                 }
 
+                buttonImport.visibility = View.VISIBLE
                 buttonImport.setOnClickListener { viewModel.delegate.onClickRestore(predefinedAccount) }
 
                 return
@@ -69,7 +65,7 @@ class ManageKeysAdapter(private val viewModel: ManageKeysViewModel) : RecyclerVi
             }
 
             buttonUnlink.visibility = View.VISIBLE
-            buttonUnlink.setOnClickListener { viewModel.confirmUnlink(account) }
+            buttonUnlink.setOnClickListener { viewModel.confirmUnlink(item) }
             buttonBackup.setOnClickListener { viewModel.delegate.onClickBackup(account) }
         }
 
@@ -90,4 +86,6 @@ class ManageKeysAdapter(private val viewModel: ManageKeysViewModel) : RecyclerVi
             keyIcon.alpha = if (isEnabled) 1F else 0.25F
         }
     }
+
+    class KeysInfoViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
 }

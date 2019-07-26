@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.core.DefaultAccountType
 import io.horizontalsystems.bankwallet.core.Wallet
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.SyncMode
 
 class ManageWalletsPresenter(private val interactor: ManageWalletsModule.IInteractor, private val router: ManageWalletsModule.IRouter)
@@ -39,8 +38,8 @@ class ManageWalletsPresenter(private val interactor: ManageWalletsModule.IIntera
 
         try {
             item.wallet = interactor.createWallet(item.coin)
-        } catch (ex: Exception) {
-            view?.showFailedToCreateKey()
+        } catch (e: Exception) {
+            view?.showError(e)
         }
     }
 
@@ -66,8 +65,8 @@ class ManageWalletsPresenter(private val interactor: ManageWalletsModule.IIntera
 
         try {
             item.wallet = interactor.restoreWallet(item.coin, accountType, syncMode)
-        } catch (ex: Exception) {
-            view?.showFailedToRestoreKey()
+        } catch (e: Exception) {
+            view?.showError(e)
         }
     }
 
@@ -111,10 +110,6 @@ class ManageWalletsPresenter(private val interactor: ManageWalletsModule.IIntera
         router.close()
     }
 
-    override fun didFailedToSave() {
-        view?.showFailedToSaveError()
-    }
-
     //  Private
 
     private fun enable(item: ManageWalletItem) {
@@ -122,12 +117,7 @@ class ManageWalletsPresenter(private val interactor: ManageWalletsModule.IIntera
         val wallet = interactor.wallet(coin)
         if (wallet == null) {
             currentItem = item
-
-            if (coin.type is CoinType.Eos) {
-                view?.showRestoreKeyDialog(coin)
-            } else {
-                view?.showCreateAndRestoreKeyDialog(coin)
-            }
+            view?.showNoAccountDialog(coin)
         } else {
             item.wallet = wallet
         }
