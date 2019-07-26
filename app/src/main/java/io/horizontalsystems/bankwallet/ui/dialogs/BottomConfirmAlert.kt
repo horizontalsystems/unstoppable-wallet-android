@@ -1,18 +1,18 @@
 package io.horizontalsystems.bankwallet.ui.dialogs
 
 import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.*
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.viewHelpers.bottomDialog
+import io.horizontalsystems.bankwallet.viewHelpers.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_confirmation.*
 
@@ -22,28 +22,19 @@ class BottomConfirmAlert : DialogFragment(), ConfirmationsAdapter.Listener {
         fun onConfirmationSuccess()
     }
 
-    private var mDialog: Dialog? = null
-    private lateinit var rootView: View
-    private lateinit var btnConfirm: Button
-    private var checkboxItemList: MutableList<CheckBoxItem> = mutableListOf()
     private var adapter = ConfirmationsAdapter(this)
-    private lateinit var recyclerView: RecyclerView
+    private var checkboxItemList: MutableList<CheckBoxItem> = mutableListOf()
 
     private lateinit var listener: Listener
+    private lateinit var btnConfirm: Button
+    private lateinit var rootView: View
+    private lateinit var recyclerView: RecyclerView
     private lateinit var color: BottomButtonColor
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = activity?.let { AlertDialog.Builder(it, R.style.BottomDialog) }
-
         rootView = View.inflate(context, R.layout.fragment_bottom_confirmations, null) as ViewGroup
         btnConfirm = rootView.findViewById(R.id.btnConfirm)
         recyclerView = rootView.findViewById(R.id.recyclerView)
-        builder?.setView(rootView)
-
-        mDialog = builder?.create()
-        mDialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
-        mDialog?.window?.setGravity(Gravity.BOTTOM)
-        mDialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         btnConfirm.setOnClickListener {
             listener.onConfirmationSuccess()
@@ -53,11 +44,11 @@ class BottomConfirmAlert : DialogFragment(), ConfirmationsAdapter.Listener {
         btnConfirm.setBackgroundResource(getBackgroundResId(color))
         setButtonTextColor(color, false)
 
-        return mDialog as Dialog
+        return bottomDialog(activity, rootView)
     }
 
     private fun setButtonTextColor(buttonColor: BottomButtonColor, enabled: Boolean) {
-        val colorRes: Int = when {
+        val colorRes = when {
             enabled -> when (buttonColor) {
                 BottomButtonColor.RED -> R.color.white
                 BottomButtonColor.YELLOW -> R.color.black
@@ -97,7 +88,7 @@ class BottomConfirmAlert : DialogFragment(), ConfirmationsAdapter.Listener {
     }
 
     companion object {
-        fun show(activity: FragmentActivity, textResourcesList: MutableList<Int>, listener: Listener, color: BottomButtonColor = BottomButtonColor.YELLOW) {
+        fun show(activity: FragmentActivity, textResourcesList: MutableList<String>, listener: Listener, color: BottomButtonColor = BottomButtonColor.YELLOW) {
             val fragment = BottomConfirmAlert()
             fragment.listener = listener
             fragment.color = color
@@ -125,25 +116,26 @@ class ConfirmationsAdapter(private var listener: Listener) : RecyclerView.Adapte
     override fun getItemCount() = confirmations.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderConfirmation {
-        val containerView = LayoutInflater.from(parent.context).inflate(R.layout.view_holder_confirmation, parent, false)
-        return ViewHolderConfirmation(containerView, listener)
+        return ViewHolderConfirmation(inflate(parent, R.layout.view_holder_confirmation), listener)
     }
 
     override fun onBindViewHolder(holder: ViewHolderConfirmation, position: Int) {
-        holder.bind(confirmations[position].textRes)
+        holder.bind(confirmations[position].text)
     }
 }
 
-class ViewHolderConfirmation(override val containerView: View, val listener: ConfirmationsAdapter.Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class ViewHolderConfirmation(override val containerView: View, val listener: ConfirmationsAdapter.Listener)
+    : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
     init {
         confirmationCheckBox.setOnCheckedChangeListener { _, isChecked ->
             listener.onItemCheckMarkClick(adapterPosition, isChecked)
         }
     }
 
-    fun bind(textRes: Int) {
-        confirmationCheckBox.text = containerView.context.getString(textRes)
+    fun bind(text: String) {
+        confirmationCheckBox.text = text
     }
 }
 
-class CheckBoxItem(val textRes: Int, var checked: Boolean = false)
+class CheckBoxItem(val text: String, var checked: Boolean = false)

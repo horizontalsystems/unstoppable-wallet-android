@@ -43,7 +43,7 @@
         app:layout_constraintTop_toBottomOf="@+id/addKeyIcon" />
 
     <TextView
-        android:id="@+id/addKeyDescription"
+        android:id="@+id/addKeyInfo"
         style="@style/Body1Grey"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -69,7 +69,7 @@
         app:layout_constraintBottom_toTopOf="@+id/btnRestoreKey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addKeyDescription" />
+        app:layout_constraintTop_toBottomOf="@+id/addKeyInfo" />
 
     <Button
         android:id="@+id/btnRestoreKey"

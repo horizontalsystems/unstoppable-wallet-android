@@ -7,11 +7,13 @@ import io.horizontalsystems.bankwallet.entities.Account
 class ManageKeysViewModel : ViewModel(), ManageKeysModule.View, ManageKeysModule.Router {
 
     val showItemsEvent = SingleLiveEvent<List<ManageAccountItem>>()
-    val closeLiveEvent = SingleLiveEvent<Void>()
-    val confirmUnlinkEvent = SingleLiveEvent<Account>()
+    val showErrorEvent = SingleLiveEvent<Exception>()
+    val confirmUnlinkEvent = SingleLiveEvent<ManageAccountItem>()
+    val confirmCreateEvent = SingleLiveEvent<Pair<String, String>>()
     val startBackupModuleLiveEvent = SingleLiveEvent<Account>()
     val startRestoreWordsLiveEvent = SingleLiveEvent<Unit>()
     val startRestoreEosLiveEvent = SingleLiveEvent<Unit>()
+    val closeLiveEvent = SingleLiveEvent<Void>()
 
     lateinit var delegate: ManageKeysModule.ViewDelegate
 
@@ -20,7 +22,7 @@ class ManageKeysViewModel : ViewModel(), ManageKeysModule.View, ManageKeysModule
         delegate.viewDidLoad()
     }
 
-    fun confirmUnlink(account: Account) {
+    fun confirmUnlink(account: ManageAccountItem) {
         confirmUnlinkEvent.value = account
     }
 
@@ -29,6 +31,15 @@ class ManageKeysViewModel : ViewModel(), ManageKeysModule.View, ManageKeysModule
     override fun show(items: List<ManageAccountItem>) {
         showItemsEvent.postValue(items)
     }
+
+    override fun showCreateConfirmation(title: String, coinCodes: String) {
+        confirmCreateEvent.postValue(Pair(title, coinCodes))
+    }
+
+    override fun showError(error: Exception) {
+        showErrorEvent.postValue(error)
+    }
+
 
     //  Router
 

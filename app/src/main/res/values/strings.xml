@@ -300,7 +300,7 @@
     <string name="ManageCoins_save">Save</string>
     <string name="ManageCoins_AddCoin_Title">Add %s Coin</string>
     <string name="ManageCoins_AddCoin_Text">This action will generate a new key(wallet) for the following coins: %s </string>
-    <string name="ManageCoins_AddCoin_TextBackup">Anyone with access to your Keys can steal your wallet funds. Store them safely and never show them to anyone. [2 line breaks] Backup each key to be able to restore funds if you loose or break your phone, or simply the wallet app gets deleted.</string>
+    <string name="ManageCoins_AddCoin_TextBackup">Anyone with access to your Keys can steal your wallet funds. Store them safely and never show them to anyone. \n\nBackup each key to be able to restore funds if you loose or break your phone, or simply the wallet app gets deleted.</string>
     <string name="ManageCoins_EOSAlert_CreateButton">At this point, the wallet is not able to create new EOS wallet accounts. You\'re only able to restore the existing one.</string>
 
     <!--Manage Keys-->
@@ -312,17 +312,17 @@
     <string name="ManageKeys_Backup">Backup</string>
     <string name="ManageKeys_Show">Show</string>
 
-    <string name="ManageKeys_Unlink_ConfirmationRemove">This action will remove the [key_title] key (wallet) from this device.</string>
-    <string name="ManageKeys_Unlink_ConfirmationDisable">Coins that will be disabled: [same coin list as on the key cell on KEYs page]</string>
+    <string name="ManageKeys_Unlink_ConfirmationRemove">This action will remove the %s key (wallet) from this device.</string>
+    <string name="ManageKeys_Unlink_ConfirmationDisable">Coins that will be disabled: %s</string>
     <string name="ManageKeys_Unlink_ConfirmationLoose">If you don\'t have a backup of this key you will loose the respective funds.</string>
     <string name="ManageKeys_UnlinkAlert">You need to backup this key before you may unlink it.</string>
 
     <!-- Manage Keys Alert -->
 
-    <string name="AddCoin_Title">Add Key for %s</string>
-    <string name="AddCoin_Description">You need to have a cryptographic key before you can add %s</string>
-    <string name="AddCoin_CreateKey">Create New</string>
-    <string name="AddCoin_RestoreKey">I already have</string>
+    <string name="AddCoin_Title">Add %s</string>
+    <string name="AddCoin_Description">You don\'t have active key for use with %s. \n\nUse Create button below to generate a new key (wallet)</string>
+    <string name="AddCoin_CreateKey">Create</string>
+    <string name="AddCoin_RestoreKey">Restore</string>
 
     <!-- Account Types -->
 

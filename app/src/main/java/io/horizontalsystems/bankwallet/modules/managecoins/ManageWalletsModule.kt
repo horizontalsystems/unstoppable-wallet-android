@@ -13,11 +13,8 @@ object ManageWalletsModule {
 
     interface IView {
         fun updateCoins()
-        fun showFailedToSaveError()
-        fun showRestoreKeyDialog(coin: Coin)
-        fun showCreateAndRestoreKeyDialog(coin: Coin)
-        fun showFailedToCreateKey()
-        fun showFailedToRestoreKey()
+        fun showNoAccountDialog(coin: Coin)
+        fun showError(e: Exception)
     }
 
     interface IViewDelegate {
@@ -54,7 +51,6 @@ object ManageWalletsModule {
 
     interface IInteractorDelegate {
         fun didSaveChanges()
-        fun didFailedToSave()
     }
 
     interface IRouter {

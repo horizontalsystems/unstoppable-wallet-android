@@ -8,6 +8,8 @@ class ManageKeysPresenter(private val interactor: ManageKeysModule.Interactor, p
 
     var view: ManageKeysModule.View? = null
 
+    private var currentItem: ManageAccountItem? = null
+
     //  ViewDelegate
 
     override var items = listOf<ManageAccountItem>()
@@ -39,8 +41,17 @@ class ManageKeysPresenter(private val interactor: ManageKeysModule.Interactor, p
         interactor.restoreAccount(accountType, syncMode)
     }
 
-    override fun onClickNew(accountType: IPredefinedAccountType) {
-        interactor.createAccount(accountType)
+    override fun onClickNew(item: ManageAccountItem) {
+        currentItem = item
+        view?.showCreateConfirmation(item.predefinedAccountType.title, item.predefinedAccountType.coinCodes)
+    }
+
+    override fun onConfirmCreate() {
+        try {
+            currentItem?.let { interactor.createAccount(it.predefinedAccountType) }
+        } catch (e: Exception) {
+            view?.showError(e)
+        }
     }
 
     override fun onClear() {

@@ -2,15 +2,19 @@ package io.horizontalsystems.bankwallet.modules.settings.managekeys
 
 import android.content.Context
 import android.content.Intent
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
+import io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysActivity
 
 object ManageKeysModule {
 
     interface View {
         fun show(items: List<ManageAccountItem>)
+        fun showError(error: Exception)
+        fun showCreateConfirmation(title: String, coinCodes: String)
     }
 
     interface ViewDelegate {
@@ -20,7 +24,8 @@ object ManageKeysModule {
         fun onClickBackup(account: Account)
         fun onClickRestore(accountType: IPredefinedAccountType)
         fun onClickUnlink(accountId: String)
-        fun onClickNew(accountType: IPredefinedAccountType)
+        fun onClickNew(item: ManageAccountItem)
+        fun onConfirmCreate()
         fun onRestore(accountType: AccountType, syncMode: SyncMode? = null)
         fun onClear()
     }

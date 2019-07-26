@@ -9,32 +9,24 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import io.horizontalsystems.bankwallet.R
 
-class AlertDialogFragment : DialogFragment() {
+class AlertDialogFragment(private var title: Int, private var description: Int, private var buttonText: Int, private var listener: Listener? = null)
+    : DialogFragment() {
 
     interface Listener {
         fun onButtonClick()
     }
 
-    private var title: Int? = null
-    private var description: Int? = null
-    private var buttonText: Int? = null
-
-    private var listener: Listener? = null
-
     override fun onCreateDialog(bundle: Bundle?): Dialog {
 
         val builder = activity?.let { AlertDialog.Builder(it, R.style.AlertDialog) }
-
         val rootView = View.inflate(context, R.layout.fragment_alert_dialog, null) as ViewGroup
+
         builder?.setView(rootView)
-
-        title?.let { rootView.findViewById<TextView>(R.id.txtTitle)?.setText(it) }
-        description?.let { rootView.findViewById<TextView>(R.id.txtDescription)?.setText(it) }
-        buttonText?.let { rootView.findViewById<TextView>(R.id.txtButton)?.setText(it) }
-
-        rootView.findViewById<TextView>(R.id.txtButton)?.let { txtButton ->
-            buttonText?.let { txtButton.setText(it) }
-            txtButton.setOnClickListener {
+        rootView.findViewById<TextView>(R.id.txtTitle)?.setText(title)
+        rootView.findViewById<TextView>(R.id.txtDescription)?.setText(description)
+        rootView.findViewById<TextView>(R.id.txtButton)?.let { btn ->
+            btn.setText(buttonText)
+            btn.setOnClickListener {
                 listener?.onButtonClick()
                 dismiss()
             }
@@ -49,13 +41,7 @@ class AlertDialogFragment : DialogFragment() {
 
     companion object {
         fun newInstance(title: Int, description: Int, buttonText: Int, listener: Listener? = null): AlertDialogFragment {
-            val dialog = AlertDialogFragment()
-            dialog.title = title
-            dialog.description = description
-            dialog.buttonText = buttonText
-            dialog.listener = listener
-            return dialog
+            return AlertDialogFragment(title, description, buttonText, listener)
         }
     }
-
 }

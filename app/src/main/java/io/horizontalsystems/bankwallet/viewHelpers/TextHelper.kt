@@ -46,12 +46,6 @@ object TextHelper : IClipboardManager {
         }
     }
 
-    fun getCleanCoinCode(coin: String): String {
-        var cleanedCoin = coin.removeSuffix("t")
-        cleanedCoin = cleanedCoin.removeSuffix("r")
-        return cleanedCoin
-    }
-
     private val clipboard: ClipboardManager?
         get() = App.instance.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
 

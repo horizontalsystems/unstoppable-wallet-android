@@ -6,16 +6,18 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.EosUnsupportedException
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.lib.AlertDialogFragment
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsViewModel
 import io.horizontalsystems.bankwallet.modules.restore.eos.RestoreEosModule
 import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule
-import io.horizontalsystems.bankwallet.ui.dialogs.ManageKeysDialog
+import io.horizontalsystems.bankwallet.ui.dialogs.ManageWalletsDialog
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import kotlinx.android.synthetic.main.activity_manage_coins.*
 
-class ManageWalletsActivity : BaseActivity(), ManageKeysDialog.Listener {
+class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener {
 
     private lateinit var viewModel: ManageWalletsViewModel
 
@@ -39,12 +41,8 @@ class ManageWalletsActivity : BaseActivity(), ManageKeysDialog.Listener {
             adapter.notifyDataSetChanged()
         })
 
-        viewModel.showRestoreKeyDialog.observe(this, Observer { coin ->
-            ManageKeysDialog.showWithoutCreateOption(this, coin, this)
-        })
-
-        viewModel.showCreateAndRestoreKeyDialog.observe(this, Observer { coin ->
-            ManageKeysDialog.show(this, coin, this)
+        viewModel.showManageKeysDialog.observe(this, Observer { coin ->
+            ManageWalletsDialog.show(this, this, coin)
         })
 
         viewModel.openRestoreWordsModule.observe(this, Observer {
@@ -53,6 +51,18 @@ class ManageWalletsActivity : BaseActivity(), ManageKeysDialog.Listener {
 
         viewModel.openRestoreEosModule.observe(this, Observer {
             RestoreEosModule.startForResult(this, ModuleCode.RESTORE_EOS)
+        })
+
+        viewModel.showErrorEvent.observe(this, Observer {
+            if (it is EosUnsupportedException) {
+                AlertDialogFragment.newInstance(
+                        R.string.Alert_TitleWarning,
+                        R.string.ManageCoins_EOSAlert_CreateButton,
+                        R.string.Alert_Ok
+                ).show(supportFragmentManager, "alert_dialog")
+
+                onCancel() // will uncheck coin
+            }
         })
 
         viewModel.closeLiveDate.observe(this, Observer {
@@ -78,7 +88,7 @@ class ManageWalletsActivity : BaseActivity(), ManageKeysDialog.Listener {
         }
     }
 
-    //  ManageKeysDialog listener
+    //  ManageWalletsDialog listener
 
     override fun onClickCreateKey() {
         viewModel.delegate.onClickCreateKey()
