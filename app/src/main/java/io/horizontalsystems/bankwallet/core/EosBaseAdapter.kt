@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core
 
+import io.horizontalsystems.bankwallet.entities.AddressError
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
 import io.horizontalsystems.eoskit.EosKit
@@ -44,7 +45,13 @@ abstract class EosBaseAdapter(eos: CoinType.Eos, protected val eosKit: EosKit) :
     }
 
     override fun parsePaymentAddress(address: String): PaymentRequestAddress {
-        return PaymentRequestAddress(address)
+        var addressError: AddressError.InvalidPaymentAddress? = null
+        try {
+            validate(address)
+        } catch (e: Exception) {
+            addressError = AddressError.InvalidPaymentAddress()
+        }
+        return PaymentRequestAddress(address, null, error = addressError)
     }
 
     override val receiveAddress: String get() = eosKit.account

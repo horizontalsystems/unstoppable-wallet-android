@@ -4,6 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
+import java.math.BigDecimal
 
 class SendViewModel : ViewModel(), SendModule.IView {
 
@@ -24,7 +26,11 @@ class SendViewModel : ViewModel(), SendModule.IView {
     val showConfirmationLiveEvent = SingleLiveEvent<Unit>()
     val pasteButtonEnabledLiveData = MutableLiveData<Boolean>()
     val feeIsAdjustableLiveData = MutableLiveData<Boolean>()
+    val availableBalanceRetrievedLiveData = MutableLiveData<BigDecimal>()
+    val onAddressParsedLiveData = MutableLiveData<PaymentRequestAddress>()
+    val getParamsFromModulesLiveEvent = SingleLiveEvent<SendModule.ParamsAction>()
     var decimalSize: Int? = null
+
 
     private var moduleInited = false
 
@@ -41,8 +47,9 @@ class SendViewModel : ViewModel(), SendModule.IView {
 
         SendModule.init(this, coin)
         delegate.onViewDidLoad()
-        feeIsAdjustableLiveData.value = delegate.feeAdjustable
+//        feeIsAdjustableLiveData.value = delegate.feeAdjustable
         moduleInited = true
+
     }
 
     override fun setPasteButtonState(enabled: Boolean) {
@@ -107,8 +114,19 @@ class SendViewModel : ViewModel(), SendModule.IView {
 
     fun onViewResumed() {
         if (moduleInited) {
-            delegate.onViewResumed()
+//            delegate.onViewResumed()
         }
     }
 
+    override fun onAvailableBalanceRetrieved(availableBalance: BigDecimal) {
+        availableBalanceRetrievedLiveData.value = availableBalance
+    }
+
+    override fun onAddressParsed(parsedAddress: PaymentRequestAddress) {
+        onAddressParsedLiveData.value = parsedAddress
+    }
+
+    override fun getParamsForAction(paramsAction: SendModule.ParamsAction) {
+        getParamsFromModulesLiveEvent.value = paramsAction
+    }
 }

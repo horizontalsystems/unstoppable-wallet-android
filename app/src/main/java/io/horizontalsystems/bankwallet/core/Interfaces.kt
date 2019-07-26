@@ -353,7 +353,7 @@ interface IFeeRateProvider {
 }
 
 sealed class SendStateError {
-    object InsufficientAmount : SendStateError()
+    class InsufficientAmount(val balance: BigDecimal) : SendStateError()
     object InsufficientFeeBalance : SendStateError()
 }
 

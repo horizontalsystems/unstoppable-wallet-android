@@ -17,13 +17,16 @@
         android:supportsRtl="true"
         android:theme="@style/DarkModeAppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
+        <activity
+            android:name=".modules.send.SendActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".modules.launcher.LauncherActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>

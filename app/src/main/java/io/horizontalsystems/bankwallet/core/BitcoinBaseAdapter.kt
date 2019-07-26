@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core
 
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
+import io.horizontalsystems.bankwallet.entities.AddressError
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
@@ -75,7 +76,13 @@ abstract class BitcoinBaseAdapter(override val wallet: Wallet, open val kit: Abs
 
     override fun parsePaymentAddress(address: String): PaymentRequestAddress {
         val paymentData = addressParser.parse(address)
-        return PaymentRequestAddress(paymentData.address, paymentData.amount?.toBigDecimal())
+        var addressError: AddressError.InvalidPaymentAddress? = null
+        try {
+            validate(paymentData.address)
+        } catch (e: Exception) {
+            addressError = AddressError.InvalidPaymentAddress()
+        }
+        return PaymentRequestAddress(paymentData.address, paymentData.amount?.toBigDecimal(), error = addressError)
     }
 
     override fun send(address: String, value: BigDecimal, feePriority: FeeRatePriority): Single<Unit> {
@@ -107,8 +114,9 @@ abstract class BitcoinBaseAdapter(override val wallet: Wallet, open val kit: Abs
 
     override fun validate(amount: BigDecimal, address: String?, feePriority: FeeRatePriority): List<SendStateError> {
         val errors = mutableListOf<SendStateError>()
-        if (amount > availableBalance(address, feePriority)) {
-            errors.add(SendStateError.InsufficientAmount)
+        val availableBalance = availableBalance(address, feePriority)
+        if (amount > availableBalance) {
+            errors.add(SendStateError.InsufficientAmount(availableBalance))
         }
         return errors
     }

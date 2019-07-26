@@ -107,22 +107,22 @@ class SendView: LinearLayout, NumPadItemsAdapter.Listener {
         numPadItemsRecyclerView?.adapter = numpadAdapter
         numPadItemsRecyclerView?.layoutManager = GridLayoutManager(context, 3)
 
-        addressInput?.bindAddressInputInitial(
-                onAmpersandClick = null,
-                onBarcodeClick = {
-                    listener?.openSendScanner()
-                },
-                onPasteClick = { viewModel.delegate.onPasteClicked() },
-                onDeleteClick = { viewModel.delegate.onDeleteClicked() }
-        )
+//        addressInput?.bindAddressInputInitial(
+//                onAmpersandClick = null,
+//                onBarcodeClick = {
+//                    listener?.openSendScanner()
+//                },
+//                onPasteClick = { viewModel.delegate.onPasteClicked() },
+//                onDeleteClick = { viewModel.delegate.onDeleteClicked() }
+//        )
 
         editTxtAmount.showSoftInputOnFocus = false
         btnSend.isEnabled = false
 
-        amountInput?.bindInitial(
-                onMaxClick = { viewModel.delegate.onMaxClicked() },
-                onSwitchClick = { viewModel.delegate.onSwitchClicked() }
-        )
+//        amountInput?.bindInitial(
+//                onMaxClick = { viewModel.delegate.onMaxClicked() },
+//                onSwitchClick = { viewModel.delegate.onSwitchClicked() }
+//        )
 
         btnSend.setOnClickListener { viewModel.delegate.onSendClicked() }
 
@@ -138,7 +138,7 @@ class SendView: LinearLayout, NumPadItemsAdapter.Listener {
         }
 
         feeRateSeekbar.bind { progress ->
-            viewModel.delegate.onFeeSliderChange(progress)
+//            viewModel.delegate.onFeeSliderChange(progress)
         }
     }
 

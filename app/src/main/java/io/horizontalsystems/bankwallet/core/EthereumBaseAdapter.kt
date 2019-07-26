@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core
 
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
+import io.horizontalsystems.bankwallet.entities.AddressError
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.Flowable
@@ -45,7 +46,13 @@ abstract class EthereumBaseAdapter(override val wallet: Wallet, protected val et
 
     override fun parsePaymentAddress(address: String): PaymentRequestAddress {
         val paymentData = addressParser.parse(address)
-        return PaymentRequestAddress(paymentData.address, paymentData.amount?.toBigDecimal())
+        var addressError: AddressError.InvalidPaymentAddress? = null
+        try {
+            validate(paymentData.address)
+        } catch (e: Exception) {
+            addressError = AddressError.InvalidPaymentAddress()
+        }
+        return PaymentRequestAddress(paymentData.address, paymentData.amount?.toBigDecimal(), error = addressError)
     }
 
     override val receiveAddress: String get() = ethereumKit.receiveAddress

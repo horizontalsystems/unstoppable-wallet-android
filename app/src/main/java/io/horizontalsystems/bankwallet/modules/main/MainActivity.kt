@@ -24,6 +24,7 @@ import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerModule
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveView
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveViewModel
 import io.horizontalsystems.bankwallet.modules.send.ConfirmationFragment
+import io.horizontalsystems.bankwallet.modules.send.SendActivity
 import io.horizontalsystems.bankwallet.modules.send.SendView
 import io.horizontalsystems.bankwallet.modules.send.SendViewModel
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
@@ -96,7 +97,7 @@ class MainActivity : BaseActivity(), SendView.Listener, ReceiveView.Listener, Tr
         super.onActivityResult(requestCode, resultCode, data)
         val scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (scanResult != null && !TextUtils.isEmpty(scanResult.contents)) {
-            sendViewModel?.delegate?.onScanAddress(scanResult.contents)
+//            sendViewModel?.delegate?.onScanAddress(scanResult.contents)
         }
     }
 
@@ -129,11 +130,14 @@ class MainActivity : BaseActivity(), SendView.Listener, ReceiveView.Listener, Tr
      */
 
     fun openSendDialog(coinCode: String) {
-        sendViewModel?.let {
-            it.init(coinCode)
-            sendView.update()
-        }
-        sendBottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+        val intent = Intent(this, SendActivity::class.java)
+        startActivity(intent)
+
+//        sendViewModel?.let {
+//            it.init(coinCode)
+//            sendView.update()
+//        }
+//        sendBottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     override fun closeSend() {

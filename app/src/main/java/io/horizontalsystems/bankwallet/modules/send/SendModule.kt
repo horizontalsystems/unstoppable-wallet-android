@@ -2,8 +2,11 @@ package io.horizontalsystems.bankwallet.modules.send
 
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
-import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
+import io.horizontalsystems.bankwallet.core.SendStateError
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
 import java.math.BigDecimal
 
 object SendModule {
@@ -28,52 +31,69 @@ object SendModule {
         fun setPasteButtonState(enabled: Boolean)
         fun setDecimal(decimal: Int)
 
+        fun onAvailableBalanceRetrieved(availableBalance: BigDecimal)
+        fun onAddressParsed(parsedAddress: PaymentRequestAddress)
+        fun getParamsForAction(paramsAction: ParamsAction)
     }
 
     interface IViewDelegate {
-        val feeAdjustable: Boolean
+//        val feeAdjustable: Boolean
         fun onViewDidLoad()
-        fun onViewResumed()
-        fun onAmountChanged(amount: BigDecimal)
-        fun onSwitchClicked()
-        fun onPasteClicked()
-        fun onScanAddress(address: String)
-        fun onDeleteClicked()
+        fun onAmountChanged(coinAmount: BigDecimal?)
+        fun onAddressChanged()
         fun onSendClicked()
+
+        fun onGetAvailableBalance()
         fun onConfirmClicked()
-        fun onMaxClicked()
         fun onClear()
-        fun onFeeSliderChange(value: Int)
+//        fun onFeeSliderChange(value: Int)
+        fun parseAddress(address: String)
+        fun onParamsFetchedForAction(params: MutableMap<AdapterFields, Any?>, paramsAction: ParamsAction)
+
+        //        fun onSwitchClicked()
+//        fun onPasteClicked()
+//        fun onScanAddress(address: String)
+//        fun onDeleteClicked()
+//        fun onViewResumed()
+//        fun onMaxClicked()
     }
 
     interface IInteractor {
         val coin: Coin
-        val clipboardHasPrimaryClip: Boolean
-        var defaultInputType: InputType
-        val addressFromClipboard: String?
-
-        fun retrieveRate()
         fun parsePaymentAddress(address: String): PaymentRequestAddress
-        fun convertedAmountForInputType(inputType: InputType, amount: BigDecimal): BigDecimal?
-        fun stateForUserInput(input: UserInput): State
-
         fun send(userInput: UserInput)
-        fun getTotalBalanceMinusFee(inputType: InputType, address: String?, feeRate: FeeRatePriority): BigDecimal
+        fun getAvailableBalance(address: String?, feeRate: FeeRatePriority): BigDecimal
         fun clear()
+        fun validate(params: MutableMap<AdapterFields, Any?>)
     }
 
     interface IInteractorDelegate {
-        fun didRateRetrieve(rate: Rate?)
-        fun didFeeRateRetrieve()
         fun didSend()
         fun didFailToSend(error: Throwable)
+        fun onValidationComplete(errorList: List<SendStateError>)
+    }
+
+    //Amount module related
+    interface ISendAmountPresenterDelegate{
+        //update amount view
+
+        //communicate changes to main presenter
+
+    }
+
+    //Amount module related
+    interface ISendAddressPresenterDelegate{
+        //update address view
+
+        //communicate changes to main presenter
+
     }
 
 
     fun init(view: SendViewModel, coinCode: String) {
         val adapter = App.adapterManager.adapters.first { it.wallet.coin.code == coinCode }
-        val interactor = SendInteractor(App.currencyManager, App.rateStorage, App.localStorage, TextHelper, adapter, App.appConfigProvider)
-        val presenter = SendPresenter(interactor, StateViewItemFactory(), UserInput())
+        val interactor = SendInteractor(adapter)
+        val presenter = SendPresenter(interactor)
 
         view.delegate = presenter
         presenter.view = view
@@ -82,6 +102,14 @@ object SendModule {
 
     enum class InputType {
         COIN, CURRENCY
+    }
+
+    enum class AdapterFields{
+        Amount, Address, FeeRatePriority
+    }
+
+    enum class ParamsAction {
+        Validate, AvailableBalance
     }
 
     open class AmountError : Exception() {
@@ -93,6 +121,7 @@ object SendModule {
         class InvalidAddress : AddressError()
     }
 
+    //todo delete this class
     sealed class HintInfo {
         data class Amount(val amountInfo: AmountInfo) : HintInfo()
         data class ErrorInfo(val error: AmountError) : HintInfo()
@@ -153,4 +182,5 @@ object SendModule {
     class SendConfirmationViewItem(val primaryAmountInfo: AmountInfo, val address: String, val feeInfo: AmountInfo, val totalInfo: AmountInfo?) {
         var secondaryAmountInfo: AmountInfo? = null
     }
+
 }

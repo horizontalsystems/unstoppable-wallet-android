@@ -55,8 +55,9 @@ class EosAdapter(override val wallet: Wallet, eos: CoinType.Eos, kit: EosKit) : 
 
     override fun validate(amount: BigDecimal, address: String?, feePriority: FeeRatePriority): List<SendStateError> {
         val errors = mutableListOf<SendStateError>()
-        if (amount > availableBalance(address, feePriority)) {
-            errors.add(SendStateError.InsufficientAmount)
+        val availableBalance = availableBalance(address, feePriority)
+        if (amount > availableBalance) {
+            errors.add(SendStateError.InsufficientAmount(availableBalance))
         }
         return errors
     }
