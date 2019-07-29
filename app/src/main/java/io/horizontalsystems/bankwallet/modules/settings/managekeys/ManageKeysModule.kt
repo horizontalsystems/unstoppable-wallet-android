@@ -53,7 +53,7 @@ object ManageKeysModule {
 
     interface Router {
         fun startBackupModule(accountItem: ManageAccountItem)
-        fun startRestoreWords()
+        fun startRestoreWords(wordsCount: Int)
         fun startRestoreEos()
         fun close()
     }

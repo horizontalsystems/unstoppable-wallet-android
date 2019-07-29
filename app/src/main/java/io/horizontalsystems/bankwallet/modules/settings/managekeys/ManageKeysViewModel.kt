@@ -13,7 +13,7 @@ class ManageKeysViewModel : ViewModel(), ManageKeysModule.View, ManageKeysModule
     val confirmCreateEvent = SingleLiveEvent<Pair<String, String>>()
     val confirmBackupEvent = SingleLiveEvent<String>()
     val startBackupModuleLiveEvent = SingleLiveEvent<ManageAccountItem>()
-    val startRestoreWordsLiveEvent = SingleLiveEvent<Unit>()
+    val startRestoreWordsLiveEvent = SingleLiveEvent<Int>()
     val startRestoreEosLiveEvent = SingleLiveEvent<Unit>()
     val closeLiveEvent = SingleLiveEvent<Void>()
 
@@ -56,8 +56,8 @@ class ManageKeysViewModel : ViewModel(), ManageKeysModule.View, ManageKeysModule
         startBackupModuleLiveEvent.postValue(accountItem)
     }
 
-    override fun startRestoreWords() {
-        startRestoreWordsLiveEvent.call()
+    override fun startRestoreWords(wordsCount: Int) {
+        startRestoreWordsLiveEvent.postValue(wordsCount)
     }
 
     override fun startRestoreEos() {

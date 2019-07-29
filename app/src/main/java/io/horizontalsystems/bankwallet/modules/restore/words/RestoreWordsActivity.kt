@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.GridLayoutManager
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.putParcelableExtra
@@ -12,18 +11,16 @@ import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
-import io.horizontalsystems.bankwallet.lib.InputTextViewHolder
-import io.horizontalsystems.bankwallet.lib.WordsInputAdapter
 import io.horizontalsystems.bankwallet.modules.syncmodule.SyncModeModule
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_restore_words.*
 
-class RestoreWordsActivity : BaseActivity() {
+class RestoreWordsActivity : BaseActivity(), RestoreWordsAdapter.Listener {
 
     private lateinit var viewModel: RestoreWordsViewModel
 
-    private val words = MutableList(12) { "" }
+    private var words = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,29 +37,15 @@ class RestoreWordsActivity : BaseActivity() {
         viewModel = ViewModelProviders.of(this).get(RestoreWordsViewModel::class.java)
         viewModel.init()
 
-        viewModel.errorLiveData.observe(this, Observer { errorId ->
-            errorId?.let {
-                HudHelper.showErrorMessage(it)
-            }
+        viewModel.errorLiveData.observe(this, Observer {
+            HudHelper.showErrorMessage(it)
         })
 
         viewModel.startSyncModeModule.observe(this, Observer {
             SyncModeModule.startForResult(this, ModuleCode.SYNC_MODE)
         })
 
-        recyclerInputs.isNestedScrollingEnabled = false
-        recyclerInputs.layoutManager = GridLayoutManager(this, 2)
-        recyclerInputs.adapter = WordsInputAdapter(object : InputTextViewHolder.WordsChangedListener {
-            override fun set(position: Int, value: String) {
-                if (isUsingNativeKeyboard()) {
-                    words[position] = value.toLowerCase()
-                }
-            }
-
-            override fun done() {
-                viewModel.delegate.restoreDidClick(words)
-            }
-        })
+        recyclerInputs.adapter = RestoreWordsAdapter(intent.getIntExtra("wordsCount", 12), this)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -81,10 +64,24 @@ class RestoreWordsActivity : BaseActivity() {
         }
     }
 
+    // WordsInputAdapter Listener
+
+    override fun onChange(position: Int, value: String) {
+        if (isUsingNativeKeyboard()) {
+            words.add(position, value.toLowerCase())
+        }
+    }
+
+    override fun onDone() {
+        viewModel.delegate.restoreDidClick(words)
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
     }
+
+    // Private
 
     private fun isUsingNativeKeyboard(): Boolean {
         if (Utils.isUsingCustomKeyboard(this)) {

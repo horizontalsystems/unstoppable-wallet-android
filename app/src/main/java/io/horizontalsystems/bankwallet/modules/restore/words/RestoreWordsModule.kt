@@ -3,8 +3,6 @@ package io.horizontalsystems.bankwallet.modules.restore.words
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.SyncMode
 
 object RestoreWordsModule {
 
@@ -29,8 +27,11 @@ object RestoreWordsModule {
         fun startSyncModeModule(words: List<String>)
     }
 
-    fun startForResult(context: AppCompatActivity, requestCode: Int) {
-        val intent = Intent(context, RestoreWordsActivity::class.java)
+    fun startForResult(context: AppCompatActivity, wordsCount: Int, requestCode: Int) {
+        val intent = Intent(context, RestoreWordsActivity::class.java).apply {
+            putExtra("wordsCount", wordsCount)
+        }
+
         context.startActivityForResult(intent, requestCode)
     }
 

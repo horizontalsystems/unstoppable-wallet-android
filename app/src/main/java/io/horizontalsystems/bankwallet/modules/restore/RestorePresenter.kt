@@ -2,10 +2,7 @@ package io.horizontalsystems.bankwallet.modules.restore
 
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountTypeManager
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.EosAccountType
-import io.horizontalsystems.bankwallet.entities.SyncMode
-import io.horizontalsystems.bankwallet.entities.Words12AccountType
+import io.horizontalsystems.bankwallet.entities.*
 
 class RestorePresenter(
         private val router: RestoreModule.Router,
@@ -26,8 +23,10 @@ class RestorePresenter(
 
     override fun onSelect(accountType: IPredefinedAccountType) {
         when (accountType) {
-            is Words12AccountType -> {
-                router.startRestoreWordsModule()
+            is Words12AccountType ->
+                router.startRestoreWordsModule(12)
+            is Words24AccountType -> {
+                router.startRestoreWordsModule(24)
             }
             is EosAccountType -> {
                 router.startRestoreEosModule()

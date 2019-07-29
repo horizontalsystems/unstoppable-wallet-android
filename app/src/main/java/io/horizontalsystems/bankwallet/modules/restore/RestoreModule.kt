@@ -31,7 +31,7 @@ object RestoreModule {
     }
 
     interface Router {
-        fun startRestoreWordsModule()
+        fun startRestoreWordsModule(wordsCount: Int)
         fun startRestoreEosModule()
         fun startMainModule()
         fun close()
