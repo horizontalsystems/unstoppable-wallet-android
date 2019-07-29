@@ -38,6 +38,7 @@ class ManageWalletsPresenter(private val interactor: ManageWalletsModule.IIntera
 
         try {
             item.wallet = interactor.createWallet(item.coin)
+            view?.showSuccess()
         } catch (e: Exception) {
             view?.showError(e)
         }

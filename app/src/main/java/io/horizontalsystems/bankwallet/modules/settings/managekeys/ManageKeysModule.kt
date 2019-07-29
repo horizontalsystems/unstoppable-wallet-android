@@ -13,10 +13,11 @@ object ManageKeysModule {
 
     interface View {
         fun show(items: List<ManageAccountItem>)
-        fun showError(error: Exception)
         fun showCreateConfirmation(title: String, coinCodes: String)
         fun showBackupConfirmation(title: String)
         fun showUnlinkConfirmation(accountItem: ManageAccountItem)
+        fun showSuccess()
+        fun showError(error: Exception)
     }
 
     interface ViewDelegate {

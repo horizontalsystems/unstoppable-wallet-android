@@ -1,8 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.managecoins
 
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 
 class ManageWalletsViewModel : ViewModel(), ManageWalletsModule.IView, ManageWalletsModule.IRouter {
 
@@ -29,6 +31,10 @@ class ManageWalletsViewModel : ViewModel(), ManageWalletsModule.IView, ManageWal
 
     override fun showNoAccountDialog(coin: Coin) {
         showManageKeysDialog.postValue(coin)
+    }
+
+    override fun showSuccess() {
+        HudHelper.showSuccessMessage(R.string.Hud_Text_Done, 500)
     }
 
     override fun showError(e: Exception) {

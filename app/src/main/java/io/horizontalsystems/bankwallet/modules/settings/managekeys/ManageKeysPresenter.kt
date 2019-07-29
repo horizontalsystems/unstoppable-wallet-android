@@ -51,6 +51,7 @@ class ManageKeysPresenter(private val interactor: ManageKeysModule.Interactor, p
     override fun onConfirmCreate() {
         try {
             currentItem?.let { interactor.createAccount(it.predefinedAccountType) }
+            view?.showSuccess()
         } catch (e: Exception) {
             view?.showError(e)
         }
