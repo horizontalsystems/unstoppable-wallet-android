@@ -1,17 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.pin.unlock
 
 import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.core.managers.AuthManager
 import io.horizontalsystems.bankwallet.core.managers.OneTimeTimer
 import io.horizontalsystems.bankwallet.entities.LockoutState
 
 class UnlockPinInteractor(
-        private val keystoreSafeExecute: IKeyStoreSafeExecute,
         private val localStorage: ILocalStorage,
-        private val authManager: AuthManager,
         private val pinManager: IPinManager,
         private val lockManager: ILockManager,
-        private val encryptionManager: IEncryptionManager,
         private val lockoutManager: ILockoutManager,
         private val timer: OneTimeTimer) : UnlockPinModule.IUnlockPinInteractor, IOneTimerDelegate {
 
@@ -19,23 +15,6 @@ class UnlockPinInteractor(
 
     init {
         timer.delegate = this
-    }
-
-    //we cache secured data here, since its main Entry point for logged in user
-    override fun cacheSecuredData() {
-        keystoreSafeExecute.safeExecute(
-                action = Runnable {
-                    if (pinManager.pin.isNullOrEmpty() && pinManager.isPinSet) {
-                        pinManager.safeLoad()
-                    }
-                    if (authManager.authData == null) {
-                        authManager.safeLoad()
-                    }
-                    if (isBiometricOn()) {
-                        encryptionManager.getCryptoObject()?.let { delegate?.setCryptoObject(it) }
-                    }
-                }
-        )
     }
 
     override fun isBiometricOn(): Boolean {

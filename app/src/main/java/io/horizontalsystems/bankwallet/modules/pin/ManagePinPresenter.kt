@@ -48,9 +48,6 @@ open class ManagePinPresenter(
     override fun didSavePin() {
     }
 
-    override fun didStartedAdapters() {
-    }
-
     override fun onBackPressed() {
     }
 

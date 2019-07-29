@@ -2,11 +2,36 @@ package io.horizontalsystems.bankwallet.modules.main
 
 import android.content.Context
 import android.content.Intent
+import io.horizontalsystems.bankwallet.core.App
 
 object MainModule {
+
+    interface IView
+
+    interface IViewDelegate {
+        fun viewDidLoad()
+    }
+
+    interface IInteractor {
+        fun onStart()
+    }
+
+    interface IInteractorDelegate
+
+    interface IRouter
+
+    fun init(view: MainViewModel, router: IRouter) {
+        val interactor = MainInteractor(App.accountManager, App.walletManager)
+        val presenter = MainPresenter(interactor, router)
+
+        view.delegate = presenter
+        presenter.view = view
+        interactor.delegate = presenter
+    }
+
     fun start(context: Context) {
         val intent = Intent(context, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         context.startActivity(intent)
     }
 

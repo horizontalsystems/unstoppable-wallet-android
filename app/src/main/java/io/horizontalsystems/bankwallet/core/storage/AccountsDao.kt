@@ -21,4 +21,10 @@ interface AccountsDao {
     @Query("SELECT COUNT(*) FROM AccountRecord WHERE isBackedUp = 0")
     fun getNonBackedUpCount(): Flowable<Int>
 
+    @Query("SELECT COUNT(*) FROM AccountRecord")
+    fun getTotalCount(): Int
+
+    @Query("DELETE FROM AccountRecord")
+    fun deleteAll()
+
 }

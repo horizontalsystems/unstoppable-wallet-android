@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.pin
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -25,7 +24,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.security.FingerprintAuthenticationDialogFragment
 import io.horizontalsystems.bankwallet.modules.main.MainModule
-import io.horizontalsystems.bankwallet.modules.restore.eos.RestoreEosActivity
 import io.horizontalsystems.bankwallet.ui.extensions.*
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
@@ -114,13 +112,6 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
             finish()
         })
 
-        viewModel.keyStoreSafeExecute.observe(this, Observer { triple ->
-            triple?.let {
-                val (action, onSuccess, onFailure) = it
-                safeExecuteWithKeystore(action, onSuccess, onFailure)
-            }
-        })
-
         viewModel.fillPinCircles.observe(this, Observer { pair ->
             pair?.let { (length, pageIndex) ->
                 pinPagesAdapter.setEnteredPinLength(pageIndex, length)
@@ -128,12 +119,12 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
         })
 
         viewModel.dismissWithCancelLiveEvent.observe(this, Observer {
-            setResult(Activity.RESULT_CANCELED)
+            setResult(PinModule.RESULT_CANCELLED)
             finish()
         })
 
         viewModel.dismissWithSuccessLiveEvent.observe(this, Observer {
-            setResult(Activity.RESULT_OK)
+            setResult(PinModule.RESULT_OK)
             finish()
         })
 

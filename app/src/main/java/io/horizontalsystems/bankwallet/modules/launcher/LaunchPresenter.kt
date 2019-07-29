@@ -9,7 +9,8 @@ class LaunchPresenter(private val interactor: LaunchModule.IInteractor,
 
     override fun viewDidLoad() {
         when {
-            interactor.isDeviceLockDisabled -> view?.showNoDeviceLockWarning()
+            interactor.isSystemLockOff -> router.openNoSystemLockModule()
+            interactor.isKeyInvalidated -> router.openKeyInvalidatedModule()
             interactor.isAccountsEmpty -> router.openWelcomeModule()
             interactor.isPinNotSet -> router.openMainModule()
             else -> router.openUnlockModule()

@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.core.storage
 
 import androidx.room.TypeConverter
-import io.horizontalsystems.bankwallet.core.security.EncryptionManager
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import java.math.BigDecimal
@@ -61,13 +61,13 @@ class DatabaseConverters {
     @TypeConverter
     fun decryptSecretString(value: String?): SecretString? {
         return value?.let {
-            SecretString(EncryptionManager.decrypt(it))
+            SecretString(App.encryptionManager.decrypt(it))
         }
     }
 
     @TypeConverter
     fun encryptSecretString(secretString: SecretString?): String? {
-        return secretString?.value?.let { EncryptionManager.encrypt(it) }
+        return secretString?.value?.let { App.encryptionManager.encrypt(it) }
     }
 
     // SecretList
@@ -75,14 +75,14 @@ class DatabaseConverters {
     @TypeConverter
     fun decryptSecretList(value: String?): SecretList? {
         return value?.let {
-            SecretList(EncryptionManager.decrypt(it).split(","))
+            SecretList(App.encryptionManager.decrypt(it).split(","))
         }
     }
 
     @TypeConverter
     fun encryptSecretList(secretList: SecretList?): String? {
         return secretList?.list?.joinToString(separator = ",")?.let {
-            EncryptionManager.encrypt(it)
+            App.encryptionManager.encrypt(it)
         }
     }
 }

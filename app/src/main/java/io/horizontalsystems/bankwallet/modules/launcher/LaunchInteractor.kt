@@ -1,10 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.launcher
 
 import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.IKeyStoreManager
 import io.horizontalsystems.bankwallet.core.IPinManager
+import io.horizontalsystems.bankwallet.core.ISystemInfoManager
 
 class LaunchInteractor(private val accountManager: IAccountManager,
-                       private val pinManager: IPinManager) : LaunchModule.IInteractor {
+                       private val pinManager: IPinManager,
+                       private val systemInfoManager: ISystemInfoManager,
+                       private val keyStoreManager: IKeyStoreManager) : LaunchModule.IInteractor {
 
     var delegate: LaunchModule.IInteractorDelegate? = null
 
@@ -12,9 +16,12 @@ class LaunchInteractor(private val accountManager: IAccountManager,
         get() = !pinManager.isPinSet
 
     override val isAccountsEmpty: Boolean
-        get() = accountManager.accounts.isEmpty()
+        get() = accountManager.isAccountsEmpty
 
-    override val isDeviceLockDisabled: Boolean
-        get() = !pinManager.isDeviceLockEnabled
+    override val isSystemLockOff: Boolean
+        get() = systemInfoManager.isSystemLockOff
+
+   override val isKeyInvalidated: Boolean
+        get() = keyStoreManager.isKeyInvalidated
 
 }

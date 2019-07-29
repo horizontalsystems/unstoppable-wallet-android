@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.backup
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -63,8 +62,8 @@ class BackupActivity : BaseActivity() {
             }
             ModuleCode.UNLOCK_PIN -> {
                 when (resultCode ) {
-                    Activity.RESULT_OK -> viewModel.delegate.didUnlock()
-                    Activity.RESULT_CANCELED -> viewModel.delegate.didCancelUnlock()
+                    PinModule.RESULT_OK -> viewModel.delegate.didUnlock()
+                    PinModule.RESULT_CANCELLED -> viewModel.delegate.didCancelUnlock()
                 }
             }
         }

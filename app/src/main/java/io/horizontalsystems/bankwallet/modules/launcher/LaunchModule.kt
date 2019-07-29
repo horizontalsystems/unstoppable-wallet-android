@@ -1,12 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.launcher
 
+import android.content.Context
+import android.content.Intent
 import io.horizontalsystems.bankwallet.core.App
 
 object LaunchModule {
 
-    interface IView {
-        fun showNoDeviceLockWarning()
-    }
+    interface IView
 
     interface IViewDelegate {
         fun viewDidLoad()
@@ -17,7 +17,8 @@ object LaunchModule {
     interface IInteractor {
         val isPinNotSet: Boolean
         val isAccountsEmpty: Boolean
-        val isDeviceLockDisabled: Boolean
+        val isSystemLockOff: Boolean
+        val isKeyInvalidated: Boolean
     }
 
     interface IInteractorDelegate
@@ -27,15 +28,23 @@ object LaunchModule {
         fun openMainModule()
         fun openUnlockModule()
         fun closeApplication()
+        fun openNoSystemLockModule()
+        fun openKeyInvalidatedModule()
     }
 
     fun init(view: LaunchViewModel, router: IRouter) {
-        val interactor = LaunchInteractor(App.accountManager, App.pinManager)
+        val interactor = LaunchInteractor(App.accountManager, App.pinManager, App.systemInfoManager, App.keyStoreManager)
         val presenter = LaunchPresenter(interactor, router)
 
         view.delegate = presenter
         presenter.view = view
         interactor.delegate = presenter
+    }
+
+    fun start(context: Context) {
+        val intent = Intent(context, LauncherActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        context.startActivity(intent)
     }
 
 }

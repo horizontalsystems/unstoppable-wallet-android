@@ -18,7 +18,6 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerModule
@@ -46,11 +45,16 @@ class MainActivity : BaseActivity(), SendView.Listener, ReceiveView.Listener, Tr
     private var sendBottomSheetBehavior: BottomSheetBehavior<View>? = null
     private var txInfoBottomSheetBehavior: BottomSheetBehavior<View>? = null
 
+    private lateinit var viewModel: MainViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_dashboard)
         setTransparentStatusBar()
+
+        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        viewModel.init()
 
         adapter = MainTabsAdapter(supportFragmentManager)
 
@@ -59,10 +63,6 @@ class MainActivity : BaseActivity(), SendView.Listener, ReceiveView.Listener, Tr
             loadViewPager()
         }
 
-        App.appCloseManager.appCloseSignal
-                .subscribe {
-                    finishAffinity()
-                }?.let { disposables.add(it) }
     }
 
     override fun onBackPressed() = when {
