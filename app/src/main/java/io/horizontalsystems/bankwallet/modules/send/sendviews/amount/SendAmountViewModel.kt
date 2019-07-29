@@ -19,6 +19,7 @@ class SendAmountViewModel: ViewModel(), SendAmountModule.IView {
     val revertInputLiveEvent = SingleLiveEvent<String>()
     val getAvailableBalanceLiveEvent = SingleLiveEvent<Unit>()
     val notifyMainViewModelOnAmountChangeLiveData = MutableLiveData<BigDecimal>()
+    val errorLiveData = MutableLiveData<SendModule.HintError?>()
 
     fun init(coinCode: String) {
         SendAmountModule.init(this, coinCode)
@@ -58,5 +59,9 @@ class SendAmountViewModel: ViewModel(), SendAmountModule.IView {
 
     override fun notifyMainViewModelOnAmountChange(coinAmount: BigDecimal?) {
         notifyMainViewModelOnAmountChangeLiveData.value = coinAmount
+    }
+
+    override fun setError(error: SendModule.HintError?) {
+        errorLiveData.value = error
     }
 }

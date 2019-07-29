@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.send.sendviews.amount
 
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.SendStateError
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import java.math.BigDecimal
@@ -13,8 +14,10 @@ object SendAmountModule {
         fun onMaxClick()
         fun onSwitchClick()
         fun onAmountChange(amountString: String)
-        fun onAvailableBalanceRetreived(availableBalance: BigDecimal)
+        fun onAvailableBalanceRetrieved(availableBalance: BigDecimal)
         fun getCoinAmount(): BigDecimal?
+        fun onValidationError(error: SendStateError.InsufficientAmount?)
+        fun onValidationSuccess()
     }
 
     interface IInteractor {
@@ -37,6 +40,7 @@ object SendAmountModule {
         fun revertInput(revertedInput: String)
         fun getAvailableBalance()
         fun notifyMainViewModelOnAmountChange(coinAmount: BigDecimal?)
+        fun setError(error: SendModule.HintError?)
     }
 
     fun init(view: SendAmountViewModel, coinCode: String) {

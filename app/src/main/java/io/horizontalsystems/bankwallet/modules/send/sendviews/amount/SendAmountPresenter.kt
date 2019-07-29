@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.sendviews.amount
 
+import io.horizontalsystems.bankwallet.core.SendStateError
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import java.math.BigDecimal
@@ -13,6 +14,7 @@ class SendAmountPresenter(private val interactor: SendAmountModule.IInteractor, 
 
     private var coinAmount: BigDecimal? = null
     private var rate: Rate? = null
+    private var error: SendStateError.InsufficientAmount? = null
 
     override fun onViewDidLoad() {
         interactor.retrieveRate()
@@ -37,6 +39,8 @@ class SendAmountPresenter(private val interactor: SendAmountModule.IInteractor, 
         interactor.defaultInputType = newInputType
         updateAmount()
         view?.addTextChangeListener()
+
+        updateError()
     }
 
     override fun onAmountChange(amountString: String) {
@@ -62,9 +66,24 @@ class SendAmountPresenter(private val interactor: SendAmountModule.IInteractor, 
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun onAvailableBalanceRetreived(availableBalance: BigDecimal) {
+    override fun onAvailableBalanceRetrieved(availableBalance: BigDecimal) {
         coinAmount = availableBalance
         updateAmount()
+    }
+
+    override fun onValidationError(error: SendStateError.InsufficientAmount?) {
+        this.error = error
+        updateError()
+    }
+
+    override fun onValidationSuccess() {
+        error = null
+        view?.setError(null)
+    }
+
+    private fun updateError() {
+        val hintError = error?.balance?.let { presenterHelper.getHintInfoBalanceError(interactor.defaultInputType, it, rate) }
+        view?.setError(hintError)
     }
 
     private fun onNumberScaleExceeded(amount: BigDecimal, decimal: Int) {

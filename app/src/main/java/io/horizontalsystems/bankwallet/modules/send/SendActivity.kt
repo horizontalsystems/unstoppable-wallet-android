@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.SendStateError
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerModule
 import io.horizontalsystems.bankwallet.modules.send.sendviews.address.SendAddressViewModel
 import io.horizontalsystems.bankwallet.modules.send.sendviews.address.SendInputAddressView
@@ -37,7 +38,7 @@ class SendActivity : BaseActivity() {
         sendMainViewModel.init("BTC")
 
         sendMainViewModel.availableBalanceRetrievedLiveData.observe(this, Observer { availableBalance ->
-            sendAmountViewModel?.delegate?.onAvailableBalanceRetreived(availableBalance)
+            sendAmountViewModel?.delegate?.onAvailableBalanceRetrieved(availableBalance)
         })
 
         sendMainViewModel.onAddressParsedLiveData.observe(this, Observer { parsedAddress ->
@@ -46,6 +47,23 @@ class SendActivity : BaseActivity() {
 
         sendMainViewModel.getParamsFromModulesLiveEvent.observe(this, Observer { paramsAction ->
             fetchParamsFromModules(paramsAction)
+        })
+
+        sendMainViewModel.validationErrorsLiveEvent.observe(this, Observer { errors ->
+            errors.forEach { error ->
+                when(error) {
+                    is SendStateError.InsufficientAmount -> {
+                        sendAmountViewModel?.delegate?.onValidationError(error)
+                    }
+                    is SendStateError.InsufficientFeeBalance -> {
+
+                    }
+                }
+            }
+        })
+
+        sendMainViewModel.amountValidationLiveEvent.observe(this, Observer {
+            sendAmountViewModel?.delegate?.onValidationSuccess()
         })
 
         addInputItems()

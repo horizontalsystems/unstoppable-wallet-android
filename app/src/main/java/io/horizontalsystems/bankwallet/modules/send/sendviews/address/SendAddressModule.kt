@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.sendviews.address
 
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
-import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import java.math.BigDecimal
 
@@ -26,8 +25,6 @@ object SendAddressModule {
     }
 
     interface IInteractor {
-//        fun parseAddress(address: String): PaymentRequestAddress
-//        fun validate(address: String)
         val addressFromClipboard: String?
         val clipboardHasPrimaryClip: Boolean
     }
@@ -36,12 +33,7 @@ object SendAddressModule {
 
     }
 
-    class AddressError : Exception() {
-        class InvalidAddress : SendModule.AddressError()
-    }
-
     fun init(view: SendAddressViewModel) {
-//        val adapter = App.adapterManager.adapters.first { it.wallet.coin.code == coinCode }
         val interactor = SendAddressInteractor(TextHelper)
         val presenter = SendAddressPresenter(interactor)
 

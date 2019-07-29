@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.send
 
-import android.util.Log
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.SendStateError
@@ -40,7 +39,8 @@ class SendPresenter(private val interactor: SendModule.IInteractor)
     override fun onParamsFetchedForAction(params: MutableMap<SendModule.AdapterFields, Any?>, paramsAction: SendModule.ParamsAction) {
         when (paramsAction) {
             SendModule.ParamsAction.Validate -> {
-                val coinAmount = params[SendModule.AdapterFields.Amount] as? BigDecimal ?: BigDecimal.ZERO
+                val coinAmount = params[SendModule.AdapterFields.Amount] as? BigDecimal
+                        ?: BigDecimal.ZERO
                 if (coinAmount > BigDecimal.ZERO) {
                     interactor.validate(params)
                 } else {
@@ -70,17 +70,13 @@ class SendPresenter(private val interactor: SendModule.IInteractor)
     }
 
     override fun onValidationComplete(errorList: List<SendStateError>) {
-        Log.e("SendPresenter", "onValidationComplete")
-        errorList.forEach { error ->
-            when(error) {
-                is SendStateError.InsufficientAmount -> {
-                    val balance = error.balance
-
-                }
-                is SendStateError.InsufficientFeeBalance -> {
-
-                }
-            }
+        var amountValidationSuccess = true
+        if (errorList.isNotEmpty()) {
+            amountValidationSuccess = false
+            view?.onValidationError(errorList)
+        }
+        if (amountValidationSuccess) {
+            view?.onAmountValidationSuccess()
         }
 
     }
@@ -115,7 +111,6 @@ class SendPresenter(private val interactor: SendModule.IInteractor)
             else -> R.string.Hud_Network_Issue
         }
     }
-
 
 
     //    override fun onViewResumed() {

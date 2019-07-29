@@ -34,6 +34,8 @@ object SendModule {
         fun onAvailableBalanceRetrieved(availableBalance: BigDecimal)
         fun onAddressParsed(parsedAddress: PaymentRequestAddress)
         fun getParamsForAction(paramsAction: ParamsAction)
+        fun onValidationError(errorList: List<SendStateError>)
+        fun onAmountValidationSuccess()
     }
 
     interface IViewDelegate {
@@ -112,6 +114,9 @@ object SendModule {
         Validate, AvailableBalance
     }
 
+    data class HintError(val amountInfo: AmountInfo): Exception()
+
+    //todo remove this errors
     open class AmountError : Exception() {
         data class InsufficientBalance(val amountInfo: AmountInfo) : AmountError()
         data class Erc20FeeError(val erc20CoinCode: String, val coinValue: CoinValue) : AmountError()

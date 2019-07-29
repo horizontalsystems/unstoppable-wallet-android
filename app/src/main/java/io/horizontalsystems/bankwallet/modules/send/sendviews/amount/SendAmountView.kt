@@ -114,13 +114,21 @@ class SendAmountView : ConstraintLayout {
         viewModel.notifyMainViewModelOnAmountChangeLiveData.observe(lifecycleOwner, Observer { coinAmount ->
             mainViewModel.delegate.onAmountChanged(coinAmount)
         })
-    }
 
-    fun updateInput(hint: String? = null, error: String? = null) {
-        txtHintInfo.visibility = if (error == null) View.VISIBLE else View.GONE
-        txtHintError.visibility = if (error == null) View.GONE else View.VISIBLE
-        txtHintInfo.text = hint
-        txtHintError.text = error
+        viewModel.errorLiveData.observe(lifecycleOwner, Observer { error ->
+            txtHintError.visibility = if (error == null) View.GONE else View.VISIBLE
+            txtHintInfo.visibility = if (error == null) View.VISIBLE else View.GONE
+
+            val errorText: String? = error?.let {
+                val availableBalanceAmount = when (it.amountInfo) {
+                    is SendModule.AmountInfo.CoinValueInfo -> App.numberFormatter.format(it.amountInfo.coinValue)
+                    is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(it.amountInfo.currencyValue)
+                }
+                context.getString(R.string.Send_Error_BalanceAmount, availableBalanceAmount)
+            }
+
+            txtHintError.text = errorText
+        })
     }
 
     fun enableSwitchBtn(enabled: Boolean) {

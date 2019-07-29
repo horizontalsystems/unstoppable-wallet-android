@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.send
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.bankwallet.core.SendStateError
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
 import java.math.BigDecimal
@@ -29,6 +30,8 @@ class SendViewModel : ViewModel(), SendModule.IView {
     val availableBalanceRetrievedLiveData = MutableLiveData<BigDecimal>()
     val onAddressParsedLiveData = MutableLiveData<PaymentRequestAddress>()
     val getParamsFromModulesLiveEvent = SingleLiveEvent<SendModule.ParamsAction>()
+    val validationErrorsLiveEvent = SingleLiveEvent<List<SendStateError>>()
+    val amountValidationLiveEvent = SingleLiveEvent<Unit>()
     var decimalSize: Int? = null
 
 
@@ -128,5 +131,13 @@ class SendViewModel : ViewModel(), SendModule.IView {
 
     override fun getParamsForAction(paramsAction: SendModule.ParamsAction) {
         getParamsFromModulesLiveEvent.value = paramsAction
+    }
+
+    override fun onValidationError(errorList: List<SendStateError>) {
+        validationErrorsLiveEvent.value = errorList
+    }
+
+    override fun onAmountValidationSuccess() {
+        amountValidationLiveEvent.call()
     }
 }

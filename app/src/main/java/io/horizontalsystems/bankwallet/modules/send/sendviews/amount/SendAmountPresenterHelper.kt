@@ -34,7 +34,7 @@ class SendAmountPresenterHelper(
         }
     }
 
-     fun getHintInfo(coinAmount: BigDecimal? = null, inputType: SendModule.InputType, rate: Rate?): SendModule.AmountInfo? {
+    fun getHintInfo(coinAmount: BigDecimal? = null, inputType: SendModule.InputType, rate: Rate?): SendModule.AmountInfo? {
         return when (inputType) {
             SendModule.InputType.CURRENCY -> coinAmount?.let {
                 SendModule.AmountInfo.CoinValueInfo(CoinValue(coinCode, it))
@@ -49,7 +49,7 @@ class SendAmountPresenterHelper(
         }
     }
 
-     fun getAmountPrefix(inputType: SendModule.InputType, rate: Rate?): String? {
+    fun getAmountPrefix(inputType: SendModule.InputType, rate: Rate?): String? {
         return when {
             inputType == SendModule.InputType.COIN -> coinCode
             rate == null -> null
@@ -65,4 +65,21 @@ class SendAmountPresenterHelper(
     }
 
     fun decimal(inputType: SendModule.InputType) = if (inputType == SendModule.InputType.COIN) coinDecimal else currencyDecimal
+
+    fun getHintInfoBalanceError(inputType: SendModule.InputType, availableCoinBalance: BigDecimal, rate: Rate?): SendModule.HintError? {
+        val amountInfo = when (inputType) {
+            SendModule.InputType.COIN -> {
+                SendModule.AmountInfo.CoinValueInfo(CoinValue(coinCode, availableCoinBalance))
+            }
+            SendModule.InputType.CURRENCY -> {
+                val currencyAmount = rate?.let { availableCoinBalance.times(it.value) }
+                currencyAmount?.let {
+                    SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(baseCurrency, it))
+                }
+            }
+        }
+        return amountInfo?.let {
+            SendModule.HintError(it)
+        }
+    }
 }
