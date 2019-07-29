@@ -28,8 +28,7 @@ class SecuritySettingsPresenter(private val router: SecuritySettingsModule.ISecu
         if (enable) {
             router.showSetPin()
         } else {
-            interactor.disablePin()
-            view?.setPinEnabled(false)
+            router.showUnlockPin()
         }
     }
 
@@ -39,6 +38,15 @@ class SecuritySettingsPresenter(private val router: SecuritySettingsModule.ISecu
 
     override fun didCancelSetPin() {
         view?.setPinEnabled(false)
+    }
+
+    override fun didUnlockPinToDisablePin() {
+        interactor.disablePin()
+        view?.setPinEnabled(false)
+    }
+
+    override fun didCancelUnlockPinToDisablePin() {
+        view?.setPinEnabled(true)
     }
 
     override fun onClear() {

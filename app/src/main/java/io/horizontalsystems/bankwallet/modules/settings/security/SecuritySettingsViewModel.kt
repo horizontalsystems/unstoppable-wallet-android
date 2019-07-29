@@ -15,6 +15,7 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
     val openManageKeysLiveEvent = SingleLiveEvent<Unit>()
     val openEditPinLiveEvent = SingleLiveEvent<Unit>()
     val openSetPinLiveEvent = SingleLiveEvent<Unit>()
+    val openUnlockPinLiveEvent = SingleLiveEvent<Unit>()
     val pinEnabledLiveEvent = MutableLiveData<Boolean>()
 
     fun init() {
@@ -58,5 +59,9 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
 
     override fun showSetPin() {
         openSetPinLiveEvent.call()
+    }
+
+    override fun showUnlockPin() {
+        openUnlockPinLiveEvent.call()
     }
 }
