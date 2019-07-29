@@ -57,7 +57,7 @@
         app:layout_constraintTop_toBottomOf="@+id/border" />
 
     <Button
-        android:id="@+id/btnCreateKey"
+        android:id="@+id/btnYellow"
         style="@style/ButtonYellow"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -66,13 +66,13 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:text="@string/AddCoin_CreateKey"
-        app:layout_constraintBottom_toTopOf="@+id/btnRestoreKey"
+        app:layout_constraintBottom_toTopOf="@+id/btnGrey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addKeyInfo" />
 
     <Button
-        android:id="@+id/btnRestoreKey"
+        android:id="@+id/btnGrey"
         style="@style/ButtonNegative"
         android:layout_width="0dp"
         android:layout_height="50dp"
@@ -85,7 +85,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnCreateKey"
+        app:layout_constraintTop_toBottomOf="@+id/btnYellow"
         app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

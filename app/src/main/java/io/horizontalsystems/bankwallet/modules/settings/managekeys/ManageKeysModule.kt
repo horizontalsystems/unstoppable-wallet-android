@@ -15,18 +15,23 @@ object ManageKeysModule {
         fun show(items: List<ManageAccountItem>)
         fun showError(error: Exception)
         fun showCreateConfirmation(title: String, coinCodes: String)
+        fun showBackupConfirmation(title: String)
+        fun showUnlinkConfirmation(accountItem: ManageAccountItem)
     }
 
     interface ViewDelegate {
         val items: List<ManageAccountItem>
 
         fun viewDidLoad()
+        fun onClickNew(accountItem: ManageAccountItem)
         fun onClickBackup(account: Account)
         fun onClickRestore(accountType: IPredefinedAccountType)
-        fun onClickUnlink(accountId: String)
-        fun onClickNew(item: ManageAccountItem)
+        fun onClickUnlink(accountItem: ManageAccountItem)
+
         fun onConfirmCreate()
-        fun onRestore(accountType: AccountType, syncMode: SyncMode? = null)
+        fun onConfirmBackup()
+        fun onConfirmUnlink(accountId: String)
+        fun onConfirmRestore(accountType: AccountType, syncMode: SyncMode? = null)
         fun onClear()
     }
 
