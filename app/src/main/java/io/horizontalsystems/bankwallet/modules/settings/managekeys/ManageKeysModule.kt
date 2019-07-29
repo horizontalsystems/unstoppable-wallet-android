@@ -25,7 +25,7 @@ object ManageKeysModule {
 
         fun viewDidLoad()
         fun onClickNew(accountItem: ManageAccountItem)
-        fun onClickBackup(account: Account)
+        fun onClickBackup(accountItem: ManageAccountItem)
         fun onClickRestore(accountType: IPredefinedAccountType)
         fun onClickUnlink(accountItem: ManageAccountItem)
 
@@ -52,7 +52,7 @@ object ManageKeysModule {
     }
 
     interface Router {
-        fun startBackupModule(account: Account)
+        fun startBackupModule(accountItem: ManageAccountItem)
         fun startRestoreWords()
         fun startRestoreEos()
         fun close()

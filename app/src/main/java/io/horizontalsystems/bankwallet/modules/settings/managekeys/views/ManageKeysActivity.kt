@@ -74,8 +74,10 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
             }
         })
 
-        viewModel.startBackupModuleLiveEvent.observe(this, Observer { account ->
-            BackupModule.start(this, account)
+        viewModel.startBackupModuleLiveEvent.observe(this, Observer { accountItem ->
+            accountItem.account?.let {
+                BackupModule.start(this, accountItem.account, accountItem.predefinedAccountType.coinCodes)
+            }
         })
 
         viewModel.startRestoreWordsLiveEvent.observe(this, Observer {

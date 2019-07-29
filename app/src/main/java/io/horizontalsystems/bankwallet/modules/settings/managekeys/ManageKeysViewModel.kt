@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.settings.managekeys
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.SingleLiveEvent
-import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 
 class ManageKeysViewModel : ViewModel(), ManageKeysModule.View, ManageKeysModule.Router {
@@ -13,7 +12,7 @@ class ManageKeysViewModel : ViewModel(), ManageKeysModule.View, ManageKeysModule
     val confirmUnlinkEvent = SingleLiveEvent<ManageAccountItem>()
     val confirmCreateEvent = SingleLiveEvent<Pair<String, String>>()
     val confirmBackupEvent = SingleLiveEvent<String>()
-    val startBackupModuleLiveEvent = SingleLiveEvent<Account>()
+    val startBackupModuleLiveEvent = SingleLiveEvent<ManageAccountItem>()
     val startRestoreWordsLiveEvent = SingleLiveEvent<Unit>()
     val startRestoreEosLiveEvent = SingleLiveEvent<Unit>()
     val closeLiveEvent = SingleLiveEvent<Void>()
@@ -53,8 +52,8 @@ class ManageKeysViewModel : ViewModel(), ManageKeysModule.View, ManageKeysModule
 
     //  Router
 
-    override fun startBackupModule(account: Account) {
-        startBackupModuleLiveEvent.postValue(account)
+    override fun startBackupModule(accountItem: ManageAccountItem) {
+        startBackupModuleLiveEvent.postValue(accountItem)
     }
 
     override fun startRestoreWords() {

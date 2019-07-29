@@ -1,7 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.settings.managekeys
 
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.EosAccountType
+import io.horizontalsystems.bankwallet.entities.SyncMode
+import io.horizontalsystems.bankwallet.entities.Words12AccountType
 
 class ManageKeysPresenter(private val interactor: ManageKeysModule.Interactor, private val router: ManageKeysModule.Router)
     : ManageKeysModule.ViewDelegate, ManageKeysModule.InteractorDelegate {
@@ -23,8 +26,8 @@ class ManageKeysPresenter(private val interactor: ManageKeysModule.Interactor, p
         view?.showCreateConfirmation(accountItem.predefinedAccountType.title, accountItem.predefinedAccountType.coinCodes)
     }
 
-    override fun onClickBackup(account: Account) {
-        router.startBackupModule(account)
+    override fun onClickBackup(accountItem: ManageAccountItem) {
+        router.startBackupModule(accountItem)
     }
 
     override fun onClickRestore(accountType: IPredefinedAccountType) {
@@ -58,9 +61,7 @@ class ManageKeysPresenter(private val interactor: ManageKeysModule.Interactor, p
     }
 
     override fun onConfirmBackup() {
-        currentItem?.account?.let {
-            router.startBackupModule(it)
-        }
+        currentItem?.let { router.startBackupModule(it) }
     }
 
     override fun onConfirmUnlink(accountId: String) {
