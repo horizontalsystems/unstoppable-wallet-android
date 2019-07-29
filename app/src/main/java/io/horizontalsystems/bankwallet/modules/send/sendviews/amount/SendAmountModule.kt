@@ -41,6 +41,7 @@ object SendAmountModule {
         fun getAvailableBalance()
         fun notifyMainViewModelOnAmountChange(coinAmount: BigDecimal?)
         fun setError(error: SendModule.HintError?)
+        fun setSwitchButtonEnabled(enabled: Boolean)
     }
 
     fun init(view: SendAmountViewModel, coinCode: String) {

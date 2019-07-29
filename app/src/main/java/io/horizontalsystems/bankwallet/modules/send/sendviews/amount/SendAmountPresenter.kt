@@ -15,11 +15,13 @@ class SendAmountPresenter(private val interactor: SendAmountModule.IInteractor, 
     private var coinAmount: BigDecimal? = null
     private var rate: Rate? = null
     private var error: SendStateError.InsufficientAmount? = null
+    private var inputType = SendModule.InputType.COIN
 
     override fun onViewDidLoad() {
         interactor.retrieveRate()
         view?.addTextChangeListener()
         updateAmount()
+        updateSwitchButtonState()
     }
 
     override fun getCoinAmount(): BigDecimal? {
@@ -32,11 +34,13 @@ class SendAmountPresenter(private val interactor: SendAmountModule.IInteractor, 
 
     override fun onSwitchClick() {
         view?.removeTextChangeListener()
-        val newInputType = when (interactor.defaultInputType) {
+        val newInputType = when (inputType) {
             SendModule.InputType.CURRENCY -> SendModule.InputType.COIN
             else -> SendModule.InputType.CURRENCY
         }
+        inputType = newInputType
         interactor.defaultInputType = newInputType
+
         updateAmount()
         view?.addTextChangeListener()
 
@@ -47,18 +51,22 @@ class SendAmountPresenter(private val interactor: SendAmountModule.IInteractor, 
         updateMaxButtonVisibility(amountString.isEmpty())
 
         val amount = parseInput(amountString)
-        val decimal = presenterHelper.decimal(interactor.defaultInputType)
+        val decimal = presenterHelper.decimal(inputType)
         if(amount.scale() > decimal) {
             onNumberScaleExceeded(amount, decimal)
         } else {
-            coinAmount = presenterHelper.getCoinAmount(amount, interactor.defaultInputType, rate)
-            view?.setHintInfo(presenterHelper.getHintInfo(coinAmount, interactor.defaultInputType, rate))
+            coinAmount = presenterHelper.getCoinAmount(amount, inputType, rate)
+            view?.setHintInfo(presenterHelper.getHintInfo(coinAmount, inputType, rate))
             view?.notifyMainViewModelOnAmountChange(coinAmount)
         }
     }
 
     override fun didRateRetrieve(rate: Rate?) {
         this.rate = rate
+        rate?.let {
+            inputType = interactor.defaultInputType
+            updateSwitchButtonState()
+        }
         updateAmount()
     }
 
@@ -81,8 +89,12 @@ class SendAmountPresenter(private val interactor: SendAmountModule.IInteractor, 
         view?.setError(null)
     }
 
+    private fun updateSwitchButtonState() {
+        view?.setSwitchButtonEnabled(rate != null)
+    }
+
     private fun updateError() {
-        val hintError = error?.balance?.let { presenterHelper.getHintInfoBalanceError(interactor.defaultInputType, it, rate) }
+        val hintError = error?.balance?.let { presenterHelper.getHintInfoBalanceError(inputType, it, rate) }
         view?.setError(hintError)
     }
 
@@ -104,9 +116,9 @@ class SendAmountPresenter(private val interactor: SendAmountModule.IInteractor, 
     }
 
     private fun updateAmount() {
-        val amountInfo = presenterHelper.getAmountInfo(coinAmount, interactor.defaultInputType, rate)
-        val hintInfo = presenterHelper.getHintInfo(coinAmount, interactor.defaultInputType, rate)
-        val prefix = presenterHelper.getAmountPrefix(interactor.defaultInputType, rate)
+        val amountInfo = presenterHelper.getAmountInfo(coinAmount, inputType, rate)
+        val hintInfo = presenterHelper.getHintInfo(coinAmount, inputType, rate)
+        val prefix = presenterHelper.getAmountPrefix(inputType, rate)
 
         view?.setAmountPrefix(prefix)
         view?.setAmountInfo(amountInfo)

@@ -129,10 +129,10 @@ class SendAmountView : ConstraintLayout {
 
             txtHintError.text = errorText
         })
-    }
 
-    fun enableSwitchBtn(enabled: Boolean) {
-        btnSwitch.isEnabled = enabled
+        viewModel.switchButtonEnabledLiveData.observe(lifecycleOwner, Observer {enabled ->
+            btnSwitch.isEnabled = enabled
+        })
     }
 
     private val textChangeListener = object : TextWatcher {
