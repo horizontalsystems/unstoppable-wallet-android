@@ -14,7 +14,9 @@ import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.backup.words.BackupWordsActivity
 import io.horizontalsystems.bankwallet.modules.backup.words.BackupWordsModule
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
-import kotlinx.android.synthetic.main.activity_backup_words.*
+import kotlinx.android.synthetic.main.activity_backup.*
+import kotlinx.android.synthetic.main.activity_backup_words.buttonBack
+import kotlinx.android.synthetic.main.activity_backup_words.buttonNext
 
 class BackupActivity : BaseActivity() {
 
@@ -23,6 +25,8 @@ class BackupActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_backup)
+
+        val coinCodes = intent.getStringExtra(ACCOUNT_COINS)
 
         viewModel = ViewModelProviders.of(this).get(BackupViewModel::class.java)
         viewModel.init(intent.getParcelableExtra(ACCOUNT_KEY))
@@ -35,11 +39,9 @@ class BackupActivity : BaseActivity() {
         })
 
         viewModel.startBackupEvent.observe(this, Observer { account ->
-            account?.let {
-                when (account.type) {
-                    is AccountType.Mnemonic -> {
-                        BackupWordsModule.start(this, account.type.words, account.id)
-                    }
+            when (account.type) {
+                is AccountType.Mnemonic -> {
+                    BackupWordsModule.start(this, account.type.words, account.id)
                 }
             }
         })
@@ -47,6 +49,8 @@ class BackupActivity : BaseActivity() {
         viewModel.closeLiveEvent.observe(this, Observer {
             finish()
         })
+
+        backupIntro.text = getString(R.string.Backup_Intro_Subtitle, coinCodes)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -61,7 +65,7 @@ class BackupActivity : BaseActivity() {
                 finish()
             }
             ModuleCode.UNLOCK_PIN -> {
-                when (resultCode ) {
+                when (resultCode) {
                     PinModule.RESULT_OK -> viewModel.delegate.didUnlock()
                     PinModule.RESULT_CANCELLED -> viewModel.delegate.didCancelUnlock()
                 }
@@ -75,10 +79,12 @@ class BackupActivity : BaseActivity() {
 
     companion object {
         const val ACCOUNT_KEY = "account_key"
+        const val ACCOUNT_COINS = "account_coins"
 
-        fun start(context: Context, account: Account) {
+        fun start(context: Context, account: Account, coinCodes: String) {
             val intent = Intent(context, BackupActivity::class.java).apply {
                 putExtra(ACCOUNT_KEY, account)
+                putExtra(ACCOUNT_COINS, coinCodes)
             }
 
             context.startActivity(intent)

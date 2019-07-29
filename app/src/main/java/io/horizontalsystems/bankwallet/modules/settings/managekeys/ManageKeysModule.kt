@@ -13,20 +13,26 @@ object ManageKeysModule {
 
     interface View {
         fun show(items: List<ManageAccountItem>)
-        fun showError(error: Exception)
         fun showCreateConfirmation(title: String, coinCodes: String)
+        fun showBackupConfirmation(title: String)
+        fun showUnlinkConfirmation(accountItem: ManageAccountItem)
+        fun showSuccess()
+        fun showError(error: Exception)
     }
 
     interface ViewDelegate {
         val items: List<ManageAccountItem>
 
         fun viewDidLoad()
-        fun onClickBackup(account: Account)
+        fun onClickNew(accountItem: ManageAccountItem)
+        fun onClickBackup(accountItem: ManageAccountItem)
         fun onClickRestore(accountType: IPredefinedAccountType)
-        fun onClickUnlink(accountId: String)
-        fun onClickNew(item: ManageAccountItem)
+        fun onClickUnlink(accountItem: ManageAccountItem)
+
         fun onConfirmCreate()
-        fun onRestore(accountType: AccountType, syncMode: SyncMode? = null)
+        fun onConfirmBackup()
+        fun onConfirmUnlink(accountId: String)
+        fun onConfirmRestore(accountType: AccountType, syncMode: SyncMode? = null)
         fun onClear()
     }
 
@@ -46,8 +52,8 @@ object ManageKeysModule {
     }
 
     interface Router {
-        fun startBackupModule(account: Account)
-        fun startRestoreWords()
+        fun startBackupModule(accountItem: ManageAccountItem)
+        fun startRestoreWords(wordsCount: Int)
         fun startRestoreEos()
         fun close()
     }

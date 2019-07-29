@@ -65,8 +65,8 @@ class ManageKeysAdapter(private val viewModel: ManageKeysViewModel) : RecyclerVi
             }
 
             buttonUnlink.visibility = View.VISIBLE
-            buttonUnlink.setOnClickListener { viewModel.confirmUnlink(item) }
-            buttonBackup.setOnClickListener { viewModel.delegate.onClickBackup(account) }
+            buttonUnlink.setOnClickListener { viewModel.delegate.onClickUnlink(item) }
+            buttonBackup.setOnClickListener { viewModel.delegate.onClickBackup(item) }
         }
 
         private fun hideButtons() {

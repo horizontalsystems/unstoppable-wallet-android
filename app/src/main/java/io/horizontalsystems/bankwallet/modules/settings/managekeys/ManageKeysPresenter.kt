@@ -18,14 +18,22 @@ class ManageKeysPresenter(private val interactor: ManageKeysModule.Interactor, p
         interactor.loadAccounts()
     }
 
-    override fun onClickBackup(account: Account) {
-        router.startBackupModule(account)
+    override fun onClickNew(accountItem: ManageAccountItem) {
+        currentItem = accountItem
+        view?.showCreateConfirmation(accountItem.predefinedAccountType.title, accountItem.predefinedAccountType.coinCodes)
+    }
+
+    override fun onClickBackup(accountItem: ManageAccountItem) {
+        router.startBackupModule(accountItem)
     }
 
     override fun onClickRestore(accountType: IPredefinedAccountType) {
         when (accountType) {
             is Words12AccountType -> {
-                router.startRestoreWords()
+                router.startRestoreWords(12)
+            }
+            is Words24AccountType -> {
+                router.startRestoreWords(24)
             }
             is EosAccountType -> {
                 router.startRestoreEos()
@@ -33,25 +41,35 @@ class ManageKeysPresenter(private val interactor: ManageKeysModule.Interactor, p
         }
     }
 
-    override fun onClickUnlink(accountId: String) {
-        interactor.deleteAccount(accountId)
-    }
+    override fun onClickUnlink(accountItem: ManageAccountItem) {
+        currentItem = accountItem
 
-    override fun onRestore(accountType: AccountType, syncMode: SyncMode?) {
-        interactor.restoreAccount(accountType, syncMode)
-    }
-
-    override fun onClickNew(item: ManageAccountItem) {
-        currentItem = item
-        view?.showCreateConfirmation(item.predefinedAccountType.title, item.predefinedAccountType.coinCodes)
+        if (accountItem.account?.isBackedUp == true) {
+            view?.showUnlinkConfirmation(accountItem)
+        } else {
+            view?.showBackupConfirmation(accountItem.predefinedAccountType.title)
+        }
     }
 
     override fun onConfirmCreate() {
         try {
             currentItem?.let { interactor.createAccount(it.predefinedAccountType) }
+            view?.showSuccess()
         } catch (e: Exception) {
             view?.showError(e)
         }
+    }
+
+    override fun onConfirmBackup() {
+        currentItem?.let { router.startBackupModule(it) }
+    }
+
+    override fun onConfirmUnlink(accountId: String) {
+        interactor.deleteAccount(accountId)
+    }
+
+    override fun onConfirmRestore(accountType: AccountType, syncMode: SyncMode?) {
+        interactor.restoreAccount(accountType, syncMode)
     }
 
     override fun onClear() {

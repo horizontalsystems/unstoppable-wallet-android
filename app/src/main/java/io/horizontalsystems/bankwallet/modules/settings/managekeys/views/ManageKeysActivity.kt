@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysVie
 import io.horizontalsystems.bankwallet.ui.dialogs.BottomButtonColor
 import io.horizontalsystems.bankwallet.ui.dialogs.BottomConfirmAlert
 import io.horizontalsystems.bankwallet.ui.dialogs.ManageKeysDialog
+import io.horizontalsystems.bankwallet.ui.dialogs.ManageKeysDialog.ManageAction
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import kotlinx.android.synthetic.main.activity_manage_keys.*
 
@@ -47,7 +48,7 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
 
                 val confirmListener = object : BottomConfirmAlert.Listener {
                     override fun onConfirmationSuccess() {
-                        viewModel.delegate.onClickUnlink(account.id)
+                        viewModel.delegate.onConfirmUnlink(account.id)
                     }
                 }
 
@@ -56,7 +57,11 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
         })
 
         viewModel.confirmCreateEvent.observe(this, Observer {
-            ManageKeysDialog.show(this, this, it.first, it.second)
+            ManageKeysDialog.show(it.first, getString(R.string.ManageCoins_AddCoin_Text, it.second), this, this, ManageAction.CREATE)
+        })
+
+        viewModel.confirmBackupEvent.observe(this, Observer {
+            ManageKeysDialog.show(it, getString(R.string.ManageKeys_UnlinkAlert), this, this, ManageAction.BACKUP)
         })
 
         viewModel.showErrorEvent.observe(this, Observer {
@@ -69,12 +74,14 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
             }
         })
 
-        viewModel.startBackupModuleLiveEvent.observe(this, Observer { account ->
-            BackupModule.start(this, account)
+        viewModel.startBackupModuleLiveEvent.observe(this, Observer { accountItem ->
+            accountItem.account?.let {
+                BackupModule.start(this, accountItem.account, accountItem.predefinedAccountType.coinCodes)
+            }
         })
 
-        viewModel.startRestoreWordsLiveEvent.observe(this, Observer {
-            RestoreWordsModule.startForResult(this, ModuleCode.RESTORE_WORDS)
+        viewModel.startRestoreWordsLiveEvent.observe(this, Observer { wordsCount ->
+            RestoreWordsModule.startForResult(this, wordsCount, ModuleCode.RESTORE_WORDS)
         })
 
         viewModel.startRestoreEosLiveEvent.observe(this, Observer {
@@ -101,10 +108,10 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
 
         when (requestCode) {
             ModuleCode.RESTORE_WORDS -> {
-                viewModel.delegate.onRestore(accountType, data.getParcelableExtra("syncMode"))
+                viewModel.delegate.onConfirmRestore(accountType, data.getParcelableExtra("syncMode"))
             }
             ModuleCode.RESTORE_EOS -> {
-                viewModel.delegate.onRestore(accountType)
+                viewModel.delegate.onConfirmRestore(accountType)
             }
         }
     }
@@ -115,4 +122,7 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
         viewModel.delegate.onConfirmCreate()
     }
 
+    override fun onClickBackupKey() {
+        viewModel.delegate.onConfirmBackup()
+    }
 }

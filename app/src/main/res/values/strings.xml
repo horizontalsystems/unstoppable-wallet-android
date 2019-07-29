@@ -40,7 +40,7 @@
     <!--Backup-->
 
     <string name="Backup_Intro_Title">Backup</string>
-    <string name="Backup_Intro_Subtitle"> The key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc. Make sure that no one is watching your screen. \n\nCoins: %s</string>
+    <string name="Backup_Intro_Subtitle">The key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc. Make sure that no one is watching your screen. \n\nThe coins controlled by this key: %s</string>
     <string name="Backup_Intro_Later">Later</string>
     <string name="Backup_Intro_BackupNow">Backup</string>
 
@@ -255,6 +255,7 @@
 
     <string name="Hud_Text_Unlock">Unlock</string>
     <string name="Hud_Text_Success">Success</string>
+    <string name="Hud_Text_Done">Done</string>
     <string name="Hud_Text_Error">Error</string>
     <string name="Hud_Text_NoInternet">No Internet</string>
     <string name="Hud_Text_Copied">Copied</string>

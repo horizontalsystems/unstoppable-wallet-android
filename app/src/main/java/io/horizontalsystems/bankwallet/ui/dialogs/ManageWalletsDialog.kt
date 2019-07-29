@@ -27,8 +27,8 @@ class ManageWalletsDialog(private val listener: Listener, private val coin: Coin
     private lateinit var addKeyTitle: TextView
     private lateinit var addKeyInfo: TextView
     private lateinit var addCoinIcon: CoinIconView
-    private lateinit var buttonCreateKey: Button
-    private lateinit var buttonRestoreKey: Button
+    private lateinit var btnCreateKey: Button
+    private lateinit var btnRestoreKey: Button
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         rootView = View.inflate(context, R.layout.fragment_bottom_manage_keys, null) as ViewGroup
@@ -36,8 +36,8 @@ class ManageWalletsDialog(private val listener: Listener, private val coin: Coin
         addKeyTitle = rootView.findViewById(R.id.addKeyTitle)
         addKeyInfo = rootView.findViewById(R.id.addKeyInfo)
         addCoinIcon = rootView.findViewById(R.id.addKeyIcon)
-        buttonCreateKey = rootView.findViewById(R.id.btnCreateKey)
-        buttonRestoreKey = rootView.findViewById(R.id.btnRestoreKey)
+        btnCreateKey = rootView.findViewById(R.id.btnYellow)
+        btnRestoreKey = rootView.findViewById(R.id.btnGrey)
 
         bindContent()
         bindActions()
@@ -58,12 +58,12 @@ class ManageWalletsDialog(private val listener: Listener, private val coin: Coin
     }
 
     private fun bindActions() {
-        buttonCreateKey.setOnClickListener {
+        btnCreateKey.setOnClickListener {
             listener.onClickCreateKey()
             dismiss()
         }
 
-        buttonRestoreKey.setOnClickListener {
+        btnRestoreKey.setOnClickListener {
             listener.onClickRestoreKey()
             dismiss()
         }

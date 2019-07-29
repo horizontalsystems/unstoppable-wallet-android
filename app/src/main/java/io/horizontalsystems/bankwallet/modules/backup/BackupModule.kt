@@ -32,8 +32,8 @@ object BackupModule {
 
     //  helpers
 
-    fun start(context: Context, account: Account) {
-        BackupActivity.start(context, account)
+    fun start(context: Context, account: Account, coinCodes: String) {
+        BackupActivity.start(context, account, coinCodes)
     }
 
     fun init(view: BackupViewModel, router: Router, account: Account) {

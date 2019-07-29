@@ -38,6 +38,7 @@ class ManageWalletsPresenter(private val interactor: ManageWalletsModule.IIntera
 
         try {
             item.wallet = interactor.createWallet(item.coin)
+            view?.showSuccess()
         } catch (e: Exception) {
             view?.showError(e)
         }
@@ -46,9 +47,9 @@ class ManageWalletsPresenter(private val interactor: ManageWalletsModule.IIntera
     override fun onClickRestoreKey() {
         val item = currentItem ?: return
 
-        when (item.coin.type.defaultAccountType) {
+        when (val accountType = item.coin.type.defaultAccountType) {
             is DefaultAccountType.Mnemonic -> {
-                router.openRestoreWordsModule()
+                router.openRestoreWordsModule(accountType.wordsCount)
             }
             is DefaultAccountType.Eos -> {
                 router.openRestoreEosModule()

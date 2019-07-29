@@ -14,6 +14,7 @@ object ManageWalletsModule {
     interface IView {
         fun updateCoins()
         fun showNoAccountDialog(coin: Coin)
+        fun showSuccess()
         fun showError(e: Exception)
     }
 
@@ -54,8 +55,8 @@ object ManageWalletsModule {
     }
 
     interface IRouter {
+        fun openRestoreWordsModule(wordsCount: Int)
         fun openRestoreEosModule()
-        fun openRestoreWordsModule()
         fun close()
     }
 

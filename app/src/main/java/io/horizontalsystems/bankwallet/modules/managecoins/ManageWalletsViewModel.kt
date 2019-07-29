@@ -1,14 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.managecoins
 
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 
 class ManageWalletsViewModel : ViewModel(), ManageWalletsModule.IView, ManageWalletsModule.IRouter {
 
     val coinsLoadedLiveEvent = SingleLiveEvent<Void>()
     val showManageKeysDialog = SingleLiveEvent<Coin>()
-    val openRestoreWordsModule = SingleLiveEvent<Void>()
+    val openRestoreWordsModule = SingleLiveEvent<Int>()
     val openRestoreEosModule = SingleLiveEvent<Coin>()
     val showErrorEvent = SingleLiveEvent<Exception>()
     val closeLiveDate = SingleLiveEvent<Void>()
@@ -31,14 +33,18 @@ class ManageWalletsViewModel : ViewModel(), ManageWalletsModule.IView, ManageWal
         showManageKeysDialog.postValue(coin)
     }
 
+    override fun showSuccess() {
+        HudHelper.showSuccessMessage(R.string.Hud_Text_Done, 500)
+    }
+
     override fun showError(e: Exception) {
         showErrorEvent.postValue(e)
     }
 
     // Router
 
-    override fun openRestoreWordsModule() {
-        openRestoreWordsModule.call()
+    override fun openRestoreWordsModule(wordsCount: Int) {
+        openRestoreWordsModule.postValue(wordsCount)
     }
 
     override fun openRestoreEosModule() {
