@@ -29,7 +29,7 @@
     <string name="Restore_EosKeyIncorrect">Incorrect Key</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Backup</string>
-    <string name="Backup_Intro_Subtitle"> The key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc. Make sure that no one is watching your screen. \n\nCoins: %s</string>
+    <string name="Backup_Intro_Subtitle">The key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc. Make sure that no one is watching your screen. \n\nThe coins controlled by this key: %s</string>
     <string name="Backup_Intro_Later">後で</string>
     <string name="Backup_Intro_BackupNow">バックアップ</string>
     <string name="Backup_Words_Title">Backup</string>
@@ -190,6 +190,7 @@
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">解除する</string>
     <string name="Hud_Text_Success">成功</string>
+    <string name="Hud_Text_Done">Done</string>
     <string name="Hud_Text_Error">エラー</string>
     <string name="Hud_Text_NoInternet">インタネットに繋がっていません。</string>
     <string name="Hud_Text_Copied">コピー完了</string>
