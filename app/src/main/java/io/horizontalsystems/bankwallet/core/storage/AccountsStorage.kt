@@ -6,11 +6,9 @@ import io.horizontalsystems.bankwallet.core.toHexString
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.reactivex.Flowable
-import java.util.concurrent.Executors
 
 class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
 
-    private val executor = Executors.newSingleThreadExecutor()
     private val dao = appDatabase.accountsDao()
 
     companion object {
@@ -75,24 +73,20 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
             else -> throw Exception("Cannot save account with type: $accountType")
         }
 
-        executor.execute {
-            dao.insert(AccountRecord(account.id,
-                    account.name,
-                    accountTypeCode,
-                    account.isBackedUp,
-                    account.defaultSyncMode,
-                    words?.let { SecretList(it) },
-                    derivation,
-                    salt?.let { SecretString(it) },
-                    key?.let { SecretString(it) },
-                    eosAccount))
-        }
+        dao.insert(AccountRecord(account.id,
+                account.name,
+                accountTypeCode,
+                account.isBackedUp,
+                account.defaultSyncMode,
+                words?.let { SecretList(it) },
+                derivation,
+                salt?.let { SecretString(it) },
+                key?.let { SecretString(it) },
+                eosAccount))
     }
 
     override fun delete(id: String) {
-        executor.execute {
-            dao.delete(id)
-        }
+        dao.delete(id)
     }
 
     override fun getNonBackedUpCount(): Flowable<Int> {
