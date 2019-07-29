@@ -23,6 +23,8 @@ object SecuritySettingsModule {
         fun onClear()
         fun didSetPin()
         fun didCancelSetPin()
+        fun didUnlockPinToDisablePin()
+        fun didCancelUnlockPinToDisablePin()
     }
 
     interface ISecuritySettingsInteractor {
@@ -44,6 +46,7 @@ object SecuritySettingsModule {
         fun showManageKeys()
         fun showEditPin()
         fun showSetPin()
+        fun showUnlockPin()
     }
 
     fun start(context: Context) {

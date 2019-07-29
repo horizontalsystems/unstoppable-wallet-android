@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.settings.security
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -46,6 +45,10 @@ class SecuritySettingsActivity : BaseActivity() {
 
         viewModel.openSetPinLiveEvent.observe(this, Observer {
             PinModule.startForSetPin(this, REQUEST_CODE_SET_PIN)
+        })
+
+        viewModel.openUnlockPinLiveEvent.observe(this, Observer {
+            PinModule.startForUnlock(this, REQUEST_CODE_UNLOCK_PIN_TO_DISABLE_PIN, true)
         })
 
         viewModel.biometryTypeLiveData.observe(this, Observer { biometryType ->
@@ -98,6 +101,13 @@ class SecuritySettingsActivity : BaseActivity() {
                 PinModule.RESULT_CANCELLED -> viewModel.delegate.didCancelSetPin()
             }
         }
+
+        if (requestCode == REQUEST_CODE_UNLOCK_PIN_TO_DISABLE_PIN) {
+            when (resultCode) {
+                PinModule.RESULT_OK -> viewModel.delegate.didUnlockPinToDisablePin()
+                PinModule.RESULT_CANCELLED -> viewModel.delegate.didCancelUnlockPinToDisablePin()
+            }
+        }
     }
 
     private fun fingerprintCanBeEnabled(): Boolean {
@@ -113,5 +123,6 @@ class SecuritySettingsActivity : BaseActivity() {
 
     companion object {
         const val REQUEST_CODE_SET_PIN = 1
+        const val REQUEST_CODE_UNLOCK_PIN_TO_DISABLE_PIN = 2
     }
 }
