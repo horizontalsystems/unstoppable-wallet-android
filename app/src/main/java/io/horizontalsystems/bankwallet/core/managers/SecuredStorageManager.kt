@@ -20,15 +20,6 @@ class SecuredStorageManager(private val encryptionManager: IEncryptionManager) :
             return null
         }
 
-    override fun saveAuthData(authData: AuthData) {
-        App.preferences.edit().putString(AUTH_DATA, encryptionManager.encrypt(authData.toString())).apply()
-    }
-
-    override fun noAuthData(): Boolean {
-        val words = App.preferences.getString(AUTH_DATA, null)
-        return words.isNullOrEmpty()
-    }
-
     override val savedPin: String?
         get() {
             val string = App.preferences.getString(LOCK_PIN, null)

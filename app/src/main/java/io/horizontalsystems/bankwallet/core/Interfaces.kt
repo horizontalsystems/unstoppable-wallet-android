@@ -51,8 +51,6 @@ interface ILocalStorage {
 
 interface ISecuredStorage {
     val authData: AuthData?
-    fun saveAuthData(authData: AuthData)
-    fun noAuthData(): Boolean
     val savedPin: String?
     fun savePin(pin: String)
     fun removePin()
