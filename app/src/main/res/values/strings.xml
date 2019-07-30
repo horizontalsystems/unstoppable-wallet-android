@@ -309,7 +309,7 @@
     <string name="ManageKeys_Title">Manage Keys</string>
     <string name="ManageKeys_Create">Create</string>
     <string name="ManageKeys_Restore">Restore</string>
-    <string name="ManageKeys_Unlink">Delete From Phone</string>
+    <string name="ManageKeys_Unlink">Delete from Phone</string>
     <string name="ManageKeys_Backup">Backup</string>
     <string name="ManageKeys_Show">Show</string>
 
