@@ -10,7 +10,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.modules.backup.eos.BackupEosModule
 import io.horizontalsystems.bankwallet.modules.backup.words.BackupWordsModule
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import kotlinx.android.synthetic.main.activity_backup.*
@@ -34,16 +34,16 @@ class BackupActivity : BaseActivity() {
         buttonBack.setOnSingleClickListener { viewModel.delegate.onClickCancel() }
         buttonNext.setOnSingleClickListener { viewModel.delegate.onClickBackup() }
 
-        viewModel.startPinModuleEvent.observe(this, Observer {
+        viewModel.startPinModule.observe(this, Observer {
             PinModule.startForUnlock(this, ModuleCode.UNLOCK_PIN, true)
         })
 
-        viewModel.startBackupEvent.observe(this, Observer {
-            when (it.type) {
-                is AccountType.Mnemonic -> {
-                    BackupWordsModule.start(this, it.type.words, account.isBackedUp)
-                }
-            }
+        viewModel.startBackupWordsModule.observe(this, Observer {
+            BackupWordsModule.start(this, it, account.isBackedUp)
+        })
+
+        viewModel.startBackupEosModule.observe(this, Observer {
+            BackupEosModule.start(this, it.first, it.second)
         })
 
         viewModel.closeLiveEvent.observe(this, Observer {
@@ -61,16 +61,16 @@ class BackupActivity : BaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-
         when (requestCode) {
-            ModuleCode.BACKUP_WORDS -> {
+            ModuleCode.BACKUP_EOS -> {
                 when (resultCode) {
                     BackupWordsModule.RESULT_BACKUP -> {
                         viewModel.delegate.didBackup()
                     }
-                    BackupWordsModule.RESULT_SHOW -> {
-                    }
                 }
+                finish()
+            }
+            ModuleCode.BACKUP_WORDS -> {
                 finish()
             }
             ModuleCode.UNLOCK_PIN -> {
