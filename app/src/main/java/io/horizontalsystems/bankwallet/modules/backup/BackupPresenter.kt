@@ -26,16 +26,16 @@ class BackupPresenter(
         }
     }
 
+    override fun didBackup() {
+        interactor.setBackedUp(account.id)
+    }
+
     override fun didUnlock() {
         router.startBackupModule(account)
     }
 
     override fun didCancelUnlock() {
 
-    }
-
-    override fun didBackUp(accountId: String) {
-        interactor.setBackedUp(accountId)
     }
 }
 

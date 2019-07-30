@@ -28,6 +28,7 @@ object ManageKeysModule {
         fun onClickBackup(accountItem: ManageAccountItem)
         fun onClickRestore(accountType: IPredefinedAccountType)
         fun onClickUnlink(accountItem: ManageAccountItem)
+        fun onClickShow(accountItem: ManageAccountItem)
 
         fun onConfirmCreate()
         fun onConfirmBackup()

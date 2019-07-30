@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.modules.backup.words.BackupWordsActivity
 import io.horizontalsystems.bankwallet.modules.backup.words.BackupWordsModule
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import kotlinx.android.synthetic.main.activity_backup.*
@@ -26,10 +25,11 @@ class BackupActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_backup)
 
-        val coinCodes = intent.getStringExtra(ACCOUNT_COINS)
+        val account = intent.getParcelableExtra<Account>(ACCOUNT_KEY)
+        val accountCoins = intent.getStringExtra(ACCOUNT_COINS)
 
         viewModel = ViewModelProviders.of(this).get(BackupViewModel::class.java)
-        viewModel.init(intent.getParcelableExtra(ACCOUNT_KEY))
+        viewModel.init(account)
 
         buttonBack.setOnSingleClickListener { viewModel.delegate.onClickCancel() }
         buttonNext.setOnSingleClickListener { viewModel.delegate.onClickBackup() }
@@ -38,10 +38,10 @@ class BackupActivity : BaseActivity() {
             PinModule.startForUnlock(this, ModuleCode.UNLOCK_PIN, true)
         })
 
-        viewModel.startBackupEvent.observe(this, Observer { account ->
-            when (account.type) {
+        viewModel.startBackupEvent.observe(this, Observer {
+            when (it.type) {
                 is AccountType.Mnemonic -> {
-                    BackupWordsModule.start(this, account.type.words, account.id)
+                    BackupWordsModule.start(this, it.type.words, account.isBackedUp)
                 }
             }
         })
@@ -50,7 +50,12 @@ class BackupActivity : BaseActivity() {
             finish()
         })
 
-        backupIntro.text = getString(R.string.Backup_Intro_Subtitle, coinCodes)
+        backupIntro.text = getString(R.string.Backup_Intro_Subtitle, accountCoins)
+
+        if (account.isBackedUp) {
+            buttonBack.text = getString(R.string.Button_Close)
+            buttonNext.text = getString(R.string.Backup_Button_ShowKey)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -59,9 +64,13 @@ class BackupActivity : BaseActivity() {
 
         when (requestCode) {
             ModuleCode.BACKUP_WORDS -> {
-                if (data == null || resultCode != RESULT_OK) return
-                val accountId = data.getStringExtra(BackupWordsActivity.ACCOUNT_ID_KEY)
-                viewModel.delegate.didBackUp(accountId)
+                when (resultCode) {
+                    BackupWordsModule.RESULT_BACKUP -> {
+                        viewModel.delegate.didBackup()
+                    }
+                    BackupWordsModule.RESULT_SHOW -> {
+                    }
+                }
                 finish()
             }
             ModuleCode.UNLOCK_PIN -> {

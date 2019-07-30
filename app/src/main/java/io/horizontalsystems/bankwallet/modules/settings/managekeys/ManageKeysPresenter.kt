@@ -51,6 +51,10 @@ class ManageKeysPresenter(private val interactor: ManageKeysModule.Interactor, p
         }
     }
 
+    override fun onClickShow(accountItem: ManageAccountItem) {
+        router.startBackupModule(accountItem)
+    }
+
     override fun onConfirmCreate() {
         try {
             currentItem?.let { interactor.createAccount(it.predefinedAccountType) }

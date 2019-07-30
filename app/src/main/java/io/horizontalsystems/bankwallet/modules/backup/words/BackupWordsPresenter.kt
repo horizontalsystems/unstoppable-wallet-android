@@ -19,8 +19,14 @@ class BackupWordsPresenter(private val interactor: BackupWordsModule.IInteractor
     override fun onNextClick() {
         if (state.canLoadNextPage()) {
             if (state.currentPage == 2) {
+                if (state.backedUp) {
+                    router.notifyClosed()
+                    return
+                }
+
                 view?.showConfirmationWords(interactor.getConfirmationIndices())
             }
+
             loadCurrentPage()
         } else {
             view?.validateWords()
@@ -42,7 +48,7 @@ class BackupWordsPresenter(private val interactor: BackupWordsModule.IInteractor
     // Interactor Delegate
 
     override fun onValidateSuccess() {
-        router.notifyBackedUp(state.accountId)
+        router.notifyBackedUp()
     }
 
     override fun onValidateFailure() {

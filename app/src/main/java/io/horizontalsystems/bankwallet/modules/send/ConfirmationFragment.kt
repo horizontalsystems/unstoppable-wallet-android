@@ -84,5 +84,4 @@ class ConfirmationFragment : DialogFragment() {
             fragment.show(activity.supportFragmentManager, "confirm_send_fragment")
         }
     }
-
 }

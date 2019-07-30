@@ -11,7 +11,7 @@ object BackupModule {
     interface ViewDelegate {
         fun onClickCancel()
         fun onClickBackup()
-        fun didBackUp(accountId: String)
+        fun didBackup()
         fun didUnlock()
         fun didCancelUnlock()
     }

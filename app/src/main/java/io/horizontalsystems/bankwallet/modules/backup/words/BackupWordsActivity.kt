@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.backup.words
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -17,11 +18,12 @@ class BackupWordsActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_backup_words)
 
+        val backedUp = intent.getBooleanExtra(ACCOUNT_BACKEDUP, false)
+
         viewModel = ViewModelProviders.of(this).get(BackupWordsViewModel::class.java)
-        viewModel.init(intent.getStringExtra(ACCOUNT_ID_KEY), intent.getStringExtra(WORDS_KEY).split(", "))
+        viewModel.init(intent.getStringArrayExtra(WORDS_KEY), backedUp)
 
         if (savedInstanceState == null) {
             viewModel.delegate.viewDidLoad()
@@ -31,46 +33,48 @@ class BackupWordsActivity : BaseActivity() {
         buttonNext.setOnSingleClickListener { viewModel.delegate.onNextClick() }
 
         viewModel.loadPageLiveEvent.observe(this, Observer { page ->
-            page?.let {
-                val fragment = when (page) {
-                    1 -> BackupWordsFragment()
-                    else -> BackupWordsConfirmFragment()
-                }
+            val fragment = when (page) {
+                1 -> BackupWordsFragment()
+                else -> BackupWordsConfirmFragment()
+            }
 
-                supportFragmentManager.beginTransaction().apply {
-                    replace(R.id.fragmentContainer, fragment)
-                    addToBackStack(null)
-                    commit()
-                }
+            supportFragmentManager.beginTransaction().apply {
+                replace(R.id.fragmentContainer, fragment)
+                addToBackStack(null)
+                commit()
+            }
 
-                // set buttons
-                when (page) {
-                    1 -> {
-                        buttonBack.setText(R.string.Button_Back)
-                        buttonNext.setText(R.string.Backup_Button_Next)
-                    }
-                    else -> {
-                        buttonBack.setText(R.string.Button_Back)
-                        buttonNext.setText(R.string.Backup_Button_Submit)
-                    }
+            // set buttons
+            when (page) {
+                1 -> {
+                    buttonBack.setText(R.string.Button_Back)
+                    buttonNext.setText(R.string.Backup_Button_Next)
                 }
+                else -> {
+                    buttonBack.setText(R.string.Button_Back)
+                    buttonNext.setText(R.string.Backup_Button_Submit)
+                }
+            }
+
+            if (backedUp) {
+                buttonBack.visibility = View.GONE
+                buttonNext.setText(R.string.Button_Close)
             }
         })
 
-        viewModel.notifyBackedUpEvent.observe(this, Observer { accountId ->
-            accountId?.let {
-                val intent = Intent().apply {
-                    putExtra(ACCOUNT_ID_KEY, accountId)
-                }
-                setResult(RESULT_OK, intent)
-                finish()
-            }
+        viewModel.notifyBackedUpEvent.observe(this, Observer {
+            setResult(BackupWordsModule.RESULT_BACKUP)
+            finish()
+        })
+
+        viewModel.notifyClosedEvent.observe(this, Observer {
+            setResult(BackupWordsModule.RESULT_SHOW)
+            finish()
         })
 
         viewModel.closeLiveEvent.observe(this, Observer {
             finish()
         })
-
     }
 
     override fun onBackPressed() {
@@ -78,13 +82,13 @@ class BackupWordsActivity : BaseActivity() {
     }
 
     companion object {
-        const val ACCOUNT_ID_KEY = "accountId"
+        const val ACCOUNT_BACKEDUP = "account_backedup"
         const val WORDS_KEY = "words"
 
-        fun start(context: AppCompatActivity, words: List<String>, accountId: String) {
+        fun start(context: AppCompatActivity, words: List<String>, backedUp: Boolean) {
             val intent = Intent(context, BackupWordsActivity::class.java).apply {
-                putExtra(ACCOUNT_ID_KEY, accountId)
-                putExtra(WORDS_KEY, words.joinToString())
+                putExtra(WORDS_KEY, words.toTypedArray())
+                putExtra(ACCOUNT_BACKEDUP, backedUp)
             }
 
             context.startActivityForResult(intent, ModuleCode.BACKUP_WORDS)

@@ -9,7 +9,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.lib.WordsAdapter
 import kotlinx.android.synthetic.main.fragment_backup_words_show_words.*
 
 class BackupWordsFragment : Fragment() {
@@ -22,12 +21,12 @@ class BackupWordsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val wordsAdapter = WordsAdapter()
 
         activity?.let {
             viewModel = ViewModelProviders.of(it).get(BackupWordsViewModel::class.java)
         }
 
+        val wordsAdapter = BackupWordsAdapter()
         recyclerWords.adapter = wordsAdapter
         recyclerWords.layoutManager = LinearLayoutManager(context)
 
@@ -38,5 +37,4 @@ class BackupWordsFragment : Fragment() {
             }
         })
     }
-
 }

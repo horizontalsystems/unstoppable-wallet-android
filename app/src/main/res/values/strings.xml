@@ -11,6 +11,7 @@
 
     <string name="Button_Cancel">Cancel</string>
     <string name="Button_Back">Back</string>
+    <string name="Button_Close">Close</string>
     <string name="Button_Ok">OK</string>
     <string name="Button_Share">Share</string>
 
@@ -58,6 +59,7 @@
     <string name="Backup_Button_Confirm">Confirm</string>
     <string name="Backup_Button_Next">Next</string>
     <string name="Backup_Button_Submit">Submit</string>
+    <string name="Backup_Button_ShowKey">Show Key</string>
 
     <!--Balance-->
 
