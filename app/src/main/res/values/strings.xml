@@ -314,7 +314,7 @@
     <string name="ManageKeys_Show">Show</string>
 
     <string name="ManageKeys_Unlink_Title">Delete Key</string>
-    <string name="ManageKeys_Unlink_ConfirmationRemove">This action will delete the [key_title] key (wallet) from this device.</string>
+    <string name="ManageKeys_Unlink_ConfirmationRemove">This action will delete the %s key (wallet) from this device.</string>
     <string name="ManageKeys_Unlink_ConfirmationDisable">Coins that will be disabled: %s</string>
     <string name="ManageKeys_Unlink_ConfirmationLoose">If you don\'t have a backup of this key you will loose the respective funds.</string>
     <string name="ManageKeys_UnlinkAlert">You need to backup this key before you may unlink it.</string>
