@@ -277,7 +277,7 @@
     <!--OS Pin-->
 
     <string name="OSPin_Confirm_Title">Phone PIN</string>
-    <string name="OSPin_Confirm_Desciption">This app requires your phone\'s PIN in order to keep sensitive data from your wallet in Android\'s secure storage and not in the app itself.</string>
+    <string name="OSPin_Confirm_Desciption">This app requires that phone has the passcode (screen lock) enabled. You may enable it in Android settings.</string>
 
     <!--Set Pin-->
 
@@ -309,11 +309,12 @@
     <string name="ManageKeys_Title">Manage Keys</string>
     <string name="ManageKeys_Create">Create</string>
     <string name="ManageKeys_Restore">Restore</string>
-    <string name="ManageKeys_Unlink">Unlink</string>
+    <string name="ManageKeys_Unlink">Delete From Phone</string>
     <string name="ManageKeys_Backup">Backup</string>
     <string name="ManageKeys_Show">Show</string>
 
-    <string name="ManageKeys_Unlink_ConfirmationRemove">This action will remove the %s key (wallet) from this device.</string>
+    <string name="ManageKeys_Unlink_Title">Delete Key</string>
+    <string name="ManageKeys_Unlink_ConfirmationRemove">This action will delete the [key_title] key (wallet) from this device.</string>
     <string name="ManageKeys_Unlink_ConfirmationDisable">Coins that will be disabled: %s</string>
     <string name="ManageKeys_Unlink_ConfirmationLoose">If you don\'t have a backup of this key you will loose the respective funds.</string>
     <string name="ManageKeys_UnlinkAlert">You need to backup this key before you may unlink it.</string>
@@ -327,9 +328,12 @@
 
     <!-- Account Types -->
 
-    <string name="ManageKeys_12_words">12 Words Key</string>
-    <string name="ManageKeys_eos">EOS Account</string>
-    <string name="ManageKeys_24_words">24 Words Key</string>
+    <string name="ManageKeys_12Words">12 Words</string>
+    <string name="ManageKeys_12Words_Text">BTC, BCH, DASH, ETH, ERC-20</string>
+    <string name="ManageKeys_Eos">EOS Blockchain</string>
+    <string name="ManageKeys_Eos_Text">EOS, EOS-based Tokens</string>
+    <string name="ManageKeys_Binance">Binance Chain</string>
+    <string name="ManageKeys_Binance_Text">BNB, BEP-2</string>
 
     <!--Coin Option-->
 
