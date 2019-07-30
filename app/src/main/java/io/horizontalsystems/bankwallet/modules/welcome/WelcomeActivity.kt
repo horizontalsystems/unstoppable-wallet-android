@@ -10,7 +10,7 @@ import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
-import kotlinx.android.synthetic.main.activity_add_wallet.*
+import kotlinx.android.synthetic.main.activity_welcome.*
 
 
 class WelcomeActivity : BaseActivity() {
@@ -21,7 +21,7 @@ class WelcomeActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setTransparentStatusBar()
 
-        setContentView(R.layout.activity_add_wallet)
+        setContentView(R.layout.activity_welcome)
 
         viewModel = ViewModelProviders.of(this).get(WelcomeViewModel::class.java)
         viewModel.init()
