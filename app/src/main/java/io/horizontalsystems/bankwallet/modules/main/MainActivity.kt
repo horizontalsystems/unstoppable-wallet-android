@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.main
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.text.TextUtils
 import android.view.View
 import android.view.ViewStub
 import android.widget.TextView
@@ -15,18 +14,13 @@ import androidx.viewpager.widget.ViewPager
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
-import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerModule
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveView
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveViewModel
-import io.horizontalsystems.bankwallet.modules.send.ConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.send.SendActivity
-import io.horizontalsystems.bankwallet.modules.send.SendView
-import io.horizontalsystems.bankwallet.modules.send.SendViewModel
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoView
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoViewModel
@@ -35,15 +29,13 @@ import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.main_activity_view_pager_layout.*
 
-class MainActivity : BaseActivity(), SendView.Listener, ReceiveView.Listener, TransactionInfoView.Listener {
+class MainActivity : BaseActivity(), ReceiveView.Listener, TransactionInfoView.Listener {
 
     private var adapter: MainTabsAdapter? = null
     private var disposables = CompositeDisposable()
     private var receiveViewModel: ReceiveViewModel? = null
-    private var sendViewModel: SendViewModel? = null
     private var transInfoViewModel: TransactionInfoViewModel? = null
     private var receiveBottomSheetBehavior: BottomSheetBehavior<View>? = null
-    private var sendBottomSheetBehavior: BottomSheetBehavior<View>? = null
     private var txInfoBottomSheetBehavior: BottomSheetBehavior<View>? = null
 
     private lateinit var viewModel: MainViewModel
@@ -73,9 +65,6 @@ class MainActivity : BaseActivity(), SendView.Listener, ReceiveView.Listener, Tr
         receiveBottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED -> {
             receiveBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         }
-        sendBottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED -> {
-            sendBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
-        }
         (adapter?.currentItem ?: 0) > 0 -> {
             viewPager.currentItem = 0
         }
@@ -84,21 +73,12 @@ class MainActivity : BaseActivity(), SendView.Listener, ReceiveView.Listener, Tr
 
     override fun onResume() {
         super.onResume()
-        sendViewModel?.onViewResumed()
         collapseBottomSheetsOnActivityRestore()
     }
 
     override fun onDestroy() {
         disposables.dispose()
         super.onDestroy()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        val scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        if (scanResult != null && !TextUtils.isEmpty(scanResult.contents)) {
-//            sendViewModel?.delegate?.onScanAddress(scanResult.contents)
-        }
     }
 
     /***
@@ -125,32 +105,11 @@ class MainActivity : BaseActivity(), SendView.Listener, ReceiveView.Listener, Tr
                 .startChooser()
     }
 
-    /***
-    Send bottomsheet
-     */
-
-    fun openSendDialog(coinCode: String) {
-        val intent = Intent(this, SendActivity::class.java)
+    fun openSend(coinCode: String) {
+        val intent = Intent(this, SendActivity::class.java).apply {
+            putExtra(SendActivity.COIN_CODE, coinCode)
+        }
         startActivity(intent)
-
-//        sendViewModel?.let {
-//            it.init(coinCode)
-//            sendView.update()
-//        }
-//        sendBottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
-    }
-
-    override fun closeSend() {
-        sendBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
-        hideDim()
-    }
-
-    override fun openSendScanner() {
-        QRScannerModule.start(this)
-    }
-
-    override fun showSendConfirmationDialog() {
-        ConfirmationFragment.show(this)
     }
 
     /***
@@ -227,13 +186,6 @@ class MainActivity : BaseActivity(), SendView.Listener, ReceiveView.Listener, Tr
                 receiveView.bind(it, this, this)
             }
 
-            //send
-            sendBottomSheetBehavior = BottomSheetBehavior.from(sendNestedScrollView)
-            setBottomSheet(sendBottomSheetBehavior)
-
-            sendViewModel = ViewModelProviders.of(this).get(SendViewModel::class.java)
-            sendViewModel?.let { sendView.initView(it, this, this) }
-
             //transaction info
             txInfoBottomSheetBehavior = BottomSheetBehavior.from(transactionInfoNestedScrollView)
             setBottomSheet(txInfoBottomSheetBehavior)
@@ -252,7 +204,6 @@ class MainActivity : BaseActivity(), SendView.Listener, ReceiveView.Listener, Tr
 
         bottomSheetDim.setOnClickListener {
             receiveBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
-            sendBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
             txInfoBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         }
     }
@@ -266,9 +217,6 @@ class MainActivity : BaseActivity(), SendView.Listener, ReceiveView.Listener, Tr
     private fun collapseBottomSheetsOnActivityRestore() {
         if (receiveBottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED && findViewById<TextView>(R.id.receiveTxtTitle)?.text?.isEmpty() == true) {
             receiveBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
-        }
-        if (sendBottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED && findViewById<TextView>(R.id.sendTxtTitle)?.text?.isEmpty() == true) {
-            sendBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         }
         if (txInfoBottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED && findViewById<TextView>(R.id.txInfoCoinName)?.text?.isEmpty() == true) {
             txInfoBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
