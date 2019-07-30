@@ -240,6 +240,11 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="ButtonSteel" parent="Button">
+        <item name="android:background">@drawable/button_steel_background_12</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
     <style name="SendButtonSmallGrey" parent="Button">
         <item name="android:background">@drawable/button_grey_background_4_themed</item>
         <item name="android:textColor">@color/stateful_button_text_color</item>

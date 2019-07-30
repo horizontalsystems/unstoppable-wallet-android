@@ -22,30 +22,16 @@
         android:id="@+id/appNameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
         android:src="@drawable/unstoppable_text"
-        android:layout_marginTop="78dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
-    <TextView
-        android:id="@+id/textTitle"
-        style="@style/BaseMedium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:textColor="@color/dark"
-        android:textSize="14sp"
-        android:text="@string/Welcome_Subtitle"
-        app:layout_constraintTop_toBottomOf="@+id/appNameText"
+        app:layout_constraintBottom_toTopOf="@id/buttonCreate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />
 
     <Button
         android:id="@+id/buttonCreate"
-        style="@style/ButtonDark"
+        style="@style/ButtonSteel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -59,10 +45,10 @@
 
     <Button
         android:id="@+id/buttonRestore"
-        style="@style/ButtonDark"
+        style="@style/ButtonSteel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="12dp"
         android:layout_marginEnd="32dp"
         android:layout_marginStart="32dp"
         android:text="@string/Welcome_RestoreWallet"
@@ -76,8 +62,8 @@
         style="@style/CaptionRegular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:textColor="@color/white"
+        android:layout_marginBottom="12dp"
+        android:textColor="@color/grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
