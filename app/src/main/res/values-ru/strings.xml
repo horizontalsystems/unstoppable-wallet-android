@@ -206,7 +206,7 @@
     <string name="UnlockPin_WalletDisabledUntil">Отключено до: %s</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">PIN-код телефона</string>
-    <string name="OSPin_Confirm_Desciption">Это приложение требует PIN-код вашего телефона, чтобы сохранить конфиденциальные данные  вашего кошелька в безопасном хранилище Android, а не в самом приложении.</string>
+    <string name="OSPin_Confirm_Desciption">This app requires that phone has the passcode (screen lock) enabled. You may enable it in Android settings.</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Код Доступа</string>
     <string name="SetPin_Info">Ваш код будет использоваться для разблокировки вашего кошелька и отправки денег</string>
@@ -230,10 +230,11 @@
     <string name="ManageKeys_Title">Управление Ключами</string>
     <string name="ManageKeys_Create">Create</string>
     <string name="ManageKeys_Restore">Restore</string>
-    <string name="ManageKeys_Unlink">Отсоединить</string>
+    <string name="ManageKeys_Unlink">Delete from Phone</string>
     <string name="ManageKeys_Backup">Резервная копия</string>
     <string name="ManageKeys_Show">Показать</string>
-    <string name="ManageKeys_Unlink_ConfirmationRemove">This action will remove the %s key (wallet) from this device.</string>
+    <string name="ManageKeys_Unlink_Title">Delete Key</string>
+    <string name="ManageKeys_Unlink_ConfirmationRemove">This action will delete the %s key (wallet) from this device.</string>
     <string name="ManageKeys_Unlink_ConfirmationDisable">Coins that will be disabled: %s</string>
     <string name="ManageKeys_Unlink_ConfirmationLoose">If you don\'t have a backup of this key you will loose the respective funds.</string>
     <string name="ManageKeys_UnlinkAlert">You need to backup this key before you may unlink it.</string>
@@ -243,9 +244,12 @@
     <string name="AddCoin_CreateKey">Create</string>
     <string name="AddCoin_RestoreKey">Restore</string>
     <!-- Account Types -->
-    <string name="ManageKeys_12_words">12 Words Key</string>
-    <string name="ManageKeys_eos">EOS аккаунт</string>
-    <string name="ManageKeys_24_words">24 Words Key</string>
+    <string name="ManageKeys_12Words">12 Words</string>
+    <string name="ManageKeys_12Words_Text">BTC, BCH, DASH, ETH, ERC-20</string>
+    <string name="ManageKeys_Eos">EOS Blockchain</string>
+    <string name="ManageKeys_Eos_Text">EOS, EOS-based Tokens</string>
+    <string name="ManageKeys_Binance">Binance Chain</string>
+    <string name="ManageKeys_Binance_Text">BNB, BEP-2</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">Параметры Восстановления</string>
     <string name="CoinOption_Fast">Быстро</string>
