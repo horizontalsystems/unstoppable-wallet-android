@@ -32,8 +32,8 @@ object PinModule {
         fun onEnter(pin: String, pageIndex: Int)
         fun onDelete(pageIndex: Int)
         fun onBackPressed()
-        fun onBiometricUnlock() {}
-        fun showBiometricUnlock() {}
+        fun onFingerprintUnlock() {}
+        fun showFingerprintUnlock() {}
         fun resetPin()
     }
 

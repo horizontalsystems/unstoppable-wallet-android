@@ -37,7 +37,7 @@ class LocalStorageManager : ILocalStorage {
             App.preferences.edit().putBoolean(WORDLIST_BACKUP, backedUp).apply()
         }
 
-    override var isBiometricOn: Boolean
+    override var isFingerprintEnabled: Boolean
         get() = App.preferences.getBoolean(FINGERPRINT_ENABLED, false)
         set(enabled) {
             App.preferences.edit().putBoolean(FINGERPRINT_ENABLED, enabled).apply()

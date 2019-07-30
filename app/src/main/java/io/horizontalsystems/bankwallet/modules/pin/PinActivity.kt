@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.security.FingerprintAuthenticationDialogFragment
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.ui.extensions.*
@@ -177,22 +176,20 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
         when (item.type) {
             NumPadItemType.NUMBER -> viewModel.delegate.onEnter(item.number.toString(), layoutManager.findFirstVisibleItemPosition())
             NumPadItemType.DELETE -> viewModel.delegate.onDelete(layoutManager.findFirstVisibleItemPosition())
-            NumPadItemType.FINGER -> viewModel.delegate.showBiometricUnlock()
+            NumPadItemType.FINGER -> viewModel.delegate.showFingerprintUnlock()
         }
     }
 
     override fun onFingerprintAuthSucceed() {
-        viewModel.delegate.onBiometricUnlock()
+        viewModel.delegate.onFingerprintUnlock()
     }
 
     private fun showFingerprintDialog(cryptoObject: FingerprintManagerCompat.CryptoObject) {
-        if (App.systemInfoManager.touchSensorCanBeUsed()) {
-            val fragment = FingerprintAuthenticationDialogFragment()
-            fragment.setCryptoObject(cryptoObject)
-            fragment.setCallback(this@PinActivity)
-            fragment.isCancelable = true
-            fragment.show(fragmentManager, "fingerprint_dialog")
-        }
+        val fragment = FingerprintAuthenticationDialogFragment()
+        fragment.setCryptoObject(cryptoObject)
+        fragment.setCallback(this@PinActivity)
+        fragment.isCancelable = true
+        fragment.show(fragmentManager, "fingerprint_dialog")
     }
 
     companion object {

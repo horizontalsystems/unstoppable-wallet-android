@@ -32,7 +32,7 @@ interface IAdapterManager {
 interface ILocalStorage {
     var currentLanguage: String?
     var isBackedUp: Boolean
-    var isBiometricOn: Boolean
+    var isFingerprintEnabled: Boolean
     var sendInputType: SendModule.InputType?
     var isLightModeOn: Boolean
     var iUnderstand: Boolean
@@ -243,11 +243,9 @@ interface IAdapter {
 
 interface ISystemInfoManager {
     val appVersion: String
-    val biometryType: BiometryType
     val isSystemLockOff: Boolean
-
-    fun phoneHasFingerprintSensor(): Boolean
-    fun touchSensorCanBeUsed(): Boolean
+    val hasFingerprintSensor: Boolean
+    val hasEnrolledFingerprints: Boolean
 }
 
 interface IPinManager {

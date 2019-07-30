@@ -68,7 +68,7 @@ class PinViewModel : ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter
     }
 
     override fun showFingerprintDialog(cryptoObject: FingerprintManagerCompat.CryptoObject) {
-        showFingerprintInputLiveEvent.value = cryptoObject
+        showFingerprintInputLiveEvent.postValue(cryptoObject)
     }
 
     override fun showBackButton() {

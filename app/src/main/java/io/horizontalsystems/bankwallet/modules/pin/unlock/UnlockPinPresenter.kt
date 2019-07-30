@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.pin.unlock
 
-import androidx.core.hardware.fingerprint.FingerprintManagerCompat
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.LockoutState
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
@@ -13,7 +12,6 @@ class UnlockPinPresenter(
 
     private val unlockPageIndex = 0
     private var enteredPin = ""
-    private var cryptoObject: FingerprintManagerCompat.CryptoObject? = null
     var view: PinModule.IPinView? = null
 
     override fun viewDidLoad() {
@@ -26,6 +24,8 @@ class UnlockPinPresenter(
         }
 
         interactor.updateLockoutState()
+
+        showFingerprintUnlock()
     }
 
     override fun onEnter(pin: String, pageIndex: Int) {
@@ -59,22 +59,17 @@ class UnlockPinPresenter(
         router.dismissModuleWithSuccess()
     }
 
-    override fun setCryptoObject(cryptoObject: FingerprintManagerCompat.CryptoObject) {
-        this.cryptoObject = cryptoObject
-        showBiometricUnlock()
-    }
-
     override fun wrongPinSubmitted() {
         view?.showPinWrong(unlockPageIndex)
     }
 
-    override fun showBiometricUnlock() {
-        if (interactor.isBiometricOn()) {
-            cryptoObject?.let { view?.showFingerprintDialog(it) }
+    override fun showFingerprintUnlock() {
+        if (interactor.isFingerprintEnabled && interactor.hasEnrolledFingerprints) {
+            interactor.cryptoObject?.let { view?.showFingerprintDialog(it) }
         }
     }
 
-    override fun onBiometricUnlock() {
+    override fun onFingerprintUnlock() {
         interactor.onUnlock()
     }
 
@@ -86,10 +81,11 @@ class UnlockPinPresenter(
     }
 
     override fun onBackPressed() {
-        if(showCancelButton) {
+        if (showCancelButton) {
             router.dismissModuleWithCancel()
         } else {
             router.closeApplication()
         }
     }
+
 }
