@@ -25,7 +25,7 @@ class SendActivity : BaseActivity() {
     private var sendAmountViewModel: SendAmountViewModel? = null
     private var sendAddressViewModel: SendAddressViewModel? = null
     private var sendFeeViewModel: SendFeeViewModel? = null
-    private lateinit var sendMainViewModel: SendViewModel
+    private lateinit var mainViewModel: SendViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,8 +45,8 @@ class SendActivity : BaseActivity() {
                 rightBtnItem = TopMenuItem(R.drawable.close) { onBackPressed() }
         )
 
-        sendMainViewModel = ViewModelProviders.of(this).get(SendViewModel::class.java)
-        sendMainViewModel.init(coinCode)
+        mainViewModel = ViewModelProviders.of(this).get(SendViewModel::class.java)
+        mainViewModel.init(coinCode)
 
         observeViewModel()
         addInputItems(coinCode)
@@ -61,35 +61,35 @@ class SendActivity : BaseActivity() {
     }
 
     private fun observeViewModel() {
-        sendMainViewModel.availableBalanceRetrievedLiveData.observe(this, Observer { availableBalance ->
+        mainViewModel.availableBalanceRetrievedLiveData.observe(this, Observer { availableBalance ->
             sendAmountViewModel?.delegate?.onAvailableBalanceRetrieved(availableBalance)
         })
 
-        sendMainViewModel.onAddressParsedLiveData.observe(this, Observer { parsedAddress ->
+        mainViewModel.onAddressParsedLiveData.observe(this, Observer { parsedAddress ->
             sendAddressViewModel?.delegate?.onParsedAddress(parsedAddress)
         })
 
-        sendMainViewModel.getParamsFromModulesLiveEvent.observe(this, Observer { paramsAction ->
+        mainViewModel.getParamsFromModulesLiveEvent.observe(this, Observer { paramsAction ->
             fetchParamsFromModules(paramsAction)
         })
 
-        sendMainViewModel.validationErrorLiveEvent.observe(this, Observer { error ->
+        mainViewModel.validationErrorLiveEvent.observe(this, Observer { error ->
             sendAmountViewModel?.delegate?.onValidationError(error)
         })
 
-        sendMainViewModel.insufficientFeeBalanceErrorLiveEvent.observe(this, Observer { (coinCode, fee) ->
+        mainViewModel.insufficientFeeBalanceErrorLiveEvent.observe(this, Observer { (coinCode, fee) ->
             sendFeeViewModel?.delegate?.onInsufficientFeeBalanceError(coinCode, fee)
         })
 
-        sendMainViewModel.amountValidationLiveEvent.observe(this, Observer {
+        mainViewModel.amountValidationLiveEvent.observe(this, Observer {
             sendAmountViewModel?.delegate?.onValidationSuccess()
         })
 
-        sendMainViewModel.feeUpdatedLiveData.observe(this, Observer { fee ->
+        mainViewModel.feeUpdatedLiveData.observe(this, Observer { fee ->
             sendFeeViewModel?.delegate?.onFeeUpdated(fee)
         })
 
-        sendMainViewModel.mainInputTypeUpdatedLiveData.observe(this, Observer { inputType ->
+        mainViewModel.mainInputTypeUpdatedLiveData.observe(this, Observer { inputType ->
             sendFeeViewModel?.delegate?.onInputTypeUpdated(inputType)
         })
     }
@@ -104,7 +104,7 @@ class SendActivity : BaseActivity() {
         params[SendModule.AdapterFields.Address] = address
         params[SendModule.AdapterFields.FeeRatePriority] = feePriority
 
-        sendMainViewModel.delegate.onParamsFetchedForAction(params, paramsAction)
+        mainViewModel.delegate.onParamsFetchedForAction(params, paramsAction)
     }
 
     private fun addInputItems(coinCode: String) {
@@ -113,7 +113,7 @@ class SendActivity : BaseActivity() {
         sendAmountViewModel = ViewModelProviders.of(this).get(SendAmountViewModel::class.java)
         sendAmountViewModel?.init(coinCode)
         sendAmountViewModel?.let {
-            sendAmountView.bindInitial(it, sendMainViewModel, this, 8)
+            sendAmountView.bindInitial(it, mainViewModel, this, 8)
         }
         sendLinearLayout.addView(sendAmountView)
 
@@ -122,13 +122,7 @@ class SendActivity : BaseActivity() {
         sendAddressViewModel = ViewModelProviders.of(this).get(SendAddressViewModel::class.java)
         sendAddressViewModel?.init()
         sendAddressViewModel?.let {
-            sendAddressView.bindAddressInputInitial(
-                    viewModel = it,
-                    mainViewModel = sendMainViewModel,
-                    lifecycleOwner = this,
-                    onBarcodeClick = { QRScannerModule.start(this) },
-                    onAmountChange = { amount -> sendMainViewModel.delegate.onAmountChanged(amount) }
-            )
+            sendAddressView.bindAddressInputInitial(it, mainViewModel, this, { QRScannerModule.start(this) })
         }
         sendLinearLayout.addView(sendAddressView)
 
@@ -137,7 +131,7 @@ class SendActivity : BaseActivity() {
         sendFeeViewModel = ViewModelProviders.of(this).get(SendFeeViewModel::class.java)
         sendFeeViewModel?.init(coinCode)
         sendFeeViewModel?.let {
-            sendFeeView.bindInitial(it, sendMainViewModel, this, true)
+            sendFeeView.bindInitial(it, mainViewModel, this, true)
         }
         sendLinearLayout.addView(sendFeeView)
 

@@ -9,7 +9,6 @@ import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.send.SendViewModel
 import kotlinx.android.synthetic.main.view_address_input.view.*
-import java.math.BigDecimal
 
 class SendInputAddressView : ConstraintLayout {
 
@@ -29,8 +28,7 @@ class SendInputAddressView : ConstraintLayout {
     fun bindAddressInputInitial(viewModel: SendAddressViewModel,
                                 mainViewModel: SendViewModel,
                                 lifecycleOwner: LifecycleOwner,
-                                onBarcodeClick: (() -> (Unit))? = null,
-                                onAmountChange: ((BigDecimal) -> (Unit))? = null
+                                onBarcodeClick: (() -> (Unit))? = null
     ) {
         this.viewModel = viewModel
         this.lifecycleOwner = lifecycleOwner
@@ -69,7 +67,7 @@ class SendInputAddressView : ConstraintLayout {
         })
 
         viewModel.amountLiveData.observe(lifecycleOwner, Observer { amount ->
-            onAmountChange?.invoke(amount)
+            mainViewModel.delegate.onAmountChanged(amount)
         })
 
         viewModel.notifyMainViewModelOnAddressChangedLiveData.observe(lifecycleOwner, Observer {
