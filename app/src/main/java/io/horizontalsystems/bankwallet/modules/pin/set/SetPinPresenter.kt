@@ -27,7 +27,7 @@ class SetPinPresenter(
     }
 
     override fun didSavePin() {
-        router.navigateToMain()
+        router.dismissModuleWithSuccess()
     }
 
 }
