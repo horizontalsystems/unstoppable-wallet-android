@@ -21,6 +21,7 @@ class SendAmountViewModel: ViewModel(), SendAmountModule.IView {
     val notifyMainViewModelOnAmountChangeLiveData = MutableLiveData<BigDecimal>()
     val hintErrorBalanceLiveData = MutableLiveData<String?>()
     val switchButtonEnabledLiveData = MutableLiveData<Boolean>()
+    val inputTypeChangedLiveData = MutableLiveData<SendModule.InputType>()
 
     fun init(coinCode: String) {
         SendAmountModule.init(this, coinCode)
@@ -68,5 +69,9 @@ class SendAmountViewModel: ViewModel(), SendAmountModule.IView {
 
     override fun setSwitchButtonEnabled(enabled: Boolean) {
         switchButtonEnabledLiveData.value = enabled
+    }
+
+    override fun onInputTypeChanged(inputType: SendModule.InputType) {
+        inputTypeChangedLiveData.value = inputType
     }
 }

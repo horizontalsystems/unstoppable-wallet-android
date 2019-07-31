@@ -34,12 +34,14 @@ object SendModule {
         fun onAvailableBalanceRetrieved(availableBalance: BigDecimal)
         fun onAddressParsed(parsedAddress: PaymentRequestAddress)
         fun getParamsForAction(paramsAction: ParamsAction)
-        fun onValidationError(errorList: List<SendStateError>)
+        fun onValidationError(error: SendStateError.InsufficientAmount)
         fun onAmountValidationSuccess()
+        fun onFeeUpdated(fee: BigDecimal)
+        fun onInputTypeUpdated(inputType: InputType?)
+        fun onInsufficientFeeBalance(coinCode: String, fee: BigDecimal)
     }
 
     interface IViewDelegate {
-//        val feeAdjustable: Boolean
         fun onViewDidLoad()
         fun onAmountChanged(coinAmount: BigDecimal?)
         fun onAddressChanged()
@@ -48,31 +50,27 @@ object SendModule {
         fun onGetAvailableBalance()
         fun onConfirmClicked()
         fun onClear()
-//        fun onFeeSliderChange(value: Int)
         fun parseAddress(address: String)
-        fun onParamsFetchedForAction(params: MutableMap<AdapterFields, Any?>, paramsAction: ParamsAction)
-
-        //        fun onSwitchClicked()
-//        fun onPasteClicked()
-//        fun onScanAddress(address: String)
-//        fun onDeleteClicked()
-//        fun onViewResumed()
-//        fun onMaxClicked()
+        fun onParamsFetchedForAction(params: Map<AdapterFields, Any?>, paramsAction: ParamsAction)
+        fun onFeePriorityChange(feeRatePriority: FeeRatePriority)
+        fun onInputTypeUpdated(inputType: InputType?)
     }
 
     interface IInteractor {
         val coin: Coin
         fun parsePaymentAddress(address: String): PaymentRequestAddress
         fun send(userInput: UserInput)
-        fun getAvailableBalance(address: String?, feeRate: FeeRatePriority): BigDecimal
+        fun getAvailableBalance(params: Map<AdapterFields, Any?>): BigDecimal
         fun clear()
-        fun validate(params: MutableMap<AdapterFields, Any?>)
+        fun validate(params: Map<AdapterFields, Any?>)
+        fun updateFee(params: Map<AdapterFields, Any?>)
     }
 
     interface IInteractorDelegate {
         fun didSend()
         fun didFailToSend(error: Throwable)
         fun onValidationComplete(errorList: List<SendStateError>)
+        fun onFeeUpdated(fee: BigDecimal)
     }
 
     //Amount module related
@@ -111,7 +109,7 @@ object SendModule {
     }
 
     enum class ParamsAction {
-        Validate, AvailableBalance
+        UpdateModules, AvailableBalance
     }
 
     data class HintError(val amountInfo: AmountInfo): Exception()

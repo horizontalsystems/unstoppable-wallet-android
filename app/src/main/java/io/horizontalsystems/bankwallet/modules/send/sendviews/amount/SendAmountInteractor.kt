@@ -17,12 +17,10 @@ class SendAmountInteractor(
         private val baseCurrency: Currency,
         private val rateStorage: IRateStorage,
         private val localStorage: ILocalStorage,
-        private val coin: Coin,
-        private val feeCoinCode: String?
+        private val coin: Coin
 ): SendAmountModule.IInteractor {
 
     private var exchangeRate: Rate? = null
-    private var exchangeFeeRate: Rate? = null
     private val disposables = CompositeDisposable()
 
     var delegate: SendAmountModule.IInteractorDelegate? = null
@@ -44,21 +42,6 @@ class SendAmountInteractor(
                             delegate?.didRateRetrieve(exchangeRate)
                         }
         )
-
-        feeCoinCode?.let {
-            disposables.add(
-                    rateStorage.latestRateObservable(it, baseCurrency.code)
-                            .take(1)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe { fetchedRate ->
-                                exchangeFeeRate = if (fetchedRate.expired) null else fetchedRate
-                                if (exchangeFeeRate != null) {
-                                    delegate?.didFeeRateRetrieve()
-                                }
-                            }
-            )
-        }
 
         disposables.add(
                 Flowable.interval(1, TimeUnit.MINUTES)

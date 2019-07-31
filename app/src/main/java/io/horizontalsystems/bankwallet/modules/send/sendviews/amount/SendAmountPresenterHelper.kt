@@ -19,11 +19,11 @@ class SendAmountPresenterHelper(
     fun getAmount(coinAmount: BigDecimal?, inputType: SendModule.InputType, rate: Rate?): String {
         val amount = when (inputType) {
             SendModule.InputType.COIN -> {
-                coinAmount?.setScale(coinDecimal, RoundingMode.HALF_EVEN)
+                coinAmount?.setScale(coinDecimal, RoundingMode.DOWN)
             }
             SendModule.InputType.CURRENCY -> {
                 val currencyAmount = rate?.let { coinAmount?.times(it.value) }
-                currencyAmount?.setScale(currencyDecimal, RoundingMode.HALF_EVEN)
+                currencyAmount?.setScale(currencyDecimal, RoundingMode.DOWN)
             }
         } ?: BigDecimal.ZERO
 

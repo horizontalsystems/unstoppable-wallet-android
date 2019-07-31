@@ -10,7 +10,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.send.SendViewModel
 import kotlinx.android.synthetic.main.view_address_input.view.*
 
-class SendInputAddressView : ConstraintLayout {
+class SendAddressView : ConstraintLayout {
 
     init {
         inflate(context, R.layout.view_address_input, this)

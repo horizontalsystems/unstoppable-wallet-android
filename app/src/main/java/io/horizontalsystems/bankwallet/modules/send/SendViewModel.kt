@@ -30,14 +30,17 @@ class SendViewModel : ViewModel(), SendModule.IView {
     val availableBalanceRetrievedLiveData = MutableLiveData<BigDecimal>()
     val onAddressParsedLiveData = MutableLiveData<PaymentRequestAddress>()
     val getParamsFromModulesLiveEvent = SingleLiveEvent<SendModule.ParamsAction>()
-    val validationErrorsLiveEvent = SingleLiveEvent<List<SendStateError>>()
+    val validationErrorLiveEvent = SingleLiveEvent<SendStateError.InsufficientAmount>()
+    val insufficientFeeBalanceErrorLiveEvent = SingleLiveEvent<Pair<String, BigDecimal>>()
     val amountValidationLiveEvent = SingleLiveEvent<Unit>()
+    val feeUpdatedLiveData = MutableLiveData<BigDecimal>()
+    val mainInputTypeUpdatedLiveData = MutableLiveData<SendModule.InputType>()
     var decimalSize: Int? = null
 
 
     private var moduleInited = false
 
-    fun init(coin: String) {
+    fun init(coinCode: String) {
         hintInfoLiveData.value = null
         sendButtonEnabledLiveData.value = null
         coinLiveData.value = null
@@ -48,9 +51,8 @@ class SendViewModel : ViewModel(), SendModule.IView {
         errorLiveData.value = null
         sendConfirmationViewItemLiveData.value = null
 
-        SendModule.init(this, coin)
+        SendModule.init(this, coinCode)
         delegate.onViewDidLoad()
-//        feeIsAdjustableLiveData.value = delegate.feeAdjustable
         moduleInited = true
 
     }
@@ -133,11 +135,23 @@ class SendViewModel : ViewModel(), SendModule.IView {
         getParamsFromModulesLiveEvent.value = paramsAction
     }
 
-    override fun onValidationError(errorList: List<SendStateError>) {
-        validationErrorsLiveEvent.value = errorList
+    override fun onValidationError(error: SendStateError.InsufficientAmount) {
+        validationErrorLiveEvent.value = error
+    }
+
+    override fun onInsufficientFeeBalance(coinCode: String, fee: BigDecimal) {
+        insufficientFeeBalanceErrorLiveEvent.value = Pair(coinCode, fee)
     }
 
     override fun onAmountValidationSuccess() {
         amountValidationLiveEvent.call()
+    }
+
+    override fun onFeeUpdated(fee: BigDecimal) {
+        feeUpdatedLiveData.value = fee
+    }
+
+    override fun onInputTypeUpdated(inputType: SendModule.InputType?) {
+        mainInputTypeUpdatedLiveData.value = inputType
     }
 }

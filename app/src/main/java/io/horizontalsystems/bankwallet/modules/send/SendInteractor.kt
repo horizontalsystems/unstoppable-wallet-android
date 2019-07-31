@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.send
 
-import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
@@ -24,24 +23,22 @@ class SendInteractor(private val adapter: IAdapter) : SendModule.IInteractor {
     override val coin: Coin
         get() = adapter.wallet.coin
 
-    private var disposable: Disposable? = null
+    private var validateDisposable: Disposable? = null
+    private var feeDisposable: Disposable? = null
 
     override fun parsePaymentAddress(address: String): PaymentRequestAddress {
         return adapter.parsePaymentAddress(address)
     }
 
-    override fun getAvailableBalance(address: String?, feeRate: FeeRatePriority): BigDecimal {
-        return adapter.availableBalance(address, feeRate)
+    @Throws
+    override fun getAvailableBalance(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
+        return adapter.availableBalance(params)
     }
 
-    override fun validate(params: MutableMap<SendModule.AdapterFields, Any?>) {
-        val coinAmount = params[SendModule.AdapterFields.Amount] as? BigDecimal ?: return
-        val address = params[SendModule.AdapterFields.Address] as? String
-        val feeRatePriority = params[SendModule.AdapterFields.FeeRatePriority] as? FeeRatePriority ?: FeeRatePriority.MEDIUM
+    override fun validate(params: Map<SendModule.AdapterFields, Any?>) {
+        validateDisposable?.dispose()
 
-        disposable?.dispose()
-
-        disposable = Single.fromCallable { adapter.validate(coinAmount, address, feeRatePriority) }
+        validateDisposable = Single.fromCallable { adapter.validate(params) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -50,7 +47,23 @@ class SendInteractor(private val adapter: IAdapter) : SendModule.IInteractor {
                 )
     }
 
-//
+    override fun updateFee(params: Map<SendModule.AdapterFields, Any?>) {
+        feeDisposable?.dispose()
+
+        feeDisposable = Single.fromCallable { adapter.fee(params) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { fee ->
+                            delegate?.onFeeUpdated(fee)
+                        },
+                        { error ->
+                            /*exception*/
+                        }
+                )
+    }
+
+    //
 //    override fun stateForUserInput(input: SendModule.UserInput): SendModule.State {
 //
 //        val coin = adapter.wallet.coin.code
@@ -180,7 +193,8 @@ class SendInteractor(private val adapter: IAdapter) : SendModule.IInteractor {
     }
 
     override fun clear() {
-        disposable?.dispose()
+        validateDisposable?.dispose()
+        feeDisposable?.dispose()
     }
 
 }

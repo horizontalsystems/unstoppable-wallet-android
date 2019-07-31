@@ -43,6 +43,7 @@ class SendAmountPresenter(private val interactor: SendAmountModule.IInteractor, 
 
         updateAmount()
         view?.addTextChangeListener()
+        view?.onInputTypeChanged(inputType)
 
         updateError()
     }
@@ -65,13 +66,10 @@ class SendAmountPresenter(private val interactor: SendAmountModule.IInteractor, 
         this.rate = rate
         rate?.let {
             inputType = interactor.defaultInputType
+            view?.onInputTypeChanged(inputType)
             updateSwitchButtonState()
         }
         updateAmount()
-    }
-
-    override fun didFeeRateRetrieve() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onAvailableBalanceRetrieved(availableBalance: BigDecimal) {
@@ -79,7 +77,7 @@ class SendAmountPresenter(private val interactor: SendAmountModule.IInteractor, 
         updateAmount()
     }
 
-    override fun onValidationError(error: SendStateError.InsufficientAmount?) {
+    override fun onValidationError(error: SendStateError.InsufficientAmount) {
         this.error = error
         updateError()
     }
