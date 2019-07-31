@@ -40,8 +40,8 @@ class ManageKeysAdapter(private val viewModel: ManageKeysViewModel) : RecyclerVi
             changeStates(isEnabled = true)
 
             val predefinedAccount = item.predefinedAccountType
-            accountName.text = predefinedAccount.title
-            accountCoins.text = predefinedAccount.coinCodes
+            accountName.text = containerView.resources.getString(predefinedAccount.title)
+            accountCoins.text = containerView.resources.getString(predefinedAccount.coinCodes)
 
             if (item.account == null) {
                 changeStates(isEnabled = false)

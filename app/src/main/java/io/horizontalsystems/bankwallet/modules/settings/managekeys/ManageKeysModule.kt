@@ -13,8 +13,8 @@ object ManageKeysModule {
 
     interface View {
         fun show(items: List<ManageAccountItem>)
-        fun showCreateConfirmation(title: String, coinCodes: String)
-        fun showBackupConfirmation(title: String)
+        fun showCreateConfirmation(accountItem: ManageAccountItem)
+        fun showBackupConfirmation(accountItem: ManageAccountItem)
         fun showUnlinkConfirmation(accountItem: ManageAccountItem)
         fun showSuccess()
         fun showError(error: Exception)

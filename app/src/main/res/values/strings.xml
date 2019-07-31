@@ -336,12 +336,12 @@
 
     <!-- Account Types -->
 
-    <string name="ManageKeys_12Words">12 Words</string>
-    <string name="ManageKeys_12Words_Text">BTC, BCH, DASH, ETH, ERC-20</string>
-    <string name="ManageKeys_Eos">EOS Blockchain</string>
-    <string name="ManageKeys_Eos_Text">EOS, EOS-based Tokens</string>
-    <string name="ManageKeys_Binance">Binance Chain</string>
-    <string name="ManageKeys_Binance_Text">BNB, BEP-2</string>
+    <string name="AccountType_12Words">12 Words</string>
+    <string name="AccountType_12Words_Text" translatable="false">BTC, BCH, DASH, ETH, ERC-20</string>
+    <string name="AccountType_Eos">EOS Blockchain</string>
+    <string name="AccountType_Eos_Text" translatable="false">EOS, EOS-based Tokens</string>
+    <string name="AccountType_Binance">Binance Chain</string>
+    <string name="AccountType_Binance_Text" translatable="false">BNB, BEP-2</string>
 
     <!--Coin Option-->
 

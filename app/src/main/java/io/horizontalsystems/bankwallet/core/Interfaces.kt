@@ -105,8 +105,8 @@ interface IPredefinedAccountTypeManager {
 }
 
 interface IPredefinedAccountType {
-    val title: String
-    val coinCodes: String
+    val title: Int // resource id
+    val coinCodes: Int // resource id
     val defaultAccountType: DefaultAccountType
     fun supports(accountType: AccountType): Boolean
 }

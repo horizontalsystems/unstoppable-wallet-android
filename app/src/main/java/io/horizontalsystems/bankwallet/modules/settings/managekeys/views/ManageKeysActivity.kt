@@ -40,8 +40,8 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
             item.account?.let { account ->
 
                 val confirmationList = listOf(
-                        getString(R.string.ManageKeys_Unlink_ConfirmationRemove, item.predefinedAccountType.title),
-                        getString(R.string.ManageKeys_Unlink_ConfirmationDisable, item.predefinedAccountType.coinCodes),
+                        getString(R.string.ManageKeys_Unlink_ConfirmationRemove, getString(item.predefinedAccountType.title)),
+                        getString(R.string.ManageKeys_Unlink_ConfirmationDisable, getString(item.predefinedAccountType.coinCodes)),
                         getString(R.string.ManageKeys_Unlink_ConfirmationLoose)
                 )
 
@@ -56,11 +56,11 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
         })
 
         viewModel.confirmCreateEvent.observe(this, Observer {
-            ManageKeysDialog.show(it.first, getString(R.string.ManageCoins_AddCoin_Text, it.second), this, this, ManageAction.CREATE)
+            ManageKeysDialog.show(getString(it.predefinedAccountType.title), getString(R.string.ManageCoins_AddCoin_Text, getString(it.predefinedAccountType.coinCodes)), this, this, ManageAction.CREATE)
         })
 
         viewModel.confirmBackupEvent.observe(this, Observer {
-            ManageKeysDialog.show(it, getString(R.string.ManageKeys_UnlinkAlert), this, this, ManageAction.BACKUP)
+            ManageKeysDialog.show(getString(it.predefinedAccountType.title), getString(R.string.ManageKeys_UnlinkAlert), this, this, ManageAction.BACKUP)
         })
 
         viewModel.showErrorEvent.observe(this, Observer {
@@ -75,7 +75,7 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
 
         viewModel.startBackupModuleLiveEvent.observe(this, Observer {
             it.account?.let { account ->
-                BackupModule.start(this, account, it.predefinedAccountType.coinCodes)
+                BackupModule.start(this, account, getString(it.predefinedAccountType.coinCodes))
             }
         })
 

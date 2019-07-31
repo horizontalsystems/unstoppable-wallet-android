@@ -20,7 +20,7 @@ class ManageKeysPresenter(private val interactor: ManageKeysModule.Interactor, p
 
     override fun onClickNew(accountItem: ManageAccountItem) {
         currentItem = accountItem
-        view?.showCreateConfirmation(accountItem.predefinedAccountType.title, accountItem.predefinedAccountType.coinCodes)
+        view?.showCreateConfirmation(accountItem)
     }
 
     override fun onClickBackup(accountItem: ManageAccountItem) {
@@ -47,7 +47,7 @@ class ManageKeysPresenter(private val interactor: ManageKeysModule.Interactor, p
         if (accountItem.account?.isBackedUp == true) {
             view?.showUnlinkConfirmation(accountItem)
         } else {
-            view?.showBackupConfirmation(accountItem.predefinedAccountType.title)
+            view?.showBackupConfirmation(accountItem)
         }
     }
 
