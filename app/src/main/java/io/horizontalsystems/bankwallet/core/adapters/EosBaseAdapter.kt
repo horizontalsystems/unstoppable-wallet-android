@@ -1,5 +1,7 @@
-package io.horizontalsystems.bankwallet.core
+package io.horizontalsystems.bankwallet.core.adapters
 
+import io.horizontalsystems.bankwallet.core.FeeRatePriority
+import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.entities.AddressError
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress

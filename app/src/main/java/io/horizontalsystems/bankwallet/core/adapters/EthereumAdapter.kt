@@ -1,9 +1,11 @@
-package io.horizontalsystems.bankwallet.core
+package io.horizontalsystems.bankwallet.core.adapters
 
 import android.content.Context
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.TransactionInfo
@@ -44,18 +46,20 @@ class EthereumAdapter(wallet: Wallet, kit: EthereumKit, addressParser: AddressPa
     }
 
     override fun fee(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
-        val feePriority = params[SendModule.AdapterFields.FeeRatePriority] as? FeeRatePriority ?: throw WrongParameters()
+        val feePriority = params[SendModule.AdapterFields.FeeRatePriority] as? FeeRatePriority
+                ?: throw WrongParameters()
         return ethereumKit.fee(feeRateProvider.ethereumGasPrice(feePriority)).movePointLeft(18)
     }
 
     override fun availableBalance(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
         val mutableParamsMap = params.toMutableMap()
-        mutableParamsMap[SendModule.AdapterFields.CoinAmount]= balance
+        mutableParamsMap[SendModule.AdapterFields.CoinAmount] = balance
         return BigDecimal.ZERO.max(balance - fee(mutableParamsMap))
     }
 
     override fun validate(params: Map<SendModule.AdapterFields, Any?>): List<SendStateError> {
-        val amount = params[SendModule.AdapterFields.CoinAmount] as? BigDecimal ?: throw WrongParameters()
+        val amount = params[SendModule.AdapterFields.CoinAmount] as? BigDecimal
+                ?: throw WrongParameters()
 
         val errors = mutableListOf<SendStateError>()
         val availableBalance = availableBalance(params)

@@ -4,6 +4,7 @@ import android.os.Handler
 import android.os.HandlerThread
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject

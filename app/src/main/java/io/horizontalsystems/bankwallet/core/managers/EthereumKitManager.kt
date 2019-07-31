@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 
 class EthereumKitManager(appConfig: IAppConfigProvider) : IEthereumKitManager {

@@ -2,8 +2,10 @@ package io.horizontalsystems.bankwallet.core.factories
 
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.adapters.*
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.bankwallet.entities.CoinType
+import io.horizontalsystems.bankwallet.entities.Wallet
 
 class AdapterFactory(
         private val context: Context,

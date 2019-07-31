@@ -1,9 +1,13 @@
-package io.horizontalsystems.bankwallet.core
+package io.horizontalsystems.bankwallet.core.adapters
 
 import android.content.Context
+import io.horizontalsystems.bankwallet.core.AdapterState
+import io.horizontalsystems.bankwallet.core.SendStateError
+import io.horizontalsystems.bankwallet.core.WrongParameters
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.eoskit.EosKit
 import io.horizontalsystems.eoskit.models.Transaction
@@ -55,7 +59,8 @@ class EosAdapter(override val wallet: Wallet, eos: CoinType.Eos, kit: EosKit) : 
     }
 
     override fun validate(params: Map<SendModule.AdapterFields, Any?>): List<SendStateError> {
-        val amount = params[SendModule.AdapterFields.CoinAmount] as? BigDecimal ?: throw WrongParameters()
+        val amount = params[SendModule.AdapterFields.CoinAmount] as? BigDecimal
+                ?: throw WrongParameters()
 
         val errors = mutableListOf<SendStateError>()
         val availableBalance = availableBalance(params)

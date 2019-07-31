@@ -1,8 +1,12 @@
-package io.horizontalsystems.bankwallet.core
+package io.horizontalsystems.bankwallet.core.adapters
 
+import io.horizontalsystems.bankwallet.core.FeeRatePriority
+import io.horizontalsystems.bankwallet.core.IAdapter
+import io.horizontalsystems.bankwallet.core.IFeeRateProvider
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.bankwallet.entities.AddressError
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.Flowable
 import io.reactivex.Single
