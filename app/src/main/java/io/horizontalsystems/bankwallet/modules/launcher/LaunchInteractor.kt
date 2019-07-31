@@ -21,7 +21,10 @@ class LaunchInteractor(private val accountManager: IAccountManager,
     override val isSystemLockOff: Boolean
         get() = systemInfoManager.isSystemLockOff
 
-   override val isKeyInvalidated: Boolean
+    override val isKeyInvalidated: Boolean
         get() = keyStoreManager.isKeyInvalidated
+
+    override val isUserNotAuthenticated: Boolean
+        get() = keyStoreManager.isUserNotAuthenticated
 
 }

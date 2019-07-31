@@ -18,16 +18,18 @@ object UnlockPinModule {
     }
 
     interface IUnlockPinInteractor {
+        val isFingerprintEnabled: Boolean
+        val hasEnrolledFingerprints: Boolean
+        val cryptoObject: FingerprintManagerCompat.CryptoObject?
+
         fun updateLockoutState()
         fun unlock(pin: String): Boolean
-        fun isBiometricOn(): Boolean
         fun onUnlock()
     }
 
     interface IUnlockPinInteractorDelegate {
         fun unlock()
         fun wrongPinSubmitted()
-        fun setCryptoObject(cryptoObject: FingerprintManagerCompat.CryptoObject)
         fun updateLockoutState(state: LockoutState)
     }
 
@@ -35,7 +37,7 @@ object UnlockPinModule {
 
         val lockoutManager = LockoutManager(App.localStorage, UptimeProvider(), LockoutUntilDateFactory(CurrentDateProvider()))
         val timer = OneTimeTimer()
-        val interactor = UnlockPinInteractor(App.localStorage, App.pinManager, App.lockManager, lockoutManager, timer)
+        val interactor = UnlockPinInteractor(App.localStorage, App.pinManager, App.lockManager, lockoutManager, App.encryptionManager, App.systemInfoManager, timer)
         val presenter = UnlockPinPresenter(interactor, router, showCancelButton)
 
         view.delegate = presenter

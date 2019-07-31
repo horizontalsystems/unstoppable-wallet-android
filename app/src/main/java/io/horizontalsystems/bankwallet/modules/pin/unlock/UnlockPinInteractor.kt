@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.pin.unlock
 
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat.CryptoObject
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.OneTimeTimer
 import io.horizontalsystems.bankwallet.entities.LockoutState
@@ -9,6 +10,8 @@ class UnlockPinInteractor(
         private val pinManager: IPinManager,
         private val lockManager: ILockManager,
         private val lockoutManager: ILockoutManager,
+        private val encryptionManager: IEncryptionManager,
+        private val systemInfoManager: ISystemInfoManager,
         private val timer: OneTimeTimer) : UnlockPinModule.IUnlockPinInteractor, IOneTimerDelegate {
 
     var delegate: UnlockPinModule.IUnlockPinInteractorDelegate? = null
@@ -17,9 +20,14 @@ class UnlockPinInteractor(
         timer.delegate = this
     }
 
-    override fun isBiometricOn(): Boolean {
-        return localStorage.isBiometricOn
-    }
+    override val isFingerprintEnabled: Boolean
+        get() = localStorage.isFingerprintEnabled
+
+    override val hasEnrolledFingerprints: Boolean
+        get() = systemInfoManager.hasEnrolledFingerprints
+
+    override val cryptoObject: CryptoObject?
+        get() = encryptionManager.getCryptoObject()
 
     override fun unlock(pin: String): Boolean {
         val valid = pinManager.validate(pin)
@@ -45,7 +53,7 @@ class UnlockPinInteractor(
 
     override fun updateLockoutState() {
         val state = lockoutManager.currentState
-        when(state) {
+        when (state) {
             is LockoutState.Locked -> timer.schedule(state.until)
         }
 

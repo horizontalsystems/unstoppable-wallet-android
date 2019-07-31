@@ -16,6 +16,9 @@ class KeyStoreChangeListener(private val systemInfoManager: ISystemInfoManager,
             keyStoreManager.isKeyInvalidated -> {
                 KeyStoreModule.startForInvalidKey(activity)
             }
+            keyStoreManager.isUserNotAuthenticated -> {
+                KeyStoreModule.startForUserAuthentication(activity)
+            }
         }
     }
 

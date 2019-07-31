@@ -8,8 +8,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.BiometryType
 import io.horizontalsystems.bankwallet.lib.AlertDialogFragment
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysModule
@@ -35,47 +33,14 @@ class SecuritySettingsActivity : BaseActivity() {
 
         //  Handling view model live events
 
-        viewModel.openManageKeysLiveEvent.observe(this, Observer {
-            ManageKeysModule.start(this)
-        })
-
-        viewModel.openEditPinLiveEvent.observe(this, Observer {
-            PinModule.startForEditPin(this)
-        })
-
-        viewModel.openSetPinLiveEvent.observe(this, Observer {
-            PinModule.startForSetPin(this, REQUEST_CODE_SET_PIN)
-        })
-
-        viewModel.openUnlockPinLiveEvent.observe(this, Observer {
-            PinModule.startForUnlock(this, REQUEST_CODE_UNLOCK_PIN_TO_DISABLE_PIN, true)
-        })
-
-        viewModel.biometryTypeLiveData.observe(this, Observer { biometryType ->
-            fingerprint.visibility = if (biometryType == BiometryType.FINGER) View.VISIBLE else View.GONE
-        })
-
-        viewModel.biometricUnlockOnLiveData.observe(this, Observer { switchIsOn ->
-            switchIsOn?.let { switchOn ->
-                fingerprint.apply {
-                    switchIsChecked = switchOn
-                    setOnClickListener {
-                        if (App.localStorage.isBiometricOn || fingerprintCanBeEnabled()) {
-                            switchToggle()
-                        }
-                    }
-
-                    switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                        App.localStorage.isBiometricOn = isChecked
-                    }
-                }
-            }
-        })
-
         viewModel.backedUpLiveData.observe(this, Observer { wordListBackedUp ->
             wordListBackedUp?.let { wordListIsBackedUp ->
                 manageKeys.setInfoBadgeVisibility(!wordListIsBackedUp)
             }
+        })
+
+        viewModel.openManageKeysLiveEvent.observe(this, Observer {
+            ManageKeysModule.start(this)
         })
 
         viewModel.pinEnabledLiveEvent.observe(this, Observer { pinEnabled ->
@@ -90,6 +55,44 @@ class SecuritySettingsActivity : BaseActivity() {
             }
             changePin.visibility = if (pinEnabled) View.VISIBLE else View.GONE
         })
+
+        viewModel.openEditPinLiveEvent.observe(this, Observer {
+            PinModule.startForEditPin(this)
+        })
+
+        viewModel.openSetPinLiveEvent.observe(this, Observer {
+            PinModule.startForSetPin(this, REQUEST_CODE_SET_PIN)
+        })
+
+        viewModel.openUnlockPinLiveEvent.observe(this, Observer {
+            PinModule.startForUnlock(this, REQUEST_CODE_UNLOCK_PIN_TO_DISABLE_PIN, true)
+        })
+
+        viewModel.showFingerprintSettings.observe(this, Observer { enabled ->
+            fingerprint.apply {
+                switchIsChecked = enabled
+
+                setOnClickListener {
+                    switchToggle()
+                }
+
+                switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
+                    viewModel.delegate.didTapEnableFingerprint(isChecked)
+                }
+                visibility = View.VISIBLE
+            }
+        })
+
+        viewModel.hideFingerprintSettings.observe(this, Observer {
+            fingerprint.visibility = View.GONE
+        })
+
+        viewModel.showNoEnrolledFingerprints.observe(this, Observer {
+            AlertDialogFragment
+                    .newInstance(R.string.Settings_Error_FingerprintNotEnabled, R.string.Settings_Error_NoFingerprintAddedYet, R.string.Alert_Ok)
+                    .show(this.supportFragmentManager, "fingerprint_not_enabled_alert")
+        })
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -108,17 +111,6 @@ class SecuritySettingsActivity : BaseActivity() {
                 PinModule.RESULT_CANCELLED -> viewModel.delegate.didCancelUnlockPinToDisablePin()
             }
         }
-    }
-
-    private fun fingerprintCanBeEnabled(): Boolean {
-        val touchSensorCanBeUsed = App.systemInfoManager.touchSensorCanBeUsed()
-        if (!touchSensorCanBeUsed) {
-            AlertDialogFragment
-                    .newInstance(R.string.Settings_Error_FingerprintNotEnabled, R.string.Settings_Error_NoFingerprintAddedYet, R.string.Alert_Ok)
-                    .show(this.supportFragmentManager, "fingerprint_not_enabled_alert")
-            return false
-        }
-        return true
     }
 
     companion object {

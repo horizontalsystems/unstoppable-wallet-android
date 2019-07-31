@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.IPinManager
 import io.horizontalsystems.bankwallet.core.ISystemInfoManager
-import io.horizontalsystems.bankwallet.entities.BiometryType
 import io.reactivex.disposables.CompositeDisposable
 
 class SecuritySettingsInteractor(
@@ -23,22 +22,23 @@ class SecuritySettingsInteractor(
                 .let { disposables.add(it) }
     }
 
-    override val biometryType: BiometryType
-        get() = systemInfoManager.biometryType
+    override val hasFingerprintSensor: Boolean
+        get() = systemInfoManager.hasFingerprintSensor
+
+    override val hasEnrolledFingerprints: Boolean
+        get() = systemInfoManager.hasEnrolledFingerprints
 
     override val nonBackedUpCount: Int
         get() = backupManager.nonBackedUpCount
 
-    override fun getBiometricUnlockOn(): Boolean {
-        return localStorage.isBiometricOn
-    }
+    override var isFingerPrintEnabled: Boolean
+        get() = localStorage.isFingerprintEnabled
+        set(value) {
+            localStorage.isFingerprintEnabled = value
+        }
 
-    override val isPinSet: Boolean
+    override val isPinEnabled: Boolean
         get() = pinManager.isPinSet
-
-    override fun setBiometricUnlockOn(biometricUnlockOn: Boolean) {
-        localStorage.isBiometricOn = biometricUnlockOn
-    }
 
     override fun disablePin() {
         pinManager.clear()
@@ -47,4 +47,5 @@ class SecuritySettingsInteractor(
     override fun clear() {
         disposables.clear()
     }
+
 }

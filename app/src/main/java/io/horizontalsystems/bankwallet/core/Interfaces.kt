@@ -32,7 +32,7 @@ interface IAdapterManager {
 interface ILocalStorage {
     var currentLanguage: String?
     var isBackedUp: Boolean
-    var isBiometricOn: Boolean
+    var isFingerprintEnabled: Boolean
     var sendInputType: SendModule.InputType?
     var isLightModeOn: Boolean
     var iUnderstand: Boolean
@@ -51,8 +51,6 @@ interface ILocalStorage {
 
 interface ISecuredStorage {
     val authData: AuthData?
-    fun saveAuthData(authData: AuthData)
-    fun noAuthData(): Boolean
     val savedPin: String?
     fun savePin(pin: String)
     fun removePin()
@@ -136,6 +134,7 @@ interface IEncryptionManager {
 
 interface IKeyStoreManager {
     val isKeyInvalidated: Boolean
+    val isUserNotAuthenticated: Boolean
 
     fun createKey(): SecretKey
     fun getKey(): SecretKey
@@ -245,11 +244,9 @@ interface IAdapter {
 
 interface ISystemInfoManager {
     val appVersion: String
-    val biometryType: BiometryType
     val isSystemLockOff: Boolean
-
-    fun phoneHasFingerprintSensor(): Boolean
-    fun touchSensorCanBeUsed(): Boolean
+    val hasFingerprintSensor: Boolean
+    val hasEnrolledFingerprints: Boolean
 }
 
 interface IPinManager {

@@ -40,6 +40,10 @@ class LauncherActivity : AppCompatActivity() {
             KeyStoreModule.startForInvalidKey(this)
         })
 
+        viewModel.openUserAuthenticationModule.observe(this, Observer {
+            KeyStoreModule.startForUserAuthentication(this)
+        })
+
         viewModel.closeApplication.observe(this, Observer {
             finishAffinity()
         })

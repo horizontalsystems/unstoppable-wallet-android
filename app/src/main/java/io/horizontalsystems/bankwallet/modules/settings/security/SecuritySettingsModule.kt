@@ -3,39 +3,39 @@ package io.horizontalsystems.bankwallet.modules.settings.security
 import android.content.Context
 import android.content.Intent
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.BiometryType
 
 object SecuritySettingsModule {
 
     interface ISecuritySettingsView {
-        fun setBiometricUnlockOn(biometricUnlockOn: Boolean)
-        fun setBiometryType(biometryType: BiometryType)
         fun setBackedUp(backedUp: Boolean)
         fun setPinEnabled(enabled: Boolean)
+        fun showFingerprintSettings(enabled: Boolean)
+        fun hideFingerprintSettings()
+        fun showNoEnrolledFingerprints()
     }
 
     interface ISecuritySettingsViewDelegate {
         fun viewDidLoad()
-        fun didSwitchBiometricUnlock(biometricUnlockOn: Boolean)
         fun didTapManageKeys()
         fun didTapEditPin()
         fun didTapEnablePin(enable: Boolean)
-        fun onClear()
+        fun didTapEnableFingerprint(enable: Boolean)
         fun didSetPin()
         fun didCancelSetPin()
         fun didUnlockPinToDisablePin()
         fun didCancelUnlockPinToDisablePin()
+        fun onClear()
     }
 
     interface ISecuritySettingsInteractor {
         val nonBackedUpCount: Int
-        val biometryType: BiometryType
-        val isPinSet: Boolean
+        val hasFingerprintSensor: Boolean
+        val hasEnrolledFingerprints: Boolean
+        val isPinEnabled: Boolean
+        var isFingerPrintEnabled: Boolean
 
-        fun getBiometricUnlockOn(): Boolean
-        fun setBiometricUnlockOn(biometricUnlockOn: Boolean)
-        fun clear()
         fun disablePin()
+        fun clear()
     }
 
     interface ISecuritySettingsInteractorDelegate {
