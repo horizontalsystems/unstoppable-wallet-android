@@ -11,13 +11,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendViewModel
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.view_amount_input.view.*
-import java.math.BigDecimal
-import java.math.RoundingMode
 
 class SendAmountView : ConstraintLayout {
 
@@ -60,33 +56,12 @@ class SendAmountView : ConstraintLayout {
             topAmountPrefix.text = prefix
         })
 
-        viewModel.amountInfoLiveData.observe(lifecycleOwner, Observer { amountInfo ->
-            val amountNumber = when (amountInfo) {
-                is SendModule.AmountInfo.CoinValueInfo -> {
-                    amountInfo.coinValue.value.setScale(8, RoundingMode.HALF_EVEN)
-                }
-                is SendModule.AmountInfo.CurrencyValueInfo -> {
-                    amountInfo.currencyValue.value.setScale(2, RoundingMode.HALF_EVEN)
-                }
-                else -> BigDecimal.ZERO
-            }
-
-            if (amountNumber > BigDecimal.ZERO) {
-                editTxtAmount.setText(amountNumber.stripTrailingZeros().toPlainString())
+        viewModel.amountLiveData.observe(lifecycleOwner, Observer { amount ->
+                editTxtAmount.setText(amount)
                 editTxtAmount.setSelection(editTxtAmount.text.length)
-            } else {
-                editTxtAmount.setText("")
-            }
         })
 
-        viewModel.amountHintValueLiveData.observe(lifecycleOwner, Observer { amountInfo ->
-            val hintText = when (amountInfo) {
-                is SendModule.AmountInfo.CoinValueInfo -> App.numberFormatter.format(amountInfo.coinValue, realNumber = true)
-                is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(amountInfo.currencyValue)
-                else -> null
-            }
-            txtHintInfo.text = hintText
-        })
+        viewModel.hintLiveData.observe(lifecycleOwner, Observer { txtHintInfo.text = it })
 
         viewModel.maxButtonVisibleValueLiveData.observe(lifecycleOwner, Observer { visible ->
             btnMax?.visibility = if (visible) View.VISIBLE else View.GONE
@@ -115,16 +90,12 @@ class SendAmountView : ConstraintLayout {
             mainViewModel.delegate.onAmountChanged(coinAmount)
         })
 
-        viewModel.errorLiveData.observe(lifecycleOwner, Observer { error ->
-            txtHintError.visibility = if (error == null) View.GONE else View.VISIBLE
-            txtHintInfo.visibility = if (error == null) View.VISIBLE else View.GONE
+        viewModel.hintErrorBalanceLiveData.observe(lifecycleOwner, Observer { hintErrorBalance ->
+            txtHintError.visibility = if (hintErrorBalance == null) View.GONE else View.VISIBLE
+            txtHintInfo.visibility = if (hintErrorBalance == null) View.VISIBLE else View.GONE
 
-            val errorText: String? = error?.let {
-                val availableBalanceAmount = when (it.amountInfo) {
-                    is SendModule.AmountInfo.CoinValueInfo -> App.numberFormatter.format(it.amountInfo.coinValue)
-                    is SendModule.AmountInfo.CurrencyValueInfo -> App.numberFormatter.format(it.amountInfo.currencyValue)
-                }
-                context.getString(R.string.Send_Error_BalanceAmount, availableBalanceAmount)
+            val errorText: String? = hintErrorBalance?.let {
+                context.getString(R.string.Send_Error_BalanceAmount, it)
             }
 
             txtHintError.text = errorText

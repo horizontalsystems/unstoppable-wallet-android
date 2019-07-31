@@ -56,7 +56,7 @@ class SendAmountPresenter(private val interactor: SendAmountModule.IInteractor, 
             onNumberScaleExceeded(amount, decimal)
         } else {
             coinAmount = presenterHelper.getCoinAmount(amount, inputType, rate)
-            view?.setHintInfo(presenterHelper.getHintInfo(coinAmount, inputType, rate))
+            view?.setHint(presenterHelper.getHint(coinAmount, inputType, rate))
             view?.notifyMainViewModelOnAmountChange(coinAmount)
         }
     }
@@ -86,7 +86,7 @@ class SendAmountPresenter(private val interactor: SendAmountModule.IInteractor, 
 
     override fun onValidationSuccess() {
         error = null
-        view?.setError(null)
+        view?.setHintErrorBalance(null)
     }
 
     private fun updateSwitchButtonState() {
@@ -94,8 +94,8 @@ class SendAmountPresenter(private val interactor: SendAmountModule.IInteractor, 
     }
 
     private fun updateError() {
-        val hintError = error?.balance?.let { presenterHelper.getHintInfoBalanceError(inputType, it, rate) }
-        view?.setError(hintError)
+        val hintErrorBalance = error?.balance?.let { presenterHelper.getBalanceForHintError(inputType, it, rate) }
+        view?.setHintErrorBalance(hintErrorBalance)
     }
 
     private fun onNumberScaleExceeded(amount: BigDecimal, decimal: Int) {
@@ -116,13 +116,13 @@ class SendAmountPresenter(private val interactor: SendAmountModule.IInteractor, 
     }
 
     private fun updateAmount() {
-        val amountInfo = presenterHelper.getAmountInfo(coinAmount, inputType, rate)
-        val hintInfo = presenterHelper.getHintInfo(coinAmount, inputType, rate)
+        val amount = presenterHelper.getAmount(coinAmount, inputType, rate)
+        val hint = presenterHelper.getHint(coinAmount, inputType, rate)
         val prefix = presenterHelper.getAmountPrefix(inputType, rate)
 
         view?.setAmountPrefix(prefix)
-        view?.setAmountInfo(amountInfo)
-        view?.setHintInfo(hintInfo)
+        view?.setAmount(amount)
+        view?.setHint(hint)
     }
 
 }

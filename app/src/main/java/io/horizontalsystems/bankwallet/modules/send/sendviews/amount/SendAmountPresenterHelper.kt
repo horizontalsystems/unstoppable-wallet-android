@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.sendviews.amount
 
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -9,40 +10,38 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 
 class SendAmountPresenterHelper(
+        private val numberFormatter: IAppNumberFormatter,
         private val coinCode: String,
         private val baseCurrency: Currency,
         private val coinDecimal: Int,
         private val currencyDecimal: Int) {
 
-    fun getAmountInfo(coinAmount: BigDecimal? = null, inputType: SendModule.InputType, rate: Rate?): SendModule.AmountInfo? {
-        return when (inputType) {
+    private val BALANCE_COIN_SCALE = 8
+
+    fun getAmount(coinAmount: BigDecimal?, inputType: SendModule.InputType, rate: Rate?): String {
+        val amount = when (inputType) {
             SendModule.InputType.COIN -> {
-                coinAmount?.let {
-                    val rounded = it.setScale(coinDecimal, RoundingMode.DOWN)
-                    val coinValue = CoinValue(coinCode, rounded)
-                    SendModule.AmountInfo.CoinValueInfo(coinValue)
-                }
+                coinAmount?.setScale(BALANCE_COIN_SCALE, RoundingMode.HALF_EVEN)
             }
             SendModule.InputType.CURRENCY -> {
                 val currencyAmount = rate?.let { coinAmount?.times(it.value) }
-                currencyAmount?.let {
-                    val rounded = it.setScale(currencyDecimal, RoundingMode.DOWN)
-                    val currencyValue = CurrencyValue(baseCurrency, rounded)
-                    SendModule.AmountInfo.CurrencyValueInfo(currencyValue)
-                }
+                currencyAmount?.setScale(currencyDecimal, RoundingMode.HALF_EVEN)
             }
-        }
+        } ?: BigDecimal.ZERO
+
+        return if (amount > BigDecimal.ZERO) amount.stripTrailingZeros().toPlainString() else ""
     }
 
-    fun getHintInfo(coinAmount: BigDecimal? = null, inputType: SendModule.InputType, rate: Rate?): SendModule.AmountInfo? {
+
+    fun getHint(coinAmount: BigDecimal? = null, inputType: SendModule.InputType, rate: Rate?): String? {
         return when (inputType) {
             SendModule.InputType.CURRENCY -> coinAmount?.let {
-                SendModule.AmountInfo.CoinValueInfo(CoinValue(coinCode, it))
+                numberFormatter.format(CoinValue(coinCode, it), realNumber = true)
             }
             SendModule.InputType.COIN -> {
                 rate?.value?.let { rateValue ->
                     coinAmount?.times(rateValue)?.let { amount ->
-                        SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(baseCurrency, amount))
+                        numberFormatter.format(CurrencyValue(baseCurrency, amount))
                     }
                 }
             }
@@ -66,20 +65,17 @@ class SendAmountPresenterHelper(
 
     fun decimal(inputType: SendModule.InputType) = if (inputType == SendModule.InputType.COIN) coinDecimal else currencyDecimal
 
-    fun getHintInfoBalanceError(inputType: SendModule.InputType, availableCoinBalance: BigDecimal, rate: Rate?): SendModule.HintError? {
-        val amountInfo = when (inputType) {
+    fun getBalanceForHintError(inputType: SendModule.InputType, availableCoinBalance: BigDecimal, rate: Rate?): String? {
+        return when (inputType) {
             SendModule.InputType.COIN -> {
-                SendModule.AmountInfo.CoinValueInfo(CoinValue(coinCode, availableCoinBalance))
+                numberFormatter.format(CoinValue(coinCode, availableCoinBalance))
             }
             SendModule.InputType.CURRENCY -> {
-                val currencyAmount = rate?.let { availableCoinBalance.times(it.value) }
-                currencyAmount?.let {
-                    SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(baseCurrency, it))
+                rate?.let {
+                    val value = availableCoinBalance.times(it.value)
+                    numberFormatter.format(CurrencyValue(baseCurrency, value))
                 }
             }
-        }
-        return amountInfo?.let {
-            SendModule.HintError(it)
         }
     }
 }

@@ -16,7 +16,7 @@ object SendAmountModule {
         fun onAmountChange(amountString: String)
         fun onAvailableBalanceRetrieved(availableBalance: BigDecimal)
         fun getCoinAmount(): BigDecimal?
-        fun onValidationError(error: SendStateError.InsufficientAmount?)
+        fun onValidationError(error: SendStateError.InsufficientAmount)
         fun onValidationSuccess()
     }
 
@@ -27,21 +27,21 @@ object SendAmountModule {
 
     interface IInteractorDelegate {
         fun didRateRetrieve(rate: Rate?)
-        fun didFeeRateRetrieve()
     }
 
     interface IView {
         fun setAmountPrefix(prefix: String?)
-        fun setAmountInfo(amountInfo: SendModule.AmountInfo?)
-        fun setHintInfo(amountInfo: SendModule.AmountInfo?)
+        fun setAmount(amount: String)
+        fun setHint(hint: String?)
         fun setMaxButtonVisible(empty: Boolean)
         fun addTextChangeListener()
         fun removeTextChangeListener()
         fun revertInput(revertedInput: String)
         fun getAvailableBalance()
         fun notifyMainViewModelOnAmountChange(coinAmount: BigDecimal?)
-        fun setError(error: SendModule.HintError?)
+        fun setHintErrorBalance(hintErrorBalance: String?)
         fun setSwitchButtonEnabled(enabled: Boolean)
+        fun onInputTypeChanged(inputType: SendModule.InputType)
     }
 
     fun init(view: SendAmountViewModel, coinCode: String) {
@@ -50,8 +50,8 @@ object SendAmountModule {
         val currencyDecimal = App.appConfigProvider.fiatDecimal
         val baseCurrency = App.currencyManager.baseCurrency
 
-        val interactor = SendAmountInteractor(baseCurrency, App.rateStorage, App.localStorage, adapter.wallet.coin, adapter.feeCoinCode)
-        val sendAmountPresenterHelper = SendAmountPresenterHelper(coinCode, baseCurrency, coinDecimal, currencyDecimal)
+        val interactor = SendAmountInteractor(baseCurrency, App.rateStorage, App.localStorage, adapter.wallet.coin)
+        val sendAmountPresenterHelper = SendAmountPresenterHelper(App.numberFormatter, coinCode, baseCurrency, coinDecimal, currencyDecimal)
         val presenter = SendAmountPresenter(interactor, sendAmountPresenterHelper)
 
         view.delegate = presenter

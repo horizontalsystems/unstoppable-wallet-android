@@ -11,15 +11,15 @@ class SendAmountViewModel: ViewModel(), SendAmountModule.IView {
     lateinit var delegate: SendAmountModule.IViewDelegate
 
     val amountInputPrefixLiveData = MutableLiveData<String>()
-    val amountInfoLiveData = MutableLiveData<SendModule.AmountInfo?>()
-    val amountHintValueLiveData = MutableLiveData<SendModule.AmountInfo?>()
+    val amountLiveData = MutableLiveData<String>()
+    val hintLiveData = MutableLiveData<String?>()
     val maxButtonVisibleValueLiveData = MutableLiveData<Boolean>()
     val addTextChangeListenerLiveEvent = SingleLiveEvent<Unit>()
     val removeTextChangeListenerLiveEvent = SingleLiveEvent<Unit>()
     val revertInputLiveEvent = SingleLiveEvent<String>()
     val getAvailableBalanceLiveEvent = SingleLiveEvent<Unit>()
     val notifyMainViewModelOnAmountChangeLiveData = MutableLiveData<BigDecimal>()
-    val errorLiveData = MutableLiveData<SendModule.HintError?>()
+    val hintErrorBalanceLiveData = MutableLiveData<String?>()
     val switchButtonEnabledLiveData = MutableLiveData<Boolean>()
 
     fun init(coinCode: String) {
@@ -30,12 +30,12 @@ class SendAmountViewModel: ViewModel(), SendAmountModule.IView {
         amountInputPrefixLiveData.value = prefix
     }
 
-    override fun setAmountInfo(amountInfo: SendModule.AmountInfo?) {
-        amountInfoLiveData.value = amountInfo
+    override fun setAmount(amount: String) {
+        amountLiveData.value = amount
     }
 
-    override fun setHintInfo(amountInfo: SendModule.AmountInfo?) {
-        amountHintValueLiveData.value = amountInfo
+    override fun setHint(hint: String?) {
+        hintLiveData.value = hint
     }
 
     override fun setMaxButtonVisible(visible: Boolean) {
@@ -62,8 +62,8 @@ class SendAmountViewModel: ViewModel(), SendAmountModule.IView {
         notifyMainViewModelOnAmountChangeLiveData.value = coinAmount
     }
 
-    override fun setError(error: SendModule.HintError?) {
-        errorLiveData.value = error
+    override fun setHintErrorBalance(hintErrorBalance: String?) {
+        hintErrorBalanceLiveData.value = hintErrorBalance
     }
 
     override fun setSwitchButtonEnabled(enabled: Boolean) {

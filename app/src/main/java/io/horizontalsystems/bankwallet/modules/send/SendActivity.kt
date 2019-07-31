@@ -127,7 +127,6 @@ class SendActivity : BaseActivity() {
                     onAmountChange = { amount -> sendMainViewModel.delegate.onAmountChanged(amount) }
             )
         }
-
         sendLinearLayout.addView(sendAddressView)
 
         //add fee view
