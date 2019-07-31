@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+        <TextView
+            android:id="@+id/feeError"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:layout_marginTop="12dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/red_warning"
+            android:textSize="12sp"
+            android:visibility="gone"
+            tools:text="Transaction fees for USDT (ERC20) paid in Ethereum. You don&apos;t have 0,00028 ETH."
+            />
+
+        <LinearLayout
+            android:id="@+id/feeAmountWrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                style="@style/Body1Grey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Send_DialogFee"
+                />
+
+            <TextView
+                android:id="@+id/txtFeePrimary"
+                style="@style/Body1Grey"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                tools:text="0.02 BTC"
+                />
+
+            <TextView
+                android:id="@+id/txtFeeSecondary"
+                style="@style/Body1Grey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="textEnd"
+                tools:text="$0.02"
+                />
+        </LinearLayout>
+
+        <io.horizontalsystems.bankwallet.ui.extensions.SeekbarView
+            android:id="@+id/feeRateSeekbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            />
+
+</LinearLayout>

@@ -4,6 +4,7 @@ import android.content.Context
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.TransactionInfo
 import io.reactivex.Flowable
@@ -42,17 +43,22 @@ class EthereumAdapter(wallet: Wallet, kit: EthereumKit, addressParser: AddressPa
         return ethereumKit.send(address, amount, gasPrice).map { Unit }
     }
 
-    override fun fee(value: BigDecimal, address: String?, feePriority: FeeRatePriority): BigDecimal {
+    override fun fee(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
+        val feePriority = params[SendModule.AdapterFields.FeeRatePriority] as? FeeRatePriority ?: throw WrongParameters()
         return ethereumKit.fee(feeRateProvider.ethereumGasPrice(feePriority)).movePointLeft(18)
     }
 
-    override fun availableBalance(address: String?, feePriority: FeeRatePriority): BigDecimal {
-        return BigDecimal.ZERO.max(balance - fee(balance, address, feePriority))
+    override fun availableBalance(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
+        val mutableParamsMap = params.toMutableMap()
+        mutableParamsMap[SendModule.AdapterFields.Amount]= balance
+        return BigDecimal.ZERO.max(balance - fee(mutableParamsMap))
     }
 
-    override fun validate(amount: BigDecimal, address: String?, feePriority: FeeRatePriority): List<SendStateError> {
+    override fun validate(params: Map<SendModule.AdapterFields, Any?>): List<SendStateError> {
+        val amount = params[SendModule.AdapterFields.Amount] as? BigDecimal ?: throw WrongParameters()
+
         val errors = mutableListOf<SendStateError>()
-        val availableBalance = availableBalance(address, feePriority)
+        val availableBalance = availableBalance(params)
         if (amount > availableBalance) {
             errors.add(SendStateError.InsufficientAmount(availableBalance))
         }
