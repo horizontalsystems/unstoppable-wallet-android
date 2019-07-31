@@ -7,6 +7,44 @@
     android:background="@drawable/bottom_sheet_background"
     android:backgroundTint="?BottomSendBackground">
 
+    <ImageView
+        android:id="@+id/confirmIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/ic_attention"
+        android:tint="@color/red_warning"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/confirmTitle"
+        style="@style/BaseSb"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="14dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="@string/ManageKeys_Unlink_Title"
+        android:textColor="?BottomDialogTextColor"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/confirmIcon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/confirmIcon"
+        app:layout_constraintTop_toTopOf="@+id/confirmIcon" />
+
+    <View
+        android:id="@+id/border"
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/steel_15"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/confirmIcon" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
@@ -18,7 +56,7 @@
         app:layout_constraintBottom_toTopOf="@+id/btnConfirm"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/border"
         tools:itemCount="3"
         tools:listitem="@layout/view_holder_confirmation" />
 
