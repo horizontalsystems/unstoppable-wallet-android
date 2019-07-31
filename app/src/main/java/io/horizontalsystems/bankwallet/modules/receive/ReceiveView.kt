@@ -46,7 +46,7 @@ class ReceiveView : ConstraintLayout {
             receiveCoinIcon.bind(it.coin)
             receiveTxtTitle.text = context.getString(R.string.Deposit_Title, it.coin.title)
             receiveAddressView.bind(it.address)
-            imgQrCode.setImageBitmap(TextHelper.getQrCodeBitmapFromAddress(it.address))
+            imgQrCode.setImageBitmap(TextHelper.getQrCodeBitmap(it.address))
 
             listener?.expandReceiveDialog()
         }
