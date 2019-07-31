@@ -14,17 +14,21 @@ object KeyStoreModule {
     interface IView {
         fun showNoSystemLockWarning()
         fun showInvalidKeyWarning()
+        fun promptUserAuthentication()
     }
 
     interface IViewDelegate {
         fun viewDidLoad()
         fun onCloseInvalidKeyWarning()
-        fun onCloseNoSystemLockWarning()
+        fun onResume()
+        fun onAuthenticationCanceled()
+        fun onAuthenticationSuccess()
     }
 
     interface IInteractor {
         val isSystemLockOff: Boolean
         val isKeyInvalidated: Boolean
+        val isUserNotAuthenticated: Boolean
 
         fun resetApp()
         fun removeKey()
@@ -54,6 +58,10 @@ object KeyStoreModule {
         start(context, ModeType.InvalidKey)
     }
 
+    fun startForUserAuthentication(context: Context) {
+        start(context, ModeType.UserAuthentication)
+    }
+
     private fun start(context: Context, mode: ModeType) {
         val intent = Intent(context, KeyStoreActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -64,7 +72,8 @@ object KeyStoreModule {
     @Parcelize
     enum class ModeType : Parcelable {
         NoSystemLock,
-        InvalidKey
+        InvalidKey,
+        UserAuthentication
     }
 
 }

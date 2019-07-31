@@ -12,6 +12,16 @@ class KeyStorePresenter(private val interactor: KeyStoreModule.IInteractor,
         when (mode) {
             KeyStoreModule.ModeType.NoSystemLock -> view?.showNoSystemLockWarning()
             KeyStoreModule.ModeType.InvalidKey -> view?.showInvalidKeyWarning()
+            KeyStoreModule.ModeType.UserAuthentication -> view?.promptUserAuthentication()
+        }
+    }
+
+    override fun onResume() {
+        if (!interactor.isSystemLockOff &&
+                !interactor.isKeyInvalidated &&
+                !interactor.isUserNotAuthenticated) {
+            interactor.removeKey()
+            router.openLaunchModule()
         }
     }
 
@@ -20,8 +30,12 @@ class KeyStorePresenter(private val interactor: KeyStoreModule.IInteractor,
         router.openLaunchModule()
     }
 
-    override fun onCloseNoSystemLockWarning() {
+    override fun onAuthenticationCanceled() {
         router.closeApplication()
+    }
+
+    override fun onAuthenticationSuccess() {
+        router.openLaunchModule()
     }
 
 }

@@ -12,6 +12,7 @@ class LaunchViewModel : ViewModel(), LaunchModule.IView, LaunchModule.IRouter {
     val openUnlockModule = SingleLiveEvent<Void>()
     val openNoSystemLockModule = SingleLiveEvent<Void>()
     val openKeyInvalidatedModule = SingleLiveEvent<Void>()
+    val openUserAuthenticationModule = SingleLiveEvent<Void>()
     val closeApplication = SingleLiveEvent<Void>()
 
     fun init() {
@@ -39,6 +40,10 @@ class LaunchViewModel : ViewModel(), LaunchModule.IView, LaunchModule.IRouter {
 
     override fun openKeyInvalidatedModule() {
         openKeyInvalidatedModule.call()
+    }
+
+    override fun openUserAuthenticationModule() {
+        openUserAuthenticationModule.call()
     }
 
     override fun closeApplication() {

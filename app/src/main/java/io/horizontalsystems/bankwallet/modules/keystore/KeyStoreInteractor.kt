@@ -16,6 +16,9 @@ class KeyStoreInteractor(private val accountManager: IAccountManager,
     override val isKeyInvalidated: Boolean
         get() = keyStoreManager.isKeyInvalidated
 
+    override val isUserNotAuthenticated: Boolean
+        get() = keyStoreManager.isUserNotAuthenticated
+
     override fun resetApp() {
         accountManager.clear()
         walletManager.enable(listOf())

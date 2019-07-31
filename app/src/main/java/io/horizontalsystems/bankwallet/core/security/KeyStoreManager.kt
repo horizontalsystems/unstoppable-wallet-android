@@ -1,12 +1,16 @@
 package io.horizontalsystems.bankwallet.core.security
 
 import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.KeyProperties
-import android.util.Log
+import android.security.keystore.UserNotAuthenticatedException
 import io.horizontalsystems.bankwallet.core.IKeyProvider
 import io.horizontalsystems.bankwallet.core.IKeyStoreManager
+import org.jetbrains.anko.getStackTraceString
 import java.security.KeyStore
 import java.security.KeyStoreException
+import java.security.UnrecoverableKeyException
+import java.util.logging.Logger
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 
@@ -18,6 +22,8 @@ class KeyStoreManager(private val keyAlias: String) : IKeyStoreManager, IKeyProv
 
     private val keyStore: KeyStore
 
+    private val logger = Logger.getLogger("KeyStoreManager")
+
     init {
         keyStore = KeyStore.getInstance(ANDROID_KEY_STORE)
         keyStore.load(null)
@@ -25,11 +31,20 @@ class KeyStoreManager(private val keyAlias: String) : IKeyStoreManager, IKeyProv
 
     override val isKeyInvalidated: Boolean
         get() = try {
-            getKey()
+            validateKey()
             false
         } catch (ex: Exception) {
-            Log.e("KeyStoreManager", "isKeyInvalidated", ex)
-            true
+            logger.warning("isKeyInvalidated: \n ${ex.getStackTraceString()}")
+            ex is KeyPermanentlyInvalidatedException || ex is UnrecoverableKeyException
+        }
+
+    override val isUserNotAuthenticated: Boolean
+        get() = try {
+            validateKey()
+            false
+        } catch (ex: Exception) {
+            logger.warning("isUserNotAuthenticated: \n ${ex.getStackTraceString()}")
+            ex is UserNotAuthenticatedException
         }
 
     override fun createKey(): SecretKey {
@@ -56,8 +71,12 @@ class KeyStoreManager(private val keyAlias: String) : IKeyStoreManager, IKeyProv
         try {
             keyStore.deleteEntry(keyAlias)
         } catch (ex: KeyStoreException) {
-            Log.e("KeyStoreManager", "removeKey", ex)
+            logger.warning("removeKey: \n ${ex.getStackTraceString()}")
         }
+    }
+
+    private fun validateKey() {
+        CipherWrapper().encrypt("abc", getKey())
     }
 
 }

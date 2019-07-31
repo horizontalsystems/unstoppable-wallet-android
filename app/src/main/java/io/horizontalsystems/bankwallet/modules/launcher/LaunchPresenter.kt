@@ -11,6 +11,7 @@ class LaunchPresenter(private val interactor: LaunchModule.IInteractor,
         when {
             interactor.isSystemLockOff -> router.openNoSystemLockModule()
             interactor.isKeyInvalidated -> router.openKeyInvalidatedModule()
+            interactor.isUserNotAuthenticated -> router.openUserAuthenticationModule()
             interactor.isAccountsEmpty -> router.openWelcomeModule()
             interactor.isPinNotSet -> router.openMainModule()
             else -> router.openUnlockModule()

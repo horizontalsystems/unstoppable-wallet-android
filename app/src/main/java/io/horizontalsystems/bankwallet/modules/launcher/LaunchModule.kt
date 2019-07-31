@@ -19,6 +19,7 @@ object LaunchModule {
         val isAccountsEmpty: Boolean
         val isSystemLockOff: Boolean
         val isKeyInvalidated: Boolean
+        val isUserNotAuthenticated: Boolean
     }
 
     interface IInteractorDelegate
@@ -30,6 +31,7 @@ object LaunchModule {
         fun closeApplication()
         fun openNoSystemLockModule()
         fun openKeyInvalidatedModule()
+        fun openUserAuthenticationModule()
     }
 
     fun init(view: LaunchViewModel, router: IRouter) {
