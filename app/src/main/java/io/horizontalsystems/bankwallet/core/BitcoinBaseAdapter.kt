@@ -125,7 +125,9 @@ abstract class BitcoinBaseAdapter(override val wallet: Wallet, open val kit: Abs
                 blockHeight = transaction.blockHeight?.toLong(),
                 amount = transaction.amount.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN),
                 timestamp = transaction.timestamp,
-                from = transaction.from.map { TransactionAddress(it.address, it.mine) },
+                // Remove from address field for BitcoinForks
+                //from = transaction.from.map { TransactionAddress(it.address, it.mine) },
+                from = emptyList(),
                 to = transaction.to.map { TransactionAddress(it.address, it.mine) }
         )
     }
