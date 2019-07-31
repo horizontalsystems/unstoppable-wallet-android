@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,102 +15,71 @@ import io.horizontalsystems.bankwallet.viewHelpers.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_confirmation.*
 
-class BottomConfirmAlert : DialogFragment(), ConfirmationsAdapter.Listener {
+class ManageKeysDeleteAlert(private val listener: Listener, private val checkboxItems: List<CheckBoxItem>)
+    : DialogFragment(), ConfirmationsAdapter.Listener {
 
     interface Listener {
         fun onConfirmationSuccess()
     }
 
-    private var adapter = ConfirmationsAdapter(this)
-    private var checkboxItemList: MutableList<CheckBoxItem> = mutableListOf()
+    private var adapter = ConfirmationsAdapter(this, checkboxItems)
 
-    private lateinit var listener: Listener
     private lateinit var btnConfirm: Button
     private lateinit var rootView: View
     private lateinit var recyclerView: RecyclerView
-    private lateinit var color: BottomButtonColor
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        rootView = View.inflate(context, R.layout.fragment_bottom_confirmations, null) as ViewGroup
-        btnConfirm = rootView.findViewById(R.id.btnConfirm)
+
+        rootView = View.inflate(context, R.layout.fragment_bottom_delete, null) as ViewGroup
         recyclerView = rootView.findViewById(R.id.recyclerView)
 
+        btnConfirm = rootView.findViewById(R.id.btnConfirm)
         btnConfirm.setOnClickListener {
             listener.onConfirmationSuccess()
             dismiss()
         }
 
-        btnConfirm.setBackgroundResource(getBackgroundResId(color))
-        setButtonTextColor(color, false)
-
         return bottomDialog(activity, rootView)
-    }
-
-    private fun setButtonTextColor(buttonColor: BottomButtonColor, enabled: Boolean) {
-        val colorRes = when {
-            enabled -> when (buttonColor) {
-                BottomButtonColor.RED -> R.color.white
-                BottomButtonColor.YELLOW -> R.color.black
-            }
-            else -> R.color.grey_50
-        }
-
-        context?.let {
-            btnConfirm.setTextColor(ContextCompat.getColor(it, colorRes))
-        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        adapter.confirmations = checkboxItemList
         adapter.notifyDataSetChanged()
     }
 
     override fun onItemCheckMarkClick(position: Int, checked: Boolean) {
-        checkboxItemList[position].checked = checked
+        checkboxItems[position].checked = checked
         checkConfirmations()
     }
 
-    private fun getBackgroundResId(color: BottomButtonColor): Int = when (color) {
-        BottomButtonColor.RED -> R.drawable.button_red_background_12
-        BottomButtonColor.YELLOW -> R.drawable.button_yellow_background_12
-    }
-
     private fun checkConfirmations() {
-        val allChecked = checkboxItemList.all { it.checked }
+        val allChecked = checkboxItems.all { it.checked }
 
         btnConfirm.isEnabled = allChecked
-        setButtonTextColor(color, allChecked)
     }
 
     companion object {
-        fun show(activity: FragmentActivity, textResourcesList: MutableList<String>, listener: Listener, color: BottomButtonColor = BottomButtonColor.YELLOW) {
-            val fragment = BottomConfirmAlert()
-            fragment.listener = listener
-            fragment.color = color
-            textResourcesList.forEach {
-                fragment.checkboxItemList.add(CheckBoxItem(it))
+        fun show(activity: FragmentActivity, checkboxItems: List<String>, listener: Listener) {
+            val fragment = ManageKeysDeleteAlert(listener, checkboxItems.map { CheckBoxItem(it) })
+
+            activity.supportFragmentManager.beginTransaction().apply {
+                add(fragment, "bottom_confirm_alert")
+                commitAllowingStateLoss()
             }
-            val ft = activity.supportFragmentManager.beginTransaction()
-            ft.add(fragment, "bottom_confirm_alert")
-            ft.commitAllowingStateLoss()
         }
     }
 }
 
-enum class BottomButtonColor {
-    YELLOW, RED
-}
+class ConfirmationsAdapter(private var listener: Listener, private val confirmations: List<CheckBoxItem>)
+    : RecyclerView.Adapter<ViewHolderConfirmation>() {
 
-class ConfirmationsAdapter(private var listener: Listener) : RecyclerView.Adapter<ViewHolderConfirmation>() {
     interface Listener {
         fun onItemCheckMarkClick(position: Int, checked: Boolean)
     }
-
-    var confirmations = listOf<CheckBoxItem>()
 
     override fun getItemCount() = confirmations.size
 
@@ -124,7 +92,7 @@ class ConfirmationsAdapter(private var listener: Listener) : RecyclerView.Adapte
     }
 }
 
-class ViewHolderConfirmation(override val containerView: View, val listener: ConfirmationsAdapter.Listener)
+class ViewHolderConfirmation(override val containerView: View, private val listener: ConfirmationsAdapter.Listener)
     : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     init {

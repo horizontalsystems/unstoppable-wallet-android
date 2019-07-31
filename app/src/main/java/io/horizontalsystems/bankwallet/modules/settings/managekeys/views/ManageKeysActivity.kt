@@ -14,8 +14,7 @@ import io.horizontalsystems.bankwallet.modules.backup.BackupModule
 import io.horizontalsystems.bankwallet.modules.restore.eos.RestoreEosModule
 import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysViewModel
-import io.horizontalsystems.bankwallet.ui.dialogs.BottomButtonColor
-import io.horizontalsystems.bankwallet.ui.dialogs.BottomConfirmAlert
+import io.horizontalsystems.bankwallet.ui.dialogs.ManageKeysDeleteAlert
 import io.horizontalsystems.bankwallet.ui.dialogs.ManageKeysDialog
 import io.horizontalsystems.bankwallet.ui.dialogs.ManageKeysDialog.ManageAction
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
@@ -40,19 +39,19 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
         viewModel.confirmUnlinkEvent.observe(this, Observer { item ->
             item.account?.let { account ->
 
-                val confirmationList = mutableListOf(
+                val confirmationList = listOf(
                         getString(R.string.ManageKeys_Unlink_ConfirmationRemove, item.predefinedAccountType.title),
                         getString(R.string.ManageKeys_Unlink_ConfirmationDisable, item.predefinedAccountType.coinCodes),
                         getString(R.string.ManageKeys_Unlink_ConfirmationLoose)
                 )
 
-                val confirmListener = object : BottomConfirmAlert.Listener {
+                val confirmListener = object : ManageKeysDeleteAlert.Listener {
                     override fun onConfirmationSuccess() {
                         viewModel.delegate.onConfirmUnlink(account.id)
                     }
                 }
 
-                BottomConfirmAlert.show(this, confirmationList, confirmListener, BottomButtonColor.RED)
+                ManageKeysDeleteAlert.show(this, confirmationList, confirmListener)
             }
         })
 

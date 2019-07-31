@@ -10,7 +10,7 @@ class RestoreWordsAdapter(private val wordsCount: Int, private val listener: Lis
     : RecyclerView.Adapter<RestoreWordsAdapter.InputTextViewHolder>() {
 
     interface Listener {
-        fun onChange(position: Int, value: String)
+        fun onChange(position: Int, word: String)
         fun onDone()
     }
 
@@ -27,7 +27,9 @@ class RestoreWordsAdapter(private val wordsCount: Int, private val listener: Lis
     inner class InputTextViewHolder(private val inputTextView: InputTextView) : RecyclerView.ViewHolder(inputTextView) {
 
         init {
-            inputTextView.bindTextChangeListener { listener.onChange(adapterPosition, it) }
+            inputTextView.bindTextChangeListener {
+                listener.onChange(adapterPosition, it.toLowerCase())
+            }
         }
 
         fun bind(position: Int, lastElement: Boolean) {

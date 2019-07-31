@@ -4,15 +4,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 
-class RestoreWordsViewModel : ViewModel(), RestoreWordsModule.IView, RestoreWordsModule.IRouter {
+class RestoreWordsViewModel : ViewModel(), RestoreWordsModule.View, RestoreWordsModule.Router {
 
-    lateinit var delegate: RestoreWordsModule.IViewDelegate
+    lateinit var delegate: RestoreWordsModule.ViewDelegate
 
     val errorLiveData = MutableLiveData<Int>()
     val startSyncModeModule = SingleLiveEvent<Unit>()
 
-    fun init() {
-        RestoreWordsModule.init(this, this)
+    fun init(wordsCount: Int) {
+        RestoreWordsModule.init(this, this, wordsCount)
     }
 
     // View

@@ -62,7 +62,7 @@ class BackupActivity : BaseActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         when (requestCode) {
-            ModuleCode.BACKUP_EOS -> {
+            ModuleCode.BACKUP_WORDS -> {
                 when (resultCode) {
                     BackupWordsModule.RESULT_BACKUP -> {
                         viewModel.delegate.didBackup()
@@ -70,7 +70,7 @@ class BackupActivity : BaseActivity() {
                 }
                 finish()
             }
-            ModuleCode.BACKUP_WORDS -> {
+            ModuleCode.BACKUP_EOS -> {
                 finish()
             }
             ModuleCode.UNLOCK_PIN -> {

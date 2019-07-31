@@ -13,7 +13,7 @@ import org.mockito.Mockito.verify
 class RestoreInteractorTest {
 
     private val wordsManager = mock(WordsManager::class.java)
-    private val delegate = mock(RestoreWordsModule.IInteractorDelegate::class.java)
+    private val delegate = mock(RestoreWordsModule.InteractorDelegate::class.java)
     private lateinit var interactor: RestoreWordsInteractor
 
     @Before
