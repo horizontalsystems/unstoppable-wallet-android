@@ -48,6 +48,19 @@ class SendActivity : BaseActivity() {
         sendMainViewModel = ViewModelProviders.of(this).get(SendViewModel::class.java)
         sendMainViewModel.init(coinCode)
 
+        observeViewModel()
+        addInputItems(coinCode)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        scanResult?.contents?.let {
+            sendAddressViewModel?.delegate?.onAddressScan(it)
+        }
+    }
+
+    private fun observeViewModel() {
         sendMainViewModel.availableBalanceRetrievedLiveData.observe(this, Observer { availableBalance ->
             sendAmountViewModel?.delegate?.onAvailableBalanceRetrieved(availableBalance)
         })
@@ -79,8 +92,6 @@ class SendActivity : BaseActivity() {
         sendMainViewModel.mainInputTypeUpdatedLiveData.observe(this, Observer { inputType ->
             sendFeeViewModel?.delegate?.onInputTypeUpdated(inputType)
         })
-
-        addInputItems(coinCode)
     }
 
     private fun fetchParamsFromModules(paramsAction: SendModule.ParamsAction) {
@@ -94,14 +105,6 @@ class SendActivity : BaseActivity() {
         params[SendModule.AdapterFields.FeeRatePriority] = feePriority
 
         sendMainViewModel.delegate.onParamsFetchedForAction(params, paramsAction)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        val scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        scanResult?.contents?.let {
-            sendAddressViewModel?.delegate?.onAddressScan(it)
-        }
     }
 
     private fun addInputItems(coinCode: String) {

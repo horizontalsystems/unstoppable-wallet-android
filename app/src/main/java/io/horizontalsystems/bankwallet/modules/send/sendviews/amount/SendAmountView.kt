@@ -28,6 +28,7 @@ class SendAmountView : ConstraintLayout {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     private lateinit var viewModel: SendAmountViewModel
+    private lateinit var sendViewModel: SendViewModel
     private lateinit var lifecycleOwner: LifecycleOwner
     private var decimalSize: Int? = null
     private var disposable: Disposable? = null
@@ -39,6 +40,7 @@ class SendAmountView : ConstraintLayout {
 
     fun bindInitial(viewModel: SendAmountViewModel, mainViewModel: SendViewModel, lifecycleOwner: LifecycleOwner, decimalSize: Int?) {
         this.viewModel = viewModel
+        this.sendViewModel = mainViewModel
         this.lifecycleOwner = lifecycleOwner
         this.decimalSize = decimalSize
 
@@ -52,13 +54,17 @@ class SendAmountView : ConstraintLayout {
 
         viewModel.delegate.onViewDidLoad()
 
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
         viewModel.amountInputPrefixLiveData.observe(lifecycleOwner, Observer { prefix ->
             topAmountPrefix.text = prefix
         })
 
         viewModel.amountLiveData.observe(lifecycleOwner, Observer { amount ->
-                editTxtAmount.setText(amount)
-                editTxtAmount.setSelection(editTxtAmount.text.length)
+            editTxtAmount.setText(amount)
+            editTxtAmount.setSelection(editTxtAmount.text.length)
         })
 
         viewModel.hintLiveData.observe(lifecycleOwner, Observer { txtHintInfo.text = it })
@@ -83,11 +89,11 @@ class SendAmountView : ConstraintLayout {
         })
 
         viewModel.getAvailableBalanceLiveEvent.observe(lifecycleOwner, Observer {
-            mainViewModel.delegate.onGetAvailableBalance()
+            sendViewModel.delegate.onGetAvailableBalance()
         })
 
         viewModel.notifyMainViewModelOnAmountChangeLiveData.observe(lifecycleOwner, Observer { coinAmount ->
-            mainViewModel.delegate.onAmountChanged(coinAmount)
+            sendViewModel.delegate.onAmountChanged(coinAmount)
         })
 
         viewModel.hintErrorBalanceLiveData.observe(lifecycleOwner, Observer { hintErrorBalance ->
@@ -101,8 +107,12 @@ class SendAmountView : ConstraintLayout {
             txtHintError.text = errorText
         })
 
-        viewModel.switchButtonEnabledLiveData.observe(lifecycleOwner, Observer {enabled ->
+        viewModel.switchButtonEnabledLiveData.observe(lifecycleOwner, Observer { enabled ->
             btnSwitch.isEnabled = enabled
+        })
+
+        viewModel.inputTypeChangedLiveData.observe(lifecycleOwner, Observer { inputType ->
+            sendViewModel.delegate.onInputTypeUpdated(inputType)
         })
     }
 
