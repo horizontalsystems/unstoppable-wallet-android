@@ -2,6 +2,8 @@ package io.horizontalsystems.bankwallet.modules.send.sendviews.amount
 
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.SendStateError
+import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import java.math.BigDecimal
@@ -15,9 +17,11 @@ object SendAmountModule {
         fun onSwitchClick()
         fun onAmountChange(amountString: String)
         fun onAvailableBalanceRetrieved(availableBalance: BigDecimal)
-        fun getCoinAmount(): BigDecimal?
+        fun getCoinValue(): CoinValue?
         fun onValidationError(error: SendStateError.InsufficientAmount)
         fun onValidationSuccess()
+        fun getCurrencyValue(): CurrencyValue?
+        fun getInputType(): SendModule.InputType
     }
 
     interface IInteractor {
@@ -52,7 +56,7 @@ object SendAmountModule {
 
         val interactor = SendAmountInteractor(baseCurrency, App.rateStorage, App.localStorage, adapter.wallet.coin)
         val sendAmountPresenterHelper = SendAmountPresenterHelper(App.numberFormatter, coinCode, baseCurrency, coinDecimal, currencyDecimal)
-        val presenter = SendAmountPresenter(interactor, sendAmountPresenterHelper)
+        val presenter = SendAmountPresenter(interactor, sendAmountPresenterHelper, coinCode, baseCurrency)
 
         view.delegate = presenter
         presenter.view = view

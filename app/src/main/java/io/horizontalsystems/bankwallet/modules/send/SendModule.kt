@@ -59,7 +59,7 @@ object SendModule {
     interface IInteractor {
         val coin: Coin
         fun parsePaymentAddress(address: String): PaymentRequestAddress
-        fun send(userInput: UserInput)
+        fun send(address: String, coinAmount: BigDecimal, feePriority: FeeRatePriority)
         fun getAvailableBalance(params: Map<AdapterFields, Any?>): BigDecimal
         fun clear()
         fun validate(params: Map<AdapterFields, Any?>)
@@ -68,7 +68,7 @@ object SendModule {
 
     interface IInteractorDelegate {
         fun didSend()
-        fun didFailToSend(error: Throwable)
+        fun showError(error: Throwable)
         fun onValidationComplete(errorList: List<SendStateError>)
         fun onFeeUpdated(fee: BigDecimal)
     }
@@ -93,7 +93,7 @@ object SendModule {
     fun init(view: SendViewModel, coinCode: String) {
         val adapter = App.adapterManager.adapters.first { it.wallet.coin.code == coinCode }
         val interactor = SendInteractor(adapter)
-        val presenter = SendPresenter(interactor)
+        val presenter = SendPresenter(interactor, ConfirmationViewItemFactory())
 
         view.delegate = presenter
         presenter.view = view
@@ -105,11 +105,11 @@ object SendModule {
     }
 
     enum class AdapterFields{
-        Amount, Address, FeeRatePriority
+        CoinAmount, CoinValue, CurrencyValue, Address, FeeRatePriority, InputType, FeeCoinValue, FeeCurrencyValue
     }
 
     enum class ParamsAction {
-        UpdateModules, AvailableBalance
+        UpdateModules, AvailableBalance, ShowConfirm, Send
     }
 
     data class HintError(val amountInfo: AmountInfo): Exception()
@@ -182,8 +182,12 @@ object SendModule {
         var sendButtonEnabled: Boolean = false
     }
 
-    class SendConfirmationViewItem(val primaryAmountInfo: AmountInfo, val address: String, val feeInfo: AmountInfo, val totalInfo: AmountInfo?) {
-        var secondaryAmountInfo: AmountInfo? = null
-    }
+    class SendConfirmationViewItem(
+            val coin: Coin,
+            val primaryAmountInfo: AmountInfo,
+            val secondaryAmountInfo: AmountInfo?,
+            val address: String,
+            val feeInfo: AmountInfo,
+            val totalInfo: AmountInfo?)
 
 }

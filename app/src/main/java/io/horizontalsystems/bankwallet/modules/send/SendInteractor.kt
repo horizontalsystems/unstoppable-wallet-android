@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send
 
+import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
@@ -25,6 +26,7 @@ class SendInteractor(private val adapter: IAdapter) : SendModule.IInteractor {
 
     private var validateDisposable: Disposable? = null
     private var feeDisposable: Disposable? = null
+    private var sendDisposable: Disposable? = null
 
     override fun parsePaymentAddress(address: String): PaymentRequestAddress {
         return adapter.parsePaymentAddress(address)
@@ -63,138 +65,21 @@ class SendInteractor(private val adapter: IAdapter) : SendModule.IInteractor {
                 )
     }
 
-    //
-//    override fun stateForUserInput(input: SendModule.UserInput): SendModule.State {
-//
-//        val coin = adapter.wallet.coin.code
-//        val baseCurrency = currencyManager.baseCurrency
-//        val rateValue = exchangeRate?.value
-//
-//        val decimal = if (input.inputType == SendModule.InputType.COIN) Math.min(adapter.decimal, appConfigProvider.maxDecimal) else appConfigProvider.fiatDecimal
-//
-//        val state = SendModule.State(decimal, input.inputType)
-//
-//        state.address = input.address
-//        val address = input.address
-//
-//        if (address != null) {
-//            try {
-//                adapter.validate(address)
-//            } catch (e: Exception) {
-//                state.addressError = SendModule.AddressError.InvalidAddress()
-//            }
-//        }
-//
-//        when (input.inputType) {
-//            SendModule.InputType.COIN -> {
-//                state.coinValue = CoinValue(coin, input.amount)
-//                rateValue?.let {
-//                    state.currencyValue = CurrencyValue(baseCurrency, input.amount.times(it))
-//                }
-//            }
-//            SendModule.InputType.CURRENCY -> {
-//                state.currencyValue = CurrencyValue(baseCurrency, input.amount)
-//                rateValue?.let {
-//                    state.coinValue = CoinValue(coin, input.amount.divide(it, 8, RoundingMode.HALF_EVEN))
-//                }
-//            }
-//        }
-//
-//        val errors = adapter.validate(state.coinValue?.value
-//                ?: BigDecimal.ZERO, address, input.feePriority)
-//
-//        for (error in errors) {
-//            when (error) {
-//                SendStateError.InsufficientAmount -> state.amountError = getAmountError(input, input.feePriority)
-//                SendStateError.InsufficientFeeBalance -> state.feeError = getFeeError(input, input.feePriority)
-//            }
-//        }
-//
-//        state.coinValue?.let { coinValue ->
-//            val coinCode = adapter.feeCoinCode ?: adapter.wallet.coin.code
-//            if (coinValue.value > BigDecimal.ZERO) {
-//                state.feeCoinValue = CoinValue(coinCode, adapter.fee(coinValue.value, input.address, input.feePriority))
-//            } else {
-//                state.feeCoinValue = CoinValue(coinCode, BigDecimal.ZERO)
-//            }
-//        }
-//
-//        var feeCurrencyRate: BigDecimal? = null
-//        adapter.feeCoinCode?.let {
-//            feeCurrencyRate = exchangeFeeRate?.value
-//        } ?: run {
-//            feeCurrencyRate = rateValue
-//        }
-//
-//        feeCurrencyRate?.let { feeCurRate ->
-//            state.feeCoinValue?.let { feeCoinValue ->
-//                state.feeCurrencyValue = CurrencyValue(baseCurrency, feeCoinValue.value.times(feeCurRate))
-//            }
-//        }
-//
-//        return state
-//    }
-
-//    private fun getFeeError(input: SendModule.UserInput, feePriority: FeeRatePriority): SendModule.AmountError.Erc20FeeError? {
-//        adapter.feeCoinCode?.let {
-//            val fee = adapter.fee(input.amount, input.address, feePriority)
-//            val coinValue = CoinValue(it, fee)
-//            return SendModule.AmountError.Erc20FeeError(adapter.wallet.coin.code, coinValue)
-//        } ?: return null
-//    }
-
-//    private fun getAmountError(input: SendModule.UserInput, feePriority: FeeRatePriority): SendModule.AmountError? {
-//        var balanceMinusFee = adapter.availableBalance(input.address, feePriority)
-//        if (balanceMinusFee < BigDecimal.ZERO) {
-//            balanceMinusFee = BigDecimal.ZERO
-//        }
-//
-//        return when (input.inputType) {
-//            SendModule.InputType.COIN -> {
-//                SendModule.AmountError.InsufficientBalance(SendModule.AmountInfo.CoinValueInfo(CoinValue(adapter.wallet.coin.code, balanceMinusFee)))
-//            }
-//            SendModule.InputType.CURRENCY -> {
-//                exchangeRate?.value?.let {
-//                    val currencyBalanceMinusFee = balanceMinusFee * it
-//                    SendModule.AmountError.InsufficientBalance(SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(currencyManager.baseCurrency, currencyBalanceMinusFee)))
-//                }
-//            }
-//        }
-//    }
-
-    override fun send(userInput: SendModule.UserInput) {
-        val address = userInput.address
-        if (address == null) {
-            delegate?.didFailToSend(SendError.NoAddress())
-            return
-        }
-
-//        val computedAmount = when (userInput.inputType) {
-//            SendModule.InputType.COIN -> userInput.amount
-//            SendModule.InputType.CURRENCY -> convertedAmountForInputType(SendModule.InputType.CURRENCY, userInput.amount)
-//        }
-//
-//        if (computedAmount == null || computedAmount.compareTo(BigDecimal.ZERO) == 0) {
-//            delegate?.didFailToSend(SendError.NoAmount())
-//            return
-//        }
-//
-//        adapter.send(address, computedAmount, userInput.feePriority)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(
-//                        { delegate?.didSend() },
-//                        { error ->
-//                            delegate?.didFailToSend(error)
-//                        })
-//                .let {
-//                    disposables.add(it)
-//                }
+    override fun send(address: String, coinAmount: BigDecimal, feePriority: FeeRatePriority) {
+        sendDisposable = adapter.send(address, coinAmount, feePriority)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { delegate?.didSend() },
+                        { error ->
+                            delegate?.showError(error)
+                        })
     }
 
     override fun clear() {
         validateDisposable?.dispose()
         feeDisposable?.dispose()
+        sendDisposable?.dispose()
     }
 
 }

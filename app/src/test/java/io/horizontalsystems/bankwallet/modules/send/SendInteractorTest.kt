@@ -164,7 +164,7 @@ class SendInteractorTest {
 
         interactor.send(userInput)
 
-        verify(delegate).didFailToSend(argThat {
+        verify(delegate).showError(argThat {
             this is SendInteractor.SendError.NoAddress
         })
     }
@@ -176,7 +176,7 @@ class SendInteractorTest {
 
         interactor.send(userInput)
 
-        verify(delegate).didFailToSend(argThat {
+        verify(delegate).showError(argThat {
             this is SendInteractor.SendError.NoAmount
         })
     }
@@ -194,7 +194,7 @@ class SendInteractorTest {
 
         interactor.send(userInput)
 
-        verify(delegate).didFailToSend(exception)
+        verify(delegate).showError(exception)
     }
 
     @Test

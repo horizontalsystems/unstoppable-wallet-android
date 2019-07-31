@@ -50,12 +50,12 @@ class EthereumAdapter(wallet: Wallet, kit: EthereumKit, addressParser: AddressPa
 
     override fun availableBalance(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
         val mutableParamsMap = params.toMutableMap()
-        mutableParamsMap[SendModule.AdapterFields.Amount]= balance
+        mutableParamsMap[SendModule.AdapterFields.CoinAmount]= balance
         return BigDecimal.ZERO.max(balance - fee(mutableParamsMap))
     }
 
     override fun validate(params: Map<SendModule.AdapterFields, Any?>): List<SendStateError> {
-        val amount = params[SendModule.AdapterFields.Amount] as? BigDecimal ?: throw WrongParameters()
+        val amount = params[SendModule.AdapterFields.CoinAmount] as? BigDecimal ?: throw WrongParameters()
 
         val errors = mutableListOf<SendStateError>()
         val availableBalance = availableBalance(params)

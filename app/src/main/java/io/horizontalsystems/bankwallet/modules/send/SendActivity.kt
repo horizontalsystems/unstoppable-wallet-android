@@ -92,17 +92,21 @@ class SendActivity : BaseActivity() {
         mainViewModel.mainInputTypeUpdatedLiveData.observe(this, Observer { inputType ->
             sendFeeViewModel?.delegate?.onInputTypeUpdated(inputType)
         })
+
+        mainViewModel.showConfirmationLiveEvent.observe(this, Observer {
+            ConfirmationFragment.show(this)
+        })
     }
 
     private fun fetchParamsFromModules(paramsAction: SendModule.ParamsAction) {
-        val coinAmount = sendAmountViewModel?.delegate?.getCoinAmount()
-        val address = sendAddressViewModel?.delegate?.getAddress()
-        val feePriority = sendFeeViewModel?.delegate?.getFeePriority()
-
         val params = mutableMapOf<SendModule.AdapterFields, Any?>()
-        params[SendModule.AdapterFields.Amount] = coinAmount
-        params[SendModule.AdapterFields.Address] = address
-        params[SendModule.AdapterFields.FeeRatePriority] = feePriority
+        params[SendModule.AdapterFields.CoinValue] = sendAmountViewModel?.delegate?.getCoinValue()
+        params[SendModule.AdapterFields.CurrencyValue] = sendAmountViewModel?.delegate?.getCurrencyValue()
+        params[SendModule.AdapterFields.InputType] = sendAmountViewModel?.delegate?.getInputType()
+        params[SendModule.AdapterFields.Address] = sendAddressViewModel?.delegate?.getAddress()
+        params[SendModule.AdapterFields.FeeRatePriority] = sendFeeViewModel?.delegate?.getFeePriority()
+        params[SendModule.AdapterFields.FeeCoinValue] = sendFeeViewModel?.delegate?.getFeeCoinValue()
+        params[SendModule.AdapterFields.FeeCurrencyValue] = sendFeeViewModel?.delegate?.getFeeCurrencyValue()
 
         mainViewModel.delegate.onParamsFetchedForAction(params, paramsAction)
     }
@@ -138,6 +142,7 @@ class SendActivity : BaseActivity() {
 
         //add send button
         val sendButtonView = SendButtonView(this)
+        sendButtonView.bind { mainViewModel.delegate.onSendClicked() }
         sendLinearLayout.addView(sendButtonView)
     }
 

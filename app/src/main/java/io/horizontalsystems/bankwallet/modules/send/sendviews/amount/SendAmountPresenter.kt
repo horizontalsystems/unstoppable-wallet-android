@@ -1,13 +1,20 @@
 package io.horizontalsystems.bankwallet.modules.send.sendviews.amount
 
 import io.horizontalsystems.bankwallet.core.SendStateError
+import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import java.math.BigDecimal
 import java.math.RoundingMode
 
 
-class SendAmountPresenter(private val interactor: SendAmountModule.IInteractor, private val presenterHelper: SendAmountPresenterHelper)
+class SendAmountPresenter(
+        private val interactor: SendAmountModule.IInteractor,
+        private val presenterHelper: SendAmountPresenterHelper,
+        private val coinCode: String,
+        private val baseCurrency: Currency)
     : SendAmountModule.IViewDelegate, SendAmountModule.IInteractorDelegate {
 
     var view: SendAmountViewModel? = null
@@ -24,8 +31,17 @@ class SendAmountPresenter(private val interactor: SendAmountModule.IInteractor, 
         updateSwitchButtonState()
     }
 
-    override fun getCoinAmount(): BigDecimal? {
-        return coinAmount
+    override fun getCoinValue(): CoinValue? {
+        return CoinValue(coinCode, coinAmount ?: BigDecimal.ZERO)
+    }
+
+    override fun getCurrencyValue(): CurrencyValue? {
+        val currencyAmount = rate?.let { coinAmount?.times(it.value) }
+        return currencyAmount?.let { CurrencyValue(baseCurrency, it) }
+    }
+
+    override fun getInputType(): SendModule.InputType {
+        return inputType
     }
 
     override fun onMaxClick() {

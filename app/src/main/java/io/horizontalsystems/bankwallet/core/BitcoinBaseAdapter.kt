@@ -98,7 +98,7 @@ abstract class BitcoinBaseAdapter(override val wallet: Wallet, open val kit: Abs
     }
 
     override fun fee(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
-        val amount = params[SendModule.AdapterFields.Amount] as? BigDecimal ?: throw WrongParameters()
+        val amount = params[SendModule.AdapterFields.CoinAmount] as? BigDecimal ?: throw WrongParameters()
         val feePriority = params[SendModule.AdapterFields.FeeRatePriority] as? FeeRatePriority ?: throw WrongParameters()
         val address = params[SendModule.AdapterFields.Address] as? String
 
@@ -115,12 +115,12 @@ abstract class BitcoinBaseAdapter(override val wallet: Wallet, open val kit: Abs
 
     override fun availableBalance(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
         val mutableParamsMap = params.toMutableMap()
-        mutableParamsMap[SendModule.AdapterFields.Amount]= balance
+        mutableParamsMap[SendModule.AdapterFields.CoinAmount]= balance
         return BigDecimal.ZERO.max(balance.subtract(fee(mutableParamsMap)))
     }
 
     override fun validate(params: Map<SendModule.AdapterFields, Any?>): List<SendStateError> {
-        val coinAmount = params[SendModule.AdapterFields.Amount] as? BigDecimal ?: throw WrongParameters()
+        val coinAmount = params[SendModule.AdapterFields.CoinAmount] as? BigDecimal ?: throw WrongParameters()
 
         val errors = mutableListOf<SendStateError>()
         val availableBalance = availableBalance(params)

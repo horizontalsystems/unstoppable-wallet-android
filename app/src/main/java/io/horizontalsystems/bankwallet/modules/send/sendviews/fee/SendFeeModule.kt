@@ -2,6 +2,8 @@ package io.horizontalsystems.bankwallet.modules.send.sendviews.fee
 
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
+import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import java.math.BigDecimal
@@ -23,6 +25,8 @@ object SendFeeModule {
         fun onInputTypeUpdated(inputType: SendModule.InputType)
         fun getFeePriority(): FeeRatePriority
         fun onInsufficientFeeBalanceError(coinCode: String, fee: BigDecimal)
+        fun getFeeCoinValue(): CoinValue
+        fun getFeeCurrencyValue(): CurrencyValue?
     }
 
     interface IInteractor {
@@ -39,7 +43,7 @@ object SendFeeModule {
         val baseCurrency = App.currencyManager.baseCurrency
         val helper = SendFeePresenterHelper(App.numberFormatter, feeCoinCode, baseCurrency)
         val interactor = SendFeeInteractor(App.rateStorage)
-        val presenter = SendFeePresenter(interactor, helper, feeCoinCode, baseCurrency.code)
+        val presenter = SendFeePresenter(interactor, helper, feeCoinCode, baseCurrency)
 
         view.delegate = presenter
         presenter.view = view

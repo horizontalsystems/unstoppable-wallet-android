@@ -36,6 +36,8 @@ class ConfirmationFragment : DialogFragment() {
 
         viewModel.sendConfirmationViewItemLiveData.observe(viewLifecycleOwner, Observer { viewItem ->
             viewItem?.let { sendConfirmationViewItem ->
+                view.findViewById<CoinIconView>(R.id.coinIcon)?.bind(sendConfirmationViewItem.coin)
+                view.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.Send_Title, sendConfirmationViewItem.coin.code)
                 view.findViewById<TextView>(R.id.primaryAmountText)?.text = sendConfirmationViewItem.primaryAmountInfo.getFormatted()
                 view.findViewById<TextView>(R.id.secondaryAmountText)?.text = sendConfirmationViewItem.secondaryAmountInfo?.getFormatted()
                 view.findViewById<AddressView>(R.id.addressView)?.bind(sendConfirmationViewItem.address)
@@ -46,15 +48,6 @@ class ConfirmationFragment : DialogFragment() {
                     view.findViewById<TextView>(R.id.txtTotalTitle)?.visibility = View.GONE
                     view.findViewById<TextView>(R.id.txtTotalValue)?.visibility = View.GONE
                 }
-            }
-        })
-
-        viewModel.coinLiveData.observe(viewLifecycleOwner, Observer { coin ->
-            coin?.let { coin1 ->
-                context?.let {
-                    view.findViewById<CoinIconView>(R.id.coinIcon)?.bind(coin1)
-                }
-                view.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.Send_Title, coin1.code)
             }
         })
 

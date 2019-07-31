@@ -55,7 +55,7 @@ class EosAdapter(override val wallet: Wallet, eos: CoinType.Eos, kit: EosKit) : 
     }
 
     override fun validate(params: Map<SendModule.AdapterFields, Any?>): List<SendStateError> {
-        val amount = params[SendModule.AdapterFields.Amount] as? BigDecimal ?: throw WrongParameters()
+        val amount = params[SendModule.AdapterFields.CoinAmount] as? BigDecimal ?: throw WrongParameters()
 
         val errors = mutableListOf<SendStateError>()
         val availableBalance = availableBalance(params)
