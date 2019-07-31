@@ -20,22 +20,22 @@ class RestoreWordsActivity : BaseActivity(), RestoreWordsAdapter.Listener {
 
     private lateinit var viewModel: RestoreWordsViewModel
 
-    private var words = mutableListOf<String>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_restore_words)
 
+        setContentView(R.layout.activity_restore_words)
         shadowlessToolbar.bind(
                 title = getString(R.string.Restore_Title),
                 leftBtnItem = TopMenuItem(R.drawable.back) { onBackPressed() },
                 rightBtnItem = TopMenuItem(R.drawable.checkmark_orange) {
-                    viewModel.delegate.restoreDidClick(words)
+                    viewModel.delegate.onDone()
                 }
         )
 
+        val wordsCount = intent.getIntExtra(RestoreWordsModule.WORDS_COUNT, 12)
+
         viewModel = ViewModelProviders.of(this).get(RestoreWordsViewModel::class.java)
-        viewModel.init()
+        viewModel.init(wordsCount)
 
         viewModel.errorLiveData.observe(this, Observer {
             HudHelper.showErrorMessage(it)
@@ -45,7 +45,7 @@ class RestoreWordsActivity : BaseActivity(), RestoreWordsAdapter.Listener {
             SyncModeModule.startForResult(this, ModuleCode.SYNC_MODE)
         })
 
-        recyclerInputs.adapter = RestoreWordsAdapter(intent.getIntExtra("wordsCount", 12), this)
+        recyclerInputs.adapter = RestoreWordsAdapter(wordsCount, this)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -55,7 +55,7 @@ class RestoreWordsActivity : BaseActivity(), RestoreWordsAdapter.Listener {
             val syncMode = data.getParcelableExtra<SyncMode>("syncMode")
 
             val intent = Intent().apply {
-                putExtra("accountType", AccountType.Mnemonic(words, AccountType.Derivation.bip44, ""))
+                putExtra("accountType", AccountType.Mnemonic(viewModel.delegate.words, AccountType.Derivation.bip44, ""))
                 putParcelableExtra("syncMode", syncMode)
             }
 
@@ -64,16 +64,16 @@ class RestoreWordsActivity : BaseActivity(), RestoreWordsAdapter.Listener {
         }
     }
 
-    // WordsInputAdapter Listener
+    //  WordsInputAdapter Listener
 
-    override fun onChange(position: Int, value: String) {
+    override fun onChange(position: Int, word: String) {
         if (isUsingNativeKeyboard()) {
-            words.add(position, value.toLowerCase())
+            viewModel.delegate.onChange(position, word)
         }
     }
 
     override fun onDone() {
-        viewModel.delegate.restoreDidClick(words)
+        viewModel.delegate.onDone()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -81,7 +81,7 @@ class RestoreWordsActivity : BaseActivity(), RestoreWordsAdapter.Listener {
         return true
     }
 
-    // Private
+    //  Private
 
     private fun isUsingNativeKeyboard(): Boolean {
         if (Utils.isUsingCustomKeyboard(this)) {

@@ -11,9 +11,9 @@ import org.mockito.Mockito
 
 class RestorePresenterTest {
 
-    private val interactor = Mockito.mock(RestoreWordsModule.IInteractor::class.java)
-    private val router = Mockito.mock(RestoreWordsModule.IRouter::class.java)
-    private val view = Mockito.mock(RestoreWordsModule.IView::class.java)
+    private val interactor = Mockito.mock(RestoreWordsModule.Interactor::class.java)
+    private val router = Mockito.mock(RestoreWordsModule.Router::class.java)
+    private val view = Mockito.mock(RestoreWordsModule.View::class.java)
 
     private lateinit var presenter: RestoreWordsPresenter
 

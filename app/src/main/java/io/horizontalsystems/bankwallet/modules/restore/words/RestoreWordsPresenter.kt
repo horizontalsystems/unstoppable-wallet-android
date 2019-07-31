@@ -2,18 +2,27 @@ package io.horizontalsystems.bankwallet.modules.restore.words
 
 import io.horizontalsystems.bankwallet.R
 
-class RestoreWordsPresenter(private val interactor: RestoreWordsModule.IInteractor, private val router: RestoreWordsModule.IRouter)
-    : RestoreWordsModule.IViewDelegate, RestoreWordsModule.IInteractorDelegate {
+class RestoreWordsPresenter(
+        wordsCount: Int,
+        private val interactor: RestoreWordsModule.Interactor,
+        private val router: RestoreWordsModule.Router)
+    : RestoreWordsModule.ViewDelegate, RestoreWordsModule.InteractorDelegate {
 
-    var view: RestoreWordsModule.IView? = null
+    var view: RestoreWordsModule.View? = null
 
-    // View Delegate
+    //  View Delegate
 
-    override fun restoreDidClick(words: List<String>) {
+    override val words = MutableList(wordsCount) { "" }
+
+    override fun onChange(position: Int, word: String) {
+        words[position] = word
+    }
+
+    override fun onDone() {
         interactor.validate(words)
     }
 
-    // Interactor Delegate
+    //  Interactor Delegate
 
     override fun didFailToValidate(exception: Exception) {
         view?.showError(R.string.Restore_ValidationFailed)
@@ -22,5 +31,4 @@ class RestoreWordsPresenter(private val interactor: RestoreWordsModule.IInteract
     override fun didValidate(words: List<String>) {
         router.startSyncModeModule(words)
     }
-
 }
