@@ -116,6 +116,7 @@ class SendActivity : BaseActivity() {
             sendAmountView.bindInitial(it, mainViewModel, this, 8)
         }
         sendLinearLayout.addView(sendAmountView)
+        sendAmountView.requestFocus()
 
         //add address view
         val sendAddressView = SendAddressView(this)
