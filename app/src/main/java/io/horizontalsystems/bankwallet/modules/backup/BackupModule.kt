@@ -11,7 +11,7 @@ object BackupModule {
     interface ViewDelegate {
         fun onClickCancel()
         fun onClickBackup()
-        fun didBackUp(accountId: String)
+        fun didBackup()
         fun didUnlock()
         fun didCancelUnlock()
     }
@@ -26,7 +26,8 @@ object BackupModule {
 
     interface Router {
         fun startUnlockPinModule()
-        fun startBackupModule(account: Account)
+        fun startBackupWordsModule(words: List<String>)
+        fun startBackupEosModule(account: String, activePrivateKey: String)
         fun close()
     }
 

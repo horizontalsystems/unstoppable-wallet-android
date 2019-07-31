@@ -78,18 +78,18 @@
         <activity
             android:name=".modules.restore.RestoreActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".modules.welcome.WelcomeActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".modules.restore.eos.RestoreEosActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".modules.keystore.KeyStoreActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".modules.backup.eos.BackupEosActivity"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="preloaded_fonts"

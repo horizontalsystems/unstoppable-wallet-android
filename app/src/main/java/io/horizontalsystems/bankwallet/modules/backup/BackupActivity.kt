@@ -10,8 +10,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.modules.backup.words.BackupWordsActivity
+import io.horizontalsystems.bankwallet.modules.backup.eos.BackupEosModule
 import io.horizontalsystems.bankwallet.modules.backup.words.BackupWordsModule
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import kotlinx.android.synthetic.main.activity_backup.*
@@ -26,42 +25,52 @@ class BackupActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_backup)
 
-        val coinCodes = intent.getStringExtra(ACCOUNT_COINS)
+        val account = intent.getParcelableExtra<Account>(ACCOUNT_KEY)
+        val accountCoins = intent.getStringExtra(ACCOUNT_COINS)
 
         viewModel = ViewModelProviders.of(this).get(BackupViewModel::class.java)
-        viewModel.init(intent.getParcelableExtra(ACCOUNT_KEY))
+        viewModel.init(account)
 
         buttonBack.setOnSingleClickListener { viewModel.delegate.onClickCancel() }
         buttonNext.setOnSingleClickListener { viewModel.delegate.onClickBackup() }
 
-        viewModel.startPinModuleEvent.observe(this, Observer {
+        viewModel.startPinModule.observe(this, Observer {
             PinModule.startForUnlock(this, ModuleCode.UNLOCK_PIN, true)
         })
 
-        viewModel.startBackupEvent.observe(this, Observer { account ->
-            when (account.type) {
-                is AccountType.Mnemonic -> {
-                    BackupWordsModule.start(this, account.type.words, account.id)
-                }
-            }
+        viewModel.startBackupWordsModule.observe(this, Observer {
+            BackupWordsModule.start(this, it, account.isBackedUp)
+        })
+
+        viewModel.startBackupEosModule.observe(this, Observer {
+            BackupEosModule.start(this, it.first, it.second)
         })
 
         viewModel.closeLiveEvent.observe(this, Observer {
             finish()
         })
 
-        backupIntro.text = getString(R.string.Backup_Intro_Subtitle, coinCodes)
+        backupIntro.text = getString(R.string.Backup_Intro_Subtitle, accountCoins)
+
+        if (account.isBackedUp) {
+            buttonBack.text = getString(R.string.Button_Close)
+            buttonNext.text = getString(R.string.Backup_Button_ShowKey)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-
         when (requestCode) {
+            ModuleCode.BACKUP_EOS -> {
+                when (resultCode) {
+                    BackupWordsModule.RESULT_BACKUP -> {
+                        viewModel.delegate.didBackup()
+                    }
+                }
+                finish()
+            }
             ModuleCode.BACKUP_WORDS -> {
-                if (data == null || resultCode != RESULT_OK) return
-                val accountId = data.getStringExtra(BackupWordsActivity.ACCOUNT_ID_KEY)
-                viewModel.delegate.didBackUp(accountId)
                 finish()
             }
             ModuleCode.UNLOCK_PIN -> {

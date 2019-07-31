@@ -11,14 +11,15 @@ class BackupWordsViewModel : ViewModel(), BackupWordsModule.IView, BackupWordsMo
 
     val loadPageLiveEvent = SingleLiveEvent<Int>()
     val errorLiveData = SingleLiveEvent<Int>()
-    val wordsLiveData = MutableLiveData<List<String>>()
+    val wordsLiveData = MutableLiveData<Array<String>>()
     val wordIndexesToConfirmLiveData = MutableLiveData<List<Int>>()
-    val validateWordsLiveEvent = SingleLiveEvent<Void>()
-    val notifyBackedUpEvent = SingleLiveEvent<String>()
-    val closeLiveEvent = SingleLiveEvent<Void>()
+    val validateWordsLiveEvent = SingleLiveEvent<Unit>()
+    val notifyBackedUpEvent = SingleLiveEvent<Unit>()
+    val notifyClosedEvent = SingleLiveEvent<Unit>()
+    val closeLiveEvent = SingleLiveEvent<Unit>()
 
-    fun init(accountId: String, words: List<String>) {
-        BackupWordsModule.init(this, this, accountId, words)
+    fun init(words: Array<String>, backedUp: Boolean) {
+        BackupWordsModule.init(this, this, words, backedUp)
     }
 
     // view
@@ -27,7 +28,7 @@ class BackupWordsViewModel : ViewModel(), BackupWordsModule.IView, BackupWordsMo
         loadPageLiveEvent.value = page
     }
 
-    override fun showWords(words: List<String>) {
+    override fun showWords(words: Array<String>) {
         wordsLiveData.value = words
     }
 
@@ -45,8 +46,12 @@ class BackupWordsViewModel : ViewModel(), BackupWordsModule.IView, BackupWordsMo
 
     // router
 
-    override fun notifyBackedUp(accountId: String) {
-        notifyBackedUpEvent.value = accountId
+    override fun notifyBackedUp() {
+        notifyBackedUpEvent.call()
+    }
+
+    override fun notifyClosed() {
+        notifyClosedEvent.call()
     }
 
     override fun close() {

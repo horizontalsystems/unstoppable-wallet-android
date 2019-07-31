@@ -8,8 +8,9 @@ class BackupViewModel : ViewModel(), BackupModule.View, BackupModule.Router {
 
     lateinit var delegate: BackupModule.ViewDelegate
 
-    val startPinModuleEvent = SingleLiveEvent<Void>()
-    val startBackupEvent = SingleLiveEvent<Account>()
+    val startPinModule = SingleLiveEvent<Void>()
+    val startBackupWordsModule = SingleLiveEvent<List<String>>()
+    val startBackupEosModule = SingleLiveEvent<Pair<String, String>>()
     val closeLiveEvent = SingleLiveEvent<Void>()
 
     fun init(account: Account) {
@@ -19,11 +20,15 @@ class BackupViewModel : ViewModel(), BackupModule.View, BackupModule.Router {
     // router
 
     override fun startUnlockPinModule() {
-        startPinModuleEvent.call()
+        startPinModule.call()
     }
 
-    override fun startBackupModule(account: Account) {
-        startBackupEvent.value = account
+    override fun startBackupWordsModule(words: List<String>) {
+        startBackupWordsModule.postValue(words)
+    }
+
+    override fun startBackupEosModule(account: String, activePrivateKey: String) {
+        startBackupEosModule.postValue(Pair(account, activePrivateKey))
     }
 
     override fun close() {

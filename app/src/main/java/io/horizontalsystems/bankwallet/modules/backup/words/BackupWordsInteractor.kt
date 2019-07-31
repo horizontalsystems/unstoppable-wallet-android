@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.backup.words
 import io.horizontalsystems.bankwallet.core.IRandomProvider
 import java.util.*
 
-class BackupWordsInteractor(private val indexesProvider: IRandomProvider, private val words: List<String>)
+class BackupWordsInteractor(private val indexesProvider: IRandomProvider, private val words: Array<String>)
     : BackupWordsModule.IInteractor {
 
     var delegate: BackupWordsModule.IInteractorDelegate? = null

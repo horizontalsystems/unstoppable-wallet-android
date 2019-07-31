@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.backup
 
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.AccountType
 
 class BackupPresenter(
         private val interactor: BackupModule.Interactor,
@@ -22,20 +23,31 @@ class BackupPresenter(
         if (interactor.isPinSet) {
             router.startUnlockPinModule()
         } else {
-            router.startBackupModule(account)
+            startBackup()
         }
     }
 
+    override fun didBackup() {
+        interactor.setBackedUp(account.id)
+    }
+
     override fun didUnlock() {
-        router.startBackupModule(account)
+        startBackup()
     }
 
     override fun didCancelUnlock() {
 
     }
 
-    override fun didBackUp(accountId: String) {
-        interactor.setBackedUp(accountId)
+    private fun startBackup() {
+        when (val accountType = account.type) {
+            is AccountType.Mnemonic -> {
+                router.startBackupWordsModule(accountType.words)
+            }
+            is AccountType.Eos -> {
+                router.startBackupEosModule(accountType.account, accountType.activePrivateKey)
+            }
+        }
     }
 }
 

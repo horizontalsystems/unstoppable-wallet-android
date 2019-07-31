@@ -60,6 +60,7 @@ class ManageKeysAdapter(private val viewModel: ManageKeysViewModel) : RecyclerVi
             val account = item.account
             if (account.isBackedUp) {
                 buttonShow.visibility = View.VISIBLE
+                buttonShow.setOnClickListener { viewModel.delegate.onClickShow(item) }
             } else {
                 buttonBackup.visibility = View.VISIBLE
             }

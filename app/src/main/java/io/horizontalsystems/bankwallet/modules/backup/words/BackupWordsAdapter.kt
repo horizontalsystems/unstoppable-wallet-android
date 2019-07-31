@@ -1,16 +1,17 @@
-package io.horizontalsystems.bankwallet.lib
+package io.horizontalsystems.bankwallet.modules.backup.words
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.viewHelpers.inflate
 
-class WordsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    var items: List<String> = listOf()
+class BackupWordsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    var items: Array<String> = arrayOf()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-            ViewHolderWord(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_word, parent, false) as TextView)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return ViewHolderWord(inflate(parent, R.layout.view_holder_word) as TextView)
+    }
 
     override fun getItemCount() = items.size
 
@@ -21,5 +22,4 @@ class WordsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     class ViewHolderWord(val textView: TextView) : RecyclerView.ViewHolder(textView)
-
 }

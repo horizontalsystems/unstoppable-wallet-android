@@ -5,9 +5,11 @@ import io.horizontalsystems.bankwallet.core.App
 import java.util.*
 
 object BackupWordsModule {
+    const val RESULT_BACKUP = 1
+    const val RESULT_SHOW = 2
 
     interface IView {
-        fun showWords(words: List<String>)
+        fun showWords(words: Array<String>)
         fun showConfirmationWords(indexes: List<Int>)
         fun showConfirmationError()
 
@@ -37,26 +39,27 @@ object BackupWordsModule {
     }
 
     interface IRouter {
-        fun notifyBackedUp(accountId: String)
+        fun notifyBackedUp()
+        fun notifyClosed()
         fun close()
     }
 
     //  helpers
 
-    fun start(context: AppCompatActivity, words: List<String>, accountId: String) {
-        BackupWordsActivity.start(context, words, accountId)
+    fun start(context: AppCompatActivity, words: List<String>, backedUp: Boolean) {
+        BackupWordsActivity.start(context, words, backedUp)
     }
 
-    fun init(view: BackupWordsViewModel, router: IRouter, accountId: String, words: List<String>) {
+    fun init(view: BackupWordsViewModel, router: IRouter, words: Array<String>, backedUp: Boolean) {
         val interactor = BackupWordsInteractor(App.randomManager, words)
-        val presenter = BackupWordsPresenter(interactor, router, State(words, accountId))
+        val presenter = BackupWordsPresenter(interactor, router, State(words, backedUp))
 
         view.delegate = presenter
         presenter.view = view
         interactor.delegate = presenter
     }
 
-    class State(val words: List<String>, val accountId: String) {
+    class State(val words: Array<String>, val backedUp: Boolean) {
 
         var currentPage: Int = 1
             private set
