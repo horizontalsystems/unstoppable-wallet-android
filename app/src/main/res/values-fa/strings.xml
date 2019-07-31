@@ -11,6 +11,7 @@
     <string name="Alert_Copied">کپی انجام شد</string>
     <string name="Button_Cancel">انصراف</string>
     <string name="Button_Back">برگشت</string>
+    <string name="Button_Close">Close</string>
     <string name="Button_Ok">تأیید</string>
     <string name="Button_Share">به اشتراك گذاشتن</string>
     <string name="Error">خطا</string>
@@ -32,7 +33,6 @@
     <string name="Backup_Intro_Subtitle">The key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc. Make sure that no one is watching your screen. \n\nThe coins controlled by this key: %s</string>
     <string name="Backup_Intro_Later">بعداً</string>
     <string name="Backup_Intro_BackupNow">پيشتيباني</string>
-    <string name="Backup_Words_Title">Backup</string>
     <string name="Backup_Confirmation_SecretKey">من قبول ميكنم كي تنها من صاحب اين ١٢ عدد مخفي ميباشم كي اين عداد در گوشي همراه من ميباشد و تنها من ميتوانم با اين عداد كيف پول و مقدار پول خود را فعال كنم.</string>
     <string name="Backup_Confirmation_DeleteAppWarn">من قبول ميكنم كي اگر اين كاربرد تكان بخورد،حذف شود و يا اشكال در عملكرد به وحود بياد، فقط تنها رمز مخفي ميتواند دوباره بهبوديافت كند.</string>
     <string name="Backup_Confirmation_LockAppWarn">من قبول ميكنم كي تعغير رمز گوشي همراه و يا حذف كردن تاريخچه كاربرد رمز مخفي را حذف ميكند. و من دوباره بايد رمز مخفي خود را وارد كنم تا بتوانم از كاربرد استفاده نمايم.</string>
@@ -44,6 +44,14 @@
     <string name="Backup_Button_Confirm">تاييد</string>
     <string name="Backup_Button_Next">بعدي</string>
     <string name="Backup_Button_Submit">ثبت</string>
+    <string name="Backup_Button_ShowKey">Show Key</string>
+    <!--Backup Words-->
+    <string name="Backup_Words_Title">Backup</string>
+    <!--Backup Eos-->
+    <string name="Backup_Eos_Title">Key</string>
+    <string name="Backup_Eos_AccountName">Account Name</string>
+    <string name="Backup_Eos_ActivePrivateKey">Private Key</string>
+    <string name="Backup_Eos_Warning">Copying your key using “copy” action poses some risks if you use any clipboard management apps or some other apps that may access to clipboard data.</string>
     <!--Balance-->
     <string name="Balance_Title">بالانس</string>
     <string name="Balance_Deposit">دريافت</string>
