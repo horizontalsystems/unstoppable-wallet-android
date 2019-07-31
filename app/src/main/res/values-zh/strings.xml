@@ -11,6 +11,7 @@
     <string name="Alert_Copied">复制成功</string>
     <string name="Button_Cancel">取消</string>
     <string name="Button_Back">返回</string>
+    <string name="Button_Close">Close</string>
     <string name="Button_Ok">确定</string>
     <string name="Button_Share">分享</string>
     <string name="Error">出错</string>
@@ -32,7 +33,6 @@
     <string name="Backup_Intro_Subtitle">The key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc. Make sure that no one is watching your screen. \n\nThe coins controlled by this key: %s</string>
     <string name="Backup_Intro_Later">稍后</string>
     <string name="Backup_Intro_BackupNow">备份</string>
-    <string name="Backup_Words_Title">Backup</string>
     <string name="Backup_Confirmation_SecretKey">我知道, 我是一个12个字的私人密钥的唯一拥有者，该密钥安全地存储在我的手机上，使我能够控制我钱包上的资金。</string>
     <string name="Backup_Confirmation_DeleteAppWarn">我知道如果此APP被移动、删除或出现故障，只有用密钥才能恢复对我钱包的访问。</string>
     <string name="Backup_Confirmation_LockAppWarn">我知道更改手机的解锁密码或删除Android设置中的应用程序数据会从设备中删除密钥。在这种情况下，我需要重新输入我的密钥才能重新获得我的钱包。</string>
@@ -44,6 +44,14 @@
     <string name="Backup_Button_Confirm">确认</string>
     <string name="Backup_Button_Next">继续</string>
     <string name="Backup_Button_Submit">提交</string>
+    <string name="Backup_Button_ShowKey">Show Key</string>
+    <!--Backup Words-->
+    <string name="Backup_Words_Title">Backup</string>
+    <!--Backup Eos-->
+    <string name="Backup_Eos_Title">Key</string>
+    <string name="Backup_Eos_AccountName">Account Name</string>
+    <string name="Backup_Eos_ActivePrivateKey">Private Key</string>
+    <string name="Backup_Eos_Warning">Copying your key using “copy” action poses some risks if you use any clipboard management apps or some other apps that may access to clipboard data.</string>
     <!--Balance-->
     <string name="Balance_Title">余额</string>
     <string name="Balance_Deposit">收到</string>
