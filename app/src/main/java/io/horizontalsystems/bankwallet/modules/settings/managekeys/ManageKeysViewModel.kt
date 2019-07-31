@@ -10,8 +10,8 @@ class ManageKeysViewModel : ViewModel(), ManageKeysModule.View, ManageKeysModule
     val showItemsEvent = SingleLiveEvent<List<ManageAccountItem>>()
     val showErrorEvent = SingleLiveEvent<Exception>()
     val confirmUnlinkEvent = SingleLiveEvent<ManageAccountItem>()
-    val confirmCreateEvent = SingleLiveEvent<Pair<String, String>>()
-    val confirmBackupEvent = SingleLiveEvent<String>()
+    val confirmCreateEvent = SingleLiveEvent<ManageAccountItem>()
+    val confirmBackupEvent = SingleLiveEvent<ManageAccountItem>()
     val startBackupModuleLiveEvent = SingleLiveEvent<ManageAccountItem>()
     val startRestoreWordsLiveEvent = SingleLiveEvent<Int>()
     val startRestoreEosLiveEvent = SingleLiveEvent<Unit>()
@@ -30,12 +30,12 @@ class ManageKeysViewModel : ViewModel(), ManageKeysModule.View, ManageKeysModule
         showItemsEvent.postValue(items)
     }
 
-    override fun showCreateConfirmation(title: String, coinCodes: String) {
-        confirmCreateEvent.postValue(Pair(title, coinCodes))
+    override fun showCreateConfirmation(accountItem: ManageAccountItem) {
+        confirmCreateEvent.postValue(accountItem)
     }
 
-    override fun showBackupConfirmation(title: String) {
-        confirmBackupEvent.postValue(title)
+    override fun showBackupConfirmation(accountItem: ManageAccountItem) {
+        confirmBackupEvent.postValue(accountItem)
     }
 
     override fun showUnlinkConfirmation(accountItem: ManageAccountItem) {

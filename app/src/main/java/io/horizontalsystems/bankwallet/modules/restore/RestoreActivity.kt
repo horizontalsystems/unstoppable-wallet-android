@@ -105,7 +105,7 @@ class KeysViewHolder(override val containerView: View)
     : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     fun bind(accountType: IPredefinedAccountType) {
-        accountName.text = accountType.title
-        accountCoin.text = accountType.coinCodes
+        accountName.text = containerView.resources.getString(accountType.title)
+        accountCoin.text = containerView.resources.getString(accountType.coinCodes)
     }
 }

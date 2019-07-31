@@ -34,7 +34,7 @@ class BackupEosActivity : BaseActivity() {
             finish()
         }
 
-        imgQrCode.setImageBitmap(TextHelper.getQrCodeBitmapFromAddress(privateKey))
+        imgQrCode.setImageBitmap(TextHelper.getQrCodeBitmap(privateKey, 120F))
     }
 
     private fun onCopy(text: String) {

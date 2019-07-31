@@ -32,10 +32,10 @@ object TextHelper : IClipboardManager {
         } ?: ""
     }
 
-    fun getQrCodeBitmapFromAddress(address: String): Bitmap? {
+    fun getQrCodeBitmap(address: String, size: Float = 150F): Bitmap? {
         val multiFormatWriter = MultiFormatWriter()
         return try {
-            val imageSize = LayoutHelper.dp(150F, App.instance)
+            val imageSize = LayoutHelper.dp(size, App.instance)
             val bitMatrix = multiFormatWriter.encode(address, BarcodeFormat.QR_CODE, imageSize, imageSize, hashMapOf(EncodeHintType.MARGIN to 0))
             val barcodeEncoder = BarcodeEncoder()
             val bitmap = barcodeEncoder.createBitmap(bitMatrix)
