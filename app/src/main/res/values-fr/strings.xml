@@ -11,6 +11,7 @@
     <string name="Alert_Copied">Copié</string>
     <string name="Button_Cancel">Annuler</string>
     <string name="Button_Back">Retour</string>
+    <string name="Button_Close">Close</string>
     <string name="Button_Ok">OK</string>
     <string name="Button_Share">Partager</string>
     <string name="Error">Erreur</string>
@@ -32,7 +33,6 @@
     <string name="Backup_Intro_Subtitle">The key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc. Make sure that no one is watching your screen. \n\nThe coins controlled by this key: %s</string>
     <string name="Backup_Intro_Later">Plus tard</string>
     <string name="Backup_Intro_BackupNow">Sauvegarde</string>
-    <string name="Backup_Words_Title">Backup</string>
     <string name="Backup_Confirmation_SecretKey">Je comprends que je suis propriétaire d\'une clé secrète privée de 12 mots, qui est stockée en toute sécurité sur mon téléphone portable et me permet de contrôler les fonds sur mon porte-monnaie.</string>
     <string name="Backup_Confirmation_DeleteAppWarn">Je comprends que si cette appli ne fonction plus, est déplacée vers un autre appareil ou supprimée, mon porte-monnaie ne peut être récupéré qu\'avec la clé secrète.</string>
     <string name="Backup_Confirmation_LockAppWarn">Je comprends que changer le PIN téléphone ou supprimer les données d\'application dans les paramètres Android supprime la clé secrète de l\'appareil. Je devrais entrer à nouveau ma clé secrète pour retrouver l\'accès à mon porte-monnaie.</string>
@@ -44,6 +44,14 @@
     <string name="Backup_Button_Confirm">Confirmer</string>
     <string name="Backup_Button_Next">Suivant</string>
     <string name="Backup_Button_Submit">Soumettre</string>
+    <string name="Backup_Button_ShowKey">Show Key</string>
+    <!--Backup Words-->
+    <string name="Backup_Words_Title">Backup</string>
+    <!--Backup Eos-->
+    <string name="Backup_Eos_Title">Key</string>
+    <string name="Backup_Eos_AccountName">Account Name</string>
+    <string name="Backup_Eos_ActivePrivateKey">Private Key</string>
+    <string name="Backup_Eos_Warning">Copying your key using “copy” action poses some risks if you use any clipboard management apps or some other apps that may access to clipboard data.</string>
     <!--Balance-->
     <string name="Balance_Title">Balance</string>
     <string name="Balance_Deposit">Recevoir</string>
