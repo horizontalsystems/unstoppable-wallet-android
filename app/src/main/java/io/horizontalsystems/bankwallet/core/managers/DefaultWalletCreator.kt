@@ -42,10 +42,9 @@ class DefaultWalletCreator(private val walletManager: IWalletManager, private va
             is AccountType.Mnemonic -> {
                 if (accountType.words.size == 12) {
                     return listOf("BTC", "ETH")
+                } else if (accountType.words.size == 24) {
+                    return listOf("BNB")
                 }
-                // else if (accountType.words.size == 24) {
-                //     return listOf("BNB")
-                // }
             }
 
             is AccountType.Eos -> {

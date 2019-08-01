@@ -13,7 +13,8 @@ class AdapterManager(
         walletManager: IWalletManager,
         private val adapterFactory: AdapterFactory,
         private val ethereumKitManager: IEthereumKitManager,
-        private val esoKitManager: IEosKitManager)
+        private val eosKitManager: IEosKitManager,
+        private val binanceKitManager: BinanceKitManager)
     : IAdapterManager, HandlerThread("A") {
 
     private val handler: Handler
@@ -41,7 +42,8 @@ class AdapterManager(
         }
 
         ethereumKitManager.ethereumKit?.refresh()
-        esoKitManager.eosKit?.refresh()
+        eosKitManager.eosKit?.refresh()
+        binanceKitManager.binanceKit?.refresh()
     }
 
     override fun initAdapters(wallets: List<Wallet>) {

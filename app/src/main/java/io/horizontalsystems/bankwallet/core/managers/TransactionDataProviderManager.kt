@@ -54,6 +54,7 @@ class TransactionDataProviderManager(appConfig: IAppConfigProvider, private val 
         is CoinType.BitcoinCash -> bitcoinCashProviders
         is CoinType.Ethereum, is CoinType.Erc20 -> ethereumProviders
         is CoinType.Dash -> dashProviders
+        is CoinType.Binance,
         is CoinType.Eos -> listOf()
     }
 
@@ -67,6 +68,7 @@ class TransactionDataProviderManager(appConfig: IAppConfigProvider, private val 
         is CoinType.Dash -> {
             dash(localStorage.baseDashProvider ?: dashProviders[0].name)
         }
+        is CoinType.Binance,
         is CoinType.Eos -> {
             TODO("not implemented")
         }

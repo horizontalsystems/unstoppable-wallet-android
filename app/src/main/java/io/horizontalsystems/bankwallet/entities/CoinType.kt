@@ -13,6 +13,7 @@ sealed class CoinType : Serializable {
 
     class Erc20(val address: String, val decimal: Int, val fee: BigDecimal = BigDecimal.ZERO) : CoinType()
     class Eos(val token: String, val symbol: String) : CoinType()
+    class Binance(val symbol: String) : CoinType()
 
     fun canSupport(accountType: AccountType): Boolean {
         when (this) {
@@ -22,6 +23,11 @@ sealed class CoinType : Serializable {
             is Bitcoin, BitcoinCash, Dash, Ethereum, is Erc20 -> {
                 if (accountType is AccountType.Mnemonic) {
                     return accountType.words.size == 12 && accountType.derivation == Derivation.bip44
+                }
+            }
+            is Binance -> {
+                if (accountType is AccountType.Mnemonic) {
+                    return accountType.words.size == 24 && accountType.derivation == Derivation.bip44
                 }
             }
         }
@@ -34,6 +40,7 @@ sealed class CoinType : Serializable {
             is Erc20, Bitcoin, BitcoinCash, Dash, Ethereum -> {
                 DefaultAccountType.Mnemonic(wordsCount = 12)
             }
+            is Binance -> DefaultAccountType.Mnemonic(wordsCount = 24)
             is Eos -> DefaultAccountType.Eos()
         }
 }

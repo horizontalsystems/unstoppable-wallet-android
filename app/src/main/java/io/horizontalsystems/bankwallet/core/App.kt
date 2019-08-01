@@ -64,6 +64,7 @@ class App : Application() {
         lateinit var transactionDataProviderManager: TransactionDataProviderManager
         lateinit var ethereumKitManager: IEthereumKitManager
         lateinit var eosKitManager: IEosKitManager
+        lateinit var binanceKitManager: BinanceKitManager
         lateinit var numberFormatter: IAppNumberFormatter
 
         lateinit var instance: App
@@ -103,6 +104,7 @@ class App : Application() {
         secureStorage = SecuredStorageManager(encryptionManager)
         ethereumKitManager = EthereumKitManager(appConfigProvider)
         eosKitManager = EosKitManager(appConfigProvider)
+        binanceKitManager = BinanceKitManager(appConfigProvider)
 
         appDatabase = AppDatabase.getInstance(this)
         rateStorage = RatesRepository(appDatabase)
@@ -139,7 +141,7 @@ class App : Application() {
 
         networkAvailabilityManager = NetworkAvailabilityManager()
 
-        adapterManager = AdapterManager(walletManager, AdapterFactory(instance, appConfigProvider, ethereumKitManager, eosKitManager, feeRateProvider), ethereumKitManager, eosKitManager)
+        adapterManager = AdapterManager(walletManager, AdapterFactory(instance, appConfigProvider, ethereumKitManager, eosKitManager, binanceKitManager, feeRateProvider), ethereumKitManager, eosKitManager, binanceKitManager)
         rateSyncer = RateSyncer(rateManager, adapterManager, currencyManager, networkAvailabilityManager)
 
         transactionDataProviderManager = TransactionDataProviderManager(appConfigProvider, localStorage)

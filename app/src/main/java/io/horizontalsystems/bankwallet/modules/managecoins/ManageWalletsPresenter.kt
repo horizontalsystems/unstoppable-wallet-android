@@ -13,7 +13,7 @@ class ManageWalletsPresenter(private val interactor: ManageWalletsModule.IIntera
 
     private var items = mutableListOf<ManageWalletItem>()
     private var popularItems = mutableListOf<ManageWalletItem>()
-    private val popularCoinCodes = listOf("BTC", "BCH", "ETH", "DASH", "EOS")
+    private val popularCoinCodes = listOf("BTC", "BCH", "ETH", "DASH", "EOS", "BNB")
     private var currentItem: ManageWalletItem? = null
 
     //  ViewDelegate
