@@ -12,24 +12,18 @@ import java.net.UnknownHostException
 class SendPresenter(
         private val interactor: SendModule.IInteractor,
         private val confirmationFactory: ConfirmationViewItemFactory)
-    : SendModule.IViewDelegate, SendModule.IInteractorDelegate, SendModule.ISendAmountPresenterDelegate {
+    : SendModule.IViewDelegate, SendModule.IInteractorDelegate {
 
     var view: SendViewModel? = null
-
-    override fun onViewDidLoad() {
-        view?.setCoin(interactor.coin)
-    }
 
     override fun onGetAvailableBalance() {
         view?.getParamsForAction(SendModule.ParamsAction.AvailableBalance)
     }
 
     override fun onAmountChanged(coinAmount: BigDecimal?) {
-        if (coinAmount == null) {
-            return
+        coinAmount?.let {
+            updateModules()
         }
-
-        updateModules()
     }
 
     override fun onParamsFetchedForAction(params: Map<SendModule.AdapterFields, Any?>, paramsAction: SendModule.ParamsAction) {
@@ -37,7 +31,8 @@ class SendPresenter(
             SendModule.ParamsAction.UpdateModules -> {
                 val updatedParams = params.toMutableMap()
                 val coinValue = (params[SendModule.AdapterFields.CoinValue] as? CoinValue)
-                updatedParams[SendModule.AdapterFields.CoinAmount] = coinValue?.value ?: BigDecimal.ZERO
+                updatedParams[SendModule.AdapterFields.CoinAmount] = coinValue?.value
+                        ?: BigDecimal.ZERO
 
                 interactor.validate(updatedParams)
                 interactor.updateFee(updatedParams)
@@ -107,10 +102,13 @@ class SendPresenter(
     private fun showConfirmationDialog(params: Map<SendModule.AdapterFields, Any?>) {
         try {
             val inputType: SendModule.InputType = params[SendModule.AdapterFields.InputType] as SendModule.InputType
-            val address: String = (params[SendModule.AdapterFields.Address] as? String) ?: throw WrongParameters()
-            val coinValue: CoinValue = (params[SendModule.AdapterFields.CoinValue] as? CoinValue) ?: throw WrongParameters()
+            val address: String = (params[SendModule.AdapterFields.Address] as? String)
+                    ?: throw WrongParameters()
+            val coinValue: CoinValue = (params[SendModule.AdapterFields.CoinValue] as? CoinValue)
+                    ?: throw WrongParameters()
             val currencyValue: CurrencyValue? = params[SendModule.AdapterFields.CurrencyValue] as? CurrencyValue
-            val feeCoinValue: CoinValue = (params[SendModule.AdapterFields.FeeCoinValue] as? CoinValue) ?: throw WrongParameters()
+            val feeCoinValue: CoinValue = (params[SendModule.AdapterFields.FeeCoinValue] as? CoinValue)
+                    ?: throw WrongParameters()
             val feeCurrencyValue: CurrencyValue? = params[SendModule.AdapterFields.FeeCurrencyValue] as? CurrencyValue
 
             val confirmationViewItem = confirmationFactory.confirmationViewItem(
@@ -130,12 +128,15 @@ class SendPresenter(
     }
 
     private fun send(params: Map<SendModule.AdapterFields, Any?>) {
-        try{
-            val address: String = (params[SendModule.AdapterFields.Address] as? String) ?: throw WrongParameters()
-            val coinValue: CoinValue = (params[SendModule.AdapterFields.CoinValue] as? CoinValue) ?: throw WrongParameters()
-            val feePriority = params[SendModule.AdapterFields.FeeRatePriority] as? FeeRatePriority ?: FeeRatePriority.MEDIUM
+        try {
+            val address: String = (params[SendModule.AdapterFields.Address] as? String)
+                    ?: throw WrongParameters()
+            val coinValue: CoinValue = (params[SendModule.AdapterFields.CoinValue] as? CoinValue)
+                    ?: throw WrongParameters()
+            val feePriority = params[SendModule.AdapterFields.FeeRatePriority] as? FeeRatePriority
+                    ?: FeeRatePriority.MEDIUM
             interactor.send(address, coinValue.value, feePriority)
-        } catch (error: WrongParameters){
+        } catch (error: WrongParameters) {
             //wrong parameters exception
         }
     }
