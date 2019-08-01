@@ -41,6 +41,13 @@ class RestoreWordsActivity : BaseActivity(), RestoreWordsAdapter.Listener {
             HudHelper.showErrorMessage(it)
         })
 
+        viewModel.notifyRestored.observe(this, Observer {
+            setResult(RESULT_OK, Intent().apply {
+                putExtra("accountType", AccountType.Mnemonic(viewModel.delegate.words, AccountType.Derivation.bip44, ""))
+            })
+            finish()
+        })
+
         viewModel.startSyncModeModule.observe(this, Observer {
             SyncModeModule.startForResult(this, ModuleCode.SYNC_MODE)
         })

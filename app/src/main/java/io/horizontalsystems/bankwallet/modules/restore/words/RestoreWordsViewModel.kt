@@ -9,6 +9,7 @@ class RestoreWordsViewModel : ViewModel(), RestoreWordsModule.View, RestoreWords
     lateinit var delegate: RestoreWordsModule.ViewDelegate
 
     val errorLiveData = MutableLiveData<Int>()
+    val notifyRestored = SingleLiveEvent<Unit>()
     val startSyncModeModule = SingleLiveEvent<Unit>()
 
     fun init(wordsCount: Int) {
@@ -23,7 +24,11 @@ class RestoreWordsViewModel : ViewModel(), RestoreWordsModule.View, RestoreWords
 
     // Router
 
-    override fun startSyncModeModule(words: List<String>) {
+    override fun notifyRestored() {
+        notifyRestored.call()
+    }
+
+    override fun startSyncModeModule() {
         startSyncModeModule.call()
     }
 }
