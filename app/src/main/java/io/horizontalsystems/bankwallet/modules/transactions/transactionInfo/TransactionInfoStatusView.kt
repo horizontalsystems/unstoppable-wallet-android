@@ -61,7 +61,7 @@ open class TransactionInfoStatusView : ConstraintLayout {
 
         bars.forEachIndexed { index, bar ->
             bar.setImageResource(if (index <= filledBars)
-                R.drawable.status_progress_bar_grey else
+                R.drawable.status_progress_bar_green else
                 R.drawable.status_progress_bar_grey)
         }
     }
