@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.extensions.AddressView
 import io.horizontalsystems.bankwallet.ui.extensions.ButtonWithProgressbarView
 import io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
+import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 
 class ConfirmationFragment : DialogFragment() {
 
@@ -55,7 +56,8 @@ class ConfirmationFragment : DialogFragment() {
             dismiss()
         })
 
-        viewModel.errorLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.errorLiveData.observe(viewLifecycleOwner, Observer {error ->
+            error?.let { HudHelper.showErrorMessage(it) }
             view.findViewById<ButtonWithProgressbarView>(R.id.buttonConfirm)?.let { buttonConfirm ->
                 buttonConfirm.bind(R.string.Backup_Button_Confirm)
             }

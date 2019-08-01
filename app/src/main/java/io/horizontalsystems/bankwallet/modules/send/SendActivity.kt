@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.modules.send.sendviews.fee.SendFeeView
 import io.horizontalsystems.bankwallet.modules.send.sendviews.fee.SendFeeViewModel
 import io.horizontalsystems.bankwallet.modules.send.sendviews.sendbutton.SendButtonView
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
+import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.activity_about_settings.shadowlessToolbar
 import kotlinx.android.synthetic.main.activity_send.*
@@ -26,7 +27,7 @@ class SendActivity : BaseActivity() {
     private var sendAddressViewModel: SendAddressViewModel? = null
     private var sendFeeViewModel: SendFeeViewModel? = null
     private lateinit var mainViewModel: SendViewModel
-    private  var sendButtonView: SendButtonView? = null
+    private var sendButtonView: SendButtonView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,9 +103,15 @@ class SendActivity : BaseActivity() {
             fetchStatesFromModules()
         })
 
+        mainViewModel.dismissWithSuccessLiveEvent.observe(this, Observer {
+            HudHelper.showSuccessMessage(R.string.Send_Success)
+            finish()
+        })
+
         mainViewModel.sendButtonEnabledLiveData.observe(this, Observer { enabled ->
             sendButtonView?.updateState(enabled)
         })
+
     }
 
     private fun fetchParamsFromModules(paramsAction: SendModule.ParamsAction) {
@@ -122,13 +129,13 @@ class SendActivity : BaseActivity() {
 
     private fun fetchStatesFromModules() {
         val states = mutableListOf<Boolean>()
-        sendAmountViewModel?.delegate?.let{
+        sendAmountViewModel?.delegate?.let {
             states.add(it.validState)
         }
-        sendAddressViewModel?.delegate?.let{
+        sendAddressViewModel?.delegate?.let {
             states.add(it.validState)
         }
-        sendFeeViewModel?.delegate?.let{
+        sendFeeViewModel?.delegate?.let {
             states.add(it.validState)
         }
         mainViewModel.delegate.onValidStatesFetchedFromModules(states)
@@ -169,7 +176,7 @@ class SendActivity : BaseActivity() {
         sendLinearLayout.addView(sendButtonView)
     }
 
-    companion object{
+    companion object {
         const val COIN_CODE = "coin_code_key"
     }
 

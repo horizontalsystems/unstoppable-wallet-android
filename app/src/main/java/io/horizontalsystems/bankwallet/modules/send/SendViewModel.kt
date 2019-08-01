@@ -13,7 +13,7 @@ class SendViewModel : ViewModel(), SendModule.IView {
 
     val dismissConfirmationLiveEvent = SingleLiveEvent<Unit>()
     val dismissWithSuccessLiveEvent = SingleLiveEvent<Unit>()
-    val errorLiveData = MutableLiveData<Int>()
+    val errorLiveData = MutableLiveData<Int?>()
     val sendConfirmationViewItemLiveData = MutableLiveData<SendModule.SendConfirmationViewItem>()
     val showConfirmationLiveEvent = SingleLiveEvent<Unit>()
     val availableBalanceRetrievedLiveData = MutableLiveData<BigDecimal>()
