@@ -4,6 +4,7 @@ import android.content.Context
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.erc20kit.core.Erc20Kit.SyncState
 import io.horizontalsystems.erc20kit.core.TransactionKey
@@ -48,22 +49,32 @@ class Erc20Adapter(context: Context, wallet: Wallet, kit: EthereumKit, decimal: 
         return erc20Kit.send(address, amount, gasPrice).map { Unit }
     }
 
-    override fun availableBalance(address: String?, feePriority: FeeRatePriority): BigDecimal {
+    override fun availableBalance(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
         return balance - fee
     }
 
-    override fun fee(value: BigDecimal, address: String?, feePriority: FeeRatePriority): BigDecimal {
+    override fun fee(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
+        val feePriority = params[SendModule.AdapterFields.FeeRatePriority] as? FeeRatePriority ?: FeeRatePriority.MEDIUM
         return erc20Kit.fee(feeRateProvider.ethereumGasPrice(feePriority)).movePointLeft(18)
     }
 
-    override fun validate(amount: BigDecimal, address: String?, feePriority: FeeRatePriority): List<SendStateError> {
+    override fun validate(params: Map<SendModule.AdapterFields, Any?>): List<SendStateError> {
         val errors = mutableListOf<SendStateError>()
-        if (amount > availableBalance(address, feePriority)) {
-            errors.add(SendStateError.InsufficientAmount)
+
+        (params[SendModule.AdapterFields.CoinAmount] as? BigDecimal)?.let { amount ->
+            val availableBalance = availableBalance(params)
+            if (amount > availableBalance) {
+                errors.add(SendStateError.InsufficientAmount(availableBalance))
+            }
         }
-        if (balanceInBigDecimal(ethereumKit.balance, decimal) < fee(amount, address, feePriority)) {
-            errors.add(SendStateError.InsufficientFeeBalance)
+
+        val ethereumBalance = balanceInBigDecimal(ethereumKit.balance, 18)
+        val expectedFee = fee(params)
+
+        if (ethereumBalance < expectedFee) {
+            errors.add(SendStateError.InsufficientFeeBalance(expectedFee))
         }
+
         return errors
     }
 

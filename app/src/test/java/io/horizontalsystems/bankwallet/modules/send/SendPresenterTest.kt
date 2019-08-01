@@ -18,7 +18,7 @@ class SendPresenterTest {
 
     private val interactor = mock(SendModule.IInteractor::class.java)
     private val view = mock(SendModule.IView::class.java)
-    private val factory = mock(StateViewItemFactory::class.java)
+    private val factory = mock(ConfirmationViewItemFactory::class.java)
     private val userInput = mock(SendModule.UserInput::class.java)
     private val prAddress = mock(PaymentRequestAddress::class.java)
     private val coin = mock(Coin::class.java)
@@ -37,7 +37,7 @@ class SendPresenterTest {
         whenever(interactor.parsePaymentAddress(any())).thenReturn(prAddress)
         whenever(interactor.stateForUserInput(any())).thenReturn(state)
         whenever(factory.viewItemForState(any(), any())).thenReturn(viewItem)
-        whenever(factory.confirmationViewItemForState(any())).thenReturn(viewItemConfirm)
+        whenever(factory.confirmationViewItem(any())).thenReturn(viewItemConfirm)
 
         presenter = SendPresenter(interactor, factory, userInput)
         presenter.view = view
@@ -170,7 +170,7 @@ class SendPresenterTest {
         val exception = Throwable()
         val errorTextId = R.string.Hud_Network_Issue
 
-        presenter.didFailToSend(exception)
+        presenter.showError(exception)
         verify(view).showError(errorTextId)
     }
 

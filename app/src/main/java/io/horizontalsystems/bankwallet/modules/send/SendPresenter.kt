@@ -2,202 +2,177 @@ package io.horizontalsystems.bankwallet.modules.send
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
-import io.horizontalsystems.bankwallet.entities.Rate
+import io.horizontalsystems.bankwallet.core.SendStateError
+import io.horizontalsystems.bankwallet.core.WrongParameters
+import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import java.math.BigDecimal
 import java.net.UnknownHostException
 
 class SendPresenter(
         private val interactor: SendModule.IInteractor,
-        private val factory: StateViewItemFactory,
-        private val userInput: SendModule.UserInput
-) : SendModule.IViewDelegate, SendModule.IInteractorDelegate {
+        private val confirmationFactory: ConfirmationViewItemFactory)
+    : SendModule.IViewDelegate, SendModule.IInteractorDelegate {
 
-    var view: SendModule.IView? = null
+    var view: SendViewModel? = null
 
-    override val feeAdjustable: Boolean
-        get() = true
-
-    //
-    // IViewDelegate
-    //
-    override fun onViewDidLoad() {
-        val state = interactor.stateForUserInput(userInput)
-        val viewItem = factory.viewItemForState(state)
-
-        view?.setCoin(interactor.coin)
-        view?.setDecimal(viewItem.decimal)
-        view?.setAmountInfo(viewItem.amountInfo)
-        view?.setSwitchButtonEnabled(viewItem.switchButtonEnabled)
-        view?.setHintInfo(viewItem.hintInfo)
-        view?.setAddressInfo(viewItem.addressInfo)
-        view?.setFeeInfo(viewItem.feeInfo)
-        view?.setSendButtonEnabled(viewItem.sendButtonEnabled)
-        updatePasteButtonState()
-        interactor.retrieveRate()
+    override fun onGetAvailableBalance() {
+        view?.getParamsForAction(SendModule.ParamsAction.AvailableBalance)
     }
 
-    override fun onViewResumed() {
-        interactor.retrieveRate()
-    }
-
-    override fun onAmountChanged(amount: BigDecimal) {
-        userInput.amount = amount
-
-        val state = interactor.stateForUserInput(userInput)
-        val viewItem = factory.viewItemForState(state)
-
-        view?.setHintInfo(viewItem.hintInfo)
-        view?.setFeeInfo(viewItem.feeInfo)
-        view?.setSendButtonEnabled(viewItem.sendButtonEnabled)
-    }
-
-    override fun onMaxClicked() {
-        val totalBalanceMinusFee = interactor.getTotalBalanceMinusFee(userInput.inputType, userInput.address, userInput.feePriority)
-        userInput.amount = totalBalanceMinusFee
-
-        val state = interactor.stateForUserInput(userInput)
-        val viewItem = factory.viewItemForState(state, true)
-
-        view?.setAmountInfo(viewItem.amountInfo)
-    }
-
-    override fun onSwitchClicked() {
-        val convertedAmount = interactor.convertedAmountForInputType(userInput.inputType, userInput.amount)
-                ?: return
-
-        val newInputType = when (userInput.inputType) {
-            SendModule.InputType.CURRENCY -> SendModule.InputType.COIN
-            else -> SendModule.InputType.CURRENCY
-        }
-
-        userInput.amount = convertedAmount
-        userInput.inputType = newInputType
-
-        val state = interactor.stateForUserInput(userInput)
-        val viewItem = factory.viewItemForState(state)
-
-        view?.setDecimal(viewItem.decimal)
-        view?.setAmountInfo(viewItem.amountInfo)
-        view?.setHintInfo(viewItem.hintInfo)
-        view?.setFeeInfo(viewItem.feeInfo)
-
-        interactor.defaultInputType = newInputType
-    }
-
-    override fun onPasteClicked() {
-        interactor.addressFromClipboard?.let {
-            onAddressEnter(it)
+    override fun onAmountChanged(coinAmount: BigDecimal?) {
+        coinAmount?.let {
+            updateModules()
         }
     }
 
-    override fun onScanAddress(address: String) {
-        onAddressEnter(address)
+    override fun onParamsFetchedForAction(params: Map<SendModule.AdapterFields, Any?>, paramsAction: SendModule.ParamsAction) {
+        when (paramsAction) {
+            SendModule.ParamsAction.UpdateModules -> {
+                val updatedParams = params.toMutableMap()
+                val coinValue = (params[SendModule.AdapterFields.CoinValue] as? CoinValue)
+                updatedParams[SendModule.AdapterFields.CoinAmount] = coinValue?.value
+                        ?: BigDecimal.ZERO
+
+                interactor.validate(updatedParams)
+                interactor.updateFee(updatedParams)
+            }
+            SendModule.ParamsAction.AvailableBalance -> getAvailableBalance(params)
+            SendModule.ParamsAction.ShowConfirm -> showConfirmationDialog(params)
+            SendModule.ParamsAction.Send -> send(params)
+        }
     }
 
-    override fun onDeleteClicked() {
-        onAddressChange(null)
-        updatePasteButtonState()
+    override fun onAddressChanged() {
+        updateModules()
+    }
+
+    override fun parseAddress(address: String) {
+        val parsedAddress = interactor.parsePaymentAddress(address)
+        view?.onAddressParsed(parsedAddress)
+    }
+
+    override fun onValidationComplete(errorList: List<SendStateError>) {
+        var amountValidationSuccess = true
+        errorList.forEach { error ->
+            when (error) {
+                is SendStateError.InsufficientAmount -> {
+                    amountValidationSuccess = false
+                    view?.onValidationError(error)
+                }
+                is SendStateError.InsufficientFeeBalance -> {
+                    view?.onInsufficientFeeBalance(interactor.coin.code, error.fee)
+                }
+            }
+        }
+        if (amountValidationSuccess) {
+            view?.onAmountValidationSuccess()
+        }
+
+        view?.getValidStatesFromModules()
+    }
+
+    override fun onFeeUpdated(fee: BigDecimal) {
+        view?.onFeeUpdated(fee)
     }
 
     override fun onSendClicked() {
-        val state = interactor.stateForUserInput(userInput)
-        val viewItem = factory.confirmationViewItemForState(state) ?: return
-
-        view?.showConfirmation(viewItem)
+        view?.getParamsForAction(SendModule.ParamsAction.ShowConfirm)
     }
 
     override fun onConfirmClicked() {
-        interactor.send(userInput)
+        view?.getParamsForAction(SendModule.ParamsAction.Send)
     }
 
     override fun onClear() {
         interactor.clear()
     }
 
-    override fun onFeeSliderChange(value: Int) {
-        userInput.feePriority = FeeRatePriority.valueOf(value)
-
-        val state = interactor.stateForUserInput(userInput)
-        val viewItem = factory.viewItemForState(state)
-
-        view?.setHintInfo(viewItem.hintInfo)
-        view?.setFeeInfo(viewItem.feeInfo)
-        view?.setSendButtonEnabled(viewItem.sendButtonEnabled)
-    }
-
-    //
-    // IInteractorDelegate
-    //
-    override fun didFeeRateRetrieve() {
-        updateViewItem()
-    }
-
-    override fun didRateRetrieve(rate: Rate?) {
-        if (rate == null) {
-            if (userInput.inputType == SendModule.InputType.CURRENCY) {
-                userInput.amount = BigDecimal.ZERO
-            }
-            userInput.inputType = SendModule.InputType.COIN
-        } else if (interactor.defaultInputType == SendModule.InputType.CURRENCY && userInput.amount == BigDecimal.ZERO) {
-            userInput.inputType = interactor.defaultInputType
-        }
-
-        updateViewItem()
-    }
-
-    private fun updateViewItem() {
-        val state = interactor.stateForUserInput(userInput)
-        val viewItem = factory.viewItemForState(state)
-
-        view?.setDecimal(viewItem.decimal)
-        view?.setAmountInfo(viewItem.amountInfo)
-        view?.setSwitchButtonEnabled(viewItem.switchButtonEnabled)
-        view?.setHintInfo(viewItem.hintInfo)
-        view?.setFeeInfo(viewItem.feeInfo)
-    }
-
     override fun didSend() {
         view?.dismissWithSuccess()
     }
 
-    override fun didFailToSend(error: Throwable) {
+    override fun showError(error: Throwable) {
         val textResourceId = getErrorText(error)
         view?.showError(textResourceId)
     }
 
+    override fun onFeePriorityChange(feeRatePriority: FeeRatePriority) {
+        updateModules()
+    }
+
+    override fun onValidStatesFetchedFromModules(validStates: MutableList<Boolean>) {
+        val invalid = validStates.contains(false)
+        view?.setSendButtonEnabled(!invalid)
+    }
+
+    private fun showConfirmationDialog(params: Map<SendModule.AdapterFields, Any?>) {
+        try {
+            val inputType: SendModule.InputType = params[SendModule.AdapterFields.InputType] as SendModule.InputType
+            val address: String = (params[SendModule.AdapterFields.Address] as? String)
+                    ?: throw WrongParameters()
+            val coinValue: CoinValue = (params[SendModule.AdapterFields.CoinValue] as? CoinValue)
+                    ?: throw WrongParameters()
+            val currencyValue: CurrencyValue? = params[SendModule.AdapterFields.CurrencyValue] as? CurrencyValue
+            val feeCoinValue: CoinValue = (params[SendModule.AdapterFields.FeeCoinValue] as? CoinValue)
+                    ?: throw WrongParameters()
+            val feeCurrencyValue: CurrencyValue? = params[SendModule.AdapterFields.FeeCurrencyValue] as? CurrencyValue
+
+            val confirmationViewItem = confirmationFactory.confirmationViewItem(
+                    interactor.coin,
+                    inputType,
+                    address,
+                    coinValue,
+                    currencyValue,
+                    feeCoinValue,
+                    feeCurrencyValue
+            )
+
+            view?.showConfirmation(confirmationViewItem)
+        } catch (error: WrongParameters) {
+            //wrong parameters exception
+        }
+    }
+
+    private fun send(params: Map<SendModule.AdapterFields, Any?>) {
+        try {
+            val address: String = (params[SendModule.AdapterFields.Address] as? String)
+                    ?: throw WrongParameters()
+            val coinValue: CoinValue = (params[SendModule.AdapterFields.CoinValue] as? CoinValue)
+                    ?: throw WrongParameters()
+            val feePriority = params[SendModule.AdapterFields.FeeRatePriority] as? FeeRatePriority
+                    ?: FeeRatePriority.MEDIUM
+            interactor.send(address, coinValue.value, feePriority)
+        } catch (error: WrongParameters) {
+            //wrong parameters exception
+        }
+    }
+
+    private fun updateModules() {
+        view?.getParamsForAction(SendModule.ParamsAction.UpdateModules)
+    }
+
+    override fun onInputTypeUpdated(inputType: SendModule.InputType?) {
+        view?.onInputTypeUpdated(inputType)
+    }
+
+    private fun getAvailableBalance(params: Map<SendModule.AdapterFields, Any?>) {
+        var availableBalance = BigDecimal.ZERO
+        try {
+            availableBalance = interactor.getAvailableBalance(params)
+        } catch (e: WrongParameters) {
+            //wrong parameters exception
+        }
+
+        view?.onAvailableBalanceRetrieved(availableBalance)
+    }
+
     private fun getErrorText(error: Throwable): Int {
-        return when(error){
+        return when (error) {
+            is WrongParameters -> R.string.Error
             is UnknownHostException -> R.string.Hud_Text_NoInternet
             else -> R.string.Hud_Network_Issue
         }
-    }
-
-    //
-    // Private
-    //
-    private fun updatePasteButtonState() {
-        view?.setPasteButtonState(interactor.clipboardHasPrimaryClip)
-    }
-
-    private fun onAddressEnter(address: String) {
-        val paymentAddress = interactor.parsePaymentAddress(address)
-        paymentAddress.amount?.let {
-            userInput.amount = it
-        }
-
-        onAddressChange(paymentAddress.address)
-    }
-
-    private fun onAddressChange(address: String?) {
-        userInput.address = address
-
-        val state = interactor.stateForUserInput(userInput)
-        val viewItem = factory.viewItemForState(state)
-
-        view?.setAddressInfo(viewItem.addressInfo)
-        view?.setAmountInfo(viewItem.amountInfo)
-        view?.setFeeInfo(viewItem.feeInfo)
-        view?.setSendButtonEnabled(viewItem.sendButtonEnabled)
     }
 
 }

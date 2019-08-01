@@ -229,12 +229,13 @@ interface IAdapter {
 
     fun send(address: String, value: BigDecimal, feePriority: FeeRatePriority): Single<Unit>
 
-    fun availableBalance(address: String?, feePriority: FeeRatePriority): BigDecimal
-    fun fee(value: BigDecimal, address: String?, feePriority: FeeRatePriority): BigDecimal
+    fun availableBalance(params: Map<SendModule.AdapterFields, Any?>): BigDecimal
+    @Throws
+    fun fee(params: Map<SendModule.AdapterFields, Any?>): BigDecimal
     @Throws
     fun validate(address: String)
-
-    fun validate(amount: BigDecimal, address: String?, feePriority: FeeRatePriority): List<SendStateError>
+    @Throws
+    fun validate(params: Map<SendModule.AdapterFields, Any?>): List<SendStateError>
     fun parsePaymentAddress(address: String): PaymentRequestAddress
 
     val receiveAddress: String
@@ -353,8 +354,8 @@ interface IFeeRateProvider {
 }
 
 sealed class SendStateError {
-    object InsufficientAmount : SendStateError()
-    object InsufficientFeeBalance : SendStateError()
+    class InsufficientAmount(val balance: BigDecimal) : SendStateError()
+    class InsufficientFeeBalance(val fee: BigDecimal) : SendStateError()
 }
 
 enum class FeeRatePriority(val value: Int) {

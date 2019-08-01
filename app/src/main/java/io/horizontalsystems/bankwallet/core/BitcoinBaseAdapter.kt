@@ -1,9 +1,11 @@
 package io.horizontalsystems.bankwallet.core
 
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
+import io.horizontalsystems.bankwallet.entities.AddressError
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bitcoincore.AbstractKit
 import io.horizontalsystems.bitcoincore.managers.UnspentOutputSelectorError
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
@@ -75,7 +77,13 @@ abstract class BitcoinBaseAdapter(override val wallet: Wallet, open val kit: Abs
 
     override fun parsePaymentAddress(address: String): PaymentRequestAddress {
         val paymentData = addressParser.parse(address)
-        return PaymentRequestAddress(paymentData.address, paymentData.amount?.toBigDecimal())
+        var addressError: AddressError.InvalidPaymentAddress? = null
+        try {
+            validate(paymentData.address)
+        } catch (e: Exception) {
+            addressError = AddressError.InvalidPaymentAddress()
+        }
+        return PaymentRequestAddress(paymentData.address, paymentData.amount?.toBigDecimal(), error = addressError)
     }
 
     override fun send(address: String, value: BigDecimal, feePriority: FeeRatePriority): Single<Unit> {
@@ -89,10 +97,14 @@ abstract class BitcoinBaseAdapter(override val wallet: Wallet, open val kit: Abs
         }
     }
 
-    override fun fee(value: BigDecimal, address: String?, feePriority: FeeRatePriority): BigDecimal {
+    override fun fee(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
+        val amount = params[SendModule.AdapterFields.CoinAmount] as? BigDecimal ?: throw WrongParameters()
+        val feePriority = params[SendModule.AdapterFields.FeeRatePriority] as? FeeRatePriority ?: throw WrongParameters()
+        val address = params[SendModule.AdapterFields.Address] as? String
+
         return try {
-            val amount = (value * satoshisInBitcoin).toLong()
-            val fee = kit.fee(amount, address, true, feeRate = feeRate(feePriority))
+            val satoshiAmount = (amount * satoshisInBitcoin).toLong()
+            val fee = kit.fee(satoshiAmount, address, true, feeRate = feeRate(feePriority))
             BigDecimal.valueOf(fee).divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
         } catch (e: UnspentOutputSelectorError.InsufficientUnspentOutputs) {
             BigDecimal.valueOf(e.fee).divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
@@ -101,14 +113,19 @@ abstract class BitcoinBaseAdapter(override val wallet: Wallet, open val kit: Abs
         }
     }
 
-    override fun availableBalance(address: String?, feePriority: FeeRatePriority): BigDecimal {
-        return BigDecimal.ZERO.max(balance.subtract(fee(balance, address, feePriority)))
+    override fun availableBalance(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
+        val mutableParamsMap = params.toMutableMap()
+        mutableParamsMap[SendModule.AdapterFields.CoinAmount]= balance
+        return BigDecimal.ZERO.max(balance.subtract(fee(mutableParamsMap)))
     }
 
-    override fun validate(amount: BigDecimal, address: String?, feePriority: FeeRatePriority): List<SendStateError> {
+    override fun validate(params: Map<SendModule.AdapterFields, Any?>): List<SendStateError> {
+        val coinAmount = params[SendModule.AdapterFields.CoinAmount] as? BigDecimal ?: throw WrongParameters()
+
         val errors = mutableListOf<SendStateError>()
-        if (amount > availableBalance(address, feePriority)) {
-            errors.add(SendStateError.InsufficientAmount)
+        val availableBalance = availableBalance(params)
+        if (coinAmount > availableBalance) {
+            errors.add(SendStateError.InsufficientAmount(availableBalance))
         }
         return errors
     }

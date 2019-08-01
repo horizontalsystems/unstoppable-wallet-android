@@ -4,6 +4,7 @@ import android.content.Context
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.eoskit.EosKit
 import io.horizontalsystems.eoskit.models.Transaction
 import io.reactivex.Flowable
@@ -45,18 +46,21 @@ class EosAdapter(override val wallet: Wallet, eos: CoinType.Eos, kit: EosKit) : 
         return eosKit.send(token, address, amount.toBigDecimal(), "").map { Unit }
     }
 
-    override fun fee(value: BigDecimal, address: String?, feePriority: FeeRatePriority): BigDecimal {
-        return BigDecimal(0)
+    override fun fee(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
+        return BigDecimal.ZERO
     }
 
-    override fun availableBalance(address: String?, feePriority: FeeRatePriority): BigDecimal {
+    override fun availableBalance(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
         return balance
     }
 
-    override fun validate(amount: BigDecimal, address: String?, feePriority: FeeRatePriority): List<SendStateError> {
+    override fun validate(params: Map<SendModule.AdapterFields, Any?>): List<SendStateError> {
+        val amount = params[SendModule.AdapterFields.CoinAmount] as? BigDecimal ?: throw WrongParameters()
+
         val errors = mutableListOf<SendStateError>()
-        if (amount > availableBalance(address, feePriority)) {
-            errors.add(SendStateError.InsufficientAmount)
+        val availableBalance = availableBalance(params)
+        if (amount > availableBalance) {
+            errors.add(SendStateError.InsufficientAmount(availableBalance))
         }
         return errors
     }

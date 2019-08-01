@@ -8,7 +8,7 @@ import java.math.BigDecimal
 
 class StateViewItemFactoryTest {
 
-    private val factory = StateViewItemFactory()
+    private val factory = ConfirmationViewItemFactory()
     private val state = SendModule.State(8, SendModule.InputType.COIN)
     private val confirmation = SendModule.State(8, SendModule.InputType.COIN)
     private val coinValue = CoinValue("BTC", BigDecimal("123.45"))
@@ -129,7 +129,7 @@ class StateViewItemFactoryTest {
         confirmation.feeCoinValue = feeCoinValue
         confirmation.inputType = SendModule.InputType.COIN
 
-        val viewItem = factory.confirmationViewItemForState(confirmation)
+        val viewItem = factory.confirmationViewItem(confirmation)
 
         Assert.assertEquals(SendModule.AmountInfo.CoinValueInfo(coinValue), viewItem?.primaryAmountInfo)
     }
@@ -140,7 +140,7 @@ class StateViewItemFactoryTest {
         confirmation.currencyValue = currencyValue
         confirmation.inputType = SendModule.InputType.CURRENCY
 
-        val viewItem = factory.confirmationViewItemForState(confirmation)
+        val viewItem = factory.confirmationViewItem(confirmation)
 
         Assert.assertEquals(SendModule.AmountInfo.CurrencyValueInfo(currencyValue), viewItem?.primaryAmountInfo)
     }
@@ -151,7 +151,7 @@ class StateViewItemFactoryTest {
         confirmation.inputType = SendModule.InputType.COIN
         confirmation.currencyValue = currencyValue
 
-        val viewItem = factory.confirmationViewItemForState(confirmation)
+        val viewItem = factory.confirmationViewItem(confirmation)
 
         Assert.assertEquals(SendModule.AmountInfo.CurrencyValueInfo(currencyValue), viewItem?.secondaryAmountInfo)
     }
@@ -162,7 +162,7 @@ class StateViewItemFactoryTest {
         confirmation.inputType = SendModule.InputType.COIN
         confirmation.currencyValue = null
 
-        val viewItem = factory.confirmationViewItemForState(confirmation)
+        val viewItem = factory.confirmationViewItem(confirmation)
 
         Assert.assertEquals(null, viewItem?.secondaryAmountInfo)
     }
@@ -173,7 +173,7 @@ class StateViewItemFactoryTest {
         confirmation.inputType = SendModule.InputType.CURRENCY
         confirmation.currencyValue = currencyValue
 
-        val viewItem = factory.confirmationViewItemForState(confirmation)
+        val viewItem = factory.confirmationViewItem(confirmation)
 
         Assert.assertEquals(SendModule.AmountInfo.CoinValueInfo(coinValue), viewItem?.secondaryAmountInfo)
     }
@@ -182,7 +182,7 @@ class StateViewItemFactoryTest {
     fun testConfirmation_TotalInfo_erc20_WithoutCurrencyValue() {
         confirmation.feeCoinValue = CoinValue("ETH", BigDecimal("0.012"))
 
-        val viewItem = factory.confirmationViewItemForState(confirmation)
+        val viewItem = factory.confirmationViewItem(confirmation)
 
         Assert.assertEquals(null, viewItem?.totalInfo)
     }

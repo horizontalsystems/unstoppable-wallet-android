@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.extensions.AddressView
 import io.horizontalsystems.bankwallet.ui.extensions.ButtonWithProgressbarView
 import io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
+import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 
 class ConfirmationFragment : DialogFragment() {
 
@@ -36,6 +37,8 @@ class ConfirmationFragment : DialogFragment() {
 
         viewModel.sendConfirmationViewItemLiveData.observe(viewLifecycleOwner, Observer { viewItem ->
             viewItem?.let { sendConfirmationViewItem ->
+                view.findViewById<CoinIconView>(R.id.coinIcon)?.bind(sendConfirmationViewItem.coin)
+                view.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.Send_Title, sendConfirmationViewItem.coin.code)
                 view.findViewById<TextView>(R.id.primaryAmountText)?.text = sendConfirmationViewItem.primaryAmountInfo.getFormatted()
                 view.findViewById<TextView>(R.id.secondaryAmountText)?.text = sendConfirmationViewItem.secondaryAmountInfo?.getFormatted()
                 view.findViewById<AddressView>(R.id.addressView)?.bind(sendConfirmationViewItem.address)
@@ -49,20 +52,12 @@ class ConfirmationFragment : DialogFragment() {
             }
         })
 
-        viewModel.coinLiveData.observe(viewLifecycleOwner, Observer { coin ->
-            coin?.let { coin1 ->
-                context?.let {
-                    view.findViewById<CoinIconView>(R.id.coinIcon)?.bind(coin1)
-                }
-                view.findViewById<TextView>(R.id.txtTitle)?.text = getString(R.string.Send_Title, coin1.code)
-            }
-        })
-
         viewModel.dismissConfirmationLiveEvent.observe(viewLifecycleOwner, Observer {
             dismiss()
         })
 
-        viewModel.errorLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.errorLiveData.observe(viewLifecycleOwner, Observer {error ->
+            error?.let { HudHelper.showErrorMessage(it) }
             view.findViewById<ButtonWithProgressbarView>(R.id.buttonConfirm)?.let { buttonConfirm ->
                 buttonConfirm.bind(R.string.Backup_Button_Confirm)
             }

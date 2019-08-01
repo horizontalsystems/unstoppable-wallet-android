@@ -55,7 +55,7 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener, BalanceSortDialogFrag
 
         viewModel.openSendDialog.observe(viewLifecycleOwner, Observer { coinCode ->
             coinCode?.let {
-                (activity as? MainActivity)?.openSendDialog(it)
+                (activity as? MainActivity)?.openSend(it)
             }
         })
 
