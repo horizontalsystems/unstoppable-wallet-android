@@ -24,6 +24,11 @@ class SendAmountPresenter(
     private var error: SendStateError.InsufficientAmount? = null
     private var inputType = SendModule.InputType.COIN
 
+    override val validState: Boolean
+        get() {
+            return (coinAmount ?: BigDecimal.ZERO) > BigDecimal.ZERO && error == null
+        }
+
     override fun onViewDidLoad() {
         interactor.retrieveRate()
         view?.addTextChangeListener()

@@ -19,7 +19,12 @@ class SendButtonView : ConstraintLayout {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     fun bind(onSendClick: (() -> (Unit))? = null) {
-        btnSend?.setOnClickListener { onSendClick?.invoke() }
+        btnSend.isEnabled = false
+        btnSend.setOnClickListener { onSendClick?.invoke() }
+    }
+
+    fun updateState(enabled: Boolean) {
+        btnSend.isEnabled = enabled
     }
 
 }

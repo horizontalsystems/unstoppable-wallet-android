@@ -68,6 +68,8 @@ class SendPresenter(
         if (amountValidationSuccess) {
             view?.onAmountValidationSuccess()
         }
+
+        view?.getValidStatesFromModules()
     }
 
     override fun onFeeUpdated(fee: BigDecimal) {
@@ -97,6 +99,11 @@ class SendPresenter(
 
     override fun onFeePriorityChange(feeRatePriority: FeeRatePriority) {
         updateModules()
+    }
+
+    override fun onValidStatesFetchedFromModules(validStates: MutableList<Boolean>) {
+        val invalid = validStates.contains(false)
+        view?.setSendButtonEnabled(!invalid)
     }
 
     private fun showConfirmationDialog(params: Map<SendModule.AdapterFields, Any?>) {

@@ -12,6 +12,8 @@ import kotlin.math.min
 object SendAmountModule {
 
     interface IViewDelegate {
+        val validState: Boolean
+
         fun onViewDidLoad()
         fun onMaxClick()
         fun onSwitchClick()

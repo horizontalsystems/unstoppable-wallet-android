@@ -25,6 +25,7 @@ class SendViewModel : ViewModel(), SendModule.IView {
     val feeUpdatedLiveData = MutableLiveData<BigDecimal>()
     val mainInputTypeUpdatedLiveData = MutableLiveData<SendModule.InputType>()
     val sendButtonEnabledLiveData = MutableLiveData<Boolean>()
+    val fetchStatesFromModulesLiveEvent = SingleLiveEvent<Unit>()
 
 
     private var moduleInited = false
@@ -91,5 +92,9 @@ class SendViewModel : ViewModel(), SendModule.IView {
 
     override fun onInputTypeUpdated(inputType: SendModule.InputType?) {
         mainInputTypeUpdatedLiveData.value = inputType
+    }
+
+    override fun getValidStatesFromModules() {
+        fetchStatesFromModulesLiveEvent.call()
     }
 }

@@ -25,6 +25,7 @@ object SendModule {
         fun onFeeUpdated(fee: BigDecimal)
         fun onInputTypeUpdated(inputType: InputType?)
         fun onInsufficientFeeBalance(coinCode: String, fee: BigDecimal)
+        fun getValidStatesFromModules()
     }
 
     interface IViewDelegate {
@@ -39,6 +40,7 @@ object SendModule {
         fun onParamsFetchedForAction(params: Map<AdapterFields, Any?>, paramsAction: ParamsAction)
         fun onFeePriorityChange(feeRatePriority: FeeRatePriority)
         fun onInputTypeUpdated(inputType: InputType?)
+        fun onValidStatesFetchedFromModules(validStates: MutableList<Boolean>)
     }
 
     interface IInteractor {

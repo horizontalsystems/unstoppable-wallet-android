@@ -16,6 +16,8 @@ object SendAddressModule {
     }
 
     interface IViewDelegate {
+        val validState: Boolean
+
         fun onViewDidLoad()
         fun onAddressScan(address: String)
         fun onPasteButtonClick()

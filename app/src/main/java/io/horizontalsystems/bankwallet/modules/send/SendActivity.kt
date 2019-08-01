@@ -26,6 +26,7 @@ class SendActivity : BaseActivity() {
     private var sendAddressViewModel: SendAddressViewModel? = null
     private var sendFeeViewModel: SendFeeViewModel? = null
     private lateinit var mainViewModel: SendViewModel
+    private  var sendButtonView: SendButtonView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,6 +97,14 @@ class SendActivity : BaseActivity() {
         mainViewModel.showConfirmationLiveEvent.observe(this, Observer {
             ConfirmationFragment.show(this)
         })
+
+        mainViewModel.fetchStatesFromModulesLiveEvent.observe(this, Observer {
+            fetchStatesFromModules()
+        })
+
+        mainViewModel.sendButtonEnabledLiveData.observe(this, Observer { enabled ->
+            sendButtonView?.updateState(enabled)
+        })
     }
 
     private fun fetchParamsFromModules(paramsAction: SendModule.ParamsAction) {
@@ -109,6 +118,20 @@ class SendActivity : BaseActivity() {
         params[SendModule.AdapterFields.FeeCurrencyValue] = sendFeeViewModel?.delegate?.getFeeCurrencyValue()
 
         mainViewModel.delegate.onParamsFetchedForAction(params, paramsAction)
+    }
+
+    private fun fetchStatesFromModules() {
+        val states = mutableListOf<Boolean>()
+        sendAmountViewModel?.delegate?.let{
+            states.add(it.validState)
+        }
+        sendAddressViewModel?.delegate?.let{
+            states.add(it.validState)
+        }
+        sendFeeViewModel?.delegate?.let{
+            states.add(it.validState)
+        }
+        mainViewModel.delegate.onValidStatesFetchedFromModules(states)
     }
 
     private fun addInputItems(coinCode: String) {
@@ -141,8 +164,8 @@ class SendActivity : BaseActivity() {
         sendLinearLayout.addView(sendFeeView)
 
         //add send button
-        val sendButtonView = SendButtonView(this)
-        sendButtonView.bind { mainViewModel.delegate.onSendClicked() }
+        sendButtonView = SendButtonView(this)
+        sendButtonView?.bind { mainViewModel.delegate.onSendClicked() }
         sendLinearLayout.addView(sendButtonView)
     }
 

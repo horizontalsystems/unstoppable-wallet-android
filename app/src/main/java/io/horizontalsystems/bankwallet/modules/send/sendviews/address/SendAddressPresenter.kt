@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.sendviews.address
 
+import io.horizontalsystems.bankwallet.entities.AddressError
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
 
 class SendAddressPresenter(private val interactor: SendAddressModule.IInteractor)
@@ -7,6 +8,12 @@ class SendAddressPresenter(private val interactor: SendAddressModule.IInteractor
 
     var view: SendAddressViewModel? = null
     private var address: String? = null
+    private var invalidAddressError: AddressError.InvalidPaymentAddress? = null
+
+    override val validState: Boolean
+        get() {
+            return !address.isNullOrBlank() && invalidAddressError == null
+        }
 
     override fun onViewDidLoad() {
         updatePasteButtonState()
@@ -44,7 +51,9 @@ class SendAddressPresenter(private val interactor: SendAddressModule.IInteractor
         view?.parseAddressInMainViewModel(address)
     }
 
-    private fun onAddressChange(address: String?, error: Exception? = null) {
+    private fun onAddressChange(address: String?, error: AddressError.InvalidPaymentAddress? = null) {
+        this.invalidAddressError = error
+        this.address = address
         view?.setAddress(address)
         view?.setAddressError(error)
         //update send button state

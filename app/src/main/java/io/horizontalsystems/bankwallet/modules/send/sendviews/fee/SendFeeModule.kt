@@ -19,6 +19,8 @@ object SendFeeModule {
     }
 
     interface IViewDelegate {
+        val validState: Boolean
+
         fun onViewDidLoad()
         fun onFeeSliderChange(progress: Int)
         fun onFeeUpdated(fee: BigDecimal?)

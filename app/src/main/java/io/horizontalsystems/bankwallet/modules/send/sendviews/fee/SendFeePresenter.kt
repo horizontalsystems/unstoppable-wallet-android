@@ -21,6 +21,12 @@ class SendFeePresenter(
     private var fee: BigDecimal = BigDecimal.ZERO
     private var inputType = SendModule.InputType.COIN
     private var feePriority: FeeRatePriority = FeeRatePriority.MEDIUM
+    private var insufficientFeeBalance: BigDecimal? = null
+
+    override val validState: Boolean
+        get() {
+            return insufficientFeeBalance == null
+        }
 
     override fun onViewDidLoad() {
         interactor.getRate(feeCoinCode, currency.code)
@@ -60,6 +66,7 @@ class SendFeePresenter(
     }
 
     override fun onInsufficientFeeBalanceError(coinCode: String, fee: BigDecimal) {
+        insufficientFeeBalance = fee
         view?.setInsufficientFeeBalanceError(coinCode, fee)
     }
 
