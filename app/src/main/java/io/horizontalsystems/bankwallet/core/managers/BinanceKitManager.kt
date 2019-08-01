@@ -2,31 +2,30 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
-import io.horizontalsystems.bankwallet.core.IEosKitManager
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.eoskit.EosKit
+import io.horizontalsystems.binancechainkit.BinanceChainKit
 
-class EosKitManager(appConfig: IAppConfigProvider) : IEosKitManager {
-    private var kit: EosKit? = null
+class BinanceKitManager(appConfig: IAppConfigProvider) {
+    private var kit: BinanceChainKit? = null
     private var useCount = 0
     private val testMode = appConfig.testMode
 
-    override val eosKit: EosKit?
+    val binanceKit: BinanceChainKit?
         get() = kit
 
-    override fun eosKit(wallet: Wallet): EosKit {
+    fun binanceKit(wallet: Wallet): BinanceChainKit {
         val account = wallet.account
-        if (account.type is AccountType.Eos) {
+        if (account.type is AccountType.Mnemonic) {
             useCount += 1
 
             kit?.let { return it }
             val networkType = if (testMode)
-                EosKit.NetworkType.TestNet else
-                EosKit.NetworkType.MainNet
+                BinanceChainKit.NetworkType.TestNet else
+                BinanceChainKit.NetworkType.MainNet
 
-            kit = EosKit.instance(App.instance, account.type.account, account.type.activePrivateKey, networkType, account.id)
+            kit = BinanceChainKit.instance(App.instance, account.type.words, account.id, networkType)
             kit?.refresh()
 
             return kit!!
@@ -35,7 +34,7 @@ class EosKitManager(appConfig: IAppConfigProvider) : IEosKitManager {
         throw UnsupportedAccountException()
     }
 
-    override fun unlink() {
+    fun unlink() {
         useCount -= 1
 
         if (useCount < 1) {

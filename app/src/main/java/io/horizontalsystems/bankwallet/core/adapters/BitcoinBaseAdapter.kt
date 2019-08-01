@@ -1,10 +1,8 @@
-package io.horizontalsystems.bankwallet.core
+package io.horizontalsystems.bankwallet.core.adapters
 
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
-import io.horizontalsystems.bankwallet.entities.AddressError
-import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
-import io.horizontalsystems.bankwallet.entities.TransactionAddress
-import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bitcoincore.AbstractKit
 import io.horizontalsystems.bitcoincore.managers.UnspentOutputSelectorError
@@ -98,8 +96,10 @@ abstract class BitcoinBaseAdapter(override val wallet: Wallet, open val kit: Abs
     }
 
     override fun fee(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
-        val amount = params[SendModule.AdapterFields.CoinAmount] as? BigDecimal ?: throw WrongParameters()
-        val feePriority = params[SendModule.AdapterFields.FeeRatePriority] as? FeeRatePriority ?: throw WrongParameters()
+        val amount = params[SendModule.AdapterFields.CoinAmount] as? BigDecimal
+                ?: throw WrongParameters()
+        val feePriority = params[SendModule.AdapterFields.FeeRatePriority] as? FeeRatePriority
+                ?: throw WrongParameters()
         val address = params[SendModule.AdapterFields.Address] as? String
 
         return try {
@@ -115,12 +115,13 @@ abstract class BitcoinBaseAdapter(override val wallet: Wallet, open val kit: Abs
 
     override fun availableBalance(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
         val mutableParamsMap = params.toMutableMap()
-        mutableParamsMap[SendModule.AdapterFields.CoinAmount]= balance
+        mutableParamsMap[SendModule.AdapterFields.CoinAmount] = balance
         return BigDecimal.ZERO.max(balance.subtract(fee(mutableParamsMap)))
     }
 
     override fun validate(params: Map<SendModule.AdapterFields, Any?>): List<SendStateError> {
-        val coinAmount = params[SendModule.AdapterFields.CoinAmount] as? BigDecimal ?: throw WrongParameters()
+        val coinAmount = params[SendModule.AdapterFields.CoinAmount] as? BigDecimal
+                ?: throw WrongParameters()
 
         val errors = mutableListOf<SendStateError>()
         val availableBalance = availableBalance(params)

@@ -4,6 +4,7 @@ import android.os.Handler
 import android.os.HandlerThread
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
@@ -12,7 +13,8 @@ class AdapterManager(
         walletManager: IWalletManager,
         private val adapterFactory: AdapterFactory,
         private val ethereumKitManager: IEthereumKitManager,
-        private val esoKitManager: IEosKitManager)
+        private val eosKitManager: IEosKitManager,
+        private val binanceKitManager: BinanceKitManager)
     : IAdapterManager, HandlerThread("A") {
 
     private val handler: Handler
@@ -40,7 +42,8 @@ class AdapterManager(
         }
 
         ethereumKitManager.ethereumKit?.refresh()
-        esoKitManager.eosKit?.refresh()
+        eosKitManager.eosKit?.refresh()
+        binanceKitManager.binanceKit?.refresh()
     }
 
     override fun initAdapters(wallets: List<Wallet>) {

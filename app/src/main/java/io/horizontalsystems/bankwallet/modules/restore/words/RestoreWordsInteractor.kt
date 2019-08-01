@@ -10,10 +10,9 @@ class RestoreWordsInteractor(private val wordsManager: WordsManager) : RestoreWo
     override fun validate(words: List<String>) {
         try {
             wordsManager.validate(words)
-            delegate?.didValidate(words)
+            delegate?.didValidate()
         } catch (e: Mnemonic.MnemonicException) {
             delegate?.didFailToValidate(e)
         }
     }
-
 }

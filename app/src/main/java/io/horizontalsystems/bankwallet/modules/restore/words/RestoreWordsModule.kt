@@ -22,12 +22,13 @@ object RestoreWordsModule {
     }
 
     interface InteractorDelegate {
+        fun didValidate()
         fun didFailToValidate(exception: Exception)
-        fun didValidate(words: List<String>)
     }
 
     interface Router {
-        fun startSyncModeModule(words: List<String>)
+        fun notifyRestored()
+        fun startSyncModeModule()
     }
 
     fun startForResult(context: AppCompatActivity, wordsCount: Int, requestCode: Int) {
@@ -40,7 +41,8 @@ object RestoreWordsModule {
 
     fun init(view: RestoreWordsViewModel, router: Router, wordsCount: Int) {
         val interactor = RestoreWordsInteractor(App.wordsManager)
-        val presenter = RestoreWordsPresenter(wordsCount, interactor, router)
+        val showSyncMode = wordsCount == 12
+        val presenter = RestoreWordsPresenter(wordsCount, showSyncMode, interactor, router)
 
         view.delegate = presenter
         presenter.view = view

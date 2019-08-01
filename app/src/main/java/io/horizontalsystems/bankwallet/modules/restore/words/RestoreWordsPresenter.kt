@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.R
 
 class RestoreWordsPresenter(
         wordsCount: Int,
+        private val showSyncMode: Boolean,
         private val interactor: RestoreWordsModule.Interactor,
         private val router: RestoreWordsModule.Router)
     : RestoreWordsModule.ViewDelegate, RestoreWordsModule.InteractorDelegate {
@@ -24,11 +25,15 @@ class RestoreWordsPresenter(
 
     //  Interactor Delegate
 
-    override fun didFailToValidate(exception: Exception) {
-        view?.showError(R.string.Restore_ValidationFailed)
+    override fun didValidate() {
+        if (showSyncMode) {
+            router.startSyncModeModule()
+        } else {
+            router.notifyRestored()
+        }
     }
 
-    override fun didValidate(words: List<String>) {
-        router.startSyncModeModule(words)
+    override fun didFailToValidate(exception: Exception) {
+        view?.showError(R.string.Restore_ValidationFailed)
     }
 }

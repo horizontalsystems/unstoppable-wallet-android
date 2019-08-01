@@ -1,26 +1,27 @@
-package io.horizontalsystems.bankwallet.core
+package io.horizontalsystems.bankwallet.core.adapters
 
 import android.content.Context
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
+import io.horizontalsystems.bitcoincash.BitcoinCashKit
+import io.horizontalsystems.bitcoincash.BitcoinCashKit.NetworkType
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.models.BlockInfo
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
-import io.horizontalsystems.bitcoincore.transactions.scripts.ScriptType
-import io.horizontalsystems.bitcoinkit.BitcoinKit
-import io.horizontalsystems.bitcoinkit.BitcoinKit.NetworkType
 import io.reactivex.Single
 import java.math.BigDecimal
 import java.util.*
 
-class BitcoinAdapter(wallet: Wallet, override val kit: BitcoinKit, addressParser: AddressParser, private val feeRateProvider: IFeeRateProvider)
-    : BitcoinBaseAdapter(wallet, kit, addressParser), BitcoinKit.Listener {
+class BitcoinCashAdapter(wallet: Wallet, override val kit: BitcoinCashKit, addressParser: AddressParser, private val feeRateProvider: IFeeRateProvider)
+    : BitcoinBaseAdapter(wallet, kit, addressParser), BitcoinCashKit.Listener {
 
     constructor(wallet: Wallet, testMode: Boolean, feeRateProvider: IFeeRateProvider) :
-            this(wallet, createKit(wallet, testMode), AddressParser("bitcoin", true), feeRateProvider)
+            this(wallet, createKit(wallet, testMode), AddressParser("bitcoincash", false), feeRateProvider)
 
     init {
         kit.listener = this
@@ -33,14 +34,11 @@ class BitcoinAdapter(wallet: Wallet, override val kit: BitcoinKit, addressParser
     override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
 
     override fun feeRate(feePriority: FeeRatePriority): Int {
-        return feeRateProvider.bitcoinFeeRate(feePriority).toInt()
+        return feeRateProvider.bitcoinCashFeeRate(feePriority).toInt()
     }
 
-    override val receiveAddress: String
-        get() = kit.receiveAddress(ScriptType.P2WPKHSH)
-
     //
-    // BitcoinKit Listener
+    // BitcoinCashKit Listener
     //
 
     override fun onBalanceUpdate(balance: Long) {
@@ -108,18 +106,17 @@ class BitcoinAdapter(wallet: Wallet, override val kit: BitcoinKit, addressParser
         private fun getNetworkType(testMode: Boolean) =
                 if (testMode) NetworkType.TestNet else NetworkType.MainNet
 
-
-        private fun createKit(wallet: Wallet, testMode: Boolean): BitcoinKit {
+        private fun createKit(wallet: Wallet, testMode: Boolean): BitcoinCashKit {
             val account = wallet.account
             if (account.type is AccountType.Mnemonic) {
-                return BitcoinKit(App.instance, account.type.words, account.id, syncMode = SyncMode.fromSyncMode(account.defaultSyncMode), networkType = getNetworkType(testMode))
+                return BitcoinCashKit(App.instance, account.type.words, account.id, syncMode = SyncMode.fromSyncMode(account.defaultSyncMode), networkType = getNetworkType(testMode))
             }
 
             throw UnsupportedAccountException()
         }
 
         fun clear(context: Context, walletId: String, testMode: Boolean) {
-            BitcoinKit.clear(context, getNetworkType(testMode), walletId)
+            BitcoinCashKit.clear(context, getNetworkType(testMode), walletId)
         }
     }
 }

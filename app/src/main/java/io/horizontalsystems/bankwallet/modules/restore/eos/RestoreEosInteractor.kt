@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.restore.eos
 
-import io.horizontalsystems.bankwallet.core.EosAdapter
+import io.horizontalsystems.bankwallet.core.adapters.EosAdapter
 import io.horizontalsystems.bankwallet.core.IClipboardManager
 
 class RestoreEosInteractor(private val clipboardManager: IClipboardManager)

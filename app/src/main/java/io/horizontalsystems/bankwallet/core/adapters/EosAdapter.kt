@@ -1,9 +1,8 @@
-package io.horizontalsystems.bankwallet.core
+package io.horizontalsystems.bankwallet.core.adapters
 
 import android.content.Context
-import io.horizontalsystems.bankwallet.entities.CoinType
-import io.horizontalsystems.bankwallet.entities.TransactionAddress
-import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.eoskit.EosKit
 import io.horizontalsystems.eoskit.models.Transaction
@@ -13,9 +12,36 @@ import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EosAdapter(override val wallet: Wallet, eos: CoinType.Eos, kit: EosKit) : EosBaseAdapter(eos, kit) {
+class EosAdapter(override val wallet: Wallet, eos: CoinType.Eos, private val eosKit: EosKit) : IAdapter {
+
+    private val token = eosKit.register(eos.token, eos.symbol)
+    private val irreversibleThreshold = 330
 
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+
+    override val decimal: Int = 4
+
+    override val feeCoinCode: String? = eos.symbol
+
+    override val confirmationsThreshold: Int = irreversibleThreshold
+
+    override fun start() {
+        // started via EosKitManager
+    }
+
+    override fun stop() {
+        // stopped via EosKitManager
+    }
+
+    override fun refresh() {
+        // refreshed via EosKitManager
+    }
+
+    override val lastBlockHeight: Int?
+        get() = eosKit.irreversibleBlockHeight?.let { it + confirmationsThreshold }
+
+    override val lastBlockHeightUpdatedFlowable: Flowable<Unit>
+        get() = eosKit.irreversibleBlockFlowable.map { Unit }
 
     override val state: AdapterState
         get() = when (token.syncState) {
@@ -42,8 +68,8 @@ class EosAdapter(override val wallet: Wallet, eos: CoinType.Eos, kit: EosKit) : 
     override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
         get() = token.transactionsFlowable.map { it.map { tx -> transactionRecord(tx) } }
 
-    override fun sendSingle(address: String, amount: String): Single<Unit> {
-        return eosKit.send(token, address, amount.toBigDecimal(), "").map { Unit }
+    override fun send(address: String, value: BigDecimal, feePriority: FeeRatePriority): Single<Unit> {
+        return eosKit.send(token, address, value, "").map { Unit } // todo: add memo
     }
 
     override fun fee(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
@@ -54,16 +80,35 @@ class EosAdapter(override val wallet: Wallet, eos: CoinType.Eos, kit: EosKit) : 
         return balance
     }
 
+    override fun validate(address: String) {
+    }
+
     override fun validate(params: Map<SendModule.AdapterFields, Any?>): List<SendStateError> {
-        val amount = params[SendModule.AdapterFields.CoinAmount] as? BigDecimal ?: throw WrongParameters()
+        val amount = params[SendModule.AdapterFields.CoinAmount] as? BigDecimal
+                ?: throw WrongParameters()
 
         val errors = mutableListOf<SendStateError>()
         val availableBalance = availableBalance(params)
-        if (amount > availableBalance) {
+        if (availableBalance < amount) {
             errors.add(SendStateError.InsufficientAmount(availableBalance))
         }
+
         return errors
     }
+
+    override fun parsePaymentAddress(address: String): PaymentRequestAddress {
+        var addressError: AddressError.InvalidPaymentAddress? = null
+        try {
+            validate(address)
+        } catch (e: Exception) {
+            addressError = AddressError.InvalidPaymentAddress()
+        }
+        return PaymentRequestAddress(address, null, error = addressError)
+    }
+
+    override val receiveAddress: String get() = eosKit.account
+
+    override val debugInfo: String = ""
 
     private fun transactionRecord(transaction: Transaction): TransactionRecord {
         val fromAddressHex = transaction.from

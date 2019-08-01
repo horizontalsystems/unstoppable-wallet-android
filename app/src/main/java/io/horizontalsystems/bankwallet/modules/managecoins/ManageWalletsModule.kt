@@ -3,10 +3,10 @@ package io.horizontalsystems.bankwallet.modules.managecoins
 import android.content.Context
 import android.content.Intent
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.Wallet
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.SyncMode
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.managecoins.views.ManageWalletsActivity
 
 object ManageWalletsModule {

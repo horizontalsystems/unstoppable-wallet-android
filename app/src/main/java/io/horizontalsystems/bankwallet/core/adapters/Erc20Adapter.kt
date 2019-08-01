@@ -1,9 +1,14 @@
-package io.horizontalsystems.bankwallet.core
+package io.horizontalsystems.bankwallet.core.adapters
 
 import android.content.Context
+import io.horizontalsystems.bankwallet.core.AdapterState
+import io.horizontalsystems.bankwallet.core.FeeRatePriority
+import io.horizontalsystems.bankwallet.core.IFeeRateProvider
+import io.horizontalsystems.bankwallet.core.SendStateError
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.erc20kit.core.Erc20Kit.SyncState
@@ -54,7 +59,8 @@ class Erc20Adapter(context: Context, wallet: Wallet, kit: EthereumKit, decimal: 
     }
 
     override fun fee(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
-        val feePriority = params[SendModule.AdapterFields.FeeRatePriority] as? FeeRatePriority ?: FeeRatePriority.MEDIUM
+        val feePriority = params[SendModule.AdapterFields.FeeRatePriority] as? FeeRatePriority
+                ?: FeeRatePriority.MEDIUM
         return erc20Kit.fee(feeRateProvider.ethereumGasPrice(feePriority)).movePointLeft(18)
     }
 

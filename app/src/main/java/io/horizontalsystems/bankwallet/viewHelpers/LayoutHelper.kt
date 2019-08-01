@@ -49,7 +49,7 @@ object LayoutHelper {
     }
 
     fun getCoinDrawableResource(coinCode: String): Int {
-        val coinResourceName = "coin_${coinCode.toLowerCase()}"
+        val coinResourceName = "coin_${coinCode.replace("-", "_").toLowerCase()}"
         return App.instance.resources.getIdentifier(coinResourceName, "drawable", App.instance.packageName)
     }
 
