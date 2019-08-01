@@ -14,6 +14,14 @@ class PoolRepo {
     private var activePoolCoinCodes = listOf<Coin>()
 
     fun activatePools(coinCodes: List<Coin>) {
+
+        // remove pools for unused coins
+        pools.map { it.key }.forEach { poolCoin ->
+            if (!coinCodes.contains(poolCoin)) {
+                pools.remove(poolCoin)
+            }
+        }
+
         coinCodes.forEach { coinCode ->
             if (!pools.containsKey(coinCode)) {
                 pools[coinCode] = Pool(Pool.State(coinCode))
