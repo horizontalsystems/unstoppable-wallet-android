@@ -9,15 +9,11 @@ import io.horizontalsystems.eoskit.models.Transaction
 import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
-import java.text.SimpleDateFormat
-import java.util.*
 
 class EosAdapter(override val wallet: Wallet, eos: CoinType.Eos, private val eosKit: EosKit) : IAdapter {
 
     private val token = eosKit.register(eos.token, eos.symbol)
     private val irreversibleThreshold = 330
-
-    private val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
 
     override val decimal: Int = 4
 
@@ -133,7 +129,7 @@ class EosAdapter(override val wallet: Wallet, eos: CoinType.Eos, private val eos
                 interTransactionIndex = transaction.actionSequence,
                 blockHeight = transaction.blockNumber.toLong(),
                 amount = amount,
-                timestamp = dateFormat.parse(transaction.date).time / 1000,
+                timestamp = transaction.date / 1000,
                 from = listOf(from),
                 to = listOf(to)
         )
