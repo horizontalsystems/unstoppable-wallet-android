@@ -12,7 +12,7 @@ class RateSyncer(private val rateManager: RateManager,
                  private val adapterManager: IAdapterManager,
                  private val currencyManager: ICurrencyManager,
                  private val networkAvailabilityManager: NetworkAvailabilityManager,
-                 timerSignal: Observable<Unit> = Observable.interval(0L, 3L, TimeUnit.MINUTES).map { Unit }) {
+                 timerSignal: Observable<Unit> = Observable.interval(0L, 5L, TimeUnit.MINUTES).map { Unit }) {
 
     private val disposables = CompositeDisposable()
 
