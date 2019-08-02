@@ -12,6 +12,8 @@ import io.horizontalsystems.bankwallet.modules.send.sendviews.address.SendAddres
 import io.horizontalsystems.bankwallet.modules.send.sendviews.address.SendAddressViewModel
 import io.horizontalsystems.bankwallet.modules.send.sendviews.amount.SendAmountView
 import io.horizontalsystems.bankwallet.modules.send.sendviews.amount.SendAmountViewModel
+import io.horizontalsystems.bankwallet.modules.send.sendviews.confirmation.SendConfirmationActivity
+import io.horizontalsystems.bankwallet.modules.send.sendviews.confirmation.SendConfirmationModule
 import io.horizontalsystems.bankwallet.modules.send.sendviews.fee.SendFeeView
 import io.horizontalsystems.bankwallet.modules.send.sendviews.fee.SendFeeViewModel
 import io.horizontalsystems.bankwallet.modules.send.sendviews.sendbutton.SendButtonView
@@ -23,10 +25,10 @@ import kotlinx.android.synthetic.main.activity_send.*
 
 class SendActivity : BaseActivity() {
 
+    private lateinit var mainViewModel: SendViewModel
     private var sendAmountViewModel: SendAmountViewModel? = null
     private var sendAddressViewModel: SendAddressViewModel? = null
     private var sendFeeViewModel: SendFeeViewModel? = null
-    private lateinit var mainViewModel: SendViewModel
     private var sendButtonView: SendButtonView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,9 +58,14 @@ class SendActivity : BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        val scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        scanResult?.contents?.let {
-            sendAddressViewModel?.delegate?.onAddressScan(it)
+        if (requestCode == SendModule.SHOW_CONFIRMATION) {
+            val memo = data?.getStringExtra(SendModule.MEMO_KEY)
+            mainViewModel.delegate.sendWithMemo(memo)
+        } else {
+            val scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+            scanResult?.contents?.let {
+                sendAddressViewModel?.delegate?.onAddressScan(it)
+            }
         }
     }
 
@@ -95,8 +102,11 @@ class SendActivity : BaseActivity() {
             sendFeeViewModel?.delegate?.onInputTypeUpdated(inputType)
         })
 
-        mainViewModel.showConfirmationLiveEvent.observe(this, Observer {
-            ConfirmationFragment.show(this)
+        mainViewModel.showSendConfirmationLiveData.observe(this, Observer { sendConfirmationInfo ->
+            val intent = Intent(this, SendConfirmationActivity::class.java).apply {
+                putExtra(SendConfirmationModule.ConfirmationInfoKey, sendConfirmationInfo)
+            }
+            startActivityForResult(intent, SendModule.SHOW_CONFIRMATION)
         })
 
         mainViewModel.fetchStatesFromModulesLiveEvent.observe(this, Observer {

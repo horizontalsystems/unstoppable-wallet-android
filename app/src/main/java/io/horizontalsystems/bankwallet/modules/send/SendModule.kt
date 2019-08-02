@@ -7,13 +7,14 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
+import io.horizontalsystems.bankwallet.modules.send.sendviews.confirmation.SendConfirmationInfo
 import java.math.BigDecimal
 
 object SendModule {
 
     interface IView {
         fun setSendButtonEnabled(sendButtonEnabled: Boolean)
-        fun showConfirmation(viewItem: SendConfirmationViewItem)
+        fun showConfirmation(viewItem: SendConfirmationInfo)
         fun showError(error: Int)
         fun dismissWithSuccess()
 
@@ -41,6 +42,7 @@ object SendModule {
         fun onFeePriorityChange(feeRatePriority: FeeRatePriority)
         fun onInputTypeUpdated(inputType: InputType?)
         fun onValidStatesFetchedFromModules(validStates: MutableList<Boolean>)
+        fun sendWithMemo(memo: String?)
     }
 
     interface IInteractor {
@@ -69,6 +71,9 @@ object SendModule {
         presenter.view = view
         interactor.delegate = presenter
     }
+
+    const val SHOW_CONFIRMATION = 1
+    const val MEMO_KEY = "memo_intent_key"
 
     enum class InputType {
         COIN, CURRENCY

@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.ui.extensions
+package io.horizontalsystems.bankwallet.modules.send.sendviews.confirmation.subviews
 
 import android.content.Context
 import android.util.AttributeSet
@@ -7,7 +7,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
 import kotlinx.android.synthetic.main.view_button_with_progressbar.view.*
 
-class ButtonWithProgressbarView : ConstraintLayout {
+class ConfirmationSendButtonView : ConstraintLayout {
 
     init {
         inflate(context, R.layout.view_button_with_progressbar, this)

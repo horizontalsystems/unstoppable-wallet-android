@@ -106,6 +106,10 @@ class SendPresenter(
         view?.setSendButtonEnabled(!invalid)
     }
 
+    override fun sendWithMemo(memo: String?) {
+        //todo send
+    }
+
     private fun showConfirmationDialog(params: Map<SendModule.AdapterFields, Any?>) {
         try {
             val inputType: SendModule.InputType = params[SendModule.AdapterFields.InputType] as SendModule.InputType
@@ -119,7 +123,6 @@ class SendPresenter(
             val feeCurrencyValue: CurrencyValue? = params[SendModule.AdapterFields.FeeCurrencyValue] as? CurrencyValue
 
             val confirmationViewItem = confirmationFactory.confirmationViewItem(
-                    interactor.coin,
                     inputType,
                     address,
                     coinValue,

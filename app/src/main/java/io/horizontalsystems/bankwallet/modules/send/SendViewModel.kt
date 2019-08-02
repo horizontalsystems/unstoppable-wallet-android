@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.core.SendStateError
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
+import io.horizontalsystems.bankwallet.modules.send.sendviews.confirmation.SendConfirmationInfo
 import java.math.BigDecimal
 
 class SendViewModel : ViewModel(), SendModule.IView {
@@ -14,8 +15,7 @@ class SendViewModel : ViewModel(), SendModule.IView {
     val dismissConfirmationLiveEvent = SingleLiveEvent<Unit>()
     val dismissWithSuccessLiveEvent = SingleLiveEvent<Unit>()
     val errorLiveData = MutableLiveData<Int?>()
-    val sendConfirmationViewItemLiveData = MutableLiveData<SendModule.SendConfirmationViewItem>()
-    val showConfirmationLiveEvent = SingleLiveEvent<Unit>()
+    val showSendConfirmationLiveData = SingleLiveEvent<SendConfirmationInfo>()
     val availableBalanceRetrievedLiveData = MutableLiveData<BigDecimal>()
     val onAddressParsedLiveData = MutableLiveData<PaymentRequestAddress>()
     val getParamsFromModulesLiveEvent = SingleLiveEvent<SendModule.ParamsAction>()
@@ -28,23 +28,16 @@ class SendViewModel : ViewModel(), SendModule.IView {
     val fetchStatesFromModulesLiveEvent = SingleLiveEvent<Unit>()
 
 
-    private var moduleInited = false
-
     fun init(coinCode: String) {
-        errorLiveData.value = null
-        sendConfirmationViewItemLiveData.value = null
-
         SendModule.init(this, coinCode)
-        moduleInited = true
     }
 
     override fun setSendButtonEnabled(sendButtonEnabled: Boolean) {
         sendButtonEnabledLiveData.value = sendButtonEnabled
     }
 
-    override fun showConfirmation(viewItem: SendModule.SendConfirmationViewItem) {
-        sendConfirmationViewItemLiveData.value = viewItem
-        showConfirmationLiveEvent.call()
+    override fun showConfirmation(viewItem: SendConfirmationInfo) {
+        showSendConfirmationLiveData.value = viewItem
     }
 
     override fun showError(error: Int) {
@@ -57,9 +50,7 @@ class SendViewModel : ViewModel(), SendModule.IView {
     }
 
     override fun onCleared() {
-        if (moduleInited) {
-            delegate.onClear()
-        }
+        delegate.onClear()
     }
 
     override fun onAvailableBalanceRetrieved(availableBalance: BigDecimal) {
