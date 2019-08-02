@@ -292,7 +292,7 @@
 
     <string name="OSPin_Confirm_Title">Phone PIN</string>
     <string name="OSPin_Confirm_Desciption">This app requires that phone has the passcode (screen lock) enabled. \n\n You may enable it in Android settings.</string>
-    <string name="OSPin_Prompt_Desciption">This app requires your phone\'s PIN in order to keep sensitive data from your wallet in Android\'s secure storage and not in the app itself.</string>
+    <string name="OSPin_Prompt_Desciption">This app requires your phone\'s PIN in order to keep sensitive data from your wallet in Android\'s secure storage and not in the app itself.\n\nPlease note that when you disabled the PIN on the OS level the security measures in safe storage of your phonе made the previously stored data invalid. You will need to Restore your wallet keys to get back to your wallet.</string>
 
     <!--Set Pin-->
 
