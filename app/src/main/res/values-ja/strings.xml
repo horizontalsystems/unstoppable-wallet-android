@@ -65,15 +65,20 @@
     <string name="Balance_Sort_Az">A-Z</string>
     <string name="Balance_Sort_Default">Default</string>
     <!--Send-->
-    <string name="Send_Title1">送る</string>
     <string name="Send_Title">%s を送る</string>
-    <string name="Send_Hint_PaymentReference">お支払い参照番号</string>
     <string name="Send_Hint_Address">住所</string>
     <string name="Send_Hint_Amount">量</string>
+    <string name="Send_Fee">Fee:</string>
     <string name="Send_Button_Paste">貼付け</string>
-    <string name="Send_Button_More">その他</string>
-    <string name="Send_Button_Send">送る</string>
+    <string name="Send_Button_Next">Next</string>
     <string name="Send_Button_Max">最大</string>
+    <string name="Send_Confirmation_Title">Confirm</string>
+    <string name="Send_Confirmation_To">To: </string>
+    <string name="Send_Confirmation_HintMemo">Memo</string>
+    <string name="Send_Confirmation_Eos_HintAccount">Account</string>
+    <string name="Send_Confirmation_Total">Total:</string>
+    <string name="Send_Confirmation_EstimateTime">Estimate Time:</string>
+    <string name="Send_Confirmation_Send_Button">Send</string>
     <string name="Send_ScanQrCode">QR コードを読み取る</string>
     <string name="Send_Success">\u2713 Sent</string>
     <string name="Send_Error_InvalidAddress">住所確認できませんでした。もう一回やり直してください。</string>
