@@ -27,7 +27,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                 .mapNotNull { record ->
                     try {
                         val accountType = when (record.type) {
-                            MNEMONIC -> AccountType.Mnemonic(record.words!!.list, record.derivation!!, record.salt!!.value)
+                            MNEMONIC -> AccountType.Mnemonic(record.words!!.list, record.derivation!!, record.salt?.value)
                             PRIVATE_KEY -> AccountType.PrivateKey(record.key!!.value.hexToByteArray())
                             HD_MASTER_KEY -> AccountType.HDMasterKey(record.key!!.value.hexToByteArray(), record.derivation!!)
                             EOS -> AccountType.Eos(record.eosAccount!!, record.key!!.value)
@@ -96,5 +96,4 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
     override fun clear() {
         dao.deleteAll()
     }
-
 }
