@@ -43,7 +43,7 @@ class RestoreWordsActivity : BaseActivity(), RestoreWordsAdapter.Listener {
 
         viewModel.notifyRestored.observe(this, Observer {
             setResult(RESULT_OK, Intent().apply {
-                putExtra("accountType", AccountType.Mnemonic(viewModel.delegate.words, AccountType.Derivation.bip44, ""))
+                putExtra("accountType", AccountType.Mnemonic(viewModel.delegate.words, AccountType.Derivation.bip44, salt = null))
             })
             finish()
         })
@@ -62,7 +62,7 @@ class RestoreWordsActivity : BaseActivity(), RestoreWordsAdapter.Listener {
             val syncMode = data.getParcelableExtra<SyncMode>("syncMode")
 
             val intent = Intent().apply {
-                putExtra("accountType", AccountType.Mnemonic(viewModel.delegate.words, AccountType.Derivation.bip44, ""))
+                putExtra("accountType", AccountType.Mnemonic(viewModel.delegate.words, AccountType.Derivation.bip44, salt = null))
                 putParcelableExtra("syncMode", syncMode)
             }
 

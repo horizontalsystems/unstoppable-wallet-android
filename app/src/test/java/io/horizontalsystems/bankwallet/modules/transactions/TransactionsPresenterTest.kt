@@ -193,8 +193,7 @@ class TransactionsPresenterTest {
     fun onUpdateLastBlockHeight() {
         val lastBlockHeight = 123123
 
-        whenever(metadataDataSource.getConfirmationThreshold(coin1)).thenReturn(null)
-
+        whenever(metadataDataSource.getLastBlockHeight(coin1)).thenReturn(null)
         presenter.onUpdateLastBlockHeight(coin1, lastBlockHeight)
 
         verify(metadataDataSource).setLastBlockHeight(lastBlockHeight, coin1)

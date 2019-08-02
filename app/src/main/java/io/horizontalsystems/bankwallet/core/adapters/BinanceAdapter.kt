@@ -80,6 +80,7 @@ class BinanceAdapter(override val wallet: Wallet, private val binanceKit: Binanc
     }
 
     override fun validate(address: String) {
+        binanceKit.validateAddress(address)
     }
 
     override fun validate(params: Map<SendModule.AdapterFields, Any?>): List<SendStateError> {

@@ -88,12 +88,6 @@ class UnlockPinPresenterTest {
     }
 
     @Test
-    fun onBiometricUnlock() {
-        presenter.onBiometricUnlock()
-        verify(interactor).onUnlock()
-    }
-
-    @Test
     fun onUnlock_onAppStart() {
         presenter = UnlockPinPresenter(interactor, router, false)
         presenter.view = view

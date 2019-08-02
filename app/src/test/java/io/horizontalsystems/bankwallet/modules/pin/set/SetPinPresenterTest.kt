@@ -47,12 +47,6 @@ class SetPinPresenterTest {
     @Test
     fun didSavePin() {
         presenter.didSavePin()
-        verify(interactor).startAdapters()
-    }
-
-    @Test
-    fun didStartedAdapters() {
-        presenter.didStartedAdapters()
-        verify(router).navigateToMain()
+        verify(router).dismissModuleWithSuccess()
     }
 }

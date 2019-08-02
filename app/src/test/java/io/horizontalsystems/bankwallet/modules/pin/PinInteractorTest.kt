@@ -1,9 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.pin
 
 import com.nhaarman.mockito_kotlin.*
-import io.horizontalsystems.bankwallet.core.IKeyStoreSafeExecute
 import io.horizontalsystems.bankwallet.core.IPinManager
-import io.horizontalsystems.bankwallet.core.managers.AuthManager
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -15,13 +13,14 @@ class PinInteractorTest {
 
     private val delegate = Mockito.mock(PinModule.IPinInteractorDelegate::class.java)
     private val pinManager = Mockito.mock(IPinManager::class.java)
-    private val authManager = Mockito.mock(AuthManager::class.java)
-    private val keystoreSafeExecute = Mockito.mock(IKeyStoreSafeExecute::class.java)
-    private var interactor = PinInteractor(pinManager, authManager, keystoreSafeExecute)
+    private var interactor = PinInteractor(pinManager)
 
-    @Captor private val actionRunnableCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
-    @Captor private val successRunnableCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
-    @Captor private val failureRunnableCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
+    @Captor
+    private val actionRunnableCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
+    @Captor
+    private val successRunnableCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
+    @Captor
+    private val failureRunnableCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
 
     @Before
     fun setup() {
@@ -53,36 +52,8 @@ class PinInteractorTest {
         val pin = "0000"
         interactor.save(pin)
 
-        verify(keystoreSafeExecute).safeExecute(actionRunnableCaptor.capture(), successRunnableCaptor.capture(), failureRunnableCaptor.capture())
-
-        val actionRunnable = actionRunnableCaptor.firstValue
-        val successRunnable = successRunnableCaptor.firstValue
-
-        actionRunnable.run()
-        successRunnable.run()
-
         verify(pinManager).store(pin)
         verify(delegate).didSavePin()
-    }
-
-    @Test
-    fun save_failToSave() {
-        val pin = "0000"
-        interactor.save(pin)
-
-        verify(keystoreSafeExecute).safeExecute(
-                actionRunnableCaptor.capture(),
-                successRunnableCaptor.capture(),
-                failureRunnableCaptor.capture())
-
-        val actionRunnable = actionRunnableCaptor.firstValue
-        val failureRunnable = failureRunnableCaptor.firstValue
-
-        actionRunnable.run()
-        failureRunnable.run()
-
-        verify(pinManager).store(pin)
-        verify(delegate).didFailToSavePin()
     }
 
     @Test
@@ -103,25 +74,5 @@ class PinInteractorTest {
 
         val isValid = interactor.unlock(pin)
         Assert.assertFalse(isValid)
-    }
-
-    @Test
-    fun startAdapters() {
-        interactor.startAdapters()
-
-        verify(keystoreSafeExecute).safeExecute(
-                actionRunnableCaptor.capture(),
-                successRunnableCaptor.capture(),
-                failureRunnableCaptor.capture()
-        )
-
-        val actionRunnable = actionRunnableCaptor.firstValue
-        val successRunnable = successRunnableCaptor.firstValue
-
-        actionRunnable.run()
-        successRunnable.run()
-
-        verify(authManager).safeLoad()
-        verify(delegate).didStartedAdapters()
     }
 }

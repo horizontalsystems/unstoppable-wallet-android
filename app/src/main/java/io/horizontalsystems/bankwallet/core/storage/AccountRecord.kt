@@ -4,7 +4,6 @@ import androidx.room.Entity
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
 
-
 class SecretString(val value: String)
 
 class SecretList(val list: List<String>)

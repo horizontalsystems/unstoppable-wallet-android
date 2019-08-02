@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.settings.security
 
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
-import io.horizontalsystems.bankwallet.entities.BiometryType
 import org.junit.Before
 import org.junit.Test
 
@@ -17,8 +17,6 @@ class SecuritySettingsPresenterTest {
     @Before
     fun setUp() {
         interactor = mock {
-            on { getBiometricUnlockOn() } doReturn true
-            on { biometryType } doReturn BiometryType.FINGER
         }
 
         presenter = SecuritySettingsPresenter(router, interactor)
@@ -30,48 +28,18 @@ class SecuritySettingsPresenterTest {
     fun testSetBiometricUnlockOnOnLoad() {
         presenter.viewDidLoad()
 
-        verify(view).setBiometricUnlockOn(true)
+        verify(view).setBackedUp(any())
     }
 
     @Test
     fun testSetBiometricUnlockOffOnLoad() {
-        interactor = mock {
-            on { getBiometricUnlockOn() } doReturn false
-        }
+        interactor = mock { on { isPinEnabled } doReturn false }
 
         presenter = SecuritySettingsPresenter(router, interactor)
         presenter.view = view
-
         presenter.viewDidLoad()
 
-        verify(view).setBiometricUnlockOn(false)
-    }
-
-    @Test
-    fun testSetBiometricTypeFingerOnLoad() {
-        presenter.viewDidLoad()
-
-        verify(view).setBiometryType(BiometryType.FINGER)
-    }
-
-    @Test
-    fun testSetBiometricTypeNoneOnLoad() {
-        interactor = mock {
-            on { biometryType } doReturn BiometryType.NONE
-        }
-
-        presenter = SecuritySettingsPresenter(router, interactor)
-        presenter.view = view
-
-        presenter.viewDidLoad()
-
-        verify(view).setBiometryType(BiometryType.NONE)
-    }
-
-    @Test
-    fun didSwitchBiometricUnlock() {
-        presenter.didSwitchBiometricUnlock(true)
-        verify(interactor).setBiometricUnlockOn(true)
+        verify(view).setPinEnabled(false)
     }
 
     @Test
