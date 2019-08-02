@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
+package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers
 
 import java.math.BigDecimal
 import java.math.BigInteger

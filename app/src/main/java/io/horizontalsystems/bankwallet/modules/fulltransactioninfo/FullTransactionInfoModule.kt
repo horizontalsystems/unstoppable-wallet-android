@@ -6,6 +6,10 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.FullTransactionItem
 import io.horizontalsystems.bankwallet.entities.FullTransactionRecord
 import io.horizontalsystems.bankwallet.entities.FullTransactionSection
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers.BinanceResponse
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers.BitcoinResponse
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers.EthereumResponse
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.views.FullTransactionInfoActivity
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import io.reactivex.Flowable
 

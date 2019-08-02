@@ -1,9 +1,11 @@
-package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
+package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.views
 
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers.EthereumResponse
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import java.math.BigDecimal
 import java.math.BigInteger

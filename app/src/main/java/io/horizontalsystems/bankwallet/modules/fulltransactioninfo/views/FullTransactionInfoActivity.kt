@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
+package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.views
 
 import android.content.Context
 import android.content.Intent
@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.FullTransactionItem
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoViewModel
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider.DataProviderSettingsModule
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper

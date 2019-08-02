@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers
 
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.adapters.BinanceAdapter
-import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.BinanceResponse
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import java.math.BigDecimal
 

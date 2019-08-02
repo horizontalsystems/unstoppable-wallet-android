@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
+package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.views
 
 import android.content.Context
 import android.os.Bundle
@@ -24,7 +24,6 @@ class FullTransactionInfoErrorFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_full_transaction_info_error, container, false)
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
