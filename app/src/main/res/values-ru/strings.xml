@@ -65,15 +65,20 @@
     <string name="Balance_Sort_Az">А-Я</string>
     <string name="Balance_Sort_Default">По умолчанию</string>
     <!--Send-->
-    <string name="Send_Title1">Отправить</string>
     <string name="Send_Title">Отправить %s</string>
-    <string name="Send_Hint_PaymentReference">Ссылка на платеж</string>
     <string name="Send_Hint_Address">Адрес</string>
     <string name="Send_Hint_Amount">Сумма</string>
+    <string name="Send_Fee">Fee:</string>
     <string name="Send_Button_Paste">Вставить</string>
-    <string name="Send_Button_More">Ещё</string>
-    <string name="Send_Button_Send">Отправить</string>
+    <string name="Send_Button_Next">Next</string>
     <string name="Send_Button_Max">Макс.</string>
+    <string name="Send_Confirmation_Title">Confirm</string>
+    <string name="Send_Confirmation_To">To: </string>
+    <string name="Send_Confirmation_HintMemo">Memo</string>
+    <string name="Send_Confirmation_Eos_HintAccount">Account</string>
+    <string name="Send_Confirmation_Total">Total:</string>
+    <string name="Send_Confirmation_EstimateTime">Estimate Time:</string>
+    <string name="Send_Confirmation_Send_Button">Send</string>
     <string name="Send_ScanQrCode">Сканировать QR-код</string>
     <string name="Send_Success">\u2713 Отправлено</string>
     <string name="Send_Error_InvalidAddress">Адрес недействителен. Попробуйте еще раз!</string>
