@@ -65,15 +65,20 @@
     <string name="Balance_Sort_Az">A-Z</string>
     <string name="Balance_Sort_Default">Default</string>
     <!--Send-->
-    <string name="Send_Title1">Gönder</string>
     <string name="Send_Title">%s gönder</string>
-    <string name="Send_Hint_PaymentReference">Ödeme Referansı</string>
     <string name="Send_Hint_Address">Adres</string>
     <string name="Send_Hint_Amount">Tutar</string>
+    <string name="Send_Fee">Fee:</string>
     <string name="Send_Button_Paste">Yapıştır</string>
-    <string name="Send_Button_More">Daha fazlası</string>
-    <string name="Send_Button_Send">Gönder</string>
+    <string name="Send_Button_Next">Next</string>
     <string name="Send_Button_Max">Azami</string>
+    <string name="Send_Confirmation_Title">Confirm</string>
+    <string name="Send_Confirmation_To">To: </string>
+    <string name="Send_Confirmation_HintMemo">Memo</string>
+    <string name="Send_Confirmation_Eos_HintAccount">Account</string>
+    <string name="Send_Confirmation_Total">Total:</string>
+    <string name="Send_Confirmation_EstimateTime">Estimate Time:</string>
+    <string name="Send_Confirmation_Send_Button">Send</string>
     <string name="Send_ScanQrCode">QR Kod Okuma</string>
     <string name="Send_Success">\u2713 Gönderilen</string>
     <string name="Send_Error_InvalidAddress">Geçersiz adres. Lütfen kontrol edip tekrar deneyin!</string>
