@@ -4,10 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import io.horizontalsystems.bankwallet.core.utils.EthInputParser
-import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.BitcoinResponse
-import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.EthereumResponse
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
-import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionResponse
 import java.math.BigInteger
 import java.text.SimpleDateFormat
 import java.util.*
@@ -142,7 +139,7 @@ class BlockchairETHResponse(@SerializedName("data") val data: Map<String, Data>)
         override val nonce get() = transaction.nonce.toInt().toString()
         override val gasLimit get() = transaction.gasLimit.toString()
         override val gasPrice get() = (transaction.gasPrice / gweiRate).toString()
-        override val gasUsed get () = transaction.gasUsed.toString()
+        override val gasUsed get() = transaction.gasUsed.toString()
         override val confirmations: Int? get() = null
         override val contractAddress: String?
             get() {

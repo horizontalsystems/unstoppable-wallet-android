@@ -71,11 +71,12 @@ class BinanceAdapter(override val wallet: Wallet, private val binanceKit: Binanc
     }
 
     override fun availableBalance(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
-        return asset.balance
+        val available = asset.balance - transferFee
+        return if (available < BigDecimal.ZERO) BigDecimal.ZERO else available
     }
 
     override fun fee(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
-        return BigDecimal.ZERO
+        return transferFee
     }
 
     override fun validate(address: String) {
@@ -115,9 +116,13 @@ class BinanceAdapter(override val wallet: Wallet, private val binanceKit: Binanc
                 transaction.to == binanceKit.receiveAddress()
         )
 
-        var amount: BigDecimal = transaction.amount.toBigDecimal()
+        var amount = BigDecimal.ZERO
         if (from.mine) {
-            amount = -amount
+            amount -= transaction.amount.toBigDecimal()
+            amount -= transaction.fee.toBigDecimal()
+        }
+        if (to.mine) {
+            amount += transaction.amount.toBigDecimal()
         }
 
         return TransactionRecord(
@@ -130,5 +135,9 @@ class BinanceAdapter(override val wallet: Wallet, private val binanceKit: Binanc
                 from = listOf(from),
                 to = listOf(to)
         )
+    }
+
+    companion object {
+        val transferFee = BigDecimal(0.000375)
     }
 }

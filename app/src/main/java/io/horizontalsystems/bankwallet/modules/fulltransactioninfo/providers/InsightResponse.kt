@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers
 
 import com.google.gson.annotations.SerializedName
-import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.BitcoinResponse
 import java.util.*
 
 class InsightResponse(
@@ -12,8 +11,8 @@ class InsightResponse(
         @SerializedName("confirmations") override val confirmations: String?,
         @SerializedName("time") val time: Long,
         @SerializedName("vin") val vin: ArrayList<Vin>,
-        @SerializedName("vout") val vout: ArrayList<Vout>
-) : BitcoinResponse() {
+        @SerializedName("vout") val vout: ArrayList<Vout>)
+    : BitcoinResponse() {
 
     override val date: Date get() = Date(time * 1000)
     override val inputs: ArrayList<Input> get() = vin as ArrayList<Input>

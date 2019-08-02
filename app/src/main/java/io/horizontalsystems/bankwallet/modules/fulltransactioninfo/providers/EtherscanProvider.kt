@@ -4,15 +4,14 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import io.horizontalsystems.bankwallet.core.utils.EthInputParser
-import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.EthereumResponse
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import java.math.BigInteger
 import java.util.*
 
 class EtherscanEthereumProvider(val testMode: Boolean) : FullTransactionInfoModule.EthereumForksProvider {
 
-    private val url = if (testMode)  "https://ropsten.etherscan.io/tx/" else "https://etherscan.io/tx/"
-    private val apiUrl = if (testMode)  "https://api-ropsten.etherscan.io/api?module=proxy&action=eth_getTransactionByHash&txhash=" else "https://api.etherscan.io/api?module=proxy&action=eth_getTransactionByHash&txhash="
+    private val url = if (testMode) "https://ropsten.etherscan.io/tx/" else "https://etherscan.io/tx/"
+    private val apiUrl = if (testMode) "https://api-ropsten.etherscan.io/api?module=proxy&action=eth_getTransactionByHash&txhash=" else "https://api.etherscan.io/api?module=proxy&action=eth_getTransactionByHash&txhash="
 
     override val name: String = "Etherscan.io"
 
@@ -41,7 +40,7 @@ class EtherscanResponse(
     override val gasUsed: String? get() = null
     override val fee: String? = null
     override val size: Int? get() = null
-    override val contractAddress: String?= if (input != "0x") receiver else null
+    override val contractAddress: String? = if (input != "0x") receiver else null
 
     override val to: String
         get() {

@@ -4,8 +4,6 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import io.horizontalsystems.bankwallet.core.utils.EthInputParser
-import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.BitcoinResponse
-import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.EthereumResponse
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import java.math.BigInteger
 import java.util.*
@@ -44,8 +42,8 @@ class HorsysDashProvider(val testMode: Boolean) : FullTransactionInfoModule.Bitc
 
 class HorsysEthereumProvider(val testMode: Boolean) : FullTransactionInfoModule.EthereumForksProvider {
 
-    private val url = if (testMode)  "http://eth-ropsten.horizontalsystems.xyz/tx/" else "https://eth.horizontalsystems.xyz/tx/"
-    private val apiUrl = if (testMode)  "http://eth-ropsten.horizontalsystems.xyz/api?module=transaction&action=gettxinfo&txhash=" else "https://eth.horizontalsystems.xyz/api?module=transaction&action=gettxinfo&txhash="
+    private val url = if (testMode) "http://eth-ropsten.horizontalsystems.xyz/tx/" else "https://eth.horizontalsystems.xyz/tx/"
+    private val apiUrl = if (testMode) "http://eth-ropsten.horizontalsystems.xyz/api?module=transaction&action=gettxinfo&txhash=" else "https://eth.horizontalsystems.xyz/api?module=transaction&action=gettxinfo&txhash="
 
     override val name: String = "HorizontalSystems.xyz"
 
@@ -104,7 +102,7 @@ class HorsysETHResponse(
 
     override val contractAddress: String? get() = if (input != "0x") receiver else null
     override val size: Int? get() = null
-    override val date: Date? get() = time?.let{ Date(it.toLong() * 1000) }
+    override val date: Date? get() = time?.let { Date(it.toLong() * 1000) }
     override val confirmations: Int? get() = confirmationsString?.toIntOrNull()
     override val height: String get() = Integer.parseInt(blockNumber, 16).toString()
     override val gasPrice: String? get() = null

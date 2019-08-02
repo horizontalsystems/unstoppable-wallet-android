@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
+package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.views
 
 import android.content.Context
 import android.util.AttributeSet

@@ -6,6 +6,10 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.FullTransactionItem
 import io.horizontalsystems.bankwallet.entities.FullTransactionRecord
 import io.horizontalsystems.bankwallet.entities.FullTransactionSection
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers.BinanceResponse
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers.BitcoinResponse
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers.EthereumResponse
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.views.FullTransactionInfoActivity
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import io.reactivex.Flowable
 
@@ -72,18 +76,16 @@ object FullTransactionInfoModule {
         fun retrieveTransactionInfo(transactionHash: String): Flowable<FullTransactionRecord>
     }
 
-    interface ProvidersMap {
-        fun bitcoin(name: String): BitcoinForksProvider
-        fun bitcoinCash(name: String): BitcoinForksProvider
-        fun ethereum(name: String): EthereumForksProvider
-    }
-
     interface BitcoinForksProvider : Provider {
         fun convert(json: JsonObject): BitcoinResponse
     }
 
     interface EthereumForksProvider : Provider {
         fun convert(json: JsonObject): EthereumResponse
+    }
+
+    interface BinanceProvider : Provider {
+        fun convert(json: JsonObject): BinanceResponse
     }
 
     interface Adapter {

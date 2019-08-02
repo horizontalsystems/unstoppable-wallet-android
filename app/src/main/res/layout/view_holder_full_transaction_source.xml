@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoItemView
+    <io.horizontalsystems.bankwallet.modules.fulltransactioninfo.views.FullTransactionInfoItemView
         android:id="@+id/transactionSource"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

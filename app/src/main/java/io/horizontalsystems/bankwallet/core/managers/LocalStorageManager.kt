@@ -22,6 +22,7 @@ class LocalStorageManager : ILocalStorage {
     private val BASE_BITCOIN_PROVIDER = "base_bitcoin_provider"
     private val BASE_ETHEREUM_PROVIDER = "base_ethereum_provider"
     private val BASE_DASH_PROVIDER = "base_dash_provider"
+    private val BASE_BINANCE_PROVIDER = "base_binance_provider"
     private val SYNC_MODE = "sync_mode"
     private val SORT_TYPE = "balance_sort_type"
 
@@ -134,6 +135,12 @@ class LocalStorageManager : ILocalStorage {
         get() = App.preferences.getString(BASE_DASH_PROVIDER, null)
         set(value) {
             App.preferences.edit().putString(BASE_DASH_PROVIDER, value).apply()
+        }
+
+    override var baseBinanceProvider: String?
+        get() = App.preferences.getString(BASE_BINANCE_PROVIDER, null)
+        set(value) {
+            App.preferences.edit().putString(BASE_BINANCE_PROVIDER, value).apply()
         }
 
     override var syncMode: SyncMode

@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
-import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.BitcoinResponse
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import java.util.*
 

@@ -4,6 +4,9 @@ import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.ITransactionDataProviderManager
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.views.FullTransactionBinanceAdapter
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.views.FullTransactionBitcoinAdapter
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.views.FullTransactionEthereumAdapter
 
 class FullTransactionInfoFactory(private val networkManager: INetworkManager, private val dataProviderManager: ITransactionDataProviderManager)
     : FullTransactionInfoModule.ProviderFactory {
@@ -35,6 +38,13 @@ class FullTransactionInfoFactory(private val networkManager: INetworkManager, pr
 
                 provider = providerDASH
                 adapter = FullTransactionBitcoinAdapter(providerDASH, coin, "duff")
+            }
+            // BNB
+            coin.type is CoinType.Binance -> {
+                val providerBinance = dataProviderManager.binance(baseProvider.name)
+
+                provider = providerBinance
+                adapter = FullTransactionBinanceAdapter(providerBinance, coin)
             }
             // ETH, ETHt
             else -> {
