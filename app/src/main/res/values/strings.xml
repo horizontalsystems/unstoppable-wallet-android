@@ -85,17 +85,23 @@
 
     <!--Send-->
 
-    <string name="Send_Title1">Send</string>
     <string name="Send_Title">Send %s</string>
 
-    <string name="Send_Hint_PaymentReference">Payment Reference</string>
     <string name="Send_Hint_Address">Address</string>
     <string name="Send_Hint_Amount">Amount</string>
 
+    <string name="Send_Fee">Fee:</string>
     <string name="Send_Button_Paste">Paste</string>
-    <string name="Send_Button_More">More</string>
-    <string name="Send_Button_Send">Send</string>
+    <string name="Send_Button_Next">Next</string>
     <string name="Send_Button_Max">Max</string>
+
+    <string name="Send_Confirmation_Title">Confirm</string>
+    <string name="Send_Confirmation_To">To: </string>
+    <string name="Send_Confirmation_HintMemo">Memo</string>
+    <string name="Send_Confirmation_Eos_HintAccount">Account</string>
+    <string name="Send_Confirmation_Total">Total:</string>
+    <string name="Send_Confirmation_EstimateTime">Estimate Time:</string>
+    <string name="Send_Confirmation_Send_Button">Send</string>
 
     <string name="Send_ScanQrCode">Scan QR Code</string>
     <string name="Send_Success">\u2713 Sent</string>
