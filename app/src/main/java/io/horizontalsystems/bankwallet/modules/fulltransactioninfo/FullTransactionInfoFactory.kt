@@ -36,6 +36,13 @@ class FullTransactionInfoFactory(private val networkManager: INetworkManager, pr
                 provider = providerDASH
                 adapter = FullTransactionBitcoinAdapter(providerDASH, coin, "duff")
             }
+            // BNB
+            coin.type is CoinType.Binance -> {
+                val providerBinance = dataProviderManager.binance(baseProvider.name)
+
+                provider = providerBinance
+                adapter = FullTransactionBinanceAdapter(providerBinance, coin)
+            }
             // ETH, ETHt
             else -> {
                 val providerETH = dataProviderManager.ethereum(baseProvider.name)

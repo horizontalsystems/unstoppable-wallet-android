@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
 
+import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.*
 
@@ -53,4 +54,15 @@ abstract class EthereumResponse : FullTransactionResponse {
         const val ethRate: Double = 1_000_000_000_000_000_000.0
         const val gweiRate: Double = 1_000_000_000.0
     }
+}
+
+abstract class BinanceResponse : FullTransactionResponse {
+    abstract val hash: String
+    abstract val blockHeight: String
+
+    abstract var fee: BigDecimal
+    abstract var value: BigDecimal
+
+    abstract var from: String
+    abstract var to: String
 }

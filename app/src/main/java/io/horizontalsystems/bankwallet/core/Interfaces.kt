@@ -43,6 +43,7 @@ interface ILocalStorage {
     var baseBitcoinProvider: String?
     var baseEthereumProvider: String?
     var baseDashProvider: String?
+    var baseBinanceProvider: String?
     var syncMode: SyncMode
     var sortType: BalanceSortType
 
@@ -169,6 +170,7 @@ interface ITransactionDataProviderManager {
     fun dash(name: String): FullTransactionInfoModule.BitcoinForksProvider
     fun bitcoinCash(name: String): FullTransactionInfoModule.BitcoinForksProvider
     fun ethereum(name: String): FullTransactionInfoModule.EthereumForksProvider
+    fun binance(name: String): FullTransactionInfoModule.BinanceProvider
 }
 
 interface IWordsManager {

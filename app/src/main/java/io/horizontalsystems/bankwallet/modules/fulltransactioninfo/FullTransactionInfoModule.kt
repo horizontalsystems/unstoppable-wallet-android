@@ -72,18 +72,16 @@ object FullTransactionInfoModule {
         fun retrieveTransactionInfo(transactionHash: String): Flowable<FullTransactionRecord>
     }
 
-    interface ProvidersMap {
-        fun bitcoin(name: String): BitcoinForksProvider
-        fun bitcoinCash(name: String): BitcoinForksProvider
-        fun ethereum(name: String): EthereumForksProvider
-    }
-
     interface BitcoinForksProvider : Provider {
         fun convert(json: JsonObject): BitcoinResponse
     }
 
     interface EthereumForksProvider : Provider {
         fun convert(json: JsonObject): EthereumResponse
+    }
+
+    interface BinanceProvider : Provider {
+        fun convert(json: JsonObject): BinanceResponse
     }
 
     interface Adapter {
