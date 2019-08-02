@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers
 
 import com.google.gson.JsonObject
+import io.horizontalsystems.bankwallet.core.adapters.BinanceAdapter
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.BinanceResponse
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import java.math.BigDecimal
@@ -26,7 +27,7 @@ class BinanceChainResponse(json: JsonObject) : BinanceResponse() {
     override val hash: String = json["hash"].asString
     override val blockHeight: String = json["height"].asString
 
-    override var fee: BigDecimal = BigDecimal(0.000375)
+    override var fee: BigDecimal = BinanceAdapter.transferFee
     override var value: BigDecimal = BigDecimal.ZERO
     override var from: String = ""
     override var to: String = ""
