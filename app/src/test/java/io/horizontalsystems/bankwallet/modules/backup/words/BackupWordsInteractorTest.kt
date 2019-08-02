@@ -7,7 +7,7 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 object BackupWordsInteractorTest : Spek({
-    val words = listOf("word1", "word2", "word3")
+    val words = arrayOf("word1", "word2", "word3")
     val random = mock<IRandomProvider>()
 
     val delegate by memoized {

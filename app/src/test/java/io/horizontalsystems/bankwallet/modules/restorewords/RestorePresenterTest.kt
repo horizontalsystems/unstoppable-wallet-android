@@ -19,14 +19,20 @@ class RestorePresenterTest {
 
     @Before
     fun setUp() {
-        presenter = RestoreWordsPresenter(interactor, router)
+        presenter = RestoreWordsPresenter(12, true, interactor, router)
         presenter.view = view
     }
 
     @Test
     fun restoreDidClick() {
-        val words = listOf("yahoo", "google", "facebook")
-        presenter.restoreDidClick(words)
+        val words = mutableListOf<String>()
+        repeat(12) {
+            val word = "word-$it"
+            words.add(it, word)
+            presenter.onChange(it, word)
+        }
+
+        presenter.onDone()
         verify(interactor).validate(words)
     }
 
@@ -35,14 +41,14 @@ class RestorePresenterTest {
         val exception = Mnemonic.MnemonicException("")
         val errorId = R.string.Restore_ValidationFailed
         presenter.didFailToValidate(exception)
+
         verify(view).showError(errorId)
     }
 
     @Test
     fun didValidate() {
-        val words = listOf("yahoo", "google", "facebook")
-        presenter.didValidate(words)
-        verify(router).startSyncModeModule(words)
+        presenter.didValidate()
+        verify(router).startSyncModeModule()
     }
 
 }

@@ -26,7 +26,8 @@ class RestoreInteractorTest {
     fun validate() {
         val words = listOf("yahoo", "google", "facebook")
         interactor.validate(words)
-        verify(delegate).didValidate(words)
+
+        verify(delegate).didValidate()
     }
 
     @Test
@@ -35,6 +36,7 @@ class RestoreInteractorTest {
         val mnemonicException = Mnemonic.MnemonicException("error")
         whenever(wordsManager.validate(words)).thenThrow(mnemonicException)
         interactor.validate(words)
+
         verify(delegate).didFailToValidate(mnemonicException)
     }
 
