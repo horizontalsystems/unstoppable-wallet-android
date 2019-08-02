@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bitcoincore.AbstractKit
 import io.horizontalsystems.bitcoincore.managers.UnspentOutputSelectorError
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
+import io.horizontalsystems.bitcoincore.transactions.scripts.ScriptType
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -16,6 +17,8 @@ import java.math.RoundingMode
 
 abstract class BitcoinBaseAdapter(override val wallet: Wallet, open val kit: AbstractKit, private val addressParser: AddressParser) : IAdapter {
 
+    open val receiveScriptType = ScriptType.P2PKH
+    open val changeScriptType = ScriptType.P2PKH
     abstract val satoshisInBitcoin: BigDecimal
     abstract fun feeRate(feePriority: FeeRatePriority): Int
 
@@ -31,7 +34,7 @@ abstract class BitcoinBaseAdapter(override val wallet: Wallet, open val kit: Abs
         get() = kit.lastBlockInfo?.height
 
     override val receiveAddress: String
-        get() = kit.receiveAddress()
+        get() = kit.receiveAddress(receiveScriptType)
 
     protected val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     protected val lastBlockHeightUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
@@ -87,7 +90,7 @@ abstract class BitcoinBaseAdapter(override val wallet: Wallet, open val kit: Abs
     override fun send(address: String, value: BigDecimal, feePriority: FeeRatePriority): Single<Unit> {
         return Single.create { emitter ->
             try {
-                kit.send(address, (value * satoshisInBitcoin).toLong(), feeRate = feeRate(feePriority))
+                kit.send(address, (value * satoshisInBitcoin).toLong(), feeRate = feeRate(feePriority), changeScriptType = changeScriptType)
                 emitter.onSuccess(Unit)
             } catch (ex: Exception) {
                 emitter.onError(ex)
@@ -104,7 +107,7 @@ abstract class BitcoinBaseAdapter(override val wallet: Wallet, open val kit: Abs
 
         return try {
             val satoshiAmount = (amount * satoshisInBitcoin).toLong()
-            val fee = kit.fee(satoshiAmount, address, true, feeRate = feeRate(feePriority))
+            val fee = kit.fee(satoshiAmount, address, true, feeRate = feeRate(feePriority), changeScriptType = changeScriptType)
             BigDecimal.valueOf(fee).divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
         } catch (e: UnspentOutputSelectorError.InsufficientUnspentOutputs) {
             BigDecimal.valueOf(e.fee).divide(satoshisInBitcoin, decimal, RoundingMode.CEILING)
