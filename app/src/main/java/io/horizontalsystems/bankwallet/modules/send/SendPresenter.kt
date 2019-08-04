@@ -32,7 +32,7 @@ class SendPresenter(
             SendModule.ParamsAction.UpdateModules -> {
                 val updatedParams = params.toMutableMap()
                 val coinValue = (params[SendModule.AdapterFields.CoinValue] as? CoinValue)
-                updatedParams[SendModule.AdapterFields.CoinAmount] = coinValue?.value
+                updatedParams[SendModule.AdapterFields.CoinAmountInBigDecimal] = coinValue?.value
                         ?: BigDecimal.ZERO
 
                 interactor.validate(updatedParams)

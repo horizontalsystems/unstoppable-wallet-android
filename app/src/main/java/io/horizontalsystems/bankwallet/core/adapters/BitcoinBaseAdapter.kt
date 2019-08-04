@@ -87,10 +87,17 @@ abstract class BitcoinBaseAdapter(override val wallet: Wallet, open val kit: Abs
         return PaymentRequestAddress(paymentData.address, paymentData.amount?.toBigDecimal(), error = addressError)
     }
 
-    override fun send(address: String, value: BigDecimal, feePriority: FeeRatePriority): Single<Unit> {
+    override fun send(params: Map<SendModule.AdapterFields, Any?>): Single<Unit> {
+        val coinValue = params[SendModule.AdapterFields.CoinValue] as? CoinValue
+                ?: throw WrongParameters()
+        val feePriority = params[SendModule.AdapterFields.FeeRatePriority] as? FeeRatePriority
+                ?: throw WrongParameters()
+        val address = params[SendModule.AdapterFields.Address] as? String
+                ?: throw WrongParameters()
+
         return Single.create { emitter ->
             try {
-                kit.send(address, (value * satoshisInBitcoin).toLong(), feeRate = feeRate(feePriority), changeScriptType = changeScriptType)
+                kit.send(address, (coinValue.value * satoshisInBitcoin).toLong(), feeRate = feeRate(feePriority), changeScriptType = changeScriptType)
                 emitter.onSuccess(Unit)
             } catch (ex: Exception) {
                 emitter.onError(ex)
@@ -99,7 +106,7 @@ abstract class BitcoinBaseAdapter(override val wallet: Wallet, open val kit: Abs
     }
 
     override fun fee(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
-        val amount = params[SendModule.AdapterFields.CoinAmount] as? BigDecimal
+        val amount = params[SendModule.AdapterFields.CoinAmountInBigDecimal] as? BigDecimal
                 ?: throw WrongParameters()
         val feePriority = params[SendModule.AdapterFields.FeeRatePriority] as? FeeRatePriority
                 ?: throw WrongParameters()
@@ -118,12 +125,12 @@ abstract class BitcoinBaseAdapter(override val wallet: Wallet, open val kit: Abs
 
     override fun availableBalance(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
         val mutableParamsMap = params.toMutableMap()
-        mutableParamsMap[SendModule.AdapterFields.CoinAmount] = balance
+        mutableParamsMap[SendModule.AdapterFields.CoinAmountInBigDecimal] = balance
         return BigDecimal.ZERO.max(balance.subtract(fee(mutableParamsMap)))
     }
 
     override fun validate(params: Map<SendModule.AdapterFields, Any?>): List<SendStateError> {
-        val coinAmount = params[SendModule.AdapterFields.CoinAmount] as? BigDecimal
+        val coinAmount = params[SendModule.AdapterFields.CoinAmountInBigDecimal] as? BigDecimal
                 ?: throw WrongParameters()
 
         val errors = mutableListOf<SendStateError>()

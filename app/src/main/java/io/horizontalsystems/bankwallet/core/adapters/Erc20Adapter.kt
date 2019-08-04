@@ -67,7 +67,7 @@ class Erc20Adapter(context: Context, wallet: Wallet, kit: EthereumKit, decimal: 
     override fun validate(params: Map<SendModule.AdapterFields, Any?>): List<SendStateError> {
         val errors = mutableListOf<SendStateError>()
 
-        (params[SendModule.AdapterFields.CoinAmount] as? BigDecimal)?.let { amount ->
+        (params[SendModule.AdapterFields.CoinAmountInBigDecimal] as? BigDecimal)?.let { amount ->
             val availableBalance = availableBalance(params)
             if (amount > availableBalance) {
                 errors.add(SendStateError.InsufficientAmount(availableBalance))

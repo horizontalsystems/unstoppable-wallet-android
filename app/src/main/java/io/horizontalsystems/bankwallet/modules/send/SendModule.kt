@@ -80,7 +80,7 @@ object SendModule {
     }
 
     enum class AdapterFields{
-        CoinAmount, CoinValue, CurrencyValue, Address, FeeRatePriority, InputType, FeeCoinValue, FeeCurrencyValue, Memo
+        CoinAmountInBigDecimal, CoinValue, CurrencyValue, Address, FeeRatePriority, InputType, FeeCoinValue, FeeCurrencyValue, Memo
     }
 
     enum class ParamsAction {

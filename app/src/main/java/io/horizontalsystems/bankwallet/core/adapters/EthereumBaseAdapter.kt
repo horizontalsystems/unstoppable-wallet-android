@@ -3,10 +3,13 @@ package io.horizontalsystems.bankwallet.core.adapters
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IFeeRateProvider
+import io.horizontalsystems.bankwallet.core.WrongParameters
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.bankwallet.entities.AddressError
+import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -37,8 +40,15 @@ abstract class EthereumBaseAdapter(override val wallet: Wallet, protected val et
     override val lastBlockHeightUpdatedFlowable: Flowable<Unit>
         get() = ethereumKit.lastBlockHeightFlowable.map { Unit }
 
-    override fun send(address: String, value: BigDecimal, feePriority: FeeRatePriority): Single<Unit> {
-        val poweredDecimal = value.scaleByPowerOfTen(decimal)
+    override fun send(params: Map<SendModule.AdapterFields, Any?>): Single<Unit> {
+        val coinValue = params[SendModule.AdapterFields.CoinValue] as? CoinValue
+                ?: throw WrongParameters()
+        val feePriority = params[SendModule.AdapterFields.FeeRatePriority] as? FeeRatePriority
+                ?: throw WrongParameters()
+        val address = params[SendModule.AdapterFields.Address] as? String
+                ?: throw WrongParameters()
+
+        val poweredDecimal = coinValue.value.scaleByPowerOfTen(decimal)
         val noScaleDecimal = poweredDecimal.setScale(0, RoundingMode.HALF_DOWN)
 
         return sendSingle(address, noScaleDecimal.toPlainString(), feeRateProvider.ethereumGasPrice(feePriority))
