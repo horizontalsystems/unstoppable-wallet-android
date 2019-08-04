@@ -12,8 +12,9 @@ object SendConfirmationModule {
         fun showCopied()
         fun loadFeeFieldsItem(secondaryItemData: SecondaryItemData)
         fun loadSendButton()
-        fun getMemoForSend()
-        fun sendWithInput(memo: String?)
+        fun getMemo()
+        fun send(memo: String? = null)
+        fun setSendButtonState(state: SendButtonState)
     }
 
     interface IViewDelegate {
@@ -21,6 +22,7 @@ object SendConfirmationModule {
         fun onReceiverClick()
         fun onSendClick()
         fun send(memo: String?)
+        fun onSendError()
     }
 
     interface IInteractor {
@@ -38,6 +40,10 @@ object SendConfirmationModule {
         view.delegate = presenter
         presenter.view = view
         interactor.delegate = presenter
+    }
+
+    enum class SendButtonState {
+        ACTIVE, SENDING
     }
 
     data class PrimaryItemData(

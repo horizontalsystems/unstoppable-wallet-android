@@ -15,6 +15,7 @@ class SendPresenter(
     : SendModule.IViewDelegate, SendModule.IInteractorDelegate {
 
     var view: SendViewModel? = null
+    private var inputParams: Map<SendModule.AdapterFields, Any?>? = null
 
     override fun onGetAvailableBalance() {
         view?.getParamsForAction(SendModule.ParamsAction.AvailableBalance)
@@ -39,7 +40,6 @@ class SendPresenter(
             }
             SendModule.ParamsAction.AvailableBalance -> getAvailableBalance(params)
             SendModule.ParamsAction.ShowConfirm -> showConfirmationDialog(params)
-            SendModule.ParamsAction.Send -> send(params)
         }
     }
 
@@ -106,8 +106,14 @@ class SendPresenter(
         view?.setSendButtonEnabled(!invalid)
     }
 
-    override fun sendWithMemo(memo: String?) {
-        //todo send
+    override fun send(memo: String?) {
+        val mutableMap = inputParams?.toMutableMap()
+        mutableMap?.let { params ->
+            memo?.let {
+                params[SendModule.AdapterFields.Memo] = it
+            }
+            interactor.send(params)
+        }
     }
 
     private fun showConfirmationDialog(params: Map<SendModule.AdapterFields, Any?>) {
@@ -131,21 +137,8 @@ class SendPresenter(
                     feeCurrencyValue
             )
 
+            inputParams = params
             view?.showConfirmation(confirmationViewItem)
-        } catch (error: WrongParameters) {
-            //wrong parameters exception
-        }
-    }
-
-    private fun send(params: Map<SendModule.AdapterFields, Any?>) {
-        try {
-            val address: String = (params[SendModule.AdapterFields.Address] as? String)
-                    ?: throw WrongParameters()
-            val coinValue: CoinValue = (params[SendModule.AdapterFields.CoinValue] as? CoinValue)
-                    ?: throw WrongParameters()
-            val feePriority = params[SendModule.AdapterFields.FeeRatePriority] as? FeeRatePriority
-                    ?: FeeRatePriority.MEDIUM
-            interactor.send(address, coinValue.value, feePriority)
         } catch (error: WrongParameters) {
             //wrong parameters exception
         }

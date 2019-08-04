@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.send.sendviews.confirmation.SendConfirmationModule
 import kotlinx.android.synthetic.main.view_button_with_progressbar.view.*
 
 class ConfirmationSendButtonView : ConstraintLayout {
@@ -19,11 +20,21 @@ class ConfirmationSendButtonView : ConstraintLayout {
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    fun bind(textResourceId: Int, isEnabled: Boolean = true, showProgressbar: Boolean = false) {
-        buttonText.text = context.getString(textResourceId)
-        buttonWrapper.isEnabled = isEnabled
-        buttonText.isEnabled = isEnabled
-        progressBar.visibility = if (showProgressbar) View.VISIBLE else View.GONE
+    fun bind(state: SendConfirmationModule.SendButtonState) {
+        when(state) {
+            SendConfirmationModule.SendButtonState.ACTIVE -> {
+                buttonText.text = context.getString(R.string.Send_Confirmation_Send_Button)
+                progressBar.visibility = View.GONE
+                buttonText.isEnabled = true
+                buttonWrapper.isEnabled = true
+            }
+            SendConfirmationModule.SendButtonState.SENDING -> {
+                buttonText.text = context.getString(R.string.Send_Sending)
+                progressBar.visibility = View.VISIBLE
+                buttonText.isEnabled = false
+                buttonWrapper.isEnabled = false
+            }
+        }
         invalidate()
     }
 

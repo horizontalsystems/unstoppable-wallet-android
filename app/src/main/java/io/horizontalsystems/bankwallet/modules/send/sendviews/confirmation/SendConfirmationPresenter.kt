@@ -8,12 +8,11 @@ class SendConfirmationPresenter(
     var view: SendConfirmationViewModel? = null
 
     override fun onViewDidLoad() {
-        confirmationInfo.primaryAmount
 
         val primaryViewItem = SendConfirmationModule.PrimaryItemData(
-                confirmationInfo.primaryAmount,
-                confirmationInfo.secondaryAmount,
-                confirmationInfo.receiver
+                primaryAmount = confirmationInfo.primaryAmount,
+                secondaryAmount = confirmationInfo.secondaryAmount,
+                receiver = confirmationInfo.receiver
         )
 
         view?.loadPrimaryItem(primaryViewItem)
@@ -22,9 +21,15 @@ class SendConfirmationPresenter(
             view?.loadMemoItem()
         }
 
-        view?.loadFeeFieldsItem(SendConfirmationModule.SecondaryItemData(confirmationInfo.fee, confirmationInfo.total, confirmationInfo.time?.toString()))
+        val secondaryItemData = SendConfirmationModule.SecondaryItemData(
+                feeAmount = confirmationInfo.fee,
+                totalAmount = confirmationInfo.total,
+                estimatedTime = confirmationInfo.time?.toString())
+
+        view?.loadFeeFieldsItem(secondaryItemData)
 
         view?.loadSendButton()
+        view?.setSendButtonState(SendConfirmationModule.SendButtonState.ACTIVE)
     }
 
     override fun onReceiverClick() {
@@ -36,10 +41,19 @@ class SendConfirmationPresenter(
     }
 
     override fun onSendClick() {
-        view?.getMemoForSend()
+        view?.setSendButtonState(SendConfirmationModule.SendButtonState.SENDING)
+        if (confirmationInfo.showMemo) {
+            view?.getMemo()
+        } else {
+            view?.send()
+        }
     }
 
     override fun send(memo: String?) {
-        view?.sendWithInput(memo)
+        view?.send(memo)
+    }
+
+    override fun onSendError() {
+        view?.setSendButtonState(SendConfirmationModule.SendButtonState.ACTIVE)
     }
 }

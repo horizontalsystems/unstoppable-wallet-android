@@ -42,13 +42,13 @@ object SendModule {
         fun onFeePriorityChange(feeRatePriority: FeeRatePriority)
         fun onInputTypeUpdated(inputType: InputType?)
         fun onValidStatesFetchedFromModules(validStates: MutableList<Boolean>)
-        fun sendWithMemo(memo: String?)
+        fun send(memo: String?)
     }
 
     interface IInteractor {
         val coin: Coin
         fun parsePaymentAddress(address: String): PaymentRequestAddress
-        fun send(address: String, coinAmount: BigDecimal, feePriority: FeeRatePriority)
+        fun send(params: Map<AdapterFields, Any?>)
         fun getAvailableBalance(params: Map<AdapterFields, Any?>): BigDecimal
         fun clear()
         fun validate(params: Map<AdapterFields, Any?>)
@@ -80,7 +80,7 @@ object SendModule {
     }
 
     enum class AdapterFields{
-        CoinAmount, CoinValue, CurrencyValue, Address, FeeRatePriority, InputType, FeeCoinValue, FeeCurrencyValue
+        CoinAmount, CoinValue, CurrencyValue, Address, FeeRatePriority, InputType, FeeCoinValue, FeeCurrencyValue, Memo
     }
 
     enum class ParamsAction {

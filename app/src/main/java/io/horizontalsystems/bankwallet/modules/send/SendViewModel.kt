@@ -12,10 +12,10 @@ class SendViewModel : ViewModel(), SendModule.IView {
 
     lateinit var delegate: SendModule.IViewDelegate
 
-    val dismissConfirmationLiveEvent = SingleLiveEvent<Unit>()
     val dismissWithSuccessLiveEvent = SingleLiveEvent<Unit>()
     val errorLiveData = MutableLiveData<Int?>()
-    val showSendConfirmationLiveData = SingleLiveEvent<SendConfirmationInfo>()
+    val sendConfirmationLiveData = MutableLiveData<SendConfirmationInfo>()
+    val showSendConfirmationLiveData = SingleLiveEvent<Unit>()
     val availableBalanceRetrievedLiveData = MutableLiveData<BigDecimal>()
     val onAddressParsedLiveData = MutableLiveData<PaymentRequestAddress>()
     val getParamsFromModulesLiveEvent = SingleLiveEvent<SendModule.ParamsAction>()
@@ -37,7 +37,8 @@ class SendViewModel : ViewModel(), SendModule.IView {
     }
 
     override fun showConfirmation(viewItem: SendConfirmationInfo) {
-        showSendConfirmationLiveData.value = viewItem
+        sendConfirmationLiveData.value = viewItem
+        showSendConfirmationLiveData.call()
     }
 
     override fun showError(error: Int) {
@@ -46,7 +47,6 @@ class SendViewModel : ViewModel(), SendModule.IView {
 
     override fun dismissWithSuccess() {
         dismissWithSuccessLiveEvent.call()
-        dismissConfirmationLiveEvent.call()
     }
 
     override fun onCleared() {
@@ -88,4 +88,5 @@ class SendViewModel : ViewModel(), SendModule.IView {
     override fun getValidStatesFromModules() {
         fetchStatesFromModulesLiveEvent.call()
     }
+
 }

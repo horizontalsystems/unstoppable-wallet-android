@@ -12,8 +12,7 @@ import io.horizontalsystems.bankwallet.modules.send.sendviews.address.SendAddres
 import io.horizontalsystems.bankwallet.modules.send.sendviews.address.SendAddressViewModel
 import io.horizontalsystems.bankwallet.modules.send.sendviews.amount.SendAmountView
 import io.horizontalsystems.bankwallet.modules.send.sendviews.amount.SendAmountViewModel
-import io.horizontalsystems.bankwallet.modules.send.sendviews.confirmation.SendConfirmationActivity
-import io.horizontalsystems.bankwallet.modules.send.sendviews.confirmation.SendConfirmationModule
+import io.horizontalsystems.bankwallet.modules.send.sendviews.confirmation.ConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.send.sendviews.fee.SendFeeView
 import io.horizontalsystems.bankwallet.modules.send.sendviews.fee.SendFeeViewModel
 import io.horizontalsystems.bankwallet.modules.send.sendviews.sendbutton.SendButtonView
@@ -58,14 +57,9 @@ class SendActivity : BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == SendModule.SHOW_CONFIRMATION) {
-            val memo = data?.getStringExtra(SendModule.MEMO_KEY)
-            mainViewModel.delegate.sendWithMemo(memo)
-        } else {
-            val scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-            scanResult?.contents?.let {
-                sendAddressViewModel?.delegate?.onAddressScan(it)
-            }
+        val scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        scanResult?.contents?.let {
+            sendAddressViewModel?.delegate?.onAddressScan(it)
         }
     }
 
@@ -102,11 +96,17 @@ class SendActivity : BaseActivity() {
             sendFeeViewModel?.delegate?.onInputTypeUpdated(inputType)
         })
 
-        mainViewModel.showSendConfirmationLiveData.observe(this, Observer { sendConfirmationInfo ->
-            val intent = Intent(this, SendConfirmationActivity::class.java).apply {
-                putExtra(SendConfirmationModule.ConfirmationInfoKey, sendConfirmationInfo)
-            }
-            startActivityForResult(intent, SendModule.SHOW_CONFIRMATION)
+        mainViewModel.showSendConfirmationLiveData.observe(this, Observer {
+            hideSoftKeyboard()
+
+            val fragmentTransaction = supportFragmentManager
+                    .beginTransaction()
+
+            fragmentTransaction
+                    .setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_right, R.anim.slide_in_from_right, R.anim.slide_out_to_right)
+                    .add(R.id.rootView, ConfirmationFragment())
+                    .addToBackStack("confirmFragment")
+                    .commit()
         })
 
         mainViewModel.fetchStatesFromModulesLiveEvent.observe(this, Observer {
