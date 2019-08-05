@@ -91,6 +91,7 @@
     <string name="Send_DialogTotal">总额:</string>
     <string name="Send_Sending">发送中</string>
     <string name="Send_ERC_Alert">以 Ethereum 支付的 %s (ERC20) 交易费用。你需要 %s ETH。</string>
+    <string name="Send_Token_InsufficientFeeAlert">Transaction fees for %s (%s) paid in %s. You need %s.</string>
     <!--Deposit-->
     <string name="Deposit_Title">收到%s</string>
     <string name="Deposit_Share">转发</string>
