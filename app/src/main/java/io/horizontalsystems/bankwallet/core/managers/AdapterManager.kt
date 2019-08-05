@@ -10,7 +10,7 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
 class AdapterManager(
-        walletManager: IWalletManager,
+        private val walletManager: IWalletManager,
         private val adapterFactory: AdapterFactory,
         private val ethereumKitManager: IEthereumKitManager,
         private val eosKitManager: IEosKitManager,
@@ -35,6 +35,10 @@ class AdapterManager(
 
     override var adapters: List<IAdapter> = listOf()
     override val adaptersUpdatedSignal = PublishSubject.create<Unit>()
+
+    override fun preloadAdapters() {
+        initAdapters(walletManager.wallets)
+    }
 
     override fun refresh() {
         handler.post {

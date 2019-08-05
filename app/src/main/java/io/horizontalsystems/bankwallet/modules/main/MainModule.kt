@@ -21,7 +21,7 @@ object MainModule {
     interface IRouter
 
     fun init(view: MainViewModel, router: IRouter) {
-        val interactor = MainInteractor(App.accountManager, App.walletManager)
+        val interactor = MainInteractor(App.accountManager, App.walletManager, App.adapterManager)
         val presenter = MainPresenter(interactor, router)
 
         view.delegate = presenter

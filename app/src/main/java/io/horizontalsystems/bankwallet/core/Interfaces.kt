@@ -24,6 +24,7 @@ interface IAdapterManager {
     val adapters: List<IAdapter>
     val adaptersUpdatedSignal: Observable<Unit>
 
+    fun preloadAdapters()
     fun refresh()
     fun initAdapters(wallets: List<Wallet>)
     fun stopKits()
