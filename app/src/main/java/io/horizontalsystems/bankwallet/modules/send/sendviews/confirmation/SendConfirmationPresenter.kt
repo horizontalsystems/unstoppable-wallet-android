@@ -21,12 +21,14 @@ class SendConfirmationPresenter(
             view?.loadMemoItem()
         }
 
-        val secondaryItemData = SendConfirmationModule.SecondaryItemData(
-                feeAmount = confirmationInfo.fee,
-                totalAmount = confirmationInfo.total,
-                estimatedTime = confirmationInfo.time?.toString())
+        if (confirmationInfo.fee != null || confirmationInfo.total != null || confirmationInfo.time != null) {
+            val secondaryItemData = SendConfirmationModule.SecondaryItemData(
+                    feeAmount = confirmationInfo.fee,
+                    totalAmount = confirmationInfo.total,
+                    estimatedTime = confirmationInfo.time?.toString())
 
-        view?.loadFeeFieldsItem(secondaryItemData)
+            view?.loadFeeFieldsItem(secondaryItemData)
+        }
 
         view?.loadSendButton()
         view?.setSendButtonState(SendConfirmationModule.SendButtonState.ACTIVE)

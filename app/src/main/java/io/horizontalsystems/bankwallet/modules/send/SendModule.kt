@@ -3,11 +3,13 @@ package io.horizontalsystems.bankwallet.modules.send
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.SendStateError
+import io.horizontalsystems.bankwallet.core.adapters.EosAdapter
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
 import io.horizontalsystems.bankwallet.modules.send.sendviews.confirmation.SendConfirmationInfo
+import io.horizontalsystems.bankwallet.modules.send.subpresenters.SendEosPresenter
 import java.math.BigDecimal
 
 object SendModule {
@@ -27,9 +29,11 @@ object SendModule {
         fun onInputTypeUpdated(inputType: InputType?)
         fun onInsufficientFeeBalance(coinCode: String, fee: BigDecimal)
         fun getValidStatesFromModules()
+        fun loadInputItems(inputs: List<Input>)
     }
 
     interface IViewDelegate {
+        fun onViewDidLoad()
         fun onAmountChanged(coinAmount: BigDecimal?)
         fun onAddressChanged()
         fun onSendClicked()
@@ -65,22 +69,36 @@ object SendModule {
     fun init(view: SendViewModel, coinCode: String) {
         val adapter = App.adapterManager.adapters.first { it.wallet.coin.code == coinCode }
         val interactor = SendInteractor(adapter)
-        val presenter = SendPresenter(interactor, ConfirmationViewItemFactory())
+        val confirmationFactory = ConfirmationViewItemFactory()
 
-        view.delegate = presenter
-        presenter.view = view
-        interactor.delegate = presenter
+        when (adapter) {
+            is EosAdapter -> {
+                val presenter = SendEosPresenter(interactor, confirmationFactory)
+
+                view.delegate = presenter
+                presenter.view = view
+                interactor.delegate = presenter
+            }
+            else -> {
+                val presenter = SendPresenter(interactor, confirmationFactory)
+
+                view.delegate = presenter
+                presenter.view = view
+                interactor.delegate = presenter
+            }
+        }
     }
-
-    const val SHOW_CONFIRMATION = 1
-    const val MEMO_KEY = "memo_intent_key"
 
     enum class InputType {
         COIN, CURRENCY
     }
 
-    enum class AdapterFields{
+    enum class AdapterFields {
         CoinAmountInBigDecimal, CoinValue, CurrencyValue, Address, FeeRate, InputType, FeeCoinValue, FeeCurrencyValue, Memo
+    }
+
+    enum class Input {
+        Amount, Address, Fee, SendButton
     }
 
     enum class ParamsAction {
@@ -100,13 +118,5 @@ object SendModule {
             }
         }
     }
-
-    class SendConfirmationViewItem(
-            val coin: Coin,
-            val primaryAmountInfo: AmountInfo,
-            val secondaryAmountInfo: AmountInfo?,
-            val address: String,
-            val feeInfo: AmountInfo,
-            val totalInfo: AmountInfo?)
 
 }

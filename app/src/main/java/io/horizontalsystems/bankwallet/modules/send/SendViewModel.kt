@@ -26,10 +26,16 @@ class SendViewModel : ViewModel(), SendModule.IView {
     val mainInputTypeUpdatedLiveData = MutableLiveData<SendModule.InputType>()
     val sendButtonEnabledLiveData = MutableLiveData<Boolean>()
     val fetchStatesFromModulesLiveEvent = SingleLiveEvent<Unit>()
+    val inputItemsLiveEvent = SingleLiveEvent<List<SendModule.Input>>()
 
 
     fun init(coinCode: String) {
         SendModule.init(this, coinCode)
+        delegate.onViewDidLoad()
+    }
+
+    override fun loadInputItems(inputs: List<SendModule.Input>) {
+        inputItemsLiveEvent.value = inputs
     }
 
     override fun setSendButtonEnabled(sendButtonEnabled: Boolean) {

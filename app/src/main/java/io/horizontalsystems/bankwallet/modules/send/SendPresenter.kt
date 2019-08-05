@@ -9,16 +9,26 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import java.math.BigDecimal
 import java.net.UnknownHostException
 
-class SendPresenter(
+open class SendPresenter(
         private val interactor: SendModule.IInteractor,
         private val confirmationFactory: ConfirmationViewItemFactory)
     : SendModule.IViewDelegate, SendModule.IInteractorDelegate {
 
     var view: SendViewModel? = null
-    private var inputParams: Map<SendModule.AdapterFields, Any?>? = null
+    protected var inputParams: Map<SendModule.AdapterFields, Any?>? = null
 
     override fun onGetAvailableBalance() {
         view?.getParamsForAction(SendModule.ParamsAction.AvailableBalance)
+    }
+
+    open val inputs = listOf(
+            SendModule.Input.Amount,
+            SendModule.Input.Address,
+            SendModule.Input.Fee,
+            SendModule.Input.SendButton)
+
+    override fun onViewDidLoad() {
+        view?.loadInputItems(inputs)
     }
 
     override fun onAmountChanged(coinAmount: BigDecimal?) {
@@ -116,7 +126,7 @@ class SendPresenter(
         }
     }
 
-    private fun showConfirmationDialog(params: Map<SendModule.AdapterFields, Any?>) {
+    open fun showConfirmationDialog(params: Map<SendModule.AdapterFields, Any?>) {
         try {
             val inputType: SendModule.InputType = params[SendModule.AdapterFields.InputType] as SendModule.InputType
             val address: String = (params[SendModule.AdapterFields.Address] as? String)
@@ -134,7 +144,8 @@ class SendPresenter(
                     coinValue,
                     currencyValue,
                     feeCoinValue,
-                    feeCurrencyValue
+                    feeCurrencyValue,
+                    false
             )
 
             inputParams = params

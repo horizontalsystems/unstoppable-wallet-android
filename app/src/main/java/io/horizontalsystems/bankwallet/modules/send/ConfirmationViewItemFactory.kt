@@ -12,18 +12,20 @@ class ConfirmationViewItemFactory {
             address: String,
             coinValue: CoinValue,
             currencyValue: CurrencyValue?,
-            feeCoinValue: CoinValue,
-            feeCurrencyValue: CurrencyValue?
+            feeCoinValue: CoinValue?,
+            feeCurrencyValue: CurrencyValue?,
+            showMemo: Boolean
     ): SendConfirmationInfo {
 
-        val stateFeeInfo: SendModule.AmountInfo = when {
+        val stateFeeInfo: SendModule.AmountInfo? = when {
             feeCurrencyValue != null && currencyValue != null -> SendModule.AmountInfo.CurrencyValueInfo(feeCurrencyValue)
-            else -> SendModule.AmountInfo.CoinValueInfo(feeCoinValue)
+            feeCoinValue != null -> SendModule.AmountInfo.CoinValueInfo(feeCoinValue)
+            else -> null
         }
 
         val stateTotalInfo: SendModule.AmountInfo? = when {
             feeCurrencyValue != null && currencyValue != null -> SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(currencyValue.currency, currencyValue.value + feeCurrencyValue.value))
-            coinValue.coinCode == feeCoinValue.coinCode -> SendModule.AmountInfo.CoinValueInfo(CoinValue(coinValue.coinCode, coinValue.value + feeCoinValue.value))
+            feeCoinValue != null && coinValue.coinCode == feeCoinValue.coinCode -> SendModule.AmountInfo.CoinValueInfo(CoinValue(coinValue.coinCode, coinValue.value + feeCoinValue.value))
             else -> null
         }
 
@@ -43,10 +45,10 @@ class ConfirmationViewItemFactory {
                 primaryAmount = primaryAmountString,
                 secondaryAmount = secondaryAmountInfo?.getFormatted(),
                 receiver = address,
-                fee = stateFeeInfo.getFormatted(),
+                fee = stateFeeInfo?.getFormatted(),
                 total = stateTotalInfo?.getFormatted(),
                 time = null,
-                showMemo = true
+                showMemo = showMemo
         )
     }
 

@@ -9,6 +9,9 @@ import io.horizontalsystems.eoskit.models.Transaction
 import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
+import java.math.RoundingMode
+import java.text.SimpleDateFormat
+import java.util.*
 
 class EosAdapter(override val wallet: Wallet, eos: CoinType.Eos, private val eosKit: EosKit) : IAdapter {
 
@@ -71,7 +74,9 @@ class EosAdapter(override val wallet: Wallet, eos: CoinType.Eos, private val eos
                 ?: throw WrongParameters()
         val memo = params[SendModule.AdapterFields.Memo] as? String ?: ""
 
-        return eosKit.send(token, address, coinValue.value, memo).map { Unit }
+        val scaledValue = coinValue.value.setScale(4, RoundingMode.HALF_EVEN)
+
+        return eosKit.send(token, address, scaledValue, memo).map { Unit }
     }
 
     override fun fee(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
