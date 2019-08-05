@@ -53,6 +53,7 @@ class BackupActivity : BaseActivity() {
         backupIntro.text = getString(R.string.Backup_Intro_Subtitle, accountCoins)
 
         if (account.isBackedUp) {
+            backupTitle.text = getString(R.string.Backup_Intro_TitleShow)
             buttonBack.text = getString(R.string.Button_Close)
             buttonNext.text = getString(R.string.Backup_Button_ShowKey)
         }
