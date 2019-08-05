@@ -29,7 +29,7 @@ object SendModule {
         fun onAmountValidationSuccess()
         fun onFeeUpdated(fee: BigDecimal)
         fun onInputTypeUpdated(inputType: InputType?)
-        fun onInsufficientFeeBalance(coinCode: String, fee: BigDecimal)
+        fun onInsufficientFeeBalance(fee: BigDecimal)
         fun getValidStatesFromModules()
         fun loadInputItems(inputs: List<Input>)
     }

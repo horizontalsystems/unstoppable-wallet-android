@@ -2,6 +2,9 @@ package io.horizontalsystems.bankwallet.modules.send.sendviews.fee
 
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
+import io.horizontalsystems.bankwallet.core.IAdapter
+import io.horizontalsystems.bankwallet.core.adapters.BinanceAdapter
+import io.horizontalsystems.bankwallet.core.adapters.Erc20Adapter
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Rate
@@ -15,10 +18,13 @@ object SendFeeModule {
         fun onFeePriorityChange(feeRatePriority: FeeRatePriority)
         fun setPrimaryFee(feeAmount: String?)
         fun setSecondaryFee(feeAmount: String?)
-        fun setInsufficientFeeBalanceError(coinCode: String, fee: BigDecimal)
+        fun setInsufficientFeeBalanceError(feeCoinValue: CoinValue)
     }
 
     interface IViewDelegate {
+        val coinCode: String
+        val baseCoinName: String
+        val tokenProtocol: String
         val validState: Boolean
 
         fun onViewDidLoad()
@@ -26,7 +32,7 @@ object SendFeeModule {
         fun onFeeUpdated(fee: BigDecimal?)
         fun onInputTypeUpdated(inputType: SendModule.InputType)
         fun getFeeRate(): Long
-        fun onInsufficientFeeBalanceError(coinCode: String, fee: BigDecimal)
+        fun onInsufficientFeeBalanceError(fee: BigDecimal)
         fun getFeeCoinValue(): CoinValue
         fun getFeeCurrencyValue(): CurrencyValue?
     }
@@ -44,13 +50,31 @@ object SendFeeModule {
         val adapter = App.adapterManager.adapters.first { it.wallet.coin.code == coinCode }
         val feeCoinCode = adapter.feeCoinCode ?: coinCode
         val baseCurrency = App.currencyManager.baseCurrency
+        val baseCoinName = getBaseCoinName(adapter)
+        val tokenProtocol = getTokenProtocol(adapter)
         val helper = SendFeePresenterHelper(App.numberFormatter, feeCoinCode, baseCurrency)
         val interactor = SendFeeInteractor(App.rateStorage, adapter)
-        val presenter = SendFeePresenter(interactor, helper, feeCoinCode, baseCurrency)
+        val presenter = SendFeePresenter(interactor, helper, coinCode, feeCoinCode, baseCurrency, baseCoinName, tokenProtocol)
 
         view.delegate = presenter
         presenter.view = view
         interactor.delegate = presenter
+    }
+
+    private fun getBaseCoinName(adapter: IAdapter): String {
+        return when(adapter) {
+            is BinanceAdapter -> "Binance"
+            is Erc20Adapter -> "Ethereum"
+            else -> adapter.wallet.coin.title
+        }
+    }
+
+    private fun getTokenProtocol(adapter: IAdapter): String {
+        return when(adapter) {
+            is BinanceAdapter -> "BEP2"
+            is Erc20Adapter -> "ERC20"
+            else -> ""
+        }
     }
 
 }

@@ -20,7 +20,7 @@ class SendViewModel : ViewModel(), SendModule.IView {
     val onAddressParsedLiveData = MutableLiveData<PaymentRequestAddress>()
     val getParamsFromModulesLiveEvent = SingleLiveEvent<SendModule.ParamsAction>()
     val validationErrorLiveEvent = SingleLiveEvent<SendStateError.InsufficientAmount>()
-    val insufficientFeeBalanceErrorLiveEvent = SingleLiveEvent<Pair<String, BigDecimal>>()
+    val insufficientFeeBalanceErrorLiveEvent = SingleLiveEvent<BigDecimal>()
     val amountValidationLiveEvent = SingleLiveEvent<Unit>()
     val feeUpdatedLiveData = MutableLiveData<BigDecimal>()
     val mainInputTypeUpdatedLiveData = MutableLiveData<SendModule.InputType>()
@@ -75,8 +75,8 @@ class SendViewModel : ViewModel(), SendModule.IView {
         validationErrorLiveEvent.value = error
     }
 
-    override fun onInsufficientFeeBalance(coinCode: String, fee: BigDecimal) {
-        insufficientFeeBalanceErrorLiveEvent.value = Pair(coinCode, fee)
+    override fun onInsufficientFeeBalance(fee: BigDecimal) {
+        insufficientFeeBalanceErrorLiveEvent.value = fee
     }
 
     override fun onAmountValidationSuccess() {

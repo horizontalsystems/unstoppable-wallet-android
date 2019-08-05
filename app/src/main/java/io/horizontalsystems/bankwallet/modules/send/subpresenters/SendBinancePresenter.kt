@@ -28,7 +28,7 @@ class SendBinancePresenter(
                     view?.onValidationError(error)
                 }
                 is SendStateError.InsufficientFeeBalance -> {
-                    view?.onInsufficientFeeBalance(interactor.coin.code, error.fee)
+                    view?.onInsufficientFeeBalance(error.fee)
                 }
             }
         }

@@ -12,8 +12,11 @@ import java.math.BigDecimal
 class SendFeePresenter(
         private val interactor: SendFeeModule.IInteractor,
         private val helper: SendFeePresenterHelper,
+        override val coinCode: String,
         private val feeCoinCode: String,
-        private val currency: Currency)
+        private val currency: Currency,
+        override val baseCoinName: String,
+        override val tokenProtocol: String)
     : SendFeeModule.IViewDelegate, SendFeeModule.IInteractorDelegate {
 
     var view: SendFeeViewModel? = null
@@ -68,9 +71,9 @@ class SendFeePresenter(
         updateView()
     }
 
-    override fun onInsufficientFeeBalanceError(coinCode: String, fee: BigDecimal) {
+    override fun onInsufficientFeeBalanceError(fee: BigDecimal) {
         insufficientFeeBalance = fee
-        view?.setInsufficientFeeBalanceError(coinCode, fee)
+        view?.setInsufficientFeeBalanceError(CoinValue(feeCoinCode, fee))
     }
 
     private fun updateView(){

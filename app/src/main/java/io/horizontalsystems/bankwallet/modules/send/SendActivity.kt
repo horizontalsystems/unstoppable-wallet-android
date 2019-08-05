@@ -71,8 +71,8 @@ class SendActivity : BaseActivity() {
             sendAmountViewModel?.delegate?.onValidationError(error)
         })
 
-        mainViewModel.insufficientFeeBalanceErrorLiveEvent.observe(this, Observer { (coinCode, fee) ->
-            sendFeeViewModel?.delegate?.onInsufficientFeeBalanceError(coinCode, fee)
+        mainViewModel.insufficientFeeBalanceErrorLiveEvent.observe(this, Observer { fee ->
+            sendFeeViewModel?.delegate?.onInsufficientFeeBalanceError(fee)
         })
 
         mainViewModel.amountValidationLiveEvent.observe(this, Observer {

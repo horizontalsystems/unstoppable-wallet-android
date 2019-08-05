@@ -117,6 +117,7 @@
     <string name="Send_Sending">Sending</string>
 
     <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
+    <string name="Send_ERC_Alert2">Transaction fees for %s (%s) paid in %s. You need %s.</string>
 
     <!--Deposit-->
 
