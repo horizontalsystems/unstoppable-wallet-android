@@ -73,7 +73,7 @@ class AppConfigProvider : IAppConfigProvider {
             Coin("Everipedia",              "IQ",           CoinType.Eos("everipediaiq", "IQ")),
             Coin("Gemini Dollar",           "GUSD",         CoinType.Erc20("0x056Fd409E1d7A124BD7017459dFEa2F387b6d5Cd", 2)),
             Coin("Golem",                   "GNT",          CoinType.Erc20("0xa74476443119A942dE498590Fe1f2454d7D4aC0d", 18)),
-            Coin("Gifto",                   "GTO",          CoinType.Binance("GTO-908å")),
+            Coin("Gifto",                   "GTO",          CoinType.Binance("GTO-908")),
             Coin("Holo",                    "HOT",          CoinType.Erc20("0x6c6EE5e31d828De241282B9606C8e98Ea48526E2", 18)),
             Coin("Huobi",                   "HT",           CoinType.Erc20("0x6f259637dcD74C767781E37Bc6133cd6A68aa161", 18)),
             Coin("IDEX",                    "IDEX",         CoinType.Erc20("0xB705268213D593B8FD88d3FDEFF93AFF5CbDcfAE", 18)),
