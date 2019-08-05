@@ -33,16 +33,19 @@ class AdapterManager(
         )
     }
 
-    override var adapters: List<IAdapter> = listOf()
+    override val adapters: List<IAdapter> get() = TODO("Deprecated")
+
     override val adaptersUpdatedSignal = PublishSubject.create<Unit>()
 
     override fun preloadAdapters() {
         initAdapters(walletManager.wallets)
     }
 
+    private val adaptersMap = mutableMapOf<Wallet, IAdapter>()
+
     override fun refresh() {
         handler.post {
-            adapters.forEach { it.refresh() }
+            adaptersMap.values.forEach { it.refresh() }
         }
 
         ethereumKitManager.ethereumKit?.refresh()
@@ -52,37 +55,35 @@ class AdapterManager(
 
     override fun initAdapters(wallets: List<Wallet>) {
         handler.post {
-            val oldAdapters = adapters.toMutableList()
+            val disabledWallets = adaptersMap.keys.subtract(wallets)
 
-            adapters = wallets.mapNotNull { wallet ->
-                var adapter = adapters.find { it.wallet == wallet }
-                if (adapter == null) {
-                    adapter = adapterFactory.adapterForCoin(wallet)
-                    adapter?.start()
+            wallets.forEach { wallet ->
+                if (!adaptersMap.containsKey(wallet)) {
+                    adapterFactory.adapterForCoin(wallet)?.let { adapter ->
+                        adapter.start()
+                        adaptersMap[wallet] = adapter
+                    }
                 }
-                adapter
             }
 
             adaptersUpdatedSignal.onNext(Unit)
 
-            oldAdapters.forEach { oldAdapter ->
-                if (adapters.none { it.wallet == oldAdapter.wallet }) {
-                    oldAdapter.stop()
-                    adapterFactory.unlinkAdapter(oldAdapter)
+            disabledWallets.forEach { wallet ->
+                adaptersMap.remove(wallet)?.let { disabledAdapter ->
+                    disabledAdapter.stop()
+                    adapterFactory.unlinkAdapter(disabledAdapter)
                 }
             }
-
-            oldAdapters.clear()
         }
     }
 
     override fun stopKits() {
         handler.post {
-            adapters.forEach {
+            adaptersMap.values.forEach {
                 it.stop()
                 adapterFactory.unlinkAdapter(it)
             }
-            adapters = listOf()
+            adaptersMap.clear()
             adaptersUpdatedSignal.onNext(Unit)
         }
     }
