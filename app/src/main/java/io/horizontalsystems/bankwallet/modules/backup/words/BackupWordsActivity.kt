@@ -21,9 +21,10 @@ class BackupWordsActivity : BaseActivity() {
         setContentView(R.layout.activity_backup_words)
 
         val backedUp = intent.getBooleanExtra(ACCOUNT_BACKEDUP, false)
+        val backupWords = intent.getStringArrayExtra(WORDS_KEY)
 
         viewModel = ViewModelProviders.of(this).get(BackupWordsViewModel::class.java)
-        viewModel.init(intent.getStringArrayExtra(WORDS_KEY), backedUp)
+        viewModel.init(backupWords, backedUp)
 
         if (savedInstanceState == null) {
             viewModel.delegate.viewDidLoad()
@@ -34,7 +35,7 @@ class BackupWordsActivity : BaseActivity() {
 
         viewModel.loadPageLiveEvent.observe(this, Observer { page ->
             val fragment = when (page) {
-                1 -> BackupWordsFragment()
+                1 -> BackupWordsFragment(backupWords.size)
                 else -> BackupWordsConfirmFragment()
             }
 
