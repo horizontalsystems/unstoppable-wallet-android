@@ -103,5 +103,14 @@ class TransactionRecordDataSource(
         poolRepo.activatePools(coins)
         itemsDataSource.clear()
     }
+
+    fun handleUpdatedCoins(coins: List<Coin>) {
+        val unusedCoins = poolRepo.allPools.map { it.coin }.filter { !coins.contains(it) }
+
+        poolRepo.deactivatePools(unusedCoins)
+
+        setCoinCodes(coins)
+    }
+
 }
 

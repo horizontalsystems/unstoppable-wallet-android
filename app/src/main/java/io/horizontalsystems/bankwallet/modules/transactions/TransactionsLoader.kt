@@ -29,6 +29,10 @@ class TransactionsLoader(private val dataSource: TransactionRecordDataSource) {
         dataSource.setCoinCodes(coins)
     }
 
+    fun handleUpdate(coins: List<Coin>) {
+        dataSource.handleUpdatedCoins(coins)
+    }
+
     fun loadNext(initial: Boolean = false) {
         if (loading) return
         loading = true
