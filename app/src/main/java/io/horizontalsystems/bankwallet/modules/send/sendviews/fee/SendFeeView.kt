@@ -54,7 +54,7 @@ class SendFeeView : ConstraintLayout {
             val baseCoinName = viewModel.delegate.baseCoinName
             val formattedFee = App.numberFormatter.format(feeCoinValue)
 
-            feeError.text = context.getString(R.string.Send_ERC_Alert2, coinCode, tokenProtocol, baseCoinName, formattedFee)
+            feeError.text = context.getString(R.string.Send_Token_InsufficientFeeAlert, coinCode, tokenProtocol, baseCoinName, formattedFee)
         })
 
         viewModel.delegate.onViewDidLoad()
