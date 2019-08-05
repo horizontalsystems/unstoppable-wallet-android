@@ -61,8 +61,6 @@ class TransactionsPresenter(
     override fun onUpdateCoinsData(allCoinData: List<Triple<Coin, Int, Int?>>) {
         val coins = allCoinData.map { it.first }
 
-        loader.setCoinCodes(coins)
-
         allCoinData.forEach { (coinCode, confirmationThreshold, lastBlockHeight) ->
             metadataDataSource.setConfirmationThreshold(confirmationThreshold, coinCode)
             lastBlockHeight?.let {
@@ -70,7 +68,7 @@ class TransactionsPresenter(
             }
         }
 
-        loader.loadNext(true)
+        interactor.fetchLastBlockHeights()
 
         val filters = when {
             coins.size < 2 -> listOf()
@@ -79,7 +77,8 @@ class TransactionsPresenter(
 
         view?.showFilters(filters)
 
-        interactor.fetchLastBlockHeights()
+        loader.handleUpdate(coins)
+        loader.loadNext(true)
     }
 
     override fun onUpdateSelectedCoinCodes(selectedCoins: List<Coin>) {
