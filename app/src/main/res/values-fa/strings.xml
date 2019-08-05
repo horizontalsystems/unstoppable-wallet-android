@@ -91,6 +91,7 @@
     <string name="Send_DialogTotal">مجموع:</string>
     <string name="Send_Sending">در حال ارسال</string>
     <string name="Send_ERC_Alert">پرداخت هزینه های معامله برای %s (ERC20) در Ethereum. شما نیاز به %s ETH.</string>
+    <string name="Send_Token_InsufficientFeeAlert">Transaction fees for %s (%s) paid in %s. You need %s.</string>
     <!--Deposit-->
     <string name="Deposit_Title">دریافت s%</string>
     <string name="Deposit_Share">فرستادن به ديگران</string>
