@@ -147,13 +147,13 @@ class SendActivity : BaseActivity() {
                     }
                     sendLinearLayout.addView(sendAddressView)
                 }
-                SendModule.Input.Fee -> {
+                is SendModule.Input.Fee -> {
                     //add fee view
                     val sendFeeView = SendFeeView(this)
                     sendFeeViewModel = ViewModelProviders.of(this).get(SendFeeViewModel::class.java)
                     sendFeeViewModel?.init(coinCode)
                     sendFeeViewModel?.let {
-                        sendFeeView.bindInitial(it, mainViewModel, this, true)
+                        sendFeeView.bindInitial(it, mainViewModel, this, input.isAdjustable)
                     }
                     sendLinearLayout.addView(sendFeeView)
                 }

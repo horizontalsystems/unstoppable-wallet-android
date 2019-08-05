@@ -10,8 +10,8 @@ import java.math.BigDecimal
 import java.net.UnknownHostException
 
 open class SendPresenter(
-        private val interactor: SendModule.IInteractor,
-        private val confirmationFactory: ConfirmationViewItemFactory)
+        protected val interactor: SendModule.IInteractor,
+        protected val confirmationFactory: ConfirmationViewItemFactory)
     : SendModule.IViewDelegate, SendModule.IInteractorDelegate {
 
     var view: SendViewModel? = null
@@ -24,7 +24,7 @@ open class SendPresenter(
     open val inputs = listOf(
             SendModule.Input.Amount,
             SendModule.Input.Address,
-            SendModule.Input.Fee,
+            SendModule.Input.Fee(true),
             SendModule.Input.SendButton)
 
     override fun onViewDidLoad() {

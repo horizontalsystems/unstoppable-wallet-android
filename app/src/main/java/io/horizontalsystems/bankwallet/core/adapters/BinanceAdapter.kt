@@ -14,7 +14,7 @@ class BinanceAdapter(override val wallet: Wallet, private val binanceKit: Binanc
 
     private val asset = binanceKit.register(symbol)
 
-    override val feeCoinCode: String? = null
+    override val feeCoinCode: String? = "BNB"
     override val decimal: Int = 8
 
     override val confirmationsThreshold: Int

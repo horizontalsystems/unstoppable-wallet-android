@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.modules.send.ConfirmationViewItemFactory
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendPresenter
 
-class SendEosPresenter(
+class SendBinancePresenter(
         interactor: SendModule.IInteractor,
         confirmationFactory: ConfirmationViewItemFactory)
     : SendPresenter(interactor, confirmationFactory) {
@@ -16,6 +16,7 @@ class SendEosPresenter(
     override val inputs = listOf(
             SendModule.Input.Amount,
             SendModule.Input.Address,
+            SendModule.Input.Fee(false),
             SendModule.Input.SendButton)
 
     override fun onValidationComplete(errorList: List<SendStateError>) {
@@ -25,6 +26,9 @@ class SendEosPresenter(
                 is SendStateError.InsufficientAmount -> {
                     amountValidationSuccess = false
                     view?.onValidationError(error)
+                }
+                is SendStateError.InsufficientFeeBalance -> {
+                    view?.onInsufficientFeeBalance(interactor.coin.code, error.fee)
                 }
             }
         }
@@ -44,13 +48,17 @@ class SendEosPresenter(
                     ?: throw WrongParameters()
             val currencyValue: CurrencyValue? = params[SendModule.AdapterFields.CurrencyValue] as? CurrencyValue
 
+            val feeCoinValue: CoinValue = (params[SendModule.AdapterFields.FeeCoinValue] as? CoinValue)
+                    ?: throw WrongParameters()
+            val feeCurrencyValue: CurrencyValue? = params[SendModule.AdapterFields.FeeCurrencyValue] as? CurrencyValue
+
             val confirmationViewItem = confirmationFactory.confirmationViewItem(
                     inputType,
                     address,
                     coinValue,
                     currencyValue,
-                    null,
-                    null,
+                    feeCoinValue,
+                    feeCurrencyValue,
                     true
             )
 

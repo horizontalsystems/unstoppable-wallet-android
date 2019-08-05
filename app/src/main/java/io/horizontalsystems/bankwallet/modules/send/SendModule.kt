@@ -3,12 +3,14 @@ package io.horizontalsystems.bankwallet.modules.send
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.SendStateError
+import io.horizontalsystems.bankwallet.core.adapters.BinanceAdapter
 import io.horizontalsystems.bankwallet.core.adapters.EosAdapter
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
 import io.horizontalsystems.bankwallet.modules.send.sendviews.confirmation.SendConfirmationInfo
+import io.horizontalsystems.bankwallet.modules.send.subpresenters.SendBinancePresenter
 import io.horizontalsystems.bankwallet.modules.send.subpresenters.SendEosPresenter
 import java.math.BigDecimal
 
@@ -79,6 +81,13 @@ object SendModule {
                 presenter.view = view
                 interactor.delegate = presenter
             }
+            is BinanceAdapter -> {
+                val presenter = SendBinancePresenter(interactor, confirmationFactory)
+
+                view.delegate = presenter
+                presenter.view = view
+                interactor.delegate = presenter
+            }
             else -> {
                 val presenter = SendPresenter(interactor, confirmationFactory)
 
@@ -97,8 +106,11 @@ object SendModule {
         CoinAmountInBigDecimal, CoinValue, CurrencyValue, Address, FeeRate, InputType, FeeCoinValue, FeeCurrencyValue, Memo
     }
 
-    enum class Input {
-        Amount, Address, Fee, SendButton
+    sealed class Input {
+        object Amount: Input()
+        object Address: Input()
+        class Fee(val isAdjustable: Boolean): Input()
+        object SendButton: Input()
     }
 
     enum class ParamsAction {
