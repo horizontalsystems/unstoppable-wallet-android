@@ -91,6 +91,7 @@
     <string name="Send_DialogTotal">Total:</string>
     <string name="Send_Sending">En attente</string>
     <string name="Send_ERC_Alert">Frais de transaction pour %s (ERC20) payé en Ethereum. Il est nécessaire %s ETH.</string>
+    <string name="Send_Token_InsufficientFeeAlert">Transaction fees for %s (%s) paid in %s. You need %s.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Recevoir %s</string>
     <string name="Deposit_Share">Transférer</string>
