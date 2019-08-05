@@ -91,6 +91,7 @@
     <string name="Send_DialogTotal">Toplam:</string>
     <string name="Send_Sending">Gönderiliyor</string>
     <string name="Send_ERC_Alert">%s (ERC20) için ișlem ücreti Ethereum hesabından ödenir. Asgari %s ETH gerekiyor</string>
+    <string name="Send_Token_InsufficientFeeAlert">Transaction fees for %s (%s) paid in %s. You need %s.</string>
     <!--Deposit-->
     <string name="Deposit_Title">%s al</string>
     <string name="Deposit_Share">İlet</string>
