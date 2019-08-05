@@ -45,7 +45,7 @@
         <activity
             android:name=".modules.send.SendActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateVisible" />
+            android:windowSoftInputMode="stateVisible"/>
         <activity
             android:name=".modules.restore.words.RestoreWordsActivity"
             android:screenOrientation="portrait" />

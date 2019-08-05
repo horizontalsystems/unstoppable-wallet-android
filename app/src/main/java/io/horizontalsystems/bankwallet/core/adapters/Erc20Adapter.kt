@@ -2,9 +2,9 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.IFeeRateProvider
 import io.horizontalsystems.bankwallet.core.SendStateError
+import io.horizontalsystems.bankwallet.core.WrongParameters
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
@@ -59,15 +59,15 @@ class Erc20Adapter(context: Context, wallet: Wallet, kit: EthereumKit, decimal: 
     }
 
     override fun fee(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
-        val feePriority = params[SendModule.AdapterFields.FeeRatePriority] as? FeeRatePriority
-                ?: FeeRatePriority.MEDIUM
-        return erc20Kit.fee(feeRateProvider.ethereumGasPrice(feePriority)).movePointLeft(18)
+        val feeRate = params[SendModule.AdapterFields.FeeRate] as? Long
+                ?: throw WrongParameters()
+        return erc20Kit.fee(gasPrice = feeRate).movePointLeft(18)
     }
 
     override fun validate(params: Map<SendModule.AdapterFields, Any?>): List<SendStateError> {
         val errors = mutableListOf<SendStateError>()
 
-        (params[SendModule.AdapterFields.CoinAmount] as? BigDecimal)?.let { amount ->
+        (params[SendModule.AdapterFields.CoinAmountInBigDecimal] as? BigDecimal)?.let { amount ->
             val availableBalance = availableBalance(params)
             if (amount > availableBalance) {
                 errors.add(SendStateError.InsufficientAmount(availableBalance))

@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.modules.send.sendviews.address.SendAddres
 import io.horizontalsystems.bankwallet.modules.send.sendviews.address.SendAddressViewModel
 import io.horizontalsystems.bankwallet.modules.send.sendviews.amount.SendAmountView
 import io.horizontalsystems.bankwallet.modules.send.sendviews.amount.SendAmountViewModel
+import io.horizontalsystems.bankwallet.modules.send.sendviews.confirmation.ConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.send.sendviews.fee.SendFeeView
 import io.horizontalsystems.bankwallet.modules.send.sendviews.fee.SendFeeViewModel
 import io.horizontalsystems.bankwallet.modules.send.sendviews.sendbutton.SendButtonView
@@ -23,10 +24,10 @@ import kotlinx.android.synthetic.main.activity_send.*
 
 class SendActivity : BaseActivity() {
 
+    private lateinit var mainViewModel: SendViewModel
     private var sendAmountViewModel: SendAmountViewModel? = null
     private var sendAddressViewModel: SendAddressViewModel? = null
     private var sendFeeViewModel: SendFeeViewModel? = null
-    private lateinit var mainViewModel: SendViewModel
     private var sendButtonView: SendButtonView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,19 +51,10 @@ class SendActivity : BaseActivity() {
         mainViewModel = ViewModelProviders.of(this).get(SendViewModel::class.java)
         mainViewModel.init(coinCode)
 
-        observeViewModel()
-        addInputItems(coinCode)
-    }
+        mainViewModel.inputItemsLiveEvent.observe(this, Observer { inputItems ->
+            addInputItems(coinCode, inputItems)
+        })
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        val scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        scanResult?.contents?.let {
-            sendAddressViewModel?.delegate?.onAddressScan(it)
-        }
-    }
-
-    private fun observeViewModel() {
         mainViewModel.availableBalanceRetrievedLiveData.observe(this, Observer { availableBalance ->
             sendAmountViewModel?.delegate?.onAvailableBalanceRetrieved(availableBalance)
         })
@@ -79,8 +71,8 @@ class SendActivity : BaseActivity() {
             sendAmountViewModel?.delegate?.onValidationError(error)
         })
 
-        mainViewModel.insufficientFeeBalanceErrorLiveEvent.observe(this, Observer { (coinCode, fee) ->
-            sendFeeViewModel?.delegate?.onInsufficientFeeBalanceError(coinCode, fee)
+        mainViewModel.insufficientFeeBalanceErrorLiveEvent.observe(this, Observer { fee ->
+            sendFeeViewModel?.delegate?.onInsufficientFeeBalanceError(fee)
         })
 
         mainViewModel.amountValidationLiveEvent.observe(this, Observer {
@@ -95,8 +87,17 @@ class SendActivity : BaseActivity() {
             sendFeeViewModel?.delegate?.onInputTypeUpdated(inputType)
         })
 
-        mainViewModel.showConfirmationLiveEvent.observe(this, Observer {
-            ConfirmationFragment.show(this)
+        mainViewModel.showSendConfirmationLiveData.observe(this, Observer {
+            hideSoftKeyboard()
+
+            val fragmentTransaction = supportFragmentManager
+                    .beginTransaction()
+
+            fragmentTransaction
+                    .setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_right, R.anim.slide_in_from_right, R.anim.slide_out_to_right)
+                    .add(R.id.rootView, ConfirmationFragment())
+                    .addToBackStack("confirmFragment")
+                    .commit()
         })
 
         mainViewModel.fetchStatesFromModulesLiveEvent.observe(this, Observer {
@@ -114,13 +115,65 @@ class SendActivity : BaseActivity() {
 
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        scanResult?.contents?.let {
+            sendAddressViewModel?.delegate?.onAddressScan(it)
+        }
+    }
+
+    private fun addInputItems(coinCode: String, inputItems: List<SendModule.Input>) {
+        inputItems.forEach { input ->
+            when (input) {
+                SendModule.Input.Amount -> {
+                    //add amount view
+                    val sendAmountView = SendAmountView(this)
+                    sendAmountViewModel = ViewModelProviders.of(this).get(SendAmountViewModel::class.java)
+                    sendAmountViewModel?.init(coinCode)
+                    sendAmountViewModel?.let {
+                        sendAmountView.bindInitial(it, mainViewModel, this, 8)
+                    }
+                    sendLinearLayout.addView(sendAmountView)
+                    sendAmountView.requestFocus()
+                }
+                SendModule.Input.Address -> {
+                    //add address view
+                    val sendAddressView = SendAddressView(this)
+                    sendAddressViewModel = ViewModelProviders.of(this).get(SendAddressViewModel::class.java)
+                    sendAddressViewModel?.init()
+                    sendAddressViewModel?.let {
+                        sendAddressView.bindAddressInputInitial(it, mainViewModel, this, { QRScannerModule.start(this) })
+                    }
+                    sendLinearLayout.addView(sendAddressView)
+                }
+                is SendModule.Input.Fee -> {
+                    //add fee view
+                    val sendFeeView = SendFeeView(this)
+                    sendFeeViewModel = ViewModelProviders.of(this).get(SendFeeViewModel::class.java)
+                    sendFeeViewModel?.init(coinCode)
+                    sendFeeViewModel?.let {
+                        sendFeeView.bindInitial(it, mainViewModel, this, input.isAdjustable)
+                    }
+                    sendLinearLayout.addView(sendFeeView)
+                }
+                SendModule.Input.SendButton -> {
+                    //add send button
+                    sendButtonView = SendButtonView(this)
+                    sendButtonView?.bind { mainViewModel.delegate.onSendClicked() }
+                    sendLinearLayout.addView(sendButtonView)
+                }
+            }
+        }
+    }
+
     private fun fetchParamsFromModules(paramsAction: SendModule.ParamsAction) {
         val params = mutableMapOf<SendModule.AdapterFields, Any?>()
         params[SendModule.AdapterFields.CoinValue] = sendAmountViewModel?.delegate?.getCoinValue()
         params[SendModule.AdapterFields.CurrencyValue] = sendAmountViewModel?.delegate?.getCurrencyValue()
         params[SendModule.AdapterFields.InputType] = sendAmountViewModel?.delegate?.getInputType()
         params[SendModule.AdapterFields.Address] = sendAddressViewModel?.delegate?.getAddress()
-        params[SendModule.AdapterFields.FeeRatePriority] = sendFeeViewModel?.delegate?.getFeePriority()
+        params[SendModule.AdapterFields.FeeRate] = sendFeeViewModel?.delegate?.getFeeRate()
         params[SendModule.AdapterFields.FeeCoinValue] = sendFeeViewModel?.delegate?.getFeeCoinValue()
         params[SendModule.AdapterFields.FeeCurrencyValue] = sendFeeViewModel?.delegate?.getFeeCurrencyValue()
 
@@ -139,41 +192,6 @@ class SendActivity : BaseActivity() {
             states.add(it.validState)
         }
         mainViewModel.delegate.onValidStatesFetchedFromModules(states)
-    }
-
-    private fun addInputItems(coinCode: String) {
-        //add amount view
-        val sendAmountView = SendAmountView(this)
-        sendAmountViewModel = ViewModelProviders.of(this).get(SendAmountViewModel::class.java)
-        sendAmountViewModel?.init(coinCode)
-        sendAmountViewModel?.let {
-            sendAmountView.bindInitial(it, mainViewModel, this, 8)
-        }
-        sendLinearLayout.addView(sendAmountView)
-        sendAmountView.requestFocus()
-
-        //add address view
-        val sendAddressView = SendAddressView(this)
-        sendAddressViewModel = ViewModelProviders.of(this).get(SendAddressViewModel::class.java)
-        sendAddressViewModel?.init()
-        sendAddressViewModel?.let {
-            sendAddressView.bindAddressInputInitial(it, mainViewModel, this, { QRScannerModule.start(this) })
-        }
-        sendLinearLayout.addView(sendAddressView)
-
-        //add fee view
-        val sendFeeView = SendFeeView(this)
-        sendFeeViewModel = ViewModelProviders.of(this).get(SendFeeViewModel::class.java)
-        sendFeeViewModel?.init(coinCode)
-        sendFeeViewModel?.let {
-            sendFeeView.bindInitial(it, mainViewModel, this, true)
-        }
-        sendLinearLayout.addView(sendFeeView)
-
-        //add send button
-        sendButtonView = SendButtonView(this)
-        sendButtonView?.bind { mainViewModel.delegate.onSendClicked() }
-        sendLinearLayout.addView(sendButtonView)
     }
 
     companion object {

@@ -4,17 +4,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
-import java.math.BigDecimal
+import io.horizontalsystems.bankwallet.entities.CoinValue
 
 class SendFeeViewModel: ViewModel(), SendFeeModule.IView {
 
     lateinit var delegate: SendFeeModule.IViewDelegate
 
-    val feeIsAdjustableLiveData = MutableLiveData<Boolean>()
     val feePriorityChangeLiveData = MutableLiveData<FeeRatePriority>()
     val primaryFeeLiveData = MutableLiveData<String?>()
     val secondaryFeeLiveData = MutableLiveData<String?>()
-    val insufficientFeeBalanceErrorLiveEvent = SingleLiveEvent<Pair<String, BigDecimal>>()
+    val insufficientFeeBalanceErrorLiveEvent = SingleLiveEvent<CoinValue>()
 
 
     fun init(coinCode: String) {
@@ -33,7 +32,7 @@ class SendFeeViewModel: ViewModel(), SendFeeModule.IView {
         secondaryFeeLiveData.value = feeAmount
     }
 
-    override fun setInsufficientFeeBalanceError(coinCode: String, fee: BigDecimal) {
-        insufficientFeeBalanceErrorLiveEvent.value = Pair(coinCode, fee)
+    override fun setInsufficientFeeBalanceError(feeCoinValue: CoinValue) {
+        insufficientFeeBalanceErrorLiveEvent.value = feeCoinValue
     }
 }

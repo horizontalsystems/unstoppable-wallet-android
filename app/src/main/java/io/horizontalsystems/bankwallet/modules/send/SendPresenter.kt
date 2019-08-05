@@ -9,15 +9,26 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import java.math.BigDecimal
 import java.net.UnknownHostException
 
-class SendPresenter(
-        private val interactor: SendModule.IInteractor,
-        private val confirmationFactory: ConfirmationViewItemFactory)
+open class SendPresenter(
+        protected val interactor: SendModule.IInteractor,
+        protected val confirmationFactory: ConfirmationViewItemFactory)
     : SendModule.IViewDelegate, SendModule.IInteractorDelegate {
 
     var view: SendViewModel? = null
+    protected var inputParams: Map<SendModule.AdapterFields, Any?>? = null
 
     override fun onGetAvailableBalance() {
         view?.getParamsForAction(SendModule.ParamsAction.AvailableBalance)
+    }
+
+    open val inputs = listOf(
+            SendModule.Input.Amount,
+            SendModule.Input.Address,
+            SendModule.Input.Fee(true),
+            SendModule.Input.SendButton)
+
+    override fun onViewDidLoad() {
+        view?.loadInputItems(inputs)
     }
 
     override fun onAmountChanged(coinAmount: BigDecimal?) {
@@ -31,7 +42,7 @@ class SendPresenter(
             SendModule.ParamsAction.UpdateModules -> {
                 val updatedParams = params.toMutableMap()
                 val coinValue = (params[SendModule.AdapterFields.CoinValue] as? CoinValue)
-                updatedParams[SendModule.AdapterFields.CoinAmount] = coinValue?.value
+                updatedParams[SendModule.AdapterFields.CoinAmountInBigDecimal] = coinValue?.value
                         ?: BigDecimal.ZERO
 
                 interactor.validate(updatedParams)
@@ -39,7 +50,6 @@ class SendPresenter(
             }
             SendModule.ParamsAction.AvailableBalance -> getAvailableBalance(params)
             SendModule.ParamsAction.ShowConfirm -> showConfirmationDialog(params)
-            SendModule.ParamsAction.Send -> send(params)
         }
     }
 
@@ -61,7 +71,7 @@ class SendPresenter(
                     view?.onValidationError(error)
                 }
                 is SendStateError.InsufficientFeeBalance -> {
-                    view?.onInsufficientFeeBalance(interactor.coin.code, error.fee)
+                    view?.onInsufficientFeeBalance(error.fee)
                 }
             }
         }
@@ -106,7 +116,17 @@ class SendPresenter(
         view?.setSendButtonEnabled(!invalid)
     }
 
-    private fun showConfirmationDialog(params: Map<SendModule.AdapterFields, Any?>) {
+    override fun send(memo: String?) {
+        val mutableMap = inputParams?.toMutableMap()
+        mutableMap?.let { params ->
+            memo?.let {
+                params[SendModule.AdapterFields.Memo] = it
+            }
+            interactor.send(params)
+        }
+    }
+
+    open fun showConfirmationDialog(params: Map<SendModule.AdapterFields, Any?>) {
         try {
             val inputType: SendModule.InputType = params[SendModule.AdapterFields.InputType] as SendModule.InputType
             val address: String = (params[SendModule.AdapterFields.Address] as? String)
@@ -119,30 +139,17 @@ class SendPresenter(
             val feeCurrencyValue: CurrencyValue? = params[SendModule.AdapterFields.FeeCurrencyValue] as? CurrencyValue
 
             val confirmationViewItem = confirmationFactory.confirmationViewItem(
-                    interactor.coin,
                     inputType,
                     address,
                     coinValue,
                     currencyValue,
                     feeCoinValue,
-                    feeCurrencyValue
+                    feeCurrencyValue,
+                    false
             )
 
+            inputParams = params
             view?.showConfirmation(confirmationViewItem)
-        } catch (error: WrongParameters) {
-            //wrong parameters exception
-        }
-    }
-
-    private fun send(params: Map<SendModule.AdapterFields, Any?>) {
-        try {
-            val address: String = (params[SendModule.AdapterFields.Address] as? String)
-                    ?: throw WrongParameters()
-            val coinValue: CoinValue = (params[SendModule.AdapterFields.CoinValue] as? CoinValue)
-                    ?: throw WrongParameters()
-            val feePriority = params[SendModule.AdapterFields.FeeRatePriority] as? FeeRatePriority
-                    ?: FeeRatePriority.MEDIUM
-            interactor.send(address, coinValue.value, feePriority)
         } catch (error: WrongParameters) {
             //wrong parameters exception
         }

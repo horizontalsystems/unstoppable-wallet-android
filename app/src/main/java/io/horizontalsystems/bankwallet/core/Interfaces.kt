@@ -233,7 +233,8 @@ interface IAdapter {
     fun getTransactions(from: Pair<String, Int>? = null, limit: Int): Single<List<TransactionRecord>>
     val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
 
-    fun send(address: String, value: BigDecimal, feePriority: FeeRatePriority): Single<Unit>
+    @Throws
+    fun send(params: Map<SendModule.AdapterFields, Any?>): Single<Unit>
 
     fun availableBalance(params: Map<SendModule.AdapterFields, Any?>): BigDecimal
     @Throws
@@ -246,6 +247,7 @@ interface IAdapter {
     fun validate(params: Map<SendModule.AdapterFields, Any?>): List<SendStateError>
 
     fun parsePaymentAddress(address: String): PaymentRequestAddress
+    fun getFeeRate(feeRatePriority: FeeRatePriority): Long
 
     val receiveAddress: String
 

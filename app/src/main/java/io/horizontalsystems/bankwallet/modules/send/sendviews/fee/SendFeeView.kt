@@ -7,6 +7,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.send.SendViewModel
 import kotlinx.android.synthetic.main.view_fee_priority_input.view.*
 
@@ -35,10 +36,6 @@ class SendFeeView : ConstraintLayout {
             viewModel.delegate.onFeeSliderChange(progress)
         }
 
-        viewModel.feeIsAdjustableLiveData.observe(lifecycleOwner, Observer{ feeIsAdjustable ->
-            feeRateSeekbar.visibility = if (feeIsAdjustable) View.VISIBLE else View.GONE
-        })
-
         viewModel.feePriorityChangeLiveData.observe(lifecycleOwner, Observer { feeRatePriority ->
             mainViewModel.delegate.onFeePriorityChange(feeRatePriority)
         })
@@ -47,11 +44,17 @@ class SendFeeView : ConstraintLayout {
 
         viewModel.secondaryFeeLiveData.observe(lifecycleOwner, Observer { txtFeeSecondary.text = it })
 
-        viewModel.insufficientFeeBalanceErrorLiveEvent.observe(lifecycleOwner, Observer {(coinCode, fee) ->
+        viewModel.insufficientFeeBalanceErrorLiveEvent.observe(lifecycleOwner, Observer {feeCoinValue ->
             feeError.visibility = View.VISIBLE
             feeRateSeekbar.visibility = View.GONE
             feeAmountWrapper.visibility = View.GONE
-            feeError.text = context.getString(R.string.Send_ERC_Alert, coinCode, fee.stripTrailingZeros().toPlainString())
+
+            val coinCode = viewModel.delegate.coinCode
+            val tokenProtocol = viewModel.delegate.tokenProtocol
+            val baseCoinName = viewModel.delegate.baseCoinName
+            val formattedFee = App.numberFormatter.format(feeCoinValue)
+
+            feeError.text = context.getString(R.string.Send_Token_InsufficientFeeAlert, coinCode, tokenProtocol, baseCoinName, formattedFee)
         })
 
         viewModel.delegate.onViewDidLoad()

@@ -2,180 +2,39 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/alert_background_themed"
+    android:layout_height="match_parent"
+    android:background="?ConfirmationScreenBackground"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
     >
 
-    <io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
-        android:id="@+id/coinIcon"
-        android:layout_width="wrap_content"
+    <io.horizontalsystems.bankwallet.ui.extensions.ShadowlessToolbarView
+        android:id="@+id/shadowlessToolbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/coin_dash"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />
 
-    <TextView
-        android:id="@+id/txtTitle"
-        style="@style/BaseSb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:textColor="?BottomDialogTextColor"
-        app:layout_constraintBottom_toBottomOf="@+id/coinIcon"
-        app:layout_constraintStart_toEndOf="@+id/coinIcon"
-        app:layout_constraintTop_toTopOf="@+id/coinIcon"
-        tools:text="Send BTC"
-        />
-
-    <View
-        android:id="@+id/border1"
-        android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:layout_marginTop="11dp"
-        android:background="@color/steel_15"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtTitle"
-        />
-
-    <View
-        android:id="@+id/inputBackgroundView"
-        android:layout_width="0dp"
-        android:layout_height="138dp"
-        android:background="?ConfirmationMiddlePartBackground"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/border1"
-        />
-    <View
-        android:id="@+id/bottomShade_1"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="?SettingsSectionBottomShadeColor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputBackgroundView"
-        />
-
-    <TextView
-        android:id="@+id/primaryAmountText"
-        style="@style/Title2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:maxLines="1"
-        android:textColor="@color/yellow_crypto"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/border1"
-        tools:text="$105"
-        />
-
-    <TextView
-        android:id="@+id/secondaryAmountText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:fontFamily="@font/noto_sans_medium"
-        android:textColor="?TextColorGreyLightToDark"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/primaryAmountText"
-        app:layout_goneMarginTop="2dp"
-        tools:text="0.0006482 BTC"
-        />
-
-    <View
-        android:id="@+id/border2"
-        android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:layout_marginBottom="10dp"
-        android:background="@color/steel_15"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/addressView"
-        />
-
-    <io.horizontalsystems.bankwallet.ui.extensions.AddressView
-        android:id="@+id/addressView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/inputBackgroundView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
-
-    <TextView
-        android:id="@+id/txtFeeTitle"
-        style="@style/Body1Grey"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/Send_DialogFee"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputBackgroundView"
-        />
-
-    <TextView
-        android:id="@+id/txtFeeValue"
-        style="@style/Body1Grey"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:textAlignment="textEnd"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/txtFeeTitle"
-        tools:text="$0.15"
-        />
-
-    <TextView
-        android:id="@+id/txtTotalTitle"
-        style="@style/Body1Grey"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
-        android:text="@string/Send_DialogTotal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtFeeTitle"
-        />
-
-    <TextView
-        android:id="@+id/txtTotalValue"
-        style="@style/Body1Grey"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:textAlignment="textEnd"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/txtTotalTitle"
-        tools:text="$123.5"
-        />
-
-    <io.horizontalsystems.bankwallet.ui.extensions.ButtonWithProgressbarView
-        android:id="@+id/buttonConfirm"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtTotalTitle"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/shadowlessToolbar"
+        >
+
+        <LinearLayout
+            android:id="@+id/confirmationLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:orientation="vertical"
+            />
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

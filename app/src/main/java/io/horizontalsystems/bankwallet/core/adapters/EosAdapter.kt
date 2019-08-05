@@ -9,6 +9,9 @@ import io.horizontalsystems.eoskit.models.Transaction
 import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
+import java.math.RoundingMode
+import java.text.SimpleDateFormat
+import java.util.*
 
 class EosAdapter(override val wallet: Wallet, eos: CoinType.Eos, private val eosKit: EosKit) : IAdapter {
 
@@ -64,12 +67,24 @@ class EosAdapter(override val wallet: Wallet, eos: CoinType.Eos, private val eos
     override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
         get() = token.transactionsFlowable.map { it.map { tx -> transactionRecord(tx) } }
 
-    override fun send(address: String, value: BigDecimal, feePriority: FeeRatePriority): Single<Unit> {
-        return eosKit.send(token, address, value, "").map { Unit } // todo: add memo
+    override fun send(params: Map<SendModule.AdapterFields, Any?>): Single<Unit> {
+        val coinValue = params[SendModule.AdapterFields.CoinValue] as? CoinValue
+                ?: throw WrongParameters()
+        val address = params[SendModule.AdapterFields.Address] as? String
+                ?: throw WrongParameters()
+        val memo = params[SendModule.AdapterFields.Memo] as? String ?: ""
+
+        val scaledValue = coinValue.value.setScale(4, RoundingMode.HALF_EVEN)
+
+        return eosKit.send(token, address, scaledValue, memo).map { Unit }
     }
 
     override fun fee(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
         return BigDecimal.ZERO
+    }
+
+    override fun getFeeRate(feeRatePriority: FeeRatePriority): Long {
+        return 0L
     }
 
     override fun availableBalance(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
@@ -80,7 +95,7 @@ class EosAdapter(override val wallet: Wallet, eos: CoinType.Eos, private val eos
     }
 
     override fun validate(params: Map<SendModule.AdapterFields, Any?>): List<SendStateError> {
-        val amount = params[SendModule.AdapterFields.CoinAmount] as? BigDecimal
+        val amount = params[SendModule.AdapterFields.CoinAmountInBigDecimal] as? BigDecimal
                 ?: throw WrongParameters()
 
         val errors = mutableListOf<SendStateError>()

@@ -1,32 +1,32 @@
 package io.horizontalsystems.bankwallet.modules.send
 
-import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.core.WrongParameters
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.send.sendviews.confirmation.SendConfirmationInfo
 
 class ConfirmationViewItemFactory {
 
     fun confirmationViewItem(
-            coin: Coin,
             inputType: SendModule.InputType,
             address: String,
             coinValue: CoinValue,
             currencyValue: CurrencyValue?,
-            feeCoinValue: CoinValue,
-            feeCurrencyValue: CurrencyValue?
-    ): SendModule.SendConfirmationViewItem {
+            feeCoinValue: CoinValue?,
+            feeCurrencyValue: CurrencyValue?,
+            showMemo: Boolean
+    ): SendConfirmationInfo {
 
-        val stateFeeInfo: SendModule.AmountInfo
-        var stateTotalInfo: SendModule.AmountInfo? = null
+        val stateFeeInfo: SendModule.AmountInfo? = when {
+            feeCurrencyValue != null && currencyValue != null -> SendModule.AmountInfo.CurrencyValueInfo(feeCurrencyValue)
+            feeCoinValue != null -> SendModule.AmountInfo.CoinValueInfo(feeCoinValue)
+            else -> null
+        }
 
-        if (feeCurrencyValue != null && currencyValue != null) {
-            stateFeeInfo = SendModule.AmountInfo.CurrencyValueInfo(feeCurrencyValue)
-            stateTotalInfo = SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(currencyValue.currency, currencyValue.value + feeCurrencyValue.value))
-        } else {
-            stateFeeInfo = SendModule.AmountInfo.CoinValueInfo(feeCoinValue)
-            if (coinValue.coinCode == feeCoinValue.coinCode) {
-                stateTotalInfo = SendModule.AmountInfo.CoinValueInfo(CoinValue(coinValue.coinCode, coinValue.value + feeCoinValue.value))
-            }
+        val stateTotalInfo: SendModule.AmountInfo? = when {
+            feeCurrencyValue != null && currencyValue != null -> SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(currencyValue.currency, currencyValue.value + feeCurrencyValue.value))
+            feeCoinValue != null && coinValue.coinCode == feeCoinValue.coinCode -> SendModule.AmountInfo.CoinValueInfo(CoinValue(coinValue.coinCode, coinValue.value + feeCoinValue.value))
+            else -> null
         }
 
         val primaryAmountInfo = when {
@@ -39,7 +39,17 @@ class ConfirmationViewItemFactory {
             else -> currencyValue?.let { SendModule.AmountInfo.CurrencyValueInfo(it) }
         }
 
-        return SendModule.SendConfirmationViewItem(coin, primaryAmountInfo, secondaryAmountInfo, address, stateFeeInfo, stateTotalInfo)
+        val primaryAmountString = primaryAmountInfo.getFormatted() ?: throw WrongParameters()
+
+        return SendConfirmationInfo(
+                primaryAmount = primaryAmountString,
+                secondaryAmount = secondaryAmountInfo?.getFormatted(),
+                receiver = address,
+                fee = stateFeeInfo?.getFormatted(),
+                total = stateTotalInfo?.getFormatted(),
+                time = null,
+                showMemo = showMemo
+        )
     }
 
 }

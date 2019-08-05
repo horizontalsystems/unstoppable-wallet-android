@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.send
 
-import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.IAdapter
+import io.horizontalsystems.bankwallet.core.WrongParameters
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
 import io.reactivex.Single
@@ -9,7 +9,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
-
 
 
 class SendInteractor(private val adapter: IAdapter) : SendModule.IInteractor {
@@ -65,15 +64,20 @@ class SendInteractor(private val adapter: IAdapter) : SendModule.IInteractor {
                 )
     }
 
-    override fun send(address: String, coinAmount: BigDecimal, feePriority: FeeRatePriority) {
-        sendDisposable = adapter.send(address, coinAmount, feePriority)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { delegate?.didSend() },
-                        { error ->
-                            delegate?.showError(error)
-                        })
+    override fun send(params: Map<SendModule.AdapterFields, Any?>) {
+        try {
+            sendDisposable = adapter.send(params)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            { delegate?.didSend() },
+                            { error ->
+                                delegate?.showError(error)
+                            })
+        } catch (error: WrongParameters) {
+            //todo add proper error text for this error
+            delegate?.showError(error)
+        }
     }
 
     override fun clear() {

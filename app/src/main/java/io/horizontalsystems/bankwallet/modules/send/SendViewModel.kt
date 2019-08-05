@@ -5,46 +5,46 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.core.SendStateError
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
+import io.horizontalsystems.bankwallet.modules.send.sendviews.confirmation.SendConfirmationInfo
 import java.math.BigDecimal
 
 class SendViewModel : ViewModel(), SendModule.IView {
 
     lateinit var delegate: SendModule.IViewDelegate
 
-    val dismissConfirmationLiveEvent = SingleLiveEvent<Unit>()
     val dismissWithSuccessLiveEvent = SingleLiveEvent<Unit>()
     val errorLiveData = MutableLiveData<Int?>()
-    val sendConfirmationViewItemLiveData = MutableLiveData<SendModule.SendConfirmationViewItem>()
-    val showConfirmationLiveEvent = SingleLiveEvent<Unit>()
+    val sendConfirmationLiveData = MutableLiveData<SendConfirmationInfo>()
+    val showSendConfirmationLiveData = SingleLiveEvent<Unit>()
     val availableBalanceRetrievedLiveData = MutableLiveData<BigDecimal>()
     val onAddressParsedLiveData = MutableLiveData<PaymentRequestAddress>()
     val getParamsFromModulesLiveEvent = SingleLiveEvent<SendModule.ParamsAction>()
     val validationErrorLiveEvent = SingleLiveEvent<SendStateError.InsufficientAmount>()
-    val insufficientFeeBalanceErrorLiveEvent = SingleLiveEvent<Pair<String, BigDecimal>>()
+    val insufficientFeeBalanceErrorLiveEvent = SingleLiveEvent<BigDecimal>()
     val amountValidationLiveEvent = SingleLiveEvent<Unit>()
     val feeUpdatedLiveData = MutableLiveData<BigDecimal>()
     val mainInputTypeUpdatedLiveData = MutableLiveData<SendModule.InputType>()
     val sendButtonEnabledLiveData = MutableLiveData<Boolean>()
     val fetchStatesFromModulesLiveEvent = SingleLiveEvent<Unit>()
+    val inputItemsLiveEvent = SingleLiveEvent<List<SendModule.Input>>()
 
-
-    private var moduleInited = false
 
     fun init(coinCode: String) {
-        errorLiveData.value = null
-        sendConfirmationViewItemLiveData.value = null
-
         SendModule.init(this, coinCode)
-        moduleInited = true
+        delegate.onViewDidLoad()
+    }
+
+    override fun loadInputItems(inputs: List<SendModule.Input>) {
+        inputItemsLiveEvent.value = inputs
     }
 
     override fun setSendButtonEnabled(sendButtonEnabled: Boolean) {
         sendButtonEnabledLiveData.value = sendButtonEnabled
     }
 
-    override fun showConfirmation(viewItem: SendModule.SendConfirmationViewItem) {
-        sendConfirmationViewItemLiveData.value = viewItem
-        showConfirmationLiveEvent.call()
+    override fun showConfirmation(viewItem: SendConfirmationInfo) {
+        sendConfirmationLiveData.value = viewItem
+        showSendConfirmationLiveData.call()
     }
 
     override fun showError(error: Int) {
@@ -53,13 +53,10 @@ class SendViewModel : ViewModel(), SendModule.IView {
 
     override fun dismissWithSuccess() {
         dismissWithSuccessLiveEvent.call()
-        dismissConfirmationLiveEvent.call()
     }
 
     override fun onCleared() {
-        if (moduleInited) {
-            delegate.onClear()
-        }
+        delegate.onClear()
     }
 
     override fun onAvailableBalanceRetrieved(availableBalance: BigDecimal) {
@@ -78,8 +75,8 @@ class SendViewModel : ViewModel(), SendModule.IView {
         validationErrorLiveEvent.value = error
     }
 
-    override fun onInsufficientFeeBalance(coinCode: String, fee: BigDecimal) {
-        insufficientFeeBalanceErrorLiveEvent.value = Pair(coinCode, fee)
+    override fun onInsufficientFeeBalance(fee: BigDecimal) {
+        insufficientFeeBalanceErrorLiveEvent.value = fee
     }
 
     override fun onAmountValidationSuccess() {
@@ -97,4 +94,5 @@ class SendViewModel : ViewModel(), SendModule.IView {
     override fun getValidStatesFromModules() {
         fetchStatesFromModulesLiveEvent.call()
     }
+
 }

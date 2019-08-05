@@ -12,8 +12,11 @@ import java.math.BigDecimal
 class SendFeePresenter(
         private val interactor: SendFeeModule.IInteractor,
         private val helper: SendFeePresenterHelper,
+        override val coinCode: String,
         private val feeCoinCode: String,
-        private val currency: Currency)
+        private val currency: Currency,
+        override val baseCoinName: String,
+        override val tokenProtocol: String)
     : SendFeeModule.IViewDelegate, SendFeeModule.IInteractorDelegate {
 
     var view: SendFeeViewModel? = null
@@ -22,6 +25,7 @@ class SendFeePresenter(
     private var inputType = SendModule.InputType.COIN
     private var feePriority: FeeRatePriority = FeeRatePriority.MEDIUM
     private var insufficientFeeBalance: BigDecimal? = null
+    private var feeRate = 0L
 
     override val validState: Boolean
         get() {
@@ -30,6 +34,7 @@ class SendFeePresenter(
 
     override fun onViewDidLoad() {
         interactor.getRate(feeCoinCode, currency.code)
+        feeRate = interactor.getFeeRate(feePriority)
     }
 
     override fun onRateFetched(latestRate: Rate?) {
@@ -39,6 +44,7 @@ class SendFeePresenter(
 
     override fun onFeeSliderChange(progress: Int) {
         feePriority = FeeRatePriority.valueOf(progress)
+        feeRate = interactor.getFeeRate(feePriority)
         view?.onFeePriorityChange(feePriority)
     }
 
@@ -47,8 +53,8 @@ class SendFeePresenter(
         updateView()
     }
 
-    override fun getFeePriority(): FeeRatePriority {
-        return feePriority
+    override fun getFeeRate(): Long {
+        return feeRate
     }
 
     override fun getFeeCoinValue(): CoinValue {
@@ -65,9 +71,9 @@ class SendFeePresenter(
         updateView()
     }
 
-    override fun onInsufficientFeeBalanceError(coinCode: String, fee: BigDecimal) {
+    override fun onInsufficientFeeBalanceError(fee: BigDecimal) {
         insufficientFeeBalance = fee
-        view?.setInsufficientFeeBalanceError(coinCode, fee)
+        view?.setInsufficientFeeBalanceError(CoinValue(feeCoinCode, fee))
     }
 
     private fun updateView(){

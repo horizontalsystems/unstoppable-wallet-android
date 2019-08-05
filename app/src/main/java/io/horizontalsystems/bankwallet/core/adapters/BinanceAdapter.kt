@@ -1,10 +1,8 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
-import io.horizontalsystems.bankwallet.entities.TransactionAddress
-import io.horizontalsystems.bankwallet.entities.TransactionRecord
-import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.core.utils.AddressParser
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.binancechainkit.models.TransactionInfo
@@ -12,12 +10,16 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
 
-class BinanceAdapter(override val wallet: Wallet, private val binanceKit: BinanceChainKit, private val symbol: String)
+class BinanceAdapter(
+        override val wallet: Wallet,
+        private val binanceKit: BinanceChainKit,
+        private val symbol: String,
+        private val addressParser: AddressParser)
     : IAdapter {
 
     private val asset = binanceKit.register(symbol)
 
-    override val feeCoinCode: String? = null
+    override val feeCoinCode: String? = "BNB"
     override val decimal: Int = 8
 
     override val confirmationsThreshold: Int
@@ -66,17 +68,30 @@ class BinanceAdapter(override val wallet: Wallet, private val binanceKit: Binanc
     override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
         get() = asset.transactionsFlowable.map { it.map { tx -> transactionRecord(tx) } }
 
-    override fun send(address: String, value: BigDecimal, feePriority: FeeRatePriority): Single<Unit> {
-        return binanceKit.send(symbol, address, value, "").map { Unit }
+    override fun send(params: Map<SendModule.AdapterFields, Any?>): Single<Unit> {
+        val coinValue = params[SendModule.AdapterFields.CoinValue] as? CoinValue
+                ?: throw WrongParameters()
+        val address = params[SendModule.AdapterFields.Address] as? String
+                ?: throw WrongParameters()
+        val memo = params[SendModule.AdapterFields.Memo] as? String ?: ""
+
+        return binanceKit.send(symbol, address, coinValue.value, memo).map { Unit }
     }
 
     override fun availableBalance(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
-        val available = asset.balance - transferFee
-        return if (available < BigDecimal.ZERO) BigDecimal.ZERO else available
+        var availableBalance = asset.balance
+        if (asset.symbol == "BNB"){
+            availableBalance -= transferFee
+        }
+        return if (availableBalance < BigDecimal.ZERO) BigDecimal.ZERO else availableBalance
     }
 
     override fun fee(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
         return transferFee
+    }
+
+    override fun getFeeRate(feeRatePriority: FeeRatePriority): Long {
+        return 0L
     }
 
     override fun validate(address: String) {
@@ -84,20 +99,32 @@ class BinanceAdapter(override val wallet: Wallet, private val binanceKit: Binanc
     }
 
     override fun validate(params: Map<SendModule.AdapterFields, Any?>): List<SendStateError> {
-        val amount = params[SendModule.AdapterFields.CoinAmount] as? BigDecimal
-                ?: throw WrongParameters()
-
         val errors = mutableListOf<SendStateError>()
-        val availableBalance = availableBalance(params)
-        if (availableBalance < amount) {
-            errors.add(SendStateError.InsufficientAmount(availableBalance))
+
+        (params[SendModule.AdapterFields.CoinAmountInBigDecimal] as? BigDecimal)?.let { amount ->
+            val availableBalance = availableBalance(params)
+            if (amount > availableBalance) {
+                errors.add(SendStateError.InsufficientAmount(availableBalance))
+            }
+        }
+
+        if (binanceKit.binanceBalance < transferFee) {
+            errors.add(SendStateError.InsufficientFeeBalance(transferFee))
         }
 
         return errors
     }
 
     override fun parsePaymentAddress(address: String): PaymentRequestAddress {
-        return PaymentRequestAddress(address, amount = null)
+        val paymentData = addressParser.parse(address)
+        var addressError: AddressError.InvalidPaymentAddress? = null
+        try {
+            validate(paymentData.address)
+        } catch (e: Exception) {
+            addressError = AddressError.InvalidPaymentAddress()
+        }
+
+        return PaymentRequestAddress(address, amount = paymentData.amount?.toBigDecimal(), error = addressError)
     }
 
     override val receiveAddress: String
