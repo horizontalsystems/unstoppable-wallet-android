@@ -1,10 +1,7 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import android.content.Context
-import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.IAdapter
-import io.horizontalsystems.bankwallet.core.SendStateError
-import io.horizontalsystems.bankwallet.core.WrongParameters
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.eoskit.EosKit
@@ -79,6 +76,10 @@ class EosAdapter(override val wallet: Wallet, eos: CoinType.Eos, private val eos
 
     override fun fee(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
         return BigDecimal.ZERO
+    }
+
+    override fun getFeeRate(feeRatePriority: FeeRatePriority): Long {
+        return 0L
     }
 
     override fun availableBalance(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {

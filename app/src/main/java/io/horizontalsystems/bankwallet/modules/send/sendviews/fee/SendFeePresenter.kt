@@ -22,6 +22,7 @@ class SendFeePresenter(
     private var inputType = SendModule.InputType.COIN
     private var feePriority: FeeRatePriority = FeeRatePriority.MEDIUM
     private var insufficientFeeBalance: BigDecimal? = null
+    private var feeRate = 0L
 
     override val validState: Boolean
         get() {
@@ -30,6 +31,7 @@ class SendFeePresenter(
 
     override fun onViewDidLoad() {
         interactor.getRate(feeCoinCode, currency.code)
+        feeRate = interactor.getFeeRate(feePriority)
     }
 
     override fun onRateFetched(latestRate: Rate?) {
@@ -39,6 +41,7 @@ class SendFeePresenter(
 
     override fun onFeeSliderChange(progress: Int) {
         feePriority = FeeRatePriority.valueOf(progress)
+        feeRate = interactor.getFeeRate(feePriority)
         view?.onFeePriorityChange(feePriority)
     }
 
@@ -47,8 +50,8 @@ class SendFeePresenter(
         updateView()
     }
 
-    override fun getFeePriority(): FeeRatePriority {
-        return feePriority
+    override fun getFeeRate(): Long {
+        return feeRate
     }
 
     override fun getFeeCoinValue(): CoinValue {

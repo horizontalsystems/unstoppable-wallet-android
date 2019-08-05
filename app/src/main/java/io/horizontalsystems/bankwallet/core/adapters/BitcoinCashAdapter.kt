@@ -27,15 +27,15 @@ class BitcoinCashAdapter(wallet: Wallet, override val kit: BitcoinCashKit, addre
         kit.listener = this
     }
 
+    override fun getFeeRate(feeRatePriority: FeeRatePriority): Long {
+        return feeRateProvider.bitcoinCashFeeRate(feeRatePriority)
+    }
+
     //
     // BitcoinBaseAdapter
     //
 
     override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
-
-    override fun feeRate(feePriority: FeeRatePriority): Int {
-        return feeRateProvider.bitcoinCashFeeRate(feePriority).toInt()
-    }
 
     //
     // BitcoinCashKit Listener

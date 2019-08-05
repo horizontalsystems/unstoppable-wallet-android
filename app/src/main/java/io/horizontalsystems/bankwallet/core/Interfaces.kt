@@ -246,6 +246,7 @@ interface IAdapter {
     fun validate(params: Map<SendModule.AdapterFields, Any?>): List<SendStateError>
 
     fun parsePaymentAddress(address: String): PaymentRequestAddress
+    fun getFeeRate(feeRatePriority: FeeRatePriority): Long
 
     val receiveAddress: String
 

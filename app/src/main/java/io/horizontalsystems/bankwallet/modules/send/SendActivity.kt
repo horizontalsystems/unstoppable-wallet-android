@@ -130,7 +130,7 @@ class SendActivity : BaseActivity() {
         params[SendModule.AdapterFields.CurrencyValue] = sendAmountViewModel?.delegate?.getCurrencyValue()
         params[SendModule.AdapterFields.InputType] = sendAmountViewModel?.delegate?.getInputType()
         params[SendModule.AdapterFields.Address] = sendAddressViewModel?.delegate?.getAddress()
-        params[SendModule.AdapterFields.FeeRatePriority] = sendFeeViewModel?.delegate?.getFeePriority()
+        params[SendModule.AdapterFields.FeeRate] = sendFeeViewModel?.delegate?.getFeeRate()
         params[SendModule.AdapterFields.FeeCoinValue] = sendFeeViewModel?.delegate?.getFeeCoinValue()
         params[SendModule.AdapterFields.FeeCurrencyValue] = sendFeeViewModel?.delegate?.getFeeCurrencyValue()
 

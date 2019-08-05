@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
-import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.IAdapter
-import io.horizontalsystems.bankwallet.core.SendStateError
-import io.horizontalsystems.bankwallet.core.WrongParameters
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.binancechainkit.BinanceChainKit
@@ -83,6 +80,10 @@ class BinanceAdapter(override val wallet: Wallet, private val binanceKit: Binanc
 
     override fun fee(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
         return transferFee
+    }
+
+    override fun getFeeRate(feeRatePriority: FeeRatePriority): Long {
+        return 0L
     }
 
     override fun validate(address: String) {

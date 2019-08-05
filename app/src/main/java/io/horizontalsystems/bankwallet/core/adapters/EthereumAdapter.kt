@@ -1,7 +1,10 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import android.content.Context
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.AdapterState
+import io.horizontalsystems.bankwallet.core.IFeeRateProvider
+import io.horizontalsystems.bankwallet.core.SendStateError
+import io.horizontalsystems.bankwallet.core.WrongParameters
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
@@ -46,9 +49,9 @@ class EthereumAdapter(wallet: Wallet, kit: EthereumKit, addressParser: AddressPa
     }
 
     override fun fee(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
-        val feePriority = params[SendModule.AdapterFields.FeeRatePriority] as? FeeRatePriority
+        val feeRate = params[SendModule.AdapterFields.FeeRate] as? Long
                 ?: throw WrongParameters()
-        return ethereumKit.fee(feeRateProvider.ethereumGasPrice(feePriority)).movePointLeft(18)
+        return ethereumKit.fee(gasPrice = feeRate).movePointLeft(18)
     }
 
     override fun availableBalance(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {

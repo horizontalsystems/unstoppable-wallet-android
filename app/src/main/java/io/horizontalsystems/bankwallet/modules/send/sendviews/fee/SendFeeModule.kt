@@ -25,7 +25,7 @@ object SendFeeModule {
         fun onFeeSliderChange(progress: Int)
         fun onFeeUpdated(fee: BigDecimal?)
         fun onInputTypeUpdated(inputType: SendModule.InputType)
-        fun getFeePriority(): FeeRatePriority
+        fun getFeeRate(): Long
         fun onInsufficientFeeBalanceError(coinCode: String, fee: BigDecimal)
         fun getFeeCoinValue(): CoinValue
         fun getFeeCurrencyValue(): CurrencyValue?
@@ -33,6 +33,7 @@ object SendFeeModule {
 
     interface IInteractor {
         fun getRate(coinCode: String, currencyCode: String)
+        fun getFeeRate(feeRatePriority: FeeRatePriority): Long
     }
 
     interface IInteractorDelegate {
@@ -44,7 +45,7 @@ object SendFeeModule {
         val feeCoinCode = adapter.feeCoinCode ?: coinCode
         val baseCurrency = App.currencyManager.baseCurrency
         val helper = SendFeePresenterHelper(App.numberFormatter, feeCoinCode, baseCurrency)
-        val interactor = SendFeeInteractor(App.rateStorage)
+        val interactor = SendFeeInteractor(App.rateStorage, adapter)
         val presenter = SendFeePresenter(interactor, helper, feeCoinCode, baseCurrency)
 
         view.delegate = presenter

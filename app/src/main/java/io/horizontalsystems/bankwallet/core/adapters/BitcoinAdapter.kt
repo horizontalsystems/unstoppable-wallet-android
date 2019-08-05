@@ -36,8 +36,8 @@ class BitcoinAdapter(wallet: Wallet, override val kit: BitcoinKit, addressParser
     override val changeScriptType = ScriptType.P2WPKH
     override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
 
-    override fun feeRate(feePriority: FeeRatePriority): Int {
-        return feeRateProvider.bitcoinFeeRate(feePriority).toInt()
+    override fun getFeeRate(feeRatePriority: FeeRatePriority): Long {
+        return feeRateProvider.bitcoinFeeRate(feeRatePriority)
     }
 
     //

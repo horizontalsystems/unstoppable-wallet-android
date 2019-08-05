@@ -27,15 +27,15 @@ class DashAdapter(wallet: Wallet, override val kit: DashKit, addressParser: Addr
         kit.listener = this
     }
 
+    override fun getFeeRate(feeRatePriority: FeeRatePriority): Long {
+        return feeRateProvider.dashFeeRate(feeRatePriority)
+    }
+
     //
     // BitcoinBaseAdapter
     //
 
     override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
-
-    override fun feeRate(feePriority: FeeRatePriority): Int {
-        return feeRateProvider.dashFeeRate(feePriority).toInt()
-    }
 
     //
     // DashKit Listener
