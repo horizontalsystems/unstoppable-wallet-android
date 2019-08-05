@@ -5,6 +5,7 @@ import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import io.horizontalsystems.bankwallet.core.utils.EthInputParser
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule.Request.GetRequest
 import java.math.BigInteger
 import java.text.SimpleDateFormat
 import java.util.*
@@ -16,8 +17,8 @@ class BlockChairBitcoinProvider : FullTransactionInfoModule.BitcoinForksProvider
         return "https://blockchair.com/bitcoin/transaction/$hash"
     }
 
-    override fun apiUrl(hash: String): String {
-        return "https://api.blockchair.com/bitcoin/dashboards/transaction/$hash"
+    override fun apiRequest(hash: String): FullTransactionInfoModule.Request {
+        return GetRequest("https://api.blockchair.com/bitcoin/dashboards/transaction/$hash")
     }
 
     override fun convert(json: JsonObject): BitcoinResponse {
@@ -36,8 +37,8 @@ class BlockChairBitcoinCashProvider : FullTransactionInfoModule.BitcoinForksProv
         return "https://blockchair.com/bitcoin-cash/transaction/$hash"
     }
 
-    override fun apiUrl(hash: String): String {
-        return "https://api.blockchair.com/bitcoin-cash/dashboards/transaction/$hash"
+    override fun apiRequest(hash: String): FullTransactionInfoModule.Request {
+        return GetRequest("https://api.blockchair.com/bitcoin-cash/dashboards/transaction/$hash")
     }
 
     override fun convert(json: JsonObject): BitcoinResponse {
@@ -56,8 +57,8 @@ class BlockChairDashProvider : FullTransactionInfoModule.BitcoinForksProvider {
         return "https://blockchair.com/dash/transaction/$hash"
     }
 
-    override fun apiUrl(hash: String): String {
-        return "https://api.blockchair.com/dash/dashboards/transaction/$hash"
+    override fun apiRequest(hash: String): FullTransactionInfoModule.Request {
+        return GetRequest("https://api.blockchair.com/dash/dashboards/transaction/$hash")
     }
 
     override fun convert(json: JsonObject): BitcoinResponse {
@@ -76,8 +77,8 @@ class BlockChairEthereumProvider : FullTransactionInfoModule.EthereumForksProvid
         return "https://blockchair.com/ethereum/transaction/$hash"
     }
 
-    override fun apiUrl(hash: String): String {
-        return "https://api.blockchair.com/ethereum/dashboards/transaction/$hash"
+    override fun apiRequest(hash: String): FullTransactionInfoModule.Request {
+        return GetRequest("https://api.blockchair.com/ethereum/dashboards/transaction/$hash")
     }
 
     override fun convert(json: JsonObject): EthereumResponse {

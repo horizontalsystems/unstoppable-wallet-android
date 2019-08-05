@@ -53,6 +53,8 @@ class TransactionDataProviderManager(appConfig: IAppConfigProvider, private val 
         else -> listOf(BinanceChainProvider(false))
     }
 
+    private val eosProviders = listOf(EosInfraProvider(), EosGreymassProvider())
+
     override val baseProviderUpdatedSignal = PublishSubject.create<Unit>()
 
     override fun providers(coin: Coin): List<Provider> = when (coin.type) {
@@ -61,7 +63,7 @@ class TransactionDataProviderManager(appConfig: IAppConfigProvider, private val 
         is CoinType.Ethereum, is CoinType.Erc20 -> ethereumProviders
         is CoinType.Dash -> dashProviders
         is CoinType.Binance -> binanceProviders
-        is CoinType.Eos -> listOf()
+        is CoinType.Eos -> eosProviders
     }
 
     override fun baseProvider(coin: Coin) = when (coin.type) {
@@ -78,7 +80,7 @@ class TransactionDataProviderManager(appConfig: IAppConfigProvider, private val 
             binance(localStorage.baseBinanceProvider ?: binanceProviders[0].name)
         }
         is CoinType.Eos -> {
-            TODO("not implemented")
+            eos(localStorage.baseEosProvider ?: eosProviders[0].name)
         }
     }
 
@@ -93,14 +95,17 @@ class TransactionDataProviderManager(appConfig: IAppConfigProvider, private val 
             is CoinType.Dash -> {
                 localStorage.baseDashProvider = name
             }
+            is CoinType.Eos -> {
+                localStorage.baseEosProvider = name
+            }
         }
 
         baseProviderUpdatedSignal.onNext(Unit)
     }
 
-    //
-    // Providers
-    //
+//
+// Providers
+//
 
     override fun bitcoin(name: String): BitcoinForksProvider {
         bitcoinProviders.let { list ->
@@ -131,4 +136,11 @@ class TransactionDataProviderManager(appConfig: IAppConfigProvider, private val 
             return list.find { it.name == name } ?: list[0]
         }
     }
+
+    override fun eos(name: String): FullTransactionInfoModule.EosProvider {
+        eosProviders.let { list ->
+            return list.find { it.name == name } ?: list[0]
+        }
+    }
+
 }

@@ -23,6 +23,7 @@ class LocalStorageManager : ILocalStorage {
     private val BASE_ETHEREUM_PROVIDER = "base_ethereum_provider"
     private val BASE_DASH_PROVIDER = "base_dash_provider"
     private val BASE_BINANCE_PROVIDER = "base_binance_provider"
+    private val BASE_EOS_PROVIDER = "base_eos_provider"
     private val SYNC_MODE = "sync_mode"
     private val SORT_TYPE = "balance_sort_type"
 
@@ -143,6 +144,12 @@ class LocalStorageManager : ILocalStorage {
             App.preferences.edit().putString(BASE_BINANCE_PROVIDER, value).apply()
         }
 
+    override var baseEosProvider: String?
+        get() = App.preferences.getString(BASE_EOS_PROVIDER, null)
+        set(value) {
+            App.preferences.edit().putString(BASE_EOS_PROVIDER, value).apply()
+        }
+
     override var syncMode: SyncMode
         get() {
             val syncString = App.preferences.getString(SYNC_MODE, SyncMode.FAST.value)
@@ -154,7 +161,8 @@ class LocalStorageManager : ILocalStorage {
 
     override var sortType: BalanceSortType
         get() {
-            val sortString = App.preferences.getString(SORT_TYPE, BalanceSortType.Default.getAsString()) ?: BalanceSortType.Default.getAsString()
+            val sortString = App.preferences.getString(SORT_TYPE, BalanceSortType.Default.getAsString())
+                    ?: BalanceSortType.Default.getAsString()
             return BalanceSortType.getTypeFromString(sortString)
         }
         set(sortType) {

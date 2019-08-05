@@ -5,6 +5,7 @@ import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import io.horizontalsystems.bankwallet.core.utils.EthInputParser
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule.Request.GetRequest
 import java.math.BigInteger
 import java.util.*
 
@@ -15,8 +16,9 @@ class HorsysBitcoinProvider(val testMode: Boolean) : FullTransactionInfoModule.B
         return "${if (testMode) "http://btc-testnet" else "https://btc"}.horizontalsystems.xyz/tx/$hash"
     }
 
-    override fun apiUrl(hash: String): String {
-        return "${if (testMode) "http://btc-testnet" else "https://btc"}.horizontalsystems.xyz/apg/tx/$hash"
+    override fun apiRequest(hash: String): FullTransactionInfoModule.Request {
+        val url = "${if (testMode) "http://btc-testnet" else "https://btc"}.horizontalsystems.xyz/apg/tx/$hash"
+        return GetRequest(url)
     }
 
     override fun convert(json: JsonObject): BitcoinResponse {
@@ -31,8 +33,9 @@ class HorsysDashProvider(val testMode: Boolean) : FullTransactionInfoModule.Bitc
         return "${if (testMode) "http://dash-testnet" else "https://dash"}.horizontalsystems.xyz/insight/tx/$hash"
     }
 
-    override fun apiUrl(hash: String): String {
-        return "${if (testMode) "http://dash-testnet" else "https://dash"}.horizontalsystems.xyz/apg/tx/$hash"
+    override fun apiRequest(hash: String): FullTransactionInfoModule.Request {
+        val url = "${if (testMode) "http://dash-testnet" else "https://dash"}.horizontalsystems.xyz/apg/tx/$hash"
+        return GetRequest(url)
     }
 
     override fun convert(json: JsonObject): BitcoinResponse {
@@ -49,7 +52,9 @@ class HorsysEthereumProvider(val testMode: Boolean) : FullTransactionInfoModule.
 
     override fun url(hash: String): String = "$url$hash"
 
-    override fun apiUrl(hash: String): String = "$apiUrl$hash"
+    override fun apiRequest(hash: String): FullTransactionInfoModule.Request {
+        return GetRequest("$apiUrl$hash")
+    }
 
     override fun convert(json: JsonObject): EthereumResponse {
         return Gson().fromJson(json["result"], HorsysETHResponse::class.java)

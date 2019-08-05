@@ -44,6 +44,7 @@ interface ILocalStorage {
     var baseEthereumProvider: String?
     var baseDashProvider: String?
     var baseBinanceProvider: String?
+    var baseEosProvider: String?
     var syncMode: SyncMode
     var sortType: BalanceSortType
 
@@ -124,6 +125,7 @@ interface INetworkManager {
     fun getRateByDay(hostType: ServiceExchangeApi.HostType, coinCode: String, currency: String, timestamp: Long): Single<BigDecimal>
     fun getRateByHour(hostType: ServiceExchangeApi.HostType, coinCode: String, currency: String, timestamp: Long): Single<BigDecimal>
     fun getTransaction(host: String, path: String): Flowable<JsonObject>
+    fun getTransactionWithPost(host: String, path: String, body: Map<String, Any>): Flowable<JsonObject>
     fun ping(host: String, url: String): Flowable<Any>
 }
 
@@ -171,6 +173,7 @@ interface ITransactionDataProviderManager {
     fun bitcoinCash(name: String): FullTransactionInfoModule.BitcoinForksProvider
     fun ethereum(name: String): FullTransactionInfoModule.EthereumForksProvider
     fun binance(name: String): FullTransactionInfoModule.BinanceProvider
+    fun eos(name: String): FullTransactionInfoModule.EosProvider
 }
 
 interface IWordsManager {
@@ -234,10 +237,13 @@ interface IAdapter {
     fun availableBalance(params: Map<SendModule.AdapterFields, Any?>): BigDecimal
     @Throws
     fun fee(params: Map<SendModule.AdapterFields, Any?>): BigDecimal
+
     @Throws
     fun validate(address: String)
+
     @Throws
     fun validate(params: Map<SendModule.AdapterFields, Any?>): List<SendStateError>
+
     fun parsePaymentAddress(address: String): PaymentRequestAddress
 
     val receiveAddress: String
