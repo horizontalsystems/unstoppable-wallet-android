@@ -166,6 +166,10 @@
     <string name="FullInfo_Contract">Contract</string>
     <string name="FullInfo_From">From</string>
     <string name="FullInfo_To">To</string>
+    <string name="FullInfo_Status">Status</string>
+    <string name="FullInfo_Memo">Memo</string>
+    <string name="FullInfo_CpuUsage">CPU Usage</string>
+    <string name="FullInfo_NetUsage">Net Usage</string>
 
     <string name="FullInfo_GasLimit">Gas Limit</string>
     <string name="FullInfo_GasUsed">Gas Used</string>

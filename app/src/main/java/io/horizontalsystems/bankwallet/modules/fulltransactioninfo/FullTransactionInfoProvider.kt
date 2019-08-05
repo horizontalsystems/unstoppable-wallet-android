@@ -10,16 +10,26 @@ class FullTransactionInfoProvider(private val networkManager: INetworkManager, p
 
     override val providerName: String get() = provider.name
 
-    override fun url(hash: String): String {
+    override fun url(hash: String): String? {
         return provider.url(hash)
     }
 
     override fun retrieveTransactionInfo(transactionHash: String): Flowable<FullTransactionRecord> {
-        val uri = provider.apiUrl(transactionHash)
+        val request = provider.apiRequest(transactionHash)
+        val uri = request.url
         val url = URL(uri)
+        val host = "${url.protocol}://${url.host}"
 
-        return networkManager
-                .getTransaction("${url.protocol}://${url.host}", uri)
-                .map { adapter.convert(it) }
+        val requestFlowable = when (request) {
+            is FullTransactionInfoModule.Request.GetRequest -> {
+                networkManager.getTransaction(host, uri)
+            }
+            is FullTransactionInfoModule.Request.PostRequest -> {
+                networkManager.getTransactionWithPost(host, uri, request.body)
+            }
+        }
+
+        return requestFlowable.map { adapter.convert(it) }
     }
+
 }

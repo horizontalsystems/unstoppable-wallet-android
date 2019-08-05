@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.adapters.BinanceAdapter
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule.Request.GetRequest
 import java.math.BigDecimal
 
 class BinanceChainProvider(val testMode: Boolean) : FullTransactionInfoModule.BinanceProvider {
@@ -14,7 +15,9 @@ class BinanceChainProvider(val testMode: Boolean) : FullTransactionInfoModule.Bi
 
     override fun url(hash: String): String = "$url$hash"
 
-    override fun apiUrl(hash: String): String = "$apiUrl$hash?format=json"
+    override fun apiRequest(hash: String): FullTransactionInfoModule.Request {
+        return GetRequest("$apiUrl$hash?format=json")
+    }
 
     override fun convert(json: JsonObject): BinanceResponse {
         return BinanceChainResponse(json)

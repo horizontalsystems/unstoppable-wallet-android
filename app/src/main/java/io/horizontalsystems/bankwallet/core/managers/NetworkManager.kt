@@ -13,10 +13,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Headers
-import retrofit2.http.Path
-import retrofit2.http.Url
+import retrofit2.http.*
 import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 
@@ -48,6 +45,11 @@ class NetworkManager(val appConfigProvider: IAppConfigProvider) : INetworkManage
                 .getFullTransaction(path)
     }
 
+    override fun getTransactionWithPost(host: String, path: String, body: Map<String, Any>): Flowable<JsonObject> {
+        return ServiceFullTransaction.service(host)
+                .getFullTransactionWithPost(path, body.mapValues { it.value.toString() })
+    }
+
     override fun ping(host: String, url: String): Flowable<Any> {
         return ServicePing.service(host)
                 .ping(url)
@@ -70,14 +72,14 @@ class NetworkManager(val appConfigProvider: IAppConfigProvider) : INetworkManage
             .create(ServiceExchangeApi.IExchangeRate::class.java)
 
     private fun latestRateApiClient(hostType: ServiceExchangeApi.HostType): ServiceExchangeApi.IExchangeRate {
-        return when(hostType) {
+        return when (hostType) {
             ServiceExchangeApi.HostType.MAIN -> latestRateMainClient
             else -> latestRateFallbackClient
         }
     }
 
     private fun historicalRateApiClient(hostType: ServiceExchangeApi.HostType): ServiceExchangeApi.IExchangeRate {
-        return when(hostType) {
+        return when (hostType) {
             ServiceExchangeApi.HostType.MAIN -> historicalRateMainClient
             else -> historicalRateFallbackClient
         }
@@ -124,6 +126,10 @@ object ServiceFullTransaction {
         @GET
         @Headers("Content-Type: application/json")
         fun getFullTransaction(@Url path: String): Flowable<JsonObject>
+
+        @POST
+        @Headers("Content-Type: application/json")
+        fun getFullTransactionWithPost(@Url path: String, @Body body: Map<String, String>): Flowable<JsonObject>
     }
 
 }

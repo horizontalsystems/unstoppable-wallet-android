@@ -5,6 +5,7 @@ import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import io.horizontalsystems.bankwallet.core.utils.EthInputParser
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule.Request.GetRequest
 import java.math.BigInteger
 import java.util.*
 
@@ -17,7 +18,9 @@ class EtherscanEthereumProvider(val testMode: Boolean) : FullTransactionInfoModu
 
     override fun url(hash: String): String = "$url$hash"
 
-    override fun apiUrl(hash: String): String = "$apiUrl$hash"
+    override fun apiRequest(hash: String): FullTransactionInfoModule.Request {
+        return GetRequest("$apiUrl$hash")
+    }
 
     override fun convert(json: JsonObject): EthereumResponse {
         return Gson().fromJson(json["result"], EtherscanResponse::class.java)

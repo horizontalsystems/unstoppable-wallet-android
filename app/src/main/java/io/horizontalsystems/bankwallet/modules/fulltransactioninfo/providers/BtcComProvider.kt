@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
+import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule.Request.GetRequest
 import java.util.*
 
 class BtcComBitcoinProvider : FullTransactionInfoModule.BitcoinForksProvider {
@@ -13,8 +14,8 @@ class BtcComBitcoinProvider : FullTransactionInfoModule.BitcoinForksProvider {
         return "https://btc.com/$hash"
     }
 
-    override fun apiUrl(hash: String): String {
-        return "https://chain.api.btc.com/v3/tx/$hash"
+    override fun apiRequest(hash: String): FullTransactionInfoModule.Request {
+        return GetRequest("https://chain.api.btc.com/v3/tx/$hash")
     }
 
     override fun convert(json: JsonObject): BitcoinResponse {
@@ -29,8 +30,8 @@ class BtcComBitcoinCashProvider : FullTransactionInfoModule.BitcoinForksProvider
         return "https://bch.btc.com/$hash"
     }
 
-    override fun apiUrl(hash: String): String {
-        return "https://bch-chain.api.btc.com/v3/tx/$hash"
+    override fun apiRequest(hash: String): FullTransactionInfoModule.Request {
+        return GetRequest("https://bch-chain.api.btc.com/v3/tx/$hash")
     }
 
     override fun convert(json: JsonObject): BitcoinResponse {
