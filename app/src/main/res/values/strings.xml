@@ -61,7 +61,7 @@
     <string name="Backup_Button_ShowKey">Show Key</string>
 
     <!--Backup Words-->
-    <string name="Backup_Words_Title">Backup</string>
+    <string name="Backup_Words_Title">Secret Key</string>
 
     <!--Backup Eos-->
     <string name="Backup_Eos_Title">Key</string>
