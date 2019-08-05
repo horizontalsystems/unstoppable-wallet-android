@@ -40,9 +40,9 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
             item.account?.let { account ->
 
                 val confirmationList = listOf(
-                        getString(R.string.ManageKeys_Unlink_ConfirmationRemove, getString(item.predefinedAccountType.title)),
-                        getString(R.string.ManageKeys_Unlink_ConfirmationDisable, getString(item.predefinedAccountType.coinCodes)),
-                        getString(R.string.ManageKeys_Unlink_ConfirmationLoose)
+                        getString(R.string.ManageKeys_Delete_ConfirmationRemove, getString(item.predefinedAccountType.title)),
+                        getString(R.string.ManageKeys_Delete_ConfirmationDisable, getString(item.predefinedAccountType.coinCodes)),
+                        getString(R.string.ManageKeys_Delete_ConfirmationLoose)
                 )
 
                 val confirmListener = object : ManageKeysDeleteAlert.Listener {
@@ -60,7 +60,7 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
         })
 
         viewModel.confirmBackupEvent.observe(this, Observer {
-            ManageKeysDialog.show(getString(it.predefinedAccountType.title), getString(R.string.ManageKeys_UnlinkAlert), this, this, ManageAction.BACKUP)
+            ManageKeysDialog.show(getString(it.predefinedAccountType.title), getString(R.string.ManageKeys_Delete_Alert), this, this, ManageAction.BACKUP)
         })
 
         viewModel.showErrorEvent.observe(this, Observer {

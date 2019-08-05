@@ -109,7 +109,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:layout_weight="1"
-            android:text="@string/ManageKeys_Unlink"
+            android:text="@string/ManageKeys_Delete"
             android:visibility="gone" />
 
         <Button

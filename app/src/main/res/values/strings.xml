@@ -40,6 +40,7 @@
     <!--Backup-->
 
     <string name="Backup_Intro_Title">Backup</string>
+    <string name="Backup_Intro_TitleShow">Show Key</string>
     <string name="Backup_Intro_Subtitle">The key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc. Make sure that no one is watching your screen. \n\nThe coins controlled by this key: %s</string>
     <string name="Backup_Intro_Later">Later</string>
     <string name="Backup_Intro_BackupNow">Backup</string>
@@ -60,7 +61,7 @@
     <string name="Backup_Button_ShowKey">Show Key</string>
 
     <!--Backup Words-->
-    <string name="Backup_Words_Title">Backup</string>
+    <string name="Backup_Words_Title">Secret Key</string>
 
     <!--Backup Eos-->
     <string name="Backup_Eos_Title">Key</string>
@@ -329,15 +330,18 @@
     <string name="ManageKeys_Title">Manage Keys</string>
     <string name="ManageKeys_Create">Create</string>
     <string name="ManageKeys_Restore">Restore</string>
-    <string name="ManageKeys_Unlink">Delete from Phone</string>
+    <string name="ManageKeys_Delete">Delete</string>
     <string name="ManageKeys_Backup">Backup</string>
     <string name="ManageKeys_Show">Show</string>
 
-    <string name="ManageKeys_Unlink_Title">Delete Key</string>
-    <string name="ManageKeys_Unlink_ConfirmationRemove">This action will delete the %s key (wallet) from this device.</string>
-    <string name="ManageKeys_Unlink_ConfirmationDisable">Coins that will be disabled: %s</string>
-    <string name="ManageKeys_Unlink_ConfirmationLoose">If you don\'t have a backup of this key you will loose the respective funds.</string>
-    <string name="ManageKeys_UnlinkAlert">You need to backup this key before you may delete it.</string>
+    <!--Manage Keys Delete Alert-->
+
+    <string name="ManageKeys_Delete_Title">Delete Key</string>
+    <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s key (wallet) from this device.</string>
+    <string name="ManageKeys_Delete_ConfirmationDisable">Coins that will be disabled: %s</string>
+    <string name="ManageKeys_Delete_ConfirmationLoose">If you don\'t have a backup of this key you will loose the respective funds.</string>
+    <string name="ManageKeys_Delete_FromPhone">Delete from Phone</string>
+    <string name="ManageKeys_Delete_Alert">You need to backup this key before you may delete it.</string>
 
     <!-- Manage Keys Alert -->
 
