@@ -162,8 +162,7 @@ class TransactionsInteractor(
         val coinsData: MutableList<Triple<Coin, Int, Int>> = mutableListOf()
         walletManager.wallets.forEach { wallet ->
             val adapter = adapterManager.getAdapterForWallet(wallet)
-            coinsData.add(Triple(wallet.coin, adapter?.confirmationsThreshold
-                    ?: 0, adapter?.lastBlockHeight ?: 0))
+            coinsData.add(Triple(wallet.coin, adapter?.confirmationsThreshold ?: 0, adapter?.lastBlockHeight ?: 0))
 
             adapter?.let {
                 adapter.transactionRecordsFlowable
