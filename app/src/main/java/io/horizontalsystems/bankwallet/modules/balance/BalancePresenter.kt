@@ -119,6 +119,8 @@ class BalancePresenter(
         dataSource.setRate(position, rate)
         updateByPosition(position)
         view?.updateHeader()
+        dataSource.sortBy(interactor.getSortingType())
+        view?.reload()
     }
 
     override fun didRefresh() {
