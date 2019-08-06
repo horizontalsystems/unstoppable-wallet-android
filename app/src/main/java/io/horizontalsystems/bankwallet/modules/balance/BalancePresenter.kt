@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -67,11 +66,11 @@ class BalancePresenter(
     }
 
     override fun onReceive(position: Int) {
-        router.openReceiveDialog(dataSource.getItem(position).coin.code)
+        router.openReceiveDialog(dataSource.getItem(position).wallet)
     }
 
     override fun onPay(position: Int) {
-        router.openSendDialog(dataSource.getItem(position).coin.code)
+        router.openSendDialog(dataSource.getItem(position).wallet)
     }
 
     override fun onClear() {
@@ -86,7 +85,7 @@ class BalancePresenter(
         val items = wallets.map {
             val adapter = interactor.getAdapterForWallet(it)
 
-            BalanceModule.BalanceItem(it.coin, adapter?.balance ?: BigDecimal.ZERO, adapter?.state ?: AdapterState.NotSynced)
+            BalanceModule.BalanceItem(it, adapter?.balance ?: BigDecimal.ZERO, adapter?.state ?: AdapterState.NotSynced)
         }
         dataSource.set(items)
         dataSource.currency?.let {
@@ -104,24 +103,26 @@ class BalancePresenter(
         view?.reload()
     }
 
-    override fun didUpdateBalance(coinCode: CoinCode, balance: BigDecimal) {
-        val position = dataSource.getPosition(coinCode)
+    override fun didUpdateBalance(wallet: Wallet, balance: BigDecimal) {
+        val position = dataSource.getPosition(wallet)
         dataSource.setBalance(position, balance)
         updateByPosition(position)
         view?.updateHeader()
     }
 
-    override fun didUpdateState(coinCode: String, state: AdapterState) {
-        val position = dataSource.getPosition(coinCode)
+    override fun didUpdateState(wallet: Wallet, state: AdapterState) {
+        val position = dataSource.getPosition(wallet)
         dataSource.setState(position, state)
         updateByPosition(position)
         view?.updateHeader()
     }
 
     override fun didUpdateRate(rate: Rate) {
-        val position = dataSource.getPosition(rate.coinCode)
-        dataSource.setRate(position, rate)
-        updateByPosition(position)
+        val positions = dataSource.getPositionsByCoinCode(rate.coinCode)
+        positions.forEach {
+            dataSource.setRate(it, rate)
+            updateByPosition(it)
+        }
         view?.updateHeader()
         dataSource.sortBy(interactor.getSortingType())
         view?.reload()

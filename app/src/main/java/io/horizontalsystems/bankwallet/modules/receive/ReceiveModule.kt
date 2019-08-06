@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.receive
 
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.receive.viewitems.AddressItem
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 
 object ReceiveModule {
@@ -34,8 +34,8 @@ object ReceiveModule {
         fun shareAddress(address: String)
     }
 
-    fun init(coinCode: CoinCode?, view: ReceiveViewModel, router: IRouter) {
-        val interactor = ReceiveInteractor(coinCode,App.walletManager, App.adapterManager, TextHelper)
+    fun init(wallet: Wallet, view: ReceiveViewModel, router: IRouter) {
+        val interactor = ReceiveInteractor(wallet, App.adapterManager, TextHelper)
         val presenter = ReceivePresenter(interactor, router)
 
         view.delegate = presenter

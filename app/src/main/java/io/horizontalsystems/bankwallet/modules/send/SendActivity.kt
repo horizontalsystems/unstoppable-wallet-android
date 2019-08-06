@@ -186,7 +186,7 @@ class SendActivity : BaseActivity() {
     }
 
     companion object {
-        const val COIN_CODE = "coin_code_key"
+        const val WALLET = "wallet_key"
     }
 
 }

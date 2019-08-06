@@ -17,6 +17,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveView
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveViewModel
@@ -85,8 +86,8 @@ class MainActivity : BaseActivity(), ReceiveView.Listener, TransactionInfoView.L
     Receive bottomsheet
      */
 
-    fun openReceiveDialog(coinCode: String) {
-        receiveViewModel?.init(coinCode)
+    fun openReceiveDialog(wallet: Wallet) {
+        receiveViewModel?.init(wallet)
     }
 
     override fun expandReceiveDialog() {
@@ -105,9 +106,9 @@ class MainActivity : BaseActivity(), ReceiveView.Listener, TransactionInfoView.L
                 .startChooser()
     }
 
-    fun openSend(coinCode: String) {
+    fun openSend(wallet: Wallet) {
         val intent = Intent(this, SendActivity::class.java).apply {
-            putExtra(SendActivity.COIN_CODE, coinCode)
+            putExtra(SendActivity.WALLET, wallet)
         }
         startActivity(intent)
     }

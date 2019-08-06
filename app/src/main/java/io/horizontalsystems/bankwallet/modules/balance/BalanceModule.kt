@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.balance
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAdapter
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -49,16 +48,16 @@ object BalanceModule {
     interface IInteractorDelegate {
         fun didUpdateWallets(wallets: List<Wallet>)
         fun didUpdateCurrency(currency: Currency)
-        fun didUpdateBalance(coinCode: CoinCode, balance: BigDecimal)
-        fun didUpdateState(coinCode: String, state: AdapterState)
+        fun didUpdateBalance(wallet: Wallet, balance: BigDecimal)
+        fun didUpdateState(wallet: Wallet, state: AdapterState)
         fun didUpdateRate(rate: Rate)
         fun didRefresh()
         fun didEnabledCoinsCountUpdated(size: Int)
     }
 
     interface IRouter {
-        fun openReceiveDialog(coin: String)
-        fun openSendDialog(coin: String)
+        fun openReceiveDialog(wallet: Wallet)
+        fun openSendDialog(wallet: Wallet)
         fun openManageCoins()
         fun openSortTypeDialog(sortingType: BalanceSortType)
     }
@@ -72,7 +71,7 @@ object BalanceModule {
         var currency: Currency? = null
 
         val coinCodes: List<CoinCode>
-            get() = items.map { it.coin.code }
+            get() = items.map { it.wallet.coin.code }.distinct()
 
         private var originalItems = listOf<BalanceItem>()
         var items = listOf<BalanceItem>()
@@ -99,8 +98,18 @@ object BalanceModule {
 
         fun getItem(position: Int): BalanceItem = items[position]
 
-        fun getPosition(coinCode: CoinCode): Int {
-            return items.indexOfFirst { it.coin.code == coinCode }
+        fun getPosition(wallet: Wallet): Int {
+            return items.indexOfFirst { it.wallet == wallet }
+        }
+
+        fun getPositionsByCoinCode(coinCode: String): List<Int> {
+            return items.mapIndexedNotNull { index, balanceItem ->
+                if (balanceItem.wallet.coin.code == coinCode) {
+                    index
+                } else {
+                    null
+                }
+            }
         }
 
         fun setBalance(position: Int, balance: BigDecimal) {
@@ -128,7 +137,7 @@ object BalanceModule {
                     items = originalItems.sortedByDescending { it.fiatValue }
                 }
                 BalanceSortType.Az ->{
-                    items = originalItems.sortedBy { it.coin.title }
+                    items = originalItems.sortedBy { it.wallet.coin.title }
                 }
                 BalanceSortType.Default -> {
                     items = originalItems
@@ -140,7 +149,7 @@ object BalanceModule {
     }
 
     data class BalanceItem(
-            val coin: Coin,
+            val wallet: Wallet,
             var balance: BigDecimal = BigDecimal.ZERO,
             var state: AdapterState = AdapterState.NotSynced,
             var rate: Rate? = null

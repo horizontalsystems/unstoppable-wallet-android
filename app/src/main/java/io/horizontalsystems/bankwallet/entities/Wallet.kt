@@ -1,8 +1,11 @@
 package io.horizontalsystems.bankwallet.entities
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
-class Wallet(val coin: Coin, val account: Account, val syncMode: SyncMode?) {
+@Parcelize
+class Wallet(val coin: Coin, val account: Account, val syncMode: SyncMode?) : Parcelable {
     override fun equals(other: Any?): Boolean {
         if (other is Wallet) {
             return coin == other.coin && account == other.account
