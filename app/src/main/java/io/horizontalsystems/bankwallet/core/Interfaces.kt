@@ -21,7 +21,6 @@ import java.util.*
 import javax.crypto.SecretKey
 
 interface IAdapterManager {
-    val adapters: List<IAdapter>
     val adaptersUpdatedSignal: Observable<Unit>
 
     fun preloadAdapters()

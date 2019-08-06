@@ -33,8 +33,6 @@ class AdapterManager(
         )
     }
 
-    override val adapters: List<IAdapter> get() = TODO("Deprecated")
-
     override val adaptersUpdatedSignal = PublishSubject.create<Unit>()
 
     override fun preloadAdapters() {

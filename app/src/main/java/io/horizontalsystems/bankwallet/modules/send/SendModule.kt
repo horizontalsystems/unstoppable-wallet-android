@@ -3,15 +3,11 @@ package io.horizontalsystems.bankwallet.modules.send
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.SendStateError
-import io.horizontalsystems.bankwallet.core.adapters.BinanceAdapter
-import io.horizontalsystems.bankwallet.core.adapters.EosAdapter
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
 import io.horizontalsystems.bankwallet.modules.send.sendviews.confirmation.SendConfirmationInfo
-import io.horizontalsystems.bankwallet.modules.send.subpresenters.SendBinancePresenter
-import io.horizontalsystems.bankwallet.modules.send.subpresenters.SendEosPresenter
 import java.math.BigDecimal
 
 object SendModule {
@@ -69,33 +65,34 @@ object SendModule {
     }
 
     fun init(view: SendViewModel, coinCode: String) {
-        val adapter = App.adapterManager.adapters.first { it.wallet.coin.code == coinCode }
-        val interactor = SendInteractor(adapter)
-        val confirmationFactory = ConfirmationViewItemFactory()
-
-        when (adapter) {
-            is EosAdapter -> {
-                val presenter = SendEosPresenter(interactor, confirmationFactory)
-
-                view.delegate = presenter
-                presenter.view = view
-                interactor.delegate = presenter
-            }
-            is BinanceAdapter -> {
-                val presenter = SendBinancePresenter(interactor, confirmationFactory)
-
-                view.delegate = presenter
-                presenter.view = view
-                interactor.delegate = presenter
-            }
-            else -> {
-                val presenter = SendPresenter(interactor, confirmationFactory)
-
-                view.delegate = presenter
-                presenter.view = view
-                interactor.delegate = presenter
-            }
-        }
+        TODO()
+//        val adapter = App.adapterManager.adapters.first { it.wallet.coin.code == coinCode }
+//        val interactor = SendInteractor(adapter)
+//        val confirmationFactory = ConfirmationViewItemFactory()
+//
+//        when (adapter) {
+//            is EosAdapter -> {
+//                val presenter = SendEosPresenter(interactor, confirmationFactory)
+//
+//                view.delegate = presenter
+//                presenter.view = view
+//                interactor.delegate = presenter
+//            }
+//            is BinanceAdapter -> {
+//                val presenter = SendBinancePresenter(interactor, confirmationFactory)
+//
+//                view.delegate = presenter
+//                presenter.view = view
+//                interactor.delegate = presenter
+//            }
+//            else -> {
+//                val presenter = SendPresenter(interactor, confirmationFactory)
+//
+//                view.delegate = presenter
+//                presenter.view = view
+//                interactor.delegate = presenter
+//            }
+//        }
     }
 
     enum class InputType {

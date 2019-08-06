@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.send
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.BaseActivity
@@ -12,14 +11,9 @@ import io.horizontalsystems.bankwallet.modules.send.sendviews.address.SendAddres
 import io.horizontalsystems.bankwallet.modules.send.sendviews.address.SendAddressViewModel
 import io.horizontalsystems.bankwallet.modules.send.sendviews.amount.SendAmountView
 import io.horizontalsystems.bankwallet.modules.send.sendviews.amount.SendAmountViewModel
-import io.horizontalsystems.bankwallet.modules.send.sendviews.confirmation.ConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.send.sendviews.fee.SendFeeView
 import io.horizontalsystems.bankwallet.modules.send.sendviews.fee.SendFeeViewModel
 import io.horizontalsystems.bankwallet.modules.send.sendviews.sendbutton.SendButtonView
-import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
-import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
-import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
-import kotlinx.android.synthetic.main.activity_about_settings.shadowlessToolbar
 import kotlinx.android.synthetic.main.activity_send.*
 
 class SendActivity : BaseActivity() {
@@ -34,84 +28,81 @@ class SendActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_send)
 
-        val coinCode: String = intent.getStringExtra(COIN_CODE) ?: ""
-
-        if (coinCode.isEmpty()) {
-            finish()
-        }
-
-        val iconRes = LayoutHelper.getCoinDrawableResource(coinCode)
-
-        shadowlessToolbar.bind(
-                title = getString(R.string.Send_Title, coinCode),
-                leftBtnItem = TopMenuItem(iconRes),
-                rightBtnItem = TopMenuItem(R.drawable.close) { onBackPressed() }
-        )
-
-        mainViewModel = ViewModelProviders.of(this).get(SendViewModel::class.java)
-        mainViewModel.init(coinCode)
-
-        mainViewModel.inputItemsLiveEvent.observe(this, Observer { inputItems ->
-            addInputItems(coinCode, inputItems)
-        })
-
-        mainViewModel.availableBalanceRetrievedLiveData.observe(this, Observer { availableBalance ->
-            sendAmountViewModel?.delegate?.onAvailableBalanceRetrieved(availableBalance)
-        })
-
-        mainViewModel.onAddressParsedLiveData.observe(this, Observer { parsedAddress ->
-            sendAddressViewModel?.delegate?.onParsedAddress(parsedAddress)
-        })
-
-        mainViewModel.getParamsFromModulesLiveEvent.observe(this, Observer { paramsAction ->
-            fetchParamsFromModules(paramsAction)
-        })
-
-        mainViewModel.validationErrorLiveEvent.observe(this, Observer { error ->
-            sendAmountViewModel?.delegate?.onValidationError(error)
-        })
-
-        mainViewModel.insufficientFeeBalanceErrorLiveEvent.observe(this, Observer { fee ->
-            sendFeeViewModel?.delegate?.onInsufficientFeeBalanceError(fee)
-        })
-
-        mainViewModel.amountValidationLiveEvent.observe(this, Observer {
-            sendAmountViewModel?.delegate?.onValidationSuccess()
-        })
-
-        mainViewModel.feeUpdatedLiveData.observe(this, Observer { fee ->
-            sendFeeViewModel?.delegate?.onFeeUpdated(fee)
-        })
-
-        mainViewModel.mainInputTypeUpdatedLiveData.observe(this, Observer { inputType ->
-            sendFeeViewModel?.delegate?.onInputTypeUpdated(inputType)
-        })
-
-        mainViewModel.showSendConfirmationLiveData.observe(this, Observer {
-            hideSoftKeyboard()
-
-            val fragmentTransaction = supportFragmentManager
-                    .beginTransaction()
-
-            fragmentTransaction
-                    .setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_right, R.anim.slide_in_from_right, R.anim.slide_out_to_right)
-                    .add(R.id.rootView, ConfirmationFragment())
-                    .addToBackStack("confirmFragment")
-                    .commit()
-        })
-
-        mainViewModel.fetchStatesFromModulesLiveEvent.observe(this, Observer {
-            fetchStatesFromModules()
-        })
-
-        mainViewModel.dismissWithSuccessLiveEvent.observe(this, Observer {
-            HudHelper.showSuccessMessage(R.string.Send_Success)
-            finish()
-        })
-
-        mainViewModel.sendButtonEnabledLiveData.observe(this, Observer { enabled ->
-            sendButtonView?.updateState(enabled)
-        })
+        TODO()
+//        val wallet: Wallet = intent.getParcelableExtra<Wallet>(WALLET) ?: finish()
+//
+//        val iconRes = LayoutHelper.getCoinDrawableResource(wallet.coin.code)
+//
+//        shadowlessToolbar.bind(
+//                title = getString(R.string.Send_Title, wallet),
+//                leftBtnItem = TopMenuItem(iconRes),
+//                rightBtnItem = TopMenuItem(R.drawable.close) { onBackPressed() }
+//        )
+//
+//        mainViewModel = ViewModelProviders.of(this).get(SendViewModel::class.java)
+//        mainViewModel.init(wallet)
+//
+//        mainViewModel.inputItemsLiveEvent.observe(this, Observer { inputItems ->
+//            addInputItems(wallet, inputItems)
+//        })
+//
+//        mainViewModel.availableBalanceRetrievedLiveData.observe(this, Observer { availableBalance ->
+//            sendAmountViewModel?.delegate?.onAvailableBalanceRetrieved(availableBalance)
+//        })
+//
+//        mainViewModel.onAddressParsedLiveData.observe(this, Observer { parsedAddress ->
+//            sendAddressViewModel?.delegate?.onParsedAddress(parsedAddress)
+//        })
+//
+//        mainViewModel.getParamsFromModulesLiveEvent.observe(this, Observer { paramsAction ->
+//            fetchParamsFromModules(paramsAction)
+//        })
+//
+//        mainViewModel.validationErrorLiveEvent.observe(this, Observer { error ->
+//            sendAmountViewModel?.delegate?.onValidationError(error)
+//        })
+//
+//        mainViewModel.insufficientFeeBalanceErrorLiveEvent.observe(this, Observer { fee ->
+//            sendFeeViewModel?.delegate?.onInsufficientFeeBalanceError(fee)
+//        })
+//
+//        mainViewModel.amountValidationLiveEvent.observe(this, Observer {
+//            sendAmountViewModel?.delegate?.onValidationSuccess()
+//        })
+//
+//        mainViewModel.feeUpdatedLiveData.observe(this, Observer { fee ->
+//            sendFeeViewModel?.delegate?.onFeeUpdated(fee)
+//        })
+//
+//        mainViewModel.mainInputTypeUpdatedLiveData.observe(this, Observer { inputType ->
+//            sendFeeViewModel?.delegate?.onInputTypeUpdated(inputType)
+//        })
+//
+//        mainViewModel.showSendConfirmationLiveData.observe(this, Observer {
+//            hideSoftKeyboard()
+//
+//            val fragmentTransaction = supportFragmentManager
+//                    .beginTransaction()
+//
+//            fragmentTransaction
+//                    .setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_right, R.anim.slide_in_from_right, R.anim.slide_out_to_right)
+//                    .add(R.id.rootView, ConfirmationFragment())
+//                    .addToBackStack("confirmFragment")
+//                    .commit()
+//        })
+//
+//        mainViewModel.fetchStatesFromModulesLiveEvent.observe(this, Observer {
+//            fetchStatesFromModules()
+//        })
+//
+//        mainViewModel.dismissWithSuccessLiveEvent.observe(this, Observer {
+//            HudHelper.showSuccessMessage(R.string.Send_Success)
+//            finish()
+//        })
+//
+//        mainViewModel.sendButtonEnabledLiveData.observe(this, Observer { enabled ->
+//            sendButtonView?.updateState(enabled)
+//        })
 
     }
 

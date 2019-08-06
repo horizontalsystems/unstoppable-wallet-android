@@ -1,10 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.sendviews.fee
 
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
-import io.horizontalsystems.bankwallet.core.IAdapter
-import io.horizontalsystems.bankwallet.core.adapters.BinanceAdapter
-import io.horizontalsystems.bankwallet.core.adapters.Erc20Adapter
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Rate
@@ -47,34 +43,35 @@ object SendFeeModule {
     }
 
     fun init(view: SendFeeViewModel, coinCode: String) {
-        val adapter = App.adapterManager.adapters.first { it.wallet.coin.code == coinCode }
-        val feeCoinCode = adapter.feeCoinCode ?: coinCode
-        val baseCurrency = App.currencyManager.baseCurrency
-        val baseCoinName = getBaseCoinName(adapter)
-        val tokenProtocol = getTokenProtocol(adapter)
-        val helper = SendFeePresenterHelper(App.numberFormatter, feeCoinCode, baseCurrency)
-        val interactor = SendFeeInteractor(App.rateStorage, adapter)
-        val presenter = SendFeePresenter(interactor, helper, coinCode, feeCoinCode, baseCurrency, baseCoinName, tokenProtocol)
-
-        view.delegate = presenter
-        presenter.view = view
-        interactor.delegate = presenter
+        TODO()
+//        val adapter = App.adapterManager.adapters.first { it.wallet.coin.code == coinCode }
+//        val feeCoinCode = adapter.feeCoinCode ?: coinCode
+//        val baseCurrency = App.currencyManager.baseCurrency
+//        val baseCoinName = getBaseCoinName(adapter)
+//        val tokenProtocol = getTokenProtocol(adapter)
+//        val helper = SendFeePresenterHelper(App.numberFormatter, feeCoinCode, baseCurrency)
+//        val interactor = SendFeeInteractor(App.rateStorage, adapter)
+//        val presenter = SendFeePresenter(interactor, helper, coinCode, feeCoinCode, baseCurrency, baseCoinName, tokenProtocol)
+//
+//        view.delegate = presenter
+//        presenter.view = view
+//        interactor.delegate = presenter
     }
 
-    private fun getBaseCoinName(adapter: IAdapter): String {
-        return when(adapter) {
-            is BinanceAdapter -> "Binance"
-            is Erc20Adapter -> "Ethereum"
-            else -> adapter.wallet.coin.title
-        }
-    }
+//    private fun getBaseCoinName(adapter: IAdapter): String {
+//        return when(adapter) {
+//            is BinanceAdapter -> "Binance"
+//            is Erc20Adapter -> "Ethereum"
+//            else -> adapter.wallet.coin.title
+//        }
+//    }
 
-    private fun getTokenProtocol(adapter: IAdapter): String {
-        return when(adapter) {
-            is BinanceAdapter -> "BEP2"
-            is Erc20Adapter -> "ERC20"
-            else -> ""
-        }
-    }
+//    private fun getTokenProtocol(adapter: IAdapter): String {
+//        return when(adapter) {
+//            is BinanceAdapter -> "BEP2"
+//            is Erc20Adapter -> "ERC20"
+//            else -> ""
+//        }
+//    }
 
 }
