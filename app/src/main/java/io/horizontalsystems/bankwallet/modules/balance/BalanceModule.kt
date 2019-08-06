@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Rate
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import java.math.BigDecimal
 
@@ -37,15 +38,16 @@ object BalanceModule {
 
     interface IInteractor {
         fun refresh()
-        fun initAdapters()
+        fun initWallets()
         fun fetchRates(currencyCode: String, coinCodes: List<CoinCode>)
         fun getSortingType(): BalanceSortType
         fun clear()
         fun saveSortingType(sortType: BalanceSortType)
+        fun getAdapterForWallet(wallet: Wallet): IAdapter?
     }
 
     interface IInteractorDelegate {
-        fun didUpdateAdapters(adapters: List<IAdapter>)
+        fun didUpdateWallets(wallets: List<Wallet>)
         fun didUpdateCurrency(currency: Currency)
         fun didUpdateBalance(coinCode: CoinCode, balance: BigDecimal)
         fun didUpdateState(coinCode: String, state: AdapterState)
@@ -148,7 +150,7 @@ object BalanceModule {
     }
 
     fun init(view: BalanceViewModel, router: IRouter) {
-        val interactor = BalanceInteractor(App.adapterManager, App.rateStorage, App.enabledWalletsStorage, App.currencyManager, App.localStorage)
+        val interactor = BalanceInteractor(App.walletManager, App.adapterManager, App.rateStorage, App.enabledWalletsStorage, App.currencyManager, App.localStorage)
         val presenter = BalancePresenter(interactor, router, BalanceItemDataSource(), BalanceViewItemFactory())
 
         presenter.view = view

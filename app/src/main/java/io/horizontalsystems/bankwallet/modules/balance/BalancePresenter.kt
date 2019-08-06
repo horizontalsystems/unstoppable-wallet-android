@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Rate
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -31,7 +31,7 @@ class BalancePresenter(
         get() = dataSource.count
 
     override fun viewDidLoad() {
-        interactor.initAdapters()
+        interactor.initWallets()
 
         flushSubject
                 .debounce(1, TimeUnit.SECONDS)
@@ -82,8 +82,12 @@ class BalancePresenter(
     //
     // BalanceModule.IInteractorDelegate
     //
-    override fun didUpdateAdapters(adapters: List<IAdapter>) {
-        val items = adapters.map { BalanceModule.BalanceItem(it.wallet.coin, it.balance, it.state) }
+    override fun didUpdateWallets(wallets: List<Wallet>) {
+        val items = wallets.map {
+            val adapter = interactor.getAdapterForWallet(it)
+
+            BalanceModule.BalanceItem(it.coin, adapter?.balance ?: BigDecimal.ZERO, adapter?.state ?: AdapterState.NotSynced)
+        }
         dataSource.set(items)
         dataSource.currency?.let {
             interactor.fetchRates(it.code, dataSource.coinCodes)

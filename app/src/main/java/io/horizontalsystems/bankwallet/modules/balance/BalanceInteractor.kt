@@ -2,12 +2,13 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import android.os.Handler
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 class BalanceInteractor(
+        private val walletManager: IWalletManager,
         private val adapterManager: IAdapterManager,
         private val rateStorage: IRateStorage,
         private val coinStorage: IEnabledWalletStorage,
@@ -22,24 +23,24 @@ class BalanceInteractor(
     private var adapterDisposables: CompositeDisposable = CompositeDisposable()
     private var rateDisposables: CompositeDisposable = CompositeDisposable()
 
-    override fun initAdapters() {
-        onUpdateAdapters()
-        disposables.add(coinStorage.enabledWalletsFlowable()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    delegate?.didEnabledCoinsCountUpdated(it.size)
-                }
-        )
+    override fun initWallets() {
+        onUpdateWallets()
+        onUpdateCurrency()
 
-        disposables.add(adapterManager.adaptersUpdatedSignal
+//        disposables.add(coinStorage.enabledWalletsFlowable()
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe {
+//                    delegate?.didEnabledCoinsCountUpdated(it.size)
+//                }
+//        )
+
+        disposables.add(walletManager.walletsObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe {
-                    onUpdateAdapters()
+                    onUpdateWallets()
                 })
-
-        onUpdateCurrency()
 
         disposables.add(currencyManager.baseCurrencyUpdatedSignal
                 .subscribeOn(Schedulers.io())
@@ -64,31 +65,37 @@ class BalanceInteractor(
 
     override fun getSortingType() = localStorage.sortType
 
+    override fun getAdapterForWallet(wallet: Wallet): IAdapter? {
+        return adapterManager.getAdapterForWallet(wallet)
+    }
+
     private fun onUpdateCurrency() {
         delegate?.didUpdateCurrency(currencyManager.baseCurrency)
     }
 
-    private fun onUpdateAdapters() {
+    private fun onUpdateWallets() {
         adapterDisposables.clear()
 
-        val adapters = adapterManager.adapters
+        val wallets = walletManager.wallets
 
-        delegate?.didUpdateAdapters(adapters)
+        delegate?.didUpdateWallets(wallets)
 
-        adapters.forEach { adapter ->
-            adapterDisposables.add(adapter.balanceUpdatedFlowable
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.io())
-                    .subscribe {
-                        delegate?.didUpdateBalance(adapter.wallet.coin.code, adapter.balance)
-                    })
+        wallets.forEach { wallet ->
+            adapterManager.getAdapterForWallet(wallet)?.let { adapter ->
+                adapterDisposables.add(adapter.balanceUpdatedFlowable
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(Schedulers.io())
+                        .subscribe {
+                            delegate?.didUpdateBalance(wallet.coin.code, adapter.balance)
+                        })
 
-            adapterDisposables.add(adapter.stateUpdatedFlowable
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.io())
-                    .subscribe {
-                        delegate?.didUpdateState(adapter.wallet.coin.code, adapter.state)
-                    })
+                adapterDisposables.add(adapter.stateUpdatedFlowable
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(Schedulers.io())
+                        .subscribe {
+                            delegate?.didUpdateState(wallet.coin.code, adapter.state)
+                        })
+            }
         }
     }
 

@@ -87,4 +87,8 @@ class AdapterManager(
             adaptersUpdatedSignal.onNext(Unit)
         }
     }
+
+    override fun getAdapterForWallet(wallet: Wallet): IAdapter? {
+        return adaptersMap[wallet]
+    }
 }
