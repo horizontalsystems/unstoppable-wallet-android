@@ -18,11 +18,11 @@ import io.reactivex.Single
 import java.math.BigDecimal
 import java.util.*
 
-class BitcoinAdapter(wallet: Wallet, override val kit: BitcoinKit, addressParser: AddressParser, private val feeRateProvider: IFeeRateProvider)
-    : BitcoinBaseAdapter(wallet, kit, addressParser), BitcoinKit.Listener {
+class BitcoinAdapter(override val kit: BitcoinKit, addressParser: AddressParser, private val feeRateProvider: IFeeRateProvider)
+    : BitcoinBaseAdapter(kit, addressParser), BitcoinKit.Listener {
 
     constructor(wallet: Wallet, testMode: Boolean, feeRateProvider: IFeeRateProvider) :
-            this(wallet, createKit(wallet, testMode), AddressParser("bitcoin", true), feeRateProvider)
+            this(createKit(wallet, testMode), AddressParser("bitcoin", true), feeRateProvider)
 
     init {
         kit.listener = this

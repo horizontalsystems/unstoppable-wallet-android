@@ -211,8 +211,6 @@ interface IEosKitManager {
 }
 
 interface IAdapter {
-    val wallet: Wallet
-
     // TODO: need to transfer it to wallet
     val feeCoinCode: String?
 

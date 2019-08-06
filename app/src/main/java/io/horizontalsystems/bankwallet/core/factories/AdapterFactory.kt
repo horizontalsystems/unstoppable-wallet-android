@@ -21,13 +21,13 @@ class AdapterFactory(
             is CoinType.Bitcoin -> BitcoinAdapter(wallet, appConfigProvider.testMode, feeRateProvider)
             is CoinType.BitcoinCash -> BitcoinCashAdapter(wallet, appConfigProvider.testMode, feeRateProvider)
             is CoinType.Dash -> DashAdapter(wallet, appConfigProvider.testMode, feeRateProvider)
-            is CoinType.Eos -> EosAdapter(wallet, coinType, eosKitManager.eosKit(wallet))
-            is CoinType.Binance -> BinanceAdapter(wallet, binanceKitManager.binanceKit(wallet), coinType.symbol, AddressParser("binance", true))
+            is CoinType.Eos -> EosAdapter(coinType, eosKitManager.eosKit(wallet))
+            is CoinType.Binance -> BinanceAdapter(binanceKitManager.binanceKit(wallet), coinType.symbol, AddressParser("binance", true))
             is CoinType.Ethereum -> {
-                EthereumAdapter(wallet, ethereumKitManager.ethereumKit(wallet), AddressParser("ethereum", true), feeRateProvider)
+                EthereumAdapter(ethereumKitManager.ethereumKit(wallet), AddressParser("ethereum", true), feeRateProvider)
             }
             is CoinType.Erc20 -> {
-                Erc20Adapter(context, wallet, ethereumKitManager.ethereumKit(wallet), coinType.decimal, coinType.fee, coinType.address, AddressParser("ethereum", true), feeRateProvider)
+                Erc20Adapter(context, ethereumKitManager.ethereumKit(wallet), coinType.decimal, coinType.fee, coinType.address, AddressParser("ethereum", true), feeRateProvider)
             }
         }
     }

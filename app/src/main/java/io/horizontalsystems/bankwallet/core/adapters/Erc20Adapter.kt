@@ -8,7 +8,6 @@ import io.horizontalsystems.bankwallet.core.WrongParameters
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
-import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.erc20kit.core.Erc20Kit.SyncState
@@ -20,8 +19,8 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
 
-class Erc20Adapter(context: Context, wallet: Wallet, kit: EthereumKit, decimal: Int, private val fee: BigDecimal, contractAddress: String, addressParser: AddressParser, feeRateProvider: IFeeRateProvider)
-    : EthereumBaseAdapter(wallet, kit, decimal, addressParser, feeRateProvider) {
+class Erc20Adapter(context: Context, kit: EthereumKit, decimal: Int, private val fee: BigDecimal, contractAddress: String, addressParser: AddressParser, feeRateProvider: IFeeRateProvider)
+    : EthereumBaseAdapter(kit, decimal, addressParser, feeRateProvider) {
 
     private val erc20Kit: Erc20Kit = Erc20Kit.getInstance(context, ethereumKit, contractAddress)
 

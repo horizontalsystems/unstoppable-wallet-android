@@ -11,7 +11,6 @@ import io.reactivex.Single
 import java.math.BigDecimal
 
 class BinanceAdapter(
-        override val wallet: Wallet,
         private val binanceKit: BinanceChainKit,
         private val symbol: String,
         private val addressParser: AddressParser)

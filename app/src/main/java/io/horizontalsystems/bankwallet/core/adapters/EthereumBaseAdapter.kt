@@ -8,7 +8,6 @@ import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.bankwallet.entities.AddressError
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
-import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.Flowable
@@ -18,7 +17,6 @@ import java.math.BigInteger
 import java.math.RoundingMode
 
 abstract class EthereumBaseAdapter(
-        override val wallet: Wallet,
         protected val ethereumKit: EthereumKit,
         final override val decimal: Int,
         private val addressParser: AddressParser,

@@ -11,7 +11,7 @@ import io.reactivex.Single
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class EosAdapter(override val wallet: Wallet, eos: CoinType.Eos, private val eosKit: EosKit) : IAdapter {
+class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit) : IAdapter {
 
     private val token = eosKit.register(eos.token, eos.symbol)
     private val irreversibleThreshold = 330
