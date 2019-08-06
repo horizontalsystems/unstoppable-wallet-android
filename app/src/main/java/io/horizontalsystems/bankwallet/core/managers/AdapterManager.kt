@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
 
 class AdapterManager(
         private val walletManager: IWalletManager,
@@ -32,8 +31,6 @@ class AdapterManager(
                 }
         )
     }
-
-    override val adaptersUpdatedSignal = PublishSubject.create<Unit>()
 
     override fun preloadAdapters() {
         initAdapters(walletManager.wallets)
@@ -64,8 +61,6 @@ class AdapterManager(
                 }
             }
 
-            adaptersUpdatedSignal.onNext(Unit)
-
             disabledWallets.forEach { wallet ->
                 adaptersMap.remove(wallet)?.let { disabledAdapter ->
                     disabledAdapter.stop()
@@ -82,7 +77,6 @@ class AdapterManager(
                 adapterFactory.unlinkAdapter(it)
             }
             adaptersMap.clear()
-            adaptersUpdatedSignal.onNext(Unit)
         }
     }
 

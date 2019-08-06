@@ -21,8 +21,6 @@ import java.util.*
 import javax.crypto.SecretKey
 
 interface IAdapterManager {
-    val adaptersUpdatedSignal: Observable<Unit>
-
     fun preloadAdapters()
     fun refresh()
     fun initAdapters(wallets: List<Wallet>)
