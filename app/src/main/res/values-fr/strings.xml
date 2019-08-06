@@ -49,7 +49,6 @@
     <!--Backup Words-->
     <string name="Backup_Words_Title">Secret Key</string>
     <!--Backup Eos-->
-    <string name="Backup_Eos_Title">Key</string>
     <string name="Backup_Eos_AccountName">Account Name</string>
     <string name="Backup_Eos_ActivePrivateKey">Private Key</string>
     <string name="Backup_Eos_Warning">Copying your key using “copy” action poses some risks if you use any clipboard management apps or some other apps that may access to clipboard data.</string>
@@ -267,8 +266,11 @@
     <string name="AddCoin_RestoreKey">Restore</string>
     <!-- Account Types -->
     <string name="AccountType_12Words">12 Words</string>
+    <string name="AccountType_12WordsKey">12 Words Key</string>
     <string name="AccountType_Eos">EOS Blockchain</string>
+    <string name="AccountType_EosKey">EOS Key</string>
     <string name="AccountType_Binance">Binance Chain</string>
+    <string name="AccountType_BinanceKey">Binance Key</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">Restaurer les options</string>
     <string name="CoinOption_Fast">Rapide</string>
