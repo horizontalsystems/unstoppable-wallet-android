@@ -147,7 +147,9 @@ class BinanceAdapter(
         var amount = BigDecimal.ZERO
         if (from.mine) {
             amount -= transaction.amount.toBigDecimal()
-            amount -= transaction.fee.toBigDecimal()
+            if (transaction.symbol == feeCoinCode) {
+                amount -= transaction.fee.toBigDecimal()
+            }
         }
         if (to.mine) {
             amount += transaction.amount.toBigDecimal()
