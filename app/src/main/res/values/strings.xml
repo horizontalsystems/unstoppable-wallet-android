@@ -64,7 +64,6 @@
     <string name="Backup_Words_Title">Secret Key</string>
 
     <!--Backup Eos-->
-    <string name="Backup_Eos_Title">Key</string>
     <string name="Backup_Eos_AccountName">Account Name</string>
     <string name="Backup_Eos_ActivePrivateKey">Private Key</string>
     <string name="Backup_Eos_Warning">Copying your key using “copy” action poses some risks if you use any clipboard management apps or some other apps that may access to clipboard data.</string>
@@ -353,10 +352,13 @@
     <!-- Account Types -->
 
     <string name="AccountType_12Words">12 Words</string>
+    <string name="AccountType_12WordsKey">12 Words Key</string>
     <string name="AccountType_12Words_Text" translatable="false">BTC, BCH, DASH, ETH, ERC-20</string>
     <string name="AccountType_Eos">EOS Blockchain</string>
+    <string name="AccountType_EosKey">EOS Key</string>
     <string name="AccountType_Eos_Text" translatable="false">EOS, EOS-based Tokens</string>
     <string name="AccountType_Binance">Binance Chain</string>
+    <string name="AccountType_BinanceKey">Binance Key</string>
     <string name="AccountType_Binance_Text" translatable="false">BNB, BEP-2</string>
 
     <!--Coin Option-->
