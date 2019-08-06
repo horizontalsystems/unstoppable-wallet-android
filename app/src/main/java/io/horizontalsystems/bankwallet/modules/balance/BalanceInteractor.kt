@@ -35,7 +35,7 @@ class BalanceInteractor(
 //                }
 //        )
 
-        disposables.add(walletManager.walletsObservable
+        disposables.add(walletManager.walletsUpdatedSignal
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe {

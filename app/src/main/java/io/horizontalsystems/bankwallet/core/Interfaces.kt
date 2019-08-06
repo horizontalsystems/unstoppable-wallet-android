@@ -213,6 +213,8 @@ interface IEosKitManager {
 
 interface IAdapter {
     val wallet: Wallet
+
+    // TODO: need to transfer it to wallet
     val feeCoinCode: String?
 
     val decimal: Int
@@ -342,7 +344,7 @@ interface ICurrentDateProvider {
 
 interface IWalletManager {
     val wallets: List<Wallet>
-    val walletsObservable: Flowable<List<Wallet>>
+    val walletsUpdatedSignal: Observable<Unit>
     fun wallet(coin: Coin): Wallet?
 
     fun preloadWallets()

@@ -24,11 +24,11 @@ class AdapterManager(
         start()
         handler = Handler(looper)
 
-        disposables.add(walletManager.walletsObservable
+        disposables.add(walletManager.walletsUpdatedSignal
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe {
-                    initAdapters(it)
+                    initAdapters(walletManager.wallets)
                 }
         )
     }

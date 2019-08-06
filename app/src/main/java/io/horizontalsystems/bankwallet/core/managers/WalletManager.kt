@@ -6,21 +6,17 @@ import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.IWalletStorage
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
 class WalletManager(private val accountManager: IAccountManager, private val walletFactory: IWalletFactory, private val storage: IWalletStorage)
     : IWalletManager {
 
+    override val wallets get() = cache.walletsSet.toList()
+    override val walletsUpdatedSignal = PublishSubject.create<Unit>()
+
     private val cache = WalletsCache()
     private val disposables = CompositeDisposable()
-    private val walletsSubject = PublishSubject.create<List<Wallet>>()
-
-    override val wallets get() = cache.walletsSet.toList()
-    override val walletsObservable: Flowable<List<Wallet>>
-        get() = walletsSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     override fun wallet(coin: Coin): Wallet? {
         val account = accountManager.account(coin.type) ?: return null
@@ -35,7 +31,7 @@ class WalletManager(private val accountManager: IAccountManager, private val wal
     override fun enable(wallets: List<Wallet>) {
         storage.save(wallets)
         cache.set(wallets)
-        walletsSubject.onNext(wallets)
+        walletsUpdatedSignal.onNext(Unit)
     }
 
     override fun clear() {
