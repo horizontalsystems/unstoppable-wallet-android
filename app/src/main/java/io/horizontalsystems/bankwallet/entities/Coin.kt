@@ -1,9 +1,12 @@
 package io.horizontalsystems.bankwallet.entities
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import java.io.Serializable
-import java.util.Objects
+import java.util.*
 
-data class Coin(val title: String, val code: String, val type: CoinType) : Serializable {
+@Parcelize
+data class Coin(val title: String, val code: String, val type: CoinType) : Serializable, Parcelable {
 
     override fun equals(other: Any?): Boolean {
         if (other is Coin) {
