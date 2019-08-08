@@ -76,10 +76,10 @@
     <string name="Balance_SyncedUntil">until: %s</string>
     <string name="Balance_Syncing">Syncing…</string>
     <string name="Balance_AddCoins">Add Coins</string>
-    <string name="Balance_Sort_Balance">Balance</string>
+    <string name="Balance_Sort_Balance">Value</string>
     <string name="Balance_Sort_PopupTitle">Sort by</string>
-    <string name="Balance_Sort_Az">A-Z</string>
-    <string name="Balance_Sort_Default">Default</string>
+    <string name="Balance_Sort_Az">Name</string>
+    <string name="Balance_Sort_Default">24h Change</string>
 
 
     <!--Send-->
