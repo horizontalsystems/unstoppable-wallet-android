@@ -32,6 +32,7 @@ object FullTransactionInfoModule {
         fun viewDidLoad()
         fun onRetryLoad()
 
+        val canShowTransactionInProviderSite: Boolean
         val providerName: String?
         val sectionCount: Int
         fun getSection(row: Int): FullTransactionSection?
