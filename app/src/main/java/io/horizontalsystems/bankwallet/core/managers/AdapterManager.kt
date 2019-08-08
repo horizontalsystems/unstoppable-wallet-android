@@ -33,13 +33,13 @@ class AdapterManager(
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe {
-                    initAdapters(walletManager.wallets)
+                    initAdapters()
                 }
         )
     }
 
     override fun preloadAdapters() {
-        initAdapters(walletManager.wallets)
+        initAdapters()
     }
 
     private val adaptersMap = mutableMapOf<Wallet, IAdapter>()
@@ -54,8 +54,9 @@ class AdapterManager(
         binanceKitManager.binanceKit?.refresh()
     }
 
-    override fun initAdapters(wallets: List<Wallet>) {
+    private fun initAdapters() {
         handler.post {
+            val wallets = walletManager.wallets
             val disabledWallets = adaptersMap.keys.subtract(wallets)
 
             wallets.forEach { wallet ->

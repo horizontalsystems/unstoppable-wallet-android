@@ -24,7 +24,6 @@ interface IAdapterManager {
     val adapterCreationObservable: Flowable<Wallet>
     fun preloadAdapters()
     fun refresh()
-    fun initAdapters(wallets: List<Wallet>)
     fun stopKits()
     fun getAdapterForWallet(wallet: Wallet): IAdapter?
 }
