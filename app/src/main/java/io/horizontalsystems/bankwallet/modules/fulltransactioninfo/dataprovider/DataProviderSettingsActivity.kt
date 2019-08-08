@@ -28,10 +28,10 @@ class DataProviderSettingsActivity : BaseActivity(), DataProviderSettingsAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val coin = intent.extras.getSerializable(DataProviderSettingsModule.COIN_STRING)
-        val txHash = intent.extras.getString(DataProviderSettingsModule.TRANSACTION_HASH)
+        val coin = intent.getParcelableExtra<Coin>(DataProviderSettingsModule.COIN_STRING)
+        val txHash = intent.getStringExtra(DataProviderSettingsModule.TRANSACTION_HASH)
         viewModel = ViewModelProviders.of(this).get(DataProviderSettingsViewModel::class.java)
-        viewModel.init(coin as Coin, txHash)
+        viewModel.init(coin, txHash)
 
         setContentView(R.layout.activity_explorer_switcher)
 
