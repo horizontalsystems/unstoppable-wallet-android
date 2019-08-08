@@ -42,6 +42,13 @@ class BalanceInteractor(
                     onUpdateWallets()
                 })
 
+        disposables.add(adapterManager.adapterCreationObservable
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe {
+                    subscribeToAdapterUpdates(it, true)
+                })
+
         disposables.add(currencyManager.baseCurrencyUpdatedSignal
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
@@ -81,22 +88,33 @@ class BalanceInteractor(
         delegate?.didUpdateWallets(wallets)
 
         wallets.forEach { wallet ->
-            adapterManager.getAdapterForWallet(wallet)?.let { adapter ->
-                adapterDisposables.add(adapter.balanceUpdatedFlowable
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(Schedulers.io())
-                        .subscribe {
-                            delegate?.didUpdateBalance(wallet, adapter.balance)
-                        })
-
-                adapterDisposables.add(adapter.stateUpdatedFlowable
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(Schedulers.io())
-                        .subscribe {
-                            delegate?.didUpdateState(wallet, adapter.state)
-                        })
-            }
+            subscribeToAdapterUpdates(wallet, false)
         }
+    }
+
+    private fun subscribeToAdapterUpdates(wallet: Wallet, initialUpdate: Boolean) {
+        adapterManager.getAdapterForWallet(wallet)?.let { adapter ->
+
+            if (initialUpdate) {
+                delegate?.didUpdateBalance(wallet, adapter.balance)
+                delegate?.didUpdateState(wallet, adapter.state)
+            }
+
+            adapterDisposables.add(adapter.balanceUpdatedFlowable
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .subscribe {
+                        delegate?.didUpdateBalance(wallet, adapter.balance)
+                    })
+
+            adapterDisposables.add(adapter.stateUpdatedFlowable
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .subscribe {
+                        delegate?.didUpdateState(wallet, adapter.state)
+                    })
+        }
+
     }
 
     override fun refresh() {
