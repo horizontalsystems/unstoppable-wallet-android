@@ -19,6 +19,7 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
 import java.math.BigDecimal
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 class BalancePresenterTest {
@@ -43,7 +44,7 @@ class BalancePresenterTest {
 
     @Test
     fun viewDidLoad() {
-        whenever(dataSource.balanceSortType).thenReturn(BalanceSortType.LastDayChange)
+        whenever(dataSource.balanceSortType).thenReturn(BalanceSortType.Name)
 
         presenter.viewDidLoad()
         testScheduler.advanceTimeBy(1, TimeUnit.MINUTES)
@@ -163,6 +164,54 @@ class BalancePresenterTest {
     }
 
     @Test
+    fun didUpdateState_sortCoins() {
+        val coinCode = "ABC"
+        val position = 1
+        val state = AdapterState.Synced
+        val sortingType = BalanceSortType.Name
+
+        val coin = mock(Coin::class.java)
+        val balance = BigDecimal(12.23)
+
+        val item1 = BalanceModule.BalanceItem(coin, balance, AdapterState.Synced)
+        val item2 = BalanceModule.BalanceItem(coin, balance, AdapterState.Synced)
+
+        val items = listOf(item1, item2)
+
+        whenever(dataSource.items).thenReturn(items)
+        whenever(dataSource.getPosition(coinCode)).thenReturn(position)
+        whenever(interactor.getSortingType()).thenReturn(sortingType)
+
+        presenter.didUpdateState(coinCode, state)
+
+        verify(dataSource).sortBy(sortingType)
+    }
+
+    @Test
+    fun didUpdateState_dontSortCoins() {
+        val coinCode = "ABC"
+        val position = 1
+        val state = AdapterState.Synced
+        val sortingType = BalanceSortType.Name
+
+        val coin = mock(Coin::class.java)
+        val balance = BigDecimal(12.23)
+
+        val item1 = BalanceModule.BalanceItem(coin, balance, AdapterState.Synced)
+        val item2 = BalanceModule.BalanceItem(coin, balance, AdapterState.Syncing(3, Date()))
+
+        val items = listOf(item1, item2)
+
+        whenever(dataSource.items).thenReturn(items)
+        whenever(dataSource.getPosition(coinCode)).thenReturn(position)
+        whenever(interactor.getSortingType()).thenReturn(sortingType)
+
+        presenter.didUpdateState(coinCode, state)
+
+        verify(dataSource, never()).sortBy(sortingType)
+    }
+
+    @Test
     fun didUpdateCurrency() {
         val currencyCode = "USD"
         val currency = mock(Currency::class.java)
@@ -184,14 +233,17 @@ class BalancePresenterTest {
         val coinCode = "ABC"
         val position = 5
         val rate = mock(Rate::class.java)
+        val sortingType = BalanceSortType.Name
 
         whenever(rate.coinCode).thenReturn(coinCode)
         whenever(dataSource.getPosition(coinCode)).thenReturn(position)
+        whenever(interactor.getSortingType()).thenReturn(sortingType)
 
         presenter.didUpdateRate(rate)
 
         verify(dataSource).setRate(position, rate)
         verify(dataSource).addUpdatedPosition(position)
+        verify(dataSource).sortBy(sortingType)
         verify(view).updateHeader()
     }
 
