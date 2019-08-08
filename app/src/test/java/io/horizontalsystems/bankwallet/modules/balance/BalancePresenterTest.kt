@@ -43,7 +43,7 @@ class BalancePresenterTest {
 
     @Test
     fun viewDidLoad() {
-        whenever(dataSource.balanceSortType).thenReturn(BalanceSortType.Default)
+        whenever(dataSource.balanceSortType).thenReturn(BalanceSortType.LastDayChange)
 
         presenter.viewDidLoad()
         testScheduler.advanceTimeBy(1, TimeUnit.MINUTES)

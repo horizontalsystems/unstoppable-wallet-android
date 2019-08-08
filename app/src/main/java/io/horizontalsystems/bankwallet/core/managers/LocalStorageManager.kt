@@ -161,8 +161,8 @@ class LocalStorageManager : ILocalStorage {
 
     override var sortType: BalanceSortType
         get() {
-            val sortString = App.preferences.getString(SORT_TYPE, BalanceSortType.Default.getAsString())
-                    ?: BalanceSortType.Default.getAsString()
+            val sortString = App.preferences.getString(SORT_TYPE, null)
+                    ?: BalanceSortType.Name.getAsString()
             return BalanceSortType.getTypeFromString(sortString)
         }
         set(sortType) {

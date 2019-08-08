@@ -79,9 +79,24 @@ class BalancePresenter(
         disposables.clear()
     }
 
+    override fun openManageCoins() {
+        router.openManageCoins()
+    }
+
+    override fun onSortClick() {
+        router.openSortTypeDialog(interactor.getSortingType())
+    }
+
+    override fun onSortTypeChanged(sortType: BalanceSortType) {
+        interactor.saveSortingType(sortType)
+        dataSource.sortBy(sortType)
+        view?.reload()
+    }
+
     //
     // BalanceModule.IInteractorDelegate
     //
+
     override fun didUpdateAdapters(adapters: List<IAdapter>) {
         val items = adapters.map { BalanceModule.BalanceItem(it.wallet.coin, it.balance, it.state) }
         dataSource.set(items)
@@ -89,7 +104,7 @@ class BalancePresenter(
             interactor.fetchRates(it.code, dataSource.coinCodes)
         }
 
-        view?.setSortingOn(items.size > showSortingButtonThreshold)
+        view?.setSortingOn(items.size >= showSortingButtonThreshold)
         view?.reload()
     }
 
@@ -110,6 +125,7 @@ class BalancePresenter(
     override fun didUpdateState(coinCode: String, state: AdapterState) {
         val position = dataSource.getPosition(coinCode)
         dataSource.setState(position, state)
+        sortCoins()
         updateByPosition(position)
         view?.updateHeader()
     }
@@ -127,8 +143,12 @@ class BalancePresenter(
         view?.didRefresh()
     }
 
-    override fun openManageCoins() {
-        router.openManageCoins()
+
+    private fun sortCoins() {
+        val syncedCount = dataSource.items.filter { it.state == AdapterState.Synced }.size
+        if (dataSource.items.size == syncedCount) {
+            dataSource.sortBy(interactor.getSortingType())
+        }
     }
 
     private fun updateViewItems() {
@@ -143,13 +163,4 @@ class BalancePresenter(
         flushSubject.onNext(Unit)
     }
 
-    override fun onSortClick() {
-        router.openSortTypeDialog(interactor.getSortingType())
-    }
-
-    override fun onSortTypeChanged(sortType: BalanceSortType) {
-        interactor.saveSortingType(sortType)
-        dataSource.sortBy(sortType)
-        view?.reload()
-    }
 }
