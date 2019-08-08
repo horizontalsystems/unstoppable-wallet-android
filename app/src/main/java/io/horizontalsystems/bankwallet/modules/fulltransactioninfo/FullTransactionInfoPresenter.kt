@@ -12,6 +12,9 @@ class FullTransactionInfoPresenter(val interactor: FullTransactionInfoInteractor
     //
     // State
     //
+    override val canShowTransactionInProviderSite: Boolean
+        get() = interactor.url(state.transactionHash) != null
+
     override val providerName: String?
         get() = state.transactionRecord?.providerName
 

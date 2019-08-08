@@ -203,12 +203,16 @@ class SectionViewAdapter(val context: Context) : RecyclerView.Adapter<RecyclerVi
             }
             is SectionLinkViewHolder -> {
                 providerName?.let {
-                    val changeProviderStyle = SpannableString(providerName)
-                    changeProviderStyle.setSpan(UnderlineSpan(), 0, changeProviderStyle.length, 0)
+                    if (!viewModel.delegate.canShowTransactionInProviderSite) {
+                        holder.transactionLink.visibility = View.GONE
+                    } else {
+                        val changeProviderStyle = SpannableString(providerName)
+                        changeProviderStyle.setSpan(UnderlineSpan(), 0, changeProviderStyle.length, 0)
 
-                    holder.transactionLink.text = changeProviderStyle
-                    holder.transactionLink.setOnClickListener {
-                        viewModel.delegate.onTapResource()
+                        holder.transactionLink.text = changeProviderStyle
+                        holder.transactionLink.setOnClickListener {
+                            viewModel.delegate.onTapResource()
+                        }
                     }
                 }
             }
