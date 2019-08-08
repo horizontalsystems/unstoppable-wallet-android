@@ -5,8 +5,11 @@ import android.os.HandlerThread
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 
 class AdapterManager(
         private val walletManager: IWalletManager,
@@ -18,6 +21,9 @@ class AdapterManager(
 
     private val handler: Handler
     private val disposables = CompositeDisposable()
+    private val adapterCreationSubject = PublishSubject.create<Wallet>()
+
+    override val adapterCreationObservable: Flowable<Wallet> = adapterCreationSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     init {
         start()
@@ -55,8 +61,10 @@ class AdapterManager(
             wallets.forEach { wallet ->
                 if (!adaptersMap.containsKey(wallet)) {
                     adapterFactory.adapterForCoin(wallet)?.let { adapter ->
-                        adapter.start()
                         adaptersMap[wallet] = adapter
+                        adapterCreationSubject.onNext(wallet)
+
+                        adapter.start()
                     }
                 }
             }
