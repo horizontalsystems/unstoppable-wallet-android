@@ -4,6 +4,7 @@ import androidx.recyclerview.widget.DiffUtil
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.TransactionItem
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule.FetchData
 
 class TransactionRecordDataSource(
@@ -18,9 +19,9 @@ class TransactionRecordDataSource(
     val allShown
         get() = poolRepo.activePools.all { it.allShown }
 
-    val allRecords: Map<Coin, List<TransactionRecord>>
+    val allRecords: Map<Wallet, List<TransactionRecord>>
         get() = poolRepo.activePools.map {
-            Pair(it.coin, it.records)
+            Pair(it.wallet, it.records)
         }.toMap()
 
     fun itemForIndex(index: Int): TransactionItem =
@@ -30,21 +31,21 @@ class TransactionRecordDataSource(
             itemsDataSource.itemIndexesForTimestamp(coin, timestamp)
 
 
-    fun itemIndexesForPending(coin: Coin, thresholdBlockHeight: Int): List<Int> =
-            itemsDataSource.itemIndexesForPending(coin, thresholdBlockHeight)
+    fun itemIndexesForPending(wallet: Wallet, thresholdBlockHeight: Int): List<Int> =
+            itemsDataSource.itemIndexesForPending(wallet, thresholdBlockHeight)
 
     fun getFetchDataList(): List<FetchData> = poolRepo.activePools.mapNotNull {
         it.getFetchData(limit)
     }
 
-    fun handleNextRecords(records: Map<Coin, List<TransactionRecord>>) {
-        records.forEach { (coin, transactionRecords) ->
-            poolRepo.getPool(coin)?.add(transactionRecords)
+    fun handleNextRecords(records: Map<Wallet, List<TransactionRecord>>) {
+        records.forEach { (wallet, transactionRecords) ->
+            poolRepo.getPool(wallet)?.add(transactionRecords)
         }
     }
 
-    fun handleUpdatedRecords(records: List<TransactionRecord>, coin: Coin): DiffUtil.DiffResult? {
-        val pool = poolRepo.getPool(coin) ?: return null
+    fun handleUpdatedRecords(records: List<TransactionRecord>, wallet: Wallet): DiffUtil.DiffResult? {
+        val pool = poolRepo.getPool(wallet) ?: return null
 
         val updatedRecords = mutableListOf<TransactionRecord>()
         val insertedRecords = mutableListOf<TransactionRecord>()
@@ -64,10 +65,10 @@ class TransactionRecordDataSource(
             }
         }
 
-        if (!poolRepo.isPoolActiveByCoinCode(coin)) return null
+        if (!poolRepo.isPoolActiveByWallet(wallet)) return null
 
-        val updatedItems = updatedRecords.map { factory.createTransactionItem(coin, it) }
-        val insertedItems = insertedRecords.map { factory.createTransactionItem(coin, it) }
+        val updatedItems = updatedRecords.map { factory.createTransactionItem(wallet, it) }
+        val insertedItems = insertedRecords.map { factory.createTransactionItem(wallet, it) }
 
         return itemsDataSource.handleModifiedItems(updatedItems, insertedItems)
     }
@@ -77,7 +78,7 @@ class TransactionRecordDataSource(
 
         poolRepo.activePools.forEach { pool ->
             unusedItems.addAll(pool.unusedRecords.map { record ->
-                factory.createTransactionItem(pool.coin, record)
+                factory.createTransactionItem(pool.wallet, record)
             })
         }
 
@@ -90,26 +91,26 @@ class TransactionRecordDataSource(
         itemsDataSource.add(usedItems)
 
         usedItems.forEach {
-            poolRepo.getPool(it.coin)?.increaseFirstUnusedIndex()
+            poolRepo.getPool(it.wallet)?.increaseFirstUnusedIndex()
         }
 
         return usedItems.size
     }
 
-    fun setCoinCodes(coins: List<Coin>) {
+    fun setWallets(wallets: List<Wallet>) {
         poolRepo.allPools.forEach {
             it.resetFirstUnusedIndex()
         }
-        poolRepo.activatePools(coins)
+        poolRepo.activatePools(wallets)
         itemsDataSource.clear()
     }
 
-    fun handleUpdatedCoins(coins: List<Coin>) {
-        val unusedCoins = poolRepo.allPools.map { it.coin }.filter { !coins.contains(it) }
+    fun handleUpdatedWallets(wallets: List<Wallet>) {
+        val unusedWallets = poolRepo.allPools.map { it.wallet }.filter { !wallets.contains(it) }
 
-        poolRepo.deactivatePools(unusedCoins)
+        poolRepo.deactivatePools(unusedWallets)
 
-        setCoinCodes(coins)
+        setWallets(wallets)
     }
 
 }

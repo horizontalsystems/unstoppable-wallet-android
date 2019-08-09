@@ -1,38 +1,38 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.Wallet
 
 class PoolRepo {
 
     val activePools: List<Pool>
-        get() = activePoolCoinCodes.mapNotNull { pools[it] }
+        get() = activePoolWallets.mapNotNull { pools[it] }
 
     val allPools: List<Pool>
         get() = pools.values.toList()
 
-    private var pools = mutableMapOf<Coin, Pool>()
-    private var activePoolCoinCodes = listOf<Coin>()
+    private var pools = mutableMapOf<Wallet, Pool>()
+    private var activePoolWallets = listOf<Wallet>()
 
-    fun activatePools(coinCodes: List<Coin>) {
-        coinCodes.forEach { coinCode ->
-            if (!pools.containsKey(coinCode)) {
-                pools[coinCode] = Pool(Pool.State(coinCode))
+    fun activatePools(wallets: List<Wallet>) {
+        wallets.forEach { wallet ->
+            if (!pools.containsKey(wallet)) {
+                pools[wallet] = Pool(Pool.State(wallet))
             }
         }
 
-        this.activePoolCoinCodes = coinCodes
+        this.activePoolWallets = wallets
     }
 
-    fun deactivatePools(coins: List<Coin>) {
-        coins.forEach { pools.remove(it) }
+    fun deactivatePools(wallets: List<Wallet>) {
+        wallets.forEach { pools.remove(it) }
     }
 
-    fun getPool(coin: Coin): Pool? {
-        return pools[coin]
+    fun getPool(wallet: Wallet): Pool? {
+        return pools[wallet]
     }
 
-    fun isPoolActiveByCoinCode(coin: Coin): Boolean {
-        return activePoolCoinCodes.contains(coin)
+    fun isPoolActiveByWallet(wallet: Wallet): Boolean {
+        return activePoolWallets.contains(wallet)
     }
 
 }

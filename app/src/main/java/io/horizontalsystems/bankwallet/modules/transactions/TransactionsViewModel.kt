@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DiffUtil
 import io.horizontalsystems.bankwallet.SingleLiveEvent
-import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -15,7 +15,7 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
 
     lateinit var delegate: TransactionsModule.IViewDelegate
 
-    val filterItems = MutableLiveData<List<Coin?>>()
+    val filterItems = MutableLiveData<List<Wallet?>>()
     val transactionViewItemLiveEvent = SingleLiveEvent<TransactionViewItem>()
     val reloadChangeEvent = SingleLiveEvent<DiffUtil.DiffResult>()
     val reloadLiveEvent = SingleLiveEvent<Unit>()
@@ -38,7 +38,7 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView, Transaction
                 .subscribe()?.let { disposables.add(it) }
     }
 
-    override fun showFilters(filters: List<Coin?>) {
+    override fun showFilters(filters: List<Wallet?>) {
         filterItems.postValue(filters)
     }
 

@@ -34,7 +34,7 @@ data class TransactionRecord(
     }
 }
 
-data class TransactionItem(val coin: Coin, val record: TransactionRecord) : Comparable<TransactionItem> {
+data class TransactionItem(val wallet: Wallet, val record: TransactionRecord) : Comparable<TransactionItem> {
     override fun compareTo(other: TransactionItem): Int {
         return record.compareTo(other.record)
     }

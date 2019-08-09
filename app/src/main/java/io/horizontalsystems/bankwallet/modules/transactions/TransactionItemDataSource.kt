@@ -4,6 +4,7 @@ import androidx.recyclerview.widget.DiffUtil
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.TransactionItem
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.Wallet
 import java.util.concurrent.CopyOnWriteArrayList
 
 class TransactionItemDataSource {
@@ -26,7 +27,7 @@ class TransactionItemDataSource {
         val indexes = mutableListOf<Int>()
 
         items.forEachIndexed { index, transactionItem ->
-            if (transactionItem.coin == coin && transactionItem.record.timestamp == timestamp) {
+            if (transactionItem.wallet.coin == coin && transactionItem.record.timestamp == timestamp) {
                 indexes.add(index)
             }
         }
@@ -34,11 +35,11 @@ class TransactionItemDataSource {
         return indexes
     }
 
-    fun itemIndexesForPending(coin: Coin, thresholdBlockHeight: Int): List<Int> {
+    fun itemIndexesForPending(wallet: Wallet, thresholdBlockHeight: Int): List<Int> {
         val indexes = mutableListOf<Int>()
 
         items.forEachIndexed { index, item ->
-            if (item.coin == coin && (item.record.blockHeight == null || item.record.blockHeight >= thresholdBlockHeight)) {
+            if (item.wallet == wallet && (item.record.blockHeight == null || item.record.blockHeight >= thresholdBlockHeight)) {
                 indexes.add(index)
             }
         }

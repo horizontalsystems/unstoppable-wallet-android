@@ -40,8 +40,8 @@ class TransactionViewItemFactory {
 
         return TransactionViewItem(
                 record.transactionHash,
-                transactionItem.coin,
-                CoinValue(transactionItem.coin.code, record.amount),
+                transactionItem.wallet.coin,
+                CoinValue(transactionItem.wallet.coin.code, record.amount),
                 currencyValue,
                 fromAddress,
                 toAddress,

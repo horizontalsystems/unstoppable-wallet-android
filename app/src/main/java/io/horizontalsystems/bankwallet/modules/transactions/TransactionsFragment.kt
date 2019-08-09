@@ -15,7 +15,7 @@ import com.google.android.material.appbar.AppBarLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
@@ -130,7 +130,7 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
         viewModel.delegate.onTransactionItemClick(item)
     }
 
-    override fun onFilterItemClick(item: Coin?) {
+    override fun onFilterItemClick(item: Wallet?) {
         viewModel.delegate.onFilterSelect(item)
     }
 
@@ -204,15 +204,15 @@ class ViewHolderEmptyScreen(override val containerView: View) : ViewHolder(conta
 class FilterAdapter(private var listener: Listener) : Adapter<ViewHolder>(), ViewHolderFilter.ClickListener {
 
     interface Listener {
-        fun onFilterItemClick(item: Coin?)
+        fun onFilterItemClick(item: Wallet?)
     }
 
     var filterChangeable = true
 
-    private var selectedFilterId: Coin? = null
-    private var filters: List<Coin?> = listOf()
+    private var selectedFilterId: Wallet? = null
+    private var filters: List<Wallet?> = listOf()
 
-    fun setFilters(filters: List<Coin?>) {
+    fun setFilters(filters: List<Wallet?>) {
         this.filters = filters
         selectedFilterId = null
         notifyDataSetChanged()
@@ -244,8 +244,8 @@ class ViewHolderFilter(override val containerView: View, private val l: ClickLis
         fun onClickItem(position: Int)
     }
 
-    fun bind(coin: Coin?, active: Boolean) {
-        filter_text.text = coin?.code ?: containerView.context.getString(R.string.Transactions_FilterAll)
+    fun bind(wallet: Wallet?, active: Boolean) {
+        filter_text.text = wallet?.coin?.code ?: containerView.context.getString(R.string.Transactions_FilterAll)
         filter_text.isActivated = active
         filter_text.setOnClickListener { l.onClickItem(adapterPosition) }
     }
