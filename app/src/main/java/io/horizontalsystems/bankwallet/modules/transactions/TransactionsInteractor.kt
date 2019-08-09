@@ -41,6 +41,14 @@ class TransactionsInteractor(
                 }
                 .let { disposables.add(it) }
 
+        adapterManager.adapterCreationObservable
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe {
+                    onUpdateCoinCodes()
+                }
+                .let { disposables.add(it) }
+
         currencyManager.baseCurrencyUpdatedSignal
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
@@ -157,14 +165,15 @@ class TransactionsInteractor(
     }
 
     private fun onUpdateCoinCodes() {
+        if (walletManager.wallets.map { adapterManager.getAdapterForWallet(it) }.any { it == null}) return
+
         transactionUpdatesDisposables.clear()
 
-        val coinsData: MutableList<Triple<Coin, Int, Int>> = mutableListOf()
+        val coinsData: MutableList<Triple<Coin, Int, Int?>> = mutableListOf()
         walletManager.wallets.forEach { wallet ->
-            val adapter = adapterManager.getAdapterForWallet(wallet)
-            coinsData.add(Triple(wallet.coin, adapter?.confirmationsThreshold ?: 0, adapter?.lastBlockHeight ?: 0))
+            adapterManager.getAdapterForWallet(wallet)?.let { adapter ->
+                coinsData.add(Triple(wallet.coin, adapter.confirmationsThreshold, adapter.lastBlockHeight))
 
-            adapter?.let {
                 adapter.transactionRecordsFlowable
                         .subscribeOn(Schedulers.io())
                         .observeOn(Schedulers.io())
