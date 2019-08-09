@@ -25,7 +25,8 @@ class LauncherActivity : AppCompatActivity() {
         })
 
         viewModel.openMainModule.observe(this, Observer {
-            MainModule.startAsNewTask(this)
+            MainModule.start(this)
+            finish()
         })
 
         viewModel.openUnlockModule.observe(this, Observer {
