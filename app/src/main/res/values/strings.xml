@@ -345,7 +345,7 @@
     <!-- Manage Keys Alert -->
 
     <string name="AddCoin_Title">Add %s</string>
-    <string name="AddCoin_Description">You don\'t have active key for use with %s. \n\nUse Create button below to generate a new key (wallet)</string>
+    <string name="AddCoin_Description">You don\'t have active key for use with %s. Use Create button below to generate a new key (wallet) \n\nYou may also use the existing key for the %s if you already have it.</string>
     <string name="AddCoin_CreateKey">Create</string>
     <string name="AddCoin_RestoreKey">Restore</string>
 
