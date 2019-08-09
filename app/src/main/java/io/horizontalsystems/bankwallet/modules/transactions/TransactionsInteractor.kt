@@ -76,33 +76,24 @@ class TransactionsInteractor(
             return
         }
 
-        val flowables = mutableListOf<Single<Pair<Wallet, List<TransactionRecord>>>>()
-
-        fetchDataList.forEach { fetchData ->
+        val flowables: List<Single<Pair<Wallet, List<TransactionRecord>>>> = fetchDataList.map { fetchData ->
             val adapter = walletManager.wallets.find { it == fetchData.wallet }?.let {
                 adapterManager.getAdapterForWallet(it)
             }
 
-            val flowable = when (adapter) {
-                null -> Single.just(Pair(fetchData.wallet, listOf()))
-                else -> {
-                    adapter.getTransactions(fetchData.from, fetchData.limit)
-                            .map {
-                                Pair(fetchData.wallet, it)
-                            }
-                }
+            when (adapter) {
+                null -> Single.just(listOf())
+                else -> adapter.getTransactions(fetchData.from, fetchData.limit)
+            }.map {
+                Pair(fetchData.wallet, it)
             }
-
-            flowables.add(flowable)
         }
 
         Single.zip(flowables) {
-            val res = mutableMapOf<Wallet, List<TransactionRecord>>()
-            it.forEach {
+            it.map {
                 it as Pair<Wallet, List<TransactionRecord>>
-                res[it.first] = it.second
-            }
-            res.toMap()
+                it.first to it.second
+            }.toMap()
         }
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
@@ -165,7 +156,7 @@ class TransactionsInteractor(
     }
 
     private fun onUpdateWallets() {
-        if (walletManager.wallets.map { adapterManager.getAdapterForWallet(it) }.any { it == null}) return
+        if (walletManager.wallets.map { adapterManager.getAdapterForWallet(it) }.any { it == null }) return
 
         transactionUpdatesDisposables.clear()
 
