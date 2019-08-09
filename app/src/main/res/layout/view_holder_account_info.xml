@@ -13,6 +13,6 @@
         style="@style/Body1Grey"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ManageCoins_AddCoin_TextBackup" />
+        android:text="@string/ManageKeys_Description" />
 
 </LinearLayout>

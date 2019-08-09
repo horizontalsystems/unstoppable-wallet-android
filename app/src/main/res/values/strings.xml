@@ -321,12 +321,12 @@
     <string name="ManageCoins_save">Save</string>
     <string name="ManageCoins_AddCoin_Title">Add %s Coin</string>
     <string name="ManageCoins_AddCoin_Text">This action will generate a new key(wallet) for the following coins: %s </string>
-    <string name="ManageCoins_AddCoin_TextBackup">Anyone with access to your Keys can steal your wallet funds. Store them safely and never show them to anyone. \n\nBackup each key to be able to restore funds if you loose or break your phone, or simply the wallet app gets deleted.</string>
     <string name="ManageCoins_EOSAlert_CreateButton">At this point, the wallet is not able to create new EOS wallet accounts. You\'re only able to restore the existing one.</string>
 
     <!--Manage Keys-->
 
     <string name="ManageKeys_Title">Manage Keys</string>
+    <string name="ManageKeys_Description">Anyone with access to your Keys can steal your wallet funds. Store keys safely and never show them to anyone. \n\nBackup each key to be able to restore funds if you loose or break your phone, or simply the wallet app gets deleted.</string>
     <string name="ManageKeys_Create">Create</string>
     <string name="ManageKeys_Restore">Restore</string>
     <string name="ManageKeys_Delete">Delete</string>
@@ -345,7 +345,7 @@
     <!-- Manage Keys Alert -->
 
     <string name="AddCoin_Title">Add %s</string>
-    <string name="AddCoin_Description">You don\'t have active key for use with %s. \n\nUse Create button below to generate a new key (wallet)</string>
+    <string name="AddCoin_Description">You don\'t have active key for use with %s. Use Create button below to generate a new key (wallet) \n\nYou may also use the existing key for the %s if you already have it.</string>
     <string name="AddCoin_CreateKey">Create</string>
     <string name="AddCoin_RestoreKey">Restore</string>
 
@@ -366,7 +366,7 @@
     <string name="CoinOption_Title">Restore Options</string>
     <string name="CoinOption_Fast">Fast</string>
     <string name="CoinOption_Recommended">0&#8211;2 hours (Recommended)</string>
-    <string name="CoinOption_Fast_Text">Restores your past transactions via secure third party server. For users with a long history of transactions involving very large sums this method may pose privacy risks.</string>
+    <string name="CoinOption_Fast_Text">Restores your past transactions directly from the network. Significantly more private but very slow. If the restore takes way too much time, go to Manage Keys section and reimport the Key for the wallet using the Fast Sync option.</string>
     <string name="CoinOption_Slow">Slow</string>
     <string name="CoinOption_MorePrivate">1&#8211;12 hours (More Private)</string>
     <string name="CoinOption_Slow_Text">Restores your past transactions directly from the network. Significantly more private but very slow. If the restore takes way too much time go to Security section in Settings tab and select “Unlink This Device” option.</string>
