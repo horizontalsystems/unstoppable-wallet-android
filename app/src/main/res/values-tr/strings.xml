@@ -11,20 +11,20 @@
     <string name="Alert_Copied">Kopyalandı</string>
     <string name="Button_Cancel">İptal</string>
     <string name="Button_Back">Geri</string>
-    <string name="Button_Close">Close</string>
+    <string name="Button_Close">Kapat</string>
     <string name="Button_Ok">Tamam</string>
     <string name="Button_Share">Paylaş</string>
     <string name="Error">Hata</string>
     <!--Welcome-->
-    <string name="Welcome_Title">Unstoppable</string>
-    <string name="Welcome_CreateWallet">New Wallet</string>
-    <string name="Welcome_RestoreWallet">Restore Wallet</string>
+    <string name="Welcome_Title">Durdurulamaz</string>
+    <string name="Welcome_CreateWallet">Yeni Cüzdan</string>
+    <string name="Welcome_RestoreWallet">Cüzdanı Geri Yükle</string>
     <!--Restore-->
     <string name="Restore_Title">Geri Yükle</string>
-    <string name="Restore_Subtitle">Enter Key</string>
+    <string name="Restore_Subtitle">Anahtarı girin</string>
     <string name="Restore_ValidationFailed">Hatalı Gizli anahtar</string>
     <string name="Restore_RestoreFailed">Cüzdan geri yüklenemedi</string>
-    <string name="Restore_EosAccountName">Account Name</string>
+    <string name="Restore_EosAccountName">Hesap Adı</string>
     <string name="Restore_EosActivePrivateKey">Active Private Key</string>
     <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
     <string name="Restore_EosKeyIncorrect">Incorrect Key</string>
