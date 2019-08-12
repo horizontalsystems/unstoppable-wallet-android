@@ -26,11 +26,11 @@
     <string name="Restore_RestoreFailed">Cüzdan geri yüklenemedi</string>
     <string name="Restore_EosAccountName">Hesap Adı</string>
     <string name="Restore_EosActivePrivateKey">Gizli Anahtarı Etkinleştir</string>
-    <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
-    <string name="Restore_EosKeyIncorrect">Incorrect Key</string>
+    <string name="Restore_EosAccountIncorrect">Yanlış Hesap</string>
+    <string name="Restore_EosKeyIncorrect">Yanlış Anahtar</string>
     <!--Backup-->
-    <string name="Backup_Intro_Title">Backup</string>
-    <string name="Backup_Intro_TitleShow">Show Key</string>
+    <string name="Backup_Intro_Title">Yedekle</string>
+    <string name="Backup_Intro_TitleShow">Anahtarı Göster</string>
     <string name="Backup_Intro_Subtitle">The key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc. Make sure that no one is watching your screen. \n\nThe coins controlled by this key: %s</string>
     <string name="Backup_Intro_Later">Sonra</string>
     <string name="Backup_Intro_BackupNow">Yedekle</string>
@@ -45,11 +45,11 @@
     <string name="Backup_Button_Confirm">Onayla</string>
     <string name="Backup_Button_Next">İleri</string>
     <string name="Backup_Button_Submit">Onayla</string>
-    <string name="Backup_Button_ShowKey">Show Key</string>
+    <string name="Backup_Button_ShowKey">Anahtarı Göster</string>
     <!--Backup Words-->
-    <string name="Backup_Words_Title">Secret Key</string>
+    <string name="Backup_Words_Title">Gizli Anahtar</string>
     <!--Backup Eos-->
-    <string name="Backup_Eos_AccountName">Account Name</string>
+    <string name="Backup_Eos_AccountName">Hesap Adı</string>
     <string name="Backup_Eos_ActivePrivateKey">Gizli Anahtar</string>
     <string name="Backup_Eos_Warning">Copying your key using “copy” action poses some risks if you use any clipboard management apps or some other apps that may access to clipboard data.</string>
     <!--Balance-->
@@ -59,26 +59,26 @@
     <string name="Balance_RatePerCoin">%s için %s</string>
     <string name="Balance_SyncedUntil">%s kadar</string>
     <string name="Balance_Syncing">Eşitleniyor…</string>
-    <string name="Balance_AddCoins">Add Coins</string>
-    <string name="Balance_Sort_Balance">Balance</string>
-    <string name="Balance_Sort_PopupTitle">Sort by</string>
+    <string name="Balance_AddCoins">Kredi Ekle</string>
+    <string name="Balance_Sort_Balance">Bakiye</string>
+    <string name="Balance_Sort_PopupTitle">Sıralama şekli</string>
     <string name="Balance_Sort_Az">A-Z</string>
-    <string name="Balance_Sort_Default">Default</string>
+    <string name="Balance_Sort_Default">Varsayılan</string>
     <!--Send-->
     <string name="Send_Title">%s gönder</string>
     <string name="Send_Hint_Address">Adres</string>
     <string name="Send_Hint_Amount">Tutar</string>
-    <string name="Send_Fee">Fee:</string>
+    <string name="Send_Fee">Ücret:</string>
     <string name="Send_Button_Paste">Yapıştır</string>
-    <string name="Send_Button_Next">Next</string>
+    <string name="Send_Button_Next">İleri</string>
     <string name="Send_Button_Max">Azami</string>
-    <string name="Send_Confirmation_Title">Confirm</string>
-    <string name="Send_Confirmation_To">To: </string>
-    <string name="Send_Confirmation_HintMemo">Memo</string>
-    <string name="Send_Confirmation_Eos_HintAccount">Account</string>
-    <string name="Send_Confirmation_Total">Total:</string>
-    <string name="Send_Confirmation_EstimateTime">Estimate Time:</string>
-    <string name="Send_Confirmation_Send_Button">Send</string>
+    <string name="Send_Confirmation_Title">Onayla</string>
+    <string name="Send_Confirmation_To">Alan: </string>
+    <string name="Send_Confirmation_HintMemo">Not</string>
+    <string name="Send_Confirmation_Eos_HintAccount">Hesap</string>
+    <string name="Send_Confirmation_Total">Toplam:</string>
+    <string name="Send_Confirmation_EstimateTime">Tahmini süre:</string>
+    <string name="Send_Confirmation_Send_Button">Gönder</string>
     <string name="Send_ScanQrCode">QR Kod Okuma</string>
     <string name="Send_Success">\u2713 Gönderilen</string>
     <string name="Send_Error_InvalidAddress">Geçersiz adres. Lütfen kontrol edip tekrar deneyin!</string>
@@ -90,7 +90,7 @@
     <string name="Send_DialogTotal">Toplam:</string>
     <string name="Send_Sending">Gönderiliyor</string>
     <string name="Send_ERC_Alert">%s (ERC20) için ișlem ücreti Ethereum hesabından ödenir. Asgari %s ETH gerekiyor</string>
-    <string name="Send_Token_InsufficientFeeAlert">Transaction fees for %s (%s) paid in %s. You need %s.</string>
+    <string name="Send_Token_InsufficientFeeAlert">%s (%s) için ișlem ücreti %s hesabından ödenir. Asgari %s gerekiyor.</string>
     <!--Deposit-->
     <string name="Deposit_Title">%s al</string>
     <string name="Deposit_Share">İlet</string>
@@ -130,10 +130,10 @@
     <string name="FullInfo_Contract">Sözleşme</string>
     <string name="FullInfo_From">Gönderen</string>
     <string name="FullInfo_To">Alan</string>
-    <string name="FullInfo_Status">Status</string>
-    <string name="FullInfo_Memo">Memo</string>
-    <string name="FullInfo_CpuUsage">CPU Usage</string>
-    <string name="FullInfo_NetUsage">Net Usage</string>
+    <string name="FullInfo_Status">Durum</string>
+    <string name="FullInfo_Memo">Not</string>
+    <string name="FullInfo_CpuUsage">CPU Kullanımı</string>
+    <string name="FullInfo_NetUsage">Ağ Kullanımı</string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
@@ -159,13 +159,13 @@
     <!--Settings-->
     <string name="Settings_Title">Ayarlar</string>
     <string name="Settings_SecurityCenter">Güvenlik Merkezi</string>
-    <string name="Settings_ManageCoins">Manage Coins</string>
-    <string name="Settings_RestoreWallet">Restore Wallet</string>
+    <string name="Settings_ManageCoins">Kredileri Yönet</string>
+    <string name="Settings_RestoreWallet">Cüzdanı Geri Yükle</string>
     <string name="Settings_BaseCurrency">Para birimi</string>
     <string name="Settings_Language">Dil</string>
     <string name="Settings_LightMode">Aydınlık mod</string>
     <string name="Settings_About">Hakkında</string>
-    <string name="Settings_ShareThisWallet">Tell Friends</string>
+    <string name="Settings_ShareThisWallet">Arkadaşlarına bahset</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <!--Settings-->
@@ -173,7 +173,7 @@
     <string name="Settings_Error_NoFingerprintAddedYet">Kayıtlı parmak izi bulunmadı. Parmak izi eklemek için, Ayarlar &gt; Güvenlik bölümüne gidin.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Parmak izi</string>
-    <string name="SettingsSecurity_EnablePin">Passcode</string>
+    <string name="SettingsSecurity_EnablePin">Şifre</string>
     <string name="SettingsSecurity_EditPin">Şifreyi Değiştir</string>
     <string name="SettingsSecurity_ManageKeys">Anahtarları Yönet</string>
     <string name="SettingsSecurity_BackupWallet">Cüzdanı yedekle</string>
@@ -183,7 +183,7 @@
     <string name="SettingsLanguage_Title">Dil</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Hakkında</string>
-    <string name="SettingsAbout_AppTitle">Unstoppable</string>
+    <string name="SettingsAbout_AppTitle">Durdurulamaz</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Şartlar &amp; Gizlilik Politikası:</string>
     <string name="SettingsAbout_TermsPrivacyText">Bu uygulama uçtan uca bir ağdır. Herhangi bir web sunucusuna veya teknik destek personeline bağlı değildir.
 \n\n  İnternet olduğu sürece her yerde çalışır. Hiç kimse bu uygulamanın çalışmasını veya birisinin programı kullanmasını engelleyemez.
@@ -193,8 +193,8 @@
 \n\nBu uygulamayı destekleyen kodun tamamı, başından beri kamu denetimine açıktı. Yapabileceğimiz en güvenilir ve merkezi olmayan cüzdanı oluşturmaya çalıştık, yine de istenmeyen yazılım sorunu olmadığının garantisi yoktur. Bununla birlikte, bu cüzdanın herhangi bir akıllı telefon cüzdan uygulamasından çok daha güvenli olacağı muhtemel.  
 \n\nDöviz kurları gibi bazı 	jenerik resmi olmayan uygulama verileri merkezi olmayan IPFS sisteminde depolanır. </string>
     <!--Setting_Tell Friends-->
-    <string name="SettingsShare_Title">Share</string>
-    <string name="SettingsShare_Text">Unstoppable Wallet - Nice App!</string>
+    <string name="SettingsShare_Title">Paylaş</string>
+    <string name="SettingsShare_Text">Durdurulamayan Cüzdan - Güzel Uygulama!</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android anahtar deposu hatası</string>
     <string name="Alert_KeysInvalidatedDescription">Android cihazınızın kilidi değiştirildiğinden cüzdan bilginizi tutan şifreli dosya artık geçersiz</string>
