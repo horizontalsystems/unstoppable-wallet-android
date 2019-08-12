@@ -25,7 +25,7 @@
     <string name="Restore_ValidationFailed">Hatalı Gizli anahtar</string>
     <string name="Restore_RestoreFailed">Cüzdan geri yüklenemedi</string>
     <string name="Restore_EosAccountName">Hesap Adı</string>
-    <string name="Restore_EosActivePrivateKey">Active Private Key</string>
+    <string name="Restore_EosActivePrivateKey">Gizli Anahtarı Etkinleştir</string>
     <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
     <string name="Restore_EosKeyIncorrect">Incorrect Key</string>
     <!--Backup-->
@@ -50,7 +50,7 @@
     <string name="Backup_Words_Title">Secret Key</string>
     <!--Backup Eos-->
     <string name="Backup_Eos_AccountName">Account Name</string>
-    <string name="Backup_Eos_ActivePrivateKey">Private Key</string>
+    <string name="Backup_Eos_ActivePrivateKey">Gizli Anahtar</string>
     <string name="Backup_Eos_Warning">Copying your key using “copy” action poses some risks if you use any clipboard management apps or some other apps that may access to clipboard data.</string>
     <!--Balance-->
     <string name="Balance_Title">Bakiye</string>
