@@ -175,7 +175,7 @@
     <string name="SettingsSecurity_Fingerprint">Parmak izi</string>
     <string name="SettingsSecurity_EnablePin">Passcode</string>
     <string name="SettingsSecurity_EditPin">Şifreyi Değiştir</string>
-    <string name="SettingsSecurity_ManageKeys">Manage Keys</string>
+    <string name="SettingsSecurity_ManageKeys">Anahtarları Yönet</string>
     <string name="SettingsSecurity_BackupWallet">Cüzdanı yedekle</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Para birimi</string>
@@ -245,7 +245,7 @@
     <string name="ManageCoins_AddCoin_Text">This action will generate a new key(wallet) for the following coins: %s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">At this point, the wallet is not able to create new EOS wallet accounts. You\'re only able to restore the existing one.</string>
     <!--Manage Keys-->
-    <string name="ManageKeys_Title">Manage Keys</string>
+    <string name="ManageKeys_Title">Anahtarları Yönet</string>
     <string name="ManageKeys_Description">Anyone with access to your Keys can steal your wallet funds. Store keys safely and never show them to anyone. \n\nBackup each key to be able to restore funds if you loose or break your phone, or simply the wallet app gets deleted.</string>
     <string name="ManageKeys_Create">Create</string>
     <string name="ManageKeys_Restore">Restore</string>
@@ -275,7 +275,7 @@
     <string name="CoinOption_Title">Geri yükleme seçenekleri</string>
     <string name="CoinOption_Fast">Hızlı</string>
     <string name="CoinOption_Recommended">0&#8211;2 saat (Tavsiye edilen)</string>
-    <string name="CoinOption_Fast_Text">Restores your past transactions directly from the network. Significantly more private but very slow. If the restore takes way too much time, go to Manage Keys section and reimport the Key for the wallet using the Fast Sync option.</string>
+    <string name="CoinOption_Fast_Text">Geçmiş hesap işlemlerinizi ağdan geri yükler. Çok daha güvenli ama yavaş. Eğer geri yükleme çok uzun zaman alıyorsa, Anahtarları Yönet ekranında cüzdan anahtarını Hızlı Eşle seçeneğiyle tekrar içe aktarın.</string>
     <string name="CoinOption_Slow">Yavaş</string>
     <string name="CoinOption_MorePrivate">1&#8211;12 saat (Daha Gizli)</string>
     <string name="CoinOption_Slow_Text">İşlem geçmişinizi ağdan geri yükleyin. Çok daha güvenli ancak daha yavaş. Eğer gereğinden daha uzun sürerse, Ayarlardaki Güvenlik bölümünden \"Bu cihazla bağı kes\"i seçin.</string>
