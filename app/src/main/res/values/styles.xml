@@ -284,6 +284,7 @@
     </style>
 
     <style name="ButtonGreen_12" parent="Button">
+        <item name="android:textColor">@color/button_yellow_text_color_selector</item>
         <item name="android:background">@drawable/button_green_background_12</item>
     </style>
 

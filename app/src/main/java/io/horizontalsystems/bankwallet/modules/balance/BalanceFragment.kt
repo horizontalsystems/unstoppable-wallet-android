@@ -294,11 +294,18 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
     fun bind(balanceViewItem: BalanceViewItem, expanded: Boolean) {
         syncing = false
         buttonPay.isEnabled = false
+        buttonReceive.isEnabled = true
         imgSyncFailed.visibility = View.GONE
         iconProgress.visibility = View.GONE
 
         balanceViewItem.state.let { adapterState ->
             when (adapterState) {
+                is AdapterState.NotReady -> {
+                    syncing = true
+                    iconProgress.visibility = View.VISIBLE
+                    textSyncProgress.text = containerView.context.getString(R.string.Balance_Syncing)
+                    buttonReceive.isEnabled = false
+                }
                 is AdapterState.Syncing -> {
                     syncing = true
                     iconProgress.visibility = View.VISIBLE

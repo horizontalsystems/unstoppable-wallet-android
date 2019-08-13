@@ -85,7 +85,7 @@ class BalancePresenter(
         val items = wallets.map {
             val adapter = interactor.getAdapterForWallet(it)
 
-            BalanceModule.BalanceItem(it, adapter?.balance ?: BigDecimal.ZERO, adapter?.state ?: AdapterState.NotSynced)
+            BalanceModule.BalanceItem(it, adapter?.balance ?: BigDecimal.ZERO, adapter?.state ?: AdapterState.NotReady)
         }
         dataSource.set(items)
         dataSource.currency?.let {
