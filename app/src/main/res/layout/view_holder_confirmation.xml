@@ -16,5 +16,5 @@
     android:paddingTop="4dp"
     android:textColor="?ConfirmationTextColor"
     android:textSize="14sp"
-    tools:text="@string/Backup_Confirmation_SecretKey"
+    tools:text="@string/ManageKeys_Delete_ConfirmationRemove"
     />

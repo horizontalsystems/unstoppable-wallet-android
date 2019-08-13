@@ -10,8 +10,9 @@ import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.extensions.InputTextView
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
+import kotlinx.android.synthetic.main.fragment_backup_words_confirm.*
 
-class BackupWordsConfirmFragment : Fragment() {
+class BackupWordsConfirmFragment(private val accountKey: String) : Fragment() {
     private lateinit var viewModel: BackupWordsViewModel
 
     private var wordIndex1 = -1
@@ -31,6 +32,8 @@ class BackupWordsConfirmFragment : Fragment() {
             viewModel = ViewModelProviders.of(it).get(BackupWordsViewModel::class.java)
         }
 
+        textDescription.text = getString(R.string.Backup_Confirmation_Title, accountKey)
+
         viewModel.wordIndexesToConfirmLiveData.observe(viewLifecycleOwner, Observer { list ->
             list?.let {
                 wordOne?.bindPrefix("${it[0]}.")
@@ -42,24 +45,20 @@ class BackupWordsConfirmFragment : Fragment() {
         })
 
         viewModel.errorLiveData.observe(viewLifecycleOwner, Observer {
-            showError(it)
+            HudHelper.showErrorMessage(it)
         })
 
         viewModel.validateWordsLiveEvent.observe(viewLifecycleOwner, Observer {
             val wordOneEntry = wordOne?.getEnteredText()?.toLowerCase()
             val wordTwoEntry = wordTwo?.getEnteredText()?.toLowerCase()
             if (wordOneEntry.isNullOrEmpty() || wordTwoEntry.isNullOrEmpty()) {
-                showError(R.string.Backup_Confirmation_Description)
+                HudHelper.showErrorMessage(getString(R.string.Backup_Confirmation_Description, accountKey))
             } else {
                 viewModel.delegate.validateDidClick(
                         hashMapOf(wordIndex1 to wordOneEntry, wordIndex2 to wordTwoEntry)
                 )
             }
         })
-    }
-
-    private fun showError(errorMsgId: Int?) {
-        errorMsgId?.let { HudHelper.showErrorMessage(it) }
     }
 
 }
