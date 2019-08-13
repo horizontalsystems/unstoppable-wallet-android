@@ -73,12 +73,12 @@
     <string name="Send_Button_Next">Next</string>
     <string name="Send_Button_Max">Макс.</string>
     <string name="Send_Confirmation_Title">Confirm</string>
-    <string name="Send_Confirmation_To">To: </string>
+    <string name="Send_Confirmation_To">Кому: </string>
     <string name="Send_Confirmation_HintMemo">Memo</string>
     <string name="Send_Confirmation_Eos_HintAccount">Account</string>
-    <string name="Send_Confirmation_Total">Total:</string>
+    <string name="Send_Confirmation_Total">Итого:</string>
     <string name="Send_Confirmation_EstimateTime">Estimate Time:</string>
-    <string name="Send_Confirmation_Send_Button">Send</string>
+    <string name="Send_Confirmation_Send_Button">Отправить</string>
     <string name="Send_ScanQrCode">Сканировать QR-код</string>
     <string name="Send_Success">\u2713 Отправлено</string>
     <string name="Send_Error_InvalidAddress">Адрес недействителен. Попробуйте еще раз!</string>
@@ -90,7 +90,7 @@
     <string name="Send_DialogTotal">Итого:</string>
     <string name="Send_Sending">Отправка</string>
     <string name="Send_ERC_Alert">Комиссия за отправку %s (ERC20) взимается в ETH. Необходимо %s ETH.</string>
-    <string name="Send_Token_InsufficientFeeAlert">Transaction fees for %s (%s) paid in %s. You need %s.</string>
+    <string name="Send_Token_InsufficientFeeAlert">Комиссия за отправку %s %s взимается в %s. Необходимо %s.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Получить %s</string>
     <string name="Deposit_Share">Переслать</string>
@@ -130,7 +130,7 @@
     <string name="FullInfo_Contract">Контракт</string>
     <string name="FullInfo_From">От</string>
     <string name="FullInfo_To">Кому</string>
-    <string name="FullInfo_Status">Status</string>
+    <string name="FullInfo_Status">Статус</string>
     <string name="FullInfo_Memo">Memo</string>
     <string name="FullInfo_CpuUsage">CPU Usage</string>
     <string name="FullInfo_NetUsage">Net Usage</string>
@@ -208,7 +208,7 @@
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Разблокировать</string>
     <string name="Hud_Text_Success">Успешно</string>
-    <string name="Hud_Text_Done">Done</string>
+    <string name="Hud_Text_Done">Готово</string>
     <string name="Hud_Text_Error">Ошибка</string>
     <string name="Hud_Text_NoInternet">Нет Интернета</string>
     <string name="Hud_Text_Copied">Скопировано</string>
