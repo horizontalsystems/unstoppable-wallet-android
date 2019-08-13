@@ -54,7 +54,7 @@ class ManageWalletsDialog(private val listener: Listener, private val coin: Coin
         addCoinIcon.bind(coin)
 
         addKeyTitle.text = getString(R.string.AddCoin_Title, coin.code)
-        addKeyInfo.text = getString(R.string.AddCoin_Description, coin.title)
+        addKeyInfo.text = getString(R.string.AddCoin_Description, coin.title, coin.title)
     }
 
     private fun bindActions() {
