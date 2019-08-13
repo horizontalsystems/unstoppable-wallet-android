@@ -19,17 +19,12 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     val reloadLiveEvent = SingleLiveEvent<Void>()
     val reloadHeaderLiveEvent = SingleLiveEvent<Void>()
     val reloadItemLiveEvent = SingleLiveEvent<Int>()
-    val enabledCoinsCountLiveEvent = SingleLiveEvent<Int>()
     val setSortingOnLiveEvent = SingleLiveEvent<Boolean>()
 
     fun init() {
         BalanceModule.init(this, this)
 
         delegate.viewDidLoad()
-    }
-
-    override fun enabledCoinsCount(size: Int) {
-        enabledCoinsCountLiveEvent.value = size
     }
 
     override fun reload() {

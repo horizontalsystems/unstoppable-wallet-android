@@ -314,7 +314,6 @@ interface IAccountsStorage {
 
 interface IEnabledWalletStorage {
     val enabledWallets: List<EnabledWallet>
-    fun enabledWalletsFlowable(): Flowable<List<EnabledWallet>>
     fun save(coins: List<EnabledWallet>)
     fun deleteAll()
 }

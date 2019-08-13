@@ -79,24 +79,7 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener, BalanceSortDialogFrag
             coinsAdapter.notifyDataSetChanged()
             reloadHeader()
             if (viewModel.delegate.itemsCount > 0) {
-                shimmerViewWrapper.stopShimmer()
-                shimmerViewWrapper.animate().alpha(0f)
                 recyclerCoins.animate().alpha(1f)
-            }
-        })
-
-        viewModel.enabledCoinsCountLiveEvent.observe(viewLifecycleOwner, Observer { size ->
-            size?.let {
-                if (it > 0 && viewModel.delegate.itemsCount == 0) {
-                    setPlaceholders(it)
-
-                    recyclerCoins.alpha = 0f
-                    shimmerViewWrapper.alpha = 1f
-                    shimmerViewWrapper.startShimmer()
-                } else if (it == 0) {
-                    recyclerCoins.alpha = 1f
-                    shimmerViewWrapper.alpha = 0f
-                }
             }
         })
 
@@ -152,17 +135,6 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener, BalanceSortDialogFrag
 
     override fun onSortItemSelect(sortType: BalanceSortType) {
         viewModel.delegate.onSortTypeChanged(sortType)
-    }
-
-    private fun setPlaceholders(count: Int) {
-        placeholderContainer.removeAllViews()
-        val placeholdersCount = Math.min(count, 6)
-        for (i in 1..placeholdersCount) {
-            val placeholder = LayoutInflater.from(context).inflate(R.layout.view_holder_coin_placeholder, placeholderContainer, false)
-            placeholderContainer.addView(placeholder)
-        }
-        val placeholder = LayoutInflater.from(context).inflate(R.layout.add_coin_placeholder, placeholderContainer, false)
-        placeholderContainer.addView(placeholder)
     }
 
     private fun setAppBarAnimation() {

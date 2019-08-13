@@ -11,7 +11,6 @@ class BalanceInteractor(
         private val walletManager: IWalletManager,
         private val adapterManager: IAdapterManager,
         private val rateStorage: IRateStorage,
-        private val coinStorage: IEnabledWalletStorage,
         private val currencyManager: ICurrencyManager,
         private val localStorage: ILocalStorage,
         private val refreshTimeout: Double = 2.0
@@ -26,14 +25,6 @@ class BalanceInteractor(
     override fun initWallets() {
         onUpdateWallets()
         onUpdateCurrency()
-
-//        disposables.add(coinStorage.enabledWalletsFlowable()
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe {
-//                    delegate?.didEnabledCoinsCountUpdated(it.size)
-//                }
-//        )
 
         disposables.add(walletManager.walletsUpdatedSignal
                 .subscribeOn(Schedulers.io())

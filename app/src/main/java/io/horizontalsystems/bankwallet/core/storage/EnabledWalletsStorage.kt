@@ -2,16 +2,11 @@ package io.horizontalsystems.bankwallet.core.storage
 
 import io.horizontalsystems.bankwallet.core.IEnabledWalletStorage
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
-import io.reactivex.Flowable
 
 class EnabledWalletsStorage(private val appDatabase: AppDatabase) : IEnabledWalletStorage {
 
     override val enabledWallets: List<EnabledWallet>
         get() = appDatabase.walletsDao().enabledCoins()
-
-    override fun enabledWalletsFlowable(): Flowable<List<EnabledWallet>> {
-        return appDatabase.walletsDao().enabledCoinsFlowable()
-    }
 
     override fun save(coins: List<EnabledWallet>) {
         appDatabase.walletsDao().deleteAll()

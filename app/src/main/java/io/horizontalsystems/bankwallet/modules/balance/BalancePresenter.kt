@@ -51,10 +51,6 @@ class BalancePresenter(
                 }?.let { disposables.add(it) }
     }
 
-    override fun didEnabledCoinsCountUpdated(size: Int) {
-        view?.enabledCoinsCount(size)
-    }
-
     override fun getViewItem(position: Int) =
             factory.createViewItem(dataSource.getItem(position), dataSource.currency)
 
