@@ -78,7 +78,7 @@
     <string name="Send_Confirmation_Eos_HintAccount">Account</string>
     <string name="Send_Confirmation_Total">Total:</string>
     <string name="Send_Confirmation_EstimateTime">Estimate Time:</string>
-    <string name="Send_Confirmation_Send_Button">Send</string>
+    <string name="Send_Confirmation_Send_Button">Envoyer</string>
     <string name="Send_ScanQrCode">Scanner le Code QR</string>
     <string name="Send_Success">\u2713 Envoyé</string>
     <string name="Send_Error_InvalidAddress">L\'adresse semble invalide. Vérifiez et réessayez!</string>
@@ -90,7 +90,7 @@
     <string name="Send_DialogTotal">Total:</string>
     <string name="Send_Sending">En attente</string>
     <string name="Send_ERC_Alert">Frais de transaction pour %s (ERC20) payé en Ethereum. Il est nécessaire %s ETH.</string>
-    <string name="Send_Token_InsufficientFeeAlert">Transaction fees for %s (%s) paid in %s. You need %s.</string>
+    <string name="Send_Token_InsufficientFeeAlert">Frais de transaction pour %s (%s) payé en %s. Il est nécessaire %s.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Recevoir %s</string>
     <string name="Deposit_Share">Transférer</string>
@@ -130,7 +130,7 @@
     <string name="FullInfo_Contract">Contrat</string>
     <string name="FullInfo_From">De</string>
     <string name="FullInfo_To">À</string>
-    <string name="FullInfo_Status">Status</string>
+    <string name="FullInfo_Status">Statut</string>
     <string name="FullInfo_Memo">Memo</string>
     <string name="FullInfo_CpuUsage">CPU Usage</string>
     <string name="FullInfo_NetUsage">Net Usage</string>
@@ -159,8 +159,8 @@
     <!--Settings-->
     <string name="Settings_Title">Paramètres</string>
     <string name="Settings_SecurityCenter">Centre de Sécurité</string>
-    <string name="Settings_ManageCoins">Manage Coins</string>
-    <string name="Settings_RestoreWallet">Restore Wallet</string>
+    <string name="Settings_ManageCoins">Gérer les coins</string>
+    <string name="Settings_RestoreWallet">Restaurer le porte-monnaie</string>
     <string name="Settings_BaseCurrency">Devise de Base</string>
     <string name="Settings_Language">Langue</string>
     <string name="Settings_LightMode">Mode lumineux</string>
@@ -173,7 +173,7 @@
     <string name="Settings_Error_NoFingerprintAddedYet">Vous n’avez pas activé d’empreintes digitales sur ce appareil. Allez à paramètres &gt; sécurité à mettre en place un accès d’empreinte digitale.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Empreinte digitale</string>
-    <string name="SettingsSecurity_EnablePin">Passcode</string>
+    <string name="SettingsSecurity_EnablePin">Code</string>
     <string name="SettingsSecurity_EditPin">Modifier le code </string>
     <string name="SettingsSecurity_ManageKeys">Manage Keys</string>
     <string name="SettingsSecurity_BackupWallet">Porte-monnaie de Sauvegarde</string>
@@ -193,7 +193,7 @@
 \n\nLe code alimentant cette application a été ouvert au public depuis le début. Nous avons essayé de créer le porte-monnaie le plus sécurisé et le plus décentralisé possible, mais rien ne garantit qu’il n’y ait pas de problèmes logiciels inattendus. Cela dit, ce porte-monnaie sera probablement beaucoup plus sécurisé que n\'importe quelle application de porte-monnaie pour portable.
 \n\nCertaines données d\'applications génériques non privées, telles que les taux de change, sont stockées dans un stockage décentralisé (IPFS). </string>
     <!--Setting_Tell Friends-->
-    <string name="SettingsShare_Title">Share</string>
+    <string name="SettingsShare_Title">Partager</string>
     <string name="SettingsShare_Text">Unstoppable Wallet - Nice App!</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Erreur de Keystore Android</string>
@@ -208,7 +208,7 @@
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Déverrouiller</string>
     <string name="Hud_Text_Success">Effectué</string>
-    <string name="Hud_Text_Done">Done</string>
+    <string name="Hud_Text_Done">Fait</string>
     <string name="Hud_Text_Error">Erreur</string>
     <string name="Hud_Text_NoInternet">Aucune connexion Internet</string>
     <string name="Hud_Text_Copied">Copié</string>
@@ -225,7 +225,7 @@
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">PIN de téléphone</string>
     <string name="OSPin_Confirm_Desciption">This app requires that phone has the passcode (screen lock) enabled.\n\n You may enable it in Android settings.\n\nPlease note that when you disabled the PIN on the OS level the security measures in safe storage of your phonе made the previously stored data invalid. You will need to Restore your wallet keys to get back to your wallet.</string>
-    <string name="OSPin_Prompt_Desciption">This app requires your phone\'s PIN in order to keep sensitive data from your wallet in Android\'s secure storage and not in the app itself.</string>
+    <string name="OSPin_Prompt_Desciption">Cette application demande le PIN de votre téléphone portable afin de garder des données sensibles de votre porte-monnaie dans le stockage sécurisé d\'Android et pas dans l\'application elle-même.</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Code</string>
     <string name="SetPin_Info">Votre code sera utilisé pour déverrouiller votre porte-monnaie et envoyer de l’argent</string>
@@ -248,10 +248,10 @@
     <string name="ManageKeys_Title">Manage Keys</string>
     <string name="ManageKeys_Description">Anyone with access to your Keys can steal your wallet funds. Store keys safely and never show them to anyone. \n\nBackup each key to be able to restore funds if you loose or break your phone, or simply the wallet app gets deleted.</string>
     <string name="ManageKeys_Create">Create</string>
-    <string name="ManageKeys_Restore">Restore</string>
+    <string name="ManageKeys_Restore">Restaurer</string>
     <string name="ManageKeys_Delete">Delete</string>
     <string name="ManageKeys_Backup">Backup</string>
-    <string name="ManageKeys_Show">Show</string>
+    <string name="ManageKeys_Show">Afficher</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">Delete Key</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s key (wallet) from this device.</string>
