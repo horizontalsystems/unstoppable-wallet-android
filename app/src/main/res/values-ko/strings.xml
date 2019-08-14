@@ -38,8 +38,8 @@
     <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is ever moved, deleted or malfunctions, the access to my wallet can be only recovered with that Secret Key.</string>
     <string name="Backup_Confirmation_LockAppWarn">I understand that changing the phone\s unlock PIN or deleting app data in Android settings deletes the Secret Key from device. I would need to re-enter my Secret Key to regain access to my wallet.</string>
     <string name="Backup_Confirmation_Disclaimer">I understand that developers of this app can not be held responsible for any unintended bugs or issues that may arise while using this app.</string>
-    <string name="Backup_Confirmation_Title">비밀 키에서 단어를 입력</string>
-    <string name="Backup_Confirmation_Description">비밀 키에서 단어를 입력.</string>
+    <string name="Backup_Confirmation_Title">Enter words from your %s</string>
+    <string name="Backup_Confirmation_Description">Enter words from your %s.</string>
     <string name="Backup_Confirmation_FailureAlertText">암호가 일치 하지 않습니다.</string>
     <string name="Backup_Confirmation_CheckTitle">확인 중…</string>
     <string name="Backup_Button_Confirm">확인</string>
