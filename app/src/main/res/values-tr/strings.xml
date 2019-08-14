@@ -94,6 +94,8 @@
     <string name="Deposit_Title">%s al</string>
     <string name="Deposit_Share">İlet</string>
     <string name="Deposit_Your_Address">Adresiniz</string>
+    <string name="Receive_Alert_NotBackedUp_Button">Backup</string>
+    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">şimdi</string>
     <string name="Timestamp_MinAgo">%d dk önce</string>
