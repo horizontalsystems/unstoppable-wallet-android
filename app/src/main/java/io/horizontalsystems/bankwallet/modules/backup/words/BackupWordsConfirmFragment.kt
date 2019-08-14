@@ -32,7 +32,7 @@ class BackupWordsConfirmFragment(private val accountKey: String) : Fragment() {
             viewModel = ViewModelProviders.of(it).get(BackupWordsViewModel::class.java)
         }
 
-        textDescription.text = getString(R.string.Backup_Confirmation_Title, accountKey)
+        textDescription.text = getString(R.string.Backup_Confirmation_Description, accountKey)
 
         viewModel.wordIndexesToConfirmLiveData.observe(viewLifecycleOwner, Observer { list ->
             list?.let {
