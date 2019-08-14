@@ -6,10 +6,7 @@ import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.IAdapter
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.entities.Rate
-import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.plugins.RxJavaPlugins
@@ -95,6 +92,7 @@ class BalancePresenterTest {
         val coinCode = "coinCode"
         val currencyCode = "currencyCode"
         val currency = mock(Currency::class.java)
+        val account = mock(Account::class.java)
         val coin = mock(Coin::class.java)
         val wallet = mock(Wallet::class.java)
         val balance = BigDecimal(12.23)
@@ -109,6 +107,8 @@ class BalancePresenterTest {
         whenever(coin.code).thenReturn(coinCode)
         whenever(coin.title).thenReturn(title)
         whenever(wallet.coin).thenReturn(coin)
+        whenever(wallet.account).thenReturn(account)
+        whenever(account.isBackedUp).thenReturn(false)
         whenever(adapter.wallet).thenReturn(wallet)
         whenever(adapter.balance).thenReturn(balance)
         whenever(adapter.state).thenReturn(state)
@@ -257,6 +257,7 @@ class BalancePresenterTest {
         whenever(dataSource.getItem(position)).thenReturn(item)
         whenever(coin.code).thenReturn(coinCode)
         whenever(item.coin).thenReturn(coin)
+        whenever(item.isBackedUp).thenReturn(true)
 
         presenter.onReceive(position)
 

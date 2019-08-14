@@ -18,6 +18,7 @@ object BalanceModule {
         fun updateHeader()
         fun enabledCoinsCount(size: Int)
         fun setSortingOn(isOn: Boolean)
+        fun showBackupAlert()
     }
 
     interface IViewDelegate {
@@ -33,6 +34,7 @@ object BalanceModule {
         fun onClear()
         fun onSortClick()
         fun onSortTypeChanged(sortType: BalanceSortType)
+        fun openManageKeys()
     }
 
     interface IInteractor {
@@ -59,6 +61,7 @@ object BalanceModule {
         fun openSendDialog(coin: String)
         fun openManageCoins()
         fun openSortTypeDialog(sortingType: BalanceSortType)
+        fun openManageKeys()
     }
 
     class BalanceItemDataSource {
@@ -138,7 +141,8 @@ object BalanceModule {
             val coin: Coin,
             var balance: BigDecimal = BigDecimal.ZERO,
             var state: AdapterState = AdapterState.NotSynced,
-            var rate: Rate? = null
+            var rate: Rate? = null,
+            var isBackedUp: Boolean = false
     ) {
         val fiatValue: BigDecimal?
             get() = rate?.let { balance.times(it.value) }

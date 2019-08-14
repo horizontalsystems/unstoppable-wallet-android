@@ -67,7 +67,11 @@ class BalancePresenter(
     }
 
     override fun onReceive(position: Int) {
-        router.openReceiveDialog(dataSource.getItem(position).coin.code)
+        if (dataSource.getItem(position).isBackedUp) {
+            router.openReceiveDialog(dataSource.getItem(position).coin.code)
+        } else {
+            view?.showBackupAlert()
+        }
     }
 
     override fun onPay(position: Int) {
@@ -98,7 +102,7 @@ class BalancePresenter(
     //
 
     override fun didUpdateAdapters(adapters: List<IAdapter>) {
-        val items = adapters.map { BalanceModule.BalanceItem(it.wallet.coin, it.balance, it.state) }
+        val items = adapters.map { BalanceModule.BalanceItem(it.wallet.coin, it.balance, it.state, isBackedUp = it.wallet.account.isBackedUp) }
         dataSource.set(items)
         dataSource.currency?.let {
             interactor.fetchRates(it.code, dataSource.coinCodes)
