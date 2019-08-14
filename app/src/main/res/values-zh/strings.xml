@@ -38,8 +38,8 @@
     <string name="Backup_Confirmation_DeleteAppWarn">我知道如果此APP被移动、删除或出现故障，只有用密钥才能恢复对我钱包的访问。</string>
     <string name="Backup_Confirmation_LockAppWarn">我知道更改手机的解锁密码或删除Android设置中的应用程序数据会从设备中删除密钥。在这种情况下，我需要重新输入我的密钥才能重新获得我的钱包。</string>
     <string name="Backup_Confirmation_Disclaimer">我理解这个应用程序的开发人员对使用这个应用程序时可能出现的任何意外的错误或问题不负责任。</string>
-    <string name="Backup_Confirmation_Title">请输入你密钥中的词</string>
-    <string name="Backup_Confirmation_Description">请输入你密钥中的词.</string>
+    <string name="Backup_Confirmation_Title">Enter words from your %s</string>
+    <string name="Backup_Confirmation_Description">Enter words from your %s.</string>
     <string name="Backup_Confirmation_FailureAlertText"> 单词不匹配</string>
     <string name="Backup_Confirmation_CheckTitle">正在检查...</string>
     <string name="Backup_Button_Confirm">确认</string>
