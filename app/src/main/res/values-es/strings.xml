@@ -11,13 +11,13 @@
     <string name="Alert_Copied">Copiado</string>
     <string name="Button_Cancel">Cancelar</string>
     <string name="Button_Back">Atrás</string>
-    <string name="Button_Close">Close</string>
+    <string name="Button_Close">Cerrar</string>
     <string name="Button_Ok">OK</string>
     <string name="Button_Share">Compartir</string>
     <string name="Error">Error</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
-    <string name="Welcome_CreateWallet">New Wallet</string>
+    <string name="Welcome_CreateWallet">Nueva cartera</string>
     <string name="Welcome_RestoreWallet">Restore Wallet</string>
     <!--Restore-->
     <string name="Restore_Title">Restaurar</string>
@@ -38,8 +38,8 @@
     <string name="Backup_Confirmation_DeleteAppWarn">Entiendo que si esta aplicación se elimina o deja de funcionar por alguna razón, mi monedero sólo puede ser recuperado utilizando mi clave secreta.</string>
     <string name="Backup_Confirmation_LockAppWarn">Entiendo que cambiar el PIN de desbloqueo del teléfono o eliminar los datos de la aplicación en la configuración de Android borra la clave secreta del dispositivo. Tendría que volver a introducir mi Clave Secreta para recuperar el acceso a mi monedero.</string>
     <string name="Backup_Confirmation_Disclaimer">Entiendo que los desarrolladores de esta aplicación no pueden ser responsables de ningún error o problemas no intencionados que puedan surgir mientras se usa esta aplicación.</string>
-    <string name="Backup_Confirmation_Title">Insertar palabras de su clave secreta</string>
-    <string name="Backup_Confirmation_Description">Insertar palabras de su clave secreta.</string>
+    <string name="Backup_Confirmation_Title">Enter words from your %s</string>
+    <string name="Backup_Confirmation_Description">Enter words from your %s.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Las contraseñas no coinciden</string>
     <string name="Backup_Confirmation_CheckTitle">Comprobar…</string>
     <string name="Backup_Button_Confirm">Confirmar</string>
