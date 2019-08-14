@@ -94,6 +94,8 @@
     <string name="Deposit_Title">受取 %s</string>
     <string name="Deposit_Share">転送</string>
     <string name="Deposit_Your_Address">お客様のアドレス</string>
+    <string name="Receive_Alert_NotBackedUp_Button">Backup</string>
+    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">ただ今</string>
     <string name="Timestamp_MinAgo">%d 分前</string>
