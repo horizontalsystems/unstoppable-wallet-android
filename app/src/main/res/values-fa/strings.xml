@@ -94,6 +94,8 @@
     <string name="Deposit_Title">دریافت s%</string>
     <string name="Deposit_Share">فرستادن به ديگران</string>
     <string name="Deposit_Your_Address">آدرس شما</string>
+    <string name="Receive_Alert_NotBackedUp_Button">Backup</string>
+    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">همين آلان</string>
     <string name="Timestamp_MinAgo">%d؜دقيقه پيش</string>
