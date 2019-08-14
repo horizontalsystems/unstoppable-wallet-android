@@ -38,7 +38,6 @@
     <string name="Backup_Confirmation_DeleteAppWarn">Je comprends que si cette appli ne fonction plus, est déplacée vers un autre appareil ou supprimée, mon porte-monnaie ne peut être récupéré qu\'avec la clé secrète.</string>
     <string name="Backup_Confirmation_LockAppWarn">Je comprends que changer le PIN téléphone ou supprimer les données d\'application dans les paramètres Android supprime la clé secrète de l\'appareil. Je devrais entrer à nouveau ma clé secrète pour retrouver l\'accès à mon porte-monnaie.</string>
     <string name="Backup_Confirmation_Disclaimer">Je comprends que les développeurs de cette application ne peuvent pas être responsables de tout bogue ou problème non désiré qui pourrait apparaître lors de l\'utilisation de cette application.</string>
-    <string name="Backup_Confirmation_Title">Enter words from your %s</string>
     <string name="Backup_Confirmation_Description">Enter words from your %s.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Les mots ne correspondent pas</string>
     <string name="Backup_Confirmation_CheckTitle">Vérification…</string>
