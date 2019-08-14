@@ -38,8 +38,8 @@
     <string name="Backup_Confirmation_DeleteAppWarn">Uygulamanın silinmesi, hatalı davranması, taşınması ve benzeri bir durumda hesabıma ulaşamadığımda, hesabımı kurtarmanın tek yolunun Gizli Anahtar olduğunu biliyourum.</string>
     <string name="Backup_Confirmation_LockAppWarn">Anladığım kadarıyla telefonun PİN kodunun değiştirmesi veya uygulama verisinin Android ayarlarından silmesi durumunda gizli anahtar telefon hafızasından silenir. Yeniden cüzdanımı erişebilmem için gizli anahtarı yeniden girmem gerekir.</string>
     <string name="Backup_Confirmation_Disclaimer">Uygulama geliştiricilerinin, istenmeyen herhangi bir hatadan veya bu uygulamayı kullanırken ortaya çıkabilecek sorunlardan sorumlu tutulamayacağını kabul ediyorum.</string>
-    <string name="Backup_Confirmation_Title">Gizli Anahtarınızda ki istenen kelimeleri giriniz</string>
-    <string name="Backup_Confirmation_Description">Gizli Anahtarınızda ki kelimeleri girin.</string>
+    <string name="Backup_Confirmation_Title">Enter words from your %s</string>
+    <string name="Backup_Confirmation_Description">Enter words from your %s.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Kelimeler eşleşmiyor</string>
     <string name="Backup_Confirmation_CheckTitle">Kontrol etme…</string>
     <string name="Backup_Button_Confirm">Onayla</string>
