@@ -14,8 +14,7 @@
         <FrameLayout
             android:id="@+id/fragmentContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:descendantFocusability="blocksDescendants" />
+            android:layout_height="match_parent" />
 
     </androidx.core.widget.NestedScrollView>
 
