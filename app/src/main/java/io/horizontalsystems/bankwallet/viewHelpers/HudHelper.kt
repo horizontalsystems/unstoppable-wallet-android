@@ -15,14 +15,18 @@ object HudHelper {
     private var toast: Toast? = null
 
     fun showSuccessMessage(text: Int, durationInMillis: Long = 2000) {
-        showHudNotification(text, R.color.green_crypto, durationInMillis)
+        showHudNotification(App.instance.getString(text), R.color.green_crypto, durationInMillis)
     }
 
-    fun showErrorMessage(text: Int) {
+    fun showErrorMessage(textRes: Int) {
+        showErrorMessage(App.instance.getString(textRes))
+    }
+
+    fun showErrorMessage(text: String) {
         showHudNotification(text, R.color.red_warning, 2000)
     }
 
-    private fun showHudNotification(text: Int, backgroundColor: Int, durationInMillis: Long) {
+    private fun showHudNotification(text: String, backgroundColor: Int, durationInMillis: Long) {
         toast?.cancel()
 
         val toast = Toast.makeText(App.instance, text, Toast.LENGTH_SHORT)

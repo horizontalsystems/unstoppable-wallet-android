@@ -14,7 +14,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.viewHelpers.inflate
 import kotlinx.android.synthetic.main.fragment_backup_words.*
 
-class BackupWordsFragment(private val wordsSize: Int) : Fragment() {
+class BackupWordsFragment(private val accountKey: String) : Fragment() {
 
     private lateinit var viewModel: BackupWordsViewModel
 
@@ -31,10 +31,7 @@ class BackupWordsFragment(private val wordsSize: Int) : Fragment() {
         recyclerWords.adapter = wordsAdapter
         recyclerWords.layoutManager = LinearLayoutManager(context)
 
-        backupTitle.text = when (wordsSize) {
-            24 -> getString(R.string.AccountType_BinanceKey)
-            else -> getString(R.string.AccountType_12WordsKey)
-        }
+        backupTitle.text = accountKey
 
         viewModel.wordsLiveData.observe(viewLifecycleOwner, Observer {
             wordsAdapter.items = it
