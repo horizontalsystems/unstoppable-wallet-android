@@ -124,7 +124,7 @@
     <string name="Deposit_Share">Forward</string>
     <string name="Deposit_Your_Address">Your Address</string>
 
-    <string name="Receive_Alert_NotBackedUp_Title">Backup</string>
+    <string name="Receive_Alert_NotBackedUp_Button">Backup</string>
     <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
 
     <!--Timestamp-->
