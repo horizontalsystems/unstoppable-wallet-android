@@ -18,20 +18,20 @@
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
     <string name="Welcome_CreateWallet">Nueva cartera</string>
-    <string name="Welcome_RestoreWallet">Restore Wallet</string>
+    <string name="Welcome_RestoreWallet">Restaurar cartera</string>
     <!--Restore-->
     <string name="Restore_Title">Restaurar</string>
-    <string name="Restore_Subtitle">Enter Key</string>
+    <string name="Restore_Subtitle">Introduzca la clave</string>
     <string name="Restore_ValidationFailed">Clave secreta incorrecta</string>
     <string name="Restore_RestoreFailed">Error al restaurar la cartera</string>
     <string name="Restore_EosAccountName">Account Name</string>
     <string name="Restore_EosActivePrivateKey">Active Private Key</string>
-    <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
-    <string name="Restore_EosKeyIncorrect">Incorrect Key</string>
+    <string name="Restore_EosAccountIncorrect">Cuenta incorrecta</string>
+    <string name="Restore_EosKeyIncorrect">Clave incorrecta</string>
     <!--Backup-->
-    <string name="Backup_Intro_Title">Backup</string>
-    <string name="Backup_Intro_TitleShow">Show Key</string>
-    <string name="Backup_Intro_Subtitle">The key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc. Make sure that no one is watching your screen. \n\nThe coins controlled by this key: %s</string>
+    <string name="Backup_Intro_Title">Copia de seguridad</string>
+    <string name="Backup_Intro_TitleShow">Mostrar clave</string>
+    <string name="Backup_Intro_Subtitle">La clave que se mostrará a continuación es la única forma de restaurar sus fondos en caso de que su teléfono se pierda, lo roben, se averie, etc. Asegúrese de que nadie esté viendo su pantalla. \n\nLas criptomonedas controladas por esta clave: %s</string>
     <string name="Backup_Intro_Later">Posterior</string>
     <string name="Backup_Intro_BackupNow">Copia de seguridad</string>
     <string name="Backup_Confirmation_SecretKey">Entiendo que soy un único propietario de una clave secreta privada de 12 palabras que se almacena de forma segura en mi teléfono y me permite controlar los fondos en mi cartera.</string>
@@ -45,9 +45,9 @@
     <string name="Backup_Button_Confirm">Confirmar</string>
     <string name="Backup_Button_Next">Siguiente</string>
     <string name="Backup_Button_Submit">Enviar</string>
-    <string name="Backup_Button_ShowKey">Show Key</string>
+    <string name="Backup_Button_ShowKey">Mostrar clave</string>
     <!--Backup Words-->
-    <string name="Backup_Words_Title">Secret Key</string>
+    <string name="Backup_Words_Title">Clave secreta</string>
     <!--Backup Eos-->
     <string name="Backup_Eos_AccountName">Account Name</string>
     <string name="Backup_Eos_ActivePrivateKey">Private Key</string>
@@ -59,8 +59,8 @@
     <string name="Balance_RatePerCoin">%s por %s</string>
     <string name="Balance_SyncedUntil">hasta: %s</string>
     <string name="Balance_Syncing">Sincronizando ...</string>
-    <string name="Balance_AddCoins">Add Coins</string>
-    <string name="Balance_Sort_Balance">Balance</string>
+    <string name="Balance_AddCoins">Añadir Monedas</string>
+    <string name="Balance_Sort_Balance">Saldo</string>
     <string name="Balance_Sort_PopupTitle">Sort by</string>
     <string name="Balance_Sort_Az">A-Z</string>
     <string name="Balance_Sort_Default">Default</string>
