@@ -18,8 +18,6 @@ class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit) : IAdapter {
 
     override val decimal: Int = 4
 
-    override val feeCoinCode: String? = eos.symbol
-
     override val confirmationsThreshold: Int = irreversibleThreshold
 
     override fun start() {

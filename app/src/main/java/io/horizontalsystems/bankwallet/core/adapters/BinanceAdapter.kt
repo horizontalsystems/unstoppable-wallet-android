@@ -18,7 +18,6 @@ class BinanceAdapter(
 
     private val asset = binanceKit.register(symbol)
 
-    override val feeCoinCode: String? = "BNB"
     override val decimal: Int = 8
 
     override val confirmationsThreshold: Int
@@ -146,9 +145,6 @@ class BinanceAdapter(
         var amount = BigDecimal.ZERO
         if (from.mine) {
             amount -= transaction.amount.toBigDecimal()
-            if (transaction.symbol == feeCoinCode) {
-                amount -= transaction.fee.toBigDecimal()
-            }
         }
         if (to.mine) {
             amount += transaction.amount.toBigDecimal()

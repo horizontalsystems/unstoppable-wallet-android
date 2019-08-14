@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -31,17 +30,8 @@ class RateSyncer(private val rateManager: RateManager,
 
     private fun requestRefresh() {
         if (networkAvailabilityManager.isConnected) {
-            val coinCodes = mutableSetOf<CoinCode>()
-            walletManager.wallets.forEach {
-                coinCodes.add(it.coin.code)
-
-//                TODO: retrieve fee coin code
-//                it.feeCoinCode?.let { feeCoinCode ->
-//                    coinCodes.add(feeCoinCode)
-//                }
-            }
-
-            rateManager.refreshLatestRates(coinCodes.toList(), currencyManager.baseCurrency.code)
+            val coinCodes = walletManager.wallets.map { it.coin.code }
+            rateManager.refreshLatestRates(coinCodes, currencyManager.baseCurrency.code)
         }
     }
 }

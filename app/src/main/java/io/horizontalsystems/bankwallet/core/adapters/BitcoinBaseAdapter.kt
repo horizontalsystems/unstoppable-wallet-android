@@ -28,7 +28,6 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit, private val address
     // Adapter implementation
     //
 
-    override val feeCoinCode: String? = null
     override val decimal = 8
 
     override val confirmationsThreshold: Int = 6

@@ -210,9 +210,6 @@ interface IEosKitManager {
 }
 
 interface IAdapter {
-    // TODO: need to transfer it to wallet
-    val feeCoinCode: String?
-
     val decimal: Int
     val confirmationsThreshold: Int
 

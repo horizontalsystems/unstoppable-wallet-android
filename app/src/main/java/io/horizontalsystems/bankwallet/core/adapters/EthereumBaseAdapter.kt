@@ -22,8 +22,6 @@ abstract class EthereumBaseAdapter(
         private val addressParser: AddressParser,
         protected val feeRateProvider: IFeeRateProvider) : IAdapter {
 
-    override val feeCoinCode: String? = "ETH"
-
     override val confirmationsThreshold: Int = 12
 
     override fun start() {
