@@ -38,8 +38,8 @@
     <string name="Backup_Confirmation_DeleteAppWarn">Я понимаю, что если это приложение удаляется или устанавливается на другое устройство, мой кошелек можно восстановить только с помощью Секретного Ключа.</string>
     <string name="Backup_Confirmation_LockAppWarn">Я понимаю, что изменение ПИН-кода телефона или удаление данных приложения в настройках Android удалит секретный ключ с устройства. Мне нужно повторно ввести мой секретный ключ, чтобы восстановить доступ к моему кошельку.</string>
     <string name="Backup_Confirmation_Disclaimer">Я понимаю, что разработчики этого приложения не могут нести ответственность за любые непреднамеренные ошибки или проблемы, которые могут возникнуть при использовании этого приложения.</string>
-    <string name="Backup_Confirmation_Title">Введите слова из вашего Cекретного Ключа</string>
-    <string name="Backup_Confirmation_Description">Введите слова из вашего секретного ключа.</string>
+    <string name="Backup_Confirmation_Title">Enter words from your %s</string>
+    <string name="Backup_Confirmation_Description">Enter words from your %s.</string>
     <string name="Backup_Confirmation_FailureAlertText">Слова не совпадают</string>
     <string name="Backup_Confirmation_CheckTitle">Проверка…</string>
     <string name="Backup_Button_Confirm">Подтвердить</string>
