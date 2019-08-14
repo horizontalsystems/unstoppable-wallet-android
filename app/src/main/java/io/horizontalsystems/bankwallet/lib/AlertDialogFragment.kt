@@ -9,8 +9,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import io.horizontalsystems.bankwallet.R
 
-class AlertDialogFragment(private var title: Int, private var description: Int, private var buttonText: Int, private var listener: Listener? = null)
-    : DialogFragment() {
+class AlertDialogFragment(
+        private var title: Int,
+        private var description: Int,
+        private var buttonText: Int,
+        private var listener: Listener? = null
+) : DialogFragment() {
 
     interface Listener {
         fun onButtonClick()
@@ -24,7 +28,7 @@ class AlertDialogFragment(private var title: Int, private var description: Int, 
         builder?.setView(rootView)
         rootView.findViewById<TextView>(R.id.txtTitle)?.setText(title)
         rootView.findViewById<TextView>(R.id.txtDescription)?.setText(description)
-        rootView.findViewById<TextView>(R.id.txtButton)?.let { btn ->
+        rootView.findViewById<TextView>(R.id.positiveButtonText)?.let { btn ->
             btn.setText(buttonText)
             btn.setOnClickListener {
                 listener?.onButtonClick()

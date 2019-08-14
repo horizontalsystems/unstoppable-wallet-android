@@ -65,6 +65,7 @@
     <attr name="ListAlertTextColor" format="reference|color" />
     <attr name="ScreenHideColor" format="reference|color" />
     <attr name="ConfirmationScreenBackground" format="reference|color" />
+    <attr name="AlertTextColor" format="reference|color" />
 
     <!-- Base application theme. -->
     <style name="DarkModeAppTheme" parent="Theme.AppCompat.NoActionBar">
@@ -145,6 +146,7 @@
         <item name="ListAlertTextColor">@color/bars_color</item>
         <item name="ScreenHideColor">@color/dark</item>
         <item name="ConfirmationScreenBackground">@color/dark</item>
+        <item name="AlertTextColor">@color/bars_color</item>
     </style>
 
     <style name="LightModeAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -225,6 +227,7 @@
         <item name="ListAlertTextColor">@color/dark</item>
         <item name="ScreenHideColor">@color/white</item>
         <item name="ConfirmationScreenBackground">@drawable/light_gradient_background</item>
+        <item name="AlertTextColor">@color/dark</item>
     </style>
 
     <style name="Button" parent="Widget.AppCompat.Button.Borderless">
