@@ -94,6 +94,8 @@
     <string name="Deposit_Title">수신%s</string>
     <string name="Deposit_Share">Forward</string>
     <string name="Deposit_Your_Address">당신의 주소</string>
+    <string name="Receive_Alert_NotBackedUp_Button">Backup</string>
+    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">지금 막</string>
     <string name="Timestamp_MinAgo">%d분 전</string>
