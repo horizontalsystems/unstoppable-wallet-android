@@ -94,6 +94,8 @@
     <string name="Deposit_Title">Recibir %s</string>
     <string name="Deposit_Share">Reenviar</string>
     <string name="Deposit_Your_Address">Su dirección</string>
+    <string name="Receive_Alert_NotBackedUp_Button">Backup</string>
+    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">reciente</string>
     <string name="Timestamp_MinAgo">Hace %d minutos</string>
