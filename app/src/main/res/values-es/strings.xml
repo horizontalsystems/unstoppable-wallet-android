@@ -38,7 +38,6 @@
     <string name="Backup_Confirmation_DeleteAppWarn">Entiendo que si esta aplicación se elimina o deja de funcionar por alguna razón, mi monedero sólo puede ser recuperado utilizando mi clave secreta.</string>
     <string name="Backup_Confirmation_LockAppWarn">Entiendo que cambiar el PIN de desbloqueo del teléfono o eliminar los datos de la aplicación en la configuración de Android borra la clave secreta del dispositivo. Tendría que volver a introducir mi Clave Secreta para recuperar el acceso a mi monedero.</string>
     <string name="Backup_Confirmation_Disclaimer">Entiendo que los desarrolladores de esta aplicación no pueden ser responsables de ningún error o problemas no intencionados que puedan surgir mientras se usa esta aplicación.</string>
-    <string name="Backup_Confirmation_Title">Insertar palabras de su clave %s</string>
     <string name="Backup_Confirmation_Description">Insertar palabras de su clave %s</string>
     <string name="Backup_Confirmation_FailureAlertText"> Las contraseñas no coinciden</string>
     <string name="Backup_Confirmation_CheckTitle">Comprobar…</string>
