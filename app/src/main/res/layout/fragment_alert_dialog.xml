@@ -1,64 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="25dp"
     android:layout_marginRight="25dp"
-    android:background="@drawable/alert_white_background"
-    >
+    android:background="@drawable/alert_background_themed">
 
     <TextView
         android:id="@+id/txtTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:fontFamily="@font/noto_sans_bold"
-        android:textColor="@color/grey"
+        android:textColor="?attr/AlertTextColor"
         android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Android Keystore Error"
-        />
+        tools:text="Android Keystore Error" />
 
     <TextView
         android:id="@+id/txtDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
         android:fontFamily="@font/noto_sans"
-        android:maxLines="10"
         android:maxWidth="275dp"
+        android:maxLines="10"
+        android:paddingStart="16dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="20dp"
         android:textAlignment="center"
-        android:textColor="@color/black"
+        android:textColor="?attr/AlertTextColor"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtTitle"
-        tools:text="Your encrypted data was recently invalidated because your Android lock screen was changed"
-        />
+        tools:text="Your encrypted data was recently invalidated because your Android lock screen was changed" />
 
-    <TextView
-        android:id="@+id/txtButton"
-        android:layout_width="wrap_content"
+    <FrameLayout
+        android:id="@+id/positiveButton"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/noto_sans_bold"
-        android:text="@string/Alert_Ok"
-        android:textColor="@color/clickable_green"
-        android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtDescription"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/txtDescription">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/steel_20" />
+
+        <TextView
+            android:id="@+id/positiveButtonText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/noto_sans_bold"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:text="@string/Alert_Ok"
+            android:textAlignment="center"
+            android:textColor="@color/yellow_crypto"
+            android:textSize="17sp" />
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
