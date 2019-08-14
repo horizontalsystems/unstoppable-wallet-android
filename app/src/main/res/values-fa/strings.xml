@@ -38,8 +38,8 @@
     <string name="Backup_Confirmation_DeleteAppWarn">من قبول ميكنم كي اگر اين كاربرد تكان بخورد،حذف شود و يا اشكال در عملكرد به وحود بياد، فقط تنها رمز مخفي ميتواند دوباره بهبوديافت كند.</string>
     <string name="Backup_Confirmation_LockAppWarn">من قبول ميكنم كي تعغير رمز گوشي همراه و يا حذف كردن تاريخچه كاربرد رمز مخفي را حذف ميكند. و من دوباره بايد رمز مخفي خود را وارد كنم تا بتوانم از كاربرد استفاده نمايم.</string>
     <string name="Backup_Confirmation_Disclaimer">من قبول ميكنم كي سازنده اين كاربرد هيچ نوع معصوليت در مقابل ويروس و ادم هاي تقلبي ندارد كي شما به ان متواجه شديد.</string>
-    <string name="Backup_Confirmation_Title">تعقيب كنيد حرف هاي رمز مخفي خود را</string>
-    <string name="Backup_Confirmation_Description">حرف هاي رمز تات را وارد كنيد.</string>
+    <string name="Backup_Confirmation_Title">Enter words from your %s</string>
+    <string name="Backup_Confirmation_Description">Enter words from your %s.</string>
     <string name="Backup_Confirmation_FailureAlertText"> ارقام با هم شباهت ندارند</string>
     <string name="Backup_Confirmation_CheckTitle">بررسي…</string>
     <string name="Backup_Button_Confirm">تاييد</string>
