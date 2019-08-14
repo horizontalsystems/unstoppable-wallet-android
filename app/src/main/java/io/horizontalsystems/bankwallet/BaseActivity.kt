@@ -55,7 +55,7 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     fun showCustomKeyboardAlert() {
-        AlertDialogFragment.newInstance(R.string.Alert_TitleWarning, R.string.Alert_CustomKeyboardIsUsed, R.string.Alert_Ok,
+        AlertDialogFragment.newInstance(R.string.Alert_TitleWarning, R.string.Alert_CustomKeyboardIsUsed, R.string.Alert_Ok, false,
                 object : AlertDialogFragment.Listener {
                     override fun onButtonClick() {
                         val imeManager = App.instance.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

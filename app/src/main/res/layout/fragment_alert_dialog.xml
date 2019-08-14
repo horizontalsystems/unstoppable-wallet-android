@@ -25,25 +25,24 @@
 
     <TextView
         android:id="@+id/txtDescription"
+        style="@style/Body1Grey"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/noto_sans"
-        android:maxWidth="275dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="20dp"
         android:maxLines="10"
-        android:paddingStart="16dp"
-        android:paddingTop="16dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="20dp"
         android:textAlignment="center"
         android:textColor="?attr/AlertTextColor"
-        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonWrapper"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtTitle"
         tools:text="Your encrypted data was recently invalidated because your Android lock screen was changed" />
 
     <FrameLayout
-        android:id="@+id/positiveButton"
+        android:id="@+id/buttonWrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -56,7 +55,7 @@
             android:background="@color/steel_20" />
 
         <TextView
-            android:id="@+id/positiveButtonText"
+            android:id="@+id/buttonTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/noto_sans_bold"
