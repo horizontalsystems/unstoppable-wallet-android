@@ -209,12 +209,12 @@
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">잠금 해제</string>
     <string name="Hud_Text_Success">성공</string>
-    <string name="Hud_Text_Done">Done</string>
+    <string name="Hud_Text_Done">완료</string>
     <string name="Hud_Text_Error">오류</string>
     <string name="Hud_Text_NoInternet">인터넷에 연결되지 않음</string>
     <string name="Hud_Text_Copied">복사됨</string>
     <string name="Hud_Text_InvalidPinError">잘못된 비밀번호</string>
-    <string name="Hud_Network_Issue">Network issues. Try again in a short moment</string>
+    <string name="Hud_Network_Issue">네트워크에 문제가 있습니다. 잠시 후 다시 시도해 주세요</string>
     <!--Fingerprint texts-->
     <string name="Fingerprint_DialogTitle">지문인식 로그인</string>
     <string name="Fingerprint_Hint">터치 센서</string>
@@ -225,8 +225,8 @@
     <string name="UnlockPin_WalletDisabledUntil">~때까지 사용 안 함: %s</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">Phone PIN</string>
-    <string name="OSPin_Confirm_Desciption">This app requires that phone has the passcode (screen lock) enabled.\n\n You may enable it in Android settings.\n\nPlease note that when you disabled the PIN on the OS level the security measures in safe storage of your phonе made the previously stored data invalid. You will need to Restore your wallet keys to get back to your wallet.</string>
-    <string name="OSPin_Prompt_Desciption">This app requires your phone\'s PIN in order to keep sensitive data from your wallet in Android\'s secure storage and not in the app itself.</string>
+    <string name="OSPin_Confirm_Desciption">이 앱을 사용하려면 휴대전화에 암호(화면 잠금) 가 활성화되어 있어야 합니다. \n\n Android 설정에서 활성화할 수 있습니다. \n\nOS 수준에서 PIN을 비활성화하면 휴대기기의 안전한 저장에 대한 보안조치로 인해 이전에 저장된 데이터가 유효하지 않게 됩니다. 지갑으로 돌아가려면 지갑 암호를 복원하십시오.</string>
+    <string name="OSPin_Prompt_Desciption">앱 자체가 아닌 안드로이드의 안전한 저장소에 지갑의 중요한 데이터를 저장하려면 이 앱은 휴대전화의 PIN이 필요합니다.</string>
     <!--Set Pin-->
     <string name="SetPin_Title">비밀번호</string>
     <string name="SetPin_Info">너의 비밀번호는 너의 지갑을 열어주고 돈을 보내는데 사용될 것입니다.</string>
@@ -243,41 +243,41 @@
     <string name="ManageCoins_title">지갑</string>
     <string name="ManageCoins_save">저장</string>
     <string name="ManageCoins_AddCoin_Title">Add %s Coin</string>
-    <string name="ManageCoins_AddCoin_Text">This action will generate a new key(wallet) for the following coins: %s </string>
-    <string name="ManageCoins_EOSAlert_CreateButton">At this point, the wallet is not able to create new EOS wallet accounts. You\'re only able to restore the existing one.</string>
+    <string name="ManageCoins_AddCoin_Text">이 작업은 다음 코인에 대한 암호(지갑) 를 생성합니다:%s </string>
+    <string name="ManageCoins_EOSAlert_CreateButton">현재 지갑에서 새 EOS 지갑 계정을 만들 수 없습니다. 기존 파일만 복원할 수 있습니다.</string>
     <!--Manage Keys-->
-    <string name="ManageKeys_Title">Manage Keys</string>
-    <string name="ManageKeys_Description">Anyone with access to your Keys can steal your wallet funds. Store keys safely and never show them to anyone. \n\nBackup each key to be able to restore funds if you loose or break your phone, or simply the wallet app gets deleted.</string>
-    <string name="ManageKeys_Create">Create</string>
-    <string name="ManageKeys_Restore">Restore</string>
-    <string name="ManageKeys_Delete">Delete</string>
-    <string name="ManageKeys_Backup">Backup</string>
-    <string name="ManageKeys_Show">Show</string>
+    <string name="ManageKeys_Title">암호 관리</string>
+    <string name="ManageKeys_Description">암호에 접근할 수 있는 사람은 누구나 지갑 자금을 훔칠 수 있습니다. 암호를 안전하게 보관하고 다른 사람에게 보여주지 마세요. \n\n휴대전화의 분실, 고장 또는 지갑 앱이 삭제된 경우 자금을 복원할 수 있도록 각 암호를 백업하세요.</string>
+    <string name="ManageKeys_Create">만들기</string>
+    <string name="ManageKeys_Restore">복구</string>
+    <string name="ManageKeys_Delete">삭제</string>
+    <string name="ManageKeys_Backup">백업</string>
+    <string name="ManageKeys_Show">표시</string>
     <!--Manage Keys Delete Alert-->
-    <string name="ManageKeys_Delete_Title">Delete Key</string>
-    <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s key (wallet) from this device.</string>
-    <string name="ManageKeys_Delete_ConfirmationDisable">Coins that will be disabled: %s</string>
-    <string name="ManageKeys_Delete_ConfirmationLoose">If you don\'t have a backup of this key you will loose the respective funds.</string>
-    <string name="ManageKeys_Delete_FromPhone">Delete from Phone</string>
-    <string name="ManageKeys_Delete_Alert">You need to backup this key before you may delete it.</string>
+    <string name="ManageKeys_Delete_Title">암호 삭제</string>
+    <string name="ManageKeys_Delete_ConfirmationRemove">이 작업은 %s 암호(지갑)를 이 장치에서 삭제합니다.</string>
+    <string name="ManageKeys_Delete_ConfirmationDisable">비활성화될 코인: %s</string>
+    <string name="ManageKeys_Delete_ConfirmationLoose">이 암호를 백업하지 않으면 해당 자금을 잃게 됩니다.</string>
+    <string name="ManageKeys_Delete_FromPhone">휴대전화에서 삭제</string>
+    <string name="ManageKeys_Delete_Alert">암호를 삭제하기전 백업이 필요합니다.</string>
     <!-- Manage Keys Alert -->
-    <string name="AddCoin_Title">Add %s</string>
-    <string name="AddCoin_Description">You don\'t have active key for use with %s. Use Create button below to generate a new key (wallet) \n\nYou may also use the existing key for the %s if you already have it.</string>
-    <string name="AddCoin_CreateKey">Create</string>
-    <string name="AddCoin_RestoreKey">Restore</string>
+    <string name="AddCoin_Title">%s 추가</string>
+    <string name="AddCoin_Description">%s에 사용할 활성화된 암호가 없습니다. 아래의 생성 버튼을 사용하여 새 암호 (지갑)를 만드세요. \n\n이미 있으시다면 %s에 기존의 암호를 사용할 수도 있습니다.</string>
+    <string name="AddCoin_CreateKey">만들기</string>
+    <string name="AddCoin_RestoreKey">복구</string>
     <!-- Account Types -->
-    <string name="AccountType_12Words">12 Words</string>
-    <string name="AccountType_12WordsKey">12 Words Key</string>
+    <string name="AccountType_12Words">12-Words</string>
+    <string name="AccountType_12WordsKey">12자리 암호</string>
     <string name="AccountType_Eos">EOS Blockchain</string>
-    <string name="AccountType_EosKey">EOS Key</string>
+    <string name="AccountType_EosKey">EOS 암호</string>
     <string name="AccountType_Binance">Binance Chain</string>
-    <string name="AccountType_BinanceKey">Binance Key</string>
+    <string name="AccountType_BinanceKey">Binance 암호</string>
     <!--Coin Option-->
-    <string name="CoinOption_Title">Restore Options</string>
-    <string name="CoinOption_Fast">Fast</string>
-    <string name="CoinOption_Recommended">0&#8211;2 hours (Recommended)</string>
-    <string name="CoinOption_Fast_Text">Restores your past transactions via secure third party server. For users with a long history of transactions involving very large sums this method may pose privacy risks.</string>
-    <string name="CoinOption_Slow">Slow</string>
-    <string name="CoinOption_MorePrivate">1&#8211;12 hours (More Private)</string>
-    <string name="CoinOption_Slow_Text">Restores your past transactions directly from the network. Significantly more private but very slow. If the restore takes way too much time, go to Manage Keys section and reimport the Key for the wallet using the Fast Sync option.</string>
+    <string name="CoinOption_Title">옵션 복구</string>
+    <string name="CoinOption_Fast">빠르게</string>
+    <string name="CoinOption_Recommended">00&#8211;2시간 (권장)</string>
+    <string name="CoinOption_Fast_Text">안전한 제3 서버를 통해 과거 거래를 복원합니다. 이 방법은 큰 액수와 긴 거래내역을 가지고 있는 사용자들에게 개인정보보호 침해의 위험을 야기할 수 있습니다.</string>
+    <string name="CoinOption_Slow">느리게</string>
+    <string name="CoinOption_MorePrivate">1&#8211;12시간 (더욱 사적임)</string>
+    <string name="CoinOption_Slow_Text">네트워크에서 직접 거래를 복원하세요. 훨씬 더 사적이지만 속도는 매우 느립니다. 복원에 너무 많은 시간이 걸린다면 암호관리 섹션에서 빠른 동기화 옵션을 사용하여 지갑의 암호를 다시 가져오세요.</string>
 </resources>
