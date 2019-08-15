@@ -186,13 +186,13 @@
     <string name="SettingsAbout_Title">О приложении</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Условия &amp; Политика конфиденциальности:</string>
-    <string name="SettingsAbout_TermsPrivacyText">Это приложение полностью децентрализованно. Работоспособность этого приложения не зависит от сторонних серверов или какой-либо команды тех поддержки.
-\n\nПриложение работает везде, пока есть интернет. Этот кошелек или его пользователи не могут быть заблокированы кем-либо.
-\n\nВаши средства хранятся только на вашем телефоне.
-\n\nВы несëте полную ответственность за безопасное хранение секретного ключа. Никогда никому не показывайте ваш секретный ключ. Если ключ будет утерян, украден или забыт то контроль над вашими средствами попадет к тому у кого окажется ваш секретный ключ.
-\n\nНе взламывайте ваш телефон, не устанавливайте приложения из неофициальных источников и никогда не предоставляйте ваше устройство другим лицам. Безопасность вашего кошелька напрямую зависит от этого.
-\n\nВесь программный код этого приложения является бесплатным и открытым для общественности. Мы старались сделать самый безопасный и в то же время децентрализованный кошелек, но нет гарантий, что в коде приложения не имеется ошибок. Тем не менее, мы верим что по уровню безопасности этот кошелек значительно превосходит почти все доступные мобильные криптокошельки на сегодня.
-\n\nНекоторые публичные данные используемые приложением такие, как обменные курсы валют хранятся в децентрализованном хранилище (IPFS).</string>
+    <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
+\n\nIt works everywhere as long as there is internet. No entity can block this app from working or to block someone from using it.
+\n\nYour funds are securely stored on the phone itself, not anywhere else.
+\n\nIt’s your responsibility to backup your Key and keep it private. Never show it to anyone. If it’s lost, forgotten or stollen your funds can be used by the person who has your key.
+\n\nDo not jailbreak your phone, do not install apps from unknown (untrusted) sources, do not give your device to untrusted people, and keep the Operating System on your phone up to date. The security of your wallet depends on this.
+\n\nThe entire code powering this app been open to the public scrutiny since the beginning. We tried to build the most secure and decentralized wallet we could, however there are no guarantees that there are no unintended software issues. That said, this wallet is likely to be significantly more secure than any smartphone wallet app out there.
+\n\nSome generic non-private app data like currency exchange rates are stored on decentralized storage(IPFS).</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Поделиться</string>
     <string name="SettingsShare_Text">Unstoppable Wallet - Отличное Приложение!</string>
@@ -276,8 +276,8 @@
     <string name="CoinOption_Title">Параметры Восстановления</string>
     <string name="CoinOption_Fast">Быстро</string>
     <string name="CoinOption_Recommended">0&#8211;2 часа (Рекомендуется)</string>
-    <string name="CoinOption_Fast_Text">Restores your past transactions directly from the network. Significantly more private but very slow. If the restore takes way too much time, go to Manage Keys section and reimport the Key for the wallet using the Fast Sync option.</string>
+    <string name="CoinOption_Fast_Text">Restores your past transactions via secure third party server. For users with a long history of transactions involving very large sums this method may pose privacy risks.</string>
     <string name="CoinOption_Slow">Медленно</string>
     <string name="CoinOption_MorePrivate">1&#8211;12 часов (Более Приватно)</string>
-    <string name="CoinOption_Slow_Text">Восстановление ваших предыдущих транзакций будет непосредственно из сети. Это более приватно, но очень медленно. Если восстановление занимает слишком много времени, перейдите в раздел \"Безопасность\" в Настройках и выберите опцию «Отключить это устройство».</string>
+    <string name="CoinOption_Slow_Text">Restores your past transactions directly from the network. Significantly more private but very slow. If the restore takes way too much time, go to Manage Keys section and reimport the Key for the wallet using the Fast Sync option.</string>
 </resources>
