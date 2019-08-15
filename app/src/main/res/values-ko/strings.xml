@@ -5,7 +5,7 @@
     <string name="Alert_Ok">확인</string>
     <string name="Alert_Cancel">취소</string>
     <string name="Alert_Copy">복사</string>
-    <string name="Alert_Share">Forward</string>
+    <string name="Alert_Share">앞으로</string>
     <string name="Alert_Close">가까운, 닫힌</string>
     <string name="Alert_Success">성공</string>
     <string name="Alert_Copied">복사됨</string>
@@ -17,11 +17,11 @@
     <string name="Error">오류</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
-    <string name="Welcome_CreateWallet">New Wallet</string>
-    <string name="Welcome_RestoreWallet">Restore Wallet</string>
+    <string name="Welcome_CreateWallet">새 지갑</string>
+    <string name="Welcome_RestoreWallet">지갑 복원</string>
     <!--Restore-->
     <string name="Restore_Title">복구</string>
-    <string name="Restore_Subtitle">Enter Key</string>
+    <string name="Restore_Subtitle">암호를 입력하세요</string>
     <string name="Restore_ValidationFailed">잘못 된 비밀 키</string>
     <string name="Restore_RestoreFailed">지갑 복구에 실패하였습니다.</string>
     <string name="Restore_EosAccountName">Account Name</string>
@@ -29,7 +29,7 @@
     <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
     <string name="Restore_EosKeyIncorrect">Incorrect Key</string>
     <!--Backup-->
-    <string name="Backup_Intro_Title">Backup</string>
+    <string name="Backup_Intro_Title">백업</string>
     <string name="Backup_Intro_TitleShow">Show Key</string>
     <string name="Backup_Intro_Subtitle">The key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc. Make sure that no one is watching your screen. \n\nThe coins controlled by this key: %s</string>
     <string name="Backup_Intro_Later">나중에</string>
@@ -46,7 +46,7 @@
     <string name="Backup_Button_Submit">제출하기</string>
     <string name="Backup_Button_ShowKey">Show Key</string>
     <!--Backup Words-->
-    <string name="Backup_Words_Title">Secret Key</string>
+    <string name="Backup_Words_Title">비밀 키</string>
     <!--Backup Eos-->
     <string name="Backup_Eos_AccountName">Account Name</string>
     <string name="Backup_Eos_ActivePrivateKey">Private Key</string>
@@ -59,7 +59,7 @@
     <string name="Balance_SyncedUntil">until: %s</string>
     <string name="Balance_Syncing">Syncing…</string>
     <string name="Balance_AddCoins">Add Coins</string>
-    <string name="Balance_Sort_Balance">Balance</string>
+    <string name="Balance_Sort_Balance">잔액</string>
     <string name="Balance_Sort_PopupTitle">Sort by</string>
     <string name="Balance_Sort_Az">A-Z</string>
     <string name="Balance_Sort_Default">Default</string>
