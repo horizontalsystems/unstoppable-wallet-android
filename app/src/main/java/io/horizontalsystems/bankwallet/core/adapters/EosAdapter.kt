@@ -10,8 +10,6 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
 import java.math.RoundingMode
-import java.text.SimpleDateFormat
-import java.util.*
 
 class EosAdapter(override val wallet: Wallet, eos: CoinType.Eos, private val eosKit: EosKit) : IAdapter {
 
@@ -29,7 +27,7 @@ class EosAdapter(override val wallet: Wallet, eos: CoinType.Eos, private val eos
     }
 
     override fun stop() {
-        // stopped via EosKitManager
+        eosKit.unregister(token)
     }
 
     override fun refresh() {
