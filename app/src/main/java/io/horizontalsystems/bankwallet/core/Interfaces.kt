@@ -229,19 +229,14 @@ interface IBalanceAdapter {
     val balance: BigDecimal
     val balanceUpdatedFlowable: Flowable<Unit>
 
-    fun availableBalance(params: Map<SendModule.AdapterFields, Any?>): BigDecimal
 }
 
 interface IReceiveAdapter {
     val receiveAddress: String
 }
 
-interface IAdapter {
-    val decimal: Int
-
-    fun start()
-    fun stop()
-    fun refresh()
+interface ISendAdapter {
+    fun availableBalance(params: Map<SendModule.AdapterFields, Any?>): BigDecimal
 
     @Throws
     fun send(params: Map<SendModule.AdapterFields, Any?>): Single<Unit>
@@ -257,6 +252,14 @@ interface IAdapter {
 
     fun parsePaymentAddress(address: String): PaymentRequestAddress
     fun getFeeRate(feeRatePriority: FeeRatePriority): Long
+}
+
+interface IAdapter {
+    val decimal: Int
+
+    fun start()
+    fun stop()
+    fun refresh()
 
     val debugInfo: String
 }
