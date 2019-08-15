@@ -26,12 +26,13 @@
     <string name="Restore_RestoreFailed">Fehler beim Wiederherstellen des Wallet</string>
     <string name="Restore_EosAccountName">Account Name</string>
     <string name="Restore_EosActivePrivateKey">Active Private Key</string>
-    <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
+    <string name="Restore_EosAccountIncorrect">Ungültiger Account</string>
     <string name="Restore_EosKeyIncorrect">Falscher Schlüssel</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Sicherung</string>
-    <string name="Backup_Intro_TitleShow">Show Key</string>
-    <string name="Backup_Intro_Subtitle">The key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc. Make sure that no one is watching your screen. \n\nThe coins controlled by this key: %s</string>
+    <string name="Backup_Intro_TitleShow">Schlüssel anzeigen</string>
+    <string name="Backup_Intro_Subtitle">Der angezeigte Schlüssel ist die einzige Möglichkeit, Ihr Guthaben wiederherzustellen, wenn Ihr Telefon verloren geht, kaputt geht usw. Achten Sie darauf, dass niemand Ihren Bildschirm sieht.
+\n\nDie Coins, die von diesem Schlüssel kontrolliert werden: %s</string>
     <string name="Backup_Intro_Later">Später</string>
     <string name="Backup_Intro_BackupNow">Backup</string>
     <string name="Backup_Confirmation_SecretKey">Ich stimme zu, dass ich allein Inhaber eines privaten 12-Wort Offlineschlüssels bin, der sicher auf meinem Telefon gespeichert wird und mir ermöglicht, Geld auf meinem Wallet zu steuern.</string>
@@ -44,9 +45,9 @@
     <string name="Backup_Button_Confirm">Bestätigen</string>
     <string name="Backup_Button_Next">Weiter</string>
     <string name="Backup_Button_Submit">Abschicken</string>
-    <string name="Backup_Button_ShowKey">Show Key</string>
+    <string name="Backup_Button_ShowKey">Schlüssel anzeigen</string>
     <!--Backup Words-->
-    <string name="Backup_Words_Title">Secret Key</string>
+    <string name="Backup_Words_Title">Offlineschlüssel</string>
     <!--Backup Eos-->
     <string name="Backup_Eos_AccountName">Account Name</string>
     <string name="Backup_Eos_ActivePrivateKey">Private Key</string>
@@ -225,8 +226,10 @@
     <string name="UnlockPin_WalletDisabledUntil">Deaktiviert bis: %s </string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">Telefon PIN</string>
-    <string name="OSPin_Confirm_Desciption">This app requires that phone has the passcode (screen lock) enabled.\n\n You may enable it in Android settings.\n\nPlease note that when you disabled the PIN on the OS level the security measures in safe storage of your phonе made the previously stored data invalid. You will need to Restore your wallet keys to get back to your wallet.</string>
-    <string name="OSPin_Prompt_Desciption">This app requires your phone\'s PIN in order to keep sensitive data from your wallet in Android\'s secure storage and not in the app itself.</string>
+    <string name="OSPin_Confirm_Desciption">Diese App erfordert, dass Zugangsperre (Bildschirmsperre) aktiviert ist.
+\n\nSie können dies in den Android-Einstellungen vornehmen.
+\n\nBitte beachten Sie, wenn Sie PIN auf dem OS ausgeschaltete haben, wurden die Sicherheitsmaßnahmen im Safe Storage Ihres Telefons für vorher gespeicherte Daten ungültig. Sie müssen Ihre Wallet-Schlüssel wiederherstellen, um an Ihr Wallet zu gelangen.</string>
+    <string name="OSPin_Prompt_Desciption">Diese App benötigt die PIN Ihres Telefons, um sensible Daten von Ihrer Wallet in Android-sicherer Speicherung zu halten und nicht in der App selbst.</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Code</string>
     <string name="SetPin_Info">Dein Code wird verwendet werden, um deinen Wallet zu entsperren und Geld schicken</string>
@@ -244,34 +247,35 @@
     <string name="ManageCoins_save">Speichern</string>
     <string name="ManageCoins_AddCoin_Title">Add %s Coin</string>
     <string name="ManageCoins_AddCoin_Text">This action will generate a new key(wallet) for the following coins: %s </string>
-    <string name="ManageCoins_EOSAlert_CreateButton">At this point, the wallet is not able to create new EOS wallet accounts. You\'re only able to restore the existing one.</string>
+    <string name="ManageCoins_EOSAlert_CreateButton">Im Moment kann das Wallet keine neuen EOS-Wallet-Accounts anlegen. Sie können nur bestehende wiederherstellen.</string>
     <!--Manage Keys-->
-    <string name="ManageKeys_Title">Manage Keys</string>
-    <string name="ManageKeys_Description">Anyone with access to your Keys can steal your wallet funds. Store keys safely and never show them to anyone. \n\nBackup each key to be able to restore funds if you loose or break your phone, or simply the wallet app gets deleted.</string>
-    <string name="ManageKeys_Create">Create</string>
-    <string name="ManageKeys_Restore">Restore</string>
-    <string name="ManageKeys_Delete">Delete</string>
-    <string name="ManageKeys_Backup">Backup</string>
-    <string name="ManageKeys_Show">Show</string>
+    <string name="ManageKeys_Title">Schlüssel Managen</string>
+    <string name="ManageKeys_Description">Jeder, der Ihre Schlüssel kennt, kann Ihr Wallet-Guthaben stehlen. Bewahren Sie die Schlüssel sicher auf und zeigen sie diese niemandem.
+\n\nSichern Sie jeden Schlüssel so, dass Sie auf das Guthaben zugreifen können, wenn Ihr Telefon kaputt geht oder die Wallet-App gelöscht wird.</string>
+    <string name="ManageKeys_Create">Erstellen</string>
+    <string name="ManageKeys_Restore">Wiederherstellen</string>
+    <string name="ManageKeys_Delete">Löschen</string>
+    <string name="ManageKeys_Backup">Sicherung</string>
+    <string name="ManageKeys_Show">Anzeigen</string>
     <!--Manage Keys Delete Alert-->
-    <string name="ManageKeys_Delete_Title">Delete Key</string>
+    <string name="ManageKeys_Delete_Title">Schlüssel löschen</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s key (wallet) from this device.</string>
     <string name="ManageKeys_Delete_ConfirmationDisable">Coins that will be disabled: %s</string>
-    <string name="ManageKeys_Delete_ConfirmationLoose">If you don\'t have a backup of this key you will loose the respective funds.</string>
-    <string name="ManageKeys_Delete_FromPhone">Delete from Phone</string>
+    <string name="ManageKeys_Delete_ConfirmationLoose">Wenn Sie keine Sicherung von diesem Schlüssel haben, verlieren Sie das zugehörige Guthaben.</string>
+    <string name="ManageKeys_Delete_FromPhone">Von Telefon löschen</string>
     <string name="ManageKeys_Delete_Alert">You need to backup this key before you may delete it.</string>
     <!-- Manage Keys Alert -->
-    <string name="AddCoin_Title">Add %s</string>
+    <string name="AddCoin_Title">%s hinzufügen</string>
     <string name="AddCoin_Description">You don\'t have active key for use with %s. Use Create button below to generate a new key (wallet) \n\nYou may also use the existing key for the %s if you already have it.</string>
-    <string name="AddCoin_CreateKey">Create</string>
-    <string name="AddCoin_RestoreKey">Restore</string>
+    <string name="AddCoin_CreateKey">Erstellen</string>
+    <string name="AddCoin_RestoreKey">Wiederherstellen</string>
     <!-- Account Types -->
     <string name="AccountType_12Words">12 Words</string>
-    <string name="AccountType_12WordsKey">12 Words Key</string>
+    <string name="AccountType_12WordsKey">12-Words-Schlüssel</string>
     <string name="AccountType_Eos">EOS Blockchain</string>
-    <string name="AccountType_EosKey">EOS Key</string>
+    <string name="AccountType_EosKey">EOS-Schlüssel</string>
     <string name="AccountType_Binance">Binance Chain</string>
-    <string name="AccountType_BinanceKey">Binance Key</string>
+    <string name="AccountType_BinanceKey">Binance Schlüssel</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">Optionen Wiederherstellen</string>
     <string name="CoinOption_Fast">Schnell</string>
