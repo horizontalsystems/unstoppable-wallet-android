@@ -29,6 +29,7 @@ interface IAdapterManager {
     fun getAdapterForWallet(wallet: Wallet): IAdapter?
     fun getTransactionsAdapterForWallet(wallet: Wallet): ITransactionsAdapter?
     fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter?
+    fun getReceiveAdapterForWallet(wallet: Wallet): IReceiveAdapter?
 }
 
 interface ILocalStorage {
@@ -231,6 +232,10 @@ interface IBalanceAdapter {
     fun availableBalance(params: Map<SendModule.AdapterFields, Any?>): BigDecimal
 }
 
+interface IReceiveAdapter {
+    val receiveAddress: String
+}
+
 interface IAdapter {
     val decimal: Int
 
@@ -252,8 +257,6 @@ interface IAdapter {
 
     fun parsePaymentAddress(address: String): PaymentRequestAddress
     fun getFeeRate(feeRatePriority: FeeRatePriority): Long
-
-    val receiveAddress: String
 
     val debugInfo: String
 }

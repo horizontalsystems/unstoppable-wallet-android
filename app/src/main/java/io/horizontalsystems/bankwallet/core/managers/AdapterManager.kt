@@ -104,4 +104,8 @@ class AdapterManager(
     override fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter? {
         return adaptersMap[wallet]?.let { it as? IBalanceAdapter }
     }
+
+    override fun getReceiveAdapterForWallet(wallet: Wallet): IReceiveAdapter? {
+        return adaptersMap[wallet]?.let { it as? IReceiveAdapter }
+    }
 }
