@@ -22,8 +22,10 @@ class AdapterManager(
     private val handler: Handler
     private val disposables = CompositeDisposable()
     private val adapterCreationSubject = PublishSubject.create<Wallet>()
+    private val adaptersReadySubject = PublishSubject.create<Unit>()
 
     override val adapterCreationObservable: Flowable<Wallet> = adapterCreationSubject.toFlowable(BackpressureStrategy.BUFFER)
+    override val adaptersReadyObservable: Flowable<Unit> = adaptersReadySubject.toFlowable(BackpressureStrategy.BUFFER)
 
     init {
         start()
@@ -70,6 +72,8 @@ class AdapterManager(
                 }
             }
 
+            adaptersReadySubject.onNext(Unit)
+
             disabledWallets.forEach { wallet ->
                 adaptersMap.remove(wallet)?.let { disabledAdapter ->
                     disabledAdapter.stop()
@@ -91,5 +95,9 @@ class AdapterManager(
 
     override fun getAdapterForWallet(wallet: Wallet): IAdapter? {
         return adaptersMap[wallet]
+    }
+
+    override fun getTransactionsAdapterForWallet(wallet: Wallet): ITransactionsAdapter? {
+        return adaptersMap[wallet]?.let { it as? ITransactionsAdapter }
     }
 }

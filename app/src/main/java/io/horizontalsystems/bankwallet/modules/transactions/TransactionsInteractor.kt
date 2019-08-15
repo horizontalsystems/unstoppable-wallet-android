@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
+import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.managers.NetworkAvailabilityManager
 import io.horizontalsystems.bankwallet.core.managers.RateManager
@@ -33,15 +33,7 @@ class TransactionsInteractor(
     override fun initialFetch() {
         onUpdateWallets()
 
-        walletManager.walletsUpdatedSignal
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe {
-                    onUpdateWallets()
-                }
-                .let { disposables.add(it) }
-
-        adapterManager.adapterCreationObservable
+        adapterManager.adaptersReadyObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe {
@@ -78,7 +70,7 @@ class TransactionsInteractor(
 
         val flowables: List<Single<Pair<Wallet, List<TransactionRecord>>>> = fetchDataList.map { fetchData ->
             val adapter = walletManager.wallets.find { it == fetchData.wallet }?.let {
-                adapterManager.getAdapterForWallet(it)
+                adapterManager.getTransactionsAdapterForWallet(it)
             }
 
             when (adapter) {
@@ -111,7 +103,7 @@ class TransactionsInteractor(
         lastBlockHeightDisposables.clear()
 
         walletManager.wallets.forEach { wallet ->
-            adapterManager.getAdapterForWallet(wallet)?.let { adapter ->
+            adapterManager.getTransactionsAdapterForWallet(wallet)?.let { adapter ->
                 adapter.lastBlockHeightUpdatedFlowable
                         .throttleLast(3, TimeUnit.SECONDS)
                         .subscribeOn(Schedulers.io())
@@ -149,20 +141,18 @@ class TransactionsInteractor(
         transactionUpdatesDisposables.clear()
     }
 
-    private fun onUpdateLastBlockHeight(wallet: Wallet, adapter: IAdapter) {
+    private fun onUpdateLastBlockHeight(wallet: Wallet, adapter: ITransactionsAdapter) {
         adapter.lastBlockHeight?.let { lastBlockHeight ->
             delegate?.onUpdateLastBlockHeight(wallet, lastBlockHeight)
         }
     }
 
     private fun onUpdateWallets() {
-        if (walletManager.wallets.map { adapterManager.getAdapterForWallet(it) }.any { it == null }) return
-
         transactionUpdatesDisposables.clear()
 
         val walletsData = mutableListOf<Triple<Wallet, Int, Int?>>()
         walletManager.wallets.forEach { wallet ->
-            adapterManager.getAdapterForWallet(wallet)?.let { adapter ->
+            adapterManager.getTransactionsAdapterForWallet(wallet)?.let { adapter ->
                 walletsData.add(Triple(wallet, adapter.confirmationsThreshold, adapter.lastBlockHeight))
 
                 adapter.transactionRecordsFlowable

@@ -22,10 +22,12 @@ import javax.crypto.SecretKey
 
 interface IAdapterManager {
     val adapterCreationObservable: Flowable<Wallet>
+    val adaptersReadyObservable: Flowable<Unit>
     fun preloadAdapters()
     fun refresh()
     fun stopKits()
     fun getAdapterForWallet(wallet: Wallet): IAdapter?
+    fun getTransactionsAdapterForWallet(wallet: Wallet): ITransactionsAdapter?
 }
 
 interface ILocalStorage {
@@ -209,25 +211,27 @@ interface IEosKitManager {
     fun unlink()
 }
 
+interface ITransactionsAdapter {
+    val confirmationsThreshold: Int
+    val lastBlockHeight: Int?
+    val lastBlockHeightUpdatedFlowable: Flowable<Unit>
+
+    fun getTransactions(from: Pair<String, Int>? = null, limit: Int): Single<List<TransactionRecord>>
+    val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
+}
+
 interface IAdapter {
     val decimal: Int
-    val confirmationsThreshold: Int
 
     fun start()
     fun stop()
     fun refresh()
-
-    val lastBlockHeight: Int?
-    val lastBlockHeightUpdatedFlowable: Flowable<Unit>
 
     val state: AdapterState
     val stateUpdatedFlowable: Flowable<Unit>
 
     val balance: BigDecimal
     val balanceUpdatedFlowable: Flowable<Unit>
-
-    fun getTransactions(from: Pair<String, Int>? = null, limit: Int): Single<List<TransactionRecord>>
-    val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
 
     @Throws
     fun send(params: Map<SendModule.AdapterFields, Any?>): Single<Unit>

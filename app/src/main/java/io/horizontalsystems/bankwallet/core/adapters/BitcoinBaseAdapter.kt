@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
-import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.IAdapter
-import io.horizontalsystems.bankwallet.core.SendStateError
-import io.horizontalsystems.bankwallet.core.WrongParameters
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.send.SendModule
@@ -18,7 +15,7 @@ import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-abstract class BitcoinBaseAdapter(open val kit: AbstractKit, private val addressParser: AddressParser) : IAdapter {
+abstract class BitcoinBaseAdapter(open val kit: AbstractKit, private val addressParser: AddressParser) : IAdapter, ITransactionsAdapter {
 
     open val receiveScriptType = ScriptType.P2PKH
     open val changeScriptType = ScriptType.P2PKH

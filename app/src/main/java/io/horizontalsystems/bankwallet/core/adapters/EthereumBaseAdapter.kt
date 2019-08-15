@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
-import io.horizontalsystems.bankwallet.core.FeeRatePriority
-import io.horizontalsystems.bankwallet.core.IAdapter
-import io.horizontalsystems.bankwallet.core.IFeeRateProvider
-import io.horizontalsystems.bankwallet.core.WrongParameters
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.bankwallet.entities.AddressError
 import io.horizontalsystems.bankwallet.entities.CoinValue
@@ -20,7 +17,7 @@ abstract class EthereumBaseAdapter(
         protected val ethereumKit: EthereumKit,
         final override val decimal: Int,
         private val addressParser: AddressParser,
-        protected val feeRateProvider: IFeeRateProvider) : IAdapter {
+        protected val feeRateProvider: IFeeRateProvider) : IAdapter, ITransactionsAdapter {
 
     override val confirmationsThreshold: Int = 12
 
