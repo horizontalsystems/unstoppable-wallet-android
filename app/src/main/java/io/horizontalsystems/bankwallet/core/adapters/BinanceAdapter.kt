@@ -30,7 +30,7 @@ class BinanceAdapter(
     }
 
     override fun stop() {
-        // handled by BinanceKitManager
+        binanceKit.unregister(asset)
     }
 
     override fun refresh() {
