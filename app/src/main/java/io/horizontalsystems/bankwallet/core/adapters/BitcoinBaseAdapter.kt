@@ -15,7 +15,7 @@ import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-abstract class BitcoinBaseAdapter(open val kit: AbstractKit, private val addressParser: AddressParser) : IAdapter, ITransactionsAdapter {
+abstract class BitcoinBaseAdapter(open val kit: AbstractKit, private val addressParser: AddressParser) : IAdapter, ITransactionsAdapter, IBalanceAdapter {
 
     open val receiveScriptType = ScriptType.P2PKH
     open val changeScriptType = ScriptType.P2PKH

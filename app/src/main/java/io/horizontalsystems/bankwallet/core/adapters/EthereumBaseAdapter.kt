@@ -17,7 +17,7 @@ abstract class EthereumBaseAdapter(
         protected val ethereumKit: EthereumKit,
         final override val decimal: Int,
         private val addressParser: AddressParser,
-        protected val feeRateProvider: IFeeRateProvider) : IAdapter, ITransactionsAdapter {
+        protected val feeRateProvider: IFeeRateProvider) : IAdapter, ITransactionsAdapter, IBalanceAdapter {
 
     override val confirmationsThreshold: Int = 12
 

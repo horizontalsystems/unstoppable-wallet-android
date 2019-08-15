@@ -100,4 +100,8 @@ class AdapterManager(
     override fun getTransactionsAdapterForWallet(wallet: Wallet): ITransactionsAdapter? {
         return adaptersMap[wallet]?.let { it as? ITransactionsAdapter }
     }
+
+    override fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter? {
+        return adaptersMap[wallet]?.let { it as? IBalanceAdapter }
+    }
 }

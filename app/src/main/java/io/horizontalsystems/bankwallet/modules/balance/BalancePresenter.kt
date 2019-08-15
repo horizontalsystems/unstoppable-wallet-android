@@ -79,7 +79,7 @@ class BalancePresenter(
     //
     override fun didUpdateWallets(wallets: List<Wallet>) {
         val items = wallets.map {
-            val adapter = interactor.getAdapterForWallet(it)
+            val adapter = interactor.getBalanceAdapterForWallet(it)
 
             BalanceModule.BalanceItem(it, adapter?.balance ?: BigDecimal.ZERO, adapter?.state ?: AdapterState.NotReady)
         }

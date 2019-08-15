@@ -63,8 +63,8 @@ class BalanceInteractor(
 
     override fun getSortingType() = localStorage.sortType
 
-    override fun getAdapterForWallet(wallet: Wallet): IAdapter? {
-        return adapterManager.getAdapterForWallet(wallet)
+    override fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter? {
+        return adapterManager.getBalanceAdapterForWallet(wallet)
     }
 
     private fun onUpdateCurrency() {
@@ -84,7 +84,7 @@ class BalanceInteractor(
     }
 
     private fun subscribeToAdapterUpdates(wallet: Wallet, initialUpdate: Boolean) {
-        adapterManager.getAdapterForWallet(wallet)?.let { adapter ->
+        adapterManager.getBalanceAdapterForWallet(wallet)?.let { adapter ->
 
             if (initialUpdate) {
                 delegate?.didUpdateBalance(wallet, adapter.balance)

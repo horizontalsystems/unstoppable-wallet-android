@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.IAdapter
+import io.horizontalsystems.bankwallet.core.IBalanceAdapter
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -41,7 +41,7 @@ object BalanceModule {
         fun getSortingType(): BalanceSortType
         fun clear()
         fun saveSortingType(sortType: BalanceSortType)
-        fun getAdapterForWallet(wallet: Wallet): IAdapter?
+        fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter?
     }
 
     interface IInteractorDelegate {

@@ -28,6 +28,7 @@ interface IAdapterManager {
     fun stopKits()
     fun getAdapterForWallet(wallet: Wallet): IAdapter?
     fun getTransactionsAdapterForWallet(wallet: Wallet): ITransactionsAdapter?
+    fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter?
 }
 
 interface ILocalStorage {
@@ -220,6 +221,16 @@ interface ITransactionsAdapter {
     val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
 }
 
+interface IBalanceAdapter {
+    val state: AdapterState
+    val stateUpdatedFlowable: Flowable<Unit>
+
+    val balance: BigDecimal
+    val balanceUpdatedFlowable: Flowable<Unit>
+
+    fun availableBalance(params: Map<SendModule.AdapterFields, Any?>): BigDecimal
+}
+
 interface IAdapter {
     val decimal: Int
 
@@ -227,16 +238,9 @@ interface IAdapter {
     fun stop()
     fun refresh()
 
-    val state: AdapterState
-    val stateUpdatedFlowable: Flowable<Unit>
-
-    val balance: BigDecimal
-    val balanceUpdatedFlowable: Flowable<Unit>
-
     @Throws
     fun send(params: Map<SendModule.AdapterFields, Any?>): Single<Unit>
 
-    fun availableBalance(params: Map<SendModule.AdapterFields, Any?>): BigDecimal
     @Throws
     fun fee(params: Map<SendModule.AdapterFields, Any?>): BigDecimal
 

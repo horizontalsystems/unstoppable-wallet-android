@@ -14,7 +14,7 @@ class BinanceAdapter(
         private val binanceKit: BinanceChainKit,
         private val symbol: String,
         private val addressParser: AddressParser)
-    : IAdapter, ITransactionsAdapter {
+    : IAdapter, ITransactionsAdapter, IBalanceAdapter {
 
     private val asset = binanceKit.register(symbol)
 
