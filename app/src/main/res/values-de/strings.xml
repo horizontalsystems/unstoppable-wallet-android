@@ -11,25 +11,25 @@
     <string name="Alert_Copied">Kopiert</string>
     <string name="Button_Cancel">Abbrechen</string>
     <string name="Button_Back">Zurück</string>
-    <string name="Button_Close">Close</string>
+    <string name="Button_Close">Schließen</string>
     <string name="Button_Ok">OK</string>
     <string name="Button_Share">Teilen</string>
     <string name="Error">Fehler</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
-    <string name="Welcome_CreateWallet">New Wallet</string>
-    <string name="Welcome_RestoreWallet">Restore Wallet</string>
+    <string name="Welcome_CreateWallet">Wallet Erstellen</string>
+    <string name="Welcome_RestoreWallet">Wallet Wiederherstellen</string>
     <!--Restore-->
     <string name="Restore_Title">Wiederherstellen</string>
-    <string name="Restore_Subtitle">Enter Key</string>
+    <string name="Restore_Subtitle">Schlüssel Eingeben</string>
     <string name="Restore_ValidationFailed">Falscher Offlineschlüssel</string>
     <string name="Restore_RestoreFailed">Fehler beim Wiederherstellen des Wallet</string>
     <string name="Restore_EosAccountName">Account Name</string>
     <string name="Restore_EosActivePrivateKey">Active Private Key</string>
     <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
-    <string name="Restore_EosKeyIncorrect">Incorrect Key</string>
+    <string name="Restore_EosKeyIncorrect">Falscher Schlüssel</string>
     <!--Backup-->
-    <string name="Backup_Intro_Title">Backup</string>
+    <string name="Backup_Intro_Title">Sicherung</string>
     <string name="Backup_Intro_TitleShow">Show Key</string>
     <string name="Backup_Intro_Subtitle">The key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc. Make sure that no one is watching your screen. \n\nThe coins controlled by this key: %s</string>
     <string name="Backup_Intro_Later">Später</string>
@@ -58,26 +58,26 @@
     <string name="Balance_RatePerCoin">%s pro %s</string>
     <string name="Balance_SyncedUntil">bis: %s</string>
     <string name="Balance_Syncing">Synchronisieren…</string>
-    <string name="Balance_AddCoins">Add Coins</string>
-    <string name="Balance_Sort_Balance">Balance</string>
-    <string name="Balance_Sort_PopupTitle">Sort by</string>
+    <string name="Balance_AddCoins">Coins hinzufügen</string>
+    <string name="Balance_Sort_Balance">Guthaben</string>
+    <string name="Balance_Sort_PopupTitle">Sortieren nach</string>
     <string name="Balance_Sort_Az">A-Z</string>
-    <string name="Balance_Sort_Default">Default</string>
+    <string name="Balance_Sort_Default">Standard</string>
     <!--Send-->
     <string name="Send_Title">%s senden</string>
     <string name="Send_Hint_Address">Adresse</string>
     <string name="Send_Hint_Amount">Betrag</string>
-    <string name="Send_Fee">Fee:</string>
+    <string name="Send_Fee">Gebühr:</string>
     <string name="Send_Button_Paste">Einfügen</string>
-    <string name="Send_Button_Next">Next</string>
+    <string name="Send_Button_Next">Weiter</string>
     <string name="Send_Button_Max">Max.</string>
-    <string name="Send_Confirmation_Title">Confirm</string>
-    <string name="Send_Confirmation_To">To: </string>
+    <string name="Send_Confirmation_Title">Bestätigen</string>
+    <string name="Send_Confirmation_To">An: </string>
     <string name="Send_Confirmation_HintMemo">Memo</string>
     <string name="Send_Confirmation_Eos_HintAccount">Account</string>
-    <string name="Send_Confirmation_Total">Total:</string>
-    <string name="Send_Confirmation_EstimateTime">Estimate Time:</string>
-    <string name="Send_Confirmation_Send_Button">Send</string>
+    <string name="Send_Confirmation_Total">Insgesamt:</string>
+    <string name="Send_Confirmation_EstimateTime">Geschätzte Zeit:</string>
+    <string name="Send_Confirmation_Send_Button">Senden</string>
     <string name="Send_ScanQrCode">QR-Code Scannen</string>
     <string name="Send_Success">\u2713 Gesendet</string>
     <string name="Send_Error_InvalidAddress">Eingegebene Adresse scheint ungültig zu sein. Bitte überprüfen Sie und versuchen es erneut!</string>
@@ -89,12 +89,12 @@
     <string name="Send_DialogTotal">Insgesamt:</string>
     <string name="Send_Sending">Wird gesendet</string>
     <string name="Send_ERC_Alert">Transaktionsgebühren für %s (ERC20) in Ethereum bezahlt. Du brauchst %s ETH.</string>
-    <string name="Send_Token_InsufficientFeeAlert">Transaction fees for %s (%s) paid in %s. You need %s.</string>
+    <string name="Send_Token_InsufficientFeeAlert">Transaktionsgebühren für %s (%s) in %s bezahlt. Du brauchst %s.</string>
     <!--Deposit-->
     <string name="Deposit_Title">%s Anfordern</string>
     <string name="Deposit_Share">Teilen</string>
     <string name="Deposit_Your_Address">Deine Adresse</string>
-    <string name="Receive_Alert_NotBackedUp_Button">Backup</string>
+    <string name="Receive_Alert_NotBackedUp_Button">Sicherung</string>
     <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">gerade eben</string>
@@ -160,13 +160,13 @@
     <!--Settings-->
     <string name="Settings_Title">Einstellungen</string>
     <string name="Settings_SecurityCenter">Sicherheit</string>
-    <string name="Settings_ManageCoins">Manage Coins</string>
-    <string name="Settings_RestoreWallet">Restore Wallet</string>
+    <string name="Settings_ManageCoins">Coins Verwalten</string>
+    <string name="Settings_RestoreWallet">Wallet Wiederherstellen</string>
     <string name="Settings_BaseCurrency">Währung</string>
     <string name="Settings_Language">Sprache</string>
     <string name="Settings_LightMode">Licht Modus</string>
     <string name="Settings_About">Info</string>
-    <string name="Settings_ShareThisWallet">Tell Friends</string>
+    <string name="Settings_ShareThisWallet">Freunden erzählen</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <!--Settings-->
@@ -174,9 +174,9 @@
     <string name="Settings_Error_NoFingerprintAddedYet">Fingerabdruck auf diesem Gerät aktiviert nicht. Geh zu Einstellungen </string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Fingerabdruck</string>
-    <string name="SettingsSecurity_EnablePin">Passcode</string>
+    <string name="SettingsSecurity_EnablePin">Code</string>
     <string name="SettingsSecurity_EditPin">Code bearbeiten</string>
-    <string name="SettingsSecurity_ManageKeys">Manage Keys</string>
+    <string name="SettingsSecurity_ManageKeys">Schlüssel Managen</string>
     <string name="SettingsSecurity_BackupWallet">Wallet sichern</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Währung</string>
@@ -194,7 +194,7 @@
 \n\nDer gesamte Programmcode dieser Anwendung ist kostenlos und für die Öffentlichkeit zugänglich. Wir haben versucht, die sicherste und gleichzeitig dezentralisierte Wallet zu schaffen, aber es gibt keine Garantie dafür, dass der Anwendungscode fehlerfrei ist. Wir glauben jedoch, dass dieser Wallet in Bezug auf die Sicherheit fast alle heute verfügbare mobile Kryptobörsen deutlich übertrifft.
 \n\nEinige von der Anwendung verwendete öffentliche Daten, wie z. B. Wechselkurse, werden im dezentralen Repository (IPFS) gespeichert</string>
     <!--Setting_Tell Friends-->
-    <string name="SettingsShare_Title">Share</string>
+    <string name="SettingsShare_Title">Teilen</string>
     <string name="SettingsShare_Text">Unstoppable Wallet - Nice App!</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android Keystore Fehler</string>
@@ -209,7 +209,7 @@
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Entsperren</string>
     <string name="Hud_Text_Success">Erfolgreich</string>
-    <string name="Hud_Text_Done">Done</string>
+    <string name="Hud_Text_Done">Fertig</string>
     <string name="Hud_Text_Error">Fehler</string>
     <string name="Hud_Text_NoInternet">Kein Internet</string>
     <string name="Hud_Text_Copied">Kopiert</string>
