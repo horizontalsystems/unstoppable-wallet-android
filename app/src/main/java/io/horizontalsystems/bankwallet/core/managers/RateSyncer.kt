@@ -31,7 +31,9 @@ class RateSyncer(private val rateManager: RateManager,
     private fun requestRefresh() {
         if (networkAvailabilityManager.isConnected) {
             val coinCodes = walletManager.wallets.map { it.coin.code }
-            rateManager.refreshLatestRates(coinCodes, currencyManager.baseCurrency.code)
+            if (coinCodes.isNotEmpty()) {
+                rateManager.refreshLatestRates(coinCodes, currencyManager.baseCurrency.code)
+            }
         }
     }
 }
