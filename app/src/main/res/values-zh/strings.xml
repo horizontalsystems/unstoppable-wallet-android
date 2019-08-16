@@ -11,27 +11,27 @@
     <string name="Alert_Copied">复制成功</string>
     <string name="Button_Cancel">取消</string>
     <string name="Button_Back">返回</string>
-    <string name="Button_Close">Close</string>
+    <string name="Button_Close">关闭</string>
     <string name="Button_Ok">确定</string>
     <string name="Button_Share">分享</string>
     <string name="Error">出错</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
-    <string name="Welcome_CreateWallet">New Wallet</string>
-    <string name="Welcome_RestoreWallet">Restore Wallet</string>
+    <string name="Welcome_CreateWallet">新的钱包</string>
+    <string name="Welcome_RestoreWallet">恢复钱包</string>
     <!--Restore-->
     <string name="Restore_Title">恢复</string>
-    <string name="Restore_Subtitle">Enter Key</string>
+    <string name="Restore_Subtitle">输入密钥</string>
     <string name="Restore_ValidationFailed">密钥不正确</string>
     <string name="Restore_RestoreFailed">无法创建钱包</string>
     <string name="Restore_EosAccountName">Account Name</string>
     <string name="Restore_EosActivePrivateKey">Active Private Key</string>
     <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
-    <string name="Restore_EosKeyIncorrect">Incorrect Key</string>
+    <string name="Restore_EosKeyIncorrect">密钥不正确</string>
     <!--Backup-->
-    <string name="Backup_Intro_Title">Backup</string>
-    <string name="Backup_Intro_TitleShow">Show Key</string>
-    <string name="Backup_Intro_Subtitle">The key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc. Make sure that no one is watching your screen. \n\nThe coins controlled by this key: %s</string>
+    <string name="Backup_Intro_Title">备份</string>
+    <string name="Backup_Intro_TitleShow">显示密钥</string>
+    <string name="Backup_Intro_Subtitle">如果您的手机曾经丢失、被盗、损坏等，下一步将显示的密钥是恢复资金的唯一方法。请确保没有人在监视您的屏幕。\n\n由此密钥控制的硬币：%s</string>
     <string name="Backup_Intro_Later">稍后</string>
     <string name="Backup_Intro_BackupNow">备份</string>
     <string name="Backup_Confirmation_SecretKey">我知道, 我是一个12个字的私人密钥的唯一拥有者，该密钥安全地存储在我的手机上，使我能够控制我钱包上的资金。</string>
@@ -44,13 +44,13 @@
     <string name="Backup_Button_Confirm">确认</string>
     <string name="Backup_Button_Next">继续</string>
     <string name="Backup_Button_Submit">提交</string>
-    <string name="Backup_Button_ShowKey">Show Key</string>
+    <string name="Backup_Button_ShowKey">显示密钥</string>
     <!--Backup Words-->
-    <string name="Backup_Words_Title">Secret Key</string>
+    <string name="Backup_Words_Title">密钥</string>
     <!--Backup Eos-->
     <string name="Backup_Eos_AccountName">Account Name</string>
     <string name="Backup_Eos_ActivePrivateKey">Private Key</string>
-    <string name="Backup_Eos_Warning">Copying your key using “copy” action poses some risks if you use any clipboard management apps or some other apps that may access to clipboard data.</string>
+    <string name="Backup_Eos_Warning">如果您使用任何剪贴板管理应用程序或其他可以访问剪贴板数据的应用程序，则使用“复制”操作复制密钥会带来一些风险。</string>
     <!--Balance-->
     <string name="Balance_Title">余额</string>
     <string name="Balance_Deposit">收到</string>
@@ -58,26 +58,26 @@
     <string name="Balance_RatePerCoin">每%s %s</string>
     <string name="Balance_SyncedUntil">直到 %s</string>
     <string name="Balance_Syncing">同步...</string>
-    <string name="Balance_AddCoins">Add Coins</string>
-    <string name="Balance_Sort_Balance">Balance</string>
-    <string name="Balance_Sort_PopupTitle">Sort by</string>
+    <string name="Balance_AddCoins">添加硬币</string>
+    <string name="Balance_Sort_Balance">余额</string>
+    <string name="Balance_Sort_PopupTitle">排序方式</string>
     <string name="Balance_Sort_Az">A-Z</string>
-    <string name="Balance_Sort_Default">Default</string>
+    <string name="Balance_Sort_Default">默认</string>
     <!--Send-->
     <string name="Send_Title">发送%s</string>
     <string name="Send_Hint_Address">地址</string>
     <string name="Send_Hint_Amount">金额</string>
-    <string name="Send_Fee">Fee:</string>
+    <string name="Send_Fee">费用:</string>
     <string name="Send_Button_Paste">粘帖</string>
-    <string name="Send_Button_Next">Next</string>
+    <string name="Send_Button_Next">继续</string>
     <string name="Send_Button_Max">最多</string>
-    <string name="Send_Confirmation_Title">Confirm</string>
-    <string name="Send_Confirmation_To">To: </string>
+    <string name="Send_Confirmation_Title">确认</string>
+    <string name="Send_Confirmation_To">收件人: </string>
     <string name="Send_Confirmation_HintMemo">Memo</string>
     <string name="Send_Confirmation_Eos_HintAccount">Account</string>
-    <string name="Send_Confirmation_Total">Total:</string>
-    <string name="Send_Confirmation_EstimateTime">Estimate Time:</string>
-    <string name="Send_Confirmation_Send_Button">Send</string>
+    <string name="Send_Confirmation_Total">总额:</string>
+    <string name="Send_Confirmation_EstimateTime">预计时间:</string>
+    <string name="Send_Confirmation_Send_Button">发送​​</string>
     <string name="Send_ScanQrCode">扫描二维码</string>
     <string name="Send_Success">\u2713 已发送</string>
     <string name="Send_Error_InvalidAddress">地址无效。 请确认后再重试，谢谢</string>
@@ -89,12 +89,12 @@
     <string name="Send_DialogTotal">总额:</string>
     <string name="Send_Sending">发送中</string>
     <string name="Send_ERC_Alert">以 Ethereum 支付的 %s (ERC20) 交易费用。你需要 %s ETH。</string>
-    <string name="Send_Token_InsufficientFeeAlert">Transaction fees for %s (%s) paid in %s. You need %s.</string>
+    <string name="Send_Token_InsufficientFeeAlert">以 %s 支付的 %s (%s) 交易费用。你需要 %s 。</string>
     <!--Deposit-->
     <string name="Deposit_Title">收到%s</string>
     <string name="Deposit_Share">转发</string>
     <string name="Deposit_Your_Address">您的地址</string>
-    <string name="Receive_Alert_NotBackedUp_Button">Backup</string>
+    <string name="Receive_Alert_NotBackedUp_Button">备份</string>
     <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">刚才</string>
@@ -131,7 +131,7 @@
     <string name="FullInfo_Contract">合同</string>
     <string name="FullInfo_From">发件人</string>
     <string name="FullInfo_To">收件人</string>
-    <string name="FullInfo_Status">Status</string>
+    <string name="FullInfo_Status">状态</string>
     <string name="FullInfo_Memo">Memo</string>
     <string name="FullInfo_CpuUsage">CPU Usage</string>
     <string name="FullInfo_NetUsage">Net Usage</string>
@@ -160,13 +160,13 @@
     <!--Settings-->
     <string name="Settings_Title">设置</string>
     <string name="Settings_SecurityCenter">安全中心</string>
-    <string name="Settings_ManageCoins">Manage Coins</string>
-    <string name="Settings_RestoreWallet">Restore Wallet</string>
+    <string name="Settings_ManageCoins">管理Coins</string>
+    <string name="Settings_RestoreWallet">恢复钱包</string>
     <string name="Settings_BaseCurrency">基本货币</string>
     <string name="Settings_Language">语言</string>
     <string name="Settings_LightMode">简单模式</string>
     <string name="Settings_About">更多</string>
-    <string name="Settings_ShareThisWallet">Tell Friends</string>
+    <string name="Settings_ShareThisWallet">分享给好友</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <!--Settings-->
@@ -174,9 +174,9 @@
     <string name="Settings_Error_NoFingerprintAddedYet">在此设备上指纹识别尚未启用。为了设置指纹识别访问，请转到\"设置“&gt;”安全“</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">指纹识别</string>
-    <string name="SettingsSecurity_EnablePin">Passcode</string>
+    <string name="SettingsSecurity_EnablePin">密码</string>
     <string name="SettingsSecurity_EditPin">修改密码</string>
-    <string name="SettingsSecurity_ManageKeys">Manage Keys</string>
+    <string name="SettingsSecurity_ManageKeys">管理密钥</string>
     <string name="SettingsSecurity_BackupWallet">备份钱包</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">基本货币</string>
@@ -186,16 +186,21 @@
     <string name="SettingsAbout_Title">更多</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">服务条款&amp;隐私策略</string>
-    <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
-\n\nIt works everywhere as long as there is internet. No entity can block this app from working or to block someone from using it.
-\n\nYour funds are securely stored on the phone itself, not anywhere else.
-\n\nIt’s your responsibility to backup your Key and keep it private. Never show it to anyone. If it’s lost, forgotten or stollen your funds can be used by the person who has your key.
-\n\nDo not jailbreak your phone, do not install apps from unknown (untrusted) sources, do not give your device to untrusted people, and keep the Operating System on your phone up to date. The security of your wallet depends on this.
-\n\nThe entire code powering this app been open to the public scrutiny since the beginning. We tried to build the most secure and decentralized wallet we could, however there are no guarantees that there are no unintended software issues. That said, this wallet is likely to be significantly more secure than any smartphone wallet app out there.
-\n\nSome generic non-private app data like currency exchange rates are stored on decentralized storage(IPFS).</string>
+    <string name="SettingsAbout_TermsPrivacyText">此应用程序是对等的。它不依赖于任何 web 服务器或支持人员来运行的技术。
+\n\n只要有互联网, 它就可以被使用。任何实体都不能阻止此应用程序工作或阻止某人使用它。
+
+\n\n您的资金安全地存储在手机上, 而不是在其他任何地方。
+
+\n\n你有责任备份您的密钥, 并保持密钥的隐私。千万不要把它给任何人看。如果它被丢失, 遗忘或被偷, 您的资金都可用于持有您密钥的人。
+
+\n\n不要越狱您的手机, 不要安装来自未知 (不受信任) 来源的应用程序, 不要将您的设备交给不受信任的人, 并使您的手机上的系统保持最新。这是你的钱包安全的重点。
+
+\n\n从一开始，为该应用程序提供动力的整个代码就向公众开放。我们试图建立最安全和分散的钱包, 我们可以, 但没有保证没有意外的软件问题。也就是说, 这个钱包可能比任何智能手机钱包应用都要安全得多。
+
+\n\n一些通用的非私有应用程序数据 (如货币汇率) 存储在分散存储 (ipfs) 中。 </string>
     <!--Setting_Tell Friends-->
-    <string name="SettingsShare_Title">Share</string>
-    <string name="SettingsShare_Text">Unstoppable Wallet - Nice App!</string>
+    <string name="SettingsShare_Title">分享</string>
+    <string name="SettingsShare_Text">自由点！势不可挡！</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android密钥存储错误</string>
     <string name="Alert_KeysInvalidatedDescription">由于您的安卓锁屏被更改，保存您钱包的加密数据已失效。</string>
@@ -209,7 +214,7 @@
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">解锁​​​​</string>
     <string name="Hud_Text_Success">成功</string>
-    <string name="Hud_Text_Done">Done</string>
+    <string name="Hud_Text_Done">完成</string>
     <string name="Hud_Text_Error">出错</string>
     <string name="Hud_Text_NoInternet">没有网络连接</string>
     <string name="Hud_Text_Copied">复制成功</string>
@@ -225,7 +230,7 @@
     <string name="UnlockPin_WalletDisabledUntil">禁用至: %s</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">电话PIN</string>
-    <string name="OSPin_Confirm_Desciption">This app requires that phone has the passcode (screen lock) enabled.\n\n You may enable it in Android settings.\n\nPlease note that when you disabled the PIN on the OS level the security measures in safe storage of your phonе made the previously stored data invalid. You will need to Restore your wallet keys to get back to your wallet.</string>
+    <string name="OSPin_Confirm_Desciption">此应用程序要求手机启用密码（屏幕锁定）。\n\n您可以在iOS设置中启用它。\n\n请注意，当您禁用操作系统级别的PIN时，您的电话安全存储中的安全措施使以前存储的数据无效。您需要恢复钱包密钥才能回到钱包。</string>
     <string name="OSPin_Prompt_Desciption">This app requires your phone\'s PIN in order to keep sensitive data from your wallet in Android\'s secure storage and not in the app itself.</string>
     <!--Set Pin-->
     <string name="SetPin_Title">密码</string>
