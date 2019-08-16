@@ -26,7 +26,7 @@
     <string name="Restore_RestoreFailed">无法创建钱包</string>
     <string name="Restore_EosAccountName">Account Name</string>
     <string name="Restore_EosActivePrivateKey">Active Private Key</string>
-    <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
+    <string name="Restore_EosAccountIncorrect">帐户无效</string>
     <string name="Restore_EosKeyIncorrect">密钥不正确</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">备份</string>
@@ -230,8 +230,8 @@
     <string name="UnlockPin_WalletDisabledUntil">禁用至: %s</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">电话PIN</string>
-    <string name="OSPin_Confirm_Desciption">此应用程序要求手机启用密码（屏幕锁定）。\n\n您可以在iOS设置中启用它。\n\n请注意，当您禁用操作系统级别的PIN时，您的电话安全存储中的安全措施使以前存储的数据无效。您需要恢复钱包密钥才能回到钱包。</string>
-    <string name="OSPin_Prompt_Desciption">This app requires your phone\'s PIN in order to keep sensitive data from your wallet in Android\'s secure storage and not in the app itself.</string>
+    <string name="OSPin_Confirm_Desciption">此应用程序要求手机启用密码（屏幕锁定）。\n\n您可以在安卓设置中启用它。\n\n请注意，当您禁用操作系统级别的PIN时，您的电话安全存储中的安全措施使以前存储的数据无效。您需要恢复钱包密钥才能回到钱包。</string>
+    <string name="OSPin_Prompt_Desciption">这个应用程序需要你的手机的密码，以便将敏感数据从你的钱包中保存在安卓的安全存储中，而不是在应用程序本身中。</string>
     <!--Set Pin-->
     <string name="SetPin_Title">密码</string>
     <string name="SetPin_Info">您的密码将用于解锁钱包app。</string>
@@ -247,42 +247,43 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">硬币管理</string>
     <string name="ManageCoins_save">保存</string>
-    <string name="ManageCoins_AddCoin_Title">Add %s Coin</string>
-    <string name="ManageCoins_AddCoin_Text">This action will generate a new key(wallet) for the following coins: %s </string>
-    <string name="ManageCoins_EOSAlert_CreateButton">At this point, the wallet is not able to create new EOS wallet accounts. You\'re only able to restore the existing one.</string>
+    <string name="ManageCoins_AddCoin_Title">加%@ </string>
+    <string name="ManageCoins_AddCoin_Text">此操作将为以下硬币生成密钥（钱包）：%s </string>
+    <string name="ManageCoins_EOSAlert_CreateButton">此时，钱包无法创建新的EOS钱包帐户。您只能还原现有的。</string>
     <!--Manage Keys-->
-    <string name="ManageKeys_Title">Manage Keys</string>
-    <string name="ManageKeys_Description">Anyone with access to your Keys can steal your wallet funds. Store keys safely and never show them to anyone. \n\nBackup each key to be able to restore funds if you loose or break your phone, or simply the wallet app gets deleted.</string>
-    <string name="ManageKeys_Create">Create</string>
-    <string name="ManageKeys_Restore">Restore</string>
-    <string name="ManageKeys_Delete">Delete</string>
-    <string name="ManageKeys_Backup">Backup</string>
-    <string name="ManageKeys_Show">Show</string>
+    <string name="ManageKeys_Title">管理密钥</string>
+    <string name="ManageKeys_Description">任何有权访问您密钥的人都可以窃取您的钱包资金。\n\n安全存放钥匙，不要让任何人看到。备份每个密钥，以便在您的手机松动或损坏时恢复资金，或者只是钱包应用程序被删除。</string>
+    <string name="ManageKeys_Create">创建</string>
+    <string name="ManageKeys_Restore">恢复</string>
+    <string name="ManageKeys_Delete">删除</string>
+    <string name="ManageKeys_Backup">备份</string>
+    <string name="ManageKeys_Show">查看</string>
     <!--Manage Keys Delete Alert-->
-    <string name="ManageKeys_Delete_Title">Delete Key</string>
-    <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s key (wallet) from this device.</string>
-    <string name="ManageKeys_Delete_ConfirmationDisable">Coins that will be disabled: %s</string>
-    <string name="ManageKeys_Delete_ConfirmationLoose">If you don\'t have a backup of this key you will loose the respective funds.</string>
-    <string name="ManageKeys_Delete_FromPhone">Delete from Phone</string>
-    <string name="ManageKeys_Delete_Alert">You need to backup this key before you may delete it.</string>
+    <string name="ManageKeys_Delete_Title">删除密钥</string>
+    <string name="ManageKeys_Delete_ConfirmationRemove">此操作将从此设备中删除%s密钥（钱包）。</string>
+    <string name="ManageKeys_Delete_ConfirmationDisable">将被禁用的硬币：%s</string>
+    <string name="ManageKeys_Delete_ConfirmationLoose">如果你没有这把密钥的备份，你将失去相应的资金。</string>
+    <string name="ManageKeys_Delete_FromPhone">从手机中删除</string>
+    <string name="ManageKeys_Delete_Alert">您需要备份此密钥才能取消链接。</string>
     <!-- Manage Keys Alert -->
-    <string name="AddCoin_Title">Add %s</string>
-    <string name="AddCoin_Description">You don\'t have active key for use with %s. Use Create button below to generate a new key (wallet) \n\nYou may also use the existing key for the %s if you already have it.</string>
-    <string name="AddCoin_CreateKey">Create</string>
-    <string name="AddCoin_RestoreKey">Restore</string>
+    <string name="AddCoin_Title">加%s</string>
+    <string name="AddCoin_Description">您没有与%s一起使用的活动密钥。 使用下面的“创建”按钮生成新密钥（钱包）。
+\n\n如果您已经拥有它，也可以使用%s的现有密钥。</string>
+    <string name="AddCoin_CreateKey">创建</string>
+    <string name="AddCoin_RestoreKey">恢复</string>
     <!-- Account Types -->
     <string name="AccountType_12Words">12 Words</string>
-    <string name="AccountType_12WordsKey">12 Words Key</string>
+    <string name="AccountType_12WordsKey">12个字的密钥</string>
     <string name="AccountType_Eos">EOS Blockchain</string>
-    <string name="AccountType_EosKey">EOS Key</string>
+    <string name="AccountType_EosKey">EOS 密钥</string>
     <string name="AccountType_Binance">Binance Chain</string>
-    <string name="AccountType_BinanceKey">Binance Key</string>
+    <string name="AccountType_BinanceKey">二进制的密钥</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">恢复选项</string>
     <string name="CoinOption_Fast">过程最快</string>
     <string name="CoinOption_Recommended">0&#8211;2 小时 (推荐)</string>
-    <string name="CoinOption_Fast_Text">Restores your past transactions via secure third party server. For users with a long history of transactions involving very large sums this method may pose privacy risks.</string>
+    <string name="CoinOption_Fast_Text">通过安全的第三方服务器可以恢复以前的事务。对于拥有大量交易历史的用户来说，这种方法可能会带来隐私风险。</string>
     <string name="CoinOption_Slow">缓慢</string>
     <string name="CoinOption_MorePrivate">1&#8211;12 小时(更多隐私)</string>
-    <string name="CoinOption_Slow_Text">Restores your past transactions directly from the network. Significantly more private but very slow. If the restore takes way too much time, go to Manage Keys section and reimport the Key for the wallet using the Fast Sync option.</string>
+    <string name="CoinOption_Slow_Text">直接从网络可以恢复以前的事务。明显更私密，但速度很慢。如果恢复时间过长，如果恢复时间过长，请转到“管理密钥”部分，然后选“快速同步”重新导入钱包密钥。</string>
 </resources>
