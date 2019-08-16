@@ -1,29 +1,73 @@
-  掌控自己的钱财！
-钱包银行是一个安全且完全分散的加密钱包应用程序，支持主要加密货币，包括比特币，比特币Cash和ERC20代币。 支持货币的数量在每一个版本都会逐渐增加
-这个银行钱包向大众提供无缝地使用比特币和其他的加密货币的方式。 使用这个软件，您不需要了解加密货币的内部运作
-它用从接口设计领域里吸收最佳的做法来构建区块链协议的一种方法。
+If you’re a type of person who needs unrestricted access to invest in blockchains and require unconditional control over your crypto investments this wallet is for you.
 
-  分散独立
-这种银行钱包是完全对等及分散管理的 它不能被停止、阻塞或取下 这个钱包无须其中的机构能直接连接货币网（其中包括比特币等等） 这种方法使银行钱包可以在任何地方运行并保持抗审查 这有用户控制自己的钱
-那边的大部分加密货币的钱包都是集中进行的 资金存储在由钱包提供商操作的远程服务器上 由于加密货币的不受监管性质, 没有任何机制能保证钱包提供商不会欺骗或该提供商的服务器不会被黑客攻击。
-作为完全分散的应用程序，银行钱包以分散的方式实现其所有功能 应用程序中的每个功能都以分散的方式实现, 大大提高了钱包的安全性和隐私性。
-没有集中管理的会发生故障（发生故障会导致应用程序停止运行）的服务器, 
+This wallet was built to enable any freedom loving individual to invest and grow crypto currency portfolio without limitations, in a private manner, regardless of regulatory landscape.
 
-  安全及开放源代码
-银行钱包的整个代码是公开及开源的, 任何人都可以来分析它的所有代码。 它的工作方式与代码中所示完全相同。  它不会被欺骗！
-银行钱包使用 Android 操作系统提供的安全本机存储机制存储用户的私人密钥和加密的资金。 只有用户才能查看和使用其资金。
-在设备丢失或更换的情况下, 用户可以使用12词的密钥来轻松地恢复钱包。 
-事实上, 在这个私人密钥的帮助下, 用户不仅仅在银行钱包而且在任何确定性钱包 (即hd 钱包) 上可以恢复钱包及存取资金 
+Exercise full unconditional control over your assets. Bitcoin, Ethereum, Dash and other crypto assets.
 
-注意: 由于存在严重的安全风险, 请勿将银行钱包安装在越狱的设备上。 越狱的 android 操作系统无法保证您的私人密钥的安全。 这意味着在越狱设备上运行的一些恶意应用程序可能会存取您的资金甚至窃取它们。
+ Why Unstoppable Wallet
 
-免责声明
+It keeps crypto assets safe on your device
+It can only be controlled by yourself
+It doesn’t know who you are
+It doesn’t collect any data
+It's easy to migrate to/from
+It’s not dependent on any entity to function
+It integrates blockchains in a decentralized manner
+It implements latest improvements for each blockchain
+It can’t be blocked or censored
+It provides real time transaction fees
+It’s fast and beautiful  
+It's the most advanced wallet to date
+(1) UNRESTRICTED CONTROL
 
-1。 这个钱包是在其早期, 就像任何其他软件产品, 它可能有未发现的问题, 这可能会导致钱包有问题, 如失去访问特定的交易。 虽然钱包经过了彻底测试，但没人敢肯定它是没有任何问题的。 我们认为它是非常安全的，比任何加密货币软件安全得多。
+  Transact freely and unconditionally regardless of where you live. No entity can stop you from sending/receiving crypto in Unstoppable wallet.   
 
+You’re the only person with control and access to your crypto finances. The Secret Key (that give you ownership over crypto assets) never leaves your device.
 
-2。 注意: 由于存在严重的安全风险, 请勿将银行钱包安装在越狱或回火的设备上。 越狱的 android 操作系统无法保证您的私人密钥的安全。 这意味着在越狱设备上运行的一些恶意应用程序可能会存取您的资金甚至窃取它们。
+(2) GENUINE PRIVACY
 
-3。
- 源代码: https://github.com/horizontalsystems
+  Stay truly private without revealing any personal data. There are no accounts, emails, phone numbers, identity checks or 3rd party servers storing your data.  
 
+Unlike most wallets in the market the Unstoppable wallet connects users directly to decentralized blockchains without any restrictions or intermediaries.
+
+(3) HIGHLY SECURE
+
+  Keep your crypto assets safe on your phone using safe storage mechanisms provided by phone's operating system. Your secret keys never leaves your device the device.
+
+  In case of a device loss or replacement you may easily restore your wallet using Secret Key. Unstoppable makes it really easy to switch to another wallet or migrate funds from another wallet.
+
+ (4) ALWAYS ONLINE
+
+Access your funds from anywhere at any time.   Unstoppable wallet was engineered to remain online and functional independent of any third party servers.   
+
+No single entity can take the wallet down and cause it's main features to malfunction. Not even the Horizontal Systems team able to interfere with it.
+
+(5) ADVANCED & AHEAD
+
+Use the most technologically advanced and decentralized wallet ever built.   It’s the only mobile wallet that implements all major blockchains in a fully decentralized manner.
+
+Over 2500 engineering hours being put into this wallet every month. This wallet is being constantly improved further and continuously integrates latest enhancements in all blockchains such as segwit or real-time transaction fee estimator.
+  
+(6) BEAUTIFUL  
+
+Deal with crypto without complexitites. You don’t need to understand technicalities powering different blockchains to be able to transact with them.   
+
+This wallet keeps complexities under the hood giving you a straightforward user interface to the world of blockchains.
+
+It’s fast, multi-lingual and highly customizable when it comes to the look and feel.   Don’t take our word for it, give it a try yourself.  
+
+(7) OPEN & PUBLIC 
+
+The code powering Unstoppable wallet is fully public and open source enabling anyone to unconditionally copy and reuse its code.
+
+https://github.com/horizontalsystems/unstoppable-wallet-ios
+
+(8) SUPPORTED CURRENCIES
+
+Bitcoin
+Ethereum
+Dash
+Bitcoin Cash
+50+ ERC20 tokens
+(in progress) EOS and EOS based tokens
+(in progress) Binance Token and Binance-based tokens
