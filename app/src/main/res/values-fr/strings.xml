@@ -21,7 +21,7 @@
     <string name="Welcome_RestoreWallet">Restaurer le porte-monnaie</string>
     <!--Restore-->
     <string name="Restore_Title">Restaurer</string>
-    <string name="Restore_Subtitle">Enter Key</string>
+    <string name="Restore_Subtitle">Entrez la clé</string>
     <string name="Restore_ValidationFailed">Clé secrète incorrecte</string>
     <string name="Restore_RestoreFailed">Échec de la restauration du porte-monnaie</string>
     <string name="Restore_EosAccountName">Account Name</string>
