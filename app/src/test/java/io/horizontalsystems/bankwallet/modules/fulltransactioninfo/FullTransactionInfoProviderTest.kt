@@ -24,7 +24,7 @@ class FullTransactionInfoProviderTest {
     @Before
 
     fun setup() {
-//        whenever(provider.apiUrl(transactionHash)).thenReturn(transactionUri)
+        whenever(provider.apiUrl(transactionHash)).thenReturn(transactionUri)
         whenever(networkManager.getTransaction(any(), any()))
                 .thenReturn(Flowable.just(jsonObject))
 
@@ -43,7 +43,7 @@ class FullTransactionInfoProviderTest {
         fullTransactionInfoProvider.retrieveTransactionInfo(transactionHash)
                 .test()
                 .assertOf {
-//                    verify(provider).apiUrl(transactionHash)
+                    verify(provider).apiUrl(transactionHash)
                     verify(adapter).convert(jsonObject)
                 }
     }
