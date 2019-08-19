@@ -1,16 +1,6 @@
-//package io.horizontalsystems.bankwallet.modules.send
-//
-//import io.horizontalsystems.bankwallet.core.IAdapter
-//import io.horizontalsystems.bankwallet.core.WrongParameters
-//import io.horizontalsystems.bankwallet.entities.Coin
-//import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
-//import io.reactivex.Single
-//import io.reactivex.android.schedulers.AndroidSchedulers
-//import io.reactivex.disposables.Disposable
-//import io.reactivex.schedulers.Schedulers
-//import java.math.BigDecimal
-//
-//
+package io.horizontalsystems.bankwallet.modules.send
+
+
 //class SendInteractor(private val adapter: IAdapter) : SendModule.IInteractor {
 //
 //    sealed class SendError : Exception() {
@@ -21,7 +11,7 @@
 //    var delegate: SendModule.IInteractorDelegate? = null
 //
 //    override val coin: Coin
-//        get() = adapter.wallet.coin
+//        get() = TODO()//adapter.wallet.coin
 //
 //    private var validateDisposable: Disposable? = null
 //    private var feeDisposable: Disposable? = null
@@ -75,7 +65,7 @@
 //                                delegate?.showError(error)
 //                            })
 //        } catch (error: WrongParameters) {
-//            //todo add proper error text for this error
+//            todo add proper error text for this error
 //            delegate?.showError(error)
 //        }
 //    }
@@ -87,3 +77,4 @@
 //    }
 //
 //}
+//

@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.IFeeRateProvider
 import io.horizontalsystems.bankwallet.core.SendStateError
 import io.horizontalsystems.bankwallet.core.WrongParameters
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
@@ -15,8 +14,8 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
 
-class EthereumAdapter(kit: EthereumKit, addressParser: AddressParser, feeRateProvider: IFeeRateProvider)
-    : EthereumBaseAdapter(kit, 18, addressParser, feeRateProvider) {
+class EthereumAdapter(kit: EthereumKit, addressParser: AddressParser)
+    : EthereumBaseAdapter(kit, 18, addressParser) {
 
     override val state: AdapterState
         get() = when (ethereumKit.syncState) {

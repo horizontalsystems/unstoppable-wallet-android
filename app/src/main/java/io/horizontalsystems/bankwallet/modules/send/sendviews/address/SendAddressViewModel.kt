@@ -2,26 +2,18 @@ package io.horizontalsystems.bankwallet.modules.send.sendviews.address
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.SingleLiveEvent
-import java.math.BigDecimal
+import io.horizontalsystems.bankwallet.entities.Coin
 
-class SendAddressViewModel: ViewModel(), SendAddressModule.IView {
+class SendAddressViewModel : ViewModel(), SendAddressModule.IView {
 
     lateinit var delegate: SendAddressModule.IViewDelegate
 
     val addressTextLiveData = MutableLiveData<String?>()
-    val notifyMainViewModelOnAddressChangedLiveData = SingleLiveEvent<Unit>()
     val errorLiveData = MutableLiveData<Exception?>()
     val pasteButtonEnabledLiveData = MutableLiveData<Boolean>()
-    val amountLiveData = MutableLiveData<BigDecimal>()
-    val mainViewModelParseAddressLiveData = MutableLiveData<String>()
 
-    fun init() {
-        SendAddressModule.init(this)
-    }
-
-    override fun onAmountChange(amount: BigDecimal) {
-        amountLiveData.value = amount
+    fun init(coin: Coin, moduleDelegate: SendAddressModule.IAddressModuleDelegate?): SendAddressPresenter {
+        return SendAddressModule.init(this, coin, moduleDelegate)
     }
 
     override fun setAddress(address: String?) {
@@ -36,11 +28,4 @@ class SendAddressViewModel: ViewModel(), SendAddressModule.IView {
         pasteButtonEnabledLiveData.value = enabled
     }
 
-    override fun notifyMainViewModelAddressUpdated() {
-        notifyMainViewModelOnAddressChangedLiveData.call()
-    }
-
-    override fun parseAddressInMainViewModel(address: String) {
-        mainViewModelParseAddressLiveData.value = address
-    }
 }

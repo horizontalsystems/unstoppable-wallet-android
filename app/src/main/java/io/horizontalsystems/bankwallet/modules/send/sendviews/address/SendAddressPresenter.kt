@@ -1,66 +1,69 @@
 package io.horizontalsystems.bankwallet.modules.send.sendviews.address
 
-import io.horizontalsystems.bankwallet.entities.AddressError
-import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
-
 class SendAddressPresenter(private val interactor: SendAddressModule.IInteractor)
-    : SendAddressModule.IViewDelegate, SendAddressModule.IInteractorDelegate {
+    : SendAddressModule.IViewDelegate, SendAddressModule.IInteractorDelegate, SendAddressModule.IAddressModule {
 
-    var view: SendAddressViewModel? = null
-    private var address: String? = null
-    private var invalidAddressError: AddressError.InvalidPaymentAddress? = null
+    var view: SendAddressModule.IView? = null
+    var moduleDelegate: SendAddressModule.IAddressModuleDelegate? = null
 
-    override val validState: Boolean
-        get() {
-            return !address.isNullOrBlank() && invalidAddressError == null
+    // SendAddressModule.IAddressModule
+
+    override var address: String? = null
+        private set(value) {
+            moduleDelegate?.onUpdateAddress()
+            field = value
         }
+
+    override fun didScanQrCode(address: String) {
+        onAddressEnter(address)
+    }
+
+    // SendAddressModule.IViewDelegate
 
     override fun onViewDidLoad() {
         updatePasteButtonState()
     }
 
-    override fun getAddress(): String? {
-        return address
+    override fun onAddressScanClicked() {
+        moduleDelegate?.scanQrCode()
     }
 
-    override fun onAddressScan(address: String) {
-        onAddressEnter(address)
-    }
-
-    override fun onPasteButtonClick() {
+    override fun onAddressPasteClicked() {
         interactor.addressFromClipboard?.let {
             onAddressEnter(it)
         }
     }
 
-    override fun onAddressDeleteClick() {
-        onAddressChange(null)
+    override fun onAddressDeleteClicked() {
+        updateAddress(null)
         updatePasteButtonState()
     }
 
-    override fun onParsedAddress(parsedAddress: PaymentRequestAddress) {
-        parsedAddress.amount?.let {
-            view?.onAmountChange(it)
-        }
-
-        address = parsedAddress.address
-        onAddressChange(parsedAddress.address, parsedAddress.error)
-    }
-
     private fun onAddressEnter(address: String) {
-        view?.parseAddressInMainViewModel(address)
+        val (parsedAddress, amount) = interactor.parseAddress(address)
+
+        try {
+            moduleDelegate?.validate(parsedAddress)
+
+            updateAddress(parsedAddress, null)
+
+            amount?.let { parsedAmount ->
+                moduleDelegate?.onUpdateAmount(parsedAmount)
+            }
+        } catch (ex: Exception) {
+            updateAddress(parsedAddress, ex)
+        }
     }
 
-    private fun onAddressChange(address: String?, error: AddressError.InvalidPaymentAddress? = null) {
-        this.invalidAddressError = error
-        this.address = address
+    private fun updateAddress(address: String?, error: Exception? = null) {
         view?.setAddress(address)
         view?.setAddressError(error)
-        //update send button state
-        view?.notifyMainViewModelAddressUpdated()
+
+        this.address = address
     }
 
     private fun updatePasteButtonState() {
         view?.setPasteButtonState(interactor.clipboardHasPrimaryClip)
     }
+
 }

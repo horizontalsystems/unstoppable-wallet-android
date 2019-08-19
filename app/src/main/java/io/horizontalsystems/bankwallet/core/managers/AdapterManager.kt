@@ -63,7 +63,7 @@ class AdapterManager(
 
             wallets.forEach { wallet ->
                 if (!adaptersMap.containsKey(wallet)) {
-                    adapterFactory.adapterForCoin(wallet)?.let { adapter ->
+                    adapterFactory.adapter(wallet)?.let { adapter ->
                         adaptersMap[wallet] = adapter
                         adapterCreationSubject.onNext(wallet)
 

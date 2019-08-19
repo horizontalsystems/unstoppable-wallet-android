@@ -1,47 +1,62 @@
 package io.horizontalsystems.bankwallet.modules.send.sendviews.address
 
-import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import java.math.BigDecimal
 
 object SendAddressModule {
 
-    interface IView{
-        fun onAmountChange(amount: BigDecimal)
+    interface IView {
         fun setAddress(address: String?)
         fun setAddressError(error: Exception?)
         fun setPasteButtonState(enabled: Boolean)
-        fun notifyMainViewModelAddressUpdated()
-        fun parseAddressInMainViewModel(address: String)
     }
 
     interface IViewDelegate {
-        val validState: Boolean
-
         fun onViewDidLoad()
-        fun onAddressScan(address: String)
-        fun onPasteButtonClick()
-        fun onAddressDeleteClick()
-        fun onParsedAddress(parsedAddress: PaymentRequestAddress)
-        fun getAddress(): String?
+        fun onAddressPasteClicked()
+        fun onAddressDeleteClicked()
+        fun onAddressScanClicked()
     }
 
     interface IInteractor {
         val addressFromClipboard: String?
         val clipboardHasPrimaryClip: Boolean
+
+        fun parseAddress(address: String): Pair<String, BigDecimal?>
     }
 
-    interface IInteractorDelegate {
+    interface IInteractorDelegate
 
+    interface IAddressModule {
+        val address: String?
+
+        fun didScanQrCode(address: String)
     }
 
-    fun init(view: SendAddressViewModel) {
-        val interactor = SendAddressInteractor(TextHelper)
+    interface IAddressModuleDelegate {
+        fun validate(address: String)
+
+        fun onUpdateAddress()
+        fun onUpdateAmount(amount: BigDecimal)
+
+        fun scanQrCode()
+    }
+
+    fun init(view: SendAddressViewModel, coin: Coin, moduleDelegate: IAddressModuleDelegate?): SendAddressPresenter {
+        val addressParser = App.addressParserFactory.parser(coin)
+        val interactor = SendAddressInteractor(TextHelper, addressParser)
         val presenter = SendAddressPresenter(interactor)
 
         view.delegate = presenter
+
         presenter.view = view
+        presenter.moduleDelegate = moduleDelegate
+
         interactor.delegate = presenter
+
+        return presenter
     }
 
 }

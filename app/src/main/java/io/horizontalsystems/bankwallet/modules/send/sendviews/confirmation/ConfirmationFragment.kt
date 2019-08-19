@@ -24,7 +24,6 @@ class ConfirmationFragment : Fragment() {
     private var memoViewItem: ConfirmationMemoView? = null
     private var sendButtonView: ConfirmationSendButtonView? = null
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_confirmation, container, false)
     }
@@ -82,19 +81,15 @@ class ConfirmationFragment : Fragment() {
             context?.let {
                 sendButtonView = ConfirmationSendButtonView(it)
                 sendButtonView?.setOnClickListener {
-                    confirmationViewModel?.delegate?.onSendClick()
+                    confirmationViewModel?.delegate?.onSendClick(memoViewItem?.getMemo())
                 }
 
                 confirmationLinearLayout.addView(sendButtonView)
             }
         })
 
-        confirmationViewModel?.getMemo?.observe(viewLifecycleOwner, Observer {
-            confirmationViewModel?.delegate?.send(memoViewItem?.getMemo())
-        })
-
         confirmationViewModel?.sendWithMemo?.observe(viewLifecycleOwner, Observer { memo ->
-            sendViewModel?.delegate?.send(memo)
+            sendViewModel?.delegate?.onSendConfirmed(memo)
         })
 
         sendViewModel?.errorLiveData?.observe(viewLifecycleOwner, Observer { errorMsgTextRes ->

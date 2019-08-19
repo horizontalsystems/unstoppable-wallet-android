@@ -20,8 +20,7 @@ object SendConfirmationModule {
     interface IViewDelegate {
         fun onViewDidLoad()
         fun onReceiverClick()
-        fun onSendClick()
-        fun send(memo: String?)
+        fun onSendClick(memo: String?)
         fun onSendError()
     }
 

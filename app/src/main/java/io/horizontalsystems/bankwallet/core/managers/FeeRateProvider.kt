@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.core.IFeeRateProvider
 import io.horizontalsystems.feeratekit.FeeRate
 import io.horizontalsystems.feeratekit.FeeRateKit
 
-class FeeRateProvider(context: Context, appConfig: IAppConfigProvider) : IFeeRateProvider, FeeRateKit.Listener {
+class FeeRateProvider(context: Context, appConfig: IAppConfigProvider) : FeeRateKit.Listener {
 
     private val feeRateKit = FeeRateKit(
             infuraProjectId = appConfig.infuraProjectId,
@@ -16,19 +16,19 @@ class FeeRateProvider(context: Context, appConfig: IAppConfigProvider) : IFeeRat
             listener = this
     )
 
-    override fun ethereumGasPrice(priority: FeeRatePriority): Long {
+    fun ethereumGasPrice(priority: FeeRatePriority): Long {
         return feeRate(feeRateKit.ethereum(), priority)
     }
 
-    override fun bitcoinFeeRate(priority: FeeRatePriority): Long {
+    fun bitcoinFeeRate(priority: FeeRatePriority): Long {
         return feeRate(feeRateKit.bitcoin(), priority)
     }
 
-    override fun bitcoinCashFeeRate(priority: FeeRatePriority): Long {
+    fun bitcoinCashFeeRate(priority: FeeRatePriority): Long {
         return feeRate(feeRateKit.bitcoinCash(), priority)
     }
 
-    override fun dashFeeRate(priority: FeeRatePriority): Long {
+    fun dashFeeRate(priority: FeeRatePriority): Long {
         return feeRate(feeRateKit.dash(), priority)
     }
 
@@ -44,5 +44,29 @@ class FeeRateProvider(context: Context, appConfig: IAppConfigProvider) : IFeeRat
             FeeRatePriority.HIGH -> (feeRate.safeMedium() + feeRate.safeHigh()) / 2
             FeeRatePriority.HIGHEST -> feeRate.safeHigh()
         }
+    }
+}
+
+class BitcoinFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRateProvider {
+    override fun feeRate(priority: FeeRatePriority): Long {
+        return feeRateProvider.bitcoinFeeRate(priority)
+    }
+}
+
+class BitcoinCashFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRateProvider {
+    override fun feeRate(priority: FeeRatePriority): Long {
+        return feeRateProvider.bitcoinCashFeeRate(priority)
+    }
+}
+
+class EthereumFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRateProvider {
+    override fun feeRate(priority: FeeRatePriority): Long {
+        return feeRateProvider.ethereumGasPrice(priority)
+    }
+}
+
+class DashFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRateProvider {
+    override fun feeRate(priority: FeeRatePriority): Long {
+        return feeRateProvider.dashFeeRate(priority)
     }
 }

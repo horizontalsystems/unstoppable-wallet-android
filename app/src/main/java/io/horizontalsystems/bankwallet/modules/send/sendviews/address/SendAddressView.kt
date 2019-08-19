@@ -7,13 +7,18 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.send.SendViewModel
 import kotlinx.android.synthetic.main.view_address_input.view.*
 
 class SendAddressView : ConstraintLayout {
 
     init {
         inflate(context, R.layout.view_address_input, this)
+
+        btnBarcodeScan.visibility = View.VISIBLE
+        btnPaste.visibility = View.VISIBLE
+        btnDeleteAddress.visibility = View.GONE
+
+        invalidate()
     }
 
     constructor(context: Context) : super(context)
@@ -22,28 +27,14 @@ class SendAddressView : ConstraintLayout {
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    private lateinit var viewModel: SendAddressViewModel
-    private lateinit var lifecycleOwner: LifecycleOwner
+    constructor(context: Context, lifecycleOwner: LifecycleOwner, sendAddressViewModel: SendAddressViewModel) : super(context) {
+        val delegate = sendAddressViewModel.delegate
 
-    fun bindAddressInputInitial(viewModel: SendAddressViewModel,
-                                mainViewModel: SendViewModel,
-                                lifecycleOwner: LifecycleOwner,
-                                onBarcodeClick: (() -> (Unit))? = null
-    ) {
-        this.viewModel = viewModel
-        this.lifecycleOwner = lifecycleOwner
+        btnBarcodeScan.setOnClickListener { delegate.onAddressScanClicked() }
+        btnPaste?.setOnClickListener { delegate.onAddressPasteClicked() }
+        btnDeleteAddress?.setOnClickListener { delegate.onAddressDeleteClicked() }
 
-        btnBarcodeScan.visibility = View.VISIBLE
-        btnPaste.visibility = View.VISIBLE
-        btnDeleteAddress.visibility = View.GONE
-
-        btnBarcodeScan?.setOnClickListener { onBarcodeClick?.invoke() }
-        btnPaste?.setOnClickListener { viewModel.delegate.onPasteButtonClick() }
-        btnDeleteAddress?.setOnClickListener { viewModel.delegate.onAddressDeleteClick() }
-
-        invalidate()
-
-        viewModel.addressTextLiveData.observe(lifecycleOwner, Observer { address ->
+        sendAddressViewModel.addressTextLiveData.observe(lifecycleOwner, Observer { address ->
             txtAddress.text = address
 
             val empty = address?.isEmpty() ?: true
@@ -52,7 +43,7 @@ class SendAddressView : ConstraintLayout {
             btnDeleteAddress.visibility = if (empty) View.GONE else View.VISIBLE
         })
 
-        viewModel.errorLiveData.observe(lifecycleOwner, Observer { error ->
+        sendAddressViewModel.errorLiveData.observe(lifecycleOwner, Observer { error ->
             error?.let {
                 val errorText = context.getString(R.string.Send_Error_IncorrectAddress)
                 txtAddressError.visibility = View.VISIBLE
@@ -62,23 +53,10 @@ class SendAddressView : ConstraintLayout {
             }
         })
 
-        viewModel.pasteButtonEnabledLiveData.observe(lifecycleOwner, Observer { enabled ->
+        sendAddressViewModel.pasteButtonEnabledLiveData.observe(lifecycleOwner, Observer { enabled ->
             btnPaste.isEnabled = enabled
         })
 
-        viewModel.amountLiveData.observe(lifecycleOwner, Observer { amount ->
-            mainViewModel.delegate.onAmountChanged(amount)
-        })
-
-        viewModel.notifyMainViewModelOnAddressChangedLiveData.observe(lifecycleOwner, Observer {
-            mainViewModel.delegate.onAddressChanged()
-        })
-
-        viewModel.mainViewModelParseAddressLiveData.observe(lifecycleOwner, Observer { address ->
-            mainViewModel.delegate.parseAddress(address)
-        })
-
-        viewModel.delegate.onViewDidLoad()
     }
 
 }

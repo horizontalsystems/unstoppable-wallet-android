@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.sendviews.confirmation.SendConfirmationInfo
 
-class ConfirmationViewItemFactory {
+class SendConfirmationViewItemFactory {
 
     fun confirmationViewItem(
             inputType: SendModule.InputType,

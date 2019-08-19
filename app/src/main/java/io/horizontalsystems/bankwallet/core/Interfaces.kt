@@ -251,7 +251,14 @@ interface ISendAdapter {
     fun validate(params: Map<SendModule.AdapterFields, Any?>): List<SendStateError>
 
     fun parsePaymentAddress(address: String): PaymentRequestAddress
-    fun getFeeRate(feeRatePriority: FeeRatePriority): Long
+//    fun getFeeRate(feeRatePriority: FeeRatePriority): Long
+}
+
+interface ISendBitcoinAdapter {
+    fun availableBalance(feeRate: Long, address: String?): BigDecimal
+    fun fee(amount: BigDecimal, feeRate: Long, address: String?): BigDecimal
+    fun validate(address: String)
+    fun send(amount: BigDecimal, address: String, feeRate: Long): Single<Unit>
 }
 
 interface IAdapter {
@@ -367,10 +374,11 @@ interface IAppNumberFormatter {
 }
 
 interface IFeeRateProvider {
-    fun ethereumGasPrice(priority: FeeRatePriority): Long
-    fun bitcoinFeeRate(priority: FeeRatePriority): Long
-    fun bitcoinCashFeeRate(priority: FeeRatePriority): Long
-    fun dashFeeRate(priority: FeeRatePriority): Long
+    fun feeRate(priority: FeeRatePriority): Long
+}
+
+interface IAddressParser {
+    fun parse(paymentAddress: String): AddressData
 }
 
 sealed class SendStateError {

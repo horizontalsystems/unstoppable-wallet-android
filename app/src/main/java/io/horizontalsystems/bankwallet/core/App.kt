@@ -7,6 +7,8 @@ import com.squareup.leakcanary.LeakCanary
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
+import io.horizontalsystems.bankwallet.core.factories.AddressParserFactory
+import io.horizontalsystems.bankwallet.core.factories.FeeCoinProvider
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.core.security.KeyStoreManager
@@ -25,7 +27,7 @@ class App : Application() {
 
         lateinit var preferences: SharedPreferences
 
-        lateinit var feeRateProvider: IFeeRateProvider
+        lateinit var feeRateProvider: FeeRateProvider
         lateinit var secureStorage: ISecuredStorage
         lateinit var localStorage: ILocalStorage
         lateinit var keyStoreManager: IKeyStoreManager
@@ -66,6 +68,8 @@ class App : Application() {
         lateinit var eosKitManager: IEosKitManager
         lateinit var binanceKitManager: BinanceKitManager
         lateinit var numberFormatter: IAppNumberFormatter
+        lateinit var addressParserFactory: AddressParserFactory
+        lateinit var feeCoinProvider: FeeCoinProvider
 
         lateinit var instance: App
             private set
@@ -141,11 +145,14 @@ class App : Application() {
 
         networkAvailabilityManager = NetworkAvailabilityManager()
 
-        adapterManager = AdapterManager(walletManager, AdapterFactory(instance, appConfigProvider, ethereumKitManager, eosKitManager, binanceKitManager, feeRateProvider), ethereumKitManager, eosKitManager, binanceKitManager)
+        adapterManager = AdapterManager(walletManager, AdapterFactory(instance, appConfigProvider, ethereumKitManager, eosKitManager, binanceKitManager), ethereumKitManager, eosKitManager, binanceKitManager)
         rateSyncer = RateSyncer(rateManager, walletManager, currencyManager, networkAvailabilityManager)
 
         transactionDataProviderManager = TransactionDataProviderManager(appConfigProvider, localStorage)
         transactionInfoFactory = FullTransactionInfoFactory(networkManager, transactionDataProviderManager)
+
+        addressParserFactory = AddressParserFactory()
+        feeCoinProvider = FeeCoinProvider(appConfigProvider)
 
     }
 

@@ -1,98 +1,79 @@
 package io.horizontalsystems.bankwallet.modules.send
 
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.FeeRatePriority
-import io.horizontalsystems.bankwallet.core.SendStateError
-import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.PaymentRequestAddress
+import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.send.sendviews.address.SendAddressModule
+import io.horizontalsystems.bankwallet.modules.send.sendviews.amount.SendAmountModule
 import io.horizontalsystems.bankwallet.modules.send.sendviews.confirmation.SendConfirmationInfo
+import io.horizontalsystems.bankwallet.modules.send.sendviews.fee.SendFeeModule
 import java.math.BigDecimal
 
 object SendModule {
 
     interface IView {
-        fun setSendButtonEnabled(sendButtonEnabled: Boolean)
-        fun showConfirmation(viewItem: SendConfirmationInfo)
-        fun showError(error: Int)
-        fun dismissWithSuccess()
-
-        fun onAvailableBalanceRetrieved(availableBalance: BigDecimal)
-        fun onAddressParsed(parsedAddress: PaymentRequestAddress)
-        fun getParamsForAction(paramsAction: ParamsAction)
-        fun onValidationError(error: SendStateError.InsufficientAmount)
-        fun onAmountValidationSuccess()
-        fun onFeeUpdated(fee: BigDecimal)
-        fun onInputTypeUpdated(inputType: InputType?)
-        fun onInsufficientFeeBalance(fee: BigDecimal)
-        fun getValidStatesFromModules()
         fun loadInputItems(inputs: List<Input>)
+        fun setSendButtonEnabled(enabled: Boolean)
+        fun showConfirmation(viewItem: SendConfirmationInfo)
+        fun dismissWithSuccess()
+        fun showError(error: Int)
     }
 
     interface IViewDelegate {
+        var amountModule: SendAmountModule.IAmountModule
+        var addressModule: SendAddressModule.IAddressModule
+        var feeModule: SendFeeModule.IFeeModule
+
         fun onViewDidLoad()
-        fun onAmountChanged(coinAmount: BigDecimal?)
-        fun onAddressChanged()
+        fun onModulesDidLoad()
+        fun onAddressScan(address: String)
         fun onSendClicked()
-
-        fun onGetAvailableBalance()
-        fun onConfirmClicked()
+        fun onSendConfirmed(memo: String?)
         fun onClear()
-        fun parseAddress(address: String)
-        fun onParamsFetchedForAction(params: Map<AdapterFields, Any?>, paramsAction: ParamsAction)
-        fun onFeePriorityChange(feeRatePriority: FeeRatePriority)
-        fun onInputTypeUpdated(inputType: InputType?)
-        fun onValidStatesFetchedFromModules(validStates: MutableList<Boolean>)
-        fun send(memo: String?)
     }
 
-    interface IInteractor {
-        val coin: Coin
-        fun parsePaymentAddress(address: String): PaymentRequestAddress
-        fun send(params: Map<AdapterFields, Any?>)
-        fun getAvailableBalance(params: Map<AdapterFields, Any?>): BigDecimal
+    interface ISendBitcoinInteractor {
+        fun fetchAvailableBalance(feeRate: Long, address: String?)
+        fun fetchFee(amount: BigDecimal, feeRate: Long, address: String?)
+        fun validate(address: String)
+        fun send(amount: BigDecimal, address: String, feeRate: Long)
         fun clear()
-        fun validate(params: Map<AdapterFields, Any?>)
-        fun updateFee(params: Map<AdapterFields, Any?>)
     }
 
-    interface IInteractorDelegate {
+    interface ISendBitcoinInteractorDelegate {
+        fun didFetchAvailableBalance(availableBalance: BigDecimal)
+        fun didFetchFee(fee: BigDecimal)
         fun didSend()
-        fun showError(error: Throwable)
-        fun onValidationComplete(errorList: List<SendStateError>)
-        fun onFeeUpdated(fee: BigDecimal)
+        fun didFailToSend(error: Throwable)
     }
 
-    fun init(view: SendViewModel, coinCode: String) {
-        TODO()
-//        val adapter = App.adapterManager.adapters.first { it.wallet.coin.code == coinCode }
-//        val interactor = SendInteractor(adapter)
-//        val confirmationFactory = ConfirmationViewItemFactory()
-//
-//        when (adapter) {
-//            is EosAdapter -> {
-//                val presenter = SendEosPresenter(interactor, confirmationFactory)
-//
-//                view.delegate = presenter
-//                presenter.view = view
-//                interactor.delegate = presenter
-//            }
-//            is BinanceAdapter -> {
-//                val presenter = SendBinancePresenter(interactor, confirmationFactory)
-//
-//                view.delegate = presenter
-//                presenter.view = view
-//                interactor.delegate = presenter
-//            }
-//            else -> {
-//                val presenter = SendPresenter(interactor, confirmationFactory)
-//
-//                view.delegate = presenter
-//                presenter.view = view
-//                interactor.delegate = presenter
-//            }
-//        }
+    interface IRouter {
+        fun scanQrCode()
+    }
+
+    fun init(view: SendViewModel, wallet: Wallet): IViewDelegate {
+        return when (val adapter = App.adapterManager.getAdapterForWallet(wallet)) {
+            is ISendBitcoinAdapter -> {
+                val interactor = SendBitcoinInteractor(adapter as ISendBitcoinAdapter)
+                val presenter = SendBitcoinPresenter(interactor, view, SendConfirmationViewItemFactory())
+
+                presenter.view = view
+                interactor.delegate = presenter
+
+                view.amountModuleDelegate = presenter
+                view.addressModuleDelegate = presenter
+                view.feeModuleDelegate = presenter
+
+                view.delegate = presenter
+
+                presenter
+            }
+            else -> {
+                throw Exception("No adapter found!")
+            }
+        }
     }
 
     enum class InputType {
@@ -104,14 +85,10 @@ object SendModule {
     }
 
     sealed class Input {
-        object Amount: Input()
-        object Address: Input()
-        class Fee(val isAdjustable: Boolean): Input()
-        object SendButton: Input()
-    }
-
-    enum class ParamsAction {
-        UpdateModules, AvailableBalance, ShowConfirm, Send
+        object Amount : Input()
+        object Address : Input()
+        class Fee(val isAdjustable: Boolean) : Input()
+        object SendButton : Input()
     }
 
     sealed class AmountInfo {

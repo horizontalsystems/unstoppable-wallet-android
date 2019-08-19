@@ -1,6 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.send.sendviews.fee
 
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
+import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Rate
@@ -10,31 +13,19 @@ import java.math.BigDecimal
 
 object SendFeeModule {
 
-    interface IView{
-        fun onFeePriorityChange(feeRatePriority: FeeRatePriority)
+    interface IView {
         fun setPrimaryFee(feeAmount: String?)
         fun setSecondaryFee(feeAmount: String?)
         fun setInsufficientFeeBalanceError(feeCoinValue: CoinValue)
     }
 
     interface IViewDelegate {
-        val coinCode: String
-        val baseCoinName: String
-        val tokenProtocol: String
-        val validState: Boolean
-
         fun onViewDidLoad()
         fun onFeeSliderChange(progress: Int)
-        fun onFeeUpdated(fee: BigDecimal?)
-        fun onInputTypeUpdated(inputType: SendModule.InputType)
-        fun getFeeRate(): Long
-        fun onInsufficientFeeBalanceError(fee: BigDecimal)
-        fun getFeeCoinValue(): CoinValue
-        fun getFeeCurrencyValue(): CurrencyValue?
     }
 
     interface IInteractor {
-        fun getRate(coinCode: String, currencyCode: String)
+        fun getRate(coinCode: String)
         fun getFeeRate(feeRatePriority: FeeRatePriority): Long
     }
 
@@ -42,36 +33,39 @@ object SendFeeModule {
         fun onRateFetched(latestRate: Rate?)
     }
 
-    fun init(view: SendFeeViewModel, coinCode: String) {
-        TODO()
-//        val adapter = App.adapterManager.adapters.first { it.wallet.coin.code == coinCode }
-//        val feeCoinCode = adapter.feeCoinCode ?: coinCode
-//        val baseCurrency = App.currencyManager.baseCurrency
-//        val baseCoinName = getBaseCoinName(adapter)
-//        val tokenProtocol = getTokenProtocol(adapter)
-//        val helper = SendFeePresenterHelper(App.numberFormatter, feeCoinCode, baseCurrency)
-//        val interactor = SendFeeInteractor(App.rateStorage, adapter)
-//        val presenter = SendFeePresenter(interactor, helper, coinCode, feeCoinCode, baseCurrency, baseCoinName, tokenProtocol)
-//
-//        view.delegate = presenter
-//        presenter.view = view
-//        interactor.delegate = presenter
+    interface IFeeModule {
+        val feeRate: Long
+
+        val coinValue: CoinValue
+        val currencyValue: CurrencyValue?
+
+        fun setFee(fee: BigDecimal)
+        fun setInputType(inputType: SendModule.InputType)
     }
 
-//    private fun getBaseCoinName(adapter: IAdapter): String {
-//        return when(adapter) {
-//            is BinanceAdapter -> "Binance"
-//            is Erc20Adapter -> "Ethereum"
-//            else -> adapter.wallet.coin.title
-//        }
-//    }
+    interface IFeeModuleDelegate {
+        fun onFeePriorityChange(feeRatePriority: FeeRatePriority)
+    }
 
-//    private fun getTokenProtocol(adapter: IAdapter): String {
-//        return when(adapter) {
-//            is BinanceAdapter -> "BEP2"
-//            is Erc20Adapter -> "ERC20"
-//            else -> ""
-//        }
-//    }
+    fun init(view: SendFeeViewModel, coin: Coin, moduleDelegate: IFeeModuleDelegate?): IFeeModule {
+        val feeRateProvider = FeeRateProviderFactory.provider(coin)
+                ?: throw Exception("No FeeRateProvider")
+        val feeCoinData = App.feeCoinProvider.feeCoinData(coin)
+        val feeCoinCode = (feeCoinData?.first ?: coin).code
+
+        val baseCurrency = App.currencyManager.baseCurrency
+        val helper = SendFeePresenterHelper(App.numberFormatter, feeCoinCode, baseCurrency)
+        val interactor = SendFeeInteractor(App.rateStorage, feeRateProvider, App.currencyManager)
+        val presenter = SendFeePresenter(interactor, helper, coin, baseCurrency, feeCoinData)
+
+        view.delegate = presenter
+
+        presenter.view = view
+        presenter.moduleDelegate = moduleDelegate
+
+        interactor.delegate = presenter
+
+        return presenter
+    }
 
 }

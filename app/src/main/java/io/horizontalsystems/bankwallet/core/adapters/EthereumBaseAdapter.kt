@@ -16,8 +16,7 @@ import java.math.RoundingMode
 abstract class EthereumBaseAdapter(
         protected val ethereumKit: EthereumKit,
         final override val decimal: Int,
-        private val addressParser: AddressParser,
-        protected val feeRateProvider: IFeeRateProvider) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, ISendAdapter {
+        private val addressParser: AddressParser) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, ISendAdapter {
 
     override val confirmationsThreshold: Int = 12
 
@@ -54,10 +53,6 @@ abstract class EthereumBaseAdapter(
 
     override fun validate(address: String) {
         ethereumKit.validateAddress(address)
-    }
-
-    override fun getFeeRate(feeRatePriority: FeeRatePriority): Long {
-        return feeRateProvider.ethereumGasPrice(feeRatePriority)
     }
 
     override fun parsePaymentAddress(address: String): PaymentRequestAddress {

@@ -88,10 +88,6 @@ class BinanceAdapter(
         return transferFee
     }
 
-    override fun getFeeRate(feeRatePriority: FeeRatePriority): Long {
-        return 0L
-    }
-
     override fun validate(address: String) {
         binanceKit.validateAddress(address)
     }

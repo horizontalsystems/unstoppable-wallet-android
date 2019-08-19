@@ -1,8 +1,9 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import android.content.Context
-import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.core.utils.AddressParser
+import io.horizontalsystems.bankwallet.core.AdapterState
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
@@ -18,11 +19,10 @@ import io.reactivex.Single
 import java.math.BigDecimal
 import java.util.*
 
-class BitcoinAdapter(override val kit: BitcoinKit, addressParser: AddressParser, private val feeRateProvider: IFeeRateProvider)
-    : BitcoinBaseAdapter(kit, addressParser), BitcoinKit.Listener {
+class BitcoinAdapter(override val kit: BitcoinKit)
+    : BitcoinBaseAdapter(kit), BitcoinKit.Listener {
 
-    constructor(wallet: Wallet, testMode: Boolean, feeRateProvider: IFeeRateProvider) :
-            this(createKit(wallet, testMode), AddressParser("bitcoin", true), feeRateProvider)
+    constructor(wallet: Wallet, testMode: Boolean) : this(createKit(wallet, testMode))
 
     init {
         kit.listener = this
@@ -35,10 +35,6 @@ class BitcoinAdapter(override val kit: BitcoinKit, addressParser: AddressParser,
     override val receiveScriptType = ScriptType.P2WPKHSH
     override val changeScriptType = ScriptType.P2WPKH
     override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
-
-    override fun getFeeRate(feeRatePriority: FeeRatePriority): Long {
-        return feeRateProvider.bitcoinFeeRate(feeRatePriority)
-    }
 
     //
     // BitcoinKit Listener

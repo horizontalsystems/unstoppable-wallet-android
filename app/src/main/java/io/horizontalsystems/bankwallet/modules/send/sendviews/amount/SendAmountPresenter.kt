@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.send.sendviews.amount
 
-import io.horizontalsystems.bankwallet.core.SendStateError
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -15,133 +14,165 @@ class SendAmountPresenter(
         private val presenterHelper: SendAmountPresenterHelper,
         private val coinCode: String,
         private val baseCurrency: Currency)
-    : SendAmountModule.IViewDelegate, SendAmountModule.IInteractorDelegate {
+    : SendAmountModule.IViewDelegate, SendAmountModule.IInteractorDelegate, SendAmountModule.IAmountModule {
 
-    var view: SendAmountViewModel? = null
+    var view: SendAmountModule.IView? = null
+    var moduleDelegate: SendAmountModule.IAmountModuleDelegate? = null
 
-    private var coinAmount: BigDecimal? = null
+    private var amount: BigDecimal? = null
+    private var availableBalance: BigDecimal? = null
     private var rate: Rate? = null
-    private var error: SendStateError.InsufficientAmount? = null
-    private var inputType = SendModule.InputType.COIN
 
-    override val validState: Boolean
+    // SendAmountModule.IAmountModule
+
+    override var inputType = SendModule.InputType.COIN
+        private set
+
+    override val coinAmount: CoinValue
+        get() = CoinValue(coinCode, amount ?: BigDecimal.ZERO)
+
+    override val fiatAmount: CurrencyValue?
         get() {
-            return (coinAmount ?: BigDecimal.ZERO) > BigDecimal.ZERO && error == null
+            val currencyAmount = rate?.let { amount?.times(it.value) }
+            return currencyAmount?.let { CurrencyValue(baseCurrency, it) }
         }
+
+    override val validAmount: BigDecimal?
+        get() {
+            val amount = this.amount ?: return null
+            val availableBalance = this.availableBalance ?: return null
+
+            if (availableBalance < amount) {
+                return null
+            }
+
+            return amount
+        }
+
+    override fun setAmount(amount: BigDecimal) {
+        this.amount = amount
+
+        syncAmount()
+        syncHint()
+        syncMaxButton()
+        syncError()
+
+        moduleDelegate?.onChangeAmount()
+    }
+
+    override fun setAvailableBalance(availableBalance: BigDecimal) {
+        this.availableBalance = availableBalance
+
+        syncError()
+    }
+
+    // SendModule.IViewDelegate
 
     override fun onViewDidLoad() {
         interactor.retrieveRate()
         view?.addTextChangeListener()
-        updateAmount()
-        updateSwitchButtonState()
-    }
 
-    override fun getCoinValue(): CoinValue? {
-        return CoinValue(coinCode, coinAmount ?: BigDecimal.ZERO)
-    }
-
-    override fun getCurrencyValue(): CurrencyValue? {
-        val currencyAmount = rate?.let { coinAmount?.times(it.value) }
-        return currencyAmount?.let { CurrencyValue(baseCurrency, it) }
-    }
-
-    override fun getInputType(): SendModule.InputType {
-        return inputType
-    }
-
-    override fun onMaxClick() {
-        view?.getAvailableBalance()
+        syncAmountType()
+        syncSwitchButton()
+        syncHint()
     }
 
     override fun onSwitchClick() {
         view?.removeTextChangeListener()
-        val newInputType = when (inputType) {
+
+        inputType = when (inputType) {
             SendModule.InputType.CURRENCY -> SendModule.InputType.COIN
             else -> SendModule.InputType.CURRENCY
         }
-        inputType = newInputType
-        interactor.defaultInputType = newInputType
+        interactor.defaultInputType = inputType
+        moduleDelegate?.onChangeInputType(inputType)
 
-        updateAmount()
+        syncAmountType()
+        syncAmount()
+        syncHint()
+        syncError()
+
         view?.addTextChangeListener()
-        view?.onInputTypeChanged(inputType)
-
-        updateError()
     }
 
     override fun onAmountChange(amountString: String) {
-        updateMaxButtonVisibility(amountString.isEmpty())
-
-        val amount = parseInput(amountString)
+        val amount = amountString.toBigDecimalOrNull()
         val decimal = presenterHelper.decimal(inputType)
-        if(amount.scale() > decimal) {
-            onNumberScaleExceeded(amount, decimal)
+
+        if (amount != null && amount.scale() > decimal) {
+            val amountNumber = amount.setScale(decimal, RoundingMode.FLOOR)
+            val revertedInput = amountNumber.toPlainString()
+            view?.revertAmount(revertedInput)
         } else {
-            coinAmount = presenterHelper.getCoinAmount(amount, inputType, rate)
-            view?.setHint(presenterHelper.getHint(coinAmount, inputType, rate))
-            view?.notifyMainViewModelOnAmountChange(coinAmount)
+            this.amount = presenterHelper.getCoinAmount(amount, inputType, rate)
+
+            syncHint()
+            syncMaxButton()
+            syncError()
+
+            moduleDelegate?.onChangeAmount()
         }
+    }
+
+    override fun onMaxClick() {
+        amount = availableBalance
+
+        syncAmount()
+        syncHint()
+        syncMaxButton()
+        syncError()
+
+        moduleDelegate?.onChangeAmount()
     }
 
     override fun didRateRetrieve(rate: Rate?) {
         this.rate = rate
+
         rate?.let {
             inputType = interactor.defaultInputType
-            view?.onInputTypeChanged(inputType)
-            updateSwitchButtonState()
+
+            moduleDelegate?.onChangeInputType(inputType)
+            syncSwitchButton()
         }
-        updateAmount()
+
+        syncAmountType()
+        syncAmount()
+        syncHint()
     }
 
-    override fun onAvailableBalanceRetrieved(availableBalance: BigDecimal) {
-        coinAmount = availableBalance
-        updateAmount()
+    private fun syncAmount() {
+        val amount = presenterHelper.getAmount(amount, inputType, rate)
+        view?.setAmount(amount)
     }
 
-    override fun onValidationError(error: SendStateError.InsufficientAmount) {
-        this.error = error
-        updateError()
+    private fun syncAmountType() {
+        val prefix = presenterHelper.getAmountPrefix(inputType, rate)
+        view?.setAmountType(prefix)
     }
 
-    override fun onValidationSuccess() {
-        error = null
-        view?.setHintErrorBalance(null)
+    private fun syncHint() {
+        val hint = presenterHelper.getHint(this.amount, inputType, rate)
+        view?.setHint(hint)
     }
 
-    private fun updateSwitchButtonState() {
+    private fun syncMaxButton() {
+        val visible = amount?.let { it == BigDecimal.ZERO } ?: true
+        view?.setMaxButtonVisible(visible)
+    }
+
+    private fun syncSwitchButton() {
         view?.setSwitchButtonEnabled(rate != null)
     }
 
-    private fun updateError() {
-        val hintErrorBalance = error?.balance?.let { presenterHelper.getBalanceForHintError(inputType, it, rate) }
-        view?.setHintErrorBalance(hintErrorBalance)
-    }
+    private fun syncError() {
+        val amount = this.amount ?: return
+        val availableBalance = this.availableBalance ?: return
 
-    private fun onNumberScaleExceeded(amount: BigDecimal, decimal: Int) {
-        val amountNumber = amount.setScale(decimal, RoundingMode.FLOOR)
-        val revertedInput = amountNumber.toPlainString()
-        view?.revertInput(revertedInput)
-    }
-
-    private fun updateMaxButtonVisibility(empty: Boolean) {
-        view?.setMaxButtonVisible(empty)
-    }
-
-    private fun parseInput(amountString: String): BigDecimal {
-        return when {
-            amountString != "" -> amountString.toBigDecimalOrNull() ?: BigDecimal.ZERO
-            else -> { BigDecimal.ZERO }
+        if (availableBalance < amount) {
+            view?.setHintErrorBalance(presenterHelper.getBalanceForHintError(inputType, availableBalance, rate))
+        } else {
+            view?.setHintErrorBalance(null)
         }
-    }
-
-    private fun updateAmount() {
-        val amount = presenterHelper.getAmount(coinAmount, inputType, rate)
-        val hint = presenterHelper.getHint(coinAmount, inputType, rate)
-        val prefix = presenterHelper.getAmountPrefix(inputType, rate)
-
-        view?.setAmountPrefix(prefix)
-        view?.setAmount(amount)
-        view?.setHint(hint)
     }
 
 }

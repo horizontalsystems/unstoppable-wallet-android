@@ -1,15 +1,16 @@
 package io.horizontalsystems.bankwallet.core.utils
 
+import io.horizontalsystems.bankwallet.core.IAddressParser
 import io.horizontalsystems.bankwallet.entities.AddressData
 
 
-class AddressParser(private val validScheme: String, private val removeScheme: Boolean) {
+class AddressParser(private val validScheme: String, private val removeScheme: Boolean) : IAddressParser {
     private val parameterVersion = "version"
     private val parameterAmount = "amount"
     private val parameterLabel = "label"
     private val parameterMessage = "message"
 
-    fun parse(paymentAddress: String): AddressData {
+    override fun parse(paymentAddress: String): AddressData {
         var parsedString = paymentAddress
         val address: String
 
@@ -31,7 +32,7 @@ class AddressParser(private val validScheme: String, private val removeScheme: B
         }
 
         // check exist params
-        val versionSeparatedParts = parsedString.split(";","?")
+        val versionSeparatedParts = parsedString.split(";", "?")
 
         if (versionSeparatedParts.size < 2) {
             address = parsedString
@@ -45,15 +46,15 @@ class AddressParser(private val validScheme: String, private val removeScheme: B
             val parts = parameter.split("=")
             if (parts.size == 2) {
                 when (parts[0]) {
-                    parameterVersion -> version = parts [1]
-                    parameterAmount-> {
+                    parameterVersion -> version = parts[1]
+                    parameterAmount -> {
                         try {
                             amount = parts[1].toDouble()
                         } catch (e: NumberFormatException) {
                             //invalid data
                         }
                     }
-                    parameterLabel -> label = parts [1]
+                    parameterLabel -> label = parts[1]
                     parameterMessage -> message = parts[1]
                     else -> parameters[parts[0]] = parts[1]
                 }

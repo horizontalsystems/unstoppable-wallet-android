@@ -11,115 +11,126 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.send.SendViewModel
-import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.view_amount_input.view.*
 
 class SendAmountView : ConstraintLayout {
 
+    private var delegate: SendAmountModule.IViewDelegate? = null
+
     init {
         inflate(context, R.layout.view_amount_input, this)
+
+        btnSwitch.visibility = View.VISIBLE
+        btnMax.visibility = View.VISIBLE
+        btnSwitch.imageTintMode = PorterDuff.Mode.SRC_IN
+
+        invalidate()
     }
 
     constructor(context: Context) : super(context)
+
+    constructor(context: Context, lifecycleOwner: LifecycleOwner, sendAmountViewModel: SendAmountViewModel) : super(context) {
+
+        delegate = sendAmountViewModel.delegate
+
+        btnMax.setOnClickListener { delegate?.onMaxClick() }
+
+        btnSwitch.setOnClickListener { delegate?.onSwitchClick() }
+
+        delegate?.onViewDidLoad()
+
+        sendAmountViewModel.amountInputPrefixLiveData.observe(lifecycleOwner, Observer { prefix ->
+            setPrefix(prefix)
+        })
+
+        sendAmountViewModel.amountLiveData.observe(lifecycleOwner, Observer { amount ->
+            setAmount(amount)
+        })
+
+        sendAmountViewModel.hintLiveData.observe(lifecycleOwner, Observer { hint ->
+            setHint(hint)
+        })
+
+        sendAmountViewModel.maxButtonVisibleValueLiveData.observe(lifecycleOwner, Observer { visible ->
+            setMaxButtonVisibility(visible)
+        })
+
+        sendAmountViewModel.addTextChangeListenerLiveEvent.observe(lifecycleOwner, Observer {
+            enableAmountChangeListener()
+        })
+
+        sendAmountViewModel.removeTextChangeListenerLiveEvent.observe(lifecycleOwner, Observer {
+            removeAmountChangeListener()
+        })
+
+        sendAmountViewModel.revertAmountLiveEvent.observe(lifecycleOwner, Observer { amount ->
+            revertAmount(amount)
+        })
+
+        sendAmountViewModel.hintErrorBalanceLiveData.observe(lifecycleOwner, Observer { hintErrorBalance ->
+            setBalanceError(hintErrorBalance)
+        })
+
+        sendAmountViewModel.switchButtonEnabledLiveData.observe(lifecycleOwner, Observer { enabled ->
+            enableCurrencySwitch(enabled)
+        })
+    }
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    private lateinit var viewModel: SendAmountViewModel
-    private lateinit var sendViewModel: SendViewModel
-    private lateinit var lifecycleOwner: LifecycleOwner
-    private var decimalSize: Int? = null
-    private var disposable: Disposable? = null
-
-    override fun onDetachedFromWindow() {
-        disposable?.dispose()
-        super.onDetachedFromWindow()
+    private fun setPrefix(prefix: String?) {
+        topAmountPrefix.text = prefix
     }
 
-    fun bindInitial(viewModel: SendAmountViewModel, mainViewModel: SendViewModel, lifecycleOwner: LifecycleOwner, decimalSize: Int?) {
-        this.viewModel = viewModel
-        this.sendViewModel = mainViewModel
-        this.lifecycleOwner = lifecycleOwner
-        this.decimalSize = decimalSize
-
-        btnSwitch.visibility = View.VISIBLE
-        btnMax.visibility = View.VISIBLE
-
-        btnMax?.setOnClickListener { viewModel.delegate.onMaxClick() }
-        btnSwitch?.setOnClickListener { viewModel.delegate.onSwitchClick() }
-        btnSwitch.imageTintMode = PorterDuff.Mode.SRC_IN
-        invalidate()
-
-        viewModel.delegate.onViewDidLoad()
-
-        observeViewModel()
+    private fun setAmount(amount: String) {
+        editTxtAmount.setText(amount)
+        editTxtAmount.setSelection(editTxtAmount.text.length)
     }
 
-    private fun observeViewModel() {
-        viewModel.amountInputPrefixLiveData.observe(lifecycleOwner, Observer { prefix ->
-            topAmountPrefix.text = prefix
-        })
+    private fun setHint(hint: String?) {
+        txtHintInfo.text = hint
+    }
 
-        viewModel.amountLiveData.observe(lifecycleOwner, Observer { amount ->
-            editTxtAmount.setText(amount)
-            editTxtAmount.setSelection(editTxtAmount.text.length)
-        })
+    private fun setMaxButtonVisibility(visible: Boolean) {
+        btnMax.visibility = if (visible) View.VISIBLE else View.GONE
+    }
 
-        viewModel.hintLiveData.observe(lifecycleOwner, Observer { txtHintInfo.text = it })
+    private fun enableAmountChangeListener() {
+        editTxtAmount.addTextChangedListener(textChangeListener)
+    }
 
-        viewModel.maxButtonVisibleValueLiveData.observe(lifecycleOwner, Observer { visible ->
-            btnMax?.visibility = if (visible) View.VISIBLE else View.GONE
-        })
+    private fun removeAmountChangeListener() {
+        editTxtAmount.removeTextChangedListener(textChangeListener)
+    }
 
-        viewModel.addTextChangeListenerLiveEvent.observe(lifecycleOwner, Observer {
-            editTxtAmount.addTextChangedListener(textChangeListener)
-        })
+    private fun revertAmount(amount: String) {
+        editTxtAmount.setText(amount)
+        editTxtAmount.setSelection(amount.length)
+        val shake = AnimationUtils.loadAnimation(context, R.anim.shake_edittext)
+        editTxtAmount.startAnimation(shake)
+    }
 
-        viewModel.removeTextChangeListenerLiveEvent.observe(lifecycleOwner, Observer {
-            editTxtAmount.removeTextChangedListener(textChangeListener)
-        })
+    private fun setBalanceError(balanceError: String?) {
+        txtHintError.visibility = if (balanceError == null) View.GONE else View.VISIBLE
+        txtHintInfo.visibility = if (balanceError == null) View.VISIBLE else View.GONE
 
-        viewModel.revertInputLiveEvent.observe(lifecycleOwner, Observer { revertedInput ->
-            editTxtAmount.setText(revertedInput)
-            editTxtAmount.setSelection(revertedInput.length)
-            val shake = AnimationUtils.loadAnimation(context, R.anim.shake_edittext)
-            editTxtAmount.startAnimation(shake)
-        })
+        val errorText: String? = balanceError?.let {
+            context.getString(R.string.Send_Error_BalanceAmount, it)
+        }
 
-        viewModel.getAvailableBalanceLiveEvent.observe(lifecycleOwner, Observer {
-            sendViewModel.delegate.onGetAvailableBalance()
-        })
+        txtHintError.text = errorText
+    }
 
-        viewModel.notifyMainViewModelOnAmountChangeLiveData.observe(lifecycleOwner, Observer { coinAmount ->
-            sendViewModel.delegate.onAmountChanged(coinAmount)
-        })
-
-        viewModel.hintErrorBalanceLiveData.observe(lifecycleOwner, Observer { hintErrorBalance ->
-            txtHintError.visibility = if (hintErrorBalance == null) View.GONE else View.VISIBLE
-            txtHintInfo.visibility = if (hintErrorBalance == null) View.VISIBLE else View.GONE
-
-            val errorText: String? = hintErrorBalance?.let {
-                context.getString(R.string.Send_Error_BalanceAmount, it)
-            }
-
-            txtHintError.text = errorText
-        })
-
-        viewModel.switchButtonEnabledLiveData.observe(lifecycleOwner, Observer { enabled ->
-            btnSwitch.isEnabled = enabled
-        })
-
-        viewModel.inputTypeChangedLiveData.observe(lifecycleOwner, Observer { inputType ->
-            sendViewModel.delegate.onInputTypeUpdated(inputType)
-        })
+    private fun enableCurrencySwitch(enabled: Boolean) {
+        btnSwitch.isEnabled = enabled
     }
 
     private val textChangeListener = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
             val amountText = s?.toString() ?: ""
-            viewModel.delegate.onAmountChange(amountText)
+            delegate?.onAmountChange(amountText)
         }
 
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}

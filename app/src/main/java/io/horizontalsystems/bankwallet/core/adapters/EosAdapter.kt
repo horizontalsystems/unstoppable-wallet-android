@@ -79,10 +79,6 @@ class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit) : IAdapter, ITra
         return BigDecimal.ZERO
     }
 
-    override fun getFeeRate(feeRatePriority: FeeRatePriority): Long {
-        return 0L
-    }
-
     override fun availableBalance(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
         return balance
     }

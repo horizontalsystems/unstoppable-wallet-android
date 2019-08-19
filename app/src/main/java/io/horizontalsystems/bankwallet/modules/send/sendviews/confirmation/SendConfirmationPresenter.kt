@@ -42,16 +42,8 @@ class SendConfirmationPresenter(
         view?.showCopied()
     }
 
-    override fun onSendClick() {
+    override fun onSendClick(memo: String?) {
         view?.setSendButtonState(SendConfirmationModule.SendButtonState.SENDING)
-        if (confirmationInfo.showMemo) {
-            view?.getMemo()
-        } else {
-            view?.send()
-        }
-    }
-
-    override fun send(memo: String?) {
         view?.send(memo)
     }
 

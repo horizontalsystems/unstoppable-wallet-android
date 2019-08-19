@@ -3,31 +3,27 @@ package io.horizontalsystems.bankwallet.modules.send.sendviews.amount
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
-import io.horizontalsystems.bankwallet.modules.send.SendModule
-import java.math.BigDecimal
+import io.horizontalsystems.bankwallet.entities.Wallet
 
-class SendAmountViewModel: ViewModel(), SendAmountModule.IView {
+class SendAmountViewModel : ViewModel(), SendAmountModule.IView {
 
     lateinit var delegate: SendAmountModule.IViewDelegate
 
-    val amountInputPrefixLiveData = MutableLiveData<String>()
+    val amountInputPrefixLiveData = MutableLiveData<String?>()
     val amountLiveData = MutableLiveData<String>()
     val hintLiveData = MutableLiveData<String?>()
     val maxButtonVisibleValueLiveData = MutableLiveData<Boolean>()
     val addTextChangeListenerLiveEvent = SingleLiveEvent<Unit>()
     val removeTextChangeListenerLiveEvent = SingleLiveEvent<Unit>()
-    val revertInputLiveEvent = SingleLiveEvent<String>()
-    val getAvailableBalanceLiveEvent = SingleLiveEvent<Unit>()
-    val notifyMainViewModelOnAmountChangeLiveData = MutableLiveData<BigDecimal>()
+    val revertAmountLiveEvent = SingleLiveEvent<String>()
     val hintErrorBalanceLiveData = MutableLiveData<String?>()
     val switchButtonEnabledLiveData = MutableLiveData<Boolean>()
-    val inputTypeChangedLiveData = MutableLiveData<SendModule.InputType>()
 
-    fun init(coinCode: String) {
-        SendAmountModule.init(this, coinCode)
+    fun init(wallet: Wallet, moduleDelegate: SendAmountModule.IAmountModuleDelegate?): SendAmountPresenter {
+        return SendAmountModule.init(this, wallet, moduleDelegate)
     }
 
-    override fun setAmountPrefix(prefix: String?) {
+    override fun setAmountType(prefix: String?) {
         amountInputPrefixLiveData.value = prefix
     }
 
@@ -51,16 +47,8 @@ class SendAmountViewModel: ViewModel(), SendAmountModule.IView {
         removeTextChangeListenerLiveEvent.call()
     }
 
-    override fun revertInput(revertedInput: String) {
-        revertInputLiveEvent.value = revertedInput
-    }
-
-    override fun getAvailableBalance() {
-        getAvailableBalanceLiveEvent.call()
-    }
-
-    override fun notifyMainViewModelOnAmountChange(coinAmount: BigDecimal?) {
-        notifyMainViewModelOnAmountChangeLiveData.value = coinAmount
+    override fun revertAmount(amount: String) {
+        revertAmountLiveEvent.value = amount
     }
 
     override fun setHintErrorBalance(hintErrorBalance: String?) {
@@ -71,7 +59,4 @@ class SendAmountViewModel: ViewModel(), SendAmountModule.IView {
         switchButtonEnabledLiveData.value = enabled
     }
 
-    override fun onInputTypeChanged(inputType: SendModule.InputType) {
-        inputTypeChangedLiveData.value = inputType
-    }
 }

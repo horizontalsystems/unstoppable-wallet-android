@@ -1,8 +1,9 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import android.content.Context
-import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.core.utils.AddressParser
+import io.horizontalsystems.bankwallet.core.AdapterState
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
@@ -17,18 +18,14 @@ import io.reactivex.Single
 import java.math.BigDecimal
 import java.util.*
 
-class BitcoinCashAdapter(override val kit: BitcoinCashKit, addressParser: AddressParser, private val feeRateProvider: IFeeRateProvider)
-    : BitcoinBaseAdapter(kit, addressParser), BitcoinCashKit.Listener {
+class BitcoinCashAdapter(override val kit: BitcoinCashKit)
+    : BitcoinBaseAdapter(kit), BitcoinCashKit.Listener {
 
-    constructor(wallet: Wallet, testMode: Boolean, feeRateProvider: IFeeRateProvider) :
-            this(createKit(wallet, testMode), AddressParser("bitcoincash", false), feeRateProvider)
+    constructor(wallet: Wallet, testMode: Boolean) :
+            this(createKit(wallet, testMode))
 
     init {
         kit.listener = this
-    }
-
-    override fun getFeeRate(feeRatePriority: FeeRatePriority): Long {
-        return feeRateProvider.bitcoinCashFeeRate(feeRatePriority)
     }
 
     //
