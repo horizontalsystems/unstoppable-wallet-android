@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bottom_sheet_background"
-    android:backgroundTint="?BottomSendBackground">
+    android:backgroundTint="?attr/BottomSheetBackground">
 
     <io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
         android:id="@+id/addKeyIcon"

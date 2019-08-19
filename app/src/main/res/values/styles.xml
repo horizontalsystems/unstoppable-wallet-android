@@ -39,9 +39,9 @@
     <attr name="TransactionTextBoxBackground" format="reference|color" />
     <attr name="TransactionDetailValueTextColor" format="reference|color" />
     <attr name="TransactionDetailBottomBarBackground" format="reference|color" />
-    <attr name="TransactionInfoMoreButtonBackground" format="reference" />
+    <attr name="TransactionInfoMoreButtonBackground" format="reference|color" />
     <attr name="BottomTransactionInfoBackground" format="reference|color" />
-    <attr name="BottomSendBackground" format="reference|color" />
+    <attr name="BottomSheetBackground" format="reference|color" />
     <attr name="BottomSendInputBackground" format="reference|color" />
     <attr name="BottomSendButtonColor" format="reference|color" />
     <attr name="BottomSendButtonHighlightedColor" format="reference|color" />
@@ -119,9 +119,9 @@
         <item name="TransactionTextBoxBackground">@color/text_box_background_dark</item>
         <item name="TransactionDetailValueTextColor">@color/bars_color</item>
         <item name="TransactionDetailBottomBarBackground">@color/dark</item>
-        <item name="TransactionInfoMoreButtonBackground">@drawable/transaction_info_more_button_background_dark</item>
+        <item name="TransactionInfoMoreButtonBackground">@color/stateful_transaction_info_more_button_dark_color</item>
         <item name="BottomTransactionInfoBackground">@color/dark</item>
-        <item name="BottomSendBackground">@color/dark</item>
+        <item name="BottomSheetBackground">@color/steel_dark</item>
         <item name="BottomSendInputBackground">@color/steel_15</item>
         <item name="BottomSendButtonColor">@color/steel_15</item>
         <item name="BottomSendButtonHighlightedColor">@color/grey_50</item>
@@ -199,9 +199,9 @@
         <item name="TransactionTextBoxBackground">@color/text_box_background_light</item>
         <item name="TransactionDetailValueTextColor">@color/dark</item>
         <item name="TransactionDetailBottomBarBackground">#f5fafafa</item>
-        <item name="TransactionInfoMoreButtonBackground">@drawable/transaction_info_more_button_background_light</item>
+        <item name="TransactionInfoMoreButtonBackground">@color/stateful_transaction_info_more_button_light_color</item>
         <item name="BottomTransactionInfoBackground">@color/bars_color</item>
-        <item name="BottomSendBackground">@color/bars_color</item>
+        <item name="BottomSheetBackground">@color/bars_color</item>
         <item name="BottomSendInputBackground">@color/white</item>
         <item name="BottomSendButtonColor">@color/lightBackground</item>
         <item name="BottomSendButtonHighlightedColor">@color/steel_grey</item>
