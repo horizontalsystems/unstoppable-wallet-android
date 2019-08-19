@@ -59,10 +59,9 @@
     <string name="Balance_SyncedUntil">до: %s</string>
     <string name="Balance_Syncing">Синхронизация…</string>
     <string name="Balance_AddCoins">Добавить Монеты</string>
-    <string name="Balance_Sort_Balance">Баланс</string>
+    <string name="Balance_Sort_Balance">Value</string>
     <string name="Balance_Sort_PopupTitle">Сортировать по</string>
-    <string name="Balance_Sort_Az">А-Я</string>
-    <string name="Balance_Sort_Default">По умолчанию</string>
+    <string name="Balance_Sort_Az">Name</string>
     <!--Send-->
     <string name="Send_Title">Отправить %s</string>
     <string name="Send_Hint_Address">Адрес</string>
