@@ -59,10 +59,9 @@
     <string name="Balance_SyncedUntil">hasta: %s</string>
     <string name="Balance_Syncing">Sincronizando ...</string>
     <string name="Balance_AddCoins">Añadir Monedas</string>
-    <string name="Balance_Sort_Balance">Saldo</string>
+    <string name="Balance_Sort_Balance">Value</string>
     <string name="Balance_Sort_PopupTitle">Ordenar por</string>
-    <string name="Balance_Sort_Az">A-Z</string>
-    <string name="Balance_Sort_Default">Predefinido</string>
+    <string name="Balance_Sort_Az">Name</string>
     <!--Send-->
     <string name="Send_Title">Enviar %s</string>
     <string name="Send_Hint_Address">Dirección</string>
