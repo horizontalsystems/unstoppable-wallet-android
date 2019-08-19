@@ -16,9 +16,11 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.lib.AlertDialogFragment
 import io.horizontalsystems.bankwallet.lib.BalanceSortDialogFragment
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
+import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysModule
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.bankwallet.viewHelpers.AnimationHelper
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
@@ -105,6 +107,22 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener, BalanceSortDialogFrag
             isOn?.let { visible ->
                 sortButton.visibility = if (visible) View.VISIBLE else View.GONE
             }
+        })
+
+        viewModel.showBackupAlert.observe(viewLifecycleOwner, Observer {
+            AlertDialogFragment.newInstance(
+                    description = R.string.Receive_Alert_NotBackedUp_Description,
+                    buttonText = R.string.Receive_Alert_NotBackedUp_Button,
+                    cancelable = true,
+                    listener = object : AlertDialogFragment.Listener {
+                        override fun onButtonClick() {
+                            viewModel.delegate.openManageKeys()
+                        }
+                    }).show(childFragmentManager, "coin_backup_alert")
+        })
+
+        viewModel.openManageKeys.observe(viewLifecycleOwner, Observer {
+            context?.let { ctx -> ManageKeysModule.start(ctx) }
         })
 
 

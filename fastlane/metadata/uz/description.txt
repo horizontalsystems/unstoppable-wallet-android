@@ -1,27 +1,73 @@
-  Control Your Money!
-Wallet BANK is a secure and a fully decentralized crypto wallet app that supports major cryptocurrencies, including Bitcoin, Ethereum, Bitcoin Cash and ERC 20 tokens. The number of supported currencies being gradually added with every release.
-This BANK wallet provides a seamless way to get started with Bitcoin and other crypto currencies for masses. You don't need to understand the inner workings of cryptocurrencies to be able to use it.
-It has been built using best practices from the design of the interface to the implementation of blockchain protocols.
+If you’re a type of person who needs unrestricted access to invest in blockchains and require unconditional control over your crypto investments this wallet is for you.
 
-  Independent & Decentralized
-The BANK wallet is fully peer-to-peer and works without any centrally managed servers. It can't be stopped, blocked or taken down. The wallet connects directly to the currency networks i.e. Bitcoin without the need for intermediary. Such approach enables the BANK wallet to operate anywhere and remain censorship-resistant. Only the user is in control of the money.
-Most crypto wallet apps out there are centralized. The funds are stored on a remote server which is operated by the wallet provider. Due to the unregulated nature of the cryptocurrencies there are no mechanisms in place to guarantee that a wallet provider doesn't cheat or that provider's servers not get hacked.
-Being a fully decentralized app the BANK wallet implements all of its functionality in a decentralized manner. Every single feature in the app is implemented in a decentralized manner substantially increasing the security and privacy aspects of the wallet.
-There are no centrally managed servers that can fail, and as a result stop app from functioning.
+This wallet was built to enable any freedom loving individual to invest and grow crypto currency portfolio without limitations, in a private manner, regardless of regulatory landscape.
 
-  Secure & Open Source
-The entire code of the BANK wallet is public and open-source, giving an option for anyone to analyze all of its code. It works exactly as shown in the code. It can't cheat!
-The BANK wallet stores user's private keys and funds encrypted on a device itself using secure native storage mechanisms provided by Android operating systems. Only user can access and use his or her funds.
-In case of a device loss or replacement the user may easily restore the wallet using a secret 12-word recovery phrase. 
-In fact, with the help of these secret phrase the user may restore the wallet and access funds on any deterministic wallet (aka HD wallet) not just the BANK wallet 
+Exercise full unconditional control over your assets. Bitcoin, Ethereum, Dash and other crypto assets.
 
-NOTE: DO NOT install the BANK wallet on a jailbroken device due to substantial security risks. A jailbroken Android operating system cannot guarantee the security of your private keys. This means that some malicious app running on jailbroken device can potentially access the private keys for your funds and steal them.
+ Why Unstoppable Wallet
 
-DISCLAIMER:
+It keeps crypto assets safe on your device
+It can only be controlled by yourself
+It doesn’t know who you are
+It doesn’t collect any data
+It's easy to migrate to/from
+It’s not dependent on any entity to function
+It integrates blockchains in a decentralized manner
+It implements latest improvements for each blockchain
+It can’t be blocked or censored
+It provides real time transaction fees
+It’s fast and beautiful  
+It's the most advanced wallet to date
+(1) UNRESTRICTED CONTROL
 
-1. This Wallet is in its early days and just like any other software product it may have undiscovered issues which may potentially result in wallet having problems, like say the loss of access to specific transactions. While the wallet has been thoroughly tested over and over no one can say for sure that it's error-free. We believe it to be very secure, more than any crypto currency app out there.
+  Transact freely and unconditionally regardless of where you live. No entity can stop you from sending/receiving crypto in Unstoppable wallet.   
 
-2. DO NOT EVER install the BANK wallet on a jailbroken or tempered device due to substantial security risks. A jailbroken Android cannot guarantee the security of your private keys. This means that some malicious app running on jailbroken device can potentially access the private keys for your funds and steal them.
+You’re the only person with control and access to your crypto finances. The Secret Key (that give you ownership over crypto assets) never leaves your device.
 
-3. Source Code: https://github.com/horizontalsystems
+(2) GENUINE PRIVACY
 
+  Stay truly private without revealing any personal data. There are no accounts, emails, phone numbers, identity checks or 3rd party servers storing your data.  
+
+Unlike most wallets in the market the Unstoppable wallet connects users directly to decentralized blockchains without any restrictions or intermediaries.
+
+(3) HIGHLY SECURE
+
+  Keep your crypto assets safe on your phone using safe storage mechanisms provided by phone's operating system. Your secret keys never leaves your device the device.
+
+  In case of a device loss or replacement you may easily restore your wallet using Secret Key. Unstoppable makes it really easy to switch to another wallet or migrate funds from another wallet.
+
+ (4) ALWAYS ONLINE
+
+Access your funds from anywhere at any time.   Unstoppable wallet was engineered to remain online and functional independent of any third party servers.   
+
+No single entity can take the wallet down and cause it's main features to malfunction. Not even the Horizontal Systems team able to interfere with it.
+
+(5) ADVANCED & AHEAD
+
+Use the most technologically advanced and decentralized wallet ever built.   It’s the only mobile wallet that implements all major blockchains in a fully decentralized manner.
+
+Over 2500 engineering hours being put into this wallet every month. This wallet is being constantly improved further and continuously integrates latest enhancements in all blockchains such as segwit or real-time transaction fee estimator.
+  
+(6) BEAUTIFUL  
+
+Deal with crypto without complexitites. You don’t need to understand technicalities powering different blockchains to be able to transact with them.   
+
+This wallet keeps complexities under the hood giving you a straightforward user interface to the world of blockchains.
+
+It’s fast, multi-lingual and highly customizable when it comes to the look and feel.   Don’t take our word for it, give it a try yourself.  
+
+(7) OPEN & PUBLIC 
+
+The code powering Unstoppable wallet is fully public and open source enabling anyone to unconditionally copy and reuse its code.
+
+https://github.com/horizontalsystems/unstoppable-wallet-ios
+
+(8) SUPPORTED CURRENCIES
+
+Bitcoin
+Ethereum
+Dash
+Bitcoin Cash
+50+ ERC20 tokens
+(in progress) EOS and EOS based tokens
+(in progress) Binance Token and Binance-based tokens

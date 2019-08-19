@@ -62,7 +62,11 @@ class BalancePresenter(
     }
 
     override fun onReceive(position: Int) {
-        router.openReceiveDialog(dataSource.getItem(position).wallet)
+        if (dataSource.getItem(position).isBackedUp) {
+            router.openReceiveDialog(dataSource.getItem(position).wallet)
+        } else {
+            view?.showBackupAlert()
+        }
     }
 
     override fun onPay(position: Int) {
@@ -72,6 +76,20 @@ class BalancePresenter(
     override fun onClear() {
         interactor.clear()
         disposables.clear()
+    }
+
+    override fun openManageCoins() {
+        router.openManageCoins()
+    }
+
+    override fun onSortClick() {
+        router.openSortTypeDialog(interactor.getSortingType())
+    }
+
+    override fun onSortTypeChanged(sortType: BalanceSortType) {
+        interactor.saveSortingType(sortType)
+        dataSource.sortBy(sortType)
+        view?.reload()
     }
 
     //
@@ -88,7 +106,7 @@ class BalancePresenter(
             interactor.fetchRates(it.code, dataSource.coinCodes)
         }
 
-        view?.setSortingOn(items.size > showSortingButtonThreshold)
+        view?.setSortingOn(items.size >= showSortingButtonThreshold)
         view?.reload()
     }
 
@@ -109,6 +127,7 @@ class BalancePresenter(
     override fun didUpdateState(wallet: Wallet, state: AdapterState) {
         val position = dataSource.getPosition(wallet)
         dataSource.setState(position, state)
+        sortCoins()
         updateByPosition(position)
         view?.updateHeader()
     }
@@ -128,8 +147,15 @@ class BalancePresenter(
         view?.didRefresh()
     }
 
-    override fun openManageCoins() {
-        router.openManageCoins()
+    override fun openManageKeys() {
+        router.openManageKeys()
+    }
+
+    private fun sortCoins() {
+        val syncedCount = dataSource.items.filter { it.state == AdapterState.Synced }.size
+        if (dataSource.items.size == syncedCount) {
+            dataSource.sortBy(interactor.getSortingType())
+        }
     }
 
     private fun updateViewItems() {
@@ -144,13 +170,4 @@ class BalancePresenter(
         flushSubject.onNext(Unit)
     }
 
-    override fun onSortClick() {
-        router.openSortTypeDialog(interactor.getSortingType())
-    }
-
-    override fun onSortTypeChanged(sortType: BalanceSortType) {
-        interactor.saveSortingType(sortType)
-        dataSource.sortBy(sortType)
-        view?.reload()
-    }
 }

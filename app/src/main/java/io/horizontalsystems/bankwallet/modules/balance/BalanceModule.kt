@@ -17,6 +17,7 @@ object BalanceModule {
         fun updateItem(position: Int)
         fun updateHeader()
         fun setSortingOn(isOn: Boolean)
+        fun showBackupAlert()
     }
 
     interface IViewDelegate {
@@ -32,6 +33,7 @@ object BalanceModule {
         fun onClear()
         fun onSortClick()
         fun onSortTypeChanged(sortType: BalanceSortType)
+        fun openManageKeys()
     }
 
     interface IInteractor {
@@ -58,6 +60,7 @@ object BalanceModule {
         fun openSendDialog(wallet: Wallet)
         fun openManageCoins()
         fun openSortTypeDialog(sortingType: BalanceSortType)
+        fun openManageKeys()
     }
 
     class BalanceItemDataSource {
@@ -73,7 +76,7 @@ object BalanceModule {
 
         private var originalItems = listOf<BalanceItem>()
         var items = listOf<BalanceItem>()
-        var balanceSortType: BalanceSortType = BalanceSortType.Default
+        var balanceSortType: BalanceSortType = BalanceSortType.Name
 
         @Synchronized
         fun addUpdatedPosition(position: Int) {
@@ -88,7 +91,7 @@ object BalanceModule {
         fun set(items: List<BalanceItem>) {
             clearUpdatedPositions()
             originalItems = items
-            sortBy(BalanceSortType.Default)
+            sortBy(BalanceSortType.Name)
         }
 
         @Synchronized
@@ -130,15 +133,12 @@ object BalanceModule {
 
         fun sortBy(sortType: BalanceSortType) {
             balanceSortType = sortType
-            when (balanceSortType) {
-                BalanceSortType.Balance -> {
-                    items = originalItems.sortedByDescending { it.fiatValue }
+            items = when (balanceSortType) {
+                BalanceSortType.Value -> {
+                    originalItems.sortedByDescending { it.fiatValue }
                 }
-                BalanceSortType.Az ->{
-                    items = originalItems.sortedBy { it.wallet.coin.title }
-                }
-                BalanceSortType.Default -> {
-                    items = originalItems
+                BalanceSortType.Name ->{
+                    originalItems.sortedBy { it.wallet.coin.title}
                 }
             }
 
@@ -150,7 +150,8 @@ object BalanceModule {
             val wallet: Wallet,
             var balance: BigDecimal = BigDecimal.ZERO,
             var state: AdapterState = AdapterState.NotSynced,
-            var rate: Rate? = null
+            var rate: Rate? = null,
+            var isBackedUp: Boolean = false
     ) {
         val fiatValue: BigDecimal?
             get() = rate?.let { balance.times(it.value) }

@@ -33,7 +33,7 @@ class KeyStoreActivity : AppCompatActivity() {
         })
 
         viewModel.showInvalidKeyWarning.observe(this, Observer {
-            AlertDialogFragment.newInstance(R.string.Alert_KeysInvalidatedTitle, R.string.Alert_KeysInvalidatedDescription, R.string.Alert_Ok,
+            AlertDialogFragment.newInstance(R.string.Alert_KeysInvalidatedTitle, R.string.Alert_KeysInvalidatedDescription, R.string.Alert_Ok, false,
                     object : AlertDialogFragment.Listener {
                         override fun onButtonClick() {
                             viewModel.delegate.onCloseInvalidKeyWarning()

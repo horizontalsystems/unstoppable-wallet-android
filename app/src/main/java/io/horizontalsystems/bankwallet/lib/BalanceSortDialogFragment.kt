@@ -22,10 +22,9 @@ class BalanceSortDialogFragment : DialogFragment(), SortingAdapter.Listener {
         dismiss()
     }
 
-    private val sortTypes = listOf(BalanceSortType.Balance, BalanceSortType.Az, BalanceSortType.Default)
-
+    private val sortTypes = listOf(BalanceSortType.Name, BalanceSortType.Value)
     private var listener: Listener? = null
-    private var selectedSortingType: BalanceSortType = BalanceSortType.Default
+    private var selectedSortingType: BalanceSortType? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
@@ -35,7 +34,11 @@ class BalanceSortDialogFragment : DialogFragment(), SortingAdapter.Listener {
         val view = inflater.inflate(R.layout.fragment_alert_dialog_single_select, container, false)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.dialogRecyclerView)
-        recyclerView.adapter = SortingAdapter(sortTypes, selectedSortingType, this)
+
+        selectedSortingType?.let {
+            recyclerView.adapter = SortingAdapter(sortTypes, it, this)
+        } ?: run { dismiss() }
+
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         return view
@@ -49,8 +52,8 @@ class BalanceSortDialogFragment : DialogFragment(), SortingAdapter.Listener {
             return dialog
         }
     }
-
 }
+
 
 class SortingAdapter(
         private val list: List<BalanceSortType>,

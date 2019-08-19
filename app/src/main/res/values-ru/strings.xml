@@ -11,35 +11,46 @@
     <string name="Alert_Copied">Скопировано</string>
     <string name="Button_Cancel">Отменить</string>
     <string name="Button_Back">Назад</string>
+    <string name="Button_Close">Закрыть</string>
     <string name="Button_Ok">Хорошо</string>
     <string name="Button_Share">Поделиться</string>
     <string name="Error">Ошибка</string>
-    <!--Guest-->
-    <string name="Guest_Title">Unstoppable</string>
-    <string name="Guest_CreateWallet">Создать Кошелек</string>
-    <string name="Guest_RestoreWallet">Восстановить</string>
+    <!--Welcome-->
+    <string name="Welcome_Title">Unstoppable</string>
+    <string name="Welcome_CreateWallet">Создать Кошелек</string>
+    <string name="Welcome_RestoreWallet">Восстановить Кошелек</string>
     <!--Restore-->
     <string name="Restore_Title">Восстановить</string>
-    <string name="Restore_Subtitle">Введите Секретный Ключ</string>
+    <string name="Restore_Subtitle">Введите ключ</string>
     <string name="Restore_ValidationFailed">Неверный Секретный Ключ</string>
     <string name="Restore_RestoreFailed">Не удалось восстановить кошелек</string>
+    <string name="Restore_EosAccountName">Account Name</string>
+    <string name="Restore_EosActivePrivateKey">Активировать Приватный Ключ</string>
+    <string name="Restore_EosAccountIncorrect">Неверный Аккаунт</string>
+    <string name="Restore_EosKeyIncorrect">Неверный Ключ</string>
     <!--Backup-->
-    <string name="Backup_Intro_Title">Секретный Ключ</string>
-    <string name="Backup_Intro_Subtitle">Ваш секретный ключ является единственным способом для восстановления вашего кошелька.\n\nОн состоит из 12 слов. Храните его в безопасном месте.</string>
+    <string name="Backup_Intro_Title">Резервная копия</string>
+    <string name="Backup_Intro_TitleShow">Показать Ключ</string>
+    <string name="Backup_Intro_Subtitle">Ключ, который будет показан далее, - это единственный способ восстановить ваши средства, если ваш телефон потерян, украден, сломан и т.д. Убедитесь, что никто не смотрит на ваш экран.\n\nМонеты, контролируемые этим ключом: %s</string>
     <string name="Backup_Intro_Later">Позже</string>
     <string name="Backup_Intro_BackupNow">Резервная копия</string>
-    <string name="Backup_Words_Title">Секретный Ключ</string>
     <string name="Backup_Confirmation_SecretKey">Я понимаю, что я единственный владелец  Секретного Ключа, который надежно хранится на моем телефоне и позволяет мне контролировать средства в моем кошельке.</string>
     <string name="Backup_Confirmation_DeleteAppWarn">Я понимаю, что если это приложение удаляется или устанавливается на другое устройство, мой кошелек можно восстановить только с помощью Секретного Ключа.</string>
     <string name="Backup_Confirmation_LockAppWarn">Я понимаю, что изменение ПИН-кода телефона или удаление данных приложения в настройках Android удалит секретный ключ с устройства. Мне нужно повторно ввести мой секретный ключ, чтобы восстановить доступ к моему кошельку.</string>
     <string name="Backup_Confirmation_Disclaimer">Я понимаю, что разработчики этого приложения не могут нести ответственность за любые непреднамеренные ошибки или проблемы, которые могут возникнуть при использовании этого приложения.</string>
-    <string name="Backup_Confirmation_Title">Введите слова из вашего Cекретного Ключа</string>
-    <string name="Backup_Confirmation_Description">Введите слова из вашего секретного ключа.</string>
+    <string name="Backup_Confirmation_Description">Введите слова из вашего %s ключа </string>
     <string name="Backup_Confirmation_FailureAlertText">Слова не совпадают</string>
     <string name="Backup_Confirmation_CheckTitle">Проверка…</string>
     <string name="Backup_Button_Confirm">Подтвердить</string>
     <string name="Backup_Button_Next">Далее</string>
     <string name="Backup_Button_Submit">Отправить</string>
+    <string name="Backup_Button_ShowKey">Показать Ключ</string>
+    <!--Backup Words-->
+    <string name="Backup_Words_Title">Секретный Ключ</string>
+    <!--Backup Eos-->
+    <string name="Backup_Eos_AccountName">Account Name</string>
+    <string name="Backup_Eos_ActivePrivateKey">Private Key</string>
+    <string name="Backup_Eos_Warning">Копирование ключа с помощью действия «копировать» представляет определенный риск, если вы используете какие-либо приложения для управления буфером обмена или другие приложения, которые могут иметь доступ к данным буфера обмена.</string>
     <!--Balance-->
     <string name="Balance_Title">Баланс</string>
     <string name="Balance_Deposit">Получить</string>
@@ -47,16 +58,26 @@
     <string name="Balance_RatePerCoin">%s за %s</string>
     <string name="Balance_SyncedUntil">до: %s</string>
     <string name="Balance_Syncing">Синхронизация…</string>
+    <string name="Balance_AddCoins">Добавить Монеты</string>
+    <string name="Balance_Sort_Balance">Баланс</string>
+    <string name="Balance_Sort_PopupTitle">Сортировать по</string>
+    <string name="Balance_Sort_Az">А-Я</string>
+    <string name="Balance_Sort_Default">По умолчанию</string>
     <!--Send-->
-    <string name="Send_Title1">Отправить</string>
     <string name="Send_Title">Отправить %s</string>
-    <string name="Send_Hint_PaymentReference">Ссылка на платеж</string>
     <string name="Send_Hint_Address">Адрес</string>
     <string name="Send_Hint_Amount">Сумма</string>
+    <string name="Send_Fee">Комиссия:</string>
     <string name="Send_Button_Paste">Вставить</string>
-    <string name="Send_Button_More">Ещё</string>
-    <string name="Send_Button_Send">Отправить</string>
+    <string name="Send_Button_Next">Далее</string>
     <string name="Send_Button_Max">Макс.</string>
+    <string name="Send_Confirmation_Title">Подтвердить</string>
+    <string name="Send_Confirmation_To">Кому: </string>
+    <string name="Send_Confirmation_HintMemo">Memo</string>
+    <string name="Send_Confirmation_Eos_HintAccount">Account</string>
+    <string name="Send_Confirmation_Total">Итого:</string>
+    <string name="Send_Confirmation_EstimateTime">Приблизительное время:</string>
+    <string name="Send_Confirmation_Send_Button">Отправить</string>
     <string name="Send_ScanQrCode">Сканировать QR-код</string>
     <string name="Send_Success">\u2713 Отправлено</string>
     <string name="Send_Error_InvalidAddress">Адрес недействителен. Попробуйте еще раз!</string>
@@ -68,10 +89,13 @@
     <string name="Send_DialogTotal">Итого:</string>
     <string name="Send_Sending">Отправка</string>
     <string name="Send_ERC_Alert">Комиссия за отправку %s (ERC20) взимается в ETH. Необходимо %s ETH.</string>
+    <string name="Send_Token_InsufficientFeeAlert">Комиссия за отправку %s %s взимается в %s. Необходимо %s.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Получить %s</string>
     <string name="Deposit_Share">Переслать</string>
     <string name="Deposit_Your_Address">Ваш Адрес</string>
+    <string name="Receive_Alert_NotBackedUp_Button">Резервная копия</string>
+    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">только что</string>
     <string name="Timestamp_MinAgo">%d мин назад</string>
@@ -107,6 +131,10 @@
     <string name="FullInfo_Contract">Контракт</string>
     <string name="FullInfo_From">От</string>
     <string name="FullInfo_To">Кому</string>
+    <string name="FullInfo_Status">Статус</string>
+    <string name="FullInfo_Memo">Memo</string>
+    <string name="FullInfo_CpuUsage">CPU Usage</string>
+    <string name="FullInfo_NetUsage">Net Usage</string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
@@ -132,10 +160,13 @@
     <!--Settings-->
     <string name="Settings_Title">Настройки</string>
     <string name="Settings_SecurityCenter">Центр Безопасности</string>
+    <string name="Settings_ManageCoins">Управление Кошельками</string>
+    <string name="Settings_RestoreWallet">Восстановить Кошелек</string>
     <string name="Settings_BaseCurrency">Базовая Валюта</string>
     <string name="Settings_Language">Язык</string>
     <string name="Settings_LightMode">Светлый Режим</string>
     <string name="Settings_About">О приложении</string>
+    <string name="Settings_ShareThisWallet">Рассказать Друзьям</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <!--Settings-->
@@ -143,25 +174,28 @@
     <string name="Settings_Error_NoFingerprintAddedYet">У вас не включен отпечаток пальца на этом устройстве. Перейдите в настройки </string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Отпечаток пальца</string>
+    <string name="SettingsSecurity_EnablePin">Код Доступа</string>
     <string name="SettingsSecurity_EditPin">Изменить Код</string>
+    <string name="SettingsSecurity_ManageKeys">Управление Ключами</string>
     <string name="SettingsSecurity_BackupWallet">Резервная копия</string>
-    <string name="SettingsSecurity_UnlinkFromThisDevice">Отсоединить это устройство</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_1">Это действие удалит ваш кошелёк с этого устройства.</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_2">Убедитесь, что у вас есть свой Секретный Ключ, иначе вы не сможете получить доступ к денежным средствам.</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Базовая Валюта</string>
     <!--Setting_Language-->
     <string name="SettingsLanguage_Title">Язык</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">О приложении</string>
+    <string name="SettingsAbout_AppTitle">Unstoppable</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Условия &amp; Политика конфиденциальности:</string>
     <string name="SettingsAbout_TermsPrivacyText">Это приложение полностью децентрализованно. Работоспособность этого приложения не зависит от сторонних серверов или какой-либо команды тех поддержки.
 \n\nПриложение работает везде, пока есть интернет. Этот кошелек или его пользователи не могут быть заблокированы кем-либо.
 \n\nВаши средства хранятся только на вашем телефоне.
-\n\nВы несëте полную ответственность за безопасное хранение секретного ключа. Никогда никому не показывайте ваш секретный ключ. Если ключ будет утерян, украден или забыт то контроль над вашими средствами попадет к тому у кого окажется ваш секретный ключ.
+\n\nВы несëте полную ответственность за безопасное хранение секретного ключа. Никогда никому не показывайте ваш ключ. Если ключ будет утерян, украден или забыт то контроль над вашими средствами попадет к тому у кого окажется ваш  ключ.
 \n\nНе взламывайте ваш телефон, не устанавливайте приложения из неофициальных источников и никогда не предоставляйте ваше устройство другим лицам. Безопасность вашего кошелька напрямую зависит от этого.
 \n\nВесь программный код этого приложения является бесплатным и открытым для общественности. Мы старались сделать самый безопасный и в то же время децентрализованный кошелек, но нет гарантий, что в коде приложения не имеется ошибок. Тем не менее, мы верим что по уровню безопасности этот кошелек значительно превосходит почти все доступные мобильные криптокошельки на сегодня.
 \n\nНекоторые публичные данные используемые приложением такие, как обменные курсы валют хранятся в децентрализованном хранилище (IPFS).</string>
+    <!--Setting_Tell Friends-->
+    <string name="SettingsShare_Title">Поделиться</string>
+    <string name="SettingsShare_Text">Unstoppable Wallet - Отличное Приложение!</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Ошибка Android Keystore</string>
     <string name="Alert_KeysInvalidatedDescription">Ваши зашифрованные данные были недавно аннулированы, потому что  Android lock screen был изменен</string>
@@ -175,6 +209,7 @@
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Разблокировать</string>
     <string name="Hud_Text_Success">Успешно</string>
+    <string name="Hud_Text_Done">Готово</string>
     <string name="Hud_Text_Error">Ошибка</string>
     <string name="Hud_Text_NoInternet">Нет Интернета</string>
     <string name="Hud_Text_Copied">Скопировано</string>
@@ -190,7 +225,8 @@
     <string name="UnlockPin_WalletDisabledUntil">Отключено до: %s</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">PIN-код телефона</string>
-    <string name="OSPin_Confirm_Desciption">Это приложение требует PIN-код вашего телефона, чтобы сохранить конфиденциальные данные  вашего кошелька в безопасном хранилище Android, а не в самом приложении.</string>
+    <string name="OSPin_Confirm_Desciption">Это приложение требует, чтобы на телефоне был включен пароль (экран блокировки).\n\nВы можете включить его в настройках Android.\n\nПожалуйста, обратите внимание, что после того, как вы отключили PIN-код на уровне ОС,  в безопасном хранилище вашего телефона ранее сохраненные данные стали недействительными. Поэтому Вам нужно восстановить ключи, чтобы вернуться к вашему кошельку.</string>
+    <string name="OSPin_Prompt_Desciption">Это приложение требует PIN-код вашего телефона, чтобы сохранить конфиденциальные данные  вашего кошелька в безопасном хранилище Android, а не в самом приложении.</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Код Доступа</string>
     <string name="SetPin_Info">Ваш код будет использоваться для разблокировки вашего кошелька и отправки денег</string>
@@ -206,6 +242,36 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">Кошельки</string>
     <string name="ManageCoins_save">Сохранить</string>
+    <string name="ManageCoins_AddCoin_Title">Добавить %s</string>
+    <string name="ManageCoins_AddCoin_Text">Это действие создаст новый ключ(кошелек) для следующих монет:%s </string>
+    <string name="ManageCoins_EOSAlert_CreateButton">В данный момент кошелек не может создать новые учетные записи EOS. Вы можете восстановить существующий.</string>
+    <!--Manage Keys-->
+    <string name="ManageKeys_Title">Управление Ключами</string>
+    <string name="ManageKeys_Description">Любой, кто имеет доступ к вашим ключам, может украсть ваши средства. Храните ключи безопасно и не показывайте их никому.\n\nРезервное копирование каждого ключа необходимо доя того, чтобы иметь возможность восстановить средства, если вы потеряете или сломаете ваш телефон, или приложение кошелька будет удалено.</string>
+    <string name="ManageKeys_Create">Создать</string>
+    <string name="ManageKeys_Restore">Восстановить</string>
+    <string name="ManageKeys_Delete">Удалить</string>
+    <string name="ManageKeys_Backup">Резервная копия</string>
+    <string name="ManageKeys_Show">Показать</string>
+    <!--Manage Keys Delete Alert-->
+    <string name="ManageKeys_Delete_Title">Удалить Ключ</string>
+    <string name="ManageKeys_Delete_ConfirmationRemove">Это действие удалит ваш %s ключ (кошелёк) с этого устройства.</string>
+    <string name="ManageKeys_Delete_ConfirmationDisable">Монеты, которые будут отключены: %s</string>
+    <string name="ManageKeys_Delete_ConfirmationLoose">Если у вас нет резервной копии этого ключа, то вы потеряете соответствующие средства.</string>
+    <string name="ManageKeys_Delete_FromPhone">Удалить с устройства</string>
+    <string name="ManageKeys_Delete_Alert">Вам нужно сделать резервную копию этого ключа, прежде чем вы можете его отсоединить.</string>
+    <!-- Manage Keys Alert -->
+    <string name="AddCoin_Title">Добавить %s</string>
+    <string name="AddCoin_Description">У вас нет активного ключа для использования %s. Нажмите кнопку \"Создать\" ниже, чтобы создать новый ключ (кошелек).\n\nВы также можете использовать существующий ключ для %s , если у вас уже есть.</string>
+    <string name="AddCoin_CreateKey">Создать</string>
+    <string name="AddCoin_RestoreKey">Восстановить</string>
+    <!-- Account Types -->
+    <string name="AccountType_12Words">12 Words</string>
+    <string name="AccountType_12WordsKey">12 Words Ключ</string>
+    <string name="AccountType_Eos">EOS Blockchain</string>
+    <string name="AccountType_EosKey">EOS Ключ</string>
+    <string name="AccountType_Binance">Binance Chain</string>
+    <string name="AccountType_BinanceKey">Binance Ключ</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">Параметры Восстановления</string>
     <string name="CoinOption_Fast">Быстро</string>
@@ -213,5 +279,5 @@
     <string name="CoinOption_Fast_Text">Восстановление ваших предыдущих транзакций через сторонний защищенный сервер. Для пользователей с длинной историей транзакций и с очень большим суммами этот метод может представлять риски для конфиденциальности.</string>
     <string name="CoinOption_Slow">Медленно</string>
     <string name="CoinOption_MorePrivate">1&#8211;12 часов (Более Приватно)</string>
-    <string name="CoinOption_Slow_Text">Восстановление ваших предыдущих транзакций будет непосредственно из сети. Это более приватно, но очень медленно. Если восстановление занимает слишком много времени, перейдите в раздел \"Безопасность\" в Настройках и выберите опцию «Отключить это устройство».</string>
+    <string name="CoinOption_Slow_Text">Восстановление ваших предыдущих транзакций будет непосредственно из сети. Это более приватно, но очень медленно. Чем больше монет вы восстанавливаете, тем больше времени потребуется. Если восстановление занимает слишком много времени, перейдите в раздел «Управление ключами» и повторно импортируйте ключ для кошелька с помощью опции «Быстрая синхронизация».</string>
 </resources>

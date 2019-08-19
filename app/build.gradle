@@ -11,7 +11,7 @@ androidExtensions {
 }
 
 def computeVersionCode() {
-    ext.buildNumber = System.getenv("BUILD_NUMBER") ?: 11
+    ext.buildNumber = System.getenv("BUILD_NUMBER") ?: 17
     return "$buildNumber".toInteger()
 }
 
@@ -22,7 +22,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 28
         versionCode computeVersionCode()
-        versionName "0.6.2"
+        versionName "0.8.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         resValue "string", "localizations", buildProperties.get("localizations")
@@ -129,7 +129,7 @@ dependencies {
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
 
     // Wallet kits
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:2165450'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:d6ee745'
     implementation 'com.github.horizontalsystems:ethereum-kit-android:6d9a47d928'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:6c9917a'
     implementation 'com.github.horizontalsystems:hd-wallet-kit-android:a3666d8'

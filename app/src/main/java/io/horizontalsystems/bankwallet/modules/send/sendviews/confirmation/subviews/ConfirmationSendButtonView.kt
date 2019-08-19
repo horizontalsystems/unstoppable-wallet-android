@@ -23,15 +23,15 @@ class ConfirmationSendButtonView : ConstraintLayout {
     fun bind(state: SendConfirmationModule.SendButtonState) {
         when(state) {
             SendConfirmationModule.SendButtonState.ACTIVE -> {
-                buttonText.text = context.getString(R.string.Send_Confirmation_Send_Button)
+                buttonTextView.text = context.getString(R.string.Send_Confirmation_Send_Button)
                 progressBar.visibility = View.GONE
-                buttonText.isEnabled = true
+                buttonTextView.isEnabled = true
                 buttonWrapper.isEnabled = true
             }
             SendConfirmationModule.SendButtonState.SENDING -> {
-                buttonText.text = context.getString(R.string.Send_Sending)
+                buttonTextView.text = context.getString(R.string.Send_Sending)
                 progressBar.visibility = View.VISIBLE
-                buttonText.isEnabled = false
+                buttonTextView.isEnabled = false
                 buttonWrapper.isEnabled = false
             }
         }

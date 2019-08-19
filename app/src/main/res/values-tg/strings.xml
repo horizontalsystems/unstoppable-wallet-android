@@ -11,35 +11,46 @@
     <string name="Alert_Copied">Нусхабардорӣ</string>
     <string name="Button_Cancel">Глшкун</string>
     <string name="Button_Back">Ьанк</string>
+    <string name="Button_Close">Close</string>
     <string name="Button_Ok">Дуруст</string>
     <string name="Button_Share">Интешар</string>
     <string name="Error">Хата</string>
-    <!--Guest-->
-    <string name="Guest_Title">Unstoppable</string>
-    <string name="Guest_CreateWallet">Create Wallet</string>
-    <string name="Guest_RestoreWallet">Restore</string>
+    <!--Welcome-->
+    <string name="Welcome_Title">Unstoppable</string>
+    <string name="Welcome_CreateWallet">New Wallet</string>
+    <string name="Welcome_RestoreWallet">Restore Wallet</string>
     <!--Restore-->
     <string name="Restore_Title">Барқарор кардани</string>
-    <string name="Restore_Subtitle">Калиди махфиро ворид кунед</string>
+    <string name="Restore_Subtitle">Enter Key</string>
     <string name="Restore_ValidationFailed">Калиди махфии нодуруст</string>
     <string name="Restore_RestoreFailed">Ноком шодан барқарор карданд</string>
+    <string name="Restore_EosAccountName">Account Name</string>
+    <string name="Restore_EosActivePrivateKey">Active Private Key</string>
+    <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
+    <string name="Restore_EosKeyIncorrect">Incorrect Key</string>
     <!--Backup-->
-    <string name="Backup_Intro_Title">Калиди махфӣ</string>
-    <string name="Backup_Intro_Subtitle">Your secret key is the only way to restore your wallet and funds if your phone is ever lost, stolen, broken, or upgraded.\n\n It consists of 12 words. Store it safely offline.</string>
+    <string name="Backup_Intro_Title">Backup</string>
+    <string name="Backup_Intro_TitleShow">Show Key</string>
+    <string name="Backup_Intro_Subtitle">The key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc. Make sure that no one is watching your screen. \n\nThe coins controlled by this key: %s</string>
     <string name="Backup_Intro_Later">Баъдтар</string>
     <string name="Backup_Intro_BackupNow">Нусхабардорӣ</string>
-    <string name="Backup_Words_Title">Калиди махфӣ</string>
     <string name="Backup_Confirmation_SecretKey">I understand that I am a sole owner of a private 12-word Secret Key which is securely stored on my phone and enables me to control funds on my wallet.</string>
     <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is ever moved, deleted or malfunctions, the access to my wallet can be only recovered with that Secret Key.</string>
     <string name="Backup_Confirmation_LockAppWarn">I understand that changing the phone\s unlock PIN or deleting app data in Android settings deletes the Secret Key from device. I would need to re-enter my Secret Key to regain access to my wallet.</string>
     <string name="Backup_Confirmation_Disclaimer">I understand that developers of this app can not be held responsible for any unintended bugs or issues that may arise while using this app.</string>
-    <string name="Backup_Confirmation_Title">Enter following words from your Secret Key</string>
-    <string name="Backup_Confirmation_Description">Enter words from your secret key.</string>
+    <string name="Backup_Confirmation_Description">Enter words from your %s.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Words do not match</string>
     <string name="Backup_Confirmation_CheckTitle">Check…</string>
     <string name="Backup_Button_Confirm">Confirm</string>
     <string name="Backup_Button_Next">Next</string>
     <string name="Backup_Button_Submit">Submit</string>
+    <string name="Backup_Button_ShowKey">Show Key</string>
+    <!--Backup Words-->
+    <string name="Backup_Words_Title">Secret Key</string>
+    <!--Backup Eos-->
+    <string name="Backup_Eos_AccountName">Account Name</string>
+    <string name="Backup_Eos_ActivePrivateKey">Private Key</string>
+    <string name="Backup_Eos_Warning">Copying your key using “copy” action poses some risks if you use any clipboard management apps or some other apps that may access to clipboard data.</string>
     <!--Balance-->
     <string name="Balance_Title">Balance</string>
     <string name="Balance_Deposit">Receive</string>
@@ -47,16 +58,26 @@
     <string name="Balance_RatePerCoin">%s per %s</string>
     <string name="Balance_SyncedUntil">until: %s</string>
     <string name="Balance_Syncing">Syncing…</string>
+    <string name="Balance_AddCoins">Add Coins</string>
+    <string name="Balance_Sort_Balance">Balance</string>
+    <string name="Balance_Sort_PopupTitle">Sort by</string>
+    <string name="Balance_Sort_Az">A-Z</string>
+    <string name="Balance_Sort_Default">Default</string>
     <!--Send-->
-    <string name="Send_Title1">Send</string>
     <string name="Send_Title">Send %s</string>
-    <string name="Send_Hint_PaymentReference">Payment Reference</string>
     <string name="Send_Hint_Address">Address</string>
     <string name="Send_Hint_Amount">Миқдор</string>
+    <string name="Send_Fee">Fee:</string>
     <string name="Send_Button_Paste">Paste</string>
-    <string name="Send_Button_More">More</string>
-    <string name="Send_Button_Send">Send</string>
+    <string name="Send_Button_Next">Next</string>
     <string name="Send_Button_Max">Max</string>
+    <string name="Send_Confirmation_Title">Confirm</string>
+    <string name="Send_Confirmation_To">To: </string>
+    <string name="Send_Confirmation_HintMemo">Memo</string>
+    <string name="Send_Confirmation_Eos_HintAccount">Account</string>
+    <string name="Send_Confirmation_Total">Total:</string>
+    <string name="Send_Confirmation_EstimateTime">Estimate Time:</string>
+    <string name="Send_Confirmation_Send_Button">Send</string>
     <string name="Send_ScanQrCode">Scan QR Code</string>
     <string name="Send_Success">\u2713 Sent</string>
     <string name="Send_Error_InvalidAddress">Address seems invalid. Please check and try again!</string>
@@ -68,10 +89,13 @@
     <string name="Send_DialogTotal">Total:</string>
     <string name="Send_Sending">Sending</string>
     <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
+    <string name="Send_Token_InsufficientFeeAlert">Transaction fees for %s (%s) paid in %s. You need %s.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Receive %s</string>
     <string name="Deposit_Share">Forward</string>
     <string name="Deposit_Your_Address">Your Address</string>
+    <string name="Receive_Alert_NotBackedUp_Button">Backup</string>
+    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">just now</string>
     <string name="Timestamp_MinAgo">%dm. ago</string>
@@ -107,6 +131,10 @@
     <string name="FullInfo_Contract">Тамос</string>
     <string name="FullInfo_From">Аз</string>
     <string name="FullInfo_To">Ба</string>
+    <string name="FullInfo_Status">Status</string>
+    <string name="FullInfo_Memo">Memo</string>
+    <string name="FullInfo_CpuUsage">CPU Usage</string>
+    <string name="FullInfo_NetUsage">Net Usage</string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
@@ -132,10 +160,13 @@
     <!--Settings-->
     <string name="Settings_Title">Танзим</string>
     <string name="Settings_SecurityCenter">Маркази амниятӣ</string>
+    <string name="Settings_ManageCoins">Manage Coins</string>
+    <string name="Settings_RestoreWallet">Restore Wallet</string>
     <string name="Settings_BaseCurrency">Асос валюта</string>
     <string name="Settings_Language">Забон</string>
     <string name="Settings_LightMode">Холат нор</string>
     <string name="Settings_About">Барнома</string>
+    <string name="Settings_ShareThisWallet">Tell Friends</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <!--Settings-->
@@ -143,25 +174,28 @@
     <string name="Settings_Error_NoFingerprintAddedYet">Шума дастрасй ва ангошт надорйд ва танзим вравед &gt; амният ангошт ра фаъол кунед.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">Ангуштзанӣ</string>
+    <string name="SettingsSecurity_EnablePin">Passcode</string>
     <string name="SettingsSecurity_EditPin">Код ра таҳрир кунед</string>
+    <string name="SettingsSecurity_ManageKeys">Manage Keys</string>
     <string name="SettingsSecurity_BackupWallet">Нусхабардорӣ Wallet</string>
-    <string name="SettingsSecurity_UnlinkFromThisDevice">Аз ин дастгоҳ ҷудо кунед</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_1">Ин амал ин дастгоҳро аз ин дастгоҳ бароварда месозад.</string>
-    <string name="SettingsSecurity_ImportWalletConfirmation_2">Боварӣ ҳосил намоед, ки шумо калиди махфиро пуштибонӣ кардед ё шумо наметавонед ба фондҳои шумо дар оянда дастрас шавед.</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Асос валюта</string>
     <!--Setting_Language-->
     <string name="SettingsLanguage_Title">Забон</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Барнома</string>
+    <string name="SettingsAbout_AppTitle">Unstoppable</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Мафҳумҳо &amp; махфият:</string>
     <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
 \n\nIt works everywhere as long as there is internet. No entity can block this app from working or to block someone from using it.
 \n\nYour funds are securely stored on the phone itself, not anywhere else.
-\n\nIt’s your responsibility to backup your Secret Key and keep it private. Never show it to anyone. If it’s lost, forgotten or stollen your funds can be used by the person who has your Secret key.
+\n\nIt’s your responsibility to backup your Key and keep it private. Never show it to anyone. If it’s lost, forgotten or stollen your funds can be used by the person who has your key.
 \n\nDo not jailbreak your phone, do not install apps from unknown (untrusted) sources, do not give your device to untrusted people, and keep the Operating System on your phone up to date. The security of your wallet depends on this.
 \n\nThe entire code powering this app been open to the public scrutiny since the beginning. We tried to build the most secure and decentralized wallet we could, however there are no guarantees that there are no unintended software issues. That said, this wallet is likely to be significantly more secure than any smartphone wallet app out there.
-\n\nSome generic non-private app data like currency exchange rates are stored on decentralized storage (IPFS).</string>
+\n\nSome generic non-private app data like currency exchange rates are stored on decentralized storage(IPFS).</string>
+    <!--Setting_Tell Friends-->
+    <string name="SettingsShare_Title">Share</string>
+    <string name="SettingsShare_Text">Unstoppable Wallet - Nice App!</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Andriod keystore хатогӣ</string>
     <string name="Alert_KeysInvalidatedDescription">Иттилооти рамзкардашудае, ки ҳамён дошт, акнун беэътибор дониста шуд, чунки экрани компютери шумо иваз карда шуд</string>
@@ -175,6 +209,7 @@
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Кушодан</string>
     <string name="Hud_Text_Success">Нагз</string>
+    <string name="Hud_Text_Done">Done</string>
     <string name="Hud_Text_Error">Хата</string>
     <string name="Hud_Text_NoInternet">No Internet</string>
     <string name="Hud_Text_Copied">Нусхабардорӣ</string>
@@ -190,7 +225,8 @@
     <string name="UnlockPin_WalletDisabledUntil">Disabled until: %s</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">Phone PIN</string>
-    <string name="OSPin_Confirm_Desciption">This app requires your phone\'s PIN in order to keep sensitive data from your wallet in Android\'s secure storage and not in the app itself.</string>
+    <string name="OSPin_Confirm_Desciption">This app requires that phone has the passcode (screen lock) enabled.\n\n You may enable it in Android settings.\n\nPlease note that when you disabled the PIN on the OS level the security measures in safe storage of your phonе made the previously stored data invalid. You will need to Restore your wallet keys to get back to your wallet.</string>
+    <string name="OSPin_Prompt_Desciption">This app requires your phone\'s PIN in order to keep sensitive data from your wallet in Android\'s secure storage and not in the app itself.</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Passcode</string>
     <string name="SetPin_Info">Your passcode will be used to unlock your wallet and send money</string>
@@ -206,6 +242,36 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_save">Save</string>
+    <string name="ManageCoins_AddCoin_Title">Add %s Coin</string>
+    <string name="ManageCoins_AddCoin_Text">This action will generate a new key(wallet) for the following coins: %s </string>
+    <string name="ManageCoins_EOSAlert_CreateButton">At this point, the wallet is not able to create new EOS wallet accounts. You\'re only able to restore the existing one.</string>
+    <!--Manage Keys-->
+    <string name="ManageKeys_Title">Manage Keys</string>
+    <string name="ManageKeys_Description">Anyone with access to your Keys can steal your wallet funds. Store keys safely and never show them to anyone. \n\nBackup each key to be able to restore funds if you loose or break your phone, or simply the wallet app gets deleted.</string>
+    <string name="ManageKeys_Create">Create</string>
+    <string name="ManageKeys_Restore">Restore</string>
+    <string name="ManageKeys_Delete">Delete</string>
+    <string name="ManageKeys_Backup">Backup</string>
+    <string name="ManageKeys_Show">Show</string>
+    <!--Manage Keys Delete Alert-->
+    <string name="ManageKeys_Delete_Title">Delete Key</string>
+    <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s key (wallet) from this device.</string>
+    <string name="ManageKeys_Delete_ConfirmationDisable">Coins that will be disabled: %s</string>
+    <string name="ManageKeys_Delete_ConfirmationLoose">If you don\'t have a backup of this key you will loose the respective funds.</string>
+    <string name="ManageKeys_Delete_FromPhone">Delete from Phone</string>
+    <string name="ManageKeys_Delete_Alert">You need to backup this key before you may delete it.</string>
+    <!-- Manage Keys Alert -->
+    <string name="AddCoin_Title">Add %s</string>
+    <string name="AddCoin_Description">You don\'t have active key for use with %s. Use Create button below to generate a new key (wallet) \n\nYou may also use the existing key for the %s if you already have it.</string>
+    <string name="AddCoin_CreateKey">Create</string>
+    <string name="AddCoin_RestoreKey">Restore</string>
+    <!-- Account Types -->
+    <string name="AccountType_12Words">12 Words</string>
+    <string name="AccountType_12WordsKey">12 Words Key</string>
+    <string name="AccountType_Eos">EOS Blockchain</string>
+    <string name="AccountType_EosKey">EOS Key</string>
+    <string name="AccountType_Binance">Binance Chain</string>
+    <string name="AccountType_BinanceKey">Binance Key</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">Restore Options</string>
     <string name="CoinOption_Fast">Fast</string>
@@ -213,5 +279,5 @@
     <string name="CoinOption_Fast_Text">Restores your past transactions via secure third party server. For users with a long history of transactions involving very large sums this method may pose privacy risks.</string>
     <string name="CoinOption_Slow">Slow</string>
     <string name="CoinOption_MorePrivate">1&#8211;12 hours (More Private)</string>
-    <string name="CoinOption_Slow_Text">Restores your past transactions directly from the network. Significantly more private but very slow. If the restore takes way too much time go to Security section in Settings tab and select “Unlink This Device” option.</string>
+    <string name="CoinOption_Slow_Text">Restores your past transactions directly from the network. Significantly more private but very slow. If the restore takes way too much time, go to Manage Keys section and reimport the Key for the wallet using the Fast Sync option.</string>
 </resources>
