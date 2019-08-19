@@ -11,7 +11,7 @@ androidExtensions {
 }
 
 def computeVersionCode() {
-    ext.buildNumber = System.getenv("BUILD_NUMBER") ?: 16
+    ext.buildNumber = System.getenv("BUILD_NUMBER") ?: 17
     return "$buildNumber".toInteger()
 }
 
@@ -22,7 +22,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 28
         versionCode computeVersionCode()
-        versionName "0.7.0"
+        versionName "0.8.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         resValue "string", "localizations", buildProperties.get("localizations")
