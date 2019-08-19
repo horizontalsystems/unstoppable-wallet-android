@@ -128,9 +128,6 @@ object BalanceModule {
                 BalanceSortType.Name ->{
                     originalItems.sortedBy { it.coin.title }
                 }
-//                BalanceSortType.LastDayChange -> {
-//                    originalItems
-//                }
             }
 
         }
