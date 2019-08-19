@@ -59,10 +59,9 @@
     <string name="Balance_SyncedUntil">直到 %s</string>
     <string name="Balance_Syncing">同步...</string>
     <string name="Balance_AddCoins">添加硬币</string>
-    <string name="Balance_Sort_Balance">余额</string>
+    <string name="Balance_Sort_Balance">Value</string>
     <string name="Balance_Sort_PopupTitle">排序方式</string>
-    <string name="Balance_Sort_Az">A-Z</string>
-    <string name="Balance_Sort_Default">默认</string>
+    <string name="Balance_Sort_Az">Name</string>
     <!--Send-->
     <string name="Send_Title">发送%s</string>
     <string name="Send_Hint_Address">地址</string>
