@@ -59,10 +59,9 @@
     <string name="Balance_SyncedUntil">%s kadar</string>
     <string name="Balance_Syncing">Eşitleniyor…</string>
     <string name="Balance_AddCoins">Kredi Ekle</string>
-    <string name="Balance_Sort_Balance">Bakiye</string>
+    <string name="Balance_Sort_Balance">Value</string>
     <string name="Balance_Sort_PopupTitle">Sıralama şekli</string>
-    <string name="Balance_Sort_Az">A-Z</string>
-    <string name="Balance_Sort_Default">Varsayılan</string>
+    <string name="Balance_Sort_Az">Name</string>
     <!--Send-->
     <string name="Send_Title">%s gönder</string>
     <string name="Send_Hint_Address">Adres</string>
