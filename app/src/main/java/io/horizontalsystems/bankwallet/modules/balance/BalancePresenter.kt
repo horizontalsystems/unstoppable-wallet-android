@@ -147,6 +147,9 @@ class BalancePresenter(
         view?.didRefresh()
     }
 
+    override fun openManageKeys() {
+        router.openManageKeys()
+    }
 
     private fun sortCoins() {
         val syncedCount = dataSource.items.filter { it.state == AdapterState.Synced }.size
