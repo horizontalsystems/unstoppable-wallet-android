@@ -93,6 +93,7 @@
     <string name="Deposit_Title">%s al</string>
     <string name="Deposit_Share">Share</string>
     <string name="Deposit_Your_Address">Adresiniz</string>
+    <string name="Deposit_Your_Account">Your Account</string>
     <string name="Receive_Alert_NotBackedUp_Button">Yedekle</string>
     <string name="Receive_Alert_NotBackedUp_Description">Para almadan önce bu cüzdanın anahtarlarını yedeklemeniz gerekir. </string>
     <!--Timestamp-->
