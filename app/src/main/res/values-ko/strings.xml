@@ -91,7 +91,7 @@
     <string name="Send_Token_InsufficientFeeAlert">%s (%s) 에 대한 거래 수수료는 %s로 지불되었습니다. 귀하는 %s가 필요합니다.</string>
     <!--Deposit-->
     <string name="Deposit_Title">수신%s</string>
-    <string name="Deposit_Share">앞으로</string>
+    <string name="Deposit_Share">Share</string>
     <string name="Deposit_Your_Address">당신의 주소</string>
     <string name="Receive_Alert_NotBackedUp_Button">백업</string>
     <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
