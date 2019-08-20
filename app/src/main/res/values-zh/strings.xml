@@ -91,7 +91,7 @@
     <string name="Send_Token_InsufficientFeeAlert">以 %s 支付的 %s (%s) 交易费用。你需要 %s 。</string>
     <!--Deposit-->
     <string name="Deposit_Title">收到%s</string>
-    <string name="Deposit_Share">转发</string>
+    <string name="Deposit_Share">Share</string>
     <string name="Deposit_Your_Address">您的地址</string>
     <string name="Receive_Alert_NotBackedUp_Button">备份</string>
     <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
