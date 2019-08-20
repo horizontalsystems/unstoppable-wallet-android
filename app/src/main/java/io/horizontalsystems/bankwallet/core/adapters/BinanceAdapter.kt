@@ -1,9 +1,8 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.core.utils.AddressParser
-import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.bankwallet.entities.TransactionAddress
+import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.binancechainkit.models.TransactionInfo
 import io.reactivex.Flowable
@@ -12,16 +11,14 @@ import java.math.BigDecimal
 
 class BinanceAdapter(
         private val binanceKit: BinanceChainKit,
-        private val symbol: String,
-        private val addressParser: AddressParser)
-    : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, ISendAdapter {
+        private val symbol: String)
+    : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, ISendBinanceAdapter {
 
     private val asset = binanceKit.register(symbol)
 
-    override val decimal: Int = 8
+    // IAdapter
 
-    override val confirmationsThreshold: Int
-        get() = 6
+    override val decimal: Int = 8
 
     override fun start() {
         // handled by BinanceKitManager
@@ -35,11 +32,10 @@ class BinanceAdapter(
         // handled by BinanceKitManager
     }
 
-    override val lastBlockHeight: Int?
-        get() = binanceKit.latestBlock?.height
+    override val debugInfo: String
+        get() = ""
 
-    override val lastBlockHeightUpdatedFlowable: Flowable<Unit>
-        get() = binanceKit.latestBlockFlowable.map { Unit }
+    // IBalanceAdapter
 
     override val state: AdapterState
         get() = when (binanceKit.syncState) {
@@ -57,75 +53,25 @@ class BinanceAdapter(
     override val balanceUpdatedFlowable: Flowable<Unit>
         get() = asset.balanceFlowable.map { Unit }
 
+    // ITransactionsAdapter
+
+    override val confirmationsThreshold: Int
+        get() = 6
+
+    override val lastBlockHeight: Int?
+        get() = binanceKit.latestBlock?.height
+
+    override val lastBlockHeightUpdatedFlowable: Flowable<Unit>
+        get() = binanceKit.latestBlockFlowable.map { Unit }
+
+    override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
+        get() = asset.transactionsFlowable.map { it.map { tx -> transactionRecord(tx) } }
+
     override fun getTransactions(from: Pair<String, Int>?, limit: Int): Single<List<TransactionRecord>> {
         return binanceKit.transactions(asset, from?.first, limit).map { list ->
             list.map { transactionRecord(it) }
         }
     }
-
-    override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
-        get() = asset.transactionsFlowable.map { it.map { tx -> transactionRecord(tx) } }
-
-    override fun send(params: Map<SendModule.AdapterFields, Any?>): Single<Unit> {
-        val coinValue = params[SendModule.AdapterFields.CoinValue] as? CoinValue
-                ?: throw WrongParameters()
-        val address = params[SendModule.AdapterFields.Address] as? String
-                ?: throw WrongParameters()
-        val memo = params[SendModule.AdapterFields.Memo] as? String ?: ""
-
-        return binanceKit.send(symbol, address, coinValue.value, memo).map { Unit }
-    }
-
-    override fun availableBalance(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
-        var availableBalance = asset.balance
-        if (asset.symbol == "BNB"){
-            availableBalance -= transferFee
-        }
-        return if (availableBalance < BigDecimal.ZERO) BigDecimal.ZERO else availableBalance
-    }
-
-    override fun fee(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
-        return transferFee
-    }
-
-    override fun validate(address: String) {
-        binanceKit.validateAddress(address)
-    }
-
-    override fun validate(params: Map<SendModule.AdapterFields, Any?>): List<SendStateError> {
-        val errors = mutableListOf<SendStateError>()
-
-        (params[SendModule.AdapterFields.CoinAmountInBigDecimal] as? BigDecimal)?.let { amount ->
-            val availableBalance = availableBalance(params)
-            if (amount > availableBalance) {
-                errors.add(SendStateError.InsufficientAmount(availableBalance))
-            }
-        }
-
-        if (binanceKit.binanceBalance < transferFee) {
-            errors.add(SendStateError.InsufficientFeeBalance(transferFee))
-        }
-
-        return errors
-    }
-
-    override fun parsePaymentAddress(address: String): PaymentRequestAddress {
-        val paymentData = addressParser.parse(address)
-        var addressError: AddressError.InvalidPaymentAddress? = null
-        try {
-            validate(paymentData.address)
-        } catch (e: Exception) {
-            addressError = AddressError.InvalidPaymentAddress()
-        }
-
-        return PaymentRequestAddress(address, amount = paymentData.amount?.toBigDecimal(), error = addressError)
-    }
-
-    override val receiveAddress: String
-        get() = binanceKit.receiveAddress()
-
-    override val debugInfo: String
-        get() = ""
 
     private fun transactionRecord(transaction: TransactionInfo): TransactionRecord {
         val from = TransactionAddress(
@@ -157,6 +103,37 @@ class BinanceAdapter(
                 to = listOf(to)
         )
     }
+
+    // ISendBinanceAdapter
+
+    override val availableBalance: BigDecimal
+        get() {
+            var availableBalance = asset.balance
+            if (asset.symbol == "BNB") {
+                availableBalance -= transferFee
+            }
+            return if (availableBalance < BigDecimal.ZERO) BigDecimal.ZERO else availableBalance
+        }
+
+    override val availableBinanceBalance: BigDecimal
+        get() = binanceKit.binanceBalance
+
+    override val fee: BigDecimal
+        get() = transferFee
+
+    override fun send(amount: BigDecimal, address: String, memo: String?): Single<Unit> {
+        return binanceKit.send(symbol, address, amount, memo ?: "").map { Unit }
+    }
+
+    override fun validate(address: String) {
+        binanceKit.validateAddress(address)
+    }
+
+    // IReceiveAdapter
+
+    override val receiveAddress: String
+        get() = binanceKit.receiveAddress()
+
 
     companion object {
         val transferFee = BigDecimal(0.000375)

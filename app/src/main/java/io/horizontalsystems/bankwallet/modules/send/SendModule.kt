@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.send
 
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ISendBinanceAdapter
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.entities.CoinValue
@@ -65,6 +66,21 @@ object SendModule {
         fun didFailToSend(error: Throwable)
     }
 
+    interface ISendBinanceInteractor {
+        val availableBalance: BigDecimal
+        val availableBinanceBalance: BigDecimal
+        val fee: BigDecimal
+
+        fun validate(address: String)
+        fun send(amount: BigDecimal, address: String, memo: String?)
+        fun clear()
+    }
+
+    interface ISendBinanceInteractorDelegate {
+        fun didSend()
+        fun didFailToSend(error: Throwable)
+    }
+
     interface IRouter {
         fun scanQrCode()
     }
@@ -96,6 +112,20 @@ object SendModule {
                 view.amountModuleDelegate = presenter
                 view.addressModuleDelegate = presenter
                 view.feeModuleDelegate = presenter
+
+                view.delegate = presenter
+
+                presenter
+            }
+            is ISendBinanceAdapter -> {
+                val interactor = SendBinanceInteractor(adapter)
+                val presenter = SendBinancePresenter(interactor, view, SendConfirmationViewItemFactory())
+
+                presenter.view = view
+                interactor.delegate = presenter
+
+                view.amountModuleDelegate = presenter
+                view.addressModuleDelegate = presenter
 
                 view.delegate = presenter
 

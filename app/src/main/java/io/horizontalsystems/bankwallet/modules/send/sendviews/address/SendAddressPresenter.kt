@@ -10,8 +10,8 @@ class SendAddressPresenter(private val interactor: SendAddressModule.IInteractor
 
     override var address: String? = null
         private set(value) {
-            moduleDelegate?.onUpdateAddress()
             field = value
+            moduleDelegate?.onUpdateAddress()
         }
 
     override fun didScanQrCode(address: String) {

@@ -9,7 +9,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 class SendFeeInteractor(private val rateStorage: IRateStorage,
-                        private val feeRateProvider: IFeeRateProvider,
+                        private val feeRateProvider: IFeeRateProvider?,
                         private val currencyManager: ICurrencyManager) : SendFeeModule.IInteractor {
 
     private var disposable: Disposable? = null
@@ -26,7 +26,7 @@ class SendFeeInteractor(private val rateStorage: IRateStorage,
     }
 
     override fun getFeeRate(feeRatePriority: FeeRatePriority): Long {
-        return feeRateProvider.feeRate(feeRatePriority)
+        return feeRateProvider?.feeRate(feeRatePriority) ?: 0
     }
 
     override fun clear() {
