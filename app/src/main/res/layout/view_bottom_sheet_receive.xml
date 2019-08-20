@@ -70,16 +70,16 @@
         />
 
     <TextView
-        android:id="@+id/txtYourAddress"
+        android:id="@+id/receiverHint"
         style="@style/CaptionRegular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/Deposit_Your_Address"
         android:textColor="@color/grey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imgQrCode"
+        tools:text="@string/Deposit_Your_Address"
         />
 
     <io.horizontalsystems.bankwallet.ui.extensions.AddressView
@@ -91,7 +91,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="@+id/btnShare"
         app:layout_constraintStart_toStartOf="@+id/btnShare"
-        app:layout_constraintTop_toBottomOf="@+id/txtYourAddress"
+        app:layout_constraintTop_toBottomOf="@+id/receiverHint"
         />
 
     <Button

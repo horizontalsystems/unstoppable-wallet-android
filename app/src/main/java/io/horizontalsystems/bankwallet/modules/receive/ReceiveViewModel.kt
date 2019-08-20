@@ -14,6 +14,7 @@ class ReceiveViewModel : ViewModel(), ReceiveModule.IView, ReceiveModule.IRouter
     val showErrorLiveData = MutableLiveData<Int>()
     val showCopiedLiveEvent = SingleLiveEvent<Unit>()
     val shareAddressLiveEvent = SingleLiveEvent<String>()
+    val hintTextResLiveEvent = SingleLiveEvent<Int>()
 
     fun init(wallet: Wallet) {
         ReceiveModule.init(wallet, this, this)
@@ -34,5 +35,9 @@ class ReceiveViewModel : ViewModel(), ReceiveModule.IView, ReceiveModule.IRouter
 
     override fun shareAddress(address: String) {
         shareAddressLiveEvent.value = address
+    }
+
+    override fun setHint(hint: Int) {
+        hintTextResLiveEvent.value = hint
     }
 }

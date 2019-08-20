@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.receive
 
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.receive.viewitems.AddressItem
 
 class ReceivePresenter(
@@ -17,6 +18,14 @@ class ReceivePresenter(
     override fun didReceiveAddress(address: AddressItem) {
         this.receiveAddress = address
         view?.showAddress(address)
+        view?.setHint(getHint(address.coin.type))
+    }
+
+    private fun getHint(type: CoinType): Int {
+        return when(type) {
+            is CoinType.Eos -> R.string.Deposit_Your_Account
+            else -> R.string.Deposit_Your_Address
+        }
     }
 
     override fun didFailToReceiveAddress(exception: Exception) {
