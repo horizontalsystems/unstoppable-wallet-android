@@ -268,8 +268,6 @@ interface ISendEosAdapter {
 }
 
 interface IAdapter {
-    val decimal: Int
-
     fun start()
     fun stop()
     fun refresh()

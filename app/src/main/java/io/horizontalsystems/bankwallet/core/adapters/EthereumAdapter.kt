@@ -11,7 +11,7 @@ import io.reactivex.Single
 import java.math.BigDecimal
 
 class EthereumAdapter(kit: EthereumKit)
-    : EthereumBaseAdapter(kit, 18) {
+    : EthereumBaseAdapter(kit, decimal) {
 
     override fun sendSingle(address: String, amount: String, gasPrice: Long): Single<Unit> {
         return ethereumKit.send(address, amount, gasPrice).map { Unit }
@@ -91,6 +91,8 @@ class EthereumAdapter(kit: EthereumKit)
     }
 
     companion object {
+        const val decimal = 18
+
         fun clear(context: Context) {
             EthereumKit.clear(context)
         }

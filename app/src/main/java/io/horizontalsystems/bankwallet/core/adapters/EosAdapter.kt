@@ -17,8 +17,6 @@ class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit) : IAdapter, ITra
 
     // IAdapter
 
-    override val decimal: Int = 4
-
     override fun start() {
         // started via EosKitManager
     }

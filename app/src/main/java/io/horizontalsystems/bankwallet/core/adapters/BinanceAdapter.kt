@@ -18,8 +18,6 @@ class BinanceAdapter(
 
     // IAdapter
 
-    override val decimal: Int = 8
-
     override fun start() {
         // handled by BinanceKitManager
     }

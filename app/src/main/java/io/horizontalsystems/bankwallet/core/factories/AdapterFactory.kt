@@ -28,7 +28,7 @@ class AdapterFactory(
                 EthereumAdapter(ethereumKitManager.ethereumKit(wallet))
             }
             is CoinType.Erc20 -> {
-                Erc20Adapter(context, ethereumKitManager.ethereumKit(wallet), coinType.decimal, coinType.fee, coinType.address)
+                Erc20Adapter(context, ethereumKitManager.ethereumKit(wallet), wallet.coin.decimal, coinType.fee, coinType.address)
             }
         }
     }

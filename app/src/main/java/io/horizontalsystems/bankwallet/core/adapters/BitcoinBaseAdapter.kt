@@ -25,8 +25,6 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
     // Adapter implementation
     //
 
-    override val decimal = 8
-
     override val confirmationsThreshold: Int = 6
     override val lastBlockHeight: Int?
         get() = kit.lastBlockInfo?.height
@@ -117,4 +115,9 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
                 to = transaction.to.map { TransactionAddress(it.address, it.mine) }
         )
     }
+
+    companion object {
+        const val decimal = 8
+    }
+
 }

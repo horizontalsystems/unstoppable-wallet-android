@@ -26,7 +26,7 @@ class FullTransactionEthereumAdapter(val provider: FullTransactionInfoModule.Eth
             }
 
             val amount = if (coin.type is CoinType.Erc20) {
-                data.value.divide(BigInteger.TEN.pow(coin.type.decimal)).toDouble()
+                data.value.divide(BigInteger.TEN.pow(coin.decimal)).toDouble()
             } else {
                 data.value.toDouble() / EthereumResponse.ethRate
             }
