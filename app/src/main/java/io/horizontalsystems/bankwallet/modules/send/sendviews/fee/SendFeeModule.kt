@@ -55,7 +55,6 @@ object SendFeeModule {
 
     fun init(view: SendFeeViewModel, coin: Coin, moduleDelegate: IFeeModuleDelegate?): IFeeModule {
         val feeRateProvider = FeeRateProviderFactory.provider(coin)
-                ?: throw Exception("No FeeRateProvider")
         val feeCoinData = App.feeCoinProvider.feeCoinData(coin)
         val feeCoinCode = (feeCoinData?.first ?: coin).code
 

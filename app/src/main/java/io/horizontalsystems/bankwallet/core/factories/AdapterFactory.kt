@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.core.IEosKitManager
 import io.horizontalsystems.bankwallet.core.IEthereumKitManager
 import io.horizontalsystems.bankwallet.core.adapters.*
 import io.horizontalsystems.bankwallet.core.managers.BinanceKitManager
-import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.Wallet
 
@@ -24,7 +23,7 @@ class AdapterFactory(
             is CoinType.BitcoinCash -> BitcoinCashAdapter(wallet, appConfigProvider.testMode)
             is CoinType.Dash -> DashAdapter(wallet, appConfigProvider.testMode)
             is CoinType.Eos -> EosAdapter(coinType, eosKitManager.eosKit(wallet))
-            is CoinType.Binance -> BinanceAdapter(binanceKitManager.binanceKit(wallet), coinType.symbol, AddressParser("binance", true))
+            is CoinType.Binance -> BinanceAdapter(binanceKitManager.binanceKit(wallet), coinType.symbol)
             is CoinType.Ethereum -> {
                 EthereumAdapter(ethereumKitManager.ethereumKit(wallet))
             }

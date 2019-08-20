@@ -50,7 +50,7 @@ class SendFeeView : ConstraintLayout {
                 feeError.text = context.getString(R.string.Send_Token_InsufficientFeeAlert, coinCode, tokenProtocol, feeCoinTitle, formattedFee)
             } else {
                 feeError.visibility = View.GONE
-                feeRateSeekbar.visibility = View.VISIBLE
+                feeRateSeekbar.visibility = if (feeIsAdjustable) View.VISIBLE else View.GONE
                 feeAmountWrapper.visibility = View.VISIBLE
             }
         })
