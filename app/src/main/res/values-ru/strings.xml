@@ -91,7 +91,7 @@
     <string name="Send_Token_InsufficientFeeAlert">Комиссия за отправку %s %s взимается в %s. Необходимо %s.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Получить %s</string>
-    <string name="Deposit_Share">Переслать</string>
+    <string name="Deposit_Share">Share</string>
     <string name="Deposit_Your_Address">Ваш Адрес</string>
     <string name="Receive_Alert_NotBackedUp_Button">Резервная копия</string>
     <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
