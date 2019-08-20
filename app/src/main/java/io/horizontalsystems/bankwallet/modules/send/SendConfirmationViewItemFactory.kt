@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.send
 import io.horizontalsystems.bankwallet.core.WrongParameters
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.send.sendviews.confirmation.SendConfirmationInfo
+import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.SendConfirmationInfo
 
 class SendConfirmationViewItemFactory {
 

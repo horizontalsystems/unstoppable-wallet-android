@@ -4,10 +4,18 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.send.sendviews.address.SendAddressModule
-import io.horizontalsystems.bankwallet.modules.send.sendviews.amount.SendAmountModule
-import io.horizontalsystems.bankwallet.modules.send.sendviews.confirmation.SendConfirmationInfo
-import io.horizontalsystems.bankwallet.modules.send.sendviews.fee.SendFeeModule
+import io.horizontalsystems.bankwallet.modules.send.binance.SendBinanceInteractor
+import io.horizontalsystems.bankwallet.modules.send.binance.SendBinancePresenter
+import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinInteractor
+import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinPresenter
+import io.horizontalsystems.bankwallet.modules.send.eos.SendEosInteractor
+import io.horizontalsystems.bankwallet.modules.send.eos.SendEosPresenter
+import io.horizontalsystems.bankwallet.modules.send.ethereum.SendEthereumInteractor
+import io.horizontalsystems.bankwallet.modules.send.ethereum.SendEthereumPresenter
+import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
+import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
+import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.SendConfirmationInfo
+import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
 import java.math.BigDecimal
 
 object SendModule {
