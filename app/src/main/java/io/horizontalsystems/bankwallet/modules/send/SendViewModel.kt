@@ -17,7 +17,7 @@ class SendViewModel : ViewModel(), SendModule.IView, SendModule.IRouter {
     var addressModuleDelegate: SendAddressModule.IAddressModuleDelegate? = null
     var feeModuleDelegate: SendFeeModule.IFeeModuleDelegate? = null
 
-    val dismissWithSuccessLiveEvent = SingleLiveEvent<Unit>()
+    val closeWithSuccess = SingleLiveEvent<Unit>()
     val errorLiveData = MutableLiveData<Throwable>()
     val sendConfirmationLiveData = MutableLiveData<SendConfirmationInfo>()
     val showSendConfirmationLiveData = SingleLiveEvent<Unit>()
@@ -38,12 +38,13 @@ class SendViewModel : ViewModel(), SendModule.IView, SendModule.IRouter {
         sendButtonEnabledLiveData.value = enabled
     }
 
-    override fun dismissWithSuccess() {
-        dismissWithSuccessLiveEvent.call()
-    }
-
     override fun showError(error: Throwable) {
         errorLiveData.value = error
+    }
+
+    override fun showConfirmation(viewItem: SendConfirmationInfo) {
+        sendConfirmationLiveData.value = viewItem
+        showSendConfirmationLiveData.call()
     }
 
     // SendModule.IRouter
@@ -52,9 +53,8 @@ class SendViewModel : ViewModel(), SendModule.IView, SendModule.IRouter {
         scanQrCode.call()
     }
 
-    override fun showConfirmation(viewItem: SendConfirmationInfo) {
-        sendConfirmationLiveData.value = viewItem
-        showSendConfirmationLiveData.call()
+    override fun closeWithSuccess() {
+        closeWithSuccess.call()
     }
 
     override fun onCleared() {

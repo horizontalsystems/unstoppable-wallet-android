@@ -65,7 +65,7 @@ class SendActivity : BaseActivity() {
                     .commit()
         })
 
-        mainViewModel.dismissWithSuccessLiveEvent.observe(this, Observer {
+        mainViewModel.closeWithSuccess.observe(this, Observer {
             HudHelper.showSuccessMessage(R.string.Send_Success)
             finish()
         })

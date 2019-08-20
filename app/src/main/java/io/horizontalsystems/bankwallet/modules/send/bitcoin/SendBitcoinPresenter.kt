@@ -88,7 +88,7 @@ class SendBitcoinPresenter(private val interactor: SendModule.ISendBitcoinIntera
     // SendModule.ISendBitcoinInteractorDelegate
 
     override fun didSend() {
-        view?.dismissWithSuccess()
+        router.closeWithSuccess()
     }
 
     override fun didFailToSend(error: Throwable) {
