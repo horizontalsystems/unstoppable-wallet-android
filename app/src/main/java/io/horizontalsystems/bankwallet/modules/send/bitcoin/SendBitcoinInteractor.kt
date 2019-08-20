@@ -42,11 +42,14 @@ class SendBitcoinInteractor(private val adapter: ISendBitcoinAdapter) : SendModu
     }
 
     override fun send(amount: BigDecimal, address: String, feeRate: Long) {
-        adapter.send(amount, address, feeRate).subscribe({
-            delegate?.didSend()
-        }, { error ->
-            delegate?.didFailToSend(error)
-        }).let { disposables.add(it) }
+        adapter.send(amount, address, feeRate)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    delegate?.didSend()
+                }, { error ->
+                    delegate?.didFailToSend(error)
+                }).let { disposables.add(it) }
     }
 
     override fun clear() {
