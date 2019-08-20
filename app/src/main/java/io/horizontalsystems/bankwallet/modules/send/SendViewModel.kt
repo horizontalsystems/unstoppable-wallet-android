@@ -18,11 +18,11 @@ class SendViewModel : ViewModel(), SendModule.IView, SendModule.IRouter {
     var feeModuleDelegate: SendFeeModule.IFeeModuleDelegate? = null
 
     val closeWithSuccess = SingleLiveEvent<Unit>()
-    val errorLiveData = MutableLiveData<Throwable>()
-    val sendConfirmationLiveData = MutableLiveData<SendConfirmationInfo>()
-    val showSendConfirmationLiveData = SingleLiveEvent<Unit>()
-    val sendButtonEnabledLiveData = MutableLiveData<Boolean>()
-    val inputItemsLiveEvent = SingleLiveEvent<List<SendModule.Input>>()
+    val error = MutableLiveData<Throwable>()
+    val sendConfirmation = MutableLiveData<SendConfirmationInfo>()
+    val showSendConfirmation = SingleLiveEvent<Unit>()
+    val sendButtonEnabled = MutableLiveData<Boolean>()
+    val inputItems = SingleLiveEvent<List<SendModule.Input>>()
 
     val scanQrCode = SingleLiveEvent<Unit>()
 
@@ -31,20 +31,20 @@ class SendViewModel : ViewModel(), SendModule.IView, SendModule.IRouter {
     }
 
     override fun loadInputItems(inputs: List<SendModule.Input>) {
-        inputItemsLiveEvent.value = inputs
+        inputItems.value = inputs
     }
 
     override fun setSendButtonEnabled(enabled: Boolean) {
-        sendButtonEnabledLiveData.value = enabled
+        sendButtonEnabled.value = enabled
     }
 
     override fun showError(error: Throwable) {
-        errorLiveData.value = error
+        this.error.value = error
     }
 
     override fun showConfirmation(viewItem: SendConfirmationInfo) {
-        sendConfirmationLiveData.value = viewItem
-        showSendConfirmationLiveData.call()
+        sendConfirmation.value = viewItem
+        showSendConfirmation.call()
     }
 
     // SendModule.IRouter

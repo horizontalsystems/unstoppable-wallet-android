@@ -12,7 +12,6 @@ class SendConfirmationViewModel: ViewModel(), SendConfirmationModule.IView {
     val addMemoViewItem = SingleLiveEvent<Unit>()
     val showCopied = SingleLiveEvent<Unit>()
     val addSendButton = SingleLiveEvent<Unit>()
-    val getMemo = SingleLiveEvent<Unit>()
     val sendWithMemo = SingleLiveEvent<String?>()
     val sendButtonState= SingleLiveEvent<SendConfirmationModule.SendButtonState>()
 
@@ -40,10 +39,6 @@ class SendConfirmationViewModel: ViewModel(), SendConfirmationModule.IView {
 
     override fun loadSendButton() {
         addSendButton.call()
-    }
-
-    override fun getMemo() {
-        getMemo.call()
     }
 
     override fun send(memo: String?) {

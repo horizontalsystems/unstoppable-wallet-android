@@ -48,7 +48,7 @@ class ConfirmationFragment : Fragment() {
 
         confirmationViewModel = ViewModelProviders.of(this).get(SendConfirmationViewModel::class.java)
 
-        sendViewModel?.sendConfirmationLiveData?.observe(viewLifecycleOwner, Observer {
+        sendViewModel?.sendConfirmation?.observe(viewLifecycleOwner, Observer {
             confirmationViewModel?.init(it)
         })
 
@@ -94,7 +94,7 @@ class ConfirmationFragment : Fragment() {
             sendViewModel?.delegate?.onSendConfirmed(memo)
         })
 
-        sendViewModel?.errorLiveData?.observe(viewLifecycleOwner, Observer { errorMsgTextRes ->
+        sendViewModel?.error?.observe(viewLifecycleOwner, Observer { errorMsgTextRes ->
             errorMsgTextRes?.let { HudHelper.showErrorMessage(getErrorText(it)) }
             confirmationViewModel?.delegate?.onSendError()
         })

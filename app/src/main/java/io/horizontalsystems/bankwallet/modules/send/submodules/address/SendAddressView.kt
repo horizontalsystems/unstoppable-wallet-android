@@ -34,7 +34,7 @@ class SendAddressView : ConstraintLayout {
         btnPaste?.setOnClickListener { delegate.onAddressPasteClicked() }
         btnDeleteAddress?.setOnClickListener { delegate.onAddressDeleteClicked() }
 
-        sendAddressViewModel.addressTextLiveData.observe(lifecycleOwner, Observer { address ->
+        sendAddressViewModel.addressText.observe(lifecycleOwner, Observer { address ->
             txtAddress.text = address
 
             val empty = address?.isEmpty() ?: true
@@ -43,7 +43,7 @@ class SendAddressView : ConstraintLayout {
             btnDeleteAddress.visibility = if (empty) View.GONE else View.VISIBLE
         })
 
-        sendAddressViewModel.errorLiveData.observe(lifecycleOwner, Observer { error ->
+        sendAddressViewModel.error.observe(lifecycleOwner, Observer { error ->
             error?.let {
                 val errorText = context.getString(R.string.Send_Error_IncorrectAddress)
                 txtAddressError.visibility = View.VISIBLE
@@ -53,7 +53,7 @@ class SendAddressView : ConstraintLayout {
             }
         })
 
-        sendAddressViewModel.pasteButtonEnabledLiveData.observe(lifecycleOwner, Observer { enabled ->
+        sendAddressViewModel.pasteButtonEnabled.observe(lifecycleOwner, Observer { enabled ->
             btnPaste.isEnabled = enabled
         })
 

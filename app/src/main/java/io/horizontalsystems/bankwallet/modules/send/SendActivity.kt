@@ -48,11 +48,11 @@ class SendActivity : BaseActivity() {
 
         mainPresenter.onViewDidLoad()
 
-        mainViewModel.inputItemsLiveEvent.observe(this, Observer { inputItems ->
+        mainViewModel.inputItems.observe(this, Observer { inputItems ->
             addInputItems(wallet, inputItems)
         })
 
-        mainViewModel.showSendConfirmationLiveData.observe(this, Observer {
+        mainViewModel.showSendConfirmation.observe(this, Observer {
             hideSoftKeyboard()
 
             val fragmentTransaction = supportFragmentManager
@@ -70,7 +70,7 @@ class SendActivity : BaseActivity() {
             finish()
         })
 
-        mainViewModel.sendButtonEnabledLiveData.observe(this, Observer { enabled ->
+        mainViewModel.sendButtonEnabled.observe(this, Observer { enabled ->
             sendButtonView?.updateState(enabled)
         })
 
