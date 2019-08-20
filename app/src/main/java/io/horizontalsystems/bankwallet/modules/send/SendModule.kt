@@ -24,7 +24,6 @@ object SendModule {
         fun loadInputItems(inputs: List<Input>)
         fun setSendButtonEnabled(enabled: Boolean)
         fun showConfirmation(viewItem: SendConfirmationInfo)
-        fun dismissWithSuccess()
         fun showError(error: Throwable)
     }
 
@@ -101,6 +100,7 @@ object SendModule {
 
     interface IRouter {
         fun scanQrCode()
+        fun closeWithSuccess()
     }
 
     fun init(view: SendViewModel, wallet: Wallet): IViewDelegate {

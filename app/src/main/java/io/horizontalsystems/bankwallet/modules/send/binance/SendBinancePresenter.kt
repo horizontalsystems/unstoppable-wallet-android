@@ -80,7 +80,7 @@ class SendBinancePresenter(private val interactor: SendModule.ISendBinanceIntera
     // SendModule.ISendBinanceInteractorDelegate
 
     override fun didSend() {
-        view?.dismissWithSuccess()
+        router.closeWithSuccess()
     }
 
     override fun didFailToSend(error: Throwable) {

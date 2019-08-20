@@ -78,7 +78,7 @@ class SendEosPresenter(private val interactor: SendModule.ISendEosInteractor,
     // SendModule.ISendEthereumInteractorDelegate
 
     override fun didSend() {
-        view?.dismissWithSuccess()
+        router.closeWithSuccess()
     }
 
     override fun didFailToSend(error: Throwable) {
