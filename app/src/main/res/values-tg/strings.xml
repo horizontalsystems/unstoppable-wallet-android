@@ -91,7 +91,7 @@
     <string name="Send_Token_InsufficientFeeAlert">Transaction fees for %s (%s) paid in %s. You need %s.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Receive %s</string>
-    <string name="Deposit_Share">Forward</string>
+    <string name="Deposit_Share">Share</string>
     <string name="Deposit_Your_Address">Your Address</string>
     <string name="Receive_Alert_NotBackedUp_Button">Backup</string>
     <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
