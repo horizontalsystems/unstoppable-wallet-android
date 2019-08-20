@@ -59,6 +59,8 @@ class ReceiveView : ConstraintLayout {
 
     private val showCopiedObserver = Observer<Unit> { HudHelper.showSuccessMessage(R.string.Hud_Text_Copied, 500) }
 
+    private val setHintTextObserver = Observer<Int> { receiverHint.setText(it) }
+
     private val shareAddressObserver = Observer<String?> { address ->
         address?.let {
             listener?.shareReceiveAddress(it)
@@ -70,6 +72,7 @@ class ReceiveView : ConstraintLayout {
         viewModel.showErrorLiveData.reObserve(lifecycleOwner, showErrorObserver)
         viewModel.showCopiedLiveEvent.reObserve(lifecycleOwner, showCopiedObserver)
         viewModel.shareAddressLiveEvent.reObserve(lifecycleOwner, shareAddressObserver)
+        viewModel.hintTextResLiveEvent.reObserve(lifecycleOwner, setHintTextObserver)
     }
 
 }

@@ -11,6 +11,7 @@ object ReceiveModule {
         fun showAddress(address: AddressItem)
         fun showError(error: Int)
         fun showCopied()
+        fun setHint(hint: Int)
     }
 
     interface IViewDelegate {
