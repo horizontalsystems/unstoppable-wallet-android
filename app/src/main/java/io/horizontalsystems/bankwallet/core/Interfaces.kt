@@ -235,25 +235,6 @@ interface IReceiveAdapter {
     val receiveAddress: String
 }
 
-interface ISendAdapter {
-    fun availableBalance(params: Map<SendModule.AdapterFields, Any?>): BigDecimal
-
-    @Throws
-    fun send(params: Map<SendModule.AdapterFields, Any?>): Single<Unit>
-
-    @Throws
-    fun fee(params: Map<SendModule.AdapterFields, Any?>): BigDecimal
-
-    @Throws
-    fun validate(address: String)
-
-    @Throws
-    fun validate(params: Map<SendModule.AdapterFields, Any?>): List<SendStateError>
-
-    fun parsePaymentAddress(address: String): PaymentRequestAddress
-//    fun getFeeRate(feeRatePriority: FeeRatePriority): Long
-}
-
 interface ISendBitcoinAdapter {
     fun availableBalance(feeRate: Long, address: String?): BigDecimal
     fun fee(amount: BigDecimal, feeRate: Long, address: String?): BigDecimal
@@ -277,6 +258,13 @@ interface ISendBinanceAdapter {
 
     fun validate(address: String)
     fun send(amount: BigDecimal, address: String, memo: String?): Single<Unit>
+}
+
+interface ISendEosAdapter {
+    val availableBalance: BigDecimal
+
+    fun validate(account: String)
+    fun send(amount: BigDecimal, account: String, memo: String?): Single<Unit>
 }
 
 interface IAdapter {

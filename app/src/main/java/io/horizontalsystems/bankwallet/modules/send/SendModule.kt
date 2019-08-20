@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send
 
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.ISendBinanceAdapter
-import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
-import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -81,6 +78,19 @@ object SendModule {
         fun didFailToSend(error: Throwable)
     }
 
+    interface ISendEosInteractor {
+        val availableBalance: BigDecimal
+
+        fun validate(account: String)
+        fun send(amount: BigDecimal, account: String, memo: String?)
+        fun clear()
+    }
+
+    interface ISendEosInteractorDelegate {
+        fun didSend()
+        fun didFailToSend(error: Throwable)
+    }
+
     interface IRouter {
         fun scanQrCode()
     }
@@ -131,6 +141,20 @@ object SendModule {
 
                 presenter
             }
+            is ISendEosAdapter -> {
+                val interactor = SendEosInteractor(adapter)
+                val presenter = SendEosPresenter(interactor, view, SendConfirmationViewItemFactory())
+
+                presenter.view = view
+                interactor.delegate = presenter
+
+                view.amountModuleDelegate = presenter
+                view.addressModuleDelegate = presenter
+
+                view.delegate = presenter
+
+                presenter
+            }
             else -> {
                 throw Exception("No adapter found!")
             }
@@ -139,10 +163,6 @@ object SendModule {
 
     enum class InputType {
         COIN, CURRENCY
-    }
-
-    enum class AdapterFields {
-        CoinAmountInBigDecimal, CoinValue, CurrencyValue, Address, FeeRate, InputType, FeeCoinValue, FeeCurrencyValue, Memo
     }
 
     sealed class Input {
