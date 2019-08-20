@@ -18,7 +18,7 @@ class SendViewModel : ViewModel(), SendModule.IView, SendModule.IRouter {
     var feeModuleDelegate: SendFeeModule.IFeeModuleDelegate? = null
 
     val dismissWithSuccessLiveEvent = SingleLiveEvent<Unit>()
-    val errorLiveData = MutableLiveData<Int?>()
+    val errorLiveData = MutableLiveData<Throwable>()
     val sendConfirmationLiveData = MutableLiveData<SendConfirmationInfo>()
     val showSendConfirmationLiveData = SingleLiveEvent<Unit>()
     val sendButtonEnabledLiveData = MutableLiveData<Boolean>()
@@ -42,7 +42,7 @@ class SendViewModel : ViewModel(), SendModule.IView, SendModule.IRouter {
         dismissWithSuccessLiveEvent.call()
     }
 
-    override fun showError(error: Int) {
+    override fun showError(error: Throwable) {
         errorLiveData.value = error
     }
 

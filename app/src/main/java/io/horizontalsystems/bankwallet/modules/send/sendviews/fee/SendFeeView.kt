@@ -7,6 +7,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import kotlinx.android.synthetic.main.view_fee_priority_input.view.*
 
 class SendFeeView : ConstraintLayout {
@@ -30,24 +31,30 @@ class SendFeeView : ConstraintLayout {
             delegate.onFeeSliderChange(progress)
         }
 
-        sendFeeViewModel.primaryFeeLiveData.observe(lifecycleOwner, Observer { txtFeePrimary.text = " $it" })
+        sendFeeViewModel.primaryFee.observe(lifecycleOwner, Observer { txtFeePrimary.text = " $it" })
 
-        sendFeeViewModel.secondaryFeeLiveData.observe(lifecycleOwner, Observer { txtFeeSecondary.text = it })
+        sendFeeViewModel.secondaryFee.observe(lifecycleOwner, Observer { txtFeeSecondary.text = it })
 
+        sendFeeViewModel.insufficientFeeBalanceError.observe(lifecycleOwner, Observer { error ->
 
-//        viewModel.insufficientFeeBalanceErrorLiveEvent.observe(lifecycleOwner, Observer {feeCoinValue ->
-//            feeError.visibility = View.VISIBLE
-//            feeRateSeekbar.visibility = View.GONE
-//            feeAmountWrapper.visibility = View.GONE
-//
-//            val coinCode = viewModel.delegate.coinCode
-//            val tokenProtocol = viewModel.delegate.tokenProtocol
-//            val baseCoinName = viewModel.delegate.baseCoinName
-//            val formattedFee = App.numberFormatter.format(feeCoinValue)
-//
-//            feeError.text = context.getString(R.string.Send_Token_InsufficientFeeAlert, coinCode, tokenProtocol, baseCoinName, formattedFee)
-//        })
-//
+            if (error != null) {
+                feeError.visibility = View.VISIBLE
+                feeRateSeekbar.visibility = View.GONE
+                feeAmountWrapper.visibility = View.GONE
+
+                val coinCode = error.coin.code
+                val tokenProtocol = error.coinProtocol
+                val feeCoinTitle = error.feeCoin.title
+                val formattedFee = App.numberFormatter.format(error.fee)
+
+                feeError.text = context.getString(R.string.Send_Token_InsufficientFeeAlert, coinCode, tokenProtocol, feeCoinTitle, formattedFee)
+            } else {
+                feeError.visibility = View.GONE
+                feeRateSeekbar.visibility = View.VISIBLE
+                feeAmountWrapper.visibility = View.VISIBLE
+            }
+        })
+
         delegate.onViewDidLoad()
     }
 

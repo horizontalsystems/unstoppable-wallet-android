@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.WrongParameters
 import io.horizontalsystems.bankwallet.modules.send.SendViewModel
 import io.horizontalsystems.bankwallet.modules.send.sendviews.confirmation.subviews.ConfirmationMemoView
 import io.horizontalsystems.bankwallet.modules.send.sendviews.confirmation.subviews.ConfirmationPrimaryView
@@ -16,6 +17,7 @@ import io.horizontalsystems.bankwallet.modules.send.sendviews.confirmation.subvi
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_confirmation.*
+import java.net.UnknownHostException
 
 class ConfirmationFragment : Fragment() {
 
@@ -93,7 +95,7 @@ class ConfirmationFragment : Fragment() {
         })
 
         sendViewModel?.errorLiveData?.observe(viewLifecycleOwner, Observer { errorMsgTextRes ->
-            errorMsgTextRes?.let { HudHelper.showErrorMessage(it) }
+            errorMsgTextRes?.let { HudHelper.showErrorMessage(getErrorText(it)) }
             confirmationViewModel?.delegate?.onSendError()
         })
 
@@ -101,6 +103,14 @@ class ConfirmationFragment : Fragment() {
             sendButtonView?.bind(state)
         })
 
+    }
+
+    private fun getErrorText(error: Throwable): Int {
+        return when (error) {
+            is WrongParameters -> R.string.Error
+            is UnknownHostException -> R.string.Hud_Text_NoInternet
+            else -> R.string.Hud_Network_Issue
+        }
     }
 
 }

@@ -12,11 +12,11 @@ class SendFeeInteractor(private val rateStorage: IRateStorage,
                         private val feeRateProvider: IFeeRateProvider,
                         private val currencyManager: ICurrencyManager) : SendFeeModule.IInteractor {
 
-    var delegate: SendFeeModule.IInteractorDelegate? = null
     private var disposable: Disposable? = null
 
-    override fun getRate(coinCode: String) {
+    var delegate: SendFeeModule.IInteractorDelegate? = null
 
+    override fun getRate(coinCode: String) {
         disposable = rateStorage.latestRateObservable(coinCode, currencyManager.baseCurrency.code)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -28,4 +28,9 @@ class SendFeeInteractor(private val rateStorage: IRateStorage,
     override fun getFeeRate(feeRatePriority: FeeRatePriority): Long {
         return feeRateProvider.feeRate(feeRatePriority)
     }
+
+    override fun clear() {
+        disposable?.dispose()
+    }
+
 }
