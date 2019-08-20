@@ -60,7 +60,7 @@ object SendAmountModule {
 
     fun init(view: SendAmountViewModel, wallet: Wallet, moduleDelegate: IAmountModuleDelegate?): SendAmountPresenter {
         val adapter = App.adapterManager.getAdapterForWallet(wallet)
-        val coinDecimal = min(adapter!!.decimal, App.appConfigProvider.maxDecimal) //TODO take decimal from coin
+        val coinDecimal = min(wallet.coin.decimal, App.appConfigProvider.maxDecimal)
         val currencyDecimal = App.appConfigProvider.fiatDecimal
         val baseCurrency = App.currencyManager.baseCurrency
 

@@ -59,10 +59,10 @@ class Erc20Adapter(context: Context, kit: EthereumKit, decimal: Int, private val
     }
 
     override val ethereumBalance: BigDecimal
-        get() = balanceInBigDecimal(ethereumKit.balance, 18)
+        get() = balanceInBigDecimal(ethereumKit.balance, EthereumAdapter.decimal)
 
     override fun fee(gasPrice: Long): BigDecimal {
-        return erc20Kit.fee(gasPrice).movePointLeft(18)
+        return erc20Kit.fee(gasPrice).movePointLeft(EthereumAdapter.decimal)
     }
 
     private fun transactionRecord(transaction: TransactionInfo): TransactionRecord {

@@ -5,7 +5,7 @@ import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 @Parcelize
-data class Coin(val title: String, val code: String, val type: CoinType) : Parcelable {
+data class Coin(val title: String, val code: String, val decimal: Int, val type: CoinType) : Parcelable {
 
     override fun equals(other: Any?): Boolean {
         if (other is Coin) {
