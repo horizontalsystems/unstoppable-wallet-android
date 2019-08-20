@@ -2,12 +2,8 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.SendStateError
-import io.horizontalsystems.bankwallet.core.WrongParameters
-import io.horizontalsystems.bankwallet.core.utils.AddressParser
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
-import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.erc20kit.core.Erc20Kit.SyncState
 import io.horizontalsystems.erc20kit.core.TransactionKey
@@ -18,10 +14,12 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
 
-class Erc20Adapter(context: Context, kit: EthereumKit, decimal: Int, private val fee: BigDecimal, contractAddress: String, addressParser: AddressParser)
-    : EthereumBaseAdapter(kit, decimal, addressParser) {
+class Erc20Adapter(context: Context, kit: EthereumKit, decimal: Int, private val fee: BigDecimal, contractAddress: String)
+    : EthereumBaseAdapter(kit, decimal) {
 
     private val erc20Kit: Erc20Kit = Erc20Kit.getInstance(context, ethereumKit, contractAddress)
+
+    // IBalanceAdapter
 
     override val state: AdapterState
         get() = when (erc20Kit.syncState) {
@@ -39,6 +37,8 @@ class Erc20Adapter(context: Context, kit: EthereumKit, decimal: Int, private val
     override val balanceUpdatedFlowable: Flowable<Unit>
         get() = erc20Kit.balanceFlowable.map { Unit }
 
+    // ITransactionsAdapter
+
     override fun getTransactions(from: Pair<String, Int>?, limit: Int): Single<List<TransactionRecord>> {
         return erc20Kit.transactions(from?.let { TransactionKey(it.first.hexStringToByteArray(), it.second) }, limit).map {
             it.map { tx -> transactionRecord(tx) }
@@ -48,38 +48,21 @@ class Erc20Adapter(context: Context, kit: EthereumKit, decimal: Int, private val
     override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
         get() = erc20Kit.transactionsFlowable.map { it.map { tx -> transactionRecord(tx) } }
 
+    // ISendEthereumAdapter
+
     override fun sendSingle(address: String, amount: String, gasPrice: Long): Single<Unit> {
         return erc20Kit.send(address, amount, gasPrice).map { Unit }
     }
 
-    override fun availableBalance(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
+    override fun availableBalance(gasPrice: Long): BigDecimal {
         return balance - fee
     }
 
-    override fun fee(params: Map<SendModule.AdapterFields, Any?>): BigDecimal {
-        val feeRate = params[SendModule.AdapterFields.FeeRate] as? Long
-                ?: throw WrongParameters()
-        return erc20Kit.fee(gasPrice = feeRate).movePointLeft(18)
-    }
+    override val ethereumBalance: BigDecimal
+        get() = balanceInBigDecimal(ethereumKit.balance, 18)
 
-    override fun validate(params: Map<SendModule.AdapterFields, Any?>): List<SendStateError> {
-        val errors = mutableListOf<SendStateError>()
-
-        (params[SendModule.AdapterFields.CoinAmountInBigDecimal] as? BigDecimal)?.let { amount ->
-            val availableBalance = availableBalance(params)
-            if (amount > availableBalance) {
-                errors.add(SendStateError.InsufficientAmount(availableBalance))
-            }
-        }
-
-        val ethereumBalance = balanceInBigDecimal(ethereumKit.balance, 18)
-        val expectedFee = fee(params)
-
-        if (ethereumBalance < expectedFee) {
-            errors.add(SendStateError.InsufficientFeeBalance(expectedFee))
-        }
-
-        return errors
+    override fun fee(gasPrice: Long): BigDecimal {
+        return erc20Kit.fee(gasPrice).movePointLeft(18)
     }
 
     private fun transactionRecord(transaction: TransactionInfo): TransactionRecord {

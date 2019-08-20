@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.send
 
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
+import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -18,7 +19,7 @@ object SendModule {
         fun setSendButtonEnabled(enabled: Boolean)
         fun showConfirmation(viewItem: SendConfirmationInfo)
         fun dismissWithSuccess()
-        fun showError(error: Int)
+        fun showError(error: Throwable)
     }
 
     interface IViewDelegate {
@@ -49,6 +50,21 @@ object SendModule {
         fun didFailToSend(error: Throwable)
     }
 
+    interface ISendEthereumInteractor {
+        val ethereumBalance: BigDecimal
+
+        fun availableBalance(gasPrice: Long): BigDecimal
+        fun validate(address: String)
+        fun fee(gasPrice: Long): BigDecimal
+        fun send(amount: BigDecimal, address: String, gasPrice: Long)
+        fun clear()
+    }
+
+    interface ISendEthereumInteractorDelegate {
+        fun didSend()
+        fun didFailToSend(error: Throwable)
+    }
+
     interface IRouter {
         fun scanQrCode()
     }
@@ -56,8 +72,23 @@ object SendModule {
     fun init(view: SendViewModel, wallet: Wallet): IViewDelegate {
         return when (val adapter = App.adapterManager.getAdapterForWallet(wallet)) {
             is ISendBitcoinAdapter -> {
-                val interactor = SendBitcoinInteractor(adapter as ISendBitcoinAdapter)
+                val interactor = SendBitcoinInteractor(adapter)
                 val presenter = SendBitcoinPresenter(interactor, view, SendConfirmationViewItemFactory())
+
+                presenter.view = view
+                interactor.delegate = presenter
+
+                view.amountModuleDelegate = presenter
+                view.addressModuleDelegate = presenter
+                view.feeModuleDelegate = presenter
+
+                view.delegate = presenter
+
+                presenter
+            }
+            is ISendEthereumAdapter -> {
+                val interactor = SendEthereumInteractor(adapter)
+                val presenter = SendEthereumPresenter(interactor, view, SendConfirmationViewItemFactory())
 
                 presenter.view = view
                 interactor.delegate = presenter

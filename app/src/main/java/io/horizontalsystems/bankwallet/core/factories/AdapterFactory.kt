@@ -26,10 +26,10 @@ class AdapterFactory(
             is CoinType.Eos -> EosAdapter(coinType, eosKitManager.eosKit(wallet))
             is CoinType.Binance -> BinanceAdapter(binanceKitManager.binanceKit(wallet), coinType.symbol, AddressParser("binance", true))
             is CoinType.Ethereum -> {
-                EthereumAdapter(ethereumKitManager.ethereumKit(wallet), AddressParser("ethereum", true))
+                EthereumAdapter(ethereumKitManager.ethereumKit(wallet))
             }
             is CoinType.Erc20 -> {
-                Erc20Adapter(context, ethereumKitManager.ethereumKit(wallet), coinType.decimal, coinType.fee, coinType.address, AddressParser("ethereum", true))
+                Erc20Adapter(context, ethereumKitManager.ethereumKit(wallet), coinType.decimal, coinType.fee, coinType.address)
             }
         }
     }

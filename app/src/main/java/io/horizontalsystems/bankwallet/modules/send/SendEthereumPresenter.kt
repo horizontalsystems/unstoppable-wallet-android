@@ -5,25 +5,25 @@ import io.horizontalsystems.bankwallet.modules.send.sendviews.amount.SendAmountM
 import io.horizontalsystems.bankwallet.modules.send.sendviews.fee.SendFeeModule
 import java.math.BigDecimal
 
-class SendBitcoinPresenter(private val interactor: SendModule.ISendBitcoinInteractor,
-                           private val router: SendModule.IRouter,
-                           private val confirmationFactory: SendConfirmationViewItemFactory) : SendModule.IViewDelegate, SendModule.ISendBitcoinInteractorDelegate,
+class SendEthereumPresenter(private val interactor: SendModule.ISendEthereumInteractor,
+                            private val router: SendModule.IRouter,
+                            private val confirmationFactory: SendConfirmationViewItemFactory) : SendModule.IViewDelegate, SendModule.ISendEthereumInteractorDelegate,
         SendAmountModule.IAmountModuleDelegate,
         SendAddressModule.IAddressModuleDelegate,
         SendFeeModule.IFeeModuleDelegate {
 
     var view: SendModule.IView? = null
 
-    private fun syncSendButton() {
-        view?.setSendButtonEnabled(enabled = amountModule.validAmount != null && addressModule.address != null)
+    private fun syncAvailableBalance() {
+        amountModule.setAvailableBalance(interactor.availableBalance(gasPrice = feeModule.feeRate))
     }
 
-    private fun syncAvailableBalance() {
-        interactor.fetchAvailableBalance(feeModule.feeRate, addressModule.address)
+    private fun syncSendButton() {
+        view?.setSendButtonEnabled(enabled = amountModule.validAmount != null && addressModule.address != null && feeModule.isValid)
     }
 
     private fun syncFee() {
-        interactor.fetchFee(amountModule.coinAmount.value, feeModule.feeRate, addressModule.address)
+        feeModule.setFee(interactor.fee(feeModule.feeRate))
     }
 
     // SendModule.IViewDelegate
@@ -44,6 +44,8 @@ class SendBitcoinPresenter(private val interactor: SendModule.ISendBitcoinIntera
 
     override fun onModulesDidLoad() {
         syncAvailableBalance()
+        feeModule.setAvailableFeeBalance(interactor.ethereumBalance)
+        syncFee()
     }
 
     override fun onAddressScan(address: String) {
@@ -65,8 +67,7 @@ class SendBitcoinPresenter(private val interactor: SendModule.ISendBitcoinIntera
                 currencyValue,
                 feeCoinValue,
                 feeCurrencyValue,
-                false
-        )
+                false)
 
         view?.showConfirmation(confirmationViewItem)
     }
@@ -83,7 +84,7 @@ class SendBitcoinPresenter(private val interactor: SendModule.ISendBitcoinIntera
         interactor.clear()
     }
 
-    // SendModule.ISendBitcoinInteractorDelegate
+    // SendModule.ISendEthereumInteractorDelegate
 
     override fun didSend() {
         view?.dismissWithSuccess()
@@ -93,19 +94,9 @@ class SendBitcoinPresenter(private val interactor: SendModule.ISendBitcoinIntera
         view?.showError(error)
     }
 
-    override fun didFetchAvailableBalance(availableBalance: BigDecimal) {
-        amountModule.setAvailableBalance(availableBalance)
-        syncSendButton()
-    }
-
-    override fun didFetchFee(fee: BigDecimal) {
-        feeModule.setFee(fee)
-    }
-
-    // SendAmountModule.ModuleDelegate
+    // SendAmountModule.IAmountModuleDelegate
 
     override fun onChangeAmount() {
-        syncFee()
         syncSendButton()
     }
 
@@ -113,15 +104,14 @@ class SendBitcoinPresenter(private val interactor: SendModule.ISendBitcoinIntera
         feeModule.setInputType(inputType)
     }
 
-    // SendAddressModule.ModuleDelegate
+    // SendAddressModule.IAddressModuleDelegate
 
     override fun validate(address: String) {
         interactor.validate(address)
     }
 
     override fun onUpdateAddress() {
-        syncAvailableBalance()
-        syncFee()
+        syncSendButton()
     }
 
     override fun onUpdateAmount(amount: BigDecimal) {
@@ -137,6 +127,7 @@ class SendBitcoinPresenter(private val interactor: SendModule.ISendBitcoinIntera
     override fun onUpdateFeeRate(feeRate: Long) {
         syncAvailableBalance()
         syncFee()
+        syncSendButton()
     }
 
 }

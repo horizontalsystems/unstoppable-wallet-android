@@ -13,20 +13,24 @@ import java.math.BigDecimal
 
 object SendFeeModule {
 
+    class InsufficientFeeBalance(val coin: Coin, val coinProtocol: String, val feeCoin: Coin, val fee: CoinValue) : Exception()
+
     interface IView {
         fun setPrimaryFee(feeAmount: String?)
         fun setSecondaryFee(feeAmount: String?)
-        fun setInsufficientFeeBalanceError(feeCoinValue: CoinValue)
+        fun setInsufficientFeeBalanceError(insufficientFeeBalance: InsufficientFeeBalance?)
     }
 
     interface IViewDelegate {
         fun onViewDidLoad()
         fun onFeeSliderChange(progress: Int)
+        fun onClear()
     }
 
     interface IInteractor {
         fun getRate(coinCode: String)
         fun getFeeRate(feeRatePriority: FeeRatePriority): Long
+        fun clear()
     }
 
     interface IInteractorDelegate {
@@ -34,17 +38,19 @@ object SendFeeModule {
     }
 
     interface IFeeModule {
+        val isValid: Boolean
         val feeRate: Long
 
         val coinValue: CoinValue
         val currencyValue: CurrencyValue?
 
         fun setFee(fee: BigDecimal)
+        fun setAvailableFeeBalance(availableFeeBalance: BigDecimal)
         fun setInputType(inputType: SendModule.InputType)
     }
 
     interface IFeeModuleDelegate {
-        fun onFeePriorityChange(feeRatePriority: FeeRatePriority)
+        fun onUpdateFeeRate(feeRate: Long)
     }
 
     fun init(view: SendFeeViewModel, coin: Coin, moduleDelegate: IFeeModuleDelegate?): IFeeModule {

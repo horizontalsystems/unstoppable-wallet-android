@@ -4,31 +4,33 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CoinValue
 
 class SendFeeViewModel : ViewModel(), SendFeeModule.IView {
 
     lateinit var delegate: SendFeeModule.IViewDelegate
 
-    val primaryFeeLiveData = MutableLiveData<String?>()
-    val secondaryFeeLiveData = MutableLiveData<String?>()
-    val insufficientFeeBalanceErrorLiveEvent = SingleLiveEvent<CoinValue>()
-
+    val primaryFee = MutableLiveData<String?>()
+    val secondaryFee = MutableLiveData<String?>()
+    val insufficientFeeBalanceError = SingleLiveEvent<SendFeeModule.InsufficientFeeBalance?>()
 
     fun init(coin: Coin, moduleDelegate: SendFeeModule.IFeeModuleDelegate?): SendFeeModule.IFeeModule {
         return SendFeeModule.init(this, coin, moduleDelegate)
     }
 
-
     override fun setPrimaryFee(feeAmount: String?) {
-        primaryFeeLiveData.value = feeAmount
+        primaryFee.value = feeAmount
     }
 
     override fun setSecondaryFee(feeAmount: String?) {
-        secondaryFeeLiveData.value = feeAmount
+        secondaryFee.value = feeAmount
     }
 
-    override fun setInsufficientFeeBalanceError(feeCoinValue: CoinValue) {
-        insufficientFeeBalanceErrorLiveEvent.value = feeCoinValue
+    override fun setInsufficientFeeBalanceError(insufficientFeeBalance: SendFeeModule.InsufficientFeeBalance?) {
+        insufficientFeeBalanceError.value = insufficientFeeBalance
     }
+
+    override fun onCleared() {
+        delegate.onClear()
+    }
+
 }

@@ -261,6 +261,15 @@ interface ISendBitcoinAdapter {
     fun send(amount: BigDecimal, address: String, feeRate: Long): Single<Unit>
 }
 
+interface ISendEthereumAdapter {
+    val ethereumBalance: BigDecimal
+
+    fun availableBalance(gasPrice: Long): BigDecimal
+    fun fee(gasPrice: Long): BigDecimal
+    fun validate(address: String)
+    fun send(amount: BigDecimal, address: String, gasPrice: Long): Single<Unit>
+}
+
 interface IAdapter {
     val decimal: Int
 
