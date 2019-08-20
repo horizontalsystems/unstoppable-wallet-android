@@ -56,7 +56,7 @@ class BalanceViewItemFactory {
                 sum += it
             }
 
-            expired = expired || balanceItem.state != AdapterState.Synced || rate == null || rate.expired
+            expired = expired || balanceItem.state != AdapterState.Synced || rate?.expired == true
         }
 
         return BalanceHeaderViewItem(currency?.let { CurrencyValue(it, sum) }, !expired)

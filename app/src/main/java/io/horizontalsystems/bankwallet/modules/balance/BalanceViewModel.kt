@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -11,7 +10,6 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
 
     val openSendDialog = SingleLiveEvent<Wallet>()
     val openReceiveDialog = SingleLiveEvent<Wallet>()
-    val balanceColorLiveDate = MutableLiveData<Int>()
     val didRefreshLiveEvent = SingleLiveEvent<Void>()
     val openManageCoinsLiveEvent = SingleLiveEvent<Void>()
     val openSortingTypeDialogLiveEvent = SingleLiveEvent<BalanceSortType>()

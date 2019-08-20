@@ -61,14 +61,6 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener, BalanceSortDialogFrag
             }
         })
 
-        viewModel.balanceColorLiveDate.observe(viewLifecycleOwner, Observer { color ->
-            color?.let { colorRes ->
-                context?.let { it ->
-                    ballanceText.setTextColor(ContextCompat.getColor(it, colorRes))
-                }
-            }
-        })
-
         viewModel.didRefreshLiveEvent.observe(viewLifecycleOwner, Observer {
             pullToRefresh.isRefreshing = false
         })
