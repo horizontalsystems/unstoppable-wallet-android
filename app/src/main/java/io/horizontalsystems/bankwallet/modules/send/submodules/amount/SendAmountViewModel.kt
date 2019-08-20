@@ -9,54 +9,54 @@ class SendAmountViewModel : ViewModel(), SendAmountModule.IView {
 
     lateinit var delegate: SendAmountModule.IViewDelegate
 
-    val amountInputPrefixLiveData = MutableLiveData<String?>()
-    val amountLiveData = MutableLiveData<String>()
-    val hintLiveData = MutableLiveData<String?>()
-    val maxButtonVisibleValueLiveData = MutableLiveData<Boolean>()
-    val addTextChangeListenerLiveEvent = SingleLiveEvent<Unit>()
-    val removeTextChangeListenerLiveEvent = SingleLiveEvent<Unit>()
-    val revertAmountLiveEvent = SingleLiveEvent<String>()
-    val hintErrorBalanceLiveData = MutableLiveData<String?>()
-    val switchButtonEnabledLiveData = MutableLiveData<Boolean>()
+    val amountInputPrefix = MutableLiveData<String?>()
+    val amount = MutableLiveData<String>()
+    val hint = MutableLiveData<String?>()
+    val maxButtonVisibleValue = MutableLiveData<Boolean>()
+    val addTextChangeListener = SingleLiveEvent<Unit>()
+    val removeTextChangeListener = SingleLiveEvent<Unit>()
+    val revertAmount = SingleLiveEvent<String>()
+    val hintErrorBalance = MutableLiveData<String?>()
+    val switchButtonEnabled = MutableLiveData<Boolean>()
 
     fun init(wallet: Wallet, moduleDelegate: SendAmountModule.IAmountModuleDelegate?): SendAmountPresenter {
         return SendAmountModule.init(this, wallet, moduleDelegate)
     }
 
     override fun setAmountType(prefix: String?) {
-        amountInputPrefixLiveData.value = prefix
+        amountInputPrefix.value = prefix
     }
 
     override fun setAmount(amount: String) {
-        amountLiveData.value = amount
+        this.amount.value = amount
     }
 
     override fun setHint(hint: String?) {
-        hintLiveData.value = hint
+        this.hint.value = hint
     }
 
     override fun setMaxButtonVisible(visible: Boolean) {
-        maxButtonVisibleValueLiveData.value = visible
+        maxButtonVisibleValue.value = visible
     }
 
     override fun addTextChangeListener() {
-        addTextChangeListenerLiveEvent.call()
+        addTextChangeListener.call()
     }
 
     override fun removeTextChangeListener() {
-        removeTextChangeListenerLiveEvent.call()
+        removeTextChangeListener.call()
     }
 
     override fun revertAmount(amount: String) {
-        revertAmountLiveEvent.value = amount
+        revertAmount.value = amount
     }
 
     override fun setHintErrorBalance(hintErrorBalance: String?) {
-        hintErrorBalanceLiveData.value = hintErrorBalance
+        this.hintErrorBalance.value = hintErrorBalance
     }
 
     override fun setSwitchButtonEnabled(enabled: Boolean) {
-        switchButtonEnabledLiveData.value = enabled
+        switchButtonEnabled.value = enabled
     }
 
 }

@@ -12,7 +12,6 @@ object SendConfirmationModule {
         fun showCopied()
         fun loadFeeFieldsItem(secondaryItemData: SecondaryItemData)
         fun loadSendButton()
-        fun getMemo()
         fun send(memo: String? = null)
         fun setSendButtonState(state: SendButtonState)
     }

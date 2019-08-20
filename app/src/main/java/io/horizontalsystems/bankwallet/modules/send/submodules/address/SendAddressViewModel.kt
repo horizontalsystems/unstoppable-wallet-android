@@ -8,24 +8,24 @@ class SendAddressViewModel : ViewModel(), SendAddressModule.IView {
 
     lateinit var delegate: SendAddressModule.IViewDelegate
 
-    val addressTextLiveData = MutableLiveData<String?>()
-    val errorLiveData = MutableLiveData<Exception?>()
-    val pasteButtonEnabledLiveData = MutableLiveData<Boolean>()
+    val addressText = MutableLiveData<String?>()
+    val error = MutableLiveData<Exception?>()
+    val pasteButtonEnabled = MutableLiveData<Boolean>()
 
     fun init(coin: Coin, moduleDelegate: SendAddressModule.IAddressModuleDelegate?): SendAddressPresenter {
         return SendAddressModule.init(this, coin, moduleDelegate)
     }
 
     override fun setAddress(address: String?) {
-        addressTextLiveData.value = address
+        addressText.value = address
     }
 
     override fun setAddressError(error: Exception?) {
-        errorLiveData.value = error
+        this.error.value = error
     }
 
     override fun setPasteButtonState(enabled: Boolean) {
-        pasteButtonEnabledLiveData.value = enabled
+        pasteButtonEnabled.value = enabled
     }
 
 }

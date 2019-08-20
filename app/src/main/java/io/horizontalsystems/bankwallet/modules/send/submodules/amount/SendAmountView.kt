@@ -39,39 +39,39 @@ class SendAmountView : ConstraintLayout {
 
         delegate?.onViewDidLoad()
 
-        sendAmountViewModel.amountInputPrefixLiveData.observe(lifecycleOwner, Observer { prefix ->
+        sendAmountViewModel.amountInputPrefix.observe(lifecycleOwner, Observer { prefix ->
             setPrefix(prefix)
         })
 
-        sendAmountViewModel.amountLiveData.observe(lifecycleOwner, Observer { amount ->
+        sendAmountViewModel.amount.observe(lifecycleOwner, Observer { amount ->
             setAmount(amount)
         })
 
-        sendAmountViewModel.hintLiveData.observe(lifecycleOwner, Observer { hint ->
+        sendAmountViewModel.hint.observe(lifecycleOwner, Observer { hint ->
             setHint(hint)
         })
 
-        sendAmountViewModel.maxButtonVisibleValueLiveData.observe(lifecycleOwner, Observer { visible ->
+        sendAmountViewModel.maxButtonVisibleValue.observe(lifecycleOwner, Observer { visible ->
             setMaxButtonVisibility(visible)
         })
 
-        sendAmountViewModel.addTextChangeListenerLiveEvent.observe(lifecycleOwner, Observer {
+        sendAmountViewModel.addTextChangeListener.observe(lifecycleOwner, Observer {
             enableAmountChangeListener()
         })
 
-        sendAmountViewModel.removeTextChangeListenerLiveEvent.observe(lifecycleOwner, Observer {
+        sendAmountViewModel.removeTextChangeListener.observe(lifecycleOwner, Observer {
             removeAmountChangeListener()
         })
 
-        sendAmountViewModel.revertAmountLiveEvent.observe(lifecycleOwner, Observer { amount ->
+        sendAmountViewModel.revertAmount.observe(lifecycleOwner, Observer { amount ->
             revertAmount(amount)
         })
 
-        sendAmountViewModel.hintErrorBalanceLiveData.observe(lifecycleOwner, Observer { hintErrorBalance ->
+        sendAmountViewModel.hintErrorBalance.observe(lifecycleOwner, Observer { hintErrorBalance ->
             setBalanceError(hintErrorBalance)
         })
 
-        sendAmountViewModel.switchButtonEnabledLiveData.observe(lifecycleOwner, Observer { enabled ->
+        sendAmountViewModel.switchButtonEnabled.observe(lifecycleOwner, Observer { enabled ->
             enableCurrencySwitch(enabled)
         })
     }
