@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.core
 import android.text.SpannableString
 import androidx.core.hardware.fingerprint.FingerprintManagerCompat
 import com.google.gson.JsonObject
-import io.horizontalsystems.bankwallet.core.managers.ServiceExchangeApi
+import io.horizontalsystems.bankwallet.core.managers.ServiceExchangeApi.HostType
 import io.horizontalsystems.bankwallet.core.storage.AccountRecord
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.Currency
@@ -126,9 +126,9 @@ interface IRandomProvider {
 }
 
 interface INetworkManager {
-    fun getLatestRateData(hostType: ServiceExchangeApi.HostType, currency: String): Single<LatestRateData>
-    fun getRateByDay(hostType: ServiceExchangeApi.HostType, coinCode: String, currency: String, timestamp: Long): Single<BigDecimal>
-    fun getRateByHour(hostType: ServiceExchangeApi.HostType, coinCode: String, currency: String, timestamp: Long): Single<BigDecimal>
+    fun getRateByDay(hostType: HostType, coinCode: String, currency: String, timestamp: Long): Single<BigDecimal>
+    fun getRateByHour(hostType: HostType, coinCode: String, currency: String, timestamp: Long): Single<BigDecimal>
+    fun getLatestRateData(hostType: HostType, currency: String): Single<LatestRateData>
     fun getTransaction(host: String, path: String): Flowable<JsonObject>
     fun getTransactionWithPost(host: String, path: String, body: Map<String, Any>): Flowable<JsonObject>
     fun ping(host: String, url: String): Flowable<Any>
