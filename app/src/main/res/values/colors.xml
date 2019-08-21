@@ -40,4 +40,14 @@
 
     <color name="transparent">#00000000</color>
 
+    <!-- Chart Colors -->
+    <color name="indicator">#D8D8D8</color>
+    <color name="grid">#3273798C</color>
+    <color name="gridText">#737373</color>
+    <color name="gridStroke">#FF5E3A</color>
+    <color name="gridStrokeOver">#F5F5F5</color>
+    <color name="chartShaderStart">#CCFF5E3A</color>
+    <color name="chartShaderEnd">#0DFF5E3A</color>
+    <color name="chartShaderOverStart">#CCF5F5F5</color>
+    <color name="chartShaderOverEnd">#03F5F5F5</color>
 </resources>
