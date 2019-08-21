@@ -247,7 +247,7 @@
     <string name="ManageCoins_EOSAlert_CreateButton">В данный момент кошелек не может создать новые учетные записи EOS. Вы можете восстановить существующий.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Управление Ключами</string>
-    <string name="ManageKeys_Description">Любой, кто имеет доступ к вашим ключам, может украсть ваши средства. Храните ключи безопасно и не показывайте их никому.\n\nРезервное копирование каждого ключа необходимо доя того, чтобы иметь возможность восстановить средства, если вы потеряете или сломаете ваш телефон, или приложение кошелька будет удалено.</string>
+    <string name="ManageKeys_Description">Anyone with access to your Keys can steal your wallet funds. Store keys safely and never show them to anyone. \n\nBackup each key to be able to restore funds if you lose or break your phone, or simply the wallet app gets deleted.</string>
     <string name="ManageKeys_Create">Создать</string>
     <string name="ManageKeys_Restore">Восстановить</string>
     <string name="ManageKeys_Delete">Удалить</string>
