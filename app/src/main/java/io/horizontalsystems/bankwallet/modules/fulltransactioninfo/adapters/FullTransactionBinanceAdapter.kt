@@ -3,11 +3,14 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.adapters
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.factories.FeeCoinProvider
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import java.math.BigDecimal
 
-class FullTransactionBinanceAdapter(val provider: FullTransactionInfoModule.BinanceProvider, val coin: Coin)
+class FullTransactionBinanceAdapter(private val provider: FullTransactionInfoModule.BinanceProvider,
+                                    private val feeCoinProvider: FeeCoinProvider,
+                                    private val coin: Coin)
     : FullTransactionInfoModule.Adapter {
 
     override fun convert(json: JsonObject): FullTransactionRecord {
@@ -22,8 +25,9 @@ class FullTransactionBinanceAdapter(val provider: FullTransactionInfoModule.Bina
         mutableListOf<FullTransactionItem>().let { section ->
 
             val amount = data.value.divide(BigDecimal.TEN.pow(8))
+            val feeCoin = feeCoinProvider.feeCoinData(coin)?.first ?: coin
 
-            section.add(FullTransactionItem(R.string.FullInfo_Fee, value = App.numberFormatter.format(CoinValue("BNB", data.fee))))
+            section.add(FullTransactionItem(R.string.FullInfo_Fee, value = App.numberFormatter.format(CoinValue(feeCoin.code, data.fee))))
             section.add(FullTransactionItem(R.string.FullInfoEth_Amount, value = App.numberFormatter.format(CoinValue(coin.code, amount))))
             sections.add(FullTransactionSection(section))
         }
