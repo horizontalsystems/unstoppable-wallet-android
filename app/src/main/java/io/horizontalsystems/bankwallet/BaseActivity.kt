@@ -18,7 +18,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.lib.AlertDialogFragment
+import io.horizontalsystems.bankwallet.ui.dialogs.AlertDialogFragment
 import java.util.*
 
 abstract class BaseActivity : AppCompatActivity() {

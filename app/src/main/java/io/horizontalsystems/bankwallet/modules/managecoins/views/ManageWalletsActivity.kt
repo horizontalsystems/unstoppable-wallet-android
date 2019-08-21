@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.EosUnsupportedException
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.lib.AlertDialogFragment
+import io.horizontalsystems.bankwallet.ui.dialogs.AlertDialogFragment
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsViewModel
 import io.horizontalsystems.bankwallet.modules.restore.eos.RestoreEosModule
 import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule
