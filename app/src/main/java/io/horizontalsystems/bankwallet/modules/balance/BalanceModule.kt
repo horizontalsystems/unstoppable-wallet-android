@@ -150,8 +150,7 @@ object BalanceModule {
             val wallet: Wallet,
             var balance: BigDecimal = BigDecimal.ZERO,
             var state: AdapterState = AdapterState.NotSynced,
-            var rate: Rate? = null,
-            var isBackedUp: Boolean = false
+            var rate: Rate? = null
     ) {
         val fiatValue: BigDecimal?
             get() = rate?.let { balance.times(it.value) }

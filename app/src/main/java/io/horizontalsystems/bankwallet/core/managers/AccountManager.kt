@@ -44,7 +44,7 @@ class AccountManager(private val storage: IAccountsStorage, private val accountC
     }
 
     override fun update(account: Account) {
-        storage.save(account)
+        storage.update(account)
 
         cache.update(account)
         accountsSubject.onNext(accounts)

@@ -49,48 +49,11 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
     }
 
     override fun save(account: Account) {
-        val accountTypeCode: String
-        var words: List<String>? = null
-        var derivation: AccountType.Derivation? = null
-        var salt: String? = null
-        var key: String? = null
-        var eosAccount: String? = null
+        dao.insert(getAccountRecord(account))
+    }
 
-        when (val accountType = account.type) {
-            is AccountType.Mnemonic -> {
-                accountTypeCode = MNEMONIC
-                words = accountType.words
-                derivation = accountType.derivation
-                salt = accountType.salt
-            }
-            is AccountType.PrivateKey -> {
-                accountTypeCode = PRIVATE_KEY
-                key = accountType.key.toHexString()
-
-            }
-            is AccountType.HDMasterKey -> {
-                accountTypeCode = HD_MASTER_KEY
-                key = accountType.key.toHexString()
-                derivation = accountType.derivation
-            }
-            is AccountType.Eos -> {
-                accountTypeCode = EOS
-                key = accountType.activePrivateKey
-                eosAccount = accountType.account
-            }
-            else -> throw Exception("Cannot save account with type: $accountType")
-        }
-
-        dao.insert(AccountRecord(account.id,
-                account.name,
-                accountTypeCode,
-                account.isBackedUp,
-                account.defaultSyncMode,
-                words?.let { SecretList(it) },
-                derivation,
-                salt?.let { SecretString(it) },
-                key?.let { SecretString(it) },
-                eosAccount))
+    override fun update(account: Account) {
+        dao.update(getAccountRecord(account))
     }
 
     override fun delete(id: String) {
@@ -104,4 +67,54 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
     override fun clear() {
         dao.deleteAll()
     }
+
+    private fun getAccountRecord(account: Account): AccountRecord {
+        return when (account.type) {
+            is AccountType.Mnemonic,
+            is AccountType.PrivateKey,
+            is AccountType.HDMasterKey,
+            is AccountType.Eos -> {
+                AccountRecord(
+                        id = account.id,
+                        name = account.name,
+                        type = getAccountTypeCode(account.type),
+                        isBackedUp = account.isBackedUp,
+                        syncMode = account.defaultSyncMode,
+                        words = if (account.type is AccountType.Mnemonic) SecretList(account.type.words) else null,
+                        derivation = getDerivation(account.type),
+                        salt = if (account.type is AccountType.Mnemonic) account.type.salt?.let { SecretString(it) } else null,
+                        key = getKey(account.type)?.let { SecretString(it) },
+                        eosAccount = if (account.type is AccountType.Eos) account.type.account else null
+                )
+            }
+            else -> throw Exception("Cannot save account with type: ${account.type}")
+        }
+    }
+
+    private fun getKey(accountType: AccountType): String? {
+        return when (accountType) {
+            is AccountType.PrivateKey -> accountType.key.toHexString()
+            is AccountType.HDMasterKey -> accountType.key.toHexString()
+            is AccountType.Eos -> accountType.activePrivateKey
+            else -> null
+        }
+    }
+
+    private fun getDerivation(accountType: AccountType): AccountType.Derivation? {
+        return when (accountType) {
+            is AccountType.Mnemonic -> accountType.derivation
+            is AccountType.HDMasterKey -> accountType.derivation
+            else -> null
+        }
+    }
+
+    private fun getAccountTypeCode(accountType: AccountType): String {
+        return when (accountType) {
+            is AccountType.HDMasterKey -> HD_MASTER_KEY
+            is AccountType.PrivateKey -> PRIVATE_KEY
+            is AccountType.Eos -> EOS
+            else -> MNEMONIC
+        }
+    }
+
 }
