@@ -331,6 +331,7 @@ interface IAccountsStorage {
 
     fun allAccounts(): List<Account>
     fun save(account: Account)
+    fun update(account: Account)
     fun delete(id: String)
     fun getNonBackedUpCount(): Flowable<Int>
     fun clear()
@@ -368,7 +369,7 @@ interface IWalletManager {
     val walletsUpdatedSignal: Observable<Unit>
     fun wallet(coin: Coin): Wallet?
 
-    fun preloadWallets()
+    fun loadWallets()
     fun enable(wallets: List<Wallet>)
     fun clear()
 }

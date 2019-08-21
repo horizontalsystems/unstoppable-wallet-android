@@ -11,7 +11,7 @@ class MainInteractor(private val accountManager: IAccountManager, private val wa
 
     override fun onStart() {
         accountManager.preloadAccounts()
-        walletManager.preloadWallets()
+        walletManager.loadWallets()
         adapterManager.preloadAdapters()
 
         accountManager.clearAccounts()

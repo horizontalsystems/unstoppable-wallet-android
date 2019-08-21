@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.core.storage
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import io.reactivex.Flowable
 
 @Dao
@@ -11,6 +8,9 @@ interface AccountsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(accountRow: AccountRecord)
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    fun update(accountRow: AccountRecord)
 
     @Query("UPDATE AccountRecord SET deleted = 1 WHERE id = :id")
     fun delete(id: String)
