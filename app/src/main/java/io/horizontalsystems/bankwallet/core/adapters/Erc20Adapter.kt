@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.AdapterState
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.erc20kit.core.Erc20Kit
@@ -93,8 +94,9 @@ class Erc20Adapter(context: Context, kit: EthereumKit, decimal: Int, private val
     }
 
     companion object {
-        fun clear(context: Context) {
-            Erc20Kit.clear(context)
+        fun clear(walletId: String, testMode: Boolean) {
+            val networkType = if (testMode) EthereumKit.NetworkType.Ropsten else EthereumKit.NetworkType.MainNet
+            Erc20Kit.clear(App.instance, networkType, walletId)
         }
     }
 

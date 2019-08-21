@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
-import android.content.Context
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
@@ -115,8 +114,8 @@ class BitcoinAdapter(override val kit: BitcoinKit)
             throw UnsupportedAccountException()
         }
 
-        fun clear(context: Context, walletId: String, testMode: Boolean) {
-            BitcoinKit.clear(context, getNetworkType(testMode), walletId)
+        fun clear(walletId: String, testMode: Boolean) {
+            BitcoinKit.clear(App.instance, getNetworkType(testMode), walletId)
         }
     }
 }

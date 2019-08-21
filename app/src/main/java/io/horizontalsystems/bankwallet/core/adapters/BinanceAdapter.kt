@@ -135,5 +135,11 @@ class BinanceAdapter(
 
     companion object {
         val transferFee = BigDecimal(0.000375)
+
+        fun clear(walletId: String, testMode: Boolean) {
+            val networkType = if (testMode) BinanceChainKit.NetworkType.TestNet else BinanceChainKit.NetworkType.MainNet
+            BinanceChainKit.clear(App.instance, networkType, walletId)
+        }
+
     }
 }
