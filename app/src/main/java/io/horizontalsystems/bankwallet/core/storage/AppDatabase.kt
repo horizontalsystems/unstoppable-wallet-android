@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
 import io.horizontalsystems.bankwallet.entities.Rate
 
-@Database(version = 8, exportSchema = false, entities = [
+@Database(version = 9, exportSchema = false, entities = [
     Rate::class,
     EnabledWallet::class,
     AccountRecord::class]
@@ -46,7 +46,8 @@ abstract class AppDatabase : RoomDatabase() {
                             MIGRATION_4_5,
                             MIGRATION_5_6,
                             MIGRATION_6_7,
-                            migrateToAccountStructure
+                            migrateToAccountStructure,
+                            MIGRATION_8_9
                     )
                     .build()
         }
@@ -124,5 +125,10 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
+        private val MIGRATION_8_9: Migration = object : Migration(8, 9) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE AccountRecord ADD COLUMN `deleted` INTEGER NOT NULL")
+            }
+        }
     }
 }

@@ -13,5 +13,7 @@ class MainInteractor(private val accountManager: IAccountManager, private val wa
         accountManager.preloadAccounts()
         walletManager.preloadWallets()
         adapterManager.preloadAdapters()
+
+        accountManager.clearAccounts()
     }
 }

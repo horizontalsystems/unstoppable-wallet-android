@@ -20,6 +20,8 @@ data class AccountRecord(var id: String,
                          var key: SecretString?,
                          var eosAccount: String?) {
 
+    var deleted = false
+
     override fun equals(other: Any?): Boolean {
         if (other is AccountRecord) {
             return id == other.id

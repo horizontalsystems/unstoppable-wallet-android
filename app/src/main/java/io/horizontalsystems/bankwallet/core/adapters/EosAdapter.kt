@@ -115,6 +115,11 @@ class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit) : IAdapter, ITra
     override val receiveAddress: String get() = eosKit.account
 
     companion object {
+        fun clear(walletId: String, testMode: Boolean) {
+            val networkType = if (testMode) EosKit.NetworkType.TestNet else EosKit.NetworkType.MainNet
+            EosKit.clear(App.instance, networkType, walletId)
+        }
+
         fun validatePrivateKey(key: String) {
             EosKit.validatePrivateKey(key)
         }

@@ -40,6 +40,14 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                 }
     }
 
+    override fun getDeleted(): List<AccountRecord> {
+        return dao.getDeleted()
+    }
+
+    override fun clearDeleted() {
+        return dao.clearDeleted()
+    }
+
     override fun save(account: Account) {
         val accountTypeCode: String
         var words: List<String>? = null

@@ -6,9 +6,12 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
+import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import java.util.concurrent.TimeUnit
 
-class AccountManager(private val storage: IAccountsStorage) : IAccountManager {
+class AccountManager(private val storage: IAccountsStorage, private val accountCleaner: AccountCleaner) : IAccountManager {
 
     private val cache = AccountsCache()
     private val accountsSubject = PublishSubject.create<List<Account>>()
@@ -60,6 +63,18 @@ class AccountManager(private val storage: IAccountsStorage) : IAccountManager {
         cache.set(listOf())
 
         accountsSubject.onNext(accounts)
+    }
+
+    override fun clearAccounts() {
+        val clearAsync = Single.fromCallable {
+            accountCleaner.clearAccounts(storage.getDeleted())
+            storage.clearDeleted()
+        }
+
+        Single.timer(3, TimeUnit.SECONDS)
+                .flatMap { clearAsync }
+                .subscribeOn(Schedulers.io())
+                .subscribe()
     }
 
     private class AccountsCache {

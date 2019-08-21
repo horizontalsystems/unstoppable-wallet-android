@@ -122,7 +122,7 @@ class App : Application() {
         wordsManager = WordsManager(localStorage)
         networkManager = NetworkManager(appConfigProvider)
         rateManager = RateManager(rateStorage, networkManager)
-        accountManager = AccountManager(accountsStorage)
+        accountManager = AccountManager(accountsStorage, AccountCleaner(appConfigProvider.testMode))
         backupManager = BackupManager(accountManager)
         walletManager = WalletManager(accountManager, walletFactory, walletStorage)
         defaultWalletCreator = DefaultWalletCreator(walletManager, appConfigProvider, walletFactory)

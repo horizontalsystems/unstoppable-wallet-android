@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
-import android.content.Context
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
@@ -112,8 +111,8 @@ class DashAdapter(override val kit: DashKit) :
             throw UnsupportedAccountException()
         }
 
-        fun clear(context: Context, walletId: String, testMode: Boolean) {
-            DashKit.clear(context, getNetworkType(testMode), walletId)
+        fun clear(walletId: String, testMode: Boolean) {
+            DashKit.clear(App.instance, getNetworkType(testMode), walletId)
         }
     }
 }
