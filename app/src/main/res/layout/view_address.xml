@@ -14,7 +14,6 @@
         android:paddingTop="2dp"
         android:paddingBottom="3dp"
         android:background="@drawable/address_background_themed"
-        app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -48,7 +47,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iconImage"
-            tools:text="rgergrgergergrververewfeferferferfrefreferfwfweenknknknknkgk8f7xxau"
+            tools:text="address"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
