@@ -342,7 +342,8 @@
     <string name="ManageKeys_Delete_ConfirmationDisable">Coins that will be disabled: %s</string>
     <string name="ManageKeys_Delete_ConfirmationLoose">If you don\'t have a backup of this key you will loose the respective funds.</string>
     <string name="ManageKeys_Delete_FromPhone">Delete from Phone</string>
-    <string name="ManageKeys_Delete_Alert">You need to backup this key before you may delete it.</string>
+    <string name="ManageKeys_Delete_Alert_Title">Backup Required</string>
+    <string name="ManageKeys_Delete_Alert">You need to backup %s key before you may delete it from this phone.</string>
 
     <!-- Manage Keys Alert -->
 
