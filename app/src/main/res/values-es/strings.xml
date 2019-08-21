@@ -253,7 +253,7 @@
     <string name="ManageCoins_EOSAlert_CreateButton">En este momento, el monedero no es capaz de crear nuevas cuentas de monederos EOS. Solo puede restaurar la existente.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Gestionar claves</string>
-    <string name="ManageKeys_Description">Cualquiera con acceso a sus Claves puede robar los fondos de su monedero. Almacene las claves de forma segura y nunca se las muestre a nadie.\n\nRespalde cada clave para poder restaurar los fondos en caso de que su teléfono se pierda, se averíe o en caso de que simplemente se borre la aplicación del monedero de su teléfono.</string>
+    <string name="ManageKeys_Description">Anyone with access to your Keys can steal your wallet funds. Store keys safely and never show them to anyone. \n\nBackup each key to be able to restore funds if you lose or break your phone, or simply the wallet app gets deleted.</string>
     <string name="ManageKeys_Create">Crear</string>
     <string name="ManageKeys_Restore">Restaurar</string>
     <string name="ManageKeys_Delete">Eliminar</string>
