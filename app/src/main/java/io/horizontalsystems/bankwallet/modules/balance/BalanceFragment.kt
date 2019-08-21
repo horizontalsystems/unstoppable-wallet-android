@@ -16,8 +16,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.lib.AlertDialogFragment
-import io.horizontalsystems.bankwallet.lib.BalanceSortDialogFragment
+import io.horizontalsystems.bankwallet.ui.dialogs.AlertDialogFragment
+import io.horizontalsystems.bankwallet.ui.dialogs.BalanceSortDialogFragment
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysModule
