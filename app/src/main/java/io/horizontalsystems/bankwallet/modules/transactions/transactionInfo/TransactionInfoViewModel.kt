@@ -35,7 +35,7 @@ class TransactionInfoViewModel : ViewModel(), TransactionInfoModule.View, Transa
         }
     }
 
-    fun onClickOpenFillInfo() {
+    fun onClickOpenFullInfo() {
         transactionLiveData.value?.let {
             delegate.openFullInfo(it.transactionHash, it.coin)
         }

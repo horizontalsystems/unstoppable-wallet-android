@@ -20,7 +20,7 @@ class TransactionInfoView : ConstraintLayout {
     private var listener: Listener? = null
 
     interface Listener {
-        fun opemTransactionInfo()
+        fun openTransactionInfo()
         fun openFullTransactionInfo(transactionHash: String, coin: Coin)
     }
 
@@ -40,7 +40,7 @@ class TransactionInfoView : ConstraintLayout {
 
     private fun setTransactionInfoDialog() {
         transactionIdView.setOnClickListener { viewModel.onClickTransactionId() }
-        txtFullInfo.setOnClickListener { viewModel.onClickOpenFillInfo() }
+        txtFullInfo.setOnClickListener { viewModel.onClickOpenFullInfo() }
 
         viewModel.showCopiedLiveEvent.observe(lifecycleOwner, Observer {
             HudHelper.showSuccessMessage(R.string.Hud_Text_Copied, 500)
@@ -93,7 +93,7 @@ class TransactionInfoView : ConstraintLayout {
                     bindAddress(title = context.getString(R.string.TransactionInfo_To), address = txRec.to, showBottomBorder = true)
                 }
 
-                listener?.opemTransactionInfo()
+                listener?.openTransactionInfo()
             }
         })
     }
