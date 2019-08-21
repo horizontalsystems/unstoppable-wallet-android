@@ -252,7 +252,7 @@
     <string name="ManageCoins_EOSAlert_CreateButton">此时，钱包无法创建新的EOS钱包帐户。您只能还原现有的。</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">管理密钥</string>
-    <string name="ManageKeys_Description">任何有权访问您密钥的人都可以窃取您的钱包资金。\n\n安全存放钥匙，不要让任何人看到。备份每个密钥，以便在您的手机松动或损坏时恢复资金，或者只是钱包应用程序被删除。</string>
+    <string name="ManageKeys_Description">Anyone with access to your Keys can steal your wallet funds. Store keys safely and never show them to anyone. \n\nBackup each key to be able to restore funds if you lose or break your phone, or simply the wallet app gets deleted.</string>
     <string name="ManageKeys_Create">创建</string>
     <string name="ManageKeys_Restore">恢复</string>
     <string name="ManageKeys_Delete">删除</string>
