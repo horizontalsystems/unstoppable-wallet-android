@@ -125,7 +125,7 @@ class MainActivity : BaseActivity(), ReceiveView.Listener, TransactionInfoView.L
         FullTransactionInfoModule.start(this, transactionHash, coin)
     }
 
-    override fun opemTransactionInfo() {
+    override fun openTransactionInfo() {
         txInfoBottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
