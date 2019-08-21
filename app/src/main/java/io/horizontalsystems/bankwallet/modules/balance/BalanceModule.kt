@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.balance
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -33,7 +34,7 @@ object BalanceModule {
         fun onClear()
         fun onSortClick()
         fun onSortTypeChanged(sortType: BalanceSortType)
-        fun openManageKeys()
+        fun openBackup()
     }
 
     interface IInteractor {
@@ -60,7 +61,7 @@ object BalanceModule {
         fun openSendDialog(wallet: Wallet)
         fun openManageCoins()
         fun openSortTypeDialog(sortingType: BalanceSortType)
-        fun openManageKeys()
+        fun openBackup(account: Account, coinCodesStringRes: Int)
     }
 
     class BalanceItemDataSource {
@@ -158,7 +159,7 @@ object BalanceModule {
 
     fun init(view: BalanceViewModel, router: IRouter) {
         val interactor = BalanceInteractor(App.walletManager, App.adapterManager, App.rateStorage, App.currencyManager, App.localStorage)
-        val presenter = BalancePresenter(interactor, router, BalanceItemDataSource(), BalanceViewItemFactory())
+        val presenter = BalancePresenter(interactor, router, BalanceItemDataSource(), App.predefinedAccountTypeManager, BalanceViewItemFactory())
 
         presenter.view = view
         interactor.delegate = presenter

@@ -16,10 +16,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.modules.backup.BackupModule
 import io.horizontalsystems.bankwallet.ui.dialogs.BalanceSortDialogFragment
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
-import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysModule
 import io.horizontalsystems.bankwallet.ui.dialogs.BackupAlertDialog
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.bankwallet.viewHelpers.AnimationHelper
@@ -105,14 +105,16 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener, BalanceSortDialogFrag
             activity?.let { ctxActivity ->
                 BackupAlertDialog.show(activity = ctxActivity, listener = object : BackupAlertDialog.Listener{
                     override fun onBackupButtonClick() {
-                        viewModel.delegate.openManageKeys()
+                        viewModel.delegate.openBackup()
                     }
                 })
             }
         })
 
-        viewModel.openManageKeys.observe(viewLifecycleOwner, Observer {
-            context?.let { ctx -> ManageKeysModule.start(ctx) }
+        viewModel.openBackup.observe(viewLifecycleOwner, Observer { (account, coinCodesStringRes) ->
+            context?.let { ctx ->
+                BackupModule.start(ctx, account, getString(coinCodesStringRes))
+            }
         })
 
 
