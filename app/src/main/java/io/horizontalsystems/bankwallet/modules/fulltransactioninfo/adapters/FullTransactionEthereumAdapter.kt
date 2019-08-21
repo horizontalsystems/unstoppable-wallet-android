@@ -3,13 +3,16 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.adapters
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.factories.FeeCoinProvider
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.providers.EthereumResponse
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import java.math.BigInteger
 
-class FullTransactionEthereumAdapter(val provider: FullTransactionInfoModule.EthereumForksProvider, val coin: Coin)
+class FullTransactionEthereumAdapter(private val provider: FullTransactionInfoModule.EthereumForksProvider,
+                                     private val feeCoinProvider: FeeCoinProvider,
+                                     private val coin: Coin)
     : FullTransactionInfoModule.Adapter {
 
     override fun convert(json: JsonObject): FullTransactionRecord {
@@ -42,7 +45,8 @@ class FullTransactionEthereumAdapter(val provider: FullTransactionInfoModule.Eth
 
         mutableListOf<FullTransactionItem>().let { section ->
             data.fee?.let {
-                section.add(FullTransactionItem(R.string.FullInfo_Fee, value = "${App.numberFormatter.format(it.toDouble())} ETH"))
+                val feeCoin = feeCoinProvider.feeCoinData(coin)?.first ?: coin
+                section.add(FullTransactionItem(R.string.FullInfo_Fee, value = "${App.numberFormatter.format(it.toDouble())} ${feeCoin.code}"))
             }
             if (data.size != null) {
                 section.add(FullTransactionItem(R.string.FullInfo_Size, value = "${data.size} (bytes)", dimmed = true))

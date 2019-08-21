@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.fulltransactioninfo
 
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.ITransactionDataProviderManager
 import io.horizontalsystems.bankwallet.entities.Coin
@@ -45,7 +46,7 @@ class FullTransactionInfoFactory(private val networkManager: INetworkManager, pr
                 val providerBinance = dataProviderManager.binance(baseProvider.name)
 
                 provider = providerBinance
-                adapter = FullTransactionBinanceAdapter(providerBinance, coin)
+                adapter = FullTransactionBinanceAdapter(providerBinance, App.feeCoinProvider, coin)
             }
             //EOS
             coin.type is CoinType.Eos -> {
@@ -59,7 +60,7 @@ class FullTransactionInfoFactory(private val networkManager: INetworkManager, pr
                 val providerETH = dataProviderManager.ethereum(baseProvider.name)
 
                 provider = providerETH
-                adapter = FullTransactionEthereumAdapter(providerETH, coin)
+                adapter = FullTransactionEthereumAdapter(providerETH, App.feeCoinProvider, coin)
             }
         }
 
