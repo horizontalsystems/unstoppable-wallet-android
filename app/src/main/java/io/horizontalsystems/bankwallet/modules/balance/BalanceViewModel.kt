@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Wallet
 
 class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter {
@@ -19,7 +20,7 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     val reloadItemLiveEvent = SingleLiveEvent<Int>()
     val setSortingOnLiveEvent = SingleLiveEvent<Boolean>()
     val showBackupAlert = SingleLiveEvent<Unit>()
-    val openManageKeys = SingleLiveEvent<Unit>()
+    val openBackup = SingleLiveEvent<Pair<Account, Int>>()
 
     fun init() {
         BalanceModule.init(this, this)
@@ -79,7 +80,7 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
         showBackupAlert.call()
     }
 
-    override fun openManageKeys() {
-        openManageKeys.call()
+    override fun openBackup(account: Account, coinCodesStringRes: Int) {
+        openBackup.value = Pair(account, coinCodesStringRes)
     }
 }

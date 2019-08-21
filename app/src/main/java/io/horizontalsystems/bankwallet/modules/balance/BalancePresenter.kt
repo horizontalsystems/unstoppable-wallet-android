@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.AdapterState
+import io.horizontalsystems.bankwallet.core.IPredefinedAccountTypeManager
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -16,12 +18,14 @@ class BalancePresenter(
         private var interactor: BalanceModule.IInteractor,
         private val router: BalanceModule.IRouter,
         private val dataSource: BalanceModule.BalanceItemDataSource,
+        private val predefinedAccountTypeManager: IPredefinedAccountTypeManager,
         private val factory: BalanceViewItemFactory) : BalanceModule.IViewDelegate, BalanceModule.IInteractorDelegate {
 
     var view: BalanceModule.IView? = null
     private val disposables = CompositeDisposable()
     private var flushSubject = PublishSubject.create<Unit>()
     private val showSortingButtonThreshold = 5
+    private var accountToBackup: Account? = null
 
     //
     // BalanceModule.IViewDelegate
@@ -62,9 +66,11 @@ class BalancePresenter(
     }
 
     override fun onReceive(position: Int) {
-        if (dataSource.getItem(position).wallet.account.isBackedUp) {
+        val account = dataSource.getItem(position).wallet.account
+        if (account.isBackedUp) {
             router.openReceiveDialog(dataSource.getItem(position).wallet)
         } else {
+            accountToBackup = account
             view?.showBackupAlert()
         }
     }
@@ -147,8 +153,12 @@ class BalancePresenter(
         view?.didRefresh()
     }
 
-    override fun openManageKeys() {
-        router.openManageKeys()
+    override fun openBackup() {
+        accountToBackup?.let { account ->
+            val accountType = predefinedAccountTypeManager.allTypes.first { it.supports(account.type) }
+            router.openBackup(account, accountType.coinCodes)
+            accountToBackup = null
+        }
     }
 
     private fun sortCoins() {
