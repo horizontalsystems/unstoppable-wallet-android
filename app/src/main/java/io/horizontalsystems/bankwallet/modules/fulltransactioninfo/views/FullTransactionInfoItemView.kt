@@ -34,11 +34,12 @@ class FullTransactionInfoItemView : ConstraintLayout {
         when (icon) {
             FullTransactionIcon.PERSON -> value?.let {
                 address = true
-                addressView.bind(it)
+                addressView.text = it
             }
             FullTransactionIcon.TOKEN -> value?.let {
                 address = true
-                addressView.bind(it, R.drawable.token)
+                addressView.text = it
+                addressView.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.token, 0, 0, 0)
             }
 
             FullTransactionIcon.TIME -> showTypeIcon(R.drawable.pending_grey)
