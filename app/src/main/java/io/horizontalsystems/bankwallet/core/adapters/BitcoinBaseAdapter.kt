@@ -15,7 +15,7 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 
 abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
-    : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, ISendBitcoinAdapter {
+    : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter {
 
     open val receiveScriptType = ScriptType.P2PKH
     open val changeScriptType = ScriptType.P2PKH
@@ -72,7 +72,7 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
         kit.refresh()
     }
 
-    override fun send(amount: BigDecimal, address: String, feeRate: Long): Single<Unit> {
+    fun send(amount: BigDecimal, address: String, feeRate: Long): Single<Unit> {
         return Single.create { emitter ->
             try {
                 kit.send(address, (amount * satoshisInBitcoin).toLong(), feeRate = feeRate.toInt(), changeScriptType = changeScriptType)
@@ -83,11 +83,11 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
         }
     }
 
-    override fun availableBalance(feeRate: Long, address: String?): BigDecimal {
+    fun availableBalance(feeRate: Long, address: String?): BigDecimal {
         return BigDecimal.ZERO.max(balance.subtract(fee(balance, feeRate, address)))
     }
 
-    override fun fee(amount: BigDecimal, feeRate: Long, address: String?): BigDecimal {
+    fun fee(amount: BigDecimal, feeRate: Long, address: String?): BigDecimal {
         return try {
             val satoshiAmount = (amount * satoshisInBitcoin).toLong()
             val fee = kit.fee(satoshiAmount, address, true, feeRate = feeRate.toInt(), changeScriptType = changeScriptType)
@@ -99,7 +99,7 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
         }
     }
 
-    override fun validate(address: String) {
+    fun validate(address: String) {
         kit.validateAddress(address)
     }
 
