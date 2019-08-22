@@ -209,12 +209,6 @@ class MainActivity : BaseActivity(), ReceiveView.Listener, TransactionInfoView.L
         }
     }
 
-    fun updateSettingsTabCounter(count: Int) {
-        val countText = if (count < 1) "" else "!"
-        val settingsTabPosition = 2
-        findViewById<AHBottomNavigation>(R.id.ahBottomNavigation)?.setNotification(countText, settingsTabPosition)
-    }
-
     private fun collapseBottomSheetsOnActivityRestore() {
         if (receiveBottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED && findViewById<TextView>(R.id.receiveTxtTitle)?.text?.isEmpty() == true) {
             receiveBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED

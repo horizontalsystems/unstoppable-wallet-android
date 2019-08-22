@@ -9,12 +9,10 @@ class MainSettingsViewModel : ViewModel(), MainSettingsModule.IMainSettingsView,
     lateinit var delegate: MainSettingsModule.IMainSettingsViewDelegate
 
     val titleLiveDate = MutableLiveData<Int>()
-    val backedUpLiveDate = MutableLiveData<Boolean>()
     val baseCurrencyLiveDate = MutableLiveData<String>()
     val languageLiveDate = MutableLiveData<String>()
     val lightModeLiveDate = MutableLiveData<Boolean>()
     val appVersionLiveDate = MutableLiveData<String>()
-    val tabItemBadgeLiveDate = MutableLiveData<Int>()
 
     val showSecuritySettingsLiveEvent = SingleLiveEvent<Unit>()
     val showManageCoinsLiveEvent = SingleLiveEvent<Unit>()
@@ -34,10 +32,6 @@ class MainSettingsViewModel : ViewModel(), MainSettingsModule.IMainSettingsView,
         titleLiveDate.value = title
     }
 
-    override fun setBackedUp(backedUp: Boolean) {
-        backedUpLiveDate.postValue(backedUp)
-    }
-
     override fun setBaseCurrency(currency: String) {
         baseCurrencyLiveDate.value = currency
     }
@@ -52,10 +46,6 @@ class MainSettingsViewModel : ViewModel(), MainSettingsModule.IMainSettingsView,
 
     override fun setAppVersion(appVersion: String) {
         appVersionLiveDate.value = appVersion
-    }
-
-    override fun setTabItemBadge(count: Int) {
-        tabItemBadgeLiveDate.postValue(count)
     }
 
     //  Router

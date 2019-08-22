@@ -72,15 +72,6 @@ class MainSettingsPresenterTest {
     }
 
     @Test
-    fun didBackup() {
-        val backedUp = true
-        presenter.didUpdateNonBackedUp(0)
-
-        verify(view).setBackedUp(backedUp)
-        verify(view).setTabItemBadge(0)
-    }
-
-    @Test
     fun didUpdateBaseCurrency() {
         val currencyCode = "EUR"
         presenter.didUpdateBaseCurrency(currencyCode)

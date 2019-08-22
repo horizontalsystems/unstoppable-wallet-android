@@ -33,12 +33,6 @@ class SecuritySettingsActivity : BaseActivity() {
 
         //  Handling view model live events
 
-        viewModel.backedUpLiveData.observe(this, Observer { wordListBackedUp ->
-            wordListBackedUp?.let { wordListIsBackedUp ->
-                manageKeys.setInfoBadgeVisibility(!wordListIsBackedUp)
-            }
-        })
-
         viewModel.openManageKeysLiveEvent.observe(this, Observer {
             ManageKeysModule.start(this)
         })
