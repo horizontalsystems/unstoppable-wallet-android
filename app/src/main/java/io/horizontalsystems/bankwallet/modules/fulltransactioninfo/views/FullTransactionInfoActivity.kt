@@ -44,7 +44,7 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
 
         setContentView(R.layout.activity_full_transaction_info)
 
-        transactionHash?.let { transactionIdView.bindTransactionId(it) }
+        transactionIdView.text = transactionHash
 
         shadowlessToolbar.bind(
                 title = getString(R.string.FullInfo_Title),
