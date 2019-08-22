@@ -10,13 +10,14 @@ class ChartHelper(private val shape: RectF) {
         val width = shape.right
         val height = shape.bottom
 
-        val stepX = width / (data.points.size - 1)
+        val totalPoints = data.points.size - 1
+        val stepX = width / totalPoints
         val stepY = height / (priceStep * 4)
         val bottom = priceTop - (priceStep * 4)
 
         val scaleSeconds = data.scale * 60
         val points = mutableListOf<DataPoint>()
-        var timestamp = data.timestamp - (data.points.size * scaleSeconds)
+        var timestamp = data.timestamp - totalPoints * scaleSeconds
 
         data.points.forEachIndexed { index, value ->
             val x = stepX * index

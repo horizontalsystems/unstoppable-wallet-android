@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.managers.ServiceExchangeApi.HostType
 import io.horizontalsystems.bankwallet.core.managers.ServiceExchangeApi.IExchangeRate
 import io.horizontalsystems.bankwallet.entities.LatestRateData
+import io.horizontalsystems.bankwallet.entities.RateStatData
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper.formatDateInUTC
 import io.reactivex.Flowable
@@ -21,6 +22,10 @@ import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 
 class NetworkManager(private val appConfig: IAppConfigProvider) : INetworkManager {
+
+    override fun getRateStats(hostType: HostType, coinCode: String, currency: String, chunk: String): Flowable<RateStatData> {
+        return rateApiClient(hostType).getRateStats(currency, coinCode, chunk)
+    }
 
     override fun getRateByDay(hostType: HostType, coinCode: String, currency: String, timestamp: Long): Single<BigDecimal> {
         return rateApiClient(hostType)
@@ -94,6 +99,12 @@ object ServiceExchangeApi {
                 @Path("fiat") currency: String
         ): Single<LatestRateData>
 
+        @GET("xrates/stats/{fiat}/{coin}/{chunk}.json")
+        fun getRateStats(
+                @Path("fiat") currency: String,
+                @Path("coin") coinCode: String,
+                @Path("chunk") chunk: String
+        ): Flowable<RateStatData>
     }
 }
 

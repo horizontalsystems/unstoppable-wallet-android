@@ -10,9 +10,8 @@ import java.util.*
 
 class GridHelper(private val shape: RectF) {
 
-    private val calendar = Calendar.getInstance()
-    private val daysInMonth = calendar.getMaximum(Calendar.DAY_OF_MONTH)
-    private val daysInYear = calendar.getMaximum(Calendar.DAY_OF_YEAR)
+    private val daysInMonth = 30
+    private val daysInYear = 364
     private val minsInDay = 24 * 60
 
     fun setGridLines(priceTop: Float, priceStep: Float): List<GridLine> {
@@ -41,28 +40,46 @@ class GridHelper(private val shape: RectF) {
         val minutes = minutesInMode(data.mode)
         val minutesPerPx = shape.right / minutes
 
-        val gridColumns = mutableListOf<GridColumn>()
-        var point = calendar.get(Calendar.MINUTE)
+        val mins = calendar.get(Calendar.MINUTE)
+        val secs = calendar.get(Calendar.SECOND)
 
+        var point = mins + (secs / 60f)
+
+        when (data.mode) {
+            Mode.DAILY -> {
+            }
+            Mode.WEEKLY,
+            Mode.MONTHLY -> {
+                val hours = calendar.get(Calendar.HOUR_OF_DAY)
+                point += hours * 60
+            }
+            Mode.MONTHLY6,
+            Mode.ANNUAL -> {
+                val hours = calendar.get(Calendar.HOUR_OF_DAY)
+                val days = calendar.get(Calendar.DAY_OF_MONTH)
+                point += days * 24 * 60
+                point += hours * 60
+            }
+        }
+
+        val columns = mutableListOf<GridColumn>()
         while (point <= minutes) {
             val offset = point * minutesPerPx
-            if (shape.right - 10 > shape.right - offset) {
-                gridColumns.add(GridColumn(shape.right - offset, pointName(calendar, data.mode)))
-            }
+            columns.add(GridColumn(shape.right - offset, pointName(calendar, data.mode)))
             calendar.time = Date(calendar.time.time - intervalMillis)
             point += interval
         }
 
-        return gridColumns
+        return columns
     }
 
     private fun intervalByMinutes(mode: Mode): Int {
         return when (mode) {
             Mode.DAILY -> 6 * 60                        // 6 hour
             Mode.WEEKLY -> minsInDay * 2                // 2 days
-            Mode.MONTHLY -> minsInDay * 7               // 7 days
+            Mode.MONTHLY -> minsInDay * 6               // 6 days
             Mode.MONTHLY6 -> minsInDay * daysInMonth    // 1 month
-            Mode.ANNUAL -> minsInDay * daysInMonth * 3  // 3 month
+            Mode.ANNUAL -> minsInDay * daysInMonth * 2  // 2 month
         }
     }
 

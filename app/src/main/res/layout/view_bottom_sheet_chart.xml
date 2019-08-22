@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/bottom_sheet_floating_background"
+        android:backgroundTint="?attr/BottomSheetBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
+            android:id="@+id/chartCoinIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/chartTitle"
+            style="@style/BaseSb"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="14dp"
+            android:text="@string/Chart_Title"
+            android:textColor="?BottomDialogTextColor"
+            app:layout_constraintBottom_toBottomOf="@+id/chartCoinIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/chartCoinIcon"
+            app:layout_constraintTop_toTopOf="@+id/chartCoinIcon"
+            tools:text="Bitcoin Rate" />
+
+        <View
+            android:id="@+id/border1"
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/steel_15"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chartCoinIcon" />
+
+        <LinearLayout
+            android:id="@+id/coinRateWrap"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/border1">
+
+            <TextView
+                android:id="@+id/coinRateLast"
+                style="@style/BaseSb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?BottomDialogTextColor"
+                android:textSize="16sp"
+                tools:text="3,979.87" />
+
+            <TextView
+                android:id="@+id/coinRateDiff"
+                style="@style/BaseSb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:textColor="@color/red_warning"
+                android:textSize="12sp"
+                tools:text="-18" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/border2"
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:background="@color/steel_15"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/coinRateWrap" />
+
+        <LinearLayout
+            android:id="@+id/chartActions"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:orientation="horizontal"
+            android:paddingTop="9dp"
+            android:paddingBottom="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/border2">
+
+            <Button
+                android:id="@+id/button1D"
+                style="@style/SendButtonSmallGrey"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="1"
+                android:text="1D" />
+
+            <Button
+                android:id="@+id/button1W"
+                style="@style/SendButtonSmallGrey"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="1"
+                android:text="1W" />
+
+            <Button
+                android:id="@+id/button1M"
+                style="@style/SendButtonSmallGrey"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="1"
+                android:text="1M" />
+
+            <Button
+                android:id="@+id/button6M"
+                style="@style/SendButtonSmallGrey"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="1"
+                android:text="6M" />
+
+            <Button
+                android:id="@+id/button1Y"
+                style="@style/SendButtonSmallGrey"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="1"
+                android:text="1Y" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/chartPointsInfo"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="vertical"
+            android:paddingTop="5dp"
+            android:paddingBottom="8dp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/border2">
+
+            <TextView
+                android:id="@+id/pointInfoDate"
+                style="@font/noto_sans_regular"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:textColor="@color/grey"
+                android:textSize="12sp"
+                tools:text="June 18, 2019 at 1:45 PM" />
+
+            <TextView
+                android:id="@+id/pointInfoPrice"
+                style="@style/BaseMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                tools:text="3,867.50" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/coinChartView"
+            android:layout_width="match_parent"
+            android:layout_height="213dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chartActions">
+
+            <io.horizontalsystems.bankwallet.lib.chartview.ChartView
+                android:id="@+id/chartView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <io.horizontalsystems.bankwallet.lib.chartview.ChartViewIndicator
+                android:id="@+id/chartViewIndicator"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="invisible" />
+
+            <ProgressBar
+                android:id="@+id/chartViewSpinner"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:backgroundTint="@color/grey"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/grey"
+                android:indeterminateTintMode="src_atop" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/marketCapWrap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/coinChartView">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="34dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/coinMarketCap"
+                    style="@font/noto_sans_regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="17dp"
+                    android:width="0dp"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    tools:text="$ 100.92 B" />
+
+                <TextView
+                    android:id="@+id/coinMarketCapTitle"
+                    style="@font/noto_sans_regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="17dp"
+                    android:width="0dp"
+                    android:text="M. CAP"
+                    android:textColor="@color/grey"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="34dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/coinRateHigh"
+                    style="@font/noto_sans_regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="17dp"
+                    android:width="0dp"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    tools:text="$ 12000.10" />
+
+                <TextView
+                    android:id="@+id/coinRateHighTitle"
+                    style="@font/noto_sans_regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="17dp"
+                    android:width="0dp"
+                    android:text="52wk High"
+                    android:textColor="@color/grey"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="34dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/coinRateLow"
+                    style="@font/noto_sans_regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="17dp"
+                    android:width="0dp"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    tools:text="$ 11000.30" />
+
+                <TextView
+                    android:id="@+id/coinRateLowTitle"
+                    style="@font/noto_sans_regular"
+                    android:layout_width="match_parent"
+                    android:layout_height="17dp"
+                    android:width="0dp"
+                    android:text="52wk Low"
+                    android:textColor="@color/grey"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

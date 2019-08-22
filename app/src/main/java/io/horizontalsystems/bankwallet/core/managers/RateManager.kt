@@ -4,7 +4,9 @@ import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.IRateStorage
 import io.horizontalsystems.bankwallet.core.managers.ServiceExchangeApi.HostType
 import io.horizontalsystems.bankwallet.entities.Rate
+import io.horizontalsystems.bankwallet.entities.RateStatData
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -84,8 +86,14 @@ class RateManager(private val storage: IRateStorage, private val networkManager:
                 }
     }
 
-    fun clear() {
-        storage.deleteAll()
+    fun getRateStats(coinCode: String, currency: String, chunk: String): Flowable<RateStatData> {
+        return networkManager
+                .getRateStats(HostType.MAIN, coinCode, currency, chunk)
+                .onErrorResumeNext(networkManager.getRateStats(HostType.FALLBACK, coinCode, currency, chunk))
     }
 
+    fun clear() {
+        disposables.clear()
+        storage.deleteAll()
+    }
 }

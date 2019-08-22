@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.managers.ServiceExchangeApi.HostType
 import io.horizontalsystems.bankwallet.core.storage.AccountRecord
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.lib.chartview.ChartView
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
@@ -51,6 +52,7 @@ interface ILocalStorage {
     var baseEosProvider: String?
     var syncMode: SyncMode
     var sortType: BalanceSortType
+    var chartMode: ChartView.Mode
 
     fun clear()
 }
@@ -126,6 +128,7 @@ interface IRandomProvider {
 }
 
 interface INetworkManager {
+    fun getRateStats(hostType: HostType, coinCode: String, currency: String, chunk: String): Flowable<RateStatData>
     fun getRateByDay(hostType: HostType, coinCode: String, currency: String, timestamp: Long): Single<BigDecimal>
     fun getRateByHour(hostType: HostType, coinCode: String, currency: String, timestamp: Long): Single<BigDecimal>
     fun getLatestRateData(hostType: HostType, currency: String): Single<LatestRateData>
@@ -383,10 +386,11 @@ interface IWalletManager {
 
 interface IAppNumberFormatter {
     fun format(coinValue: CoinValue, explicitSign: Boolean = false, realNumber: Boolean = false): String?
+    fun format(currencyValue: CurrencyValue, showNegativeSign: Boolean = true, trimmable: Boolean = false, canUseLessSymbol: Boolean = true, shorten: Boolean = false): String?
     fun formatForTransactions(coinValue: CoinValue): String?
-    fun format(currencyValue: CurrencyValue, showNegativeSign: Boolean = true, trimmable: Boolean = false, canUseLessSymbol: Boolean = true): String?
     fun formatForTransactions(currencyValue: CurrencyValue, isIncoming: Boolean): SpannableString
     fun format(value: Double): String
+    fun shortenNumber(value: Long): String
 }
 
 interface IFeeRateProvider {
@@ -395,11 +399,6 @@ interface IFeeRateProvider {
 
 interface IAddressParser {
     fun parse(paymentAddress: String): AddressData
-}
-
-sealed class SendStateError {
-    class InsufficientAmount(val balance: BigDecimal) : SendStateError()
-    class InsufficientFeeBalance(val fee: BigDecimal) : SendStateError()
 }
 
 enum class FeeRatePriority(val value: Int) {

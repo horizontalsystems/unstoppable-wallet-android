@@ -393,4 +393,9 @@
     <string name="Charts_Low">Low</string>
     <string name="Charts_Volume">Volume</string>
 
+    <!-- Bottom Sheet Chart -->
+    <string name="Chart_Title">%s Rate</string>
+    <string name="Chart_Rate_High">%s High</string>
+    <string name="Chart_Rate_Low">%s Low</string>
+
 </resources>

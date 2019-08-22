@@ -22,6 +22,7 @@ class BalancePresenter(
         private val factory: BalanceViewItemFactory) : BalanceModule.IViewDelegate, BalanceModule.IInteractorDelegate {
 
     var view: BalanceModule.IView? = null
+
     private val disposables = CompositeDisposable()
     private var flushSubject = PublishSubject.create<Unit>()
     private val showSortingButtonThreshold = 5
@@ -105,7 +106,8 @@ class BalancePresenter(
         val items = wallets.map {
             val adapter = interactor.getBalanceAdapterForWallet(it)
 
-            BalanceModule.BalanceItem(it, adapter?.balance ?: BigDecimal.ZERO, adapter?.state ?: AdapterState.NotReady)
+            BalanceModule.BalanceItem(it, adapter?.balance ?: BigDecimal.ZERO, adapter?.state
+                    ?: AdapterState.NotReady)
         }
         dataSource.set(items)
         dataSource.currency?.let {
@@ -159,6 +161,11 @@ class BalancePresenter(
             router.openBackup(account, accountType.coinCodes)
             accountToBackup = null
         }
+    }
+
+    override fun openChart(position: Int) {
+        val data = dataSource.getItem(position)
+        router.openChart(data.wallet.coin, data.rate)
     }
 
     private fun sortCoins() {
