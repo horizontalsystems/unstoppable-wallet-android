@@ -94,6 +94,7 @@
     <string name="Deposit_Share">Share</string>
     <string name="Deposit_Your_Address">您的地址</string>
     <string name="Deposit_Your_Account">Your Account</string>
+    <string name="Receive_Alert_NotBackedUp_Title">Backup Alert</string>
     <string name="Receive_Alert_NotBackedUp_Button">备份</string>
     <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
     <!--Timestamp-->
@@ -264,7 +265,8 @@
     <string name="ManageKeys_Delete_ConfirmationDisable">将被禁用的硬币：%s</string>
     <string name="ManageKeys_Delete_ConfirmationLoose">如果你没有这把密钥的备份，你将失去相应的资金。</string>
     <string name="ManageKeys_Delete_FromPhone">从手机中删除</string>
-    <string name="ManageKeys_Delete_Alert">您需要备份此密钥才能取消链接。</string>
+    <string name="ManageKeys_Delete_Alert_Title">Backup Required</string>
+    <string name="ManageKeys_Delete_Alert">You need to backup %s key before you may delete it from this phone.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">加%s</string>
     <string name="AddCoin_Description">您没有与%s一起使用的活动密钥。 使用下面的“创建”按钮生成新密钥（钱包）。
