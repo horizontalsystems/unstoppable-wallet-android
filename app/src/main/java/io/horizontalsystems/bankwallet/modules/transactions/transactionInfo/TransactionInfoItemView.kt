@@ -21,7 +21,7 @@ class TransactionInfoItemView : ConstraintLayout {
     private var attrValueIcon: String? = null
 
 
-    constructor(context: Context) : super(context) {}
+    constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) { loadAttributes(attrs) }
 

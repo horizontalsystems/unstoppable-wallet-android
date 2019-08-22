@@ -59,7 +59,8 @@ class TransactionInfoView : ConstraintLayout {
                 txInfoCoinIcon.bind(txRec.coin)
 
                 fiatValue.apply {
-                    text = txRec.currencyValue?.let { App.numberFormatter.format(it, showNegativeSign = true, canUseLessSymbol = false) }
+                    val fiatValueText = txRec.currencyValue?.let { App.numberFormatter.format(it, showNegativeSign = true, canUseLessSymbol = false) }
+                    text = "$fiatValueText ${if (txRec.sentToSelf) "*" else ""}"
                     setTextColor(resources.getColor(if (txRec.incoming) R.color.green_crypto else R.color.yellow_crypto, null))
                 }
 
@@ -72,6 +73,27 @@ class TransactionInfoView : ConstraintLayout {
                         bind(title = context.getString(R.string.TransactionInfo_HistoricalRate), value = rate)
                     }
                     visibility = if (txRec.rate == null) View.GONE else View.VISIBLE
+                }
+
+                itemFee.apply {
+                    if (txRec.feeCoinValue != null) {
+                        val fee = App.numberFormatter.format(txRec.feeCoinValue, explicitSign = false, realNumber = true)
+                        bind(title = context.getString(R.string.TransactionInfo_Fee), value = fee)
+                        visibility = View.VISIBLE
+                    } else {
+                        visibility = View.GONE
+                    }
+                }
+
+                footNote.apply {
+                    if (txRec.sentToSelf) {
+                        val footNoteText = "* ${context.getString(R.string.TransactionInfo_FootNote)}"
+                        text = footNoteText
+                        visibility = View.VISIBLE
+                    } else {
+                        visibility = View.GONE
+                    }
+
                 }
 
                 itemTime.bind(title = context.getString(R.string.TransactionInfo_Time), value = txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) }

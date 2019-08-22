@@ -96,6 +96,7 @@ class BinanceAdapter(
                 interTransactionIndex = 0,
                 blockHeight = transaction.blockNumber.toLong(),
                 amount = amount,
+                fee = transferFee,
                 timestamp = transaction.date.time / 1000,
                 from = listOf(from),
                 to = listOf(to)

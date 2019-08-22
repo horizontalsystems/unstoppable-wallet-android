@@ -110,6 +110,7 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
                 interTransactionIndex = 0,
                 blockHeight = transaction.blockHeight?.toLong(),
                 amount = transaction.amount.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN),
+                fee = transaction.fee?.toBigDecimal()?.divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN),
                 timestamp = transaction.timestamp,
                 from = emptyList(),
                 to = transaction.to.map { TransactionAddress(it.address, it.mine) }
