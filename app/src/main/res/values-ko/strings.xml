@@ -94,6 +94,7 @@
     <string name="Deposit_Share">Share</string>
     <string name="Deposit_Your_Address">당신의 주소</string>
     <string name="Deposit_Your_Account">Your Account</string>
+    <string name="Receive_Alert_NotBackedUp_Title">Backup Alert</string>
     <string name="Receive_Alert_NotBackedUp_Button">백업</string>
     <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
     <!--Timestamp-->
@@ -265,7 +266,8 @@
     <string name="ManageKeys_Delete_ConfirmationDisable">비활성화될 코인: %s</string>
     <string name="ManageKeys_Delete_ConfirmationLoose">이 암호를 백업하지 않으면 해당 자금을 잃게 됩니다.</string>
     <string name="ManageKeys_Delete_FromPhone">휴대전화에서 삭제</string>
-    <string name="ManageKeys_Delete_Alert">암호를 삭제하기전 백업이 필요합니다.</string>
+    <string name="ManageKeys_Delete_Alert_Title">Backup Required</string>
+    <string name="ManageKeys_Delete_Alert">You need to backup %s key before you may delete it from this phone.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">%s 추가</string>
     <string name="AddCoin_Description">%s에 사용할 활성화된 암호가 없습니다. 아래의 생성 버튼을 사용하여 새 암호 (지갑)를 만드세요. \n\n이미 있으시다면 %s에 기존의 암호를 사용할 수도 있습니다.</string>
