@@ -118,6 +118,8 @@
     <string name="TransactionInfo_ButtonVerify">확인</string>
     <string name="TransactionInfo_Status_Pending">보류 중</string>
     <string name="TransactionInfo_HistoricalRate">과거 환율</string>
+    <string name="TransactionInfo_Fee">Fee</string>
+    <string name="TransactionInfo_FootNote">The value of this transaction appears as 0 because it was sent to your own address</string>
     <!--Full Info-->
     <string name="FullInfo_Title">거래기록</string>
     <string name="FullInfo_Time">시간</string>
@@ -270,7 +272,7 @@
     <string name="ManageKeys_Delete_Alert">You need to backup %s key before you may delete it from this phone.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">%s 추가</string>
-    <string name="AddCoin_Description">%s에 사용할 활성화된 암호가 없습니다. 아래의 생성 버튼을 사용하여 새 암호 (지갑)를 만드세요. \n\n이미 있으시다면 %s에 기존의 암호를 사용할 수도 있습니다.</string>
+    <string name="AddCoin_Description">You don\'t have key for %s which requires a %s key. The wallet can generate the key for you. Use the create button below to generate a new key. \n\nYou may also use the existing %s key for the %s if you have one..</string>
     <string name="AddCoin_CreateKey">만들기</string>
     <string name="AddCoin_RestoreKey">복구</string>
     <!-- Account Types -->
