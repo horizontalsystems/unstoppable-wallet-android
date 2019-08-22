@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.settings.security
 
-import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
@@ -25,13 +24,6 @@ class SecuritySettingsPresenterTest {
 
 
     @Test
-    fun testSetBiometricUnlockOnOnLoad() {
-        presenter.viewDidLoad()
-
-        verify(view).setBackedUp(any())
-    }
-
-    @Test
     fun testSetBiometricUnlockOffOnLoad() {
         interactor = mock { on { isPinEnabled } doReturn false }
 
@@ -46,12 +38,6 @@ class SecuritySettingsPresenterTest {
     fun didTapEditPin() {
         presenter.didTapEditPin()
         verify(router).showEditPin()
-    }
-
-    @Test
-    fun didBackup() {
-        presenter.didBackup(0)
-        verify(view).setBackedUp(true)
     }
 
     @Test

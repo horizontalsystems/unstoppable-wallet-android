@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.settings.security
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 
@@ -8,7 +7,6 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
 
     lateinit var delegate: SecuritySettingsModule.ISecuritySettingsViewDelegate
 
-    val backedUpLiveData = MutableLiveData<Boolean>()
     val openManageKeysLiveEvent = SingleLiveEvent<Unit>()
     val openEditPinLiveEvent = SingleLiveEvent<Unit>()
     val openSetPinLiveEvent = SingleLiveEvent<Unit>()
@@ -30,10 +28,6 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
     }
 
     //  ISecuritySettingsView
-
-    override fun setBackedUp(backedUp: Boolean) {
-        backedUpLiveData.postValue(backedUp)
-    }
 
     override fun setPinEnabled(enabled: Boolean) {
         pinEnabledLiveEvent.postValue(enabled)

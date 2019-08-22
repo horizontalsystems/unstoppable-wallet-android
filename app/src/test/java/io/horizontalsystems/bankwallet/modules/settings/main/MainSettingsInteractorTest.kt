@@ -4,10 +4,12 @@ import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.ICurrencyManager
+import io.horizontalsystems.bankwallet.core.ILanguageManager
+import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.ISystemInfoManager
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
-import io.reactivex.Flowable
 import io.reactivex.Observable
 import org.junit.After
 import org.junit.Assert
@@ -20,14 +22,12 @@ class MainSettingsInteractorTest {
     private val delegate = mock<MainSettingsModule.IMainSettingsInteractorDelegate>()
 
     private lateinit var localStorage: ILocalStorage
-    private lateinit var backupManager: IBackupManager
     private lateinit var languageManager: ILanguageManager
     private lateinit var sysInfoManager: ISystemInfoManager
     private lateinit var currencyManager: ICurrencyManager
 
     private lateinit var interactor: MainSettingsInteractor
 
-    private val backedUpSignal = Flowable.empty<Int>()
     private val baseCurrencyUpdatedSignal = Observable.empty<Unit>()
 
     val currentLanguage: Locale = Locale("en")
@@ -39,10 +39,6 @@ class MainSettingsInteractorTest {
     @Before
     fun setUp() {
         RxBaseTest.setup()
-
-        backupManager = mock {
-            on { nonBackedUpCountFlowable } doReturn backedUpSignal
-        }
 
         localStorage = mock {
             on { isLightModeOn } doReturn true
@@ -63,7 +59,7 @@ class MainSettingsInteractorTest {
         }
 
 
-        interactor = MainSettingsInteractor(localStorage, backupManager, languageManager, sysInfoManager, currencyManager)
+        interactor = MainSettingsInteractor(localStorage, languageManager, sysInfoManager, currencyManager)
 
         interactor.delegate = delegate
     }
@@ -99,7 +95,7 @@ class MainSettingsInteractorTest {
             on { isLightModeOn } doReturn false
             on { baseCurrencyCode } doReturn currency.code
         }
-        interactor = MainSettingsInteractor(localStorage, backupManager, languageManager, sysInfoManager, currencyManager)
+        interactor = MainSettingsInteractor(localStorage, languageManager, sysInfoManager, currencyManager)
         interactor.delegate = delegate
 
         Assert.assertFalse(interactor.getLightMode())

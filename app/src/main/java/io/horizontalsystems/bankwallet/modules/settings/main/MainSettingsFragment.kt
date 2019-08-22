@@ -63,12 +63,6 @@ class MainSettingsFragment : Fragment() {
             }
         })
 
-        viewModel.backedUpLiveDate.observe(viewLifecycleOwner, Observer { wordListBackedUp ->
-            wordListBackedUp?.let { wordListIsBackedUp ->
-                securityCenter.setInfoBadgeVisibility(!wordListIsBackedUp)
-            }
-        })
-
         viewModel.showBaseCurrencySettingsLiveEvent.observe(viewLifecycleOwner, Observer {
             context?.let { context -> BaseCurrencySettingsModule.start(context) }
         })
@@ -109,14 +103,6 @@ class MainSettingsFragment : Fragment() {
 
         viewModel.showManageCoinsLiveEvent.observe(viewLifecycleOwner, Observer {
             context?.let { ManageWalletsModule.start(it) }
-        })
-
-        viewModel.tabItemBadgeLiveDate.observe(viewLifecycleOwner, Observer { count ->
-            activity?.let { activity ->
-                count?.let {
-                    (activity as? MainActivity)?.updateSettingsTabCounter(it)
-                }
-            }
         })
 
         viewModel.appVersionLiveDate.observe(viewLifecycleOwner, Observer { version ->

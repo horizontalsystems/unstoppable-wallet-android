@@ -1,12 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.settings.security
 
 class SecuritySettingsPresenter(private val router: SecuritySettingsModule.ISecuritySettingsRouter, private val interactor: SecuritySettingsModule.ISecuritySettingsInteractor)
-    : SecuritySettingsModule.ISecuritySettingsViewDelegate, SecuritySettingsModule.ISecuritySettingsInteractorDelegate {
+    : SecuritySettingsModule.ISecuritySettingsViewDelegate {
 
     var view: SecuritySettingsModule.ISecuritySettingsView? = null
 
     override fun viewDidLoad() {
-        view?.setBackedUp(interactor.nonBackedUpCount == 0)
         view?.setPinEnabled(interactor.isPinEnabled)
 
         if (interactor.hasFingerprintSensor && interactor.isPinEnabled) {
@@ -72,12 +71,6 @@ class SecuritySettingsPresenter(private val router: SecuritySettingsModule.ISecu
         } else {
             view?.hideFingerprintSettings()
         }
-    }
-
-    // ISecuritySettingsInteractorDelegate
-
-    override fun didBackup(count: Int) {
-        view?.setBackedUp(count == 0)
     }
 
 }
