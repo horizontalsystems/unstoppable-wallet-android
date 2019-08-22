@@ -9,7 +9,7 @@ interface AccountsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(accountRow: AccountRecord)
 
-    @Update(onConflict = OnConflictStrategy.REPLACE)
+    @Update
     fun update(accountRow: AccountRecord)
 
     @Query("UPDATE AccountRecord SET deleted = 1 WHERE id = :id")
