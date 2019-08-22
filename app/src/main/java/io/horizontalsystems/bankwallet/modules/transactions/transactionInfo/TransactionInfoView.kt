@@ -58,7 +58,7 @@ class TransactionInfoView : ConstraintLayout {
 
                 txInfoCoinIcon.bind(txRec.coin)
 
-                transactionIdView.bindTransactionId(txRec.transactionHash)
+                transactionIdView.text = txRec.transactionHash
 
                 fiatValue.apply {
                     val fiatValueText = txRec.currencyValue?.let { App.numberFormatter.format(it, showNegativeSign = true, canUseLessSymbol = false) }

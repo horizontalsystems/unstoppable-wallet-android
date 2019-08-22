@@ -44,14 +44,17 @@
         app:layout_constraintEnd_toStartOf="@+id/transactionIdView"
         />
 
-    <io.horizontalsystems.bankwallet.ui.extensions.AddressView
+    <TextView
         android:id="@+id/transactionIdView"
+        style="@style/TextButton"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="8dp"
+        android:drawableStart="@drawable/hash"
         app:layout_constraintBottom_toBottomOf="@+id/txInfoCoinIcon"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/txInfoCoinIcon"
+        tools:text="0123456789abcdef"
         />
 
     <TextView
