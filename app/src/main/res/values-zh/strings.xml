@@ -118,6 +118,8 @@
     <string name="TransactionInfo_ButtonVerify">验证</string>
     <string name="TransactionInfo_Status_Pending">在过程中</string>
     <string name="TransactionInfo_HistoricalRate">历史汇率</string>
+    <string name="TransactionInfo_Fee">Fee</string>
+    <string name="TransactionInfo_FootNote">The value of this transaction appears as 0 because it was sent to your own address</string>
     <!--Full Info-->
     <string name="FullInfo_Title">交易</string>
     <string name="FullInfo_Time">时间</string>
@@ -269,8 +271,7 @@
     <string name="ManageKeys_Delete_Alert">You need to backup %s key before you may delete it from this phone.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">加%s</string>
-    <string name="AddCoin_Description">您没有与%s一起使用的活动密钥。 使用下面的“创建”按钮生成新密钥（钱包）。
-\n\n如果您已经拥有它，也可以使用%s的现有密钥。</string>
+    <string name="AddCoin_Description">You don\'t have key for %s which requires a %s key. The wallet can generate the key for you. Use the create button below to generate a new key. \n\nYou may also use the existing %s key for the %s if you have one..</string>
     <string name="AddCoin_CreateKey">创建</string>
     <string name="AddCoin_RestoreKey">恢复</string>
     <!-- Account Types -->
