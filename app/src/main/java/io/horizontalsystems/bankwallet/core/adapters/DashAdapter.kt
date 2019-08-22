@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ISendDashAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
@@ -18,7 +19,7 @@ import java.math.BigDecimal
 import java.util.*
 
 class DashAdapter(override val kit: DashKit) :
-        BitcoinBaseAdapter(kit), DashKit.Listener {
+        BitcoinBaseAdapter(kit), DashKit.Listener, ISendDashAdapter {
 
     constructor(wallet: Wallet, testMode: Boolean) :
             this(createKit(wallet, testMode))
@@ -97,7 +98,23 @@ class DashAdapter(override val kit: DashKit) :
         return kit.transactions(from?.first, limit).map { it.map { tx -> transactionRecord(tx) } }
     }
 
+    // ISendDashAdapter
+
+    override fun availableBalance(address: String?): BigDecimal {
+        return availableBalance(feeRate, address)
+    }
+
+    override fun fee(amount: BigDecimal, address: String?): BigDecimal {
+        return fee(amount, feeRate, address)
+    }
+
+    override fun send(amount: BigDecimal, address: String): Single<Unit> {
+        return send(amount, address, feeRate)
+    }
+
     companion object {
+
+        private const val feeRate = 1L
 
         private fun getNetworkType(testMode: Boolean) =
                 if (testMode) NetworkType.TestNet else NetworkType.MainNet

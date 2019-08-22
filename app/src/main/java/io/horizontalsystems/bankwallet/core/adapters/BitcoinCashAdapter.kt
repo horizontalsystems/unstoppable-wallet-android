@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
@@ -18,7 +19,7 @@ import java.math.BigDecimal
 import java.util.*
 
 class BitcoinCashAdapter(override val kit: BitcoinCashKit)
-    : BitcoinBaseAdapter(kit), BitcoinCashKit.Listener {
+    : BitcoinBaseAdapter(kit), BitcoinCashKit.Listener, ISendBitcoinAdapter {
 
     constructor(wallet: Wallet, testMode: Boolean) :
             this(createKit(wallet, testMode))

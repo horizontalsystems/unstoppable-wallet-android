@@ -8,6 +8,8 @@ import io.horizontalsystems.bankwallet.modules.send.binance.SendBinanceInteracto
 import io.horizontalsystems.bankwallet.modules.send.binance.SendBinancePresenter
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinInteractor
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinPresenter
+import io.horizontalsystems.bankwallet.modules.send.dash.SendDashInteractor
+import io.horizontalsystems.bankwallet.modules.send.dash.SendDashPresenter
 import io.horizontalsystems.bankwallet.modules.send.eos.SendEosInteractor
 import io.horizontalsystems.bankwallet.modules.send.eos.SendEosPresenter
 import io.horizontalsystems.bankwallet.modules.send.ethereum.SendEthereumInteractor
@@ -49,6 +51,21 @@ object SendModule {
     }
 
     interface ISendBitcoinInteractorDelegate {
+        fun didFetchAvailableBalance(availableBalance: BigDecimal)
+        fun didFetchFee(fee: BigDecimal)
+        fun didSend()
+        fun didFailToSend(error: Throwable)
+    }
+
+    interface ISendDashInteractor {
+        fun fetchAvailableBalance( address: String?)
+        fun fetchFee(amount: BigDecimal, address: String?)
+        fun validate(address: String)
+        fun send(amount: BigDecimal, address: String)
+        fun clear()
+    }
+
+    interface ISendDashInteractorDelegate {
         fun didFetchAvailableBalance(availableBalance: BigDecimal)
         fun didFetchFee(fee: BigDecimal)
         fun didSend()
@@ -108,6 +125,21 @@ object SendModule {
             is ISendBitcoinAdapter -> {
                 val interactor = SendBitcoinInteractor(adapter)
                 val presenter = SendBitcoinPresenter(interactor, view, SendConfirmationViewItemFactory())
+
+                presenter.view = view
+                interactor.delegate = presenter
+
+                view.amountModuleDelegate = presenter
+                view.addressModuleDelegate = presenter
+                view.feeModuleDelegate = presenter
+
+                view.delegate = presenter
+
+                presenter
+            }
+            is ISendDashAdapter -> {
+                val interactor = SendDashInteractor(adapter)
+                val presenter = SendDashPresenter(interactor, view, SendConfirmationViewItemFactory())
 
                 presenter.view = view
                 interactor.delegate = presenter
