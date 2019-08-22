@@ -59,7 +59,7 @@ class SendAddressPresenter(private val interactor: SendAddressModule.IInteractor
         view?.setAddress(address)
         view?.setAddressError(error)
 
-        this.address = address
+        this.address = if (error == null) address else null
     }
 
     private fun updatePasteButtonState() {
