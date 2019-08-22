@@ -94,6 +94,7 @@
     <string name="Deposit_Share">Share</string>
     <string name="Deposit_Your_Address">Adresiniz</string>
     <string name="Deposit_Your_Account">Your Account</string>
+    <string name="Receive_Alert_NotBackedUp_Title">Backup Alert</string>
     <string name="Receive_Alert_NotBackedUp_Button">Yedekle</string>
     <string name="Receive_Alert_NotBackedUp_Description">Para almadan önce bu cüzdanın anahtarlarını yedeklemeniz gerekir. </string>
     <!--Timestamp-->
@@ -259,7 +260,8 @@
     <string name="ManageKeys_Delete_ConfirmationDisable">Etkisizleştirilecek cüzdanlar: %s</string>
     <string name="ManageKeys_Delete_ConfirmationLoose">Eğer anahtarın yedeğini saklamadıysanız, erişimi kaybedeceksiniz.</string>
     <string name="ManageKeys_Delete_FromPhone">Cihazdan sil</string>
-    <string name="ManageKeys_Delete_Alert">Silmeden önce bu anahtarı yedeklemeniz gerekiyor.</string>
+    <string name="ManageKeys_Delete_Alert_Title">Backup Required</string>
+    <string name="ManageKeys_Delete_Alert">You need to backup %s key before you may delete it from this phone.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">%s ekle</string>
     <string name="AddCoin_Description">%s için kullanılan aktif anahtar yok. Oluştura tıklayıp yeni anahtar (cüzdan) oluşturabilirsiniz.\n\n%s için anahtarınız zaten varsa onu kullanabilirsiniz.</string>
