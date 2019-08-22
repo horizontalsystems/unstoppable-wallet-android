@@ -94,6 +94,7 @@
     <string name="Deposit_Share">Share</string>
     <string name="Deposit_Your_Address">Su dirección</string>
     <string name="Deposit_Your_Account">Your Account</string>
+    <string name="Receive_Alert_NotBackedUp_Title">Backup Alert</string>
     <string name="Receive_Alert_NotBackedUp_Button">Copia de seguridad</string>
     <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
     <!--Timestamp-->
@@ -265,7 +266,8 @@
     <string name="ManageKeys_Delete_ConfirmationDisable">Monedas que serán deshabilitadas: %s</string>
     <string name="ManageKeys_Delete_ConfirmationLoose">Si usted no tiene un respaldo de esta clave, usted perderá los fondos respectivos.</string>
     <string name="ManageKeys_Delete_FromPhone">Eliminar del teléfono</string>
-    <string name="ManageKeys_Delete_Alert">Necesita respaldar esta clave antes de que pueda desvincularla.</string>
+    <string name="ManageKeys_Delete_Alert_Title">Backup Required</string>
+    <string name="ManageKeys_Delete_Alert">You need to backup %s key before you may delete it from this phone.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">Añadir %s</string>
     <string name="AddCoin_Description">No tiene una clave activa para usar con %s. Use el botón Crear abajo para generar una nueva clave (monedero).\n\nTambién puede usar la clave existente para el %s si ya la tiene.</string>
