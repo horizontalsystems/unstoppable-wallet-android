@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -18,17 +19,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         />
 
-    <io.horizontalsystems.bankwallet.ui.extensions.AddressView
+    <TextView
         android:id="@+id/transactionIdView"
+        style="@style/TextButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
         android:layout_marginStart="16dp"
-        app:layout_goneMarginEnd="16dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:drawableStart="@drawable/hash"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/shadowlessToolbar"
+        app:layout_goneMarginEnd="16dp"
+        tools:text="0123456789abcdef0123456789abcdef0123456789abcdef"
         />
 
     <ProgressBar
