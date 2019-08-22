@@ -51,7 +51,9 @@ class ChartGrid(private val context: Context, private val shape: RectF) {
 
     private fun drawColumns(canvas: Canvas) {
         gridColumns.forEach {
-            canvas.drawLine(it.x, shape.top, it.x, shape.bottom, gridPaint)
+            if (shape.right - it.x > 5f) {
+                canvas.drawLine(it.x, shape.top, it.x, shape.bottom, gridPaint)
+            }
 
             // Labels
             canvas.drawText(it.value, it.x, shape.bottom + 25, textPaint)

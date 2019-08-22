@@ -3,9 +3,9 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.entities.SyncMode
+import io.horizontalsystems.bankwallet.lib.chartview.ChartView.Mode
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.send.SendModule
-
 
 class LocalStorageManager : ILocalStorage {
 
@@ -26,6 +26,7 @@ class LocalStorageManager : ILocalStorage {
     private val BASE_EOS_PROVIDER = "base_eos_provider"
     private val SYNC_MODE = "sync_mode"
     private val SORT_TYPE = "balance_sort_type"
+    private val CHART_MODE = "prev_chart_mode"
 
     override var currentLanguage: String?
         get() = App.preferences.getString(CURRENT_LANGUAGE, null)
@@ -169,8 +170,16 @@ class LocalStorageManager : ILocalStorage {
             App.preferences.edit().putString(SORT_TYPE, sortType.getAsString()).apply()
         }
 
+    override var chartMode: Mode
+        get() {
+            val mode = App.preferences.getString(CHART_MODE, null) ?: return Mode.DAILY
+            return Mode.valueOf(mode)
+        }
+        set(mode) {
+            App.preferences.edit().putString(CHART_MODE, mode.name).apply()
+        }
+
     override fun clear() {
         App.preferences.edit().clear().apply()
     }
-
 }

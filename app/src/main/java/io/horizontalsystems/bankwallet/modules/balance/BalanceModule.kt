@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.balance
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Rate
@@ -35,6 +36,7 @@ object BalanceModule {
         fun onSortClick()
         fun onSortTypeChanged(sortType: BalanceSortType)
         fun openBackup()
+        fun openChart(position: Int)
     }
 
     interface IInteractor {
@@ -62,6 +64,7 @@ object BalanceModule {
         fun openManageCoins()
         fun openSortTypeDialog(sortingType: BalanceSortType)
         fun openBackup(account: Account, coinCodesStringRes: Int)
+        fun openChart(coin: Coin, rate: Rate?)
     }
 
     class BalanceItemDataSource {

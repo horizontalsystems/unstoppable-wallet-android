@@ -17,10 +17,11 @@ import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.backup.BackupModule
-import io.horizontalsystems.bankwallet.ui.dialogs.BalanceSortDialogFragment
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
+import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
 import io.horizontalsystems.bankwallet.ui.dialogs.BackupAlertDialog
+import io.horizontalsystems.bankwallet.ui.dialogs.BalanceSortDialogFragment
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.bankwallet.viewHelpers.AnimationHelper
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
@@ -30,7 +31,6 @@ import kotlinx.android.synthetic.main.fragment_balance.*
 import kotlinx.android.synthetic.main.view_holder_add_coin.*
 import kotlinx.android.synthetic.main.view_holder_coin.*
 import java.math.BigDecimal
-
 
 class BalanceFragment : Fragment(), CoinsAdapter.Listener, BalanceSortDialogFragment.Listener {
 
@@ -103,7 +103,7 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener, BalanceSortDialogFrag
 
         viewModel.showBackupAlert.observe(viewLifecycleOwner, Observer {
             activity?.let { ctxActivity ->
-                BackupAlertDialog.show(activity = ctxActivity, listener = object : BackupAlertDialog.Listener{
+                BackupAlertDialog.show(activity = ctxActivity, listener = object : BackupAlertDialog.Listener {
                     override fun onBackupButtonClick() {
                         viewModel.delegate.openBackup()
                     }
@@ -117,6 +117,9 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener, BalanceSortDialogFrag
             }
         })
 
+        viewModel.openChartModule.observe(viewLifecycleOwner, Observer { data ->
+            RateChartFragment(data.first, data.second).also { it.show(childFragmentManager, it.tag) }
+        })
 
         coinsAdapter.viewDelegate = viewModel.delegate
         recyclerCoins.adapter = coinsAdapter
@@ -206,6 +209,10 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener, BalanceSortDialogFrag
     override fun onAddCoinClick() {
         viewModel.delegate.openManageCoins()
     }
+
+    override fun onClickChart(position: Int) {
+        viewModel.delegate.openChart(position)
+    }
 }
 
 class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -215,6 +222,7 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
         fun onReceiveClicked(position: Int)
         fun onItemClick(position: Int)
         fun onAddCoinClick()
+        fun onClickChart(position: Int)
     }
 
     private val coinType = 1
@@ -333,6 +341,10 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
 
         buttonPay.setOnSingleClickListener {
             listener.onSendClicked(adapterPosition)
+        }
+
+        buttonChart.setOnSingleClickListener {
+            listener.onClickChart(adapterPosition)
         }
 
         buttonReceive.setOnSingleClickListener {

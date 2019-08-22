@@ -14,7 +14,6 @@ import java.math.RoundingMode
 import java.text.NumberFormat
 import java.util.*
 
-
 class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumberFormatter {
 
     private val COIN_BIG_NUMBER_EDGE = "0.01".toBigDecimal()
@@ -23,6 +22,12 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
     private val FIAT_TEN_CENT_EDGE = "0.1".toBigDecimal()
 
     private var formatters: MutableMap<String, NumberFormat> = mutableMapOf()
+    private val suffixes = TreeMap<Long, String>().apply {
+        put(1_000L, "k")
+        put(1_000_000L, "M")
+        put(1_000_000_000L, "B")
+        put(1_000_000_000_000L, "T")
+    }
 
     override fun format(coinValue: CoinValue, explicitSign: Boolean, realNumber: Boolean): String? {
         var value = coinValue.value.abs()
@@ -54,7 +59,7 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         return formatted
     }
 
-    override fun format(currencyValue: CurrencyValue, showNegativeSign: Boolean, trimmable: Boolean, canUseLessSymbol: Boolean): String? {
+    override fun format(currencyValue: CurrencyValue, showNegativeSign: Boolean, trimmable: Boolean, canUseLessSymbol: Boolean, shorten: Boolean): String? {
 
         val absValue = currencyValue.value.abs()
         var value = absValue
@@ -73,19 +78,18 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
                 value = BigDecimal("0.01")
                 customFormatter.maximumFractionDigits = 2
             }
+            value >= FIAT_BIG_NUMBER_EDGE && trimmable -> {
+                customFormatter.maximumFractionDigits = 0
+            }
             else -> {
-                when {
-                    trimmable && (value >= FIAT_BIG_NUMBER_EDGE) -> {
-                        customFormatter.maximumFractionDigits = 0
-                    }
-                    else -> {
-                        customFormatter.maximumFractionDigits = 2
-                    }
-                }
+                customFormatter.maximumFractionDigits = 2
             }
         }
 
-        val formatted = customFormatter.format(value)
+        //  shorten will convert 100_000 to 100 K
+        val formatted = if (shorten && value > BigDecimal("100000"))
+            shortenNumber(value.toLong()) else
+            customFormatter.format(value)
 
         var result = "${currencyValue.currency.symbol}$formatted"
 
@@ -103,7 +107,7 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
     override fun formatForTransactions(currencyValue: CurrencyValue, isIncoming: Boolean): SpannableString {
         val spannable = SpannableString(format(currencyValue, showNegativeSign = true, trimmable = true, canUseLessSymbol = true))
 
-        //set color
+        //  set color
         val amountTextColor = if (isIncoming) R.color.green_crypto else R.color.yellow_crypto
         val color = ContextCompat.getColor(App.instance, amountTextColor)
 
@@ -112,8 +116,10 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
     }
 
     override fun format(value: Double): String {
-        val customFormatter = getFormatter(languageManager.currentLanguage)
-        customFormatter?.maximumFractionDigits = 8
+        val customFormatter = getFormatter(languageManager.currentLanguage)?.also {
+            it.maximumFractionDigits = 8
+        }
+
         if (value == 0.0) {
             customFormatter?.maximumFractionDigits = 0
         }
@@ -121,13 +127,28 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         return customFormatter?.format(value) ?: "0"
     }
 
+    override fun shortenNumber(value: Long): String {
+        if (value == Long.MIN_VALUE) return shortenNumber(Long.MIN_VALUE + 1)
+        if (value < 0) return "-" + shortenNumber(-value)
+        if (value < 1000) return value.toString() //deal with easy case
+
+        val entry = suffixes.floorEntry(value)
+        val divideBy: Long = entry.key
+        val suffix: String = entry.value
+
+        val truncated = value / (divideBy / 10) //the number part of the output times 10
+        val hasDecimal = truncated < 100 && truncated / 10.0 != (truncated / 10).toDouble()
+
+        return if (hasDecimal) "${truncated / 10.0} $suffix" else "${truncated / 10} $suffix"
+    }
+
     private fun getFormatter(locale: Locale): NumberFormat? {
         return formatters[locale.language] ?: run {
-            val newFormatter = NumberFormat.getInstance(locale)
-            newFormatter.roundingMode = RoundingMode.HALF_EVEN
+            val newFormatter = NumberFormat.getInstance(locale).apply {
+                roundingMode = RoundingMode.HALF_EVEN
+            }
             formatters[locale.language] = newFormatter
             return newFormatter
         }
     }
-
 }
