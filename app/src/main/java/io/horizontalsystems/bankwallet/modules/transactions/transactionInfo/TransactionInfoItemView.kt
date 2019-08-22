@@ -37,7 +37,7 @@ class TransactionInfoItemView : ConstraintLayout {
 
     fun bindAddress(title: String, address: String) {
         txtTitle.text = title
-        addressView.bind(address)
+        addressView.text = address
         addressView.visibility = View.VISIBLE
 
         invalidate()
