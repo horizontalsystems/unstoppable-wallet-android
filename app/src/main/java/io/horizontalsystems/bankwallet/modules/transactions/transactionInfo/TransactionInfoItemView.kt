@@ -51,6 +51,14 @@ class TransactionInfoItemView : ConstraintLayout {
         invalidate()
     }
 
+    fun bindText(text: String?) {
+        txtTitle.visibility = View.GONE
+        textLines.visibility = View.VISIBLE
+        border.visibility = View.GONE
+
+        textLines.text = text
+    }
+
     private fun loadAttributes(attrs: AttributeSet) {
         val ta = context.obtainStyledAttributes(attrs, R.styleable.TransactionInfoItemView, 0, 0)
         try {

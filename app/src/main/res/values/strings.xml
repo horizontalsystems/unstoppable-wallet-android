@@ -153,6 +153,8 @@
     <string name="TransactionInfo_ButtonVerify">Verify</string>
     <string name="TransactionInfo_Status_Pending">Pending</string>
     <string name="TransactionInfo_HistoricalRate">Historical Rate</string>
+    <string name="TransactionInfo_Fee">Fee</string>
+    <string name="TransactionInfo_FootNote">The value of this transaction appears as 0 because it was sent to your own address</string>
 
     <!--Full Info-->
 

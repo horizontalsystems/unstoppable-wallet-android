@@ -15,8 +15,10 @@ data class TransactionViewItem(
         val coin: Coin,
         val coinValue: CoinValue,
         val currencyValue: CurrencyValue?,
+        val feeCoinValue: CoinValue?,
         val from: String?,
         val to: String?,
+        val sentToSelf: Boolean,
         val incoming: Boolean,
         val date: Date?,
         val status: TransactionStatus,
@@ -81,7 +83,7 @@ object TransactionsModule {
         val dataSource = TransactionRecordDataSource(PoolRepo(), TransactionItemDataSource(), TransactionItemFactory())
         val interactor = TransactionsInteractor(App.walletManager, App.adapterManager, App.currencyManager, App.rateManager, App.networkAvailabilityManager)
         val transactionsLoader = TransactionsLoader(dataSource)
-        val presenter = TransactionsPresenter(interactor, router, TransactionViewItemFactory(), transactionsLoader, TransactionMetadataDataSource())
+        val presenter = TransactionsPresenter(interactor, router, TransactionViewItemFactory(App.feeCoinProvider), transactionsLoader, TransactionMetadataDataSource())
 
         presenter.view = view
         interactor.delegate = presenter

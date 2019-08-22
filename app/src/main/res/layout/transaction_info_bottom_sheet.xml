@@ -131,12 +131,21 @@
         />
 
     <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
-        android:id="@+id/itemTime"
+        android:id="@+id/itemFee"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/itemRate"
+        />
+
+    <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
+        android:id="@+id/itemTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemFee"
         />
 
     <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
@@ -167,6 +176,16 @@
         app:layout_constraintTop_toBottomOf="@+id/itemFrom"
         />
 
+    <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
+        android:id="@+id/footNote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemTo"
+        />
+
     <TextView
         android:id="@+id/txtFullInfo"
         android:layout_width="match_parent"
@@ -182,7 +201,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemTo"
+        app:layout_constraintTop_toBottomOf="@+id/footNote"
         />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

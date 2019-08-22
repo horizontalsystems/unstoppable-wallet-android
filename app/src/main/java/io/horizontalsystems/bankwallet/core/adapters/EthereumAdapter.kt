@@ -65,12 +65,15 @@ class EthereumAdapter(kit: EthereumKit)
             }
         }
 
+        val fee = transaction.gasUsed?.toBigDecimal()?.multiply(transaction.gasPrice.toBigDecimal())?.movePointLeft(decimal)
+
         return TransactionRecord(
                 transactionHash = transaction.hash,
                 transactionIndex = transaction.transactionIndex ?: 0,
                 interTransactionIndex = 0,
                 blockHeight = transaction.blockNumber,
                 amount = amount,
+                fee = fee,
                 timestamp = transaction.timestamp,
                 from = listOf(from),
                 to = listOf(to)
