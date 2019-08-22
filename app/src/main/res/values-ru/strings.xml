@@ -94,6 +94,7 @@
     <string name="Deposit_Share">Share</string>
     <string name="Deposit_Your_Address">Ваш Адрес</string>
     <string name="Deposit_Your_Account">Your Account</string>
+    <string name="Receive_Alert_NotBackedUp_Title">Backup Alert</string>
     <string name="Receive_Alert_NotBackedUp_Button">Резервная копия</string>
     <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
     <!--Timestamp-->
@@ -259,7 +260,8 @@
     <string name="ManageKeys_Delete_ConfirmationDisable">Монеты, которые будут отключены: %s</string>
     <string name="ManageKeys_Delete_ConfirmationLoose">Если у вас нет резервной копии этого ключа, то вы потеряете соответствующие средства.</string>
     <string name="ManageKeys_Delete_FromPhone">Удалить с устройства</string>
-    <string name="ManageKeys_Delete_Alert">Вам нужно сделать резервную копию этого ключа, прежде чем вы можете его отсоединить.</string>
+    <string name="ManageKeys_Delete_Alert_Title">Backup Required</string>
+    <string name="ManageKeys_Delete_Alert">You need to backup %s key before you may delete it from this phone.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">Добавить %s</string>
     <string name="AddCoin_Description">У вас нет активного ключа для использования %s. Нажмите кнопку \"Создать\" ниже, чтобы создать новый ключ (кошелек).\n\nВы также можете использовать существующий ключ для %s , если у вас уже есть.</string>
