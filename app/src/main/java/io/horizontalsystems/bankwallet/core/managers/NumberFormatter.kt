@@ -15,7 +15,7 @@ import java.text.NumberFormat
 import java.util.*
 
 
-class NumberFormatter(private val languageManager: ILanguageManager): IAppNumberFormatter {
+class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumberFormatter {
 
     private val COIN_BIG_NUMBER_EDGE = "0.01".toBigDecimal()
     private val FIAT_BIG_NUMBER_EDGE = "1000".toBigDecimal()
@@ -38,7 +38,7 @@ class NumberFormatter(private val languageManager: ILanguageManager): IAppNumber
         val formatted = customFormatter.format(value)
         var result = "$formatted ${coinValue.coinCode}"
 
-        if (explicitSign) {
+        if (explicitSign && coinValue.value.toLong() != 0L) {
             val sign = if (coinValue.value < BigDecimal.ZERO) "-" else "+"
             result = "$sign $result"
         }

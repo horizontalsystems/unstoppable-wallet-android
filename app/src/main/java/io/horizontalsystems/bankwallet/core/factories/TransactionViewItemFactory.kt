@@ -3,12 +3,13 @@ package io.horizontalsystems.bankwallet.core.factories
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.TransactionItem
+import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import java.math.BigDecimal
 import java.util.*
 
-class TransactionViewItemFactory {
+class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
 
     fun item(transactionItem: TransactionItem, lastBlockHeight: Int?, threshold: Int, rate: CurrencyValue?): TransactionViewItem {
         val record = transactionItem.record
@@ -27,28 +28,44 @@ class TransactionViewItemFactory {
         }
 
         val incoming = record.amount > BigDecimal.ZERO
+        var toAddress: String? = null
+        var fromAddress: String? = null
 
-        var toAddress = if (incoming) null else record.to.firstOrNull { !it.mine }?.address
-        var fromAddress = if (!incoming) null else record.from.firstOrNull { !it.mine }?.address
-
-        if (toAddress == null && fromAddress == null) {
-            toAddress = record.to.firstOrNull()?.address
-            fromAddress = record.from.firstOrNull()?.address
+        if (incoming) {
+            fromAddress = record.from.firstOrNull { !it.mine }?.address
+        } else {
+            toAddress = record.to.firstOrNull { !it.mine }?.address
         }
 
         val currencyValue = rate?.let { CurrencyValue(it.currency, record.amount * it.value) }
+        val coin = transactionItem.wallet.coin
+
+        val feeCoinValue = transactionItem.record.fee?.let {
+            val feeCoin = feeCoinProvider.feeCoinData(coin)?.first ?: coin
+            CoinValue(feeCoin.code, transactionItem.record.fee)
+        }
 
         return TransactionViewItem(
                 record.transactionHash,
-                transactionItem.wallet.coin,
-                CoinValue(transactionItem.wallet.coin.code, record.amount),
+                coin,
+                CoinValue(coin.code, record.amount),
                 currencyValue,
+                feeCoinValue,
                 fromAddress,
                 toAddress,
+                isSentToSelf(record),
                 incoming,
                 if (record.timestamp == 0L) null else Date(record.timestamp * 1000),
                 status,
                 rate
         )
     }
+
+    private fun isSentToSelf(record: TransactionRecord): Boolean {
+        val allFromAddressesMine = record.from.all { it.mine }
+        val allToAddressesMine = record.to.all { it.mine }
+
+        return allFromAddressesMine && allToAddressesMine
+    }
+
 }

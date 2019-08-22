@@ -9,6 +9,7 @@ data class TransactionRecord(
         val interTransactionIndex: Int,
         val blockHeight: Long?,
         val amount: BigDecimal,
+        val fee: BigDecimal? = null,
         val timestamp: Long,
         val from: List<TransactionAddress>,
         val to: List<TransactionAddress>)
