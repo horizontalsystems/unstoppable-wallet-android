@@ -118,6 +118,8 @@
     <string name="TransactionInfo_ButtonVerify">Verificar</string>
     <string name="TransactionInfo_Status_Pending">Pendiente</string>
     <string name="TransactionInfo_HistoricalRate">Estado histórico</string>
+    <string name="TransactionInfo_Fee">Fee</string>
+    <string name="TransactionInfo_FootNote">The value of this transaction appears as 0 because it was sent to your own address</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Transacción</string>
     <string name="FullInfo_Time">Hora</string>
@@ -270,7 +272,7 @@
     <string name="ManageKeys_Delete_Alert">You need to backup %s key before you may delete it from this phone.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">Añadir %s</string>
-    <string name="AddCoin_Description">No tiene una clave activa para usar con %s. Use el botón Crear abajo para generar una nueva clave (monedero).\n\nTambién puede usar la clave existente para el %s si ya la tiene.</string>
+    <string name="AddCoin_Description">You don\'t have key for %s which requires a %s key. The wallet can generate the key for you. Use the create button below to generate a new key. \n\nYou may also use the existing %s key for the %s if you have one..</string>
     <string name="AddCoin_CreateKey">Crear</string>
     <string name="AddCoin_RestoreKey">Restaurar</string>
     <!-- Account Types -->
