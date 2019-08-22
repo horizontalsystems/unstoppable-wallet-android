@@ -58,6 +58,8 @@ class TransactionInfoView : ConstraintLayout {
 
                 txInfoCoinIcon.bind(txRec.coin)
 
+                transactionIdView.bindTransactionId(txRec.transactionHash)
+
                 fiatValue.apply {
                     val fiatValueText = txRec.currencyValue?.let { App.numberFormatter.format(it, showNegativeSign = true, canUseLessSymbol = false) }
                     text = "$fiatValueText ${if (txRec.sentToSelf) "*" else ""}"
@@ -67,21 +69,19 @@ class TransactionInfoView : ConstraintLayout {
                 coinValue.text = App.numberFormatter.format(txRec.coinValue, explicitSign = true, realNumber = true)
                 txInfoCoinName.text = txRec.coin.title
 
-                itemRate.apply {
-                    txRec.rate?.let {
-                        val rate = context.getString(R.string.Balance_RatePerCoin, App.numberFormatter.format(it, canUseLessSymbol = false), txRec.coin.code)
-                        bind(title = context.getString(R.string.TransactionInfo_HistoricalRate), value = rate)
-                    }
-                    visibility = if (txRec.rate == null) View.GONE else View.VISIBLE
+                if (txRec.rate == null) {
+                    itemRate.visibility = View.GONE
+                } else {
+                    itemRate.visibility = View.VISIBLE
+                    val rate = context.getString(R.string.Balance_RatePerCoin, App.numberFormatter.format(txRec.rate, canUseLessSymbol = false), txRec.coin.code)
+                    itemRate.bind(context.getString(R.string.TransactionInfo_HistoricalRate), rate)
                 }
 
-                itemFee.apply {
-                    if (txRec.feeCoinValue != null) {
-                        val fee = App.numberFormatter.format(txRec.feeCoinValue, explicitSign = false, realNumber = true)
-                        bind(title = context.getString(R.string.TransactionInfo_Fee), value = fee)
-                        visibility = View.VISIBLE
-                    } else {
-                        visibility = View.GONE
+                itemFee.visibility = View.GONE
+                txRec.feeCoinValue?.let {
+                    App.numberFormatter.format(txRec.feeCoinValue, explicitSign = false, realNumber = true)?.let { fee ->
+                        itemFee.bind(context.getString(R.string.TransactionInfo_Fee), fee)
+                        itemFee.visibility = View.VISIBLE
                     }
                 }
 
@@ -96,23 +96,23 @@ class TransactionInfoView : ConstraintLayout {
 
                 }
 
-                itemTime.bind(title = context.getString(R.string.TransactionInfo_Time), value = txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) }
-                        ?: "")
-
+                itemTime.bind(context.getString(R.string.TransactionInfo_Time), txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) } ?: "")
                 itemStatus.bindStatus(txStatus)
 
-                transactionIdView.bindTransactionId(txRec.transactionHash)
-
-                itemFrom.apply {
-                    setOnClickListener { viewModel.onClickFrom() }
-                    visibility = if (txRec.from.isNullOrEmpty()) View.GONE else View.VISIBLE
-                    bindAddress(title = context.getString(R.string.TransactionInfo_From), address = txRec.from, showBottomBorder = true)
+                if (txRec.from.isNullOrEmpty()) {
+                    itemFrom.visibility = View.GONE
+                } else {
+                    itemFrom.visibility = View.VISIBLE
+                    itemFrom.setOnClickListener { viewModel.onClickFrom() }
+                    itemFrom.bindAddress(context.getString(R.string.TransactionInfo_From), txRec.from)
                 }
 
-                itemTo.apply {
-                    setOnClickListener { viewModel.onClickTo() }
-                    visibility = if (txRec.to.isNullOrEmpty()) View.GONE else View.VISIBLE
-                    bindAddress(title = context.getString(R.string.TransactionInfo_To), address = txRec.to, showBottomBorder = true)
+                if (txRec.to.isNullOrEmpty()) {
+                    itemTo.visibility = View.GONE
+                } else {
+                    itemTo.visibility = View.VISIBLE
+                    itemTo.setOnClickListener { viewModel.onClickTo() }
+                    itemTo.bindAddress(context.getString(R.string.TransactionInfo_To), txRec.to)
                 }
 
                 listener?.openTransactionInfo()

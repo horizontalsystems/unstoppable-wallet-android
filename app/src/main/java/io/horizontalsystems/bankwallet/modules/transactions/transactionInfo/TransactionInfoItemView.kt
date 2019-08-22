@@ -27,27 +27,27 @@ class TransactionInfoItemView : ConstraintLayout {
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) { loadAttributes(attrs) }
 
-    fun bind(title: String? = null, value: String? = null) {
+    fun bind(title: String, value: String) {
         txtTitle.text = title
         valueText.text = value
-        valueText.visibility = if (value == null) View.GONE else View.VISIBLE
-        border.visibility = View.VISIBLE
+        valueText.visibility = View.VISIBLE
+
+        invalidate()
     }
 
-    fun bindAddress(title: String? = null, address: String? = null, showBottomBorder: Boolean = false) {
+    fun bindAddress(title: String, address: String) {
         txtTitle.text = title
-        address?.let { addressView.bind(it) }
-        addressView.visibility = if (address == null) View.GONE else View.VISIBLE
-        border.visibility = if (showBottomBorder) View.VISIBLE else View.GONE
+        addressView.bind(address)
+        addressView.visibility = View.VISIBLE
 
         invalidate()
     }
 
     fun bindStatus(transactionStatus: TransactionStatus) {
-        transactionStatusView.visibility = View.VISIBLE
-        border.visibility = View.VISIBLE
         txtTitle.setText(R.string.TransactionInfo_Status)
         transactionStatusView.bind(transactionStatus)
+        transactionStatusView.visibility = View.VISIBLE
+
         invalidate()
     }
 
