@@ -94,6 +94,7 @@
     <string name="Deposit_Share">Share</string>
     <string name="Deposit_Your_Address">Your Address</string>
     <string name="Deposit_Your_Account">Your Account</string>
+    <string name="Receive_Alert_NotBackedUp_Title">Backup Alert</string>
     <string name="Receive_Alert_NotBackedUp_Button">Backup</string>
     <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
     <!--Timestamp-->
@@ -259,7 +260,8 @@
     <string name="ManageKeys_Delete_ConfirmationDisable">Coins that will be disabled: %s</string>
     <string name="ManageKeys_Delete_ConfirmationLoose">If you don\'t have a backup of this key you will loose the respective funds.</string>
     <string name="ManageKeys_Delete_FromPhone">Delete from Phone</string>
-    <string name="ManageKeys_Delete_Alert">You need to backup this key before you may delete it.</string>
+    <string name="ManageKeys_Delete_Alert_Title">Backup Required</string>
+    <string name="ManageKeys_Delete_Alert">You need to backup %s key before you may delete it from this phone.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">Add %s</string>
     <string name="AddCoin_Description">You don\'t have active key for use with %s. Use Create button below to generate a new key (wallet) \n\nYou may also use the existing key for the %s if you already have it.</string>
