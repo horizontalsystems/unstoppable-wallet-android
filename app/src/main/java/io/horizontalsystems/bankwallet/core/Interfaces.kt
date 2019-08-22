@@ -244,6 +244,13 @@ interface ISendBitcoinAdapter {
     fun send(amount: BigDecimal, address: String, feeRate: Long): Single<Unit>
 }
 
+interface ISendDashAdapter {
+    fun availableBalance(address: String?): BigDecimal
+    fun fee(amount: BigDecimal, address: String?): BigDecimal
+    fun validate(address: String)
+    fun send(amount: BigDecimal, address: String): Single<Unit>
+}
+
 interface ISendEthereumAdapter {
     val ethereumBalance: BigDecimal
 
