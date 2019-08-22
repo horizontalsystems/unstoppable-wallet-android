@@ -71,8 +71,9 @@
         app:layout_constraintTop_toTopOf="@+id/receiverView"
         />
 
-    <io.horizontalsystems.bankwallet.ui.extensions.AddressView
+    <TextView
         android:id="@+id/receiverView"
+        style="@style/TextButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"

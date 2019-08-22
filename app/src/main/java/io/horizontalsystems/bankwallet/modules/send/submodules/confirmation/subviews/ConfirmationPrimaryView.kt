@@ -22,7 +22,7 @@ class ConfirmationPrimaryView : ConstraintLayout {
     fun bind(primaryItemData: SendConfirmationModule.PrimaryItemData, onReceiverClick: (() -> (Unit))) {
         primaryAmountText.text = primaryItemData.primaryAmount
         secondaryAmountText.text = primaryItemData.secondaryAmount
-        receiverView.bind(primaryItemData.receiver)
+        receiverView.text = primaryItemData.receiver
         receiverView.setOnClickListener { onReceiverClick.invoke() }
     }
 
