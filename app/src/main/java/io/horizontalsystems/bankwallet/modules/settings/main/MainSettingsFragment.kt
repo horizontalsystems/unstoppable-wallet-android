@@ -63,6 +63,12 @@ class MainSettingsFragment : Fragment() {
             }
         })
 
+        viewModel.backedUpLiveDate.observe(viewLifecycleOwner, Observer { wordListBackedUp ->
+            wordListBackedUp?.let { wordListIsBackedUp ->
+                securityCenter.setInfoBadgeVisibility(!wordListIsBackedUp)
+            }
+        })
+
         viewModel.showBaseCurrencySettingsLiveEvent.observe(viewLifecycleOwner, Observer {
             context?.let { context -> BaseCurrencySettingsModule.start(context) }
         })

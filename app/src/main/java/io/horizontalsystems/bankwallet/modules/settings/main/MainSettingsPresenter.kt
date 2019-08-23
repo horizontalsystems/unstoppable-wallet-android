@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.settings.main
 
-import io.horizontalsystems.bankwallet.R
-
 class MainSettingsPresenter(
         private val router: MainSettingsModule.IMainSettingsRouter,
         private val interactor: MainSettingsModule.IMainSettingsInteractor)
@@ -10,7 +8,7 @@ class MainSettingsPresenter(
     var view: MainSettingsModule.IMainSettingsView? = null
 
     override fun viewDidLoad() {
-        view?.setTitle(R.string.Settings_Title)
+        view?.setBackedUp(interactor.nonBackedUpCount == 0)
         view?.setBaseCurrency(interactor.baseCurrency)
         view?.setLanguage(interactor.currentLanguage)
         view?.setLightMode(interactor.getLightMode())
@@ -43,6 +41,10 @@ class MainSettingsPresenter(
 
     override fun didTapAppLink() {
         router.openAppLink()
+    }
+
+    override fun didUpdateNonBackedUp(count: Int) {
+        view?.setBackedUp(count == 0)
     }
 
     override fun didUpdateBaseCurrency(baseCurrency: String) {

@@ -8,7 +8,7 @@ class MainSettingsViewModel : ViewModel(), MainSettingsModule.IMainSettingsView,
 
     lateinit var delegate: MainSettingsModule.IMainSettingsViewDelegate
 
-    val titleLiveDate = MutableLiveData<Int>()
+    val backedUpLiveDate = MutableLiveData<Boolean>()
     val baseCurrencyLiveDate = MutableLiveData<String>()
     val languageLiveDate = MutableLiveData<String>()
     val lightModeLiveDate = MutableLiveData<Boolean>()
@@ -28,8 +28,8 @@ class MainSettingsViewModel : ViewModel(), MainSettingsModule.IMainSettingsView,
         delegate.viewDidLoad()
     }
 
-    override fun setTitle(title: Int) {
-        titleLiveDate.value = title
+    override fun setBackedUp(backedUp: Boolean) {
+        backedUpLiveDate.postValue(backedUp)
     }
 
     override fun setBaseCurrency(currency: String) {
