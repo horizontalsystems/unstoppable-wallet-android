@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.App
 object SecuritySettingsModule {
 
     interface ISecuritySettingsView {
+        fun setBackedUp(backedUp: Boolean)
         fun setPinEnabled(enabled: Boolean)
         fun showFingerprintSettings(enabled: Boolean)
         fun hideFingerprintSettings()
@@ -27,6 +28,7 @@ object SecuritySettingsModule {
     }
 
     interface ISecuritySettingsInteractor {
+        val nonBackedUpCount: Int
         val hasFingerprintSensor: Boolean
         val hasEnrolledFingerprints: Boolean
         val isPinEnabled: Boolean
@@ -34,6 +36,10 @@ object SecuritySettingsModule {
 
         fun disablePin()
         fun clear()
+    }
+
+    interface ISecuritySettingsInteractorDelegate {
+        fun didBackup(count: Int)
     }
 
     interface ISecuritySettingsRouter {
@@ -48,10 +54,11 @@ object SecuritySettingsModule {
     }
 
     fun init(view: SecuritySettingsViewModel, router: ISecuritySettingsRouter) {
-        val interactor = SecuritySettingsInteractor(App.localStorage, App.systemInfoManager, App.pinManager)
+        val interactor = SecuritySettingsInteractor(App.backupManager, App.localStorage, App.systemInfoManager, App.pinManager)
         val presenter = SecuritySettingsPresenter(router, interactor)
 
         view.delegate = presenter
         presenter.view = view
+        interactor.delegate = presenter
     }
 }

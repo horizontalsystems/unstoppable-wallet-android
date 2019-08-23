@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.core.App
 object MainSettingsModule {
 
     interface IMainSettingsView {
-        fun setTitle(title: Int)
+        fun setBackedUp(backedUp: Boolean)
         fun setBaseCurrency(currency: String)
         fun setLanguage(language: String)
         fun setLightMode(lightMode: Boolean)
@@ -25,6 +25,7 @@ object MainSettingsModule {
     }
 
     interface IMainSettingsInteractor {
+        val nonBackedUpCount: Int
         var currentLanguage: String
         val baseCurrency: String
         var appVersion: String
@@ -34,6 +35,7 @@ object MainSettingsModule {
     }
 
     interface IMainSettingsInteractorDelegate {
+        fun didUpdateNonBackedUp(count: Int)
         fun didUpdateBaseCurrency(baseCurrency: String)
         fun didUpdateLightMode()
     }
@@ -51,6 +53,7 @@ object MainSettingsModule {
     fun init(view: MainSettingsViewModel, router: IMainSettingsRouter) {
         val interactor = MainSettingsInteractor(
                 localStorage = App.localStorage,
+                backupManager = App.backupManager,
                 languageManager = App.languageManager,
                 systemInfoManager = App.systemInfoManager,
                 currencyManager = App.currencyManager
