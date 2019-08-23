@@ -19,44 +19,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btnShare"
-        style="@style/ButtonGreen_12"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="24dp"
-        android:text="@string/Deposit_Share"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/receiveAddressView" />
-
-    <ImageView
-        android:id="@+id/imgQrCode"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="8dp"
-        android:background="@android:color/transparent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/receiveTxtTitle" />
-
-    <TextView
-        android:id="@+id/receiverHint"
-        style="@style/CaptionRegular"
+    <io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
+        android:id="@+id/receiveCoinIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:textColor="@color/grey"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgQrCode"
-        tools:text="@string/Deposit_Your_Address" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/receiveTxtTitle"
@@ -84,25 +54,55 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/receiveCoinIcon" />
 
+    <ImageView
+        android:id="@+id/imgQrCode"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/receiveTxtTitle" />
+
+    <TextView
+        android:id="@+id/receiverHint"
+        style="@style/CaptionRegular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgQrCode"
+        tools:text="@string/Deposit_Your_Address" />
+
     <TextView
         android:id="@+id/receiveAddressView"
         style="@style/TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="@+id/btnShare"
         app:layout_constraintStart_toStartOf="@+id/btnShare"
         app:layout_constraintTop_toBottomOf="@+id/receiverHint"
         tools:text="address" />
 
-    <io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
-        android:id="@+id/receiveCoinIcon"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/btnShare"
+        style="@style/ButtonGreen_12"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/Deposit_Share"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/receiveAddressView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
