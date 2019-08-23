@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.managecoins
 import android.content.Context
 import android.content.Intent
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.SyncMode
@@ -13,7 +14,7 @@ object ManageWalletsModule {
 
     interface IView {
         fun updateCoins()
-        fun showNoAccountDialog(coin: Coin)
+        fun showNoAccountDialog(coin: Coin, accountKeyName: Int)
         fun showSuccess()
         fun showError(e: Exception)
     }
@@ -44,6 +45,7 @@ object ManageWalletsModule {
     interface IInteractor {
         val coins: List<Coin>
         val wallets: List<Wallet>
+        val predefinedAccountTypes: List<IPredefinedAccountType>
         fun wallet(coin: Coin): Wallet?
         fun saveWallets(wallets: List<Wallet>)
         fun createWallet(coin: Coin): Wallet
@@ -61,7 +63,7 @@ object ManageWalletsModule {
     }
 
     fun init(view: ManageWalletsViewModel, router: IRouter) {
-        val interactor = ManageWalletsInteractor(App.appConfigProvider, App.walletManager, App.accountCreator, App.walletFactory)
+        val interactor = ManageWalletsInteractor(App.appConfigProvider, App.walletManager, App.accountCreator, App.walletFactory, App.predefinedAccountTypeManager)
         val presenter = ManageWalletsPresenter(interactor, router)
 
         view.delegate = presenter

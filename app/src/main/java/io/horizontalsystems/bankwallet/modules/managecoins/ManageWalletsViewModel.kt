@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 class ManageWalletsViewModel : ViewModel(), ManageWalletsModule.IView, ManageWalletsModule.IRouter {
 
     val coinsLoadedLiveEvent = SingleLiveEvent<Void>()
-    val showManageKeysDialog = SingleLiveEvent<Coin>()
+    val showManageKeysDialog = SingleLiveEvent<Pair<Coin, Int>>()
     val openRestoreWordsModule = SingleLiveEvent<Int>()
     val openRestoreEosModule = SingleLiveEvent<Coin>()
     val showErrorEvent = SingleLiveEvent<Exception>()
@@ -29,8 +29,8 @@ class ManageWalletsViewModel : ViewModel(), ManageWalletsModule.IView, ManageWal
         coinsLoadedLiveEvent.call()
     }
 
-    override fun showNoAccountDialog(coin: Coin) {
-        showManageKeysDialog.postValue(coin)
+    override fun showNoAccountDialog(coin: Coin, accountKeyName: Int) {
+        showManageKeysDialog.postValue(Pair(coin, accountKeyName))
     }
 
     override fun showSuccess() {

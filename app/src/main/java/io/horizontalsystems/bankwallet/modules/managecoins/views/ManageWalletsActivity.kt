@@ -9,10 +9,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.EosUnsupportedException
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.ui.dialogs.AlertDialogFragment
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsViewModel
 import io.horizontalsystems.bankwallet.modules.restore.eos.RestoreEosModule
 import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule
+import io.horizontalsystems.bankwallet.ui.dialogs.AlertDialogFragment
 import io.horizontalsystems.bankwallet.ui.dialogs.ManageWalletsDialog
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import kotlinx.android.synthetic.main.activity_manage_coins.*
@@ -41,8 +41,8 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener {
             adapter.notifyDataSetChanged()
         })
 
-        viewModel.showManageKeysDialog.observe(this, Observer { coin ->
-            ManageWalletsDialog.show(this, this, coin)
+        viewModel.showManageKeysDialog.observe(this, Observer { (coin, accountKeyName) ->
+            ManageWalletsDialog.show(this, this, coin, accountKeyName)
         })
 
         viewModel.openRestoreWordsModule.observe(this, Observer { wordsCount ->
