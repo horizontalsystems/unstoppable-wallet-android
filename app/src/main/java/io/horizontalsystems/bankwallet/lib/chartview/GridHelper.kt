@@ -59,7 +59,7 @@ class GridHelper(private val shape: RectF) {
                 point += hours * 60
             }
             Mode.MONTHLY6,
-            Mode.ANNUAL -> {
+            Mode.MONTHLY18 -> {
                 val hours = calendar.get(Calendar.HOUR_OF_DAY)
                 val days = calendar.get(Calendar.DAY_OF_MONTH)
                 point += days * 24 * 60
@@ -80,11 +80,11 @@ class GridHelper(private val shape: RectF) {
 
     private fun intervalByMinutes(mode: Mode): Int {
         return when (mode) {
-            Mode.DAILY -> 6 * 60                        // 6 hour
-            Mode.WEEKLY -> minsInDay * 2                // 2 days
-            Mode.MONTHLY -> minsInDay * 6               // 6 days
-            Mode.MONTHLY6 -> minsInDay * daysInMonth    // 1 month
-            Mode.ANNUAL -> minsInDay * daysInMonth * 2  // 2 month
+            Mode.DAILY -> 6 * 60                            // 6 hour
+            Mode.WEEKLY -> minsInDay * 2                    // 2 days
+            Mode.MONTHLY -> minsInDay * 6                   // 6 days
+            Mode.MONTHLY6 -> minsInDay * daysInMonth        // 1 month
+            Mode.MONTHLY18 -> minsInDay * daysInMonth * 2   // 2 month
         }
     }
 
@@ -94,7 +94,7 @@ class GridHelper(private val shape: RectF) {
             Mode.WEEKLY -> minsInDay * 7
             Mode.MONTHLY -> minsInDay * daysInMonth
             Mode.MONTHLY6 -> minsInDay * daysInMonth * 6
-            Mode.ANNUAL -> minsInDay * daysInYear
+            Mode.MONTHLY18 -> minsInDay * daysInYear
         }
     }
 
@@ -104,7 +104,7 @@ class GridHelper(private val shape: RectF) {
             Mode.WEEKLY -> calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.US)
             Mode.MONTHLY -> calendar.get(Calendar.DAY_OF_MONTH).toString()
             Mode.MONTHLY6 -> calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.US)
-            Mode.ANNUAL -> calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.US)
+            Mode.MONTHLY18 -> calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.US)
         }
     }
 }

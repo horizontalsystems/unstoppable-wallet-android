@@ -86,10 +86,10 @@ class RateManager(private val storage: IRateStorage, private val networkManager:
                 }
     }
 
-    fun getRateStats(coinCode: String, currency: String, chunk: String): Flowable<RateStatData> {
+    fun getRateStats(coinCode: String, currency: String): Flowable<RateStatData> {
         return networkManager
-                .getRateStats(HostType.MAIN, coinCode, currency, chunk)
-                .onErrorResumeNext(networkManager.getRateStats(HostType.FALLBACK, coinCode, currency, chunk))
+                .getRateStats(HostType.MAIN, coinCode, currency)
+                .onErrorResumeNext(networkManager.getRateStats(HostType.FALLBACK, coinCode, currency))
     }
 
     fun clear() {

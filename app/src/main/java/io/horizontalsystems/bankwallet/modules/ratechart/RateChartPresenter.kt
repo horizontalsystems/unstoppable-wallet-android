@@ -2,6 +2,8 @@ package io.horizontalsystems.bankwallet.modules.ratechart
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.entities.Rate
+import io.horizontalsystems.bankwallet.entities.RateStatData
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.Mode
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartData
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.Interactor
@@ -9,24 +11,27 @@ import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.Interac
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.View
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.ViewDelegate
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
-import java.math.BigDecimal
 
 class RateChartPresenter(val view: View, private val interactor: Interactor, private val coinCode: CoinCode)
     : ViewModel(), ViewDelegate, InteractorDelegate {
 
+    private var lastRate: Rate? = null
+    private var rateStats: RateStatData? = null
+
     //  ViewDelegate
 
     override val currency: Currency
-        get() = interactor.getCurrency()
+        get() = interactor.chartCurrency
 
     override fun viewDidLoad() {
         view.showSpinner()
-        interactor.getData(coinCode)
+        view.setDefaultMode(interactor.defaultChartMode)
+        showOrFetch(interactor.defaultChartMode)
     }
 
     override fun onClick(mode: Mode) {
         view.showSpinner()
-        interactor.getData(coinCode, mode)
+        showOrFetch(mode)
     }
 
     //  InteractorDelegate
@@ -35,16 +40,38 @@ class RateChartPresenter(val view: View, private val interactor: Interactor, pri
         view.setDefaultMode(mode)
     }
 
-    override fun showRate(rate: BigDecimal, startRate: BigDecimal) {
-        view.showRate(rate, startRate)
+    override fun showChart(data: Pair<RateStatData, Rate>, mode: Mode) {
+        rateStats = data.first
+        lastRate = data.second
+
+        showStats(mode)
     }
 
-    override fun showMarketCap(value: BigDecimal, high: BigDecimal, low: BigDecimal) {
-        view.showMarketCap(value, high, low)
+    private fun showOrFetch(mode: Mode) {
+        if (rateStats == null) {
+            interactor.getData(coinCode, mode)
+        } else {
+            showStats(mode)
+        }
     }
 
-    override fun showChart(data: ChartData) {
-        view.showChart(data)
+    private fun showStats(mode: Mode) {
+        val stat = rateStats ?: return
+        val rate = lastRate ?: return
+        val data = stat.stats[mode.name] ?: return
+
+        val fst = data.rates[0].toBigDecimal()
+        val max = data.rates.max() ?: 0f
+        val min = data.rates.min() ?: 0f
+
+        val rates = when(mode) {
+            Mode.MONTHLY18 -> data.rates.takeLast(52) // for one year
+            else -> data.rates
+        }
+
+        view.showRate(rate.value, fst)
+        view.showMarketCap(stat.marketCap, max.toBigDecimal(), min.toBigDecimal())
+        view.showChart(ChartData(rates, data.timestamp, data.scale, mode))
         view.hideSpinner()
     }
 

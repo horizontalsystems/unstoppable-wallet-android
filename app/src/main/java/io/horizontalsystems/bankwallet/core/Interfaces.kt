@@ -128,7 +128,7 @@ interface IRandomProvider {
 }
 
 interface INetworkManager {
-    fun getRateStats(hostType: HostType, coinCode: String, currency: String, chunk: String): Flowable<RateStatData>
+    fun getRateStats(hostType: HostType, coinCode: String, currency: String): Flowable<RateStatData>
     fun getRateByDay(hostType: HostType, coinCode: String, currency: String, timestamp: Long): Single<BigDecimal>
     fun getRateByHour(hostType: HostType, coinCode: String, currency: String, timestamp: Long): Single<BigDecimal>
     fun getLatestRateData(hostType: HostType, currency: String): Single<LatestRateData>
