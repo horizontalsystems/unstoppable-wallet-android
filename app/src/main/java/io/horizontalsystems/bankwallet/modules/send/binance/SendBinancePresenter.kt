@@ -84,7 +84,7 @@ class SendBinancePresenter(private val interactor: SendModule.ISendBinanceIntera
     }
 
     override fun didFailToSend(error: Throwable) {
-        view?.showError(error)
+        view?.showErrorInToast(error)
     }
 
     // SendAmountModule.IAmountModuleDelegate

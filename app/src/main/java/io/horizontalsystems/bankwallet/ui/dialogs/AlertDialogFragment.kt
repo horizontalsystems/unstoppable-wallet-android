@@ -11,7 +11,8 @@ import io.horizontalsystems.bankwallet.R
 
 class AlertDialogFragment(
         private var title: Int?,
-        private var description: Int,
+        private var description: Int? = null,
+        private var descriptionString: String? = null,
         private var buttonText: Int,
         private var canCancel: Boolean,
         private var listener: Listener? = null
@@ -28,7 +29,7 @@ class AlertDialogFragment(
             title?.let { setText(it) }
             visibility = if (title == null) View.GONE else View.VISIBLE
         }
-        rootView.findViewById<TextView>(R.id.txtDescription)?.setText(description)
+        rootView.findViewById<TextView>(R.id.txtDescription)?.text = description?.let { getString(it) } ?: descriptionString
         rootView.findViewById<TextView>(R.id.buttonTextView)?.let { btn ->
             btn.setText(buttonText)
             btn.setOnClickListener {
@@ -47,7 +48,21 @@ class AlertDialogFragment(
 
     companion object {
         fun newInstance(title: Int? = null, description: Int, buttonText: Int, cancelable: Boolean = false, listener: Listener? = null): AlertDialogFragment {
-            return AlertDialogFragment(title, description, buttonText, cancelable, listener)
+            return AlertDialogFragment(
+                    title = title,
+                    description = description,
+                    buttonText = buttonText,
+                    canCancel = cancelable,
+                    listener = listener)
+        }
+
+        fun newInstance(title: Int? = null, descriptionString: String?, buttonText: Int, cancelable: Boolean = false, listener: Listener? = null): AlertDialogFragment {
+            return AlertDialogFragment(
+                    title = title,
+                    descriptionString = descriptionString,
+                    buttonText = buttonText,
+                    canCancel = cancelable,
+                    listener = listener)
         }
     }
 }

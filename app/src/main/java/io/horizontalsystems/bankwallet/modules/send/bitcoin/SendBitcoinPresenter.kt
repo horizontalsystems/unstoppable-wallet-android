@@ -92,7 +92,7 @@ class SendBitcoinPresenter(private val interactor: SendModule.ISendBitcoinIntera
     }
 
     override fun didFailToSend(error: Throwable) {
-        view?.showError(error)
+        view?.showErrorInToast(error)
     }
 
     override fun didFetchAvailableBalance(availableBalance: BigDecimal) {

@@ -90,7 +90,7 @@ class SendDashPresenter(private val interactor: SendModule.ISendDashInteractor,
     }
 
     override fun didFailToSend(error: Throwable) {
-        view?.showError(error)
+        view?.showErrorInToast(error)
     }
 
     override fun didFetchAvailableBalance(availableBalance: BigDecimal) {

@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.eos
 
+import io.horizontalsystems.bankwallet.core.CoinException
 import io.horizontalsystems.bankwallet.core.ISendEosAdapter
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -25,8 +26,11 @@ class SendEosInteractor(private val adapter: ISendEosAdapter) : SendModule.ISend
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     delegate?.didSend()
-                }, { error ->
-                    delegate?.didFailToSend(error)
+                }, {
+                    when (it) {
+                        is CoinException -> delegate?.didFailToSendWithEosBackendError(it)
+                        else -> delegate?.didFailToSend(it)
+                    }
                 }).let { disposables.add(it) }
     }
 

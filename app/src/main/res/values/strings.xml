@@ -273,6 +273,9 @@
     <!--Errors-->
 
     <string name="Error_UnsupportedBlockchain">Unsupported currency</string>
+    <string name="Eos_Backend_Error_SelfTransfer">Can\'t transfer token to own account</string>
+    <string name="Eos_Backend_Error_AccountNotExist">Target account does not exist</string>
+    <string name="Eos_Backend_Error_InsufficientRam">Your EOS account doesn\'t have enough RAM to send this token. You need to increase RAM stake to proceed.</string>
 
     <!--Hud texts-->
 

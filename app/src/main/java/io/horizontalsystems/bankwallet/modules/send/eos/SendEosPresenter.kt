@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.eos
 
+import io.horizontalsystems.bankwallet.core.CoinException
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationViewItemFactory
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
@@ -85,7 +86,11 @@ class SendEosPresenter(private val interactor: SendModule.ISendEosInteractor,
     }
 
     override fun didFailToSend(error: Throwable) {
-        view?.showError(error)
+        view?.showErrorInToast(error)
+    }
+
+    override fun didFailToSendWithEosBackendError(coinException: CoinException) {
+        view?.showErrorInDialog(coinException)
     }
 
     // SendAmountModule.IAmountModuleDelegate

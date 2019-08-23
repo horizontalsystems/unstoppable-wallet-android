@@ -1,10 +1,12 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.TransactionAddress
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.eoskit.EosKit
+import io.horizontalsystems.eoskit.core.exceptions.BackendError
 import io.horizontalsystems.eoskit.models.Transaction
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -107,7 +109,19 @@ class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit) : IAdapter, ITra
     }
 
     override fun send(amount: BigDecimal, account: String, memo: String?): Single<Unit> {
-        return eosKit.send(token, account, amount, memo ?: "").map { Unit }
+        return eosKit.send(token, account, amount, memo ?: "")
+                .onErrorResumeNext { Single.error(getException(it)) }
+                .map { Unit }
+    }
+
+    private fun getException(error: Throwable): Exception {
+        return when(error) {
+            is BackendError.TransferToSelfError -> CoinException(R.string.Eos_Backend_Error_SelfTransfer)
+            is BackendError.AccountNotExistError -> CoinException(R.string.Eos_Backend_Error_AccountNotExist)
+            is BackendError.InsufficientRamError -> CoinException(R.string.Eos_Backend_Error_InsufficientRam)
+            is BackendError -> CoinException(null, error.detail)
+            else -> Exception()
+        }
     }
 
     // IReceiveAdapter

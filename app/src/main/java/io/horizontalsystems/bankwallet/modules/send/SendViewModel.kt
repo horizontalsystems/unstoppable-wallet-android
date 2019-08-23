@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.send
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.bankwallet.core.CoinException
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
@@ -19,6 +20,7 @@ class SendViewModel : ViewModel(), SendModule.IView, SendModule.IRouter {
 
     val closeWithSuccess = SingleLiveEvent<Unit>()
     val error = MutableLiveData<Throwable>()
+    val errorInDialog = SingleLiveEvent<CoinException>()
     val sendConfirmation = MutableLiveData<SendConfirmationInfo>()
     val showSendConfirmation = SingleLiveEvent<Unit>()
     val sendButtonEnabled = MutableLiveData<Boolean>()
@@ -38,8 +40,12 @@ class SendViewModel : ViewModel(), SendModule.IView, SendModule.IRouter {
         sendButtonEnabled.value = enabled
     }
 
-    override fun showError(error: Throwable) {
+    override fun showErrorInToast(error: Throwable) {
         this.error.value = error
+    }
+
+    override fun showErrorInDialog(coinException: CoinException) {
+        errorInDialog.value = coinException
     }
 
     override fun showConfirmation(viewItem: SendConfirmationInfo) {
