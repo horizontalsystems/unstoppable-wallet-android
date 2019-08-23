@@ -293,4 +293,15 @@
     <string name="CoinOption_Slow">느리게</string>
     <string name="CoinOption_MorePrivate">1&#8211;12시간 (더욱 사적임)</string>
     <string name="CoinOption_Slow_Text">네트워크에서 직접 거래를 복원하세요. 훨씬 더 사적이지만 속도는 매우 느립니다. 복원에 너무 많은 시간이 걸린다면 암호관리 섹션에서 빠른 동기화 옵션을 사용하여 지갑의 암호를 다시 가져오세요.</string>
+    <!--Charts-->
+    <string name="Charts_TimeDuration_Day">1D</string>
+    <string name="Charts_TimeDuration_Week">7D</string>
+    <string name="Charts_TimeDuration_Month">1M</string>
+    <string name="Charts_TimeDuration_Quartal">3M</string>
+    <string name="Charts_TimeDuration_HalfYear">6M</string>
+    <string name="Charts_TimeDuration_Year">1Y</string>
+    <string name="Charts_MarketCap">Mkt. Cap</string>
+    <string name="Charts_High">High</string>
+    <string name="Charts_Low">Low</string>
+    <string name="Charts_Volume">Volume</string>
 </resources>
