@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.managecoins
 
 import io.horizontalsystems.bankwallet.core.DefaultAccountType
+import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.SyncMode
@@ -118,9 +119,18 @@ class ManageWalletsPresenter(private val interactor: ManageWalletsModule.IIntera
         val wallet = interactor.wallet(coin)
         if (wallet == null) {
             currentItem = item
-            view?.showNoAccountDialog(coin)
+            val accountType = getPredefinedAccountType(coin.type.defaultAccountType)
+            accountType?.let {
+                view?.showNoAccountDialog(coin, it.title)
+            }
         } else {
             item.wallet = wallet
+        }
+    }
+
+    private fun getPredefinedAccountType(coinDefaultAccountType: DefaultAccountType): IPredefinedAccountType? {
+        return interactor.predefinedAccountTypes.firstOrNull {
+            it.defaultAccountType::class == coinDefaultAccountType::class
         }
     }
 

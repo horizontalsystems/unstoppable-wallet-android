@@ -14,7 +14,7 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
 import io.horizontalsystems.bankwallet.viewHelpers.bottomDialog
 
-class ManageWalletsDialog(private val listener: Listener, private val coin: Coin)
+class ManageWalletsDialog(private val listener: Listener, private val coin: Coin, private val accountKeyName: Int)
     : DialogFragment() {
 
     interface Listener {
@@ -54,7 +54,7 @@ class ManageWalletsDialog(private val listener: Listener, private val coin: Coin
         addCoinIcon.bind(coin)
 
         addKeyTitle.text = getString(R.string.AddCoin_Title, coin.code)
-        addKeyInfo.text = getString(R.string.AddCoin_Description, coin.title, coin.title)
+        addKeyInfo.text = getString(R.string.AddCoin_Description, coin.title, getString(accountKeyName), getString(accountKeyName), coin.title)
     }
 
     private fun bindActions() {
@@ -70,8 +70,8 @@ class ManageWalletsDialog(private val listener: Listener, private val coin: Coin
     }
 
     companion object {
-        fun show(activity: FragmentActivity, listener: Listener, coin: Coin) {
-            val fragment = ManageWalletsDialog(listener, coin)
+        fun show(activity: FragmentActivity, listener: Listener, coin: Coin, accountKeyName: Int) {
+            val fragment = ManageWalletsDialog(listener, coin, accountKeyName)
             val transaction = activity.supportFragmentManager.beginTransaction()
 
             transaction.add(fragment, "bottom_manage_keys_dialog")

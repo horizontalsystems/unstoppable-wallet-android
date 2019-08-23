@@ -10,7 +10,8 @@ class ManageWalletsInteractor(
         private val appConfigProvider: IAppConfigProvider,
         private val walletManager: IWalletManager,
         private val accountCreator: IAccountCreator,
-        private val walletFactory: IWalletFactory)
+        private val walletFactory: IWalletFactory,
+        private val predefinedAccountTypeManager: IPredefinedAccountTypeManager)
     : ManageWalletsModule.IInteractor {
 
     var delegate: ManageWalletsModule.IInteractorDelegate? = null
@@ -20,6 +21,9 @@ class ManageWalletsInteractor(
 
     override val wallets: List<Wallet>
         get() = walletManager.wallets
+
+    override val predefinedAccountTypes: List<IPredefinedAccountType>
+        get() = predefinedAccountTypeManager.allTypes
 
     override fun wallet(coin: Coin): Wallet? {
         return walletManager.wallet(coin)
