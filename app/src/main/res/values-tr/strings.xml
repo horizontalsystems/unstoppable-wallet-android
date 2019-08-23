@@ -287,4 +287,15 @@
     <string name="CoinOption_Slow">Yavaş</string>
     <string name="CoinOption_MorePrivate">1&#8211;12 saat (Daha Gizli)</string>
     <string name="CoinOption_Slow_Text">Geçmiş hesap işlemlerinizi ağdan geri yükler. Çok daha güvenli ama yavaş. Eğer geri yükleme çok uzun zaman alıyorsa, Anahtarları Yönet ekranında cüzdan anahtarını Hızlı Eşle seçeneğiyle tekrar içe aktarın.</string>
+    <!--Charts-->
+    <string name="Charts_TimeDuration_Day">1D</string>
+    <string name="Charts_TimeDuration_Week">7D</string>
+    <string name="Charts_TimeDuration_Month">1M</string>
+    <string name="Charts_TimeDuration_Quartal">3M</string>
+    <string name="Charts_TimeDuration_HalfYear">6M</string>
+    <string name="Charts_TimeDuration_Year">1Y</string>
+    <string name="Charts_MarketCap">Mkt. Cap</string>
+    <string name="Charts_High">High</string>
+    <string name="Charts_Low">Low</string>
+    <string name="Charts_Volume">Volume</string>
 </resources>
