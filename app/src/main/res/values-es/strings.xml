@@ -215,6 +215,9 @@
     <string name="Unlock_Page_EnterYourPin">Código</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Divisa no admitida</string>
+    <string name="Eos_Backend_Error_SelfTransfer">Can\'t transfer token to own account</string>
+    <string name="Eos_Backend_Error_AccountNotExist">Target account does not exist</string>
+    <string name="Eos_Backend_Error_InsufficientRam">Your EOS account doesn\'t have enough RAM to send this token. You need to increase RAM stake to proceed.</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Desbloquear</string>
     <string name="Hud_Text_Success">Completado</string>
