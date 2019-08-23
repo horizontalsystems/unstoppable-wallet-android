@@ -23,8 +23,8 @@ import java.util.concurrent.TimeUnit
 
 class NetworkManager(private val appConfig: IAppConfigProvider) : INetworkManager {
 
-    override fun getRateStats(hostType: HostType, coinCode: String, currency: String, chunk: String): Flowable<RateStatData> {
-        return rateApiClient(hostType).getRateStats(currency, coinCode, chunk)
+    override fun getRateStats(hostType: HostType, coinCode: String, currency: String): Flowable<RateStatData> {
+        return rateApiClient(hostType).getRateStats(currency, coinCode)
     }
 
     override fun getRateByDay(hostType: HostType, coinCode: String, currency: String, timestamp: Long): Single<BigDecimal> {
@@ -99,11 +99,10 @@ object ServiceExchangeApi {
                 @Path("fiat") currency: String
         ): Single<LatestRateData>
 
-        @GET("xrates/stats/{fiat}/{coin}/{chunk}.json")
+        @GET("xrates/stats/{fiat}/{coin}/index.json")
         fun getRateStats(
                 @Path("fiat") currency: String,
-                @Path("coin") coinCode: String,
-                @Path("chunk") chunk: String
+                @Path("coin") coinCode: String
         ): Flowable<RateStatData>
     }
 }

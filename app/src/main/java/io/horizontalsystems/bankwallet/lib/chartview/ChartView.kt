@@ -23,7 +23,7 @@ class ChartView : View {
         WEEKLY,
         MONTHLY,
         MONTHLY6,
-        ANNUAL
+        MONTHLY18
     }
 
     var listener: Listener? = null

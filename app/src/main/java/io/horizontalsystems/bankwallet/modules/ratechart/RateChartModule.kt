@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.entities.Rate
+import io.horizontalsystems.bankwallet.entities.RateStatData
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.Mode
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartData
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
@@ -28,16 +30,15 @@ object RateChartModule {
     }
 
     interface Interactor {
-        fun getCurrency(): Currency
-        fun getData(coinCode: CoinCode, mode: Mode? = null)
+        val chartCurrency: Currency
+        var defaultChartMode: Mode
+        fun getData(coinCode: CoinCode, mode: Mode)
         fun clear()
     }
 
     interface InteractorDelegate {
         fun setDefault(mode: Mode)
-        fun showRate(rate: BigDecimal, startRate: BigDecimal)
-        fun showMarketCap(value: BigDecimal, high: BigDecimal, low: BigDecimal)
-        fun showChart(data: ChartData)
+        fun showChart(data: Pair<RateStatData, Rate>, mode: Mode)
         fun showError(error: Throwable)
     }
 

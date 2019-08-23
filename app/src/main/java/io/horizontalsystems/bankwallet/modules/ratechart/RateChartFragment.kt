@@ -74,7 +74,7 @@ class RateChartFragment(private val coin: Coin, private val rate: Rate?) : Botto
                 Mode.WEEKLY -> resetActions(button1W)
                 Mode.MONTHLY -> resetActions(button1M)
                 Mode.MONTHLY6 -> resetActions(button6M)
-                Mode.ANNUAL -> resetActions(button1Y)
+                Mode.MONTHLY18 -> resetActions(button1Y)
             }
         })
 
@@ -144,7 +144,7 @@ class RateChartFragment(private val coin: Coin, private val rate: Rate?) : Botto
             resetActions(it)
         }
         button1Y.setOnClickListener {
-            presenter.onClick(Mode.ANNUAL)
+            presenter.onClick(Mode.MONTHLY18)
             resetActions(it)
         }
     }
@@ -169,7 +169,7 @@ class RateChartFragment(private val coin: Coin, private val rate: Rate?) : Botto
             Mode.WEEKLY -> "1W"
             Mode.MONTHLY -> "1M"
             Mode.MONTHLY6 -> "6M"
-            Mode.ANNUAL -> "1Y"
+            Mode.MONTHLY18 -> "1Y"
         }
 
         coinRateHighTitle.text = getString(R.string.Chart_Rate_High, modeName)
