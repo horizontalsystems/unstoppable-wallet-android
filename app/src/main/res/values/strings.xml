@@ -379,4 +379,18 @@
     <string name="CoinOption_MorePrivate">1&#8211;12 hours (More Private)</string>
     <string name="CoinOption_Slow_Text">Restores your past transactions directly from the network. Significantly more private but very slow. If the restore takes way too much time, go to Manage Keys section and reimport the Key for the wallet using the Fast Sync option.</string>
 
+    <!--Charts-->
+
+    <string name="Charts_TimeDuration_Day">1D</string>
+    <string name="Charts_TimeDuration_Week">7D</string>
+    <string name="Charts_TimeDuration_Month">1M</string>
+    <string name="Charts_TimeDuration_Quartal">3M</string>
+    <string name="Charts_TimeDuration_HalfYear">6M</string>
+    <string name="Charts_TimeDuration_Year">1Y</string>
+
+    <string name="Charts_MarketCap">Mkt Cap</string>
+    <string name="Charts_High">High</string>
+    <string name="Charts_Low">Low</string>
+    <string name="Charts_Volume">Volume</string>
+
 </resources>
