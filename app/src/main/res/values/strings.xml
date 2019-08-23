@@ -123,7 +123,7 @@
     <string name="Deposit_Your_Address">Your Address</string>
     <string name="Deposit_Your_Account">Your Account</string>
 
-    <string name="Receive_Alert_NotBackedUp_Title">Backup Alert</string>
+    <string name="Receive_Alert_NotBackedUp_Title">Backup Required</string>
     <string name="Receive_Alert_NotBackedUp_Button">Backup</string>
     <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
 
