@@ -71,6 +71,7 @@ class BalanceInteractor(
         delegate?.didUpdateCurrency(currencyManager.baseCurrency)
     }
 
+    @Synchronized
     private fun onUpdateWallets() {
         adapterDisposables.clear()
 
@@ -83,6 +84,7 @@ class BalanceInteractor(
         }
     }
 
+    @Synchronized
     private fun subscribeToAdapterUpdates(wallet: Wallet, initialUpdate: Boolean) {
         adapterManager.getBalanceAdapterForWallet(wallet)?.let { adapter ->
 
