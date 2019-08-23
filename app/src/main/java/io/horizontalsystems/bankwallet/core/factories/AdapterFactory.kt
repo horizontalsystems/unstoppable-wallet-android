@@ -22,7 +22,7 @@ class AdapterFactory(
             is CoinType.Bitcoin -> BitcoinAdapter(wallet, appConfigProvider.testMode)
             is CoinType.BitcoinCash -> BitcoinCashAdapter(wallet, appConfigProvider.testMode)
             is CoinType.Dash -> DashAdapter(wallet, appConfigProvider.testMode)
-            is CoinType.Eos -> EosAdapter(coinType, eosKitManager.eosKit(wallet))
+            is CoinType.Eos -> EosAdapter(coinType, eosKitManager.eosKit(wallet), wallet.coin.decimal)
             is CoinType.Binance -> BinanceAdapter(binanceKitManager.binanceKit(wallet), coinType.symbol)
             is CoinType.Ethereum -> {
                 EthereumAdapter(ethereumKitManager.ethereumKit(wallet))

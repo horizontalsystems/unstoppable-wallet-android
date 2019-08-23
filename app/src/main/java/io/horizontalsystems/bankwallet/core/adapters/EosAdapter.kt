@@ -11,8 +11,9 @@ import io.horizontalsystems.eoskit.models.Transaction
 import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
+import java.math.RoundingMode
 
-class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, ISendEosAdapter {
+class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit, private val decimal: Int) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, ISendEosAdapter {
 
     private val token = eosKit.register(eos.token, eos.symbol)
     private val irreversibleThreshold = 330
@@ -109,7 +110,8 @@ class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit) : IAdapter, ITra
     }
 
     override fun send(amount: BigDecimal, account: String, memo: String?): Single<Unit> {
-        return eosKit.send(token, account, amount, memo ?: "")
+        val scaledAmount = amount.setScale(decimal, RoundingMode.HALF_EVEN)
+        return eosKit.send(token, account, scaledAmount, memo ?: "")
                 .onErrorResumeNext { Single.error(getException(it)) }
                 .map { Unit }
     }

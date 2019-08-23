@@ -7,12 +7,10 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddre
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
 import java.math.BigDecimal
-import java.math.RoundingMode
 
 class SendEosPresenter(private val interactor: SendModule.ISendEosInteractor,
                        private val router: SendModule.IRouter,
-                       private val confirmationFactory: SendConfirmationViewItemFactory,
-                       private val coinDecimal: Int) : SendModule.IViewDelegate, SendModule.ISendEosInteractorDelegate,
+                       private val confirmationFactory: SendConfirmationViewItemFactory) : SendModule.IViewDelegate, SendModule.ISendEosInteractorDelegate,
         SendAmountModule.IAmountModuleDelegate,
         SendAddressModule.IAddressModuleDelegate {
 
@@ -70,9 +68,8 @@ class SendEosPresenter(private val interactor: SendModule.ISendEosInteractor,
     override fun onSendConfirmed(memo: String?) {
         val amount = amountModule.validAmount ?: return
         val address = addressModule.address ?: return
-        val scaledAmount = amount.setScale(coinDecimal, RoundingMode.HALF_EVEN)
 
-        interactor.send(scaledAmount, address, memo)
+        interactor.send(amount, address, memo)
     }
 
     override fun onClear() {
