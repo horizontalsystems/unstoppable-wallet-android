@@ -64,9 +64,7 @@ class MainSettingsFragment : Fragment() {
         })
 
         viewModel.backedUpLiveDate.observe(viewLifecycleOwner, Observer { wordListBackedUp ->
-            wordListBackedUp?.let { wordListIsBackedUp ->
-                securityCenter.setInfoBadgeVisibility(!wordListIsBackedUp)
-            }
+            securityCenter.setInfoBadgeVisibility(!wordListBackedUp)
         })
 
         viewModel.showBaseCurrencySettingsLiveEvent.observe(viewLifecycleOwner, Observer {

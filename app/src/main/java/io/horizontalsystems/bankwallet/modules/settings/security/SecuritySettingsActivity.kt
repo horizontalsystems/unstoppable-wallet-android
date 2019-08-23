@@ -8,9 +8,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.ui.dialogs.AlertDialogFragment
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysModule
+import io.horizontalsystems.bankwallet.ui.dialogs.AlertDialogFragment
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import kotlinx.android.synthetic.main.activity_settings_security.*
 
@@ -34,9 +34,7 @@ class SecuritySettingsActivity : BaseActivity() {
         //  Handling view model live events
 
         viewModel.backedUpLiveData.observe(this, Observer { wordListBackedUp ->
-            wordListBackedUp?.let { wordListIsBackedUp ->
-                manageKeys.setInfoBadgeVisibility(!wordListIsBackedUp)
-            }
+            manageKeys.setInfoBadgeVisibility(!wordListBackedUp)
         })
 
         viewModel.openManageKeysLiveEvent.observe(this, Observer {
