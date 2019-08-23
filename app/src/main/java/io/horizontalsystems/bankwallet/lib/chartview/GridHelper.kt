@@ -23,7 +23,12 @@ class GridHelper(private val shape: RectF) {
             val gridSpacing = shape.bottom / 4
             y = gridSpacing * it + shape.top
 
-            gridLines.add(GridLine(y, String.format("%.0f", value)))
+            var label = String.format("%.0f", value)
+            if (value <= 1) {
+                label = String.format("%.2f", value)
+            }
+
+            gridLines.add(GridLine(y, label))
             value -= priceStep
         }
 
