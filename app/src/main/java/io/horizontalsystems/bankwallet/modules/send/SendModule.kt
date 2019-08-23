@@ -184,7 +184,7 @@ object SendModule {
             }
             is ISendEosAdapter -> {
                 val interactor = SendEosInteractor(adapter)
-                val presenter = SendEosPresenter(interactor, view, SendConfirmationViewItemFactory(), wallet.coin.decimal)
+                val presenter = SendEosPresenter(interactor, view, SendConfirmationViewItemFactory())
 
                 presenter.view = view
                 interactor.delegate = presenter
