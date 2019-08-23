@@ -292,4 +292,15 @@
     <string name="CoinOption_Slow">缓慢</string>
     <string name="CoinOption_MorePrivate">1&#8211;12 小时(更多隐私)</string>
     <string name="CoinOption_Slow_Text">直接从网络可以恢复以前的事务。明显更私密，但速度很慢。如果恢复时间过长，如果恢复时间过长，请转到“管理密钥”部分，然后选“快速同步”重新导入钱包密钥。</string>
+    <!--Charts-->
+    <string name="Charts_TimeDuration_Day">1D</string>
+    <string name="Charts_TimeDuration_Week">7D</string>
+    <string name="Charts_TimeDuration_Month">1M</string>
+    <string name="Charts_TimeDuration_Quartal">3M</string>
+    <string name="Charts_TimeDuration_HalfYear">6M</string>
+    <string name="Charts_TimeDuration_Year">1Y</string>
+    <string name="Charts_MarketCap">Mkt. Cap</string>
+    <string name="Charts_High">High</string>
+    <string name="Charts_Low">Low</string>
+    <string name="Charts_Volume">Volume</string>
 </resources>
