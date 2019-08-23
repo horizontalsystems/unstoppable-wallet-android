@@ -93,7 +93,7 @@ class SendEthereumPresenter(private val interactor: SendModule.ISendEthereumInte
     }
 
     override fun didFailToSend(error: Throwable) {
-        view?.showError(error)
+        view?.showErrorInToast(error)
     }
 
     // SendAmountModule.IAmountModuleDelegate

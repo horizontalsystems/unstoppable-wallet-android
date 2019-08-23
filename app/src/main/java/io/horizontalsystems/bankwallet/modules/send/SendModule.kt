@@ -26,7 +26,8 @@ object SendModule {
         fun loadInputItems(inputs: List<Input>)
         fun setSendButtonEnabled(enabled: Boolean)
         fun showConfirmation(viewItem: SendConfirmationInfo)
-        fun showError(error: Throwable)
+        fun showErrorInToast(error: Throwable)
+        fun showErrorInDialog(coinException: CoinException)
     }
 
     interface IViewDelegate {
@@ -113,6 +114,7 @@ object SendModule {
     interface ISendEosInteractorDelegate {
         fun didSend()
         fun didFailToSend(error: Throwable)
+        fun didFailToSendWithEosBackendError(coinException: CoinException)
     }
 
     interface IRouter {

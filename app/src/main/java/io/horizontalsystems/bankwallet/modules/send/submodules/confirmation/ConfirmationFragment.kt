@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subv
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationPrimaryView
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationSecondaryDataView
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationSendButtonView
+import io.horizontalsystems.bankwallet.ui.dialogs.AlertDialogFragment
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_confirmation.*
@@ -97,6 +98,20 @@ class ConfirmationFragment : Fragment() {
         sendViewModel?.error?.observe(viewLifecycleOwner, Observer { errorMsgTextRes ->
             errorMsgTextRes?.let { HudHelper.showErrorMessage(getErrorText(it)) }
             confirmationViewModel?.delegate?.onSendError()
+        })
+
+        sendViewModel?.errorInDialog?.observe(viewLifecycleOwner, Observer { coinThrowable ->
+            fragmentManager?.let { fragManager ->
+                val errorText = coinThrowable.errorTextRes?.let { getString(it) } ?: coinThrowable.nonTranslatableText
+                AlertDialogFragment.newInstance(
+                        descriptionString = errorText,
+                        buttonText = R.string.Alert_Ok,
+                        listener = object : AlertDialogFragment.Listener {
+                            override fun onButtonClick() {
+                                activity?.onBackPressed()
+                            }
+                        }).show(fragManager, "alert_dialog")
+            }
         })
 
         confirmationViewModel?.sendButtonState?.observe(viewLifecycleOwner, Observer { state ->
