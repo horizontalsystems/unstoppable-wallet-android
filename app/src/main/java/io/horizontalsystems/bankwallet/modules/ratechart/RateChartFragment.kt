@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.lib.chartview.ChartView.Mode
 import io.horizontalsystems.bankwallet.lib.chartview.models.DataPoint
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import kotlinx.android.synthetic.main.view_bottom_sheet_chart.*
+import java.math.BigDecimal
 import java.util.*
 
 class RateChartFragment(private val coin: Coin, private val rate: Rate?) : BottomSheetDialogFragment(), ChartView.Listener {
@@ -49,7 +50,7 @@ class RateChartFragment(private val coin: Coin, private val rate: Rate?) : Botto
     private fun initialize() {
         chartView.listener = this
         chartView.setIndicator(chartViewIndicator)
-        chartTitle.text = getString(R.string.Chart_Title, coin.title)
+        chartTitle.text = getString(R.string.Charts_Title, coin.title)
 
         if (rate == null) return
         val currencyValue = CurrencyValue(presenter.currency, rate.value)
@@ -78,18 +79,22 @@ class RateChartFragment(private val coin: Coin, private val rate: Rate?) : Botto
             }
         })
 
-        presenterView.showRate.observe(viewLifecycleOwner, Observer {
-            val (lastRate, startRate) = it
+        presenterView.showRate.observe(viewLifecycleOwner, Observer { (lastRate, startRate) ->
+            val diffColour: Int
+            val diffString: String
 
             val rateDiff = -(startRate - lastRate)
-            if (rateDiff < 0.toBigDecimal()) {
-                coinRateDiff.setTextColor(resources.getColor(R.color.red_warning))
+            if (rateDiff < BigDecimal.ZERO) {
+                diffString = String.format("%.2f", rateDiff * BigDecimal(100) / startRate) + " %"
+                diffColour = resources.getColor(R.color.red_warning)
             } else {
-                coinRateDiff.setTextColor(resources.getColor(R.color.green_crypto))
+                diffString = String.format("%.2f", rateDiff * BigDecimal(100) / lastRate) + " %"
+                diffColour = resources.getColor(R.color.green_crypto)
             }
 
+            coinRateDiff.setTextColor(diffColour)
+            coinRateDiff.text = diffString
             coinRateLast.text = formatter.format(CurrencyValue(presenter.currency, lastRate))
-            coinRateDiff.text = formatter.format(CurrencyValue(presenter.currency, rateDiff))
         })
 
         presenterView.showMarketCap.observe(viewLifecycleOwner, Observer {
@@ -165,14 +170,14 @@ class RateChartFragment(private val coin: Coin, private val rate: Rate?) : Botto
 
     private fun updateLabels(mode: Mode) {
         val modeName = when (mode) {
-            Mode.DAILY -> "1D"
-            Mode.WEEKLY -> "1W"
-            Mode.MONTHLY -> "1M"
-            Mode.MONTHLY6 -> "6M"
-            Mode.MONTHLY18 -> "1Y"
+            Mode.DAILY -> getString(R.string.Charts_TimeDuration_Day)
+            Mode.WEEKLY -> getString(R.string.Charts_TimeDuration_Week)
+            Mode.MONTHLY -> getString(R.string.Charts_TimeDuration_Month)
+            Mode.MONTHLY6 -> getString(R.string.Charts_TimeDuration_HalfYear)
+            Mode.MONTHLY18 -> getString(R.string.Charts_TimeDuration_Year)
         }
 
-        coinRateHighTitle.text = getString(R.string.Chart_Rate_High, modeName)
-        coinRateLowTitle.text = getString(R.string.Chart_Rate_Low, modeName)
+        coinRateHighTitle.text = getString(R.string.Charts_Rate_High, modeName)
+        coinRateLowTitle.text = getString(R.string.Charts_Rate_Low, modeName)
     }
 }

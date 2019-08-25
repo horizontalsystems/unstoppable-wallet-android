@@ -34,7 +34,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="14dp"
-            android:text="@string/Chart_Title"
             android:textColor="?BottomDialogTextColor"
             app:layout_constraintBottom_toBottomOf="@+id/chartCoinIcon"
             app:layout_constraintEnd_toEndOf="parent"
@@ -189,7 +188,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:textColor="@color/white"
+                android:textColor="?BottomDialogTextColor"
                 android:textSize="14sp"
                 tools:text="3,867.50" />
 
@@ -208,7 +207,12 @@
             <io.horizontalsystems.bankwallet.lib.chartview.ChartView
                 android:id="@+id/chartView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                app:fallColor="@color/red_warning"
+                app:growColor="@color/green_crypto"
+                app:indicatorColor="?AlertTextColor"
+                app:textColor="@color/grey"
+                app:touchColor="?AlertTextColor" />
 
             <io.horizontalsystems.bankwallet.lib.chartview.ChartViewIndicator
                 android:id="@+id/chartViewIndicator"
@@ -216,19 +220,22 @@
                 android:layout_height="match_parent"
                 android:visibility="invisible" />
 
-            <ProgressBar
-                android:id="@+id/chartViewSpinner"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:backgroundTint="@color/grey"
-                android:indeterminate="true"
-                android:indeterminateTint="@color/grey"
-                android:indeterminateTintMode="src_atop" />
-
         </RelativeLayout>
+
+        <ProgressBar
+            android:id="@+id/chartViewSpinner"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:backgroundTint="@color/grey"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/grey"
+            android:indeterminateTintMode="src_atop"
+            app:layout_constraintBottom_toTopOf="@+id/marketCapWrap"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chartPointsInfo" />
 
         <LinearLayout
             android:id="@+id/marketCapWrap"
@@ -252,11 +259,11 @@
 
                 <TextView
                     android:id="@+id/coinMarketCap"
-                    style="@font/noto_sans_regular"
                     android:layout_width="match_parent"
                     android:layout_height="17dp"
                     android:width="0dp"
-                    android:textColor="@color/white"
+                    android:fontFamily="@font/noto_sans_regular"
+                    android:textColor="?BottomDialogTextColor"
                     android:textSize="12sp"
                     tools:text="$ 100.92 B" />
 
@@ -266,7 +273,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="17dp"
                     android:width="0dp"
-                    android:text="M. CAP"
+                    android:text="@string/Charts_MarketCap"
                     android:textColor="@color/grey"
                     android:textSize="12sp" />
 
@@ -280,11 +287,11 @@
 
                 <TextView
                     android:id="@+id/coinRateHigh"
-                    style="@font/noto_sans_regular"
                     android:layout_width="match_parent"
                     android:layout_height="17dp"
                     android:width="0dp"
-                    android:textColor="@color/white"
+                    android:fontFamily="@font/noto_sans_regular"
+                    android:textColor="?BottomDialogTextColor"
                     android:textSize="12sp"
                     tools:text="$ 12000.10" />
 
@@ -308,11 +315,11 @@
 
                 <TextView
                     android:id="@+id/coinRateLow"
-                    style="@font/noto_sans_regular"
                     android:layout_width="match_parent"
                     android:layout_height="17dp"
                     android:width="0dp"
-                    android:textColor="@color/white"
+                    android:fontFamily="@font/noto_sans_regular"
+                    android:textColor="?BottomDialogTextColor"
                     android:textSize="12sp"
                     tools:text="$ 11000.30" />
 

@@ -8,6 +8,8 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateInterpolator
+import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.lib.chartview.models.ChartConfig
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartData
 import io.horizontalsystems.bankwallet.lib.chartview.models.DataPoint
 
@@ -31,12 +33,12 @@ class ChartView : View {
     private val viewHelper = ViewHelper(context)
     private val scaleHelper = ScaleHelper()
 
-    private val shape = RectF()
-    private val chart = Chart(context, shape)
-    private val chartGrid = ChartGrid(context, shape)
-    private var chartIndicator: ChartViewIndicator? = null
+    private val config = ChartConfig(context, viewHelper)
 
-    private var animatingFraction = 0f
+    private val shape = RectF()
+    private val chartCurve = ChartCurve(shape, config)
+    private val chartGrid = ChartGrid(shape, config)
+    private var chartIndicator: ChartViewIndicator? = null
 
     // Animator
     private val animator = ValueAnimator().apply {
@@ -44,40 +46,59 @@ class ChartView : View {
         duration = 500
         addUpdateListener { animator ->
             // Get our float from the animation. This method returns the Interpolated float.
-            animatingFraction = animator.animatedFraction
+            config.animatedFraction = animator.animatedFraction
             invalidate()
         }
     }
 
     constructor(context: Context) : super(context)
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
+        initialize(attrs)
+    }
+
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+        initialize(attrs)
+    }
+
+    private fun initialize(attrs: AttributeSet) {
+        val ta = context.obtainStyledAttributes(attrs, R.styleable.ChartView)
+        try {
+            ta.getInt(R.styleable.ChartView_growColor, context.getColor(R.color.green_crypto)).let { config.growColor = it }
+            ta.getInt(R.styleable.ChartView_fallColor, context.getColor(R.color.red_warning)).let { config.fallColor = it }
+            ta.getInt(R.styleable.ChartView_textColor, context.getColor(R.color.grey)).let { config.textColor = it }
+            ta.getInt(R.styleable.ChartView_gridColor, context.getColor(R.color.steel_20)).let { config.gridColor = it }
+            ta.getInt(R.styleable.ChartView_touchColor, context.getColor(R.color.bars_color)).let { config.touchColor = it }
+            ta.getInt(R.styleable.ChartView_indicatorColor, context.getColor(R.color.bars_color)).let { config.indicatorColor = it }
+        } finally {
+            ta.recycle()
+        }
+    }
 
     override fun willNotDraw(): Boolean {
         return false
     }
 
     override fun onDraw(canvas: Canvas) {
-        chart.draw(canvas, animatingFraction)
+        chartCurve.draw(canvas)
         chartGrid.draw(canvas)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                chart.onTouchActive()
+                chartCurve.onTouchActive()
                 listener?.onTouchDown()
-                chartIndicator?.onMove(chart.findPoint(event.rawX), listener)
+                chartIndicator?.onMove(chartCurve.findPoint(event.rawX), listener)
                 invalidate()
             }
 
             MotionEvent.ACTION_MOVE -> {
-                chartIndicator?.onMove(chart.findPoint(event.rawX), listener)
+                chartIndicator?.onMove(chartCurve.findPoint(event.rawX), listener)
             }
 
             MotionEvent.ACTION_UP,
             MotionEvent.ACTION_CANCEL -> {
-                chart.onTouchInactive()
+                chartCurve.onTouchInactive()
                 listener?.onTouchUp()
                 invalidate()
             }
@@ -87,14 +108,27 @@ class ChartView : View {
     }
 
     fun setIndicator(indicator: ChartViewIndicator) {
-        this.chartIndicator = indicator
+        chartIndicator = indicator
+        chartIndicator?.init(config)
     }
 
     fun setData(data: ChartData) {
+        configure(data)
         setPoints(data)
 
         animator.setFloatValues(0f)
         animator.start()
+    }
+
+    private fun configure(data: ChartData) {
+        val firstRate = data.points.firstOrNull() ?: return
+        val lastRate = data.lastRate ?: return
+
+        if (lastRate < firstRate.toBigDecimal()) {
+            config.curveColor = config.fallColor
+        } else {
+            config.curveColor = config.growColor
+        }
     }
 
     private fun setPoints(data: ChartData) {
@@ -102,11 +136,11 @@ class ChartView : View {
         val max = data.points.max() ?: 0f
 
         val (valueTop, valueStep) = scaleHelper.scale(min, max)
-        val valueWidth = viewHelper.measureTextWidth(valueTop.toString())
 
-        shape.set(0f, 0f, width - valueWidth, height - viewHelper.dp2px(20f))
+        config.offsetRight = viewHelper.measureTextWidth(valueTop.toString())
+        shape.set(0f, 0f, width - config.offsetRight, height - config.offsetBottom)
 
-        chart.init(data, valueTop, valueStep)
-        chartGrid.init(data, valueTop, valueStep, valueWidth)
+        chartCurve.init(data, valueTop, valueStep)
+        chartGrid.init(data, valueTop, valueStep)
     }
 }

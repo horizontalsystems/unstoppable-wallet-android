@@ -388,14 +388,10 @@
     <string name="Charts_TimeDuration_HalfYear">6M</string>
     <string name="Charts_TimeDuration_Year">1Y</string>
 
+    <string name="Charts_Title">%s Rate</string>
+    <string name="Charts_Rate_High">%s High</string>
+    <string name="Charts_Rate_Low">%s Low</string>
     <string name="Charts_MarketCap">Mkt. Cap</string>
-    <string name="Charts_High">High</string>
-    <string name="Charts_Low">Low</string>
     <string name="Charts_Volume">Volume</string>
-
-    <!-- Bottom Sheet Chart -->
-    <string name="Chart_Title">%s Rate</string>
-    <string name="Chart_Rate_High">%s High</string>
-    <string name="Chart_Rate_Low">%s Low</string>
 
 </resources>

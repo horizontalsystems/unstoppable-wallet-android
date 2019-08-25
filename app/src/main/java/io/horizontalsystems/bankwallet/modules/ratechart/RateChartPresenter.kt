@@ -71,7 +71,7 @@ class RateChartPresenter(val view: View, private val interactor: Interactor, pri
 
         view.showRate(rate.value, fst)
         view.showMarketCap(stat.marketCap, max.toBigDecimal(), min.toBigDecimal())
-        view.showChart(ChartData(rates, data.timestamp, data.scale, mode))
+        view.showChart(ChartData(rates, data.timestamp, data.scale, mode, rate.value))
         view.hideSpinner()
     }
 
