@@ -39,10 +39,24 @@
         android:singleLine="true"
         android:textColor="?BottomDialogTextColor"
         app:layout_constraintBottom_toBottomOf="@+id/receiveCoinIcon"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/closeButton"
         app:layout_constraintStart_toEndOf="@+id/receiveCoinIcon"
         app:layout_constraintTop_toTopOf="@+id/receiveCoinIcon"
         tools:text="Receive Bitcoin" />
+
+    <ImageView
+        android:id="@+id/closeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="7dp"
+        android:padding="5dp"
+        android:src="@drawable/close"
+        android:tint="@color/grey"
+        android:background="@drawable/rounded_ripple_24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/receiveCoinIcon"
+        app:layout_constraintBottom_toBottomOf="@+id/receiveCoinIcon"
+        />
 
     <View
         android:id="@+id/border"
@@ -64,7 +78,7 @@
         android:background="@android:color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/receiveTxtTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/border" />
 
     <TextView
         android:id="@+id/receiverHint"
