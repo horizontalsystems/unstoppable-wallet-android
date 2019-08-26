@@ -36,6 +36,7 @@ class ReceiveView : ConstraintLayout {
         this.listener = listener
         this.lifecycleOwner = lifecycleOwner
 
+        closeButton.setOnClickListener { listener.closeReceiveDialog() }
         btnShare.setOnClickListener { viewModel.delegate.onShareClick() }
         receiveAddressView.setOnClickListener { viewModel.delegate.onAddressClick() }
         setObservers()
