@@ -8,7 +8,7 @@ import android.view.View
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartConfig
 import io.horizontalsystems.bankwallet.lib.chartview.models.DataPoint
 
-class ChartViewIndicator : View {
+class ChartIndicator : View {
 
     private val touchPoint = TouchPoint(0f, 0f, 0f)
     private val indicatorPaint = Paint()
@@ -31,7 +31,7 @@ class ChartViewIndicator : View {
 
     override fun onDraw(canvas: Canvas) {
         canvas.drawLine(touchPoint.x, 0f, touchPoint.x, height.toFloat(), indicatorPaint)
-        canvas.drawRoundRect(touchPoint.x - 20, touchPoint.y - 20, touchPoint.x + 20, touchPoint.y + 20, 20f, 20f, indicatorPaint)
+        canvas.drawRoundRect(touchPoint.x - 15, touchPoint.y - 15, touchPoint.x + 15, touchPoint.y + 15, 20f, 20f, indicatorPaint)
     }
 
     fun onMove(point: DataPoint?, listener: ChartView.Listener?) {

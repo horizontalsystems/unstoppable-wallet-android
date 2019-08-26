@@ -38,7 +38,7 @@ class ChartView : View {
     private val shape = RectF()
     private val chartCurve = ChartCurve(shape, config)
     private val chartGrid = ChartGrid(shape, config)
-    private var chartIndicator: ChartViewIndicator? = null
+    private var chartIndicator: ChartIndicator? = null
 
     // Animator
     private val animator = ValueAnimator().apply {
@@ -107,7 +107,7 @@ class ChartView : View {
         return true
     }
 
-    fun setIndicator(indicator: ChartViewIndicator) {
+    fun setIndicator(indicator: ChartIndicator) {
         chartIndicator = indicator
         chartIndicator?.init(config)
     }
