@@ -51,6 +51,15 @@ class TransactionInfoItemView : ConstraintLayout {
         invalidate()
     }
 
+    fun bindHashId(title: String, address: String) {
+        txtTitle.text = title
+        addressView.text = address
+        addressView.visibility = View.VISIBLE
+        addressView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.hash, 0, 0, 0)
+
+        invalidate()
+    }
+
     private fun loadAttributes(attrs: AttributeSet) {
         val ta = context.obtainStyledAttributes(attrs, R.styleable.TransactionInfoItemView, 0, 0)
         try {
