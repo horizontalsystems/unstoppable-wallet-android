@@ -394,7 +394,7 @@ interface IAppNumberFormatter {
 }
 
 interface IFeeRateProvider {
-    fun feeRate(priority: FeeRatePriority): Long
+    fun feeRates(): List<FeeRateInfo>
 }
 
 interface IAddressParser {
@@ -402,11 +402,9 @@ interface IAddressParser {
 }
 
 enum class FeeRatePriority(val value: Int) {
-    LOWEST(0),
     LOW(1),
     MEDIUM(2),
-    HIGH(3),
-    HIGHEST(4);
+    HIGH(3);
 
     companion object {
         fun valueOf(value: Int): FeeRatePriority = values().find { it.value == value } ?: MEDIUM

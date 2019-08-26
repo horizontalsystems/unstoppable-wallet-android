@@ -1,12 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.fee
 
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.Rate
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import java.math.BigDecimal
 
@@ -19,17 +15,21 @@ object SendFeeModule {
         fun setPrimaryFee(feeAmount: String?)
         fun setSecondaryFee(feeAmount: String?)
         fun setInsufficientFeeBalanceError(insufficientFeeBalance: InsufficientFeeBalance?)
+        fun setDuration(duration: String)
+        fun setFeePriority(priority: String)
+        fun showFeeRatePrioritySelector(feeRates: List<FeeRateInfoViewItem>)
     }
 
     interface IViewDelegate {
         fun onViewDidLoad()
-        fun onFeeSliderChange(progress: Int)
+        fun onChangeFeeRate(feeRateInfo: FeeRateInfo)
+        fun onClickFeeRatePriority()
         fun onClear()
     }
 
     interface IInteractor {
         fun getRate(coinCode: String)
-        fun getFeeRate(feeRatePriority: FeeRatePriority): Long
+        fun getFeeRates(): List<FeeRateInfo>?
         fun clear()
     }
 
@@ -40,9 +40,9 @@ object SendFeeModule {
     interface IFeeModule {
         val isValid: Boolean
         val feeRate: Long
-
         val coinValue: CoinValue
         val currencyValue: CurrencyValue?
+        val duration: String?
 
         fun setFee(fee: BigDecimal)
         fun setAvailableFeeBalance(availableFeeBalance: BigDecimal)
@@ -52,6 +52,8 @@ object SendFeeModule {
     interface IFeeModuleDelegate {
         fun onUpdateFeeRate(feeRate: Long)
     }
+
+    data class FeeRateInfoViewItem(val title: String, val feeRateInfo: FeeRateInfo, val selected: Boolean)
 
     fun init(view: SendFeeViewModel, coin: Coin, moduleDelegate: IFeeModuleDelegate?): IFeeModule {
         val feeRateProvider = FeeRateProviderFactory.provider(coin)

@@ -10,6 +10,6 @@ class SendConfirmationInfo(
         val receiver: String,
         val fee: String?,
         val total: String?,
-        val time: Long?,
+        val duration: String?,
         val showMemo: Boolean = false): Parcelable {
 }

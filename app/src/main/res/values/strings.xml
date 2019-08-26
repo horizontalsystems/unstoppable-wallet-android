@@ -109,8 +109,14 @@
     <string name="Send_Error_BalanceAmount">Balance %s</string>
 
     <string name="Send_DialogTitle">Confirm Transaction</string>
-    <string name="Send_DialogFee">Fee:</string>
+    <string name="Send_DialogSpeed">Transaction Speed</string>
+    <string name="Send_TxSpeed_Low">Low</string>
+    <string name="Send_TxSpeed_Medium">Medium</string>
+    <string name="Send_TxSpeed_High">High</string>
+    <string name="Send_DialogDuration">Duration</string>
+    <string name="Send_DialogFee">Fee</string>
     <string name="Send_DialogTotal">Total:</string>
+    <string name="Send_DialogProceed">Proceed</string>
     <string name="Send_Sending">Sending</string>
 
     <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
@@ -134,6 +140,11 @@
     <string name="Timestamp_HoursAgo">%dh. ago</string>
     <string name="Timestamp_Today">Тoday</string>
     <string name="Timestamp_Yesterday">Yesterday</string>
+
+    <string name="Duration_instant">Instant</string>
+    <string name="Duration_seconds">%d seconds</string>
+    <string name="Duration_minutes">%d minutes</string>
+    <string name="Duration_hours">%d hours</string>
 
     <!--Transactions-->
 

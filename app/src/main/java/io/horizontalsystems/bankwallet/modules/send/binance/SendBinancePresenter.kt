@@ -53,6 +53,7 @@ class SendBinancePresenter(private val interactor: SendModule.ISendBinanceIntera
         val currencyValue = amountModule.fiatAmount
         val feeCoinValue = feeModule.coinValue
         val feeCurrencyValue = feeModule.currencyValue
+        val duration = feeModule.duration
 
         val confirmationViewItem = confirmationFactory.confirmationViewItem(
                 inputType,
@@ -61,6 +62,7 @@ class SendBinancePresenter(private val interactor: SendModule.ISendBinanceIntera
                 currencyValue,
                 feeCoinValue,
                 feeCurrencyValue,
+                duration,
                 false)
 
         view?.showConfirmation(confirmationViewItem)

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="12dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/feeError"
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="@color/red_warning"
+        android:textSize="12sp"
+        android:visibility="gone"
+        tools:text="Transaction fees for USDT (ERC20) paid in Ethereum. You don&apos;t have 0,00028 ETH."
+        />
+
+    <LinearLayout
+        android:id="@+id/feeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/txSpeedLayout"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:id="@+id/txSpeedMenuTitle"
+                style="@style/Subhead1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:text="@string/Send_DialogSpeed"
+                android:textColor="@color/grey"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+
+            <TextView
+                android:id="@+id/txSpeedMenu"
+                style="@style/Subhead1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:includeFontPadding="false"
+                android:textColor="?TextColorGreyLightToDark"
+                app:layout_constraintEnd_toStartOf="@+id/txSpeedMenuArrow"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:text="Medium"
+                />
+
+            <ImageView
+                android:id="@+id/txSpeedMenuArrow"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:src="@drawable/ic_down"
+                android:tint="@color/grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/txSpeedMenu"
+                app:layout_constraintBottom_toBottomOf="@+id/txSpeedMenu"
+                />
+
+            <View
+                android:id="@+id/border2"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/steel_20"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:id="@+id/txDurationTitle"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:text="@string/Send_DialogDuration"
+                android:textColor="@color/grey"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+
+            <TextView
+                android:id="@+id/txDuration"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:text="~10 minutes"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/txFeeTitle"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:text="@string/Send_DialogFee"
+                android:textColor="@color/grey"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <TextView
+                android:id="@+id/txFeePrimary"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toStartOf="@+id/feeSeparator"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="0.0005 BTC"
+                />
+
+            <TextView
+                android:id="@+id/feeSeparator"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:text=" | "
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toStartOf="@+id/txFeeSecondary"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <TextView
+                android:id="@+id/txFeeSecondary"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="$0.40"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

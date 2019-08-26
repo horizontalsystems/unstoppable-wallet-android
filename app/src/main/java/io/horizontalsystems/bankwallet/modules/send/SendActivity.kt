@@ -120,7 +120,7 @@ class SendActivity : BaseActivity() {
 
                     mainPresenter.feeModule = feePresenter
 
-                    val sendFeeView = SendFeeView(context = this, lifecycleOwner = this, sendFeeViewModel = feeViewModel, feeIsAdjustable = input.isAdjustable)
+                    val sendFeeView = SendFeeView(context = this, lifecycleOwner = this, sendFeeViewModel = feeViewModel, feeIsAdjustable = input.isAdjustable, fragmentManager = supportFragmentManager)
                     sendLinearLayout.addView(sendFeeView)
                 }
                 SendModule.Input.SendButton -> {

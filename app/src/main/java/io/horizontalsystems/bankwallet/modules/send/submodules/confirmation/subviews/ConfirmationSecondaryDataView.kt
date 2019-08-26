@@ -22,7 +22,7 @@ class ConfirmationSecondaryDataView : ConstraintLayout {
 
     fun bind(secondaryData: SendConfirmationModule.SecondaryItemData) {
         secondaryData.feeAmount?.let {
-            feeWrapper.visibility = View.VISIBLE
+            feeLayout.visibility = View.VISIBLE
             feeValue.text = it
         }
         secondaryData.totalAmount?.let {

@@ -28,6 +28,15 @@ object DateHelper {
         }
     }
 
+    fun getTxDurationString(context: Context, durationInSec: Long): String {
+        return when {
+            durationInSec < 10 -> context.getString(R.string.Duration_instant)
+            durationInSec < 60 -> context.getString(R.string.Duration_seconds, durationInSec)
+            durationInSec < 60 * 60 -> context.getString(R.string.Duration_minutes, durationInSec / 60)
+            else -> context.getString(R.string.Duration_hours, durationInSec / 60 * 60)
+        }
+    }
+
     fun getShortDateForTransaction(date: Date): String = if (isThisYear(date)) {
         formatDate(date, "MMM d")
     } else {

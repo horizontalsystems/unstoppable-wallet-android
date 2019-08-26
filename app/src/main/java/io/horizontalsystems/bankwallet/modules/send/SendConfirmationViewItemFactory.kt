@@ -14,6 +14,7 @@ class SendConfirmationViewItemFactory {
             currencyValue: CurrencyValue?,
             feeCoinValue: CoinValue?,
             feeCurrencyValue: CurrencyValue?,
+            duration: String?,
             showMemo: Boolean
     ): SendConfirmationInfo {
 
@@ -47,7 +48,7 @@ class SendConfirmationViewItemFactory {
                 receiver = address,
                 fee = stateFeeInfo?.getFormatted(),
                 total = stateTotalInfo?.getFormatted(),
-                time = null,
+                duration = duration,
                 showMemo = showMemo
         )
     }

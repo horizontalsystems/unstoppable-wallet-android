@@ -130,7 +130,7 @@
         <item name="BottomSendImageButtonTint">@color/white</item>
         <item name="BottomDialogTextColor">@color/white</item>
         <item name="BottomDialogTextColorHighlighted">@color/yellow_crypto</item>
-        <item name="ConfirmationDialogBackground">@color/dark</item>
+        <item name="ConfirmationDialogBackground">@color/steel_dark</item>
         <item name="AddressBackground">@color/address_background_dark</item>
         <item name="ConfirmationMiddlePartBackground">@color/steel_15</item>
         <item name="CurrencySwitcherTitleColor">@color/bars_color</item>
@@ -413,6 +413,18 @@
     </style>
 
     <style name="Body1">
+        <item name="android:fontFamily">@font/noto_sans_regular</item>
+        <item name="android:textColor">@color/bars_color</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Subhead1">
+        <item name="android:fontFamily">@font/noto_sans_medium</item>
+        <item name="android:textColor">@color/bars_color</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Subhead2">
         <item name="android:fontFamily">@font/noto_sans_regular</item>
         <item name="android:textColor">@color/bars_color</item>
         <item name="android:textSize">14sp</item>
