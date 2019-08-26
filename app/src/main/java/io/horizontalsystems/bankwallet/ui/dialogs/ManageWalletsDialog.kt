@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
@@ -29,6 +30,7 @@ class ManageWalletsDialog(private val listener: Listener, private val coin: Coin
     private lateinit var addCoinIcon: CoinIconView
     private lateinit var btnCreateKey: Button
     private lateinit var btnRestoreKey: Button
+    private lateinit var btnClose: ImageView
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         rootView = View.inflate(context, R.layout.fragment_bottom_manage_keys, null) as ViewGroup
@@ -38,6 +40,9 @@ class ManageWalletsDialog(private val listener: Listener, private val coin: Coin
         addCoinIcon = rootView.findViewById(R.id.addKeyIcon)
         btnCreateKey = rootView.findViewById(R.id.btnYellow)
         btnRestoreKey = rootView.findViewById(R.id.btnGrey)
+        btnClose = rootView.findViewById(R.id.closeButton)
+
+        btnClose.setOnClickListener { dismiss() }
 
         bindContent()
         bindActions()

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,6 +27,7 @@ class ManageKeysDeleteAlert(private val listener: Listener, private val checkbox
 
     private lateinit var btnConfirm: Button
     private lateinit var rootView: View
+    private lateinit var closeBtn: ImageView
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -34,10 +36,13 @@ class ManageKeysDeleteAlert(private val listener: Listener, private val checkbox
         recyclerView = rootView.findViewById(R.id.recyclerView)
 
         btnConfirm = rootView.findViewById(R.id.btnConfirm)
+        closeBtn = rootView.findViewById(R.id.closeButton)
         btnConfirm.setOnClickListener {
             listener.onConfirmationSuccess()
             dismiss()
         }
+
+        closeBtn.setOnClickListener { dismiss() }
 
         return bottomDialog(activity, rootView)
     }
