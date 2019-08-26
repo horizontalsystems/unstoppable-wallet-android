@@ -214,7 +214,7 @@
                 app:textColor="@color/grey"
                 app:touchColor="?AlertTextColor" />
 
-            <io.horizontalsystems.bankwallet.lib.chartview.ChartViewIndicator
+            <io.horizontalsystems.bankwallet.lib.chartview.ChartIndicator
                 android:id="@+id/chartViewIndicator"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
