@@ -129,6 +129,10 @@ class MainActivity : BaseActivity(), ReceiveView.Listener, TransactionInfoView.L
         txInfoBottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
+    override fun closeTransactionInfo() {
+        txInfoBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+    }
+
     private fun loadViewPager() {
         setTopMarginByStatusBarHeight(viewPager)
 

@@ -22,6 +22,7 @@ class TransactionInfoView : ConstraintLayout {
     interface Listener {
         fun openTransactionInfo()
         fun openFullTransactionInfo(transactionHash: String, coin: Coin)
+        fun closeTransactionInfo()
     }
 
     constructor(context: Context) : super(context)
@@ -39,7 +40,7 @@ class TransactionInfoView : ConstraintLayout {
     }
 
     private fun setTransactionInfoDialog() {
-        transactionIdView.setOnClickListener { viewModel.onClickTransactionId() }
+        closeButton.setOnClickListener { listener?.closeTransactionInfo() }
         txtFullInfo.setOnClickListener { viewModel.onClickOpenFullInfo() }
 
         viewModel.showCopiedLiveEvent.observe(lifecycleOwner, Observer {
@@ -58,7 +59,10 @@ class TransactionInfoView : ConstraintLayout {
 
                 txInfoCoinIcon.bind(txRec.coin)
 
-                transactionIdView.text = txRec.transactionHash
+                itemId.apply {
+                    bindHashId(context.getString(R.string.TransactionInfo_Id), txRec.transactionHash)
+                    setOnClickListener { viewModel.onClickTransactionId() }
+                }
 
                 fiatValue.apply {
                     val fiatValueText = txRec.currencyValue?.let { App.numberFormatter.format(it, showNegativeSign = true, canUseLessSymbol = false) }
