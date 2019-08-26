@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:maxLines="1"
-        android:hint="Memo"
+        android:hint="@string/Send_Confirmation_HintMemo"
         android:paddingTop="8dp"
         android:paddingStart="12dp"
         android:paddingBottom="10dp"
