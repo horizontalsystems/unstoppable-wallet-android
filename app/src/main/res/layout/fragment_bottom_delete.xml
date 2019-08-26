@@ -43,9 +43,23 @@
         android:textColor="?BottomDialogTextColor"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/confirmIcon"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/closeButton"
         app:layout_constraintStart_toEndOf="@+id/confirmIcon"
         app:layout_constraintTop_toTopOf="@+id/confirmIcon" />
+
+    <ImageView
+        android:id="@+id/closeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="7dp"
+        android:padding="5dp"
+        android:src="@drawable/close"
+        android:tint="@color/grey"
+        android:background="@drawable/rounded_ripple_24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/confirmIcon"
+        app:layout_constraintBottom_toBottomOf="@+id/confirmIcon"
+        />
 
     <View
         android:id="@+id/border"
