@@ -37,8 +37,8 @@ class TransactionInfoItemView : ConstraintLayout {
 
     fun bindAddress(title: String, address: String) {
         txtTitle.text = title
-        addressView.text = address
-        addressView.visibility = View.VISIBLE
+        decoratedText.text = address
+        decoratedText.visibility = View.VISIBLE
 
         invalidate()
     }
@@ -53,9 +53,9 @@ class TransactionInfoItemView : ConstraintLayout {
 
     fun bindHashId(title: String, address: String) {
         txtTitle.text = title
-        addressView.text = address
-        addressView.visibility = View.VISIBLE
-        addressView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.hash, 0, 0, 0)
+        decoratedText.text = address
+        decoratedText.visibility = View.VISIBLE
+        decoratedText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.hash, 0, 0, 0)
 
         invalidate()
     }

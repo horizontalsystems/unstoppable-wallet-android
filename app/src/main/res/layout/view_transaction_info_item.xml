@@ -38,7 +38,7 @@
         />
 
     <TextView
-        android:id="@+id/addressView"
+        android:id="@+id/decoratedText"
         style="@style/TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
