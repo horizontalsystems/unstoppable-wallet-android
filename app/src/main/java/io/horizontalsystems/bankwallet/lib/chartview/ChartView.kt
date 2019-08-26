@@ -17,10 +17,10 @@ class ChartView : View {
     interface Listener {
         fun onTouchDown()
         fun onTouchUp()
-        fun onTouchMove(point: DataPoint)
+        fun onTouchSelect(point: DataPoint)
     }
 
-    enum class Mode {
+    enum class ChartType {
         DAILY,
         WEEKLY,
         MONTHLY,
@@ -122,9 +122,9 @@ class ChartView : View {
 
     private fun configure(data: ChartData) {
         val firstRate = data.points.firstOrNull() ?: return
-        val lastRate = data.lastRate ?: return
+        val lastRate = data.points.lastOrNull() ?: return
 
-        if (lastRate < firstRate.toBigDecimal()) {
+        if (lastRate < firstRate) {
             config.curveColor = config.fallColor
         } else {
             config.curveColor = config.growColor

@@ -164,8 +164,8 @@ class BalancePresenter(
     }
 
     override fun openChart(position: Int) {
-        val data = dataSource.getItem(position)
-        router.openChart(data.wallet.coin, data.rate)
+        val wallet = dataSource.getItem(position).wallet
+        router.openChart(wallet.coin)
     }
 
     private fun sortCoins() {

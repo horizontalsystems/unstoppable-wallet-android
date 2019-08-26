@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.lib.chartview
 
 import android.graphics.RectF
-import io.horizontalsystems.bankwallet.lib.chartview.ChartView.Mode
+import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartData
 import io.horizontalsystems.bankwallet.lib.chartview.models.GridColumn
 import io.horizontalsystems.bankwallet.lib.chartview.models.GridLine
@@ -51,15 +51,15 @@ class GridHelper(private val shape: RectF) {
         var point = mins + (secs / 60f)
 
         when (data.mode) {
-            Mode.DAILY -> {
+            ChartType.DAILY -> {
             }
-            Mode.WEEKLY,
-            Mode.MONTHLY -> {
+            ChartType.WEEKLY,
+            ChartType.MONTHLY -> {
                 val hours = calendar.get(Calendar.HOUR_OF_DAY)
                 point += hours * 60
             }
-            Mode.MONTHLY6,
-            Mode.MONTHLY18 -> {
+            ChartType.MONTHLY6,
+            ChartType.MONTHLY18 -> {
                 val hours = calendar.get(Calendar.HOUR_OF_DAY)
                 val days = calendar.get(Calendar.DAY_OF_MONTH)
                 point += days * 24 * 60
@@ -78,33 +78,33 @@ class GridHelper(private val shape: RectF) {
         return columns
     }
 
-    private fun intervalByMinutes(mode: Mode): Int {
+    private fun intervalByMinutes(mode: ChartType): Int {
         return when (mode) {
-            Mode.DAILY -> 6 * 60                            // 6 hour
-            Mode.WEEKLY -> minsInDay * 2                    // 2 days
-            Mode.MONTHLY -> minsInDay * 6                   // 6 days
-            Mode.MONTHLY6 -> minsInDay * daysInMonth        // 1 month
-            Mode.MONTHLY18 -> minsInDay * daysInMonth * 2   // 2 month
+            ChartType.DAILY -> 6 * 60                            // 6 hour
+            ChartType.WEEKLY -> minsInDay * 2                    // 2 days
+            ChartType.MONTHLY -> minsInDay * 6                   // 6 days
+            ChartType.MONTHLY6 -> minsInDay * daysInMonth        // 1 month
+            ChartType.MONTHLY18 -> minsInDay * daysInMonth * 2   // 2 month
         }
     }
 
-    private fun minutesInMode(mode: Mode): Int {
+    private fun minutesInMode(mode: ChartType): Int {
         return when (mode) {
-            Mode.DAILY -> minsInDay
-            Mode.WEEKLY -> minsInDay * 7
-            Mode.MONTHLY -> minsInDay * daysInMonth
-            Mode.MONTHLY6 -> minsInDay * daysInMonth * 6
-            Mode.MONTHLY18 -> minsInDay * daysInYear
+            ChartType.DAILY -> minsInDay
+            ChartType.WEEKLY -> minsInDay * 7
+            ChartType.MONTHLY -> minsInDay * daysInMonth
+            ChartType.MONTHLY6 -> minsInDay * daysInMonth * 6
+            ChartType.MONTHLY18 -> minsInDay * daysInYear
         }
     }
 
-    private fun pointName(calendar: Calendar, mode: Mode): String {
+    private fun pointName(calendar: Calendar, mode: ChartType): String {
         return when (mode) {
-            Mode.DAILY -> calendar.get(Calendar.HOUR_OF_DAY).toString()
-            Mode.WEEKLY -> calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.US)
-            Mode.MONTHLY -> calendar.get(Calendar.DAY_OF_MONTH).toString()
-            Mode.MONTHLY6 -> calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.US)
-            Mode.MONTHLY18 -> calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.US)
+            ChartType.DAILY -> calendar.get(Calendar.HOUR_OF_DAY).toString()
+            ChartType.WEEKLY -> calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.US)
+            ChartType.MONTHLY -> calendar.get(Calendar.DAY_OF_MONTH).toString()
+            ChartType.MONTHLY6 -> calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.US)
+            ChartType.MONTHLY18 -> calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.US)
         }
     }
 }

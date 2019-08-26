@@ -117,8 +117,8 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener, BalanceSortDialogFrag
             }
         })
 
-        viewModel.openChartModule.observe(viewLifecycleOwner, Observer { data ->
-            RateChartFragment(data.first, data.second).also { it.show(childFragmentManager, it.tag) }
+        viewModel.openChartModule.observe(viewLifecycleOwner, Observer { coin ->
+            RateChartFragment(coin).also { it.show(childFragmentManager, it.tag) }
         })
 
         coinsAdapter.viewDelegate = viewModel.delegate

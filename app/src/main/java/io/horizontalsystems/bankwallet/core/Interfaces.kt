@@ -52,7 +52,7 @@ interface ILocalStorage {
     var baseEosProvider: String?
     var syncMode: SyncMode
     var sortType: BalanceSortType
-    var chartMode: ChartView.Mode
+    var chartMode: ChartView.ChartType
 
     fun clear()
 }
