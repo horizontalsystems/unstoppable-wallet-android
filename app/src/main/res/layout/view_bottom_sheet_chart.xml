@@ -18,39 +18,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
-            android:id="@+id/chartCoinIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/chartTitle"
-            style="@style/BaseSb"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="14dp"
-            android:textColor="?BottomDialogTextColor"
-            app:layout_constraintBottom_toBottomOf="@+id/chartCoinIcon"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/chartCoinIcon"
-            app:layout_constraintTop_toTopOf="@+id/chartCoinIcon"
-            tools:text="Bitcoin Rate" />
-
-        <View
-            android:id="@+id/border1"
-            android:layout_width="0dp"
-            android:layout_height="0.5dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/steel_15"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chartCoinIcon" />
-
         <LinearLayout
             android:id="@+id/coinRateWrap"
             android:layout_width="match_parent"
@@ -84,15 +51,6 @@
 
         </LinearLayout>
 
-        <View
-            android:id="@+id/border2"
-            android:layout_width="0dp"
-            android:layout_height="0.5dp"
-            android:background="@color/steel_15"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/coinRateWrap" />
-
         <LinearLayout
             android:id="@+id/chartActions"
             android:layout_width="match_parent"
@@ -114,7 +72,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
                 android:layout_weight="1"
-                android:text="1D" />
+                android:text="@string/Charts_TimeDuration_Day" />
 
             <Button
                 android:id="@+id/button1W"
@@ -124,7 +82,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
                 android:layout_weight="1"
-                android:text="1W" />
+                android:text="@string/Charts_TimeDuration_Week" />
 
             <Button
                 android:id="@+id/button1M"
@@ -134,7 +92,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
                 android:layout_weight="1"
-                android:text="1M" />
+                android:text="@string/Charts_TimeDuration_Month" />
 
             <Button
                 android:id="@+id/button6M"
@@ -144,7 +102,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
                 android:layout_weight="1"
-                android:text="6M" />
+                android:text="@string/Charts_TimeDuration_HalfYear" />
 
             <Button
                 android:id="@+id/button1Y"
@@ -154,7 +112,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
                 android:layout_weight="1"
-                android:text="1Y" />
+                android:text="@string/Charts_TimeDuration_Year" />
 
         </LinearLayout>
 
@@ -193,49 +151,6 @@
                 tools:text="3,867.50" />
 
         </LinearLayout>
-
-        <RelativeLayout
-            android:id="@+id/coinChartView"
-            android:layout_width="match_parent"
-            android:layout_height="213dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chartActions">
-
-            <io.horizontalsystems.bankwallet.lib.chartview.ChartView
-                android:id="@+id/chartView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:fallColor="@color/red_warning"
-                app:growColor="@color/green_crypto"
-                app:indicatorColor="?AlertTextColor"
-                app:textColor="@color/grey"
-                app:touchColor="?AlertTextColor" />
-
-            <io.horizontalsystems.bankwallet.lib.chartview.ChartIndicator
-                android:id="@+id/chartViewIndicator"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="invisible" />
-
-        </RelativeLayout>
-
-        <ProgressBar
-            android:id="@+id/chartViewSpinner"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:backgroundTint="@color/grey"
-            android:indeterminate="true"
-            android:indeterminateTint="@color/grey"
-            android:indeterminateTintMode="src_atop"
-            app:layout_constraintBottom_toTopOf="@+id/marketCapWrap"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chartPointsInfo" />
 
         <LinearLayout
             android:id="@+id/marketCapWrap"
@@ -335,6 +250,96 @@
 
             </LinearLayout>
         </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/coinChartView"
+            android:layout_width="match_parent"
+            android:layout_height="213dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chartActions">
+
+            <ProgressBar
+                android:id="@+id/chartViewSpinner"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:backgroundTint="@color/grey"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/grey"
+                android:indeterminateTintMode="src_atop" />
+
+            <TextView
+                android:id="@+id/chartError"
+                style="@style/BaseSb"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="@color/red_warning" />
+
+            <io.horizontalsystems.bankwallet.lib.chartview.ChartIndicator
+                android:id="@+id/chartViewIndicator"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="invisible" />
+
+            <io.horizontalsystems.bankwallet.lib.chartview.ChartView
+                android:id="@+id/chartView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:fallColor="@color/red_warning"
+                app:growColor="@color/green_crypto"
+                app:indicatorColor="?AlertTextColor"
+                app:textColor="@color/grey"
+                app:touchColor="?AlertTextColor" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/chartTitle"
+            style="@style/BaseSb"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="14dp"
+            android:textColor="?BottomDialogTextColor"
+            app:layout_constraintBottom_toBottomOf="@+id/chartCoinIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/chartCoinIcon"
+            app:layout_constraintTop_toTopOf="@+id/chartCoinIcon"
+            tools:text="Bitcoin Rate" />
+
+        <View
+            android:id="@+id/border1"
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/steel_15"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chartCoinIcon" />
+
+        <View
+            android:id="@+id/border2"
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:background="@color/steel_15"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/coinRateWrap" />
+
+        <io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
+            android:id="@+id/chartCoinIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

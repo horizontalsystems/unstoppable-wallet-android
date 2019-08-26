@@ -64,7 +64,7 @@ object BalanceModule {
         fun openManageCoins()
         fun openSortTypeDialog(sortingType: BalanceSortType)
         fun openBackup(account: Account, coinCodesStringRes: Int)
-        fun openChart(coin: Coin, rate: Rate?)
+        fun openChart(coin: Coin)
     }
 
     class BalanceItemDataSource {

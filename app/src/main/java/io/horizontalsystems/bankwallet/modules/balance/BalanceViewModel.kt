@@ -23,7 +23,7 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     val setSortingOnLiveEvent = SingleLiveEvent<Boolean>()
     val showBackupAlert = SingleLiveEvent<Unit>()
     val openBackup = SingleLiveEvent<Pair<Account, Int>>()
-    val openChartModule = SingleLiveEvent<Pair<Coin, Rate?>>()
+    val openChartModule = SingleLiveEvent<Coin>()
 
     fun init() {
         BalanceModule.init(this, this)
@@ -87,7 +87,7 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
         openBackup.value = Pair(account, coinCodesStringRes)
     }
 
-    override fun openChart(coin: Coin, rate: Rate?) {
-        openChartModule.postValue(Pair(coin, rate))
+    override fun openChart(coin: Coin) {
+        openChartModule.postValue(coin)
     }
 }

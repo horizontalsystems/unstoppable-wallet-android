@@ -37,7 +37,7 @@ class ChartIndicator : View {
     fun onMove(point: DataPoint?, listener: ChartView.Listener?) {
         if (point == null || listener == null) return
         if (point.x != touchPoint.last) {
-            listener.onTouchMove(point)
+            listener.onTouchSelect(point)
 
             touchPoint.x = point.x
             touchPoint.y = point.y
