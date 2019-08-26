@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.fee
 
-import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
 import io.horizontalsystems.bankwallet.core.IFeeRateProvider
 import io.horizontalsystems.bankwallet.core.IRateStorage
+import io.horizontalsystems.bankwallet.entities.FeeRateInfo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -25,8 +25,8 @@ class SendFeeInteractor(private val rateStorage: IRateStorage,
                 }
     }
 
-    override fun getFeeRate(feeRatePriority: FeeRatePriority): Long {
-        return feeRateProvider?.feeRate(feeRatePriority) ?: 0
+    override fun getFeeRates(): List<FeeRateInfo>? {
+        return feeRateProvider?.feeRates()
     }
 
     override fun clear() {

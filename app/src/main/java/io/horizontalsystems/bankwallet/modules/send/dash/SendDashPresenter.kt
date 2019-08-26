@@ -58,6 +58,7 @@ class SendDashPresenter(private val interactor: SendModule.ISendDashInteractor,
         val currencyValue = amountModule.fiatAmount
         val feeCoinValue = feeModule.coinValue
         val feeCurrencyValue = feeModule.currencyValue
+        val duration = feeModule.duration
 
         val confirmationViewItem = confirmationFactory.confirmationViewItem(
                 inputType,
@@ -66,6 +67,7 @@ class SendDashPresenter(private val interactor: SendModule.ISendDashInteractor,
                 currencyValue,
                 feeCoinValue,
                 feeCurrencyValue,
+                duration,
                 false
         )
 

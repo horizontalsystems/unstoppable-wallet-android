@@ -18,10 +18,12 @@ class SendFeePresenter(
     var moduleDelegate: SendFeeModule.IFeeModuleDelegate? = null
 
     private var xRate: Rate? = null
+
     private var fee: BigDecimal = BigDecimal.ZERO
-    private var inputType = SendModule.InputType.COIN
-    private var feePriority: FeeRatePriority = FeeRatePriority.MEDIUM
     private var availableFeeBalance: BigDecimal? = null
+
+    private var feeRates: List<FeeRateInfo>? = null
+    private var feeRateInfo = FeeRateInfo(FeeRatePriority.MEDIUM, 0, 0)
 
     private val coin: Coin
         get() = feeCoinData?.first ?: baseCoin
@@ -36,10 +38,13 @@ class SendFeePresenter(
     }
 
     private fun syncFeeLabels() {
-        val reversedInputType = if (inputType == SendModule.InputType.COIN) SendModule.InputType.CURRENCY else SendModule.InputType.COIN
+        view?.setPrimaryFee(helper.feeAmount(fee, SendModule.InputType.COIN, xRate))
+        view?.setSecondaryFee(helper.feeAmount(fee, SendModule.InputType.CURRENCY, xRate))
+    }
 
-        view?.setPrimaryFee(helper.feeAmount(fee, inputType, xRate))
-        view?.setSecondaryFee(helper.feeAmount(fee, reversedInputType, xRate))
+    private fun syncFeeRateLabels() {
+        view?.setDuration(helper.duration(feeRateInfo.duration))
+        view?.setFeePriority(helper.priority(feeRateInfo.priority))
     }
 
     private fun validate() {
@@ -61,14 +66,17 @@ class SendFeePresenter(
             false
         }
 
-    override var feeRate = 0L
-        private set
+    override val feeRate
+        get() = feeRateInfo.feeRate
 
     override val coinValue: CoinValue
         get() = CoinValue(coin.code, fee)
 
     override val currencyValue: CurrencyValue?
         get() = xRate?.let { CurrencyValue(baseCurrency, fee.multiply(it.value)) }
+
+    override val duration: String?
+        get() = helper.duration(feeRateInfo.duration)
 
     override fun setFee(fee: BigDecimal) {
         this.fee = fee
@@ -81,24 +89,43 @@ class SendFeePresenter(
         syncError()
     }
 
-    override fun setInputType(inputType: SendModule.InputType) {
-        this.inputType = inputType
-        syncFeeLabels()
-    }
+    override fun setInputType(inputType: SendModule.InputType) {}
 
     // SendFeeModule.IViewDelegate
 
     override fun onViewDidLoad() {
         interactor.getRate(coin.code)
-        feeRate = interactor.getFeeRate(feePriority)
 
+        feeRates = interactor.getFeeRates()
+
+        feeRates?.find { it.priority == FeeRatePriority.MEDIUM }?.let {
+            feeRateInfo = it
+        }
+
+        syncFeeRateLabels()
         syncFeeLabels()
         syncError()
     }
 
-    override fun onFeeSliderChange(progress: Int) {
-        feePriority = FeeRatePriority.valueOf(progress)
-        feeRate = interactor.getFeeRate(feePriority)
+    override fun onClickFeeRatePriority() {
+        feeRates?.let {
+            view?.showFeeRatePrioritySelector(it.map { rateInfo ->
+                feeRateInfoViewItem(rateInfo)
+            })
+        }
+    }
+
+    private fun feeRateInfoViewItem(rateInfo: FeeRateInfo): SendFeeModule.FeeRateInfoViewItem {
+        return SendFeeModule.FeeRateInfoViewItem(
+                title = "${helper.priority(rateInfo.priority)} (~${helper.duration(rateInfo.duration)})",
+                feeRateInfo = rateInfo,
+                selected = rateInfo.priority == feeRateInfo.priority)
+    }
+
+    override fun onChangeFeeRate(feeRateInfo: FeeRateInfo) {
+        this.feeRateInfo = feeRateInfo
+
+        syncFeeRateLabels()
 
         moduleDelegate?.onUpdateFeeRate(feeRate)
     }

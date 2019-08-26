@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_sort_type.*
+import kotlinx.android.synthetic.main.view_holder_item_selector.*
 
 
 class BalanceSortDialogFragment : DialogFragment(), SortingAdapter.Listener {
@@ -66,7 +66,7 @@ class SortingAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-            ViewHolderSortType(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_sort_type, parent, false), this)
+            ViewHolderSortType(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_item_selector, parent, false), this)
 
 
     override fun onBindViewHolder(holder: ViewHolderSortType, position: Int) {
@@ -91,7 +91,7 @@ class ViewHolderSortType(override val containerView: View, private val listener:
     }
 
     fun bind(titleRes: Int, selected: Boolean) {
-        txTitle.text = containerView.context.getString(titleRes)
-        txTitle.isSelected = selected
+        itemTitle.text = containerView.context.getString(titleRes)
+        itemTitle.isSelected = selected
     }
 }

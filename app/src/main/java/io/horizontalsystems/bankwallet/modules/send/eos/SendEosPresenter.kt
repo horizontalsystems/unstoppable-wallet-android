@@ -60,6 +60,7 @@ class SendEosPresenter(private val interactor: SendModule.ISendEosInteractor,
                 currencyValue,
                 null,
                 null,
+                null,
                 true)
 
         view?.showConfirmation(confirmationViewItem)

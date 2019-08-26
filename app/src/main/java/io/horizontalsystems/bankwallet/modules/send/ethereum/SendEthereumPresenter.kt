@@ -61,6 +61,7 @@ class SendEthereumPresenter(private val interactor: SendModule.ISendEthereumInte
         val currencyValue = amountModule.fiatAmount
         val feeCoinValue = feeModule.coinValue
         val feeCurrencyValue = feeModule.currencyValue
+        val duration = feeModule.duration
 
         val confirmationViewItem = confirmationFactory.confirmationViewItem(
                 inputType,
@@ -69,6 +70,7 @@ class SendEthereumPresenter(private val interactor: SendModule.ISendEthereumInte
                 currencyValue,
                 feeCoinValue,
                 feeCurrencyValue,
+                duration,
                 false)
 
         view?.showConfirmation(confirmationViewItem)

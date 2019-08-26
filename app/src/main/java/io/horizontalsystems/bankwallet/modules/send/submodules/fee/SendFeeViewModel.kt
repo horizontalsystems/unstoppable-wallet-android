@@ -11,6 +11,9 @@ class SendFeeViewModel : ViewModel(), SendFeeModule.IView {
 
     val primaryFee = MutableLiveData<String?>()
     val secondaryFee = MutableLiveData<String?>()
+    val duration = MutableLiveData<String>()
+    val feePriority = MutableLiveData<String>()
+    val showFeePriorityOptions = MutableLiveData<List<SendFeeModule.FeeRateInfoViewItem>>()
     val insufficientFeeBalanceError = SingleLiveEvent<SendFeeModule.InsufficientFeeBalance?>()
 
     fun init(coin: Coin, moduleDelegate: SendFeeModule.IFeeModuleDelegate?): SendFeeModule.IFeeModule {
@@ -23,6 +26,18 @@ class SendFeeViewModel : ViewModel(), SendFeeModule.IView {
 
     override fun setSecondaryFee(feeAmount: String?) {
         secondaryFee.value = feeAmount
+    }
+
+    override fun setFeePriority(priority: String) {
+        feePriority.value = priority
+    }
+
+    override fun setDuration(duration: String) {
+        this.duration.value = duration
+    }
+
+    override fun showFeeRatePrioritySelector(feeRates: List<SendFeeModule.FeeRateInfoViewItem>) {
+        showFeePriorityOptions.value = feeRates
     }
 
     override fun setInsufficientFeeBalanceError(insufficientFeeBalance: SendFeeModule.InsufficientFeeBalance?) {
