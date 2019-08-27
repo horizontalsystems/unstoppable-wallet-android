@@ -298,11 +298,11 @@
     <string name="AddCoin_CreateKey">Crear</string>
     <string name="AddCoin_RestoreKey">Restaurar</string>
     <!-- Account Types -->
-    <string name="AccountType_12Words">12 Words</string>
-    <string name="AccountType_12WordsKey">Clave de 12-Words</string>
+    <string name="AccountType_12Words">12 palabras</string>
+    <string name="AccountType_12WordsKey">Clave de 12-palabras</string>
     <string name="AccountType_Eos">EOS Blockchain</string>
     <string name="AccountType_EosKey">Clave de EOS</string>
-    <string name="AccountType_Binance">Binance Chain</string>
+    <string name="AccountType_Binance">Cadena de Binance</string>
     <string name="AccountType_BinanceKey">Clave de Binance</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">Restaurar opciones</string>
@@ -311,7 +311,7 @@
     <string name="CoinOption_Fast_Text">Restaura tus transacciones pasadas vía un tercer servidor seguro. Para usuarios con una larga historia de transacciones con grandes cantidades, éste método puede tener riesgos de privacidad.</string>
     <string name="CoinOption_Slow">Lento</string>
     <string name="CoinOption_MorePrivate">1&#8211;12 horas (Más Privado)</string>
-    <string name="CoinOption_Slow_Text">Restaure sus transacciones pasadas directamente desde la red. Significativamente más privado pero muy lento. Si la restauración toma mucho tiempo, vaya a la sección Administrar claves y reimporte la Clave para la cartera utilizando la opción de Sincronización rápida.</string>
+    <string name="CoinOption_Slow_Text">Restaure sus transacciones pasadas directamente desde la red. Significativamente más privado pero muy lento. Si la restauración toma mucho tiempo, vaya a la sección Administrar claves y reimporte la Clave para el monedero utilizando la opción de Sincronización rápida.</string>
     <!--Charts-->
     <string name="Charts_TimeDuration_Day">1D</string>
     <string name="Charts_TimeDuration_Week">7D</string>
