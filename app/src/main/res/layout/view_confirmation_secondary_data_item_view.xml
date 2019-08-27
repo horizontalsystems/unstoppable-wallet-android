@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,32 +13,28 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:id="@+id/feeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:visibility="gone"
-            >
+            android:visibility="gone">
 
             <TextView
                 style="@style/Body1Grey"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/Send_Fee"
-                />
+                android:text="@string/Send_Fee" />
 
             <TextView
                 android:id="@+id/feeValue"
                 style="@style/Body1Grey"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="0.0053 DASH"
-                />
+                tools:text="0.0053 DASH" />
         </LinearLayout>
 
         <LinearLayout
@@ -47,24 +43,21 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:orientation="horizontal"
-            android:visibility="gone"
-            >
+            android:visibility="gone">
 
             <TextView
                 style="@style/Body1Grey"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/Send_Confirmation_Total"
-                />
+                android:text="@string/Send_Confirmation_Total" />
 
             <TextView
                 android:id="@+id/totalValue"
                 style="@style/Body1Grey"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="0.0353 DASH"
-                />
+                tools:text="0.0353 DASH" />
         </LinearLayout>
 
         <LinearLayout
@@ -73,24 +66,21 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:orientation="horizontal"
-            android:visibility="gone"
-            >
+            android:visibility="gone">
 
             <TextView
                 style="@style/Body1Grey"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/Send_Confirmation_EstimateTime"
-                />
+                android:text="@string/Send_Confirmation_EstimateTime" />
 
             <TextView
                 android:id="@+id/timeValue"
                 style="@style/Body1Grey"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="Instant"
-                />
+                tools:text="Instant" />
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
