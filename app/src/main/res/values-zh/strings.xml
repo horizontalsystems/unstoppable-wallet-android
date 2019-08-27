@@ -84,8 +84,14 @@
     <string name="Send_Error_IncorrectAddress">地址不正确</string>
     <string name="Send_Error_BalanceAmount">余额%s</string>
     <string name="Send_DialogTitle">确认交易</string>
-    <string name="Send_DialogFee">费用:</string>
+    <string name="Send_DialogSpeed">Transaction Speed</string>
+    <string name="Send_TxSpeed_Low">Low</string>
+    <string name="Send_TxSpeed_Medium">Medium</string>
+    <string name="Send_TxSpeed_High">High</string>
+    <string name="Send_DialogDuration">Duration</string>
+    <string name="Send_DialogFee">Fee</string>
     <string name="Send_DialogTotal">总额:</string>
+    <string name="Send_DialogProceed">Proceed</string>
     <string name="Send_Sending">发送中</string>
     <string name="Send_ERC_Alert">以 Ethereum 支付的 %s (ERC20) 交易费用。你需要 %s ETH。</string>
     <string name="Send_Token_InsufficientFeeAlert">以 %s 支付的 %s (%s) 交易费用。你需要 %s 。</string>
@@ -103,6 +109,10 @@
     <string name="Timestamp_HoursAgo">%d 小时前</string>
     <string name="Timestamp_Today">今天</string>
     <string name="Timestamp_Yesterday">昨天</string>
+    <string name="Duration_instant">Instant</string>
+    <string name="Duration_seconds">%d seconds</string>
+    <string name="Duration_minutes">%d minutes</string>
+    <string name="Duration_hours">%d hours</string>
     <!--Transactions-->
     <string name="Transactions_Title">交易记录</string>
     <string name="Transactions_FilterAll">全部</string>
