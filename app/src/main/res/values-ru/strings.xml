@@ -84,8 +84,14 @@
     <string name="Send_Error_IncorrectAddress">Неверный Адрес</string>
     <string name="Send_Error_BalanceAmount">Баланс %s</string>
     <string name="Send_DialogTitle">Подтвердить Транзакцию</string>
-    <string name="Send_DialogFee">Комиссия:</string>
+    <string name="Send_DialogSpeed">Transaction Speed</string>
+    <string name="Send_TxSpeed_Low">Low</string>
+    <string name="Send_TxSpeed_Medium">Medium</string>
+    <string name="Send_TxSpeed_High">High</string>
+    <string name="Send_DialogDuration">Duration</string>
+    <string name="Send_DialogFee">Fee</string>
     <string name="Send_DialogTotal">Итого:</string>
+    <string name="Send_DialogProceed">Proceed</string>
     <string name="Send_Sending">Отправка</string>
     <string name="Send_ERC_Alert">Комиссия за отправку %s (ERC20) взимается в ETH. Необходимо %s ETH.</string>
     <string name="Send_Token_InsufficientFeeAlert">Комиссия за отправку %s %s взимается в %s. Необходимо %s.</string>
@@ -103,6 +109,10 @@
     <string name="Timestamp_HoursAgo">%d ч назад</string>
     <string name="Timestamp_Today">Сегодня</string>
     <string name="Timestamp_Yesterday">Вчера</string>
+    <string name="Duration_instant">Instant</string>
+    <string name="Duration_seconds">%d seconds</string>
+    <string name="Duration_minutes">%d minutes</string>
+    <string name="Duration_hours">%d hours</string>
     <!--Transactions-->
     <string name="Transactions_Title">Транзакции</string>
     <string name="Transactions_FilterAll">ВСЕ</string>
