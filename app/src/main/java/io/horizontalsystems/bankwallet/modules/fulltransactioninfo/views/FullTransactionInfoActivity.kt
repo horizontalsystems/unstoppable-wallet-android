@@ -48,13 +48,19 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
 
         shadowlessToolbar.bind(
                 title = getString(R.string.FullInfo_Title),
-                leftBtnItem = TopMenuItem(text = R.string.Button_Share, onClick = { viewModel.share() }),
                 rightBtnItem = TopMenuItem(text = R.string.Button_Close, onClick = { onBackPressed() })
         )
 
         //
         // LiveData
         //
+        viewModel.showShareButton.observe(this, Observer {
+            shadowlessToolbar.bind(
+                    title = null,
+                    leftBtnItem = TopMenuItem(text = R.string.Button_Share, onClick = { viewModel.share() })
+            )
+        })
+
         viewModel.reloadLiveEvent.observe(this, Observer {
             recyclerTransactionInfo.visibility = View.VISIBLE
             transactionRecordAdapter.notifyDataSetChanged()
