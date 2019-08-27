@@ -13,51 +13,43 @@ class BalanceInteractor(
         private val rateStorage: IRateStorage,
         private val currencyManager: ICurrencyManager,
         private val localStorage: ILocalStorage,
-        private val refreshTimeout: Double = 2.0
-) : BalanceModule.IInteractor {
+        private val refreshTimeout: Long = 2)
+    : BalanceModule.IInteractor {
 
     var delegate: BalanceModule.IInteractorDelegate? = null
 
-    private var disposables: CompositeDisposable = CompositeDisposable()
-    private var adapterDisposables: CompositeDisposable = CompositeDisposable()
-    private var rateDisposables: CompositeDisposable = CompositeDisposable()
+    private var disposables = CompositeDisposable()
+    private var adapterDisposables = CompositeDisposable()
+    private var rateDisposables = CompositeDisposable()
 
     override fun initWallets() {
         onUpdateWallets()
         onUpdateCurrency()
 
-        disposables.add(walletManager.walletsUpdatedSignal
+        walletManager.walletsUpdatedSignal
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .subscribe {
-                    onUpdateWallets()
-                })
+                .subscribe { onUpdateWallets() }
+                .let { disposables.add(it) }
 
-        disposables.add(adapterManager.adapterCreationObservable
+        adapterManager.adapterCreationObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .subscribe {
-                    subscribeToAdapterUpdates(it, true)
-                })
+                .subscribe { subscribeToAdapterUpdates(it, true) }
+                .let { disposables.add(it) }
 
-        disposables.add(currencyManager.baseCurrencyUpdatedSignal
+        currencyManager.baseCurrencyUpdatedSignal
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .subscribe {
-                    onUpdateCurrency()
-                })
+                .subscribe { onUpdateCurrency() }
+                .let { disposables.add(it) }
     }
 
     override fun fetchRates(currencyCode: String, coinCodes: List<CoinCode>) {
         rateDisposables.clear()
 
-        coinCodes.forEach {
-            rateDisposables.add(rateStorage.latestRateObservable(it, currencyCode)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.io())
-                    .subscribe {
-                        delegate?.didUpdateRate(it)
-                    })
+        coinCodes.forEach { coinCode ->
+            getLatestRate(currencyCode, coinCode)
         }
     }
 
@@ -107,15 +99,12 @@ class BalanceInteractor(
                         delegate?.didUpdateState(wallet, adapter.state)
                     })
         }
-
     }
 
     override fun refresh() {
         adapterManager.refresh()
 
-        Handler().postDelayed({
-            delegate?.didRefresh()
-        }, (refreshTimeout * 1000).toLong())
+        Handler().postDelayed({ delegate?.didRefresh() }, refreshTimeout * 1000)
     }
 
     override fun clear() {
@@ -126,5 +115,15 @@ class BalanceInteractor(
 
     override fun saveSortingType(sortType: BalanceSortType) {
         localStorage.sortType = sortType
+    }
+
+    private fun getLatestRate(currencyCode: String, coinCode: String) {
+        rateStorage.latestRateObservable(coinCode, currencyCode)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe {
+                    delegate?.didUpdateRate(it)
+                }
+                .let { rateDisposables.add(it) }
     }
 }

@@ -26,6 +26,7 @@ import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.bankwallet.viewHelpers.AnimationHelper
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
+import io.horizontalsystems.bankwallet.viewHelpers.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_balance.*
 import kotlinx.android.synthetic.main.view_holder_add_coin.*
@@ -44,21 +45,15 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener, BalanceSortDialogFrag
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        toolbarTitle.setText(R.string.Balance_Title)
-
         viewModel = ViewModelProviders.of(this).get(BalanceViewModel::class.java)
         viewModel.init()
 
-        viewModel.openReceiveDialog.observe(viewLifecycleOwner, Observer { coinCode ->
-            coinCode?.let {
-                (activity as? MainActivity)?.openReceiveDialog(it)
-            }
+        viewModel.openReceiveDialog.observe(viewLifecycleOwner, Observer {
+            (activity as? MainActivity)?.openReceiveDialog(it)
         })
 
-        viewModel.openSendDialog.observe(viewLifecycleOwner, Observer { coinCode ->
-            coinCode?.let {
-                (activity as? MainActivity)?.openSend(it)
-            }
+        viewModel.openSendDialog.observe(viewLifecycleOwner, Observer {
+            (activity as? MainActivity)?.openSend(it)
         })
 
         viewModel.didRefreshLiveEvent.observe(viewLifecycleOwner, Observer {
@@ -66,7 +61,7 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener, BalanceSortDialogFrag
         })
 
         viewModel.openManageCoinsLiveEvent.observe(viewLifecycleOwner, Observer {
-            context?.let { context -> ManageWalletsModule.start(context) }
+            context?.let { ManageWalletsModule.start(it) }
         })
 
         viewModel.reloadLiveEvent.observe(viewLifecycleOwner, Observer {
@@ -82,28 +77,20 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener, BalanceSortDialogFrag
         })
 
         viewModel.reloadItemLiveEvent.observe(viewLifecycleOwner, Observer { position ->
-            position?.let {
-                coinsAdapter.notifyItemChanged(it)
-            }
+            coinsAdapter.notifyItemChanged(position)
         })
 
         viewModel.openSortingTypeDialogLiveEvent.observe(viewLifecycleOwner, Observer { sortingType ->
-            sortingType?.let {
-                BalanceSortDialogFragment
-                        .newInstance(this, it)
-                        .show(childFragmentManager, "select_sorting_type_alert")
-            }
+            BalanceSortDialogFragment.newInstance(this, sortingType).also { it.show(childFragmentManager, it.tag) }
         })
 
-        viewModel.setSortingOnLiveEvent.observe(viewLifecycleOwner, Observer { isOn ->
-            isOn?.let { visible ->
-                sortButton.visibility = if (visible) View.VISIBLE else View.GONE
-            }
+        viewModel.setSortingOnLiveEvent.observe(viewLifecycleOwner, Observer { visible ->
+            sortButton.visibility = if (visible) View.VISIBLE else View.GONE
         })
 
         viewModel.showBackupAlert.observe(viewLifecycleOwner, Observer {
             activity?.let { ctxActivity ->
-                BackupAlertDialog.show(activity = ctxActivity, listener = object : BackupAlertDialog.Listener {
+                BackupAlertDialog.show(ctxActivity, object : BackupAlertDialog.Listener {
                     override fun onBackupButtonClick() {
                         viewModel.delegate.openBackup()
                     }
@@ -112,9 +99,7 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener, BalanceSortDialogFrag
         })
 
         viewModel.openBackup.observe(viewLifecycleOwner, Observer { (account, coinCodesStringRes) ->
-            context?.let { ctx ->
-                BackupModule.start(ctx, account, getString(coinCodesStringRes))
-            }
+            context?.let { BackupModule.start(it, account, getString(coinCodesStringRes)) }
         })
 
         viewModel.openChartModule.observe(viewLifecycleOwner, Observer { coin ->
@@ -139,6 +124,7 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener, BalanceSortDialogFrag
             }
         }
 
+        sortButton.visibility = View.GONE
         sortButton.setOnClickListener {
             viewModel.delegate.onSortClick()
         }
@@ -159,7 +145,7 @@ class BalanceFragment : Fragment(), CoinsAdapter.Listener, BalanceSortDialogFrag
             }
         })
 
-        app_bar_layout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+        appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
             val fraction = Math.abs(verticalOffset).toFloat() / appBarLayout.totalScrollRange
             var alphaFract = 1f - fraction
             if (alphaFract < 0.20) {
@@ -250,11 +236,12 @@ class CoinsAdapter(private val listener: Listener) : RecyclerView.Adapter<Recycl
         return if (position == itemCount - 1) addCoinType else coinType
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-            when (viewType) {
-                addCoinType -> ViewHolderAddCoin(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_add_coin, parent, false), listener)
-                else -> ViewHolderCoin(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_coin, parent, false), listener)
-            }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            addCoinType -> ViewHolderAddCoin(inflate(parent, R.layout.view_holder_add_coin), listener)
+            else -> ViewHolderCoin(inflate(parent, R.layout.view_holder_coin), listener)
+        }
+    }
 
     override fun onBindViewHolder(p0: RecyclerView.ViewHolder, p1: Int) {}
 
@@ -300,10 +287,13 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
                     syncing = true
                     iconProgress.visibility = View.VISIBLE
                     iconProgress.setProgress(adapterState.progress.toFloat())
+
+                    var progressText = containerView.context.getString(R.string.Balance_Syncing)
                     adapterState.lastBlockDate?.let {
-                        textSyncProgress.text = containerView.context.getString(R.string.Balance_SyncedUntil, DateHelper.formatDate(it, "MMM d.yyyy"))
+                        progressText = containerView.context.getString(R.string.Balance_SyncedUntil, DateHelper.formatDate(it, "MMM d.yyyy"))
                     }
-                            ?: run { textSyncProgress.text = containerView.context.getString(R.string.Balance_Syncing) }
+
+                    textSyncProgress.text = progressText
                 }
                 is AdapterState.Synced -> {
                     if (balanceViewItem.coinValue.value > BigDecimal.ZERO) {
@@ -322,7 +312,9 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
             textCurrencyAmount.text = App.numberFormatter.format(it, trimmable = true)
             textCurrencyAmount.visibility = if (it.value.compareTo(BigDecimal.ZERO) == 0) View.GONE else View.VISIBLE
             textCurrencyAmount.alpha = if (!balanceViewItem.rateExpired && balanceViewItem.state is AdapterState.Synced) 1f else 0.5f
-        } ?: run { textCurrencyAmount.visibility = View.GONE }
+        } ?: run {
+            textCurrencyAmount.visibility = View.GONE
+        }
 
         textCoinAmount.text = App.numberFormatter.format(balanceViewItem.coinValue)
         textCoinAmount.alpha = if (balanceViewItem.state is AdapterState.Synced) 1f else 0.3f
@@ -333,11 +325,11 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
         coinIcon.bind(balanceViewItem.coin)
         textCoinName.text = balanceViewItem.coin.title
 
+        textExchangeRate.setTextColor(ContextCompat.getColor(containerView.context, if (balanceViewItem.rateExpired) R.color.steel_40 else R.color.grey))
         textExchangeRate.text = balanceViewItem.exchangeValue?.let { exchangeValue ->
             val rateString = App.numberFormatter.format(exchangeValue, trimmable = true, canUseLessSymbol = false)
             containerView.context.getString(R.string.Balance_RatePerCoin, rateString, balanceViewItem.coinValue.coinCode)
-        } ?: ""
-        textExchangeRate.setTextColor(ContextCompat.getColor(containerView.context, if (balanceViewItem.rateExpired) R.color.steel_40 else R.color.grey))
+        }
 
         buttonPay.setOnSingleClickListener {
             listener.onSendClicked(adapterPosition)
@@ -367,7 +359,5 @@ class ViewHolderCoin(override val containerView: View, private val listener: Coi
         } else {
             AnimationHelper.collapse(buttonsWrapper)
         }
-
     }
-
 }

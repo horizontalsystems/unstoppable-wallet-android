@@ -3,11 +3,7 @@ package io.horizontalsystems.bankwallet.modules.balance
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.entities.Rate
-import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import java.math.BigDecimal
 
@@ -67,20 +63,19 @@ object BalanceModule {
         fun openChart(coin: Coin)
     }
 
-    class BalanceItemDataSource {
+    class DataSource(var currency: Currency) {
         private var updatedPositions = mutableListOf<Int>()
 
         val count
             get() = items.count()
 
-        var currency: Currency? = null
-
         val coinCodes: List<CoinCode>
             get() = items.map { it.wallet.coin.code }.distinct()
 
-        private var originalItems = listOf<BalanceItem>()
         var items = listOf<BalanceItem>()
         var balanceSortType: BalanceSortType = BalanceSortType.Name
+
+        private var originalItems = listOf<BalanceItem>()
 
         @Synchronized
         fun addUpdatedPosition(position: Int) {
@@ -130,9 +125,7 @@ object BalanceModule {
         }
 
         fun clearRates() {
-            items.forEach {
-                it.rate = null
-            }
+            items.forEach { it.rate = null }
         }
 
         fun sortBy(sortType: BalanceSortType) {
@@ -141,13 +134,11 @@ object BalanceModule {
                 BalanceSortType.Value -> {
                     originalItems.sortedByDescending { it.fiatValue }
                 }
-                BalanceSortType.Name ->{
-                    originalItems.sortedBy { it.wallet.coin.title}
+                BalanceSortType.Name -> {
+                    originalItems.sortedBy { it.wallet.coin.title }
                 }
             }
-
         }
-
     }
 
     data class BalanceItem(
@@ -161,12 +152,12 @@ object BalanceModule {
     }
 
     fun init(view: BalanceViewModel, router: IRouter) {
-        val interactor = BalanceInteractor(App.walletManager, App.adapterManager, App.rateStorage, App.currencyManager, App.localStorage)
-        val presenter = BalancePresenter(interactor, router, BalanceItemDataSource(), App.predefinedAccountTypeManager, BalanceViewItemFactory())
+        val currencyManager = App.currencyManager
+        val interactor = BalanceInteractor(App.walletManager, App.adapterManager, App.rateStorage, currencyManager, App.localStorage)
+        val presenter = BalancePresenter(interactor, router, DataSource(currencyManager.baseCurrency), App.predefinedAccountTypeManager, BalanceViewItemFactory())
 
         presenter.view = view
         interactor.delegate = presenter
         view.delegate = presenter
     }
-
 }
