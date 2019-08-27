@@ -15,22 +15,22 @@ import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 
 class BalancePresenter(
-        private var interactor: BalanceModule.IInteractor,
+        private val interactor: BalanceModule.IInteractor,
         private val router: BalanceModule.IRouter,
-        private val dataSource: BalanceModule.BalanceItemDataSource,
+        private val dataSource: BalanceModule.DataSource,
         private val predefinedAccountTypeManager: IPredefinedAccountTypeManager,
-        private val factory: BalanceViewItemFactory) : BalanceModule.IViewDelegate, BalanceModule.IInteractorDelegate {
+        private val factory: BalanceViewItemFactory)
+    : BalanceModule.IViewDelegate, BalanceModule.IInteractorDelegate {
 
     var view: BalanceModule.IView? = null
 
     private val disposables = CompositeDisposable()
-    private var flushSubject = PublishSubject.create<Unit>()
+    private val flushSubject = PublishSubject.create<Unit>()
     private val showSortingButtonThreshold = 5
     private var accountToBackup: Account? = null
 
-    //
-    // BalanceModule.IViewDelegate
-    //
+    // ViewDelegate
+
     override val itemsCount: Int
         get() = dataSource.count
 
@@ -48,12 +48,10 @@ class BalancePresenter(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    dataSource.items.forEach { item ->
-                        item.rate?.let { rate ->
-                            didUpdateRate(rate)
-                        }
+                    dataSource.items.mapNotNull { it.rate }.forEach {
+                        didUpdateRate(it)
                     }
-                }?.let { disposables.add(it) }
+                }.let { disposables.add(it) }
     }
 
     override fun getViewItem(position: Int) =
@@ -99,22 +97,19 @@ class BalancePresenter(
         view?.reload()
     }
 
-    //
-    // BalanceModule.IInteractorDelegate
-    //
+    // InteractorDelegate
+
     override fun didUpdateWallets(wallets: List<Wallet>) {
-        val items = wallets.map {
+        val balanceItems = wallets.map {
             val adapter = interactor.getBalanceAdapterForWallet(it)
+            val adapterState = adapter?.state ?: AdapterState.NotReady
 
-            BalanceModule.BalanceItem(it, adapter?.balance ?: BigDecimal.ZERO, adapter?.state
-                    ?: AdapterState.NotReady)
+            BalanceModule.BalanceItem(it, adapter?.balance ?: BigDecimal.ZERO, adapterState)
         }
-        dataSource.set(items)
-        dataSource.currency?.let {
-            interactor.fetchRates(it.code, dataSource.coinCodes)
-        }
+        dataSource.set(balanceItems)
+        interactor.fetchRates(dataSource.currency.code, dataSource.coinCodes)
 
-        view?.setSortingOn(items.size >= showSortingButtonThreshold)
+        view?.setSortingOn(balanceItems.size >= showSortingButtonThreshold)
         view?.reload()
     }
 
@@ -186,5 +181,4 @@ class BalancePresenter(
         dataSource.addUpdatedPosition(position)
         flushSubject.onNext(Unit)
     }
-
 }

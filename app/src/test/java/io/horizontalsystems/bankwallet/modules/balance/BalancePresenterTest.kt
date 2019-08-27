@@ -24,7 +24,7 @@ class BalancePresenterTest {
     private val interactor = mock(BalanceModule.IInteractor::class.java)
     private val view = mock(BalanceModule.IView::class.java)
     private val router = mock(BalanceModule.IRouter::class.java)
-    private val dataSource = mock(BalanceModule.BalanceItemDataSource::class.java)
+    private val dataSource = mock(BalanceModule.DataSource::class.java)
     private val factory = mock(BalanceViewItemFactory::class.java)
 
     private lateinit var presenter: BalancePresenter
