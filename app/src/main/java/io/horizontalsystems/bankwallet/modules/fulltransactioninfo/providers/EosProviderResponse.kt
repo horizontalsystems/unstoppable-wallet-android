@@ -4,7 +4,7 @@ import com.google.gson.JsonObject
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EosProviderResponse(json: JsonObject) : EosResponse() {
+class EosProviderResponse(json: JsonObject, eosAccount: String) : EosResponse() {
 
     override val txId: String
 
@@ -45,7 +45,8 @@ class EosProviderResponse(json: JsonObject) : EosResponse() {
         val trace = json["traces"].asJsonArray.first {
             val trace = it.asJsonObject
             val action = trace["act"].asJsonObject
-            action["name"].asString == "transfer"
+            val receipt = trace["receipt"].asJsonObject
+            action["name"].asString == "transfer" && receipt["receiver"].asString == eosAccount
         }.asJsonObject
 
         val action = trace["act"].asJsonObject

@@ -17,8 +17,8 @@ class EosInfraProvider : FullTransactionInfoModule.EosProvider {
         return PostRequest("https://public.eosinfra.io/v1/history/get_transaction", hashMapOf("id" to hash))
     }
 
-    override fun convert(json: JsonObject): EosResponse {
-        return EosProviderResponse(json)
+    override fun convert(json: JsonObject, eosAccount: String): EosResponse {
+        return EosProviderResponse(json, eosAccount)
     }
 
 }

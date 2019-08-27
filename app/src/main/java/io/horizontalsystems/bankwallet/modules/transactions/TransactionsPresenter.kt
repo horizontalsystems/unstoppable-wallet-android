@@ -52,7 +52,7 @@ class TransactionsPresenter(
             interactor.fetchRate(wallet.coin, transactionItem.record.timestamp)
         }
 
-        return factory.item(transactionItem, lastBlockHeight, threshold, rate)
+        return factory.item(wallet, transactionItem, lastBlockHeight, threshold, rate)
     }
 
     override fun onBottomReached() {

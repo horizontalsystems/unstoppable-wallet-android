@@ -15,8 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.core.putParcelableExtra
 import io.horizontalsystems.bankwallet.entities.FullTransactionItem
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoViewModel
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider.DataProviderSettingsModule
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
@@ -37,10 +38,10 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
         super.onCreate(savedInstanceState)
 
         val transactionHash = intent.getStringExtra(transactionHashKey)
-        val coin = intent.getParcelableExtra<Coin>(coinKey)
+        val wallet = intent.getParcelableExtra<Wallet>(walletKey)
 
         viewModel = ViewModelProviders.of(this).get(FullTransactionInfoViewModel::class.java)
-        viewModel.init(transactionHash, coin)
+        viewModel.init(transactionHash, wallet)
 
         setContentView(R.layout.activity_full_transaction_info)
 
@@ -139,12 +140,12 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
 
     companion object {
         const val transactionHashKey = "transaction_hash"
-        const val coinKey = "coin"
+        const val walletKey = "wallet"
 
-        fun start(context: Context, transactionHash: String, coin: Coin) {
+        fun start(context: Context, transactionHash: String, wallet: Wallet) {
             val intents = Intent(context, FullTransactionInfoActivity::class.java)
             intents.putExtra(transactionHashKey, transactionHash)
-            intents.putExtra(coinKey, coin)
+            intents.putParcelableExtra(walletKey, wallet)
             context.startActivity(intents)
         }
     }

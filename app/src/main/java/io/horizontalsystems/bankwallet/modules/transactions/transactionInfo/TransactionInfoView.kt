@@ -8,7 +8,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.transaction_info_bottom_sheet.view.*
@@ -21,7 +21,7 @@ class TransactionInfoView : ConstraintLayout {
 
     interface Listener {
         fun openTransactionInfo()
-        fun openFullTransactionInfo(transactionHash: String, coin: Coin)
+        fun openFullTransactionInfo(transactionHash: String, wallet: Wallet)
         fun closeTransactionInfo()
     }
 
@@ -49,7 +49,7 @@ class TransactionInfoView : ConstraintLayout {
 
         viewModel.showFullInfoLiveEvent.observe(lifecycleOwner, Observer { pair ->
             pair?.let {
-                listener?.openFullTransactionInfo(transactionHash = it.first, coin = it.second)
+                listener?.openFullTransactionInfo(transactionHash = it.first, wallet = it.second)
             }
         })
 
@@ -57,7 +57,7 @@ class TransactionInfoView : ConstraintLayout {
             txRecord?.let { txRec ->
                 val txStatus = txRec.status
 
-                txInfoCoinIcon.bind(txRec.coin)
+                txInfoCoinIcon.bind(txRec.wallet.coin)
 
                 itemId.apply {
                     bindHashId(context.getString(R.string.TransactionInfo_Id), txRec.transactionHash)
@@ -71,13 +71,13 @@ class TransactionInfoView : ConstraintLayout {
                 }
 
                 coinValue.text = App.numberFormatter.format(txRec.coinValue, explicitSign = true, realNumber = true)
-                txInfoCoinName.text = txRec.coin.title
+                txInfoCoinName.text = txRec.wallet.coin.title
 
                 if (txRec.rate == null) {
                     itemRate.visibility = View.GONE
                 } else {
                     itemRate.visibility = View.VISIBLE
-                    val rate = context.getString(R.string.Balance_RatePerCoin, App.numberFormatter.format(txRec.rate, canUseLessSymbol = false), txRec.coin.code)
+                    val rate = context.getString(R.string.Balance_RatePerCoin, App.numberFormatter.format(txRec.rate, canUseLessSymbol = false), txRec.wallet.coin.code)
                     itemRate.bind(context.getString(R.string.TransactionInfo_HistoricalRate), rate)
                 }
 

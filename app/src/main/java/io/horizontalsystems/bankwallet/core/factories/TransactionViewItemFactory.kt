@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.core.factories
 
-import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.TransactionItem
-import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import java.math.BigDecimal
@@ -11,7 +8,7 @@ import java.util.*
 
 class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
 
-    fun item(transactionItem: TransactionItem, lastBlockHeight: Int?, threshold: Int, rate: CurrencyValue?): TransactionViewItem {
+    fun item(wallet: Wallet, transactionItem: TransactionItem, lastBlockHeight: Int?, threshold: Int, rate: CurrencyValue?): TransactionViewItem {
         val record = transactionItem.record
 
         var status: TransactionStatus = TransactionStatus.Pending
@@ -46,8 +43,8 @@ class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
         }
 
         return TransactionViewItem(
+                wallet,
                 record.transactionHash,
-                coin,
                 CoinValue(coin.code, record.amount),
                 currencyValue,
                 feeCoinValue,

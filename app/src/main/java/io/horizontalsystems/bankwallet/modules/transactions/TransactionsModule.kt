@@ -11,8 +11,8 @@ import java.util.*
 typealias CoinCode = String
 
 data class TransactionViewItem(
+        val wallet: Wallet,
         val transactionHash: String,
-        val coin: Coin,
         val coinValue: CoinValue,
         val currencyValue: CurrencyValue?,
         val feeCoinValue: CoinValue?,

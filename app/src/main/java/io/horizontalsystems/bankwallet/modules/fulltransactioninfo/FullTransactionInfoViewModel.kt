@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.Wallet
 
 class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View, FullTransactionInfoModule.Router {
 
@@ -18,8 +19,8 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
     val openProviderSettingsEvent = SingleLiveEvent<Pair<Coin, String>>()
     val showShareButton = SingleLiveEvent<Void>()
 
-    fun init(transactionHash: String, coin: Coin) {
-        FullTransactionInfoModule.init(this, this, coin, transactionHash)
+    fun init(transactionHash: String, wallet: Wallet) {
+        FullTransactionInfoModule.init(this, this, wallet, transactionHash)
         delegate.viewDidLoad()
     }
 

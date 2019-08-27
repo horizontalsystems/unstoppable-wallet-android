@@ -2,16 +2,18 @@ package io.horizontalsystems.bankwallet.modules.fulltransactioninfo.adapters
 
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.WrongAccountTypeForThisProvider
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import java.util.*
 
-class FullTransactionEosAdapter(val provider: FullTransactionInfoModule.EosProvider, val coin: Coin)
+class FullTransactionEosAdapter(val provider: FullTransactionInfoModule.EosProvider, val wallet: Wallet)
     : FullTransactionInfoModule.Adapter {
 
     override fun convert(json: JsonObject): FullTransactionRecord {
-        val data = provider.convert(json)
+        val eosAccount = (wallet.account.type as? AccountType.Eos)?.account ?: throw WrongAccountTypeForThisProvider()
+        val data = provider.convert(json, eosAccount)
         val sections = mutableListOf<FullTransactionSection>()
 
         mutableListOf<FullTransactionItem>().let { section ->
