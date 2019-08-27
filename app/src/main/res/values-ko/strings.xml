@@ -99,8 +99,8 @@
     <string name="Deposit_Title">수신%s</string>
     <string name="Deposit_Share">Share</string>
     <string name="Deposit_Your_Address">당신의 주소</string>
-    <string name="Deposit_Your_Account">Your Account</string>
-    <string name="Receive_Alert_NotBackedUp_Title">Backup Required</string>
+    <string name="Deposit_Your_Account">내 계정</string>
+    <string name="Receive_Alert_NotBackedUp_Title">백업이 필요합니다</string>
     <string name="Receive_Alert_NotBackedUp_Button">백업</string>
     <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
     <!--Timestamp-->
@@ -269,7 +269,7 @@
     <string name="ManageCoins_EOSAlert_CreateButton">현재 지갑에서 새 EOS 지갑 계정을 만들 수 없습니다. 기존 파일만 복원할 수 있습니다.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">암호 관리</string>
-    <string name="ManageKeys_Description">Anyone with access to your Keys can steal your wallet funds. Store keys safely and never show them to anyone. \n\nBackup each key to be able to restore funds if you lose or break your phone, or simply the wallet app gets deleted.</string>
+    <string name="ManageKeys_Description">암호에 접근할 수 있는 사람은 누구나 지갑 자금을 훔칠 수 있습니다. 암호를 안전하게 보관하고 다른 사람에게 보여주지 마세요. \n\n휴대전화의 분실, 고장 또는 지갑 앱이 삭제된 경우 자금을 복원할 수 있도록 각 암호를 백업하세요.</string>
     <string name="ManageKeys_Create">만들기</string>
     <string name="ManageKeys_Restore">복구</string>
     <string name="ManageKeys_Delete">삭제</string>
@@ -281,8 +281,8 @@
     <string name="ManageKeys_Delete_ConfirmationDisable">비활성화될 코인: %s</string>
     <string name="ManageKeys_Delete_ConfirmationLoose">이 암호를 백업하지 않으면 해당 자금을 잃게 됩니다.</string>
     <string name="ManageKeys_Delete_FromPhone">휴대전화에서 삭제</string>
-    <string name="ManageKeys_Delete_Alert_Title">Backup Required</string>
-    <string name="ManageKeys_Delete_Alert">You need to backup %s key before you may delete it from this phone.</string>
+    <string name="ManageKeys_Delete_Alert_Title">백업이 필요합니다</string>
+    <string name="ManageKeys_Delete_Alert">귀하의 핸드폰에서 삭제하기전 %s 암호의 백업이 필요합니다</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">%s 추가</string>
     <string name="AddCoin_Description">You don\'t have key for %1s which requires a %2s key. The wallet can generate the key for you. Use the create button below to generate a new key. \n\nYou may also use the existing %3s key for the %4s if you have one..</string>
@@ -304,15 +304,15 @@
     <string name="CoinOption_MorePrivate">1&#8211;12시간 (더욱 사적임)</string>
     <string name="CoinOption_Slow_Text">네트워크에서 직접 거래를 복원하세요. 훨씬 더 사적이지만 속도는 매우 느립니다. 복원에 너무 많은 시간이 걸린다면 암호관리 섹션에서 빠른 동기화 옵션을 사용하여 지갑의 암호를 다시 가져오세요.</string>
     <!--Charts-->
-    <string name="Charts_TimeDuration_Day">1D</string>
-    <string name="Charts_TimeDuration_Week">7D</string>
-    <string name="Charts_TimeDuration_Month">1M</string>
-    <string name="Charts_TimeDuration_Quartal">3M</string>
-    <string name="Charts_TimeDuration_HalfYear">6M</string>
-    <string name="Charts_TimeDuration_Year">1Y</string>
-    <string name="Charts_Title">%s Rate</string>
-    <string name="Charts_Rate_High">%s High</string>
-    <string name="Charts_Rate_Low">%s Low</string>
-    <string name="Charts_MarketCap">Mkt. Cap</string>
-    <string name="Charts_Volume">Volume</string>
+    <string name="Charts_TimeDuration_Day">하루</string>
+    <string name="Charts_TimeDuration_Week">일주일</string>
+    <string name="Charts_TimeDuration_Month">한 달</string>
+    <string name="Charts_TimeDuration_Quartal">3개월</string>
+    <string name="Charts_TimeDuration_HalfYear">6개월</string>
+    <string name="Charts_TimeDuration_Year">1년</string>
+    <string name="Charts_Title">%s 률</string>
+    <string name="Charts_Rate_High">%s 높은</string>
+    <string name="Charts_Rate_Low">%s 낮은</string>
+    <string name="Charts_MarketCap">시가총액</string>
+    <string name="Charts_Volume">음량</string>
 </resources>
