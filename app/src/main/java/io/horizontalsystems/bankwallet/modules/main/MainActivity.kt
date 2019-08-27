@@ -16,7 +16,6 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveView
@@ -121,8 +120,8 @@ class MainActivity : BaseActivity(), ReceiveView.Listener, TransactionInfoView.L
         transInfoViewModel?.setViewItem(txInfoItem)
     }
 
-    override fun openFullTransactionInfo(transactionHash: String, coin: Coin) {
-        FullTransactionInfoModule.start(this, transactionHash, coin)
+    override fun openFullTransactionInfo(transactionHash: String, wallet: Wallet) {
+        FullTransactionInfoModule.start(this, transactionHash, wallet)
     }
 
     override fun openTransactionInfo() {
