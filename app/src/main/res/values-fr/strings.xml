@@ -84,8 +84,14 @@
     <string name="Send_Error_IncorrectAddress">Adresse incorrect</string>
     <string name="Send_Error_BalanceAmount">Balance %s</string>
     <string name="Send_DialogTitle">Confirmer la transaction</string>
-    <string name="Send_DialogFee">Frais:</string>
+    <string name="Send_DialogSpeed">Transaction Speed</string>
+    <string name="Send_TxSpeed_Low">Low</string>
+    <string name="Send_TxSpeed_Medium">Medium</string>
+    <string name="Send_TxSpeed_High">High</string>
+    <string name="Send_DialogDuration">Duration</string>
+    <string name="Send_DialogFee">Fee</string>
     <string name="Send_DialogTotal">Total:</string>
+    <string name="Send_DialogProceed">Proceed</string>
     <string name="Send_Sending">En attente</string>
     <string name="Send_ERC_Alert">Frais de transaction pour %s (ERC20) payé en Ethereum. Il est nécessaire %s ETH.</string>
     <string name="Send_Token_InsufficientFeeAlert">Frais de transaction pour %s (%s) payé en %s. Il est nécessaire %s.</string>
@@ -103,6 +109,10 @@
     <string name="Timestamp_HoursAgo">Il y a %d heures</string>
     <string name="Timestamp_Today">Aujourd\'hui</string>
     <string name="Timestamp_Yesterday">Hier</string>
+    <string name="Duration_instant">Instant</string>
+    <string name="Duration_seconds">%d seconds</string>
+    <string name="Duration_minutes">%d minutes</string>
+    <string name="Duration_hours">%d hours</string>
     <!--Transactions-->
     <string name="Transactions_Title">Transactions</string>
     <string name="Transactions_FilterAll">TOUS</string>
