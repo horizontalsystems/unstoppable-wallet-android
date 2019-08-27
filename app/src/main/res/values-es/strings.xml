@@ -59,9 +59,9 @@
     <string name="Balance_SyncedUntil">hasta: %s</string>
     <string name="Balance_Syncing">Sincronizando ...</string>
     <string name="Balance_AddCoins">Añadir Monedas</string>
-    <string name="Balance_Sort_Balance">Value</string>
+    <string name="Balance_Sort_Balance">Valor</string>
     <string name="Balance_Sort_PopupTitle">Ordenar por</string>
-    <string name="Balance_Sort_Az">Name</string>
+    <string name="Balance_Sort_Az">Nombre</string>
     <!--Send-->
     <string name="Send_Title">Enviar %s</string>
     <string name="Send_Hint_Address">Dirección</string>
@@ -84,43 +84,43 @@
     <string name="Send_Error_IncorrectAddress">Código incorrecto</string>
     <string name="Send_Error_BalanceAmount">Saldo %s</string>
     <string name="Send_DialogTitle">Confirmar transacción</string>
-    <string name="Send_DialogSpeed">Transaction Speed</string>
-    <string name="Send_TxSpeed_Low">Low</string>
-    <string name="Send_TxSpeed_Medium">Medium</string>
-    <string name="Send_TxSpeed_High">High</string>
-    <string name="Send_DialogDuration">Duration</string>
-    <string name="Send_DialogFee">Fee</string>
+    <string name="Send_DialogSpeed">Velocidad de transacción</string>
+    <string name="Send_TxSpeed_Low">Bajo</string>
+    <string name="Send_TxSpeed_Medium">Medio</string>
+    <string name="Send_TxSpeed_High">Alto</string>
+    <string name="Send_DialogDuration">Duración</string>
+    <string name="Send_DialogFee">Comisión</string>
     <string name="Send_DialogTotal">Total:</string>
-    <string name="Send_DialogProceed">Proceed</string>
+    <string name="Send_DialogProceed">Continuar</string>
     <string name="Send_Sending">Enviando</string>
     <string name="Send_ERC_Alert">Tarifas de transacción para %s (ERC20) pagado en Ethereum. Es necesario %s ETH.</string>
     <string name="Send_Token_InsufficientFeeAlert">Tarifas de transacción para %s (%s) pagado en %s. Es necesario %s.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Recibir %s</string>
-    <string name="Deposit_Share">Share</string>
+    <string name="Deposit_Share">Compartir</string>
     <string name="Deposit_Your_Address">Su dirección</string>
-    <string name="Deposit_Your_Account">Your Account</string>
-    <string name="Receive_Alert_NotBackedUp_Title">Backup Required</string>
+    <string name="Deposit_Your_Account">Su cuenta</string>
+    <string name="Receive_Alert_NotBackedUp_Title">Se requiere una copia de seguridad</string>
     <string name="Receive_Alert_NotBackedUp_Button">Copia de seguridad</string>
-    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
+    <string name="Receive_Alert_NotBackedUp_Description">Necesita hacer una copia de seguridad de las claves de este monedero antes de que pueda recibir fondos en él. </string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">reciente</string>
     <string name="Timestamp_MinAgo">Hace %d minutos</string>
     <string name="Timestamp_HoursAgo">Hace %d hora</string>
     <string name="Timestamp_Today">Hoy</string>
     <string name="Timestamp_Yesterday">Ayer</string>
-    <string name="Duration_instant">Instant</string>
+    <string name="Duration_instant">Inmediato</string>
     <plurals name="Duration_seconds">
-        <item quantity="one">%d second</item>
-        <item quantity="other">%d seconds</item>
+        <item quantity="one">%d segundo</item>
+        <item quantity="other">%d segundo</item>
     </plurals>
     <plurals name="Duration_minutes">
-        <item quantity="one">%d minute</item>
-        <item quantity="other">%d minutes</item>
+        <item quantity="one">%d minuto</item>
+        <item quantity="other">%d minuto</item>
     </plurals>
     <plurals name="Duration_hours">
-        <item quantity="one">%d hour</item>
-        <item quantity="other">%d hours</item>
+        <item quantity="one">%d hora</item>
+        <item quantity="other">%d hora</item>
     </plurals>
     <!--Transactions-->
     <string name="Transactions_Title">Transacciones</string>
@@ -137,8 +137,8 @@
     <string name="TransactionInfo_ButtonVerify">Verificar</string>
     <string name="TransactionInfo_Status_Pending">Pendiente</string>
     <string name="TransactionInfo_HistoricalRate">Estado histórico</string>
-    <string name="TransactionInfo_Fee">Fee</string>
-    <string name="TransactionInfo_FootNote">The value of this transaction appears as 0 because it was sent to your own address</string>
+    <string name="TransactionInfo_Fee">Comisión</string>
+    <string name="TransactionInfo_FootNote">El valor de esta transacción aparece como 0 porque fue enviado a su propia dirección</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Transacción</string>
     <string name="FullInfo_Time">Hora</string>
@@ -155,7 +155,7 @@
     <string name="FullInfo_To">Para</string>
     <string name="FullInfo_Status">Estado</string>
     <string name="FullInfo_Memo">Memo</string>
-    <string name="FullInfo_CpuUsage">CPU Usage</string>
+    <string name="FullInfo_CpuUsage">Uso de CPU</string>
     <string name="FullInfo_NetUsage">Net Usage</string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
     <string name="FullInfo_GasUsed">Gas Used</string>
@@ -234,9 +234,9 @@
     <string name="Unlock_Page_EnterYourPin">Código</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Divisa no admitida</string>
-    <string name="Eos_Backend_Error_SelfTransfer">Can\'t transfer token to own account</string>
-    <string name="Eos_Backend_Error_AccountNotExist">Target account does not exist</string>
-    <string name="Eos_Backend_Error_InsufficientRam">Your EOS account doesn\'t have enough RAM to send this token. You need to increase RAM stake to proceed.</string>
+    <string name="Eos_Backend_Error_SelfTransfer">No se puede transferir el token a su propia cuenta</string>
+    <string name="Eos_Backend_Error_AccountNotExist">La cuenta de destino no existe</string>
+    <string name="Eos_Backend_Error_InsufficientRam">Su cuenta EOS no tiene suficiente memoria RAM para enviar este token. Necesita aumentar la participación en RAM para continuar.</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Desbloquear</string>
     <string name="Hud_Text_Success">Completado</string>
@@ -278,7 +278,7 @@
     <string name="ManageCoins_EOSAlert_CreateButton">En este momento, el monedero no es capaz de crear nuevas cuentas de monederos EOS. Solo puede restaurar la existente.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Gestionar claves</string>
-    <string name="ManageKeys_Description">Anyone with access to your Keys can steal your wallet funds. Store keys safely and never show them to anyone. \n\nBackup each key to be able to restore funds if you lose or break your phone, or simply the wallet app gets deleted.</string>
+    <string name="ManageKeys_Description">Cualquiera con acceso a sus claves puede robar los fondos de su monedero. Almacene las claves de forma segura y nunca se las muestre a nadie.\n\nRespalde cada clave para poder restaurar los fondos en caso de que su teléfono se pierda, se averíe o en caso de que simplemente se borre la aplicación del monedero de su teléfono.</string>
     <string name="ManageKeys_Create">Crear</string>
     <string name="ManageKeys_Restore">Restaurar</string>
     <string name="ManageKeys_Delete">Eliminar</string>
@@ -290,11 +290,11 @@
     <string name="ManageKeys_Delete_ConfirmationDisable">Monedas que serán deshabilitadas: %s</string>
     <string name="ManageKeys_Delete_ConfirmationLoose">Si usted no tiene un respaldo de esta clave, usted perderá los fondos respectivos.</string>
     <string name="ManageKeys_Delete_FromPhone">Eliminar del teléfono</string>
-    <string name="ManageKeys_Delete_Alert_Title">Backup Required</string>
-    <string name="ManageKeys_Delete_Alert">You need to backup %s key before you may delete it from this phone.</string>
+    <string name="ManageKeys_Delete_Alert_Title">Se requiere una copia de seguridad</string>
+    <string name="ManageKeys_Delete_Alert">Necesita respaldar esta clave %s antes de que pueda eliminarla de este teléfono.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">Añadir %s</string>
-    <string name="AddCoin_Description">You don\'t have key for %1s which requires a %2s key. The wallet can generate the key for you. Use the create button below to generate a new key. \n\nYou may also use the existing %3s key for the %4s if you have one..</string>
+    <string name="AddCoin_Description">Usted no tiene la clave para %1s, el cual requiere una clave %2s. El monedero puede generar una clave para usted. Use el botón de Crear que se encuentra más abajo para generar una nueva clave.\n\nTambién puede usar la clave %3sexistente para el %4s si ya tiene una..</string>
     <string name="AddCoin_CreateKey">Crear</string>
     <string name="AddCoin_RestoreKey">Restaurar</string>
     <!-- Account Types -->
@@ -318,10 +318,10 @@
     <string name="Charts_TimeDuration_Month">1M</string>
     <string name="Charts_TimeDuration_Quartal">3M</string>
     <string name="Charts_TimeDuration_HalfYear">6M</string>
-    <string name="Charts_TimeDuration_Year">1Y</string>
-    <string name="Charts_Title">%s Rate</string>
-    <string name="Charts_Rate_High">%s High</string>
-    <string name="Charts_Rate_Low">%s Low</string>
-    <string name="Charts_MarketCap">Mkt. Cap</string>
-    <string name="Charts_Volume">Volume</string>
+    <string name="Charts_TimeDuration_Year">1A</string>
+    <string name="Charts_Title">%s Tarifa</string>
+    <string name="Charts_Rate_High">%s Alto</string>
+    <string name="Charts_Rate_Low">%s Bajo</string>
+    <string name="Charts_MarketCap">Capitalización de mercado</string>
+    <string name="Charts_Volume">Volumen</string>
 </resources>
