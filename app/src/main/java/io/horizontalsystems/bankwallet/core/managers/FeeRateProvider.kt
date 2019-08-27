@@ -39,10 +39,9 @@ class FeeRateProvider(context: Context, appConfig: IAppConfigProvider) : FeeRate
 
     private fun feeRates(feeRate: FeeRate): List<FeeRateInfo> {
         val feeRatesInfoList = mutableListOf<FeeRateInfo>()
-        // TODO take duration from FeeRate
-        feeRatesInfoList.add(FeeRateInfo(FeeRatePriority.LOW, feeRate.lowPriority, 30 * 60L))
-        feeRatesInfoList.add(FeeRateInfo(FeeRatePriority.MEDIUM, feeRate.mediumPriority, 10 * 60L))
-        feeRatesInfoList.add(FeeRateInfo(FeeRatePriority.HIGH, feeRate.mediumPriority, 5 * 60L))
+        feeRatesInfoList.add(FeeRateInfo(FeeRatePriority.LOW, feeRate.lowPriority, feeRate.lowPriorityDuration))
+        feeRatesInfoList.add(FeeRateInfo(FeeRatePriority.MEDIUM, feeRate.mediumPriority, feeRate.mediumPriorityDuration))
+        feeRatesInfoList.add(FeeRateInfo(FeeRatePriority.HIGH, feeRate.mediumPriority, feeRate.highPriorityDuration))
 
         return feeRatesInfoList
     }
