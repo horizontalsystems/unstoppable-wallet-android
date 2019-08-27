@@ -35,10 +35,8 @@ class ConfirmationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         shadowlessToolbar.bind(
                 title = getString(R.string.Send_Confirmation_Title),
-                leftBtnItem = TopMenuItem(R.drawable.back) {
-                    activity?.onBackPressed()
-                }
-        )
+                leftBtnItem = TopMenuItem(R.drawable.back, onClick = { activity?.onBackPressed() }
+        ))
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

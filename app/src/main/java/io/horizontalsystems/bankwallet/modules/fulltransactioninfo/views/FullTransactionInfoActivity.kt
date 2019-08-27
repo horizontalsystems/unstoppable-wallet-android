@@ -48,11 +48,9 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
 
         shadowlessToolbar.bind(
                 title = getString(R.string.FullInfo_Title),
-                leftBtnItem = TopMenuItem(R.drawable.back) { onBackPressed() }
+                leftBtnItem = TopMenuItem(text = R.string.Button_Share, onClick = { viewModel.share() }),
+                rightBtnItem = TopMenuItem(text = R.string.Button_Close, onClick = { onBackPressed() })
         )
-
-        closeBtn.setOnClickListener { onBackPressed() }
-        shareBtn.setOnClickListener { viewModel.share() }
 
         //
         // LiveData

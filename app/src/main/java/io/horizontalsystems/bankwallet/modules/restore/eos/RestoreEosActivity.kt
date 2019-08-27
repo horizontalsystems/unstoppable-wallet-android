@@ -25,8 +25,9 @@ class RestoreEosActivity : BaseActivity() {
 
         shadowlessToolbar.bind(
                 title = getString(R.string.Restore_Title),
-                leftBtnItem = TopMenuItem(R.drawable.back, this::onBackPressed),
-                rightBtnItem = TopMenuItem(R.drawable.checkmark_orange, this::onClickDone))
+                leftBtnItem = TopMenuItem(R.drawable.back, onClick = { onBackPressed() }),
+                rightBtnItem = TopMenuItem(R.drawable.checkmark_orange, onClick = { onClickDone() })
+        )
 
         viewModel = ViewModelProviders.of(this).get(RestoreEosViewModel::class.java)
         viewModel.init()

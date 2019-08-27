@@ -26,10 +26,8 @@ class RestoreWordsActivity : BaseActivity(), RestoreWordsAdapter.Listener {
         setContentView(R.layout.activity_restore_words)
         shadowlessToolbar.bind(
                 title = getString(R.string.Restore_Title),
-                leftBtnItem = TopMenuItem(R.drawable.back) { onBackPressed() },
-                rightBtnItem = TopMenuItem(R.drawable.checkmark_orange) {
-                    viewModel.delegate.onDone()
-                }
+                leftBtnItem = TopMenuItem(R.drawable.back, onClick = { onBackPressed() }),
+                rightBtnItem = TopMenuItem(R.drawable.checkmark_orange, onClick = { viewModel.delegate.onDone() })
         )
 
         val wordsCount = intent.getIntExtra(RestoreWordsModule.WORDS_COUNT, 12)

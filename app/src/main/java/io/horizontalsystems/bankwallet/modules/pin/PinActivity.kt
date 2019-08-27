@@ -69,7 +69,7 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
         })
 
         viewModel.showBackButton.observe(this, Observer {
-            shadowlessToolbar.bindLeftButton(TopMenuItem(R.drawable.back, { viewModel.delegate.onBackPressed() }))
+            shadowlessToolbar.bind(null, TopMenuItem(R.drawable.back, onClick = { viewModel.delegate.onBackPressed() }))
         })
 
         viewModel.titleLiveDate.observe(this, Observer { title ->

@@ -16,7 +16,7 @@ class AboutSettingsActivity: BaseActivity() {
 
         shadowlessToolbar.bind(
                 title = getString(R.string.SettingsAbout_Title),
-                leftBtnItem = TopMenuItem(R.drawable.back, { onBackPressed() })
+                leftBtnItem = TopMenuItem(R.drawable.back, onClick = { onBackPressed() })
         )
     }
 
