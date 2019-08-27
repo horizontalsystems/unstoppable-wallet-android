@@ -142,9 +142,19 @@
     <string name="Timestamp_Yesterday">Yesterday</string>
 
     <string name="Duration_instant">Instant</string>
-    <string name="Duration_seconds">%d seconds</string>
-    <string name="Duration_minutes">%d minutes</string>
-    <string name="Duration_hours">%d hours</string>
+
+    <plurals name="Duration_seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
+    <plurals name="Duration_minutes">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+    <plurals name="Duration_hours">
+        <item quantity="one">%d hour</item>
+        <item quantity="other">%d hours</item>
+    </plurals>
 
     <!--Transactions-->
 

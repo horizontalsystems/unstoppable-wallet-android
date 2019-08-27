@@ -31,9 +31,15 @@ object DateHelper {
     fun getTxDurationString(context: Context, durationInSec: Long): String {
         return when {
             durationInSec < 10 -> context.getString(R.string.Duration_instant)
-            durationInSec < 60 -> context.getString(R.string.Duration_seconds, durationInSec)
-            durationInSec < 60 * 60 -> context.getString(R.string.Duration_minutes, durationInSec / 60)
-            else -> context.getString(R.string.Duration_hours, durationInSec / 60 * 60)
+            durationInSec < 60 -> context.resources.getQuantityString(R.plurals.Duration_seconds, durationInSec.toInt(), durationInSec.toInt())
+            durationInSec < 60 * 60 -> {
+                val minutes = (durationInSec / 60).toInt()
+                context.resources.getQuantityString(R.plurals.Duration_minutes, minutes, minutes)
+            }
+            else -> {
+                val hours = (durationInSec / (60 * 60)).toInt()
+                context.resources.getQuantityString(R.plurals.Duration_hours, hours, hours)
+            }
         }
     }
 
