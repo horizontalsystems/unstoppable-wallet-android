@@ -61,7 +61,7 @@
     <string name="Balance_AddCoins">코인 추가</string>
     <string name="Balance_Sort_Balance">Value</string>
     <string name="Balance_Sort_PopupTitle">정렬 기준</string>
-    <string name="Balance_Sort_Az">Name</string>
+    <string name="Balance_Sort_Az">이름</string>
     <!--Send-->
     <string name="Send_Title">전송 %s</string>
     <string name="Send_Hint_Address">주소</string>
@@ -84,12 +84,12 @@
     <string name="Send_Error_IncorrectAddress">잘못된 주소</string>
     <string name="Send_Error_BalanceAmount">잔액%s</string>
     <string name="Send_DialogTitle">거래를 확인해라</string>
-    <string name="Send_DialogSpeed">Transaction Speed</string>
-    <string name="Send_TxSpeed_Low">Low</string>
-    <string name="Send_TxSpeed_Medium">Medium</string>
-    <string name="Send_TxSpeed_High">High</string>
+    <string name="Send_DialogSpeed">거래 속도</string>
+    <string name="Send_TxSpeed_Low">낮음</string>
+    <string name="Send_TxSpeed_Medium">보통</string>
+    <string name="Send_TxSpeed_High">높음</string>
     <string name="Send_DialogDuration">Duration</string>
-    <string name="Send_DialogFee">Fee</string>
+    <string name="Send_DialogFee">수수료</string>
     <string name="Send_DialogTotal">합계:</string>
     <string name="Send_DialogProceed">Proceed</string>
     <string name="Send_Sending">전송중</string>
@@ -97,7 +97,7 @@
     <string name="Send_Token_InsufficientFeeAlert">%s (%s) 에 대한 거래 수수료는 %s로 지불되었습니다. 귀하는 %s가 필요합니다.</string>
     <!--Deposit-->
     <string name="Deposit_Title">수신%s</string>
-    <string name="Deposit_Share">Share</string>
+    <string name="Deposit_Share">공유</string>
     <string name="Deposit_Your_Address">당신의 주소</string>
     <string name="Deposit_Your_Account">내 계정</string>
     <string name="Receive_Alert_NotBackedUp_Title">백업이 필요합니다</string>
@@ -225,8 +225,8 @@
     <string name="Unlock_Page_EnterYourPin">비밀번호</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">지원되지 않는 통화</string>
-    <string name="Eos_Backend_Error_SelfTransfer">Can\'t transfer token to own account</string>
-    <string name="Eos_Backend_Error_AccountNotExist">Target account does not exist</string>
+    <string name="Eos_Backend_Error_SelfTransfer">토큰을 개인계정으로 옮길 수 없습니다</string>
+    <string name="Eos_Backend_Error_AccountNotExist">회원 계정이 존재하지 않습니다</string>
     <string name="Eos_Backend_Error_InsufficientRam">Your EOS account doesn\'t have enough RAM to send this token. You need to increase RAM stake to proceed.</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">잠금 해제</string>
