@@ -84,8 +84,14 @@
     <string name="Send_Error_IncorrectAddress">잘못된 주소</string>
     <string name="Send_Error_BalanceAmount">잔액%s</string>
     <string name="Send_DialogTitle">거래를 확인해라</string>
-    <string name="Send_DialogFee">수수료:</string>
+    <string name="Send_DialogSpeed">Transaction Speed</string>
+    <string name="Send_TxSpeed_Low">Low</string>
+    <string name="Send_TxSpeed_Medium">Medium</string>
+    <string name="Send_TxSpeed_High">High</string>
+    <string name="Send_DialogDuration">Duration</string>
+    <string name="Send_DialogFee">Fee</string>
     <string name="Send_DialogTotal">합계:</string>
+    <string name="Send_DialogProceed">Proceed</string>
     <string name="Send_Sending">전송중</string>
     <string name="Send_ERC_Alert">%@ (ERC20) 에 대한 거래 수수료는 Ethereum 로 지불되었습니다. 귀하는 %@ ETH 가 필요합니다.</string>
     <string name="Send_Token_InsufficientFeeAlert">%s (%s) 에 대한 거래 수수료는 %s로 지불되었습니다. 귀하는 %s가 필요합니다.</string>
@@ -103,6 +109,10 @@
     <string name="Timestamp_HoursAgo">%d시간 전</string>
     <string name="Timestamp_Today">오늘</string>
     <string name="Timestamp_Yesterday">어제</string>
+    <string name="Duration_instant">Instant</string>
+    <string name="Duration_seconds">%d seconds</string>
+    <string name="Duration_minutes">%d minutes</string>
+    <string name="Duration_hours">%d hours</string>
     <!--Transactions-->
     <string name="Transactions_Title">거래기록</string>
     <string name="Transactions_FilterAll">전부</string>
