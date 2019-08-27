@@ -84,8 +84,14 @@
     <string name="Send_Error_IncorrectAddress">Geçersiz adres</string>
     <string name="Send_Error_BalanceAmount">%s bakiye</string>
     <string name="Send_DialogTitle">İşlemi Onayla</string>
-    <string name="Send_DialogFee">Masraf:</string>
+    <string name="Send_DialogSpeed">Transaction Speed</string>
+    <string name="Send_TxSpeed_Low">Low</string>
+    <string name="Send_TxSpeed_Medium">Medium</string>
+    <string name="Send_TxSpeed_High">High</string>
+    <string name="Send_DialogDuration">Duration</string>
+    <string name="Send_DialogFee">Fee</string>
     <string name="Send_DialogTotal">Toplam:</string>
+    <string name="Send_DialogProceed">Proceed</string>
     <string name="Send_Sending">Gönderiliyor</string>
     <string name="Send_ERC_Alert">%s (ERC20) için ișlem ücreti Ethereum hesabından ödenir. Asgari %s ETH gerekiyor</string>
     <string name="Send_Token_InsufficientFeeAlert">%s (%s) için ișlem ücreti %s hesabından ödenir. Asgari %s gerekiyor.</string>
@@ -103,6 +109,10 @@
     <string name="Timestamp_HoursAgo">%d saat önce</string>
     <string name="Timestamp_Today">Bugün</string>
     <string name="Timestamp_Yesterday">Dün</string>
+    <string name="Duration_instant">Instant</string>
+    <string name="Duration_seconds">%d seconds</string>
+    <string name="Duration_minutes">%d minutes</string>
+    <string name="Duration_hours">%d hours</string>
     <!--Transactions-->
     <string name="Transactions_Title">Hesap işlemleri</string>
     <string name="Transactions_FilterAll">HEPSI</string>
