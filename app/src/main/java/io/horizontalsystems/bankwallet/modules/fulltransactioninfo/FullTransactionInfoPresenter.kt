@@ -31,6 +31,9 @@ class FullTransactionInfoPresenter(val interactor: FullTransactionInfoInteractor
     override fun viewDidLoad() {
         interactor.didLoad()
         interactor.updateProvider(state.coin)
+        if (canShowTransactionInProviderSite) {
+            view?.showShareButton()
+        }
 
         retryLoadInfo()
     }

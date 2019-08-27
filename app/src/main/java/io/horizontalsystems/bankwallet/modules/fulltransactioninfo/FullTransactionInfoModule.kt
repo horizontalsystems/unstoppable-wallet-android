@@ -16,7 +16,6 @@ import io.reactivex.Flowable
 
 object FullTransactionInfoModule {
     interface View {
-        fun show()
         fun reload()
         fun showLoading()
         fun hideLoading()
@@ -26,6 +25,7 @@ object FullTransactionInfoModule {
         fun openUrl(url: String)
         fun openProviderSettings(coin: Coin, transactionHash: String)
         fun share(url: String)
+        fun showShareButton()
     }
 
     interface ViewDelegate {
