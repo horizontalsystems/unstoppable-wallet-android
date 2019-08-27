@@ -22,6 +22,7 @@ class LauncherActivity : AppCompatActivity() {
 
         viewModel.openWelcomeModule.observe(this, Observer {
             WelcomeModule.start(this)
+            finish()
         })
 
         viewModel.openMainModule.observe(this, Observer {
