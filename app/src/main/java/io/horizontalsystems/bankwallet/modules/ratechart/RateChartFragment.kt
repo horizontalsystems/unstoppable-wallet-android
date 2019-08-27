@@ -38,6 +38,7 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
         chartView.listener = this
         chartView.setIndicator(chartViewIndicator)
         chartTitle.text = getString(R.string.Charts_Title, coin.title)
+        closeButton.setOnClickListener { dismiss() }
 
         presenter = ViewModelProviders.of(this, RateChartModule.Factory(coin)).get(RateChartPresenter::class.java)
         presenterView = presenter.view as RateChartView
