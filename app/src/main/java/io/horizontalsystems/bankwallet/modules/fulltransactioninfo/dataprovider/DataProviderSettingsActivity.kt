@@ -37,7 +37,7 @@ class DataProviderSettingsActivity : BaseActivity(), DataProviderSettingsAdapter
 
         shadowlessToolbar.bind(
                 title = getString(R.string.FullInfo_Source),
-                leftBtnItem = TopMenuItem(R.drawable.back, { onBackPressed() })
+                leftBtnItem = TopMenuItem(R.drawable.back, onClick = { onBackPressed() })
         )
 
         adapter = DataProviderSettingsAdapter(this)

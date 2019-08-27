@@ -29,7 +29,7 @@ class RestoreActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_restore)
-        shadowlessToolbar.bind(getString(R.string.Restore_Title), TopMenuItem(R.drawable.back) { onBackPressed() })
+        shadowlessToolbar.bind(getString(R.string.Restore_Title), TopMenuItem(R.drawable.back, onClick = { onBackPressed() } ))
 
         viewModel = ViewModelProviders.of(this).get(RestoreViewModel::class.java)
         viewModel.init()

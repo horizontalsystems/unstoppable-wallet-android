@@ -23,10 +23,8 @@ class SyncModeActivity : BaseActivity() {
 
         shadowlessToolbar.bind(
                 title = getString(R.string.CoinOption_Title),
-                leftBtnItem = TopMenuItem(R.drawable.back) { onBackPressed() },
-                rightBtnItem = TopMenuItem(R.drawable.checkmark_orange) {
-                    viewModel.delegate.didConfirm()
-                }
+                leftBtnItem = TopMenuItem(R.drawable.back, onClick = { onBackPressed() }),
+                rightBtnItem = TopMenuItem(R.drawable.checkmark_orange, onClick = { viewModel.delegate.didConfirm() })
         )
 
         viewModel = ViewModelProviders.of(this).get(SyncModeViewModel::class.java)

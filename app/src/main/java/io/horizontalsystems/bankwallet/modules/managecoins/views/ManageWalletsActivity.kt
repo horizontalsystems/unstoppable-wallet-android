@@ -33,8 +33,8 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener {
 
         shadowlessToolbar.bind(
                 title = getString(R.string.ManageCoins_title),
-                leftBtnItem = TopMenuItem(R.drawable.back) { onBackPressed() },
-                rightBtnItem = TopMenuItem(R.drawable.checkmark_orange) { viewModel.delegate.saveChanges() }
+                leftBtnItem = TopMenuItem(R.drawable.back, onClick = { onBackPressed() }),
+                rightBtnItem = TopMenuItem(R.drawable.checkmark_orange, onClick = { viewModel.delegate.saveChanges() })
         )
 
         viewModel.coinsLoadedLiveEvent.observe(this, Observer {

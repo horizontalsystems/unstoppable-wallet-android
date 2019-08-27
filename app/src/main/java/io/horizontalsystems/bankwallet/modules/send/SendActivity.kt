@@ -40,7 +40,7 @@ class SendActivity : BaseActivity() {
         shadowlessToolbar.bind(
                 title = getString(R.string.Send_Title, wallet.coin.title),
                 leftBtnItem = TopMenuItem(iconRes),
-                rightBtnItem = TopMenuItem(R.drawable.close) { onBackPressed() }
+                rightBtnItem = TopMenuItem(R.drawable.close, onClick = { onBackPressed() })
         )
 
         mainViewModel = ViewModelProviders.of(this).get(SendViewModel::class.java)
