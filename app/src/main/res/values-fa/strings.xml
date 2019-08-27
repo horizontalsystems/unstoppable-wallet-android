@@ -84,8 +84,14 @@
     <string name="Send_Error_IncorrectAddress">آدرس اشتباه است</string>
     <string name="Send_Error_BalanceAmount">مانده حساب %s</string>
     <string name="Send_DialogTitle">معامله را تایید کنید</string>
-    <string name="Send_DialogFee">هزينه:</string>
+    <string name="Send_DialogSpeed">Transaction Speed</string>
+    <string name="Send_TxSpeed_Low">Low</string>
+    <string name="Send_TxSpeed_Medium">Medium</string>
+    <string name="Send_TxSpeed_High">High</string>
+    <string name="Send_DialogDuration">Duration</string>
+    <string name="Send_DialogFee">Fee</string>
     <string name="Send_DialogTotal">مجموع:</string>
+    <string name="Send_DialogProceed">Proceed</string>
     <string name="Send_Sending">در حال ارسال</string>
     <string name="Send_ERC_Alert">پرداخت هزینه های معامله برای %s (ERC20) در Ethereum. شما نیاز به %s ETH.</string>
     <string name="Send_Token_InsufficientFeeAlert">Transaction fees for %s (%s) paid in %s. You need %s.</string>
@@ -103,6 +109,10 @@
     <string name="Timestamp_HoursAgo">%dساعتپيش</string>
     <string name="Timestamp_Today">امروز</string>
     <string name="Timestamp_Yesterday">ديروز</string>
+    <string name="Duration_instant">Instant</string>
+    <string name="Duration_seconds">%d seconds</string>
+    <string name="Duration_minutes">%d minutes</string>
+    <string name="Duration_hours">%d hours</string>
     <!--Transactions-->
     <string name="Transactions_Title">معاملات</string>
     <string name="Transactions_FilterAll">همه</string>
