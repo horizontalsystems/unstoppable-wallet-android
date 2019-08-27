@@ -20,7 +20,7 @@
             android:paddingTop="4dp"
             android:paddingBottom="18dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:itemCount="2"
+            tools:itemCount="1"
             tools:listitem="@layout/view_holder_coin" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
@@ -36,11 +36,11 @@
         <TextView
             android:id="@+id/toolbarTitle"
             style="@style/TabTitle"
-            android:text="@string/Balance_Title"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/app_bar_height_tall"
             android:layout_marginStart="16dp"
             android:gravity="bottom|start"
+            android:text="@string/Balance_Title"
             app:layout_scrollFlags="scroll|snap" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -58,8 +58,8 @@
                 android:layout_height="wrap_content"
                 android:paddingStart="10dp"
                 android:paddingEnd="0dp"
-                android:src="@drawable/stateful_balance_sort_icon"
-                android:visibility="visible"
+                android:src="@drawable/ic_sort"
+                android:tint="@color/stateful_button_yellow_color"
                 app:layout_constraintBottom_toBottomOf="@+id/ballanceText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/ballanceText" />
