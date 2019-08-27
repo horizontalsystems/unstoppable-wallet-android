@@ -84,8 +84,14 @@
     <string name="Send_Error_IncorrectAddress">住所誤り</string>
     <string name="Send_Error_BalanceAmount">残高：%s</string>
     <string name="Send_DialogTitle">取引を承認する</string>
-    <string name="Send_DialogFee">料金:</string>
+    <string name="Send_DialogSpeed">Transaction Speed</string>
+    <string name="Send_TxSpeed_Low">Low</string>
+    <string name="Send_TxSpeed_Medium">Medium</string>
+    <string name="Send_TxSpeed_High">High</string>
+    <string name="Send_DialogDuration">Duration</string>
+    <string name="Send_DialogFee">Fee</string>
     <string name="Send_DialogTotal">合計:</string>
+    <string name="Send_DialogProceed">Proceed</string>
     <string name="Send_Sending">Sending</string>
     <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
     <string name="Send_Token_InsufficientFeeAlert">Transaction fees for %s (%s) paid in %s. You need %s.</string>
@@ -103,6 +109,10 @@
     <string name="Timestamp_HoursAgo">%d 時間前</string>
     <string name="Timestamp_Today">今日</string>
     <string name="Timestamp_Yesterday">昨日</string>
+    <string name="Duration_instant">Instant</string>
+    <string name="Duration_seconds">%d seconds</string>
+    <string name="Duration_minutes">%d minutes</string>
+    <string name="Duration_hours">%d hours</string>
     <!--Transactions-->
     <string name="Transactions_Title">トランザクション</string>
     <string name="Transactions_FilterAll">ALL</string>
