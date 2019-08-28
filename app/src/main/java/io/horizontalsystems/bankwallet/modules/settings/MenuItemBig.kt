@@ -45,4 +45,8 @@ class MenuItemBig : ConstraintLayout {
             ta.recycle()
         }
     }
+
+    fun setSubtitle(v: String) {
+        subtitle.text = v
+    }
 }

@@ -7,6 +7,9 @@ class ReportProblemPresenter(
         val router: ReportProblemModule.IRouter
 ) : ViewModel(), ReportProblemModule.IInteractorDelegate, ReportProblemModule.IViewDelegate {
 
+    override val email get() = interactor.email
+    override val telegramGroup get() = "@" + interactor.telegramGroup
+
     override fun didTapEmail() {
         router.openSendMail(interactor.email)
     }

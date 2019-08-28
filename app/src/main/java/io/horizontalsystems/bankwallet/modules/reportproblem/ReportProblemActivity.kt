@@ -38,10 +38,12 @@ class ReportProblemActivity : BaseActivity() {
                 leftBtnItem = TopMenuItem(R.drawable.back) { onBackPressed() }
         )
 
+        mail.setSubtitle(presenter.email)
         mail.setOnSingleClickListener {
             presenter.didTapEmail()
         }
 
+        telegram.setSubtitle(presenter.telegramGroup)
         telegram.setOnSingleClickListener {
             presenter.didTapTelegram()
         }
