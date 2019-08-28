@@ -22,8 +22,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:title="Mail"
-        app:subtitle="hsdao@protonmail.ch"
+        app:title="@string/SettingsReport_Email"
         app:icon="@drawable/ic_email"
         app:layout_constraintTop_toBottomOf="@+id/shadowlessToolbar" />
 
@@ -33,8 +32,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:title="Telegram"
-        app:subtitle="\@Unstoppable_Wallet"
+        app:title="@string/SettingsReport_Telegram"
         app:icon="@drawable/ic_telegram"
         app:layout_constraintTop_toBottomOf="@+id/mail" />
 

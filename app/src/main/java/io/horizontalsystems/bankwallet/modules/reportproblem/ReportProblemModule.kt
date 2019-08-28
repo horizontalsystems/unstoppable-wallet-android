@@ -10,6 +10,8 @@ object ReportProblemModule {
     interface IView
 
     interface IViewDelegate {
+        val email: String
+        val telegramGroup: String
         fun didTapEmail()
         fun didTapTelegram()
     }
