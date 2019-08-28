@@ -28,7 +28,7 @@
 
     <string name="Restore_Title">Restore</string>
     <string name="Restore_Subtitle">Enter Key</string>
-    <string name="Restore_ValidationFailed">Incorrect Secret Key</string>
+    <string name="Restore_ValidationFailed">Incorrect Key</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>
 
     <string name="Restore_EosAccountName">Account Name</string>
