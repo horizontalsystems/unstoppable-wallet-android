@@ -10,6 +10,8 @@ import java.math.BigDecimal
 
 class AppConfigProvider : IAppConfigProvider {
 
+    override val reportEmail = "hsdao@protonmail.ch"
+    override val reportTelegramGroup = "unstoppable_wallet"
     override val ipfsId = "QmXTJZBMMRmBbPun6HFt3tmb3tfYF2usLPxFoacL7G5uMX"
     override val ipfsMainGateway = "ipfs-ext.horizontalsystems.xyz"
     override val ipfsFallbackGateway = "ipfs.io"

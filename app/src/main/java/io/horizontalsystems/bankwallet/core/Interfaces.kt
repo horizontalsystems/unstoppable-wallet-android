@@ -309,6 +309,8 @@ interface ILockManager {
 }
 
 interface IAppConfigProvider {
+    val reportEmail: String
+    val reportTelegramGroup: String
     val ipfsId: String
     val ipfsMainGateway: String
     val ipfsFallbackGateway: String
