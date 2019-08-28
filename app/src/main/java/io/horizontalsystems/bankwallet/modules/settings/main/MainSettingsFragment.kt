@@ -126,7 +126,7 @@ class MainSettingsFragment : Fragment() {
         })
 
         viewModel.reloadAppLiveEvent.observe(viewLifecycleOwner, Observer {
-            context?.let { context -> MainModule.startAsNewTask(context, MainActivity.SETTINGS_TAB_POSITION) }
+            activity?.let { MainModule.startAsNewTask(it, MainActivity.SETTINGS_TAB_POSITION) }
         })
 
     }
