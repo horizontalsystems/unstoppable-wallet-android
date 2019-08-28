@@ -8,11 +8,15 @@ class SendAddressPresenter(private val interactor: SendAddressModule.IInteractor
 
     // SendAddressModule.IAddressModule
 
-    override var address: String? = null
+    override var currentAddress: String? = null
         private set(value) {
             field = value
             moduleDelegate?.onUpdateAddress()
         }
+
+    override fun validAddress(): String {
+        return currentAddress ?: throw SendAddressModule.ValidationError.InvalidAddress()
+    }
 
     override fun didScanQrCode(address: String) {
         onAddressEnter(address)
@@ -59,7 +63,7 @@ class SendAddressPresenter(private val interactor: SendAddressModule.IInteractor
         view?.setAddress(address)
         view?.setAddressError(error)
 
-        this.address = if (error == null) address else null
+        this.currentAddress = if (error == null) address else null
     }
 
     private fun updatePasteButtonState() {

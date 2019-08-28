@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.confirmation
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.bankwallet.modules.send.SendModule
 
 class SendConfirmationViewModel: ViewModel(), SendConfirmationModule.IView {
 
@@ -16,7 +17,7 @@ class SendConfirmationViewModel: ViewModel(), SendConfirmationModule.IView {
     val sendButtonState= SingleLiveEvent<SendConfirmationModule.SendButtonState>()
 
 
-    fun init(confirmationInfo: SendConfirmationInfo) {
+    fun init(confirmationInfo: List<SendModule.SendConfirmationViewItem>) {
         SendConfirmationModule.init(this, confirmationInfo)
         delegate.onViewDidLoad()
     }

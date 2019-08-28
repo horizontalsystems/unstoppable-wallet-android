@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.confirmation
 
+import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 
 object SendConfirmationModule {
@@ -31,9 +32,9 @@ object SendConfirmationModule {
         fun didCopyToClipboard()
     }
 
-    fun init(view: SendConfirmationViewModel, confirmationInfo: SendConfirmationInfo) {
+    fun init(view: SendConfirmationViewModel, confirmationViewItems: List<SendModule.SendConfirmationViewItem>) {
         val interactor = SendConfirmationInteractor(TextHelper)
-        val presenter = SendConfirmationPresenter(interactor, confirmationInfo)
+        val presenter = SendConfirmationPresenter(interactor, confirmationViewItems)
 
         view.delegate = presenter
         presenter.view = view

@@ -1,13 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.bitcoin
 
-import io.horizontalsystems.bankwallet.modules.send.SendConfirmationViewItemFactory
-import io.horizontalsystems.bankwallet.modules.send.SendModule
-import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
-import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
-import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
-import java.math.BigDecimal
-
-class SendBitcoinPresenter(private val interactor: SendModule.ISendBitcoinInteractor,
+/* class SendBitcoinPresenter(private val interactor: SendModule.ISendBitcoinInteractor,
                            private val router: SendModule.IRouter,
                            private val confirmationFactory: SendConfirmationViewItemFactory) : SendModule.IViewDelegate, SendModule.ISendBitcoinInteractorDelegate,
         SendAmountModule.IAmountModuleDelegate,
@@ -17,15 +10,15 @@ class SendBitcoinPresenter(private val interactor: SendModule.ISendBitcoinIntera
     var view: SendModule.IView? = null
 
     private fun syncSendButton() {
-        view?.setSendButtonEnabled(enabled = amountModule.validAmount != null && addressModule.address != null)
+        view?.setSendButtonEnabled(enabled = amountModule.validAmount != null && addressModule.currentAddress != null)
     }
 
     private fun syncAvailableBalance() {
-        interactor.fetchAvailableBalance(feeModule.feeRate, addressModule.address)
+        interactor.fetchAvailableBalance(feeModule.feeRate, addressModule.currentAddress)
     }
 
     private fun syncFee() {
-        interactor.fetchFee(amountModule.coinAmount.value, feeModule.feeRate, addressModule.address)
+        interactor.fetchFee(amountModule.coinAmount.value, feeModule.feeRate, addressModule.currentAddress)
     }
 
     // SendModule.IViewDelegate
@@ -41,7 +34,7 @@ class SendBitcoinPresenter(private val interactor: SendModule.ISendBitcoinIntera
                 SendModule.Input.Amount,
                 SendModule.Input.Address,
                 SendModule.Input.Fee(true),
-                SendModule.Input.SendButton))
+                SendModule.Input.ProceedButton))
     }
 
     override fun onModulesDidLoad() {
@@ -52,9 +45,9 @@ class SendBitcoinPresenter(private val interactor: SendModule.ISendBitcoinIntera
         addressModule.didScanQrCode(address)
     }
 
-    override fun onSendClicked() {
+    override fun onProceedClicked() {
         val inputType = amountModule.inputType
-        val address = addressModule.address ?: return
+        val address = addressModule.currentAddress ?: return
         val coinValue = amountModule.coinAmount
         val currencyValue = amountModule.fiatAmount
         val feeCoinValue = feeModule.coinValue
@@ -77,7 +70,7 @@ class SendBitcoinPresenter(private val interactor: SendModule.ISendBitcoinIntera
 
     override fun onSendConfirmed(memo: String?) {
         val amount = amountModule.validAmount ?: return
-        val address = addressModule.address ?: return
+        val address = addressModule.currentAddress ?: return
         val feeRate = feeModule.feeRate
 
         interactor.send(amount, address, feeRate)
@@ -89,13 +82,13 @@ class SendBitcoinPresenter(private val interactor: SendModule.ISendBitcoinIntera
 
     // SendModule.ISendBitcoinInteractorDelegate
 
-    override fun didSend() {
-        router.closeWithSuccess()
-    }
-
-    override fun didFailToSend(error: Throwable) {
-        view?.showErrorInToast(error)
-    }
+//    override fun didSend() {
+//        router.closeWithSuccess()
+//    }
+//
+//    override fun didFailToSend(error: Throwable) {
+//        view?.showErrorInToast(error)
+//    }
 
     override fun didFetchAvailableBalance(availableBalance: BigDecimal) {
         amountModule.setAvailableBalance(availableBalance)
@@ -144,3 +137,4 @@ class SendBitcoinPresenter(private val interactor: SendModule.ISendBitcoinIntera
     }
 
 }
+*/

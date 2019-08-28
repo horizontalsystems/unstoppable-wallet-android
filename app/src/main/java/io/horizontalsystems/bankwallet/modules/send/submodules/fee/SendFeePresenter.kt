@@ -3,6 +3,9 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.fee
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
+import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CoinValueInfo
+import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CurrencyValueInfo
 import java.math.BigDecimal
 
 
@@ -18,6 +21,7 @@ class SendFeePresenter(
     var moduleDelegate: SendFeeModule.IFeeModuleDelegate? = null
 
     private var xRate: Rate? = null
+    private var inputType = SendModule.InputType.COIN
 
     private var fee: BigDecimal = BigDecimal.ZERO
     private var availableFeeBalance: BigDecimal? = null
@@ -69,11 +73,29 @@ class SendFeePresenter(
     override val feeRate
         get() = feeRateInfo.feeRate
 
-    override val coinValue: CoinValue
-        get() = CoinValue(coin.code, fee)
+    override val primaryAmountInfo: AmountInfo
+        get() {
+            return when (inputType) {
+                SendModule.InputType.COIN -> CoinValueInfo(CoinValue(coin.code, fee))
+                SendModule.InputType.CURRENCY -> {
+                    this.xRate?.let { xRate ->
+                        CurrencyValueInfo(CurrencyValue(baseCurrency, fee * xRate.value))
+                    } ?: throw Exception("Invalid state")
+                }
+            }
+        }
 
-    override val currencyValue: CurrencyValue?
-        get() = xRate?.let { CurrencyValue(baseCurrency, fee.multiply(it.value)) }
+    override val secondaryAmountInfo: AmountInfo?
+        get() {
+            return when (inputType.reversed()) {
+                SendModule.InputType.COIN -> CoinValueInfo(CoinValue(coin.code, fee))
+                SendModule.InputType.CURRENCY -> {
+                    this.xRate?.let { xRate ->
+                        CurrencyValueInfo(CurrencyValue(baseCurrency, fee * xRate.value))
+                    }
+                }
+            }
+        }
 
     override val duration: String?
         get() = helper.duration(feeRateInfo.duration)
@@ -89,7 +111,9 @@ class SendFeePresenter(
         syncError()
     }
 
-    override fun setInputType(inputType: SendModule.InputType) {}
+    override fun setInputType(inputType: SendModule.InputType) {
+        this.inputType = inputType
+    }
 
     // SendFeeModule.IViewDelegate
 

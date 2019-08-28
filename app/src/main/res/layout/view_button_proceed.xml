@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <Button
-        android:id="@+id/btnSend"
+        android:id="@+id/btnProceed"
         style="@style/ButtonYellow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

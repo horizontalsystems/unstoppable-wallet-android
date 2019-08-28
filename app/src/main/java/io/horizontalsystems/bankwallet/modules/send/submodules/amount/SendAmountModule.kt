@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
 import java.math.BigDecimal
 import kotlin.math.min
 
@@ -43,12 +44,17 @@ object SendAmountModule {
     }
 
     interface IAmountModule {
-        val validAmount: BigDecimal?
-
+        val currentAmount: BigDecimal
         val inputType: SendModule.InputType
         val coinAmount: CoinValue
         val fiatAmount: CurrencyValue?
 
+        @Throws
+        fun primaryAmountInfo(): AmountInfo
+        @Throws
+        fun secondaryAmountInfo(): AmountInfo?
+        @Throws
+        fun validAmount(): BigDecimal
         fun setAmount(amount: BigDecimal)
         fun setAvailableBalance(availableBalance: BigDecimal)
     }
@@ -56,6 +62,11 @@ object SendAmountModule {
     interface IAmountModuleDelegate {
         fun onChangeAmount()
         fun onChangeInputType(inputType: SendModule.InputType)
+    }
+
+    open class ValidationError : Exception() {
+        class EmptyValue(val field: String) : ValidationError()
+        class InsufficientBalance(val availableBalance: AmountInfo?) : ValidationError()
     }
 
     fun init(view: SendAmountViewModel, wallet: Wallet, moduleDelegate: IAmountModuleDelegate?): SendAmountPresenter {

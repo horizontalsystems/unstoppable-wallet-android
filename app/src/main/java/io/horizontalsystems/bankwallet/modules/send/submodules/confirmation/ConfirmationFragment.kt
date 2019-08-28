@@ -47,7 +47,7 @@ class ConfirmationFragment : Fragment() {
 
         confirmationViewModel = ViewModelProviders.of(this).get(SendConfirmationViewModel::class.java)
 
-        sendViewModel?.sendConfirmation?.observe(viewLifecycleOwner, Observer {
+        sendViewModel?.confirmationViewItems?.observe(viewLifecycleOwner, Observer {
             confirmationViewModel?.init(it)
         })
 

@@ -1,44 +1,38 @@
 package io.horizontalsystems.bankwallet.modules.send
 
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.CoinException
+import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.send.binance.SendBinanceInteractor
-import io.horizontalsystems.bankwallet.modules.send.binance.SendBinancePresenter
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinInteractor
-import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinPresenter
-import io.horizontalsystems.bankwallet.modules.send.dash.SendDashInteractor
-import io.horizontalsystems.bankwallet.modules.send.dash.SendDashPresenter
-import io.horizontalsystems.bankwallet.modules.send.eos.SendEosInteractor
-import io.horizontalsystems.bankwallet.modules.send.eos.SendEosPresenter
-import io.horizontalsystems.bankwallet.modules.send.ethereum.SendEthereumInteractor
-import io.horizontalsystems.bankwallet.modules.send.ethereum.SendEthereumPresenter
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
-import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.SendConfirmationInfo
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
+import io.reactivex.Single
 import java.math.BigDecimal
 
 object SendModule {
 
     interface IView {
+        var delegate: IViewDelegate
+
         fun loadInputItems(inputs: List<Input>)
         fun setSendButtonEnabled(enabled: Boolean)
-        fun showConfirmation(viewItem: SendConfirmationInfo)
+        fun showConfirmation(confirmationViewItems: List<SendConfirmationViewItem>)
         fun showErrorInToast(error: Throwable)
         fun showErrorInDialog(coinException: CoinException)
     }
 
     interface IViewDelegate {
-        var amountModule: SendAmountModule.IAmountModule
-        var addressModule: SendAddressModule.IAddressModule
-        var feeModule: SendFeeModule.IFeeModule
+        var view: IView
+        val handler: ISendHandler
 
         fun onViewDidLoad()
         fun onModulesDidLoad()
         fun onAddressScan(address: String)
-        fun onSendClicked()
+        fun onProceedClicked()
         fun onSendConfirmed(memo: String?)
         fun onClear()
     }
@@ -47,19 +41,17 @@ object SendModule {
         fun fetchAvailableBalance(feeRate: Long, address: String?)
         fun fetchFee(amount: BigDecimal, feeRate: Long, address: String?)
         fun validate(address: String)
-        fun send(amount: BigDecimal, address: String, feeRate: Long)
+        fun send(amount: BigDecimal, address: String, feeRate: Long): Single<Unit>
         fun clear()
     }
 
     interface ISendBitcoinInteractorDelegate {
         fun didFetchAvailableBalance(availableBalance: BigDecimal)
         fun didFetchFee(fee: BigDecimal)
-        fun didSend()
-        fun didFailToSend(error: Throwable)
     }
 
     interface ISendDashInteractor {
-        fun fetchAvailableBalance( address: String?)
+        fun fetchAvailableBalance(address: String?)
         fun fetchFee(amount: BigDecimal, address: String?)
         fun validate(address: String)
         fun send(amount: BigDecimal, address: String)
@@ -122,24 +114,68 @@ object SendModule {
         fun closeWithSuccess()
     }
 
-    fun init(view: SendViewModel, wallet: Wallet): IViewDelegate {
-        return when (val adapter = App.adapterManager.getAdapterForWallet(wallet)) {
+    interface ISendInteractor {
+        var delegate: ISendInteractorDelegate
+
+        fun send(sendSingle: Single<Unit>)
+        fun clear()
+    }
+
+    interface ISendInteractorDelegate {
+        fun didSend()
+        fun didFailToSend(error: Throwable)
+    }
+
+    interface ISendHandler {
+        var amountModule: SendAmountModule.IAmountModule
+        var addressModule: SendAddressModule.IAddressModule
+        var feeModule: SendFeeModule.IFeeModule
+
+        val inputItems: List<Input>
+        var delegate: ISendHandlerDelegate
+
+        fun onModulesDidLoad()
+        fun onAddressScan(address: String)
+        fun confirmationViewItems(): List<SendConfirmationViewItem>
+        fun sendSingle(): Single<Unit>
+    }
+
+    interface ISendHandlerDelegate {
+        fun onChange(isValid: Boolean)
+    }
+
+    abstract class SendConfirmationViewItem
+
+    data class SendConfirmationAmountViewItem(val primaryInfo: AmountInfo,
+                                              val secondaryInfo: AmountInfo?,
+                                              val receiver: String) : SendConfirmationViewItem()
+
+    data class SendConfirmationFeeViewItem(val primaryInfo: AmountInfo,
+                                           val secondaryInfo: AmountInfo?) : SendConfirmationViewItem()
+
+    data class SendConfirmationTotalViewItem(val primaryInfo: AmountInfo,
+                                             val secondaryInfo: AmountInfo?) : SendConfirmationViewItem()
+
+    data class SendConfirmationMemoViewItem(val memo: String) : SendConfirmationViewItem()
+
+    data class SendConfirmationDurationViewItem(val duration: Long?) : SendConfirmationViewItem()
+
+
+    fun init(viewModel: SendViewModel, wallet: Wallet): IViewDelegate {
+        val handler: ISendHandler = when (val adapter = App.adapterManager.getAdapterForWallet(wallet)) {
             is ISendBitcoinAdapter -> {
                 val interactor = SendBitcoinInteractor(adapter)
-                val presenter = SendBitcoinPresenter(interactor, view, SendConfirmationViewItemFactory())
+                val handler = SendBitcoinHandler(interactor, viewModel)
 
-                presenter.view = view
-                interactor.delegate = presenter
+                interactor.delegate = handler
 
-                view.amountModuleDelegate = presenter
-                view.addressModuleDelegate = presenter
-                view.feeModuleDelegate = presenter
+                viewModel.amountModuleDelegate = handler
+                viewModel.addressModuleDelegate = handler
+                viewModel.feeModuleDelegate = handler
 
-                view.delegate = presenter
-
-                presenter
+                handler
             }
-            is ISendDashAdapter -> {
+            /*is ISendDashAdapter -> {
                 val interactor = SendDashInteractor(adapter)
                 val presenter = SendDashPresenter(interactor, view, SendConfirmationViewItemFactory())
 
@@ -195,22 +231,39 @@ object SendModule {
                 view.delegate = presenter
 
                 presenter
-            }
+            }*/
             else -> {
                 throw Exception("No adapter found!")
             }
         }
+        val view: IView = viewModel
+        val router: IRouter = viewModel
+        val interactor: ISendInteractor = SendInteractor()
+
+        val presenter = SendPresenter(interactor, router, handler)
+
+        presenter.view = view
+
+        view.delegate = presenter
+        handler.delegate = presenter
+        interactor.delegate = presenter
+
+        return presenter
     }
 
     enum class InputType {
-        COIN, CURRENCY
+        COIN, CURRENCY;
+
+        fun reversed(): InputType {
+            return if (this == COIN) CURRENCY else COIN
+        }
     }
 
     sealed class Input {
         object Amount : Input()
         object Address : Input()
         class Fee(val isAdjustable: Boolean) : Input()
-        object SendButton : Input()
+        object ProceedButton : Input()
     }
 
     sealed class AmountInfo {

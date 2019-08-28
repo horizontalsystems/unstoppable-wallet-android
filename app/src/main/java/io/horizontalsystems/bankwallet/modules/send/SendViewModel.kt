@@ -7,12 +7,11 @@ import io.horizontalsystems.bankwallet.core.CoinException
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
-import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.SendConfirmationInfo
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
 
 class SendViewModel : ViewModel(), SendModule.IView, SendModule.IRouter {
 
-    lateinit var delegate: SendModule.IViewDelegate
+    override lateinit var delegate: SendModule.IViewDelegate
 
     var amountModuleDelegate: SendAmountModule.IAmountModuleDelegate? = null
     var addressModuleDelegate: SendAddressModule.IAddressModuleDelegate? = null
@@ -21,7 +20,7 @@ class SendViewModel : ViewModel(), SendModule.IView, SendModule.IRouter {
     val closeWithSuccess = SingleLiveEvent<Unit>()
     val error = MutableLiveData<Throwable>()
     val errorInDialog = SingleLiveEvent<CoinException>()
-    val sendConfirmation = MutableLiveData<SendConfirmationInfo>()
+    val confirmationViewItems = MutableLiveData<List<SendModule.SendConfirmationViewItem>>()
     val showSendConfirmation = SingleLiveEvent<Unit>()
     val sendButtonEnabled = MutableLiveData<Boolean>()
     val inputItems = SingleLiveEvent<List<SendModule.Input>>()
@@ -48,8 +47,8 @@ class SendViewModel : ViewModel(), SendModule.IView, SendModule.IRouter {
         errorInDialog.value = coinException
     }
 
-    override fun showConfirmation(viewItem: SendConfirmationInfo) {
-        sendConfirmation.value = viewItem
+    override fun showConfirmation(confirmationViewItems: List<SendModule.SendConfirmationViewItem>) {
+        this.confirmationViewItems.value = confirmationViewItems
         showSendConfirmation.call()
     }
 
