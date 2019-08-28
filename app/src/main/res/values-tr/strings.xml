@@ -217,7 +217,7 @@
 \n\nDöviz kurları gibi bazı 	jenerik resmi olmayan uygulama verileri merkezi olmayan IPFS sisteminde depolanır. </string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Paylaş</string>
-    <string name="SettingsShare_Text">Unstoppable Wallet - a crypto wallet I recommend</string>
+    <string name="SettingsShare_Text">Unstoppable Wallet - kullanmanız gereken kripto para cüzdanı</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android anahtar deposu hatası</string>
     <string name="Alert_KeysInvalidatedDescription">Android cihazınızın kilidi değiştirildiğinden cüzdan bilginizi tutan şifreli dosya artık geçersiz</string>
@@ -228,9 +228,9 @@
     <string name="Unlock_Page_EnterYourPin">Şifre</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Desteklenmeyen para birimi</string>
-    <string name="Eos_Backend_Error_SelfTransfer">Can\'t transfer token to own account</string>
-    <string name="Eos_Backend_Error_AccountNotExist">Target account does not exist</string>
-    <string name="Eos_Backend_Error_InsufficientRam">Your EOS account doesn\'t have enough RAM to send this token. You need to increase RAM stake to proceed.</string>
+    <string name="Eos_Backend_Error_SelfTransfer">Bu kripto para kendi hesabınaza aktarılamıyor</string>
+    <string name="Eos_Backend_Error_AccountNotExist">Bu hesap mevcut değil</string>
+    <string name="Eos_Backend_Error_InsufficientRam">EOS hesabınızda bu kripto parayı göndermek için yeterli RAM bulunmuyor. Devam etmek için EOS RAM hissenizi arttırmak gerekiyor.</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Kilidi Aç</string>
     <string name="Hud_Text_Success">Başarılı</string>
