@@ -1,13 +1,14 @@
-package io.horizontalsystems.bankwallet.modules.send
+package io.horizontalsystems.bankwallet.modules.send.eos
 
+import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
 import io.reactivex.Single
 import java.math.BigDecimal
 
-class SendBinanceHandler(private val interactor: SendModule.ISendBinanceInteractor,
-                         private val router: SendModule.IRouter) : SendModule.ISendHandler,
+class SendEosHandler(private val interactor: SendModule.ISendEosInteractor,
+                     private val router: SendModule.IRouter) : SendModule.ISendHandler,
         SendAmountModule.IAmountModuleDelegate,
         SendAddressModule.IAddressModuleDelegate {
 
@@ -23,6 +24,10 @@ class SendBinanceHandler(private val interactor: SendModule.ISendBinanceInteract
         }
     }
 
+    private fun syncAvailableBalance() {
+        amountModule.setAvailableBalance(interactor.availableBalance)
+    }
+
     // SendModule.ISendHandler
 
     override lateinit var amountModule: SendAmountModule.IAmountModule
@@ -34,7 +39,6 @@ class SendBinanceHandler(private val interactor: SendModule.ISendBinanceInteract
     override val inputItems: List<SendModule.Input> = listOf(
             SendModule.Input.Amount,
             SendModule.Input.Address,
-            SendModule.Input.Fee(false),
             SendModule.Input.ProceedButton)
 
     override lateinit var delegate: SendModule.ISendHandlerDelegate
@@ -48,10 +52,7 @@ class SendBinanceHandler(private val interactor: SendModule.ISendBinanceInteract
     }
 
     override fun onModulesDidLoad() {
-        amountModule.setAvailableBalance(interactor.availableBalance)
-
-        feeModule.setFee(interactor.fee)
-        feeModule.setAvailableFeeBalance(interactor.availableBinanceBalance)
+        syncAvailableBalance()
     }
 
     override fun onAddressScan(address: String) {
@@ -65,7 +66,7 @@ class SendBinanceHandler(private val interactor: SendModule.ISendBinanceInteract
     }
 
     override fun onChangeInputType(inputType: SendModule.InputType) {
-        feeModule.setInputType(inputType)
+
     }
 
     // SendAddressModule.IAddressModuleDelegate
@@ -79,7 +80,7 @@ class SendBinanceHandler(private val interactor: SendModule.ISendBinanceInteract
     }
 
     override fun onUpdateAmount(amount: BigDecimal) {
-        amountModule.setAmount(amount)
+        amountModule.setAvailableBalance(amount)
     }
 
     override fun scanQrCode() {
