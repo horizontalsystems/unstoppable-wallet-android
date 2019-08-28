@@ -2,8 +2,12 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.fee
 
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.FeeRateInfo
+import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
 import java.math.BigDecimal
 
 
@@ -40,8 +44,8 @@ object SendFeeModule {
     interface IFeeModule {
         val isValid: Boolean
         val feeRate: Long
-        val coinValue: CoinValue
-        val currencyValue: CurrencyValue?
+        val primaryAmountInfo: AmountInfo
+        val secondaryAmountInfo: AmountInfo?
         val duration: String?
 
         fun setFee(fee: BigDecimal)

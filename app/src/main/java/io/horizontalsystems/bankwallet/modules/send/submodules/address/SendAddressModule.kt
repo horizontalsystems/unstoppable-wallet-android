@@ -30,8 +30,10 @@ object SendAddressModule {
     interface IInteractorDelegate
 
     interface IAddressModule {
-        val address: String?
+        val currentAddress: String?
 
+        @Throws
+        fun validAddress(): String
         fun didScanQrCode(address: String)
     }
 
@@ -42,6 +44,10 @@ object SendAddressModule {
         fun onUpdateAmount(amount: BigDecimal)
 
         fun scanQrCode()
+    }
+
+    open class ValidationError : Exception() {
+        class InvalidAddress : ValidationError()
     }
 
     fun init(view: SendAddressViewModel, coin: Coin, moduleDelegate: IAddressModuleDelegate?): SendAddressPresenter {

@@ -16,7 +16,7 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmount
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.ConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeView
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeViewModel
-import io.horizontalsystems.bankwallet.modules.send.submodules.sendbutton.SendButtonView
+import io.horizontalsystems.bankwallet.modules.send.submodules.sendbutton.ProceedButtonView
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
@@ -27,7 +27,7 @@ class SendActivity : BaseActivity() {
     private lateinit var mainPresenter: SendModule.IViewDelegate
     private lateinit var mainViewModel: SendViewModel
 
-    private var sendButtonView: SendButtonView? = null
+    private var proceedButtonView: ProceedButtonView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,7 +71,7 @@ class SendActivity : BaseActivity() {
         })
 
         mainViewModel.sendButtonEnabled.observe(this, Observer { enabled ->
-            sendButtonView?.updateState(enabled)
+            proceedButtonView?.updateState(enabled)
         })
 
         mainViewModel.scanQrCode.observe(this, Observer {
@@ -96,19 +96,18 @@ class SendActivity : BaseActivity() {
                     val amountViewModel = ViewModelProviders.of(this).get(SendAmountViewModel::class.java)
                     val amountPresenter = amountViewModel.init(wallet, mainViewModel.amountModuleDelegate)
 
-                    mainPresenter.amountModule = amountPresenter
+                    mainPresenter.handler.amountModule = amountPresenter
 
                     val amountView = SendAmountView(context = this, lifecycleOwner = this, sendAmountViewModel = amountViewModel)
                     sendLinearLayout.addView(amountView)
                     amountView.requestFocus()
-
                 }
                 SendModule.Input.Address -> {
                     //add address view
                     val addressViewModel = ViewModelProviders.of(this).get(SendAddressViewModel::class.java)
                     val addressPresenter = addressViewModel.init(wallet.coin, mainViewModel.addressModuleDelegate)
 
-                    mainPresenter.addressModule = addressPresenter
+                    mainPresenter.handler.addressModule = addressPresenter
 
                     val sendAddressView = SendAddressView(context = this, lifecycleOwner = this, sendAddressViewModel = addressViewModel)
                     sendLinearLayout.addView(sendAddressView)
@@ -118,16 +117,16 @@ class SendActivity : BaseActivity() {
                     val feeViewModel = ViewModelProviders.of(this).get(SendFeeViewModel::class.java)
                     val feePresenter = feeViewModel.init(wallet.coin, mainViewModel.feeModuleDelegate)
 
-                    mainPresenter.feeModule = feePresenter
+                    mainPresenter.handler.feeModule = feePresenter
 
                     val sendFeeView = SendFeeView(context = this, lifecycleOwner = this, sendFeeViewModel = feeViewModel, feeIsAdjustable = input.isAdjustable, fragmentManager = supportFragmentManager)
                     sendLinearLayout.addView(sendFeeView)
                 }
-                SendModule.Input.SendButton -> {
+                SendModule.Input.ProceedButton -> {
                     //add send button
-                    sendButtonView = SendButtonView(this)
-                    sendButtonView?.bind { mainPresenter.onSendClicked() }
-                    sendLinearLayout.addView(sendButtonView)
+                    proceedButtonView = ProceedButtonView(this)
+                    proceedButtonView?.bind { mainPresenter.onProceedClicked() }
+                    sendLinearLayout.addView(proceedButtonView)
                 }
             }
         }

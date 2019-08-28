@@ -1,12 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.dash
 
-import io.horizontalsystems.bankwallet.modules.send.SendConfirmationViewItemFactory
-import io.horizontalsystems.bankwallet.modules.send.SendModule
-import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
-import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
-import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
-import java.math.BigDecimal
-
+/*
 class SendDashPresenter(private val interactor: SendModule.ISendDashInteractor,
                         private val router: SendModule.IRouter,
                         private val confirmationFactory: SendConfirmationViewItemFactory) : SendModule.IViewDelegate, SendModule.ISendDashInteractorDelegate,
@@ -16,15 +10,15 @@ class SendDashPresenter(private val interactor: SendModule.ISendDashInteractor,
     var view: SendModule.IView? = null
 
     private fun syncSendButton() {
-        view?.setSendButtonEnabled(enabled = amountModule.validAmount != null && addressModule.address != null)
+        view?.setSendButtonEnabled(enabled = amountModule.validAmount != null && addressModule.currentAddress != null)
     }
 
     private fun syncAvailableBalance() {
-        interactor.fetchAvailableBalance(addressModule.address)
+        interactor.fetchAvailableBalance(addressModule.currentAddress)
     }
 
     private fun syncFee() {
-        interactor.fetchFee(amountModule.coinAmount.value, addressModule.address)
+        interactor.fetchFee(amountModule.coinAmount.value, addressModule.currentAddress)
     }
 
     // SendModule.IViewDelegate
@@ -40,7 +34,7 @@ class SendDashPresenter(private val interactor: SendModule.ISendDashInteractor,
                 SendModule.Input.Amount,
                 SendModule.Input.Address,
                 SendModule.Input.Fee(false),
-                SendModule.Input.SendButton))
+                SendModule.Input.ProceedButton))
     }
 
     override fun onModulesDidLoad() {
@@ -51,9 +45,9 @@ class SendDashPresenter(private val interactor: SendModule.ISendDashInteractor,
         addressModule.didScanQrCode(address)
     }
 
-    override fun onSendClicked() {
+    override fun onProceedClicked() {
         val inputType = amountModule.inputType
-        val address = addressModule.address ?: return
+        val address = addressModule.currentAddress ?: return
         val coinValue = amountModule.coinAmount
         val currencyValue = amountModule.fiatAmount
         val feeCoinValue = feeModule.coinValue
@@ -76,7 +70,7 @@ class SendDashPresenter(private val interactor: SendModule.ISendDashInteractor,
 
     override fun onSendConfirmed(memo: String?) {
         val amount = amountModule.validAmount ?: return
-        val address = addressModule.address ?: return
+        val address = addressModule.currentAddress ?: return
 
         interactor.send(amount, address)
     }
@@ -135,3 +129,4 @@ class SendDashPresenter(private val interactor: SendModule.ISendDashInteractor,
     }
 
 }
+*/

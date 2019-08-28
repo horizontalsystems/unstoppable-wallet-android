@@ -63,17 +63,4 @@ class SendAmountPresenterHelper(
 
     fun decimal(inputType: SendModule.InputType) = if (inputType == SendModule.InputType.COIN) coinDecimal else currencyDecimal
 
-    fun getBalanceForHintError(inputType: SendModule.InputType, availableCoinBalance: BigDecimal, rate: Rate?): String? {
-        return when (inputType) {
-            SendModule.InputType.COIN -> {
-                numberFormatter.format(CoinValue(coinCode, availableCoinBalance))
-            }
-            SendModule.InputType.CURRENCY -> {
-                rate?.let {
-                    val value = availableCoinBalance.times(it.value)
-                    numberFormatter.format(CurrencyValue(baseCurrency, value))
-                }
-            }
-        }
-    }
 }

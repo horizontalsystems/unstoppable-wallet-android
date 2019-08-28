@@ -4,12 +4,12 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
-import kotlinx.android.synthetic.main.view_button_send.view.*
+import kotlinx.android.synthetic.main.view_button_proceed.view.*
 
-class SendButtonView : ConstraintLayout {
+class ProceedButtonView : ConstraintLayout {
 
     init {
-        inflate(context, R.layout.view_button_send, this)
+        inflate(context, R.layout.view_button_proceed, this)
     }
 
     constructor(context: Context) : super(context)
@@ -18,13 +18,13 @@ class SendButtonView : ConstraintLayout {
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    fun bind(onSendClick: (() -> (Unit))? = null) {
-        btnSend.isEnabled = false
-        btnSend.setOnClickListener { onSendClick?.invoke() }
+    fun bind(onClick: (() -> (Unit))? = null) {
+        btnProceed.isEnabled = false
+        btnProceed.setOnClickListener { onClick?.invoke() }
     }
 
     fun updateState(enabled: Boolean) {
-        btnSend.isEnabled = enabled
+        btnProceed.isEnabled = enabled
     }
 
 }

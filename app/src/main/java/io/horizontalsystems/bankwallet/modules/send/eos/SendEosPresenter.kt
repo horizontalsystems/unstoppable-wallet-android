@@ -1,13 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.eos
 
-import io.horizontalsystems.bankwallet.core.CoinException
-import io.horizontalsystems.bankwallet.modules.send.SendConfirmationViewItemFactory
-import io.horizontalsystems.bankwallet.modules.send.SendModule
-import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
-import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
-import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
-import java.math.BigDecimal
-
+/*
 class SendEosPresenter(private val interactor: SendModule.ISendEosInteractor,
                        private val router: SendModule.IRouter,
                        private val confirmationFactory: SendConfirmationViewItemFactory) : SendModule.IViewDelegate, SendModule.ISendEosInteractorDelegate,
@@ -17,7 +10,7 @@ class SendEosPresenter(private val interactor: SendModule.ISendEosInteractor,
     var view: SendModule.IView? = null
 
     private fun syncSendButton() {
-        view?.setSendButtonEnabled(enabled = amountModule.validAmount != null && addressModule.address != null)
+        view?.setSendButtonEnabled(enabled = amountModule.validAmount != null && addressModule.currentAddress != null)
     }
 
     private fun syncAvailableBalance() {
@@ -36,7 +29,7 @@ class SendEosPresenter(private val interactor: SendModule.ISendEosInteractor,
         view?.loadInputItems(listOf(
                 SendModule.Input.Amount,
                 SendModule.Input.Address,
-                SendModule.Input.SendButton))
+                SendModule.Input.ProceedButton))
     }
 
     override fun onModulesDidLoad() {
@@ -47,9 +40,9 @@ class SendEosPresenter(private val interactor: SendModule.ISendEosInteractor,
         addressModule.didScanQrCode(address)
     }
 
-    override fun onSendClicked() {
+    override fun onProceedClicked() {
         val inputType = amountModule.inputType
-        val address = addressModule.address ?: return
+        val address = addressModule.currentAddress ?: return
         val coinValue = amountModule.coinAmount
         val currencyValue = amountModule.fiatAmount
 
@@ -68,7 +61,7 @@ class SendEosPresenter(private val interactor: SendModule.ISendEosInteractor,
 
     override fun onSendConfirmed(memo: String?) {
         val amount = amountModule.validAmount ?: return
-        val address = addressModule.address ?: return
+        val address = addressModule.currentAddress ?: return
 
         interactor.send(amount, address, memo)
     }
@@ -120,3 +113,4 @@ class SendEosPresenter(private val interactor: SendModule.ISendEosInteractor,
     }
 
 }
+*/
