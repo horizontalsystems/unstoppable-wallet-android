@@ -22,7 +22,7 @@
     <!--Restore-->
     <string name="Restore_Title">Restore</string>
     <string name="Restore_Subtitle">Enter Key</string>
-    <string name="Restore_ValidationFailed">Incorrect Secret Key</string>
+    <string name="Restore_ValidationFailed">Incorrect Key</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>
     <string name="Restore_EosAccountName">Account Name</string>
     <string name="Restore_EosActivePrivateKey">Active Private Key</string>
@@ -217,7 +217,7 @@
 \n\nSome generic non-private app data like currency exchange rates are stored on decentralized storage(IPFS).</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Share</string>
-    <string name="SettingsShare_Text">Unstoppable Wallet - Nice App!</string>
+    <string name="SettingsShare_Text">Unstoppable Wallet - a crypto wallet I recommend</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android Keystore Error</string>
     <string name="Alert_KeysInvalidatedDescription">The encrypted data holding your wallet was recently invalidated because your Android lock screen was changed</string>
@@ -288,7 +288,7 @@
     <string name="ManageKeys_Delete_Alert">You need to backup %s key before you may delete it from this phone.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">Add %s</string>
-    <string name="AddCoin_Description">You don\'t have key for %1s which requires a %2s key. The wallet can generate the key for you. Use the create button below to generate a new key. \n\nYou may also use the existing %3s key for the %4s if you have one..</string>
+    <string name="AddCoin_Description">You don\'t have key for %1s. The wallet can generate the key for you. Use the create button below to generate a new key. \n\nYou may also use the existing %3s key for the %4s if you have one.</string>
     <string name="AddCoin_CreateKey">Create</string>
     <string name="AddCoin_RestoreKey">Restore</string>
     <!-- Account Types -->
