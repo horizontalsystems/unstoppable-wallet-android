@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.modules.send.binance.SendBinanceInteracto
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinInteractor
 import io.horizontalsystems.bankwallet.modules.send.dash.SendDashInteractor
 import io.horizontalsystems.bankwallet.modules.send.eos.SendEosInteractor
+import io.horizontalsystems.bankwallet.modules.send.ethereum.SendEthereumInteractor
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
@@ -70,13 +71,7 @@ object SendModule {
         fun availableBalance(gasPrice: Long): BigDecimal
         fun validate(address: String)
         fun fee(gasPrice: Long): BigDecimal
-        fun send(amount: BigDecimal, address: String, gasPrice: Long)
-        fun clear()
-    }
-
-    interface ISendEthereumInteractorDelegate {
-        fun didSend()
-        fun didFailToSend(error: Throwable)
+        fun send(amount: BigDecimal, address: String, gasPrice: Long): Single<Unit>
     }
 
     interface ISendBinanceInteractor {
@@ -172,6 +167,16 @@ object SendModule {
 
                 handler
             }
+            is ISendEthereumAdapter -> {
+                val interactor = SendEthereumInteractor(adapter)
+                val handler = SendEthereumHandler(interactor, viewModel)
+
+                viewModel.amountModuleDelegate = handler
+                viewModel.addressModuleDelegate = handler
+                viewModel.feeModuleDelegate = handler
+
+                handler
+            }
             is ISendBinanceAdapter -> {
                 val interactor = SendBinanceInteractor(adapter)
                 val handler = SendBinanceHandler(interactor, viewModel)
@@ -190,24 +195,6 @@ object SendModule {
 
                 handler
             }
-
-            /*
-            is ISendEthereumAdapter -> {
-                val interactor = SendEthereumInteractor(adapter)
-                val presenter = SendEthereumPresenter(interactor, view, SendConfirmationViewItemFactory())
-
-                presenter.view = view
-                interactor.delegate = presenter
-
-                view.amountModuleDelegate = presenter
-                view.addressModuleDelegate = presenter
-                view.feeModuleDelegate = presenter
-
-                view.delegate = presenter
-
-                presenter
-            }
-            */
             else -> {
                 throw Exception("No adapter found!")
             }
