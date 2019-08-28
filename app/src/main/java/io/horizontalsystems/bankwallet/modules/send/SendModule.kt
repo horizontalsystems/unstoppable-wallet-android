@@ -1,14 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.send
 
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.CoinException
-import io.horizontalsystems.bankwallet.core.ISendBinanceAdapter
-import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.send.binance.SendBinanceInteractor
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinInteractor
+import io.horizontalsystems.bankwallet.modules.send.dash.SendDashInteractor
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
@@ -56,15 +54,13 @@ object SendModule {
         fun fetchAvailableBalance(address: String?)
         fun fetchFee(amount: BigDecimal, address: String?)
         fun validate(address: String)
-        fun send(amount: BigDecimal, address: String)
+        fun send(amount: BigDecimal, address: String): Single<Unit>
         fun clear()
     }
 
     interface ISendDashInteractorDelegate {
         fun didFetchAvailableBalance(availableBalance: BigDecimal)
         fun didFetchFee(fee: BigDecimal)
-        fun didSend()
-        fun didFailToSend(error: Throwable)
     }
 
     interface ISendEthereumInteractor {
@@ -171,6 +167,17 @@ object SendModule {
 
                 handler
             }
+            is ISendDashAdapter -> {
+                val interactor = SendDashInteractor(adapter)
+                val handler = SendDashHandler(interactor, viewModel)
+
+                interactor.delegate = handler
+
+                viewModel.amountModuleDelegate = handler
+                viewModel.addressModuleDelegate = handler
+
+                handler
+            }
             is ISendBinanceAdapter -> {
                 val interactor = SendBinanceInteractor(adapter)
                 val handler = SendBinanceHandler(interactor, viewModel)
@@ -180,20 +187,7 @@ object SendModule {
 
                 handler
             }
-            /*is ISendDashAdapter -> {
-                val interactor = SendDashInteractor(adapter)
-                val presenter = SendDashPresenter(interactor, view, SendConfirmationViewItemFactory())
-
-                presenter.view = view
-                interactor.delegate = presenter
-
-                view.amountModuleDelegate = presenter
-                view.addressModuleDelegate = presenter
-
-                view.delegate = presenter
-
-                presenter
-            }
+            /*
             is ISendEthereumAdapter -> {
                 val interactor = SendEthereumInteractor(adapter)
                 val presenter = SendEthereumPresenter(interactor, view, SendConfirmationViewItemFactory())
@@ -204,20 +198,6 @@ object SendModule {
                 view.amountModuleDelegate = presenter
                 view.addressModuleDelegate = presenter
                 view.feeModuleDelegate = presenter
-
-                view.delegate = presenter
-
-                presenter
-            }
-            is ISendBinanceAdapter -> {
-                val interactor = SendBinanceInteractor(adapter)
-                val presenter = SendBinancePresenter(interactor, view, SendConfirmationViewItemFactory())
-
-                presenter.view = view
-                interactor.delegate = presenter
-
-                view.amountModuleDelegate = presenter
-                view.addressModuleDelegate = presenter
 
                 view.delegate = presenter
 
