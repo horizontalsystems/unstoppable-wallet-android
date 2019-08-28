@@ -68,7 +68,7 @@
             android:name=".modules.settings.AboutSettingsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.settings.ReportProblemActivity"
+            android:name=".modules.reportproblem.ReportProblemActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.pin.PinActivity"
