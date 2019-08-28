@@ -22,7 +22,7 @@
     <!--Restore-->
     <string name="Restore_Title">Restaurar</string>
     <string name="Restore_Subtitle">Introduzca la clave</string>
-    <string name="Restore_ValidationFailed">Clave secreta incorrecta</string>
+    <string name="Restore_ValidationFailed">Incorrect Key</string>
     <string name="Restore_RestoreFailed">Error al restaurar la cartera</string>
     <string name="Restore_EosAccountName">Account Name</string>
     <string name="Restore_EosActivePrivateKey">Active Private Key</string>
@@ -223,7 +223,7 @@
 \n\nAlgunos datos genéricos de carácter público de esta app se guardan en centros de almacenamiento descentralizado (IPFS).</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Compartir</string>
-    <string name="SettingsShare_Text">Monedero Unstoppable - ¡Buena aplicación!</string>
+    <string name="SettingsShare_Text">Unstoppable Wallet - a crypto wallet I recommend</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Error de almacenamiento de claves de Android</string>
     <string name="Alert_KeysInvalidatedDescription">Los datos encriptados de su monedero han sido recientemente  invalidados porque se cambió la pantalla de bloqueo de Android</string>
@@ -294,7 +294,7 @@
     <string name="ManageKeys_Delete_Alert">Necesita respaldar esta clave %s antes de que pueda eliminarla de este teléfono.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">Añadir %s</string>
-    <string name="AddCoin_Description">Usted no tiene la clave para %1s, el cual requiere una clave %2s. El monedero puede generar una clave para usted. Use el botón de Crear que se encuentra más abajo para generar una nueva clave.\n\nTambién puede usar la clave %3sexistente para el %4s si ya tiene una..</string>
+    <string name="AddCoin_Description">You don\'t have key for %1s. The wallet can generate the key for you. Use the create button below to generate a new key. \n\nYou may also use the existing %3s key for the %4s if you have one.</string>
     <string name="AddCoin_CreateKey">Crear</string>
     <string name="AddCoin_RestoreKey">Restaurar</string>
     <!-- Account Types -->
