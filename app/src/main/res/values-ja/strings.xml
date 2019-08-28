@@ -188,6 +188,7 @@
     <string name="Settings_ShareThisWallet">Tell Friends</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
+    <string name="Settings_Report">Report a Problem</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">指紋認証が無効</string>
     <string name="Settings_Error_NoFingerprintAddedYet">このデバイスの指紋を有効にしていません。指紋認証アクセスを設定するにはセキュリティ設定 &gt; にて設定してください。</string>
@@ -215,6 +216,10 @@
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Share</string>
     <string name="SettingsShare_Text">Unstoppable Wallet - a crypto wallet I recommend</string>
+    <!--Setting_Report-->
+    <string name="SettingsReport_Title">Report a Problem</string>
+    <string name="SettingsReport_Email">Mail</string>
+    <string name="SettingsReport_Telegram">Telegram</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">アンドロイドのキーストア エラー</string>
     <string name="Alert_KeysInvalidatedDescription">あなたの財布を保持している暗号化されたデータは、アンドロイド ロック画面が変更されたために無効になりました。</string>
