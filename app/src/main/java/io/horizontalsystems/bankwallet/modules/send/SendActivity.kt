@@ -16,6 +16,8 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmount
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.ConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeView
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeViewModel
+import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoView
+import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoViewModel
 import io.horizontalsystems.bankwallet.modules.send.submodules.sendbutton.ProceedButtonView
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
@@ -121,6 +123,16 @@ class SendActivity : BaseActivity() {
 
                     val sendFeeView = SendFeeView(context = this, lifecycleOwner = this, sendFeeViewModel = feeViewModel, feeIsAdjustable = input.isAdjustable, fragmentManager = supportFragmentManager)
                     sendLinearLayout.addView(sendFeeView)
+                }
+                is SendModule.Input.Memo -> {
+                    //add memo view
+                    val memoViewModel = ViewModelProviders.of(this).get(SendMemoViewModel::class.java)
+                    val memoPresenter = memoViewModel.init(input.maxLength)
+
+                    mainPresenter.handler.memoModule = memoPresenter
+
+                    val sendMemoView = SendMemoView(context = this, lifecycleOwner = this, sendMemoViewModel = memoViewModel)
+                    sendLinearLayout.addView(sendMemoView)
                 }
                 SendModule.Input.ProceedButton -> {
                     //add send button
