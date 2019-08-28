@@ -22,7 +22,7 @@
     <!--Restore-->
     <string name="Restore_Title">Restaurer</string>
     <string name="Restore_Subtitle">Entrez la clé</string>
-    <string name="Restore_ValidationFailed">Clé secrète incorrecte</string>
+    <string name="Restore_ValidationFailed">Incorrect Key</string>
     <string name="Restore_RestoreFailed">Échec de la restauration du porte-monnaie</string>
     <string name="Restore_EosAccountName">Account Name</string>
     <string name="Restore_EosActivePrivateKey">Active Private Key</string>
@@ -217,7 +217,7 @@
 \n\nCertaines données d\'applications génériques non privées, telles que les taux de change, sont stockées dans un stockage décentralisé (IPFS). </string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Partager</string>
-    <string name="SettingsShare_Text">Unstoppable Wallet - Bonne App!</string>
+    <string name="SettingsShare_Text">Unstoppable Wallet - a crypto wallet I recommend</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Erreur de Keystore Android</string>
     <string name="Alert_KeysInvalidatedDescription">Les données cryptées contenant votre porte-monnaie ont récemment été invalidées car votre écran de verrouillage Android a été modifié</string>
@@ -288,7 +288,7 @@
     <string name="ManageKeys_Delete_Alert">You need to backup %s key before you may delete it from this phone.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">Ajouter %s</string>
-    <string name="AddCoin_Description">You don\'t have key for %1s which requires a %2s key. The wallet can generate the key for you. Use the create button below to generate a new key. \n\nYou may also use the existing %3s key for the %4s if you have one..</string>
+    <string name="AddCoin_Description">You don\'t have key for %1s. The wallet can generate the key for you. Use the create button below to generate a new key. \n\nYou may also use the existing %3s key for the %4s if you have one.</string>
     <string name="AddCoin_CreateKey">Créer</string>
     <string name="AddCoin_RestoreKey">Restaurer</string>
     <!-- Account Types -->
