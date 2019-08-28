@@ -71,7 +71,7 @@ class SendAmountPresenter(
     override fun validAmount(): BigDecimal {
         val amount = this.amount ?: BigDecimal.ZERO
 
-        if (amount.toLong() <= 0L) {
+        if (amount <= BigDecimal.ZERO) {
             throw SendAmountModule.ValidationError.EmptyValue("amount")
         }
 

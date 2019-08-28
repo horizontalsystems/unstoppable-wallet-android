@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.send.binance.SendBinanceInteractor
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinInteractor
 import io.horizontalsystems.bankwallet.modules.send.dash.SendDashInteractor
+import io.horizontalsystems.bankwallet.modules.send.eos.SendEosInteractor
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
@@ -91,14 +92,7 @@ object SendModule {
         val availableBalance: BigDecimal
 
         fun validate(account: String)
-        fun send(amount: BigDecimal, account: String, memo: String?)
-        fun clear()
-    }
-
-    interface ISendEosInteractorDelegate {
-        fun didSend()
-        fun didFailToSend(error: Throwable)
-        fun didFailToSendWithEosBackendError(coinException: CoinException)
+        fun send(amount: BigDecimal, account: String, memo: String?): Single<Unit>
     }
 
     interface IRouter {
@@ -187,6 +181,16 @@ object SendModule {
 
                 handler
             }
+            is ISendEosAdapter -> {
+                val interactor = SendEosInteractor(adapter)
+                val handler = SendEosHandler(interactor, viewModel)
+
+                viewModel.amountModuleDelegate = handler
+                viewModel.addressModuleDelegate = handler
+
+                handler
+            }
+
             /*
             is ISendEthereumAdapter -> {
                 val interactor = SendEthereumInteractor(adapter)
@@ -203,20 +207,7 @@ object SendModule {
 
                 presenter
             }
-            is ISendEosAdapter -> {
-                val interactor = SendEosInteractor(adapter)
-                val presenter = SendEosPresenter(interactor, view, SendConfirmationViewItemFactory())
-
-                presenter.view = view
-                interactor.delegate = presenter
-
-                view.amountModuleDelegate = presenter
-                view.addressModuleDelegate = presenter
-
-                view.delegate = presenter
-
-                presenter
-            }*/
+            */
             else -> {
                 throw Exception("No adapter found!")
             }
