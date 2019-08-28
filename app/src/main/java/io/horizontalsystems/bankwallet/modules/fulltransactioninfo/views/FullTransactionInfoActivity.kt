@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.putParcelableExtra
 import io.horizontalsystems.bankwallet.entities.FullTransactionItem
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoViewModel
@@ -145,7 +144,7 @@ class FullTransactionInfoActivity : BaseActivity(), FullTransactionInfoErrorFrag
         fun start(context: Context, transactionHash: String, wallet: Wallet) {
             val intents = Intent(context, FullTransactionInfoActivity::class.java)
             intents.putExtra(transactionHashKey, transactionHash)
-            intents.putParcelableExtra(walletKey, wallet)
+            intents.putExtra(walletKey, wallet)
             context.startActivity(intents)
         }
     }
