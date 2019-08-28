@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.modules.send.ethereum.SendEthereumInterac
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
+import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoModule
 import io.reactivex.Single
 import java.math.BigDecimal
 
@@ -116,6 +117,7 @@ object SendModule {
         var amountModule: SendAmountModule.IAmountModule
         var addressModule: SendAddressModule.IAddressModule
         var feeModule: SendFeeModule.IFeeModule
+        var memoModule: SendMemoModule.IMemoModule
 
         val inputItems: List<Input>
         var delegate: ISendHandlerDelegate
@@ -231,6 +233,7 @@ object SendModule {
         object Amount : Input()
         object Address : Input()
         class Fee(val isAdjustable: Boolean) : Input()
+        class Memo(val maxLength: Int): Input()
         object ProceedButton : Input()
     }
 
