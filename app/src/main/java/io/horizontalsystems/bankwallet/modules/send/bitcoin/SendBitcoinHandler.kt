@@ -1,16 +1,18 @@
-package io.horizontalsystems.bankwallet.modules.send
+package io.horizontalsystems.bankwallet.modules.send.bitcoin
 
+import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
 import io.reactivex.Single
 import java.math.BigDecimal
 
-class SendDashHandler(private val interactor: SendModule.ISendDashInteractor,
+class SendBitcoinHandler(private val interactor: SendModule.ISendBitcoinInteractor,
                          private val router: SendModule.IRouter) : SendModule.ISendHandler,
-        SendModule.ISendDashInteractorDelegate,
+        SendModule.ISendBitcoinInteractorDelegate,
         SendAmountModule.IAmountModuleDelegate,
-        SendAddressModule.IAddressModuleDelegate {
+        SendAddressModule.IAddressModuleDelegate,
+        SendFeeModule.IFeeModuleDelegate {
 
     private fun syncValidation() {
         try {
@@ -25,11 +27,11 @@ class SendDashHandler(private val interactor: SendModule.ISendDashInteractor,
     }
 
     private fun syncAvailableBalance() {
-        interactor.fetchAvailableBalance(addressModule.currentAddress)
+        interactor.fetchAvailableBalance(feeModule.feeRate, addressModule.currentAddress)
     }
 
     private fun syncFee() {
-        interactor.fetchFee(amountModule.coinAmount.value, addressModule.currentAddress)
+        interactor.fetchFee(amountModule.coinAmount.value, feeModule.feeRate, addressModule.currentAddress)
     }
 
     // SendModule.ISendHandler
@@ -45,7 +47,7 @@ class SendDashHandler(private val interactor: SendModule.ISendDashInteractor,
     override val inputItems: List<SendModule.Input> = listOf(
             SendModule.Input.Amount,
             SendModule.Input.Address,
-            SendModule.Input.Fee(false),
+            SendModule.Input.Fee(true),
             SendModule.Input.ProceedButton)
 
     override fun onModulesDidLoad() {
@@ -61,7 +63,7 @@ class SendDashHandler(private val interactor: SendModule.ISendDashInteractor,
     }
 
     override fun sendSingle(): Single<Unit> {
-        return interactor.send(amountModule.validAmount(), addressModule.validAddress())
+        return interactor.send(amountModule.validAmount(), addressModule.validAddress(), feeModule.feeRate)
     }
 
     // SendModule.ISendBitcoinInteractorDelegate
@@ -103,6 +105,13 @@ class SendDashHandler(private val interactor: SendModule.ISendDashInteractor,
 
     override fun scanQrCode() {
         router.scanQrCode()
+    }
+
+    // SendFeeModule.IFeeModuleDelegate
+
+    override fun onUpdateFeeRate(feeRate: Long) {
+        syncAvailableBalance()
+        syncFee()
     }
 
 }

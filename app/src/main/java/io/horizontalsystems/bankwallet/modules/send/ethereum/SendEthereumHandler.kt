@@ -1,5 +1,6 @@
-package io.horizontalsystems.bankwallet.modules.send
+package io.horizontalsystems.bankwallet.modules.send.ethereum
 
+import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
