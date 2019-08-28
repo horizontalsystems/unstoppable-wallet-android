@@ -22,7 +22,7 @@
     <!--Restore-->
     <string name="Restore_Title">Geri Yükle</string>
     <string name="Restore_Subtitle">Anahtarı girin</string>
-    <string name="Restore_ValidationFailed">Incorrect Key</string>
+    <string name="Restore_ValidationFailed">Yanlış Anahtar</string>
     <string name="Restore_RestoreFailed">Cüzdan geri yüklenemedi</string>
     <string name="Restore_EosAccountName">Hesap Adı</string>
     <string name="Restore_EosActivePrivateKey">Gizli Anahtarı Etkinleştir</string>
@@ -84,14 +84,14 @@
     <string name="Send_Error_IncorrectAddress">Geçersiz adres</string>
     <string name="Send_Error_BalanceAmount">%s bakiye</string>
     <string name="Send_DialogTitle">İşlemi Onayla</string>
-    <string name="Send_DialogSpeed">Transaction Speed</string>
-    <string name="Send_TxSpeed_Low">Low</string>
-    <string name="Send_TxSpeed_Medium">Medium</string>
-    <string name="Send_TxSpeed_High">High</string>
-    <string name="Send_DialogDuration">Duration</string>
-    <string name="Send_DialogFee">Fee</string>
+    <string name="Send_DialogSpeed">İşlem hızı</string>
+    <string name="Send_TxSpeed_Low">Yavaş</string>
+    <string name="Send_TxSpeed_Medium">Ortadüzey</string>
+    <string name="Send_TxSpeed_High">Hızlı</string>
+    <string name="Send_DialogDuration">Süre</string>
+    <string name="Send_DialogFee">Masraf</string>
     <string name="Send_DialogTotal">Toplam:</string>
-    <string name="Send_DialogProceed">Proceed</string>
+    <string name="Send_DialogProceed">Devam</string>
     <string name="Send_Sending">Gönderiliyor</string>
     <string name="Send_ERC_Alert">%s (ERC20) için ișlem ücreti Ethereum hesabından ödenir. Asgari %s ETH gerekiyor</string>
     <string name="Send_Token_InsufficientFeeAlert">%s (%s) için ișlem ücreti %s hesabından ödenir. Asgari %s gerekiyor.</string>
@@ -99,8 +99,8 @@
     <string name="Deposit_Title">%s al</string>
     <string name="Deposit_Share">Paylaş</string>
     <string name="Deposit_Your_Address">Adresiniz</string>
-    <string name="Deposit_Your_Account">Your Account</string>
-    <string name="Receive_Alert_NotBackedUp_Title">Backup Required</string>
+    <string name="Deposit_Your_Account">Hesabınız</string>
+    <string name="Receive_Alert_NotBackedUp_Title">Yedekleme Gerekli</string>
     <string name="Receive_Alert_NotBackedUp_Button">Yedekle</string>
     <string name="Receive_Alert_NotBackedUp_Description">Para almadan önce bu cüzdanın anahtarlarını yedeklemeniz gerekir. </string>
     <!--Timestamp-->
@@ -109,18 +109,18 @@
     <string name="Timestamp_HoursAgo">%d saat önce</string>
     <string name="Timestamp_Today">Bugün</string>
     <string name="Timestamp_Yesterday">Dün</string>
-    <string name="Duration_instant">Instant</string>
+    <string name="Duration_instant">Anlık</string>
     <plurals name="Duration_seconds">
-        <item quantity="one">%d second</item>
-        <item quantity="other">%d seconds</item>
+        <item quantity="one">%d saniye</item>
+        <item quantity="other">%d saniye</item>
     </plurals>
     <plurals name="Duration_minutes">
-        <item quantity="one">%d minute</item>
-        <item quantity="other">%d minutes</item>
+        <item quantity="one">%d dakika</item>
+        <item quantity="other">%d dakika</item>
     </plurals>
     <plurals name="Duration_hours">
-        <item quantity="one">%d hour</item>
-        <item quantity="other">%d hours</item>
+        <item quantity="one">%d saat</item>
+        <item quantity="other">%d saat</item>
     </plurals>
     <!--Transactions-->
     <string name="Transactions_Title">Hesap işlemleri</string>
@@ -137,8 +137,8 @@
     <string name="TransactionInfo_ButtonVerify">Doğrula</string>
     <string name="TransactionInfo_Status_Pending">Devam ediyor</string>
     <string name="TransactionInfo_HistoricalRate">Geçmiş Kur</string>
-    <string name="TransactionInfo_Fee">Fee</string>
-    <string name="TransactionInfo_FootNote">The value of this transaction appears as 0 because it was sent to your own address</string>
+    <string name="TransactionInfo_Fee">Masraf</string>
+    <string name="TransactionInfo_FootNote">Kendi adresinize gönderildiğinden bu işlemin değeri 0 olarak görünür</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Hesap işlemi</string>
     <string name="FullInfo_Time">Tarih</string>
