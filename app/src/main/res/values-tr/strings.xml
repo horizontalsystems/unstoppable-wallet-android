@@ -22,7 +22,7 @@
     <!--Restore-->
     <string name="Restore_Title">Geri Yükle</string>
     <string name="Restore_Subtitle">Anahtarı girin</string>
-    <string name="Restore_ValidationFailed">Hatalı Gizli anahtar</string>
+    <string name="Restore_ValidationFailed">Incorrect Key</string>
     <string name="Restore_RestoreFailed">Cüzdan geri yüklenemedi</string>
     <string name="Restore_EosAccountName">Hesap Adı</string>
     <string name="Restore_EosActivePrivateKey">Gizli Anahtarı Etkinleştir</string>
@@ -97,7 +97,7 @@
     <string name="Send_Token_InsufficientFeeAlert">%s (%s) için ișlem ücreti %s hesabından ödenir. Asgari %s gerekiyor.</string>
     <!--Deposit-->
     <string name="Deposit_Title">%s al</string>
-    <string name="Deposit_Share">Share</string>
+    <string name="Deposit_Share">Paylaş</string>
     <string name="Deposit_Your_Address">Adresiniz</string>
     <string name="Deposit_Your_Account">Your Account</string>
     <string name="Receive_Alert_NotBackedUp_Title">Backup Required</string>
@@ -217,7 +217,7 @@
 \n\nDöviz kurları gibi bazı 	jenerik resmi olmayan uygulama verileri merkezi olmayan IPFS sisteminde depolanır. </string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Paylaş</string>
-    <string name="SettingsShare_Text">Durdurulamayan Cüzdan - Güzel Uygulama!</string>
+    <string name="SettingsShare_Text">Unstoppable Wallet - a crypto wallet I recommend</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android anahtar deposu hatası</string>
     <string name="Alert_KeysInvalidatedDescription">Android cihazınızın kilidi değiştirildiğinden cüzdan bilginizi tutan şifreli dosya artık geçersiz</string>
@@ -288,7 +288,7 @@
     <string name="ManageKeys_Delete_Alert">You need to backup %s key before you may delete it from this phone.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">%s ekle</string>
-    <string name="AddCoin_Description">You don\'t have key for %1s which requires a %2s key. The wallet can generate the key for you. Use the create button below to generate a new key. \n\nYou may also use the existing %3s key for the %4s if you have one..</string>
+    <string name="AddCoin_Description">You don\'t have key for %1s. The wallet can generate the key for you. Use the create button below to generate a new key. \n\nYou may also use the existing %3s key for the %4s if you have one.</string>
     <string name="AddCoin_CreateKey">Oluştur</string>
     <string name="AddCoin_RestoreKey">Geri Yükle</string>
     <!-- Account Types -->
