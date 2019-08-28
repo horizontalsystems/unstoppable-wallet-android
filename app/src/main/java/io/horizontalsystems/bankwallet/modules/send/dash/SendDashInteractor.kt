@@ -41,15 +41,8 @@ class SendDashInteractor(private val adapter: ISendDashAdapter) : SendModule.ISe
                 .let { disposables.add(it) }
     }
 
-    override fun send(amount: BigDecimal, address: String) {
-        adapter.send(amount, address)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    delegate?.didSend()
-                }, { error ->
-                    delegate?.didFailToSend(error)
-                }).let { disposables.add(it) }
+    override fun send(amount: BigDecimal, address: String): Single<Unit> {
+        return adapter.send(amount, address)
     }
 
     override fun clear() {
