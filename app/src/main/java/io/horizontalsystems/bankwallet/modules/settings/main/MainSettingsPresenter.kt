@@ -47,6 +47,10 @@ class MainSettingsPresenter(
         view?.setBackedUp(count == 0)
     }
 
+    override fun didTapReportProblem() {
+        router.showReportProblem()
+    }
+
     override fun didUpdateBaseCurrency(baseCurrency: String) {
         view?.setBaseCurrency(baseCurrency)
     }

@@ -5,6 +5,11 @@
         <attr name="setting_icon" format="integer" />
         <attr name="setting_arrow" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="MenuItemBig">
+        <attr name="title" />
+        <attr name="subtitle" format="string" />
+        <attr name="icon" format="reference" />
+    </declare-styleable>
     <declare-styleable name="TransactionInfoItemView">
         <attr name="title" format="string" />
         <attr name="value" format="string" />

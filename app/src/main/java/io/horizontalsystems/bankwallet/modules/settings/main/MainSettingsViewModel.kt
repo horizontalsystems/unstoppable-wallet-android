@@ -19,6 +19,7 @@ class MainSettingsViewModel : ViewModel(), MainSettingsModule.IMainSettingsView,
     val showBaseCurrencySettingsLiveEvent = SingleLiveEvent<Unit>()
     val showLanguageSettingsLiveEvent = SingleLiveEvent<Unit>()
     val showAboutLiveEvent = SingleLiveEvent<Unit>()
+    val showReportProblemLiveEvent = SingleLiveEvent<Unit>()
     val showAppLinkLiveEvent = SingleLiveEvent<Unit>()
     val reloadAppLiveEvent = SingleLiveEvent<Unit>()
 
@@ -76,6 +77,10 @@ class MainSettingsViewModel : ViewModel(), MainSettingsModule.IMainSettingsView,
 
     override fun reloadAppInterface() {
         reloadAppLiveEvent.call()
+    }
+
+    override fun showReportProblem() {
+        showReportProblemLiveEvent.call()
     }
 
     //  ViewModel

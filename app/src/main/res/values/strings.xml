@@ -237,6 +237,7 @@
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoSubtitle" translatable="false">decentralized app</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
+    <string name="Settings_Report">Report a Problem</string>
 
     <!--Settings-->
 
@@ -278,6 +279,10 @@
     <string name="SettingsShare_Title">Share</string>
     <string name="SettingsShare_Text">Unstoppable Wallet - a crypto wallet I recommend</string>
     <string name="SettingsShare_Link" translatable="false">https://unstoppable.money</string>
+
+    <!--Setting_Report-->
+
+    <string name="SettingsReport_Title">Report a Problem</string>
 
     <!--Alert-->
 
