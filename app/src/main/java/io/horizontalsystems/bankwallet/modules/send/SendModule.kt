@@ -2,10 +2,12 @@ package io.horizontalsystems.bankwallet.modules.send
 
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.CoinException
+import io.horizontalsystems.bankwallet.core.ISendBinanceAdapter
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.send.binance.SendBinanceInteractor
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinInteractor
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
@@ -86,13 +88,7 @@ object SendModule {
         val fee: BigDecimal
 
         fun validate(address: String)
-        fun send(amount: BigDecimal, address: String, memo: String?)
-        fun clear()
-    }
-
-    interface ISendBinanceInteractorDelegate {
-        fun didSend()
-        fun didFailToSend(error: Throwable)
+        fun send(amount: BigDecimal, address: String, memo: String?): Single<Unit>
     }
 
     interface ISendEosInteractor {
@@ -172,6 +168,15 @@ object SendModule {
                 viewModel.amountModuleDelegate = handler
                 viewModel.addressModuleDelegate = handler
                 viewModel.feeModuleDelegate = handler
+
+                handler
+            }
+            is ISendBinanceAdapter -> {
+                val interactor = SendBinanceInteractor(adapter)
+                val handler = SendBinanceHandler(interactor, viewModel)
+
+                viewModel.amountModuleDelegate = handler
+                viewModel.addressModuleDelegate = handler
 
                 handler
             }

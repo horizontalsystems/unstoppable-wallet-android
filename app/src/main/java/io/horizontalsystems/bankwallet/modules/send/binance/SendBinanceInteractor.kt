@@ -2,15 +2,10 @@ package io.horizontalsystems.bankwallet.modules.send.binance
 
 import io.horizontalsystems.bankwallet.core.ISendBinanceAdapter
 import io.horizontalsystems.bankwallet.modules.send.SendModule
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.Single
 import java.math.BigDecimal
 
 class SendBinanceInteractor(private val adapter: ISendBinanceAdapter) : SendModule.ISendBinanceInteractor {
-    private val disposables = CompositeDisposable()
-
-    var delegate: SendModule.ISendBinanceInteractorDelegate? = null
 
     override val availableBalance: BigDecimal
         get() = adapter.availableBalance
@@ -25,18 +20,8 @@ class SendBinanceInteractor(private val adapter: ISendBinanceAdapter) : SendModu
         adapter.validate(address)
     }
 
-    override fun send(amount: BigDecimal, address: String, memo: String?) {
-        adapter.send(amount, address, memo)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribe({
-                    delegate?.didSend()
-                }, { error ->
-                    delegate?.didFailToSend(error)
-                }).let { disposables.add(it) }
-    }
-
-    override fun clear() {
-        disposables.clear()
+    override fun send(amount: BigDecimal, address: String, memo: String?): Single<Unit> {
+        return adapter.send(amount, address, memo)
     }
 
 }
