@@ -191,6 +191,7 @@
     <string name="Settings_ShareThisWallet">Partager avec ami</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
+    <string name="Settings_Report">Report a Problem</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Empreinte digitale n\'est pas activé</string>
     <string name="Settings_Error_NoFingerprintAddedYet">Vous n’avez pas activé d’empreintes digitales sur ce appareil. Allez à paramètres &gt; sécurité à mettre en place un accès d’empreinte digitale.</string>
@@ -218,6 +219,10 @@
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Partager</string>
     <string name="SettingsShare_Text">Unstoppable Wallet - a crypto wallet I recommend</string>
+    <!--Setting_Report-->
+    <string name="SettingsReport_Title">Report a Problem</string>
+    <string name="SettingsReport_Email">Mail</string>
+    <string name="SettingsReport_Telegram">Telegram</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Erreur de Keystore Android</string>
     <string name="Alert_KeysInvalidatedDescription">Les données cryptées contenant votre porte-monnaie ont récemment été invalidées car votre écran de verrouillage Android a été modifié</string>
