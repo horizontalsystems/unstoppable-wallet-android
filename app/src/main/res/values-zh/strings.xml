@@ -188,6 +188,7 @@
     <string name="Settings_ShareThisWallet">分享给好友</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
+    <string name="Settings_Report">Report a Problem</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">指纹识别未启用</string>
     <string name="Settings_Error_NoFingerprintAddedYet">在此设备上指纹识别尚未启用。为了设置指纹识别访问，请转到\"设置“&gt;”安全“</string>
@@ -220,6 +221,10 @@
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">分享</string>
     <string name="SettingsShare_Text">Unstoppable Wallet - a crypto wallet I recommend</string>
+    <!--Setting_Report-->
+    <string name="SettingsReport_Title">Report a Problem</string>
+    <string name="SettingsReport_Email">Mail</string>
+    <string name="SettingsReport_Telegram">Telegram</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android密钥存储错误</string>
     <string name="Alert_KeysInvalidatedDescription">由于您的安卓锁屏被更改，保存您钱包的加密数据已失效。</string>
