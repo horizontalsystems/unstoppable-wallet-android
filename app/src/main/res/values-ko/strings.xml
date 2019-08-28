@@ -317,8 +317,12 @@
     <string name="Charts_TimeDuration_HalfYear">6개월</string>
     <string name="Charts_TimeDuration_Year">1년</string>
     <string name="Charts_Title">%s 률</string>
-    <string name="Charts_Rate_High">%s 높은</string>
-    <string name="Charts_Rate_Low">%s 낮은</string>
+    <string name="Charts_Rate_High">High</string>
+    <string name="Charts_Rate_Low">Low</string>
     <string name="Charts_MarketCap">시가총액</string>
+    <string name="Charts_MarketCap_Thousand">%s k</string>
+    <string name="Charts_MarketCap_Million">%s M</string>
+    <string name="Charts_MarketCap_Billion">%s B</string>
     <string name="Charts_Volume">음량</string>
+    <string name="Charts_Error_NotAvailable">Chart not available</string>
 </resources>
