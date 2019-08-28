@@ -22,7 +22,7 @@
     <!--Restore-->
     <string name="Restore_Title">복구</string>
     <string name="Restore_Subtitle">암호를 입력하세요</string>
-    <string name="Restore_ValidationFailed">잘못 된 비밀 키</string>
+    <string name="Restore_ValidationFailed">Incorrect Key</string>
     <string name="Restore_RestoreFailed">지갑 복구에 실패하였습니다.</string>
     <string name="Restore_EosAccountName">Account Name</string>
     <string name="Restore_EosActivePrivateKey">Active Private Key</string>
@@ -220,7 +220,7 @@
 \n\n통화 환율과 같은 총괄적이고 사적이지 않은 데이터는 분산된 저장소(IPFS)에 저장될 것입니다.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">공유</string>
-    <string name="SettingsShare_Text">Unstoppable과 함께 자유로워지세요!</string>
+    <string name="SettingsShare_Text">Unstoppable Wallet - a crypto wallet I recommend</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">안드로이드 키저장 에러</string>
     <string name="Alert_KeysInvalidatedDescription">당신의 안드로이드 스크린 장금이 변했기 때문에 당신의 지갑에 암호화된 데이터들은 지금 이용할 수 없습니다.</string>
@@ -291,7 +291,7 @@
     <string name="ManageKeys_Delete_Alert">귀하의 핸드폰에서 삭제하기전 %s 암호의 백업이 필요합니다</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">%s 추가</string>
-    <string name="AddCoin_Description">You don\'t have key for %1s which requires a %2s key. The wallet can generate the key for you. Use the create button below to generate a new key. \n\nYou may also use the existing %3s key for the %4s if you have one..</string>
+    <string name="AddCoin_Description">You don\'t have key for %1s. The wallet can generate the key for you. Use the create button below to generate a new key. \n\nYou may also use the existing %3s key for the %4s if you have one.</string>
     <string name="AddCoin_CreateKey">만들기</string>
     <string name="AddCoin_RestoreKey">복구</string>
     <!-- Account Types -->
