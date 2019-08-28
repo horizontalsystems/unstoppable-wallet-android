@@ -188,6 +188,7 @@
     <string name="Settings_ShareThisWallet">친구에게 추천하기</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
+    <string name="Settings_Report">Report a Problem</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">지문을 사용할 수 없습니다.</string>
     <string name="Settings_Error_NoFingerprintAddedYet">당신은 이 장치에서 지문을 사용할 수 없습니다. 지문 액세스를 설정하는 보안으로 이동합니다.</string>
@@ -221,6 +222,10 @@
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">공유</string>
     <string name="SettingsShare_Text">Unstoppable Wallet - a crypto wallet I recommend</string>
+    <!--Setting_Report-->
+    <string name="SettingsReport_Title">Report a Problem</string>
+    <string name="SettingsReport_Email">Mail</string>
+    <string name="SettingsReport_Telegram">Telegram</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">안드로이드 키저장 에러</string>
     <string name="Alert_KeysInvalidatedDescription">당신의 안드로이드 스크린 장금이 변했기 때문에 당신의 지갑에 암호화된 데이터들은 지금 이용할 수 없습니다.</string>
