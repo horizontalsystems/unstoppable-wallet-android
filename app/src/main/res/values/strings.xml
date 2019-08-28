@@ -410,8 +410,8 @@
     <string name="Charts_TimeDuration_Year">1Y</string>
 
     <string name="Charts_Title">%s Rate</string>
-    <string name="Charts_Rate_High">%s High</string>
-    <string name="Charts_Rate_Low">%s Low</string>
+    <string name="Charts_Rate_High">High</string>
+    <string name="Charts_Rate_Low">Low</string>
     <string name="Charts_MarketCap">Mkt. Cap</string>
     <string name="Charts_MarketCap_Thousand">%s k</string>
     <string name="Charts_MarketCap_Million">%s M</string>
