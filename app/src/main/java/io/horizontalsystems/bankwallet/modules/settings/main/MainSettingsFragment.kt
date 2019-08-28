@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.settings.AboutSettingsActivity
+import io.horizontalsystems.bankwallet.modules.settings.ReportProblemActivity
 import io.horizontalsystems.bankwallet.modules.settings.basecurrency.BaseCurrencySettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.language.LanguageSettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.security.SecuritySettingsModule
@@ -48,6 +49,8 @@ class MainSettingsFragment : Fragment() {
         lightMode.setOnClickListener { lightMode.switchToggle() }
 
         about.setOnClickListener { viewModel.delegate.didTapAbout() }
+
+        report.setOnClickListener { viewModel.delegate.didTapReportProblem() }
 
         shareApp.setOnClickListener {
             shareAppLink()
@@ -96,6 +99,12 @@ class MainSettingsFragment : Fragment() {
         viewModel.showAboutLiveEvent.observe(viewLifecycleOwner, Observer {
             activity?.let {
                 AboutSettingsActivity.start(it)
+            }
+        })
+
+        viewModel.showReportProblemLiveEvent.observe(viewLifecycleOwner, Observer {
+            activity?.let {
+                ReportProblemActivity.start(it)
             }
         })
 

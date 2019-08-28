@@ -21,6 +21,7 @@ object MainSettingsModule {
         fun didSwitchLightMode(lightMode: Boolean)
         fun didTapAbout()
         fun didTapAppLink()
+        fun didTapReportProblem()
         fun onClear()
     }
 
@@ -48,6 +49,7 @@ object MainSettingsModule {
         fun showAbout()
         fun openAppLink()
         fun reloadAppInterface()
+        fun showReportProblem()
     }
 
     fun init(view: MainSettingsViewModel, router: IMainSettingsRouter) {
