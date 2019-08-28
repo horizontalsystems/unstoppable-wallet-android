@@ -288,7 +288,7 @@
     <string name="ManageKeys_Delete_Alert">%s anahtarınızı bu cihazdan silmeden önce yedeklemeniz gerekiyor.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">%s ekle</string>
-    <string name="AddCoin_Description">You don\'t have key for %1s. The wallet can generate the key for you. Use the create button below to generate a new key. \n\nYou may also use the existing %3s key for the %4s if you have one.</string>
+    <string name="AddCoin_Description">%1s için Anahtarınız yok. Cüzdanınız, sizin için yeni anahtar oluşturabilir. Yeni bir anahtar oluşturmak için aşağıdaki Oluştur düğmesini tıklayın, veya \n\nMevcut %3s anahtarınız varsa onu %4s için kullanabilirsiniz.</string>
     <string name="AddCoin_CreateKey">Oluştur</string>
     <string name="AddCoin_RestoreKey">Geri Yükle</string>
     <!-- Account Types -->
