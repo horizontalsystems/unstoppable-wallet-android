@@ -272,7 +272,7 @@
     <string name="ManageCoins_EOSAlert_CreateButton">Uygulama henüz EOS cüzdanı oluşturamamaktadır. Sadece var olan cüzda geri yüklenebilir.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Anahtarları Yönet</string>
-    <string name="ManageKeys_Description">Anyone with access to your Keys can steal your wallet funds. Store keys safely and never show them to anyone. \n\nBackup each key to be able to restore funds if you lose or break your phone, or simply the wallet app gets deleted.</string>
+    <string name="ManageKeys_Description">Anahtarlarınıza erişimi olan herkes cüzdan paranızı çalabilir. Anahtarları güvenli bir şekilde saklayın ve asla kimseye göstermeyin.\n\nTelefonunuzu kaybederseniz veya kırdığınızda veya sadece cüzdan uygulaması silinirse para geri yükleyebilmek için her anahtarı yedekle.</string>
     <string name="ManageKeys_Create">Oluştur</string>
     <string name="ManageKeys_Restore">Geri Yükle</string>
     <string name="ManageKeys_Delete">Sil</string>
@@ -284,8 +284,8 @@
     <string name="ManageKeys_Delete_ConfirmationDisable">Etkisizleştirilecek cüzdanlar: %s</string>
     <string name="ManageKeys_Delete_ConfirmationLoose">Eğer anahtarın yedeğini saklamadıysanız, erişimi kaybedeceksiniz.</string>
     <string name="ManageKeys_Delete_FromPhone">Cihazdan sil</string>
-    <string name="ManageKeys_Delete_Alert_Title">Backup Required</string>
-    <string name="ManageKeys_Delete_Alert">You need to backup %s key before you may delete it from this phone.</string>
+    <string name="ManageKeys_Delete_Alert_Title">Yedekleme Gerekli</string>
+    <string name="ManageKeys_Delete_Alert">%s anahtarınızı bu cihazdan silmeden önce yedeklemeniz gerekiyor.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">%s ekle</string>
     <string name="AddCoin_Description">You don\'t have key for %1s. The wallet can generate the key for you. Use the create button below to generate a new key. \n\nYou may also use the existing %3s key for the %4s if you have one.</string>
@@ -307,19 +307,19 @@
     <string name="CoinOption_MorePrivate">1&#8211;12 saat (Daha Gizli)</string>
     <string name="CoinOption_Slow_Text">Geçmiş hesap işlemlerinizi ağdan geri yükler. Çok daha güvenli ama yavaş. Eğer geri yükleme çok uzun zaman alıyorsa, Anahtarları Yönet ekranında cüzdan anahtarını Hızlı Eşle seçeneğiyle tekrar içe aktarın.</string>
     <!--Charts-->
-    <string name="Charts_TimeDuration_Day">1D</string>
-    <string name="Charts_TimeDuration_Week">7D</string>
-    <string name="Charts_TimeDuration_Month">1M</string>
-    <string name="Charts_TimeDuration_Quartal">3M</string>
-    <string name="Charts_TimeDuration_HalfYear">6M</string>
+    <string name="Charts_TimeDuration_Day">1G</string>
+    <string name="Charts_TimeDuration_Week">7G</string>
+    <string name="Charts_TimeDuration_Month">1A</string>
+    <string name="Charts_TimeDuration_Quartal">3A</string>
+    <string name="Charts_TimeDuration_HalfYear">6A</string>
     <string name="Charts_TimeDuration_Year">1Y</string>
-    <string name="Charts_Title">%s Rate</string>
-    <string name="Charts_Rate_High">High</string>
-    <string name="Charts_Rate_Low">Low</string>
-    <string name="Charts_MarketCap">Mkt. Cap</string>
+    <string name="Charts_Title">%s kur</string>
+    <string name="Charts_Rate_High">Yüksek</string>
+    <string name="Charts_Rate_Low">Düşük</string>
+    <string name="Charts_MarketCap">P. Değeri</string>
     <string name="Charts_MarketCap_Thousand">%s k</string>
     <string name="Charts_MarketCap_Million">%s M</string>
     <string name="Charts_MarketCap_Billion">%s B</string>
-    <string name="Charts_Volume">Volume</string>
-    <string name="Charts_Error_NotAvailable">Chart not available</string>
+    <string name="Charts_Volume">Hacim</string>
+    <string name="Charts_Error_NotAvailable">Grafik yok</string>
 </resources>
