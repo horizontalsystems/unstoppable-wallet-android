@@ -22,7 +22,7 @@
     <!--Restore-->
     <string name="Restore_Title">Wiederherstellen</string>
     <string name="Restore_Subtitle">Schlüssel Eingeben</string>
-    <string name="Restore_ValidationFailed">Falscher Offlineschlüssel</string>
+    <string name="Restore_ValidationFailed">Incorrect Key</string>
     <string name="Restore_RestoreFailed">Fehler beim Wiederherstellen des Wallet</string>
     <string name="Restore_EosAccountName">Account Name</string>
     <string name="Restore_EosActivePrivateKey">Active Private Key</string>
@@ -218,7 +218,7 @@
 \n\nEinige von der Anwendung verwendete öffentliche Daten, wie z. B. Wechselkurse, werden im dezentralen Repository (IPFS) gespeichert</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Teilen</string>
-    <string name="SettingsShare_Text">Unstoppable Wallet - Nice App!</string>
+    <string name="SettingsShare_Text">Unstoppable Wallet - a crypto wallet I recommend</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android Keystore Fehler</string>
     <string name="Alert_KeysInvalidatedDescription">Deine verschlüsselten Daten wurden kürzlich ungültig gemacht, weil dein Android-Sperrbildschirm geändert wurde</string>
@@ -291,7 +291,7 @@
     <string name="ManageKeys_Delete_Alert">You need to backup %s key before you may delete it from this phone.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">%s hinzufügen</string>
-    <string name="AddCoin_Description">You don\'t have key for %1s which requires a %2s key. The wallet can generate the key for you. Use the create button below to generate a new key. \n\nYou may also use the existing %3s key for the %4s if you have one..</string>
+    <string name="AddCoin_Description">You don\'t have key for %1s. The wallet can generate the key for you. Use the create button below to generate a new key. \n\nYou may also use the existing %3s key for the %4s if you have one.</string>
     <string name="AddCoin_CreateKey">Erstellen</string>
     <string name="AddCoin_RestoreKey">Wiederherstellen</string>
     <!-- Account Types -->
