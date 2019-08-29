@@ -1,19 +1,20 @@
 package io.horizontalsystems.bankwallet.lib.chartview
 
 import android.graphics.RectF
+import io.horizontalsystems.bankwallet.lib.chartview.models.ChartConfig
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartData
 import io.horizontalsystems.bankwallet.lib.chartview.models.DataPoint
 
-class ChartHelper(private val shape: RectF) {
+class ChartHelper(private val shape: RectF, private val config: ChartConfig) {
 
-    fun setPoints(data: ChartData, priceTop: Float, priceStep: Float): List<DataPoint> {
+    fun setPoints(data: ChartData): List<DataPoint> {
         val width = shape.right
         val height = shape.bottom
 
         val totalPoints = data.points.size - 1
         val stepX = width / totalPoints
-        val stepY = height / (priceStep * 4)
-        val bottom = priceTop - (priceStep * 4)
+        val stepY = height / (config.valueStep * 4)
+        val bottom = config.valueTop - (config.valueStep * 4)
 
         val scaleSeconds = data.scale * 60
         val points = mutableListOf<DataPoint>()

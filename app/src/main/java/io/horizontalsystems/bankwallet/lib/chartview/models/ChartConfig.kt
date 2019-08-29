@@ -25,6 +25,11 @@ class ChartConfig(context: Context, viewHelper: ViewHelper) {
     var offsetRight = 0f
     var offsetBottom = 0f
 
+    //  grid dimens
+    var valueTop = 0f
+    var valueStep = 0f
+    var valuePrecision = 0
+
     //  Animation
     var animatedFraction = 0f
 }

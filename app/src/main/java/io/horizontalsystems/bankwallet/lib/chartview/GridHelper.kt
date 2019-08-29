@@ -2,34 +2,30 @@ package io.horizontalsystems.bankwallet.lib.chartview
 
 import android.graphics.RectF
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
+import io.horizontalsystems.bankwallet.lib.chartview.models.ChartConfig
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartData
 import io.horizontalsystems.bankwallet.lib.chartview.models.GridColumn
 import io.horizontalsystems.bankwallet.lib.chartview.models.GridLine
 import java.sql.Date
 import java.util.*
 
-class GridHelper(private val shape: RectF) {
+class GridHelper(private val shape: RectF, private val config: ChartConfig) {
 
     private val daysInMonth = 30
     private val daysInYear = 364
     private val minsInDay = 24 * 60
 
-    fun setGridLines(priceTop: Float, priceStep: Float): List<GridLine> {
+    fun setGridLines(): List<GridLine> {
         var y: Float
-        var value = priceTop
+        var value = config.valueTop
         val gridLines = mutableListOf<GridLine>()
 
         repeat(4) {
             val gridSpacing = shape.bottom / 4
             y = gridSpacing * it + shape.top
 
-            var label = String.format("%.0f", value)
-            if (value <= 1) {
-                label = String.format("%.2f", value)
-            }
-
-            gridLines.add(GridLine(y, label))
-            value -= priceStep
+            gridLines.add(GridLine(y, String.format("%.${config.valuePrecision}f", value)))
+            value -= config.valueStep
         }
 
         return gridLines

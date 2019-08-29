@@ -11,7 +11,11 @@ class ViewHelper(private val context: Context) {
         return dps * scale + 0.5f
     }
 
-    fun measureTextWidth(text: String): Float {
+    fun measureWidth(value: Float, precision: Int): Float {
+        return measureTextWidth(String.format("%.${precision}f", value))
+    }
+
+    private fun measureTextWidth(text: String): Float {
         val paint = Paint()
         val width = paint.measureText(text)
 

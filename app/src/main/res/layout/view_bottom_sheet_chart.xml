@@ -273,7 +273,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="17dp"
                 android:width="0dp"
-                android:text="52wk High"
+                android:text="@string/Charts_Rate_High"
                 android:textColor="@color/grey"
                 android:textSize="12sp" />
 
@@ -301,7 +301,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="17dp"
                 android:width="0dp"
-                android:text="52wk Low"
+                android:text="@string/Charts_Rate_Low"
                 android:textColor="@color/grey"
                 android:textSize="12sp" />
 

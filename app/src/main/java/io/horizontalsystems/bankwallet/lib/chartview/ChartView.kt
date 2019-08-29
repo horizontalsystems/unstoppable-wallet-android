@@ -31,9 +31,8 @@ class ChartView : View {
     var listener: Listener? = null
 
     private val viewHelper = ViewHelper(context)
-    private val scaleHelper = ScaleHelper()
-
     private val config = ChartConfig(context, viewHelper)
+    private val helper = ScaleHelper(config)
 
     private val shape = RectF()
     private val chartCurve = ChartCurve(shape, config)
@@ -144,12 +143,10 @@ class ChartView : View {
     }
 
     private fun setPoints(data: ChartData) {
-        val min = data.points.min() ?: 0f
-        val max = data.points.max() ?: 0f
+        helper.scale(data.points)
 
-        val (valueTop, valueStep) = scaleHelper.scale(min, max)
         if (config.showGrid) {
-            config.offsetRight = viewHelper.measureTextWidth(valueTop.toString())
+            config.offsetRight = viewHelper.measureWidth(config.valueTop, config.valuePrecision)
             config.offsetBottom = viewHelper.dp2px(20f)
         }
 
@@ -165,9 +162,9 @@ class ChartView : View {
 
         shape.set(0f, 0f, shapeWidth - config.offsetRight, shapeHeight - config.offsetBottom)
 
-        chartCurve.init(data, valueTop, valueStep)
+        chartCurve.init(data)
         if (config.showGrid) {
-            chartGrid.init(data, valueTop, valueStep)
+            chartGrid.init(data)
         }
     }
 }

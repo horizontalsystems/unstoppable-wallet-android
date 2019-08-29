@@ -8,14 +8,14 @@ import io.horizontalsystems.bankwallet.lib.chartview.models.DataPoint
 
 class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
 
-    private val chartHelper = ChartHelper(shape)
+    private val chartHelper = ChartHelper(shape, config)
     private var points = listOf<DataPoint>()
 
     private val linePaint = Paint()
     private var gradient = Paint()
 
-    fun init(data: ChartData, valueTop: Float, valueStep: Float) {
-        points = chartHelper.setPoints(data, valueTop, valueStep)
+    fun init(data: ChartData) {
+        points = chartHelper.setPoints(data)
         onTouchInactive()
 
         linePaint.apply {

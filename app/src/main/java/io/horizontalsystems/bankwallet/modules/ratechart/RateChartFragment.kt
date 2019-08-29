@@ -61,7 +61,6 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
         })
 
         presenterView.setDefaultMode.observe(viewLifecycleOwner, Observer { type ->
-            updateLabels(type)
             when (type) {
                 ChartType.DAILY -> resetActions(button1D)
                 ChartType.WEEKLY -> resetActions(button1W)
@@ -73,9 +72,7 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
 
         presenterView.showChart.observe(viewLifecycleOwner, Observer { item ->
             chartView.setData(item.chartData)
-            updateLabels(item.type)
 
-            item.rateValue?.let { coinRateLast.text = formatter.format(it) }
             val diffColor = if (item.diffValue < BigDecimal.ZERO)
                 resources.getColor(R.color.red_warning) else
                 resources.getColor(R.color.green_crypto)
@@ -83,14 +80,15 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
             coinRateDiff.setTextColor(diffColor)
             coinRateDiff.text = "${String.format("%.2f", item.diffValue)}%"
 
+            item.rateValue?.let { coinRateLast.text = formatter.format(it, canUseLessSymbol = false) }
             coinMarketCap.text = formatter.format(item.marketCap, shorten = true)
-            coinRateHigh.text = formatter.format(item.highValue)
-            coinRateLow.text = formatter.format(item.lowValue)
+            coinRateHigh.text = formatter.format(item.highValue, canUseLessSymbol = false)
+            coinRateLow.text = formatter.format(item.lowValue, canUseLessSymbol = false)
             setViewVisibility(marketCapWrap, isVisible = true)
         })
 
         presenterView.setSelectedPoint.observe(viewLifecycleOwner, Observer { (time, value) ->
-            pointInfoPrice.text = formatter.format(value)
+            pointInfoPrice.text = formatter.format(value, canUseLessSymbol = false)
             pointInfoDate.text = DateHelper.formatDate(Date(time * 1000), "MMM d, yyyy 'at' hh:mm a")
         })
 
@@ -159,18 +157,5 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
                 it.visibility = View.VISIBLE else
                 it.visibility = View.INVISIBLE
         }
-    }
-
-    private fun updateLabels(mode: ChartType) {
-        val modeName = when (mode) {
-            ChartType.DAILY -> getString(R.string.Charts_TimeDuration_Day)
-            ChartType.WEEKLY -> getString(R.string.Charts_TimeDuration_Week)
-            ChartType.MONTHLY -> getString(R.string.Charts_TimeDuration_Month)
-            ChartType.MONTHLY6 -> getString(R.string.Charts_TimeDuration_HalfYear)
-            ChartType.MONTHLY18 -> getString(R.string.Charts_TimeDuration_Year)
-        }
-
-        coinRateHighTitle.text = getString(R.string.Charts_Rate_High, modeName)
-        coinRateLowTitle.text = getString(R.string.Charts_Rate_Low, modeName)
     }
 }

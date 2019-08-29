@@ -8,8 +8,6 @@ import io.horizontalsystems.bankwallet.entities.RateStatData
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartData
 import java.math.BigDecimal
-import kotlin.math.max
-import kotlin.math.min
 
 data class ChartViewItem(
         val type: ChartType,
@@ -36,33 +34,25 @@ class RateChartViewFactory {
             points.add(rate.value.toFloat())
         }
 
-        val (min, max) = pointsEdges(points)
+        val min = points.min() ?: 0f
+        val max = points.max() ?: 0f
 
-        val lowValue = CurrencyValue(currency, min)
-        val highValue = CurrencyValue(currency, max)
+        val lowValue = CurrencyValue(currency, min.toBigDecimal())
+        val highValue = CurrencyValue(currency, max.toBigDecimal())
         val marketCap = CurrencyValue(currency, stat.marketCap)
-        val diffValue = diffInPercent(points.first { it != 0f }, points.last())
+        val diffValue = growthDiff(points)
         val rateValue = rate?.let { CurrencyValue(currency, it.value) }
         val chartData = ChartData(points, data.timestamp, data.scale, chartType)
 
         return ChartViewItem(chartType, rateValue, marketCap, lowValue, highValue, diffValue, chartData)
     }
 
-    private fun pointsEdges(points: List<Float>): Pair<BigDecimal, BigDecimal> {
-        var min = Float.MIN_VALUE
-        var max = Float.MIN_VALUE
-
-        points.forEach {
-            min = min(it, min)
-            max = max(it, max)
-        }
-
-        return Pair(min.toBigDecimal(), max.toBigDecimal())
-    }
-
     companion object {
-        fun diffInPercent(pointStart: Float, pointEnd: Float): BigDecimal {
+        fun growthDiff(points: List<Float>): BigDecimal {
+            val pointStart = points.first { it != 0f }
+            val pointEnd = points.last()
             val delta = -(pointStart - pointEnd)
+
             return (delta / pointStart * 100).toBigDecimal()
         }
     }

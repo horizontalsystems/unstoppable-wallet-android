@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.lib.chartview.models.GridColumn
 import io.horizontalsystems.bankwallet.lib.chartview.models.GridLine
 
 class ChartGrid(private val shape: RectF, private val config: ChartConfig) {
-    private val gridHelper = GridHelper(shape)
+    private val gridHelper = GridHelper(shape, config)
 
     private var gridColumns = listOf<GridColumn>()
     private var gridLines = listOf<GridLine>()
@@ -17,9 +17,9 @@ class ChartGrid(private val shape: RectF, private val config: ChartConfig) {
     private var gridPaint = Paint()
     private var textPaint = Paint()
 
-    fun init(data: ChartData, valueTop: Float, valueStep: Float) {
+    fun init(data: ChartData) {
         gridColumns = gridHelper.setGridColumns(data)
-        gridLines = gridHelper.setGridLines(valueTop, valueStep)
+        gridLines = gridHelper.setGridLines()
 
         gridPaint.apply {
             color = config.gridColor
