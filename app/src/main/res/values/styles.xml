@@ -41,6 +41,7 @@
     <attr name="TransactionDetailBottomBarBackground" format="reference|color" />
     <attr name="TransactionInfoMoreButtonBackground" format="reference|color" />
     <attr name="BottomTransactionInfoBackground" format="reference|color" />
+    <attr name="LightBackground" format="color" />
     <attr name="BottomSheetBackground" format="reference|color" />
     <attr name="BottomSendInputBackground" format="reference|color" />
     <attr name="BottomSendButtonColor" format="reference|color" />
@@ -123,6 +124,7 @@
         <item name="TransactionDetailBottomBarBackground">@color/dark</item>
         <item name="TransactionInfoMoreButtonBackground">@color/stateful_transaction_info_more_button_dark_color</item>
         <item name="BottomTransactionInfoBackground">@color/dark</item>
+        <item name="LightBackground">@color/steel_20</item>
         <item name="BottomSheetBackground">@color/steel_dark</item>
         <item name="BottomSendInputBackground">@color/steel_15</item>
         <item name="BottomSendButtonColor">@color/steel_15</item>
@@ -205,6 +207,7 @@
         <item name="TransactionDetailBottomBarBackground">#f5fafafa</item>
         <item name="TransactionInfoMoreButtonBackground">@color/stateful_transaction_info_more_button_light_color</item>
         <item name="BottomTransactionInfoBackground">@color/bars_color</item>
+        <item name="LightBackground">@color/lightBackground</item>
         <item name="BottomSheetBackground">@color/bars_color</item>
         <item name="BottomSendInputBackground">@color/white</item>
         <item name="BottomSendButtonColor">@color/lightBackground</item>

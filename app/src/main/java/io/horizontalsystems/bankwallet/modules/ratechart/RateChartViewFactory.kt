@@ -48,11 +48,6 @@ class RateChartViewFactory {
         return ChartViewItem(chartType, rateValue, marketCap, lowValue, highValue, diffValue, chartData)
     }
 
-    private fun diffInPercent(pointStart: Float, pointEnd: Float): BigDecimal {
-        val delta = -(pointStart - pointEnd)
-        return (delta / pointStart * 100).toBigDecimal()
-    }
-
     private fun pointsEdges(points: List<Float>): Pair<BigDecimal, BigDecimal> {
         var min = Float.MIN_VALUE
         var max = Float.MIN_VALUE
@@ -63,5 +58,12 @@ class RateChartViewFactory {
         }
 
         return Pair(min.toBigDecimal(), max.toBigDecimal())
+    }
+
+    companion object {
+        fun diffInPercent(pointStart: Float, pointEnd: Float): BigDecimal {
+            val delta = -(pointStart - pointEnd)
+            return (delta / pointStart * 100).toBigDecimal()
+        }
     }
 }

@@ -46,7 +46,7 @@ object RateChartModule {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = RateChartView()
-            val interactor = RateChartInteractor(App.rateManager, App.rateStorage, App.localStorage)
+            val interactor = RateChartInteractor(App.rateStatsManager, App.rateStorage, App.localStorage)
             val presenter = RateChartPresenter(view, interactor, coin.code, App.currencyManager.baseCurrency, RateChartViewFactory())
 
             interactor.delegate = presenter

@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.lib.chartview.models.ChartData
 import java.math.BigDecimal
 
 data class BalanceViewItem(
@@ -13,12 +14,15 @@ data class BalanceViewItem(
         val exchangeValue: CurrencyValue?,
         val currencyValue: CurrencyValue?,
         val state: AdapterState,
+        val chartStatsFetching: Boolean,
+        val chartStats: Pair<BigDecimal, ChartData>?,
         val rateExpired: Boolean
 )
 
 data class BalanceHeaderViewItem(
         val currencyValue: CurrencyValue?,
-        val upToDate: Boolean
+        val upToDate: Boolean,
+        val chartEnabled: Boolean
 )
 
 class BalanceViewItemFactory {
@@ -40,11 +44,13 @@ class BalanceViewItemFactory {
                 exchangeValue,
                 currencyValue,
                 item.state,
+                item.chartStatsFetching,
+                item.chartStats,
                 item.rate?.expired ?: false
         )
     }
 
-    fun createHeaderViewItem(items: List<BalanceModule.BalanceItem>, currency: Currency?): BalanceHeaderViewItem {
+    fun createHeaderViewItem(items: List<BalanceModule.BalanceItem>, chartEnabled: Boolean, currency: Currency?): BalanceHeaderViewItem {
         var sum = BigDecimal.ZERO
         var expired = false
         val nonZeroItems = items.filter { it.balance > BigDecimal.ZERO }
@@ -59,7 +65,7 @@ class BalanceViewItemFactory {
             expired = expired || balanceItem.state != AdapterState.Synced || rate?.expired == true
         }
 
-        return BalanceHeaderViewItem(currency?.let { CurrencyValue(it, sum) }, !expired)
+        return BalanceHeaderViewItem(currency?.let { CurrencyValue(it, sum) }, !expired, chartEnabled)
     }
 
 }
