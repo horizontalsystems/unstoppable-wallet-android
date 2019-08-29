@@ -94,7 +94,7 @@
     <string name="Send_DialogProceed">继续</string>
     <string name="Send_Sending">正在发送</string>
     <string name="Send_ERC_Alert">用Ethereum支付的%s（ERC20）交易费用。您需要%s ETH。</string>
-    <string name="Send_Token_InsufficientFeeAlert">用%s支付的%s（%s）交易费用。您需要%s。</string>
+    <string name="Send_Token_InsufficientFeeAlert">%s（%s）的交易费用以%s支付。您需要%s。</string>
     <!--Deposit-->
     <string name="Deposit_Title">收到%s</string>
     <string name="Deposit_Share">分享</string>
