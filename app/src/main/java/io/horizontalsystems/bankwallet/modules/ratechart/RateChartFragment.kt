@@ -78,7 +78,7 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
                 resources.getColor(R.color.green_crypto)
 
             coinRateDiff.setTextColor(diffColor)
-            coinRateDiff.text = "${String.format("%.2f", item.diffValue)}%"
+            coinRateDiff.text = App.numberFormatter.format(item.diffValue.toDouble(), showSign = true, precision = 2) + "%"
 
             item.rateValue?.let { coinRateLast.text = formatter.format(it, canUseLessSymbol = false) }
             coinMarketCap.text = formatter.format(item.marketCap, shorten = true)

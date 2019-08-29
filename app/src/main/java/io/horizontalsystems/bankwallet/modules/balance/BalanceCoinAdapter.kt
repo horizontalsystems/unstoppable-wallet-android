@@ -178,30 +178,26 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
     }
 
     private fun showChart(viewItem: BalanceViewItem, expanded: Boolean, chartEnabled: Boolean) {
-        if (expanded || !chartEnabled || viewItem.chartStatsFetching) {
+        if (expanded || !chartEnabled) {
             return setChartVisibility(show = false)
         }
 
         setChartVisibility(show = true)
 
-        val chartStats = viewItem.chartStats
-        if (chartStats == null) {
-            chartView.visibility = View.INVISIBLE
-            chartRateDiff.text = "N/A"
-            chartRateDiff.setTextColor(containerView.context.getColor(R.color.grey_50))
-            return
-        }
-
-        val chartGrowth = chartStats.first
-        chartView.requestLayout()
-        chartView.setData(chartStats.second)
-
-        val diffColor = if (chartGrowth < BigDecimal.ZERO)
+        val diffColor = if (viewItem.chartDiff < BigDecimal.ZERO)
             containerView.context.getColor(R.color.red_warning) else
             containerView.context.getColor(R.color.green_crypto)
 
-        chartRateDiff.setTextColor(diffColor)
-        chartRateDiff.text = "${String.format("%.2f", chartGrowth)}%"
+        val chartStats = viewItem.chartData
+        if (chartStats == null) {
+            chartView.visibility = View.INVISIBLE
+            chartRateDiff.text = containerView.context.getString(R.string.NotAvailable)
+            chartRateDiff.setTextColor(containerView.context.getColor(R.color.grey_50))
+        } else {
+            chartView.setData(chartStats)
+            chartRateDiff.text = App.numberFormatter.format(viewItem.chartDiff.toDouble(), showSign = true, precision = 2) + "%"
+            chartRateDiff.setTextColor(diffColor)
+        }
     }
 
     private fun setChartVisibility(show: Boolean) {

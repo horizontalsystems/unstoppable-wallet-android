@@ -14,8 +14,8 @@ data class BalanceViewItem(
         val exchangeValue: CurrencyValue?,
         val currencyValue: CurrencyValue?,
         val state: AdapterState,
-        val chartStatsFetching: Boolean,
-        val chartStats: Pair<BigDecimal, ChartData>?,
+        val chartDiff: BigDecimal,
+        val chartData: ChartData?,
         val rateExpired: Boolean
 )
 
@@ -44,8 +44,8 @@ class BalanceViewItemFactory {
                 exchangeValue,
                 currencyValue,
                 item.state,
-                item.chartStatsFetching,
-                item.chartStats,
+                item.chartDiff,
+                item.chartData,
                 item.rate?.expired ?: false
         )
     }

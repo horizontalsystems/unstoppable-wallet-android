@@ -57,9 +57,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="24dp"
-                android:visibility="gone"
                 android:src="@drawable/ic_sort"
                 android:tint="@color/stateful_button_yellow_color"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/ballanceText"
                 app:layout_constraintEnd_toStartOf="@+id/chartButton"
                 app:layout_constraintTop_toTopOf="@+id/ballanceText" />

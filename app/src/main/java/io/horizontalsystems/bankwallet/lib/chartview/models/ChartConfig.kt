@@ -24,6 +24,7 @@ class ChartConfig(context: Context, viewHelper: ViewHelper) {
     var strokeWidth = viewHelper.dp2px(0.5f)
     var offsetRight = 0f
     var offsetBottom = 0f
+    var gridEdgeOffset = viewHelper.dp2px(5f)
 
     //  grid dimens
     var valueTop = 0f

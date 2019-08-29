@@ -3,11 +3,9 @@ package io.horizontalsystems.bankwallet.modules.balance
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
-import io.horizontalsystems.bankwallet.core.managers.RateStatsManager
+import io.horizontalsystems.bankwallet.core.managers.StatsData
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.lib.chartview.ChartView
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartData
-import io.horizontalsystems.bankwallet.modules.ratechart.RateChartViewFactory.Companion.growthDiff
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import java.math.BigDecimal
 
@@ -57,9 +55,8 @@ object BalanceModule {
         fun didUpdateBalance(wallet: Wallet, balance: BigDecimal)
         fun didUpdateState(wallet: Wallet, state: AdapterState)
         fun didUpdateRate(rate: Rate)
-        fun onReceiveRateStats(data: Pair<RateStatsManager.StatsKey, RateStatData>)
+        fun onReceiveRateStats(coinCode: CoinCode, data: StatsData)
         fun onFailFetchChartStats(coinCode: String)
-        fun onFetchingChartStats(coinCode: String)
         fun didRefresh()
     }
 
@@ -141,23 +138,9 @@ object BalanceModule {
             items = sorted(items)
         }
 
-        fun setChartData(position: Int, data: RateData) {
-            val points = data.rates.toMutableList()
-            val balanceItem = items[position]
-
-            balanceItem.rate?.let {
-                points.add(it.value.toFloat())
-            }
-
-            if (points.size < 10) return
-            val growth = growthDiff(points)
-
-            balanceItem.chartStatsFetching = false
-            balanceItem.chartStats = Pair(growth, ChartData(points, data.timestamp, data.scale, ChartView.ChartType.DAILY))
-        }
-
-        fun setChartStatsFetching(position: Int, fetching: Boolean) {
-            items[position]?.let { it.chartStatsFetching = fetching }
+        fun setChartData(position: Int, chartData: ChartData, chartDiff: BigDecimal) {
+            items[position].chartDiff = chartDiff
+            items[position].chartData = chartData
         }
 
         fun clearRates() {
@@ -178,10 +161,10 @@ object BalanceModule {
             val wallet: Wallet,
             var balance: BigDecimal,
             var state: AdapterState,
-            var rate: Rate? = null,
-            var chartStats: Pair<BigDecimal, ChartData>? = null) {
+            var rate: Rate? = null) {
 
-        var chartStatsFetching: Boolean = false
+        var chartDiff: BigDecimal = BigDecimal.ZERO
+        var chartData: ChartData? = null
         val fiatValue: BigDecimal?
             get() = rate?.let { balance.times(it.value) }
     }

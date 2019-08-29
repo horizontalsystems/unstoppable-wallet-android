@@ -2,10 +2,14 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountTypeManager
-import io.horizontalsystems.bankwallet.core.managers.RateStatsManager
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.core.managers.StatsData
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.entities.Rate
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.BalanceItem
+import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -102,14 +106,9 @@ class BalancePresenter(
 
     override fun onEnableChart(enabled: Boolean) {
         dataSource.chartEnabled = enabled
+        view?.reload()
 
-        if (enabled) {
-            dataSource.coinCodes.forEach {
-                interactor.fetchRateStats(dataSource.currency.code, it)
-            }
-        } else {
-            view?.reload()
-        }
+        if (enabled) updateStats()
     }
 
     override fun onSortTypeChanged(sortType: BalanceSortType) {
@@ -127,7 +126,6 @@ class BalancePresenter(
 
             val balanceItem = BalanceItem(wallet, adapter?.balance ?: BigDecimal.ZERO, adapterState)
             if (dataSource.chartEnabled) {
-                balanceItem.chartStatsFetching = true
                 interactor.fetchRateStats(dataSource.currency.code, wallet.coin.code)
             }
 
@@ -145,6 +143,9 @@ class BalancePresenter(
         dataSource.currency = currency
         dataSource.clearRates()
         interactor.fetchRates(currency.code, dataSource.coinCodes)
+        if (dataSource.chartEnabled) {
+            updateStats()
+        }
         view?.reload()
     }
 
@@ -172,27 +173,20 @@ class BalancePresenter(
         postViewReload()
     }
 
-    override fun onReceiveRateStats(data: Pair<RateStatsManager.StatsKey, RateStatData>) {
-        val (key, rate) = data
-        val rateStats = rate.stats[ChartType.DAILY.name] ?: return
-        val positions = dataSource.getPositionsByCoinCode(key.coinCode)
+    override fun onReceiveRateStats(coinCode: CoinCode, data: StatsData) {
+        val positions = dataSource.getPositionsByCoinCode(coinCode)
+        val chartData = data.stats[ChartType.DAILY.name] ?: return
+        val chartDiff = data.diff[ChartType.DAILY.name] ?: return
 
         positions.forEach { position ->
-            dataSource.setChartData(position, rateStats)
+            dataSource.setChartData(position, chartData, chartDiff)
             view?.updateItem(position)
         }
     }
 
     override fun onFailFetchChartStats(coinCode: String) {
         dataSource.getPositionsByCoinCode(coinCode).forEach { position ->
-            dataSource.setChartStatsFetching(position, false)
             view?.updateItem(position)
-        }
-    }
-
-    override fun onFetchingChartStats(coinCode: String) {
-        dataSource.getPositionsByCoinCode(coinCode).forEach { position ->
-            dataSource.setChartStatsFetching(position, true)
         }
     }
 
@@ -209,8 +203,9 @@ class BalancePresenter(
     }
 
     override fun openChart(position: Int) {
-        val wallet = dataSource.getItem(position).wallet
-        router.openChart(wallet.coin)
+        val item = dataSource.getItem(position)
+        if (item.chartData == null) return
+        router.openChart(item.wallet.coin)
     }
 
     private fun postViewReload() {
@@ -227,5 +222,11 @@ class BalancePresenter(
     private fun updateByPosition(position: Int) {
         dataSource.addUpdatedPosition(position)
         flushSubject.onNext(Unit)
+    }
+
+    private fun updateStats() {
+        dataSource.coinCodes.forEach {
+            interactor.fetchRateStats(dataSource.currency.code, it)
+        }
     }
 }
