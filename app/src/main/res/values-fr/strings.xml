@@ -72,7 +72,7 @@
     <string name="Send_Button_Max">Max</string>
     <string name="Send_Confirmation_Title">Confirmer</string>
     <string name="Send_Confirmation_To">À: </string>
-    <string name="Send_Confirmation_HintMemo">Memo</string>
+    <string name="Send_Confirmation_HintMemo">Memo:</string>
     <string name="Send_Confirmation_Eos_HintAccount">Account</string>
     <string name="Send_Confirmation_Total">Total:</string>
     <string name="Send_Confirmation_EstimateTime">Temps estimé :</string>
@@ -91,6 +91,7 @@
     <string name="Send_DialogDuration">Duration</string>
     <string name="Send_DialogFee">Fee</string>
     <string name="Send_DialogTotal">Total:</string>
+    <string name="Send_DialogMemoHint">Memo</string>
     <string name="Send_DialogProceed">Proceed</string>
     <string name="Send_Sending">En attente</string>
     <string name="Send_ERC_Alert">Frais de transaction pour %s (ERC20) payé en Ethereum. Il est nécessaire %s ETH.</string>
@@ -121,6 +122,18 @@
     <plurals name="Duration_hours">
         <item quantity="one">%d hour</item>
         <item quantity="other">%d hours</item>
+    </plurals>
+    <plurals name="DurationInterval_seconds">
+        <item quantity="one">within %d second</item>
+        <item quantity="other">within %d seconds</item>
+    </plurals>
+    <plurals name="DurationInterval_minutes">
+        <item quantity="one">within %d minute</item>
+        <item quantity="other">within %d minutes</item>
+    </plurals>
+    <plurals name="DurationInterval_hours">
+        <item quantity="one">within %d hour</item>
+        <item quantity="other">within %d hours</item>
     </plurals>
     <!--Transactions-->
     <string name="Transactions_Title">Transactions</string>
