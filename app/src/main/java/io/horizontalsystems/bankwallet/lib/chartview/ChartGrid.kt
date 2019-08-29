@@ -34,6 +34,8 @@ class ChartGrid(private val shape: RectF, private val config: ChartConfig) {
     }
 
     fun draw(canvas: Canvas) {
+        if (!config.showGrid) return
+
         drawLines(canvas)
         drawColumns(canvas)
         drawFrameLines(canvas)

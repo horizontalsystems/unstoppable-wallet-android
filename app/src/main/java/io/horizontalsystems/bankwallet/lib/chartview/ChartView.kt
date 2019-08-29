@@ -63,6 +63,10 @@ class ChartView : View {
     private fun initialize(attrs: AttributeSet) {
         val ta = context.obtainStyledAttributes(attrs, R.styleable.ChartView)
         try {
+            ta.getBoolean(R.styleable.ChartView_showGrid, true).let { config.showGrid = it }
+            ta.getBoolean(R.styleable.ChartView_animated, true).let { config.animated = it }
+            ta.getDimension(R.styleable.ChartView_width, 0f).let { config.width = it }
+            ta.getDimension(R.styleable.ChartView_height, 0f).let { config.height = it }
             ta.getInt(R.styleable.ChartView_growColor, context.getColor(R.color.green_crypto)).let { config.growColor = it }
             ta.getInt(R.styleable.ChartView_fallColor, context.getColor(R.color.red_warning)).let { config.fallColor = it }
             ta.getInt(R.styleable.ChartView_textColor, context.getColor(R.color.grey)).let { config.textColor = it }
@@ -80,26 +84,30 @@ class ChartView : View {
 
     override fun onDraw(canvas: Canvas) {
         chartCurve.draw(canvas)
-        chartGrid.draw(canvas)
+        if (config.showGrid) {
+            chartGrid.draw(canvas)
+        }
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        val eventListener = listener ?: return false
+
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 chartCurve.onTouchActive()
-                listener?.onTouchDown()
-                chartIndicator?.onMove(chartCurve.findPoint(event.rawX), listener)
+                eventListener.onTouchDown()
+                chartIndicator?.onMove(chartCurve.findPoint(event.rawX), eventListener)
                 invalidate()
             }
 
             MotionEvent.ACTION_MOVE -> {
-                chartIndicator?.onMove(chartCurve.findPoint(event.rawX), listener)
+                chartIndicator?.onMove(chartCurve.findPoint(event.rawX), eventListener)
             }
 
             MotionEvent.ACTION_UP,
             MotionEvent.ACTION_CANCEL -> {
                 chartCurve.onTouchInactive()
-                listener?.onTouchUp()
+                eventListener.onTouchUp()
                 invalidate()
             }
         }
@@ -116,8 +124,12 @@ class ChartView : View {
         configure(data)
         setPoints(data)
 
-        animator.setFloatValues(0f)
-        animator.start()
+        if (config.animated) {
+            animator.setFloatValues(0f)
+            animator.start()
+        } else {
+            invalidate()
+        }
     }
 
     private fun configure(data: ChartData) {
@@ -136,11 +148,26 @@ class ChartView : View {
         val max = data.points.max() ?: 0f
 
         val (valueTop, valueStep) = scaleHelper.scale(min, max)
+        if (config.showGrid) {
+            config.offsetRight = viewHelper.measureTextWidth(valueTop.toString())
+            config.offsetBottom = viewHelper.dp2px(20f)
+        }
 
-        config.offsetRight = viewHelper.measureTextWidth(valueTop.toString())
-        shape.set(0f, 0f, width - config.offsetRight, height - config.offsetBottom)
+        var shapeWidth = width.toFloat()
+        if (shapeWidth == 0f) {
+            shapeWidth = config.width
+        }
+
+        var shapeHeight = height.toFloat()
+        if (shapeHeight == 0f) {
+            shapeHeight = config.height
+        }
+
+        shape.set(0f, 0f, shapeWidth - config.offsetRight, shapeHeight - config.offsetBottom)
 
         chartCurve.init(data, valueTop, valueStep)
-        chartGrid.init(data, valueTop, valueStep)
+        if (config.showGrid) {
+            chartGrid.init(data, valueTop, valueStep)
+        }
     }
 }
