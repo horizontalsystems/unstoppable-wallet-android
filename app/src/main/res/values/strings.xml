@@ -146,6 +146,7 @@
     <string name="Duration_Within">Within %s</string>
     <string name="Duration_Hours">%d h.</string>
     <string name="Duration_Minutes">%d min.</string>
+    <string name="Duration_Seconds">%d sec.</string>
 
     <plurals name="Duration_seconds">
         <item quantity="one">%d second</item>
