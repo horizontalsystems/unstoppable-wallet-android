@@ -72,7 +72,7 @@
     <string name="Send_Button_Max">最大</string>
     <string name="Send_Confirmation_Title">Confirm</string>
     <string name="Send_Confirmation_To">To: </string>
-    <string name="Send_Confirmation_HintMemo">Memo</string>
+    <string name="Send_Confirmation_HintMemo">Memo:</string>
     <string name="Send_Confirmation_Eos_HintAccount">Account</string>
     <string name="Send_Confirmation_Total">Total:</string>
     <string name="Send_Confirmation_EstimateTime">Estimate Time:</string>
@@ -91,6 +91,7 @@
     <string name="Send_DialogDuration">Duration</string>
     <string name="Send_DialogFee">Fee</string>
     <string name="Send_DialogTotal">合計:</string>
+    <string name="Send_DialogMemoHint">Memo</string>
     <string name="Send_DialogProceed">Proceed</string>
     <string name="Send_Sending">Sending</string>
     <string name="Send_ERC_Alert">Transaction fees for %s (ERC20) paid in Ethereum. You need %s ETH.</string>
@@ -118,6 +119,15 @@
     </plurals>
     <plurals name="Duration_hours">
         <item quantity="other">%d hours</item>
+    </plurals>
+    <plurals name="DurationInterval_seconds">
+        <item quantity="other">within %d seconds</item>
+    </plurals>
+    <plurals name="DurationInterval_minutes">
+        <item quantity="other">within %d minutes</item>
+    </plurals>
+    <plurals name="DurationInterval_hours">
+        <item quantity="other">within %d hours</item>
     </plurals>
     <!--Transactions-->
     <string name="Transactions_Title">トランザクション</string>
