@@ -153,11 +153,11 @@
     <string name="FullInfo_Status">状态</string>
     <string name="FullInfo_Memo">备忘录</string>
     <string name="FullInfo_CpuUsage">CPU使用</string>
-    <string name="FullInfo_NetUsage">Net Usage</string>
-    <string name="FullInfo_GasLimit">Gas Limit</string>
-    <string name="FullInfo_GasUsed">Gas Used</string>
-    <string name="FullInfo_GasPrice">Gas Price</string>
-    <string name="FullInfo_Source_Title">信息源</string>
+    <string name="FullInfo_NetUsage">网络使用</string>
+    <string name="FullInfo_GasLimit">燃料限制</string>
+    <string name="FullInfo_GasUsed">已用燃料</string>
+    <string name="FullInfo_GasPrice">燃料价格</string>
+    <string name="FullInfo_Source_Title">源</string>
     <string name="FullInfo_Source_Online">在线</string>
     <string name="FullInfo_Source_Offline">离线</string>
     <string name="FullInfo_Error_Subtitle">离线</string>
@@ -165,9 +165,9 @@
     <string name="FullInfo_Error_ChangeSource">更改源</string>
     <!--no used-->
     <string name="FullInfo_Id">ID</string>
-    <string name="FullInfo_TotalInput">转入总额</string>
-    <string name="FullInfo_TotalOutput">转出总额</string>
-    <string name="FullInfo_FeePerByte">每字节存储数据的费用</string>
+    <string name="FullInfo_TotalInput">输入总额</string>
+    <string name="FullInfo_TotalOutput">输出总额</string>
+    <string name="FullInfo_FeePerByte">每字节费用</string>
     <string name="FullInfo_FeeRate">手续费汇率</string>
     <string name="FullInfo_NoAddress">空地址</string>
     <string name="FullInfo_SatByte">sat/B</string>
@@ -237,24 +237,24 @@
     <string name="Error_UnsupportedBlockchain">不支持的货币</string>
     <string name="Eos_Backend_Error_SelfTransfer">无法将代币转入自己的账户</string>
     <string name="Eos_Backend_Error_AccountNotExist">目标账户不存在</string>
-    <string name="Eos_Backend_Error_InsufficientRam">您的EOS账户没有足够的RAM来发送此代币。您必须增加RAM才能继续。</string>
+    <string name="Eos_Backend_Error_InsufficientRam">您的EOS账户没有足够的RAM来发送此令牌。您必须增加RAM才能继续。</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">解锁​​​​</string>
     <string name="Hud_Text_Success">成功</string>
     <string name="Hud_Text_Done">完成</string>
     <string name="Hud_Text_Error">出错</string>
-    <string name="Hud_Text_NoInternet">没有网络连接</string>
-    <string name="Hud_Text_Copied">复制成功</string>
-    <string name="Hud_Text_InvalidPinError">密码不正确</string>
+    <string name="Hud_Text_NoInternet">没有网络</string>
+    <string name="Hud_Text_Copied">已复制</string>
+    <string name="Hud_Text_InvalidPinError">错误密码</string>
     <string name="Hud_Network_Issue">网络问题。请稍后再试</string>
     <!--Fingerprint texts-->
-    <string name="Fingerprint_DialogTitle">使用指纹登录</string>
+    <string name="Fingerprint_DialogTitle">指纹登录</string>
     <string name="Fingerprint_Hint">触控传感器</string>
     <string name="Fingerprint_EnterPin">密码</string>
     <string name="Fingerprint_NotRecognized">指纹无法识别。请重试</string>
-    <string name="Fingerprint_Success">成功!</string>
+    <string name="Fingerprint_Success">成功！</string>
     <!--Unlock Pin-->
-    <string name="UnlockPin_WalletDisabledUntil">禁用至: %s</string>
+    <string name="UnlockPin_WalletDisabledUntil">禁用至：%s</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">电话PIN</string>
     <string name="OSPin_Confirm_Desciption">此应用程序要求手机启用密码（屏幕锁定）。\n\n您可以在安卓设置中启用它。\n\n请注意，当您禁用操作系统级别的PIN时，您的电话安全存储中的安全措施使以前存储的数据无效。您需要恢复钱包密钥才能回到钱包。</string>
