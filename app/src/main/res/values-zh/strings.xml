@@ -295,7 +295,7 @@
     <string name="ManageKeys_Delete_Alert">您必须在将其从电话上删除之前先备份%s密钥。</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">加%s</string>
-    <string name="AddCoin_Description">You don\'t have key for %1s. The wallet can generate the key for you. Use the create button below to generate a new key. \n\nYou may also use the existing %3s key for the %4s if you have one.</string>
+    <string name="AddCoin_Description">您没有%1s的密钥。钱包可以为您生成密钥。使用下方的创建按钮生成新密钥。\n\n如果有的话，您也可以使用%4s的现有%3s密钥。</string>
     <string name="AddCoin_CreateKey">创建</string>
     <string name="AddCoin_RestoreKey">恢复</string>
     <!-- Account Types -->
@@ -314,12 +314,12 @@
     <string name="CoinOption_MorePrivate">1&#8211;12 小时(更多隐私)</string>
     <string name="CoinOption_Slow_Text">直接从网络可以恢复以前的事务。明显更私密，但速度很慢。如果恢复时间过长，如果恢复时间过长，请转到“管理密钥”部分，然后选“快速同步”重新导入钱包密钥。</string>
     <!--Charts-->
-    <string name="Charts_TimeDuration_Day">1D</string>
-    <string name="Charts_TimeDuration_Week">7D</string>
-    <string name="Charts_TimeDuration_Month">1M</string>
-    <string name="Charts_TimeDuration_Quartal">3M</string>
-    <string name="Charts_TimeDuration_HalfYear">6M</string>
-    <string name="Charts_TimeDuration_Year">1Y</string>
+    <string name="Charts_TimeDuration_Day">1天</string>
+    <string name="Charts_TimeDuration_Week">7天</string>
+    <string name="Charts_TimeDuration_Month">1个月</string>
+    <string name="Charts_TimeDuration_Quartal">3个月</string>
+    <string name="Charts_TimeDuration_HalfYear">6个月</string>
+    <string name="Charts_TimeDuration_Year">1年</string>
     <string name="Charts_Title">%s Rate</string>
     <string name="Charts_Rate_High">High</string>
     <string name="Charts_Rate_Low">Low</string>
