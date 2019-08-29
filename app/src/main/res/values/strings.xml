@@ -109,12 +109,12 @@
     <string name="Send_Error_BalanceAmount">Balance %s</string>
 
     <string name="Send_DialogTitle">Confirm</string>
-    <string name="Send_DialogSpeed">Transaction Speed</string>
+    <string name="Send_DialogSpeed">Transaction Speed:</string>
     <string name="Send_TxSpeed_Low">Low</string>
     <string name="Send_TxSpeed_Medium">Medium</string>
     <string name="Send_TxSpeed_High">High</string>
-    <string name="Send_DialogDuration">Duration</string>
-    <string name="Send_DialogFee">Fee</string>
+    <string name="Send_DialogDuration">Duration:</string>
+    <string name="Send_DialogFee">Fee:</string>
     <string name="Send_DialogTotal">Total:</string>
     <string name="Send_DialogMemoHint">Memo</string>
     <string name="Send_DialogProceed">Proceed</string>
