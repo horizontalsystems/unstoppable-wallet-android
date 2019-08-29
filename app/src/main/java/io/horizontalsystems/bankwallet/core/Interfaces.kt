@@ -4,7 +4,6 @@ import android.text.SpannableString
 import androidx.core.hardware.fingerprint.FingerprintManagerCompat
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.managers.ServiceExchangeApi.HostType
-import io.horizontalsystems.bankwallet.core.storage.AccountRecord
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView
@@ -347,7 +346,7 @@ interface IAccountsStorage {
     fun delete(id: String)
     fun getNonBackedUpCount(): Flowable<Int>
     fun clear()
-    fun getDeleted(): List<AccountRecord>
+    fun getDeletedAccountIds(): List<String>
     fun clearDeleted()
 }
 

@@ -67,7 +67,7 @@ class AccountManager(private val storage: IAccountsStorage, private val accountC
 
     override fun clearAccounts() {
         val clearAsync = Single.fromCallable {
-            accountCleaner.clearAccounts(storage.getDeleted())
+            accountCleaner.clearAccounts(storage.getDeletedAccountIds())
             storage.clearDeleted()
         }
 
