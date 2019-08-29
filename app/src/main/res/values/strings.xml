@@ -143,6 +143,9 @@
     <string name="Timestamp_Yesterday">Yesterday</string>
 
     <string name="Duration_instant">Instant</string>
+    <string name="Duration_Within">Within %s</string>
+    <string name="Duration_Hours">%d h.</string>
+    <string name="Duration_Minutes">%d min.</string>
 
     <plurals name="Duration_seconds">
         <item quantity="one">%d second</item>
