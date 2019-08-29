@@ -2,8 +2,10 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import android.os.Handler
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.managers.RateStatsManager
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
@@ -11,6 +13,7 @@ class BalanceInteractor(
         private val walletManager: IWalletManager,
         private val adapterManager: IAdapterManager,
         private val rateStorage: IRateStorage,
+        private val rateStatsManager: RateStatsManager,
         private val currencyManager: ICurrencyManager,
         private val localStorage: ILocalStorage,
         private val refreshTimeout: Long = 2)
@@ -47,16 +50,11 @@ class BalanceInteractor(
 
     override fun fetchRates(currencyCode: String, coinCodes: List<CoinCode>) {
         rateDisposables.clear()
+        coinCodes.forEach { getLatestRate(currencyCode, it) }
+    }
 
-        coinCodes.forEach { coinCode ->
-            rateStorage.latestRateObservable(coinCode, currencyCode)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.io())
-                    .subscribe {
-                        delegate?.didUpdateRate(it)
-                    }
-                    .let { rateDisposables.add(it) }
-        }
+    override fun fetchRateStats(currencyCode: String, coinCode: CoinCode) {
+        getRateStats(currencyCode, coinCode)
     }
 
     override fun getSortingType() = localStorage.sortType
@@ -77,9 +75,7 @@ class BalanceInteractor(
 
         delegate?.didUpdateWallets(wallets)
 
-        wallets.forEach { wallet ->
-            subscribeToAdapterUpdates(wallet, false)
-        }
+        wallets.forEach { subscribeToAdapterUpdates(it, false) }
     }
 
     @Synchronized
@@ -131,5 +127,19 @@ class BalanceInteractor(
                     delegate?.didUpdateRate(it)
                 }
                 .let { rateDisposables.add(it) }
+    }
+
+    private fun getRateStats(currencyCode: String, coinCode: String) {
+        delegate?.onFetchingChartStats(coinCode)
+
+        rateStatsManager.getRateStats(coinCode, currencyCode)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    delegate?.onReceiveRateStats(it)
+                }, {
+                    delegate?.onFailFetchChartStats(coinCode)
+                })
+                .let { disposables.add(it) }
     }
 }

@@ -57,6 +57,7 @@ class App : Application() {
 
         lateinit var rateSyncer: RateSyncer
         lateinit var rateManager: RateManager
+        lateinit var rateStatsManager: RateStatsManager
         lateinit var networkAvailabilityManager: NetworkAvailabilityManager
         lateinit var appDatabase: AppDatabase
         lateinit var rateStorage: IRateStorage
@@ -122,6 +123,7 @@ class App : Application() {
         wordsManager = WordsManager(localStorage)
         networkManager = NetworkManager(appConfigProvider)
         rateManager = RateManager(rateStorage, networkManager)
+        rateStatsManager = RateStatsManager(networkManager)
         accountManager = AccountManager(accountsStorage, AccountCleaner(appConfigProvider.testMode))
         backupManager = BackupManager(accountManager)
         walletManager = WalletManager(accountManager, walletFactory, walletStorage)

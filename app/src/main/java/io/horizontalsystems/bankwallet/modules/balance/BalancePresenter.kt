@@ -2,10 +2,10 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountTypeManager
-import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.entities.Rate
-import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.core.managers.RateStatsManager
+import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
+import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.BalanceItem
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -58,7 +58,7 @@ class BalancePresenter(
             factory.createViewItem(dataSource.getItem(position), dataSource.currency)
 
     override fun getHeaderViewItem() =
-            factory.createHeaderViewItem(dataSource.items, dataSource.currency)
+            factory.createHeaderViewItem(dataSource.items, dataSource.chartEnabled, dataSource.currency)
 
     override fun refresh() {
         interactor.refresh()
@@ -91,6 +91,18 @@ class BalancePresenter(
         router.openSortTypeDialog(interactor.getSortingType())
     }
 
+    override fun onEnableChart(enabled: Boolean) {
+        dataSource.chartEnabled = enabled
+
+        if (enabled) {
+            dataSource.coinCodes.forEach {
+                interactor.fetchRateStats(dataSource.currency.code, it)
+            }
+        } else {
+            view?.reload()
+        }
+    }
+
     override fun onSortTypeChanged(sortType: BalanceSortType) {
         interactor.saveSortingType(sortType)
         dataSource.sortBy(sortType)
@@ -100,12 +112,19 @@ class BalancePresenter(
     // InteractorDelegate
 
     override fun didUpdateWallets(wallets: List<Wallet>) {
-        val balanceItems = wallets.map {
-            val adapter = interactor.getBalanceAdapterForWallet(it)
+        val balanceItems = wallets.map { wallet ->
+            val adapter = interactor.getBalanceAdapterForWallet(wallet)
             val adapterState = adapter?.state ?: AdapterState.NotReady
 
-            BalanceModule.BalanceItem(it, adapter?.balance ?: BigDecimal.ZERO, adapterState)
+            val balanceItem = BalanceItem(wallet, adapter?.balance ?: BigDecimal.ZERO, adapterState)
+            if (dataSource.chartEnabled) {
+                balanceItem.chartStatsFetching = true
+                interactor.fetchRateStats(dataSource.currency.code, wallet.coin.code)
+            }
+
+            balanceItem
         }
+
         dataSource.set(balanceItems)
         interactor.fetchRates(dataSource.currency.code, dataSource.coinCodes)
 
@@ -144,6 +163,30 @@ class BalancePresenter(
         view?.updateHeader()
         dataSource.sortBy(interactor.getSortingType())
         view?.reload()
+    }
+
+    override fun onReceiveRateStats(data: Pair<RateStatsManager.StatsKey, RateStatData>) {
+        val (key, rate) = data
+        val rateStats = rate.stats[ChartType.DAILY.name] ?: return
+        val positions = dataSource.getPositionsByCoinCode(key.coinCode)
+
+        positions.forEach { position ->
+            dataSource.setChartData(position, rateStats)
+            view?.updateItem(position)
+        }
+    }
+
+    override fun onFailFetchChartStats(coinCode: String) {
+        dataSource.getPositionsByCoinCode(coinCode).forEach { position ->
+            dataSource.setChartStatsFetching(position, false)
+            view?.updateItem(position)
+        }
+    }
+
+    override fun onFetchingChartStats(coinCode: String) {
+        dataSource.getPositionsByCoinCode(coinCode).forEach { position ->
+            dataSource.setChartStatsFetching(position, true)
+        }
     }
 
     override fun didRefresh() {

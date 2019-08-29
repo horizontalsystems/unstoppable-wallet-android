@@ -2,7 +2,8 @@ package io.horizontalsystems.bankwallet.modules.ratechart
 
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.IRateStorage
-import io.horizontalsystems.bankwallet.core.managers.RateManager
+import io.horizontalsystems.bankwallet.core.managers.RateStatsManager
+import io.horizontalsystems.bankwallet.core.managers.RateStatsManager.StatsKey
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.entities.RateStatData
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
@@ -14,7 +15,7 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 
 class RateChartInteractor(
-        private val rateManager: RateManager,
+        private val rateStatsManager: RateStatsManager,
         private val rateStorage: IRateStorage,
         private val localStorage: ILocalStorage)
     : RateChartModule.Interactor {
@@ -30,14 +31,18 @@ class RateChartInteractor(
         }
 
     override fun getRateStats(coinCode: CoinCode, currencyCode: String) {
-        val getRates = rateManager.getRateStats(coinCode, currencyCode)
+        val getRates = rateStatsManager.getRateStats(coinCode, currencyCode)
         val getLocalRate = rateStorage.latestRateObservable(coinCode, currencyCode)
 
-        Flowable.zip(getRates, getLocalRate, BiFunction<RateStatData, Rate, Pair<RateStatData, Rate>> { a, b -> Pair(a, b) })
+        val zipper = BiFunction<Pair<StatsKey, RateStatData>, Rate, Pair<Pair<StatsKey, RateStatData>, Rate>> { a, b ->
+            Pair(a, b)
+        }
+
+        Flowable.zip(getRates, getLocalRate, zipper)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    delegate?.onReceiveStats(it)
+                .subscribe({ (data, rate) ->
+                    delegate?.onReceiveStats(Pair(data.second, rate))
                 }, {
                     delegate?.onReceiveError(it)
                 })

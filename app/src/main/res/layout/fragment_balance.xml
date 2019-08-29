@@ -56,9 +56,19 @@
                 android:id="@+id/sortButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="10dp"
-                android:paddingEnd="0dp"
+                android:layout_marginEnd="24dp"
+                android:visibility="gone"
                 android:src="@drawable/ic_sort"
+                android:tint="@color/stateful_button_yellow_color"
+                app:layout_constraintBottom_toBottomOf="@+id/ballanceText"
+                app:layout_constraintEnd_toStartOf="@+id/chartButton"
+                app:layout_constraintTop_toTopOf="@+id/ballanceText" />
+
+            <ImageView
+                android:id="@+id/chartButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_rate"
                 android:tint="@color/stateful_button_yellow_color"
                 app:layout_constraintBottom_toBottomOf="@+id/ballanceText"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -3,7 +3,11 @@ package io.horizontalsystems.bankwallet.modules.balance
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
+import io.horizontalsystems.bankwallet.core.managers.RateStatsManager
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.lib.chartview.ChartView
+import io.horizontalsystems.bankwallet.lib.chartview.models.ChartData
+import io.horizontalsystems.bankwallet.modules.ratechart.RateChartViewFactory.Companion.diffInPercent
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import java.math.BigDecimal
 
@@ -30,6 +34,7 @@ object BalanceModule {
         fun openManageCoins()
         fun onClear()
         fun onSortClick()
+        fun onEnableChart(enabled: Boolean)
         fun onSortTypeChanged(sortType: BalanceSortType)
         fun openBackup()
         fun openChart(position: Int)
@@ -39,6 +44,7 @@ object BalanceModule {
         fun refresh()
         fun initWallets()
         fun fetchRates(currencyCode: String, coinCodes: List<CoinCode>)
+        fun fetchRateStats(currencyCode: String, coinCode: CoinCode)
         fun getSortingType(): BalanceSortType
         fun clear()
         fun saveSortingType(sortType: BalanceSortType)
@@ -51,6 +57,9 @@ object BalanceModule {
         fun didUpdateBalance(wallet: Wallet, balance: BigDecimal)
         fun didUpdateState(wallet: Wallet, state: AdapterState)
         fun didUpdateRate(rate: Rate)
+        fun onReceiveRateStats(data: Pair<RateStatsManager.StatsKey, RateStatData>)
+        fun onFailFetchChartStats(coinCode: String)
+        fun onFetchingChartStats(coinCode: String)
         fun didRefresh()
     }
 
@@ -74,6 +83,7 @@ object BalanceModule {
 
         var items = listOf<BalanceItem>()
         var balanceSortType: BalanceSortType = BalanceSortType.Name
+        var chartEnabled = false
 
         private var originalItems = listOf<BalanceItem>()
 
@@ -124,6 +134,25 @@ object BalanceModule {
             items[position].rate = rate
         }
 
+        fun setChartData(position: Int, data: RateData) {
+            val points = data.rates.toMutableList()
+            val balanceItem = items[position]
+
+            balanceItem.rate?.let {
+                points.add(it.value.toFloat())
+            }
+
+            if (points.size < 10) return
+            val growth = diffInPercent(points.first { it != 0f }, points.last())
+
+            balanceItem.chartStatsFetching = false
+            balanceItem.chartStats = Pair(growth, ChartData(points, data.timestamp, data.scale, ChartView.ChartType.DAILY))
+        }
+
+        fun setChartStatsFetching(position: Int, fetching: Boolean) {
+            items[position]?.let { it.chartStatsFetching = fetching }
+        }
+
         fun clearRates() {
             items.forEach { it.rate = null }
         }
@@ -143,17 +172,19 @@ object BalanceModule {
 
     data class BalanceItem(
             val wallet: Wallet,
-            var balance: BigDecimal = BigDecimal.ZERO,
-            var state: AdapterState = AdapterState.NotSynced,
-            var rate: Rate? = null
-    ) {
+            var balance: BigDecimal,
+            var state: AdapterState,
+            var rate: Rate? = null,
+            var chartStats: Pair<BigDecimal, ChartData>? = null) {
+
+        var chartStatsFetching: Boolean = false
         val fiatValue: BigDecimal?
             get() = rate?.let { balance.times(it.value) }
     }
 
     fun init(view: BalanceViewModel, router: IRouter) {
         val currencyManager = App.currencyManager
-        val interactor = BalanceInteractor(App.walletManager, App.adapterManager, App.rateStorage, currencyManager, App.localStorage)
+        val interactor = BalanceInteractor(App.walletManager, App.adapterManager, App.rateStorage, App.rateStatsManager, currencyManager, App.localStorage)
         val presenter = BalancePresenter(interactor, router, DataSource(currencyManager.baseCurrency), App.predefinedAccountTypeManager, BalanceViewItemFactory())
 
         presenter.view = view
