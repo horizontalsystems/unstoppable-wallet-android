@@ -94,7 +94,7 @@
 
     <string name="Send_Confirmation_Title">Confirm</string>
     <string name="Send_Confirmation_To">To: </string>
-    <string name="Send_Confirmation_HintMemo">Memo</string>
+    <string name="Send_Confirmation_HintMemo">Memo:</string>
     <string name="Send_Confirmation_Eos_HintAccount">Account</string>
     <string name="Send_Confirmation_Total">Total:</string>
     <string name="Send_Confirmation_EstimateTime">Estimate Time:</string>
@@ -116,6 +116,7 @@
     <string name="Send_DialogDuration">Duration</string>
     <string name="Send_DialogFee">Fee</string>
     <string name="Send_DialogTotal">Total:</string>
+    <string name="Send_DialogMemoHint">Memo</string>
     <string name="Send_DialogProceed">Proceed</string>
     <string name="Send_Sending">Sending</string>
 
@@ -154,6 +155,19 @@
     <plurals name="Duration_hours">
         <item quantity="one">%d hour</item>
         <item quantity="other">%d hours</item>
+    </plurals>
+
+    <plurals name="DurationInterval_seconds">
+        <item quantity="one">within %d second</item>
+        <item quantity="other">within %d seconds</item>
+    </plurals>
+    <plurals name="DurationInterval_minutes">
+        <item quantity="one">within %d minute</item>
+        <item quantity="other">within %d minutes</item>
+    </plurals>
+    <plurals name="DurationInterval_hours">
+        <item quantity="one">within %d hour</item>
+        <item quantity="other">within %d hours</item>
     </plurals>
 
     <!--Transactions-->

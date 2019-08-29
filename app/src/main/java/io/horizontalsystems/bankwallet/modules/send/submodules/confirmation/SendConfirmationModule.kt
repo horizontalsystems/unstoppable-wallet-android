@@ -8,19 +8,16 @@ object SendConfirmationModule {
     const val ConfirmationInfoKey = "confirmation_info_key"
 
     interface IView{
-        fun loadPrimaryItem(primaryItemData: PrimaryItemData)
-        fun loadMemoItem()
+        fun loadPrimaryItems(primaryItemData: PrimaryItemData)
+        fun loadSecondaryItems(secondaryItemData: SecondaryItemData)
         fun showCopied()
-        fun loadFeeFieldsItem(secondaryItemData: SecondaryItemData)
         fun loadSendButton()
-        fun send(memo: String? = null)
         fun setSendButtonState(state: SendButtonState)
     }
 
     interface IViewDelegate {
         fun onViewDidLoad()
         fun onReceiverClick()
-        fun onSendClick(memo: String?)
         fun onSendError()
     }
 
@@ -51,6 +48,7 @@ object SendConfirmationModule {
             val receiver: String)
 
     data class SecondaryItemData(
+            val memo: String?,
             val feeAmount: String?,
             val totalAmount: String?,
             val estimatedTime: String?)

@@ -45,7 +45,9 @@ class SendEosHandler(private val interactor: SendModule.ISendEosInteractor,
             SendModule.Input.ProceedButton)
 
     override fun confirmationViewItems(): List<SendModule.SendConfirmationViewItem> {
-        TODO("not implemented")
+        return listOf(
+                SendModule.SendConfirmationAmountViewItem(amountModule.primaryAmountInfo(), amountModule.secondaryAmountInfo(), addressModule.validAddress()),
+                SendModule.SendConfirmationMemoViewItem(memoModule.memo))
     }
 
     override fun sendSingle(): Single<Unit> {

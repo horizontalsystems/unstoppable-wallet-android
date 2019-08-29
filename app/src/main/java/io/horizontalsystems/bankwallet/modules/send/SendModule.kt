@@ -41,7 +41,7 @@ object SendModule {
         fun onModulesDidLoad()
         fun onAddressScan(address: String)
         fun onProceedClicked()
-        fun onSendConfirmed(memo: String?)
+        fun onSendConfirmed()
         fun onClear()
     }
 
@@ -124,6 +124,7 @@ object SendModule {
 
         fun onModulesDidLoad()
         fun onAddressScan(address: String)
+        @Throws
         fun confirmationViewItems(): List<SendConfirmationViewItem>
         fun sendSingle(): Single<Unit>
     }
@@ -144,9 +145,9 @@ object SendModule {
     data class SendConfirmationTotalViewItem(val primaryInfo: AmountInfo,
                                              val secondaryInfo: AmountInfo?) : SendConfirmationViewItem()
 
-    data class SendConfirmationMemoViewItem(val memo: String) : SendConfirmationViewItem()
+    data class SendConfirmationMemoViewItem(val memo: String?) : SendConfirmationViewItem()
 
-    data class SendConfirmationDurationViewItem(val duration: Long?) : SendConfirmationViewItem()
+    data class SendConfirmationDurationViewItem(val duration: String?) : SendConfirmationViewItem()
 
 
     fun init(viewModel: SendViewModel, wallet: Wallet): IViewDelegate {

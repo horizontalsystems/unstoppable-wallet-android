@@ -43,6 +43,21 @@ object DateHelper {
         }
     }
 
+    fun getTxDurationIntervalString(context: Context, durationInSec: Long): String {
+        return when {
+            durationInSec < 10 -> context.getString(R.string.Duration_instant)
+            durationInSec < 60 -> context.resources.getQuantityString(R.plurals.DurationInterval_seconds, durationInSec.toInt(), durationInSec.toInt())
+            durationInSec < 60 * 60 -> {
+                val minutes = (durationInSec / 60).toInt()
+                context.resources.getQuantityString(R.plurals.DurationInterval_minutes, minutes, minutes)
+            }
+            else -> {
+                val hours = (durationInSec / (60 * 60)).toInt()
+                context.resources.getQuantityString(R.plurals.DurationInterval_hours, hours, hours)
+            }
+        }
+    }
+
     fun getShortDateForTransaction(date: Date): String = if (isThisYear(date)) {
         formatDate(date, "MMM d")
     } else {

@@ -10,10 +10,8 @@ class SendConfirmationViewModel: ViewModel(), SendConfirmationModule.IView {
 
     val addPrimaryDataViewItem = SingleLiveEvent<SendConfirmationModule.PrimaryItemData>()
     val addSecondaryDataViewItem = SingleLiveEvent<SendConfirmationModule.SecondaryItemData>()
-    val addMemoViewItem = SingleLiveEvent<Unit>()
     val showCopied = SingleLiveEvent<Unit>()
     val addSendButton = SingleLiveEvent<Unit>()
-    val sendWithMemo = SingleLiveEvent<String?>()
     val sendButtonState= SingleLiveEvent<SendConfirmationModule.SendButtonState>()
 
 
@@ -22,28 +20,20 @@ class SendConfirmationViewModel: ViewModel(), SendConfirmationModule.IView {
         delegate.onViewDidLoad()
     }
 
-    override fun loadPrimaryItem(primaryItemData: SendConfirmationModule.PrimaryItemData) {
+    override fun loadPrimaryItems(primaryItemData: SendConfirmationModule.PrimaryItemData) {
         addPrimaryDataViewItem.value = primaryItemData
-    }
-
-    override fun loadMemoItem() {
-        addMemoViewItem.call()
     }
 
     override fun showCopied() {
         showCopied.call()
     }
 
-    override fun loadFeeFieldsItem(secondaryItemData: SendConfirmationModule.SecondaryItemData) {
+    override fun loadSecondaryItems(secondaryItemData: SendConfirmationModule.SecondaryItemData) {
         addSecondaryDataViewItem.value = secondaryItemData
     }
 
     override fun loadSendButton() {
         addSendButton.call()
-    }
-
-    override fun send(memo: String?) {
-        sendWithMemo.value = memo
     }
 
     override fun setSendButtonState(state: SendConfirmationModule.SendButtonState) {

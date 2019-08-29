@@ -25,7 +25,7 @@ class SendPresenter(private val interactor: SendModule.ISendInteractor,
         view.showConfirmation(handler.confirmationViewItems())
     }
 
-    override fun onSendConfirmed(memo: String?) {
+    override fun onSendConfirmed() {
         interactor.send(handler.sendSingle())
     }
 

@@ -6,12 +6,12 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.SendConfirmationModule
-import kotlinx.android.synthetic.main.view_confirmation_secondary_data_item_view.view.*
+import kotlinx.android.synthetic.main.view_confirmation_secondary_item_view.view.*
 
-class ConfirmationSecondaryDataView : ConstraintLayout {
+class ConfirmationSecondaryView : ConstraintLayout {
 
     init {
-        inflate(context, R.layout.view_confirmation_secondary_data_item_view, this)
+        inflate(context, R.layout.view_confirmation_secondary_item_view, this)
     }
 
     constructor(context: Context) : super(context)
@@ -21,6 +21,10 @@ class ConfirmationSecondaryDataView : ConstraintLayout {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     fun bind(secondaryData: SendConfirmationModule.SecondaryItemData) {
+        secondaryData.memo?.let {
+            memoLayout.visibility = View.VISIBLE
+            memoValue.text = it
+        }
         secondaryData.feeAmount?.let {
             feeLayout.visibility = View.VISIBLE
             feeValue.text = it

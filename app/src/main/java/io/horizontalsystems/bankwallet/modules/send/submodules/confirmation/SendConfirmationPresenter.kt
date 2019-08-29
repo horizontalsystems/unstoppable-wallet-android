@@ -1,6 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.confirmation
 
 import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.bankwallet.modules.send.SendModule.SendConfirmationAmountViewItem
+import io.horizontalsystems.bankwallet.modules.send.SendModule.SendConfirmationDurationViewItem
+import io.horizontalsystems.bankwallet.modules.send.SendModule.SendConfirmationFeeViewItem
+import io.horizontalsystems.bankwallet.modules.send.SendModule.SendConfirmationMemoViewItem
 
 class SendConfirmationPresenter(
         private val interactor: SendConfirmationModule.IInteractor,
@@ -8,48 +12,70 @@ class SendConfirmationPresenter(
     : SendConfirmationModule.IViewDelegate, SendConfirmationModule.IInteractorDelegate {
 
     var view: SendConfirmationViewModel? = null
+    private var receiver = ""
 
     override fun onViewDidLoad() {
+        var primaryAmount = ""
+        var secondaryAmount = ""
+        var primaryFeeAmount: String? = null
+        var secondaryFeeAmount: String? = null
+        var memo: String? = null
+        var duration: String? = null
 
-//        val primaryViewItem = SendConfirmationModule.PrimaryItemData(
-//                primaryAmount = confirmationInfo.primaryAmount,
-//                secondaryAmount = confirmationInfo.secondaryAmount,
-//                receiver = confirmationInfo.receiver
-//        )
-//
-//        view?.loadPrimaryItem(primaryViewItem)
-//
-//        if (confirmationInfo.showMemo) {
-//            view?.loadMemoItem()
-//        }
-//
-//        if (confirmationInfo.fee != null || confirmationInfo.total != null || confirmationInfo.duration != null) {
-//            val secondaryItemData = SendConfirmationModule.SecondaryItemData(
-//                    feeAmount = confirmationInfo.fee,
-//                    totalAmount = confirmationInfo.total,
-//                    estimatedTime = confirmationInfo.duration)
-//
-//            view?.loadFeeFieldsItem(secondaryItemData)
-//        }
-//
-//        view?.loadSendButton()
-//        view?.setSendButtonState(SendConfirmationModule.SendButtonState.ACTIVE)
+        confirmationViewItems.forEach { item ->
+            when (item) {
+                is SendConfirmationAmountViewItem -> {
+                    primaryAmount = item.primaryInfo.getFormatted() ?: ""
+                    secondaryAmount = item.secondaryInfo?.getFormatted() ?: ""
+                    receiver = item.receiver
+                }
+                is SendConfirmationFeeViewItem -> {
+                    primaryFeeAmount = item.primaryInfo.getFormatted()
+                    secondaryFeeAmount = item.secondaryInfo?.getFormatted()
+                }
+                is SendConfirmationMemoViewItem -> {
+                    memo = item.memo
+                }
+                is SendConfirmationDurationViewItem -> {
+                    duration = item.duration
+                }
+            }
+        }
+
+        val primaryViewItem = SendConfirmationModule.PrimaryItemData(
+                primaryAmount = primaryAmount,
+                secondaryAmount = secondaryAmount,
+                receiver = receiver
+        )
+
+        view?.loadPrimaryItems(primaryViewItem)
+
+        val secondaryViewItem = SendConfirmationModule.SecondaryItemData(
+                memo = memo,
+                feeAmount = primaryFeeAmount?.let { primaryFeeAmount ->
+                    "$primaryFeeAmount${secondaryFeeAmount?.let { secondaryFeeAmount -> " | $secondaryFeeAmount" }
+                            ?: ""}"
+                },
+                totalAmount = null,
+                estimatedTime = duration
+        )
+
+        view?.loadSecondaryItems(secondaryViewItem)
+
+        view?.loadSendButton()
+        view?.setSendButtonState(SendConfirmationModule.SendButtonState.ACTIVE)
     }
 
     override fun onReceiverClick() {
-//        interactor.copyToClipboard(confirmationInfo.receiver)
+        interactor.copyToClipboard(receiver)
     }
 
     override fun didCopyToClipboard() {
         view?.showCopied()
     }
 
-    override fun onSendClick(memo: String?) {
-        view?.setSendButtonState(SendConfirmationModule.SendButtonState.SENDING)
-        view?.send(memo)
-    }
-
     override fun onSendError() {
         view?.setSendButtonState(SendConfirmationModule.SendButtonState.ACTIVE)
     }
+
 }
