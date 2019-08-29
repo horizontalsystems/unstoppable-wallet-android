@@ -93,7 +93,7 @@
     <string name="Send_DialogTotal">总额：</string>
     <string name="Send_DialogProceed">继续</string>
     <string name="Send_Sending">正在发送</string>
-    <string name="Send_ERC_Alert">用以太币Ethereum支付的%s（ERC20）交易费用。您需要%s ETH。</string>
+    <string name="Send_ERC_Alert">用Ethereum支付的%s（ERC20）交易费用。您需要%s ETH。</string>
     <string name="Send_Token_InsufficientFeeAlert">用%s支付的%s（%s）交易费用。您需要%s。</string>
     <!--Deposit-->
     <string name="Deposit_Title">收到%s</string>
@@ -168,44 +168,44 @@
     <string name="FullInfo_TotalInput">输入总额</string>
     <string name="FullInfo_TotalOutput">输出总额</string>
     <string name="FullInfo_FeePerByte">每字节费用</string>
-    <string name="FullInfo_FeeRate">手续费汇率</string>
+    <string name="FullInfo_FeeRate">费率</string>
     <string name="FullInfo_NoAddress">空地址</string>
     <string name="FullInfo_SatByte">sat/B</string>
     <string name="FullInfo_Bytes">字节</string>
-    <string name="FullInfo_SubtitleInputs">收入</string>
-    <string name="FullInfo_SubtitleOutputs">转出</string>
+    <string name="FullInfo_SubtitleInputs">输入</string>
+    <string name="FullInfo_SubtitleOutputs">输出</string>
     <string name="FullInfoEth_Nonce">Nonce</string>
     <string name="FullInfoEth_Amount">金额</string>
     <!--Settings-->
     <string name="Settings_Title">设置</string>
     <string name="Settings_SecurityCenter">安全中心</string>
-    <string name="Settings_ManageCoins">管理Coins</string>
+    <string name="Settings_ManageCoins">管理代币</string>
     <string name="Settings_RestoreWallet">恢复钱包</string>
-    <string name="Settings_BaseCurrency">基本货币</string>
+    <string name="Settings_BaseCurrency">基础货币</string>
     <string name="Settings_Language">语言</string>
     <string name="Settings_LightMode">简单模式</string>
-    <string name="Settings_About">更多</string>
+    <string name="Settings_About">关于</string>
     <string name="Settings_ShareThisWallet">分享给好友</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <string name="Settings_Report">报告问题</string>
     <!--Settings-->
-    <string name="Settings_Error_FingerprintNotEnabled">指纹识别未启用</string>
-    <string name="Settings_Error_NoFingerprintAddedYet">在此设备上指纹识别尚未启用。为了设置指纹识别访问，请转到\"设置“&gt;”安全“</string>
+    <string name="Settings_Error_FingerprintNotEnabled">指纹未启用</string>
+    <string name="Settings_Error_NoFingerprintAddedYet">您未在此设备上启用指纹。前往“设置 &gt; 安全”设置指纹访问。</string>
     <!--Setting_Security-->
-    <string name="SettingsSecurity_Fingerprint">指纹识别</string>
+    <string name="SettingsSecurity_Fingerprint">指纹</string>
     <string name="SettingsSecurity_EnablePin">密码</string>
-    <string name="SettingsSecurity_EditPin">修改密码</string>
+    <string name="SettingsSecurity_EditPin">编辑密码</string>
     <string name="SettingsSecurity_ManageKeys">管理密钥</string>
     <string name="SettingsSecurity_BackupWallet">备份钱包</string>
     <!--Setting_Currency-->
-    <string name="SettingsCurrency_Title">基本货币</string>
+    <string name="SettingsCurrency_Title">基础货币</string>
     <!--Setting_Language-->
     <string name="SettingsLanguage_Title">语言</string>
     <!--Setting_About-->
-    <string name="SettingsAbout_Title">更多</string>
+    <string name="SettingsAbout_Title">关于</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
-    <string name="SettingsAbout_TermsPrivacySubtitle">服务条款&amp;隐私策略</string>
+    <string name="SettingsAbout_TermsPrivacySubtitle">条款和隐私：</string>
     <string name="SettingsAbout_TermsPrivacyText">此应用程序是对等的。它不依赖于任何 web 服务器或支持人员来运行的技术。
 \n\n只要有互联网, 它就可以被使用。任何实体都不能阻止此应用程序工作或阻止某人使用它。
 
@@ -226,7 +226,7 @@
     <string name="SettingsReport_Email">邮件</string>
     <string name="SettingsReport_Telegram">电报</string>
     <!--Alert-->
-    <string name="Alert_KeysInvalidatedTitle">Android密钥存储错误</string>
+    <string name="Alert_KeysInvalidatedTitle">Android密钥库错误</string>
     <string name="Alert_KeysInvalidatedDescription">由于您的安卓锁屏被更改，保存您钱包的加密数据已失效。</string>
     <string name="Alert_TitleWarning">警示</string>
     <string name="Alert_NoDeviceLockDescription">在此设备上设置锁定屏幕以继续。转到 \"设置\" &gt; \"安全\" &gt; \"屏幕锁定\" 并启用锁定屏幕设置。</string>
