@@ -222,9 +222,9 @@
     <string name="SettingsShare_Title">分享</string>
     <string name="SettingsShare_Text">Unstoppable Wallet——我强烈推荐的一款加密货币钱包</string>
     <!--Setting_Report-->
-    <string name="SettingsReport_Title">Report a Problem</string>
-    <string name="SettingsReport_Email">Mail</string>
-    <string name="SettingsReport_Telegram">Telegram</string>
+    <string name="SettingsReport_Title">报告问题</string>
+    <string name="SettingsReport_Email">邮件</string>
+    <string name="SettingsReport_Telegram">电报</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android密钥存储错误</string>
     <string name="Alert_KeysInvalidatedDescription">由于您的安卓锁屏被更改，保存您钱包的加密数据已失效。</string>
@@ -235,9 +235,9 @@
     <string name="Unlock_Page_EnterYourPin">密码</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">不支持的货币</string>
-    <string name="Eos_Backend_Error_SelfTransfer">Can\'t transfer token to own account</string>
-    <string name="Eos_Backend_Error_AccountNotExist">Target account does not exist</string>
-    <string name="Eos_Backend_Error_InsufficientRam">Your EOS account doesn\'t have enough RAM to send this token. You need to increase RAM stake to proceed.</string>
+    <string name="Eos_Backend_Error_SelfTransfer">无法将代币转入自己的账户</string>
+    <string name="Eos_Backend_Error_AccountNotExist">目标账户不存在</string>
+    <string name="Eos_Backend_Error_InsufficientRam">您的EOS账户没有足够的RAM来发送此代币。您必须增加RAM才能继续。</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">解锁​​​​</string>
     <string name="Hud_Text_Success">成功</string>
@@ -279,7 +279,7 @@
     <string name="ManageCoins_EOSAlert_CreateButton">此时，钱包无法创建新的EOS钱包帐户。您只能还原现有的。</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">管理密钥</string>
-    <string name="ManageKeys_Description">Anyone with access to your Keys can steal your wallet funds. Store keys safely and never show them to anyone. \n\nBackup each key to be able to restore funds if you lose or break your phone, or simply the wallet app gets deleted.</string>
+    <string name="ManageKeys_Description">任何能获取您密钥的人都能够窃取您钱包的资金。保存好密钥且绝不能向任何人透露。\n\n保存每一个密钥将能够在手机丢失或出现故障，或者在钱包应用被删除的情况下恢复资金。</string>
     <string name="ManageKeys_Create">创建</string>
     <string name="ManageKeys_Restore">恢复</string>
     <string name="ManageKeys_Delete">删除</string>
@@ -291,8 +291,8 @@
     <string name="ManageKeys_Delete_ConfirmationDisable">将被禁用的硬币：%s</string>
     <string name="ManageKeys_Delete_ConfirmationLoose">如果你没有这把密钥的备份，你将失去相应的资金。</string>
     <string name="ManageKeys_Delete_FromPhone">从手机中删除</string>
-    <string name="ManageKeys_Delete_Alert_Title">Backup Required</string>
-    <string name="ManageKeys_Delete_Alert">You need to backup %s key before you may delete it from this phone.</string>
+    <string name="ManageKeys_Delete_Alert_Title">需要备份</string>
+    <string name="ManageKeys_Delete_Alert">您必须在将其从电话上删除之前先备份%s密钥。</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">加%s</string>
     <string name="AddCoin_Description">You don\'t have key for %1s. The wallet can generate the key for you. Use the create button below to generate a new key. \n\nYou may also use the existing %3s key for the %4s if you have one.</string>
