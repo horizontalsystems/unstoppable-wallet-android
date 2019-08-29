@@ -59,7 +59,10 @@ class SendBitcoinHandler(private val interactor: SendModule.ISendBitcoinInteract
     }
 
     override fun confirmationViewItems(): List<SendModule.SendConfirmationViewItem> {
-        TODO("not implemented")
+        return listOf(
+                SendModule.SendConfirmationAmountViewItem(amountModule.primaryAmountInfo(), amountModule.secondaryAmountInfo(), addressModule.validAddress()),
+                SendModule.SendConfirmationFeeViewItem(feeModule.primaryAmountInfo, feeModule.secondaryAmountInfo),
+                SendModule.SendConfirmationDurationViewItem(feeModule.duration))
     }
 
     override fun sendSingle(): Single<Unit> {

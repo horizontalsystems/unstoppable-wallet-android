@@ -10,9 +10,8 @@ import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.WrongParameters
 import io.horizontalsystems.bankwallet.modules.send.SendViewModel
-import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationMemoView
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationPrimaryView
-import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationSecondaryDataView
+import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationSecondaryView
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationSendButtonView
 import io.horizontalsystems.bankwallet.ui.dialogs.AlertDialogFragment
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
@@ -24,7 +23,6 @@ class ConfirmationFragment : Fragment() {
 
     private var sendViewModel: SendViewModel? = null
     private var confirmationViewModel: SendConfirmationViewModel? = null
-    private var memoViewItem: ConfirmationMemoView? = null
     private var sendButtonView: ConfirmationSendButtonView? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -59,20 +57,13 @@ class ConfirmationFragment : Fragment() {
             }
         })
 
-        confirmationViewModel?.addMemoViewItem?.observe(viewLifecycleOwner, Observer {
-            context?.let {
-                memoViewItem = ConfirmationMemoView(it)
-                confirmationLinearLayout.addView(memoViewItem)
-            }
-        })
-
         confirmationViewModel?.showCopied?.observe(viewLifecycleOwner, Observer {
             HudHelper.showSuccessMessage(R.string.Hud_Text_Copied, 500)
         })
 
         confirmationViewModel?.addSecondaryDataViewItem?.observe(viewLifecycleOwner, Observer { secondaryData ->
             context?.let {
-                val secondaryDataView = ConfirmationSecondaryDataView(it)
+                val secondaryDataView = ConfirmationSecondaryView(it)
                 secondaryDataView.bind(secondaryData)
                 confirmationLinearLayout.addView(secondaryDataView)
             }
@@ -82,15 +73,12 @@ class ConfirmationFragment : Fragment() {
             context?.let {
                 sendButtonView = ConfirmationSendButtonView(it)
                 sendButtonView?.setOnClickListener {
-                    confirmationViewModel?.delegate?.onSendClick(memoViewItem?.getMemo())
+                    sendButtonView?.bind(SendConfirmationModule.SendButtonState.SENDING)
+                    sendViewModel?.delegate?.onSendConfirmed()
                 }
 
                 confirmationLinearLayout.addView(sendButtonView)
             }
-        })
-
-        confirmationViewModel?.sendWithMemo?.observe(viewLifecycleOwner, Observer { memo ->
-            sendViewModel?.delegate?.onSendConfirmed(memo)
         })
 
         sendViewModel?.error?.observe(viewLifecycleOwner, Observer { errorMsgTextRes ->

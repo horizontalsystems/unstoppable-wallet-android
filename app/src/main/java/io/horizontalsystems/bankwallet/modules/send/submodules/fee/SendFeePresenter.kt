@@ -47,7 +47,7 @@ class SendFeePresenter(
     }
 
     private fun syncFeeRateLabels() {
-        view?.setDuration(helper.duration(feeRateInfo.duration))
+        view?.setDuration(helper.durationInterval(feeRateInfo.duration))
         view?.setFeePriority(helper.priority(feeRateInfo.priority))
     }
 
@@ -98,7 +98,7 @@ class SendFeePresenter(
         }
 
     override val duration: String?
-        get() = helper.duration(feeRateInfo.duration)
+        get() = helper.durationInterval(feeRateInfo.duration)
 
     override fun setFee(fee: BigDecimal) {
         this.fee = fee

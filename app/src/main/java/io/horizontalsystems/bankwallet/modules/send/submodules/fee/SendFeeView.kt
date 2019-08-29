@@ -39,7 +39,7 @@ class SendFeeView : ConstraintLayout, FeeRatePrioritySelector.Listener {
         sendFeeViewModel.secondaryFee.observe(lifecycleOwner, Observer { txFeeSecondary.text = it })
 
         sendFeeViewModel.duration.observe(lifecycleOwner, Observer { duration ->
-            txDuration.text = duration?.let { "~ $it" }
+            txDuration.text = duration
         })
 
         sendFeeViewModel.feePriority.observe(lifecycleOwner, Observer { selectedPriority ->

@@ -36,6 +36,10 @@ class SendFeePresenterHelper(
         return DateHelper.getTxDurationString(App.instance, durationInSecs)
     }
 
+    fun durationInterval(durationInSecs: Long): String {
+        return DateHelper.getTxDurationIntervalString(App.instance, durationInSecs)
+    }
+
     fun priority(priority: FeeRatePriority): String = when (priority) {
         FeeRatePriority.LOW -> App.instance.getString(R.string.Send_TxSpeed_Low)
         FeeRatePriority.MEDIUM -> App.instance.getString(R.string.Send_TxSpeed_Medium)

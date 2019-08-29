@@ -43,7 +43,10 @@ class SendBinanceHandler(private val interactor: SendModule.ISendBinanceInteract
 
 
     override fun confirmationViewItems(): List<SendModule.SendConfirmationViewItem> {
-        TODO("not implemented")
+        return listOf(
+                SendModule.SendConfirmationAmountViewItem(amountModule.primaryAmountInfo(), amountModule.secondaryAmountInfo(), addressModule.validAddress()),
+                SendModule.SendConfirmationFeeViewItem(feeModule.primaryAmountInfo, feeModule.secondaryAmountInfo),
+                SendModule.SendConfirmationMemoViewItem(memoModule.memo))
     }
 
     override fun sendSingle(): Single<Unit> {
