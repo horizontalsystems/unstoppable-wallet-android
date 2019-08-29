@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.core.managers.RateStatsManager
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartData
-import io.horizontalsystems.bankwallet.modules.ratechart.RateChartViewFactory.Companion.diffInPercent
+import io.horizontalsystems.bankwallet.modules.ratechart.RateChartViewFactory.Companion.growthDiff
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import java.math.BigDecimal
 
@@ -143,7 +143,7 @@ object BalanceModule {
             }
 
             if (points.size < 10) return
-            val growth = diffInPercent(points.first { it != 0f }, points.last())
+            val growth = growthDiff(points)
 
             balanceItem.chartStatsFetching = false
             balanceItem.chartStats = Pair(growth, ChartData(points, data.timestamp, data.scale, ChartView.ChartType.DAILY))
