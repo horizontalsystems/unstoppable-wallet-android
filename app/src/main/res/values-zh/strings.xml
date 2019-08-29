@@ -321,12 +321,12 @@
     <string name="Charts_TimeDuration_HalfYear">6个月</string>
     <string name="Charts_TimeDuration_Year">1年</string>
     <string name="Charts_Title">%s价格</string>
-    <string name="Charts_Rate_High">High</string>
-    <string name="Charts_Rate_Low">Low</string>
-    <string name="Charts_MarketCap">Mkt. Cap</string>
-    <string name="Charts_MarketCap_Thousand">%s k</string>
-    <string name="Charts_MarketCap_Million">%s M</string>
-    <string name="Charts_MarketCap_Billion">%s B</string>
-    <string name="Charts_Volume">Volume</string>
-    <string name="Charts_Error_NotAvailable">Chart not available</string>
+    <string name="Charts_Rate_High">高</string>
+    <string name="Charts_Rate_Low">低</string>
+    <string name="Charts_MarketCap">市场价值</string>
+    <string name="Charts_MarketCap_Thousand">%s千</string>
+    <string name="Charts_MarketCap_Million">%s百万</string>
+    <string name="Charts_MarketCap_Billion">%s十亿</string>
+    <string name="Charts_Volume">量</string>
+    <string name="Charts_Error_NotAvailable">无可用图表</string>
 </resources>
