@@ -19,6 +19,7 @@ data class TransactionViewItem(
         val from: String?,
         val to: String?,
         val sentToSelf: Boolean,
+        val showFromAddress: Boolean,
         val incoming: Boolean,
         val date: Date?,
         val status: TransactionStatus,

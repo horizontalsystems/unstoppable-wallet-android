@@ -103,7 +103,7 @@ class TransactionInfoView : ConstraintLayout {
                 itemTime.bind(context.getString(R.string.TransactionInfo_Time), txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) } ?: "")
                 itemStatus.bindStatus(txStatus)
 
-                if (txRec.from.isNullOrEmpty()) {
+                if (txRec.from.isNullOrEmpty() || !txRec.showFromAddress) {
                     itemFrom.visibility = View.GONE
                 } else {
                     itemFrom.visibility = View.VISIBLE

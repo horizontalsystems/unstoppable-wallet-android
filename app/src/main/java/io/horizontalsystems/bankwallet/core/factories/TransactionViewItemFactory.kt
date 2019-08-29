@@ -51,6 +51,7 @@ class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
                 fromAddress,
                 toAddress,
                 isSentToSelf(record),
+                showFromAddress(wallet.coin.type),
                 incoming,
                 if (record.timestamp == 0L) null else Date(record.timestamp * 1000),
                 status,
@@ -63,6 +64,10 @@ class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
         val allToAddressesMine = record.to.all { it.mine }
 
         return allFromAddressesMine && allToAddressesMine
+    }
+
+    private fun showFromAddress(coinType: CoinType): Boolean {
+        return !(coinType == CoinType.Bitcoin || coinType == CoinType.BitcoinCash || coinType == CoinType.Dash)
     }
 
 }
