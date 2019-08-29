@@ -18,8 +18,8 @@ interface AccountsDao {
     @Query("SELECT * FROM AccountRecord WHERE deleted = 0")
     fun getAll(): List<AccountRecord>
 
-    @Query("SELECT * FROM AccountRecord WHERE deleted = 1")
-    fun getDeleted(): List<AccountRecord>
+    @Query("SELECT id FROM AccountRecord WHERE deleted = 1")
+    fun getDeletedIds(): List<String>
 
     @Query("SELECT COUNT(*) FROM AccountRecord WHERE isBackedUp = 0 AND deleted = 0")
     fun getNonBackedUpCount(): Flowable<Int>

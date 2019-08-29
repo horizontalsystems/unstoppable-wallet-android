@@ -1,22 +1,21 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.adapters.*
-import io.horizontalsystems.bankwallet.core.storage.AccountRecord
 
 class AccountCleaner(private val testMode: Boolean) {
 
-    fun clearAccounts(accountRecords: List<AccountRecord>) {
+    fun clearAccounts(accountRecords: List<String>) {
         accountRecords.forEach { clearAccount(it) }
     }
 
-    private fun clearAccount(accountRecord: AccountRecord) {
-        BinanceAdapter.clear(accountRecord.id, testMode)
-        BitcoinAdapter.clear(accountRecord.id, testMode)
-        BitcoinCashAdapter.clear(accountRecord.id, testMode)
-        DashAdapter.clear(accountRecord.id, testMode)
-        EosAdapter.clear(accountRecord.id, testMode)
-        EthereumAdapter.clear(accountRecord.id, testMode)
-        Erc20Adapter.clear(accountRecord.id, testMode)
+    private fun clearAccount(accountId: String) {
+        BinanceAdapter.clear(accountId, testMode)
+        BitcoinAdapter.clear(accountId, testMode)
+        BitcoinCashAdapter.clear(accountId, testMode)
+        DashAdapter.clear(accountId, testMode)
+        EosAdapter.clear(accountId, testMode)
+        EthereumAdapter.clear(accountId, testMode)
+        Erc20Adapter.clear(accountId, testMode)
     }
 
 }

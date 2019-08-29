@@ -7,11 +7,15 @@ class KeyStorePresenter(private val interactor: KeyStoreModule.IInteractor,
     var view: KeyStoreModule.IView? = null
 
     override fun viewDidLoad() {
-        interactor.resetApp()
-
         when (mode) {
-            KeyStoreModule.ModeType.NoSystemLock -> view?.showNoSystemLockWarning()
-            KeyStoreModule.ModeType.InvalidKey -> view?.showInvalidKeyWarning()
+            KeyStoreModule.ModeType.NoSystemLock -> {
+                interactor.resetApp()
+                view?.showNoSystemLockWarning()
+            }
+            KeyStoreModule.ModeType.InvalidKey -> {
+                interactor.resetApp()
+                view?.showInvalidKeyWarning()
+            }
             KeyStoreModule.ModeType.UserAuthentication -> view?.promptUserAuthentication()
         }
     }
