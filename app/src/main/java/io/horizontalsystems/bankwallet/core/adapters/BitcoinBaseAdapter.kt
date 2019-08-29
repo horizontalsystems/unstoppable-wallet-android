@@ -112,7 +112,7 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
                 amount = transaction.amount.toBigDecimal().divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN),
                 fee = transaction.fee?.toBigDecimal()?.divide(satoshisInBitcoin, decimal, RoundingMode.HALF_EVEN),
                 timestamp = transaction.timestamp,
-                from = emptyList(),
+                from = transaction.from.map { TransactionAddress(it.address, it.mine) },
                 to = transaction.to.map { TransactionAddress(it.address, it.mine) }
         )
     }
