@@ -72,7 +72,7 @@
     <string name="Send_Button_Max">Azami</string>
     <string name="Send_Confirmation_Title">Onayla</string>
     <string name="Send_Confirmation_To">Alan: </string>
-    <string name="Send_Confirmation_HintMemo">Not</string>
+    <string name="Send_Confirmation_HintMemo">Memo:</string>
     <string name="Send_Confirmation_Eos_HintAccount">Hesap</string>
     <string name="Send_Confirmation_Total">Toplam:</string>
     <string name="Send_Confirmation_EstimateTime">Tahmini süre:</string>
@@ -91,6 +91,7 @@
     <string name="Send_DialogDuration">Süre</string>
     <string name="Send_DialogFee">Masraf</string>
     <string name="Send_DialogTotal">Toplam:</string>
+    <string name="Send_DialogMemoHint">Memo</string>
     <string name="Send_DialogProceed">Devam</string>
     <string name="Send_Sending">Gönderiliyor</string>
     <string name="Send_ERC_Alert">%s (ERC20) için ișlem ücreti Ethereum hesabından ödenir. Asgari %s ETH gerekiyor</string>
@@ -121,6 +122,18 @@
     <plurals name="Duration_hours">
         <item quantity="one">%d saat</item>
         <item quantity="other">%d saat</item>
+    </plurals>
+    <plurals name="DurationInterval_seconds">
+        <item quantity="one">within %d second</item>
+        <item quantity="other">within %d seconds</item>
+    </plurals>
+    <plurals name="DurationInterval_minutes">
+        <item quantity="one">within %d minute</item>
+        <item quantity="other">within %d minutes</item>
+    </plurals>
+    <plurals name="DurationInterval_hours">
+        <item quantity="one">within %d hour</item>
+        <item quantity="other">within %d hours</item>
     </plurals>
     <!--Transactions-->
     <string name="Transactions_Title">Hesap işlemleri</string>
