@@ -227,9 +227,9 @@
     <string name="SettingsReport_Telegram">电报</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android密钥库错误</string>
-    <string name="Alert_KeysInvalidatedDescription">由于您的安卓锁屏被更改，保存您钱包的加密数据已失效。</string>
-    <string name="Alert_TitleWarning">警示</string>
-    <string name="Alert_NoDeviceLockDescription">在此设备上设置锁定屏幕以继续。转到 \"设置\" &gt; \"安全\" &gt; \"屏幕锁定\" 并启用锁定屏幕设置。</string>
+    <string name="Alert_KeysInvalidatedDescription">因为您的Android锁定屏幕已被更改，所以保存您钱包的加密数据目前已失效。</string>
+    <string name="Alert_TitleWarning">警告</string>
+    <string name="Alert_NoDeviceLockDescription">在此设备上设置锁定屏幕以继续。前往“设置” &gt; “安全” &gt; “屏幕锁定”并启用锁定屏幕设置。</string>
     <string name="Alert_CustomKeyboardIsUsed">您使用的是第三方键盘。您必须使用默认键盘。</string>
     <!--Unlock-->
     <string name="Unlock_Page_EnterYourPin">密码</string>
