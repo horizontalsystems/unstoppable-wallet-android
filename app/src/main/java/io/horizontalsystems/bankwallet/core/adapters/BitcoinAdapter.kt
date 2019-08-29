@@ -12,7 +12,6 @@ import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.models.BlockInfo
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
-import io.horizontalsystems.bitcoincore.transactions.scripts.ScriptType
 import io.horizontalsystems.bitcoinkit.BitcoinKit
 import io.horizontalsystems.bitcoinkit.BitcoinKit.NetworkType
 import io.reactivex.Single
@@ -32,8 +31,6 @@ class BitcoinAdapter(override val kit: BitcoinKit)
     // BitcoinBaseAdapter
     //
 
-    override val receiveScriptType = ScriptType.P2WPKHSH
-    override val changeScriptType = ScriptType.P2WPKH
     override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
 
     //
