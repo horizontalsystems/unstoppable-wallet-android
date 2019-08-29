@@ -31,12 +31,12 @@ class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
     }
 
     fun onTouchActive() {
-        setGradient(setAlphaComponent(config.touchColor, 80), setAlphaComponent(config.touchColor, 5))
+        setGradient(setAlphaComponent(config.touchColor, 104), setAlphaComponent(config.touchColor, 13))
         linePaint.color = config.touchColor
     }
 
     fun onTouchInactive() {
-        setGradient(setAlphaComponent(config.curveColor, 80), setAlphaComponent(config.curveColor, 5))
+        setGradient(setAlphaComponent(config.curveColor, 104), setAlphaComponent(config.curveColor, 13))
         linePaint.color = config.curveColor
     }
 
@@ -64,9 +64,9 @@ class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
 
         points.forEachIndexed { index, point ->
             if (index == 0) {
-                path.moveTo(point.x, animatedYCoordinate(point.y))
+                path.moveTo(point.x, animatedY(point.y))
             } else {
-                path.lineTo(point.x, animatedYCoordinate(point.y))
+                path.lineTo(point.x, animatedY(point.y))
             }
         }
 
@@ -78,9 +78,9 @@ class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
 
         points.forEachIndexed { index, point ->
             if (index == 0) {
-                path.moveTo(point.x, animatedYCoordinate(point.y))
+                path.moveTo(point.x, animatedY(point.y))
             } else {
-                path.lineTo(point.x, animatedYCoordinate(point.y))
+                path.lineTo(point.x, animatedY(point.y))
             }
         }
 
@@ -92,7 +92,9 @@ class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
         drawPath(path, gradient)
     }
 
-    private fun animatedYCoordinate(y: Float): Float {
+    private fun animatedY(y: Float): Float {
+        if (!config.animated) return y
+
         // Figure out top of column based on INVERSE of percentage. Bigger the percentage,
         // the smaller top is, since 100% goes to 0.
         return shape.bottom - (shape.bottom - y) * config.animatedFraction
