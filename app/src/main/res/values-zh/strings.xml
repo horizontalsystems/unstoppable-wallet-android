@@ -37,26 +37,26 @@
     <string name="Backup_Confirmation_SecretKey">我明白我是安全保存在我的电话中并能控制我钱包上的资金的12字私有密钥的唯一所有人。</string>
     <string name="Backup_Confirmation_DeleteAppWarn">我明白如果此应用曾被移动、删除或出现故障，则只能通过该密钥恢复对我钱包的访问。</string>
     <string name="Backup_Confirmation_LockAppWarn">我明白更改电话的解锁密码或者在Android设置中删除应用数据将会从设备上删除密钥。我必须重新输入我的密钥才能重新访问我的钱包。</string>
-    <string name="Backup_Confirmation_Disclaimer">我理解这个应用程序的开发人员对使用这个应用程序时可能出现的任何意外的错误或问题不负责任。</string>
-    <string name="Backup_Confirmation_Description">从你的 %s 输入单词。</string>
-    <string name="Backup_Confirmation_FailureAlertText"> 单词不匹配</string>
-    <string name="Backup_Confirmation_CheckTitle">正在检查...</string>
+    <string name="Backup_Confirmation_Disclaimer">我明白此应用的开发者不会对任何在使用此应用时出现的意外错误或问题负责。</string>
+    <string name="Backup_Confirmation_Description">从您的%s输入文字。</string>
+    <string name="Backup_Confirmation_FailureAlertText">文字不匹配</string>
+    <string name="Backup_Confirmation_CheckTitle">检查...</string>
     <string name="Backup_Button_Confirm">确认</string>
-    <string name="Backup_Button_Next">继续</string>
+    <string name="Backup_Button_Next">下一步</string>
     <string name="Backup_Button_Submit">提交</string>
     <string name="Backup_Button_ShowKey">显示密钥</string>
     <!--Backup Words-->
     <string name="Backup_Words_Title">密钥</string>
     <!--Backup Eos-->
-    <string name="Backup_Eos_AccountName">Account Name</string>
-    <string name="Backup_Eos_ActivePrivateKey">Private Key</string>
-    <string name="Backup_Eos_Warning">如果您使用任何剪贴板管理应用程序或其他可以访问剪贴板数据的应用程序，则使用“复制”操作复制密钥会带来一些风险。</string>
+    <string name="Backup_Eos_AccountName">账户名</string>
+    <string name="Backup_Eos_ActivePrivateKey">私钥</string>
+    <string name="Backup_Eos_Warning">如果您有使用任何剪贴板管理应用或其他可存取剪贴板数据的应用，那么适用”复制“操作复制您的密钥将会带来风险。</string>
     <!--Balance-->
     <string name="Balance_Title">余额</string>
-    <string name="Balance_Deposit">收到</string>
+    <string name="Balance_Deposit">接收</string>
     <string name="Balance_Send">发送​​</string>
-    <string name="Balance_RatePerCoin">每%s %s</string>
-    <string name="Balance_SyncedUntil">直到 %s</string>
+    <string name="Balance_RatePerCoin">%s / %s</string>
+    <string name="Balance_SyncedUntil">直至：%s</string>
     <string name="Balance_Syncing">同步...</string>
     <string name="Balance_AddCoins">添加硬币</string>
     <string name="Balance_Sort_Balance">值</string>
@@ -120,39 +120,39 @@
         <item quantity="other">%d小时</item>
     </plurals>
     <!--Transactions-->
-    <string name="Transactions_Title">交易记录</string>
+    <string name="Transactions_Title">交易</string>
     <string name="Transactions_FilterAll">全部</string>
-    <string name="Transactions_EmptyList">您还没有任何交易记录。</string>
+    <string name="Transactions_EmptyList">您尚无任何交易</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">交易</string>
     <string name="TransactionInfo_Status">状态</string>
     <string name="TransactionInfo_Status_Confirmed">已确认</string>
     <string name="TransactionInfo_Id">ID</string>
-    <string name="TransactionInfo_To">收件人：</string>
-    <string name="TransactionInfo_From">发件人：</string>
+    <string name="TransactionInfo_To">接收人</string>
+    <string name="TransactionInfo_From">发送人</string>
     <string name="TransactionInfo_Time">时间</string>
     <string name="TransactionInfo_ButtonVerify">验证</string>
-    <string name="TransactionInfo_Status_Pending">在过程中</string>
-    <string name="TransactionInfo_HistoricalRate">历史汇率</string>
+    <string name="TransactionInfo_Status_Pending">待处理</string>
+    <string name="TransactionInfo_HistoricalRate">历史价格</string>
     <string name="TransactionInfo_Fee">费用</string>
     <string name="TransactionInfo_FootNote">该交易的值似乎为0，因为它发送至您自己的地址</string>
     <!--Full Info-->
     <string name="FullInfo_Title">交易</string>
     <string name="FullInfo_Time">时间</string>
     <string name="FullInfo_Block">区块</string>
-    <string name="FullInfo_Confirmations">确认框</string>
-    <string name="FullInfo_Inputs">收入</string>
-    <string name="FullInfo_Outputs">转出</string>
-    <string name="FullInfo_Size">文件大小</string>
+    <string name="FullInfo_Confirmations">确认</string>
+    <string name="FullInfo_Inputs">输入</string>
+    <string name="FullInfo_Outputs">输出</string>
+    <string name="FullInfo_Size">大小</string>
     <string name="FullInfo_Fee">费用</string>
-    <string name="FullInfo_Rate">费率</string>
-    <string name="FullInfo_Source">信息源</string>
+    <string name="FullInfo_Rate">价格</string>
+    <string name="FullInfo_Source">源</string>
     <string name="FullInfo_Contract">合同</string>
-    <string name="FullInfo_From">发件人</string>
-    <string name="FullInfo_To">收件人</string>
+    <string name="FullInfo_From">发送人</string>
+    <string name="FullInfo_To">接收人</string>
     <string name="FullInfo_Status">状态</string>
-    <string name="FullInfo_Memo">Memo</string>
-    <string name="FullInfo_CpuUsage">CPU Usage</string>
+    <string name="FullInfo_Memo">备忘录</string>
+    <string name="FullInfo_CpuUsage">CPU使用</string>
     <string name="FullInfo_NetUsage">Net Usage</string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
     <string name="FullInfo_GasUsed">Gas Used</string>
