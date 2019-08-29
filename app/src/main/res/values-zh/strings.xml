@@ -256,26 +256,26 @@
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">禁用至：%s</string>
     <!--OS Pin-->
-    <string name="OSPin_Confirm_Title">电话PIN</string>
-    <string name="OSPin_Confirm_Desciption">此应用程序要求手机启用密码（屏幕锁定）。\n\n您可以在安卓设置中启用它。\n\n请注意，当您禁用操作系统级别的PIN时，您的电话安全存储中的安全措施使以前存储的数据无效。您需要恢复钱包密钥才能回到钱包。</string>
-    <string name="OSPin_Prompt_Desciption">这个应用程序需要你的手机的密码，以便将敏感数据从你的钱包中保存在安卓的安全存储中，而不是在应用程序本身中。</string>
+    <string name="OSPin_Confirm_Title">电话PIN码</string>
+    <string name="OSPin_Confirm_Desciption">此应用要求电话已启用密码（屏幕锁定）。\n\n您可以在Android设置中启用密码。\n\n请注意，禁用操作系统级别的PIN码后，电话的安全存储保障措施将使以前保存的数据无效。您必须恢复您的钱包密钥才能回到您的钱包。</string>
+    <string name="OSPin_Prompt_Desciption">此应用要求使用您电话的PIN码，以便将钱包的敏感数据保存在Android的安全存储区而不是应用本身。</string>
     <!--Set Pin-->
     <string name="SetPin_Title">密码</string>
-    <string name="SetPin_Info">您的密码将用于解锁钱包app。</string>
-    <string name="SetPin_ErrorShortPin">请只输入数字。</string>
+    <string name="SetPin_Info">您的密码将用于解锁钱包和发送资金</string>
+    <string name="SetPin_ErrorShortPin">请输入全部数字。</string>
     <string name="SetPin_ConfirmInfo">确认</string>
-    <string name="SetPin_Success">锁定密码设置成功!</string>
-    <string name="SetPin_ErrorPinsDontMatch">密码不匹配。请再试一次。</string>
-    <string name="SetPin_ErrorFailedToSavePin">保存您的密码出错。请重试。</string>
+    <string name="SetPin_Success">锁定密码设置成功！</string>
+    <string name="SetPin_ErrorPinsDontMatch">密码不匹配。请重试。</string>
+    <string name="SetPin_ErrorFailedToSavePin">保存密码时出错。请重试。</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">修改密码</string>
+    <string name="EditPin_Title">编辑密码</string>
     <string name="EditPin_UnlockInfo">当前密码</string>
     <string name="EditPin_NewPinInfo">新密码</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">硬币管理</string>
+    <string name="ManageCoins_title">代币管理器</string>
     <string name="ManageCoins_save">保存</string>
-    <string name="ManageCoins_AddCoin_Title">加%@ </string>
-    <string name="ManageCoins_AddCoin_Text">此操作将为以下硬币生成密钥（钱包）：%s </string>
+    <string name="ManageCoins_AddCoin_Title">添加%s代币</string>
+    <string name="ManageCoins_AddCoin_Text">此操作将生成以下代币的新密钥（钱包）：%s</string>
     <string name="ManageCoins_EOSAlert_CreateButton">此时，钱包无法创建新的EOS钱包帐户。您只能还原现有的。</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">管理密钥</string>
