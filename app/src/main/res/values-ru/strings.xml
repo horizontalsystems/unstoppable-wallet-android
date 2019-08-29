@@ -72,7 +72,7 @@
     <string name="Send_Button_Max">Макс.</string>
     <string name="Send_Confirmation_Title">Подтвердить</string>
     <string name="Send_Confirmation_To">Кому: </string>
-    <string name="Send_Confirmation_HintMemo">Memo</string>
+    <string name="Send_Confirmation_HintMemo">Memo:</string>
     <string name="Send_Confirmation_Eos_HintAccount">Account</string>
     <string name="Send_Confirmation_Total">Итого:</string>
     <string name="Send_Confirmation_EstimateTime">Приблизительное время:</string>
@@ -91,6 +91,7 @@
     <string name="Send_DialogDuration">Duration</string>
     <string name="Send_DialogFee">Fee</string>
     <string name="Send_DialogTotal">Итого:</string>
+    <string name="Send_DialogMemoHint">Memo</string>
     <string name="Send_DialogProceed">Proceed</string>
     <string name="Send_Sending">Отправка</string>
     <string name="Send_ERC_Alert">Комиссия за отправку %s (ERC20) взимается в ETH. Необходимо %s ETH.</string>
@@ -127,6 +128,24 @@
         <item quantity="few">%d hours</item>
         <item quantity="many">%d hours</item>
         <item quantity="other">%d hours</item>
+    </plurals>
+    <plurals name="DurationInterval_seconds">
+        <item quantity="one">within %d second</item>
+        <item quantity="few">within %d seconds</item>
+        <item quantity="many">within %d seconds</item>
+        <item quantity="other">within %d seconds</item>
+    </plurals>
+    <plurals name="DurationInterval_minutes">
+        <item quantity="one">within %d minute</item>
+        <item quantity="few">within %d minutes</item>
+        <item quantity="many">within %d minutes</item>
+        <item quantity="other">within %d minutes</item>
+    </plurals>
+    <plurals name="DurationInterval_hours">
+        <item quantity="one">within %d hour</item>
+        <item quantity="few">within %d hours</item>
+        <item quantity="many">within %d hours</item>
+        <item quantity="other">within %d hours</item>
     </plurals>
     <!--Transactions-->
     <string name="Transactions_Title">Транзакции</string>
