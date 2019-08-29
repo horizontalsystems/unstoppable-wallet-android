@@ -320,7 +320,7 @@
     <string name="Charts_TimeDuration_Quartal">3个月</string>
     <string name="Charts_TimeDuration_HalfYear">6个月</string>
     <string name="Charts_TimeDuration_Year">1年</string>
-    <string name="Charts_Title">%s Rate</string>
+    <string name="Charts_Title">%s价格</string>
     <string name="Charts_Rate_High">High</string>
     <string name="Charts_Rate_Low">Low</string>
     <string name="Charts_MarketCap">Mkt. Cap</string>
