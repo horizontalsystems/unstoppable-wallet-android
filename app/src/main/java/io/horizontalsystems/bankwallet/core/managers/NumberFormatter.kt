@@ -13,6 +13,7 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.NumberFormat
 import java.util.*
+import kotlin.math.abs
 
 class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumberFormatter {
 
@@ -115,16 +116,24 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         return spannable
     }
 
-    override fun format(value: Double): String {
+    override fun format(value: Double, showSign: Boolean, precision: Int): String {
         val customFormatter = getFormatter(languageManager.currentLanguage)?.also {
-            it.maximumFractionDigits = 8
+            it.maximumFractionDigits = precision
         }
 
         if (value == 0.0) {
             customFormatter?.maximumFractionDigits = 0
         }
 
-        return customFormatter?.format(value) ?: "0"
+        var format = customFormatter?.format(abs(value)) ?: "0"
+        if (showSign) {
+            format = if (value < 0.0)
+                "-$format" else {
+                "+$format"
+            }
+        }
+
+        return format
     }
 
     override fun shortenNumber(value: Long): String {

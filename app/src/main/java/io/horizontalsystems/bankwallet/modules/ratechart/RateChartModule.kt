@@ -3,10 +3,10 @@ package io.horizontalsystems.bankwallet.modules.ratechart
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.managers.StatsData
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Rate
-import io.horizontalsystems.bankwallet.entities.RateStatData
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
 import io.horizontalsystems.bankwallet.lib.chartview.models.DataPoint
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
@@ -36,7 +36,7 @@ object RateChartModule {
     }
 
     interface InteractorDelegate {
-        fun onReceiveStats(data: Pair<RateStatData, Rate>)
+        fun onReceiveStats(data: Pair<StatsData, Rate>)
         fun onReceiveError(ex: Throwable)
     }
 

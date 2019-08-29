@@ -53,7 +53,7 @@ class ChartGrid(private val shape: RectF, private val config: ChartConfig) {
 
     private fun drawColumns(canvas: Canvas) {
         gridColumns.forEach {
-            if (shape.right - it.x > 5f) {
+            if (it.x > config.gridEdgeOffset && shape.right - it.x > config.gridEdgeOffset) {
                 canvas.drawLine(it.x, shape.top, it.x, shape.bottom, gridPaint)
             }
 

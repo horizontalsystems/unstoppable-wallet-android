@@ -1,7 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.ratechart
 
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.core.managers.StatsData
+import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
 import io.horizontalsystems.bankwallet.lib.chartview.models.DataPoint
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.Interactor
@@ -18,8 +21,8 @@ class RateChartPresenter(
         private val factory: RateChartViewFactory)
     : ViewModel(), ViewDelegate, InteractorDelegate {
 
-    private var lastRate: Rate? = null
-    private var rateStat: RateStatData? = null
+    private var rate: Rate? = null
+    private var statsData: StatsData? = null
     private var chartType = interactor.defaultChartType
 
     //  ViewDelegate
@@ -44,12 +47,17 @@ class RateChartPresenter(
 
     //  InteractorDelegate
 
-    override fun onReceiveStats(data: Pair<RateStatData, Rate>) {
-        rateStat = data.first
-        lastRate = data.second
+    override fun onReceiveStats(data: Pair<StatsData, Rate>) {
+        rate = data.second
+        statsData = data.first
+        val stats = data.first.stats
 
-        enableButtons(data.first.stats)
-        showStats()
+        for (type in stats.keys) {
+            val chartType = ChartType.fromString(type) ?: continue
+            view.enableChartType(chartType)
+        }
+
+        showChart()
     }
 
     override fun onReceiveError(ex: Throwable) {
@@ -58,31 +66,23 @@ class RateChartPresenter(
     }
 
     private fun showOrFetch() {
-        if (rateStat == null) {
+        if (statsData == null) {
             interactor.getRateStats(coinCode, currency.code)
         } else {
-            showStats()
+            showChart()
         }
     }
 
-    private fun showStats() {
+    private fun showChart() {
+        val statsData = statsData ?: return
+
         view.hideSpinner()
 
         try {
-            val viewItem = factory.createViewItem(chartType, rateStat, lastRate, currency)
+            val viewItem = factory.createViewItem(chartType, statsData, rate, currency)
             view.showChart(viewItem)
         } catch (e: Exception) {
             view.showError(e)
-        }
-    }
-
-    private fun enableButtons(rates: Map<String, RateData>) {
-        val chartTypes = ChartType.values().associateBy(ChartType::name)
-
-        rates.forEach { (key, data) ->
-            if (data.rates.size > 10) {
-                chartTypes[key]?.let { view.enableChartType(it) }
-            }
         }
     }
 

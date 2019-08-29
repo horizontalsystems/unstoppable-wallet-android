@@ -25,7 +25,12 @@ class ChartView : View {
         WEEKLY,
         MONTHLY,
         MONTHLY6,
-        MONTHLY18
+        MONTHLY18;
+
+        companion object {
+            val map = values().associateBy(ChartType::name)
+            fun fromString(type: String?): ChartType? = map[type]
+        }
     }
 
     var listener: Listener? = null

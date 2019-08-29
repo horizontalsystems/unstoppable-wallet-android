@@ -19,6 +19,6 @@ class ViewHelper(private val context: Context) {
         val paint = Paint()
         val width = paint.measureText(text)
 
-        return dp2px(width) + dp2px(8f) // padding
+        return dp2px(width) + dp2px(10f) // padding
     }
 }

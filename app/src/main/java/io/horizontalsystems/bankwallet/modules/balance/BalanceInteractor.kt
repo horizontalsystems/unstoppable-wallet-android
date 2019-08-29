@@ -54,7 +54,16 @@ class BalanceInteractor(
     }
 
     override fun fetchRateStats(currencyCode: String, coinCode: CoinCode) {
-        getRateStats(currencyCode, coinCode)
+        rateStatsManager.getRateStats(coinCode, currencyCode)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    delegate?.onReceiveRateStats(coinCode, it)
+                }, {
+                    delegate?.onFailFetchChartStats(coinCode)
+                })
+                .let { disposables.add(it) }
+
     }
 
     override fun getSortingType() = localStorage.sortType
@@ -127,19 +136,5 @@ class BalanceInteractor(
                     delegate?.didUpdateRate(it)
                 }
                 .let { rateDisposables.add(it) }
-    }
-
-    private fun getRateStats(currencyCode: String, coinCode: String) {
-        delegate?.onFetchingChartStats(coinCode)
-
-        rateStatsManager.getRateStats(coinCode, currencyCode)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    delegate?.onReceiveRateStats(it)
-                }, {
-                    delegate?.onFailFetchChartStats(coinCode)
-                })
-                .let { disposables.add(it) }
     }
 }

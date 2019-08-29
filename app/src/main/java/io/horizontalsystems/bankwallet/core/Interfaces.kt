@@ -402,7 +402,7 @@ interface IAppNumberFormatter {
     fun format(currencyValue: CurrencyValue, showNegativeSign: Boolean = true, trimmable: Boolean = false, canUseLessSymbol: Boolean = true, shorten: Boolean = false): String?
     fun formatForTransactions(coinValue: CoinValue): String?
     fun formatForTransactions(currencyValue: CurrencyValue, isIncoming: Boolean): SpannableString
-    fun format(value: Double): String
+    fun format(value: Double, showSign: Boolean = false, precision: Int = 8): String
     fun shortenNumber(value: Long): String
 }
 
