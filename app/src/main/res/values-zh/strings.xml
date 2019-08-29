@@ -102,11 +102,11 @@
     <string name="Deposit_Your_Account">您的账户</string>
     <string name="Receive_Alert_NotBackedUp_Title">需要备份</string>
     <string name="Receive_Alert_NotBackedUp_Button">备份</string>
-    <string name="Receive_Alert_NotBackedUp_Description">您必须在接收资金前先为该钱包备份密钥。</string>
+    <string name="Receive_Alert_NotBackedUp_Description">您在接收资金前必须先为该钱包备份密钥。</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">刚才</string>
-    <string name="Timestamp_MinAgo">%d 分钟前</string>
-    <string name="Timestamp_HoursAgo">%d 小时前</string>
+    <string name="Timestamp_MinAgo">%d分钟前</string>
+    <string name="Timestamp_HoursAgo">%d小时前</string>
     <string name="Timestamp_Today">今天</string>
     <string name="Timestamp_Yesterday">昨天</string>
     <string name="Duration_instant">即时</string>
@@ -234,7 +234,7 @@
     <!--Unlock-->
     <string name="Unlock_Page_EnterYourPin">密码</string>
     <!--Errors-->
-    <string name="Error_UnsupportedBlockchain">不支持的货币</string>
+    <string name="Error_UnsupportedBlockchain">不获支持货币</string>
     <string name="Eos_Backend_Error_SelfTransfer">无法将代币转入自己的账户</string>
     <string name="Eos_Backend_Error_AccountNotExist">目标账户不存在</string>
     <string name="Eos_Backend_Error_InsufficientRam">您的EOS账户没有足够的RAM来发送此令牌。您必须增加RAM才能继续。</string>
