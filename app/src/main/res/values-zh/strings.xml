@@ -22,7 +22,7 @@
     <!--Restore-->
     <string name="Restore_Title">恢复</string>
     <string name="Restore_Subtitle">输入密钥</string>
-    <string name="Restore_ValidationFailed">Incorrect Key</string>
+    <string name="Restore_ValidationFailed">错误密钥</string>
     <string name="Restore_RestoreFailed">无法创建钱包</string>
     <string name="Restore_EosAccountName">Account Name</string>
     <string name="Restore_EosActivePrivateKey">Active Private Key</string>
@@ -59,9 +59,9 @@
     <string name="Balance_SyncedUntil">直到 %s</string>
     <string name="Balance_Syncing">同步...</string>
     <string name="Balance_AddCoins">添加硬币</string>
-    <string name="Balance_Sort_Balance">Value</string>
+    <string name="Balance_Sort_Balance">值</string>
     <string name="Balance_Sort_PopupTitle">排序方式</string>
-    <string name="Balance_Sort_Az">Name</string>
+    <string name="Balance_Sort_Az">名称</string>
     <!--Send-->
     <string name="Send_Title">发送%s</string>
     <string name="Send_Hint_Address">地址</string>
@@ -84,40 +84,40 @@
     <string name="Send_Error_IncorrectAddress">地址不正确</string>
     <string name="Send_Error_BalanceAmount">余额%s</string>
     <string name="Send_DialogTitle">确认交易</string>
-    <string name="Send_DialogSpeed">Transaction Speed</string>
-    <string name="Send_TxSpeed_Low">Low</string>
-    <string name="Send_TxSpeed_Medium">Medium</string>
-    <string name="Send_TxSpeed_High">High</string>
-    <string name="Send_DialogDuration">Duration</string>
-    <string name="Send_DialogFee">Fee</string>
+    <string name="Send_DialogSpeed">交易速度</string>
+    <string name="Send_TxSpeed_Low">低</string>
+    <string name="Send_TxSpeed_Medium">中</string>
+    <string name="Send_TxSpeed_High">高</string>
+    <string name="Send_DialogDuration">时长</string>
+    <string name="Send_DialogFee">费用</string>
     <string name="Send_DialogTotal">总额:</string>
-    <string name="Send_DialogProceed">Proceed</string>
+    <string name="Send_DialogProceed">继续</string>
     <string name="Send_Sending">发送中</string>
     <string name="Send_ERC_Alert">以 Ethereum 支付的 %s (ERC20) 交易费用。你需要 %s ETH。</string>
     <string name="Send_Token_InsufficientFeeAlert">以 %s 支付的 %s (%s) 交易费用。你需要 %s 。</string>
     <!--Deposit-->
     <string name="Deposit_Title">收到%s</string>
-    <string name="Deposit_Share">Share</string>
+    <string name="Deposit_Share">分享</string>
     <string name="Deposit_Your_Address">您的地址</string>
-    <string name="Deposit_Your_Account">Your Account</string>
-    <string name="Receive_Alert_NotBackedUp_Title">Backup Required</string>
+    <string name="Deposit_Your_Account">您的账户</string>
+    <string name="Receive_Alert_NotBackedUp_Title">需要备份</string>
     <string name="Receive_Alert_NotBackedUp_Button">备份</string>
-    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
+    <string name="Receive_Alert_NotBackedUp_Description">您必须在接收资金前先为该钱包备份密钥。</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">刚才</string>
     <string name="Timestamp_MinAgo">%d 分钟前</string>
     <string name="Timestamp_HoursAgo">%d 小时前</string>
     <string name="Timestamp_Today">今天</string>
     <string name="Timestamp_Yesterday">昨天</string>
-    <string name="Duration_instant">Instant</string>
+    <string name="Duration_instant">即时</string>
     <plurals name="Duration_seconds">
-        <item quantity="other">%d seconds</item>
+        <item quantity="other">%d秒</item>
     </plurals>
     <plurals name="Duration_minutes">
-        <item quantity="other">%d minutes</item>
+        <item quantity="other">%d分</item>
     </plurals>
     <plurals name="Duration_hours">
-        <item quantity="other">%d hours</item>
+        <item quantity="other">%d小时</item>
     </plurals>
     <!--Transactions-->
     <string name="Transactions_Title">交易记录</string>
@@ -134,8 +134,8 @@
     <string name="TransactionInfo_ButtonVerify">验证</string>
     <string name="TransactionInfo_Status_Pending">在过程中</string>
     <string name="TransactionInfo_HistoricalRate">历史汇率</string>
-    <string name="TransactionInfo_Fee">Fee</string>
-    <string name="TransactionInfo_FootNote">The value of this transaction appears as 0 because it was sent to your own address</string>
+    <string name="TransactionInfo_Fee">费用</string>
+    <string name="TransactionInfo_FootNote">该交易的值似乎为0，因为它发送至您自己的地址</string>
     <!--Full Info-->
     <string name="FullInfo_Title">交易</string>
     <string name="FullInfo_Time">时间</string>
@@ -188,7 +188,7 @@
     <string name="Settings_ShareThisWallet">分享给好友</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
-    <string name="Settings_Report">Report a Problem</string>
+    <string name="Settings_Report">报告问题</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">指纹识别未启用</string>
     <string name="Settings_Error_NoFingerprintAddedYet">在此设备上指纹识别尚未启用。为了设置指纹识别访问，请转到\"设置“&gt;”安全“</string>
@@ -220,7 +220,7 @@
 \n\n一些通用的非私有应用程序数据 (如货币汇率) 存储在分散存储 (ipfs) 中。 </string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">分享</string>
-    <string name="SettingsShare_Text">Unstoppable Wallet - a crypto wallet I recommend</string>
+    <string name="SettingsShare_Text">Unstoppable Wallet——我强烈推荐的一款加密货币钱包</string>
     <!--Setting_Report-->
     <string name="SettingsReport_Title">Report a Problem</string>
     <string name="SettingsReport_Email">Mail</string>
