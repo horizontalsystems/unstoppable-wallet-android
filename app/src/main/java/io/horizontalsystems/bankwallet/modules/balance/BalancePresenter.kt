@@ -26,6 +26,7 @@ class BalancePresenter(
 
     private val disposables = CompositeDisposable()
     private val flushSubject = PublishSubject.create<Unit>()
+    private val reloadViewSubject = PublishSubject.create<Unit>()
     private val showSortingButtonThreshold = 5
     private var accountToBackup: Account? = null
 
@@ -35,6 +36,7 @@ class BalancePresenter(
         get() = dataSource.count
 
     override fun viewDidLoad() {
+        dataSource.sortType = interactor.getSortingType()
         interactor.initWallets()
 
         flushSubject
@@ -42,6 +44,13 @@ class BalancePresenter(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext { updateViewItems() }
+                .subscribe()?.let { disposables.add(it) }
+
+        reloadViewSubject
+                .throttleLast(1, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .doOnNext { view?.reload() }
                 .subscribe()?.let { disposables.add(it) }
 
         Flowable.interval(1, TimeUnit.MINUTES)
@@ -105,7 +114,7 @@ class BalancePresenter(
 
     override fun onSortTypeChanged(sortType: BalanceSortType) {
         interactor.saveSortingType(sortType)
-        dataSource.sortBy(sortType)
+        dataSource.sortType = sortType
         view?.reload()
     }
 
@@ -149,20 +158,18 @@ class BalancePresenter(
     override fun didUpdateState(wallet: Wallet, state: AdapterState) {
         val position = dataSource.getPosition(wallet)
         dataSource.setState(position, state)
-        sortCoins()
-        updateByPosition(position)
-        view?.updateHeader()
+
+        postViewReload()
     }
 
+    @Synchronized
     override fun didUpdateRate(rate: Rate) {
         val positions = dataSource.getPositionsByCoinCode(rate.coinCode)
         positions.forEach {
             dataSource.setRate(it, rate)
-            updateByPosition(it)
         }
-        view?.updateHeader()
-        dataSource.sortBy(interactor.getSortingType())
-        view?.reload()
+
+        postViewReload()
     }
 
     override fun onReceiveRateStats(data: Pair<RateStatsManager.StatsKey, RateStatData>) {
@@ -206,11 +213,8 @@ class BalancePresenter(
         router.openChart(wallet.coin)
     }
 
-    private fun sortCoins() {
-        val syncedCount = dataSource.items.filter { it.state == AdapterState.Synced }.size
-        if (dataSource.items.size == syncedCount) {
-            dataSource.sortBy(interactor.getSortingType())
-        }
+    private fun postViewReload() {
+        reloadViewSubject.onNext(Unit)
     }
 
     private fun updateViewItems() {
