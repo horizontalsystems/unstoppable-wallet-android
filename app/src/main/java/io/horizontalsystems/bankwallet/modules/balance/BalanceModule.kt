@@ -82,10 +82,13 @@ object BalanceModule {
             get() = items.map { it.wallet.coin.code }.distinct()
 
         var items = listOf<BalanceItem>()
-        var balanceSortType: BalanceSortType = BalanceSortType.Name
-        var chartEnabled = false
+        var sortType: BalanceSortType = BalanceSortType.Name
+            set(value) {
+                field = value
+                items = sorted(items)
+            }
 
-        private var originalItems = listOf<BalanceItem>()
+        var chartEnabled = false
 
         @Synchronized
         fun addUpdatedPosition(position: Int) {
@@ -98,9 +101,8 @@ object BalanceModule {
         }
 
         fun set(items: List<BalanceItem>) {
+            this.items = sorted(items)
             clearUpdatedPositions()
-            originalItems = items
-            sortBy(BalanceSortType.Name)
         }
 
         @Synchronized
@@ -128,10 +130,15 @@ object BalanceModule {
 
         fun setState(position: Int, state: AdapterState) {
             items[position].state = state
+
+            if (items.all { it.state == AdapterState.Synced }) {
+                items = sorted(items)
+            }
         }
 
         fun setRate(position: Int, rate: Rate) {
             items[position].rate = rate
+            items = sorted(items)
         }
 
         fun setChartData(position: Int, data: RateData) {
@@ -157,15 +164,12 @@ object BalanceModule {
             items.forEach { it.rate = null }
         }
 
-        fun sortBy(sortType: BalanceSortType) {
-            balanceSortType = sortType
-            items = when (balanceSortType) {
-                BalanceSortType.Value -> {
-                    originalItems.sortedByDescending { it.fiatValue }
-                }
-                BalanceSortType.Name -> {
-                    originalItems.sortedBy { it.wallet.coin.title }
-                }
+        private fun sorted(items: List<BalanceItem>) = when (sortType) {
+            BalanceSortType.Value -> {
+                items.sortedByDescending { it.fiatValue }
+            }
+            BalanceSortType.Name -> {
+                items.sortedBy { it.wallet.coin.title }
             }
         }
     }
