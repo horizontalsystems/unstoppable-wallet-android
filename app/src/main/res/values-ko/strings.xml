@@ -72,7 +72,7 @@
     <string name="Send_Button_Max">최대</string>
     <string name="Send_Confirmation_Title">확인</string>
     <string name="Send_Confirmation_To">에게: </string>
-    <string name="Send_Confirmation_HintMemo">Memo</string>
+    <string name="Send_Confirmation_HintMemo">Memo:</string>
     <string name="Send_Confirmation_Eos_HintAccount">Account</string>
     <string name="Send_Confirmation_Total">합계:</string>
     <string name="Send_Confirmation_EstimateTime">예상 소요시간:</string>
@@ -91,6 +91,7 @@
     <string name="Send_DialogDuration">Duration</string>
     <string name="Send_DialogFee">수수료</string>
     <string name="Send_DialogTotal">합계:</string>
+    <string name="Send_DialogMemoHint">Memo</string>
     <string name="Send_DialogProceed">Proceed</string>
     <string name="Send_Sending">전송중</string>
     <string name="Send_ERC_Alert">%@ (ERC20) 에 대한 거래 수수료는 Ethereum 로 지불되었습니다. 귀하는 %@ ETH 가 필요합니다.</string>
@@ -118,6 +119,15 @@
     </plurals>
     <plurals name="Duration_hours">
         <item quantity="other">%d hours</item>
+    </plurals>
+    <plurals name="DurationInterval_seconds">
+        <item quantity="other">within %d seconds</item>
+    </plurals>
+    <plurals name="DurationInterval_minutes">
+        <item quantity="other">within %d minutes</item>
+    </plurals>
+    <plurals name="DurationInterval_hours">
+        <item quantity="other">within %d hours</item>
     </plurals>
     <!--Transactions-->
     <string name="Transactions_Title">거래기록</string>
