@@ -322,9 +322,10 @@
     <string name="Charts_Rate_High">Alto</string>
     <string name="Charts_Rate_Low">Bajo</string>
     <string name="Charts_MarketCap">Capitalización de mercado</string>
-    <string name="Charts_MarketCap_Thousand">%s k</string>
-    <string name="Charts_MarketCap_Million">%s M</string>
-    <string name="Charts_MarketCap_Billion">%s B</string>
+    <string name="Charts_MarketCap_Thousand">k</string>
+    <string name="Charts_MarketCap_Million">M</string>
+    <string name="Charts_MarketCap_Billion">B</string>
+    <string name="Charts_MarketCap_Trillion">T</string>
     <string name="Charts_Volume">Volumen</string>
     <string name="Charts_Error_NotAvailable">Chart not available</string>
 </resources>
