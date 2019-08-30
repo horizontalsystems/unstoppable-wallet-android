@@ -115,30 +115,6 @@
     <string name="Duration_Hours">%d h.</string>
     <string name="Duration_Minutes">%d min.</string>
     <string name="Duration_Seconds">%d sec.</string>
-    <plurals name="Duration_seconds">
-        <item quantity="one">%d saniye</item>
-        <item quantity="other">%d saniye</item>
-    </plurals>
-    <plurals name="Duration_minutes">
-        <item quantity="one">%d dakika</item>
-        <item quantity="other">%d dakika</item>
-    </plurals>
-    <plurals name="Duration_hours">
-        <item quantity="one">%d saat</item>
-        <item quantity="other">%d saat</item>
-    </plurals>
-    <plurals name="DurationInterval_seconds">
-        <item quantity="one">within %d second</item>
-        <item quantity="other">within %d seconds</item>
-    </plurals>
-    <plurals name="DurationInterval_minutes">
-        <item quantity="one">within %d minute</item>
-        <item quantity="other">within %d minutes</item>
-    </plurals>
-    <plurals name="DurationInterval_hours">
-        <item quantity="one">within %d hour</item>
-        <item quantity="other">within %d hours</item>
-    </plurals>
     <!--Transactions-->
     <string name="Transactions_Title">Hesap işlemleri</string>
     <string name="Transactions_FilterAll">HEPSI</string>
