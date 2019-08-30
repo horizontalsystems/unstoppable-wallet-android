@@ -83,13 +83,13 @@
     <string name="Send_Error_InsufficientBalance">残高は足りません。</string>
     <string name="Send_Error_IncorrectAddress">住所誤り</string>
     <string name="Send_Error_BalanceAmount">残高：%s</string>
-    <string name="Send_DialogTitle">取引を承認する</string>
-    <string name="Send_DialogSpeed">Transaction Speed</string>
+    <string name="Send_DialogTitle">Confirm</string>
+    <string name="Send_DialogSpeed">Transaction Speed:</string>
     <string name="Send_TxSpeed_Low">Low</string>
     <string name="Send_TxSpeed_Medium">Medium</string>
     <string name="Send_TxSpeed_High">High</string>
-    <string name="Send_DialogDuration">Duration</string>
-    <string name="Send_DialogFee">Fee</string>
+    <string name="Send_DialogDuration">Duration:</string>
+    <string name="Send_DialogFee">Fee:</string>
     <string name="Send_DialogTotal">合計:</string>
     <string name="Send_DialogMemoHint">Memo</string>
     <string name="Send_DialogProceed">Proceed</string>
@@ -111,6 +111,10 @@
     <string name="Timestamp_Today">今日</string>
     <string name="Timestamp_Yesterday">昨日</string>
     <string name="Duration_instant">Instant</string>
+    <string name="Duration_Within">Within %s</string>
+    <string name="Duration_Hours">%d h.</string>
+    <string name="Duration_Minutes">%d min.</string>
+    <string name="Duration_Seconds">%d sec.</string>
     <plurals name="Duration_seconds">
         <item quantity="other">%d seconds</item>
     </plurals>
