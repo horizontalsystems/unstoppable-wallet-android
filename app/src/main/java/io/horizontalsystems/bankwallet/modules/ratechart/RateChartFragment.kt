@@ -105,7 +105,7 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
 
         presenterView.showError.observe(viewLifecycleOwner, Observer {
             chartError.visibility = View.VISIBLE
-            chartError.text = it.message
+            chartError.text = getString(R.string.Charts_Error_NotAvailable)
         })
     }
 
