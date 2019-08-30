@@ -35,12 +35,12 @@ class SendActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_send)
 
-        val wallet: Wallet = intent.getParcelableExtra<Wallet>(WALLET) ?: run { finish(); return }
+        val wallet: Wallet = intent.getParcelableExtra(WALLET) ?: run { finish(); return }
 
         val iconRes = LayoutHelper.getCoinDrawableResource(wallet.coin.code)
 
         shadowlessToolbar.bind(
-                title = getString(R.string.Send_Title, wallet.coin.title),
+                title = getString(R.string.Send_Title, wallet.coin.code),
                 leftBtnItem = TopMenuItem(iconRes),
                 rightBtnItem = TopMenuItem(R.drawable.close, onClick = { onBackPressed() })
         )
