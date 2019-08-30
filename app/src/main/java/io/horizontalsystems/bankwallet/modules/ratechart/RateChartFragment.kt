@@ -83,9 +83,14 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
             setViewVisibility(marketCapWrap, isVisible = true)
         })
 
-        presenterView.setSelectedPoint.observe(viewLifecycleOwner, Observer { (time, value) ->
+        presenterView.setSelectedPoint.observe(viewLifecycleOwner, Observer { (time, value, type) ->
+            val outputFormat = when (type) {
+                ChartType.DAILY,
+                ChartType.WEEKLY -> "MMM d, yyyy 'at' hh:mm a"
+                else -> "MMM d, yyyy"
+            }
             pointInfoPrice.text = formatter.format(value, canUseLessSymbol = false)
-            pointInfoDate.text = DateHelper.formatDate(Date(time * 1000), "MMM d, yyyy 'at' hh:mm a")
+            pointInfoDate.text = DateHelper.formatDate(Date(time * 1000), outputFormat)
         })
 
         presenterView.enableChartType.observe(viewLifecycleOwner, Observer { type ->
