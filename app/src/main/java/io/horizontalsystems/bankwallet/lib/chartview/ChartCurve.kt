@@ -31,12 +31,12 @@ class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
     }
 
     fun onTouchActive() {
-        setGradient(setAlphaComponent(config.touchColor, 104), setAlphaComponent(config.touchColor, 13))
+        setGradient(setAlphaComponent(config.touchColor, 0xCC), setAlphaComponent(config.touchColor, 0x0D))
         linePaint.color = config.touchColor
     }
 
     fun onTouchInactive() {
-        setGradient(setAlphaComponent(config.curveColor, 104), setAlphaComponent(config.curveColor, 13))
+        setGradient(setAlphaComponent(config.curveColor, 0xCC), setAlphaComponent(config.curveColor, 0x0D))
         linePaint.color = config.curveColor
     }
 
@@ -101,6 +101,6 @@ class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
     }
 
     private fun setGradient(colorStart: Int, colorEnd: Int) {
-        gradient.shader = LinearGradient(0f, 0f, 0f, shape.bottom, colorStart, colorEnd, Shader.TileMode.CLAMP)
+        gradient.shader = LinearGradient(0f, 0f, 0f, shape.bottom + 2, colorStart, colorEnd, Shader.TileMode.REPEAT)
     }
 }

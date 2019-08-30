@@ -22,7 +22,9 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
 
     private lateinit var presenter: RateChartPresenter
     private lateinit var presenterView: RateChartView
+
     private val formatter = App.numberFormatter
+    private var actions = mapOf<ChartType, View>()
 
     override fun getTheme(): Int {
         return R.style.BottomDialog
@@ -61,13 +63,7 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
         })
 
         presenterView.setDefaultMode.observe(viewLifecycleOwner, Observer { type ->
-            when (type) {
-                ChartType.DAILY -> resetActions(button1D)
-                ChartType.WEEKLY -> resetActions(button1W)
-                ChartType.MONTHLY -> resetActions(button1M)
-                ChartType.MONTHLY6 -> resetActions(button6M)
-                ChartType.MONTHLY18 -> resetActions(button1Y)
-            }
+            actions[type]?.let { it.isActivated = true }
         })
 
         presenterView.showChart.observe(viewLifecycleOwner, Observer { item ->
@@ -92,8 +88,14 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
             pointInfoDate.text = DateHelper.formatDate(Date(time * 1000), "MMM d, yyyy 'at' hh:mm a")
         })
 
-        presenterView.enableChartType.observe(viewLifecycleOwner, Observer {
-            // todo: disable button
+        presenterView.enableChartType.observe(viewLifecycleOwner, Observer { type ->
+            actions[type]?.let { action ->
+                action.isEnabled = true
+                action.setOnClickListener {
+                    presenter.onSelect(type)
+                    resetActions(it)
+                }
+            }
         })
 
         presenterView.showError.observe(viewLifecycleOwner, Observer {
@@ -123,30 +125,20 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
     }
 
     private fun bindActions() {
-        button1D.setOnClickListener {
-            presenter.onSelect(ChartType.DAILY)
-            resetActions(it)
-        }
-        button1W.setOnClickListener {
-            presenter.onSelect(ChartType.WEEKLY)
-            resetActions(it)
-        }
-        button1M.setOnClickListener {
-            presenter.onSelect(ChartType.MONTHLY)
-            resetActions(it)
-        }
-        button6M.setOnClickListener {
-            presenter.onSelect(ChartType.MONTHLY6)
-            resetActions(it)
-        }
-        button1Y.setOnClickListener {
-            presenter.onSelect(ChartType.MONTHLY18)
-            resetActions(it)
+        actions = mapOf(
+                Pair(ChartType.DAILY, button1D),
+                Pair(ChartType.WEEKLY, button1W),
+                Pair(ChartType.MONTHLY, button1M),
+                Pair(ChartType.MONTHLY6, button6M),
+                Pair(ChartType.MONTHLY18, button1Y))
+
+        actions.values.forEach {
+            it.isEnabled = false
         }
     }
 
     private fun resetActions(current: View) {
-        listOf(button1D, button1W, button1M, button6M, button1Y).forEach { it.isActivated = false }
+        actions.values.forEach { it.isActivated = false }
         setViewVisibility(marketCapWrap, isVisible = false)
         current.isActivated = true
     }

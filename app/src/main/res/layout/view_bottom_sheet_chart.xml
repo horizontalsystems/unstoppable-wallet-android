@@ -121,55 +121,60 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/border2">
 
-        <Button
+        <TextView
             android:id="@+id/button1D"
-            style="@style/SendButtonSmallGrey"
+            style="@style/TextFlatButton"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:layout_weight="1"
-            android:text="@string/Charts_TimeDuration_Day" />
+            android:text="@string/Charts_TimeDuration_Day"
+            android:textColor="@color/stateful_button_lightgrey_color" />
 
-        <Button
+        <TextView
             android:id="@+id/button1W"
-            style="@style/SendButtonSmallGrey"
+            style="@style/TextFlatButton"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:layout_weight="1"
-            android:text="@string/Charts_TimeDuration_Week" />
+            android:text="@string/Charts_TimeDuration_Week"
+            android:textColor="@color/stateful_button_lightgrey_color" />
 
-        <Button
+        <TextView
             android:id="@+id/button1M"
-            style="@style/SendButtonSmallGrey"
+            style="@style/TextFlatButton"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:layout_weight="1"
-            android:text="@string/Charts_TimeDuration_Month" />
+            android:text="@string/Charts_TimeDuration_Month"
+            android:textColor="@color/stateful_button_lightgrey_color" />
 
-        <Button
+        <TextView
             android:id="@+id/button6M"
-            style="@style/SendButtonSmallGrey"
+            style="@style/TextFlatButton"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:layout_weight="1"
-            android:text="@string/Charts_TimeDuration_HalfYear" />
+            android:text="@string/Charts_TimeDuration_HalfYear"
+            android:textColor="@color/stateful_button_lightgrey_color" />
 
-        <Button
+        <TextView
             android:id="@+id/button1Y"
-            style="@style/SendButtonSmallGrey"
+            style="@style/TextFlatButton"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:layout_weight="1"
-            android:text="@string/Charts_TimeDuration_Year" />
+            android:text="@string/Charts_TimeDuration_Year"
+            android:textColor="@color/stateful_button_lightgrey_color" />
 
     </LinearLayout>
 

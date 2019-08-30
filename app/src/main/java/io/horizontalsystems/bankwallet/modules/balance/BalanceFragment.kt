@@ -43,6 +43,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
         recyclerCoins.layoutManager = NpaLinearLayoutManager(context)
         (recyclerCoins.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
 
+        sortButton.isActivated = true
         sortButton.setOnClickListener {
             viewModel.delegate.onSortClick()
         }

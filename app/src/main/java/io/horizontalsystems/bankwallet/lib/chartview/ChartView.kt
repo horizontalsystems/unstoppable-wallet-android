@@ -47,7 +47,7 @@ class ChartView : View {
     // Animator
     private val animator = ValueAnimator().apply {
         interpolator = AccelerateInterpolator()
-        duration = 500
+        duration = 300
         addUpdateListener { animator ->
             // Get our float from the animation. This method returns the Interpolated float.
             config.animatedFraction = animator.animatedFraction
@@ -151,7 +151,7 @@ class ChartView : View {
         helper.scale(data.points)
 
         if (config.showGrid) {
-            config.offsetRight = viewHelper.measureWidth(config.valueTop, config.valuePrecision)
+            config.offsetRight = viewHelper.measureWidth(config.valueTop, config.valuePrecision) + viewHelper.dp2px(20f)
             config.offsetBottom = viewHelper.dp2px(20f)
         }
 

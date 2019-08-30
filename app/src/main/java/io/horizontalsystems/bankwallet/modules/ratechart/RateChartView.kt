@@ -26,7 +26,7 @@ class RateChartView : RateChartModule.View {
     }
 
     override fun enableChartType(type: ChartView.ChartType) {
-        enableChartType.postValue(type)
+        enableChartType.value = type
     }
 
     override fun showChart(viewItem: ChartViewItem) {
