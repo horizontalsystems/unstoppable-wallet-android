@@ -16,8 +16,8 @@ object FeeRateProviderFactory {
         return when (coin.type) {
             is CoinType.Bitcoin -> BitcoinFeeRateProvider(feeRateProvider)
             is CoinType.BitcoinCash -> BitcoinCashFeeRateProvider(feeRateProvider)
-            is CoinType.Ethereum -> EthereumFeeRateProvider(feeRateProvider)
             is CoinType.Dash -> DashFeeRateProvider(feeRateProvider)
+            is CoinType.Ethereum, is CoinType.Erc20 -> EthereumFeeRateProvider(feeRateProvider)
             else -> null
         }
     }
