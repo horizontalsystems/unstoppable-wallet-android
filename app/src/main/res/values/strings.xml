@@ -148,32 +148,6 @@
     <string name="Duration_Minutes">%d min.</string>
     <string name="Duration_Seconds">%d sec.</string>
 
-    <plurals name="Duration_seconds">
-        <item quantity="one">%d second</item>
-        <item quantity="other">%d seconds</item>
-    </plurals>
-    <plurals name="Duration_minutes">
-        <item quantity="one">%d minute</item>
-        <item quantity="other">%d minutes</item>
-    </plurals>
-    <plurals name="Duration_hours">
-        <item quantity="one">%d hour</item>
-        <item quantity="other">%d hours</item>
-    </plurals>
-
-    <plurals name="DurationInterval_seconds">
-        <item quantity="one">within %d second</item>
-        <item quantity="other">within %d seconds</item>
-    </plurals>
-    <plurals name="DurationInterval_minutes">
-        <item quantity="one">within %d minute</item>
-        <item quantity="other">within %d minutes</item>
-    </plurals>
-    <plurals name="DurationInterval_hours">
-        <item quantity="one">within %d hour</item>
-        <item quantity="other">within %d hours</item>
-    </plurals>
-
     <!--Transactions-->
 
     <string name="Transactions_Title">Transactions</string>

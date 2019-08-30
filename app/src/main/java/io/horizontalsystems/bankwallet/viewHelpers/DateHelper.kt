@@ -31,14 +31,14 @@ object DateHelper {
     fun getTxDurationString(context: Context, durationInSec: Long): String {
         return when {
             durationInSec < 10 -> context.getString(R.string.Duration_instant)
-            durationInSec < 60 -> context.resources.getQuantityString(R.plurals.Duration_seconds, durationInSec.toInt(), durationInSec.toInt())
+            durationInSec < 60 -> context.getString(R.string.Duration_Seconds, durationInSec)
             durationInSec < 60 * 60 -> {
-                val minutes = (durationInSec / 60).toInt()
-                context.resources.getQuantityString(R.plurals.Duration_minutes, minutes, minutes)
+                val minutes = durationInSec / 60
+                context.getString(R.string.Duration_Minutes, minutes)
             }
             else -> {
-                val hours = (durationInSec / (60 * 60)).toInt()
-                context.resources.getQuantityString(R.plurals.Duration_hours, hours, hours)
+                val hours = durationInSec / (60 * 60)
+                context.getString(R.string.Duration_Hours, hours)
             }
         }
     }
@@ -46,14 +46,17 @@ object DateHelper {
     fun getTxDurationIntervalString(context: Context, durationInSec: Long): String {
         return when {
             durationInSec < 10 -> context.getString(R.string.Duration_instant)
-            durationInSec < 60 -> context.resources.getQuantityString(R.plurals.DurationInterval_seconds, durationInSec.toInt(), durationInSec.toInt())
+            durationInSec < 60 -> {
+                val seconds = context.getString(R.string.Duration_Seconds, durationInSec)
+                context.getString(R.string.Duration_Within, seconds)
+            }
             durationInSec < 60 * 60 -> {
-                val minutes = (durationInSec / 60).toInt()
-                context.resources.getQuantityString(R.plurals.DurationInterval_minutes, minutes, minutes)
+                val minutes = context.getString(R.string.Duration_Minutes, durationInSec / 60)
+                context.getString(R.string.Duration_Within, minutes)
             }
             else -> {
-                val hours = (durationInSec / (60 * 60)).toInt()
-                context.resources.getQuantityString(R.plurals.DurationInterval_hours, hours, hours)
+                val hours = context.getString(R.string.Duration_Hours, durationInSec / (60 * 60))
+                context.getString(R.string.Duration_Within, hours)
             }
         }
     }
