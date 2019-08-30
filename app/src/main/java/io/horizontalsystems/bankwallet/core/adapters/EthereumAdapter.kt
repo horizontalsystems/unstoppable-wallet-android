@@ -56,13 +56,13 @@ class EthereumAdapter(kit: EthereumKit)
         val toAddressHex = transaction.to
         val to = TransactionAddress(toAddressHex, toAddressHex == mineAddress)
 
-        var amount: BigDecimal
+        var amount = BigDecimal.ZERO
 
-        transaction.value.toBigDecimal().let {
-            amount = it.movePointLeft(decimal)
-            if (from.mine) {
-                amount = -amount
-            }
+        if (from.mine) {
+            amount -= transaction.value.toBigDecimal()
+        }
+        if (to.mine) {
+            amount += transaction.value.toBigDecimal()
         }
 
         val fee = transaction.gasUsed?.toBigDecimal()?.multiply(transaction.gasPrice.toBigDecimal())?.movePointLeft(decimal)
@@ -72,7 +72,7 @@ class EthereumAdapter(kit: EthereumKit)
                 transactionIndex = transaction.transactionIndex ?: 0,
                 interTransactionIndex = 0,
                 blockHeight = transaction.blockNumber,
-                amount = amount,
+                amount = amount.movePointLeft(decimal),
                 fee = fee,
                 timestamp = transaction.timestamp,
                 from = listOf(from),

@@ -72,13 +72,13 @@ class Erc20Adapter(context: Context, kit: EthereumKit, decimal: Int, private val
         val from = TransactionAddress(transaction.from, transaction.from == mineAddress)
         val to = TransactionAddress(transaction.to, transaction.to == mineAddress)
 
-        var amount: BigDecimal
+        var amount = BigDecimal.ZERO
 
-        transaction.value.toBigDecimal().let {
-            amount = it.movePointLeft(decimal)
-            if (from.mine) {
-                amount = -amount
-            }
+        if (from.mine) {
+            amount -= transaction.value.toBigDecimal()
+        }
+        if (to.mine) {
+            amount += transaction.value.toBigDecimal()
         }
 
         return TransactionRecord(
@@ -86,7 +86,7 @@ class Erc20Adapter(context: Context, kit: EthereumKit, decimal: Int, private val
                 transactionIndex = transaction.transactionIndex ?: 0,
                 interTransactionIndex = transaction.interTransactionIndex,
                 blockHeight = transaction.blockNumber,
-                amount = amount,
+                amount = amount.movePointLeft(decimal),
                 timestamp = transaction.timestamp,
                 from = listOf(from),
                 to = listOf(to)
