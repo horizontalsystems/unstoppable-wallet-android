@@ -63,7 +63,7 @@
     <string name="Balance_Sort_Balance">Значение</string>
     <string name="Balance_Sort_PopupTitle">Сортировать по</string>
     <string name="Balance_Sort_Az">Название</string>
-    <string name="Balance_Sort_24hPriceChange">24h Price (%)</string>
+    <string name="Balance_Sort_24hPriceChange">Цена 24 часа (%)</string>
     <!--Send-->
     <string name="Send_Title">Отправить %s</string>
     <string name="Send_Hint_Address">Адрес</string>
@@ -105,7 +105,7 @@
     <string name="Deposit_Your_Account">Ваш Аккаунт</string>
     <string name="Receive_Alert_NotBackedUp_Title">Необходима Резервная Копия</string>
     <string name="Receive_Alert_NotBackedUp_Button">Резервная копия</string>
-    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
+    <string name="Receive_Alert_NotBackedUp_Description">Вам нужно сделать резервную копию ключа, прежде чем вы сможете получать.</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">только что</string>
     <string name="Timestamp_MinAgo">%d мин назад</string>
@@ -213,11 +213,11 @@
 \n\nНекоторые публичные данные используемые приложением такие, как обменные курсы валют хранятся в децентрализованном хранилище (IPFS).</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Поделиться</string>
-    <string name="SettingsShare_Text">Unstoppable Wallet - a crypto wallet I recommend</string>
+    <string name="SettingsShare_Text">Unstoppable Wallet - криптокошелек, который я рекомендую</string>
     <!--Setting_Report-->
-    <string name="SettingsReport_Title">Report a Problem</string>
-    <string name="SettingsReport_Email">Mail</string>
-    <string name="SettingsReport_Telegram">Telegram</string>
+    <string name="SettingsReport_Title">Наши Контакты</string>
+    <string name="SettingsReport_Email">Эл. почта</string>
+    <string name="SettingsReport_Telegram">Telegram </string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Ошибка Android Keystore</string>
     <string name="Alert_KeysInvalidatedDescription">Ваши зашифрованные данные были недавно аннулированы, потому что  Android lock screen был изменен</string>
@@ -228,9 +228,9 @@
     <string name="Unlock_Page_EnterYourPin">Код Доступа</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Неподдерживаемая валюта</string>
-    <string name="Eos_Backend_Error_SelfTransfer">Can\'t transfer token to own account</string>
-    <string name="Eos_Backend_Error_AccountNotExist">Target account does not exist</string>
-    <string name="Eos_Backend_Error_InsufficientRam">Your EOS account doesn\'t have enough RAM to send this token. You need to increase RAM stake to proceed.</string>
+    <string name="Eos_Backend_Error_SelfTransfer">Не удается отправить токен на свой аккаунт</string>
+    <string name="Eos_Backend_Error_AccountNotExist">Этот аккаунт не существует</string>
+    <string name="Eos_Backend_Error_InsufficientRam">У вашего аккаунта EOS недостаточно оперативной памяти для отправки этого токена. Для продолжения необходимо увеличить ставку RAM.</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Разблокировать</string>
     <string name="Hud_Text_Success">Успешно</string>
@@ -272,11 +272,11 @@
     <string name="ManageCoins_EOSAlert_CreateButton">В данный момент кошелек не может создать новые учетные записи EOS. Вы можете восстановить существующий.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Управление Ключами</string>
-    <string name="ManageKeys_Description">Anyone with access to your Keys can steal your wallet funds. Store keys safely and never show them to anyone. \n\nBackup each key to be able to restore funds if you lose or break your phone, or simply the wallet app gets deleted.</string>
+    <string name="ManageKeys_Description">Любой, кто имеет доступ к вашим ключам, может украсть ваши средства. Храните ключи безопасно и не показывайте их никому.\n\nРезервное копирование каждого ключа необходимо доя того, чтобы иметь возможность восстановить средства, если вы потеряете или сломаете ваш телефон, или приложение кошелька будет удалено.</string>
     <string name="ManageKeys_Create">Создать</string>
     <string name="ManageKeys_Restore">Восстановить</string>
     <string name="ManageKeys_Delete">Удалить</string>
-    <string name="ManageKeys_Backup">Резервная копия</string>
+    <string name="ManageKeys_Backup">Резерв. копия</string>
     <string name="ManageKeys_Show">Показать</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">Удалить Ключ</string>
@@ -284,11 +284,11 @@
     <string name="ManageKeys_Delete_ConfirmationDisable">Монеты, которые будут отключены: %s</string>
     <string name="ManageKeys_Delete_ConfirmationLoose">Если у вас нет резервной копии этого ключа, то вы потеряете соответствующие средства.</string>
     <string name="ManageKeys_Delete_FromPhone">Удалить с устройства</string>
-    <string name="ManageKeys_Delete_Alert_Title">Backup Required</string>
-    <string name="ManageKeys_Delete_Alert">You need to backup %s key before you may delete it from this phone.</string>
+    <string name="ManageKeys_Delete_Alert_Title">Необходима Резервная Копия</string>
+    <string name="ManageKeys_Delete_Alert">Вам нужно сделать резервную копию %s ключа, прежде чем вы его сможете удалить с этого устройства.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">Добавить %s</string>
-    <string name="AddCoin_Description">You don\'t have key for %1s. The wallet can generate the key for you. Use the create button below to generate a new key. \n\nYou may also use the existing %3s key for the %4s if you have one.</string>
+    <string name="AddCoin_Description">У вас нет ключа для %1s. Кошелек может сгенерировать ключ. Используйте кнопку \"Создать\" ниже, чтобы сгенерировать новый ключ.\n\nВы также можете использовать существующий %3s ключ для %4s , если он у вас есть.</string>
     <string name="AddCoin_CreateKey">Создать</string>
     <string name="AddCoin_RestoreKey">Восстановить</string>
     <!-- Account Types -->
@@ -307,20 +307,20 @@
     <string name="CoinOption_MorePrivate">1&#8211;12 часов (Более Приватно)</string>
     <string name="CoinOption_Slow_Text">Восстановление ваших предыдущих транзакций будет непосредственно из сети. Это более приватно, но очень медленно. Чем больше монет вы восстанавливаете, тем больше времени потребуется. Если восстановление занимает слишком много времени, перейдите в раздел «Управление ключами» и повторно импортируйте ключ для кошелька с помощью опции «Быстрая синхронизация».</string>
     <!--Charts-->
-    <string name="Charts_TimeDuration_Day">1D</string>
-    <string name="Charts_TimeDuration_Week">7D</string>
-    <string name="Charts_TimeDuration_Month">1M</string>
-    <string name="Charts_TimeDuration_Quartal">3M</string>
-    <string name="Charts_TimeDuration_HalfYear">6M</string>
-    <string name="Charts_TimeDuration_Year">1Y</string>
-    <string name="Charts_Title">%s Rate</string>
-    <string name="Charts_Rate_High">High</string>
-    <string name="Charts_Rate_Low">Low</string>
-    <string name="Charts_MarketCap">Mkt. Cap</string>
-    <string name="Charts_MarketCap_Thousand">k</string>
-    <string name="Charts_MarketCap_Million">M</string>
-    <string name="Charts_MarketCap_Billion">B</string>
-    <string name="Charts_MarketCap_Trillion">T</string>
-    <string name="Charts_Volume">Volume</string>
-    <string name="Charts_Error_NotAvailable">Chart not available</string>
+    <string name="Charts_TimeDuration_Day">1Д</string>
+    <string name="Charts_TimeDuration_Week">7Д</string>
+    <string name="Charts_TimeDuration_Month">1М</string>
+    <string name="Charts_TimeDuration_Quartal">3М</string>
+    <string name="Charts_TimeDuration_HalfYear">6М</string>
+    <string name="Charts_TimeDuration_Year">1Г</string>
+    <string name="Charts_Title">%s Курс</string>
+    <string name="Charts_Rate_High">Высокая</string>
+    <string name="Charts_Rate_Low">Низкая</string>
+    <string name="Charts_MarketCap">Рын. Кап.</string>
+    <string name="Charts_MarketCap_Thousand">тыс.</string>
+    <string name="Charts_MarketCap_Million">млн.</string>
+    <string name="Charts_MarketCap_Billion">млр.</string>
+    <string name="Charts_MarketCap_Trillion">трл.</string>
+    <string name="Charts_Volume">Объём</string>
+    <string name="Charts_Error_NotAvailable">График недоступен</string>
 </resources>
