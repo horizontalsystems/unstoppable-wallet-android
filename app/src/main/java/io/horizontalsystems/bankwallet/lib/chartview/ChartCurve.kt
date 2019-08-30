@@ -42,6 +42,9 @@ class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
 
     fun findPoint(value: Float): DataPoint? {
         if (points.size < 2) return null
+        if (points.last().x <= value) {
+            return points.last()
+        }
 
         val interval = points[1].x - points[0].x
         val lower = value - interval
