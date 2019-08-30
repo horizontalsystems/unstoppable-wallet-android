@@ -1,18 +1,26 @@
 package io.horizontalsystems.bankwallet.modules.settings.main
 
-class MainSettingsPresenter(
-        private val router: MainSettingsModule.IMainSettingsRouter,
-        private val interactor: MainSettingsModule.IMainSettingsInteractor)
-    : MainSettingsModule.IMainSettingsViewDelegate, MainSettingsModule.IMainSettingsInteractorDelegate {
+import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsModule.IMainSettingsInteractor
+import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsModule.IMainSettingsInteractorDelegate
+import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsModule.IMainSettingsRouter
+import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsModule.IMainSettingsView
+import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsModule.IMainSettingsViewDelegate
 
-    var view: MainSettingsModule.IMainSettingsView? = null
+class MainSettingsPresenter(
+        val view: IMainSettingsView,
+        val router: IMainSettingsRouter,
+        private val interactor: IMainSettingsInteractor)
+    : ViewModel(), IMainSettingsViewDelegate, IMainSettingsInteractorDelegate {
+
+    private val helper = MainSettingsHelper()
 
     override fun viewDidLoad() {
-        view?.setBackedUp(interactor.nonBackedUpCount == 0)
-        view?.setBaseCurrency(interactor.baseCurrency)
-        view?.setLanguage(interactor.currentLanguage)
-        view?.setLightMode(interactor.getLightMode())
-        view?.setAppVersion(interactor.appVersion)
+        view.setBackedUp(helper.isBackedUp(interactor.nonBackedUpCount))
+        view.setBaseCurrency(helper.displayName(interactor.baseCurrency))
+        view.setLanguage(interactor.currentLanguageDisplayName)
+        view.setLightMode(interactor.lightMode)
+        view.setAppVersion(interactor.appVersion)
     }
 
     override fun didTapSecurity() {
@@ -32,34 +40,39 @@ class MainSettingsPresenter(
     }
 
     override fun didSwitchLightMode(lightMode: Boolean) {
-        interactor.setLightMode(lightMode)
+        interactor.lightMode = lightMode
+        router.reloadAppInterface()
     }
 
     override fun didTapAbout() {
         router.showAbout()
     }
 
-    override fun didTapAppLink() {
-        router.openAppLink()
-    }
-
-    override fun didUpdateNonBackedUp(count: Int) {
-        view?.setBackedUp(count == 0)
+    override fun didTapCompanyLogo() {
+        router.openLink(interactor.companyWebPageLink)
     }
 
     override fun didTapReportProblem() {
         router.showReportProblem()
     }
 
-    override fun didUpdateBaseCurrency(baseCurrency: String) {
-        view?.setBaseCurrency(baseCurrency)
+    override fun didTapTellFriends() {
+        router.showShareApp(interactor.appWebPageLink)
     }
 
-    override fun didUpdateLightMode() {
-        router.reloadAppInterface()
+    // IMainSettingsInteractorDelegate
+
+    override fun didUpdateNonBackedUp(count: Int) {
+        view.setBackedUp(helper.isBackedUp(count))
     }
 
-    override fun onClear() {
+    override fun didUpdateBaseCurrency() {
+        view.setBaseCurrency(helper.displayName(interactor.baseCurrency))
+    }
+
+    // ViewModel
+
+    override fun onCleared() {
         interactor.clear()
     }
 

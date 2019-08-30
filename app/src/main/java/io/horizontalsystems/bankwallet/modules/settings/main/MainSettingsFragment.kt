@@ -24,7 +24,6 @@ import kotlinx.android.synthetic.main.fragment_settings.*
 
 
 class MainSettingsFragment : Fragment() {
-    private lateinit var viewModel: MainSettingsViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_settings, container, false)
@@ -33,92 +32,71 @@ class MainSettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this).get(MainSettingsViewModel::class.java)
-        viewModel.init()
-
         shadowlessToolbar.bindTitle(getString(R.string.Settings_Title))
 
-        securityCenter.setOnClickListener { viewModel.delegate.didTapSecurity() }
+        val presenter = ViewModelProviders.of(this, MainSettingsModule.Factory()).get(MainSettingsPresenter::class.java)
+        val presenterView = presenter.view as MainSettingsView
+        val router = presenter.router as MainSettingsRouter
 
-        manageCoins.setOnClickListener { viewModel.delegate.didManageCoins() }
+        bindViewListeners(presenter)
 
-        baseCurrency.setOnClickListener { viewModel.delegate.didTapBaseCurrency() }
+        subscribeToViewEvents(presenterView, presenter)
 
-        language.setOnClickListener { viewModel.delegate.didTapLanguage() }
+        subscribeToRouterEvents(router)
+
+        presenter.viewDidLoad()
+    }
+
+    private fun bindViewListeners(presenter: MainSettingsPresenter) {
+        securityCenter.setOnClickListener { presenter.didTapSecurity() }
+
+        manageCoins.setOnClickListener { presenter.didManageCoins() }
+
+        baseCurrency.setOnClickListener { presenter.didTapBaseCurrency() }
+
+        language.setOnClickListener { presenter.didTapLanguage() }
 
         lightMode.setOnClickListener { lightMode.switchToggle() }
 
-        about.setOnClickListener { viewModel.delegate.didTapAbout() }
+        about.setOnClickListener { presenter.didTapAbout() }
 
-        report.setOnClickListener { viewModel.delegate.didTapReportProblem() }
+        report.setOnClickListener { presenter.didTapReportProblem() }
 
-        shareApp.setOnClickListener {
-            shareAppLink()
-        }
+        shareApp.setOnClickListener { presenter.didTapTellFriends() }
 
-        companyLogo.setOnClickListener {
-            viewModel.delegate.didTapAppLink()
-        }
+        companyLogo.setOnClickListener { presenter.didTapCompanyLogo() }
+    }
 
-        viewModel.baseCurrencyLiveDate.observe(viewLifecycleOwner, Observer { currency ->
+    private fun subscribeToViewEvents(presenterView: MainSettingsView, presenter: MainSettingsPresenter) {
+        presenterView.baseCurrency.observe(viewLifecycleOwner, Observer { currency ->
             currency?.let {
                 baseCurrency.selectedValue = it
             }
         })
 
-        viewModel.backedUpLiveDate.observe(viewLifecycleOwner, Observer { wordListBackedUp ->
+        presenterView.backedUp.observe(viewLifecycleOwner, Observer { wordListBackedUp ->
             securityCenter.setInfoBadgeVisibility(!wordListBackedUp)
         })
 
-        viewModel.showBaseCurrencySettingsLiveEvent.observe(viewLifecycleOwner, Observer {
-            context?.let { context -> BaseCurrencySettingsModule.start(context) }
-        })
-
-        viewModel.languageLiveDate.observe(viewLifecycleOwner, Observer { languageCode ->
+        presenterView.language.observe(viewLifecycleOwner, Observer { languageCode ->
             languageCode?.let {
                 language.selectedValue = it.capitalize()
             }
         })
 
-        viewModel.lightModeLiveDate.observe(viewLifecycleOwner, Observer { lightModeValue ->
+        presenterView.lightMode.observe(viewLifecycleOwner, Observer { lightModeValue ->
             lightModeValue?.let {
                 lightMode.apply {
                     switchIsChecked = it
 
                     switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                        viewModel.delegate.didSwitchLightMode(isChecked)
+                        presenter.didSwitchLightMode(isChecked)
                     }
                 }
             }
         })
 
-        viewModel.showLanguageSettingsLiveEvent.observe(viewLifecycleOwner, Observer {
-            context?.let { context -> LanguageSettingsModule.start(context) }
-        })
-
-        viewModel.showAboutLiveEvent.observe(viewLifecycleOwner, Observer {
-            activity?.let {
-                AboutSettingsActivity.start(it)
-            }
-        })
-
-        viewModel.showReportProblemLiveEvent.observe(viewLifecycleOwner, Observer {
-            activity?.let {
-                ReportProblemModule.start(it)
-            }
-        })
-
-        viewModel.showSecuritySettingsLiveEvent.observe(viewLifecycleOwner, Observer {
-            context?.let {
-                SecuritySettingsModule.start(it)
-            }
-        })
-
-        viewModel.showManageCoinsLiveEvent.observe(viewLifecycleOwner, Observer {
-            context?.let { ManageWalletsModule.start(it) }
-        })
-
-        viewModel.appVersionLiveDate.observe(viewLifecycleOwner, Observer { version ->
+        presenterView.appVersion.observe(viewLifecycleOwner, Observer { version ->
             version?.let {
                 var appVersion = getString(R.string.Settings_InfoTitleWithVersion, it)
                 if (getString(R.string.is_release) == "false") {
@@ -127,26 +105,56 @@ class MainSettingsFragment : Fragment() {
                 appName.text = appVersion
             }
         })
+    }
 
-        viewModel.showAppLinkLiveEvent.observe(viewLifecycleOwner, Observer {
-            val uri = Uri.parse(getString(R.string.Settings_InfoLink))
+    private fun subscribeToRouterEvents(router: MainSettingsRouter) {
+        router.showBaseCurrencySettingsLiveEvent.observe(viewLifecycleOwner, Observer {
+            context?.let { context -> BaseCurrencySettingsModule.start(context) }
+        })
+
+        router.showLanguageSettingsLiveEvent.observe(viewLifecycleOwner, Observer {
+            context?.let { context -> LanguageSettingsModule.start(context) }
+        })
+
+        router.showAboutLiveEvent.observe(viewLifecycleOwner, Observer {
+            activity?.let {
+                AboutSettingsActivity.start(it)
+            }
+        })
+
+        router.showReportProblemLiveEvent.observe(viewLifecycleOwner, Observer {
+            activity?.let {
+                ReportProblemModule.start(it)
+            }
+        })
+
+        router.showSecuritySettingsLiveEvent.observe(viewLifecycleOwner, Observer {
+            context?.let {
+                SecuritySettingsModule.start(it)
+            }
+        })
+
+        router.showManageCoinsLiveEvent.observe(viewLifecycleOwner, Observer {
+            context?.let { ManageWalletsModule.start(it) }
+        })
+
+        router.openLinkLiveEvent.observe(viewLifecycleOwner, Observer { link ->
+            val uri = Uri.parse(link)
             val intent = Intent(Intent.ACTION_VIEW, uri)
             activity?.startActivity(intent)
         })
 
-        viewModel.reloadAppLiveEvent.observe(viewLifecycleOwner, Observer {
-            activity?.let { MainModule.startAsNewTask(it, MainActivity.SETTINGS_TAB_POSITION) }
+        router.shareAppLiveEvent.observe(viewLifecycleOwner, Observer { appWebPageLink ->
+            val shareMessage = getString(R.string.SettingsShare_Text) + "\n" + appWebPageLink + "\n"
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.type = "text/plain"
+            shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.SettingsShare_Title)))
         })
 
-    }
-
-    private fun shareAppLink() {
-        val shareMessage = getString(R.string.SettingsShare_Text) + "\n" + getString(R.string.SettingsShare_Link) + "\n"
-
-        val shareIntent = Intent(Intent.ACTION_SEND)
-        shareIntent.type = "text/plain"
-        shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
-        startActivity(Intent.createChooser(shareIntent, getString(R.string.SettingsShare_Title)))
+        router.reloadAppLiveEvent.observe(viewLifecycleOwner, Observer {
+            activity?.let { MainModule.startAsNewTask(it, MainActivity.SETTINGS_TAB_POSITION) }
+        })
     }
 
 }

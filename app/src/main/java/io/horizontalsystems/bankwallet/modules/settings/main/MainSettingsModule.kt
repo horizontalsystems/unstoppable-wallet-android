@@ -1,6 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.settings.main
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.Currency
 
 object MainSettingsModule {
 
@@ -20,25 +23,26 @@ object MainSettingsModule {
         fun didTapLanguage()
         fun didSwitchLightMode(lightMode: Boolean)
         fun didTapAbout()
-        fun didTapAppLink()
+        fun didTapCompanyLogo()
         fun didTapReportProblem()
-        fun onClear()
+        fun didTapTellFriends()
     }
 
     interface IMainSettingsInteractor {
+        val companyWebPageLink: String
+        val appWebPageLink: String
         val nonBackedUpCount: Int
-        var currentLanguage: String
-        val baseCurrency: String
-        var appVersion: String
-        fun getLightMode(): Boolean
-        fun setLightMode(lightMode: Boolean)
+        val currentLanguageDisplayName: String
+        val baseCurrency: Currency
+        val appVersion: String
+        var lightMode: Boolean
+
         fun clear()
     }
 
     interface IMainSettingsInteractorDelegate {
         fun didUpdateNonBackedUp(count: Int)
-        fun didUpdateBaseCurrency(baseCurrency: String)
-        fun didUpdateLightMode()
+        fun didUpdateBaseCurrency()
     }
 
     interface IMainSettingsRouter {
@@ -47,24 +51,30 @@ object MainSettingsModule {
         fun showBaseCurrencySettings()
         fun showLanguageSettings()
         fun showAbout()
-        fun openAppLink()
+        fun openLink(url: String)
         fun reloadAppInterface()
         fun showReportProblem()
+        fun showShareApp(appWebPageLink: String)
     }
 
-    fun init(view: MainSettingsViewModel, router: IMainSettingsRouter) {
-        val interactor = MainSettingsInteractor(
-                localStorage = App.localStorage,
-                backupManager = App.backupManager,
-                languageManager = App.languageManager,
-                systemInfoManager = App.systemInfoManager,
-                currencyManager = App.currencyManager
-        )
+    class Factory : ViewModelProvider.Factory {
 
-        val presenter = MainSettingsPresenter(router, interactor)
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            val view = MainSettingsView()
+            val router = MainSettingsRouter()
+            val interactor = MainSettingsInteractor(
+                    localStorage = App.localStorage,
+                    backupManager = App.backupManager,
+                    languageManager = App.languageManager,
+                    systemInfoManager = App.systemInfoManager,
+                    currencyManager = App.currencyManager,
+                    appConfigProvider = App.appConfigProvider
+            )
+            val presenter = MainSettingsPresenter(view, router, interactor)
+            interactor.delegate = presenter
 
-        view.delegate = presenter
-        presenter.view = view
-        interactor.delegate = presenter
+            return presenter as T
+        }
     }
+
 }

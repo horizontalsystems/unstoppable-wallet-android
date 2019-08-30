@@ -9,7 +9,8 @@ import io.horizontalsystems.bankwallet.entities.*
 import java.math.BigDecimal
 
 class AppConfigProvider : IAppConfigProvider {
-
+    override val companyWebPageLink: String = "https://horizontalsystems.io"
+    override val appWebPageLink: String = "https://unstoppable.money"
     override val reportEmail = "hsdao@protonmail.ch"
     override val reportTelegramGroup = "unstoppable_wallet"
     override val ipfsId = "QmXTJZBMMRmBbPun6HFt3tmb3tfYF2usLPxFoacL7G5uMX"
