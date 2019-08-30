@@ -63,6 +63,7 @@
     <string name="Balance_Sort_Balance">Valor</string>
     <string name="Balance_Sort_PopupTitle">Ordenar por</string>
     <string name="Balance_Sort_Az">Nombre</string>
+    <string name="Balance_Sort_24hPriceChange">24h Price (%)</string>
     <!--Send-->
     <string name="Send_Title">Enviar %s</string>
     <string name="Send_Hint_Address">Dirección</string>
@@ -74,7 +75,7 @@
     <string name="Send_Confirmation_Title">Confirmar</string>
     <string name="Send_Confirmation_To">Para: </string>
     <string name="Send_Confirmation_HintMemo">Memo:</string>
-    <string name="Send_Confirmation_Eos_HintAccount">Cuenta</string>
+    <string name="Send_Confirmation_Eos_HintAccount">Account</string>
     <string name="Send_Confirmation_Total">Total:</string>
     <string name="Send_Confirmation_EstimateTime">Tiempo estimado:</string>
     <string name="Send_Confirmation_Send_Button">Enviar</string>
@@ -174,11 +175,11 @@
     <string name="FullInfoEth_Nonce">Nonce</string>
     <string name="FullInfoEth_Amount">Importe</string>
     <!--Settings-->
-    <string name="Settings_Title">Configuraciones</string>
-    <string name="Settings_SecurityCenter">Centro de Seguridad</string>
+    <string name="Settings_Title">Ajustes</string>
+    <string name="Settings_SecurityCenter">Centro de seguridad</string>
     <string name="Settings_ManageCoins">Gestionar monedas</string>
     <string name="Settings_RestoreWallet">Restaurar cartera</string>
-    <string name="Settings_BaseCurrency">Divisa principal</string>
+    <string name="Settings_BaseCurrency">Moneda principal</string>
     <string name="Settings_Language">Idioma</string>
     <string name="Settings_LightMode">Modo ligero</string>
     <string name="Settings_About">Acerca de</string>
@@ -196,7 +197,7 @@
     <string name="SettingsSecurity_ManageKeys">Gestionar claves</string>
     <string name="SettingsSecurity_BackupWallet">Copia de Seguridad de cartera</string>
     <!--Setting_Currency-->
-    <string name="SettingsCurrency_Title">Divisa principal</string>
+    <string name="SettingsCurrency_Title">Moneda principal</string>
     <!--Setting_Language-->
     <string name="SettingsLanguage_Title">Idioma</string>
     <!--Setting_About-->
@@ -250,7 +251,7 @@
     <string name="Fingerprint_Hint">Sensor táctil</string>
     <string name="Fingerprint_EnterPin">Código</string>
     <string name="Fingerprint_NotRecognized">Huella digital no reconocida. Por favor inténtelo de nuevo.</string>
-    <string name="Fingerprint_Success">Operación realizada correctamente</string>
+    <string name="Fingerprint_Success">Completado!</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Inhabilitado hasta: %s</string>
     <!--OS Pin-->
@@ -287,7 +288,7 @@
     <string name="ManageKeys_Delete_Title">Eliminar clave</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">Esta acción eliminará la clave %s (monedero) de este dispositivo.</string>
     <string name="ManageKeys_Delete_ConfirmationDisable">Monedas que serán deshabilitadas: %s</string>
-    <string name="ManageKeys_Delete_ConfirmationLoose">Si usted no tiene un respaldo de esta clave, usted perderá los fondos respectivos.</string>
+    <string name="ManageKeys_Delete_ConfirmationLoose">Si usted no tiene un respaldo de esta clave, usted perderá los respectivos fondos.</string>
     <string name="ManageKeys_Delete_FromPhone">Eliminar del teléfono</string>
     <string name="ManageKeys_Delete_Alert_Title">Se requiere una copia de seguridad</string>
     <string name="ManageKeys_Delete_Alert">Necesita respaldar esta clave %s antes de que pueda eliminarla de este teléfono.</string>
