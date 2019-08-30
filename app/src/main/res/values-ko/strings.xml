@@ -15,6 +15,7 @@
     <string name="Button_Ok">확인</string>
     <string name="Button_Share">공유</string>
     <string name="Error">오류</string>
+    <string name="NotAvailable">N/A</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
     <string name="Welcome_CreateWallet">새 지갑</string>
