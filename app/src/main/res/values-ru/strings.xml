@@ -114,9 +114,9 @@
     <string name="Timestamp_Yesterday">Вчера</string>
     <string name="Duration_instant">Мгновенно</string>
     <string name="Duration_Within">В течение %s</string>
-    <string name="Duration_Hours">%d h.</string>
-    <string name="Duration_Minutes">%d min.</string>
-    <string name="Duration_Seconds">%d sec.</string>
+    <string name="Duration_Hours">%d ч.</string>
+    <string name="Duration_Minutes">%d мин.</string>
+    <string name="Duration_Seconds">%d сек.</string>
     <!--Transactions-->
     <string name="Transactions_Title">Транзакции</string>
     <string name="Transactions_FilterAll">ВСЕ</string>
@@ -132,8 +132,8 @@
     <string name="TransactionInfo_ButtonVerify">Проверить</string>
     <string name="TransactionInfo_Status_Pending">В процессе</string>
     <string name="TransactionInfo_HistoricalRate">Исторический Курс</string>
-    <string name="TransactionInfo_Fee">Fee</string>
-    <string name="TransactionInfo_FootNote">The value of this transaction appears as 0 because it was sent to your own address</string>
+    <string name="TransactionInfo_Fee">Комиссия</string>
+    <string name="TransactionInfo_FootNote">Значение этой транзакции выглядит как 0, потому что она была отправлена на свой собственный адрес</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Транзакция</string>
     <string name="FullInfo_Time">Время</string>
@@ -186,7 +186,7 @@
     <string name="Settings_ShareThisWallet">Рассказать Друзьям</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
-    <string name="Settings_Report">Report a Problem</string>
+    <string name="Settings_Report">Сообщить о Проблеме</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Отпечаток пальца не включен</string>
     <string name="Settings_Error_NoFingerprintAddedYet">У вас не включен отпечаток пальца на этом устройстве. Перейдите в настройки </string>
