@@ -26,7 +26,7 @@
     <string name="Restore_RestoreFailed">Échec de la restauration du porte-monnaie</string>
     <string name="Restore_EosAccountName">Account Name</string>
     <string name="Restore_EosActivePrivateKey">Active Private Key</string>
-    <string name="Restore_EosAccountIncorrect">Compte Invalide</string>
+    <string name="Restore_EosAccountIncorrect">Incorrect Account</string>
     <string name="Restore_EosKeyIncorrect">Clé Incorrect</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Sauvegarde</string>
@@ -329,12 +329,12 @@
     <string name="CoinOption_MorePrivate">1&#8211;12 heures (Plus Privé)</string>
     <string name="CoinOption_Slow_Text">Restaurez vos transactions passées directement depuis le réseau. Significablement plus privées mais très lentes. Si la restauration prend beaucoup de temps, dirigez dans la section Manage Keys et ré-importez la clé d\'un porte-monnaie dans en utilisant l\'option Fast Sync.</string>
     <!--Charts-->
-    <string name="Charts_TimeDuration_Day">1D</string>
-    <string name="Charts_TimeDuration_Week">7D</string>
+    <string name="Charts_TimeDuration_Day">1J</string>
+    <string name="Charts_TimeDuration_Week">7J</string>
     <string name="Charts_TimeDuration_Month">1M</string>
     <string name="Charts_TimeDuration_Quartal">3M</string>
     <string name="Charts_TimeDuration_HalfYear">6M</string>
-    <string name="Charts_TimeDuration_Year">1Y</string>
+    <string name="Charts_TimeDuration_Year">1A</string>
     <string name="Charts_Title">%s Rate</string>
     <string name="Charts_Rate_High">High</string>
     <string name="Charts_Rate_Low">Low</string>
