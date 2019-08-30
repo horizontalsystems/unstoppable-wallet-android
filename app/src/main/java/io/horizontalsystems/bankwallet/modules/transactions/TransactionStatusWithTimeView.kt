@@ -56,7 +56,7 @@ open class TransactionStatusWithTimeView : ConstraintLayout {
         val filledBars = bars.size * transactionStatus.progress
 
         bars.forEachIndexed { index, bar ->
-            bar.setImageResource(if (index <= filledBars)
+            bar.setImageResource(if (filledBars > 0.0 && index <= filledBars)
                 R.drawable.status_progress_bar_grey_small else
                 R.drawable.status_progress_bar_grey_20_small)
         }
