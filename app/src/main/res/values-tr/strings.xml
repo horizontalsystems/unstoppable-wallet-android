@@ -84,13 +84,13 @@
     <string name="Send_Error_InsufficientBalance">Yetersiz bakiye.</string>
     <string name="Send_Error_IncorrectAddress">Geçersiz adres</string>
     <string name="Send_Error_BalanceAmount">%s bakiye</string>
-    <string name="Send_DialogTitle">Confirm</string>
-    <string name="Send_DialogSpeed">Transaction Speed:</string>
+    <string name="Send_DialogTitle">Onayla</string>
+    <string name="Send_DialogSpeed">İşlem hızı:</string>
     <string name="Send_TxSpeed_Low">Yavaş</string>
     <string name="Send_TxSpeed_Medium">Ortadüzey</string>
     <string name="Send_TxSpeed_High">Hızlı</string>
-    <string name="Send_DialogDuration">Duration:</string>
-    <string name="Send_DialogFee">Fee:</string>
+    <string name="Send_DialogDuration">Süre:</string>
+    <string name="Send_DialogFee">Masraf:</string>
     <string name="Send_DialogTotal">Toplam:</string>
     <string name="Send_DialogMemoHint">Memo</string>
     <string name="Send_DialogProceed">Devam</string>
@@ -112,10 +112,10 @@
     <string name="Timestamp_Today">Bugün</string>
     <string name="Timestamp_Yesterday">Dün</string>
     <string name="Duration_instant">Anlık</string>
-    <string name="Duration_Within">Within %s</string>
-    <string name="Duration_Hours">%d h.</string>
-    <string name="Duration_Minutes">%d min.</string>
-    <string name="Duration_Seconds">%d sec.</string>
+    <string name="Duration_Within">%s Içinde</string>
+    <string name="Duration_Hours">%d sa.</string>
+    <string name="Duration_Minutes">%d dk.</string>
+    <string name="Duration_Seconds">%d sn.</string>
     <!--Transactions-->
     <string name="Transactions_Title">Hesap işlemleri</string>
     <string name="Transactions_FilterAll">HEPSI</string>
@@ -185,7 +185,7 @@
     <string name="Settings_ShareThisWallet">Arkadaşlarına bahset</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
-    <string name="Settings_Report">Report a Problem</string>
+    <string name="Settings_Report">Sorunu Bildir</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Parmak izi etkin değil</string>
     <string name="Settings_Error_NoFingerprintAddedYet">Kayıtlı parmak izi bulunmadı. Parmak izi eklemek için, Ayarlar &gt; Güvenlik bölümüne gidin.</string>
@@ -214,8 +214,8 @@
     <string name="SettingsShare_Title">Paylaş</string>
     <string name="SettingsShare_Text">Unstoppable Wallet - kullanmanız gereken kripto para cüzdanı</string>
     <!--Setting_Report-->
-    <string name="SettingsReport_Title">Report a Problem</string>
-    <string name="SettingsReport_Email">Mail</string>
+    <string name="SettingsReport_Title">Sorunu Bildir</string>
+    <string name="SettingsReport_Email">E-posta</string>
     <string name="SettingsReport_Telegram">Telegram</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android anahtar deposu hatası</string>
@@ -316,9 +316,10 @@
     <string name="Charts_Rate_High">Yüksek</string>
     <string name="Charts_Rate_Low">Düşük</string>
     <string name="Charts_MarketCap">P. Değeri</string>
-    <string name="Charts_MarketCap_Thousand">%s k</string>
-    <string name="Charts_MarketCap_Million">%s M</string>
-    <string name="Charts_MarketCap_Billion">%s B</string>
+    <string name="Charts_MarketCap_Thousand">k</string>
+    <string name="Charts_MarketCap_Million">M</string>
+    <string name="Charts_MarketCap_Billion">B</string>
+    <string name="Charts_MarketCap_Trillion">T</string>
     <string name="Charts_Volume">Hacim</string>
     <string name="Charts_Error_NotAvailable">Grafik yok</string>
 </resources>
