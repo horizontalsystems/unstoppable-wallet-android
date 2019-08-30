@@ -130,7 +130,7 @@ class ManageWalletsPresenter(private val interactor: ManageWalletsModule.IIntera
 
     private fun getPredefinedAccountType(coinDefaultAccountType: DefaultAccountType): IPredefinedAccountType? {
         return interactor.predefinedAccountTypes.firstOrNull {
-            it.defaultAccountType::class == coinDefaultAccountType::class
+            it.defaultAccountType == coinDefaultAccountType
         }
     }
 
