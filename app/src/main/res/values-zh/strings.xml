@@ -316,9 +316,10 @@
     <string name="Charts_Rate_High">高</string>
     <string name="Charts_Rate_Low">低</string>
     <string name="Charts_MarketCap">市场价值</string>
-    <string name="Charts_MarketCap_Thousand">%s千</string>
-    <string name="Charts_MarketCap_Million">%s百万</string>
-    <string name="Charts_MarketCap_Billion">%s十亿</string>
+    <string name="Charts_MarketCap_Thousand">k</string>
+    <string name="Charts_MarketCap_Million">M</string>
+    <string name="Charts_MarketCap_Billion">B</string>
+    <string name="Charts_MarketCap_Trillion">T</string>
     <string name="Charts_Volume">量</string>
     <string name="Charts_Error_NotAvailable">无可用图表</string>
 </resources>
