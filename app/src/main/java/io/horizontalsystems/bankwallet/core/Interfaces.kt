@@ -320,6 +320,8 @@ interface ILockManager {
 }
 
 interface IAppConfigProvider {
+    val companyWebPageLink: String
+    val appWebPageLink: String
     val reportEmail: String
     val reportTelegramGroup: String
     val ipfsId: String
