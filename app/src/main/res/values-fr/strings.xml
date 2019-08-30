@@ -63,6 +63,7 @@
     <string name="Balance_Sort_Balance">Valeur</string>
     <string name="Balance_Sort_PopupTitle">Trier par</string>
     <string name="Balance_Sort_Az">Nom</string>
+    <string name="Balance_Sort_24hPriceChange">24h Price (%)</string>
     <!--Send-->
     <string name="Send_Title">Envoyer %s</string>
     <string name="Send_Hint_Address">Adresse</string>
