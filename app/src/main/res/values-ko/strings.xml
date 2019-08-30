@@ -23,7 +23,7 @@
     <!--Restore-->
     <string name="Restore_Title">복구</string>
     <string name="Restore_Subtitle">암호를 입력하세요</string>
-    <string name="Restore_ValidationFailed">Incorrect Key</string>
+    <string name="Restore_ValidationFailed">틀린 암호 입니다</string>
     <string name="Restore_RestoreFailed">지갑 복구에 실패하였습니다.</string>
     <string name="Restore_EosAccountName">Account Name</string>
     <string name="Restore_EosActivePrivateKey">Active Private Key</string>
@@ -85,13 +85,13 @@
     <string name="Send_Error_InsufficientBalance">잔액이 부족합니다.</string>
     <string name="Send_Error_IncorrectAddress">잘못된 주소</string>
     <string name="Send_Error_BalanceAmount">잔액%s</string>
-    <string name="Send_DialogTitle">Confirm</string>
-    <string name="Send_DialogSpeed">Transaction Speed:</string>
+    <string name="Send_DialogTitle">확인</string>
+    <string name="Send_DialogSpeed">거래 속도:</string>
     <string name="Send_TxSpeed_Low">낮음</string>
     <string name="Send_TxSpeed_Medium">보통</string>
     <string name="Send_TxSpeed_High">높음</string>
     <string name="Send_DialogDuration">Duration:</string>
-    <string name="Send_DialogFee">Fee:</string>
+    <string name="Send_DialogFee">수수료:</string>
     <string name="Send_DialogTotal">합계:</string>
     <string name="Send_DialogMemoHint">Memo</string>
     <string name="Send_DialogProceed">Proceed</string>
@@ -132,8 +132,8 @@
     <string name="TransactionInfo_ButtonVerify">확인</string>
     <string name="TransactionInfo_Status_Pending">보류 중</string>
     <string name="TransactionInfo_HistoricalRate">과거 환율</string>
-    <string name="TransactionInfo_Fee">Fee</string>
-    <string name="TransactionInfo_FootNote">The value of this transaction appears as 0 because it was sent to your own address</string>
+    <string name="TransactionInfo_Fee">수수료</string>
+    <string name="TransactionInfo_FootNote">이 거래의 가치는 귀하의 주소로 전송되었으므로 0으로 나타납니다</string>
     <!--Full Info-->
     <string name="FullInfo_Title">거래기록</string>
     <string name="FullInfo_Time">시간</string>
@@ -186,7 +186,7 @@
     <string name="Settings_ShareThisWallet">친구에게 추천하기</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
-    <string name="Settings_Report">Report a Problem</string>
+    <string name="Settings_Report">문제점 보고</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">지문을 사용할 수 없습니다.</string>
     <string name="Settings_Error_NoFingerprintAddedYet">당신은 이 장치에서 지문을 사용할 수 없습니다. 지문 액세스를 설정하는 보안으로 이동합니다.</string>
@@ -221,8 +221,8 @@
     <string name="SettingsShare_Title">공유</string>
     <string name="SettingsShare_Text">Unstoppable Wallet - a crypto wallet I recommend</string>
     <!--Setting_Report-->
-    <string name="SettingsReport_Title">Report a Problem</string>
-    <string name="SettingsReport_Email">Mail</string>
+    <string name="SettingsReport_Title">문제점 보고</string>
+    <string name="SettingsReport_Email">E-mail</string>
     <string name="SettingsReport_Telegram">Telegram</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">안드로이드 키저장 에러</string>
@@ -320,12 +320,12 @@
     <string name="Charts_TimeDuration_HalfYear">6개월</string>
     <string name="Charts_TimeDuration_Year">1년</string>
     <string name="Charts_Title">%s 률</string>
-    <string name="Charts_Rate_High">High</string>
-    <string name="Charts_Rate_Low">Low</string>
+    <string name="Charts_Rate_High">높음</string>
+    <string name="Charts_Rate_Low">낮음</string>
     <string name="Charts_MarketCap">시가총액</string>
-    <string name="Charts_MarketCap_Thousand">k</string>
-    <string name="Charts_MarketCap_Million">M</string>
-    <string name="Charts_MarketCap_Billion">B</string>
+    <string name="Charts_MarketCap_Thousand">천</string>
+    <string name="Charts_MarketCap_Million">백만</string>
+    <string name="Charts_MarketCap_Billion">십억</string>
     <string name="Charts_MarketCap_Trillion">T</string>
     <string name="Charts_Volume">음량</string>
     <string name="Charts_Error_NotAvailable">Chart not available</string>
