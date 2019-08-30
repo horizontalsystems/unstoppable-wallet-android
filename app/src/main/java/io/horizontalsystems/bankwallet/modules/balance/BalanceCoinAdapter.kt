@@ -128,7 +128,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             textCurrencyAmount.visibility = View.GONE
         }
 
-        showChart(balanceViewItem, expanded, chartEnabled)
+        showChart(balanceViewItem, expanded, chartEnabled, textCurrencyAmount.visibility)
 
         textCoinAmount.text = App.numberFormatter.format(balanceViewItem.coinValue)
         textCoinAmount.alpha = if (balanceViewItem.state is AdapterState.Synced) 1f else 0.3f
@@ -174,15 +174,15 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             AnimationHelper.collapse(buttonsWrapper)
         }
 
-        showChart(balanceViewItem, expanded, chartEnabled)
+        showChart(balanceViewItem, expanded, chartEnabled, textCurrencyAmount.visibility)
     }
 
-    private fun showChart(viewItem: BalanceViewItem, expanded: Boolean, chartEnabled: Boolean) {
+    private fun showChart(viewItem: BalanceViewItem, expanded: Boolean, chartEnabled: Boolean, textCurrencyAmountVisibility: Int) {
         if (expanded || !chartEnabled) {
-            return setChartVisibility(show = false)
+            return setChartVisibility(false, textCurrencyAmountVisibility)
         }
 
-        setChartVisibility(show = true)
+        setChartVisibility(true, textCurrencyAmountVisibility)
 
         val diffColor = if (viewItem.chartDiff < BigDecimal.ZERO)
             containerView.context.getColor(R.color.red_warning) else
@@ -200,15 +200,15 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
         }
     }
 
-    private fun setChartVisibility(show: Boolean) {
+    private fun setChartVisibility(show: Boolean, textCurrencyAmountVisibility: Int) {
         if (show) {
             chartView.visibility = View.VISIBLE
             chartViewCard.visibility = View.VISIBLE
             chartRateDiff.visibility = View.VISIBLE
-            textCurrencyAmount.visibility = View.INVISIBLE
-            textCoinAmount.visibility = View.INVISIBLE
+            textCurrencyAmount.visibility = View.GONE
+            textCoinAmount.visibility = View.GONE
         } else {
-            textCurrencyAmount.visibility = View.VISIBLE
+            textCurrencyAmount.visibility = textCurrencyAmountVisibility
             textCoinAmount.visibility = View.VISIBLE
             chartViewCard.visibility = View.INVISIBLE
             chartRateDiff.visibility = View.INVISIBLE
