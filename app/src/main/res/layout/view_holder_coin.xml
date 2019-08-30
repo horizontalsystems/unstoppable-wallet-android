@@ -16,16 +16,16 @@
 
     <!-- first line -->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:clipChildren="true"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp">
+        android:clipChildren="true">
 
         <io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
             android:id="@+id/coinIcon"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -65,7 +65,10 @@
             style="@style/Body1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="4dp"
             android:textColor="?BallanceCoinAmountColor"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/textCoinName"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="0.000078 BTC" />
@@ -82,13 +85,13 @@
             app:layout_constraintEnd_toEndOf="parent">
 
             <io.horizontalsystems.bankwallet.lib.chartview.ChartView
-                app:width="64dp"
-                app:height="31dp"
                 android:id="@+id/chartView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:animated="false"
-                app:showGrid="false" />
+                app:height="31dp"
+                app:showGrid="false"
+                app:width="64dp" />
 
         </androidx.cardview.widget.CardView>
 
