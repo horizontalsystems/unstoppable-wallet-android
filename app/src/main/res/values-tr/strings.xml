@@ -63,6 +63,7 @@
     <string name="Balance_Sort_Balance">Değer</string>
     <string name="Balance_Sort_PopupTitle">Sıralama şekli</string>
     <string name="Balance_Sort_Az">İsim</string>
+    <string name="Balance_Sort_24hPriceChange">24h Price (%)</string>
     <!--Send-->
     <string name="Send_Title">%s gönder</string>
     <string name="Send_Hint_Address">Adres</string>
