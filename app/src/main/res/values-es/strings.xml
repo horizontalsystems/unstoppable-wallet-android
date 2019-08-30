@@ -115,7 +115,7 @@
     <string name="Duration_Within">Within %s</string>
     <string name="Duration_Hours">%d h.</string>
     <string name="Duration_Minutes">%d min.</string>
-    <string name="Duration_Seconds">%d sec.</string>
+    <string name="Duration_Seconds">%d seg.</string>
     <!--Transactions-->
     <string name="Transactions_Title">Transacciones</string>
     <string name="Transactions_FilterAll">TODO</string>
@@ -319,8 +319,8 @@
     <string name="Charts_TimeDuration_HalfYear">6M</string>
     <string name="Charts_TimeDuration_Year">1A</string>
     <string name="Charts_Title">%s Tarifa</string>
-    <string name="Charts_Rate_High">High</string>
-    <string name="Charts_Rate_Low">Low</string>
+    <string name="Charts_Rate_High">Alto</string>
+    <string name="Charts_Rate_Low">Bajo</string>
     <string name="Charts_MarketCap">Capitalización de mercado</string>
     <string name="Charts_MarketCap_Thousand">%s k</string>
     <string name="Charts_MarketCap_Million">%s M</string>
