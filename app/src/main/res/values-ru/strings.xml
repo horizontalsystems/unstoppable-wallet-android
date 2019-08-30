@@ -63,6 +63,7 @@
     <string name="Balance_Sort_Balance">Значение</string>
     <string name="Balance_Sort_PopupTitle">Сортировать по</string>
     <string name="Balance_Sort_Az">Название</string>
+    <string name="Balance_Sort_24hPriceChange">24h Price (%)</string>
     <!--Send-->
     <string name="Send_Title">Отправить %s</string>
     <string name="Send_Hint_Address">Адрес</string>
