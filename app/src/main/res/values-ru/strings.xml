@@ -15,7 +15,7 @@
     <string name="Button_Ok">Хорошо</string>
     <string name="Button_Share">Поделиться</string>
     <string name="Error">Ошибка</string>
-    <string name="NotAvailable">N/A</string>
+    <string name="NotAvailable">Нет данных</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
     <string name="Welcome_CreateWallet">Создать Кошелек</string>
@@ -102,8 +102,8 @@
     <string name="Deposit_Title">Получить %s</string>
     <string name="Deposit_Share">Поделиться</string>
     <string name="Deposit_Your_Address">Ваш Адрес</string>
-    <string name="Deposit_Your_Account">Your Account</string>
-    <string name="Receive_Alert_NotBackedUp_Title">Backup Required</string>
+    <string name="Deposit_Your_Account">Ваш Аккаунт</string>
+    <string name="Receive_Alert_NotBackedUp_Title">Необходима Резервная Копия</string>
     <string name="Receive_Alert_NotBackedUp_Button">Резервная копия</string>
     <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
     <!--Timestamp-->
@@ -112,8 +112,8 @@
     <string name="Timestamp_HoursAgo">%d ч назад</string>
     <string name="Timestamp_Today">Сегодня</string>
     <string name="Timestamp_Yesterday">Вчера</string>
-    <string name="Duration_instant">Instant</string>
-    <string name="Duration_Within">Within %s</string>
+    <string name="Duration_instant">Мгновенно</string>
+    <string name="Duration_Within">В течение %s</string>
     <string name="Duration_Hours">%d h.</string>
     <string name="Duration_Minutes">%d min.</string>
     <string name="Duration_Seconds">%d sec.</string>
