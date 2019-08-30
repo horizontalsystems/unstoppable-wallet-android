@@ -10,6 +10,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
 import io.horizontalsystems.bankwallet.lib.chartview.models.DataPoint
@@ -77,7 +78,10 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
             coinRateDiff.text = App.numberFormatter.format(item.diffValue.toDouble(), showSign = true, precision = 2) + "%"
 
             item.rateValue?.let { coinRateLast.text = formatter.format(it, canUseLessSymbol = false) }
-            coinMarketCap.text = formatter.format(item.marketCap, shorten = true)
+            val shortValue = shortenValue(item.marketCap.value)
+            val marketCap = CurrencyValue(item.marketCap.currency, shortValue.first)
+            coinMarketCap.text = formatter.format(marketCap, canUseLessSymbol = false) + shortValue.second
+
             coinRateHigh.text = formatter.format(item.highValue, canUseLessSymbol = false)
             coinRateLow.text = formatter.format(item.lowValue, canUseLessSymbol = false)
             setViewVisibility(marketCapWrap, isVisible = true)
@@ -104,6 +108,7 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
         })
 
         presenterView.showError.observe(viewLifecycleOwner, Observer {
+            chartView.visibility = View.INVISIBLE
             chartError.visibility = View.VISIBLE
             chartError.text = getString(R.string.Charts_Error_NotAvailable)
         })
@@ -154,5 +159,28 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
                 it.visibility = View.VISIBLE else
                 it.visibility = View.INVISIBLE
         }
+    }
+
+    // Need to move this to helpers
+    private fun shortenValue(number: Number): Pair<BigDecimal, String> {
+        val suffix = arrayOf(
+                " ",
+                getString(R.string.Charts_MarketCap_Thousand),
+                getString(R.string.Charts_MarketCap_Million),
+                getString(R.string.Charts_MarketCap_Billion),
+                getString(R.string.Charts_MarketCap_Trillion)) // "P", "E"
+
+        val valueLong = number.toLong()
+        val value = Math.floor(Math.log10(valueLong.toDouble())).toInt()
+        val base = value / 3
+
+        var returnSuffix = ""
+        var valueDecimal = valueLong.toBigDecimal()
+        if (value >= 3 && base < suffix.size) {
+            valueDecimal = (valueLong / Math.pow(10.0, (base * 3).toDouble())).toBigDecimal()
+            returnSuffix = suffix[base]
+        }
+
+        return Pair(valueDecimal, returnSuffix)
     }
 }

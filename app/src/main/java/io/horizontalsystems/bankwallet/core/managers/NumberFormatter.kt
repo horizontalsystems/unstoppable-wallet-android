@@ -23,12 +23,6 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
     private val FIAT_TEN_CENT_EDGE = "0.1".toBigDecimal()
 
     private var formatters: MutableMap<String, NumberFormat> = mutableMapOf()
-    private val suffixes = TreeMap<Long, String>().apply {
-        put(1_000L, "k")
-        put(1_000_000L, "M")
-        put(1_000_000_000L, "B")
-        put(1_000_000_000_000L, "T")
-    }
 
     override fun format(coinValue: CoinValue, explicitSign: Boolean, realNumber: Boolean): String? {
         var value = coinValue.value.abs()
@@ -87,10 +81,7 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
             }
         }
 
-        //  shorten will convert 100_000 to 100 K
-        val formatted = if (shorten && value > BigDecimal("100000"))
-            shortenNumber(value.toLong()) else
-            customFormatter.format(value)
+        val formatted = customFormatter.format(value)
 
         var result = "${currencyValue.currency.symbol}$formatted"
 
@@ -134,21 +125,6 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         }
 
         return format
-    }
-
-    override fun shortenNumber(value: Long): String {
-        if (value == Long.MIN_VALUE) return shortenNumber(Long.MIN_VALUE + 1)
-        if (value < 0) return "-" + shortenNumber(-value)
-        if (value < 1000) return value.toString() //deal with easy case
-
-        val entry = suffixes.floorEntry(value)
-        val divideBy: Long = entry.key
-        val suffix: String = entry.value
-
-        val truncated = value / (divideBy / 10) //the number part of the output times 10
-        val hasDecimal = truncated < 100 && truncated / 10.0 != (truncated / 10).toDouble()
-
-        return if (hasDecimal) "${truncated / 10.0} $suffix" else "${truncated / 10} $suffix"
     }
 
     private fun getFormatter(locale: Locale): NumberFormat? {
