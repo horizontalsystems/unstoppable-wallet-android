@@ -15,6 +15,7 @@
     <string name="Button_Ok">تأیید</string>
     <string name="Button_Share">به اشتراك گذاشتن</string>
     <string name="Error">خطا</string>
+    <string name="NotAvailable">N/A</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
     <string name="Welcome_CreateWallet">New Wallet</string>
