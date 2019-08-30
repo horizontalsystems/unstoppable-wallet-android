@@ -118,8 +118,20 @@ interface IPredefinedAccountType {
 }
 
 sealed class DefaultAccountType {
-    class Mnemonic(val wordsCount: Int) : DefaultAccountType()
-    class Eos : DefaultAccountType()
+    class Mnemonic(val wordsCount: Int) : DefaultAccountType() {
+        override fun equals(other: Any?): Boolean {
+            return other is Mnemonic && other.wordsCount == wordsCount
+        }
+
+        override fun hashCode(): Int {
+            return wordsCount
+        }
+    }
+    class Eos : DefaultAccountType() {
+        override fun equals(other: Any?): Boolean {
+            return other is Eos
+        }
+    }
 }
 
 interface IRandomProvider {
