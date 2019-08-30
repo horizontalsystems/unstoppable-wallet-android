@@ -15,7 +15,7 @@
     <string name="Button_Ok">确定</string>
     <string name="Button_Share">分享</string>
     <string name="Error">出错</string>
-    <string name="NotAvailable">N/A</string>
+    <string name="NotAvailable">不可用</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
     <string name="Welcome_CreateWallet">新钱包</string>
@@ -84,13 +84,13 @@
     <string name="Send_Error_InsufficientBalance">资金不足。</string>
     <string name="Send_Error_IncorrectAddress">错误地址</string>
     <string name="Send_Error_BalanceAmount">余额%s</string>
-    <string name="Send_DialogTitle">Confirm</string>
-    <string name="Send_DialogSpeed">Transaction Speed:</string>
+    <string name="Send_DialogTitle">确认</string>
+    <string name="Send_DialogSpeed">交易速度:</string>
     <string name="Send_TxSpeed_Low">低</string>
     <string name="Send_TxSpeed_Medium">中</string>
     <string name="Send_TxSpeed_High">高</string>
-    <string name="Send_DialogDuration">Duration:</string>
-    <string name="Send_DialogFee">Fee:</string>
+    <string name="Send_DialogDuration">时长:</string>
+    <string name="Send_DialogFee">费用：</string>
     <string name="Send_DialogTotal">总额：</string>
     <string name="Send_DialogMemoHint">Memo</string>
     <string name="Send_DialogProceed">继续</string>
@@ -112,10 +112,10 @@
     <string name="Timestamp_Today">今天</string>
     <string name="Timestamp_Yesterday">昨天</string>
     <string name="Duration_instant">即时</string>
-    <string name="Duration_Within">Within %s</string>
-    <string name="Duration_Hours">%d h.</string>
-    <string name="Duration_Minutes">%d min.</string>
-    <string name="Duration_Seconds">%d sec.</string>
+    <string name="Duration_Within">在%s内</string>
+    <string name="Duration_Hours">%d小时。</string>
+    <string name="Duration_Minutes">%d分钟。</string>
+    <string name="Duration_Seconds">%d秒</string>
     <!--Transactions-->
     <string name="Transactions_Title">交易</string>
     <string name="Transactions_FilterAll">全部</string>
@@ -316,10 +316,10 @@
     <string name="Charts_Rate_High">高</string>
     <string name="Charts_Rate_Low">低</string>
     <string name="Charts_MarketCap">市场价值</string>
-    <string name="Charts_MarketCap_Thousand">k</string>
-    <string name="Charts_MarketCap_Million">M</string>
-    <string name="Charts_MarketCap_Billion">B</string>
-    <string name="Charts_MarketCap_Trillion">T</string>
+    <string name="Charts_MarketCap_Thousand">千</string>
+    <string name="Charts_MarketCap_Million">百万</string>
+    <string name="Charts_MarketCap_Billion">十亿</string>
+    <string name="Charts_MarketCap_Trillion">万亿</string>
     <string name="Charts_Volume">量</string>
     <string name="Charts_Error_NotAvailable">无可用图表</string>
 </resources>
