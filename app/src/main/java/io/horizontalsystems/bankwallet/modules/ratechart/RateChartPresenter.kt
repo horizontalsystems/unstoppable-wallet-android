@@ -42,7 +42,8 @@ class RateChartPresenter(
     }
 
     override fun onTouchSelect(point: DataPoint) {
-        view.showSelectedPoint(Pair(point.time, CurrencyValue(currency, point.value.toBigDecimal())))
+        val currencyValue = CurrencyValue(currency, point.value.toBigDecimal())
+        view.showSelectedPoint(Triple(point.time, currencyValue, chartType))
     }
 
     //  InteractorDelegate

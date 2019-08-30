@@ -19,7 +19,7 @@ object RateChartModule {
         fun setChartType(type: ChartType)
         fun enableChartType(type: ChartType)
         fun showChart(viewItem: ChartViewItem)
-        fun showSelectedPoint(data: Pair<Long, CurrencyValue>)
+        fun showSelectedPoint(data: Triple<Long, CurrencyValue, ChartType>)
         fun showError(ex: Throwable)
     }
 
