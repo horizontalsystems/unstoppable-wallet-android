@@ -83,13 +83,13 @@
     <string name="Send_Error_InsufficientBalance">资金不足。</string>
     <string name="Send_Error_IncorrectAddress">错误地址</string>
     <string name="Send_Error_BalanceAmount">余额%s</string>
-    <string name="Send_DialogTitle">确认交易</string>
-    <string name="Send_DialogSpeed">交易速度</string>
+    <string name="Send_DialogTitle">Confirm</string>
+    <string name="Send_DialogSpeed">Transaction Speed:</string>
     <string name="Send_TxSpeed_Low">低</string>
     <string name="Send_TxSpeed_Medium">中</string>
     <string name="Send_TxSpeed_High">高</string>
-    <string name="Send_DialogDuration">时长</string>
-    <string name="Send_DialogFee">费用</string>
+    <string name="Send_DialogDuration">Duration:</string>
+    <string name="Send_DialogFee">Fee:</string>
     <string name="Send_DialogTotal">总额：</string>
     <string name="Send_DialogMemoHint">Memo</string>
     <string name="Send_DialogProceed">继续</string>
@@ -111,6 +111,10 @@
     <string name="Timestamp_Today">今天</string>
     <string name="Timestamp_Yesterday">昨天</string>
     <string name="Duration_instant">即时</string>
+    <string name="Duration_Within">Within %s</string>
+    <string name="Duration_Hours">%d h.</string>
+    <string name="Duration_Minutes">%d min.</string>
+    <string name="Duration_Seconds">%d sec.</string>
     <plurals name="Duration_seconds">
         <item quantity="other">%d秒</item>
     </plurals>
