@@ -185,22 +185,12 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:orientation="vertical"
-        android:paddingTop="5dp"
+        android:paddingTop="2dp"
         android:paddingBottom="8dp"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/border2">
-
-        <TextView
-            android:id="@+id/pointInfoDate"
-            style="@font/noto_sans_regular"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:textColor="@color/grey"
-            android:textSize="12sp"
-            tools:text="June 18, 2019 at 1:45 PM" />
 
         <TextView
             android:id="@+id/pointInfoPrice"
@@ -211,6 +201,16 @@
             android:textColor="?BottomDialogTextColor"
             android:textSize="14sp"
             tools:text="3,867.50" />
+
+        <TextView
+            android:id="@+id/pointInfoDate"
+            style="@font/noto_sans_regular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textColor="@color/grey"
+            android:textSize="12sp"
+            tools:text="June 18, 2019 at 1:45 PM" />
 
     </LinearLayout>
 
