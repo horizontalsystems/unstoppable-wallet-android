@@ -83,13 +83,13 @@
     <string name="Send_Error_InsufficientBalance">잔액이 부족합니다.</string>
     <string name="Send_Error_IncorrectAddress">잘못된 주소</string>
     <string name="Send_Error_BalanceAmount">잔액%s</string>
-    <string name="Send_DialogTitle">거래를 확인해라</string>
-    <string name="Send_DialogSpeed">거래 속도</string>
+    <string name="Send_DialogTitle">Confirm</string>
+    <string name="Send_DialogSpeed">Transaction Speed:</string>
     <string name="Send_TxSpeed_Low">낮음</string>
     <string name="Send_TxSpeed_Medium">보통</string>
     <string name="Send_TxSpeed_High">높음</string>
-    <string name="Send_DialogDuration">Duration</string>
-    <string name="Send_DialogFee">수수료</string>
+    <string name="Send_DialogDuration">Duration:</string>
+    <string name="Send_DialogFee">Fee:</string>
     <string name="Send_DialogTotal">합계:</string>
     <string name="Send_DialogMemoHint">Memo</string>
     <string name="Send_DialogProceed">Proceed</string>
@@ -111,6 +111,10 @@
     <string name="Timestamp_Today">오늘</string>
     <string name="Timestamp_Yesterday">어제</string>
     <string name="Duration_instant">Instant</string>
+    <string name="Duration_Within">Within %s</string>
+    <string name="Duration_Hours">%d h.</string>
+    <string name="Duration_Minutes">%d min.</string>
+    <string name="Duration_Seconds">%d sec.</string>
     <plurals name="Duration_seconds">
         <item quantity="other">%d seconds</item>
     </plurals>
