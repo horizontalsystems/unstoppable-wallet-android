@@ -49,8 +49,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
         }
 
         chartButton.setOnClickListener {
-            it.isActivated = !it.isActivated
-            viewModel.delegate.onEnableChart(it.isActivated)
+            viewModel.delegate.onChartClick()
         }
 
         pullToRefresh.setOnRefreshListener {
@@ -191,6 +190,10 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
 
         viewModel.openChartModule.observe(viewLifecycleOwner, Observer { coin ->
             RateChartFragment(coin).also { it.show(childFragmentManager, it.tag) }
+        })
+
+        viewModel.setChartButtonEnabled.observe(viewLifecycleOwner, Observer { enabled ->
+            chartButton.isActivated = enabled
         })
     }
 

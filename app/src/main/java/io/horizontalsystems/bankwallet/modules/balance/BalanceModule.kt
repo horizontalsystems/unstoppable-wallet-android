@@ -18,6 +18,7 @@ object BalanceModule {
         fun updateHeader()
         fun setSortingOn(isOn: Boolean)
         fun showBackupAlert()
+        fun setChartButtonState(enabled: Boolean)
     }
 
     interface IViewDelegate {
@@ -32,7 +33,7 @@ object BalanceModule {
         fun openManageCoins()
         fun onClear()
         fun onSortClick()
-        fun onEnableChart(enabled: Boolean)
+        fun onChartClick()
         fun onSortTypeChanged(sortType: BalanceSortType)
         fun openBackup()
         fun openChart(position: Int)
@@ -69,7 +70,11 @@ object BalanceModule {
         fun openChart(coin: Coin)
     }
 
-    class DataSource(var currency: Currency) {
+    interface IBalanceSorter {
+        fun sort(items: List<BalanceItem>, sortType: BalanceSortType) : List<BalanceItem>
+    }
+
+    class DataSource(var currency: Currency, private val sorter: IBalanceSorter) {
         private var updatedPositions = mutableListOf<Int>()
 
         val count
@@ -82,7 +87,7 @@ object BalanceModule {
         var sortType: BalanceSortType = BalanceSortType.Name
             set(value) {
                 field = value
-                items = sorted(items)
+                items = sorter.sort(items, sortType)
             }
 
         var chartEnabled = false
@@ -98,7 +103,7 @@ object BalanceModule {
         }
 
         fun set(items: List<BalanceItem>) {
-            this.items = sorted(items)
+            this.items = sorter.sort(items, sortType)
             clearUpdatedPositions()
         }
 
@@ -129,32 +134,25 @@ object BalanceModule {
             items[position].state = state
 
             if (items.all { it.state == AdapterState.Synced }) {
-                items = sorted(items)
+                items = sorter.sort(items, sortType)
             }
         }
 
         fun setRate(position: Int, rate: Rate) {
             items[position].rate = rate
-            items = sorted(items)
+            items = sorter.sort(items, sortType)
         }
 
         fun setChartData(position: Int, chartData: ChartData, chartDiff: BigDecimal) {
             items[position].chartDiff = chartDiff
             items[position].chartData = chartData
+            items = sorter.sort(items, sortType)
         }
 
         fun clearRates() {
             items.forEach { it.rate = null }
         }
 
-        private fun sorted(items: List<BalanceItem>) = when (sortType) {
-            BalanceSortType.Value -> {
-                items.sortedByDescending { it.fiatValue }
-            }
-            BalanceSortType.Name -> {
-                items.sortedBy { it.wallet.coin.title }
-            }
-        }
     }
 
     data class BalanceItem(
@@ -172,7 +170,7 @@ object BalanceModule {
     fun init(view: BalanceViewModel, router: IRouter) {
         val currencyManager = App.currencyManager
         val interactor = BalanceInteractor(App.walletManager, App.adapterManager, App.rateStorage, App.rateStatsManager, currencyManager, App.localStorage)
-        val presenter = BalancePresenter(interactor, router, DataSource(currencyManager.baseCurrency), App.predefinedAccountTypeManager, BalanceViewItemFactory())
+        val presenter = BalancePresenter(interactor, router, DataSource(currencyManager.baseCurrency, BalanceSorter()), App.predefinedAccountTypeManager, BalanceViewItemFactory())
 
         presenter.view = view
         interactor.delegate = presenter
