@@ -95,8 +95,8 @@
     <string name="Send_DialogMemoHint">Memo</string>
     <string name="Send_DialogProceed">Continuar</string>
     <string name="Send_Sending">Enviando</string>
-    <string name="Send_ERC_Alert">Tarifas de transacción para %s (ERC20) pagado en Ethereum. Es necesario %s ETH.</string>
-    <string name="Send_Token_InsufficientFeeAlert">Tarifas de transacción para %s (%s) pagado en %s. Es necesario %s.</string>
+    <string name="Send_ERC_Alert">Las comisiones de transacción para %s (ERC20) pagado en Ethereum. Es necesario %s ETH.</string>
+    <string name="Send_Token_InsufficientFeeAlert">Las comisiones de transacción para %s (%s) pagado en %s. Es necesario %s.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Recibir %s</string>
     <string name="Deposit_Share">Compartir</string>
