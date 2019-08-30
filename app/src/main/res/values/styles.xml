@@ -302,6 +302,11 @@
         <item name="android:background">@drawable/button_yellow_background_12</item>
     </style>
 
+    <style name="ButtonDestructive" parent="Button">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/button_red_background</item>
+    </style>
+
     <style name="ButtonNegative" parent="Button">
         <item name="android:background">@drawable/button_grey_background_12</item>
         <item name="android:textColor">@color/black</item>
