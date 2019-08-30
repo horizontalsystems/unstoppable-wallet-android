@@ -90,7 +90,7 @@
     <string name="Send_TxSpeed_Low">Bajo</string>
     <string name="Send_TxSpeed_Medium">Medio</string>
     <string name="Send_TxSpeed_High">Alto</string>
-    <string name="Send_DialogDuration">Duration:</string>
+    <string name="Send_DialogDuration">Duración:</string>
     <string name="Send_DialogFee">Comisión:</string>
     <string name="Send_DialogTotal">Total:</string>
     <string name="Send_DialogMemoHint">Memo</string>
@@ -150,11 +150,11 @@
     <string name="FullInfo_To">Para</string>
     <string name="FullInfo_Status">Estado</string>
     <string name="FullInfo_Memo">Memo</string>
-    <string name="FullInfo_CpuUsage">Uso de CPU</string>
-    <string name="FullInfo_NetUsage">Uso de red</string>
-    <string name="FullInfo_GasLimit">Límite de gas</string>
-    <string name="FullInfo_GasUsed">Gas usado</string>
-    <string name="FullInfo_GasPrice">Precio del gas</string>
+    <string name="FullInfo_CpuUsage">CPU Usage</string>
+    <string name="FullInfo_NetUsage">Net Usage</string>
+    <string name="FullInfo_GasLimit">Gas Limit</string>
+    <string name="FullInfo_GasUsed">Gas Used</string>
+    <string name="FullInfo_GasPrice">Gas Price</string>
     <string name="FullInfo_Source_Title">Source</string>
     <string name="FullInfo_Source_Online">En Línea</string>
     <string name="FullInfo_Source_Offline">Desconectado</string>
@@ -222,7 +222,7 @@
     <string name="SettingsShare_Text">Unstoppable Wallet - a crypto wallet I recommend</string>
     <!--Setting_Report-->
     <string name="SettingsReport_Title">Report a Problem</string>
-    <string name="SettingsReport_Email">Mail</string>
+    <string name="SettingsReport_Email">E-mail</string>
     <string name="SettingsReport_Telegram">Telegram</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Error de almacenamiento de claves de Android</string>
@@ -302,7 +302,7 @@
     <string name="AccountType_12WordsKey">Clave de 12-palabras</string>
     <string name="AccountType_Eos">EOS Blockchain</string>
     <string name="AccountType_EosKey">Clave de EOS</string>
-    <string name="AccountType_Binance">Cadena de Binance</string>
+    <string name="AccountType_Binance">Binance Chain</string>
     <string name="AccountType_BinanceKey">Clave de Binance</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">Restaurar opciones</string>
