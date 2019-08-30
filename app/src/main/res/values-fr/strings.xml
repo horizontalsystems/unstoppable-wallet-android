@@ -22,7 +22,7 @@
     <!--Restore-->
     <string name="Restore_Title">Restaurer</string>
     <string name="Restore_Subtitle">Entrez la clé</string>
-    <string name="Restore_ValidationFailed">Incorrect Key</string>
+    <string name="Restore_ValidationFailed">Clé incorrect</string>
     <string name="Restore_RestoreFailed">Échec de la restauration du porte-monnaie</string>
     <string name="Restore_EosAccountName">Account Name</string>
     <string name="Restore_EosActivePrivateKey">Active Private Key</string>
@@ -59,9 +59,9 @@
     <string name="Balance_SyncedUntil">jusqu\'à: %s</string>
     <string name="Balance_Syncing">Synchronisation…</string>
     <string name="Balance_AddCoins">Ajouter des coins</string>
-    <string name="Balance_Sort_Balance">Value</string>
+    <string name="Balance_Sort_Balance">Valeur</string>
     <string name="Balance_Sort_PopupTitle">Trier par</string>
-    <string name="Balance_Sort_Az">Name</string>
+    <string name="Balance_Sort_Az">Nom</string>
     <!--Send-->
     <string name="Send_Title">Envoyer %s</string>
     <string name="Send_Hint_Address">Adresse</string>
@@ -83,13 +83,13 @@
     <string name="Send_Error_InsufficientBalance">Fonds insuffisants.</string>
     <string name="Send_Error_IncorrectAddress">Adresse incorrect</string>
     <string name="Send_Error_BalanceAmount">Balance %s</string>
-    <string name="Send_DialogTitle">Confirm</string>
+    <string name="Send_DialogTitle">Confirmer</string>
     <string name="Send_DialogSpeed">Transaction Speed:</string>
     <string name="Send_TxSpeed_Low">Low</string>
     <string name="Send_TxSpeed_Medium">Medium</string>
     <string name="Send_TxSpeed_High">High</string>
     <string name="Send_DialogDuration">Duration:</string>
-    <string name="Send_DialogFee">Fee:</string>
+    <string name="Send_DialogFee">Frais:</string>
     <string name="Send_DialogTotal">Total:</string>
     <string name="Send_DialogMemoHint">Memo</string>
     <string name="Send_DialogProceed">Proceed</string>
@@ -98,7 +98,7 @@
     <string name="Send_Token_InsufficientFeeAlert">Frais de transaction pour %s (%s) payé en %s. Il est nécessaire %s.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Recevoir %s</string>
-    <string name="Deposit_Share">Share</string>
+    <string name="Deposit_Share">Partager</string>
     <string name="Deposit_Your_Address">Votre address</string>
     <string name="Deposit_Your_Account">Your Account</string>
     <string name="Receive_Alert_NotBackedUp_Title">Backup Required</string>
@@ -154,7 +154,7 @@
     <string name="TransactionInfo_ButtonVerify">Vérifiez</string>
     <string name="TransactionInfo_Status_Pending">En attente</string>
     <string name="TransactionInfo_HistoricalRate">Taux historique</string>
-    <string name="TransactionInfo_Fee">Fee</string>
+    <string name="TransactionInfo_Fee">Frais</string>
     <string name="TransactionInfo_FootNote">The value of this transaction appears as 0 because it was sent to your own address</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Transaction</string>
