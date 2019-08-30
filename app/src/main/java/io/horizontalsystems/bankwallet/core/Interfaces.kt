@@ -403,7 +403,6 @@ interface IAppNumberFormatter {
     fun formatForTransactions(coinValue: CoinValue): String?
     fun formatForTransactions(currencyValue: CurrencyValue, isIncoming: Boolean): SpannableString
     fun format(value: Double, showSign: Boolean = false, precision: Int = 8): String
-    fun shortenNumber(value: Long): String
 }
 
 interface IFeeRateProvider {
