@@ -452,6 +452,14 @@
         <item name="android:textColor">?TransactionDetailValueTextColor</item>
     </style>
 
+    <style name="TextFlatButton">
+        <item name="android:fontFamily">@font/noto_sans_medium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
     <style name="FormInputTextThemed" parent="Base">
         <item name="android:textColorHint">@color/grey_50</item>
         <item name="android:textColor">?attr/TextColorBarsToDark</item>

@@ -54,7 +54,10 @@ class RateChartPresenter(
 
         for (type in stats.keys) {
             val chartType = ChartType.fromString(type) ?: continue
-            view.enableChartType(chartType)
+            val chartData = stats[chartType.name] ?: continue
+            if (chartData.points.size > 10) {
+                view.enableChartType(chartType)
+            }
         }
 
         showChart()
