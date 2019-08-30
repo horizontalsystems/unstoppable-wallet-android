@@ -15,6 +15,7 @@
     <string name="Button_Ok">Tamam</string>
     <string name="Button_Share">Paylaş</string>
     <string name="Error">Hata</string>
+    <string name="NotAvailable">N/A</string>
     <!--Welcome-->
     <string name="Welcome_Title">Durdurulamaz</string>
     <string name="Welcome_CreateWallet">Yeni Cüzdan</string>
