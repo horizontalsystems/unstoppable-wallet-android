@@ -42,6 +42,7 @@ class BalancePresenter(
     override fun viewDidLoad() {
         dataSource.sortType = interactor.getSortingType()
         interactor.initWallets()
+        view?.setChartButtonState(dataSource.chartEnabled)
 
         flushSubject
                 .debounce(1, TimeUnit.SECONDS)
@@ -101,19 +102,26 @@ class BalancePresenter(
     }
 
     override fun onSortClick() {
-        router.openSortTypeDialog(interactor.getSortingType())
+        router.openSortTypeDialog(dataSource.sortType)
     }
 
-    override fun onEnableChart(enabled: Boolean) {
-        dataSource.chartEnabled = enabled
+    override fun onChartClick() {
+        dataSource.chartEnabled = !dataSource.chartEnabled
+        view?.setChartButtonState(dataSource.chartEnabled)
         view?.reload()
 
-        if (enabled) updateStats()
+        if (dataSource.chartEnabled) updateStats()
     }
 
     override fun onSortTypeChanged(sortType: BalanceSortType) {
-        interactor.saveSortingType(sortType)
         dataSource.sortType = sortType
+        if (sortType == BalanceSortType.PercentGrowth) {
+            dataSource.chartEnabled = true
+            view?.setChartButtonState(dataSource.chartEnabled)
+            updateStats()
+        } else {
+            interactor.saveSortingType(sortType)
+        }
         view?.reload()
     }
 
@@ -180,8 +188,8 @@ class BalancePresenter(
 
         positions.forEach { position ->
             dataSource.setChartData(position, chartData, chartDiff)
-            view?.updateItem(position)
         }
+        postViewReload()
     }
 
     override fun onFailFetchChartStats(coinCode: String) {

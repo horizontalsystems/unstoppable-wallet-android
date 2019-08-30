@@ -22,7 +22,7 @@ class BalanceSortDialogFragment : DialogFragment(), SortingAdapter.Listener {
         dismiss()
     }
 
-    private val sortTypes = listOf(BalanceSortType.Name, BalanceSortType.Value)
+    private val sortTypes = listOf(BalanceSortType.Name, BalanceSortType.Value, BalanceSortType.PercentGrowth)
     private var listener: Listener? = null
     private var selectedSortingType: BalanceSortType? = null
 

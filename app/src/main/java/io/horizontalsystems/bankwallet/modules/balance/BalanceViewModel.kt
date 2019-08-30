@@ -2,9 +2,8 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Wallet
 
 class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter {
@@ -24,6 +23,7 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     val showBackupAlert = SingleLiveEvent<Unit>()
     val openBackup = SingleLiveEvent<Pair<Account, Int>>()
     val openChartModule = SingleLiveEvent<Coin>()
+    val setChartButtonEnabled = SingleLiveEvent<Boolean>()
 
     fun init() {
         BalanceModule.init(this, this)
@@ -89,5 +89,9 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
 
     override fun openChart(coin: Coin) {
         openChartModule.postValue(coin)
+    }
+
+    override fun setChartButtonState(enabled: Boolean) {
+        setChartButtonEnabled.value = enabled
     }
 }
