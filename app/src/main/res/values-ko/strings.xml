@@ -63,6 +63,7 @@
     <string name="Balance_Sort_Balance">Value</string>
     <string name="Balance_Sort_PopupTitle">정렬 기준</string>
     <string name="Balance_Sort_Az">이름</string>
+    <string name="Balance_Sort_24hPriceChange">24h Price (%)</string>
     <!--Send-->
     <string name="Send_Title">전송 %s</string>
     <string name="Send_Hint_Address">주소</string>
