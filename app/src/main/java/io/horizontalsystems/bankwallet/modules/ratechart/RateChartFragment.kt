@@ -49,7 +49,9 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
         observeData()
         bindActions()
 
-        presenter.viewDidLoad()
+        dialog?.setOnShowListener {
+            presenter.viewDidLoad()
+        }
     }
 
     private fun observeData() {
