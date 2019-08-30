@@ -12,12 +12,14 @@ class ChartIndicator : View {
 
     private val touchPoint = TouchPoint(0f, 0f, 0f)
     private val indicatorPaint = Paint()
+    private var config: ChartConfig? = null
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     fun init(config: ChartConfig) {
+        this.config = config
         indicatorPaint.apply {
             color = config.indicatorColor
             style = Paint.Style.FILL
@@ -30,7 +32,8 @@ class ChartIndicator : View {
     }
 
     override fun onDraw(canvas: Canvas) {
-        canvas.drawLine(touchPoint.x, 0f, touchPoint.x, height.toFloat(), indicatorPaint)
+        val bottom = height - (config?.offsetBottom ?: 0f)
+        canvas.drawLine(touchPoint.x, 0f, touchPoint.x, bottom, indicatorPaint)
         canvas.drawRoundRect(touchPoint.x - 15, touchPoint.y - 15, touchPoint.x + 15, touchPoint.y + 15, 20f, 20f, indicatorPaint)
     }
 
