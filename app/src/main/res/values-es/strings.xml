@@ -63,7 +63,7 @@
     <string name="Balance_Sort_Balance">Valor</string>
     <string name="Balance_Sort_PopupTitle">Ordenar por</string>
     <string name="Balance_Sort_Az">Nombre</string>
-    <string name="Balance_Sort_24hPriceChange">24h Price (%)</string>
+    <string name="Balance_Sort_24hPriceChange">Precio 24h (%)</string>
     <!--Send-->
     <string name="Send_Title">Enviar %s</string>
     <string name="Send_Hint_Address">Dirección</string>
@@ -86,7 +86,7 @@
     <string name="Send_Error_IncorrectAddress">Código incorrecto</string>
     <string name="Send_Error_BalanceAmount">Saldo %s</string>
     <string name="Send_DialogTitle">Confirmar</string>
-    <string name="Send_DialogSpeed">Transaction Speed:</string>
+    <string name="Send_DialogSpeed">Velocidad de transacción:</string>
     <string name="Send_TxSpeed_Low">Bajo</string>
     <string name="Send_TxSpeed_Medium">Medio</string>
     <string name="Send_TxSpeed_High">Alto</string>
@@ -113,7 +113,7 @@
     <string name="Timestamp_Today">Hoy</string>
     <string name="Timestamp_Yesterday">Ayer</string>
     <string name="Duration_instant">Inmediato</string>
-    <string name="Duration_Within">Within %s</string>
+    <string name="Duration_Within">Dentro de %s</string>
     <string name="Duration_Hours">%d h.</string>
     <string name="Duration_Minutes">%d min.</string>
     <string name="Duration_Seconds">%d seg.</string>
@@ -186,7 +186,7 @@
     <string name="Settings_ShareThisWallet">Recomendar a un amigo</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
-    <string name="Settings_Report">Report a Problem</string>
+    <string name="Settings_Report">Reportar un problema</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Huella digital no habilitada</string>
     <string name="Settings_Error_NoFingerprintAddedYet">No ha activado su huella digital en este dispositivo. Vaya a Ajustes &gt; seguridad para configurar el acceso a su huella digital.</string>
@@ -219,10 +219,10 @@
 \n\nAlgunos datos genéricos de carácter público de esta app se guardan en centros de almacenamiento descentralizado (IPFS).</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Compartir</string>
-    <string name="SettingsShare_Text">Unstoppable Wallet - a crypto wallet I recommend</string>
+    <string name="SettingsShare_Text">Monedero Unstoppable - un monedero de criptomonedas que yo recomiendo</string>
     <!--Setting_Report-->
-    <string name="SettingsReport_Title">Report a Problem</string>
-    <string name="SettingsReport_Email">E-mail</string>
+    <string name="SettingsReport_Title">Reportar un problema</string>
+    <string name="SettingsReport_Email">Correo electrónico</string>
     <string name="SettingsReport_Telegram">Telegram</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Error de almacenamiento de claves de Android</string>
@@ -294,7 +294,7 @@
     <string name="ManageKeys_Delete_Alert">Necesita respaldar esta clave %s antes de que pueda eliminarla de este teléfono.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">Añadir %s</string>
-    <string name="AddCoin_Description">You don\'t have key for %1s. The wallet can generate the key for you. Use the create button below to generate a new key. \n\nYou may also use the existing %3s key for the %4s if you have one.</string>
+    <string name="AddCoin_Description">Usted no tiene la clave para %1s. El monedero puede generar una clave para usted. Use el botón de crear para generar una nueva clave. \n\nTambién puede usar la %3sclave ya existente para el %4ssi tiene una.</string>
     <string name="AddCoin_CreateKey">Crear</string>
     <string name="AddCoin_RestoreKey">Restaurar</string>
     <!-- Account Types -->
@@ -328,5 +328,5 @@
     <string name="Charts_MarketCap_Billion">B</string>
     <string name="Charts_MarketCap_Trillion">T</string>
     <string name="Charts_Volume">Volumen</string>
-    <string name="Charts_Error_NotAvailable">Chart not available</string>
+    <string name="Charts_Error_NotAvailable">Gráfico no disponible</string>
 </resources>
