@@ -23,7 +23,7 @@
     <!--Restore-->
     <string name="Restore_Title">Wiederherstellen</string>
     <string name="Restore_Subtitle">Schlüssel Eingeben</string>
-    <string name="Restore_ValidationFailed">Incorrect Key</string>
+    <string name="Restore_ValidationFailed">Falscher Schlüssel</string>
     <string name="Restore_RestoreFailed">Fehler beim Wiederherstellen des Wallet</string>
     <string name="Restore_EosAccountName">Account Name</string>
     <string name="Restore_EosActivePrivateKey">Active Private Key</string>
@@ -61,10 +61,10 @@
     <string name="Balance_SyncedUntil">bis: %s</string>
     <string name="Balance_Syncing">Synchronisieren…</string>
     <string name="Balance_AddCoins">Coins hinzufügen</string>
-    <string name="Balance_Sort_Balance">Value</string>
+    <string name="Balance_Sort_Balance">Wert</string>
     <string name="Balance_Sort_PopupTitle">Sortieren nach</string>
     <string name="Balance_Sort_Az">Name</string>
-    <string name="Balance_Sort_24hPriceChange">24h Price (%)</string>
+    <string name="Balance_Sort_24hPriceChange">24h Preis (%)</string>
     <!--Send-->
     <string name="Send_Title">%s senden</string>
     <string name="Send_Hint_Address">Adresse</string>
@@ -86,25 +86,25 @@
     <string name="Send_Error_InsufficientBalance">Nicht genug Geldmittel.</string>
     <string name="Send_Error_IncorrectAddress">Falscher Adresse</string>
     <string name="Send_Error_BalanceAmount">Guthaben %s</string>
-    <string name="Send_DialogTitle">Confirm</string>
-    <string name="Send_DialogSpeed">Transaction Speed:</string>
-    <string name="Send_TxSpeed_Low">Low</string>
-    <string name="Send_TxSpeed_Medium">Medium</string>
-    <string name="Send_TxSpeed_High">High</string>
-    <string name="Send_DialogDuration">Duration:</string>
-    <string name="Send_DialogFee">Fee:</string>
+    <string name="Send_DialogTitle">Bestätigen</string>
+    <string name="Send_DialogSpeed">Transaktionsgeschwindigkeit:</string>
+    <string name="Send_TxSpeed_Low">Niedrig</string>
+    <string name="Send_TxSpeed_Medium">Mittel</string>
+    <string name="Send_TxSpeed_High">Hoch</string>
+    <string name="Send_DialogDuration">Dauer:</string>
+    <string name="Send_DialogFee">Gebühr:</string>
     <string name="Send_DialogTotal">Insgesamt:</string>
     <string name="Send_DialogMemoHint">Memo</string>
-    <string name="Send_DialogProceed">Proceed</string>
+    <string name="Send_DialogProceed">Fortfahren</string>
     <string name="Send_Sending">Wird gesendet</string>
     <string name="Send_ERC_Alert">Transaktionsgebühren für %s (ERC20) in Ethereum bezahlt. Du brauchst %s ETH.</string>
     <string name="Send_Token_InsufficientFeeAlert">Transaktionsgebühren für %s (%s) in %s bezahlt. Du brauchst %s.</string>
     <!--Deposit-->
     <string name="Deposit_Title">%s Anfordern</string>
-    <string name="Deposit_Share">Share</string>
+    <string name="Deposit_Share">Teilen</string>
     <string name="Deposit_Your_Address">Deine Adresse</string>
-    <string name="Deposit_Your_Account">Your Account</string>
-    <string name="Receive_Alert_NotBackedUp_Title">Backup Required</string>
+    <string name="Deposit_Your_Account">Dein Konto</string>
+    <string name="Receive_Alert_NotBackedUp_Title">Backup erforderlich</string>
     <string name="Receive_Alert_NotBackedUp_Button">Sicherung</string>
     <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
     <!--Timestamp-->
@@ -113,11 +113,11 @@
     <string name="Timestamp_HoursAgo">Vor %d St</string>
     <string name="Timestamp_Today">Heute</string>
     <string name="Timestamp_Yesterday">Gestern</string>
-    <string name="Duration_instant">Instant</string>
+    <string name="Duration_instant">Sofort</string>
     <string name="Duration_Within">Within %s</string>
-    <string name="Duration_Hours">%d h.</string>
-    <string name="Duration_Minutes">%d min.</string>
-    <string name="Duration_Seconds">%d sec.</string>
+    <string name="Duration_Hours">%d Std.</string>
+    <string name="Duration_Minutes">%d Min.</string>
+    <string name="Duration_Seconds">%d Sek.</string>
     <!--Transactions-->
     <string name="Transactions_Title">Transaktionen</string>
     <string name="Transactions_FilterAll">ALLE</string>
@@ -133,8 +133,8 @@
     <string name="TransactionInfo_ButtonVerify">Prüfen</string>
     <string name="TransactionInfo_Status_Pending">Anstehend</string>
     <string name="TransactionInfo_HistoricalRate">Historischer Rate</string>
-    <string name="TransactionInfo_Fee">Fee</string>
-    <string name="TransactionInfo_FootNote">The value of this transaction appears as 0 because it was sent to your own address</string>
+    <string name="TransactionInfo_Fee">Gebühr</string>
+    <string name="TransactionInfo_FootNote">Der Wert dieser Transaktion ist gleich 0, da die Transaktion an Ihre eigene Adresse gesendet wurde</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Transaktion</string>
     <string name="FullInfo_Time">Zeit</string>
@@ -217,7 +217,7 @@
     <string name="SettingsShare_Text">Unstoppable Wallet - a crypto wallet I recommend</string>
     <!--Setting_Report-->
     <string name="SettingsReport_Title">Report a Problem</string>
-    <string name="SettingsReport_Email">Mail</string>
+    <string name="SettingsReport_Email">E-Mail</string>
     <string name="SettingsReport_Telegram">Telegram</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android Keystore Fehler</string>
@@ -229,8 +229,8 @@
     <string name="Unlock_Page_EnterYourPin">Code</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Nicht unterstützte Währung</string>
-    <string name="Eos_Backend_Error_SelfTransfer">Can\'t transfer token to own account</string>
-    <string name="Eos_Backend_Error_AccountNotExist">Target account does not exist</string>
+    <string name="Eos_Backend_Error_SelfTransfer">Token kann nicht auf das eigene Konto übertragen werden</string>
+    <string name="Eos_Backend_Error_AccountNotExist">Der Zielkonto existiert nicht</string>
     <string name="Eos_Backend_Error_InsufficientRam">Your EOS account doesn\'t have enough RAM to send this token. You need to increase RAM stake to proceed.</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Entsperren</string>
@@ -275,7 +275,8 @@
     <string name="ManageCoins_EOSAlert_CreateButton">Im Moment kann das Wallet keine neuen EOS-Wallet-Accounts anlegen. Sie können nur bestehende wiederherstellen.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Schlüssel Managen</string>
-    <string name="ManageKeys_Description">Anyone with access to your Keys can steal your wallet funds. Store keys safely and never show them to anyone. \n\nBackup each key to be able to restore funds if you lose or break your phone, or simply the wallet app gets deleted.</string>
+    <string name="ManageKeys_Description">Jeder, der Ihre Schlüssel kennt, kann Ihr Wallet-Guthaben stehlen. Bewahren Sie die Schlüssel sicher auf und zeigen sie diese niemandem.
+\n\nSichern Sie jeden Schlüssel so, dass Sie auf das Guthaben zugreifen können, wenn Ihr Telefon kaputt geht oder die Wallet-App gelöscht wird.</string>
     <string name="ManageKeys_Create">Erstellen</string>
     <string name="ManageKeys_Restore">Wiederherstellen</string>
     <string name="ManageKeys_Delete">Löschen</string>
@@ -287,8 +288,8 @@
     <string name="ManageKeys_Delete_ConfirmationDisable">Coins, die entfernt werden: %s</string>
     <string name="ManageKeys_Delete_ConfirmationLoose">Wenn Sie keine Sicherung von diesem Schlüssel haben, verlieren Sie das zugehörige Guthaben.</string>
     <string name="ManageKeys_Delete_FromPhone">Von Telefon löschen</string>
-    <string name="ManageKeys_Delete_Alert_Title">Backup Required</string>
-    <string name="ManageKeys_Delete_Alert">You need to backup %s key before you may delete it from this phone.</string>
+    <string name="ManageKeys_Delete_Alert_Title">Backup erforderlich</string>
+    <string name="ManageKeys_Delete_Alert">Sie müssen den %s-Schlüssel in einem Backup sichern, bevor Sie ihn von diesem Handy löschen können.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">%s hinzufügen</string>
     <string name="AddCoin_Description">You don\'t have key for %1s. The wallet can generate the key for you. Use the create button below to generate a new key. \n\nYou may also use the existing %3s key for the %4s if you have one.</string>
