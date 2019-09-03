@@ -22,6 +22,7 @@
     <string name="Welcome_RestoreWallet">恢复钱包</string>
     <!--Restore-->
     <string name="Restore_Title">恢复</string>
+    <string name="Restore_Descripton">To restore existing wallet you need to enter a secret key for that wallet.\n\nOnce you restore one wallet you will be able to restore more wallets by going to Manage Keys section in app Settings.</string>
     <string name="Restore_Subtitle">输入密钥</string>
     <string name="Restore_ValidationFailed">错误密钥</string>
     <string name="Restore_RestoreFailed">无法恢复钱包</string>
