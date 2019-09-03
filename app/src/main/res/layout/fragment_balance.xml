@@ -60,9 +60,11 @@
                 android:padding="4dp"
                 android:src="@drawable/ic_sort"
                 android:tint="@color/stateful_button_yellow_color"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/ballanceText"
                 app:layout_constraintEnd_toStartOf="@+id/chartButton"
-                app:layout_constraintTop_toTopOf="@+id/ballanceText" />
+                app:layout_constraintTop_toTopOf="@+id/ballanceText"
+                tools:visibility="visible" />
 
             <ImageView
                 android:id="@+id/chartButton"
@@ -71,9 +73,11 @@
                 android:padding="4dp"
                 android:src="@drawable/ic_rate"
                 android:tint="@color/stateful_button_yellow_color"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/ballanceText"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/ballanceText" />
+                app:layout_constraintTop_toTopOf="@+id/ballanceText"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/ballanceText"

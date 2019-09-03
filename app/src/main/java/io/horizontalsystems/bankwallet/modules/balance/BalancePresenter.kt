@@ -144,6 +144,7 @@ class BalancePresenter(
         interactor.fetchRates(dataSource.currency.code, dataSource.coinCodes)
 
         view?.setSortingOn(balanceItems.size >= showSortingButtonThreshold)
+        view?.setChartOn(balanceItems.isNotEmpty())
         view?.reload()
     }
 

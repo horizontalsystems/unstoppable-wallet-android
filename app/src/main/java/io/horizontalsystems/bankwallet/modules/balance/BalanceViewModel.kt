@@ -20,6 +20,7 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     val reloadHeaderLiveEvent = SingleLiveEvent<Void>()
     val reloadItemLiveEvent = SingleLiveEvent<Int>()
     val setSortingOnLiveEvent = SingleLiveEvent<Boolean>()
+    val setChartOnLiveEvent = SingleLiveEvent<Boolean>()
     val showBackupAlert = SingleLiveEvent<Unit>()
     val openBackup = SingleLiveEvent<Pair<Account, Int>>()
     val openChartModule = SingleLiveEvent<Coin>()
@@ -77,6 +78,10 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
 
     override fun setSortingOn(isOn: Boolean) {
         setSortingOnLiveEvent.postValue(isOn)
+    }
+
+    override fun setChartOn(isOn: Boolean) {
+        setChartOnLiveEvent.postValue(isOn)
     }
 
     override fun showBackupAlert() {
