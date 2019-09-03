@@ -99,7 +99,7 @@ class GridHelper(private val shape: RectF, private val config: ChartConfig) {
         return when (mode) {
             ChartType.DAILY -> calendar.get(Calendar.HOUR_OF_DAY).toString()
             ChartType.WEEKLY -> DateHelper.getShortDayOfWeek(calendar.time)
-            ChartType.MONTHLY -> DateHelper.getShortMonth(calendar.time)
+            ChartType.MONTHLY -> calendar.get(Calendar.DAY_OF_MONTH).toString()
             ChartType.MONTHLY6 -> DateHelper.getShortMonth(calendar.time)
             ChartType.MONTHLY18 -> DateHelper.getShortMonth(calendar.time)
         }
