@@ -22,7 +22,7 @@
     <string name="Welcome_RestoreWallet">Restaurar cartera</string>
     <!--Restore-->
     <string name="Restore_Title">Restaurar</string>
-    <string name="Restore_Description">To restore existing wallet you need to enter a secret key for that wallet.\n\nOnce you restore one wallet you will be able to restore more wallets by going to Manage Keys section in app Settings.</string>
+    <string name="Restore_Description">Para restaurar el monedero existente, es necesario introducir la clave privada para ese monedero.\n\nUna vez que restablezca un monedero podrá restaurar más monederos yendo a la sección Administrar Claves en Ajustes de la aplicación.</string>
     <string name="Restore_Subtitle">Introduzca la clave</string>
     <string name="Restore_ValidationFailed">Clave incorrecta</string>
     <string name="Restore_RestoreFailed">Error al restaurar la cartera</string>
@@ -323,7 +323,7 @@
     <string name="Charts_Title">%s Tarifa</string>
     <string name="Charts_Rate_High">Alto</string>
     <string name="Charts_Rate_Low">Bajo</string>
-    <string name="Charts_MarketCap">Capitalización de mercado</string>
+    <string name="Charts_MarketCap">Cap. de Mercado</string>
     <string name="Charts_MarketCap_Thousand">k</string>
     <string name="Charts_MarketCap_Million">M</string>
     <string name="Charts_MarketCap_Billion">B</string>
