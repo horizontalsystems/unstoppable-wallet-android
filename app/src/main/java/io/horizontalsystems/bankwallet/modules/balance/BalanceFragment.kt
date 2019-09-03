@@ -174,6 +174,10 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
             sortButton.visibility = if (visible) View.VISIBLE else View.GONE
         })
 
+        viewModel.setChartOnLiveEvent.observe(viewLifecycleOwner, Observer { visible ->
+            chartButton.visibility = if (visible) View.VISIBLE else View.GONE
+        })
+
         viewModel.showBackupAlert.observe(viewLifecycleOwner, Observer {
             activity?.let {
                 BackupAlertDialog.show(it, object : BackupAlertDialog.Listener {

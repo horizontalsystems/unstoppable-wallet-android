@@ -17,6 +17,7 @@ object BalanceModule {
         fun updateItem(position: Int)
         fun updateHeader()
         fun setSortingOn(isOn: Boolean)
+        fun setChartOn(isOn: Boolean)
         fun showBackupAlert()
         fun setChartButtonState(enabled: Boolean)
     }
