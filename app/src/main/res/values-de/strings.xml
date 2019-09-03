@@ -326,6 +326,6 @@
     <string name="Charts_MarketCap_Million">M</string>
     <string name="Charts_MarketCap_Billion">B</string>
     <string name="Charts_MarketCap_Trillion">T</string>
-    <string name="Charts_Volume">Volume</string>
+    <string name="Charts_Volume">Lautstärke</string>
     <string name="Charts_Error_NotAvailable">Chart not available</string>
 </resources>
