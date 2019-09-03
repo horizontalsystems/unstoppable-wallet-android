@@ -289,7 +289,7 @@
     <string name="ManageKeys_Delete_Alert">Vous devez sauvegarder la clé %s avant de pouvoir la supprimer de ce téléphone.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">Ajouter %s</string>
-    <string name="AddCoin_Description">You don\'t have key for %1s. The wallet can generate the key for you. Use the create button below to generate a new key. \n\nYou may also use the existing %3s key for the %4s if you have one.</string>
+    <string name="AddCoin_Description">Vous n\'avez pas de clé pour %1s. Le porte-monnaie peut générer la clé pour vous. Utilisez le bouton Créer ci-dessous pour générer une nouvelle clé. \n\nVous pouvez également utiliser la clé %3s existante pour le %4s si vous en avez une.</string>
     <string name="AddCoin_CreateKey">Créer</string>
     <string name="AddCoin_RestoreKey">Restaurer</string>
     <!-- Account Types -->
@@ -314,10 +314,10 @@
     <string name="Charts_TimeDuration_Quartal">3M</string>
     <string name="Charts_TimeDuration_HalfYear">6M</string>
     <string name="Charts_TimeDuration_Year">1A</string>
-    <string name="Charts_Title">%s Rate</string>
+    <string name="Charts_Title">Taux %s</string>
     <string name="Charts_Rate_High">Élevée</string>
     <string name="Charts_Rate_Low">Faible</string>
-    <string name="Charts_MarketCap">Mkt. Cap</string>
+    <string name="Charts_MarketCap">Cap. marché</string>
     <string name="Charts_MarketCap_Thousand">k</string>
     <string name="Charts_MarketCap_Million">M</string>
     <string name="Charts_MarketCap_Billion">B</string>
