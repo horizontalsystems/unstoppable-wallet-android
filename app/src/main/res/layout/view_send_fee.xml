@@ -127,20 +127,9 @@
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
                 android:textColor="@color/grey"
-                app:layout_constraintEnd_toStartOf="@+id/feeSeparator"
+                app:layout_constraintEnd_toStartOf="@+id/txFeeSecondary"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="0.0005 BTC" />
-
-            <TextView
-                android:id="@+id/feeSeparator"
-                style="@style/Subhead2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:includeFontPadding="false"
-                android:text=" | "
-                android:textColor="@color/grey"
-                app:layout_constraintEnd_toStartOf="@+id/txFeeSecondary"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/txFeeSecondary"
@@ -151,7 +140,7 @@
                 android:textColor="@color/grey"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="$0.40" />
+                tools:text=" | $0.40" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

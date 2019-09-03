@@ -21,7 +21,7 @@ class SendFeeInteractor(private val rateStorage: IRateStorage,
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    delegate?.onRateFetched(it)
+                    delegate?.onRateFetched(if (it.expired) null else it)
                 }
     }
 
