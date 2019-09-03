@@ -67,19 +67,21 @@ abstract class BinanceResponse : FullTransactionResponse {
     abstract var to: String
 }
 
-abstract class EosResponse: FullTransactionResponse {
+abstract class EosResponse : FullTransactionResponse {
     abstract val txId: String
     abstract val status: String
 
     abstract val blockNumber: String
     abstract val blockTimeStamp: Long
 
-    abstract val account: String
-    abstract val from: String
-    abstract val to: String
-    abstract val amount: String
-    abstract val memo: String
+    abstract val actions: List<EosAction>
 
     abstract val cpuUsage: Int
     abstract val netUsage: Int
 }
+
+data class EosAction(val account: String,
+                     val from: String,
+                     val to: String,
+                     val amount: String,
+                     val memo: String)
