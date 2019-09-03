@@ -114,7 +114,7 @@
     <string name="Timestamp_Today">Aujourd\'hui</string>
     <string name="Timestamp_Yesterday">Hier</string>
     <string name="Duration_instant">Instantané</string>
-    <string name="Duration_Within">Dans %s</string>
+    <string name="Duration_Within">Dans la limite de %s</string>
     <string name="Duration_Hours">%d h.</string>
     <string name="Duration_Minutes">%d min.</string>
     <string name="Duration_Seconds">%d sec.</string>
@@ -306,7 +306,7 @@
     <string name="CoinOption_Fast_Text">Restaure vos transactions passées via un serveur tiers sécurisé. Pour les utilisateurs ayant une longue histoire de transactions impliquant des sommes très importantes, cette méthode peut poser des risques de confidentialité.</string>
     <string name="CoinOption_Slow">Lente</string>
     <string name="CoinOption_MorePrivate">1&#8211;12 heures (Plus Privé)</string>
-    <string name="CoinOption_Slow_Text">Restaurez vos transactions passées directement depuis le réseau. Significablement plus privées mais très lentes. Si la restauration prend beaucoup de temps, dirigez dans la section Manage Keys et ré-importez la clé d\'un porte-monnaie dans en utilisant l\'option Fast Sync.</string>
+    <string name="CoinOption_Slow_Text">Restaure vos transactions passées directement depuis le réseau. Beaucoup plus privé mais très lent. Si la restauration prend trop de temps, accédez à la section Gérer les clés et réimportez la clé du porte-monnaie à l\'aide de l\'option Synchronisation rapide.</string>
     <!--Charts-->
     <string name="Charts_TimeDuration_Day">1J</string>
     <string name="Charts_TimeDuration_Week">7J</string>
