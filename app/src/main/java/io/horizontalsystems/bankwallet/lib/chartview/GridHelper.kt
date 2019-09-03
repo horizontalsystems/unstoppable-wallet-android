@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.lib.chartview.models.ChartConfig
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartData
 import io.horizontalsystems.bankwallet.lib.chartview.models.GridColumn
 import io.horizontalsystems.bankwallet.lib.chartview.models.GridLine
+import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import java.sql.Date
 import java.util.*
 
@@ -97,10 +98,10 @@ class GridHelper(private val shape: RectF, private val config: ChartConfig) {
     private fun pointName(calendar: Calendar, mode: ChartType): String {
         return when (mode) {
             ChartType.DAILY -> calendar.get(Calendar.HOUR_OF_DAY).toString()
-            ChartType.WEEKLY -> calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.US)
-            ChartType.MONTHLY -> calendar.get(Calendar.DAY_OF_MONTH).toString()
-            ChartType.MONTHLY6 -> calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.US)
-            ChartType.MONTHLY18 -> calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.US)
+            ChartType.WEEKLY -> DateHelper.getShortDayOfWeek(calendar.time)
+            ChartType.MONTHLY -> DateHelper.getShortMonth(calendar.time)
+            ChartType.MONTHLY6 -> DateHelper.getShortMonth(calendar.time)
+            ChartType.MONTHLY18 -> DateHelper.getShortMonth(calendar.time)
         }
     }
 }
