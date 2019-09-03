@@ -173,9 +173,8 @@ class BalancePresenter(
 
     @Synchronized
     override fun didUpdateRate(rate: Rate) {
-        val positions = dataSource.getPositionsByCoinCode(rate.coinCode)
-        positions.forEach {
-            dataSource.setRate(it, rate)
+        dataSource.getPositionsByCoinCode(rate.coinCode).forEach { position ->
+            dataSource.setRate(position, rate)
         }
 
         postViewReload()
