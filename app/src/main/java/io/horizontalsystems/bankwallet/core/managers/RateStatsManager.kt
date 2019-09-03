@@ -60,8 +60,8 @@ class RateStatsManager(private val networkManager: INetworkManager, private val 
         }
 
         val points = when (chartType) {
-            ChartType.MONTHLY18 -> rates.takeLast(53) // for one year
-            else -> data.rates
+            ChartType.MONTHLY18 -> rates.takeLast(ChartType.annualPoints) // for one year
+            else -> rates
         }
 
         return ChartData(points, data.timestamp, data.scale, chartType)
