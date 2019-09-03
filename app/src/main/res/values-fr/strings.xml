@@ -214,10 +214,10 @@
 \n\nCertaines données d\'applications génériques non privées, telles que les taux de change, sont stockées dans un stockage décentralisé (IPFS). </string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Partager</string>
-    <string name="SettingsShare_Text">Unstoppable Wallet - a crypto wallet I recommend</string>
+    <string name="SettingsShare_Text">Unstoppable Wallet - un porte-monnaie crypto que je recommande</string>
     <!--Setting_Report-->
-    <string name="SettingsReport_Title">Report a Problem</string>
-    <string name="SettingsReport_Email">Mail</string>
+    <string name="SettingsReport_Title">Signaler un problème</string>
+    <string name="SettingsReport_Email">E-mail</string>
     <string name="SettingsReport_Telegram">Telegram</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Erreur de Keystore Android</string>
@@ -229,9 +229,9 @@
     <string name="Unlock_Page_EnterYourPin">Code</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Devise non supportée</string>
-    <string name="Eos_Backend_Error_SelfTransfer">Can\'t transfer token to own account</string>
-    <string name="Eos_Backend_Error_AccountNotExist">Target account does not exist</string>
-    <string name="Eos_Backend_Error_InsufficientRam">Your EOS account doesn\'t have enough RAM to send this token. You need to increase RAM stake to proceed.</string>
+    <string name="Eos_Backend_Error_SelfTransfer">Impossible de transférer des tokens sur votre propre compte</string>
+    <string name="Eos_Backend_Error_AccountNotExist">Ce compte n\'existe pas</string>
+    <string name="Eos_Backend_Error_InsufficientRam">Votre compte EOS ne dispose pas de suffisamment de RAM pour envoyer ce token. Vous devez augmenter la participation RAM pour continuer.</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Déverrouiller</string>
     <string name="Hud_Text_Success">Effectué</string>
@@ -273,7 +273,7 @@
     <string name="ManageCoins_EOSAlert_CreateButton">À cet étape, le porte-monnaie n\'est pas capable de créer de nouveaux comptes de porte-monnaies EOS. Vous n\'êtes que capable de restaurer celui existant.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Gérer les clés</string>
-    <string name="ManageKeys_Description">Anyone with access to your Keys can steal your wallet funds. Store keys safely and never show them to anyone. \n\nBackup each key to be able to restore funds if you lose or break your phone, or simply the wallet app gets deleted.</string>
+    <string name="ManageKeys_Description">Toute personne ayant accès à vos clés peut être en mesure de voler les fonds de votre porte-monnaie. Conservez les clés en sécurité et ne les montrez jamais à personne. \n\nSauvegardez chaque clé pour pouvoir restaurer des fonds si vous perdez ou cassez votre téléphone, ou si l’application est supprimée.</string>
     <string name="ManageKeys_Create">Créer</string>
     <string name="ManageKeys_Restore">Restaurer</string>
     <string name="ManageKeys_Delete">Supprimer</string>
