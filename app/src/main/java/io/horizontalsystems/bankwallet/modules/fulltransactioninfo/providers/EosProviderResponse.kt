@@ -14,15 +14,7 @@ class EosProviderResponse(json: JsonObject, eosAccount: String) : EosResponse() 
 
     override val blockTimeStamp: Long
 
-    override val amount: String
-
-    override val from: String
-
-    override val to: String
-
-    override val memo: String
-
-    override val account: String
+    override val actions: List<EosAction>
 
     override val cpuUsage: Int
 
@@ -42,21 +34,29 @@ class EosProviderResponse(json: JsonObject, eosAccount: String) : EosResponse() 
         cpuUsage = txReceipt["cpu_usage_us"].asInt
         netUsage = txReceipt["net_usage_words"].asInt
 
-        val trace = json["traces"].asJsonArray.first {
+        val actions = mutableListOf<EosAction>()
+
+        json["traces"].asJsonArray.forEach {
             val trace = it.asJsonObject
             val action = trace["act"].asJsonObject
             val receipt = trace["receipt"].asJsonObject
-            action["name"].asString == "transfer" && receipt["receiver"].asString == eosAccount
-        }.asJsonObject
+            val myTrace = action["name"].asString == "transfer" && receipt["receiver"].asString == eosAccount
 
-        val action = trace["act"].asJsonObject
-        account = action["account"].asString
+            if (myTrace) {
+                val account = action["account"].asString
 
-        val actionData = action["data"].asJsonObject
-        amount = actionData["quantity"].asString
-        from = actionData["from"].asString
-        to = actionData["to"].asString
-        memo = actionData["memo"].asString
+                val actionData = action["data"].asJsonObject
+
+                val amount = actionData["quantity"].asString
+                val from = actionData["from"].asString
+                val to = actionData["to"].asString
+                val memo = actionData["memo"].asString
+
+                actions.add(EosAction(account, from, to, amount, memo))
+            }
+        }
+
+        this.actions = actions.toList()
     }
 
 }

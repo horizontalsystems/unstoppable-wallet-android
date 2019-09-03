@@ -12,7 +12,8 @@ class FullTransactionEosAdapter(val provider: FullTransactionInfoModule.EosProvi
     : FullTransactionInfoModule.Adapter {
 
     override fun convert(json: JsonObject): FullTransactionRecord {
-        val eosAccount = (wallet.account.type as? AccountType.Eos)?.account ?: throw WrongAccountTypeForThisProvider()
+        val eosAccount = (wallet.account.type as? AccountType.Eos)?.account
+                ?: throw WrongAccountTypeForThisProvider()
         val data = provider.convert(json, eosAccount)
         val sections = mutableListOf<FullTransactionSection>()
 
@@ -24,17 +25,19 @@ class FullTransactionEosAdapter(val provider: FullTransactionInfoModule.EosProvi
             sections.add(FullTransactionSection(section))
         }
 
-        mutableListOf<FullTransactionItem>().let { section ->
-            section.add(FullTransactionItem(R.string.FullInfo_Contract, value = data.account, clickable = true, icon = FullTransactionIcon.TOKEN))
-            section.add(FullTransactionItem(R.string.FullInfoEth_Amount, value = data.amount))
-            section.add(FullTransactionItem(R.string.FullInfo_From, value = data.from, clickable = true, icon = FullTransactionIcon.PERSON))
-            section.add(FullTransactionItem(R.string.FullInfo_To, value = data.to, clickable = true, icon = FullTransactionIcon.PERSON))
+        data.actions.forEach { action ->
+            mutableListOf<FullTransactionItem>().let { section ->
+                section.add(FullTransactionItem(R.string.FullInfo_Contract, value = action.account, clickable = true, icon = FullTransactionIcon.TOKEN))
+                section.add(FullTransactionItem(R.string.FullInfoEth_Amount, value = action.amount))
+                section.add(FullTransactionItem(R.string.FullInfo_From, value = action.from, clickable = true, icon = FullTransactionIcon.PERSON))
+                section.add(FullTransactionItem(R.string.FullInfo_To, value = action.to, clickable = true, icon = FullTransactionIcon.PERSON))
 
-            if (data.memo.isNotEmpty()) {
-                section.add(FullTransactionItem(R.string.FullInfo_Memo, value = data.memo, clickable = true))
+                if (action.memo.isNotEmpty()) {
+                    section.add(FullTransactionItem(R.string.FullInfo_Memo, value = action.memo, clickable = true))
+                }
+
+                sections.add(FullTransactionSection(section))
             }
-
-            sections.add(FullTransactionSection(section))
         }
 
         mutableListOf<FullTransactionItem>().let { section ->
