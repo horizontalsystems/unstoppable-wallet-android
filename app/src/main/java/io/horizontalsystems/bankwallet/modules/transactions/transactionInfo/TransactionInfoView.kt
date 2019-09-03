@@ -66,7 +66,7 @@ class TransactionInfoView : ConstraintLayout {
 
                 fiatValue.apply {
                     val fiatValueText = txRec.currencyValue?.let { App.numberFormatter.format(it, showNegativeSign = true, canUseLessSymbol = false) }
-                    text = "$fiatValueText ${if (txRec.sentToSelf) "*" else ""}"
+                    text = fiatValueText?.let { "$fiatValueText ${if (txRec.sentToSelf) "*" else ""}" }
                     setTextColor(resources.getColor(if (txRec.incoming) R.color.green_crypto else R.color.yellow_crypto, null))
                 }
 
