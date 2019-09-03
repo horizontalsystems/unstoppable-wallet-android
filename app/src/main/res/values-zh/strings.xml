@@ -8,137 +8,155 @@
     <string name="Alert_Share">转发</string>
     <string name="Alert_Close">关闭</string>
     <string name="Alert_Success">成功</string>
-    <string name="Alert_Copied">复制成功</string>
+    <string name="Alert_Copied">已复制</string>
     <string name="Button_Cancel">取消</string>
     <string name="Button_Back">返回</string>
     <string name="Button_Close">关闭</string>
     <string name="Button_Ok">确定</string>
     <string name="Button_Share">分享</string>
     <string name="Error">出错</string>
+    <string name="NotAvailable">不可用</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
-    <string name="Welcome_CreateWallet">新的钱包</string>
+    <string name="Welcome_CreateWallet">新钱包</string>
     <string name="Welcome_RestoreWallet">恢复钱包</string>
     <!--Restore-->
     <string name="Restore_Title">恢复</string>
+    <string name="Restore_Description">要恢复现有钱包，您必须输入该钱包的密钥。\n\n恢复一个钱包后，您可以前往应用设置中的“管理密钥”恢复更多钱包。</string>
     <string name="Restore_Subtitle">输入密钥</string>
-    <string name="Restore_ValidationFailed">密钥不正确</string>
-    <string name="Restore_RestoreFailed">无法创建钱包</string>
-    <string name="Restore_EosAccountName">Account Name</string>
-    <string name="Restore_EosActivePrivateKey">Active Private Key</string>
-    <string name="Restore_EosAccountIncorrect">帐户无效</string>
-    <string name="Restore_EosKeyIncorrect">密钥不正确</string>
+    <string name="Restore_ValidationFailed">错误密钥</string>
+    <string name="Restore_RestoreFailed">无法恢复钱包</string>
+    <string name="Restore_EosAccountName">账户名</string>
+    <string name="Restore_EosActivePrivateKey">活跃私钥</string>
+    <string name="Restore_EosAccountIncorrect">无效账户</string>
+    <string name="Restore_EosKeyIncorrect">错误密钥</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">备份</string>
     <string name="Backup_Intro_TitleShow">显示密钥</string>
-    <string name="Backup_Intro_Subtitle">如果您的手机曾经丢失、被盗、损坏等，下一步将显示的密钥是恢复资金的唯一方法。请确保没有人在监视您的屏幕。\n\n由此密钥控制的硬币：%s</string>
+    <string name="Backup_Intro_Subtitle">如果您的手机曾经丢失、被盗、损坏等，下一步将显示的密钥是恢复资金的唯一方法。请确保没有人在看着您的屏幕。\n\n受此密钥控制的代币：%s</string>
     <string name="Backup_Intro_Later">稍后</string>
     <string name="Backup_Intro_BackupNow">备份</string>
-    <string name="Backup_Confirmation_SecretKey">我知道, 我是一个12个字的私人密钥的唯一拥有者，该密钥安全地存储在我的手机上，使我能够控制我钱包上的资金。</string>
-    <string name="Backup_Confirmation_DeleteAppWarn">我知道如果此APP被移动、删除或出现故障，只有用密钥才能恢复对我钱包的访问。</string>
-    <string name="Backup_Confirmation_LockAppWarn">我知道更改手机的解锁密码或删除Android设置中的应用程序数据会从设备中删除密钥。在这种情况下，我需要重新输入我的密钥才能重新获得我的钱包。</string>
-    <string name="Backup_Confirmation_Disclaimer">我理解这个应用程序的开发人员对使用这个应用程序时可能出现的任何意外的错误或问题不负责任。</string>
-    <string name="Backup_Confirmation_Description">从你的 %s 输入单词。</string>
-    <string name="Backup_Confirmation_FailureAlertText"> 单词不匹配</string>
-    <string name="Backup_Confirmation_CheckTitle">正在检查...</string>
+    <string name="Backup_Confirmation_SecretKey">我明白我是安全保存在我的电话中并能控制我钱包上的资金的12字私有密钥的唯一所有人。</string>
+    <string name="Backup_Confirmation_DeleteAppWarn">我明白如果此应用曾被移动、删除或出现故障，则只能通过该密钥恢复对我钱包的访问。</string>
+    <string name="Backup_Confirmation_LockAppWarn">我明白更改电话的解锁密码或者在Android设置中删除应用数据将会从设备上删除密钥。我必须重新输入我的密钥才能重新访问我的钱包。</string>
+    <string name="Backup_Confirmation_Disclaimer">我明白此应用的开发者不会对任何在使用此应用时出现的意外错误或问题负责。</string>
+    <string name="Backup_Confirmation_Description">从您的%s输入文字。</string>
+    <string name="Backup_Confirmation_FailureAlertText">文字不匹配</string>
+    <string name="Backup_Confirmation_CheckTitle">检查...</string>
     <string name="Backup_Button_Confirm">确认</string>
-    <string name="Backup_Button_Next">继续</string>
+    <string name="Backup_Button_Next">下一步</string>
     <string name="Backup_Button_Submit">提交</string>
     <string name="Backup_Button_ShowKey">显示密钥</string>
     <!--Backup Words-->
     <string name="Backup_Words_Title">密钥</string>
     <!--Backup Eos-->
-    <string name="Backup_Eos_AccountName">Account Name</string>
-    <string name="Backup_Eos_ActivePrivateKey">Private Key</string>
-    <string name="Backup_Eos_Warning">如果您使用任何剪贴板管理应用程序或其他可以访问剪贴板数据的应用程序，则使用“复制”操作复制密钥会带来一些风险。</string>
+    <string name="Backup_Eos_AccountName">账户名</string>
+    <string name="Backup_Eos_ActivePrivateKey">私钥</string>
+    <string name="Backup_Eos_Warning">如果您有使用任何剪贴板管理应用或其他可存取剪贴板数据的应用，那么适用”复制“操作复制您的密钥将会带来风险。</string>
     <!--Balance-->
     <string name="Balance_Title">余额</string>
-    <string name="Balance_Deposit">收到</string>
+    <string name="Balance_Deposit">接收</string>
     <string name="Balance_Send">发送​​</string>
-    <string name="Balance_RatePerCoin">每%s %s</string>
-    <string name="Balance_SyncedUntil">直到 %s</string>
-    <string name="Balance_Syncing">同步...</string>
-    <string name="Balance_AddCoins">添加硬币</string>
-    <string name="Balance_Sort_Balance">余额</string>
+    <string name="Balance_RatePerCoin">%s / %s</string>
+    <string name="Balance_SyncedUntil">直至：%s</string>
+    <string name="Balance_Syncing">正在同步...</string>
+    <string name="Balance_AddCoins">添加代币</string>
+    <string name="Balance_Sort_Balance">值</string>
     <string name="Balance_Sort_PopupTitle">排序方式</string>
-    <string name="Balance_Sort_Az">A-Z</string>
-    <string name="Balance_Sort_Default">默认</string>
+    <string name="Balance_Sort_Az">名称</string>
+    <string name="Balance_Sort_24hPriceChange">24小时变更 (%)</string>
     <!--Send-->
     <string name="Send_Title">发送%s</string>
     <string name="Send_Hint_Address">地址</string>
     <string name="Send_Hint_Amount">金额</string>
-    <string name="Send_Fee">费用:</string>
+    <string name="Send_Fee">费用：</string>
     <string name="Send_Button_Paste">粘帖</string>
-    <string name="Send_Button_Next">继续</string>
+    <string name="Send_Button_Next">下一步</string>
     <string name="Send_Button_Max">最多</string>
     <string name="Send_Confirmation_Title">确认</string>
-    <string name="Send_Confirmation_To">收件人: </string>
-    <string name="Send_Confirmation_HintMemo">Memo</string>
-    <string name="Send_Confirmation_Eos_HintAccount">Account</string>
-    <string name="Send_Confirmation_Total">总额:</string>
-    <string name="Send_Confirmation_EstimateTime">预计时间:</string>
+    <string name="Send_Confirmation_To">接收人：</string>
+    <string name="Send_Confirmation_HintMemo">Memo:</string>
+    <string name="Send_Confirmation_Eos_HintAccount">账户</string>
+    <string name="Send_Confirmation_Total">总额：</string>
+    <string name="Send_Confirmation_EstimateTime">预计时间：</string>
     <string name="Send_Confirmation_Send_Button">发送​​</string>
     <string name="Send_ScanQrCode">扫描二维码</string>
-    <string name="Send_Success">\u2713 已发送</string>
-    <string name="Send_Error_InvalidAddress">地址无效。 请确认后再重试，谢谢</string>
-    <string name="Send_Error_InsufficientBalance">余额不足</string>
-    <string name="Send_Error_IncorrectAddress">地址不正确</string>
+    <string name="Send_Success">\u2713已发送</string>
+    <string name="Send_Error_InvalidAddress">地址无效。 请检查并重试！</string>
+    <string name="Send_Error_InsufficientBalance">资金不足。</string>
+    <string name="Send_Error_IncorrectAddress">错误地址</string>
     <string name="Send_Error_BalanceAmount">余额%s</string>
-    <string name="Send_DialogTitle">确认交易</string>
-    <string name="Send_DialogFee">费用:</string>
-    <string name="Send_DialogTotal">总额:</string>
-    <string name="Send_Sending">发送中</string>
-    <string name="Send_ERC_Alert">以 Ethereum 支付的 %s (ERC20) 交易费用。你需要 %s ETH。</string>
-    <string name="Send_Token_InsufficientFeeAlert">以 %s 支付的 %s (%s) 交易费用。你需要 %s 。</string>
+    <string name="Send_DialogTitle">确认</string>
+    <string name="Send_DialogSpeed">交易速度:</string>
+    <string name="Send_TxSpeed_Low">低</string>
+    <string name="Send_TxSpeed_Medium">中</string>
+    <string name="Send_TxSpeed_High">高</string>
+    <string name="Send_DialogDuration">时长:</string>
+    <string name="Send_DialogFee">费用：</string>
+    <string name="Send_DialogTotal">总额：</string>
+    <string name="Send_DialogMemoHint">Memo</string>
+    <string name="Send_DialogProceed">继续</string>
+    <string name="Send_Sending">正在发送</string>
+    <string name="Send_ERC_Alert">用Ethereum支付的%s（ERC20）交易费用。您需要%s ETH。</string>
+    <string name="Send_Token_InsufficientFeeAlert">%s（%s）的交易费用以%s支付。您需要%s。</string>
     <!--Deposit-->
     <string name="Deposit_Title">收到%s</string>
-    <string name="Deposit_Share">转发</string>
+    <string name="Deposit_Share">分享</string>
     <string name="Deposit_Your_Address">您的地址</string>
+    <string name="Deposit_Your_Account">您的账户</string>
+    <string name="Receive_Alert_NotBackedUp_Title">需要备份</string>
     <string name="Receive_Alert_NotBackedUp_Button">备份</string>
-    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
+    <string name="Receive_Alert_NotBackedUp_Description">您在接收资金前必须先为该钱包备份密钥。</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">刚才</string>
-    <string name="Timestamp_MinAgo">%d 分钟前</string>
-    <string name="Timestamp_HoursAgo">%d 小时前</string>
+    <string name="Timestamp_MinAgo">%d分钟前</string>
+    <string name="Timestamp_HoursAgo">%d小时前</string>
     <string name="Timestamp_Today">今天</string>
     <string name="Timestamp_Yesterday">昨天</string>
+    <string name="Duration_instant">即时</string>
+    <string name="Duration_Within">在%s内</string>
+    <string name="Duration_Hours">%d小时。</string>
+    <string name="Duration_Minutes">%d分钟。</string>
+    <string name="Duration_Seconds">%d秒</string>
     <!--Transactions-->
-    <string name="Transactions_Title">交易记录</string>
+    <string name="Transactions_Title">交易</string>
     <string name="Transactions_FilterAll">全部</string>
-    <string name="Transactions_EmptyList">您还没有任何交易记录。</string>
+    <string name="Transactions_EmptyList">您尚无任何交易</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Title">交易</string>
     <string name="TransactionInfo_Status">状态</string>
     <string name="TransactionInfo_Status_Confirmed">已确认</string>
     <string name="TransactionInfo_Id">ID</string>
-    <string name="TransactionInfo_To">收件人：</string>
-    <string name="TransactionInfo_From">发件人：</string>
+    <string name="TransactionInfo_To">接收人</string>
+    <string name="TransactionInfo_From">发送人</string>
     <string name="TransactionInfo_Time">时间</string>
     <string name="TransactionInfo_ButtonVerify">验证</string>
-    <string name="TransactionInfo_Status_Pending">在过程中</string>
-    <string name="TransactionInfo_HistoricalRate">历史汇率</string>
+    <string name="TransactionInfo_Status_Pending">待处理</string>
+    <string name="TransactionInfo_HistoricalRate">历史价格</string>
+    <string name="TransactionInfo_Fee">费用</string>
+    <string name="TransactionInfo_FootNote">该交易的值似乎为0，因为它发送至您自己的地址</string>
     <!--Full Info-->
     <string name="FullInfo_Title">交易</string>
     <string name="FullInfo_Time">时间</string>
     <string name="FullInfo_Block">区块</string>
-    <string name="FullInfo_Confirmations">确认框</string>
-    <string name="FullInfo_Inputs">收入</string>
-    <string name="FullInfo_Outputs">转出</string>
-    <string name="FullInfo_Size">文件大小</string>
+    <string name="FullInfo_Confirmations">确认</string>
+    <string name="FullInfo_Inputs">输入</string>
+    <string name="FullInfo_Outputs">输出</string>
+    <string name="FullInfo_Size">大小</string>
     <string name="FullInfo_Fee">费用</string>
-    <string name="FullInfo_Rate">费率</string>
-    <string name="FullInfo_Source">信息源</string>
+    <string name="FullInfo_Rate">价格</string>
+    <string name="FullInfo_Source">源</string>
     <string name="FullInfo_Contract">合同</string>
-    <string name="FullInfo_From">发件人</string>
-    <string name="FullInfo_To">收件人</string>
+    <string name="FullInfo_From">发送人</string>
+    <string name="FullInfo_To">接收人</string>
     <string name="FullInfo_Status">状态</string>
-    <string name="FullInfo_Memo">Memo</string>
-    <string name="FullInfo_CpuUsage">CPU Usage</string>
-    <string name="FullInfo_NetUsage">Net Usage</string>
-    <string name="FullInfo_GasLimit">Gas Limit</string>
-    <string name="FullInfo_GasUsed">Gas Used</string>
-    <string name="FullInfo_GasPrice">Gas Price</string>
-    <string name="FullInfo_Source_Title">信息源</string>
+    <string name="FullInfo_Memo">备忘录</string>
+    <string name="FullInfo_CpuUsage">CPU使用</string>
+    <string name="FullInfo_NetUsage">网络使用</string>
+    <string name="FullInfo_GasLimit">燃料限制</string>
+    <string name="FullInfo_GasUsed">已用燃料</string>
+    <string name="FullInfo_GasPrice">燃料价格</string>
+    <string name="FullInfo_Source_Title">源</string>
     <string name="FullInfo_Source_Online">在线</string>
     <string name="FullInfo_Source_Offline">离线</string>
     <string name="FullInfo_Error_Subtitle">离线</string>
@@ -146,144 +164,164 @@
     <string name="FullInfo_Error_ChangeSource">更改源</string>
     <!--no used-->
     <string name="FullInfo_Id">ID</string>
-    <string name="FullInfo_TotalInput">转入总额</string>
-    <string name="FullInfo_TotalOutput">转出总额</string>
-    <string name="FullInfo_FeePerByte">每字节存储数据的费用</string>
-    <string name="FullInfo_FeeRate">手续费汇率</string>
+    <string name="FullInfo_TotalInput">输入总额</string>
+    <string name="FullInfo_TotalOutput">输出总额</string>
+    <string name="FullInfo_FeePerByte">每字节费用</string>
+    <string name="FullInfo_FeeRate">费率</string>
     <string name="FullInfo_NoAddress">空地址</string>
     <string name="FullInfo_SatByte">sat/B</string>
     <string name="FullInfo_Bytes">字节</string>
-    <string name="FullInfo_SubtitleInputs">收入</string>
-    <string name="FullInfo_SubtitleOutputs">转出</string>
+    <string name="FullInfo_SubtitleInputs">输入</string>
+    <string name="FullInfo_SubtitleOutputs">输出</string>
     <string name="FullInfoEth_Nonce">Nonce</string>
     <string name="FullInfoEth_Amount">金额</string>
     <!--Settings-->
     <string name="Settings_Title">设置</string>
     <string name="Settings_SecurityCenter">安全中心</string>
-    <string name="Settings_ManageCoins">管理Coins</string>
+    <string name="Settings_ManageCoins">管理代币</string>
     <string name="Settings_RestoreWallet">恢复钱包</string>
-    <string name="Settings_BaseCurrency">基本货币</string>
+    <string name="Settings_BaseCurrency">基础货币</string>
     <string name="Settings_Language">语言</string>
     <string name="Settings_LightMode">简单模式</string>
-    <string name="Settings_About">更多</string>
+    <string name="Settings_About">关于</string>
     <string name="Settings_ShareThisWallet">分享给好友</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
+    <string name="Settings_Report">报告问题</string>
     <!--Settings-->
-    <string name="Settings_Error_FingerprintNotEnabled">指纹识别未启用</string>
-    <string name="Settings_Error_NoFingerprintAddedYet">在此设备上指纹识别尚未启用。为了设置指纹识别访问，请转到\"设置“&gt;”安全“</string>
+    <string name="Settings_Error_FingerprintNotEnabled">指纹未启用</string>
+    <string name="Settings_Error_NoFingerprintAddedYet">您未在此设备上启用指纹。前往“设置 &gt; 安全”设置指纹访问。</string>
     <!--Setting_Security-->
-    <string name="SettingsSecurity_Fingerprint">指纹识别</string>
+    <string name="SettingsSecurity_Fingerprint">指纹</string>
     <string name="SettingsSecurity_EnablePin">密码</string>
-    <string name="SettingsSecurity_EditPin">修改密码</string>
+    <string name="SettingsSecurity_EditPin">编辑密码</string>
     <string name="SettingsSecurity_ManageKeys">管理密钥</string>
     <string name="SettingsSecurity_BackupWallet">备份钱包</string>
     <!--Setting_Currency-->
-    <string name="SettingsCurrency_Title">基本货币</string>
+    <string name="SettingsCurrency_Title">基础货币</string>
     <!--Setting_Language-->
     <string name="SettingsLanguage_Title">语言</string>
     <!--Setting_About-->
-    <string name="SettingsAbout_Title">更多</string>
+    <string name="SettingsAbout_Title">关于</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
-    <string name="SettingsAbout_TermsPrivacySubtitle">服务条款&amp;隐私策略</string>
-    <string name="SettingsAbout_TermsPrivacyText">此应用程序是对等的。它不依赖于任何 web 服务器或支持人员来运行的技术。
-\n\n只要有互联网, 它就可以被使用。任何实体都不能阻止此应用程序工作或阻止某人使用它。
-
-\n\n您的资金安全地存储在手机上, 而不是在其他任何地方。
-
-\n\n你有责任备份您的密钥, 并保持密钥的隐私。千万不要把它给任何人看。如果它被丢失, 遗忘或被偷, 您的资金都可用于持有您密钥的人。
-
-\n\n不要越狱您的手机, 不要安装来自未知 (不受信任) 来源的应用程序, 不要将您的设备交给不受信任的人, 并使您的手机上的系统保持最新。这是你的钱包安全的重点。
-
-\n\n从一开始，为该应用程序提供动力的整个代码就向公众开放。我们试图建立最安全和分散的钱包, 我们可以, 但没有保证没有意外的软件问题。也就是说, 这个钱包可能比任何智能手机钱包应用都要安全得多。
-
-\n\n一些通用的非私有应用程序数据 (如货币汇率) 存储在分散存储 (ipfs) 中。 </string>
+    <string name="SettingsAbout_TermsPrivacySubtitle">条款和隐私：</string>
+    <string name="SettingsAbout_TermsPrivacyText">此应用是一款点对点应用。其运作不依赖于任何网络服务器或技术支持人员。
+\n\n只要有网络它就能工作。没有实体能够阻止此应用工作或者阻止任何人使用它。
+\n\n您的资金安全地保存在电话上，而不是其他地方。
+\n\n您的职责是备份密钥并保证其安全。绝不要向任何人展示密钥。如果密钥丢失、遗忘或被盗，您的资金将会被拥有密钥的人使用。
+\n\n不要对您的电话进行越狱，不要安装来源不明（不可靠）的应用，不要把您的电话交给不可靠的人，保证电话的操作系统是最新版本。您钱包的安全将取决于此。
+\n\n支持此应用的完整代码从一开始就对公众监督开放。我们付出了最大努力以开发最安全的分散式钱包，但这不保证其中不会存在意外的软件问题。尽管如此，此钱包很可能还是比市面上的其他智能手机钱包更为安全。
+\n\n像货币汇率等通用非私有应用数据将保存在分散式存储系统（IPFS）。</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">分享</string>
-    <string name="SettingsShare_Text">自由点！势不可挡！</string>
+    <string name="SettingsShare_Text">Unstoppable Wallet——我强烈推荐的一款加密货币钱包</string>
+    <!--Setting_Report-->
+    <string name="SettingsReport_Title">报告问题</string>
+    <string name="SettingsReport_Email">邮件</string>
+    <string name="SettingsReport_Telegram">电报</string>
     <!--Alert-->
-    <string name="Alert_KeysInvalidatedTitle">Android密钥存储错误</string>
-    <string name="Alert_KeysInvalidatedDescription">由于您的安卓锁屏被更改，保存您钱包的加密数据已失效。</string>
-    <string name="Alert_TitleWarning">警示</string>
-    <string name="Alert_NoDeviceLockDescription">在此设备上设置锁定屏幕以继续。转到 \"设置\" &gt; \"安全\" &gt; \"屏幕锁定\" 并启用锁定屏幕设置。</string>
+    <string name="Alert_KeysInvalidatedTitle">Android密钥库错误</string>
+    <string name="Alert_KeysInvalidatedDescription">因为您的Android锁定屏幕已被更改，所以保存您钱包的加密数据目前已失效。</string>
+    <string name="Alert_TitleWarning">警告</string>
+    <string name="Alert_NoDeviceLockDescription">在此设备上设置锁定屏幕以继续。前往“设置” &gt; “安全” &gt; “屏幕锁定”并启用锁定屏幕设置。</string>
     <string name="Alert_CustomKeyboardIsUsed">您使用的是第三方键盘。您必须使用默认键盘。</string>
     <!--Unlock-->
     <string name="Unlock_Page_EnterYourPin">密码</string>
     <!--Errors-->
-    <string name="Error_UnsupportedBlockchain">不支持的货币</string>
+    <string name="Error_UnsupportedBlockchain">不获支持货币</string>
+    <string name="Eos_Backend_Error_SelfTransfer">无法将代币转入自己的账户</string>
+    <string name="Eos_Backend_Error_AccountNotExist">目标账户不存在</string>
+    <string name="Eos_Backend_Error_InsufficientRam">您的EOS账户没有足够的RAM来发送此令牌。您必须增加RAM才能继续。</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">解锁​​​​</string>
     <string name="Hud_Text_Success">成功</string>
     <string name="Hud_Text_Done">完成</string>
     <string name="Hud_Text_Error">出错</string>
-    <string name="Hud_Text_NoInternet">没有网络连接</string>
-    <string name="Hud_Text_Copied">复制成功</string>
-    <string name="Hud_Text_InvalidPinError">密码不正确</string>
+    <string name="Hud_Text_NoInternet">没有网络</string>
+    <string name="Hud_Text_Copied">已复制</string>
+    <string name="Hud_Text_InvalidPinError">错误密码</string>
     <string name="Hud_Network_Issue">网络问题。请稍后再试</string>
     <!--Fingerprint texts-->
-    <string name="Fingerprint_DialogTitle">使用指纹登录</string>
+    <string name="Fingerprint_DialogTitle">指纹登录</string>
     <string name="Fingerprint_Hint">触控传感器</string>
     <string name="Fingerprint_EnterPin">密码</string>
     <string name="Fingerprint_NotRecognized">指纹无法识别。请重试</string>
-    <string name="Fingerprint_Success">成功!</string>
+    <string name="Fingerprint_Success">成功！</string>
     <!--Unlock Pin-->
-    <string name="UnlockPin_WalletDisabledUntil">禁用至: %s</string>
+    <string name="UnlockPin_WalletDisabledUntil">禁用至：%s</string>
     <!--OS Pin-->
-    <string name="OSPin_Confirm_Title">电话PIN</string>
-    <string name="OSPin_Confirm_Desciption">此应用程序要求手机启用密码（屏幕锁定）。\n\n您可以在安卓设置中启用它。\n\n请注意，当您禁用操作系统级别的PIN时，您的电话安全存储中的安全措施使以前存储的数据无效。您需要恢复钱包密钥才能回到钱包。</string>
-    <string name="OSPin_Prompt_Desciption">这个应用程序需要你的手机的密码，以便将敏感数据从你的钱包中保存在安卓的安全存储中，而不是在应用程序本身中。</string>
+    <string name="OSPin_Confirm_Title">电话PIN码</string>
+    <string name="OSPin_Confirm_Desciption">此应用要求电话已启用密码（屏幕锁定）。\n\n您可以在Android设置中启用密码。\n\n请注意，禁用操作系统级别的PIN码后，电话的安全存储保障措施将使以前保存的数据无效。您必须恢复您的钱包密钥才能回到您的钱包。</string>
+    <string name="OSPin_Prompt_Desciption">此应用要求使用您电话的PIN码，以便将钱包的敏感数据保存在Android的安全存储区而不是应用本身。</string>
     <!--Set Pin-->
     <string name="SetPin_Title">密码</string>
-    <string name="SetPin_Info">您的密码将用于解锁钱包app。</string>
-    <string name="SetPin_ErrorShortPin">请只输入数字。</string>
+    <string name="SetPin_Info">您的密码将用于解锁钱包和发送资金</string>
+    <string name="SetPin_ErrorShortPin">请输入全部数字。</string>
     <string name="SetPin_ConfirmInfo">确认</string>
-    <string name="SetPin_Success">锁定密码设置成功!</string>
-    <string name="SetPin_ErrorPinsDontMatch">密码不匹配。请再试一次。</string>
-    <string name="SetPin_ErrorFailedToSavePin">保存您的密码出错。请重试。</string>
+    <string name="SetPin_Success">锁定密码设置成功！</string>
+    <string name="SetPin_ErrorPinsDontMatch">密码不匹配。请重试。</string>
+    <string name="SetPin_ErrorFailedToSavePin">保存密码时出错。请重试。</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">修改密码</string>
+    <string name="EditPin_Title">编辑密码</string>
     <string name="EditPin_UnlockInfo">当前密码</string>
     <string name="EditPin_NewPinInfo">新密码</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">硬币管理</string>
+    <string name="ManageCoins_title">代币管理器</string>
     <string name="ManageCoins_save">保存</string>
-    <string name="ManageCoins_AddCoin_Title">加%@ </string>
-    <string name="ManageCoins_AddCoin_Text">此操作将为以下硬币生成密钥（钱包）：%s </string>
-    <string name="ManageCoins_EOSAlert_CreateButton">此时，钱包无法创建新的EOS钱包帐户。您只能还原现有的。</string>
+    <string name="ManageCoins_AddCoin_Title">添加%s代币</string>
+    <string name="ManageCoins_AddCoin_Text">此操作将生成以下代币的新密钥（钱包）：%s</string>
+    <string name="ManageCoins_EOSAlert_CreateButton">此时，钱包无法创建新的EOS钱包帐户。您只能恢复现有账户。</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">管理密钥</string>
-    <string name="ManageKeys_Description">任何有权访问您密钥的人都可以窃取您的钱包资金。\n\n安全存放钥匙，不要让任何人看到。备份每个密钥，以便在您的手机松动或损坏时恢复资金，或者只是钱包应用程序被删除。</string>
+    <string name="ManageKeys_Description">任何能获取您密钥的人都能够窃取您钱包中的资金。保存好密钥且绝不能向任何人透露。\n\n保存每一个密钥将能够在手机丢失或出现故障，或者在钱包应用被删除的情况下恢复资金。</string>
     <string name="ManageKeys_Create">创建</string>
     <string name="ManageKeys_Restore">恢复</string>
     <string name="ManageKeys_Delete">删除</string>
     <string name="ManageKeys_Backup">备份</string>
-    <string name="ManageKeys_Show">查看</string>
+    <string name="ManageKeys_Show">显示</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">删除密钥</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">此操作将从此设备中删除%s密钥（钱包）。</string>
-    <string name="ManageKeys_Delete_ConfirmationDisable">将被禁用的硬币：%s</string>
-    <string name="ManageKeys_Delete_ConfirmationLoose">如果你没有这把密钥的备份，你将失去相应的资金。</string>
-    <string name="ManageKeys_Delete_FromPhone">从手机中删除</string>
-    <string name="ManageKeys_Delete_Alert">您需要备份此密钥才能取消链接。</string>
+    <string name="ManageKeys_Delete_ConfirmationDisable">将被禁用的代币：%s</string>
+    <string name="ManageKeys_Delete_ConfirmationLoose">如果您没有此密钥的备份，那么您将失去相关资金。</string>
+    <string name="ManageKeys_Delete_FromPhone">从电话删除</string>
+    <string name="ManageKeys_Delete_Alert_Title">需要备份</string>
+    <string name="ManageKeys_Delete_Alert">您必须在将其从电话上删除之前先备份%s密钥。</string>
     <!-- Manage Keys Alert -->
-    <string name="AddCoin_Title">加%s</string>
-    <string name="AddCoin_Description">您没有与%s一起使用的活动密钥。 使用下面的“创建”按钮生成新密钥（钱包）。
-\n\n如果您已经拥有它，也可以使用%s的现有密钥。</string>
+    <string name="AddCoin_Title">添加%s</string>
+    <string name="AddCoin_Description">您没有%1s的密钥。钱包可以为您生成密钥。使用下方的创建按钮生成新密钥。\n\n如果有的话，您也可以使用%4s现有的%3s密钥。</string>
     <string name="AddCoin_CreateKey">创建</string>
     <string name="AddCoin_RestoreKey">恢复</string>
     <!-- Account Types -->
-    <string name="AccountType_12Words">12 Words</string>
-    <string name="AccountType_12WordsKey">12个字的密钥</string>
-    <string name="AccountType_Eos">EOS Blockchain</string>
-    <string name="AccountType_EosKey">EOS 密钥</string>
-    <string name="AccountType_Binance">Binance Chain</string>
-    <string name="AccountType_BinanceKey">二进制的密钥</string>
+    <string name="AccountType_12Words">12字</string>
+    <string name="AccountType_12WordsKey">12字密钥</string>
+    <string name="AccountType_Eos">EOS区块链</string>
+    <string name="AccountType_EosKey">EOS密钥</string>
+    <string name="AccountType_Binance">币安链</string>
+    <string name="AccountType_BinanceKey">币安密钥</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">恢复选项</string>
-    <string name="CoinOption_Fast">过程最快</string>
-    <string name="CoinOption_Recommended">0&#8211;2 小时 (推荐)</string>
-    <string name="CoinOption_Fast_Text">通过安全的第三方服务器可以恢复以前的事务。对于拥有大量交易历史的用户来说，这种方法可能会带来隐私风险。</string>
-    <string name="CoinOption_Slow">缓慢</string>
-    <string name="CoinOption_MorePrivate">1&#8211;12 小时(更多隐私)</string>
-    <string name="CoinOption_Slow_Text">直接从网络可以恢复以前的事务。明显更私密，但速度很慢。如果恢复时间过长，如果恢复时间过长，请转到“管理密钥”部分，然后选“快速同步”重新导入钱包密钥。</string>
+    <string name="CoinOption_Fast">快</string>
+    <string name="CoinOption_Recommended">0&#8211;2小时（推荐）</string>
+    <string name="CoinOption_Fast_Text">通过安全的第三方服务器恢复过往交易。对于具有大量涉及大额交易历史的用户，这种方法可能会带来隐私风险。</string>
+    <string name="CoinOption_Slow">慢</string>
+    <string name="CoinOption_MorePrivate">1&#8211;12小时（更加私密）</string>
+    <string name="CoinOption_Slow_Text">直接通过网络恢复您的过往交易。更加私密，但非常缓慢。如果恢复过程耗时过长，请前往”管理密钥“部分并使用”快速同步“选项重新导入钱包密钥。</string>
+    <!--Charts-->
+    <string name="Charts_TimeDuration_Day">1天</string>
+    <string name="Charts_TimeDuration_Week">7天</string>
+    <string name="Charts_TimeDuration_Month">1个月</string>
+    <string name="Charts_TimeDuration_Quartal">3个月</string>
+    <string name="Charts_TimeDuration_HalfYear">6个月</string>
+    <string name="Charts_TimeDuration_Year">1年</string>
+    <string name="Charts_Title">%s价格</string>
+    <string name="Charts_Rate_High">高</string>
+    <string name="Charts_Rate_Low">低</string>
+    <string name="Charts_MarketCap">市场价值</string>
+    <string name="Charts_MarketCap_Thousand">千</string>
+    <string name="Charts_MarketCap_Million">百万</string>
+    <string name="Charts_MarketCap_Billion">十亿</string>
+    <string name="Charts_MarketCap_Trillion">万亿</string>
+    <string name="Charts_Volume">量</string>
+    <string name="Charts_Error_NotAvailable">无可用图表</string>
 </resources>

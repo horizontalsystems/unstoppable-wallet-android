@@ -15,18 +15,20 @@
     <string name="Button_Ok">OK</string>
     <string name="Button_Share">Partager</string>
     <string name="Error">Erreur</string>
+    <string name="NotAvailable">S. O.</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
     <string name="Welcome_CreateWallet">Nouveau porte-monnaie</string>
     <string name="Welcome_RestoreWallet">Restaurer le porte-monnaie</string>
     <!--Restore-->
     <string name="Restore_Title">Restaurer</string>
+    <string name="Restore_Description">Pour restaurer un porte-monnaie existant, vous devez entrer une clé secrète pour ce porte-monnaie.\n\nAprès avoir restauré un porte-monnaie, vous pourrez restaurer plus de porte-monnaies en accédant à la section Gérer les clés dans les Paramètres de l\'application.</string>
     <string name="Restore_Subtitle">Entrez la clé</string>
-    <string name="Restore_ValidationFailed">Clé secrète incorrecte</string>
+    <string name="Restore_ValidationFailed">Clé incorrect</string>
     <string name="Restore_RestoreFailed">Échec de la restauration du porte-monnaie</string>
     <string name="Restore_EosAccountName">Account Name</string>
     <string name="Restore_EosActivePrivateKey">Active Private Key</string>
-    <string name="Restore_EosAccountIncorrect">Compte Invalide</string>
+    <string name="Restore_EosAccountIncorrect">Compte incorrect</string>
     <string name="Restore_EosKeyIncorrect">Clé Incorrect</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Sauvegarde</string>
@@ -59,10 +61,10 @@
     <string name="Balance_SyncedUntil">jusqu\'à: %s</string>
     <string name="Balance_Syncing">Synchronisation…</string>
     <string name="Balance_AddCoins">Ajouter des coins</string>
-    <string name="Balance_Sort_Balance">Balance</string>
+    <string name="Balance_Sort_Balance">Valeur</string>
     <string name="Balance_Sort_PopupTitle">Trier par</string>
-    <string name="Balance_Sort_Az">A-Z</string>
-    <string name="Balance_Sort_Default">Défaut</string>
+    <string name="Balance_Sort_Az">Nom</string>
+    <string name="Balance_Sort_24hPriceChange">Prix 24h (%)</string>
     <!--Send-->
     <string name="Send_Title">Envoyer %s</string>
     <string name="Send_Hint_Address">Adresse</string>
@@ -73,7 +75,7 @@
     <string name="Send_Button_Max">Max</string>
     <string name="Send_Confirmation_Title">Confirmer</string>
     <string name="Send_Confirmation_To">À: </string>
-    <string name="Send_Confirmation_HintMemo">Memo</string>
+    <string name="Send_Confirmation_HintMemo">Memo:</string>
     <string name="Send_Confirmation_Eos_HintAccount">Account</string>
     <string name="Send_Confirmation_Total">Total:</string>
     <string name="Send_Confirmation_EstimateTime">Temps estimé :</string>
@@ -84,24 +86,38 @@
     <string name="Send_Error_InsufficientBalance">Fonds insuffisants.</string>
     <string name="Send_Error_IncorrectAddress">Adresse incorrect</string>
     <string name="Send_Error_BalanceAmount">Balance %s</string>
-    <string name="Send_DialogTitle">Confirmer la transaction</string>
+    <string name="Send_DialogTitle">Confirmer</string>
+    <string name="Send_DialogSpeed">Vitesse de transaction :</string>
+    <string name="Send_TxSpeed_Low">Faible</string>
+    <string name="Send_TxSpeed_Medium">Moyenne</string>
+    <string name="Send_TxSpeed_High">Élevée</string>
+    <string name="Send_DialogDuration">Durée :</string>
     <string name="Send_DialogFee">Frais:</string>
     <string name="Send_DialogTotal">Total:</string>
+    <string name="Send_DialogMemoHint">Memo</string>
+    <string name="Send_DialogProceed">Continuer</string>
     <string name="Send_Sending">En attente</string>
     <string name="Send_ERC_Alert">Frais de transaction pour %s (ERC20) payé en Ethereum. Il est nécessaire %s ETH.</string>
     <string name="Send_Token_InsufficientFeeAlert">Frais de transaction pour %s (%s) payé en %s. Il est nécessaire %s.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Recevoir %s</string>
-    <string name="Deposit_Share">Transférer</string>
+    <string name="Deposit_Share">Partager</string>
     <string name="Deposit_Your_Address">Votre address</string>
+    <string name="Deposit_Your_Account">Votre compte</string>
+    <string name="Receive_Alert_NotBackedUp_Title">Sauvegarde requise</string>
     <string name="Receive_Alert_NotBackedUp_Button">Sauvegarde</string>
-    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
+    <string name="Receive_Alert_NotBackedUp_Description">Vous devez sauvegarder les clés de ce porte-monnaie avant de pouvoir recevoir des fonds. </string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">à l\'instant</string>
     <string name="Timestamp_MinAgo">Il y a %d minute</string>
     <string name="Timestamp_HoursAgo">Il y a %d heures</string>
     <string name="Timestamp_Today">Aujourd\'hui</string>
     <string name="Timestamp_Yesterday">Hier</string>
+    <string name="Duration_instant">Instantané</string>
+    <string name="Duration_Within">Dans %s</string>
+    <string name="Duration_Hours">%d h.</string>
+    <string name="Duration_Minutes">%d min.</string>
+    <string name="Duration_Seconds">%d sec.</string>
     <!--Transactions-->
     <string name="Transactions_Title">Transactions</string>
     <string name="Transactions_FilterAll">TOUS</string>
@@ -117,6 +133,8 @@
     <string name="TransactionInfo_ButtonVerify">Vérifiez</string>
     <string name="TransactionInfo_Status_Pending">En attente</string>
     <string name="TransactionInfo_HistoricalRate">Taux historique</string>
+    <string name="TransactionInfo_Fee">Frais</string>
+    <string name="TransactionInfo_FootNote">La valeur de cette transaction apparaît comme 0 car elle a été envoyée à votre propre adresse</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Transaction</string>
     <string name="FullInfo_Time">Heure</string>
@@ -169,6 +187,7 @@
     <string name="Settings_ShareThisWallet">Partager avec ami</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
+    <string name="Settings_Report">Signaler un problème</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Empreinte digitale n\'est pas activé</string>
     <string name="Settings_Error_NoFingerprintAddedYet">Vous n’avez pas activé d’empreintes digitales sur ce appareil. Allez à paramètres &gt; sécurité à mettre en place un accès d’empreinte digitale.</string>
@@ -176,7 +195,7 @@
     <string name="SettingsSecurity_Fingerprint">Empreinte digitale</string>
     <string name="SettingsSecurity_EnablePin">Code</string>
     <string name="SettingsSecurity_EditPin">Modifier le code </string>
-    <string name="SettingsSecurity_ManageKeys">Manage Keys</string>
+    <string name="SettingsSecurity_ManageKeys">Gérer les clés</string>
     <string name="SettingsSecurity_BackupWallet">Porte-monnaie de Sauvegarde</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Devise de Base</string>
@@ -195,7 +214,11 @@
 \n\nCertaines données d\'applications génériques non privées, telles que les taux de change, sont stockées dans un stockage décentralisé (IPFS). </string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Partager</string>
-    <string name="SettingsShare_Text">Unstoppable Wallet - Bonne App!</string>
+    <string name="SettingsShare_Text">Unstoppable Wallet - un porte-monnaie crypto que je recommande</string>
+    <!--Setting_Report-->
+    <string name="SettingsReport_Title">Signaler un problème</string>
+    <string name="SettingsReport_Email">E-mail</string>
+    <string name="SettingsReport_Telegram">Telegram</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Erreur de Keystore Android</string>
     <string name="Alert_KeysInvalidatedDescription">Les données cryptées contenant votre porte-monnaie ont récemment été invalidées car votre écran de verrouillage Android a été modifié</string>
@@ -206,6 +229,9 @@
     <string name="Unlock_Page_EnterYourPin">Code</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Devise non supportée</string>
+    <string name="Eos_Backend_Error_SelfTransfer">Impossible de transférer des tokens sur votre propre compte</string>
+    <string name="Eos_Backend_Error_AccountNotExist">Ce compte n\'existe pas</string>
+    <string name="Eos_Backend_Error_InsufficientRam">Votre compte EOS ne dispose pas de suffisamment de RAM pour envoyer ce token. Vous devez augmenter la participation RAM pour continuer.</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Déverrouiller</string>
     <string name="Hud_Text_Success">Effectué</string>
@@ -247,7 +273,7 @@
     <string name="ManageCoins_EOSAlert_CreateButton">À cet étape, le porte-monnaie n\'est pas capable de créer de nouveaux comptes de porte-monnaies EOS. Vous n\'êtes que capable de restaurer celui existant.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Gérer les clés</string>
-    <string name="ManageKeys_Description">Celui qui a l\'accès à vos clés peut voler vos fonds de porte-monnaie. Stockez les clés en toute sécurité et ne les montrez jamais à quelqu\'un.\n\nSauvegardez chaque clé pour pouvoir restaurer des fonds si vous perdez ou cassez votre portable, ou simplement l\'application de portefeuille est supprimée.</string>
+    <string name="ManageKeys_Description">Toute personne ayant accès à vos clés peut être en mesure de voler les fonds de votre porte-monnaie. Conservez les clés en sécurité et ne les montrez jamais à personne. \n\nSauvegardez chaque clé pour pouvoir restaurer des fonds si vous perdez ou cassez votre téléphone, ou si l’application est supprimée.</string>
     <string name="ManageKeys_Create">Créer</string>
     <string name="ManageKeys_Restore">Restaurer</string>
     <string name="ManageKeys_Delete">Supprimer</string>
@@ -259,10 +285,11 @@
     <string name="ManageKeys_Delete_ConfirmationDisable">Coins qui seront désactivées : %s</string>
     <string name="ManageKeys_Delete_ConfirmationLoose">Si vous n\'avez pas de sauvegarde de cette clé, vous perdrez les fonds respectifs.</string>
     <string name="ManageKeys_Delete_FromPhone">Supprimer de l\'appareil</string>
-    <string name="ManageKeys_Delete_Alert">Vous devez sauvegarder cette clé avant de pouvoir la supprimer.</string>
+    <string name="ManageKeys_Delete_Alert_Title">Backup Required</string>
+    <string name="ManageKeys_Delete_Alert">You need to backup %s key before you may delete it from this phone.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">Ajouter %s</string>
-    <string name="AddCoin_Description">Vous n\'avez pas de clé active à utiliser avec %s. Utilisez le bouton Créer ci-dessous pour générer une nouvelle clé (porte-monnaie).\n\nVous pouvez également utiliser la clé existante pour le %s si vous l\'avez déjà.</string>
+    <string name="AddCoin_Description">You don\'t have key for %1s. The wallet can generate the key for you. Use the create button below to generate a new key. \n\nYou may also use the existing %3s key for the %4s if you have one.</string>
     <string name="AddCoin_CreateKey">Créer</string>
     <string name="AddCoin_RestoreKey">Restaurer</string>
     <!-- Account Types -->
@@ -280,4 +307,21 @@
     <string name="CoinOption_Slow">Lente</string>
     <string name="CoinOption_MorePrivate">1&#8211;12 heures (Plus Privé)</string>
     <string name="CoinOption_Slow_Text">Restaurez vos transactions passées directement depuis le réseau. Significablement plus privées mais très lentes. Si la restauration prend beaucoup de temps, dirigez dans la section Manage Keys et ré-importez la clé d\'un porte-monnaie dans en utilisant l\'option Fast Sync.</string>
+    <!--Charts-->
+    <string name="Charts_TimeDuration_Day">1J</string>
+    <string name="Charts_TimeDuration_Week">7J</string>
+    <string name="Charts_TimeDuration_Month">1M</string>
+    <string name="Charts_TimeDuration_Quartal">3M</string>
+    <string name="Charts_TimeDuration_HalfYear">6M</string>
+    <string name="Charts_TimeDuration_Year">1A</string>
+    <string name="Charts_Title">%s Rate</string>
+    <string name="Charts_Rate_High">Élevée</string>
+    <string name="Charts_Rate_Low">Faible</string>
+    <string name="Charts_MarketCap">Mkt. Cap</string>
+    <string name="Charts_MarketCap_Thousand">k</string>
+    <string name="Charts_MarketCap_Million">M</string>
+    <string name="Charts_MarketCap_Billion">B</string>
+    <string name="Charts_MarketCap_Trillion">T</string>
+    <string name="Charts_Volume">Volume</string>
+    <string name="Charts_Error_NotAvailable">Chart not available</string>
 </resources>

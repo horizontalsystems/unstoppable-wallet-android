@@ -15,14 +15,16 @@
     <string name="Button_Ok">OK</string>
     <string name="Button_Share">Compartir</string>
     <string name="Error">Error</string>
+    <string name="NotAvailable">N/A</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
     <string name="Welcome_CreateWallet">Nueva cartera</string>
     <string name="Welcome_RestoreWallet">Restaurar cartera</string>
     <!--Restore-->
     <string name="Restore_Title">Restaurar</string>
+    <string name="Restore_Description">Para restaurar el monedero existente, es necesario introducir la clave privada para ese monedero.\n\nUna vez que restablezca un monedero podrá restaurar más monederos yendo a la sección Administrar Claves en Ajustes de la aplicación.</string>
     <string name="Restore_Subtitle">Introduzca la clave</string>
-    <string name="Restore_ValidationFailed">Clave secreta incorrecta</string>
+    <string name="Restore_ValidationFailed">Clave incorrecta</string>
     <string name="Restore_RestoreFailed">Error al restaurar la cartera</string>
     <string name="Restore_EosAccountName">Account Name</string>
     <string name="Restore_EosActivePrivateKey">Active Private Key</string>
@@ -59,10 +61,10 @@
     <string name="Balance_SyncedUntil">hasta: %s</string>
     <string name="Balance_Syncing">Sincronizando ...</string>
     <string name="Balance_AddCoins">Añadir Monedas</string>
-    <string name="Balance_Sort_Balance">Saldo</string>
+    <string name="Balance_Sort_Balance">Valor</string>
     <string name="Balance_Sort_PopupTitle">Ordenar por</string>
-    <string name="Balance_Sort_Az">A-Z</string>
-    <string name="Balance_Sort_Default">Predefinido</string>
+    <string name="Balance_Sort_Az">Nombre</string>
+    <string name="Balance_Sort_24hPriceChange">Precio 24h (%)</string>
     <!--Send-->
     <string name="Send_Title">Enviar %s</string>
     <string name="Send_Hint_Address">Dirección</string>
@@ -73,8 +75,8 @@
     <string name="Send_Button_Max">Máx.</string>
     <string name="Send_Confirmation_Title">Confirmar</string>
     <string name="Send_Confirmation_To">Para: </string>
-    <string name="Send_Confirmation_HintMemo">Memo</string>
-    <string name="Send_Confirmation_Eos_HintAccount">Cuenta</string>
+    <string name="Send_Confirmation_HintMemo">Memo:</string>
+    <string name="Send_Confirmation_Eos_HintAccount">Account</string>
     <string name="Send_Confirmation_Total">Total:</string>
     <string name="Send_Confirmation_EstimateTime">Tiempo estimado:</string>
     <string name="Send_Confirmation_Send_Button">Enviar</string>
@@ -84,24 +86,38 @@
     <string name="Send_Error_InsufficientBalance">Saldo insuficiente</string>
     <string name="Send_Error_IncorrectAddress">Código incorrecto</string>
     <string name="Send_Error_BalanceAmount">Saldo %s</string>
-    <string name="Send_DialogTitle">Confirmar transacción</string>
+    <string name="Send_DialogTitle">Confirmar</string>
+    <string name="Send_DialogSpeed">Velocidad de transacción:</string>
+    <string name="Send_TxSpeed_Low">Bajo</string>
+    <string name="Send_TxSpeed_Medium">Medio</string>
+    <string name="Send_TxSpeed_High">Alto</string>
+    <string name="Send_DialogDuration">Duración:</string>
     <string name="Send_DialogFee">Comisión:</string>
     <string name="Send_DialogTotal">Total:</string>
+    <string name="Send_DialogMemoHint">Memo</string>
+    <string name="Send_DialogProceed">Continuar</string>
     <string name="Send_Sending">Enviando</string>
-    <string name="Send_ERC_Alert">Tarifas de transacción para %s (ERC20) pagado en Ethereum. Es necesario %s ETH.</string>
-    <string name="Send_Token_InsufficientFeeAlert">Tarifas de transacción para %s (%s) pagado en %s. Es necesario %s.</string>
+    <string name="Send_ERC_Alert">Las comisiones de transacción para %s (ERC20) pagado en Ethereum. Es necesario %s ETH.</string>
+    <string name="Send_Token_InsufficientFeeAlert">Las comisiones de transacción para %s (%s) pagado en %s. Es necesario %s.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Recibir %s</string>
-    <string name="Deposit_Share">Reenviar</string>
+    <string name="Deposit_Share">Compartir</string>
     <string name="Deposit_Your_Address">Su dirección</string>
+    <string name="Deposit_Your_Account">Su cuenta</string>
+    <string name="Receive_Alert_NotBackedUp_Title">Se requiere una copia de seguridad</string>
     <string name="Receive_Alert_NotBackedUp_Button">Copia de seguridad</string>
-    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
+    <string name="Receive_Alert_NotBackedUp_Description">Necesita hacer una copia de seguridad de las claves de este monedero antes de que pueda recibir fondos en él. </string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">reciente</string>
     <string name="Timestamp_MinAgo">Hace %d minutos</string>
     <string name="Timestamp_HoursAgo">Hace %d hora</string>
     <string name="Timestamp_Today">Hoy</string>
     <string name="Timestamp_Yesterday">Ayer</string>
+    <string name="Duration_instant">Inmediato</string>
+    <string name="Duration_Within">Dentro de %s</string>
+    <string name="Duration_Hours">%d h.</string>
+    <string name="Duration_Minutes">%d min.</string>
+    <string name="Duration_Seconds">%d seg.</string>
     <!--Transactions-->
     <string name="Transactions_Title">Transacciones</string>
     <string name="Transactions_FilterAll">TODO</string>
@@ -117,6 +133,8 @@
     <string name="TransactionInfo_ButtonVerify">Verificar</string>
     <string name="TransactionInfo_Status_Pending">Pendiente</string>
     <string name="TransactionInfo_HistoricalRate">Estado histórico</string>
+    <string name="TransactionInfo_Fee">Comisión</string>
+    <string name="TransactionInfo_FootNote">El valor de esta transacción aparece como 0 porque fue enviado a su propia dirección</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Transacción</string>
     <string name="FullInfo_Time">Hora</string>
@@ -138,8 +156,8 @@
     <string name="FullInfo_GasLimit">Gas Limit</string>
     <string name="FullInfo_GasUsed">Gas Used</string>
     <string name="FullInfo_GasPrice">Gas Price</string>
-    <string name="FullInfo_Source_Title">Origen</string>
-    <string name="FullInfo_Source_Online">En línea</string>
+    <string name="FullInfo_Source_Title">Source</string>
+    <string name="FullInfo_Source_Online">En Línea</string>
     <string name="FullInfo_Source_Offline">Desconectado</string>
     <string name="FullInfo_Error_Subtitle">Desconectado</string>
     <string name="FullInfo_Error_Retry">Reintentar</string>
@@ -149,8 +167,8 @@
     <string name="FullInfo_TotalInput">Inversión total</string>
     <string name="FullInfo_TotalOutput">Rendimiento total</string>
     <string name="FullInfo_FeePerByte">Comisión por byte</string>
-    <string name="FullInfo_FeeRate">Rate</string>
-    <string name="FullInfo_NoAddress">Dirección Vacía</string>
+    <string name="FullInfo_FeeRate">Tasa de comisión</string>
+    <string name="FullInfo_NoAddress">Dirección vacía</string>
     <string name="FullInfo_SatByte">sat/B</string>
     <string name="FullInfo_Bytes">Bytes</string>
     <string name="FullInfo_SubtitleInputs">Inversiones</string>
@@ -158,17 +176,18 @@
     <string name="FullInfoEth_Nonce">Nonce</string>
     <string name="FullInfoEth_Amount">Importe</string>
     <!--Settings-->
-    <string name="Settings_Title">Configuraciones</string>
-    <string name="Settings_SecurityCenter">Centro de Seguridad</string>
+    <string name="Settings_Title">Ajustes</string>
+    <string name="Settings_SecurityCenter">Centro de seguridad</string>
     <string name="Settings_ManageCoins">Gestionar monedas</string>
     <string name="Settings_RestoreWallet">Restaurar cartera</string>
-    <string name="Settings_BaseCurrency">Divisa principal</string>
+    <string name="Settings_BaseCurrency">Moneda principal</string>
     <string name="Settings_Language">Idioma</string>
-    <string name="Settings_LightMode">Modo de brillo</string>
+    <string name="Settings_LightMode">Modo ligero</string>
     <string name="Settings_About">Acerca de</string>
     <string name="Settings_ShareThisWallet">Recomendar a un amigo</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
+    <string name="Settings_Report">Reportar un problema</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Huella digital no habilitada</string>
     <string name="Settings_Error_NoFingerprintAddedYet">No ha activado su huella digital en este dispositivo. Vaya a Ajustes &gt; seguridad para configurar el acceso a su huella digital.</string>
@@ -177,15 +196,15 @@
     <string name="SettingsSecurity_EnablePin">Código</string>
     <string name="SettingsSecurity_EditPin">Editar el código </string>
     <string name="SettingsSecurity_ManageKeys">Gestionar claves</string>
-    <string name="SettingsSecurity_BackupWallet">Copia de Seguridad de Cartera</string>
+    <string name="SettingsSecurity_BackupWallet">Copia de Seguridad de cartera</string>
     <!--Setting_Currency-->
-    <string name="SettingsCurrency_Title">Divisa principal</string>
+    <string name="SettingsCurrency_Title">Moneda principal</string>
     <!--Setting_Language-->
     <string name="SettingsLanguage_Title">Idioma</string>
     <!--Setting_About-->
     <string name="SettingsAbout_Title">Acerca de</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
-    <string name="SettingsAbout_TermsPrivacySubtitle">Términos y privacidad:</string>
+    <string name="SettingsAbout_TermsPrivacySubtitle">Términos &amp; privacidad:</string>
     <string name="SettingsAbout_TermsPrivacyText">Esta aplicación es de servidor a servidor. No depende de ninguna web o tecnología personal de apoyo a la función.
 
 \n\nFunciona en cualquier lugar siempre que haya conexión a internet. Ninguna entidad puede bloquear el funcionamiento de esta aplicación o impedir el acceso de un usuario.
@@ -201,7 +220,11 @@
 \n\nAlgunos datos genéricos de carácter público de esta app se guardan en centros de almacenamiento descentralizado (IPFS).</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Compartir</string>
-    <string name="SettingsShare_Text">Unstoppable Wallet - Aplicación Niza!</string>
+    <string name="SettingsShare_Text">Monedero Unstoppable - un monedero de criptomonedas que yo recomiendo</string>
+    <!--Setting_Report-->
+    <string name="SettingsReport_Title">Reportar un problema</string>
+    <string name="SettingsReport_Email">Correo electrónico</string>
+    <string name="SettingsReport_Telegram">Telegram</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Error de almacenamiento de claves de Android</string>
     <string name="Alert_KeysInvalidatedDescription">Los datos encriptados de su monedero han sido recientemente  invalidados porque se cambió la pantalla de bloqueo de Android</string>
@@ -212,6 +235,9 @@
     <string name="Unlock_Page_EnterYourPin">Código</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Divisa no admitida</string>
+    <string name="Eos_Backend_Error_SelfTransfer">No se puede transferir el token a su propia cuenta</string>
+    <string name="Eos_Backend_Error_AccountNotExist">La cuenta de destino no existe</string>
+    <string name="Eos_Backend_Error_InsufficientRam">Su cuenta EOS no tiene suficiente memoria RAM para enviar este token. Necesita aumentar la participación en RAM para continuar.</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Desbloquear</string>
     <string name="Hud_Text_Success">Completado</string>
@@ -226,34 +252,34 @@
     <string name="Fingerprint_Hint">Sensor táctil</string>
     <string name="Fingerprint_EnterPin">Código</string>
     <string name="Fingerprint_NotRecognized">Huella digital no reconocida. Por favor inténtelo de nuevo.</string>
-    <string name="Fingerprint_Success">Operación realizada correctamente</string>
+    <string name="Fingerprint_Success">Completado!</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Inhabilitado hasta: %s</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">PIN de teléfono</string>
-    <string name="OSPin_Confirm_Desciption">Esta aplicación require que el teléfono tenga el código de acceso (bloqueo de pantalla) habilitado.\n\nLo puedes habilitar en los ajustes de Android.\n\nTome en cuenta que cuando desahabilita el PIN en el nivel OS, las medidas de seguridad en el alacenamiento seguro de su teléfono hace que la información previamente almacenada no sea válida. Usted necesita restaurar sus claves de los monederos para poder volver a su monedero.</string>
+    <string name="OSPin_Confirm_Desciption">Esta aplicación require que el teléfono tenga el código de acceso (bloqueo de pantalla) habilitado.\n\nLo puedes habilitar en los ajustes de Android.\n\nTome en cuenta que cuando desahabilita el PIN en el nivel OS, las medidas de seguridad en el alacenamiento seguro de su teléfono hace que la información previamente almacenada no sea válida. Usted necesita restaurar las claves de sus monederos para poder volver a su monedero.</string>
     <string name="OSPin_Prompt_Desciption">Esta aplicación requiere el PIN de tu teléfono para mantener datos sensibles de tu monedero en el almacenamiento seguro de Android y no en la propia aplicación.</string>
     <!--Set Pin-->
     <string name="SetPin_Title">Código</string>
     <string name="SetPin_Info">Su código servirá para abrir su monedero y enviar dinero</string>
     <string name="SetPin_ErrorShortPin">Por favor, introduzca todos los dígitos.</string>
     <string name="SetPin_ConfirmInfo">Confirmar</string>
-    <string name="SetPin_Success">Tu contraseña fue establecida con éxito!</string>
-    <string name="SetPin_ErrorPinsDontMatch">El código no coincide. Inténtelo de nuevo</string>
+    <string name="SetPin_Success">¡Tu contraseña se ha establecido correctamente!</string>
+    <string name="SetPin_ErrorPinsDontMatch">El código no coincide. Inténtelo de nuevo.</string>
     <string name="SetPin_ErrorFailedToSavePin">Se ha producido un error al intentar guardar su código. Inténtelo de nuevo.</string>
     <!--Edit Pin-->
     <string name="EditPin_Title">Editar el código </string>
     <string name="EditPin_UnlockInfo">Código Actual</string>
     <string name="EditPin_NewPinInfo">Código Nuevo</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Monederos</string>
+    <string name="ManageCoins_title">Gestor de monedas</string>
     <string name="ManageCoins_save">Guardar</string>
-    <string name="ManageCoins_AddCoin_Title">Añadir %s </string>
+    <string name="ManageCoins_AddCoin_Title">Añadir monedas %s</string>
     <string name="ManageCoins_AddCoin_Text">Esta acción generará una clave (monedero) para las siguientes monedas:%s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">En este momento, el monedero no es capaz de crear nuevas cuentas de monederos EOS. Solo puede restaurar la existente.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Gestionar claves</string>
-    <string name="ManageKeys_Description">Cualquiera con acceso a sus Claves puede robar los fondos de su monedero. Almacene las claves de forma segura y nunca se las muestre a nadie.\n\nRespalde cada clave para poder restaurar los fondos en caso de que su teléfono se pierda, se averíe o en caso de que simplemente se borre la aplicación del monedero de su teléfono.</string>
+    <string name="ManageKeys_Description">Cualquiera con acceso a sus claves puede robar los fondos de su monedero. Almacene las claves de forma segura y nunca se las muestre a nadie.\n\nRespalde cada clave para poder restaurar los fondos en caso de que su teléfono se pierda, se averíe o en caso de que simplemente se borre la aplicación del monedero de su teléfono.</string>
     <string name="ManageKeys_Create">Crear</string>
     <string name="ManageKeys_Restore">Restaurar</string>
     <string name="ManageKeys_Delete">Eliminar</string>
@@ -263,17 +289,18 @@
     <string name="ManageKeys_Delete_Title">Eliminar clave</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">Esta acción eliminará la clave %s (monedero) de este dispositivo.</string>
     <string name="ManageKeys_Delete_ConfirmationDisable">Monedas que serán deshabilitadas: %s</string>
-    <string name="ManageKeys_Delete_ConfirmationLoose">Si usted no tiene un respaldo de esta clave, usted perderá los fondos respectivos.</string>
+    <string name="ManageKeys_Delete_ConfirmationLoose">Si usted no tiene un respaldo de esta clave, usted perderá los respectivos fondos.</string>
     <string name="ManageKeys_Delete_FromPhone">Eliminar del teléfono</string>
-    <string name="ManageKeys_Delete_Alert">Necesita respaldar esta clave antes de que pueda desvincularla.</string>
+    <string name="ManageKeys_Delete_Alert_Title">Se requiere una copia de seguridad</string>
+    <string name="ManageKeys_Delete_Alert">Necesita respaldar esta clave %s antes de que pueda eliminarla de este teléfono.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">Añadir %s</string>
-    <string name="AddCoin_Description">No tiene una clave activa para usar con %s. Use el botón Crear abajo para generar una nueva clave (monedero).\n\nTambién puede usar la clave existente para el %s si ya la tiene.</string>
+    <string name="AddCoin_Description">Usted no tiene la clave para %1s. El monedero puede generar una clave para usted. Use el botón de crear para generar una nueva clave. \n\nTambién puede usar la %3sclave ya existente para el %4ssi tiene una.</string>
     <string name="AddCoin_CreateKey">Crear</string>
     <string name="AddCoin_RestoreKey">Restaurar</string>
     <!-- Account Types -->
-    <string name="AccountType_12Words">12 Words</string>
-    <string name="AccountType_12WordsKey">Clave de 12-Words</string>
+    <string name="AccountType_12Words">12 palabras</string>
+    <string name="AccountType_12WordsKey">Clave de 12-palabras</string>
     <string name="AccountType_Eos">EOS Blockchain</string>
     <string name="AccountType_EosKey">Clave de EOS</string>
     <string name="AccountType_Binance">Binance Chain</string>
@@ -285,5 +312,22 @@
     <string name="CoinOption_Fast_Text">Restaura tus transacciones pasadas vía un tercer servidor seguro. Para usuarios con una larga historia de transacciones con grandes cantidades, éste método puede tener riesgos de privacidad.</string>
     <string name="CoinOption_Slow">Lento</string>
     <string name="CoinOption_MorePrivate">1&#8211;12 horas (Más Privado)</string>
-    <string name="CoinOption_Slow_Text">Restaure sus transacciones pasadas directamente desde la red. Significativamente más privado pero muy lento. Si la restauración toma mucho tiempo, vaya a la sección Administrar claves y reimporte la Clave para la cartera utilizando la opción de Sincronización rápida.</string>
+    <string name="CoinOption_Slow_Text">Restaure sus transacciones pasadas directamente desde la red. Significativamente más privado pero muy lento. Si la restauración toma mucho tiempo, vaya a la sección Administrar claves y reimporte la Clave para el monedero utilizando la opción de Sincronización rápida.</string>
+    <!--Charts-->
+    <string name="Charts_TimeDuration_Day">1D</string>
+    <string name="Charts_TimeDuration_Week">7D</string>
+    <string name="Charts_TimeDuration_Month">1M</string>
+    <string name="Charts_TimeDuration_Quartal">3M</string>
+    <string name="Charts_TimeDuration_HalfYear">6M</string>
+    <string name="Charts_TimeDuration_Year">1A</string>
+    <string name="Charts_Title">%s Tarifa</string>
+    <string name="Charts_Rate_High">Alto</string>
+    <string name="Charts_Rate_Low">Bajo</string>
+    <string name="Charts_MarketCap">Cap. de Mercado</string>
+    <string name="Charts_MarketCap_Thousand">k</string>
+    <string name="Charts_MarketCap_Million">M</string>
+    <string name="Charts_MarketCap_Billion">B</string>
+    <string name="Charts_MarketCap_Trillion">T</string>
+    <string name="Charts_Volume">Volumen</string>
+    <string name="Charts_Error_NotAvailable">Gráfico no disponible</string>
 </resources>

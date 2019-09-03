@@ -15,14 +15,16 @@
     <string name="Button_Ok">Хорошо</string>
     <string name="Button_Share">Поделиться</string>
     <string name="Error">Ошибка</string>
+    <string name="NotAvailable">Нет данных</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
     <string name="Welcome_CreateWallet">Создать Кошелек</string>
     <string name="Welcome_RestoreWallet">Восстановить Кошелек</string>
     <!--Restore-->
     <string name="Restore_Title">Восстановить</string>
+    <string name="Restore_Description">Чтобы восстановить существующий кошелек вам нужно ввести секретный ключ для этого кошелька.\n\nКак только вы восстановите один кошелек, вы сможете восстановить больше кошельков, перейдя в раздел \"Управление Ключами\" в настройках приложения.</string>
     <string name="Restore_Subtitle">Введите ключ</string>
-    <string name="Restore_ValidationFailed">Неверный Секретный Ключ</string>
+    <string name="Restore_ValidationFailed">Неверный ключ</string>
     <string name="Restore_RestoreFailed">Не удалось восстановить кошелек</string>
     <string name="Restore_EosAccountName">Account Name</string>
     <string name="Restore_EosActivePrivateKey">Активировать Приватный Ключ</string>
@@ -59,10 +61,10 @@
     <string name="Balance_SyncedUntil">до: %s</string>
     <string name="Balance_Syncing">Синхронизация…</string>
     <string name="Balance_AddCoins">Добавить Монеты</string>
-    <string name="Balance_Sort_Balance">Баланс</string>
+    <string name="Balance_Sort_Balance">Балансу</string>
     <string name="Balance_Sort_PopupTitle">Сортировать по</string>
-    <string name="Balance_Sort_Az">А-Я</string>
-    <string name="Balance_Sort_Default">По умолчанию</string>
+    <string name="Balance_Sort_Az">Названию</string>
+    <string name="Balance_Sort_24hPriceChange">Цена 24 часа (%)</string>
     <!--Send-->
     <string name="Send_Title">Отправить %s</string>
     <string name="Send_Hint_Address">Адрес</string>
@@ -73,7 +75,7 @@
     <string name="Send_Button_Max">Макс.</string>
     <string name="Send_Confirmation_Title">Подтвердить</string>
     <string name="Send_Confirmation_To">Кому: </string>
-    <string name="Send_Confirmation_HintMemo">Memo</string>
+    <string name="Send_Confirmation_HintMemo">Заметка:</string>
     <string name="Send_Confirmation_Eos_HintAccount">Account</string>
     <string name="Send_Confirmation_Total">Итого:</string>
     <string name="Send_Confirmation_EstimateTime">Приблизительное время:</string>
@@ -84,24 +86,38 @@
     <string name="Send_Error_InsufficientBalance">Недостаточно средств.</string>
     <string name="Send_Error_IncorrectAddress">Неверный Адрес</string>
     <string name="Send_Error_BalanceAmount">Баланс %s</string>
-    <string name="Send_DialogTitle">Подтвердить Транзакцию</string>
+    <string name="Send_DialogTitle">Подтвердить</string>
+    <string name="Send_DialogSpeed">Скорость транзакции:</string>
+    <string name="Send_TxSpeed_Low">Низкая</string>
+    <string name="Send_TxSpeed_Medium">Средняя</string>
+    <string name="Send_TxSpeed_High">Высокая</string>
+    <string name="Send_DialogDuration">Продолжительность:</string>
     <string name="Send_DialogFee">Комиссия:</string>
     <string name="Send_DialogTotal">Итого:</string>
+    <string name="Send_DialogMemoHint">Заметка</string>
+    <string name="Send_DialogProceed">Продолжить</string>
     <string name="Send_Sending">Отправка</string>
     <string name="Send_ERC_Alert">Комиссия за отправку %s (ERC20) взимается в ETH. Необходимо %s ETH.</string>
     <string name="Send_Token_InsufficientFeeAlert">Комиссия за отправку %s %s взимается в %s. Необходимо %s.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Получить %s</string>
-    <string name="Deposit_Share">Переслать</string>
+    <string name="Deposit_Share">Поделиться</string>
     <string name="Deposit_Your_Address">Ваш Адрес</string>
+    <string name="Deposit_Your_Account">Ваш Аккаунт</string>
+    <string name="Receive_Alert_NotBackedUp_Title">Необходима Резервная Копия</string>
     <string name="Receive_Alert_NotBackedUp_Button">Резервная копия</string>
-    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
+    <string name="Receive_Alert_NotBackedUp_Description">Вам нужно сделать резервную копию ключа, прежде чем вы сможете получать.</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">только что</string>
     <string name="Timestamp_MinAgo">%d мин назад</string>
     <string name="Timestamp_HoursAgo">%d ч назад</string>
     <string name="Timestamp_Today">Сегодня</string>
     <string name="Timestamp_Yesterday">Вчера</string>
+    <string name="Duration_instant">Мгновенно</string>
+    <string name="Duration_Within">в течение %s</string>
+    <string name="Duration_Hours">%d ч.</string>
+    <string name="Duration_Minutes">%d мин.</string>
+    <string name="Duration_Seconds">%d сек.</string>
     <!--Transactions-->
     <string name="Transactions_Title">Транзакции</string>
     <string name="Transactions_FilterAll">ВСЕ</string>
@@ -117,6 +133,8 @@
     <string name="TransactionInfo_ButtonVerify">Проверить</string>
     <string name="TransactionInfo_Status_Pending">В процессе</string>
     <string name="TransactionInfo_HistoricalRate">Исторический Курс</string>
+    <string name="TransactionInfo_Fee">Комиссия</string>
+    <string name="TransactionInfo_FootNote">Значение этой транзакции выглядит как 0, потому что она была отправлена на свой собственный адрес</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Транзакция</string>
     <string name="FullInfo_Time">Время</string>
@@ -169,6 +187,7 @@
     <string name="Settings_ShareThisWallet">Рассказать Друзьям</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
+    <string name="Settings_Report">Сообщить о Проблеме</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Отпечаток пальца не включен</string>
     <string name="Settings_Error_NoFingerprintAddedYet">У вас не включен отпечаток пальца на этом устройстве. Перейдите в настройки </string>
@@ -195,7 +214,11 @@
 \n\nНекоторые публичные данные используемые приложением такие, как обменные курсы валют хранятся в децентрализованном хранилище (IPFS).</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Поделиться</string>
-    <string name="SettingsShare_Text">Unstoppable Wallet - Отличное Приложение!</string>
+    <string name="SettingsShare_Text">Unstoppable Wallet - криптокошелек, который я рекомендую</string>
+    <!--Setting_Report-->
+    <string name="SettingsReport_Title">Наши Контакты</string>
+    <string name="SettingsReport_Email">Эл. почта</string>
+    <string name="SettingsReport_Telegram">Telegram </string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Ошибка Android Keystore</string>
     <string name="Alert_KeysInvalidatedDescription">Ваши зашифрованные данные были недавно аннулированы, потому что  Android lock screen был изменен</string>
@@ -206,6 +229,9 @@
     <string name="Unlock_Page_EnterYourPin">Код Доступа</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Неподдерживаемая валюта</string>
+    <string name="Eos_Backend_Error_SelfTransfer">Не удается отправить токен на свой аккаунт</string>
+    <string name="Eos_Backend_Error_AccountNotExist">Этот аккаунт не существует</string>
+    <string name="Eos_Backend_Error_InsufficientRam">У вашего аккаунта EOS недостаточно оперативной памяти для отправки этого токена. Для продолжения необходимо увеличить ставку RAM.</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Разблокировать</string>
     <string name="Hud_Text_Success">Успешно</string>
@@ -251,7 +277,7 @@
     <string name="ManageKeys_Create">Создать</string>
     <string name="ManageKeys_Restore">Восстановить</string>
     <string name="ManageKeys_Delete">Удалить</string>
-    <string name="ManageKeys_Backup">Резервная копия</string>
+    <string name="ManageKeys_Backup">Резерв. копия</string>
     <string name="ManageKeys_Show">Показать</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">Удалить Ключ</string>
@@ -259,10 +285,11 @@
     <string name="ManageKeys_Delete_ConfirmationDisable">Монеты, которые будут отключены: %s</string>
     <string name="ManageKeys_Delete_ConfirmationLoose">Если у вас нет резервной копии этого ключа, то вы потеряете соответствующие средства.</string>
     <string name="ManageKeys_Delete_FromPhone">Удалить с устройства</string>
-    <string name="ManageKeys_Delete_Alert">Вам нужно сделать резервную копию этого ключа, прежде чем вы можете его отсоединить.</string>
+    <string name="ManageKeys_Delete_Alert_Title">Необходима Резервная Копия</string>
+    <string name="ManageKeys_Delete_Alert">Вам нужно сделать резервную копию %s ключа, прежде чем вы его сможете удалить с этого устройства.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">Добавить %s</string>
-    <string name="AddCoin_Description">У вас нет активного ключа для использования %s. Нажмите кнопку \"Создать\" ниже, чтобы создать новый ключ (кошелек).\n\nВы также можете использовать существующий ключ для %s , если у вас уже есть.</string>
+    <string name="AddCoin_Description">У вас нет ключа для %1s. Кошелек может сгенерировать ключ. Используйте кнопку \"Создать\" ниже, чтобы сгенерировать новый ключ.\n\nВы также можете использовать существующий %3s ключ для %4s , если он у вас есть.</string>
     <string name="AddCoin_CreateKey">Создать</string>
     <string name="AddCoin_RestoreKey">Восстановить</string>
     <!-- Account Types -->
@@ -280,4 +307,21 @@
     <string name="CoinOption_Slow">Медленно</string>
     <string name="CoinOption_MorePrivate">1&#8211;12 часов (Более Приватно)</string>
     <string name="CoinOption_Slow_Text">Восстановление ваших предыдущих транзакций будет непосредственно из сети. Это более приватно, но очень медленно. Чем больше монет вы восстанавливаете, тем больше времени потребуется. Если восстановление занимает слишком много времени, перейдите в раздел «Управление ключами» и повторно импортируйте ключ для кошелька с помощью опции «Быстрая синхронизация».</string>
+    <!--Charts-->
+    <string name="Charts_TimeDuration_Day">1Д</string>
+    <string name="Charts_TimeDuration_Week">7Д</string>
+    <string name="Charts_TimeDuration_Month">1М</string>
+    <string name="Charts_TimeDuration_Quartal">3М</string>
+    <string name="Charts_TimeDuration_HalfYear">6М</string>
+    <string name="Charts_TimeDuration_Year">1Г</string>
+    <string name="Charts_Title">%s Курс</string>
+    <string name="Charts_Rate_High">Высокая</string>
+    <string name="Charts_Rate_Low">Низкая</string>
+    <string name="Charts_MarketCap">Рын. Кап.</string>
+    <string name="Charts_MarketCap_Thousand">тыс.</string>
+    <string name="Charts_MarketCap_Million">млн.</string>
+    <string name="Charts_MarketCap_Billion">млр.</string>
+    <string name="Charts_MarketCap_Trillion">трл.</string>
+    <string name="Charts_Volume">Объём</string>
+    <string name="Charts_Error_NotAvailable">График недоступен</string>
 </resources>

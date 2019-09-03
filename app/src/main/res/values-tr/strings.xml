@@ -15,14 +15,16 @@
     <string name="Button_Ok">Tamam</string>
     <string name="Button_Share">Paylaş</string>
     <string name="Error">Hata</string>
+    <string name="NotAvailable">N/A</string>
     <!--Welcome-->
     <string name="Welcome_Title">Durdurulamaz</string>
     <string name="Welcome_CreateWallet">Yeni Cüzdan</string>
     <string name="Welcome_RestoreWallet">Cüzdanı Geri Yükle</string>
     <!--Restore-->
     <string name="Restore_Title">Geri Yükle</string>
+    <string name="Restore_Description">To restore existing wallet you need to enter a secret key for that wallet.\n\nOnce you restore one wallet you will be able to restore more wallets by going to Manage Keys section in app Settings.</string>
     <string name="Restore_Subtitle">Anahtarı girin</string>
-    <string name="Restore_ValidationFailed">Hatalı Gizli anahtar</string>
+    <string name="Restore_ValidationFailed">Yanlış Anahtar</string>
     <string name="Restore_RestoreFailed">Cüzdan geri yüklenemedi</string>
     <string name="Restore_EosAccountName">Hesap Adı</string>
     <string name="Restore_EosActivePrivateKey">Gizli Anahtarı Etkinleştir</string>
@@ -59,10 +61,10 @@
     <string name="Balance_SyncedUntil">%s kadar</string>
     <string name="Balance_Syncing">Eşitleniyor…</string>
     <string name="Balance_AddCoins">Kredi Ekle</string>
-    <string name="Balance_Sort_Balance">Bakiye</string>
+    <string name="Balance_Sort_Balance">Değer</string>
     <string name="Balance_Sort_PopupTitle">Sıralama şekli</string>
-    <string name="Balance_Sort_Az">A-Z</string>
-    <string name="Balance_Sort_Default">Varsayılan</string>
+    <string name="Balance_Sort_Az">İsim</string>
+    <string name="Balance_Sort_24hPriceChange">24 saat Değişiklik</string>
     <!--Send-->
     <string name="Send_Title">%s gönder</string>
     <string name="Send_Hint_Address">Adres</string>
@@ -73,7 +75,7 @@
     <string name="Send_Button_Max">Azami</string>
     <string name="Send_Confirmation_Title">Onayla</string>
     <string name="Send_Confirmation_To">Alan: </string>
-    <string name="Send_Confirmation_HintMemo">Not</string>
+    <string name="Send_Confirmation_HintMemo">Memo:</string>
     <string name="Send_Confirmation_Eos_HintAccount">Hesap</string>
     <string name="Send_Confirmation_Total">Toplam:</string>
     <string name="Send_Confirmation_EstimateTime">Tahmini süre:</string>
@@ -84,24 +86,38 @@
     <string name="Send_Error_InsufficientBalance">Yetersiz bakiye.</string>
     <string name="Send_Error_IncorrectAddress">Geçersiz adres</string>
     <string name="Send_Error_BalanceAmount">%s bakiye</string>
-    <string name="Send_DialogTitle">İşlemi Onayla</string>
+    <string name="Send_DialogTitle">Onayla</string>
+    <string name="Send_DialogSpeed">İşlem hızı:</string>
+    <string name="Send_TxSpeed_Low">Yavaş</string>
+    <string name="Send_TxSpeed_Medium">Ortadüzey</string>
+    <string name="Send_TxSpeed_High">Hızlı</string>
+    <string name="Send_DialogDuration">Süre:</string>
     <string name="Send_DialogFee">Masraf:</string>
     <string name="Send_DialogTotal">Toplam:</string>
+    <string name="Send_DialogMemoHint">Memo</string>
+    <string name="Send_DialogProceed">Devam</string>
     <string name="Send_Sending">Gönderiliyor</string>
     <string name="Send_ERC_Alert">%s (ERC20) için ișlem ücreti Ethereum hesabından ödenir. Asgari %s ETH gerekiyor</string>
     <string name="Send_Token_InsufficientFeeAlert">%s (%s) için ișlem ücreti %s hesabından ödenir. Asgari %s gerekiyor.</string>
     <!--Deposit-->
     <string name="Deposit_Title">%s al</string>
-    <string name="Deposit_Share">İlet</string>
+    <string name="Deposit_Share">Paylaş</string>
     <string name="Deposit_Your_Address">Adresiniz</string>
+    <string name="Deposit_Your_Account">Hesabınız</string>
+    <string name="Receive_Alert_NotBackedUp_Title">Yedekleme Gerekli</string>
     <string name="Receive_Alert_NotBackedUp_Button">Yedekle</string>
-    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
+    <string name="Receive_Alert_NotBackedUp_Description">Para almadan önce bu cüzdanın anahtarlarını yedeklemeniz gerekir. </string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">şimdi</string>
     <string name="Timestamp_MinAgo">%d dk önce</string>
     <string name="Timestamp_HoursAgo">%d saat önce</string>
     <string name="Timestamp_Today">Bugün</string>
     <string name="Timestamp_Yesterday">Dün</string>
+    <string name="Duration_instant">Anlık</string>
+    <string name="Duration_Within">%s Içinde</string>
+    <string name="Duration_Hours">%d sa.</string>
+    <string name="Duration_Minutes">%d dk.</string>
+    <string name="Duration_Seconds">%d sn.</string>
     <!--Transactions-->
     <string name="Transactions_Title">Hesap işlemleri</string>
     <string name="Transactions_FilterAll">HEPSI</string>
@@ -117,6 +133,8 @@
     <string name="TransactionInfo_ButtonVerify">Doğrula</string>
     <string name="TransactionInfo_Status_Pending">Devam ediyor</string>
     <string name="TransactionInfo_HistoricalRate">Geçmiş Kur</string>
+    <string name="TransactionInfo_Fee">Masraf</string>
+    <string name="TransactionInfo_FootNote">Kendi adresinize gönderildiğinden bu işlemin değeri 0 olarak görünür</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Hesap işlemi</string>
     <string name="FullInfo_Time">Tarih</string>
@@ -169,6 +187,7 @@
     <string name="Settings_ShareThisWallet">Arkadaşlarına bahset</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
+    <string name="Settings_Report">Sorunu Bildir</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Parmak izi etkin değil</string>
     <string name="Settings_Error_NoFingerprintAddedYet">Kayıtlı parmak izi bulunmadı. Parmak izi eklemek için, Ayarlar &gt; Güvenlik bölümüne gidin.</string>
@@ -195,7 +214,11 @@
 \n\nDöviz kurları gibi bazı 	jenerik resmi olmayan uygulama verileri merkezi olmayan IPFS sisteminde depolanır. </string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Paylaş</string>
-    <string name="SettingsShare_Text">Durdurulamayan Cüzdan - Güzel Uygulama!</string>
+    <string name="SettingsShare_Text">Unstoppable Wallet - kullanmanız gereken kripto para cüzdanı</string>
+    <!--Setting_Report-->
+    <string name="SettingsReport_Title">Sorunu Bildir</string>
+    <string name="SettingsReport_Email">E-posta</string>
+    <string name="SettingsReport_Telegram">Telegram</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android anahtar deposu hatası</string>
     <string name="Alert_KeysInvalidatedDescription">Android cihazınızın kilidi değiştirildiğinden cüzdan bilginizi tutan şifreli dosya artık geçersiz</string>
@@ -206,6 +229,9 @@
     <string name="Unlock_Page_EnterYourPin">Şifre</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">Desteklenmeyen para birimi</string>
+    <string name="Eos_Backend_Error_SelfTransfer">Bu kripto para kendi hesabınaza aktarılamıyor</string>
+    <string name="Eos_Backend_Error_AccountNotExist">Bu hesap mevcut değil</string>
+    <string name="Eos_Backend_Error_InsufficientRam">EOS hesabınızda bu kripto parayı göndermek için yeterli RAM bulunmuyor. Devam etmek için EOS RAM hissenizi arttırmak gerekiyor.</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Kilidi Aç</string>
     <string name="Hud_Text_Success">Başarılı</string>
@@ -247,7 +273,7 @@
     <string name="ManageCoins_EOSAlert_CreateButton">Uygulama henüz EOS cüzdanı oluşturamamaktadır. Sadece var olan cüzda geri yüklenebilir.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Anahtarları Yönet</string>
-    <string name="ManageKeys_Description">Anahtarlarınıza ulaşabilen herkes cüzdanınızı kullanabilir. Anahtarları kimsenin bulamayacağı güvenli bir yerde tutun.\n\nCihazın bozulması, kaybolması veya uygulamanın silinmesi durumunda cüzdanınızı geri yükleyebilmeniz için her anahtarı yedekleyin.</string>
+    <string name="ManageKeys_Description">Anahtarlarınıza erişimi olan herkes cüzdan paranızı çalabilir. Anahtarları güvenli bir şekilde saklayın ve asla kimseye göstermeyin.\n\nTelefonunuzu kaybederseniz veya kırdığınızda veya sadece cüzdan uygulaması silinirse para geri yükleyebilmek için her anahtarı yedekle.</string>
     <string name="ManageKeys_Create">Oluştur</string>
     <string name="ManageKeys_Restore">Geri Yükle</string>
     <string name="ManageKeys_Delete">Sil</string>
@@ -259,10 +285,11 @@
     <string name="ManageKeys_Delete_ConfirmationDisable">Etkisizleştirilecek cüzdanlar: %s</string>
     <string name="ManageKeys_Delete_ConfirmationLoose">Eğer anahtarın yedeğini saklamadıysanız, erişimi kaybedeceksiniz.</string>
     <string name="ManageKeys_Delete_FromPhone">Cihazdan sil</string>
-    <string name="ManageKeys_Delete_Alert">Silmeden önce bu anahtarı yedeklemeniz gerekiyor.</string>
+    <string name="ManageKeys_Delete_Alert_Title">Yedekleme Gerekli</string>
+    <string name="ManageKeys_Delete_Alert">%s anahtarınızı bu cihazdan silmeden önce yedeklemeniz gerekiyor.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">%s ekle</string>
-    <string name="AddCoin_Description">%s için kullanılan aktif anahtar yok. Oluştura tıklayıp yeni anahtar (cüzdan) oluşturabilirsiniz.\n\n%s için anahtarınız zaten varsa onu kullanabilirsiniz.</string>
+    <string name="AddCoin_Description">%1s için Anahtarınız yok. Cüzdanınız, sizin için yeni anahtar oluşturabilir. Yeni bir anahtar oluşturmak için aşağıdaki Oluştur düğmesini tıklayın, veya \n\nMevcut %3s anahtarınız varsa onu %4s için kullanabilirsiniz.</string>
     <string name="AddCoin_CreateKey">Oluştur</string>
     <string name="AddCoin_RestoreKey">Geri Yükle</string>
     <!-- Account Types -->
@@ -280,4 +307,21 @@
     <string name="CoinOption_Slow">Yavaş</string>
     <string name="CoinOption_MorePrivate">1&#8211;12 saat (Daha Gizli)</string>
     <string name="CoinOption_Slow_Text">Geçmiş hesap işlemlerinizi ağdan geri yükler. Çok daha güvenli ama yavaş. Eğer geri yükleme çok uzun zaman alıyorsa, Anahtarları Yönet ekranında cüzdan anahtarını Hızlı Eşle seçeneğiyle tekrar içe aktarın.</string>
+    <!--Charts-->
+    <string name="Charts_TimeDuration_Day">1G</string>
+    <string name="Charts_TimeDuration_Week">7G</string>
+    <string name="Charts_TimeDuration_Month">1A</string>
+    <string name="Charts_TimeDuration_Quartal">3A</string>
+    <string name="Charts_TimeDuration_HalfYear">6A</string>
+    <string name="Charts_TimeDuration_Year">1Y</string>
+    <string name="Charts_Title">%s kur</string>
+    <string name="Charts_Rate_High">Yüksek</string>
+    <string name="Charts_Rate_Low">Düşük</string>
+    <string name="Charts_MarketCap">P. Değeri</string>
+    <string name="Charts_MarketCap_Thousand">k</string>
+    <string name="Charts_MarketCap_Million">M</string>
+    <string name="Charts_MarketCap_Billion">B</string>
+    <string name="Charts_MarketCap_Trillion">T</string>
+    <string name="Charts_Volume">Hacim</string>
+    <string name="Charts_Error_NotAvailable">Grafik yok</string>
 </resources>

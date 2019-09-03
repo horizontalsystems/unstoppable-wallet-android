@@ -15,14 +15,16 @@
     <string name="Button_Ok">확인</string>
     <string name="Button_Share">공유</string>
     <string name="Error">오류</string>
+    <string name="NotAvailable">해당 없음 </string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
     <string name="Welcome_CreateWallet">새 지갑</string>
     <string name="Welcome_RestoreWallet">지갑 복원</string>
     <!--Restore-->
     <string name="Restore_Title">복구</string>
+    <string name="Restore_Description">기존 지갑을 복원하시려면 개인 암호를 입력해야 합니다. \n\n하나의 지갑을 복원하신 후엔 앱 설정의 암호관리 섹션에서 더 많은 지갑들을 복원하실 수 있습니다.</string>
     <string name="Restore_Subtitle">암호를 입력하세요</string>
-    <string name="Restore_ValidationFailed">잘못 된 비밀 키</string>
+    <string name="Restore_ValidationFailed">틀린 암호 입니다</string>
     <string name="Restore_RestoreFailed">지갑 복구에 실패하였습니다.</string>
     <string name="Restore_EosAccountName">Account Name</string>
     <string name="Restore_EosActivePrivateKey">Active Private Key</string>
@@ -59,10 +61,10 @@
     <string name="Balance_SyncedUntil">%s 까지</string>
     <string name="Balance_Syncing">동기화...</string>
     <string name="Balance_AddCoins">코인 추가</string>
-    <string name="Balance_Sort_Balance">잔액</string>
+    <string name="Balance_Sort_Balance">Value</string>
     <string name="Balance_Sort_PopupTitle">정렬 기준</string>
-    <string name="Balance_Sort_Az">A-Z</string>
-    <string name="Balance_Sort_Default">Default</string>
+    <string name="Balance_Sort_Az">이름</string>
+    <string name="Balance_Sort_24hPriceChange">24시간 가격 (%)</string>
     <!--Send-->
     <string name="Send_Title">전송 %s</string>
     <string name="Send_Hint_Address">주소</string>
@@ -73,35 +75,49 @@
     <string name="Send_Button_Max">최대</string>
     <string name="Send_Confirmation_Title">확인</string>
     <string name="Send_Confirmation_To">에게: </string>
-    <string name="Send_Confirmation_HintMemo">Memo</string>
+    <string name="Send_Confirmation_HintMemo">Memo:</string>
     <string name="Send_Confirmation_Eos_HintAccount">Account</string>
     <string name="Send_Confirmation_Total">합계:</string>
     <string name="Send_Confirmation_EstimateTime">예상 소요시간:</string>
     <string name="Send_Confirmation_Send_Button">전송</string>
     <string name="Send_ScanQrCode">QR 코드 스캔</string>
-    <string name="Send_Success">\u2713 Sent</string>
+    <string name="Send_Success">\u2713 보냄</string>
     <string name="Send_Error_InvalidAddress">주소가 올바르지 않습니다. 다시 확인하고 시도해주세요!</string>
     <string name="Send_Error_InsufficientBalance">잔액이 부족합니다.</string>
     <string name="Send_Error_IncorrectAddress">잘못된 주소</string>
     <string name="Send_Error_BalanceAmount">잔액%s</string>
-    <string name="Send_DialogTitle">거래를 확인해라</string>
+    <string name="Send_DialogTitle">확인</string>
+    <string name="Send_DialogSpeed">거래 속도:</string>
+    <string name="Send_TxSpeed_Low">낮음</string>
+    <string name="Send_TxSpeed_Medium">보통</string>
+    <string name="Send_TxSpeed_High">높음</string>
+    <string name="Send_DialogDuration">기간:</string>
     <string name="Send_DialogFee">수수료:</string>
     <string name="Send_DialogTotal">합계:</string>
+    <string name="Send_DialogMemoHint">Memo</string>
+    <string name="Send_DialogProceed">진행</string>
     <string name="Send_Sending">전송중</string>
     <string name="Send_ERC_Alert">%@ (ERC20) 에 대한 거래 수수료는 Ethereum 로 지불되었습니다. 귀하는 %@ ETH 가 필요합니다.</string>
     <string name="Send_Token_InsufficientFeeAlert">%s (%s) 에 대한 거래 수수료는 %s로 지불되었습니다. 귀하는 %s가 필요합니다.</string>
     <!--Deposit-->
     <string name="Deposit_Title">수신%s</string>
-    <string name="Deposit_Share">앞으로</string>
+    <string name="Deposit_Share">공유</string>
     <string name="Deposit_Your_Address">당신의 주소</string>
+    <string name="Deposit_Your_Account">내 계정</string>
+    <string name="Receive_Alert_NotBackedUp_Title">백업이 필요합니다</string>
     <string name="Receive_Alert_NotBackedUp_Button">백업</string>
-    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
+    <string name="Receive_Alert_NotBackedUp_Description">이 지갑에 자금을 받기전에 암호의 백업이 필요합니다. </string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">지금 막</string>
     <string name="Timestamp_MinAgo">%d분 전</string>
     <string name="Timestamp_HoursAgo">%d시간 전</string>
     <string name="Timestamp_Today">오늘</string>
     <string name="Timestamp_Yesterday">어제</string>
+    <string name="Duration_instant">즉시</string>
+    <string name="Duration_Within">%s 안에</string>
+    <string name="Duration_Hours">%d 시</string>
+    <string name="Duration_Minutes">%d 분</string>
+    <string name="Duration_Seconds">%d 초</string>
     <!--Transactions-->
     <string name="Transactions_Title">거래기록</string>
     <string name="Transactions_FilterAll">전부</string>
@@ -117,6 +133,8 @@
     <string name="TransactionInfo_ButtonVerify">확인</string>
     <string name="TransactionInfo_Status_Pending">보류 중</string>
     <string name="TransactionInfo_HistoricalRate">과거 환율</string>
+    <string name="TransactionInfo_Fee">수수료</string>
+    <string name="TransactionInfo_FootNote">이 거래의 가치는 귀하의 주소로 전송되었으므로 0으로 나타납니다</string>
     <!--Full Info-->
     <string name="FullInfo_Title">거래기록</string>
     <string name="FullInfo_Time">시간</string>
@@ -169,6 +187,7 @@
     <string name="Settings_ShareThisWallet">친구에게 추천하기</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
+    <string name="Settings_Report">문제점 보고</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">지문을 사용할 수 없습니다.</string>
     <string name="Settings_Error_NoFingerprintAddedYet">당신은 이 장치에서 지문을 사용할 수 없습니다. 지문 액세스를 설정하는 보안으로 이동합니다.</string>
@@ -201,7 +220,11 @@
 \n\n통화 환율과 같은 총괄적이고 사적이지 않은 데이터는 분산된 저장소(IPFS)에 저장될 것입니다.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">공유</string>
-    <string name="SettingsShare_Text">Unstoppable과 함께 자유로워지세요!</string>
+    <string name="SettingsShare_Text">Unstoppable 지갑 - 내가 추천하는 암호지갑</string>
+    <!--Setting_Report-->
+    <string name="SettingsReport_Title">문제점 보고</string>
+    <string name="SettingsReport_Email">E-mail</string>
+    <string name="SettingsReport_Telegram">Telegram</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">안드로이드 키저장 에러</string>
     <string name="Alert_KeysInvalidatedDescription">당신의 안드로이드 스크린 장금이 변했기 때문에 당신의 지갑에 암호화된 데이터들은 지금 이용할 수 없습니다.</string>
@@ -212,6 +235,9 @@
     <string name="Unlock_Page_EnterYourPin">비밀번호</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">지원되지 않는 통화</string>
+    <string name="Eos_Backend_Error_SelfTransfer">토큰을 개인계정으로 옮길 수 없습니다</string>
+    <string name="Eos_Backend_Error_AccountNotExist">회원 계정이 존재하지 않습니다</string>
+    <string name="Eos_Backend_Error_InsufficientRam">귀하의 EOS계정은 이 토큰을 보내기엔 RAM이 충분하지 않습니다. 진행하시려면 RAM량을 늘리셔야 합니다.</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">잠금 해제</string>
     <string name="Hud_Text_Success">성공</string>
@@ -230,7 +256,7 @@
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">~때까지 사용 안 함: %s</string>
     <!--OS Pin-->
-    <string name="OSPin_Confirm_Title">Phone PIN</string>
+    <string name="OSPin_Confirm_Title">핸드폰 핀넘버</string>
     <string name="OSPin_Confirm_Desciption">이 앱을 사용하려면 휴대전화에 암호(화면 잠금) 가 활성화되어 있어야 합니다. \n\n Android 설정에서 활성화할 수 있습니다. \n\nOS 수준에서 PIN을 비활성화하면 휴대기기의 안전한 저장에 대한 보안조치로 인해 이전에 저장된 데이터가 유효하지 않게 됩니다. 지갑으로 돌아가려면 지갑 암호를 복원하십시오.</string>
     <string name="OSPin_Prompt_Desciption">앱 자체가 아닌 안드로이드의 안전한 저장소에 지갑의 중요한 데이터를 저장하려면 이 앱은 휴대전화의 PIN이 필요합니다.</string>
     <!--Set Pin-->
@@ -265,10 +291,12 @@
     <string name="ManageKeys_Delete_ConfirmationDisable">비활성화될 코인: %s</string>
     <string name="ManageKeys_Delete_ConfirmationLoose">이 암호를 백업하지 않으면 해당 자금을 잃게 됩니다.</string>
     <string name="ManageKeys_Delete_FromPhone">휴대전화에서 삭제</string>
-    <string name="ManageKeys_Delete_Alert">암호를 삭제하기전 백업이 필요합니다.</string>
+    <string name="ManageKeys_Delete_Alert_Title">백업이 필요합니다</string>
+    <string name="ManageKeys_Delete_Alert">귀하의 핸드폰에서 삭제하기전 %s 암호의 백업이 필요합니다</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">%s 추가</string>
-    <string name="AddCoin_Description">%s에 사용할 활성화된 암호가 없습니다. 아래의 생성 버튼을 사용하여 새 암호 (지갑)를 만드세요. \n\n이미 있으시다면 %s에 기존의 암호를 사용할 수도 있습니다.</string>
+    <string name="AddCoin_Description">%1s에 대한 암호가 없습니다. 지갑은 열쇠를 생성 할 수 있습니다. 아래의 생성 버튼을 사용하여 새 키를 만드세요. 
+\n\n 기존에 가지고 있는 %3s암호를 %4s 사용하실 수도 있습니다.</string>
     <string name="AddCoin_CreateKey">만들기</string>
     <string name="AddCoin_RestoreKey">복구</string>
     <!-- Account Types -->
@@ -286,4 +314,21 @@
     <string name="CoinOption_Slow">느리게</string>
     <string name="CoinOption_MorePrivate">1&#8211;12시간 (더욱 사적임)</string>
     <string name="CoinOption_Slow_Text">네트워크에서 직접 거래를 복원하세요. 훨씬 더 사적이지만 속도는 매우 느립니다. 복원에 너무 많은 시간이 걸린다면 암호관리 섹션에서 빠른 동기화 옵션을 사용하여 지갑의 암호를 다시 가져오세요.</string>
+    <!--Charts-->
+    <string name="Charts_TimeDuration_Day">하루</string>
+    <string name="Charts_TimeDuration_Week">일주일</string>
+    <string name="Charts_TimeDuration_Month">한 달</string>
+    <string name="Charts_TimeDuration_Quartal">3개월</string>
+    <string name="Charts_TimeDuration_HalfYear">6개월</string>
+    <string name="Charts_TimeDuration_Year">1년</string>
+    <string name="Charts_Title">%s 률</string>
+    <string name="Charts_Rate_High">높음</string>
+    <string name="Charts_Rate_Low">낮음</string>
+    <string name="Charts_MarketCap">시가총액</string>
+    <string name="Charts_MarketCap_Thousand">천</string>
+    <string name="Charts_MarketCap_Million">백만</string>
+    <string name="Charts_MarketCap_Billion">십억</string>
+    <string name="Charts_MarketCap_Trillion">조</string>
+    <string name="Charts_Volume">음량</string>
+    <string name="Charts_Error_NotAvailable">차트 이용불가</string>
 </resources>
