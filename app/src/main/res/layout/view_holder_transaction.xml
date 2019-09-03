@@ -1,47 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="72dp"
     android:background="@drawable/clickable_transaction_bg"
     android:clickable="true"
-    android:focusable="true"
-    >
+    android:focusable="true">
 
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="@color/steel_20"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/directionIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        />
+        tools:src="@drawable/ic_incoming" />
 
     <TextView
         android:id="@+id/txDate"
         style="@style/BaseSb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="9.5dp"
+        android:layout_marginStart="12dp"
         android:textAllCaps="true"
         android:textColor="?TransactionDateColor"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Jun 3"
-        />
+        app:layout_constraintStart_toEndOf="@+id/directionIcon"
+        app:layout_constraintTop_toTopOf="@+id/directionIcon"
+        tools:text="Jun 3" />
 
     <io.horizontalsystems.bankwallet.modules.transactions.TransactionStatusWithTimeView
         android:id="@+id/txStatusWithTimeView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
         android:layout_marginBottom="12dp"
-        android:layout_marginTop="9dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/txDate"
-        app:layout_constraintTop_toBottomOf="@+id/txDate"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/txDate" />
 
     <TextView
         android:id="@+id/txValueInFiat"
@@ -52,8 +56,7 @@
         android:textColor="@color/green_crypto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/txDate"
-        tools:text="$400"
-        />
+        tools:text="$400" />
 
     <TextView
         android:id="@+id/txValueInCoin"
@@ -61,12 +64,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:textColor="@color/grey"
         android:includeFontPadding="false"
+        android:textColor="@color/grey"
         app:layout_constraintBottom_toBottomOf="@+id/txStatusWithTimeView"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:text="+ 0,006482 BTC"
-        />
+        tools:text="+ 0,006482 BTC" />
 
     <View
         android:id="@+id/bottomShade"
@@ -74,10 +76,9 @@
         android:layout_height="0.5dp"
         android:background="?SettingsSectionBottomShadeColor"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <View
         android:id="@+id/pendingShade"
@@ -88,7 +89,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

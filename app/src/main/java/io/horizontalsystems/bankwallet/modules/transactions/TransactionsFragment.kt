@@ -192,6 +192,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
             App.numberFormatter.formatForTransactions(it, transactionRecord.incoming)
         }
         txValueInCoin.text = App.numberFormatter.formatForTransactions(transactionRecord.coinValue)
+        directionIcon.setImageResource(if (transactionRecord.incoming) R.drawable.ic_incoming else R.drawable.ic_outgoing)
         txDate.text = transactionRecord.date?.let { DateHelper.getShortDateForTransaction(it) }
         val time = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }
         txStatusWithTimeView.bind(transactionRecord.status, time)
