@@ -64,7 +64,7 @@
     <string name="Balance_Sort_Balance">Valeur</string>
     <string name="Balance_Sort_PopupTitle">Trier par</string>
     <string name="Balance_Sort_Az">Nom</string>
-    <string name="Balance_Sort_24hPriceChange">24h Price (%)</string>
+    <string name="Balance_Sort_24hPriceChange">Prix 24h (%)</string>
     <!--Send-->
     <string name="Send_Title">Envoyer %s</string>
     <string name="Send_Hint_Address">Adresse</string>
@@ -87,15 +87,15 @@
     <string name="Send_Error_IncorrectAddress">Adresse incorrect</string>
     <string name="Send_Error_BalanceAmount">Balance %s</string>
     <string name="Send_DialogTitle">Confirmer</string>
-    <string name="Send_DialogSpeed">Transaction Speed:</string>
-    <string name="Send_TxSpeed_Low">Low</string>
-    <string name="Send_TxSpeed_Medium">Medium</string>
-    <string name="Send_TxSpeed_High">High</string>
-    <string name="Send_DialogDuration">Duration:</string>
+    <string name="Send_DialogSpeed">Vitesse de transaction :</string>
+    <string name="Send_TxSpeed_Low">Faible</string>
+    <string name="Send_TxSpeed_Medium">Moyenne</string>
+    <string name="Send_TxSpeed_High">Élevée</string>
+    <string name="Send_DialogDuration">Durée :</string>
     <string name="Send_DialogFee">Frais:</string>
     <string name="Send_DialogTotal">Total:</string>
     <string name="Send_DialogMemoHint">Memo</string>
-    <string name="Send_DialogProceed">Proceed</string>
+    <string name="Send_DialogProceed">Continuer</string>
     <string name="Send_Sending">En attente</string>
     <string name="Send_ERC_Alert">Frais de transaction pour %s (ERC20) payé en Ethereum. Il est nécessaire %s ETH.</string>
     <string name="Send_Token_InsufficientFeeAlert">Frais de transaction pour %s (%s) payé en %s. Il est nécessaire %s.</string>
@@ -103,18 +103,18 @@
     <string name="Deposit_Title">Recevoir %s</string>
     <string name="Deposit_Share">Partager</string>
     <string name="Deposit_Your_Address">Votre address</string>
-    <string name="Deposit_Your_Account">Your Account</string>
-    <string name="Receive_Alert_NotBackedUp_Title">Backup Required</string>
+    <string name="Deposit_Your_Account">Votre compte</string>
+    <string name="Receive_Alert_NotBackedUp_Title">Sauvegarde requise</string>
     <string name="Receive_Alert_NotBackedUp_Button">Sauvegarde</string>
-    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
+    <string name="Receive_Alert_NotBackedUp_Description">Vous devez sauvegarder les clés de ce porte-monnaie avant de pouvoir recevoir des fonds. </string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">à l\'instant</string>
     <string name="Timestamp_MinAgo">Il y a %d minute</string>
     <string name="Timestamp_HoursAgo">Il y a %d heures</string>
     <string name="Timestamp_Today">Aujourd\'hui</string>
     <string name="Timestamp_Yesterday">Hier</string>
-    <string name="Duration_instant">Instant</string>
-    <string name="Duration_Within">Within %s</string>
+    <string name="Duration_instant">Instantané</string>
+    <string name="Duration_Within">Dans %s</string>
     <string name="Duration_Hours">%d h.</string>
     <string name="Duration_Minutes">%d min.</string>
     <string name="Duration_Seconds">%d sec.</string>
@@ -134,7 +134,7 @@
     <string name="TransactionInfo_Status_Pending">En attente</string>
     <string name="TransactionInfo_HistoricalRate">Taux historique</string>
     <string name="TransactionInfo_Fee">Frais</string>
-    <string name="TransactionInfo_FootNote">The value of this transaction appears as 0 because it was sent to your own address</string>
+    <string name="TransactionInfo_FootNote">La valeur de cette transaction apparaît comme 0 car elle a été envoyée à votre propre adresse</string>
     <!--Full Info-->
     <string name="FullInfo_Title">Transaction</string>
     <string name="FullInfo_Time">Heure</string>
@@ -187,7 +187,7 @@
     <string name="Settings_ShareThisWallet">Partager avec ami</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
-    <string name="Settings_Report">Report a Problem</string>
+    <string name="Settings_Report">Signaler un problème</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Empreinte digitale n\'est pas activé</string>
     <string name="Settings_Error_NoFingerprintAddedYet">Vous n’avez pas activé d’empreintes digitales sur ce appareil. Allez à paramètres &gt; sécurité à mettre en place un accès d’empreinte digitale.</string>
@@ -195,7 +195,7 @@
     <string name="SettingsSecurity_Fingerprint">Empreinte digitale</string>
     <string name="SettingsSecurity_EnablePin">Code</string>
     <string name="SettingsSecurity_EditPin">Modifier le code </string>
-    <string name="SettingsSecurity_ManageKeys">Manage Keys</string>
+    <string name="SettingsSecurity_ManageKeys">Gérer les clés</string>
     <string name="SettingsSecurity_BackupWallet">Porte-monnaie de Sauvegarde</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Devise de Base</string>
