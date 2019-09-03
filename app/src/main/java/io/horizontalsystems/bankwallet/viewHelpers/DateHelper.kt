@@ -67,6 +67,14 @@ object DateHelper {
         formatDate(date, "MMM dd, yyyy")
     }
 
+    fun getShortMonth(date: Date): String {
+        return formatDate(date, "MMM")
+    }
+
+    fun getShortDayOfWeek(date: Date): String {
+        return formatDate(date, "EEE")
+    }
+
     fun formatDateInUTC(timestamp: Long, dateFormat: String): String {
         val dateFormatter = SimpleDateFormat(dateFormat, Locale("US"))
         dateFormatter.timeZone = TimeZone.getTimeZone("UTC")
