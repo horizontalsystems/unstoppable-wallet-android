@@ -22,7 +22,7 @@
     <string name="Welcome_RestoreWallet">Restaurer le porte-monnaie</string>
     <!--Restore-->
     <string name="Restore_Title">Restaurer</string>
-    <string name="Restore_Description">Pour restaurer un porte-monnaie existant, vous devez entrer une clé secrète pour ce porte-monnaie.\n\nAprès avoir restauré un porte-monnaie, vous pourrez restaurer plus de porte-monnaies en accédant à la section Gérer les clés dans les Paramètres de l\'application.</string>
+    <string name="Restore_Description">Pour restaurer un porte-monnaie existant, vous devez entrer une clé secrète pour ce porte-monnaie. \n\nAprès avoir restauré un porte-monnaie, vous pourrez restaurer plus de porte-monnaies en accédant à la section Gérer les clés dans les Paramètres de l\'application.</string>
     <string name="Restore_Subtitle">Entrez la clé</string>
     <string name="Restore_ValidationFailed">Clé incorrect</string>
     <string name="Restore_RestoreFailed">Échec de la restauration du porte-monnaie</string>
@@ -33,7 +33,7 @@
     <!--Backup-->
     <string name="Backup_Intro_Title">Sauvegarde</string>
     <string name="Backup_Intro_TitleShow">Voir la clé</string>
-    <string name="Backup_Intro_Subtitle">La clé qui sera affichée suivante est la seule façon de restaurer vos fonds, si votre téléphone est perdu, volé, cassé, etc. Assurez-vous que personne ne regarde votre écran.\n\nLes coins contrôlées par cette clé : %s</string>
+    <string name="Backup_Intro_Subtitle">La clé qui sera affichée est le seul moyen de restaurer vos fonds si votre téléphone est perdu, volé, cassé, etc. Assurez-vous que personne ne regarde votre écran.\n\nCoins contrôlées par cette clé : %s</string>
     <string name="Backup_Intro_Later">Plus tard</string>
     <string name="Backup_Intro_BackupNow">Sauvegarde</string>
     <string name="Backup_Confirmation_SecretKey">Je comprends que je suis propriétaire d\'une clé secrète privée de 12 mots, qui est stockée en toute sécurité sur mon téléphone portable et me permet de contrôler les fonds sur mon porte-monnaie.</string>
@@ -205,13 +205,13 @@
     <string name="SettingsAbout_Title">À propos de</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">Terms &amp; Confidentialité:</string>
-    <string name="SettingsAbout_TermsPrivacyText">Cette application est décentralisé. Cela ne dépend pas du personnel du service d\'assistance Web.
-\n\nCela fonctionne partout tant qu\'il y a internet. Aucune entité ne peut empêcher cette application de fonctionner ou d\'empêcher quelqu\'un de l\'utiliser.
-\n\nVos fonds stockés en sécurité sur votre portable, pas sur autres.
-\n\nIl est de votre responsabilité de sauvegarder votre clé secrète et de la garder privée. Ne le montre jamais à personne. En cas de perte, d’oubli ou de vol, vos fonds peuvent être utilisés par la personne qui détient votre clé secrète.
-\n\nNe piratez pas votre portable, n\'installez pas d\'applications de sources inconnues (non fiables), ne confiez pas votre appareil à des personnes non fiables et maintenez le système d\'exploitation à jour. La sécurité de votre portefeuille dépend de tout cela.
-\n\nLe code alimentant cette application a été ouvert au public depuis le début. Nous avons essayé de créer le porte-monnaie le plus sécurisé et le plus décentralisé possible, mais rien ne garantit qu’il n’y ait pas de problèmes logiciels inattendus. Cela dit, ce porte-monnaie sera probablement beaucoup plus sécurisé que n\'importe quelle application de porte-monnaie pour portable.
-\n\nCertaines données d\'applications génériques non privées, telles que les taux de change, sont stockées dans un stockage décentralisé (IPFS). </string>
+    <string name="SettingsAbout_TermsPrivacyText">Cette application est décentralisée. Elle ne dépend d\'aucun serveur Web ou personnel de support technique pour fonctionner.
+\n\nElle fonctionne partout tant qu\'il y a internet. Aucune entité ne peut empêcher cette application de fonctionner ou empêcher quelqu\'un de l\'utiliser.
+\n\nVos fonds sont stockés de manière sécurisée sur le téléphone, pas ailleurs.
+\n\nIl est de votre responsabilité de sauvegarder votre clé secrète et de la garder privée. Ne la montrez jamais à personne. En cas de perte, d’oubli ou de vol, vos fonds peuvent être utilisés par la personne qui détient votre clé secrète.
+\n\nNe piratez pas votre téléphone, n\'installez pas d\'applications de sources inconnues (non fiables), ne confiez pas votre appareil à des personnes non fiables et maintenez le système d\'exploitation à jour. La sécurité de votre porte-monnaie dépend de tout cela.
+\n\nLe code alimentant cette application a été ouvert au public depuis le début. Nous avons essayé de créer le porte-monnaie le plus sécurisé et le plus décentralisé possible, mais rien ne garantit qu’il n’y ait pas de problèmes logiciels inattendus. Cela dit, ce porte-monnaie sera probablement beaucoup plus sécurisé que n\'importe quelle application de porte-monnaie pour téléphone.
+\n\nCertaines données d\'applications génériques non privées, telles que les taux de change, sont stockées dans un stockage décentralisé (IPFS).</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Partager</string>
     <string name="SettingsShare_Text">Unstoppable Wallet - un porte-monnaie crypto que je recommande</string>
@@ -270,7 +270,7 @@
     <string name="ManageCoins_save">Sauvegarder</string>
     <string name="ManageCoins_AddCoin_Title">Ajouter %s</string>
     <string name="ManageCoins_AddCoin_Text">Cette action générera une clé(porte-monnaie) pour les coins suivantes :%s </string>
-    <string name="ManageCoins_EOSAlert_CreateButton">À cet étape, le porte-monnaie n\'est pas capable de créer de nouveaux comptes de porte-monnaies EOS. Vous n\'êtes que capable de restaurer celui existant.</string>
+    <string name="ManageCoins_EOSAlert_CreateButton">À cet étape, le porte-monnaie n\'est pas capable de créer de nouveaux comptes de porte-monnaies EOS. Vous pouvez seulement restaurer celui existant.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Gérer les clés</string>
     <string name="ManageKeys_Description">Toute personne ayant accès à vos clés peut être en mesure de voler les fonds de votre porte-monnaie. Conservez les clés en sécurité et ne les montrez jamais à personne. \n\nSauvegardez chaque clé pour pouvoir restaurer des fonds si vous perdez ou cassez votre téléphone, ou si l’application est supprimée.</string>
@@ -320,8 +320,8 @@
     <string name="Charts_MarketCap">Cap. marché</string>
     <string name="Charts_MarketCap_Thousand">k</string>
     <string name="Charts_MarketCap_Million">M</string>
-    <string name="Charts_MarketCap_Billion">B</string>
+    <string name="Charts_MarketCap_Billion">G</string>
     <string name="Charts_MarketCap_Trillion">T</string>
     <string name="Charts_Volume">Volume</string>
-    <string name="Charts_Error_NotAvailable">Chart not available</string>
+    <string name="Charts_Error_NotAvailable">Graphique non disponible</string>
 </resources>
