@@ -55,7 +55,7 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
 
             // To avoid the bottom sheet stuck in between
             dialog?.findViewById<View>(R.id.design_bottom_sheet)?.let {
-                BottomSheetBehavior.from(view).apply {
+                BottomSheetBehavior.from(it).apply {
                     state = BottomSheetBehavior.STATE_EXPANDED
                     isHideable = true
                     skipCollapsed = true
