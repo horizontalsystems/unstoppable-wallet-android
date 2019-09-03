@@ -315,8 +315,8 @@
     <string name="Charts_TimeDuration_HalfYear">6M</string>
     <string name="Charts_TimeDuration_Year">1A</string>
     <string name="Charts_Title">%s Rate</string>
-    <string name="Charts_Rate_High">High</string>
-    <string name="Charts_Rate_Low">Low</string>
+    <string name="Charts_Rate_High">Élevée</string>
+    <string name="Charts_Rate_Low">Faible</string>
     <string name="Charts_MarketCap">Mkt. Cap</string>
     <string name="Charts_MarketCap_Thousand">k</string>
     <string name="Charts_MarketCap_Million">M</string>
