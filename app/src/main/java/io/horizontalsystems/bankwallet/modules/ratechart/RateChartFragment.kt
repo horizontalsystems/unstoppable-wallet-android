@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -51,6 +52,15 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
 
         dialog?.setOnShowListener {
             presenter.viewDidLoad()
+
+            // To avoid the bottom sheet stuck in between
+            dialog?.findViewById<View>(R.id.design_bottom_sheet)?.let {
+                BottomSheetBehavior.from(view).apply {
+                    state = BottomSheetBehavior.STATE_EXPANDED
+                    isHideable = true
+                    skipCollapsed = true
+                }
+            }
         }
     }
 
