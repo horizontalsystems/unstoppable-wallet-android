@@ -22,7 +22,7 @@
     <string name="Welcome_RestoreWallet">Wallet Wiederherstellen</string>
     <!--Restore-->
     <string name="Restore_Title">Wiederherstellen</string>
-    <string name="Restore_Description">To restore existing wallet you need to enter a secret key for that wallet.\n\nOnce you restore one wallet you will be able to restore more wallets by going to Manage Keys section in app Settings.</string>
+    <string name="Restore_Description">Um ein bestehendes Wallet wiederherzustellen, müssen Sie den Offlineschlüssel für dieses Wallet eingeben.\n\nSobald Sie ein Wallet wiederhergestellt haben, können Sie weitere Wallets wiederherstellen. Gehen Sie dazu in das Verzeichnis Manage Schlüssel in den App-Einstellungen.</string>
     <string name="Restore_Subtitle">Schlüssel Eingeben</string>
     <string name="Restore_ValidationFailed">Falscher Schlüssel</string>
     <string name="Restore_RestoreFailed">Fehler beim Wiederherstellen des Wallet</string>
@@ -107,7 +107,7 @@
     <string name="Deposit_Your_Account">Dein Konto</string>
     <string name="Receive_Alert_NotBackedUp_Title">Backup erforderlich</string>
     <string name="Receive_Alert_NotBackedUp_Button">Sicherung</string>
-    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
+    <string name="Receive_Alert_NotBackedUp_Description">Sie müssen die Schlüssel für diese Wallet sichern, bevor Sie Geld darauf erhalten können. </string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">gerade eben</string>
     <string name="Timestamp_MinAgo">Vor %d Min</string>
@@ -115,7 +115,7 @@
     <string name="Timestamp_Today">Heute</string>
     <string name="Timestamp_Yesterday">Gestern</string>
     <string name="Duration_instant">Sofort</string>
-    <string name="Duration_Within">Within %s</string>
+    <string name="Duration_Within">Innerhalb %s</string>
     <string name="Duration_Hours">%d Std.</string>
     <string name="Duration_Minutes">%d Min.</string>
     <string name="Duration_Seconds">%d Sek.</string>
@@ -188,7 +188,7 @@
     <string name="Settings_ShareThisWallet">Freunden erzählen</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
-    <string name="Settings_Report">Report a Problem</string>
+    <string name="Settings_Report">Problem melden</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Fingerabdruck Nicht Aktivieren</string>
     <string name="Settings_Error_NoFingerprintAddedYet">Fingerabdruck auf diesem Gerät aktiviert nicht. Geh zu Einstellungen </string>
@@ -215,9 +215,9 @@
 \n\nEinige von der Anwendung verwendete öffentliche Daten, wie z. B. Wechselkurse, werden im dezentralen Repository (IPFS) gespeichert</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Teilen</string>
-    <string name="SettingsShare_Text">Unstoppable Wallet - a crypto wallet I recommend</string>
+    <string name="SettingsShare_Text">Unstoppable Wallet - eine krypto Wallet, die ich empfehle</string>
     <!--Setting_Report-->
-    <string name="SettingsReport_Title">Report a Problem</string>
+    <string name="SettingsReport_Title">Problem melden</string>
     <string name="SettingsReport_Email">E-Mail</string>
     <string name="SettingsReport_Telegram">Telegram</string>
     <!--Alert-->
@@ -232,7 +232,7 @@
     <string name="Error_UnsupportedBlockchain">Nicht unterstützte Währung</string>
     <string name="Eos_Backend_Error_SelfTransfer">Token kann nicht auf das eigene Konto übertragen werden</string>
     <string name="Eos_Backend_Error_AccountNotExist">Der Zielkonto existiert nicht</string>
-    <string name="Eos_Backend_Error_InsufficientRam">Your EOS account doesn\'t have enough RAM to send this token. You need to increase RAM stake to proceed.</string>
+    <string name="Eos_Backend_Error_InsufficientRam">Ihr EOS-Konto hat nicht genügend RAM, um diesen Token zu senden. Sie müssen den RAM-Anteil erhöhen, um fortzufahren.</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">Entsperren</string>
     <string name="Hud_Text_Success">Erfolgreich</string>
@@ -293,7 +293,7 @@
     <string name="ManageKeys_Delete_Alert">Sie müssen den %s-Schlüssel in einem Backup sichern, bevor Sie ihn von diesem Handy löschen können.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">%s hinzufügen</string>
-    <string name="AddCoin_Description">You don\'t have key for %1s. The wallet can generate the key for you. Use the create button below to generate a new key. \n\nYou may also use the existing %3s key for the %4s if you have one.</string>
+    <string name="AddCoin_Description">Du verfügst nicht über einen Schlüssel für , der einen Schlüssel %1s erfordert. Die Wallet kann den Schlüssel für Sie generieren. Verwenden Sie die Taste Create unten, um einen neuen Schlüssel zu generieren.\n\nDu kannst auch den vorhandenen %3s-Schlüssel für den %4s verwenden, falls du einen hast.</string>
     <string name="AddCoin_CreateKey">Erstellen</string>
     <string name="AddCoin_RestoreKey">Wiederherstellen</string>
     <!-- Account Types -->
@@ -321,11 +321,11 @@
     <string name="Charts_Title">%s Rate</string>
     <string name="Charts_Rate_High">Hoch</string>
     <string name="Charts_Rate_Low">Niedrig</string>
-    <string name="Charts_MarketCap">Mkt. Cap</string>
-    <string name="Charts_MarketCap_Thousand">k</string>
-    <string name="Charts_MarketCap_Million">M</string>
-    <string name="Charts_MarketCap_Billion">B</string>
-    <string name="Charts_MarketCap_Trillion">T</string>
+    <string name="Charts_MarketCap">Mkt. Kap.</string>
+    <string name="Charts_MarketCap_Thousand">Tsd.</string>
+    <string name="Charts_MarketCap_Million">Mill.</string>
+    <string name="Charts_MarketCap_Billion">Mrd.</string>
+    <string name="Charts_MarketCap_Trillion">Trill.</string>
     <string name="Charts_Volume">Lautstärke</string>
-    <string name="Charts_Error_NotAvailable">Chart not available</string>
+    <string name="Charts_Error_NotAvailable">Diagramm nicht verfügbar</string>
 </resources>

@@ -22,7 +22,7 @@
     <string name="Welcome_RestoreWallet">Cüzdanı Geri Yükle</string>
     <!--Restore-->
     <string name="Restore_Title">Geri Yükle</string>
-    <string name="Restore_Description">To restore existing wallet you need to enter a secret key for that wallet.\n\nOnce you restore one wallet you will be able to restore more wallets by going to Manage Keys section in app Settings.</string>
+    <string name="Restore_Description">Cüzdanı geri yüklemek için o cüzdanın gizli anahtarını gürmelisiniz.\n\nDaha fazla cüzdanı geri yüklemek için bir cüzdanı geri yükledikten sonra Ayarlardaki Anahtarları Yönet bölümüne gidin.</string>
     <string name="Restore_Subtitle">Anahtarı girin</string>
     <string name="Restore_ValidationFailed">Yanlış Anahtar</string>
     <string name="Restore_RestoreFailed">Cüzdan geri yüklenemedi</string>
