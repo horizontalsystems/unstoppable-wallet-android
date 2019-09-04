@@ -22,7 +22,7 @@
     <string name="Welcome_RestoreWallet">Wallet Wiederherstellen</string>
     <!--Restore-->
     <string name="Restore_Title">Wiederherstellen</string>
-    <string name="Restore_Description">To restore existing wallet you need to enter a secret key for that wallet.\n\nOnce you restore one wallet you will be able to restore more wallets by going to Manage Keys section in app Settings.</string>
+    <string name="Restore_Description">Um ein bestehendes Wallet wiederherzustellen, müssen Sie den Offlineschlüssel für dieses Wallet eingeben.\n\nSobald Sie ein Wallet wiederhergestellt haben, können Sie weitere Wallets wiederherstellen. Gehen Sie dazu in das Verzeichnis Manage Schlüssel in den App-Einstellungen.</string>
     <string name="Restore_Subtitle">Schlüssel Eingeben</string>
     <string name="Restore_ValidationFailed">Falscher Schlüssel</string>
     <string name="Restore_RestoreFailed">Fehler beim Wiederherstellen des Wallet</string>
@@ -115,7 +115,7 @@
     <string name="Timestamp_Today">Heute</string>
     <string name="Timestamp_Yesterday">Gestern</string>
     <string name="Duration_instant">Sofort</string>
-    <string name="Duration_Within">Within %s</string>
+    <string name="Duration_Within">Innerhalb %s</string>
     <string name="Duration_Hours">%d Std.</string>
     <string name="Duration_Minutes">%d Min.</string>
     <string name="Duration_Seconds">%d Sek.</string>
@@ -188,7 +188,7 @@
     <string name="Settings_ShareThisWallet">Freunden erzählen</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
     <string name="Settings_InfoLink">https://horizontalsystems.io</string>
-    <string name="Settings_Report">Report a Problem</string>
+    <string name="Settings_Report">Problem melden</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Fingerabdruck Nicht Aktivieren</string>
     <string name="Settings_Error_NoFingerprintAddedYet">Fingerabdruck auf diesem Gerät aktiviert nicht. Geh zu Einstellungen </string>
@@ -217,7 +217,7 @@
     <string name="SettingsShare_Title">Teilen</string>
     <string name="SettingsShare_Text">Unstoppable Wallet - a crypto wallet I recommend</string>
     <!--Setting_Report-->
-    <string name="SettingsReport_Title">Report a Problem</string>
+    <string name="SettingsReport_Title">Problem melden</string>
     <string name="SettingsReport_Email">E-Mail</string>
     <string name="SettingsReport_Telegram">Telegram</string>
     <!--Alert-->
