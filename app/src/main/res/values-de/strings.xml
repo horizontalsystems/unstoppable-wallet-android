@@ -187,7 +187,6 @@
     <string name="Settings_About">Info</string>
     <string name="Settings_ShareThisWallet">Freunden erzählen</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
-    <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <string name="Settings_Report">Problem melden</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Fingerabdruck Nicht Aktivieren</string>
