@@ -186,7 +186,6 @@
     <string name="Settings_About">에 대해</string>
     <string name="Settings_ShareThisWallet">친구에게 추천하기</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
-    <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <string name="Settings_Report">문제점 보고</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">지문을 사용할 수 없습니다.</string>
