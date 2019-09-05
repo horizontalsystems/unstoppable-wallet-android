@@ -186,7 +186,6 @@
     <string name="Settings_About">Hakkında</string>
     <string name="Settings_ShareThisWallet">Arkadaşlarına bahset</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
-    <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <string name="Settings_Report">Sorunu Bildir</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Parmak izi etkin değil</string>
