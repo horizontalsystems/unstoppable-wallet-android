@@ -351,6 +351,10 @@ interface IRateStorage {
     fun deleteAll()
 }
 
+interface IRateManager {
+    fun syncLatestRates()
+}
+
 interface IAccountsStorage {
     val isAccountsEmpty: Boolean
 

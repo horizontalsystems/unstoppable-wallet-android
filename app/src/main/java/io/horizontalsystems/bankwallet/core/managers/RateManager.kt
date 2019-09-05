@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.INetworkManager
-import io.horizontalsystems.bankwallet.core.IRateStorage
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.ServiceExchangeApi.HostType
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
@@ -12,12 +11,25 @@ import retrofit2.HttpException
 import java.math.BigDecimal
 import java.net.SocketTimeoutException
 
-class RateManager(private val storage: IRateStorage, private val networkManager: INetworkManager) {
+class RateManager(private val storage: IRateStorage,
+                  private val networkManager: INetworkManager,
+                  private val walletManager: IWalletManager,
+                  private val currencyManager: ICurrencyManager,
+                  private val networkAvailabilityManager: NetworkAvailabilityManager) : IRateManager {
 
     private var disposables: CompositeDisposable = CompositeDisposable()
     private val latestRateFallbackThreshold = 60 * 10 // 10 minutes
 
-    fun refreshLatestRates(coinCodes: List<String>, currencyCode: String) {
+    override fun syncLatestRates() {
+        if (networkAvailabilityManager.isConnected) {
+            val coinCodes = walletManager.wallets.map { it.coin.code }
+            if (coinCodes.isNotEmpty()) {
+                refreshLatestRates(coinCodes, currencyManager.baseCurrency.code)
+            }
+        }
+    }
+
+    private fun refreshLatestRates(coinCodes: List<String>, currencyCode: String) {
         disposables.clear()
         networkManager.getLatestRateData(HostType.MAIN, currencyCode)
                 .onErrorResumeNext(networkManager.getLatestRateData(HostType.FALLBACK, currencyCode))

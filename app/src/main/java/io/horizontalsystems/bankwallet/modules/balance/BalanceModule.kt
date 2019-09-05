@@ -72,7 +72,7 @@ object BalanceModule {
     }
 
     interface IBalanceSorter {
-        fun sort(items: List<BalanceItem>, sortType: BalanceSortType) : List<BalanceItem>
+        fun sort(items: List<BalanceItem>, sortType: BalanceSortType): List<BalanceItem>
     }
 
     class DataSource(var currency: Currency, private val sorter: IBalanceSorter) {
@@ -170,7 +170,7 @@ object BalanceModule {
 
     fun init(view: BalanceViewModel, router: IRouter) {
         val currencyManager = App.currencyManager
-        val interactor = BalanceInteractor(App.walletManager, App.adapterManager, App.rateStorage, App.rateStatsManager, currencyManager, App.localStorage)
+        val interactor = BalanceInteractor(App.walletManager, App.adapterManager, App.rateStorage, App.rateStatsManager, currencyManager, App.localStorage, App.rateManager)
         val presenter = BalancePresenter(interactor, router, DataSource(currencyManager.baseCurrency, BalanceSorter()), App.predefinedAccountTypeManager, BalanceViewItemFactory())
 
         presenter.view = view
