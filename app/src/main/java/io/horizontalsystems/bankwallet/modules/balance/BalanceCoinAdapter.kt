@@ -149,8 +149,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             listener.onSendClicked(adapterPosition)
         }
 
-        chartViewCard.setOnClickListener { listener.onClickChart(adapterPosition) }
-        chartRateDiff.setOnClickListener { listener.onClickChart(adapterPosition) }
+        chartButton.setOnClickListener { listener.onClickChart(adapterPosition) }
 
         buttonReceive.setOnSingleClickListener {
             listener.onReceiveClicked(adapterPosition)
@@ -203,6 +202,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
     private fun setChartVisibility(show: Boolean, textCurrencyAmountVisibility: Int) {
         if (show) {
             chartView.visibility = View.VISIBLE
+            chartButton.visibility = View.VISIBLE
             chartViewCard.visibility = View.VISIBLE
             chartRateDiff.visibility = View.VISIBLE
             textCurrencyAmount.visibility = View.GONE
@@ -211,6 +211,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             textCurrencyAmount.visibility = textCurrencyAmountVisibility
             textCoinAmount.visibility = View.VISIBLE
             chartViewCard.visibility = View.INVISIBLE
+            chartButton.visibility = View.INVISIBLE
             chartRateDiff.visibility = View.INVISIBLE
         }
     }
