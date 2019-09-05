@@ -15,13 +15,13 @@ class RateManager(private val storage: IRateStorage,
                   private val networkManager: INetworkManager,
                   private val walletManager: IWalletManager,
                   private val currencyManager: ICurrencyManager,
-                  private val networkAvailabilityManager: NetworkAvailabilityManager) : IRateManager {
+                  private val connectivityManager: ConnectivityManager) : IRateManager {
 
     private var disposables: CompositeDisposable = CompositeDisposable()
     private val latestRateFallbackThreshold = 60 * 10 // 10 minutes
 
     override fun syncLatestRates() {
-        if (networkAvailabilityManager.isConnected) {
+        if (connectivityManager.isConnected) {
             val coinCodes = walletManager.wallets.map { it.coin.code }
             if (coinCodes.isNotEmpty()) {
                 refreshLatestRates(coinCodes, currencyManager.baseCurrency.code)
