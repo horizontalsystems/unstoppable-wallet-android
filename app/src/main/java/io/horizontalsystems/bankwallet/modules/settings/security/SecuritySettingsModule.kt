@@ -28,7 +28,7 @@ object SecuritySettingsModule {
     }
 
     interface ISecuritySettingsInteractor {
-        val nonBackedUpCount: Int
+        val allBackedUp: Boolean
         val hasFingerprintSensor: Boolean
         val hasEnrolledFingerprints: Boolean
         val isPinEnabled: Boolean
@@ -39,7 +39,7 @@ object SecuritySettingsModule {
     }
 
     interface ISecuritySettingsInteractorDelegate {
-        fun didBackup(count: Int)
+        fun didAllBackedUp(allBackedUp: Boolean)
     }
 
     interface ISecuritySettingsRouter {

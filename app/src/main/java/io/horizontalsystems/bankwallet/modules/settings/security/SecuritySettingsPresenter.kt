@@ -6,7 +6,7 @@ class SecuritySettingsPresenter(private val router: SecuritySettingsModule.ISecu
     var view: SecuritySettingsModule.ISecuritySettingsView? = null
 
     override fun viewDidLoad() {
-        view?.setBackedUp(interactor.nonBackedUpCount == 0)
+        view?.setBackedUp(interactor.allBackedUp)
         view?.setPinEnabled(interactor.isPinEnabled)
 
         if (interactor.hasFingerprintSensor && interactor.isPinEnabled) {
@@ -76,8 +76,8 @@ class SecuritySettingsPresenter(private val router: SecuritySettingsModule.ISecu
 
     // ISecuritySettingsInteractorDelegate
 
-    override fun didBackup(count: Int) {
-        view?.setBackedUp(count == 0)
+    override fun didAllBackedUp(allBackedUp: Boolean) {
+        view?.setBackedUp(allBackedUp)
     }
 
 }

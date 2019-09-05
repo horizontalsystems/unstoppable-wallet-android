@@ -16,7 +16,7 @@ class MainSettingsPresenter(
     private val helper = MainSettingsHelper()
 
     override fun viewDidLoad() {
-        view.setBackedUp(helper.isBackedUp(interactor.nonBackedUpCount))
+        view.setBackedUp(interactor.allBackedUp)
         view.setBaseCurrency(helper.displayName(interactor.baseCurrency))
         view.setLanguage(interactor.currentLanguageDisplayName)
         view.setLightMode(interactor.lightMode)
@@ -62,8 +62,8 @@ class MainSettingsPresenter(
 
     // IMainSettingsInteractorDelegate
 
-    override fun didUpdateNonBackedUp(count: Int) {
-        view.setBackedUp(helper.isBackedUp(count))
+    override fun didUpdateAllBackedUp(allBackedUp: Boolean) {
+        view.setBackedUp(allBackedUp)
     }
 
     override fun didUpdateBaseCurrency() {
