@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.reactivex.subjects.PublishSubject
 
 
-class NetworkAvailabilityManager {
+class ConnectivityManager {
 
     private val connectivityManager = App.instance.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
