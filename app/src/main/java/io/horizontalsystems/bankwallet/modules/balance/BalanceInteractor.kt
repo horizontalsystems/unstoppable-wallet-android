@@ -16,6 +16,7 @@ class BalanceInteractor(
         private val rateStatsManager: RateStatsManager,
         private val currencyManager: ICurrencyManager,
         private val localStorage: ILocalStorage,
+        private val rateManager: IRateManager,
         private val refreshTimeout: Long = 2)
     : BalanceModule.IInteractor {
 
@@ -114,6 +115,7 @@ class BalanceInteractor(
 
     override fun refresh() {
         adapterManager.refresh()
+        rateManager.syncLatestRates()
 
         Handler().postDelayed({ delegate?.didRefresh() }, refreshTimeout * 1000)
     }

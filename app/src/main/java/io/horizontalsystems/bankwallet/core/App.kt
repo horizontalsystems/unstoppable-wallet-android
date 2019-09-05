@@ -55,7 +55,7 @@ class App : Application() {
         lateinit var defaultWalletCreator: DefaultWalletCreator
         lateinit var walletRemover: WalletRemover
 
-        lateinit var rateSyncer: RateSyncer
+        lateinit var rateSyncScheduler: RateSyncScheduler
         lateinit var rateManager: RateManager
         lateinit var rateStatsManager: RateStatsManager
         lateinit var networkAvailabilityManager: NetworkAvailabilityManager
@@ -122,7 +122,6 @@ class App : Application() {
 
         wordsManager = WordsManager(localStorage)
         networkManager = NetworkManager(appConfigProvider)
-        rateManager = RateManager(rateStorage, networkManager)
         rateStatsManager = RateStatsManager(networkManager, rateStorage)
         accountManager = AccountManager(accountsStorage, AccountCleaner(appConfigProvider.testMode))
         backupManager = BackupManager(accountManager)
@@ -148,7 +147,9 @@ class App : Application() {
         networkAvailabilityManager = NetworkAvailabilityManager()
 
         adapterManager = AdapterManager(walletManager, AdapterFactory(instance, appConfigProvider, ethereumKitManager, eosKitManager, binanceKitManager), ethereumKitManager, eosKitManager, binanceKitManager)
-        rateSyncer = RateSyncer(rateManager, walletManager, currencyManager, networkAvailabilityManager)
+
+        rateManager = RateManager(rateStorage, networkManager, walletManager, currencyManager, networkAvailabilityManager)
+        rateSyncScheduler = RateSyncScheduler(rateManager, walletManager, currencyManager, networkAvailabilityManager)
 
         transactionDataProviderManager = TransactionDataProviderManager(appConfigProvider, localStorage)
         transactionInfoFactory = FullTransactionInfoFactory(networkManager, transactionDataProviderManager)
