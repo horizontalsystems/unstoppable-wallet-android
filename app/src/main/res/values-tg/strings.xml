@@ -186,7 +186,6 @@
     <string name="Settings_About">Барнома</string>
     <string name="Settings_ShareThisWallet">Tell Friends</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
-    <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <string name="Settings_Report">Report a Problem</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Ангуштзании ангушт надоштааст</string>
