@@ -80,8 +80,8 @@ interface IAccountManager {
 }
 
 interface IBackupManager {
-    val nonBackedUpCount: Int
-    val nonBackedUpCountFlowable: Flowable<Int>
+    val allBackedUp: Boolean
+    val allBackedUpFlowable: Flowable<Boolean>
     fun setIsBackedUp(id: String)
 }
 

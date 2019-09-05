@@ -17,8 +17,8 @@ class SecuritySettingsInteractor(
     private var disposables: CompositeDisposable = CompositeDisposable()
 
     init {
-        backupManager.nonBackedUpCountFlowable
-                .subscribe { delegate?.didBackup(it) }
+        backupManager.allBackedUpFlowable
+                .subscribe { delegate?.didAllBackedUp(it) }
                 .let { disposables.add(it) }
     }
 
@@ -28,8 +28,8 @@ class SecuritySettingsInteractor(
     override val hasEnrolledFingerprints: Boolean
         get() = systemInfoManager.hasEnrolledFingerprints
 
-    override val nonBackedUpCount: Int
-        get() = backupManager.nonBackedUpCount
+    override val allBackedUp: Boolean
+        get() = backupManager.allBackedUp
 
     override var isFingerPrintEnabled: Boolean
         get() = localStorage.isFingerprintEnabled

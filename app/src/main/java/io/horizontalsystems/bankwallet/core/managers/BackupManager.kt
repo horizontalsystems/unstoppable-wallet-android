@@ -6,12 +6,12 @@ import io.reactivex.Flowable
 
 class BackupManager(private val accountManager: IAccountManager) : IBackupManager {
 
-    override val nonBackedUpCount: Int
-        get() = accountManager.accounts.count { !it.isBackedUp }
+    override val allBackedUp: Boolean
+        get() = accountManager.accounts.all { it.isBackedUp }
 
-    override val nonBackedUpCountFlowable: Flowable<Int>
+    override val allBackedUpFlowable: Flowable<Boolean>
         get() = accountManager.accountsFlowable.map { accounts ->
-            accounts.count { !it.isBackedUp }
+            accounts.all { it.isBackedUp }
         }
 
     override fun setIsBackedUp(id: String) {
