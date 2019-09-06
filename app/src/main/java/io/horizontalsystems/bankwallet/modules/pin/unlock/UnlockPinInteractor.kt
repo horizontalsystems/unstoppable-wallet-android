@@ -22,8 +22,8 @@ class UnlockPinInteractor(
     override val isFingerprintEnabled: Boolean
         get() = pinManager.isFingerprintEnabled
 
-    override val hasEnrolledFingerprints: Boolean
-        get() = systemInfoManager.hasEnrolledFingerprints
+    override val biometricAuthSupported: Boolean
+        get() = systemInfoManager.biometricAuthSupported
 
     override val cryptoObject: CryptoObject?
         get() = encryptionManager.getCryptoObject()

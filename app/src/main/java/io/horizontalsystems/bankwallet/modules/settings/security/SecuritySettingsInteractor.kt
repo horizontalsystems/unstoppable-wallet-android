@@ -23,10 +23,7 @@ class SecuritySettingsInteractor(
     }
 
     override val biometricAuthSupported: Boolean
-        get() = systemInfoManager.hasFingerprintSensor
-
-    override val hasEnrolledFingerprints: Boolean
-        get() = systemInfoManager.hasEnrolledFingerprints
+        get() = systemInfoManager.biometricAuthSupported
 
     override val allBackedUp: Boolean
         get() = backupManager.allBackedUp
