@@ -56,7 +56,7 @@ class SendFeePresenter(
         val availableFeeBalance = availableFeeBalance ?: return
 
         if (availableFeeBalance < fee) {
-            throw SendFeeModule.InsufficientFeeBalance(baseCoin, coinProtocol, feeCoin, CoinValue(feeCoin.code, fee))
+            throw SendFeeModule.InsufficientFeeBalance(baseCoin, coinProtocol, feeCoin, CoinValue(feeCoin, fee))
         }
     }
 
@@ -76,7 +76,7 @@ class SendFeePresenter(
     override val primaryAmountInfo: AmountInfo
         get() {
             return when (inputType) {
-                SendModule.InputType.COIN -> CoinValueInfo(CoinValue(coin.code, fee))
+                SendModule.InputType.COIN -> CoinValueInfo(CoinValue(coin, fee))
                 SendModule.InputType.CURRENCY -> {
                     this.xRate?.let { xRate ->
                         CurrencyValueInfo(CurrencyValue(baseCurrency, fee * xRate.value))
@@ -88,7 +88,7 @@ class SendFeePresenter(
     override val secondaryAmountInfo: AmountInfo?
         get() {
             return when (inputType.reversed()) {
-                SendModule.InputType.COIN -> CoinValueInfo(CoinValue(coin.code, fee))
+                SendModule.InputType.COIN -> CoinValueInfo(CoinValue(coin, fee))
                 SendModule.InputType.CURRENCY -> {
                     this.xRate?.let { xRate ->
                         CurrencyValueInfo(CurrencyValue(baseCurrency, fee * xRate.value))

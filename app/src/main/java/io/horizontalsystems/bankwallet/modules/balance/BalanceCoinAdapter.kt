@@ -142,7 +142,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
         textExchangeRate.setTextColor(ContextCompat.getColor(containerView.context, if (balanceViewItem.rateExpired) R.color.steel_40 else R.color.grey))
         textExchangeRate.text = balanceViewItem.exchangeValue?.let { exchangeValue ->
             val rateString = App.numberFormatter.format(exchangeValue, trimmable = true, canUseLessSymbol = false)
-            containerView.context.getString(R.string.Balance_RatePerCoin, rateString, balanceViewItem.coinValue.coinCode)
+            containerView.context.getString(R.string.Balance_RatePerCoin, rateString, balanceViewItem.coin.code)
         }
 
         buttonPay.setOnSingleClickListener {

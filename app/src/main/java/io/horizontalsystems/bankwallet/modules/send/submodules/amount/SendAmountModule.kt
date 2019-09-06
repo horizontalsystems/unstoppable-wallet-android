@@ -75,8 +75,8 @@ object SendAmountModule {
         val baseCurrency = App.currencyManager.baseCurrency
 
         val interactor = SendAmountInteractor(baseCurrency, App.rateStorage, App.localStorage, wallet.coin)
-        val sendAmountPresenterHelper = SendAmountPresenterHelper(App.numberFormatter, wallet.coin.code, baseCurrency, coinDecimal, currencyDecimal)
-        val presenter = SendAmountPresenter(interactor, sendAmountPresenterHelper, wallet.coin.code, baseCurrency)
+        val sendAmountPresenterHelper = SendAmountPresenterHelper(App.numberFormatter, wallet.coin, baseCurrency, coinDecimal, currencyDecimal)
+        val presenter = SendAmountPresenter(interactor, sendAmountPresenterHelper, wallet.coin, baseCurrency)
 
         view.delegate = presenter
 

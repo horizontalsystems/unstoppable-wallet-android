@@ -1,13 +1,12 @@
 package io.horizontalsystems.bankwallet.entities
 
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import java.math.BigDecimal
 
-data class CoinValue(val coinCode: CoinCode, val value: BigDecimal) {
+data class CoinValue(val coin: Coin, val value: BigDecimal) {
 
     override fun equals(other: Any?): Boolean {
         if (other is CoinValue) {
-            return coinCode == other.coinCode && value == other.value
+            return coin.code == other.coin.code && value == other.value
 
         }
 
@@ -15,7 +14,7 @@ data class CoinValue(val coinCode: CoinCode, val value: BigDecimal) {
     }
 
     override fun hashCode(): Int {
-        var result = coinCode.hashCode()
+        var result = coin.hashCode()
         result = 31 * result + value.hashCode()
         return result
     }

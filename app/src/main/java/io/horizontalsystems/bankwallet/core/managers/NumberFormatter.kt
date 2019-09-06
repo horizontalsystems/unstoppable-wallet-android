@@ -36,7 +36,7 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         }
         value = value.stripTrailingZeros()
         val formatted = customFormatter.format(value)
-        var result = "$formatted ${coinValue.coinCode}"
+        var result = "$formatted ${coinValue.coin.code}"
 
         if (explicitSign && coinValue.value.toLong() != 0L) {
             val sign = if (coinValue.value < BigDecimal.ZERO) "-" else "+"
