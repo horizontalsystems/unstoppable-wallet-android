@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.sub
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.SendConfirmationModule
@@ -20,10 +21,17 @@ class ConfirmationPrimaryView : ConstraintLayout {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     fun bind(primaryItemData: SendConfirmationModule.PrimaryItemData, onReceiverClick: (() -> (Unit))) {
-        primaryAmountText.text = primaryItemData.primaryAmount
-        secondaryAmountText.text = primaryItemData.secondaryAmount
+        primaryName.text = primaryItemData.primaryName
+        primaryAmount.text = primaryItemData.primaryAmount
+        secondaryName.text = primaryItemData.secondaryName
+        secondaryAmount.text = primaryItemData.secondaryAmount
         receiverView.text = primaryItemData.receiver
         receiverView.setOnClickListener { onReceiverClick.invoke() }
+
+        primaryItemData.memo?.let {
+            memoLayout.visibility = View.VISIBLE
+            memoValue.text = it
+        }
     }
 
 }
