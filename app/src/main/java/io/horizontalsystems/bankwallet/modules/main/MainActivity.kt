@@ -22,8 +22,8 @@ import io.horizontalsystems.bankwallet.modules.receive.ReceiveView
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveViewModel
 import io.horizontalsystems.bankwallet.modules.send.SendActivity
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
-import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoViewModel
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoView
+import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoViewModel
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_dashboard.*
@@ -213,9 +213,6 @@ class MainActivity : BaseActivity(), ReceiveView.Listener, TransactionInfoView.L
     }
 
     private fun collapseBottomSheetsOnActivityRestore() {
-        if (receiveBottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED && findViewById<TextView>(R.id.receiveTxtTitle)?.text?.isEmpty() == true) {
-            receiveBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
-        }
         if (txInfoBottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED && findViewById<TextView>(R.id.txInfoCoinName)?.text?.isEmpty() == true) {
             txInfoBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         }

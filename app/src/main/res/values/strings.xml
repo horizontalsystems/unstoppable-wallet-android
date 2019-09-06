@@ -128,7 +128,7 @@
 
     <!--Deposit-->
 
-    <string name="Deposit_Title">Receive %s</string>
+    <string name="Deposit_Title">Receive</string>
     <string name="Deposit_Share">Share</string>
     <string name="Deposit_Your_Address">Your Address</string>
     <string name="Deposit_Your_Account">Your Account</string>

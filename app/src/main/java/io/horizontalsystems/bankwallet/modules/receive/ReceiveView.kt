@@ -2,17 +2,18 @@ package io.horizontalsystems.bankwallet.modules.receive
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.reObserve
 import io.horizontalsystems.bankwallet.modules.receive.viewitems.AddressItem
+import io.horizontalsystems.bankwallet.ui.extensions.ConstraintLayoutWithHeader
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
+import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import kotlinx.android.synthetic.main.view_bottom_sheet_receive.view.*
 
-class ReceiveView : ConstraintLayout {
+class ReceiveView : ConstraintLayoutWithHeader {
 
     private lateinit var viewModel: ReceiveViewModel
     private lateinit var lifecycleOwner: LifecycleOwner
@@ -31,12 +32,12 @@ class ReceiveView : ConstraintLayout {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     fun bind(viewModel: ReceiveViewModel, lifecycleOwner: LifecycleOwner, listener: Listener) {
-        inflate(context, R.layout.view_bottom_sheet_receive, this)
+        setContentView(R.layout.view_bottom_sheet_receive)
         this.viewModel = viewModel
         this.listener = listener
         this.lifecycleOwner = lifecycleOwner
 
-        closeButton.setOnClickListener { listener.closeReceiveDialog() }
+        setOnCloseCallback { listener.closeReceiveDialog() }
         btnShare.setOnClickListener { viewModel.delegate.onShareClick() }
         receiveAddressView.setOnClickListener { viewModel.delegate.onAddressClick() }
         setObservers()
@@ -44,8 +45,10 @@ class ReceiveView : ConstraintLayout {
 
     private val showAddressObserver = Observer<AddressItem?> { address ->
         address?.let {
-            receiveCoinIcon.bind(it.coin)
-            receiveTxtTitle.text = context.getString(R.string.Deposit_Title, it.coin.title)
+            val coin = it.coin
+            setTitle(context.getString(R.string.Deposit_Title))
+            setSubtitle("${coin.code} ${coin.title}")
+            setHeaderIcon(LayoutHelper.getCoinDrawableResource(coin.code))
             receiveAddressView.text = it.address
             imgQrCode.setImageBitmap(TextHelper.getQrCodeBitmap(it.address))
 
