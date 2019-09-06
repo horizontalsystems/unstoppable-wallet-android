@@ -242,6 +242,11 @@ object SendModule {
         data class CoinValueInfo(val coinValue: CoinValue) : AmountInfo()
         data class CurrencyValueInfo(val currencyValue: CurrencyValue) : AmountInfo()
 
+        fun getAmountName(): String = when (this) {
+            is CoinValueInfo -> this.coinValue.coin.title
+            is CurrencyValueInfo -> this.currencyValue.currency.code
+        }
+
         fun getFormatted(): String? = when (this) {
             is CoinValueInfo -> {
                 App.numberFormatter.format(this.coinValue)

@@ -21,10 +21,6 @@ class ConfirmationSecondaryView : ConstraintLayout {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     fun bind(secondaryData: SendConfirmationModule.SecondaryItemData) {
-        secondaryData.memo?.let {
-            memoLayout.visibility = View.VISIBLE
-            memoValue.text = it
-        }
         secondaryData.feeAmount?.let {
             feeLayout.visibility = View.VISIBLE
             feeValue.text = it
