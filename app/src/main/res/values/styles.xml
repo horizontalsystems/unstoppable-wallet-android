@@ -118,14 +118,14 @@
         <item name="HudBackground">@color/black_85</item>
         <item name="HudTextColor">@color/white</item>
         <item name="TransactionDateColor">@color/grey_light</item>
-        <item name="TransactionDetailBackground">@color/steel_15</item>
+        <item name="TransactionDetailBackground">@color/steel_dark</item>
         <item name="TransactionTextBoxBackground">@color/text_box_background_dark</item>
         <item name="TransactionDetailValueTextColor">@color/bars_color</item>
         <item name="TransactionDetailBottomBarBackground">@color/dark</item>
         <item name="TransactionInfoMoreButtonBackground">@color/stateful_transaction_info_more_button_dark_color</item>
         <item name="BottomTransactionInfoBackground">@color/dark</item>
         <item name="LightBackground">@color/steel_20</item>
-        <item name="BottomSheetBackground">@color/steel_dark</item>
+        <item name="BottomSheetBackground">@color/dark</item>
         <item name="BottomSendInputBackground">@color/steel_15</item>
         <item name="BottomSendButtonColor">@color/steel_15</item>
         <item name="BottomSendButtonHighlightedColor">@color/grey_50</item>

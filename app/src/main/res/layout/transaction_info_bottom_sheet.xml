@@ -3,73 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingStart="8dp"
-    android:paddingEnd="8dp"
-    android:paddingBottom="8dp">
-
-    <View
-        android:id="@+id/backgroundView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/bottom_sheet_floating_background"
-        android:backgroundTint="?attr/BottomSheetBackground"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
-        android:id="@+id/txInfoCoinIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/txtTitle"
-        style="@style/BaseSb"
-        android:layout_width="0dp"
-        android:layout_height="23dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="10dp"
-        android:ellipsize="end"
-        android:text="@string/TransactionInfo_Title"
-        android:textColor="?TransactionDetailValueTextColor"
-        app:layout_constraintBottom_toBottomOf="@+id/txInfoCoinIcon"
-        app:layout_constraintEnd_toStartOf="@+id/closeButton"
-        app:layout_constraintStart_toEndOf="@+id/txInfoCoinIcon"
-        app:layout_constraintTop_toTopOf="@+id/txInfoCoinIcon" />
-
-    <ImageView
-        android:id="@+id/closeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="7dp"
-        android:padding="5dp"
-        android:src="@drawable/close"
-        android:tint="@color/grey"
-        android:background="@drawable/rounded_ripple_24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/txInfoCoinIcon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/txInfoCoinIcon"
-        />
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/fiatValue"
         style="@style/Title2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:background="?TransactionDetailBackground"
         android:paddingTop="16dp"
         android:textAlignment="center"
         android:textColor="@color/green_crypto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txInfoCoinIcon"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="$3" />
 
     <TextView
@@ -119,15 +66,6 @@
         app:layout_constraintTop_toBottomOf="@+id/footNote" />
 
     <View
-        android:id="@+id/border1"
-        android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:background="@color/steel_15"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/fiatValue" />
-
-    <View
         android:id="@+id/border2"
         android:layout_width="0dp"
         android:layout_height="0.5dp"
@@ -153,20 +91,12 @@
         app:layout_constraintTop_toBottomOf="@+id/itemRate" />
 
     <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
-        android:id="@+id/itemTime"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemFee" />
-
-    <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
         android:id="@+id/itemStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemTime" />
+        app:layout_constraintTop_toBottomOf="@+id/itemFee" />
 
     <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
         android:id="@+id/itemFrom"
