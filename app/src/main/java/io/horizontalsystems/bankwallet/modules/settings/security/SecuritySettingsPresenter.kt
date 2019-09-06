@@ -34,6 +34,7 @@ class SecuritySettingsPresenter(private val router: SecuritySettingsModule.ISecu
 
     override fun didSetPin() {
         syncPinSet(true)
+        view?.toggleBiometricEnabled(interactor.isBiometricEnabled)
     }
 
     override fun didCancelSetPin() {
