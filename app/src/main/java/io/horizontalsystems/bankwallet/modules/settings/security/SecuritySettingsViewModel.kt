@@ -8,15 +8,16 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
 
     lateinit var delegate: SecuritySettingsModule.ISecuritySettingsViewDelegate
 
-    val backedUpLiveData = MutableLiveData<Boolean>()
+    val backupAlertVisibleLiveData = MutableLiveData<Boolean>()
+    val pinSetLiveData = MutableLiveData<Boolean>()
+    val editPinVisibleLiveData = MutableLiveData<Boolean>()
+    val biometricSettingsVisibleLiveData = MutableLiveData<Boolean>()
+    val biometricEnabledLiveData = MutableLiveData<Boolean>()
+
     val openManageKeysLiveEvent = SingleLiveEvent<Unit>()
     val openEditPinLiveEvent = SingleLiveEvent<Unit>()
     val openSetPinLiveEvent = SingleLiveEvent<Unit>()
     val openUnlockPinLiveEvent = SingleLiveEvent<Unit>()
-    val pinEnabledLiveEvent = SingleLiveEvent<Boolean>()
-    val showFingerprintSettings = SingleLiveEvent<Boolean>()
-    val hideFingerprintSettings = SingleLiveEvent<Unit>()
-    val showNoEnrolledFingerprints = SingleLiveEvent<Unit>()
 
     fun init() {
         SecuritySettingsModule.init(this, this)
@@ -31,24 +32,24 @@ class SecuritySettingsViewModel : ViewModel(), SecuritySettingsModule.ISecurityS
 
     //  ISecuritySettingsView
 
-    override fun setBackedUp(backedUp: Boolean) {
-        backedUpLiveData.postValue(backedUp)
+    override fun setBackupAlertVisible(visible: Boolean) {
+        backupAlertVisibleLiveData.postValue(visible)
     }
 
-    override fun setPinEnabled(enabled: Boolean) {
-        pinEnabledLiveEvent.postValue(enabled)
+    override fun togglePinSet(pinSet: Boolean) {
+        pinSetLiveData.postValue(pinSet)
     }
 
-    override fun showFingerprintSettings(enabled: Boolean) {
-        showFingerprintSettings.postValue(enabled)
+    override fun setEditPinVisible(visible: Boolean) {
+        editPinVisibleLiveData.postValue(visible)
     }
 
-    override fun hideFingerprintSettings() {
-        hideFingerprintSettings.postValue(null)
+    override fun setBiometricSettingsVisible(visible: Boolean) {
+        biometricSettingsVisibleLiveData.postValue(visible)
     }
 
-    override fun showNoEnrolledFingerprints() {
-        showNoEnrolledFingerprints.postValue(null)
+    override fun toggleBiometricEnabled(enabled: Boolean) {
+        biometricEnabledLiveData.postValue(enabled)
     }
 
     //  ISecuritySettingsRouter

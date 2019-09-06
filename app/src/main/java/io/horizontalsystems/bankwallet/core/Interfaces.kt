@@ -306,6 +306,7 @@ interface ISystemInfoManager {
 }
 
 interface IPinManager {
+    var isFingerprintEnabled: Boolean
     val isPinSet: Boolean
 
     fun store(pin: String)
