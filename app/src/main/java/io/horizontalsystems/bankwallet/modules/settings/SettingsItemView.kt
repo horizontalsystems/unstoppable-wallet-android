@@ -72,15 +72,17 @@ class SettingsItemView : ConstraintLayout {
 
     var switchIsChecked: Boolean = false
         set(isChecked) {
-            switchOnCheckedChangeListener = null
+            switch.setOnCheckedChangeListener(null)
             switch.isChecked = isChecked
             switch.visibility = View.VISIBLE
             field = isChecked
+            switch.setOnCheckedChangeListener(switchOnCheckedChangeListener)
             invalidate()
         }
 
     var switchOnCheckedChangeListener: CompoundButton.OnCheckedChangeListener? = null
         set(value) {
+            field = value
             switch.setOnCheckedChangeListener(value)
             invalidate()
         }
