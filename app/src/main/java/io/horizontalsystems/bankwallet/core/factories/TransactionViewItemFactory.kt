@@ -39,13 +39,13 @@ class TransactionViewItemFactory(private val feeCoinProvider: FeeCoinProvider) {
 
         val feeCoinValue = transactionItem.record.fee?.let {
             val feeCoin = feeCoinProvider.feeCoinData(coin)?.first ?: coin
-            CoinValue(feeCoin.code, transactionItem.record.fee)
+            CoinValue(feeCoin, transactionItem.record.fee)
         }
 
         return TransactionViewItem(
                 wallet,
                 record.transactionHash,
-                CoinValue(coin.code, record.amount),
+                CoinValue(coin, record.amount),
                 currencyValue,
                 feeCoinValue,
                 fromAddress,

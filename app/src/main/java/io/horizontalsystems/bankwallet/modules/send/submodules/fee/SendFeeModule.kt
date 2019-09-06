@@ -62,10 +62,10 @@ object SendFeeModule {
     fun init(view: SendFeeViewModel, coin: Coin, moduleDelegate: IFeeModuleDelegate?): IFeeModule {
         val feeRateProvider = FeeRateProviderFactory.provider(coin)
         val feeCoinData = App.feeCoinProvider.feeCoinData(coin)
-        val feeCoinCode = (feeCoinData?.first ?: coin).code
+        val feeCoin = feeCoinData?.first ?: coin
 
         val baseCurrency = App.currencyManager.baseCurrency
-        val helper = SendFeePresenterHelper(App.numberFormatter, feeCoinCode, baseCurrency)
+        val helper = SendFeePresenterHelper(App.numberFormatter, feeCoin, baseCurrency)
         val interactor = SendFeeInteractor(App.rateStorage, feeRateProvider, App.currencyManager)
         val presenter = SendFeePresenter(interactor, helper, coin, baseCurrency, feeCoinData)
 

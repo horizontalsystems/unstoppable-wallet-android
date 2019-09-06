@@ -1,17 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.amount
 
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
-import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.Rate
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import java.math.BigDecimal
 import java.math.RoundingMode
 
 class SendAmountPresenterHelper(
         private val numberFormatter: IAppNumberFormatter,
-        private val coinCode: String,
+        private val coin: Coin,
         private val baseCurrency: Currency,
         private val coinDecimal: Int,
         private val currencyDecimal: Int) {
@@ -34,7 +31,7 @@ class SendAmountPresenterHelper(
     fun getHint(coinAmount: BigDecimal? = null, inputType: SendModule.InputType, rate: Rate?): String? {
         return when (inputType) {
             SendModule.InputType.CURRENCY -> coinAmount?.let {
-                numberFormatter.format(CoinValue(coinCode, it), realNumber = true)
+                numberFormatter.format(CoinValue(coin, it), realNumber = true)
             }
             SendModule.InputType.COIN -> {
                 rate?.value?.let { rateValue ->
@@ -48,7 +45,7 @@ class SendAmountPresenterHelper(
 
     fun getAmountPrefix(inputType: SendModule.InputType, rate: Rate?): String? {
         return when {
-            inputType == SendModule.InputType.COIN -> coinCode
+            inputType == SendModule.InputType.COIN -> coin.code
             rate == null -> null
             else -> baseCurrency.symbol
         }
