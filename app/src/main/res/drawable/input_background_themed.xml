@@ -4,7 +4,7 @@
     <solid android:color="?attr/InputBackground"/>
     <corners android:radius="8dp"/>
     <stroke
-        android:width="0.5dp"
+        android:width="1px"
         android:color="@color/steel_15"
         />
 </shape>
