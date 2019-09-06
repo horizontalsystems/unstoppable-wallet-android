@@ -19,7 +19,7 @@ object UnlockPinModule {
 
     interface IUnlockPinInteractor {
         val isFingerprintEnabled: Boolean
-        val hasEnrolledFingerprints: Boolean
+        val biometricAuthSupported: Boolean
         val cryptoObject: FingerprintManagerCompat.CryptoObject?
 
         fun updateLockoutState()

@@ -64,7 +64,7 @@ class UnlockPinPresenter(
     }
 
     override fun showFingerprintUnlock() {
-        if (interactor.isFingerprintEnabled && interactor.hasEnrolledFingerprints) {
+        if (interactor.isFingerprintEnabled && interactor.biometricAuthSupported) {
             interactor.cryptoObject?.let { view?.showFingerprintDialog(it) }
         }
     }

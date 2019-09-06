@@ -30,7 +30,6 @@ object SecuritySettingsModule {
     interface ISecuritySettingsInteractor {
         val allBackedUp: Boolean
         val biometricAuthSupported: Boolean
-        val hasEnrolledFingerprints: Boolean
         val isPinSet: Boolean
         var isBiometricEnabled: Boolean
 
