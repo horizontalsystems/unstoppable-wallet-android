@@ -6,21 +6,17 @@ class SecuritySettingsPresenter(private val router: SecuritySettingsModule.ISecu
     var view: SecuritySettingsModule.ISecuritySettingsView? = null
 
     override fun viewDidLoad() {
-        view?.setBackedUp(interactor.allBackedUp)
-        view?.setPinEnabled(interactor.isPinEnabled)
+        view?.setBackupAlertVisible(!interactor.allBackedUp)
 
-        if (interactor.hasFingerprintSensor && interactor.isPinEnabled) {
-            view?.showFingerprintSettings(interactor.isFingerPrintEnabled)
-        } else {
-            view?.hideFingerprintSettings()
-        }
+        syncPinSet(interactor.isPinSet)
+        view?.toggleBiometricEnabled(interactor.isBiometricEnabled)
     }
 
     override fun didTapManageKeys() {
         router.showManageKeys()
     }
 
-    override fun didTapEnablePin(enable: Boolean) {
+    override fun didSwitchPinSet(enable: Boolean) {
         if (enable) {
             router.showSetPin()
         } else {
@@ -32,52 +28,41 @@ class SecuritySettingsPresenter(private val router: SecuritySettingsModule.ISecu
         router.showEditPin()
     }
 
-    override fun didTapEnableFingerprint(enable: Boolean) {
-        if (interactor.hasEnrolledFingerprints) {
-            interactor.isFingerPrintEnabled = enable
-        } else {
-            interactor.isFingerPrintEnabled = false
-
-            view?.showNoEnrolledFingerprints()
-            view?.showFingerprintSettings(false)
-        }
+    override fun didSwitchBiometricEnabled(enable: Boolean) {
+        interactor.isBiometricEnabled = enable
     }
 
     override fun didSetPin() {
-        updateViews()
+        syncPinSet(true)
     }
 
     override fun didCancelSetPin() {
-        updateViews()
+        view?.togglePinSet(false)
     }
 
     override fun didUnlockPinToDisablePin() {
         interactor.disablePin()
-
-        updateViews()
+        syncPinSet(false)
     }
 
     override fun didCancelUnlockPinToDisablePin() {
-        updateViews()
+        view?.togglePinSet(true)
     }
 
     override fun onClear() {
         interactor.clear()
     }
 
-    private fun updateViews() {
-        view?.setPinEnabled(interactor.isPinEnabled)
-        if (interactor.isPinEnabled) {
-            view?.showFingerprintSettings(enabled = interactor.isFingerPrintEnabled)
-        } else {
-            view?.hideFingerprintSettings()
-        }
+    private fun syncPinSet(pinSet: Boolean) {
+        view?.togglePinSet(pinSet)
+        view?.setEditPinVisible(pinSet)
+        view?.setBiometricSettingsVisible(pinSet && interactor.biometricAuthSupported)
     }
 
     // ISecuritySettingsInteractorDelegate
 
     override fun didAllBackedUp(allBackedUp: Boolean) {
-        view?.setBackedUp(allBackedUp)
+        view?.setBackupAlertVisible(!allBackedUp)
     }
 
 }

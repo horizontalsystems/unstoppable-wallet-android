@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.core.managers.OneTimeTimer
 import io.horizontalsystems.bankwallet.entities.LockoutState
 
 class UnlockPinInteractor(
-        private val localStorage: ILocalStorage,
         private val pinManager: IPinManager,
         private val lockManager: ILockManager,
         private val lockoutManager: ILockoutManager,
@@ -21,7 +20,7 @@ class UnlockPinInteractor(
     }
 
     override val isFingerprintEnabled: Boolean
-        get() = localStorage.isFingerprintEnabled
+        get() = pinManager.isFingerprintEnabled
 
     override val hasEnrolledFingerprints: Boolean
         get() = systemInfoManager.hasEnrolledFingerprints

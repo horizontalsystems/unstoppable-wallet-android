@@ -10,7 +10,6 @@ import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.ManageKeysModule
-import io.horizontalsystems.bankwallet.ui.dialogs.AlertDialogFragment
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import kotlinx.android.synthetic.main.activity_settings_security.*
 
@@ -31,26 +30,37 @@ class SecuritySettingsActivity : BaseActivity() {
 
         manageKeys.setOnClickListener { viewModel.delegate.didTapManageKeys() }
 
+        fingerprint.switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
+            viewModel.delegate.didSwitchBiometricEnabled(isChecked)
+        }
+
+        fingerprint.setOnClickListener {
+            fingerprint.switchToggle()
+        }
+
+        enablePin.switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
+            viewModel.delegate.didSwitchPinSet(isChecked)
+        }
+
+        enablePin.setOnClickListener {
+            enablePin.switchToggle()
+        }
+
         //  Handling view model live events
 
-        viewModel.backedUpLiveData.observe(this, Observer { wordListBackedUp ->
-            manageKeys.setInfoBadgeVisibility(!wordListBackedUp)
+        viewModel.backupAlertVisibleLiveData.observe(this, Observer { alert ->
+            manageKeys.setInfoBadgeVisibility(alert)
         })
 
         viewModel.openManageKeysLiveEvent.observe(this, Observer {
             ManageKeysModule.start(this)
         })
 
-        viewModel.pinEnabledLiveEvent.observe(this, Observer { pinEnabled ->
-            enablePin.apply {
-                switchIsChecked = pinEnabled
-                setOnClickListener {
-                    switchToggle()
-                }
-                switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                    viewModel.delegate.didTapEnablePin(isChecked)
-                }
-            }
+        viewModel.pinSetLiveData.observe(this, Observer { pinEnabled ->
+            enablePin.switchIsChecked = pinEnabled
+        })
+
+        viewModel.editPinVisibleLiveData.observe(this, Observer { pinEnabled ->
             changePin.visibility = if (pinEnabled) View.VISIBLE else View.GONE
         })
 
@@ -66,31 +76,13 @@ class SecuritySettingsActivity : BaseActivity() {
             PinModule.startForUnlock(this, REQUEST_CODE_UNLOCK_PIN_TO_DISABLE_PIN, true)
         })
 
-        viewModel.showFingerprintSettings.observe(this, Observer { enabled ->
-            fingerprint.apply {
-                switchIsChecked = enabled
-
-                setOnClickListener {
-                    switchToggle()
-                }
-
-                switchOnCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
-                    viewModel.delegate.didTapEnableFingerprint(isChecked)
-                }
-                visibility = View.VISIBLE
-            }
+        viewModel.biometricSettingsVisibleLiveData.observe(this, Observer { enabled ->
+            fingerprint.visibility = if (enabled) View.VISIBLE else View.GONE
         })
 
-        viewModel.hideFingerprintSettings.observe(this, Observer {
-            fingerprint.visibility = View.GONE
+        viewModel.biometricEnabledLiveData.observe(this, Observer {
+            fingerprint.switchIsChecked = it
         })
-
-        viewModel.showNoEnrolledFingerprints.observe(this, Observer {
-            AlertDialogFragment
-                    .newInstance(R.string.Settings_Error_FingerprintNotEnabled, R.string.Settings_Error_NoFingerprintAddedYet, R.string.Alert_Ok)
-                    .show(this.supportFragmentManager, "fingerprint_not_enabled_alert")
-        })
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

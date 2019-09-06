@@ -133,7 +133,7 @@ class App : Application() {
 
         randomManager = RandomProvider()
         systemInfoManager = SystemInfoManager()
-        pinManager = PinManager(secureStorage)
+        pinManager = PinManager(secureStorage, localStorage)
         lockManager = LockManager(pinManager).apply {
             backgroundManager.registerListener(this)
         }
