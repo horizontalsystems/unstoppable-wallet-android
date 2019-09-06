@@ -3,17 +3,18 @@ package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.ui.extensions.ConstraintLayoutWithHeader
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
+import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.transaction_info_bottom_sheet.view.*
 
-class TransactionInfoView : ConstraintLayout {
+class TransactionInfoView : ConstraintLayoutWithHeader {
 
     private lateinit var viewModel: TransactionInfoViewModel
     private lateinit var lifecycleOwner: LifecycleOwner
@@ -32,7 +33,8 @@ class TransactionInfoView : ConstraintLayout {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     fun bind(viewModel: TransactionInfoViewModel, lifecycleOwner: LifecycleOwner, listener: Listener) {
-        inflate(context, R.layout.transaction_info_bottom_sheet, this)
+        setContentView(R.layout.transaction_info_bottom_sheet)
+
         this.viewModel = viewModel
         this.listener = listener
         this.lifecycleOwner = lifecycleOwner
@@ -40,7 +42,8 @@ class TransactionInfoView : ConstraintLayout {
     }
 
     private fun setTransactionInfoDialog() {
-        closeButton.setOnClickListener { listener?.closeTransactionInfo() }
+        setOnCloseCallback { listener?.closeTransactionInfo() }
+
         txtFullInfo.setOnClickListener { viewModel.onClickOpenFullInfo() }
 
         viewModel.showCopiedLiveEvent.observe(lifecycleOwner, Observer {
@@ -55,9 +58,10 @@ class TransactionInfoView : ConstraintLayout {
 
         viewModel.transactionLiveData.observe(lifecycleOwner, Observer { txRecord ->
             txRecord?.let { txRec ->
-                val txStatus = txRec.status
 
-                txInfoCoinIcon.bind(txRec.wallet.coin)
+                setTitle(context.getString(R.string.TransactionInfo_Title))
+                setSubtitle(txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) })
+                setHeaderIcon(LayoutHelper.getCoinDrawableResource(txRec.wallet.coin.code))
 
                 itemId.apply {
                     bindHashId(context.getString(R.string.TransactionInfo_Id), txRec.transactionHash)
@@ -100,8 +104,7 @@ class TransactionInfoView : ConstraintLayout {
 
                 }
 
-                itemTime.bind(context.getString(R.string.TransactionInfo_Time), txRec.date?.let { DateHelper.getFullDateWithShortMonth(it) } ?: "")
-                itemStatus.bindStatus(txStatus)
+                itemStatus.bindStatus(txRec.status)
 
                 if (txRec.from.isNullOrEmpty() || !txRec.showFromAddress) {
                     itemFrom.visibility = View.GONE
