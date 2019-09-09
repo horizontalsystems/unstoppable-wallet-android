@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
+import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.entities.*
@@ -7,7 +8,6 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
-import org.mockito.Mockito.times
 
 class TransactionRecordDataSourceTest {
 
@@ -15,35 +15,30 @@ class TransactionRecordDataSourceTest {
     private val itemsDataSource = mock(TransactionItemDataSource::class.java)!!
     private val factory = mock(TransactionItemFactory::class.java)!!
     private val limit = 10
-    private val btc = mock(Coin::class.java)
-    private val bch = mock(Coin::class.java)
-    private val eth = mock(Coin::class.java)
+    private val walletBtc = mock(Wallet::class.java)
+    private val walletEth = mock(Wallet::class.java)
 
     private lateinit var dataSource: TransactionRecordDataSource
 
     @Before
     fun setup() {
-        whenever(btc.type).thenReturn(mock(CoinType.Bitcoin::class.java))
-        whenever(bch.type).thenReturn(mock(CoinType.BitcoinCash::class.java))
-        whenever(eth.type).thenReturn(mock(CoinType.Ethereum::class.java))
-
         dataSource = TransactionRecordDataSource(poolRepo, itemsDataSource, factory, limit)
     }
 
     @Test
     fun setCoinCodes() {
-        val coinCodes = listOf(btc, eth)
+        val wallets = listOf(walletBtc, walletEth)
         val pool1 = mock(Pool::class.java)
         val pool2 = mock(Pool::class.java)
         val pools = listOf(pool1, pool2)
 
         whenever(poolRepo.allPools).thenReturn(pools)
 
-        dataSource.setCoinCodes(coinCodes)
+        dataSource.setWallets(wallets)
 
         verify(pool1).resetFirstUnusedIndex()
         verify(pool2).resetFirstUnusedIndex()
-        verify(poolRepo).activatePools(coinCodes)
+        verify(poolRepo).activatePools(wallets)
         verify(itemsDataSource).clear()
     }
 
@@ -67,17 +62,17 @@ class TransactionRecordDataSourceTest {
     @Test
     fun handleNextRecords() {
         val transactionRecords1 = listOf(mock(TransactionRecord::class.java))
-        val coin1 = btc
+        val wallet1 = walletBtc
         val pool1 = mock(Pool::class.java)
 
         val transactionRecords2 = listOf(mock(TransactionRecord::class.java))
-        val coin2 = eth
+        val wallet2 = walletEth
         val pool2 = mock(Pool::class.java)
 
-        val records = mapOf(coin1 to transactionRecords1, coin2 to transactionRecords2)
+        val records = mapOf(wallet1 to transactionRecords1, wallet2 to transactionRecords2)
 
-        whenever(poolRepo.getPool(coin1)).thenReturn(pool1)
-        whenever(poolRepo.getPool(coin2)).thenReturn(pool2)
+        whenever(poolRepo.getPool(wallet1)).thenReturn(pool1)
+        whenever(poolRepo.getPool(wallet2)).thenReturn(pool2)
 
         dataSource.handleNextRecords(records)
 
@@ -134,27 +129,27 @@ class TransactionRecordDataSourceTest {
                 to = listOf(address)
         )
 
-        val itemBtc1 = TransactionItem(btc, btc1Rec)
-        val itemBtc2 = TransactionItem(btc, btc2Rec)
-        val itemEth1 = TransactionItem(eth, eth1Rec)
-        val itemEth2 = TransactionItem(eth, eth2Rec)
+        val itemBtc1 = TransactionItem(walletBtc, btc1Rec)
+        val itemBtc2 = TransactionItem(walletBtc, btc2Rec)
+        val itemEth1 = TransactionItem(walletEth, eth1Rec)
+        val itemEth2 = TransactionItem(walletEth, eth2Rec)
 
         val poolBtc = mock(Pool::class.java)
         val poolEth = mock(Pool::class.java)
 
         whenever(poolRepo.activePools).thenReturn(listOf(poolBtc, poolEth))
-        whenever(poolRepo.getPool(btc)).thenReturn(poolBtc)
-        whenever(poolRepo.getPool(eth)).thenReturn(poolEth)
+        whenever(poolRepo.getPool(walletBtc)).thenReturn(poolBtc)
+        whenever(poolRepo.getPool(walletEth)).thenReturn(poolEth)
 
-        whenever(poolBtc.coin).thenReturn(btc)
-        whenever(poolEth.coin).thenReturn(eth)
+        whenever(poolBtc.wallet).thenReturn(walletBtc)
+        whenever(poolEth.wallet).thenReturn(walletEth)
         whenever(poolBtc.unusedRecords).thenReturn(listOf(btc1Rec, btc2Rec))
         whenever(poolEth.unusedRecords).thenReturn(listOf(eth1Rec, eth2Rec))
 
-        whenever(factory.createTransactionItem(btc, btc1Rec)).thenReturn(itemBtc1)
-        whenever(factory.createTransactionItem(btc, btc2Rec)).thenReturn(itemBtc2)
-        whenever(factory.createTransactionItem(eth, eth1Rec)).thenReturn(itemEth1)
-        whenever(factory.createTransactionItem(eth, eth2Rec)).thenReturn(itemEth2)
+        whenever(factory.createTransactionItem(walletBtc, btc1Rec)).thenReturn(itemBtc1)
+        whenever(factory.createTransactionItem(walletBtc, btc2Rec)).thenReturn(itemBtc2)
+        whenever(factory.createTransactionItem(walletEth, eth1Rec)).thenReturn(itemEth1)
+        whenever(factory.createTransactionItem(walletEth, eth2Rec)).thenReturn(itemEth2)
 
         val result = dataSource.increasePage()
 
@@ -169,14 +164,12 @@ class TransactionRecordDataSourceTest {
 
     @Test
     fun increasePage_zero() {
-
-
         val poolBtc = mock(Pool::class.java)
         val poolEth = mock(Pool::class.java)
 
         whenever(poolRepo.activePools).thenReturn(listOf(poolBtc, poolEth))
-        whenever(poolRepo.getPool(btc)).thenReturn(poolBtc)
-        whenever(poolRepo.getPool(eth)).thenReturn(poolEth)
+        whenever(poolRepo.getPool(walletBtc)).thenReturn(poolBtc)
+        whenever(poolRepo.getPool(walletEth)).thenReturn(poolEth)
 
         whenever(poolBtc.unusedRecords).thenReturn(listOf())
         whenever(poolEth.unusedRecords).thenReturn(listOf())
@@ -209,10 +202,11 @@ class TransactionRecordDataSourceTest {
     fun itemIndexesForTimestamp() {
         val timestamp = 123123L
         val indexes = listOf(1, 3, 4)
+        val coin = mock(Coin::class.java)
 
-        whenever(itemsDataSource.itemIndexesForTimestamp(btc, timestamp)).thenReturn(indexes)
+        whenever(itemsDataSource.itemIndexesForTimestamp(coin, timestamp)).thenReturn(indexes)
 
-        Assert.assertArrayEquals(indexes.toIntArray(), dataSource.itemIndexesForTimestamp(btc, timestamp).toIntArray())
+        Assert.assertArrayEquals(indexes.toIntArray(), dataSource.itemIndexesForTimestamp(coin, timestamp).toIntArray())
     }
 
     @Test
@@ -248,26 +242,25 @@ class TransactionRecordDataSourceTest {
         val recordsEth = mutableListOf(mock(TransactionRecord::class.java))
 
         whenever(poolRepo.activePools).thenReturn(listOf(poolBtc, poolEth))
-        whenever(poolBtc.coin).thenReturn(btc)
-        whenever(poolEth.coin).thenReturn(eth)
+        whenever(poolBtc.wallet).thenReturn(walletBtc)
+        whenever(poolEth.wallet).thenReturn(walletEth)
         whenever(poolBtc.records).thenReturn(recordsBtc)
         whenever(poolEth.records).thenReturn(recordsEth)
 
         val actualAllRecords = dataSource.allRecords
 
-        Assert.assertArrayEquals(arrayOf(btc, eth), actualAllRecords.keys.toTypedArray())
-        Assert.assertArrayEquals(recordsBtc.toTypedArray(), actualAllRecords[btc]?.toTypedArray())
-        Assert.assertArrayEquals(recordsEth.toTypedArray(), actualAllRecords[eth]?.toTypedArray())
+        Assert.assertArrayEquals(arrayOf(walletBtc, walletEth), actualAllRecords.keys.toTypedArray())
+        Assert.assertArrayEquals(recordsBtc.toTypedArray(), actualAllRecords[walletBtc]?.toTypedArray())
+        Assert.assertArrayEquals(recordsEth.toTypedArray(), actualAllRecords[walletEth]?.toTypedArray())
     }
 
     @Test
     fun handleUpdatedRecords_noPool() {
         val records = listOf<TransactionRecord>()
 
+        whenever(poolRepo.getPool(walletBtc)).thenReturn(null)
 
-        whenever(poolRepo.getPool(btc)).thenReturn(null)
-
-        Assert.assertNull(dataSource.handleUpdatedRecords(records, btc))
+        Assert.assertNull(dataSource.handleUpdatedRecords(records, walletBtc))
     }
 
     @Test
@@ -276,10 +269,10 @@ class TransactionRecordDataSourceTest {
 
         val pool = mock(Pool::class.java)
 
-        whenever(poolRepo.getPool(btc)).thenReturn(pool)
-        whenever(poolRepo.isPoolActiveByCoinCode(btc)).thenReturn(false)
+        whenever(poolRepo.getPool(walletBtc)).thenReturn(pool)
+        whenever(poolRepo.isPoolActiveByWallet(walletBtc)).thenReturn(false)
 
-        Assert.assertNull(dataSource.handleUpdatedRecords(records, btc))
+        Assert.assertNull(dataSource.handleUpdatedRecords(records, walletBtc))
     }
 
     @Test
@@ -289,12 +282,12 @@ class TransactionRecordDataSourceTest {
 
         val pool = mock(Pool::class.java)
 
-        whenever(poolRepo.getPool(btc)).thenReturn(pool)
-        whenever(poolRepo.isPoolActiveByCoinCode(btc)).thenReturn(true)
+        whenever(poolRepo.getPool(walletBtc)).thenReturn(pool)
+        whenever(poolRepo.isPoolActiveByWallet(walletBtc)).thenReturn(true)
         whenever(pool.handleUpdatedRecord(record1)).thenReturn(Pool.HandleResult.NEW_DATA)
         whenever(itemsDataSource.shouldInsertRecord(record1)).thenReturn(false)
 
-        Assert.assertNull(dataSource.handleUpdatedRecords(records, btc))
+        Assert.assertNull(dataSource.handleUpdatedRecords(records, walletBtc))
     }
 
     @Test
@@ -305,13 +298,13 @@ class TransactionRecordDataSourceTest {
         val pool = mock(Pool::class.java)
         val transactionItem = mock(TransactionItem::class.java)
 
-        whenever(poolRepo.getPool(btc)).thenReturn(pool)
-        whenever(poolRepo.isPoolActiveByCoinCode(btc)).thenReturn(true)
+        whenever(poolRepo.getPool(walletBtc)).thenReturn(pool)
+        whenever(poolRepo.isPoolActiveByWallet(walletBtc)).thenReturn(true)
         whenever(pool.handleUpdatedRecord(record1)).thenReturn(Pool.HandleResult.NEW_DATA)
         whenever(itemsDataSource.shouldInsertRecord(record1)).thenReturn(true)
-        whenever(factory.createTransactionItem(btc, record1)).thenReturn(transactionItem)
+        whenever(factory.createTransactionItem(walletBtc, record1)).thenReturn(transactionItem)
 
-        val result = dataSource.handleUpdatedRecords(records, btc)
+        val result = dataSource.handleUpdatedRecords(records, walletBtc)
 
         verify(pool).increaseFirstUnusedIndex()
         verify(itemsDataSource).handleModifiedItems(listOf(), listOf(transactionItem))
@@ -326,11 +319,11 @@ class TransactionRecordDataSourceTest {
 
         val pool = mock(Pool::class.java)
 
-        whenever(poolRepo.getPool(btc)).thenReturn(pool)
-        whenever(poolRepo.isPoolActiveByCoinCode(btc)).thenReturn(true)
+        whenever(poolRepo.getPool(walletBtc)).thenReturn(pool)
+        whenever(poolRepo.isPoolActiveByWallet(walletBtc)).thenReturn(true)
         whenever(pool.handleUpdatedRecord(record1)).thenReturn(Pool.HandleResult.IGNORED)
 
-        Assert.assertNull(dataSource.handleUpdatedRecords(records, btc))
+        Assert.assertNull(dataSource.handleUpdatedRecords(records, walletBtc))
     }
 
     @Test
@@ -344,21 +337,21 @@ class TransactionRecordDataSourceTest {
         val ignoredRecord = mock(TransactionRecord::class.java)
         val records = listOf<TransactionRecord>(updatedRecord1, ignoredRecord, updatedRecord2, insertedRecord1)
 
-        val updatedItem1 = TransactionItem(btc, updatedRecord1)
-        val updatedItem2 = TransactionItem(btc, updatedRecord2)
-        val insertedItem1 = TransactionItem(btc, insertedRecord1)
+        val updatedItem1 = TransactionItem(walletBtc, updatedRecord1)
+        val updatedItem2 = TransactionItem(walletBtc, updatedRecord2)
+        val insertedItem1 = TransactionItem(walletBtc, insertedRecord1)
 
-        whenever(poolRepo.getPool(btc)).thenReturn(pool)
-        whenever(poolRepo.isPoolActiveByCoinCode(btc)).thenReturn(true)
+        whenever(poolRepo.getPool(walletBtc)).thenReturn(pool)
+        whenever(poolRepo.isPoolActiveByWallet(walletBtc)).thenReturn(true)
         whenever(pool.handleUpdatedRecord(updatedRecord1)).thenReturn(Pool.HandleResult.UPDATED)
         whenever(pool.handleUpdatedRecord(ignoredRecord)).thenReturn(Pool.HandleResult.IGNORED)
         whenever(pool.handleUpdatedRecord(updatedRecord2)).thenReturn(Pool.HandleResult.UPDATED)
         whenever(pool.handleUpdatedRecord(insertedRecord1)).thenReturn(Pool.HandleResult.INSERTED)
-        whenever(factory.createTransactionItem(btc, updatedRecord1)).thenReturn(updatedItem1)
-        whenever(factory.createTransactionItem(btc, updatedRecord2)).thenReturn(updatedItem2)
-        whenever(factory.createTransactionItem(btc, insertedRecord1)).thenReturn(insertedItem1)
+        whenever(factory.createTransactionItem(walletBtc, updatedRecord1)).thenReturn(updatedItem1)
+        whenever(factory.createTransactionItem(walletBtc, updatedRecord2)).thenReturn(updatedItem2)
+        whenever(factory.createTransactionItem(walletBtc, insertedRecord1)).thenReturn(insertedItem1)
 
-        dataSource.handleUpdatedRecords(records, btc)
+        dataSource.handleUpdatedRecords(records, walletBtc)
 
         verify(itemsDataSource).handleModifiedItems(listOf(updatedItem1, updatedItem2), listOf(insertedItem1))
     }
@@ -367,8 +360,8 @@ class TransactionRecordDataSourceTest {
     fun itemIndexesForPending() {
         val lastBlockHeight = 100
 
-        dataSource.itemIndexesForPending(btc, lastBlockHeight)
+        dataSource.itemIndexesForPending(walletBtc, lastBlockHeight)
 
-        verify(itemsDataSource).itemIndexesForPending(btc, lastBlockHeight)
+        verify(itemsDataSource).itemIndexesForPending(walletBtc, lastBlockHeight)
     }
 }

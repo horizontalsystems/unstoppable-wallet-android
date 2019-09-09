@@ -5,6 +5,7 @@ import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.FullTransactionItem
 import io.horizontalsystems.bankwallet.entities.FullTransactionRecord
+import io.horizontalsystems.bankwallet.entities.Wallet
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
@@ -21,13 +22,15 @@ class FullTransactionInfoPresenterTest {
     private val transactionHash = "abc"
     private val transactionUrl = "http://domain.com"
     private val coin = mock(Coin::class.java)
+    private val wallet = mock(Wallet::class.java)
 
     private lateinit var presenter: FullTransactionInfoPresenter
 
     @Before
     fun setup() {
         whenever(state.transactionHash).thenReturn(transactionHash)
-        whenever(state.coin).thenReturn(coin)
+        whenever(state.wallet).thenReturn(wallet)
+        whenever(wallet.coin).thenReturn(coin)
         whenever(interactor.url(transactionHash)).thenReturn(transactionUrl)
 
         presenter = FullTransactionInfoPresenter(interactor, router, state)
@@ -75,14 +78,14 @@ class FullTransactionInfoPresenterTest {
     fun onTapProvider() {
         presenter.onTapProvider()
 
-        verify(view).openProviderSettings(state.coin, state.transactionHash)
+        verify(view).openProviderSettings(coin, state.transactionHash)
     }
 
     @Test
     fun onTapChangeProvider() {
         presenter.onTapChangeProvider()
 
-        verify(view).openProviderSettings(state.coin, state.transactionHash)
+        verify(view).openProviderSettings(coin, state.transactionHash)
     }
 
     @Test
@@ -105,7 +108,7 @@ class FullTransactionInfoPresenterTest {
 
         verify(state).transactionRecord = null
         verify(view).reload()
-        verify(interactor).updateProvider(coin)
+        verify(interactor).updateProvider(wallet)
         verify(view).hideError()
         verify(view).showLoading()
 
