@@ -14,6 +14,8 @@ class BalanceViewItemFactoryTest {
     private val factory = BalanceViewItemFactory()
     val currency = mock(Currency::class.java)
     val coin = mock(Coin::class.java)
+    val wallet = mock(Wallet::class.java)
+    val state = mock(AdapterState::class.java)
     val coinCode = "coinCode"
     val coinTitle = "coinTitle"
 
@@ -21,12 +23,13 @@ class BalanceViewItemFactoryTest {
     fun setup() {
         whenever(coin.code).thenReturn(coinCode)
         whenever(coin.title).thenReturn(coinTitle)
+        whenever(wallet.coin).thenReturn(coin)
     }
 
     @Test
     fun createViewItem_coinValue() {
         val balance = 12.23.toBigDecimal()
-        val item = BalanceModule.BalanceItem(coin, balance)
+        val item = BalanceModule.BalanceItem(wallet, balance, state)
 
         val viewItem = factory.createViewItem(item, null)
 
@@ -35,7 +38,7 @@ class BalanceViewItemFactoryTest {
 
     @Test
     fun createViewItem_rateExpired_noRate() {
-        val item = BalanceModule.BalanceItem(coin)
+        val item = BalanceModule.BalanceItem(wallet, BigDecimal.ZERO, state)
 
         val viewItem = factory.createViewItem(item, null)
 
@@ -45,7 +48,7 @@ class BalanceViewItemFactoryTest {
     @Test
     fun createViewItem_rateExpired_withRate() {
         val rate = mock(Rate::class.java)
-        val item = BalanceModule.BalanceItem(coin, rate = rate)
+        val item = BalanceModule.BalanceItem(wallet, BigDecimal.ZERO, state, rate)
 
         whenever(rate.expired).thenReturn(true)
 
@@ -57,7 +60,7 @@ class BalanceViewItemFactoryTest {
     @Test
     fun createViewItem_state() {
         val state = AdapterState.Synced
-        val item = BalanceModule.BalanceItem(coin, state = state)
+        val item = BalanceModule.BalanceItem(wallet, BigDecimal.ZERO, state)
 
         val viewItem = factory.createViewItem(item, null)
 
@@ -66,7 +69,7 @@ class BalanceViewItemFactoryTest {
 
     @Test
     fun createViewItem_exchangeValue_currencyValue_noRate_withCurrency() {
-        val item = BalanceModule.BalanceItem(coin)
+        val item = BalanceModule.BalanceItem(wallet, BigDecimal.ZERO, state)
 
         val viewItem = factory.createViewItem(item, currency)
 
@@ -76,7 +79,8 @@ class BalanceViewItemFactoryTest {
 
     @Test
     fun createViewItem_exchangeValue_currencyValue_withRate_noCurrency() {
-        val item = BalanceModule.BalanceItem(coin, rate = Rate("coinCode", "", 123.123.toBigDecimal(), 123L, false))
+        val rate = Rate("coinCode", "", 123.123.toBigDecimal(), 123L, false)
+        val item = BalanceModule.BalanceItem(wallet, BigDecimal.ZERO, state, rate)
 
         val viewItem = factory.createViewItem(item, null)
 
@@ -90,7 +94,7 @@ class BalanceViewItemFactoryTest {
         val rate = 123.123123.toBigDecimal()
         val exchangeValue = CurrencyValue(currency, rate)
         val currencyValue = CurrencyValue(currency, rate * balance)
-        val item = BalanceModule.BalanceItem(coin, balance = balance, rate = Rate("coinCode", "", rate, 123L, false))
+        val item = BalanceModule.BalanceItem(wallet, balance, state, Rate("coinCode", "", rate, 123L, false))
 
         val viewItem = factory.createViewItem(item, currency)
 
@@ -100,7 +104,7 @@ class BalanceViewItemFactoryTest {
 
     @Test
     fun createHeaderViewItem_currencyValue_nullCurrency() {
-        val viewItem = factory.createHeaderViewItem(listOf(), null)
+        val viewItem = factory.createHeaderViewItem(listOf(), false, null)
 
         Assert.assertNull(viewItem.currencyValue)
     }
@@ -129,7 +133,7 @@ class BalanceViewItemFactoryTest {
         whenever(balanceItem2.rate).thenReturn(rateObject2)
         whenever(rateObject2.value).thenReturn(rate2)
 
-        val viewItem = factory.createHeaderViewItem(listOf(balanceItem1, balanceItem2), currency)
+        val viewItem = factory.createHeaderViewItem(listOf(balanceItem1, balanceItem2), false, currency)
 
         Assert.assertEquals(expectedCurrencyValue, viewItem.currencyValue)
     }
@@ -155,7 +159,7 @@ class BalanceViewItemFactoryTest {
         whenever(balanceItem2.balance).thenReturn(balance2)
         whenever(balanceItem2.rate).thenReturn(null)
 
-        val viewItem = factory.createHeaderViewItem(listOf(balanceItem1, balanceItem2), currency)
+        val viewItem = factory.createHeaderViewItem(listOf(balanceItem1, balanceItem2), false, currency)
 
         Assert.assertEquals(expectedCurrencyValue, viewItem.currencyValue)
     }
@@ -184,7 +188,7 @@ class BalanceViewItemFactoryTest {
         whenever(balanceItem2.rate).thenReturn(rateObject2)
         whenever(rateObject2.value).thenReturn(rate2)
 
-        val viewItem = factory.createHeaderViewItem(listOf(balanceItem1, balanceItem2), currency)
+        val viewItem = factory.createHeaderViewItem(listOf(balanceItem1, balanceItem2), false, currency)
 
         Assert.assertTrue(viewItem.upToDate)
     }
@@ -213,7 +217,7 @@ class BalanceViewItemFactoryTest {
         whenever(rateObject2.value).thenReturn(rate2)
         whenever(rateObject2.expired).thenReturn(true)
 
-        val viewItem = factory.createHeaderViewItem(listOf(balanceItem1, balanceItem2), currency)
+        val viewItem = factory.createHeaderViewItem(listOf(balanceItem1, balanceItem2), false, currency)
 
         Assert.assertFalse(viewItem.upToDate)
     }
@@ -244,7 +248,7 @@ class BalanceViewItemFactoryTest {
         whenever(rateObject2.value).thenReturn(rate2)
         whenever(rateObject2.expired).thenReturn(false)
 
-        val viewItem = factory.createHeaderViewItem(listOf(balanceItem1, balanceItem2), currency)
+        val viewItem = factory.createHeaderViewItem(listOf(balanceItem1, balanceItem2), false, currency)
 
         Assert.assertFalse(viewItem.upToDate)
     }
@@ -268,7 +272,7 @@ class BalanceViewItemFactoryTest {
         whenever(balanceItem2.balance).thenReturn(balance2)
         whenever(balanceItem2.rate).thenReturn(null)
 
-        val viewItem = factory.createHeaderViewItem(listOf(balanceItem1, balanceItem2), currency)
+        val viewItem = factory.createHeaderViewItem(listOf(balanceItem1, balanceItem2), false, currency)
 
         Assert.assertFalse(viewItem.upToDate)
     }
@@ -282,7 +286,7 @@ class BalanceViewItemFactoryTest {
         whenever(balanceItem.balance).thenReturn(BigDecimal.ZERO)
         whenever(balanceItem.rate).thenReturn(null)
 
-        val viewItem = factory.createHeaderViewItem(listOf(balanceItem), currency)
+        val viewItem = factory.createHeaderViewItem(listOf(balanceItem), false, currency)
 
         Assert.assertTrue(viewItem.upToDate)
     }

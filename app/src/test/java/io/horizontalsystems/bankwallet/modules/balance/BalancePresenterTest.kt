@@ -1,11 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.never
+import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.IAdapter
+import io.horizontalsystems.bankwallet.core.IBalanceAdapter
+import io.horizontalsystems.bankwallet.core.IPredefinedAccountTypeManager
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
@@ -16,7 +16,6 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
 import java.math.BigDecimal
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 class BalancePresenterTest {
@@ -35,18 +34,18 @@ class BalancePresenterTest {
         RxBaseTest.setup()
         RxJavaPlugins.setComputationSchedulerHandler { testScheduler }
 
-        presenter = BalancePresenter(interactor, router, dataSource, factory)
+        presenter = BalancePresenter(interactor, router, dataSource, mock(IPredefinedAccountTypeManager::class.java), factory)
         presenter.view = view
     }
 
     @Test
     fun viewDidLoad() {
-        whenever(dataSource.balanceSortType).thenReturn(BalanceSortType.Name)
+        whenever(dataSource.sortType).thenReturn(BalanceSortType.Name)
 
         presenter.viewDidLoad()
         testScheduler.advanceTimeBy(1, TimeUnit.MINUTES)
 
-        verify(interactor).initAdapters()
+        verify(interactor).initWallets()
     }
 
     @Test
@@ -78,10 +77,12 @@ class BalancePresenterTest {
         val items = listOf<BalanceModule.BalanceItem>()
         val viewItem = mock(BalanceHeaderViewItem::class.java)
         val currency = mock(Currency::class.java)
+        val chartEnabled = false
 
         whenever(dataSource.items).thenReturn(items)
         whenever(dataSource.currency).thenReturn(currency)
-        whenever(factory.createHeaderViewItem(items, currency)).thenReturn(viewItem)
+        whenever(dataSource.chartEnabled).thenReturn(chartEnabled)
+        whenever(factory.createHeaderViewItem(items, chartEnabled, currency)).thenReturn(viewItem)
 
         Assert.assertEquals(viewItem, presenter.getHeaderViewItem())
     }
@@ -95,28 +96,28 @@ class BalancePresenterTest {
         val account = mock(Account::class.java)
         val coin = mock(Coin::class.java)
         val wallet = mock(Wallet::class.java)
+        val balanceAdapter = mock(IBalanceAdapter::class.java)
         val balance = BigDecimal(12.23)
         val state = mock(AdapterState::class.java)
         val coinCodes = listOf(coinCode)
 
-        val adapter = mock(IAdapter::class.java)
-        val adapters = listOf(adapter)
+        val wallets = listOf(wallet)
 
-        val items = listOf(BalanceModule.BalanceItem(coin, balance, state))
+        val items = listOf(BalanceModule.BalanceItem(wallet, balance, state))
 
+        whenever(interactor.getBalanceAdapterForWallet(wallet)).thenReturn(balanceAdapter)
+        whenever(balanceAdapter.balance).thenReturn(balance)
+        whenever(balanceAdapter.state).thenReturn(state)
         whenever(coin.code).thenReturn(coinCode)
         whenever(coin.title).thenReturn(title)
         whenever(wallet.coin).thenReturn(coin)
         whenever(wallet.account).thenReturn(account)
         whenever(account.isBackedUp).thenReturn(false)
-        whenever(adapter.wallet).thenReturn(wallet)
-        whenever(adapter.balance).thenReturn(balance)
-        whenever(adapter.state).thenReturn(state)
         whenever(currency.code).thenReturn(currencyCode)
         whenever(dataSource.currency).thenReturn(currency)
         whenever(dataSource.coinCodes).thenReturn(coinCodes)
 
-        presenter.didUpdateAdapters(adapters)
+        presenter.didUpdateWallets(wallets)
 
         verify(dataSource).set(items)
         verify(interactor).fetchRates(currencyCode, coinCodes)
@@ -125,23 +126,14 @@ class BalancePresenterTest {
     }
 
     @Test
-    fun didUpdateWallets_nullCurrency() {
-        whenever(dataSource.currency).thenReturn(null)
-
-        presenter.didUpdateAdapters(listOf())
-
-        verify(interactor, never()).fetchRates(any(), any())
-    }
-
-    @Test
     fun didUpdateBalance() {
-        val coinCode = "coinCode"
+        val wallet = mock(Wallet::class.java)
         val position = 5
         val balance = 123123.123.toBigDecimal()
 
-        whenever(dataSource.getPosition(coinCode)).thenReturn(position)
+        whenever(dataSource.getPosition(wallet)).thenReturn(position)
 
-        presenter.didUpdateBalance(coinCode, balance)
+        presenter.didUpdateBalance(wallet, balance)
 
         verify(dataSource).setBalance(position, balance)
         verify(dataSource).addUpdatedPosition(position)
@@ -150,65 +142,15 @@ class BalancePresenterTest {
 
     @Test
     fun didUpdateState() {
-        val coinCode = "ABC"
+        val wallet = mock(Wallet::class.java)
         val position = 5
         val state = AdapterState.Synced
 
-        whenever(dataSource.getPosition(coinCode)).thenReturn(position)
+        whenever(dataSource.getPosition(wallet)).thenReturn(position)
 
-        presenter.didUpdateState(coinCode, state)
+        presenter.didUpdateState(wallet, state)
 
         verify(dataSource).setState(position, state)
-        verify(dataSource).addUpdatedPosition(position)
-        verify(view).updateHeader()
-    }
-
-    @Test
-    fun didUpdateState_sortCoins() {
-        val coinCode = "ABC"
-        val position = 1
-        val state = AdapterState.Synced
-        val sortingType = BalanceSortType.Name
-
-        val coin = mock(Coin::class.java)
-        val balance = BigDecimal(12.23)
-
-        val item1 = BalanceModule.BalanceItem(coin, balance, AdapterState.Synced)
-        val item2 = BalanceModule.BalanceItem(coin, balance, AdapterState.Synced)
-
-        val items = listOf(item1, item2)
-
-        whenever(dataSource.items).thenReturn(items)
-        whenever(dataSource.getPosition(coinCode)).thenReturn(position)
-        whenever(interactor.getSortingType()).thenReturn(sortingType)
-
-        presenter.didUpdateState(coinCode, state)
-
-        verify(dataSource).sortBy(sortingType)
-    }
-
-    @Test
-    fun didUpdateState_dontSortCoins() {
-        val coinCode = "ABC"
-        val position = 1
-        val state = AdapterState.Synced
-        val sortingType = BalanceSortType.Name
-
-        val coin = mock(Coin::class.java)
-        val balance = BigDecimal(12.23)
-
-        val item1 = BalanceModule.BalanceItem(coin, balance, AdapterState.Synced)
-        val item2 = BalanceModule.BalanceItem(coin, balance, AdapterState.Syncing(3, Date()))
-
-        val items = listOf(item1, item2)
-
-        whenever(dataSource.items).thenReturn(items)
-        whenever(dataSource.getPosition(coinCode)).thenReturn(position)
-        whenever(interactor.getSortingType()).thenReturn(sortingType)
-
-        presenter.didUpdateState(coinCode, state)
-
-        verify(dataSource, never()).sortBy(sortingType)
     }
 
     @Test
@@ -232,36 +174,31 @@ class BalancePresenterTest {
     fun didUpdateRate() {
         val coinCode = "ABC"
         val position = 5
-        val rate = mock(Rate::class.java)
-        val sortingType = BalanceSortType.Name
+        val rate = mock<Rate>()
 
         whenever(rate.coinCode).thenReturn(coinCode)
-        whenever(dataSource.getPosition(coinCode)).thenReturn(position)
-        whenever(interactor.getSortingType()).thenReturn(sortingType)
+        whenever(dataSource.getPositionsByCoinCode(coinCode)).thenReturn(listOf(position))
 
         presenter.didUpdateRate(rate)
 
         verify(dataSource).setRate(position, rate)
-        verify(dataSource).addUpdatedPosition(position)
-        verify(dataSource).sortBy(sortingType)
-        verify(view).updateHeader()
     }
 
     @Test
     fun onReceive() {
         val position = 5
-        val coinCode = "coinCode"
-        val item = mock(BalanceModule.BalanceItem::class.java)
-        val coin = mock(Coin::class.java)
+        val item = mock<BalanceModule.BalanceItem>()
+        val wallet = mock<Wallet>()
+        val account = mock<Account>()
 
         whenever(dataSource.getItem(position)).thenReturn(item)
-        whenever(coin.code).thenReturn(coinCode)
-        whenever(item.coin).thenReturn(coin)
-        whenever(item.isBackedUp).thenReturn(true)
+        whenever(item.wallet).thenReturn(wallet)
+        whenever(wallet.account).thenReturn(account)
+        whenever(account.isBackedUp).thenReturn(true)
 
         presenter.onReceive(position)
 
-        verify(router).openReceiveDialog(coinCode)
+        verify(router).openReceiveDialog(wallet)
     }
 
     @Test
@@ -270,14 +207,14 @@ class BalancePresenterTest {
         val coinCode = "coinCode"
         val item = mock(BalanceModule.BalanceItem::class.java)
         val coin = mock(Coin::class.java)
+        val wallet = mock(Wallet::class.java)
 
         whenever(dataSource.getItem(position)).thenReturn(item)
-        whenever(coin.code).thenReturn(coinCode)
-        whenever(item.coin).thenReturn(coin)
+        whenever(item.wallet).thenReturn(wallet)
 
         presenter.onPay(position)
 
-        verify(router).openSendDialog(coinCode)
+        verify(router).openSendDialog(wallet)
     }
 
     @Test

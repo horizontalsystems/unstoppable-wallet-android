@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinType
+import io.horizontalsystems.bankwallet.entities.Wallet
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
@@ -13,6 +14,7 @@ class TransactionInfoPresenterTest {
     private val router = Mockito.mock(TransactionInfoModule.Router::class.java)
     private val view = Mockito.mock(TransactionInfoModule.View::class.java)
     private val coin = Mockito.mock(Coin::class.java)
+    private val wallet = Mockito.mock(Wallet::class.java)
 
     private lateinit var presenter: TransactionInfoPresenter
 
@@ -39,8 +41,8 @@ class TransactionInfoPresenterTest {
     fun openFullInfo() {
         val transactionHash = "hash"
 
-        presenter.openFullInfo(transactionHash, coin)
-        verify(router).openFullInfo(transactionHash, coin)
+        presenter.openFullInfo(transactionHash, wallet)
+        verify(router).openFullInfo(transactionHash, wallet)
     }
 
 }
