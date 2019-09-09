@@ -11,8 +11,8 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.biometric.BiometricPrompt
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.hardware.fingerprint.FingerprintManagerCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
@@ -21,19 +21,20 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.security.FingerprintAuthenticationDialogFragment
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.ui.extensions.*
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_pin.*
+import java.util.concurrent.Executor
 
 
-class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuthenticationDialogFragment.Callback {
+class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener {
 
     private lateinit var viewModel: PinViewModel
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var pinPagesAdapter: PinPagesAdapter
+    private val executor = Executor { command -> command.run() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -180,16 +181,24 @@ class PinActivity : BaseActivity(), NumPadItemsAdapter.Listener, FingerprintAuth
         }
     }
 
-    override fun onFingerprintAuthSucceed() {
+    fun onFingerprintAuthSucceed() {
         viewModel.delegate.onFingerprintUnlock()
     }
 
-    private fun showFingerprintDialog(cryptoObject: FingerprintManagerCompat.CryptoObject) {
-        val fragment = FingerprintAuthenticationDialogFragment()
-        fragment.setCryptoObject(cryptoObject)
-        fragment.setCallback(this@PinActivity)
-        fragment.isCancelable = true
-        fragment.show(fragmentManager, "fingerprint_dialog")
+    private fun showFingerprintDialog(cryptoObject: BiometricPrompt.CryptoObject) {
+        val promptInfo = BiometricPrompt.PromptInfo.Builder()
+                .setTitle(getString(R.string.Fingerprint_DialogTitle))
+                .setNegativeButtonText(getString(R.string.Button_Cancel))
+                .build()
+
+        val biometricPrompt = BiometricPrompt(this, executor, object : BiometricPrompt.AuthenticationCallback() {
+            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                super.onAuthenticationSucceeded(result)
+                onFingerprintAuthSucceed()
+            }
+        })
+
+        biometricPrompt.authenticate(promptInfo, cryptoObject)
     }
 
     companion object {

@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.pin
 
-import androidx.core.hardware.fingerprint.FingerprintManagerCompat
+import androidx.biometric.BiometricPrompt
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
@@ -23,7 +23,7 @@ class PinViewModel : ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter
     val dismissWithCancelLiveEvent = SingleLiveEvent<Unit>()
     val dismissWithSuccessLiveEvent = SingleLiveEvent<Unit>()
     val showBackButton = SingleLiveEvent<Unit>()
-    val showFingerprintInputLiveEvent = SingleLiveEvent<FingerprintManagerCompat.CryptoObject>()
+    val showFingerprintInputLiveEvent = SingleLiveEvent<BiometricPrompt.CryptoObject>()
     val resetCirclesWithShakeAndDelayForPage = SingleLiveEvent<Int>()
     val showAttemptsLeftError = MutableLiveData<Pair<Int, Int>>()
     val showLockedView = SingleLiveEvent<Date>()
@@ -67,7 +67,7 @@ class PinViewModel : ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter
         resetCirclesWithShakeAndDelayForPage.value = pageIndex
     }
 
-    override fun showFingerprintDialog(cryptoObject: FingerprintManagerCompat.CryptoObject) {
+    override fun showFingerprintDialog(cryptoObject: BiometricPrompt.CryptoObject) {
         showFingerprintInputLiveEvent.postValue(cryptoObject)
     }
 

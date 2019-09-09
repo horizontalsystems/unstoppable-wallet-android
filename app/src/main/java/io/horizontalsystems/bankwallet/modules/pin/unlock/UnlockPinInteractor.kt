@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.pin.unlock
 
-import androidx.core.hardware.fingerprint.FingerprintManagerCompat.CryptoObject
+import androidx.biometric.BiometricPrompt
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.OneTimeTimer
 import io.horizontalsystems.bankwallet.entities.LockoutState
@@ -25,7 +25,7 @@ class UnlockPinInteractor(
     override val biometricAuthSupported: Boolean
         get() = systemInfoManager.biometricAuthSupported
 
-    override val cryptoObject: CryptoObject?
+    override val cryptoObject: BiometricPrompt.CryptoObject?
         get() = encryptionManager.getCryptoObject()
 
     override fun unlock(pin: String): Boolean {
