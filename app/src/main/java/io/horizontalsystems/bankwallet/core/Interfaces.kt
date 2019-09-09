@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.text.SpannableString
-import androidx.core.hardware.fingerprint.FingerprintManagerCompat
+import androidx.biometric.BiometricPrompt
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.managers.ServiceExchangeApi.HostType
 import io.horizontalsystems.bankwallet.entities.*
@@ -151,7 +151,7 @@ interface INetworkManager {
 interface IEncryptionManager {
     fun encrypt(data: String): String
     fun decrypt(data: String): String
-    fun getCryptoObject(): FingerprintManagerCompat.CryptoObject?
+    fun getCryptoObject(): BiometricPrompt.CryptoObject?
 }
 
 interface IKeyStoreManager {

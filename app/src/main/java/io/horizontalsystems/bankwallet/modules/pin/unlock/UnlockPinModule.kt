@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.pin.unlock
 
-import androidx.core.hardware.fingerprint.FingerprintManagerCompat
+import androidx.biometric.BiometricPrompt
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.factories.LockoutUntilDateFactory
 import io.horizontalsystems.bankwallet.core.managers.CurrentDateProvider
@@ -20,7 +20,7 @@ object UnlockPinModule {
     interface IUnlockPinInteractor {
         val isFingerprintEnabled: Boolean
         val biometricAuthSupported: Boolean
-        val cryptoObject: FingerprintManagerCompat.CryptoObject?
+        val cryptoObject: BiometricPrompt.CryptoObject?
 
         fun updateLockoutState()
         fun unlock(pin: String): Boolean
