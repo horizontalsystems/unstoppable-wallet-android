@@ -98,7 +98,7 @@
     <string name="Send_DialogProceed">Продолжить</string>
     <string name="Send_Sending">Отправка</string>
     <string name="Send_ERC_Alert">Комиссия за отправку %s (ERC20) взимается в ETH. Необходимо %s ETH.</string>
-    <string name="Send_Token_InsufficientFeeAlert">Комиссия за отправку %s %s взимается в %s. Необходимо %s.</string>
+    <string name="Send_Token_InsufficientFeeAlert">Комиссия за отправку %s %s взымается в %s. Необходимо %s.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Получить %s</string>
     <string name="Deposit_Share">Поделиться</string>
