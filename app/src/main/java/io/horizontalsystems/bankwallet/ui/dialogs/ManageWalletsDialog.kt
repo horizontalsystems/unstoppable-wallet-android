@@ -26,6 +26,7 @@ class ManageWalletsDialog(private val listener: Listener, private val coin: Coin
 
     private lateinit var rootView: View
     private lateinit var addKeyTitle: TextView
+    private lateinit var addKeySubtitle: TextView
     private lateinit var addKeyInfo: TextView
     private lateinit var addCoinIcon: CoinIconView
     private lateinit var btnCreateKey: Button
@@ -36,13 +37,17 @@ class ManageWalletsDialog(private val listener: Listener, private val coin: Coin
         rootView = View.inflate(context, R.layout.fragment_bottom_manage_keys, null) as ViewGroup
 
         addKeyTitle = rootView.findViewById(R.id.addKeyTitle)
+        addKeySubtitle = rootView.findViewById(R.id.addKeySubtitle)
         addKeyInfo = rootView.findViewById(R.id.addKeyInfo)
         addCoinIcon = rootView.findViewById(R.id.addKeyIcon)
         btnCreateKey = rootView.findViewById(R.id.btnYellow)
         btnRestoreKey = rootView.findViewById(R.id.btnGrey)
         btnClose = rootView.findViewById(R.id.closeButton)
 
-        btnClose.setOnClickListener { dismiss() }
+        btnClose.setOnClickListener {
+            dismiss()
+            listener.onCancel()
+        }
 
         bindContent()
         bindActions()
@@ -58,7 +63,8 @@ class ManageWalletsDialog(private val listener: Listener, private val coin: Coin
     private fun bindContent() {
         addCoinIcon.bind(coin)
 
-        addKeyTitle.text = getString(R.string.AddCoin_Title, coin.code)
+        addKeyTitle.text = getString(R.string.AddCoin_Title)
+        addKeySubtitle.text = getString(R.string.AddCoin_Subtitle, coin.title)
         addKeyInfo.text = getString(R.string.AddCoin_Description, coin.title, getString(accountKeyName), getString(accountKeyName), coin.title)
     }
 
