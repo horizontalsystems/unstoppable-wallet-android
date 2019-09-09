@@ -56,14 +56,18 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
         })
 
         viewModel.confirmCreateEvent.observe(this, Observer {
-            ManageKeysDialog.show(getString(it.predefinedAccountType.title), getString(R.string.ManageCoins_AddCoin_Text, getString(it.predefinedAccountType.coinCodes)), this, this, ManageAction.CREATE)
+            val title = getString(R.string.ManageCoins_AddCoin_Title)
+            val subtitle = getString(R.string.ManageCoins_AddCoin_Subtitle, getString(it.predefinedAccountType.title))
+            val description = getString(R.string.ManageCoins_AddCoin_Text, getString(it.predefinedAccountType.coinCodes))
+            ManageKeysDialog.show(title, subtitle, description, this, this, ManageAction.CREATE)
         })
 
         viewModel.confirmBackupEvent.observe(this, Observer {
             val title = getString(R.string.ManageKeys_Delete_Alert_Title)
+            val subtitle = getString(it.predefinedAccountType.title)
             val keyName = getString(it.predefinedAccountType.title)
             val description = getString(R.string.ManageKeys_Delete_Alert, keyName)
-            ManageKeysDialog.show(title, description, this, this, ManageAction.BACKUP)
+            ManageKeysDialog.show(title, subtitle, description, this, this, ManageAction.BACKUP)
         })
 
         viewModel.showErrorEvent.observe(this, Observer {

@@ -44,6 +44,18 @@
         app:layout_constraintTop_toTopOf="@+id/addKeyIcon"
         tools:text="@string/AddCoin_Title" />
 
+    <TextView
+        android:id="@+id/addKeySubtitle"
+        style="@style/CaptionRegular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:includeFontPadding="false"
+        android:textColor="@color/grey"
+        app:layout_constraintLeft_toLeftOf="@id/addKeyTitle"
+        app:layout_constraintTop_toBottomOf="@id/addKeyTitle"
+        tools:text="Subtitle" />
+
     <ImageView
         android:id="@+id/closeButton"
         android:layout_width="wrap_content"
@@ -62,11 +74,11 @@
         android:id="@+id/border"
         android:layout_width="0dp"
         android:layout_height="0.5dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="12dp"
         android:background="@color/steel_15"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addKeyIcon" />
+        app:layout_constraintTop_toBottomOf="@+id/addKeySubtitle" />
 
     <TextView
         android:id="@+id/addKeyInfo"

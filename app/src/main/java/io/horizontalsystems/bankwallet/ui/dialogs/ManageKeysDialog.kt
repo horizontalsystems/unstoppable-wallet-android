@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.viewHelpers.bottomDialog
 class ManageKeysDialog(
         private val listener: Listener,
         private val title: String,
+        private val subtitle: String,
         private val content: String,
         private val action: ManageAction)
     : DialogFragment() {
@@ -27,6 +28,7 @@ class ManageKeysDialog(
 
     private lateinit var rootView: View
     private lateinit var addKeyTitle: TextView
+    private lateinit var addKeySubtitle: TextView
     private lateinit var addKeyInfo: TextView
     private lateinit var addCoinIcon: CoinIconView
     private lateinit var btnYellow: Button
@@ -37,6 +39,7 @@ class ManageKeysDialog(
         rootView = View.inflate(context, R.layout.fragment_bottom_manage_keys, null) as ViewGroup
 
         addKeyTitle = rootView.findViewById(R.id.addKeyTitle)
+        addKeySubtitle = rootView.findViewById(R.id.addKeySubtitle)
         addKeyInfo = rootView.findViewById(R.id.addKeyInfo)
         addCoinIcon = rootView.findViewById(R.id.addKeyIcon)
 
@@ -56,6 +59,7 @@ class ManageKeysDialog(
         addCoinIcon.bind(R.drawable.ic_manage_keys)
 
         addKeyTitle.text = title
+        addKeySubtitle.text = subtitle
         addKeyInfo.text = content
     }
 
@@ -86,8 +90,8 @@ class ManageKeysDialog(
     }
 
     companion object {
-        fun show(title: String, content: String, activity: FragmentActivity, listener: Listener, action: ManageAction) {
-            val fragment = ManageKeysDialog(listener, title, content, action)
+        fun show(title: String, subtitle: String, content: String, activity: FragmentActivity, listener: Listener, action: ManageAction) {
+            val fragment = ManageKeysDialog(listener, title, subtitle, content, action)
             val transaction = activity.supportFragmentManager.beginTransaction()
 
             transaction.add(fragment, "bottom_create_key_dialog")
