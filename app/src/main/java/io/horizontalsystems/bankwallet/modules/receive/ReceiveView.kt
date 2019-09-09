@@ -46,8 +46,8 @@ class ReceiveView : ConstraintLayoutWithHeader {
     private val showAddressObserver = Observer<AddressItem?> { address ->
         address?.let {
             val coin = it.coin
-            setTitle(context.getString(R.string.Deposit_Title))
-            setSubtitle("${coin.code} ${coin.title}")
+            setTitle(context.getString(R.string.Deposit_Title, coin.code))
+            setSubtitle(coin.title)
             setHeaderIcon(LayoutHelper.getCoinDrawableResource(coin.code))
             receiveAddressView.text = it.address
             imgQrCode.setImageBitmap(TextHelper.getQrCodeBitmap(it.address))
