@@ -16,7 +16,8 @@ data class ChartViewItem(
         val lowValue: CurrencyValue,
         val highValue: CurrencyValue,
         val diffValue: BigDecimal,
-        val chartData: ChartData
+        val chartData: ChartData,
+        val lastUpdateTimestamp: Long? = null
 )
 
 class RateChartViewFactory {
@@ -40,7 +41,8 @@ class RateChartViewFactory {
                 lowValue,
                 highValue,
                 diff,
-                chartData
+                chartData,
+                rate?.timestamp?.times(1000)
         )
     }
 }

@@ -11,6 +11,7 @@ object DateHelper {
 
     fun getOnlyTime(date: Date): String = formatDate(date, "HH:mm")
     fun getFullDateWithShortMonth(date: Date): String = formatDate(date, "MMM d, yyyy, HH:mm")
+    fun getFullDateWithShortMonth(timestamp: Long): String = formatDate(Date(timestamp), "MMM d, yyyy, HH:mm")
 
     fun getRelativeDateString(context: Context, date: Date): String {
         val secondsAgo = getSecondsAgo(date).toInt()
