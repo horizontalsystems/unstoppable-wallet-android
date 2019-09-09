@@ -82,6 +82,7 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
         presenterView.showChart.observe(viewLifecycleOwner, Observer { item ->
             chartView.visibility = View.VISIBLE
             chartView.setData(item.chartData)
+            chartSubtitle.text = item.lastUpdateTimestamp?.let { DateHelper.getFullDateWithShortMonth(it) }
 
             val diffColor = if (item.diffValue < BigDecimal.ZERO)
                 resources.getColor(R.color.red_warning) else
@@ -103,7 +104,7 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
         presenterView.setSelectedPoint.observe(viewLifecycleOwner, Observer { (time, value, type) ->
             val outputFormat = when (type) {
                 ChartType.DAILY,
-                ChartType.WEEKLY -> "MMM d, yyyy 'at' hh:mm a"
+                ChartType.WEEKLY -> "MMM d, yyyy 'at' HH:mm a"
                 else -> "MMM d, yyyy"
             }
             pointInfoPrice.text = formatter.format(value, canUseLessSymbol = false)

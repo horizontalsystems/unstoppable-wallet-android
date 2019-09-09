@@ -16,22 +16,25 @@ import java.math.BigDecimal
 class RateStatsManager(private val networkManager: INetworkManager, private val rateStorage: IRateStorage) {
 
     private val disposables = CompositeDisposable()
-    private val cache = mutableMapOf<StatsKey, StatsData>()
+    private val cache = mutableMapOf<StatsKey, RateStatData>()
 
     fun getRateStats(coinCode: String, currencyCode: String): Flowable<StatsData> {
         val statsKey = StatsKey(coinCode, currencyCode)
         val cached = cache[statsKey]
-        if (cached != null) {
-            return Flowable.just(cached)
-        }
 
         val rateLocal = rateStorage.latestRateObservable(coinCode, currencyCode)
-        val rateStats = networkManager
-                .getRateStats(HostType.MAIN, coinCode, currencyCode)
-                .onErrorResumeNext(networkManager.getRateStats(HostType.FALLBACK, coinCode, currencyCode))
+        val rateStats = if (cached != null) {
+            Flowable.just(cached)
+        } else {
+            networkManager
+                    .getRateStats(HostType.MAIN, coinCode, currencyCode)
+                    .onErrorResumeNext(networkManager.getRateStats(HostType.FALLBACK, coinCode, currencyCode))
+        }
 
         return Flowable.zip(rateLocal, rateStats, BiFunction<Rate, RateStatData, Pair<Rate, RateStatData>> { a, b -> Pair(a, b) })
                 .map { (rate, data) ->
+                    cache[statsKey] = data
+
                     val stats = mutableMapOf<String, ChartData>()
                     val diffs = mutableMapOf<String, BigDecimal>()
 
@@ -44,7 +47,7 @@ class RateStatsManager(private val networkManager: INetworkManager, private val 
                         diffs[type] = growthDiff(chartData.points)
                     }
 
-                    StatsData(data.marketCap, stats, diffs).also { cache[statsKey] = it }
+                    StatsData(data.marketCap, stats, diffs)
                 }
     }
 
@@ -55,7 +58,9 @@ class RateStatsManager(private val networkManager: INetworkManager, private val 
 
     private fun convert(data: RateData, rate: Rate?, chartType: ChartType): ChartData {
         val rates = data.rates.toMutableList()
+        var timestamp = data.timestamp
         if (rate != null) {
+            timestamp = rate.timestamp
             rates.add(rate.value.toFloat())
         }
 
@@ -64,7 +69,7 @@ class RateStatsManager(private val networkManager: INetworkManager, private val 
             else -> rates
         }
 
-        return ChartData(points, data.timestamp, data.scale, chartType)
+        return ChartData(points, timestamp, data.scale, chartType)
     }
 
     private fun growthDiff(points: List<Float>): BigDecimal {
