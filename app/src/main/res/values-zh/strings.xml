@@ -267,7 +267,8 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">代币管理器</string>
     <string name="ManageCoins_save">保存</string>
-    <string name="ManageCoins_AddCoin_Title">添加%s代币</string>
+    <string name="ManageCoins_AddCoin_Title">Add Key</string>
+    <string name="ManageCoins_AddCoin_Subtitle">%s Key</string>
     <string name="ManageCoins_AddCoin_Text">此操作将生成以下代币的新密钥（钱包）：%s</string>
     <string name="ManageCoins_EOSAlert_CreateButton">此时，钱包无法创建新的EOS钱包帐户。您只能恢复现有账户。</string>
     <!--Manage Keys-->
@@ -287,7 +288,8 @@
     <string name="ManageKeys_Delete_Alert_Title">需要备份</string>
     <string name="ManageKeys_Delete_Alert">您必须在将其从电话上删除之前先备份%s密钥。</string>
     <!-- Manage Keys Alert -->
-    <string name="AddCoin_Title">添加%s</string>
+    <string name="AddCoin_Title">Add Key</string>
+    <string name="AddCoin_Subtitle">%s Key</string>
     <string name="AddCoin_Description">您没有%1s的密钥。钱包可以为您生成密钥。使用下方的创建按钮生成新密钥。\n\n如果有的话，您也可以使用%4s现有的%3s密钥。</string>
     <string name="AddCoin_CreateKey">创建</string>
     <string name="AddCoin_RestoreKey">恢复</string>
