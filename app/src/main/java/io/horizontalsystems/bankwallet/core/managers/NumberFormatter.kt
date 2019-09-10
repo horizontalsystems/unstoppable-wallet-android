@@ -27,7 +27,7 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
     override fun format(coinValue: CoinValue, explicitSign: Boolean, realNumber: Boolean): String? {
         var value = coinValue.value.abs()
 
-        val customFormatter = getFormatter(languageManager.currentLanguage) ?: return null
+        val customFormatter = getFormatter(languageManager.currentLocale) ?: return null
 
         when {
             !realNumber && value > COIN_BIG_NUMBER_EDGE -> customFormatter.maximumFractionDigits = 4
@@ -59,7 +59,7 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         val absValue = currencyValue.value.abs()
         var value = absValue
 
-        val customFormatter = getFormatter(languageManager.currentLanguage) ?: return null
+        val customFormatter = getFormatter(languageManager.currentLocale) ?: return null
 
         when {
             value.compareTo(BigDecimal.ZERO) == 0 -> {
@@ -108,7 +108,7 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
     }
 
     override fun format(value: Double, showSign: Boolean, precision: Int): String {
-        val customFormatter = getFormatter(languageManager.currentLanguage)?.also {
+        val customFormatter = getFormatter(languageManager.currentLocale)?.also {
             it.maximumFractionDigits = precision
         }
 

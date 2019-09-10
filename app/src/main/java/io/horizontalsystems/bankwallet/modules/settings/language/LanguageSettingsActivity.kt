@@ -54,8 +54,8 @@ class LanguageSettingsActivity : BaseActivity(), LanguageSettingsAdapter.Listene
 
     }
 
-    override fun onItemClick(item: LanguageItem) {
-        viewModel.delegate.didSelect(item)
+    override fun onItemClick(position: Int) {
+        viewModel.delegate.didSelect(position)
     }
 }
 
@@ -64,10 +64,10 @@ class LanguageSettingsAdapter(private var listener: Listener) : RecyclerView.Ada
     private val VIEW_TYPE_LOADING = 2
 
     interface Listener {
-        fun onItemClick(item: LanguageItem)
+        fun onItemClick(position: Int)
     }
 
-    var items = listOf<LanguageItem>()
+    var items = listOf<LanguageViewItem>()
 
     override fun getItemCount() = if (items.isEmpty()) 1 else items.size
 
@@ -87,7 +87,7 @@ class LanguageSettingsAdapter(private var listener: Listener) : RecyclerView.Ada
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is ViewHolderLanguageItem -> holder.bind(items[position]) { listener.onItemClick(items[position]) }
+            is ViewHolderLanguageItem -> holder.bind(items[position]) { listener.onItemClick(position) }
         }
     }
 
@@ -95,12 +95,12 @@ class LanguageSettingsAdapter(private var listener: Listener) : RecyclerView.Ada
 
 class ViewHolderLanguageItem(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(item: LanguageItem, onClick: () -> (Unit)) {
+    fun bind(item: LanguageViewItem, onClick: () -> (Unit)) {
 
         containerView.setOnSingleClickListener { onClick.invoke() }
-        image.setImageResource(LayoutHelper.getLangDrawableResource(item.locale.language))
-        title.text = item.locale.getDisplayLanguage(item.locale).capitalize()
-        subtitle.text = item.locale.displayName.capitalize()
+        image.setImageResource(LayoutHelper.getLangDrawableResource(item.code))
+        title.text = item.nativeDisplayName.capitalize()
+        subtitle.text = item.displayName.capitalize()
         checkmarkIcon.visibility = if (item.current) View.VISIBLE else View.GONE
     }
 

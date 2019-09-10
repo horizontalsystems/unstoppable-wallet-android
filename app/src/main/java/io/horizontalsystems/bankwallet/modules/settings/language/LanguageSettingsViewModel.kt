@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.SingleLiveEvent
 class LanguageSettingsViewModel: ViewModel(), LanguageSettingsModule.ILanguageSettingsView, LanguageSettingsModule.ILanguageSettingsRouter {
 
     lateinit var delegate: LanguageSettingsModule.ILanguageSettingsViewDelegate
-    val languageItems = MutableLiveData<List<LanguageItem>>()
+    val languageItems = MutableLiveData<List<LanguageViewItem>>()
     val reloadAppLiveEvent = SingleLiveEvent<Unit>()
 
     fun init() {
@@ -15,7 +15,7 @@ class LanguageSettingsViewModel: ViewModel(), LanguageSettingsModule.ILanguageSe
         delegate.viewDidLoad()
     }
 
-    override fun show(items: List<LanguageItem>) {
+    override fun show(items: List<LanguageViewItem>) {
         languageItems.value = items
     }
 

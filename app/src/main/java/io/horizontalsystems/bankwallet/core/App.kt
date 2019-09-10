@@ -17,7 +17,6 @@ import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bankwallet.core.storage.EnabledWalletsStorage
 import io.horizontalsystems.bankwallet.core.storage.RatesRepository
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
-import java.util.*
 import java.util.logging.Level
 import java.util.logging.Logger
 
@@ -96,8 +95,6 @@ class App : Application() {
         instance = this
         preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
-        val fallbackLanguage = Locale("en")
-
         appConfigProvider = AppConfigProvider()
         feeRateProvider = FeeRateProvider(instance, appConfigProvider)
         backgroundManager = BackgroundManager(this)
@@ -140,7 +137,7 @@ class App : Application() {
         keyStoreChangeListener = KeyStoreChangeListener(systemInfoManager, keyStoreManager).apply {
             backgroundManager.registerListener(this)
         }
-        languageManager = LanguageManager(localStorage, appConfigProvider, fallbackLanguage)
+        languageManager = LanguageManager(localStorage, "en")
         currencyManager = CurrencyManager(localStorage, appConfigProvider)
         numberFormatter = NumberFormatter(languageManager)
 

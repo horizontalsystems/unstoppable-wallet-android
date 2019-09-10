@@ -2,28 +2,20 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import android.os.Build
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.ILanguageManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import java.util.*
 
+class LanguageManager(private val localStorage: ILocalStorage, fallbackLanguage: String) : ILanguageManager {
 
-class LanguageManager(
-        private val localStorage: ILocalStorage,
-        private val appConfigProvider: IAppConfigProvider,
-        fallbackLanguage: Locale) : ILanguageManager {
-
-    override val availableLanguages: List<Locale>
-        get() = appConfigProvider.localizations.map { Locale(it) }
-
-    override var currentLanguage: Locale
-        get() = language
+    override var currentLocale: Locale = localStorage.currentLanguage?.let { Locale(it) } ?: preferredSystemLocale ?: Locale(fallbackLanguage)
         set(value) {
-            language = value
+            field = value
+
             localStorage.currentLanguage = value.language
 
             val configuration = App.instance.resources.configuration
-            configuration.setLocale(value)
+            configuration.setLocale(currentLocale)
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 App.instance.createConfigurationContext(configuration)
@@ -33,10 +25,22 @@ class LanguageManager(
             }
         }
 
-    private var language: Locale = localStorage.currentLanguage?.let { Locale(localStorage.currentLanguage) }
-            ?: preferredSystemLanguage ?: fallbackLanguage
+    override var currentLanguage: String
+        get() = currentLocale.language
+        set(value) {
+            currentLocale = Locale(value)
+        }
 
-    private val preferredSystemLanguage: Locale?
+    override fun getName(language: String): String {
+        return Locale(language).displayLanguage
+    }
+
+    override fun getNativeName(language: String): String {
+        val locale = Locale(language)
+        return locale.getDisplayLanguage(locale)
+    }
+
+    private val preferredSystemLocale: Locale?
         get() {
             return when {
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.N -> App.instance.resources.configuration.locales.get(0)
