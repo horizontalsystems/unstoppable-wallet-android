@@ -177,7 +177,7 @@ interface ICurrencyManager {
     val baseCurrency: Currency
     val baseCurrencyUpdatedSignal: Observable<Unit>
     val currencies: List<Currency>
-    fun setBaseCurrency(code: String)
+    fun setBaseCurrency(currency: Currency)
 }
 
 interface ITransactionDataProviderManager {

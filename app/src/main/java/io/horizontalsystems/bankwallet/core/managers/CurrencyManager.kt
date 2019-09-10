@@ -22,8 +22,8 @@ class CurrencyManager(private val localStorage: ILocalStorage, private val appCo
 
     override val baseCurrencyUpdatedSignal = PublishSubject.create<Unit>()
 
-    override fun setBaseCurrency(code: String) {
-        localStorage.baseCurrencyCode = code
+    override fun setBaseCurrency(currency: Currency) {
+        localStorage.baseCurrencyCode = currency.code
 
         baseCurrencyUpdatedSignal.onNext(Unit)
     }

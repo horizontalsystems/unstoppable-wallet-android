@@ -51,8 +51,8 @@ class BaseCurrencySettingsActivity : BaseActivity(), CurrencySwitcherAdapter.Lis
         })
     }
 
-    override fun onItemClick(item: CurrencyItem) {
-        viewModel.delegate.didSelect(item)
+    override fun onItemClick(position: Int) {
+        viewModel.delegate.didSelect(position)
     }
 }
 
@@ -61,10 +61,10 @@ class CurrencySwitcherAdapter(private var listener: Listener) : RecyclerView.Ada
     private val VIEW_TYPE_LOADING = 2
 
     interface Listener {
-        fun onItemClick(item: CurrencyItem)
+        fun onItemClick(position: Int)
     }
 
-    var items = listOf<CurrencyItem>()
+    var items = listOf<CurrencyViewItem>()
 
     override fun getItemCount() = if (items.isEmpty()) 1 else items.size
 
@@ -85,7 +85,7 @@ class CurrencySwitcherAdapter(private var listener: Listener) : RecyclerView.Ada
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is ViewHolderCurrency -> holder.bind(items[position]) { listener.onItemClick(items[position]) }
+            is ViewHolderCurrency -> holder.bind(items[position]) { listener.onItemClick(position) }
         }
     }
 
@@ -93,7 +93,7 @@ class CurrencySwitcherAdapter(private var listener: Listener) : RecyclerView.Ada
 
 class ViewHolderCurrency(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(item: CurrencyItem, onClick: () -> (Unit)) {
+    fun bind(item: CurrencyViewItem, onClick: () -> (Unit)) {
 
         containerView.setOnSingleClickListener { onClick.invoke() }
         image.setImageResource(LayoutHelper.getCurrencyDrawableResource(item.code.toLowerCase()))

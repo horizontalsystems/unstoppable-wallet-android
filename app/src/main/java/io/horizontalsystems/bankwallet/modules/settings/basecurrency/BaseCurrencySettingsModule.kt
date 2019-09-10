@@ -7,24 +7,20 @@ import io.horizontalsystems.bankwallet.entities.Currency
 
 object BaseCurrencySettingsModule {
 
-    interface IBaseCurrencySettingsView{
-        fun show(items: List<CurrencyItem>)
+    interface IView {
+        fun show(items: List<CurrencyViewItem>)
         fun close()
     }
 
-    interface IBaseCurrencySettingsViewDelegate {
+    interface IViewDelegate {
         fun viewDidLoad()
-        fun didSelect(item: CurrencyItem)
+        fun didSelect(position: Int)
     }
 
-    interface IBaseCurrencySettingsInteractor {
+    interface IInteractor {
         val currencies: List<Currency>
         val baseCurrency: Currency
-        fun setBaseCurrency(code: String)
-    }
-
-    interface IBaseCurrencySettingsInteractorDelegate {
-        fun didSetBaseCurrency()
+        fun setBaseCurrency(currency: Currency)
     }
 
     fun init(view: BaseCurrencySettingsViewModel) {
@@ -33,7 +29,6 @@ object BaseCurrencySettingsModule {
 
         view.delegate = presenter
         presenter.view = view
-        interactor.delegate = presenter
     }
 
     fun start(context: Context) {
@@ -43,10 +38,10 @@ object BaseCurrencySettingsModule {
 
 }
 
-data class CurrencyItem (val code: String, val symbol: String, val selected: Boolean) {
+data class CurrencyViewItem(val code: String, val symbol: String, val selected: Boolean) {
 
     override fun equals(other: Any?): Boolean {
-        if (other is CurrencyItem) {
+        if (other is CurrencyViewItem) {
             return code == other.code
         }
 
