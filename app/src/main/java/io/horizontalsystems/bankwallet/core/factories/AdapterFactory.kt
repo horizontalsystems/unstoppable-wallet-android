@@ -18,18 +18,16 @@ class AdapterFactory(
         private val binanceKitManager: BinanceKitManager) {
 
     fun adapter(wallet: Wallet): IAdapter? {
+        val confirmationsThreshold = appConfigProvider.confirmationsThreshold(wallet.coin.type)
+
         return when (val coinType = wallet.coin.type) {
-            is CoinType.Bitcoin -> BitcoinAdapter(wallet, appConfigProvider.testMode)
-            is CoinType.BitcoinCash -> BitcoinCashAdapter(wallet, appConfigProvider.testMode)
-            is CoinType.Dash -> DashAdapter(wallet, appConfigProvider.testMode)
-            is CoinType.Eos -> EosAdapter(coinType, eosKitManager.eosKit(wallet), wallet.coin.decimal)
-            is CoinType.Binance -> BinanceAdapter(binanceKitManager.binanceKit(wallet), coinType.symbol)
-            is CoinType.Ethereum -> {
-                EthereumAdapter(ethereumKitManager.ethereumKit(wallet))
-            }
-            is CoinType.Erc20 -> {
-                Erc20Adapter(context, ethereumKitManager.ethereumKit(wallet), wallet.coin.decimal, coinType.fee, coinType.address)
-            }
+            is CoinType.Bitcoin -> BitcoinAdapter(wallet, appConfigProvider.testMode, confirmationsThreshold)
+            is CoinType.BitcoinCash -> BitcoinCashAdapter(wallet, appConfigProvider.testMode, confirmationsThreshold)
+            is CoinType.Dash -> DashAdapter(wallet, appConfigProvider.testMode, confirmationsThreshold)
+            is CoinType.Eos -> EosAdapter(coinType, eosKitManager.eosKit(wallet), wallet.coin.decimal, confirmationsThreshold)
+            is CoinType.Binance -> BinanceAdapter(binanceKitManager.binanceKit(wallet), coinType.symbol, confirmationsThreshold)
+            is CoinType.Ethereum -> EthereumAdapter(ethereumKitManager.ethereumKit(wallet), confirmationsThreshold)
+            is CoinType.Erc20 -> Erc20Adapter(context, ethereumKitManager.ethereumKit(wallet), wallet.coin.decimal, coinType.fee, coinType.address, confirmationsThreshold)
         }
     }
 
