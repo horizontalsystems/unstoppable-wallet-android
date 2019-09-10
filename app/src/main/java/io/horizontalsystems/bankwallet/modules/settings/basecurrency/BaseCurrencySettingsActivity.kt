@@ -20,13 +20,17 @@ import kotlinx.android.synthetic.main.view_holder_item_with_checkmark.*
 
 class BaseCurrencySettingsActivity : BaseActivity(), CurrencySwitcherAdapter.Listener {
 
-    private lateinit var viewModel: BaseCurrencySettingsViewModel
+    private lateinit var presenter: BaseCurrencySettingsPresenter
+    private lateinit var presenterView: BaseCurrencySettingsView
+    private lateinit var presenterRouter: BaseCurrencySettingsRouter
     private var adapter: CurrencySwitcherAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(BaseCurrencySettingsViewModel::class.java)
-        viewModel.init()
+
+        presenter = ViewModelProviders.of(this, BaseCurrencySettingsModule.Factory()).get(BaseCurrencySettingsPresenter::class.java)
+        presenterView = presenter.view as BaseCurrencySettingsView
+        presenterRouter = presenter.router as BaseCurrencySettingsRouter
 
         setContentView(R.layout.activity_currency_switcher)
 
@@ -39,20 +43,22 @@ class BaseCurrencySettingsActivity : BaseActivity(), CurrencySwitcherAdapter.Lis
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        viewModel.currencyItems.observe(this, Observer { items ->
+        presenterView.currencyItems.observe(this, Observer { items ->
             items?.let {
                 adapter?.items = it
                 adapter?.notifyDataSetChanged()
             }
         })
 
-        viewModel.closeLiveEvent.observe(this, Observer {
+        presenterRouter.closeLiveEvent.observe(this, Observer {
             finish()
         })
+
+        presenter.viewDidLoad()
     }
 
     override fun onItemClick(position: Int) {
-        viewModel.delegate.didSelect(position)
+        presenter.didSelect(position)
     }
 }
 

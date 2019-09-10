@@ -2,6 +2,8 @@ package io.horizontalsystems.bankwallet.modules.settings.basecurrency
 
 import android.content.Context
 import android.content.Intent
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Currency
 
@@ -9,6 +11,9 @@ object BaseCurrencySettingsModule {
 
     interface IView {
         fun show(items: List<CurrencyViewItem>)
+    }
+
+    interface IRouter {
         fun close()
     }
 
@@ -23,19 +28,21 @@ object BaseCurrencySettingsModule {
         fun setBaseCurrency(currency: Currency)
     }
 
-    fun init(view: BaseCurrencySettingsViewModel) {
-        val interactor = BaseCurrencySettingsInteractor(App.currencyManager)
-        val presenter = BaseCurrencySettingsPresenter(interactor)
-
-        view.delegate = presenter
-        presenter.view = view
-    }
-
     fun start(context: Context) {
         val intent = Intent(context, BaseCurrencySettingsActivity::class.java)
         context.startActivity(intent)
     }
 
+    class Factory : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            val view = BaseCurrencySettingsView()
+            val router = BaseCurrencySettingsRouter()
+            val interactor = BaseCurrencySettingsInteractor(App.currencyManager)
+            val presenter = BaseCurrencySettingsPresenter(view, router, interactor)
+
+            return presenter as T
+        }
+    }
 }
 
 data class CurrencyViewItem(val code: String, val symbol: String, val selected: Boolean) {
