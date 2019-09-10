@@ -25,17 +25,19 @@
             android:visibility="gone">
 
             <TextView
-                style="@style/Body1Grey"
+                style="@style/Subhead2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/Send_Confirmation_HintMemo" />
+                android:text="@string/Send_Confirmation_HintMemo"
+                android:textColor="@color/grey" />
 
             <TextView
                 android:id="@+id/memoValue"
-                style="@style/Body1Grey"
+                style="@style/Subhead2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/grey"
                 tools:text="Salary for August" />
         </LinearLayout>
 
@@ -48,17 +50,19 @@
             android:visibility="gone">
 
             <TextView
-                style="@style/Body1Grey"
+                style="@style/Subhead2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/Send_Fee" />
+                android:text="@string/Send_Fee"
+                android:textColor="@color/grey" />
 
             <TextView
                 android:id="@+id/feeValue"
-                style="@style/Body1Grey"
+                style="@style/Subhead2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/grey"
                 tools:text="0.0053 DASH" />
         </LinearLayout>
 
@@ -71,17 +75,19 @@
             android:visibility="gone">
 
             <TextView
-                style="@style/Body1Grey"
+                style="@style/Subhead2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/Send_Confirmation_EstimateTime" />
+                android:text="@string/Send_Confirmation_EstimateTime"
+                android:textColor="@color/grey" />
 
             <TextView
                 android:id="@+id/timeValue"
-                style="@style/Body1Grey"
+                style="@style/Subhead2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/grey"
                 tools:text="Instant" />
         </LinearLayout>
     </LinearLayout>

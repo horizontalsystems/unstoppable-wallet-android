@@ -31,7 +31,7 @@
 
         <TextView
             android:id="@+id/accountName"
-            style="@style/BaseSb"
+            style="@style/Headline2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -55,7 +55,7 @@
 
         <TextView
             android:id="@+id/accountCoins"
-            style="@style/Body1"
+            style="@style/Subhead2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:includeFontPadding="false"

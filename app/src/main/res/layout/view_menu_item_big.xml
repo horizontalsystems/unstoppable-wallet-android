@@ -31,7 +31,7 @@
 
     <TextView
         android:id="@+id/title"
-        style="@style/BaseMedium"
+        style="@style/Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -54,7 +54,7 @@
 
     <TextView
         android:id="@+id/subtitle"
-        style="@style/Body1"
+        style="@style/Subhead2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"

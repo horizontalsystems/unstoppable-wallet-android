@@ -10,10 +10,11 @@
 
     <TextView
         android:id="@+id/backupTitle"
-        style="@style/Title2Yellow"
+        style="@style/Title3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:textColor="@color/yellow_crypto"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/AccountType_12WordsKey" />

@@ -8,18 +8,19 @@
 
     <EditText
         android:id="@+id/memoInput"
-        style="@style/FormInputTextThemed"
+        style="@style/Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:hint="@string/Send_DialogMemoHint"
-        android:paddingTop="8dp"
-        android:paddingStart="12dp"
-        android:paddingBottom="10dp"
-        android:paddingEnd="12dp"
         android:layout_marginTop="12dp"
         android:background="@drawable/input_background_themed"
-        app:layout_constraintTop_toTopOf="parent"
+        android:hint="@string/Send_DialogMemoHint"
+        android:maxLines="1"
+        android:paddingStart="12dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="10dp"
+        android:textColor="?attr/TextColorBarsToDark"
+        android:textColorHint="@color/grey_50"
         app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

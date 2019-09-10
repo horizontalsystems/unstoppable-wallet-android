@@ -27,7 +27,7 @@
 
     <TextView
         android:id="@+id/txDate"
-        style="@style/BaseSb"
+        style="@style/Headline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
@@ -49,7 +49,7 @@
 
     <TextView
         android:id="@+id/txValueInFiat"
-        style="@style/Title2"
+        style="@style/Title3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -60,7 +60,7 @@
 
     <TextView
         android:id="@+id/txValueInCoin"
-        style="@style/Body1"
+        style="@style/Subhead2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"

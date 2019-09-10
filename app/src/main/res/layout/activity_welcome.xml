@@ -59,7 +59,7 @@
 
     <TextView
         android:id="@+id/textVersion"
-        style="@style/CaptionRegular"
+        style="@style/Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"

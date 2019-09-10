@@ -32,7 +32,7 @@
 
     <TextView
         android:id="@+id/confirmTitle"
-        style="@style/BaseSb"
+        style="@style/Headline2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"

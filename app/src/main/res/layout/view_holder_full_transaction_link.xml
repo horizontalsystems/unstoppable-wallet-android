@@ -9,12 +9,11 @@
 
     <TextView
         android:id="@+id/transactionLink"
-        style="@style/Body1"
+        style="@style/Subhead2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="11dp"
         android:textAlignment="center"
-        android:textColor="?TextColorBarsToDark"
-        />
+        android:textColor="?TextColorBarsToDark" />
 
 </LinearLayout>
