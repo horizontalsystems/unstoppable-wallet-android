@@ -10,8 +10,8 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
 
-class EthereumAdapter(kit: EthereumKit, confirmationsThreshold: Int)
-    : EthereumBaseAdapter(kit, decimal, confirmationsThreshold) {
+class EthereumAdapter(kit: EthereumKit)
+    : EthereumBaseAdapter(kit, decimal) {
 
     override fun sendSingle(address: String, amount: String, gasPrice: Long): Single<Unit> {
         return ethereumKit.send(address, amount, gasPrice).map { Unit }

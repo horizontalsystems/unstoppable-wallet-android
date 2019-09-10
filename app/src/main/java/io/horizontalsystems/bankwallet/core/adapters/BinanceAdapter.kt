@@ -11,8 +11,7 @@ import java.math.BigDecimal
 
 class BinanceAdapter(
         private val binanceKit: BinanceChainKit,
-        private val symbol: String,
-        override val confirmationsThreshold: Int)
+        private val symbol: String)
     : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, ISendBinanceAdapter {
 
     private val asset = binanceKit.register(symbol)
@@ -53,6 +52,9 @@ class BinanceAdapter(
         get() = asset.balanceFlowable.map { Unit }
 
     // ITransactionsAdapter
+
+    override val confirmationsThreshold: Int
+        get() = 1
 
     override val lastBlockHeight: Int?
         get() = binanceKit.latestBlock?.height

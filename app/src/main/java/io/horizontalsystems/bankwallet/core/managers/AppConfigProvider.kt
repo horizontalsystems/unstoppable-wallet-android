@@ -116,15 +116,4 @@ class AppConfigProvider : IAppConfigProvider {
             EosAccountType(),
             Words24AccountType()
     )
-
-    override fun confirmationsThreshold(coinType: CoinType): Int = when (coinType) {
-        is CoinType.Bitcoin,
-        is CoinType.BitcoinCash,
-        is CoinType.Dash -> 3
-        is CoinType.Erc20,
-        is CoinType.Ethereum -> 12
-        is CoinType.Eos -> 330
-        is CoinType.Binance -> 1
-    }
-
 }

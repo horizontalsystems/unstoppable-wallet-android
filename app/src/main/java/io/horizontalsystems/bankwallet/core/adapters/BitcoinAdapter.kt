@@ -18,10 +18,10 @@ import io.reactivex.Single
 import java.math.BigDecimal
 import java.util.*
 
-class BitcoinAdapter(override val kit: BitcoinKit, confirmationsThreshold: Int)
-    : BitcoinBaseAdapter(kit, confirmationsThreshold), BitcoinKit.Listener, ISendBitcoinAdapter {
+class BitcoinAdapter(override val kit: BitcoinKit)
+    : BitcoinBaseAdapter(kit), BitcoinKit.Listener, ISendBitcoinAdapter {
 
-    constructor(wallet: Wallet, testMode: Boolean, confirmationsThreshold: Int) : this(createKit(wallet, testMode, confirmationsThreshold), confirmationsThreshold)
+    constructor(wallet: Wallet, testMode: Boolean) : this(createKit(wallet, testMode))
 
     init {
         kit.listener = this
@@ -103,15 +103,10 @@ class BitcoinAdapter(override val kit: BitcoinKit, confirmationsThreshold: Int)
                 if (testMode) NetworkType.TestNet else NetworkType.MainNet
 
 
-        private fun createKit(wallet: Wallet, testMode: Boolean, confirmationsThreshold: Int): BitcoinKit {
+        private fun createKit(wallet: Wallet, testMode: Boolean): BitcoinKit {
             val account = wallet.account
             if (account.type is AccountType.Mnemonic) {
-                return BitcoinKit(context = App.instance,
-                        words = account.type.words,
-                        walletId = account.id,
-                        syncMode = SyncMode.fromSyncMode(account.defaultSyncMode),
-                        networkType = getNetworkType(testMode),
-                        confirmationsThreshold = confirmationsThreshold)
+                return BitcoinKit(App.instance, account.type.words, account.id, syncMode = SyncMode.fromSyncMode(account.defaultSyncMode), networkType = getNetworkType(testMode))
             }
 
             throw UnsupportedAccountException()
