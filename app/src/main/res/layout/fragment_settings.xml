@@ -143,7 +143,7 @@
 
             <TextView
                 android:id="@+id/appName"
-                style="@style/CaptionRegular"
+                style="@style/Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
@@ -166,7 +166,7 @@
 
             <TextView
                 android:id="@+id/decentralizedAppBy"
-                style="@style/CaptionRegular"
+                style="@style/Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3.5dp"

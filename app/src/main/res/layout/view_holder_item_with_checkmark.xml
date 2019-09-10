@@ -40,26 +40,25 @@
 
         <TextView
             android:id="@+id/title"
-            style="@style/BaseMedium"
+            style="@style/Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:textColor="?TextColorBarsToDark"
             app:layout_constraintStart_toEndOf="@+id/image"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="USD"
-            />
+            tools:text="USD" />
 
         <TextView
             android:id="@+id/subtitle"
-            style="@style/Body1Grey"
+            style="@style/Subhead2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:textColor="@color/grey"
             app:layout_constraintStart_toStartOf="@+id/title"
             app:layout_constraintTop_toBottomOf="@+id/title"
-            tools:text="United States Dollar"
-            />
+            tools:text="United States Dollar" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView

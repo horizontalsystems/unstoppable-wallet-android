@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/fiatValue"
-        style="@style/Title2"
+        style="@style/Title3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?TransactionDetailBackground"
@@ -21,7 +21,7 @@
 
     <TextView
         android:id="@+id/coinValue"
-        style="@style/Body1"
+        style="@style/Subhead2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?TransactionDetailBackground"
@@ -36,7 +36,7 @@
 
     <TextView
         android:id="@+id/txInfoCoinName"
-        style="@style/CaptionRegular"
+        style="@style/Caption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?TransactionDetailBackground"

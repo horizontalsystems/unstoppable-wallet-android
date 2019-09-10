@@ -10,19 +10,18 @@
 
     <TextView
         android:id="@+id/txtTitle"
-        style="@style/Body1"
+        style="@style/Subhead2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="14dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="14dp"
+        android:layout_marginBottom="14dp"
         android:includeFontPadding="false"
         android:textColor="@color/grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="From"
-        />
+        tools:text="From" />
 
     <ImageView
         android:id="@+id/statusIcon"
@@ -56,18 +55,17 @@
 
     <TextView
         android:id="@+id/valueText"
-        style="@style/Body1"
+        style="@style/Subhead2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:layout_marginStart="4dp"
+        android:layout_marginEnd="16dp"
         android:textColor="?BottomDialogTextColor"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="June 6, 2019, 15:02"
-        />
+        tools:text="June 6, 2019, 15:02" />
 
     <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoStatusView
         android:id="@+id/transactionStatusView"

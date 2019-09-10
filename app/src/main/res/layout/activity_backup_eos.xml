@@ -27,7 +27,7 @@
 
             <TextView
                 android:id="@+id/accountName"
-                style="@style/Body1Grey"
+                style="@style/Subhead2"
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
                 android:layout_marginStart="24dp"
@@ -36,6 +36,7 @@
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:text="@string/Backup_Eos_AccountName"
+                android:textColor="@color/grey"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -50,7 +51,7 @@
 
             <TextView
                 android:id="@+id/privateKey"
-                style="@style/Body1Grey"
+                style="@style/Subhead2"
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
                 android:layout_marginStart="24dp"
@@ -60,6 +61,7 @@
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:text="@string/Backup_Eos_ActivePrivateKey"
+                android:textColor="@color/grey"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/eosAccount" />
 
@@ -74,13 +76,14 @@
 
             <TextView
                 android:id="@+id/copyWarning"
-                style="@style/Body1Grey"
+                style="@style/Subhead2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="24dp"
                 android:text="@string/Backup_Eos_Warning"
+                android:textColor="@color/grey"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/eosActivePrivateKey" />
 

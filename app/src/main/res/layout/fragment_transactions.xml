@@ -17,13 +17,13 @@
 
         <TextView
             android:id="@+id/toolbarTitle"
-            style="@style/TabTitle"
+            style="@style/Title2"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/app_bar_height_tall"
             android:layout_marginStart="16dp"
             android:gravity="bottom|start"
-            app:layout_scrollFlags="scroll|snap"
-            />
+            android:textColor="?TitleColor"
+            app:layout_scrollFlags="scroll|snap" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerTags"

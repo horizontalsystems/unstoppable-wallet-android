@@ -20,7 +20,7 @@
 
     <TextView
         android:id="@+id/providerName"
-        style="@style/BaseMedium"
+        style="@style/Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -34,7 +34,7 @@
 
     <TextView
         android:id="@+id/providerError"
-        style="@style/Body1"
+        style="@style/Subhead2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -62,7 +62,7 @@
 
     <TextView
         android:id="@+id/changeProvider"
-        style="@style/Body1"
+        style="@style/Subhead2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"

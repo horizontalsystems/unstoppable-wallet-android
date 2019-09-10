@@ -30,7 +30,7 @@
 
     <TextView
         android:id="@+id/setting_title"
-        style="@style/Base"
+        style="@style/Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

@@ -61,7 +61,7 @@
 
         <TextView
             android:id="@+id/textCoinName"
-            style="@style/BaseSb"
+            style="@style/Headline2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
@@ -72,7 +72,7 @@
 
         <TextView
             android:id="@+id/textCoinAmount"
-            style="@style/Body1"
+            style="@style/Subhead2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="0dp"
@@ -109,7 +109,7 @@
 
         <TextView
             android:id="@+id/textSyncProgress"
-            style="@style/Body1"
+            style="@style/Subhead2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
@@ -122,7 +122,7 @@
 
         <TextView
             android:id="@+id/textExchangeRate"
-            style="@style/Body1"
+            style="@style/Subhead2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
@@ -134,7 +134,7 @@
 
         <TextView
             android:id="@+id/textCurrencyAmount"
-            style="@style/BaseSb"
+            style="@style/Headline2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
@@ -147,7 +147,7 @@
 
         <TextView
             android:id="@+id/chartRateDiff"
-            style="@style/BaseSb"
+            style="@style/Headline2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"

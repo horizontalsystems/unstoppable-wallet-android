@@ -12,30 +12,31 @@
 
     <TextView
         android:id="@+id/txtPrefix"
-        style="@style/BaseGrey"
+        style="@style/Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="12."
-        />
+        tools:text="12." />
 
     <EditText
         android:id="@+id/inputEditText"
-        style="@style/FormInputTextThemed"
+        style="@style/Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:background="@android:color/transparent"
-        android:maxLines="1"
-        android:inputType="text"
         android:imeOptions="actionNext"
+        android:inputType="text"
+        android:maxLines="1"
+        android:textColor="?attr/TextColorBarsToDark"
+        android:textColorHint="@color/grey_50"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/txtPrefix"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/Send_Hint_Address"
-        />
+        tools:text="@string/Send_Hint_Address" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -47,25 +47,24 @@
 
             <TextView
                 android:id="@+id/txtAddress"
-                style="@style/Base"
+                style="@style/Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="middle"
-                android:textColorHint="@color/grey_50"
-                android:textColor="?TextColorBarsToDark"
                 android:hint="@string/Send_Hint_Address"
                 android:singleLine="true"
-                />
+                android:textColor="?TextColorBarsToDark"
+                android:textColorHint="@color/grey_50" />
 
             <TextView
                 android:id="@+id/txtAddressError"
+                style="@style/Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
-                style="@style/CaptionRegularRed"
+                android:textColor="@color/red_warning"
                 android:visibility="gone"
-                tools:text="@string/Send_Error_IncorrectAddress"
-                />
+                tools:text="@string/Send_Error_IncorrectAddress" />
         </LinearLayout>
 
         <ImageButton

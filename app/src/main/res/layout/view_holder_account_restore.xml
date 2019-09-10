@@ -24,7 +24,7 @@
 
         <TextView
             android:id="@+id/accountName"
-            style="@style/BaseSb"
+            style="@style/Headline2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -49,16 +49,16 @@
 
         <TextView
             android:id="@+id/accountCoin"
-            style="@style/Body1"
+            style="@style/Subhead2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:includeFontPadding="false"
-            android:text="BTC, BCH, DASH, ETH, ERC20"
             android:textColor="@color/grey"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="BTC, BCH, DASH, ETH, ERC20" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
