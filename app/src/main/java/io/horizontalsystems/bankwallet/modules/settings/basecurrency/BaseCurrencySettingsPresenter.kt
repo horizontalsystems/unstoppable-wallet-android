@@ -1,29 +1,23 @@
 package io.horizontalsystems.bankwallet.modules.settings.basecurrency
 
-class BaseCurrencySettingsPresenter(private val interactor: BaseCurrencySettingsModule.IBaseCurrencySettingsInteractor) :
-        BaseCurrencySettingsModule.IBaseCurrencySettingsViewDelegate,
-        BaseCurrencySettingsModule.IBaseCurrencySettingsInteractorDelegate {
+class BaseCurrencySettingsPresenter(private val interactor: BaseCurrencySettingsModule.IInteractor) : BaseCurrencySettingsModule.IViewDelegate {
 
-    var view: BaseCurrencySettingsModule.IBaseCurrencySettingsView? = null
+    var view: BaseCurrencySettingsModule.IView? = null
+
+    private val currencies = interactor.currencies
 
     override fun viewDidLoad() {
-        showItems()
+        val baseCurrency = interactor.baseCurrency
+        val items = currencies.map { CurrencyViewItem(it.code, it.symbol, it == baseCurrency) }
+        view?.show(items)
     }
 
-    override fun didSelect(item: CurrencyItem) {
-        if (!item.selected) {
-            interactor.setBaseCurrency(item.code)
+    override fun didSelect(position: Int) {
+        val selected = currencies[position]
+        if (selected != interactor.baseCurrency) {
+            interactor.setBaseCurrency(selected)
         }
-    }
-
-    override fun didSetBaseCurrency() {
         view?.close()
     }
 
-    private fun showItems() {
-        val baseCurrencyCode = interactor.baseCurrency.code
-
-        val items = interactor.currencies.map { CurrencyItem(it.code, it.symbol, it.code == baseCurrencyCode) }
-        view?.show(items)
-    }
 }

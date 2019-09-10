@@ -4,10 +4,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 
-class BaseCurrencySettingsViewModel: ViewModel(), BaseCurrencySettingsModule.IBaseCurrencySettingsView {
+class BaseCurrencySettingsViewModel: ViewModel(), BaseCurrencySettingsModule.IView {
 
-    lateinit var delegate: BaseCurrencySettingsModule.IBaseCurrencySettingsViewDelegate
-    val currencyItems = MutableLiveData<List<CurrencyItem>>()
+    lateinit var delegate: BaseCurrencySettingsModule.IViewDelegate
+    val currencyItems = MutableLiveData<List<CurrencyViewItem>>()
     val closeLiveEvent = SingleLiveEvent<Unit>()
 
 
@@ -16,7 +16,7 @@ class BaseCurrencySettingsViewModel: ViewModel(), BaseCurrencySettingsModule.IBa
         delegate.viewDidLoad()
     }
 
-    override fun show(items: List<CurrencyItem>) {
+    override fun show(items: List<CurrencyViewItem>) {
         currencyItems.value = items
     }
 
