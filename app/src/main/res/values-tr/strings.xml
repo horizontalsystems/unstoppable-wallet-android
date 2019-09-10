@@ -267,7 +267,8 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">Cüzdanlar</string>
     <string name="ManageCoins_save">Kaydet</string>
-    <string name="ManageCoins_AddCoin_Title">%s Kredisi Ekle</string>
+    <string name="ManageCoins_AddCoin_Title">Add Key</string>
+    <string name="ManageCoins_AddCoin_Subtitle">%s Key</string>
     <string name="ManageCoins_AddCoin_Text">Bu işlem, şu krediler için yeni anahtar(cüzdan) oluşturacak: %s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">Uygulama henüz EOS cüzdanı oluşturamamaktadır. Sadece var olan cüzda geri yüklenebilir.</string>
     <!--Manage Keys-->
@@ -287,7 +288,8 @@
     <string name="ManageKeys_Delete_Alert_Title">Yedekleme Gerekli</string>
     <string name="ManageKeys_Delete_Alert">%s anahtarınızı bu cihazdan silmeden önce yedeklemeniz gerekiyor.</string>
     <!-- Manage Keys Alert -->
-    <string name="AddCoin_Title">%s ekle</string>
+    <string name="AddCoin_Title">Add Key</string>
+    <string name="AddCoin_Subtitle">%s Key</string>
     <string name="AddCoin_Description">%1s için Anahtarınız yok. Cüzdanınız, sizin için yeni anahtar oluşturabilir. Yeni bir anahtar oluşturmak için aşağıdaki Oluştur düğmesini tıklayın, veya \n\nMevcut %3s anahtarınız varsa onu %4s için kullanabilirsiniz.</string>
     <string name="AddCoin_CreateKey">Oluştur</string>
     <string name="AddCoin_RestoreKey">Geri Yükle</string>
