@@ -2,6 +2,8 @@ package io.horizontalsystems.bankwallet.modules.settings.language
 
 import android.content.Context
 import android.content.Intent
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 
 object LanguageSettingsModule {
@@ -32,12 +34,15 @@ object LanguageSettingsModule {
         context.startActivity(intent)
     }
 
-    fun init(view: LanguageSettingsViewModel, router: ILanguageSettingsRouter) {
-        val interactor = LanguageSettingsInteractor(App.languageManager, App.appConfigProvider)
-        val presenter = LanguageSettingsPresenter(router, interactor)
+    class Factory : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            val view = LanguageSettingsView()
+            val router = LanguageSettingsRouter()
+            val interactor = LanguageSettingsInteractor(App.languageManager, App.appConfigProvider)
+            val presenter = LanguageSettingsPresenter(view, router, interactor)
 
-        view.delegate = presenter
-        presenter.view = view
+            return presenter as T
+        }
     }
 }
 

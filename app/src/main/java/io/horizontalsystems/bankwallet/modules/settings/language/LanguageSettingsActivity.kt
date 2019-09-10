@@ -22,13 +22,15 @@ import kotlinx.android.synthetic.main.view_holder_item_with_checkmark.*
 
 class LanguageSettingsActivity : BaseActivity(), LanguageSettingsAdapter.Listener {
 
-    private lateinit var viewModel: LanguageSettingsViewModel
+    private lateinit var presenter: LanguageSettingsPresenter
     private var adapter: LanguageSettingsAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(LanguageSettingsViewModel::class.java)
-        viewModel.init()
+        presenter = ViewModelProviders.of(this, LanguageSettingsModule.Factory()).get(LanguageSettingsPresenter::class.java)
+
+        val presenterView = presenter.view as LanguageSettingsView
+        val presenterRouter = presenter.router as LanguageSettingsRouter
 
         setContentView(R.layout.activity_language_settings)
 
@@ -41,21 +43,22 @@ class LanguageSettingsActivity : BaseActivity(), LanguageSettingsAdapter.Listene
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        viewModel.languageItems.observe(this, Observer { items ->
+        presenterView.languageItems.observe(this, Observer { items ->
             items?.let {
                 adapter?.items = it
                 adapter?.notifyDataSetChanged()
             }
         })
 
-        viewModel.reloadAppLiveEvent.observe(this, Observer {
+        presenterRouter.reloadAppLiveEvent.observe(this, Observer {
             MainModule.startAsNewTask(this, MainActivity.SETTINGS_TAB_POSITION)
         })
 
+        presenter.viewDidLoad()
     }
 
     override fun onItemClick(position: Int) {
-        viewModel.delegate.didSelect(position)
+        presenter.didSelect(position)
     }
 }
 
