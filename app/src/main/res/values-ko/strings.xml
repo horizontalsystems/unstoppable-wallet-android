@@ -273,7 +273,8 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">지갑</string>
     <string name="ManageCoins_save">저장</string>
-    <string name="ManageCoins_AddCoin_Title">%@ 추가 </string>
+    <string name="ManageCoins_AddCoin_Title">Add Key</string>
+    <string name="ManageCoins_AddCoin_Subtitle">%s Key</string>
     <string name="ManageCoins_AddCoin_Text">이 작업은 다음 코인에 대한 암호(지갑) 를 생성합니다:%s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">현재 지갑에서 새 EOS 지갑 계정을 만들 수 없습니다. 기존 파일만 복원할 수 있습니다.</string>
     <!--Manage Keys-->
@@ -293,7 +294,8 @@
     <string name="ManageKeys_Delete_Alert_Title">백업이 필요합니다</string>
     <string name="ManageKeys_Delete_Alert">귀하의 핸드폰에서 삭제하기전 %s 암호의 백업이 필요합니다</string>
     <!-- Manage Keys Alert -->
-    <string name="AddCoin_Title">%s 추가</string>
+    <string name="AddCoin_Title">Add Key</string>
+    <string name="AddCoin_Subtitle">%s Key</string>
     <string name="AddCoin_Description">%1s에 대한 암호가 없습니다. 지갑은 열쇠를 생성 할 수 있습니다. 아래의 생성 버튼을 사용하여 새 키를 만드세요. 
 \n\n 기존에 가지고 있는 %3s암호를 %4s 사용하실 수도 있습니다.</string>
     <string name="AddCoin_CreateKey">만들기</string>
