@@ -52,7 +52,7 @@ class TransactionViewItemFactoryTest {
         val expectedItem = TransactionViewItem(
                 bitWallet,
                 txRecordIncoming.transactionHash,
-                CoinValue(txItem.wallet.coin.code, txRecordIncoming.amount),
+                CoinValue(txItem.wallet.coin, txRecordIncoming.amount),
                 currencyValue,
                 null,
                 txRecordIncoming.from.firstOrNull { it.mine != incoming }?.address,
@@ -78,7 +78,7 @@ class TransactionViewItemFactoryTest {
         val expectedItem = TransactionViewItem(
                 bitWallet,
                 txRecordOutgoing.transactionHash,
-                CoinValue(txItem.wallet.coin.code, txRecordOutgoing.amount),
+                CoinValue(txItem.wallet.coin, txRecordOutgoing.amount),
                 currencyValue,
                 null,
                 null,
@@ -116,7 +116,7 @@ class TransactionViewItemFactoryTest {
         val expectedItem = TransactionViewItem(
                 bitWallet,
                 txRecordToMyself.transactionHash,
-                CoinValue(txItem.wallet.coin.code, txRecordToMyself.amount),
+                CoinValue(txItem.wallet.coin, txRecordToMyself.amount),
                 currencyValue,
                 null,
                 null,

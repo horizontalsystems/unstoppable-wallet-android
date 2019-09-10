@@ -2,10 +2,8 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.core.ILanguageManager
-import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -18,7 +16,7 @@ class NumberFormatterTest {
 
     private lateinit var formatter: NumberFormatter
     private val usdCurrency = Currency(code = "USD", symbol = "$")
-    private val btcCoinCode: CoinCode = "BTC"
+    private val btcCoin: Coin = Coin("Bitcoin","BTC",8, CoinType.Bitcoin)
     private val defaultLocale = Locale("en")
 
     @Before
@@ -78,7 +76,7 @@ class NumberFormatterTest {
     }
 
     private fun assertCoinFormatter(input: Double, expected: String) {
-        val value = CoinValue(btcCoinCode, input.toBigDecimal())
+        val value = CoinValue(btcCoin, input.toBigDecimal())
         val formatted = formatter.format(value)
         Assert.assertEquals(expected, formatted)
     }
