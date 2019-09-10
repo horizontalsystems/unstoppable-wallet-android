@@ -13,12 +13,10 @@ import io.reactivex.Single
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class EosAdapter(eos: CoinType.Eos,
-                 private val eosKit: EosKit,
-                 private val decimal: Int,
-                 override val confirmationsThreshold: Int) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, ISendEosAdapter {
+class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit, private val decimal: Int) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, ISendEosAdapter {
 
     private val token = eosKit.register(eos.token, eos.symbol)
+    private val irreversibleThreshold = 330
 
     // IAdapter
 
@@ -37,6 +35,8 @@ class EosAdapter(eos: CoinType.Eos,
     override val debugInfo: String = ""
 
     // ITransactionsAdapter
+
+    override val confirmationsThreshold: Int = irreversibleThreshold
 
     override val lastBlockHeight: Int?
         get() = eosKit.irreversibleBlockHeight?.let { it + confirmationsThreshold }

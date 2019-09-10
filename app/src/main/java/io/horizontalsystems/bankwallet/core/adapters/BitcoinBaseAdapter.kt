@@ -14,8 +14,7 @@ import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-abstract class BitcoinBaseAdapter(open val kit: AbstractKit,
-                                  override val confirmationsThreshold: Int)
+abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
     : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter {
 
     open val receiveScriptType = ScriptType.P2PKH
@@ -26,6 +25,7 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit,
     // Adapter implementation
     //
 
+    override val confirmationsThreshold: Int = 3
     override val lastBlockHeight: Int?
         get() = kit.lastBlockInfo?.height
 

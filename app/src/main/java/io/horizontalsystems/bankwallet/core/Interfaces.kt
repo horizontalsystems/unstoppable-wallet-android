@@ -337,8 +337,6 @@ interface IAppConfigProvider {
     val defaultCoinCodes: List<String>
     val coins: List<Coin>
     val predefinedAccountTypes: List<IPredefinedAccountType>
-
-    fun confirmationsThreshold(coinType: CoinType): Int
 }
 
 interface IOneTimerDelegate {
