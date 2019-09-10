@@ -21,7 +21,7 @@
 
     <TextView
         android:id="@+id/transactionIdView"
-        style="@style/TextButton"
+        style="@style/TextButtonWithIcon"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

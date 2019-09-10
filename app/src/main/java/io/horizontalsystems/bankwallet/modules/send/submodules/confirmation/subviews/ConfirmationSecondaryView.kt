@@ -25,10 +25,6 @@ class ConfirmationSecondaryView : ConstraintLayout {
             feeLayout.visibility = View.VISIBLE
             feeValue.text = it
         }
-        secondaryData.totalAmount?.let {
-            totalWrapper.visibility = View.VISIBLE
-            totalValue.text = it
-        }
         secondaryData.estimatedTime?.let {
             timeWrapper.visibility = View.VISIBLE
             timeValue.text = it
