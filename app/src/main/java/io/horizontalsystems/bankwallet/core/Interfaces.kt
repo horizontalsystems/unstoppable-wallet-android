@@ -204,8 +204,11 @@ interface IWordsManager {
 }
 
 interface ILanguageManager {
-    var currentLanguage: Locale
-    val availableLanguages: List<Locale>
+    var currentLocale: Locale
+    var currentLanguage: String
+
+    fun getName(language: String): String
+    fun getNativeName(language: String): String
 }
 
 sealed class AdapterState {

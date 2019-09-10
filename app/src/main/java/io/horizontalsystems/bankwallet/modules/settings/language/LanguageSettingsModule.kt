@@ -3,26 +3,24 @@ package io.horizontalsystems.bankwallet.modules.settings.language
 import android.content.Context
 import android.content.Intent
 import io.horizontalsystems.bankwallet.core.App
-import java.util.*
 
 object LanguageSettingsModule {
 
     interface ILanguageSettingsView {
-        fun show(items: List<LanguageItem>)
+        fun show(items: List<LanguageViewItem>)
     }
 
     interface ILanguageSettingsViewDelegate {
         fun viewDidLoad()
-        fun didSelect(item: LanguageItem)
+        fun didSelect(position: Int)
     }
 
     interface ILanguageSettingsInteractor {
-        var items: List<LanguageItem>
-        fun setCurrentLanguage(item: LanguageItem)
-    }
-
-    interface ILanguageSettingsInteractorDelegate {
-        fun didSetCurrentLanguage()
+        val currentLanguage: String
+        val availableLanguages: List<String>
+        fun setCurrentLanguage(language: String)
+        fun getName(language: String): String
+        fun getNativeName(language: String): String
     }
 
     interface ILanguageSettingsRouter{
@@ -35,13 +33,12 @@ object LanguageSettingsModule {
     }
 
     fun init(view: LanguageSettingsViewModel, router: ILanguageSettingsRouter) {
-        val interactor = LanguageSettingsInteractor(languageManager = App.languageManager)
+        val interactor = LanguageSettingsInteractor(App.languageManager, App.appConfigProvider)
         val presenter = LanguageSettingsPresenter(router, interactor)
 
         view.delegate = presenter
         presenter.view = view
-        interactor.delegate = presenter
     }
 }
 
-data class LanguageItem(val locale: Locale, var current: Boolean)
+data class LanguageViewItem(val code: String, val displayName: String, val nativeDisplayName: String, var current: Boolean)

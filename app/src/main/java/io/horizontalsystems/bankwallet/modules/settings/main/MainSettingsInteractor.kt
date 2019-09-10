@@ -36,7 +36,7 @@ class MainSettingsInteractor(
         get() = backupManager.allBackedUp
 
     override val currentLanguageDisplayName: String
-        get() = languageManager.currentLanguage.displayLanguage
+        get() = languageManager.getName(languageManager.currentLanguage)
 
     override val baseCurrency: Currency
         get() = currencyManager.baseCurrency
