@@ -33,7 +33,7 @@ class BalanceViewItemFactoryTest {
 
         val viewItem = factory.createViewItem(item, null)
 
-        Assert.assertEquals(CoinValue(coinCode, balance), viewItem.coinValue)
+        Assert.assertEquals(CoinValue(coin, balance), viewItem.coinValue)
     }
 
     @Test
