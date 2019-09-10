@@ -267,7 +267,8 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_save">保存</string>
-    <string name="ManageCoins_AddCoin_Title">Add %s Coin</string>
+    <string name="ManageCoins_AddCoin_Title">Add Key</string>
+    <string name="ManageCoins_AddCoin_Subtitle">%s Key</string>
     <string name="ManageCoins_AddCoin_Text">This action will generate a new key(wallet) for the following coins: %s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">At this point, the wallet is not able to create new EOS wallet accounts. You\'re only able to restore the existing one.</string>
     <!--Manage Keys-->
@@ -287,7 +288,8 @@
     <string name="ManageKeys_Delete_Alert_Title">Backup Required</string>
     <string name="ManageKeys_Delete_Alert">You need to backup %s key before you may delete it from this phone.</string>
     <!-- Manage Keys Alert -->
-    <string name="AddCoin_Title">Add %s</string>
+    <string name="AddCoin_Title">Add Key</string>
+    <string name="AddCoin_Subtitle">%s Key</string>
     <string name="AddCoin_Description">You don\'t have key for %1s. The wallet can generate the key for you. Use the create button below to generate a new key. \n\nYou may also use the existing %3s key for the %4s if you have one.</string>
     <string name="AddCoin_CreateKey">Create</string>
     <string name="AddCoin_RestoreKey">Restore</string>
