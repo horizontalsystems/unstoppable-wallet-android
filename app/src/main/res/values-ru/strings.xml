@@ -267,7 +267,8 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">Кошельки</string>
     <string name="ManageCoins_save">Сохранить</string>
-    <string name="ManageCoins_AddCoin_Title">Добавить %s</string>
+    <string name="ManageCoins_AddCoin_Title">Add Key</string>
+    <string name="ManageCoins_AddCoin_Subtitle">%s Key</string>
     <string name="ManageCoins_AddCoin_Text">Это действие создаст новый ключ(кошелек) для следующих монет:%s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">В данный момент кошелек не может создать новые учетные записи EOS. Вы можете восстановить существующий.</string>
     <!--Manage Keys-->
@@ -287,7 +288,8 @@
     <string name="ManageKeys_Delete_Alert_Title">Необходима Резервная Копия</string>
     <string name="ManageKeys_Delete_Alert">Вам нужно сделать резервную копию %s ключа, прежде чем вы его сможете удалить с этого устройства.</string>
     <!-- Manage Keys Alert -->
-    <string name="AddCoin_Title">Добавить %s</string>
+    <string name="AddCoin_Title">Add Key</string>
+    <string name="AddCoin_Subtitle">%s Key</string>
     <string name="AddCoin_Description">У вас нет ключа для %1s. Кошелек может сгенерировать ключ. Используйте кнопку \"Создать\" ниже, чтобы сгенерировать новый ключ.\n\nВы также можете использовать существующий %3s ключ для %4s , если он у вас есть.</string>
     <string name="AddCoin_CreateKey">Создать</string>
     <string name="AddCoin_RestoreKey">Восстановить</string>
