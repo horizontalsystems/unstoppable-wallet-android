@@ -63,29 +63,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/totalWrapper"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <TextView
-                style="@style/Body1Grey"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/Send_Confirmation_Total" />
-
-            <TextView
-                android:id="@+id/totalValue"
-                style="@style/Body1Grey"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="0.0353 DASH" />
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/timeWrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

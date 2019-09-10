@@ -62,7 +62,6 @@ class SendConfirmationPresenter(
                     "$primaryFeeAmount${secondaryFeeAmount?.let { secondaryFeeAmount -> " | $secondaryFeeAmount" }
                             ?: ""}"
                 },
-                totalAmount = null,
                 estimatedTime = duration
         )
 

@@ -52,7 +52,6 @@ object SendConfirmationModule {
 
     data class SecondaryItemData(
             val feeAmount: String?,
-            val totalAmount: String?,
             val estimatedTime: String?)
 
 }

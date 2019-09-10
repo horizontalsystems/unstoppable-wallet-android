@@ -39,7 +39,7 @@
 
     <TextView
         android:id="@+id/decoratedText"
-        style="@style/TextButton"
+        style="@style/TextButtonWithIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
