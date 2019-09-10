@@ -1,25 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
-
-    <TextView
-        android:id="@+id/statusPendingText"
-        style="@style/Body1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="?TextColorBarsToDark"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="4dp"
-        android:visibility="gone"
-        android:text="@string/TransactionInfo_Status_Pending"
-        app:layout_constraintEnd_toStartOf="@+id/statusIcon"
-        app:layout_constraintBottom_toBottomOf="@+id/statusIcon"
-        app:layout_constraintTop_toTopOf="@+id/statusIcon"
-        />
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/statusIcon"
@@ -27,62 +10,49 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_checkmark_green"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/statusPendingText"
+        style="@style/Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/TransactionInfo_Status_Pending"
+        android:textColor="?TextColorBarsToDark"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/statusIcon"
+        app:layout_constraintEnd_toStartOf="@+id/statusIcon"
+        app:layout_constraintTop_toTopOf="@+id/statusIcon" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/progressBarWrapper"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        >
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
         <ImageView
             android:id="@+id/progressBar1"
             style="@style/TransactionInfoStatusProgressBarBig"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/progressBar2"
             style="@style/TransactionInfoStatusProgressBarBig"
             app:layout_constraintStart_toEndOf="@id/progressBar1"
-            app:layout_constraintTop_toTopOf="@id/progressBar1"
-            />
+            app:layout_constraintTop_toTopOf="@id/progressBar1" />
 
         <ImageView
             android:id="@+id/progressBar3"
             style="@style/TransactionInfoStatusProgressBarBig"
             app:layout_constraintStart_toEndOf="@id/progressBar2"
-            app:layout_constraintTop_toTopOf="@id/progressBar1"
-            />
-
-        <ImageView
-            android:id="@+id/progressBar4"
-            style="@style/TransactionInfoStatusProgressBarBig"
-            app:layout_constraintStart_toEndOf="@id/progressBar3"
-            app:layout_constraintTop_toTopOf="@id/progressBar1"
-            />
-
-        <ImageView
-            android:id="@+id/progressBar5"
-            style="@style/TransactionInfoStatusProgressBarBig"
-            app:layout_constraintStart_toEndOf="@id/progressBar4"
-            app:layout_constraintTop_toTopOf="@id/progressBar1"
-            />
-
-        <ImageView
-            android:id="@+id/progressBar6"
-            style="@style/TransactionInfoStatusProgressBarBig"
-            app:layout_constraintStart_toEndOf="@id/progressBar5"
-            app:layout_constraintTop_toTopOf="@id/progressBar1"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="4dp"
-            />
+            app:layout_constraintTop_toTopOf="@id/progressBar1" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
