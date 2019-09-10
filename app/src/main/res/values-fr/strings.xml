@@ -267,7 +267,8 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">Portefeuilles</string>
     <string name="ManageCoins_save">Sauvegarder</string>
-    <string name="ManageCoins_AddCoin_Title">Ajouter %s</string>
+    <string name="ManageCoins_AddCoin_Title">Add Key</string>
+    <string name="ManageCoins_AddCoin_Subtitle">%s Key</string>
     <string name="ManageCoins_AddCoin_Text">Cette action générera une clé(porte-monnaie) pour les coins suivantes :%s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">À ce stade, le porte-monnaie ne peut pas créer de nouveaux comptes de porte-monnaie EOS. Vous pouvez seulement restaurer le compte existant.</string>
     <!--Manage Keys-->
@@ -287,7 +288,8 @@
     <string name="ManageKeys_Delete_Alert_Title">Sauvegarde requise</string>
     <string name="ManageKeys_Delete_Alert">Vous devez sauvegarder la clé %s avant de pouvoir la supprimer de ce téléphone.</string>
     <!-- Manage Keys Alert -->
-    <string name="AddCoin_Title">Ajouter %s</string>
+    <string name="AddCoin_Title">Add Key</string>
+    <string name="AddCoin_Subtitle">%s Key</string>
     <string name="AddCoin_Description">Vous n\'avez pas de clé pour %1s. Le porte-monnaie peut générer la clé pour vous. Utilisez le bouton Créer ci-dessous pour générer une nouvelle clé. \n\nVous pouvez également utiliser la clé %3s existante pour le %4s si vous en avez une.</string>
     <string name="AddCoin_CreateKey">Créer</string>
     <string name="AddCoin_RestoreKey">Restaurer</string>
