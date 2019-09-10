@@ -50,10 +50,11 @@
                 style="@style/Base"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:ellipsize="middle"
                 android:textColorHint="@color/grey_50"
                 android:textColor="?TextColorBarsToDark"
                 android:hint="@string/Send_Hint_Address"
-                android:maxLines="3"
+                android:singleLine="true"
                 />
 
             <TextView
