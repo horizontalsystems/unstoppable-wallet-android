@@ -1,11 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.settings.language
 
-class LanguageSettingsPresenter(
-        private val router: LanguageSettingsModule.ILanguageSettingsRouter,
-        private val interactor: LanguageSettingsModule.ILanguageSettingsInteractor)
-    : LanguageSettingsModule.ILanguageSettingsViewDelegate {
+import androidx.lifecycle.ViewModel
 
-    var view: LanguageSettingsModule.ILanguageSettingsView? = null
+class LanguageSettingsPresenter(
+        val view: LanguageSettingsModule.ILanguageSettingsView,
+        val router: LanguageSettingsModule.ILanguageSettingsRouter,
+        private val interactor: LanguageSettingsModule.ILanguageSettingsInteractor
+) : ViewModel(), LanguageSettingsModule.ILanguageSettingsViewDelegate {
 
     private val availableLanguages = interactor.availableLanguages
 
@@ -15,7 +16,7 @@ class LanguageSettingsPresenter(
             LanguageViewItem(code, interactor.getName(code), interactor.getNativeName(code), currentLanguage == code)
         }
 
-        view?.show(items)
+        view.show(items)
     }
 
     override fun didSelect(position: Int) {
