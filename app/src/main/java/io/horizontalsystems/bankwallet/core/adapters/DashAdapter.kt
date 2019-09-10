@@ -18,11 +18,11 @@ import io.reactivex.Single
 import java.math.BigDecimal
 import java.util.*
 
-class DashAdapter(override val kit: DashKit) :
-        BitcoinBaseAdapter(kit), DashKit.Listener, ISendDashAdapter {
+class DashAdapter(override val kit: DashKit, confirmationsThreshold: Int) :
+        BitcoinBaseAdapter(kit, confirmationsThreshold), DashKit.Listener, ISendDashAdapter {
 
-    constructor(wallet: Wallet, testMode: Boolean) :
-            this(createKit(wallet, testMode))
+    constructor(wallet: Wallet, testMode: Boolean, confirmationsThreshold: Int) :
+            this(createKit(wallet, testMode, confirmationsThreshold), confirmationsThreshold)
 
     init {
         kit.listener = this
@@ -119,10 +119,15 @@ class DashAdapter(override val kit: DashKit) :
         private fun getNetworkType(testMode: Boolean) =
                 if (testMode) NetworkType.TestNet else NetworkType.MainNet
 
-        private fun createKit(wallet: Wallet, testMode: Boolean): DashKit {
+        private fun createKit(wallet: Wallet, testMode: Boolean, confirmationsThreshold: Int): DashKit {
             val account = wallet.account
             if (account.type is AccountType.Mnemonic) {
-                return DashKit(App.instance, account.type.words, account.id, syncMode = SyncMode.fromSyncMode(account.defaultSyncMode), networkType = getNetworkType(testMode))
+                return DashKit(context = App.instance,
+                        words = account.type.words,
+                        walletId = account.id,
+                        syncMode = SyncMode.fromSyncMode(account.defaultSyncMode),
+                        networkType = getNetworkType(testMode),
+                        confirmationsThreshold = confirmationsThreshold)
             }
 
             throw UnsupportedAccountException()

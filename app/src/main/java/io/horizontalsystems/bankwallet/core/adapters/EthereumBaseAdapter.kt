@@ -10,7 +10,8 @@ import java.math.RoundingMode
 
 abstract class EthereumBaseAdapter(
         protected val ethereumKit: EthereumKit,
-        val decimal: Int) : IAdapter, ISendEthereumAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter {
+        val decimal: Int,
+        override val confirmationsThreshold: Int) : IAdapter, ISendEthereumAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter {
 
     // IAdapter
 
@@ -29,8 +30,6 @@ abstract class EthereumBaseAdapter(
     override val debugInfo: String = ethereumKit.debugInfo()
 
     // ITransactionsAdapter
-
-    override val confirmationsThreshold: Int = 12
 
     override val lastBlockHeight: Int? get() = ethereumKit.lastBlockHeight?.toInt()
 

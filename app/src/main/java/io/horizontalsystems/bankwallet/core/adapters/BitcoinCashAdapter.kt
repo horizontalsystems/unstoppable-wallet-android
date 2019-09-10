@@ -18,11 +18,11 @@ import io.reactivex.Single
 import java.math.BigDecimal
 import java.util.*
 
-class BitcoinCashAdapter(override val kit: BitcoinCashKit)
-    : BitcoinBaseAdapter(kit), BitcoinCashKit.Listener, ISendBitcoinAdapter {
+class BitcoinCashAdapter(override val kit: BitcoinCashKit, confirmationsThreshold: Int)
+    : BitcoinBaseAdapter(kit, confirmationsThreshold), BitcoinCashKit.Listener, ISendBitcoinAdapter {
 
-    constructor(wallet: Wallet, testMode: Boolean) :
-            this(createKit(wallet, testMode))
+    constructor(wallet: Wallet, testMode: Boolean, confirmationsThreshold: Int) :
+            this(createKit(wallet, testMode, confirmationsThreshold), confirmationsThreshold)
 
     init {
         kit.listener = this
@@ -103,10 +103,15 @@ class BitcoinCashAdapter(override val kit: BitcoinCashKit)
         private fun getNetworkType(testMode: Boolean) =
                 if (testMode) NetworkType.TestNet else NetworkType.MainNet
 
-        private fun createKit(wallet: Wallet, testMode: Boolean): BitcoinCashKit {
+        private fun createKit(wallet: Wallet, testMode: Boolean, confirmationsThreshold: Int): BitcoinCashKit {
             val account = wallet.account
             if (account.type is AccountType.Mnemonic) {
-                return BitcoinCashKit(App.instance, account.type.words, account.id, syncMode = SyncMode.fromSyncMode(account.defaultSyncMode), networkType = getNetworkType(testMode))
+                return BitcoinCashKit(context = App.instance,
+                        words = account.type.words,
+                        walletId = account.id,
+                        syncMode = SyncMode.fromSyncMode(account.defaultSyncMode),
+                        networkType = getNetworkType(testMode),
+                        confirmationsThreshold = confirmationsThreshold)
             }
 
             throw UnsupportedAccountException()
