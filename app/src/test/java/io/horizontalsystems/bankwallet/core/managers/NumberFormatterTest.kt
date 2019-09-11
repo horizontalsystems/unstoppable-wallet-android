@@ -21,7 +21,7 @@ class NumberFormatterTest {
 
     @Before
     fun setup() {
-        whenever(languageManager.currentLanguage).thenReturn(defaultLocale)
+        whenever(languageManager.currentLocale).thenReturn(defaultLocale)
         formatter = NumberFormatter(languageManager)
     }
 
@@ -56,7 +56,7 @@ class NumberFormatterTest {
 
     @Test
     fun format_Currency_by_russian_locale() {
-        whenever(languageManager.currentLanguage).thenReturn(Locale("ru"))
+        whenever(languageManager.currentLocale).thenReturn(Locale("ru"))
         formatter = NumberFormatter(languageManager)
         assertCurrencyFormatter(0.0003903, "< $0,01")
         assertCurrencyFormatter(12.03903, "$12,04")
