@@ -26,6 +26,7 @@ object LanguageSettingsModule {
 
     interface ILanguageSettingsRouter{
         fun reloadAppInterface()
+        fun close()
     }
 
     fun start(context: Context) {

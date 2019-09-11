@@ -20,8 +20,13 @@ class LanguageSettingsPresenter(
     }
 
     override fun didSelect(position: Int) {
-        interactor.currentLanguage = languages[position]
-        router.reloadAppInterface()
-    }
+        val selected = languages[position]
 
+        if (selected == interactor.currentLanguage) {
+            router.close()
+        } else {
+            interactor.currentLanguage = selected
+            router.reloadAppInterface()
+        }
+    }
 }
