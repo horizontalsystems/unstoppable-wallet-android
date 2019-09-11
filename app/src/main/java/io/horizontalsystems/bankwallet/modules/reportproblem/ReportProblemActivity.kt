@@ -10,7 +10,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
-import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import kotlinx.android.synthetic.main.activity_about_settings.shadowlessToolbar
 import kotlinx.android.synthetic.main.activity_report_problem.*
 
@@ -34,8 +33,12 @@ class ReportProblemActivity : BaseActivity() {
             telegram.setSubtitle(it)
         })
 
+        presenterView.showCopiedLiveEvent.observe(this, Observer {
+            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied, 500)
+        })
+
         router.sendEmailLiveEvent.observe(this, Observer {
-            composeEmailOrCopyToClipboard(it)
+            sendEmail(it)
         })
 
         router.openTelegramGroupEvent.observe(this, Observer {
@@ -68,7 +71,7 @@ class ReportProblemActivity : BaseActivity() {
         }
     }
 
-    private fun composeEmailOrCopyToClipboard(recipient: String) {
+    private fun sendEmail(recipient: String) {
         val intent = Intent(Intent.ACTION_SENDTO).apply {
             data = Uri.parse("mailto:")
             putExtra(Intent.EXTRA_EMAIL, arrayOf(recipient))
@@ -77,8 +80,7 @@ class ReportProblemActivity : BaseActivity() {
         if (intent.resolveActivity(packageManager) != null) {
             startActivity(intent)
         } else {
-            TextHelper.copyText(recipient)
-            HudHelper.showSuccessMessage(R.string.Hud_Text_Copied, 500)
+            presenter.didFailSendMail()
         }
     }
 

@@ -6,7 +6,7 @@ class ReportProblemPresenter(
         val view: ReportProblemModule.IView,
         val router: ReportProblemModule.IRouter,
         private val interactor: ReportProblemModule.IInteractor
-) : ViewModel(), ReportProblemModule.IViewDelegate {
+) : ViewModel(), ReportProblemModule.IViewDelegate, ReportProblemModule.IRouterDelegate {
 
     override fun viewDidLoad() {
         view.setEmail(interactor.email)
@@ -21,4 +21,8 @@ class ReportProblemPresenter(
         router.openTelegram(interactor.telegramGroup)
     }
 
+    override fun didFailSendMail() {
+        interactor.copyToClipboard(interactor.email)
+        view.showCopied()
+    }
 }
