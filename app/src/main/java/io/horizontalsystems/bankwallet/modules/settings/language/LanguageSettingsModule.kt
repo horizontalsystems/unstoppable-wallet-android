@@ -18,9 +18,8 @@ object LanguageSettingsModule {
     }
 
     interface ILanguageSettingsInteractor {
-        val currentLanguage: String
+        var currentLanguage: String
         val availableLanguages: List<String>
-        fun setCurrentLanguage(language: String)
         fun getName(language: String): String
         fun getNativeName(language: String): String
     }
@@ -46,4 +45,4 @@ object LanguageSettingsModule {
     }
 }
 
-data class LanguageViewItem(val code: String, val displayName: String, val nativeDisplayName: String, var current: Boolean)
+data class LanguageViewItem(val language: String, val name: String, val nativeName: String, var current: Boolean)

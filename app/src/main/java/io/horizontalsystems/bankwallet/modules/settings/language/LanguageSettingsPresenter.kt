@@ -8,19 +8,19 @@ class LanguageSettingsPresenter(
         private val interactor: LanguageSettingsModule.ILanguageSettingsInteractor
 ) : ViewModel(), LanguageSettingsModule.ILanguageSettingsViewDelegate {
 
-    private val availableLanguages = interactor.availableLanguages
+    private val languages = interactor.availableLanguages
 
     override fun viewDidLoad() {
         val currentLanguage = interactor.currentLanguage
-        val items = availableLanguages.map { code ->
-            LanguageViewItem(code, interactor.getName(code), interactor.getNativeName(code), currentLanguage == code)
+        val items = languages.map { language ->
+            LanguageViewItem(language, interactor.getName(language), interactor.getNativeName(language), currentLanguage == language)
         }
 
         view.show(items)
     }
 
     override fun didSelect(position: Int) {
-        interactor.setCurrentLanguage(availableLanguages[position])
+        interactor.currentLanguage = languages[position]
         router.reloadAppInterface()
     }
 

@@ -8,15 +8,14 @@ class LanguageSettingsInteractor(
         private val appConfigProvider: IAppConfigProvider
 ) : LanguageSettingsModule.ILanguageSettingsInteractor {
 
-    override val currentLanguage: String
+    override var currentLanguage: String
         get() = languageManager.currentLanguage
+        set(value) {
+            languageManager.currentLanguage = value
+        }
 
     override val availableLanguages: List<String>
         get() = appConfigProvider.localizations
-
-    override fun setCurrentLanguage(language: String) {
-        languageManager.currentLanguage = language
-    }
 
     override fun getName(language: String): String {
         return languageManager.getName(language)

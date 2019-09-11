@@ -206,6 +206,7 @@ interface IWordsManager {
 interface ILanguageManager {
     var currentLocale: Locale
     var currentLanguage: String
+    val currentLanguageName: String
 
     fun getName(language: String): String
     fun getNativeName(language: String): String
