@@ -23,8 +23,17 @@ class ReportProblemActivity : BaseActivity() {
         setContentView(R.layout.activity_report_problem)
 
         presenter = ViewModelProviders.of(this, ReportProblemModule.Factory()).get(ReportProblemPresenter::class.java)
-
+        val presenterView = presenter.view as ReportProblemView
         val router = presenter.router as ReportProblemRouter
+
+        presenterView.emailLiveData.observe(this, Observer {
+            mail.setSubtitle(it)
+        })
+
+        presenterView.telegramGroupLiveData.observe(this, Observer {
+            telegram.setSubtitle(it)
+        })
+
         router.sendEmailLiveEvent.observe(this, Observer {
             composeEmailOrCopyToClipboard(it)
         })
@@ -38,15 +47,15 @@ class ReportProblemActivity : BaseActivity() {
                 leftBtnItem = TopMenuItem(R.drawable.back) { onBackPressed() }
         )
 
-        mail.setSubtitle(presenter.email)
         mail.setOnSingleClickListener {
             presenter.didTapEmail()
         }
 
-        telegram.setSubtitle(presenter.telegramGroup)
         telegram.setOnSingleClickListener {
             presenter.didTapTelegram()
         }
+
+        presenter.viewDidLoad()
     }
 
     private fun openTelegramGroup(group: String) {
