@@ -2,11 +2,12 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import android.os.Build
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.ILanguageManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import java.util.*
 
-class LanguageManager(private val localStorage: ILocalStorage, fallbackLanguage: String) : ILanguageManager {
+class LanguageManager(private val localStorage: ILocalStorage, private val appConfigProvider: IAppConfigProvider, fallbackLanguage: String) : ILanguageManager {
 
     override var currentLocale: Locale = localStorage.currentLanguage?.let { Locale(it) } ?: preferredSystemLocale ?: Locale(fallbackLanguage)
         set(value) {
@@ -45,10 +46,25 @@ class LanguageManager(private val localStorage: ILocalStorage, fallbackLanguage:
 
     private val preferredSystemLocale: Locale?
         get() {
-            return when {
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.N -> App.instance.resources.configuration.locales.get(0)
-                else -> App.instance.resources.configuration.locale
+            val appLocaleLanguages = appConfigProvider.localizations.map { Locale(it).language }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                val deviceLocales = App.instance.resources.configuration.locales
+
+                for (i in 0 until deviceLocales.size()) {
+                    val deviceLocale = deviceLocales.get(i)
+
+                    if (appLocaleLanguages.contains(deviceLocale.language)) {
+                        return deviceLocale
+                    }
+                }
+            } else {
+                val deviceLocale = App.instance.resources.configuration.locale
+                if (appLocaleLanguages.contains(deviceLocale.language)) {
+                    return deviceLocale
+                }
             }
+            return null
         }
 
 }
