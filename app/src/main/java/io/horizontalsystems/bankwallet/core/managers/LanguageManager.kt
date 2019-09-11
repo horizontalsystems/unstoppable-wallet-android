@@ -31,6 +31,9 @@ class LanguageManager(private val localStorage: ILocalStorage, fallbackLanguage:
             currentLocale = Locale(value)
         }
 
+    override val currentLanguageName: String
+        get() = currentLocale.displayLanguage
+
     override fun getName(language: String): String {
         return Locale(language).displayLanguage
     }
