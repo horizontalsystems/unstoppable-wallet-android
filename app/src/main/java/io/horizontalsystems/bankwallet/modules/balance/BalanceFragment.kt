@@ -82,7 +82,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
             LayoutHelper.getAttr(R.attr.SwipeRefreshBackgroundColor, theme)?.let { color ->
                 pullToRefresh.setProgressBackgroundColorSchemeColor(color)
             }
-            LayoutHelper.getAttr(R.attr.SwipeRefreshSpinnerColor, theme)?.let { color ->
+            LayoutHelper.getAttr(R.attr.ColorOz, theme)?.let { color ->
                 pullToRefresh.setColorSchemeColors(color)
             }
         }
