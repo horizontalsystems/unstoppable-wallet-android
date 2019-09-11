@@ -25,7 +25,7 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
     // Adapter implementation
     //
 
-    override val confirmationsThreshold: Int = 3
+    override val confirmationsThreshold: Int = defaultConfirmationsThreshold
     override val lastBlockHeight: Int?
         get() = kit.lastBlockInfo?.height
 
@@ -118,6 +118,7 @@ abstract class BitcoinBaseAdapter(open val kit: AbstractKit)
     }
 
     companion object {
+        const val defaultConfirmationsThreshold = 3
         const val decimal = 8
     }
 

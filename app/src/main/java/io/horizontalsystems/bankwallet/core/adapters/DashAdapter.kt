@@ -122,7 +122,12 @@ class DashAdapter(override val kit: DashKit) :
         private fun createKit(wallet: Wallet, testMode: Boolean): DashKit {
             val account = wallet.account
             if (account.type is AccountType.Mnemonic) {
-                return DashKit(App.instance, account.type.words, account.id, syncMode = SyncMode.fromSyncMode(account.defaultSyncMode), networkType = getNetworkType(testMode))
+                return DashKit(context = App.instance,
+                        words = account.type.words,
+                        walletId = account.id,
+                        syncMode = SyncMode.fromSyncMode(account.defaultSyncMode),
+                        networkType = getNetworkType(testMode),
+                        confirmationsThreshold = defaultConfirmationsThreshold)
             }
 
             throw UnsupportedAccountException()
