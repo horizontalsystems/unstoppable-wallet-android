@@ -137,7 +137,7 @@ class App : Application() {
         keyStoreChangeListener = KeyStoreChangeListener(systemInfoManager, keyStoreManager).apply {
             backgroundManager.registerListener(this)
         }
-        languageManager = LanguageManager(localStorage, "en")
+        languageManager = LanguageManager(localStorage, appConfigProvider, "en")
         currencyManager = CurrencyManager(localStorage, appConfigProvider)
         numberFormatter = NumberFormatter(languageManager)
 
