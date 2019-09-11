@@ -24,8 +24,7 @@ object BaseCurrencySettingsModule {
 
     interface IInteractor {
         val currencies: List<Currency>
-        val baseCurrency: Currency
-        fun setBaseCurrency(currency: Currency)
+        var baseCurrency: Currency
     }
 
     fun start(context: Context) {
