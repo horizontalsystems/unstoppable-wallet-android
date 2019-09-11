@@ -32,15 +32,15 @@ class LanguageManager(private val localStorage: ILocalStorage, fallbackLanguage:
         }
 
     override val currentLanguageName: String
-        get() = currentLocale.displayLanguage
+        get() = currentLocale.displayLanguage.capitalize()
 
     override fun getName(language: String): String {
-        return Locale(language).displayLanguage
+        return Locale(language).displayLanguage.capitalize()
     }
 
     override fun getNativeName(language: String): String {
         val locale = Locale(language)
-        return locale.getDisplayLanguage(locale)
+        return locale.getDisplayLanguage(locale).capitalize()
     }
 
     private val preferredSystemLocale: Locale?

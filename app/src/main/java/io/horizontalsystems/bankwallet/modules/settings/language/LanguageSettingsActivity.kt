@@ -106,8 +106,8 @@ class ViewHolderLanguageItem(override val containerView: View) : RecyclerView.Vi
 
         containerView.setOnSingleClickListener { onClick.invoke() }
         image.setImageResource(LayoutHelper.getLangDrawableResource(item.language))
-        title.text = item.nativeName.capitalize()
-        subtitle.text = item.name.capitalize()
+        title.text = item.nativeName
+        subtitle.text = item.name
         checkmarkIcon.visibility = if (item.current) View.VISIBLE else View.GONE
     }
 
