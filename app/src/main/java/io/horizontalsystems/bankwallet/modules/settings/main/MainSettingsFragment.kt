@@ -80,7 +80,7 @@ class MainSettingsFragment : Fragment() {
 
         presenterView.language.observe(viewLifecycleOwner, Observer { languageCode ->
             languageCode?.let {
-                language.selectedValue = it.capitalize()
+                language.selectedValue = it
             }
         })
 
