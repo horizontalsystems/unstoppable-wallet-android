@@ -3,5 +3,5 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:color="@color/yellow_pressed" android:state_pressed="true"/>
     <item android:color="@color/yellow_pressed" android:state_selected="true"/>
-    <item android:color="?SortDialogItemTextColor" android:state_pressed="false"/>
+    <item android:color="?ColorOz" android:state_pressed="false"/>
 </selector>

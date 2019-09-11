@@ -52,22 +52,15 @@
     <attr name="ConfirmationDialogBackground" format="reference|color" />
     <attr name="AddressBackground" format="reference|color" />
     <attr name="ConfirmationMiddlePartBackground" format="reference|color" />
-    <attr name="CurrencySwitcherTitleColor" format="reference|color" />
     <attr name="PendingTransactionShadeColor" format="reference|color" />
     <attr name="TransactionTagColor" format="reference|color" />
     <attr name="ProgressbarSpinnerColor" format="reference|color" />
-    <attr name="SwipeRefreshSpinnerColor" format="reference|color" />
     <attr name="SwipeRefreshBackgroundColor" format="reference|color" />
     <attr name="InputBackground" format="reference|color" />
     <attr name="SeekbarNonActiveColor" format="reference|color" />
     <attr name="ConfirmationTextColor" format="reference|color" />
     <attr name="SettingsSectionBottomShadeColor" format="reference|color" />
     <attr name="AddCoinButtonPlaceholder" format="reference|color" />
-    <attr name="SortDialogItemTextColor" format="reference|color" />
-    <attr name="ListAlertTextColor" format="reference|color" />
-    <attr name="ScreenHideColor" format="reference|color" />
-    <attr name="ConfirmationScreenBackground" format="reference|color" />
-    <attr name="AlertTextColor" format="reference|color" />
 
     <!-- New themed colors for text and icons -->
     <attr name="ColorJacob" format="reference|color" />
@@ -150,22 +143,15 @@
         <item name="ConfirmationDialogBackground">@color/steel_dark</item>
         <item name="AddressBackground">@color/address_background_dark</item>
         <item name="ConfirmationMiddlePartBackground">@color/steel_15</item>
-        <item name="CurrencySwitcherTitleColor">@color/bars_color</item>
         <item name="PendingTransactionShadeColor">@color/dark_50</item>
         <item name="TransactionTagColor">@color/stateful_tag_filter_text_color_dark</item>
         <item name="ProgressbarSpinnerColor">@color/dark</item>
-        <item name="SwipeRefreshSpinnerColor">@color/bars_color</item>
         <item name="SwipeRefreshBackgroundColor">@color/dark</item>
         <item name="InputBackground">@color/steel_dark</item>
         <item name="SeekbarNonActiveColor">@color/steel_dark</item>
         <item name="ConfirmationTextColor">@color/lightBackground</item>
         <item name="SettingsSectionBottomShadeColor">@color/black_20</item>
         <item name="AddCoinButtonPlaceholder">@color/steel_dark</item>
-        <item name="SortDialogItemTextColor">@color/bars_color</item>
-        <item name="ListAlertTextColor">@color/bars_color</item>
-        <item name="ScreenHideColor">@color/dark</item>
-        <item name="ConfirmationScreenBackground">@color/dark</item>
-        <item name="AlertTextColor">@color/bars_color</item>
 
         <!-- New colors: for icons & text -->
         <item name="ColorJacob">@color/yellow_d</item>
@@ -246,22 +232,15 @@
         <item name="ConfirmationDialogBackground">@color/bars_color</item>
         <item name="AddressBackground">@color/address_background_light</item>
         <item name="ConfirmationMiddlePartBackground">@color/white</item>
-        <item name="CurrencySwitcherTitleColor">@color/dark</item>
         <item name="PendingTransactionShadeColor">@color/white_50</item>
         <item name="TransactionTagColor">@color/dark</item>
         <item name="ProgressbarSpinnerColor">@color/bars_color</item>
-        <item name="SwipeRefreshSpinnerColor">@color/dark</item>
         <item name="SwipeRefreshBackgroundColor">@color/bars_color</item>
         <item name="InputBackground">@color/white</item>
         <item name="SeekbarNonActiveColor">@color/grey_light</item>
         <item name="ConfirmationTextColor">@color/dark</item>
         <item name="SettingsSectionBottomShadeColor">@color/steel_15</item>
         <item name="AddCoinButtonPlaceholder">@color/bars_color</item>
-        <item name="SortDialogItemTextColor">@color/dark</item>
-        <item name="ListAlertTextColor">@color/dark</item>
-        <item name="ScreenHideColor">@color/white</item>
-        <item name="ConfirmationScreenBackground">@drawable/light_gradient_background</item>
-        <item name="AlertTextColor">@color/dark</item>
 
         <!-- New colors: for icons & text -->
         <item name="ColorJacob">@color/yellow_l</item>
@@ -376,13 +355,6 @@
         <item name="android:windowMinWidthMinor">85%</item>
         <item name="android:windowMinWidthMajor">65%</item>
         <item name="android:windowSoftInputMode">adjustResize|stateHidden</item>
-    </style>
-
-    <style name="ListAlertDialog" parent="Theme.AppCompat.Light.Dialog">
-        <item name="android:windowBackground">@drawable/alert_background_themed</item>
-        <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:backgroundDimAmount">0.7</item>
-        <item name="textColorAlertDialogListItem">?ListAlertTextColor</item>
     </style>
 
     <style name="BottomDialogAnimations" parent="@android:style/Animation.Activity">

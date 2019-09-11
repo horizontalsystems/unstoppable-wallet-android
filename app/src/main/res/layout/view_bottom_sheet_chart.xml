@@ -367,9 +367,9 @@
             android:layout_height="match_parent"
             app:fallColor="@color/red_warning"
             app:growColor="@color/green_crypto"
-            app:indicatorColor="?AlertTextColor"
+            app:indicatorColor="?ColorOz"
             app:textColor="@color/grey"
-            app:touchColor="?AlertTextColor" />
+            app:touchColor="?ColorOz" />
 
     </RelativeLayout>
 
