@@ -174,10 +174,9 @@ interface IClipboardManager {
 }
 
 interface ICurrencyManager {
-    val baseCurrency: Currency
+    var baseCurrency: Currency
     val baseCurrencyUpdatedSignal: Observable<Unit>
     val currencies: List<Currency>
-    fun setBaseCurrency(currency: Currency)
 }
 
 interface ITransactionDataProviderManager {

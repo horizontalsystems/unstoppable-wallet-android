@@ -19,7 +19,7 @@ class BaseCurrencySettingsPresenter(
     override fun didSelect(position: Int) {
         val selected = currencies[position]
         if (selected != interactor.baseCurrency) {
-            interactor.setBaseCurrency(selected)
+            interactor.baseCurrency = selected
         }
         router.close()
     }

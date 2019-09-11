@@ -8,7 +8,7 @@ import io.reactivex.subjects.PublishSubject
 
 class CurrencyManager(private val localStorage: ILocalStorage, private val appConfigProvider: IAppConfigProvider) : ICurrencyManager {
 
-    override val baseCurrency: Currency
+    override var baseCurrency: Currency
         get() {
             val currencies = appConfigProvider.currencies
             val storedCode = localStorage.baseCurrencyCode
@@ -16,16 +16,13 @@ class CurrencyManager(private val localStorage: ILocalStorage, private val appCo
                 currencies.first { it.code == code }
             } ?: currencies.first()
         }
+        set(value) {
+            localStorage.baseCurrencyCode = value.code
+            baseCurrencyUpdatedSignal.onNext(Unit)
+        }
 
     override val currencies: List<Currency>
         get() = appConfigProvider.currencies
 
     override val baseCurrencyUpdatedSignal = PublishSubject.create<Unit>()
-
-    override fun setBaseCurrency(currency: Currency) {
-        localStorage.baseCurrencyCode = currency.code
-
-        baseCurrencyUpdatedSignal.onNext(Unit)
-    }
-
 }
