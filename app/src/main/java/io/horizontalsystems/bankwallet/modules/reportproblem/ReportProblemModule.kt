@@ -7,11 +7,13 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 
 object ReportProblemModule {
-    interface IView
+    interface IView {
+        fun setEmail(email: String)
+        fun setTelegramGroup(group: String)
+    }
 
     interface IViewDelegate {
-        val email: String
-        val telegramGroup: String
+        fun viewDidLoad()
         fun didTapEmail()
         fun didTapTelegram()
     }
@@ -21,8 +23,6 @@ object ReportProblemModule {
         val telegramGroup: String
     }
 
-    interface IInteractorDelegate
-
     interface IRouter {
         fun openSendMail(recipient: String)
         fun openTelegram(group: String)
@@ -30,11 +30,10 @@ object ReportProblemModule {
 
     class Factory : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val interactor = ReportProblemInteractor(App.appConfigProvider)
+            val view = ReportProblemView()
             val router = ReportProblemRouter()
-            val presenter = ReportProblemPresenter(interactor, router)
-
-            interactor.delegate = presenter
+            val interactor = ReportProblemInteractor(App.appConfigProvider)
+            val presenter = ReportProblemPresenter(view, router, interactor)
 
             return presenter as T
         }

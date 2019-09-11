@@ -3,12 +3,15 @@ package io.horizontalsystems.bankwallet.modules.reportproblem
 import androidx.lifecycle.ViewModel
 
 class ReportProblemPresenter(
-        private val interactor: ReportProblemModule.IInteractor,
-        val router: ReportProblemModule.IRouter
-) : ViewModel(), ReportProblemModule.IInteractorDelegate, ReportProblemModule.IViewDelegate {
+        val view: ReportProblemModule.IView,
+        val router: ReportProblemModule.IRouter,
+        private val interactor: ReportProblemModule.IInteractor
+) : ViewModel(), ReportProblemModule.IViewDelegate {
 
-    override val email get() = interactor.email
-    override val telegramGroup get() = "@" + interactor.telegramGroup
+    override fun viewDidLoad() {
+        view.setEmail(interactor.email)
+        view.setTelegramGroup("@" + interactor.telegramGroup)
+    }
 
     override fun didTapEmail() {
         router.openSendMail(interactor.email)
