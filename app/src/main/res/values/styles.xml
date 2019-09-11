@@ -69,6 +69,21 @@
     <attr name="ConfirmationScreenBackground" format="reference|color" />
     <attr name="AlertTextColor" format="reference|color" />
 
+    <!-- New themed colors for text and icons -->
+    <attr name="ColorJacob" format="reference|color" />
+    <attr name="ColorRemus" format="reference|color" />
+    <attr name="ColorLucian" format="reference|color" />
+    <attr name="ColorOz" format="reference|color" />
+    <attr name="ColorLeah" format="reference|color" />
+
+    <!-- New themed colors for backgrounds -->
+    <attr name="ColorJeremy" format="reference|color" />
+    <attr name="ColorElena" format="reference|color" />
+    <attr name="ColorLawrence" format="reference|color" />
+    <attr name="ColorClaude" format="reference|color" />
+    <attr name="ColorGwen" format="reference" />
+
+
     <!-- Base application theme. -->
     <style name="DarkModeAppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
@@ -151,6 +166,19 @@
         <item name="ScreenHideColor">@color/dark</item>
         <item name="ConfirmationScreenBackground">@color/dark</item>
         <item name="AlertTextColor">@color/bars_color</item>
+
+        <!-- New colors: for icons & text -->
+        <item name="ColorJacob">@color/yellow_d</item>
+        <item name="ColorRemus">@color/green_d</item>
+        <item name="ColorLucian">@color/red_d</item>
+        <item name="ColorOz">@color/light</item>
+        <item name="ColorLeah">@color/steel_light</item>
+        <!-- New colors: for backgrounds -->
+        <item name="ColorJeremy">@color/steel_20</item>
+        <item name="ColorElena">@color/steel_20</item>
+        <item name="ColorLawrence">@color/steel_20</item>
+        <item name="ColorClaude">@color/dark</item>
+        <item name="ColorGwen">@color/dark</item>
     </style>
 
     <style name="LightModeAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -234,6 +262,19 @@
         <item name="ScreenHideColor">@color/white</item>
         <item name="ConfirmationScreenBackground">@drawable/light_gradient_background</item>
         <item name="AlertTextColor">@color/dark</item>
+
+        <!-- New colors: for icons & text -->
+        <item name="ColorJacob">@color/yellow_l</item>
+        <item name="ColorRemus">@color/green_l</item>
+        <item name="ColorLucian">@color/red_l</item>
+        <item name="ColorOz">@color/dark</item>
+        <item name="ColorLeah">@color/steel_dark</item>
+        <!-- New colors: for backgrounds -->
+        <item name="ColorJeremy">@color/steel_light</item>
+        <item name="ColorElena">@color/steel_grey</item>
+        <item name="ColorLawrence">@color/white</item>
+        <item name="ColorClaude">@color/white</item>
+        <item name="ColorGwen">@drawable/light_gradient_background</item>
     </style>
 
     <style name="Button" parent="Widget.AppCompat.Button.Borderless">
