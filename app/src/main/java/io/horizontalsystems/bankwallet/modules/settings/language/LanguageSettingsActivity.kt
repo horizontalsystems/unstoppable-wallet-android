@@ -54,6 +54,10 @@ class LanguageSettingsActivity : BaseActivity(), LanguageSettingsAdapter.Listene
             MainModule.startAsNewTask(this, MainActivity.SETTINGS_TAB_POSITION)
         })
 
+        presenterRouter.closeLiveEvent.observe(this, Observer {
+            finish()
+        })
+
         presenter.viewDidLoad()
     }
 
