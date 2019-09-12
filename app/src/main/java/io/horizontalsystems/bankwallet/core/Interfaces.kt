@@ -108,7 +108,6 @@ interface IPredefinedAccountTypeManager {
     val allTypes: List<IPredefinedAccountType>
     fun account(predefinedAccountType: IPredefinedAccountType): Account?
     fun createAccount(predefinedAccountType: IPredefinedAccountType): Account?
-    fun createAllAccounts()
 }
 
 interface IPredefinedAccountType {

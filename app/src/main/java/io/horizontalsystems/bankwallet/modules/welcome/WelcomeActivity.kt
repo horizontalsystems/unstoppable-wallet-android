@@ -7,9 +7,8 @@ import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.modules.main.MainModule
+import io.horizontalsystems.bankwallet.modules.createwallet.CreateWalletModule
 import io.horizontalsystems.bankwallet.modules.restore.RestoreModule
-import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_welcome.*
 
 
@@ -26,17 +25,12 @@ class WelcomeActivity : BaseActivity() {
         viewModel = ViewModelProviders.of(this).get(WelcomeViewModel::class.java)
         viewModel.init()
 
-        viewModel.openMainModule.observe(this, Observer {
-            MainModule.startAsNewTask(this)
-            finish()
-        })
-
         viewModel.openRestoreModule.observe(this, Observer {
             RestoreModule.start(this)
         })
 
-        viewModel.showErrorDialog.observe(this, Observer {
-            HudHelper.showErrorMessage(R.string.Error)
+        viewModel.openCreateWalletModule.observe(this, Observer {
+            CreateWalletModule.start(this)
         })
 
         viewModel.appVersionLiveData.observe(this, Observer { appVersion ->
