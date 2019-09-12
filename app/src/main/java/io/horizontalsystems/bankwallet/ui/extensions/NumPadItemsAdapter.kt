@@ -99,7 +99,7 @@ class NumPadItemViewHolder(itemView: View) : ViewHolder(itemView) {
                 txtLetters.visibility = if (item.number == 0 || !showLetters) View.GONE else View.VISIBLE
                 txtNumber.text = item.number.toString()
                 txtLetters.text = item.letters
-                itemView.setBackgroundResource(R.drawable.numpad_button_background)
+                itemView.setBackgroundResource(R.drawable.numpad_circle)
             }
 
             NumPadItemType.FINGER -> {
