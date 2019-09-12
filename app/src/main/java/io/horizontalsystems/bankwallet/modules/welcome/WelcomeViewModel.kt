@@ -8,9 +8,8 @@ class WelcomeViewModel : ViewModel(), WelcomeModule.IView, WelcomeModule.IRouter
 
     lateinit var delegate: WelcomeModule.IViewDelegate
 
-    val openMainModule = SingleLiveEvent<Void>()
     val openRestoreModule = SingleLiveEvent<Void>()
-    val showErrorDialog = SingleLiveEvent<Void>()
+    val openCreateWalletModule = SingleLiveEvent<Void>()
     val appVersionLiveData = MutableLiveData<String>()
 
     fun init() {
@@ -24,18 +23,13 @@ class WelcomeViewModel : ViewModel(), WelcomeModule.IView, WelcomeModule.IRouter
         appVersionLiveData.value = appVersion
     }
 
-    override fun showError() {
-        showErrorDialog.call()
-    }
-
     // IRouter
-
-    override fun openMainModule() {
-        openMainModule.call()
-    }
 
     override fun openRestoreModule() {
         openRestoreModule.call()
     }
 
+    override fun openCreateWalletModule() {
+        openCreateWalletModule.call()
+    }
 }

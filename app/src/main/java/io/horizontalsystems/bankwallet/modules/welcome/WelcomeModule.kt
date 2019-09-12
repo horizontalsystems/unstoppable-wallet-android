@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.core.App
 object WelcomeModule {
 
     interface IView {
-        fun showError()
         fun setAppVersion(appVersion: String)
     }
 
@@ -18,18 +17,12 @@ object WelcomeModule {
     }
 
     interface IInteractor {
-        fun createWallet()
         val appVersion: String
     }
 
-    interface IInteractorDelegate {
-        fun didCreateWallet()
-        fun didFailToCreateWallet()
-    }
-
     interface IRouter {
-        fun openMainModule()
         fun openRestoreModule()
+        fun openCreateWalletModule()
     }
 
     fun start(context: Context) {
@@ -39,12 +32,11 @@ object WelcomeModule {
     }
 
     fun init(view: WelcomeViewModel, router: IRouter) {
-        val interactor = WelcomeInteractor(App.predefinedAccountTypeManager, App.systemInfoManager)
+        val interactor = WelcomeInteractor(App.systemInfoManager)
         val presenter = WelcomePresenter(interactor, router)
 
         view.delegate = presenter
         presenter.view = view
-        interactor.delegate = presenter
     }
 
 }
