@@ -1,10 +1,6 @@
 <resources>
 
     <!-- App themable color names -->
-    <attr name="NumpadNumberBackground" format="reference|color" />
-    <attr name="NumpadNumberBackgroundHighlight" format="reference|color" />
-    <attr name="NumpadNumberColor" format="reference|color" />
-    <attr name="NumpadBorderColor" format="reference|color" />
     <attr name="BallanceCoinNameColor" format="reference|color" />
     <attr name="BallanceCoinAmountColor" format="reference|color" />
     <attr name="TitleColor" format="reference|color" />
@@ -26,8 +22,6 @@
     <attr name="StatusBarColor" format="reference|color" />
     <attr name="RippleColor" format="reference|color" />
     <attr name="RoundRippleColor" format="reference|color" />
-    <attr name="NumpadDeleteButton" format="reference" />
-    <attr name="NumpadFingerprintButton" format="reference" />
     <attr name="AppBarBackground" format="reference" />
     <attr name="BottomNavBackground" format="reference" />
     <attr name="BlockScreenLockIcon" format="reference" />
@@ -92,10 +86,6 @@
         <item name="colorControlNormal">@color/grey</item>
         <item name="colorControlActivated">@color/yellow_crypto</item>
 
-        <item name="NumpadNumberBackground">@color/steel_15</item>
-        <item name="NumpadNumberBackgroundHighlight">@color/steel_40</item>
-        <item name="NumpadNumberColor">@color/grey_light</item>
-        <item name="NumpadBorderColor">@color/transparent</item>
         <item name="BallanceCoinNameColor">@color/white</item>
         <item name="BallanceCoinAmountColor">@color/white</item>
         <item name="TitleColor">@color/white</item>
@@ -117,8 +107,6 @@
         <item name="StatusBarColor">@color/dark</item>
         <item name="RippleColor">@color/ripple_white</item>
         <item name="RoundRippleColor">@color/white_50</item>
-        <item name="NumpadDeleteButton">@drawable/round_backspace_24px</item>
-        <item name="NumpadFingerprintButton">@drawable/fingerprint_outline_white</item>
         <item name="AppBarBackground">@drawable/shadow_top_navigation</item>
         <item name="BottomNavBackground">@drawable/shadow_bottom_navigation</item>
         <item name="BlockScreenLockIcon">@drawable/ic_blocked_dark</item>
@@ -181,10 +169,6 @@
         <item name="colorControlNormal">@color/grey</item>
         <item name="colorControlActivated">@color/yellow_crypto</item>
 
-        <item name="NumpadNumberBackground">@color/white</item>
-        <item name="NumpadNumberBackgroundHighlight">@color/lightBackground</item>
-        <item name="NumpadNumberColor">@color/dark</item>
-        <item name="NumpadBorderColor">@color/steel_15</item>
         <item name="BallanceCoinNameColor">@color/dark</item>
         <item name="BallanceCoinAmountColor">@color/dark</item>
         <item name="TitleColor">@color/dark</item>
@@ -206,8 +190,6 @@
         <item name="StatusBarColor">@color/bars_color</item>
         <item name="RippleColor">@color/ripple_black</item>
         <item name="RoundRippleColor">@color/grey_light</item>
-        <item name="NumpadDeleteButton">@drawable/round_backspace_dark_24px</item>
-        <item name="NumpadFingerprintButton">@drawable/fingerprint_outline_black</item>
         <item name="AppBarBackground">@drawable/shadow_top_navigation_light</item>
         <item name="BottomNavBackground">@drawable/shadow_bottom_navigation_light</item>
         <item name="BlockScreenLockIcon">@drawable/ic_blocked_light</item>

@@ -1,71 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="100dp"
-    android:layout_height="46dp"
-    android:background="@drawable/numpad_button_background"
-    android:layout_margin="5dp"
+    android:layout_width="72dp"
+    android:layout_height="72dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/numpad_circle"
     android:clickable="true"
-    android:focusable="true"
-    >
+    android:focusable="true">
 
     <TextView
         android:id="@+id/txtNumPadNumber"
+        style="@style/Title2R"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:fontFamily="@font/noto_sans_semi_bold"
-        android:textColor="?NumpadNumberColor"
-        android:textSize="22sp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:includeFontPadding="false"
+        android:textColor="?ColorLeah"
+        app:layout_constraintBottom_toTopOf="@+id/txtNumPadText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/txtNumPadText"
-        tools:text="6"
-        />
+        tools:text="6" />
 
     <TextView
         android:id="@+id/txtNumPadText"
+        style="@style/Micro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="2dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
         android:fontFamily="@font/noto_sans"
-        android:textColor="@color/grey"
-        android:textSize="12sp"
-        android:includeFontPadding="false"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="@color/grey_50"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="mno"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/txtNumPadNumber"
+        tools:text="mno" />
 
     <ImageView
         android:id="@+id/imgBackSpace"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="?NumpadDeleteButton"
+        android:src="@drawable/ic_backspace"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:visibility="gone"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imgFingerprint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="?NumpadFingerprintButton"
+        android:src="@drawable/ic_fingerprint"
+        android:tint="@color/grey"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:visibility="gone"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
