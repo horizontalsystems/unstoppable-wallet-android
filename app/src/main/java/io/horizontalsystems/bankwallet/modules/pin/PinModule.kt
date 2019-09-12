@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.pin
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
 import java.util.*
@@ -50,15 +49,15 @@ object PinModule {
     }
 
     fun startForSetPin(context: AppCompatActivity, requestCode: Int) {
-        PinActivity.startForResult(context, requestCode, PinInteractionType.SET_PIN)
+        PinActivity.startForResult(context, PinInteractionType.SET_PIN, requestCode)
     }
 
-    fun startForEditPin(context: Context) {
-        PinActivity.start(context, PinInteractionType.EDIT_PIN)
+    fun startForEditPin(context: AppCompatActivity) {
+        PinActivity.startForResult(context, PinInteractionType.EDIT_PIN)
     }
 
     fun startForUnlock(context: AppCompatActivity, requestCode: Int, showCancel: Boolean = false) {
-        PinActivity.startForResult(context, requestCode, PinInteractionType.UNLOCK, showCancel)
+        PinActivity.startForResult(context, PinInteractionType.UNLOCK, requestCode, showCancel)
     }
 
 }
