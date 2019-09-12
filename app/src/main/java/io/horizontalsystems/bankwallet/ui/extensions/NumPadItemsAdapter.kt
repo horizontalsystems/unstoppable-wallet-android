@@ -55,7 +55,7 @@ class NumPadItemsAdapter(private val listener: Listener, bottomLeftButtonType: N
 data class NumPadItem(val type: NumPadItemType, val number: Int, val letters: String)
 
 enum class NumPadItemType {
-    NUMBER, DELETE, FINGER, DOT
+    NUMBER, DELETE, FINGER
 }
 
 class NumPadItemViewHolder(itemView: View) : ViewHolder(itemView) {
@@ -105,12 +105,6 @@ class NumPadItemViewHolder(itemView: View) : ViewHolder(itemView) {
             NumPadItemType.FINGER -> {
                 itemView.background = null
                 imgFingerprint.visibility = if (isFingerprintEnabled) View.VISIBLE else View.GONE
-            }
-
-            NumPadItemType.DOT -> {
-                itemView.background = null
-                txtNumber.text = "."
-                txtNumber.visibility = View.VISIBLE
             }
 
         }
