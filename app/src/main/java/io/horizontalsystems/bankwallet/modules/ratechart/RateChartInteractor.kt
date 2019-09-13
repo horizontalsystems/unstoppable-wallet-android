@@ -1,27 +1,30 @@
 package io.horizontalsystems.bankwallet.modules.ratechart
 
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.IRateStatsManager
+import io.horizontalsystems.bankwallet.core.IRateStatsSyncer
 import io.horizontalsystems.bankwallet.core.IRateStorage
-import io.horizontalsystems.bankwallet.core.managers.RateStatsManager
 import io.horizontalsystems.bankwallet.core.managers.StatsData
-import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
-import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 
 class RateChartInteractor(
-        private val rateStatsManager: RateStatsManager,
+        private val rateStatsManager: IRateStatsManager,
+        private val rateStatsSyncer: IRateStatsSyncer,
         private val rateStorage: IRateStorage,
         private val localStorage: ILocalStorage)
     : RateChartModule.Interactor {
 
+    private val disposables = CompositeDisposable()
     var delegate: RateChartModule.InteractorDelegate? = null
 
-    private val disposable = CompositeDisposable()
+    override var chartEnabled: Boolean
+        get() = rateStatsSyncer.rateChartShown
+        set(value) {
+            rateStatsSyncer.rateChartShown = value
+        }
 
     override var defaultChartType: ChartType
         get() = localStorage.chartMode
@@ -29,22 +32,34 @@ class RateChartInteractor(
             localStorage.chartMode = value
         }
 
-    override fun getRateStats(coinCode: CoinCode, currencyCode: String) {
-        val getRates = rateStatsManager.getRateStats(coinCode, currencyCode)
-        val getLocalRate = rateStorage.latestRateObservable(coinCode, currencyCode)
-
-        Flowable.zip(getRates, getLocalRate, BiFunction<StatsData, Rate, Pair<StatsData, Rate>> { a, b -> Pair(a, b) })
+    override fun subscribeToChartStats() {
+        rateStatsManager.statsFlowable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ (data, rate) ->
-                    delegate?.onReceiveStats(Pair(data, rate))
+                .subscribe({
+                    if (it is StatsData) {
+                        delegate?.onReceiveStats(it)
+                    }
                 }, {
                     delegate?.onReceiveError(it)
                 })
-                .let { disposable.add(it) }
+                .let { disposables.add(it) }
+    }
+
+    override fun subscribeToLatestRate(coinCode: String, currencyCode: String) {
+        rateStorage.latestRateObservable(coinCode, currencyCode)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    delegate?.onReceiveLatestRate(it)
+                }, {
+                    delegate?.onReceiveError(it)
+                })
+                .let { disposables.add(it) }
     }
 
     override fun clear() {
-        disposable.clear()
+        disposables.clear()
     }
+
 }

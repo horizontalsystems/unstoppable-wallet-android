@@ -9,7 +9,6 @@ import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.BalanceItem
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -40,9 +39,12 @@ class BalancePresenter(
         get() = dataSource.count
 
     override fun viewDidLoad() {
+        interactor.chartEnabled = false
+
         dataSource.sortType = interactor.getSortingType()
+        view?.setChartButtonState(interactor.chartEnabled)
+
         interactor.initWallets()
-        view?.setChartButtonState(dataSource.chartEnabled)
 
         flushSubject
                 .debounce(1, TimeUnit.SECONDS)
@@ -72,7 +74,7 @@ class BalancePresenter(
             factory.createViewItem(dataSource.getItem(position), dataSource.currency)
 
     override fun getHeaderViewItem() =
-            factory.createHeaderViewItem(dataSource.items, dataSource.chartEnabled, dataSource.currency)
+            factory.createHeaderViewItem(dataSource.items, interactor.chartEnabled, dataSource.currency)
 
     override fun refresh() {
         interactor.refresh()
@@ -106,19 +108,16 @@ class BalancePresenter(
     }
 
     override fun onChartClick() {
-        dataSource.chartEnabled = !dataSource.chartEnabled
-        view?.setChartButtonState(dataSource.chartEnabled)
+        interactor.chartEnabled = !interactor.chartEnabled
+        view?.setChartButtonState(interactor.chartEnabled)
         view?.reload()
-
-        if (dataSource.chartEnabled) updateStats()
     }
 
     override fun onSortTypeChanged(sortType: BalanceSortType) {
         dataSource.sortType = sortType
         if (sortType == BalanceSortType.PercentGrowth) {
-            dataSource.chartEnabled = true
-            view?.setChartButtonState(dataSource.chartEnabled)
-            updateStats()
+            interactor.chartEnabled = true
+            view?.setChartButtonState(interactor.chartEnabled)
         } else {
             interactor.saveSortingType(sortType)
         }
@@ -133,9 +132,6 @@ class BalancePresenter(
             val adapterState = adapter?.state ?: AdapterState.NotReady
 
             val balanceItem = BalanceItem(wallet, adapter?.balance ?: BigDecimal.ZERO, adapterState)
-            if (dataSource.chartEnabled) {
-                interactor.fetchRateStats(dataSource.currency.code, wallet.coin.code)
-            }
 
             balanceItem
         }
@@ -152,9 +148,6 @@ class BalancePresenter(
         dataSource.currency = currency
         dataSource.clearRates()
         interactor.fetchRates(currency.code, dataSource.coinCodes)
-        if (dataSource.chartEnabled) {
-            updateStats()
-        }
         view?.reload()
     }
 
@@ -181,8 +174,8 @@ class BalancePresenter(
         postViewReload()
     }
 
-    override fun onReceiveRateStats(coinCode: CoinCode, data: StatsData) {
-        val positions = dataSource.getPositionsByCoinCode(coinCode)
+    override fun onReceiveRateStats(data: StatsData) {
+        val positions = dataSource.getPositionsByCoinCode(data.coinCode)
         val chartData = data.stats[ChartType.DAILY.name] ?: return
         val chartDiff = data.diff[ChartType.DAILY.name] ?: return
 
@@ -232,9 +225,4 @@ class BalancePresenter(
         flushSubject.onNext(Unit)
     }
 
-    private fun updateStats() {
-        dataSource.coinCodes.forEach {
-            interactor.fetchRateStats(dataSource.currency.code, it)
-        }
-    }
 }

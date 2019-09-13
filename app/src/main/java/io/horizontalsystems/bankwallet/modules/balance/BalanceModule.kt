@@ -41,10 +41,11 @@ object BalanceModule {
     }
 
     interface IInteractor {
+        var chartEnabled: Boolean
+
         fun refresh()
         fun initWallets()
         fun fetchRates(currencyCode: String, coinCodes: List<CoinCode>)
-        fun fetchRateStats(currencyCode: String, coinCode: CoinCode)
         fun getSortingType(): BalanceSortType
         fun clear()
         fun saveSortingType(sortType: BalanceSortType)
@@ -57,7 +58,7 @@ object BalanceModule {
         fun didUpdateBalance(wallet: Wallet, balance: BigDecimal)
         fun didUpdateState(wallet: Wallet, state: AdapterState)
         fun didUpdateRate(rate: Rate)
-        fun onReceiveRateStats(coinCode: CoinCode, data: StatsData)
+        fun onReceiveRateStats(data: StatsData)
         fun onFailFetchChartStats(coinCode: String)
         fun didRefresh()
     }
@@ -90,8 +91,6 @@ object BalanceModule {
                 field = value
                 items = sorter.sort(items, sortType)
             }
-
-        var chartEnabled = false
 
         @Synchronized
         fun addUpdatedPosition(position: Int) {
@@ -170,7 +169,7 @@ object BalanceModule {
 
     fun init(view: BalanceViewModel, router: IRouter) {
         val currencyManager = App.currencyManager
-        val interactor = BalanceInteractor(App.walletManager, App.adapterManager, App.rateStorage, App.rateStatsManager, currencyManager, App.localStorage, App.rateManager)
+        val interactor = BalanceInteractor(App.walletManager, App.adapterManager, App.rateStorage, App.rateStatsManager, App.rateStatsSyncer, currencyManager, App.localStorage, App.rateManager)
         val presenter = BalancePresenter(interactor, router, DataSource(currencyManager.baseCurrency, BalanceSorter()), App.predefinedAccountTypeManager, BalanceViewItemFactory())
 
         presenter.view = view

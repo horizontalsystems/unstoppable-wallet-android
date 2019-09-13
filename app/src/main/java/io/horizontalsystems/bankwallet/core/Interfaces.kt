@@ -4,6 +4,7 @@ import android.text.SpannableString
 import androidx.biometric.BiometricPrompt
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.managers.ServiceExchangeApi.HostType
+import io.horizontalsystems.bankwallet.core.managers.StatsResponse
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView
@@ -356,6 +357,17 @@ interface IRateStorage {
 
 interface IRateManager {
     fun syncLatestRates()
+}
+
+interface IRateStatsManager {
+    val statsFlowable: Flowable<StatsResponse>
+    fun syncStats(coinCode: String, currencyCode: String)
+}
+
+interface IRateStatsSyncer {
+    var balanceStatsOn: Boolean
+    var lockStatsOn: Boolean
+    var rateChartShown: Boolean
 }
 
 interface IAccountsStorage {

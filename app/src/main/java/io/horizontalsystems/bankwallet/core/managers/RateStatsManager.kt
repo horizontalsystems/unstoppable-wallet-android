@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.INetworkManager
+import io.horizontalsystems.bankwallet.core.IRateStatsManager
 import io.horizontalsystems.bankwallet.core.IRateStorage
 import io.horizontalsystems.bankwallet.core.managers.ServiceExchangeApi.HostType
 import io.horizontalsystems.bankwallet.entities.Rate
@@ -8,32 +9,47 @@ import io.horizontalsystems.bankwallet.entities.RateData
 import io.horizontalsystems.bankwallet.entities.RateStatData
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartData
+import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
+import java.util.*
 
-class RateStatsManager(private val networkManager: INetworkManager, private val rateStorage: IRateStorage) {
+class RateStatsManager(private val networkManager: INetworkManager,
+                       private val rateStorage: IRateStorage) : IRateStatsManager {
 
+    private val cacheUpdateTimeInterval: Long = 30 * 60 * 60 // 30 minutes in seconds
     private val disposables = CompositeDisposable()
-    private val cache = mutableMapOf<StatsKey, RateStatData>()
+    private val cache = mutableMapOf<StatsKey, Pair<Long?, RateStatData>>()
+    private val statsSubject = PublishSubject.create<StatsResponse>()
 
-    fun getRateStats(coinCode: String, currencyCode: String): Flowable<StatsData> {
+    override val statsFlowable: Flowable<StatsResponse>
+        get() = statsSubject.toFlowable(BackpressureStrategy.BUFFER)
+
+    override fun syncStats(coinCode: String, currencyCode: String) {
         val statsKey = StatsKey(coinCode, currencyCode)
+        val currentTime = Date().time / 1000 // timestamp in seconds
         val cached = cache[statsKey]
 
-        val rateLocal = rateStorage.latestRateObservable(coinCode, currencyCode)
-        val rateStats = if (cached != null) {
-            Flowable.just(cached)
+        val rateStats = if (cached != null && cached.first ?: 0 > currentTime - cacheUpdateTimeInterval) {
+            Single.just(cached.second)
         } else {
             networkManager
                     .getRateStats(HostType.MAIN, coinCode, currencyCode)
-                    .onErrorResumeNext(networkManager.getRateStats(HostType.FALLBACK, coinCode, currencyCode))
+                    .firstOrError()
+                    .onErrorResumeNext { networkManager.getRateStats(HostType.FALLBACK, coinCode, currencyCode).firstOrError() }
         }
 
-        return Flowable.zip(rateLocal, rateStats, BiFunction<Rate, RateStatData, Pair<Rate, RateStatData>> { a, b -> Pair(a, b) })
+        val rateLocal = rateStorage.latestRateObservable(coinCode, currencyCode).firstOrError()
+
+        Single.zip(rateLocal, rateStats, BiFunction<Rate, RateStatData, Pair<Rate, RateStatData>> { a, b -> Pair(a, b) })
                 .map { (rate, data) ->
-                    cache[statsKey] = data
+                    val lastDailyTimestamp = data.stats[ChartType.DAILY.name]?.timestamp
+                    cache[statsKey] = Pair(lastDailyTimestamp, data)
 
                     val stats = mutableMapOf<String, ChartData>()
                     val diffs = mutableMapOf<String, BigDecimal>()
@@ -47,8 +63,18 @@ class RateStatsManager(private val networkManager: INetworkManager, private val 
                         diffs[type] = growthDiff(chartData.points)
                     }
 
-                    StatsData(data.marketCap, stats, diffs)
+                    StatsData(coinCode, data.marketCap, stats, diffs)
                 }
+                .subscribeOn(Schedulers.io())
+                .subscribe({
+                    statsSubject.onNext(it)
+                }, {
+                    statsSubject.onNext(StatsError(coinCode))
+                })
+                .let {
+                    disposables.add(it)
+                }
+
     }
 
     fun clear() {
@@ -81,4 +107,7 @@ class RateStatsManager(private val networkManager: INetworkManager, private val 
 }
 
 data class StatsKey(val coinCode: String, val currencyCode: String)
-data class StatsData(val marketCap: BigDecimal, val stats: Map<String, ChartData>, val diff: Map<String, BigDecimal>)
+
+sealed class StatsResponse
+data class StatsData(val coinCode: String, val marketCap: BigDecimal, val stats: Map<String, ChartData>, val diff: Map<String, BigDecimal>) : StatsResponse()
+data class StatsError(val coinCode: String) : StatsResponse()
