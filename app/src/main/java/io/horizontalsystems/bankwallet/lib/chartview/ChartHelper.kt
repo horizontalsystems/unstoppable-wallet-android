@@ -1,12 +1,13 @@
 package io.horizontalsystems.bankwallet.lib.chartview
 
 import android.graphics.RectF
+import io.horizontalsystems.bankwallet.lib.chartview.ChartCurve.Coordinate
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartConfig
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
 
 class ChartHelper(private val shape: RectF, private val config: ChartConfig) {
 
-    fun setCoordinates(points: List<ChartPoint>) {
+    fun setCoordinates(points: List<ChartPoint>): List<Coordinate> {
         val width = shape.width()
         val height = shape.height()
         val bottom = config.valueTop - (config.valueStep * 4)
@@ -17,10 +18,16 @@ class ChartHelper(private val shape: RectF, private val config: ChartConfig) {
         val deltaX = (endTimestamp - startTimestamp) / width
         val deltaY = height / (config.valueStep * 4)
 
+        val coordinates = mutableListOf<Coordinate>()
+
         for (point in points) {
-            point.x = (point.timestamp - startTimestamp) / deltaX
-            point.y = height - deltaY * (point.value - bottom)
+            val x = (point.timestamp - startTimestamp) / deltaX
+            val y = height - deltaY * (point.value - bottom)
+
+            coordinates.add(Coordinate(x, y, point))
         }
+
+        return coordinates
     }
 
     companion object {

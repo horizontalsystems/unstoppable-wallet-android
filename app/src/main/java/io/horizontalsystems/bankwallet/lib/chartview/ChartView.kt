@@ -100,12 +100,12 @@ class ChartView : View {
             MotionEvent.ACTION_DOWN -> {
                 chartCurve.onTouchActive()
                 eventListener.onTouchDown()
-                chartIndicator?.onMove(chartCurve.findPoint(event.rawX), eventListener)
+                chartIndicator?.onMove(chartCurve.find(event.rawX), eventListener)
                 invalidate()
             }
 
             MotionEvent.ACTION_MOVE -> {
-                chartIndicator?.onMove(chartCurve.findPoint(event.rawX), eventListener)
+                chartIndicator?.onMove(chartCurve.find(event.rawX), eventListener)
             }
 
             MotionEvent.ACTION_UP,
@@ -168,6 +168,7 @@ class ChartView : View {
         shape.set(0f, 0f, shapeWidth - config.offsetRight, shapeHeight - config.offsetBottom)
 
         chartCurve.init(points)
+
         if (config.showGrid) {
             chartGrid.init(points, chartType)
         }
