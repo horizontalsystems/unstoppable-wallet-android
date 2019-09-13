@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
-import io.horizontalsystems.bankwallet.lib.chartview.models.ChartData
+import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
 import java.math.BigDecimal
 
 data class ChartViewItem(
@@ -16,23 +16,22 @@ data class ChartViewItem(
         val lowValue: CurrencyValue,
         val highValue: CurrencyValue,
         val diffValue: BigDecimal,
-        val chartData: ChartData,
+        val chartData: List<ChartPoint>,
         val lastUpdateTimestamp: Long? = null
 )
 
 class RateChartViewFactory {
     fun createViewItem(chartType: ChartType, statData: StatsData, rate: Rate?, currency: Currency): ChartViewItem {
-        val data = statData.stats[chartType.name] ?: throw NoRateStats()
         val diff = statData.diff[chartType.name] ?: throw NoRateStats()
+        val points = statData.stats[chartType.name] ?: throw NoRateStats()
 
-        val min = data.points.min() ?: 0f
-        val max = data.points.max() ?: 0f
+        val minValue = points.minBy { it.value }?.value ?: 0f
+        val maxValue = points.maxBy { it.value }?.value ?: 0f
 
-        val lowValue = CurrencyValue(currency, min.toBigDecimal())
-        val highValue = CurrencyValue(currency, max.toBigDecimal())
+        val lowValue = CurrencyValue(currency, minValue.toBigDecimal())
+        val highValue = CurrencyValue(currency, maxValue.toBigDecimal())
         val marketCap = CurrencyValue(currency, statData.marketCap)
         val rateValue = rate?.let { CurrencyValue(currency, it.value) }
-        val chartData = ChartData(data.points, data.timestamp, data.scale, chartType)
 
         return ChartViewItem(
                 chartType,
@@ -41,7 +40,7 @@ class RateChartViewFactory {
                 lowValue,
                 highValue,
                 diff,
-                chartData,
+                points,
                 rate?.timestamp?.times(1000)
         )
     }

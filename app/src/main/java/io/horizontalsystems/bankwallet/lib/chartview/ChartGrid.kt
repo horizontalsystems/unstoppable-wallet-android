@@ -3,10 +3,7 @@ package io.horizontalsystems.bankwallet.lib.chartview
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
-import io.horizontalsystems.bankwallet.lib.chartview.models.ChartConfig
-import io.horizontalsystems.bankwallet.lib.chartview.models.ChartData
-import io.horizontalsystems.bankwallet.lib.chartview.models.GridColumn
-import io.horizontalsystems.bankwallet.lib.chartview.models.GridLine
+import io.horizontalsystems.bankwallet.lib.chartview.models.*
 
 class ChartGrid(private val shape: RectF, private val config: ChartConfig) {
     private val gridHelper = GridHelper(shape, config)
@@ -17,8 +14,8 @@ class ChartGrid(private val shape: RectF, private val config: ChartConfig) {
     private var gridPaint = Paint()
     private var textPaint = Paint()
 
-    fun init(data: ChartData) {
-        gridColumns = gridHelper.setGridColumns(data)
+    fun init(points: List<ChartPoint>, chartType: ChartView.ChartType) {
+        gridColumns = gridHelper.setGridColumns(points, chartType)
         gridLines = gridHelper.setGridLines()
 
         gridPaint.apply {

@@ -3,19 +3,20 @@ package io.horizontalsystems.bankwallet.lib.chartview
 import android.graphics.*
 import androidx.core.graphics.ColorUtils.setAlphaComponent
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartConfig
-import io.horizontalsystems.bankwallet.lib.chartview.models.ChartData
-import io.horizontalsystems.bankwallet.lib.chartview.models.DataPoint
+import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
 
 class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
 
     private val chartHelper = ChartHelper(shape, config)
-    private var points = listOf<DataPoint>()
+    private var points = listOf<ChartPoint>()
 
     private val linePaint = Paint()
     private var gradient = Paint()
 
-    fun init(data: ChartData) {
-        points = chartHelper.setPoints(data)
+    fun init(points: List<ChartPoint>) {
+        this.points = points
+        chartHelper.setCoordinates(points)
+
         onTouchInactive()
 
         linePaint.apply {
@@ -40,7 +41,7 @@ class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
         linePaint.color = config.curveColor
     }
 
-    fun findPoint(value: Float): DataPoint? {
+    fun findPoint(value: Float): ChartPoint? {
         if (points.size < 2) return null
         if (points.last().x <= value) {
             return points.last()

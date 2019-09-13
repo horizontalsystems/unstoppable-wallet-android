@@ -205,7 +205,7 @@ class BalancePresenter(
 
     override fun openChart(position: Int) {
         val item = dataSource.getItem(position)
-        if (item.chartData == null) return
+        if (item.chartPoints == null) return
         router.openChart(item.wallet.coin)
     }
 

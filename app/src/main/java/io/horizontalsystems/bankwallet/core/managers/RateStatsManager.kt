@@ -7,8 +7,9 @@ import io.horizontalsystems.bankwallet.core.managers.ServiceExchangeApi.HostType
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.entities.RateData
 import io.horizontalsystems.bankwallet.entities.RateStatData
+import io.horizontalsystems.bankwallet.lib.chartview.ChartHelper
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
-import io.horizontalsystems.bankwallet.lib.chartview.models.ChartData
+import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -19,8 +20,8 @@ import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.util.*
 
-class RateStatsManager(private val networkManager: INetworkManager,
-                       private val rateStorage: IRateStorage) : IRateStatsManager {
+class RateStatsManager(private val networkManager: INetworkManager, private val rateStorage: IRateStorage)
+    : IRateStatsManager {
 
     private val cacheUpdateTimeInterval: Long = 30 * 60 * 60 // 30 minutes in seconds
     private val disposables = CompositeDisposable()
@@ -38,8 +39,7 @@ class RateStatsManager(private val networkManager: INetworkManager,
         val rateStats = if (cached != null && cached.first ?: 0 > currentTime - cacheUpdateTimeInterval) {
             Single.just(cached.second)
         } else {
-            networkManager
-                    .getRateStats(HostType.MAIN, coinCode, currencyCode)
+            networkManager.getRateStats(HostType.MAIN, coinCode, currencyCode)
                     .firstOrError()
                     .onErrorResumeNext { networkManager.getRateStats(HostType.FALLBACK, coinCode, currencyCode).firstOrError() }
         }
@@ -51,7 +51,7 @@ class RateStatsManager(private val networkManager: INetworkManager,
                     val lastDailyTimestamp = data.stats[ChartType.DAILY.name]?.timestamp
                     cache[statsKey] = Pair(lastDailyTimestamp, data)
 
-                    val stats = mutableMapOf<String, ChartData>()
+                    val stats = mutableMapOf<String, List<ChartPoint>>()
                     val diffs = mutableMapOf<String, BigDecimal>()
 
                     for (type in data.stats.keys) {
@@ -60,7 +60,7 @@ class RateStatsManager(private val networkManager: INetworkManager,
                         val chartData = convert(statsData, rate, chartType)
 
                         stats[type] = chartData
-                        diffs[type] = growthDiff(chartData.points)
+                        diffs[type] = growthDiff(chartData)
                     }
 
                     StatsData(coinCode, data.marketCap, stats, diffs)
@@ -71,10 +71,7 @@ class RateStatsManager(private val networkManager: INetworkManager,
                 }, {
                     statsSubject.onNext(StatsError(coinCode))
                 })
-                .let {
-                    disposables.add(it)
-                }
-
+                .let { disposables.add(it) }
     }
 
     fun clear() {
@@ -82,7 +79,7 @@ class RateStatsManager(private val networkManager: INetworkManager,
         cache.clear()
     }
 
-    private fun convert(data: RateData, rate: Rate?, chartType: ChartType): ChartData {
+    private fun convert(data: RateData, rate: Rate?, chartType: ChartType): List<ChartPoint> {
         val rates = data.rates.toMutableList()
         var timestamp = data.timestamp
         if (rate != null) {
@@ -95,19 +92,19 @@ class RateStatsManager(private val networkManager: INetworkManager,
             else -> rates
         }
 
-        return ChartData(points, timestamp, data.scale, chartType)
+        return ChartHelper.convert(points, data.scale, timestamp)
     }
 
-    private fun growthDiff(points: List<Float>): BigDecimal {
-        val pointStart = points.first { it != 0f }
+    private fun growthDiff(points: List<ChartPoint>): BigDecimal {
+        val pointStart = points.first { it.value != 0f }
         val pointEnd = points.last()
 
-        return ((pointEnd - pointStart) / pointStart * 100).toBigDecimal()
+        return ((pointEnd.value - pointStart.value) / pointStart.value * 100).toBigDecimal()
     }
 }
 
-data class StatsKey(val coinCode: String, val currencyCode: String)
-
 sealed class StatsResponse
-data class StatsData(val coinCode: String, val marketCap: BigDecimal, val stats: Map<String, ChartData>, val diff: Map<String, BigDecimal>) : StatsResponse()
+
+data class StatsKey(val coinCode: String, val currencyCode: String)
+data class StatsData(val coinCode: String, val marketCap: BigDecimal, val stats: Map<String, List<ChartPoint>>, val diff: Map<String, BigDecimal>) : StatsResponse()
 data class StatsError(val coinCode: String) : StatsResponse()

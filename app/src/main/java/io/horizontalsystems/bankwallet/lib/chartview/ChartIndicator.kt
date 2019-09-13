@@ -6,7 +6,7 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartConfig
-import io.horizontalsystems.bankwallet.lib.chartview.models.DataPoint
+import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
 
 class ChartIndicator : View {
 
@@ -37,7 +37,7 @@ class ChartIndicator : View {
         canvas.drawRoundRect(touchPoint.x - 15, touchPoint.y - 15, touchPoint.x + 15, touchPoint.y + 15, 20f, 20f, indicatorPaint)
     }
 
-    fun onMove(point: DataPoint?, listener: ChartView.Listener?) {
+    fun onMove(point: ChartPoint?, listener: ChartView.Listener?) {
         if (point == null || listener == null) return
         if (point.x != touchPoint.last) {
             listener.onTouchSelect(point)
