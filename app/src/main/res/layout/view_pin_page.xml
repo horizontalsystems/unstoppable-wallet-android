@@ -10,6 +10,42 @@
     >
 
     <TextView
+        android:id="@+id/txtTitle"
+        style="@style/Headline1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="32dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textAlignment="center"
+        android:textColor="?ColorOz"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/pinCirclesWrapper"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:text="@string/SetPin_Title" />
+
+    <TextView
+        android:id="@+id/txtTopError"
+        style="@style/Headline1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="32dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textAlignment="center"
+        android:textColor="?ColorLucian"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/pinCirclesWrapper"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:text="@string/SetPin_Title" />
+
+    <TextView
         android:id="@+id/txtDescription"
         style="@style/Subhead2"
         android:layout_width="0dp"
@@ -22,6 +58,7 @@
         android:text="@string/SetPin_Info"
         android:textAlignment="center"
         android:textColor="@color/grey"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/pinCirclesWrapper"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />

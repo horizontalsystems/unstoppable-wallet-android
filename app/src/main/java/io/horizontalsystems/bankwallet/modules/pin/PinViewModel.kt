@@ -25,7 +25,7 @@ class PinViewModel : ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter
     val showBackButton = SingleLiveEvent<Unit>()
     val showFingerprintInputLiveEvent = SingleLiveEvent<BiometricPrompt.CryptoObject>()
     val resetCirclesWithShakeAndDelayForPage = SingleLiveEvent<Int>()
-    val showAttemptsLeftError = MutableLiveData<Pair<Int, Int>>()
+    val showPinIncorrectError = MutableLiveData<Pair<Int, Int>>()
     val showLockedView = SingleLiveEvent<Date>()
     val closeApplicationLiveEvent = SingleLiveEvent<Unit>()
 
@@ -99,9 +99,8 @@ class PinViewModel : ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter
         showLockedView.postValue(until)
     }
 
-    override fun showAttemptsLeft(attempts: Int?, pageIndex: Int) {
-        attempts?.let {
-            showAttemptsLeftError.postValue(Pair(attempts, pageIndex))
-        }
+    override fun showIncorrectPinError(error: Int, pageIndex: Int) {
+        showPinIncorrectError.postValue(Pair(pageIndex, error))
     }
+
 }

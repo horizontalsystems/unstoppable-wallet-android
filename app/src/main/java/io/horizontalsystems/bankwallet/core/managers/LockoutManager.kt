@@ -29,7 +29,7 @@ class LockoutManager(
                 if (attempts < 1) 1 else attempts
             }
 
-            return LockoutState.Unlocked(attemptsLeft)
+            return LockoutState.Unlocked(attemptsLeft != null)
         }
 
     override fun didFailUnlock() {

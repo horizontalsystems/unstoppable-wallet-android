@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.pin.ManagePinPresenter
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.pin.PinPage
+import io.horizontalsystems.bankwallet.modules.pin.TopText
 
 class SetPinPresenter(
         private val interactor: PinModule.IPinInteractor,
@@ -15,8 +16,8 @@ class SetPinPresenter(
         val pinPages = mutableListOf<PinPage>()
         pages.forEach { page ->
             when (page) {
-                Page.ENTER -> pinPages.add(PinPage(R.string.SetPin_Info))
-                Page.CONFIRM -> pinPages.add(PinPage(R.string.SetPin_ConfirmInfo))
+                Page.ENTER -> pinPages.add(PinPage(TopText.Description(R.string.SetPin_Info)))
+                Page.CONFIRM -> pinPages.add(PinPage(TopText.Description(R.string.SetPin_ConfirmInfo)))
             }
         }
         view?.addPages(pinPages)

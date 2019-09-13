@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.pin.ManagePinPresenter
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.pin.PinPage
+import io.horizontalsystems.bankwallet.modules.pin.TopText
 
 class EditPinPresenter(interactor: PinModule.IPinInteractor, private val router: EditPinModule.IEditPinRouter)
     : ManagePinPresenter(interactor, pages = listOf(Page.UNLOCK, Page.ENTER, Page.CONFIRM)) {
@@ -14,9 +15,9 @@ class EditPinPresenter(interactor: PinModule.IPinInteractor, private val router:
 
         pages.forEach { page ->
             when (page) {
-                Page.UNLOCK -> pinPages.add(PinPage(R.string.EditPin_UnlockInfo))
-                Page.ENTER -> pinPages.add(PinPage(R.string.EditPin_NewPinInfo))
-                Page.CONFIRM -> pinPages.add(PinPage(R.string.SetPin_ConfirmInfo))
+                Page.UNLOCK -> pinPages.add(PinPage(TopText.Description(R.string.EditPin_UnlockInfo)))
+                Page.ENTER -> pinPages.add(PinPage(TopText.Description(R.string.EditPin_NewPinInfo)))
+                Page.CONFIRM -> pinPages.add(PinPage(TopText.Description(R.string.SetPin_ConfirmInfo)))
             }
         }
         view?.addPages(pinPages)

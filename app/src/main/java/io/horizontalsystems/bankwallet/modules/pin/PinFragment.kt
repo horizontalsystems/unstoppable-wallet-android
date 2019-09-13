@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.pin
 
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -101,10 +100,8 @@ class PinFragment: Fragment(), NumPadItemsAdapter.Listener {
             }
         })
 
-        viewModel.showErrorForPage.observe(viewLifecycleOwner, Observer { errorForPage ->
-            errorForPage?.let { (error, pageIndex) ->
-                pinPagesAdapter.setErrorForPage(pageIndex, error?.let { getString(error) } ?: null)
-            }
+        viewModel.showErrorForPage.observe(viewLifecycleOwner, Observer { (error, pageIndex) ->
+            pinPagesAdapter.setErrorForPage(pageIndex, getString(error))
         })
 
         viewModel.showError.observe(viewLifecycleOwner, Observer { error ->
@@ -153,8 +150,8 @@ class PinFragment: Fragment(), NumPadItemsAdapter.Listener {
             }
         })
 
-        viewModel.showAttemptsLeftError.observe(viewLifecycleOwner, Observer {
-            //todo why param: attempts left not used
+        viewModel.showPinIncorrectError.observe(viewLifecycleOwner, Observer {(pageIndex, errorRes) ->
+            pinPagesAdapter.showPinIncorrectError(pageIndex, errorRes)
             pinUnlock.visibility = View.VISIBLE
             pinUnlockBlocked.visibility = View.GONE
         })
@@ -216,12 +213,17 @@ class PinFragment: Fragment(), NumPadItemsAdapter.Listener {
 
 
 //PinPage part
-class PinPage(val description: Int, var enteredDigitsLength: Int = 0, var error: String? = null)
+class PinPage(var topText: TopText, var enteredDigitsLength: Int = 0, var error: String? = null)
 
 class PinPagesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var pinPages = mutableListOf<PinPage>()
     var shakePageIndex: Int? = null
+
+    fun showPinIncorrectError(pageIndex: Int, error: Int) {
+        pinPages[pageIndex].topText = TopText.ErrorTitle(error)
+        notifyDataSetChanged()
+    }
 
     fun setErrorForPage(pageIndex: Int, error: String?) {
         pinPages[pageIndex].error = error
@@ -248,6 +250,8 @@ class PinPagesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 }
 
 class PinPageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    private var txtTitle: TextView = itemView.findViewById(R.id.txtTitle)
+    private var topError: TextView = itemView.findViewById(R.id.txtTopError)
     private var txtDesc: TextView = itemView.findViewById(R.id.txtDescription)
     private var txtError: TextView = itemView.findViewById(R.id.errorMessage)
     private var pinCirclesWrapper = itemView.findViewById<ConstraintLayout>(R.id.pinCirclesWrapper)
@@ -260,7 +264,25 @@ class PinPageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private var imgPinMask6: ImageView = itemView.findViewById(R.id.imgPinMaskSix)
 
     fun bind(pinPage: PinPage, shake: Boolean) {
-        txtDesc.text = itemView.resources.getString(pinPage.description)
+        topError.visibility = View.GONE
+        txtDesc.visibility = View.GONE
+        txtTitle.visibility = View.GONE
+
+        when(pinPage.topText) {
+            is TopText.Title -> {
+                txtTitle.visibility = View.VISIBLE
+                txtTitle.setText(pinPage.topText.text)
+            }
+            is TopText.ErrorTitle -> {
+                topError.visibility = View.VISIBLE
+                topError.setText(pinPage.topText.text)
+            }
+            is TopText.Description -> {
+                txtDesc.visibility = View.VISIBLE
+                txtDesc.setText(pinPage.topText.text)
+            }
+        }
+
         updatePinCircles(pinPage.enteredDigitsLength)
         txtError.text = pinPage.error ?: ""
         if (shake) {
