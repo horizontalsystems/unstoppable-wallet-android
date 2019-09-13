@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,8 +17,9 @@ import io.horizontalsystems.bankwallet.viewHelpers.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_confirmation.*
 
-class ManageKeysDeleteAlert(private val listener: Listener, private val checkboxItems: List<CheckBoxItem>)
-    : DialogFragment(), ConfirmationsAdapter.Listener {
+class ManageKeysDeleteAlert(private val listener: Listener,
+                            private val checkboxItems: List<CheckBoxItem>,
+                            private val subtitle: String) : DialogFragment(), ConfirmationsAdapter.Listener {
 
     interface Listener {
         fun onConfirmationSuccess()
@@ -28,6 +30,7 @@ class ManageKeysDeleteAlert(private val listener: Listener, private val checkbox
     private lateinit var btnConfirm: Button
     private lateinit var rootView: View
     private lateinit var closeBtn: ImageView
+    private lateinit var subtitleView: TextView
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -43,7 +46,7 @@ class ManageKeysDeleteAlert(private val listener: Listener, private val checkbox
         }
 
         closeBtn.setOnClickListener { dismiss() }
-
+        subtitleView = rootView.findViewById(R.id.confirmSubtitle)
         return bottomDialog(activity, rootView)
     }
 
@@ -54,6 +57,8 @@ class ManageKeysDeleteAlert(private val listener: Listener, private val checkbox
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         adapter.notifyDataSetChanged()
+
+        subtitleView.text = subtitle
     }
 
     override fun onItemCheckMarkClick(position: Int, checked: Boolean) {
@@ -68,8 +73,8 @@ class ManageKeysDeleteAlert(private val listener: Listener, private val checkbox
     }
 
     companion object {
-        fun show(activity: FragmentActivity, checkboxItems: List<String>, listener: Listener) {
-            val fragment = ManageKeysDeleteAlert(listener, checkboxItems.map { CheckBoxItem(it) })
+        fun show(activity: FragmentActivity, subtitle: String, checkboxItems: List<String>, listener: Listener) {
+            val fragment = ManageKeysDeleteAlert(listener, checkboxItems.map { CheckBoxItem(it) }, subtitle)
 
             activity.supportFragmentManager.beginTransaction().apply {
                 add(fragment, "bottom_confirm_alert")
