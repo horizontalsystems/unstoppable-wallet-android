@@ -42,7 +42,6 @@ class UnlockPinPresenter(
                 } else {
                     wrongPinSubmitted()
                 }
-                enteredPin = ""
             }
         }
     }
@@ -94,7 +93,7 @@ class UnlockPinPresenter(
     }
 
     private fun removeErrorMessage() {
-        if (isShowingPinMismatchError && enteredPin.length == 1) {
+        if (isShowingPinMismatchError && enteredPin.isNotEmpty()) {
             view?.updateTopTextForPage(TopText.Title(R.string.Unlock_Page_EnterYourPin), unlockPageIndex)
             isShowingPinMismatchError = false
         }
