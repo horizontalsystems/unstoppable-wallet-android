@@ -15,7 +15,7 @@ object PinModule {
         fun setTitle(title: Int)
         fun addPages(pages: List<PinPage>)
         fun showPage(index: Int)
-        fun showErrorForPage(error: Int, pageIndex: Int)
+        fun updateTopTextForPage(text: TopText, pageIndex: Int)
         fun showError(error: Int)
         fun showPinWrong(pageIndex: Int)
         fun showBackButton()
@@ -23,7 +23,7 @@ object PinModule {
         fun hideToolbar()
         fun showFingerprintDialog(cryptoObject: BiometricPrompt.CryptoObject)
         fun showLockView(until: Date)
-        fun showIncorrectPinError(error: Int, pageIndex: Int)
+        fun showPinInput()
     }
 
     interface IPinViewDelegate {
@@ -64,8 +64,9 @@ object PinModule {
 
 sealed class TopText(open val text: Int){
     class Title(override val text: Int): TopText(text)
-    class ErrorTitle(override val text: Int): TopText(text)
+    class BigError(override val text: Int): TopText(text)
     class Description(override val text: Int): TopText(text)
+    class SmallError(override val text: Int): TopText(text)
 }
 
 enum class PinInteractionType {
