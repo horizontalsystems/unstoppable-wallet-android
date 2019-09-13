@@ -23,7 +23,6 @@ open class ManagePinPresenter(
 
             if (enteredPin.length == PinModule.PIN_COUNT) {
                 navigateToPage(pageIndex, enteredPin)
-                enteredPin = ""
             }
         }
     }
@@ -51,7 +50,7 @@ open class ManagePinPresenter(
     }
 
     private fun removeErrorMessage(pageIndex: Int) {
-        if (isShowingPinMismatchError && pages[pageIndex] == Page.ENTER && enteredPin.length == 1) {
+        if (isShowingPinMismatchError && pages[pageIndex] == Page.ENTER && enteredPin.isNotEmpty()) {
             view?.updateTopTextForPage(TopText.Description(R.string.EditPin_NewPinInfo), pageIndex)
             isShowingPinMismatchError = false
         }
@@ -83,7 +82,6 @@ open class ManagePinPresenter(
         } else {
             val pageUnlockIndex = pages.indexOfFirst { it == Page.UNLOCK }
             if (pageUnlockIndex >= 0) {
-                enteredPin = ""
                 view?.showPinWrong(pageUnlockIndex)
             }
         }

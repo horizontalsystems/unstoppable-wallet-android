@@ -96,6 +96,7 @@ class PinFragment: Fragment(), NumPadItemsAdapter.Listener {
                 Handler().postDelayed({
                     pinPagesAdapter.setEnteredPinLength(layoutManager.findFirstVisibleItemPosition(), 0)
                     pinPagesRecyclerView.smoothScrollToPosition(it)
+                    viewModel.delegate.resetPin()
                 }, 300)
             }
         })
