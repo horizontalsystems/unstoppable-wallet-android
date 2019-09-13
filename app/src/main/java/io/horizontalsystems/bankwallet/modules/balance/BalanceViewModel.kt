@@ -37,7 +37,7 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     }
 
     override fun updateItem(position: Int) {
-        reloadItemLiveEvent.value = position
+        reloadItemLiveEvent.postValue(position)
     }
 
     override fun updateHeader() {

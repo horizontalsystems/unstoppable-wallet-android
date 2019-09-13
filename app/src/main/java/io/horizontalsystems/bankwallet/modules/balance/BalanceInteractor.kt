@@ -2,10 +2,10 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import android.os.Handler
 import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.core.managers.RateStatsManager
+import io.horizontalsystems.bankwallet.core.managers.StatsData
+import io.horizontalsystems.bankwallet.core.managers.StatsError
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
@@ -13,18 +13,24 @@ class BalanceInteractor(
         private val walletManager: IWalletManager,
         private val adapterManager: IAdapterManager,
         private val rateStorage: IRateStorage,
-        private val rateStatsManager: RateStatsManager,
+        private val rateStatsManager: IRateStatsManager,
+        private val rateStatsSyncer: IRateStatsSyncer,
         private val currencyManager: ICurrencyManager,
         private val localStorage: ILocalStorage,
         private val rateManager: IRateManager,
-        private val refreshTimeout: Long = 2)
-    : BalanceModule.IInteractor {
+        private val refreshTimeout: Long = 2) : BalanceModule.IInteractor {
 
     var delegate: BalanceModule.IInteractorDelegate? = null
 
     private var disposables = CompositeDisposable()
     private var adapterDisposables = CompositeDisposable()
     private var rateDisposables = CompositeDisposable()
+
+    override var chartEnabled: Boolean
+        get() = rateStatsSyncer.balanceStatsOn
+        set(value) {
+            rateStatsSyncer.balanceStatsOn = value
+        }
 
     override fun initWallets() {
         onUpdateWallets()
@@ -47,24 +53,23 @@ class BalanceInteractor(
                 .observeOn(Schedulers.io())
                 .subscribe { onUpdateCurrency() }
                 .let { disposables.add(it) }
+
+        rateStatsManager.statsFlowable
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe({
+                    when (it) {
+                        is StatsData -> delegate?.onReceiveRateStats(it)
+                        is StatsError -> delegate?.onFailFetchChartStats(it.coinCode)
+                    }
+                }, {
+                })
+                .let { disposables.add(it) }
     }
 
     override fun fetchRates(currencyCode: String, coinCodes: List<CoinCode>) {
         rateDisposables.clear()
         coinCodes.forEach { getLatestRate(currencyCode, it) }
-    }
-
-    override fun fetchRateStats(currencyCode: String, coinCode: CoinCode) {
-        rateStatsManager.getRateStats(coinCode, currencyCode)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    delegate?.onReceiveRateStats(coinCode, it)
-                }, {
-                    delegate?.onFailFetchChartStats(coinCode)
-                })
-                .let { disposables.add(it) }
-
     }
 
     override fun getSortingType() = localStorage.sortType
