@@ -51,7 +51,7 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
                     }
                 }
 
-                ManageKeysDeleteAlert.show(this, confirmationList, confirmListener)
+                ManageKeysDeleteAlert.show(this, getString(item.predefinedAccountType.title), confirmationList, confirmListener)
             }
         })
 

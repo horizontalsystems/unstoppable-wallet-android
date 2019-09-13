@@ -47,6 +47,18 @@
         app:layout_constraintStart_toEndOf="@+id/confirmIcon"
         app:layout_constraintTop_toTopOf="@+id/confirmIcon" />
 
+    <TextView
+        android:id="@+id/confirmSubtitle"
+        style="@style/Subhead2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:includeFontPadding="false"
+        android:textColor="@color/grey"
+        app:layout_constraintLeft_toLeftOf="@id/confirmTitle"
+        app:layout_constraintTop_toBottomOf="@id/confirmTitle"
+        tools:text="Subtitle" />
+
     <ImageView
         android:id="@+id/closeButton"
         android:layout_width="wrap_content"
@@ -69,7 +81,7 @@
         android:background="@color/steel_15"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/confirmIcon" />
+        app:layout_constraintTop_toBottomOf="@+id/confirmSubtitle" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
