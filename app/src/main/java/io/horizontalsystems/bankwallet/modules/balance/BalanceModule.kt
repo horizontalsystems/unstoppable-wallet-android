@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
 import io.horizontalsystems.bankwallet.core.managers.StatsData
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.lib.chartview.models.ChartData
+import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import java.math.BigDecimal
 
@@ -143,9 +143,9 @@ object BalanceModule {
             items = sorter.sort(items, sortType)
         }
 
-        fun setChartData(position: Int, chartData: ChartData, chartDiff: BigDecimal) {
+        fun setChartData(position: Int, chartPoints: List<ChartPoint>, chartDiff: BigDecimal) {
             items[position].chartDiff = chartDiff
-            items[position].chartData = chartData
+            items[position].chartPoints = chartPoints
             items = sorter.sort(items, sortType)
         }
 
@@ -162,7 +162,7 @@ object BalanceModule {
             var rate: Rate? = null) {
 
         var chartDiff: BigDecimal = BigDecimal.ZERO
-        var chartData: ChartData? = null
+        var chartPoints: List<ChartPoint>? = null
         val fiatValue: BigDecimal?
             get() = rate?.let { balance.times(it.value) }
     }

@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
-import io.horizontalsystems.bankwallet.lib.chartview.models.DataPoint
+import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import kotlinx.android.synthetic.main.view_bottom_sheet_chart.*
 import java.math.BigDecimal
@@ -88,7 +88,7 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
 
         presenterView.showChart.observe(viewLifecycleOwner, Observer { item ->
             chartView.visibility = View.VISIBLE
-            chartView.setData(item.chartData)
+            chartView.setData(item.chartData, item.type)
             chartSubtitle.text = item.lastUpdateTimestamp?.let { DateHelper.getFullDateWithShortMonth(it) }
 
             val diffColor = if (item.diffValue < BigDecimal.ZERO)
@@ -151,7 +151,7 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
         setViewVisibility(chartActions, isVisible = true)
     }
 
-    override fun onTouchSelect(point: DataPoint) {
+    override fun onTouchSelect(point: ChartPoint) {
         presenter.onTouchSelect(point)
     }
 

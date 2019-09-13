@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
 import io.horizontalsystems.bankwallet.viewHelpers.AnimationHelper
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.inflate
@@ -187,13 +188,13 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             containerView.context.getColor(R.color.red_warning) else
             containerView.context.getColor(R.color.green_crypto)
 
-        val chartStats = viewItem.chartData
-        if (chartStats == null) {
+        val chartPoints = viewItem.chartPoints
+        if (chartPoints == null) {
             chartView.visibility = View.INVISIBLE
             chartRateDiff.text = containerView.context.getString(R.string.NotAvailable)
             chartRateDiff.setTextColor(containerView.context.getColor(R.color.grey_50))
         } else {
-            chartView.setData(chartStats)
+            chartView.setData(chartPoints, ChartType.DAILY)
             chartRateDiff.text = App.numberFormatter.format(viewItem.chartDiff.toDouble(), showSign = true, precision = 2) + "%"
             chartRateDiff.setTextColor(diffColor)
         }

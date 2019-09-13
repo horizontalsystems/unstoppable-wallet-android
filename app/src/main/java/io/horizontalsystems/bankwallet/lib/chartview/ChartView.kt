@@ -10,14 +10,13 @@ import android.view.View
 import android.view.animation.AccelerateInterpolator
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartConfig
-import io.horizontalsystems.bankwallet.lib.chartview.models.ChartData
-import io.horizontalsystems.bankwallet.lib.chartview.models.DataPoint
+import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
 
 class ChartView : View {
     interface Listener {
         fun onTouchDown()
         fun onTouchUp()
-        fun onTouchSelect(point: DataPoint)
+        fun onTouchSelect(point: ChartPoint)
     }
 
     enum class ChartType {
@@ -125,9 +124,9 @@ class ChartView : View {
         chartIndicator?.init(config)
     }
 
-    fun setData(data: ChartData) {
-        configure(data)
-        setPoints(data)
+    fun setData(points: List<ChartPoint>, chartType: ChartType) {
+        setColour(points)
+        setPoints(points, chartType)
 
         if (config.animated) {
             animator.setFloatValues(0f)
@@ -137,24 +136,19 @@ class ChartView : View {
         }
     }
 
-    private fun configure(data: ChartData) {
-        val firstRate = data.points.firstOrNull() ?: return
-        val lastRate = data.points.lastOrNull() ?: return
+    private fun setColour(points: List<ChartPoint>) {
+        val startPoint = points.firstOrNull() ?: return
+        val endPoint = points.lastOrNull() ?: return
 
-        if (lastRate < firstRate) {
+        if (startPoint.value > endPoint.value) {
             config.curveColor = config.fallColor
         } else {
             config.curveColor = config.growColor
         }
     }
 
-    private fun setPoints(data: ChartData) {
-        helper.scale(data.points)
-
-        if (config.showGrid) {
-            config.offsetRight = viewHelper.measureWidth(config.valueTop, config.valuePrecision) + viewHelper.dp2px(20f)
-            config.offsetBottom = viewHelper.dp2px(20f)
-        }
+    private fun setPoints(points: List<ChartPoint>, chartType: ChartType) {
+        helper.scale(points)
 
         var shapeWidth = width.toFloat()
         if (shapeWidth == 0f) {
@@ -166,11 +160,16 @@ class ChartView : View {
             shapeHeight = config.height
         }
 
+        if (config.showGrid) {
+            config.offsetRight = viewHelper.measureWidth(config.valueTop, config.valuePrecision) + viewHelper.dp2px(20f)
+            config.offsetBottom = viewHelper.dp2px(20f)
+        }
+
         shape.set(0f, 0f, shapeWidth - config.offsetRight, shapeHeight - config.offsetBottom)
 
-        chartCurve.init(data)
+        chartCurve.init(points)
         if (config.showGrid) {
-            chartGrid.init(data)
+            chartGrid.init(points, chartType)
         }
     }
 }

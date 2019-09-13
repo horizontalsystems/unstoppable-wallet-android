@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
-import io.horizontalsystems.bankwallet.lib.chartview.models.DataPoint
+import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.Interactor
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.InteractorDelegate
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.View
@@ -56,9 +56,9 @@ class RateChartPresenter(
         updateChart()
     }
 
-    override fun onTouchSelect(point: DataPoint) {
+    override fun onTouchSelect(point: ChartPoint) {
         val currencyValue = CurrencyValue(currency, point.value.toBigDecimal())
-        view.showSelectedPoint(Triple(point.time, currencyValue, chartType))
+        view.showSelectedPoint(Triple(point.timestamp, currencyValue, chartType))
     }
 
     override fun onChartClosed() {
@@ -85,8 +85,8 @@ class RateChartPresenter(
 
         for (type in stats.keys) {
             val chartType = ChartType.fromString(type) ?: continue
-            val chartData = stats[chartType.name] ?: continue
-            if (chartData.points.size > 10) {
+            val chartPoints = stats[chartType.name] ?: continue
+            if (chartPoints.size > 10) {
                 view.enableChartType(chartType)
             }
         }

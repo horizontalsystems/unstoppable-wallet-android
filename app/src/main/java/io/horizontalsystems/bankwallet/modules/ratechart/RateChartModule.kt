@@ -8,7 +8,8 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
-import io.horizontalsystems.bankwallet.lib.chartview.models.DataPoint
+import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
+import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 
 object RateChartModule {
 
@@ -25,7 +26,7 @@ object RateChartModule {
     interface ViewDelegate {
         fun viewDidLoad()
         fun onSelect(type: ChartType)
-        fun onTouchSelect(point: DataPoint)
+        fun onTouchSelect(point: ChartPoint)
         fun onChartClosed()
     }
 
