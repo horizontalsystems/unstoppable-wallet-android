@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.createwallet
 
+import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.Coin
 
 class CreateWalletPresenter(
@@ -7,7 +8,7 @@ class CreateWalletPresenter(
         val router: CreateWalletModule.IRouter,
         private val interactor: CreateWalletModule.IInteractor,
         private val state: CreateWalletModule.State
-) : CreateWalletModule.IViewDelegate {
+) : ViewModel(), CreateWalletModule.IViewDelegate {
 
     override fun viewDidLoad() {
         val coinViewItems = mutableListOf<CreateWalletModule.CoinViewItem>()

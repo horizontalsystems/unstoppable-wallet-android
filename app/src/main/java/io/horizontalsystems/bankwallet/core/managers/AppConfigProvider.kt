@@ -47,13 +47,23 @@ class AppConfigProvider : IAppConfigProvider {
     override val defaultCoinCodes: List<String>
         get() = listOf("BTC", "ETH")
 
+    override val featuredCoins: List<FeaturedCoin>
+        get() = listOf(
+                FeaturedCoin(coins[0], true),
+                FeaturedCoin(coins[1], true),
+                FeaturedCoin(coins[2], false),
+                FeaturedCoin(coins[3], false),
+                FeaturedCoin(coins[4], false),
+                FeaturedCoin(coins[5], false)
+        )
+
     override val coins: List<Coin> = listOf(
             Coin("Bitcoin",                 "BTC",          8,      CoinType.Bitcoin),
-            Coin("Bitcoin Cash",            "BCH",          8,      CoinType.BitcoinCash),
             Coin("Ethereum",                "ETH",         18,      CoinType.Ethereum),
+            Coin("Bitcoin Cash",            "BCH",          8,      CoinType.BitcoinCash),
             Coin("Dash",                    "DASH",         8,      CoinType.Dash),
-            Coin("EOS",                     "EOS",          4,      CoinType.Eos("eosio.token", "EOS")),
             Coin("Binance Chain",           "BNB",          8,      CoinType.Binance("BNB")),
+            Coin("EOS",                     "EOS",          4,      CoinType.Eos("eosio.token", "EOS")),
             Coin("0x",                      "ZRX",         18,      CoinType.Erc20("0xE41d2489571d322189246DaFA5ebDe1F4699F498")),
             Coin("Aelf",                    "ELF",         18,      CoinType.Erc20("0xbf2179859fc6D5BEE9Bf9158632Dc51678a4100e")),
             Coin("Aurora DAO",              "AURA",        18,      CoinType.Erc20("0xCdCFc0f66c522Fd086A1b725ea3c0Eeb9F9e8814")),
