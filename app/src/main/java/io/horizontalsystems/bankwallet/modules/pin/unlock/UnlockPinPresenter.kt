@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.LockoutState
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.pin.PinPage
+import io.horizontalsystems.bankwallet.modules.pin.TopText
 
 class UnlockPinPresenter(
         private val interactor: UnlockPinModule.IUnlockPinInteractor,
@@ -15,7 +16,7 @@ class UnlockPinPresenter(
     var view: PinModule.IPinView? = null
 
     override fun viewDidLoad() {
-        view?.addPages(listOf(PinPage(R.string.Unlock_Page_EnterYourPin)))
+        view?.addPages(listOf(PinPage(TopText.Title(R.string.Unlock_Page_EnterYourPin))))
 
         if (showCancelButton) {
             view?.showBackButton()
@@ -75,7 +76,11 @@ class UnlockPinPresenter(
 
     override fun updateLockoutState(state: LockoutState) {
         when (state) {
-            is LockoutState.Unlocked -> view?.showAttemptsLeft(state.attemptsLeft, unlockPageIndex)
+            is LockoutState.Unlocked -> {
+                if(state.hasFailedAttempts){
+                    view?.showIncorrectPinError(R.string.UnlockPin_Error_PinIncorrect, unlockPageIndex)
+                }
+            }
             is LockoutState.Locked -> view?.showLockView(state.until)
         }
     }

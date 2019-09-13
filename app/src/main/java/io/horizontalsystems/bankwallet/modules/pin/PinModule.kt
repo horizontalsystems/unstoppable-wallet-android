@@ -23,7 +23,7 @@ object PinModule {
         fun hideToolbar()
         fun showFingerprintDialog(cryptoObject: BiometricPrompt.CryptoObject)
         fun showLockView(until: Date)
-        fun showAttemptsLeft(attempts: Int?, pageIndex: Int)
+        fun showIncorrectPinError(error: Int, pageIndex: Int)
     }
 
     interface IPinViewDelegate {
@@ -60,6 +60,12 @@ object PinModule {
         PinActivity.startForResult(context, PinInteractionType.UNLOCK, requestCode, showCancel)
     }
 
+}
+
+sealed class TopText(open val text: Int){
+    class Title(override val text: Int): TopText(text)
+    class ErrorTitle(override val text: Int): TopText(text)
+    class Description(override val text: Int): TopText(text)
 }
 
 enum class PinInteractionType {
