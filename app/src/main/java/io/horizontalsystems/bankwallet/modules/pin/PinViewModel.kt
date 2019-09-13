@@ -16,7 +16,7 @@ class PinViewModel : ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter
     val addPagesEvent = MutableLiveData<List<PinPage>>()
     val showPageAtIndex = MutableLiveData<Int>()
     val showError = MutableLiveData<Int>()
-    val showErrorForPage = MutableLiveData<Pair<Int, Int>>()
+    val updateTopTextForPage = MutableLiveData<Pair<TopText, Int>>()
     val fillPinCircles = MutableLiveData<Pair<Int, Int>>()
     val navigateToMainLiveEvent = SingleLiveEvent<Unit>()
     val hideToolbar = SingleLiveEvent<Unit>()
@@ -25,9 +25,9 @@ class PinViewModel : ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter
     val showBackButton = SingleLiveEvent<Unit>()
     val showFingerprintInputLiveEvent = SingleLiveEvent<BiometricPrompt.CryptoObject>()
     val resetCirclesWithShakeAndDelayForPage = SingleLiveEvent<Int>()
-    val showPinIncorrectError = MutableLiveData<Pair<Int, Int>>()
     val showLockedView = SingleLiveEvent<Date>()
     val closeApplicationLiveEvent = SingleLiveEvent<Unit>()
+    val showPinInput = SingleLiveEvent<Unit>()
 
 
     fun init(interactionType: PinInteractionType, showCancelButton: Boolean) {
@@ -55,8 +55,8 @@ class PinViewModel : ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter
         showPageAtIndex.value = index
     }
 
-    override fun showErrorForPage(error: Int, pageIndex: Int) {
-        showErrorForPage.value = Pair(error, pageIndex)
+    override fun updateTopTextForPage(text: TopText, pageIndex: Int) {
+        updateTopTextForPage.value = Pair(text, pageIndex)
     }
 
     override fun showError(error: Int) {
@@ -99,8 +99,7 @@ class PinViewModel : ViewModel(), PinModule.IPinView, SetPinModule.ISetPinRouter
         showLockedView.postValue(until)
     }
 
-    override fun showIncorrectPinError(error: Int, pageIndex: Int) {
-        showPinIncorrectError.postValue(Pair(pageIndex, error))
+    override fun showPinInput() {
+        showPinInput.call()
     }
-
 }

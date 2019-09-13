@@ -14,6 +14,7 @@ class UnlockPinPresenter(
     private val unlockPageIndex = 0
     private var enteredPin = ""
     var view: PinModule.IPinView? = null
+    private var isShowingPinMismatchError = false
 
     override fun viewDidLoad() {
         view?.addPages(listOf(PinPage(TopText.Title(R.string.Unlock_Page_EnterYourPin))))
@@ -32,6 +33,7 @@ class UnlockPinPresenter(
     override fun onEnter(pin: String, pageIndex: Int) {
         if (enteredPin.length < PinModule.PIN_COUNT) {
             enteredPin += pin
+            removeErrorMessage()
             view?.fillCircles(enteredPin.length, pageIndex)
 
             if (enteredPin.length == PinModule.PIN_COUNT) {
@@ -62,6 +64,8 @@ class UnlockPinPresenter(
 
     override fun wrongPinSubmitted() {
         view?.showPinWrong(unlockPageIndex)
+        isShowingPinMismatchError = true
+        view?.updateTopTextForPage(TopText.BigError(R.string.UnlockPin_Error_PinIncorrect), unlockPageIndex)
     }
 
     override fun showFingerprintUnlock() {
@@ -76,11 +80,7 @@ class UnlockPinPresenter(
 
     override fun updateLockoutState(state: LockoutState) {
         when (state) {
-            is LockoutState.Unlocked -> {
-                if(state.hasFailedAttempts){
-                    view?.showIncorrectPinError(R.string.UnlockPin_Error_PinIncorrect, unlockPageIndex)
-                }
-            }
+            is LockoutState.Unlocked -> view?.showPinInput()
             is LockoutState.Locked -> view?.showLockView(state.until)
         }
     }
@@ -90,6 +90,13 @@ class UnlockPinPresenter(
             router.dismissModuleWithCancel()
         } else {
             router.closeApplication()
+        }
+    }
+
+    private fun removeErrorMessage() {
+        if (isShowingPinMismatchError && enteredPin.length == 1) {
+            view?.updateTopTextForPage(TopText.Title(R.string.Unlock_Page_EnterYourPin), unlockPageIndex)
+            isShowingPinMismatchError = false
         }
     }
 

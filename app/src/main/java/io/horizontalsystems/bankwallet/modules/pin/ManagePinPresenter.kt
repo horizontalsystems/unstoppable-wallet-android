@@ -10,6 +10,7 @@ open class ManagePinPresenter(
 
     var view: PinModule.IPinView? = null
     private var enteredPin = ""
+    private var isShowingPinMismatchError = false
 
     override fun viewDidLoad() {
     }
@@ -17,20 +18,13 @@ open class ManagePinPresenter(
     override fun onEnter(pin: String, pageIndex: Int) {
         if (enteredPin.length < PinModule.PIN_COUNT) {
             enteredPin += pin
+            removeErrorMessage(pageIndex)
             view?.fillCircles(enteredPin.length, pageIndex)
 
             if (enteredPin.length == PinModule.PIN_COUNT) {
                 navigateToPage(pageIndex, enteredPin)
                 enteredPin = ""
             }
-        }
-    }
-
-    private fun navigateToPage(pageIndex: Int, pin: String) {
-        when (pages[pageIndex]) {
-            Page.UNLOCK -> onEnterFromUnlock(pin)
-            Page.ENTER -> onEnterFromEnterPage(pin)
-            Page.CONFIRM -> onEnterFromConfirmPage(pin)
         }
     }
 
@@ -56,17 +50,25 @@ open class ManagePinPresenter(
         view?.showError(R.string.SetPin_ErrorFailedToSavePin)
     }
 
+    private fun removeErrorMessage(pageIndex: Int) {
+        if (isShowingPinMismatchError && pages[pageIndex] == Page.ENTER && enteredPin.length == 1) {
+            view?.updateTopTextForPage(TopText.Description(R.string.EditPin_NewPinInfo), pageIndex)
+            isShowingPinMismatchError = false
+        }
+    }
+
+    private fun navigateToPage(pageIndex: Int, pin: String) {
+        when (pages[pageIndex]) {
+            Page.UNLOCK -> onEnterFromUnlock(pin)
+            Page.ENTER -> onEnterFromEnterPage(pin)
+            Page.CONFIRM -> onEnterFromConfirmPage(pin)
+        }
+    }
+
     private fun show(page: Page) {
         val pageIndex = pages.indexOfFirst { it == page }
         if (pageIndex >= 0) {
             view?.showPage(pageIndex)
-        }
-    }
-
-    private fun show(error: Int, page: Page) {
-        val pageIndex = pages.indexOfFirst { it == page }
-        if (pageIndex >= 0) {
-            view?.showErrorForPage(error, pageIndex)
         }
     }
 
@@ -97,7 +99,12 @@ open class ManagePinPresenter(
             interactor.save(pin)
         } else {
             showEnterPage()
-            show(R.string.SetPin_ErrorPinsDontMatch, page = Page.ENTER)
+            isShowingPinMismatchError = true
+            pages.indexOfFirst { it == Page.ENTER }.let { pageIndex ->
+                if (pageIndex >= 0) {
+                    view?.updateTopTextForPage(TopText.SmallError(R.string.SetPin_ErrorPinsDontMatch), pageIndex)
+                }
+            }
         }
     }
 }

@@ -100,8 +100,8 @@ class PinFragment: Fragment(), NumPadItemsAdapter.Listener {
             }
         })
 
-        viewModel.showErrorForPage.observe(viewLifecycleOwner, Observer { (error, pageIndex) ->
-            pinPagesAdapter.setErrorForPage(pageIndex, getString(error))
+        viewModel.updateTopTextForPage.observe(viewLifecycleOwner, Observer { (error, pageIndex) ->
+            pinPagesAdapter.updateTopTextForPage(error, pageIndex)
         })
 
         viewModel.showError.observe(viewLifecycleOwner, Observer { error ->
@@ -150,8 +150,7 @@ class PinFragment: Fragment(), NumPadItemsAdapter.Listener {
             }
         })
 
-        viewModel.showPinIncorrectError.observe(viewLifecycleOwner, Observer {(pageIndex, errorRes) ->
-            pinPagesAdapter.showPinIncorrectError(pageIndex, errorRes)
+        viewModel.showPinInput.observe(viewLifecycleOwner, Observer {
             pinUnlock.visibility = View.VISIBLE
             pinUnlockBlocked.visibility = View.GONE
         })
@@ -213,20 +212,15 @@ class PinFragment: Fragment(), NumPadItemsAdapter.Listener {
 
 
 //PinPage part
-class PinPage(var topText: TopText, var enteredDigitsLength: Int = 0, var error: String? = null)
+class PinPage(var topText: TopText, var enteredDigitsLength: Int = 0)
 
 class PinPagesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var pinPages = mutableListOf<PinPage>()
     var shakePageIndex: Int? = null
 
-    fun showPinIncorrectError(pageIndex: Int, error: Int) {
-        pinPages[pageIndex].topText = TopText.ErrorTitle(error)
-        notifyDataSetChanged()
-    }
-
-    fun setErrorForPage(pageIndex: Int, error: String?) {
-        pinPages[pageIndex].error = error
+    fun updateTopTextForPage(text: TopText, pageIndex: Int) {
+        pinPages[pageIndex].topText = text
         notifyDataSetChanged()
     }
 
@@ -251,9 +245,9 @@ class PinPagesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 class PinPageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private var txtTitle: TextView = itemView.findViewById(R.id.txtTitle)
-    private var topError: TextView = itemView.findViewById(R.id.txtTopError)
+    private var bigError: TextView = itemView.findViewById(R.id.txtBigError)
     private var txtDesc: TextView = itemView.findViewById(R.id.txtDescription)
-    private var txtError: TextView = itemView.findViewById(R.id.errorMessage)
+    private var smallError: TextView = itemView.findViewById(R.id.txtSmallError)
     private var pinCirclesWrapper = itemView.findViewById<ConstraintLayout>(R.id.pinCirclesWrapper)
 
     private var imgPinMask1: ImageView = itemView.findViewById(R.id.imgPinMaskOne)
@@ -264,27 +258,31 @@ class PinPageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private var imgPinMask6: ImageView = itemView.findViewById(R.id.imgPinMaskSix)
 
     fun bind(pinPage: PinPage, shake: Boolean) {
-        topError.visibility = View.GONE
+        bigError.visibility = View.GONE
         txtDesc.visibility = View.GONE
         txtTitle.visibility = View.GONE
+        smallError.visibility = View.GONE
 
         when(pinPage.topText) {
             is TopText.Title -> {
                 txtTitle.visibility = View.VISIBLE
                 txtTitle.setText(pinPage.topText.text)
             }
-            is TopText.ErrorTitle -> {
-                topError.visibility = View.VISIBLE
-                topError.setText(pinPage.topText.text)
+            is TopText.BigError -> {
+                bigError.visibility = View.VISIBLE
+                bigError.setText(pinPage.topText.text)
             }
             is TopText.Description -> {
                 txtDesc.visibility = View.VISIBLE
                 txtDesc.setText(pinPage.topText.text)
             }
+            is TopText.SmallError -> {
+                smallError.visibility = View.VISIBLE
+                smallError.setText(pinPage.topText.text)
+            }
         }
 
         updatePinCircles(pinPage.enteredDigitsLength)
-        txtError.text = pinPage.error ?: ""
         if (shake) {
             val shakeAnim = AnimationUtils.loadAnimation(itemView.context, R.anim.shake_pin_circles)
             pinCirclesWrapper.startAnimation(shakeAnim)
