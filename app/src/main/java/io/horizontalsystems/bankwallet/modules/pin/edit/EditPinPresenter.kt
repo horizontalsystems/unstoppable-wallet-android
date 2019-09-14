@@ -28,7 +28,4 @@ class EditPinPresenter(interactor: PinModule.IPinInteractor, private val router:
         router.dismissModuleWithSuccess()
     }
 
-    override fun onBackPressed() {
-        router.dismissModuleWithCancel()
-    }
 }

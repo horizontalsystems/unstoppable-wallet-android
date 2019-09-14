@@ -84,14 +84,6 @@ class UnlockPinPresenter(
         }
     }
 
-    override fun onBackPressed() {
-        if (showCancelButton) {
-            router.dismissModuleWithCancel()
-        } else {
-            router.closeApplication()
-        }
-    }
-
     private fun removeErrorMessage() {
         if (isShowingPinMismatchError && enteredPin.isNotEmpty()) {
             view?.updateTopTextForPage(TopText.Title(R.string.Unlock_Page_EnterYourPin), unlockPageIndex)
