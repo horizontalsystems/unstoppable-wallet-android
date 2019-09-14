@@ -4,10 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.viewpager2.adapter.FragmentStateAdapter
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.pin.main.PinContainerModule
@@ -37,21 +35,17 @@ class PinActivity : BaseActivity() {
         subscribeToRouterEvents(router)
 
         if (showRates) {
-            viewPager2.visibility = View.VISIBLE
+            viewPager.visibility = View.VISIBLE
             circleIndicator.visibility = View.VISIBLE
             fragmentContainer.visibility = View.GONE
 
-            viewPager2.adapter = object : FragmentStateAdapter(this) {
-                override fun getItemCount(): Int = 2
-                override fun createFragment(position: Int): Fragment = when (position) {
-                    0 -> pinFragment
-                    else -> RatesFragment()
-                }
-            }
+            val fragments = listOf(pinFragment, RatesFragment())
 
-            circleIndicator.setViewPager(viewPager2)
+            viewPager.adapter = PinViewPagerAdapter(fragments, supportFragmentManager)
+
+            circleIndicator.setViewPager(viewPager)
         } else {
-            viewPager2.visibility = View.GONE
+            viewPager.visibility = View.GONE
             circleIndicator.visibility = View.GONE
             fragmentContainer.visibility = View.VISIBLE
 
