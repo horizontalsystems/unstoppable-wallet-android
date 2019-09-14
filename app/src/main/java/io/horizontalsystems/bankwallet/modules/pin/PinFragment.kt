@@ -43,9 +43,6 @@ class PinFragment: Fragment(), NumPadItemsAdapter.Listener {
     private val executor = Executor { command -> command.run() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        if (container == null){
-            return null
-        }
         return inflater.inflate(R.layout.fragment_pin, container, false)
     }
 
