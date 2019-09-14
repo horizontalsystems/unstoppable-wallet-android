@@ -31,7 +31,7 @@ class LauncherActivity : AppCompatActivity() {
         })
 
         viewModel.openUnlockModule.observe(this, Observer {
-            PinModule.startForUnlock(this, REQUEST_CODE_UNLOCK_PIN)
+            PinModule.startForUnlock(this, REQUEST_CODE_UNLOCK_PIN, showRates = true)
         })
 
         viewModel.openNoSystemLockModule.observe(this, Observer {
