@@ -9,7 +9,6 @@ object SetPinModule {
     interface ISetPinRouter {
         fun navigateToMain()
         fun dismissModuleWithSuccess()
-        fun dismissModuleWithCancel()
     }
 
     fun init(view: PinViewModel, router: ISetPinRouter) {

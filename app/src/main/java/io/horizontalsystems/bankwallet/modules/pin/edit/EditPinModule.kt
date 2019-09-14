@@ -8,7 +8,6 @@ object EditPinModule {
 
     interface IEditPinRouter {
         fun dismissModuleWithSuccess()
-        fun dismissModuleWithCancel()
     }
 
     fun init(view: PinViewModel, router: IEditPinRouter) {

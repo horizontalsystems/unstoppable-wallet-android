@@ -41,9 +41,6 @@ open class ManagePinPresenter(
     override fun didSavePin() {
     }
 
-    override fun onBackPressed() {
-    }
-
     override fun didFailToSavePin() {
         showEnterPage()
         view?.showError(R.string.SetPin_ErrorFailedToSavePin)

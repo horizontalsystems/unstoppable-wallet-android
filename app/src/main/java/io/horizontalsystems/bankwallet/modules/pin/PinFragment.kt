@@ -75,7 +75,7 @@ class PinFragment: Fragment(), NumPadItemsAdapter.Listener {
         })
 
         viewModel.showBackButton.observe(viewLifecycleOwner, Observer {
-            shadowlessToolbar.bind(null, TopMenuItem(R.drawable.back, onClick = { viewModel.delegate.onBackPressed() }))
+            shadowlessToolbar.bind(null, TopMenuItem(R.drawable.back, onClick = { activity?.onBackPressed() }))
         })
 
         viewModel.titleLiveDate.observe(viewLifecycleOwner, Observer { title ->
@@ -94,9 +94,9 @@ class PinFragment: Fragment(), NumPadItemsAdapter.Listener {
         viewModel.showPageAtIndex.observe(viewLifecycleOwner, Observer { index ->
             index?.let {
                 Handler().postDelayed({
-                    pinPagesAdapter.setEnteredPinLength(layoutManager.findFirstVisibleItemPosition(), 0)
                     pinPagesRecyclerView.smoothScrollToPosition(it)
                     viewModel.delegate.resetPin()
+                    pinPagesAdapter.setEnteredPinLength(layoutManager.findFirstVisibleItemPosition(), 0)
                 }, 300)
             }
         })
@@ -122,11 +122,6 @@ class PinFragment: Fragment(), NumPadItemsAdapter.Listener {
             }
         })
 
-        viewModel.dismissWithCancelLiveEvent.observe(viewLifecycleOwner, Observer {
-            activity?.setResult(PinModule.RESULT_CANCELLED)
-            activity?.finish()
-        })
-
         viewModel.dismissWithSuccessLiveEvent.observe(viewLifecycleOwner, Observer {
             activity?.setResult(PinModule.RESULT_OK)
             activity?.finish()
@@ -145,8 +140,8 @@ class PinFragment: Fragment(), NumPadItemsAdapter.Listener {
                 pinPagesAdapter.notifyDataSetChanged()
                 Handler().postDelayed({
                     pinPagesAdapter.shakePageIndex = null
-                    pinPagesAdapter.setEnteredPinLength(pageIndex, 0)
                     viewModel.delegate.resetPin()
+                    pinPagesAdapter.setEnteredPinLength(pageIndex, 0)
                 }, 300)
             }
         })
@@ -165,9 +160,6 @@ class PinFragment: Fragment(), NumPadItemsAdapter.Listener {
             }
         })
 
-        viewModel.closeApplicationLiveEvent.observe(viewLifecycleOwner, Observer {
-            activity?.finishAffinity()
-        })
     }
 
     override fun onItemClick(item: NumPadItem) {
