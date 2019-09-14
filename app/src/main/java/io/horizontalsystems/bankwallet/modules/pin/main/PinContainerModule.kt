@@ -1,25 +1,26 @@
 package io.horizontalsystems.bankwallet.modules.pin.main
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+
 object PinContainerModule {
 
-    interface IView {
-
-    }
-
-    interface IViewDelegate {
+    interface ViewDelegate {
         fun onBackPressed()
-
     }
 
-    interface IRouter{
+    interface Router{
         fun closeActivity()
         fun closeApplication()
     }
 
-    fun init(view: PinContainerViewModel, router: IRouter, showCancelButton: Boolean) {
-        val presenter = PinContainerPresenter(router, showCancelButton)
+    class Factory(private val showCancelButton: Boolean) : ViewModelProvider.Factory {
 
-        view.delegate = presenter
-        presenter.view = view
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            val router = PinContainerRouter()
+            val presenter = PinContainerPresenter(router, showCancelButton)
+
+            return presenter as T
+        }
     }
 }

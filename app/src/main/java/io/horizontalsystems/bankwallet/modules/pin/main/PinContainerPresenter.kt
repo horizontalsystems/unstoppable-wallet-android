@@ -1,10 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.pin.main
 
-class PinContainerPresenter(
-        private val router: PinContainerModule.IRouter,
-        private val showCancelButton: Boolean) : PinContainerModule.IViewDelegate {
+import androidx.lifecycle.ViewModel
 
-    var view: PinContainerModule.IView? = null
+class PinContainerPresenter(
+        val router: PinContainerModule.Router,
+        private val showCancelButton: Boolean) : ViewModel(), PinContainerModule.ViewDelegate {
 
     override fun onBackPressed() {
         if (showCancelButton) {

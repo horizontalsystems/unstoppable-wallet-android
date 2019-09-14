@@ -10,13 +10,15 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.pin.main.PinContainerViewModel
+import io.horizontalsystems.bankwallet.modules.pin.main.PinContainerModule
+import io.horizontalsystems.bankwallet.modules.pin.main.PinContainerPresenter
+import io.horizontalsystems.bankwallet.modules.pin.main.PinContainerRouter
 import kotlinx.android.synthetic.main.activity_pin_container.*
 
 
 class PinActivity : BaseActivity() {
 
-    private lateinit var viewModel: PinContainerViewModel
+    private lateinit var presenter: PinContainerPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,17 +31,10 @@ class PinActivity : BaseActivity() {
         val showCancelButton = intent?.extras?.getBoolean(keyShowCancel) ?: true
         val showRates = intent?.extras?.getBoolean(keyShowRates) ?: false
 
-        viewModel = ViewModelProviders.of(this).get(PinContainerViewModel::class.java)
-        viewModel.init(showCancelButton)
+        val presenter = ViewModelProviders.of(this, PinContainerModule.Factory(showCancelButton)).get(PinContainerPresenter::class.java)
+        val router = presenter.router as PinContainerRouter
 
-        viewModel.closeApplicationLiveEvent.observe(this, Observer {
-            finishAffinity()
-        })
-
-        viewModel.closeActivityLiveEvent.observe(this, Observer {
-            setResult(PinModule.RESULT_CANCELLED)
-            finish()
-        })
+        subscribeToRouterEvents(router)
 
         if (showRates) {
             viewPager2.visibility = View.VISIBLE
@@ -48,7 +43,7 @@ class PinActivity : BaseActivity() {
 
             viewPager2.adapter = object : FragmentStateAdapter(this) {
                 override fun getItemCount(): Int = 2
-                override fun createFragment(position: Int): Fragment = when(position) {
+                override fun createFragment(position: Int): Fragment = when (position) {
                     0 -> pinFragment
                     else -> RatesFragment()
                 }
@@ -69,8 +64,19 @@ class PinActivity : BaseActivity() {
 
     }
 
+    private fun subscribeToRouterEvents(router: PinContainerRouter) {
+        router.closeApplication.observe(this, Observer {
+            finishAffinity()
+        })
+
+        router.closeActivity.observe(this, Observer {
+            setResult(PinModule.RESULT_CANCELLED)
+            finish()
+        })
+    }
+
     override fun onBackPressed() {
-        viewModel.delegate.onBackPressed()
+        presenter.onBackPressed()
     }
 
     companion object {
