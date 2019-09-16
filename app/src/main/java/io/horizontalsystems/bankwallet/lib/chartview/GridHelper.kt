@@ -11,9 +11,6 @@ import java.util.*
 
 class GridHelper(private val shape: RectF, private val config: ChartConfig) {
 
-    private val daysInMonth = 30
-    private val minsInDay = 24 * 60
-
     fun setGridLines(): List<GridLine> {
         var y: Float
         var value = config.valueTop
@@ -36,55 +33,52 @@ class GridHelper(private val shape: RectF, private val config: ChartConfig) {
 
         val date = Date(endTimestamp)
         val calendar = Calendar.getInstance().apply { time = date }
+        var columnLabel = columnLabel(calendar, chartType)
 
-        val gridInterval = intervalMillis(chartType)
         //  We need to move last vertical grid line to nearest hour/day depending on chart type
-        var gridOffset = calendar.get(Calendar.MINUTE)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
 
         when (chartType) {
             ChartType.DAILY -> {
             }
             ChartType.WEEKLY,
             ChartType.MONTHLY -> {
-                gridOffset += calendar.get(Calendar.HOUR_OF_DAY) * 60
+                calendar.set(Calendar.HOUR_OF_DAY, 0)
             }
             ChartType.MONTHLY6,
             ChartType.MONTHLY18 -> {
-                gridOffset += calendar.get(Calendar.HOUR_OF_DAY) * 60
-                gridOffset += calendar.get(Calendar.DAY_OF_MONTH) * 24 * 60
+                calendar.set(Calendar.HOUR_OF_DAY, 0)
+                calendar.set(Calendar.DATE, 1)
             }
         }
 
-        calendar.time = Date(date.time - gridOffset * 60 * 1000L)
-
-        var xAxis = shape.right
-        val delta = (endTimestamp - startTimestamp) / shape.width()
+        val delta = (endTimestamp - startTimestamp) / shape.right
         val columns = mutableListOf<GridColumn>()
 
-        while (xAxis >= 0) {
-            val time = calendar.time.time
-            xAxis = (time - startTimestamp) / delta
+        while (true) {
+            val xAxis = (calendar.time.time - startTimestamp) / delta
+            if (xAxis <= 0) break
 
-            columns.add(GridColumn(xAxis, pointName(calendar, chartType)))
-            calendar.time = Date(time - gridInterval)
+            columns.add(GridColumn(xAxis, columnLabel))
+            moveColumn(chartType, calendar)
+            columnLabel = columnLabel(calendar, chartType)
         }
 
         return columns
     }
 
-    private fun intervalMillis(type: ChartType): Long {
-        val interval = when (type) {
-            ChartType.DAILY -> 6 * 60                            // 6 hour
-            ChartType.WEEKLY -> minsInDay * 2                    // 2 days
-            ChartType.MONTHLY -> minsInDay * 6                   // 6 days
-            ChartType.MONTHLY6 -> minsInDay * daysInMonth        // 1 month
-            ChartType.MONTHLY18 -> minsInDay * daysInMonth * 2   // 2 month
+    private fun moveColumn(type: ChartType, calendar: Calendar) {
+        when (type) {
+            ChartType.DAILY -> calendar.add(Calendar.HOUR_OF_DAY, -6)       // 6 hour
+            ChartType.WEEKLY -> calendar.add(Calendar.DAY_OF_WEEK, -2)      // 2 days
+            ChartType.MONTHLY -> calendar.add(Calendar.DAY_OF_MONTH, -6)    // 6 days
+            ChartType.MONTHLY6 -> calendar.add(Calendar.MONTH, -1)          // 1 month
+            ChartType.MONTHLY18 -> calendar.add(Calendar.MONTH, -2)         // 2 month
         }
-
-        return interval * 60 * 1000L
     }
 
-    private fun pointName(calendar: Calendar, type: ChartType): String {
+    private fun columnLabel(calendar: Calendar, type: ChartType): String {
         return when (type) {
             ChartType.DAILY -> calendar.get(Calendar.HOUR_OF_DAY).toString()
             ChartType.WEEKLY -> DateHelper.getShortDayOfWeek(calendar.time)
