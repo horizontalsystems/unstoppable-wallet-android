@@ -9,8 +9,11 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.EosUnsupportedException
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.main.MainModule
+import io.horizontalsystems.bankwallet.ui.dialogs.AlertDialogFragment
+import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_create_wallet.*
 import kotlinx.android.synthetic.main.view_holder_coin_manager.*
@@ -22,6 +25,11 @@ class CreateWalletActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_wallet)
+        shadowlessToolbar.bind(
+                title = getString(R.string.Welcome_CreateWallet),
+                leftBtnItem = TopMenuItem(R.drawable.back, onClick = { onBackPressed() }),
+                rightBtnItem = TopMenuItem(R.drawable.checkmark_orange, onClick = { presenter.didClickCreate() })
+        )
 
         presenter = ViewModelProviders.of(this, CreateWalletModule.Factory()).get(CreateWalletPresenter::class.java)
 
@@ -37,7 +45,18 @@ class CreateWalletActivity : BaseActivity() {
     private fun observeView(view: CreateWalletView) {
         view.itemsLiveData.observe(this, Observer {
             coinItemsAdapter.items = it
+            coinItemsAdapter.notifyDataSetChanged()
         })
+        view.errorLiveEvent.observe(this, Observer {
+            if (it is EosUnsupportedException) {
+                AlertDialogFragment.newInstance(
+                        R.string.Alert_TitleWarning,
+                        R.string.ManageCoins_EOSAlert_CreateButton,
+                        R.string.Alert_Ok
+                ).show(supportFragmentManager, "alert_dialog")
+            }
+        })
+
     }
 
     private fun observeRouter(router: CreateWalletRouter) {
@@ -76,6 +95,7 @@ class SwitchableViewHolder(override val containerView: View, private val present
         coinIcon.bind(coinViewItem.code)
         coinTitle.text = coinViewItem.code
         coinCode.text = coinViewItem.title
+        toggleSwitch.isChecked = coinViewItem.selected
     }
 
     companion object {

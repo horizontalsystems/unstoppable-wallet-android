@@ -89,6 +89,7 @@ interface IBackupManager {
 interface IAccountCreator {
     fun createRestoredAccount(accountType: AccountType, syncMode: SyncMode?, createDefaultWallets: Boolean): Account
     fun createNewAccount(defaultAccountType: DefaultAccountType, createDefaultWallets: Boolean): Account
+    fun createNewAccount(coin: Coin)
 }
 
 interface IAccountFactory {

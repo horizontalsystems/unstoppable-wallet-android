@@ -6,6 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".modules.createwallet.CreateWalletActivity">
 
+    <io.horizontalsystems.bankwallet.ui.extensions.ShadowlessToolbarView
+        android:id="@+id/shadowlessToolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/coins"
@@ -14,10 +22,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:itemCount="6"
-        tools:listitem="@layout/view_holder_switchable">
-
-    </androidx.recyclerview.widget.RecyclerView>
+        app:layout_constraintTop_toBottomOf="@+id/shadowlessToolbar"
+        tools:itemCount="6"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
