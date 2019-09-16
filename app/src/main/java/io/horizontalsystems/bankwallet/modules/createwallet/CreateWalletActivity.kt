@@ -13,7 +13,7 @@ import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_create_wallet.*
-import kotlinx.android.synthetic.main.view_holder_switchable.*
+import kotlinx.android.synthetic.main.view_holder_coin_manager.*
 
 class CreateWalletActivity : BaseActivity() {
     private lateinit var presenter: CreateWalletPresenter
@@ -75,7 +75,7 @@ class CoinItemsAdapter(private val presenter: CreateWalletPresenter) : RecyclerV
 
 class SwitchableViewHolder(override val containerView: View, private val presenter: CreateWalletPresenter) : RecyclerView.ViewHolder(containerView), LayoutContainer {
     init {
-        enabled.setOnCheckedChangeListener { buttonView, isChecked ->
+        toggleSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 presenter.didEnable(adapterPosition)
             } else {
@@ -85,11 +85,13 @@ class SwitchableViewHolder(override val containerView: View, private val present
     }
 
     fun bind(coinViewItem: CreateWalletModule.CoinViewItem) {
-        title.text = coinViewItem.title
-        enabled.isChecked = coinViewItem.selected
+        coinIcon.bind(coinViewItem.code)
+        coinTitle.text = coinViewItem.code
+        coinCode.text = coinViewItem.title
+        toggleSwitch.isChecked = coinViewItem.selected
     }
 
     companion object {
-        const val layoutResourceId = R.layout.view_holder_switchable
+        const val layoutResourceId = R.layout.view_holder_coin_manager
     }
 }
