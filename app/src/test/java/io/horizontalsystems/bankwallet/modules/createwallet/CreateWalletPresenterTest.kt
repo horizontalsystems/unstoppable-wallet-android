@@ -1,9 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.createwallet
 
-import com.nhaarman.mockito_kotlin.doReturn
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
+import io.horizontalsystems.bankwallet.core.EosUnsupportedException
 import io.horizontalsystems.bankwallet.entities.Coin
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -13,7 +11,8 @@ object CreateWalletPresenterTest : Spek({
     val router by memoized { mock<CreateWalletModule.IRouter>() }
     val interactor by memoized { mock<CreateWalletModule.IInteractor>() }
     val state by memoized { mock<CreateWalletModule.State>() }
-    val presenter by memoized { CreateWalletPresenter(view, router, interactor, state) }
+    val coinViewItemFactory by memoized { mock<CoinViewItemFactory>() }
+    val presenter by memoized { CreateWalletPresenter(view, router, interactor, coinViewItemFactory, state) }
 
     val titleBtc = "Bitcoin"
     val codeBtc = "BTC"
@@ -29,41 +28,88 @@ object CreateWalletPresenterTest : Spek({
         on { code } doReturn codeEth
     }
 
+    val featuredCoins = listOf(coinBtc, coinEth)
+    val coinViewItems = listOf<CreateWalletModule.CoinViewItem>(mock(), mock())
+
     describe("#viewDidLoad") {
         describe("common") {
-            val coinViewItemBtc = CreateWalletModule.CoinViewItem(titleBtc, codeBtc)
-            val coinViewItemEth = CreateWalletModule.CoinViewItem(titleEth, codeEth)
 
             beforeEachTest {
-                whenever(interactor.featuredCoins).thenReturn(listOf(coinBtc, coinEth))
+                whenever(interactor.featuredCoins).thenReturn(featuredCoins)
+                whenever(coinViewItemFactory.createItems(featuredCoins, 0)).thenReturn(coinViewItems)
+
                 presenter.viewDidLoad()
             }
 
-            it("sets coin items to view") {
-                verify(view).setItems(listOf(coinViewItemBtc, coinViewItemEth))
+            it("sets coin view items to view") {
+                verify(view).setItems(coinViewItems)
             }
 
             it("sets coins to state") {
-                verify(state).coins = listOf(coinBtc, coinEth)
+                verify(state).coins = featuredCoins
+            }
+
+            it("sets default selected position to state") {
+                verify(state).selectedPosition = 0
             }
         }
     }
 
-
-
     describe("#didTapItem") {
+        val position = 123
+
         beforeEach {
-            whenever(state.coins).thenReturn(listOf(coinBtc, coinEth))
+            whenever(state.coins).thenReturn(featuredCoins)
+            whenever(coinViewItemFactory.createItems(featuredCoins, position)).thenReturn(coinViewItems)
 
-            presenter.didTapItem(1)
+            presenter.didTapItem(position)
         }
 
-        it("creates wallet for selected coin") {
-            verify(interactor).createWallet(coinEth)
+        it("sets updated coin items to view") {
+            verify(view).setItems(coinViewItems)
         }
 
-        it("routes to main module") {
-            verify(router).startMainModule()
+        it("sets selected position to state") {
+            verify(state).selectedPosition = position
+        }
+    }
+
+    describe("didClickCreate") {
+        describe("when interactor throws exception") {
+            val exception = EosUnsupportedException()
+
+            beforeEach {
+                whenever(state.coins).thenReturn(featuredCoins)
+                whenever(state.selectedPosition).thenReturn(1)
+                whenever(interactor.createWallet(any())).thenThrow(exception)
+
+                presenter.didClickCreate()
+            }
+
+            it("shows an error") {
+                verify(view).showError(exception)
+            }
+
+            it("doesn't route to main module") {
+                verify(router, never()).startMainModule()
+            }
+        }
+
+        describe("when interactor performs successfully") {
+            beforeEach {
+                whenever(state.coins).thenReturn(featuredCoins)
+                whenever(state.selectedPosition).thenReturn(1)
+
+                presenter.didClickCreate()
+            }
+
+            it("creates wallet for selected coin") {
+                verify(interactor).createWallet(coinEth)
+            }
+
+            it("routes to main module") {
+                verify(router).startMainModule()
+            }
         }
     }
 

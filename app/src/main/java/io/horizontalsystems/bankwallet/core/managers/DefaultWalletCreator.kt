@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.IWalletFactory
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 
@@ -22,6 +23,11 @@ class DefaultWalletCreator(private val walletManager: IWalletManager, private va
         }
 
         walletManager.enable(wallets)
+    }
+
+    fun createWallet(account: Account, coin: Coin) {
+        val wallet = walletFactory.wallet(coin, account, account.defaultSyncMode)
+        walletManager.enable(listOf(wallet))
     }
 
     private fun defaultWallets(account: Account): List<Wallet> {
