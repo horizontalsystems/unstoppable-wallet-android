@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.fee
 
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
@@ -19,8 +20,8 @@ object SendFeeModule {
         fun setPrimaryFee(feeAmount: String?)
         fun setSecondaryFee(feeAmount: String?)
         fun setInsufficientFeeBalanceError(insufficientFeeBalance: InsufficientFeeBalance?)
-        fun setDuration(duration: String)
-        fun setFeePriority(priority: String)
+        fun setDuration(duration: Long)
+        fun setFeePriority(priority: FeeRatePriority)
         fun showFeeRatePrioritySelector(feeRates: List<FeeRateInfoViewItem>)
     }
 
@@ -46,7 +47,7 @@ object SendFeeModule {
         val feeRate: Long
         val primaryAmountInfo: AmountInfo
         val secondaryAmountInfo: AmountInfo?
-        val duration: String?
+        val duration: Long?
 
         fun setFee(fee: BigDecimal)
         fun setAvailableFeeBalance(availableFeeBalance: BigDecimal)
@@ -57,7 +58,7 @@ object SendFeeModule {
         fun onUpdateFeeRate(feeRate: Long)
     }
 
-    data class FeeRateInfoViewItem(val title: String, val feeRateInfo: FeeRateInfo, val selected: Boolean)
+    data class FeeRateInfoViewItem(val feeRateInfo: FeeRateInfo, val selected: Boolean)
 
     fun init(view: SendFeeViewModel, coin: Coin, moduleDelegate: IFeeModuleDelegate?): IFeeModule {
         val feeRateProvider = FeeRateProviderFactory.provider(coin)

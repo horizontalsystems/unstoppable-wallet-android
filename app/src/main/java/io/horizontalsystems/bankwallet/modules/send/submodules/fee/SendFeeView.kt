@@ -10,6 +10,8 @@ import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.FeeRateInfo
+import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
+import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import kotlinx.android.synthetic.main.view_send_fee.view.*
 
 class SendFeeView : ConstraintLayout, FeeRatePrioritySelector.Listener {
@@ -36,16 +38,17 @@ class SendFeeView : ConstraintLayout, FeeRatePrioritySelector.Listener {
 
         sendFeeViewModel.primaryFee.observe(lifecycleOwner, Observer { txFeePrimary.text = " $it" })
 
-        sendFeeViewModel.secondaryFee.observe(lifecycleOwner, Observer { fiatFee->
+        sendFeeViewModel.secondaryFee.observe(lifecycleOwner, Observer { fiatFee ->
             fiatFee?.let { txFeeSecondary.text = " | $it" }
         })
 
         sendFeeViewModel.duration.observe(lifecycleOwner, Observer { duration ->
-            txDuration.text = duration
+            val txDurationString = DateHelper.getTxDurationString(context, duration)
+            txDuration.text = context.getString(R.string.Duration_Within, txDurationString)
         })
 
-        sendFeeViewModel.feePriority.observe(lifecycleOwner, Observer { selectedPriority ->
-            txSpeedMenu.text = selectedPriority
+        sendFeeViewModel.feePriority.observe(lifecycleOwner, Observer { feePriority ->
+            txSpeedMenu.text = TextHelper.getFeeRatePriorityString(context, feePriority)
         })
 
         sendFeeViewModel.showFeePriorityOptions.observe(lifecycleOwner, Observer { feeRates ->

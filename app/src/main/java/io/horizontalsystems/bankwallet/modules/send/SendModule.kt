@@ -147,7 +147,7 @@ object SendModule {
 
     data class SendConfirmationMemoViewItem(val memo: String?) : SendConfirmationViewItem()
 
-    data class SendConfirmationDurationViewItem(val duration: String?) : SendConfirmationViewItem()
+    data class SendConfirmationDurationViewItem(val duration: Long?) : SendConfirmationViewItem()
 
 
     fun init(viewModel: SendViewModel, wallet: Wallet): IViewDelegate {
