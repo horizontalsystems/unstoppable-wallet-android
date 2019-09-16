@@ -6,13 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.FeaturedCoin
 
 object CreateWalletModule {
 
     interface IView {
         fun setItems(items: List<CoinViewItem>)
-        fun setCreateEnabled(enabled: Boolean)
     }
 
     interface IRouter {
@@ -21,23 +19,20 @@ object CreateWalletModule {
 
     interface IViewDelegate {
         fun viewDidLoad()
-        fun didEnable(position: Int)
-        fun didDisable(position: Int)
-        fun didCreate()
+        fun didTapItem(position: Int)
     }
 
     interface IInteractor {
-        val featuredCoins: List<FeaturedCoin>
+        val featuredCoins: List<Coin>
 
-        fun createWallet(coins: List<Coin>)
+        fun createWallet(coins: Coin)
     }
 
     class State {
         var coins = listOf<Coin>()
-        var enabledPositions = setOf<Int>()
     }
 
-    data class CoinViewItem(val title: String, val code: String, val selected: Boolean)
+    data class CoinViewItem(val title: String, val code: String)
 
     class Factory : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

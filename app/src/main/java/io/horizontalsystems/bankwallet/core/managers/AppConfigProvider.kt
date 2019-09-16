@@ -47,14 +47,14 @@ class AppConfigProvider : IAppConfigProvider {
     override val defaultCoinCodes: List<String>
         get() = listOf("BTC", "ETH")
 
-    override val featuredCoins: List<FeaturedCoin>
+    override val featuredCoins: List<Coin>
         get() = listOf(
-                FeaturedCoin(coins[0], true),
-                FeaturedCoin(coins[1], true),
-                FeaturedCoin(coins[2], false),
-                FeaturedCoin(coins[3], false),
-                FeaturedCoin(coins[4], false),
-                FeaturedCoin(coins[5], false)
+                coins[0],
+                coins[1],
+                coins[2],
+                coins[3],
+                coins[4],
+                coins[5]
         )
 
     override val coins: List<Coin> = listOf(

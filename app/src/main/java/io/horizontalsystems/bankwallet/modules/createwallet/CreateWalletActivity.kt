@@ -28,10 +28,6 @@ class CreateWalletActivity : BaseActivity() {
         observeView(presenter.view as CreateWalletView)
         observeRouter(presenter.router as CreateWalletRouter)
 
-        buttonCreate.setOnSingleClickListener {
-            presenter.didCreate()
-        }
-
         coinItemsAdapter = CoinItemsAdapter(presenter)
         coins.adapter = coinItemsAdapter
 
@@ -41,10 +37,6 @@ class CreateWalletActivity : BaseActivity() {
     private fun observeView(view: CreateWalletView) {
         view.itemsLiveData.observe(this, Observer {
             coinItemsAdapter.items = it
-        })
-
-        view.createEnabledLiveData.observe(this, Observer {
-            buttonCreate.isEnabled = it
         })
     }
 
@@ -75,12 +67,8 @@ class CoinItemsAdapter(private val presenter: CreateWalletPresenter) : RecyclerV
 
 class SwitchableViewHolder(override val containerView: View, private val presenter: CreateWalletPresenter) : RecyclerView.ViewHolder(containerView), LayoutContainer {
     init {
-        toggleSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                presenter.didEnable(adapterPosition)
-            } else {
-                presenter.didDisable(adapterPosition)
-            }
+        containerView.setOnSingleClickListener {
+            presenter.didTapItem(adapterPosition)
         }
     }
 
@@ -88,7 +76,6 @@ class SwitchableViewHolder(override val containerView: View, private val present
         coinIcon.bind(coinViewItem.code)
         coinTitle.text = coinViewItem.code
         coinCode.text = coinViewItem.title
-        toggleSwitch.isChecked = coinViewItem.selected
     }
 
     companion object {

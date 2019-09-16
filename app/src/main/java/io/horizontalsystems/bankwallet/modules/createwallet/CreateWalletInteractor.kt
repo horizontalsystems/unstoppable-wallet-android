@@ -2,13 +2,12 @@ package io.horizontalsystems.bankwallet.modules.createwallet
 
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.FeaturedCoin
 
 class CreateWalletInteractor(private val appConfigProvider: IAppConfigProvider) : CreateWalletModule.IInteractor {
-    override val featuredCoins: List<FeaturedCoin>
+    override val featuredCoins: List<Coin>
         get() = appConfigProvider.featuredCoins
 
-    override fun createWallet(coins: List<Coin>) {
+    override fun createWallet(coins: Coin) {
         TODO("not implemented")
     }
 }
