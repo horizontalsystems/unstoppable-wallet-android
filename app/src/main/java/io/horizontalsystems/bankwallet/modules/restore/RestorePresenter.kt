@@ -45,6 +45,6 @@ class RestorePresenter(
     }
 
     override fun didFailRestore(e: Exception) {
-        TODO("not implemented")
+        view?.showError(e)
     }
 }
