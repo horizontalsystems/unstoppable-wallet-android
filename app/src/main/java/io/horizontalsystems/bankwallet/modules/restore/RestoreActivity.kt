@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.restore.eos.RestoreEosModule
 import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
+import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_restore.*
 import kotlinx.android.synthetic.main.view_holder_account_restore.*
@@ -29,7 +30,7 @@ class RestoreActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_restore)
-        shadowlessToolbar.bind(getString(R.string.Restore_Title), TopMenuItem(R.drawable.back, onClick = { onBackPressed() } ))
+        shadowlessToolbar.bind(getString(R.string.Restore_Title), TopMenuItem(R.drawable.back, onClick = { onBackPressed() }))
 
         viewModel = ViewModelProviders.of(this).get(RestoreViewModel::class.java)
         viewModel.init()
@@ -40,6 +41,10 @@ class RestoreActivity : BaseActivity() {
         viewModel.reloadLiveEvent.observe(this, Observer {
             adapter.items = it
             adapter.notifyDataSetChanged()
+        })
+
+        viewModel.showErrorLiveEvent.observe(this, Observer {
+            HudHelper.showErrorMessage(R.string.Restore_RestoreFailed)
         })
 
         viewModel.startRestoreWordsLiveEvent.observe(this, Observer { wordsCount ->

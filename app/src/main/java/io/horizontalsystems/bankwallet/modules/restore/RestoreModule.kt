@@ -11,6 +11,7 @@ object RestoreModule {
 
     interface View {
         fun reload(items: List<IPredefinedAccountType>)
+        fun showError(ex: Exception)
     }
 
     interface ViewDelegate {
