@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.pin.unlock
 
 import androidx.biometric.BiometricPrompt
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.factories.LockoutUntilDateFactory
 import io.horizontalsystems.bankwallet.core.managers.CurrentDateProvider
@@ -8,14 +10,15 @@ import io.horizontalsystems.bankwallet.core.managers.LockoutManager
 import io.horizontalsystems.bankwallet.core.managers.OneTimeTimer
 import io.horizontalsystems.bankwallet.core.managers.UptimeProvider
 import io.horizontalsystems.bankwallet.entities.LockoutState
-import io.horizontalsystems.bankwallet.modules.pin.PinViewModel
+import io.horizontalsystems.bankwallet.modules.pin.PinView
 
 object UnlockPinModule {
-    interface IUnlockPinRouter {
+
+    interface Router {
         fun dismissModuleWithSuccess()
     }
 
-    interface IUnlockPinInteractor {
+    interface Interactor {
         val isFingerprintEnabled: Boolean
         val biometricAuthSupported: Boolean
         val cryptoObject: BiometricPrompt.CryptoObject?
@@ -25,22 +28,26 @@ object UnlockPinModule {
         fun onUnlock()
     }
 
-    interface IUnlockPinInteractorDelegate {
+    interface InteractorDelegate {
         fun unlock()
         fun wrongPinSubmitted()
         fun updateLockoutState(state: LockoutState)
     }
 
-    fun init(view: PinViewModel, router: IUnlockPinRouter, showCancelButton: Boolean) {
+    class Factory(private val showCancelButton: Boolean) : ViewModelProvider.Factory {
 
-        val lockoutManager = LockoutManager(App.localStorage, UptimeProvider(), LockoutUntilDateFactory(CurrentDateProvider()))
-        val timer = OneTimeTimer()
-        val interactor = UnlockPinInteractor(App.pinManager, App.lockManager, lockoutManager, App.encryptionManager, App.systemInfoManager, timer)
-        val presenter = UnlockPinPresenter(interactor, router, showCancelButton)
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            val view = PinView()
+            val router = UnlockPinRouter()
 
-        view.delegate = presenter
-        presenter.view = view
-        interactor.delegate = presenter
+            val lockoutManager = LockoutManager(App.localStorage, UptimeProvider(), LockoutUntilDateFactory(CurrentDateProvider()))
+            val interactor = UnlockPinInteractor(App.pinManager, App.lockManager, lockoutManager, App.encryptionManager, App.systemInfoManager, OneTimeTimer())
+            val presenter = UnlockPinPresenter(view, router, interactor, showCancelButton)
+
+            interactor.delegate = presenter
+
+            return presenter as T
+        }
     }
 
 }

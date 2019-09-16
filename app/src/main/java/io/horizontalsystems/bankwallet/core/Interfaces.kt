@@ -345,7 +345,7 @@ interface IAppConfigProvider {
     val predefinedAccountTypes: List<IPredefinedAccountType>
 }
 
-interface IOneTimerDelegate {
+interface OneTimerDelegate {
     fun onFire()
 }
 

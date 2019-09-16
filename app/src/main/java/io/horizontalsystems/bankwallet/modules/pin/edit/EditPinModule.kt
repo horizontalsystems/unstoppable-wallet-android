@@ -1,23 +1,30 @@
 package io.horizontalsystems.bankwallet.modules.pin.edit
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.pin.PinInteractor
-import io.horizontalsystems.bankwallet.modules.pin.PinViewModel
+import io.horizontalsystems.bankwallet.modules.pin.PinView
 
 object EditPinModule {
 
-    interface IEditPinRouter {
+    interface Router {
         fun dismissModuleWithSuccess()
     }
 
-    fun init(view: PinViewModel, router: IEditPinRouter) {
+    class Factory : ViewModelProvider.Factory {
 
-        val interactor = PinInteractor(App.pinManager)
-        val presenter = EditPinPresenter(interactor, router)
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            val view = PinView()
+            val router = EditPinRouter()
 
-        view.delegate = presenter
-        presenter.view = view
-        interactor.delegate = presenter
+            val interactor = PinInteractor(App.pinManager)
+            val presenter = EditPinPresenter(view, router, interactor)
+
+            interactor.delegate = presenter
+
+            return presenter as T
+        }
     }
 
 }

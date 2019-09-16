@@ -8,10 +8,9 @@ object PinModule {
 
     const val RESULT_OK = 1
     const val RESULT_CANCELLED = 2
-
     const val PIN_COUNT = 6
 
-    interface IPinView {
+    interface View {
         fun setTitle(title: Int)
         fun addPages(pages: List<PinPage>)
         fun showPage(index: Int)
@@ -26,7 +25,7 @@ object PinModule {
         fun showPinInput()
     }
 
-    interface IPinViewDelegate {
+    interface ViewDelegate {
         fun viewDidLoad()
         fun onEnter(pin: String, pageIndex: Int)
         fun onDelete(pageIndex: Int)
@@ -35,14 +34,14 @@ object PinModule {
         fun resetPin()
     }
 
-    interface IPinInteractor {
+    interface Interactor {
         fun set(pin: String?)
         fun validate(pin: String): Boolean
         fun save(pin: String)
         fun unlock(pin: String): Boolean
     }
 
-    interface IPinInteractorDelegate {
+    interface InteractorDelegate {
         fun didSavePin()
         fun didFailToSavePin()
     }

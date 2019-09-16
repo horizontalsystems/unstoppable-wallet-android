@@ -11,7 +11,7 @@ import org.mockito.Mockito
 
 class PinInteractorTest {
 
-    private val delegate = Mockito.mock(PinModule.IPinInteractorDelegate::class.java)
+    private val delegate = Mockito.mock(PinModule.InteractorDelegate::class.java)
     private val pinManager = Mockito.mock(IPinManager::class.java)
     private var interactor = PinInteractor(pinManager)
 

@@ -1,14 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.pin
 
+import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 
 open class ManagePinPresenter(
-        private val interactor: PinModule.IPinInteractor,
-        val pages: List<Page>) : PinModule.IPinViewDelegate, PinModule.IPinInteractorDelegate {
+        open val view: PinView,
+        private val interactor: PinModule.Interactor,
+        val pages: List<Page>) : ViewModel(), PinModule.ViewDelegate, PinModule.InteractorDelegate {
 
     enum class Page { UNLOCK, ENTER, CONFIRM }
 
-    var view: PinModule.IPinView? = null
     private var enteredPin = ""
     private var isShowingPinMismatchError = false
 
@@ -19,7 +20,7 @@ open class ManagePinPresenter(
         if (enteredPin.length < PinModule.PIN_COUNT) {
             enteredPin += pin
             removeErrorMessage(pageIndex)
-            view?.fillCircles(enteredPin.length, pageIndex)
+            view.fillCircles(enteredPin.length, pageIndex)
 
             if (enteredPin.length == PinModule.PIN_COUNT) {
                 navigateToPage(pageIndex, enteredPin)
@@ -34,7 +35,7 @@ open class ManagePinPresenter(
     override fun onDelete(pageIndex: Int) {
         if (enteredPin.isNotEmpty()) {
             enteredPin = enteredPin.substring(0, enteredPin.length - 1)
-            view?.fillCircles(enteredPin.length, pageIndex)
+            view.fillCircles(enteredPin.length, pageIndex)
         }
     }
 
@@ -43,12 +44,12 @@ open class ManagePinPresenter(
 
     override fun didFailToSavePin() {
         showEnterPage()
-        view?.showError(R.string.SetPin_ErrorFailedToSavePin)
+        view.showError(R.string.SetPin_ErrorFailedToSavePin)
     }
 
     private fun removeErrorMessage(pageIndex: Int) {
         if (isShowingPinMismatchError && pages[pageIndex] == Page.ENTER && enteredPin.isNotEmpty()) {
-            view?.updateTopTextForPage(TopText.Description(R.string.EditPin_NewPinInfo), pageIndex)
+            view.updateTopTextForPage(TopText.Description(R.string.EditPin_NewPinInfo), pageIndex)
             isShowingPinMismatchError = false
         }
     }
@@ -64,7 +65,7 @@ open class ManagePinPresenter(
     private fun show(page: Page) {
         val pageIndex = pages.indexOfFirst { it == page }
         if (pageIndex >= 0) {
-            view?.showPage(pageIndex)
+            view.showPage(pageIndex)
         }
     }
 
@@ -79,7 +80,7 @@ open class ManagePinPresenter(
         } else {
             val pageUnlockIndex = pages.indexOfFirst { it == Page.UNLOCK }
             if (pageUnlockIndex >= 0) {
-                view?.showPinWrong(pageUnlockIndex)
+                view.showPinWrong(pageUnlockIndex)
             }
         }
     }
@@ -97,7 +98,7 @@ open class ManagePinPresenter(
             isShowingPinMismatchError = true
             pages.indexOfFirst { it == Page.ENTER }.let { pageIndex ->
                 if (pageIndex >= 0) {
-                    view?.updateTopTextForPage(TopText.SmallError(R.string.SetPin_ErrorPinsDontMatch), pageIndex)
+                    view.updateTopTextForPage(TopText.SmallError(R.string.SetPin_ErrorPinsDontMatch), pageIndex)
                 }
             }
         }

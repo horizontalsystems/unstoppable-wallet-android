@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.pin.unlock
 
+import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.LockoutState
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
@@ -7,22 +8,22 @@ import io.horizontalsystems.bankwallet.modules.pin.PinPage
 import io.horizontalsystems.bankwallet.modules.pin.TopText
 
 class UnlockPinPresenter(
-        private val interactor: UnlockPinModule.IUnlockPinInteractor,
-        private val router: UnlockPinModule.IUnlockPinRouter,
-        private val showCancelButton: Boolean) : PinModule.IPinViewDelegate, UnlockPinModule.IUnlockPinInteractorDelegate {
+        val view: PinModule.View,
+        val router: UnlockPinModule.Router,
+        private val interactor: UnlockPinModule.Interactor,
+        private val showCancelButton: Boolean) : ViewModel(), PinModule.ViewDelegate, UnlockPinModule.InteractorDelegate {
 
     private val unlockPageIndex = 0
     private var enteredPin = ""
-    var view: PinModule.IPinView? = null
     private var isShowingPinMismatchError = false
 
     override fun viewDidLoad() {
-        view?.addPages(listOf(PinPage(TopText.Title(R.string.Unlock_Page_EnterYourPin))))
+        view.addPages(listOf(PinPage(TopText.Title(R.string.Unlock_Page_EnterYourPin))))
 
         if (showCancelButton) {
-            view?.showBackButton()
+            view.showBackButton()
         } else {
-            view?.hideToolbar()
+            view.hideToolbar()
         }
 
         interactor.updateLockoutState()
@@ -34,7 +35,7 @@ class UnlockPinPresenter(
         if (enteredPin.length < PinModule.PIN_COUNT) {
             enteredPin += pin
             removeErrorMessage()
-            view?.fillCircles(enteredPin.length, pageIndex)
+            view.fillCircles(enteredPin.length, pageIndex)
 
             if (enteredPin.length == PinModule.PIN_COUNT) {
                 if (interactor.unlock(enteredPin)) {
@@ -53,7 +54,7 @@ class UnlockPinPresenter(
     override fun onDelete(pageIndex: Int) {
         if (enteredPin.isNotEmpty()) {
             enteredPin = enteredPin.substring(0, enteredPin.length - 1)
-            view?.fillCircles(enteredPin.length, pageIndex)
+            view.fillCircles(enteredPin.length, pageIndex)
         }
     }
 
@@ -62,14 +63,14 @@ class UnlockPinPresenter(
     }
 
     override fun wrongPinSubmitted() {
-        view?.showPinWrong(unlockPageIndex)
+        view.showPinWrong(unlockPageIndex)
         isShowingPinMismatchError = true
-        view?.updateTopTextForPage(TopText.BigError(R.string.UnlockPin_Error_PinIncorrect), unlockPageIndex)
+        view.updateTopTextForPage(TopText.BigError(R.string.UnlockPin_Error_PinIncorrect), unlockPageIndex)
     }
 
     override fun showFingerprintUnlock() {
         if (interactor.isFingerprintEnabled && interactor.biometricAuthSupported) {
-            interactor.cryptoObject?.let { view?.showFingerprintDialog(it) }
+            interactor.cryptoObject?.let { view.showFingerprintDialog(it) }
         }
     }
 
@@ -79,14 +80,14 @@ class UnlockPinPresenter(
 
     override fun updateLockoutState(state: LockoutState) {
         when (state) {
-            is LockoutState.Unlocked -> view?.showPinInput()
-            is LockoutState.Locked -> view?.showLockView(state.until)
+            is LockoutState.Unlocked -> view.showPinInput()
+            is LockoutState.Locked -> view.showLockView(state.until)
         }
     }
 
     private fun removeErrorMessage() {
         if (isShowingPinMismatchError && enteredPin.isNotEmpty()) {
-            view?.updateTopTextForPage(TopText.Title(R.string.Unlock_Page_EnterYourPin), unlockPageIndex)
+            view.updateTopTextForPage(TopText.Title(R.string.Unlock_Page_EnterYourPin), unlockPageIndex)
             isShowingPinMismatchError = false
         }
     }

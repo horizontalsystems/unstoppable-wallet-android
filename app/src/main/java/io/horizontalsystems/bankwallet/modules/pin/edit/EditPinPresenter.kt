@@ -1,16 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.pin.edit
 
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.pin.ManagePinPresenter
-import io.horizontalsystems.bankwallet.modules.pin.PinModule
-import io.horizontalsystems.bankwallet.modules.pin.PinPage
-import io.horizontalsystems.bankwallet.modules.pin.TopText
+import io.horizontalsystems.bankwallet.modules.pin.*
 
-class EditPinPresenter(interactor: PinModule.IPinInteractor, private val router: EditPinModule.IEditPinRouter)
-    : ManagePinPresenter(interactor, pages = listOf(Page.UNLOCK, Page.ENTER, Page.CONFIRM)) {
+class EditPinPresenter(
+        override val view: PinView,
+        val router: EditPinModule.Router,
+        interactor: PinModule.Interactor)
+    : ManagePinPresenter(view, interactor, pages = listOf(Page.UNLOCK, Page.ENTER, Page.CONFIRM)) {
 
     override fun viewDidLoad() {
-        view?.setTitle(R.string.EditPin_Title)
+        view.setTitle(R.string.EditPin_Title)
         val pinPages = mutableListOf<PinPage>()
 
         pages.forEach { page ->
@@ -20,8 +20,8 @@ class EditPinPresenter(interactor: PinModule.IPinInteractor, private val router:
                 Page.CONFIRM -> pinPages.add(PinPage(TopText.Description(R.string.SetPin_ConfirmInfo)))
             }
         }
-        view?.addPages(pinPages)
-        view?.showBackButton()
+        view.addPages(pinPages)
+        view.showBackButton()
     }
 
     override fun didSavePin() {
