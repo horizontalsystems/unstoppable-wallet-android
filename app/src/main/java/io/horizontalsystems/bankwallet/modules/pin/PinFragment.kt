@@ -19,6 +19,15 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.main.MainModule
+import io.horizontalsystems.bankwallet.modules.pin.edit.EditPinModule
+import io.horizontalsystems.bankwallet.modules.pin.edit.EditPinPresenter
+import io.horizontalsystems.bankwallet.modules.pin.edit.EditPinRouter
+import io.horizontalsystems.bankwallet.modules.pin.set.SetPinRouter
+import io.horizontalsystems.bankwallet.modules.pin.set.SetPinModule
+import io.horizontalsystems.bankwallet.modules.pin.set.SetPinPresenter
+import io.horizontalsystems.bankwallet.modules.pin.unlock.UnlockPinRouter
+import io.horizontalsystems.bankwallet.modules.pin.unlock.UnlockPinModule
+import io.horizontalsystems.bankwallet.modules.pin.unlock.UnlockPinPresenter
 import io.horizontalsystems.bankwallet.ui.extensions.*
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
@@ -26,20 +35,23 @@ import kotlinx.android.synthetic.main.fragment_pin.*
 import java.util.concurrent.Executor
 
 
-class PinFragment: Fragment(), NumPadItemsAdapter.Listener {
+class PinFragment : Fragment(), NumPadItemsAdapter.Listener {
 
     private val interactionType: PinInteractionType by lazy {
         //todo default parameter?
-        arguments?.getSerializable(PinActivity.keyInteractionType) as? PinInteractionType ?: PinInteractionType.UNLOCK
+        arguments?.getSerializable(PinActivity.keyInteractionType) as? PinInteractionType
+                ?: PinInteractionType.UNLOCK
     }
 
     private val showCancelButton: Boolean by lazy {
         arguments?.getBoolean(PinActivity.keyShowCancel) ?: true
     }
 
-    private lateinit var viewModel: PinViewModel
+    private lateinit var pinView: PinView
+    private lateinit var viewDelegate: PinModule.ViewDelegate
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var pinPagesAdapter: PinPagesAdapter
+    private lateinit var numpadAdapter: NumPadItemsAdapter
     private val executor = Executor { command -> command.run() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -57,113 +69,126 @@ class PinFragment: Fragment(), NumPadItemsAdapter.Listener {
         snapHelper.attachToRecyclerView(pinPagesRecyclerView)
         pinPagesRecyclerView.adapter = pinPagesAdapter
 
-        pinPagesRecyclerView.setOnTouchListener {_, _ ->  true /*disable RecyclerView scroll*/ }
+        pinPagesRecyclerView.setOnTouchListener { _, _ -> true /*disable RecyclerView scroll*/ }
 
-        viewModel = ViewModelProviders.of(this).get(PinViewModel::class.java)
-        viewModel.init(interactionType, showCancelButton)
+        when (interactionType) {
+            PinInteractionType.UNLOCK -> {
+                val unlockPresenter = ViewModelProviders.of(this, UnlockPinModule.Factory(showCancelButton)).get(UnlockPinPresenter::class.java)
+                val unlockRouter = unlockPresenter.router as UnlockPinRouter
+                pinView = unlockPresenter.view as PinView
+                viewDelegate = unlockPresenter
 
-        val numpadAdapter = NumPadItemsAdapter(this, NumPadItemType.FINGER)
+                unlockRouter.dismissWithSuccess.observe(viewLifecycleOwner, Observer { dismissWithSuccess() })
+            }
+            PinInteractionType.EDIT_PIN -> {
+                val editPresenter = ViewModelProviders.of(this, EditPinModule.Factory()).get(EditPinPresenter::class.java)
+                val editRouter = editPresenter.router as EditPinRouter
+                pinView = editPresenter.view as PinView
+                viewDelegate = editPresenter
+
+                editRouter.dismissWithSuccess.observe(viewLifecycleOwner, Observer { dismissWithSuccess() })
+            }
+            PinInteractionType.SET_PIN -> {
+                val setPresenter = ViewModelProviders.of(this, SetPinModule.Factory()).get(SetPinPresenter::class.java)
+                val setRouter = setPresenter.router as SetPinRouter
+                pinView = setPresenter.view as PinView
+                viewDelegate = setPresenter
+
+                setRouter.dismissWithSuccess.observe(viewLifecycleOwner, Observer { dismissWithSuccess() })
+
+                setRouter.navigateToMain.observe(viewLifecycleOwner, Observer {
+                    context?.let { ctx -> MainModule.start(ctx) }
+                    activity?.finish()
+                })
+            }
+        }
+
+        viewDelegate.viewDidLoad()
+
+        numpadAdapter = NumPadItemsAdapter(this, NumPadItemType.FINGER)
 
         numPadItemsRecyclerView.adapter = numpadAdapter
         numPadItemsRecyclerView.layoutManager = GridLayoutManager(context, 3)
 
-        viewModel.hideToolbar.observe(viewLifecycleOwner, Observer {
+        observeData()
+    }
+
+    private fun dismissWithSuccess() {
+        activity?.setResult(PinModule.RESULT_OK)
+        activity?.finish()
+    }
+
+    private fun observeData() {
+        pinView.hideToolbar.observe(viewLifecycleOwner, Observer {
             shadowlessToolbar.visibility = View.GONE
         })
 
-        viewModel.showBackButton.observe(viewLifecycleOwner, Observer {
+        pinView.showBackButton.observe(viewLifecycleOwner, Observer {
             shadowlessToolbar.bind(null, TopMenuItem(R.drawable.back, onClick = { activity?.onBackPressed() }))
         })
 
-        viewModel.titleLiveDate.observe(viewLifecycleOwner, Observer { title ->
-            title?.let {
-                shadowlessToolbar.bindTitle(getString(it))
-            }
+        pinView.titleLiveDate.observe(viewLifecycleOwner, Observer {
+            shadowlessToolbar.bindTitle(getString(it))
         })
 
-        viewModel.addPagesEvent.observe(viewLifecycleOwner, Observer { pinPages ->
-            pinPages?.let {
-                pinPagesAdapter.pinPages.addAll(it)
-                pinPagesAdapter.notifyDataSetChanged()
-            }
+        pinView.addPagesEvent.observe(viewLifecycleOwner, Observer {
+            pinPagesAdapter.pinPages.addAll(it)
+            pinPagesAdapter.notifyDataSetChanged()
         })
 
-        viewModel.showPageAtIndex.observe(viewLifecycleOwner, Observer { index ->
-            index?.let {
-                Handler().postDelayed({
-                    pinPagesRecyclerView.smoothScrollToPosition(it)
-                    viewModel.delegate.resetPin()
-                    pinPagesAdapter.setEnteredPinLength(layoutManager.findFirstVisibleItemPosition(), 0)
-                }, 300)
-            }
+        pinView.showPageAtIndex.observe(viewLifecycleOwner, Observer {
+            Handler().postDelayed({
+                pinPagesRecyclerView.smoothScrollToPosition(it)
+                viewDelegate.resetPin()
+                pinPagesAdapter.setEnteredPinLength(layoutManager.findFirstVisibleItemPosition(), 0)
+            }, 300)
         })
 
-        viewModel.updateTopTextForPage.observe(viewLifecycleOwner, Observer { (error, pageIndex) ->
+        pinView.updateTopTextForPage.observe(viewLifecycleOwner, Observer { (error, pageIndex) ->
             pinPagesAdapter.updateTopTextForPage(error, pageIndex)
         })
 
-        viewModel.showError.observe(viewLifecycleOwner, Observer { error ->
-            error?.let {
-                HudHelper.showErrorMessage(it)
-            }
+        pinView.showError.observe(viewLifecycleOwner, Observer {
+            HudHelper.showErrorMessage(it)
         })
 
-        viewModel.navigateToMainLiveEvent.observe(viewLifecycleOwner, Observer {
-            context?.let { ctx -> MainModule.start(ctx) }
-            activity?.finish()
+        pinView.fillPinCircles.observe(viewLifecycleOwner, Observer { (length, pageIndex) ->
+            pinPagesAdapter.setEnteredPinLength(pageIndex, length)
         })
 
-        viewModel.fillPinCircles.observe(viewLifecycleOwner, Observer { pair ->
-            pair?.let { (length, pageIndex) ->
-                pinPagesAdapter.setEnteredPinLength(pageIndex, length)
-            }
+        pinView.showFingerprintInputLiveEvent.observe(viewLifecycleOwner, Observer {
+            showFingerprintDialog(it)
+            numpadAdapter.showFingerPrintButton = true
         })
 
-        viewModel.dismissWithSuccessLiveEvent.observe(viewLifecycleOwner, Observer {
-            activity?.setResult(PinModule.RESULT_OK)
-            activity?.finish()
+        pinView.resetCirclesWithShakeAndDelayForPage.observe(viewLifecycleOwner, Observer { pageIndex ->
+            pinPagesAdapter.shakePageIndex = pageIndex
+            pinPagesAdapter.notifyDataSetChanged()
+            Handler().postDelayed({
+                pinPagesAdapter.shakePageIndex = null
+                viewDelegate.resetPin()
+                pinPagesAdapter.setEnteredPinLength(pageIndex, 0)
+            }, 300)
         })
 
-        viewModel.showFingerprintInputLiveEvent.observe(viewLifecycleOwner, Observer { cryptoObject ->
-            cryptoObject?.let {
-                showFingerprintDialog(it)
-                numpadAdapter.showFingerPrintButton = true
-            }
-        })
-
-        viewModel.resetCirclesWithShakeAndDelayForPage.observe(viewLifecycleOwner, Observer { pageIndex ->
-            pageIndex?.let {
-                pinPagesAdapter.shakePageIndex = it
-                pinPagesAdapter.notifyDataSetChanged()
-                Handler().postDelayed({
-                    pinPagesAdapter.shakePageIndex = null
-                    viewModel.delegate.resetPin()
-                    pinPagesAdapter.setEnteredPinLength(pageIndex, 0)
-                }, 300)
-            }
-        })
-
-        viewModel.showPinInput.observe(viewLifecycleOwner, Observer {
+        pinView.showPinInput.observe(viewLifecycleOwner, Observer {
             pinUnlock.visibility = View.VISIBLE
             pinUnlockBlocked.visibility = View.GONE
         })
 
-        viewModel.showLockedView.observe(viewLifecycleOwner, Observer { untilDate ->
-            untilDate?.let {
-                pinUnlock.visibility = View.GONE
-                pinUnlockBlocked.visibility = View.VISIBLE
-                val time = DateHelper.formatDate(it, "HH:mm:ss")
-                blockedScreenMessage.text = getString(R.string.UnlockPin_WalletDisabledUntil, time)
-            }
+        pinView.showLockedView.observe(viewLifecycleOwner, Observer {
+            pinUnlock.visibility = View.GONE
+            pinUnlockBlocked.visibility = View.VISIBLE
+            val time = DateHelper.formatDate(it, "HH:mm:ss")
+            blockedScreenMessage.text = getString(R.string.UnlockPin_WalletDisabledUntil, time)
         })
-
     }
 
     override fun onItemClick(item: NumPadItem) {
         when (item.type) {
-            NumPadItemType.NUMBER -> viewModel.delegate.onEnter(item.number.toString(), layoutManager.findFirstVisibleItemPosition())
-            NumPadItemType.DELETE -> viewModel.delegate.onDelete(layoutManager.findFirstVisibleItemPosition())
-            NumPadItemType.FINGER -> viewModel.delegate.showFingerprintUnlock()
+            NumPadItemType.NUMBER -> viewDelegate.onEnter(item.number.toString(), layoutManager.findFirstVisibleItemPosition())
+            NumPadItemType.DELETE -> viewDelegate.onDelete(layoutManager.findFirstVisibleItemPosition())
+            NumPadItemType.FINGER -> viewDelegate.showFingerprintUnlock()
         }
     }
 
@@ -176,7 +201,7 @@ class PinFragment: Fragment(), NumPadItemsAdapter.Listener {
         val biometricPrompt = BiometricPrompt(this, executor, object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                 super.onAuthenticationSucceeded(result)
-                viewModel.delegate.onFingerprintUnlock()
+                viewDelegate.onFingerprintUnlock()
             }
         })
 
@@ -253,7 +278,7 @@ class PinPageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         txtTitle.visibility = View.GONE
         smallError.visibility = View.GONE
 
-        when(pinPage.topText) {
+        when (pinPage.topText) {
             is TopText.Title -> {
                 txtTitle.visibility = View.VISIBLE
                 txtTitle.setText(pinPage.topText.text)

@@ -1,11 +1,11 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.IOneTimerDelegate
+import io.horizontalsystems.bankwallet.core.OneTimerDelegate
 import java.util.*
 
 class OneTimeTimer {
 
-    var delegate: IOneTimerDelegate? = null
+    var delegate: OneTimerDelegate? = null
     private var timer: Timer? = null
 
     fun schedule(time: Date) {

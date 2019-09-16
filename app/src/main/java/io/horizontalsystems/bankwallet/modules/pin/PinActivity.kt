@@ -29,7 +29,7 @@ class PinActivity : BaseActivity() {
         val showCancelButton = intent?.extras?.getBoolean(keyShowCancel) ?: true
         val showRates = intent?.extras?.getBoolean(keyShowRates) ?: false
 
-        val presenter = ViewModelProviders.of(this, PinContainerModule.Factory(showCancelButton)).get(PinContainerPresenter::class.java)
+        presenter = ViewModelProviders.of(this, PinContainerModule.Factory(showCancelButton)).get(PinContainerPresenter::class.java)
         val router = presenter.router as PinContainerRouter
 
         subscribeToRouterEvents(router)
