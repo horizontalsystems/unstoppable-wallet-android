@@ -1,18 +1,18 @@
-package io.horizontalsystems.bankwallet.modules.syncmodule
+package io.horizontalsystems.bankwallet.modules.restore.options
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.SyncMode
 
-class SyncModeViewModel : ViewModel(), SyncModeModule.IView, SyncModeModule.IRouter {
+class RestoreOptionsViewModel : ViewModel(), RestoreOptionsModule.IView, RestoreOptionsModule.IRouter {
 
-    lateinit var delegate: SyncModeModule.IViewDelegate
+    lateinit var delegate: RestoreOptionsModule.IViewDelegate
 
     val notifySyncModeSelected = SingleLiveEvent<SyncMode>()
     val syncModeUpdatedLiveEvent = SingleLiveEvent<SyncMode>()
 
     fun init() {
-        SyncModeModule.init(this, this)
+        RestoreOptionsModule.init(this, this)
         delegate.viewDidLoad()
     }
 

@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.core.utils.ModuleCode
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
-import io.horizontalsystems.bankwallet.modules.syncmodule.SyncModeModule
+import io.horizontalsystems.bankwallet.modules.restore.options.RestoreOptionsModule
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_restore_words.*
@@ -47,7 +47,7 @@ class RestoreWordsActivity : BaseActivity(), RestoreWordsAdapter.Listener {
         })
 
         viewModel.startSyncModeModule.observe(this, Observer {
-            SyncModeModule.startForResult(this, ModuleCode.SYNC_MODE)
+            RestoreOptionsModule.start(this, ModuleCode.RESTORE_OPTIONS)
         })
 
         recyclerInputs.adapter = RestoreWordsAdapter(wordsCount, this)
@@ -56,7 +56,7 @@ class RestoreWordsActivity : BaseActivity(), RestoreWordsAdapter.Listener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == ModuleCode.SYNC_MODE && data != null && resultCode == RESULT_OK) {
+        if (requestCode == ModuleCode.RESTORE_OPTIONS && data != null && resultCode == RESULT_OK) {
             val syncMode = data.getParcelableExtra<SyncMode>("syncMode")
 
             val intent = Intent().apply {

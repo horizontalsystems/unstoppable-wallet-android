@@ -1,10 +1,10 @@
-package io.horizontalsystems.bankwallet.modules.syncmodule
+package io.horizontalsystems.bankwallet.modules.restore.options
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import io.horizontalsystems.bankwallet.entities.SyncMode
 
-object SyncModeModule {
+object RestoreOptionsModule {
 
     interface IView {
         fun update(syncMode: SyncMode)
@@ -22,12 +22,12 @@ object SyncModeModule {
         fun notifyOnSelect(syncMode: SyncMode)
     }
 
-    fun startForResult(context: AppCompatActivity, requestCode: Int) {
-        context.startActivityForResult(Intent(context, SyncModeActivity::class.java), requestCode)
+    fun start(context: AppCompatActivity, requestCode: Int) {
+        context.startActivityForResult(Intent(context, RestoreOptionsActivity::class.java), requestCode)
     }
 
-    fun init(view: SyncModeViewModel, router: IRouter) {
-        val presenter = SyncModePresenter(router, State())
+    fun init(view: RestoreOptionsViewModel, router: IRouter) {
+        val presenter = RestoreOptionsPresenter(router, State())
 
         view.delegate = presenter
         presenter.view = view

@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.syncmodule
+package io.horizontalsystems.bankwallet.modules.restore.options
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,15 +11,15 @@ import io.horizontalsystems.bankwallet.core.putParcelableExtra
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import kotlinx.android.synthetic.main.activity_about_settings.shadowlessToolbar
-import kotlinx.android.synthetic.main.activity_sync_mode.*
+import kotlinx.android.synthetic.main.activity_restore_options.*
 
-class SyncModeActivity : BaseActivity() {
+class RestoreOptionsActivity : BaseActivity() {
 
-    private lateinit var viewModel: SyncModeViewModel
+    private lateinit var viewModel: RestoreOptionsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sync_mode)
+        setContentView(R.layout.activity_restore_options)
 
         shadowlessToolbar.bind(
                 title = getString(R.string.CoinOption_Title),
@@ -27,7 +27,7 @@ class SyncModeActivity : BaseActivity() {
                 rightBtnItem = TopMenuItem(R.drawable.checkmark_orange, onClick = { viewModel.delegate.didConfirm() })
         )
 
-        viewModel = ViewModelProviders.of(this).get(SyncModeViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(RestoreOptionsViewModel::class.java)
         viewModel.init()
 
         viewModel.notifySyncModeSelected.observe(this, Observer { syncMode: SyncMode? ->
