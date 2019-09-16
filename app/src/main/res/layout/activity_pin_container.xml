@@ -18,7 +18,8 @@
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/circleIndicator"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -26,8 +27,8 @@
     <me.relex.circleindicator.CircleIndicator
         android:id="@+id/circleIndicator"
         android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:layout_marginBottom="16dp"
+        android:layout_height="20dp"
+        android:layout_marginBottom="18dp"
         app:ci_height="8dp"
         app:ci_margin="6dp"
         app:ci_width="8dp"

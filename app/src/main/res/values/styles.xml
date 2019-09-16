@@ -54,7 +54,9 @@
     <attr name="SeekbarNonActiveColor" format="reference|color" />
     <attr name="ConfirmationTextColor" format="reference|color" />
     <attr name="SettingsSectionBottomShadeColor" format="reference|color" />
+    <attr name="CellBottomShadeColor" format="reference|color" />
     <attr name="AddCoinButtonPlaceholder" format="reference|color" />
+    <attr name="ShadingBottomGradient" format="reference" />
 
     <!-- New themed colors for text and icons -->
     <attr name="ColorJacob" format="reference|color" />
@@ -139,7 +141,9 @@
         <item name="SeekbarNonActiveColor">@color/steel_dark</item>
         <item name="ConfirmationTextColor">@color/lightBackground</item>
         <item name="SettingsSectionBottomShadeColor">@color/black_20</item>
+        <item name="CellBottomShadeColor">@color/black_50</item>
         <item name="AddCoinButtonPlaceholder">@color/steel_dark</item>
+        <item name="ShadingBottomGradient">@drawable/rates_gradient_dark</item>
 
         <!-- New colors: for icons & text -->
         <item name="ColorJacob">@color/yellow_d</item>
@@ -222,7 +226,9 @@
         <item name="SeekbarNonActiveColor">@color/grey_light</item>
         <item name="ConfirmationTextColor">@color/dark</item>
         <item name="SettingsSectionBottomShadeColor">@color/steel_15</item>
+        <item name="CellBottomShadeColor">@color/steel_20</item>
         <item name="AddCoinButtonPlaceholder">@color/bars_color</item>
+        <item name="ShadingBottomGradient">@drawable/rates_gradient_light</item>
 
         <!-- New colors: for icons & text -->
         <item name="ColorJacob">@color/yellow_l</item>

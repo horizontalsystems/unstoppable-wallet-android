@@ -27,6 +27,7 @@
     <color name="bars_color_95">#f2f5f5f5</color>
     <color name="black_85">#d9000000</color>
     <color name="black_20">#33000000</color>
+    <color name="black_50">#80000000</color>
     <!-- eof base colors -->
 
     <color name="navigation_bar">?attr/BottomNavigationBackgroundColor</color>
