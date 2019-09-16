@@ -22,7 +22,7 @@ class SendConfirmationPresenter(
         var primaryFeeAmount: String? = null
         var secondaryFeeAmount: String? = null
         var memo: String? = null
-        var duration: String? = null
+        var duration: Long? = null
 
         confirmationViewItems.forEach { item ->
             when (item) {

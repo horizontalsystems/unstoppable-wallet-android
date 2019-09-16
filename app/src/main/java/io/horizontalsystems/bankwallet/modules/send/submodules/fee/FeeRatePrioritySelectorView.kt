@@ -10,8 +10,11 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.entities.FeeRateInfo
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule.FeeRateInfoViewItem
+import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
+import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_item_selector.*
 
@@ -93,7 +96,9 @@ class FeeRatesAdapter(private val list: List<FeeRateInfoViewItem>,
             ViewHolderFeeRatePriority(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_item_selector, parent, false), this)
 
     override fun onBindViewHolder(holder: ViewHolderFeeRatePriority, position: Int) {
-        holder.bind(list[position].title, list[position].selected)
+        val item = list[position].feeRateInfo
+        val isSelected = list[position].selected
+        holder.bind(item.priority, item.duration, isSelected)
     }
 
     override fun getItemCount() = list.size
@@ -115,9 +120,12 @@ class ViewHolderFeeRatePriority(override val containerView: View,
         containerView.setOnClickListener { listener.onClick(adapterPosition) }
     }
 
-    fun bind(title: String, selected: Boolean) {
-        itemTitle.text = title
-        itemTitle.isSelected = selected
+    fun bind(priority: FeeRatePriority, duration: Long, isSelected: Boolean) {
+        val priorityString = TextHelper.getFeeRatePriorityString(itemView.context, priority)
+        val durationString = DateHelper.getTxDurationString(itemView.context, duration)
+
+        itemTitle.text = "$priorityString (~$durationString)"
+        itemTitle.isSelected = isSelected
     }
 
 }
