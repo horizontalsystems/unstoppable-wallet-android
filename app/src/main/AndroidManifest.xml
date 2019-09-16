@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".modules.syncmodule.SyncModeActivity"
+            android:name="io.horizontalsystems.bankwallet.modules.restore.options.RestoreOptionsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.backup.BackupActivity"

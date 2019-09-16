@@ -81,7 +81,6 @@ class BalancePresenterTest {
 
         whenever(dataSource.items).thenReturn(items)
         whenever(dataSource.currency).thenReturn(currency)
-        whenever(dataSource.chartEnabled).thenReturn(chartEnabled)
         whenever(factory.createHeaderViewItem(items, chartEnabled, currency)).thenReturn(viewItem)
 
         Assert.assertEquals(viewItem, presenter.getHeaderViewItem())

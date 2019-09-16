@@ -1,11 +1,11 @@
-package io.horizontalsystems.bankwallet.modules.syncmodule
+package io.horizontalsystems.bankwallet.modules.restore.options
 
 import io.horizontalsystems.bankwallet.entities.SyncMode
 
-class SyncModePresenter(private val router: SyncModeModule.IRouter, private val state: SyncModeModule.State)
-    : SyncModeModule.IViewDelegate {
+class RestoreOptionsPresenter(private val router: RestoreOptionsModule.IRouter, private val state: RestoreOptionsModule.State)
+    : RestoreOptionsModule.IViewDelegate {
 
-    var view: SyncModeModule.IView? = null
+    var view: RestoreOptionsModule.IView? = null
 
     override fun viewDidLoad() {
         view?.update(state.syncMode)
