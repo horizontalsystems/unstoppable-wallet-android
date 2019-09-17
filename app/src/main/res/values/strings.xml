@@ -10,6 +10,7 @@
     <string name="Alert_Copied">Copied</string>
 
     <string name="Button_Cancel">Cancel</string>
+    <string name="Button_Create">Create</string>
     <string name="Button_Back">Back</string>
     <string name="Button_Close">Close</string>
     <string name="Button_Ok">OK</string>
@@ -24,6 +25,10 @@
     <string name="Welcome_CreateWallet">New Wallet</string>
     <string name="Welcome_RestoreWallet">Restore Wallet</string>
     <string name="Welcome_Version" translatable="false">version %s</string>
+
+    <!--Create-->
+    <string name="Create_Title">New Wallet</string>
+    <string name="Create_Description">Select crypto currencies your new wallet should support. You may do this later as well.</string>
 
     <!--Restore-->
 

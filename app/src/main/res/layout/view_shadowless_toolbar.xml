@@ -33,11 +33,11 @@
 
     <TextView
         android:id="@+id/leftTextButton"
-        style="@style/Body"
+        style="@style/Headline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="13dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="13dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="3dp"
         android:textColor="@color/yellow_crypto"
@@ -48,11 +48,11 @@
 
     <TextView
         android:id="@+id/rightTextButton"
-        style="@style/Body"
+        style="@style/Headline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="9dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="16dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="3dp"
         android:textColor="@color/yellow_crypto"
@@ -67,7 +67,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="44dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="4dp"
         android:textColor="?TitleColor"

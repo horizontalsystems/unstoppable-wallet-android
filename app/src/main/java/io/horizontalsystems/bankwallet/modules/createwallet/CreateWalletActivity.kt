@@ -26,9 +26,9 @@ class CreateWalletActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_wallet)
         shadowlessToolbar.bind(
-                title = getString(R.string.Welcome_CreateWallet),
-                leftBtnItem = TopMenuItem(R.drawable.back, onClick = { onBackPressed() }),
-                rightBtnItem = TopMenuItem(R.drawable.checkmark_orange, onClick = { presenter.didClickCreate() })
+                title = getString(R.string.Create_Title),
+                leftBtnItem = TopMenuItem(text = R.string.Button_Cancel, onClick = { onBackPressed() }),
+                rightBtnItem = TopMenuItem(text = R.string.Button_Create, onClick = { presenter.didClickCreate() })
         )
 
         presenter = ViewModelProviders.of(this, CreateWalletModule.Factory()).get(CreateWalletPresenter::class.java)
