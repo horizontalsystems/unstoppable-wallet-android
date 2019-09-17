@@ -37,7 +37,13 @@ object CreateWalletModule {
         var coins = listOf<Coin>()
     }
 
-    data class CoinViewItem(val title: String, val code: String, val selected: Boolean)
+    data class CoinViewItem(val title: String, val code: String) {
+        var selected = false
+
+        constructor(title: String, code: String, selected: Boolean) : this(title, code) {
+            this.selected = selected
+        }
+    }
 
     class Factory : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
