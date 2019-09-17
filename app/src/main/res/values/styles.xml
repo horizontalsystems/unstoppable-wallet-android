@@ -312,9 +312,9 @@
         <item name="android:textSize">14sp</item>
     </style>
 
-    <style name="ButtonGreen_12" parent="Button">
-        <item name="android:textColor">@color/button_yellow_text_color_selector</item>
-        <item name="android:background">@drawable/button_green_background_12</item>
+    <style name="ButtonGreen" parent="Button">
+        <item name="android:textColor">@color/button_text_color_selector</item>
+        <item name="android:background">@drawable/button_green_background</item>
     </style>
 
     <style name="ButtonYellow" parent="Button">
@@ -325,11 +325,6 @@
     <style name="ButtonDestructive" parent="Button">
         <item name="android:textColor">@color/white</item>
         <item name="android:background">@drawable/button_red_background</item>
-    </style>
-
-    <style name="ButtonNegative" parent="Button">
-        <item name="android:background">@drawable/button_grey_background_12</item>
-        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="ToolbarStyle">

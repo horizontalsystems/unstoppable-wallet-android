@@ -170,7 +170,7 @@
 
         <Button
             android:id="@+id/buttonReceive"
-            style="@style/ButtonGreen_12"
+            style="@style/ButtonGreen"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginEnd="4dp"
