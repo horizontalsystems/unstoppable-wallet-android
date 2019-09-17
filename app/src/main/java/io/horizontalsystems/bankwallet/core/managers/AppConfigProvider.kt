@@ -70,7 +70,7 @@ class AppConfigProvider : IAppConfigProvider {
             Coin("Dai",                     "DAI",         18,      CoinType.Erc20("0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359")),
             Coin("Decentraland",            "MANA",        18,      CoinType.Erc20("0x0F5D2fB29fb7d3CFeE444a200298f468908cC942")),
             Coin("Digix DAO",               "DGD",          9,      CoinType.Erc20("0xE0B7927c4aF23765Cb51314A0E0521A9645F0E2A")),
-            Coin("Digix Gold",              "DGX",          9,      CoinType.Erc20("0x4f3AfEC4E5a3F2A6a1A411DEF7D7dFe50eE057bF")),
+            Coin("Digix Gold",              "DGX",          9,      CoinType.Erc20("0x4f3AfEC4E5a3F2A6a1A411DEF7D7dFe50eE057bF", gasLimit = 300_000)),
             Coin("EnjinCoin",               "ENJ",         18,      CoinType.Erc20("0xF629cBd94d3791C9250152BD8dfBDF380E2a3B9c")),
             Coin("EOSDT",                   "EOSDT",        9,      CoinType.Eos("eosdtsttoken", "EOSDT")),
             Coin("Everipedia",              "IQ",           3,      CoinType.Eos("everipediaiq", "IQ")),
