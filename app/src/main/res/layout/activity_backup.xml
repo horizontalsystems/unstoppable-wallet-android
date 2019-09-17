@@ -39,7 +39,7 @@
 
     <Button
         android:id="@+id/buttonBack"
-        style="@style/ButtonNegative"
+        style="@style/ButtonSteel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
