@@ -11,7 +11,7 @@ sealed class CoinType : Serializable {
     object Dash : CoinType()
     object Ethereum : CoinType()
 
-    class Erc20(val address: String, val fee: BigDecimal = BigDecimal.ZERO) : CoinType()
+    class Erc20(val address: String, val fee: BigDecimal = BigDecimal.ZERO, val gasLimit: Long = 100_000) : CoinType()
     class Eos(val token: String, val symbol: String) : CoinType()
     class Binance(val symbol: String) : CoinType()
 
