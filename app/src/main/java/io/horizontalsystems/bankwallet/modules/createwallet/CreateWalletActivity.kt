@@ -37,6 +37,7 @@ class CreateWalletActivity : BaseActivity() {
         observeRouter(presenter.router as CreateWalletRouter)
 
         coinItemsAdapter = CoinItemsAdapter(presenter)
+        coinItemsAdapter.setHasStableIds(true)
         coins.adapter = coinItemsAdapter
 
         presenter.viewDidLoad()
@@ -69,6 +70,10 @@ class CreateWalletActivity : BaseActivity() {
 
 class CoinItemsAdapter(private val presenter: CreateWalletPresenter) : RecyclerView.Adapter<SwitchableViewHolder>() {
     var items = listOf<CreateWalletModule.CoinViewItem>()
+
+    override fun getItemId(position: Int): Long {
+        return items[position].hashCode().toLong()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SwitchableViewHolder {
         val containerView = LayoutInflater.from(parent.context).inflate(SwitchableViewHolder.layoutResourceId, parent, false)
