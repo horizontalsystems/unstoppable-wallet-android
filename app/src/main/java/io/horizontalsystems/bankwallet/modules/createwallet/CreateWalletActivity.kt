@@ -16,7 +16,7 @@ import io.horizontalsystems.bankwallet.ui.dialogs.AlertDialogFragment
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_create_wallet.*
-import kotlinx.android.synthetic.main.view_holder_coin_manager.*
+import kotlinx.android.synthetic.main.view_holder_cell_multiline.*
 
 class CreateWalletActivity : BaseActivity() {
     private lateinit var presenter: CreateWalletPresenter
@@ -85,7 +85,7 @@ class CoinItemsAdapter(private val presenter: CreateWalletPresenter) : RecyclerV
     }
 
     override fun onBindViewHolder(holder: SwitchableViewHolder, position: Int) {
-        holder.bind(items[position])
+        holder.bind(items[position], position == itemCount - 1)
     }
 }
 
@@ -96,14 +96,15 @@ class SwitchableViewHolder(override val containerView: View, private val present
         }
     }
 
-    fun bind(coinViewItem: CreateWalletModule.CoinViewItem) {
+    fun bind(coinViewItem: CreateWalletModule.CoinViewItem, lastElement: Boolean) {
         coinIcon.bind(coinViewItem.code)
-        coinTitle.text = coinViewItem.code
-        coinCode.text = coinViewItem.title
-        toggleSwitch.isChecked = coinViewItem.selected
+        title.text = coinViewItem.code
+        subtitle.text = coinViewItem.title
+        checkmark.visibility = if (coinViewItem.selected) View.VISIBLE else View.GONE
+        bottomShade.visibility = if (lastElement) View.VISIBLE else View.GONE
     }
 
     companion object {
-        const val layoutResourceId = R.layout.view_holder_coin_manager
+        const val layoutResourceId = R.layout.view_holder_cell_multiline
     }
 }
