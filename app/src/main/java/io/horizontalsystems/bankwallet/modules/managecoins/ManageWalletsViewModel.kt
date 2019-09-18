@@ -3,13 +3,14 @@ package io.horizontalsystems.bankwallet.modules.managecoins
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 
 class ManageWalletsViewModel : ViewModel(), ManageWalletsModule.IView, ManageWalletsModule.IRouter {
 
     val coinsLoadedLiveEvent = SingleLiveEvent<Void>()
-    val showManageKeysDialog = SingleLiveEvent<Pair<Coin, Int>>()
+    val showManageKeysDialog = SingleLiveEvent<Pair<Coin, IPredefinedAccountType>>()
     val openRestoreWordsModule = SingleLiveEvent<Int>()
     val openRestoreEosModule = SingleLiveEvent<Coin>()
     val showErrorEvent = SingleLiveEvent<Exception>()
@@ -29,8 +30,8 @@ class ManageWalletsViewModel : ViewModel(), ManageWalletsModule.IView, ManageWal
         coinsLoadedLiveEvent.call()
     }
 
-    override fun showNoAccountDialog(coin: Coin, accountKeyName: Int) {
-        showManageKeysDialog.postValue(Pair(coin, accountKeyName))
+    override fun showNoAccountDialog(coin: Coin, predefinedAccountType: IPredefinedAccountType) {
+        showManageKeysDialog.postValue(Pair(coin, predefinedAccountType))
     }
 
     override fun showSuccess() {
