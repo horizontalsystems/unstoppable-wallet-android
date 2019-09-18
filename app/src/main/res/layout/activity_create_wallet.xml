@@ -8,8 +8,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:context=".modules.createwallet.CreateWalletActivity">
+        android:layout_height="wrap_content">
 
         <io.horizontalsystems.bankwallet.ui.extensions.ShadowlessToolbarView
             android:id="@+id/shadowlessToolbar"
