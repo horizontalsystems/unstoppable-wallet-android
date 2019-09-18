@@ -10,6 +10,7 @@
     <string name="Alert_Success">Başarılı</string>
     <string name="Alert_Copied">Kopyalandı</string>
     <string name="Button_Cancel">İptal</string>
+    <string name="Button_Create">Create</string>
     <string name="Button_Back">Geri</string>
     <string name="Button_Close">Kapat</string>
     <string name="Button_Ok">Tamam</string>
@@ -20,6 +21,9 @@
     <string name="Welcome_Title">Durdurulamaz</string>
     <string name="Welcome_CreateWallet">Yeni Cüzdan</string>
     <string name="Welcome_RestoreWallet">Cüzdanı Geri Yükle</string>
+    <!--Create-->
+    <string name="Create_Title">New Wallet</string>
+    <string name="Create_Description">Select crypto currencies your new wallet should support. You may do this later as well.</string>
     <!--Restore-->
     <string name="Restore_Title">Geri Yükle</string>
     <string name="Restore_Description">Cüzdanı geri yüklemek için o cüzdanın gizli anahtarını gürmelisiniz.\n\nDaha fazla cüzdanı geri yüklemek için bir cüzdanı geri yükledikten sonra Ayarlardaki Anahtarları Yönet bölümüne gidin.</string>
