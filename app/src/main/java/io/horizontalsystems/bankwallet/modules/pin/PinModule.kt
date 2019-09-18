@@ -47,15 +47,15 @@ object PinModule {
     }
 
     fun startForSetPin(context: AppCompatActivity, requestCode: Int) {
-        PinActivity.startForResult(context, PinInteractionType.SET_PIN, requestCode)
+        LockScreenActivity.startForResult(context, PinInteractionType.SET_PIN, requestCode)
     }
 
     fun startForEditPin(context: AppCompatActivity) {
-        PinActivity.startForResult(context, PinInteractionType.EDIT_PIN)
+        LockScreenActivity.startForResult(context, PinInteractionType.EDIT_PIN)
     }
 
     fun startForUnlock(context: AppCompatActivity, requestCode: Int, showCancel: Boolean = false, showRates: Boolean = false) {
-        PinActivity.startForResult(context, PinInteractionType.UNLOCK, requestCode, showCancel, showRates)
+        LockScreenActivity.startForResult(context, PinInteractionType.UNLOCK, requestCode, showCancel, showRates)
     }
 
 }
