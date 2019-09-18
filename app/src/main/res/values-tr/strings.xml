@@ -293,8 +293,8 @@
     <string name="AddCoin_CreateKey">Oluştur</string>
     <string name="AddCoin_RestoreKey">Geri Yükle</string>
     <!-- Account Types -->
-    <string name="AccountType_12Words">12 Kelime</string>
-    <string name="AccountType_12WordsKey">12 Kelimeli Anahtar</string>
+    <string name="AccountType_Unstoppable">12 Kelime</string>
+    <string name="AccountType_UnstoppableKey">12 Kelimeli Anahtar</string>
     <string name="AccountType_Eos">EOS Blokzinciri</string>
     <string name="AccountType_EosKey">EOS Anahtarı</string>
     <string name="AccountType_Binance">Binance Chain</string>

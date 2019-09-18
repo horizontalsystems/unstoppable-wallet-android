@@ -4,9 +4,9 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.DefaultAccountType
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 
-class Words12AccountType : IPredefinedAccountType {
-    override val title = R.string.AccountType_12Words
-    override val coinCodes = R.string.AccountType_12Words_Text
+class UnstoppableAccountType : IPredefinedAccountType {
+    override val title = R.string.AccountType_Unstoppable
+    override val coinCodes = R.string.AccountType_Unstoppable_Text
     override val defaultAccountType: DefaultAccountType
         get() = DefaultAccountType.Mnemonic(12)
 
@@ -19,7 +19,7 @@ class Words12AccountType : IPredefinedAccountType {
     }
 }
 
-class Words24AccountType : IPredefinedAccountType {
+class BinanceAccountType : IPredefinedAccountType {
     override val title = R.string.AccountType_Binance
     override val coinCodes = R.string.AccountType_Binance_Text
     override val defaultAccountType: DefaultAccountType

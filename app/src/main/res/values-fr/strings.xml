@@ -293,8 +293,8 @@
     <string name="AddCoin_CreateKey">Créer</string>
     <string name="AddCoin_RestoreKey">Restaurer</string>
     <!-- Account Types -->
-    <string name="AccountType_12Words">12 Words</string>
-    <string name="AccountType_12WordsKey">Clé de 12 Words</string>
+    <string name="AccountType_Unstoppable">12 Words</string>
+    <string name="AccountType_UnstoppableKey">Clé de 12 Words</string>
     <string name="AccountType_Eos">EOS Blockchain</string>
     <string name="AccountType_EosKey">Clé EOS</string>
     <string name="AccountType_Binance">Binance Chain</string>

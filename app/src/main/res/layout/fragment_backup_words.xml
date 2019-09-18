@@ -17,7 +17,7 @@
         android:textColor="@color/yellow_crypto"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/AccountType_12WordsKey" />
+        tools:text="@string/AccountType_UnstoppableKey" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerWords"
