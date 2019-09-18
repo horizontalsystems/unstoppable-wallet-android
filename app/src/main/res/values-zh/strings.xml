@@ -293,8 +293,8 @@
     <string name="AddCoin_CreateKey">创建</string>
     <string name="AddCoin_RestoreKey">恢复</string>
     <!-- Account Types -->
-    <string name="AccountType_12Words">12字</string>
-    <string name="AccountType_12WordsKey">12字密钥</string>
+    <string name="AccountType_Unstoppable">12字</string>
+    <string name="AccountType_UnstoppableKey">12字密钥</string>
     <string name="AccountType_Eos">EOS区块链</string>
     <string name="AccountType_EosKey">EOS密钥</string>
     <string name="AccountType_Binance">币安链</string>

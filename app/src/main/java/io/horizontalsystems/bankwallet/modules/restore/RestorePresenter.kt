@@ -23,9 +23,9 @@ class RestorePresenter(
 
     override fun onSelect(accountType: IPredefinedAccountType) {
         when (accountType) {
-            is Words12AccountType ->
+            is UnstoppableAccountType ->
                 router.startRestoreWordsModule(12)
-            is Words24AccountType -> {
+            is BinanceAccountType -> {
                 router.startRestoreWordsModule(24)
             }
             is EosAccountType -> {

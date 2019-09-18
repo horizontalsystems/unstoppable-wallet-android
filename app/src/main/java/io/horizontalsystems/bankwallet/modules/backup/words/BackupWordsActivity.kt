@@ -35,7 +35,7 @@ class BackupWordsActivity : BaseActivity() {
 
         val accountKey = when (backupWords.size) {
             24 -> getString(R.string.AccountType_BinanceKey)
-            else -> getString(R.string.AccountType_12WordsKey)
+            else -> getString(R.string.AccountType_UnstoppableKey)
         }
 
         viewModel.loadPageLiveEvent.observe(this, Observer { page ->

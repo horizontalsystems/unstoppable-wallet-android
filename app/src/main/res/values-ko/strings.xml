@@ -300,8 +300,8 @@
     <string name="AddCoin_CreateKey">만들기</string>
     <string name="AddCoin_RestoreKey">복구</string>
     <!-- Account Types -->
-    <string name="AccountType_12Words">12-Words</string>
-    <string name="AccountType_12WordsKey">12자리 암호</string>
+    <string name="AccountType_Unstoppable">12-Words</string>
+    <string name="AccountType_UnstoppableKey">12자리 암호</string>
     <string name="AccountType_Eos">EOS Blockchain</string>
     <string name="AccountType_EosKey">EOS 암호</string>
     <string name="AccountType_Binance">Binance Chain</string>
