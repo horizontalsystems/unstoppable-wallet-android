@@ -10,6 +10,7 @@
     <string name="Alert_Success">成功</string>
     <string name="Alert_Copied">コピー完了</string>
     <string name="Button_Cancel">キャンセル</string>
+    <string name="Button_Create">Create</string>
     <string name="Button_Back">戻る</string>
     <string name="Button_Close">Close</string>
     <string name="Button_Ok">はい</string>
@@ -20,6 +21,9 @@
     <string name="Welcome_Title">Unstoppable</string>
     <string name="Welcome_CreateWallet">New Wallet</string>
     <string name="Welcome_RestoreWallet">Restore Wallet</string>
+    <!--Create-->
+    <string name="Create_Title">New Wallet</string>
+    <string name="Create_Description">Select crypto currencies your new wallet should support. You may do this later as well.</string>
     <!--Restore-->
     <string name="Restore_Title">Restore</string>
     <string name="Restore_Description">To restore existing wallet you need to enter a secret key for that wallet.\n\nOnce you restore one wallet you will be able to restore more wallets by going to Manage Keys section in app Settings.</string>
