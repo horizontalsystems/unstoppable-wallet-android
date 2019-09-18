@@ -11,15 +11,15 @@
     <string name="Alert_Copied">کپی انجام شد</string>
     <string name="Button_Cancel">انصراف</string>
     <string name="Button_Back">برگشت</string>
-    <string name="Button_Close">Close</string>
+    <string name="Button_Close">بستن</string>
     <string name="Button_Ok">تأیید</string>
     <string name="Button_Share">به اشتراك گذاشتن</string>
     <string name="Error">خطا</string>
-    <string name="NotAvailable">N/A</string>
+    <string name="NotAvailable">مربوط نیست</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
-    <string name="Welcome_CreateWallet">New Wallet</string>
-    <string name="Welcome_RestoreWallet">Restore Wallet</string>
+    <string name="Welcome_CreateWallet">کیف پول جدید</string>
+    <string name="Welcome_RestoreWallet">بازیابی کیف پول</string>
     <!--Restore-->
     <string name="Restore_Title">بازگرداني</string>
     <string name="Restore_Description">To restore existing wallet you need to enter a secret key for that wallet.\n\nOnce you restore one wallet you will be able to restore more wallets by going to Manage Keys section in app Settings.</string>
