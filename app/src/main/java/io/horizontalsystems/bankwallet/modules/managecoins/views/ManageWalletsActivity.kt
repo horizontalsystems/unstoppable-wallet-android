@@ -41,8 +41,8 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener {
             adapter.notifyDataSetChanged()
         })
 
-        viewModel.showManageKeysDialog.observe(this, Observer { (coin, accountKeyName) ->
-            ManageWalletsDialog.show(this, this, coin, accountKeyName)
+        viewModel.showManageKeysDialog.observe(this, Observer { (coin, predefinedAccountType) ->
+            ManageWalletsDialog.show(this, this, coin, predefinedAccountType)
         })
 
         viewModel.openRestoreWordsModule.observe(this, Observer { wordsCount ->

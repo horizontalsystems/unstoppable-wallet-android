@@ -11,11 +11,12 @@ import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
 import io.horizontalsystems.bankwallet.viewHelpers.bottomDialog
 
-class ManageWalletsDialog(private val listener: Listener, private val coin: Coin, private val accountKeyName: Int)
+class ManageWalletsDialog(private val listener: Listener, private val coin: Coin, private val predefinedAccountType: IPredefinedAccountType)
     : DialogFragment() {
 
     interface Listener {
@@ -64,8 +65,8 @@ class ManageWalletsDialog(private val listener: Listener, private val coin: Coin
         addCoinIcon.bind(coin)
 
         addKeyTitle.text = getString(R.string.AddCoin_Title)
-        addKeySubtitle.text = getString(R.string.AddCoin_Subtitle, coin.title)
-        addKeyInfo.text = getString(R.string.AddCoin_Description, coin.title, getString(accountKeyName), getString(accountKeyName), coin.title)
+        addKeySubtitle.text = getString(predefinedAccountType.title)
+        addKeyInfo.text = getString(R.string.AddCoin_Description, coin.title, getString(predefinedAccountType.coinCodes), getString(predefinedAccountType.title))
     }
 
     private fun bindActions() {
@@ -81,8 +82,8 @@ class ManageWalletsDialog(private val listener: Listener, private val coin: Coin
     }
 
     companion object {
-        fun show(activity: FragmentActivity, listener: Listener, coin: Coin, accountKeyName: Int) {
-            val fragment = ManageWalletsDialog(listener, coin, accountKeyName)
+        fun show(activity: FragmentActivity, listener: Listener, coin: Coin, predefinedAccountType: IPredefinedAccountType) {
+            val fragment = ManageWalletsDialog(listener, coin, predefinedAccountType)
             val transaction = activity.supportFragmentManager.beginTransaction()
 
             transaction.add(fragment, "bottom_manage_keys_dialog")
