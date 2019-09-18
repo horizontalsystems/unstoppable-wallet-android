@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.entities
 
 import io.horizontalsystems.bankwallet.core.DefaultAccountType
-import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import java.io.Serializable
 import java.math.BigDecimal
 
@@ -22,12 +21,12 @@ sealed class CoinType : Serializable {
             }
             is Bitcoin, BitcoinCash, Dash, Ethereum, is Erc20 -> {
                 if (accountType is AccountType.Mnemonic) {
-                    return accountType.words.size == 12 && accountType.derivation == Derivation.bip44
+                    return accountType.words.size == 12
                 }
             }
             is Binance -> {
                 if (accountType is AccountType.Mnemonic) {
-                    return accountType.words.size == 24 && accountType.derivation == Derivation.bip44
+                    return accountType.words.size == 24
                 }
             }
         }

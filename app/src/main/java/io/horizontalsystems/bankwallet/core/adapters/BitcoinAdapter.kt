@@ -5,11 +5,13 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bitcoincore.BitcoinCore
+import io.horizontalsystems.bitcoincore.core.Bip
 import io.horizontalsystems.bitcoincore.models.BlockInfo
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
 import io.horizontalsystems.bitcoinkit.BitcoinKit
@@ -102,16 +104,23 @@ class BitcoinAdapter(override val kit: BitcoinKit)
         private fun getNetworkType(testMode: Boolean) =
                 if (testMode) NetworkType.TestNet else NetworkType.MainNet
 
+        private fun getBip(derivation: Derivation): Bip = when (derivation) {
+            Derivation.bip44 -> Bip.BIP44
+            Derivation.bip49 -> Bip.BIP49
+            Derivation.bip84 -> Bip.BIP84
+        }
 
         private fun createKit(wallet: Wallet, testMode: Boolean): BitcoinKit {
             val account = wallet.account
-            if (account.type is AccountType.Mnemonic) {
+            val accountType = account.type
+            if (accountType is AccountType.Mnemonic) {
                 return BitcoinKit(context = App.instance,
-                        words = account.type.words,
+                        words = accountType.words,
                         walletId = account.id,
                         syncMode = SyncMode.fromSyncMode(account.defaultSyncMode),
                         networkType = getNetworkType(testMode),
-                        confirmationsThreshold = defaultConfirmationsThreshold)
+                        confirmationsThreshold = defaultConfirmationsThreshold,
+                        bip = getBip(accountType.derivation))
             }
 
             throw UnsupportedAccountException()
