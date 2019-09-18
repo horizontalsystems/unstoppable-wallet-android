@@ -10,6 +10,7 @@
     <string name="Alert_Success">Erfolgreich</string>
     <string name="Alert_Copied">Kopiert</string>
     <string name="Button_Cancel">Abbrechen</string>
+    <string name="Button_Create">Create</string>
     <string name="Button_Back">Zurück</string>
     <string name="Button_Close">Schließen</string>
     <string name="Button_Ok">OK</string>
@@ -20,6 +21,9 @@
     <string name="Welcome_Title">Unstoppable</string>
     <string name="Welcome_CreateWallet">Wallet Erstellen</string>
     <string name="Welcome_RestoreWallet">Wallet Wiederherstellen</string>
+    <!--Create-->
+    <string name="Create_Title">New Wallet</string>
+    <string name="Create_Description">Select crypto currencies your new wallet should support. You may do this later as well.</string>
     <!--Restore-->
     <string name="Restore_Title">Wiederherstellen</string>
     <string name="Restore_Description">Um ein bestehendes Wallet wiederherzustellen, müssen Sie den Offlineschlüssel für dieses Wallet eingeben.\n\nSobald Sie ein Wallet wiederhergestellt haben, können Sie weitere Wallets wiederherstellen. Gehen Sie dazu in das Verzeichnis Manage Schlüssel in den App-Einstellungen.</string>
