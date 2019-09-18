@@ -2,9 +2,9 @@ package io.horizontalsystems.bankwallet.modules.pin
 
 import io.horizontalsystems.bankwallet.core.IPinManager
 
-class PinInteractor(private val pinManager: IPinManager) : PinModule.Interactor {
+class PinInteractor(private val pinManager: IPinManager) : PinModule.IInteractor {
 
-    var delegate: PinModule.InteractorDelegate? = null
+    var delegate: PinModule.IInteractorDelegate? = null
     private var storedPin: String? = null
 
     override fun set(pin: String?) {

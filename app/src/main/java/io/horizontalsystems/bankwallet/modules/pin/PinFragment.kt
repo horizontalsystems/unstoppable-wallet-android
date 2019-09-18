@@ -47,7 +47,7 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener {
     }
 
     private lateinit var pinView: PinView
-    private lateinit var viewDelegate: PinModule.ViewDelegate
+    private lateinit var viewDelegate: PinModule.IViewDelegate
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var pinPagesAdapter: PinPagesAdapter
     private lateinit var numpadAdapter: NumPadItemsAdapter

@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import java.util.*
 
-class PinView : PinModule.View {
+class PinView : PinModule.IView {
 
     val titleLiveDate = MutableLiveData<Int>()
     val addPagesEvent = MutableLiveData<List<PinPage>>()

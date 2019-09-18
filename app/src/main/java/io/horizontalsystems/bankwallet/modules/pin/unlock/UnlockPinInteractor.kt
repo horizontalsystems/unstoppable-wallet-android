@@ -11,9 +11,9 @@ class UnlockPinInteractor(
         private val lockoutManager: ILockoutManager,
         private val encryptionManager: IEncryptionManager,
         private val systemInfoManager: ISystemInfoManager,
-        private val timer: OneTimeTimer) : UnlockPinModule.Interactor, OneTimerDelegate {
+        private val timer: OneTimeTimer) : UnlockPinModule.IInteractor, OneTimerDelegate {
 
-    var delegate: UnlockPinModule.InteractorDelegate? = null
+    var delegate: UnlockPinModule.IInteractorDelegate? = null
 
     init {
         timer.delegate = this

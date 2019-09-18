@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.modules.pin.PinView
 
 object EditPinModule {
 
-    interface Router {
+    interface IRouter {
         fun dismissModuleWithSuccess()
     }
 

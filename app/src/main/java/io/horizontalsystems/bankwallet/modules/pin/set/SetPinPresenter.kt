@@ -5,8 +5,8 @@ import io.horizontalsystems.bankwallet.modules.pin.*
 
 class SetPinPresenter(
         override val view: PinView,
-        val router: SetPinModule.Router,
-        interactor: PinModule.Interactor) : ManagePinPresenter(view, interactor, pages = listOf(Page.ENTER, Page.CONFIRM)) {
+        val router: SetPinModule.IRouter,
+        interactor: PinModule.IInteractor) : ManagePinPresenter(view, interactor, pages = listOf(Page.ENTER, Page.CONFIRM)) {
 
     override fun viewDidLoad() {
         view.setTitle(R.string.SetPin_Title)
