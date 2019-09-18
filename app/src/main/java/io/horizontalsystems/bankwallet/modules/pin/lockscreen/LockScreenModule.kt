@@ -5,11 +5,11 @@ import androidx.lifecycle.ViewModelProvider
 
 object LockScreenModule {
 
-    interface ViewDelegate {
+    interface IViewDelegate {
         fun onBackPressed()
     }
 
-    interface Router{
+    interface IRouter{
         fun closeActivity()
         fun closeApplication()
     }

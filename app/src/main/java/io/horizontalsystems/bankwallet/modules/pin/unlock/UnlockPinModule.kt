@@ -14,11 +14,11 @@ import io.horizontalsystems.bankwallet.modules.pin.PinView
 
 object UnlockPinModule {
 
-    interface Router {
+    interface IRouter {
         fun dismissModuleWithSuccess()
     }
 
-    interface Interactor {
+    interface IInteractor {
         val isFingerprintEnabled: Boolean
         val biometricAuthSupported: Boolean
         val cryptoObject: BiometricPrompt.CryptoObject?
@@ -28,7 +28,7 @@ object UnlockPinModule {
         fun onUnlock()
     }
 
-    interface InteractorDelegate {
+    interface IInteractorDelegate {
         fun unlock()
         fun wrongPinSubmitted()
         fun updateLockoutState(state: LockoutState)

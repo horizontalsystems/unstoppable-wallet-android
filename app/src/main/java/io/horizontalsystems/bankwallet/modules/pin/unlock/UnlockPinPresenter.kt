@@ -8,10 +8,10 @@ import io.horizontalsystems.bankwallet.modules.pin.PinPage
 import io.horizontalsystems.bankwallet.modules.pin.TopText
 
 class UnlockPinPresenter(
-        val view: PinModule.View,
-        val router: UnlockPinModule.Router,
-        private val interactor: UnlockPinModule.Interactor,
-        private val showCancelButton: Boolean) : ViewModel(), PinModule.ViewDelegate, UnlockPinModule.InteractorDelegate {
+        val view: PinModule.IView,
+        val router: UnlockPinModule.IRouter,
+        private val interactor: UnlockPinModule.IInteractor,
+        private val showCancelButton: Boolean) : ViewModel(), PinModule.IViewDelegate, UnlockPinModule.IInteractorDelegate {
 
     private val unlockPageIndex = 0
     private var enteredPin = ""

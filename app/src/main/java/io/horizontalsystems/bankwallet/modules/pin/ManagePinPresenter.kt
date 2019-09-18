@@ -5,8 +5,8 @@ import io.horizontalsystems.bankwallet.R
 
 open class ManagePinPresenter(
         open val view: PinView,
-        private val interactor: PinModule.Interactor,
-        val pages: List<Page>) : ViewModel(), PinModule.ViewDelegate, PinModule.InteractorDelegate {
+        private val interactor: PinModule.IInteractor,
+        val pages: List<Page>) : ViewModel(), PinModule.IViewDelegate, PinModule.IInteractorDelegate {
 
     enum class Page { UNLOCK, ENTER, CONFIRM }
 
