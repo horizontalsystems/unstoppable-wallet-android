@@ -18,6 +18,7 @@ class BalanceInteractor(
         private val currencyManager: ICurrencyManager,
         private val localStorage: ILocalStorage,
         private val rateManager: IRateManager,
+        private val predefinedAccountTypeManager: IPredefinedAccountTypeManager,
         private val refreshTimeout: Long = 2) : BalanceModule.IInteractor {
 
     var delegate: BalanceModule.IInteractorDelegate? = null
@@ -76,6 +77,10 @@ class BalanceInteractor(
 
     override fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter? {
         return adapterManager.getBalanceAdapterForWallet(wallet)
+    }
+
+    override fun predefinedAccountType(wallet: Wallet): IPredefinedAccountType? {
+        return predefinedAccountTypeManager.predefinedAccountType(wallet.account.type)
     }
 
     private fun onUpdateCurrency() {

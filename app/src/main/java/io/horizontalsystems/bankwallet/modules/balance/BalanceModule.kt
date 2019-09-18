@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.balance
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
+import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 import io.horizontalsystems.bankwallet.core.managers.StatsData
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
@@ -18,7 +19,7 @@ object BalanceModule {
         fun updateHeader()
         fun setSortingOn(isOn: Boolean)
         fun setChartOn(isOn: Boolean)
-        fun showBackupAlert()
+        fun showBackupAlert(coin: Coin, predefinedAccountType: IPredefinedAccountType)
         fun setChartButtonState(enabled: Boolean)
     }
 
@@ -50,6 +51,7 @@ object BalanceModule {
         fun clear()
         fun saveSortingType(sortType: BalanceSortType)
         fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter?
+        fun predefinedAccountType(wallet: Wallet): IPredefinedAccountType?
     }
 
     interface IInteractorDelegate {
@@ -169,7 +171,7 @@ object BalanceModule {
 
     fun init(view: BalanceViewModel, router: IRouter) {
         val currencyManager = App.currencyManager
-        val interactor = BalanceInteractor(App.walletManager, App.adapterManager, App.rateStorage, App.rateStatsManager, App.rateStatsSyncer, currencyManager, App.localStorage, App.rateManager)
+        val interactor = BalanceInteractor(App.walletManager, App.adapterManager, App.rateStorage, App.rateStatsManager, App.rateStatsSyncer, currencyManager, App.localStorage, App.rateManager, App.predefinedAccountTypeManager)
         val presenter = BalancePresenter(interactor, router, DataSource(currencyManager.baseCurrency, BalanceSorter()), App.predefinedAccountTypeManager, BalanceViewItemFactory())
 
         presenter.view = view
