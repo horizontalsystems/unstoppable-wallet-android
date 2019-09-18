@@ -10,6 +10,7 @@
     <string name="Alert_Success">موفقیت</string>
     <string name="Alert_Copied">کپی انجام شد</string>
     <string name="Button_Cancel">انصراف</string>
+    <string name="Button_Create">Create</string>
     <string name="Button_Back">برگشت</string>
     <string name="Button_Close">بستن</string>
     <string name="Button_Ok">تأیید</string>
@@ -20,6 +21,9 @@
     <string name="Welcome_Title">Unstoppable</string>
     <string name="Welcome_CreateWallet">کیف پول جدید</string>
     <string name="Welcome_RestoreWallet">بازیابی کیف پول</string>
+    <!--Create-->
+    <string name="Create_Title">New Wallet</string>
+    <string name="Create_Description">Select crypto currencies your new wallet should support. You may do this later as well.</string>
     <!--Restore-->
     <string name="Restore_Title">بازگرداني</string>
     <string name="Restore_Description">برای بازیابی کیف پول موجود ، باید یک کلید مخفی برای آن کیف پول وارد کنید. \n\n زمانی که یک کیف پول را بازیابی می کنید، با رفتن به بخش مدیریت کلیدها در تنظیمات برنامه ، می توانید کیف پول های بیشتری را بازیابی کنید.</string>
