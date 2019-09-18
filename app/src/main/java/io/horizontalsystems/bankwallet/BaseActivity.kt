@@ -29,9 +29,7 @@ abstract class BaseActivity : AppCompatActivity() {
         val lightMode = App.localStorage.isLightModeOn
         setTheme(if (lightMode) R.style.LightModeAppTheme else R.style.DarkModeAppTheme)
 
-        if (!BuildConfig.DEBUG) {
-            window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
-        }
+        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
     }
 
     override fun attachBaseContext(newBase: Context?) {
