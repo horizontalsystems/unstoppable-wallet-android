@@ -39,10 +39,8 @@ class BalancePresenter(
         get() = dataSource.count
 
     override fun viewDidLoad() {
-        interactor.chartEnabled = false
-
         dataSource.sortType = interactor.getSortingType()
-        view?.setChartButtonState(interactor.chartEnabled)
+        view?.setChartButtonState(dataSource.statsModeOn)
 
         interactor.initWallets()
 
@@ -74,7 +72,7 @@ class BalancePresenter(
             factory.createViewItem(dataSource.getItem(position), dataSource.currency)
 
     override fun getHeaderViewItem() =
-            factory.createHeaderViewItem(dataSource.items, interactor.chartEnabled, dataSource.currency)
+            factory.createHeaderViewItem(dataSource.items, dataSource.statsModeOn, dataSource.currency)
 
     override fun refresh() {
         interactor.refresh()
@@ -110,16 +108,16 @@ class BalancePresenter(
     }
 
     override fun onChartClick() {
-        interactor.chartEnabled = !interactor.chartEnabled
-        view?.setChartButtonState(interactor.chartEnabled)
+        dataSource.statsModeOn = !dataSource.statsModeOn
+        view?.setChartButtonState(dataSource.statsModeOn)
         view?.reload()
     }
 
     override fun onSortTypeChanged(sortType: BalanceSortType) {
         dataSource.sortType = sortType
         if (sortType == BalanceSortType.PercentGrowth) {
-            interactor.chartEnabled = true
-            view?.setChartButtonState(interactor.chartEnabled)
+            dataSource.statsModeOn = true
+            view?.setChartButtonState(dataSource.statsModeOn)
         } else {
             interactor.saveSortingType(sortType)
         }
@@ -127,6 +125,10 @@ class BalancePresenter(
     }
 
     // InteractorDelegate
+
+    override fun willEnterForeground() {
+        updateStats()
+    }
 
     override fun didUpdateWallets(wallets: List<Wallet>) {
         val balanceItems = wallets.map { wallet ->
@@ -140,6 +142,7 @@ class BalancePresenter(
 
         dataSource.set(balanceItems)
         interactor.fetchRates(dataSource.currency.code, dataSource.coinCodes)
+        updateStats()
 
         view?.setSortingOn(balanceItems.size >= showSortingButtonThreshold)
         view?.setChartOn(balanceItems.isNotEmpty())
@@ -150,6 +153,7 @@ class BalancePresenter(
         dataSource.currency = currency
         dataSource.clearRates()
         interactor.fetchRates(currency.code, dataSource.coinCodes)
+        updateStats()
         view?.reload()
     }
 
@@ -169,7 +173,14 @@ class BalancePresenter(
 
     @Synchronized
     override fun didUpdateRate(rate: Rate) {
-        dataSource.getPositionsByCoinCode(rate.coinCode).forEach { position ->
+        val positions = dataSource.getPositionsByCoinCode(rate.coinCode)
+
+        if (positions.isEmpty())
+            return
+
+        interactor.syncStats(rate.coinCode, dataSource.currency.code)
+
+        positions.forEach { position ->
             dataSource.setRate(position, rate)
         }
 
@@ -225,6 +236,14 @@ class BalancePresenter(
     private fun updateByPosition(position: Int) {
         dataSource.addUpdatedPosition(position)
         flushSubject.onNext(Unit)
+    }
+
+    private fun updateStats() {
+        if (dataSource.statsModeOn) {
+            dataSource.items.forEach { item ->
+                interactor.syncStats(coinCode = item.wallet.coin.code, currencyCode = dataSource.currency.code)
+            }
+        }
     }
 
 }

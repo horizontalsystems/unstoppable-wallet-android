@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.ratechart
 
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.IRateStatsManager
-import io.horizontalsystems.bankwallet.core.IRateStatsSyncer
 import io.horizontalsystems.bankwallet.core.IRateStorage
 import io.horizontalsystems.bankwallet.core.managers.StatsData
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
@@ -12,7 +11,6 @@ import io.reactivex.schedulers.Schedulers
 
 class RateChartInteractor(
         private val rateStatsManager: IRateStatsManager,
-        private val rateStatsSyncer: IRateStatsSyncer,
         private val rateStorage: IRateStorage,
         private val localStorage: ILocalStorage)
     : RateChartModule.Interactor {
@@ -20,17 +18,15 @@ class RateChartInteractor(
     private val disposables = CompositeDisposable()
     var delegate: RateChartModule.InteractorDelegate? = null
 
-    override var chartEnabled: Boolean
-        get() = rateStatsSyncer.rateChartShown
-        set(value) {
-            rateStatsSyncer.rateChartShown = value
-        }
-
     override var defaultChartType: ChartType
         get() = localStorage.chartMode
         set(value) {
             localStorage.chartMode = value
         }
+
+    override fun syncStats(coinCode: String, currencyCode: String) {
+        rateStatsManager.syncStats(coinCode, currencyCode)
+    }
 
     override fun subscribeToChartStats() {
         rateStatsManager.statsFlowable

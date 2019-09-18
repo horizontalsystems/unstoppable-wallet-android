@@ -42,7 +42,7 @@ class RateChartPresenter(
 
         interactor.subscribeToChartStats()
         interactor.subscribeToLatestRate(coinCode, currency.code)
-        interactor.chartEnabled = true
+        interactor.syncStats(coinCode, currency.code)
     }
 
     override fun onSelect(type: ChartType) {
@@ -59,10 +59,6 @@ class RateChartPresenter(
     override fun onTouchSelect(point: ChartPoint) {
         val currencyValue = CurrencyValue(currency, point.value.toBigDecimal())
         view.showSelectedPoint(Triple(point.timestamp, currencyValue, chartType))
-    }
-
-    override fun onChartClosed() {
-        interactor.chartEnabled = false
     }
 
     //  InteractorDelegate

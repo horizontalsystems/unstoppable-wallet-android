@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import android.os.Handler
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.managers.BackgroundManager
 import io.horizontalsystems.bankwallet.core.managers.StatsData
 import io.horizontalsystems.bankwallet.core.managers.StatsError
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -12,14 +13,14 @@ import io.reactivex.schedulers.Schedulers
 class BalanceInteractor(
         private val walletManager: IWalletManager,
         private val adapterManager: IAdapterManager,
-        private val rateStorage: IRateStorage,
         private val rateStatsManager: IRateStatsManager,
-        private val rateStatsSyncer: IRateStatsSyncer,
         private val currencyManager: ICurrencyManager,
+        private val backgroundManager: BackgroundManager,
+        private val rateStorage: IRateStorage,
         private val localStorage: ILocalStorage,
         private val rateManager: IRateManager,
         private val predefinedAccountTypeManager: IPredefinedAccountTypeManager,
-        private val refreshTimeout: Long = 2) : BalanceModule.IInteractor {
+        private val refreshTimeout: Long = 2) : BalanceModule.IInteractor,  BackgroundManager.Listener {
 
     var delegate: BalanceModule.IInteractorDelegate? = null
 
@@ -27,13 +28,23 @@ class BalanceInteractor(
     private var adapterDisposables = CompositeDisposable()
     private var rateDisposables = CompositeDisposable()
 
-    override var chartEnabled: Boolean
-        get() = rateStatsSyncer.balanceStatsOn
-        set(value) {
-            rateStatsSyncer.balanceStatsOn = value
-        }
+    // BackgroundManager.Listener
+
+    override fun willEnterForeground(activity: Activity) {
+        delegate?.willEnterForeground()
+    }
+
+    override fun didEnterBackground() {}
+
+    // BalanceModule.IInteractor
+
+    override fun syncStats(coinCode: String, currencyCode: String) {
+        rateStatsManager.syncStats(coinCode, currencyCode)
+    }
 
     override fun initWallets() {
+        backgroundManager.registerListener(this)
+
         onUpdateWallets()
         onUpdateCurrency()
 
@@ -131,6 +142,7 @@ class BalanceInteractor(
     }
 
     override fun clear() {
+        backgroundManager.unregisterListener(this)
         disposables.clear()
         adapterDisposables.clear()
         rateDisposables.clear()

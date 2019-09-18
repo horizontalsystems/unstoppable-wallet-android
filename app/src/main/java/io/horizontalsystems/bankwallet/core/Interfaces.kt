@@ -366,12 +366,6 @@ interface IRateStatsManager {
     fun syncStats(coinCode: String, currencyCode: String)
 }
 
-interface IRateStatsSyncer {
-    var balanceStatsOn: Boolean
-    var lockStatsOn: Boolean
-    var rateChartShown: Boolean
-}
-
 interface IAccountsStorage {
     val isAccountsEmpty: Boolean
 

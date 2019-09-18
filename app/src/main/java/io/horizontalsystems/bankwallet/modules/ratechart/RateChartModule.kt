@@ -9,7 +9,6 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
-import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 
 object RateChartModule {
 
@@ -27,15 +26,14 @@ object RateChartModule {
         fun viewDidLoad()
         fun onSelect(type: ChartType)
         fun onTouchSelect(point: ChartPoint)
-        fun onChartClosed()
     }
 
     interface Interactor {
         var defaultChartType: ChartType
-        var chartEnabled: Boolean
 
         fun subscribeToLatestRate(coinCode: String, currencyCode: String)
         fun subscribeToChartStats()
+        fun syncStats(coinCode: String, currencyCode: String)
         fun clear()
     }
 
@@ -51,7 +49,7 @@ object RateChartModule {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = RateChartView()
-            val interactor = RateChartInteractor(App.rateStatsManager,App.rateStatsSyncer, App.rateStorage, App.localStorage)
+            val interactor = RateChartInteractor(App.rateStatsManager, App.rateStorage, App.localStorage)
             val presenter = RateChartPresenter(view, interactor, coin.code, App.currencyManager.baseCurrency, RateChartViewFactory())
 
             interactor.delegate = presenter
