@@ -37,7 +37,7 @@
     <!--Backup-->
     <string name="Backup_Intro_Title">备份</string>
     <string name="Backup_Intro_TitleShow">显示密钥</string>
-    <string name="Backup_Intro_Subtitle">如果您的手机曾经丢失、被盗、损坏等，下一步将显示的密钥是恢复资金的唯一方法。请确保没有人在看着您的屏幕。\n\n受此密钥控制的代币：%s</string>
+    <string name="Backup_Intro_Subtitle">The special private key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.\n\nThe coins controlled by this key: %s.</string>
     <string name="Backup_Intro_Later">稍后</string>
     <string name="Backup_Intro_BackupNow">备份</string>
     <string name="Backup_Confirmation_SecretKey">我明白我是安全保存在我的电话中并能控制我钱包上的资金的12字私有密钥的唯一所有人。</string>
@@ -110,7 +110,7 @@
     <string name="Deposit_Your_Account">您的账户</string>
     <string name="Receive_Alert_NotBackedUp_Title">需要备份</string>
     <string name="Receive_Alert_NotBackedUp_Button">备份</string>
-    <string name="Receive_Alert_NotBackedUp_Description">您在接收资金前必须先为该钱包备份密钥。</string>
+    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the %1$s wallet before you may receive %2$s.</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">刚才</string>
     <string name="Timestamp_MinAgo">%d分钟前</string>
@@ -198,7 +198,7 @@
     <string name="SettingsSecurity_Fingerprint">指纹</string>
     <string name="SettingsSecurity_EnablePin">密码</string>
     <string name="SettingsSecurity_EditPin">编辑密码</string>
-    <string name="SettingsSecurity_ManageKeys">管理密钥</string>
+    <string name="SettingsSecurity_ManageKeys">Manage Wallets</string>
     <string name="SettingsSecurity_BackupWallet">备份钱包</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">基础货币</string>
@@ -271,30 +271,28 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">代币管理器</string>
     <string name="ManageCoins_save">保存</string>
-    <string name="ManageCoins_AddCoin_Title">Add Key</string>
-    <string name="ManageCoins_AddCoin_Subtitle">%s Key</string>
-    <string name="ManageCoins_AddCoin_Text">此操作将生成以下代币的新密钥（钱包）：%s</string>
+    <string name="ManageCoins_AddCoin_Title">Add Wallet</string>
+    <string name="ManageCoins_AddCoin_Text">This action will generate a new %1$s wallet for the following coins: %2$s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">此时，钱包无法创建新的EOS钱包帐户。您只能恢复现有账户。</string>
     <!--Manage Keys-->
-    <string name="ManageKeys_Title">管理密钥</string>
-    <string name="ManageKeys_Description">任何能获取您密钥的人都能够窃取您钱包中的资金。保存好密钥且绝不能向任何人透露。\n\n保存每一个密钥将能够在手机丢失或出现故障，或者在钱包应用被删除的情况下恢复资金。</string>
+    <string name="ManageKeys_Title">Manage Wallets</string>
+    <string name="ManageKeys_Description">Highlighted below are your active wallets where each wallet responsible for different set of crypto currencies.\n\nYou should backup each highlighted wallets by backing up the private key for that wallet. This key is the only way to restore your funds if your phone is ever lost, stolen, broken etc.</string>
     <string name="ManageKeys_Create">创建</string>
     <string name="ManageKeys_Restore">恢复</string>
     <string name="ManageKeys_Delete">删除</string>
     <string name="ManageKeys_Backup">备份</string>
     <string name="ManageKeys_Show">显示</string>
     <!--Manage Keys Delete Alert-->
-    <string name="ManageKeys_Delete_Title">删除密钥</string>
-    <string name="ManageKeys_Delete_ConfirmationRemove">此操作将从此设备中删除%s密钥（钱包）。</string>
+    <string name="ManageKeys_Delete_Title">Delete Wallet</string>
+    <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s wallet from this device.</string>
     <string name="ManageKeys_Delete_ConfirmationDisable">将被禁用的代币：%s</string>
-    <string name="ManageKeys_Delete_ConfirmationLoose">如果您没有此密钥的备份，那么您将失去相关资金。</string>
+    <string name="ManageKeys_Delete_ConfirmationLoose">If you don\'t have a backup of the %s key, you will loose the respective funds.</string>
     <string name="ManageKeys_Delete_FromPhone">从电话删除</string>
     <string name="ManageKeys_Delete_Alert_Title">需要备份</string>
     <string name="ManageKeys_Delete_Alert">您必须在将其从电话上删除之前先备份%s密钥。</string>
     <!-- Manage Keys Alert -->
-    <string name="AddCoin_Title">Add Key</string>
-    <string name="AddCoin_Subtitle">%s Key</string>
-    <string name="AddCoin_Description">您没有%1s的密钥。钱包可以为您生成密钥。使用下方的创建按钮生成新密钥。\n\n如果有的话，您也可以使用%4s现有的%3s密钥。</string>
+    <string name="AddCoin_Title">Add %s</string>
+    <string name="AddCoin_Description">You don\'t have a wallet that can store %1$s. The app can generate a new wallet for you. Use the Create button below to generate a new wallet.\n\nYou will be able to use the new wallet for the following coins: %2$s.\n\nYou may also use the existing %3$s Wallet key if you have one. Use the restore button for that.</string>
     <string name="AddCoin_CreateKey">创建</string>
     <string name="AddCoin_RestoreKey">恢复</string>
     <!-- Account Types -->
