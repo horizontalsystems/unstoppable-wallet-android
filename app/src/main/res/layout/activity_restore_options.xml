@@ -15,6 +15,8 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/shadowlessToolbar">
 
@@ -23,72 +25,44 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <io.horizontalsystems.bankwallet.components.CellView
+                android:id="@+id/bip44"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                app:subtitle="@string/CoinOption_bip44"
+                app:title="@string/CoinOption_BeforeOctober" />
+
+            <io.horizontalsystems.bankwallet.components.CellView
+                android:id="@+id/bip49"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                app:subtitle="@string/CoinOption_bip49"
+                app:title="@string/CoinOption_AfterOctober" />
+
+            <TextView
+                style="@style/Subhead2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/CoinOption_TimePeriod"
+                android:textColor="@color/grey" />
+
+            <io.horizontalsystems.bankwallet.components.CellView
                 android:id="@+id/fastSync"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/clickable_setting_item_bg">
+                android:layout_marginTop="24dp"
+                app:subtitle="@string/CoinOption_Recommended"
+                app:title="@string/CoinOption_Fast" />
 
-                <View
-                    android:id="@+id/fastTopShade"
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="@color/steel_15"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/fastCheckmarkIcon"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        android:id="@+id/fastTitle"
-                        style="@style/Body"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/CoinOption_Fast"
-                        android:textColor="?TextColorBarsToDark"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/fastSubtitle"
-                        style="@style/Subhead2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="@string/CoinOption_Recommended"
-                        android:textColor="@color/grey"
-                        app:layout_constraintStart_toStartOf="@+id/fastTitle"
-                        app:layout_constraintTop_toBottomOf="@+id/fastTitle" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <ImageView
-                    android:id="@+id/fastCheckmarkIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:src="@drawable/checkmark_orange"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <View
-                    android:id="@+id/fastBottomShade"
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="?SettingsSectionBottomShadeColor"
-                    app:layout_constraintBottom_toBottomOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            <io.horizontalsystems.bankwallet.components.CellView
+                android:id="@+id/slowSync"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                app:subtitle="@string/CoinOption_MorePrivate"
+                app:title="@string/CoinOption_Slow" />
 
             <TextView
                 style="@style/Subhead2"
@@ -100,79 +74,12 @@
                 android:text="@string/CoinOption_Fast_Text"
                 android:textColor="@color/grey" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/slowSync"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="32dp"
-                android:background="@drawable/clickable_setting_item_bg">
-
-                <View
-                    android:id="@+id/slowTopShade"
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="@color/steel_15"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/slowCheckmarkIcon"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        android:id="@+id/slowTitle"
-                        style="@style/Body"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/CoinOption_Slow"
-                        android:textColor="?TextColorBarsToDark"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/slowSubtitle"
-                        style="@style/Subhead2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="@string/CoinOption_MorePrivate"
-                        android:textColor="@color/grey"
-                        app:layout_constraintStart_toStartOf="@+id/slowTitle"
-                        app:layout_constraintTop_toBottomOf="@+id/slowTitle" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <ImageView
-                    android:id="@+id/slowCheckmarkIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:src="@drawable/checkmark_orange"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <View
-                    android:id="@+id/slowBottomShade"
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="?SettingsSectionBottomShadeColor"
-                    app:layout_constraintBottom_toBottomOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
             <TextView
                 style="@style/Subhead2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/CoinOption_Slow_Text"
                 android:textColor="@color/grey" />

@@ -64,7 +64,8 @@ open class AccountType : Parcelable {
 
     @Parcelize
     enum class Derivation : Parcelable {
-        bip39,
-        bip44
+        bip44,
+        bip49,
+        bip84
     }
 }
