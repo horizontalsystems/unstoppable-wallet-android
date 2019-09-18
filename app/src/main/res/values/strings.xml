@@ -28,7 +28,7 @@
 
     <!--Create-->
     <string name="Create_Title">New Wallet</string>
-    <string name="Create_Description">Select crypto currencies your new wallet should support. You may do this later as well.</string>
+    <string name="Create_Description">Select one cryptocurrency to start. You will be able to add other cryptocurrencies later.</string>
 
     <!--Restore-->
 
