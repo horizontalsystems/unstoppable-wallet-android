@@ -117,7 +117,7 @@
     <string name="Duration_Within">در %s</string>
     <string name="Duration_Hours">%d ساعت.</string>
     <string name="Duration_Minutes">%d دقیقه.</string>
-    <string name="Duration_Seconds">%d sec.</string>
+    <string name="Duration_Seconds">%d ثانیه.</string>
     <!--Transactions-->
     <string name="Transactions_Title">معاملات</string>
     <string name="Transactions_FilterAll">همه</string>
@@ -133,8 +133,8 @@
     <string name="TransactionInfo_ButtonVerify">تامين كنيد</string>
     <string name="TransactionInfo_Status_Pending">در حالت انتظار</string>
     <string name="TransactionInfo_HistoricalRate">چارت هاي تاريخي</string>
-    <string name="TransactionInfo_Fee">Fee</string>
-    <string name="TransactionInfo_FootNote">The value of this transaction appears as 0 because it was sent to your own address</string>
+    <string name="TransactionInfo_Fee">قیمت</string>
+    <string name="TransactionInfo_FootNote">ارزش این تراکنش به عنوان 0 ظاهر می شود زیرا به آدرس شخصی شما ارسال شده بود</string>
     <!--Full Info-->
     <string name="FullInfo_Title">معاملات</string>
     <string name="FullInfo_Time">زمان</string>
@@ -149,8 +149,8 @@
     <string name="FullInfo_Contract">قرارداد</string>
     <string name="FullInfo_From">از</string>
     <string name="FullInfo_To">به</string>
-    <string name="FullInfo_Status">Status</string>
-    <string name="FullInfo_Memo">Memo</string>
+    <string name="FullInfo_Status">وضعیت</string>
+    <string name="FullInfo_Memo">یادداشت</string>
     <string name="FullInfo_CpuUsage">CPU Usage</string>
     <string name="FullInfo_NetUsage">Net Usage</string>
     <string name="FullInfo_GasLimit">Gas Limit</string>
@@ -178,23 +178,23 @@
     <!--Settings-->
     <string name="Settings_Title">تنظيمات</string>
     <string name="Settings_SecurityCenter">مركز امنيتي</string>
-    <string name="Settings_ManageCoins">Manage Coins</string>
-    <string name="Settings_RestoreWallet">Restore Wallet</string>
+    <string name="Settings_ManageCoins">مدیریت سکه ها</string>
+    <string name="Settings_RestoreWallet">بازیابی كيف پول</string>
     <string name="Settings_BaseCurrency">ارز مرجع</string>
     <string name="Settings_Language">زبان</string>
     <string name="Settings_LightMode">حالت چراغ</string>
     <string name="Settings_About">در باره ما</string>
-    <string name="Settings_ShareThisWallet">Tell Friends</string>
+    <string name="Settings_ShareThisWallet">گفتن به دوستان</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
-    <string name="Settings_Report">Report a Problem</string>
+    <string name="Settings_Report">گزارش مشکل</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">اثر انگشت فعال نشده است</string>
     <string name="Settings_Error_NoFingerprintAddedYet">اثر انگشت در اين دستگاه فعال نشده است.بر تنظيمات برويد&gt;قفل دستگاه تا با اثر انگشت دست يابي شود.</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Fingerprint">اثر انگشت</string>
-    <string name="SettingsSecurity_EnablePin">Passcode</string>
+    <string name="SettingsSecurity_EnablePin">رمز عبور</string>
     <string name="SettingsSecurity_EditPin">تعغير كد</string>
-    <string name="SettingsSecurity_ManageKeys">Manage Keys</string>
+    <string name="SettingsSecurity_ManageKeys">مدیریت کلیدها</string>
     <string name="SettingsSecurity_BackupWallet">پيشتيبان گيري كيف پول</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">ارز مرجع</string>
@@ -302,27 +302,27 @@
     <string name="AccountType_BinanceKey">کلید Binance</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">بازیابی انتخاب ها</string>
-    <string name="CoinOption_Fast">Fast</string>
-    <string name="CoinOption_Recommended">0&#8211;2 hours (Recommended)</string>
-    <string name="CoinOption_Fast_Text">Restores your past transactions via secure third party server. For users with a long history of transactions involving very large sums this method may pose privacy risks.</string>
-    <string name="CoinOption_Slow">Slow</string>
-    <string name="CoinOption_MorePrivate">1&#8211;12 hours (More Private)</string>
-    <string name="CoinOption_Slow_Text">Restores your past transactions directly from the network. Significantly more private but very slow. If the restore takes way too much time, go to Manage Keys section and reimport the Key for the wallet using the Fast Sync option.</string>
+    <string name="CoinOption_Fast">سریع</string>
+    <string name="CoinOption_Recommended">&#8211;۲ ساعت (توصیه شده)</string>
+    <string name="CoinOption_Fast_Text">تراکنش های قبلی خود را از طریق سرور شخص ثالث ایمن بازیابی کنید. برای کاربران با سابقه طولانی در تراکنش های شامل مبالغ بسیار زیاد، این روش ممکن است خطرات حریم خصوصی را به همراه داشته باشد.</string>
+    <string name="CoinOption_Slow">آهسته</string>
+    <string name="CoinOption_MorePrivate">&#8211;۱۲ ساعت (خصوصی تر)</string>
+    <string name="CoinOption_Slow_Text">تراکنش های قبلی خود را مستقیماً از شبکه بازیابی کنید. بسیار خصوصی تر اما بسیار کند است. اگر بازیابی زمان زیادی طول کشید ، به بخش مدیریت کلیدها بروید و با استفاده از گزینه همزمانی سریع ، کلید کیف پول را مجدداً وارد کنید.</string>
     <!--Charts-->
-    <string name="Charts_TimeDuration_Day">1D</string>
-    <string name="Charts_TimeDuration_Week">7D</string>
-    <string name="Charts_TimeDuration_Month">1M</string>
-    <string name="Charts_TimeDuration_Quartal">3M</string>
-    <string name="Charts_TimeDuration_HalfYear">6M</string>
-    <string name="Charts_TimeDuration_Year">1Y</string>
-    <string name="Charts_Title">%s Rate</string>
-    <string name="Charts_Rate_High">High</string>
-    <string name="Charts_Rate_Low">Low</string>
-    <string name="Charts_MarketCap">Mkt. Cap</string>
+    <string name="Charts_TimeDuration_Day">۱روز</string>
+    <string name="Charts_TimeDuration_Week">۷روز</string>
+    <string name="Charts_TimeDuration_Month">۱دقیقه</string>
+    <string name="Charts_TimeDuration_Quartal">۳دقیقه</string>
+    <string name="Charts_TimeDuration_HalfYear">۶دقیقه</string>
+    <string name="Charts_TimeDuration_Year">۱سال</string>
+    <string name="Charts_Title">%s میزان</string>
+    <string name="Charts_Rate_High">بالا</string>
+    <string name="Charts_Rate_Low">پایین</string>
+    <string name="Charts_MarketCap">Mkt. ظرفیت</string>
     <string name="Charts_MarketCap_Thousand">k</string>
     <string name="Charts_MarketCap_Million">M</string>
     <string name="Charts_MarketCap_Billion">B</string>
     <string name="Charts_MarketCap_Trillion">T</string>
-    <string name="Charts_Volume">Volume</string>
-    <string name="Charts_Error_NotAvailable">Chart not available</string>
+    <string name="Charts_Volume">درجه صدا</string>
+    <string name="Charts_Error_NotAvailable">نمودار موجود نیست</string>
 </resources>
