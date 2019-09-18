@@ -81,12 +81,14 @@ class BalancePresenter(
     }
 
     override fun onReceive(position: Int) {
-        val account = dataSource.getItem(position).wallet.account
-        if (account.isBackedUp) {
-            router.openReceiveDialog(dataSource.getItem(position).wallet)
+        val wallet = dataSource.getItem(position).wallet
+        if (wallet.account.isBackedUp) {
+            router.openReceiveDialog(wallet)
         } else {
-            accountToBackup = account
-            view?.showBackupAlert()
+            interactor.predefinedAccountType(wallet)?.let { predefinedAccountType ->
+                accountToBackup = wallet.account
+                view?.showBackupAlert(wallet.coin, predefinedAccountType)
+            }
         }
     }
 

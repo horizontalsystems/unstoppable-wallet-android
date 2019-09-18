@@ -179,8 +179,8 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
         })
 
         viewModel.showBackupAlert.observe(viewLifecycleOwner, Observer {
-            activity?.let {
-                BackupAlertDialog.show(it, object : BackupAlertDialog.Listener {
+            activity?.let { activity ->
+                BackupAlertDialog.show(activity, getString(it.second.title), it.first.title, object : BackupAlertDialog.Listener {
                     override fun onBackupButtonClick() {
                         viewModel.delegate.openBackup()
                     }

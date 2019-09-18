@@ -140,7 +140,7 @@
 
     <string name="Receive_Alert_NotBackedUp_Title">Backup Required</string>
     <string name="Receive_Alert_NotBackedUp_Button">Backup</string>
-    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
+    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the %1$s wallet before you may receive %2$s.</string>
 
     <!--Timestamp-->
 
