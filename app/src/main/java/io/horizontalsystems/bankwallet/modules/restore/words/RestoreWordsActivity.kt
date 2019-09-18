@@ -32,7 +32,6 @@ class RestoreWordsActivity : BaseActivity(), RestoreWordsAdapter.Listener {
         )
 
         val wordsCount = intent.getIntExtra(ModuleField.WORDS_COUNT, 12)
-        val derivation = intent.getParcelableExtra<AccountType.Derivation>(ModuleField.DERIVATION)
 
         viewModel = ViewModelProviders.of(this).get(RestoreWordsViewModel::class.java)
         viewModel.init(wordsCount)
@@ -43,7 +42,7 @@ class RestoreWordsActivity : BaseActivity(), RestoreWordsAdapter.Listener {
 
         viewModel.notifyRestored.observe(this, Observer {
             setResult(RESULT_OK, Intent().apply {
-                putExtra(ModuleField.ACCOUNT_TYPE, AccountType.Mnemonic(viewModel.delegate.words, derivation, salt = null))
+                putExtra(ModuleField.ACCOUNT_TYPE, AccountType.Mnemonic(viewModel.delegate.words, AccountType.Derivation.bip44, salt = null))
             })
             finish()
         })
