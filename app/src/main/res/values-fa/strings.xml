@@ -98,25 +98,25 @@
     <string name="Send_DialogProceed">پردازش</string>
     <string name="Send_Sending">در حال ارسال</string>
     <string name="Send_ERC_Alert">پرداخت هزینه های معامله برای %s (ERC20) در Ethereum. شما نیاز به %s ETH.</string>
-    <string name="Send_Token_InsufficientFeeAlert">Transaction fees for %s (%s) paid in %s. You need %s.</string>
+    <string name="Send_Token_InsufficientFeeAlert">هزینه تراکنش برای %s (%s) پرداخت شده در %s. شما نیاز دارید %s.</string>
     <!--Deposit-->
     <string name="Deposit_Title">دریافت s%</string>
-    <string name="Deposit_Share">Share</string>
+    <string name="Deposit_Share">به اشتراك گذاشتن</string>
     <string name="Deposit_Your_Address">آدرس شما</string>
-    <string name="Deposit_Your_Account">Your Account</string>
-    <string name="Receive_Alert_NotBackedUp_Title">Backup Required</string>
-    <string name="Receive_Alert_NotBackedUp_Button">Backup</string>
-    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the keys for this wallet before you may receive funds on it. </string>
+    <string name="Deposit_Your_Account">حساب کاربری شما</string>
+    <string name="Receive_Alert_NotBackedUp_Title">تهیه نسخه پشتیبان لازم است</string>
+    <string name="Receive_Alert_NotBackedUp_Button">پيشتيباني</string>
+    <string name="Receive_Alert_NotBackedUp_Description">قبل از دریافت بودجه، باید از کلیدهای این کیف پول نسخه پشتیبان تهیه کنید. </string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">همين آلان</string>
     <string name="Timestamp_MinAgo">%d؜دقيقه پيش</string>
     <string name="Timestamp_HoursAgo">%dساعتپيش</string>
     <string name="Timestamp_Today">امروز</string>
     <string name="Timestamp_Yesterday">ديروز</string>
-    <string name="Duration_instant">Instant</string>
-    <string name="Duration_Within">Within %s</string>
-    <string name="Duration_Hours">%d h.</string>
-    <string name="Duration_Minutes">%d min.</string>
+    <string name="Duration_instant">فوری</string>
+    <string name="Duration_Within">در %s</string>
+    <string name="Duration_Hours">%d ساعت.</string>
+    <string name="Duration_Minutes">%d دقیقه.</string>
     <string name="Duration_Seconds">%d sec.</string>
     <!--Transactions-->
     <string name="Transactions_Title">معاملات</string>
@@ -298,10 +298,10 @@
     <string name="AccountType_12WordsKey">12 Words Key</string>
     <string name="AccountType_Eos">EOS Blockchain</string>
     <string name="AccountType_EosKey">EOS Key</string>
-    <string name="AccountType_Binance">Binance Chain</string>
-    <string name="AccountType_BinanceKey">Binance Key</string>
+    <string name="AccountType_Binance">زنجیره Binance</string>
+    <string name="AccountType_BinanceKey">کلید Binance</string>
     <!--Coin Option-->
-    <string name="CoinOption_Title">Restore Options</string>
+    <string name="CoinOption_Title">بازیابی انتخاب ها</string>
     <string name="CoinOption_Fast">Fast</string>
     <string name="CoinOption_Recommended">0&#8211;2 hours (Recommended)</string>
     <string name="CoinOption_Fast_Text">Restores your past transactions via secure third party server. For users with a long history of transactions involving very large sums this method may pose privacy risks.</string>
