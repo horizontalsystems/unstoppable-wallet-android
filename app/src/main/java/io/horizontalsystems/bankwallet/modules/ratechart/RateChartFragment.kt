@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.ratechart
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -63,12 +62,6 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
                 }
             }
         }
-    }
-
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-
-        presenter.onChartClosed()
     }
 
     private fun observeData() {

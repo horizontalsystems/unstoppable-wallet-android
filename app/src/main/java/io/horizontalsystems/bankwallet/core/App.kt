@@ -57,7 +57,6 @@ class App : Application() {
         lateinit var rateSyncScheduler: RateSyncScheduler
         lateinit var rateManager: RateManager
         lateinit var rateStatsManager: IRateStatsManager
-        lateinit var rateStatsSyncer: IRateStatsSyncer
         lateinit var connectivityManager: ConnectivityManager
         lateinit var appDatabase: AppDatabase
         lateinit var rateStorage: IRateStorage
@@ -148,10 +147,6 @@ class App : Application() {
 
         rateManager = RateManager(rateStorage, networkManager, walletManager, currencyManager, connectivityManager)
         rateSyncScheduler = RateSyncScheduler(rateManager, walletManager, currencyManager, connectivityManager)
-
-        rateStatsSyncer = RateStatsSyncer(rateStatsManager, walletManager, currencyManager, rateStorage).apply {
-            backgroundManager.registerListener(this)
-        }
 
         transactionDataProviderManager = TransactionDataProviderManager(appConfigProvider, localStorage)
         transactionInfoFactory = FullTransactionInfoFactory(networkManager, transactionDataProviderManager)
