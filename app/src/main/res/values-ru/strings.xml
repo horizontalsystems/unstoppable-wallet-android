@@ -26,7 +26,7 @@
     <string name="Create_Description">Select crypto currencies your new wallet should support. You may do this later as well.</string>
     <!--Restore-->
     <string name="Restore_Title">Восстановить</string>
-    <string name="Restore_Description">Чтобы восстановить существующий кошелек вам нужно ввести секретный ключ для этого кошелька.\n\nКак только вы восстановите один кошелек, вы сможете восстановить больше кошельков, перейдя в раздел \"Управление Ключами\" в настройках приложения.</string>
+    <string name="Restore_Description">To restore existing wallet you need to enter a private key for that wallet.\n\nOnce you restore one wallet you will be able to restore more wallets by going to Manage Keys section in app Settings.</string>
     <string name="Restore_Subtitle">Введите ключ</string>
     <string name="Restore_ValidationFailed">Неверный ключ</string>
     <string name="Restore_RestoreFailed">Не удалось восстановить кошелек</string>
@@ -296,8 +296,8 @@
     <string name="AddCoin_CreateKey">Создать</string>
     <string name="AddCoin_RestoreKey">Восстановить</string>
     <!-- Account Types -->
-    <string name="AccountType_12Words">12 Words</string>
-    <string name="AccountType_12WordsKey">12 Words Ключ</string>
+    <string name="AccountType_Unstoppable">Unstoppable Wallet</string>
+    <string name="AccountType_UnstoppableKey">12 Words Key</string>
     <string name="AccountType_Eos">EOS Blockchain</string>
     <string name="AccountType_EosKey">EOS Ключ</string>
     <string name="AccountType_Binance">Binance Chain</string>
@@ -306,10 +306,15 @@
     <string name="CoinOption_Title">Параметры Восстановления</string>
     <string name="CoinOption_Fast">Быстро</string>
     <string name="CoinOption_Recommended">0&#8211;2 часа (Рекомендуется)</string>
-    <string name="CoinOption_Fast_Text">Восстановление ваших предыдущих транзакций через сторонний защищенный сервер. Для пользователей с длинной историей транзакций и с очень большим суммами этот метод может представлять риски для конфиденциальности.</string>
+    <string name="CoinOption_Fast_Text">Fast : Restores your past transaction via secure third party server. For users with transactions involving large sums this method may pose privacy risks.</string>
     <string name="CoinOption_Slow">Медленно</string>
     <string name="CoinOption_MorePrivate">1&#8211;12 часов (Более Приватно)</string>
-    <string name="CoinOption_Slow_Text">Восстановление ваших предыдущих транзакций будет непосредственно из сети. Это более приватно, но очень медленно. Чем больше монет вы восстанавливаете, тем больше времени потребуется. Если восстановление занимает слишком много времени, перейдите в раздел «Управление ключами» и повторно импортируйте ключ для кошелька с помощью опции «Быстрая синхронизация».</string>
+    <string name="CoinOption_Slow_Text">Slow: Restores your past transactions directly from the blockchain. More private but very slow. If it takes too long, go to Manage Wallets in Settings, delete the Unstoppable entry and repeat the process with Fast option.</string>
+    <string name="CoinOption_TimePeriod">Select the time period when you first created the wallet in Unstoppable.</string>
+    <string name="CoinOption_BeforeOctober">Before October 2019</string>
+    <string name="CoinOption_AfterOctober">After October 2019</string>
+    <string name="CoinOption_bip44">BIP-44</string>
+    <string name="CoinOption_bip49">BIP-49</string>
     <!--Charts-->
     <string name="Charts_TimeDuration_Day">1Д</string>
     <string name="Charts_TimeDuration_Week">7Д</string>
