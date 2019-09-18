@@ -26,7 +26,7 @@
     <string name="Create_Description">Select crypto currencies your new wallet should support. You may do this later as well.</string>
     <!--Restore-->
     <string name="Restore_Title">بازگرداني</string>
-    <string name="Restore_Description">برای بازیابی کیف پول موجود ، باید یک کلید مخفی برای آن کیف پول وارد کنید. \n\n زمانی که یک کیف پول را بازیابی می کنید، با رفتن به بخش مدیریت کلیدها در تنظیمات برنامه ، می توانید کیف پول های بیشتری را بازیابی کنید.</string>
+    <string name="Restore_Description">To restore existing wallet you need to enter a private key for that wallet.\n\nOnce you restore one wallet you will be able to restore more wallets by going to Manage Keys section in app Settings.</string>
     <string name="Restore_Subtitle">کلید را وارد کنید</string>
     <string name="Restore_ValidationFailed">کلید نادرست</string>
     <string name="Restore_RestoreFailed">بازگرداني كيف پول ناموفق شد</string>
@@ -296,8 +296,8 @@
     <string name="AddCoin_CreateKey">به وجود آوردن</string>
     <string name="AddCoin_RestoreKey">بازیابی</string>
     <!-- Account Types -->
-    <string name="AccountType_12Words">۱۲ کلمه</string>
-    <string name="AccountType_12WordsKey">کلید ۱۲ کلمه ای</string>
+    <string name="AccountType_Unstoppable">Unstoppable Wallet</string>
+    <string name="AccountType_UnstoppableKey">12 Words Key</string>
     <string name="AccountType_Eos">EOS Blockchain</string>
     <string name="AccountType_EosKey">کلید EOS</string>
     <string name="AccountType_Binance">زنجیره Binance</string>
@@ -306,10 +306,15 @@
     <string name="CoinOption_Title">بازیابی انتخاب ها</string>
     <string name="CoinOption_Fast">سریع</string>
     <string name="CoinOption_Recommended">&#8211;۲ ساعت (توصیه شده)</string>
-    <string name="CoinOption_Fast_Text">تراکنش های قبلی خود را از طریق سرور شخص ثالث ایمن بازیابی کنید. برای کاربران با سابقه طولانی در تراکنش های شامل مبالغ بسیار زیاد، این روش ممکن است خطرات حریم خصوصی را به همراه داشته باشد.</string>
+    <string name="CoinOption_Fast_Text">Fast : Restores your past transaction via secure third party server. For users with transactions involving large sums this method may pose privacy risks.</string>
     <string name="CoinOption_Slow">آهسته</string>
     <string name="CoinOption_MorePrivate">&#8211;۱۲ ساعت (خصوصی تر)</string>
-    <string name="CoinOption_Slow_Text">تراکنش های قبلی خود را مستقیماً از شبکه بازیابی کنید. بسیار خصوصی تر اما بسیار کند است. اگر بازیابی زمان زیادی طول کشید ، به بخش مدیریت کلیدها بروید و با استفاده از گزینه همزمانی سریع ، کلید کیف پول را مجدداً وارد کنید.</string>
+    <string name="CoinOption_Slow_Text">Slow: Restores your past transactions directly from the blockchain. More private but very slow. If it takes too long, go to Manage Wallets in Settings, delete the Unstoppable entry and repeat the process with Fast option.</string>
+    <string name="CoinOption_TimePeriod">Select the time period when you first created the wallet in Unstoppable.</string>
+    <string name="CoinOption_BeforeOctober">Before October 2019</string>
+    <string name="CoinOption_AfterOctober">After October 2019</string>
+    <string name="CoinOption_bip44">BIP-44</string>
+    <string name="CoinOption_bip49">BIP-49</string>
     <!--Charts-->
     <string name="Charts_TimeDuration_Day">۱روز</string>
     <string name="Charts_TimeDuration_Week">۷روز</string>
