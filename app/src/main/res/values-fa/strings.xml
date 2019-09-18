@@ -37,7 +37,7 @@
     <!--Backup-->
     <string name="Backup_Intro_Title">پيشتيباني</string>
     <string name="Backup_Intro_TitleShow">نمایش کلید</string>
-    <string name="Backup_Intro_Subtitle">كليدي كه بعدا نشان داده خواهد شد تنها راه بازگرداندن سرمایه شما در صورت گم شدن ، سرقت ، خراب شدن تلفن شما و غیره است. مطمئن شوید که کسی صفحه شما را نمی بیند. \n\nسکه ها با این کلید کنترل می شوند:%s</string>
+    <string name="Backup_Intro_Subtitle">The special private key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.\n\nThe coins controlled by this key: %s.</string>
     <string name="Backup_Intro_Later">بعداً</string>
     <string name="Backup_Intro_BackupNow">پيشتيباني</string>
     <string name="Backup_Confirmation_SecretKey">من قبول ميكنم كي تنها من صاحب اين ١٢ عدد مخفي ميباشم كي اين عداد در گوشي همراه من ميباشد و تنها من ميتوانم با اين عداد كيف پول و مقدار پول خود را فعال كنم.</string>
@@ -110,7 +110,7 @@
     <string name="Deposit_Your_Account">حساب کاربری شما</string>
     <string name="Receive_Alert_NotBackedUp_Title">تهیه نسخه پشتیبان لازم است</string>
     <string name="Receive_Alert_NotBackedUp_Button">پيشتيباني</string>
-    <string name="Receive_Alert_NotBackedUp_Description">قبل از دریافت بودجه، باید از کلیدهای این کیف پول نسخه پشتیبان تهیه کنید. </string>
+    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the %1$s wallet before you may receive %2$s.</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">همين آلان</string>
     <string name="Timestamp_MinAgo">%d؜دقيقه پيش</string>
@@ -198,7 +198,7 @@
     <string name="SettingsSecurity_Fingerprint">اثر انگشت</string>
     <string name="SettingsSecurity_EnablePin">رمز عبور</string>
     <string name="SettingsSecurity_EditPin">تعغير كد</string>
-    <string name="SettingsSecurity_ManageKeys">مدیریت کلیدها</string>
+    <string name="SettingsSecurity_ManageKeys">Manage Wallets</string>
     <string name="SettingsSecurity_BackupWallet">پيشتيبان گيري كيف پول</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">ارز مرجع</string>
@@ -271,30 +271,28 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">ميديت سكه</string>
     <string name="ManageCoins_save">ذخیره</string>
-    <string name="ManageCoins_AddCoin_Title">افزودن کلید</string>
-    <string name="ManageCoins_AddCoin_Subtitle">%sکلید</string>
-    <string name="ManageCoins_AddCoin_Text">این عملکرد یک کلید جدید (کیف پول) برای سکه های زیر ایجاد می کند:%s </string>
+    <string name="ManageCoins_AddCoin_Title">Add Wallet</string>
+    <string name="ManageCoins_AddCoin_Text">This action will generate a new %1$s wallet for the following coins: %2$s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">در این مرحله ، کیف پول قادر به ایجاد حساب های کیف پول جدید EOS نیست. شما فقط قادر به بازیابی کیف پول موجود هستید.</string>
     <!--Manage Keys-->
-    <string name="ManageKeys_Title">مدیریت کلیدها</string>
-    <string name="ManageKeys_Description">هرکسی که به کلیدهای شما دسترسی داشته باشد می تواند مبلغ کیف پول شما را بدزدد. کلیدها را به شکلی مطمئن ذخیره کنید و هرگز آنها را به کسی نشان ندهید.\n\nاز هر کلید پشتیبان تهیه کنید تا در صورت از دست دادن یا خراب شدن تلفن خود ، بتوانید مبلغ خود را بازیابی کنید ، یا به سادگی برنامه کیف پول حذف می شود.</string>
+    <string name="ManageKeys_Title">Manage Wallets</string>
+    <string name="ManageKeys_Description">Highlighted below are your active wallets where each wallet responsible for different set of crypto currencies.\n\nYou should backup each highlighted wallets by backing up the private key for that wallet. This key is the only way to restore your funds if your phone is ever lost, stolen, broken etc.</string>
     <string name="ManageKeys_Create">ایجاد</string>
     <string name="ManageKeys_Restore">بازیابی</string>
     <string name="ManageKeys_Delete">پاک کردن</string>
     <string name="ManageKeys_Backup">پيشتيباني</string>
     <string name="ManageKeys_Show">نشان دادن</string>
     <!--Manage Keys Delete Alert-->
-    <string name="ManageKeys_Delete_Title">پاک کردن کلید</string>
-    <string name="ManageKeys_Delete_ConfirmationRemove">این عملکرد کلید (کیف پول) %s را از این دستگاه پاک خواهد کرد.</string>
+    <string name="ManageKeys_Delete_Title">Delete Wallet</string>
+    <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s wallet from this device.</string>
     <string name="ManageKeys_Delete_ConfirmationDisable">سکه ها غیرفعال خواهند شد: %s</string>
-    <string name="ManageKeys_Delete_ConfirmationLoose">در صورت نداشتن نسخه پشتیبان از این کلید ، مبلغ مربوطه را از دست خواهید داد.</string>
+    <string name="ManageKeys_Delete_ConfirmationLoose">If you don\'t have a backup of the %s key, you will loose the respective funds.</string>
     <string name="ManageKeys_Delete_FromPhone">پاک کردن از تلفن</string>
     <string name="ManageKeys_Delete_Alert_Title">تهیه نسخه پشتیبان لازم است</string>
     <string name="ManageKeys_Delete_Alert">قبل از اینکه بتوانید آن را از این تلفن حذف کنید ، باید از کلید %s نسخه پشتیبان تهیه کنید.</string>
     <!-- Manage Keys Alert -->
-    <string name="AddCoin_Title">افزودن کلید</string>
-    <string name="AddCoin_Subtitle">کلید %s</string>
-    <string name="AddCoin_Description">برای %1s کلید ندارید. کیف پول می تواند کلید را برای شما ایجاد کند. برای تولید یک کلید جدید از دکمه به وجود آوردن زیر استفاده کنید. \n\n شما همچنین باید از کلید %3s موجود برای %4s استفاده کنید اگر یک کلید دارید.</string>
+    <string name="AddCoin_Title">Add %s</string>
+    <string name="AddCoin_Description">You don\'t have a wallet that can store %1$s. The app can generate a new wallet for you. Use the Create button below to generate a new wallet.\n\nYou will be able to use the new wallet for the following coins: %2$s.\n\nYou may also use the existing %3$s Wallet key if you have one. Use the restore button for that.</string>
     <string name="AddCoin_CreateKey">به وجود آوردن</string>
     <string name="AddCoin_RestoreKey">بازیابی</string>
     <!-- Account Types -->
