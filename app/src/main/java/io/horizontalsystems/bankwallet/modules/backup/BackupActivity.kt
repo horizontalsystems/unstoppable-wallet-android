@@ -35,7 +35,7 @@ class BackupActivity : BaseActivity() {
         buttonNext.setOnSingleClickListener { viewModel.delegate.onClickBackup() }
 
         viewModel.startPinModule.observe(this, Observer {
-            PinModule.startForUnlock(this, ModuleCode.UNLOCK_PIN, true)
+            PinModule.startForUnlock(this, ModuleCode.UNLOCK_PIN)
         })
 
         viewModel.startBackupWordsModule.observe(this, Observer {

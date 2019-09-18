@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.pin
+package io.horizontalsystems.bankwallet.modules.ratelist
 
 import android.os.Bundle
 import android.view.LayoutInflater
