@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreModule
+import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenModule
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.welcome.WelcomeModule
@@ -31,7 +32,7 @@ class LauncherActivity : AppCompatActivity() {
         })
 
         viewModel.openUnlockModule.observe(this, Observer {
-            PinModule.startForUnlock(this, REQUEST_CODE_UNLOCK_PIN, showRates = true)
+            LockScreenModule.startForUnlock(this, REQUEST_CODE_UNLOCK_PIN)
         })
 
         viewModel.openNoSystemLockModule.observe(this, Observer {

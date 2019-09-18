@@ -73,7 +73,7 @@ class SecuritySettingsActivity : BaseActivity() {
         })
 
         viewModel.openUnlockPinLiveEvent.observe(this, Observer {
-            PinModule.startForUnlock(this, REQUEST_CODE_UNLOCK_PIN_TO_DISABLE_PIN, true)
+            PinModule.startForUnlock(this, REQUEST_CODE_UNLOCK_PIN_TO_DISABLE_PIN)
         })
 
         viewModel.biometricSettingsVisibleLiveData.observe(this, Observer { enabled ->

@@ -74,7 +74,10 @@
             android:name=".modules.reportproblem.ReportProblemActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".modules.pin.LockScreenActivity"
+            android:name=".modules.lockscreen.LockScreenActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".modules.pin.PinActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.settings.basecurrency.BaseCurrencySettingsActivity"

@@ -10,6 +10,9 @@ object PinModule {
     const val RESULT_CANCELLED = 2
     const val PIN_COUNT = 6
 
+    const val keyInteractionType = "interaction_type"
+    const val keyShowCancel = "show_cancel"
+
     interface IView {
         fun setTitle(title: Int)
         fun addPages(pages: List<PinPage>)
@@ -47,15 +50,15 @@ object PinModule {
     }
 
     fun startForSetPin(context: AppCompatActivity, requestCode: Int) {
-        LockScreenActivity.startForResult(context, PinInteractionType.SET_PIN, requestCode)
+        PinActivity.startForResult(context, PinInteractionType.SET_PIN, requestCode)
     }
 
     fun startForEditPin(context: AppCompatActivity) {
-        LockScreenActivity.startForResult(context, PinInteractionType.EDIT_PIN)
+        PinActivity.startForResult(context, PinInteractionType.EDIT_PIN)
     }
 
-    fun startForUnlock(context: AppCompatActivity, requestCode: Int, showCancel: Boolean = false, showRates: Boolean = false) {
-        LockScreenActivity.startForResult(context, PinInteractionType.UNLOCK, requestCode, showCancel, showRates)
+    fun startForUnlock(context: AppCompatActivity, requestCode: Int) {
+        PinActivity.startForResult(context, PinInteractionType.UNLOCK, requestCode, true)
     }
 
 }
