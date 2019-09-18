@@ -48,7 +48,7 @@
 
     <string name="Backup_Intro_Title">Backup</string>
     <string name="Backup_Intro_TitleShow">Show Key</string>
-    <string name="Backup_Intro_Subtitle">The key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc. Make sure that no one is watching your screen. \n\nThe coins controlled by this key: %s</string>
+    <string name="Backup_Intro_Subtitle">The special private key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.\n\nThe coins controlled by this key: %s.</string>
     <string name="Backup_Intro_Later">Later</string>
     <string name="Backup_Intro_BackupNow">Backup</string>
 
@@ -248,7 +248,7 @@
     <string name="SettingsSecurity_Fingerprint">Fingerprint</string>
     <string name="SettingsSecurity_EnablePin">Passcode</string>
     <string name="SettingsSecurity_EditPin">Edit Passcode</string>
-    <string name="SettingsSecurity_ManageKeys">Manage Keys</string>
+    <string name="SettingsSecurity_ManageKeys">Manage Wallets</string>
     <string name="SettingsSecurity_BackupWallet">Backup Wallet</string>
 
     <!--Setting_Currency-->
@@ -352,15 +352,14 @@
 
     <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_save">Save</string>
-    <string name="ManageCoins_AddCoin_Title">Add Key</string>
-    <string name="ManageCoins_AddCoin_Subtitle">%s Key</string>
-    <string name="ManageCoins_AddCoin_Text">This action will generate a new key(wallet) for the following coins: %s </string>
+    <string name="ManageCoins_AddCoin_Title">Add Wallet</string>
+    <string name="ManageCoins_AddCoin_Text">This action will generate a new %1$s wallet for the following coins: %2$s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">At this point, the wallet is not able to create new EOS wallet accounts. You\'re only able to restore the existing one.</string>
 
     <!--Manage Keys-->
 
-    <string name="ManageKeys_Title">Manage Keys</string>
-    <string name="ManageKeys_Description">Anyone with access to your Keys can steal your wallet funds. Store keys safely and never show them to anyone. \n\nBackup each key to be able to restore funds if you lose or break your phone, or simply the wallet app gets deleted.</string>
+    <string name="ManageKeys_Title">Manage Wallets</string>
+    <string name="ManageKeys_Description">Highlighted below are your active wallets where each wallet responsible for different set of crypto currencies.\n\nYou should backup each highlighted wallets by backing up the private key for that wallet. This key is the only way to restore your funds if your phone is ever lost, stolen, broken etc.</string>
     <string name="ManageKeys_Create">Create</string>
     <string name="ManageKeys_Restore">Restore</string>
     <string name="ManageKeys_Delete">Delete</string>
@@ -369,17 +368,17 @@
 
     <!--Manage Keys Delete Alert-->
 
-    <string name="ManageKeys_Delete_Title">Delete Key</string>
-    <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s key (wallet) from this device.</string>
+    <string name="ManageKeys_Delete_Title">Delete Wallet</string>
+    <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s wallet from this device.</string>
     <string name="ManageKeys_Delete_ConfirmationDisable">Coins that will be disabled: %s</string>
-    <string name="ManageKeys_Delete_ConfirmationLoose">If you don\'t have a backup of this key you will loose the respective funds.</string>
+    <string name="ManageKeys_Delete_ConfirmationLoose">If you don\'t have a backup of the %s key, you will loose the respective funds.</string>
     <string name="ManageKeys_Delete_FromPhone">Delete from Phone</string>
     <string name="ManageKeys_Delete_Alert_Title">Backup Required</string>
     <string name="ManageKeys_Delete_Alert">You need to backup %s key before you may delete it from this phone.</string>
 
     <!-- Manage Keys Alert -->
 
-    <string name="AddCoin_Title">Add Key</string>
+    <string name="AddCoin_Title">Add %s</string>
     <string name="AddCoin_Description">You don\'t have a wallet that can store %1$s. The app can generate a new wallet for you. Use the Create button below to generate a new wallet.\n\nYou will be able to use the new wallet for the following coins: %2$s.\n\nYou may also use the existing %3$s Wallet key if you have one. Use the restore button for that.</string>
     <string name="AddCoin_CreateKey">Create</string>
     <string name="AddCoin_RestoreKey">Restore</string>
