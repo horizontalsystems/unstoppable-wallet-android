@@ -10,6 +10,7 @@
     <string name="Alert_Success">Успешно</string>
     <string name="Alert_Copied">Скопировано</string>
     <string name="Button_Cancel">Отменить</string>
+    <string name="Button_Create">Create</string>
     <string name="Button_Back">Назад</string>
     <string name="Button_Close">Закрыть</string>
     <string name="Button_Ok">Хорошо</string>
@@ -20,6 +21,9 @@
     <string name="Welcome_Title">Unstoppable</string>
     <string name="Welcome_CreateWallet">Создать Кошелек</string>
     <string name="Welcome_RestoreWallet">Восстановить Кошелек</string>
+    <!--Create-->
+    <string name="Create_Title">New Wallet</string>
+    <string name="Create_Description">Select crypto currencies your new wallet should support. You may do this later as well.</string>
     <!--Restore-->
     <string name="Restore_Title">Восстановить</string>
     <string name="Restore_Description">Чтобы восстановить существующий кошелек вам нужно ввести секретный ключ для этого кошелька.\n\nКак только вы восстановите один кошелек, вы сможете восстановить больше кошельков, перейдя в раздел \"Управление Ключами\" в настройках приложения.</string>
