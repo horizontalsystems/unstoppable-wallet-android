@@ -26,7 +26,7 @@
     <string name="Create_Description">Select crypto currencies your new wallet should support. You may do this later as well.</string>
     <!--Restore-->
     <string name="Restore_Title">恢复</string>
-    <string name="Restore_Description">要恢复现有钱包，您必须输入该钱包的密钥。\n\n恢复一个钱包后，您可以前往应用设置中的“管理密钥”恢复更多钱包。</string>
+    <string name="Restore_Description">To restore existing wallet you need to enter a private key for that wallet.\n\nOnce you restore one wallet you will be able to restore more wallets by going to Manage Keys section in app Settings.</string>
     <string name="Restore_Subtitle">输入密钥</string>
     <string name="Restore_ValidationFailed">错误密钥</string>
     <string name="Restore_RestoreFailed">无法恢复钱包</string>
@@ -296,8 +296,8 @@
     <string name="AddCoin_CreateKey">创建</string>
     <string name="AddCoin_RestoreKey">恢复</string>
     <!-- Account Types -->
-    <string name="AccountType_12Words">12字</string>
-    <string name="AccountType_12WordsKey">12字密钥</string>
+    <string name="AccountType_Unstoppable">Unstoppable Wallet</string>
+    <string name="AccountType_UnstoppableKey">12 Words Key</string>
     <string name="AccountType_Eos">EOS区块链</string>
     <string name="AccountType_EosKey">EOS密钥</string>
     <string name="AccountType_Binance">币安链</string>
@@ -306,10 +306,15 @@
     <string name="CoinOption_Title">恢复选项</string>
     <string name="CoinOption_Fast">快</string>
     <string name="CoinOption_Recommended">0&#8211;2小时（推荐）</string>
-    <string name="CoinOption_Fast_Text">通过安全的第三方服务器恢复过往交易。对于具有大量涉及大额交易历史的用户，这种方法可能会带来隐私风险。</string>
+    <string name="CoinOption_Fast_Text">Fast : Restores your past transaction via secure third party server. For users with transactions involving large sums this method may pose privacy risks.</string>
     <string name="CoinOption_Slow">慢</string>
     <string name="CoinOption_MorePrivate">1&#8211;12小时（更加私密）</string>
-    <string name="CoinOption_Slow_Text">直接通过网络恢复您的过往交易。更加私密，但非常缓慢。如果恢复过程耗时过长，请前往”管理密钥“部分并使用”快速同步“选项重新导入钱包密钥。</string>
+    <string name="CoinOption_Slow_Text">Slow: Restores your past transactions directly from the blockchain. More private but very slow. If it takes too long, go to Manage Wallets in Settings, delete the Unstoppable entry and repeat the process with Fast option.</string>
+    <string name="CoinOption_TimePeriod">Select the time period when you first created the wallet in Unstoppable.</string>
+    <string name="CoinOption_BeforeOctober">Before October 2019</string>
+    <string name="CoinOption_AfterOctober">After October 2019</string>
+    <string name="CoinOption_bip44">BIP-44</string>
+    <string name="CoinOption_bip49">BIP-49</string>
     <!--Charts-->
     <string name="Charts_TimeDuration_Day">1天</string>
     <string name="Charts_TimeDuration_Week">7天</string>
