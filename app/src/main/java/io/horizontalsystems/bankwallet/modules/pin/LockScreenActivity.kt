@@ -8,15 +8,15 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.pin.main.PinContainerModule
-import io.horizontalsystems.bankwallet.modules.pin.main.PinContainerPresenter
-import io.horizontalsystems.bankwallet.modules.pin.main.PinContainerRouter
+import io.horizontalsystems.bankwallet.modules.pin.lockscreen.LockScreenModule
+import io.horizontalsystems.bankwallet.modules.pin.lockscreen.LockScreenPresenter
+import io.horizontalsystems.bankwallet.modules.pin.lockscreen.LockScreenRouter
 import kotlinx.android.synthetic.main.activity_pin_container.*
 
 
-class PinActivity : BaseActivity() {
+class LockScreenActivity : BaseActivity() {
 
-    private lateinit var presenter: PinContainerPresenter
+    private lateinit var presenter: LockScreenPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,8 +29,8 @@ class PinActivity : BaseActivity() {
         val showCancelButton = intent?.extras?.getBoolean(keyShowCancel) ?: true
         val showRates = intent?.extras?.getBoolean(keyShowRates) ?: false
 
-        presenter = ViewModelProviders.of(this, PinContainerModule.Factory(showCancelButton)).get(PinContainerPresenter::class.java)
-        val router = presenter.router as PinContainerRouter
+        presenter = ViewModelProviders.of(this, LockScreenModule.Factory(showCancelButton)).get(LockScreenPresenter::class.java)
+        val router = presenter.router as LockScreenRouter
 
         subscribeToRouterEvents(router)
 
@@ -58,7 +58,7 @@ class PinActivity : BaseActivity() {
 
     }
 
-    private fun subscribeToRouterEvents(router: PinContainerRouter) {
+    private fun subscribeToRouterEvents(router: LockScreenRouter) {
         router.closeApplication.observe(this, Observer {
             finishAffinity()
         })
@@ -80,7 +80,7 @@ class PinActivity : BaseActivity() {
         const val keyShowRates = "show_rates"
 
         fun startForResult(context: AppCompatActivity, interactionType: PinInteractionType, requestCode: Int = 0, showCancel: Boolean = true, showRates: Boolean = false) {
-            val intent = Intent(context, PinActivity::class.java)
+            val intent = Intent(context, LockScreenActivity::class.java)
             intent.putExtra(keyInteractionType, interactionType)
             intent.putExtra(keyShowCancel, showCancel)
             intent.putExtra(keyShowRates, showRates)

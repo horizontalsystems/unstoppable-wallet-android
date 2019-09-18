@@ -1,9 +1,9 @@
-package io.horizontalsystems.bankwallet.modules.pin.main
+package io.horizontalsystems.bankwallet.modules.pin.lockscreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
-object PinContainerModule {
+object LockScreenModule {
 
     interface ViewDelegate {
         fun onBackPressed()
@@ -17,8 +17,8 @@ object PinContainerModule {
     class Factory(private val showCancelButton: Boolean) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val router = PinContainerRouter()
-            val presenter = PinContainerPresenter(router, showCancelButton)
+            val router = LockScreenRouter()
+            val presenter = LockScreenPresenter(router, showCancelButton)
 
             return presenter as T
         }

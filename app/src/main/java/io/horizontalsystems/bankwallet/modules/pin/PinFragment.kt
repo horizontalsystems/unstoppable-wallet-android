@@ -22,12 +22,12 @@ import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.pin.edit.EditPinModule
 import io.horizontalsystems.bankwallet.modules.pin.edit.EditPinPresenter
 import io.horizontalsystems.bankwallet.modules.pin.edit.EditPinRouter
-import io.horizontalsystems.bankwallet.modules.pin.set.SetPinRouter
 import io.horizontalsystems.bankwallet.modules.pin.set.SetPinModule
 import io.horizontalsystems.bankwallet.modules.pin.set.SetPinPresenter
-import io.horizontalsystems.bankwallet.modules.pin.unlock.UnlockPinRouter
+import io.horizontalsystems.bankwallet.modules.pin.set.SetPinRouter
 import io.horizontalsystems.bankwallet.modules.pin.unlock.UnlockPinModule
 import io.horizontalsystems.bankwallet.modules.pin.unlock.UnlockPinPresenter
+import io.horizontalsystems.bankwallet.modules.pin.unlock.UnlockPinRouter
 import io.horizontalsystems.bankwallet.ui.extensions.*
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
@@ -38,13 +38,12 @@ import java.util.concurrent.Executor
 class PinFragment : Fragment(), NumPadItemsAdapter.Listener {
 
     private val interactionType: PinInteractionType by lazy {
-        //todo default parameter?
-        arguments?.getSerializable(PinActivity.keyInteractionType) as? PinInteractionType
+        arguments?.getSerializable(LockScreenActivity.keyInteractionType) as? PinInteractionType
                 ?: PinInteractionType.UNLOCK
     }
 
     private val showCancelButton: Boolean by lazy {
-        arguments?.getBoolean(PinActivity.keyShowCancel) ?: true
+        arguments?.getBoolean(LockScreenActivity.keyShowCancel) ?: true
     }
 
     private lateinit var pinView: PinView
@@ -214,8 +213,8 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener {
             val pinFragment = PinFragment()
 
             val args = Bundle().also {
-                it.putSerializable(PinActivity.keyInteractionType, interactionType)
-                it.putBoolean(PinActivity.keyShowCancel, showCancel)
+                it.putSerializable(LockScreenActivity.keyInteractionType, interactionType)
+                it.putBoolean(LockScreenActivity.keyShowCancel, showCancel)
             }
             pinFragment.arguments = args
 

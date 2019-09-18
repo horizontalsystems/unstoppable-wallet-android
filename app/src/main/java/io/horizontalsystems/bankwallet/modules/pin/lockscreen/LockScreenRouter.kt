@@ -1,8 +1,8 @@
-package io.horizontalsystems.bankwallet.modules.pin.main
+package io.horizontalsystems.bankwallet.modules.pin.lockscreen
 
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 
-class PinContainerRouter: PinContainerModule.Router {
+class LockScreenRouter: LockScreenModule.Router {
 
     val closeApplication = SingleLiveEvent<Unit>()
     val closeActivity = SingleLiveEvent<Unit>()
