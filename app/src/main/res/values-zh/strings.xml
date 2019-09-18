@@ -10,6 +10,7 @@
     <string name="Alert_Success">成功</string>
     <string name="Alert_Copied">已复制</string>
     <string name="Button_Cancel">取消</string>
+    <string name="Button_Create">Create</string>
     <string name="Button_Back">返回</string>
     <string name="Button_Close">关闭</string>
     <string name="Button_Ok">确定</string>
@@ -20,6 +21,9 @@
     <string name="Welcome_Title">Unstoppable</string>
     <string name="Welcome_CreateWallet">新钱包</string>
     <string name="Welcome_RestoreWallet">恢复钱包</string>
+    <!--Create-->
+    <string name="Create_Title">New Wallet</string>
+    <string name="Create_Description">Select crypto currencies your new wallet should support. You may do this later as well.</string>
     <!--Restore-->
     <string name="Restore_Title">恢复</string>
     <string name="Restore_Description">要恢复现有钱包，您必须输入该钱包的密钥。\n\n恢复一个钱包后，您可以前往应用设置中的“管理密钥”恢复更多钱包。</string>
