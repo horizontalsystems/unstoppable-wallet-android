@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.send
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.zxing.integration.android.IntentIntegrator
@@ -9,14 +10,14 @@ import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerModule
-import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressView
+import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressViewModel
-import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountView
+import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountViewModel
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.ConfirmationFragment
-import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeView
+import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeViewModel
-import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoView
+import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoViewModel
 import io.horizontalsystems.bankwallet.modules.send.submodules.sendbutton.ProceedButtonView
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
@@ -54,14 +55,13 @@ class SendActivity : BaseActivity() {
             addInputItems(wallet, inputItems)
         })
 
+
         mainViewModel.showSendConfirmation.observe(this, Observer {
             hideSoftKeyboard()
 
-            val fragmentTransaction = supportFragmentManager
-                    .beginTransaction()
-
-            fragmentTransaction
-                    .setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_right, R.anim.slide_in_from_right, R.anim.slide_out_to_right)
+            supportFragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_right,
+                                         R.anim.slide_in_from_right, R.anim.slide_out_to_right)
                     .add(R.id.rootView, ConfirmationFragment())
                     .addToBackStack("confirmFragment")
                     .commit()
@@ -100,9 +100,8 @@ class SendActivity : BaseActivity() {
 
                     mainPresenter.handler.amountModule = amountPresenter
 
-                    val amountView = SendAmountView(context = this, lifecycleOwner = this, sendAmountViewModel = amountViewModel)
-                    sendLinearLayout.addView(amountView)
-                    amountView.requestFocus()
+                    val sendAmountFragment = SendAmountFragment(amountViewModel)
+                    supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendAmountFragment).commitNow()
                 }
                 SendModule.Input.Address -> {
                     //add address view
@@ -111,8 +110,9 @@ class SendActivity : BaseActivity() {
 
                     mainPresenter.handler.addressModule = addressPresenter
 
-                    val sendAddressView = SendAddressView(context = this, lifecycleOwner = this, sendAddressViewModel = addressViewModel)
-                    sendLinearLayout.addView(sendAddressView)
+                    val sendAddressFragment = SendAddressFragment(addressViewModel)
+                    supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendAddressFragment)
+                            .commitNow()
                 }
                 is SendModule.Input.Fee -> {
                     //add fee view
@@ -121,8 +121,8 @@ class SendActivity : BaseActivity() {
 
                     mainPresenter.handler.feeModule = feePresenter
 
-                    val sendFeeView = SendFeeView(context = this, lifecycleOwner = this, sendFeeViewModel = feeViewModel, feeIsAdjustable = input.isAdjustable, fragmentManager = supportFragmentManager)
-                    sendLinearLayout.addView(sendFeeView)
+                    val sendFeeFragment = SendFeeFragment(feeViewModel, input.isAdjustable)
+                    supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendFeeFragment).commitNow()
                 }
                 is SendModule.Input.Memo -> {
                     //add memo view
@@ -131,8 +131,8 @@ class SendActivity : BaseActivity() {
 
                     mainPresenter.handler.memoModule = memoPresenter
 
-                    val sendMemoView = SendMemoView(context = this, lifecycleOwner = this, sendMemoViewModel = memoViewModel)
-                    sendLinearLayout.addView(sendMemoView)
+                    val sendMemoFragment = SendMemoFragment(memoViewModel)
+                    supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendMemoFragment).commitNow()
                 }
                 SendModule.Input.ProceedButton -> {
                     //add send button
