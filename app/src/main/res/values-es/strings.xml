@@ -37,7 +37,7 @@
     <!--Backup-->
     <string name="Backup_Intro_Title">Copia de seguridad</string>
     <string name="Backup_Intro_TitleShow">Mostrar clave</string>
-    <string name="Backup_Intro_Subtitle">La clave que se mostrará a continuación es la única forma de restaurar sus fondos en caso de que su teléfono se pierda, lo roben, se averie, etc. Asegúrese de que nadie esté viendo su pantalla. \n\nLas criptomonedas controladas por esta clave: %s</string>
+    <string name="Backup_Intro_Subtitle">The special private key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.\n\nThe coins controlled by this key: %s.</string>
     <string name="Backup_Intro_Later">Posterior</string>
     <string name="Backup_Intro_BackupNow">Copia de seguridad</string>
     <string name="Backup_Confirmation_SecretKey">Entiendo que soy un único propietario de una clave secreta privada de 12 palabras que se almacena de forma segura en mi teléfono y me permite controlar los fondos en mi cartera.</string>
@@ -110,7 +110,7 @@
     <string name="Deposit_Your_Account">Su cuenta</string>
     <string name="Receive_Alert_NotBackedUp_Title">Se requiere una copia de seguridad</string>
     <string name="Receive_Alert_NotBackedUp_Button">Copia de seguridad</string>
-    <string name="Receive_Alert_NotBackedUp_Description">Necesita hacer una copia de seguridad de las claves de este monedero antes de que pueda recibir fondos en él. </string>
+    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the %1$s wallet before you may receive %2$s.</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">reciente</string>
     <string name="Timestamp_MinAgo">Hace %d minutos</string>
@@ -198,7 +198,7 @@
     <string name="SettingsSecurity_Fingerprint">Huella digital</string>
     <string name="SettingsSecurity_EnablePin">Código</string>
     <string name="SettingsSecurity_EditPin">Editar el código </string>
-    <string name="SettingsSecurity_ManageKeys">Gestionar claves</string>
+    <string name="SettingsSecurity_ManageKeys">Manage Wallets</string>
     <string name="SettingsSecurity_BackupWallet">Copia de Seguridad de cartera</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Moneda principal</string>
@@ -277,30 +277,28 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">Gestor de monedas</string>
     <string name="ManageCoins_save">Guardar</string>
-    <string name="ManageCoins_AddCoin_Title">Add Key</string>
-    <string name="ManageCoins_AddCoin_Subtitle">%s Key</string>
-    <string name="ManageCoins_AddCoin_Text">Esta acción generará una clave (monedero) para las siguientes monedas:%s </string>
+    <string name="ManageCoins_AddCoin_Title">Add Wallet</string>
+    <string name="ManageCoins_AddCoin_Text">This action will generate a new %1$s wallet for the following coins: %2$s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">En este momento, el monedero no es capaz de crear nuevas cuentas de monederos EOS. Solo puede restaurar la existente.</string>
     <!--Manage Keys-->
-    <string name="ManageKeys_Title">Gestionar claves</string>
-    <string name="ManageKeys_Description">Cualquiera con acceso a sus claves puede robar los fondos de su monedero. Almacene las claves de forma segura y nunca se las muestre a nadie.\n\nRespalde cada clave para poder restaurar los fondos en caso de que su teléfono se pierda, se averíe o en caso de que simplemente se borre la aplicación del monedero de su teléfono.</string>
+    <string name="ManageKeys_Title">Manage Wallets</string>
+    <string name="ManageKeys_Description">Highlighted below are your active wallets where each wallet responsible for different set of crypto currencies.\n\nYou should backup each highlighted wallets by backing up the private key for that wallet. This key is the only way to restore your funds if your phone is ever lost, stolen, broken etc.</string>
     <string name="ManageKeys_Create">Crear</string>
     <string name="ManageKeys_Restore">Restaurar</string>
     <string name="ManageKeys_Delete">Eliminar</string>
     <string name="ManageKeys_Backup">Copia de seguridad</string>
     <string name="ManageKeys_Show">Mostrar</string>
     <!--Manage Keys Delete Alert-->
-    <string name="ManageKeys_Delete_Title">Eliminar clave</string>
-    <string name="ManageKeys_Delete_ConfirmationRemove">Esta acción eliminará la clave %s (monedero) de este dispositivo.</string>
+    <string name="ManageKeys_Delete_Title">Delete Wallet</string>
+    <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s wallet from this device.</string>
     <string name="ManageKeys_Delete_ConfirmationDisable">Monedas que serán deshabilitadas: %s</string>
-    <string name="ManageKeys_Delete_ConfirmationLoose">Si usted no tiene un respaldo de esta clave, usted perderá los respectivos fondos.</string>
+    <string name="ManageKeys_Delete_ConfirmationLoose">If you don\'t have a backup of the %s key, you will loose the respective funds.</string>
     <string name="ManageKeys_Delete_FromPhone">Eliminar del teléfono</string>
     <string name="ManageKeys_Delete_Alert_Title">Se requiere una copia de seguridad</string>
     <string name="ManageKeys_Delete_Alert">Necesita respaldar esta clave %s antes de que pueda eliminarla de este teléfono.</string>
     <!-- Manage Keys Alert -->
-    <string name="AddCoin_Title">Add Key</string>
-    <string name="AddCoin_Subtitle">%s Key</string>
-    <string name="AddCoin_Description">Usted no tiene la clave para %1s. El monedero puede generar una clave para usted. Use el botón de crear para generar una nueva clave. \n\nTambién puede usar la %3sclave ya existente para el %4ssi tiene una.</string>
+    <string name="AddCoin_Title">Add %s</string>
+    <string name="AddCoin_Description">You don\'t have a wallet that can store %1$s. The app can generate a new wallet for you. Use the Create button below to generate a new wallet.\n\nYou will be able to use the new wallet for the following coins: %2$s.\n\nYou may also use the existing %3$s Wallet key if you have one. Use the restore button for that.</string>
     <string name="AddCoin_CreateKey">Crear</string>
     <string name="AddCoin_RestoreKey">Restaurar</string>
     <!-- Account Types -->
