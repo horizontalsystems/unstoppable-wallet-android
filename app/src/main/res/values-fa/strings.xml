@@ -204,20 +204,20 @@
     <string name="SettingsAbout_Title">در باره ما</string>
     <string name="SettingsAbout_AppTitle">Unstoppable</string>
     <string name="SettingsAbout_TermsPrivacySubtitle">شرايط &amp; حريم خصوصي:</string>
-    <string name="SettingsAbout_TermsPrivacyText">This app is peer-to-peer. It does not depend on any web server or tech support personnel to function.
-\n\nIt works everywhere as long as there is internet. No entity can block this app from working or to block someone from using it.
-\n\nYour funds are securely stored on the phone itself, not anywhere else.
-\n\nIt’s your responsibility to backup your Key and keep it private. Never show it to anyone. If it’s lost, forgotten or stollen your funds can be used by the person who has your key.
-\n\nDo not jailbreak your phone, do not install apps from unknown (untrusted) sources, do not give your device to untrusted people, and keep the Operating System on your phone up to date. The security of your wallet depends on this.
-\n\nThe entire code powering this app been open to the public scrutiny since the beginning. We tried to build the most secure and decentralized wallet we could, however there are no guarantees that there are no unintended software issues. That said, this wallet is likely to be significantly more secure than any smartphone wallet app out there.
-\n\nSome generic non-private app data like currency exchange rates are stored on decentralized storage(IPFS).</string>
+    <string name="SettingsAbout_TermsPrivacyText">این برنامه از چندین وب سایت قابل دسترسی است. این به عملکرد سرورهای وب یا پرسنل پشتیبانی فنی بستگی ندارد.
+\n\nهرجا که اینترنت وجود داشته باشد، کار می کند. هیچ نهادی نمی تواند این برنامه را از کار بیندازد یا مانع دسترسی کسی به آن شود.
+\n\nمبلغ شما به طور ایمن در خود تلفن ذخیره می شود ، نه هیچ جای دیگر.
+\n\nتهیه نسخه پشتیبان از کلید و خصوصی نگهداشتن آن مسئولیت شماست. هرگز آن را به کسی نشان ندهید. در صورت گم کردن ، فراموش کردن یا دزدیده شدن آن، پول شما توسط شخصی که کلید شما را دارد می تواند استفاده شود.
+\n\nتلفن خود را رمزگشایی نکنید ، برنامه ها را از منابع ناشناخته (غیر قابل اعتماد) نصب نکنید، دستگاه خود را به افراد غیرقابل اعتماد ندهید و سیستم عامل را بر روی تلفن خود به روز نگه دارید. امنیت کیف پول شما به این بستگی دارد.
+\n\nتمام کد ی که به این برنامه قدرت می دهد از ابتدا برای تحقیق عموم آزاد بود. ما سعی کردیم ایمن ترین و غیر متمرکزترین کیف پولی را که می توانیم بسازیم ، با اینحال هیچ تضمینی برای عدم وجود مشکلات نرم افزاری ناخواسته وجود ندارد. این بدین معنی است که ، این کیف پول می تواند از هر نوع برنامه کیف پول تلفن هوشمند موجود ایمن تر باشد.
+\n\nبعضی از اطلاعات برنامه غیر خصوصی عمومی مانند نرخ ارز در ذخیره سازی غیرمتمرکز (IPFS) ذخیره می شوند.</string>
     <!--Setting_Tell Friends-->
-    <string name="SettingsShare_Title">Share</string>
-    <string name="SettingsShare_Text">Unstoppable Wallet - a crypto wallet I recommend</string>
+    <string name="SettingsShare_Title">به اشتراك گذاشتن</string>
+    <string name="SettingsShare_Text">کیف پول غیر قابل توقف - کیف پول رمزنگاری شده که توصیه می کنم</string>
     <!--Setting_Report-->
-    <string name="SettingsReport_Title">Report a Problem</string>
-    <string name="SettingsReport_Email">Mail</string>
-    <string name="SettingsReport_Telegram">Telegram</string>
+    <string name="SettingsReport_Title">گزارش مشکل</string>
+    <string name="SettingsReport_Email">ايميل</string>
+    <string name="SettingsReport_Telegram">تلگرام</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">اندرايد keystore خطا</string>
     <string name="Alert_KeysInvalidatedDescription">Data شما ديگر نامتعبر است بخاطر تعغير دادن قفل صفحه</string>
@@ -228,13 +228,13 @@
     <string name="Unlock_Page_EnterYourPin">رمز عبور</string>
     <!--Errors-->
     <string name="Error_UnsupportedBlockchain">پول رايج شده پيشيباني ندارد</string>
-    <string name="Eos_Backend_Error_SelfTransfer">Can\'t transfer token to own account</string>
-    <string name="Eos_Backend_Error_AccountNotExist">Target account does not exist</string>
-    <string name="Eos_Backend_Error_InsufficientRam">Your EOS account doesn\'t have enough RAM to send this token. You need to increase RAM stake to proceed.</string>
+    <string name="Eos_Backend_Error_SelfTransfer">مبلغ نمی تواند به حساب خودتان منتقل شود</string>
+    <string name="Eos_Backend_Error_AccountNotExist">حساب کاربری مقصد وجود ندارد</string>
+    <string name="Eos_Backend_Error_InsufficientRam">حساب EOS شما RAM یا حافظه کافی برای ارسال این مبلغ ندارد. برای ادامه پردازش باید RAM را افزایش دهید.</string>
     <!--Hud texts-->
     <string name="Hud_Text_Unlock">بازگشايي</string>
     <string name="Hud_Text_Success">موفقيت</string>
-    <string name="Hud_Text_Done">Done</string>
+    <string name="Hud_Text_Done">انجام شد</string>
     <string name="Hud_Text_Error">خطا</string>
     <string name="Hud_Text_NoInternet">انترنت نداريد</string>
     <string name="Hud_Text_Copied">کپی انجام شد</string>
