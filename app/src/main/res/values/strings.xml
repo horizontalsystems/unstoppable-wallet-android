@@ -400,10 +400,15 @@
     <string name="CoinOption_Title">Restore Options</string>
     <string name="CoinOption_Fast">Fast</string>
     <string name="CoinOption_Recommended">0&#8211;2 hours (Recommended)</string>
-    <string name="CoinOption_Fast_Text">Restores your past transactions via secure third party server. For users with a long history of transactions involving very large sums this method may pose privacy risks.</string>
+    <string name="CoinOption_Fast_Text">Fast : Restores your past transaction via secure third party server. For users with transactions involving large sums this method may pose privacy risks.</string>
     <string name="CoinOption_Slow">Slow</string>
     <string name="CoinOption_MorePrivate">1&#8211;12 hours (More Private)</string>
-    <string name="CoinOption_Slow_Text">Restores your past transactions directly from the network. Significantly more private but very slow. If the restore takes way too much time, go to Manage Keys section and reimport the Key for the wallet using the Fast Sync option.</string>
+    <string name="CoinOption_Slow_Text">Slow: Restores your past transactions directly from the blockchain. More private but very slow. If it takes too long, go to Manage Wallets in Settings, delete the Unstoppable entry and repeat the process with Fast option.</string>
+    <string name="CoinOption_TimePeriod">Select the time period when you first created the wallet in Unstoppable.</string>
+    <string name="CoinOption_BeforeOctober">Before October 2019</string>
+    <string name="CoinOption_AfterOctober">After October 2019</string>
+    <string name="CoinOption_bip44">BIP-44</string>
+    <string name="CoinOption_bip49">BIP-49</string>
 
     <!--Charts-->
 

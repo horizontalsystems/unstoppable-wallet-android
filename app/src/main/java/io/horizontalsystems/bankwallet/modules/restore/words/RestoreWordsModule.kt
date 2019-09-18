@@ -3,9 +3,9 @@ package io.horizontalsystems.bankwallet.modules.restore.words
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.utils.ModuleField
 
 object RestoreWordsModule {
-    const val WORDS_COUNT = "WORDS_COUNT"
 
     interface View {
         fun showError(error: Int)
@@ -33,7 +33,7 @@ object RestoreWordsModule {
 
     fun startForResult(context: AppCompatActivity, wordsCount: Int, requestCode: Int) {
         val intent = Intent(context, RestoreWordsActivity::class.java).apply {
-            putExtra(WORDS_COUNT, wordsCount)
+            putExtra(ModuleField.WORDS_COUNT, wordsCount)
         }
 
         context.startActivityForResult(intent, requestCode)

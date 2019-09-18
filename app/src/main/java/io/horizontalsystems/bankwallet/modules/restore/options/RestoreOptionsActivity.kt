@@ -2,12 +2,13 @@ package io.horizontalsystems.bankwallet.modules.restore.options
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.putParcelableExtra
+import io.horizontalsystems.bankwallet.core.utils.ModuleField
+import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import kotlinx.android.synthetic.main.activity_about_settings.shadowlessToolbar
@@ -24,30 +25,35 @@ class RestoreOptionsActivity : BaseActivity() {
         shadowlessToolbar.bind(
                 title = getString(R.string.CoinOption_Title),
                 leftBtnItem = TopMenuItem(R.drawable.back, onClick = { onBackPressed() }),
-                rightBtnItem = TopMenuItem(R.drawable.checkmark_orange, onClick = { viewModel.delegate.didConfirm() })
+                rightBtnItem = TopMenuItem(R.drawable.checkmark_orange, onClick = { viewModel.delegate.onDone() })
         )
 
         viewModel = ViewModelProviders.of(this).get(RestoreOptionsViewModel::class.java)
         viewModel.init()
 
-        viewModel.notifySyncModeSelected.observe(this, Observer { syncMode: SyncMode? ->
-            syncMode?.let {
-                val intent = Intent().apply {
-                    putParcelableExtra("syncMode", it)
-                }
-                setResult(RESULT_OK, intent)
-                finish()
-            }
+        viewModel.notifyOptionsLiveEvent.observe(this, Observer { (syncMode, derivation) ->
+            setResult(RESULT_OK, Intent().apply {
+                putParcelableExtra(ModuleField.DERIVATION, derivation)
+                putParcelableExtra(ModuleField.SYNCMODE, syncMode)
+            })
+
+            finish()
         })
 
-        viewModel.syncModeUpdatedLiveEvent.observe(this, Observer { syncMode ->
-            syncMode?.let {
-                fastCheckmarkIcon.visibility = if (it == SyncMode.FAST) View.VISIBLE else View.GONE
-                slowCheckmarkIcon.visibility = if (it == SyncMode.FAST) View.GONE else View.VISIBLE
-            }
+        viewModel.syncModeLiveEvent.observe(this, Observer {
+            fastSync.bind(checked = it == SyncMode.FAST)
+            slowSync.bind(checked = it == SyncMode.SLOW)
         })
 
-        fastSync.setOnClickListener { viewModel.delegate.onSyncModeSelect(isFast = true) }
-        slowSync.setOnClickListener { viewModel.delegate.onSyncModeSelect(isFast = false) }
+        viewModel.derivationLiveEvent.observe(this, Observer {
+            bip44.bind(checked = it == Derivation.bip44)
+            bip49.bind(checked = it == Derivation.bip49)
+        })
+
+        fastSync.setOnClickListener { viewModel.delegate.onSelect(SyncMode.FAST) }
+        slowSync.setOnClickListener { viewModel.delegate.onSelect(SyncMode.SLOW) }
+
+        bip44.setOnClickListener { viewModel.delegate.onSelect(Derivation.bip44) }
+        bip49.setOnClickListener { viewModel.delegate.onSelect(Derivation.bip49) }
     }
 }

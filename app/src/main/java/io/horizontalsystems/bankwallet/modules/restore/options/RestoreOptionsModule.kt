@@ -2,24 +2,27 @@ package io.horizontalsystems.bankwallet.modules.restore.options
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
+import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import io.horizontalsystems.bankwallet.entities.SyncMode
 
 object RestoreOptionsModule {
 
     interface IView {
         fun update(syncMode: SyncMode)
+        fun update(derivation: Derivation)
     }
 
     interface IViewDelegate {
         fun viewDidLoad()
-        fun onSyncModeSelect(isFast: Boolean)
-        fun didConfirm()
+        fun onSelect(syncMode: SyncMode)
+        fun onSelect(derivation: Derivation)
+        fun onDone()
     }
 
     interface IInteractor
 
     interface IRouter {
-        fun notifyOnSelect(syncMode: SyncMode)
+        fun notifyOptions(syncMode: SyncMode, derivation: Derivation)
     }
 
     fun start(context: AppCompatActivity, requestCode: Int) {
@@ -27,13 +30,9 @@ object RestoreOptionsModule {
     }
 
     fun init(view: RestoreOptionsViewModel, router: IRouter) {
-        val presenter = RestoreOptionsPresenter(router, State())
+        val presenter = RestoreOptionsPresenter(router)
 
         view.delegate = presenter
         presenter.view = view
-    }
-
-    class State {
-        var syncMode: SyncMode = SyncMode.FAST
     }
 }

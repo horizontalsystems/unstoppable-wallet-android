@@ -9,3 +9,9 @@ object ModuleCode {
     const val UNLOCK_PIN = 6
 }
 
+object ModuleField {
+    const val WORDS_COUNT = "WORDS_COUNT"
+    const val SYNCMODE = "SYNCMODE"
+    const val ACCOUNT_TYPE = "ACCOUNT_TYPE"
+    const val DERIVATION = "DERIVATION"
+}
