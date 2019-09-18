@@ -71,11 +71,11 @@ class NumPadItemViewHolder(itemView: View) : ViewHolder(itemView) {
         itemView.setOnTouchListener { v, event ->
             when {
                 event.action == MotionEvent.ACTION_DOWN -> {
-                    onClick.invoke()
                     v.isPressed = true
                     true
                 }
                 event.action == MotionEvent.ACTION_UP -> {
+                    onClick.invoke()
                     v.isPressed = false
                     true
                 }
