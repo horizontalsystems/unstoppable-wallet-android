@@ -17,20 +17,20 @@
 نمی تواند مسدود یا سانسور شود
 هزینه تراکنش را در زمان واقعی فراهم می کند
 سریع و زیبا است
-It's the most advanced wallet to date
-(1) UNRESTRICTED CONTROL
+این پیشرفته ترین کیف پول تا به امروز است
+(۱) کنترل نامحدود
 
-  Transact freely and unconditionally regardless of where you live. No entity can stop you from sending/receiving crypto in Unstoppable wallet.   
+فارغ از اینکه در کجا زندگی می کنید ، آزادانه و بدون قید و شرط معامله کنید. هیچ نهادی نمی تواند شما را از ارسال / دریافت ارز رمزنگاری شده در کیف پول غیرقابل توقف بازدارد.   
 
-You’re the only person with control and access to your crypto finances. The Secret Key (that give you ownership over crypto assets) never leaves your device.
+شما تنها فردی هستید که به منابع مالی رمزنگاری شده خود کنترل و دسترسی دارید. کلید مخفی (که به شما مالکیت بر دارایی های رمزنگاری شده را می دهد) هرگز دستگاه شما را ترک نمی کند.
 
-(2) GENUINE PRIVACY
+(۲) حریم خصوصی واقعی
 
-  Stay truly private without revealing any personal data. There are no accounts, emails, phone numbers, identity checks or 3rd party servers storing your data.  
+واقعاً خصوصی بمانید بدون اینکه هیچ اطلاعات شخصی را نشان دهید. هیچ شماره حساب ، ایمیل ، شماره تلفن ، بررسی هویت یا سرورهای شخص ثالث در ذخیره داده های شما وجود ندارد
 
-Unlike most wallets in the market the Unstoppable wallet connects users directly to decentralized blockchains without any restrictions or intermediaries.
+برخلاف بیشتر کیف پول های موجود در بازار، کیف پول غیرقابل توقف کاربران را به طور مستقیم به بلوک های زنجیره ای غیر متمرکز و بدون محدودیت یا واسطه متصل می کند.
 
-(3) HIGHLY SECURE
+(۳) بسیار مطمئن
 
   Keep your crypto assets safe on your phone using safe storage mechanisms provided by phone's operating system. Your secret keys never leaves your device the device.
 
