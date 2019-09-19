@@ -9,10 +9,42 @@ import kotlinx.android.synthetic.main.view_cell.view.*
 
 class CellView : ConstraintLayout {
 
-    private var title: String? = null
-    private var subtitle: String? = null
-    private var rightTitle: String? = null
-    private var bottomBorder: Boolean = false
+    var icon: String? = null
+        set(value) {
+            field = value
+            field?.let { cellIcon.bind(it) }
+            cellIcon.visibility = if (value == null) View.GONE else View.VISIBLE
+        }
+
+    var title: String? = null
+        set(value) {
+            field = value
+            cellLeft.title = value
+        }
+
+    var subtitle: String? = null
+        set(value) {
+            field = value
+            cellLeft.subtitle = value
+        }
+
+    var rightTitle: String? = null
+        set(value) {
+            field = value
+            cellRight.title = rightTitle
+        }
+
+    var checked: Boolean = false
+        set(value) {
+            field = value
+            cellRight.checked = value
+        }
+
+    var bottomBorder: Boolean = false
+        set(value) {
+            field = value
+            bottomShade.visibility = if (value) View.VISIBLE else View.INVISIBLE
+        }
 
     init {
         inflate(context, R.layout.view_cell, this)
@@ -36,21 +68,6 @@ class CellView : ConstraintLayout {
             bottomBorder = ta.getBoolean(R.styleable.CellView_bottomBorder, false)
         } finally {
             ta.recycle()
-        }
-    }
-
-    fun bind(checked: Boolean) {
-        cellRight.checked = checked
-    }
-
-    override fun onFinishInflate() {
-        super.onFinishInflate()
-
-        cellLeft.bind(title, subtitle)
-        cellRight.title = rightTitle
-
-        if (bottomBorder) {
-            bottomShade.visibility = View.VISIBLE
         }
     }
 }

@@ -9,6 +9,19 @@ import kotlinx.android.synthetic.main.view_cell_left.view.*
 
 class CellLeftView : ConstraintLayout {
 
+    var title: String? = null
+        set(value) {
+            field = value
+            cellTitle.text = value
+        }
+
+    var subtitle: String? = null
+        set(value) {
+            field = value
+            cellSubtitle.text = value
+            cellSubtitle.visibility = if (value == null) View.GONE else View.VISIBLE
+        }
+
     init {
         inflate(context, R.layout.view_cell_left, this)
     }
@@ -16,13 +29,6 @@ class CellLeftView : ConstraintLayout {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-
-    fun bind(title: String?, subtitle: String?) {
-        cellTitle.text = title
-        cellSubtitle.text = subtitle
-
-        cellSubtitle.visibility = if (subtitle == null) View.GONE else View.VISIBLE
-    }
 
     override fun onFinishInflate() {
         super.onFinishInflate()

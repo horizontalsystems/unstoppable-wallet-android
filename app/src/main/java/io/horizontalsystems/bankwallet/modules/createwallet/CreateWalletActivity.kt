@@ -1,14 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.createwallet
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.components.CellView
 import io.horizontalsystems.bankwallet.core.EosUnsupportedException
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.main.MainModule
@@ -16,7 +15,6 @@ import io.horizontalsystems.bankwallet.ui.dialogs.AlertDialogFragment
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_create_wallet.*
-import kotlinx.android.synthetic.main.view_holder_cell_multiline.*
 
 class CreateWalletActivity : BaseActivity() {
     private lateinit var presenter: CreateWalletPresenter
@@ -47,6 +45,7 @@ class CreateWalletActivity : BaseActivity() {
             coinItemsAdapter.items = it
             coinItemsAdapter.notifyDataSetChanged()
         })
+
         view.errorLiveEvent.observe(this, Observer {
             if (it is EosUnsupportedException) {
                 AlertDialogFragment.newInstance(
@@ -56,7 +55,6 @@ class CreateWalletActivity : BaseActivity() {
                 ).show(supportFragmentManager, "alert_dialog")
             }
         })
-
     }
 
     private fun observeRouter(router: CreateWalletRouter) {
@@ -79,8 +77,7 @@ class CoinItemsAdapter(private val presenter: CreateWalletPresenter) : RecyclerV
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SwitchableViewHolder {
-        val containerView = LayoutInflater.from(parent.context).inflate(SwitchableViewHolder.layoutResourceId, parent, false)
-        return SwitchableViewHolder(containerView, presenter)
+        return SwitchableViewHolder(CellView(parent.context), presenter)
     }
 
     override fun getItemCount(): Int {
@@ -92,7 +89,7 @@ class CoinItemsAdapter(private val presenter: CreateWalletPresenter) : RecyclerV
     }
 }
 
-class SwitchableViewHolder(override val containerView: View, private val presenter: CreateWalletPresenter) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class SwitchableViewHolder(override val containerView: CellView, private val presenter: CreateWalletPresenter) : RecyclerView.ViewHolder(containerView), LayoutContainer {
     init {
         containerView.setOnSingleClickListener {
             presenter.didTapItem(adapterPosition)
@@ -100,14 +97,10 @@ class SwitchableViewHolder(override val containerView: View, private val present
     }
 
     fun bind(coinViewItem: CreateWalletModule.CoinViewItem, lastElement: Boolean) {
-        coinIcon.bind(coinViewItem.code)
-        title.text = coinViewItem.code
-        subtitle.text = coinViewItem.title
-        checkmark.visibility = if (coinViewItem.selected) View.VISIBLE else View.GONE
-        bottomShade.visibility = if (lastElement) View.VISIBLE else View.GONE
-    }
-
-    companion object {
-        const val layoutResourceId = R.layout.view_holder_cell_multiline
+        containerView.icon = coinViewItem.code
+        containerView.title = coinViewItem.code
+        containerView.subtitle = coinViewItem.title
+        containerView.checked = coinViewItem.selected
+        containerView.bottomBorder = lastElement
     }
 }

@@ -41,13 +41,13 @@ class RestoreOptionsActivity : BaseActivity() {
         })
 
         viewModel.syncModeLiveEvent.observe(this, Observer {
-            fastSync.bind(checked = it == SyncMode.FAST)
-            slowSync.bind(checked = it == SyncMode.SLOW)
+            fastSync.checked = it == SyncMode.FAST
+            slowSync.checked = it == SyncMode.SLOW
         })
 
         viewModel.derivationLiveEvent.observe(this, Observer {
-            bip44.bind(checked = it == Derivation.bip44)
-            bip49.bind(checked = it == Derivation.bip49)
+            bip44.checked = it == Derivation.bip44
+            bip49.checked = it == Derivation.bip49
         })
 
         fastSync.setOnClickListener { viewModel.delegate.onSelect(SyncMode.FAST) }
