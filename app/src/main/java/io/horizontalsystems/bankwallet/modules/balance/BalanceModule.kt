@@ -18,9 +18,8 @@ object BalanceModule {
         fun updateItem(position: Int)
         fun updateHeader()
         fun setSortingOn(isOn: Boolean)
-        fun setChartOn(isOn: Boolean)
         fun showBackupAlert(coin: Coin, predefinedAccountType: IPredefinedAccountType)
-        fun setChartButtonState(enabled: Boolean)
+        fun setStatsButton(state: StatsButtonState)
     }
 
     interface IViewDelegate {
@@ -78,6 +77,10 @@ object BalanceModule {
         fun sort(items: List<BalanceItem>, sortType: BalanceSortType): List<BalanceItem>
     }
 
+    enum class StatsButtonState {
+        NORMAL, HIDDEN, SELECTED
+    }
+
     class DataSource(var currency: Currency, private val sorter: IBalanceSorter) {
         private var updatedPositions = mutableListOf<Int>()
 
@@ -94,7 +97,7 @@ object BalanceModule {
                 items = sorter.sort(items, sortType)
             }
 
-        var statsModeOn = false
+        var statsButtonState: StatsButtonState = StatsButtonState.HIDDEN
 
         @Synchronized
         fun addUpdatedPosition(position: Int) {

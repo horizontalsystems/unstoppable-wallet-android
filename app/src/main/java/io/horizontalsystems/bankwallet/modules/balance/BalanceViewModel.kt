@@ -21,11 +21,10 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     val reloadHeaderLiveEvent = SingleLiveEvent<Void>()
     val reloadItemLiveEvent = SingleLiveEvent<Int>()
     val setSortingOnLiveEvent = SingleLiveEvent<Boolean>()
-    val setChartOnLiveEvent = SingleLiveEvent<Boolean>()
     val showBackupAlert = SingleLiveEvent<Pair<Coin, IPredefinedAccountType>>()
     val openBackup = SingleLiveEvent<Pair<Account, Int>>()
     val openChartModule = SingleLiveEvent<Coin>()
-    val setChartButtonEnabled = SingleLiveEvent<Boolean>()
+    val setStatsButtonState = SingleLiveEvent<BalanceModule.StatsButtonState>()
 
     fun init() {
         BalanceModule.init(this, this)
@@ -81,10 +80,6 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
         setSortingOnLiveEvent.postValue(isOn)
     }
 
-    override fun setChartOn(isOn: Boolean) {
-        setChartOnLiveEvent.postValue(isOn)
-    }
-
     override fun showBackupAlert(coin: Coin, predefinedAccountType: IPredefinedAccountType) {
         showBackupAlert.postValue(Pair(coin, predefinedAccountType))
     }
@@ -97,7 +92,8 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
         openChartModule.postValue(coin)
     }
 
-    override fun setChartButtonState(enabled: Boolean) {
-        setChartButtonEnabled.value = enabled
+    override fun setStatsButton(state: BalanceModule.StatsButtonState) {
+        setStatsButtonState.postValue(state)
     }
+
 }
