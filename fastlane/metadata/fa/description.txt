@@ -34,15 +34,15 @@
 
 با استفاده از مکانیسم های ذخیره سازی ایمن ارائه شده توسط سیستم عامل تلفن ، دارایی های خود را در تلفن خود ایمن نگه دارید. کلیدهای مخفی شما هرگز دستگاه شما را ترک نمی کنند.
 
-  In case of a device loss or replacement you may easily restore your wallet using Secret Key. Unstoppable makes it really easy to switch to another wallet or migrate funds from another wallet.
+در صورت از بین رفتن دستگاه یا تعویض دستگاه ، شما به راحتی کیف پول خود را با استفاده از کلید مخفی بازیابی می کنید. غیرقابل توقف ، انتقال به کیف پول دیگر یا انتقال وجه از کیف پول دیگر را بسیار آسان می کند.
 
- (4) ALWAYS ONLINE
+(۴) همیشه آنلاین
 
-Access your funds from anywhere at any time.   Unstoppable wallet was engineered to remain online and functional independent of any third party servers.   
+از هرجایی و هر زمان به بودجه خود دسترسی داشته باشید. کیف پول غیرقابل توقف به گونه ای مهندسی شده است تا بصورت آنلاین و مستقل از سرورهای شخص ثالث باقی بماند.   
 
-No single entity can take the wallet down and cause it's main features to malfunction. Not even the Horizontal Systems team able to interfere with it.
+هیچ نهادی نمی تواند کیف پول را پایین بیاورد و باعث بد عمل کردن ویژگی های اصلی آن شود. حتی تیم سیستم های افقی قادر به دخالت در آن نیستند.
 
-(5) ADVANCED & AHEAD
+(۵) پیشرفته و رو به جلو
 
 Use the most technologically advanced and decentralized wallet ever built.   It’s the only mobile wallet that implements all major blockchains in a fully decentralized manner.
 
