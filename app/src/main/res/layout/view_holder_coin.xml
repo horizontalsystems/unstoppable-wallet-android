@@ -71,7 +71,7 @@
             tools:text="Bitcoin" />
 
         <TextView
-            android:id="@+id/textCoinAmount"
+            android:id="@+id/coinAmount"
             style="@style/Subhead2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -108,20 +108,20 @@
         <!-- Second Line-->
 
         <TextView
-            android:id="@+id/textSyncProgress"
+            android:id="@+id/textProgress"
             style="@style/Subhead2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:includeFontPadding="false"
             android:textColor="@color/grey"
-            android:visibility="visible"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/coinIcon"
             tools:text="Until Dec 17. 2018" />
 
         <TextView
-            android:id="@+id/textExchangeRate"
+            android:id="@+id/exchangeRate"
             style="@style/Subhead2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -133,7 +133,7 @@
             tools:text="$6500 per BTC" />
 
         <TextView
-            android:id="@+id/textCurrencyAmount"
+            android:id="@+id/fiatAmount"
             style="@style/Headline2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
