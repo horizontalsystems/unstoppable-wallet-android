@@ -44,7 +44,7 @@
 
 (۵) پیشرفته و رو به جلو
 
-Use the most technologically advanced and decentralized wallet ever built.   It’s the only mobile wallet that implements all major blockchains in a fully decentralized manner.
+از پیشرفته ترین و غیرمتمرکز ترین کیف پولی که تاکنون ساخته شده استفاده کنید. این تنها کیف پول متحرک است که کلیه زنجیره های اصلی را به روشی کاملاً غیرمتمرکز اجرا می کند.
 
 Over 2500 engineering hours being put into this wallet every month. This wallet is being constantly improved further and continuously integrates latest enhancements in all blockchains such as segwit or real-time transaction fee estimator.
   
