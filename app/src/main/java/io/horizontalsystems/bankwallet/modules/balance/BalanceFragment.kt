@@ -14,6 +14,7 @@ import com.google.android.material.appbar.AppBarLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.backup.BackupModule
+import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.StatsButtonState
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
@@ -174,10 +175,6 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
             sortButton.visibility = if (visible) View.VISIBLE else View.GONE
         })
 
-        viewModel.setChartOnLiveEvent.observe(viewLifecycleOwner, Observer { visible ->
-            chartButton.visibility = if (visible) View.VISIBLE else View.GONE
-        })
-
         viewModel.showBackupAlert.observe(viewLifecycleOwner, Observer {
             activity?.let { activity ->
                 BackupAlertDialog.show(activity, getString(it.second.title), it.first.title, object : BackupAlertDialog.Listener {
@@ -196,8 +193,22 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
             RateChartFragment(coin).also { it.show(childFragmentManager, it.tag) }
         })
 
-        viewModel.setChartButtonEnabled.observe(viewLifecycleOwner, Observer { enabled ->
-            chartButton.isActivated = enabled
+        viewModel.setStatsButtonState.observe(viewLifecycleOwner, Observer { statsButtonState ->
+            when (statsButtonState) {
+                StatsButtonState.NORMAL -> {
+                    chartButton.visibility = View.VISIBLE
+
+                    chartButton.isActivated = false
+                }
+                StatsButtonState.HIDDEN -> {
+                    chartButton.visibility = View.GONE
+                }
+                StatsButtonState.SELECTED -> {
+                    chartButton.visibility = View.VISIBLE
+
+                    chartButton.isActivated = true
+                }
+            }
         })
     }
 
