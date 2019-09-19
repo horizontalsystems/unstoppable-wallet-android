@@ -1,14 +1,14 @@
-If you’re a type of person who needs unrestricted access to invest in blockchains and require unconditional control over your crypto investments this wallet is for you.
+اگر شما فردی هستید که به دسترسی نامحدود برای سرمایه گذاری در زنجیره های بلوکی دارید و نیاز به کنترل بی قید و شرط سرمایه گذاری های رمزنگاری شده خود دارید ، این کیف پول برای شما مناسب است.
 
-This wallet was built to enable any freedom loving individual to invest and grow crypto currency portfolio without limitations, in a private manner, regardless of regulatory landscape.
+این کیف پول برای این ساخته شده است تا هر فرد طرفدار آزاد بتواند بدون محدودیت ، به صورت خصوصی و بدون در نظر گرفتن منظر نظارتی ، سرمایه گذاری و رشد کند.
 
-Exercise full unconditional control over your assets. Bitcoin, Ethereum, Dash and other crypto assets.
+کنترل کامل بدون قید و شرط بر دارایی های خود را تمرین کنید. بیت کوین ، اتریوم ، دش و سایر دارایی های رمزنگاری شده.
 
- Why Unstoppable Wallet
+چرا  کیف پول غیر قابل توقف
 
-It keeps crypto assets safe on your device
-It can only be controlled by yourself
-It doesn’t know who you are
+دارایی های رمزگذاری شده را در دستگاه شما مطمئن نگه می دارد
+تنها توسط خودتان می تواند کنترل شود
+نمی داند شما چه کسی هستید
 It doesn’t collect any data
 It's easy to migrate to/from
 It’s not dependent on any entity to function
