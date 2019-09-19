@@ -32,7 +32,7 @@
 
 (۳) بسیار مطمئن
 
-  Keep your crypto assets safe on your phone using safe storage mechanisms provided by phone's operating system. Your secret keys never leaves your device the device.
+با استفاده از مکانیسم های ذخیره سازی ایمن ارائه شده توسط سیستم عامل تلفن ، دارایی های خود را در تلفن خود ایمن نگه دارید. کلیدهای مخفی شما هرگز دستگاه شما را ترک نمی کنند.
 
   In case of a device loss or replacement you may easily restore your wallet using Secret Key. Unstoppable makes it really easy to switch to another wallet or migrate funds from another wallet.
 
