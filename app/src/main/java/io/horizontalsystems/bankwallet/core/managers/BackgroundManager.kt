@@ -11,8 +11,9 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
     }
 
     interface Listener {
-        fun willEnterForeground(activity: Activity)
-        fun didEnterBackground()
+        fun willEnterForeground(activity: Activity) {}
+        fun willEnterForeground() {}
+        fun didEnterBackground() {}
     }
 
     private var refs: Int = 0
@@ -38,6 +39,7 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
         if (refs == 0) {
             listeners.forEach { listener ->
                 listener.willEnterForeground(activity)
+                listener.willEnterForeground()
             }
         }
         refs++
