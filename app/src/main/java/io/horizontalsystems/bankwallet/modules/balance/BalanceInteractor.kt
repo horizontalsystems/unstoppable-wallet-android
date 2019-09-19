@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-import android.app.Activity
 import android.os.Handler
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.BackgroundManager
@@ -29,13 +28,15 @@ class BalanceInteractor(
     private var adapterDisposables = CompositeDisposable()
     private var rateDisposables = CompositeDisposable()
 
-    // BackgroundManager.Listener
-
-    override fun willEnterForeground(activity: Activity) {
-        delegate?.willEnterForeground()
+    init {
+        backgroundManager.registerListener(this)
     }
 
-    override fun didEnterBackground() {}
+    // BackgroundManager.Listener
+
+    override fun willEnterForeground() {
+        delegate?.willEnterForeground()
+    }
 
     // BalanceModule.IInteractor
 
@@ -44,8 +45,6 @@ class BalanceInteractor(
     }
 
     override fun initWallets() {
-        backgroundManager.registerListener(this)
-
         onUpdateWallets()
         onUpdateCurrency()
 
@@ -144,6 +143,7 @@ class BalanceInteractor(
 
     override fun clear() {
         backgroundManager.unregisterListener(this)
+
         disposables.clear()
         adapterDisposables.clear()
         rateDisposables.clear()
