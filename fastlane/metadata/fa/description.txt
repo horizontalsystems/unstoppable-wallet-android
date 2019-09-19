@@ -9,14 +9,14 @@
 دارایی های رمزگذاری شده را در دستگاه شما مطمئن نگه می دارد
 تنها توسط خودتان می تواند کنترل شود
 نمی داند شما چه کسی هستید
-It doesn’t collect any data
-It's easy to migrate to/from
-It’s not dependent on any entity to function
-It integrates blockchains in a decentralized manner
-It implements latest improvements for each blockchain
-It can’t be blocked or censored
-It provides real time transaction fees
-It’s fast and beautiful  
+هیچ اطلاعاتی را جمع آوری نمی کند
+مهاجرت به آن / از آن آسان است
+برای عمل کردن به هیچ نهادی وابسته نیست
+زنجیره های بلوکی را به روشی غیر متمرکز ادغام می کند
+آخرین پیشرفتها را برای هر زنجیره بلوکی پیاده سازی می کند
+نمی تواند مسدود یا سانسور شود
+هزینه تراکنش را در زمان واقعی فراهم می کند
+سریع و زیبا است
 It's the most advanced wallet to date
 (1) UNRESTRICTED CONTROL
 
