@@ -1,12 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.address
 
-class SendAddressPresenter(private val interactor: SendAddressModule.IInteractor)
-    : SendAddressModule.IViewDelegate, SendAddressModule.IInteractorDelegate, SendAddressModule.IAddressModule {
+import androidx.lifecycle.ViewModel
 
-    var view: SendAddressModule.IView? = null
+class SendAddressPresenter(val view: SendAddressModule.View,
+                           private val interactor: SendAddressModule.Interactor)
+    : ViewModel(), SendAddressModule.IAddressModule, SendAddressModule.InteractorDelegate,
+      SendAddressModule.ViewDelegate {
+
     var moduleDelegate: SendAddressModule.IAddressModuleDelegate? = null
-
-    // SendAddressModule.IAddressModule
 
     override var currentAddress: String? = null
         private set(value) {

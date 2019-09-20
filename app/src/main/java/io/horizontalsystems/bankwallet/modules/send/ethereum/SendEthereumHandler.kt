@@ -9,10 +9,9 @@ import io.reactivex.Single
 import java.math.BigDecimal
 
 class SendEthereumHandler(private val interactor: SendModule.ISendEthereumInteractor,
-                          private val router: SendModule.IRouter) : SendModule.ISendHandler,
-        SendAmountModule.IAmountModuleDelegate,
-        SendAddressModule.IAddressModuleDelegate,
-        SendFeeModule.IFeeModuleDelegate {
+                          private val router: SendModule.IRouter)
+    : SendModule.ISendHandler, SendAmountModule.IAmountModuleDelegate, SendAddressModule.IAddressModuleDelegate,
+      SendFeeModule.IFeeModuleDelegate {
 
     private fun syncValidation() {
         try {
@@ -52,7 +51,9 @@ class SendEthereumHandler(private val interactor: SendModule.ISendEthereumIntera
 
     override fun confirmationViewItems(): List<SendModule.SendConfirmationViewItem> {
         return listOf(
-                SendModule.SendConfirmationAmountViewItem(amountModule.primaryAmountInfo(), amountModule.secondaryAmountInfo(), addressModule.validAddress()),
+                SendModule.SendConfirmationAmountViewItem(amountModule.primaryAmountInfo(),
+                                                          amountModule.secondaryAmountInfo(),
+                                                          addressModule.validAddress()),
                 SendModule.SendConfirmationFeeViewItem(feeModule.primaryAmountInfo, feeModule.secondaryAmountInfo),
                 SendModule.SendConfirmationDurationViewItem(feeModule.duration))
     }

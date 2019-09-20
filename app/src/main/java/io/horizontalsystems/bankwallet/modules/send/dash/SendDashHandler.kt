@@ -9,10 +9,9 @@ import io.reactivex.Single
 import java.math.BigDecimal
 
 class SendDashHandler(private val interactor: SendModule.ISendDashInteractor,
-                      private val router: SendModule.IRouter) : SendModule.ISendHandler,
-        SendModule.ISendDashInteractorDelegate,
-        SendAmountModule.IAmountModuleDelegate,
-        SendAddressModule.IAddressModuleDelegate {
+                      private val router: SendModule.IRouter)
+    : SendModule.ISendHandler, SendModule.ISendDashInteractorDelegate, SendAmountModule.IAmountModuleDelegate,
+      SendAddressModule.IAddressModuleDelegate {
 
     private fun syncValidation() {
         try {
@@ -59,7 +58,9 @@ class SendDashHandler(private val interactor: SendModule.ISendDashInteractor,
 
     override fun confirmationViewItems(): List<SendModule.SendConfirmationViewItem> {
         return listOf(
-                SendModule.SendConfirmationAmountViewItem(amountModule.primaryAmountInfo(), amountModule.secondaryAmountInfo(), addressModule.validAddress()),
+                SendModule.SendConfirmationAmountViewItem(amountModule.primaryAmountInfo(),
+                                                          amountModule.secondaryAmountInfo(),
+                                                          addressModule.validAddress()),
                 SendModule.SendConfirmationFeeViewItem(feeModule.primaryAmountInfo, feeModule.secondaryAmountInfo))
     }
 

@@ -9,9 +9,8 @@ import io.reactivex.Single
 import java.math.BigDecimal
 
 class SendBinanceHandler(private val interactor: SendModule.ISendBinanceInteractor,
-                         private val router: SendModule.IRouter) : SendModule.ISendHandler,
-        SendAmountModule.IAmountModuleDelegate,
-        SendAddressModule.IAddressModuleDelegate {
+                         private val router: SendModule.IRouter)
+    : SendModule.ISendHandler, SendAmountModule.IAmountModuleDelegate, SendAddressModule.IAddressModuleDelegate {
 
     private fun syncValidation() {
         try {
@@ -44,7 +43,9 @@ class SendBinanceHandler(private val interactor: SendModule.ISendBinanceInteract
 
     override fun confirmationViewItems(): List<SendModule.SendConfirmationViewItem> {
         return listOf(
-                SendModule.SendConfirmationAmountViewItem(amountModule.primaryAmountInfo(), amountModule.secondaryAmountInfo(), addressModule.validAddress()),
+                SendModule.SendConfirmationAmountViewItem(amountModule.primaryAmountInfo(),
+                                                          amountModule.secondaryAmountInfo(),
+                                                          addressModule.validAddress()),
                 SendModule.SendConfirmationFeeViewItem(feeModule.primaryAmountInfo, feeModule.secondaryAmountInfo),
                 SendModule.SendConfirmationMemoViewItem(memoModule.memo))
     }

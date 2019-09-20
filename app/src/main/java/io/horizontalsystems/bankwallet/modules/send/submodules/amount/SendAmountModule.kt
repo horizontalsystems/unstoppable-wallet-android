@@ -12,7 +12,7 @@ import kotlin.math.min
 
 object SendAmountModule {
 
-    interface IView {
+    interface View {
         fun setAmountType(prefix: String?)
         fun setAmount(amount: String)
         fun setHint(hint: String?)
@@ -27,19 +27,19 @@ object SendAmountModule {
         fun revertAmount(amount: String)
     }
 
-    interface IViewDelegate {
+    interface ViewDelegate {
         fun onViewDidLoad()
         fun onAmountChange(amountString: String)
         fun onSwitchClick()
         fun onMaxClick()
     }
 
-    interface IInteractor {
+    interface Interactor {
         var defaultInputType: SendModule.InputType
         fun retrieveRate()
     }
 
-    interface IInteractorDelegate {
+    interface InteractorDelegate {
         fun didRateRetrieve(rate: Rate?)
     }
 

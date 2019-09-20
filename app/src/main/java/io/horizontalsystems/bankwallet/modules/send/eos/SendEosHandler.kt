@@ -9,9 +9,8 @@ import io.reactivex.Single
 import java.math.BigDecimal
 
 class SendEosHandler(private val interactor: SendModule.ISendEosInteractor,
-                     private val router: SendModule.IRouter) : SendModule.ISendHandler,
-        SendAmountModule.IAmountModuleDelegate,
-        SendAddressModule.IAddressModuleDelegate {
+                     private val router: SendModule.IRouter)
+    : SendModule.ISendHandler, SendAmountModule.IAmountModuleDelegate, SendAddressModule.IAddressModuleDelegate {
 
     private fun syncValidation() {
         try {
@@ -46,7 +45,9 @@ class SendEosHandler(private val interactor: SendModule.ISendEosInteractor,
 
     override fun confirmationViewItems(): List<SendModule.SendConfirmationViewItem> {
         return listOf(
-                SendModule.SendConfirmationAmountViewItem(amountModule.primaryAmountInfo(), amountModule.secondaryAmountInfo(), addressModule.validAddress()),
+                SendModule.SendConfirmationAmountViewItem(amountModule.primaryAmountInfo(),
+                                                          amountModule.secondaryAmountInfo(),
+                                                          addressModule.validAddress()),
                 SendModule.SendConfirmationMemoViewItem(memoModule.memo))
     }
 

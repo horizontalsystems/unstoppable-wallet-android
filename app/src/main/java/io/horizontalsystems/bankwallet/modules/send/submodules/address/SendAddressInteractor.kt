@@ -4,10 +4,12 @@ import io.horizontalsystems.bankwallet.core.IAddressParser
 import io.horizontalsystems.bankwallet.core.IClipboardManager
 import java.math.BigDecimal
 
-class SendAddressInteractor(private val textHelper: IClipboardManager,
-                            private val addressParser: IAddressParser) : SendAddressModule.IInteractor {
+class SendAddressInteractor(
+        private val textHelper: IClipboardManager,
+        private val addressParser: IAddressParser)
+    : SendAddressModule.Interactor {
 
-    var delegate: SendAddressModule.IInteractorDelegate? = null
+    var delegate: SendAddressModule.InteractorDelegate? = null
 
     override val addressFromClipboard: String?
         get() = textHelper.getCopiedText()
