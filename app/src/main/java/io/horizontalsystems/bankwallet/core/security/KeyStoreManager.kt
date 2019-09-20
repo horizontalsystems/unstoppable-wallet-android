@@ -47,21 +47,6 @@ class KeyStoreManager(private val keyAlias: String) : IKeyStoreManager, IKeyProv
             ex is UserNotAuthenticatedException
         }
 
-    override fun createKey(): SecretKey {
-        val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE)
-
-        keyGenerator.init(KeyGenParameterSpec.Builder(keyAlias,
-                KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
-                .setBlockModes(BLOCK_MODE)
-                .setUserAuthenticationRequired(true)
-                .setUserAuthenticationValidityDurationSeconds(AUTH_DURATION_SEC)
-                .setRandomizedEncryptionRequired(false)
-                .setEncryptionPaddings(PADDING)
-                .build())
-
-        return keyGenerator.generateKey()
-    }
-
     override fun getKey(): SecretKey {
         val key = keyStore.getKey(keyAlias, null) ?: createKey()
         return key as SecretKey
@@ -73,6 +58,20 @@ class KeyStoreManager(private val keyAlias: String) : IKeyStoreManager, IKeyProv
         } catch (ex: KeyStoreException) {
             logger.warning("removeKey: \n ${ex.getStackTraceString()}")
         }
+    }
+
+    private fun createKey(): SecretKey {
+        val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE)
+
+        keyGenerator.init(KeyGenParameterSpec.Builder(keyAlias, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
+                .setBlockModes(BLOCK_MODE)
+                .setUserAuthenticationRequired(true)
+                .setUserAuthenticationValidityDurationSeconds(AUTH_DURATION_SEC)
+                .setRandomizedEncryptionRequired(false)
+                .setEncryptionPaddings(PADDING)
+                .build())
+
+        return keyGenerator.generateKey()
     }
 
     private fun validateKey() {
