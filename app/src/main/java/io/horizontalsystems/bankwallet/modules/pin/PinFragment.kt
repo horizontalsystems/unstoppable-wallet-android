@@ -289,8 +289,8 @@ class PinPageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     private fun updatePinCircles(length: Int) {
-        val filledCircle = R.drawable.pin_circle_filled
-        val emptyCircle = R.drawable.ic_circle_steel_20_with_border
+        val filledCircle = R.drawable.ic_pin_ellipse_yellow
+        val emptyCircle = R.drawable.ic_pin_ellipse
 
         imgPinMask1.setImageResource(if (length > 0) filledCircle else emptyCircle)
         imgPinMask2.setImageResource(if (length > 1) filledCircle else emptyCircle)

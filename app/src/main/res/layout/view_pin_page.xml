@@ -99,7 +99,7 @@
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_circle_steel_20_with_border" />
+            app:srcCompat="@drawable/ic_pin_ellipse" />
 
         <ImageView
             android:id="@+id/imgPinMaskTwo"
@@ -110,7 +110,7 @@
             app:layout_constraintEnd_toStartOf="@+id/imgPinMaskThree"
             app:layout_constraintStart_toEndOf="@+id/imgPinMaskOne"
             app:layout_constraintTop_toTopOf="@+id/imgPinMaskOne"
-            app:srcCompat="@drawable/ic_circle_steel_20_with_border" />
+            app:srcCompat="@drawable/ic_pin_ellipse" />
 
         <ImageView
             android:id="@+id/imgPinMaskThree"
@@ -121,7 +121,7 @@
             app:layout_constraintEnd_toStartOf="@+id/imgPinMaskFour"
             app:layout_constraintStart_toEndOf="@+id/imgPinMaskTwo"
             app:layout_constraintTop_toTopOf="@+id/imgPinMaskTwo"
-            app:srcCompat="@drawable/ic_circle_steel_20_with_border" />
+            app:srcCompat="@drawable/ic_pin_ellipse" />
 
         <ImageView
             android:id="@+id/imgPinMaskFour"
@@ -132,7 +132,7 @@
             app:layout_constraintEnd_toStartOf="@+id/imgPinMaskFive"
             app:layout_constraintStart_toEndOf="@+id/imgPinMaskThree"
             app:layout_constraintTop_toTopOf="@+id/imgPinMaskThree"
-            app:srcCompat="@drawable/ic_circle_steel_20_with_border" />
+            app:srcCompat="@drawable/ic_pin_ellipse" />
 
         <ImageView
             android:id="@+id/imgPinMaskFive"
@@ -143,7 +143,7 @@
             app:layout_constraintEnd_toStartOf="@+id/imgPinMaskSix"
             app:layout_constraintStart_toEndOf="@+id/imgPinMaskFour"
             app:layout_constraintTop_toTopOf="@+id/imgPinMaskFour"
-            app:srcCompat="@drawable/ic_circle_steel_20_with_border" />
+            app:srcCompat="@drawable/ic_pin_ellipse" />
 
         <ImageView
             android:id="@+id/imgPinMaskSix"
@@ -154,7 +154,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imgPinMaskFive"
             app:layout_constraintTop_toTopOf="@+id/imgPinMaskFive"
-            app:srcCompat="@drawable/ic_circle_steel_20_with_border" />
+            app:srcCompat="@drawable/ic_pin_ellipse" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

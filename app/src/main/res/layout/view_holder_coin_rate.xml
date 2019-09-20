@@ -4,11 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="60dp"
-    android:background="@drawable/clickable_transaction_bg"
     android:clickable="true"
     android:focusable="true">
 
-    <ImageView
+    <io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
         android:id="@+id/coinIcon"
         android:layout_width="24dp"
         android:layout_height="24dp"
@@ -57,15 +56,31 @@
         tools:text="$400" />
 
     <TextView
-        android:id="@+id/txChangeValue"
+        android:id="@+id/txDiff"
         style="@style/Headline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:includeFontPadding="false"
         android:textColor="?ColorLucian"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/txCoinName"
         app:layout_constraintEnd_toEndOf="@+id/txValueInFiat"
         tools:text="+ 0.87%" />
+
+    <ProgressBar
+        android:id="@+id/loadingSpinner"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:backgroundTint="@color/grey"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/grey"
+        android:indeterminateTintMode="src_atop"
+        android:visibility="invisible"
+        app:layout_constraintTop_toTopOf="@+id/txCoinName"
+        app:layout_constraintEnd_toEndOf="@+id/txValueInFiat"/>
 
     <View
         android:id="@+id/divider"

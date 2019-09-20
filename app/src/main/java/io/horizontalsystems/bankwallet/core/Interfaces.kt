@@ -102,6 +102,7 @@ interface IWalletFactory {
 
 interface IWalletStorage {
     fun wallets(accounts: List<Account>): List<Wallet>
+    fun enabledCoins(): List<Coin>
     fun save(wallets: List<Wallet>)
 }
 
