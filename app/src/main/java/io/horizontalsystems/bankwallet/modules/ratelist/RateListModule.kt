@@ -38,7 +38,7 @@ object RateListModule {
         fun fetchRates(coinCodes: List<String>, currencyCode: String)
     }
 
-    interface IInteractorDelegate{
+    interface IInteractorDelegate {
         fun onReceive(statsData: StatsData)
         fun onFailStats(coinCode: String)
         fun didUpdateRate(rate: Rate)
@@ -47,13 +47,11 @@ object RateListModule {
 
     class Factory : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            var coins = App.walletStorage.enabledCoins()
-            if (coins.isEmpty()) {
-                coins = App.appConfigProvider.featuredCoins
-            }
             val view = RateListView()
+            val coins = RateListSorter().smartSort(App.walletStorage.enabledCoins(), App.appConfigProvider.featuredCoins)
             val interactor = RatesInteractor(App.rateStatsManager, App.rateStorage, CurrentDateProvider(), App.backgroundManager)
-            val presenter = RateListPresenter(view, interactor, DataSource(App.currencyManager.baseCurrency, coins))
+            val dataSource = DataSource(App.currencyManager.baseCurrency, coins)
+            val presenter = RateListPresenter(view, interactor, dataSource)
 
             interactor.delegate = presenter
 
@@ -65,10 +63,7 @@ object RateListModule {
 
         private val chartType = ChartView.ChartType.DAILY.name
 
-        var items = coins.map {coin ->
-            val viewItem = RateViewItem(coin)
-            viewItem
-        }
+        val items = coins.map { RateViewItem(it) }
 
         val coinCodes: List<String>
             get() {
@@ -91,7 +86,7 @@ object RateListModule {
         }
 
         fun setStatsFailed(coinCode: String) {
-            getPositionByCoinCode(coinCode)?.let {position ->
+            getPositionByCoinCode(coinCode)?.let { position ->
                 items[position].loadingStatus = RateLoadingStatus.Failed
             }
         }
@@ -103,6 +98,21 @@ object RateListModule {
     }
 }
 
+class RateListSorter {
+    fun smartSort(coins: List<Coin>, featuredCoins: List<Coin>): List<Coin> {
+        return if (coins.isEmpty()) {
+            featuredCoins
+        } else {
+            val filteredByPredefined = coins.filter { featuredCoins.contains(it) }
+            val remainingCoins = coins.filter { !featuredCoins.contains(it) }.sortedBy { it.title }
+            val mergedList = mutableListOf<Coin>()
+            mergedList.addAll(filteredByPredefined)
+            mergedList.addAll(remainingCoins)
+            mergedList
+        }
+    }
+}
+
 class RateViewItem(val coin: Coin) {
     var rateExpired: Boolean = false
     var rate: CurrencyValue? = null
@@ -110,6 +120,6 @@ class RateViewItem(val coin: Coin) {
     var loadingStatus: RateLoadingStatus = RateLoadingStatus.Loading
 }
 
-enum class RateLoadingStatus{
+enum class RateLoadingStatus {
     Loading, Loaded, Failed
 }
