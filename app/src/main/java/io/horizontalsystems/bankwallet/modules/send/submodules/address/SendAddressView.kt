@@ -4,17 +4,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.Coin
 
-class SendAddressViewModel : ViewModel(), SendAddressModule.IView {
-
-    lateinit var delegate: SendAddressModule.IViewDelegate
+class SendAddressView : SendAddressModule.View {
 
     val addressText = MutableLiveData<String?>()
     val error = MutableLiveData<Exception?>()
     val pasteButtonEnabled = MutableLiveData<Boolean>()
-
-    fun init(coin: Coin, moduleDelegate: SendAddressModule.IAddressModuleDelegate?): SendAddressPresenter {
-        return SendAddressModule.init(this, coin, moduleDelegate)
-    }
 
     override fun setAddress(address: String?) {
         addressText.value = address

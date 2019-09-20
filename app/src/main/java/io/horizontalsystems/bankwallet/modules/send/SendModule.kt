@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.send
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -149,77 +151,80 @@ object SendModule {
 
     data class SendConfirmationDurationViewItem(val duration: Long?) : SendConfirmationViewItem()
 
+    class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
 
-    fun init(viewModel: SendViewModel, wallet: Wallet): IViewDelegate {
-        val handler: ISendHandler = when (val adapter = App.adapterManager.getAdapterForWallet(wallet)) {
-            is ISendBitcoinAdapter -> {
-                val interactor = SendBitcoinInteractor(adapter)
-                val handler = SendBitcoinHandler(interactor, viewModel)
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
-                interactor.delegate = handler
+            val view = SendView()
+            val interactor: ISendInteractor = SendInteractor()
+            val router = SendRouter()
+            val presenter = SendPresenter(interactor, router)
 
-                viewModel.amountModuleDelegate = handler
-                viewModel.addressModuleDelegate = handler
-                viewModel.feeModuleDelegate = handler
+            val handler: ISendHandler = when (val adapter = App.adapterManager.getAdapterForWallet(wallet)) {
+                is ISendBitcoinAdapter -> {
+                    val bitcoinInteractor = SendBitcoinInteractor(adapter)
+                    val handler = SendBitcoinHandler(bitcoinInteractor, router)
 
-                handler
+                    bitcoinInteractor.delegate = handler
+
+                    presenter.amountModuleDelegate = handler
+                    presenter.addressModuleDelegate = handler
+                    presenter.feeModuleDelegate = handler
+
+                    handler
+                }
+                is ISendDashAdapter -> {
+                    val dashInteractor = SendDashInteractor(adapter)
+                    val handler = SendDashHandler(dashInteractor, router)
+
+                    dashInteractor.delegate = handler
+
+                    presenter.amountModuleDelegate = handler
+                    presenter.addressModuleDelegate = handler
+
+                    handler
+                }
+                is ISendEthereumAdapter -> {
+                    val ethereumInteractor = SendEthereumInteractor(adapter)
+                    val handler = SendEthereumHandler(ethereumInteractor, router)
+
+                    presenter.amountModuleDelegate = handler
+                    presenter.addressModuleDelegate = handler
+                    presenter.feeModuleDelegate = handler
+
+                    handler
+                }
+                is ISendBinanceAdapter -> {
+                    val binanceInteractor = SendBinanceInteractor(adapter)
+                    val handler = SendBinanceHandler(binanceInteractor, router)
+
+                    presenter.amountModuleDelegate = handler
+                    presenter.addressModuleDelegate = handler
+
+                    handler
+                }
+                is ISendEosAdapter -> {
+                    val eosInteractor = SendEosInteractor(adapter)
+                    val handler = SendEosHandler(eosInteractor, router)
+
+                    presenter.amountModuleDelegate = handler
+                    presenter.addressModuleDelegate = handler
+
+                    handler
+                }
+                else -> {
+                    throw Exception("No adapter found!")
+                }
             }
-            is ISendDashAdapter -> {
-                val interactor = SendDashInteractor(adapter)
-                val handler = SendDashHandler(interactor, viewModel)
 
-                interactor.delegate = handler
+            presenter.view = view
 
-                viewModel.amountModuleDelegate = handler
-                viewModel.addressModuleDelegate = handler
+            view.delegate = presenter
+            handler.delegate = presenter
+            interactor.delegate = presenter
 
-                handler
-            }
-            is ISendEthereumAdapter -> {
-                val interactor = SendEthereumInteractor(adapter)
-                val handler = SendEthereumHandler(interactor, viewModel)
-
-                viewModel.amountModuleDelegate = handler
-                viewModel.addressModuleDelegate = handler
-                viewModel.feeModuleDelegate = handler
-
-                handler
-            }
-            is ISendBinanceAdapter -> {
-                val interactor = SendBinanceInteractor(adapter)
-                val handler = SendBinanceHandler(interactor, viewModel)
-
-                viewModel.amountModuleDelegate = handler
-                viewModel.addressModuleDelegate = handler
-
-                handler
-            }
-            is ISendEosAdapter -> {
-                val interactor = SendEosInteractor(adapter)
-                val handler = SendEosHandler(interactor, viewModel)
-
-                viewModel.amountModuleDelegate = handler
-                viewModel.addressModuleDelegate = handler
-
-                handler
-            }
-            else -> {
-                throw Exception("No adapter found!")
-            }
+            return presenter as T
         }
-        val view: IView = viewModel
-        val router: IRouter = viewModel
-        val interactor: ISendInteractor = SendInteractor()
-
-        val presenter = SendPresenter(interactor, router, handler)
-
-        presenter.view = view
-
-        view.delegate = presenter
-        handler.delegate = presenter
-        interactor.delegate = presenter
-
-        return presenter
     }
 
     enum class InputType {

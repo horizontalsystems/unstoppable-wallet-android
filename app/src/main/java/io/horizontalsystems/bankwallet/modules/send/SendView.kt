@@ -9,15 +9,10 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddre
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
 
-class SendViewModel : ViewModel(), SendModule.IView, SendModule.IRouter {
+class SendView : SendModule.IView {
 
     override lateinit var delegate: SendModule.IViewDelegate
 
-    var amountModuleDelegate: SendAmountModule.IAmountModuleDelegate? = null
-    var addressModuleDelegate: SendAddressModule.IAddressModuleDelegate? = null
-    var feeModuleDelegate: SendFeeModule.IFeeModuleDelegate? = null
-
-    val closeWithSuccess = SingleLiveEvent<Unit>()
     val error = MutableLiveData<Throwable>()
     val errorInDialog = SingleLiveEvent<CoinException>()
     val confirmationViewItems = MutableLiveData<List<SendModule.SendConfirmationViewItem>>()
@@ -27,9 +22,9 @@ class SendViewModel : ViewModel(), SendModule.IView, SendModule.IRouter {
 
     val scanQrCode = SingleLiveEvent<Unit>()
 
-    fun init(wallet: Wallet): SendModule.IViewDelegate {
-        return SendModule.init(this, wallet)
-    }
+//    fun init(wallet: Wallet): SendModule.IViewDelegate {
+//        return SendModule.init(this, wallet)
+//    }
 
     override fun loadInputItems(inputs: List<SendModule.Input>) {
         inputItems.value = inputs
@@ -52,18 +47,18 @@ class SendViewModel : ViewModel(), SendModule.IView, SendModule.IRouter {
         showSendConfirmation.call()
     }
 
-    // SendModule.IRouter
-
-    override fun scanQrCode() {
-        scanQrCode.call()
-    }
-
-    override fun closeWithSuccess() {
-        closeWithSuccess.call()
-    }
-
-    override fun onCleared() {
-        delegate.onClear()
-    }
+//    // SendModule.IRouter
+//
+//    override fun scanQrCode() {
+//        scanQrCode.call()
+//    }
+//
+//    override fun closeWithSuccess() {
+//        closeWithSuccess.call()
+//    }
+//
+//    override fun onCleared() {
+//        delegate.onClear()
+//    }
 
 }
