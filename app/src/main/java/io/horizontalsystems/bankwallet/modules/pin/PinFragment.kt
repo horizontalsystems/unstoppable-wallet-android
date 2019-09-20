@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.pin.edit.EditPinModule
 import io.horizontalsystems.bankwallet.modules.pin.edit.EditPinPresenter
@@ -127,11 +126,11 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener {
             shadowlessToolbar.bind(null, TopMenuItem(R.drawable.back, onClick = { activity?.onBackPressed() }))
         })
 
-        pinView.titleLiveDate.observe(viewLifecycleOwner, Observer {
+        pinView.title.observe(viewLifecycleOwner, Observer {
             shadowlessToolbar.bindTitle(getString(it))
         })
 
-        pinView.addPagesEvent.observe(viewLifecycleOwner, Observer {
+        pinView.addPages.observe(viewLifecycleOwner, Observer {
             pinPagesAdapter.pinPages.addAll(it)
             pinPagesAdapter.notifyDataSetChanged()
         })
@@ -156,7 +155,7 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener {
             pinPagesAdapter.setEnteredPinLength(pageIndex, length)
         })
 
-        pinView.showFingerprintInputLiveEvent.observe(viewLifecycleOwner, Observer {
+        pinView.showFingerprintInput.observe(viewLifecycleOwner, Observer {
             showFingerprintDialog(it)
             numpadAdapter.showFingerPrintButton = true
         })

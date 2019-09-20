@@ -1,10 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.pin.set
 
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.pin.*
+import io.horizontalsystems.bankwallet.modules.pin.ManagePinPresenter
+import io.horizontalsystems.bankwallet.modules.pin.PinModule
+import io.horizontalsystems.bankwallet.modules.pin.PinPage
+import io.horizontalsystems.bankwallet.modules.pin.TopText
 
 class SetPinPresenter(
-        override val view: PinView,
+        override val view: PinModule.IView,
         val router: SetPinModule.IRouter,
         interactor: PinModule.IInteractor) : ManagePinPresenter(view, interactor, pages = listOf(Page.ENTER, Page.CONFIRM)) {
 

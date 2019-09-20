@@ -1,26 +1,21 @@
 package io.horizontalsystems.bankwallet.modules.pin
 
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
+import com.nhaarman.mockito_kotlin.whenever
 import io.horizontalsystems.bankwallet.core.IPinManager
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Captor
 import org.mockito.Mockito
 
 class PinInteractorTest {
 
-    private val delegate = Mockito.mock(PinModule.InteractorDelegate::class.java)
+    private val delegate = Mockito.mock(PinModule.IInteractorDelegate::class.java)
     private val pinManager = Mockito.mock(IPinManager::class.java)
     private var interactor = PinInteractor(pinManager)
 
-    @Captor
-    private val actionRunnableCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
-    @Captor
-    private val successRunnableCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
-    @Captor
-    private val failureRunnableCaptor: KArgumentCaptor<Runnable> = argumentCaptor()
 
     @Before
     fun setup() {

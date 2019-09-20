@@ -14,17 +14,16 @@ import java.util.*
 
 class UnlockPinPresenterTest {
 
-    private val interactor = mock(UnlockPinModule.IUnlockPinInteractor::class.java)
-    private val router = mock(UnlockPinModule.IUnlockPinRouter::class.java)
-    private val view = mock(PinModule.IPinView::class.java)
+    private val interactor = mock(UnlockPinModule.IInteractor::class.java)
+    private val router = mock(UnlockPinModule.IRouter::class.java)
+    private val view = mock(PinModule.IView::class.java)
     private lateinit var presenter: UnlockPinPresenter
 
     @Before
     fun setUp() {
         RxBaseTest.setup()
 
-        presenter = UnlockPinPresenter(interactor, router, false)
-        presenter.view = view
+        presenter = UnlockPinPresenter(view, router, interactor, false)
     }
 
     @Test
@@ -42,8 +41,7 @@ class UnlockPinPresenterTest {
 
     @Test
     fun viewDidLoad_showCancelButton() {
-        presenter = UnlockPinPresenter(interactor, router, true)
-        presenter.view = view
+        presenter = UnlockPinPresenter(view, router, interactor, true)
         presenter.viewDidLoad()
         verify(view).showBackButton()
         verify(interactor).updateLockoutState()
@@ -89,8 +87,7 @@ class UnlockPinPresenterTest {
 
     @Test
     fun onUnlock_onAppStart() {
-        presenter = UnlockPinPresenter(interactor, router, false)
-        presenter.view = view
+        presenter = UnlockPinPresenter(view, router, interactor, false)
 
         presenter.unlock()
         verify(router).dismissModuleWithSuccess()
@@ -105,23 +102,21 @@ class UnlockPinPresenterTest {
 
     @Test
     fun updateLockoutState_Unlocked() {
-        val attempts = null
-        val pageIndex = 0
-        val state = LockoutState.Unlocked(null)
+        val hasFailedAttempts = false
+        val state = LockoutState.Unlocked(hasFailedAttempts)
         presenter.updateLockoutState(state)
 
-        verify(view).showAttemptsLeft(attempts, pageIndex)
+        verify(view).showPinInput()
         verify(view, never()).showLockView(any())
     }
 
     @Test
     fun updateLockoutState_UnlockedWithFewAttempts() {
-        val attempts = 3
-        val pageIndex = 0
-        val state = LockoutState.Unlocked(3)
+        val hasFailedAttempts = true
+        val state = LockoutState.Unlocked(hasFailedAttempts)
         presenter.updateLockoutState(state)
 
-        verify(view).showAttemptsLeft(attempts, pageIndex)
+        verify(view).showPinInput()
         verify(view, never()).showLockView(any())
     }
 
@@ -132,21 +127,7 @@ class UnlockPinPresenterTest {
         presenter.updateLockoutState(state)
 
         verify(view).showLockView(any())
-        verify(view, never()).showAttemptsLeft(any(), any())
-    }
-
-    @Test
-    fun onBackPressed() {
-        presenter.onBackPressed()
-        verify(router).closeApplication()
-    }
-
-    @Test
-    fun onBackPressed_withShowCancelButton() {
-        presenter = UnlockPinPresenter(interactor, router, true)
-        presenter.onBackPressed()
-
-        verify(router).dismissModuleWithCancel()
+        verify(view, never()).showPinInput()
     }
 
 }

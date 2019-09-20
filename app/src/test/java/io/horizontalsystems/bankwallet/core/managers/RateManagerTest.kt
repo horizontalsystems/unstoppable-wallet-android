@@ -4,7 +4,10 @@ import com.nhaarman.mockito_kotlin.*
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.IRateStorage
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.entities.LatestRateData
+import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.modules.RxBaseTest
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -25,7 +28,7 @@ class RateManagerTest {
     private val mainHost = ServiceExchangeApi.HostType.MAIN
     private val fallbackHost = ServiceExchangeApi.HostType.FALLBACK
 
-    private val walletManager = mock<WalletManager>()
+    private val walletStorage = mock<WalletStorage>()
     private val currencyManager = mock<ICurrencyManager>()
     private val connectivityManager = mock<ConnectivityManager>()
     private val currencyCode = "USD"
@@ -34,7 +37,7 @@ class RateManagerTest {
     fun setup() {
         RxBaseTest.setup()
 
-        rateManager = RateManager(storage, networkManager, walletManager, currencyManager, connectivityManager)
+        rateManager = RateManager(storage, networkManager, walletStorage, currencyManager, connectivityManager)
 
         val baseCurrency = mock<Currency>()
 
@@ -45,75 +48,73 @@ class RateManagerTest {
 
     @Test
     fun refreshRates() {
-        val coins = listOf("BTC", "ETH")
+        val coinCodes = listOf("BTC", "ETH")
         val rates = hashMapOf("BTC" to "3981.05", "ETH" to "138.27")
 
-        val wallets = getMockWalletsForCoinCodes(coins)
-        whenever(walletManager.wallets).thenReturn(wallets)
+        val coins = getMockCoinsForCoinCodes(coinCodes)
+        whenever(walletStorage.enabledCoins()).thenReturn(coins)
 
         whenever(networkManager.getLatestRateData(mainHost, currencyCode)).thenReturn(Single.just(LatestRateData(rates, "USD", 1000L)))
         whenever(networkManager.getLatestRateData(fallbackHost, currencyCode)).thenReturn(Single.just(LatestRateData(rates, "USD", 1000L)))
 
         rateManager.syncLatestRates()
 
-        verify(storage).saveLatest(Rate(coins[0], currencyCode, 3981.05.toBigDecimal(), 1000, true))
-        verify(storage).saveLatest(Rate(coins[1], currencyCode, 138.27.toBigDecimal(), 1000, true))
+        verify(storage).saveLatest(Rate(coinCodes[0], currencyCode, 3981.05.toBigDecimal(), 1000, true))
+        verify(storage).saveLatest(Rate(coinCodes[1], currencyCode, 138.27.toBigDecimal(), 1000, true))
         verify(storage, atMost(2)).saveLatest(any())
     }
 
 
     @Test
     fun refreshRates_oneMissingRate() {
-        val coins = listOf("BTC", "ETH")
+        val coinCodes = listOf("BTC", "ETH")
         val rates = hashMapOf("ETH" to "138.27")
 
-        val wallets = getMockWalletsForCoinCodes(coins)
-        whenever(walletManager.wallets).thenReturn(wallets)
+        val coins = getMockCoinsForCoinCodes(coinCodes)
+        whenever(walletStorage.enabledCoins()).thenReturn(coins)
 
         whenever(networkManager.getLatestRateData(mainHost, currencyCode)).thenReturn(Single.just(LatestRateData(rates, "USD", 1000L)))
         whenever(networkManager.getLatestRateData(fallbackHost, currencyCode)).thenReturn(Single.just(LatestRateData(rates, "USD", 1000L)))
 
         rateManager.syncLatestRates()
 
-        verify(storage).saveLatest(Rate(coins[1], currencyCode, 138.27.toBigDecimal(), 1000, true))
+        verify(storage).saveLatest(Rate(coinCodes[1], currencyCode, 138.27.toBigDecimal(), 1000, true))
         verify(storage, atMost(1)).saveLatest(any())
     }
 
-    private fun getMockWalletsForCoinCodes(coinCodes: List<String>): List<Wallet> {
+    private fun getMockCoinsForCoinCodes(coinCodes: List<String>): List<Coin> {
         return coinCodes.map {
-            val wallet = mock<Wallet>()
             val coin = mock<Coin>()
 
-            whenever(wallet.coin).thenReturn(coin)
             whenever(coin.code).thenReturn(it)
 
-            wallet
+            coin
         }
     }
 
     @Test
     fun refreshRates_oneEmptyRate() {
-        val coins = listOf("BTC", "ETH")
+        val coinCodes = listOf("BTC", "ETH")
         val rates = hashMapOf("BTC" to "", "ETH" to "138.27")
 
-        val wallets = getMockWalletsForCoinCodes(coins)
-        whenever(walletManager.wallets).thenReturn(wallets)
+        val coins = getMockCoinsForCoinCodes(coinCodes)
+        whenever(walletStorage.enabledCoins()).thenReturn(coins)
 
         whenever(networkManager.getLatestRateData(mainHost, currencyCode)).thenReturn(Single.just(LatestRateData(rates, "USD", 1000L)))
         whenever(networkManager.getLatestRateData(fallbackHost, currencyCode)).thenReturn(Single.just(LatestRateData(rates, "USD", 1000L)))
 
         rateManager.syncLatestRates()
 
-        verify(storage).saveLatest(Rate(coins[1], currencyCode, 138.27.toBigDecimal(), 1000, true))
+        verify(storage).saveLatest(Rate(coinCodes[1], currencyCode, 138.27.toBigDecimal(), 1000, true))
         verify(storage, atMost(1)).saveLatest(any())
     }
 
     @Test
     fun refreshRates_oneError() {
-        val coins = listOf("BTC", "ETH")
+        val coinCodes = listOf("BTC", "ETH")
 
-        val wallets = getMockWalletsForCoinCodes(coins)
-        whenever(walletManager.wallets).thenReturn(wallets)
+        val coins = getMockCoinsForCoinCodes(coinCodes)
+        whenever(walletStorage.enabledCoins()).thenReturn(coins)
 
         whenever(networkManager.getLatestRateData(fallbackHost, currencyCode)).thenReturn(Single.error(Exception()))
         whenever(networkManager.getLatestRateData(mainHost, currencyCode)).thenReturn(Single.error(Exception()))
@@ -125,19 +126,19 @@ class RateManagerTest {
 
     @Test
     fun refreshRates_fromFallbackHost() {
-        val coins = listOf("BTC", "ETH")
+        val coinCodes = listOf("BTC", "ETH")
         val rates = hashMapOf("BTC" to "3981.05", "ETH" to "138.27")
 
-        val wallets = getMockWalletsForCoinCodes(coins)
-        whenever(walletManager.wallets).thenReturn(wallets)
+        val coins = getMockCoinsForCoinCodes(coinCodes)
+        whenever(walletStorage.enabledCoins()).thenReturn(coins)
 
         whenever(networkManager.getLatestRateData(fallbackHost, currencyCode)).thenReturn(Single.error(Exception()))
         whenever(networkManager.getLatestRateData(mainHost, currencyCode)).thenReturn(Single.just(LatestRateData(rates, "USD", 1000L)))
 
         rateManager.syncLatestRates()
 
-        verify(storage).saveLatest(Rate(coins[0], currencyCode, 3981.05.toBigDecimal(), 1000, true))
-        verify(storage).saveLatest(Rate(coins[1], currencyCode, 138.27.toBigDecimal(), 1000, true))
+        verify(storage).saveLatest(Rate(coinCodes[0], currencyCode, 3981.05.toBigDecimal(), 1000, true))
+        verify(storage).saveLatest(Rate(coinCodes[1], currencyCode, 138.27.toBigDecimal(), 1000, true))
         verify(storage, atMost(2)).saveLatest(any())
     }
 
