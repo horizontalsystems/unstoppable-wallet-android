@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 
 open class ManagePinPresenter(
-        open val view: PinView,
+        open val view: PinModule.IView,
         private val interactor: PinModule.IInteractor,
         val pages: List<Page>) : ViewModel(), PinModule.IViewDelegate, PinModule.IInteractorDelegate {
 

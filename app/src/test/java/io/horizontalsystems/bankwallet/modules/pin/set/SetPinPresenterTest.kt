@@ -11,15 +11,14 @@ import org.mockito.Mockito
 
 class SetPinPresenterTest {
 
-    private val interactor = Mockito.mock(PinModule.IPinInteractor::class.java)
-    private val router = Mockito.mock(SetPinModule.ISetPinRouter::class.java)
-    private val view = Mockito.mock(PinModule.IPinView::class.java)
-    private var presenter = SetPinPresenter(interactor, router)
+    private val interactor = Mockito.mock(PinModule.IInteractor::class.java)
+    private val router = Mockito.mock(SetPinModule.IRouter::class.java)
+    private val view = Mockito.mock(PinModule.IView::class.java)
+    private var presenter = SetPinPresenter(view, router, interactor)
 
     @Before
     fun setUp() {
         RxBaseTest.setup()
-        presenter.view = view
     }
 
     @Test

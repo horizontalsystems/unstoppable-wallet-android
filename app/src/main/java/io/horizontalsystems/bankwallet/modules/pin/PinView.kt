@@ -7,22 +7,22 @@ import java.util.*
 
 class PinView : PinModule.IView {
 
-    val titleLiveDate = MutableLiveData<Int>()
-    val addPagesEvent = MutableLiveData<List<PinPage>>()
+    val title = MutableLiveData<Int>()
+    val addPages = MutableLiveData<List<PinPage>>()
     val showPageAtIndex = MutableLiveData<Int>()
     val showError = MutableLiveData<Int>()
     val updateTopTextForPage = MutableLiveData<Pair<TopText, Int>>()
     val fillPinCircles = MutableLiveData<Pair<Int, Int>>()
     val hideToolbar = SingleLiveEvent<Unit>()
     val showBackButton = SingleLiveEvent<Unit>()
-    val showFingerprintInputLiveEvent = SingleLiveEvent<BiometricPrompt.CryptoObject>()
+    val showFingerprintInput = SingleLiveEvent<BiometricPrompt.CryptoObject>()
     val resetCirclesWithShakeAndDelayForPage = SingleLiveEvent<Int>()
     val showLockedView = SingleLiveEvent<Date>()
     val showPinInput = SingleLiveEvent<Unit>()
 
 
     override fun setTitle(title: Int) {
-        titleLiveDate.value = title
+        this.title.value = title
     }
 
     override fun hideToolbar() {
@@ -30,7 +30,7 @@ class PinView : PinModule.IView {
     }
 
     override fun addPages(pages: List<PinPage>) {
-        addPagesEvent.value = pages
+        addPages.value = pages
     }
 
     override fun showPage(index: Int) {
@@ -50,7 +50,7 @@ class PinView : PinModule.IView {
     }
 
     override fun showFingerprintDialog(cryptoObject: BiometricPrompt.CryptoObject) {
-        showFingerprintInputLiveEvent.postValue(cryptoObject)
+        showFingerprintInput.postValue(cryptoObject)
     }
 
     override fun showBackButton() {

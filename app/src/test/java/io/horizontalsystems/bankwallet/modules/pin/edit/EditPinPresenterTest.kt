@@ -10,15 +10,14 @@ import org.mockito.Mockito
 
 class EditPinPresenterTest {
 
-    private val interactor = Mockito.mock(PinModule.IPinInteractor::class.java)
-    private val router = Mockito.mock(EditPinModule.IEditPinRouter::class.java)
-    private val view = Mockito.mock(PinModule.IPinView::class.java)
-    private var presenter = EditPinPresenter(interactor, router)
+    private val interactor = Mockito.mock(PinModule.IInteractor::class.java)
+    private val router = Mockito.mock(EditPinModule.IRouter::class.java)
+    private val view = Mockito.mock(PinModule.IView::class.java)
+    private var presenter = EditPinPresenter(view, router, interactor)
 
     @Before
     fun setUp() {
         RxBaseTest.setup()
-        presenter.view = view
     }
 
 
@@ -41,9 +40,4 @@ class EditPinPresenterTest {
         verify(router).dismissModuleWithSuccess()
     }
 
-    @Test
-    fun onBackPressed() {
-        presenter.onBackPressed()
-        verify(router).dismissModuleWithCancel()
-    }
 }
