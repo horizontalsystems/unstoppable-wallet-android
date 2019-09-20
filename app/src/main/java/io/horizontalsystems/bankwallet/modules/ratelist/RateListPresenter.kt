@@ -41,29 +41,23 @@ class RateListPresenter(
         postViewReload()
     }
 
+    override fun willEnterForeground() {
+        interactor.getRateStats(dataSource.coinCodes, dataSource.baseCurrency.code)
+    }
+
     @Synchronized
     override fun didUpdateRate(rate: Rate) {
-        dataSource.getPositionsByCoinCode(rate.coinCode).forEach { position ->
-            dataSource.setRate(position, rate)
-        }
+        dataSource.setRate(rate)
         postViewReload()
     }
 
-    override fun onReceiveRateStats(statsData: StatsData) {
-        val positions = dataSource.getPositionsByCoinCode(statsData.coinCode)
-        val chartDiff = statsData.diff[dataSource.chartType]
-
-        positions.forEach { position ->
-            dataSource.setChartData(position, chartDiff)
-        }
-
+    override fun onReceive(statsData: StatsData) {
+        dataSource.setChartData(statsData)
         postViewReload()
     }
 
-    override fun onFailFetchChartStats(coinCode: String) {
-        dataSource.getPositionsByCoinCode(coinCode).forEach { position ->
-            dataSource.setLoadingStatusAsFailed(position)
-        }
+    override fun onFailStats(coinCode: String) {
+        dataSource.setStatsFailed(coinCode)
         postViewReload()
     }
 

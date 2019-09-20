@@ -39,9 +39,10 @@ object RateListModule {
     }
 
     interface IInteractorDelegate{
-        fun onReceiveRateStats(statsData: StatsData)
-        fun onFailFetchChartStats(coinCode: String)
+        fun onReceive(statsData: StatsData)
+        fun onFailStats(coinCode: String)
         fun didUpdateRate(rate: Rate)
+        fun willEnterForeground()
     }
 
     class Factory : ViewModelProvider.Factory {
@@ -51,7 +52,7 @@ object RateListModule {
                 coins = App.appConfigProvider.featuredCoins
             }
             val view = RateListView()
-            val interactor = RatesInteractor(App.rateStatsManager, App.rateStorage, CurrentDateProvider())
+            val interactor = RatesInteractor(App.rateStatsManager, App.rateStorage, CurrentDateProvider(), App.backgroundManager)
             val presenter = RateListPresenter(view, interactor, DataSource(App.currencyManager.baseCurrency, coins))
 
             interactor.delegate = presenter
@@ -61,6 +62,9 @@ object RateListModule {
     }
 
     class DataSource(val baseCurrency: Currency, coins: List<Coin>) {
+
+        private val chartType = ChartView.ChartType.DAILY.name
+
         var items = coins.map {coin ->
             val viewItem = RateViewItem(coin)
             viewItem
@@ -71,30 +75,30 @@ object RateListModule {
                 return items.map { it.coin.code }
             }
 
-        var chartType = ChartView.ChartType.DAILY.name
-
-        fun setChartData(position: Int, diff: BigDecimal?) {
-            items[position].diff = diff
-            items[position].loadingStatus = RateLoadingStatus.Loaded
-        }
-
-        fun setRate(position: Int, rate: Rate) {
-            items[position].rate = CurrencyValue(baseCurrency, rate.value)
-            items[position].rateExpired = rate.expired
-        }
-
-        fun setLoadingStatusAsFailed(position: Int) {
-            items[position].loadingStatus = RateLoadingStatus.Failed
-        }
-
-        fun getPositionsByCoinCode(coinCode: String): List<Int> {
-            return items.mapIndexedNotNull { index, viewItem ->
-                if (viewItem.coin.code == coinCode) {
-                    index
-                } else {
-                    null
-                }
+        fun setChartData(statsData: StatsData) {
+            val chartDiff = statsData.diff[chartType]
+            getPositionByCoinCode(statsData.coinCode)?.let { position ->
+                items[position].diff = chartDiff
+                items[position].loadingStatus = RateLoadingStatus.Loaded
             }
+        }
+
+        fun setRate(rate: Rate) {
+            getPositionByCoinCode(rate.coinCode)?.let { position ->
+                items[position].rate = CurrencyValue(baseCurrency, rate.value)
+                items[position].rateExpired = rate.expired
+            }
+        }
+
+        fun setStatsFailed(coinCode: String) {
+            getPositionByCoinCode(coinCode)?.let {position ->
+                items[position].loadingStatus = RateLoadingStatus.Failed
+            }
+        }
+
+        private fun getPositionByCoinCode(coinCode: String): Int? {
+            val index = items.indexOfFirst { it.coin.code == coinCode }
+            return if (index >= 0) index else null
         }
     }
 }

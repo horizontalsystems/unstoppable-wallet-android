@@ -1,7 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.ratelist
 
+import android.app.Activity
 import io.horizontalsystems.bankwallet.core.IRateStatsManager
 import io.horizontalsystems.bankwallet.core.IRateStorage
+import io.horizontalsystems.bankwallet.core.managers.BackgroundManager
 import io.horizontalsystems.bankwallet.core.managers.CurrentDateProvider
 import io.horizontalsystems.bankwallet.core.managers.StatsData
 import io.horizontalsystems.bankwallet.core.managers.StatsError
@@ -12,11 +14,20 @@ import java.util.*
 class RatesInteractor(
         private val rateStatsManager: IRateStatsManager,
         private val rateStorage: IRateStorage,
-        private val currentDateProvider: CurrentDateProvider
-) : RateListModule.IInteractor {
+        private val currentDateProvider: CurrentDateProvider,
+        private val backgroundManager: BackgroundManager
+) : RateListModule.IInteractor, BackgroundManager.Listener {
+
+    init {
+        backgroundManager.registerListener(this)
+    }
 
     var delegate: RateListModule.IInteractorDelegate? = null
     private var disposables = CompositeDisposable()
+
+    override fun willEnterForeground(activity: Activity) {
+        delegate?.willEnterForeground()
+    }
 
     override val currentDate: Date
         get() = currentDateProvider.currentDate
@@ -27,8 +38,8 @@ class RatesInteractor(
                 .observeOn(Schedulers.io())
                 .subscribe({
                     when (it) {
-                        is StatsData -> delegate?.onReceiveRateStats(it)
-                        is StatsError -> delegate?.onFailFetchChartStats(it.coinCode)
+                        is StatsData -> delegate?.onReceive(it)
+                        is StatsError -> delegate?.onFailStats(it.coinCode)
                     }
                 }, {
                 })
@@ -54,6 +65,7 @@ class RatesInteractor(
     }
 
     override fun clear() {
+        backgroundManager.unregisterListener(this)
         disposables.clear()
     }
 }
