@@ -60,6 +60,10 @@ class MainSettingsPresenter(
         router.showShareApp(interactor.appWebPageLink)
     }
 
+    override fun didTapNotifications() {
+        router.showNotifications()
+    }
+
     // IMainSettingsInteractorDelegate
 
     override fun didUpdateAllBackedUp(allBackedUp: Boolean) {

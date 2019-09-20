@@ -9,6 +9,7 @@ class MainSettingsRouter: MainSettingsModule.IMainSettingsRouter {
     val showBaseCurrencySettingsLiveEvent = SingleLiveEvent<Unit>()
     val showLanguageSettingsLiveEvent = SingleLiveEvent<Unit>()
     val showAboutLiveEvent = SingleLiveEvent<Unit>()
+    val showNotificationsLiveEvent = SingleLiveEvent<Unit>()
     val showReportProblemLiveEvent = SingleLiveEvent<Unit>()
     val openLinkLiveEvent = SingleLiveEvent<String>()
     val shareAppLiveEvent = SingleLiveEvent<String>()
@@ -50,4 +51,7 @@ class MainSettingsRouter: MainSettingsModule.IMainSettingsRouter {
         shareAppLiveEvent.postValue(appWebPageLink)
     }
 
+    override fun showNotifications() {
+        showNotificationsLiveEvent.call()
+    }
 }

@@ -12,10 +12,7 @@ import io.horizontalsystems.bankwallet.core.factories.FeeCoinProvider
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.core.security.KeyStoreManager
-import io.horizontalsystems.bankwallet.core.storage.AccountsStorage
-import io.horizontalsystems.bankwallet.core.storage.AppDatabase
-import io.horizontalsystems.bankwallet.core.storage.EnabledWalletsStorage
-import io.horizontalsystems.bankwallet.core.storage.RatesRepository
+import io.horizontalsystems.bankwallet.core.storage.*
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -61,6 +58,7 @@ class App : Application() {
         lateinit var appDatabase: AppDatabase
         lateinit var rateStorage: IRateStorage
         lateinit var accountsStorage: IAccountsStorage
+        lateinit var priceAlertsStorage: IPriceAlertsStorage
         lateinit var enabledWalletsStorage: IEnabledWalletStorage
         lateinit var transactionInfoFactory: FullTransactionInfoFactory
         lateinit var transactionDataProviderManager: TransactionDataProviderManager
@@ -111,6 +109,7 @@ class App : Application() {
         appDatabase = AppDatabase.getInstance(this)
         rateStorage = RatesRepository(appDatabase)
         accountsStorage = AccountsStorage(appDatabase)
+        priceAlertsStorage = PriceAlertsStorage(appConfigProvider, appDatabase)
 
         walletFactory = WalletFactory()
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)

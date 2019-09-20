@@ -9,11 +9,13 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
+import io.horizontalsystems.bankwallet.entities.PriceAlertRecord
 import io.horizontalsystems.bankwallet.entities.Rate
 
-@Database(version = 9, exportSchema = false, entities = [
+@Database(version = 10, exportSchema = false, entities = [
     Rate::class,
     EnabledWallet::class,
+    PriceAlertRecord::class,
     AccountRecord::class]
 )
 
@@ -23,6 +25,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun ratesDao(): RatesDao
     abstract fun walletsDao(): EnabledWalletsDao
     abstract fun accountsDao(): AccountsDao
+    abstract fun priceAlertsDao(): PriceAlertsDao
 
     companion object {
 

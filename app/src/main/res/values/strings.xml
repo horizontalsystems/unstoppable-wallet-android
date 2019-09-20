@@ -227,6 +227,7 @@
 
     <string name="Settings_Title">Settings</string>
     <string name="Settings_SecurityCenter">Security Center</string>
+    <string name="Settings_Notifications">Notifications</string>
     <string name="Settings_ManageCoins">Manage Coins</string>
     <string name="Settings_RestoreWallet">Restore Wallet</string>
     <string name="Settings_BaseCurrency">Base Currency</string>
@@ -283,6 +284,12 @@
     <string name="SettingsReport_Title">Report a Problem</string>
     <string name="SettingsReport_Email">Mail</string>
     <string name="SettingsReport_Telegram">Telegram</string>
+
+    <!--Setting_Notifications-->
+
+    <string name="SettingsNotifications_Title">Notifications</string>
+    <string name="SettingsNotifications_Description">Set price notifications for the coins you would like to watch.</string>
+    <string name="SettingsNotifications_Off">Off</string>
 
     <!--Alert-->
 
