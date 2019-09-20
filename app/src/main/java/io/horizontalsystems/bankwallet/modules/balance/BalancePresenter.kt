@@ -188,7 +188,9 @@ class BalancePresenter(
         if (positions.isEmpty())
             return
 
-        interactor.syncStats(rate.coinCode, dataSource.currency.code)
+        if (dataSource.statsButtonState == StatsButtonState.SELECTED) {
+            interactor.syncStats(rate.coinCode, dataSource.currency.code)
+        }
 
         positions.forEach { position ->
             dataSource.setRate(position, rate)
