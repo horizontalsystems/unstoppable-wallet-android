@@ -34,5 +34,6 @@ class CellLeftView : ConstraintLayout {
         super.onFinishInflate()
 
         cellIcon.visibility = View.GONE
+        cellSubtitle.visibility = View.GONE
     }
 }

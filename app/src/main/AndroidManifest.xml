@@ -71,6 +71,9 @@
             android:name=".modules.settings.AboutSettingsActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".modules.notifications.NotificationsActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".modules.reportproblem.ReportProblemActivity"
             android:screenOrientation="portrait" />
         <activity

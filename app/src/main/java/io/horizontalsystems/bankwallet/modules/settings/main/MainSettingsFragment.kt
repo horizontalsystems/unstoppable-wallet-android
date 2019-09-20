@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
+import io.horizontalsystems.bankwallet.modules.notifications.NotificationsModule
 import io.horizontalsystems.bankwallet.modules.reportproblem.ReportProblemModule
 import io.horizontalsystems.bankwallet.modules.settings.AboutSettingsActivity
 import io.horizontalsystems.bankwallet.modules.settings.basecurrency.BaseCurrencySettingsModule
@@ -49,6 +50,8 @@ class MainSettingsFragment : Fragment() {
 
     private fun bindViewListeners(presenter: MainSettingsPresenter) {
         securityCenter.setOnClickListener { presenter.didTapSecurity() }
+
+        notifications.setOnClickListener { presenter.didTapNotifications() }
 
         manageCoins.setOnClickListener { presenter.didManageCoins() }
 
@@ -119,6 +122,12 @@ class MainSettingsFragment : Fragment() {
         router.showAboutLiveEvent.observe(viewLifecycleOwner, Observer {
             activity?.let {
                 AboutSettingsActivity.start(it)
+            }
+        })
+
+        router.showNotificationsLiveEvent.observe(viewLifecycleOwner, Observer {
+            activity?.let {
+                NotificationsModule.start(it)
             }
         })
 

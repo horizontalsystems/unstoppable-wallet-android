@@ -378,6 +378,12 @@ interface IAccountsStorage {
     fun clearDeleted()
 }
 
+interface IPriceAlertsStorage {
+    fun all(): List<PriceAlert>
+    fun save(priceAlert: PriceAlert)
+    fun delete(priceAlert: PriceAlert)
+}
+
 interface IEnabledWalletStorage {
     val enabledWallets: List<EnabledWallet>
     fun save(coins: List<EnabledWallet>)

@@ -59,13 +59,24 @@
                 app:layout_constraintTop_toBottomOf="@+id/manageCoins" />
 
             <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
-                android:id="@+id/baseCurrency"
+                android:id="@+id/notifications"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/manageCoins"
+                app:setting_arrow="true"
+                app:setting_icon="@drawable/ic_notification"
+                app:setting_title="@string/Settings_Notifications" />
+
+            <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
+                android:id="@+id/baseCurrency"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/notifications"
                 app:setting_arrow="true"
                 app:setting_icon="@drawable/ic_currency"
                 app:setting_title="@string/Settings_BaseCurrency" />

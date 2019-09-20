@@ -13,6 +13,8 @@ class CellRightView : ConstraintLayout {
     init {
         inflate(context, R.layout.view_cell_right, this)
         enableIcon(null)
+        cellTitle.visibility = View.GONE
+        spinner.visibility = View.GONE
     }
 
     constructor(context: Context) : super(context)
@@ -22,7 +24,9 @@ class CellRightView : ConstraintLayout {
     var title: String? = null
         set(value) {
             field = value
-            cellTitle.text = title
+
+            cellTitle.text = value
+            cellTitle.visibility = if (value == null) View.GONE else View.VISIBLE
         }
 
     var checked: Boolean = false
