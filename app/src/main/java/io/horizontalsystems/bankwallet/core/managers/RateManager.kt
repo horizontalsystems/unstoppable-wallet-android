@@ -13,7 +13,7 @@ import java.net.SocketTimeoutException
 
 class RateManager(private val storage: IRateStorage,
                   private val networkManager: INetworkManager,
-                  private val walletManager: IWalletManager,
+                  private val walletStorage: IWalletStorage,
                   private val currencyManager: ICurrencyManager,
                   private val connectivityManager: ConnectivityManager) : IRateManager {
 
@@ -22,7 +22,7 @@ class RateManager(private val storage: IRateStorage,
 
     override fun syncLatestRates() {
         if (connectivityManager.isConnected) {
-            val coinCodes = walletManager.wallets.map { it.coin.code }
+            val coinCodes = walletStorage.enabledCoins().map { it.code }
             if (coinCodes.isNotEmpty()) {
                 refreshLatestRates(coinCodes, currencyManager.baseCurrency.code)
             }
