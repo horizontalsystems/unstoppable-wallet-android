@@ -104,7 +104,7 @@ class RateListSorter {
             featuredCoins
         } else {
             val filteredByPredefined = coins.filter { featuredCoins.contains(it) }
-            val remainingCoins = coins.filter { !featuredCoins.contains(it) }.sortedBy { it.title }
+            val remainingCoins = coins.filter { !featuredCoins.contains(it) }.sortedBy { it.code }
             val mergedList = mutableListOf<Coin>()
             mergedList.addAll(filteredByPredefined)
             mergedList.addAll(remainingCoins)

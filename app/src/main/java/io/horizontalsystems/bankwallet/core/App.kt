@@ -145,7 +145,7 @@ class App : Application() {
 
         adapterManager = AdapterManager(walletManager, AdapterFactory(instance, appConfigProvider, ethereumKitManager, eosKitManager, binanceKitManager), ethereumKitManager, eosKitManager, binanceKitManager)
 
-        rateManager = RateManager(rateStorage, networkManager, walletManager, currencyManager, connectivityManager)
+        rateManager = RateManager(rateStorage, networkManager, walletStorage, currencyManager, connectivityManager)
         rateSyncScheduler = RateSyncScheduler(rateManager, walletManager, currencyManager, connectivityManager)
 
         transactionDataProviderManager = TransactionDataProviderManager(appConfigProvider, localStorage)
