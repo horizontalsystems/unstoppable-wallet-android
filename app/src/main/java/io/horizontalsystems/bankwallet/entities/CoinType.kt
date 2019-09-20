@@ -21,12 +21,12 @@ sealed class CoinType : Serializable {
             }
             is Bitcoin, BitcoinCash, Dash, Ethereum, is Erc20 -> {
                 if (accountType is AccountType.Mnemonic) {
-                    return accountType.words.size == 12
+                    return accountType.words.size == 12 && accountType.salt == null
                 }
             }
             is Binance -> {
                 if (accountType is AccountType.Mnemonic) {
-                    return accountType.words.size == 24
+                    return accountType.words.size == 24 && accountType.salt == null
                 }
             }
         }
