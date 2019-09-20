@@ -23,8 +23,6 @@ class KeyStoreInteractor(private val accountManager: IAccountManager,
         accountManager.clear()
         walletManager.enable(listOf())
         localStorage.clear()
-
-        //TODO clear kits
     }
 
     override fun removeKey() {
