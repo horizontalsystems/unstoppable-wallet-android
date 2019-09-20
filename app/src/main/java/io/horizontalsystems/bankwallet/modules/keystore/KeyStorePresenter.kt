@@ -1,29 +1,33 @@
 package io.horizontalsystems.bankwallet.modules.keystore
 
+import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreModule.ModeType
+
 class KeyStorePresenter(private val interactor: KeyStoreModule.IInteractor,
                         private val router: KeyStoreModule.IRouter,
-                        private val mode: KeyStoreModule.ModeType) : KeyStoreModule.IViewDelegate, KeyStoreModule.IInteractorDelegate {
+                        private val mode: ModeType) : KeyStoreModule.IViewDelegate, KeyStoreModule.IInteractorDelegate {
 
     var view: KeyStoreModule.IView? = null
 
     override fun viewDidLoad() {
         when (mode) {
-            KeyStoreModule.ModeType.NoSystemLock -> {
+            ModeType.NoSystemLock -> {
                 interactor.resetApp()
                 view?.showNoSystemLockWarning()
             }
-            KeyStoreModule.ModeType.InvalidKey -> {
+            ModeType.InvalidKey -> {
                 interactor.resetApp()
                 view?.showInvalidKeyWarning()
             }
-            KeyStoreModule.ModeType.UserAuthentication -> view?.promptUserAuthentication()
+            ModeType.UserAuthentication -> {
+                view?.promptUserAuthentication()
+            }
         }
     }
 
     override fun onResume() {
-        if (!interactor.isSystemLockOff &&
-                !interactor.isKeyInvalidated &&
-                !interactor.isUserNotAuthenticated) {
+        if (mode != ModeType.UserAuthentication &&
+                !interactor.isSystemLockOff &&
+                !interactor.isKeyInvalidated) {
             interactor.removeKey()
             router.openLaunchModule()
         }
