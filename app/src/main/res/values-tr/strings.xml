@@ -252,6 +252,7 @@
     <string name="Fingerprint_Success">Başarılı!</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Engellendi: %s</string>
+    <string name="UnlockPin_Error_PinIncorrect">Incorrect</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">Telefon PİN\'i</string>
     <string name="OSPin_Confirm_Desciption">Bu uygulamayı kullanabilmeniz için telefonun Ekran Kilidi (Şifre/PİN) etkinleştirilmeli.\n\nAndroid Ayarlarından etkinleştirebilirsiniz.\n\nŞifreyi kaldırdığınızda, kullanılmakta olan güvenli bilgi deposu sistem tarafından kaldırılır. Cüzdanlarınızı gizli anahtar ile geri yüklemeniz gerekecek.</string>
