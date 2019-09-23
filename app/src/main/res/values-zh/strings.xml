@@ -182,6 +182,7 @@
     <!--Settings-->
     <string name="Settings_Title">设置</string>
     <string name="Settings_SecurityCenter">安全中心</string>
+    <string name="Settings_Notifications">Notifications</string>
     <string name="Settings_ManageCoins">管理代币</string>
     <string name="Settings_RestoreWallet">恢复钱包</string>
     <string name="Settings_BaseCurrency">基础货币</string>
@@ -222,6 +223,10 @@
     <string name="SettingsReport_Title">报告问题</string>
     <string name="SettingsReport_Email">邮件</string>
     <string name="SettingsReport_Telegram">电报</string>
+    <!--Setting_Notifications-->
+    <string name="SettingsNotifications_Title">Notifications</string>
+    <string name="SettingsNotifications_Description">Set price notifications for the coins you would like to watch.</string>
+    <string name="SettingsNotifications_Off">Off</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android密钥库错误</string>
     <string name="Alert_KeysInvalidatedDescription">因为您的Android锁定屏幕已被更改，所以保存您钱包的加密数据目前已失效。</string>
