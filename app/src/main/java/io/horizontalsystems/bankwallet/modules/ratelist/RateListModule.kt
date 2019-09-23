@@ -31,6 +31,8 @@ object RateListModule {
 
     interface IInteractor {
         val currentDate: Date
+        val currency: Currency
+        val coins: List<Coin>
 
         fun clear()
         fun initRateList()
@@ -48,10 +50,16 @@ object RateListModule {
     class Factory : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = RateListView()
-            val coins = RateListSorter().smartSort(App.walletStorage.enabledCoins(), App.appConfigProvider.featuredCoins)
-            val interactor = RatesInteractor(App.rateStatsManager, App.rateStorage, CurrentDateProvider(), App.backgroundManager)
-            val dataSource = DataSource(App.currencyManager.baseCurrency, coins)
-            val presenter = RateListPresenter(view, interactor, dataSource)
+            val interactor = RatesInteractor(
+                    App.rateStatsManager,
+                    App.rateStorage,
+                    CurrentDateProvider(),
+                    App.backgroundManager,
+                    App.currencyManager,
+                    App.walletStorage,
+                    App.appConfigProvider,
+                    RateListSorter())
+            val presenter = RateListPresenter(view, interactor, DataSource())
 
             interactor.delegate = presenter
 
@@ -59,11 +67,15 @@ object RateListModule {
         }
     }
 
-    class DataSource(val baseCurrency: Currency, coins: List<Coin>) {
+    class DataSource() {
 
         private val chartType = ChartView.ChartType.DAILY.name
 
-        val items = coins.map { RateViewItem(it) }
+        var items = listOf<RateViewItem>()
+
+        fun setViewItems(coins: List<Coin>){
+            items = coins.map { RateViewItem(it) }
+        }
 
         val coinCodes: List<String>
             get() {
@@ -78,7 +90,7 @@ object RateListModule {
             }
         }
 
-        fun setRate(rate: Rate) {
+        fun setRate(rate: Rate, baseCurrency: Currency) {
             getPositionByCoinCode(rate.coinCode)?.let { position ->
                 items[position].rate = CurrencyValue(baseCurrency, rate.value)
                 items[position].rateExpired = rate.expired
