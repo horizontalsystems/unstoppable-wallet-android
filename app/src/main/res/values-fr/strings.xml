@@ -182,6 +182,7 @@
     <!--Settings-->
     <string name="Settings_Title">Paramètres</string>
     <string name="Settings_SecurityCenter">Centre de Sécurité</string>
+    <string name="Settings_Notifications">Notifications</string>
     <string name="Settings_ManageCoins">Gérer les coins</string>
     <string name="Settings_RestoreWallet">Restaurer le porte-monnaie</string>
     <string name="Settings_BaseCurrency">Devise de Base</string>
@@ -222,6 +223,10 @@
     <string name="SettingsReport_Title">Signaler un problème</string>
     <string name="SettingsReport_Email">E-mail</string>
     <string name="SettingsReport_Telegram">Telegram</string>
+    <!--Setting_Notifications-->
+    <string name="SettingsNotifications_Title">Notifications</string>
+    <string name="SettingsNotifications_Description">Set price notifications for the coins you would like to watch.</string>
+    <string name="SettingsNotifications_Off">Off</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Erreur de Keystore Android</string>
     <string name="Alert_KeysInvalidatedDescription">Les données cryptées contenant votre porte-monnaie ont récemment été invalidées car votre écran de verrouillage Android a été modifié</string>
