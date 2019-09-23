@@ -12,7 +12,7 @@ import io.horizontalsystems.bankwallet.entities.EnabledWallet
 import io.horizontalsystems.bankwallet.entities.PriceAlertRecord
 import io.horizontalsystems.bankwallet.entities.Rate
 
-@Database(version = 10, exportSchema = false, entities = [
+@Database(version = 11, exportSchema = false, entities = [
     Rate::class,
     EnabledWallet::class,
     PriceAlertRecord::class,

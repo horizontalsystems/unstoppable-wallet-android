@@ -350,6 +350,7 @@ interface OneTimerDelegate {
 
 interface IRateStorage {
     fun latestRateObservable(coinCode: CoinCode, currencyCode: String): Flowable<Rate>
+    fun latestRate(coinCode: CoinCode, currencyCode: String): Rate?
     fun rateSingle(coinCode: CoinCode, currencyCode: String, timestamp: Long): Single<Rate>
     fun save(rate: Rate)
     fun saveLatest(rate: Rate)
@@ -358,6 +359,7 @@ interface IRateStorage {
 
 interface IRateManager {
     fun syncLatestRates()
+    fun syncLatestRatesSingle(): Single<LatestRateData>
 }
 
 interface IRateStatsManager {
@@ -384,6 +386,11 @@ interface IPriceAlertsStorage {
     fun save(priceAlerts: List<PriceAlert>)
     fun delete(priceAlerts: List<PriceAlert>)
     fun deleteExcluding(coinCodes: List<String>)
+}
+
+interface IBackgroundPriceAlertManager{
+    fun updateAlerts()
+    fun fetchRates(): Single<LatestRateData>
 }
 
 interface IEnabledWalletStorage {

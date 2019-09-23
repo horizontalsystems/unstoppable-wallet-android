@@ -12,7 +12,11 @@ class RatesRepository(private val appDatabase: AppDatabase) : IRateStorage {
     private val executor = Executors.newSingleThreadExecutor()
 
     override fun latestRateObservable(coinCode: CoinCode, currencyCode: String): Flowable<Rate> {
-        return appDatabase.ratesDao().getLatestRate(coinCode, currencyCode).distinctUntilChanged()
+        return appDatabase.ratesDao().getLatestRateFlowable(coinCode, currencyCode).distinctUntilChanged()
+    }
+
+    override fun latestRate(coinCode: CoinCode, currencyCode: String): Rate? {
+        return appDatabase.ratesDao().getLatestRate(coinCode, currencyCode)
     }
 
     override fun rateSingle(coinCode: CoinCode, currencyCode: String, timestamp: Long): Single<Rate> {

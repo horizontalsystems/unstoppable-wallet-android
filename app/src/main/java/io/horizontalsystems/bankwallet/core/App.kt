@@ -71,6 +71,7 @@ class App : Application() {
         lateinit var addressParserFactory: AddressParserFactory
         lateinit var feeCoinProvider: FeeCoinProvider
         lateinit var notificationManager: NotificationManager
+        lateinit var backgroundPriceAlertManager: IBackgroundPriceAlertManager
 
         lateinit var instance: App
             private set
@@ -159,6 +160,9 @@ class App : Application() {
         priceAlertManager = PriceAlertManager(walletManager, priceAlertsStorage)
 
         notificationManager = NotificationManager(NotificationManagerCompat.from(this))
+        backgroundPriceAlertManager = BackgroundPriceAlertManager(priceAlertsStorage, rateManager, currencyManager, rateStorage)
+
+        BackgroundRateAlertScheduler.startPeriodicWorker(instance)
     }
 
 }
