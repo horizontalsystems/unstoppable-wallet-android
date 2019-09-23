@@ -182,6 +182,7 @@
     <!--Settings-->
     <string name="Settings_Title">설정</string>
     <string name="Settings_SecurityCenter">보안 센터</string>
+    <string name="Settings_Notifications">Notifications</string>
     <string name="Settings_ManageCoins">코인 관리</string>
     <string name="Settings_RestoreWallet">지갑 복원</string>
     <string name="Settings_BaseCurrency">기초 통화</string>
@@ -228,6 +229,10 @@
     <string name="SettingsReport_Title">문제점 보고</string>
     <string name="SettingsReport_Email">E-mail</string>
     <string name="SettingsReport_Telegram">Telegram</string>
+    <!--Setting_Notifications-->
+    <string name="SettingsNotifications_Title">Notifications</string>
+    <string name="SettingsNotifications_Description">Set price notifications for the coins you would like to watch.</string>
+    <string name="SettingsNotifications_Off">Off</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">안드로이드 키저장 에러</string>
     <string name="Alert_KeysInvalidatedDescription">당신의 안드로이드 스크린 장금이 변했기 때문에 당신의 지갑에 암호화된 데이터들은 지금 이용할 수 없습니다.</string>
