@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.settings.main
 
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.managers.PriceAlertManager
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.reactivex.disposables.CompositeDisposable
 
@@ -10,7 +11,8 @@ class MainSettingsInteractor(
         private val languageManager: ILanguageManager,
         private val systemInfoManager: ISystemInfoManager,
         private val currencyManager: ICurrencyManager,
-        private val appConfigProvider: IAppConfigProvider) : MainSettingsModule.IMainSettingsInteractor {
+        private val appConfigProvider: IAppConfigProvider,
+        private val priceAlertManager: PriceAlertManager) : MainSettingsModule.IMainSettingsInteractor {
 
     private var disposables: CompositeDisposable = CompositeDisposable()
 
@@ -24,7 +26,14 @@ class MainSettingsInteractor(
         disposables.add(currencyManager.baseCurrencyUpdatedSignal.subscribe {
             delegate?.didUpdateBaseCurrency()
         })
+
+        disposables.add(priceAlertManager.priceAlertCountFlowable.subscribe {
+            delegate?.didUpdatePriceAlertCount(it)
+        })
     }
+
+    override val priceAlertCount: Int
+        get() = priceAlertManager.priceAlertCount
 
     override val companyWebPageLink: String
         get() = appConfigProvider.companyWebPageLink

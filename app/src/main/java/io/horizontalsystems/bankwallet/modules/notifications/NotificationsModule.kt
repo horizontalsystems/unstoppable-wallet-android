@@ -5,7 +5,6 @@ import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.managers.PriceAlertManager
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 
 object NotificationsModule {
@@ -40,7 +39,7 @@ object NotificationsModule {
     class Factory : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = NotificationsView()
-            val interactor = NotificationsInteractor(PriceAlertManager(App.walletManager, App.priceAlertsStorage))
+            val interactor = NotificationsInteractor(App.priceAlertManager)
             val presenter = NotificationsPresenter(view, interactor, PriceAlertViewItemFactory())
 
             return presenter as T

@@ -16,4 +16,7 @@ interface PriceAlertsDao {
 
     @Query("DELETE FROM PriceAlertRecord WHERE coinCode == :coinCode")
     fun delete(coinCode: String)
+
+    @Query("SELECT COUNT(*) FROM PriceAlertRecord")
+    fun count(): Int
 }

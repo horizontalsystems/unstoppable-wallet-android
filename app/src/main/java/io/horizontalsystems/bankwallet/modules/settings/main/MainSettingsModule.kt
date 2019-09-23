@@ -13,6 +13,7 @@ object MainSettingsModule {
         fun setLanguage(language: String)
         fun setLightMode(lightMode: Boolean)
         fun setAppVersion(appVersion: String)
+        fun setPriceAlertCount(count: Int)
     }
 
     interface IMainSettingsViewDelegate {
@@ -30,6 +31,7 @@ object MainSettingsModule {
     }
 
     interface IMainSettingsInteractor {
+        val priceAlertCount: Int
         val companyWebPageLink: String
         val appWebPageLink: String
         val allBackedUp: Boolean
@@ -44,6 +46,7 @@ object MainSettingsModule {
     interface IMainSettingsInteractorDelegate {
         fun didUpdateAllBackedUp(allBackedUp: Boolean)
         fun didUpdateBaseCurrency()
+        fun didUpdatePriceAlertCount(count: Int)
     }
 
     interface IMainSettingsRouter {
@@ -70,7 +73,8 @@ object MainSettingsModule {
                     languageManager = App.languageManager,
                     systemInfoManager = App.systemInfoManager,
                     currencyManager = App.currencyManager,
-                    appConfigProvider = App.appConfigProvider
+                    appConfigProvider = App.appConfigProvider,
+                    priceAlertManager = App.priceAlertManager
             )
             val presenter = MainSettingsPresenter(view, router, interactor)
             interactor.delegate = presenter
