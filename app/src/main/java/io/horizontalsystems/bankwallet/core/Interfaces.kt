@@ -383,6 +383,7 @@ interface IPriceAlertsStorage {
     fun all(): List<PriceAlert>
     fun save(priceAlert: PriceAlert)
     fun delete(priceAlert: PriceAlert)
+    fun deleteExcluding(coinCodes: List<String>)
 }
 
 interface IEnabledWalletStorage {

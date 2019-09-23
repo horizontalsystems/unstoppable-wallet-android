@@ -31,4 +31,8 @@ class PriceAlertsStorage(private val appConfigProvider: IAppConfigProvider, appD
     override fun delete(priceAlert: PriceAlert) {
         dao.delete(priceAlert.coin.code)
     }
+
+    override fun deleteExcluding(coinCodes: List<String>) {
+        dao.deleteExcluding(coinCodes)
+    }
 }

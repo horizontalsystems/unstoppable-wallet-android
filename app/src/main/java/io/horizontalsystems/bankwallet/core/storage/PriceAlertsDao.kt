@@ -19,4 +19,7 @@ interface PriceAlertsDao {
 
     @Query("SELECT COUNT(*) FROM PriceAlertRecord")
     fun count(): Int
+
+    @Query("DELETE FROM PriceAlertRecord WHERE coinCode NOT IN(:coinCodes)")
+    fun deleteExcluding(coinCodes: List<String>)
 }
