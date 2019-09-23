@@ -3,10 +3,7 @@ package io.horizontalsystems.bankwallet.modules.balance
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountTypeManager
 import io.horizontalsystems.bankwallet.core.managers.StatsData
-import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.entities.Rate
-import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.BalanceItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.StatsButtonState
@@ -201,11 +198,11 @@ class BalancePresenter(
 
     override fun onReceiveRateStats(data: StatsData) {
         val positions = dataSource.getPositionsByCoinCode(data.coinCode)
-        val chartData = data.stats[ChartType.DAILY.name] ?: return
-        val chartDiff = data.diff[ChartType.DAILY.name] ?: return
+        val points = data.stats[ChartType.DAILY.name] ?: return
+        val diff = data.diff[ChartType.DAILY.name] ?: return
 
         positions.forEach { position ->
-            dataSource.setChartData(position, chartData, chartDiff)
+            dataSource.setChartData(position, ChartData(points, diff))
         }
         postViewReload()
     }
@@ -230,7 +227,7 @@ class BalancePresenter(
 
     override fun openChart(position: Int) {
         val item = dataSource.getItem(position)
-        if (item.chartPoints == null) return
+        if (item.chartData == null) return
         router.openChart(item.wallet.coin)
     }
 

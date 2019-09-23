@@ -188,18 +188,17 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
 
         setChartVisibility(true, fiatAmountVisibility)
 
-        val diffColor = if (viewItem.chartDiff < BigDecimal.ZERO)
-            containerView.context.getColor(R.color.red_warning) else
-            containerView.context.getColor(R.color.green_crypto)
-
-        val chartPoints = viewItem.chartPoints
-        if (chartPoints == null) {
+        val chartData = viewItem.chartData
+        if (chartData == null) {
             chartView.visibility = View.INVISIBLE
             chartRateDiff.text = containerView.context.getString(R.string.NotAvailable)
             chartRateDiff.setTextColor(containerView.context.getColor(R.color.grey_50))
         } else {
-            chartView.setData(chartPoints, ChartType.DAILY)
-            chartRateDiff.text = App.numberFormatter.format(viewItem.chartDiff.toDouble(), showSign = true, precision = 2) + "%"
+            val diffColor = if (chartData.diff < BigDecimal.ZERO)
+                containerView.context.getColor(R.color.red_warning) else
+                containerView.context.getColor(R.color.green_crypto)
+            chartView.setData(chartData.points, ChartType.DAILY)
+            chartRateDiff.text = App.numberFormatter.format(chartData.diff.toDouble(), showSign = true, precision = 2) + "%"
             chartRateDiff.setTextColor(diffColor)
         }
     }
