@@ -10,7 +10,10 @@ import io.reactivex.Single
 interface RatesDao {
 
     @Query("SELECT * FROM Rate WHERE coinCode = :coinCode AND currencyCode = :currencyCode AND isLatest = 1")
-    fun getLatestRate(coinCode: CoinCode, currencyCode: String): Flowable<Rate>
+    fun getLatestRateFlowable(coinCode: CoinCode, currencyCode: String): Flowable<Rate>
+
+    @Query("SELECT * FROM Rate WHERE coinCode = :coinCode AND currencyCode = :currencyCode AND isLatest = 1")
+    fun getLatestRate(coinCode: CoinCode, currencyCode: String): Rate?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(rate: Rate)

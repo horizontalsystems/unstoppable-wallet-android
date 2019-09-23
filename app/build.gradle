@@ -74,6 +74,9 @@ android {
     packagingOptions {
         pickFirst("META-INF/atomicfu.kotlin_module")
     }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
@@ -127,6 +130,12 @@ dependencies {
     api "org.jetbrains.anko:anko-commons:0.10.8"
 
     api 'com.journeyapps:zxing-android-embedded:3.6.0'
+
+    // WorkManager Kotlin + Coroutines
+    def work_version = "2.2.0"
+    implementation "androidx.work:work-runtime-ktx:$work_version"
+    // WorkManager RxJava2 support
+    implementation "androidx.work:work-rxjava2:$work_version"
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.3'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'

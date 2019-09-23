@@ -17,7 +17,7 @@ class PriceAlertsStorage(private val appConfigProvider: IAppConfigProvider, appD
             appConfigProvider.coins.firstOrNull {
                 it.code == priceAlertRecord.coinCode
             }?.let { coin ->
-                PriceAlert(coin, PriceAlert.State.valueOf(priceAlertRecord.stateRaw))
+                PriceAlert(coin, PriceAlert.State.valueOf(priceAlertRecord.stateRaw), priceAlertRecord.lastRate)
             }
         }
     }
@@ -25,7 +25,7 @@ class PriceAlertsStorage(private val appConfigProvider: IAppConfigProvider, appD
     override fun save(priceAlerts: List<PriceAlert>) {
         priceAlerts.forEach { priceAlert ->
             priceAlert.state.value?.let {
-                dao.update(PriceAlertRecord(priceAlert.coin.code, it))
+                dao.update(PriceAlertRecord(priceAlert.coin.code, it, priceAlert.lastRate))
             }
         }
     }

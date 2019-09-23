@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.entities
 
-data class PriceAlert(val coin: Coin, var state: State) {
+import java.math.BigDecimal
+
+data class PriceAlert(val coin: Coin, var state: State, var lastRate: BigDecimal?) {
     enum class State(val value: Int?) {
         OFF(null),
         PERCENT_2(2),
