@@ -23,12 +23,14 @@ class RateListPresenter(
         }
 
     override fun viewDidLoad() {
+        dataSource.setViewItems(interactor.coins)
+
         view.showCurrentDate(interactor.currentDate)
 
         interactor.initRateList()
 
-        interactor.fetchRates(dataSource.coinCodes, dataSource.baseCurrency.code)
-        interactor.getRateStats(dataSource.coinCodes, dataSource.baseCurrency.code)
+        interactor.fetchRates(dataSource.coinCodes, interactor.currency.code)
+        interactor.getRateStats(dataSource.coinCodes, interactor.currency.code)
 
         reloadViewSubject
                 .throttleLast(1, TimeUnit.SECONDS)
@@ -42,12 +44,12 @@ class RateListPresenter(
     }
 
     override fun willEnterForeground() {
-        interactor.getRateStats(dataSource.coinCodes, dataSource.baseCurrency.code)
+        interactor.getRateStats(dataSource.coinCodes, interactor.currency.code)
     }
 
     @Synchronized
     override fun didUpdateRate(rate: Rate) {
-        dataSource.setRate(rate)
+        dataSource.setRate(rate, interactor.currency)
         postViewReload()
     }
 
