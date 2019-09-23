@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerModule
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
@@ -46,7 +47,7 @@ class RestoreEosActivity : BaseActivity() {
 
         viewModel.finishLiveEvent.observe(this, Observer { pair ->
             setResult(RESULT_OK, Intent().apply {
-                putExtra("accountType", AccountType.Eos(pair.first, pair.second))
+                putExtra(ModuleField.ACCOUNT_TYPE, AccountType.Eos(pair.first, pair.second))
             })
 
             finish()
