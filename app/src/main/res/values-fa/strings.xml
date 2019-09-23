@@ -302,7 +302,7 @@
     <string name="AddCoin_CreateKey">به وجود آوردن</string>
     <string name="AddCoin_RestoreKey">بازیابی</string>
     <!-- Account Types -->
-    <string name="AccountType_Unstoppable">کیف پول غیر قابل توقف</string>
+    <string name="AccountType_Unstoppable">Unstoppable Wallet</string>
     <string name="AccountType_UnstoppableKey">کلید ۱۲ کلمه ای</string>
     <string name="AccountType_Eos">EOS Blockchain</string>
     <string name="AccountType_EosKey">کلید EOS</string>
