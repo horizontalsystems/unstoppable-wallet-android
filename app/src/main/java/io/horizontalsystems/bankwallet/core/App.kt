@@ -59,6 +59,7 @@ class App : Application() {
         lateinit var rateStorage: IRateStorage
         lateinit var accountsStorage: IAccountsStorage
         lateinit var priceAlertsStorage: IPriceAlertsStorage
+        lateinit var priceAlertManager: PriceAlertManager
         lateinit var enabledWalletsStorage: IEnabledWalletStorage
         lateinit var transactionInfoFactory: FullTransactionInfoFactory
         lateinit var transactionDataProviderManager: TransactionDataProviderManager
@@ -109,7 +110,6 @@ class App : Application() {
         appDatabase = AppDatabase.getInstance(this)
         rateStorage = RatesRepository(appDatabase)
         accountsStorage = AccountsStorage(appDatabase)
-        priceAlertsStorage = PriceAlertsStorage(appConfigProvider, appDatabase)
 
         walletFactory = WalletFactory()
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
@@ -153,6 +153,8 @@ class App : Application() {
         addressParserFactory = AddressParserFactory()
         feeCoinProvider = FeeCoinProvider(appConfigProvider)
 
+        priceAlertsStorage = PriceAlertsStorage(appConfigProvider, appDatabase)
+        priceAlertManager = PriceAlertManager(walletManager, priceAlertsStorage)
     }
 
 }

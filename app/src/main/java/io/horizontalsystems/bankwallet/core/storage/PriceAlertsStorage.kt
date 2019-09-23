@@ -7,6 +7,9 @@ import io.horizontalsystems.bankwallet.entities.PriceAlertRecord
 
 class PriceAlertsStorage(private val appConfigProvider: IAppConfigProvider, appDatabase: AppDatabase) : IPriceAlertsStorage {
 
+    override val priceAlertCount: Int
+        get() = dao.count()
+
     private val dao = appDatabase.priceAlertsDao()
 
     override fun all(): List<PriceAlert> {
