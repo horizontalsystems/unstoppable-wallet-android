@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.viewHelpers.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_add_coin.*
 import kotlinx.android.synthetic.main.view_holder_coin.*
+import kotlinx.android.synthetic.main.view_holder_coin.chartView
 import java.math.BigDecimal
 
 class BalanceCoinAdapter(private val listener: Listener, private val viewDelegate: BalanceModule.IViewDelegate)
@@ -188,18 +189,36 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
 
         setChartVisibility(true, fiatAmountVisibility)
 
+        chartLoading.visibility = View.INVISIBLE
+        textChartError.visibility = View.INVISIBLE
+        chartView.visibility = View.INVISIBLE
+
         val chartData = viewItem.chartData
-        if (chartData == null) {
-            chartView.visibility = View.INVISIBLE
-            chartRateDiff.text = containerView.context.getString(R.string.NotAvailable)
-            chartRateDiff.setTextColor(containerView.context.getColor(R.color.grey_50))
-        } else {
-            val diffColor = if (chartData.diff < BigDecimal.ZERO)
-                containerView.context.getColor(R.color.red_warning) else
-                containerView.context.getColor(R.color.green_crypto)
-            chartView.setData(chartData.points, ChartType.DAILY)
-            chartRateDiff.text = App.numberFormatter.format(chartData.diff.toDouble(), showSign = true, precision = 2) + "%"
-            chartRateDiff.setTextColor(diffColor)
+
+        when {
+            chartData == null -> {
+                chartLoading.visibility = View.VISIBLE
+
+                chartRateDiff.text = "0%"
+                chartRateDiff.setTextColor(containerView.context.getColor(R.color.grey_50))
+            }
+            chartData.error -> {
+                textChartError.visibility = View.VISIBLE
+                textChartError.text = containerView.context.getString(R.string.NotAvailable)
+
+                chartRateDiff.text = "----"
+                chartRateDiff.setTextColor(containerView.context.getColor(R.color.grey_50))
+            }
+            else -> {
+                chartView.visibility = View.VISIBLE
+
+                val diffColor = if (chartData.diff < BigDecimal.ZERO)
+                    containerView.context.getColor(R.color.red_warning) else
+                    containerView.context.getColor(R.color.green_crypto)
+                chartView.setData(chartData.points, ChartType.DAILY)
+                chartRateDiff.text = App.numberFormatter.format(chartData.diff.toDouble(), showSign = true, precision = 2) + "%"
+                chartRateDiff.setTextColor(diffColor)
+            }
         }
     }
 
