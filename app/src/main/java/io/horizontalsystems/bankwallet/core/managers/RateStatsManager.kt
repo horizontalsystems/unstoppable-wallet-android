@@ -40,8 +40,7 @@ class RateStatsManager(private val networkManager: INetworkManager, private val 
             Single.just(cached.second)
         } else {
             networkManager.getRateStats(HostType.MAIN, coinCode, currencyCode)
-                    .firstOrError()
-                    .onErrorResumeNext { networkManager.getRateStats(HostType.FALLBACK, coinCode, currencyCode).firstOrError() }
+                    .onErrorResumeNext { networkManager.getRateStats(HostType.FALLBACK, coinCode, currencyCode) }
         }
 
         val rateLocal = rateStorage.latestRateObservable(coinCode, currencyCode).firstOrError()
