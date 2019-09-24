@@ -303,7 +303,7 @@
     <string name="AddCoin_RestoreKey">بازیابی</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">Unstoppable Wallet</string>
-    <string name="AccountType_UnstoppableKey">کلید ۱۲ کلمه ای</string>
+    <string name="AccountType_UnstoppableKey">Unstoppable Wallet Key</string>
     <string name="AccountType_Eos">EOS Blockchain</string>
     <string name="AccountType_EosKey">کلید EOS</string>
     <string name="AccountType_Binance">زنجیره Binance</string>
