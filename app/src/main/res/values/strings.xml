@@ -396,10 +396,10 @@
     <string name="AccountType_Unstoppable">Unstoppable Wallet</string>
     <string name="AccountType_UnstoppableKey">Unstoppable Wallet Key</string>
     <string name="AccountType_Unstoppable_Text" translatable="false">BTC, BCH, DASH, ETH, ERC-20</string>
-    <string name="AccountType_Eos">EOS Blockchain</string>
+    <string name="AccountType_Eos">EOS Wallet</string>
     <string name="AccountType_EosKey">EOS Key</string>
     <string name="AccountType_Eos_Text" translatable="false">EOS, EOS-based Tokens</string>
-    <string name="AccountType_Binance">Binance Chain</string>
+    <string name="AccountType_Binance">Binance Wallet</string>
     <string name="AccountType_BinanceKey">Binance Key</string>
     <string name="AccountType_Binance_Text" translatable="false">BNB, BEP-2</string>
 
