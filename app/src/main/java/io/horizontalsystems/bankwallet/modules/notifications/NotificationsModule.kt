@@ -10,17 +10,29 @@ import io.horizontalsystems.bankwallet.entities.PriceAlert
 object NotificationsModule {
     interface IView {
         fun setItems(items: List<PriceAlertViewItem>)
+        fun showWarning()
+        fun hideWarning()
+    }
+
+    interface IRouter {
+        fun openNotificationSettings()
     }
 
     interface IViewDelegate {
         fun viewDidLoad()
         fun didSelectState(itemPosition: Int, state: PriceAlert.State)
+        fun didClickOpenSettings()
     }
 
     interface IInteractor {
+        val priceAlertsEnabled: Boolean
         val priceAlerts: List<PriceAlert>
 
         fun savePriceAlert(priceAlert: PriceAlert)
+    }
+
+    interface IInteractorDelegate {
+        fun didEnterForeground()
     }
 
     fun start(context: Context) {
@@ -39,8 +51,11 @@ object NotificationsModule {
     class Factory : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = NotificationsView()
-            val interactor = NotificationsInteractor(App.priceAlertManager)
-            val presenter = NotificationsPresenter(view, interactor, PriceAlertViewItemFactory())
+            val router = NotificationsRouter()
+            val interactor = NotificationsInteractor(App.priceAlertManager, App.backgroundManager, App.notificationManager)
+            val presenter = NotificationsPresenter(view, router, interactor, PriceAlertViewItemFactory())
+
+            interactor.delegate = presenter
 
             return presenter as T
         }

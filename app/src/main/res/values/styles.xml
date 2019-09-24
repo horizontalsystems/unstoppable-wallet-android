@@ -255,6 +255,20 @@
         <item name="android:background">@drawable/button_yellow_background</item>
     </style>
 
+    <style name="ButtonSecondary">
+        <item name="android:background">@drawable/button_secondary_background</item>
+        <item name="android:fontFamily">@font/noto_sans_medium</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:paddingStart">9dp</item>
+        <item name="android:paddingEnd">9dp</item>
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingBottom">7dp</item>
+        <item name="android:textColor">@color/button_secondary_text_color_selector</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
     <style name="ButtonDark" parent="Button">
         <item name="android:background">@drawable/button_dark_background_12</item>
         <item name="android:textColor">@color/white</item>
