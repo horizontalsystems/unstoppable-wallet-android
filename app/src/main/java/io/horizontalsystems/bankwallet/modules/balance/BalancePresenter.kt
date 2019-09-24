@@ -3,7 +3,10 @@ package io.horizontalsystems.bankwallet.modules.balance
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountTypeManager
 import io.horizontalsystems.bankwallet.core.managers.StatsData
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.entities.Rate
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.BalanceItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.StatsButtonState
@@ -209,6 +212,7 @@ class BalancePresenter(
 
     override fun onFailFetchChartStats(coinCode: String) {
         dataSource.getPositionsByCoinCode(coinCode).forEach { position ->
+            dataSource.setChartData(position, BalanceChartData(error = true))
             view?.updateItem(position)
         }
     }
