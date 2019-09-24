@@ -303,7 +303,7 @@
     <string name="AddCoin_RestoreKey">恢复</string>
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">Unstoppable Wallet</string>
-    <string name="AccountType_UnstoppableKey">12 Words Key</string>
+    <string name="AccountType_UnstoppableKey">Unstoppable Wallet Key</string>
     <string name="AccountType_Eos">EOS区块链</string>
     <string name="AccountType_EosKey">EOS密钥</string>
     <string name="AccountType_Binance">币安链</string>
