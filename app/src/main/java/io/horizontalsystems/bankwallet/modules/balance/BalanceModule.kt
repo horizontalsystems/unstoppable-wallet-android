@@ -149,7 +149,7 @@ object BalanceModule {
             items = sorter.sort(items, sortType)
         }
 
-        fun setChartData(position: Int, data: ChartData) {
+        fun setChartData(position: Int, data: BalanceChartData) {
             items[position].chartData = data
             items = sorter.sort(items, sortType)
         }
@@ -166,7 +166,7 @@ object BalanceModule {
             var state: AdapterState,
             var rate: Rate? = null) {
 
-        var chartData: ChartData? = null
+        var chartData: BalanceChartData? = null
         val fiatValue: BigDecimal?
             get() = rate?.let { balance.times(it.value) }
     }

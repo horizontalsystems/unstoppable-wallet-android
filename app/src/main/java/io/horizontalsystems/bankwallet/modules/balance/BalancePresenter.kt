@@ -202,7 +202,7 @@ class BalancePresenter(
         val diff = data.diff[ChartType.DAILY.name] ?: return
 
         positions.forEach { position ->
-            dataSource.setChartData(position, ChartData(points, diff))
+            dataSource.setChartData(position, BalanceChartData(points, diff))
         }
         postViewReload()
     }

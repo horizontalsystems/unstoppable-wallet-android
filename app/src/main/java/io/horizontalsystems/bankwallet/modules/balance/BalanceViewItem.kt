@@ -10,7 +10,7 @@ data class BalanceViewItem(
         val exchangeValue: CurrencyValue?,
         val currencyValue: CurrencyValue?,
         val state: AdapterState,
-        val chartData: ChartData?,
+        val chartData: BalanceChartData?,
         val rateExpired: Boolean
 )
 
