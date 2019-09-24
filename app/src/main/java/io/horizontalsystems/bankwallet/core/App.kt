@@ -6,15 +6,13 @@ import android.preference.PreferenceManager
 import androidx.core.app.NotificationManagerCompat
 import com.squareup.leakcanary.LeakCanary
 import io.horizontalsystems.bankwallet.BuildConfig
-import io.horizontalsystems.bankwallet.core.factories.AccountFactory
-import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
-import io.horizontalsystems.bankwallet.core.factories.AddressParserFactory
-import io.horizontalsystems.bankwallet.core.factories.FeeCoinProvider
+import io.horizontalsystems.bankwallet.core.factories.*
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.core.security.KeyStoreManager
 import io.horizontalsystems.bankwallet.core.storage.*
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
+import io.horizontalsystems.bankwalval.core.utils.EmojiHelper
 import java.util.logging.Level
 import java.util.logging.Logger
 
@@ -70,8 +68,11 @@ class App : Application() {
         lateinit var numberFormatter: IAppNumberFormatter
         lateinit var addressParserFactory: AddressParserFactory
         lateinit var feeCoinProvider: FeeCoinProvider
-        lateinit var notificationManager: NotificationManager
+        lateinit var priceAlertHandler: IPriceAlertHandler
         lateinit var backgroundPriceAlertManager: IBackgroundPriceAlertManager
+        lateinit var emojiHelper: IEmojiHelper
+        lateinit var notificationManager: INotificationManager
+        lateinit var notificationFactory: INotificationFactory
 
         lateinit var instance: App
             private set
@@ -158,6 +159,10 @@ class App : Application() {
 
         priceAlertsStorage = PriceAlertsStorage(appConfigProvider, appDatabase)
         priceAlertManager = PriceAlertManager(walletManager, priceAlertsStorage)
+        emojiHelper = EmojiHelper()
+        notificationFactory = NotificationFactory(emojiHelper, instance)
+        priceAlertHandler = PriceAlertHandler(priceAlertsStorage, notificationManager, notificationFactory)
+        backgroundPriceAlertManager = BackgroundPriceAlertManager(priceAlertsStorage, rateManager, currencyManager, rateStorage, priceAlertHandler)
 
         notificationManager = NotificationManager(NotificationManagerCompat.from(this))
         backgroundPriceAlertManager = BackgroundPriceAlertManager(priceAlertsStorage, rateManager, currencyManager, rateStorage)

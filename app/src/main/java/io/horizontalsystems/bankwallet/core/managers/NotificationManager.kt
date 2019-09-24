@@ -2,8 +2,9 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import android.os.Build
 import androidx.core.app.NotificationManagerCompat
+import io.horizontalsystems.bankwallet.core.INotificationManager
 
-class NotificationManager(private val androidNotificationManager: NotificationManagerCompat) {
+class NotificationManager(private val androidNotificationManager: NotificationManagerCompat): INotificationManager {
 
     val isEnabled: Boolean
         get() = when {
@@ -15,6 +16,8 @@ class NotificationManager(private val androidNotificationManager: NotificationMa
             }
             else -> true
         }
+
+
 
     companion object {
         private const val channelId = "priceAlert"
