@@ -294,6 +294,10 @@
     <string name="SettingsNotifications_Off">Off</string>
     <string name="SettingsNotifications_DeactivateAll">Deactivate All</string>
 
+    <string name="Notification_Notifications">Notifications %s</string>
+    <string name="Notification_Up">Up</string>
+    <string name="Notification_Down">Down</string>
+
     <!--Alert-->
 
     <string name="Alert_KeysInvalidatedTitle">Android Keystore Error</string>

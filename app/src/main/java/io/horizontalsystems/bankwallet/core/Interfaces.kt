@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core
 import android.text.SpannableString
 import androidx.biometric.BiometricPrompt
 import com.google.gson.JsonObject
+import io.horizontalsystems.bankwallet.core.factories.PriceAlertItem
 import io.horizontalsystems.bankwallet.core.managers.ServiceExchangeApi.HostType
 import io.horizontalsystems.bankwallet.core.managers.StatsResponse
 import io.horizontalsystems.bankwallet.entities.*
@@ -388,9 +389,28 @@ interface IPriceAlertsStorage {
     fun deleteExcluding(coinCodes: List<String>)
 }
 
+interface IEmojiHelper{
+    val multiAlerts: String
+
+    fun title(signedState: Int): String
+    fun body(signedState: Int): String
+}
+
+interface IPriceAlertHandler{
+    fun handleAlerts(latestRateData: LatestRateData)
+}
+
 interface IBackgroundPriceAlertManager{
     fun updateAlerts()
     fun fetchRates(): Single<LatestRateData>
+}
+
+interface INotificationFactory{
+    fun notifications(priceAlertItems: List<PriceAlertItem>): List<AlertNotification>
+}
+
+interface INotificationManager{
+    fun show(notifications: List<AlertNotification>)
 }
 
 interface IEnabledWalletStorage {
