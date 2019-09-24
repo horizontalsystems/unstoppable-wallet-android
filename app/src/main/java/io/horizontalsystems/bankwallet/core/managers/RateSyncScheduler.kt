@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit
 class RateSyncScheduler(private val rateManager: IRateManager,
                         walletManager: IWalletManager,
                         currencyManager: ICurrencyManager,
-                        connnectivityManager: ConnectivityManager,
+                        connectivityManager: ConnectivityManager,
                         timerSignal: Observable<Unit> = Observable.interval(0L, 5L, TimeUnit.MINUTES).map { Unit }) {
 
     private val disposables = CompositeDisposable()
@@ -20,7 +20,7 @@ class RateSyncScheduler(private val rateManager: IRateManager,
         disposables.add(Observable.merge(
                 walletManager.walletsUpdatedSignal,
                 currencyManager.baseCurrencyUpdatedSignal,
-                connnectivityManager.networkAvailabilitySignal,
+                connectivityManager.networkAvailabilitySignal,
                 timerSignal)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
