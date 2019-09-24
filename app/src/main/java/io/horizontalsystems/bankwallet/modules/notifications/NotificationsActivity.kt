@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.notifications
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.components.CellView
+import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import kotlinx.android.extensions.LayoutContainer
@@ -32,6 +34,11 @@ class NotificationsActivity : BaseActivity() {
         presenter = ViewModelProviders.of(this, NotificationsModule.Factory()).get(NotificationsPresenter::class.java)
 
         observeView(presenter.view as NotificationsView)
+        observeRouter(presenter.router as NotificationsRouter)
+
+        buttonAndroidSettings.setOnSingleClickListener {
+            presenter.didClickOpenSettings()
+        }
 
         notificationItemsAdapter = NotificationItemsAdapter(presenter)
         notifications.adapter = notificationItemsAdapter
@@ -43,6 +50,38 @@ class NotificationsActivity : BaseActivity() {
         view.itemsLiveData.observe(this, Observer {
             notificationItemsAdapter.items = it
             notificationItemsAdapter.notifyDataSetChanged()
+        })
+
+        view.toggleWarningLiveData.observe(this, Observer { showWarning ->
+            if (showWarning) {
+                textDescription.visibility = View.GONE
+                notifications.visibility = View.GONE
+
+                textWarning.visibility = View.VISIBLE
+                buttonAndroidSettings.visibility = View.VISIBLE
+            } else {
+                textDescription.visibility = View.VISIBLE
+                notifications.visibility = View.VISIBLE
+
+                textWarning.visibility = View.GONE
+                buttonAndroidSettings.visibility = View.GONE
+            }
+        })
+    }
+
+    private fun observeRouter(router: NotificationsRouter) {
+        router.openNotificationSettingsLiveEvent.observe(this, Observer {
+            val intent = Intent()
+            intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
+
+            //for Android 5-7
+            intent.putExtra("app_package", packageName)
+            intent.putExtra("app_uid", applicationInfo.uid)
+
+            // for Android 8 and above
+            intent.putExtra("android.provider.extra.APP_PACKAGE", packageName)
+
+            startActivity(intent)
         })
     }
 }

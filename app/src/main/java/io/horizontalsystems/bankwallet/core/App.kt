@@ -69,6 +69,7 @@ class App : Application() {
         lateinit var numberFormatter: IAppNumberFormatter
         lateinit var addressParserFactory: AddressParserFactory
         lateinit var feeCoinProvider: FeeCoinProvider
+        lateinit var notificationManager: NotificationManager
 
         lateinit var instance: App
             private set
@@ -155,6 +156,8 @@ class App : Application() {
 
         priceAlertsStorage = PriceAlertsStorage(appConfigProvider, appDatabase)
         priceAlertManager = PriceAlertManager(walletManager, priceAlertsStorage)
+
+        notificationManager = NotificationManager(NotificationManagerCompat.from(this))
     }
 
 }
