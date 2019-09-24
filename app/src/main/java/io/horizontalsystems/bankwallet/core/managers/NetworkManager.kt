@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit
 
 class NetworkManager(private val appConfig: IAppConfigProvider) : INetworkManager {
 
-    override fun getRateStats(hostType: HostType, coinCode: String, currency: String): Flowable<RateStatData> {
+    override fun getRateStats(hostType: HostType, coinCode: String, currency: String): Single<RateStatData> {
         return rateApiClient(hostType).getRateStats(currency, coinCode)
     }
 
@@ -103,7 +103,7 @@ object ServiceExchangeApi {
         fun getRateStats(
                 @Path("fiat") currency: String,
                 @Path("coin") coinCode: String
-        ): Flowable<RateStatData>
+        ): Single<RateStatData>
     }
 }
 
