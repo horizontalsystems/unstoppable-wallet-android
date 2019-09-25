@@ -35,7 +35,7 @@ class PriceAlertHandlerTest {
 
     @Before
     fun setup() {
-        whenever(priceAlertStorage.activePriceAlerts()).thenReturn(listOf(priceAlert1, priceAlert2))
+        whenever(priceAlertStorage.all()).thenReturn(listOf(priceAlert1, priceAlert2))
     }
 
     @Test
@@ -69,7 +69,7 @@ class PriceAlertHandlerTest {
     fun handleAlerts_AlertWithoutLastRate() {
         val priceAlertNoRate = PriceAlert(btcCoin, PriceAlert.State.PERCENT_3, null)
 
-        whenever(priceAlertStorage.activePriceAlerts()).thenReturn(listOf(priceAlertNoRate, priceAlert2))
+        whenever(priceAlertStorage.all()).thenReturn(listOf(priceAlertNoRate, priceAlert2))
 
         val expectedItem = PriceAlertItem(ethCoin, 2)
 

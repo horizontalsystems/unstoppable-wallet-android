@@ -22,10 +22,6 @@ class PriceAlertsStorage(private val appConfigProvider: IAppConfigProvider, appD
         }
     }
 
-    override fun activePriceAlerts(): List<PriceAlert> {
-        return all().filter { it.state != PriceAlert.State.OFF }
-    }
-
     override fun save(priceAlerts: List<PriceAlert>) {
         priceAlerts.forEach { priceAlert ->
             priceAlert.state.value?.let {

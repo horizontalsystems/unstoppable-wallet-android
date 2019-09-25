@@ -17,7 +17,7 @@ class PriceAlertHandler(
 ) : IPriceAlertHandler {
 
     override fun handleAlerts(latestRateData: LatestRateData) {
-        val priceAlerts = priceAlertStorage.activePriceAlerts()
+        val priceAlerts = priceAlertStorage.all()
 
         val alertItems = getAlertsToNotify(priceAlerts, latestRateData)
         notificationManager.show(notificationFactory.notifications(alertItems))

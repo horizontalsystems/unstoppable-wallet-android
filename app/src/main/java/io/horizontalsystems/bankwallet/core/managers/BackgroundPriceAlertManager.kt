@@ -20,7 +20,7 @@ class BackgroundPriceAlertManager(
     }
 
     override fun didEnterBackground() {
-        val alerts = priceAlertsStorage.activePriceAlerts()
+        val alerts = priceAlertsStorage.all()
         val currency = currencyManager.baseCurrency
         alerts.forEach { priceAlert ->
             val rate = rateStorage.latestRate(priceAlert.coin.code, currency.code)
