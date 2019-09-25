@@ -9,6 +9,9 @@ import java.util.concurrent.TimeUnit
 class BackgroundRateAlertScheduler(appContext: Context, workerParams: WorkerParameters) : RxWorker(appContext, workerParams) {
 
     override fun createWork(): Single<Result> {
+        if (App.backgroundManager.inForeground){
+            return Single.just(Result.failure())
+        }
         return App.backgroundPriceAlertManager.fetchRates()
                 .map { Result.success() }
                 .onErrorReturn { Result.failure() }
@@ -33,7 +36,6 @@ class BackgroundRateAlertScheduler(appContext: Context, workerParams: WorkerPara
         private fun createConstraints() = Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .setRequiresBatteryNotLow(true)
-                .setRequiresStorageNotLow(true)
                 .build()
     }
 }
