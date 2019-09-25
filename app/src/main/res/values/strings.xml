@@ -292,6 +292,7 @@
     <string name="SettingsNotifications_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order to be able to receive price change alerts.</string>
     <string name="SettingsNotifications_TurnOn">Turn on in Settings</string>
     <string name="SettingsNotifications_Off">Off</string>
+    <string name="SettingsNotifications_DeactivateAll">Deactivate All</string>
 
     <!--Alert-->
 

@@ -381,8 +381,8 @@ interface IAccountsStorage {
 interface IPriceAlertsStorage {
     val priceAlertCount: Int
     fun all(): List<PriceAlert>
-    fun save(priceAlert: PriceAlert)
-    fun delete(priceAlert: PriceAlert)
+    fun save(priceAlerts: List<PriceAlert>)
+    fun delete(priceAlerts: List<PriceAlert>)
     fun deleteExcluding(coinCodes: List<String>)
 }
 
