@@ -43,7 +43,7 @@ object AnimationHelper {
                     v.layoutParams.height = initialHeight - (initialHeight * interpolatedTime).toInt()
                     v.requestLayout()
                     if (interpolatedTime > 0.3f) {
-                        v.alpha = (1 - interpolatedTime)*2
+                        v.alpha = (1 - interpolatedTime) * 2
                     }
                 }
             }
@@ -55,6 +55,21 @@ object AnimationHelper {
 
         // 1dp/ms
         a.duration = (((initialHeight / v.context.resources.displayMetrics.density)) * 2).toLong()
+
+        a.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationRepeat(animation: Animation?) {}
+
+            override fun onAnimationEnd(animation: Animation?) {}
+
+            override fun onAnimationStart(animation: Animation?) {
+                v.postDelayed({
+                    if (v.visibility != View.GONE) {
+                        v.visibility = View.GONE
+                    }
+                }, a.duration + 100)
+            }
+        })
+
         v.startAnimation(a)
     }
 }
