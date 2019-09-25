@@ -384,6 +384,7 @@ interface IAccountsStorage {
 interface IPriceAlertsStorage {
     val priceAlertCount: Int
     fun all(): List<PriceAlert>
+    fun activePriceAlerts(): List<PriceAlert>
     fun save(priceAlerts: List<PriceAlert>)
     fun delete(priceAlerts: List<PriceAlert>)
     fun deleteExcluding(coinCodes: List<String>)
@@ -401,15 +402,15 @@ interface IPriceAlertHandler{
 }
 
 interface IBackgroundPriceAlertManager{
-    fun updateAlerts()
     fun fetchRates(): Single<LatestRateData>
 }
 
 interface INotificationFactory{
-    fun notifications(priceAlertItems: List<PriceAlertItem>): List<AlertNotification>
+    fun notifications(alertItems: List<PriceAlertItem>): List<AlertNotification>
 }
 
 interface INotificationManager{
+    val isEnabled: Boolean
     fun show(notifications: List<AlertNotification>)
 }
 

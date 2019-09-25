@@ -1,14 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.notifications
 
+import io.horizontalsystems.bankwallet.core.INotificationManager
 import io.horizontalsystems.bankwallet.core.managers.BackgroundManager
-import io.horizontalsystems.bankwallet.core.managers.NotificationManager
 import io.horizontalsystems.bankwallet.core.managers.PriceAlertManager
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 
 class NotificationsInteractor(
         private val priceAlertManager: PriceAlertManager,
         backgroundManager: BackgroundManager,
-        private val notificationManager: NotificationManager
+        private val notificationManager: INotificationManager
 ) : NotificationsModule.IInteractor, BackgroundManager.Listener {
 
     init {

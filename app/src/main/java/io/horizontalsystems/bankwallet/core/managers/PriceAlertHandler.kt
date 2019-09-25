@@ -7,42 +7,58 @@ import io.horizontalsystems.bankwallet.core.IPriceAlertsStorage
 import io.horizontalsystems.bankwallet.core.factories.PriceAlertItem
 import io.horizontalsystems.bankwallet.entities.LatestRateData
 import io.horizontalsystems.bankwallet.entities.PriceAlert
+import java.math.BigDecimal
 import kotlin.math.abs
 
 class PriceAlertHandler(
         private val priceAlertStorage: IPriceAlertsStorage,
         private val notificationManager: INotificationManager,
         private val notificationFactory: INotificationFactory
-): IPriceAlertHandler {
+) : IPriceAlertHandler {
 
     override fun handleAlerts(latestRateData: LatestRateData) {
-        val priceAlerts = priceAlertStorage.all()
+        val priceAlerts = priceAlertStorage.activePriceAlerts()
         val significantAlerts = mutableListOf<PriceAlertItem>()
+        val changedAlerts = mutableListOf<PriceAlert>()
+
         priceAlerts.forEach { priceAlert ->
-            if (priceAlert.state != PriceAlert.State.OFF) {
-                val latestRateNullable = latestRateData.rates[priceAlert.coin.code]?.toBigDecimalOrNull()
-                val priceAlertLastRate = priceAlert.lastRate
-                if (priceAlertLastRate != null) {
-                    latestRateNullable?.let { latestRate ->
-                        val diff = abs((latestRate.toFloat() - priceAlertLastRate.toFloat()) / latestRate.toFloat() * 100)
-                        priceAlert.state.value?.let { percent ->
-                            if (diff.toInt() > percent) {
-                                priceAlert.lastRate = latestRate
-                                priceAlertStorage.save(priceAlert)
-                                val signedState = priceAlert.state.value?.let { if (diff >= 0.0) it else -it } ?: 0
-                                significantAlerts.add(PriceAlertItem(priceAlert.coin, signedState))
-                            }
-                        }
+
+            val latestRate = latestRateData.rates[priceAlert.coin.code]?.toBigDecimalOrNull() ?: run {
+                        return@forEach
                     }
-                } else {
-                    //fallback, store priceAlert with new rate
-                    priceAlert.lastRate = latestRateNullable
-                    priceAlertStorage.save(priceAlert)
-                }
+
+            val alertRate = priceAlert.lastRate ?: run {
+                priceAlert.lastRate = latestRate
+                changedAlerts.add(priceAlert)
+                return@forEach
             }
+
+            val signedState = signedState(alertRate, latestRate, priceAlert.state.value ?: 0) ?: run {
+                        return@forEach
+                    }
+
+            priceAlert.lastRate = latestRate
+            changedAlerts.add(priceAlert)
+            significantAlerts.add(PriceAlertItem(priceAlert.coin, signedState))
         }
+
+        if (changedAlerts.isNotEmpty()) {
+            priceAlertStorage.save(changedAlerts)
+        }
+
         val notifications = notificationFactory.notifications(significantAlerts)
         notificationManager.show(notifications)
     }
+
+    private fun signedState(alertRate: BigDecimal, latestRate: BigDecimal, threshold: Int): Int? {
+        val diff = (latestRate.toFloat() - alertRate.toFloat()) / alertRate.toFloat() * 100
+
+        if (abs(diff.toInt()) < threshold) {
+            return null
+        }
+
+        return if (diff < 0) -threshold else threshold
+    }
+
 
 }

@@ -161,11 +161,11 @@ class App : Application() {
         priceAlertManager = PriceAlertManager(walletManager, priceAlertsStorage)
         emojiHelper = EmojiHelper()
         notificationFactory = NotificationFactory(emojiHelper, instance)
-        priceAlertHandler = PriceAlertHandler(priceAlertsStorage, notificationManager, notificationFactory)
-        backgroundPriceAlertManager = BackgroundPriceAlertManager(priceAlertsStorage, rateManager, currencyManager, rateStorage, priceAlertHandler)
-
         notificationManager = NotificationManager(NotificationManagerCompat.from(this))
-        backgroundPriceAlertManager = BackgroundPriceAlertManager(priceAlertsStorage, rateManager, currencyManager, rateStorage)
+        priceAlertHandler = PriceAlertHandler(priceAlertsStorage, notificationManager, notificationFactory)
+        backgroundPriceAlertManager = BackgroundPriceAlertManager(priceAlertsStorage, rateManager, currencyManager, rateStorage, priceAlertHandler).apply {
+            backgroundManager.registerListener(this)
+        }
 
         BackgroundRateAlertScheduler.startPeriodicWorker(instance)
     }

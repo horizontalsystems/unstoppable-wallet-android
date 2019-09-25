@@ -22,7 +22,7 @@ class PriceAlertManager(private val walletManager: IWalletManager, private val p
         val priceAlerts = priceAlertsStorage.all()
 
         return walletManager.wallets.map { wallet ->
-            priceAlerts.firstOrNull { it.coin == wallet.coin } ?: PriceAlert(wallet.coin, PriceAlert.State.OFF, null)
+            priceAlerts.firstOrNull { it.coin == wallet.coin } ?: PriceAlert(wallet.coin, PriceAlert.State.OFF)
         }
     }
 
