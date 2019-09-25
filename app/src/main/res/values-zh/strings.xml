@@ -304,9 +304,9 @@
     <!-- Account Types -->
     <string name="AccountType_Unstoppable">Unstoppable Wallet</string>
     <string name="AccountType_UnstoppableKey">Unstoppable Wallet Key</string>
-    <string name="AccountType_Eos">EOS区块链</string>
+    <string name="AccountType_Eos">EOS Wallet</string>
     <string name="AccountType_EosKey">EOS密钥</string>
-    <string name="AccountType_Binance">币安链</string>
+    <string name="AccountType_Binance">Binance Wallet</string>
     <string name="AccountType_BinanceKey">币安密钥</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">恢复选项</string>
