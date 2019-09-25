@@ -102,7 +102,12 @@ class NotificationItemsAdapter(private val presenter: NotificationsPresenter) : 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificationItemViewHolder {
-        return NotificationItemViewHolder(CellView(parent.context), presenter)
+        val cellView = CellView(parent.context)
+        cellView.layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        return NotificationItemViewHolder(cellView, presenter)
     }
 
     override fun getItemCount(): Int {
