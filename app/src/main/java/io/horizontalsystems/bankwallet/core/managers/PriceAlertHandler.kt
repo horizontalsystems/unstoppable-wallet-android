@@ -18,36 +18,32 @@ class PriceAlertHandler(
 
     override fun handleAlerts(latestRateData: LatestRateData) {
         val priceAlerts = priceAlertStorage.activePriceAlerts()
-        val significantAlerts = mutableListOf<PriceAlertItem>()
-        val changedAlerts = mutableListOf<PriceAlert>()
 
-        priceAlerts.forEach { priceAlert ->
+        val alertItems = getAlertsToNotify(priceAlerts, latestRateData)
+        notificationManager.show(notificationFactory.notifications(alertItems))
 
-            val latestRate = latestRateData.rates[priceAlert.coin.code]?.toBigDecimalOrNull() ?: run {
-                        return@forEach
-                    }
-
-            val alertRate = priceAlert.lastRate ?: run {
-                priceAlert.lastRate = latestRate
-                changedAlerts.add(priceAlert)
-                return@forEach
-            }
-
-            val signedState = signedState(alertRate, latestRate, priceAlert.state.value ?: 0) ?: run {
-                        return@forEach
-                    }
-
-            priceAlert.lastRate = latestRate
-            changedAlerts.add(priceAlert)
-            significantAlerts.add(PriceAlertItem(priceAlert.coin, signedState))
-        }
-
+        val changedAlerts = getChangedAlerts(priceAlerts, latestRateData)
         if (changedAlerts.isNotEmpty()) {
             priceAlertStorage.save(changedAlerts)
         }
+    }
 
-        val notifications = notificationFactory.notifications(significantAlerts)
-        notificationManager.show(notifications)
+    private fun getAlertsToNotify(priceAlerts: List<PriceAlert>, latestRateData: LatestRateData): List<PriceAlertItem> {
+        return priceAlerts.mapNotNull { priceAlert ->
+            val latestRate = latestRateData.rates[priceAlert.coin.code]?.toBigDecimalOrNull() ?: run {
+                return@mapNotNull null
+            }
+
+            val alertRate = priceAlert.lastRate ?: run {
+                return@mapNotNull null
+            }
+
+            val signedState = signedState(alertRate, latestRate, priceAlert.state.value ?: 0) ?: run {
+                return@mapNotNull null
+            }
+
+            PriceAlertItem(priceAlert.coin, signedState)
+        }
     }
 
     private fun signedState(alertRate: BigDecimal, latestRate: BigDecimal, threshold: Int): Int? {
@@ -60,5 +56,15 @@ class PriceAlertHandler(
         return if (diff < 0) -threshold else threshold
     }
 
+    private fun getChangedAlerts(priceAlerts: List<PriceAlert>, latestRateData: LatestRateData): List<PriceAlert> {
+        val changedAlerts = mutableListOf<PriceAlert>()
+        priceAlerts.forEach { priceAlert ->
+            latestRateData.rates[priceAlert.coin.code]?.toBigDecimalOrNull()?.let { rate ->
+                priceAlert.lastRate = rate
+                changedAlerts.add(priceAlert)
+            }
+        }
+        return changedAlerts
+    }
 
 }
