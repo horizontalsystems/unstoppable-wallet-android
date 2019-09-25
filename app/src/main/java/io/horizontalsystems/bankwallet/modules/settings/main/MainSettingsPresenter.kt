@@ -21,7 +21,6 @@ class MainSettingsPresenter(
         view.setLanguage(interactor.currentLanguageDisplayName)
         view.setLightMode(interactor.lightMode)
         view.setAppVersion(interactor.appVersion)
-        view.setPriceAlertCount(interactor.priceAlertCount)
     }
 
     override fun didTapSecurity() {
@@ -73,10 +72,6 @@ class MainSettingsPresenter(
 
     override fun didUpdateBaseCurrency() {
         view.setBaseCurrency(helper.displayName(interactor.baseCurrency))
-    }
-
-    override fun didUpdatePriceAlertCount(count: Int) {
-        view.setPriceAlertCount(count)
     }
 
     // ViewModel

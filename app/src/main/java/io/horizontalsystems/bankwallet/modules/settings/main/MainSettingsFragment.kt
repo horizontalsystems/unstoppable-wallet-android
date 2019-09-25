@@ -108,10 +108,6 @@ class MainSettingsFragment : Fragment() {
                 appName.text = appVersion
             }
         })
-
-        presenterView.priceAlertCount.observe(viewLifecycleOwner, Observer {
-            notifications.selectedValue = if (it == 0) null else it.toString()
-        })
     }
 
     private fun subscribeToRouterEvents(router: MainSettingsRouter) {
