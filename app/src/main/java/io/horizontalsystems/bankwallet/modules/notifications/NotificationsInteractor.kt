@@ -23,8 +23,8 @@ class NotificationsInteractor(
     override val priceAlerts: List<PriceAlert>
         get() = priceAlertManager.getPriceAlerts()
 
-    override fun savePriceAlert(priceAlert: PriceAlert) {
-        priceAlertManager.savePriceAlert(priceAlert)
+    override fun savePriceAlerts(priceAlerts: List<PriceAlert>) {
+        priceAlertManager.savePriceAlerts(priceAlerts)
     }
 
     override fun willEnterForeground() {

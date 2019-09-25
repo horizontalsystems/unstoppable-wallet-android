@@ -15,8 +15,7 @@ class NotificationsPresenter(
     override fun viewDidLoad() {
         priceAlerts = interactor.priceAlerts
 
-        val items = priceAlertViewItemFactory.createItems(priceAlerts)
-        view.setItems(items)
+        view.setItems(priceAlertViewItemFactory.createItems(priceAlerts))
 
         checkPriceAlertsEnabled()
     }
@@ -25,11 +24,19 @@ class NotificationsPresenter(
         val priceAlert = priceAlerts[itemPosition]
         priceAlert.state = state
 
-        interactor.savePriceAlert(priceAlert)
+        interactor.savePriceAlerts(listOf(priceAlert))
     }
 
     override fun didClickOpenSettings() {
         router.openNotificationSettings()
+    }
+
+    override fun didClickDeactivateAll() {
+        priceAlerts.forEach { it.state = PriceAlert.State.OFF }
+
+        interactor.savePriceAlerts(priceAlerts)
+
+        view.setItems(priceAlertViewItemFactory.createItems(priceAlerts))
     }
 
     override fun didEnterForeground() {

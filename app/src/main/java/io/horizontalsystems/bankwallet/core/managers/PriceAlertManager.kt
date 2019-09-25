@@ -36,12 +36,10 @@ class PriceAlertManager(private val walletManager: IWalletManager, private val p
         }
     }
 
-    fun savePriceAlert(priceAlert: PriceAlert) {
-        if (priceAlert.state.value != null) {
-            priceAlertsStorage.save(priceAlert)
-        } else {
-            priceAlertsStorage.delete(priceAlert)
-        }
+    fun savePriceAlerts(priceAlerts: List<PriceAlert>) {
+        priceAlertsStorage.save(priceAlerts.filter { it.state.value != null })
+        priceAlertsStorage.delete(priceAlerts.filter { it.state.value == null })
+
 
         priceAlertCountSubject.onNext(priceAlertsStorage.priceAlertCount)
     }

@@ -22,13 +22,14 @@ object NotificationsModule {
         fun viewDidLoad()
         fun didSelectState(itemPosition: Int, state: PriceAlert.State)
         fun didClickOpenSettings()
+        fun didClickDeactivateAll()
     }
 
     interface IInteractor {
         val priceAlertsEnabled: Boolean
         val priceAlerts: List<PriceAlert>
 
-        fun savePriceAlert(priceAlert: PriceAlert)
+        fun savePriceAlerts(priceAlerts: List<PriceAlert>)
     }
 
     interface IInteractorDelegate {

@@ -40,6 +40,10 @@ class NotificationsActivity : BaseActivity() {
             presenter.didClickOpenSettings()
         }
 
+        deactivateAll.setOnSingleClickListener {
+            presenter.didClickDeactivateAll()
+        }
+
         notificationItemsAdapter = NotificationItemsAdapter(presenter)
         notifications.adapter = notificationItemsAdapter
 

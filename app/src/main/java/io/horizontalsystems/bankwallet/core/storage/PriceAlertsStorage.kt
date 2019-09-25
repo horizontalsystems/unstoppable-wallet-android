@@ -22,14 +22,16 @@ class PriceAlertsStorage(private val appConfigProvider: IAppConfigProvider, appD
         }
     }
 
-    override fun save(priceAlert: PriceAlert) {
-        priceAlert.state.value?.let {
-            dao.update(PriceAlertRecord(priceAlert.coin.code, it))
+    override fun save(priceAlerts: List<PriceAlert>) {
+        priceAlerts.forEach { priceAlert ->
+            priceAlert.state.value?.let {
+                dao.update(PriceAlertRecord(priceAlert.coin.code, it))
+            }
         }
     }
 
-    override fun delete(priceAlert: PriceAlert) {
-        dao.delete(priceAlert.coin.code)
+    override fun delete(priceAlerts: List<PriceAlert>) {
+        dao.delete(priceAlerts.map { it.coin.code })
     }
 
     override fun deleteExcluding(coinCodes: List<String>) {
