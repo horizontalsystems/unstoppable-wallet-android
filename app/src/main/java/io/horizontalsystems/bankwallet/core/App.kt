@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core
 import android.app.Application
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import androidx.core.app.NotificationManagerCompat
 import com.squareup.leakcanary.LeakCanary
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.AccountFactory
