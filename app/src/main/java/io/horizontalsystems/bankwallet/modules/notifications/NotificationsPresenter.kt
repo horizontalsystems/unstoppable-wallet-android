@@ -22,9 +22,12 @@ class NotificationsPresenter(
 
     override fun didSelectState(itemPosition: Int, state: PriceAlert.State) {
         val priceAlert = priceAlerts[itemPosition]
-        priceAlert.state = state
 
-        interactor.savePriceAlerts(listOf(priceAlert))
+        if (priceAlert.state != state) {
+            priceAlert.state = state
+
+            interactor.savePriceAlerts(listOf(priceAlert))
+        }
     }
 
     override fun didClickOpenSettings() {
