@@ -77,7 +77,12 @@ class CoinItemsAdapter(private val presenter: CreateWalletPresenter) : RecyclerV
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SwitchableViewHolder {
-        return SwitchableViewHolder(CellView(parent.context), presenter)
+        val cellView = CellView(parent.context)
+        cellView.layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        return SwitchableViewHolder(cellView, presenter)
     }
 
     override fun getItemCount(): Int {
