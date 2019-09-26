@@ -62,26 +62,26 @@
                 android:src="@drawable/ic_sort"
                 android:tint="@color/stateful_button_yellow_color"
                 android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@+id/ballanceText"
-                app:layout_constraintEnd_toStartOf="@+id/chartButton"
-                app:layout_constraintTop_toTopOf="@+id/ballanceText"
+                app:layout_constraintBottom_toBottomOf="@+id/balanceText"
+                app:layout_constraintEnd_toStartOf="@+id/switchChartButton"
+                app:layout_constraintTop_toTopOf="@+id/balanceText"
                 tools:visibility="visible" />
 
             <ImageView
-                android:id="@+id/chartButton"
+                android:id="@+id/switchChartButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
                 android:src="@drawable/ic_rate"
                 android:tint="@color/stateful_button_yellow_color"
                 android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@+id/ballanceText"
+                app:layout_constraintBottom_toBottomOf="@+id/balanceText"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/ballanceText"
+                app:layout_constraintTop_toTopOf="@+id/balanceText"
                 tools:visibility="visible" />
 
             <TextView
-                android:id="@+id/ballanceText"
+                android:id="@+id/balanceText"
                 style="@style/Title3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

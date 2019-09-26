@@ -116,7 +116,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:textColor="@color/grey_50"
-                android:text="N/A"/>
+                tools:text="N/A"/>
 
         </androidx.cardview.widget.CardView>
 
