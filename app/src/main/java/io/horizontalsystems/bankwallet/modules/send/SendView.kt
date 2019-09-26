@@ -20,12 +20,6 @@ class SendView : SendModule.IView {
     val sendButtonEnabled = MutableLiveData<Boolean>()
     val inputItems = SingleLiveEvent<List<SendModule.Input>>()
 
-    val scanQrCode = SingleLiveEvent<Unit>()
-
-//    fun init(wallet: Wallet): SendModule.IViewDelegate {
-//        return SendModule.init(this, wallet)
-//    }
-
     override fun loadInputItems(inputs: List<SendModule.Input>) {
         inputItems.value = inputs
     }
@@ -46,19 +40,5 @@ class SendView : SendModule.IView {
         this.confirmationViewItems.value = confirmationViewItems
         showSendConfirmation.call()
     }
-
-//    // SendModule.IRouter
-//
-//    override fun scanQrCode() {
-//        scanQrCode.call()
-//    }
-//
-//    override fun closeWithSuccess() {
-//        closeWithSuccess.call()
-//    }
-//
-//    override fun onCleared() {
-//        delegate.onClear()
-//    }
 
 }

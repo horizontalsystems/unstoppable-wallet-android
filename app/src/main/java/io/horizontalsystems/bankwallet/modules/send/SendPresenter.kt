@@ -9,9 +9,9 @@ class SendPresenter(private val interactor: SendModule.ISendInteractor,
                     val router: SendModule.IRouter)
     : ViewModel(), SendModule.IViewDelegate, SendModule.ISendInteractorDelegate, SendModule.ISendHandlerDelegate {
 
-    var amountModuleDelegate: SendAmountModule.IAmountModuleDelegate? = null
-    var addressModuleDelegate: SendAddressModule.IAddressModuleDelegate? = null
-    var feeModuleDelegate: SendFeeModule.IFeeModuleDelegate? = null
+    var amountModuleDelegate: SendAmountModule.AmountModuleDelegate? = null
+    var addressModuleDelegate: SendAddressModule.AddressModuleDelegate? = null
+    var feeModuleDelegate: SendFeeModule.FeeModuleDelegate? = null
 
     override lateinit var view: SendModule.IView
 
@@ -40,6 +40,10 @@ class SendPresenter(private val interactor: SendModule.ISendInteractor,
     }
 
     override fun onClear() {
+        interactor.clear()
+    }
+
+    override fun onCleared() {
         interactor.clear()
     }
 

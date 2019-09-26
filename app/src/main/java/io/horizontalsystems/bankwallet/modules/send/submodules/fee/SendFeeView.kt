@@ -6,9 +6,7 @@ import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.entities.Coin
 
-class SendFeeViewModel : ViewModel(), SendFeeModule.IView {
-
-    lateinit var delegate: SendFeeModule.IViewDelegate
+class SendFeeView : SendFeeModule.View {
 
     val primaryFee = MutableLiveData<String?>()
     val secondaryFee = MutableLiveData<String?>()
@@ -16,10 +14,6 @@ class SendFeeViewModel : ViewModel(), SendFeeModule.IView {
     val feePriority = MutableLiveData<FeeRatePriority>()
     val showFeePriorityOptions = MutableLiveData<List<SendFeeModule.FeeRateInfoViewItem>>()
     val insufficientFeeBalanceError = SingleLiveEvent<SendFeeModule.InsufficientFeeBalance?>()
-
-    fun init(coin: Coin, moduleDelegate: SendFeeModule.IFeeModuleDelegate?): SendFeeModule.IFeeModule {
-        return SendFeeModule.init(this, coin, moduleDelegate)
-    }
 
     override fun setPrimaryFee(feeAmount: String?) {
         primaryFee.value = feeAmount
@@ -43,10 +37,6 @@ class SendFeeViewModel : ViewModel(), SendFeeModule.IView {
 
     override fun setInsufficientFeeBalanceError(insufficientFeeBalance: SendFeeModule.InsufficientFeeBalance?) {
         insufficientFeeBalanceError.value = insufficientFeeBalance
-    }
-
-    override fun onCleared() {
-        delegate.onClear()
     }
 
 }

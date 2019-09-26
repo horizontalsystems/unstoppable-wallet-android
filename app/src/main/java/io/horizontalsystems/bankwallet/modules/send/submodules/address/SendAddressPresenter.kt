@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 
 class SendAddressPresenter(val view: SendAddressModule.View,
                            private val interactor: SendAddressModule.Interactor)
-    : ViewModel(), SendAddressModule.IAddressModule, SendAddressModule.InteractorDelegate,
+    : ViewModel(), SendAddressModule.AddressModule, SendAddressModule.InteractorDelegate,
       SendAddressModule.ViewDelegate {
 
-    var moduleDelegate: SendAddressModule.IAddressModuleDelegate? = null
+    var moduleDelegate: SendAddressModule.AddressModuleDelegate? = null
 
     override var currentAddress: String? = null
         private set(value) {

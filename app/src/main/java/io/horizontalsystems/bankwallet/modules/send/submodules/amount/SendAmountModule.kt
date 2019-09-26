@@ -1,12 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.amount
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.Rate
-import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
+import io.horizontalsystems.bankwallet.modules.send.SendPresenter
 import java.math.BigDecimal
 import kotlin.math.min
 
@@ -43,7 +43,7 @@ object SendAmountModule {
         fun didRateRetrieve(rate: Rate?)
     }
 
-    interface IAmountModule {
+    interface AmountModule {
         val currentAmount: BigDecimal
         val inputType: SendModule.InputType
         val coinAmount: CoinValue
@@ -51,15 +51,18 @@ object SendAmountModule {
 
         @Throws
         fun primaryAmountInfo(): AmountInfo
+
         @Throws
         fun secondaryAmountInfo(): AmountInfo?
+
         @Throws
         fun validAmount(): BigDecimal
+
         fun setAmount(amount: BigDecimal)
         fun setAvailableBalance(availableBalance: BigDecimal)
     }
 
-    interface IAmountModuleDelegate {
+    interface AmountModuleDelegate {
         fun onChangeAmount()
         fun onChangeInputType(inputType: SendModule.InputType)
     }
@@ -69,23 +72,28 @@ object SendAmountModule {
         class InsufficientBalance(val availableBalance: AmountInfo?) : ValidationError()
     }
 
-    fun init(view: SendAmountViewModel, wallet: Wallet, moduleDelegate: IAmountModuleDelegate?): SendAmountPresenter {
-        val coinDecimal = min(wallet.coin.decimal, App.appConfigProvider.maxDecimal)
-        val currencyDecimal = App.appConfigProvider.fiatDecimal
-        val baseCurrency = App.currencyManager.baseCurrency
 
-        val interactor = SendAmountInteractor(baseCurrency, App.rateStorage, App.localStorage, wallet.coin)
-        val sendAmountPresenterHelper = SendAmountPresenterHelper(App.numberFormatter, wallet.coin, baseCurrency, coinDecimal, currencyDecimal)
-        val presenter = SendAmountPresenter(interactor, sendAmountPresenterHelper, wallet.coin, baseCurrency)
+    class Factory(private val wallet: Wallet,
+                  private val amountModule: SendPresenter) : ViewModelProvider.Factory {
 
-        view.delegate = presenter
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
-        presenter.view = view
-        presenter.moduleDelegate = moduleDelegate
+            val view = SendAmountView()
+            val coinDecimal = min(wallet.coin.decimal, App.appConfigProvider.maxDecimal)
+            val currencyDecimal = App.appConfigProvider.fiatDecimal
+            val baseCurrency = App.currencyManager.baseCurrency
 
-        interactor.delegate = presenter
+            val interactor = SendAmountInteractor(baseCurrency, App.rateStorage, App.localStorage, wallet.coin)
+            val sendAmountPresenterHelper =
+                    SendAmountPresenterHelper(App.numberFormatter, wallet.coin, baseCurrency, coinDecimal,
+                                              currencyDecimal)
+            val presenter = SendAmountPresenter(view, interactor, sendAmountPresenterHelper, wallet.coin, baseCurrency)
 
-        return presenter
+            interactor.delegate = presenter
+            amountModule.handler.amountModule = presenter
+
+            return presenter as T
+        }
     }
 
 }

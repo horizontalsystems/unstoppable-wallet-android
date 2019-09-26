@@ -9,14 +9,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule
-import io.horizontalsystems.bankwallet.modules.ratechart.RateChartPresenter
-import io.horizontalsystems.bankwallet.modules.ratechart.RateChartView
-import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsModule
-import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsPresenter
+import io.horizontalsystems.bankwallet.modules.send.SendPresenter
 import kotlinx.android.synthetic.main.view_address_input.*
 
-class SendAddressFragment(private val coin: Coin) : Fragment() {
+class SendAddressFragment(private val coin: Coin,
+                          private val addressModule: SendPresenter)
+    : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.view_address_input, container, false)
@@ -26,9 +24,10 @@ class SendAddressFragment(private val coin: Coin) : Fragment() {
 
         super.onViewCreated(view, savedInstanceState)
 
-        val presenter =
-                ViewModelProviders.of(this, SendAddressModule.Factory(coin)).get(SendAddressPresenter::class.java)
+        val presenter = ViewModelProviders.of(this, SendAddressModule.Factory(coin, addressModule))
+                .get(SendAddressPresenter::class.java)
         val presenterView = presenter.view as SendAddressView
+        presenter.moduleDelegate = addressModule.addressModuleDelegate
 
         btnBarcodeScan.setOnClickListener { presenter.onAddressScanClicked() }
         btnPaste?.setOnClickListener { presenter.onAddressPasteClicked() }

@@ -10,7 +10,7 @@ import java.math.BigDecimal
 
 class SendBinanceHandler(private val interactor: SendModule.ISendBinanceInteractor,
                          private val router: SendModule.IRouter)
-    : SendModule.ISendHandler, SendAmountModule.IAmountModuleDelegate, SendAddressModule.IAddressModuleDelegate {
+    : SendModule.ISendHandler, SendAmountModule.AmountModuleDelegate, SendAddressModule.AddressModuleDelegate {
 
     private fun syncValidation() {
         try {
@@ -26,10 +26,10 @@ class SendBinanceHandler(private val interactor: SendModule.ISendBinanceInteract
 
     // SendModule.ISendHandler
 
-    override lateinit var amountModule: SendAmountModule.IAmountModule
-    override lateinit var addressModule: SendAddressModule.IAddressModule
-    override lateinit var feeModule: SendFeeModule.IFeeModule
-    override lateinit var memoModule: SendMemoModule.IMemoModule
+    override lateinit var amountModule: SendAmountModule.AmountModule
+    override lateinit var addressModule: SendAddressModule.AddressModule
+    override lateinit var feeModule: SendFeeModule.FeeModule
+    override lateinit var memoModule: SendMemoModule.MemoModule
 
     override lateinit var delegate: SendModule.ISendHandlerDelegate
 
@@ -65,7 +65,7 @@ class SendBinanceHandler(private val interactor: SendModule.ISendBinanceInteract
         addressModule.didScanQrCode(address)
     }
 
-    // SendAmountModule.IAmountModuleDelegate
+    // SendAmountModule.AmountModuleDelegate
 
     override fun onChangeAmount() {
         syncValidation()
@@ -75,7 +75,7 @@ class SendBinanceHandler(private val interactor: SendModule.ISendBinanceInteract
         feeModule.setInputType(inputType)
     }
 
-    // SendAddressModule.IAddressModuleDelegate
+    // SendAddressModule.AddressModuleDelegate
 
     override fun validate(address: String) {
         interactor.validate(address)

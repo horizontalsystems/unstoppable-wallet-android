@@ -9,24 +9,31 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
+import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountPresenter
+import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountView
 import kotlinx.android.synthetic.main.view_send_memo.*
 
 
-class SendMemoFragment(val sendMemoViewModel: SendMemoViewModel) : Fragment() {
+class SendMemoFragment(private val maxLength: Int) : Fragment() {
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.view_send_memo, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val presenter = ViewModelProviders.of(this, SendMemoModule.Factory(maxLength)).get(SendMemoPresenter::class.java)
+        val presenterView = presenter.view as SendMemoView
 
         memoInput.addTextChangedListener(object : TextWatcher {
 
             override fun afterTextChanged(s: Editable?) {
-                sendMemoViewModel.delegate.onTextEntered(s?.toString() ?: "")
+                presenter.onTextEntered(s?.toString() ?: "")
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -34,7 +41,7 @@ class SendMemoFragment(val sendMemoViewModel: SendMemoViewModel) : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
 
-        sendMemoViewModel.maxLength.observe(viewLifecycleOwner, Observer { maxLength ->
+        presenterView.maxLength.observe(viewLifecycleOwner, Observer { maxLength ->
             memoInput.filters = arrayOf(InputFilter.LengthFilter(maxLength))
         })
     }

@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.confirmation
 
+import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule.SendConfirmationAmountViewItem
 import io.horizontalsystems.bankwallet.modules.send.SendModule.SendConfirmationDurationViewItem
@@ -7,12 +8,12 @@ import io.horizontalsystems.bankwallet.modules.send.SendModule.SendConfirmationF
 import io.horizontalsystems.bankwallet.modules.send.SendModule.SendConfirmationMemoViewItem
 
 class SendConfirmationPresenter(
-        private val interactor: SendConfirmationModule.IInteractor,
-        private val confirmationViewItems: List<SendModule.SendConfirmationViewItem>)
-    : SendConfirmationModule.IViewDelegate, SendConfirmationModule.IInteractorDelegate {
+        val view: SendConfirmationModule.View,
+        private val interactor: SendConfirmationModule.Interactor )
+    : ViewModel(), SendConfirmationModule.ViewDelegate, SendConfirmationModule.InteractorDelegate {
 
-    var view: SendConfirmationViewModel? = null
     private var receiver = ""
+    var confirmationViewItems: List<SendModule.SendConfirmationViewItem>? = null
 
     override fun onViewDidLoad() {
         var primaryName = ""
@@ -24,7 +25,7 @@ class SendConfirmationPresenter(
         var memo: String? = null
         var duration: Long? = null
 
-        confirmationViewItems.forEach { item ->
+        confirmationViewItems?.forEach { item ->
             when (item) {
                 is SendConfirmationAmountViewItem -> {
                     primaryName = item.primaryInfo.getAmountName()
