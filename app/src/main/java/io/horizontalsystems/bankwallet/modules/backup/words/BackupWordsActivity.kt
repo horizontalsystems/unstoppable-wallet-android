@@ -33,15 +33,10 @@ class BackupWordsActivity : BaseActivity() {
         buttonBack.setOnSingleClickListener { viewModel.delegate.onBackClick() }
         buttonNext.setOnSingleClickListener { viewModel.delegate.onNextClick() }
 
-        val accountKey = when (backupWords.size) {
-            24 -> getString(R.string.AccountType_BinanceKey)
-            else -> getString(R.string.AccountType_UnstoppableKey)
-        }
-
         viewModel.loadPageLiveEvent.observe(this, Observer { page ->
             val fragment = when (page) {
-                1 -> BackupWordsFragment(accountKey)
-                else -> BackupWordsConfirmFragment(accountKey)
+                1 -> BackupWordsFragment()
+                else -> BackupWordsConfirmFragment()
             }
 
             supportFragmentManager.beginTransaction().apply {

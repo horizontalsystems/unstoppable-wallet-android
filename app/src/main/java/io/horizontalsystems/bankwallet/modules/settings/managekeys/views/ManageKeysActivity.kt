@@ -43,7 +43,7 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
                 val confirmationList = listOf(
                         getString(R.string.ManageKeys_Delete_ConfirmationRemove, getString(item.predefinedAccountType.title)),
                         getString(R.string.ManageKeys_Delete_ConfirmationDisable, getString(item.predefinedAccountType.coinCodes)),
-                        getString(R.string.ManageKeys_Delete_ConfirmationLoose, getString(item.predefinedAccountType.title))
+                        getString(R.string.ManageKeys_Delete_ConfirmationLose)
                 )
 
                 val confirmListener = object : ManageKeysDeleteAlert.Listener {
@@ -59,7 +59,7 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
         viewModel.confirmCreateEvent.observe(this, Observer {
             val title = getString(R.string.ManageCoins_AddCoin_Title)
             val subtitle = getString(it.predefinedAccountType.title)
-            val description = getString(R.string.ManageCoins_AddCoin_Text, getString(it.predefinedAccountType.title), getString(it.predefinedAccountType.coinCodes))
+            val description = getString(R.string.ManageCoins_AddCoin_Text, getString(it.predefinedAccountType.coinCodes))
             ManageKeysDialog.show(title, subtitle, description, this, this, ManageAction.CREATE)
         })
 
@@ -67,7 +67,7 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
             val title = getString(R.string.ManageKeys_Delete_Alert_Title)
             val subtitle = getString(it.predefinedAccountType.title)
             val keyName = getString(it.predefinedAccountType.title)
-            val description = getString(R.string.ManageKeys_Delete_Alert, keyName)
+            val description = getString(R.string.ManageKeys_Delete_Alert)
             ManageKeysDialog.show(title, subtitle, description, this, this, ManageAction.BACKUP)
         })
 

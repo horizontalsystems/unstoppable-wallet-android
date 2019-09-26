@@ -10,9 +10,8 @@ import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.extensions.InputTextView
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
-import kotlinx.android.synthetic.main.fragment_backup_words_confirm.*
 
-class BackupWordsConfirmFragment(private val accountKey: String) : Fragment() {
+class BackupWordsConfirmFragment : Fragment() {
     private lateinit var viewModel: BackupWordsViewModel
 
     private var wordIndex1 = -1
@@ -32,8 +31,6 @@ class BackupWordsConfirmFragment(private val accountKey: String) : Fragment() {
             viewModel = ViewModelProviders.of(it).get(BackupWordsViewModel::class.java)
         }
 
-        textDescription.text = getString(R.string.Backup_Confirmation_Description, accountKey)
-
         viewModel.wordIndexesToConfirmLiveData.observe(viewLifecycleOwner, Observer { list ->
             list?.let {
                 wordOne?.bindPrefix("${it[0]}.")
@@ -52,7 +49,7 @@ class BackupWordsConfirmFragment(private val accountKey: String) : Fragment() {
             val wordOneEntry = wordOne?.getEnteredText()?.toLowerCase()
             val wordTwoEntry = wordTwo?.getEnteredText()?.toLowerCase()
             if (wordOneEntry.isNullOrEmpty() || wordTwoEntry.isNullOrEmpty()) {
-                HudHelper.showErrorMessage(getString(R.string.Backup_Confirmation_Description, accountKey))
+                HudHelper.showErrorMessage(getString(R.string.Backup_Confirmation_Description))
             } else {
                 viewModel.delegate.validateDidClick(
                         hashMapOf(wordIndex1 to wordOneEntry, wordIndex2 to wordTwoEntry)

@@ -19,6 +19,8 @@
     <string name="Error">Error</string>
     <string name="NotAvailable">N/A</string>
 
+    <string name="Wallet">%s wallet</string>
+
     <!--Welcome-->
 
     <string name="Welcome_Title">Unstoppable</string>
@@ -34,7 +36,6 @@
 
     <string name="Restore_Title">Restore</string>
     <string name="Restore_Description">To restore existing wallet you need to enter a private key for that wallet.\n\nOnce you restore one wallet you will be able to restore more wallets by going to Manage Keys section in app Settings.</string>
-    <string name="Restore_Subtitle">Enter Key</string>
     <string name="Restore_ValidationFailed">Incorrect Key</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>
 
@@ -52,12 +53,14 @@
     <string name="Backup_Intro_Later">Later</string>
     <string name="Backup_Intro_BackupNow">Backup</string>
 
+    <string name="Backup_DisplayTitle">Private Key</string>
+
     <string name="Backup_Confirmation_SecretKey">I understand that I am a sole owner of a private 12-word Secret Key which is securely stored on my phone and enables me to control funds on my wallet.</string>
     <string name="Backup_Confirmation_DeleteAppWarn">I understand that if this app is ever moved, deleted or malfunctions, the access to my wallet can be only recovered with that Secret Key.</string>
     <string name="Backup_Confirmation_LockAppWarn">I understand that changing the phone\s unlock PIN or deleting app data in Android settings deletes the Secret Key from device. I would need to re-enter my Secret Key to regain access to my wallet.</string>
     <string name="Backup_Confirmation_Disclaimer">I understand that developers of this app can not be held responsible for any unintended bugs or issues that may arise while using this app.</string>
 
-    <string name="Backup_Confirmation_Description">Enter words from your %s.</string>
+    <string name="Backup_Confirmation_Description">Enter words from your private key.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Words do not match</string>
     <string name="Backup_Confirmation_CheckTitle">Check…</string>
 
@@ -368,7 +371,7 @@
     <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_save">Save</string>
     <string name="ManageCoins_AddCoin_Title">Add Wallet</string>
-    <string name="ManageCoins_AddCoin_Text">This action will generate a new %1$s wallet for the following coins: %2$s </string>
+    <string name="ManageCoins_AddCoin_Text">This action will generate a new wallet for the following coins: %s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">At this point, the wallet is not able to create new EOS wallet accounts. You\'re only able to restore the existing one.</string>
 
     <!--Manage Keys-->
@@ -386,28 +389,25 @@
     <string name="ManageKeys_Delete_Title">Delete Wallet</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s wallet from this device.</string>
     <string name="ManageKeys_Delete_ConfirmationDisable">Coins that will be disabled: %s</string>
-    <string name="ManageKeys_Delete_ConfirmationLoose">If you don\'t have a backup of the %s key, you will loose the respective funds.</string>
+    <string name="ManageKeys_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to your funds.</string>
     <string name="ManageKeys_Delete_FromPhone">Delete from Phone</string>
     <string name="ManageKeys_Delete_Alert_Title">Backup Required</string>
-    <string name="ManageKeys_Delete_Alert">You need to backup %s key before you may delete it from this phone.</string>
+    <string name="ManageKeys_Delete_Alert">You need to backup the private key before it can be deleted from this phone.</string>
 
     <!-- Manage Keys Alert -->
 
     <string name="AddCoin_Title">Add %s</string>
-    <string name="AddCoin_Description">You don\'t have a wallet that can store %1$s. The app can generate a new wallet for you. Use the Create button below to generate a new wallet.\n\nYou will be able to use the new wallet for the following coins: %2$s.\n\nYou may also use the existing %3$s Wallet key if you have one. Use the restore button for that.</string>
+    <string name="AddCoin_Description">You don\'t have a wallet that can store %1$s. The app can generate a new wallet for you. Use the Create button below to generate a new wallet.\n\nYou will be able to use the new wallet for the following coins: %2$s.\n\nYou may also use the existing %3$s wallet key if you have one. Use the restore button for that.</string>
     <string name="AddCoin_CreateKey">Create</string>
     <string name="AddCoin_RestoreKey">Restore</string>
 
     <!-- Account Types -->
 
-    <string name="AccountType_Unstoppable">Unstoppable Wallet</string>
-    <string name="AccountType_UnstoppableKey">Unstoppable Wallet Key</string>
+    <string name="AccountType_Unstoppable">Unstoppable</string>
     <string name="AccountType_Unstoppable_Text" translatable="false">BTC, BCH, DASH, ETH, ERC-20</string>
-    <string name="AccountType_Eos">EOS Wallet</string>
-    <string name="AccountType_EosKey">EOS Key</string>
+    <string name="AccountType_Eos">EOS</string>
     <string name="AccountType_Eos_Text" translatable="false">EOS, EOS-based Tokens</string>
-    <string name="AccountType_Binance">Binance Wallet</string>
-    <string name="AccountType_BinanceKey">Binance Key</string>
+    <string name="AccountType_Binance">Binance</string>
     <string name="AccountType_Binance_Text" translatable="false">BNB, BEP-2</string>
 
     <!--Coin Option-->
