@@ -163,7 +163,7 @@ class App : Application() {
         notificationFactory = NotificationFactory(emojiHelper, instance)
         notificationManager = NotificationManager(NotificationManagerCompat.from(this))
         priceAlertHandler = PriceAlertHandler(priceAlertsStorage, notificationManager, notificationFactory)
-        backgroundPriceAlertManager = BackgroundPriceAlertManager(priceAlertsStorage, rateManager, currencyManager, rateStorage, priceAlertHandler).apply {
+        backgroundPriceAlertManager = BackgroundPriceAlertManager(priceAlertsStorage, rateManager, currencyManager, rateStorage, priceAlertHandler, notificationManager).apply {
             backgroundManager.registerListener(this)
         }
 

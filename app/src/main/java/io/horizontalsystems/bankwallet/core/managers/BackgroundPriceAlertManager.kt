@@ -9,7 +9,8 @@ class BackgroundPriceAlertManager(
         private val rateManager: IRateManager,
         private val currencyManager: ICurrencyManager,
         private val rateStorage: IRateStorage,
-        private val priceAlertHandler: IPriceAlertHandler
+        private val priceAlertHandler: IPriceAlertHandler,
+        private val notificationManager: INotificationManager
 ) : IBackgroundPriceAlertManager, BackgroundManager.Listener {
 
     override fun fetchRates(): Single<LatestRateData> {
@@ -29,4 +30,7 @@ class BackgroundPriceAlertManager(
         priceAlertsStorage.save(alerts)
     }
 
+    override fun willEnterForeground() {
+        notificationManager.clear()
+    }
 }

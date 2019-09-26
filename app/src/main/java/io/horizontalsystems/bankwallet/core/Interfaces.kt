@@ -411,6 +411,7 @@ interface INotificationFactory{
 interface INotificationManager{
     val isEnabled: Boolean
     fun show(notifications: List<AlertNotification>)
+    fun clear()
 }
 
 interface IEnabledWalletStorage {
