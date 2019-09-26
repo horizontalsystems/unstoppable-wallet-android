@@ -1,6 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.memo
 
-class SendMemoPresenter(private val maxLength: Int) : SendMemoModule.IViewDelegate, SendMemoModule.IMemoModule {
+import androidx.lifecycle.ViewModel
+
+class SendMemoPresenter(private val maxLength: Int,
+                        var view: SendMemoModule.View)
+    : ViewModel(), SendMemoModule.ViewDelegate, SendMemoModule.MemoModule {
 
     // SendMemoModule.IMemoModule
 
@@ -8,8 +12,6 @@ class SendMemoPresenter(private val maxLength: Int) : SendMemoModule.IViewDelega
         private set
 
     // SendMemoModule.IViewDelegate
-
-    override lateinit var view: SendMemoModule.IView
 
     override fun onViewDidLoad() {
         view.setMaxLength(maxLength)

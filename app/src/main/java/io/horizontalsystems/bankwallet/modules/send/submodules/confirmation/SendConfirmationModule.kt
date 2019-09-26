@@ -1,13 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.confirmation
 
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.bankwallet.modules.send.SendPresenter
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 
 object SendConfirmationModule {
 
-    const val ConfirmationInfoKey = "confirmation_info_key"
+    //const val ConfirmationInfoKey = "confirmation_info_key"
 
-    interface IView{
+    interface View{
         fun loadPrimaryItems(primaryItemData: PrimaryItemData)
         fun loadSecondaryItems(secondaryItemData: SecondaryItemData)
         fun showCopied()
@@ -15,27 +20,18 @@ object SendConfirmationModule {
         fun setSendButtonState(state: SendButtonState)
     }
 
-    interface IViewDelegate {
+    interface ViewDelegate {
         fun onViewDidLoad()
         fun onReceiverClick()
         fun onSendError()
     }
 
-    interface IInteractor {
+    interface Interactor {
         fun copyToClipboard(coinAddress: String)
     }
 
-    interface IInteractorDelegate {
+    interface InteractorDelegate {
         fun didCopyToClipboard()
-    }
-
-    fun init(view: SendConfirmationViewModel, confirmationViewItems: List<SendModule.SendConfirmationViewItem>) {
-        val interactor = SendConfirmationInteractor(TextHelper)
-        val presenter = SendConfirmationPresenter(interactor, confirmationViewItems)
-
-        view.delegate = presenter
-        presenter.view = view
-        interactor.delegate = presenter
     }
 
     enum class SendButtonState {
@@ -53,5 +49,20 @@ object SendConfirmationModule {
     data class SecondaryItemData(
             val feeAmount: String?,
             val estimatedTime: Long?)
+
+
+    class Factory() : ViewModelProvider.Factory {
+
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+
+            val view = SendConfirmationView()
+            val interactor = SendConfirmationInteractor(TextHelper)
+            val presenter = SendConfirmationPresenter(view, interactor )
+
+            interactor.delegate = presenter
+
+            return presenter as T
+        }
+    }
 
 }

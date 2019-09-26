@@ -6,60 +6,67 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.FeeRateInfo
+import io.horizontalsystems.bankwallet.modules.send.SendPresenter
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import kotlinx.android.synthetic.main.view_send_fee.*
 
-class SendFeeFragment(private val sendFeeViewModel: SendFeeViewModel,
-                      private val feeIsAdjustable: Boolean )
+class SendFeeFragment(private val feeIsAdjustable: Boolean,
+                      private val coin: Coin,
+                      private val moduleDelegate: SendPresenter)
     : Fragment(), FeeRatePrioritySelector.Listener {
 
-    private var delegate: SendFeeModule.IViewDelegate? = null
+    private var presenter: SendFeePresenter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.view_send_fee, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        delegate = sendFeeViewModel.delegate
+        super.onViewCreated(view, savedInstanceState)
+
+        presenter = ViewModelProviders.of(this, SendFeeModule.Factory(coin, moduleDelegate))
+                .get(SendFeePresenter::class.java)
+        val presenterView = presenter?.view as SendFeeView
 
         txSpeedLayout.visibility = if (feeIsAdjustable) View.VISIBLE else View.GONE
         txSpeedLayout.setOnClickListener {
-            delegate?.onClickFeeRatePriority()
+            presenter?.onClickFeeRatePriority()
         }
 
-        sendFeeViewModel.primaryFee.observe(viewLifecycleOwner, Observer { txFeePrimary.text = " $it" })
+        presenterView.primaryFee.observe(viewLifecycleOwner, Observer { txFeePrimary.text = " $it" })
 
-        sendFeeViewModel.secondaryFee.observe(viewLifecycleOwner, Observer { fiatFee ->
+        presenterView.secondaryFee.observe(viewLifecycleOwner, Observer { fiatFee ->
             fiatFee?.let { txFeeSecondary.text = " | $it" }
         })
 
-        sendFeeViewModel.duration.observe(viewLifecycleOwner, Observer { duration ->
+        presenterView.duration.observe(viewLifecycleOwner, Observer { duration ->
             context?.let {
                 val txDurationString = DateHelper.getTxDurationString(it, duration)
                 txDuration.text = it.getString(R.string.Duration_Within, txDurationString)
             }
         })
 
-        sendFeeViewModel.feePriority.observe(viewLifecycleOwner, Observer { feePriority ->
+        presenterView.feePriority.observe(viewLifecycleOwner, Observer { feePriority ->
             context?.let {
                 txSpeedMenu.text = TextHelper.getFeeRatePriorityString(it, feePriority)
             }
         })
 
-        sendFeeViewModel.showFeePriorityOptions.observe(viewLifecycleOwner, Observer { feeRates ->
+        presenterView.showFeePriorityOptions.observe(viewLifecycleOwner, Observer { feeRates ->
             FeeRatePrioritySelector
                     .newInstance(this, feeRates)
                     .show(this.requireFragmentManager(), "fee_rate_priority_selector")
         })
 
 
-        sendFeeViewModel.insufficientFeeBalanceError.observe(viewLifecycleOwner, Observer { error ->
+        presenterView.insufficientFeeBalanceError.observe(viewLifecycleOwner, Observer { error ->
             if (error != null) {
                 feeError.visibility = View.VISIBLE
                 txSpeedLayout.visibility = View.GONE
@@ -70,7 +77,8 @@ class SendFeeFragment(private val sendFeeViewModel: SendFeeViewModel,
                 val feeCoinTitle = error.feeCoin.title
                 val formattedFee = App.numberFormatter.format(error.fee)
 
-                feeError.text = context?.getString(R.string.Send_Token_InsufficientFeeAlert, coinCode, tokenProtocol, feeCoinTitle, formattedFee)
+                feeError.text = context?.getString(R.string.Send_Token_InsufficientFeeAlert, coinCode, tokenProtocol,
+                                                   feeCoinTitle, formattedFee)
             } else {
                 feeError.visibility = View.GONE
                 txSpeedLayout.visibility = if (feeIsAdjustable) View.VISIBLE else View.GONE
@@ -78,10 +86,10 @@ class SendFeeFragment(private val sendFeeViewModel: SendFeeViewModel,
             }
         })
 
-        delegate?.onViewDidLoad()
+        presenter?.onViewDidLoad()
     }
 
     override fun onSelectFeeRate(feeRate: FeeRateInfo) {
-        delegate?.onChangeFeeRate(feeRate)
+        presenter?.onChangeFeeRate(feeRate)
     }
 }

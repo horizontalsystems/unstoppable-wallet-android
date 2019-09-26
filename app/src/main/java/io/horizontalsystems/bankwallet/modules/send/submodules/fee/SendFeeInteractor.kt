@@ -10,11 +10,11 @@ import io.reactivex.schedulers.Schedulers
 
 class SendFeeInteractor(private val rateStorage: IRateStorage,
                         private val feeRateProvider: IFeeRateProvider?,
-                        private val currencyManager: ICurrencyManager) : SendFeeModule.IInteractor {
+                        private val currencyManager: ICurrencyManager) : SendFeeModule.Interactor {
 
     private var disposable: Disposable? = null
 
-    var delegate: SendFeeModule.IInteractorDelegate? = null
+    var delegate: SendFeeModule.InteractorDelegate? = null
 
     override fun getRate(coinCode: String) {
         disposable = rateStorage.latestRateObservable(coinCode, currencyManager.baseCurrency.code)

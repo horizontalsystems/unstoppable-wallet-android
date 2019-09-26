@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.modules.send.SendPresenter
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import java.math.BigDecimal
 
@@ -31,7 +32,7 @@ object SendAddressModule {
 
     interface InteractorDelegate
 
-    interface IAddressModule {
+    interface AddressModule {
         val currentAddress: String?
 
         @Throws
@@ -39,7 +40,7 @@ object SendAddressModule {
         fun didScanQrCode(address: String)
     }
 
-    interface IAddressModuleDelegate {
+    interface AddressModuleDelegate {
         fun validate(address: String)
 
         fun onUpdateAddress()
@@ -53,16 +54,18 @@ object SendAddressModule {
     }
 
 
-    class Factory(private val coin: Coin) : ViewModelProvider.Factory {
+    class Factory(private val coin: Coin,
+                  private val addressModule: SendPresenter) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
-            val view = SendAddressViewModel()
+            val view = SendAddressView()
             val addressParser = App.addressParserFactory.parser(coin)
             val interactor = SendAddressInteractor(TextHelper, addressParser)
             val presenter = SendAddressPresenter(view, interactor)
 
             interactor.delegate = presenter
+            addressModule.handler.addressModule = presenter
 
             return presenter as T
         }

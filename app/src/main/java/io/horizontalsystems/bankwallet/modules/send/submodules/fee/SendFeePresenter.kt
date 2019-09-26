@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.fee
 
+import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.send.SendModule
@@ -10,15 +11,15 @@ import java.math.BigDecimal
 
 
 class SendFeePresenter(
-        private val interactor: SendFeeModule.IInteractor,
+        val view: SendFeeModule.View,
+        private val interactor: SendFeeModule.Interactor,
         private val helper: SendFeePresenterHelper,
         private val baseCoin: Coin,
         private val baseCurrency: Currency,
         private val feeCoinData: Pair<Coin, String>?)
-    : SendFeeModule.IViewDelegate, SendFeeModule.IInteractorDelegate, SendFeeModule.IFeeModule {
+    : ViewModel(), SendFeeModule.ViewDelegate, SendFeeModule.InteractorDelegate, SendFeeModule.FeeModule {
 
-    var view: SendFeeModule.IView? = null
-    var moduleDelegate: SendFeeModule.IFeeModuleDelegate? = null
+    var moduleDelegate: SendFeeModule.FeeModuleDelegate? = null
 
     private var xRate: Rate? = null
     private var inputType = SendModule.InputType.COIN

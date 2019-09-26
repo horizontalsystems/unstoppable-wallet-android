@@ -5,12 +5,13 @@ import io.horizontalsystems.bankwallet.SingleLiveEvent
 class SendRouter : SendModule.IRouter {
 
     val closeWithSuccess = SingleLiveEvent<Unit>()
+    val scanQrCode = SingleLiveEvent<Unit>()
 
     override fun scanQrCode() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        scanQrCode.call()
     }
 
     override fun closeWithSuccess() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        closeWithSuccess.call()
     }
 }

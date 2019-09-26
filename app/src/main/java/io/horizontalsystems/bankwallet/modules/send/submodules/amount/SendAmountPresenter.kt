@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.amount
 
+import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CoinValueInfo
@@ -10,20 +11,18 @@ import java.math.RoundingMode
 
 
 class SendAmountPresenter(
-        private val interactor: SendAmountModule.IInteractor,
+        val view: SendAmountModule.View,
+        private val interactor: SendAmountModule.Interactor,
         private val presenterHelper: SendAmountPresenterHelper,
         private val coin: Coin,
         private val baseCurrency: Currency)
-    : SendAmountModule.IViewDelegate, SendAmountModule.IInteractorDelegate, SendAmountModule.IAmountModule {
+    : ViewModel(), SendAmountModule.ViewDelegate, SendAmountModule.InteractorDelegate, SendAmountModule.AmountModule {
 
-    var view: SendAmountModule.IView? = null
-    var moduleDelegate: SendAmountModule.IAmountModuleDelegate? = null
+    var moduleDelegate: SendAmountModule.AmountModuleDelegate? = null
 
     private var amount: BigDecimal? = null
     private var availableBalance: BigDecimal? = null
     private var xRate: Rate? = null
-
-    // SendAmountModule.IAmountModule
 
     override var inputType = SendModule.InputType.COIN
         private set
