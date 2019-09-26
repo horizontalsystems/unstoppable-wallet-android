@@ -49,7 +49,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
             viewModel.delegate.onSortClick()
         }
 
-        chartButton.setOnClickListener {
+        switchChartButton.setOnClickListener {
             viewModel.delegate.onChartClick()
         }
 
@@ -196,17 +196,17 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
         viewModel.setStatsButtonState.observe(viewLifecycleOwner, Observer { statsButtonState ->
             when (statsButtonState) {
                 StatsButtonState.NORMAL -> {
-                    chartButton.visibility = View.VISIBLE
+                    switchChartButton.visibility = View.VISIBLE
 
-                    chartButton.isActivated = false
+                    switchChartButton.isActivated = false
                 }
                 StatsButtonState.HIDDEN -> {
-                    chartButton.visibility = View.GONE
+                    switchChartButton.visibility = View.GONE
                 }
                 StatsButtonState.SELECTED -> {
-                    chartButton.visibility = View.VISIBLE
+                    switchChartButton.visibility = View.VISIBLE
 
-                    chartButton.isActivated = true
+                    switchChartButton.isActivated = true
                 }
             }
         })
@@ -217,10 +217,10 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
 
         context?.let {
             val color = if (headerViewItem.upToDate) R.color.yellow_crypto else R.color.yellow_crypto_40
-            ballanceText.setTextColor(ContextCompat.getColor(it, color))
+            balanceText.setTextColor(ContextCompat.getColor(it, color))
         }
 
-        ballanceText.text = headerViewItem.currencyValue?.let {
+        balanceText.text = headerViewItem.currencyValue?.let {
             App.numberFormatter.format(it)
         }
     }
