@@ -17,6 +17,7 @@
     <string name="Button_Share">공유</string>
     <string name="Error">오류</string>
     <string name="NotAvailable">해당 없음 </string>
+    <string name="Wallet">%s wallet</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
     <string name="Welcome_CreateWallet">새 지갑</string>
@@ -27,7 +28,6 @@
     <!--Restore-->
     <string name="Restore_Title">복구</string>
     <string name="Restore_Description">To restore existing wallet you need to enter a private key for that wallet.\n\nOnce you restore one wallet you will be able to restore more wallets by going to Manage Keys section in app Settings.</string>
-    <string name="Restore_Subtitle">암호를 입력하세요</string>
     <string name="Restore_ValidationFailed">틀린 암호 입니다</string>
     <string name="Restore_RestoreFailed">지갑 복구에 실패하였습니다.</string>
     <string name="Restore_EosAccountName">Account Name</string>
@@ -40,11 +40,12 @@
     <string name="Backup_Intro_Subtitle">The special private key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.\n\nThe coins controlled by this key: %s.</string>
     <string name="Backup_Intro_Later">나중에</string>
     <string name="Backup_Intro_BackupNow">백업</string>
+    <string name="Backup_DisplayTitle">Private Key</string>
     <string name="Backup_Confirmation_SecretKey">본인은 본인의 휴대폰에 안전하게 저장되어 있으며 지갑에 있는 자금을 통제할 수 있는 사적인 12자리 비밀 암호의 유일한 소유자라는 것을 이해합니다.</string>
     <string name="Backup_Confirmation_DeleteAppWarn">이 앱의 이동, 삭제 또는 오작동의 경우, 본인은 지갑에 대한 접근은 이 비밀 암호를 통해서만 복구될 수 있다는 점을 이해합니다.</string>
     <string name="Backup_Confirmation_LockAppWarn">I understand that changing the phone\s unlock PIN or deleting app data in Android settings deletes the Secret Key from device. I would need to re-enter my Secret Key to regain access to my wallet.</string>
     <string name="Backup_Confirmation_Disclaimer">본인은 의도치 않은 버그나 앱을 사용하면서 일어날 수 있는 문제들에 대해서 이 앱의 계발자들은 어떠한 책임도 없다는 것을 이해합니다.</string>
-    <string name="Backup_Confirmation_Description">%s에서 단어를 입력하세요</string>
+    <string name="Backup_Confirmation_Description">Enter words from your private key.</string>
     <string name="Backup_Confirmation_FailureAlertText">암호가 일치 하지 않습니다.</string>
     <string name="Backup_Confirmation_CheckTitle">확인 중…</string>
     <string name="Backup_Button_Confirm">확인</string>
@@ -290,7 +291,7 @@
     <string name="ManageCoins_title">지갑</string>
     <string name="ManageCoins_save">저장</string>
     <string name="ManageCoins_AddCoin_Title">Add Wallet</string>
-    <string name="ManageCoins_AddCoin_Text">This action will generate a new %1$s wallet for the following coins: %2$s </string>
+    <string name="ManageCoins_AddCoin_Text">This action will generate a new wallet for the following coins: %s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">현재 지갑에서 새 EOS 지갑 계정을 만들 수 없습니다. 기존 파일만 복원할 수 있습니다.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Manage Wallets</string>
@@ -304,22 +305,19 @@
     <string name="ManageKeys_Delete_Title">Delete Wallet</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s wallet from this device.</string>
     <string name="ManageKeys_Delete_ConfirmationDisable">비활성화될 코인: %s</string>
-    <string name="ManageKeys_Delete_ConfirmationLoose">If you don\'t have a backup of the %s key, you will loose the respective funds.</string>
+    <string name="ManageKeys_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to your funds.</string>
     <string name="ManageKeys_Delete_FromPhone">휴대전화에서 삭제</string>
     <string name="ManageKeys_Delete_Alert_Title">백업이 필요합니다</string>
-    <string name="ManageKeys_Delete_Alert">귀하의 핸드폰에서 삭제하기전 %s 암호의 백업이 필요합니다</string>
+    <string name="ManageKeys_Delete_Alert">You need to backup the private key before it can be deleted from this phone.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">Add %s</string>
-    <string name="AddCoin_Description">You don\'t have a wallet that can store %1$s. The app can generate a new wallet for you. Use the Create button below to generate a new wallet.\n\nYou will be able to use the new wallet for the following coins: %2$s.\n\nYou may also use the existing %3$s Wallet key if you have one. Use the restore button for that.</string>
+    <string name="AddCoin_Description">You don\'t have a wallet that can store %1$s. The app can generate a new wallet for you. Use the Create button below to generate a new wallet.\n\nYou will be able to use the new wallet for the following coins: %2$s.\n\nYou may also use the existing %3$s wallet key if you have one. Use the restore button for that.</string>
     <string name="AddCoin_CreateKey">만들기</string>
     <string name="AddCoin_RestoreKey">복구</string>
     <!-- Account Types -->
-    <string name="AccountType_Unstoppable">Unstoppable Wallet</string>
-    <string name="AccountType_UnstoppableKey">Unstoppable Wallet Key</string>
-    <string name="AccountType_Eos">EOS Wallet</string>
-    <string name="AccountType_EosKey">EOS 암호</string>
-    <string name="AccountType_Binance">Binance Wallet</string>
-    <string name="AccountType_BinanceKey">Binance 암호</string>
+    <string name="AccountType_Unstoppable">Unstoppable</string>
+    <string name="AccountType_Eos">EOS</string>
+    <string name="AccountType_Binance">Binance</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">옵션 복구</string>
     <string name="CoinOption_Fast">빠르게</string>
