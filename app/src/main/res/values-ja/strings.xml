@@ -230,6 +230,9 @@
     <string name="SettingsNotifications_TurnOn">Turn on in Settings</string>
     <string name="SettingsNotifications_Off">Off</string>
     <string name="SettingsNotifications_DeactivateAll">Deactivate All</string>
+    <string name="Notification_Notifications">Notifications %s</string>
+    <string name="Notification_Up">Up</string>
+    <string name="Notification_Down">Down</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">アンドロイドのキーストア エラー</string>
     <string name="Alert_KeysInvalidatedDescription">あなたの財布を保持している暗号化されたデータは、アンドロイド ロック画面が変更されたために無効になりました。</string>
