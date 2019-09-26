@@ -66,7 +66,7 @@ class ManageWalletsDialog(private val listener: Listener, private val coin: Coin
 
         addKeyTitle.text = getString(R.string.AddCoin_Title, coin.title)
         addKeySubtitle.text = getString(predefinedAccountType.title)
-        addKeyInfo.text = getString(R.string.AddCoin_Description, coin.title, getString(predefinedAccountType.coinCodes), getString(predefinedAccountType.title))
+        addKeyInfo.text = getString(R.string.AddCoin_Description, "${coin.title} (${coin.code})", getString(predefinedAccountType.coinCodes), getString(predefinedAccountType.title))
     }
 
     private fun bindActions() {
