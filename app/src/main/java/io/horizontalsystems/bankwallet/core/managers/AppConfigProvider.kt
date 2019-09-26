@@ -70,7 +70,7 @@ class AppConfigProvider : IAppConfigProvider {
             Coin("Ankr Network",            "ANKR",         8,      CoinType.Binance("ANKR-E97")),
             Coin("Bancor",                  "BNT",         18,      CoinType.Erc20("0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C")),
             Coin("Basic Attention Token",   "BAT",         18,      CoinType.Erc20("0x0D8775F648430679A709E98d2b0Cb6250d2887EF")),
-            Coin("Binance Coin",            "BNB-ERC20",   18,      CoinType.Erc20("0xB8c77482e45F1F44dE1745F52C74426C631bDD52")),
+            Coin("Binance Token",           "BNB-ERC20",   18,      CoinType.Erc20("0xB8c77482e45F1F44dE1745F52C74426C631bDD52")),
             Coin("Bitcoin BEP2",            "BTCB",         8,      CoinType.Binance("BTCB-1DE")),
             Coin("Cashaaa",                 "CAS",          8,      CoinType.Binance("CAS-167")),
             Coin("ChainLink",               "LINK",        18,      CoinType.Erc20("0x514910771AF9Ca656af840dff83E8264EcF986CA")),
