@@ -55,7 +55,6 @@ class MainActivity : BaseActivity(), ReceiveView.Listener, TransactionInfoView.L
             it.inflate()
             loadViewPager()
         }
-
     }
 
     override fun onBackPressed() = when {
