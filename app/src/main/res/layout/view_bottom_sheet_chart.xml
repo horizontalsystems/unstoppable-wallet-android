@@ -73,7 +73,7 @@
         android:layout_width="0dp"
         android:layout_height="0.5dp"
         android:layout_marginTop="12dp"
-        android:background="@color/steel_15"
+        android:background="@color/steel_20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chartSubtitle" />
@@ -105,7 +105,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:textColor="@color/red_warning"
+            android:textColor="@color/red_d"
             android:textSize="12sp"
             tools:text="-18" />
 
@@ -115,7 +115,7 @@
         android:id="@+id/border2"
         android:layout_width="0dp"
         android:layout_height="0.5dp"
-        android:background="@color/steel_15"
+        android:background="@color/steel_20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/coinRateWrap" />
@@ -353,7 +353,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:textColor="@color/red_warning" />
+            android:textColor="@color/red_d" />
 
         <io.horizontalsystems.bankwallet.lib.chartview.ChartIndicator
             android:id="@+id/chartViewIndicator"
@@ -365,8 +365,8 @@
             android:id="@+id/chartView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:fallColor="@color/red_warning"
-            app:growColor="@color/green_crypto"
+            app:fallColor="@color/red_d"
+            app:growColor="@color/green_d"
             app:indicatorColor="?ColorOz"
             app:textColor="@color/grey"
             app:touchColor="?ColorOz" />

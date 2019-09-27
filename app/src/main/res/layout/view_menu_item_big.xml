@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/clickable_setting_item_bg">
+    android:background="@drawable/clickable_background_color_lawrence">
 
     <View
         android:id="@+id/topShade"
         android:layout_width="0dp"
         android:layout_height="0.5dp"
-        android:background="@color/steel_15"
+        android:background="@color/steel_20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -21,7 +21,7 @@
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:tint="@color/yellow_crypto"
+        android:tint="?ColorJacob"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/title"
         app:layout_constraintHorizontal_chainStyle="spread"

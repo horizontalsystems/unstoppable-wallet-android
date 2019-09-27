@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="16dp"
         android:paddingBottom="24dp"
-        android:textColor="@color/yellow_crypto"
+        android:textColor="?ColorJacob"
         app:title="Title"
         app:value="Value" />
 

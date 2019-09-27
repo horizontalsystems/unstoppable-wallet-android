@@ -1,56 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="dark_50">#8013151A</color>
-    <color name="colorPrimaryDark">#000000</color>
-    <color name="lightBackground">#efeff4</color>
-    <color name="green_pressed">#1aa65d</color>
-    <color name="green_crypto">#1ebf6b</color>
-    <color name="green_crypto_20">#331ebf6b</color>
-    <color name="grey">#808085</color>
-    <color name="grey_pressed">#717175</color>
-    <color name="grey_50">#80808085</color>
-    <color name="steel_15">#2673798C</color>
-    <color name="steel_30">#4d73798C</color>
-    <color name="steel_40">#6673798C</color>
-    <color name="grey_light">#e0e0e0</color>
-    <color name="yellow_crypto">#ff9e00</color>
-    <color name="yellow_crypto_40">#66ff9e00</color>
-    <color name="yellow">#ffad00</color>
-    <color name="yellow_pressed">#e68e00</color>
-    <color name="black">#000000</color>
-    <color name="white">#ffffff</color>
-    <color name="white_50">#80ffffff</color>
-    <color name="red_error">#deff3434</color>
-    <color name="red_warning">#ff5e3a</color>
-    <color name="red_warning_pressed">#e65534</color>
-    <color name="bars_color">#f5f5f5</color>
-    <color name="bars_color_95">#f2f5f5f5</color>
-    <color name="black_85">#d9000000</color>
-    <color name="black_20">#33000000</color>
-    <color name="black_50">#80000000</color>
-    <!-- eof base colors -->
-
-    <color name="navigation_bar">?attr/BottomNavigationBackgroundColor</color>
-
+    <!-- still used colors -->
     <color name="ripple_white">#b2ffffff</color>
     <color name="ripple_black">#1f000000</color>
-    <color name="status_bar_light_color">#4c000000</color>
-
     <color name="transparent">#00000000</color>
-
+    <color name="grey_donut">#717175</color>
 
     <!-- new colors -->
     <color name="yellow_d">#ffa800</color>
     <color name="yellow_l">#f58400</color>
+    <color name="yellow_50">#80ffa800</color>
     <color name="green_d">#13d670</color>
     <color name="green_l">#00b757</color>
     <color name="red_d">#ff4820</color>
     <color name="red_l">#ed402e</color>
+    <color name="grey">#808085</color>
+    <color name="grey_50">#80808085</color>
+    <color name="black">#000000</color>
+    <color name="black_50">#80000000</color>
+    <color name="white">#ffffff</color>
+    <color name="white_pressed">#e3e4e8</color>
+    <color name="white_50">#80ffffff</color>
 
     <color name="light">#f5f5f5</color>
+    <color name="light_grey">#c8c7cc</color>
     <color name="dark">#13151a</color>
     <color name="steel_light">#ebebf0</color>
     <color name="steel_dark">#262830</color>
     <color name="steel_grey">#c8c7cc</color>
     <color name="steel_20">#3373798c</color>
+    <color name="steel_dark_pressed">#353842</color>
 </resources>

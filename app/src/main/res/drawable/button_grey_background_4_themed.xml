@@ -4,21 +4,21 @@
         <shape android:shape="rectangle">
             <solid android:color="?BottomSendButtonHighlightedColor" />
             <corners android:radius="4dp" />
-            <stroke android:width="0.5dp" android:color="@color/steel_15" />
+            <stroke android:width="0.5dp" android:color="@color/steel_20" />
         </shape>
     </item>
     <item android:state_activated="true">
         <shape android:shape="rectangle">
-            <solid android:color="@color/green_crypto" />
+            <solid android:color="?ColorRemus" />
             <corners android:radius="4dp" />
-            <stroke android:width="0.5dp" android:color="@color/steel_15" />
+            <stroke android:width="0.5dp" android:color="@color/steel_20" />
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
             <solid android:color="?BottomSendButtonColor" />
             <corners android:radius="4dp" />
-            <stroke android:width="0.5dp" android:color="@color/steel_15" />
+            <stroke android:width="0.5dp" android:color="@color/steel_20" />
         </shape>
     </item>
 </selector>

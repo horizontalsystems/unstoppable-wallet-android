@@ -134,7 +134,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
         coinIcon.bind(balanceViewItem.coin)
         textCoinName.text = balanceViewItem.coin.title
 
-        exchangeRate.setTextColor(ContextCompat.getColor(containerView.context, if (balanceViewItem.rateExpired) R.color.steel_40 else R.color.grey))
+        exchangeRate.setTextColor(ContextCompat.getColor(containerView.context, if (balanceViewItem.rateExpired) R.color.grey_50 else R.color.grey))
         exchangeRate.text = balanceViewItem.exchangeValue?.let { exchangeValue ->
             val rateString = App.numberFormatter.format(exchangeValue, trimmable = true, canUseLessSymbol = false)
             containerView.context.getString(R.string.Balance_RatePerCoin, rateString, balanceViewItem.coin.code)
@@ -213,8 +213,8 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
                 chartView.visibility = View.VISIBLE
 
                 val diffColor = if (chartData.diff < BigDecimal.ZERO)
-                    containerView.context.getColor(R.color.red_warning) else
-                    containerView.context.getColor(R.color.green_crypto)
+                    containerView.context.getColor(R.color.red_d) else
+                    containerView.context.getColor(R.color.green_d)
                 chartView.setData(chartData.points, ChartType.DAILY)
                 chartRateDiff.text = App.numberFormatter.format(chartData.diff.toDouble(), showSign = true, precision = 2) + "%"
                 chartRateDiff.setTextColor(diffColor)

@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="60dp"
-    android:background="@drawable/clickable_setting_item_bg">
+    android:background="@drawable/clickable_background_color_lawrence">
 
     <View
         android:id="@+id/topShade"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="?SettingsSectionBottomShadeColor"
+        android:background="@color/steel_20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -41,7 +41,7 @@
         android:id="@+id/bottomShade"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="?SettingsSectionBottomShadeColor"
+        android:background="@color/steel_20"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent" />
 

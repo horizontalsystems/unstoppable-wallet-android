@@ -146,7 +146,7 @@ class MainActivity : BaseActivity(), ReceiveView.Listener, TransactionInfoView.L
         ahBottomNavigation.addItem(AHBottomNavigationItem(R.string.Transactions_Title, R.drawable.transactions, 0))
         ahBottomNavigation.addItem(AHBottomNavigationItem(R.string.Settings_Title, R.drawable.settings, 0))
 
-        ahBottomNavigation.accentColor = ContextCompat.getColor(this, R.color.yellow_crypto)
+        ahBottomNavigation.accentColor = ContextCompat.getColor(this, R.color.yellow_d)
         ahBottomNavigation.inactiveColor = ContextCompat.getColor(this, R.color.grey)
         ahBottomNavigation.titleState = AHBottomNavigation.TitleState.ALWAYS_HIDE
         ahBottomNavigation.setUseElevation(false)

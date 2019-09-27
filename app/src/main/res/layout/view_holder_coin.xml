@@ -55,7 +55,7 @@
             android:indeterminateTint="@color/grey"
             android:indeterminateTintMode="src_atop"
             android:src="@drawable/ic_attention"
-            android:tint="@color/red_warning"
+            android:tint="?ColorLucian"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -156,7 +156,7 @@
             android:layout_marginTop="15dp"
             android:layout_marginEnd="4dp"
             android:includeFontPadding="false"
-            android:textColor="@color/yellow_crypto"
+            android:textColor="?ColorJacob"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="$52.50" />
@@ -168,7 +168,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
             android:includeFontPadding="false"
-            android:textColor="@color/red_warning"
+            android:textColor="?ColorLucian"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

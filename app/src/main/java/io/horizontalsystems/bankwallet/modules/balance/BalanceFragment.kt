@@ -216,7 +216,7 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
         val headerViewItem = viewModel.delegate.getHeaderViewItem()
 
         context?.let {
-            val color = if (headerViewItem.upToDate) R.color.yellow_crypto else R.color.yellow_crypto_40
+            val color = if (headerViewItem.upToDate) R.color.yellow_d else R.color.yellow_50
             balanceText.setTextColor(ContextCompat.getColor(it, color))
         }
 

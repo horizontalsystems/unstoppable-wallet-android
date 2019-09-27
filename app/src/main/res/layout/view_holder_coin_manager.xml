@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="72dp"
-    android:background="@drawable/clickable_manage_coin_bg"
+    android:background="@drawable/clickable_background_color_lawrence"
     android:clickable="true"
     android:focusable="true">
 
@@ -12,7 +12,7 @@
         android:id="@+id/topShade"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="@color/steel_15"
+        android:background="@color/steel_20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -70,7 +70,7 @@
         android:id="@+id/bottomShade"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="?SettingsSectionBottomShadeColor"
+        android:background="@color/steel_20"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

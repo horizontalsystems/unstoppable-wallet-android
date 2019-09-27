@@ -17,7 +17,7 @@ class RotatingCircleProgressView : View {
 
     init {
         mThickness = LayoutHelper.dp(2f, context).toFloat()
-        donutColor = ContextCompat.getColor(context, R.color.grey_pressed)
+        donutColor = ContextCompat.getColor(context, R.color.grey_donut)
         circleBackgroundColor = ContextCompat.getColor(context, R.color.grey)
         lastUpdateTime = System.currentTimeMillis()
         val themedColor = LayoutHelper.getAttr(R.attr.ProgressbarSpinnerColor, context.theme)

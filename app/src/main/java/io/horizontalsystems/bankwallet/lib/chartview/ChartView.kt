@@ -71,12 +71,12 @@ class ChartView : View {
             ta.getBoolean(R.styleable.ChartView_animated, true).let { config.animated = it }
             ta.getDimension(R.styleable.ChartView_width, 0f).let { config.width = it }
             ta.getDimension(R.styleable.ChartView_height, 0f).let { config.height = it }
-            ta.getInt(R.styleable.ChartView_growColor, context.getColor(R.color.green_crypto)).let { config.growColor = it }
-            ta.getInt(R.styleable.ChartView_fallColor, context.getColor(R.color.red_warning)).let { config.fallColor = it }
+            ta.getInt(R.styleable.ChartView_growColor, context.getColor(R.color.green_d)).let { config.growColor = it }
+            ta.getInt(R.styleable.ChartView_fallColor, context.getColor(R.color.red_d)).let { config.fallColor = it }
             ta.getInt(R.styleable.ChartView_textColor, context.getColor(R.color.grey)).let { config.textColor = it }
             ta.getInt(R.styleable.ChartView_gridColor, context.getColor(R.color.steel_20)).let { config.gridColor = it }
-            ta.getInt(R.styleable.ChartView_touchColor, context.getColor(R.color.bars_color)).let { config.touchColor = it }
-            ta.getInt(R.styleable.ChartView_indicatorColor, context.getColor(R.color.bars_color)).let { config.indicatorColor = it }
+            ta.getInt(R.styleable.ChartView_touchColor, context.getColor(R.color.light)).let { config.touchColor = it }
+            ta.getInt(R.styleable.ChartView_indicatorColor, context.getColor(R.color.light)).let { config.indicatorColor = it }
         } finally {
             ta.recycle()
         }
