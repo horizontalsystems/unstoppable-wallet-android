@@ -25,7 +25,7 @@
             android:indeterminateTint="@color/grey"
             android:indeterminateTintMode="src_atop"
             android:src="@drawable/ic_manage_keys"
-            android:tint="@color/deemable_yellow_crypto"
+            android:tint="@color/dimmable_color_jacob"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:textColor="?TextDeemable"
+            android:textColor="?TextDimmable"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/keyIcon"
             app:layout_constraintTop_toTopOf="parent"
@@ -59,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:includeFontPadding="false"
-            android:textColor="@color/deemable_grey"
+            android:textColor="@color/dimmable_grey"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:text="BTC, BCH, DASH, ETH, ERC-20" />
@@ -141,7 +141,7 @@
                 android:layout_height="wrap_content"
                 android:maxWidth="16dp"
                 android:src="@drawable/ic_attention"
-                android:tint="@color/red_warning" />
+                android:tint="?ColorLucian" />
 
             <TextView
                 android:layout_width="wrap_content"

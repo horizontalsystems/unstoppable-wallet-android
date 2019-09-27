@@ -13,7 +13,7 @@
         android:background="?TransactionDetailBackground"
         android:paddingTop="16dp"
         android:textAlignment="center"
-        android:textColor="@color/green_crypto"
+        android:textColor="?ColorRemus"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -69,7 +69,7 @@
         android:id="@+id/border2"
         android:layout_width="0dp"
         android:layout_height="0.5dp"
-        android:background="@color/steel_15"
+        android:background="@color/steel_20"
         app:layout_constraintBottom_toBottomOf="@+id/txInfoCoinName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -135,7 +135,7 @@
         android:paddingBottom="14dp"
         android:singleLine="false"
         android:text="@string/TransactionInfo_FootNote"
-        android:textColor="?BottomDialogTextColorHighlighted"
+        android:textColor="?ColorJacob"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/itemId" />

@@ -13,7 +13,7 @@
         android:layout_height="34dp"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textColor="@color/red_warning"
+        android:textColor="?ColorLucian"
         android:textSize="12sp"
         android:visibility="gone"
         tools:text="Transaction fees for USDT (ERC20) paid in Ethereum. You don&apos;t have 0,00028 ETH." />

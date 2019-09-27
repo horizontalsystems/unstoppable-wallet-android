@@ -40,7 +40,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="4dp"
         android:text="@string/FullInfo_Error_Subtitle"
-        android:textColor="@color/red_warning"
+        android:textColor="?ColorLucian"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/providerName" />

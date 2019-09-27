@@ -83,8 +83,8 @@ class ViewHolderCoinRate(override val containerView: View) : RecyclerView.ViewHo
         txDiff.setTextColor(containerView.context.getColor(R.color.grey))
         viewItem.diff?.let { diff ->
             val diffColor = if (diff < BigDecimal.ZERO)
-                containerView.context.getColor(R.color.red_warning) else
-                containerView.context.getColor(R.color.green_crypto)
+                containerView.context.getColor(R.color.red_d) else
+                containerView.context.getColor(R.color.green_d)
             txDiff.text = App.numberFormatter.format(diff.toDouble(), showSign = true, precision = 2) + "%"
             txDiff.setTextColor(diffColor)
         }

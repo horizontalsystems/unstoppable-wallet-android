@@ -108,9 +108,9 @@ class ViewHolderDataProviderSettings(private val context: Context, override val 
         subtitle.text = context.getString(if (item.online) R.string.FullInfo_Source_Online else R.string.FullInfo_Source_Offline)
 
         if (item.online) {
-            subtitle.setTextColor(subtitle.resources.getColor(R.color.green_crypto))
+            subtitle.setTextColor(subtitle.resources.getColor(R.color.green_d))
         } else {
-            subtitle.setTextColor(subtitle.resources.getColor(R.color.red_warning))
+            subtitle.setTextColor(subtitle.resources.getColor(R.color.red_d))
         }
 
         if (item.checking) {

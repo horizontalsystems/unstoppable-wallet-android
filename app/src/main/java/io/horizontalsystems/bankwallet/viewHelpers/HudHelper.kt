@@ -15,7 +15,7 @@ object HudHelper {
     private var toast: Toast? = null
 
     fun showSuccessMessage(text: Int, durationInMillis: Long = 2000) {
-        showHudNotification(App.instance.getString(text), R.color.green_crypto, durationInMillis)
+        showHudNotification(App.instance.getString(text), R.color.green_d, durationInMillis)
     }
 
     fun showErrorMessage(textRes: Int) {
@@ -23,7 +23,7 @@ object HudHelper {
     }
 
     fun showErrorMessage(text: String) {
-        showHudNotification(text, R.color.red_warning, 2000)
+        showHudNotification(text, R.color.red_d, 2000)
     }
 
     private fun showHudNotification(text: String, backgroundColor: Int, durationInMillis: Long) {

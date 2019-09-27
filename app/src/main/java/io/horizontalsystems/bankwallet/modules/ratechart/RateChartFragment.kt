@@ -85,8 +85,8 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
             chartSubtitle.text = item.lastUpdateTimestamp?.let { DateHelper.getFullDateWithShortMonth(it) }
 
             val diffColor = if (item.diffValue < BigDecimal.ZERO)
-                resources.getColor(R.color.red_warning) else
-                resources.getColor(R.color.green_crypto)
+                resources.getColor(R.color.red_d) else
+                resources.getColor(R.color.green_d)
 
             coinRateDiff.setTextColor(diffColor)
             coinRateDiff.text = App.numberFormatter.format(item.diffValue.toDouble(), showSign = true, precision = 2) + "%"

@@ -100,7 +100,7 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         val spannable = SpannableString(format(currencyValue, showNegativeSign = true, trimmable = true, canUseLessSymbol = true))
 
         //  set color
-        val amountTextColor = if (isIncoming) R.color.green_crypto else R.color.yellow_crypto
+        val amountTextColor = if (isIncoming) R.color.green_d else R.color.yellow_d
         val color = ContextCompat.getColor(App.instance, amountTextColor)
 
         spannable.setSpan(ForegroundColorSpan(color), 0, spannable.length, 0)

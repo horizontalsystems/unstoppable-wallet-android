@@ -4,7 +4,7 @@
         <shape android:shape="rectangle">
             <corners android:radius="8dp" />
             <solid android:color="@color/steel_20" />
-            <stroke android:width="0.5dp" android:color="@color/steel_15" />
+            <stroke android:width="0.5dp" android:color="@color/steel_20" />
         </shape>
     </item>
     <item android:state_pressed="false">
@@ -13,14 +13,14 @@
                 <shape android:shape="rectangle">
                     <corners android:radius="8dp" />
                     <solid android:color="@color/steel_grey" />
-                    <stroke android:width="0.5dp" android:color="@color/steel_15" />
+                    <stroke android:width="0.5dp" android:color="@color/steel_20" />
                 </shape>
             </item>
             <item>
                 <shape android:shape="rectangle">
                     <corners android:radius="8dp" />
                     <gradient android:angle="270" android:endColor="#00ffffff" android:startColor="#ffffffff" />
-                    <stroke android:width="0.5dp" android:color="@color/steel_15" />
+                    <stroke android:width="0.5dp" android:color="@color/steel_20" />
                 </shape>
             </item>
         </layer-list>
@@ -29,7 +29,7 @@
         <shape android:shape="rectangle">
             <corners android:radius="8dp" />
             <solid android:color="@color/steel_grey" />
-            <stroke android:width="0.5dp" android:color="@color/steel_15" />
+            <stroke android:width="0.5dp" android:color="@color/steel_20" />
         </shape>
     </item>
 </selector>
