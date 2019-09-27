@@ -17,7 +17,7 @@ class FullTransactionInfoInteractor(private val transactionInfoFactory: FullTran
     private var provider: FullTransactionInfoModule.FullProvider? = null
 
     //
-    // IInteractor implementations
+    // Interactor implementations
     //
     override fun didLoad() {
         disposables.add(dataProviderManager.baseProviderUpdatedSignal.subscribe {

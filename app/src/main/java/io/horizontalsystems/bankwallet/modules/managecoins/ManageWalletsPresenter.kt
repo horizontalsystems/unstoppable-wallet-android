@@ -17,7 +17,7 @@ class ManageWalletsPresenter(private val interactor: ManageWalletsModule.IIntera
     private val popularCoinCodes = listOf("BTC", "BCH", "ETH", "DASH", "EOS", "BNB")
     private var currentItem: ManageWalletItem? = null
 
-    //  IViewDelegate
+    //  ViewDelegate
 
     override fun viewDidLoad() {
         val wallets = interactor.wallets
@@ -106,7 +106,7 @@ class ManageWalletsPresenter(private val interactor: ManageWalletsModule.IIntera
         interactor.saveWallets((items + popularItems).mapNotNull { it.wallet })
     }
 
-    //  IInteractorDelegate
+    //  InteractorDelegate
 
     override fun didSaveChanges() {
         router.close()

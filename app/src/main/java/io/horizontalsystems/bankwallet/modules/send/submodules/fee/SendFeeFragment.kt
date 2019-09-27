@@ -20,7 +20,7 @@ class SendFeeFragment(
         private val feeIsAdjustable: Boolean,
         private val coin: Coin,
         private val feeModuleDelegate: SendFeeModule.IFeeModuleDelegate,
-        private val sendHadler: SendModule.ISendHandler
+        private val sendHandler: SendModule.ISendHandler
 ) : Fragment(), FeeRatePrioritySelector.Listener {
 
     private var presenter: SendFeePresenter? = null
@@ -33,7 +33,7 @@ class SendFeeFragment(
 
         super.onViewCreated(view, savedInstanceState)
 
-        presenter = ViewModelProviders.of(this, SendFeeModule.Factory(coin, sendHadler, feeModuleDelegate))
+        presenter = ViewModelProviders.of(this, SendFeeModule.Factory(coin, sendHandler, feeModuleDelegate))
                 .get(SendFeePresenter::class.java)
         val presenterView = presenter?.view as SendFeeView
 

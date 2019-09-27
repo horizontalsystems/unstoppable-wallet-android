@@ -24,7 +24,7 @@ class ManageWalletsViewModel : ViewModel(), ManageWalletsModule.IView, ManageWal
         delegate.viewDidLoad()
     }
 
-    // IView
+    // View
 
     override fun updateCoins() {
         coinsLoadedLiveEvent.call()
@@ -56,7 +56,7 @@ class ManageWalletsViewModel : ViewModel(), ManageWalletsModule.IView, ManageWal
         closeLiveDate.call()
     }
 
-    // IView model
+    // View model
 
     override fun onCleared() {
         delegate.onClear()

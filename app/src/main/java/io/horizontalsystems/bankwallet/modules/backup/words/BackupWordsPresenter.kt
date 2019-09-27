@@ -5,11 +5,11 @@ import java.util.*
 class BackupWordsPresenter(private val interactor: BackupWordsModule.IInteractor, private val router: BackupWordsModule.IRouter, private val state: BackupWordsModule.State)
     : BackupWordsModule.IPresenter, BackupWordsModule.IViewDelegate, BackupWordsModule.IInteractorDelegate {
 
-    //  IView
+    //  View
 
     override var view: BackupWordsModule.IView? = null
 
-    //  IView delegate
+    //  View delegate
 
     override fun viewDidLoad() {
         view?.showWords(state.words)
@@ -45,7 +45,7 @@ class BackupWordsPresenter(private val interactor: BackupWordsModule.IInteractor
         interactor.validate(confirmationWords)
     }
 
-    // IInteractor Delegate
+    // Interactor Delegate
 
     override fun onValidateSuccess() {
         router.notifyBackedUp()

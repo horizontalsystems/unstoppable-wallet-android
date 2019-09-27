@@ -7,7 +7,7 @@ class RestoreEosPresenter(private val interactor: RestoreEosModule.IInteractor, 
 
     var view: RestoreEosModule.IView? = null
 
-    //  IViewDelegate
+    //  ViewDelegate
 
     override fun onClickDone(accountName: String, privateKey: String) {
         interactor.validate(accountName, privateKey)
@@ -29,7 +29,7 @@ class RestoreEosPresenter(private val interactor: RestoreEosModule.IInteractor, 
         key?.let { view?.setPrivateKey(key) }
     }
 
-    //  IInteractorDelegate
+    //  InteractorDelegate
 
     override fun onValidationSuccess(accountName: String, privateKey: String) {
         router.finishWithSuccess(accountName, privateKey)

@@ -34,7 +34,7 @@ class RateChartPresenter(
 
     private var chartType = interactor.defaultChartType
 
-    //  IViewDelegate
+    //  ViewDelegate
 
     override fun viewDidLoad() {
         view.showSpinner()
@@ -61,7 +61,7 @@ class RateChartPresenter(
         view.showSelectedPoint(Triple(point.timestamp, currencyValue, chartType))
     }
 
-    //  IInteractorDelegate
+    //  InteractorDelegate
 
     @Synchronized
     override fun onReceiveStats(data: StatsData) {
