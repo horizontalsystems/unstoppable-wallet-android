@@ -142,10 +142,10 @@ dependencies {
 
     // Wallet kits
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:53e09a5'
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:e6492fe'
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:db6f1a2'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:15df939'
     implementation 'com.github.horizontalsystems:hd-wallet-kit-android:68903dc'
-    implementation 'com.github.horizontalsystems:binance-chain-kit-android:559255e'
+    implementation 'com.github.horizontalsystems:binance-chain-kit-android:d33bda5'
     implementation('com.github.horizontalsystems:eos-kit-android:42fbfd5') {
         exclude group: 'com.google.protobuf'
     }
