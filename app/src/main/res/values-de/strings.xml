@@ -37,7 +37,7 @@
     <!--Backup-->
     <string name="Backup_Intro_Title">Sicherung</string>
     <string name="Backup_Intro_TitleShow">Schlüssel anzeigen</string>
-    <string name="Backup_Intro_Subtitle">The special private key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.\n\nThe coins controlled by this key: %s.</string>
+    <string name="Backup_Intro_Subtitle">The private key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.\n\nThe coins controlled by this key: %s.</string>
     <string name="Backup_Intro_Later">Später</string>
     <string name="Backup_Intro_BackupNow">Backup</string>
     <string name="Backup_DisplayTitle">Private Key</string>
