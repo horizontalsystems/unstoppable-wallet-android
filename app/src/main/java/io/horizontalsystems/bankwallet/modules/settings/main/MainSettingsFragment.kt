@@ -23,7 +23,6 @@ import io.horizontalsystems.bankwallet.modules.settings.language.LanguageSetting
 import io.horizontalsystems.bankwallet.modules.settings.security.SecuritySettingsModule
 import kotlinx.android.synthetic.main.fragment_settings.*
 
-
 class MainSettingsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -32,8 +31,6 @@ class MainSettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        shadowlessToolbar.bindTitle(getString(R.string.Settings_Title))
 
         val presenter = ViewModelProviders.of(this, MainSettingsModule.Factory()).get(MainSettingsPresenter::class.java)
         val presenterView = presenter.view as MainSettingsView
@@ -165,5 +162,4 @@ class MainSettingsFragment : Fragment() {
             activity?.let { MainModule.startAsNewTask(it, MainActivity.SETTINGS_TAB_POSITION) }
         })
     }
-
 }

@@ -4,14 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.*
-import com.google.android.material.appbar.AppBarLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
@@ -41,7 +39,7 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
         viewModel.init()
 
         transactionsAdapter.viewModel = viewModel
-        toolbarTitle.setText(R.string.Transactions_Title)
+        recyclerTags.adapter = filterAdapter
 
         recyclerTransactions.setHasFixedSize(true)
         recyclerTransactions.adapter = transactionsAdapter
@@ -51,9 +49,6 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
                 filterAdapter.filterChangeable = newState == SCROLL_STATE_IDLE
             }
         })
-
-        recyclerTags.adapter = filterAdapter
-        recyclerTags.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
         viewModel.filterItems.observe(viewLifecycleOwner, Observer { filters ->
             filters?.let {
@@ -93,29 +88,6 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
             it?.forEach { index ->
                 transactionsAdapter.notifyItemChanged(index)
             }
-        })
-
-        setAppBarAnimation()
-    }
-
-    private fun setAppBarAnimation() {
-        toolbarTitle.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                toolbarTitle.pivotX = 0f
-                toolbarTitle.pivotY = toolbarTitle.height.toFloat()
-                toolbarTitle.viewTreeObserver.removeOnGlobalLayoutListener(this)
-            }
-        })
-
-        app_bar_layout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
-            val fraction = Math.abs(verticalOffset).toFloat() / appBarLayout.totalScrollRange
-            var alphaFract = 1f - fraction
-            if (alphaFract < 0.20) {
-                alphaFract = 0f
-            }
-            toolbarTitle.alpha = alphaFract
-            toolbarTitle.scaleX = (1f - fraction / 3)
-            toolbarTitle.scaleY = (1f - fraction / 3)
         })
     }
 
