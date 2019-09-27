@@ -37,15 +37,15 @@
     <!--Backup-->
     <string name="Backup_Intro_Title">پيشتيباني</string>
     <string name="Backup_Intro_TitleShow">نمایش کلید</string>
-    <string name="Backup_Intro_Subtitle">The private key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.\n\nThe coins controlled by this key: %s.</string>
+    <string name="Backup_Intro_Subtitle">کلید خصوصی که بعدا نشان داده خواهد شد تنها راه برای بازیابی وجه شما در صورت گم شدن ، دزدی ، خراب شدن و غیره است.\n\nمطمئن شوید که هیچ کس در حال تماشای صفحه شما نیست.\n\nسکه ها توسط این کلید کنترل می شوند:%s.</string>
     <string name="Backup_Intro_Later">بعداً</string>
     <string name="Backup_Intro_BackupNow">پيشتيباني</string>
-    <string name="Backup_DisplayTitle">Private Key</string>
+    <string name="Backup_DisplayTitle">کلید خصوصی</string>
     <string name="Backup_Confirmation_SecretKey">من قبول ميكنم كي تنها من صاحب اين ١٢ عدد مخفي ميباشم كي اين عداد در گوشي همراه من ميباشد و تنها من ميتوانم با اين عداد كيف پول و مقدار پول خود را فعال كنم.</string>
     <string name="Backup_Confirmation_DeleteAppWarn">من قبول ميكنم كي اگر اين كاربرد تكان بخورد،حذف شود و يا اشكال در عملكرد به وحود بياد، فقط تنها رمز مخفي ميتواند دوباره بهبوديافت كند.</string>
     <string name="Backup_Confirmation_LockAppWarn">من قبول ميكنم كي تعغير رمز گوشي همراه و يا حذف كردن تاريخچه كاربرد رمز مخفي را حذف ميكند. و من دوباره بايد رمز مخفي خود را وارد كنم تا بتوانم از كاربرد استفاده نمايم.</string>
     <string name="Backup_Confirmation_Disclaimer">من قبول ميكنم كي سازنده اين كاربرد هيچ نوع معصوليت در مقابل ويروس و ادم هاي تقلبي ندارد كي شما به ان متواجه شديد.</string>
-    <string name="Backup_Confirmation_Description">Enter words from your private key.</string>
+    <string name="Backup_Confirmation_Description">کلمات را از کلید خصوصی خود وارد کنید.</string>
     <string name="Backup_Confirmation_FailureAlertText"> ارقام با هم شباهت ندارند</string>
     <string name="Backup_Confirmation_CheckTitle">بررسي…</string>
     <string name="Backup_Button_Confirm">تاييد</string>
@@ -56,7 +56,7 @@
     <string name="Backup_Words_Title">کلید مخفی</string>
     <!--Backup Eos-->
     <string name="Backup_Eos_AccountName">Account Name</string>
-    <string name="Backup_Eos_ActivePrivateKey">Private Key</string>
+    <string name="Backup_Eos_ActivePrivateKey">کلید خصوصی</string>
     <string name="Backup_Eos_Warning">در صورتی که از برنامه های مدیریتی کلیپ بورد یا برخی برنامه های دیگر که ممکن است به اطلاعات کلیپ بورد دسترسی داشته باشند استفاده می کنید، کپی کردن کلید با استفاده از عملکرد \"کپی\" می تواند ریسک هایی را به همراه داشته باشد.</string>
     <!--Balance-->
     <string name="Balance_Title">بالانس</string>
@@ -183,7 +183,7 @@
     <!--Settings-->
     <string name="Settings_Title">تنظيمات</string>
     <string name="Settings_SecurityCenter">مركز امنيتي</string>
-    <string name="Settings_Notifications">Notifications</string>
+    <string name="Settings_Notifications">اطلاعیه ها</string>
     <string name="Settings_ManageCoins">مدیریت سکه ها</string>
     <string name="Settings_RestoreWallet">بازیابی كيف پول</string>
     <string name="Settings_BaseCurrency">ارز مرجع</string>
@@ -225,15 +225,15 @@
     <string name="SettingsReport_Email">ايميل</string>
     <string name="SettingsReport_Telegram">تلگرام</string>
     <!--Setting_Notifications-->
-    <string name="SettingsNotifications_Title">Notifications</string>
-    <string name="SettingsNotifications_Description">Set price change alerts for the coins you would like to watch.\n\nYou will be alerted when the change in price for the last 24 hours exceeds selected threshold.</string>
-    <string name="SettingsNotifications_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order to be able to receive price change alerts.</string>
-    <string name="SettingsNotifications_TurnOn">Turn on in Settings</string>
-    <string name="SettingsNotifications_Off">Off</string>
-    <string name="SettingsNotifications_DeactivateAll">Deactivate All</string>
-    <string name="Notification_Notifications">Notifications %s</string>
-    <string name="Notification_Up">Up</string>
-    <string name="Notification_Down">Down</string>
+    <string name="SettingsNotifications_Title">اطلاعیه ها</string>
+    <string name="SettingsNotifications_Description">هشدارهای تغییر قیمت را برای سکه هایی که می خواهید تماشا کنید تنظیم کنید.\n\nوقتی تغییر قیمت برای ۲۴ ساعت گذشته بیش از آستانه انتخاب شده باشد ، به شما هشدار داده می شود.</string>
+    <string name="SettingsNotifications_NotificationsDisabledWarning">اطلاعیه ها برای برنامه کیف پول غیر قابل توقف غیرفعال هستند. برای اینکه بتوانید هشدارهای تغییر قیمت را دریافت کنید ، باید آنها را فعال کنید.</string>
+    <string name="SettingsNotifications_TurnOn">روشن کردن در تنظیمات</string>
+    <string name="SettingsNotifications_Off">خاموش</string>
+    <string name="SettingsNotifications_DeactivateAll">غیر فعال کردن همه</string>
+    <string name="Notification_Notifications">اطلاعیه ها%s</string>
+    <string name="Notification_Up">بالا</string>
+    <string name="Notification_Down">پایین</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">اندرايد keystore خطا</string>
     <string name="Alert_KeysInvalidatedDescription">Data شما ديگر نامتعبر است بخاطر تعغير دادن قفل صفحه</string>
@@ -264,7 +264,7 @@
     <string name="Fingerprint_Success">موفقيت!</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">غير فعال تا:٪؜s</string>
-    <string name="UnlockPin_Error_PinIncorrect">Incorrect</string>
+    <string name="UnlockPin_Error_PinIncorrect">نادرست</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">كد گوشي همراه</string>
     <string name="OSPin_Confirm_Desciption">این برنامه نیاز دارد که تلفن دارای رمز عبور (قفل صفحه) باشد.\n\n شما می توانید آن را در تنظیمات اندروید فعال کنید.\n\nلطفاً توجه داشته باشید که هنگامی که PIN یا کد را در سطح OS یا سیستم عامل غیرفعال کردید ، اقدامات امنیتی در ذخیره ایمن ایجاد شده در تلفن شما ، اطلاعاتی که قبلا ذخیره شده است را نامعتبر می کند. برای بازگشت به کیف پول خود، باید کلیدهای کیف پول خود را بازیابی کنید.</string>
@@ -285,7 +285,7 @@
     <string name="ManageCoins_title">ميديت سكه</string>
     <string name="ManageCoins_save">ذخیره</string>
     <string name="ManageCoins_AddCoin_Title">اضافه کردن کیف پول</string>
-    <string name="ManageCoins_AddCoin_Text">This action will generate a new wallet for the following coins: %s </string>
+    <string name="ManageCoins_AddCoin_Text">این عملکرد یک کیف پول جدید برای سکه های زیر تولید می کند:%s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">در این مرحله ، کیف پول قادر به ایجاد حساب های کیف پول جدید EOS نیست. شما فقط قادر به بازیابی کیف پول موجود هستید.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">مدیریت کیف پول ها</string>
@@ -299,13 +299,13 @@
     <string name="ManageKeys_Delete_Title">پاک کردن کیف پول</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">این عمل کیف پول %s را از این دستگاه پاک خواهد کرد.</string>
     <string name="ManageKeys_Delete_ConfirmationDisable">سکه ها غیرفعال خواهند شد: %s</string>
-    <string name="ManageKeys_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to your funds.</string>
+    <string name="ManageKeys_Delete_ConfirmationLose">اگر از کلید خصوصی این کیف پول نسخه پشتیبان تهیه نکرده اید، دسترسی به بودجه خود را از دست خواهید داد.</string>
     <string name="ManageKeys_Delete_FromPhone">پاک کردن از تلفن</string>
     <string name="ManageKeys_Delete_Alert_Title">تهیه نسخه پشتیبان لازم است</string>
-    <string name="ManageKeys_Delete_Alert">You need to backup the private key before it can be deleted from this phone.</string>
+    <string name="ManageKeys_Delete_Alert">قبل از اینکه بتوانید آن را از این تلفن حذف کنید ، باید از کلید خصوصی نسخه پشتیبان تهیه کنید.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">اضافه کردن %s</string>
-    <string name="AddCoin_Description">You don\'t have a wallet that can store %1$s. The app can generate a new wallet for you. Use the Create button below to generate a new wallet.\n\nYou will be able to use the new wallet for the following coins: %2$s.\n\nYou may also use the existing %3$s wallet key if you have one. Use the restore button for that.</string>
+    <string name="AddCoin_Description">شما کیف پولی ندارید که بتواند ذخیره کند%1$s. این برنامه می تواند یک کیف پول جدید برای شما ایجاد کند. برای ایجاد کیف پول جدید از دکمه به وجود آوردن زیر استفاده کنید. \n\n شما می توانید از کیف پول جدید برای سکه های زیر استفاده کنید:%2$s. \n\n همچنین می توانید از کلید کیف پول %3$s موجود استفاده کنید اگر دارید. برای این کار از دکمه بازیابی استفاده کنید.</string>
     <string name="AddCoin_CreateKey">به وجود آوردن</string>
     <string name="AddCoin_RestoreKey">بازیابی</string>
     <!-- Account Types -->
