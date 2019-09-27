@@ -79,19 +79,17 @@ class RateStatsManager(private val networkManager: INetworkManager, private val 
     }
 
     private fun convert(data: RateData, rate: Rate?, chartType: ChartType): List<ChartPoint> {
-        val rates = data.rates.toMutableList()
-        var timestamp = data.timestamp
+        val rates = when (chartType) {
+            ChartType.MONTHLY18 -> data.rates.takeLast(ChartType.annualPoints) // for one year
+            else -> data.rates
+        }
+
+        val points = ChartHelper.convert(rates, data.scale, data.timestamp).toMutableList()
         if (rate != null) {
-            timestamp = rate.timestamp
-            rates.add(rate.value.toFloat())
+            points.add(ChartPoint(rate.value.toFloat(), rate.timestamp))
         }
 
-        val points = when (chartType) {
-            ChartType.MONTHLY18 -> rates.takeLast(ChartType.annualPoints) // for one year
-            else -> rates
-        }
-
-        return ChartHelper.convert(points, data.scale, timestamp)
+        return points
     }
 
     private fun growthDiff(points: List<ChartPoint>): BigDecimal {
