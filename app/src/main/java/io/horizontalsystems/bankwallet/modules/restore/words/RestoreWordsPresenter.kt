@@ -23,7 +23,7 @@ class RestoreWordsPresenter(
         interactor.validate(words)
     }
 
-    //  IInteractor Delegate
+    //  Interactor Delegate
 
     override fun didValidate() {
         if (showSyncMode) {

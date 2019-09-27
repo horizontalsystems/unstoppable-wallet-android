@@ -18,7 +18,7 @@ class RestoreEosViewModel : ViewModel(), RestoreEosModule.IView, RestoreEosModul
         RestoreEosModule.init(this, this)
     }
 
-    //  IView
+    //  View
 
     override fun setPrivateKey(key: String) {
         setPrivateKey.postValue(key)

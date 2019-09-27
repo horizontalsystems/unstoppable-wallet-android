@@ -18,7 +18,7 @@ class RestoreOptionsViewModel : ViewModel(), RestoreOptionsModule.IView, Restore
         delegate.viewDidLoad()
     }
 
-    // IView
+    // View
 
     override fun update(syncMode: SyncMode) {
         syncModeLiveEvent.value = syncMode

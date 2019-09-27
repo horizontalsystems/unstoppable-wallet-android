@@ -9,11 +9,11 @@ class BackupPresenter(
         private val account: Account)
     : BackupModule.ViewDelegate, BackupModule.InteractorDelegate {
 
-    //  IView
+    //  View
 
     var view: BackupModule.View? = null
 
-    //  IView delegates
+    //  View delegates
 
     override fun onClickCancel() {
         router.close()

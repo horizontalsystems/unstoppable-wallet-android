@@ -12,7 +12,7 @@ class RestorePresenter(
 
     var view: RestoreModule.View? = null
 
-    //  IView Delegate
+    //  View Delegate
 
     override var items = listOf<IPredefinedAccountType>()
 
