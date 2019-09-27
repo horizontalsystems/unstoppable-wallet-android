@@ -37,7 +37,7 @@
     <!--Backup-->
     <string name="Backup_Intro_Title">پيشتيباني</string>
     <string name="Backup_Intro_TitleShow">نمایش کلید</string>
-    <string name="Backup_Intro_Subtitle">کلید خصوصی ویژه که در مرحله بعدی نشان داده می شود ، تنها راه بازیابی وجه شما در صورت گم شدن ، دزدیده شدن ، خراب شدن و غیره تلفن شما است.\n\nمطمئن شوید که هیچ کس صفحه شما را نمی بیند.\n\nسکه ها با این کلید کنترل می شوند:%s.</string>
+    <string name="Backup_Intro_Subtitle">The private key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.\n\nThe coins controlled by this key: %s.</string>
     <string name="Backup_Intro_Later">بعداً</string>
     <string name="Backup_Intro_BackupNow">پيشتيباني</string>
     <string name="Backup_DisplayTitle">Private Key</string>
