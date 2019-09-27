@@ -1,18 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.confirmation
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.modules.send.SendModule
-import io.horizontalsystems.bankwallet.modules.send.SendPresenter
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 
 object SendConfirmationModule {
 
     //const val ConfirmationInfoKey = "confirmation_info_key"
 
-    interface View{
+    interface IView{
         fun loadPrimaryItems(primaryItemData: PrimaryItemData)
         fun loadSecondaryItems(secondaryItemData: SecondaryItemData)
         fun showCopied()
@@ -20,17 +16,17 @@ object SendConfirmationModule {
         fun setSendButtonState(state: SendButtonState)
     }
 
-    interface ViewDelegate {
+    interface IViewDelegate {
         fun onViewDidLoad()
         fun onReceiverClick()
         fun onSendError()
     }
 
-    interface Interactor {
+    interface IInteractor {
         fun copyToClipboard(coinAddress: String)
     }
 
-    interface InteractorDelegate {
+    interface IInteractorDelegate {
         fun didCopyToClipboard()
     }
 

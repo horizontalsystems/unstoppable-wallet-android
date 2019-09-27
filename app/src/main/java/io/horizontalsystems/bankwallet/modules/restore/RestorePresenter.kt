@@ -12,7 +12,7 @@ class RestorePresenter(
 
     var view: RestoreModule.View? = null
 
-    //  View Delegate
+    //  IView Delegate
 
     override var items = listOf<IPredefinedAccountType>()
 
@@ -38,7 +38,7 @@ class RestorePresenter(
         interactor.restore(accountType, syncMode)
     }
 
-    // Interactor Delegate
+    // IInteractor Delegate
 
     override fun didRestore() {
         router.startMainModule()

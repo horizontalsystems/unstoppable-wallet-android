@@ -8,9 +8,9 @@ import io.horizontalsystems.bankwallet.modules.send.SendModule.SendConfirmationF
 import io.horizontalsystems.bankwallet.modules.send.SendModule.SendConfirmationMemoViewItem
 
 class SendConfirmationPresenter(
-        val view: SendConfirmationModule.View,
-        private val interactor: SendConfirmationModule.Interactor )
-    : ViewModel(), SendConfirmationModule.ViewDelegate, SendConfirmationModule.InteractorDelegate {
+        val view: SendConfirmationModule.IView,
+        private val interactor: SendConfirmationModule.IInteractor )
+    : ViewModel(), SendConfirmationModule.IViewDelegate, SendConfirmationModule.IInteractorDelegate {
 
     private var receiver = ""
     var confirmationViewItems: List<SendModule.SendConfirmationViewItem>? = null
@@ -56,7 +56,7 @@ class SendConfirmationPresenter(
                 memo = memo
         )
 
-        view?.loadPrimaryItems(primaryViewItem)
+        view.loadPrimaryItems(primaryViewItem)
 
         val secondaryViewItem = SendConfirmationModule.SecondaryItemData(
                 feeAmount = primaryFeeAmount?.let { primaryFeeAmount ->
@@ -66,10 +66,10 @@ class SendConfirmationPresenter(
                 estimatedTime = duration
         )
 
-        view?.loadSecondaryItems(secondaryViewItem)
+        view.loadSecondaryItems(secondaryViewItem)
 
-        view?.loadSendButton()
-        view?.setSendButtonState(SendConfirmationModule.SendButtonState.ACTIVE)
+        view.loadSendButton()
+        view.setSendButtonState(SendConfirmationModule.SendButtonState.ACTIVE)
     }
 
     override fun onReceiverClick() {
@@ -77,11 +77,11 @@ class SendConfirmationPresenter(
     }
 
     override fun didCopyToClipboard() {
-        view?.showCopied()
+        view.showCopied()
     }
 
     override fun onSendError() {
-        view?.setSendButtonState(SendConfirmationModule.SendButtonState.ACTIVE)
+        view.setSendButtonState(SendConfirmationModule.SendButtonState.ACTIVE)
     }
 
 }

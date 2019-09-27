@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.amount
 import androidx.lifecycle.MutableLiveData
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 
-class SendAmountView : SendAmountModule.View {
+class SendAmountView : SendAmountModule.IView {
 
     val amount = MutableLiveData<String>()
     val hint = MutableLiveData<String?>()

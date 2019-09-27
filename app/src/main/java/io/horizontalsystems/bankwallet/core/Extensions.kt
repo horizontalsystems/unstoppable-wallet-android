@@ -61,7 +61,7 @@ fun <T> LiveData<T>.reObserve(owner: LifecycleOwner, observer: Observer<T>) {
     observe(owner, observer)
 }
 
-//View
+//IView
 
 fun View.setOnSingleClickListener(l: ((v: View) -> Unit)) {
     this.setOnClickListener(

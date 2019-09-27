@@ -116,10 +116,10 @@ object SendModule {
     }
 
     interface ISendHandler {
-        var amountModule: SendAmountModule.AmountModule
-        var addressModule: SendAddressModule.AddressModule
-        var feeModule: SendFeeModule.FeeModule
-        var memoModule: SendMemoModule.MemoModule
+        var amountModule: SendAmountModule.IAmountModule
+        var addressModule: SendAddressModule.IAddressModule
+        var feeModule: SendFeeModule.IFeeModule
+        var memoModule: SendMemoModule.IMemoModule
 
         val inputItems: List<Input>
         var delegate: ISendHandlerDelegate

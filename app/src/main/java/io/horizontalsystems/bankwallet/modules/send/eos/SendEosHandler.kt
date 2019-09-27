@@ -10,7 +10,7 @@ import java.math.BigDecimal
 
 class SendEosHandler(private val interactor: SendModule.ISendEosInteractor,
                      private val router: SendModule.IRouter)
-    : SendModule.ISendHandler, SendAmountModule.AmountModuleDelegate, SendAddressModule.AddressModuleDelegate {
+    : SendModule.ISendHandler, SendAmountModule.IAmountModuleDelegate, SendAddressModule.IAddressModuleDelegate {
 
     private fun syncValidation() {
         try {
@@ -30,10 +30,10 @@ class SendEosHandler(private val interactor: SendModule.ISendEosInteractor,
 
     // SendModule.ISendHandler
 
-    override lateinit var amountModule: SendAmountModule.AmountModule
-    override lateinit var addressModule: SendAddressModule.AddressModule
-    override lateinit var feeModule: SendFeeModule.FeeModule
-    override lateinit var memoModule: SendMemoModule.MemoModule
+    override lateinit var amountModule: SendAmountModule.IAmountModule
+    override lateinit var addressModule: SendAddressModule.IAddressModule
+    override lateinit var feeModule: SendFeeModule.IFeeModule
+    override lateinit var memoModule: SendMemoModule.IMemoModule
 
     override lateinit var delegate: SendModule.ISendHandlerDelegate
 
@@ -63,7 +63,7 @@ class SendEosHandler(private val interactor: SendModule.ISendEosInteractor,
         addressModule.didScanQrCode(address)
     }
 
-    // SendAmountModule.AmountModuleDelegate
+    // SendAmountModule.IAmountModuleDelegate
 
     override fun onChangeAmount() {
         syncValidation()
@@ -73,7 +73,7 @@ class SendEosHandler(private val interactor: SendModule.ISendEosInteractor,
 
     }
 
-    // SendAddressModule.AddressModuleDelegate
+    // SendAddressModule.IAddressModuleDelegate
 
     override fun validate(address: String) {
         interactor.validate(address)

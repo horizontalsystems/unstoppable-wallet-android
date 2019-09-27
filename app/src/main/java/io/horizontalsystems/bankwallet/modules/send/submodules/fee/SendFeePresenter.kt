@@ -11,15 +11,15 @@ import java.math.BigDecimal
 
 
 class SendFeePresenter(
-        val view: SendFeeModule.View,
-        private val interactor: SendFeeModule.Interactor,
+        val view: SendFeeModule.IView,
+        private val interactor: SendFeeModule.IInteractor,
         private val helper: SendFeePresenterHelper,
         private val baseCoin: Coin,
         private val baseCurrency: Currency,
         private val feeCoinData: Pair<Coin, String>?)
-    : ViewModel(), SendFeeModule.ViewDelegate, SendFeeModule.InteractorDelegate, SendFeeModule.FeeModule {
+    : ViewModel(), SendFeeModule.IViewDelegate, SendFeeModule.IInteractorDelegate, SendFeeModule.IFeeModule {
 
-    var moduleDelegate: SendFeeModule.FeeModuleDelegate? = null
+    var moduleDelegate: SendFeeModule.IFeeModuleDelegate? = null
 
     private var xRate: Rate? = null
     private var inputType = SendModule.InputType.COIN
@@ -36,20 +36,20 @@ class SendFeePresenter(
     private fun syncError() {
         try {
             validate()
-            view?.setInsufficientFeeBalanceError(null)
+            view.setInsufficientFeeBalanceError(null)
         } catch (e: SendFeeModule.InsufficientFeeBalance) {
-            view?.setInsufficientFeeBalanceError(e)
+            view.setInsufficientFeeBalanceError(e)
         }
     }
 
     private fun syncFeeLabels() {
-        view?.setPrimaryFee(helper.feeAmount(fee, SendModule.InputType.COIN, xRate))
-        view?.setSecondaryFee(helper.feeAmount(fee, SendModule.InputType.CURRENCY, xRate))
+        view.setPrimaryFee(helper.feeAmount(fee, SendModule.InputType.COIN, xRate))
+        view.setSecondaryFee(helper.feeAmount(fee, SendModule.InputType.CURRENCY, xRate))
     }
 
     private fun syncFeeRateLabels() {
-        view?.setDuration(feeRateInfo.duration)
-        view?.setFeePriority(feeRateInfo.priority)
+        view.setDuration(feeRateInfo.duration)
+        view.setFeePriority(feeRateInfo.priority)
     }
 
     private fun validate() {
@@ -134,7 +134,7 @@ class SendFeePresenter(
 
     override fun onClickFeeRatePriority() {
         feeRates?.let {
-            view?.showFeeRatePrioritySelector(it.map { rateInfo ->
+            view.showFeeRatePrioritySelector(it.map { rateInfo ->
                 feeRateInfoViewItem(rateInfo)
             })
         }

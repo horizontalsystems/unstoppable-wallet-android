@@ -6,13 +6,12 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
-import io.horizontalsystems.bankwallet.modules.send.SendPresenter
 import java.math.BigDecimal
 import kotlin.math.min
 
 object SendAmountModule {
 
-    interface View {
+    interface IView {
         fun setAmountType(prefix: String?)
         fun setAmount(amount: String)
         fun setHint(hint: String?)
@@ -27,23 +26,23 @@ object SendAmountModule {
         fun revertAmount(amount: String)
     }
 
-    interface ViewDelegate {
+    interface IViewDelegate {
         fun onViewDidLoad()
         fun onAmountChange(amountString: String)
         fun onSwitchClick()
         fun onMaxClick()
     }
 
-    interface Interactor {
+    interface IInteractor {
         var defaultInputType: SendModule.InputType
         fun retrieveRate()
     }
 
-    interface InteractorDelegate {
+    interface IInteractorDelegate {
         fun didRateRetrieve(rate: Rate?)
     }
 
-    interface AmountModule {
+    interface IAmountModule {
         val currentAmount: BigDecimal
         val inputType: SendModule.InputType
         val coinAmount: CoinValue
@@ -62,7 +61,7 @@ object SendAmountModule {
         fun setAvailableBalance(availableBalance: BigDecimal)
     }
 
-    interface AmountModuleDelegate {
+    interface IAmountModuleDelegate {
         fun onChangeAmount()
         fun onChangeInputType(inputType: SendModule.InputType)
     }
@@ -74,7 +73,7 @@ object SendAmountModule {
 
 
     class Factory(private val wallet: Wallet,
-                  private val amountModule: SendPresenter) : ViewModelProvider.Factory {
+                  private val sendHandler: SendModule.ISendHandler) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
@@ -90,7 +89,7 @@ object SendAmountModule {
             val presenter = SendAmountPresenter(view, interactor, sendAmountPresenterHelper, wallet.coin, baseCurrency)
 
             interactor.delegate = presenter
-            amountModule.handler.amountModule = presenter
+            sendHandler.amountModule = presenter
 
             return presenter as T
         }

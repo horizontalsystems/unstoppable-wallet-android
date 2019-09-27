@@ -4,9 +4,9 @@ import io.horizontalsystems.bankwallet.core.IClipboardManager
 
 
 class SendConfirmationInteractor(private val clipboardManager: IClipboardManager)
-    : SendConfirmationModule.Interactor {
+    : SendConfirmationModule.IInteractor {
 
-    var delegate: SendConfirmationModule.InteractorDelegate? = null
+    var delegate: SendConfirmationModule.IInteractorDelegate? = null
 
     override fun copyToClipboard(coinAddress: String) {
         clipboardManager.copyText(coinAddress)

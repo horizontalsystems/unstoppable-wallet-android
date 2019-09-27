@@ -95,20 +95,26 @@ class SendActivity : BaseActivity() {
             when (input) {
                 SendModule.Input.Amount -> {
                     //add amount view
-                    val sendAmountFragment = SendAmountFragment(wallet, mainPresenter)
-                    supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendAmountFragment).commitNow()
+                    mainPresenter.amountModuleDelegate?.let {
+                        val sendAmountFragment =  SendAmountFragment(wallet, it, mainPresenter.handler)
+                        supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendAmountFragment).commitNow()
+                    }
                 }
                 SendModule.Input.Address -> {
                     //add address view
-                    val sendAddressFragment = SendAddressFragment(wallet.coin, mainPresenter)
-                    supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendAddressFragment)
-                            .commitNow()
+                    mainPresenter.addressModuleDelegate?.let {
+                        val sendAddressFragment = SendAddressFragment(wallet.coin, it, mainPresenter.handler)
+                        supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendAddressFragment)
+                                .commitNow()
+                    }
                 }
                 is SendModule.Input.Fee -> {
                     //add fee view
-                    val sendFeeFragment =
-                            SendFeeFragment(input.isAdjustable, wallet.coin, mainPresenter)
-                    supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendFeeFragment).commitNow()
+                    mainPresenter.feeModuleDelegate?.let {
+                        val sendFeeFragment = SendFeeFragment(input.isAdjustable, wallet.coin, it, mainPresenter.handler)
+                        supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendFeeFragment)
+                                .commitNow()
+                    }
                 }
                 is SendModule.Input.Memo -> {
                     //add memo view

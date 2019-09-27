@@ -2,12 +2,12 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.address
 
 import androidx.lifecycle.ViewModel
 
-class SendAddressPresenter(val view: SendAddressModule.View,
-                           private val interactor: SendAddressModule.Interactor)
-    : ViewModel(), SendAddressModule.AddressModule, SendAddressModule.InteractorDelegate,
-      SendAddressModule.ViewDelegate {
+class SendAddressPresenter(val view: SendAddressModule.IView,
+                           private val interactor: SendAddressModule.IInteractor)
+    : ViewModel(), SendAddressModule.IAddressModule, SendAddressModule.IInteractorDelegate,
+      SendAddressModule.IViewDelegate {
 
-    var moduleDelegate: SendAddressModule.AddressModuleDelegate? = null
+    var moduleDelegate: SendAddressModule.IAddressModuleDelegate? = null
 
     override var currentAddress: String? = null
         private set(value) {
@@ -61,14 +61,14 @@ class SendAddressPresenter(val view: SendAddressModule.View,
     }
 
     private fun updateAddress(address: String?, error: Exception? = null) {
-        view?.setAddress(address)
-        view?.setAddressError(error)
+        view.setAddress(address)
+        view.setAddressError(error)
 
         this.currentAddress = if (error == null) address else null
     }
 
     private fun updatePasteButtonState() {
-        view?.setPasteButtonState(interactor.clipboardHasPrimaryClip)
+        view.setPasteButtonState(interactor.clipboardHasPrimaryClip)
     }
 
 }

@@ -11,14 +11,14 @@ import java.math.RoundingMode
 
 
 class SendAmountPresenter(
-        val view: SendAmountModule.View,
-        private val interactor: SendAmountModule.Interactor,
+        val view: SendAmountModule.IView,
+        private val interactor: SendAmountModule.IInteractor,
         private val presenterHelper: SendAmountPresenterHelper,
         private val coin: Coin,
         private val baseCurrency: Currency)
-    : ViewModel(), SendAmountModule.ViewDelegate, SendAmountModule.InteractorDelegate, SendAmountModule.AmountModule {
+    : ViewModel(), SendAmountModule.IViewDelegate, SendAmountModule.IInteractorDelegate, SendAmountModule.IAmountModule {
 
-    var moduleDelegate: SendAmountModule.AmountModuleDelegate? = null
+    var moduleDelegate: SendAmountModule.IAmountModuleDelegate? = null
 
     private var amount: BigDecimal? = null
     private var availableBalance: BigDecimal? = null
@@ -97,7 +97,7 @@ class SendAmountPresenter(
 
     override fun onViewDidLoad() {
         interactor.retrieveRate()
-        view?.addTextChangeListener()
+        view.addTextChangeListener()
 
         syncAmountType()
         syncSwitchButton()
@@ -105,7 +105,7 @@ class SendAmountPresenter(
     }
 
     override fun onSwitchClick() {
-        view?.removeTextChangeListener()
+        view.removeTextChangeListener()
 
         inputType = when (inputType) {
             SendModule.InputType.CURRENCY -> SendModule.InputType.COIN
@@ -119,7 +119,7 @@ class SendAmountPresenter(
         syncHint()
         syncError()
 
-        view?.addTextChangeListener()
+        view.addTextChangeListener()
     }
 
     override fun onAmountChange(amountString: String) {
@@ -129,7 +129,7 @@ class SendAmountPresenter(
         if (amount != null && amount.scale() > decimal) {
             val amountNumber = amount.setScale(decimal, RoundingMode.FLOOR)
             val revertedInput = amountNumber.toPlainString()
-            view?.revertAmount(revertedInput)
+            view.revertAmount(revertedInput)
         } else {
             this.amount = presenterHelper.getCoinAmount(amount, inputType, xRate)
 
@@ -169,26 +169,26 @@ class SendAmountPresenter(
 
     private fun syncAmount() {
         val amount = presenterHelper.getAmount(amount, inputType, xRate)
-        view?.setAmount(amount)
+        view.setAmount(amount)
     }
 
     private fun syncAmountType() {
         val prefix = presenterHelper.getAmountPrefix(inputType, xRate)
-        view?.setAmountType(prefix)
+        view.setAmountType(prefix)
     }
 
     private fun syncHint() {
         val hint = presenterHelper.getHint(this.amount, inputType, xRate)
-        view?.setHint(hint)
+        view.setHint(hint)
     }
 
     private fun syncMaxButton() {
         val visible = amount?.let { it == BigDecimal.ZERO } ?: true
-        view?.setMaxButtonVisible(visible)
+        view.setMaxButtonVisible(visible)
     }
 
     private fun syncSwitchButton() {
-        view?.setSwitchButtonEnabled(xRate != null)
+        view.setSwitchButtonEnabled(xRate != null)
     }
 
     private fun validate() {
@@ -214,9 +214,9 @@ class SendAmountPresenter(
     private fun syncError() {
         try {
             validate()
-            view?.setHintErrorBalance(null)
+            view.setHintErrorBalance(null)
         } catch (insufficientBalance: InsufficientBalance) {
-            view?.setHintErrorBalance(insufficientBalance.availableBalance?.getFormatted())
+            view.setHintErrorBalance(insufficientBalance.availableBalance?.getFormatted())
         }
     }
 

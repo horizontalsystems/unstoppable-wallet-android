@@ -11,7 +11,7 @@ class RestoreWordsPresenter(
 
     var view: RestoreWordsModule.View? = null
 
-    //  View Delegate
+    //  IView Delegate
 
     override val words = MutableList(wordsCount) { "" }
 
@@ -23,7 +23,7 @@ class RestoreWordsPresenter(
         interactor.validate(words)
     }
 
-    //  Interactor Delegate
+    //  IInteractor Delegate
 
     override fun didValidate() {
         if (showSyncMode) {

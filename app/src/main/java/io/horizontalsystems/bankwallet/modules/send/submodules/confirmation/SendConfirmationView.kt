@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.confirmation
 
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 
-class SendConfirmationView: SendConfirmationModule.View {
+class SendConfirmationView: SendConfirmationModule.IView {
 
     val addPrimaryDataViewItem = SingleLiveEvent<SendConfirmationModule.PrimaryItemData>()
     val addSecondaryDataViewItem = SingleLiveEvent<SendConfirmationModule.SecondaryItemData>()

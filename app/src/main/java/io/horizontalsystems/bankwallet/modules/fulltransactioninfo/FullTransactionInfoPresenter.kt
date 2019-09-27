@@ -26,7 +26,7 @@ class FullTransactionInfoPresenter(val interactor: FullTransactionInfoInteractor
     }
 
     //
-    // ViewDelegate
+    // IViewDelegate
     //
     override fun viewDidLoad() {
         interactor.didLoad()
@@ -81,7 +81,7 @@ class FullTransactionInfoPresenter(val interactor: FullTransactionInfoInteractor
     }
 
     //
-    // InteractorDelegate
+    // IInteractorDelegate
     //
     override fun onProviderChange() {
         state.transactionRecord = null

@@ -4,35 +4,35 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.modules.send.SendPresenter
+import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import java.math.BigDecimal
 
 object SendAddressModule {
 
-    interface View {
+    interface IView {
         fun setAddress(address: String?)
         fun setAddressError(error: Exception?)
         fun setPasteButtonState(enabled: Boolean)
     }
 
-    interface ViewDelegate {
+    interface IViewDelegate {
         fun onViewDidLoad()
         fun onAddressPasteClicked()
         fun onAddressDeleteClicked()
         fun onAddressScanClicked()
     }
 
-    interface Interactor {
+    interface IInteractor {
         val addressFromClipboard: String?
         val clipboardHasPrimaryClip: Boolean
 
         fun parseAddress(address: String): Pair<String, BigDecimal?>
     }
 
-    interface InteractorDelegate
+    interface IInteractorDelegate
 
-    interface AddressModule {
+    interface IAddressModule {
         val currentAddress: String?
 
         @Throws
@@ -40,7 +40,7 @@ object SendAddressModule {
         fun didScanQrCode(address: String)
     }
 
-    interface AddressModuleDelegate {
+    interface IAddressModuleDelegate {
         fun validate(address: String)
 
         fun onUpdateAddress()
@@ -55,7 +55,7 @@ object SendAddressModule {
 
 
     class Factory(private val coin: Coin,
-                  private val addressModule: SendPresenter) : ViewModelProvider.Factory {
+                  private val sendHandler: SendModule.ISendHandler) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
@@ -65,7 +65,7 @@ object SendAddressModule {
             val presenter = SendAddressPresenter(view, interactor)
 
             interactor.delegate = presenter
-            addressModule.handler.addressModule = presenter
+            sendHandler.addressModule = presenter
 
             return presenter as T
         }

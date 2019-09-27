@@ -11,15 +11,17 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.FeeRateInfo
-import io.horizontalsystems.bankwallet.modules.send.SendPresenter
+import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.TextHelper
 import kotlinx.android.synthetic.main.view_send_fee.*
 
-class SendFeeFragment(private val feeIsAdjustable: Boolean,
-                      private val coin: Coin,
-                      private val moduleDelegate: SendPresenter)
-    : Fragment(), FeeRatePrioritySelector.Listener {
+class SendFeeFragment(
+        private val feeIsAdjustable: Boolean,
+        private val coin: Coin,
+        private val feeModuleDelegate: SendFeeModule.IFeeModuleDelegate,
+        private val sendHadler: SendModule.ISendHandler
+) : Fragment(), FeeRatePrioritySelector.Listener {
 
     private var presenter: SendFeePresenter? = null
 
@@ -31,7 +33,7 @@ class SendFeeFragment(private val feeIsAdjustable: Boolean,
 
         super.onViewCreated(view, savedInstanceState)
 
-        presenter = ViewModelProviders.of(this, SendFeeModule.Factory(coin, moduleDelegate))
+        presenter = ViewModelProviders.of(this, SendFeeModule.Factory(coin, sendHadler, feeModuleDelegate))
                 .get(SendFeePresenter::class.java)
         val presenterView = presenter?.view as SendFeeView
 

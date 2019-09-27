@@ -6,16 +6,16 @@ import androidx.lifecycle.ViewModelProvider
 
 object SendMemoModule {
 
-    interface View {
+    interface IView {
         fun setMaxLength(maxLength: Int)
     }
 
-    interface ViewDelegate {
+    interface IViewDelegate {
         fun onViewDidLoad()
         fun onTextEntered(memo: String)
     }
 
-    interface MemoModule {
+    interface IMemoModule {
         val memo: String?
     }
 

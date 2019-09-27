@@ -12,13 +12,16 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.send.SendPresenter
+import io.horizontalsystems.bankwallet.modules.send.SendModule
 import kotlinx.android.synthetic.main.view_amount_input.*
 
-class SendAmountFragment(private val wallet: Wallet,
-                         private val amountModule: SendPresenter) : Fragment() {
+class SendAmountFragment(
+        private val wallet: Wallet,
+        private val amountModuleDelegate: SendAmountModule.IAmountModuleDelegate,
+        private val sendHandler:SendModule.ISendHandler
+) : Fragment() {
 
-    var presenter: SendAmountModule.ViewDelegate? = null
+    private lateinit var presenter: SendAmountPresenter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.view_amount_input, container, false)
@@ -28,13 +31,13 @@ class SendAmountFragment(private val wallet: Wallet,
 
         super.onViewCreated(view, savedInstanceState)
 
-        presenter = ViewModelProviders.of(this, SendAmountModule.Factory(wallet, amountModule))
+        presenter = ViewModelProviders.of(this, SendAmountModule.Factory(wallet, sendHandler))
                 .get(SendAmountPresenter::class.java)
-        val presenterView = (presenter as SendAmountPresenter).view as SendAmountView
-        (presenter as SendAmountPresenter).moduleDelegate = amountModule.amountModuleDelegate
+        val presenterView = presenter.view as SendAmountView
+        presenter.moduleDelegate = amountModuleDelegate
 
-        btnMax.setOnClickListener { presenter?.onMaxClick() }
-        btnSwitch.setOnClickListener { presenter?.onSwitchClick() }
+        btnMax.setOnClickListener { presenter.onMaxClick() }
+        btnSwitch.setOnClickListener { presenter.onSwitchClick() }
 
         presenterView.amountInputPrefix.observe(viewLifecycleOwner, Observer { prefix ->
             setPrefix(prefix)
@@ -72,7 +75,7 @@ class SendAmountFragment(private val wallet: Wallet,
             enableCurrencySwitch(enabled)
         })
 
-        presenter?.onViewDidLoad()
+        presenter.onViewDidLoad()
     }
 
 
@@ -126,7 +129,7 @@ class SendAmountFragment(private val wallet: Wallet,
     private val textChangeListener = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
             val amountText = s?.toString() ?: ""
-            presenter?.onAmountChange(amountText)
+            presenter.onAmountChange(amountText)
         }
 
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}

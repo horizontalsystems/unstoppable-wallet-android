@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.memo
 import androidx.lifecycle.ViewModel
 
 class SendMemoPresenter(private val maxLength: Int,
-                        var view: SendMemoModule.View)
-    : ViewModel(), SendMemoModule.ViewDelegate, SendMemoModule.MemoModule {
+                        var view: SendMemoModule.IView)
+    : ViewModel(), SendMemoModule.IViewDelegate, SendMemoModule.IMemoModule {
 
     // SendMemoModule.IMemoModule
 

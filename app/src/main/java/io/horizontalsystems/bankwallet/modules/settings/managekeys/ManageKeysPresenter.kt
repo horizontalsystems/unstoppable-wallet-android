@@ -10,7 +10,7 @@ class ManageKeysPresenter(private val interactor: ManageKeysModule.Interactor, p
 
     private var currentItem: ManageAccountItem? = null
 
-    //  ViewDelegate
+    //  IViewDelegate
 
     override var items = listOf<ManageAccountItem>()
 
@@ -80,7 +80,7 @@ class ManageKeysPresenter(private val interactor: ManageKeysModule.Interactor, p
         interactor.clear()
     }
 
-    //  InteractorDelegate
+    //  IInteractorDelegate
 
     override fun didLoad(accounts: List<ManageAccountItem>) {
         items = accounts

@@ -16,7 +16,7 @@ class RestoreWordsViewModel : ViewModel(), RestoreWordsModule.View, RestoreWords
         RestoreWordsModule.init(this, this, wordsCount)
     }
 
-    // View
+    // IView
 
     override fun showError(error: Int) {
         errorLiveData.value = error
