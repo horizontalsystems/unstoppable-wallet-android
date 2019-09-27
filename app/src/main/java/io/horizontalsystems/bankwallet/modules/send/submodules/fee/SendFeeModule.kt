@@ -8,15 +8,15 @@ import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
-import io.horizontalsystems.bankwallet.modules.send.SendPresenter
 import java.math.BigDecimal
 
 
 object SendFeeModule {
 
-    class InsufficientFeeBalance(val coin: Coin, val coinProtocol: String, val feeCoin: Coin, val fee: CoinValue) : Exception()
+    class InsufficientFeeBalance(val coin: Coin, val coinProtocol: String, val feeCoin: Coin, val fee: CoinValue) :
+            Exception()
 
-    interface View {
+    interface IView {
         fun setPrimaryFee(feeAmount: String?)
         fun setSecondaryFee(feeAmount: String?)
         fun setInsufficientFeeBalanceError(insufficientFeeBalance: InsufficientFeeBalance?)
@@ -25,24 +25,24 @@ object SendFeeModule {
         fun showFeeRatePrioritySelector(feeRates: List<FeeRateInfoViewItem>)
     }
 
-    interface ViewDelegate {
+    interface IViewDelegate {
         fun onViewDidLoad()
         fun onChangeFeeRate(feeRateInfo: FeeRateInfo)
         fun onClickFeeRatePriority()
         fun onClear()
     }
 
-    interface Interactor {
+    interface IInteractor {
         fun getRate(coinCode: String)
         fun getFeeRates(): List<FeeRateInfo>?
         fun clear()
     }
 
-    interface InteractorDelegate {
+    interface IInteractorDelegate {
         fun onRateFetched(latestRate: Rate?)
     }
 
-    interface FeeModule {
+    interface IFeeModule {
         val isValid: Boolean
         val feeRate: Long
         val primaryAmountInfo: AmountInfo
@@ -54,14 +54,18 @@ object SendFeeModule {
         fun setInputType(inputType: SendModule.InputType)
     }
 
-    interface FeeModuleDelegate {
+    interface IFeeModuleDelegate {
         fun onUpdateFeeRate(feeRate: Long)
     }
 
     data class FeeRateInfoViewItem(val feeRateInfo: FeeRateInfo, val selected: Boolean)
 
 
-    class Factory(private val coin: Coin, private val moduleDelegate: SendPresenter) : ViewModelProvider.Factory {
+    class Factory(
+            private val coin: Coin,
+            private val sendHandler: SendModule.ISendHandler,
+            private val feeModuleDelegate: IFeeModuleDelegate
+    ) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
@@ -77,8 +81,8 @@ object SendFeeModule {
             val presenter = SendFeePresenter(view, interactor, helper, coin, baseCurrency, feeCoinData)
 
             interactor.delegate = presenter
-            presenter.moduleDelegate = moduleDelegate.feeModuleDelegate
-            moduleDelegate.handler.feeModule = presenter
+            presenter.moduleDelegate = feeModuleDelegate
+            sendHandler.feeModule = presenter
 
             return presenter as T
         }

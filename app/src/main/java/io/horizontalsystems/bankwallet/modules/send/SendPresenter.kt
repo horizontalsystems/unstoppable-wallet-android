@@ -6,12 +6,12 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmount
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
 
 class SendPresenter(private val interactor: SendModule.ISendInteractor,
-                    val router: SendModule.IRouter)
-    : ViewModel(), SendModule.IViewDelegate, SendModule.ISendInteractorDelegate, SendModule.ISendHandlerDelegate {
+                    val router: SendModule.IRouter
+) : ViewModel(), SendModule.IViewDelegate, SendModule.ISendInteractorDelegate, SendModule.ISendHandlerDelegate {
 
-    var amountModuleDelegate: SendAmountModule.AmountModuleDelegate? = null
-    var addressModuleDelegate: SendAddressModule.AddressModuleDelegate? = null
-    var feeModuleDelegate: SendFeeModule.FeeModuleDelegate? = null
+    var amountModuleDelegate: SendAmountModule.IAmountModuleDelegate? = null
+    var addressModuleDelegate: SendAddressModule.IAddressModuleDelegate? = null
+    var feeModuleDelegate: SendFeeModule.IFeeModuleDelegate? = null
 
     override lateinit var view: SendModule.IView
 

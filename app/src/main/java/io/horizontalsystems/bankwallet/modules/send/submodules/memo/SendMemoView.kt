@@ -1,9 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.memo
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 
-class SendMemoView : SendMemoModule.View {
+class SendMemoView : SendMemoModule.IView {
 
     val maxLength = MutableLiveData<Int>()
 

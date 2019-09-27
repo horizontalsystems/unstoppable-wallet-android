@@ -11,9 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
-import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountPresenter
-import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountView
 import kotlinx.android.synthetic.main.view_send_memo.*
 
 

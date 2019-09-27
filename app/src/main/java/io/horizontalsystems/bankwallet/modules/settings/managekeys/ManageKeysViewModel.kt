@@ -24,7 +24,7 @@ class ManageKeysViewModel : ViewModel(), ManageKeysModule.View, ManageKeysModule
         delegate.viewDidLoad()
     }
 
-    //  View
+    //  IView
 
     override fun show(items: List<ManageAccountItem>) {
         showItemsEvent.postValue(items)

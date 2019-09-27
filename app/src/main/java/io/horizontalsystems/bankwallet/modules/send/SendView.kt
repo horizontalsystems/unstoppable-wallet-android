@@ -1,13 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.send
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.core.CoinException
-import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
-import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
-import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeModule
 
 class SendView : SendModule.IView {
 

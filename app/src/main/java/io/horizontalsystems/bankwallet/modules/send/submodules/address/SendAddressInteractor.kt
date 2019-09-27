@@ -7,9 +7,9 @@ import java.math.BigDecimal
 class SendAddressInteractor(
         private val textHelper: IClipboardManager,
         private val addressParser: IAddressParser)
-    : SendAddressModule.Interactor {
+    : SendAddressModule.IInteractor {
 
-    var delegate: SendAddressModule.InteractorDelegate? = null
+    var delegate: SendAddressModule.IInteractorDelegate? = null
 
     override val addressFromClipboard: String?
         get() = textHelper.getCopiedText()

@@ -1,10 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.address
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.entities.Coin
 
-class SendAddressView : SendAddressModule.View {
+class SendAddressView : SendAddressModule.IView {
 
     val addressText = MutableLiveData<String?>()
     val error = MutableLiveData<Exception?>()

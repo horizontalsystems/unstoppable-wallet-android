@@ -9,7 +9,7 @@ class TransactionInfoPresenter(
 
     var view: TransactionInfoModule.View? = null
 
-    // ViewDelegate methods
+    // IViewDelegate methods
 
     override fun onCopy(value: String) {
         interactor.onCopy(value)

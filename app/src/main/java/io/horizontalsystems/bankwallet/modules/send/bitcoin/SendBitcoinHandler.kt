@@ -10,8 +10,8 @@ import java.math.BigDecimal
 
 class SendBitcoinHandler(private val interactor: SendModule.ISendBitcoinInteractor,
                          private val router: SendModule.IRouter)
-    : SendModule.ISendHandler, SendModule.ISendBitcoinInteractorDelegate, SendAmountModule.AmountModuleDelegate,
-      SendAddressModule.AddressModuleDelegate, SendFeeModule.FeeModuleDelegate {
+    : SendModule.ISendHandler, SendModule.ISendBitcoinInteractorDelegate, SendAmountModule.IAmountModuleDelegate,
+      SendAddressModule.IAddressModuleDelegate, SendFeeModule.IFeeModuleDelegate {
 
     private fun syncValidation() {
         try {
@@ -35,10 +35,10 @@ class SendBitcoinHandler(private val interactor: SendModule.ISendBitcoinInteract
 
     // SendModule.ISendHandler
 
-    override lateinit var amountModule: SendAmountModule.AmountModule
-    override lateinit var addressModule: SendAddressModule.AddressModule
-    override lateinit var feeModule: SendFeeModule.FeeModule
-    override lateinit var memoModule: SendMemoModule.MemoModule
+    override lateinit var amountModule: SendAmountModule.IAmountModule
+    override lateinit var addressModule: SendAddressModule.IAddressModule
+    override lateinit var feeModule: SendFeeModule.IFeeModule
+    override lateinit var memoModule: SendMemoModule.IMemoModule
 
     override lateinit var delegate: SendModule.ISendHandlerDelegate
 

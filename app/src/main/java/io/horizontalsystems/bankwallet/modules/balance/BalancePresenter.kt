@@ -34,7 +34,7 @@ class BalancePresenter(
     private val showSortingButtonThreshold = 5
     private var accountToBackup: Account? = null
 
-    // ViewDelegate
+    // IViewDelegate
 
     override val itemsCount: Int
         get() = dataSource.count
@@ -129,7 +129,7 @@ class BalancePresenter(
         view?.reload()
     }
 
-    // InteractorDelegate
+    // IInteractorDelegate
 
     override fun willEnterForeground() {
         updateStats()

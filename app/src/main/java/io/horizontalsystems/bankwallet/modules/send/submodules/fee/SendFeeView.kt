@@ -1,12 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.fee
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
-import io.horizontalsystems.bankwallet.entities.Coin
 
-class SendFeeView : SendFeeModule.View {
+class SendFeeView : SendFeeModule.IView {
 
     val primaryFee = MutableLiveData<String?>()
     val secondaryFee = MutableLiveData<String?>()

@@ -18,12 +18,12 @@ class SendAmountInteractor (
         private val rateStorage: IRateStorage,
         private val localStorage: ILocalStorage,
         private val coin: Coin
-): SendAmountModule.Interactor {
+): SendAmountModule.IInteractor {
 
     private var exchangeRate: Rate? = null
     private val disposables = CompositeDisposable()
 
-    var delegate: SendAmountModule.InteractorDelegate? = null
+    var delegate: SendAmountModule.IInteractorDelegate? = null
 
     override var defaultInputType: SendModule.InputType
         get() = localStorage.sendInputType ?: SendModule.InputType.COIN

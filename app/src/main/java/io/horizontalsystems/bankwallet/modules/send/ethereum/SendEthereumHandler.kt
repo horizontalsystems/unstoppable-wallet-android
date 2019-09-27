@@ -10,8 +10,8 @@ import java.math.BigDecimal
 
 class SendEthereumHandler(private val interactor: SendModule.ISendEthereumInteractor,
                           private val router: SendModule.IRouter)
-    : SendModule.ISendHandler, SendAmountModule.AmountModuleDelegate, SendAddressModule.AddressModuleDelegate,
-      SendFeeModule.FeeModuleDelegate {
+    : SendModule.ISendHandler, SendAmountModule.IAmountModuleDelegate, SendAddressModule.IAddressModuleDelegate,
+      SendFeeModule.IFeeModuleDelegate {
 
     private fun syncValidation() {
         try {
@@ -35,10 +35,10 @@ class SendEthereumHandler(private val interactor: SendModule.ISendEthereumIntera
 
     // SendModule.ISendHandler
 
-    override lateinit var amountModule: SendAmountModule.AmountModule
-    override lateinit var addressModule: SendAddressModule.AddressModule
-    override lateinit var feeModule: SendFeeModule.FeeModule
-    override lateinit var memoModule: SendMemoModule.MemoModule
+    override lateinit var amountModule: SendAmountModule.IAmountModule
+    override lateinit var addressModule: SendAddressModule.IAddressModule
+    override lateinit var feeModule: SendFeeModule.IFeeModule
+    override lateinit var memoModule: SendMemoModule.IMemoModule
 
     override lateinit var delegate: SendModule.ISendHandlerDelegate
 
@@ -72,7 +72,7 @@ class SendEthereumHandler(private val interactor: SendModule.ISendEthereumIntera
         addressModule.didScanQrCode(address)
     }
 
-    // SendAmountModule.AmountModuleDelegate
+    // SendAmountModule.IAmountModuleDelegate
 
     override fun onChangeAmount() {
         syncValidation()
@@ -82,7 +82,7 @@ class SendEthereumHandler(private val interactor: SendModule.ISendEthereumIntera
         feeModule.setInputType(inputType)
     }
 
-    // SendAddressModule.AddressModuleDelegate
+    // SendAddressModule.IAddressModuleDelegate
 
     override fun validate(address: String) {
         interactor.validate(address)

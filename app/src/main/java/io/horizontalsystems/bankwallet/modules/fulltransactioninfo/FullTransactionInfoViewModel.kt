@@ -37,7 +37,7 @@ class FullTransactionInfoViewModel : ViewModel(), FullTransactionInfoModule.View
     }
 
     //
-    // View
+    // IView
     //
 
     override fun showShareButton() {

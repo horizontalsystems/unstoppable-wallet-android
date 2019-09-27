@@ -20,7 +20,7 @@ class RestoreViewModel : ViewModel(), RestoreModule.View, RestoreModule.Router {
         delegate.viewDidLoad()
     }
 
-    //  View
+    //  IView
 
     override fun reload(items: List<IPredefinedAccountType>) {
         reloadLiveEvent.postValue(items)
