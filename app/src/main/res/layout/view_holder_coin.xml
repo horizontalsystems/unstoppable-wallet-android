@@ -14,11 +14,9 @@
     android:paddingEnd="11dp"
     android:paddingBottom="16dp">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="62dp"
-        android:layout_marginBottom="12dp"
         android:clipChildren="true">
 
         <!-- first line -->
@@ -181,6 +179,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:paddingTop="12dp"
         android:visibility="visible">
 
         <Button
