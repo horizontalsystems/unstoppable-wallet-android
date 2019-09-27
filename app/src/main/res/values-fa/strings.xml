@@ -17,7 +17,7 @@
     <string name="Button_Share">به اشتراك گذاشتن</string>
     <string name="Error">خطا</string>
     <string name="NotAvailable">مربوط نیست</string>
-    <string name="Wallet">%s wallet</string>
+    <string name="Wallet">%s کیف پول</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
     <string name="Welcome_CreateWallet">کیف پول جدید</string>
