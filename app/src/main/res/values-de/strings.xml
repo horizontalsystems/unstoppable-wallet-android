@@ -183,7 +183,7 @@
     <!--Settings-->
     <string name="Settings_Title">Einstellungen</string>
     <string name="Settings_SecurityCenter">Sicherheit</string>
-    <string name="Settings_Notifications">Notifications</string>
+    <string name="Settings_Notifications">Benachrichtigungen</string>
     <string name="Settings_ManageCoins">Coins Verwalten</string>
     <string name="Settings_RestoreWallet">Wallet Wiederherstellen</string>
     <string name="Settings_BaseCurrency">Währung</string>
@@ -200,7 +200,7 @@
     <string name="SettingsSecurity_Fingerprint">Fingerabdruck</string>
     <string name="SettingsSecurity_EnablePin">Code</string>
     <string name="SettingsSecurity_EditPin">Code bearbeiten</string>
-    <string name="SettingsSecurity_ManageKeys">Manage Wallets</string>
+    <string name="SettingsSecurity_ManageKeys">Wallets verwalten</string>
     <string name="SettingsSecurity_BackupWallet">Wallet sichern</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Währung</string>
@@ -225,11 +225,11 @@
     <string name="SettingsReport_Email">E-Mail</string>
     <string name="SettingsReport_Telegram">Telegram</string>
     <!--Setting_Notifications-->
-    <string name="SettingsNotifications_Title">Notifications</string>
+    <string name="SettingsNotifications_Title">Benachrichtigungen</string>
     <string name="SettingsNotifications_Description">Set price change alerts for the coins you would like to watch.\n\nYou will be alerted when the change in price for the last 24 hours exceeds selected threshold.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order to be able to receive price change alerts.</string>
     <string name="SettingsNotifications_TurnOn">Turn on in Settings</string>
-    <string name="SettingsNotifications_Off">Off</string>
+    <string name="SettingsNotifications_Off">Aus</string>
     <string name="SettingsNotifications_DeactivateAll">Deactivate All</string>
     <string name="Notification_Notifications">Notifications %s</string>
     <string name="Notification_Up">Up</string>
