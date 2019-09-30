@@ -27,7 +27,7 @@
     <string name="Create_Description">选择一种加密货币开始使用。您可以在以后添加其他加密货币。</string>
     <!--Restore-->
     <string name="Restore_Title">恢复</string>
-    <string name="Restore_Description">要恢复现有钱包，您需要输入该钱包的密钥。\n\n一旦你恢复了一个钱包，你就可以恢复更多的钱包，方法是进入“应用程序设置”中的“管理密钥”部分。</string>
+    <string name="Restore_Description">To restore existing wallet you need to enter a private key for that wallet.\n\nOnce you restore one wallet you will be able to restore other wallets via Manage Wallets section in Security settings of the app.</string>
     <string name="Restore_ValidationFailed">错误密钥</string>
     <string name="Restore_RestoreFailed">无法恢复钱包</string>
     <string name="Restore_EosAccountName">账户名</string>
