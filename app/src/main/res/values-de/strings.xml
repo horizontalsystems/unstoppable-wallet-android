@@ -10,7 +10,7 @@
     <string name="Alert_Success">Erfolgreich</string>
     <string name="Alert_Copied">Kopiert</string>
     <string name="Button_Cancel">Abbrechen</string>
-    <string name="Button_Create">Create</string>
+    <string name="Button_Create">Erstellen</string>
     <string name="Button_Back">Zurück</string>
     <string name="Button_Close">Schließen</string>
     <string name="Button_Ok">OK</string>
@@ -23,7 +23,7 @@
     <string name="Welcome_CreateWallet">Wallet Erstellen</string>
     <string name="Welcome_RestoreWallet">Wallet Wiederherstellen</string>
     <!--Create-->
-    <string name="Create_Title">New Wallet</string>
+    <string name="Create_Title">Wallet Erstellen</string>
     <string name="Create_Description">Select one cryptocurrency to start. You will be able to add other cryptocurrencies later.</string>
     <!--Restore-->
     <string name="Restore_Title">Wiederherstellen</string>
@@ -40,7 +40,7 @@
     <string name="Backup_Intro_Subtitle">The private key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.\n\nThe coins controlled by this key: %s.</string>
     <string name="Backup_Intro_Later">Später</string>
     <string name="Backup_Intro_BackupNow">Backup</string>
-    <string name="Backup_DisplayTitle">Private Key</string>
+    <string name="Backup_DisplayTitle">Privater Schlüssel</string>
     <string name="Backup_Confirmation_SecretKey">Ich stimme zu, dass ich allein Inhaber eines privaten 12-Wort Offlineschlüssels bin, der sicher auf meinem Telefon gespeichert wird und mir ermöglicht, Geld auf meinem Wallet zu steuern.</string>
     <string name="Backup_Confirmation_DeleteAppWarn">Ich stimme zu, dass bei einer Verschiebung oder Entfernung dieser App, der Zugang zu meinem Walletkonto nur bei Verwendung den Offlineschlüsseln erfolgt werden muss.</string>
     <string name="Backup_Confirmation_LockAppWarn">Ich stimme zu, dass das Ändern der PIN oder das Löschen von App-Daten in Android-Einstellungen den Offlineschlüssel vom Gerät löschen. Ich muss meinen Geheimschlüssel erneut eingeben, um den Zugriff auf meine Wallet wiederherzustellen.</string>
