@@ -27,7 +27,7 @@
     <string name="Create_Description">برای شروع ، یک ارز رمزگذاری شده انتخاب کنید. بعداً می توانید ارزهای رمزنگاری شده دیگری را اضافه کنید.</string>
     <!--Restore-->
     <string name="Restore_Title">بازگرداني</string>
-    <string name="Restore_Description">To restore existing wallet you need to enter a private key for that wallet.\n\nOnce you restore one wallet you will be able to restore other wallets via Manage Wallets section in Security settings of the app.</string>
+    <string name="Restore_Description">برای بازیابی کیف پول موجود، باید یک کلید خصوصی برای آن کیف پول وارد کنید.\n\nپس از بازیابی یک کیف پول، می توانید با رفتن به بخش مدیریت کلیدها در تنظیمات برنامه، کیف پول های بیشتری را بازیابی کنید.</string>
     <string name="Restore_ValidationFailed">کلید نادرست</string>
     <string name="Restore_RestoreFailed">بازگرداني كيف پول ناموفق شد</string>
     <string name="Restore_EosAccountName">نام حساب</string>
