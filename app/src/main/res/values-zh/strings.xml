@@ -305,7 +305,7 @@
     <string name="ManageKeys_Delete_Alert">You need to backup the private key before it can be deleted from this phone.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">添加%s</string>
-    <string name="AddCoin_Description">You don\'t have a wallet that can store %1$s. The app can generate a new wallet for you. Use the Create button below to generate a new wallet.\n\nYou will be able to use the new wallet for the following coins: %2$s.\n\nYou may also use the existing %3$s wallet key if you have one. Use the restore button for that.</string>
+    <string name="AddCoin_Description">您没有可恢复 %1$s 的钱包。应用可以为您生成新的钱包。使用下方的“创建”按钮生成新钱包。\n\n您将可以为以下代币使用新钱包：%2$s。\n\n如果您已有钱包，那么您也可以使用现有的%3$s钱包。为此使用“恢复”按钮。</string>
     <string name="AddCoin_CreateKey">创建</string>
     <string name="AddCoin_RestoreKey">恢复</string>
     <!-- Account Types -->
@@ -316,10 +316,10 @@
     <string name="CoinOption_Title">恢复选项</string>
     <string name="CoinOption_Fast">快</string>
     <string name="CoinOption_Recommended">0&#8211;2小时（推荐）</string>
-    <string name="CoinOption_Fast_Text">Fast : Restores your past transaction via secure third party server. For users with transactions involving large sums this method may pose privacy risks.</string>
+    <string name="CoinOption_Fast_Text">快：通过安全的第三方服务器恢复您过往的交易。对于拥有大额交易的用户，此方法可能会带来隐私风险。</string>
     <string name="CoinOption_Slow">慢</string>
     <string name="CoinOption_MorePrivate">1&#8211;12小时（更加私密）</string>
-    <string name="CoinOption_Slow_Text">Slow: Restores your past transactions directly from the blockchain. More private but very slow. If it takes too long, go to Manage Wallets in Settings, delete the Unstoppable entry and repeat the process with Fast option.</string>
+    <string name="CoinOption_Slow_Text">慢：直接从区块链恢复您过往的交易。如果耗时过长，请前往“设置”中的“管理钱包”，删除Unstoppable条目并使用“快”选项重复此过程。</string>
     <string name="CoinOption_TimePeriod">当首次在Unstoppable中创建钱包时选择时间周期。</string>
     <string name="CoinOption_BeforeOctober">在2019年10月之前</string>
     <string name="CoinOption_AfterOctober">在2019年10月之后</string>
