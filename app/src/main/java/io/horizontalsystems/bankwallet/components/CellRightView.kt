@@ -14,7 +14,6 @@ class CellRightView : ConstraintLayout {
         inflate(context, R.layout.view_cell_right, this)
         enableIcon(null)
         cellTitle.visibility = View.GONE
-        spinner.visibility = View.GONE
     }
 
     constructor(context: Context) : super(context)
@@ -33,6 +32,12 @@ class CellRightView : ConstraintLayout {
         set(value) {
             field = value
             enableIcon(if (value) checkIcon else null)
+        }
+
+    var downArrow: Boolean = false
+        set(value) {
+            field = value
+            enableIcon(if (value) downIcon else null)
         }
 
     private fun enableIcon(icon: ImageView?) {

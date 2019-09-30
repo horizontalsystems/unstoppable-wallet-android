@@ -39,6 +39,7 @@
             android:layout_marginTop="16dp"
             android:text="@string/SettingsNotifications_TurnOn"
             style="@style/ButtonSecondary"
+            android:visibility="invisible"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textWarning" />

@@ -12,6 +12,7 @@ object NotificationsModule {
         fun setItems(items: List<PriceAlertViewItem>)
         fun showWarning()
         fun hideWarning()
+        fun showStateSelector(itemPosition: Int, priceAlert: PriceAlert)
     }
 
     interface IRouter {
@@ -23,6 +24,7 @@ object NotificationsModule {
         fun didSelectState(itemPosition: Int, state: PriceAlert.State)
         fun didClickOpenSettings()
         fun didClickDeactivateAll()
+        fun didTapItem(itemPosition: Int)
     }
 
     interface IInteractor {
