@@ -59,7 +59,10 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.balance_menu, menu)
+
+        // todo: handle menu states in presenter
         menuSort = menu.findItem(R.id.menuSort)
+        menuSort?.isVisible = viewModel.delegate.itemsCount >= 5
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
