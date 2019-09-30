@@ -10,7 +10,7 @@
     <string name="Alert_Success">Completado</string>
     <string name="Alert_Copied">Copiado</string>
     <string name="Button_Cancel">Cancelar</string>
-    <string name="Button_Create">Create</string>
+    <string name="Button_Create">Crear</string>
     <string name="Button_Back">Atrás</string>
     <string name="Button_Close">Cerrar</string>
     <string name="Button_Ok">OK</string>
@@ -23,7 +23,7 @@
     <string name="Welcome_CreateWallet">Nueva cartera</string>
     <string name="Welcome_RestoreWallet">Restaurar cartera</string>
     <!--Create-->
-    <string name="Create_Title">New Wallet</string>
+    <string name="Create_Title">Nueva cartera</string>
     <string name="Create_Description">Select one cryptocurrency to start. You will be able to add other cryptocurrencies later.</string>
     <!--Restore-->
     <string name="Restore_Title">Restaurar</string>
