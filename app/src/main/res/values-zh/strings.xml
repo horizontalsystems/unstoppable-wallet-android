@@ -226,7 +226,7 @@
     <string name="SettingsReport_Telegram">电报</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">通知</string>
-    <string name="SettingsNotifications_Description">为您要监察的代币设置价格变更警报。\n\n当价格在过去24小内的变更超过选定的临界值时，您将收到警报。</string>
+    <string name="SettingsNotifications_Description">为您要监察的代币设置价格变更警报。\n\n当价格的变化在24小时内超出选定的临界值时，您将收到警报。</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">已禁用Unstoppable钱包应用通知。您必须开启通知并允许后台应用刷新才能接收价格变更警报。</string>
     <string name="SettingsNotifications_TurnOn">在设置中开启</string>
     <string name="SettingsNotifications_Off">关</string>
