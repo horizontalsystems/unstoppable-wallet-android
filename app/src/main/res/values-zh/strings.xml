@@ -45,7 +45,7 @@
     <string name="Backup_Confirmation_DeleteAppWarn">我明白如果此应用曾被移动、删除或出现故障，则只能通过该密钥恢复对我钱包的访问。</string>
     <string name="Backup_Confirmation_LockAppWarn">我明白更改电话的解锁密码或者在Android设置中删除应用数据将会从设备上删除密钥。我必须重新输入我的密钥才能重新访问我的钱包。</string>
     <string name="Backup_Confirmation_Disclaimer">我明白此应用的开发者不会对任何在使用此应用时出现的意外错误或问题负责。</string>
-    <string name="Backup_Confirmation_Description">Enter words from your private key.</string>
+    <string name="Backup_Confirmation_Description">输入您密钥中的文字。</string>
     <string name="Backup_Confirmation_FailureAlertText">文字不匹配</string>
     <string name="Backup_Confirmation_CheckTitle">检查...</string>
     <string name="Backup_Button_Confirm">确认</string>
@@ -226,7 +226,7 @@
     <string name="SettingsReport_Telegram">电报</string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">通知</string>
-    <string name="SettingsNotifications_Description">Set price change alerts for the coins you would like to watch.\n\nYou will be alerted when the change in price for the last 24 hours exceeds selected threshold.</string>
+    <string name="SettingsNotifications_Description">为您要监察的代币设置价格变更警报。\n\n当价格在过去24小内的变更超过选定的临界值时，您将收到警报。</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">已禁用Unstoppable钱包应用通知。您必须开启通知并允许后台应用刷新才能接收价格变更警报。</string>
     <string name="SettingsNotifications_TurnOn">在设置中开启</string>
     <string name="SettingsNotifications_Off">关</string>
@@ -264,7 +264,7 @@
     <string name="Fingerprint_Success">成功！</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">禁用至：%s</string>
-    <string name="UnlockPin_Error_PinIncorrect">Incorrect</string>
+    <string name="UnlockPin_Error_PinIncorrect">错误</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">电话PIN码</string>
     <string name="OSPin_Confirm_Desciption">此应用要求电话已启用密码（屏幕锁定）。\n\n您可以在Android设置中启用密码。\n\n请注意，禁用操作系统级别的PIN码后，电话的安全存储保障措施将使以前保存的数据无效。您必须恢复您的钱包密钥才能回到您的钱包。</string>
@@ -302,7 +302,7 @@
     <string name="ManageKeys_Delete_ConfirmationLose">如果您尚未对此钱包备份私钥，您将失去您的资金。</string>
     <string name="ManageKeys_Delete_FromPhone">从电话删除</string>
     <string name="ManageKeys_Delete_Alert_Title">需要备份</string>
-    <string name="ManageKeys_Delete_Alert">You need to backup the private key before it can be deleted from this phone.</string>
+    <string name="ManageKeys_Delete_Alert">您必须在将私钥从该手机删除之前先对其进行备份。</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">添加%s</string>
     <string name="AddCoin_Description">您没有可恢复 %1$s 的钱包。应用可以为您生成新的钱包。使用下方的“创建”按钮生成新钱包。\n\n您将可以为以下代币使用新钱包：%2$s。\n\n如果您已有钱包，那么您也可以使用现有的%3$s钱包。为此使用“恢复”按钮。</string>
