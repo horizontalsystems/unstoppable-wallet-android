@@ -20,6 +20,10 @@ class NotificationsPresenter(
         checkPriceAlertsEnabled()
     }
 
+    override fun didTapItem(itemPosition: Int) {
+        view.showStateSelector(itemPosition, priceAlerts[itemPosition])
+    }
+
     override fun didSelectState(itemPosition: Int, state: PriceAlert.State) {
         val priceAlert = priceAlerts[itemPosition]
 
@@ -27,6 +31,8 @@ class NotificationsPresenter(
             priceAlert.state = state
 
             interactor.savePriceAlerts(listOf(priceAlert))
+
+            view.setItems(priceAlertViewItemFactory.createItems(priceAlerts))
         }
     }
 

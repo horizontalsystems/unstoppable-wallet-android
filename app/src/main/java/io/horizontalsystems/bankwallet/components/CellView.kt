@@ -47,7 +47,11 @@ class CellView : ConstraintLayout {
             bottomShade.visibility = if (value) View.VISIBLE else View.INVISIBLE
         }
 
-    val spinner get() = cellRight.spinner
+    var downArrow: Boolean = false
+        set(value) {
+            field = value
+            cellRight.downArrow = value
+        }
 
     init {
         inflate(context, R.layout.view_cell, this)
