@@ -27,7 +27,7 @@
     <string name="Create_Description">选择一种加密货币开始使用。您可以在以后添加其他加密货币。</string>
     <!--Restore-->
     <string name="Restore_Title">恢复</string>
-    <string name="Restore_Description">To restore existing wallet you need to enter a private key for that wallet.\n\nOnce you restore one wallet you will be able to restore more wallets by going to Manage Keys section in app Settings.</string>
+    <string name="Restore_Description">要恢复现有钱包，您需要输入该钱包的密钥。\n\n一旦你恢复了一个钱包，你就可以恢复更多的钱包，方法是进入“应用程序设置”中的“管理密钥”部分。</string>
     <string name="Restore_ValidationFailed">错误密钥</string>
     <string name="Restore_RestoreFailed">无法恢复钱包</string>
     <string name="Restore_EosAccountName">账户名</string>
@@ -37,7 +37,7 @@
     <!--Backup-->
     <string name="Backup_Intro_Title">备份</string>
     <string name="Backup_Intro_TitleShow">显示密钥</string>
-    <string name="Backup_Intro_Subtitle">The private key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.\n\nThe coins controlled by this key: %s.</string>
+    <string name="Backup_Intro_Subtitle">如果您的手机出现丢失、被盗或损坏等情况，那么在下一步显示的私钥将是恢复您资金的唯一方法。\n\n确保不会有任何人看到您的屏幕。\n\n此密钥控制的代币：%s</string>
     <string name="Backup_Intro_Later">稍后</string>
     <string name="Backup_Intro_BackupNow">备份</string>
     <string name="Backup_DisplayTitle">私钥</string>
@@ -111,7 +111,7 @@
     <string name="Deposit_Your_Account">您的账户</string>
     <string name="Receive_Alert_NotBackedUp_Title">需要备份</string>
     <string name="Receive_Alert_NotBackedUp_Button">备份</string>
-    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the %1$s wallet before you may receive %2$s.</string>
+    <string name="Receive_Alert_NotBackedUp_Description">您必须在接收%1$s之前先备份%2$s钱包。</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">刚才</string>
     <string name="Timestamp_MinAgo">%d分钟前</string>
@@ -227,13 +227,13 @@
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">通知</string>
     <string name="SettingsNotifications_Description">Set price change alerts for the coins you would like to watch.\n\nYou will be alerted when the change in price for the last 24 hours exceeds selected threshold.</string>
-    <string name="SettingsNotifications_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order to be able to receive price change alerts.</string>
+    <string name="SettingsNotifications_NotificationsDisabledWarning">已禁用Unstoppable钱包应用通知。您必须开启通知并允许后台应用刷新才能接收价格变更警报。</string>
     <string name="SettingsNotifications_TurnOn">在设置中开启</string>
     <string name="SettingsNotifications_Off">关</string>
     <string name="SettingsNotifications_DeactivateAll">全部停用</string>
     <string name="Notification_Notifications">通知 %s</string>
-    <string name="Notification_Up">Up</string>
-    <string name="Notification_Down">Down</string>
+    <string name="Notification_Up">上</string>
+    <string name="Notification_Down">下</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android密钥库错误</string>
     <string name="Alert_KeysInvalidatedDescription">因为您的Android锁定屏幕已被更改，所以保存您钱包的加密数据目前已失效。</string>
@@ -297,7 +297,7 @@
     <string name="ManageKeys_Show">显示</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">删除钱包</string>
-    <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s wallet from this device.</string>
+    <string name="ManageKeys_Delete_ConfirmationRemove">该操作将从此设备删除%s 钱包。</string>
     <string name="ManageKeys_Delete_ConfirmationDisable">将被禁用的代币：%s</string>
     <string name="ManageKeys_Delete_ConfirmationLose">如果您尚未对此钱包备份私钥，您将失去您的资金。</string>
     <string name="ManageKeys_Delete_FromPhone">从电话删除</string>
