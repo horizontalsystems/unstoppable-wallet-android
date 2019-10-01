@@ -38,7 +38,7 @@ En cas de perte ou de remplacement d'un appareil, vous pouvez facilement restaur
 
 (4) TOUJOURS EN LIGNE
 
-Accédez à vos fonds de n'importe où et n'importe quand. Unstoppable Wallet a été conçu pour rester en ligne et fonctionnel indépendamment de tout serveur tiers.   
+Accédez à vos fonds de n'importe où et n'importe quand. Unstoppable Wallet a été conçu pour rester en ligne et être fonctionnel indépendamment de tout serveur tiers.   
 
 Aucune entité ne peut à elle seule fermer le portefeuille et provoquer un dysfonctionnement de ses principales caractéristiques. Même l'équipe de Horizontal Systems n'a pas la possibilité d'y toucher.
 
@@ -48,7 +48,7 @@ Utilisez le portefeuille le plus sophistiqué technologiquement et le plus déce
 
 Plus de 2500 heures d'ingénierie sont investies dans ce portefeuille chaque mois. Ce portefeuille fait l'objet d'améliorations constantes et intègre en permanence les dernières innovations des blockchains comme Segwit ou le calculateur de frais de transactions en temps réel.
   
-(6) BEAUTIFUL
+(6) LA BEAUTÉ
 
 Gère la crypto sans complexités. Vous n'avez pas besoin de comprendre les détails techniques qui alimentent les différentes blockchains pour être en mesure de faire des transactions.   
 
@@ -58,16 +58,16 @@ Il est rapide, multilingue et l'aspect ainsi que la convivialité sont parfaitem
 
 (7) OPEN ET PUBLIC
 
-The code powering Unstoppable wallet is fully public and open source enabling anyone to unconditionally copy and reuse its code.
+Le code qui fait tourner Unstoppable Wallet est entièrement public et open source, permettant à quiconque de copier et réutiliser son code sans condition.
 
 https://github.com/horizontalsystems/unstoppable-wallet-ios
 
-(8) SUPPORTED CURRENCIES
+(8) MONNAIES PRISES EN CHARGE
 
 Bitcoin
 Ethereum
 Dash
 Bitcoin Cash
 50+ ERC20 tokens
-(in progress) EOS and EOS based tokens
-(in progress) Binance Token and Binance-based tokens
+(en cours) EOS et tokens basés sur EOS
+(en cours) Binance Token et tokens basés sur Binance
