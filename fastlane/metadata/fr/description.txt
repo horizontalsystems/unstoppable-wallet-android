@@ -28,15 +28,15 @@ You’re the only person with control and access to your crypto finances. La cl�
 
 Restez vraiment confidentiel sans révéler aucune donnée personnelle. Il n'y a pas de comptes, de mails, de numéros de téléphone, de contrôles d'identité ou de serveurs tiers qui stockent vos données.
 
-Unlike most wallets in the market the Unstoppable wallet connects users directly to decentralized blockchains without any restrictions or intermediaries.
+Contrairement à la plupart des portefeuilles sur le marché, Unstoppable Wallet relie les utilisateurs directement aux blockchains décentralisés sans aucune restriction ni intermédiaire.
 
-(3) HIGHLY SECURE
+(3) HAUTEMENT SÉCURISÉ
 
-  Keep your crypto assets safe on your phone using safe storage mechanisms provided by phone's operating system. Your secret keys never leaves your device the device.
+Gardez vos actifs crypto en sécurité sur votre téléphone en utilisant des mécanismes de stockage sûrs fournis par le système d'exploitation du téléphone. Vos clés secrètes ne quittent jamais votre appareil.
 
-  In case of a device loss or replacement you may easily restore your wallet using Secret Key. Unstoppable makes it really easy to switch to another wallet or migrate funds from another wallet.
+En cas de perte ou de remplacement d'un appareil, vous pouvez facilement restaurer votre portefeuille à l'aide de Secret Key. Unstoppable permet de passer facilement d'un portefeuille à un autre ou de transférer des fonds d'un autre portefeuille.
 
- (4) ALWAYS ONLINE
+(4) TOUJOURS EN LIGNE
 
 Access your funds from anywhere at any time.   Unstoppable wallet was engineered to remain online and functional independent of any third party servers.   
 
