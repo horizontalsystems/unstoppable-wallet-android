@@ -35,6 +35,7 @@ class SendAmountFragment(
                 .get(SendAmountPresenter::class.java)
         val presenterView = presenter.view as SendAmountView
         presenter.moduleDelegate = amountModuleDelegate
+        editTxtAmount.requestFocus()
 
         btnMax.setOnClickListener { presenter.onMaxClick() }
         btnSwitch.setOnClickListener { presenter.onSwitchClick() }
