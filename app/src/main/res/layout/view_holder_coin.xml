@@ -19,7 +19,7 @@
         android:clipChildren="true"
         android:paddingStart="12dp"
         android:paddingTop="8dp"
-        android:paddingEnd="13dp"
+        android:paddingEnd="8dp"
         android:paddingBottom="10dp">
 
         <!-- first line -->
@@ -75,6 +75,8 @@
             style="@style/Subhead2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingStart="0dp"
+            android:paddingEnd="4dp"
             android:textColor="?BallanceCoinAmountColor"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/textCoinName"
@@ -150,6 +152,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:includeFontPadding="false"
+            android:paddingStart="0dp"
+            android:paddingEnd="4dp"
             android:textColor="?ColorJacob"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -161,6 +165,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:includeFontPadding="false"
+            android:paddingStart="0dp"
+            android:paddingEnd="4dp"
             android:textColor="?ColorLucian"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -174,9 +180,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingStart="7dp"
+        android:paddingStart="8dp"
         android:paddingTop="2dp"
-        android:paddingEnd="9dp"
+        android:paddingEnd="8dp"
         android:paddingBottom="8dp"
         android:visibility="visible">
 
