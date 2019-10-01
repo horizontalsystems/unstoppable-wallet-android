@@ -12,7 +12,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/bottom_sheet_floating_background"
-        android:backgroundTint="?attr/BottomSheetBackground"
+        android:backgroundTint="?attr/ColorLawrence"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
