@@ -26,6 +26,10 @@ class SendAddressFragment(
 
         super.onViewCreated(view, savedInstanceState)
 
+        btnBarcodeScan.visibility = View.VISIBLE
+        btnPaste.visibility = View.VISIBLE
+        btnDeleteAddress.visibility = View.GONE
+
         val presenter = ViewModelProviders.of(this, SendAddressModule.Factory(coin, sendHandler))
                 .get(SendAddressPresenter::class.java)
         val presenterView = presenter.view as SendAddressView
