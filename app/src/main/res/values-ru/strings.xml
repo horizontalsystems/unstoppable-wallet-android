@@ -10,20 +10,20 @@
     <string name="Alert_Success">Успешно</string>
     <string name="Alert_Copied">Скопировано</string>
     <string name="Button_Cancel">Отменить</string>
-    <string name="Button_Create">Create</string>
+    <string name="Button_Create">Создать</string>
     <string name="Button_Back">Назад</string>
     <string name="Button_Close">Закрыть</string>
     <string name="Button_Ok">Хорошо</string>
     <string name="Button_Share">Поделиться</string>
     <string name="Error">Ошибка</string>
     <string name="NotAvailable">Нет данных</string>
-    <string name="Wallet">%s wallet</string>
+    <string name="Wallet">%s Кошелек</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
     <string name="Welcome_CreateWallet">Создать Кошелек</string>
     <string name="Welcome_RestoreWallet">Восстановить Кошелек</string>
     <!--Create-->
-    <string name="Create_Title">New Wallet</string>
+    <string name="Create_Title">Создать Кошелек</string>
     <string name="Create_Description">Select one cryptocurrency to start. You will be able to add other cryptocurrencies later.</string>
     <!--Restore-->
     <string name="Restore_Title">Восстановить</string>
@@ -40,7 +40,7 @@
     <string name="Backup_Intro_Subtitle">The private key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.\n\nThe coins controlled by this key: %s.</string>
     <string name="Backup_Intro_Later">Позже</string>
     <string name="Backup_Intro_BackupNow">Резервная копия</string>
-    <string name="Backup_DisplayTitle">Private Key</string>
+    <string name="Backup_DisplayTitle">Приватный Ключ</string>
     <string name="Backup_Confirmation_SecretKey">Я понимаю, что я единственный владелец  Секретного Ключа, который надежно хранится на моем телефоне и позволяет мне контролировать средства в моем кошельке.</string>
     <string name="Backup_Confirmation_DeleteAppWarn">Я понимаю, что если это приложение удаляется или устанавливается на другое устройство, мой кошелек можно восстановить только с помощью Секретного Ключа.</string>
     <string name="Backup_Confirmation_LockAppWarn">Я понимаю, что изменение ПИН-кода телефона или удаление данных приложения в настройках Android удалит секретный ключ с устройства. Мне нужно повторно ввести мой секретный ключ, чтобы восстановить доступ к моему кошельку.</string>
@@ -183,7 +183,7 @@
     <!--Settings-->
     <string name="Settings_Title">Настройки</string>
     <string name="Settings_SecurityCenter">Центр Безопасности</string>
-    <string name="Settings_Notifications">Notifications</string>
+    <string name="Settings_Notifications">Уведомления </string>
     <string name="Settings_ManageCoins">Управление Кошельками</string>
     <string name="Settings_RestoreWallet">Восстановить Кошелек</string>
     <string name="Settings_BaseCurrency">Базовая Валюта</string>
@@ -225,13 +225,13 @@
     <string name="SettingsReport_Email">Эл. почта</string>
     <string name="SettingsReport_Telegram">Telegram </string>
     <!--Setting_Notifications-->
-    <string name="SettingsNotifications_Title">Notifications</string>
+    <string name="SettingsNotifications_Title">Уведомления </string>
     <string name="SettingsNotifications_Description">Set price change alerts for the coins you would like to watch.\n\nYou will be alerted when the change in price for the last 24 hours exceeds selected threshold.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order to be able to receive price change alerts.</string>
     <string name="SettingsNotifications_TurnOn">Turn on in Settings</string>
-    <string name="SettingsNotifications_Off">Off</string>
+    <string name="SettingsNotifications_Off">Выкл.</string>
     <string name="SettingsNotifications_DeactivateAll">Deactivate All</string>
-    <string name="Notification_Notifications">Notifications %s</string>
+    <string name="Notification_Notifications">Уведомления %s</string>
     <string name="Notification_Up">Up</string>
     <string name="Notification_Down">Down</string>
     <!--Alert-->
@@ -284,7 +284,7 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">Валюты</string>
     <string name="ManageCoins_save">Сохранить</string>
-    <string name="ManageCoins_AddCoin_Title">Add Wallet</string>
+    <string name="ManageCoins_AddCoin_Title">Добавить Кошелек</string>
     <string name="ManageCoins_AddCoin_Text">This action will generate a new wallet for the following coins: %s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">В данный момент кошелек не может создать новые учетные записи EOS. Вы можете восстановить существующий.</string>
     <!--Manage Keys-->
@@ -296,15 +296,15 @@
     <string name="ManageKeys_Backup">Резерв. копия</string>
     <string name="ManageKeys_Show">Показать</string>
     <!--Manage Keys Delete Alert-->
-    <string name="ManageKeys_Delete_Title">Delete Wallet</string>
-    <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s wallet from this device.</string>
+    <string name="ManageKeys_Delete_Title">Удалить Кошелек</string>
+    <string name="ManageKeys_Delete_ConfirmationRemove">Это действие удалит ваш %s кошелек с этого устройства.</string>
     <string name="ManageKeys_Delete_ConfirmationDisable">Монеты, которые будут отключены: %s</string>
     <string name="ManageKeys_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to your funds.</string>
     <string name="ManageKeys_Delete_FromPhone">Удалить с устройства</string>
     <string name="ManageKeys_Delete_Alert_Title">Необходима Резервная Копия</string>
     <string name="ManageKeys_Delete_Alert">You need to backup the private key before it can be deleted from this phone.</string>
     <!-- Manage Keys Alert -->
-    <string name="AddCoin_Title">Add %s</string>
+    <string name="AddCoin_Title">Добавить %s</string>
     <string name="AddCoin_Description">You don\'t have a wallet that can store %1$s. The app can generate a new wallet for you. Use the Create button below to generate a new wallet.\n\nYou will be able to use the new wallet for the following coins: %2$s.\n\nYou may also use the existing %3$s wallet key if you have one. Use the restore button for that.</string>
     <string name="AddCoin_CreateKey">Создать</string>
     <string name="AddCoin_RestoreKey">Восстановить</string>
