@@ -38,25 +38,25 @@ En cas de perte ou de remplacement d'un appareil, vous pouvez facilement restaur
 
 (4) TOUJOURS EN LIGNE
 
-Accédez à vos fonds de n'importe où et n'importe quand.   Unstoppable wallet was engineered to remain online and functional independent of any third party servers.   
+Accédez à vos fonds de n'importe où et n'importe quand. Unstoppable Wallet a été conçu pour rester en ligne et fonctionnel indépendamment de tout serveur tiers.   
 
-No single entity can take the wallet down and cause it's main features to malfunction. Not even the Horizontal Systems team able to interfere with it.
+Aucune entité ne peut à elle seule fermer le portefeuille et provoquer un dysfonctionnement de ses principales caractéristiques. Même l'équipe de Horizontal Systems n'a pas la possibilité d'y toucher.
 
-(5) ADVANCED & AHEAD
+(5) À LA POINTE ET EN AVANCE SUR SON TEMPS
 
-Use the most technologically advanced and decentralized wallet ever built.   It’s the only mobile wallet that implements all major blockchains in a fully decentralized manner.
+Utilisez le portefeuille le plus sophistiqué technologiquement et le plus décentralisé jamais construit. C'est le seul portefeuille mobile qui implémente toutes les principales blockchains d'une manière totalement décentralisée.
 
-Over 2500 engineering hours being put into this wallet every month. This wallet is being constantly improved further and continuously integrates latest enhancements in all blockchains such as segwit or real-time transaction fee estimator.
+Plus de 2500 heures d'ingénierie sont investies dans ce portefeuille chaque mois. Ce portefeuille fait l'objet d'améliorations constantes et intègre en permanence les dernières innovations des blockchains comme Segwit ou le calculateur de frais de transactions en temps réel.
   
-(6) BEAUTIFUL  
+(6) BEAUTIFUL
 
-Deal with crypto without complexitites. You don’t need to understand technicalities powering different blockchains to be able to transact with them.   
+Gère la crypto sans complexités. Vous n'avez pas besoin de comprendre les détails techniques qui alimentent les différentes blockchains pour être en mesure de faire des transactions.   
 
-This wallet keeps complexities under the hood giving you a straightforward user interface to the world of blockchains.
+Ce portefeuille garde les complexités sous le capot, ce qui vous donne une interface utilisateur simple et directe avec le monde des blockchains.
 
-It’s fast, multi-lingual and highly customizable when it comes to the look and feel.   Don’t take our word for it, give it a try yourself.  
+Il est rapide, multilingue et l'aspect ainsi que la convivialité sont parfaitement personnalisables. Ne nous croyez pas sur parole, essayez-le vous-même.
 
-(7) OPEN & PUBLIC 
+(7) OPEN ET PUBLIC
 
 The code powering Unstoppable wallet is fully public and open source enabling anyone to unconditionally copy and reuse its code.
 
