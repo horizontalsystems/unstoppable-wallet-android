@@ -45,7 +45,7 @@
     <string name="Backup_Confirmation_DeleteAppWarn">Ich stimme zu, dass bei einer Verschiebung oder Entfernung dieser App, der Zugang zu meinem Walletkonto nur bei Verwendung den Offlineschlüsseln erfolgt werden muss.</string>
     <string name="Backup_Confirmation_LockAppWarn">Ich stimme zu, dass das Ändern der PIN oder das Löschen von App-Daten in Android-Einstellungen den Offlineschlüssel vom Gerät löschen. Ich muss meinen Geheimschlüssel erneut eingeben, um den Zugriff auf meine Wallet wiederherzustellen.</string>
     <string name="Backup_Confirmation_Disclaimer">Ich stimme zu, dass Entwickler dieser App nicht für unbeabsichtigte Fehler oder Probleme verantwortlich gemacht werden können, die bei der Verwendung dieser App auftreten können.</string>
-    <string name="Backup_Confirmation_Description">Enter words from your private key.</string>
+    <string name="Backup_Confirmation_Description">Geben Sie die Worte Ihres privaten Schlüssels ein.</string>
     <string name="Backup_Confirmation_FailureAlertText">Die Wörter stimmen nicht überein</string>
     <string name="Backup_Confirmation_CheckTitle">Prüfen…</string>
     <string name="Backup_Button_Confirm">Bestätigen</string>
@@ -111,7 +111,7 @@
     <string name="Deposit_Your_Account">Dein Konto</string>
     <string name="Receive_Alert_NotBackedUp_Title">Backup erforderlich</string>
     <string name="Receive_Alert_NotBackedUp_Button">Sicherung</string>
-    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the %1$s wallet before you may receive %2$s.</string>
+    <string name="Receive_Alert_NotBackedUp_Description">Sie müssen das %1$s Wallet sichern, bevor Sie %2$s erhalten können.</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">gerade eben</string>
     <string name="Timestamp_MinAgo">Vor %d Min</string>
@@ -264,7 +264,7 @@
     <string name="Fingerprint_Success">Erfolgreich!</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Deaktiviert bis: %s </string>
-    <string name="UnlockPin_Error_PinIncorrect">Incorrect</string>
+    <string name="UnlockPin_Error_PinIncorrect">Falsch</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">Telefon PIN</string>
     <string name="OSPin_Confirm_Desciption">Diese App erfordert, dass Zugangsperre (Bildschirmsperre) aktiviert ist.
@@ -305,10 +305,10 @@
     <string name="ManageKeys_Delete_ConfirmationLose">Wenn Sie den privaten Schlüssel für dieses Wallet nicht gesichert haben, verlieren Sie den Zugang zu Ihrem Guthaben.</string>
     <string name="ManageKeys_Delete_FromPhone">Von Telefon löschen</string>
     <string name="ManageKeys_Delete_Alert_Title">Backup erforderlich</string>
-    <string name="ManageKeys_Delete_Alert">You need to backup the private key before it can be deleted from this phone.</string>
+    <string name="ManageKeys_Delete_Alert">Sie müssen den privaten Schlüssel für dieses Wallet sichern, bevor Sie es von diesem Telefon löschen können.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">%s hinzufügen</string>
-    <string name="AddCoin_Description">You don\'t have a wallet that can store %1$s. The app can generate a new wallet for you. Use the Create button below to generate a new wallet.\n\nYou will be able to use the new wallet for the following coins: %2$s.\n\nYou may also use the existing %3$s wallet key if you have one. Use the restore button for that.</string>
+    <string name="AddCoin_Description">Sie haben kein Wallet, das %1$s speichern kann. Die App kann ein neues Wallet für Sie anlegen. Nutzen Sie den \"Erstellen Button\" unten, um ein neues Wallet anzulegen.\n\nSie können das Wallet für die folgenden Coins verwenden: %2$s.\n\nSie können auch den bestehenden %3$s Wallet-Schlüssel nehmen, wenn Sie einen besitzen. Nutzen sie den Button \"Wiederherstellen\" dafür.</string>
     <string name="AddCoin_CreateKey">Erstellen</string>
     <string name="AddCoin_RestoreKey">Wiederherstellen</string>
     <!-- Account Types -->
