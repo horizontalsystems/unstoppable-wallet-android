@@ -14,7 +14,7 @@ object ManageWalletsModule {
 
     interface IView {
         fun updateCoins()
-        fun showNoAccountDialog(coin: Coin, accountKeyName: Int)
+        fun showNoAccountDialog(coin: Coin, predefinedAccountType: IPredefinedAccountType)
         fun showSuccess()
         fun showError(e: Exception)
     }

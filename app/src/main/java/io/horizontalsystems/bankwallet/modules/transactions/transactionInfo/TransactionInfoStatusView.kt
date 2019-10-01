@@ -56,11 +56,11 @@ open class TransactionInfoStatusView : ConstraintLayout {
     }
 
     private fun fillProgress(transactionStatus: TransactionStatus.Processing) {
-        val bars = listOf(progressBar1, progressBar2, progressBar3, progressBar4, progressBar5, progressBar6)
+        val bars = listOf(progressBar1, progressBar2, progressBar3)
         val filledBars = bars.size * transactionStatus.progress
 
         bars.forEachIndexed { index, bar ->
-            bar.setImageResource(if (filledBars > 0.0 && index <= filledBars)
+            bar.setImageResource(if (filledBars > 0.0 && index < filledBars)
                 R.drawable.status_progress_bar_green else
                 R.drawable.status_progress_bar_grey)
         }

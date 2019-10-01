@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.AccountType
 
 class PredefinedAccountTypeManager(private val appConfigProvider: IAppConfigProvider, private val accountManager: IAccountManager, private val accountCreator: IAccountCreator)
     : IPredefinedAccountTypeManager {
@@ -17,12 +18,7 @@ class PredefinedAccountTypeManager(private val appConfigProvider: IAppConfigProv
         return accountCreator.createNewAccount(predefinedAccountType.defaultAccountType, createDefaultWallets = true)
     }
 
-    override fun createAllAccounts() {
-        allTypes.forEach { predefinedAccountType ->
-            try {
-                createAccount(predefinedAccountType)
-            } catch (e: Exception) {
-            }
-        }
+    override fun predefinedAccountType(type: AccountType): IPredefinedAccountType? {
+        return allTypes.firstOrNull { it.supports(type) }
     }
 }

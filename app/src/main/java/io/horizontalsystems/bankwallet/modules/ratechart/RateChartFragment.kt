@@ -14,7 +14,7 @@ import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
-import io.horizontalsystems.bankwallet.lib.chartview.models.DataPoint
+import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import kotlinx.android.synthetic.main.view_bottom_sheet_chart.*
 import java.math.BigDecimal
@@ -81,11 +81,12 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
 
         presenterView.showChart.observe(viewLifecycleOwner, Observer { item ->
             chartView.visibility = View.VISIBLE
-            chartView.setData(item.chartData)
+            chartView.setData(item.chartData, item.type)
+            chartSubtitle.text = item.lastUpdateTimestamp?.let { DateHelper.getFullDateWithShortMonth(it) }
 
             val diffColor = if (item.diffValue < BigDecimal.ZERO)
-                resources.getColor(R.color.red_warning) else
-                resources.getColor(R.color.green_crypto)
+                resources.getColor(R.color.red_d) else
+                resources.getColor(R.color.green_d)
 
             coinRateDiff.setTextColor(diffColor)
             coinRateDiff.text = App.numberFormatter.format(item.diffValue.toDouble(), showSign = true, precision = 2) + "%"
@@ -103,7 +104,7 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
         presenterView.setSelectedPoint.observe(viewLifecycleOwner, Observer { (time, value, type) ->
             val outputFormat = when (type) {
                 ChartType.DAILY,
-                ChartType.WEEKLY -> "MMM d, yyyy 'at' hh:mm a"
+                ChartType.WEEKLY -> "MMM d, yyyy 'at' HH:mm a"
                 else -> "MMM d, yyyy"
             }
             pointInfoPrice.text = formatter.format(value, canUseLessSymbol = false)
@@ -143,7 +144,7 @@ class RateChartFragment(private val coin: Coin) : BottomSheetDialogFragment(), C
         setViewVisibility(chartActions, isVisible = true)
     }
 
-    override fun onTouchSelect(point: DataPoint) {
+    override fun onTouchSelect(point: ChartPoint) {
         presenter.onTouchSelect(point)
     }
 

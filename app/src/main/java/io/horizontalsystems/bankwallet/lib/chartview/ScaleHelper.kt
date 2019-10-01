@@ -1,32 +1,40 @@
 package io.horizontalsystems.bankwallet.lib.chartview
 
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartConfig
+import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
 import java.math.BigDecimal
 import java.math.BigDecimal.*
 import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 
 class ScaleHelper(private val config: ChartConfig) {
     private val gridLines = 5
     private val maxScale = 4
     private val topBottomPadding = 0.05F
 
-    fun scale(points: List<Float>) {
-        val min = points.min() ?: 0f
-        val max = points.max() ?: 0f
+    fun scale(points: List<ChartPoint>) {
+        var minValue = Float.MAX_VALUE
+        var maxValue = Float.MIN_VALUE
 
-        var valueDelta = max - min
-        if (valueDelta == 0f) {
-            valueDelta = max
+        for (point in points) {
+            minValue = min(point.value, minValue)
+            maxValue = max(point.value, maxValue)
         }
 
-        val valueMax = max + valueDelta * topBottomPadding
-        val valueMin = min - valueDelta * topBottomPadding
+        var valueDelta = maxValue - minValue
+        if (valueDelta == 0f) {
+            valueDelta = maxValue
+        }
+
+        val valueMax = maxValue + valueDelta * topBottomPadding
+        val valueMin = minValue - valueDelta * topBottomPadding
 
         val valuePrecision = setScale(valueMax.toBigDecimal(), valueMin.toBigDecimal())
         val valueTop = ceil(valueMax, valuePrecision)
         val valueStep = ceil((valueTop - valueMin) / (gridLines - 1), valuePrecision)
 
-        config.valuePrecision = Math.max(valuePrecision, 0)
+        config.valuePrecision = max(valuePrecision, 0)
         config.valueTop = valueTop
         config.valueStep = valueStep
     }

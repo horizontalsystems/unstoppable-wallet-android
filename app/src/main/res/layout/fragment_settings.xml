@@ -1,26 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <io.horizontalsystems.bankwallet.ui.extensions.ShadowlessToolbarView
-        android:id="@+id/shadowlessToolbar"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:background="@color/transparent"
+        app:elevation="0dp">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/app_bar_height_tall"
+            app:collapsedTitleTextAppearance="@style/Title3"
+            app:elevation="0dp"
+            app:expandedTitleMarginBottom="16dp"
+            app:expandedTitleMarginStart="16dp"
+            app:expandedTitleTextAppearance="@style/Title2"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:layout_scrollFlags="scroll|enterAlways|snap"
+                app:title="@string/Settings_Title" />
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shadowlessToolbar">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:clipToPadding="false">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -53,19 +73,30 @@
                 android:id="@+id/bottomShade_1"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="?SettingsSectionBottomShadeColor"
+                android:background="@color/steel_20"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/manageCoins" />
 
             <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
-                android:id="@+id/baseCurrency"
+                android:id="@+id/notifications"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/manageCoins"
+                app:setting_arrow="true"
+                app:setting_icon="@drawable/ic_notification"
+                app:setting_title="@string/Settings_Notifications" />
+
+            <io.horizontalsystems.bankwallet.modules.settings.SettingsItemView
+                android:id="@+id/baseCurrency"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/notifications"
                 app:setting_arrow="true"
                 app:setting_icon="@drawable/ic_currency"
                 app:setting_title="@string/Settings_BaseCurrency" />
@@ -95,7 +126,7 @@
                 android:id="@+id/bottomShade_2"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="?SettingsSectionBottomShadeColor"
+                android:background="@color/steel_20"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lightMode" />
@@ -136,14 +167,14 @@
                 android:id="@+id/bottomShade_3"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="?SettingsSectionBottomShadeColor"
+                android:background="@color/steel_20"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/report" />
 
             <TextView
                 android:id="@+id/appName"
-                style="@style/CaptionRegular"
+                style="@style/Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
@@ -166,7 +197,7 @@
 
             <TextView
                 android:id="@+id/decentralizedAppBy"
-                style="@style/CaptionRegular"
+                style="@style/Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3.5dp"
@@ -194,4 +225,4 @@
 
     </androidx.core.widget.NestedScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

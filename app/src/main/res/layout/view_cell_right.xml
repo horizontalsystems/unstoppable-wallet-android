@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/cellTitle"
+        style="@style/Body"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textColor="?TextColorBarsToDark"
+        tools:text="Label" />
+
+    <ImageView
+        android:id="@+id/lightModeIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:tint="?ColorJacob"
+        app:layout_constraintEnd_toStartOf="@+id/downIcon"
+        app:srcCompat="@drawable/ic_light_mode" />
+
+    <ImageView
+        android:id="@+id/downIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:tint="@color/grey"
+        app:layout_constraintEnd_toStartOf="@+id/arrowIcon"
+        app:srcCompat="@drawable/ic_down" />
+
+    <ImageView
+        android:id="@+id/arrowIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:tint="?ColorJacob"
+        app:layout_constraintEnd_toStartOf="@+id/checkIcon"
+        app:srcCompat="@drawable/ic_right_arrrow" />
+
+    <ImageView
+        android:id="@+id/checkIcon"
+        android:layout_width="18dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="16dp"
+        android:tint="?ColorJacob"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_checkmark" />
+
+
+
+</LinearLayout>

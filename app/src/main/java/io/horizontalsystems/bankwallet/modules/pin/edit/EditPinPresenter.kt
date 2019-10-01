@@ -4,30 +4,31 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.pin.ManagePinPresenter
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.pin.PinPage
+import io.horizontalsystems.bankwallet.modules.pin.TopText
 
-class EditPinPresenter(interactor: PinModule.IPinInteractor, private val router: EditPinModule.IEditPinRouter)
-    : ManagePinPresenter(interactor, pages = listOf(Page.UNLOCK, Page.ENTER, Page.CONFIRM)) {
+class EditPinPresenter(
+        override val view: PinModule.IView,
+        val router: EditPinModule.IRouter,
+        interactor: PinModule.IInteractor)
+    : ManagePinPresenter(view, interactor, pages = listOf(Page.UNLOCK, Page.ENTER, Page.CONFIRM)) {
 
     override fun viewDidLoad() {
-        view?.setTitle(R.string.EditPin_Title)
+        view.setTitle(R.string.EditPin_Title)
         val pinPages = mutableListOf<PinPage>()
 
         pages.forEach { page ->
             when (page) {
-                Page.UNLOCK -> pinPages.add(PinPage(R.string.EditPin_UnlockInfo))
-                Page.ENTER -> pinPages.add(PinPage(R.string.EditPin_NewPinInfo))
-                Page.CONFIRM -> pinPages.add(PinPage(R.string.SetPin_ConfirmInfo))
+                Page.UNLOCK -> pinPages.add(PinPage(TopText.Description(R.string.EditPin_UnlockInfo)))
+                Page.ENTER -> pinPages.add(PinPage(TopText.Description(R.string.EditPin_NewPinInfo)))
+                Page.CONFIRM -> pinPages.add(PinPage(TopText.Description(R.string.SetPin_ConfirmInfo)))
             }
         }
-        view?.addPages(pinPages)
-        view?.showBackButton()
+        view.addPages(pinPages)
+        view.showBackButton()
     }
 
     override fun didSavePin() {
         router.dismissModuleWithSuccess()
     }
 
-    override fun onBackPressed() {
-        router.dismissModuleWithCancel()
-    }
 }

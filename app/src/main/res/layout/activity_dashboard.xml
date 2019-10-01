@@ -23,14 +23,6 @@
         android:background="#99000000"
         />
 
-    <View
-        android:id="@+id/screenHide"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:background="?ScreenHideColor"
-        />
-
     <androidx.core.widget.NestedScrollView
         android:id="@+id/receiveNestedScrollView"
         android:layout_width="match_parent"

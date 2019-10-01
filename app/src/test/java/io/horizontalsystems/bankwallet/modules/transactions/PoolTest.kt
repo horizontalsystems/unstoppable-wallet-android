@@ -1,9 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
 import com.nhaarman.mockito_kotlin.*
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.Wallet
 import org.junit.Assert
 import org.junit.Test
 import org.mockito.Mockito.mock
@@ -12,11 +11,10 @@ class PoolTest {
 
     private val state = mock(Pool.State::class.java)
     private val pool = Pool(state)
-    private val coin = mock(Coin::class.java)
+    private val wallet = mock(Wallet::class.java)
 
     @Test
     fun allShown() {
-        whenever(coin.type).thenReturn(mock(CoinType.Bitcoin::class.java))
         whenever(state.allLoaded).thenReturn(true)
         whenever(state.unusedRecords).thenReturn(listOf())
 
@@ -58,10 +56,10 @@ class PoolTest {
     }
 
     @Test
-    fun coinCode() {
-        whenever(state.coin).thenReturn(coin)
+    fun wallet() {
+        whenever(state.wallet).thenReturn(wallet)
 
-        Assert.assertEquals(coin, pool.coin)
+        Assert.assertEquals(wallet, pool.wallet)
     }
 
     @Test
@@ -110,11 +108,11 @@ class PoolTest {
         whenever(unusedRecords.size).thenReturn(unusedRecordsSize)
         whenever(state.allLoaded).thenReturn(false)
         whenever(state.unusedRecords).thenReturn(unusedRecords)
-        whenever(state.coin).thenReturn(coin)
+        whenever(state.wallet).thenReturn(wallet)
         whenever(state.records).thenReturn(mutableListOf(mock(TransactionRecord::class.java), lastRecord))
         whenever(lastRecord.transactionHash).thenReturn(lastRecordHash)
 
-        val fetchData = TransactionsModule.FetchData(coin, fromPair, limit - unusedRecordsSize + 1)
+        val fetchData = TransactionsModule.FetchData(wallet, fromPair, limit - unusedRecordsSize + 1)
 
         Assert.assertEquals(fetchData, pool.getFetchData(limit))
     }
@@ -128,10 +126,10 @@ class PoolTest {
         whenever(unusedRecords.size).thenReturn(unusedRecordsSize)
         whenever(state.allLoaded).thenReturn(false)
         whenever(state.unusedRecords).thenReturn(unusedRecords)
-        whenever(state.coin).thenReturn(coin)
+        whenever(state.wallet).thenReturn(wallet)
         whenever(state.records).thenReturn(mutableListOf())
 
-        val fetchData = TransactionsModule.FetchData(coin, null, limit - unusedRecordsSize + 1)
+        val fetchData = TransactionsModule.FetchData(wallet, null, limit - unusedRecordsSize + 1)
 
         Assert.assertEquals(fetchData, pool.getFetchData(limit))
     }

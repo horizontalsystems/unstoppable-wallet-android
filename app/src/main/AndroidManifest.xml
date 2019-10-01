@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
 
     <application
@@ -19,7 +20,6 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".modules.launcher.LauncherActivity"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".modules.syncmodule.SyncModeActivity"
+            android:name="io.horizontalsystems.bankwallet.modules.restore.options.RestoreOptionsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.backup.BackupActivity"
@@ -39,13 +39,16 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
+            android:name=".modules.createwallet.CreateWalletActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".modules.main.MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".modules.send.SendActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateVisible"/>
+            android:windowSoftInputMode="stateVisible|adjustResize"/>
         <activity
             android:name=".modules.restore.words.RestoreWordsActivity"
             android:screenOrientation="portrait" />
@@ -68,7 +71,13 @@
             android:name=".modules.settings.AboutSettingsActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".modules.notifications.NotificationsActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".modules.reportproblem.ReportProblemActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".modules.lockscreen.LockScreenActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".modules.pin.PinActivity"

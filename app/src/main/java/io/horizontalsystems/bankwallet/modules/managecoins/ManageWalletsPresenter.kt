@@ -121,7 +121,7 @@ class ManageWalletsPresenter(private val interactor: ManageWalletsModule.IIntera
             currentItem = item
             val accountType = getPredefinedAccountType(coin.type.defaultAccountType)
             accountType?.let {
-                view?.showNoAccountDialog(coin, it.title)
+                view?.showNoAccountDialog(coin, it)
             }
         } else {
             item.wallet = wallet

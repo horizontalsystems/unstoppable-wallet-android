@@ -1,21 +1,27 @@
 package io.horizontalsystems.bankwallet.modules.settings.language
 
+import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.ILanguageManager
 
-class LanguageSettingsInteractor(private val languageManager: ILanguageManager): LanguageSettingsModule.ILanguageSettingsInteractor {
+class LanguageSettingsInteractor(
+        private val languageManager: ILanguageManager,
+        private val appConfigProvider: IAppConfigProvider
+) : LanguageSettingsModule.ILanguageSettingsInteractor {
 
-    var delegate: LanguageSettingsModule.ILanguageSettingsInteractorDelegate? = null
-
-    override var items: List<LanguageItem> = listOf()
-        get() {
-            val currentLanguage = languageManager.currentLanguage
-            return languageManager.availableLanguages.map { locale ->
-                LanguageItem(locale, currentLanguage.language == locale.language)
-            }
+    override var currentLanguage: String
+        get() = languageManager.currentLanguage
+        set(value) {
+            languageManager.currentLanguage = value
         }
 
-    override fun setCurrentLanguage(item: LanguageItem) {
-        languageManager.currentLanguage = item.locale
-        delegate?.didSetCurrentLanguage()
+    override val availableLanguages: List<String>
+        get() = appConfigProvider.localizations
+
+    override fun getName(language: String): String {
+        return languageManager.getName(language)
+    }
+
+    override fun getNativeName(language: String): String {
+        return languageManager.getNativeName(language)
     }
 }

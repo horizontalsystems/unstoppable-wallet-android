@@ -30,7 +30,7 @@
 
     <TextView
         android:id="@+id/chartTitle"
-        style="@style/BaseSb"
+        style="@style/Headline2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
@@ -41,6 +41,18 @@
         app:layout_constraintStart_toEndOf="@+id/chartCoinIcon"
         app:layout_constraintTop_toTopOf="@+id/chartCoinIcon"
         tools:text="Bitcoin Rate" />
+
+    <TextView
+        android:id="@+id/chartSubtitle"
+        style="@style/Subhead2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:includeFontPadding="false"
+        android:textColor="@color/grey"
+        app:layout_constraintLeft_toLeftOf="@id/chartTitle"
+        app:layout_constraintTop_toBottomOf="@id/chartTitle"
+        tools:text="Subtitle" />
 
     <ImageView
         android:id="@+id/closeButton"
@@ -60,11 +72,11 @@
         android:id="@+id/border1"
         android:layout_width="0dp"
         android:layout_height="0.5dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/steel_15"
+        android:layout_marginTop="12dp"
+        android:background="@color/steel_20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chartCoinIcon" />
+        app:layout_constraintTop_toBottomOf="@+id/chartSubtitle" />
 
     <LinearLayout
         android:id="@+id/coinRateWrap"
@@ -80,7 +92,7 @@
 
         <TextView
             android:id="@+id/coinRateLast"
-            style="@style/BaseSb"
+            style="@style/Headline2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="?BottomDialogTextColor"
@@ -89,11 +101,11 @@
 
         <TextView
             android:id="@+id/coinRateDiff"
-            style="@style/BaseSb"
+            style="@style/Headline2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:textColor="@color/red_warning"
+            android:textColor="@color/red_d"
             android:textSize="12sp"
             tools:text="-18" />
 
@@ -103,7 +115,7 @@
         android:id="@+id/border2"
         android:layout_width="0dp"
         android:layout_height="0.5dp"
-        android:background="@color/steel_15"
+        android:background="@color/steel_20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/coinRateWrap" />
@@ -194,7 +206,7 @@
 
         <TextView
             android:id="@+id/pointInfoPrice"
-            style="@style/BaseMedium"
+            style="@style/Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
@@ -337,11 +349,11 @@
 
         <TextView
             android:id="@+id/chartError"
-            style="@style/BaseSb"
+            style="@style/Headline2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:textColor="@color/red_warning" />
+            android:textColor="@color/red_d" />
 
         <io.horizontalsystems.bankwallet.lib.chartview.ChartIndicator
             android:id="@+id/chartViewIndicator"
@@ -353,11 +365,11 @@
             android:id="@+id/chartView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:fallColor="@color/red_warning"
-            app:growColor="@color/green_crypto"
-            app:indicatorColor="?AlertTextColor"
+            app:fallColor="@color/red_d"
+            app:growColor="@color/green_d"
+            app:indicatorColor="?ColorOz"
             app:textColor="@color/grey"
-            app:touchColor="?AlertTextColor" />
+            app:touchColor="?ColorOz" />
 
     </RelativeLayout>
 

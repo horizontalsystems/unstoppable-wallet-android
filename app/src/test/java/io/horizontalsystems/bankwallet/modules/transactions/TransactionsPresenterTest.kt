@@ -24,12 +24,18 @@ class TransactionsPresenterTest {
     private val coin1 = mock(Coin::class.java)
     private val coin2 = mock(Coin::class.java)
 
+    private val wallet1 = mock(Wallet::class.java)
+    private val wallet2 = mock(Wallet::class.java)
+
     private lateinit var presenter: TransactionsPresenter
 
     @Before
     fun before() {
         presenter = TransactionsPresenter(interactor, router, factory, loader, metadataDataSource)
         presenter.view = view
+
+        whenever(wallet1.coin).thenReturn(coin1)
+        whenever(wallet2.coin).thenReturn(coin2)
     }
 
     @Test
@@ -54,15 +60,19 @@ class TransactionsPresenterTest {
 
         whenever(transactionRecord.timestamp).thenReturn(timestamp)
         whenever(transactionItem.record).thenReturn(transactionRecord)
-        whenever(transactionItem.coin).thenReturn(coin1)
+        whenever(transactionItem.wallet).thenReturn(wallet1)
         whenever(loader.itemForIndex(index)).thenReturn(transactionItem)
-        whenever(metadataDataSource.getLastBlockHeight(coin1)).thenReturn(lastBlockHeight)
-        whenever(metadataDataSource.getConfirmationThreshold(coin1)).thenReturn(threshold)
+        whenever(metadataDataSource.getLastBlockHeight(wallet1)).thenReturn(lastBlockHeight)
+        whenever(metadataDataSource.getConfirmationThreshold(wallet1)).thenReturn(threshold)
         whenever(metadataDataSource.getRate(coin1, timestamp)).thenReturn(rateCurrencyValue)
-        whenever(factory.item(transactionItem, lastBlockHeight, threshold, rateCurrencyValue)).thenReturn(viewItem)
+        whenever(factory.item(wallet1, transactionItem, lastBlockHeight, threshold, rateCurrencyValue)).thenReturn(viewItem)
 
-        Assert.assertEquals(viewItem, presenter.itemForIndex(index))
+        val result = presenter.itemForIndex(index)
+
+        verify(factory).item(wallet1, transactionItem, lastBlockHeight, threshold, rateCurrencyValue)
         verify(interactor, never()).fetchRate(coin1, timestamp)
+
+        Assert.assertEquals(viewItem, result)
     }
 
     @Test
@@ -75,7 +85,7 @@ class TransactionsPresenterTest {
         whenever(loader.itemForIndex(index)).thenReturn(transactionItem)
         whenever(transactionRecord.timestamp).thenReturn(timestamp)
         whenever(transactionItem.record).thenReturn(transactionRecord)
-        whenever(transactionItem.coin).thenReturn(coin1)
+        whenever(transactionItem.wallet).thenReturn(wallet1)
         whenever(metadataDataSource.getRate(coin1, timestamp)).thenReturn(null)
 
         presenter.itemForIndex(index)
@@ -100,14 +110,14 @@ class TransactionsPresenterTest {
     fun onFilterSelect_all() {
         presenter.onFilterSelect(null)
 
-        verify(interactor).setSelectedCoinCodes(listOf())
+        verify(interactor).setSelectedWallets(listOf())
     }
 
     @Test
     fun onFilterSelect() {
-        presenter.onFilterSelect(coin1)
+        presenter.onFilterSelect(wallet1)
 
-        verify(interactor).setSelectedCoinCodes(listOf(coin1))
+        verify(interactor).setSelectedWallets(listOf(wallet1))
     }
 
     @Test
@@ -116,19 +126,18 @@ class TransactionsPresenterTest {
         val lastBlockHeight1 = 123
         val confirmationThreshold2 = 12
         val lastBlockHeight2 = null
-        val allCoinsData = listOf(
-                Triple(coin1, confirmationThreshold1, lastBlockHeight1),
-                Triple(coin2, confirmationThreshold2, lastBlockHeight2)
+        val allWalletsData = listOf(
+                Triple(wallet1, confirmationThreshold1, lastBlockHeight1),
+                Triple(wallet2, confirmationThreshold2, lastBlockHeight2)
         )
 
-        presenter.onUpdateCoinsData(allCoinsData)
+        presenter.onUpdateWalletsData(allWalletsData)
 
-        verify(loader).setCoinCodes(listOf(coin1, coin2))
-        verify(metadataDataSource).setConfirmationThreshold(confirmationThreshold1, coin1)
-        verify(metadataDataSource).setConfirmationThreshold(confirmationThreshold2, coin2)
-        verify(metadataDataSource).setLastBlockHeight(lastBlockHeight1, coin1)
+        verify(metadataDataSource).setConfirmationThreshold(confirmationThreshold1, wallet1)
+        verify(metadataDataSource).setConfirmationThreshold(confirmationThreshold2, wallet2)
+        verify(metadataDataSource).setLastBlockHeight(lastBlockHeight1, wallet1)
         verify(loader).loadNext(true)
-        verify(view).showFilters(listOf(null, coin1, coin2))
+        verify(view).showFilters(listOf(null, wallet1, wallet2))
         verify(interactor).fetchLastBlockHeights()
     }
 
@@ -136,20 +145,20 @@ class TransactionsPresenterTest {
     fun onUpdateCoinsData_lessThen2Coins() {
         val confirmationThreshold1 = 6
         val lastBlockHeight1 = 123
-        val allCoinsData = listOf(Triple(coin1, confirmationThreshold1, lastBlockHeight1))
+        val allCoinsData = listOf(Triple(wallet1, confirmationThreshold1, lastBlockHeight1))
 
-        presenter.onUpdateCoinsData(allCoinsData)
+        presenter.onUpdateWalletsData(allCoinsData)
 
         verify(view).showFilters(listOf())
     }
 
     @Test
     fun onUpdateSelectedCoinCodes() {
-        val coins = listOf(coin1)
+        val selectedWallets = listOf(wallet1)
 
-        presenter.onUpdateSelectedCoinCodes(coins)
+        presenter.onUpdateSelectedWallets(selectedWallets)
 
-        verify(loader).setCoinCodes(coins)
+        verify(loader).setWallets(selectedWallets)
         verify(loader).loadNext(true)
     }
 
@@ -157,7 +166,7 @@ class TransactionsPresenterTest {
     fun didFetchRecords() {
         val record1 = mock(TransactionRecord::class.java)
         val timestamp1 = 123435L
-        val records = mapOf(coin1 to listOf<TransactionRecord>(record1))
+        val records = mapOf(wallet1 to listOf<TransactionRecord>(record1))
 
         whenever(record1.timestamp).thenReturn(timestamp1)
 
@@ -193,10 +202,10 @@ class TransactionsPresenterTest {
     fun onUpdateLastBlockHeight() {
         val lastBlockHeight = 123123
 
-        whenever(metadataDataSource.getLastBlockHeight(coin1)).thenReturn(null)
-        presenter.onUpdateLastBlockHeight(coin1, lastBlockHeight)
+        whenever(metadataDataSource.getLastBlockHeight(wallet1)).thenReturn(null)
+        presenter.onUpdateLastBlockHeight(wallet1, lastBlockHeight)
 
-        verify(metadataDataSource).setLastBlockHeight(lastBlockHeight, coin1)
+        verify(metadataDataSource).setLastBlockHeight(lastBlockHeight, wallet1)
         verify(view).reload()
     }
 
@@ -206,13 +215,13 @@ class TransactionsPresenterTest {
         val oldBlockHeight = 123122
         val threshold = 1
 
-        whenever(metadataDataSource.getConfirmationThreshold(coin1)).thenReturn(threshold)
-        whenever(metadataDataSource.getLastBlockHeight(coin1)).thenReturn(oldBlockHeight)
-        whenever(loader.itemIndexesForPending(coin1, oldBlockHeight - threshold)).thenReturn(listOf(1))
+        whenever(metadataDataSource.getConfirmationThreshold(wallet1)).thenReturn(threshold)
+        whenever(metadataDataSource.getLastBlockHeight(wallet1)).thenReturn(oldBlockHeight)
+        whenever(loader.itemIndexesForPending(wallet1, oldBlockHeight - threshold)).thenReturn(listOf(1))
 
-        presenter.onUpdateLastBlockHeight(coin1, lastBlockHeight)
+        presenter.onUpdateLastBlockHeight(wallet1, lastBlockHeight)
 
-        verify(metadataDataSource).setLastBlockHeight(lastBlockHeight, coin1)
+        verify(metadataDataSource).setLastBlockHeight(lastBlockHeight, wallet1)
         verify(view).reloadItems(listOf(1))
     }
 
@@ -220,7 +229,7 @@ class TransactionsPresenterTest {
     fun onUpdateBaseCurrency() {
         val record1 = mock(TransactionRecord::class.java)
         val timestamp1 = 123435L
-        val transactionRecords = mapOf(coin1 to listOf<TransactionRecord>(record1))
+        val transactionRecords = mapOf(wallet1 to listOf<TransactionRecord>(record1))
 
         whenever(record1.timestamp).thenReturn(timestamp1)
         whenever(loader.allRecords).thenReturn(transactionRecords)
@@ -279,9 +288,9 @@ class TransactionsPresenterTest {
 
         whenever(record.timestamp).thenReturn(timestamp)
 
-        presenter.didUpdateRecords(records, coin1)
+        presenter.didUpdateRecords(records, wallet1)
 
-        verify(loader).didUpdateRecords(records, coin1)
+        verify(loader).didUpdateRecords(records, wallet1)
     }
 
 }

@@ -1,7 +1,11 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.IAppConfigProvider
+import io.horizontalsystems.bankwallet.core.IEnabledWalletStorage
+import io.horizontalsystems.bankwallet.core.IWalletFactory
+import io.horizontalsystems.bankwallet.core.IWalletStorage
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
 import io.horizontalsystems.bankwallet.entities.Wallet
 
@@ -23,6 +27,15 @@ class WalletStorage(
             } else {
                 null
             }
+        }.mapNotNull { it }
+    }
+
+    override fun enabledCoins(): List<Coin> {
+        val coins = appConfigProvider.coins
+
+        return storage.enabledWallets.map {enabledWallet ->
+            val coin = coins.find { it.code == enabledWallet.coinCode }
+            coin
         }.mapNotNull { it }
     }
 

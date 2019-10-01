@@ -8,10 +8,11 @@ import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.putParcelableExtra
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
+import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
-import io.horizontalsystems.bankwallet.modules.syncmodule.SyncModeModule
+import io.horizontalsystems.bankwallet.modules.restore.options.RestoreOptionsModule
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_restore_words.*
@@ -30,7 +31,7 @@ class RestoreWordsActivity : BaseActivity(), RestoreWordsAdapter.Listener {
                 rightBtnItem = TopMenuItem(R.drawable.checkmark_orange, onClick = { viewModel.delegate.onDone() })
         )
 
-        val wordsCount = intent.getIntExtra(RestoreWordsModule.WORDS_COUNT, 12)
+        val wordsCount = intent.getIntExtra(ModuleField.WORDS_COUNT, 12)
 
         viewModel = ViewModelProviders.of(this).get(RestoreWordsViewModel::class.java)
         viewModel.init(wordsCount)
@@ -41,13 +42,13 @@ class RestoreWordsActivity : BaseActivity(), RestoreWordsAdapter.Listener {
 
         viewModel.notifyRestored.observe(this, Observer {
             setResult(RESULT_OK, Intent().apply {
-                putExtra("accountType", AccountType.Mnemonic(viewModel.delegate.words, AccountType.Derivation.bip44, salt = null))
+                putExtra(ModuleField.ACCOUNT_TYPE, AccountType.Mnemonic(viewModel.delegate.words, AccountType.Derivation.bip44, salt = null))
             })
             finish()
         })
 
         viewModel.startSyncModeModule.observe(this, Observer {
-            SyncModeModule.startForResult(this, ModuleCode.SYNC_MODE)
+            RestoreOptionsModule.start(this, ModuleCode.RESTORE_OPTIONS)
         })
 
         recyclerInputs.adapter = RestoreWordsAdapter(wordsCount, this)
@@ -56,12 +57,13 @@ class RestoreWordsActivity : BaseActivity(), RestoreWordsAdapter.Listener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == ModuleCode.SYNC_MODE && data != null && resultCode == RESULT_OK) {
-            val syncMode = data.getParcelableExtra<SyncMode>("syncMode")
+        if (requestCode == ModuleCode.RESTORE_OPTIONS && data != null && resultCode == RESULT_OK) {
+            val syncMode = data.getParcelableExtra<SyncMode>(ModuleField.SYNCMODE)
+            val derivation = data.getParcelableExtra<AccountType.Derivation>(ModuleField.DERIVATION)
 
             val intent = Intent().apply {
-                putExtra("accountType", AccountType.Mnemonic(viewModel.delegate.words, AccountType.Derivation.bip44, salt = null))
-                putParcelableExtra("syncMode", syncMode)
+                putExtra(ModuleField.ACCOUNT_TYPE, AccountType.Mnemonic(viewModel.delegate.words, derivation, salt = null))
+                putParcelableExtra(ModuleField.SYNCMODE, syncMode)
             }
 
             setResult(RESULT_OK, intent)

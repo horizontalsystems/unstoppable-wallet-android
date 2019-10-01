@@ -43,14 +43,15 @@ object SendConfirmationModule {
     }
 
     data class PrimaryItemData(
+            val primaryName: String,
             val primaryAmount: String,
+            val secondaryName: String?,
             val secondaryAmount: String?,
-            val receiver: String)
+            val receiver: String,
+            val memo: String?)
 
     data class SecondaryItemData(
-            val memo: String?,
             val feeAmount: String?,
-            val totalAmount: String?,
-            val estimatedTime: String?)
+            val estimatedTime: Long?)
 
 }

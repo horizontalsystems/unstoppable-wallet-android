@@ -2,38 +2,29 @@ package io.horizontalsystems.bankwallet.modules.settings.basecurrency
 
 import android.content.Context
 import android.content.Intent
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Currency
 
 object BaseCurrencySettingsModule {
 
-    interface IBaseCurrencySettingsView{
-        fun show(items: List<CurrencyItem>)
+    interface IView {
+        fun show(items: List<CurrencyViewItem>)
+    }
+
+    interface IRouter {
         fun close()
     }
 
-    interface IBaseCurrencySettingsViewDelegate {
+    interface IViewDelegate {
         fun viewDidLoad()
-        fun didSelect(item: CurrencyItem)
+        fun didSelect(position: Int)
     }
 
-    interface IBaseCurrencySettingsInteractor {
+    interface IInteractor {
         val currencies: List<Currency>
-        val baseCurrency: Currency
-        fun setBaseCurrency(code: String)
-    }
-
-    interface IBaseCurrencySettingsInteractorDelegate {
-        fun didSetBaseCurrency()
-    }
-
-    fun init(view: BaseCurrencySettingsViewModel) {
-        val interactor = BaseCurrencySettingsInteractor(App.currencyManager)
-        val presenter = BaseCurrencySettingsPresenter(interactor)
-
-        view.delegate = presenter
-        presenter.view = view
-        interactor.delegate = presenter
+        var baseCurrency: Currency
     }
 
     fun start(context: Context) {
@@ -41,12 +32,22 @@ object BaseCurrencySettingsModule {
         context.startActivity(intent)
     }
 
+    class Factory : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            val view = BaseCurrencySettingsView()
+            val router = BaseCurrencySettingsRouter()
+            val interactor = BaseCurrencySettingsInteractor(App.currencyManager)
+            val presenter = BaseCurrencySettingsPresenter(view, router, interactor)
+
+            return presenter as T
+        }
+    }
 }
 
-data class CurrencyItem (val code: String, val symbol: String, val selected: Boolean) {
+data class CurrencyViewItem(val code: String, val symbol: String, val selected: Boolean) {
 
     override fun equals(other: Any?): Boolean {
-        if (other is CurrencyItem) {
+        if (other is CurrencyViewItem) {
             return code == other.code
         }
 

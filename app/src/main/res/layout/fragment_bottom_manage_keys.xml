@@ -30,7 +30,7 @@
 
     <TextView
         android:id="@+id/addKeyTitle"
-        style="@style/BaseSb"
+        style="@style/Headline2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
@@ -43,6 +43,18 @@
         app:layout_constraintStart_toEndOf="@+id/addKeyIcon"
         app:layout_constraintTop_toTopOf="@+id/addKeyIcon"
         tools:text="@string/AddCoin_Title" />
+
+    <TextView
+        android:id="@+id/addKeySubtitle"
+        style="@style/Subhead2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:includeFontPadding="false"
+        android:textColor="@color/grey"
+        app:layout_constraintLeft_toLeftOf="@id/addKeyTitle"
+        app:layout_constraintTop_toBottomOf="@id/addKeyTitle"
+        tools:text="Subtitle" />
 
     <ImageView
         android:id="@+id/closeButton"
@@ -62,25 +74,26 @@
         android:id="@+id/border"
         android:layout_width="0dp"
         android:layout_height="0.5dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/steel_15"
+        android:layout_marginTop="12dp"
+        android:background="@color/steel_20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addKeyIcon" />
+        app:layout_constraintTop_toBottomOf="@+id/addKeySubtitle" />
 
     <TextView
         android:id="@+id/addKeyInfo"
-        style="@style/Body1Grey"
+        style="@style/Subhead2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:paddingBottom="8dp"
-        tools:text="@string/AddCoin_Description"
+        android:textColor="@color/grey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/border" />
+        app:layout_constraintTop_toBottomOf="@+id/border"
+        tools:text="@string/AddCoin_Description" />
 
     <Button
         android:id="@+id/btnYellow"
@@ -99,7 +112,7 @@
 
     <Button
         android:id="@+id/btnGrey"
-        style="@style/ButtonNegative"
+        style="@style/ButtonSteel"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"

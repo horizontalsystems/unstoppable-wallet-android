@@ -29,5 +29,4 @@ class MainSettingsView : MainSettingsModule.IMainSettingsView {
     override fun setAppVersion(appVersion: String) {
         this.appVersion.postValue(appVersion)
     }
-
 }

@@ -6,6 +6,7 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.SendConfirmationModule
+import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import kotlinx.android.synthetic.main.view_confirmation_secondary_item_view.view.*
 
 class ConfirmationSecondaryView : ConstraintLayout {
@@ -21,21 +22,13 @@ class ConfirmationSecondaryView : ConstraintLayout {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     fun bind(secondaryData: SendConfirmationModule.SecondaryItemData) {
-        secondaryData.memo?.let {
-            memoLayout.visibility = View.VISIBLE
-            memoValue.text = it
-        }
         secondaryData.feeAmount?.let {
             feeLayout.visibility = View.VISIBLE
             feeValue.text = it
         }
-        secondaryData.totalAmount?.let {
-            totalWrapper.visibility = View.VISIBLE
-            totalValue.text = it
-        }
         secondaryData.estimatedTime?.let {
             timeWrapper.visibility = View.VISIBLE
-            timeValue.text = it
+            timeValue.text = DateHelper.getTxDurationIntervalString(context, it)
         }
     }
 

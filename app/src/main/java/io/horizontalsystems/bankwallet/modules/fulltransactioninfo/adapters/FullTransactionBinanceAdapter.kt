@@ -27,8 +27,8 @@ class FullTransactionBinanceAdapter(private val provider: FullTransactionInfoMod
             val amount = data.value.divide(BigDecimal.TEN.pow(8))
             val feeCoin = feeCoinProvider.feeCoinData(coin)?.first ?: coin
 
-            section.add(FullTransactionItem(R.string.FullInfo_Fee, value = App.numberFormatter.format(CoinValue(feeCoin.code, data.fee))))
-            section.add(FullTransactionItem(R.string.FullInfoEth_Amount, value = App.numberFormatter.format(CoinValue(coin.code, amount))))
+            section.add(FullTransactionItem(R.string.FullInfo_Fee, value = App.numberFormatter.format(CoinValue(feeCoin, data.fee))))
+            section.add(FullTransactionItem(R.string.FullInfoEth_Amount, value = App.numberFormatter.format(CoinValue(coin, amount))))
             sections.add(FullTransactionSection(section))
         }
 

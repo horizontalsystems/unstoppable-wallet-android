@@ -102,12 +102,12 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     private fun updateBaseContextLocale(context: Context): Context {
-        val language = App.languageManager.currentLanguage
-        Locale.setDefault(language)
+        val locale = App.languageManager.currentLocale
+        Locale.setDefault(locale)
 
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            updateResourcesLocale(context, language)
-        } else updateResourcesLocaleLegacy(context, language)
+            updateResourcesLocale(context, locale)
+        } else updateResourcesLocaleLegacy(context, locale)
     }
 
     @TargetApi(Build.VERSION_CODES.N)

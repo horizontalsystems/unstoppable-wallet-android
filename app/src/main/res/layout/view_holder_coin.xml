@@ -9,23 +9,33 @@
     android:layout_marginEnd="13dp"
     android:background="?CoinItemBackground"
     android:orientation="vertical"
-    android:paddingStart="11dp"
-    android:paddingTop="8dp"
-    android:paddingEnd="11dp"
+    android:paddingStart="3dp"
+    android:paddingEnd="3dp"
     android:paddingBottom="8dp">
 
-    <!-- first line -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:clipChildren="true">
+        android:layout_height="78dp"
+        android:clipChildren="true"
+        android:paddingStart="12dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="13dp"
+        android:paddingBottom="10dp">
+
+        <!-- first line -->
+
+        <View
+            android:id="@+id/chartButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="@+id/chartViewCard"
+            app:layout_constraintStart_toStartOf="@+id/chartViewCard" />
 
         <io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
             android:id="@+id/coinIcon"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,14 +54,14 @@
             android:indeterminateTint="@color/grey"
             android:indeterminateTintMode="src_atop"
             android:src="@drawable/ic_attention"
-            android:tint="@color/red_warning"
+            android:tint="?ColorLucian"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textCoinName"
-            style="@style/BaseSb"
+            style="@style/Headline2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
@@ -61,12 +71,10 @@
             tools:text="Bitcoin" />
 
         <TextView
-            android:id="@+id/textCoinAmount"
-            style="@style/Body1"
+            android:id="@+id/coinAmount"
+            style="@style/Subhead2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="4dp"
             android:textColor="?BallanceCoinAmountColor"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/textCoinName"
@@ -76,80 +84,87 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/chartViewCard"
             android:layout_width="64dp"
-            android:layout_height="match_parent"
+            android:layout_height="32dp"
             android:visibility="invisible"
             app:cardBackgroundColor="?LightBackground"
             app:cardCornerRadius="8dp"
             app:cardElevation="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/coinIcon">
 
             <io.horizontalsystems.bankwallet.lib.chartview.ChartView
                 android:id="@+id/chartView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:animated="false"
-                app:height="31dp"
+                app:height="32dp"
                 app:showGrid="false"
                 app:width="64dp" />
 
+            <View
+                android:id="@+id/chartLoading"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/steel_20"
+                android:layout_marginTop="24dp"/>
+
+            <TextView
+                android:id="@+id/textChartError"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="@color/grey_50"
+                tools:text="N/A"/>
+
         </androidx.cardview.widget.CardView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!-- second line -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="23dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="12dp">
+        <!-- Second Line-->
 
         <TextView
-            android:id="@+id/textSyncProgress"
-            style="@style/Body1"
+            android:id="@+id/textProgress"
+            style="@style/Subhead2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:includeFontPadding="false"
             android:textColor="@color/grey"
-            android:visibility="gone"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/coinIcon"
             tools:text="Until Dec 17. 2018" />
 
         <TextView
-            android:id="@+id/textExchangeRate"
-            style="@style/Body1"
+            android:id="@+id/exchangeRate"
+            style="@style/Subhead2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:includeFontPadding="false"
             android:textColor="@color/grey"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/coinIcon"
             tools:text="$6500 per BTC" />
 
         <TextView
-            android:id="@+id/textCurrencyAmount"
-            style="@style/BaseSb"
+            android:id="@+id/fiatAmount"
+            style="@style/Headline2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
             android:includeFontPadding="false"
-            android:textColor="@color/yellow_crypto"
+            android:textColor="?ColorJacob"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             tools:text="$52.50" />
 
         <TextView
             android:id="@+id/chartRateDiff"
-            style="@style/BaseSb"
+            style="@style/Headline2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:includeFontPadding="false"
-            android:textColor="@color/red_warning"
+            android:textColor="?ColorLucian"
             android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             tools:text="-0.23%" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -159,15 +174,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:paddingStart="7dp"
+        android:paddingTop="2dp"
+        android:paddingEnd="9dp"
+        android:paddingBottom="8dp"
         android:visibility="visible">
 
         <Button
             android:id="@+id/buttonReceive"
-            style="@style/ButtonGreen_12"
+            style="@style/ButtonGreen"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginEnd="4dp"
-            android:layout_marginBottom="8dp"
             android:layout_weight="1"
             android:text="@string/Balance_Deposit" />
 
@@ -177,7 +195,6 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginStart="4dp"
-            android:layout_marginBottom="8dp"
             android:layout_weight="1"
             android:text="@string/Balance_Send" />
 

@@ -27,7 +27,7 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
     override fun format(coinValue: CoinValue, explicitSign: Boolean, realNumber: Boolean): String? {
         var value = coinValue.value.abs()
 
-        val customFormatter = getFormatter(languageManager.currentLanguage) ?: return null
+        val customFormatter = getFormatter(languageManager.currentLocale) ?: return null
 
         when {
             !realNumber && value > COIN_BIG_NUMBER_EDGE -> customFormatter.maximumFractionDigits = 4
@@ -36,7 +36,7 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         }
         value = value.stripTrailingZeros()
         val formatted = customFormatter.format(value)
-        var result = "$formatted ${coinValue.coinCode}"
+        var result = "$formatted ${coinValue.coin.code}"
 
         if (explicitSign && coinValue.value.toLong() != 0L) {
             val sign = if (coinValue.value < BigDecimal.ZERO) "-" else "+"
@@ -59,7 +59,7 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         val absValue = currencyValue.value.abs()
         var value = absValue
 
-        val customFormatter = getFormatter(languageManager.currentLanguage) ?: return null
+        val customFormatter = getFormatter(languageManager.currentLocale) ?: return null
 
         when {
             value.compareTo(BigDecimal.ZERO) == 0 -> {
@@ -100,7 +100,7 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         val spannable = SpannableString(format(currencyValue, showNegativeSign = true, trimmable = true, canUseLessSymbol = true))
 
         //  set color
-        val amountTextColor = if (isIncoming) R.color.green_crypto else R.color.yellow_crypto
+        val amountTextColor = if (isIncoming) R.color.green_d else R.color.yellow_d
         val color = ContextCompat.getColor(App.instance, amountTextColor)
 
         spannable.setSpan(ForegroundColorSpan(color), 0, spannable.length, 0)
@@ -108,7 +108,7 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
     }
 
     override fun format(value: Double, showSign: Boolean, precision: Int): String {
-        val customFormatter = getFormatter(languageManager.currentLanguage)?.also {
+        val customFormatter = getFormatter(languageManager.currentLocale)?.also {
             it.maximumFractionDigits = precision
         }
 

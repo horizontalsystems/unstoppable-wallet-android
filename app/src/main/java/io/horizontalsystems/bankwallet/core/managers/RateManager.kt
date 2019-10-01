@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.INetworkManager
-import io.horizontalsystems.bankwallet.core.IRateStorage
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.ServiceExchangeApi.HostType
+import io.horizontalsystems.bankwallet.entities.LatestRateData
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
 import io.reactivex.Single
@@ -12,28 +12,47 @@ import retrofit2.HttpException
 import java.math.BigDecimal
 import java.net.SocketTimeoutException
 
-class RateManager(private val storage: IRateStorage, private val networkManager: INetworkManager) {
+class RateManager(private val storage: IRateStorage,
+                  private val networkManager: INetworkManager,
+                  private val walletStorage: IWalletStorage,
+                  private val currencyManager: ICurrencyManager,
+                  private val connectivityManager: ConnectivityManager) : IRateManager {
 
     private var disposables: CompositeDisposable = CompositeDisposable()
     private val latestRateFallbackThreshold = 60 * 10 // 10 minutes
 
-    fun refreshLatestRates(coinCodes: List<String>, currencyCode: String) {
+    override fun syncLatestRatesSingle(): Single<LatestRateData> {
+        val coinCodes = walletStorage.enabledCoins().map { it.code }
+        return refreshLatestRates(coinCodes, currencyManager.baseCurrency.code)
+    }
+
+    override fun syncLatestRates() {
         disposables.clear()
-        networkManager.getLatestRateData(HostType.MAIN, currencyCode)
+        if (connectivityManager.isConnected) {
+            syncLatestRatesSingle()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .subscribe({
+
+                    },{
+                        //request failed
+                    })
+                    .let { disposables.add(it) }
+        }
+    }
+
+    private fun refreshLatestRates(coinCodes: List<String>, currencyCode: String): Single<LatestRateData> {
+        return networkManager.getLatestRateData(HostType.MAIN, currencyCode)
                 .onErrorResumeNext(networkManager.getLatestRateData(HostType.FALLBACK, currencyCode))
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe({ latestRateData ->
+                .doOnSuccess {
+                    latestRateData ->
                     coinCodes.forEach { coinCode ->
                         latestRateData.rates[coinCode]?.toBigDecimalOrNull()?.let {
                             val rate = Rate(coinCode, latestRateData.currency, it, latestRateData.timestamp, true)
                             storage.saveLatest(rate)
                         }
                     }
-                }, {
-                    //request failed
-                })
-                .let { disposables.add(it) }
+                }
     }
 
     private fun getLatestRateFallback(coinCode: CoinCode, currencyCode: String, timestamp: Long): Single<BigDecimal> {

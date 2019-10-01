@@ -15,18 +15,22 @@ class SendConfirmationPresenter(
     private var receiver = ""
 
     override fun onViewDidLoad() {
+        var primaryName = ""
         var primaryAmount = ""
-        var secondaryAmount = ""
+        var secondaryName: String? = null
+        var secondaryAmount: String? = null
         var primaryFeeAmount: String? = null
         var secondaryFeeAmount: String? = null
         var memo: String? = null
-        var duration: String? = null
+        var duration: Long? = null
 
         confirmationViewItems.forEach { item ->
             when (item) {
                 is SendConfirmationAmountViewItem -> {
+                    primaryName = item.primaryInfo.getAmountName()
                     primaryAmount = item.primaryInfo.getFormatted() ?: ""
-                    secondaryAmount = item.secondaryInfo?.getFormatted() ?: ""
+                    secondaryName = item.secondaryInfo?.getAmountName()
+                    secondaryAmount = item.secondaryInfo?.getFormatted()
                     receiver = item.receiver
                 }
                 is SendConfirmationFeeViewItem -> {
@@ -43,20 +47,21 @@ class SendConfirmationPresenter(
         }
 
         val primaryViewItem = SendConfirmationModule.PrimaryItemData(
+                primaryName = primaryName,
                 primaryAmount = primaryAmount,
+                secondaryName = secondaryName,
                 secondaryAmount = secondaryAmount,
-                receiver = receiver
+                receiver = receiver,
+                memo = memo
         )
 
         view?.loadPrimaryItems(primaryViewItem)
 
         val secondaryViewItem = SendConfirmationModule.SecondaryItemData(
-                memo = memo,
                 feeAmount = primaryFeeAmount?.let { primaryFeeAmount ->
                     "$primaryFeeAmount${secondaryFeeAmount?.let { secondaryFeeAmount -> " | $secondaryFeeAmount" }
                             ?: ""}"
                 },
-                totalAmount = null,
                 estimatedTime = duration
         )
 

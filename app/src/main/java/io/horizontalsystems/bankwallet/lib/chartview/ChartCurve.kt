@@ -3,19 +3,19 @@ package io.horizontalsystems.bankwallet.lib.chartview
 import android.graphics.*
 import androidx.core.graphics.ColorUtils.setAlphaComponent
 import io.horizontalsystems.bankwallet.lib.chartview.models.ChartConfig
-import io.horizontalsystems.bankwallet.lib.chartview.models.ChartData
-import io.horizontalsystems.bankwallet.lib.chartview.models.DataPoint
+import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
 
 class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
 
     private val chartHelper = ChartHelper(shape, config)
-    private var points = listOf<DataPoint>()
+    private var coordinates = listOf<Coordinate>()
 
     private val linePaint = Paint()
-    private var gradient = Paint()
+    private val gradient = Paint()
 
-    fun init(data: ChartData) {
-        points = chartHelper.setPoints(data)
+    fun init(points: List<ChartPoint>) {
+        coordinates = chartHelper.setCoordinates(points)
+
         onTouchInactive()
 
         linePaint.apply {
@@ -40,21 +40,21 @@ class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
         linePaint.color = config.curveColor
     }
 
-    fun findPoint(value: Float): DataPoint? {
-        if (points.size < 2) return null
-        if (points.last().x <= value) {
-            return points.last()
+    fun find(value: Float): Coordinate? {
+        if (coordinates.size < 2) return null
+        if (coordinates.last().x <= value) {
+            return coordinates.last()
         }
 
-        val interval = points[1].x - points[0].x
+        val interval = coordinates[1].x - coordinates[0].x
         val lower = value - interval
         val upper = value + interval
 
-        return points.find { it.x > lower && it.x < upper }
+        return coordinates.find { it.x > lower && it.x < upper }
     }
 
     fun draw(canvas: Canvas) {
-        if (points.isEmpty()) {
+        if (coordinates.isEmpty()) {
             return
         }
 
@@ -65,7 +65,7 @@ class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
     private fun Canvas.drawChart() {
         val path = Path()
 
-        points.forEachIndexed { index, point ->
+        coordinates.forEachIndexed { index, point ->
             if (index == 0) {
                 path.moveTo(point.x, animatedY(point.y))
             } else {
@@ -79,7 +79,7 @@ class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
     private fun Canvas.drawGradient() {
         val path = Path()
 
-        points.forEachIndexed { index, point ->
+        coordinates.forEachIndexed { index, point ->
             if (index == 0) {
                 path.moveTo(point.x, animatedY(point.y))
             } else {
@@ -88,8 +88,8 @@ class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
         }
 
         //  Link the last two points
-        path.lineTo(points.last().x, shape.bottom)
-        path.lineTo(points.first().x, shape.bottom)
+        path.lineTo(coordinates.last().x, shape.bottom)
+        path.lineTo(coordinates.first().x, shape.bottom)
         path.close()
 
         drawPath(path, gradient)
@@ -106,4 +106,6 @@ class ChartCurve(private val shape: RectF, private val config: ChartConfig) {
     private fun setGradient(colorStart: Int, colorEnd: Int) {
         gradient.shader = LinearGradient(0f, 0f, 0f, shape.bottom + 2, colorStart, colorEnd, Shader.TileMode.REPEAT)
     }
+
+    class Coordinate(val x: Float, val y: Float, val point: ChartPoint)
 }

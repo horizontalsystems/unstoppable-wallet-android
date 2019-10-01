@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
-import io.horizontalsystems.bankwallet.lib.chartview.models.DataPoint
+import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.Interactor
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.InteractorDelegate
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.View
@@ -18,11 +18,20 @@ class RateChartPresenter(
         private val interactor: Interactor,
         private val coinCode: CoinCode,
         private val currency: Currency,
-        private val factory: RateChartViewFactory)
-    : ViewModel(), ViewDelegate, InteractorDelegate {
+        private val factory: RateChartViewFactory) : ViewModel(), ViewDelegate, InteractorDelegate {
 
-    private var rate: Rate? = null
+    private var latestRate: Rate? = null
+        set(value) {
+            field = value
+            updateChart()
+        }
+
     private var statsData: StatsData? = null
+        set(value) {
+            field = value
+            updateChart()
+        }
+
     private var chartType = interactor.defaultChartType
 
     //  ViewDelegate
@@ -30,33 +39,50 @@ class RateChartPresenter(
     override fun viewDidLoad() {
         view.showSpinner()
         view.setChartType(interactor.defaultChartType)
-        showOrFetch()
+
+        interactor.subscribeToChartStats()
+        interactor.subscribeToLatestRate(coinCode, currency.code)
+        interactor.syncStats(coinCode, currency.code)
     }
 
     override fun onSelect(type: ChartType) {
+        if (chartType == type)
+            return
+
         chartType = type
         interactor.defaultChartType = type
 
         view.showSpinner()
-        showOrFetch()
+        updateChart()
     }
 
-    override fun onTouchSelect(point: DataPoint) {
+    override fun onTouchSelect(point: ChartPoint) {
         val currencyValue = CurrencyValue(currency, point.value.toBigDecimal())
-        view.showSelectedPoint(Triple(point.time, currencyValue, chartType))
+        view.showSelectedPoint(Triple(point.timestamp, currencyValue, chartType))
     }
 
     //  InteractorDelegate
 
-    override fun onReceiveStats(data: Pair<StatsData, Rate>) {
-        rate = data.second
-        statsData = data.first
-        val stats = data.first.stats
+    @Synchronized
+    override fun onReceiveStats(data: StatsData) {
+        if (data.coinCode != coinCode)
+            return
+
+        statsData = data
+    }
+
+    @Synchronized
+    override fun onReceiveLatestRate(rate: Rate) {
+        latestRate = rate
+    }
+
+    private fun updateChart() {
+        val stats = statsData?.stats ?: return
 
         for (type in stats.keys) {
             val chartType = ChartType.fromString(type) ?: continue
-            val chartData = stats[chartType.name] ?: continue
-            if (chartData.points.size > 10) {
+            val chartPoints = stats[chartType.name] ?: continue
+            if (chartPoints.size > 10) {
                 view.enableChartType(chartType)
             }
         }
@@ -69,21 +95,13 @@ class RateChartPresenter(
         view.showError(ex)
     }
 
-    private fun showOrFetch() {
-        if (statsData == null) {
-            interactor.getRateStats(coinCode, currency.code)
-        } else {
-            showChart()
-        }
-    }
-
     private fun showChart() {
         val statsData = statsData ?: return
 
         view.hideSpinner()
 
         try {
-            val viewItem = factory.createViewItem(chartType, statsData, rate, currency)
+            val viewItem = factory.createViewItem(chartType, statsData, latestRate, currency)
             view.showChart(viewItem)
         } catch (e: Exception) {
             view.showError(e)
@@ -95,4 +113,5 @@ class RateChartPresenter(
     override fun onCleared() {
         interactor.clear()
     }
+
 }

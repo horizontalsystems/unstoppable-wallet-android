@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -20,11 +21,10 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     val reloadHeaderLiveEvent = SingleLiveEvent<Void>()
     val reloadItemLiveEvent = SingleLiveEvent<Int>()
     val setSortingOnLiveEvent = SingleLiveEvent<Boolean>()
-    val setChartOnLiveEvent = SingleLiveEvent<Boolean>()
-    val showBackupAlert = SingleLiveEvent<Unit>()
+    val showBackupAlert = SingleLiveEvent<Pair<Coin, IPredefinedAccountType>>()
     val openBackup = SingleLiveEvent<Pair<Account, Int>>()
     val openChartModule = SingleLiveEvent<Coin>()
-    val setChartButtonEnabled = SingleLiveEvent<Boolean>()
+    val setStatsButtonState = SingleLiveEvent<BalanceModule.StatsButtonState>()
 
     fun init() {
         BalanceModule.init(this, this)
@@ -37,7 +37,7 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     }
 
     override fun updateItem(position: Int) {
-        reloadItemLiveEvent.value = position
+        reloadItemLiveEvent.postValue(position)
     }
 
     override fun updateHeader() {
@@ -80,12 +80,8 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
         setSortingOnLiveEvent.postValue(isOn)
     }
 
-    override fun setChartOn(isOn: Boolean) {
-        setChartOnLiveEvent.postValue(isOn)
-    }
-
-    override fun showBackupAlert() {
-        showBackupAlert.call()
+    override fun showBackupAlert(coin: Coin, predefinedAccountType: IPredefinedAccountType) {
+        showBackupAlert.postValue(Pair(coin, predefinedAccountType))
     }
 
     override fun openBackup(account: Account, coinCodesStringRes: Int) {
@@ -96,7 +92,8 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
         openChartModule.postValue(coin)
     }
 
-    override fun setChartButtonState(enabled: Boolean) {
-        setChartButtonEnabled.value = enabled
+    override fun setStatsButton(state: BalanceModule.StatsButtonState) {
+        setStatsButtonState.postValue(state)
     }
+
 }

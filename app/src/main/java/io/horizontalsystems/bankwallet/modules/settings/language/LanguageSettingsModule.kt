@@ -2,31 +2,31 @@ package io.horizontalsystems.bankwallet.modules.settings.language
 
 import android.content.Context
 import android.content.Intent
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import java.util.*
 
 object LanguageSettingsModule {
 
     interface ILanguageSettingsView {
-        fun show(items: List<LanguageItem>)
+        fun show(items: List<LanguageViewItem>)
     }
 
     interface ILanguageSettingsViewDelegate {
         fun viewDidLoad()
-        fun didSelect(item: LanguageItem)
+        fun didSelect(position: Int)
     }
 
     interface ILanguageSettingsInteractor {
-        var items: List<LanguageItem>
-        fun setCurrentLanguage(item: LanguageItem)
-    }
-
-    interface ILanguageSettingsInteractorDelegate {
-        fun didSetCurrentLanguage()
+        var currentLanguage: String
+        val availableLanguages: List<String>
+        fun getName(language: String): String
+        fun getNativeName(language: String): String
     }
 
     interface ILanguageSettingsRouter{
         fun reloadAppInterface()
+        fun close()
     }
 
     fun start(context: Context) {
@@ -34,14 +34,16 @@ object LanguageSettingsModule {
         context.startActivity(intent)
     }
 
-    fun init(view: LanguageSettingsViewModel, router: ILanguageSettingsRouter) {
-        val interactor = LanguageSettingsInteractor(languageManager = App.languageManager)
-        val presenter = LanguageSettingsPresenter(router, interactor)
+    class Factory : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            val view = LanguageSettingsView()
+            val router = LanguageSettingsRouter()
+            val interactor = LanguageSettingsInteractor(App.languageManager, App.appConfigProvider)
+            val presenter = LanguageSettingsPresenter(view, router, interactor)
 
-        view.delegate = presenter
-        presenter.view = view
-        interactor.delegate = presenter
+            return presenter as T
+        }
     }
 }
 
-data class LanguageItem(val locale: Locale, var current: Boolean)
+data class LanguageViewItem(val language: String, val name: String, val nativeName: String, var current: Boolean)

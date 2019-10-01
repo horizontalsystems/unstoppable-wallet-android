@@ -22,13 +22,15 @@ import kotlinx.android.synthetic.main.view_holder_item_with_checkmark.*
 
 class LanguageSettingsActivity : BaseActivity(), LanguageSettingsAdapter.Listener {
 
-    private lateinit var viewModel: LanguageSettingsViewModel
+    private lateinit var presenter: LanguageSettingsPresenter
     private var adapter: LanguageSettingsAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(LanguageSettingsViewModel::class.java)
-        viewModel.init()
+        presenter = ViewModelProviders.of(this, LanguageSettingsModule.Factory()).get(LanguageSettingsPresenter::class.java)
+
+        val presenterView = presenter.view as LanguageSettingsView
+        val presenterRouter = presenter.router as LanguageSettingsRouter
 
         setContentView(R.layout.activity_language_settings)
 
@@ -41,21 +43,26 @@ class LanguageSettingsActivity : BaseActivity(), LanguageSettingsAdapter.Listene
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        viewModel.languageItems.observe(this, Observer { items ->
+        presenterView.languageItems.observe(this, Observer { items ->
             items?.let {
                 adapter?.items = it
                 adapter?.notifyDataSetChanged()
             }
         })
 
-        viewModel.reloadAppLiveEvent.observe(this, Observer {
+        presenterRouter.reloadAppLiveEvent.observe(this, Observer {
             MainModule.startAsNewTask(this, MainActivity.SETTINGS_TAB_POSITION)
         })
 
+        presenterRouter.closeLiveEvent.observe(this, Observer {
+            finish()
+        })
+
+        presenter.viewDidLoad()
     }
 
-    override fun onItemClick(item: LanguageItem) {
-        viewModel.delegate.didSelect(item)
+    override fun onItemClick(position: Int) {
+        presenter.didSelect(position)
     }
 }
 
@@ -64,10 +71,10 @@ class LanguageSettingsAdapter(private var listener: Listener) : RecyclerView.Ada
     private val VIEW_TYPE_LOADING = 2
 
     interface Listener {
-        fun onItemClick(item: LanguageItem)
+        fun onItemClick(position: Int)
     }
 
-    var items = listOf<LanguageItem>()
+    var items = listOf<LanguageViewItem>()
 
     override fun getItemCount() = if (items.isEmpty()) 1 else items.size
 
@@ -87,7 +94,7 @@ class LanguageSettingsAdapter(private var listener: Listener) : RecyclerView.Ada
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is ViewHolderLanguageItem -> holder.bind(items[position]) { listener.onItemClick(items[position]) }
+            is ViewHolderLanguageItem -> holder.bind(items[position]) { listener.onItemClick(position) }
         }
     }
 
@@ -95,12 +102,12 @@ class LanguageSettingsAdapter(private var listener: Listener) : RecyclerView.Ada
 
 class ViewHolderLanguageItem(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(item: LanguageItem, onClick: () -> (Unit)) {
+    fun bind(item: LanguageViewItem, onClick: () -> (Unit)) {
 
         containerView.setOnSingleClickListener { onClick.invoke() }
-        image.setImageResource(LayoutHelper.getLangDrawableResource(item.locale.language))
-        title.text = item.locale.getDisplayLanguage(item.locale).capitalize()
-        subtitle.text = item.locale.displayName.capitalize()
+        image.setImageResource(LayoutHelper.getLangDrawableResource(item.language))
+        title.text = item.nativeName
+        subtitle.text = item.name
         checkmarkIcon.visibility = if (item.current) View.VISIBLE else View.GONE
     }
 

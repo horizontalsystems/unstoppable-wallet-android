@@ -1,9 +1,11 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.text.SpannableString
-import androidx.core.hardware.fingerprint.FingerprintManagerCompat
+import androidx.biometric.BiometricPrompt
 import com.google.gson.JsonObject
+import io.horizontalsystems.bankwallet.core.factories.PriceAlertItem
 import io.horizontalsystems.bankwallet.core.managers.ServiceExchangeApi.HostType
+import io.horizontalsystems.bankwallet.core.managers.StatsResponse
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView
@@ -80,14 +82,15 @@ interface IAccountManager {
 }
 
 interface IBackupManager {
-    val nonBackedUpCount: Int
-    val nonBackedUpCountFlowable: Flowable<Int>
+    val allBackedUp: Boolean
+    val allBackedUpFlowable: Flowable<Boolean>
     fun setIsBackedUp(id: String)
 }
 
 interface IAccountCreator {
     fun createRestoredAccount(accountType: AccountType, syncMode: SyncMode?, createDefaultWallets: Boolean): Account
     fun createNewAccount(defaultAccountType: DefaultAccountType, createDefaultWallets: Boolean): Account
+    fun createNewAccount(coin: Coin)
 }
 
 interface IAccountFactory {
@@ -100,6 +103,7 @@ interface IWalletFactory {
 
 interface IWalletStorage {
     fun wallets(accounts: List<Account>): List<Wallet>
+    fun enabledCoins(): List<Coin>
     fun save(wallets: List<Wallet>)
 }
 
@@ -107,7 +111,7 @@ interface IPredefinedAccountTypeManager {
     val allTypes: List<IPredefinedAccountType>
     fun account(predefinedAccountType: IPredefinedAccountType): Account?
     fun createAccount(predefinedAccountType: IPredefinedAccountType): Account?
-    fun createAllAccounts()
+    fun predefinedAccountType(type: AccountType): IPredefinedAccountType?
 }
 
 interface IPredefinedAccountType {
@@ -139,7 +143,7 @@ interface IRandomProvider {
 }
 
 interface INetworkManager {
-    fun getRateStats(hostType: HostType, coinCode: String, currency: String): Flowable<RateStatData>
+    fun getRateStats(hostType: HostType, coinCode: String, currency: String): Single<RateStatData>
     fun getRateByDay(hostType: HostType, coinCode: String, currency: String, timestamp: Long): Single<BigDecimal>
     fun getRateByHour(hostType: HostType, coinCode: String, currency: String, timestamp: Long): Single<BigDecimal>
     fun getLatestRateData(hostType: HostType, currency: String): Single<LatestRateData>
@@ -151,15 +155,13 @@ interface INetworkManager {
 interface IEncryptionManager {
     fun encrypt(data: String): String
     fun decrypt(data: String): String
-    fun getCryptoObject(): FingerprintManagerCompat.CryptoObject?
+    fun getCryptoObject(): BiometricPrompt.CryptoObject?
 }
 
 interface IKeyStoreManager {
     val isKeyInvalidated: Boolean
     val isUserNotAuthenticated: Boolean
 
-    fun createKey(): SecretKey
-    fun getKey(): SecretKey
     fun removeKey()
 }
 
@@ -174,10 +176,9 @@ interface IClipboardManager {
 }
 
 interface ICurrencyManager {
-    val baseCurrency: Currency
+    var baseCurrency: Currency
     val baseCurrencyUpdatedSignal: Observable<Unit>
     val currencies: List<Currency>
-    fun setBaseCurrency(code: String)
 }
 
 interface ITransactionDataProviderManager {
@@ -204,8 +205,12 @@ interface IWordsManager {
 }
 
 interface ILanguageManager {
-    var currentLanguage: Locale
-    val availableLanguages: List<Locale>
+    var currentLocale: Locale
+    var currentLanguage: String
+    val currentLanguageName: String
+
+    fun getName(language: String): String
+    fun getNativeName(language: String): String
 }
 
 sealed class AdapterState {
@@ -301,11 +306,11 @@ interface IAdapter {
 interface ISystemInfoManager {
     val appVersion: String
     val isSystemLockOff: Boolean
-    val hasFingerprintSensor: Boolean
-    val hasEnrolledFingerprints: Boolean
+    val biometricAuthSupported: Boolean
 }
 
 interface IPinManager {
+    var isFingerprintEnabled: Boolean
     val isPinSet: Boolean
 
     fun store(pin: String)
@@ -335,20 +340,32 @@ interface IAppConfigProvider {
     val localizations: List<String>
     val currencies: List<Currency>
     val defaultCoinCodes: List<String>
+    val featuredCoins: List<Coin>
     val coins: List<Coin>
     val predefinedAccountTypes: List<IPredefinedAccountType>
 }
 
-interface IOneTimerDelegate {
+interface OneTimerDelegate {
     fun onFire()
 }
 
 interface IRateStorage {
     fun latestRateObservable(coinCode: CoinCode, currencyCode: String): Flowable<Rate>
+    fun latestRate(coinCode: CoinCode, currencyCode: String): Rate?
     fun rateSingle(coinCode: CoinCode, currencyCode: String, timestamp: Long): Single<Rate>
     fun save(rate: Rate)
     fun saveLatest(rate: Rate)
     fun deleteAll()
+}
+
+interface IRateManager {
+    fun syncLatestRates()
+    fun syncLatestRatesSingle(): Single<LatestRateData>
+}
+
+interface IRateStatsManager {
+    val statsFlowable: Flowable<StatsResponse>
+    fun syncStats(coinCode: String, currencyCode: String)
 }
 
 interface IAccountsStorage {
@@ -362,6 +379,39 @@ interface IAccountsStorage {
     fun clear()
     fun getDeletedAccountIds(): List<String>
     fun clearDeleted()
+}
+
+interface IPriceAlertsStorage {
+    val priceAlertCount: Int
+    fun all(): List<PriceAlert>
+    fun save(priceAlerts: List<PriceAlert>)
+    fun delete(priceAlerts: List<PriceAlert>)
+    fun deleteExcluding(coinCodes: List<String>)
+}
+
+interface IEmojiHelper{
+    val multiAlerts: String
+
+    fun title(signedState: Int): String
+    fun body(signedState: Int): String
+}
+
+interface IPriceAlertHandler{
+    fun handleAlerts(latestRateData: LatestRateData)
+}
+
+interface IBackgroundPriceAlertManager{
+    fun fetchRates(): Single<LatestRateData>
+}
+
+interface INotificationFactory{
+    fun notifications(alertItems: List<PriceAlertItem>): List<AlertNotification>
+}
+
+interface INotificationManager{
+    val isEnabled: Boolean
+    fun show(notifications: List<AlertNotification>)
+    fun clear()
 }
 
 interface IEnabledWalletStorage {

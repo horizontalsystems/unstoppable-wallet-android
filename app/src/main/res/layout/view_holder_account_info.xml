@@ -9,9 +9,10 @@
     android:paddingEnd="3dp">
 
     <TextView
-        style="@style/Body1Grey"
+        style="@style/Subhead2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ManageKeys_Description" />
+        android:text="@string/ManageKeys_Description"
+        android:textColor="@color/grey" />
 
 </LinearLayout>

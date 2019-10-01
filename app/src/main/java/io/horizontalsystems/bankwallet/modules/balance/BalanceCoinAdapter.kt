@@ -8,12 +8,14 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
 import io.horizontalsystems.bankwallet.viewHelpers.AnimationHelper
 import io.horizontalsystems.bankwallet.viewHelpers.DateHelper
 import io.horizontalsystems.bankwallet.viewHelpers.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_add_coin.*
 import kotlinx.android.synthetic.main.view_holder_coin.*
+import kotlinx.android.synthetic.main.view_holder_coin.chartView
 import java.math.BigDecimal
 
 class BalanceCoinAdapter(private val listener: Listener, private val viewDelegate: BalanceModule.IViewDelegate)
@@ -92,7 +94,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
                 is AdapterState.NotReady -> {
                     syncing = true
                     iconProgress.visibility = View.VISIBLE
-                    textSyncProgress.text = containerView.context.getString(R.string.Balance_Syncing)
+                    textProgress.text = containerView.context.getString(R.string.Balance_Syncing)
                     buttonReceive.isEnabled = false
                 }
                 is AdapterState.Syncing -> {
@@ -105,7 +107,7 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
                         progressText = containerView.context.getString(R.string.Balance_SyncedUntil, DateHelper.formatDate(it, "MMM d.yyyy"))
                     }
 
-                    textSyncProgress.text = progressText
+                    textProgress.text = progressText
                 }
                 is AdapterState.Synced -> {
                     if (balanceViewItem.coinValue.value > BigDecimal.ZERO) {
@@ -120,37 +122,29 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             }
         }
 
-        balanceViewItem.currencyValue?.let {
-            textCurrencyAmount.text = App.numberFormatter.format(it, trimmable = true)
-            textCurrencyAmount.visibility = if (it.value.compareTo(BigDecimal.ZERO) == 0) View.GONE else View.VISIBLE
-            textCurrencyAmount.alpha = if (!balanceViewItem.rateExpired && balanceViewItem.state is AdapterState.Synced) 1f else 0.5f
-        } ?: run {
-            textCurrencyAmount.visibility = View.GONE
-        }
+        showFiatAmount(balanceViewItem)
+        showChart(balanceViewItem, expanded, chartEnabled, fiatAmount.visibility)
 
-        showChart(balanceViewItem, expanded, chartEnabled, textCurrencyAmount.visibility)
+        coinAmount.text = App.numberFormatter.format(balanceViewItem.coinValue)
+        coinAmount.alpha = if (balanceViewItem.state is AdapterState.Synced) 1f else 0.3f
 
-        textCoinAmount.text = App.numberFormatter.format(balanceViewItem.coinValue)
-        textCoinAmount.alpha = if (balanceViewItem.state is AdapterState.Synced) 1f else 0.3f
-
-        textSyncProgress.visibility = if (expanded && syncing) View.VISIBLE else View.GONE
-        textExchangeRate.visibility = if (expanded && syncing) View.GONE else View.VISIBLE
+        textProgress.visibility = if (expanded && syncing) View.VISIBLE else View.GONE
+        exchangeRate.visibility = if (expanded && syncing) View.GONE else View.VISIBLE
 
         coinIcon.bind(balanceViewItem.coin)
         textCoinName.text = balanceViewItem.coin.title
 
-        textExchangeRate.setTextColor(ContextCompat.getColor(containerView.context, if (balanceViewItem.rateExpired) R.color.steel_40 else R.color.grey))
-        textExchangeRate.text = balanceViewItem.exchangeValue?.let { exchangeValue ->
+        exchangeRate.setTextColor(ContextCompat.getColor(containerView.context, if (balanceViewItem.rateExpired) R.color.grey_50 else R.color.grey))
+        exchangeRate.text = balanceViewItem.exchangeValue?.let { exchangeValue ->
             val rateString = App.numberFormatter.format(exchangeValue, trimmable = true, canUseLessSymbol = false)
-            containerView.context.getString(R.string.Balance_RatePerCoin, rateString, balanceViewItem.coinValue.coinCode)
+            containerView.context.getString(R.string.Balance_RatePerCoin, rateString, balanceViewItem.coin.code)
         }
 
         buttonPay.setOnSingleClickListener {
             listener.onSendClicked(adapterPosition)
         }
 
-        chartViewCard.setOnClickListener { listener.onClickChart(adapterPosition) }
-        chartRateDiff.setOnClickListener { listener.onClickChart(adapterPosition) }
+        chartButton.setOnClickListener { listener.onClickChart(adapterPosition) }
 
         buttonReceive.setOnSingleClickListener {
             listener.onReceiveClicked(adapterPosition)
@@ -165,8 +159,8 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
 
     fun bindPartial(balanceViewItem: BalanceViewItem, expanded: Boolean, chartEnabled: Boolean) {
         viewHolderRoot.isSelected = expanded
-        textSyncProgress.visibility = if (expanded && syncing) View.VISIBLE else View.GONE
-        textExchangeRate.visibility = if (expanded && syncing) View.GONE else View.VISIBLE
+        textProgress.visibility = if (expanded && syncing) View.VISIBLE else View.GONE
+        exchangeRate.visibility = if (expanded && syncing) View.GONE else View.VISIBLE
 
         if (expanded) {
             AnimationHelper.expand(buttonsWrapper)
@@ -174,43 +168,73 @@ class ViewHolderCoin(override val containerView: View, private val listener: Bal
             AnimationHelper.collapse(buttonsWrapper)
         }
 
-        showChart(balanceViewItem, expanded, chartEnabled, textCurrencyAmount.visibility)
+        showFiatAmount(balanceViewItem)
+        showChart(balanceViewItem, expanded, chartEnabled, fiatAmount.visibility)
     }
 
-    private fun showChart(viewItem: BalanceViewItem, expanded: Boolean, chartEnabled: Boolean, textCurrencyAmountVisibility: Int) {
+    private fun showFiatAmount(balanceViewItem: BalanceViewItem) {
+        balanceViewItem.currencyValue?.let {
+            fiatAmount.text = App.numberFormatter.format(it, trimmable = true)
+            fiatAmount.visibility = if (it.value.compareTo(BigDecimal.ZERO) == 0) View.GONE else View.VISIBLE
+            fiatAmount.alpha = if (!balanceViewItem.rateExpired && balanceViewItem.state is AdapterState.Synced) 1f else 0.5f
+        } ?: run {
+            fiatAmount.visibility = View.GONE
+        }
+    }
+
+    private fun showChart(viewItem: BalanceViewItem, expanded: Boolean, chartEnabled: Boolean, fiatAmountVisibility: Int) {
         if (expanded || !chartEnabled) {
-            return setChartVisibility(false, textCurrencyAmountVisibility)
+            return setChartVisibility(false, fiatAmountVisibility)
         }
 
-        setChartVisibility(true, textCurrencyAmountVisibility)
+        setChartVisibility(true, fiatAmountVisibility)
 
-        val diffColor = if (viewItem.chartDiff < BigDecimal.ZERO)
-            containerView.context.getColor(R.color.red_warning) else
-            containerView.context.getColor(R.color.green_crypto)
+        chartLoading.visibility = View.INVISIBLE
+        textChartError.visibility = View.INVISIBLE
+        chartView.visibility = View.INVISIBLE
 
-        val chartStats = viewItem.chartData
-        if (chartStats == null) {
-            chartView.visibility = View.INVISIBLE
-            chartRateDiff.text = containerView.context.getString(R.string.NotAvailable)
-            chartRateDiff.setTextColor(containerView.context.getColor(R.color.grey_50))
-        } else {
-            chartView.setData(chartStats)
-            chartRateDiff.text = App.numberFormatter.format(viewItem.chartDiff.toDouble(), showSign = true, precision = 2) + "%"
-            chartRateDiff.setTextColor(diffColor)
+        val chartData = viewItem.chartData
+
+        when {
+            chartData == null -> {
+                chartLoading.visibility = View.VISIBLE
+
+                chartRateDiff.text = "0%"
+                chartRateDiff.setTextColor(containerView.context.getColor(R.color.grey_50))
+            }
+            chartData.error -> {
+                textChartError.visibility = View.VISIBLE
+                textChartError.text = containerView.context.getString(R.string.NotAvailable)
+
+                chartRateDiff.text = "----"
+                chartRateDiff.setTextColor(containerView.context.getColor(R.color.grey_50))
+            }
+            else -> {
+                chartView.visibility = View.VISIBLE
+
+                val diffColor = if (chartData.diff < BigDecimal.ZERO)
+                    containerView.context.getColor(R.color.red_d) else
+                    containerView.context.getColor(R.color.green_d)
+                chartView.setData(chartData.points, ChartType.DAILY)
+                chartRateDiff.text = App.numberFormatter.format(chartData.diff.toDouble(), showSign = true, precision = 2) + "%"
+                chartRateDiff.setTextColor(diffColor)
+            }
         }
     }
 
-    private fun setChartVisibility(show: Boolean, textCurrencyAmountVisibility: Int) {
+    private fun setChartVisibility(show: Boolean, fiatAmountVisibility: Int) {
         if (show) {
             chartView.visibility = View.VISIBLE
+            chartButton.visibility = View.VISIBLE
             chartViewCard.visibility = View.VISIBLE
             chartRateDiff.visibility = View.VISIBLE
-            textCurrencyAmount.visibility = View.GONE
-            textCoinAmount.visibility = View.GONE
+            fiatAmount.visibility = View.GONE
+            coinAmount.visibility = View.GONE
         } else {
-            textCurrencyAmount.visibility = textCurrencyAmountVisibility
-            textCoinAmount.visibility = View.VISIBLE
+            fiatAmount.visibility = fiatAmountVisibility
+            coinAmount.visibility = View.VISIBLE
             chartViewCard.visibility = View.INVISIBLE
+            chartButton.visibility = View.INVISIBLE
             chartRateDiff.visibility = View.INVISIBLE
         }
     }

@@ -117,7 +117,7 @@ class EosAdapter(eos: CoinType.Eos, private val eosKit: EosKit, private val deci
     }
 
     private fun getException(error: Throwable): Exception {
-        return when(error) {
+        return when (error) {
             is BackendError.TransferToSelfError -> CoinException(R.string.Eos_Backend_Error_SelfTransfer)
             is BackendError.AccountNotExistError -> CoinException(R.string.Eos_Backend_Error_AccountNotExist)
             is BackendError.InsufficientRamError -> CoinException(R.string.Eos_Backend_Error_InsufficientRam)

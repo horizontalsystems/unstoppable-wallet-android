@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.welcome
 
-class WelcomePresenter(private val interactor: WelcomeModule.IInteractor, private val router: WelcomeModule.IRouter) : WelcomeModule.IViewDelegate, WelcomeModule.IInteractorDelegate {
+class WelcomePresenter(private val interactor: WelcomeModule.IInteractor, private val router: WelcomeModule.IRouter) : WelcomeModule.IViewDelegate {
 
     var view: WelcomeModule.IView? = null
 
@@ -9,21 +9,11 @@ class WelcomePresenter(private val interactor: WelcomeModule.IInteractor, privat
     }
 
     override fun createWalletDidClick() {
-        interactor.createWallet()
+        router.openCreateWalletModule()
     }
 
     override fun restoreWalletDidClick() {
         router.openRestoreModule()
-    }
-
-    // interactor delegate
-
-    override fun didCreateWallet() {
-        router.openMainModule()
-    }
-
-    override fun didFailToCreateWallet() {
-        view?.showError()
     }
 
 }

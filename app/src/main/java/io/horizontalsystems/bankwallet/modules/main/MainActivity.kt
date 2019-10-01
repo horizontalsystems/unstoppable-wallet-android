@@ -55,7 +55,6 @@ class MainActivity : BaseActivity(), ReceiveView.Listener, TransactionInfoView.L
             it.inflate()
             loadViewPager()
         }
-
     }
 
     override fun onBackPressed() = when {
@@ -146,7 +145,7 @@ class MainActivity : BaseActivity(), ReceiveView.Listener, TransactionInfoView.L
         ahBottomNavigation.addItem(AHBottomNavigationItem(R.string.Transactions_Title, R.drawable.transactions, 0))
         ahBottomNavigation.addItem(AHBottomNavigationItem(R.string.Settings_Title, R.drawable.settings, 0))
 
-        ahBottomNavigation.accentColor = ContextCompat.getColor(this, R.color.yellow_crypto)
+        ahBottomNavigation.accentColor = ContextCompat.getColor(this, R.color.yellow_d)
         ahBottomNavigation.inactiveColor = ContextCompat.getColor(this, R.color.grey)
         ahBottomNavigation.titleState = AHBottomNavigation.TitleState.ALWAYS_HIDE
         ahBottomNavigation.setUseElevation(false)
@@ -213,9 +212,6 @@ class MainActivity : BaseActivity(), ReceiveView.Listener, TransactionInfoView.L
     }
 
     private fun collapseBottomSheetsOnActivityRestore() {
-        if (receiveBottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED && findViewById<TextView>(R.id.receiveTxtTitle)?.text?.isEmpty() == true) {
-            receiveBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
-        }
         if (txInfoBottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED && findViewById<TextView>(R.id.txInfoCoinName)?.text?.isEmpty() == true) {
             txInfoBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         }

@@ -3,19 +3,14 @@ package io.horizontalsystems.bankwallet.modules.settings.basecurrency
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
 import io.horizontalsystems.bankwallet.entities.Currency
 
-class BaseCurrencySettingsInteractor(
-        private val currencyManager: ICurrencyManager): BaseCurrencySettingsModule.IBaseCurrencySettingsInteractor {
-
-    var delegate: BaseCurrencySettingsModule.IBaseCurrencySettingsInteractorDelegate? = null
+class BaseCurrencySettingsInteractor(private val currencyManager: ICurrencyManager) : BaseCurrencySettingsModule.IInteractor {
 
     override val currencies: List<Currency>
         get() = currencyManager.currencies
 
-    override val baseCurrency: Currency
+    override var baseCurrency: Currency
         get() = currencyManager.baseCurrency
-
-    override fun setBaseCurrency(code: String) {
-        currencyManager.setBaseCurrency(code= code)
-        delegate?.didSetBaseCurrency()
-    }
+        set(value) {
+            currencyManager.baseCurrency = value
+        }
 }

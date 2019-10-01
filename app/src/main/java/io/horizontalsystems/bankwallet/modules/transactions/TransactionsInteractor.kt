@@ -4,7 +4,7 @@ import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ICurrencyManager
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.core.IWalletManager
-import io.horizontalsystems.bankwallet.core.managers.NetworkAvailabilityManager
+import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.RateManager
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
@@ -20,7 +20,7 @@ class TransactionsInteractor(
         private val adapterManager: IAdapterManager,
         private val currencyManager: ICurrencyManager,
         private val rateManager: RateManager,
-        private val networkAvailabilityManager: NetworkAvailabilityManager) : TransactionsModule.IInteractor {
+        private val connectivityManager: ConnectivityManager) : TransactionsModule.IInteractor {
 
     var delegate: TransactionsModule.IInteractorDelegate? = null
 
@@ -51,11 +51,11 @@ class TransactionsInteractor(
                 }
                 .let { disposables.add(it) }
 
-        networkAvailabilityManager.networkAvailabilitySignal
+        connectivityManager.networkAvailabilitySignal
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe {
-                    if (networkAvailabilityManager.isConnected) {
+                    if (connectivityManager.isConnected) {
                         delegate?.onConnectionRestore()
                     }
                 }

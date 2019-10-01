@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.EosUnsupportedException
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
+import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.backup.BackupModule
 import io.horizontalsystems.bankwallet.modules.restore.eos.RestoreEosModule
@@ -42,7 +43,7 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
                 val confirmationList = listOf(
                         getString(R.string.ManageKeys_Delete_ConfirmationRemove, getString(item.predefinedAccountType.title)),
                         getString(R.string.ManageKeys_Delete_ConfirmationDisable, getString(item.predefinedAccountType.coinCodes)),
-                        getString(R.string.ManageKeys_Delete_ConfirmationLoose)
+                        getString(R.string.ManageKeys_Delete_ConfirmationLose)
                 )
 
                 val confirmListener = object : ManageKeysDeleteAlert.Listener {
@@ -51,19 +52,23 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
                     }
                 }
 
-                ManageKeysDeleteAlert.show(this, confirmationList, confirmListener)
+                ManageKeysDeleteAlert.show(this, getString(item.predefinedAccountType.title), confirmationList, confirmListener)
             }
         })
 
         viewModel.confirmCreateEvent.observe(this, Observer {
-            ManageKeysDialog.show(getString(it.predefinedAccountType.title), getString(R.string.ManageCoins_AddCoin_Text, getString(it.predefinedAccountType.coinCodes)), this, this, ManageAction.CREATE)
+            val title = getString(R.string.ManageCoins_AddCoin_Title)
+            val subtitle = getString(it.predefinedAccountType.title)
+            val description = getString(R.string.ManageCoins_AddCoin_Text, getString(it.predefinedAccountType.coinCodes))
+            ManageKeysDialog.show(title, subtitle, description, this, this, ManageAction.CREATE)
         })
 
         viewModel.confirmBackupEvent.observe(this, Observer {
             val title = getString(R.string.ManageKeys_Delete_Alert_Title)
+            val subtitle = getString(it.predefinedAccountType.title)
             val keyName = getString(it.predefinedAccountType.title)
-            val description = getString(R.string.ManageKeys_Delete_Alert, keyName)
-            ManageKeysDialog.show(title, description, this, this, ManageAction.BACKUP)
+            val description = getString(R.string.ManageKeys_Delete_Alert)
+            ManageKeysDialog.show(title, subtitle, description, this, this, ManageAction.BACKUP)
         })
 
         viewModel.showErrorEvent.observe(this, Observer {
@@ -106,11 +111,11 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
         if (data == null || resultCode != RESULT_OK)
             return
 
-        val accountType = data.getParcelableExtra<AccountType>("accountType")
+        val accountType = data.getParcelableExtra<AccountType>(ModuleField.ACCOUNT_TYPE)
 
         when (requestCode) {
             ModuleCode.RESTORE_WORDS -> {
-                viewModel.delegate.onConfirmRestore(accountType, data.getParcelableExtra("syncMode"))
+                viewModel.delegate.onConfirmRestore(accountType, data.getParcelableExtra(ModuleField.SYNCMODE))
             }
             ModuleCode.RESTORE_EOS -> {
                 viewModel.delegate.onConfirmRestore(accountType)

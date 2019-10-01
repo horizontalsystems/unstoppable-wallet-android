@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.fee
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.SingleLiveEvent
+import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.entities.Coin
 
 class SendFeeViewModel : ViewModel(), SendFeeModule.IView {
@@ -11,8 +12,8 @@ class SendFeeViewModel : ViewModel(), SendFeeModule.IView {
 
     val primaryFee = MutableLiveData<String?>()
     val secondaryFee = MutableLiveData<String?>()
-    val duration = MutableLiveData<String>()
-    val feePriority = MutableLiveData<String>()
+    val duration = MutableLiveData<Long>()
+    val feePriority = MutableLiveData<FeeRatePriority>()
     val showFeePriorityOptions = MutableLiveData<List<SendFeeModule.FeeRateInfoViewItem>>()
     val insufficientFeeBalanceError = SingleLiveEvent<SendFeeModule.InsufficientFeeBalance?>()
 
@@ -28,11 +29,11 @@ class SendFeeViewModel : ViewModel(), SendFeeModule.IView {
         secondaryFee.value = feeAmount
     }
 
-    override fun setFeePriority(priority: String) {
+    override fun setFeePriority(priority: FeeRatePriority) {
         feePriority.value = priority
     }
 
-    override fun setDuration(duration: String) {
+    override fun setDuration(duration: Long) {
         this.duration.value = duration
     }
 

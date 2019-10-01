@@ -21,8 +21,8 @@
             android:layout_height="?android:attr/actionBarSize"
             android:theme="@style/ToolbarStyle"
             app:titleMarginStart="16dp"
-            app:titleTextAppearance="@style/TabTitleSmall"
-            />
+            app:titleTextAppearance="@style/Title3"
+            app:titleTextColor="?TitleColor" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.journeyapps.barcodescanner.DecoratedBarcodeView

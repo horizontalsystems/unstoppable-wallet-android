@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.core.security
 
-import androidx.core.hardware.fingerprint.FingerprintManagerCompat
+import androidx.biometric.BiometricPrompt
 import io.horizontalsystems.bankwallet.core.IEncryptionManager
 import io.horizontalsystems.bankwallet.core.IKeyProvider
 import javax.crypto.Cipher
@@ -17,11 +17,11 @@ class EncryptionManager(private val keyProvider: IKeyProvider) : IEncryptionMana
         return CipherWrapper().decrypt(data, keyProvider.getKey())
     }
 
-    override fun getCryptoObject(): FingerprintManagerCompat.CryptoObject {
+    override fun getCryptoObject(): BiometricPrompt.CryptoObject? {
         val cipher = CipherWrapper().cipher
         cipher.init(Cipher.ENCRYPT_MODE, keyProvider.getKey())
 
-        return FingerprintManagerCompat.CryptoObject(cipher)
+        return BiometricPrompt.CryptoObject(cipher)
     }
 
 }

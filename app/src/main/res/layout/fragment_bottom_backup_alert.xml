@@ -25,13 +25,13 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="10dp"
         android:src="@drawable/ic_attention"
-        android:tint="@color/red_warning"
+        android:tint="?ColorLucian"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/dialogTitle"
-        style="@style/BaseSb"
+        style="@style/Headline2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
@@ -50,21 +50,21 @@
         android:layout_width="0dp"
         android:layout_height="0.5dp"
         android:layout_marginTop="10dp"
-        android:background="@color/steel_15"
+        android:background="@color/steel_20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dialogIcon" />
 
     <TextView
         android:id="@+id/dialogText"
-        style="@style/Body1Grey"
+        style="@style/Subhead2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:paddingBottom="8dp"
-        android:text="@string/Receive_Alert_NotBackedUp_Description"
+        android:textColor="@color/grey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/border" />

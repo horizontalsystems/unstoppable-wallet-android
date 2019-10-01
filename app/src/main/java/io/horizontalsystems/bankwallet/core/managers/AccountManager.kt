@@ -25,6 +25,7 @@ class AccountManager(private val storage: IAccountsStorage, private val accountC
 
     override val accountsFlowable: Flowable<List<Account>>
         get() = accountsSubject.toFlowable(BackpressureStrategy.BUFFER)
+
     override val deleteAccountObservable: Flowable<String>
         get() = deleteAccountSubject.toFlowable(BackpressureStrategy.BUFFER)
 
@@ -59,10 +60,11 @@ class AccountManager(private val storage: IAccountsStorage, private val accountC
     }
 
     override fun clear() {
-        storage.clear()
+        cache.accountsSet.map { it.id }.forEach { accountId ->
+            storage.delete(accountId)
+        }
         cache.set(listOf())
-
-        accountsSubject.onNext(accounts)
+        accountsSubject.onNext(listOf())
     }
 
     override fun clearAccounts() {

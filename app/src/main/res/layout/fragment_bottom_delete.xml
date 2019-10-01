@@ -26,13 +26,13 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="10dp"
         android:src="@drawable/ic_attention"
-        android:tint="@color/red_warning"
+        android:tint="?ColorLucian"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/confirmTitle"
-        style="@style/BaseSb"
+        style="@style/Headline2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
@@ -46,6 +46,18 @@
         app:layout_constraintEnd_toStartOf="@+id/closeButton"
         app:layout_constraintStart_toEndOf="@+id/confirmIcon"
         app:layout_constraintTop_toTopOf="@+id/confirmIcon" />
+
+    <TextView
+        android:id="@+id/confirmSubtitle"
+        style="@style/Subhead2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:includeFontPadding="false"
+        android:textColor="@color/grey"
+        app:layout_constraintLeft_toLeftOf="@id/confirmTitle"
+        app:layout_constraintTop_toBottomOf="@id/confirmTitle"
+        tools:text="Subtitle" />
 
     <ImageView
         android:id="@+id/closeButton"
@@ -66,10 +78,10 @@
         android:layout_width="0dp"
         android:layout_height="0.5dp"
         android:layout_marginTop="10dp"
-        android:background="@color/steel_15"
+        android:background="@color/steel_20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/confirmIcon" />
+        app:layout_constraintTop_toBottomOf="@+id/confirmSubtitle" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

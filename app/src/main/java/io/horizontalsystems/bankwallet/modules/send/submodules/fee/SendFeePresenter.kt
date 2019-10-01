@@ -47,8 +47,8 @@ class SendFeePresenter(
     }
 
     private fun syncFeeRateLabels() {
-        view?.setDuration(helper.durationInterval(feeRateInfo.duration))
-        view?.setFeePriority(helper.priority(feeRateInfo.priority))
+        view?.setDuration(feeRateInfo.duration)
+        view?.setFeePriority(feeRateInfo.priority)
     }
 
     private fun validate() {
@@ -56,7 +56,7 @@ class SendFeePresenter(
         val availableFeeBalance = availableFeeBalance ?: return
 
         if (availableFeeBalance < fee) {
-            throw SendFeeModule.InsufficientFeeBalance(baseCoin, coinProtocol, feeCoin, CoinValue(feeCoin.code, fee))
+            throw SendFeeModule.InsufficientFeeBalance(baseCoin, coinProtocol, feeCoin, CoinValue(feeCoin, fee))
         }
     }
 
@@ -76,7 +76,7 @@ class SendFeePresenter(
     override val primaryAmountInfo: AmountInfo
         get() {
             return when (inputType) {
-                SendModule.InputType.COIN -> CoinValueInfo(CoinValue(coin.code, fee))
+                SendModule.InputType.COIN -> CoinValueInfo(CoinValue(coin, fee))
                 SendModule.InputType.CURRENCY -> {
                     this.xRate?.let { xRate ->
                         CurrencyValueInfo(CurrencyValue(baseCurrency, fee * xRate.value))
@@ -88,7 +88,7 @@ class SendFeePresenter(
     override val secondaryAmountInfo: AmountInfo?
         get() {
             return when (inputType.reversed()) {
-                SendModule.InputType.COIN -> CoinValueInfo(CoinValue(coin.code, fee))
+                SendModule.InputType.COIN -> CoinValueInfo(CoinValue(coin, fee))
                 SendModule.InputType.CURRENCY -> {
                     this.xRate?.let { xRate ->
                         CurrencyValueInfo(CurrencyValue(baseCurrency, fee * xRate.value))
@@ -97,8 +97,8 @@ class SendFeePresenter(
             }
         }
 
-    override val duration: String?
-        get() = helper.durationInterval(feeRateInfo.duration)
+    override val duration: Long?
+        get() = feeRateInfo.duration
 
     override fun setFee(fee: BigDecimal) {
         this.fee = fee
@@ -140,9 +140,7 @@ class SendFeePresenter(
     }
 
     private fun feeRateInfoViewItem(rateInfo: FeeRateInfo): SendFeeModule.FeeRateInfoViewItem {
-        return SendFeeModule.FeeRateInfoViewItem(
-                title = "${helper.priority(rateInfo.priority)} (~${helper.duration(rateInfo.duration)})",
-                feeRateInfo = rateInfo,
+        return SendFeeModule.FeeRateInfoViewItem(feeRateInfo = rateInfo,
                 selected = rateInfo.priority == feeRateInfo.priority)
     }
 

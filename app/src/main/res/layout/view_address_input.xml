@@ -10,7 +10,7 @@
     <View
         android:id="@+id/background"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
+        android:layout_height="0dp"
         android:layout_marginTop="12dp"
         android:background="@drawable/input_background_themed"
         android:gravity="center_vertical"
@@ -25,10 +25,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:paddingEnd="8dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        android:paddingEnd="6dp"
         android:paddingStart="12dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="@+id/background"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/background"
@@ -45,25 +47,24 @@
 
             <TextView
                 android:id="@+id/txtAddress"
-                style="@style/Base"
+                style="@style/Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="middle"
-                android:textColorHint="@color/grey_50"
-                android:textColor="?TextColorBarsToDark"
                 android:hint="@string/Send_Hint_Address"
                 android:singleLine="true"
-                />
+                android:textColor="?TextColorBarsToDark"
+                android:textColorHint="@color/grey_50" />
 
             <TextView
                 android:id="@+id/txtAddressError"
+                style="@style/Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
-                style="@style/CaptionRegularRed"
+                android:textColor="?ColorLucian"
                 android:visibility="gone"
-                tools:text="@string/Send_Error_IncorrectAddress"
-                />
+                tools:text="@string/Send_Error_IncorrectAddress" />
         </LinearLayout>
 
         <ImageButton

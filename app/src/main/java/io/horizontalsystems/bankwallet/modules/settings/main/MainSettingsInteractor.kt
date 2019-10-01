@@ -17,8 +17,8 @@ class MainSettingsInteractor(
     var delegate: MainSettingsModule.IMainSettingsInteractorDelegate? = null
 
     init {
-        disposables.add(backupManager.nonBackedUpCountFlowable.subscribe {
-            delegate?.didUpdateNonBackedUp(it)
+        disposables.add(backupManager.allBackedUpFlowable.subscribe {
+            delegate?.didUpdateAllBackedUp(it)
         })
 
         disposables.add(currencyManager.baseCurrencyUpdatedSignal.subscribe {
@@ -32,11 +32,11 @@ class MainSettingsInteractor(
     override val appWebPageLink: String
         get() = appConfigProvider.appWebPageLink
 
-    override val nonBackedUpCount: Int
-        get() = backupManager.nonBackedUpCount
+    override val allBackedUp: Boolean
+        get() = backupManager.allBackedUp
 
     override val currentLanguageDisplayName: String
-        get() = languageManager.currentLanguage.displayLanguage
+        get() = languageManager.currentLanguageName
 
     override val baseCurrency: Currency
         get() = currencyManager.baseCurrency

@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.amount
 
-import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.Rate
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CoinValueInfo
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CurrencyValueInfo
@@ -15,7 +12,7 @@ import java.math.RoundingMode
 class SendAmountPresenter(
         private val interactor: SendAmountModule.IInteractor,
         private val presenterHelper: SendAmountPresenterHelper,
-        private val coinCode: String,
+        private val coin: Coin,
         private val baseCurrency: Currency)
     : SendAmountModule.IViewDelegate, SendAmountModule.IInteractorDelegate, SendAmountModule.IAmountModule {
 
@@ -32,7 +29,7 @@ class SendAmountPresenter(
         private set
 
     override val coinAmount: CoinValue
-        get() = CoinValue(coinCode, amount ?: BigDecimal.ZERO)
+        get() = CoinValue(coin, amount ?: BigDecimal.ZERO)
 
     override val fiatAmount: CurrencyValue?
         get() {
@@ -47,7 +44,7 @@ class SendAmountPresenter(
     @Throws
     override fun primaryAmountInfo(): SendModule.AmountInfo {
         return when (inputType) {
-            SendModule.InputType.COIN -> CoinValueInfo(CoinValue(coinCode, validAmount()))
+            SendModule.InputType.COIN -> CoinValueInfo(CoinValue(coin, validAmount()))
             SendModule.InputType.CURRENCY -> {
                 this.xRate?.let { xRate ->
                     CurrencyValueInfo(CurrencyValue(baseCurrency, validAmount() * xRate.value))
@@ -58,7 +55,7 @@ class SendAmountPresenter(
 
     override fun secondaryAmountInfo(): SendModule.AmountInfo? {
         return when (inputType.reversed()) {
-            SendModule.InputType.COIN -> CoinValueInfo(CoinValue(coinCode, validAmount()))
+            SendModule.InputType.COIN -> CoinValueInfo(CoinValue(coin, validAmount()))
             SendModule.InputType.CURRENCY -> {
                 this.xRate?.let { xRate ->
                     CurrencyValueInfo(CurrencyValue(baseCurrency, validAmount() * xRate.value))
@@ -202,7 +199,7 @@ class SendAmountPresenter(
         if (availableBalance < amount) {
             val amountInfo = when (inputType) {
                 SendModule.InputType.COIN -> {
-                    CoinValueInfo(CoinValue(coinCode, availableBalance))
+                    CoinValueInfo(CoinValue(coin, availableBalance))
                 }
                 SendModule.InputType.CURRENCY -> {
                     xRate?.let { rate ->

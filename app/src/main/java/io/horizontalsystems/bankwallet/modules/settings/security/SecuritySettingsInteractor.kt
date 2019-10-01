@@ -17,27 +17,24 @@ class SecuritySettingsInteractor(
     private var disposables: CompositeDisposable = CompositeDisposable()
 
     init {
-        backupManager.nonBackedUpCountFlowable
-                .subscribe { delegate?.didBackup(it) }
+        backupManager.allBackedUpFlowable
+                .subscribe { delegate?.didAllBackedUp(it) }
                 .let { disposables.add(it) }
     }
 
-    override val hasFingerprintSensor: Boolean
-        get() = systemInfoManager.hasFingerprintSensor
+    override val biometricAuthSupported: Boolean
+        get() = systemInfoManager.biometricAuthSupported
 
-    override val hasEnrolledFingerprints: Boolean
-        get() = systemInfoManager.hasEnrolledFingerprints
+    override val allBackedUp: Boolean
+        get() = backupManager.allBackedUp
 
-    override val nonBackedUpCount: Int
-        get() = backupManager.nonBackedUpCount
-
-    override var isFingerPrintEnabled: Boolean
-        get() = localStorage.isFingerprintEnabled
+    override var isBiometricEnabled: Boolean
+        get() = pinManager.isFingerprintEnabled
         set(value) {
-            localStorage.isFingerprintEnabled = value
+            pinManager.isFingerprintEnabled = value
         }
 
-    override val isPinEnabled: Boolean
+    override val isPinSet: Boolean
         get() = pinManager.isPinSet
 
     override fun disablePin() {

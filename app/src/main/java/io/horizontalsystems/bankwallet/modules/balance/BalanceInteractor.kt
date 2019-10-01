@@ -2,28 +2,47 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import android.os.Handler
 import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.core.managers.RateStatsManager
+import io.horizontalsystems.bankwallet.core.managers.BackgroundManager
+import io.horizontalsystems.bankwallet.core.managers.StatsData
+import io.horizontalsystems.bankwallet.core.managers.StatsError
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 class BalanceInteractor(
         private val walletManager: IWalletManager,
         private val adapterManager: IAdapterManager,
-        private val rateStorage: IRateStorage,
-        private val rateStatsManager: RateStatsManager,
+        private val rateStatsManager: IRateStatsManager,
         private val currencyManager: ICurrencyManager,
+        private val backgroundManager: BackgroundManager,
+        private val rateStorage: IRateStorage,
         private val localStorage: ILocalStorage,
-        private val refreshTimeout: Long = 2)
-    : BalanceModule.IInteractor {
+        private val rateManager: IRateManager,
+        private val predefinedAccountTypeManager: IPredefinedAccountTypeManager,
+        private val refreshTimeout: Long = 2) : BalanceModule.IInteractor,  BackgroundManager.Listener {
 
     var delegate: BalanceModule.IInteractorDelegate? = null
 
     private var disposables = CompositeDisposable()
     private var adapterDisposables = CompositeDisposable()
     private var rateDisposables = CompositeDisposable()
+
+    init {
+        backgroundManager.registerListener(this)
+    }
+
+    // BackgroundManager.Listener
+
+    override fun willEnterForeground() {
+        delegate?.willEnterForeground()
+    }
+
+    // BalanceModule.IInteractor
+
+    override fun syncStats(coinCode: String, currencyCode: String) {
+        rateStatsManager.syncStats(coinCode, currencyCode)
+    }
 
     override fun initWallets() {
         onUpdateWallets()
@@ -46,6 +65,18 @@ class BalanceInteractor(
                 .observeOn(Schedulers.io())
                 .subscribe { onUpdateCurrency() }
                 .let { disposables.add(it) }
+
+        rateStatsManager.statsFlowable
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe({
+                    when (it) {
+                        is StatsData -> delegate?.onReceiveRateStats(it)
+                        is StatsError -> delegate?.onFailFetchChartStats(it.coinCode)
+                    }
+                }, {
+                })
+                .let { disposables.add(it) }
     }
 
     override fun fetchRates(currencyCode: String, coinCodes: List<CoinCode>) {
@@ -53,23 +84,14 @@ class BalanceInteractor(
         coinCodes.forEach { getLatestRate(currencyCode, it) }
     }
 
-    override fun fetchRateStats(currencyCode: String, coinCode: CoinCode) {
-        rateStatsManager.getRateStats(coinCode, currencyCode)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    delegate?.onReceiveRateStats(coinCode, it)
-                }, {
-                    delegate?.onFailFetchChartStats(coinCode)
-                })
-                .let { disposables.add(it) }
-
-    }
-
     override fun getSortingType() = localStorage.sortType
 
     override fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter? {
         return adapterManager.getBalanceAdapterForWallet(wallet)
+    }
+
+    override fun predefinedAccountType(wallet: Wallet): IPredefinedAccountType? {
+        return predefinedAccountTypeManager.predefinedAccountType(wallet.account.type)
     }
 
     private fun onUpdateCurrency() {
@@ -114,11 +136,14 @@ class BalanceInteractor(
 
     override fun refresh() {
         adapterManager.refresh()
+        rateManager.syncLatestRates()
 
         Handler().postDelayed({ delegate?.didRefresh() }, refreshTimeout * 1000)
     }
 
     override fun clear() {
+        backgroundManager.unregisterListener(this)
+
         disposables.clear()
         adapterDisposables.clear()
         rateDisposables.clear()

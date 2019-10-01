@@ -8,13 +8,13 @@ class ChartConfig(context: Context, viewHelper: ViewHelper) {
     var showGrid = true
     var animated = true
     //  colors
-    var curveColor = context.getColor(R.color.red_warning)
-    var touchColor = context.getColor(R.color.bars_color)
+    var curveColor = context.getColor(R.color.red_d)
+    var touchColor = context.getColor(R.color.light)
     var gridColor = context.getColor(R.color.steel_20)
     var textColor = context.getColor(R.color.grey)
-    var growColor = context.getColor(R.color.green_crypto)
-    var fallColor = context.getColor(R.color.red_warning)
-    var indicatorColor = context.getColor(R.color.bars_color)
+    var growColor = context.getColor(R.color.green_d)
+    var fallColor = context.getColor(R.color.red_d)
+    var indicatorColor = context.getColor(R.color.light)
 
     //  dimens
     var width = 0f

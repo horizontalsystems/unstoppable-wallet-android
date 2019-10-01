@@ -54,7 +54,7 @@ class BinanceAdapter(
     // ITransactionsAdapter
 
     override val confirmationsThreshold: Int
-        get() = 6
+        get() = 1
 
     override val lastBlockHeight: Int?
         get() = binanceKit.latestBlock?.height

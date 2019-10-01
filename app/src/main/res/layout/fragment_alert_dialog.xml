@@ -16,7 +16,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:fontFamily="@font/noto_sans_bold"
-        android:textColor="?attr/AlertTextColor"
+        android:textColor="?attr/ColorOz"
         android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +25,7 @@
 
     <TextView
         android:id="@+id/txtDescription"
-        style="@style/Body1Grey"
+        style="@style/Subhead2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -34,7 +34,7 @@
         android:layout_marginBottom="20dp"
         android:maxLines="10"
         android:textAlignment="center"
-        android:textColor="?attr/AlertTextColor"
+        android:textColor="?attr/ColorOz"
         app:layout_constraintBottom_toTopOf="@+id/buttonWrapper"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,7 +63,7 @@
             android:paddingBottom="16dp"
             android:text="@string/Alert_Ok"
             android:textAlignment="center"
-            android:textColor="@color/yellow_crypto"
+            android:textColor="?ColorJacob"
             android:textSize="17sp" />
     </FrameLayout>
 

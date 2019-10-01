@@ -24,6 +24,10 @@ class CoinIconView : ConstraintLayout {
         dynamicCoinIcon.setImageResource(LayoutHelper.getCoinDrawableResource(coin.code))
     }
 
+    fun bind(coinCode: String) {
+        dynamicCoinIcon.setImageResource(LayoutHelper.getCoinDrawableResource(coinCode))
+    }
+
     fun bind(icon: Int) {
         dynamicCoinIcon.setImageResource(icon)
     }

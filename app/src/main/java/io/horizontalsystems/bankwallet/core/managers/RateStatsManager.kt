@@ -1,38 +1,56 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.INetworkManager
+import io.horizontalsystems.bankwallet.core.IRateStatsManager
 import io.horizontalsystems.bankwallet.core.IRateStorage
 import io.horizontalsystems.bankwallet.core.managers.ServiceExchangeApi.HostType
 import io.horizontalsystems.bankwallet.entities.Rate
 import io.horizontalsystems.bankwallet.entities.RateData
 import io.horizontalsystems.bankwallet.entities.RateStatData
+import io.horizontalsystems.bankwallet.lib.chartview.ChartHelper
 import io.horizontalsystems.bankwallet.lib.chartview.ChartView.ChartType
-import io.horizontalsystems.bankwallet.lib.chartview.models.ChartData
+import io.horizontalsystems.bankwallet.lib.chartview.models.ChartPoint
+import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
+import java.util.*
 
-class RateStatsManager(private val networkManager: INetworkManager, private val rateStorage: IRateStorage) {
+class RateStatsManager(private val networkManager: INetworkManager, private val rateStorage: IRateStorage)
+    : IRateStatsManager {
 
+    private val cacheUpdateTimeInterval: Long = 30 * 60 * 60 // 30 minutes in seconds
     private val disposables = CompositeDisposable()
-    private val cache = mutableMapOf<StatsKey, StatsData>()
+    private val cache = mutableMapOf<StatsKey, Pair<Long?, RateStatData>>()
+    private val statsSubject = PublishSubject.create<StatsResponse>()
 
-    fun getRateStats(coinCode: String, currencyCode: String): Flowable<StatsData> {
+    override val statsFlowable: Flowable<StatsResponse>
+        get() = statsSubject.toFlowable(BackpressureStrategy.BUFFER)
+
+    override fun syncStats(coinCode: String, currencyCode: String) {
         val statsKey = StatsKey(coinCode, currencyCode)
+        val currentTime = Date().time / 1000 // timestamp in seconds
         val cached = cache[statsKey]
-        if (cached != null) {
-            return Flowable.just(cached)
+
+        val rateStats = if (cached != null && cached.first ?: 0 > currentTime - cacheUpdateTimeInterval) {
+            Single.just(cached.second)
+        } else {
+            networkManager.getRateStats(HostType.MAIN, coinCode, currencyCode)
+                    .onErrorResumeNext { networkManager.getRateStats(HostType.FALLBACK, coinCode, currencyCode) }
         }
 
-        val rateLocal = rateStorage.latestRateObservable(coinCode, currencyCode)
-        val rateStats = networkManager
-                .getRateStats(HostType.MAIN, coinCode, currencyCode)
-                .onErrorResumeNext(networkManager.getRateStats(HostType.FALLBACK, coinCode, currencyCode))
+        val rateLocal = rateStorage.latestRateObservable(coinCode, currencyCode).firstOrError()
 
-        return Flowable.zip(rateLocal, rateStats, BiFunction<Rate, RateStatData, Pair<Rate, RateStatData>> { a, b -> Pair(a, b) })
+        Single.zip(rateLocal, rateStats, BiFunction<Rate, RateStatData, Pair<Rate, RateStatData>> { a, b -> Pair(a, b) })
                 .map { (rate, data) ->
-                    val stats = mutableMapOf<String, ChartData>()
+                    val lastDailyTimestamp = data.stats[ChartType.DAILY.name]?.timestamp
+                    cache[statsKey] = Pair(lastDailyTimestamp, data)
+
+                    val stats = mutableMapOf<String, List<ChartPoint>>()
                     val diffs = mutableMapOf<String, BigDecimal>()
 
                     for (type in data.stats.keys) {
@@ -41,11 +59,18 @@ class RateStatsManager(private val networkManager: INetworkManager, private val 
                         val chartData = convert(statsData, rate, chartType)
 
                         stats[type] = chartData
-                        diffs[type] = growthDiff(chartData.points)
+                        diffs[type] = growthDiff(chartData)
                     }
 
-                    StatsData(data.marketCap, stats, diffs).also { cache[statsKey] = it }
+                    StatsData(coinCode, data.marketCap, stats, diffs)
                 }
+                .subscribeOn(Schedulers.io())
+                .subscribe({
+                    statsSubject.onNext(it)
+                }, {
+                    statsSubject.onNext(StatsError(coinCode))
+                })
+                .let { disposables.add(it) }
     }
 
     fun clear() {
@@ -53,27 +78,30 @@ class RateStatsManager(private val networkManager: INetworkManager, private val 
         cache.clear()
     }
 
-    private fun convert(data: RateData, rate: Rate?, chartType: ChartType): ChartData {
-        val rates = data.rates.toMutableList()
+    private fun convert(data: RateData, rate: Rate?, chartType: ChartType): List<ChartPoint> {
+        val rates = when (chartType) {
+            ChartType.MONTHLY18 -> data.rates.takeLast(ChartType.annualPoints) // for one year
+            else -> data.rates
+        }
+
+        val points = ChartHelper.convert(rates, data.scale, data.timestamp).toMutableList()
         if (rate != null) {
-            rates.add(rate.value.toFloat())
+            points.add(ChartPoint(rate.value.toFloat(), rate.timestamp))
         }
 
-        val points = when (chartType) {
-            ChartType.MONTHLY18 -> rates.takeLast(ChartType.annualPoints) // for one year
-            else -> rates
-        }
-
-        return ChartData(points, data.timestamp, data.scale, chartType)
+        return points
     }
 
-    private fun growthDiff(points: List<Float>): BigDecimal {
-        val pointStart = points.first { it != 0f }
+    private fun growthDiff(points: List<ChartPoint>): BigDecimal {
+        val pointStart = points.first { it.value != 0f }
         val pointEnd = points.last()
 
-        return ((pointEnd - pointStart) / pointStart * 100).toBigDecimal()
+        return ((pointEnd.value - pointStart.value) / pointStart.value * 100).toBigDecimal()
     }
 }
 
+sealed class StatsResponse
+
 data class StatsKey(val coinCode: String, val currencyCode: String)
-data class StatsData(val marketCap: BigDecimal, val stats: Map<String, ChartData>, val diff: Map<String, BigDecimal>)
+data class StatsData(val coinCode: String, val marketCap: BigDecimal, val stats: Map<String, List<ChartPoint>>, val diff: Map<String, BigDecimal>) : StatsResponse()
+data class StatsError(val coinCode: String) : StatsResponse()

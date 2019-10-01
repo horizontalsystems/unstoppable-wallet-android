@@ -22,6 +22,4 @@ class KeyStoreChangeListener(private val systemInfoManager: ISystemInfoManager,
         }
     }
 
-    override fun didEnterBackground() {}
-
 }

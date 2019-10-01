@@ -12,11 +12,13 @@ import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
+import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.restore.eos.RestoreEosModule
 import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
+import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.activity_restore.*
 import kotlinx.android.synthetic.main.view_holder_account_restore.*
@@ -29,7 +31,7 @@ class RestoreActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_restore)
-        shadowlessToolbar.bind(getString(R.string.Restore_Title), TopMenuItem(R.drawable.back, onClick = { onBackPressed() } ))
+        shadowlessToolbar.bind(getString(R.string.Restore_Title), TopMenuItem(R.drawable.back, onClick = { onBackPressed() }))
 
         viewModel = ViewModelProviders.of(this).get(RestoreViewModel::class.java)
         viewModel.init()
@@ -40,6 +42,10 @@ class RestoreActivity : BaseActivity() {
         viewModel.reloadLiveEvent.observe(this, Observer {
             adapter.items = it
             adapter.notifyDataSetChanged()
+        })
+
+        viewModel.showErrorLiveEvent.observe(this, Observer {
+            HudHelper.showErrorMessage(R.string.Restore_RestoreFailed)
         })
 
         viewModel.startRestoreWordsLiveEvent.observe(this, Observer { wordsCount ->
@@ -66,11 +72,11 @@ class RestoreActivity : BaseActivity() {
         if (data == null || resultCode != RESULT_OK)
             return
 
-        val accountType = data.getParcelableExtra<AccountType>("accountType")
+        val accountType = data.getParcelableExtra<AccountType>(ModuleField.ACCOUNT_TYPE)
 
         when (requestCode) {
             ModuleCode.RESTORE_WORDS -> {
-                viewModel.delegate.onRestore(accountType, data.getParcelableExtra("syncMode"))
+                viewModel.delegate.onRestore(accountType, data.getParcelableExtra(ModuleField.SYNCMODE))
             }
             ModuleCode.RESTORE_EOS -> {
                 viewModel.delegate.onRestore(accountType)
@@ -105,7 +111,8 @@ class KeysViewHolder(override val containerView: View)
     : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     fun bind(accountType: IPredefinedAccountType) {
-        accountName.text = containerView.resources.getString(accountType.title)
+        val accountTypeTitle = containerView.resources.getString(accountType.title)
+        accountName.text = containerView.resources.getString(R.string.Wallet, accountTypeTitle)
         accountCoin.text = containerView.resources.getString(accountType.coinCodes)
     }
 }

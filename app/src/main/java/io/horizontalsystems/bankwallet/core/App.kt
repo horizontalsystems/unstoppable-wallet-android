@@ -3,21 +3,16 @@ package io.horizontalsystems.bankwallet.core
 import android.app.Application
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import androidx.core.app.NotificationManagerCompat
 import com.squareup.leakcanary.LeakCanary
 import io.horizontalsystems.bankwallet.BuildConfig
-import io.horizontalsystems.bankwallet.core.factories.AccountFactory
-import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
-import io.horizontalsystems.bankwallet.core.factories.AddressParserFactory
-import io.horizontalsystems.bankwallet.core.factories.FeeCoinProvider
+import io.horizontalsystems.bankwallet.core.factories.*
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.security.EncryptionManager
 import io.horizontalsystems.bankwallet.core.security.KeyStoreManager
-import io.horizontalsystems.bankwallet.core.storage.AccountsStorage
-import io.horizontalsystems.bankwallet.core.storage.AppDatabase
-import io.horizontalsystems.bankwallet.core.storage.EnabledWalletsStorage
-import io.horizontalsystems.bankwallet.core.storage.RatesRepository
+import io.horizontalsystems.bankwallet.core.storage.*
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
-import java.util.*
+import io.horizontalsystems.bankwalval.core.utils.EmojiHelper
 import java.util.logging.Level
 import java.util.logging.Logger
 
@@ -55,13 +50,15 @@ class App : Application() {
         lateinit var defaultWalletCreator: DefaultWalletCreator
         lateinit var walletRemover: WalletRemover
 
-        lateinit var rateSyncer: RateSyncer
+        lateinit var rateSyncScheduler: RateSyncScheduler
         lateinit var rateManager: RateManager
-        lateinit var rateStatsManager: RateStatsManager
-        lateinit var networkAvailabilityManager: NetworkAvailabilityManager
+        lateinit var rateStatsManager: IRateStatsManager
+        lateinit var connectivityManager: ConnectivityManager
         lateinit var appDatabase: AppDatabase
         lateinit var rateStorage: IRateStorage
         lateinit var accountsStorage: IAccountsStorage
+        lateinit var priceAlertsStorage: IPriceAlertsStorage
+        lateinit var priceAlertManager: PriceAlertManager
         lateinit var enabledWalletsStorage: IEnabledWalletStorage
         lateinit var transactionInfoFactory: FullTransactionInfoFactory
         lateinit var transactionDataProviderManager: TransactionDataProviderManager
@@ -71,6 +68,11 @@ class App : Application() {
         lateinit var numberFormatter: IAppNumberFormatter
         lateinit var addressParserFactory: AddressParserFactory
         lateinit var feeCoinProvider: FeeCoinProvider
+        lateinit var priceAlertHandler: IPriceAlertHandler
+        lateinit var backgroundPriceAlertManager: IBackgroundPriceAlertManager
+        lateinit var emojiHelper: IEmojiHelper
+        lateinit var notificationManager: INotificationManager
+        lateinit var notificationFactory: INotificationFactory
 
         lateinit var instance: App
             private set
@@ -96,8 +98,6 @@ class App : Application() {
         instance = this
         preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
-        val fallbackLanguage = Locale("en")
-
         appConfigProvider = AppConfigProvider()
         feeRateProvider = FeeRateProvider(instance, appConfigProvider)
         backgroundManager = BackgroundManager(this)
@@ -122,7 +122,6 @@ class App : Application() {
 
         wordsManager = WordsManager(localStorage)
         networkManager = NetworkManager(appConfigProvider)
-        rateManager = RateManager(rateStorage, networkManager)
         rateStatsManager = RateStatsManager(networkManager, rateStorage)
         accountManager = AccountManager(accountsStorage, AccountCleaner(appConfigProvider.testMode))
         backupManager = BackupManager(accountManager)
@@ -134,21 +133,23 @@ class App : Application() {
 
         randomManager = RandomProvider()
         systemInfoManager = SystemInfoManager()
-        pinManager = PinManager(secureStorage)
+        pinManager = PinManager(secureStorage, localStorage)
         lockManager = LockManager(pinManager).apply {
             backgroundManager.registerListener(this)
         }
         keyStoreChangeListener = KeyStoreChangeListener(systemInfoManager, keyStoreManager).apply {
             backgroundManager.registerListener(this)
         }
-        languageManager = LanguageManager(localStorage, appConfigProvider, fallbackLanguage)
+        languageManager = LanguageManager(localStorage, appConfigProvider, "en")
         currencyManager = CurrencyManager(localStorage, appConfigProvider)
         numberFormatter = NumberFormatter(languageManager)
 
-        networkAvailabilityManager = NetworkAvailabilityManager()
+        connectivityManager = ConnectivityManager()
 
         adapterManager = AdapterManager(walletManager, AdapterFactory(instance, appConfigProvider, ethereumKitManager, eosKitManager, binanceKitManager), ethereumKitManager, eosKitManager, binanceKitManager)
-        rateSyncer = RateSyncer(rateManager, walletManager, currencyManager, networkAvailabilityManager)
+
+        rateManager = RateManager(rateStorage, networkManager, walletStorage, currencyManager, connectivityManager)
+        rateSyncScheduler = RateSyncScheduler(rateManager, walletManager, currencyManager, connectivityManager)
 
         transactionDataProviderManager = TransactionDataProviderManager(appConfigProvider, localStorage)
         transactionInfoFactory = FullTransactionInfoFactory(networkManager, transactionDataProviderManager)
@@ -156,6 +157,17 @@ class App : Application() {
         addressParserFactory = AddressParserFactory()
         feeCoinProvider = FeeCoinProvider(appConfigProvider)
 
+        priceAlertsStorage = PriceAlertsStorage(appConfigProvider, appDatabase)
+        priceAlertManager = PriceAlertManager(walletManager, priceAlertsStorage)
+        emojiHelper = EmojiHelper()
+        notificationFactory = NotificationFactory(emojiHelper, instance)
+        notificationManager = NotificationManager(NotificationManagerCompat.from(this))
+        priceAlertHandler = PriceAlertHandler(priceAlertsStorage, notificationManager, notificationFactory)
+        backgroundPriceAlertManager = BackgroundPriceAlertManager(priceAlertsStorage, rateManager, currencyManager, rateStorage, priceAlertHandler, notificationManager).apply {
+            backgroundManager.registerListener(this)
+        }
+
+        BackgroundRateAlertScheduler.startPeriodicWorker(instance)
     }
 
 }

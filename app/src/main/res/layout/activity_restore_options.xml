@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <io.horizontalsystems.bankwallet.ui.extensions.ShadowlessToolbarView
+        android:id="@+id/shadowlessToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/shadowlessToolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <io.horizontalsystems.bankwallet.components.CellView
+                android:id="@+id/bip44"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                app:subtitle="@string/CoinOption_bip44"
+                app:title="@string/CoinOption_BeforeOctober" />
+
+            <io.horizontalsystems.bankwallet.components.CellView
+                android:id="@+id/bip49"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                app:subtitle="@string/CoinOption_bip49"
+                app:title="@string/CoinOption_AfterOctober" />
+
+            <TextView
+                style="@style/Subhead2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/CoinOption_TimePeriod"
+                android:textColor="@color/grey" />
+
+            <io.horizontalsystems.bankwallet.components.CellView
+                android:id="@+id/fastSync"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="24dp"
+                app:subtitle="@string/CoinOption_Recommended"
+                app:title="@string/CoinOption_Fast" />
+
+            <io.horizontalsystems.bankwallet.components.CellView
+                android:id="@+id/slowSync"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                app:subtitle="@string/CoinOption_MorePrivate"
+                app:title="@string/CoinOption_Slow" />
+
+            <TextView
+                style="@style/Subhead2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/CoinOption_Fast_Text"
+                android:textColor="@color/grey" />
+
+            <TextView
+                style="@style/Subhead2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/CoinOption_Slow_Text"
+                android:textColor="@color/grey" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

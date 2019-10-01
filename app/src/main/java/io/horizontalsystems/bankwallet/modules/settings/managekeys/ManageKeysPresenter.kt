@@ -29,10 +29,10 @@ class ManageKeysPresenter(private val interactor: ManageKeysModule.Interactor, p
 
     override fun onClickRestore(accountType: IPredefinedAccountType) {
         when (accountType) {
-            is Words12AccountType -> {
+            is UnstoppableAccountType -> {
                 router.startRestoreWords(12)
             }
-            is Words24AccountType -> {
+            is BinanceAccountType -> {
                 router.startRestoreWords(24)
             }
             is EosAccountType -> {

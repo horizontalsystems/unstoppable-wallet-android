@@ -26,12 +26,13 @@ object MainSettingsModule {
         fun didTapCompanyLogo()
         fun didTapReportProblem()
         fun didTapTellFriends()
+        fun didTapNotifications()
     }
 
     interface IMainSettingsInteractor {
         val companyWebPageLink: String
         val appWebPageLink: String
-        val nonBackedUpCount: Int
+        val allBackedUp: Boolean
         val currentLanguageDisplayName: String
         val baseCurrency: Currency
         val appVersion: String
@@ -41,7 +42,7 @@ object MainSettingsModule {
     }
 
     interface IMainSettingsInteractorDelegate {
-        fun didUpdateNonBackedUp(count: Int)
+        fun didUpdateAllBackedUp(allBackedUp: Boolean)
         fun didUpdateBaseCurrency()
     }
 
@@ -55,6 +56,7 @@ object MainSettingsModule {
         fun reloadAppInterface()
         fun showReportProblem()
         fun showShareApp(appWebPageLink: String)
+        fun showNotifications()
     }
 
     class Factory : ViewModelProvider.Factory {

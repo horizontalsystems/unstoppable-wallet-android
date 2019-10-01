@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.SyncMode
 
 class AccountCreator(
@@ -13,21 +14,34 @@ class AccountCreator(
     : IAccountCreator {
 
     override fun createRestoredAccount(accountType: AccountType, syncMode: SyncMode?, createDefaultWallets: Boolean): Account {
-        return createAccount(accountType, isBackedUp = true, defaultSyncMode = syncMode, createDefaultWallets = createDefaultWallets)
-    }
-
-    override fun createNewAccount(defaultAccountType: DefaultAccountType, createDefaultWallets: Boolean): Account {
-        return createAccount(createAccountType(defaultAccountType), isBackedUp = false, defaultSyncMode = SyncMode.NEW, createDefaultWallets = createDefaultWallets)
-    }
-
-    private fun createAccount(accountType: AccountType, isBackedUp: Boolean, defaultSyncMode: SyncMode?, createDefaultWallets: Boolean): Account {
-        val account = accountFactory.account(accountType, isBackedUp, defaultSyncMode)
-
-        accountManager.create(account)
-
+        val account = createAccount(accountType, isBackedUp = true, defaultSyncMode = syncMode)
         if (createDefaultWallets) {
             defaultWalletCreator.handleCreate(account)
         }
+        return account
+    }
+
+    override fun createNewAccount(defaultAccountType: DefaultAccountType, createDefaultWallets: Boolean): Account {
+        val account = createAccount(defaultAccountType)
+        if (createDefaultWallets) {
+            defaultWalletCreator.handleCreate(account)
+        }
+        return account
+    }
+
+    override fun createNewAccount(coin: Coin) {
+        val account = createAccount(coin.type.defaultAccountType)
+        defaultWalletCreator.createWallet(account, coin)
+    }
+
+    private fun createAccount(defaultAccountType: DefaultAccountType): Account {
+        return createAccount(createAccountType(defaultAccountType), isBackedUp = false, defaultSyncMode = SyncMode.NEW)
+    }
+
+    private fun createAccount(accountType: AccountType, isBackedUp: Boolean, defaultSyncMode: SyncMode?): Account {
+        val account = accountFactory.account(accountType, isBackedUp, defaultSyncMode)
+
+        accountManager.create(account)
 
         return account
     }

@@ -28,11 +28,12 @@
 
             <EditText
                 android:id="@+id/txtInput"
-                style="@style/FormInputTextThemed"
+                style="@style/Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine"
                 android:singleLine="false"
+                android:textColor="?attr/TextColorBarsToDark"
                 android:textColorHint="@color/grey_50" />
 
         </LinearLayout>

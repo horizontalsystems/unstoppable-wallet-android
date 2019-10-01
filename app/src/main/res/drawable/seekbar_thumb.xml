@@ -2,7 +2,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="oval">
-            <solid android:color="@color/green_crypto"/>
+            <solid android:color="?ColorRemus"/>
             <size
                 android:width="18dp"
                 android:height="18dp"/>

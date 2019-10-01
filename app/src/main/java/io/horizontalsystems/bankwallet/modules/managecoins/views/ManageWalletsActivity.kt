@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.EosUnsupportedException
 import io.horizontalsystems.bankwallet.core.utils.ModuleCode
+import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsViewModel
 import io.horizontalsystems.bankwallet.modules.restore.eos.RestoreEosModule
@@ -41,8 +42,8 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener {
             adapter.notifyDataSetChanged()
         })
 
-        viewModel.showManageKeysDialog.observe(this, Observer { (coin, accountKeyName) ->
-            ManageWalletsDialog.show(this, this, coin, accountKeyName)
+        viewModel.showManageKeysDialog.observe(this, Observer { (coin, predefinedAccountType) ->
+            ManageWalletsDialog.show(this, this, coin, predefinedAccountType)
         })
 
         viewModel.openRestoreWordsModule.observe(this, Observer { wordsCount ->
@@ -76,11 +77,11 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener {
         if (data == null || resultCode != RESULT_OK)
             return
 
-        val accountType = data.getParcelableExtra<AccountType>("accountType")
+        val accountType = data.getParcelableExtra<AccountType>(ModuleField.ACCOUNT_TYPE)
 
         when (requestCode) {
             ModuleCode.RESTORE_WORDS -> {
-                viewModel.delegate.onRestore(accountType, data.getParcelableExtra("syncMode"))
+                viewModel.delegate.onRestore(accountType, data.getParcelableExtra(ModuleField.SYNCMODE))
             }
             ModuleCode.RESTORE_EOS -> {
                 viewModel.delegate.onRestore(accountType)

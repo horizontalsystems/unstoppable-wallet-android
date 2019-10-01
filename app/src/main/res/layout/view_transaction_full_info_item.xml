@@ -20,13 +20,14 @@
 
     <TextView
         android:id="@+id/txtTitle"
-        style="@style/Body1Grey"
+        style="@style/Subhead2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="14dp"
         android:layout_marginBottom="14dp"
         android:includeFontPadding="false"
+        android:textColor="@color/grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/typeIcon"
         app:layout_constraintTop_toTopOf="parent"
@@ -34,7 +35,7 @@
 
     <TextView
         android:id="@+id/addressView"
-        style="@style/TextButton"
+        style="@style/TextButtonWithIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
@@ -48,27 +49,27 @@
 
     <TextView
         android:id="@+id/valueText"
-        style="@style/Body1"
+        style="@style/Subhead2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="16dp"
-        android:textColor="?BottomDialogTextColor"
-        android:visibility="gone"
-        android:textAlignment="textEnd"
         android:ellipsize="end"
         android:maxLines="1"
+        android:textAlignment="textEnd"
+        android:textColor="?BottomDialogTextColor"
+        android:visibility="gone"
         app:layout_constrainedWidth="true"
-        app:layout_constraintHorizontal_bias="1"
-        app:layout_constraintStart_toEndOf="@+id/txtTitle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toEndOf="@+id/txtTitle"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="June 6, 2019, 15:02 " />
 
     <TextView
         android:id="@+id/sourceProviderText"
-        style="@style/Body1"
+        style="@style/Subhead2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
@@ -96,7 +97,7 @@
         android:id="@+id/border"
         android:layout_width="0dp"
         android:layout_height="0.5dp"
-        android:background="@color/steel_15"
+        android:background="@color/steel_20"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

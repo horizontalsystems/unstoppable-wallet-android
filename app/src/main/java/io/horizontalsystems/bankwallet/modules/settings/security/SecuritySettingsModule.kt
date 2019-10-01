@@ -7,19 +7,19 @@ import io.horizontalsystems.bankwallet.core.App
 object SecuritySettingsModule {
 
     interface ISecuritySettingsView {
-        fun setBackedUp(backedUp: Boolean)
-        fun setPinEnabled(enabled: Boolean)
-        fun showFingerprintSettings(enabled: Boolean)
-        fun hideFingerprintSettings()
-        fun showNoEnrolledFingerprints()
+        fun setBackupAlertVisible(visible: Boolean)
+        fun togglePinSet(pinSet: Boolean)
+        fun setEditPinVisible(visible: Boolean)
+        fun setBiometricSettingsVisible(visible: Boolean)
+        fun toggleBiometricEnabled(enabled: Boolean)
     }
 
     interface ISecuritySettingsViewDelegate {
         fun viewDidLoad()
         fun didTapManageKeys()
         fun didTapEditPin()
-        fun didTapEnablePin(enable: Boolean)
-        fun didTapEnableFingerprint(enable: Boolean)
+        fun didSwitchPinSet(enable: Boolean)
+        fun didSwitchBiometricEnabled(enable: Boolean)
         fun didSetPin()
         fun didCancelSetPin()
         fun didUnlockPinToDisablePin()
@@ -28,18 +28,17 @@ object SecuritySettingsModule {
     }
 
     interface ISecuritySettingsInteractor {
-        val nonBackedUpCount: Int
-        val hasFingerprintSensor: Boolean
-        val hasEnrolledFingerprints: Boolean
-        val isPinEnabled: Boolean
-        var isFingerPrintEnabled: Boolean
+        val allBackedUp: Boolean
+        val biometricAuthSupported: Boolean
+        val isPinSet: Boolean
+        var isBiometricEnabled: Boolean
 
         fun disablePin()
         fun clear()
     }
 
     interface ISecuritySettingsInteractorDelegate {
-        fun didBackup(count: Int)
+        fun didAllBackedUp(allBackedUp: Boolean)
     }
 
     interface ISecuritySettingsRouter {

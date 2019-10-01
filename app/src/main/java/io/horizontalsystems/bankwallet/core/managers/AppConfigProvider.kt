@@ -47,20 +47,30 @@ class AppConfigProvider : IAppConfigProvider {
     override val defaultCoinCodes: List<String>
         get() = listOf("BTC", "ETH")
 
+    override val featuredCoins: List<Coin>
+        get() = listOf(
+                coins[0],
+                coins[1],
+                coins[2],
+                coins[3],
+                coins[4],
+                coins[5]
+        )
+
     override val coins: List<Coin> = listOf(
             Coin("Bitcoin",                 "BTC",          8,      CoinType.Bitcoin),
-            Coin("Bitcoin Cash",            "BCH",          8,      CoinType.BitcoinCash),
             Coin("Ethereum",                "ETH",         18,      CoinType.Ethereum),
+            Coin("Bitcoin Cash",            "BCH",          8,      CoinType.BitcoinCash),
             Coin("Dash",                    "DASH",         8,      CoinType.Dash),
-            Coin("EOS",                     "EOS",          4,      CoinType.Eos("eosio.token", "EOS")),
             Coin("Binance Chain",           "BNB",          8,      CoinType.Binance("BNB")),
+            Coin("EOS",                     "EOS",          4,      CoinType.Eos("eosio.token", "EOS")),
             Coin("0x",                      "ZRX",         18,      CoinType.Erc20("0xE41d2489571d322189246DaFA5ebDe1F4699F498")),
             Coin("Aelf",                    "ELF",         18,      CoinType.Erc20("0xbf2179859fc6D5BEE9Bf9158632Dc51678a4100e")),
             Coin("Aurora DAO",              "AURA",        18,      CoinType.Erc20("0xCdCFc0f66c522Fd086A1b725ea3c0Eeb9F9e8814")),
             Coin("Ankr Network",            "ANKR",         8,      CoinType.Binance("ANKR-E97")),
             Coin("Bancor",                  "BNT",         18,      CoinType.Erc20("0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C")),
             Coin("Basic Attention Token",   "BAT",         18,      CoinType.Erc20("0x0D8775F648430679A709E98d2b0Cb6250d2887EF")),
-            Coin("Binance Coin",            "BNB-ERC20",   18,      CoinType.Erc20("0xB8c77482e45F1F44dE1745F52C74426C631bDD52")),
+            Coin("Binance Token",           "BNB-ERC20",   18,      CoinType.Erc20("0xB8c77482e45F1F44dE1745F52C74426C631bDD52")),
             Coin("Bitcoin BEP2",            "BTCB",         8,      CoinType.Binance("BTCB-1DE")),
             Coin("Cashaaa",                 "CAS",          8,      CoinType.Binance("CAS-167")),
             Coin("ChainLink",               "LINK",        18,      CoinType.Erc20("0x514910771AF9Ca656af840dff83E8264EcF986CA")),
@@ -70,7 +80,7 @@ class AppConfigProvider : IAppConfigProvider {
             Coin("Dai",                     "DAI",         18,      CoinType.Erc20("0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359")),
             Coin("Decentraland",            "MANA",        18,      CoinType.Erc20("0x0F5D2fB29fb7d3CFeE444a200298f468908cC942")),
             Coin("Digix DAO",               "DGD",          9,      CoinType.Erc20("0xE0B7927c4aF23765Cb51314A0E0521A9645F0E2A")),
-            Coin("Digix Gold",              "DGX",          9,      CoinType.Erc20("0x4f3AfEC4E5a3F2A6a1A411DEF7D7dFe50eE057bF")),
+            Coin("Digix Gold",              "DGX",          9,      CoinType.Erc20("0x4f3AfEC4E5a3F2A6a1A411DEF7D7dFe50eE057bF", gasLimit = 300_000)),
             Coin("EnjinCoin",               "ENJ",         18,      CoinType.Erc20("0xF629cBd94d3791C9250152BD8dfBDF380E2a3B9c")),
             Coin("EOSDT",                   "EOSDT",        9,      CoinType.Eos("eosdtsttoken", "EOSDT")),
             Coin("Everipedia",              "IQ",           3,      CoinType.Eos("everipediaiq", "IQ")),
@@ -112,8 +122,8 @@ class AppConfigProvider : IAppConfigProvider {
     )
 
     override val predefinedAccountTypes: List<IPredefinedAccountType> = listOf(
-            Words12AccountType(),
+            UnstoppableAccountType(),
             EosAccountType(),
-            Words24AccountType()
+            BinanceAccountType()
     )
 }
