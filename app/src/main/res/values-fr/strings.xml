@@ -229,7 +229,7 @@
     <string name="SettingsNotifications_Description">Définissez des alertes de changement de prix pour les pièces que vous voulez surveiller. \n\nVous serez averti lorsque le changement de prix pour les dernières 24 heures dépasse le seuil sélectionné.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">Les notifications pour l\'application Unstoppable Wallet sont désactivées. Vous devez les activer pour pouvoir recevoir des alertes de changement de prix.</string>
     <string name="SettingsNotifications_TurnOn">Activer dans Paramètres</string>
-    <string name="SettingsNotifications_Off">Off</string>
+    <string name="SettingsNotifications_Off">Désactivé</string>
     <string name="SettingsNotifications_DeactivateAll">Tout désactiver</string>
     <string name="Notification_Notifications">Notification : %s</string>
     <string name="Notification_Up">Monter</string>
