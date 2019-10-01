@@ -22,11 +22,11 @@ C'est le portefeuille le plus sophistiqué à l'heure actuelle
 
 Effectuez des transactions librement et inconditionnellement, peu importe où vous habitez. Aucune entité ne peut vous empêcher d'envoyer/recevoir des crypto avec Unstoppable Wallet.   
 
-You’re the only person with control and access to your crypto finances. La clé secrète (qui vous donne la propriété des biens cryptés) ne quitte jamais votre appareil.
+Vous êtes la seule personne qui a accès et contrôle vos finances crypto. La clé secrète (qui vous donne la propriété des actifs cryptés) ne quitte jamais votre appareil.
 
 (2) UN VÉRITABLE RESPECT DE LA CONFIDENTIALITÉ
 
-Restez vraiment confidentiel sans révéler aucune donnée personnelle. Il n'y a pas de comptes, de mails, de numéros de téléphone, de contrôles d'identité ou de serveurs tiers qui stockent vos données.
+Maintenez vraiment la confidentialité sans révéler aucune donnée personnelle. Il n'y a pas de comptes, de mails, de numéros de téléphone, de contrôles d'identité ou de serveurs tiers qui stockent vos données.
 
 Contrairement à la plupart des portefeuilles sur le marché, Unstoppable Wallet relie les utilisateurs directement aux blockchains décentralisés sans aucune restriction ni intermédiaire.
 
