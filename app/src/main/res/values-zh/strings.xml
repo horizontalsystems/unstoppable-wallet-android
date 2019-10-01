@@ -10,20 +10,24 @@
     <string name="Alert_Success">成功</string>
     <string name="Alert_Copied">已复制</string>
     <string name="Button_Cancel">取消</string>
+    <string name="Button_Create">创建</string>
     <string name="Button_Back">返回</string>
     <string name="Button_Close">关闭</string>
     <string name="Button_Ok">确定</string>
     <string name="Button_Share">分享</string>
     <string name="Error">出错</string>
     <string name="NotAvailable">不可用</string>
+    <string name="Wallet">%s钱包</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
     <string name="Welcome_CreateWallet">新钱包</string>
     <string name="Welcome_RestoreWallet">恢复钱包</string>
+    <!--Create-->
+    <string name="Create_Title">新的钱包</string>
+    <string name="Create_Description">选择一种加密货币开始使用。您可以在以后添加其他加密货币。</string>
     <!--Restore-->
     <string name="Restore_Title">恢复</string>
-    <string name="Restore_Description">要恢复现有钱包，您必须输入该钱包的密钥。\n\n恢复一个钱包后，您可以前往应用设置中的“管理密钥”恢复更多钱包。</string>
-    <string name="Restore_Subtitle">输入密钥</string>
+    <string name="Restore_Description">要恢复现有钱包，您必须输入该钱包的私钥。\n\n恢复钱包后，您可以通过应用的“安全”设置中的“管理钱包”恢复其他钱包。</string>
     <string name="Restore_ValidationFailed">错误密钥</string>
     <string name="Restore_RestoreFailed">无法恢复钱包</string>
     <string name="Restore_EosAccountName">账户名</string>
@@ -33,14 +37,15 @@
     <!--Backup-->
     <string name="Backup_Intro_Title">备份</string>
     <string name="Backup_Intro_TitleShow">显示密钥</string>
-    <string name="Backup_Intro_Subtitle">如果您的手机曾经丢失、被盗、损坏等，下一步将显示的密钥是恢复资金的唯一方法。请确保没有人在看着您的屏幕。\n\n受此密钥控制的代币：%s</string>
+    <string name="Backup_Intro_Subtitle">如果您的手机出现丢失、被盗或损坏等情况，那么在下一步显示的私钥将是恢复您资金的唯一方法。\n\n确保不会有任何人看到您的屏幕。\n\n此密钥控制的代币：%s</string>
     <string name="Backup_Intro_Later">稍后</string>
     <string name="Backup_Intro_BackupNow">备份</string>
+    <string name="Backup_DisplayTitle">私钥</string>
     <string name="Backup_Confirmation_SecretKey">我明白我是安全保存在我的电话中并能控制我钱包上的资金的12字私有密钥的唯一所有人。</string>
     <string name="Backup_Confirmation_DeleteAppWarn">我明白如果此应用曾被移动、删除或出现故障，则只能通过该密钥恢复对我钱包的访问。</string>
     <string name="Backup_Confirmation_LockAppWarn">我明白更改电话的解锁密码或者在Android设置中删除应用数据将会从设备上删除密钥。我必须重新输入我的密钥才能重新访问我的钱包。</string>
     <string name="Backup_Confirmation_Disclaimer">我明白此应用的开发者不会对任何在使用此应用时出现的意外错误或问题负责。</string>
-    <string name="Backup_Confirmation_Description">从您的%s输入文字。</string>
+    <string name="Backup_Confirmation_Description">输入您密钥中的文字。</string>
     <string name="Backup_Confirmation_FailureAlertText">文字不匹配</string>
     <string name="Backup_Confirmation_CheckTitle">检查...</string>
     <string name="Backup_Button_Confirm">确认</string>
@@ -106,7 +111,7 @@
     <string name="Deposit_Your_Account">您的账户</string>
     <string name="Receive_Alert_NotBackedUp_Title">需要备份</string>
     <string name="Receive_Alert_NotBackedUp_Button">备份</string>
-    <string name="Receive_Alert_NotBackedUp_Description">您在接收资金前必须先为该钱包备份密钥。</string>
+    <string name="Receive_Alert_NotBackedUp_Description">您必须在接收%1$s之前先备份%2$s钱包。</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">刚才</string>
     <string name="Timestamp_MinAgo">%d分钟前</string>
@@ -178,6 +183,7 @@
     <!--Settings-->
     <string name="Settings_Title">设置</string>
     <string name="Settings_SecurityCenter">安全中心</string>
+    <string name="Settings_Notifications">通知</string>
     <string name="Settings_ManageCoins">管理代币</string>
     <string name="Settings_RestoreWallet">恢复钱包</string>
     <string name="Settings_BaseCurrency">基础货币</string>
@@ -186,7 +192,6 @@
     <string name="Settings_About">关于</string>
     <string name="Settings_ShareThisWallet">分享给好友</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
-    <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <string name="Settings_Report">报告问题</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">指纹未启用</string>
@@ -195,7 +200,7 @@
     <string name="SettingsSecurity_Fingerprint">指纹</string>
     <string name="SettingsSecurity_EnablePin">密码</string>
     <string name="SettingsSecurity_EditPin">编辑密码</string>
-    <string name="SettingsSecurity_ManageKeys">管理密钥</string>
+    <string name="SettingsSecurity_ManageKeys">管理钱包</string>
     <string name="SettingsSecurity_BackupWallet">备份钱包</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">基础货币</string>
@@ -219,6 +224,16 @@
     <string name="SettingsReport_Title">报告问题</string>
     <string name="SettingsReport_Email">邮件</string>
     <string name="SettingsReport_Telegram">电报</string>
+    <!--Setting_Notifications-->
+    <string name="SettingsNotifications_Title">通知</string>
+    <string name="SettingsNotifications_Description">为您要监察的代币设置价格变更警报。\n\n当价格的变化在24小时内超出选定的临界值时，您将收到警报。</string>
+    <string name="SettingsNotifications_NotificationsDisabledWarning">已禁用Unstoppable钱包应用通知。您必须开启通知并允许后台应用刷新才能接收价格变更警报。</string>
+    <string name="SettingsNotifications_TurnOn">在设置中开启</string>
+    <string name="SettingsNotifications_Off">关</string>
+    <string name="SettingsNotifications_DeactivateAll">全部停用</string>
+    <string name="Notification_Notifications">通知 %s</string>
+    <string name="Notification_Up">上</string>
+    <string name="Notification_Down">下</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android密钥库错误</string>
     <string name="Alert_KeysInvalidatedDescription">因为您的Android锁定屏幕已被更改，所以保存您钱包的加密数据目前已失效。</string>
@@ -249,6 +264,7 @@
     <string name="Fingerprint_Success">成功！</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">禁用至：%s</string>
+    <string name="UnlockPin_Error_PinIncorrect">错误</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">电话PIN码</string>
     <string name="OSPin_Confirm_Desciption">此应用要求电话已启用密码（屏幕锁定）。\n\n您可以在Android设置中启用密码。\n\n请注意，禁用操作系统级别的PIN码后，电话的安全存储保障措施将使以前保存的数据无效。您必须恢复您的钱包密钥才能回到您的钱包。</string>
@@ -268,45 +284,47 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">代币管理器</string>
     <string name="ManageCoins_save">保存</string>
-    <string name="ManageCoins_AddCoin_Title">添加%s代币</string>
-    <string name="ManageCoins_AddCoin_Text">此操作将生成以下代币的新密钥（钱包）：%s</string>
+    <string name="ManageCoins_AddCoin_Title">添加钱包</string>
+    <string name="ManageCoins_AddCoin_Text">该操作将为以下代币生成新钱包: %s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">此时，钱包无法创建新的EOS钱包帐户。您只能恢复现有账户。</string>
     <!--Manage Keys-->
-    <string name="ManageKeys_Title">管理密钥</string>
-    <string name="ManageKeys_Description">任何能获取您密钥的人都能够窃取您钱包中的资金。保存好密钥且绝不能向任何人透露。\n\n保存每一个密钥将能够在手机丢失或出现故障，或者在钱包应用被删除的情况下恢复资金。</string>
+    <string name="ManageKeys_Title">管理钱包</string>
+    <string name="ManageKeys_Description">在下方突出显示的就是您的活跃钱包，每一个钱包负责不同的加密货币集合。\n\n您应该通过备份每一个突出显示的钱包的私钥对其进行备份。如果您的手机出现丢失、被盗、损坏等情况，该密钥是恢复您资金的唯一方法。</string>
     <string name="ManageKeys_Create">创建</string>
     <string name="ManageKeys_Restore">恢复</string>
     <string name="ManageKeys_Delete">删除</string>
     <string name="ManageKeys_Backup">备份</string>
     <string name="ManageKeys_Show">显示</string>
     <!--Manage Keys Delete Alert-->
-    <string name="ManageKeys_Delete_Title">删除密钥</string>
-    <string name="ManageKeys_Delete_ConfirmationRemove">此操作将从此设备中删除%s密钥（钱包）。</string>
+    <string name="ManageKeys_Delete_Title">删除钱包</string>
+    <string name="ManageKeys_Delete_ConfirmationRemove">该操作将从此设备删除%s 钱包。</string>
     <string name="ManageKeys_Delete_ConfirmationDisable">将被禁用的代币：%s</string>
-    <string name="ManageKeys_Delete_ConfirmationLoose">如果您没有此密钥的备份，那么您将失去相关资金。</string>
+    <string name="ManageKeys_Delete_ConfirmationLose">如果您尚未对此钱包备份私钥，您将失去您的资金。</string>
     <string name="ManageKeys_Delete_FromPhone">从电话删除</string>
     <string name="ManageKeys_Delete_Alert_Title">需要备份</string>
-    <string name="ManageKeys_Delete_Alert">您必须在将其从电话上删除之前先备份%s密钥。</string>
+    <string name="ManageKeys_Delete_Alert">您必须在将私钥从该手机删除之前先对其进行备份。</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">添加%s</string>
-    <string name="AddCoin_Description">您没有%1s的密钥。钱包可以为您生成密钥。使用下方的创建按钮生成新密钥。\n\n如果有的话，您也可以使用%4s现有的%3s密钥。</string>
+    <string name="AddCoin_Description">您没有可恢复 %1$s 的钱包。应用可以为您生成新的钱包。使用下方的“创建”按钮生成新钱包。\n\n您将可以为以下代币使用新钱包：%2$s。\n\n如果您已有钱包，那么您也可以使用现有的%3$s钱包。为此使用“恢复”按钮。</string>
     <string name="AddCoin_CreateKey">创建</string>
     <string name="AddCoin_RestoreKey">恢复</string>
     <!-- Account Types -->
-    <string name="AccountType_Unstoppable">12字</string>
-    <string name="AccountType_UnstoppableKey">12字密钥</string>
-    <string name="AccountType_Eos">EOS区块链</string>
-    <string name="AccountType_EosKey">EOS密钥</string>
-    <string name="AccountType_Binance">币安链</string>
-    <string name="AccountType_BinanceKey">币安密钥</string>
+    <string name="AccountType_Unstoppable">Unstoppable</string>
+    <string name="AccountType_Eos">EOS</string>
+    <string name="AccountType_Binance">Binance</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">恢复选项</string>
     <string name="CoinOption_Fast">快</string>
     <string name="CoinOption_Recommended">0&#8211;2小时（推荐）</string>
-    <string name="CoinOption_Fast_Text">通过安全的第三方服务器恢复过往交易。对于具有大量涉及大额交易历史的用户，这种方法可能会带来隐私风险。</string>
+    <string name="CoinOption_Fast_Text">快：通过安全的第三方服务器恢复您过往的交易。对于拥有大额交易的用户，此方法可能会带来隐私风险。</string>
     <string name="CoinOption_Slow">慢</string>
     <string name="CoinOption_MorePrivate">1&#8211;12小时（更加私密）</string>
-    <string name="CoinOption_Slow_Text">直接通过网络恢复您的过往交易。更加私密，但非常缓慢。如果恢复过程耗时过长，请前往”管理密钥“部分并使用”快速同步“选项重新导入钱包密钥。</string>
+    <string name="CoinOption_Slow_Text">慢：直接从区块链恢复您过往的交易。如果耗时过长，请前往“设置”中的“管理钱包”，删除Unstoppable条目并使用“快”选项重复此过程。</string>
+    <string name="CoinOption_TimePeriod">当首次在Unstoppable中创建钱包时选择时间周期。</string>
+    <string name="CoinOption_BeforeOctober">在2019年10月之前</string>
+    <string name="CoinOption_AfterOctober">在2019年10月之后</string>
+    <string name="CoinOption_bip44">BIP-44</string>
+    <string name="CoinOption_bip49">BIP-49</string>
     <!--Charts-->
     <string name="Charts_TimeDuration_Day">1天</string>
     <string name="Charts_TimeDuration_Week">7天</string>

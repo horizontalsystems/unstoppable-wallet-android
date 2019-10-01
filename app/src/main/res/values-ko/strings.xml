@@ -10,20 +10,24 @@
     <string name="Alert_Success">성공</string>
     <string name="Alert_Copied">복사됨</string>
     <string name="Button_Cancel">취소</string>
+    <string name="Button_Create">Create</string>
     <string name="Button_Back">뒤로</string>
     <string name="Button_Close">가까운, 닫힌</string>
     <string name="Button_Ok">확인</string>
     <string name="Button_Share">공유</string>
     <string name="Error">오류</string>
     <string name="NotAvailable">해당 없음 </string>
+    <string name="Wallet">%s wallet</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
     <string name="Welcome_CreateWallet">새 지갑</string>
     <string name="Welcome_RestoreWallet">지갑 복원</string>
+    <!--Create-->
+    <string name="Create_Title">New Wallet</string>
+    <string name="Create_Description">Select one cryptocurrency to start. You will be able to add other cryptocurrencies later.</string>
     <!--Restore-->
     <string name="Restore_Title">복구</string>
-    <string name="Restore_Description">기존 지갑을 복원하시려면 개인 암호를 입력해야 합니다. \n\n하나의 지갑을 복원하신 후엔 앱 설정의 암호관리 섹션에서 더 많은 지갑들을 복원하실 수 있습니다.</string>
-    <string name="Restore_Subtitle">암호를 입력하세요</string>
+    <string name="Restore_Description">To restore existing wallet you need to enter a private key for that wallet.\n\nOnce you restore one wallet you will be able to restore other wallets via Manage Wallets section in Security settings of the app.</string>
     <string name="Restore_ValidationFailed">틀린 암호 입니다</string>
     <string name="Restore_RestoreFailed">지갑 복구에 실패하였습니다.</string>
     <string name="Restore_EosAccountName">Account Name</string>
@@ -33,14 +37,15 @@
     <!--Backup-->
     <string name="Backup_Intro_Title">백업</string>
     <string name="Backup_Intro_TitleShow">암호 보이기</string>
-    <string name="Backup_Intro_Subtitle">앞으로 표시될 암호는 귀하의 휴대전화가 분실, 도난, 파손당했을 경우에 펀드를 복구할 수 있는 유일한 방법입니다. 주변에 화면을 보고 있는 사람이 없는지 확인하세요.\n\n코인은 이 암호로 통제됩니다: %s</string>
+    <string name="Backup_Intro_Subtitle">The private key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.\n\nThe coins controlled by this key: %s.</string>
     <string name="Backup_Intro_Later">나중에</string>
     <string name="Backup_Intro_BackupNow">백업</string>
+    <string name="Backup_DisplayTitle">Private Key</string>
     <string name="Backup_Confirmation_SecretKey">본인은 본인의 휴대폰에 안전하게 저장되어 있으며 지갑에 있는 자금을 통제할 수 있는 사적인 12자리 비밀 암호의 유일한 소유자라는 것을 이해합니다.</string>
     <string name="Backup_Confirmation_DeleteAppWarn">이 앱의 이동, 삭제 또는 오작동의 경우, 본인은 지갑에 대한 접근은 이 비밀 암호를 통해서만 복구될 수 있다는 점을 이해합니다.</string>
     <string name="Backup_Confirmation_LockAppWarn">I understand that changing the phone\s unlock PIN or deleting app data in Android settings deletes the Secret Key from device. I would need to re-enter my Secret Key to regain access to my wallet.</string>
     <string name="Backup_Confirmation_Disclaimer">본인은 의도치 않은 버그나 앱을 사용하면서 일어날 수 있는 문제들에 대해서 이 앱의 계발자들은 어떠한 책임도 없다는 것을 이해합니다.</string>
-    <string name="Backup_Confirmation_Description">%s에서 단어를 입력하세요</string>
+    <string name="Backup_Confirmation_Description">Enter words from your private key.</string>
     <string name="Backup_Confirmation_FailureAlertText">암호가 일치 하지 않습니다.</string>
     <string name="Backup_Confirmation_CheckTitle">확인 중…</string>
     <string name="Backup_Button_Confirm">확인</string>
@@ -106,7 +111,7 @@
     <string name="Deposit_Your_Account">내 계정</string>
     <string name="Receive_Alert_NotBackedUp_Title">백업이 필요합니다</string>
     <string name="Receive_Alert_NotBackedUp_Button">백업</string>
-    <string name="Receive_Alert_NotBackedUp_Description">이 지갑에 자금을 받기전에 암호의 백업이 필요합니다. </string>
+    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the %1$s wallet before you may receive %2$s.</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">지금 막</string>
     <string name="Timestamp_MinAgo">%d분 전</string>
@@ -178,6 +183,7 @@
     <!--Settings-->
     <string name="Settings_Title">설정</string>
     <string name="Settings_SecurityCenter">보안 센터</string>
+    <string name="Settings_Notifications">Notifications</string>
     <string name="Settings_ManageCoins">코인 관리</string>
     <string name="Settings_RestoreWallet">지갑 복원</string>
     <string name="Settings_BaseCurrency">기초 통화</string>
@@ -186,7 +192,6 @@
     <string name="Settings_About">에 대해</string>
     <string name="Settings_ShareThisWallet">친구에게 추천하기</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
-    <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <string name="Settings_Report">문제점 보고</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">지문을 사용할 수 없습니다.</string>
@@ -195,7 +200,7 @@
     <string name="SettingsSecurity_Fingerprint">지문</string>
     <string name="SettingsSecurity_EnablePin">비밀번호</string>
     <string name="SettingsSecurity_EditPin">비밀번호 변경</string>
-    <string name="SettingsSecurity_ManageKeys">암호 관리</string>
+    <string name="SettingsSecurity_ManageKeys">Manage Wallets</string>
     <string name="SettingsSecurity_BackupWallet">백업용 지갑</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">기초 통화</string>
@@ -225,6 +230,16 @@
     <string name="SettingsReport_Title">문제점 보고</string>
     <string name="SettingsReport_Email">E-mail</string>
     <string name="SettingsReport_Telegram">Telegram</string>
+    <!--Setting_Notifications-->
+    <string name="SettingsNotifications_Title">Notifications</string>
+    <string name="SettingsNotifications_Description">Set price change alerts for the coins you would like to watch.\n\nYou will be alerted when the change in price for the last 24 hours exceeds selected threshold.</string>
+    <string name="SettingsNotifications_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order to be able to receive price change alerts.</string>
+    <string name="SettingsNotifications_TurnOn">Turn on in Settings</string>
+    <string name="SettingsNotifications_Off">Off</string>
+    <string name="SettingsNotifications_DeactivateAll">Deactivate All</string>
+    <string name="Notification_Notifications">Notifications %s</string>
+    <string name="Notification_Up">Up</string>
+    <string name="Notification_Down">Down</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">안드로이드 키저장 에러</string>
     <string name="Alert_KeysInvalidatedDescription">당신의 안드로이드 스크린 장금이 변했기 때문에 당신의 지갑에 암호화된 데이터들은 지금 이용할 수 없습니다.</string>
@@ -255,6 +270,7 @@
     <string name="Fingerprint_Success">성공!</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">~때까지 사용 안 함: %s</string>
+    <string name="UnlockPin_Error_PinIncorrect">Incorrect</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">핸드폰 핀넘버</string>
     <string name="OSPin_Confirm_Desciption">이 앱을 사용하려면 휴대전화에 암호(화면 잠금) 가 활성화되어 있어야 합니다. \n\n Android 설정에서 활성화할 수 있습니다. \n\nOS 수준에서 PIN을 비활성화하면 휴대기기의 안전한 저장에 대한 보안조치로 인해 이전에 저장된 데이터가 유효하지 않게 됩니다. 지갑으로 돌아가려면 지갑 암호를 복원하십시오.</string>
@@ -274,46 +290,47 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">지갑</string>
     <string name="ManageCoins_save">저장</string>
-    <string name="ManageCoins_AddCoin_Title">%@ 추가 </string>
-    <string name="ManageCoins_AddCoin_Text">이 작업은 다음 코인에 대한 암호(지갑) 를 생성합니다:%s </string>
+    <string name="ManageCoins_AddCoin_Title">Add Wallet</string>
+    <string name="ManageCoins_AddCoin_Text">This action will generate a new wallet for the following coins: %s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">현재 지갑에서 새 EOS 지갑 계정을 만들 수 없습니다. 기존 파일만 복원할 수 있습니다.</string>
     <!--Manage Keys-->
-    <string name="ManageKeys_Title">암호 관리</string>
-    <string name="ManageKeys_Description">암호에 접근할 수 있는 사람은 누구나 지갑 자금을 훔칠 수 있습니다. 암호를 안전하게 보관하고 다른 사람에게 보여주지 마세요. \n\n휴대전화의 분실, 고장 또는 지갑 앱이 삭제된 경우 자금을 복원할 수 있도록 각 암호를 백업하세요.</string>
+    <string name="ManageKeys_Title">Manage Wallets</string>
+    <string name="ManageKeys_Description">Highlighted below are your active wallets where each wallet responsible for different set of crypto currencies.\n\nYou should backup each highlighted wallets by backing up the private key for that wallet. This key is the only way to restore your funds if your phone is ever lost, stolen, broken etc.</string>
     <string name="ManageKeys_Create">만들기</string>
     <string name="ManageKeys_Restore">복구</string>
     <string name="ManageKeys_Delete">삭제</string>
     <string name="ManageKeys_Backup">백업</string>
     <string name="ManageKeys_Show">표시</string>
     <!--Manage Keys Delete Alert-->
-    <string name="ManageKeys_Delete_Title">암호 삭제</string>
-    <string name="ManageKeys_Delete_ConfirmationRemove">이 작업은 %s 암호(지갑)를 이 장치에서 삭제합니다.</string>
+    <string name="ManageKeys_Delete_Title">Delete Wallet</string>
+    <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s wallet from this device.</string>
     <string name="ManageKeys_Delete_ConfirmationDisable">비활성화될 코인: %s</string>
-    <string name="ManageKeys_Delete_ConfirmationLoose">이 암호를 백업하지 않으면 해당 자금을 잃게 됩니다.</string>
+    <string name="ManageKeys_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to your funds.</string>
     <string name="ManageKeys_Delete_FromPhone">휴대전화에서 삭제</string>
     <string name="ManageKeys_Delete_Alert_Title">백업이 필요합니다</string>
-    <string name="ManageKeys_Delete_Alert">귀하의 핸드폰에서 삭제하기전 %s 암호의 백업이 필요합니다</string>
+    <string name="ManageKeys_Delete_Alert">You need to backup the private key before it can be deleted from this phone.</string>
     <!-- Manage Keys Alert -->
-    <string name="AddCoin_Title">%s 추가</string>
-    <string name="AddCoin_Description">%1s에 대한 암호가 없습니다. 지갑은 열쇠를 생성 할 수 있습니다. 아래의 생성 버튼을 사용하여 새 키를 만드세요. 
-\n\n 기존에 가지고 있는 %3s암호를 %4s 사용하실 수도 있습니다.</string>
+    <string name="AddCoin_Title">Add %s</string>
+    <string name="AddCoin_Description">You don\'t have a wallet that can store %1$s. The app can generate a new wallet for you. Use the Create button below to generate a new wallet.\n\nYou will be able to use the new wallet for the following coins: %2$s.\n\nYou may also use the existing %3$s wallet key if you have one. Use the restore button for that.</string>
     <string name="AddCoin_CreateKey">만들기</string>
     <string name="AddCoin_RestoreKey">복구</string>
     <!-- Account Types -->
-    <string name="AccountType_Unstoppable">12-Words</string>
-    <string name="AccountType_UnstoppableKey">12자리 암호</string>
-    <string name="AccountType_Eos">EOS Blockchain</string>
-    <string name="AccountType_EosKey">EOS 암호</string>
-    <string name="AccountType_Binance">Binance Chain</string>
-    <string name="AccountType_BinanceKey">Binance 암호</string>
+    <string name="AccountType_Unstoppable">Unstoppable</string>
+    <string name="AccountType_Eos">EOS</string>
+    <string name="AccountType_Binance">Binance</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">옵션 복구</string>
     <string name="CoinOption_Fast">빠르게</string>
     <string name="CoinOption_Recommended">00&#8211;2시간 (권장)</string>
-    <string name="CoinOption_Fast_Text">안전한 제3 서버를 통해 과거 거래를 복원합니다. 이 방법은 큰 액수와 긴 거래내역을 가지고 있는 사용자들에게 개인정보보호 침해의 위험을 야기할 수 있습니다.</string>
+    <string name="CoinOption_Fast_Text">Fast : Restores your past transaction via secure third party server. For users with transactions involving large sums this method may pose privacy risks.</string>
     <string name="CoinOption_Slow">느리게</string>
     <string name="CoinOption_MorePrivate">1&#8211;12시간 (더욱 사적임)</string>
-    <string name="CoinOption_Slow_Text">네트워크에서 직접 거래를 복원하세요. 훨씬 더 사적이지만 속도는 매우 느립니다. 복원에 너무 많은 시간이 걸린다면 암호관리 섹션에서 빠른 동기화 옵션을 사용하여 지갑의 암호를 다시 가져오세요.</string>
+    <string name="CoinOption_Slow_Text">Slow: Restores your past transactions directly from the blockchain. More private but very slow. If it takes too long, go to Manage Wallets in Settings, delete the Unstoppable entry and repeat the process with Fast option.</string>
+    <string name="CoinOption_TimePeriod">Select the time period when you first created the wallet in Unstoppable.</string>
+    <string name="CoinOption_BeforeOctober">Before October 2019</string>
+    <string name="CoinOption_AfterOctober">After October 2019</string>
+    <string name="CoinOption_bip44">BIP-44</string>
+    <string name="CoinOption_bip49">BIP-49</string>
     <!--Charts-->
     <string name="Charts_TimeDuration_Day">하루</string>
     <string name="Charts_TimeDuration_Week">일주일</string>

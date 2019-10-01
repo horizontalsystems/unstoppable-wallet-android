@@ -10,20 +10,24 @@
     <string name="Alert_Success">Effectué</string>
     <string name="Alert_Copied">Copié</string>
     <string name="Button_Cancel">Annuler</string>
+    <string name="Button_Create">Create</string>
     <string name="Button_Back">Retour</string>
     <string name="Button_Close">Fermer</string>
     <string name="Button_Ok">OK</string>
     <string name="Button_Share">Partager</string>
     <string name="Error">Erreur</string>
     <string name="NotAvailable">S. O.</string>
+    <string name="Wallet">%s wallet</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
     <string name="Welcome_CreateWallet">Nouveau porte-monnaie</string>
     <string name="Welcome_RestoreWallet">Restaurer le porte-monnaie</string>
+    <!--Create-->
+    <string name="Create_Title">New Wallet</string>
+    <string name="Create_Description">Select one cryptocurrency to start. You will be able to add other cryptocurrencies later.</string>
     <!--Restore-->
     <string name="Restore_Title">Restaurer</string>
-    <string name="Restore_Description">Pour restaurer un porte-monnaie existant, vous devez entrer une clé secrète pour ce porte-monnaie. \n\nAprès avoir restauré un porte-monnaie, vous pourrez restaurer plus de porte-monnaies en accédant à la section Gérer les clés dans les Paramètres de l\'application.</string>
-    <string name="Restore_Subtitle">Entrez la clé</string>
+    <string name="Restore_Description">To restore existing wallet you need to enter a private key for that wallet.\n\nOnce you restore one wallet you will be able to restore other wallets via Manage Wallets section in Security settings of the app.</string>
     <string name="Restore_ValidationFailed">Clé incorrect</string>
     <string name="Restore_RestoreFailed">Échec de la restauration du porte-monnaie</string>
     <string name="Restore_EosAccountName">Account Name</string>
@@ -33,14 +37,15 @@
     <!--Backup-->
     <string name="Backup_Intro_Title">Sauvegarde</string>
     <string name="Backup_Intro_TitleShow">Voir la clé</string>
-    <string name="Backup_Intro_Subtitle">La clé qui sera affichée est le seul moyen de restaurer vos fonds si votre téléphone est perdu, volé, cassé, etc. Assurez-vous que personne ne regarde votre écran.\n\nCoins contrôlées par cette clé : %s</string>
+    <string name="Backup_Intro_Subtitle">The private key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.\n\nThe coins controlled by this key: %s.</string>
     <string name="Backup_Intro_Later">Plus tard</string>
     <string name="Backup_Intro_BackupNow">Sauvegarde</string>
+    <string name="Backup_DisplayTitle">Private Key</string>
     <string name="Backup_Confirmation_SecretKey">Je comprends que je suis propriétaire d\'une clé secrète privée de 12 mots, qui est stockée en toute sécurité sur mon téléphone portable et me permet de contrôler les fonds sur mon porte-monnaie.</string>
     <string name="Backup_Confirmation_DeleteAppWarn">Je comprends que si cette appli ne fonction plus, est déplacée vers un autre appareil ou supprimée, mon porte-monnaie ne peut être récupéré qu\'avec la clé secrète.</string>
     <string name="Backup_Confirmation_LockAppWarn">Je comprends que changer le PIN téléphone ou supprimer les données d\'application dans les paramètres Android supprime la clé secrète de l\'appareil. Je devrais entrer à nouveau ma clé secrète pour retrouver l\'accès à mon porte-monnaie.</string>
     <string name="Backup_Confirmation_Disclaimer">Je comprends que les développeurs de cette application ne peuvent pas être responsables de tout bogue ou problème non désiré qui pourrait apparaître lors de l\'utilisation de cette application.</string>
-    <string name="Backup_Confirmation_Description">Entrez les mots de votre clé %s.</string>
+    <string name="Backup_Confirmation_Description">Enter words from your private key.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Les mots ne correspondent pas</string>
     <string name="Backup_Confirmation_CheckTitle">Vérification…</string>
     <string name="Backup_Button_Confirm">Confirmer</string>
@@ -106,7 +111,7 @@
     <string name="Deposit_Your_Account">Votre compte</string>
     <string name="Receive_Alert_NotBackedUp_Title">Sauvegarde requise</string>
     <string name="Receive_Alert_NotBackedUp_Button">Sauvegarde</string>
-    <string name="Receive_Alert_NotBackedUp_Description">Vous devez sauvegarder les clés de ce porte-monnaie avant de pouvoir recevoir des fonds. </string>
+    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the %1$s wallet before you may receive %2$s.</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">à l\'instant</string>
     <string name="Timestamp_MinAgo">Il y a %d minute</string>
@@ -178,6 +183,7 @@
     <!--Settings-->
     <string name="Settings_Title">Paramètres</string>
     <string name="Settings_SecurityCenter">Centre de Sécurité</string>
+    <string name="Settings_Notifications">Notifications</string>
     <string name="Settings_ManageCoins">Gérer les coins</string>
     <string name="Settings_RestoreWallet">Restaurer le porte-monnaie</string>
     <string name="Settings_BaseCurrency">Devise de Base</string>
@@ -186,7 +192,6 @@
     <string name="Settings_About">À propos de</string>
     <string name="Settings_ShareThisWallet">Partager avec ami</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
-    <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <string name="Settings_Report">Signaler un problème</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Empreinte digitale n\'est pas activé</string>
@@ -195,7 +200,7 @@
     <string name="SettingsSecurity_Fingerprint">Empreinte digitale</string>
     <string name="SettingsSecurity_EnablePin">Code</string>
     <string name="SettingsSecurity_EditPin">Modifier le code </string>
-    <string name="SettingsSecurity_ManageKeys">Gérer les clés</string>
+    <string name="SettingsSecurity_ManageKeys">Manage Wallets</string>
     <string name="SettingsSecurity_BackupWallet">Porte-monnaie de Sauvegarde</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Devise de Base</string>
@@ -219,6 +224,16 @@
     <string name="SettingsReport_Title">Signaler un problème</string>
     <string name="SettingsReport_Email">E-mail</string>
     <string name="SettingsReport_Telegram">Telegram</string>
+    <!--Setting_Notifications-->
+    <string name="SettingsNotifications_Title">Notifications</string>
+    <string name="SettingsNotifications_Description">Set price change alerts for the coins you would like to watch.\n\nYou will be alerted when the change in price for the last 24 hours exceeds selected threshold.</string>
+    <string name="SettingsNotifications_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order to be able to receive price change alerts.</string>
+    <string name="SettingsNotifications_TurnOn">Turn on in Settings</string>
+    <string name="SettingsNotifications_Off">Off</string>
+    <string name="SettingsNotifications_DeactivateAll">Deactivate All</string>
+    <string name="Notification_Notifications">Notifications %s</string>
+    <string name="Notification_Up">Up</string>
+    <string name="Notification_Down">Down</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Erreur de Keystore Android</string>
     <string name="Alert_KeysInvalidatedDescription">Les données cryptées contenant votre porte-monnaie ont récemment été invalidées car votre écran de verrouillage Android a été modifié</string>
@@ -249,6 +264,7 @@
     <string name="Fingerprint_Success">Effectué!</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Désactivé jusqu\'à: %s</string>
+    <string name="UnlockPin_Error_PinIncorrect">Incorrect</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">PIN de téléphone</string>
     <string name="OSPin_Confirm_Desciption">Cette application nécessite qu\'un code secret soit activé sur le téléphone (verrouillage de l\'écran). \n\nVous pouvez activer cette fonction dans les paramètres Android. \n\nVeuillez noter que lorsque vous avez désactivé le code PIN au niveau du système d\'exploitation, les mesures de sécurité stockées sur votre téléphone ont rendu invalide les données précédemment stockées. Vous devrez Restaurer vos clés de porte-monnaie pour revenir à votre porte-monnaie.</string>
@@ -268,45 +284,47 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">Portefeuilles</string>
     <string name="ManageCoins_save">Sauvegarder</string>
-    <string name="ManageCoins_AddCoin_Title">Ajouter %s</string>
-    <string name="ManageCoins_AddCoin_Text">Cette action générera une clé(porte-monnaie) pour les coins suivantes :%s </string>
+    <string name="ManageCoins_AddCoin_Title">Add Wallet</string>
+    <string name="ManageCoins_AddCoin_Text">This action will generate a new wallet for the following coins: %s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">À ce stade, le porte-monnaie ne peut pas créer de nouveaux comptes de porte-monnaie EOS. Vous pouvez seulement restaurer le compte existant.</string>
     <!--Manage Keys-->
-    <string name="ManageKeys_Title">Gérer les clés</string>
-    <string name="ManageKeys_Description">Toute personne ayant accès à vos clés peut être en mesure de voler les fonds de votre porte-monnaie. Conservez les clés en sécurité et ne les montrez jamais à personne. \n\nSauvegardez chaque clé pour pouvoir restaurer des fonds si vous perdez ou cassez votre téléphone, ou si l’application est supprimée.</string>
+    <string name="ManageKeys_Title">Manage Wallets</string>
+    <string name="ManageKeys_Description">Highlighted below are your active wallets where each wallet responsible for different set of crypto currencies.\n\nYou should backup each highlighted wallets by backing up the private key for that wallet. This key is the only way to restore your funds if your phone is ever lost, stolen, broken etc.</string>
     <string name="ManageKeys_Create">Créer</string>
     <string name="ManageKeys_Restore">Restaurer</string>
     <string name="ManageKeys_Delete">Supprimer</string>
     <string name="ManageKeys_Backup">Sauvegarde</string>
     <string name="ManageKeys_Show">Afficher</string>
     <!--Manage Keys Delete Alert-->
-    <string name="ManageKeys_Delete_Title">Supprimer la clé</string>
-    <string name="ManageKeys_Delete_ConfirmationRemove">Cette action supprimera la clé %s (porte-monnaie) de cet appareil.</string>
+    <string name="ManageKeys_Delete_Title">Delete Wallet</string>
+    <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s wallet from this device.</string>
     <string name="ManageKeys_Delete_ConfirmationDisable">Coins qui seront désactivées : %s</string>
-    <string name="ManageKeys_Delete_ConfirmationLoose">Si vous n\'avez pas de sauvegarde de cette clé, vous perdrez les fonds respectifs.</string>
+    <string name="ManageKeys_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to your funds.</string>
     <string name="ManageKeys_Delete_FromPhone">Supprimer de l\'appareil</string>
     <string name="ManageKeys_Delete_Alert_Title">Sauvegarde requise</string>
-    <string name="ManageKeys_Delete_Alert">Vous devez sauvegarder la clé %s avant de pouvoir la supprimer de ce téléphone.</string>
+    <string name="ManageKeys_Delete_Alert">You need to backup the private key before it can be deleted from this phone.</string>
     <!-- Manage Keys Alert -->
-    <string name="AddCoin_Title">Ajouter %s</string>
-    <string name="AddCoin_Description">Vous n\'avez pas de clé pour %1s. Le porte-monnaie peut générer la clé pour vous. Utilisez le bouton Créer ci-dessous pour générer une nouvelle clé. \n\nVous pouvez également utiliser la clé %3s existante pour le %4s si vous en avez une.</string>
+    <string name="AddCoin_Title">Add %s</string>
+    <string name="AddCoin_Description">You don\'t have a wallet that can store %1$s. The app can generate a new wallet for you. Use the Create button below to generate a new wallet.\n\nYou will be able to use the new wallet for the following coins: %2$s.\n\nYou may also use the existing %3$s wallet key if you have one. Use the restore button for that.</string>
     <string name="AddCoin_CreateKey">Créer</string>
     <string name="AddCoin_RestoreKey">Restaurer</string>
     <!-- Account Types -->
-    <string name="AccountType_Unstoppable">12 Words</string>
-    <string name="AccountType_UnstoppableKey">Clé de 12 Words</string>
-    <string name="AccountType_Eos">EOS Blockchain</string>
-    <string name="AccountType_EosKey">Clé EOS</string>
-    <string name="AccountType_Binance">Binance Chain</string>
-    <string name="AccountType_BinanceKey">Clé de Binance</string>
+    <string name="AccountType_Unstoppable">Unstoppable</string>
+    <string name="AccountType_Eos">EOS</string>
+    <string name="AccountType_Binance">Binance</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">Restaurer les options</string>
     <string name="CoinOption_Fast">Rapide</string>
     <string name="CoinOption_Recommended">0&#8211;2 heures (Recommandé)</string>
-    <string name="CoinOption_Fast_Text">Restaure vos transactions passées via un serveur tiers sécurisé. Pour les utilisateurs ayant une longue histoire de transactions impliquant des sommes très importantes, cette méthode peut poser des risques de confidentialité.</string>
+    <string name="CoinOption_Fast_Text">Fast : Restores your past transaction via secure third party server. For users with transactions involving large sums this method may pose privacy risks.</string>
     <string name="CoinOption_Slow">Lente</string>
     <string name="CoinOption_MorePrivate">1&#8211;12 heures (Plus Privé)</string>
-    <string name="CoinOption_Slow_Text">Restaure vos transactions passées directement depuis le réseau. Beaucoup plus privé mais très lent. Si la restauration prend trop de temps, accédez à la section Gérer les clés et réimportez la clé du porte-monnaie à l\'aide de l\'option Synchronisation rapide.</string>
+    <string name="CoinOption_Slow_Text">Slow: Restores your past transactions directly from the blockchain. More private but very slow. If it takes too long, go to Manage Wallets in Settings, delete the Unstoppable entry and repeat the process with Fast option.</string>
+    <string name="CoinOption_TimePeriod">Select the time period when you first created the wallet in Unstoppable.</string>
+    <string name="CoinOption_BeforeOctober">Before October 2019</string>
+    <string name="CoinOption_AfterOctober">After October 2019</string>
+    <string name="CoinOption_bip44">BIP-44</string>
+    <string name="CoinOption_bip49">BIP-49</string>
     <!--Charts-->
     <string name="Charts_TimeDuration_Day">1J</string>
     <string name="Charts_TimeDuration_Week">7J</string>

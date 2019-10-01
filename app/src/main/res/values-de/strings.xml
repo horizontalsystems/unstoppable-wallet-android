@@ -10,20 +10,24 @@
     <string name="Alert_Success">Erfolgreich</string>
     <string name="Alert_Copied">Kopiert</string>
     <string name="Button_Cancel">Abbrechen</string>
+    <string name="Button_Create">Erstellen</string>
     <string name="Button_Back">Zurück</string>
     <string name="Button_Close">Schließen</string>
     <string name="Button_Ok">OK</string>
     <string name="Button_Share">Teilen</string>
     <string name="Error">Fehler</string>
     <string name="NotAvailable">N/A</string>
+    <string name="Wallet">%s wallet</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
     <string name="Welcome_CreateWallet">Wallet Erstellen</string>
     <string name="Welcome_RestoreWallet">Wallet Wiederherstellen</string>
+    <!--Create-->
+    <string name="Create_Title">Wallet Erstellen</string>
+    <string name="Create_Description">Wählen Sie eine Kryptowährung. Sie können später weitere Kryptowährungen hinzufügen.</string>
     <!--Restore-->
     <string name="Restore_Title">Wiederherstellen</string>
-    <string name="Restore_Description">Um ein bestehendes Wallet wiederherzustellen, müssen Sie den Offlineschlüssel für dieses Wallet eingeben.\n\nSobald Sie ein Wallet wiederhergestellt haben, können Sie weitere Wallets wiederherstellen. Gehen Sie dazu in das Verzeichnis Manage Schlüssel in den App-Einstellungen.</string>
-    <string name="Restore_Subtitle">Schlüssel Eingeben</string>
+    <string name="Restore_Description">Um ein bestehendes Wallet wiederherzustellen, müssen Sie einen geheimen Schlüssel für das Wallet eingeben. \n\nSobald Sie ein Wallet wiederhergestellt haben, können Sie andere Wallete über den Abschnitt Wallet Manager in den Sicherheitseinstellungen der App wiederherstellen.</string>
     <string name="Restore_ValidationFailed">Falscher Schlüssel</string>
     <string name="Restore_RestoreFailed">Fehler beim Wiederherstellen des Wallet</string>
     <string name="Restore_EosAccountName">Account Name</string>
@@ -33,15 +37,15 @@
     <!--Backup-->
     <string name="Backup_Intro_Title">Sicherung</string>
     <string name="Backup_Intro_TitleShow">Schlüssel anzeigen</string>
-    <string name="Backup_Intro_Subtitle">Der angezeigte Schlüssel ist die einzige Möglichkeit, Ihr Guthaben wiederherzustellen, wenn Ihr Telefon verloren geht, kaputt geht usw. Achten Sie darauf, dass niemand Ihren Bildschirm sieht.
-\n\nDie Coins, die von diesem Schlüssel kontrolliert werden: %s</string>
+    <string name="Backup_Intro_Subtitle">Der private Schlüssel, der als nächstes angezeigt wird, ist die einzige Möglichkeit, Ihr Guthaben wiederherzustellen, wenn Ihr Telefon verloren geht, gestohlen wird oder beschädigt wird. \n\nAchten Sie darauf, dass niemand Ihren Bildschirm sieht.\n\nDie Coins, die von diesem Schlüssel kontrolliert werden: %s</string>
     <string name="Backup_Intro_Later">Später</string>
     <string name="Backup_Intro_BackupNow">Backup</string>
+    <string name="Backup_DisplayTitle">Privater Schlüssel</string>
     <string name="Backup_Confirmation_SecretKey">Ich stimme zu, dass ich allein Inhaber eines privaten 12-Wort Offlineschlüssels bin, der sicher auf meinem Telefon gespeichert wird und mir ermöglicht, Geld auf meinem Wallet zu steuern.</string>
     <string name="Backup_Confirmation_DeleteAppWarn">Ich stimme zu, dass bei einer Verschiebung oder Entfernung dieser App, der Zugang zu meinem Walletkonto nur bei Verwendung den Offlineschlüsseln erfolgt werden muss.</string>
     <string name="Backup_Confirmation_LockAppWarn">Ich stimme zu, dass das Ändern der PIN oder das Löschen von App-Daten in Android-Einstellungen den Offlineschlüssel vom Gerät löschen. Ich muss meinen Geheimschlüssel erneut eingeben, um den Zugriff auf meine Wallet wiederherzustellen.</string>
     <string name="Backup_Confirmation_Disclaimer">Ich stimme zu, dass Entwickler dieser App nicht für unbeabsichtigte Fehler oder Probleme verantwortlich gemacht werden können, die bei der Verwendung dieser App auftreten können.</string>
-    <string name="Backup_Confirmation_Description">Geben Sie die Worte Ihres %s-Schlüssels ein.</string>
+    <string name="Backup_Confirmation_Description">Enter words from your private key.</string>
     <string name="Backup_Confirmation_FailureAlertText">Die Wörter stimmen nicht überein</string>
     <string name="Backup_Confirmation_CheckTitle">Prüfen…</string>
     <string name="Backup_Button_Confirm">Bestätigen</string>
@@ -107,7 +111,7 @@
     <string name="Deposit_Your_Account">Dein Konto</string>
     <string name="Receive_Alert_NotBackedUp_Title">Backup erforderlich</string>
     <string name="Receive_Alert_NotBackedUp_Button">Sicherung</string>
-    <string name="Receive_Alert_NotBackedUp_Description">Sie müssen die Schlüssel für diese Wallet sichern, bevor Sie Geld darauf erhalten können. </string>
+    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the %1$s wallet before you may receive %2$s.</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">gerade eben</string>
     <string name="Timestamp_MinAgo">Vor %d Min</string>
@@ -179,6 +183,7 @@
     <!--Settings-->
     <string name="Settings_Title">Einstellungen</string>
     <string name="Settings_SecurityCenter">Sicherheit</string>
+    <string name="Settings_Notifications">Benachrichtigungen</string>
     <string name="Settings_ManageCoins">Coins Verwalten</string>
     <string name="Settings_RestoreWallet">Wallet Wiederherstellen</string>
     <string name="Settings_BaseCurrency">Währung</string>
@@ -187,7 +192,6 @@
     <string name="Settings_About">Info</string>
     <string name="Settings_ShareThisWallet">Freunden erzählen</string>
     <string name="Settings_InfoTitleWithVersion">Unstoppable %s</string>
-    <string name="Settings_InfoLink">https://horizontalsystems.io</string>
     <string name="Settings_Report">Problem melden</string>
     <!--Settings-->
     <string name="Settings_Error_FingerprintNotEnabled">Fingerabdruck Nicht Aktivieren</string>
@@ -196,7 +200,7 @@
     <string name="SettingsSecurity_Fingerprint">Fingerabdruck</string>
     <string name="SettingsSecurity_EnablePin">Code</string>
     <string name="SettingsSecurity_EditPin">Code bearbeiten</string>
-    <string name="SettingsSecurity_ManageKeys">Schlüssel Managen</string>
+    <string name="SettingsSecurity_ManageKeys">Wallets verwalten</string>
     <string name="SettingsSecurity_BackupWallet">Wallet sichern</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Währung</string>
@@ -220,6 +224,16 @@
     <string name="SettingsReport_Title">Problem melden</string>
     <string name="SettingsReport_Email">E-Mail</string>
     <string name="SettingsReport_Telegram">Telegram</string>
+    <!--Setting_Notifications-->
+    <string name="SettingsNotifications_Title">Benachrichtigungen</string>
+    <string name="SettingsNotifications_Description">Legen Sie einen Preisänderungsalarm für die Coins fest, die Sie beobachten möchten. \n\nSie werden benachrichtigt, wenn die Preisänderung in den letzten 24 die gewählte Grenze übersteigt.</string>
+    <string name="SettingsNotifications_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order to be able to receive price change alerts.</string>
+    <string name="SettingsNotifications_TurnOn">In Einstellungen einschalten</string>
+    <string name="SettingsNotifications_Off">Aus</string>
+    <string name="SettingsNotifications_DeactivateAll">Alle deaktivieren</string>
+    <string name="Notification_Notifications">Benachrichtigung: %s</string>
+    <string name="Notification_Up">Hoch</string>
+    <string name="Notification_Down">Runter</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android Keystore Fehler</string>
     <string name="Alert_KeysInvalidatedDescription">Deine verschlüsselten Daten wurden kürzlich ungültig gemacht, weil dein Android-Sperrbildschirm geändert wurde</string>
@@ -250,6 +264,7 @@
     <string name="Fingerprint_Success">Erfolgreich!</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Deaktiviert bis: %s </string>
+    <string name="UnlockPin_Error_PinIncorrect">Incorrect</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">Telefon PIN</string>
     <string name="OSPin_Confirm_Desciption">Diese App erfordert, dass Zugangsperre (Bildschirmsperre) aktiviert ist.
@@ -271,46 +286,48 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">Wallets</string>
     <string name="ManageCoins_save">Speichern</string>
-    <string name="ManageCoins_AddCoin_Title">Hinzufügen %s</string>
-    <string name="ManageCoins_AddCoin_Text">Diese Aktion erzeugt einen Schlüssel (Wallet) für die folgenden Coins: %s </string>
+    <string name="ManageCoins_AddCoin_Title">Wallet hinzufügen</string>
+    <string name="ManageCoins_AddCoin_Text">This action will generate a new wallet for the following coins: %s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">Im Moment kann das Wallet keine neuen EOS-Wallet-Accounts anlegen. Sie können nur bestehende wiederherstellen.</string>
     <!--Manage Keys-->
-    <string name="ManageKeys_Title">Schlüssel Managen</string>
-    <string name="ManageKeys_Description">Jeder, der Ihre Schlüssel kennt, kann Ihr Wallet-Guthaben stehlen. Bewahren Sie die Schlüssel sicher auf und zeigen sie diese niemandem.
-\n\nSichern Sie jeden Schlüssel so, dass Sie auf das Guthaben zugreifen können, wenn Ihr Telefon kaputt geht oder die Wallet-App gelöscht wird.</string>
+    <string name="ManageKeys_Title">Wallets verwalten</string>
+    <string name="ManageKeys_Description">Aktive Wallets sind hervorgehoben. Diese sind für verschiedene Kryptowährungen verantwortlich.
+\n\n Sie sollten für jedes hervorgehobene Wallet den privaten Schlüssel sichern. Dieser Schlüssel ist die einzige Möglichkeit, Ihr Guthaben wiederherzustellen, wenn Ihr Telefon verloren geht, gestohlen wird oder kaputt geht.</string>
     <string name="ManageKeys_Create">Erstellen</string>
     <string name="ManageKeys_Restore">Wiederherstellen</string>
     <string name="ManageKeys_Delete">Löschen</string>
     <string name="ManageKeys_Backup">Sicherung</string>
     <string name="ManageKeys_Show">Anzeigen</string>
     <!--Manage Keys Delete Alert-->
-    <string name="ManageKeys_Delete_Title">Schlüssel löschen</string>
-    <string name="ManageKeys_Delete_ConfirmationRemove">Diese Aktion wird den %s-Schlüssel (Wallet) von diesem Gerät löschen.</string>
+    <string name="ManageKeys_Delete_Title">Wallet löschen</string>
+    <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s wallet from this device.</string>
     <string name="ManageKeys_Delete_ConfirmationDisable">Coins, die entfernt werden: %s</string>
-    <string name="ManageKeys_Delete_ConfirmationLoose">Wenn Sie keine Sicherung von diesem Schlüssel haben, verlieren Sie das zugehörige Guthaben.</string>
+    <string name="ManageKeys_Delete_ConfirmationLose">Wenn Sie den privaten Schlüssel für dieses Wallet nicht gesichert haben, verlieren Sie den Zugang zu Ihrem Guthaben.</string>
     <string name="ManageKeys_Delete_FromPhone">Von Telefon löschen</string>
     <string name="ManageKeys_Delete_Alert_Title">Backup erforderlich</string>
-    <string name="ManageKeys_Delete_Alert">Sie müssen den %s-Schlüssel in einem Backup sichern, bevor Sie ihn von diesem Handy löschen können.</string>
+    <string name="ManageKeys_Delete_Alert">You need to backup the private key before it can be deleted from this phone.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">%s hinzufügen</string>
-    <string name="AddCoin_Description">Du verfügst nicht über einen Schlüssel für , der einen Schlüssel %1s erfordert. Die Wallet kann den Schlüssel für Sie generieren. Verwenden Sie die Taste Create unten, um einen neuen Schlüssel zu generieren.\n\nDu kannst auch den vorhandenen %3s-Schlüssel für den %4s verwenden, falls du einen hast.</string>
+    <string name="AddCoin_Description">You don\'t have a wallet that can store %1$s. The app can generate a new wallet for you. Use the Create button below to generate a new wallet.\n\nYou will be able to use the new wallet for the following coins: %2$s.\n\nYou may also use the existing %3$s wallet key if you have one. Use the restore button for that.</string>
     <string name="AddCoin_CreateKey">Erstellen</string>
     <string name="AddCoin_RestoreKey">Wiederherstellen</string>
     <!-- Account Types -->
-    <string name="AccountType_Unstoppable">12 Words</string>
-    <string name="AccountType_UnstoppableKey">12-Words-Schlüssel</string>
-    <string name="AccountType_Eos">EOS Blockchain</string>
-    <string name="AccountType_EosKey">EOS-Schlüssel</string>
-    <string name="AccountType_Binance">Binance Chain</string>
-    <string name="AccountType_BinanceKey">Binance Schlüssel</string>
+    <string name="AccountType_Unstoppable">Unstoppable</string>
+    <string name="AccountType_Eos">EOS</string>
+    <string name="AccountType_Binance">Binance</string>
     <!--Coin Option-->
     <string name="CoinOption_Title">Optionen Wiederherstellen</string>
     <string name="CoinOption_Fast">Schnell</string>
     <string name="CoinOption_Recommended">0&#8211;2 Stunden (empfohlen)</string>
-    <string name="CoinOption_Fast_Text">Stellt deine bisherigen Transaktionen über sicheren Drittanbieter-Server wieder her. Für Benutzer mit einer langen Geschichte von Transaktionen mit sehr großen Summen kann diese Methode die Privatsphäre-Risiken darstellen.</string>
+    <string name="CoinOption_Fast_Text">Fast : Restores your past transaction via secure third party server. For users with transactions involving large sums this method may pose privacy risks.</string>
     <string name="CoinOption_Slow">Langsam</string>
     <string name="CoinOption_MorePrivate">1&#8211;12 Stunden (mehr privat)</string>
-    <string name="CoinOption_Slow_Text">Stellt vergangene Transaktionen direkt aus dem Netzwerk wieder her. Das schützt die Privatsphäre deutlich besser, ist aber sehr langsam. Wenn die Wiederherstellung zu lange dauert, gehen Sie zu Schlüssel Verwalten und reimportieren Sie den Schlüssel für das Wallet, indem Sie die Fast Sync Option nutzen.</string>
+    <string name="CoinOption_Slow_Text">Slow: Restores your past transactions directly from the blockchain. More private but very slow. If it takes too long, go to Manage Wallets in Settings, delete the Unstoppable entry and repeat the process with Fast option.</string>
+    <string name="CoinOption_TimePeriod">Select the time period when you first created the wallet in Unstoppable.</string>
+    <string name="CoinOption_BeforeOctober">Vor Oktober 2019</string>
+    <string name="CoinOption_AfterOctober">Nach Oktober 2019</string>
+    <string name="CoinOption_bip44">BIP-44</string>
+    <string name="CoinOption_bip49">BIP-49</string>
     <!--Charts-->
     <string name="Charts_TimeDuration_Day">1T</string>
     <string name="Charts_TimeDuration_Week">7D</string>

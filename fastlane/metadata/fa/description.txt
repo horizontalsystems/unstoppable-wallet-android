@@ -1,73 +1,73 @@
-If you’re a type of person who needs unrestricted access to invest in blockchains and require unconditional control over your crypto investments this wallet is for you.
+اگر شما فردی هستید که به دسترسی نامحدود برای سرمایه گذاری در زنجیره های بلوکی دارید و نیاز به کنترل بی قید و شرط سرمایه گذاری های رمزنگاری شده خود دارید ، این کیف پول برای شما مناسب است.
 
-This wallet was built to enable any freedom loving individual to invest and grow crypto currency portfolio without limitations, in a private manner, regardless of regulatory landscape.
+این کیف پول برای این ساخته شده است تا هر فرد طرفدار آزاد بتواند بدون محدودیت ، به صورت خصوصی و بدون در نظر گرفتن منظر نظارتی ، سرمایه گذاری و رشد کند.
 
-Exercise full unconditional control over your assets. Bitcoin, Ethereum, Dash and other crypto assets.
+کنترل کامل بدون قید و شرط بر دارایی های خود را تمرین کنید. بیت کوین ، اتریوم ، دش و سایر دارایی های رمزنگاری شده.
 
- Why Unstoppable Wallet
+چرا  کیف پول غیر قابل توقف
 
-It keeps crypto assets safe on your device
-It can only be controlled by yourself
-It doesn’t know who you are
-It doesn’t collect any data
-It's easy to migrate to/from
-It’s not dependent on any entity to function
-It integrates blockchains in a decentralized manner
-It implements latest improvements for each blockchain
-It can’t be blocked or censored
-It provides real time transaction fees
-It’s fast and beautiful  
-It's the most advanced wallet to date
-(1) UNRESTRICTED CONTROL
+دارایی های رمزگذاری شده را در دستگاه شما مطمئن نگه می دارد
+تنها توسط خودتان می تواند کنترل شود
+نمی داند شما چه کسی هستید
+هیچ اطلاعاتی را جمع آوری نمی کند
+مهاجرت به آن / از آن آسان است
+برای عمل کردن به هیچ نهادی وابسته نیست
+زنجیره های بلوکی را به روشی غیر متمرکز ادغام می کند
+آخرین پیشرفتها را برای هر زنجیره بلوکی پیاده سازی می کند
+نمی تواند مسدود یا سانسور شود
+هزینه تراکنش را در زمان واقعی فراهم می کند
+سریع و زیبا است
+این پیشرفته ترین کیف پول تا به امروز است
+(۱) کنترل نامحدود
 
-  Transact freely and unconditionally regardless of where you live. No entity can stop you from sending/receiving crypto in Unstoppable wallet.   
+فارغ از اینکه در کجا زندگی می کنید ، آزادانه و بدون قید و شرط معامله کنید. هیچ نهادی نمی تواند شما را از ارسال / دریافت ارز رمزنگاری شده در کیف پول غیرقابل توقف بازدارد.   
 
-You’re the only person with control and access to your crypto finances. The Secret Key (that give you ownership over crypto assets) never leaves your device.
+شما تنها فردی هستید که به منابع مالی رمزنگاری شده خود کنترل و دسترسی دارید. کلید مخفی (که به شما مالکیت بر دارایی های رمزنگاری شده را می دهد) هرگز دستگاه شما را ترک نمی کند.
 
-(2) GENUINE PRIVACY
+(۲) حریم خصوصی واقعی
 
-  Stay truly private without revealing any personal data. There are no accounts, emails, phone numbers, identity checks or 3rd party servers storing your data.  
+واقعاً خصوصی بمانید بدون اینکه هیچ اطلاعات شخصی را نشان دهید. هیچ شماره حساب ، ایمیل ، شماره تلفن ، بررسی هویت یا سرورهای شخص ثالث در ذخیره داده های شما وجود ندارد
 
-Unlike most wallets in the market the Unstoppable wallet connects users directly to decentralized blockchains without any restrictions or intermediaries.
+برخلاف بیشتر کیف پول های موجود در بازار، کیف پول غیرقابل توقف کاربران را به طور مستقیم به بلوک های زنجیره ای غیر متمرکز و بدون محدودیت یا واسطه متصل می کند.
 
-(3) HIGHLY SECURE
+(۳) بسیار مطمئن
 
-  Keep your crypto assets safe on your phone using safe storage mechanisms provided by phone's operating system. Your secret keys never leaves your device the device.
+با استفاده از مکانیسم های ذخیره سازی ایمن ارائه شده توسط سیستم عامل تلفن ، دارایی های خود را در تلفن خود ایمن نگه دارید. کلیدهای مخفی شما هرگز دستگاه شما را ترک نمی کنند.
 
-  In case of a device loss or replacement you may easily restore your wallet using Secret Key. Unstoppable makes it really easy to switch to another wallet or migrate funds from another wallet.
+در صورت از بین رفتن دستگاه یا تعویض دستگاه ، شما به راحتی کیف پول خود را با استفاده از کلید مخفی بازیابی می کنید. غیرقابل توقف ، انتقال به کیف پول دیگر یا انتقال وجه از کیف پول دیگر را بسیار آسان می کند.
 
- (4) ALWAYS ONLINE
+(۴) همیشه آنلاین
 
-Access your funds from anywhere at any time.   Unstoppable wallet was engineered to remain online and functional independent of any third party servers.   
+از هرجایی و هر زمان به بودجه خود دسترسی داشته باشید. کیف پول غیرقابل توقف به گونه ای مهندسی شده است تا بصورت آنلاین و مستقل از سرورهای شخص ثالث باقی بماند.   
 
-No single entity can take the wallet down and cause it's main features to malfunction. Not even the Horizontal Systems team able to interfere with it.
+هیچ نهادی نمی تواند کیف پول را پایین بیاورد و باعث بد عمل کردن ویژگی های اصلی آن شود. حتی تیم سیستم های افقی قادر به دخالت در آن نیستند.
 
-(5) ADVANCED & AHEAD
+(۵) پیشرفته و رو به جلو
 
-Use the most technologically advanced and decentralized wallet ever built.   It’s the only mobile wallet that implements all major blockchains in a fully decentralized manner.
+از پیشرفته ترین و غیرمتمرکز ترین کیف پولی که تاکنون ساخته شده استفاده کنید. این تنها کیف پول متحرک است که کلیه زنجیره های اصلی را به روشی کاملاً غیرمتمرکز اجرا می کند.
 
-Over 2500 engineering hours being put into this wallet every month. This wallet is being constantly improved further and continuously integrates latest enhancements in all blockchains such as segwit or real-time transaction fee estimator.
+بیش از ۲۵۰۰ ساعت مهندسی هر ماه صرف این کیف پول می شود. این کیف پول به طور مداوم در حال بهتر شدن است و به طور مداوم آخرین پیشرفت ها را در کلیه زنجیره های بلوکی مانند سگویت یا برآوردگر هزینه معامله در زمان واقعی ادغام می کند.
   
-(6) BEAUTIFUL  
+(۶) زیبا
 
-Deal with crypto without complexitites. You don’t need to understand technicalities powering different blockchains to be able to transact with them.   
+با ارز رمزگذاری شده بدون پیچیدگی کار کنید. برای اینکه بتوانید با آن ارتباط برقرار کنید ، لازم نیست تکنیک هایی را که دارای زنجیره های مختلف است را بدانید.   
 
-This wallet keeps complexities under the hood giving you a straightforward user interface to the world of blockchains.
+این کیف پول پیچیدگی ها را مخفی نگه می دارد و رابط کاربری ساده ای را به دنیای زنجیره های بلوکی می دهد.
 
-It’s fast, multi-lingual and highly customizable when it comes to the look and feel.   Don’t take our word for it, give it a try yourself.  
+این سریع ، چند زبانه و کاملا قابل تنظیم است مخصوصا وقتی به ظاهر و احساس می رسد. تنها به حرف های ما تکیه نکنید ، خودتان آن را امتحان کنید
 
-(7) OPEN & PUBLIC 
+(۷) باز و عمومی
 
-The code powering Unstoppable wallet is fully public and open source enabling anyone to unconditionally copy and reuse its code.
+منبع تغذیه کد کیف پول غیرقابل توقف کاملاً عمومی و منبع آزاد است و به هر کسی امکان می دهد بدون قید و شرط کد خود را کپی و دوباره از آن استفاده کند.
 
 https://github.com/horizontalsystems/unstoppable-wallet-ios
 
-(8) SUPPORTED CURRENCIES
+(۸) ارز های پشتیبانی شده
 
-Bitcoin
-Ethereum
-Dash
-Bitcoin Cash
-50+ ERC20 tokens
-(in progress) EOS and EOS based tokens
-(in progress) Binance Token and Binance-based tokens
+بیت کوین
+اتریوم
+دش
+بیت کوین نقد
+50+ ERC20 سکه
+(در حال پیشرفت) EOS و EOS بر اساس سکه
+(در حال پیشرفت) Binance سکه و نشانهای مبتنی بر Binance
