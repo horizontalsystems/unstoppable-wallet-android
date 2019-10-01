@@ -17,14 +17,14 @@
     <string name="Button_Share">Partager</string>
     <string name="Error">Erreur</string>
     <string name="NotAvailable">S. O.</string>
-    <string name="Wallet">%s wallet</string>
+    <string name="Wallet">%s portefeuille</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
     <string name="Welcome_CreateWallet">Nouveau porte-monnaie</string>
     <string name="Welcome_RestoreWallet">Restaurer le porte-monnaie</string>
     <!--Create-->
     <string name="Create_Title">Nouveau porte-monnaie</string>
-    <string name="Create_Description">Select one cryptocurrency to start. You will be able to add other cryptocurrencies later.</string>
+    <string name="Create_Description">Sélectionnez une cryptomonnaie pour commencer. Vous pourrez ajouter d\'autres cryptomonnaies plus tard.</string>
     <!--Restore-->
     <string name="Restore_Title">Restaurer</string>
     <string name="Restore_Description">To restore existing wallet you need to enter a private key for that wallet.\n\nOnce you restore one wallet you will be able to restore other wallets via Manage Wallets section in Security settings of the app.</string>
