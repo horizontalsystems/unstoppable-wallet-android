@@ -23,7 +23,7 @@
     <string name="Welcome_CreateWallet">Nouveau porte-monnaie</string>
     <string name="Welcome_RestoreWallet">Restaurer le porte-monnaie</string>
     <!--Create-->
-    <string name="Create_Title">Nouveau porte-monnaie</string>
+    <string name="Create_Title">Nouveau portefeuille</string>
     <string name="Create_Description">Sélectionnez une cryptomonnaie pour commencer. Vous pourrez ajouter d\'autres cryptomonnaies plus tard.</string>
     <!--Restore-->
     <string name="Restore_Title">Restaurer</string>
@@ -37,7 +37,7 @@
     <!--Backup-->
     <string name="Backup_Intro_Title">Sauvegarde</string>
     <string name="Backup_Intro_TitleShow">Voir la clé</string>
-    <string name="Backup_Intro_Subtitle">La clé privée qui va s\'afficher est le seul moyen de restaurer vos fonds si votre téléphone est perdu, volé, cassé, etc. \n\nAssurez-vous que personne ne regarde votre écran.\n\nLes pièces sont contrôlées grâce à cette clé :%s.</string>
+    <string name="Backup_Intro_Subtitle">La clé privée qui va s\'afficher est le seul moyen de restaurer vos fonds si votre téléphone est perdu, volé, endommagé, etc. \n\nAssurez-vous que personne ne regarde votre écran.\n\nLes pièces sont contrôlées grâce à cette clé :%s.</string>
     <string name="Backup_Intro_Later">Plus tard</string>
     <string name="Backup_Intro_BackupNow">Sauvegarde</string>
     <string name="Backup_DisplayTitle">Clé privée</string>
