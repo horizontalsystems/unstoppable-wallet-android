@@ -23,7 +23,7 @@
     <string name="Welcome_CreateWallet">Nouveau porte-monnaie</string>
     <string name="Welcome_RestoreWallet">Restaurer le porte-monnaie</string>
     <!--Create-->
-    <string name="Create_Title">New Wallet</string>
+    <string name="Create_Title">Nouveau porte-monnaie</string>
     <string name="Create_Description">Select one cryptocurrency to start. You will be able to add other cryptocurrencies later.</string>
     <!--Restore-->
     <string name="Restore_Title">Restaurer</string>
@@ -304,7 +304,7 @@
     <string name="ManageKeys_Delete_Alert_Title">Sauvegarde requise</string>
     <string name="ManageKeys_Delete_Alert">You need to backup the private key before it can be deleted from this phone.</string>
     <!-- Manage Keys Alert -->
-    <string name="AddCoin_Title">Add %s</string>
+    <string name="AddCoin_Title">Ajouter %s</string>
     <string name="AddCoin_Description">You don\'t have a wallet that can store %1$s. The app can generate a new wallet for you. Use the Create button below to generate a new wallet.\n\nYou will be able to use the new wallet for the following coins: %2$s.\n\nYou may also use the existing %3$s wallet key if you have one. Use the restore button for that.</string>
     <string name="AddCoin_CreateKey">Créer</string>
     <string name="AddCoin_RestoreKey">Restaurer</string>
