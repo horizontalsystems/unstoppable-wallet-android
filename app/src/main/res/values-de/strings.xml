@@ -56,7 +56,7 @@
     <string name="Backup_Words_Title">Offlineschlüssel</string>
     <!--Backup Eos-->
     <string name="Backup_Eos_AccountName">Account Name</string>
-    <string name="Backup_Eos_ActivePrivateKey">Private Key</string>
+    <string name="Backup_Eos_ActivePrivateKey">Privater Schlüssel</string>
     <string name="Backup_Eos_Warning">Den Schlüssel mit \"Kopieren\" zu kopieren, ist riskant, da Sie womöglich Zwischenablage-Management-Apps oder andere Apps nutzen, die Zugriff auf die Daten in der Zwischenablage haben.</string>
     <!--Balance-->
     <string name="Balance_Title">Guthaben</string>
@@ -227,7 +227,7 @@
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">Benachrichtigungen</string>
     <string name="SettingsNotifications_Description">Legen Sie einen Preisänderungsalarm für die Coins fest, die Sie beobachten möchten. \n\nSie werden benachrichtigt, wenn die Preisänderung in den letzten 24 die gewählte Grenze übersteigt.</string>
-    <string name="SettingsNotifications_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order to be able to receive price change alerts.</string>
+    <string name="SettingsNotifications_NotificationsDisabledWarning">Die Benachrichtigungen für das Unstoppable Wallet sind ausgeschaltet. Sie müssen die Benachrichtigungen einschalten und eine Aktualisierung im Hintergrund erlauben, um Benachrichtigungen bei Preisänderungn zu erhalten.</string>
     <string name="SettingsNotifications_TurnOn">In Einstellungen einschalten</string>
     <string name="SettingsNotifications_Off">Aus</string>
     <string name="SettingsNotifications_DeactivateAll">Alle deaktivieren</string>
@@ -287,7 +287,7 @@
     <string name="ManageCoins_title">Wallets</string>
     <string name="ManageCoins_save">Speichern</string>
     <string name="ManageCoins_AddCoin_Title">Wallet hinzufügen</string>
-    <string name="ManageCoins_AddCoin_Text">This action will generate a new wallet for the following coins: %s </string>
+    <string name="ManageCoins_AddCoin_Text">Damit erzeugen Sie ein neues Wallet für folgende Coins: %s</string>
     <string name="ManageCoins_EOSAlert_CreateButton">Im Moment kann das Wallet keine neuen EOS-Wallet-Accounts anlegen. Sie können nur bestehende wiederherstellen.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">Wallets verwalten</string>
@@ -300,7 +300,7 @@
     <string name="ManageKeys_Show">Anzeigen</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">Wallet löschen</string>
-    <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s wallet from this device.</string>
+    <string name="ManageKeys_Delete_ConfirmationRemove">Damit wird das %s Wallet von Ihrem Gerät gelöscht.</string>
     <string name="ManageKeys_Delete_ConfirmationDisable">Coins, die entfernt werden: %s</string>
     <string name="ManageKeys_Delete_ConfirmationLose">Wenn Sie den privaten Schlüssel für dieses Wallet nicht gesichert haben, verlieren Sie den Zugang zu Ihrem Guthaben.</string>
     <string name="ManageKeys_Delete_FromPhone">Von Telefon löschen</string>
@@ -319,11 +319,11 @@
     <string name="CoinOption_Title">Optionen Wiederherstellen</string>
     <string name="CoinOption_Fast">Schnell</string>
     <string name="CoinOption_Recommended">0&#8211;2 Stunden (empfohlen)</string>
-    <string name="CoinOption_Fast_Text">Fast : Restores your past transaction via secure third party server. For users with transactions involving large sums this method may pose privacy risks.</string>
+    <string name="CoinOption_Fast_Text">Schnell: Stellt Ihre vergangenen Transaktionen über einen sicheren Drittserver her. Für Nutzer, die Transaktionen mit großen Summen haben, könnte diese Methode Datenschutzrisiken bergen.</string>
     <string name="CoinOption_Slow">Langsam</string>
     <string name="CoinOption_MorePrivate">1&#8211;12 Stunden (mehr privat)</string>
-    <string name="CoinOption_Slow_Text">Slow: Restores your past transactions directly from the blockchain. More private but very slow. If it takes too long, go to Manage Wallets in Settings, delete the Unstoppable entry and repeat the process with Fast option.</string>
-    <string name="CoinOption_TimePeriod">Select the time period when you first created the wallet in Unstoppable.</string>
+    <string name="CoinOption_Slow_Text">Langsam: Stellt Ihre vergangenen Transaktionen direkt aus der Blockchain her. Mehr Datenschutz, aber sehr langsam. Wenn es zu lange dauert, gehen Sie in den Einstellungen zu Wallets verwalten und löschen Sie den Eintrag Unstoppable. Wiederholen Sie den Prozess mit der Option \"Schnell\".</string>
+    <string name="CoinOption_TimePeriod">Wählen Sie den Zeitraum, in dem Sie Ihr Wallet im Unstoppable Wallet das erste Mal erstellt haben.</string>
     <string name="CoinOption_BeforeOctober">Vor Oktober 2019</string>
     <string name="CoinOption_AfterOctober">Nach Oktober 2019</string>
     <string name="CoinOption_bip44">BIP-44</string>
