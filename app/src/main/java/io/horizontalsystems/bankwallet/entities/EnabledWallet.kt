@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import io.horizontalsystems.bankwallet.core.storage.AccountRecord
 
-@Entity(primaryKeys = ["coinCode", "accountId"],
+@Entity(primaryKeys = ["coinId", "accountId"],
         foreignKeys = [ForeignKey(
                 entity = AccountRecord::class,
                 parentColumns = ["id"],
@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.core.storage.AccountRecord
         ])
 
 data class EnabledWallet(
-        val coinCode: String,
+        val coinId: String,
         val accountId: String,
         val walletOrder: Int? = null,
         val syncMode: SyncMode? = null

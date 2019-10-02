@@ -87,7 +87,7 @@ object BalanceModule {
             get() = items.count()
 
         val coinCodes: List<CoinCode>
-            get() = items.map { it.wallet.coin.code }.distinct()
+            get() = items.map { it.wallet.coin.coinId }.distinct()
 
         var items = listOf<BalanceItem>()
         var sortType: BalanceSortType = BalanceSortType.Name
