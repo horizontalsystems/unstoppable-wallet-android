@@ -21,8 +21,8 @@ class PriceAlertHandlerTest {
     private val notificationFactory = mock<INotificationFactory>()
     private val handler = PriceAlertHandler(priceAlertStorage, notificationManager, notificationFactory)
 
-    private val btcCoin = Coin("Bitcoin", "BTC", 0, CoinType.Bitcoin)
-    private val ethCoin = Coin("Ethereum", "ETH", 0, CoinType.Ethereum)
+    private val btcCoin = Coin("BTC", "Bitcoin", "BTC", 0, CoinType.Bitcoin)
+    private val ethCoin = Coin("ETH", "Ethereum", "ETH", 0, CoinType.Ethereum)
 
     private val rates = mapOf("BTC" to "8600", "ETH" to "120")
     private val ratesWithOnlyBtc = mapOf("BTC" to "8600")
