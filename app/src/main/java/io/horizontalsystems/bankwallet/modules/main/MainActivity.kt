@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewStub
 import android.widget.TextView
 import androidx.annotation.NonNull
-import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
@@ -18,8 +17,6 @@ import io.horizontalsystems.bankwallet.BaseActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
-import io.horizontalsystems.bankwallet.modules.receive.ReceiveView
-import io.horizontalsystems.bankwallet.modules.receive.ReceiveViewModel
 import io.horizontalsystems.bankwallet.modules.send.SendActivity
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoView
@@ -29,13 +26,11 @@ import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.main_activity_view_pager_layout.*
 
-class MainActivity : BaseActivity(), ReceiveView.Listener, TransactionInfoView.Listener {
+class MainActivity : BaseActivity(), TransactionInfoView.Listener {
 
     private var adapter: MainTabsAdapter? = null
     private var disposables = CompositeDisposable()
-    private var receiveViewModel: ReceiveViewModel? = null
     private var transInfoViewModel: TransactionInfoViewModel? = null
-    private var receiveBottomSheetBehavior: BottomSheetBehavior<View>? = null
     private var txInfoBottomSheetBehavior: BottomSheetBehavior<View>? = null
 
     private lateinit var viewModel: MainViewModel
@@ -61,9 +56,6 @@ class MainActivity : BaseActivity(), ReceiveView.Listener, TransactionInfoView.L
         txInfoBottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED -> {
             txInfoBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         }
-        receiveBottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED -> {
-            receiveBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
-        }
         (adapter?.currentItem ?: 0) > 0 -> {
             viewPager.currentItem = 0
         }
@@ -78,30 +70,6 @@ class MainActivity : BaseActivity(), ReceiveView.Listener, TransactionInfoView.L
     override fun onDestroy() {
         disposables.dispose()
         super.onDestroy()
-    }
-
-    /***
-    Receive bottomsheet
-     */
-
-    fun openReceiveDialog(wallet: Wallet) {
-        receiveViewModel?.init(wallet)
-    }
-
-    override fun expandReceiveDialog() {
-        receiveBottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
-    }
-
-    override fun closeReceiveDialog() {
-        receiveBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
-        hideDim()
-    }
-
-    override fun shareReceiveAddress(address: String) {
-        ShareCompat.IntentBuilder.from(this)
-                .setType("text/plain")
-                .setText(address)
-                .startChooser()
     }
 
     fun openSend(wallet: Wallet) {
@@ -180,14 +148,6 @@ class MainActivity : BaseActivity(), ReceiveView.Listener, TransactionInfoView.L
     private fun preloadBottomSheets() {
         Handler().postDelayed({
             setBottomSheets()
-            //receive
-            receiveBottomSheetBehavior = BottomSheetBehavior.from(receiveNestedScrollView)
-            setBottomSheet(receiveBottomSheetBehavior)
-
-            receiveViewModel = ViewModelProviders.of(this).get(ReceiveViewModel::class.java)
-            receiveViewModel?.let {
-                receiveView.bind(it, this, this)
-            }
 
             //transaction info
             txInfoBottomSheetBehavior = BottomSheetBehavior.from(transactionInfoNestedScrollView)
@@ -206,7 +166,6 @@ class MainActivity : BaseActivity(), ReceiveView.Listener, TransactionInfoView.L
         hideDim()
 
         bottomSheetDim.setOnClickListener {
-            receiveBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
             txInfoBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         }
     }
