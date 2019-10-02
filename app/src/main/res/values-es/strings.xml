@@ -325,7 +325,7 @@
     <string name="CoinOption_Fast_Text">Rápida: Restaura sus transacciones pasadas a través de un servidor de seguridad externo. Para usuarios con transacciones que involucren grandes sumas, este método posiblemente implique un riesgo en la privacidad.</string>
     <string name="CoinOption_Slow">Lento</string>
     <string name="CoinOption_MorePrivate">1&#8211;12 horas (Más Privado)</string>
-    <string name="CoinOption_Slow_Text">Lenta Restaura sus transacciones pasadas directamente del blockchain. Más privado pero muy lento. Si toma mucho tiempo, vaya a Gestionar Monederos en Ajustes, elimine la entrada de Unstoppable y repita el proceso con la opción Rápida.</string>
+    <string name="CoinOption_Slow_Text">Lento: Restaura sus transacciones pasadas directamente del blockchain. Más privado pero muy lento. Si toma mucho tiempo, vaya a Gestionar Monederos en Ajustes, elimine la entrada de Unstoppable y repita el proceso con la opción Rápida.</string>
     <string name="CoinOption_TimePeriod">Seleccione el período de tiempo de cuando creó por primera vez el monedero en Unstoppable.</string>
     <string name="CoinOption_BeforeOctober">Antes de Octubre de 2019</string>
     <string name="CoinOption_AfterOctober">Después de Octubre de 2019</string>
