@@ -322,13 +322,13 @@
     <string name="CoinOption_Title">Restaurar opciones</string>
     <string name="CoinOption_Fast">Rápido</string>
     <string name="CoinOption_Recommended">0&#8211;2 horas (Recomendado)</string>
-    <string name="CoinOption_Fast_Text">Fast : Restores your past transaction via secure third party server. For users with transactions involving large sums this method may pose privacy risks.</string>
+    <string name="CoinOption_Fast_Text">Rápida: Restaura sus transacciones pasadas a través de un servidor de seguridad externo. Para usuarios con transacciones que involucren grandes sumas, este método posiblemente implique un riesgo en la privacidad.</string>
     <string name="CoinOption_Slow">Lento</string>
     <string name="CoinOption_MorePrivate">1&#8211;12 horas (Más Privado)</string>
-    <string name="CoinOption_Slow_Text">Slow: Restores your past transactions directly from the blockchain. More private but very slow. If it takes too long, go to Manage Wallets in Settings, delete the Unstoppable entry and repeat the process with Fast option.</string>
-    <string name="CoinOption_TimePeriod">Select the time period when you first created the wallet in Unstoppable.</string>
-    <string name="CoinOption_BeforeOctober">Before October 2019</string>
-    <string name="CoinOption_AfterOctober">After October 2019</string>
+    <string name="CoinOption_Slow_Text">Lenta Restaura sus transacciones pasadas directamente del blockchain. Más privado pero muy lento. Si toma mucho tiempo, vaya a Gestionar Monederos en Ajustes, elimine la entrada de Unstoppable y repita el proceso con la opción Rápida.</string>
+    <string name="CoinOption_TimePeriod">Seleccione el período de tiempo de cuando creó por primera vez el monedero en Unstoppable.</string>
+    <string name="CoinOption_BeforeOctober">Antes de Octubre de 2019</string>
+    <string name="CoinOption_AfterOctober">Después de Octubre de 2019</string>
     <string name="CoinOption_bip44">BIP-44</string>
     <string name="CoinOption_bip49">BIP-49</string>
     <!--Charts-->
