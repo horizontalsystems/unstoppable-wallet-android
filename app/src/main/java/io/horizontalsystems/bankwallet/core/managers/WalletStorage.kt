@@ -19,7 +19,7 @@ class WalletStorage(
         val coins = appConfigProvider.coins
 
         return storage.enabledWallets.map { enabledWallet ->
-            val coin = coins.find { it.code == enabledWallet.coinCode }
+            val coin = coins.find { it.coinId == enabledWallet.coinId }
             val account = accounts.find { it.id == enabledWallet.accountId }
 
             if (coin != null && account != null) {
@@ -34,7 +34,7 @@ class WalletStorage(
         val coins = appConfigProvider.coins
 
         return storage.enabledWallets.map {enabledWallet ->
-            val coin = coins.find { it.code == enabledWallet.coinCode }
+            val coin = coins.find { it.coinId == enabledWallet.coinId }
             coin
         }.mapNotNull { it }
     }

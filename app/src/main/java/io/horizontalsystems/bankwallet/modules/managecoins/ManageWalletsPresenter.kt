@@ -14,7 +14,7 @@ class ManageWalletsPresenter(private val interactor: ManageWalletsModule.IIntera
 
     private var items = mutableListOf<ManageWalletItem>()
     private var popularItems = mutableListOf<ManageWalletItem>()
-    private val popularCoinCodes = listOf("BTC", "BCH", "ETH", "DASH", "EOS", "BNB")
+    private val popularCoinIds = listOf("BTC", "BCH", "ETH", "DASH", "EOS", "BNB")
     private var currentItem: ManageWalletItem? = null
 
     //  ViewDelegate
@@ -22,8 +22,8 @@ class ManageWalletsPresenter(private val interactor: ManageWalletsModule.IIntera
     override fun viewDidLoad() {
         val wallets = interactor.wallets
 
-        val popularCoins = interactor.coins.filter { popularCoinCodes.contains(it.code) }
-        val coins = interactor.coins.filter { !popularCoinCodes.contains(it.code) }
+        val popularCoins = interactor.coins.filter { popularCoinIds.contains(it.coinId) }
+        val coins = interactor.coins.filter { !popularCoinIds.contains(it.coinId) }
 
         popularItems = popularCoins.map { coin ->
             ManageWalletItem(coin, wallets.find { it.coin == coin })
