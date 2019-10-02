@@ -16,7 +16,7 @@ class TransactionViewItemFactoryTest {
     private val myTxAddress = TransactionAddress("myAddress", true)
     private val toTxAddress = TransactionAddress("toAddress", false)
     private val hash = "efwewegweg32rf234"
-    private val bitCoin = Coin("Bitcoin", "BTC", 8, CoinType.Bitcoin)
+    private val bitCoin = Coin("BTC", "Bitcoin", "BTC", 8, CoinType.Bitcoin)
     private val bitWallet = Wallet(bitCoin, mock(), mock())
     private val rate = CurrencyValue(Currency(code = "USD", symbol = "$"), 3900.toBigDecimal())
     private val lastBlockHeight = 1000

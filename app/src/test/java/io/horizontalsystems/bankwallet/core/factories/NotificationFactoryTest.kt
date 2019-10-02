@@ -31,10 +31,10 @@ class NotificationFactoryTest : Spek({
         whenever(context.getString(R.string.Notification_Notifications, emojiHelper.multiAlerts)).thenReturn("Notifications $mockMultiString")
     }
 
-    val firstCoin = Coin("First", "FRST", 0, CoinType.Bitcoin)
-    val secondCoin = Coin("Second", "SCND", 0, CoinType.Bitcoin)
-    val thirdCoin = Coin("Third", "THRD", 0, CoinType.Bitcoin)
-    val fourthCoin = Coin("Fourth", "FRTH", 0, CoinType.Bitcoin)
+    val firstCoin = Coin("FRST", "First", "FRST", 0, CoinType.Bitcoin)
+    val secondCoin = Coin("SCND", "Second", "SCND", 0, CoinType.Bitcoin)
+    val thirdCoin = Coin("THRD", "Third", "THRD", 0, CoinType.Bitcoin)
+    val fourthCoin = Coin("FRTH", "Fourth", "FRTH", 0, CoinType.Bitcoin)
 
     describe("#notifications") {
         describe("make notification for 1 alert") {
