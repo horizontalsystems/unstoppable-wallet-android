@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.balance
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -15,13 +16,14 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.StatsButton
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.managecoins.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
+import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.ui.dialogs.BackupAlertDialog
 import io.horizontalsystems.bankwallet.ui.dialogs.BalanceSortDialogFragment
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 import kotlinx.android.synthetic.main.fragment_balance.*
 
-class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDialogFragment.Listener {
+class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDialogFragment.Listener, ReceiveFragment.Listener {
 
     private lateinit var viewModel: BalanceViewModel
     private lateinit var coinAdapter: BalanceCoinAdapter
@@ -101,6 +103,15 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
         }
     }
 
+    // ReceiveFragment listener
+    override fun shareReceiveAddress(address: String) {
+        ShareCompat.IntentBuilder
+                .from(activity)
+                .setType("text/plain")
+                .setText(address)
+                .startChooser()
+    }
+
     // BalanceAdapter listener
 
     override fun onSendClicked(position: Int) {
@@ -126,8 +137,8 @@ class BalanceFragment : Fragment(), BalanceCoinAdapter.Listener, BalanceSortDial
     // LiveData
 
     private fun observeLiveData() {
-        viewModel.openReceiveDialog.observe(viewLifecycleOwner, Observer {
-            (activity as? MainActivity)?.openReceiveDialog(it)
+        viewModel.openReceiveDialog.observe(viewLifecycleOwner, Observer {wallet ->
+            ReceiveFragment(wallet, this).also { it.show(childFragmentManager, it.tag) }
         })
 
         viewModel.openSendDialog.observe(viewLifecycleOwner, Observer {

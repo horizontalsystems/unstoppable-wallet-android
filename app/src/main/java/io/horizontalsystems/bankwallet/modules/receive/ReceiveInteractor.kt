@@ -8,7 +8,8 @@ import io.horizontalsystems.bankwallet.modules.receive.viewitems.AddressItem
 class ReceiveInteractor(
         private var wallet: Wallet,
         private var adapterManager: IAdapterManager,
-        private var clipboardManager: IClipboardManager) : ReceiveModule.IInteractor {
+        private var clipboardManager: IClipboardManager
+) : ReceiveModule.IInteractor {
 
     var delegate: ReceiveModule.IInteractorDelegate? = null
 

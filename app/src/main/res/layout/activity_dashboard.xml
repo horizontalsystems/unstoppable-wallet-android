@@ -24,24 +24,6 @@
         />
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/receiveNestedScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipToPadding="true"
-        app:behavior_hideable="true"
-        app:behavior_peekHeight="0dp"
-        app:layout_anchorGravity="bottom"
-        app:layout_behavior="@string/bottom_sheet_behavior"
-        >
-
-        <io.horizontalsystems.bankwallet.modules.receive.ReceiveView
-            android:id="@+id/receiveView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
-    </androidx.core.widget.NestedScrollView>
-
-    <androidx.core.widget.NestedScrollView
         android:id="@+id/transactionInfoNestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
