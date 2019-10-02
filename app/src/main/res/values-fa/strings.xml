@@ -105,7 +105,7 @@
     <string name="Send_ERC_Alert">پرداخت هزینه های معامله برای %s (ERC20) در Ethereum. شما نیاز به %s ETH.</string>
     <string name="Send_Token_InsufficientFeeAlert">هزینه تراکنش برای %s (%s) پرداخت شده در %s. شما نیاز دارید %s.</string>
     <!--Deposit-->
-    <string name="Deposit_Title">دریافت s%</string>
+    <string name="Deposit_Title">دریافت %s</string>
     <string name="Deposit_Share">به اشتراك گذاشتن</string>
     <string name="Deposit_Your_Address">آدرس شما</string>
     <string name="Deposit_Your_Account">حساب کاربری شما</string>
