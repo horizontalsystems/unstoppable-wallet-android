@@ -17,17 +17,17 @@
     <string name="Button_Share">Compartir</string>
     <string name="Error">Error</string>
     <string name="NotAvailable">N/A</string>
-    <string name="Wallet">%s wallet</string>
+    <string name="Wallet">%s monedero</string>
     <!--Welcome-->
     <string name="Welcome_Title">Unstoppable</string>
     <string name="Welcome_CreateWallet">Nueva cartera</string>
     <string name="Welcome_RestoreWallet">Restaurar cartera</string>
     <!--Create-->
-    <string name="Create_Title">Nueva cartera</string>
-    <string name="Create_Description">Select one cryptocurrency to start. You will be able to add other cryptocurrencies later.</string>
+    <string name="Create_Title">Nuevo monedero</string>
+    <string name="Create_Description">Seleccione una criptomoneda para comenzar. Podrá añadir otras criptomonedas posteriormente.</string>
     <!--Restore-->
     <string name="Restore_Title">Restaurar</string>
-    <string name="Restore_Description">To restore existing wallet you need to enter a private key for that wallet.\n\nOnce you restore one wallet you will be able to restore other wallets via Manage Wallets section in Security settings of the app.</string>
+    <string name="Restore_Description">Para restaurar el monedero existente, usted necesita ingresar la clave privada para ese monedero.\n\nUna vez que restaure un monedero usted podrá restaurar otros monederos al acceder a la sección Gestionar Monederos en los ajustes de Seguridad de la aplicación.</string>
     <string name="Restore_ValidationFailed">Clave incorrecta</string>
     <string name="Restore_RestoreFailed">Error al restaurar la cartera</string>
     <string name="Restore_EosAccountName">Account Name</string>
@@ -37,15 +37,15 @@
     <!--Backup-->
     <string name="Backup_Intro_Title">Copia de seguridad</string>
     <string name="Backup_Intro_TitleShow">Mostrar clave</string>
-    <string name="Backup_Intro_Subtitle">The private key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.\n\nThe coins controlled by this key: %s.</string>
+    <string name="Backup_Intro_Subtitle">La clave privada que se mostrará a continuación es la única forma de restaurar sus fondos en caso de que su teléfono se pierda, lo roben, se averíe, etc.\n\nAsegúrese de que nadie está viendo su pantalla.\n\nLas monedas controladas por esta clave: %s.</string>
     <string name="Backup_Intro_Later">Posterior</string>
     <string name="Backup_Intro_BackupNow">Copia de seguridad</string>
-    <string name="Backup_DisplayTitle">Private Key</string>
+    <string name="Backup_DisplayTitle">Clave privada</string>
     <string name="Backup_Confirmation_SecretKey">Entiendo que soy un único propietario de una clave secreta privada de 12 palabras que se almacena de forma segura en mi teléfono y me permite controlar los fondos en mi cartera.</string>
     <string name="Backup_Confirmation_DeleteAppWarn">Entiendo que si esta aplicación se elimina o deja de funcionar por alguna razón, mi monedero sólo puede ser recuperado utilizando mi clave secreta.</string>
     <string name="Backup_Confirmation_LockAppWarn">Entiendo que cambiar el PIN de desbloqueo del teléfono o eliminar los datos de la aplicación en la configuración de Android borra la clave secreta del dispositivo. Tendría que volver a introducir mi Clave Secreta para recuperar el acceso a mi monedero.</string>
     <string name="Backup_Confirmation_Disclaimer">Entiendo que los desarrolladores de esta aplicación no pueden ser responsables de ningún error o problemas no intencionados que puedan surgir mientras se usa esta aplicación.</string>
-    <string name="Backup_Confirmation_Description">Enter words from your private key.</string>
+    <string name="Backup_Confirmation_Description">Ingrese las palabras de su clave privada.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Las contraseñas no coinciden</string>
     <string name="Backup_Confirmation_CheckTitle">Comprobar…</string>
     <string name="Backup_Button_Confirm">Confirmar</string>
@@ -111,7 +111,7 @@
     <string name="Deposit_Your_Account">Su cuenta</string>
     <string name="Receive_Alert_NotBackedUp_Title">Se requiere una copia de seguridad</string>
     <string name="Receive_Alert_NotBackedUp_Button">Copia de seguridad</string>
-    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the %1$s wallet before you may receive %2$s.</string>
+    <string name="Receive_Alert_NotBackedUp_Description">Necesita respaldar el monedero %1$s antes de poder recibir %2$s.</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">reciente</string>
     <string name="Timestamp_MinAgo">Hace %d minutos</string>
@@ -183,7 +183,7 @@
     <!--Settings-->
     <string name="Settings_Title">Ajustes</string>
     <string name="Settings_SecurityCenter">Centro de seguridad</string>
-    <string name="Settings_Notifications">Notifications</string>
+    <string name="Settings_Notifications">Notificaciones</string>
     <string name="Settings_ManageCoins">Gestionar monedas</string>
     <string name="Settings_RestoreWallet">Restaurar cartera</string>
     <string name="Settings_BaseCurrency">Moneda principal</string>
@@ -200,7 +200,7 @@
     <string name="SettingsSecurity_Fingerprint">Huella digital</string>
     <string name="SettingsSecurity_EnablePin">Código</string>
     <string name="SettingsSecurity_EditPin">Editar el código </string>
-    <string name="SettingsSecurity_ManageKeys">Manage Wallets</string>
+    <string name="SettingsSecurity_ManageKeys">Gestionar monederos</string>
     <string name="SettingsSecurity_BackupWallet">Copia de Seguridad de cartera</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Moneda principal</string>
@@ -231,14 +231,14 @@
     <string name="SettingsReport_Email">Correo electrónico</string>
     <string name="SettingsReport_Telegram">Telegram</string>
     <!--Setting_Notifications-->
-    <string name="SettingsNotifications_Title">Notifications</string>
-    <string name="SettingsNotifications_Description">Set price change alerts for the coins you would like to watch.\n\nYou will be alerted when the change in price for the last 24 hours exceeds selected threshold.</string>
-    <string name="SettingsNotifications_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order to be able to receive price change alerts.</string>
-    <string name="SettingsNotifications_TurnOn">Turn on in Settings</string>
-    <string name="SettingsNotifications_Off">Off</string>
-    <string name="SettingsNotifications_DeactivateAll">Deactivate All</string>
-    <string name="Notification_Notifications">Notifications %s</string>
-    <string name="Notification_Up">Up</string>
+    <string name="SettingsNotifications_Title">Notificaciones</string>
+    <string name="SettingsNotifications_Description">Establecer alertas de cambio de precio para las monedas que desea ver.\n\nSe le avisará cuando el cambio de precio, durante las últimas 24 horas, supere el umbral seleccionado.</string>
+    <string name="SettingsNotifications_NotificationsDisabledWarning">Las notificaciones para la aplicación del Monedero Unstoppable están desactivadas. Necesita activarlas para poder recibir alertas de cambio de precios.</string>
+    <string name="SettingsNotifications_TurnOn">Activar en ajustes</string>
+    <string name="SettingsNotifications_Off">Desactivado</string>
+    <string name="SettingsNotifications_DeactivateAll">Desactivar todo</string>
+    <string name="Notification_Notifications">Notificaciones %s</string>
+    <string name="Notification_Up">Arriba</string>
     <string name="Notification_Down">Down</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Error de almacenamiento de claves de Android</string>
