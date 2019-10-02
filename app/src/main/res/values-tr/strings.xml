@@ -10,20 +10,20 @@
     <string name="Alert_Success">Başarılı</string>
     <string name="Alert_Copied">Kopyalandı</string>
     <string name="Button_Cancel">İptal</string>
-    <string name="Button_Create">Create</string>
+    <string name="Button_Create">Oluştur</string>
     <string name="Button_Back">Geri</string>
     <string name="Button_Close">Kapat</string>
     <string name="Button_Ok">Tamam</string>
     <string name="Button_Share">Paylaş</string>
     <string name="Error">Hata</string>
     <string name="NotAvailable">N/A</string>
-    <string name="Wallet">%s wallet</string>
+    <string name="Wallet">%s cüzdanı</string>
     <!--Welcome-->
     <string name="Welcome_Title">Durdurulamaz</string>
     <string name="Welcome_CreateWallet">Yeni Cüzdan</string>
     <string name="Welcome_RestoreWallet">Cüzdanı Geri Yükle</string>
     <!--Create-->
-    <string name="Create_Title">New Wallet</string>
+    <string name="Create_Title">Yeni Cüzdan</string>
     <string name="Create_Description">Select one cryptocurrency to start. You will be able to add other cryptocurrencies later.</string>
     <!--Restore-->
     <string name="Restore_Title">Geri Yükle</string>
@@ -40,7 +40,7 @@
     <string name="Backup_Intro_Subtitle">The private key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.\n\nThe coins controlled by this key: %s.</string>
     <string name="Backup_Intro_Later">Sonra</string>
     <string name="Backup_Intro_BackupNow">Yedekle</string>
-    <string name="Backup_DisplayTitle">Private Key</string>
+    <string name="Backup_DisplayTitle">Gizli Anahtar</string>
     <string name="Backup_Confirmation_SecretKey">Cüzdanıma erişmemi sağlayan 12 kelimeli Gizli Anahtarın tek sahibinin olduğumu ve bu anahtarın telefonumun güvenli hafızasında tutulduğunu kabul ediyorum.</string>
     <string name="Backup_Confirmation_DeleteAppWarn">Uygulamanın silinmesi, hatalı davranması, taşınması ve benzeri bir durumda hesabıma ulaşamadığımda, hesabımı kurtarmanın tek yolunun Gizli Anahtar olduğunu biliyourum.</string>
     <string name="Backup_Confirmation_LockAppWarn">Anladığım kadarıyla telefonun PİN kodunun değiştirmesi veya uygulama verisinin Android ayarlarından silmesi durumunda gizli anahtar telefon hafızasından silenir. Yeniden cüzdanımı erişebilmem için gizli anahtarı yeniden girmem gerekir.</string>
@@ -183,7 +183,7 @@
     <!--Settings-->
     <string name="Settings_Title">Ayarlar</string>
     <string name="Settings_SecurityCenter">Güvenlik Merkezi</string>
-    <string name="Settings_Notifications">Notifications</string>
+    <string name="Settings_Notifications">Bildirimler</string>
     <string name="Settings_ManageCoins">Kredileri Yönet</string>
     <string name="Settings_RestoreWallet">Cüzdanı Geri Yükle</string>
     <string name="Settings_BaseCurrency">Para birimi</string>
@@ -200,7 +200,7 @@
     <string name="SettingsSecurity_Fingerprint">Parmak izi</string>
     <string name="SettingsSecurity_EnablePin">Şifre</string>
     <string name="SettingsSecurity_EditPin">Şifreyi Değiştir</string>
-    <string name="SettingsSecurity_ManageKeys">Manage Wallets</string>
+    <string name="SettingsSecurity_ManageKeys">Cüzdanları yönet</string>
     <string name="SettingsSecurity_BackupWallet">Cüzdanı yedekle</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Para birimi</string>
@@ -225,12 +225,12 @@
     <string name="SettingsReport_Email">E-posta</string>
     <string name="SettingsReport_Telegram">Telegram</string>
     <!--Setting_Notifications-->
-    <string name="SettingsNotifications_Title">Notifications</string>
+    <string name="SettingsNotifications_Title">Bildirimler</string>
     <string name="SettingsNotifications_Description">Set price change alerts for the coins you would like to watch.\n\nYou will be alerted when the change in price for the last 24 hours exceeds selected threshold.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order to be able to receive price change alerts.</string>
     <string name="SettingsNotifications_TurnOn">Turn on in Settings</string>
-    <string name="SettingsNotifications_Off">Off</string>
-    <string name="SettingsNotifications_DeactivateAll">Deactivate All</string>
+    <string name="SettingsNotifications_Off">Kapat</string>
+    <string name="SettingsNotifications_DeactivateAll">Etkisizleştir</string>
     <string name="Notification_Notifications">Notifications %s</string>
     <string name="Notification_Up">Up</string>
     <string name="Notification_Down">Down</string>
@@ -284,11 +284,11 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">Cüzdanlar</string>
     <string name="ManageCoins_save">Kaydet</string>
-    <string name="ManageCoins_AddCoin_Title">Add Wallet</string>
+    <string name="ManageCoins_AddCoin_Title">Cüzdan Ekle</string>
     <string name="ManageCoins_AddCoin_Text">This action will generate a new wallet for the following coins: %s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">Uygulama henüz EOS cüzdanı oluşturamamaktadır. Sadece var olan cüzda geri yüklenebilir.</string>
     <!--Manage Keys-->
-    <string name="ManageKeys_Title">Manage Wallets</string>
+    <string name="ManageKeys_Title">Cüzdanları yönet</string>
     <string name="ManageKeys_Description">Highlighted below are your active wallets where each wallet responsible for different set of crypto currencies.\n\nYou should backup each highlighted wallets by backing up the private key for that wallet. This key is the only way to restore your funds if your phone is ever lost, stolen, broken etc.</string>
     <string name="ManageKeys_Create">Oluştur</string>
     <string name="ManageKeys_Restore">Geri Yükle</string>
@@ -296,7 +296,7 @@
     <string name="ManageKeys_Backup">Yedekle</string>
     <string name="ManageKeys_Show">Göster</string>
     <!--Manage Keys Delete Alert-->
-    <string name="ManageKeys_Delete_Title">Delete Wallet</string>
+    <string name="ManageKeys_Delete_Title">Cüzdanı Sil</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s wallet from this device.</string>
     <string name="ManageKeys_Delete_ConfirmationDisable">Etkisizleştirilecek cüzdanlar: %s</string>
     <string name="ManageKeys_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to your funds.</string>
@@ -304,7 +304,7 @@
     <string name="ManageKeys_Delete_Alert_Title">Yedekleme Gerekli</string>
     <string name="ManageKeys_Delete_Alert">You need to backup the private key before it can be deleted from this phone.</string>
     <!-- Manage Keys Alert -->
-    <string name="AddCoin_Title">Add %s</string>
+    <string name="AddCoin_Title">%s ekle</string>
     <string name="AddCoin_Description">You don\'t have a wallet that can store %1$s. The app can generate a new wallet for you. Use the Create button below to generate a new wallet.\n\nYou will be able to use the new wallet for the following coins: %2$s.\n\nYou may also use the existing %3$s wallet key if you have one. Use the restore button for that.</string>
     <string name="AddCoin_CreateKey">Oluştur</string>
     <string name="AddCoin_RestoreKey">Geri Yükle</string>
