@@ -319,7 +319,7 @@
     <string name="CoinOption_Fast_Text">Быстро: Восстановление ваших предыдущих транзакций через сторонний защищенный сервер. Для пользователей с длинной историей транзакций и с очень большим суммами этот метод может представлять риски для конфиденциальности.</string>
     <string name="CoinOption_Slow">Медленно</string>
     <string name="CoinOption_MorePrivate">1&#8211;12 часов (Более Приватно)</string>
-    <string name="CoinOption_Slow_Text">Slow: Restores your past transactions directly from the blockchain. More private but very slow. If it takes too long, go to Manage Wallets in Settings, delete the Unstoppable entry and repeat the process with Fast option.</string>
+    <string name="CoinOption_Slow_Text">Медленно: Восстановление ваших предыдущих транзакций будет непосредственно из блокчейна. Это более приватно, но очень медленно. Если это занимает слишком много времени, перейдите в раздел \"Управление Кошельками\"  в настройках, удалите незавершенную запись и повторите процесс с помощью Быстрой опции.</string>
     <string name="CoinOption_TimePeriod">Выберите период времени, когда вы создали кошелек в Unstoppable.</string>
     <string name="CoinOption_BeforeOctober">До октября 2019 г.</string>
     <string name="CoinOption_AfterOctober">После октября 2019 г.</string>
