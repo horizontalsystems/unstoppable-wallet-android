@@ -45,7 +45,7 @@
     <string name="Backup_Confirmation_DeleteAppWarn">Uygulamanın silinmesi, hatalı davranması, taşınması ve benzeri bir durumda hesabıma ulaşamadığımda, hesabımı kurtarmanın tek yolunun Gizli Anahtar olduğunu biliyourum.</string>
     <string name="Backup_Confirmation_LockAppWarn">Anladığım kadarıyla telefonun PİN kodunun değiştirmesi veya uygulama verisinin Android ayarlarından silmesi durumunda gizli anahtar telefon hafızasından silenir. Yeniden cüzdanımı erişebilmem için gizli anahtarı yeniden girmem gerekir.</string>
     <string name="Backup_Confirmation_Disclaimer">Uygulama geliştiricilerinin, istenmeyen herhangi bir hatadan veya bu uygulamayı kullanırken ortaya çıkabilecek sorunlardan sorumlu tutulamayacağını kabul ediyorum.</string>
-    <string name="Backup_Confirmation_Description">Enter words from your private key.</string>
+    <string name="Backup_Confirmation_Description">Gizli Anahtarınızda ki kelimeleri girin.</string>
     <string name="Backup_Confirmation_FailureAlertText"> Kelimeler eşleşmiyor</string>
     <string name="Backup_Confirmation_CheckTitle">Kontrol etme…</string>
     <string name="Backup_Button_Confirm">Onayla</string>
@@ -231,7 +231,7 @@
     <string name="SettingsNotifications_TurnOn">Ayarlardan aç</string>
     <string name="SettingsNotifications_Off">Kapat</string>
     <string name="SettingsNotifications_DeactivateAll">Etkisizleştir</string>
-    <string name="Notification_Notifications">Notifications %s</string>
+    <string name="Notification_Notifications">Bildirimler %s</string>
     <string name="Notification_Up">Yukarı</string>
     <string name="Notification_Down">Aşağı</string>
     <!--Alert-->
@@ -264,7 +264,7 @@
     <string name="Fingerprint_Success">Başarılı!</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Engellendi: %s</string>
-    <string name="UnlockPin_Error_PinIncorrect">Incorrect</string>
+    <string name="UnlockPin_Error_PinIncorrect">Yanlış</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">Telefon PİN\'i</string>
     <string name="OSPin_Confirm_Desciption">Bu uygulamayı kullanabilmeniz için telefonun Ekran Kilidi (Şifre/PİN) etkinleştirilmeli.\n\nAndroid Ayarlarından etkinleştirebilirsiniz.\n\nŞifreyi kaldırdığınızda, kullanılmakta olan güvenli bilgi deposu sistem tarafından kaldırılır. Cüzdanlarınızı gizli anahtar ile geri yüklemeniz gerekecek.</string>
@@ -302,7 +302,7 @@
     <string name="ManageKeys_Delete_ConfirmationLose">Bu cüzdanın özel anahtarını yedeklemediyseniz, fonlarınıza erişiminizi kaybedersiniz.</string>
     <string name="ManageKeys_Delete_FromPhone">Cihazdan sil</string>
     <string name="ManageKeys_Delete_Alert_Title">Yedekleme Gerekli</string>
-    <string name="ManageKeys_Delete_Alert">You need to backup the private key before it can be deleted from this phone.</string>
+    <string name="ManageKeys_Delete_Alert">Özel anahtarı bu telefondan silinmeden önce yedeklemeniz gerekir.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">%s ekle</string>
     <string name="AddCoin_Description">%1$s saklayabilen bir cüzdanınız yok. Uygulamanın sizin için yeni bir cüzdan oluşturabilir. Yeni bir cüzdan oluşturmak için aşağıdaki Oluştur düğmesini kullanın.\n\nYeni cüzdanı aşağıdaki paralar için kullanabileceksiniz: %2$s.\n\nVarsa, mevcut %3$s Cüzdan anahtarını da kullanabilirsiniz. Bunun için Geri Yükle düğmesini kullanın.</string>
