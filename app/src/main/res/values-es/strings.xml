@@ -239,7 +239,7 @@
     <string name="SettingsNotifications_DeactivateAll">Desactivar todo</string>
     <string name="Notification_Notifications">Notificaciones %s</string>
     <string name="Notification_Up">Arriba</string>
-    <string name="Notification_Down">Down</string>
+    <string name="Notification_Down">Abajo</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Error de almacenamiento de claves de Android</string>
     <string name="Alert_KeysInvalidatedDescription">Los datos encriptados de su monedero han sido recientemente  invalidados porque se cambió la pantalla de bloqueo de Android</string>
@@ -270,7 +270,7 @@
     <string name="Fingerprint_Success">Completado!</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Inhabilitado hasta: %s</string>
-    <string name="UnlockPin_Error_PinIncorrect">Incorrect</string>
+    <string name="UnlockPin_Error_PinIncorrect">Incorrecto</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">PIN de teléfono</string>
     <string name="OSPin_Confirm_Desciption">Esta aplicación require que el teléfono tenga el código de acceso (bloqueo de pantalla) habilitado.\n\nLo puedes habilitar en los ajustes de Android.\n\nTome en cuenta que cuando desahabilita el PIN en el nivel OS, las medidas de seguridad en el alacenamiento seguro de su teléfono hace que la información previamente almacenada no sea válida. Usted necesita restaurar las claves de sus monederos para poder volver a su monedero.</string>
@@ -290,28 +290,28 @@
     <!--Manage Coins-->
     <string name="ManageCoins_title">Gestor de monedas</string>
     <string name="ManageCoins_save">Guardar</string>
-    <string name="ManageCoins_AddCoin_Title">Add Wallet</string>
-    <string name="ManageCoins_AddCoin_Text">This action will generate a new wallet for the following coins: %s </string>
+    <string name="ManageCoins_AddCoin_Title">Añadir Monedero</string>
+    <string name="ManageCoins_AddCoin_Text">Esta acción generará un nuevo monedero para las siguientes monedas:%s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">En este momento, el monedero no es capaz de crear nuevas cuentas de monederos EOS. Solo puede restaurar la existente.</string>
     <!--Manage Keys-->
-    <string name="ManageKeys_Title">Manage Wallets</string>
-    <string name="ManageKeys_Description">Highlighted below are your active wallets where each wallet responsible for different set of crypto currencies.\n\nYou should backup each highlighted wallets by backing up the private key for that wallet. This key is the only way to restore your funds if your phone is ever lost, stolen, broken etc.</string>
+    <string name="ManageKeys_Title">Gestionar Monederos</string>
+    <string name="ManageKeys_Description">A continuación se destacan sus monederos activos donde cada monedero es responsable de diferentes tipos de criptomonedas.\n\nDebería hacer copias de seguridad de cada monedero resaltado, respaldando la clave privada de esa cartera. Esta clave es la única manera de restaurar sus fondos si su teléfono se pierde, lo roban, se avería, etc.</string>
     <string name="ManageKeys_Create">Crear</string>
     <string name="ManageKeys_Restore">Restaurar</string>
     <string name="ManageKeys_Delete">Eliminar</string>
     <string name="ManageKeys_Backup">Copia de seguridad</string>
     <string name="ManageKeys_Show">Mostrar</string>
     <!--Manage Keys Delete Alert-->
-    <string name="ManageKeys_Delete_Title">Delete Wallet</string>
-    <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s wallet from this device.</string>
+    <string name="ManageKeys_Delete_Title">Eliminar Monedero</string>
+    <string name="ManageKeys_Delete_ConfirmationRemove">Esta acción eliminará los monederos %s de este dispositivo.</string>
     <string name="ManageKeys_Delete_ConfirmationDisable">Monedas que serán deshabilitadas: %s</string>
-    <string name="ManageKeys_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to your funds.</string>
+    <string name="ManageKeys_Delete_ConfirmationLose">Si usted no respaldó la clave privada para este monedero, perderá el acceso a sus fondos.</string>
     <string name="ManageKeys_Delete_FromPhone">Eliminar del teléfono</string>
     <string name="ManageKeys_Delete_Alert_Title">Se requiere una copia de seguridad</string>
-    <string name="ManageKeys_Delete_Alert">You need to backup the private key before it can be deleted from this phone.</string>
+    <string name="ManageKeys_Delete_Alert">Necesita respaldar esta clave %@ antes de que pueda eliminarla de este teléfono.</string>
     <!-- Manage Keys Alert -->
-    <string name="AddCoin_Title">Add %s</string>
-    <string name="AddCoin_Description">You don\'t have a wallet that can store %1$s. The app can generate a new wallet for you. Use the Create button below to generate a new wallet.\n\nYou will be able to use the new wallet for the following coins: %2$s.\n\nYou may also use the existing %3$s wallet key if you have one. Use the restore button for that.</string>
+    <string name="AddCoin_Title">Añadir %s</string>
+    <string name="AddCoin_Description">Usted no tiene un monedero que pueda restaurar %1$s. La aplicación puede generar un nuevo monedero para usted. Use el botón de crear, que se encuentra abajo, para generar un nuevo monedero.\n\nPodrá usar el nuevo monedero para las siguientes monedas: %2$s.\n\nUsted también piede utilizar el la clave existente del monedero%3$s si ya tiene uno. Use el botón restaurar para hacerlo.</string>
     <string name="AddCoin_CreateKey">Crear</string>
     <string name="AddCoin_RestoreKey">Restaurar</string>
     <!-- Account Types -->
