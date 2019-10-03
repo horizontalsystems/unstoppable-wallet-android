@@ -14,7 +14,6 @@ import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerModule
 import io.horizontalsystems.bankwallet.ui.extensions.TopMenuItem
 import io.horizontalsystems.bankwallet.viewHelpers.HudHelper
 import kotlinx.android.synthetic.main.activity_restore_eos.*
-import kotlinx.android.synthetic.main.activity_restore_words.shadowlessToolbar
 
 class RestoreEosActivity : BaseActivity() {
 
@@ -25,10 +24,15 @@ class RestoreEosActivity : BaseActivity() {
         setContentView(R.layout.activity_restore_eos)
 
         shadowlessToolbar.bind(
-                title = getString(R.string.Restore_Title),
+                title = getString(R.string.Restore_Enter_Key_Title),
                 leftBtnItem = TopMenuItem(R.drawable.back, onClick = { onBackPressed() }),
                 rightBtnItem = TopMenuItem(R.drawable.checkmark_orange, onClick = { onClickDone() })
         )
+
+        val accountTypeTitleRes = intent.getIntExtra(ModuleField.ACCOUNT_TYPE_TITLE, 0)
+        if (accountTypeTitleRes > 0) {
+            subtitle.text = getString(R.string.Restore_Enter_Key_Subtitle, getString(accountTypeTitleRes))
+        }
 
         viewModel = ViewModelProviders.of(this).get(RestoreEosViewModel::class.java)
         viewModel.init()

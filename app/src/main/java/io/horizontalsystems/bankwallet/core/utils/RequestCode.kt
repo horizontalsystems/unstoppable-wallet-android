@@ -11,6 +11,7 @@ object ModuleCode {
 
 object ModuleField {
     const val WORDS_COUNT = "WORDS_COUNT"
+    const val ACCOUNT_TYPE_TITLE = "ACCOUNT_TYPE_TITLE"
     const val SYNCMODE = "SYNCMODE"
     const val ACCOUNT_TYPE = "ACCOUNT_TYPE"
     const val DERIVATION = "DERIVATION"

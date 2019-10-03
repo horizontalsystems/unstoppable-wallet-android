@@ -11,8 +11,8 @@ class ManageWalletsViewModel : ViewModel(), ManageWalletsModule.IView, ManageWal
 
     val coinsLoadedLiveEvent = SingleLiveEvent<Void>()
     val showManageKeysDialog = SingleLiveEvent<Pair<Coin, IPredefinedAccountType>>()
-    val openRestoreWordsModule = SingleLiveEvent<Int>()
-    val openRestoreEosModule = SingleLiveEvent<Coin>()
+    val openRestoreWordsModule = SingleLiveEvent<Pair<Int,Int>>()
+    val openRestoreEosModule = SingleLiveEvent<Int>()
     val showErrorEvent = SingleLiveEvent<Exception>()
     val closeLiveDate = SingleLiveEvent<Void>()
 
@@ -44,12 +44,12 @@ class ManageWalletsViewModel : ViewModel(), ManageWalletsModule.IView, ManageWal
 
     // Router
 
-    override fun openRestoreWordsModule(wordsCount: Int) {
-        openRestoreWordsModule.postValue(wordsCount)
+    override fun openRestoreWordsModule(wordsCount: Int, titleRes: Int) {
+        openRestoreWordsModule.postValue(Pair(wordsCount, titleRes))
     }
 
-    override fun openRestoreEosModule() {
-        openRestoreEosModule.call()
+    override fun openRestoreEosModule(titleRes: Int) {
+        openRestoreEosModule.postValue(titleRes)
     }
 
     override fun close() {

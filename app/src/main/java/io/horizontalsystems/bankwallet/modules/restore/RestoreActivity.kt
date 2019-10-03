@@ -48,12 +48,12 @@ class RestoreActivity : BaseActivity() {
             HudHelper.showErrorMessage(R.string.Restore_RestoreFailed)
         })
 
-        viewModel.startRestoreWordsLiveEvent.observe(this, Observer { wordsCount ->
-            RestoreWordsModule.startForResult(this, wordsCount, ModuleCode.RESTORE_WORDS)
+        viewModel.startRestoreWordsLiveEvent.observe(this, Observer { (wordsCount, titleRes) ->
+            RestoreWordsModule.startForResult(this, wordsCount, titleRes, ModuleCode.RESTORE_WORDS)
         })
 
-        viewModel.startRestoreEosLiveEvent.observe(this, Observer {
-            RestoreEosModule.startForResult(this, ModuleCode.RESTORE_EOS)
+        viewModel.startRestoreEosLiveEvent.observe(this, Observer {titleRes ->
+            RestoreEosModule.startForResult(this, titleRes, ModuleCode.RESTORE_EOS)
         })
 
         viewModel.startMainModuleLiveEvent.observe(this, Observer {
