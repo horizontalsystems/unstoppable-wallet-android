@@ -5,24 +5,24 @@ platform :android do
     reset_git_repo(force: true, skip_clean: true)
   end
 
-  desc "Submit a new Dev Build"
+  desc "Submit a new Version Build"
   lane :dev_build do |options|
     commit = last_git_commit
     build_number = options[:build_number]
 
     gradle(task: "clean")
-    gradle(task: "assembleDevMainnetDebug", flags: "--stacktrace --no-daemon")
+    gradle(task: "assembleDevMainnetVersionDebug", flags: "--stacktrace --no-daemon")
 
     upload_to_hockey(notes: "Author: #{commit[:author]}, changes: #{commit[:message]}")
   end
 
-  desc "Submit a new Dev Testnet Build"
+  desc "Submit a new Master Build"
   lane :dev_testnet_build do |options|
     commit = last_git_commit
     build_number = options[:build_number]
 
     gradle(task: "clean")
-    gradle(task: "assembleDevTestnetDebug", flags: "--stacktrace --no-daemon")
+    gradle(task: "assembleDevMainnetMasterDebug", flags: "--stacktrace --no-daemon")
 
     upload_to_hockey(notes: "Author: #{commit[:author]}, changes: #{commit[:message]}")
   end
