@@ -24,10 +24,10 @@
     <string name="Welcome_RestoreWallet">Восстановить Кошелек</string>
     <!--Create-->
     <string name="Create_Title">Создать Кошелек</string>
-    <string name="Create_Description">Select one cryptocurrency to start. You will be able to add other cryptocurrencies later.</string>
+    <string name="Create_Description">Выберите одну криптовалюту для начала. Вы сможете добавить другие криптовалюты позже.</string>
     <!--Restore-->
     <string name="Restore_Title">Восстановить</string>
-    <string name="Restore_Description">To restore existing wallet you need to enter a private key for that wallet.\n\nOnce you restore one wallet you will be able to restore other wallets via Manage Wallets section in Security settings of the app.</string>
+    <string name="Restore_Description">Чтобы восстановить существующий кошелек вам нужно ввести приватный ключ для этого кошелька.\n\nКак только вы восстановите один кошелек, вы сможете восстановить больше кошельков, перейдя в раздел \"Управление Кошельками\" в настройках приложения.</string>
     <string name="Restore_ValidationFailed">Неверный ключ</string>
     <string name="Restore_RestoreFailed">Не удалось восстановить кошелек</string>
     <string name="Restore_EosAccountName">Account Name</string>
@@ -37,7 +37,7 @@
     <!--Backup-->
     <string name="Backup_Intro_Title">Резервная копия</string>
     <string name="Backup_Intro_TitleShow">Показать Ключ</string>
-    <string name="Backup_Intro_Subtitle">The private key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.\n\nThe coins controlled by this key: %s.</string>
+    <string name="Backup_Intro_Subtitle">Приватный Ключ, который будет показан далее, - это единственный способ восстановить ваши средства, если ваш телефон потерян, украден, сломан и т.д. Убедитесь, что никто не смотрит на ваш экран.\n\nМонеты, контролируемые этим ключом: %s.</string>
     <string name="Backup_Intro_Later">Позже</string>
     <string name="Backup_Intro_BackupNow">Резервная копия</string>
     <string name="Backup_DisplayTitle">Приватный Ключ</string>
@@ -45,7 +45,7 @@
     <string name="Backup_Confirmation_DeleteAppWarn">Я понимаю, что если это приложение удаляется или устанавливается на другое устройство, мой кошелек можно восстановить только с помощью Секретного Ключа.</string>
     <string name="Backup_Confirmation_LockAppWarn">Я понимаю, что изменение ПИН-кода телефона или удаление данных приложения в настройках Android удалит секретный ключ с устройства. Мне нужно повторно ввести мой секретный ключ, чтобы восстановить доступ к моему кошельку.</string>
     <string name="Backup_Confirmation_Disclaimer">Я понимаю, что разработчики этого приложения не могут нести ответственность за любые непреднамеренные ошибки или проблемы, которые могут возникнуть при использовании этого приложения.</string>
-    <string name="Backup_Confirmation_Description">Enter words from your private key.</string>
+    <string name="Backup_Confirmation_Description">Введите слова из вашего приватного ключа.</string>
     <string name="Backup_Confirmation_FailureAlertText">Слова не совпадают</string>
     <string name="Backup_Confirmation_CheckTitle">Проверка…</string>
     <string name="Backup_Button_Confirm">Подтвердить</string>
@@ -111,7 +111,7 @@
     <string name="Deposit_Your_Account">Ваш Аккаунт</string>
     <string name="Receive_Alert_NotBackedUp_Title">Необходима Резервная Копия</string>
     <string name="Receive_Alert_NotBackedUp_Button">Резервная копия</string>
-    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the %1$s wallet before you may receive %2$s.</string>
+    <string name="Receive_Alert_NotBackedUp_Description">Вам нужно сделать резервную копию %1$s ключа, прежде чем вы сможете получать %2$s.</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">только что</string>
     <string name="Timestamp_MinAgo">%d мин назад</string>
@@ -200,7 +200,7 @@
     <string name="SettingsSecurity_Fingerprint">Отпечаток пальца</string>
     <string name="SettingsSecurity_EnablePin">Код Доступа</string>
     <string name="SettingsSecurity_EditPin">Изменить Код</string>
-    <string name="SettingsSecurity_ManageKeys">Manage Wallets</string>
+    <string name="SettingsSecurity_ManageKeys">Управление Кошельками</string>
     <string name="SettingsSecurity_BackupWallet">Резервная копия</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Базовая Валюта</string>
@@ -226,14 +226,14 @@
     <string name="SettingsReport_Telegram">Telegram </string>
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">Уведомления </string>
-    <string name="SettingsNotifications_Description">Set price change alerts for the coins you would like to watch.\n\nYou will be alerted when the change in price for the last 24 hours exceeds selected threshold.</string>
-    <string name="SettingsNotifications_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order to be able to receive price change alerts.</string>
-    <string name="SettingsNotifications_TurnOn">Turn on in Settings</string>
+    <string name="SettingsNotifications_Description">Установите  уведомления о смене цен для монет, за которыми вы бы хотели следить.\n\nВы будете предупреждены, когда изменение цены за последние 24 часа превысят выбранный порог.</string>
+    <string name="SettingsNotifications_NotificationsDisabledWarning">Уведомления для приложения Unstoppable Wallet отключены. Вам нужно включить уведомления и разрешить фоновое обновление для приложения, чтобы иметь возможность получать уведомления о смене цен.</string>
+    <string name="SettingsNotifications_TurnOn">Включить в настройках</string>
     <string name="SettingsNotifications_Off">Выкл.</string>
-    <string name="SettingsNotifications_DeactivateAll">Deactivate All</string>
+    <string name="SettingsNotifications_DeactivateAll">Отключить всё</string>
     <string name="Notification_Notifications">Уведомления %s</string>
-    <string name="Notification_Up">Up</string>
-    <string name="Notification_Down">Down</string>
+    <string name="Notification_Up">Вверх</string>
+    <string name="Notification_Down">Вниз</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Ошибка Android Keystore</string>
     <string name="Alert_KeysInvalidatedDescription">Ваши зашифрованные данные были недавно аннулированы, потому что  Android lock screen был изменен</string>
@@ -264,7 +264,7 @@
     <string name="Fingerprint_Success">Успешно!</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Отключено до: %s</string>
-    <string name="UnlockPin_Error_PinIncorrect">Incorrect</string>
+    <string name="UnlockPin_Error_PinIncorrect">Неправильно</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">PIN-код телефона</string>
     <string name="OSPin_Confirm_Desciption">Это приложение требует, чтобы на телефоне был включен пароль (экран блокировки).\n\nВы можете включить его в настройках Android.\n\nПожалуйста, обратите внимание, что после того, как вы отключили PIN-код на уровне ОС,  в безопасном хранилище вашего телефона ранее сохраненные данные стали недействительными. Поэтому Вам нужно восстановить ключи, чтобы вернуться к вашему кошельку.</string>
@@ -285,11 +285,11 @@
     <string name="ManageCoins_title">Валюты</string>
     <string name="ManageCoins_save">Сохранить</string>
     <string name="ManageCoins_AddCoin_Title">Добавить Кошелек</string>
-    <string name="ManageCoins_AddCoin_Text">This action will generate a new wallet for the following coins: %s </string>
+    <string name="ManageCoins_AddCoin_Text">Это действие сгенерирует новый кошелек для следующих монет:%s </string>
     <string name="ManageCoins_EOSAlert_CreateButton">В данный момент кошелек не может создать новые учетные записи EOS. Вы можете восстановить существующий.</string>
     <!--Manage Keys-->
-    <string name="ManageKeys_Title">Manage Wallets</string>
-    <string name="ManageKeys_Description">Highlighted below are your active wallets where each wallet responsible for different set of crypto currencies.\n\nYou should backup each highlighted wallets by backing up the private key for that wallet. This key is the only way to restore your funds if your phone is ever lost, stolen, broken etc.</string>
+    <string name="ManageKeys_Title">Управление Кошельками</string>
+    <string name="ManageKeys_Description">Ниже выделены ваши активные кошельки, где каждый кошелек отвечает за разный набор криптовалют.\n\nВы должны сделать резервную копию каждого выделенного кошелька, записав его приватный ключ. Этот ключ - единственный способ восстановить ваши средства, если ваш телефон потерян, украден, сломан и тд</string>
     <string name="ManageKeys_Create">Создать</string>
     <string name="ManageKeys_Restore">Восстановить</string>
     <string name="ManageKeys_Delete">Удалить</string>
@@ -299,13 +299,13 @@
     <string name="ManageKeys_Delete_Title">Удалить Кошелек</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">Это действие удалит ваш %s кошелек с этого устройства.</string>
     <string name="ManageKeys_Delete_ConfirmationDisable">Монеты, которые будут отключены: %s</string>
-    <string name="ManageKeys_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to your funds.</string>
+    <string name="ManageKeys_Delete_ConfirmationLose">Если вы не сделали резервную копию приватного ключа для этого кошелька, вы потеряете доступ к вашим средствам.</string>
     <string name="ManageKeys_Delete_FromPhone">Удалить с устройства</string>
     <string name="ManageKeys_Delete_Alert_Title">Необходима Резервная Копия</string>
-    <string name="ManageKeys_Delete_Alert">You need to backup the private key before it can be deleted from this phone.</string>
+    <string name="ManageKeys_Delete_Alert">Вам нужно сделать резервную копию приватного ключа для этого кошелька, прежде чем он будет удален с этого телефона.</string>
     <!-- Manage Keys Alert -->
     <string name="AddCoin_Title">Добавить %s</string>
-    <string name="AddCoin_Description">You don\'t have a wallet that can store %1$s. The app can generate a new wallet for you. Use the Create button below to generate a new wallet.\n\nYou will be able to use the new wallet for the following coins: %2$s.\n\nYou may also use the existing %3$s wallet key if you have one. Use the restore button for that.</string>
+    <string name="AddCoin_Description">У вас нет кошелька, который может хранить %1$s. Приложение может создать для вас новый кошелек. Используйте кнопку \"Создать\" ниже, чтобы создать новый кошелек.\n\nВы сможете использовать новый кошелек для следующих монет: %2$s.\n\nВы также можете использовать существующий ключ кошелька %3$s , если он у вас есть. Используйте кнопку \"Восстановить\" для этого.</string>
     <string name="AddCoin_CreateKey">Создать</string>
     <string name="AddCoin_RestoreKey">Восстановить</string>
     <!-- Account Types -->
@@ -316,11 +316,11 @@
     <string name="CoinOption_Title">Параметры Восстановления</string>
     <string name="CoinOption_Fast">Быстро</string>
     <string name="CoinOption_Recommended">0&#8211;2 часа (Рекомендуется)</string>
-    <string name="CoinOption_Fast_Text">Fast : Restores your past transaction via secure third party server. For users with transactions involving large sums this method may pose privacy risks.</string>
+    <string name="CoinOption_Fast_Text">Быстро: Восстановление ваших предыдущих транзакций через сторонний защищенный сервер. Для пользователей с длинной историей транзакций и с очень большим суммами этот метод может представлять риски для конфиденциальности.</string>
     <string name="CoinOption_Slow">Медленно</string>
     <string name="CoinOption_MorePrivate">1&#8211;12 часов (Более Приватно)</string>
-    <string name="CoinOption_Slow_Text">Slow: Restores your past transactions directly from the blockchain. More private but very slow. If it takes too long, go to Manage Wallets in Settings, delete the Unstoppable entry and repeat the process with Fast option.</string>
-    <string name="CoinOption_TimePeriod">Select the time period when you first created the wallet in Unstoppable.</string>
+    <string name="CoinOption_Slow_Text">Медленно: Восстановление ваших предыдущих транзакций будет непосредственно из блокчейна. Это более приватно, но очень медленно. Если это занимает слишком много времени, перейдите в раздел \"Управление Кошельками\"  в настройках, удалите незавершенную запись и повторите процесс с помощью Быстрой опции.</string>
+    <string name="CoinOption_TimePeriod">Выберите период времени, когда вы создали кошелек в Unstoppable.</string>
     <string name="CoinOption_BeforeOctober">До октября 2019 г.</string>
     <string name="CoinOption_AfterOctober">После октября 2019 г.</string>
     <string name="CoinOption_bip44">BIP-44</string>
