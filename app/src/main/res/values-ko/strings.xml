@@ -37,15 +37,15 @@
     <!--Backup-->
     <string name="Backup_Intro_Title">백업</string>
     <string name="Backup_Intro_TitleShow">암호 보이기</string>
-    <string name="Backup_Intro_Subtitle">The private key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.\n\nThe coins controlled by this key: %s.</string>
+    <string name="Backup_Intro_Subtitle">다음에 나오게될 개인 암호는 귀하께서 휴대폰 분실, 도난, 파손 등을 당하셨을 경우에 귀하의 자금을 복원시킬 유일한 방법입니다.\n\n다른 사람이 귀하의 화면을 보지 못하게 하십시오.\n\n코인들은 이 암호로 통제됩니다.%s.</string>
     <string name="Backup_Intro_Later">나중에</string>
     <string name="Backup_Intro_BackupNow">백업</string>
-    <string name="Backup_DisplayTitle">Private Key</string>
+    <string name="Backup_DisplayTitle">개인 암호</string>
     <string name="Backup_Confirmation_SecretKey">본인은 본인의 휴대폰에 안전하게 저장되어 있으며 지갑에 있는 자금을 통제할 수 있는 사적인 12자리 비밀 암호의 유일한 소유자라는 것을 이해합니다.</string>
     <string name="Backup_Confirmation_DeleteAppWarn">이 앱의 이동, 삭제 또는 오작동의 경우, 본인은 지갑에 대한 접근은 이 비밀 암호를 통해서만 복구될 수 있다는 점을 이해합니다.</string>
     <string name="Backup_Confirmation_LockAppWarn">I understand that changing the phone\s unlock PIN or deleting app data in Android settings deletes the Secret Key from device. I would need to re-enter my Secret Key to regain access to my wallet.</string>
     <string name="Backup_Confirmation_Disclaimer">본인은 의도치 않은 버그나 앱을 사용하면서 일어날 수 있는 문제들에 대해서 이 앱의 계발자들은 어떠한 책임도 없다는 것을 이해합니다.</string>
-    <string name="Backup_Confirmation_Description">Enter words from your private key.</string>
+    <string name="Backup_Confirmation_Description">귀하의 개인 암호에서 글자를 입력 하십시오.</string>
     <string name="Backup_Confirmation_FailureAlertText">암호가 일치 하지 않습니다.</string>
     <string name="Backup_Confirmation_CheckTitle">확인 중…</string>
     <string name="Backup_Button_Confirm">확인</string>
@@ -111,7 +111,7 @@
     <string name="Deposit_Your_Account">내 계정</string>
     <string name="Receive_Alert_NotBackedUp_Title">백업이 필요합니다</string>
     <string name="Receive_Alert_NotBackedUp_Button">백업</string>
-    <string name="Receive_Alert_NotBackedUp_Description">You need to backup the %1$s wallet before you may receive %2$s.</string>
+    <string name="Receive_Alert_NotBackedUp_Description">귀하께서 %2$s를 받기전에 %1$s 지갑의 백업이 필요합니다.</string>
     <!--Timestamp-->
     <string name="Timestamp_JustNow">지금 막</string>
     <string name="Timestamp_MinAgo">%d분 전</string>
@@ -183,7 +183,7 @@
     <!--Settings-->
     <string name="Settings_Title">설정</string>
     <string name="Settings_SecurityCenter">보안 센터</string>
-    <string name="Settings_Notifications">Notifications</string>
+    <string name="Settings_Notifications">알림</string>
     <string name="Settings_ManageCoins">코인 관리</string>
     <string name="Settings_RestoreWallet">지갑 복원</string>
     <string name="Settings_BaseCurrency">기초 통화</string>
@@ -200,7 +200,7 @@
     <string name="SettingsSecurity_Fingerprint">지문</string>
     <string name="SettingsSecurity_EnablePin">비밀번호</string>
     <string name="SettingsSecurity_EditPin">비밀번호 변경</string>
-    <string name="SettingsSecurity_ManageKeys">Manage Wallets</string>
+    <string name="SettingsSecurity_ManageKeys">지갑 관리</string>
     <string name="SettingsSecurity_BackupWallet">백업용 지갑</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">기초 통화</string>
@@ -231,7 +231,7 @@
     <string name="SettingsReport_Email">E-mail</string>
     <string name="SettingsReport_Telegram">Telegram</string>
     <!--Setting_Notifications-->
-    <string name="SettingsNotifications_Title">Notifications</string>
+    <string name="SettingsNotifications_Title">알림</string>
     <string name="SettingsNotifications_Description">Set price change alerts for the coins you would like to watch.\n\nYou will be alerted when the change in price for the last 24 hours exceeds selected threshold.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order to be able to receive price change alerts.</string>
     <string name="SettingsNotifications_TurnOn">Turn on in Settings</string>
