@@ -1,25 +1,23 @@
 package io.horizontalsystems.bankwallet.ui.dialogs
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.viewHelpers.bottomDialog
+import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
 import io.horizontalsystems.bankwallet.viewHelpers.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_confirmation.*
 
-class ManageKeysDeleteAlert(private val listener: Listener,
-                            private val checkboxItems: List<CheckBoxItem>,
-                            private val subtitle: String) : DialogFragment(), ConfirmationsAdapter.Listener {
+class ManageKeysDeleteAlert(
+        private val listener: Listener,
+        private val checkboxItems: List<CheckBoxItem>,
+        private val subtitle: String
+) : BaseBottomSheetDialogFragment(), ConfirmationsAdapter.Listener {
 
     interface Listener {
         fun onConfirmationSuccess()
@@ -28,37 +26,27 @@ class ManageKeysDeleteAlert(private val listener: Listener,
     private var adapter = ConfirmationsAdapter(this, checkboxItems)
 
     private lateinit var btnConfirm: Button
-    private lateinit var rootView: View
-    private lateinit var closeBtn: ImageView
-    private lateinit var subtitleView: TextView
     private lateinit var recyclerView: RecyclerView
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setContentView(R.layout.fragment_bottom_delete)
 
-        rootView = View.inflate(context, R.layout.fragment_bottom_delete, null) as ViewGroup
-        recyclerView = rootView.findViewById(R.id.recyclerView)
+        setTitle(getString(R.string.ManageKeys_Delete_Title))
+        setSubtitle(subtitle)
+        setHeaderIcon(R.drawable.ic_attention_red)
 
-        btnConfirm = rootView.findViewById(R.id.btnConfirm)
-        closeBtn = rootView.findViewById(R.id.closeButton)
+        recyclerView = view.findViewById(R.id.recyclerView)
+        btnConfirm = view.findViewById(R.id.btnConfirm)
         btnConfirm.setOnClickListener {
             listener.onConfirmationSuccess()
             dismiss()
         }
 
-        closeBtn.setOnClickListener { dismiss() }
-        subtitleView = rootView.findViewById(R.id.confirmSubtitle)
-        return bottomDialog(activity, rootView)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         adapter.notifyDataSetChanged()
-
-        subtitleView.text = subtitle
     }
 
     override fun onItemCheckMarkClick(position: Int, checked: Boolean) {

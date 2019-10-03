@@ -1,23 +1,22 @@
 package io.horizontalsystems.bankwallet.ui.dialogs
 
-import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
-import io.horizontalsystems.bankwallet.viewHelpers.bottomDialog
+import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
+import io.horizontalsystems.bankwallet.viewHelpers.LayoutHelper
 
-class ManageWalletsDialog(private val listener: Listener, private val coin: Coin, private val predefinedAccountType: IPredefinedAccountType)
-    : DialogFragment() {
+class ManageWalletsDialog(
+        private val listener: Listener,
+        private val coin: Coin,
+        private val predefinedAccountType: IPredefinedAccountType)
+    : BaseBottomSheetDialogFragment() {
 
     interface Listener {
         fun onClickCreateKey()
@@ -25,48 +24,39 @@ class ManageWalletsDialog(private val listener: Listener, private val coin: Coin
         fun onCancel() {}
     }
 
-    private lateinit var rootView: View
-    private lateinit var addKeyTitle: TextView
-    private lateinit var addKeySubtitle: TextView
     private lateinit var addKeyInfo: TextView
-    private lateinit var addCoinIcon: CoinIconView
     private lateinit var btnCreateKey: Button
     private lateinit var btnRestoreKey: Button
-    private lateinit var btnClose: ImageView
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        rootView = View.inflate(context, R.layout.fragment_bottom_manage_keys, null) as ViewGroup
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setContentView(R.layout.fragment_bottom_manage_keys)
 
-        addKeyTitle = rootView.findViewById(R.id.addKeyTitle)
-        addKeySubtitle = rootView.findViewById(R.id.addKeySubtitle)
-        addKeyInfo = rootView.findViewById(R.id.addKeyInfo)
-        addCoinIcon = rootView.findViewById(R.id.addKeyIcon)
-        btnCreateKey = rootView.findViewById(R.id.btnYellow)
-        btnRestoreKey = rootView.findViewById(R.id.btnGrey)
-        btnClose = rootView.findViewById(R.id.closeButton)
+        setTitle(activity?.getString(R.string.Deposit_Title, coin.code))
+        setSubtitle(coin.title)
+        setHeaderIcon(LayoutHelper.getCoinDrawableResource(coin.code))
 
-        btnClose.setOnClickListener {
-            dismiss()
-            listener.onCancel()
-        }
+        addKeyInfo = view.findViewById(R.id.addKeyInfo)
+        btnCreateKey = view.findViewById(R.id.btnYellow)
+        btnRestoreKey = view.findViewById(R.id.btnGrey)
 
-        bindContent()
+        addKeyInfo.text = getString(
+                R.string.AddCoin_Description, "${coin.title} (${coin.code})",
+                getString(predefinedAccountType.coinCodes),
+                getString(predefinedAccountType.title)
+        )
+
         bindActions()
+    }
 
-        return bottomDialog(activity, rootView)
+    override fun close() {
+        super.close()
+        listener.onCancel()
     }
 
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
         listener.onCancel()
-    }
-
-    private fun bindContent() {
-        addCoinIcon.bind(coin)
-
-        addKeyTitle.text = getString(R.string.AddCoin_Title, coin.title)
-        addKeySubtitle.text = getString(predefinedAccountType.title)
-        addKeyInfo.text = getString(R.string.AddCoin_Description, "${coin.title} (${coin.code})", getString(predefinedAccountType.coinCodes), getString(predefinedAccountType.title))
     }
 
     private fun bindActions() {

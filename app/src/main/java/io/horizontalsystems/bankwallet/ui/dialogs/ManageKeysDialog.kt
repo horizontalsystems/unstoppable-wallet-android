@@ -1,17 +1,12 @@
 package io.horizontalsystems.bankwallet.ui.dialogs
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.ui.extensions.CoinIconView
-import io.horizontalsystems.bankwallet.viewHelpers.bottomDialog
+import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
 
 class ManageKeysDialog(
         private val listener: Listener,
@@ -19,48 +14,33 @@ class ManageKeysDialog(
         private val subtitle: String,
         private val content: String,
         private val action: ManageAction)
-    : DialogFragment() {
+    : BaseBottomSheetDialogFragment() {
 
     interface Listener {
         fun onClickCreateKey() {}
         fun onClickBackupKey() {}
     }
 
-    private lateinit var rootView: View
-    private lateinit var addKeyTitle: TextView
-    private lateinit var addKeySubtitle: TextView
     private lateinit var addKeyInfo: TextView
-    private lateinit var addCoinIcon: CoinIconView
     private lateinit var btnYellow: Button
     private lateinit var btnGrey: Button
-    private lateinit var btnClose: ImageView
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        rootView = View.inflate(context, R.layout.fragment_bottom_manage_keys, null) as ViewGroup
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setContentView(R.layout.fragment_bottom_manage_keys)
 
-        addKeyTitle = rootView.findViewById(R.id.addKeyTitle)
-        addKeySubtitle = rootView.findViewById(R.id.addKeySubtitle)
-        addKeyInfo = rootView.findViewById(R.id.addKeyInfo)
-        addCoinIcon = rootView.findViewById(R.id.addKeyIcon)
+        setTitle(title)
+        setSubtitle(subtitle)
+        val icon = if (action == ManageAction.CREATE) R.drawable.ic_manage_keys else R.drawable.ic_attention_red
+        setHeaderIcon(icon)
 
-        btnYellow = rootView.findViewById(R.id.btnYellow)
-        btnGrey = rootView.findViewById(R.id.btnGrey)
-        btnClose = rootView.findViewById(R.id.closeButton)
+        addKeyInfo = view.findViewById(R.id.addKeyInfo)
+        btnYellow = view.findViewById(R.id.btnYellow)
+        btnGrey = view.findViewById(R.id.btnGrey)
 
-        btnClose.setOnClickListener { dismiss() }
-
-        bindContent()
-        bindActions()
-
-        return bottomDialog(activity, rootView)
-    }
-
-    private fun bindContent() {
-        addCoinIcon.bind(R.drawable.ic_manage_keys)
-
-        addKeyTitle.text = title
-        addKeySubtitle.text = subtitle
         addKeyInfo.text = content
+
+        bindActions()
     }
 
     private fun bindActions() {
