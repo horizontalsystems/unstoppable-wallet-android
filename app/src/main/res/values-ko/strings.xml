@@ -233,7 +233,7 @@
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Title">알림</string>
     <string name="SettingsNotifications_Description">귀하께서 보고싶으신 코인들의 가격 변동 설정 알람 설정을 하십시오.\n\n귀하께서는 24시간 전의 가격 변동이 선택하신 기대치에 도달할 경우에 알림을 받을 것 입니다.</string>
-    <string name="SettingsNotifications_NotificationsDisabledWarning">막을수없는 지갑 앱을 위한 알림이 불가능합니다. 귀하께서는 가격 변동 알림을 받으시려면 앱을 켜놓는걸 필요로 합니다.</string>
+    <string name="SettingsNotifications_NotificationsDisabledWarning">Unstoppable 지갑 앱을 위한 알림이 불가능합니다. 귀하께서는 가격 변동 알림을 받으시려면 앱을 켜놓는걸 필요로 합니다.</string>
     <string name="SettingsNotifications_TurnOn">설정에서 켜십시오</string>
     <string name="SettingsNotifications_Off">끄기</string>
     <string name="SettingsNotifications_DeactivateAll">전부 비활성화</string>
@@ -325,10 +325,10 @@
     <string name="CoinOption_Fast_Text">빠른: 귀하의 과거 거래내역을 보안 암호와 서버를 통해 복원합니다. 많은 양의 거래내역을 가지고 계신 사용자께서는 이 방법은 개인정보보호 침해의 위험을 야기할 수 있습니다.</string>
     <string name="CoinOption_Slow">느리게</string>
     <string name="CoinOption_MorePrivate">1&#8211;12시간 (더욱 사적임)</string>
-    <string name="CoinOption_Slow_Text">느린: 블록 체인으로 부터 귀하의 과거 거래내역을 복원합니다. 더 사적이지만 굉장히 느립니다. 만약 너무 느리게 간다면, 설정에서 지갑 관리하기에 가신후, 막을 수 없는 입장을 삭제하시고 빠른 선택의 과정을 반복 하십시오.</string>
-    <string name="CoinOption_TimePeriod">Select the time period when you first created the wallet in Unstoppable.</string>
-    <string name="CoinOption_BeforeOctober">Before October 2019</string>
-    <string name="CoinOption_AfterOctober">After October 2019</string>
+    <string name="CoinOption_Slow_Text">느린: 블록 체인으로 부터 귀하의 과거 거래내역을 복원합니다. 더 사적이지만 굉장히 느립니다. 만약 너무 느리게 간다면, 설정에서 지갑 관리하기에 가신후, Unstoppable 입장을 삭제하시고 빠른 선택의 과정을 반복 하십시오.</string>
+    <string name="CoinOption_TimePeriod">귀하께서 처음으로 Unstoppable에서 지갑을 생성하셨을 때 시간 주기를 선택 하십시오.</string>
+    <string name="CoinOption_BeforeOctober">2019년 10월 전에</string>
+    <string name="CoinOption_AfterOctober">2019년 10월 후에</string>
     <string name="CoinOption_bip44">BIP-44</string>
     <string name="CoinOption_bip49">BIP-49</string>
     <!--Charts-->
