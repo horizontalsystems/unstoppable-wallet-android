@@ -32,6 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine"
+                android:background="@color/transparent"
                 android:singleLine="false"
                 android:textColor="?attr/TextColorBarsToDark"
                 android:textColorHint="@color/grey_50" />
