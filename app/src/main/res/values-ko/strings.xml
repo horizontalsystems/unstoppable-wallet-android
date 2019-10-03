@@ -295,23 +295,23 @@
     <string name="ManageCoins_EOSAlert_CreateButton">현재 지갑에서 새 EOS 지갑 계정을 만들 수 없습니다. 기존 파일만 복원할 수 있습니다.</string>
     <!--Manage Keys-->
     <string name="ManageKeys_Title">지갑 관리하기</string>
-    <string name="ManageKeys_Description">Highlighted below are your active wallets where each wallet responsible for different set of crypto currencies.\n\nYou should backup each highlighted wallets by backing up the private key for that wallet. This key is the only way to restore your funds if your phone is ever lost, stolen, broken etc.</string>
+    <string name="ManageKeys_Description">아래 강조표시가 된부분은 각각의 지갑이 다른 세트의 가상화폐에 책임이 있는 귀하께서 사용중인 지갑입니다. \n\n귀하께서는 개인 암호를 백업 시킴으로써 각각의 강조표시된 지갑들도 백업을 하셔야 합니다. 이 암호는 귀하께서 휴대폰 분실, 도난, 파손 등을 당하셨을때 복원 할 수 있는 유일한 암호 입니다.</string>
     <string name="ManageKeys_Create">만들기</string>
     <string name="ManageKeys_Restore">복구</string>
     <string name="ManageKeys_Delete">삭제</string>
     <string name="ManageKeys_Backup">백업</string>
     <string name="ManageKeys_Show">표시</string>
     <!--Manage Keys Delete Alert-->
-    <string name="ManageKeys_Delete_Title">Delete Wallet</string>
-    <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s wallet from this device.</string>
+    <string name="ManageKeys_Delete_Title">지갑 삭제하기</string>
+    <string name="ManageKeys_Delete_ConfirmationRemove">이 행동은 %s 지갑을 장치에서 삭제합니다.</string>
     <string name="ManageKeys_Delete_ConfirmationDisable">비활성화될 코인: %s</string>
-    <string name="ManageKeys_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to your funds.</string>
+    <string name="ManageKeys_Delete_ConfirmationLose">지갑에서 개인 암호를 백업 시키지 않으셨을 경우, 귀하께서는 자금 접근에 제한이 있을 것 입니다.</string>
     <string name="ManageKeys_Delete_FromPhone">휴대전화에서 삭제</string>
     <string name="ManageKeys_Delete_Alert_Title">백업이 필요합니다</string>
-    <string name="ManageKeys_Delete_Alert">You need to backup the private key before it can be deleted from this phone.</string>
+    <string name="ManageKeys_Delete_Alert">개인 암호가 휴대폰에서 지워질 수 있기 전에 귀하께서는 개인 암호를 백업 하셔야 합니다.</string>
     <!-- Manage Keys Alert -->
-    <string name="AddCoin_Title">Add %s</string>
-    <string name="AddCoin_Description">You don\'t have a wallet that can store %1$s. The app can generate a new wallet for you. Use the Create button below to generate a new wallet.\n\nYou will be able to use the new wallet for the following coins: %2$s.\n\nYou may also use the existing %3$s wallet key if you have one. Use the restore button for that.</string>
+    <string name="AddCoin_Title">추가하기 %s</string>
+    <string name="AddCoin_Description">귀하께서는 %1$s를 저장할 수 있는 지갑을 가지고 계시지 않습니다. 이 앱은 귀하를 위해 새로운 지갑을 만들어 드릴 수 있습니다. 새로운 지갑을 만들기 위해 밑에있는 생성하기 버튼을 사용하십시오.\n\n귀하께서는 %2$s만큼의 다음 코인에 대한 새로운 지갑을 사용 하실 수 있을 것 입니다.\n\n귀하께서는 또한 기존에 가지고 계셨던%3$s 지갑 암호를 사용하실 수 있습니다. 복원하기 버튼을 누르십시오.</string>
     <string name="AddCoin_CreateKey">만들기</string>
     <string name="AddCoin_RestoreKey">복구</string>
     <!-- Account Types -->
@@ -322,10 +322,10 @@
     <string name="CoinOption_Title">옵션 복구</string>
     <string name="CoinOption_Fast">빠르게</string>
     <string name="CoinOption_Recommended">00&#8211;2시간 (권장)</string>
-    <string name="CoinOption_Fast_Text">Fast : Restores your past transaction via secure third party server. For users with transactions involving large sums this method may pose privacy risks.</string>
+    <string name="CoinOption_Fast_Text">빠른: 귀하의 과거 거래내역을 보안 암호와 서버를 통해 복원합니다. 많은 양의 거래내역을 가지고 계신 사용자께서는 이 방법은 개인정보보호 침해의 위험을 야기할 수 있습니다.</string>
     <string name="CoinOption_Slow">느리게</string>
     <string name="CoinOption_MorePrivate">1&#8211;12시간 (더욱 사적임)</string>
-    <string name="CoinOption_Slow_Text">Slow: Restores your past transactions directly from the blockchain. More private but very slow. If it takes too long, go to Manage Wallets in Settings, delete the Unstoppable entry and repeat the process with Fast option.</string>
+    <string name="CoinOption_Slow_Text">느린: 블록 체인으로 부터 귀하의 과거 거래내역을 복원합니다. 더 사적이지만 굉장히 느립니다. 만약 너무 느리게 간다면, 설정에서 지갑 관리하기에 가신후, 막을 수 없는 입장을 삭제하시고 빠른 선택의 과정을 반복 하십시오.</string>
     <string name="CoinOption_TimePeriod">Select the time period when you first created the wallet in Unstoppable.</string>
     <string name="CoinOption_BeforeOctober">Before October 2019</string>
     <string name="CoinOption_AfterOctober">After October 2019</string>
