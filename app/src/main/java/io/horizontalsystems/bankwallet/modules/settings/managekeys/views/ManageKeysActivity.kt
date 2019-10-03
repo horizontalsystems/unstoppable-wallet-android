@@ -86,12 +86,12 @@ class ManageKeysActivity : BaseActivity(), ManageKeysDialog.Listener {
             }
         })
 
-        viewModel.startRestoreWordsLiveEvent.observe(this, Observer { wordsCount ->
-            RestoreWordsModule.startForResult(this, wordsCount, ModuleCode.RESTORE_WORDS)
+        viewModel.startRestoreWordsLiveEvent.observe(this, Observer { (wordsCount, titleRes) ->
+            RestoreWordsModule.startForResult(this, wordsCount, titleRes, ModuleCode.RESTORE_WORDS)
         })
 
-        viewModel.startRestoreEosLiveEvent.observe(this, Observer {
-            RestoreEosModule.startForResult(this, ModuleCode.RESTORE_EOS)
+        viewModel.startRestoreEosLiveEvent.observe(this, Observer { titleRes ->
+            RestoreEosModule.startForResult(this, titleRes, ModuleCode.RESTORE_EOS)
         })
 
         viewModel.showItemsEvent.observe(this, Observer { list ->

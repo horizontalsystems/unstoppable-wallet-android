@@ -46,12 +46,12 @@ class ManageWalletsActivity : BaseActivity(), ManageWalletsDialog.Listener {
             ManageWalletsDialog.show(this, this, coin, predefinedAccountType)
         })
 
-        viewModel.openRestoreWordsModule.observe(this, Observer { wordsCount ->
-            RestoreWordsModule.startForResult(this, wordsCount, ModuleCode.RESTORE_WORDS)
+        viewModel.openRestoreWordsModule.observe(this, Observer { (wordsCount, titleRes) ->
+            RestoreWordsModule.startForResult(this, wordsCount, titleRes, ModuleCode.RESTORE_WORDS)
         })
 
-        viewModel.openRestoreEosModule.observe(this, Observer {
-            RestoreEosModule.startForResult(this, ModuleCode.RESTORE_EOS)
+        viewModel.openRestoreEosModule.observe(this, Observer {titleRes ->
+            RestoreEosModule.startForResult(this, titleRes, ModuleCode.RESTORE_EOS)
         })
 
         viewModel.showErrorEvent.observe(this, Observer {

@@ -35,6 +35,8 @@
     <!--Restore-->
 
     <string name="Restore_Title">Restore</string>
+    <string name="Restore_Enter_Key_Title">Enter Key</string>
+    <string name="Restore_Enter_Key_Subtitle">Enter your private key for %s. The key needs to be entered correctly.</string>
     <string name="Restore_Description">To restore existing wallet you need to enter a private key for that wallet.\n\nOnce you restore one wallet you will be able to restore other wallets via Manage Wallets section in Security settings of the app.</string>
     <string name="Restore_ValidationFailed">Incorrect Key</string>
     <string name="Restore_RestoreFailed">Failed to restore wallet</string>

@@ -47,13 +47,16 @@ class ManageWalletsPresenter(private val interactor: ManageWalletsModule.IIntera
 
     override fun onClickRestoreKey() {
         val item = currentItem ?: return
+        val predefinedAccountType = interactor.predefinedAccountTypes.firstOrNull {
+            it.defaultAccountType == item.coin.type.defaultAccountType
+        } ?: return
 
         when (val accountType = item.coin.type.defaultAccountType) {
             is DefaultAccountType.Mnemonic -> {
-                router.openRestoreWordsModule(accountType.wordsCount)
+                router.openRestoreWordsModule(accountType.wordsCount, predefinedAccountType.title)
             }
             is DefaultAccountType.Eos -> {
-                router.openRestoreEosModule()
+                router.openRestoreEosModule(predefinedAccountType.title)
             }
         }
     }

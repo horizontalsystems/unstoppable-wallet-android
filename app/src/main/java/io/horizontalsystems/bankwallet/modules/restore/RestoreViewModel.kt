@@ -10,8 +10,8 @@ class RestoreViewModel : ViewModel(), RestoreModule.View, RestoreModule.Router {
 
     val reloadLiveEvent = SingleLiveEvent<List<IPredefinedAccountType>>()
     val showErrorLiveEvent = SingleLiveEvent<Exception>()
-    val startRestoreWordsLiveEvent = SingleLiveEvent<Int>()
-    val startRestoreEosLiveEvent = SingleLiveEvent<Unit>()
+    val startRestoreWordsLiveEvent = SingleLiveEvent<Pair<Int, Int>>()
+    val startRestoreEosLiveEvent = SingleLiveEvent<Int>()
     val startMainModuleLiveEvent = SingleLiveEvent<Unit>()
     val closeLiveEvent = SingleLiveEvent<Unit>()
 
@@ -32,12 +32,12 @@ class RestoreViewModel : ViewModel(), RestoreModule.View, RestoreModule.Router {
 
     //  Router
 
-    override fun startRestoreWordsModule(wordsCount: Int) {
-        startRestoreWordsLiveEvent.postValue(wordsCount)
+    override fun startRestoreWordsModule(wordsCount: Int, titleRes: Int) {
+        startRestoreWordsLiveEvent.postValue(Pair(wordsCount, titleRes))
     }
 
-    override fun startRestoreEosModule() {
-        startRestoreEosLiveEvent.call()
+    override fun startRestoreEosModule(titleRes: Int) {
+        startRestoreEosLiveEvent.postValue(titleRes)
     }
 
     override fun startMainModule() {
