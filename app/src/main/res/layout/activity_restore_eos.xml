@@ -33,6 +33,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginTop="24dp"
         app:inputFromClipboard="true"
+        app:inputMaxLines="2"
         app:inputHint="@string/Restore_EosAccountName"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/subtitle" />
