@@ -19,7 +19,7 @@
     <string name="NotAvailable">N/A</string>
     <string name="Wallet">%s cüzdanı</string>
     <!--Welcome-->
-    <string name="Welcome_Title">Durdurulamaz</string>
+    <string name="Welcome_Title">Unstoppable</string>
     <string name="Welcome_CreateWallet">Yeni Cüzdan</string>
     <string name="Welcome_RestoreWallet">Cüzdanı Geri Yükle</string>
     <!--Create-->
@@ -30,8 +30,8 @@
     <string name="Restore_Description">Cüzdanı geri yüklemek için o cüzdanın gizli anahtarını girmelisiniz.\n\nDaha fazla cüzdanı geri yüklemek için bir cüzdanı geri yükledikten sonra Ayarlardaki Anahtarları Yönet bölümüne gidin.</string>
     <string name="Restore_ValidationFailed">Yanlış Anahtar</string>
     <string name="Restore_RestoreFailed">Cüzdan geri yüklenemedi</string>
-    <string name="Restore_EosAccountName">Hesap Adı</string>
-    <string name="Restore_EosActivePrivateKey">Gizli Anahtarı Etkinleştir</string>
+    <string name="Restore_EosAccountName">Account Name</string>
+    <string name="Restore_EosActivePrivateKey">Active Private Key</string>
     <string name="Restore_EosAccountIncorrect">Yanlış Hesap</string>
     <string name="Restore_EosKeyIncorrect">Yanlış Anahtar</string>
     <!--Backup-->
